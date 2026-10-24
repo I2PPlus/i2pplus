@@ -33,6 +33,7 @@ import net.i2p.util.SimpleTimer2;
  * Tracks outbound messages.
  */
 public class OutboundMessageRegistry {
+    /** Logger for this class. */
     private final Log _log;
     /** List of currently active MessageSelector instances. */
     private final List<MessageSelector> _selectors;
@@ -48,7 +49,9 @@ public class OutboundMessageRegistry {
      * allowRequeue=true.
      */
     private final Set<OutNetMessage> _activeMessages;
+    /** Timer removing stale entries. */
     private final CleanupTask _cleanupTask;
+    /** The router sending the messages. */
     private final RouterContext _context;
 
     /**
@@ -261,6 +264,7 @@ public class OutboundMessageRegistry {
         _activeMessages.remove(msg);
     }
 
+    /** Periodically removes entries that were never answered. */
     private class CleanupTask extends SimpleTimer2.TimedEvent {
         /** LOCKING: _selectors. */
         private long _nextExpire;
@@ -349,6 +353,8 @@ public class OutboundMessageRegistry {
 
         /**
          * Reschedule the cleanup for the given selector's expiration.
+         *
+         * @param sel the selector whose expiration to schedule
          */
         public void scheduleExpiration(MessageSelector sel) {
             long now = _context.clock().now();

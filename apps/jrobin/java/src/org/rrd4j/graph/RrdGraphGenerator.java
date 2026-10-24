@@ -26,12 +26,15 @@ class RrdGraphGenerator {
      */
     static final float AXIS_STROKE_WIDTH = 5f;
 
+    /** Axis bounds chosen when the data gives no good one. */
     private static final double[] SENSIBLE_VALUES = {
         1000.0, 900.0, 800.0, 750.0, 700.0, 600.0, 500.0, 400.0, 300.0, 250.0, 200.0, 125.0, 100.0,
         90.0, 80.0, 75.0, 70.0, 60.0, 50.0, 40.0, 30.0, 25.0, 20.0, 10.0, 9.0, 8.0, 7.0, 6.0, 5.0,
         4.0, 3.5, 3.0, 2.5, 2.0, 1.8, 1.5, 1.2, 1.0, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0.0, -1
     };
+    /** Index of the base unit in the symbol table. */
     private static final int SYMBOLS_CENTER = 8;
+    /** Unit symbols, ordered by magnitude. */
     private static final char[] SYMBOLS = {
         'y', 'z', 'a', 'f', 'p', 'n', 'µ', 'm', ' ', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y'
     };
@@ -1056,8 +1059,8 @@ class RrdGraphGenerator {
     }
 
     /**
-     * Small leading.
-     * @return the small leading
+     * Line spacing for small legend text.
+     * @return the legend font height times the small leading factor
      */
     double getSmallLeading() {
         return getFontHeight(RrdGraphConstants.FONTTAG_LEGEND)
@@ -1065,8 +1068,8 @@ class RrdGraphGenerator {
     }
 
     /**
-     * Box space.
-     * @return the box space
+     * Space around the legend box.
+     * @return the legend font height times the box space factor, rounded up
      */
     double getBoxSpace() {
         return Math.ceil(
@@ -1074,6 +1077,11 @@ class RrdGraphGenerator {
                         * RrdGraphConstants.LEGEND_BOX_SPACE);
     }
 
+    /**
+     * Chooses a round grid spacing for the axis.
+     *
+     * @return the spacing between grid lines
+     */
     private double getBox() {
         return getFontHeight(RrdGraphConstants.FONTTAG_LEGEND) * RrdGraphConstants.LEGEND_BOX;
     }

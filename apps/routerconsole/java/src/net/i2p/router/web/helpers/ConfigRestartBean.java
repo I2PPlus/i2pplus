@@ -25,10 +25,14 @@ public class ConfigRestartBean {
      * order is: form value, form class, display text.
      */
     private static final String[] SET1 = {"shutdownImmediate", "stop now", "Shutdown immediately", "cancelShutdown", "cancel", "Cancel shutdown"};
+    /** Button labels shown to a basic-mode user. */
     private static final String[] SET2 = {"restartImmediate", "reload now", "Restart immediately", "cancelShutdown", "cancel", "Cancel restart"};
+    /** Button labels shown to an advanced-mode user. */
     private static final String[] SET3 = {"restart", "reload", "Restart", "shutdown", "stop", "Shutdown"};
+    /** Button labels shown when the router may only stop. */
     private static final String[] SET4 = {"shutdown", "stop", "Shutdown"};
 
+    /** Property selecting the advanced button set. */
     private static final String PROP_ADVANCED = "routerconsole.advanced";
 
     /**
@@ -201,10 +205,25 @@ public class ConfigRestartBean {
         return Long.MAX_VALUE/2; // sidebar.jsp adds a safety factor so we don't want to overflow...
     }
 
+    /**
+     * Translates a label using the router's language.
+     *
+     * @param s the text to translate
+     * @param ctx the context holding the language
+     * @return the translated text
+     */
     private static String _t(String s, RouterContext ctx) {
         return Messages.getString(s, ctx);
     }
 
+    /**
+     * Translates a label with one argument substituted.
+     *
+     * @param s the text to translate
+     * @param o the argument to substitute
+     * @param ctx the context holding the language
+     * @return the translated text
+     */
     private static String _t(String s, Object o, RouterContext ctx) {
         return Messages.getString(s, o, ctx);
     }

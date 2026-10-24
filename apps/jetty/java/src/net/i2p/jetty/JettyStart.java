@@ -38,18 +38,29 @@ import org.eclipse.jetty.xml.XmlConfiguration;
  */
 public class JettyStart implements ClientApp {
 
+    /** The manager that starts the apps. */
     private final ClientAppManager _mgr;
+    /** The command line arguments given. */
     private final String[] _args;
+    /** The Jetty servers that were started. */
     private final List<LifeCycle> _jettys;
-    // warning, may be null if called from main
+    /** The app context, null when run standalone from main. */
     private final I2PAppContext _context;
+    /** Current state of the server. */
     private volatile ClientAppState _state;
+    /** The HTTP port in use. */
     private volatile int _port;
+    /** The HTTPS port in use. */
     private volatile int _sslPort;
+    /** Config directory for Jetty 9.3 and newer. */
     private static final String GZIP_DIR = "eepsite-jetty9.3";
+    /** Config file enabling the gzip handler. */
     private static final String GZIP_CONFIG = "jetty-gzip.xml";
+    /** Oldest Jetty version with the gzip handler. */
     private static final String MIN_GZIP_HANDLER_VER = "9.3";
+    /** Config directory for the rewrite handler. */
     private static final String REWRITE_DIR = "eepsite-jetty9";
+    /** Config file enabling the rewrite handler. */
     private static final String REWRITE_CONFIG = "jetty-rewrite.xml";
     /**
      * All args must be XML file names.
@@ -190,7 +201,9 @@ public class JettyStart implements ClientApp {
         }
     }
 
+    /** Thread starting the server. */
     private class Starter extends I2PAppThread {
+        /** Builds the server startup thread. */
         public Starter() {
             super("JettyStarter");
             changeState(STARTING);
@@ -269,7 +282,9 @@ public class JettyStart implements ClientApp {
         }
     }
 
+    /** Thread stopping the server. */
     private class Stopper extends I2PAppThread {
+        /** Builds the server shutdown thread. */
         public Stopper() {
             super("JettyStopper");
             changeState(STOPPING);
@@ -313,10 +328,21 @@ public class JettyStart implements ClientApp {
         return "Jetty " + Arrays.toString(_args);
     }
 
+    /**
+     * Changes the app state and notifies listeners.
+     *
+     * @param state the new state
+     */
     private void changeState(ClientAppState state) {
         changeState(state, null);
     }
 
+    /**
+     * Changes the app state and notifies listeners.
+     *
+     * @param state the new state
+     * @param e the exception, null if none
+     */
     private synchronized void changeState(ClientAppState state, Exception e) {
         _state = state;
         if (_mgr != null)

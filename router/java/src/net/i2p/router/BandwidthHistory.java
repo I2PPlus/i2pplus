@@ -40,19 +40,31 @@ public class BandwidthHistory extends SimpleTimer2.TimedEvent {
     private static final long FLUSH_INTERVAL = 60 * 1000;
     /** Discard file data older than 30 min. */
     private static final long MAX_FILE_AGE = 30L * 60 * 1000;
+    /** Splits a saved history line on the commas. */
     private static final Pattern COMMA_SPLIT = Pattern.compile(",");
+    /** File holding the bandwidth history. */
     private static final String FILE_NAME = "i2p-bandwidth.dat";
 
+    /** The one history in use. */
     private static BandwidthHistory instance;
 
+    /** The router context. */
     private final RouterContext _ctx;
+    /** The saved times of the samples. */
     private final long[] _timestamps;
+    /** The saved received byte counts. */
     private final long[] _rx;
+    /** The saved sent byte counts. */
     private final long[] _tx;
+    /** Most samples held at once. */
     private final int _capacity;
+    /** File the history is saved to. */
     private final File _file;
+    /** Index of the oldest sample. */
     private int _head;
+    /** Number of samples stored. */
     private int _count;
+    /** When the history is saved next. */
     private long _nextFlush;
 
     /**
@@ -84,8 +96,8 @@ public class BandwidthHistory extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     * The ring buffer capacity.
-     * @return the ring buffer capacity
+     * Report how many samples fit before the oldest is overwritten.
+     * @return the capacity in samples, currently always 1200
      */
     public int getCapacity() {
         return _capacity;
@@ -133,8 +145,8 @@ public class BandwidthHistory extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     * The number of stored samples.
-     * @return number of stored samples
+     * Report how many samples the buffer currently holds.
+     * @return a count from 0 to the capacity, inclusive
      */
     public synchronized int getCount() {
         return _count;

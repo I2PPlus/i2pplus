@@ -28,6 +28,7 @@ public class ConfigNavHelper extends HelperBase {
                                            "i2cp", "plugins", "webapps",  "reseed", "advanced", "family", "ban",
                                            "tuning"};
 
+    /** Translation keys for the tab titles. */
     private static final String[] titles =
                                           {_x("Bandwidth"), _x("Network"), _x("UI"), _x("Sidebar"), _x("Home Page"),
                                            _x("Service"), _x("Update"), _x("Tunnels"),
@@ -41,8 +42,16 @@ public class ConfigNavHelper extends HelperBase {
      *  @since 0.9.19
      */
     private static class Tab {
+        /** Page the tab links to. */
         public final String page;
+        /** Title shown on the tab. */
         public final String title;
+        /**
+         * Names one navigation tab.
+         *
+         * @param p page the tab links to
+         * @param t title shown on the tab
+         */
         public Tab(String p, String t) {
             page = p; title = t;
         }
@@ -53,9 +62,12 @@ public class ConfigNavHelper extends HelperBase {
      *  @since 0.9.19
      */
     private class TabComparator implements Comparator<Tab> {
+         /** Fixed id, the comparator is never serialized across versions. */
          private static final long serialVersionUID = 1L;
+         /** Orders titles by locale collation. */
          private final Collator coll;
 
+         /** Creates the comparator with the default locale. */
          public TabComparator() {
              super();
              coll = Collator.getInstance(new Locale(Messages.getLanguage(_context)));

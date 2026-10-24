@@ -27,7 +27,9 @@ import java.util.Set;
  */
 class Piece implements Comparable<Piece> {
 
+    /** Piece number within the torrent. */
     private final int id;
+    /** Peers this piece was requested from. */
     private final Set<PeerID> peers;
 
     /**

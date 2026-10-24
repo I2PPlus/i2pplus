@@ -67,20 +67,29 @@ class Packet {
      * Session the packet travels over, set at construction.
      */
     protected final I2PSession _session;
+    /** Stream id used for sending. */
     private long _sendStreamId;
+    /** Stream id used for receiving. */
     private long _receiveStreamId;
+    /** Sequence number of the packet. */
     private long _sequenceNum;
+    /** Highest sequence number acknowledged. */
     private long _ackThrough;
     /**
      * Sequence numbers the sender has not had acknowledged.
      */
     protected long[] _nacks;
+    /** Time to wait before resending, in ms. */
     private int _resendDelay;
+    /** The packet flags. */
     private int _flags;
+    /** The data carried by the packet. */
     private ByteArray _payload;
+    /** True once the signature was verified. */
     private boolean _sigVerified;
-    // the next four are set only if the flags say so
     /**
+     * Time to wait before resending, in ms, one of the four fields
+     * set only when the flags say so.
      * Destination's signature on the packet, when that option is included.
      */
     protected Signature _optionSignature;
@@ -94,10 +103,13 @@ class Packet {
      * Sending destination, when that option is included.
      */
     protected Destination _optionFrom;
+    /** Delay option requested by the peer. */
     private int _optionDelay;
+    /** Max payload option requested by the peer. */
     private int _optionMaxSize;
-    // following 3 for ofline sigs
     /**
+     * The transient signing key of the peer, the three fields that
+     * follow it are for offline signatures.
      * When the offline signature's transient key stops being valid.
      */
     protected long _transientExpires;
@@ -109,8 +121,9 @@ class Packet {
      * Ephemeral signing public key taken from the offline signing block.
      */
     protected SigningPublicKey _transientSigningPublicKey;
-    // ports
+    /** The local streaming port. */
     private int _localPort;
+    /** The remote streaming port. */
     private int _remotePort;
 
     /**
@@ -228,6 +241,7 @@ class Packet {
      */
     public I2PSession getSession() {return _session;}
 
+    /** True once the send stream id is set. */
     private boolean _sendStreamIdSet = false;
 
     /**
@@ -249,6 +263,7 @@ class Packet {
         _sendStreamId = id;
     }
 
+    /** True once the receive stream id is set. */
     private boolean _receiveStreamIdSet = false;
 
     /**
@@ -1082,6 +1097,11 @@ class Packet {
         return Base64.encode(DataHelper.toLong(4, id)).replace("==", "");
     }
 
+    /**
+     * Appends the flag names to the buffer.
+     *
+     * @param buf the buffer to append to
+     */
     private final void toFlagString(StringBuilder buf) {
         I2PAppContext ctx = I2PAppContext.getCurrentContext();
         boolean debug = ctx != null && ctx.logManager().getLog(Packet.class).shouldDebug();

@@ -28,6 +28,7 @@ public class DeserializationException extends Exception {
         UNEXPECTED_TOKEN;
     }
 
+    /** Pinned for serialized-form compatibility. */
     private static final long serialVersionUID = 1L;
     /** Position */
     private final int position;

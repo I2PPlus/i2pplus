@@ -65,11 +65,21 @@ import net.i2p.util.RandomSource;
  */
 class NtpMessage {
 
-    // Jan. 19, 1968, halfway through era 0, the earliest date we can handle
+    /**
+     * Seconds since Jan. 1 1900 at the pivot: Jan. 19, 1968, halfway through
+     * era 0, the earliest date we can handle, where dates switch from the 21st
+     * to the 20th century.
+     */
     private static final double SECONDS_PIVOT = 1L << 31;
-    // Feb. 8, 2036, the start of era 1
+    /**
+     * Seconds in one NTP era: Feb. 8, 2036, the start of era 1.
+     */
     private static final double SECONDS_ERA = 1L << 32;
-    // Feb. 26, 2104, halfway through era 1, the latest date we can handle
+    /**
+     * Seconds since Jan. 1 1900 at the end: Feb. 26, 2104, halfway through
+     * era 1, the latest date we can handle, where dates switch back to the
+     * 21st century.
+     */
     private static final double SECONDS_END = 3L << 31;
 
     /**
@@ -444,6 +454,12 @@ class NtpMessage {
      */
     private static final ThreadLocal<DateFormat> _DATE_FORMAT = ThreadLocal.withInitial(() -> new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss", Locale.US));
 
+    /**
+     * Formats an NTP timestamp for display.
+     *
+     * @param timestamp the timestamp in seconds since 1900
+     * @return the date and time as text
+     */
     private static String timestampToString(double timestamp) {
         if(timestamp==0) return "0";
 

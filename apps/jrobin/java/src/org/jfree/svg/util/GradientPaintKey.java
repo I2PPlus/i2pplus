@@ -28,6 +28,7 @@ import java.awt.GradientPaint;
  */
 public final class GradientPaintKey {
 
+    /** The paint this instance is a cache key for. */
     private final GradientPaint paint;
 
     /**

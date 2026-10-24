@@ -18,6 +18,7 @@ import java.security.NoSuchAlgorithmException;
  * @since 0.9.4
  */
 public class PasswordManager {
+    /** Used for the log and for reading and writing the password file. */
     private final I2PAppContext _context;
 
     /**
@@ -295,8 +296,8 @@ public class PasswordManager {
     }
 
     /**
-     * speed/comparison test before removing BC version;
-     * JVM was slightly faster.
+     * Speed and comparison test before removing the BC version,
+     * which was slightly faster on the JVM.
      */
 
 }

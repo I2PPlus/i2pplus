@@ -21,7 +21,10 @@ import net.i2p.router.RouterContext;
  * @since 0.8.12 moved from Router.java
  */
 public class UpdateRoutingKeyModifierJob extends JobImpl {
-    // Run every 15 minutes in case of time zone change, clock skew, etc.
+    /**
+     * Longest the job may be delayed, 15 min. It runs about that often, in case
+     * of a time zone change or clock skew.
+     */
     private static final long MAX_DELAY_FAILSAFE = 15*60*1000L;
 
     /**

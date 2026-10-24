@@ -81,46 +81,75 @@ import net.i2p.util.Translate;
  * For embedded use, instantiate, call setKillVMOnEnd(false), and then call {@link #runRouter()}.
  */
 public class Router implements RouterClock.ClockShiftListener {
+    /** Logger for the router. */
     private Log _log;
+    /** The router context. */
     private final RouterContext _context;
+    /** The router's config properties. */
     private final Map<String, String> _config;
     /** Full path to the config file. */
     private String _configFilename;
+    /** Our router info, null until we have one. */
     private RouterInfo _routerInfo;
+    /** Lock guarding the router info. */
     private final ReentrantReadWriteLock _routerInfoLock = new ReentrantReadWriteLock(false);
+    /** Our router identity. */
     private RouterIdentity _routerIdent;
+    /** Hash of our router identity. */
     private Hash _routerHash;
     /** Not for external use. */
     public final Object routerInfoFileLock = new Object();
+    /** Lock guarding writes to router.config. */
     private final Object _configFileLock = new Object();
+    /** When the router was started. */
     private long _started;
+    /** Whether shutdown exits the JVM. */
     private volatile boolean _killVMOnEnd;
+    /** Exit code set before a graceful shutdown. */
     private int _gracefulExitCode;
+    /** Listener notified on out-of-memory errors. */
     private I2PThread.OOMEventListener _oomListener;
+    /** Hook run when the JVM exits. */
     private ShutdownHook _shutdownHook;
+    /** Thread watching for a shutdown request. */
     private I2PThread _gracefulShutdownDetector;
+    /** Lock for the shutdown request flag. */
     private Object _gracefulShutdownLock;
+    /** Watchdog that restarts a hung router. */
     private RouterWatchdog _watchdog;
+    /** Thread running the watchdog. */
     private Thread _watchdogThread;
+    /** Thread touching the watchdog timestamp. */
     private MarkLiveliness _markLiveliness;
+    /** Log of events shown on the notifications page. */
     private final EventLog _eventLog;
+    /** Lock guarding the router state. */
     private final Object _stateLock = new Object();
+    /** Current state of the router. */
     private State _state = State.UNINITIALIZED;
+    /** Signer for our router family, if configured. */
     private FamilyKeyCrypto _familyKeyCrypto;
+    /** Whether loading the family key failed. */
     private boolean _familyKeyCryptoFail;
     /**
      * Lock protecting the family key crypto.
      */
     public final Object _familyKeyLock = new Object();
+    /** Callback logging the UPnP scan results. */
     private UPnPScannerCallback _upnpScannerCallback;
+    /** How long the router was down before this run. */
     private long _downtime = -1;
+    /** The congestion cap last logged, to skip repeat warnings. */
     private char _lastCongestionCap = 0;
+    /** History of our bandwidth over time. */
     private BandwidthHistory _bandwidthHistory;
 
-    // Cache for getSharePercentage() to avoid repeated Double.parseDouble on hot paths
+    /** Config string the cached share percentage was parsed from. */
     private String _cachedSharePctProp;
+    /** Cached share of tunnels offered to clients. */
     private double _cachedSharePct = DEFAULT_SHARE_PERCENTAGE / 100.0d;
 
+    /** Bundle holding the translated console strings. */
     private static final String BUNDLE_NAME = "net.i2p.router.web.messages";
     /**
      * Config property for the router config file location.
@@ -132,7 +161,9 @@ public class Router implements RouterClock.ClockShiftListener {
 
     /** Used to differentiate routerInfo files on different networks. */
     private static final int DEFAULT_NETWORK_ID = 2;
+    /** Config key for the network id. */
     private static final String PROP_NETWORK_ID = "router.networkID";
+    /** The network id we communicate on. */
     private final int _networkID;
 
     /** Coalesce stats this often - should be a little less than one minute, so the graphs get updated. */
@@ -160,16 +191,23 @@ public class Router implements RouterClock.ClockShiftListener {
      * Config property for the outbound exploratory pool random key.
      */
     public static final String PROP_OB_RANDOM_KEY = TunnelPoolSettings.PREFIX_OUTBOUND_EXPLORATORY + TunnelPoolSettings.PROP_RANDOM_KEY;
+    /** File name for the event log. */
     private static final String EVENTLOG = "eventlog.txt";
+    /** Config key recording the loaded jbigi resource. */
     private static final String PROP_JBIGI = "jbigi.loadedResource";
+    /** Config key recording the processor the jbigi was chosen for. */
     private static final String PROP_JBIGI_PROCESSOR = "jbigi.lastProcessor";
     /**
      * The update zip file name.
      */
     public static final String UPDATE_FILE = "i2pupdate.zip";
+    /** Whether congestion capability letters are published. */
     private static final boolean CONGESTION_CAPS = true;
+    /** Seconds allowed for a graceful shutdown. */
     private static final int SHUTDOWN_WAIT_SECS = 60;
+    /** Config key for the console's advanced mode. */
     private static final String PROP_ADVANCED = "routerconsole.advanced";
+    /** Config key relaxing the congestion cap rules. */
     private static final String PROP_RELAX_CONGESTION_CAP = "router.relaxCongestionCap";
     /**
      * Whether advanced mode is enabled.
@@ -177,6 +215,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * @return true if advanced mode is enabled
      */
     public boolean isAdvanced() {return getContext().getBooleanProperty(PROP_ADVANCED);}
+    /** Timezone the router started with, restored on shutdown. */
     private static final String ORIGINAL_TIMEZONE_ID;
     static {
         // If embedding I2P you may wish to disable one or more of the following
@@ -644,6 +683,7 @@ public class Router implements RouterClock.ClockShiftListener {
      */
     public RouterContext getContext() {return _context;}
 
+    /** Logs the UPnP scan and port mapping results. */
     private class LoggerCallback implements UPnPScannerCallback {
         /**
          * Callback that logs the UPnP/SSDP scan start and finish.
@@ -808,6 +848,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * @since 0.9.18
      */
     private enum State {
+        /** Nothing has run yet. */
         UNINITIALIZED,
         /** Constructor complete. */
         INITIALIZED,
@@ -852,10 +893,12 @@ public class Router implements RouterClock.ClockShiftListener {
         EnumSet.of(State.RUNNING, State.GRACEFUL_SHUTDOWN, State.STARTING_1, State.STARTING_2,
                    State.STARTING_3, State.NETDB_READY, State.EXPL_TUNNELS_READY);
 
+    /** States counted as a graceful shutdown. */
     private static final Set<State> STATES_GRACEFUL =
         EnumSet.of(State.GRACEFUL_SHUTDOWN, State.FINAL_SHUTDOWN_1, State.FINAL_SHUTDOWN_2,
                    State.FINAL_SHUTDOWN_3, State.STOPPED);
 
+    /** States counted as the final shutdown. */
     private static final Set<State> STATES_FINAL =
         EnumSet.of(State.FINAL_SHUTDOWN_1, State.FINAL_SHUTDOWN_2, State.FINAL_SHUTDOWN_3, State.STOPPED);
 
@@ -2037,6 +2080,11 @@ public class Router implements RouterClock.ClockShiftListener {
         }
     }
 
+    /**
+     * Returns the file recording when the router last ran.
+     *
+     * @return the ping file
+     */
     private File getPingFile() {
         String s = _context.getProperty("router.pingFile", "router.ping");
         File f = new File(s);
@@ -2044,6 +2092,7 @@ public class Router implements RouterClock.ClockShiftListener {
         return f;
     }
 
+    /** Interval between watchdog liveliness touches, one minute. */
     private static final long LIVELINESS_DELAY = 60L*1000;
 
     /**

@@ -2,8 +2,11 @@ package org.rrd4j.core.timespec;
 
 /** Tokenizes at-style time specification strings into tokens. */
 class TimeScanner {
+    /** The text being scanned for a time. */
     private final String dateString;
+    /** Where the scanner is in the text, and where it was before the last token. */
     private int pos, pos_save;
+    /** The token just read, and the one before it. */
     private TimeToken token, token_save;
 
     /** Keyword tokens for time specification parsing */
@@ -116,7 +119,7 @@ class TimeScanner {
     }
     /**
      * Next token from the date string.
-     * @return the next token from the date string
+     * @return the next token, EOF once the string is exhausted
      */
     TimeToken nextToken() {
         StringBuilder buffer = new StringBuilder();
@@ -195,6 +198,12 @@ class TimeScanner {
         pos = pos_save;
         return token = token_save;
     }
+    /**
+     * Recognizes one word of the date text.
+     *
+     * @param arg the word to recognize
+     * @return the token's type
+     */
     private int parseToken(String arg) {
         for (int i = 0; specials[i].value != null; i++) {
             if (specials[i].value.equalsIgnoreCase(arg)) {

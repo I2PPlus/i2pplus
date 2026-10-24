@@ -29,6 +29,7 @@ import net.i2p.util.Log;
  * @since 0.9.70+
  */
 public class HealthHelper extends HelperBase {
+    /** Logger for this class. */
     private Log _log;
 
     /**
@@ -256,13 +257,23 @@ public class HealthHelper extends HelperBase {
         return new Anomaly(color, detail);
     }
 
-    /** Baseline-vs-current evaluation result for a single stat. @since 0.9.70+. */
+    /**
+     * Baseline-vs-current evaluation result for a single stat.
+     *
+     * @since 0.9.70+
+     */
     private static final class Anomaly {
         /** "green", "yellow", "red", or "gray". */
         final String color;
         /** Tooltip detail line (e.g. "vs baseline 12% ↑"), or null when collecting. */
         final String detail;
 
+        /**
+         * Holds one evaluation result.
+         *
+         * @param color the colour to show
+         * @param detail the tooltip line, or null
+         */
         Anomaly(String color, String detail) {
             this.color = color;
             this.detail = detail;

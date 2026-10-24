@@ -5,6 +5,7 @@ package net.i2p.i2pcontrol.security;
  * Indicates that the provided token is malformed or incorrect.
  */
 public class InvalidAuthTokenException extends Exception {
+    /** Pinned for serialized-form compatibility. */
     private static final long serialVersionUID = 7605321329341235577L;
 
     /**

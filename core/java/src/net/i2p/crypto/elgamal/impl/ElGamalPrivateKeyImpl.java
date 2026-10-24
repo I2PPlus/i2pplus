@@ -27,6 +27,7 @@ import javax.crypto.spec.DHPrivateKeySpec;
  * PKCS#8 encoding for standardized key storage and transmission.
  */
 public class ElGamalPrivateKeyImpl implements ElGamalPrivateKey, DHPrivateKey {
+    /** Pinned for serialized-form compatibility. */
     private static final long serialVersionUID = 4819350091141529678L;
 
     /** The private exponent x. */
@@ -34,7 +35,7 @@ public class ElGamalPrivateKeyImpl implements ElGamalPrivateKey, DHPrivateKey {
     /** El spec. */
     private ElGamalParameterSpec elSpec;
 
-    /** No-arg constructor. */
+    /** Creates a key with no parameters, set later by decoding. */
     protected ElGamalPrivateKeyImpl() {}
 
     /**

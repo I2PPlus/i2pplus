@@ -24,13 +24,19 @@ import net.i2p.data.DataHelper;
  */
 public class ConsolePasswordManager extends RouterPasswordManager {
 
+    /** Property marking the password migration as done. */
     private static final String PROP_MIGRATED = "routerconsole.passwordManager.migrated";
-    // migrate these to hash
+    /** Old plaintext console password property, migrated to a hash. */
     private static final String PROP_CONSOLE_OLD = "consolePassword";
+    /** User name the console password is stored under. */
     private static final String CONSOLE_USER = "admin";
+    /** Suffix of the hashed password property. */
     private static final String PROP_PBKDF2 = ".pbkdf2";
+    /** PBKDF2 rounds used when hashing a password. */
     private static final int PBKDF2_ITERATIONS = 1000000;
+    /** Splits a stored hash into its parts. */
     private static final Pattern COLON_SPLIT = Pattern.compile(":");
+    /** Generates password salts. */
     private static final SecureRandom _random = new SecureRandom();
 
     /**

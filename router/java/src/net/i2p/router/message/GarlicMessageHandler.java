@@ -26,9 +26,13 @@ import net.i2p.util.RandomSource;
  * and those garlic messages are handled in InboundMessageDistributor.</p>
  */
 public class GarlicMessageHandler implements HandlerJobBuilder {
+    /** The router handling the message. */
     private final RouterContext _context;
+    /** Xor mask for this router's own message ids. */
     private final long _msgIDBloomXorLocal;
+    /** Xor mask for messages from other routers. */
     private final long _msgIDBloomXorRouter;
+    /** Xor mask for messages arriving through a tunnel. */
     private final long _msgIDBloomXorTunnel;
     /**
      * Create a handler that draws a fresh random message-ID XOR mask for each

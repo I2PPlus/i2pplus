@@ -24,7 +24,9 @@ import net.i2p.util.Log;
  * @since 0.9.70+
  */
 class ContactDrivenRefreshJob extends JobImpl {
+    /** Logger for this class. */
     private final Log _log;
+    /** The floodfill database whose profile is refreshed. */
     private final FloodfillNetworkDatabaseFacade _facade;
 
     /** Peers we've heard from recently that may need a RI refresh. */

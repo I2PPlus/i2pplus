@@ -25,9 +25,13 @@ import java.util.StringTokenizer;
  *
  */
 public class Sample {
+    /** The database the sample belongs to. */
     private final RrdDb parentDb;
+    /** Time the sample was taken. */
     private long time;
+    /** Data sources named in the sample. */
     private final String[] dsNames;
+    /** Values read for those sources. */
     private final double[] values;
 
     /**

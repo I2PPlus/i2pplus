@@ -10,7 +10,9 @@ import org.bouncycastle.util.Util;
  */
 class MLKEMEngine
 {
+    /** Random source for the key generation and encapsulation. */
     private SecureRandom random;
+    /** The IND-CPA core of the KEM. */
     private MLKEMIndCpa indCpa;
 
     /** Kyber N parameter */
@@ -22,36 +24,54 @@ class MLKEMEngine
 
     /** Number of bytes for Hashes and Seeds */
     public final static int KyberSymBytes = 32;
+    /** Shared secret length, in bytes. */
     private final static int KyberSharedSecretBytes = 32; // Number of Bytes for Shared Secret
 
     /** Kyber polynomial bytes */
     public final static int KyberPolyBytes = 384;
 
+    /** Eta2 noise parameter value. */
     private final static int KyberEta2 = 2;
 
+    /** Message length of the IND-CPA scheme, in bytes. */
     private final static int KyberIndCpaMsgBytes = KyberSymBytes;
 
 
-    // parameters for Kyber{k}
+    /** The k parameter of the Kyber variant. */
     private final int KyberK;
+    /** Polynomial vector length, in bytes. */
     private final int KyberPolyVecBytes;
+    /** Compressed polynomial length, in bytes. */
     private final int KyberPolyCompressedBytes;
+    /** Compressed polynomial vector length, in bytes. */
     private final int KyberPolyVecCompressedBytes;
+    /** Eta1 noise parameter value. */
     private final int KyberEta1;
+    /** IND-CPA public key length, in bytes. */
     private final int KyberIndCpaPublicKeyBytes;
+    /** IND-CPA secret key length, in bytes. */
     private final int KyberIndCpaSecretKeyBytes;
+    /** IND-CPA scheme size, in bytes. */
     private final int KyberIndCpaBytes;
+    /** Encapsulating key length, in bytes. */
     private final int KyberPublicKeyBytes;
+    /** Decapsulating key length, in bytes. */
     private final int KyberSecretKeyBytes;
+    /** Ciphertext length, in bytes. */
     private final int KyberCipherTextBytes;
 
-    // Crypto
+    /** Size named by the crypto suffix of the variant. */
     private final int CryptoBytes;
+    /** Secret key length named by the crypto suffix. */
     private final int CryptoSecretKeyBytes;
+    /** Public key length named by the crypto suffix. */
     private final int CryptoPublicKeyBytes;
+    /** Ciphertext length named by the crypto suffix. */
     private final int CryptoCipherTextBytes;
 
+    /** Session key length derived per variant, in bytes. */
     private final int sessionKeyLength;
+    /** The symmetric primitives used by the scheme. */
     private final Symmetric symmetric;
 
     /**
@@ -454,6 +474,14 @@ class MLKEMEngine
         return kemDecryptInternal(secretKey, cipherText);
     }
 
+    /**
+     * Conditionally copies x into r, constant time.
+     *
+     * @param r the destination array
+     * @param x the source array
+     * @param xlen the source length, in bytes
+     * @param b true to copy
+     */
     private void cmov(byte[] r, byte[] x, int xlen, boolean b)
     {
         if (b)

@@ -26,10 +26,15 @@ public class MessageStatusMessage extends I2CPMessageImpl {
      * I2CP message type ID written to the wire header.
      */
     public static final int MESSAGE_TYPE = 22;
+    /** The session the message belongs to. */
     private int _sessionId;
+    /** The message being reported on. */
     private long _messageId;
+    /** The nonce the message was sent with. */
     private long _nonce;
+    /** Size of the message, in bytes. */
     private long _size;
+    /** What happened to the message. */
     private int _status;
 
     /**
@@ -237,8 +242,8 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Session id.
-     * @return the session id
+     * Session the status applies to.
+     * @return the session id 0-65535, or -1 if not set
      */
     public long getSessionId() {
         return _sessionId;
@@ -354,9 +359,10 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Status string.
+     * Human-readable name of a status constant.
      * @param status the STATUS_* constant to translate
-     * @return the status string
+     * @return an upper-case string such as AVAILABLE, or SEND FAILURE CODE: n
+     *         for unrecognized values
      */
     public static final String getStatusString(int status) {
         switch (status) {

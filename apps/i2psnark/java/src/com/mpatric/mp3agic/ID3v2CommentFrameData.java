@@ -2,18 +2,36 @@ package com.mpatric.mp3agic;
 
 import java.io.UnsupportedEncodingException;
 
+/** An ID3v2 comment frame. */
 public class ID3v2CommentFrameData extends AbstractID3v2FrameData {
 
+    /** Language code used when the frame has none. */
     private static final String DEFAULT_LANGUAGE = "eng";
 
+    /** The three letter language code of the comment. */
     private String language;
+    /** The description of the comment. */
     private EncodedText description;
+    /** The comment text itself. */
     private EncodedText comment;
 
+    /**
+     * Builds an empty comment frame.
+     *
+     * @param unsynchronisation true for the unsynchronisation scheme
+     */
     public ID3v2CommentFrameData(boolean unsynchronisation) {
         super(unsynchronisation);
     }
 
+    /**
+     * Builds a comment frame from its parts.
+     *
+     * @param unsynchronisation true for the unsynchronisation scheme
+     * @param language the three letter language code
+     * @param description the description of the comment
+     * @param comment the comment text
+     */
     public ID3v2CommentFrameData(
             boolean unsynchronisation,
             String language,
@@ -31,6 +49,13 @@ public class ID3v2CommentFrameData extends AbstractID3v2FrameData {
         this.comment = comment;
     }
 
+    /**
+     * Builds a comment frame from the frame bytes.
+     *
+     * @param unsynchronisation true for the unsynchronisation scheme
+     * @param bytes the raw frame bytes
+     * @throws InvalidDataException if the frame data is corrupt
+     */
     public ID3v2CommentFrameData(boolean unsynchronisation, byte[] bytes)
             throws InvalidDataException {
         super(unsynchronisation);
@@ -101,26 +126,56 @@ public class ID3v2CommentFrameData extends AbstractID3v2FrameData {
         return length;
     }
 
+    /**
+     * Returns the language code of the comment.
+     *
+     * @return the three letter code
+     */
     public String getLanguage() {
         return language;
     }
 
+    /**
+     * Sets the language code of the comment.
+     *
+     * @param language the three letter code to set
+     */
     public void setLanguage(String language) {
         this.language = language;
     }
 
+    /**
+     * Returns the comment text.
+     *
+     * @return the comment, encoded as in the tag
+     */
     public EncodedText getComment() {
         return comment;
     }
 
+    /**
+     * Sets the comment text.
+     *
+     * @param comment the comment to set
+     */
     public void setComment(EncodedText comment) {
         this.comment = comment;
     }
 
+    /**
+     * Returns the description of the comment.
+     *
+     * @return the description, encoded as in the tag
+     */
     public EncodedText getDescription() {
         return description;
     }
 
+    /**
+     * Sets the description of the comment.
+     *
+     * @param description the description to set
+     */
     public void setDescription(EncodedText description) {
         this.description = description;
     }

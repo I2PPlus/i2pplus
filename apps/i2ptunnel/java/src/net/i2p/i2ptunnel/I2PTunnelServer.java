@@ -114,7 +114,9 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      * I2P client (bad option values, unresolvable hosts, lingering connections).
      */
     protected final Logging l;
+    /** SSL factory for the client connections. */
     private I2PSSLSocketFactory _sslFactory;
+    /** Default read timeout, negative for no timeout. */
     private static final long DEFAULT_READ_TIMEOUT = -1;
     /** Default timeout - override if desired. */
     protected volatile long readTimeout = DEFAULT_READ_TIMEOUT;
@@ -180,7 +182,9 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      * @since 0.9.71+
      */
     public static final String PROP_SERVER_THREADS = "i2ptunnel.server.threads";
+    /** Delay before recreating the server socket. */
     private static final long RECONNECT_DELAY_2MIN = 120 * 1000L;
+    /** Delay before the short recovery attempt. */
     private static final long RECONNECT_DELAY_10S = 10 * 1000L;
     /**
      * Pool running the per-connection client handlers, taken from the
@@ -196,7 +200,9 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      * @since 0.9.71+
      */
     protected volatile TunnelControllerGroup _tcg;
+    /** The open client connections, by hash. */
     private final Map<Integer, InetSocketAddress> _socketMap = new ConcurrentHashMap<>(4);
+    /** Filter deciding which connections to accept. */
     private volatile StatefulConnectionFilter _filter;
 
     /**
@@ -230,6 +236,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      * Server ID for HTTP bidirectional proxies; not incremented, always 0.
      */
     protected static volatile long serverId = 0;
+    /** Default port of the client socket. */
     private static final int DEFAULT_LOCAL_PORT = 4488;
     /**
      * Local port a HTTP bidir subclass hands to its proxy, replacing the
@@ -339,13 +346,22 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
         open = true;
     }
 
+    /**
+     * Opens the client socket and starts serving.
+     *
+     * @param host the host to bind to
+     * @param port the port to bind to
+     * @param tunnel the tunnel to connect through
+     */
     private void init(InetAddress host, int port, I2PTunnel tunnel) {
         this.remoteHost = host;
         this.remotePort = port;
         buildSocketMap(tunnel.getClientOptions());
     }
 
+    /** Delay between the connection retries. */
     private static final int RETRY_DELAY = 15*1000;
+    /** Connection attempts before giving up. */
     private static final int MAX_RETRIES = 20;
 
     /**
@@ -1227,8 +1243,14 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      * Run the blockingHandler.
      */
     private class Handler implements Runnable {
+        /** The I2P socket being served. */
         private final I2PSocket _i2ps;
 
+        /**
+         * Builds the handler for one socket.
+         *
+         * @param socket the I2P socket to serve
+         */
         public Handler(I2PSocket socket) {_i2ps = socket;}
 
         /**

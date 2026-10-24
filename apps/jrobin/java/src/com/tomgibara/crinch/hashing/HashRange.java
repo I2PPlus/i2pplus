@@ -24,11 +24,14 @@ import java.math.BigInteger;
  */
 public class HashRange {
 
-    // statics
 
+    /** Smallest value that fits in an int. */
     private static final BigInteger INT_MINIMUM = BigInteger.valueOf(Integer.MIN_VALUE);
+    /** Largest value that fits in an int. */
     private static final BigInteger INT_MAXIMUM = BigInteger.valueOf(Integer.MAX_VALUE);
+    /** Smallest value that fits in a long. */
     private static final BigInteger LONG_MINIMUM = BigInteger.valueOf(Long.MIN_VALUE);
+    /** Largest value that fits in a long. */
     private static final BigInteger LONG_MAXIMUM = BigInteger.valueOf(Long.MAX_VALUE);
 
     /** Full int range from Integer.MIN_VALUE to Integer.MAX_VALUE */
@@ -40,17 +43,22 @@ public class HashRange {
     /** Positive long range from 1 to Long.MAX_VALUE */
     public static final HashRange POSITIVE_LONG_RANGE = new HashRange(BigInteger.ONE, LONG_MAXIMUM);
 
-    // fields
 
+    /** Smallest value in the range, included. */
     private final BigInteger minimum;
+    /** Largest value in the range, excluded. */
     private final BigInteger maximum;
+    /** True if the bounds fit in an int. */
     private final boolean intBounded;
+    /** True if the bounds fit in a long. */
     private final boolean longBounded;
+    /** Cached count of values in the range. */
     private BigInteger size = null;
+    /** Cached flag if the size fits an int. */
     private Boolean intSized = null;
+    /** Cached flag if the size fits a long. */
     private Boolean longSized = null;
 
-    // constructors
 
     /**
      * Construct a HashRange with BigInteger bounds.
@@ -89,7 +97,6 @@ public class HashRange {
         this(BigInteger.valueOf(minimum), BigInteger.valueOf(maximum));
     }
 
-    // accessors
 
     /**
      * Checks whether this range starts at zero.
@@ -157,7 +164,6 @@ public class HashRange {
         return longSized;
     }
 
-    // methods
 
     /**
      * Creates an equivalent range whose minimum is zero.

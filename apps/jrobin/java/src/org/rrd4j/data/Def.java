@@ -12,10 +12,15 @@ import org.rrd4j.core.RrdDb;
  * backend configuration.
  */
 class Def extends Source {
+    /** The RRD file to read. */
     private final URI rrdUri;
+    /** The data source to read. */
     private final String dsName;
+    /** Backend used to open the file. */
     private final RrdBackendFactory backend;
+    /** Consolidation function to read with. */
     private final ConsolFun consolFun;
+    /** The values fetched from the file. */
     private FetchData fetchData;
 
     /**

@@ -32,25 +32,30 @@ import org.json.simple.Jsoner;
  * @since 0.9.38
  */
 public class MLabRunner {
-    // ns.measurementlab.net does not support https
-    //private static final String NS_URL = "http://ns.measurementlab.net/ndt?format=json";
+    /** Name server URL for the bandwidth test, over https only. */
     private static final String NS_URL_SSL = "https://mlab-ns.appspot.com/ndt?format=json";
-    // use ndt_ssl for test over ssl
+    /** Name server URL for the ndt_ssl test, used when SSL is selected. */
     private static final String NS_URL_SSL_SSL = "https://mlab-ns.appspot.com/ndt_ssl?format=json";
+    /** Config key for using SSL in the bandwidth test. */
     private static final String PROP_SSL = "routerconsole.bwtest.useSSL";
-    // SSL hangs far too often
+    /** Whether SSL is the default, SSL hangs far too often for it. */
     private static final boolean DEFAULT_USE_SSL = false;
+    /** Time allowed for the name server lookup. */
     private static final long NS_TIMEOUT = 20*1000;
+    /** The app context. */
     private final I2PAppContext _context;
+    /** Logger for the bandwidth test runner. */
     private final Log _log;
+    /** True while a test is running. */
     private final AtomicBoolean _running = new AtomicBoolean();
+    /** The test running now, null if none. */
     private static MLabRunner _instance;
 
     /**
-     * The singleton instance.
+     * Gets the runner instance, creating it if none exists.
      *
      * @param ctx the application context
-     * @return the singleton instance
+     * @return the runner for this context
      */
     public static MLabRunner getInstance(I2PAppContext ctx) {
         synchronized(MLabRunner.class) {
@@ -342,7 +347,11 @@ public class MLabRunner {
      * Returned from runNDT
      */
     private class ToolRunImpl implements ToolRun {
+        /** Runs one measurement tool. */
+        private ToolRunImpl() {}
+        /** Listeners of the test's progress. */
         private List<ToolRunListener> listeners = new ArrayList<>();
+        /** True once the test was cancelled. */
         private boolean cancelled;
 
         public void cancel() {
@@ -418,6 +427,9 @@ public class MLabRunner {
 
     /** Standalone test */
     private static class TestListener implements ToolListener {
+        /** Receives the speed test's progress. */
+        private TestListener() {}
+        /** True once the test has finished. */
         private final AtomicBoolean _complete = new AtomicBoolean();
 
         public void reportSummary(String str) {
@@ -433,6 +445,11 @@ public class MLabRunner {
             _complete.set(true);
         }
 
+        /**
+         * Whether the test has finished.
+         *
+         * @return true if the test is done
+         */
         public boolean isComplete() {
             return _complete.get();
         }

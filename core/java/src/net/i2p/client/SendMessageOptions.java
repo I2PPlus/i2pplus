@@ -183,6 +183,13 @@ public class SendMessageOptions extends DateAndFlags {
         return codes.length - 1;
     }
 
+    /**
+     * The priority value stored at an index of the options table.
+     *
+     * @param code the index to read
+     * @param codes the table of values
+     * @return the value at that index
+     */
     private static int codeToVal(int code, int[] codes) {
         return codes[code];
     }

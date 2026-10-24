@@ -38,25 +38,35 @@ import java.nio.charset.StandardCharsets;
  */
 public class CommentSet extends AbstractSet<Comment> {
 
+    /** The comments, by time bucket. */
     private final HashMap<Integer, List<Comment>> map;
+    /** The comments not hidden. */
     private int size;
+    /** The comments including the hidden ones. */
     private int realSize;
+    /** The rating we gave the torrent. */
     private int myRating;
+    /** The sum of all the ratings. */
     private int totalRating;
+    /** The ratings counted in the sum. */
     private int ratingSize;
+    /** Total length of the comment texts. */
     private int totalTextSize;
+    /** When the newest comment was written. */
     private long latestCommentTime;
+    /** True if the set changed since the last save. */
     private boolean modified;
 
     /** Maximum number of comments allowed. */
     public static final int MAX_SIZE = 256;
 
-    // Comment.java enforces max text length of 512, but
-    // we don't want 256*512 in memory per-torrent, so
-    // track and enforce separately.
-    // Assume most comments are short or null.
+    /**
+     * Total text length allowed across the comments, so the set does
+     * not hold 256 comments of 512 characters each.
+     */
     private static final int MAX_TOTAL_TEXT_LEN = MAX_SIZE * 16;
 
+    /** Builds an empty comment set. */
     private CommentSet() {
         super();
         map = new HashMap<>(4);

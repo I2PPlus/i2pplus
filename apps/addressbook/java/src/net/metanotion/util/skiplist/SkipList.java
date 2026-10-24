@@ -15,14 +15,13 @@ import net.i2p.util.RandomSource;
 public class SkipList<K extends Comparable<? super K>, V> implements Flushable, Iterable<V> {
     /** The probability of each next higher level. */
     protected static final int P = 2;
+    /** What {@link #maxLevels()} reports - span counts are no longer tracked here. */
     private static final int MIN_SLOTS = 4;
-    // these two are really final
-    /** First span in the list. */
+    /** First span in the list. Reassigned, though it is never replaced after construction. */
     protected SkipSpan<K, V> first;
     /** Level stack above the first span. */
     protected SkipLevels<K, V> stack;
-    // I2P mod
-    /** Random number generator. */
+    /** Random number generator, the I2P one rather than the upstream default. */
     public static final Random rng = RandomSource.getInstance();
 
     /** Number of items in the list. */
@@ -179,9 +178,10 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
         return new SkipIterator<>(ss, search[0]);
     }
 
-    // Levels adjusted to guarantee O(log n) search
-    // This is expensive proportional to the number of spans.
-    /** Rebalance the skip list levels. */
+    /**
+     * Rebalance the skip list levels, adjusted to guarantee O(log n) searches.
+     * The work is proportional to the number of spans.
+     */
     public void balance() {
     // TODO Skip List Balancing Algorithm
     }

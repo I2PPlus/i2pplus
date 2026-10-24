@@ -35,12 +35,19 @@ import net.i2p.util.SecureFileOutputStream;
  * Manages all router cryptographic key pairs including persistent storage of router keys and in-memory management of LeaseSet keys for secure communications.
  */
 public class KeyManager {
+    /** Logger for the key manager. */
     private final Log _log;
+    /** The router context. */
     private final RouterContext _context;
+    /** Our router's private key. */
     private PrivateKey _privateKey;
+    /** Our router's public key. */
     private PublicKey _publicKey;
+    /** Our router's signing private key. */
     private SigningPrivateKey _signingPrivateKey;
+    /** Our router's signing public key. */
     private SigningPublicKey _signingPublicKey;
+    /** The lease set keys, by destination hash. */
     private final Map<Hash, LeaseSetKeys> _leaseSetKeys; // Destination --> LeaseSetKeys
     /** Property key for keydir. */
 
@@ -192,6 +199,7 @@ public class KeyManager {
      * there's no real reason to try so hard to recover our old keys.
      */
     private class SynchronizeKeysJob extends JobImpl {
+        /** Builds the key synchronization job. */
         public SynchronizeKeysJob() {
             super(KeyManager.this._context);
         }
@@ -211,6 +219,11 @@ public class KeyManager {
             }
         }
 
+        /**
+         * Synchronizes the router keys with the files in the directory.
+         *
+         * @param keyDir the key directory
+         */
         private void syncKeys(File keyDir) {
             syncPrivateKey(keyDir);
             syncPublicKey(keyDir);
@@ -219,6 +232,11 @@ public class KeyManager {
             syncVerificationKey(keyDir, type);
         }
 
+        /**
+         * Synchronizes the private key with its file.
+         *
+         * @param keyDir the key directory
+         */
         private void syncPrivateKey(File keyDir) {
             DataStructure ds;
             File keyFile = new File(keyDir, KEYFILE_PRIVATE_ENC);
@@ -232,6 +250,11 @@ public class KeyManager {
                 _privateKey = (PrivateKey) readin;
         }
 
+        /**
+         * Synchronizes the public key with its file.
+         *
+         * @param keyDir the key directory
+         */
         private void syncPublicKey(File keyDir) {
             DataStructure ds;
             File keyFile = new File(keyDir, KEYFILE_PUBLIC_ENC);
@@ -248,6 +271,7 @@ public class KeyManager {
         /**
          * Synchronize the signing private key with the file on disk.
          *
+         * @param keyDir the key directory
          * @param type the SigType to expect on read-in, ignored on write
          */
         private void syncSigningKey(File keyDir, SigType type) {
@@ -266,6 +290,7 @@ public class KeyManager {
         /**
          * Synchronize the signing public key with the file on disk.
          *
+         * @param keyDir the key directory
          * @param type the SigType to expect on read-in, ignored on write
          */
         private void syncVerificationKey(File keyDir, SigType type) {

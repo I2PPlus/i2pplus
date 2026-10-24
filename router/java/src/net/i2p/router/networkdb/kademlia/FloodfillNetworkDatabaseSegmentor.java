@@ -37,13 +37,16 @@ import net.i2p.util.Log;
  * @since 0.9.61
  */
 public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseFacade {
+    /** Logger for this class. */
     private final Log _log;
+    /** The router context the segments live in. */
     private final RouterContext _context;
     /**
      * Database id of the special main netDb, deliberately null so it is never
      * confused with a client's hash-keyed id.
      */
     public static final Hash MAIN_DBID = null;
+    /** The facade holding the main database. */
     private final FloodfillNetworkDatabaseFacade _mainDbid;
 
     /**

@@ -50,22 +50,34 @@ import net.i2p.util.Log;
  *
  */
 class I2CPMessageProducer {
+    /** The log for the producer. */
     private final Log _log;
+    /** The app context. */
     private final I2PAppContext _context;
+    /** The send rate limit, zero for none. */
     private volatile int _maxBytesPerSecond;
+    /** Bytes allowed in the current send period. */
     private volatile int _sendPeriodBytes;
+    /** When the current send period began. */
     private volatile long _sendPeriodBeginTime;
+    /** The lock guarding the send state. */
     private final ReentrantLock _lock;
+    /** Signalled when the send period refills. */
     private final java.util.concurrent.locks.Condition _throttleCondition;
+    /** Config key of the send rate limit. */
     private static final String PROP_MAX_BW = "i2cp.outboundBytesPerSecond";
 
     /** See ConnectionOptions in streaming  - MTU + streaming overhead + gzip overhead. */
     private static final int TYP_SIZE = 1730 + 28 + 23;
 
+    /** Smallest send rate limit allowed. */
     private static final int MIN_RATE = 2 * TYP_SIZE;
 
-    // http://i2p-projekt.i2p/en/docs/protocol/i2cp
-    // Note that some are listed for both client and server side, don't include those below.
+    /**
+     * The I2CP options set by the client side, not the ones listed
+     * for both the client and the server side.
+     * See also: <a href="http://i2p-projekt.i2p/en/docs/protocol/i2cp">the I2CP protocol</a>
+     */
     private static final String[] CLIENT_SIDE_OPTIONS = new String[] {
         "i2cp.closeIdleTime",
         "i2cp.closeOnIdle",

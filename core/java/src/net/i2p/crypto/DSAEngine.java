@@ -33,9 +33,12 @@ import java.security.interfaces.RSAKey;
  * @since 0.8.1
  */
 public final class DSAEngine {
+    /** Logger for this class. */
     private final Log _log;
+    /** The context supplying the random. */
     private final I2PAppContext _context;
 
+    /** Whether to use the JVM's own DSA implementation. */
     private static final boolean _useJavaLibs = false; // = _isAndroid;
 
     /**
@@ -62,6 +65,11 @@ public final class DSAEngine {
      */
     private static final BigInteger DSAQ_MINUS_2 = CryptoConstants.dsaq.subtract(BigInteger.valueOf(2));
 
+    /**
+     * Gives a SHA-512 digest, from a pool.
+     *
+     * @return a digest ready for use
+     */
     private static MessageDigest sha512() {
         try {
             return MessageDigest.getInstance("SHA-512");

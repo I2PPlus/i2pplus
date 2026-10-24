@@ -26,6 +26,7 @@ public class DisconnectMessage extends I2CPMessageImpl {
      * I2CP message type ID written to the wire header.
      */
     public static final int MESSAGE_TYPE = 30;
+    /** Why the router closed the connection, as shown to the client. */
     private String _reason;
 
     /**

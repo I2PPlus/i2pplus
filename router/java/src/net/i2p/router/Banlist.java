@@ -34,83 +34,131 @@ import net.i2p.util.VersionComparator;
  * including permanent bans, temporary bans, and transport-specific restrictions.
  */
 public class Banlist {
+    /** Logger for ban decisions. */
     private final Log _log;
+    /** The router context. */
     private final RouterContext _context;
+    /** Active bans by router hash. */
     private final Map<Hash, Entry> _entries;
 
-    // IP-based bad packet offender tracking
-    // Key: IP address (String), Value: {timestamp, count}
+    /** Bad packet offenses by IP address, with times. */
     private final ConcurrentHashMap<String, long[]> _badPacketIPs;
-    // Key: IP address (String), Value: {timestamp, count}
+    /** Corrupt connection offenses by IP address, with times. */
     private final ConcurrentHashMap<String, long[]> _corruptConnectionIPs;
-    // Key: IP address (String), Value: {timestamp, count}
+    /** Port hopping offenses by IP address, with times. */
     private final ConcurrentHashMap<String, long[]> _portHoppingIPs;
-    // Global threshold: number of offenses before temp ban (configurable)
+    /** Config key for the offenses needed to ban. */
     private static final String PROP_MAX_OFFENSES = "router.banlist.maxOffenses";
+    /** Default offenses needed to ban. */
     private static final int MAX_OFFENSES_DEFAULT = 3;
+    /** Offenses needed to ban, in effect right now. */
     private int _maxOffenses;
-    // Time window: offenses within this period count toward threshold (ms): 15 minutes (configurable)
+    /**
+     * Config key for the window offenses count in, 15 minutes by default.
+     */
     private static final String PROP_OFFENSE_WINDOW = "router.banlist.offenseWindow";
+    /** The default offense window is 15 minutes. */
     private static final long OFFENSE_WINDOW_DEFAULT = 15*60*1000L;
+    /** Offense window in effect right now. */
     private long _offenseWindow;
-    // Startup grace period: don't track offenses in first 3 minutes after startup (configurable)
+    /**
+     * Config key for the startup grace period, during which offenses
+     * are not tracked, 3 minutes by default.
+     */
     private static final String PROP_STARTUP_GRACE = "router.banlist.startupGrace";
+    /** The default startup grace before offenses count is 3 minutes. */
     private static final long STARTUP_GRACE_DEFAULT = 3*60*1000L;
+    /** Startup grace period in effect right now. */
     private long _startupGrace;
-    // Default ban duration for bad packet offenders (configurable)
+    /** Config key for the bad packet ban length. */
     private static final String PROP_BAD_PACKET_DURATION = "router.banlist.badPacketDuration";
+    /** The default bad packet ban lasts 1 hour. */
     private static final long BANLIST_DURATION_BAD_PACKETS_DEFAULT = 60*60*1000L;
+    /** Bad packet ban length in effect right now. */
     private long _badPacketDuration;
-    // Enable/disable auto-banning features (configurable)
+    /** Config key turning the bad packet ban on or off. */
     private static final String PROP_ENABLE_BAD_PACKET_BAN = "router.banlist.enableBadPacketBan";
+    /** Bad packet banning is off by default. */
     private static final boolean ENABLE_BAD_PACKET_BAN_DEFAULT = false;
+    /** Whether bad packet banning is enabled. */
     private boolean _enableBadPacketBan;
+    /** Config key turning the corrupt connection ban on or off. */
     private static final String PROP_ENABLE_CORRUPT_CONNECTION_BAN = "router.banlist.enableCorruptConnectionBan";
+    /** Corrupt connection banning is off by default. */
     private static final boolean ENABLE_CORRUPT_CONNECTION_BAN_DEFAULT = false;
+    /** Whether corrupt connection banning is enabled. */
     private boolean _enableCorruptConnectionBan;
+    /** Config key turning the port hopping ban on or off. */
     private static final String PROP_ENABLE_PORT_HOPPING_BAN = "router.banlist.enablePortHoppingBan";
+    /** Port hopping banning is off by default. */
     private static final boolean ENABLE_PORT_HOPPING_BAN_DEFAULT = false;
+    /** Whether port hopping banning is enabled. */
     private boolean _enablePortHoppingBan;
-    // Blocklist enable (maps to router.blocklist.enable)
+    /** Config key turning the blocklist on or off. */
     private static final String PROP_ENABLE_BLOCKLIST = "router.blocklist.enable";
+    /** The blocklist is on by default. */
     private static final boolean ENABLE_BLOCKLIST_DEFAULT = true;
+    /** Whether the blocklist is enabled. */
     private boolean _enableBlocklist;
-    // Tor blocklist enable (maps to router.blocklistTor.enable)
+    /** Config key turning the Tor blocklist on or off. */
     private static final String PROP_ENABLE_TOR_BLOCKLIST = "router.blocklistTor.enable";
+    /** The Tor blocklist is on by default. */
     private static final boolean ENABLE_TOR_BLOCKLIST_DEFAULT = true;
+    /** Whether the Tor blocklist is enabled. */
     private boolean _enableTorBlocklist;
-    // Country blocklist enable (maps to router.blocklistCountries.enable)
+    /** Config key turning the country blocklist on or off. */
     private static final String PROP_ENABLE_COUNTRY_BAN = "router.blocklistCountries.enable";
+    /** Country banning is off by default. */
     private static final boolean ENABLE_COUNTRY_BAN_DEFAULT = false;
+    /** Whether country banning is enabled. */
     private boolean _enableCountryBan;
-    // Country ban duration - uses existing router.blockCountries property (session-based)
-    // XG router ban (unlimited bandwidth, no transit tunnels)
+    /** Config key turning the XG router ban on or off. */
     private static final String PROP_ENABLE_XG_BAN = "router.banlistXG";
+    /** Banning XG capacity routers is off by default. */
     private static final boolean ENABLE_XG_BAN_DEFAULT = false;
+    /** Whether the XG router ban is enabled. */
     private boolean _enableXgBan;
-    // LU router ban (low bandwidth tier, unreachable/firewalled)
+    /** Config key turning the LU router ban on or off. */
     private static final String PROP_ENABLE_LU_BAN = "router.banlistLU";
+    /** Banning LU capacity routers is off by default. */
     private static final boolean ENABLE_LU_BAN_DEFAULT = false;
+    /** Whether the LU router ban is enabled. */
     private boolean _enableLuBan;
-    // Introducer-cap router ban (an SSU2 address advertising more introducers than the spec allows)
+    /**
+     * Config key turning the introducer-cap ban on or off, for an SSU2
+     * address advertising more introducers than the spec allows.
+     */
     private static final String PROP_ENABLE_INTRODUCER_BAN = "router.banlistIntroducers";
+    /** Banning introducer-capped routers is on by default. */
     private static final boolean ENABLE_INTRODUCER_BAN_DEFAULT = true;
+    /** Whether the introducer-cap ban is enabled. */
     private boolean _enableIntroducerBan;
-    // Invalid RouterInfo version ban (a version above the highest one we know)
+    /** Config key turning the invalid version ban on or off. */
     private static final String PROP_ENABLE_INVALID_VERSION_BAN = "router.banlistInvalidVersion";
+    /** Banning invalid router versions is on by default. */
     private static final boolean ENABLE_INVALID_VERSION_BAN_DEFAULT = true;
+    /** Whether the invalid version ban is enabled. */
     private boolean _enableInvalidVersionBan;
-    // Invalid RouterInfo publication date ban (a RouterInfo published in the past epoch)
+    /**
+     * Config key turning the bad publication date ban on or off, for a
+     * router info published in the past epoch.
+     */
     private static final String PROP_ENABLE_PUB_DATE_BAN = "router.banlistPubDate";
+    /** Banning bad publication dates is on by default. */
     private static final boolean ENABLE_PUB_DATE_BAN_DEFAULT = true;
+    /** Whether the bad publication date ban is enabled. */
     private boolean _enablePubDateBan;
-    // Contradictory reachability caps ban (publishing both R and U)
+    /** Config key turning the contradictory caps ban on or off. */
     private static final String PROP_ENABLE_RU_CAPS_BAN = "router.banlistRUCaps";
+    /** Banning contradictory reachability caps is on by default. */
     private static final boolean ENABLE_RU_CAPS_BAN_DEFAULT = true;
+    /** Whether the contradictory caps ban is enabled. */
     private boolean _enableRUCapsBan;
-    // Custom capability bans (e.g., "LG", "XfU", "DGU")
+    /** Config key listing capability letters to ban. */
     private static final String PROP_CUSTOM_CAPABILITY_BANS = "router.banlistCapabilities";
+    /** Splits the capability ban list on commas and spaces. */
     private static final Pattern COMMA_SPLIT = Pattern.compile("[,\\s]+");
+    /** Capability letters to ban, from the config. */
     private String _customCapabilityBans;
 
     /**
@@ -182,6 +230,7 @@ public class Banlist {
      * Ban duration for repeat bad packet offenders.
      */
     public static final long BANLIST_DURATION_BAD_PACKETS = 60*60*1000L; // 1 hour
+    /** Wait before the cleanup job first runs. */
     private static final long BANLIST_CLEANER_START_DELAY = BANLIST_DURATION_PARTIAL;
 
     /**
@@ -191,6 +240,7 @@ public class Banlist {
      * minimum scale floor MIN_BAN_SCALE.
      */
     private static final int BAN_COUNT_BASELINE = 3000;
+    /** Smallest factor a ban duration may be scaled by. */
     private static final double MIN_BAN_SCALE = 0.25;
     /** Eligible ban durations for reduction: &gt; 4 hours. */
     private static final long BAN_REDUCTION_MIN = 4 * 60 * 60 * 1000L;
@@ -529,6 +579,7 @@ public class Banlist {
         return null;
     }
 
+    /** Periodically removes expired bans and offenses. */
     private class Cleanup extends JobImpl {
         /**
          * Creates the periodic banlist cleanup job.
@@ -952,7 +1003,7 @@ public class Banlist {
     /**
      * Number of currently banlisted routers.
      *
-     * @return the number of currently banlisted routers
+     * @return the size of the ban map
      */
     public int getRouterCount() {return _entries.size();}
 

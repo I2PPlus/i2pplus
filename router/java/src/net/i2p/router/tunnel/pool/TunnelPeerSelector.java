@@ -53,21 +53,35 @@ import net.i2p.router.peermanager.ProfileOrganizer;
  */
 public abstract class TunnelPeerSelector extends ConnectChecker {
 
+    /** The capacities that disqualify a peer by default. */
     private static final String DEFAULT_EXCLUDE_CAPS = String.valueOf(Router.CAPABILITY_BW12) +
                                                         String.valueOf(Router.CAPABILITY_NO_TUNNELS);
 
+    /** Context the cached config values were read from. */
     private static volatile RouterContext _cfgCtx;
+    /** When the cached config values were last read. */
     private static volatile long _cfgRefreshed;
+    /** Cached capability letters to exclude. */
     private static volatile String _cachedExcludeCaps;
+    /** Cached explicit peer list from the config. */
     private static volatile String _cachedExplicitPeers;
+    /** Cached flag to skip unreachable inbound exploratory hops. */
     private static volatile boolean _cachedIbExplUnreachable;
+    /** Cached flag to skip unreachable outbound exploratory hops. */
     private static volatile boolean _cachedObExplUnreachable;
+    /** Cached flag to skip unreachable inbound client hops. */
     private static volatile boolean _cachedIbClientUnreachable;
+    /** Cached flag to skip unreachable outbound client hops. */
     private static volatile boolean _cachedObClientUnreachable;
+    /** Cached flag to skip slow inbound exploratory hops. */
     private static volatile boolean _cachedIbExplSlow;
+    /** Cached flag to skip slow outbound exploratory hops. */
     private static volatile boolean _cachedObExplSlow;
+    /** Cached flag to skip slow inbound client hops. */
     private static volatile boolean _cachedIbClientSlow;
+    /** Cached flag to skip slow outbound client hops. */
     private static volatile boolean _cachedObClientSlow;
+    /** How often the cached config values are refreshed. */
     private static final long CONFIG_REFRESH_MS = 30 * 1000L;
 
     /**
@@ -84,22 +98,41 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * @since 0.9.71+
      */
     private static final long ENDPOINT_CACHE_TTL_MS = 300 * 1000L;
+    /** Entries held in each endpoint cache. */
     private static final int ENDPOINT_CACHE_MAX_SIZE = 4096;
     /** Prune at most every this many cache misses once over capacity. */
     private static final int ENDPOINT_PRUNE_STRIDE = 64;
+    /** The cached inbound gateway endpoints. */
     private static final ConcurrentHashMap<Hash, EndpointCacheEntry> _ibgwCache =
         new ConcurrentHashMap<>(512);
+    /** The cached outbound endpoint entries. */
     private static final ConcurrentHashMap<Hash, EndpointCacheEntry> _obepCache =
         new ConcurrentHashMap<>(512);
+    /** Counts selections to time the endpoint cache pruning. */
     private static final AtomicInteger _endpointPruneCounter = new AtomicInteger();
 
+    /** One cached gateway or endpoint decision. */
     private static final class EndpointCacheEntry {
+        /** Whether the peer was allowed as an endpoint. */
         final boolean allowed;
+        /** When the cached decision goes stale. */
         final long expiresAt;
+        /**
+         * Caches one endpoint decision.
+         *
+         * @param allowed whether the peer was allowed
+         * @param expiresAt when the decision goes stale
+         */
         EndpointCacheEntry(boolean allowed, long expiresAt) {
             this.allowed = allowed;
             this.expiresAt = expiresAt;
         }
+        /**
+         * Whether the cached decision has gone stale.
+         *
+         * @param now the current time
+         * @return true if the entry may be dropped
+         */
         boolean isExpired(long now) { return now >= expiresAt; }
     }
 
@@ -153,42 +186,102 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         _cfgRefreshed = now;
     }
 
+    /**
+     * Returns the cached exclude-caps config value.
+     *
+     * @param ctx the router context
+     * @return the capability letters
+     */
     private static String getCachedExcludeCaps(RouterContext ctx) {
         refreshPeerConfig(ctx);
         return _cachedExcludeCaps;
     }
+    /**
+     * Returns the cached explicit peers config value.
+     *
+     * @param ctx the router context
+     * @return the explicit peer list
+     */
     private static String getCachedExplicitPeers(RouterContext ctx) {
         refreshPeerConfig(ctx);
         return _cachedExplicitPeers;
     }
+    /**
+     * Returns the cached inbound exploratory unreachable flag.
+     *
+     * @param ctx the router context
+     * @return true to exclude unreachable peers
+     */
     private static boolean getCachedIbExplUnreachable(RouterContext ctx) {
         refreshPeerConfig(ctx);
         return _cachedIbExplUnreachable;
     }
+    /**
+     * Returns the cached outbound exploratory unreachable flag.
+     *
+     * @param ctx the router context
+     * @return true to exclude unreachable peers
+     */
     private static boolean getCachedObExplUnreachable(RouterContext ctx) {
         refreshPeerConfig(ctx);
         return _cachedObExplUnreachable;
     }
+    /**
+     * Returns the cached inbound client unreachable flag.
+     *
+     * @param ctx the router context
+     * @return true to exclude unreachable peers
+     */
     private static boolean getCachedIbClientUnreachable(RouterContext ctx) {
         refreshPeerConfig(ctx);
         return _cachedIbClientUnreachable;
     }
+    /**
+     * Returns the cached outbound client unreachable flag.
+     *
+     * @param ctx the router context
+     * @return true to exclude unreachable peers
+     */
     private static boolean getCachedObClientUnreachable(RouterContext ctx) {
         refreshPeerConfig(ctx);
         return _cachedObClientUnreachable;
     }
+    /**
+     * Returns the cached inbound exploratory slow flag.
+     *
+     * @param ctx the router context
+     * @return true to exclude slow peers
+     */
     private static boolean getCachedIbExplSlow(RouterContext ctx) {
         refreshPeerConfig(ctx);
         return _cachedIbExplSlow;
     }
+    /**
+     * Returns the cached outbound exploratory slow flag.
+     *
+     * @param ctx the router context
+     * @return true to exclude slow peers
+     */
     private static boolean getCachedObExplSlow(RouterContext ctx) {
         refreshPeerConfig(ctx);
         return _cachedObExplSlow;
     }
+    /**
+     * Returns the cached inbound client slow flag.
+     *
+     * @param ctx the router context
+     * @return true to exclude slow peers
+     */
     private static boolean getCachedIbClientSlow(RouterContext ctx) {
         refreshPeerConfig(ctx);
         return _cachedIbClientSlow;
     }
+    /**
+     * Returns the cached outbound client slow flag.
+     *
+     * @param ctx the router context
+     * @return true to exclude slow peers
+     */
     private static boolean getCachedObClientSlow(RouterContext ctx) {
         refreshPeerConfig(ctx);
         return _cachedObClientSlow;
@@ -201,7 +294,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     /** Multiplier applied to the base activity window by {@link #getActivityWindow}. */
     private static final int MIN_WINDOW_MULTIPLIER = 1;
+    /** Largest bandwidth window multiplier allowed. */
     private static final int MAX_WINDOW_MULTIPLIER = 4;
+    /** Default bandwidth window multiplier. */
     private static final int DEFAULT_WINDOW_MULTIPLIER = 1;
 
     /**
@@ -1347,11 +1442,24 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         return false;
     }
 
+    /**
+     * Whether the peer was rejected as a gateway too recently.
+     *
+     * @param profile the peer's profile
+     * @param cutoffMillis how far back to look
+     * @return true if a recent rejection blocks the peer
+     */
     private boolean wasRecentlyRejected(PeerProfile profile, long cutoffMillis) {
         long cutoff = ctx.clock().now() - cutoffMillis;
         return profile.getTunnelHistory().getLastRejectedBandwidth() > cutoff;
     }
 
+    /**
+     * Whether a floodfill is excluded from tunnel service.
+     *
+     * @param routerInfo the candidate peer
+     * @return true to skip the peer
+     */
     private boolean shouldExcludeFloodfillPeer(RouterInfo routerInfo) {
         String capabilities = routerInfo.getCapabilities();
         boolean isFloodfill = capabilities.contains(Character.toString(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL));
@@ -1614,14 +1722,21 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
                VersionComparator.comp(version, MIN_VERSION) < 0;
     }
 
+    /** Config key for excluding unreachable outbound exploratory hops. */
     private static final String PROP_OUTBOUND_EXPLORATORY_EXCLUDE_UNREACHABLE = "router.outboundExploratoryExcludeUnreachable";
+    /** Config key for excluding unreachable outbound client hops. */
     private static final String PROP_OUTBOUND_CLIENT_EXCLUDE_UNREACHABLE = "router.outboundClientExcludeUnreachable";
+    /** Config key for excluding unreachable inbound exploratory hops. */
     private static final String PROP_INBOUND_EXPLORATORY_EXCLUDE_UNREACHABLE = "router.inboundExploratoryExcludeUnreachable";
+    /** Config key for excluding unreachable inbound client hops. */
     private static final String PROP_INBOUND_CLIENT_EXCLUDE_UNREACHABLE = "router.inboundClientExcludeUnreachable";
+    /** Unreachable hops are kept by default here. */
     private static final boolean DEFAULT_OUTBOUND_EXPLORATORY_EXCLUDE_UNREACHABLE = false;
+    /** Unreachable hops are kept by default here. */
     private static final boolean DEFAULT_OUTBOUND_CLIENT_EXCLUDE_UNREACHABLE = false;
-    // see comments at getExclude() above
+    /** Unreachable hops are kept by default here. */
     private static final boolean DEFAULT_INBOUND_EXPLORATORY_EXCLUDE_UNREACHABLE = false;
+    /** Unreachable hops are kept by default here. */
     private static final boolean DEFAULT_INBOUND_CLIENT_EXCLUDE_UNREACHABLE = false;
 
     /**
@@ -1653,9 +1768,13 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         }
     }
 
+    /** Config key for excluding slow outbound exploratory hops. */
     private static final String PROP_OUTBOUND_EXPLORATORY_EXCLUDE_SLOW = "router.outboundExploratoryExcludeSlow";
+    /** Config key for excluding slow outbound client hops. */
     private static final String PROP_OUTBOUND_CLIENT_EXCLUDE_SLOW = "router.outboundClientExcludeSlow";
+    /** Config key for excluding slow inbound exploratory hops. */
     private static final String PROP_INBOUND_EXPLORATORY_EXCLUDE_SLOW = "router.inboundExploratoryExcludeSlow";
+    /** Config key for excluding slow inbound client hops. */
     private static final String PROP_INBOUND_CLIENT_EXCLUDE_SLOW = "router.inboundClientExcludeSlow";
 
     /**
@@ -1780,6 +1899,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         return ordered;
     }
 
+    /** Orders peers by base64 hash for stable selection. */
     private static final Comparator<Hash> HASH_BASE64_COMPARATOR = Comparator.comparing(h -> h.toBase64());
 
     /**
@@ -1800,7 +1920,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * then siphash(l) - siphash(r).
      */
     private static class HashComparator implements Comparator<Hash>, Serializable {
+        /** First seed for the deterministic peer shuffle. */
         private final long k0;
+        /** Second seed for the deterministic peer shuffle. */
         private final long k1;
 
         /**
@@ -1914,6 +2036,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         return rv;
     }
 
+    /** Display labels for the peer skip reasons. */
     private static final Map<String, String> REASON_LABELS = new LinkedHashMap<>(8);
     static {
         REASON_LABELS.put("too-many-tunnels", "Too many tunnels");
@@ -1941,7 +2064,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
          */
         private static final int MAX_EXCLUDED_PEERS = 384;
 
+        /** Whether this selector builds inbound tunnels. */
         private final boolean _isIn;
+        /** Whether this selector builds exploratory tunnels. */
         private final boolean _isExpl;
         /** Build success ratio, fetched once per Excluder construction. */
         private final double _buildSuccess;
@@ -2129,7 +2254,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * @since 0.9.58
      */
     private class ClosestHopExcluder extends ExcluderBase {
+        /** Whether the pass builds inbound tunnels. */
         private final boolean isIn;
+        /** The hop position mask for this router. */
         private final int ourMask;
 
         /**
@@ -2552,8 +2679,15 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * @since 0.9.71+
      */
     private static final class PreConnectFailJob extends JobImpl {
+        /** The peer to retry a session with. */
         private final Hash _peer;
 
+        /**
+         * Prepares to retry a failed pre-connect session.
+         *
+         * @param ctx the router context
+         * @param peer the peer to retry
+         */
         PreConnectFailJob(RouterContext ctx, Hash peer) {
             super(ctx);
             _peer = peer;

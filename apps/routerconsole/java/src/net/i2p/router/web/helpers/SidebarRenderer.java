@@ -75,9 +75,17 @@ class SidebarRenderer {
         SECTION_NAMES = Collections.unmodifiableMap(aMap);
     }
 
+    /** The router the sidebar describes. */
     private final RouterContext _context;
+    /** Supplies the state the sidebar shows. */
     private final SidebarHelper _helper;
+    /** Id of the toggle control being rendered. */
     private String toggleId = "";
+    /**
+     * Gives the checkbox that hides a sidebar section.
+     *
+     * @return the html of the toggle checkbox
+     */
     private String getToggle() {return "<input type=checkbox id=" + toggleId + " class=\"toggleSection script\" checked hidden>";}
 
     /**
@@ -433,6 +441,7 @@ class SidebarRenderer {
         return buf.toString();
     }
 
+    /** Formatter for the clock shown in the sidebar. */
     private static final ThreadLocal<DateFormat> CLOCK_FMT = ThreadLocal.withInitial(() -> {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.UK);
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -1284,6 +1293,12 @@ class SidebarRenderer {
         }
     }
 
+    /**
+     * Appends graph values to the tooltip text.
+     *
+     * @param sb where the text is written
+     * @param values the values to append
+     */
     private static void appendValues(StringBuilder sb, double[] values) {
         for (int i = 0; i < values.length; i++) {
             if (i > 0) {sb.append(',');}

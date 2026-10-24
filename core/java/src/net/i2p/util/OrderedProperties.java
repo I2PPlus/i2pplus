@@ -27,6 +27,7 @@ import java.util.Set;
  */
 public class OrderedProperties extends Properties {
 
+    /** Order used when the entries are written out. */
     private static final EntryComparator ECOMP = new EntryComparator();
 
     /**
@@ -48,7 +49,10 @@ public class OrderedProperties extends Properties {
         return new UnmodifiableSortedSet<>(super.entrySet(), ECOMP);
     }
 
+    /** Orders entries by key so the written file is stable. */
     private static class EntryComparator implements Comparator<Map.Entry<Object, Object>>, Serializable {
+        /** Orders entries by key so the written file is stable. */
+        private EntryComparator() {}
         @Override
         public int compare(Map.Entry<Object, Object> l, Map.Entry<Object, Object> r) {
             return ((String) l.getKey()).compareTo(((String) r.getKey()));

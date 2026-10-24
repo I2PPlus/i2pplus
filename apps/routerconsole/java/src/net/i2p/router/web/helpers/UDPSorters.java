@@ -167,6 +167,7 @@ class UDPSorters {
      * @since 0.9.33
      */
     static class RateInComparator extends PeerComparator {
+        /** Time the comparator was made, so rates are read consistently */
         private final long now = I2PAppContext.getGlobalContext().clock().now();
 
         /** Default constructor; snapshots the clock for the bps comparison. */
@@ -188,6 +189,7 @@ class UDPSorters {
      * @since 0.9.33
      */
     static class RateOutComparator extends PeerComparator {
+        /** Time the comparator was made, so rates are read consistently */
         private final long now = I2PAppContext.getGlobalContext().clock().now();
 
         /** Default constructor; snapshots the clock for the bps comparison. */

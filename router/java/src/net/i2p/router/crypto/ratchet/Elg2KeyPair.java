@@ -11,6 +11,7 @@ import net.i2p.data.PublicKey;
  */
 public class Elg2KeyPair extends KeyPair {
 
+    /** The key in its encoded form. */
     private final byte[] encoded;
 
     /**

@@ -59,9 +59,6 @@ public class Service {
         return serviceNode;
     }
 
-    ////////////////////////////////////////////////
-    //	Constructor
-    ////////////////////////////////////////////////
     /** Root node name for service control point documents. */
     public static final String SCPD_ROOTNODE = "scpd";
 
@@ -282,7 +279,6 @@ public class Service {
      * @param url the URL to check
      * @return true if the URLs match, false otherwise
      */
-    // Thanks for Giordano Sassaroli <sassarol@cefriel.it> (09/03/03)
     private boolean isURL(String referenceUrl, String url) {
         if (referenceUrl == null || url == null) return false;
         boolean ret = url.equals(referenceUrl);
@@ -511,7 +507,6 @@ public class Service {
         Node scpdNode = data.getSCPDNode();
         if (scpdNode != null) return scpdNode;
 
-        // Thanks for Jaap (Sep 18, 2010)
         Device rootDev = getRootDevice();
         if (rootDev == null) return null;
 
@@ -540,7 +535,6 @@ public class Service {
     public byte[] getSCPDData() {
         Node scpdNode = getSCPDNode();
         if (scpdNode == null) return new byte[0];
-        // Thanks for Mikael Hakman (04/25/05)
         String desc = new String();
         desc += UPnP.XML_DECLARATION;
         desc += "\n";
@@ -689,6 +683,11 @@ public class Service {
     //	UserData
     ////////////////////////////////////////////////
 
+    /**
+     * Parses the service node.
+     *
+     * @return the parsed data of the service node
+     */
     private ServiceData getServiceData() {
         Node node = getServiceNode();
         ServiceData userData = (ServiceData) node.getUserData();
@@ -704,10 +703,20 @@ public class Service {
     //	Notify
     ////////////////////////////////////////////////
 
+    /**
+     * Gives the service type as sent in notify messages.
+     *
+     * @return the service type as sent in notify messages
+     */
     private String getNotifyServiceTypeNT() {
         return getServiceType();
     }
 
+    /**
+     * Builds the search target string for notifications.
+     *
+     * @return the USN string
+     */
     private String getNotifyServiceTypeUSN() {
         return getDevice().getUDN() + "::" + getServiceType();
     }
@@ -871,6 +880,13 @@ public class Service {
         return null;
     }
 
+    /**
+     * Sends a state variable's new value to one subscriber.
+     *
+     * @param sub the subscriber to notify
+     * @param stateVar the variable whose value changed
+     * @return true if the notification was sent
+     */
     private boolean notify(Subscriber sub, StateVariable stateVar) {
         String varName = stateVar.getName();
         String value = stateVar.getValue();

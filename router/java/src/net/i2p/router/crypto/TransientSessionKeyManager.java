@@ -72,6 +72,7 @@ import net.i2p.util.SimpleTimer2;
  * Todo: Switch to ConcurrentHashMaps and ReadWriteLocks, only get write lock during cleanup.
  */
 public class TransientSessionKeyManager extends SessionKeyManager {
+    /** Logger for transient session management. */
     private final Log _log;
     /** Map allowing us to go from the targeted PublicKey to the OutboundSession used. */
     private final Map<PublicKey, OutboundSession> _outboundSessions;
@@ -84,11 +85,15 @@ public class TransientSessionKeyManager extends SessionKeyManager {
     private final Map<SessionTag, TagSet> _inboundTagSets;
     /** The router context. */
     protected final I2PAppContext _context;
+    /** False once the manager has shut down. */
     private volatile boolean _alive;
     /** For debugging. */
     private final AtomicInteger _rcvTagSetID = new AtomicInteger();
+    /** Counter handing out sent tag set ids. */
     private final AtomicInteger _sentTagSetID = new AtomicInteger();
+    /** Tags included in each tag set sent. */
     private final int _tagsToSend;
+    /** Tag count below which more tag sets are sent. */
     private final int _lowThreshold;
 
     /**
@@ -165,7 +170,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      * appropriate application context itself.
      *
      * @param context the application context this manager is a service of, whose
-              log manager supplies the logger
+     *                log manager supplies the logger
      */
     public TransientSessionKeyManager(I2PAppContext context) {
         this(context, DEFAULT_TAGS, LOW_THRESHOLD);
@@ -203,6 +208,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         synchronized (_outboundSessions) {_outboundSessions.clear();}
     }
 
+    /** Periodically cleans up stale tag sets. */
     private class CleanupEvent extends SimpleTimer2.TimedEvent {
         /** Creates cleanup timer running recurring maintenance on sessions. */
         public CleanupEvent() { super(_context.simpleTimer2()); }
@@ -219,7 +225,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
     /**
      * Snapshot of all inbound tag sets.
      *
-     * @return a snapshot of all inbound tag sets
+     * @return a new set, safe to iterate
      */
     private Set<TagSet> getInboundTagSets() {
         return new HashSet<>(_inboundTagSets.values());
@@ -649,6 +655,12 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         return key;
     }
 
+    /**
+     * Returns the pending session for a target key.
+     *
+     * @param target the peer's public key
+     * @return the session, or null if none is pending
+     */
     private OutboundSession getSession(PublicKey target) {
         synchronized (_outboundSessions) {
             return _outboundSessions.get(target);
@@ -683,12 +695,22 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         }
     }
 
+    /**
+     * Registers a new outbound session.
+     *
+     * @param sess the session to add
+     */
     private void addSession(OutboundSession sess) {
         synchronized (_outboundSessions) {
             _outboundSessions.put(sess.getTarget(), sess);
         }
     }
 
+    /**
+     * Drops the pending session for a target key.
+     *
+     * @param target the peer's public key
+     */
     private void removeSession(PublicKey target) {
         if (target == null) return;
         OutboundSession session = null;
@@ -893,6 +915,8 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      * Earliest first.
      */
     private static class TagSetComparator implements Comparator<TagSet>, Serializable {
+         /** Orders tag sets by how full they are. */
+         private TagSetComparator() {}
          /** Compare two entries for ordering. */
          public int compare(TagSet l, TagSet r) {
              return compareTagSets(l.getDate(), r.getDate(), l.hashCode(), r.hashCode());
@@ -924,11 +948,17 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      * The state for a crypto session to a single public key.
      */
     private static class OutboundSession {
+        /** The app context. */
         private final I2PAppContext _context;
+        /** Logger for this session. */
         private final Log _log;
+        /** The peer's public key. */
         private final PublicKey _target;
+        /** Key for the most recently sent tag set. */
         private SessionKey _currentKey;
+        /** When the session was created. */
         private final long _established;
+        /** When a tag was last consumed. */
         private long _lastUsed;
         /**
          * Before the first ack, all tagsets go here. These are never expired, we rely
@@ -957,9 +987,17 @@ public class TransientSessionKeyManager extends SessionKeyManager {
          */
         private int _consecutiveFailures;
 
+        /** Failed tag sets before the session is dropped. */
         private static final int MAX_FAILS = 2;
-        /** Creates state for tracking outbound ElGamal session to a single target. */
-
+        /**
+         * Creates state for tracking one outbound ElGamal session to a
+         * single target.
+         *
+         * @param ctx the app context
+         * @param log the logger for the session
+         * @param target the peer's public key
+         * @param key the session key in use
+         */
         public OutboundSession(I2PAppContext ctx, Log log, PublicKey target, SessionKey key) {
             _context = ctx;
             _log = log;
@@ -992,6 +1030,8 @@ public class TransientSessionKeyManager extends SessionKeyManager {
          * For tagsets delivered after the session was acked, this is a nop
          * because the tagset was originally placed directly on the acked list.
          * If the set was previously failed, it will be added back in.
+         *
+         * @param set the tag set that was acknowledged
          */
         void ackTags(TagSet set) {
             synchronized (_tagSets) {
@@ -1013,7 +1053,11 @@ public class TransientSessionKeyManager extends SessionKeyManager {
             set.setAcked();
         }
 
-        /** Didn't get an ack for these tags. */
+        /**
+         * Didn't get an ack for these tags.
+         *
+         * @param set the tag set that failed
+         */
         void failTags(TagSet set) {
             synchronized (_tagSets) {
                 _unackedTagSets.remove(set);
@@ -1043,18 +1087,27 @@ public class TransientSessionKeyManager extends SessionKeyManager {
                 }
             }
         }
-        /** Return the target. */
-
+        /**
+         * The peer this session goes to.
+         *
+         * @return the target's public key
+         */
         public PublicKey getTarget() {
             return _target;
         }
-        /** Return the currentKey. */
-
+        /**
+         * The session key in use now.
+         *
+         * @return the current key
+         */
         public SessionKey getCurrentKey() {
             return _currentKey;
         }
-        /** Replace the current session key. */
-
+        /**
+         * Replaces the session key, dropping the old tags when it changes.
+         *
+         * @param key the new session key
+         */
         public void setCurrentKey(SessionKey key) {
             _lastUsed = _context.clock().now();
             if (_currentKey != null && !_currentKey.equals(key)) {
@@ -1074,19 +1127,27 @@ public class TransientSessionKeyManager extends SessionKeyManager {
             _currentKey = key;
 
         }
-        /** Return the establishedDate. */
-
+        /**
+         * When the session was established.
+         *
+         * @return the time, in epoch ms
+         */
         public long getEstablishedDate() {
             return _established;
         }
-        /** Return the lastUsedDate. */
-
+        /**
+         * When a tag from the session was last used.
+         *
+         * @return the time, in epoch ms
+         */
         public long getLastUsedDate() {
             return _lastUsed;
         }
 
         /**
-         * Expire old tags, returning the number of tag sets removed.
+         * Expires the old tags.
+         *
+         * @return the number of tag sets removed
          */
         public int expireTags() {
             long now = _context.clock().now();
@@ -1111,8 +1172,11 @@ public class TransientSessionKeyManager extends SessionKeyManager {
             }
             return removed;
         }
-        /** Consume the next available tag and advance. */
-
+        /**
+         * Consumes the next available tag and advances.
+         *
+         * @return the tag, null if none are left
+         */
         public SessionTag consumeNext() {
             long now = _context.clock().now();
             _lastUsed = now;
@@ -1183,6 +1247,11 @@ public class TransientSessionKeyManager extends SessionKeyManager {
                 return -1;
         }
 
+        /**
+         * Records a tag set as sent but not yet acked.
+         *
+         * @param set the tag set to add to the unacked sets
+         */
         public void addTags(TagSet set) {
             _lastUsed = _context.clock().now();
             synchronized (_tagSets) {
@@ -1199,11 +1268,17 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         }
     }
 
+    /** One set of session tags sent to a peer. */
     private static class TagSet implements TagSetHandle {
+        /** The tags in this set. */
         private final Set<SessionTag> _sessionTags;
+        /** Key the tags were encrypted with. */
         private final SessionKey _key;
+        /** When the set was created. */
         private final long _date;
+        /** Id identifying the set among those sent. */
         private final int _id;
+        /** Tag count when the set was created. */
         private final int _origSize;
         /** Did we get an ack for this tagset? Only for outbound tagsets. */
         private boolean _acked;
@@ -1212,6 +1287,9 @@ public class TransientSessionKeyManager extends SessionKeyManager {
          * Creates a tag set with its key and expiry.
          *
          * @param date For inbound: when the TagSet will expire; for outbound: creation time
+         * @param tags the session tags in the set
+         * @param key the session key the tags belong to
+         * @param id identifies the set among those sent
          */
         public TagSet(Set<SessionTag> tags, SessionKey key, long date, int id) {
             if (key == null) throw new IllegalArgumentException("Missing key");
@@ -1241,18 +1319,27 @@ public class TransientSessionKeyManager extends SessionKeyManager {
             return _origSize;
         }
 
-        /** Tags still available. */
+        /**
+         * The tags still available.
+         *
+         * @return the unconsumed tags of the set
+         */
         public Set<SessionTag> getTags() {
             return _sessionTags;
         }
-        /** Return the associatedKey. */
-
+        /**
+         * The session key the set belongs to.
+         *
+         * @return the key for the tags
+         */
         public SessionKey getAssociatedKey() {
             return _key;
         }
 
         /**
-         * Caller must synch.
+         * Marks the tag as used. Caller must synch.
+         *
+         * @param tag the tag to remove from the set
          */
         public void consume(SessionTag tag) {
             _sessionTags.remove(tag);
@@ -1294,7 +1381,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         /**
          * Debug string with ID, size, ack status, and key.
          *
-         * @return debug string with ID, size, ack status, and key
+         * @return the formatted text
          */
         @Override
         public String toString() {

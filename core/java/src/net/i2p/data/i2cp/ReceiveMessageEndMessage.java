@@ -24,6 +24,7 @@ public class ReceiveMessageEndMessage extends I2CPMessageImpl {
      * Message type.
      */
     public static final int MESSAGE_TYPE = 7;
+    /** The session whose message transfer has just ended. */
     private int _sessionId;
     /**
      * _message id.

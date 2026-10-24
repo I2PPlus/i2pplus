@@ -11,7 +11,9 @@ import net.i2p.stat.StatManager;
  *
  */
 public class ConfigStatsHandler extends FormHandler {
+    /** The graphs the page asks for. */
     private String _graphs;
+    /** Set when the full version of the page is shown. */
     private boolean _isFull;
 
     /** ConfigStatsHandler default constructor. */

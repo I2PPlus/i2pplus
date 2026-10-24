@@ -8,8 +8,11 @@ import org.rrd4j.core.Util;
  * with quadrant-based scaling.
  */
 class ValueAxisMrtg extends Axis {
+    /** Colours and fonts for the rendered graph. */
     private final ImageParameters im;
+    /** Where the drawing happens. */
     private final ImageWorker worker;
+    /** The graph definition being drawn. */
     private final RrdGraphDef gdef;
 
     /**
@@ -36,7 +39,7 @@ class ValueAxisMrtg extends Axis {
     }
     /**
      * True if axis labels were drawn.
-     * @return true if axis labels were drawn
+     * @return true if labels were drawn, false for a NaN range
      */
     boolean draw() {
         Font font = gdef.getFont(FONTTAG_AXIS);

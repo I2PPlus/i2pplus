@@ -37,41 +37,52 @@ public class RandomArt {
      */
     public RandomArt() {}
 
-    /*
-     * Field sizes for the random art.  Have to be odd, so the starting point
-     * can be in the exact middle of the picture, and FLDBASE should be >=8 .
-     * Else pictures would be too dense, and drawing the frame would
-     * fail, too, because the key type would not fit in anymore.
-     */
+    /** Base of the symbol field values. */
     private static final int    FLDBASE     = 11;
+    /** Height of the symbol field. */
     private static final int    FLDSIZE_Y   = FLDBASE;
+    /** Width of the symbol field. */
     private static final int    FLDSIZE_X   = FLDBASE;
-    /*
-     * Chars to be used after each other every time the worm
-     * intersects with itself.  Matter of taste.
-     */
+    /** Characters of the ASCII symbol field. */
     private static final String A_augmentation_string = " .o+=*BOX@%&#/^SE";
+    /** Characters of the Unicode symbol field. */
     private static final String U_augmentation_string = " \u265a\u265e\u265c\u2618" +
                                                          "\u2665\u2605\u2622\u265f" +
                                                          "\u2666\u2685\u262f\u263b" +
                                                          "\u2691\u265b\u2663\u2660";
 
+    /** ASCII box border, top. */
     private static final char A_BOX_TOP = ' ';
+    /** ASCII box border, bottom. */
     private static final char A_BOX_BOTTOM = ' ';
+    /** ASCII box border, left. */
     private static final char A_BOX_LEFT = ' ';
+    /** ASCII box border, right. */
     private static final char A_BOX_RIGHT = ' ';
+    /** ASCII box border, top left. */
     private static final char A_BOX_TL = ' ';
+    /** ASCII box border, top right. */
     private static final char A_BOX_TR = ' ';
+    /** ASCII box border, bottom left. */
     private static final char A_BOX_BL = ' ';
+    /** ASCII box border, bottom right. */
     private static final char A_BOX_BR = ' ';
 
+    /** Unicode box border, top. */
     private static final char U_BOX_TOP = '\u0020';
+    /** Unicode box border, bottom. */
     private static final char U_BOX_BOTTOM = '\u0020';
+    /** Unicode box border, left. */
     private static final char U_BOX_LEFT = '\u0020';
+    /** Unicode box border, right. */
     private static final char U_BOX_RIGHT = '\u0020';
+    /** Unicode box border, top left. */
     private static final char U_BOX_TL = '\u0020';
+    /** Unicode box border, top right. */
     private static final char U_BOX_TR = '\u0020';
+    /** Unicode box border, bottom left. */
     private static final char U_BOX_BL = '\u0020';
+    /** Unicode box border, bottom right. */
     private static final char U_BOX_BR = '\u0020';
 
     /**
@@ -216,6 +227,13 @@ public class RandomArt {
         return retval.toString();
     }
 
+    /**
+     * Chooses the color for a value.
+     *
+     * @param base the value to color
+     * @param mod the modulus applied first
+     * @return the color name
+     */
     private static String getColor(long base, int mod) {
         if (mod != 0) {
             base += mod * (5 * 256 * 256L);

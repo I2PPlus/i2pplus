@@ -58,6 +58,13 @@ public class RrdGraph implements RrdGraphConstants {
         this(gdef, () -> RrdGraph.generateImageWorker(gdef, writer, param));
     }
 
+    /**
+     * Builds the image for a graph definition.
+     *
+     * @param gdef the graph definition
+     * @param worker supplies the image worker
+     * @throws IOException if the image cannot be rendered
+     */
     private RrdGraph(RrdGraphDef gdef, Supplier<ImageWorker> worker) throws IOException {
         this.gdef = gdef;
         RrdGraphGenerator generator =
@@ -77,6 +84,14 @@ public class RrdGraph implements RrdGraphConstants {
         info.setMeta(meta);
     }
 
+    /**
+     * Creates the worker that renders the graph.
+     *
+     * @param gdef the graph definition
+     * @param writer the image writer to render with
+     * @param param the writer parameters, or null
+     * @return the worker to render with
+     */
     private static ImageWorker generateImageWorker(
             RrdGraphDef gdef, ImageWriter writer, ImageWriteParam param) {
         return BufferedImageWorker.getBuilder()

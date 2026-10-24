@@ -23,9 +23,13 @@ import net.i2p.i2ptunnel.udp.*;
  * MultiSink routes packets based on toPort.
  */
 public class SOCKSUDPPort implements Source, Sink {
+    /** Sends datagrams into the tunnel. */
     private final UDPSink udpsink;
+    /** Delivers datagrams arriving from the tunnel. */
     private final UDPSource udpsource;
+    /** Adds the SOCKS framing on the way out. */
     private final SOCKSUDPWrapper wrapper;
+    /** Removes the SOCKS framing on the way in. */
     private final SOCKSUDPUnwrapper unwrapper;
 
     /**

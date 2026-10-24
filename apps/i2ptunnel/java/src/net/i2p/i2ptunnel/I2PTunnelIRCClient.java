@@ -33,15 +33,21 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
 
     /** List of Destination objects that we point at. */
     private final List<I2PSocketAddress> _addrs;
-    // application should ping timeout before this
+    /**
+     * How long a read may wait before the connection is dropped, 10 min;
+     * the application should time out its ping before this.
+     */
     private static final long DEFAULT_READ_TIMEOUT = 10 * (long) 60 * 1000;
     /**
      * Read timeout in milliseconds applied to each client socket, adjustable with
      * setReadTimeout() after the tunnel is built.
      */
     protected long readTimeout = DEFAULT_READ_TIMEOUT;
+    /** Whether DCC connections are supported. */
     private final boolean _dccEnabled;
+    /** Serves inbound DCC connections, if any. */
     private I2PTunnelDCCServer _DCCServer;
+    /** Opens outbound DCC connections, if any. */
     private DCCClientManager _DCCClientManager;
 
     /**
@@ -267,7 +273,11 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
      */
     static final int IRC_CONNECT_MAX_ATTEMPTS = 4;
 
-    /** Backoff floor (ms) for I2P connect retries, doubling per attempt. @since 0.9.71+. */
+    /**
+     * Backoff floor (ms) for I2P connect retries, doubling per attempt.
+     *
+     * @since 0.9.71+
+     */
     static final long IRC_CONNECT_RETRY_BASE_DELAY = 1000;
 
     /**
@@ -465,8 +475,10 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     //  Start of the DCCHelper interface
     //
 
+  /** Rewrites DCC lines between the local client and I2P. */
   private class DCC implements DCCHelper {
 
+    /** Address advertised to the local IRC client. */
     private final byte[] _localAddr;
 
     /**

@@ -36,6 +36,7 @@ import org.cybergarage.xml.ParserException;
  *
  */
 public class SOAPRequest extends HTTPRequest {
+    /** Header naming the action a SOAP request carries. */
     private static final String SOAPACTION = HTTP.SOAP_ACTION;
 
     ////////////////////////////////////////////////
@@ -133,10 +134,20 @@ public class SOAPRequest extends HTTPRequest {
 
     private Node rootNode;
 
+    /**
+     * Records the parsed body of the request.
+     *
+     * @param node the root of the SOAP body
+     */
     private void setRootNode(Node node) {
         rootNode = node;
     }
 
+    /**
+     * Parses and caches the body if it has not been parsed.
+     *
+     * @return the root of the SOAP body
+     */
     private synchronized Node getRootNode() {
         if (rootNode != null) return rootNode;
 
@@ -196,7 +207,6 @@ public class SOAPRequest extends HTTPRequest {
      * @param node the node to set as content
      */
     public void setContent(Node node) {
-        // Thanks for Ralf G. R. Bergs <Ralf@Ber.gs>, Inma Marin Lopez <inma@dif.um.es>.
         String conStr = "";
         conStr += SOAP.VERSION_HEADER;
         conStr += "\n";

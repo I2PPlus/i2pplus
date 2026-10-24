@@ -51,18 +51,24 @@ import net.i2p.util.EventDispatcherImpl;
 import net.i2p.util.Log;
 import net.i2p.util.OrderedProperties;
 
-// TODO: Poor error propagation as most events aren't listened to elsewhere.
 /**
  * Manages I2PTunnelTasks and I2PSessions.
  * Typically one of each.
  */
 public class I2PTunnel extends EventDispatcherImpl implements Logging {
+    /** Logger for the tunnel. */
     private final Log _log;
+    /** The app context. */
     private final I2PAppContext _context;
+    /** Sequence number of the created tunnels. */
     private static final AtomicLong __tunnelId = new AtomicLong();
+    /** This tunnel's position in that sequence. */
     private final long _tunnelId;
+    /** The I2CP options of the tunnel. */
     private final Properties _clientOptions;
+    /** The sessions the tunnel holds open. */
     private final Set<I2PSession> _sessions;
+    /** The controller that started the tunnel. */
     private final TunnelController _controller;
     /** Packet processing delay in milliseconds. */
     public static final int PACKET_DELAY = 80;
@@ -86,14 +92,20 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      */
     public String filterDefinition;
 
+    /** Arguments hidden from the command line help. */
     private static final String[] nocli_args = { "-nocli", "-die"};
 
+    /** The tasks serving the connections. */
     private final List<I2PTunnelTask> tasks = new CopyOnWriteArrayList<>();
+    /** Id given to the next task. */
     private int next_task_id = 1;
 
+    /** Listeners of the connection events. */
     private final Set<ConnectionEventListener> listeners = new CopyOnWriteArraySet<>();
 
+    /** Port meaning the standalone app has no console. */
     private static final int NOGUI = 99999;
+    /** The command line options of the standalone app. */
     private static final LongOpt[] longopts = new LongOpt[] {
         new LongOpt("cli", LongOpt.NO_ARGUMENT, null, 'c'),
         new LongOpt("die", LongOpt.NO_ARGUMENT, null, 'd'),
@@ -109,7 +121,17 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      *
      * @since 0.9.17
      */
-    private enum CloseMode { NORMAL, FORCED, DESTROY }
+    /**
+     * How the tunnel is closed by the console or command line.
+     */
+    private enum CloseMode {
+        /** Close the tunnel, waiting for the connections to end. */
+        NORMAL,
+        /** Close the tunnel, dropping the active connections. */
+        FORCED,
+        /** Close the tunnel and remove its configuration. */
+        DESTROY,
+    }
 
     /**
      * Command-line entry point.
@@ -419,6 +441,11 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      */
     TunnelController getController() { return _controller; }
 
+    /**
+     * Adds a task serving the connections.
+     *
+     * @param tsk the task to add
+     */
     private void addtask(I2PTunnelTask tsk) {
         tsk.setTunnel(this);
         if (tsk.isOpen()) {
@@ -2005,6 +2032,11 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         listeners.remove(lsnr);
     }
 
+    /**
+     * Returns the log prefix naming the tunnel.
+     *
+     * @return the prefix with the tunnel id
+     */
     private String getPrefix() { return "[" + _tunnelId + "]: "; }
 
     /**

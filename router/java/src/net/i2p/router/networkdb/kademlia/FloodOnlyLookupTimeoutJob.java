@@ -18,6 +18,7 @@ import net.i2p.util.Log;
  */
 class FloodOnlyLookupTimeoutJob extends JobImpl {
 
+    /** The search this timeout belongs to. */
     private final FloodSearchJob _search;
 
     /**

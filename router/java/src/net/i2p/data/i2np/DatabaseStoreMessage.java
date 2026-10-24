@@ -34,12 +34,19 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
      * I2NP message type ID for a database store request.
      */
     public final static int MESSAGE_TYPE = 1;
+    /** The key being stored. */
     private Hash _key;
+    /** The entry being stored. */
     private DatabaseEntry _dbEntry;
+    /** Cached serialization of the message. */
     private byte[] _byteCache;
+    /** Token identifying the reply to send back. */
     private long _replyToken;
+    /** Tunnel the reply should go back through. */
     private TunnelId _replyTunnel;
+    /** Gateway the reply should go back to. */
     private Hash _replyGateway;
+    /** True if this message arrived as someone's reply. */
     private boolean _receivedAsReply;
 
     /**

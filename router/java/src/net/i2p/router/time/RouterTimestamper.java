@@ -19,32 +19,54 @@ import net.i2p.util.Log;
  * @since 0.9.1 moved from net.i2p.time
  */
 public class RouterTimestamper extends Timestamper {
+    /** The app context. */
     private final I2PAppContext _context;
-    // warning, may be null
+    /** Logger, may be null before the context is ready. */
     private Log _log;
+    /** The NTP server names configured. */
     private final List<String> _servers;
+    /** NTP servers grouped by priority. */
     private List<List<String>> _priorityServers;
+    /** Listeners notified of clock updates. */
     private final List<UpdateListener> _listeners;
+    /** Interval between queries, in ms. */
     private int _queryFrequency;
+    /** Servers queried per round. */
     private int _concurringServers;
+    /** Query rounds failed in a row. */
     private int _consecutiveFails;
+    /** True while NTP is disabled. */
     private volatile boolean _disabled;
+    /** True to run the thread as a daemon. */
     private final boolean _daemon;
+    /** True once the first query succeeded. */
     private volatile boolean _initialized;
+    /** True when the clock is well synchronized. */
     private boolean _wellSynced;
+    /** True while the timestamper thread runs. */
     private volatile boolean _isRunning;
+    /** The thread running the queries. */
     private Thread _timestamperThread;
+    /** Zone file for the stratum calculations. */
     private final Zones _zones;
 
+    /** Shortest query interval allowed. */
     private static final int MIN_QUERY_FREQUENCY = 5*60*1000;
+    /** Default query interval. */
     private static final int DEFAULT_QUERY_FREQUENCY = 11*60*1000;
+    /** Default NTP servers, comma separated. */
     private static final String DEFAULT_SERVER_LIST = "0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org";
+    /** Default setting, NTP off until enabled. */
     private static final boolean DEFAULT_DISABLED = true;
     /** Number of servers to query when changing the clock. */
     private static final int DEFAULT_CONCURRING_SERVERS = 3;
+    /** Failed rounds before slowing down. */
     private static final int MAX_CONSECUTIVE_FAILS = 10;
+    /** Default query timeout, in ms. */
     private static final int DEFAULT_TIMEOUT = 10*1000;
+    /** Query timeout while well synced, in ms. */
     private static final int SHORT_TIMEOUT = 5*1000;
+    /** Time callers wait for the first query. */
     private static final long MAX_WAIT_INITIALIZATION = 45*1000L;
 
     /**
@@ -240,6 +262,9 @@ public class RouterTimestamper extends Timestamper {
      * @since 0.8.8
      */
     private class Shutdown implements Runnable {
+        /** Stops the timestamper when the JVM exits. */
+        private Shutdown() {}
+
         /**
          * Stop the timestamper and interrupt the query thread.
          */

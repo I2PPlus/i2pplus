@@ -13,8 +13,14 @@ public enum MeetOrSlice {
     /** Value 'slice'. */
     SLICE("slice");
 
+    /** The name used for this value in the SVG attribute. */
     private final String label;
 
+    /**
+     * Creates a value with the name used in the attribute.
+     *
+     * @param label the attribute name
+     */
     MeetOrSlice(String label) {
         this.label = label;
     }

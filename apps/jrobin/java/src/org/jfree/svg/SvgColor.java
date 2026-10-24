@@ -30,6 +30,7 @@ import java.awt.Color;
  */
 public final class SvgColor {
 
+    /** Utility class, not intended for instantiation. */
     private SvgColor() {}
 
     /**
@@ -82,6 +83,12 @@ public final class SvgColor {
         return new Color(component[0], component[1], component[2], component[3]);
     }
 
+    /**
+     * Parses an rgb(...) colour value.
+     *
+     * @param text the functional notation to parse
+     * @return the colour, null if malformed
+     */
     private static Color parseFunctional(String text) {
         boolean hasAlpha = text.startsWith("rgba(");
         int open = text.indexOf('(');
@@ -115,6 +122,12 @@ public final class SvgColor {
         return new Color(c[0], c[1], c[2], c[3]);
     }
 
+    /**
+     * Parses one colour channel, percent or 0-255.
+     *
+     * @param part the text to parse
+     * @return the channel value, null if malformed
+     */
     private static Integer parseChannel(String part) {
         String s = part.trim();
         if (s.endsWith("%")) {
@@ -153,11 +166,23 @@ public final class SvgColor {
         }
     }
 
+    /**
+     * Limits a fraction to the range 0 to 1.
+     *
+     * @param f the fraction to clamp, 0 to 1
+     * @return the clamped fraction
+     */
     private static float clamp01(float f) {
         if (f < 0f) {return 0f;}
         return f > 1f ? 1f : f;
     }
 
+    /**
+     * Gives the value of one hex digit.
+     *
+     * @param c the character to convert
+     * @return its value, -1 if not a hex digit
+     */
     private static int hexValue(char c) {
         if (c >= '0' && c <= '9') {return c - '0';}
         if (c >= 'a' && c <= 'f') {return c - 'a' + 10;}
@@ -188,14 +213,32 @@ public final class SvgColor {
         return sb.append(hex2(r)).append(hex2(g)).append(hex2(b)).toString();
     }
 
+    /**
+     * Checks whether a byte can be written as a doubled hex digit.
+     *
+     * @param v the value to check
+     * @return true if the short hex form applies
+     */
     private static boolean isShort(int v) {
         return (v >> 4) == (v & 0x0f);
     }
 
+    /**
+     * Writes one byte as two hex digits.
+     *
+     * @param v the value to write
+     * @return the hex text
+     */
     private static String hex2(int v) {
         return new String(new char[] { hexDigit(v >> 4), hexDigit(v & 0x0f) });
     }
 
+    /**
+     * Writes one nibble as a hex digit.
+     *
+     * @param v the nibble, 0 to 15
+     * @return the hex digit for it
+     */
     private static char hexDigit(int v) {
         return (char) (v < 10 ? '0' + v : 'a' + v - 10);
     }

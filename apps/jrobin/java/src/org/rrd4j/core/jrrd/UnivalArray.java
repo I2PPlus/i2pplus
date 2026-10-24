@@ -8,7 +8,9 @@ import java.nio.ByteOrder;
  *
  */
 class UnivalArray {
+    /** The buffer holding the array's values. */
     private final ByteBuffer buffer;
+    /** Size in bytes of one native long. */
     private final int sizeoflong;
 
     /**

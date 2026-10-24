@@ -18,14 +18,20 @@ public class SearchHelper extends HelperBase {
      */
     public SearchHelper() {}
 
+    /** Engine the search form submits to. */
     private String _engine;
+    /** Text being searched for. */
     private String _query;
+    /** The search engines, by name. */
     private Map<String, String> _engines = new TreeMap<>();
 
+    /** Separator between engines in the config property. */
     private static final char S = ',';
     /** Search engines config property. */
     static final String PROP_ENGINES = "routerconsole.searchEngines";
+    /** Property naming the default search engine. */
     private static final String PROP_DEFAULT = "routerconsole.searchEngine";
+    /** Engine used when the property is unset. */
     private static final String DEFAULT = "shinobi.i2p";
 
     /** Default search engine list. */
@@ -70,8 +76,10 @@ public class SearchHelper extends HelperBase {
      */
     public void setQuery(String s) {_query = s;}
 
+    /** The separator as a string, for splitting. */
     private static final String SS = Character.toString(S);
 
+    /** Reads the engine list from the config. */
     private void buildEngineMap() {
         String config = _context.getProperty(PROP_ENGINES, ENGINES_DEFAULT);
         String[] args = DataHelper.split(config, SS);

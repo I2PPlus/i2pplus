@@ -15,6 +15,7 @@ import java.security.spec.AlgorithmParameterSpec;
  * @since 0.9.15
  */
 public class EdDSAParameterSpec implements AlgorithmParameterSpec, Serializable {
+    /** Pinned for serialized-form compatibility. */
     private static final long serialVersionUID = 8274987108472012L;
     /** The curve parameters. */
     private final Curve curve;

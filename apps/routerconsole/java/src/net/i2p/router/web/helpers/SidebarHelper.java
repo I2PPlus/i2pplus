@@ -64,9 +64,11 @@ public class SidebarHelper extends HelperBase {
     /** Active HTTP session for nonce-based form validation. */
     private HttpSession _session;
 
-    // Cached stats survive the request-scoped bean, so they are recomputed
-    // once per sidebar refresh cycle instead of on every render.
-    /** Expiry for the cached tunnel build success. */
+    /**
+     * Expiry for the cached tunnel build success. The cache is shared
+     * across requests and refreshed once per sidebar cycle, not on
+     * every render.
+     */
     private static volatile long _buildSuccessCachedUntil;
     /** Expiry for the cached concurrency string. */
     private static volatile long _concurrencyCachedUntil;
@@ -135,14 +137,14 @@ public class SidebarHelper extends HelperBase {
     /** Property name for unified sidebar toggle. */
     private static final String PROP_UNIFIED_SIDEBAR = "routerconsole.unifiedSidebar";
     /**
-     * True if advanced mode is enabled in config.
-     * @return true if advanced mode is enabled in config
+     * Whether advanced mode is on, which selects the fuller sidebar sections.
+     * @return true if routerconsole.advanced is set
      */
     @Override
     public boolean isAdvanced() {return ctx.getBooleanProperty(PROP_ADVANCED);}
     /**
-     * True if unified sidebar is enabled.
-     * @return true if unified sidebar is enabled
+     * Whether the unified sidebar layout is used instead of the classic one.
+     * @return true if routerconsole.unifiedSidebar is set
      */
     public boolean unifiedSidebar() {return _context.getBooleanProperty(PROP_UNIFIED_SIDEBAR);}
     /** Property prefix for summary bar section configuration per page. */
@@ -231,7 +233,11 @@ public class SidebarHelper extends HelperBase {
         "Destinations" + S +
         "";
 
-     /** Default minimal summary bar sections for advanced mode @since 0.9.32. */
+     /**
+      * Default minimal summary bar sections for advanced mode
+      *
+      * @since 0.9.32
+      */
     static final String DEFAULT_MINIMAL_ADVANCED =
         "AdvancedRouterInfo" + S +
         "CPUBar" + S +
@@ -333,7 +339,9 @@ public class SidebarHelper extends HelperBase {
      * @since 0.9.31
      */
     public static class NetworkStateMessage {
+        /** Reachability shown on the page. */
         private NetworkState state;
+        /** Message explaining the reachability. */
         private String msg;
 
         /**
@@ -360,14 +368,14 @@ public class SidebarHelper extends HelperBase {
         }
 
         /**
-         * Reachability state.
-         * @return the reachability state
+         * Gets the reachability state to show in the summary bar.
+         * @return one of the NetworkState values, never null
          */
         public NetworkState getState() {return state;}
 
         /**
-         * Localized state description.
-         * @return the localized state description
+         * Gets the text explaining the reachability state.
+         * @return the text last set by setMessage, possibly a MessageFormat pattern
          */
         public String getMessage() {return msg;}
 
@@ -379,11 +387,16 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
-     * Network reachability state and message.
-     * @return network reachability state and message
+     * Gets the router's network reachability for the summary bar.
+     * @return the state plus a localized message explaining it
      */
     public NetworkStateMessage getReachability() {return reachability();}
 
+    /**
+     * Asks the router how reachable it is.
+     *
+     * @return the state and the message to show
+     */
     private NetworkStateMessage reachability() {
         if (_context.commSystem().isDummy()) {return new NetworkStateMessage(NetworkState.VMCOMM, "VM Comm System");}
 /*
@@ -1030,6 +1043,9 @@ public class SidebarHelper extends HelperBase {
      * Inner class, can't be Serializable.
      */
     private class AlphaComparator implements Comparator<Destination> {
+        /** Orders the sidebar's destinations by name. */
+        private AlphaComparator() {}
+        /** Translated name of the torrent app. */
         private final String snark = _t("I2PSnark");
 
         /**
@@ -1362,32 +1378,33 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
-     * True if a signed release update is available.
-     * @return true if a signed release update is available
+     * Whether the sidebar should offer a signed release update.
+     * @return true if one is available and has not been downloaded
      */
     private static boolean updateAvailable() {
         return NewsHelper.isUpdateAvailable();
     }
 
     /**
-     * True if an unsigned update is available.
-     * @return true if an unsigned update is available
+     * Whether an unsigned router update is on offer.
+     * @return true if one is available and router.updateUnsigned is set
      */
     private boolean unsignedUpdateAvailable() {
         return NewsHelper.isUnsignedUpdateAvailable(_context);
     }
 
     /**
-     * True if a signed development (SU3) update is available @since 0.9.20.
-     * @return true if a signed development (SU3) update is available @since 0.9.20
+     * Whether a signed development SU3 update is on offer.
+     * @return true if one is available and router.updateDevSU3 is set
+     * @since 0.9.20
      */
     private boolean devSU3UpdateAvailable() {
         return NewsHelper.isDevSU3UpdateAvailable(_context);
     }
 
     /**
-     * Unsigned update version string.
-     * @return the unsigned update version string
+     * Gets the version of the unsigned update on offer.
+     * @return the date and time in the local zone, null if none
      */
     private static String getUnsignedUpdateVersion() {
         // value is a formatted date, does not need escaping
@@ -1395,8 +1412,9 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
-     * Development SU3 update version, HTML-escaped @since 0.9.20.
-     * @return the development SU3 update version, HTML-escaped @since 0.9.20
+     * Gets the version of the development SU3 update on offer.
+     * @return the HTML-escaped version, null if none
+     * @since 0.9.20
      */
     private static String getDevSU3UpdateVersion() {
         return DataHelper.escapeHTML(NewsHelper.devSU3UpdateVersion());
@@ -1628,8 +1646,8 @@ public class SidebarHelper extends HelperBase {
      */
     public void storeNewsHelper(NewsHelper n) {_newshelper = n;}
     /**
-     * Stored NewsHelper.
-     * @return the stored NewsHelper
+     * Gets the news helper stored for this sidebar render.
+     * @return the helper passed to storeNewsHelper(), null before that
      */
     public NewsHelper getNewsHelper() {return _newshelper;}
 
@@ -1694,8 +1712,8 @@ public class SidebarHelper extends HelperBase {
      */
     public void setAction(String s) {_action = s == null ? null : DataHelper.stripHTML(s);}
     /**
-     * Form action or null.
-     * @return the form action or null
+     * Gets the action the sidebar form submitted.
+     * @return the HTML-stripped action, null if setAction() was not called
      */
     public String getAction() {return _action;}
 
@@ -1707,8 +1725,8 @@ public class SidebarHelper extends HelperBase {
      */
     public void setConsoleNonce(String s) {_consoleNonce = s == null ? null : DataHelper.stripHTML(s);}
     /**
-     * Console nonce or null.
-     * @return the console nonce or null
+     * Gets the console nonce submitted with the sidebar form.
+     * @return the HTML-stripped nonce, null if not submitted
      */
     public String getConsoleNonce() {return _consoleNonce;}
 
@@ -1720,8 +1738,8 @@ public class SidebarHelper extends HelperBase {
      */
     public void setUpdateNonce(String s) {_updateNonce = s == null ? null : DataHelper.stripHTML(s);}
     /**
-     * Update nonce or null.
-     * @return the update nonce or null
+     * Gets the update nonce submitted with the sidebar form.
+     * @return the HTML-stripped nonce, null if not submitted
      */
     public String getUpdateNonce() {return _updateNonce;}
 

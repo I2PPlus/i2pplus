@@ -21,7 +21,9 @@ import net.i2p.util.SystemVersion;
  * @since 0.9.4
  */
 class UnsignedUpdateChecker extends UpdateRunner {
+    /** Milliseconds between checks. */
     private final long _ms;
+    /** True once an update with no valid signature is found */
     private boolean _unsignedUpdateAvailable;
 
     /**

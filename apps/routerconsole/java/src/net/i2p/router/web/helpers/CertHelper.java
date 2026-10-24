@@ -21,13 +21,21 @@ public class CertHelper extends HelperBase {
      */
     public CertHelper() {}
 
+    /** Directory the certificates are kept in. */
     private static final String DIR = "certificates";
+    /** Path of the I2CP certificate. */
     private static final String I2CP = "i2cp/i2cp.local.crt";
+    /** Path of the console certificate. */
     private static final String CONSOLE = "console/console.local.crt";
+    /** Directory the tunnel certificates are kept in. */
     private static final String I2PTUNNEL_DIR = "i2ptunnel";
+    /** Directory the SAM certificates are kept in. */
     private static final String SAM_DIR = "sam";
+    /** Directory the eepsite certificates are kept in. */
     private static final String EEPSITE_DIR = "eepsite";
+    /** File separator for building the certificate paths. */
     private static final String slash = System.getProperty("file.separator");
+    /** Logger for this class. */
     private Log _log;
 
     /**

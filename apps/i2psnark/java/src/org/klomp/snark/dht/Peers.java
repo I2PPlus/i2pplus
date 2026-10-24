@@ -25,6 +25,7 @@ import net.i2p.data.Hash;
  */
 class Peers extends ConcurrentHashMap<Hash, Peer> {
 
+    /** Pinned for serialized-form compatibility. */
     private static final long serialVersionUID = 1L;
 
     /**

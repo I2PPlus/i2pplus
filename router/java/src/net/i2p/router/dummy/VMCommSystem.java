@@ -41,8 +41,11 @@ import net.i2p.util.Log;
  * FOR DEBUGGING AND LOCAL TESTING ONLY.
  */
 public class VMCommSystem extends CommSystemFacade {
+    /** Logger for this class. */
     private final Log _log;
+    /** The router this transport serves. */
     private final RouterContext _context;
+    /** XDH factory kept for the tests. */
     private final X25519KeyFactory _xdhThread;
 
     /**
@@ -139,10 +142,21 @@ public class VMCommSystem extends CommSystemFacade {
         _context.statManager().addRateData("transport.sendProcessingTime", msg.getLifetime(), msg.getLifetime());
     }
 
+    /** Delivers a message received from another router. */
     private class ReceiveJob extends JobImpl {
+        /** The sender's hash. */
         private Hash _from;
+        /** The message bytes. */
         private byte[] _msg;
+        /** The receiving router's context. */
         private RouterContext _ctx;
+        /**
+         * Holds a message to deliver to a job.
+         *
+         * @param from the hash of the sending router
+         * @param msg the message bytes
+         * @param us the local router context
+         */
         public ReceiveJob(Hash from, byte[] msg, RouterContext us) {
             super(us);
             _ctx = us;

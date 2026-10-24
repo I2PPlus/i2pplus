@@ -41,8 +41,11 @@ import net.i2p.util.SystemVersion;
  * }.
  */
 class BatchedPreprocessor extends TrivialPreprocessor {
+    /** When the first unsent message was queued, 0 if none. */
     private long _pendingSince;
+    /** How long the current batch may still wait, in ms. */
     private long _pendingDelay;
+    /** Name shown in the logs for this preprocessor. */
     private final String _name;
 
     /**
@@ -57,6 +60,7 @@ class BatchedPreprocessor extends TrivialPreprocessor {
     /** Gateway lifetime of each flushed message, weight = its byte length. */
     private final RateStatMeanBatch _writeDelayBatch = new RateStatMeanBatch();
 
+    /** Switch for the verbose batching logs. */
     private static final boolean DEBUG = false;
 
     /** Minimum delay even under full pressure (ms) -- avoids busy-wait retry storms. */
@@ -79,8 +83,6 @@ class BatchedPreprocessor extends TrivialPreprocessor {
                                          - IV_SIZE
                                          - 1  // 0x00 ending the padding
                                          - 4; // 4 byte checksum
-
-    //private static final boolean DISABLE_BATCHING = false;
 
     /** Not final or private so the test code can adjust. */
     static long DEFAULT_DELAY = SystemVersion.isSlow() ? 100 : 20;
@@ -113,6 +115,12 @@ class BatchedPreprocessor extends TrivialPreprocessor {
     /** How long to wait before flushing a queued message. */
     @Override
     public long getDelayAmount() { return getDelayAmount(true); }
+    /**
+     * Chooses how long the current batch may wait.
+     *
+     * @param shouldStat true to record the delay in the statistics
+     * @return the remaining delay, in ms
+     */
     private long getDelayAmount(boolean shouldStat) {
         long rv;
         if (_pendingSince > 0 && _pendingDelay > 0) {
@@ -414,10 +422,14 @@ class BatchedPreprocessor extends TrivialPreprocessor {
         return false;
     }
 
-    /*
-     * Only if Log.INFO
+    /**
+     * Logs the state of the queue, only if Log.INFO.
+     * Format: title: allocated: X pending: X (delay: X)
+     * [0]:offset/length/lifetime [1]:etc.
      *
-     * title: allocated: X pending: X (delay: X) [0]:offset/length/lifetime [1]:etc.
+     * @param allocated bytes already allocated to the batch
+     * @param pending the messages still queued
+     * @param title a label for what triggered the display
      */
     private void display(long allocated, List<PendingGatewayMessage> pending, String title) {
         if (_log.shouldInfo() || _log.shouldDebug()) {

@@ -43,12 +43,16 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
      * Replacement for dests.
      */
     private final List<I2PSocketAddress> _addrs;
-    // We don't know what protocol, so we assume the application has its own timeout mechanism
+    /**
+     * No read timeout, -1. The protocol is unknown here, so the application is
+     * assumed to have its own timeout mechanism.
+     */
     private static final long DEFAULT_READ_TIMEOUT = -1;
     /**
      * Idle timeout in milliseconds for I2P socket reads on new connections. &le; 0 means no timeout.
      */
     protected long readTimeout = DEFAULT_READ_TIMEOUT;
+    /** The thread running the tunnel's socket loop. */
     private InternalSocketRunner _isr;
 
     /**
@@ -226,6 +230,11 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
         }
     }
 
+    /**
+     * Picks one of the configured targets at random.
+     *
+     * @return the address to connect to, null if none is set
+     */
     private final I2PSocketAddress pickDestination() {
         synchronized(_addrs) {
             int size = _addrs.size();

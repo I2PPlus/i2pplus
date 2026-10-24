@@ -32,11 +32,17 @@ import net.i2p.util.RandomSource;
  * exploratory lookups.</p>
  */
 public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder {
+    /** The router answering lookups. */
     private RouterContext _context;
+    /** The facade holding the keys being looked up. */
     private FloodfillNetworkDatabaseFacade _facade;
+    /** Logger for this class. */
     private Log _log;
+    /** Records peers that send bad lookups. */
     private BanLogger _banLogger;
+    /** Xor mask for this router's lookup message ids. */
     private final long _msgIDBloomXor = RandomSource.getInstance().nextLong(I2NPMessage.MAX_ID_VALUE);
+    /** Rate windows kept for the lookup statistics. */
     private static final long[] RATES = RateConstants.BASIC_RATES;
 
     /**

@@ -69,16 +69,24 @@ import java.io.Serializable;
  * as well as to drop any failed establishment attempts.
  */
 public class EstablishmentManager {
+    /** The router context. */
     private final RouterContext _context;
+    /** Logger for SSU connection establishment. */
     private final Log _log;
+    /** The SSU transport we serve. */
     private final UDPTransport _transport;
+    /** The network id we communicate on. */
     private final int _networkID;
+    /** Records why routers were banned. */
     private final BanLogger _banLogger;
 
-    // SSU 2
+    /** Builder for SSU2 packets. */
     private final PacketBuilder2 _builder2;
+    /** Tokens we hold for hosts we contact. */
     private final Map<RemoteHostId, Token> _outboundTokens;
+    /** Tokens issued to hosts that contacted us. */
     private final Map<RemoteHostId, Token> _inboundTokens;
+    /** Counts termination messages per host. */
     private final ObjectCounter<RemoteHostId> _terminationCounter;
     /**
      * Cached "{@code udp.inboundTokenLifetime}" RateStat handle. Registered in the
@@ -144,13 +152,18 @@ public class EstablishmentManager {
      */
     private final Map<RemoteHostId, Long> _inboundBans;
 
+    /** False once the manager has shut down. */
     private volatile boolean _alive;
+    /** Lock for the establishment activity count. */
     private final Object _activityLock;
+    /** Establishment attempts currently in flight. */
     private int _activity;
 
     /** Max outbound in progress - max inbound is half of this. */
     private final int DEFAULT_MAX_CONCURRENT_ESTABLISH;
+    /** Default concurrent establishments for a low profile. */
     private static volatile int _defaultLowMaxConcurrentEstablish = SystemVersion.isSlow() ? 128 : 512;
+    /** Default concurrent establishments for a high profile. */
     private static volatile int _defaultHighMaxConcurrentEstablish = SystemVersion.isSlow() ? 256 : 2048;
     /**
      * The default low max concurrent establish.
@@ -172,8 +185,13 @@ public class EstablishmentManager {
      * @param val the desired max concurrent outbound sessions, clamped to 64-8192
      */
     public static void setDefaultHighMaxConcurrentEstablish(int val) { _defaultHighMaxConcurrentEstablish = Math.max(64, Math.min(8192, val)); }
+    /** Config key for the concurrent establishment limit. */
     private static final String PROP_MAX_CONCURRENT_ESTABLISH = "i2np.udp.maxConcurrentEstablish";
-    /** Tuned max concurrent establish, -1 = use config. Set by Tuner. @since 0.9.71+. */
+    /**
+     * Tuned max concurrent establish, -1 = use config. Set by Tuner.
+     *
+     * @since 0.9.71+
+     */
     private static volatile int _tunedMaxConcurrentEstablish = -1;
     /**
      * Set the max concurrent establish (called by Tuner).
@@ -198,7 +216,7 @@ public class EstablishmentManager {
 
     /**
      * The current max queued outbound connections.
-     * @return the current max queued outbound connections
+     * @return the limit currently in effect
      * @since 0.9.70+
      */
     public static int getMaxQueuedOutbound() { return MAX_QUEUED_OUTBOUND; }
@@ -223,6 +241,7 @@ public class EstablishmentManager {
      */
     private static final long BAN_DURATION_INVALID_ADDRESS_MS = 4*60*60*1000L;
 
+    /** Largest possible handshake nonce value. */
     private static final long MAX_NONCE = 0xFFFFFFFFL;
 
     /**
@@ -297,7 +316,9 @@ public class EstablishmentManager {
      * Minimum gap between inbound establishment give-up reports.  @since 0.9.71+.
      */
     static final long INBOUND_GIVEUP_LOG_INTERVAL_MS = 60 * 1000L;
+    /** When the inbound giveup was last logged. */
     private static final AtomicLong _lastInboundGiveupLog = new AtomicLong();
+    /** Giveup logs suppressed since the last one. */
     private static final AtomicLong _inboundGiveupSuppressed = new AtomicLong();
 
     /**
@@ -345,7 +366,9 @@ public class EstablishmentManager {
      * @since 0.9.71+
      */
     static long getInboundGiveupSuppressed() { return _inboundGiveupSuppressed.get(); }
+    /** When a corrupt confirm was last logged. */
     private static final AtomicLong _lastCorruptConfirmLog = new AtomicLong();
+    /** Corrupt confirm logs suppressed since the last one. */
     private static final AtomicLong _corruptConfirmSuppressed = new AtomicLong();
 
     /**
@@ -413,16 +436,20 @@ public class EstablishmentManager {
     /** For the DSM and or netdb store. */
     static final AtomicLong DATA_MESSAGE_TIMEOUT = new AtomicLong(30*1000L);
 
+    /** How long an inbound establishment failure bans a peer. */
     private static final long IB_BAN_TIME = 30*60L*1000L;
 
-    // SSU 2
+    /** Fewest tokens issued to one host. */
     private static final int MIN_TOKENS = SystemVersion.isSlow() ? 64 : 128;
+    /** Most tokens issued to one host. */
     private static final int MAX_TOKENS = SystemVersion.isSlow() ? 1024 : 2048;
     /**
      * How long an inbound token stays valid, in milliseconds.
      */
     public static final long IB_TOKEN_EXPIRATION = 60*60L*1000L;
+    /** Maximum clock skew accepted in a handshake. */
     private static final long MAX_SKEW = 2*60L*1000L;
+    /** File holding the SSU2 tokens across restarts. */
     private static final String TOKEN_FILE = "ssu2tokens.txt";
     /** Max immediate terminations to send to a peer every FAILSAFE_INTERVAL. */
     private static final int MAX_TERMINATIONS = 2;
@@ -1920,6 +1947,7 @@ public class EstablishmentManager {
         return admitted;
     }
 
+    /** Records that an establishment attempt happened. */
     private void notifyActivity() {
         synchronized (_activityLock) {
             _activity++;
@@ -3168,7 +3196,6 @@ public class EstablishmentManager {
         }
     }
 
-    //// SSU 2 ////
 
     /**
      * Remember a token that can be used later to connect to the peer.
@@ -3362,9 +3389,11 @@ public class EstablishmentManager {
      */
     @SuppressWarnings("PMD.AvoidFieldNameMatchingTypeName")
     public static class Token {
+        /** The token value itself. */
         private final long token;
-        // save space until 2106
+        /** When the token expires, as an epoch second. */
         private final int expires;
+        /** When the token was added, as an epoch second. */
         private final int added;
 
         /**
@@ -3541,6 +3570,9 @@ public class EstablishmentManager {
      * @since 0.9.57
      */
     private static class TokenComparator implements Comparator<Map.Entry<RemoteHostId, Token>>, Serializable {
+        /** Orders hosts by how many tokens they hold. */
+        private TokenComparator() {}
+
         /**
          * Compare the two entries by expiration, soonest first.
          */
@@ -3564,6 +3596,8 @@ public class EstablishmentManager {
 
         /**
          * Creates the inbound token cache.
+         *
+         * @param max the maximum number of tokens held
          */
         public InboundTokens(int max) {super(max);}
 
@@ -3589,7 +3623,9 @@ public class EstablishmentManager {
      * @since 0.9.55
      */
     private static class HPCallback implements SSU2Payload.PayloadCallback {
+        /** The host whose handshake failed. */
         private final RemoteHostId _from;
+        /** Logger for this callback, may be null. */
         private final Log _log;
 
         /** Time the hole punch request was received. */
@@ -3605,6 +3641,9 @@ public class EstablishmentManager {
 
         /**
          * Creates the hole punch callback.
+         *
+         * @param from the host whose handshake failed
+         * @param log the logger to use, may be null
          */
         public HPCallback(RemoteHostId from, Log log) {
             _from = from;
@@ -3743,6 +3782,11 @@ public class EstablishmentManager {
             warn("Unexpected PathResponse block in HolePunch");
         }
 
+        /**
+         * Logs a hole punch warning naming the host.
+         *
+         * @param msg the message to log
+         */
         private void warn(String msg) {
             if (_log != null && _log.shouldWarn()) {
                 _log.warn("[SSU] " + msg + " from " + _from);
@@ -3750,7 +3794,6 @@ public class EstablishmentManager {
         }
     }
 
-    /* End SSU 2 */
 
 
     /**
@@ -3762,6 +3805,8 @@ public class EstablishmentManager {
         /**
          * Run the establish loop.
          */
+        /** Runs one SSU handshake. */
+        private Establisher() {}
         @Override
         public void run() {
             while (_alive) {
@@ -3783,13 +3828,17 @@ public class EstablishmentManager {
             _outboundByHash.clear();
         }
 
+        /** When the failsafe pass last ran. */
         private long _lastFailsafe;
+        /** Interval between failsafe passes. */
         private static final long FAILSAFE_INTERVAL = 3*60*1000L;
 
-        // Debugging
+        /** When the establishment state was last printed. */
         private long _lastPrinted;
+        /** Interval between establishment state prints. */
         private static final long PRINT_INTERVAL = 5*1000L;
 
+        /** Prints the active establishment counts if the interval passed. */
         private void doPass() {
             long now = _context.clock().now();
             if (_log.shouldDebug() && _lastPrinted + PRINT_INTERVAL < now) {
@@ -3827,7 +3876,11 @@ public class EstablishmentManager {
             }
         }
 
-        /** Perform failsafe cleanup of stale establishment states. */
+        /**
+         * Perform failsafe cleanup of stale establishment states.
+         *
+         * @param now the current time
+         */
         private void doFailsafe(long now) {
             for (Iterator<OutboundEstablishState> iter = _liveIntroductions.values().iterator(); iter.hasNext(); ) {
                 OutboundEstablishState state = iter.next();

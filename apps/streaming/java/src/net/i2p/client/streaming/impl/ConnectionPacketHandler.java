@@ -90,6 +90,10 @@ class ConnectionPacketHandler {
     }
     /** Sample counters for the per-packet size stats (one per call site). */
     private int _receiveMsgSizeCnt;
+    /**
+     * Messages received with a payload size already seen in this
+     * connection
+     */
     private int _receiveDupMsgSizeCnt;
 
     /**

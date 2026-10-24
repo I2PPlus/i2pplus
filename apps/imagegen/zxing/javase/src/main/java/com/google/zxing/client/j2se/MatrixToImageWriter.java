@@ -31,8 +31,10 @@ import javax.imageio.ImageIO;
  */
 public final class MatrixToImageWriter {
 
+  /** The config used when the caller supplies none */
   private static final MatrixToImageConfig DEFAULT_CONFIG = new MatrixToImageConfig();
 
+  /** Utility class, not intended for instantiation. */
   private MatrixToImageWriter() {}
 
   /**

@@ -57,6 +57,10 @@ public class KeyPairGenerator extends KeyPairGeneratorSpi {
      */
     protected boolean initialized;
 
+    /**
+     * Parameter specs for the supported curves, built once in the
+     * static initializer
+     */
     private static final Map<Integer, AlgorithmParameterSpec> edParameters;
 
     static {

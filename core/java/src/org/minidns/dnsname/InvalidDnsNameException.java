@@ -17,6 +17,7 @@ import org.minidns.dnslabel.DnsLabel;
  */
 public abstract class InvalidDnsNameException extends IllegalStateException {
 
+    /** Pinned for serialized-form compatibility. */
     private static final long serialVersionUID = 1L;
 
     /** the ACE-encoded domain name */
@@ -36,6 +37,7 @@ public abstract class InvalidDnsNameException extends IllegalStateException {
      * DNS labels are limited to 63 characters according to DNS specifications.
      */
     public static class LabelTooLongException extends InvalidDnsNameException {
+        /** Pinned for serialized-form compatibility. */
         private static final long serialVersionUID = 1L;
 
         /** The specific label that exceeds the maximum length */

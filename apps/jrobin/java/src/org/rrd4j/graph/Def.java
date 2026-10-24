@@ -11,9 +11,13 @@ import org.rrd4j.data.DataProcessor;
  * from RRD files into graphs.
  */
 class Def extends Source {
+    /** The RRD file the definition reads. */
     private final URI rrdUri;
+    /** The data source to read. */
     private final String dsName;
+    /** Backend used to open the file. */
     private final RrdBackendFactory backend;
+    /** Consolidation function to read with. */
     private final ConsolFun consolFun;
 
     /**

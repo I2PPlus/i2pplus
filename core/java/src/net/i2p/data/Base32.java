@@ -117,6 +117,7 @@ public class Base32 {
         -9 // Decimal 123 - 127
     };
 
+    /** Value marking an invalid encoding character. */
     private static final byte BAD_ENCODING = -9; // Indicates error in encoding
 
     /** Defeats instantiation. */
@@ -136,6 +137,11 @@ public class Base32 {
         runApp(args);
     }
 
+    /**
+     * Runs the command-line encoder or decoder.
+     *
+     * @param args the command-line arguments
+     */
     private static void runApp(String[] args) {
         String cmd = args[0].toLowerCase(Locale.US);
         if ("encodestring".equals(cmd)) {
@@ -159,17 +165,38 @@ public class Base32 {
         }
     }
 
+    /**
+     * Reads a stream fully.
+     *
+     * @param in the stream to read
+     * @return the bytes read
+     * @throws IOException if the stream cannot be read
+     */
     private static byte[] read(InputStream in) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream(64);
         DataHelper.copy(in, baos);
         return baos.toByteArray();
     }
 
+    /**
+     * Writes the stream base32-encoded.
+     *
+     * @param in the bytes to encode
+     * @param out where the text is written
+     * @throws IOException if either stream fails
+     */
     private static void encode(InputStream in, OutputStream out) throws IOException {
         String encoded = encode(read(in));
         for (int i = 0; i < encoded.length(); i++) out.write((byte) (encoded.charAt(i) & 0xFF));
     }
 
+    /**
+     * Writes the base32 text decoded.
+     *
+     * @param in the text to decode
+     * @param out where the bytes are written
+     * @throws IOException if either stream fails
+     */
     private static void decode(InputStream in, OutputStream out) throws IOException {
         byte[] decoded = decode(DataHelper.getUTF8(read(in)));
         if (decoded == null) {
@@ -179,6 +206,7 @@ public class Base32 {
         out.write(decoded);
     }
 
+    /** Prints the command-line usage. */
     private static void help() {
         System.out.println("Syntax: Base32 encode <inFile> <outFile>");
         System.out.println("or    : Base32 encode <inFile>");
@@ -213,6 +241,7 @@ public class Base32 {
         return buf.toString();
     }
 
+    /** Bit masks for pulling groups out of a byte. */
     private static final byte[] emask = {(byte) 0x1f, (byte) 0x01, (byte) 0x03, (byte) 0x07, (byte) 0x0f};
 
     /**
@@ -268,6 +297,7 @@ public class Base32 {
         return decode(DataHelper.getASCII(s));
     }
 
+    /** Bit masks for reassembling bytes from groups. */
     private static final byte[] dmask = {
         (byte) 0xf8, (byte) 0x7c, (byte) 0x3e, (byte) 0x1f,
         (byte) 0x0f, (byte) 0x07, (byte) 0x03, (byte) 0x01

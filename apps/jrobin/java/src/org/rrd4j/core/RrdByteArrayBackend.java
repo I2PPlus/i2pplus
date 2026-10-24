@@ -6,6 +6,7 @@ import java.nio.ByteBuffer;
 /** Abstract byte array based backend. */
 public abstract class RrdByteArrayBackend extends ByteBufferBackend {
 
+    /** The whole rrd file held in memory. */
     private byte[] buffer;
 
     /**
@@ -27,7 +28,7 @@ public abstract class RrdByteArrayBackend extends ByteBufferBackend {
 
     /**
      * Underlying byte buffer.
-     * @return the underlying byte buffer
+     * @return the live buffer, not a copy
      */
     protected byte[] getBuffer() {
         return buffer;

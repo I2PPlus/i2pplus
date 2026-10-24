@@ -20,8 +20,11 @@ import net.i2p.util.Log;
  * to be eventually placed in the OutNetMessagePool.
  */
 public class ClientMessagePool {
+    /** Logger for this class. */
     private final Log _log;
+    /** The router context the pool runs in. */
     private final RouterContext _context;
+    /** Messages waiting for their tunnel's reply. */
     private final OutboundCache _cache;
 
     /**

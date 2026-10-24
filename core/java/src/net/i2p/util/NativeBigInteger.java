@@ -94,10 +94,15 @@ public class NativeBigInteger extends BigInteger {
     /** Is native lib loaded and at least version 3, and GMP at least version 5? */
     private static boolean _nativeCTOk;
 
+    /** Version of the loaded jbigi library. */
     private static int _jbigiVersion;
+    /** Version of the GMP library in use. */
     private static String _libGMPVersion = "unknown";
+    /** How the native library load went. */
     private static String _loadStatus = "uninitialized";
+    /** CPU model the jbigi was chosen for. */
     private static String _cpuModel = "uninitialized";
+    /** Resource the jbigi library was extracted from. */
     private static String _extractedResource;
 
     /**
@@ -123,6 +128,7 @@ public class NativeBigInteger extends BigInteger {
      */
     private static final String JBIGI_OPTIMIZATION_ATHLON64 = "athlon64";
 
+    /** jbigi build optimized for the Pentium 4. */
     private static final String JBIGI_OPTIMIZATION_PENTIUM4 = "pentium4";
 
     /**
@@ -132,8 +138,11 @@ public class NativeBigInteger extends BigInteger {
      */
     private static final String JBIGI_OPTIMIZATION_ATOM = "atom";
 
+    /** jbigi build optimized for Core 2. */
     private static final String JBIGI_OPTIMIZATION_CORE2 = "core2";
+    /** jbigi build optimized for Core i. */
     private static final String JBIGI_OPTIMIZATION_COREI = "corei";
+    /** jbigi build optimized for Intel Atom Nano. */
     private static final String JBIGI_OPTIMIZATION_NANO = "nano";
 
     /**
@@ -143,14 +152,23 @@ public class NativeBigInteger extends BigInteger {
      */
     private static final String JBIGI_OPTIMIZATION_COREI_SBR = "coreisbr";
 
+    /** jbigi build for Core i with Haswell instructions. */
     private static final String JBIGI_OPTIMIZATION_COREI_HWL = "coreihwl";
+    /** jbigi build for Core i with Broadwell instructions. */
     private static final String JBIGI_OPTIMIZATION_COREI_BWL = "coreibwl";
+    /** jbigi build optimized for AMD K10. */
     private static final String JBIGI_OPTIMIZATION_K10 = "k10";
+    /** jbigi build optimized for AMD Bulldozer. */
     private static final String JBIGI_OPTIMIZATION_BULLDOZER = "bulldozer";
+    /** jbigi build optimized for AMD Piledriver. */
     private static final String JBIGI_OPTIMIZATION_PILEDRIVER = "piledriver";
+    /** jbigi build optimized for AMD Steamroller. */
     private static final String JBIGI_OPTIMIZATION_STEAMROLLER = "steamroller";
+    /** jbigi build optimized for AMD Excavator. */
     private static final String JBIGI_OPTIMIZATION_EXCAVATOR = "excavator";
+    /** jbigi build optimized for AMD Bobcat. */
     private static final String JBIGI_OPTIMIZATION_BOBCAT = "bobcat";
+    /** jbigi build optimized for AMD Jaguar. */
     private static final String JBIGI_OPTIMIZATION_JAGUAR = "jaguar";
 
     /**
@@ -210,16 +228,20 @@ public class NativeBigInteger extends BigInteger {
     // none -> {"none"), since 0.9.30
     private static final String[] JBIGI_COMPAT_LIST_NONE = {JBIGI_OPTIMIZATION_X86};
 
+    /** Compatible builds for ARM ARMv8. */
     private static final String[] JBIGI_COMPAT_LIST_ARM_ARMV8 = {JBIGI_OPTIMIZATION_ARM_ARMV8};
+    /** Compatible builds for VIA processors. */
     private static final String[] JBIGI_COMPAT_LIST_VIA = {
         JBIGI_OPTIMIZATION_NANO,
         JBIGI_OPTIMIZATION_X86
     };
+    /** Compatible builds for AMD Athlon and Opteron. */
     private static final String[] JBIGI_COMPAT_LIST_AMD_ATHLON = {
         JBIGI_OPTIMIZATION_K10,
         JBIGI_OPTIMIZATION_ATHLON64,
         JBIGI_OPTIMIZATION_X86
     };
+    /** Compatible builds for AMD APUs. */
     private static final String[] JBIGI_COMPAT_LIST_AMD_APU = {
         JBIGI_OPTIMIZATION_JAGUAR, JBIGI_OPTIMIZATION_BOBCAT, JBIGI_OPTIMIZATION_ATHLON64
     };
@@ -231,12 +253,15 @@ public class NativeBigInteger extends BigInteger {
         JBIGI_OPTIMIZATION_BULLDOZER, JBIGI_OPTIMIZATION_ATHLON64, JBIGI_OPTIMIZATION_X86
     };
 
+    /** Compatible builds for Intel Atom. */
     private static final String[] JBIGI_COMPAT_LIST_INTEL_ATOM = {
         JBIGI_OPTIMIZATION_ATOM, JBIGI_OPTIMIZATION_X86, JBIGI_OPTIMIZATION_PENTIUM4
     };
+    /** Compatible builds for Intel Pentium. */
     private static final String[] JBIGI_COMPAT_LIST_INTEL_PENTIUM = {
         JBIGI_OPTIMIZATION_PENTIUM4, JBIGI_OPTIMIZATION_X86
     };
+    /** Compatible builds for Intel Core. */
     private static final String[] JBIGI_COMPAT_LIST_INTEL_CORE = {
         JBIGI_OPTIMIZATION_SKYLAKE,
         JBIGI_OPTIMIZATION_COREI_BWL,
@@ -291,40 +316,52 @@ public class NativeBigInteger extends BigInteger {
      */
     private static final boolean _isWin = SystemVersion.isWindows();
 
+    /** Whether we are running on OS/2. */
     private static final boolean _isOS2 = System.getProperty("os.name").startsWith("OS/2");
+    /** Whether we are running on macOS. */
     private static final boolean _isMac = SystemVersion.isMac();
+    /** True on the KFreeBSD kernel. */
     private static final boolean _isKFreebsd =
             System.getProperty("os.name").toLowerCase(Locale.US).contains("kfreebsd");
+    /** True on the FreeBSD kernel. */
     private static final boolean _isFreebsd = (!_isKFreebsd)
             && System.getProperty("os.name").toLowerCase(Locale.US).contains("freebsd");
+    /** True on the NetBSD kernel. */
     private static final boolean _isNetbsd =
             System.getProperty("os.name").toLowerCase(Locale.US).contains("netbsd");
+    /** True on the OpenBSD kernel. */
     private static final boolean _isOpenbsd =
             System.getProperty("os.name").toLowerCase(Locale.US).contains("openbsd");
+    /** True on the SunOS kernel. */
     private static final boolean _isSunos =
             System.getProperty("os.name").toLowerCase(Locale.US).contains("sunos");
+    /** Whether we are running on Android. */
     private static final boolean _isAndroid = SystemVersion.isAndroid();
 
-    /*
-     * This isn't always correct.
-     * http://stackoverflow.com/questions/807263/how-do-i-detect-which-kind-of-jre-is-installed-32bit-vs-64bit
-     * <a href="https://web.archive.org/web/2020/http://mark.koli.ch/2009/10/javas-osarch-system-property-is-the-bitness-of-the-jre-not-the-operating-system.html">os.arch is the bitness of the JRE</a>
-     * <a href="https://web.archive.org/web/20121221174620/http://mark.koli.ch/2009/10/reliably-checking-os-bitness-32-or-64-bit-on-windows-with-a-tiny-c-app.html">checking OS bitness on Windows</a>
-     * sun.arch.data.model not on all JVMs
-     * sun.arch.data.model == 64 => 64 bit processor
-     * sun.arch.data.model == 32 => A 32 bit JVM but could be either 32 or 64 bit processor or libs
-     * os.arch contains "64" could be 32 or 64 bit libs
+    /**
+     * Whether the JVM is 64-bit.
+     * See also: <a href="http://stackoverflow.com/questions/807263/how-do-i-detect-which-kind-of-jre-is-installed-32bit-vs-64bit">detecting the JRE bitness</a>
      */
     private static final boolean _is64 = SystemVersion.is64Bit();
 
+    /** Whether the CPU is x86. */
     private static final boolean _isX86 = SystemVersion.isX86();
 
+    /** Whether the CPU is ARM. */
     private static final boolean _isArm = SystemVersion.isARM();
 
-    /* libjbigi.so vs jbigi.dll */
+    /**
+     * _isOS2 ? "" : "lib");
+     * File name prefix for the native library.
+     */
     private static final String _libPrefix = (_isWin || _isOS2 ? "" : "lib");
+    /**
+     * _isOS2 ? ".dll" : _isMac ? ".jnilib" : ".so");
+     * File name suffix for the native library.
+     */
     private static final String _libSuffix = (_isWin || _isOS2 ? ".dll" : _isMac ? ".jnilib" : ".so");
 
+    /** The CPU type the jbigi was chosen for. */
     private static final String sCPUType; // The CPU Type to optimize for (one of the above strings)
 
     /**
@@ -849,6 +886,11 @@ public class NativeBigInteger extends BigInteger {
                 .debug(s);
     }
 
+    /**
+     * Logs an informational message about the library load.
+     *
+     * @param s the message to log
+     */
     private static void info(String s) {
         if (_doLog) System.err.println(s);
         I2PAppContext.getGlobalContext()
@@ -858,6 +900,11 @@ public class NativeBigInteger extends BigInteger {
         _loadStatus = s;
     }
 
+    /**
+     * Logs a warning about the library load.
+     *
+     * @param s the message to log
+     */
     private static void warn(String s) {
         warn(s, null);
     }

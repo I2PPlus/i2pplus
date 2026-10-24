@@ -18,10 +18,17 @@ public class MLKEMKeyPairGenerator
     {
     }
 
+    /** The parameter set keys are generated for. */
     private MLKEMParameters mlkemParams;
 
+    /** Random used during generation. */
     private SecureRandom random;
 
+    /**
+     * Sets the parameters used for generating.
+     *
+     * @param param the parameter set to generate with
+     */
     private void initialize(
         KeyGenerationParameters param)
     {
@@ -30,6 +37,11 @@ public class MLKEMKeyPairGenerator
 
     }
 
+    /**
+     * Generates a key pair for the set parameters.
+     *
+     * @return the new key pair
+     */
     private AsymmetricCipherKeyPair genKeyPair()
     {
         MLKEMEngine engine = mlkemParams.getEngine();

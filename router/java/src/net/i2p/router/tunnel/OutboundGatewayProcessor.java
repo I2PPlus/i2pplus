@@ -13,7 +13,9 @@ import net.i2p.data.SessionKey;
  *
  */
 class OutboundGatewayProcessor {
+    /** The router context the tunnel runs in. */
     private final I2PAppContext _context;
+    /** The tunnel this processor runs. */
     private final TunnelCreatorConfig _config;
 
     /**

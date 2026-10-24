@@ -20,11 +20,18 @@ import net.i2p.util.Log;
  * Endpoint selection currently picks the first matching endpoint for IPv4 or IPv6.
  */
 class PacketPusher implements Runnable {
+    /** Logger for this class. */
     private final Log _log;
+    /** Where outgoing messages are fragmented. */
     private final OutboundMessageFragments _fragments;
-    // Use thread-safe CopyOnWriteArrayList for safe concurrent iterations with minimal locking
+    /**
+     * Endpoints to push to, in a thread-safe copy-on-write list, for safe
+     * concurrent iterations with minimal locking.
+     */
     private final List<UDPEndpoint> _endpoints;
+    /** False once the job has been cancelled. */
     private volatile boolean _alive;
+    /** The thread running the push loop. */
     private volatile Thread _thread;
 
     /**

@@ -22,9 +22,10 @@ import org.eclipse.jetty.server.handler.HandlerWrapper;
  *
  * This class is NOT used for the webapp or the bare ServerSocket implementation.
  */
-public class HostCheckHandler extends HandlerWrapper
-{
+public class HostCheckHandler extends HandlerWrapper {
+    /** Supplies the configuration and the log. */
     private final I2PAppContext _context;
+    /** Host names the service will answer for. */
     private final Set<String> _listenHosts;
 
     /**

@@ -65,10 +65,13 @@ public class LinearInterpolator extends Plottable {
     /** Array of timestamps for the data series */
 
     private final long[] timestamps;
+    /** Y coordinates of the points being interpolated. */
     private final double[] values;
 
-    // used only if INTERPOLATE_BESTFIT is specified
-    /** Intercept of the best-fit line, or NaN when regression has not been computed. */
+    /**
+     * Intercept of the best-fit line, or NaN when regression has not been
+     * computed. Used only if INTERPOLATE_BESTFIT is specified.
+     */
     double b0 = Double.NaN;
     /** Slope of the best-fit line, or NaN when regression has not been computed. */
     double b1 = Double.NaN;

@@ -49,7 +49,9 @@ import java.nio.charset.StandardCharsets;
  */
 public class SingleFileNamingService extends NamingService {
 
+    /** The hosts file being read. */
     private final File _file;
+    /** Guards reads and writes of the file. */
     private final ReentrantReadWriteLock _fileLock;
 
     /** Cached number of entries. */
@@ -60,8 +62,10 @@ public class SingleFileNamingService extends NamingService {
 
     /** Hostname to base64 key cache, guarded by _fileLock; valid when _cacheStamp &gt;= file mtime. */
     private final Map<String, String> _keyCache = new HashMap<>(64);
+    /** File timestamp the current cache was read at. */
     private volatile long _cacheStamp;
 
+    /** True once the service is closed. */
     private volatile boolean _isClosed;
 
     /**
@@ -600,10 +604,12 @@ public class SingleFileNamingService extends NamingService {
         }
     }
 
+    /** Takes the file read lock. */
     private void getReadLock() {
         _fileLock.readLock().lock();
     }
 
+    /** Releases the file read lock. */
     private void releaseReadLock() {
         _fileLock.readLock().unlock();
     }
@@ -622,6 +628,7 @@ public class SingleFileNamingService extends NamingService {
         return false;
     }
 
+    /** Releases the file write lock. */
     private void releaseWriteLock() {
         _fileLock.writeLock().unlock();
     }

@@ -17,9 +17,13 @@ import net.i2p.data.Destination;
  */
 class SAMv3DatagramSession extends SAMDatagramSession implements Session, SAMDatagramReceiver {
 
+    /** The handler that created this session. */
     private final SAMv3Handler handler;
+    /** The UDP server the session is registered with. */
     private final SAMv3DatagramServer server;
+    /** Name the client gave this session. */
     private final String nick;
+    /** Where the client's datagrams come from. */
     private final SocketAddress clientAddress;
 
     /**

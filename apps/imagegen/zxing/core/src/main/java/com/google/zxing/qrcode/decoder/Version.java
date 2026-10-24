@@ -39,11 +39,16 @@ public final class Version {
       0x2542E, 0x26A64, 0x27541, 0x28C69
   };
 
+  /** All the QR code versions. */
   private static final Version[] VERSIONS = buildVersions();
 
+  /** The number of this version. */
   private final int versionNumber;
+  /** The centers of the alignment patterns. */
   private final int[] alignmentPatternCenters;
+  /** The error correction blocks, by level. */
   private final ECBlocks[] ecBlocks;
+  /** The total number of codewords. */
   private final int totalCodewords;
 
   /**
@@ -228,7 +233,9 @@ public final class Version {
    * will be the same across all blocks within one version.</p>
    */
   public static final class ECBlocks {
+    /** Error correction codewords per block. */
     private final int ecCodewordsPerBlock;
+    /** The block counts, by block type. */
     private final ECB[] ecBlocks;
 
     /**
@@ -289,7 +296,9 @@ public final class Version {
    * parameters is used consecutively in the QR code version's format.</p>
    */
   public static final class ECB {
+    /** The number of blocks of the type. */
     private final int count;
+    /** Data codewords per block of the type. */
     private final int dataCodewords;
 
     /**

@@ -50,7 +50,6 @@ final class SSU2Util {
         return version >= MIN_SUPPORTED_VERSION && version <= MAX_SUPPORTED_VERSION;
     }
 
-    // lengths
     /** 32 bytes, X25519 public key length. */
     public static final int KEY_LEN = EncType.ECIES_X25519.getPubkeyLen();
     /** 16 bytes, MAC tag length. */
@@ -117,7 +116,6 @@ final class SSU2Util {
         }
     }
 
-    // header fields
     /** Offset of destination connection ID in header. */
     public static final int DEST_CONN_ID_OFFSET = 0;
     /** Offset of packet number in header. */
@@ -141,7 +139,6 @@ final class SSU2Util {
     /** Offset of token in long header. */
     public static final int TOKEN_OFFSET = 24;
 
-    // header protection
     /** Length of header protection sample in bytes. */
     public static final int HEADER_PROT_SAMPLE_LEN = 12;
     /** Total header protection sample length for both samples. */
@@ -164,9 +161,10 @@ final class SSU2Util {
     /** Maximum padding for session created. */
     public static final int PADDING_MAX_SESSION_CREATED = 64;
 
-    // data size minimums, not including IP/UDP headers
-
-    /** Short message type (e.g. data) minimum length in bytes (40). */
+    /**
+     * Minimum short-header data message size, 40 bytes. No minimum
+     * here includes the IP or UDP headers.
+     */
     public static final int MIN_DATA_LEN = SHORT_HEADER_SIZE + TOTAL_PROT_SAMPLE_LEN;
     /** Long message type minimum length in bytes (56). */
     public static final int MIN_LONG_DATA_LEN = LONG_HEADER_SIZE + TOTAL_PROT_SAMPLE_LEN;
@@ -215,7 +213,6 @@ final class SSU2Util {
     /** Message type flag for hole punch. */
     public static final byte HOLE_PUNCH_FLAG_BYTE = 11;
 
-    // HKDF infos
     /** HKDF info string for session created header key derivation. */
     public static final String INFO_CREATED =   "SessCreateHeader";
     /** HKDF info string for session confirmed key derivation. */
@@ -228,8 +225,6 @@ final class SSU2Util {
     /** All-zero key of KEY_LEN bytes. */
     public static final byte[] ZEROKEY = new byte[KEY_LEN];
 
-    // relay and peer test
-    // Signature prologues
     /** Prologue for relay request signatures. */
     public static final byte[] RELAY_REQUEST_PROLOGUE = DataHelper.getASCII("RelayRequestData");
     /** Prologue for relay response signatures. */
@@ -237,7 +232,6 @@ final class SSU2Util {
     /** Prologue for peer test signatures. */
     public static final byte[] PEER_TEST_PROLOGUE = DataHelper.getASCII("PeerTestValidate");
 
-    // test status codes
     /** Peer test accepted. */
     public static final int TEST_ACCEPT = 0;
     /** Rejected by Bob: unspecified reason. */
@@ -265,7 +259,6 @@ final class SSU2Util {
     /** Rejected by Charlie: unknown Alice. */
     public static final int TEST_REJECT_CHARLIE_UNKNOWN_ALICE = 70;
 
-    // relay status codes
     /** Relay accepted. */
     public static final int RELAY_ACCEPT = 0;
     /** Rejected by Bob: unspecified reason. */
@@ -295,7 +288,6 @@ final class SSU2Util {
     /** Rejected by Charlie: unknown Alice. */
     public static final int RELAY_REJECT_CHARLIE_UNKNOWN_ALICE = 70;
 
-    // termination reason codes
     /** Unspecified reason. */
     public static final int REASON_UNSPEC = 0;
     /** Termination requested by remote. */
@@ -379,6 +371,7 @@ final class SSU2Util {
         }
     }
 
+    /** Utility class, not intended for instantiation. */
     private SSU2Util() { /* no-op */ }
 
     /**

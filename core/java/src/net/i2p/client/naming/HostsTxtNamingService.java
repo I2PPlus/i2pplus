@@ -49,6 +49,10 @@ public class HostsTxtNamingService extends MetaNamingService {
     /** Default hosts.txt filenames. */
     public static final String DEFAULT_HOSTS_FILE = "privatehosts.txt,userhosts.txt,hosts.txt";
 
+    /**
+     * The hosts files configured for this service.
+     * @return the file names, empty if none are configured
+     */
     private List<String> getFilenames() {
         String list = _context.getProperty(PROP_HOSTS_FILE, DEFAULT_HOSTS_FILE);
         StringTokenizer tok = new StringTokenizer(list, ",");

@@ -7,7 +7,9 @@ package org.rrd4j.core.jrrd;
  */
 public class PDPStatusBlock {
 
+    /** Where the status block starts in the file. */
     private final long offset;
+    /** Size of the status block, in bytes. */
     private final long size;
     /** the last reading from the data source */
     final String lastReading;
@@ -16,8 +18,11 @@ public class PDPStatusBlock {
     /** the current value of the primary data point */
     final double value;
 
+    /** Indexes the fields of a primary data point's status block. */
     private enum pdp_par_en {
+        /** Seconds of unknown data accumulated so far. */
         PDP_unkn_sec_cnt,
+        /** The consolidated value so far. */
         PDP_val
     }
 

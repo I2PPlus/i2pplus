@@ -19,9 +19,12 @@ import net.i2p.router.RouterContext;
  * @since 0.9.56
  */
 class DirectLookupJob extends FloodOnlySearchJob {
+    /** The lookup message awaiting a reply. */
     private OutNetMessage _onm;
+    /** The entry as it was before the lookup. */
     private final RouterInfo _oldRI;
 
+    /** How long to wait for the reply - 8 seconds. */
     private static final int TIMEOUT = 8*1000;
 
     /**

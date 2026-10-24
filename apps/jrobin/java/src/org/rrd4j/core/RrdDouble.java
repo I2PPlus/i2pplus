@@ -8,7 +8,9 @@ import java.io.IOException;
  * @param <U> the updater type
  */
 class RrdDouble<U extends RrdUpdater<U>> extends RrdPrimitive<U> {
+    /** Value read from or written to the file. */
     private double cache;
+    /** True while the value is held in memory. */
     private boolean cached = false;
 
     /**

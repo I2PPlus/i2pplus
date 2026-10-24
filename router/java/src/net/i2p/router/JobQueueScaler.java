@@ -49,92 +49,138 @@ import net.i2p.util.SystemVersion;
  * @since 0.9.68+
  */
 class JobQueueScaler implements Runnable {
+    /** Logger for scaling decisions. */
     private final Log _log;
+    /** The queue whose runners are scaled. */
     private final JobQueue _jobQueue;
+    /** The router context. */
     private final RouterContext _context;
+    /** True while the scaler job is scheduled. */
     private volatile boolean _isRunning;
+    /** False once the scaler has shut down. */
     private volatile boolean _isAlive;
 
-    // Scaling state
+    /** Checks in a row that wanted to scale up. */
     private int _consecutiveScaleUpChecks;
+    /** Checks in a row that wanted to scale down. */
     private int _consecutiveScaleDownChecks;
+    /** When the last scale event happened. */
     private long _lastScaleTime;
+    /** Runner limit from the config. */
     private int _configuredMaxRunners;
+    /** Runner limit in effect right now. */
     private int _currentMaxRunners;
 
-    // Feedback mechanism for detecting ineffective scaling
+    /** State captured before the last scale, for feedback. */
     private PreScaleSnapshot _preScaleSnapshot;
+    /** Checks run since the last scale event. */
     private int _checksSinceLastScale;
+    /** Total checks run, never reset by scale events. */
     private int _periodicCheckCount; // monotonic counter for periodic tasks (not reset by scale events)
+    /** Scale-ups in a row that did not help. */
     private int _consecutiveFailedScaleUps;
+    /** True while the failure cooldown runs. */
     private boolean _isInExtendedCooldown;
+    /** Circuit breaker set after repeated failures. */
     private boolean _scalingUpDisabled; // Circuit breaker after repeated failures
 
-    // Cached parsed config values to avoid repeated Double.parseDouble on hot paths
+    /**
+     * Config string the cached ratio was parsed from, kept to avoid
+     * re-parsing on the hot path.
+     */
     private String _cachedScaleJobsRatioProp;
+    /** Backlog ratio needed to scale up. */
     private double _cachedScaleJobsRatio = DEFAULT_SCALE_UP_JOBS_RATIO;
 
-    // Trend tracking for predictive scaling
+    /** Ready jobs seen at the previous check. */
     private int _previousReadyJobs;
+    /** Message delay seen at the previous check. */
     private long _previousMessageDelay;
+    /** Recent message delay samples for trend tracking. */
     private long[] _messageDelayHistory;
+    /** Write index into the delay history. */
     private int _msgDelayHistoryIndex;
+    /** Samples held in the delay history. */
     private int _msgDelayHistoryCount;
 
-    // External runner requests from subsystems (e.g., Tuner)
+    /** Runner floor requested by subsystems. */
     private final AtomicInteger _externalFloor = new AtomicInteger(0);
+    /** Runner requests by subsystem name, with expiry times. */
     private final ConcurrentHashMap<String, int[]> _externalRequests = new ConcurrentHashMap<>(4);
 
-    // Recovery time tracking
+    /** When the current overload episode began. */
     private long _loadEpisodeStart;
+    /** When the queue last recovered from an overload. */
     private long _lastRecoveryTime;
 
-    // Feedback configuration
+    /** Checks after a scale before judging its result. */
     private static final int FEEDBACK_CHECKS_AFTER_SCALE = 2; // Check 2 times after scaling (faster response)
+    /** Failed scale-ups before the circuit breaker opens. */
     private static final int MAX_CONSECUTIVE_FAILED_SCALES = 5; // Reduced from 10 - circuit breaker opens sooner
+    /** Cooldown multiplier after a failed scale. */
     private static final long EXTENDED_COOLDOWN_MULTIPLIER = 2; // 2x normal cooldown (reduced from 3x)
+    /** Lag growth tolerated after a scale before rollback. */
     private static final double LAG_INCREASE_THRESHOLD = 1.5; // Allow 50% lag increase before rollback (was 2.0 = 100%)
+    /** Backlog growth tolerated after a scale before rollback. */
     private static final double READY_JOBS_INCREASE_THRESHOLD = 1.5; // Allow 50% increase before rollback (was 2.0 = 100%)
 
-    // Trend tracking for predictive scaling
+    /** Delay samples kept, a 12 second window at 2s checks. */
     private static final int MSG_DELAY_HISTORY_SIZE = 6; // samples, 12s window at 2s interval
+    /** Delay over the baseline median that triggers action. */
     private static final double BASELINE_MULTIPLIER = 2.0; // trigger when current > 2x baseline median
+    /** Jobs added per check that count as backlog growth. */
     private static final int QUEUE_GROWTH_RATE_THRESHOLD = 2; // jobs/check interval
 
-    // RAM-based limits
+    /** One megabyte, for the memory limits. */
     private static final long MB = 1024 * 1024L;
+    /** A runner thread is estimated at 2 MB of heap. */
     private static final long RUNNER_MEMORY_ESTIMATE = 2 * MB; // ~2MB per thread (stack + overhead)
+    /** Share of the heap allowed for runner threads. */
     private static final double MAX_MEMORY_PERCENTAGE = 0.10; // Use max 10% of heap for runners
 
-    // Configuration defaults
-    // Scale-up: add runners when lag is consistently high, not on every transient spike.
-    // Scale-down: remove idle runners when load drops, don't require impossible conditions.
-    // Max runners capped at 2× cores to prevent context-switching death spirals.
-
+    /** The default interval between checks is 2 seconds. */
     private static final long DEFAULT_SCALE_CHECK_INTERVAL = 2000; // 2 seconds (less frequent checks reduce overhead)
+    /** The default wait between scale events is 10 seconds. */
     private static final long DEFAULT_SCALE_COOLDOWN = 10000; // 10 seconds (cooldown between scale events)
+    /** The default lag that justifies scaling up is 10 ms. */
     private static final int DEFAULT_SCALE_UP_LAG_THRESHOLD = 10; // 10ms (scale up only when lag is significant)
+    /** The default message delay that justifies scaling up is 200 ms. */
     private static final int DEFAULT_SCALE_UP_MESSAGE_DELAY_THRESHOLD = 200; // 200ms (scale up if message delay exceeds 200ms)
+    /** The default lag low enough to scale down is 5 ms. */
     private static final int DEFAULT_SCALE_DOWN_LAG_THRESHOLD = 5; // 5ms (scale down when lag is moderate)
+    /** Default backlog ratio needed to scale up. */
     private static final double DEFAULT_SCALE_UP_JOBS_RATIO = 2.0; // 2x (require real backlog, not just 1 extra job)
+    /** Runners added per scale-up. */
     private static final int DEFAULT_SCALE_UP_STEP = 1;
+    /** Runners removed per scale-down, faster than we grow. */
     private static final int DEFAULT_SCALE_DOWN_STEP = 2; // Remove 2 at a time (shrink faster than we grow)
+    /** Checks that must want a scale-up before acting. */
     private static final int SUSTAINED_CHECKS_REQUIRED = 3; // 3 checks before scaling up
+    /** Checks that must want a scale-down before acting. */
     private static final int SUSTAINED_CHECKS_REQUIRED_DOWN = 2; // 2 checks before scaling down (respond faster to idle)
 
-    // Property names
+    /** Config key turning dynamic scaling on or off. */
     private static final String PROP_DYNAMIC_SCALING = "router.dynamicJobScaling";
+    /** Config key for the lag that justifies scaling up. */
     private static final String PROP_SCALE_UP_LAG = "router.scaleUpLagThreshold";
+    /** Config key for the lag low enough to scale down. */
     private static final String PROP_SCALE_DOWN_LAG = "router.scaleDownLagThreshold";
+    /** Config key for the backlog ratio needed to scale up. */
     private static final String PROP_SCALE_JOBS_RATIO = "router.scaleUpJobsRatio";
+    /** Config key for the interval between checks. */
     private static final String PROP_SCALE_CHECK_INTERVAL = "router.scaleCheckInterval";
+    /** Config key for the wait between scale events. */
     private static final String PROP_SCALE_COOLDOWN = "router.scaleCooldown";
+    /** Config key for the message delay that justifies scaling up. */
     private static final String PROP_SCALE_UP_MSG_DELAY = "router.scaleUpMessageDelayThreshold";
+    /** Config key for the minimum runner count. */
     private static final String PROP_MIN_RUNNERS = "router.minJobRunners";
+    /** Config key turning the post-scale feedback check on or off. */
     private static final String PROP_FEEDBACK_ENABLED = "router.scaleFeedbackEnabled";
 
-    // Suppression thresholds — these gate scale-up decisions
+    /** CPU percent above which scale-up is skipped. */
     private static final int CPU_SATURATION_THRESHOLD = 85; // % — skip scale-up if CPU saturated
+    /** GC pause ms per minute above which scale-up is skipped. */
     private static final long GC_STORM_THRESHOLD = 50; // ms/min — skip scale-up if GC pause time is high
 
     /**
@@ -142,14 +188,31 @@ class JobQueueScaler implements Runnable {
      * Used to evaluate if scaling actually helped.
      */
     private static class PreScaleSnapshot {
+        /** When the state was captured. */
         final long timestamp;
+        /** Runners in effect at the capture. */
         final int runnerCount;
+        /** Ready jobs at the capture. */
         final int readyJobs;
+        /** Worst job lag at the capture. */
         final long maxLag;
+        /** Average job lag at the capture. */
         final long avgLag;
+        /** Heap in use at the capture. */
         final long usedMemory;
+        /** Runners added by the scale event. */
         final int runnersAdded;
 
+        /**
+         * Captures the queue state before a scaling decision.
+         *
+         * @param runnerCount the job runners then running
+         * @param readyJobs the jobs ready to run
+         * @param maxLag the longest job lag, in milliseconds
+         * @param avgLag the average job lag, in milliseconds
+         * @param usedMemory the memory in use, in bytes
+         * @param runnersAdded the runners added so far
+         */
         PreScaleSnapshot(int runnerCount, int readyJobs, long maxLag, long avgLag,
                         long usedMemory, int runnersAdded) {
             this.timestamp = System.currentTimeMillis();
@@ -1096,9 +1159,17 @@ class JobQueueScaler implements Runnable {
      * called explicitly.
      */
     private class AutoReleaseEvent extends SimpleTimer2.TimedEvent {
+        /** Why the runners are being released. */
         private final String _reason;
+        /** Number of runners to release. */
         private final int _count;
 
+        /**
+         * Prepares to release runners back to the floor.
+         *
+         * @param reason why the runners are released
+         * @param count runners to release
+         */
         AutoReleaseEvent(String reason, int count) {
             super(_context.simpleTimer2());
             _reason = reason;

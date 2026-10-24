@@ -26,6 +26,7 @@ import org.bouncycastle.pqc.crypto.mlkem.MLKEMPublicKeyParameters;
  */
 public final class MLKEM {
 
+    /** Utility class, not intended for instantiation. */
     private MLKEM() {}
 
     /** MLKEM-512 key factory. */
@@ -35,8 +36,15 @@ public final class MLKEM {
     /** MLKEM-1024 key factory. */
     public static final KeyFactory MLKEM1024KeyFactory = new MLKEMFactory(EncType.MLKEM1024_X25519_INT);
 
+    /** Makes the key factories for one ML-KEM variant. */
     private static class MLKEMFactory implements KeyFactory {
+        /** The ML-KEM variant this factory handles. */
         private final EncType t;
+        /**
+         * Names the variant the factory handles.
+         *
+         * @param type the ML-KEM variant
+         */
         public MLKEMFactory(EncType type) { t = type; }
         public KeyPair getKeys() {
             try {

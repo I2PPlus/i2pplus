@@ -16,8 +16,10 @@ public class EncodingFactory {
 	/** Utility class, not instantiable. */
 	private EncodingFactory() {}
 
+	/** Encoding classes loaded when nothing is configured */
 	private static final String DEFAULT_ENCODINGS = "i2p.susi.webmail.encoding.HeaderLine;i2p.susi.webmail.encoding.QuotedPrintable;i2p.susi.webmail.encoding.Base64;i2p.susi.webmail.encoding.SevenBit;i2p.susi.webmail.encoding.EightBit;i2p.susi.webmail.encoding.HTML";
 
+	/** Encoding name to its implementation. */
 	private static final Map<String, Encoding> encodings;
 
 	static {
@@ -46,8 +48,7 @@ public class EncodingFactory {
 	 *
 	 * @return the matching encoder, or null if the name is unknown
 	 */
-	public static Encoding getEncoding( String name )
-	{
+	public static Encoding getEncoding( String name ) {
 		return name != null && !name.isEmpty() ? encodings.get( name ) : null;
 	}
 	/**
@@ -55,8 +56,7 @@ public class EncodingFactory {
 	 *
 	 * @return List of encodings
 	 */
-	public static Set<String> availableEncodings()
-	{
+	public static Set<String> availableEncodings() {
 		return encodings.keySet();
 	}
 }

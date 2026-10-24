@@ -16,19 +16,22 @@ import net.i2p.router.transport.GeoIP;
 
 /**
  * Country to continent mapping for NTP.
+ * Logging is unavailable here: Zones is built from the RouterClock
+ * constructor and logging would recurse.
+ *
  * @since 0.9.20
  */
 @SuppressWarnings("PMD.AvoidFieldNameMatchingTypeName")
 class Zones {
 
+    /** The context reading the zone files. */
     private final I2PAppContext _context;
-    // can't log here, called from RouterClock constructor, stack overflow
-
-    // lower case country to NTP region
+    /** NTP region by lower case country code. */
     private final Map<String, String> _countryToZone;
-    // upper case continent to NTP region
+    /** NTP region by upper case continent code. */
     private final Map<String, String> _continentToZone;
 
+    /** Bundled file mapping continents to NTP regions. */
     private static final String CONTINENT_FILE_DEFAULT = "continents.txt";
 
     /**

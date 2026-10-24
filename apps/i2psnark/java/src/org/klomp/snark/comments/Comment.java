@@ -16,24 +16,34 @@ import net.i2p.data.DataHelper;
  */
 public class Comment implements Comparable<Comment> {
 
+    /** The comment text. */
     private final String text;
+    /** The name of the commenter. */
     private final String name;
-    // seconds since 1/1/2005
+    /** When the comment was written, seconds since 1/1/2005. */
     private final int time;
+    /** The rating the commenter gave. */
     private final byte rating;
+    /** True if we wrote the comment. */
     private final boolean byMe;
+    /** True to keep the comment out of the display. */
     private boolean hidden;
+    /** Sequence number of the created comments. */
     private static final AtomicInteger _id = new AtomicInteger();
+    /** This comment's position in that sequence. */
     private final int id = _id.incrementAndGet();
 
     /** Maximum length of a commenter name. */
     public static final int MAX_NAME_LEN = 32;
-    // same as IRC, more or less
+    /** Longest comment text accepted, the IRC limit more or less. */
     private static final int MAX_TEXT_LEN = 512;
+    /** Width of the comment time buckets. */
     private static final int BUCKET_SIZE = 4 * 60 * 60 * 1000;
+    /** Factor shrinking the bucket times. */
     private static final long TIME_SHRINK = 1000L;
+    /** Largest clock skew accepted in a comment. */
     private static final int MAX_SKEW = (int) (BUCKET_SIZE / TIME_SHRINK);
-    // 1/1/2005
+    /** Epoch of the comment times, 1/1/2005. */
     private static final long TIME_OFFSET = 1104537600000L;
 
     /**
@@ -261,6 +271,13 @@ public class Comment implements Comparable<Comment> {
         return rating == c.rating && eq(text, c.text) && eq(name, c.name);
     }
 
+    /**
+     * Compares two possibly null strings for equality.
+     *
+     * @param lhs the first string, null allowed
+     * @param rhs the second string, null allowed
+     * @return true if both are null or equal
+     */
     private static boolean eq(String lhs, String rhs) {
         return (lhs == null && rhs == null) || (lhs != null && lhs.equals(rhs));
     }

@@ -46,12 +46,17 @@ import org.rrd4j.graph.SVGImageWorker;
  * including the combined rate graph.
  */
 class GraphRenderer {
+    /** Logger for graph rendering. */
     private final Log _log;
+    /** Source of the stat data being graphed. */
     private final GraphListener _listener;
+    /** The app context. */
     private final I2PAppContext _context;
+    /** Config key for the console theme. */
     private static final String PROP_THEME_NAME = "routerconsole.theme";
 
 
+    /** Theme assumed when none is configured. */
     private static final String DEFAULT_THEME = "dark";
 
     /**
@@ -129,7 +134,9 @@ class GraphRenderer {
      */
     private static final Color ARROW_COLOR = new Color(0, 0, 0, 0);
 
+    /** Whether we are running on Windows. */
     private static final boolean IS_WIN = SystemVersion.isWindows();
+    /** Config key for line smoothing. */
     private static final String PROP_SMOOTH = "routerconsole.graphSmooth";
     /**
      * Keep the historical zero-floored y-axis even when the window's data lives in a
@@ -138,11 +145,17 @@ class GraphRenderer {
      * @since 0.9.71+
      */
     private static final String PROP_ZERO_BASE = "routerconsole.graphZeroBase";
+    /** Config key for the unit label font. */
     private static final String PROP_FONT_MONO = "routerconsole.graphFont.unit";
+    /** Config key for the legend font. */
     private static final String PROP_FONT_LEGEND = "routerconsole.graphFont.legend";
+    /** Config key for the title font. */
     private static final String PROP_FONT_TITLE = "routerconsole.graphFont.title";
+    /** Default unit label font size. */
     private static final int SIZE_MONO = 10;
+    /** Default legend font size. */
     private static final int SIZE_LEGEND = 11;
+    /** Default title font size. */
     private static final int SIZE_TITLE = 12;
     /**
      * Headroom left under the data minimum, as a fraction of the window's data range.
@@ -152,8 +165,10 @@ class GraphRenderer {
      * @since 0.9.71+
      */
     private static final double AXIS_FLOOR_MARGIN = 0.1d;
+    /** The stroke drawing the graph grid lines. */
     private static final Stroke GRID_STROKE =
             new BasicStroke(1, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1, new float[] {1, 1}, 0);
+    /** Matches the start of a camel case word in a stat name. */
     private static final Pattern CAMEL_CASE_PATTERN = Pattern.compile("(?<=[a-z])([A-Z])");
 
     /**
@@ -163,13 +178,16 @@ class GraphRenderer {
      */
     private static final ThreadLocal<SimpleDateFormat> LOCAL_DATE_FMT =
             ThreadLocal.withInitial(() -> new SimpleDateFormat("dd MMM HH:mm", Locale.US));
+    /** Per-thread UTC date format for the graph labels. */
     private static final ThreadLocal<SimpleDateFormat> UTC_DATE_FMT = ThreadLocal.withInitial(() -> {
         SimpleDateFormat sdf = new SimpleDateFormat("dd MMM HH:mm", Locale.US);
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
         return sdf;
     });
 
+    /** Graphics environment holding the available fonts. */
     private static final GraphicsEnvironment GE = GraphicsEnvironment.getLocalGraphicsEnvironment();
+    /** Font families available on this system. */
     private static final List<String> FONTLIST = Arrays.asList(GE.getAvailableFontFamilyNames());
 
     /**
@@ -636,12 +654,24 @@ class GraphRenderer {
         }
     }
 
+    /**
+     * Sets the graph's time zone.
+     *
+     * @param def the graph definition
+     * @param useUtc whether to use UTC
+     */
     private void configureTimeZone(RrdGraphDef def, boolean useUtc) {
         if (useUtc) {
             def.setTimeZone(TimeZone.getTimeZone("UTC"));
         }
     }
 
+    /**
+     * Sets the graph's fonts from the config.
+     *
+     * @param def the graph definition
+     * @param cfg the render configuration
+     */
     private void configureFonts(RrdGraphDef def, GraphRenderConfig cfg) {
         int smallSize = SIZE_MONO;
         int legendSize = SIZE_LEGEND;
@@ -670,6 +700,11 @@ class GraphRenderer {
         def.setFont(RrdGraphDef.FONTTAG_TITLE, cfg.title);
     }
 
+    /**
+     * Derives the unit base and decimal places for the stat.
+     *
+     * @param cfg the render configuration to update
+     */
     private void configureBaseAndDecimals(GraphRenderConfig cfg) {
         String name = cfg.rate.getRateStat().getName();
         cfg.derivedTitle = deriveTitle(name);
@@ -862,10 +897,20 @@ class GraphRenderer {
      * Replaces fragile string-index heuristics with typed lookups.
      */
     private static final class StatMeta {
+        /** Unit base for the stat, 1000 or 1024. */
         final int base;              // 1000 or 1024
+        /** True when the stat shows no decimal places. */
         final boolean noDecimalPlace; // true for integer-only metrics
+        /** True for one decimal place, false for two. */
         final boolean singleDecimalPlace; // true for single decimal, false for two
 
+        /**
+         * Holds the display metadata for one stat.
+         *
+         * @param base the unit base
+         * @param noDecimalPlace whether decimals are dropped
+         * @param singleDecimalPlace whether one decimal place is used
+         */
         StatMeta(int base, boolean noDecimalPlace, boolean singleDecimalPlace) {
             this.base = base;
             this.noDecimalPlace = noDecimalPlace;
@@ -918,6 +963,12 @@ class GraphRenderer {
         STAT_META = Collections.unmodifiableMap(m);
     }
 
+    /**
+     * Sets the graph title and vertical label.
+     *
+     * @param def the graph definition
+     * @param cfg the render configuration
+     */
     private void configureTitle(RrdGraphDef def, GraphRenderConfig cfg) {
         if (cfg.titleOverride != null) {
             def.setTitle(cfg.titleOverride);
@@ -946,6 +997,13 @@ class GraphRenderer {
         }
     }
 
+    /**
+     * Adds the stat's data sources to the graph.
+     *
+     * @param def the graph definition
+     * @param cfg the render configuration
+     * @throws IOException if the rrd file cannot be read
+     */
     private void configureDataSources(RrdGraphDef def, GraphRenderConfig cfg) throws IOException {
         cfg.path = cfg.listener.getData().getPath();
         try {
@@ -1011,6 +1069,12 @@ class GraphRenderer {
                  plotLineShade(cfg.theme, 0));
     }
 
+    /**
+     * Adds the legend lines to the graph.
+     *
+     * @param def the graph definition
+     * @param cfg the render configuration
+     */
     private void configureLegend(RrdGraphDef def, GraphRenderConfig cfg) {
         if (!cfg.hideLegend) {
             Variable var = new Variable.MIN();
@@ -1341,6 +1405,12 @@ class GraphRenderer {
         return paletteColor(theme, 0);
     }
 
+    /**
+     * Adds the router restart markers to the graph.
+     *
+     * @param def the graph definition
+     * @param cfg the render configuration
+     */
     private void configureRestartMarkers(RrdGraphDef def, GraphRenderConfig cfg) {
         if (!cfg.hideLegend && cfg.showRestarts) {
             cfg.timeLabel = cfg.useUtc ? " UTC" : "";
@@ -1362,6 +1432,12 @@ class GraphRenderer {
         }
     }
 
+    /**
+     * Adds the comments and signature text to the graph.
+     *
+     * @param def the graph definition
+     * @param cfg the render configuration
+     */
     private void configureCommentsAndSignature(RrdGraphDef def, GraphRenderConfig cfg) {
         if (!cfg.hideLegend) {
             // Small vertical space (\s advances by small leading only) to
@@ -1385,6 +1461,12 @@ class GraphRenderer {
         }
     }
 
+    /**
+     * Sets the grid style and rendering options.
+     *
+     * @param def the graph definition
+     * @param cfg the render configuration
+     */
     private void configureGridAndRendering(RrdGraphDef def, GraphRenderConfig cfg) {
         if (cfg.hideGrid) {
             def.setDrawXGrid(false);
@@ -1412,6 +1494,14 @@ class GraphRenderer {
         }
     }
 
+    /**
+     * Renders the graph and writes the image.
+     *
+     * @param def the graph definition
+     * @param out where the image is written
+     * @param cfg the render configuration
+     * @throws IOException if the image cannot be written
+     */
     private void renderGraph(RrdGraphDef def, OutputStream out, GraphRenderConfig cfg) throws IOException {
         RrdGraph graph;
         try {
@@ -1627,11 +1717,23 @@ class GraphRenderer {
      * Ordered by preference: first available font in the list is used.
      */
     private static final class FontConfig {
+        /** Font names tried for titles, in order. */
         final List<String> titleCandidates;
+        /** Font names tried for unit labels, in order. */
         final List<String> monoCandidates;
+        /** Font used for titles when no candidate exists. */
         final String fallbackTitle;
+        /** Font used for unit labels when no candidate exists. */
         final String fallbackMono;
 
+        /**
+         * Holds the font choices for the graphs.
+         *
+         * @param titleCandidates the fonts tried for titles
+         * @param monoCandidates the fonts tried for mono text
+         * @param fallbackTitle the title font to fall back to
+         * @param fallbackMono the mono font to fall back to
+         */
         FontConfig(List<String> titleCandidates, List<String> monoCandidates,
                    String fallbackTitle, String fallbackMono) {
             this.titleCandidates = titleCandidates;
@@ -1694,10 +1796,20 @@ class GraphRenderer {
 
     /** Resolved font family names for a render pass. */
     private static final class FontNames {
+        /** Font chosen for the unit labels. */
         final String mono;
+        /** Font chosen for the legend. */
         final String legend;
+        /** Font chosen for the title. */
         final String title;
 
+        /**
+         * Holds the fonts chosen for one graph.
+         *
+         * @param mono the unit label font
+         * @param legend the legend font
+         * @param title the title font
+         */
         FontNames(String mono, String legend, String title) {
             this.mono = mono;
             this.legend = legend;
@@ -1764,7 +1876,6 @@ class GraphRenderer {
         /** The listener holding the RRD: the datasource, the archive rows and the clock. */
         final GraphListener listener;
 
-        // Computed fields (filled by builders)
         /** Title derived from the rate stat name. */
         String derivedTitle;
         /** True to format values with no decimals, for counts and percentages. */
@@ -1813,6 +1924,11 @@ class GraphRenderer {
         /** Largest finite value in the plotted window, NaN until resolved. */
         double dataMax;
 
+        /**
+         * Builds the render configuration from its builder.
+         *
+         * @param b the builder holding the settings
+         */
         private GraphRenderConfig(Builder b) {
             this.start = b.start;
             this.end = b.end;

@@ -21,6 +21,7 @@ public class EmptyProperties extends OrderedProperties {
 /** Singleton immutable empty properties instance. */
     public static final EmptyProperties INSTANCE = new EmptyProperties();
 
+    /** Utility class, not intended for instantiation. */
     private EmptyProperties() {
         super();
     }

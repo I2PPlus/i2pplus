@@ -215,6 +215,8 @@ public class JaxpParser extends Parser {
         }
 
         /**
+         * Reads up to b.length bytes into b.
+         *
          * @since 0.9.22
          */
         @Override
@@ -223,6 +225,8 @@ public class JaxpParser extends Parser {
         }
 
         /**
+         * Reads up to len bytes into b at off.
+         *
          * @since 0.9.22
          */
         @Override
@@ -264,6 +268,9 @@ public class JaxpParser extends Parser {
      * parsing.
      */
     private static class BlankingResolver implements EntityResolver {
+        /** Refuses to fetch any external entity. */
+        private BlankingResolver() {}
+        /** Empty body returned in place of an entity. */
         private static final byte[] DUMMY = new byte[0];
 
         /**

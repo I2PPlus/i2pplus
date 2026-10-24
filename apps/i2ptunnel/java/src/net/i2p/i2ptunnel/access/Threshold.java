@@ -13,7 +13,9 @@ class Threshold {
     /** A Threshold that is always breached. */
     static final Threshold DENY = new Threshold(0, 1);
 
+    /** Connections allowed in the window. */
     private final int connections;
+    /** Length of the window, in seconds. */
     private final int seconds;
 
     /**

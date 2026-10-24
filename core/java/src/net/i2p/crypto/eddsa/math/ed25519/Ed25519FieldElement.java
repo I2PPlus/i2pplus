@@ -81,6 +81,7 @@ public class Ed25519FieldElement extends FieldElement {
         return new Ed25519FieldElement(f, copy);
     }
 
+    /** A 32-byte array of zeroes, for comparisons. */
     private static final byte[] ZERO = new byte[32];
 
     /**

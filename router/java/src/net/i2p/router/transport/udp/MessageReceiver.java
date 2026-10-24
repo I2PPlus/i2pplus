@@ -28,19 +28,31 @@ import net.i2p.router.util.CoDelPriorityBlockingQueue;
  * @since 0.9.14 (dynamic resizing since 0.9.70+)
  */
 class MessageReceiver {
+    /** The router context. */
     private final RouterContext _context;
+    /** Logger for the message receiver. */
     private final Log _log;
+    /** The transport the messages belong to. */
     private final UDPTransport _transport;
+    /** Logger recording the banned peers. */
     private final BanLogger _banLogger;
     /** List of messages (InboundMessageState) fully received but not interpreted yet. */
     private final BlockingQueue<InboundMessageState> _completeMessages;
+    /** True while the receiver threads keep running. */
     private volatile boolean _alive;
+    /** Number of receiver threads. */
     private static volatile int _threadCount = SystemVersion.isSlow() ? 2 : 3;
+    /** Receiver threads currently reading. */
     private final AtomicInteger _activeRunners = new AtomicInteger();
+    /** Messages being processed right now. */
     private final AtomicInteger _processingCount = new AtomicInteger();
+    /** Queue entry that stops a receiver thread. */
     private static final long POISON_IMS = -99999999999L;
+    /** Fewest receiver threads allowed. */
     private static final int MIN_THREADS = 2;
+    /** Most receiver threads allowed. */
     private static final int MAX_THREADS = 16;
+    /** Sequence number of the receiver threads. */
     private static final AtomicInteger _threadNum = new AtomicInteger();
 
     /**
@@ -126,6 +138,7 @@ class MessageReceiver {
         }
     }
 
+    /** Starts one more receiver thread if needed. */
     private void startRunner() {
         Runner r = new Runner();
         _activeRunners.incrementAndGet();
@@ -133,8 +146,11 @@ class MessageReceiver {
         t.start();
     }
 
+    /** Thread taking messages off the queue. */
     private class Runner implements Runnable {
+        /** Handler processing the messages. */
         private final I2NPMessageHandler _handler;
+        /** Builds a runner with its own message handler. */
         Runner() { _handler = new I2NPMessageHandler(_context); }
         /**
          * Run the receive loop.

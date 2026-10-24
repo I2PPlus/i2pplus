@@ -14,7 +14,9 @@ import java.util.Map;
  */
 public class EchoHandler implements RequestHandler {
 
+    /** The argument names this method requires. */
     private static final String[] requiredArgs = {"Echo"};
+    /** Checks the token a request carries. */
     private final JSONRPC2Helper _helper;
 
     /**

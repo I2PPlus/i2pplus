@@ -11,7 +11,7 @@ import java.io.OutputStream;
 import java.io.Writer;
 
 /**
- * ref: https://en.wikipedia.org/wiki/Quoted-printable
+ * See also: <a href="https://en.wikipedia.org/wiki/Quoted-printable">Quoted-printable</a>
  */
 public class QuotedPrintable extends Encoding {
 
@@ -26,6 +26,7 @@ public class QuotedPrintable extends Encoding {
 		return "quoted-printable";
 	}
 
+	/** Initial buffer size for decoded output. */
 	private static int BUFSIZE = 2;
 
 	/**
@@ -51,8 +52,7 @@ public class QuotedPrintable extends Encoding {
 	 * @since since 0.9.33
 	 */
 	@Override
-	public void encode(InputStream in, Writer out) throws IOException
-	{
+	public void encode(InputStream in, Writer out) throws IOException {
 		int buffered = 0;
 		int tmp[] = new int[BUFSIZE];
 		int l = 0;

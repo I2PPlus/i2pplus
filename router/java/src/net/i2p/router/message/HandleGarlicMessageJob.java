@@ -33,13 +33,20 @@ import net.i2p.util.Log;
  * Public visibility is necessary for integration with the job queue system.
  */
 public class HandleGarlicMessageJob extends JobImpl implements GarlicMessageReceiver.CloveReceiver {
+    /** Logger for this class. */
     private final Log _log;
+    /** The garlic message being processed. */
     private final GarlicMessage _message;
+    /** Bloom mask for the local message id. */
     private final long _msgIDBloomXorLocal;
+    /** Bloom mask for the router's message id. */
     private final long _msgIDBloomXorRouter;
+    /** Bloom mask for the tunnel's message id. */
     private final long _msgIDBloomXorTunnel;
 
+    /** Priority of replies sent by the router. */
     private static final int ROUTER_PRIORITY = OutNetMessage.PRIORITY_LOWEST;
+    /** Priority of replies sent through the tunnel. */
     private static final int TUNNEL_PRIORITY = OutNetMessage.PRIORITY_LOWEST;
 
     /**

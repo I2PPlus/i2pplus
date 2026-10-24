@@ -42,29 +42,51 @@ import net.i2p.util.Log;
  * @since 0.9.54
  */
 class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payload.PayloadCallback {
+    /** Records why routers were banned. */
     private final BanLogger _banLogger;
+    /** Bob's socket address. */
     private InetSocketAddress _bobSocketAddress;
+    /** The SSU transport we serve. */
     private final UDPTransport _transport;
+    /** Connection id we send with. */
     private final long _sendConnID;
+    /** Connection id we receive with. */
     private final long _rcvConnID;
+    /** The router address being connected to. */
     private final RouterAddress _routerAddress;
+    /** Introduction states, by introducer hash. */
     private final Map<Hash, IntroState> _introducers;
+    /** The handshake token echoed by Bob. */
     private long _token;
+    /** Handshake state for the ratchet keys. */
     private HandshakeState _handshakeState;
+    /** Version of the handshake. */
     private final int _version;
-    // Bob's intro key, same for send and receive
+    /**
+     * First header encryption key, Bob's introduction key, used for
+     * sending and receiving alike.
+     */
     private final byte[] _headerEncryptKey1;
+    /** Second header encryption key for sending. */
     private byte[] _sendHeaderEncryptKey2;
+    /** Second header encryption key for receiving. */
     private byte[] _rcvHeaderEncryptKey2;
+    /** Retry key for the second receive header. */
     private final byte[] _rcvRetryHeaderEncryptKey2;
+    /** The MTU agreed for the new peer. */
     private final int _mtu;
+    /** Session Request packet held for retransmission. */
     private byte[] _sessReqForReTX;
+    /** Session Confirmed fragments for retransmission. */
     private byte[][] _sessConfForReTX;
+    /** When the handshake started. */
     private long _timeReceived;
-    // not adjusted for RTT
+    /** Our clock skew to Bob, in ms, not adjusted for RTT. */
     private long _skew;
+    /** The peer state being built, once created. */
     private PeerState2 _pstate;
 
+    /** Maximum clock skew accepted in a handshake. */
     private static final long MAX_SKEW = 2*60*1000L;
 
     /**
@@ -72,9 +94,6 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
      * @since 0.9.55
      */
     public enum IntroState {
-        // pending states
-        // we may transition from these to another state
-        // See EstablishmentManager.handlePendingIntro() for state machine
 
         /** Nothing happened yet. */
         INTRO_STATE_INIT,
@@ -91,8 +110,6 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         /** We got a good relay response via this introducer. */
         INTRO_STATE_RELAY_CHARLIE_ACCEPTED,
 
-        // final states
-        // we do not transition from these states
 
         /** Introducer has expired. */
         INTRO_STATE_EXPIRED,
@@ -309,6 +326,15 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         _sessReqForReTX = null;
     }
 
+    /**
+     * Processes one handshake payload.
+     *
+     * @param payload the packet payload
+     * @param offset where the handshake data starts
+     * @param length the handshake data length
+     * @param isHandshake true for a handshake packet
+     * @throws GeneralSecurityException if the decryption or MAC fails
+     */
     private void processPayload(byte[] payload, int offset, int length, boolean isHandshake) throws GeneralSecurityException {
         try {
             int blocks = SSU2Payload.processPayload(_context, this, payload, offset, length, isHandshake, null);

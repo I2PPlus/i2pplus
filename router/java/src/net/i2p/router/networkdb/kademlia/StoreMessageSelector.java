@@ -21,11 +21,17 @@ import net.i2p.util.Log;
  * duplicate processing of delivery confirmations.
  */
 class StoreMessageSelector implements MessageSelector {
+    /** Logger for this class. */
     private final Log _log;
+    /** The peer whose reply we are waiting for. */
     private final Hash _peer;
+    /** Message id of the store we sent. */
     private final long _storeJobId;
+    /** Message id of the reply we expect. */
     private final long _waitingForId;
+    /** Time past which the reply is no longer wanted. */
     private final long _expiration;
+    /** True once the reply has been matched. */
     private volatile boolean _found;
 
     /**

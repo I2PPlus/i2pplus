@@ -24,6 +24,7 @@ import java.security.SecureRandom;
  */
 public class RandomSource extends SecureRandom implements EntropyHarvester {
 
+    /** Pinned for serialized-form compatibility. */
     private static final long serialVersionUID = 1L;
     /**
      * The context this generator was created for.
@@ -166,6 +167,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
         writeSeed(buf);
     }
 
+    /** File the seed is saved between runs. */
     private static final String SEEDFILE = "prngseed.rnd";
 
     /**
@@ -225,7 +227,9 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
      * @since 0.9.18
      */
     private static class SecureRandomInit implements Runnable {
+        /** Bytes read to seed the random. */
         private final byte[] buf;
+        /** How many bytes to read for the seed. */
         private static final int SZ = 64;
 
         /**

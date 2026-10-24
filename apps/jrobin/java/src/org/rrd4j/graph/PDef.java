@@ -8,6 +8,7 @@ import org.rrd4j.data.IPlottable;
  * plottable object that can generate values programmatically.
  */
 class PDef extends Source {
+    /** The object whose rendering is exposed as a graph source. */
     private final IPlottable plottable;
 
     /**

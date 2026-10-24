@@ -74,7 +74,6 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
     /** Flag to ensure {@link #releaseBufs(boolean)} is called only once. */
     private volatile boolean _released;
 
-    //// NTCP2 things
     /** Noise protocol handshake state for XK pattern. */
     private HandshakeState _handshakeState;
     /** Length of padding specified in message 1 options, used for probing resistance. */
@@ -89,6 +88,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
     private ByteArray _payloadTmp;
     /** Alice's negotiated options from message 3. */
     private NTCP2Options _hisPadding;
+    /** NTCP version in use, 2 until the hello says otherwise. */
     private int _version = 2;
 
     /** Buffer size for reading data phase packets (16 KB), same as I2PTunnelRunner. */
@@ -112,6 +112,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         EnumSet.of(State.IB_NTCP2_INIT, State.IB_NTCP2_GOT_X, State.IB_NTCP2_GOT_MSG1, State.IB_NTCP2_GOT_PADDING,
                    State.IB_NTCP2_SENT_Y, State.IB_NTCP2_GOT_RI, State.IB_NTCP2_READ_RANDOM);
 
+    /** Logs and times the bans this peer earns. */
     private final BanLogger _banLogger;
 
     /**

@@ -24,6 +24,7 @@ class SessionsDB {
 	 * @since 0.9.25
 	 */
 	static class ExistingIdException extends Exception {
+		/** Pinned for serialized-form compatibility. */
 		private static final long serialVersionUID = 0x1;
 
 		/**
@@ -37,6 +38,7 @@ class SessionsDB {
 	 * @since 0.9.25
 	 */
 	static class ExistingDestException extends Exception {
+		/** Pinned for serialized-form compatibility. */
 		private static final long serialVersionUID = 0x1;
 
 		/**
@@ -45,6 +47,7 @@ class SessionsDB {
 		ExistingDestException() {}
 	}
 
+	/** Session records by session name. */
 	private final HashMap<String, SessionRecord> map;
 
 	/**
@@ -100,8 +103,7 @@ class SessionsDB {
 	 * @param nick the session nickname
 	 * @return true if removed, false if not found
 	 */
-	synchronized public boolean del( String nick )
-	{
+	synchronized public boolean del( String nick ) {
 		return map.remove(nick) != null;
 	}
 
@@ -112,8 +114,7 @@ class SessionsDB {
 	 * @param nick the session nickname
 	 * @return the session record, or null if not found
 	 */
-	synchronized public SessionRecord get(String nick)
-	{
+	synchronized public SessionRecord get(String nick) {
 		SessionRecord rec = map.get(nick);
 		if (rec != null)
 			rec.touch();
@@ -126,8 +127,7 @@ class SessionsDB {
 	 * @param nick the session nickname
 	 * @return true if a session with this nick exists
 	 */
-	synchronized public boolean containsKey( String nick )
-	{
+	synchronized public boolean containsKey( String nick ) {
 		return map.containsKey(nick);
 	}
 
@@ -136,8 +136,7 @@ class SessionsDB {
 	 * @return the count of entries currently held in the session map
 	 * @since 0.9.70+
 	 */
-	public synchronized int size()
-	{
+	public synchronized int size() {
 		return map.size();
 	}
 

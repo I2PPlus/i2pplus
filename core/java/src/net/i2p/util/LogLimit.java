@@ -14,7 +14,9 @@ package net.i2p.util;
  *
  */
 class LogLimit {
+    /** Logger whose output is being limited. */
     private final String _rootName;
+    /** Messages allowed before the rest are dropped. */
     private int _limit;
 
     /**

@@ -86,11 +86,13 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
 
     /** HTTP authentication realm for HTTP proxy. */
     public static final String AUTH_REALM = "I2P HTTP Proxy";
+    /** User-Agent header sent to I2P sites. */
     private static final String UA_I2P = "User-Agent: " + "MYOB/6.66 (AN/ON)" + "\r\n";
-    // ESR version of Firefox, same as Tor Browser
+    /** User-Agent header sent to clearnet sites. */
     private static final String UA_CLEARNET = "User-Agent: " + DNSOverHTTPS.UA_CLEARNET + "\r\n";
-    // overrides
+    /** Config key overriding the I2P user agent. */
     private static final String PROP_UA_I2P = "httpclient.userAgent.i2p";
+    /** Config key overriding the clearnet user agent. */
     private static final String PROP_UA_CLEARNET = "httpclient.userAgent.outproxy";
     /** Config key to enable browser-side keepalive. */
     public static final String OPT_KEEPALIVE_BROWSER = "keepalive.browser";
@@ -101,11 +103,13 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
 
     /** How long to wait for another request on the same socket. */
     static final int BROWSER_KEEPALIVE_TIMEOUT = 2*60*1000;
+    /** Default keep-alive setting for browser connections. */
     private static final boolean DEFAULT_KEEPALIVE_BROWSER = true;
     /** Total connect attempts before the client stops retrying and fails the request. */
     static final int I2P_CONNECT_MAX_RETRIES = 6;
     /** Backoff floor and per-attempt multiply base for I2P connect retries. */
     static final long I2P_CONNECT_RETRY_BASE_DELAY = 1000;
+    /** Default keep-alive setting for I2P connections. */
     private static final boolean DEFAULT_KEEPALIVE_I2P = true;
     /** Default reconnects on an empty upstream response before giving up. */
     private static final int DEFAULT_EMPTY_RETRIES = 9;
@@ -231,6 +235,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         "<html><body><H1>I2P ERROR: REQUEST DENIED</H1>" +
         "The requested address appears to be invalid.<BR>";
 
+    /** Error response for a blacklisted address. */
     private final static String ERR_BLACKLISTED =
         "HTTP/1.1 403 Address Blacklisted\r\n" +
         "Content-Type: text/html; charset=iso-8859-1\r\n" +
@@ -240,6 +245,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         "<html><body><H1>I2P ERROR: ADDRESS BLACKLISTED</H1>" +
         "The requested address has been blacklisted.<BR>";
 
+    /** Error response when no outproxy is configured. */
     private final static String ERR_NO_OUTPROXY =
         "HTTP/1.1 503 Service Unavailable\r\n" +
         "Content-Type: text/html; charset=iso-8859-1\r\n" +
@@ -250,6 +256,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         "Your request was for a site outside of I2P, but you have no " +
         "HTTP outproxy configured. Please configure an outproxy in I2PTunnel";
 
+    /** Error response for an address helper key conflict. */
     private final static String ERR_AHELPER_CONFLICT =
         "HTTP/1.1 409 Conflict\r\n" +
         "Content-Type: text/html; charset=iso-8859-1\r\n" +
@@ -266,6 +273,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         "discarding the host entry from your host database, " +
         "or naming one of them differently.<p>";
 
+    /** Error response for an unresolvable helper key. */
     private final static String ERR_AHELPER_NOTFOUND =
         "HTTP/1.1 404 Not Found\r\n" +
         "Content-Type: text/html; charset=iso-8859-1\r\n" +
@@ -277,6 +285,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         "It seems to be garbage data, or a mistyped b32. Check your URL " +
         "to try and fix the helper key to be either a b32 or a base64.";
 
+    /** Error response for a new address helper host. */
     private final static String ERR_AHELPER_NEW =
         "HTTP/1.1 409 New Address\r\n" +
         "Content-Type: text/html; charset=iso-8859-1\r\n" +
@@ -289,6 +298,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         "If you save it to your addressbook, you will not see this message again. " +
         "If you do not wish to visit this host, click the \"back\" button on your browser.";
 
+    /** Error response for a non-HTTP request protocol. */
     private final static String ERR_BAD_PROTOCOL =
         "HTTP/1.1 403 Bad Protocol\r\n" +
         "Content-Type: text/html; charset=iso-8859-1\r\n" +
@@ -299,6 +309,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         "The request uses a bad protocol. " +
         "The I2P HTTP Proxy supports HTTP and HTTPS requests only. Other protocols such as FTP are not allowed.<BR>";
 
+    /** Error response for an invalid request URI. */
     private final static String ERR_BAD_URI =
         "HTTP/1.1 403 Bad URI\r\n" +
         "Content-Type: text/html; charset=iso-8859-1\r\n" +
@@ -309,6 +320,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         "The request URI is invalid, and probably contains illegal characters. " +
         "If you clicked e.g. a forum link, check the end of the URI for any characters the browser has mistakenly added on.<BR>";
 
+    /** Error response for a localhost request through the proxy. */
     private final static String ERR_LOCALHOST =
         "HTTP/1.1 403 Access Denied\r\n" +
         "Content-Type: text/html; charset=iso-8859-1\r\n" +
@@ -318,6 +330,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         "<html><body><H1>I2P ERROR: REQUEST DENIED</H1>" +
         "Your browser is misconfigured. Do not use the proxy to access the router console or other localhost destinations.<BR>";
 
+    /** Error response for SSL requested to an I2P address. */
     private final static String ERR_INTERNAL_SSL =
         "HTTP/1.1 403 SSL Rejected\r\n" +
         "Content-Type: text/html; charset=iso-8859-1\r\n" +
@@ -437,6 +450,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         }
         return opts;
     }
+    /** Socket runner for private mode, null otherwise. */
     private InternalSocketRunner isr;
 
     /**
@@ -487,9 +501,11 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         return AUTH_REALM;
     }
 
+    /** URL parameter carrying an address helper. */
     private static final String HELPER_PARAM = "i2paddresshelper";
     /** Local HTTP proxy server hostname. */
     public static final String LOCAL_SERVER = "proxy.i2p";
+    /** Default setting for gzipping responses. */
     private static final boolean DEFAULT_GZIP = true;
     /** All default to false. */
     public static final String PROP_REFERER = "i2ptunnel.httpclient.sendReferer";
@@ -2023,14 +2039,23 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             CANCELLED
         }
 
+        /** Lock for the connection state below. */
         private final Object _lock = new Object();
+        /** Callback releasing the destination's connection permit. */
         private final Consumer<Hash> _releaser;
+        /** Current connection generation number. */
         private long _generation;
+        /** Generation of the connection attempt in flight. */
         private long _attemptGen;
+        /** The destination being connected to. */
         private Hash _dest;
+        /** The destination port being connected to. */
         private int _port;
+        /** The destination holding our connection permit. */
         private Hash _permit;
+        /** The socket currently in use, null until connected. */
         private I2PSocket _sock;
+        /** Current state of this connection. */
         private State _state = State.OPEN;
 
         /**
@@ -2355,6 +2380,11 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         return null;
     }
 
+    /**
+     * Closes a socket, ignoring any error.
+     *
+     * @param sock the socket to close, may be null
+     */
     private static void closeQuietly(I2PSocket sock) {
         if (sock == null) {return;}
         try {sock.close();} catch (IOException ioe) {/* ignored */}
@@ -2610,6 +2640,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      * Warning - DataHelper limits line length.
      */
     private static class InputReader {
+        /** Stream the status line is read from. */
         InputStream _s;
 
         /**
@@ -2621,6 +2652,12 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             _s = s;
         }
 
+        /**
+         * Reads one CRLF-terminated line.
+         *
+         * @return the line without the terminator
+         * @throws IOException if the stream fails or ends early
+         */
         String readLine() throws IOException {
             return DataHelper.readLine(_s);
         }
@@ -2698,6 +2735,12 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             "http://reg.i2p/jump/," +
             "http://stats.i2p/cgi-bin/jump.cgi?a=";
 
+    /**
+     * Checks whether the tunnel type serves this protocol.
+     *
+     * @param protocol the request protocol
+     * @return true if the address type is supported
+     */
     private static boolean isSupportedAddress(String protocol) {
         if (protocol == null) {return false;}
         String lc = protocol.toLowerCase(Locale.US);
@@ -2750,6 +2793,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         }
     }
 
+    /** Error response when address helpers are disabled. */
     private final static String ERR_HELPER_DISABLED =
             "HTTP/1.1 403 Disabled\r\n" +
             "Content-Type: text/plain\r\n" +

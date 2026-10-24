@@ -16,10 +16,11 @@ import java.net.SocketTimeoutException;
  */
 class TimeoutPipedInputStream extends PipedInputStream {
 
+    /** Milliseconds a read waits for data. */
     private int timeout;
-    // local version of pkg private in super
+    /** True once the writing end has closed. */
     private boolean _closedByWriter;
-    // local version of pkg private in super
+    /** True once the reading end has closed. */
     private volatile boolean _closedByReader;
 
     /**

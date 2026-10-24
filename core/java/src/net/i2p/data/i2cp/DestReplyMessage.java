@@ -24,7 +24,9 @@ public class DestReplyMessage extends I2CPMessageImpl {
      * I2CP message type number of a destination lookup reply.
      */
     public static final int MESSAGE_TYPE = 35;
+    /** The destination found for the name. */
     private Destination _dest;
+    /** Hash of the destination being reported. */
     private Hash _hash;
 
     /**

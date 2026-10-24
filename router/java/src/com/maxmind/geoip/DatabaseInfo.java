@@ -66,8 +66,10 @@ public class DatabaseInfo {
     /** Net speed edition revision 1 IPv6 */
     public static final int NETSPEED_EDITION_REV1_V6 = 33;
 
+    /** Parses the database build date. */
     private static final SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
 
+    /** The info string stored in the database. */
     private String info;
 
     /**

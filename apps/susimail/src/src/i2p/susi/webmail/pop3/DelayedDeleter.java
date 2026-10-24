@@ -21,13 +21,21 @@ import net.i2p.util.SimpleTimer2;
  */
 class DelayedDeleter {
 
+    /** The mailbox the messages are deleted from. */
     private final POP3MailBox mailbox;
+    /** The message ids waiting to be deleted. */
     private final Set<String> toDelete;
+    /** The timer running the delete checks. */
     private final SimpleTimer2.TimedEvent timer;
+    /** The log for the deleter. */
     private final Log _log;
+    /** True while the delete thread runs. */
     private volatile boolean isDeleting;
+    /** True once the deleter is shut down. */
     private volatile boolean isDead;
+    /** Interval between the delete checks. */
     private static final long CHECK_TIME = 16*(long) 60*1000;
+    /** Idle time before deleting the messages. */
     private static final long MIN_IDLE = 60*(long) 60*1000;
 
     /**
@@ -74,6 +82,7 @@ class DelayedDeleter {
         timer.cancel();
     }
 
+    /** Checks for messages to delete. */
     private class Checker extends SimpleTimer2.TimedEvent {
         /** Schedule first deferred-delete check. */
         public Checker() {
@@ -102,6 +111,7 @@ class DelayedDeleter {
         }
     }
 
+    /** Deletes the waiting messages. */
     private class Deleter extends I2PAppThread {
         /** Thread that performs the deletion. */
         public Deleter() {super("Susimail-Delete");}

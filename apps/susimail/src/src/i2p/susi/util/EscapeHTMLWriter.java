@@ -13,12 +13,19 @@ import java.io.Writer;
  */
 public class EscapeHTMLWriter extends FilterWriter {
 
+    /** Entity for an ampersand. */
     private static final String AMP = "&amp;";
+    /** Entity for a double quote. */
     private static final String QUOT = "&quot;";
+    /** Entity for a less-than sign. */
     private static final String LT = "&lt;";
+    /** Entity for a greater-than sign. */
     private static final String GT = "&gt;";
+    /** Entity for an apostrophe. */
     private static final String APOS = "&apos;";
+    /** Entity for a dash, escaped to avoid mojibake. */
     private static final String MDASH = "&#45;";
+    /** Markup for a line break. */
     private static final String BR = "<br>\n";
 
     /** Track state: 0=normal, 1=saw '&lt;', 2=saw '&lt;-', 3=prev was '-'. */

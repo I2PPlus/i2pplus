@@ -27,6 +27,7 @@ import java.util.NoSuchElementException;
 @SuppressWarnings("java:S2975")
 public class CachedIteratorArrayList<E> extends ArrayList<E> {
 
+    /** Pinned for serialized-form compatibility. */
     private static final long serialVersionUID = 4863212596318574111L;
 
     /** Thread local. */
@@ -90,7 +91,15 @@ public class CachedIteratorArrayList<E> extends ArrayList<E> {
         }
     }
 
+    /**
+     * An iterator reused across traversals of the list.
+     *
+     * @param <E> the element type of the list
+     */
     private static class CachedIterator<E> implements Iterator<E>, Serializable {
+        /** An iterator that keeps its own position. */
+        private CachedIterator() {}
+
         /**
          * Index of element to be returned by subsequent call to next.
          */
@@ -113,7 +122,11 @@ public class CachedIteratorArrayList<E> extends ArrayList<E> {
         /** Reference to the owning list, set on each call to {@link #iterator()}. */
         private transient WeakReference<CachedIteratorArrayList<E>> listRef;
 
-        /** Reset iterator state for the given list. */
+        /**
+         * Reset iterator state for the given list.
+         *
+         * @param list the list to iterate
+         */
         void reset(CachedIteratorArrayList<E> list) {
             this.listRef = new WeakReference<CachedIteratorArrayList<E>>(list);
             cursor = 0;
@@ -121,6 +134,11 @@ public class CachedIteratorArrayList<E> extends ArrayList<E> {
             expectedModCount = list.modCount;
         }
 
+        /**
+         * Gives the list this iterator belongs to.
+         *
+         * @return the owning list, null if it was collected
+         */
         private CachedIteratorArrayList<E> list() {
             CachedIteratorArrayList<E> l = listRef != null ? listRef.get() : null;
             if (l == null)
@@ -176,6 +194,11 @@ public class CachedIteratorArrayList<E> extends ArrayList<E> {
             }
         }
 
+        /**
+         * Fails if the list changed since the iterator was created.
+         *
+         * @param l the list to check
+         */
         final void checkForComodification(CachedIteratorArrayList<E> l) {
             if (l.modCount != expectedModCount)
                 throw new ConcurrentModificationException();

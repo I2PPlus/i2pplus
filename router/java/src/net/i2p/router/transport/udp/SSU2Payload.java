@@ -845,6 +845,7 @@ class SSU2Payload {
      * Not used for receive; we use callbacks instead.
      */
     public abstract static class Block {
+        /** The payload block type number. */
         private final int type;
 
         /**
@@ -921,12 +922,19 @@ class SSU2Payload {
      * Used to exchange router information during session establishment.
      */
     public static class RIBlock extends Block {
+        /** The router info bytes. */
         private final byte[] data;
+        /** Offset of the router info in the block. */
         private final int doff;
+        /** Length of the router info bytes. */
         private final int dlen;
+        /** Flag bits of the block. */
         private final boolean f;
+        /** Whether the router info is gzipped. */
         private final boolean gz;
+        /** Fragment number of the block. */
         private final int fr;
+        /** Fragment total of the block. */
         private final int frt;
 
         /**
@@ -991,6 +999,7 @@ class SSU2Payload {
      * Used to transport I2NP messages over SSU2.
      */
     public static class I2NPBlock extends Block {
+        /** The message state being tracked, if any. */
         private OutboundMessageState m;
 
         /**
@@ -1035,6 +1044,7 @@ class SSU2Payload {
      * Same format as I2NPBlock.
      */
     public static class FirstFragBlock extends Block {
+        /** The message state being tracked, if any. */
         private OutboundMessageState m;
 
         /**
@@ -1079,7 +1089,9 @@ class SSU2Payload {
      * Follow-on fragment block for SSU2 payload.
      */
     public static class FollowFragBlock extends Block {
+        /** The message state being tracked, if any. */
         private OutboundMessageState m;
+        /** Flag bits of the block. */
         private int f;
 
         /**
@@ -1138,7 +1150,9 @@ class SSU2Payload {
      * Used to pad messages to required sizes.
      */
     public static class PaddingBlock extends Block {
+        /** Length of the padding, in bytes. */
         private final int sz;
+        /** The app context for the padding size. */
         private final I2PAppContext ctx;
 
         /**
@@ -1188,6 +1202,7 @@ class SSU2Payload {
      * Used for time synchronization between peers.
      */
     public static class DateTimeBlock extends Block {
+        /** The sender's current time. */
         private final long now;
 
         /**
@@ -1224,6 +1239,7 @@ class SSU2Payload {
      * Used to negotiate session parameters.
      */
     public static class OptionsBlock extends Block {
+        /** The advertised option bytes. */
         private final byte[] opts;
 
         /**
@@ -1260,7 +1276,9 @@ class SSU2Payload {
      * Used to signal session termination.
      */
     public static class TerminationBlock extends Block {
+        /** The termination reason number. */
         private final byte rsn;
+        /** Count of messages received, if known. */
         private final long rcvd;
 
         /**
@@ -1300,9 +1318,13 @@ class SSU2Payload {
      * Used to acknowledge receipt of packets.
      */
     public static class AckBlock extends Block {
+        /** The message id being acked. */
         private final long t;
+        /** Bytes of capacity being acked. */
         private final int a;
+        /** Extra data of the ack, if any. */
         private final byte[] r;
+        /** Receive time of the acked message. */
         private final int rc;
 
         /**
@@ -1358,7 +1380,9 @@ class SSU2Payload {
      * Used to exchange transport addresses.
      */
     public static class AddressBlock extends Block {
+        /** The advertised IP address bytes. */
         private final byte[] i;
+        /** The advertised port. */
         private final int p;
 
         /**
@@ -1431,6 +1455,7 @@ class SSU2Payload {
      * Used to identify relay sessions.
      */
     public static class RelayTagBlock extends Block {
+        /** The relay tag being introduced. */
         private final long t;
 
         /**
@@ -1467,6 +1492,7 @@ class SSU2Payload {
      * Used to request relay services from a peer.
      */
     public static class RelayRequestBlock extends Block {
+        /** The relay request payload. */
         private final byte[] d;
 
         /**
@@ -1503,6 +1529,7 @@ class SSU2Payload {
      * Used to respond to relay requests.
      */
     public static class RelayResponseBlock extends Block {
+        /** The relay response payload. */
         private final byte[] d;
 
         /**
@@ -1538,6 +1565,7 @@ class SSU2Payload {
      * Used to introduce peers for relayed connections.
      */
     public static class RelayIntroBlock extends Block {
+        /** The introduction payload. */
         private final byte[] d;
 
         /**
@@ -1573,9 +1601,13 @@ class SSU2Payload {
      * Used for network reachability testing.
      */
     public static class PeerTestBlock extends Block {
+        /** The peer test nonce. */
         private final int n;
+        /** The peer test counter. */
         private final int c;
+        /** The hash echoed in the test. */
         private final Hash h;
+        /** Extra data of the test. */
         private final byte[] d;
 
         /**
@@ -1627,6 +1659,7 @@ class SSU2Payload {
      * Used to provide tokens for future session establishment.
      */
     public static class NewTokenBlock extends Block {
+        /** The new token being sent. */
         private final EstablishmentManager.Token tok;
 
         /**
@@ -1664,6 +1697,7 @@ class SSU2Payload {
      * @since 0.9.55
      */
     public static class PathChallengeBlock extends Block {
+        /** The path challenge data. */
         private final byte[] d;
 
         /**
@@ -1699,6 +1733,7 @@ class SSU2Payload {
      * @since 0.9.55
      */
     public static class PathResponseBlock extends Block {
+        /** The path response data. */
         private final byte[] d;
 
         /**

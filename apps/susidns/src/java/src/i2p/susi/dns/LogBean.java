@@ -33,9 +33,13 @@ public class LogBean extends BaseBean
      */
     public LogBean() {}
 
+    /** Log the page is showing. */
     private String logName;
+    /** Contents of that log. */
     private String logged;
+    /** Name of the addressbook's own log file. */
     private static final String LOG_FILE = "log.txt";
+    /** Splits a log line at its separator. */
     private static final Pattern DASH_SPLIT = Pattern.compile("\\s*--\\s*");
 
     /**

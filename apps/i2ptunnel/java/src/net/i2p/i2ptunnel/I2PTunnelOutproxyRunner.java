@@ -39,20 +39,29 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
     /** Class log, also used as the prefix for each runner's per-connection log. */
     protected final Log _log;
 
+    /** Sequence number of the created runners. */
     private static final AtomicLong __runnerId = new AtomicLong();
+    /** This runner's position in that sequence. */
     private final long _runnerId;
 
     /** Max bytes streamed in a packet - smaller packets might be filled up to this size. */
     private static final int MAX_PACKET_SIZE = 4 * 1024;
+    /** Socket buffer size, in bytes. */
     private static final int NETWORK_BUFFER_SIZE = MAX_PACKET_SIZE * 8;
 
+    /** The clear side socket to the outproxy. */
     private final Socket s;
+    /** The I2P side socket to the client. */
     private final Socket i2ps;
+    /** Lock for closing the sockets. */
     private final Object slock; // NOSONAR S1068
 
+    /** Latch signalling both directions have finished. */
     private final CountDownLatch finishLatch = new CountDownLatch(2);
 
+    /** Data already read from the I2P side. */
     private final byte[] initialI2PData;
+    /** Data already read from the clear side. */
     private final byte[] initialSocketData;
 
     /** When the runner started up. */
@@ -68,8 +77,9 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
  */
     private final I2PTunnelRunner.FailCallback onTimeout;
 
-    // Use AtomicLong to safely count totals across threads
+    /** Bytes sent to the outproxy, counted across the copy threads. */
     private final AtomicLong totalSent = new AtomicLong(0);
+    /** Bytes received from the outproxy. */
     private final AtomicLong totalReceived = new AtomicLong(0);
 
     /**
@@ -214,10 +224,15 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
      * Flushes are batched by checking available bytes without forced sleeps.
      */
     private class StreamForwarder extends I2PAppThread {
+        /** Stream the data is read from. */
         private final InputStream in;
+        /** Stream the data is written to. */
         private final OutputStream out;
+        /** Name of the direction being copied. */
         private final String direction;
+        /** True when copying toward I2P. */
         private final boolean _toI2P;
+        /** Cache supplying the copy buffers. */
         private final ByteCache _cache;
 
         /**

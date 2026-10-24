@@ -32,7 +32,9 @@ public class HomeHelper extends HelperBase {
     /** Construct the home page helper. */
     public HomeHelper() {}
 
+    /** Separator between app names in the config property. */
     private static final char S = ',';
+    /** Path prefix for the app icons. */
     private static final String I = "/themes/console/images/";
     /** Service list property. */
     static final String PROP_SERVICES = "routerconsole.services";
@@ -249,19 +251,19 @@ public class HomeHelper extends HelperBase {
 
     /**
      * True if no language has been configured.
-     * @return true if no language has been configured
+     * @return true if routerconsole.lang is unset
      */
     public boolean shouldShowWelcome() {return _context.getProperty(Messages.PROP_LANG) == null;}
 
     /**
      * True if bandwidth is not yet configured.
-     * @return true if bandwidth is not yet configured
+     * @return true if i2np.bandwidth.outboundKBytesPerSecond is unset
      */
     public boolean shouldShowBandwidthConfig() {return _context.getProperty("i2np.bandwidth.outboundKBytesPerSecond") == null;}
 
     /**
      * True if search should be shown.
-     * @return true if search should be shown
+     * @return true if routerconsole.showSearch is set
      */
     public boolean shouldShowSearch() {return _context.getBooleanProperty(PROP_SEARCH);}
 
@@ -273,8 +275,8 @@ public class HomeHelper extends HelperBase {
     public boolean isAdvanced() {return _context.getBooleanProperty(PROP_ADVANCED);}
 
     /**
-     * Services HTML.
-     * @return the services HTML
+     * The services table for the home page.
+     * @return the rendered table html, new-user or advanced layout
      */
     public String getServices() {
         List<App> plugins = NavHelper.getInstance(_context).getClientApps(_context);
@@ -287,32 +289,34 @@ public class HomeHelper extends HelperBase {
     }
 
     /**
-     * Favorites HTML.
-     * @return the favorites HTML
+     * The favorites table for the home page.
+     * @return the rendered table html
      */
     public String getFavorites() {return homeTable(PROP_FAVORITES, DEFAULT_FAVORITES, null);}
 
     /**
-     * Config services HTML.
-     * @return the config services HTML
+     * The services table for the config page.
+     * @return the rendered table html
      */
     public String getConfigServices() {return configTable(PROP_SERVICES, DEFAULT_SERVICES);}
 
     /**
-     * Config favorites HTML.
-     * @return the config favorites HTML
+     * The favorites table for the config page.
+     * @return the rendered table html
      */
     public String getConfigFavorites() {return configTable(PROP_FAVORITES, DEFAULT_FAVORITES);}
 
     /**
-     * Config search HTML.
-     * @return the config search HTML
+     * The search engines table for the config page.
+     * @return the rendered table html
      */
     public String getConfigSearch() {return configTable(SearchHelper.PROP_ENGINES, SearchHelper.ENGINES_DEFAULT);}
 
     /**
-     * Proxy status HTML.
-     * @return the proxy status HTML
+     * Builds the HTTP proxy status check for the home page. It loads a
+     * one-pixel image through the proxy, so the alt text only shows when the
+     * browser is not configured to use it.
+     * @return a translated warning if the proxy port is down, else an img tag
      */
     public String getProxyStatus() {
         int port = _context.portMapper().getPort(PortMapper.SVC_HTTP_PROXY);
@@ -323,6 +327,14 @@ public class HomeHelper extends HelperBase {
                 "\">";
     }
 
+    /**
+     * Builds the table of apps shown on the home page.
+     *
+     * @param prop property naming the apps to show
+     * @param dflt the default app list
+     * @param toAdd apps added to the property are also shown
+     * @return the table markup
+     */
     private String homeTable(String prop, String dflt, Collection<App> toAdd) {
         String config = _context.getProperty(prop, dflt);
         Collection<App> apps = buildApps(_context, config);
@@ -367,6 +379,13 @@ public class HomeHelper extends HelperBase {
         return keep;
     }
 
+    /**
+     * Builds the table of app config links.
+     *
+     * @param prop property naming the apps to show
+     * @param dflt the default app list
+     * @return the table markup
+     */
     private String configTable(String prop, String dflt) {
         String config = _context.getProperty(prop, dflt);
         Collection<App> apps;
@@ -375,6 +394,7 @@ public class HomeHelper extends HelperBase {
         return renderConfig(apps);
     }
 
+    /** The separator as a string, for splitting. */
     private static final String SS = Character.toString(S);
 
     /**
@@ -430,6 +450,12 @@ public class HomeHelper extends HelperBase {
         ctx.router().saveConfig(prop, buf.toString());
     }
 
+    /**
+     * Renders one app's icon and links.
+     *
+     * @param apps the apps to render
+     * @return the markup for the apps
+     */
     private String renderApps(Collection<App> apps) {
         String website = _t("Web Server");
         StringBuilder buf = new StringBuilder(6*1024);
@@ -494,6 +520,12 @@ public class HomeHelper extends HelperBase {
             return buf.toString();
         }
 
+    /**
+     * Renders one app's config link.
+     *
+     * @param apps the apps to render
+     * @return the markup for the links
+     */
     private String renderConfig(Collection<App> apps) {
         StringBuilder buf = new StringBuilder(64*1024);
         buf.append("<table class=homelinkedit><tr><th class=center title=\"")
@@ -537,6 +569,9 @@ public class HomeHelper extends HelperBase {
 
     /** Ignore case, current locale. */
     private static class AppComparator implements Comparator<App>, Serializable {
+        /** Orders the console's apps. */
+        private AppComparator() {}
+
         /**
          * Order apps by name, ignoring case and the current locale.
          */

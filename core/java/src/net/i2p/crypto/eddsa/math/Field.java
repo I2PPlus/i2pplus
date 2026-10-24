@@ -7,6 +7,7 @@ import java.io.Serializable;
  *
  */
 public class Field implements Serializable {
+    /** Pinned for serialized-form compatibility. */
     private static final long serialVersionUID = 8746587465875676L;
 
     /**

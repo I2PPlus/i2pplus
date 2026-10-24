@@ -48,10 +48,14 @@ import net.i2p.util.VersionComparator;
  * Moved from ReseedHandler in routerconsole; see {@link ReseedChecker} for additional validation.
  */
 public class Reseeder {
+    /** The router context. */
     private final RouterContext _context;
+    /** Logger for reseeding. */
     private final Log _log;
+    /** Checker watching for reseed updates. */
     private final ReseedChecker _checker;
 
+    /** Largest SU3 download accepted, in bytes. */
     private static final long MAX_SU3_RESPONSE_SIZE = 1024 * 1024L;
     /** Limit per host to avoid getting stuck on one that is seriously overloaded. */
     private static final long MAX_FILE_AGE = 3*24*60*60*1000L;
@@ -59,8 +63,9 @@ public class Reseeder {
     private static final boolean ENABLE_SU3 = true;
     /** If false, use SU3 only; disable fallback to directory index and individual dat files. */
     private static final int MIN_RI_WANTED = 800;
+    /** Reseed URLs required before downloading. */
     private static final int MIN_RESEED_SERVERS = 12;
-    // Network ID cross-check, proposal 147, as of 0.9.42
+    /** URL parameter carrying the network id. */
     private static final String NETID_PARAM = "?netid=";
 
     /**
@@ -109,6 +114,7 @@ public class Reseeder {
         "https://spiral.likogan.dev/"               + ',' +   // admin_at_likogan.dev.crt          CA
         "https://www2.mk16.de/";                              // i2p-reseed_at_mk16.de.crt         CA
 
+    /** Name of the downloaded reseed file. */
     private static final String SU3_FILENAME = "i2pseeds.su3";
 
     /** Host for the HTTP proxy used during reseed. */
@@ -146,11 +152,15 @@ public class Reseeder {
     /** If true, skip reseeding entirely. */
     public static final String PROP_DISABLE = "router.reseedDisable";
 
-    // From PersistentDataStore
+    /** Filename prefix of router infos. */
     private static final String ROUTERINFO_PREFIX = "routerInfo-";
+    /** Filename suffix of router infos. */
     private static final String ROUTERINFO_SUFFIX = ".dat";
+    /** Matches a parenthesised comment in a reseed URL list. */
     private static final Pattern PAREN_PATTERN = Pattern.compile("\\([^)]*\\)");
+    /** Matches a signature verification failure line. */
     private static final Pattern VERIFY_FAIL_PATTERN = Pattern.compile("verification failed for .*");
+    /** Splits the reseed URL list entries. */
     private static final Pattern URL_SPLIT_PATTERN = Pattern.compile("[ ,]+");
 
     /**
@@ -252,21 +262,35 @@ public class Reseeder {
      */
     private static boolean isSNISupported() {return SystemVersion.isJava7() || SystemVersion.isAndroid();}
 
+    /** Runs one reseed download attempt. */
     private class ReseedRunner implements Runnable, EepGet.StatusListener {
+        /** True while this attempt is running. */
         private boolean _isRunning;
+        /** Proxy host for HTTP fetches. */
         private final String _proxyHost;
+        /** Proxy host for HTTPS fetches. */
         private final String _sproxyHost;
+        /** Proxy port for HTTP fetches. */
         private final int _proxyPort;
+        /** Proxy port for HTTPS fetches. */
         private final int _sproxyPort;
+        /** True to route HTTP fetches through the proxy. */
         private final boolean _shouldProxyHTTP;
+        /** True to route HTTPS fetches through the proxy. */
         private final boolean _shouldProxySSL;
+        /** Proxy type used for HTTPS fetches. */
         private final SSLEepGet.ProxyType _sproxyType;
+        /** SSL result of the fetch, for the stats. */
         private SSLEepGet.SSLState _sslState;
+        /** Nonzero once a reseed date was seen. */
         private int _gotDate;
+        /** When the current attempt started. */
         private long _attemptStarted;
         /** Bytes per second for each SU3 download. */
         private final List<Long> _bandwidths;
+        /** Distinct reseed dates accepted per attempt. */
         private static final int MAX_DATE_SETS = 4;
+        /** The reseed URL being fetched. */
         private final URI _url;
 
         /**
@@ -311,6 +335,11 @@ public class Reseeder {
             }
         }
 
+        /**
+         * Rejects a reseed URL that is not HTTPS.
+         *
+         * @param url the URL to validate
+         */
         private void validateUrl(URI url) {
             if (url == null) return;
             String path = url.getPath();
@@ -319,6 +348,13 @@ public class Reseeder {
             }
         }
 
+        /**
+         * Checks the URL host and port are acceptable.
+         *
+         * @param host the URL host
+         * @param port the URL port
+         * @return true if the URL may be fetched
+         */
         private boolean isValidHostPort(String host, int port) {
             return host != null && !host.isEmpty() && port > 0;
         }
@@ -332,6 +368,7 @@ public class Reseeder {
             }
         }
 
+        /** Runs one reseed download and apply attempt. */
         private void run2() {
             _isRunning = true;
             _checker.setError("");
@@ -986,6 +1023,7 @@ public class Reseeder {
         }
     }
 
+    /** Bundle holding the translated console strings. */
     private static final String BUNDLE_NAME = "net.i2p.router.web.messages";
 
     /**

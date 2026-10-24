@@ -6,6 +6,7 @@ package org.rrd4j.data;
  * values.
  */
 abstract class Source {
+    /** Name other definitions use to refer to this source. */
     private final String name;
 
     /** data values */

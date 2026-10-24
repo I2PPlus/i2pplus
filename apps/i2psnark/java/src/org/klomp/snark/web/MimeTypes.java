@@ -40,6 +40,7 @@ import java.nio.charset.StandardCharsets;
  */
 class MimeTypes {
 
+    /** File extension to content type, loaded from the mime database. */
     private final Map<String, String> _mimeMap;
 
     /**

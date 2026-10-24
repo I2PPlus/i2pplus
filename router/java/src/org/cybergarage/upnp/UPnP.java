@@ -215,6 +215,12 @@ public class UPnP {
     //	UUID
     ////////////////////////////////////////////////
 
+    /**
+     * Formats a seed as a uuid-like string.
+     *
+     * @param seed the number to format
+     * @return the uuid string
+     */
     private static final String toUUID(int seed) {
         String id = Integer.toString(seed & 0xFFFF, 16);
         int idLen = id.length();
@@ -354,6 +360,7 @@ public class UPnP {
     /** Default time-to-live value for multicast packets. */
     public static final int DEFAULT_TTL = 4;
 
+    /** Hops a search message may cross. */
     private static int timeToLive = DEFAULT_TTL;
 
     /**

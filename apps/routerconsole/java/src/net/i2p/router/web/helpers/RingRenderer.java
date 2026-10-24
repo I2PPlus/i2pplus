@@ -16,9 +16,13 @@ public class RingRenderer {
      */
     public RingRenderer() {}
 
+    /** Diameter of the ring gauge, in pixels. */
     private static final int RING_SIZE = 90;
+    /** Width of the ring band, in pixels. */
     private static final int RING_STROKE = 8;
+    /** Radius of the ring band's centre line, in pixels. */
     private static final int RING_RADIUS = (RING_SIZE - RING_STROKE) / 2;
+    /** Circumference of that centre line, for the dash pattern. */
     private static final double RING_CIRCUM = 2 * Math.PI * RING_RADIUS;
 
     /** Mode: health (green/yellow/red), activity (blue/cyan). */
@@ -38,11 +42,17 @@ public class RingRenderer {
     /** Mode: anomaly — color by deviation from the router's own baseline, not an absolute cap. */
     public static final String MODE_ANOMALY = "anomaly";
 
-    // Deviation bands for MODE_ANOMALY, as a fraction of baseline
-    // (|current - baseline| / baseline)
-    /** Green anomaly band threshold. */
+    /**
+     * In anomaly mode, a stat above its baseline stays green while it is at
+     * most this much higher than the baseline (a quarter), measured as
+     * (current - baseline) / baseline.
+     */
     static final double ANOMALY_GREEN_BAND = 0.25;
-    /** Yellow anomaly band threshold. */
+    /**
+     * In anomaly mode, a stat above its baseline stays yellow while it is at
+     * most this much higher than the baseline (three quarters); beyond that
+     * it is red.
+     */
     static final double ANOMALY_YELLOW_BAND = 0.75;
 
     /** Plot type: mini bars at the bottom of the ring. */
@@ -50,6 +60,7 @@ public class RingRenderer {
     /** Plot type: line chart clipped to the inner circle area. */
     public static final String PLOT_LINE = "line";
 
+    /** Counts the clip paths so each ring gets a unique id. */
     private static final AtomicInteger _clipId = new AtomicInteger();
 
     /**
@@ -176,6 +187,11 @@ public class RingRenderer {
         return buf.toString();
     }
 
+    /**
+     * Appends the SVG defs shared by the line plots.
+     *
+     * @param buf where the markup is written
+     */
     private static void appendLinePlotDefs(StringBuilder buf) {
         int id = _clipId.incrementAndGet();
         int cr = RING_RADIUS - 6;
@@ -185,6 +201,13 @@ public class RingRenderer {
            .append("</clipPath></defs>");
     }
 
+    /**
+     * Appends one sparkline plot to the markup.
+     *
+     * @param buf where the markup is written
+     * @param history the values to plot
+     * @param cls the CSS colour class applied to the plot
+     */
     private static void appendLinePlot(StringBuilder buf, double[] history, String cls) {
         int count = 0;
         double min = Double.MAX_VALUE, max = -Double.MAX_VALUE;

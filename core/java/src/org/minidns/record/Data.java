@@ -33,7 +33,7 @@ public abstract class Data {
 
     /**
      * The payload type.
-     * @return The payload type.
+     * @return The DNS record type of this payload.
      */
     public abstract TYPE getType();
 
@@ -45,8 +45,10 @@ public abstract class Data {
      */
     protected abstract void serialize(DataOutputStream dos) throws IOException;
 
+    /** The record's bytes. */
     private byte[] bytes;
 
+    /** Rebuilds the bytes from the parsed fields. */
     private void setBytes() {
         if (bytes != null) return;
 
@@ -105,6 +107,7 @@ public abstract class Data {
         return bytes.clone();
     }
 
+    /** Cache of the computed hash code. */
     private transient Integer hashCodeCache;
 
     @Override

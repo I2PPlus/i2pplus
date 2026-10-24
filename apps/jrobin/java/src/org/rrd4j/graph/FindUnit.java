@@ -6,12 +6,16 @@ package org.rrd4j.graph;
  */
 class FindUnit {
 
+    /** Marks a unit that was not recognised. */
     private static final char UNIT_UNKNOWN = '?';
+    /** Unit symbols, ordered by magnitude. */
     private static final char[] UNIT_SYMBOLS = {
         'y', 'z', 'a', 'f', 'p', 'n', 'µ', 'm', ' ', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y'
     };
+    /** Index of the base unit in the symbol table. */
     private static final int SYMBOLS_CENTER = 8;
 
+    /** Utility class, not intended for instantiation. */
     private FindUnit() {}
 
     /**

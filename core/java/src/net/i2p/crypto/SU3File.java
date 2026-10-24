@@ -44,30 +44,49 @@ import java.nio.charset.StandardCharsets;
 @SuppressWarnings("PMD.CloseResource")
 public class SU3File {
 
+    /** The app context. */
     private final I2PAppContext _context;
 
+    /** The SU3 file being read. */
     private final File _file;
+    /** The file's version string. */
     private String _version;
+    /** Length of the version field, in bytes. */
     private int _versionLength;
+    /** The signer name from the header. */
     private String _signer;
+    /** Length of the signature, in bytes. */
     private int _signatureLength;
+    /** Length of the signer field, in bytes. */
     private int _signerLength;
+    /** The content type code, -1 until read. */
     private int _fileType = -1;
+    /** The content type of the file. */
     private ContentType _contentType;
+    /** Length of the content, in bytes. */
     private long _contentLength;
+    /** The signer's public key. */
     private PublicKey _signerPubkey;
+    /** True once the header has been verified. */
     private boolean _headerVerified;
+    /** The signature type of the file. */
     private SigType _sigType;
+    /** Whether to verify the signature. */
     private boolean _verifySignature = true;
+    /** Certificate file used for verification. */
     private File _certFile;
 
     /**
      * The magic string every SU3 file starts with.
      */
     public static final String MAGIC = "I2Psu3";
+    /** Magic bytes at the start of the file. */
     private static final byte[] MAGIC_BYTES = DataHelper.getASCII(MAGIC);
+    /** The SU3 file version we write. */
     private static final int FILE_VERSION = 0;
+    /** Shortest version string accepted. */
     private static final int MIN_VERSION_BYTES = 16;
+    /** Offset where the version string starts. */
     private static final int VERSION_OFFSET = 40; // Signature.SIGNATURE_BYTES; avoid early ctx init
 
     /**
@@ -155,16 +174,30 @@ public class SU3File {
      * trusted certificates for that type.
      */
     private enum ContentType {
+        /** Content of an unknown type. */
         UNKNOWN(CONTENT_UNKNOWN, "unknown"),
+        /** A router update file. */
         ROUTER(CONTENT_ROUTER, "router"),
+        /** A plugin or tarball file. */
         PLUGIN(CONTENT_PLUGIN, "plugin"),
+        /** A reseed file. */
         RESEED(CONTENT_RESEED, "reseed"),
+        /** A news feed file. */
         NEWS(CONTENT_NEWS, "news"),
+        /** A blocklist file. */
         BLOCKLIST(CONTENT_BLOCKLIST, "blocklist");
 
+        /** The content type code. */
         private final int code;
+        /** The content type name. */
         private final String name;
 
+        /**
+         * Names one content type.
+         *
+         * @param code the type code
+         * @param name the type name
+         */
         ContentType(int code, String name) {
             this.code = code;
             this.name = name;
@@ -188,6 +221,8 @@ public class SU3File {
 
         /**
          * Lookup content type by numeric code.
+         *
+         * @param code the numeric content type code
          * @return null if not supported
          */
         public static ContentType getByCode(int code) {
@@ -195,6 +230,7 @@ public class SU3File {
         }
     }
 
+    /** Content types indexed by code. */
     private static final Map<Integer, ContentType> BY_CODE = new HashMap<>();
 
     static {
@@ -203,7 +239,9 @@ public class SU3File {
         }
     }
 
+    /** Type assumed when the code is unknown. */
     private static final ContentType DEFAULT_CONTENT_TYPE = ContentType.UNKNOWN;
+    /** Signature type assumed when none is set. */
     private static final int DEFAULT_SIG_CODE = 6;
 
     /**
@@ -445,6 +483,12 @@ public class SU3File {
         }
     }
 
+    /**
+     * Returns the offset where the content starts.
+     *
+     * @return the content offset
+     * @throws IOException if the header is invalid
+     */
     private int getContentOffset() throws IOException {
         verifyHeader();
         return VERSION_OFFSET + _versionLength + _signerLength;
@@ -727,6 +771,7 @@ public class SU3File {
         if (!ok) System.exit(1);
     }
 
+    /** Prints the command line usage. */
     private static final void showUsageCLI() {
         System.err.println(
                 "Usage: SU3File keygen       [-t type|code] [-p keystorepw] [-r crlFile.crl] publicKeyFile.crt"
@@ -747,7 +792,7 @@ public class SU3File {
 
     /**
      * String listing available signature types.
-     * @return string listing available signature types
+     * @return the list of type names for the -t option
      * @since 0.9.9
      */
     private static String dumpTypes() {

@@ -49,7 +49,9 @@ public abstract class LocalHTTPServer {
     /** Construct the tunnel's local HTTP server. */
     public LocalHTTPServer() {}
 
+    /** Logger for this class. */
     private static final Log _log = new Log(LocalHTTPServer.class);
+    /** Reply page for an unknown command. */
     private final static String ERR_404 =
          "HTTP/1.1 404 Not Found\r\n"+
          "Content-Type: text/plain\r\n"+
@@ -57,6 +59,7 @@ public abstract class LocalHTTPServer {
          "\r\n"+
          "HTTP Proxy local file not found";
 
+    /** Reply page when adding a tunnel fails. */
     private final static String ERR_ADD =
          "HTTP/1.1 409 Bad\r\n"+
          "Content-Type: text/plain\r\n"+
@@ -64,6 +67,7 @@ public abstract class LocalHTTPServer {
          "\r\n"+
          "Add to addressbook failed - bad parameters";
 
+    /** Reply page when a base32 address is invalid. */
     private final static String ERR_B32 =
          "HTTP/1.1 400 Bad\r\n"+
          "Content-Type: text/plain\r\n"+
@@ -71,6 +75,7 @@ public abstract class LocalHTTPServer {
          "\r\n"+
          "B32 update failed - bad parameters";
 
+    /** Reply page for a successful command. */
     private final static String OK =
          "HTTP/1.1 200 OK\r\n" +
          "Content-Type: text/plain\r\n" +
@@ -79,6 +84,7 @@ public abstract class LocalHTTPServer {
          "\r\n"+
          "I2P HTTP proxy OK";
 
+    /** Reply page carrying a freshly generated destination. */
     private final static String NEWKEY =
          "HTTP/1.1 200 OK\r\n" +
          "Content-Type: text/html; charset=UTF-8\r\n" +
@@ -87,10 +93,12 @@ public abstract class LocalHTTPServer {
          "Connection: close\r\n"+
          "\r\n";
 
+    /** Stylesheet links shared by the reply pages. */
     private final static String headerLinks =
         "<link href=\"http://proxy.i2p/themes/console/default/proxy.css\" rel=stylesheet>\n" +
         "<link rel=icon href=\"http://proxy.i2p/themes/console/default/images/favicon.svg\">\n";
 
+    /** Logo block shared by the reply pages. */
     private final static String logo =
         "<img src=\"http://proxy.i2p/themes/console/default/images/i2plogo.png\" alt=\"I2P+ Router Console\" border=0>";
     /**

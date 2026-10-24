@@ -28,8 +28,11 @@ public class BWLimits {
      */
     public BWLimits() {}
 
+    /** The limits last read, reused until the next update. */
     private static int[] cachedResult = null;
+    /** When the limits were last read, in ms */
     private static long lastUpdateTime = 0L; // store time in milliseconds
+    /** Milliseconds between reads of the router's limits */
     private static final long UPDATE_INTERVAL = 10 * (long) 60 * 1000;
 
     /**

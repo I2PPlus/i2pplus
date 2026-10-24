@@ -67,7 +67,9 @@ import net.i2p.util.SimpleTimer2;
 public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
     /** The runner's logger, from the global context's log manager. */
     protected final Log _log;
+    /** Counter numbering the tunnel runners. */
     private static final AtomicLong __runnerId = new AtomicLong();
+    /** This runner's id, for the logs. */
     private final long _runnerId;
     /**
      * Max bytes streamed in a packet - smaller ones might be filled up to this size.
@@ -183,19 +185,47 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      * @since 0.9.71+
      */
     static final long EMPTY_CYCLE_BASE_DELAY_MS = 150;
-    /** Cap for empty-retry inter-cycle delay (ms). @since 0.9.71+. */
+    /**
+     * Cap for empty-retry inter-cycle delay (ms).
+     *
+     * @since 0.9.71+
+     */
     static final long EMPTY_CYCLE_MAX_DELAY_MS = 1200;
-    /** Per-dest race token bucket capacity (SYNs worth of budget). @since 0.9.71+. */
+    /**
+     * Per-dest race token bucket capacity (SYNs worth of budget).
+     *
+     * @since 0.9.71+
+     */
     static final int RACE_TOKENS_MAX = 6;
-    /** Token refill rate: tokens per second, keyed per remote dest. @since 0.9.71+. */
+    /**
+     * Token refill rate: tokens per second, keyed per remote dest.
+     *
+     * @since 0.9.71+
+     */
     static final int RACE_REFILL_PER_SEC = 6;
-    /** Budget cost of one dual-race open (two SYNs). @since 0.9.71+. */
+    /**
+     * Budget cost of one dual-race open (two SYNs).
+     *
+     * @since 0.9.71+
+     */
     static final int RACE_COST_TOKENS = 2;
-    /** Budget cost of one single-socket open on the empty path. @since 0.9.71+. */
+    /**
+     * Budget cost of one single-socket open on the empty path.
+     *
+     * @since 0.9.71+
+     */
     static final int SINGLE_COST_TOKENS = 1;
-    /** Stagger between the two race connects (ms) to avoid same-tick double SYN. @since 0.9.71+. */
+    /**
+     * Stagger between the two race connects (ms) to avoid same-tick double SYN.
+     *
+     * @since 0.9.71+
+     */
     static final long RACE_STAGGER_MS = 100;
-    /** Overall wait for a race winner's first response byte (ms). @since 0.9.71+. */
+    /**
+     * Overall wait for a race winner's first response byte (ms).
+     *
+     * @since 0.9.71+
+     */
     static final long EMPTY_RACE_TIMEOUT_MS = 30 * 1000;
     /**
      * No-bytes read timeout (ms) once a response body has started streaming.
@@ -218,7 +248,11 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      * @since 0.9.71+
      */
     static final long INITIAL_RESPONSE_TIMEOUT_MS = 120 * 1000;
-    /** Watchdog poll interval (ms); SimpleTimer2 rejects periods under 5s. @since 0.9.71+. */
+    /**
+     * Watchdog poll interval (ms); SimpleTimer2 rejects periods under 5s.
+     *
+     * @since 0.9.71+
+     */
     static final long INITIAL_WATCHDOG_POLL_MS = 5 * 1000;
 
     /**
@@ -398,10 +432,15 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      * @since 0.9.71+
      */
     static final class ResumeBudget {
+        /** Watchdog cycles seen with no data. */
         private int stallCycles;
+        /** Watchdog cycles counted so far. */
         private int totalCycles;
+        /** Byte count seen at the last check. */
         private long lastBody = -1;
+        /** Total time the watchdog allows. */
         private final long deadlineMs;
+        /** The clock for the deadline checks. */
         private final Clock _clock;
 
         /**
@@ -465,6 +504,11 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
             return true;
         }
 
+        /**
+         * Returns the current time for the watchdog.
+         *
+         * @return the time, in ms
+         */
         private long _nowMs() {
             return _clock != null ? _clock.now() : System.currentTimeMillis();
         }
@@ -512,7 +556,9 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
     private volatile I2PSocket i2ps;
     /** Synchronization lock for socket access. */
     private final Object slock;
+    /** Lock for the finish state. */
     private final Object finishLock = new Object();
+    /** True once the session has finished. */
     private volatile boolean finished;
     /** Data to send over I2P before normal forwarding starts. */
     private final byte[] initialI2PData;
@@ -520,14 +566,19 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
     private final byte[] initialSocketData;
     /** When runner started up. */
     private final long startedOn;
+    /** The I2P sockets this session opened. */
     private final List<I2PSocket> sockList;
     /** If we die before receiving any data, run this job. */
     private final Runnable onTimeout;
+    /** Callback run when the session fails. */
     private final FailCallback _onFail;
+    /** Callback run when the session succeeds. */
     private SuccessCallback _onSuccess;
     /** Optional reconnect callback for the empty-response retry; null = never retry. */
     private ReconnectCallback _reconnectCallback;
+    /** Total bytes sent to I2P. */
     private volatile long totalSent;
+    /** Total bytes received from I2P. */
     private volatile long totalReceived;
     /** Prevent the no-data failure callback from firing more than once across
      * the synchronous completion block and the exception/finally paths. */
@@ -550,6 +601,7 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
     /** Watchdog lifecycle: set on schedule, cleared on cancel, read by the
      * timer thread so a tick racing run()'s finally cannot re-arm. */
     private volatile boolean _initialWatchdogOn;
+    /** Watchdog for the initial connection, kept for cancelling. */
     private volatile SimpleTimer2.TimedEvent _initialWatchdog;
     /** Keep I2P socket alive after data transfer. */
     protected volatile boolean _keepAliveI2P;
@@ -557,7 +609,9 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
     protected volatile boolean _keepAliveSocket;
     /** Executor for submitting tasks; null = fallback to new Thread. */
     private volatile Executor _runnerExecutor;
+    /** Forwarder copying data to I2P. */
     private volatile StreamForwarder toI2P;
+    /** Forwarder copying data from I2P. */
     private volatile StreamForwarder fromI2P;
 
     /**
@@ -1205,9 +1259,13 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
         return true;
     }
 
+    /** GET request prefix for proxy mode. */
     private static final byte[] GET = { 'G', 'E', 'T', ' ' };
+    /** HEAD request prefix for proxy mode. */
     private static final byte[] HEAD = { 'H', 'E', 'A', 'D', ' ' };
+    /** POST request prefix for proxy mode. */
     private static final byte[] POST = { 'P', 'O', 'S', 'T', ' ' };
+    /** PUT request prefix for proxy mode. */
     private static final byte[] PUT = { 'P', 'U', 'T', ' ' };
 
     /**
@@ -1472,11 +1530,22 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
         t.start();
     }
 
+    /**
+     * Closes a socket, ignoring any error.
+     *
+     * @param sock the socket to close, may be null
+     */
     private static void closeQuietly(I2PSocket sock) {
         if (sock == null) {return;}
         try {sock.close();} catch (IOException ioe) {/* ignored */}
     }
 
+    /**
+     * Sleeps, reporting whether interrupted.
+     *
+     * @param delayMs how long to sleep, in ms
+     * @return true if the sleep was interrupted
+     */
     private static boolean sleepQuietly(long delayMs) {
         if (delayMs <= 0) {return true;}
         try {
@@ -1783,6 +1852,8 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      * run()'s finally cancels it.
      */
     private final class InitialResponseWatchdog extends SimpleTimer2.TimedEvent {
+        /** Times out a tunnel that never answers. */
+        private InitialResponseWatchdog() {}
         @Override
         public void timeReached() {
             if (!_initialWatchdogOn || _firstByteMs > 0) {
@@ -2168,12 +2239,19 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      */
     private class StreamForwarder implements Runnable {
 
+        /** Stream the bytes are read from. */
         private final InputStream in;
+        /** Stream the bytes are written to. */
         private final OutputStream out;
+        /** Direction label for the logs. */
         private final String direction;
+        /** True when copying toward I2P. */
         private final boolean _toI2P;
+        /** Pooled buffer used for the copies. */
         private final ByteCache _cache;
+        /** Run when the stream ends normally. */
         private final SuccessCallback _callback;
+        /** Exception that ended the forward, null until then. */
         private volatile Exception _failure;
         /** Flag to signal this forwarder should stop. */
         public volatile boolean done;

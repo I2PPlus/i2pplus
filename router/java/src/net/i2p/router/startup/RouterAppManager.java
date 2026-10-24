@@ -26,9 +26,12 @@ import net.i2p.util.Log;
  */
 public class RouterAppManager extends ClientAppManagerImpl {
 
+    /** Logger for this class. */
     private final Log _log;
-    // client to args
-    // this assumes clients do not override equals()
+    /**
+     * Client apps to the arguments they were started with. This assumes the
+     * clients do not override equals().
+     */
     private final ConcurrentHashMap<ClientApp, String[]> _clients;
 
     /**
@@ -106,8 +109,6 @@ public class RouterAppManager extends ClientAppManagerImpl {
         }
         return null;
     }
-
-    // ClientAppManager methods
 
     /**
      * Must be called on all state transitions except

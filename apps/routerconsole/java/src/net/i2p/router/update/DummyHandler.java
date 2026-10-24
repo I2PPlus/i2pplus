@@ -12,7 +12,9 @@ import net.i2p.update.*;
  * @since 0.9.4
  */
 class DummyHandler implements Checker, Updater {
+    /** The router the dummy update runs on. */
     private final RouterContext _context;
+    /** Reports the dummy update's progress. */
     private final ConsoleUpdateManager _mgr;
 
     /**
@@ -50,10 +52,15 @@ class DummyHandler implements Checker, Updater {
      * Use for both check and update.
      */
     private static class DummyRunner extends UpdateRunner {
+        /** How long the dummy update should run, in ms. */
         private final long _delay;
 
         /**
          * Creates a runner that sleeps for the requested time, then reports failure.
+         *
+         * @param ctx the router context
+         * @param mgr the update manager to report to
+         * @param maxTime how long to sleep, in milliseconds
          */
         public DummyRunner(RouterContext ctx, ConsoleUpdateManager mgr, long maxTime) {
             super(ctx, mgr, UpdateType.TYPE_DUMMY, Collections.<URI> emptyList());

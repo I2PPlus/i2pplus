@@ -29,25 +29,44 @@ import net.i2p.util.Log;
  * @since 0.9.16
  */
 class SearchState {
+    /** The router context. */
     private final RouterContext _context;
+    /** Peers asked, waiting for a reply. */
     private final Set<Hash> _pendingPeers;
+    /** When each pending peer was asked. */
     private final Map<Hash, Long> _pendingPeerTimes;
+    /** Peers asked at any point in the search. */
     private final Set<Hash> _attemptedPeers;
+    /** Peers that failed to reply. */
     private final Set<Hash> _failedPeers;
+    /** Peers that replied with results. */
     private final Set<Hash> _successfulPeers;
+    /** Peers that replied at all. */
     private final Set<Hash> _repliedPeers;
+    /** The hash being searched for. */
     private final Hash _searchKey;
+    /** When the search completed, 0 until then. */
     private volatile long _completed;
+    /** When the search started. */
     private volatile long _started;
+    /** True if the search was aborted. */
     private volatile boolean _aborted;
+    /** Logger for the lookup search. */
     private final Log _log;
+    /** Lease sets found, by hash. */
     private final Map<Hash, LeaseSet> _leaseSetResponses;
+    /** When the first lease set arrived. */
     private long _firstLeaseSetTime;
 
+    /** Initial responses received so far. */
     private final AtomicInteger _initialResponseCount = new AtomicInteger();
+    /** When waiting for the initial responses began. */
     private volatile long _initialResponseStart;
+    /** Initial responses waited for. */
     private static final int INITIAL_RESPONSE_TARGET = 3;
+    /** Time waited for the initial responses. */
     private static final long INITIAL_RESPONSE_TIMEOUT = 3 * 1000L;
+    /** Publish date of the lease set stored. */
     private volatile long _storedLeaseDate;
 
     /**
@@ -133,6 +152,14 @@ class SearchState {
         }
     }
 
+    /**
+     * Picks the peers closest to the target.
+     *
+     * @param peers the peers to choose from
+     * @param max the number of peers wanted
+     * @param target the hash to measure distance to
+     * @return the closest peers chosen
+     */
     private Set<Hash> locked_getClosest(Set<Hash> peers, int max, Hash target) {
         if (_attemptedPeers.size() <= max) {return new HashSet<>(_attemptedPeers);}
         TreeSet<Hash> closest = new TreeSet<>(new XORComparator<>(target));

@@ -43,20 +43,31 @@ import java.io.Writer;
  * Entry point for all SAM v1/v2/v3 STREAM/DATAGRAM/RAW/MASTER sessions.
  */
 public class SAMBridge implements Runnable, ClientApp {
+    /** Logger usable before the context exists. */
     private static final Log _logStatic = new Log(SAMBridge.class);
+    /** Logger for the SAM bridge. */
     private final Log _log;
 
     /** When this bridge was instantiated, for the session-error grace window. */
     private final long _started = System.currentTimeMillis();
 
+    /** The listening channel for client connections. */
     private volatile ServerSocketChannel serverSocket; // NOSONAR volatile is correct: single-assignment visibility flag read by the accept loop
+    /** Host the bridge listens on. */
     private final String _listenHost;
+    /** Port the bridge listens on. */
     private final int _listenPort;
+    /** I2CP properties passed to the sessions. */
     private final Properties i2cpProps;
+    /** True if the bridge connections use SSL. */
     private final boolean _useSSL;
+    /** Config file holding the SAM keys. */
     private final File _configFile;
+    /** The thread running the accept loop. */
     private volatile Thread _runner; // NOSONAR volatile is correct: single-assignment visibility flag
+    /** Lock for the v3 datagram server state. */
     private final Object _v3DGServerLock = new Object();
+    /** The v3 datagram server, while running. */
     private SAMv3DatagramServer _v3DGServer;
     /**
      * Pluggable "Secure Session Manager" for interactive, GUI-based session
@@ -76,19 +87,26 @@ public class SAMBridge implements Runnable, ClientApp {
      * destination keys (Destination+PrivateKey+SigningPrivateKey).
      */
     private final Map<String, String> nameToPrivKeys;
+    /** The handlers serving open connections. */
     private final Set<Handler> _handlers;
+    /** The shared handler pool, while in use. */
     private volatile SAMHandlerPool _handlerPool; // NOSONAR volatile is correct: single-assignment visibility flag read by shutdown
 
+    /** True while the bridge accepts new connections. */
     private volatile boolean acceptConnections = true;
 
+    /** The app manager that started the bridge. */
     private final ClientAppManager _mgr;
+    /** Current state of the bridge app. */
     private volatile ClientAppState _state = UNINITIALIZED;
 
     /** Default filename for persistent SAM private key storage. */
     public static final String DEFAULT_SAM_KEYFILE = "sam.keys";
     /** Default filename for the SAM configuration file. */
     static final String DEFAULT_SAM_CONFIGFILE = "sam.config";
+    /** Config key naming the SAM key file. */
     private static final String PROP_SAM_KEYFILE = "sam.keyfile";
+    /** Config key enabling SSL for the bridge. */
     private static final String PROP_SAM_SSL = "sam.useSSL";
     /** Property for the SAM TCP listen address. */
     public static final String PROP_TCP_HOST = "sam.tcp.host";
@@ -653,6 +671,9 @@ public class SAMBridge implements Runnable, ClientApp {
     ////// end ClientApp helpers
 
     private static class HelpRequestedException extends Exception {
+        /** Signals that the client asked for help. */
+        private HelpRequestedException() {}
+        /** Serial version of the saved state. */
         static final long serialVersionUID = 0x1;
     }
 
@@ -734,11 +755,17 @@ public class SAMBridge implements Runnable, ClientApp {
      * @since 0.9.6
      */
     private static class Options {
+        /** Host the bridge listens on. */
         private final String host;
+        /** Key file holding the SAM keys. */
         private final String keyFile;
+        /** Port the bridge listens on. */
         private final int port;
+        /** I2CP options for the sessions. */
         private final Properties opts;
+        /** True if the builder wants SSL. */
         private final boolean isSSL;
+        /** Config file for the SAM keys. */
         private final File configFile;
 
         /**
@@ -913,6 +940,7 @@ public class SAMBridge implements Runnable, ClientApp {
         }
     }
 
+    /** Prints the command line usage text. */
     private static void usage() {
         System.err.println("Usage: SAMBridge [-s] [-c sam.config] [keyfile [listenHost] listenPortNum[ name=val]*]\n" +
                            "or:\n" +

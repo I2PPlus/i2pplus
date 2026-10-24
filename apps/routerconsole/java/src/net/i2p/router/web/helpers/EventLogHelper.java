@@ -23,16 +23,22 @@ import net.i2p.util.Log;
  * Supports /events.jsp page in router console.
  */
 public class EventLogHelper extends FormHandler {
+    /** Matches the text after an event name. */
     private static final Pattern EVENT_SPACE = Pattern.compile(" .+$");
+    /** Matches a single digit. */
     private static final Pattern EVENT_DIGIT = Pattern.compile("\\d");
+    /** Start time of the events shown. */
     private long _from;
+    /** Age of the events shown. */
     private long _age;
-    //private long _to = Long.MAX_VALUE;
+    /** The event type filtered for. */
     private String _event = ALL;
-    // EventLog name to translated display string
+    /** The EventLog names mapped to translated display strings. */
     private final Map<String, String> _xevents;
 
+    /** Filter value selecting every event. */
     private static final String ALL = "all";
+    /** The event names offered in the form. */
     private static final String[] _events = new String[] {
         EventLog.ABORTED, _x("Aborted startup"),
         EventLog.BECAME_FLOODFILL, _x("Enabled floodfill"),
@@ -57,8 +63,9 @@ public class EventLogHelper extends FormHandler {
         EventLog.UPDATED, _x("Updated router"),
         EventLog.WATCHDOG, _x("Watchdog warning")
     };
-    // in seconds
+    /** One day, in seconds. */
     private static final long DAY = 24*60*60L;
+    /** The age options offered in the form, in seconds. */
     private static final long[] _times = { 0, DAY, 7*DAY, 30*DAY, 90*DAY, 365*DAY };
 
     /**
@@ -152,6 +159,13 @@ public class EventLogHelper extends FormHandler {
         return "";
     }
 
+    /**
+     * Writes one option of the filter form.
+     *
+     * @param key the option value
+     * @param val the option label
+     * @throws IOException if the writing fails
+     */
     private void writeOption(String key, String val) throws IOException {
          _out.write("<option value=\"");
          _out.write(val);

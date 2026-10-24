@@ -42,7 +42,9 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public final class ByteCache extends TryCache<ByteArray> {
 
+    /** The log for the byte cache. */
     private static final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(ByteCache.class);
+    /** The caches, by entry size. */
     private static final Map<Integer, ByteCache> _caches = new ConcurrentHashMap<>(16);
 
     /**
@@ -53,8 +55,11 @@ public final class ByteCache extends TryCache<ByteArray> {
      */
     private static final int MIN_CACHE = 256 * 1024; // 256KB
 
+    /** Largest entry size that may be cached. */
     private static final int MAX_CACHE_LIMIT = 8 * 1024 * 1024; // 8MB
+    /** Largest entry size actually allowed. */
     private static final int MAX_CACHE;
+    /** Fewest objects a cache holds. */
     private static final int MIN_CACHE_OBJECTS = 16;
 
     /** How often do we cleanup all caches. */
@@ -77,6 +82,9 @@ public final class ByteCache extends TryCache<ByteArray> {
      * Global cleanup task that iterates over all caches.
      */
     private static class GlobalCleanup extends SimpleTimer2.TimedEvent {
+        /** Drops cached buffers when memory is low. */
+        private GlobalCleanup() {}
+
         /**
          * Clean all caches of entries past their expiration, then reschedule.
          */
@@ -159,6 +167,7 @@ public final class ByteCache extends TryCache<ByteArray> {
         }
     }
 
+    /** The size of the entries in this cache. */
     private final int _entrySize;
 
     /**
@@ -167,8 +176,14 @@ public final class ByteCache extends TryCache<ByteArray> {
      * @since 0.9.36
      */
     private static class ByteArrayFactory implements TryCache.ObjectFactory<ByteArray> {
+        /** The size of the arrays made. */
         private final int sz;
 
+        /**
+         * Makes arrays of one size.
+         *
+         * @param entrySize the size of the arrays
+         */
         ByteArrayFactory(int entrySize) {
             sz = entrySize;
         }
@@ -185,6 +200,12 @@ public final class ByteCache extends TryCache<ByteArray> {
         }
     }
 
+    /**
+     * Caches byte arrays of one size.
+     *
+     * @param maxCachedEntries the most arrays to cache
+     * @param entrySize the size of the arrays
+     */
     private ByteCache(int maxCachedEntries, int entrySize) {
         super(new ByteArrayFactory(entrySize), maxCachedEntries);
         _entrySize = entrySize;

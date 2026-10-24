@@ -26,6 +26,7 @@ import net.i2p.client.streaming.I2PSocketAddress;
  * @since 0.8.4
  */
 class StandardServerSocket extends ServerSocket {
+    /** The I2P listening socket this java.net server socket wraps. */
     private final I2PServerSocketFull _socket;
 
     /**

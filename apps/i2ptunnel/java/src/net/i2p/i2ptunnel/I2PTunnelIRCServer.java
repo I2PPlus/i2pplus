@@ -43,10 +43,15 @@ import java.nio.charset.StandardCharsets;
  * No outbound filtering.
  */
 public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
+    /** The key used to cloak the client addresses. */
     private final byte[] cloakKey; // 32 bytes of stuff to scramble the dest with
+    /** The hostname sent to the IRC server. */
     private final String hostname;
+    /** The webirc method name, if any. */
     private final String method;
+    /** The webirc password, if any. */
     private final String webircPassword;
+    /** The IP the webirc handshake spoofs. */
     private final String webircSpoofIP;
 
     /** IRC server config keys. */
@@ -66,33 +71,41 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
     public static final String PROP_HOSTNAME="ircserver.fakeHostname";
     /** Default for {@link #PROP_HOSTNAME}, the full B32 destination as a hostname. */
     public static final String PROP_HOSTNAME_DEFAULT="%f.b32.i2p";
+    /** Time allowed for one line of the server greeting. */
     private static final long HEADER_TIMEOUT = (long) 30*1000;
+    /** Total time allowed for the server greeting. */
     private static final long TOTAL_HEADER_TIMEOUT = 2 * HEADER_TIMEOUT;
+    /** Longest IRC line accepted. */
     private static final int MAX_LINE_LENGTH = 1024;
-    // application should ping timeout before this
+    /** Default idle time before the drop, the client should time out first. */
     private static final long DEFAULT_IRC_READ_TIMEOUT = 10 * (long) 60 * 1000;
 
+    /** Error line sent when the destination is unavailable. */
     private final static String ERR_UNAVAILABLE =
         ":ircserver.i2p 499 you :" +
          "This I2P IRC server is unavailable. It may be down or undergoing maintenance. " +
          "Please try again later." +
          "\r\n";
 
+    /** Error line sent when the registration fails. */
     private final static String ERR_REGISTRATION =
         ":ircserver.i2p 499 you :" +
          "Bad registration." +
          "\r\n";
 
+    /** Error line sent when the connection times out. */
     private final static String ERR_TIMEOUT =
         ":ircserver.i2p 499 you :" +
          "Timeout registering." +
          "\r\n";
 
+    /** Error line sent when the connection closes early. */
     private final static String ERR_EOF =
         ":ircserver.i2p 499 you :" +
          "EOF while registering." +
          "\r\n";
 
+    /** IRC protocol options stripped from the client's request. */
     private static final String[] BAD_PROTOCOLS = {
         "GET ", "HEAD ", "POST ", "GNUTELLA CONNECT", "\023BitTorrent protocol"
     };
@@ -388,6 +401,11 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
      * @since 0.9.19
      */
     private static class RegistrationException extends IOException {
+        /**
+         * Builds the exception with a message.
+         *
+         * @param s the message for the client
+         */
         public RegistrationException(String s) {
             super(s);
         }

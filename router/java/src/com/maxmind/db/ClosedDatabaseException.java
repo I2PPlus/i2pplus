@@ -7,6 +7,7 @@ import java.io.IOException;
  */
 public class ClosedDatabaseException extends IOException {
 
+    /** Pinned for serialized-form compatibility. */
     private static final long serialVersionUID = 1L;
 
     /**

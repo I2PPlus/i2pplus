@@ -59,8 +59,11 @@ public final class CertUtil {
     /** Utility class. */
     private CertUtil() {}
 
+    /** Directory the certificates are kept in. */
     private static final String CERT_DIR = "certificates";
+    /** Directory the revocations are kept in. */
     private static final String REVOCATION_DIR = "revocations";
+    /** Line length used when writing a certificate. */
     private static final int LINE_LENGTH = 64;
 
     static {
@@ -270,10 +273,24 @@ public final class CertUtil {
         return null;
     }
 
+    /**
+     * Records a certificate error for display.
+     *
+     * @param msg what went wrong
+     * @param t the exception, may be null
+     */
     private static void error(String msg, Throwable t) {
         log(I2PAppContext.getGlobalContext(), Log.ERROR, msg, t);
     }
 
+    /**
+     * Logs a certificate message at a given level.
+     *
+     * @param ctx the context to log through
+     * @param level the log level
+     * @param msg a description of what happened
+     * @param t the exception, may be null
+     */
     private static void log(I2PAppContext ctx, int level, String msg, Throwable t) {
         Log l = ctx.logManager().getLog(CertUtil.class);
         l.log(level, msg, t);
@@ -669,7 +686,10 @@ public final class CertUtil {
         }
     }
 
-    // threshold for warning
+    /**
+     * CertUtil.main() warns about a certificate that expires within this
+     * much time from now - six months.
+     */
     private static final long CHECK = 180 * 24 * 60 * 60 * 1000L;
 
     /**

@@ -12,6 +12,7 @@ import java.io.Writer;
  * @since 0.9.33 consolidated from routerconsole and i2psnark
  */
 public class WriterOutputStream extends OutputStream {
+    /** The writer that decoded bytes are written to. */
     private final Writer _writer;
 
     /**

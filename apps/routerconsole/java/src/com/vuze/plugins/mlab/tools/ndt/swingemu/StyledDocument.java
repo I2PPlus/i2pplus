@@ -38,7 +38,9 @@ StyledDocument
 	{
 	}
 
+	/** Logger for this class. */
 	private final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(Tcpbw100.class);
+	/** The text held by the document. */
 	private final StringBuilder text = new StringBuilder();
 
 	/**

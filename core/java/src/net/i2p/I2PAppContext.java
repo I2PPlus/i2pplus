@@ -66,58 +66,95 @@ public class I2PAppContext {
 
     /** Override properties for this context. */
     protected final I2PProperties _overrideProps;
+    /** Config properties merged with the system properties. */
     private volatile Properties _mergedProps;
 
+    /** The context's stat manager, created on demand. */
     private StatManager _statManager;
     /** The session key manager. */
     protected SessionKeyManager _sessionKeyManager;
+    /** The context's naming service, created on demand. */
     private NamingService _namingService;
+    /** The context's ElGamal engine, created on demand. */
     private ElGamalEngine _elGamalEngine;
+    /** The context's AES engine, created on demand. */
     private AESEngine _AESEngine;
+    /** The context's log manager, created on demand. */
     private LogManager _logManager;
+    /** The context's HMAC-SHA256 generator, created on demand. */
     private HMAC256Generator _hmac256;
+    /** The context's SHA-256 generator, created on demand. */
     private SHA256Generator _sha;
     /** The context clock, overridden in RouterContext. */
     protected Clock _clock;
+    /** The context's DSA engine, created on demand. */
     private DSAEngine _dsa;
+    /** The context's secure random source, created on demand. */
     private RandomSource _random;
+    /** The context's key generator, created on demand. */
     private KeyGenerator _keyGenerator;
     /** The key ring, overridden in RouterContext. */
     protected KeyRing _keyRing;
+    /** The context's shared timer, created on demand. */
     private SimpleTimer2 _simpleTimer2;
+    /** The context's port mapper for UPnP. */
     private final PortMapper _portMapper;
+    /** Whether the stat manager has been created. */
     private volatile boolean _statManagerInitialized;
     /**
      * Whether the session key manager has been initialized.
      */
     protected volatile boolean _sessionKeyManagerInitialized;
+    /** Whether the naming service has been created. */
     private volatile boolean _namingServiceInitialized;
+    /** Whether the ElGamal engine has been created. */
     private volatile boolean _elGamalEngineInitialized;
+    /** Whether the AES engine has been created. */
     private volatile boolean _AESEngineInitialized;
+    /** Whether the log manager has been created. */
     private volatile boolean _logManagerInitialized;
+    /** Whether the HMAC generator has been created. */
     private volatile boolean _hmac256Initialized;
+    /** Whether the SHA generator has been created. */
     private volatile boolean _shaInitialized;
     /** Whether the clock is initialized, used in RouterContext. */
     protected volatile boolean _clockInitialized;
+    /** Whether the DSA engine has been created. */
     private volatile boolean _dsaInitialized;
+    /** Whether the random source has been created. */
     private volatile boolean _randomInitialized;
+    /** Whether the key generator has been created. */
     private volatile boolean _keyGeneratorInitialized;
     /** Whether the key ring is initialized, used in RouterContext. */
     protected volatile boolean _keyRingInitialized;
+    /** Whether the shared timer has been created. */
     private volatile boolean _simpleTimer2Initialized;
     /** Shutdown tasks to run on context shutdown. */
     protected final Set<Runnable> _shutdownTasks;
+    /** The installation's base directory. */
     private final File _baseDir;
+    /** Directory holding i2p.properties. */
     private final File _configDir;
+    /** Directory holding the router's egress files. */
     private final File _routerDir;
+    /** Directory for pid files. */
     private final File _pidDir;
+    /** Directory holding the log files. */
     private final File _logDir;
+    /** Directory of the running application. */
     private final File _appDir;
+    /** Directory for scratch files. */
     private volatile File _tmpDir;
+    /** Directory holding the jar files. */
     private final File _libDir;
+    /** Random for unique temp directory names. */
     private final Random _tmpDirRand = new Random();
+    /** The context's client app manager. */
     private final ClientAppManager _appManager;
-    // split up big lock on this to avoid deadlocks
+    /**
+     * Guards for the lazily created context components, split from one
+     * big lock to avoid deadlocks.
+     */
     private final Object _lock1 = new Object(), _lock2 = new Object(), _lock3 = new Object(), _lock4 = new Object(),
                          _lock5 = new Object(), _lock7 = new Object(), _lock8 = new Object(),
                          _lock10 = new Object(), _lock11 = new Object(), _lock12 = new Object(),
@@ -732,6 +769,7 @@ public class I2PAppContext {
         return _statManager;
     }
 
+    /** Creates the stat manager from the config. */
     private void initializeStatManager() {
         synchronized (_lock2) {
             if (_statManager == null)
@@ -789,6 +827,7 @@ public class I2PAppContext {
         return _namingService;
     }
 
+    /** Creates the naming service from the config. */
     private void initializeNamingService() {
         synchronized (_lock4) {
             if (_namingService == null) {
@@ -814,6 +853,7 @@ public class I2PAppContext {
         return _elGamalEngine;
     }
 
+    /** Creates the ElGamal engine. */
     private void initializeElGamalEngine() {
         synchronized (_lock5) {
             if (_elGamalEngine == null)
@@ -834,6 +874,7 @@ public class I2PAppContext {
         return _AESEngine;
     }
 
+    /** Creates the AES engine. */
     private void initializeAESEngine() {
         synchronized (_lock7) {
             if (_AESEngine == null) {_AESEngine = new CryptixAESEngine(this);}
@@ -855,6 +896,7 @@ public class I2PAppContext {
         return _logManager;
     }
 
+    /** Creates the log manager from the config. */
     private void initializeLogManager() {
         synchronized (_lock8) {
             if (_logManager == null)
@@ -916,6 +958,7 @@ public class I2PAppContext {
         return _sha;
     }
 
+    /** Creates the SHA-256 generator. */
     private void initializeSHA() {
         synchronized (_lock11) {
             if (_sha == null)
@@ -935,6 +978,7 @@ public class I2PAppContext {
         return _dsa;
     }
 
+    /** Creates the DSA engine. */
     private void initializeDSA() {
         synchronized (_lock12) {
             if (_dsa == null)
@@ -955,6 +999,7 @@ public class I2PAppContext {
         return _keyGenerator;
     }
 
+    /** Creates the key generator. */
     private void initializeKeyGenerator() {
         synchronized (_lock13) {
             if (_keyGenerator == null)
@@ -1039,6 +1084,7 @@ public class I2PAppContext {
         return _random;
     }
 
+    /** Creates the secure random source. */
     private void initializeRandom() {
         synchronized (_lock17) {
             if (_random == null)
@@ -1132,6 +1178,7 @@ public class I2PAppContext {
         return _simpleTimer2;
     }
 
+    /** Creates the shared timer. */
     private void initializeSimpleTimer2() {
         synchronized (_lock20) {
             if (_simpleTimer2 == null)
@@ -1141,11 +1188,9 @@ public class I2PAppContext {
     }
 
     /**
-     * The ClientAppManager for this context. Overridden in RouterContext to
-     * return the RouterAppManager.
-     * <p>
-     * As of 0.9.30 this returns non-null in I2PAppContext and null in a router
-     * context. Prior to that, it returned null always.
+     * The ClientAppManager for this context, non-null in a standalone context
+     * and null in a router context. RouterContext overrides this to return the
+     * RouterAppManager.
      *
      * @return the app manager, null in a router context
      * @since 0.9.11, in RouterContext since 0.9.4

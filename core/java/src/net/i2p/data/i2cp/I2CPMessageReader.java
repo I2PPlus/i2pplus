@@ -27,6 +27,7 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 @SuppressWarnings("PMD.CloseResource")
 public class I2CPMessageReader {
+    /** Stream the messages are read from. */
     private InputStream _stream;
     /**
      * Listener notified of incoming messages, read errors and disconnects.
@@ -148,6 +149,7 @@ public class I2CPMessageReader {
          * Whether the reader thread should stay alive past the last message.
          */
         protected volatile boolean _stayAlive;
+        /** Logger for this class. */
         private final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(I2CPMessageReader.class);
 
         /**

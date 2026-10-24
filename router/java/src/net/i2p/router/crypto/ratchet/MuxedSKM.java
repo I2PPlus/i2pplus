@@ -19,9 +19,13 @@ import net.i2p.router.crypto.TransientSessionKeyManager;
  */
 public class MuxedSKM extends SessionKeyManager {
 
+    /** The ElGamal session keys. */
     private final TransientSessionKeyManager _elg;
+    /** The ratcheted ECIES session keys. */
     private final RatchetSKM _ec;
+    /** Counts the ElGamal keys handed out. */
     private final AtomicInteger _elgCounter = new AtomicInteger();
+    /** Counts the ratcheted keys handed out. */
     private final AtomicInteger _ecCounter = new AtomicInteger();
     /**
      * How much slower the ElGamal slow decrypt is than the ratchet one, so its

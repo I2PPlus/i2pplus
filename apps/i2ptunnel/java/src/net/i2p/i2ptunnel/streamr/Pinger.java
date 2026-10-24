@@ -13,10 +13,13 @@ public class Pinger implements Source, Runnable {
     protected Sink sink;
     /** The thread running the ping loop. */
     protected final Thread thread;
+    /** Held while waiting for the next ping. */
     private final Object waitlock = new Object();
     /** True while the ping loop should keep running. */
     protected volatile boolean running;
+    /** Logger for this class. */
     private final Log log;
+    /** UDP port the pings are sent from. */
     private final int fromPort;
 
     /**

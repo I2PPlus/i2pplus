@@ -18,6 +18,7 @@ import java.util.zip.InflaterInputStream;
  * GZIPInputStream reads the GZIP header from the stream on instantiation.
  */
 public class ResettableGZIPInputStream extends InflaterInputStream {
+    /** Size of the gzip footer, the crc and the size. */
     private static final int FOOTER_SIZE = 8; // CRC32 + ISIZE
 
     /** See below for why this is necessary. */
@@ -26,8 +27,11 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
     /** Keep a typesafe copy of this. */
     private final LookaheadInputStream _lookaheadStream;
 
+    /** The checksum of the data read. */
     private final CRC32 _crc32;
+    /** A one byte buffer for single reads. */
     private final byte[] _buf1 = new byte[1];
+    /** True once the stream is fully read. */
     private boolean _complete;
 
     /**
@@ -222,6 +226,11 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
         return "Read: " + getTotalRead() + "; Expanded: " + getTotalExpanded() + "; Remaining: " + getRemaining() + "; Finished: " + getFinished();
     }
 
+    /**
+     * Checks the footer of the stream.
+     *
+     * @throws IOException if the footer does not match
+     */
     private void verifyFooter() throws IOException {
         byte[] footer = _lookaheadStream.getFooter();
 
@@ -351,9 +360,16 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
      * @since 0.8.12
      */
     private static class ExtraByteInputStream extends FilterInputStream {
+        /** The dummy byte appended at the end. */
         private static final byte DUMMY = 0;
+        /** True once the dummy byte was sent. */
         private boolean _extraSent;
 
+        /**
+         * Appends one dummy byte to a stream.
+         *
+         * @param in the stream to wrap
+         */
         public ExtraByteInputStream(InputStream in) {
             super(in);
         }
@@ -390,6 +406,11 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
             _extraSent = false;
         }
 
+        /**
+         * The stream to read from.
+         *
+         * @return the wrapped stream
+         */
         public InputStream getInputStream() {
             return in;
         }

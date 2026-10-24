@@ -1,12 +1,4 @@
 package net.i2p.router.transport;
-/*
- * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain
- * with no warranty of any kind, either expressed or implied.
- * It probably won't make your computer catch on fire, or eat
- * your children, but it might.  Use at your own risk.
- *
- */
 
 /**
  * Abstract base implementation for I2P transport protocols.
@@ -83,10 +75,14 @@ import net.i2p.util.Translate;
 public abstract class TransportImpl implements Transport {
             /** Timestamp labels for {@link #afterSend(OutNetMessage, boolean, boolean, long)}, constants so neither costs an allocation. */
     private static final String AFTER_SEND_SUCCESSFUL = "afterSend(successful)";
+    /** Name of the failed send callback. */
     private static final String AFTER_SEND_FAILED = "afterSend(failed)";
 
+    /** Logger for the transport. */
     private final Log _log;
+    /** Listener notified of the transport events. */
     private TransportEventListener _listener;
+    /** The addresses currently published. */
     private final List<RouterAddress> _currentAddresses;
     /**
      * IP of the current IPv4 address, or null.  Maintained by every mutation of
@@ -96,7 +92,10 @@ public abstract class TransportImpl implements Transport {
      * @since 0.9.71+
      */
     private volatile byte[] _currentIPv4;
-    // Only used by NTCP. SSU does not use. See send() below.
+    /**
+     * Pool of the messages waiting to be sent, used by NTCP only,
+     * see send() below.
+     */
     private volatile PrioritySendPool _sendPool;
     /**
      * The router context, which every subclass reads its configuration from.
@@ -104,19 +103,27 @@ public abstract class TransportImpl implements Transport {
     protected final RouterContext _context;
             /** Map from routerIdentHash to timestamp (Long) when the peer was last unreachable. */
     private final Map<Hash, Long>  _unreachableEntries;
+    /** Peers recently marked unreachable, by hash. */
     private final Map<Hash, Long> _wasUnreachableEntries;
-    // one-entry cache for reachable check
+    /** The last peer checked for reachability, a one-entry cache. */
     private volatile Hash _lastReachablePeer;
+    /** Our local addresses, for loopback checks. */
     private final Set<InetAddress> _localAddresses;
+    /** Messages evicted from the pool last pass. */
     private volatile int _sendPoolEvictedLast;
+    /** Messages dropped from the pool last pass. */
     private volatile int _sendPoolDroppedLast;
+    /** When the pool statistics were last logged. */
     private long _lastSendPoolStatTime;
 
             /** Global router ident -&gt; IP map. */
     private static final Map<Hash, byte[]> _IPMap;
 
+    /** Time a peer counts as unreachable. */
     private final long UNREACHABLE_PERIOD;
+    /** Time the unreachable mark is remembered. */
     private final long WAS_UNREACHABLE_PERIOD;
+    /** Timer clearing the unreachable entries. */
     private volatile CleanupUnreachable _cleanupJob;
 
 /** Advertised reachability value for a working IPv4 address. @since 0.9.50. */
@@ -140,6 +147,7 @@ public abstract class TransportImpl implements Transport {
      */
     protected static final String PROP_BOOST_CONNECTION_LIMITS = "i2np.boostConnectionLimits";
 
+    /** Rate stat periods for the transport statistics. */
     private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
 
     static {
@@ -153,19 +161,21 @@ public abstract class TransportImpl implements Transport {
 
             /** 50/100/150/250/450/550/700 for BW Tiers K/L/M/N/O/P/X. */
     private static final int MAX_CONNECTION_FACTOR = 100;
-    // see constructor
+    /** Messages the send pool holds, sized in the constructor. */
     private static volatile int SEND_POOL_CAPACITY = SystemVersion.isSlow() ? 64 : 128;
 
     /**
-     * The current NTCP send pool capacity.
-     * @return the current NTCP send pool capacity
+     * Capacity of the NTCP send pool.
+     *
+     * @return the messages the pool holds
      * @since 0.9.70+
      */
     public static int getSendPoolCapacity() { return SEND_POOL_CAPACITY; }
 
     /**
-     * The send pool instance (for stat access), or null if not NTCP.
-     * @return the send pool instance (for stat access), or null if not NTCP
+     * The send pool instance, for stat access.
+     *
+     * @return the pool, null if this is not NTCP
      * @since 0.9.70+
      */
     public PrioritySendPool getSendPool() { return _sendPool; }
@@ -340,8 +350,9 @@ public abstract class TransportImpl implements Transport {
     }
 
     /**
-     * The router context.
-     * @return the router context
+     * The context this transport runs in.
+     *
+     * @return the context, never null
      * @since 0.9.70+
      */
     public RouterContext getContext() { return _context; }
@@ -403,6 +414,7 @@ public abstract class TransportImpl implements Transport {
         return ctx.getProperty(maxProp, def);
     }
 
+    /** Default share of our capacity we offer. */
     private static final int DEFAULT_CAPACITY_PCT = 90;
 
     /**
@@ -430,9 +442,9 @@ public abstract class TransportImpl implements Transport {
     public List<Long> getClockSkews() {return Collections.emptyList();}
 
     /**
-     * Most recent error messages.
+     * Recent error messages from this transport.
      *
-     * @return the most recent error messages
+     * @return the messages, empty if there are none
      */
     public List<String> getMostRecentErrorMessages() {return Collections.emptyList();}
 
@@ -584,12 +596,22 @@ public abstract class TransportImpl implements Transport {
         }
     }
 
+    /**
+     * Runs the job if the context has a job queue.
+     *
+     * @param job the job to run
+     */
     private void addJobIfPresent(Job job) {
         if (job != null) {
             _context.jobQueue().addJob(job);
         }
     }
 
+    /**
+     * Drops a message from the send queue.
+     *
+     * @param msg the message to discard
+     */
     private void unregisterAndDiscard(OutNetMessage msg) {
         MessageSelector selector = msg.getReplySelector();
         if (selector != null) {
@@ -958,6 +980,7 @@ public abstract class TransportImpl implements Transport {
      * @since IPv6
      */
     private static class AddrComparator implements Comparator<RouterAddress>, Serializable {
+        /** Cost adjustment for the IPv6 preference. */
         private final int adj;
         /**
          * Sort addresses by published cost, biased by the configured IPv6
@@ -1195,6 +1218,7 @@ public abstract class TransportImpl implements Transport {
         markWasUnreachable(peer, false);
     }
 
+    /** Timer clearing the unreachable entries. */
     private class CleanupUnreachable extends SimpleTimer2.TimedEvent {
         /**
          * Start the recurring cleanup of stale unreachable entries.
@@ -1403,6 +1427,7 @@ public abstract class TransportImpl implements Transport {
                                                 cfg != TransportUtil.IPv6Config.IPV6_DISABLED);
     }
 
+    /** Bundle holding the translated console strings. */
     private static final String BUNDLE_NAME = "net.i2p.router.web.messages";
 
     /**

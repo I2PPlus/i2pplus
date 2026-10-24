@@ -22,9 +22,11 @@ public class ForwardPort {
 	public static final int PROTOCOL_TCP_IPV4 = 6;
 	/** Port number to forward */
 	public final int portNumber;
-	// We don't currently support binding to a specific internal interface.
-	// It would be complicated: Different interfaces may be on different LANs,
-	// and an IGD is normally on only one LAN.
+	/**
+	 * Precomputed hash of the forwarding rule. The rule names no internal
+	 * interface - binding to one would be complicated, as different interfaces
+	 * may be on different LANs and an IGD is normally on only one LAN.
+	 */
 	private final int hashCode;
 
 	/**

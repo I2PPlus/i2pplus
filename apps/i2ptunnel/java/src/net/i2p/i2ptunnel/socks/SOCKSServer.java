@@ -40,6 +40,7 @@ import net.i2p.util.Log;
  */
 abstract class SOCKSServer {
 
+    /** Property prefix for a host-to-destination mapping */
     private static final String PROP_MAPPING_PREFIX = "ipmapping.";
 
     /**
@@ -158,6 +159,7 @@ abstract class SOCKSServer {
         return null;
     }
 
+    /** Headers removed from every forwarded request */
     private static final String[] _skipHeaders = new String[0];
 
     /**

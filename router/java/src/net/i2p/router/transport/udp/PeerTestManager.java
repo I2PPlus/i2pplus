@@ -132,9 +132,13 @@ with either Bob or Charlie, but it is not required.</p>
 
  */
 class PeerTestManager {
+    /** The router context. */
     private final RouterContext _context;
+    /** Logger for SSU peer tests. */
     private final Log _log;
+    /** The SSU transport we test through. */
     private final UDPTransport _transport;
+    /** Builder for SSU2 peer test packets. */
     private final PacketBuilder2 _packetBuilder2;
     /** Map of Long(nonce) to PeerTestState for tests currently in progress (as Bob/Charlie). */
     private final Map<Long, PeerTestState> _activeTests;
@@ -146,11 +150,14 @@ class PeerTestManager {
      * @since 0.9.71+
      */
     private volatile PeerTestState _currentTest;
+    /** True when the current test round is done. */
     private volatile boolean _currentTestComplete;
     /** Test being run as Alice. */
     private final Queue<Long> _recentTests;
+    /** Throttles the rate of peer tests. */
     private final IPThrottler _throttle;
 
+    /** Relays allowed per test for Alice. */
     private static final int MAX_RELAYED_PER_TEST_ALICE = 9;
 
     /** Longest we will keep track of a Charlie nonce for. */
@@ -160,28 +167,34 @@ class PeerTestManager {
 
     /** Tests running as Bob/Charlie. */
     private static final int MAX_ACTIVE_TESTS = 20;
+    /** Recent test records kept. */
     private static final int MAX_RECENT_TESTS = 40;
 
     /** For the throttler. */
     private static final int MAX_PER_IP = 12;
+    /** Interval between throttle cleanups. */
     private static final long THROTTLE_CLEAN_TIME = 10*60*1000L;
 
     /** Initial timeout; ContinueTimer adds backoff. */
     private static final int RESEND_TIMEOUT = 4*1000;
+    /** Longest a single peer test may take. */
     private static final int MAX_TEST_TIME = 20*1000;
+    /** Maximum clock skew accepted in a test. */
     private static final long MAX_SKEW = 2*60*1000L;
+    /** Largest possible peer test nonce. */
     private static final long MAX_NONCE = (1L << 32) - 1L;
 
-    // special markers for SSU2 when Charlie is firewalled
+    /** Marker IP for pending SSU2 introducers. */
     private static final InetAddress PENDING_IP;
     static {
         InetAddress p = null;
         try { p = InetAddress.getByName("0.0.0.1"); } catch (UnknownHostException uhe) { /* ignored */ }
         PENDING_IP = p;
     }
+    /** Marker port for pending SSU2 introducers. */
     private static final int PENDING_PORT = 99999;
 
-    // Preliminary
+    /** Whether the SSU2 symmetric NAT test runs. */
     private static final boolean ENABLE_SSU2_SYMNAT_TEST = true;
 
     /**
@@ -210,8 +223,16 @@ class PeerTestManager {
      * @since 0.9.71+
      */
     private static final class RIMiss {
+        /** The router whose router info went missing. */
         private final Hash hash;
+        /** When the miss was recorded. */
         private final long when;
+        /**
+         * Records a missing router info.
+         *
+         * @param hash the router hash
+         * @param when the time of the miss
+         */
         RIMiss(Hash hash, long when) {this.hash = hash; this.when = when;}
     }
 
@@ -318,6 +339,7 @@ class PeerTestManager {
      * SSU 1 or 2. We are Alice.
      */
     private class ContinueTimer extends SimpleTimer2.TimedEvent {
+        /** The nonce of the current test. */
         private final long _nonce;
 
         /**
@@ -577,15 +599,6 @@ class PeerTestManager {
         }
     }
 
-    /*
-     * If we have sent a packet to charlie within the last 10 minutes, ignore any test
-     * results we get from them, as our NAT will have poked a hole anyway
-     * NAT idle timeouts vary widely, from 30s to 10m or more.
-     * Set this too high and a high-traffic router may rarely get a good test result.
-     * Set it too low and a router will think it is reachable when it isn't.
-     * Maybe a router should need two consecutive OK results before believing it?
-     *
-     */
 
     /**
      * Reset all state and call testComplete(). We are Alice.
@@ -914,12 +927,19 @@ class PeerTestManager {
      * @since 0.9.55
      */
     private class DelayTest extends SimpleTimer2.TimedEvent {
+        /** The host the relay request came from. */
         private final RemoteHostId from;
+        /** The peer state of the requester. */
         private final PeerState2 fromPeer;
+        /** The message type being relayed. */
         private final int msg;
+        /** The target peer's hash. */
         private final Hash hash;
+        /** The relayed payload. */
         private final byte[] data;
+        /** Relays already sent for this request. */
         private volatile int count;
+        /** Delay between relay retries. */
         private static final long DELAY = 50;
 
         /**
@@ -1944,6 +1964,7 @@ class PeerTestManager {
      * forget about charlie's nonce after a short while.
      */
     private class RemoveTest extends SimpleTimer2.TimedEvent {
+        /** The nonce the reply must carry. */
         private final Long _nonce;
 
         /**
@@ -1976,6 +1997,7 @@ class PeerTestManager {
      * @since 0.9.57
      */
     private class CharlieTimer extends SimpleTimer2.TimedEvent {
+        /** The nonce the failure reply must carry. */
         private final Long _nonce;
 
         /**
@@ -2093,8 +2115,15 @@ class PeerTestManager {
      * @since 0.9.57
      */
     private class DelaySend extends SimpleTimer2.TimedEvent {
+        /** The packet to send late. */
         private final UDPPacket pkt;
 
+        /**
+         * Schedules a delayed packet send.
+         *
+         * @param packet the packet to send
+         * @param delay how long to wait
+         */
         public DelaySend(UDPPacket packet, long delay) {
             super(_context.simpleTimer2());
             pkt = packet;
@@ -2133,12 +2162,22 @@ class PeerTestManager {
         return reason;
     }
 
+    /** Collects the payloads of one peer test reply. */
     private class PTCallback implements SSU2Payload.PayloadCallback {
+        /** The host the reply came from. */
         private final RemoteHostId _from;
+        /** When the reply arrived. */
         public long _timeReceived;
+        /** Alice's IP as seen by the peer. */
         public byte[] _aliceIP;
+        /** Alice's port as seen by the peer. */
         public int _alicePort;
 
+        /**
+         * Prepares to collect one peer test reply.
+         *
+         * @param from the host the reply comes from
+         */
         public PTCallback(RemoteHostId from) {
             _from = from;
         }

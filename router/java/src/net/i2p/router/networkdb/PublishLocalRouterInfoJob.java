@@ -30,12 +30,13 @@ import net.i2p.util.Log;
  * send to the floodfills until the second time it runs.
  */
 public class PublishLocalRouterInfoJob extends JobImpl {
+    /** Logger for this class. */
     private final Log _log;
 
     /**
      * Don't store if somebody else stored it recently.
      * Publishes within this window of the last store are skipped;
-     * the normal publish interval is {@link #getDelay()}, 7-11 minutes.
+     * the normal publish interval from {@link #getDelay()} is 7-11 minutes.
      */
     private static final long MIN_PUBLISH_DELAY = 9L*60*1000;
 
@@ -181,6 +182,9 @@ public class PublishLocalRouterInfoJob extends JobImpl {
      * @since 0.9.18
      */
     private static class AddrComparator implements Comparator<RouterAddress>, Serializable {
+        /** Orders router addresses by transport. */
+        private AddrComparator() {}
+
         /**
          * Compare two RouterAddresses by transport style, then host.
          */

@@ -33,13 +33,23 @@ public class XI2PLocationFilter extends HandlerWrapper {
      */
     public XI2PLocationFilter() {}
 
+    /** Config key enabling the location header. */
     private static final String PROP_ENABLE_LOCATION_HEADER = "i2p.tunnel.webserverLocationHeader";
+    /** The cached header value. */
     private String X_I2P_Location = null;
+    /** When the last fetch failed. */
     private long lastFailure = -1;
+    /** Time before retrying after a failure. */
     private static final long failTimeout = 600000;
+    /** The log for the filter. */
     private final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(XI2PLocationFilter.class);
 
 
+    /**
+     * Caches the header value.
+     *
+     * @param xi2plocation the value to cache
+     */
     private synchronized void setLocation(String xi2plocation) {
         if (_log.shouldInfo())
             _log.info("Checking X-I2P-Location header prefix: " + xi2plocation);
@@ -54,6 +64,11 @@ public class XI2PLocationFilter extends HandlerWrapper {
             _log.info("Caching X-I2P-Location header prefix: " + X_I2P_Location);
     }
 
+    /**
+     * Whether to retry the fetch after a failure.
+     *
+     * @return true when it is time to retry
+     */
     private synchronized boolean shouldRecheck() {
         boolean settable = (X_I2P_Location == null);
         if (!settable) return settable;
@@ -74,6 +89,13 @@ public class XI2PLocationFilter extends HandlerWrapper {
         return false;
     }
 
+    /**
+     * Gets the location header for a target.
+     *
+     * @param host the target host
+     * @param port the target port
+     * @return the header value
+     */
     private synchronized String getXI2PLocation(String host, String port) {
         boolean shouldConfigure = I2PAppContext.getGlobalContext().getBooleanProperty(PROP_ENABLE_LOCATION_HEADER);
         File configDir = I2PAppContext.getGlobalContext().getConfigDir();
@@ -132,6 +154,12 @@ public class XI2PLocationFilter extends HandlerWrapper {
         return null;
     }
 
+    /**
+     * Builds the header value from the request.
+     *
+     * @param httpRequest the request to describe
+     * @return the header value
+     */
     private synchronized String headerContents(final HttpServletRequest httpRequest) {
         if (X_I2P_Location != null) {
             String scheme = httpRequest.getScheme();

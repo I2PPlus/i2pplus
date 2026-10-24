@@ -17,7 +17,9 @@ import net.i2p.data.Hash;
  *
  */
 public class ClientTunnelSettings {
+    /** Settings for the client's inbound tunnels. */
     private final TunnelPoolSettings _inboundSettings;
+    /** Settings for the client's outbound tunnels. */
     private final TunnelPoolSettings _outboundSettings;
 
     /**
@@ -31,15 +33,15 @@ public class ClientTunnelSettings {
     }
 
     /**
-     * Inbound tunnel pool settings.
+     * Get the settings for the client's inbound tunnel pool.
      *
-     * @return inbound tunnel pool settings
+     * @return the settings, created with the destination and never null
      */
     public TunnelPoolSettings getInboundSettings() { return _inboundSettings; }
     /**
-     * Outbound tunnel pool settings.
+     * Get the settings for the client's outbound tunnel pool.
      *
-     * @return outbound tunnel pool settings
+     * @return the settings, created with the destination and never null
      */
     public TunnelPoolSettings getOutboundSettings() { return _outboundSettings; }
 
@@ -53,6 +55,11 @@ public class ClientTunnelSettings {
         _outboundSettings.readFromProperties("outbound.", props);
    }
 
+    /**
+     * Writes both pools' settings into the properties.
+     *
+     * @param props where the settings are written
+     */
     private void writeToProperties(Properties props) {
         if (props == null) return;
         _inboundSettings.writeToProperties("inbound.", props);

@@ -30,6 +30,7 @@ SpinnerNumberModel
 	{
 	}
 
+	/** Current value, kept inside the model's range. */
 	private int		value;
 
 	/**

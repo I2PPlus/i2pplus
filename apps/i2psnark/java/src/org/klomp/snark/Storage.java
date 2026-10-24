@@ -75,26 +75,45 @@ import net.i2p.util.SystemVersion;
  * @see StorageListener
  */
 public class Storage implements Closeable {
+    /** The torrent's metadata. */
     private final MetaInfo metainfo;
+    /** The torrent's files, in piece order. */
     private final List<TorrentFile> _torrentFiles;
+    /** Directory the torrent's files live under. */
     private final File _base;
+    /** Notified of progress and errors. */
     private final StorageListener listener;
+    /** The webapp's configuration helper. */
     private final I2PSnarkUtil _util;
+    /** Logger for file and piece operations. */
     private static final Log _log = new Log(Storage.class);
 
+    /** Which pieces are verified as present. */
     private /* FIXME final FIXME */ BitField bitfield; // BitField to represent the pieces
+    /** Pieces still missing from the torrent. */
     private int needed; // Number of pieces needed
+    /** Whether files may be opened read-only. */
     private boolean _probablyComplete; // use this to decide whether to open files RO
 
+    /** Piece size in bytes. */
     private final int piece_size;
+    /** Number of pieces in the torrent. */
     private final int pieces;
+    /** Total bytes across all files. */
     private final long total_length;
+    /** Whether the torrent's file names are kept as-is. */
     private final boolean _preserveFileNames;
+    /** Whether the verified-piece state changed since saving. */
     private boolean changed;
+    /** Whether a hash check is running. */
     private volatile boolean _isChecking;
+    /** Files whose allocation is in progress. */
     private final AtomicInteger _allocateCount = new AtomicInteger();
+    /** Pieces verified by the running hash check. */
     private final AtomicInteger _checkProgress = new AtomicInteger();
+    /** When storage was last read or written. */
     private final AtomicLong _activity = new AtomicLong();
+    /** File names excluded from the download. */
     private List<String> _filesExcluded = new ArrayList<>();
     /** Files or folders that exist but could not be read (e.g. permissions). */
     private List<String> _unreadableFiles = new ArrayList<>();
@@ -134,13 +153,18 @@ public class Storage implements Closeable {
     /** Default priority value for files. */
     public static final int PRIORITY_NORMAL = 0;
 
+    /** Cached sanitized file names. */
     private static final Map<String, String> _filterNameCache =
             new ConcurrentHashMap<>();
 
+    /** True when running on Windows. */
     private static final boolean _isWindows = SystemVersion.isWindows();
+    /** True when running on ARM. */
     private static final boolean _isARM = SystemVersion.isARM();
 
+    /** Buffer size for piece reads and writes. */
     private static final int BUFSIZE = PeerState.PARTSIZE;
+    /** Pooled buffers for piece data. */
     private static final ByteCache _cache = ByteCache.getInstance(16, BUFSIZE);
 
     /** Cap on the buffer used for piece verification during a full recheck; checking never
@@ -159,6 +183,7 @@ public class Storage implements Closeable {
     private static final int MAX_CONCURRENT_CHECKS = Math.max(1,
             I2PAppContext.getGlobalContext().getProperty("i2psnark.maxConcurrentChecks", 4));
 
+    /** Limits how many torrents hash-check at once. */
     private static final Semaphore _checkSemaphore = new Semaphore(MAX_CONCURRENT_CHECKS, true);
 
     /** The default piece size for new torrents. */
@@ -483,6 +508,14 @@ public class Storage implements Closeable {
         }
     }
 
+    /**
+     * Lists the files on disk matching the torrent.
+     *
+     * @param base the base directory
+     * @param filters the filters selecting the files
+     * @return the matching files
+     * @throws IOException if the directory cannot be read
+     */
     private List<TorrentFile> getFiles(File base, List<TorrentCreateFilter> filters)
             throws IOException {
         if (base.getAbsolutePath().equals("/")) {
@@ -558,6 +591,13 @@ public class Storage implements Closeable {
         return excludedNames;
     }
 
+    /**
+     * Returns a file's path relative to the base directory.
+     *
+     * @param path the file path
+     * @param base the base directory
+     * @return the folder path with forward slashes
+     */
     private String getFolderHierarchy(Path path, Path base) {
         Path relativePath = base.relativize(path);
         Path parent = relativePath.getParent();
@@ -1385,6 +1425,7 @@ public class Storage implements Closeable {
         }
     }
 
+    /** Characters illegal in file names. */
     private static final char[] ILLEGAL =
             new char[] {
                 '<',
@@ -1475,7 +1516,10 @@ public class Storage implements Closeable {
                 0x200f
             };
 
-    // https://docs.microsoft.com/en-us/windows/desktop/FileIO/naming-a-file
+    /**
+     * Names Windows reserves for devices.
+     * See also: <a href="https://docs.microsoft.com/en-us/windows/desktop/FileIO/naming-a-file">Windows file naming</a>
+     */
     private static final String[] WIN_ILLEGAL =
             new String[] {
                 "con", "prn", "aux", "nul", "com1", "com2", "com3", "com4", "com5", "com6", "com7",
@@ -1500,7 +1544,6 @@ public class Storage implements Closeable {
          return filterName(name);
      }
 
-        // <p>TODO: If multiple files in the same torrent map to the same filter name, the whole torrent
     /**
      * Removes 'suspicious' characters from the given file name.
      * http://msdn.microsoft.com/en-us/library/aa365247%28VS.85%29.aspx Then replace chars not
@@ -1807,7 +1850,6 @@ public class Storage implements Closeable {
         return changed;
     }
 
-        // <p>TODO thread the checking so we can return and display something on the UI
     /**
      * This is called at the beginning, and at presumed completion, so we have to be careful about
      * locking.
@@ -2293,7 +2335,6 @@ public class Storage implements Closeable {
         }
     }
 
-        // does the recheck here. TODO thread the recheck?
     /**
      * Put the piece in the Storage if it is correct. Warning - takes a LONG time if complete as it.
      *
@@ -2627,6 +2668,14 @@ public class Storage implements Closeable {
         }
     }
 
+    /**
+     * Reads a piece without checking its hash.
+     *
+     * @param piece the piece number
+     * @param bs the array to fill
+     * @return the bytes read
+     * @throws IOException if a file read fails
+     */
     private int getUncheckedPiece(int piece, byte[] bs) throws IOException {
         return getUncheckedPiece(piece, bs, 0, getPieceLength(piece));
     }
@@ -2664,6 +2713,16 @@ public class Storage implements Closeable {
         return true;
     }
 
+    /**
+     * Reads part of a piece without checking its hash.
+     *
+     * @param piece the piece number
+     * @param bs the array to fill
+     * @param off the offset in the array
+     * @param length the bytes to read
+     * @return the bytes read
+     * @throws IOException if a file read fails
+     */
     private int getUncheckedPiece(int piece, byte[] bs, int off, int length) throws IOException {
         return getUncheckedPiece(piece, bs, off, length, false);
     }
@@ -2728,8 +2787,11 @@ public class Storage implements Closeable {
      * @since 0.9.71+
      */
     private final class FileCursor {
+        /** Index of the file holding the piece. */
         private int i;
+        /** Length of the file being read. */
         private long raflen;
+        /** Offset where the piece starts in the file. */
         private long start;
 
         /**
@@ -2757,7 +2819,7 @@ public class Storage implements Closeable {
         /**
          * The file containing the cursor position.
          *
-         * @return the file containing the cursor position
+         * @return the file the cursor currently sits in
          */
         TorrentFile getFile() {
             return _torrentFiles.get(i);
@@ -2766,7 +2828,7 @@ public class Storage implements Closeable {
         /**
          * The offset of the cursor within the current file.
          *
-         * @return the offset of the cursor within the current file
+         * @return the byte offset inside that file
          */
         long getOffset() {
             return start;
@@ -2799,6 +2861,7 @@ public class Storage implements Closeable {
         }
     }
 
+    /** A file handle is closed after 4 minutes idle. */
     private static final long RAF_CLOSE_DELAY = 4 * (long) 60 * 1000;
 
     /** Close unused RAFs - call periodically. */
@@ -2815,7 +2878,9 @@ public class Storage implements Closeable {
      * @since 0.9.9
      */
     private class TorrentFile implements Comparable<TorrentFile> {
+        /** The file's length in bytes. */
         public final long length;
+        /** The file's path relative to the base directory. */
         public final String name;
 
         /**
@@ -2860,13 +2925,21 @@ public class Storage implements Closeable {
         /** Priority by file; default 0. */
         public volatile int priority;
 
-        /** For new metainfo from files; use base == f for single-file torrent. */
+        /** For new metainfo from files; use base == f for single-file torrent.
+         *
+         * @param base the data dir, or the base file for a single-file torrent
+         * @param f the file to track
+         */
         public TorrentFile(File base, File f) {
             this(base, f, f.length());
         }
 
         /**
          * For existing metainfo with specified file length; use base == f for single-file torrent.
+         *
+         * @param base the data dir, or the base file for a single-file torrent
+         * @param f the file to track
+         * @param len the file length from the metainfo, in bytes
          */
         public TorrentFile(File base, File f, long len) {
             this(base, f, len, false);
@@ -2875,6 +2948,11 @@ public class Storage implements Closeable {
         /**
          * For existing metainfo; a padding file is a synthetic BEP 47 zero-fill entry whose pieces
          * hash as zeros. The runtime never creates, allocates, or writes it to disk.
+         *
+         * @param base the data dir, or the base file for a single-file torrent
+         * @param f the file to track
+         * @param len the file length from the metainfo, in bytes
+         * @param padding true for a synthetic BEP 47 padding file
          */
         public TorrentFile(File base, File f, long len, boolean padding) {
             this(base, f, f, null, len, padding);
@@ -2912,12 +2990,12 @@ public class Storage implements Closeable {
             movedToDataDir = workFile == null;
         }
 
-        /*
-         * For each of the following, caller must synchronize on RAFlock[i]... except at the
-         * beginning if you're careful
-         */
 
-        /** This must be called before using the RAF to ensure it is open locking: this. */
+        /** This must be called before using the RAF to ensure it is open locking: this.
+         *
+         * @return the open handle, null only if the open failed
+         * @throws IOException if the file cannot be opened
+         */
         public synchronized RandomAccessFile checkRAF() throws IOException {
             if (raf != null) {
                 RAFtime = System.currentTimeMillis();
@@ -2935,6 +3013,7 @@ public class Storage implements Closeable {
          * read-only one first, and attempts to make the file writable if
          * permissions deny it.
          *
+         * @param forceRW true to force a read-write handle
          * @return the read-write handle
          * @throws IOException if the file cannot be opened read-write
          * @since 0.9.71+
@@ -2956,23 +3035,38 @@ public class Storage implements Closeable {
             return raf;
         }
 
-        /** Locking: this. */
+        /** Locking: this.
+         *
+         * @throws IOException if the file cannot be opened
+         */
         private synchronized void openRAF() throws IOException {
             openRAF(_probablyComplete);
         }
 
-        /** Locking: this. */
+        /** Locking: this.
+         *
+         * @param readonly true to open the file read-only
+         * @throws IOException if the file cannot be opened
+         */
         private synchronized void openRAF(boolean readonly) throws IOException {
             openRAF(readonly, false);
         }
 
-        /** Locking: this. */
+        /** Locking: this.
+         *
+         * @param readonly true to prefer a read-only open
+         * @param forceRW true to force a read-write open regardless of writability
+         * @throws IOException if the file cannot be opened
+         */
         private synchronized void openRAF(boolean readonly, boolean forceRW) throws IOException {
             raf = new RandomAccessFile(RAFfile, forceRW ? "rw" : (readonly || !RAFfile.canWrite()) ? "r" : "rw");
             RAFtime = System.currentTimeMillis();
         }
 
-        /** Close if last used time older than cutoff. locking: this. */
+        /** Close if last used time older than cutoff. locking: this.
+         *
+         * @param cutoff the time to compare against, in ms since epoch
+         */
         public synchronized void closeRAF(long cutoff) {
             if (RAFtime > 0 && RAFtime < cutoff) {
                 try {
@@ -2981,7 +3075,10 @@ public class Storage implements Closeable {
             }
         }
 
-        /** Can be called even if not open locking: this. */
+        /** Can be called even if not open locking: this.
+         *
+         * @throws IOException if the handle cannot be closed
+         */
         public synchronized void closeRAF() throws IOException {
             RAFtime = 0;
             if (raf == null) {
@@ -3000,6 +3097,8 @@ public class Storage implements Closeable {
          *
          * <p>Opens the file read-write through checkRAF(true); the caller must synchronize
          * and call {@link #closeRAF()}.
+         *
+         * @throws IOException if the file does not exist or cannot be extended
          */
         public synchronized void allocateFile() throws IOException {
             // caller synchronized
@@ -3039,6 +3138,7 @@ public class Storage implements Closeable {
          *
          * <p>Caller must synchronize and call checkRAF() or {@link #openRAF()}.
          *
+         * @throws IOException if the file cannot be written
          * @since 0.9.1
          */
         private synchronized void balloonFile() throws IOException {

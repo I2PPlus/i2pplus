@@ -20,16 +20,26 @@ import net.i2p.util.SimpleTimer2;
  */
 class BackgroundChecker {
 
+    /** The mailbox checked in the background. */
     private final POP3MailBox mailbox;
+    /** The message ids marked for deletion. */
     private final Set<String> toDelete;
+    /** The timer scheduling the checks. */
     private final SimpleTimer2.TimedEvent timer;
+    /** True while a check is running. */
     private volatile boolean isChecking;
+    /** True once the mailbox is shut down. */
     private volatile boolean isDead;
+    /** Logger for the background checker. */
     private final Log _log;
 
+    /** Default interval between the checks, in minutes. */
     private static final int DEFAULT_CHECK_MINUTES = 3*60;
+    /** Smallest check interval allowed, in minutes. */
     private static final int MIN_CHECK_MINUTES = 15;
+    /** Least idle time before a check runs. */
     private static final long MIN_IDLE = 30*(long) 60*1000;
+    /** Least time since the last check. */
     private static final long MIN_SINCE = 60*(long) 60*1000;
 
     /**
@@ -62,6 +72,11 @@ class BackgroundChecker {
         timer.cancel();
     }
 
+    /**
+     * Reads the check interval from the config.
+     *
+     * @return the interval between checks, in ms
+     */
     private long getCheckTime() {
         int minutes = DEFAULT_CHECK_MINUTES;
         String con = Config.getProperty(WebMail.CONFIG_CHECK_MINUTES);
@@ -76,6 +91,7 @@ class BackgroundChecker {
         return (long) minutes * 60 * 1000L;
     }
 
+    /** Timer event starting the periodic mailbox checks. */
     private class Checker extends SimpleTimer2.TimedEvent {
 
         /** Schedule first check. */
@@ -106,6 +122,7 @@ class BackgroundChecker {
         }
     }
 
+    /** Thread fetching the new messages of a check. */
     private class Getter extends I2PAppThread {
         /** Thread that runs the mail check. */
         public Getter() {super("Susimail-Getter");}

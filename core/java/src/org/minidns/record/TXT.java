@@ -29,6 +29,7 @@ import java.util.List;
  */
 public class TXT extends Data {
 
+    /** The record's bytes. */
     private final byte[] blob;
 
     /**
@@ -63,6 +64,7 @@ public class TXT extends Data {
         return blob.clone();
     }
 
+    /** Cache of the text of the first string. */
     private transient String textCache;
 
     /**
@@ -85,6 +87,7 @@ public class TXT extends Data {
         return textCache;
     }
 
+    /** Cache of the strings in the record. */
     private transient List<String> characterStringsCache;
 
     /**

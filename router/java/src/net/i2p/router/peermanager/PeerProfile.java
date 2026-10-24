@@ -13,7 +13,6 @@ import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
-// TODO most of the methods should be synchronized.
 /**
  * Copied from http://www.i2p2.i2p/how_peerselection.html
  * <p>
@@ -30,25 +29,34 @@ import net.i2p.util.SystemVersion;
 */
 
 public class PeerProfile {
+    /** Logger for this peer's profile. */
     private final Log _log;
+    /** The router context. */
     private final RouterContext _context;
-    // whoozaat?
+    /** The peer this profile describes. */
     private final Hash _peer;
-    // general peer stats
+    /** When we first heard about this peer. */
     private long _firstHeardAbout;
+    /** When we last heard about this peer. */
     private long _lastHeardAbout;
+    /** When a send to this peer last succeeded. */
     private long _lastSentToSuccessfully;
+    /** When a send to this peer last failed. */
     private long _lastFailedSend;
+    /** When we last received from this peer. */
     private long _lastHeardFrom;
+    /** Average tunnel test response time, in ms. */
     private float _tunnelTestResponseTimeAvg;
+    /** When the tunnel test average was last updated. */
     private long _tunnelTestTimeAvgLastUpdate;
+    /** Average direct ping response time, in ms. */
     private float _peerTestResponseTimeAvg;
-    // periodic rates
+    /** Rate stat for netdb response times. */
     private RateStat _dbResponseTime;
+    /** Rate stat for tunnel build response times. */
     private RateStat _tunnelCreateResponseTime;
+    /** Rate stat for netdb introductions. */
     private RateStat _dbIntroduction;
-    // calculation bonuses
-    // ints to save some space
     /**
      * Retained for backward compatibility with stored profile data. No longer
      * used for routing decisions; reads/writes go through the lowLatency flag.
@@ -58,30 +66,37 @@ public class PeerProfile {
      * Last update time of the speed bonus, for the 4-hour expiry.
      */
     private long _speedBonusLastUpdate;
+    /** Bonus points for high measured capacity. */
     private int _capacityBonus;
+    /** When the capacity bonus was last recomputed. */
     private long _capacityBonusLastUpdate;
+    /** Bonus points for good netdb integration. */
     private int _integrationBonus;
-    // calculation values
-    // floats to save some space
+    /** Computed speed score for this peer. */
     private float _speedValue;
+    /** Computed capacity score for this peer. */
     private float _capacityValue;
+    /** Computed integration score for this peer. */
     private float _integrationValue;
-    // new calculation values, to be updated
-    // floats to save some space
+    /** Speed score computed by the new calculator. */
     private float _speedValueNew;
+    /** Capacity score computed by the new calculator. */
     private float _capacityValueNew;
-    // are we in coalescing state?
+    /** Whether the profile is in coalescing state. */
     private boolean _coalescing;
-    // good vs bad behavior
+    /** History of tunnel successes and failures. */
     private TunnelHistory _tunnelHistory;
+    /** History of netdb successes and failures. */
     private DBHistory _dbHistory;
     /** Floodfill reliability classification based on proven request-handling history. Persisted. */
     private FloodfillReliability _floodfillReliability;
-    // does this peer profile contain expanded data, or just the basics?
+    /** Whether the tunnel history is expanded. */
     private boolean _expanded;
+    /** Whether the netdb history is expanded. */
     private boolean _expandedDB;
     /** Low latency flag, set when peer responds quickly to tunnel builds, persisted. */
     private volatile boolean _lowLatency;
+    /** Keyspace distance from us, for profile sorting. */
     private final int _distance;
     /** Packet-loss (retransmit) ratio reported by the transport, 0.0 = unknown/healthy. Not persisted. */
     private transient volatile float _lossRatio;
@@ -102,7 +117,9 @@ public class PeerProfile {
      * reorder/insert values on coalesce.
      */
     private final float[] _peakThroughput = new float[THROUGHPUT_COUNT];
+    /** Throughput total for the current measurement period. */
     private final AtomicLong _peakThroughputCurrentTotal = new AtomicLong();
+    /** Peak tunnel throughputs per period. */
     private final float[] _peakTunnelThroughput = new float[THROUGHPUT_COUNT];
     /** Total number of bytes pushed through a single tunnel in a 1 minute period. */
     private final float[] _peakTunnel1mThroughput = new float[THROUGHPUT_COUNT];
@@ -112,16 +129,23 @@ public class PeerProfile {
      * @since 0.9.71+
      */
     private final Object _peakTunnel1mLock = new Object();
+    /** When the last tunnel test of this peer started. */
     private long _lastTestStarted;
+    /** When the throughput totals were last updated. */
     private volatile long _lastThroughputUpdate;
+    /** When the profile was last coalesced. */
     private long _lastCoalesceDate = System.currentTimeMillis();
+    /** Rate stat periods for tunnel build responses. */
     private static final long[] TUNNEL_CREATE_RESPONSE_RATES = {
         RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR, RateConstants.ONE_DAY
     };
+    /** Rate stat periods for netdb responses. */
     private static final long[] DB_RESPONSE_RATES = { RateConstants.ONE_HOUR };
+    /** Rate stat periods for netdb introductions. */
     private static final long[] DB_INTRODUCTION_RATES = {
         RateConstants.ONE_HOUR, RateConstants.ONE_DAY
     };
+    /** Profile age needed before coalescing. */
     private static final long MIN_AGE_FOR_COALESCE = 4 * RateConstants.ONE_HOUR;
 
     /**
@@ -137,7 +161,8 @@ public class PeerProfile {
     }
 
     /**
-     * Caller should call {@link #setLastHeardAbout} and setFirstHeardAbout().
+     * Caller should call {@link #setLastHeardAbout(long)} and
+     * {@link #setFirstHeardAbout(long)}.
      *
      * @param context the router context
      * @param peer non-null
@@ -145,8 +170,10 @@ public class PeerProfile {
     public PeerProfile(RouterContext context, Hash peer) {this(context, peer, false);}
 
     /**
-     * Caller should call setLastHeardAbout() and {@link #setFirstHeardAbout()}.
+     * Caller should call {@link #setLastHeardAbout(long)} and
+     * {@link #setFirstHeardAbout(long)}.
      *
+     * @param context the router context
      * @param peer non-null
      * @param expand whether to eagerly expand (default false; auto-expanded on first use)
      */
@@ -442,9 +469,17 @@ public class PeerProfile {
      */
     public void setLastSendSuccessful(long when) {_lastSentToSuccessfully = when;}
 
-    /** Measured direct-link RTT in ms, or 0 when never measured. @since 0.9.71+. */
+    /**
+     * Measured direct-link RTT in ms, or 0 when never measured.
+     *
+     * @since 0.9.71+
+     */
     private volatile int _firstHopRtt;
-    /** When {@link #_firstHopRtt} was last refreshed, in ms since the epoch. @since 0.9.71+. */
+    /**
+     * When {@link #_firstHopRtt} was last refreshed, in ms since the epoch.
+     *
+     * @since 0.9.71+
+     */
     private volatile long _firstHopRttTime;
 
     /**
@@ -897,7 +932,7 @@ public class PeerProfile {
     /**
      * Timestamp when the EWMA was last updated.
      *
-     * @return timestamp when the EWMA was last updated
+     * @return the time, in ms
      */
     public long getTunnelTestTimeAvgLastUpdate() {return _tunnelTestTimeAvgLastUpdate;}
 
@@ -1057,7 +1092,7 @@ void recalculateLowLatency() {
     /**
      * The peak throughput in KBps.
      *
-     * @return the peak throughput in KBps
+     * @return the sum over all periods
      */
     public float getPeakThroughputKBps() {
         float rv = 0;
@@ -1109,7 +1144,7 @@ void recalculateLowLatency() {
     /**
      * The peak tunnel throughput in KBps.
      *
-     * @return the peak tunnel throughput in KBps
+     * @return the sum over all periods
      */
     public float getPeakTunnelThroughputKBps() {
         float rv = 0;
@@ -1202,7 +1237,7 @@ void recalculateLowLatency() {
     /**
      * The timestamp of the last throughput update.
      *
-     * @return the timestamp of the last throughput update
+     * @return the time, in ms
      */
     long getLastThroughputUpdate() {return _lastThroughputUpdate;}
 
@@ -1216,7 +1251,7 @@ void recalculateLowLatency() {
     /**
      * The timestamp of the last test start.
      *
-     * @return the timestamp of the last test start
+     * @return the time, in ms
      */
     public long getLastTestStarted() {return _lastTestStarted;}
 
@@ -1369,8 +1404,23 @@ void recalculateLowLatency() {
         }
     }
 
+    /**
+     * Recomputes the speed score from the history.
+     *
+     * @return the new speed score
+     */
     private float calculateSpeed() {return (float) SpeedCalculator.calc(this);}
+    /**
+     * Recomputes the capacity score from the history.
+     *
+     * @return the new capacity score
+     */
     private float calculateCapacity() {return (float) CapacityCalculator.calc(this);}
+    /**
+     * Recomputes the integration score from the history.
+     *
+     * @return the new integration score
+     */
     private float calculateIntegration() {return (float) IntegrationCalculator.calc(this);}
 
     /**

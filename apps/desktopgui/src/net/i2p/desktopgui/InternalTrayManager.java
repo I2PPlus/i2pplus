@@ -27,16 +27,23 @@ import net.i2p.util.Translate;
  */
 class InternalTrayManager extends TrayManager {
 
+    /** The router context. */
     private final RouterContext _context;
+    /** Logger for the tray menu. */
     private final Log log;
+    /** The main application object. */
     private final Main _main;
+    /** Menu items of the tray popup. */
     private MenuItem _browserItem, _configItem, _restartItem, _stopItem,
                      _restartHardItem, _stopHardItem, _cancelItem;
+    /** Menu items of the Java menu bar. */
     private JMenuItem _jstatusItem, _jbrowserItem, _jconfigItem, _jrestartItem, _jstopItem,
                        _jrestartHardItem, _jstopHardItem, _jcancelItem;
 
+    /** True if the desktop console can be opened. */
     private static final boolean CONSOLE_ENABLED = Desktop.isDesktopSupported() &&
                                                    Desktop.getDesktop().isSupported(Action.BROWSE);
+    /** Bundle holding the translated console strings. */
     private static final String CONSOLE_BUNDLE_NAME = "net.i2p.router.web.messages";
 
     /**

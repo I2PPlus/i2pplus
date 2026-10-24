@@ -9,11 +9,17 @@ import net.i2p.util.SystemVersion;
  * Use {@link net.i2p.client.streaming.I2PSocketManager#buildOptions} to get one of these.
  */
 class I2PSocketOptionsImpl implements I2PSocketOptions {
+    /** How long a connect may wait, in ms. */
     private long _connectTimeout;
+    /** How long a read may wait, in ms. */
     private long _readTimeout;
+    /** How long a write may wait, in ms. */
     private long _writeTimeout;
+    /** Largest send or receive buffer allowed, in bytes. */
     private int _maxBufferSize;
+    /** The local port of the socket. */
     private int _localPort;
+    /** The remote port of the socket. */
     private int _remotePort;
 
     /**

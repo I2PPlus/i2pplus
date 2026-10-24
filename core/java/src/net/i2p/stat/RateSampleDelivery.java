@@ -55,16 +55,31 @@ class RateSampleDelivery {
 
     /** One coalesced sample, detached from the {@link Rate} that produced it. */
     private static final class Sample {
+        /** The listener to notify with the sample. */
         final RateSummaryListener listener;
+        /** The total value the sample sums up. */
         final double totalValue;
+        /** The number of events in the sample. */
         final long eventCount;
+        /** The total event time in the sample. */
         final double totalEventTime;
+        /** The period the sample covers, in ms. */
         final long period;
         /** The sample's archive step stamp, carried from {@link Rate#coalesce}. */
         final long timestampMs;
         /** {@code timestampMs / period}: the archive step this sample is for. */
         final long step;
 
+        /**
+         * Builds one sample to deliver.
+         *
+         * @param listener the listener to notify
+         * @param totalValue the total value summed
+         * @param eventCount the number of events
+         * @param totalEventTime the total event time
+         * @param period the period covered, in ms
+         * @param timestampMs when the sample was taken
+         */
         Sample(RateSummaryListener listener, double totalValue, long eventCount,
                double totalEventTime, long period, long timestampMs) {
             this.listener = listener;
@@ -77,20 +92,26 @@ class RateSampleDelivery {
         }
     }
 
+    /** The samples waiting to be delivered. */
     private final LinkedBlockingDeque<Sample> _queue;
     /** Retained capacity, kept for the overrun report. */
     private final int _capacity;
+    /** True while the delivery thread should run. */
     private final AtomicBoolean _running = new AtomicBoolean(true);
     /** Overruns reported so far; see {@link #reportOverruns} for the consumer-only reader. */
     private final AtomicLong _overruns = new AtomicLong();
+    /** Samples dropped in favour of newer ones. */
     private final AtomicLong _superseded = new AtomicLong();
+    /** Samples delivered to their listeners. */
     private final AtomicLong _delivered = new AtomicLong();
     /**
      * Overruns already written to the log. Touched only by the consumer thread,
      * so it needs no synchronisation.
      */
     private long _reportedOverruns;
+    /** The app context. */
     private final I2PAppContext _context;
+    /** The thread delivering the samples. */
     private final Thread _thread;
 
     /**
@@ -297,6 +318,7 @@ class RateSampleDelivery {
         }
     }
 
+    /** Delivers the queued samples to their listeners. */
     private void run() {
         while (_running.get() || !_queue.isEmpty()) {
             reportOverruns();
@@ -360,6 +382,8 @@ class RateSampleDelivery {
 
     /** Stops the consumer on router shutdown. */
     private class Shutdown implements Runnable {
+        /** Delivers the remaining samples when the JVM exits. */
+        private Shutdown() {}
         @Override
         public void run() {
             shutdown();

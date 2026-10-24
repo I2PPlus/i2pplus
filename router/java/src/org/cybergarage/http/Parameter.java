@@ -11,7 +11,9 @@ package org.cybergarage.http;
  * query parameters, form data, and HTTP headers.
  */
 public class Parameter {
+    /** The parameter's name. */
     private String name = new String();
+    /** The parameter's value. */
     private String value = new String();
 
     /** Creates a new empty Parameter with null name and value. */

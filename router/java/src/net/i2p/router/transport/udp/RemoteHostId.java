@@ -11,9 +11,13 @@ import net.i2p.util.Addresses;
  *
  */
 final class RemoteHostId {
+    /** The peer's address bytes. */
     private final byte[] _ip;
+    /** The peer's SSU port. */
     private final int _port;
+    /** The peer's hash, if known. */
     private final Hash _peerHash;
+    /** Precomputed hash of the id. */
     private final int _hashCode;
 
     /**
@@ -33,6 +37,13 @@ final class RemoteHostId {
         this(null, 0, peerHash);
     }
 
+    /**
+     * Combines an address, port and hash into one key.
+     *
+     * @param ip the address bytes
+     * @param port the SSU port
+     * @param peerHash the peer's hash, may be null
+     */
     private RemoteHostId(byte[] ip, int port, Hash peerHash) {
         _ip = ip;
         _port = port;

@@ -15,7 +15,10 @@ import java.nio.channels.FileChannel.MapMode;
  * Provides thread-safe access to database data either memory-mapped or loaded into memory.
  */
 final class BufferHolder {
-    // DO NOT PASS OUTSIDE THIS CLASS. Doing so will remove thread safety.
+    /**
+     * The buffer backing the reads. Do not pass it outside this class - doing
+     * so removes the thread safety.
+     */
     private final ByteBuffer buffer;
 
     /**

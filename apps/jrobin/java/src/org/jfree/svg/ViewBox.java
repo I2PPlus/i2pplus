@@ -7,12 +7,16 @@ package org.jfree.svg;
  */
 public class ViewBox {
 
+    /** Left edge of the viewBox. */
     private final int minX;
 
+    /** Top edge of the viewBox. */
     private final int minY;
 
+    /** Width of the viewBox. */
     private final int width;
 
+    /** Height of the viewBox. */
     private final int height;
 
     /**

@@ -72,6 +72,7 @@ public class UPnPStatus {
     ////////////////////////////////////////////////
 
     private int code;
+    /** Human-readable description of the status. */
     private String description;
 
     /** Creates a new UPnPStatus with default values (code 0, empty description). */

@@ -30,6 +30,7 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
      * The I2CP message type number for an expiry-timed send request.
      */
     public static final int MESSAGE_TYPE = 36;
+    /** When the message expires, together with its flags. */
     private final DateAndFlags _daf;
 
     /**

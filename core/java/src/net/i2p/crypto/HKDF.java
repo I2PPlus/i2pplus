@@ -29,7 +29,9 @@ import javax.crypto.SecretKey;
  */
 public final class HKDF {
 
+    /** Supplies the PRNG the derivation runs on. */
     private final I2PAppContext _context;
+    /** The byte 1, first value the expand step hashes. */
     private static final byte[] ONE = new byte[] {1};
 
     /**

@@ -93,25 +93,33 @@ public class Rate {
      */
     private static final int RECENT_SAMPLE_RING = 8;
 
-    /*
-     * Field visibility is split three ways. The four per-event fields are plain:
-     * every writer (addData, coalesce, load) holds this monitor and the fields
-     * are private, so their getters take it too - trading a barrier on every
-     * event for one uncontended acquisition by the reader. The per-period fields
-     * below stay volatile so that polled readers such as getLastEventCount()
-     * remain lock-free.
+    /**
+     * Value accumulated in the current period. The per-event fields are
+     * plain and guarded by this monitor, while the per-period fields below
+     * stay volatile so the polled readers stay lock-free.
      */
     private float _currentTotalValue;
+    /** Events counted in the current period. */
     private int _currentEventCount;
+    /** Event time accumulated in the current period. */
     private volatile int _currentTotalEventTime;
+    /** Value of the last complete period. */
     private volatile float _lastTotalValue;
+    /** Events of the last complete period. */
     private volatile int _lastEventCount;
+    /** Event time of the last complete period. */
     private volatile int _lastTotalEventTime;
+    /** Value kept for the extreme value display. */
     private volatile float _extremeTotalValue;
+    /** Events behind the extreme value. */
     private volatile int _extremeEventCount;
+    /** Event time behind the extreme value. */
     private volatile int _extremeTotalEventTime;
+    /** Value accumulated since creation. */
     private float _lifetimeTotalValue;
+    /** Events counted since creation. */
     private long _lifetimeEventCount;
+    /** Event time accumulated since creation. */
     private volatile long _lifetimeTotalEventTime;
     /**
      * Volatile because the registering thread (console startup) writes it with the
@@ -121,8 +129,10 @@ public class Rate {
      * another, and the listener can end up registered but never notified.
      */
     private volatile RateSummaryListener _graphListener;
+    /** The stat this rate belongs to. */
     private RateStat _stat;
 
+    /** When the rate was last coalesced. */
     private volatile long _lastCoalesceDate;
     /**
      * Wall clock of the last successful coalesce, kept apart from
@@ -135,7 +145,9 @@ public class Rate {
      * carries the real elapsed span the rescale is defined against.
      */
     private volatile long _lastCoalesceNow;
+    /** When the rate was created. */
     private volatile long _creationDate;
+    /** The period length, in ms. */
     private volatile int _period;
     /**
      * How many times {@link #coalesce} declined to coalesce because the period
@@ -1109,6 +1121,11 @@ public class Rate {
         return buf.toString();
     }
 
+    /**
+     * Returns the current time for the statistics.
+     *
+     * @return the time, in epoch ms
+     */
     private static final long now() {
         // "event time" is in the stat log (and uses Clock).
         // we just want sequential and stable time here, so use the OS time, since it doesn't skew periodically

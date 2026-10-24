@@ -36,9 +36,13 @@ import net.i2p.util.Log;
  */
 public class AuthenticateHandler implements RequestHandler {
 
+    /** Logger for this class. */
     private static final Log _log = new Log(AuthenticateHandler.class);
+    /** Arguments the request must carry. */
     private static final String[] requiredArgs = {"Password", "API"};
+    /** Reads the request's arguments. */
     private final JSONRPC2Helper _helper;
+    /** Issues the token on success. */
     private final SecurityManager _secMan;
 
     /**

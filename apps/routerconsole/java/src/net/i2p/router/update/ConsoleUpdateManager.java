@@ -66,10 +66,15 @@ import net.i2p.util.VersionComparator;
  */
 public class ConsoleUpdateManager implements UpdateManager, RouterApp {
 
+    /** The router context. */
     private final RouterContext _context;
+    /** Logger for the console updates. */
     private final Log _log;
+    /** The registered updaters that perform the downloads. */
     private final Collection<RegisteredUpdater> _registeredUpdaters;
+    /** The registered checkers that look for new updates. */
     private final Collection<RegisteredChecker> _registeredCheckers;
+    /** Post-processors, by update type. */
     private final Map<Integer, UpdatePostProcessor> _registeredPostProcessors;
     /** Active checking tasks. */
     private final Collection<UpdateTask> _activeCheckers;
@@ -81,24 +86,38 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     private final Map<UpdateItem, Version> _downloaded;
     /** Downloaded AND installed. */
     private final Map<UpdateItem, Version> _installed;
+    /** True if torrent updates are allowed. */
     private final boolean _allowTorrent;
+    /** Formatter for the percentage display. */
     private static final DecimalFormat _pct = new DecimalFormat("0.0%");
+    /** The app manager used for restarts. */
     private final ClientAppManager _cmgr;
+    /** Current state of the update manager app. */
     private volatile ClientAppState _state = UNINITIALIZED;
 
+    /** Status message shown in the console, null if none. */
     private volatile String _status;
+    /** True while an external restart is pending. */
     private volatile boolean _externalRestartPending;
 
+    /** Default maximum time for one update attempt. */
     private static final long DEFAULT_MAX_TIME = 3*60*60*1000L;
+    /** Default delay before the first update check. */
     private static final long DEFAULT_CHECK_TIME = (long) 90*1000;
+    /** Time an update status message stays shown. */
     private static final long STATUS_CLEAN_TIME = 5 * (long) 60 * 1000; // 5 minutes sidebar notification persistence ?
+    /** Interval between stale task cleanups. */
     private static final long TASK_CLEANER_TIME = 15 * (long) 60 * 1000;
+    /** Config key enabling unsigned updates. */
     private static final String PROP_UNSIGNED_AVAILABLE = "router.updateUnsignedAvailable";
+    /** Config key enabling dev SU3 updates. */
     private static final String PROP_DEV_SU3_AVAILABLE = "router.updateDevSU3Available";
 
-    /*  @since 0.9.59+ */
+    /** Config key enabling torrent updates. */
     private static final String PROP_ENABLE_TORRENT_UPDATES = "router.enableTorrentUpdates";
+    /** Matches the detail of a verification failure message. */
     private static final Pattern FOR_CONTENT_PATTERN = Pattern.compile("for content.*");
+    /** Default setting for torrent updates. */
     private static final boolean DEFAULT_ENABLE_TORRENT_UPDATES = false;
 
     /**
@@ -126,8 +145,9 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     * Null if not found.
-     * @return null if not found
+     * Finds the registered console update manager app.
+     *
+     * @return the running instance, null if the app is not registered
      */
     public static ConsoleUpdateManager getInstance() {
         ClientAppManager cmgr = I2PAppContext.getGlobalContext().clientAppManager();
@@ -666,6 +686,15 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         return retry(ui, va.sourceMap, sorted, maxTime) != null;
     }
 
+    /**
+     * Schedules a retry of a failed update.
+     *
+     * @param ui the update item to retry
+     * @param sourceMap the source URIs, by method
+     * @param toTry the updaters still to try
+     * @param maxTime the maximum time for the whole update
+     * @return the scheduled task, null if none could be scheduled
+     */
     private UpdateTask retry(UpdateItem ui, Map<UpdateMethod, List<URI>> sourceMap,
                              List<RegisteredUpdater> toTry, long maxTime) {
         for (Iterator<RegisteredUpdater> iter = toTry.iterator(); iter.hasNext(); ) {
@@ -1461,6 +1490,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         return copied;
     }
 
+    /** Restarts the router console. */
     private void restart() {
         if (_context.hasWrapper()) {
             ConfigServiceHandler.registerWrapperNotifier(_context, Router.EXIT_GRACEFUL_RESTART, false);
@@ -1506,14 +1536,26 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      */
     public String _t(String s, Object o, Object o2) {return Messages.getString(s, o, o2, _context);}
 
+    /**
+     * Sets the status message shown in the console.
+     *
+     * @param s the message to show
+     */
     private void updateStatus(String s) {_status = s;}
 
+    /**
+     * Shows the final status message and schedules its cleanup.
+     *
+     * @param msg the message to show
+     */
     private void finishStatus(String msg) {
         updateStatus(msg);
         new StatusCleaner(msg).schedule(STATUS_CLEAN_TIME);
     }
 
+    /** Timer clearing an old update status message. */
     private class StatusCleaner extends SimpleTimer2.TimedEvent {
+        /** The status message this cleaner may clear. */
         private final String _msg;
         /**
          * Clears the status message once it has been displayed long enough.
@@ -1533,6 +1575,9 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      * Periodically drops checkers and downloaders whose tasks stopped running.
      */
     private class TaskCleaner extends SimpleTimer2.TimedEvent {
+        /** Discards finished update tasks. */
+        private TaskCleaner() {}
+
         /**
          * Reschedules itself, then evicts the checkers and downloaders
          * whose task is no longer running.
@@ -1669,8 +1714,9 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         }
 
         /**
-         * Hash code consistent with equals().
-         * @return a hash code consistent with equals()
+         * Hashes the fields compared by equals().
+         *
+         * @return the combined hash of those fields
          */
         @Override
         public int hashCode() {return checker.hashCode() ^ type.hashCode() ^ method.hashCode();}
@@ -1719,8 +1765,9 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         }
 
         /**
-         * Hash code consistent with equals().
-         * @return a hash code consistent with equals()
+         * Hashes the fields compared by equals().
+         *
+         * @return the combined hash of those fields
          */
         @Override
         public int hashCode() {return type.hashCode() ^ id.hashCode();}
@@ -1768,8 +1815,9 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         public int compareTo(Version r) {return VersionComparator.comp(versionStr, r.versionStr);}
 
         /**
-         * Hash code consistent with equals().
-         * @return a hash code consistent with equals()
+         * Hashes the fields compared by equals().
+         *
+         * @return the combined hash of those fields
          */
         @Override
         public int hashCode() {return versionStr.hashCode();}
@@ -1846,8 +1894,9 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         public boolean equals(Object o) {return super.equals(o) && (o instanceof VersionAvailable);}
 
         /**
-         * Hash code consistent with equals().
-         * @return a hash code consistent with equals()
+         * Hashes the fields compared by equals().
+         *
+         * @return the combined hash of those fields
          */
         @Override
         public int hashCode() {return super.hashCode();} // findbugs

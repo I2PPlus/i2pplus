@@ -130,20 +130,35 @@ public enum EncType {
      * @since 0.9.67
      */
     MLKEM1024_X25519_CT(100010, 1568, 0, EncAlgo.ECIES_MLKEM_INT, "EC/None/NoPadding", X25519_SPEC, "0.9.67");
+    /** The two byte encryption type code. */
     private final int code;
+    /** Length of the public key, in bytes. */
     private final int pubkeyLen;
+    /** Length of the private key, in bytes. */
     private final int privkeyLen;
+    /** The underlying algorithm family. */
     private final EncAlgo base;
+    /** Name of the algorithm for display. */
     private final String algoName;
+    /** Version that introduced this type. */
     private final String since;
+    /** Parameters of the algorithm, if any. */
     private final AlgorithmParameterSpec params;
+    /** True if the implementation is available. */
     private final boolean isAvail;
+    /** True for a post quantum type. */
     private final boolean isPQ;
 
     /**
      * Creates an encryption type with its parameters.
      *
      * @param transformation full JCE transformation string, e.g. "EC/None/NoPadding"
+     * @param cod the two byte encryption type code
+     * @param pubLen length of the public key, in bytes
+     * @param privLen length of the private key, in bytes
+     * @param baseAlgo the underlying algorithm family
+     * @param pSpec parameters of the algorithm, null if none
+     * @param supportedSince version that introduced this type
      */
     EncType(
             int cod,
@@ -240,6 +255,11 @@ public enum EncType {
         return isAvail;
     }
 
+    /**
+     * Checks whether the implementation loads.
+     *
+     * @return true if the cipher can be used
+     */
     private boolean x_isAvailable() {
         switch (base) {
             case ELGAMAL:
@@ -293,6 +313,7 @@ public enum EncType {
         return isPQ;
     }
 
+    /** The types indexed by their code. */
     private static final EncType[] BY_CODE;
 
     static {

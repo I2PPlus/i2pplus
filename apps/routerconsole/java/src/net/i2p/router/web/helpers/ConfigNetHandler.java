@@ -30,32 +30,51 @@ public class ConfigNetHandler extends FormHandler {
      */
     public ConfigNetHandler() {}
 
+    /** True when the form was submitted to save. */
     private boolean _saveRequested;
+    /** Form flag for requiring introductions. */
     private boolean _requireIntroductions;
+    /** Form flag for hidden mode. */
     private boolean _hiddenMode;
+    /** Form flag for dynamic key re-creation. */
     private boolean _dynamicKeys;
+    /** Form value for the NTCP bind address. */
     private String _ntcpHostname;
+    /** Form value for the NTCP port. */
     private String _ntcpPort;
+    /** Form value for the UDP bind address. */
     private String _udpHost1;
+    /** Form value for the UDP port. */
     private String _udpPort;
+    /** Form value for the UDP auto-detected IP. */
     private String _udpAutoIP;
+    /** Form value for the NTCP auto-detected IP. */
     private String _ntcpAutoIP;
+    /** Form flag for picking a random NTCP port. */
     private boolean _ntcpAutoPort;
+    /** Form flag for enabling UPnP. */
     private boolean _upnp;
+    /** Form flag for the laptop mode. */
     private boolean _laptop;
+    /** Form value for the inbound bandwidth limit. */
     private String _inboundRate;
-    //private String _inboundBurstRate;
-    //private String _inboundBurst;
+    /** Form value for the outbound bandwidth limit. */
     private String _outboundRate;
-    //private String _outboundBurstRate;
-    //private String _outboundBurst;
+    /** Form value for the share percentage. */
     private String _sharePct;
+    /** True to save the bandwidth limits only. */
     private boolean _ratesOnly;
+    /** Form flag for disabling UDP. */
     private boolean _udpDisabled;
+    /** Form value for the IPv6 mode. */
     private String _ipv6Mode;
+    /** Form flag for forcing IPv4 firewalled. */
     private boolean _ipv4Firewalled;
+    /** Form flag for forcing IPv6 firewalled. */
     private boolean _ipv6Firewalled;
+    /** Config changes to show after a save. */
     private final Map<String, String> changes = new HashMap<>();
+    /** Config key for hidden mode. */
     private static final String PROP_HIDDEN = Router.PROP_HIDDEN_HIDDEN; // see Router for other choice
 
     /**

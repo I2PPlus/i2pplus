@@ -460,7 +460,6 @@ public class Action {
      * @since 0.9.50
      */
     public boolean postControlAction(String fromHost) {
-        // Thanks for Giordano Sassaroli <sassarol@cefriel.it> (08/30/03)
         ArgumentList actionArgList = getArgumentList();
         ArgumentList actionInputArgList = getInputArgumentList();
         ActionRequest ctrlReq = new ActionRequest();
@@ -470,7 +469,6 @@ public class Action {
         ActionResponse ctrlRes = ctrlReq.post();
         if (Debug.isOn() == true) ctrlRes.print();
         setControlResponse(ctrlRes);
-        // Thanks for Dimas <cyberrate@users.sourceforge.net> and Stefano Lenzi
         // <kismet-sl@users.sourceforge.net> (07/09/04)
         int statCode = ctrlRes.getStatusCode();
         setStatus(statCode);

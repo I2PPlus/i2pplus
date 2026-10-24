@@ -24,11 +24,16 @@ import net.i2p.util.SystemVersion;
  */
 public class ExternalMain implements ClientApp, NotificationService {
 
+    /** The application context. */
     private final I2PAppContext _appContext;
+    /** Runs the client apps the tray shows. */
     private final ClientAppManager _mgr;
+    /** Logger for this class. */
     private final Log log;
+    /** The tray icon and its menu. */
     private TrayManager _trayManager;
 
+    /** Property asking for the Swing tray instead of the native one. */
     private static final String PROP_SWING = "desktopgui.swing";
 
     /**

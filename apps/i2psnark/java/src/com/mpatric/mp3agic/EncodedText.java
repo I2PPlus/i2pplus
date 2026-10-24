@@ -8,31 +8,46 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.util.Arrays;
 
+/** Text in an ID3 tag with one of the ID3 text encodings. */
 public class EncodedText {
 
+    /** Encoding id for ISO-8859-1 text. */
     public static final byte TEXT_ENCODING_ISO_8859_1 = 0;
+    /** Encoding id for UTF-16LE text. */
     public static final byte TEXT_ENCODING_UTF_16 = 1;
+    /** Encoding id for UTF-16BE text. */
     public static final byte TEXT_ENCODING_UTF_16BE = 2;
+    /** Encoding id for UTF-8 text. */
     public static final byte TEXT_ENCODING_UTF_8 = 3;
 
+    /** Charset name for ISO-8859-1 text. */
     public static final String CHARSET_ISO_8859_1 = "ISO-8859-1";
+    /** Charset name for UTF-16LE text. */
     public static final String CHARSET_UTF_16 = "UTF-16LE";
+    /** Charset name for UTF-16BE text. */
     public static final String CHARSET_UTF_16BE = "UTF-16BE";
+    /** Charset name for UTF-8 text. */
     public static final String CHARSET_UTF_8 = "UTF-8";
 
+    /** Charset names, indexed by encoding id. */
     private static final String[] characterSets = {
         CHARSET_ISO_8859_1, CHARSET_UTF_16, CHARSET_UTF_16BE, CHARSET_UTF_8
     };
 
+    /** Encoding ids tried when the encoding is unknown. */
     private static final byte[] textEncodingFallback = {0, 2, 1, 3};
 
+    /** Byte order marks, one per encoding. */
     private static final byte[][] boms = {
         {}, {(byte) 0xff, (byte) 0xfe}, {(byte) 0xfe, (byte) 0xff}, {}
     };
 
+    /** Terminator bytes, one per encoding. */
     private static final byte[][] terminators = {{0}, {0, 0}, {0, 0}, {0}};
 
+    /** The encoded text bytes. */
     private byte[] value;
+    /** The encoding id of the value. */
     private byte textEncoding;
 
     /**
@@ -73,22 +88,47 @@ public class EncodedText {
         throw new IllegalArgumentException("Invalid string, could not find appropriate encoding");
     }
 
+    /**
+     * Encodes a string in the given encoding.
+     *
+     * @param string the text to encode
+     * @param transcodeToTextEncoding the encoding id to transcode to
+     * @throws IllegalArgumentException if the text cannot be represented
+     * @throws CharacterCodingException if the encoding fails
+     */
     public EncodedText(String string, byte transcodeToTextEncoding)
             throws IllegalArgumentException, CharacterCodingException {
         this(string);
         setTextEncoding(transcodeToTextEncoding);
     }
 
+    /**
+     * Encodes a string with an explicit encoding.
+     *
+     * @param textEncoding the encoding id to use
+     * @param string the text to encode
+     */
     public EncodedText(byte textEncoding, String string) {
         this.textEncoding = textEncoding;
         value = stringToBytes(string, characterSetForTextEncoding(textEncoding));
         this.stripBomAndTerminator();
     }
 
+    /**
+     * Wraps already encoded bytes.
+     *
+     * @param value the encoded bytes
+     */
     public EncodedText(byte[] value) {
         this(textEncodingForBytesFromBOM(value), value);
     }
 
+    /**
+     * Guesses the encoding from a byte order mark.
+     *
+     * @param value the bytes to examine
+     * @return the encoding id, or zero if no mark was found
+     */
     private static byte textEncodingForBytesFromBOM(byte[] value) {
         if (value.length >= 2 && value[0] == (byte) 0xff && value[1] == (byte) 0xfe) {
             return TEXT_ENCODING_UTF_16;
@@ -104,6 +144,12 @@ public class EncodedText {
         }
     }
 
+    /**
+     * Returns the charset name for an encoding id.
+     *
+     * @param textEncoding the encoding id
+     * @return the charset name
+     */
     private static String characterSetForTextEncoding(byte textEncoding) {
         try {
             return characterSets[textEncoding];
@@ -112,6 +158,7 @@ public class EncodedText {
         }
     }
 
+    /** Removes a leading byte order mark and a trailing terminator. */
     private void stripBomAndTerminator() {
         int leadingCharsToRemove = 0;
         if (value.length >= 2
@@ -283,6 +330,14 @@ public class EncodedText {
         return true;
     }
 
+    /**
+     * Decodes bytes to a string.
+     *
+     * @param bytes the bytes to decode
+     * @param characterSet the charset name
+     * @return the decoded text
+     * @throws CharacterCodingException if the bytes cannot be decoded
+     */
     private static String bytesToString(byte[] bytes, String characterSet)
             throws CharacterCodingException {
         CharBuffer cbuf = bytesToCharBuffer(bytes, characterSet);
@@ -292,6 +347,14 @@ public class EncodedText {
         return s.substring(0, length);
     }
 
+    /**
+     * Decodes bytes to a char buffer.
+     *
+     * @param bytes the bytes to decode
+     * @param characterSet the charset name
+     * @return the decoded buffer
+     * @throws CharacterCodingException if the bytes cannot be decoded
+     */
     protected static CharBuffer bytesToCharBuffer(byte[] bytes, String characterSet)
             throws CharacterCodingException {
         Charset charset = Charset.forName(characterSet);
@@ -299,6 +362,13 @@ public class EncodedText {
         return decoder.decode(ByteBuffer.wrap(bytes));
     }
 
+    /**
+     * Encodes a string to bytes.
+     *
+     * @param s the text to encode
+     * @param characterSet the charset name
+     * @return the encoded bytes
+     */
     private static byte[] stringToBytes(String s, String characterSet) {
         try {
             return charBufferToBytes(CharBuffer.wrap(s), characterSet);
@@ -307,6 +377,14 @@ public class EncodedText {
         }
     }
 
+    /**
+     * Encodes a char buffer to bytes.
+     *
+     * @param charBuffer the buffer to encode
+     * @param characterSet the charset name
+     * @return the encoded bytes
+     * @throws CharacterCodingException if the buffer cannot be encoded
+     */
     protected static byte[] charBufferToBytes(CharBuffer charBuffer, String characterSet)
             throws CharacterCodingException {
         Charset charset = Charset.forName(characterSet);

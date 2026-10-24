@@ -23,6 +23,7 @@ import java.io.OutputStream;
  *
  */
 public class SessionId {
+    /** The session's 32-bit identifier. */
     private int _sessionId;
 
     /** Creates a new SessionId with default value -1. */
@@ -43,8 +44,8 @@ public class SessionId {
     }
 
     /**
-     * Session id.
-     * @return the session id
+     * Numeric identifier of the session.
+     * @return the session id, 0-65535
      */
     public int getSessionId() {
         return _sessionId;

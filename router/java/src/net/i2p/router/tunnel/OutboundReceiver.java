@@ -16,15 +16,22 @@ import net.i2p.util.Log;
  * Not used for zero-hop OBGWs.
  */
 class OutboundReceiver implements TunnelGateway.Receiver {
+    /** The router context. */
     private final RouterContext _context;
+    /** Logger for the outbound receiver. */
     private final Log _log;
+    /** The tunnel the messages go through. */
     private final TunnelCreatorConfig _config;
+    /** The cached next hop router info. */
     private RouterInfo _nextHopCache;
+    /** Send priority of the tunnel messages. */
     private final int _priority;
-    // same job used for all messages
+    /** The same job instance run after any failed send. */
     private final JobImpl _sendFailJob;
 
+    /** Time allowed for the next hop lookup. */
     private static final long MAX_LOOKUP_TIME = 15*1000L;
+    /** Send priority of our own tunnel messages. */
     private static final int PRIORITY = OutNetMessage.PRIORITY_MY_DATA;
 
     /**
@@ -80,6 +87,12 @@ class OutboundReceiver implements TunnelGateway.Receiver {
         return _config.getPeer(1);
     }
 
+    /**
+     * Queues the message for sending to the next hop.
+     *
+     * @param msg the message to send
+     * @param ri the next hop's router info
+     */
     private void send(TunnelDataMessage msg, RouterInfo ri) {
         if (_log.shouldDebug())
             _log.debug("Forwarding encrypted message via " + _config + " [MsgID" + msg.getUniqueId() + "]");
@@ -90,11 +103,16 @@ class OutboundReceiver implements TunnelGateway.Receiver {
         _config.incrementProcessedMessages();
     }
 
+    /** Job sending one message to the next hop. */
     private class SendJob extends JobImpl {
+        /** The message to send. */
         private final TunnelDataMessage _msg;
 
         /**
-         * The tunnel data message to send once the first hop is found.
+         * Builds the send job for one tunnel data message.
+         *
+         * @param ctx the router context
+         * @param msg the message to send once the first hop is found
          */
         public SendJob(RouterContext ctx, TunnelDataMessage msg) {
             super(ctx);
@@ -135,6 +153,8 @@ class OutboundReceiver implements TunnelGateway.Receiver {
     private class LookupFailedJob extends JobImpl {
         /**
          * Binds the router context.
+         *
+         * @param ctx the router context
          */
         public LookupFailedJob(RouterContext ctx) {
             super(ctx);
@@ -167,6 +187,8 @@ class OutboundReceiver implements TunnelGateway.Receiver {
     private class SendFailedJob extends JobImpl {
         /**
          * Binds the router context.
+         *
+         * @param ctx the router context
          */
         public SendFailedJob(RouterContext ctx) {
             super(ctx);

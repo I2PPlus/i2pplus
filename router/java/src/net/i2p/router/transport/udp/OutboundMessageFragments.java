@@ -26,8 +26,11 @@ import net.i2p.util.SystemVersion;
  * message.
  */
 class OutboundMessageFragments {
+    /** The router context. */
     private final RouterContext _context;
+    /** The log for the fragments. */
     private final Log _log;
+    /** The transport owning this job. */
     private final UDPTransport _transport;
 
     /**
@@ -35,10 +38,15 @@ class OutboundMessageFragments {
      * Thread-safe for iteration and modification with reduced array copying.
      */
     private final CopyOnWriteArrayList<PeerState> _activePeers = new CopyOnWriteArrayList<>();
+    /** The index of the next peer to serve. */
     private int _peerIndex = 0;
+    /** The peers to remove from the pool. */
     private final CopyOnWriteArrayList<PeerState> _peersToRemove = new CopyOnWriteArrayList<>();
+    /** The lock held while waiting for messages. */
     private final Object _waitLock = new Object();
+    /** True while the job runs. */
     private volatile boolean _alive;
+    /** The builder of the SSU packets. */
     private final PacketBuilder2 _builder2;
     /**
      * Maximum number of times to send a packet before failing it.
@@ -550,6 +558,7 @@ class OutboundMessageFragments {
         return Math.min(Math.max(roundMin, MIN_WAIT_MS), MAX_WAIT_MS);
     }
 
+/** Waits until there is a message to send. */
 private void waitForMessages() {
     synchronized (_waitLock) {
         try {
@@ -563,6 +572,11 @@ private void waitForMessages() {
     }
 }
 
+/**
+ * Waits until there is a message to send.
+ *
+ * @param timeout the most time to wait, in milliseconds
+ */
 private void waitForMessages(int timeout) {
     synchronized (_waitLock) {
         try {

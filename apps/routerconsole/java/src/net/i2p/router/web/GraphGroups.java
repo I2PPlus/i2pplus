@@ -465,6 +465,7 @@ public final class GraphGroups {
         return GROUPS.keySet().equals(TITLES.keySet());
     }
 
+    /** Utility class, not intended for instantiation. */
     private GraphGroups() {}
 
     /**
@@ -591,10 +592,22 @@ public final class GraphGroups {
         return rv;
     }
 
+    /**
+     * The group id with the pair prefix removed.
+     *
+     * @param groupId the id to strip
+     * @return the rest of the id
+     */
     private static String keyOfPairId(String groupId) {
         return groupId.substring(PAIR_PREFIX.length());
     }
 
+    /**
+     * The in or out suffix of a stat name.
+     *
+     * @param statName the name to test
+     * @return the suffix, null if there is none
+     */
     private static String suffixOf(String statName) {
         if (statName == null) {
             return null;

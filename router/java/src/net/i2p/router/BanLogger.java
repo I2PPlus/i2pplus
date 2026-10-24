@@ -39,9 +39,13 @@ import net.i2p.util.Log;
  * @since 0.9.68
  */
 public class BanLogger {
+    /** The router context. */
     private RouterContext _context;
+    /** Logger for the ban messages. */
     private Log _log;
+    /** File the ban records are written to. */
     private File _logFile;
+    /** Per-thread formatter for the record dates. */
     private final ThreadLocal<DateFormat> _dateFormat = new ThreadLocal<DateFormat>() {
         @Override
         protected DateFormat initialValue() {
@@ -50,20 +54,34 @@ public class BanLogger {
             return fmt;
         }
     };
+    /** Bans recorded by this instance. */
     private AtomicInteger _banCount;
+    /** When this instance started recording. */
     private long _startTime;
+    /** Lock for writing the log file. */
     private final Object _writeLock = new Object();
+    /** The single instance of the logger. */
     private static BanLogger self;
 
+    /** Directory holding the ban logs. */
     private static final String LOG_DIR = "sessionbans";
+    /** Name of the current ban log file. */
     private static final String LOG_FILENAME = "sessionbans.txt";
+    /** Prefix of the archived ban log names. */
     private static final String ARCHIVE_PREFIX = "sessionbans-";
+    /** Config key for the archive count kept. */
     private static final String PROP_MAX_ARCHIVES = "router.banlogger.maxArchives";
+    /** Splits a ban record on the pipe separators. */
     private static final Pattern PIPE_SPLIT = Pattern.compile("\\s*\\|\\s*");
+    /** Archives kept by default. */
     private static final int DEFAULT_MAX_ARCHIVES = 10;
+    /** Writer for the current ban log file. */
     private static volatile PrintWriter writer;
+    /** True once the log file was opened. */
     private static volatile boolean initialized = false;
+    /** True once the old global log was archived. */
     private static volatile boolean globalArchiveDone = false;
+    /** True once the file header was written. */
     private static volatile boolean headerWritten = false;
 
     /** No-arg constructor for deferred initialization. */

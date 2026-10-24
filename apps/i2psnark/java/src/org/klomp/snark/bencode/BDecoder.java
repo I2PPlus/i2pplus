@@ -29,29 +29,30 @@ import java.util.Map;
  */
 public class BDecoder {
 
-    // The maximum allowed length of a bencoded byte array, to prevent
-    // allocation of an attacker-controlled amount of memory
+    /**
+     * Largest byte array that may be allocated, to keep an attacker-controlled
+     * length from exhausting memory.
+     */
     private static final int MAX_BYTE_ARRAY_LENGTH = 64 * 1024 * 1024;
 
-    // The maximum allowed nesting depth of lists and maps, to prevent
-    // a StackOverflowError on attacker-controlled input
+    /**
+     * Deepest nesting of lists and maps allowed, to stop a StackOverflowError
+     * on attacker-controlled input.
+     */
     private static final int MAX_DEPTH = 64;
 
-    // The InputStream to BDecode.
+    /** The stream bencode is read from. */
     private final InputStream in;
 
-    // The last indicator read.
-    // Zero if unknown.
-    // '0'..'9' indicates a byte[].
-    // 'i' indicates an Number.
-    // 'l' indicates a List.
-    // 'd' indicates a Map.
-    // 'e' indicates end of Number, List or Map (only used internally).
-    // -1 indicates end of stream.
-    // Call getNextIndicator to get the current value (will never return zero).
+    /**
+     * The last indicator read, zero if unknown: '0'..'9' indicates a byte[],
+     * 'i' a Number, 'l' a List, 'd' a Map, 'e' the end of a Number, List or
+     * Map (only used internally), and -1 the end of the stream. Call
+     * getNextIndicator to get the current value (it will never return zero).
+     */
     private int indicator = 0;
 
-    // The current nesting depth of lists and maps being decoded.
+    /** The current nesting depth of lists and maps being decoded. */
     private int depth = 0;
 
     /**

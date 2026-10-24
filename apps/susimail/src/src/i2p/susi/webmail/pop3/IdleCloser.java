@@ -13,15 +13,22 @@ import net.i2p.util.SimpleTimer2;
  * @since 0.9.13
  */
 class IdleCloser {
+    /** The mailbox watched for idleness. */
     private final POP3MailBox mailbox;
+    /** The timer running the idle checks. */
     private final SimpleTimer2.TimedEvent timer;
+    /** The log for the closer. */
     private final Log _log;
+    /** True while the close thread runs. */
     private volatile boolean isClosing;
+    /** True once the closer is shut down. */
     private volatile boolean isDead;
-    // POP3 RFC 1939 server minimum idle timeout is 10 minutes
-    // pop3.postman.i2p timeout is 5 minutes
-    // We want to be less than that.
+    /**
+     * Default idle time before closing, less than the five minute
+     * timeout of the postman pop3 server.
+     */
     private static final int DEFAULT_IDLE_SECONDS = 4*60;
+    /** Smallest configured idle time. */
     private static final int MIN_IDLE_CONFIG = 60;
 
     /**
@@ -43,6 +50,11 @@ class IdleCloser {
         timer.cancel();
     }
 
+    /**
+     * The configured idle time.
+     *
+     * @return the idle time in milliseconds
+     */
     private static long getMaxIdle() {
         int seconds = DEFAULT_IDLE_SECONDS;
         String con = Config.getProperty(WebMail.CONFIG_IDLE_SECONDS);
@@ -56,6 +68,7 @@ class IdleCloser {
         return seconds * 1000L;
     }
 
+    /** Checks the mailbox for idleness. */
     private class Checker extends SimpleTimer2.TimedEvent {
         /** Schedule first idle-close check. */
         public Checker() {
@@ -86,6 +99,7 @@ class IdleCloser {
         }
     }
 
+    /** Closes the idle mailbox connection. */
     private class Closer extends I2PAppThread {
         /** Thread that closes the connection. */
         public Closer() {super("Susimail-Closer");}

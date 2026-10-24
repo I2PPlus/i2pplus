@@ -31,11 +31,17 @@ public class EdDSAEngine extends Signature {
 
     /** The message digest used for signing/verification. */
     protected MessageDigest digest;
+    /** Collects the data to be signed. */
     private ByteArrayOutputStream baos;
+    /** The key used to sign or verify. */
     private EdDSAKey key;
+    /** True when the data is given in one call. */
     private boolean oneShotMode;
+    /** The data given in one call. */
     private byte[] oneShotBytes;
+    /** Offset in the one call data. */
     private int oneShotOffset;
+    /** Length of the one call data. */
     private int oneShotLength;
 
     /**
@@ -49,6 +55,7 @@ public class EdDSAEngine extends Signature {
      */
     public static final AlgorithmParameterSpec ONE_SHOT_MODE = new OneShotSpec();
 
+    /** Encoder of big integers in little endian. */
     private static final BigIntegerLittleEndianEncoding _ble = new BigIntegerLittleEndianEncoding();
 
     /**
@@ -77,7 +84,11 @@ public class EdDSAEngine extends Signature {
      */
     private byte[] sBuf;
 
-    private static class OneShotSpec implements AlgorithmParameterSpec {}
+    /** Parameter spec carrying the one call data. */
+    private static class OneShotSpec implements AlgorithmParameterSpec {
+        /** A marker spec for a signature made without a context. */
+        private OneShotSpec() {}
+    }
 
     /**
      * No specific EdDSA-internal hash requested, allows any EdDSA key.
@@ -213,6 +224,12 @@ public class EdDSAEngine extends Signature {
         }
     }
 
+    /**
+     * Signs the collected data.
+     *
+     * @return the signature bytes
+     * @throws SignatureException if the signing fails
+     */
     private byte[] x_engineSign() throws SignatureException {
         Curve curve = key.getParams().getCurve();
         ScalarOps sc = key.getParams().getScalarOps();
@@ -268,6 +285,13 @@ public class EdDSAEngine extends Signature {
         }
     }
 
+    /**
+     * Checks the signature of the collected data.
+     *
+     * @param sigBytes the signature to check
+     * @return true if the signature is valid
+     * @throws SignatureException if the checking fails
+     */
     private boolean x_engineVerify(byte[] sigBytes) throws SignatureException {
         Curve curve = key.getParams().getCurve();
         int b = curve.getField().getb();

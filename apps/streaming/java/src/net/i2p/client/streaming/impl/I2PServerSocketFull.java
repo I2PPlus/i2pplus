@@ -11,6 +11,7 @@ import net.i2p.client.streaming.I2PSocketManager;
  * Bridge to allow accepting new connections.
  */
 class I2PServerSocketFull implements I2PServerSocket {
+    /** The manager that opened this listening socket. */
     private final I2PSocketManagerFull _socketManager;
 
     /**

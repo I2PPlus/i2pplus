@@ -22,7 +22,9 @@ public class ConfigReseedHandler extends FormHandler {
      * Construct a new ConfigReseedHandler.
      */
     public ConfigReseedHandler() {}
+    /** Reseed URLs the form set, by name. */
     private final Map<String, String> changes = new HashMap<>();
+    /** Reseed URL names the form cleared. */
     private final List<String> removes = new ArrayList<>();
 
     @Override
@@ -134,6 +136,7 @@ public class ConfigReseedHandler extends FormHandler {
         return false;
     }
 
+    /** Replaces the form's URLs with the ones in the config. */
     private void resetUrlList() {
         if (_context.router().saveConfig(Reseeder.PROP_RESEED_URL, null))
             addFormNotice(_t("URL list reset successfully"), true);
@@ -168,6 +171,7 @@ public class ConfigReseedHandler extends FormHandler {
         changes.put(config, Boolean.toString(val));
     }
 
+    /** Writes the submitted URLs into the config. */
     private void saveChanges() {
         saveString(Reseeder.PROP_PROXY_PORT, "port");
         saveString(Reseeder.PROP_PROXY_HOST, "host");

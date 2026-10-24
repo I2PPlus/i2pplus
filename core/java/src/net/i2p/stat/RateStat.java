@@ -34,6 +34,7 @@ public class RateStat {
      * log names which period of which stat is broken instead of only counting.
      */
     private volatile String _firstFailurePeriod;
+    /** What first failed to write the stats file. */
     private volatile Throwable _firstFailureCause;
 
     /**
@@ -280,7 +281,7 @@ public void addData(long value) {
      * Returns rate with requested period if it exists,
      * otherwise null.
      *
-     * @param period ms
+     * @param period the rate period, in milliseconds
      * @return the Rate whose period equals this one exactly, or null
      */
     public Rate getRate(long period) {
@@ -294,7 +295,7 @@ public void addData(long value) {
     /**
      * Tests if a rate with the provided period exists within this RateStat.
      *
-     * @param period ms
+     * @param period the rate period, in milliseconds
      * @return true if exists
      * @since 0.8.8
      */
@@ -307,7 +308,9 @@ public void addData(long value) {
         return _statName.hashCode();
     }
 
+    /** Line separator of the report file. */
     private static final String NL = System.getProperty("line.separator");
+    /** Rule drawn between report sections */
     private static final String HR = "#----------------------------------------------------------------------------------------";
 
     @Override

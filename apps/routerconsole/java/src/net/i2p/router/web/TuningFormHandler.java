@@ -33,10 +33,20 @@ public class TuningFormHandler extends FormHandler {
 
     /** A tunable parameter: property name, form-field prefix, and accepted suffix fields. */
     private static final class Tunable {
+        /** The property being tuned. */
         final String prop;
+        /** Property prefix for per-destination overrides, if any. */
         final String prefix;
+        /** How the property is shown and applied. */
         final int flags;
 
+        /**
+         * Names one tunable property.
+         *
+         * @param prop the property's name
+         * @param prefix the per-destination prefix, or null
+         * @param flags how the property is shown and applied
+         */
         Tunable(String prop, String prefix, int flags) {
             this.prop = prop;
             this.prefix = prefix;
@@ -44,6 +54,7 @@ public class TuningFormHandler extends FormHandler {
         }
     }
 
+    /** The properties the tuner page manages. */
     private static final List<Tunable> TUNED = new ArrayList<>(64);
     static {
         Tunable t;
@@ -372,7 +383,6 @@ public class TuningFormHandler extends FormHandler {
     /** Form field values submitted via jsp:setProperty, keyed by field name. */
     private final Map<String, String> _formValues = new HashMap<>(128);
 
-    // setters, called by jsp:setProperty for each submitted form field
     /**
      * Record the Default control for the ACK_FREQUENCY Tuner param: the default
      * the auto-tuner starts from and reverts toward.
@@ -2016,7 +2026,6 @@ public class TuningFormHandler extends FormHandler {
      */
     public void setXdhPreCalcMinStep(String v) { _formValues.put("xdhPreCalcMinStep", v); }
 
-    // Full-coverage params (all Tuner params exposed)
     /**
      * Record the Default control for the CONNECT_TIMEOUT_MULTIPLIER Tuner
      * param: the default the auto-tuner starts from and reverts toward.

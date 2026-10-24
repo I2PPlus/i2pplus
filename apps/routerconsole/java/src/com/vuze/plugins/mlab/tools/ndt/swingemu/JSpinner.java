@@ -32,6 +32,7 @@ JSpinner
 	{
 	}
 
+	/** Holds the spinner's value, range and step. */
 	private SpinnerNumberModel		model;
 
 	/**

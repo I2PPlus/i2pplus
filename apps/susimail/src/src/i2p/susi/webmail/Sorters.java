@@ -128,7 +128,9 @@ class Sorters {
      * Sorts Mail objects by subject field.
      */
     public static class SubjectSorter extends SorterBase {
+        /** Lower-cased "Re:" prefix, stripped when sorting by subject */
         private static final String xre = Messages.getString("Re:").toLowerCase(Locale.US);
+        /** Lower-cased "Fwd:" prefix, stripped when sorting by subject */
         private static final String xfwd = Messages.getString("Fwd:").toLowerCase(Locale.US);
         /** Locale-aware string collator. */
         private final Comparator<Object> collator = Collator.getInstance();

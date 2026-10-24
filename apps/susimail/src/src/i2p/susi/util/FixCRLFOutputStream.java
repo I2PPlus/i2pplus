@@ -12,6 +12,10 @@ import java.io.OutputStream;
  */
 public class FixCRLFOutputStream extends FilterOutputStream {
 
+    /**
+     * The byte before this one, to recognise a CRLF pair; -1 when
+     * there was none
+     */
     private int previous = -1;
 
     /**

@@ -40,17 +40,29 @@ public class QRServlet extends HttpServlet {
      */
     public QRServlet() {}
 
+    /** The serialization version of the servlet. */
     private static final long serialVersionUID = -3507466186902317988L;
+    /** Init parameter naming the image version. */
     private static final String INIT_PARAM_VERSION = "version";
+    /** Init parameter naming the cache provider class. */
     private static final String INIT_PARAM_CACHE_PROVIDER = "cacheProvider";
+    /** Request parameter for the identicon size. */
     private static final String PARAM_IDENTICON_SIZE_SHORT = "s";
+    /** Request parameter for the identicon code. */
     private static final String PARAM_IDENTICON_CODE_SHORT = "c";
+    /** Request parameter for the identicon text. */
     private static final String PARAM_IDENTICON_TEXT_SHORT = "t";
+    /** Request parameter for the image format. */
     private static final String PARAM_FORMAT = "fmt";
+    /** Image format name the writer is asked for. */
     private static final String IDENTICON_IMAGE_FORMAT = "PNG";
+    /** Mime type of the identicon raster image. */
     private static final String IDENTICON_IMAGE_MIMETYPE = "image/png";
+    /** Mime type of the identicon SVG image. */
     private static final String IDENTICON_SVG_MIMETYPE = "image/svg+xml";
+    /** Default time before an identicon expires. */
     private static final long DEFAULT_IDENTICON_EXPIRES_IN_MILLIS = 24 * 60 * (long) 60 * 1000;
+    /** Font used when the request names none. */
     private static final String DEFAULT_FONT_NAME = SystemVersion.isWindows() ?
                                                     "Lucida Sans Typewriter" : Font.MONOSPACED;
     /** Bumped when the rendered output format changes. */

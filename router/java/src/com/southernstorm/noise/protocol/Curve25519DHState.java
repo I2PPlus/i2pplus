@@ -11,10 +11,15 @@ import net.i2p.router.crypto.ratchet.Elg2KeyPair;
  */
 class Curve25519DHState implements DHState, Cloneable {
 
+    /** The raw 32-byte public key. */
     private final byte[] publicKey;
+    /** The raw 32-byte private key. */
     private final byte[] privateKey;
+    /** Which of the two keys are set. */
     private int mode;
+    /** Factory encoding the keys for display. */
     private final KeyFactory _xdh;
+    /** Cache of the public key in encoded form. */
     private byte[] encodedPublicKey;
 
     /**

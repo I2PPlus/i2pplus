@@ -109,6 +109,20 @@ public class RRSIG extends Data {
         return new RRSIG(typeCovered, null, algorithm, labels, originalTtl, signatureExpiration, signatureInception, keyTag, signerName, signature);
     }
 
+    /**
+     * Builds a record from its parsed fields.
+     *
+     * @param typeCovered the type the signature covers
+     * @param algorithm the signature algorithm, or null
+     * @param algorithmByte the algorithm number from the wire
+     * @param labels the label count the signer used
+     * @param originalTtl the TTL of the original record
+     * @param signatureExpiration when the signature expires
+     * @param signatureInception when the signature becomes valid
+     * @param keyTag the signer's key tag
+     * @param signerName the signer's domain name
+     * @param signature the signature bytes
+     */
     private RRSIG(TYPE typeCovered, SignatureAlgorithm algorithm, byte algorithmByte, byte labels, long originalTtl, Date signatureExpiration, Date signatureInception, int keyTag, DnsName signerName, byte[] signature) {
         this.typeCovered = typeCovered;
 
@@ -230,6 +244,7 @@ public class RRSIG extends Data {
         return signature.length;
     }
 
+    /** Base64 of the signature, computed once and kept */
     private transient String base64SignatureCache;
 
     /**

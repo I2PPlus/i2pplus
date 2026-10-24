@@ -21,18 +21,31 @@ public class ConfigUpdateHandler extends FormHandler {
         super();
     }
 
+    /** The URL of the news feed. */
     private String _newsURL;
+    /** Interval between the update checks. */
     private long _refreshFrequency;
+    /** The URL of the update stream. */
     private String _updateURL;
+    /** The policy for applying the updates. */
     private String _updatePolicy;
+    /** The proxy host for the downloads. */
     private String _proxyHost;
+    /** The proxy port for the downloads. */
     private String _proxyPort;
+    /** True to download updates through the proxy. */
     private boolean _updateThroughProxy;
+    /** True to fetch the news through the proxy. */
     private boolean _newsThroughProxy;
+    /** The signing keys trusted for the updates. */
     private String _trustedKeys;
+    /** True to accept the unsigned updates. */
     private boolean _updateUnsigned;
+    /** The URL of the i2pzip update stream. */
     private String _zipURL;
+    /** True to follow the development stream. */
     private boolean _updateDevSU3;
+    /** The URL of the development stream. */
     private String _devSU3URL;
 
     /** Property for news URL. */
@@ -107,6 +120,7 @@ public class ConfigUpdateHandler extends FormHandler {
      */
     public static final String DEFAULT_UPDATE_URL = "";
 
+    /** Directory holding the trusted SU3 signing certificates. */
     private static final String SU3_CERT_DIR = "certificates/router";
 
     /**

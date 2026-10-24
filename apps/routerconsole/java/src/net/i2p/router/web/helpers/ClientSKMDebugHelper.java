@@ -38,6 +38,7 @@ public class ClientSKMDebugHelper {
      */
     private ClientSKMDebugHelper() {}
 
+    /** The column headers of the debug page's tables */
     private static final String COLUMNS =
         "<tr><th>Kind</th><th>Peer</th><th>Set</th><th>Acked</th><th>Created</th><th>Established</th>" +
         "<th>Last Used</th><th>Last Rcvd</th><th>Expires in</th><th>Tags</th><th>Remaining</th><th>NK sent</th></tr>\n";
@@ -106,6 +107,14 @@ public class ClientSKMDebugHelper {
         out.write(legacy.toString());
     }
 
+    /**
+     * Appends one ratchet's debug rows under a title.
+     *
+     * @param ctx the router context
+     * @param sections the page sections being built
+     * @param title the heading for this ratchet
+     * @param rskm the ratchet to report on
+     */
     private static void appendRatchet(RouterContext ctx, StringBuilder sections, String title, RatchetSKM rskm) {
         sections.append(buildSection(title, rskm.getDebugRows(), rskm.getDebugSummary(),
                                      columns(ctx), 1, peerRenderer()));

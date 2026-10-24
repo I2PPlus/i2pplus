@@ -35,9 +35,12 @@ public class FileDumpHelper extends HelperBase {
      */
     public FileDumpHelper() {}
 
+    /** Matches the revision dash in a dump line. */
     private static final Pattern DUMP_DASH = Pattern.compile("-.*? ");
 
+    /** Base URL for linking a dumped file to our source tree. */
     private static final String LINK = "http://git.skank.i2p/i2pplus/I2P.Plus/src/commit/";
+    /** Base URL for linking a dumped file to the upstream source tree. */
     private static final String UPSTREAMLINK = "https://github.com/i2p/i2p.i2p/tree/";
 
     /**
@@ -108,6 +111,14 @@ public class FileDumpHelper extends HelperBase {
         return buf.toString();
     }
 
+    /**
+     * Lists the files of a directory into the dump.
+     *
+     * @param buf where the listing is written
+     * @param dir the directory to list
+     * @param suffix only files ending like this are listed
+     * @param linkrev true to link each file to its source
+     */
     private static void dumpDir(StringBuilder buf, File dir, String suffix, boolean linkrev) {
         File[] files = dir.listFiles(new FileSuffixFilter(suffix));
         if (files == null) {return;}
@@ -115,6 +126,13 @@ public class FileDumpHelper extends HelperBase {
         for (int i = 0; i < files.length; i++) {dumpFile(buf, files[i], linkrev);}
     }
 
+    /**
+     * Writes one file's size, date and hash into the dump.
+     *
+     * @param buf where the entry is written
+     * @param f the file to describe
+     * @param linkrev true to link the file to its source
+     */
     private static void dumpFile(StringBuilder buf, File f, boolean linkrev) {
         buf.append("<tr><td><b title=\"").append(f.getAbsolutePath()).append("\">").append(f.getName()).append("</b></td>")
            .append("<td>").append(f.length()).append("</td><td title=\"UTC\">");
@@ -180,6 +198,12 @@ public class FileDumpHelper extends HelperBase {
         buf.append("</td></tr>\n");
     }
 
+    /**
+     * Hashes a file for the dump.
+     *
+     * @param f the file to hash
+     * @return the hash, null if the file cannot be read
+     */
     private static byte[] sha256(File f) {
         InputStream in = null;
         try {

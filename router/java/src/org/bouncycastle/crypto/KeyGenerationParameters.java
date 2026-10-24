@@ -7,11 +7,13 @@ import java.security.SecureRandom;
  */
 public class KeyGenerationParameters
 {
+    /** Source of randomness for the generation. */
     private SecureRandom    random;
+    /** Strength the generated key should have. */
     private int             strength;
 
     /**
-     * initialise the generator with a source of randomness
+     * Initialise the generator with a source of randomness
      * and a strength (in bits).
      *
      * @param random the random byte source.
@@ -26,7 +28,7 @@ public class KeyGenerationParameters
     }
 
     /**
-     * return the random source associated with this
+     * Return the random source associated with this
      * generator.
      *
      * @return the generators random source.
@@ -37,7 +39,7 @@ public class KeyGenerationParameters
     }
 
     /**
-     * return the bit strength for keys produced by this generator,
+     * Return the bit strength for keys produced by this generator,
      *
      * @return the strength of the keys this generator produces (in bits).
      */

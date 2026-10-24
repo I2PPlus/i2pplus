@@ -22,9 +22,10 @@ import org.eclipse.jetty.webapp.WebAppContext;
  * and "/foo" to "/foo.jsp".
  *
  */
-public class LocaleWebAppHandler extends HandlerWrapper
-{
+public class LocaleWebAppHandler extends HandlerWrapper {
+    /** The router context whose locale is set. */
     private final I2PAppContext _context;
+    /** The webapp context whose locale is set. */
     private final WebAppContext _wac;
 
     /**

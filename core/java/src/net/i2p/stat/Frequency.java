@@ -12,11 +12,17 @@ package net.i2p.stat;
  * Or not.
  */
 public class Frequency {
+    /** Average interval between recent events, in ms. */
     private double _avgInterval;
+    /** Smallest average interval seen in the period. */
     private double _minAverageInterval;
+    /** How far back events count, in ms. */
     private final long _period;
+    /** When the most recent event happened. */
     private long _lastEvent;
+    /** When this frequency was created. */
     private final long _start = now();
+    /** Events counted so far. */
     private long _count;
 
     /**
@@ -176,6 +182,11 @@ public class Frequency {
         }
     }
 
+    /**
+     * Reads the current time.
+     *
+     * @return the current time, in ms
+     */
     private static final long now() {
         return System.currentTimeMillis();
     }

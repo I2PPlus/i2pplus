@@ -81,15 +81,25 @@ import net.i2p.util.Translate;
  * </ul>
  */
 public class CommSystemFacadeImpl extends CommSystemFacade {
+    /** Logger for the comm system facade. */
     private final Log _log;
+    /** The router context. */
     private final RouterContext _context;
+    /** The manager the facade reports to. */
     private final TransportManager _manager;
+    /** The GeoIP lookup helper. */
     private final GeoIP _geoIP;
+    /** The reverse DNS lookup helper. */
     private final ReverseDnsLookup _rdns;
+    /** The country name lookup helper. */
     private final CountryLookup _countryLookup;
+    /** Renderer of the peer detail pages. */
     private final PeerHTMLRenderer _peerHTML;
+    /** Peers exempt from the incoming rate limits. */
     private final Map<String, Object> _exemptIncoming;
+    /** True while the network monitoring is enabled. */
     private volatile boolean _netMonitorStatus;
+    /** True once the transports were started. */
     private boolean _wasStarted;
 
     /**
@@ -102,6 +112,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      */
     private static final String PROP_DISABLED = "i2np.disable";
 
+    /** Placeholder value for the exempt peer sets. */
     private static final Object DUMMY = Integer.valueOf(0);
 
     /**
@@ -173,8 +184,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     public static String getRdnsCacheStats() { return ReverseDnsLookup.getRdnsCacheStats(); }
 
     /**
-     * The computed maximum rDNS cache size based on available memory.
-     * @return the computed maximum rDNS cache size based on available memory
+     * The maximum rDNS cache size, computed from the memory available.
+     *
+     * @return the entries the cache holds
      * @since 0.9.61+
      */
     public static int getMaxRdnsCacheSize() { return ReverseDnsLookup.getMaxRdnsCacheSize(); }
@@ -647,6 +659,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * @since 0.9.50
      */
     private static class AddrComparator implements Comparator<RouterAddress>, Serializable {
+        /** Orders router addresses by transport. */
+        private AddrComparator() {}
+
         /**
          * Compare two router addresses for consistent ordering.
          */
@@ -805,13 +820,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         return _manager.getXDHFactory();
     }
 
-    /*
-     * GeoIP stuff
-     *
-     * This is only used in the router console for now, but we put it here because
-     * 1) it's a lot easier, and 2) we could use it in the future for peer selection,
-     * tunnel selection, banlisting, etc.
-     */
 
     /**
      * Router must call after netdb is initialized.
@@ -974,14 +982,10 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     @Override
     public boolean isDummy() {return _context.getBooleanProperty(PROP_DISABLED);}
 
-    /*
-     * Timestamper stuff
-     *
-     * This is used as a backup to NTP over UDP.
-     * @since 0.7.12
-     */
 
+    /** Startup delay before the first status ping. */
     private static final int TIME_START_DELAY = 5*60*1000;
+    /** Interval between the status pings. */
     private static final int TIME_REPEAT_DELAY = 8*60*1000;
 
     /** Start the backup timestamper. */
@@ -1025,7 +1029,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * @since 0.9.4
      */
     private class NetMonitor extends SimpleTimer2.TimedEvent {
+        /** Short delay before a status check. */
         private static final long SHORT_DELAY = 15*1000L;
+        /** Long delay before a status check. */
         private static final long LONG_DELAY = 90*1000L;
 
         /**

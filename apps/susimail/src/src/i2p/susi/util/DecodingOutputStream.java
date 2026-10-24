@@ -19,13 +19,18 @@ import net.i2p.util.Log;
  */
 public class DecodingOutputStream extends OutputStream {
 
+    /** Logger for this class. */
     private static final Log _log = new Log(DecodingOutputStream.class);
+    /** Where decoded characters are written. */
     private final Writer _out;
+    /** Bytes waiting to be decoded. */
     private final ByteBuffer _bb;
+    /** Characters waiting to be written. */
     private final CharBuffer _cb;
+    /** The decoder doing the work. */
     private final CharsetDecoder _dc;
 
-    // Charset.forName("UTF-8").newDecoder().replacement().charAt(0) & 0xffff
+    /** Character substituted for undecodable bytes, the Unicode replacement character. */
     private static final int REPLACEMENT = 0xfffd;
 
     /**
@@ -83,6 +88,12 @@ public class DecodingOutputStream extends OutputStream {
         }
     }
 
+    /**
+     * Decodes the buffered bytes and writes the result.
+     *
+     * @param endOfInput true if no more bytes will follow
+     * @throws IOException if the output cannot be written
+     */
     private void decodeAndWrite(boolean endOfInput) throws IOException {
         // not ByteBuffer to avoid Java 8/9 issues with flip()
         (_bb).flip();

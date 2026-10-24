@@ -44,6 +44,7 @@ public class CryptoChecker {
      */
     public CryptoChecker() {}
 
+    /** Download page offered when the router runs on Java 6 */
     private static String JRE6 = "http://www.oracle.com/technetwork/java/javase/downloads/index.html";
 
     /**

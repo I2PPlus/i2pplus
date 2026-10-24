@@ -23,7 +23,9 @@ package com.google.zxing.qrcode.encoder;
  */
 final class BlockPair {
 
+  /** The block's data codewords. */
   private final byte[] dataBytes;
+  /** The block's error correction codewords. */
   private final byte[] errorCorrectionBytes;
 
   /**

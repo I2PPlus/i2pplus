@@ -36,14 +36,21 @@ import net.i2p.util.Log;
  */
 class OutboundNTCP2State implements EstablishState {
 
+    /** The router context. */
     private final RouterContext _context;
+    /** Logger for the NTCP connection. */
     private final Log _log;
+    /** Records why routers were banned. */
     private final BanLogger _banLogger;
+    /** The NTCP transport we serve. */
     private final NTCPTransport _transport;
+    /** The connection being established. */
     private final NTCPConnection _con;
+    /** Scratch buffer for the handshake fields. */
     private final byte[] _tmp;
     /** Bytes received so far. */
     private int _received;
+    /** Our clock skew to the peer, in ms. */
     private long _peerSkew;
 
     /**
@@ -63,7 +70,7 @@ class OutboundNTCP2State implements EstablishState {
     /** NTCP2 message 1 size in bytes (64). */
     public static final int MSG1_SIZE = KEY_SIZE + OPTIONS1_SIZE + MAC_SIZE;
     /**
-     * i2pd's short handshake message total (287). It compares the message it
+     * The short handshake message total used by i2pd (287). It compares the message it
      * just built or received against this to decide which padding scale to use.
      */
     static final int MSG_SHORT_MAX = 287;
@@ -73,6 +80,7 @@ class OutboundNTCP2State implements EstablishState {
      * may predate the 2026 padding increase.
      */
     static final int PADDING_SHORT_MAX = MSG_SHORT_MAX - MSG1_SIZE;
+    /** Largest padding length in message 3. */
     private static final int PADDING3_MAX = 64;
 
     /**
@@ -266,10 +274,11 @@ class OutboundNTCP2State implements EstablishState {
 
     /** NTCP2 message 3 part 1 size in bytes (48). */
     public static final int MSG3P1_SIZE = KEY_SIZE + MAC_SIZE;
+    /** Size of the options field in message 3. */
     private static final int OPTIONS3_SIZE = 12;
     /** In SECONDS. */
     public static final long MAX_SKEW = 60;
-    // SipHash KDF things
+    /** Shared empty array for zero-length values. */
     private static final byte[] ZEROLEN = new byte[0];
     /**
      * All-zero key marking a static key or IV as unset.
@@ -278,20 +287,35 @@ class OutboundNTCP2State implements EstablishState {
     /** For SipHash keygen. */
     private static final byte[] SIPHASH = DataHelper.getASCII("siphash");
 
+    /** Lock for the handshake state. */
     private final Object _stateLock = new Object();
+    /** Current state of the handshake. */
     private State _state;
+    /** Reason the handshake failed, null until then. */
     private String _failReason;
 
+    /** Handshake state for the ratchet keys. */
     private final HandshakeState _handshakeState;
+    /** Alice's router info. */
     private final RouterInfo _aliceRI;
+    /** Size of Alice's router info, in bytes. */
     private final int _aliceRISize;
+    /** Padding length of message 2. */
     private int _padlen2;
+    /** Padding length of message 3. */
     private final int _padlen3;
+    /** Hash of Bob's handshake. */
     private final SessionKey _bobHash;
+    /** IV of Bob's handshake. */
     private final byte[] _bobIV;
+    /** Version of the handshake. */
     private final int _version;
 
+    /**
+     * State of the outbound NTCP2 handshake.
+     */
     private enum State {
+        /** Nothing sent yet. */
         OB_INIT,
         /** Sent 1. */
         OB_SENT_X,
@@ -301,6 +325,7 @@ class OutboundNTCP2State implements EstablishState {
         OB_GOT_PADDING,
         /** Sent 1, got 2 incl. padding, sent 3. */
         VERIFIED,
+        /** The handshake failed a check. */
         CORRUPT
     }
 
@@ -371,6 +396,11 @@ class OutboundNTCP2State implements EstablishState {
             throw new IllegalArgumentException("Bad NTCP2 IV");
     }
 
+    /**
+     * Moves to the next handshake state.
+     *
+     * @param state the new state
+     */
     private void changeState(State state) {
         synchronized (_stateLock) {
             _state = state;

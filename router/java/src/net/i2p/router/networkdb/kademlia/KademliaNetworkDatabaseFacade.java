@@ -275,12 +275,19 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /** RouterInfo expiration time in ms for floodfill peers. */
     private static final long ROUTER_INFO_EXPIRATION_FLOODFILL = 16*60*60*1000L;
 
+    /** The context of the cached settings. */
     private static volatile RouterContext _cfgCtx;
+    /** When the cached settings were refreshed. */
     private static volatile long _cfgRefreshed;
+    /** The cached republish threshold. */
     private static volatile long _cachedProactiveRepublishThreshold;
+    /** The cached block-my-country flag. */
     private static volatile boolean _cachedBlockMyCountry;
+    /** The cached own country. */
     private static volatile String _cachedMyCountry;
+    /** The cached minimum allowed version. */
     private static volatile String _cachedMinVersionAllowed;
+    /** Interval for refreshing the cached settings. */
     private static final long CONFIG_REFRESH_MS = 30 * 1000L;
 
     /**
@@ -1994,6 +2001,11 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * Drains the batch queue and creates individual republish jobs for each LeaseSet.
      */
     private class BatchRepublishJob extends JobImpl {
+        /**
+         * Republishes client lease sets in batches.
+         *
+         * @param ctx the router context
+         */
         public BatchRepublishJob(RouterContext ctx) {
             super(ctx);
         }
@@ -3808,10 +3820,10 @@ return false;
     private static final int TIMEOUT_MULTIPLIER = 3;
 
     /**
-     * The timeout for a peer, based on the profile data, or the default timeout.
+     * How long to wait for one peer's reply, scaled from its profile.
      *
      * @param peer the router hash whose profile sets the timeout; must not be null
-     * @return the timeout for a peer, based on the profile data, or the default timeout
+     * @return the timeout in ms, 7500-45000; 45000 when there is no profile data
      */
     public int getPeerTimeout(Hash peer) {
         if (peer == null) {throw new IllegalArgumentException("Peer cannot be null");}
@@ -4039,9 +4051,10 @@ return false;
     }
 
     /**
-     * "MainNetDb" for the main netdb, or "ClientNetDb [base32]" for a client netdb.
+     * Name this netdb for use in log messages.
      *
-     * @return "MainNetDb" for the main netdb, or "ClientNetDb [base32]" for a client netdb
+     * @return "MainNetDb" for the main netdb, or "ClientNetDb [xxxxxxxx]" with
+     *         the first 8 base32 characters of the netdb id for a client netdb
      */
     @Override
     public String toString() {
@@ -4235,6 +4248,12 @@ return false;
         /** Reference to the Kademlia facade. */
         private final KademliaNetworkDatabaseFacade _facade;
 
+        /**
+         * Refreshes the client lease sets periodically.
+         *
+         * @param ctx the router context
+         * @param facade the facade whose lease sets to refresh
+         */
         public RefreshClientLeaseSetsJob(RouterContext ctx, KademliaNetworkDatabaseFacade facade) {
             super(ctx);
             _facade = facade;

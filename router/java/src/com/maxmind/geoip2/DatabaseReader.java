@@ -54,10 +54,18 @@ import java.util.Map;
  */
 public class DatabaseReader implements Closeable {
 
+    /** The open database file. */
     private final Reader reader;
 
+    /** Languages to prefer in the results. */
     private final List<String> locales;
 
+    /**
+     * Opens the database the builder describes.
+     *
+     * @param builder the builder describing where the database is
+     * @throws IOException if the database cannot be read
+     */
     private DatabaseReader(Builder builder) throws IOException {
         if (builder.stream != null) {
             this.reader = new Reader(builder.stream, builder.cache);

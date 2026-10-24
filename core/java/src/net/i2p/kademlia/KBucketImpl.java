@@ -64,7 +64,9 @@ class KBucketImpl<T extends SimpleDataStructure> implements KBucket<T> {
     /** Include if no bits higher than this bit (inclusive) are set. */
     private final int _end;
 
+    /** Contacts the bucket holds before splitting. */
     private final int _max;
+    /** Chooses which contact to drop when the bucket is full. */
     private final KBucketTrimmer<T> _trimmer;
 
     /**
@@ -80,6 +82,7 @@ class KBucketImpl<T extends SimpleDataStructure> implements KBucket<T> {
     /** When did we last shake things up. */
     private long _lastChanged;
 
+    /** Supplies the clock and the random. */
     private final I2PAppContext _context;
 
     /**

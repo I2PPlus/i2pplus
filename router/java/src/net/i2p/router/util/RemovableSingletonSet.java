@@ -21,6 +21,7 @@ import java.util.NoSuchElementException;
  * @since 0.9.7
  */
 public class RemovableSingletonSet<E> extends AbstractSet<E> {
+    /** The one element, null when the set is empty. */
     private volatile E _elem;
 
     /**
@@ -86,7 +87,11 @@ public class RemovableSingletonSet<E> extends AbstractSet<E> {
         return new RSSIterator();
     }
 
+    /** Walks the set's single element. */
     private class RSSIterator implements Iterator<E> {
+        /** Walks the set's single element. */
+        private RSSIterator() {}
+        /** True once the element has been returned. */
         boolean done;
 
         /**

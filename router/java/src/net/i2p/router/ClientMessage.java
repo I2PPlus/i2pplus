@@ -20,13 +20,21 @@ import net.i2p.data.i2cp.SessionConfig;
  *
  */
 public class ClientMessage {
+    /** The I2CP message carried. */
     private final Payload _payload;
+    /** The client this message is for. */
     private final Destination _destination;
+    /** The client it came from, for received messages. */
     private final Destination _fromDestination;
+    /** Config of the session that sent it. */
     private final SessionConfig _senderConfig;
+    /** Hash of the destination. */
     private final Hash _destinationHash;
+    /** Id for matching replies. */
     private final MessageId _messageId;
+    /** Nonce for deduplication. */
     private final long _messageNonce;
+    /** Time past which the message is dropped. */
     private final long _expiration;
     /** Flags only used for outbound messages. */
     private final int _flags;

@@ -8,6 +8,7 @@ import java.math.BigInteger;
  * @see ElGamalPrivateKeySpec
  */
 public class ElGamalPublicKeySpec extends ElGamalKeySpec {
+    /** The public value g^x mod p. */
     private final BigInteger y;
 
     /**

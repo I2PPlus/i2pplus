@@ -25,6 +25,7 @@ package com.google.zxing.qrcode.decoder;
  */
 final class FormatInformation {
 
+  /** Xor mask applied to the QR format bits. */
   private static final int FORMAT_INFO_MASK_QR = 0x5412;
 
   /**
@@ -65,9 +66,16 @@ final class FormatInformation {
       {0x2BED, 0x1F},
   };
 
+  /** The level the format bits name. */
   private final ErrorCorrectionLevel errorCorrectionLevel;
+  /** The data mask pattern the format bits name. */
   private final byte dataMask;
 
+  /**
+   * Decodes the fifteen format bits.
+   *
+   * @param formatInfo the raw format information
+   */
   private FormatInformation(int formatInfo) {
     // Bits 3,4
     errorCorrectionLevel = ErrorCorrectionLevel.forBits((formatInfo >> 3) & 0x03);

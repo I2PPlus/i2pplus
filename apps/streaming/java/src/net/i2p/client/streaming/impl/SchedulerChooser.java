@@ -9,8 +9,11 @@ import net.i2p.util.Log;
  * Examine a connection's state and pick the right scheduler for it.
  */
 class SchedulerChooser {
+    /** The context the schedulers run in. */
     private final I2PAppContext _context;
+    /** Logger for this class. */
     private final Log _log;
+    /** Scheduler that runs nothing, used when the session dies. */
     private final TaskScheduler _nullScheduler;
     /** List of TaskScheduler objects. */
     private final List<TaskScheduler> _schedulers;
@@ -43,6 +46,11 @@ class SchedulerChooser {
         return _nullScheduler;
     }
 
+    /**
+     * Builds the pool of task schedulers.
+     *
+     * @return the schedulers to use
+     */
     private List<TaskScheduler> createSchedulers() {
         List<TaskScheduler> rv = new ArrayList<>(8);
         rv.add(new SchedulerHardDisconnected(_context));
@@ -56,8 +64,11 @@ class SchedulerChooser {
         return rv;
     }
 
+    /** A scheduler that drops every task. */
     private class NullScheduler implements TaskScheduler {
 
+        /** A scheduler that runs nothing, used as a placeholder. */
+        private NullScheduler() {}
         @Override
         public void eventOccurred(Connection con) {
             if (_log.shouldWarn())

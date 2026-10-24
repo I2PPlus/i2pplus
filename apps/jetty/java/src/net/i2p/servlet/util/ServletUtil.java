@@ -7,6 +7,7 @@ package net.i2p.servlet.util;
  */
 public class ServletUtil {
 
+    /** Utility class, not intended for instantiation. */
     private ServletUtil() {};
 
     /**

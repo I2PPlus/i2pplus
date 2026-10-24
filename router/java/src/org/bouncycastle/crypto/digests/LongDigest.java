@@ -12,21 +12,28 @@ import org.bouncycastle.util.Pack;
 public abstract class LongDigest
     implements ExtendedDigest, Memoable, EncodableDigest
 {
+    /** Length of the digest in bytes. */
     private static final int BYTE_LENGTH = 128;
 
     /** Crypto operation purpose. */
     protected final CryptoServicePurpose purpose;
 
+    /** Buffer for the current eight byte block. */
     private byte[] xBuf = new byte[8];
+    /** Position in the block buffer. */
     private int     xBufOff;
 
+    /** Byte counter for the length padding. */
     private long    byteCount1;
+    /** High byte counter for the length padding. */
     private long    byteCount2;
 
     /** Hash working variables H1-H8. */
     protected long    H1, H2, H3, H4, H5, H6, H7, H8;
 
+    /** Schedule words of the compression. */
     private long[]  W = new long[80];
+    /** Position in the schedule. */
     private int     wOff;
 
     /**
@@ -156,7 +163,11 @@ public abstract class LongDigest
         return 96 + (wOff * 8);
     }
 
-    /** @param in the input byte */
+    /**
+     * Updates the digest with one byte.
+     *
+     * @param in the input byte
+     */
     public void update(
         byte in)
     {
@@ -171,7 +182,11 @@ public abstract class LongDigest
         byteCount1++;
     }
 
-    /** @param in the input bytes */
+    /**
+     * Updates the digest with the given bytes.
+     *
+     * @param in the input bytes
+     */
     public void update(
         byte[]  in,
         int     inOff,
@@ -285,7 +300,7 @@ public abstract class LongDigest
     }
 
     /**
-     * adjust the byte counts so that byteCount2 represents the
+     * Adjust the byte counts so that byteCount2 represents the
      * upper long (less 3 bits) word of the byte count.
      */
     private void adjustByteCounts()
@@ -406,7 +421,14 @@ public abstract class LongDigest
         }
     }
 
-    /* SHA-384 and SHA-512 functions (as for SHA-256 but for longs) */
+    /**
+     * Choose function of the compression, for the long-word digests.
+     *
+     * @param x the first word
+     * @param y the second word
+     * @param z the third word
+     * @return the bits of z chosen by x
+     */
     private long Ch(
         long    x,
         long    y,
@@ -415,6 +437,14 @@ public abstract class LongDigest
         return ((x & y) ^ ((~x) & z));
     }
 
+    /**
+     * Majority function of the compression.
+     *
+     * @param x the first word
+     * @param y the second word
+     * @param z the third word
+     * @return the bits set in at least two words
+     */
     private long Maj(
         long    x,
         long    y,
@@ -423,24 +453,48 @@ public abstract class LongDigest
         return ((x & y) ^ (x & z) ^ (y & z));
     }
 
+    /**
+     * Sigma zero rotation function.
+     *
+     * @param x the word to rotate
+     * @return the mixed rotations
+     */
     private long Sum0(
         long    x)
     {
         return ((x << 36)|(x >>> 28)) ^ ((x << 30)|(x >>> 34)) ^ ((x << 25)|(x >>> 39));
     }
 
+    /**
+     * Sigma one rotation function.
+     *
+     * @param x the word to rotate
+     * @return the mixed rotations
+     */
     private long Sum1(
         long    x)
     {
         return ((x << 50)|(x >>> 14)) ^ ((x << 46)|(x >>> 18)) ^ ((x << 23)|(x >>> 41));
     }
 
+    /**
+     * Sigma zero schedule function.
+     *
+     * @param x the schedule word
+     * @return the mixed rotations
+     */
     private long Sigma0(
         long    x)
     {
         return ((x << 63)|(x >>> 1)) ^ ((x << 56)|(x >>> 8)) ^ (x >>> 7);
     }
 
+    /**
+     * Sigma one schedule function.
+     *
+     * @param x the schedule word
+     * @return the mixed rotations
+     */
     private long Sigma1(
         long    x)
     {

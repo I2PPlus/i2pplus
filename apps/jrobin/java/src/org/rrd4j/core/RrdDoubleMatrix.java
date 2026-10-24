@@ -12,8 +12,11 @@ import java.io.IOException;
  * @param <U> The type of RrdUpdater this primitive belongs to
  */
 class RrdDoubleMatrix<U extends RrdUpdater<U>> extends RrdPrimitive<U> {
+    /** Label used when describing a matrix in text. */
     private static final String LENGTH = ", length=";
+    /** Rows in the matrix. */
     private final int rows;
+    /** Columns in the matrix. */
     private final int columns;
 
     /**

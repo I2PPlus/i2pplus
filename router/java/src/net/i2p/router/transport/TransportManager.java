@@ -97,7 +97,9 @@ import static net.i2p.router.transport.Transport.AddressSource.*;
  * for external use. Implementation details may change without notice.
  */
 public class TransportManager implements TransportEventListener {
+    /** Logger for the transports. */
     private final Log _log;
+    /** Records why routers were banned. */
     private final BanLogger _banLogger;
     /**
      * Converted from List to prevent concurrent modification exceptions.
@@ -106,11 +108,17 @@ public class TransportManager implements TransportEventListener {
     private final Map<String, Transport> _transports;
             /** Locking: this. */
     private final Map<String, Transport> _pluggableTransports;
+    /** The router context. */
     private final RouterContext _context;
+    /** The UPnP port forwarding manager. */
     private final UPnPManager _upnpManager;
+    /** Timer refreshing the UPnP mappings. */
     private final SimpleTimer2.TimedEvent _upnpRefresher;
+    /** Factory for the NTCP2 and SSU2 key agreements. */
     private final X25519KeyFactory _xdhThread;
+    /** True if UDP transports are enabled. */
     private final boolean _enableUDP;
+    /** True while a UPnP update is queued. */
     private boolean _upnpUpdateQueued;
     /**
      * Cached {@link #getEstablished()} result.  Held as a single immutable holder so
@@ -130,7 +138,9 @@ public class TransportManager implements TransportEventListener {
      * snapshot is stale.
      */
     private static final class EstablishedSnapshot {
+        /** Peers in the summary. */
         private final List<Hash> peers;
+        /** When the summary expires. */
         private final long expiresAt;
 
         /**
@@ -155,15 +165,22 @@ public class TransportManager implements TransportEventListener {
     public static final String PROP_ENABLE_UPNP_IPV6 = "i2np.upnp.ipv6.enable";
             /** Default UPnP IPv6 enable. */
     public static final boolean DEFAULT_ENABLE_UPNP_IPV6 = true;
+    /** Java property naming a SOCKS proxy. */
     private static final String PROP_JAVA_PROXY1 = "socksProxyHost";
+    /** Java property enabling the system proxies. */
     private static final String PROP_JAVA_PROXY2 = "java.net.useSystemProxies";
+    /** Java property naming the HTTP proxy. */
     private static final String PROP_JAVA_PROXY3 = "http.proxyHost";
+    /** Java property naming the HTTPS proxy. */
     private static final String PROP_JAVA_PROXY4 = "https.proxyHost";
 
             /** Not forever, since they may update. */
     private static final long SIGTYPE_BANLIST_DURATION = 36*60*60*1000L;
+    /** Interval between UPnP mapping refreshes. */
     private static final long UPNP_REFRESH_TIME = UPnP.LEASE_TIME_SECONDS * 1000L / 3;
+    /** XOR value randomizing the message id bloom filter. */
     private final long _msgIDBloomXor;
+    /** Rate stat periods for the transport statistics. */
     private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
 
     /**
@@ -177,6 +194,7 @@ public class TransportManager implements TransportEventListener {
             /** Minimum outbound Fast connections to maintain (below this, we establish more). */
     private static final int MAINTAINER_MIN_OUTBOUND = 150;
 
+    /** Timer maintaining the outbound capacity. */
     private OutboundMaintainerEvent _outboundMaintainer;
 
     /**
@@ -356,6 +374,11 @@ public class TransportManager implements TransportEventListener {
         return _xdhThread;
     }
 
+    /**
+     * Adds a started transport to the lists.
+     *
+     * @param transport the transport to add
+     */
     private void addTransport(Transport transport) {
         if (transport == null) return;
         Transport old = _transports.put(transport.getStyle(), transport);
@@ -364,6 +387,11 @@ public class TransportManager implements TransportEventListener {
         transport.setListener(this);
     }
 
+    /**
+     * Removes a stopped transport from the lists.
+     *
+     * @param transport the transport to remove
+     */
     private void removeTransport(Transport transport) {
         if (transport == null) return;
         transport.setListener(null);
@@ -372,6 +400,7 @@ public class TransportManager implements TransportEventListener {
             _log.warn("Removing transport [" + transport.getStyle() + "]");
     }
 
+    /** Applies the current config to the running transports. */
     private void configTransports() {
         Transport udp = null;
         if (_enableUDP) {
@@ -658,9 +687,9 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     * Number of registered transports.
+     * Count of the registered transports.
      *
-     * @return number of registered transports
+     * @return the number in the list
      */
     int getTransportCount() { return _transports.size(); }
 
@@ -738,6 +767,7 @@ public class TransportManager implements TransportEventListener {
         return false;
     }
 
+    /** Share of capacity counted as high. */
     private static final int HIGH_CAPACITY_PCT = 50;
     /**
      * Are all transports well below their outbound connection limit
@@ -1395,9 +1425,9 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     * Aggregated recent error messages from all transports.
+     * Recent error messages from all the transports.
      *
-     * @return aggregated recent error messages from all transports
+     * @return the messages, aggregated and de-duplicated
      */
     List<String> getMostRecentErrorMessages() {
         List<String> rv = new ArrayList<>(16);
@@ -1449,6 +1479,7 @@ public class TransportManager implements TransportEventListener {
         return s;
     }
 
+    /** Bundle holding the translated console strings. */
     private static final String BUNDLE_NAME = "net.i2p.router.web.messages";
 
     /**

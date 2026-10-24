@@ -19,6 +19,7 @@ public class GarlicMessage extends FastI2NPMessageImpl {
      * I2NP message type code for a garlic message.
      */
     public final static int MESSAGE_TYPE = 11;
+    /** The clove data, already encrypted. */
     private byte[] _data;
 
     /**

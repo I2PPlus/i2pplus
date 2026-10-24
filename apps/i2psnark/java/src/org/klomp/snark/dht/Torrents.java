@@ -26,6 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 class Torrents extends ConcurrentHashMap<InfoHash, Peers> {
 
+    /** Pinned for serialized-form compatibility. */
     private static final long serialVersionUID = 1L;
 
     /**

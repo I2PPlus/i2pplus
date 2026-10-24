@@ -14,8 +14,11 @@ import net.i2p.I2PAppContext;
  */
 public class GarlicClovePool {
 
+    /** The clove objects held for reuse. */
     private final GarlicClove[] pool;
+    /** How many clove objects are ready. */
     private int available;
+    /** Supplies the pool's configuration. */
     private final I2PAppContext context;
 
     /**

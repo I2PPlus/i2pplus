@@ -10,6 +10,7 @@ import org.bouncycastle.crypto.KeyGenerationParameters;
 public class MLKEMKeyGenerationParameters
     extends KeyGenerationParameters
 {
+    /** The parameter set of the key to be generated. */
     private final MLKEMParameters params;
 
     /**

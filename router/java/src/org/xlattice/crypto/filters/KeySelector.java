@@ -45,9 +45,13 @@ package org.xlattice.crypto.filters;
  */
 public class KeySelector {
 
+    /** Bits in the full key block. */
     private final int m;
+    /** Bits selected from the block. */
     private final int k;
+    /** Which individual bits are selected. */
     private final BitSelector  bitSel;
+    /** Which words are selected. */
     private final WordSelector wordSel;
 
     /**
@@ -145,6 +149,7 @@ public class KeySelector {
     private final static int[] MASK   = {
     ~0,~1,~3,~7,~15,~31,~63,~127,~255,~511,~1023,~2047,~4095,~8191,~16383,~32767};
 
+    /** 2 to the 15, the largest table size allowed. */
     private final static int TWO_UP_15 = 32 * 1024;
 
     /**

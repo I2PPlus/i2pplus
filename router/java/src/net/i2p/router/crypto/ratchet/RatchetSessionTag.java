@@ -13,6 +13,7 @@ public class RatchetSessionTag {
     /** Length of the tag in bytes. */
     public static final int LENGTH = 8;
 
+    /** The 64-bit session tag value. */
     private final long _data;
     /**
      * Tag from a long value for compact 8-byte storage.
@@ -56,9 +57,9 @@ public class RatchetSessionTag {
         return _data;
     }
     /**
-     * Tag size in bytes (always 8).
+     * Return the fixed length of the tag.
      *
-     * @return the tag size in bytes (always 8)
+     * @return 8, the same as {@link #LENGTH}
      */
     public int length() { // NOSONAR S1845 length() is standard Java naming
         return LENGTH;
@@ -97,9 +98,9 @@ public class RatchetSessionTag {
     }
 
     /**
-     * Base64-encoded tag string.
+     * Describe the tag for log messages.
      *
-     * @return base64-encoded tag string
+     * @return "RatchetSessionTag: " followed by the 12-character base64 tag
      */
     @Override
     public String toString() {

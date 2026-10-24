@@ -23,9 +23,19 @@ import java.io.IOException;
  */
 public final class UNKNOWN extends Data {
 
+    /** The type this record stands for. */
     private final TYPE type;
+    /** The record's bytes, as read. */
     private final byte[] data;
 
+    /**
+     * Reads a record of a type nothing else parses.
+     *
+     * @param dis the stream to read from
+     * @param payloadLength the number of bytes to read
+     * @param type the unrecognized type
+     * @throws IOException if the reading fails
+     */
     private UNKNOWN(DataInputStream dis, int payloadLength, TYPE type) throws IOException {
         this.type = type;
         this.data = new byte[payloadLength];

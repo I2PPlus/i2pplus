@@ -40,6 +40,7 @@ import java.util.List;
  */
 public final class PublicSuffixListParser {
 
+    /** Longest line the parser accepts. */
     private static final int MAX_LINE_LEN = 256;
 
     /**
@@ -89,6 +90,14 @@ public final class PublicSuffixListParser {
         return new PublicSuffixList(rules, exceptions);
     }
 
+    /**
+     * Reads one line, stopping at the first whitespace.
+     *
+     * @param r where to read
+     * @param sb receives the line, cleared first
+     * @return true if a line was read
+     * @throws IOException if the read fails
+     */
     private boolean readLine(final Reader r, final StringBuilder sb) throws IOException {
         sb.setLength(0);
         int b;

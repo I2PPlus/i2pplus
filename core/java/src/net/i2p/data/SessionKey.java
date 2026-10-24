@@ -67,6 +67,7 @@ package net.i2p.data;
  *
  */
 public class SessionKey extends SimpleDataStructure {
+    /** The key expanded for the cipher, built once per use. */
     private Object _preparedKey;
 
     /** Key size in bytes (32). */

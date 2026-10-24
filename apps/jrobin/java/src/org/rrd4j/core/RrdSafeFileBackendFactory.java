@@ -14,14 +14,18 @@ public class RrdSafeFileBackendFactory extends RrdRandomAccessFileBackendFactory
     /** Default time (in milliseconds) this backend will wait for a file lock. */
     public static final long LOCK_WAIT_TIME = 3000L;
 
+    /** How long a lock is retried, in ms. */
     private static long defaultLockWaitTime = LOCK_WAIT_TIME;
 
     /** Default time between two consecutive file locking attempts. */
     public static final long LOCK_RETRY_PERIOD = 50L;
 
+    /** Pause between lock attempts, in ms. */
     private static long defaultLockRetryPeriod = LOCK_RETRY_PERIOD;
 
+    /** Wait time this factory hands to its backends. */
     private final long lockWaitTime;
+    /** Retry period this factory hands to its backends. */
     private final long lockRetryPeriod;
 
     /** Generate a factory using the default system wide lock settings */

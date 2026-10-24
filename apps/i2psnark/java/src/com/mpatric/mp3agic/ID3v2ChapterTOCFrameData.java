@@ -125,6 +125,11 @@ public class ID3v2ChapterTOCFrameData extends AbstractID3v2FrameData {
         return bb.array();
     }
 
+    /**
+     * Packs the root and ordered flags into the frame's flag byte.
+     *
+     * @return the packed flag byte
+     */
     private byte getFlags() {
         byte b = 0;
 
@@ -177,7 +182,7 @@ public class ID3v2ChapterTOCFrameData extends AbstractID3v2FrameData {
     /**
      * The element ID of this table of contents.
      *
-     * @return the element ID of this table of contents
+     * @return the element id referenced by the child frames
      */
     public String getId() {
         return id;
@@ -213,7 +218,7 @@ public class ID3v2ChapterTOCFrameData extends AbstractID3v2FrameData {
     /**
      * The subframes contained in this frame.
      *
-     * @return the subframes contained in this frame
+     * @return the child frames, empty if none
      */
     public ArrayList<ID3v2Frame> getSubframes() {
         return subframes;

@@ -28,6 +28,7 @@ import java.security.spec.RSAKeyGenParameterSpec;
  */
 final class RSASigningPrivateCrtKey extends SigningPrivateKey {
 
+    /** The Java CRT key the signature is made with. */
     private final RSAPrivateCrtKey _crt;
 
     /**
@@ -52,14 +53,21 @@ final class RSASigningPrivateCrtKey extends SigningPrivateKey {
         return new RSASigningPrivateCrtKey(pk, type, b);
     }
 
+    /**
+     * Wraps a Java CRT key together with its encoded form.
+     *
+     * @param pk the Java private key
+     * @param type the signature type
+     * @param data the encoded key
+     */
     private RSASigningPrivateCrtKey(RSAPrivateCrtKey pk, SigType type, byte[] data) {
         super(type, data);
         _crt = pk;
     }
 
     /**
-     * Java private CRT key.
-     * @return the Java private CRT key
+     * The Java key wrapped by this object.
+     * @return the underlying CRT key, never null
      */
     public RSAPrivateCrtKey toJavaKey() {
         return _crt;

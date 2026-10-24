@@ -76,6 +76,7 @@ import net.i2p.util.SystemVersion;
 public class ProfileOrganizer {
     /** Threshold below which the network is considered under attack. */
     public static final double ATTACK_THRESHOLD = 0.40;
+    /** Sorts profiles by capacity, highest first. */
     private static final Comparator<PeerProfile> CAPACITY_COMPARATOR =
             Comparator.comparingDouble(PeerProfile::getCapacityValue);
     /**
@@ -97,8 +98,11 @@ public class ProfileOrganizer {
             if (byAge != 0) {return byAge;}
             return Double.compare(a.getCapacityValue(), b.getCapacityValue());
         };
+    /** Logger for profile reorganization. */
     private final Log _log;
+    /** The router context. */
     private final RouterContext _context;
+    /** Profiles of peers fast enough for tunnels. */
     private final Map<Hash, PeerProfile> _fastPeers;
     /**
      * Count of fast-tier peers that passed all tests (proven throughput or high-cap bypass).
@@ -220,6 +224,7 @@ public class ProfileOrganizer {
             _fastQualityCount--;
         return removed;
     }
+    /** Profiles of peers with high capacity. */
     private final Map<Hash, PeerProfile> _highCapacityPeers;
 
     /**
@@ -257,7 +262,9 @@ public class ProfileOrganizer {
      * @since 0.9.71+
      */
     static final long TIER_FILL_DEBOUNCE_MS = 5 * 1000L;
+    /** Profiles of peers well integrated into the netdb. */
     private final Map<Hash, PeerProfile> _wellIntegratedPeers;
+    /** Profiles of peers not currently failing. */
     private final Map<Hash, PeerProfile> _notFailingPeers;
     /**
      * Every tier this object retains, in a fixed order, so a pass that must read
@@ -269,6 +276,7 @@ public class ProfileOrganizer {
      * @since 0.9.71+
      */
     private final List<Map<Hash, PeerProfile>> _allTiers;
+    /** Cached keys of the not-failing peers map. */
     private final List<Hash> _notFailingPeersList;
     /** Peers demoted via demoteIfUnreachable — excluded from promotion for TUNNEL_DEMOTION_COOLDOWN_MS. */
     private final ConcurrentHashMap<Hash, Long> _demotedPeers = new ConcurrentHashMap<>(64);
@@ -283,14 +291,22 @@ public class ProfileOrganizer {
     public static final int DEMOTE_STRIKE_THRESHOLD = 3;
     /** A strike older than this no longer counts, so a peer that recovered is not demoted by one later failure. */
     public static final long DEMOTE_STRIKE_DECAY_MS = 10 * 60 * 1000L;
+    /** Demoted peers remembered across reorganizations. */
     private static final int MAX_DEMOTED_PEERS = 1024;
 
+    /** Hash of this router. */
     private Hash _us;
+    /** Saves and restores the peer profiles. */
     private final ProfilePersistenceHelper _persistenceHelper;
+    /** All profiles ordered by inverse capacity. */
     private Set<PeerProfile> _strictCapacityOrder;
+    /** Speed value a peer needs for the fast pool. */
     private double _thresholdSpeedValue;
+    /** Capacity value a peer needs for the high-capacity pool. */
     private double _thresholdCapacityValue;
+    /** Integration value a peer needs for the well-integrated pool. */
     private double _thresholdIntegrationValue;
+    /** Round trip time peers are held to, in ms. */
     private double _thresholdRTT;
     /**
      * First-measured fast-tier RTT boundary, captured during the initial
@@ -313,6 +329,7 @@ public class ProfileOrganizer {
        * @since 0.9.71+
        */
     private volatile float _averageLowLatencyRTT;
+    /** Comparator ordering profiles by inverse capacity. */
     private final InverseCapacityComparator _comp;
 
     /**
@@ -399,7 +416,9 @@ public class ProfileOrganizer {
      * @since 0.9.72+
      */
     public static final long DEFAULT_ROUTERINFO_REFRESH_AGE_MS = 60 * 60 * 1000L;
+    /** Grace period after startup before peers are penalized. */
     private static final long STARTUP_GRACE_PERIOD_MS = 10 * 60 * 1000L;
+    /** Window for trusting a stale router info as proof of life. */
     private static final long PROOF_OF_LIFE_WINDOW_MS = 60 * 60 * 1000L;
     /**
      * Property key naming the fast tier's ceiling.
@@ -618,6 +637,7 @@ public class ProfileOrganizer {
      * @since 0.9.71+
      */
     public static final String PROP_LOSSY_MODERATE_THRESHOLD = "profileOrganizer.lossyModerateThreshold";
+    /** Default packet loss marking a peer moderately lossy. */
     private static final float DEFAULT_LOSSY_MODERATE_THRESHOLD = 0.10f;
     /**
      * Minimum time after a loss demotion before a peer may be re-admitted,
@@ -725,11 +745,17 @@ public class ProfileOrganizer {
      */
     public static final int MIN_MAX_PROFILES = 800;
 
+    /**
+     * Returns the default profile count from the config.
+     *
+     * @return the maximum number of profiles
+     */
     private static int getDefaultMaxProfiles() {
         if (SystemVersion.isSlow()) return MIN_MAX_PROFILES;
         return ABSOLUTE_MAX_PROFILES;
     }
 
+    /** Rate stat periods for the profile statistics. */
     private static final long[] RATES = {
         RateConstants.ONE_MINUTE,
         RateConstants.FIVE_MINUTES,
@@ -737,6 +763,7 @@ public class ProfileOrganizer {
         RateConstants.ONE_HOUR
     };
 
+    /** Lock guarding the profile maps during reorganization. */
     private final ReentrantReadWriteLock _reorganizeLock = new ReentrantReadWriteLock(false);
 
     /**
@@ -834,10 +861,27 @@ public class ProfileOrganizer {
                                     status.toString().contains("REJECT_UNSOLICITED"));
         }
 
+      /** Takes the reorganization read lock. */
       private void getReadLock() {_reorganizeLock.readLock().lock();}
+    /**
+     * Takes the read lock if it is free.
+     *
+     * @return true if the lock was taken
+     */
     private boolean tryReadLock() {return _reorganizeLock.readLock().tryLock();}
+    /** Releases the reorganization read lock. */
     private void releaseReadLock() {_reorganizeLock.readLock().unlock();}
+    /**
+     * Takes the write lock if it is free.
+     *
+     * @return true if the lock was taken
+     */
     private boolean tryWriteLock() {return _reorganizeLock.writeLock().tryLock();}
+    /**
+     * Takes the reorganization write lock, waiting if needed.
+     *
+     * @return true if the lock was taken
+     */
     private boolean getWriteLock() {
         try {
             boolean rv = _reorganizeLock.writeLock().tryLock(3000, TimeUnit.MILLISECONDS);
@@ -850,6 +894,7 @@ public class ProfileOrganizer {
             return false;
         }
     }
+    /** Releases the reorganization write lock. */
     private void releaseWriteLock() {_reorganizeLock.writeLock().unlock();}
 
     /**
@@ -1017,6 +1062,12 @@ public class ProfileOrganizer {
         return old;
     }
 
+    /**
+     * Counts the profiles in one pool map.
+     *
+     * @param m the pool map
+     * @return the number of profiles
+     */
     private int count(Map<Hash, PeerProfile> m) {
         getReadLock();
         try {return m.size();}
@@ -1087,6 +1138,13 @@ public class ProfileOrganizer {
         return activePeers;
     }
 
+    /**
+     * Checks whether a peer is in one pool map.
+     *
+     * @param m the pool map
+     * @param peer the peer hash
+     * @return true if the peer is in the map
+     */
     private boolean isX(Map<Hash, PeerProfile> m, Hash peer) {
         getReadLock();
         try {return m.containsKey(peer);}
@@ -1145,6 +1203,7 @@ public class ProfileOrganizer {
         } finally {releaseWriteLock();}
     }
 
+    /** Bad netdb replies per hour before a peer is penalized. */
     private static final int MAX_BAD_REPLIES_PER_HOUR = 40;
 
     /**
@@ -1323,7 +1382,12 @@ public class ProfileOrganizer {
         final int mask;
         /** Selection value. */
         final int val;
-        /** Create slice. */
+        /**
+         * Creates one masked slice.
+         *
+         * @param mask the bits to match
+         * @param val the value those bits must have
+         */
         Slice(int mask, int val) {
             this.mask = mask;
             this.val = val;
@@ -1824,8 +1888,14 @@ public class ProfileOrganizer {
      */
     public int getStoredProfileCount() {return _persistenceHelper.getStoredProfileCount();}
 
+    /** Profile count considered enough for full selection. */
     private static final int ENOUGH_PROFILES = getEnoughProfiles();
 
+    /**
+     * Derives the enough-profiles count from the config.
+     *
+     * @return the profile count
+     */
     private static int getEnoughProfiles() {
         if (SystemVersion.isSlow()) return 1000;
         long maxMemory = SystemVersion.getMaxMemory();
@@ -2112,6 +2182,12 @@ public class ProfileOrganizer {
         }
     }
 
+    /**
+     * Scales a baseline timeout by the configured multiple.
+     *
+     * @param baselineMs the baseline timeout
+     * @return the adjusted timeout
+     */
     private long applyBaselineMultiple(long baselineMs) {
         return applyBaselineMultiple(baselineMs, _lowLatencyBaselineMultiple);
     }
@@ -2647,11 +2723,23 @@ public class ProfileOrganizer {
      * logging sections.
      */
     private static final class CandidateSet {
+        /** The candidate profiles. */
         final Set<PeerProfile> profiles;
+        /** Total integration value across the candidates. */
         final double totalIntegration;
+        /** Candidates whose profiles have expired. */
         final int expiredCount;
+        /** Total profiles held by the organizer. */
         final int profileCount;
 
+        /**
+         * Holds one candidate pool and its totals.
+         *
+         * @param profiles the candidate profiles
+         * @param totalIntegration integration summed over the candidates
+         * @param expiredCount candidates with expired profiles
+         * @param profileCount total profiles held
+         */
         CandidateSet(Set<PeerProfile> profiles, double totalIntegration, int expiredCount, int profileCount) {
             this.profiles = profiles;
             this.totalIntegration = totalIntegration;
@@ -3702,6 +3790,17 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
         }
     }
 
+    /**
+     * Interpolates the capacity threshold for selection.
+     *
+     * @param meanCapacity the mean capacity of the peers
+     * @param numExceedingMean peers above the mean
+     * @param totalPeers the peers considered
+     * @param thresholdAtMedian the threshold when half are above
+     * @param thresholdAtMinHighCap the threshold at the minimum high cap
+     * @param thresholdAtLowest the threshold at the lowest point
+     * @return the capacity threshold
+     */
     private double calculateCapacityThreshold(double meanCapacity, int numExceedingMean, int totalPeers,
                                              double thresholdAtMedian, double thresholdAtMinHighCap,
                                              double thresholdAtLowest) {
@@ -3718,6 +3817,14 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
         }
     }
 
+    /**
+     * Computes the speed threshold over the high-capacity peers.
+     *
+     * @param reordered profiles ordered by capacity
+     * @param now the current time
+     * @param capacityThreshold the capacity threshold in effect
+     * @return the speed threshold
+     */
     private double calculateSpeedThreshold(Set<PeerProfile> reordered, long now, double capacityThreshold) {
         PeerProfile boundary = selectSpeedBoundary(reordered, now, capacityThreshold);
         if (boundary == null) return 0;
@@ -4044,6 +4151,12 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      */
     public double getHighCapRTTThreshold() {return 0;}
 
+    /**
+     * Returns a peer's profile with the read lock held.
+     *
+     * @param peer the peer hash
+     * @return the profile, or null if unknown
+     */
     private PeerProfile lockedGetProfile(Hash peer) {
         return _notFailingPeers.get(peer);
     }
@@ -4076,6 +4189,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     static final int MAX_CANDIDATE_SAMPLE = 1024;
     /** Property for the floor; see {@link #getMinCandidateSample}. */
     public static final String PROP_MIN_CANDIDATE_SAMPLE = "profileOrganizer.minCandidateSample";
+    /** Minimum candidate sample size for threshold math. */
     private static volatile int _minCandidateSample = DEFAULT_MIN_CANDIDATE_SAMPLE;
 
     /**
@@ -4153,6 +4267,18 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
         return Math.min(peerCount, Math.max(need, floor));
     }
 
+    /**
+     * Selects peers while holding the lock.
+     *
+     * @param peers the profiles to choose from
+     * @param howMany the number of peers to select
+     * @param toExclude the hashes to skip
+     * @param matches the set to add the selections to
+     * @param mask the network bits to match
+     * @param ipSet the masked ips to match
+     * @param buildSuccess the cached build success ratio
+     * @param rttCeiling the largest acceptable round trip time
+     */
     private void lockedSelectPeers(Map<Hash, PeerProfile> peers, int howMany, Set<Hash> toExclude,
                                     Set<Hash> matches, int mask, MaskedIPSet ipSet, double buildSuccess,
                                     long rttCeiling) {
@@ -4918,6 +5044,12 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
                profile.getLastHeardAbout() > now - PROOF_OF_LIFE_WINDOW_MS;
     }
 
+    /**
+     * Puts a profile into the pool maps with the write lock held.
+     *
+     * @param profile the profile to place
+     * @param buildSuccess the current tunnel build success ratio
+     */
     private void lockedPlaceProfile(PeerProfile profile, double buildSuccess) {
         lockedPlaceProfile(profile, buildSuccess,
                            getMinimumHighCapacityPeers(),
@@ -6944,7 +7076,14 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
                                     defaultTierSize(known, _defaultMinHighCapPeers, 15));
     }
 
+    /** Shared formatter for the statistics display. */
     private static final DecimalFormat _fmt = new DecimalFormat("###,##0.00", new DecimalFormatSymbols(Locale.UK));
+    /**
+     * Formats one number for the statistics display.
+     *
+     * @param num the value to format
+     * @return the formatted text
+     */
     private static final String num(double num) {synchronized (_fmt) {return _fmt.format(num);} }
 
     /**
@@ -7012,7 +7151,9 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * negligible impact on decision accuracy.
      */
     private volatile double _cachedBuildSuccess = 1.0;
+    /** When the build success ratio was last read. */
     private volatile long _cachedBuildSuccessTime;
+    /** How long the cached build success ratio stays fresh. */
     private static final long BUILD_SUCCESS_CACHE_MS = 15_000;
 
     /**

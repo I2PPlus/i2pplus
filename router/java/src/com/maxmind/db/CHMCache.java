@@ -10,10 +10,14 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class CHMCache implements NodeCache {
 
+    /** Entries held when no capacity is given. */
     private static final int DEFAULT_CAPACITY = 4096;
 
+    /** Most entries the cache holds. */
     private final int capacity;
+    /** The cached values, by key. */
     private final ConcurrentHashMap<Integer, Object> cache;
+    /** True once the capacity has been reached. */
     private boolean cacheFull = false;
 
     /**

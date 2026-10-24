@@ -25,22 +25,35 @@ public final class RyuDouble {
      * Creates a Ryu instance.
      */
     public RyuDouble() {}
+    /** Mantissa bits of a double. */
     private static final int DOUBLE_MANTISSA_BITS = 52;
+    /** Mask of the mantissa bits. */
     private static final long DOUBLE_MANTISSA_MASK = (1L << DOUBLE_MANTISSA_BITS) - 1;
 
+    /** Exponent bits of a double. */
     private static final int DOUBLE_EXPONENT_BITS = 11;
+    /** Mask of the exponent bits. */
     private static final int DOUBLE_EXPONENT_MASK = (1 << DOUBLE_EXPONENT_BITS) - 1;
+    /** Exponent bias of a double. */
     private static final int DOUBLE_EXPONENT_BIAS = (1 << (DOUBLE_EXPONENT_BITS - 1)) - 1;
 
+    /** Entries in the positive power of five table. */
     private static final int POS_TABLE_SIZE = 326;
+    /** Entries in the negative power of five table. */
     private static final int NEG_TABLE_SIZE = 291;
 
+    /** Significant bits in a split power of five. */
     private static final int POW5_BITCOUNT = 121; // max 3*31 = 124
+    /** Bits in one quarter of a split power. */
     private static final int POW5_QUARTER_BITCOUNT = 31;
+    /** Table of the positive powers of five. */
     private static final int[][] POW5_SPLIT = new int[POS_TABLE_SIZE][4];
 
+    /** Significant bits in a split inverse power. */
     private static final int POW5_INV_BITCOUNT = 122; // max 3*31 = 124
+    /** Bits in one quarter of a split inverse. */
     private static final int POW5_INV_QUARTER_BITCOUNT = 31;
+    /** Table of the negative powers of five. */
     private static final int[][] POW5_INV_SPLIT = new int[NEG_TABLE_SIZE][4];
 
     static {
@@ -329,10 +342,22 @@ public final class RyuDouble {
         return new String(result, 0, index);
     }
 
+    /**
+     * Estimates the bit count of a power of five.
+     *
+     * @param e the exponent of the power
+     * @return the number of significant bits
+     */
     private static int pow5bits(int e) {
         return ((e * 1217359) >>> 19) + 1;
     }
 
+    /**
+     * Counts the decimal digits of a value.
+     *
+     * @param v the value to measure
+     * @return the number of digits
+     */
     private static int decimalLength(long v) {
         if (v >= 1000000000000000000L) return 19;
         if (v >= 100000000000000000L) return 18;
@@ -355,10 +380,23 @@ public final class RyuDouble {
         return 1;
     }
 
+    /**
+     * Checks whether a value divides the power of five.
+     *
+     * @param value the value to check
+     * @param q the exponent of the power
+     * @return true if the value is a multiple
+     */
     private static boolean multipleOfPowerOf5(long value, int q) {
         return pow5Factor(value) >= q;
     }
 
+    /**
+     * Counts the factors of five in a value.
+     *
+     * @param value the value to factor
+     * @return the number of five factors
+     */
     private static int pow5Factor(long value) {
         // We want to find the largest power of 5 that divides value.
         if ((value % 5) != 0) return 0;

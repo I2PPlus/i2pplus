@@ -11,18 +11,31 @@ import net.i2p.crypto.KeyFactory;
  */
 public class HandshakeState implements Destroyable, Cloneable {
 
+    /** The symmetric state carrying the keys. */
     private final SymmetricState symmetric;
+    /** True for the initiator of the handshake. */
     private final boolean isInitiator;
+    /** Our static key pair for the handshake. */
     private DHState localKeyPair;
+    /** Our ephemeral key pair for the handshake. */
     private DHState localEphemeral;
+    /** Our hybrid key pair for the handshake. */
     private DHState localHybrid;
+    /** The peer's static key, once received. */
     private DHState remotePublicKey;
+    /** The peer's ephemeral key, once received. */
     private DHState remoteEphemeral;
+    /** The peer's hybrid key, once received. */
     private DHState remoteHybrid;
+    /** The next action allowed in the pattern. */
     private int action;
+    /** The key types the pattern requires. */
     private final int requirements;
+    /** Position within the pattern tokens. */
     private int patternIndex;
+    /** True once the state was cloned for writing. */
     private boolean wasCloned;
+    /** True once the state was destroyed. */
     private boolean isDestroyed;
 
     /**
@@ -153,6 +166,7 @@ public class HandshakeState implements Destroyable, Cloneable {
      * protocolName12.
      */
     public static final String protocolName12 = "Noise_XKhfschaobfse+hs1+hs2+hs3_25519+MLKEM768_ChaChaPoly_SHA256";
+    /** The handshake pattern being run. */
     private final NoiseInit.PatternID patternId;
     /** NTCP2 */
     public static final String PATTERN_ID_XK = "XK";
@@ -166,6 +180,7 @@ public class HandshakeState implements Destroyable, Cloneable {
     public static final String PATTERN_ID_XK_SSU2 = "XK-SSU2";
     /** Hybrid Base */
     private static final String PATTERN_ID_IKHFS = "IKhfs";
+    /** Name of the I2P ratchet handshake pattern. */
     private static final String PATTERN_ID_XKHFS = "XKhfs";
     /**
      * Hybrid Ratchet
@@ -202,8 +217,8 @@ public static final String PATTERN_ID_XKHFS_512_SSU2 = "XKhfs512-SSU2";
      * PATTERN_ID_XKHFS_768_SSU2.
      */
     public static final String PATTERN_ID_XKHFS_768_SSU2 = "XKhfs768-SSU2";
-    // no 1024, too big
 
+    /** The token list of the handshake pattern. */
     private final short[] pattern;
 
     /**
@@ -485,7 +500,7 @@ public static final String PATTERN_ID_XKHFS_512_SSU2 = "XKhfs512-SSU2";
     {
         return remoteHybrid;
     }
-    // Empty value for when the prologue is not supplied.
+    /** The empty prologue used when none is set. */
     private static final byte[] emptyPrologue = new byte [0];
 
     /**

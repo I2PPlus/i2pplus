@@ -33,18 +33,26 @@ import java.nio.charset.StandardCharsets;
 public class BlacklistBean extends BaseBean {
     /** Blacklist bean for address blacklisting. */
     public BlacklistBean() {}
+    /** Path of the blacklist file. */
     private String fileName;
+    /** The blacklist contents read from the file. */
     private String content;
+    /** Contents shared between requests until the file changes. */
     private static String cachedContent = null;
+    /** Modification time of the file the cache was read at. */
     private static long lastModified = 0;
 
     /** Trimmed lines of the current content, rebuilt when content changes. */
     private List<String> _lines;
+    /** Name of the blacklist file in the router directory. */
     private static final String BLACKLIST_FILE = "blacklist.txt";
+    /** Logger for this class. */
     private static final Log _log = new Log(BlacklistBean.class);
 
-    // Pattern to validate I2P addresses (hostnames, b32, b64)
-    // b64 destinations vary with key type: EdDSA ~128 chars, DSA 516 chars
+    /**
+     * Pattern to validate I2P addresses (hostnames, b32, b64). b64
+     * destinations vary with key type: EdDSA ~128 chars, DSA 516 chars.
+     */
     private static final Pattern I2P_ADDRESS_PATTERN = Pattern.compile(
         "^[a-zA-Z0-9.-]+\\.i2p$|" +                    // hostname.i2p
         "^[a-zA-Z2-7]{52,53}\\.b32\\.i2p$|" +          // b32 addresses (52-53 chars)
@@ -63,8 +71,8 @@ public class BlacklistBean extends BaseBean {
     }
 
     /**
-     * Blacklist file.
-     * @return the blacklist file
+     * The file holding the host blacklist.
+     * @return blacklist.txt in the addressbook directory
      */
     private File blacklistFile() {
         return new File(addressbookDir(), BLACKLIST_FILE);

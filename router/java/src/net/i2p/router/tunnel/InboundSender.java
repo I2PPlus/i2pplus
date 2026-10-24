@@ -7,6 +7,7 @@ import net.i2p.I2PAppContext;
  * it on to the first hop.
  */
 class InboundSender implements TunnelGateway.Sender {
+    /** The processor whose queue this sender drains. */
     private final InboundGatewayProcessor _processor;
 
     /**

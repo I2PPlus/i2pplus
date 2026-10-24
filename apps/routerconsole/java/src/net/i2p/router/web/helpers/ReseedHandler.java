@@ -11,6 +11,7 @@ import net.i2p.router.web.HelperBase;
  * Handler to deal with reseed requests.
  */
 public class ReseedHandler extends HelperBase {
+    /** The session the reseed request arrives on. */
     private HttpSession _session;
 
     /**
@@ -59,6 +60,7 @@ public class ReseedHandler extends HelperBase {
         }
     }
 
+    /** Starts a reseed when the form asks for one. */
     private void requestReseed() {
         _context.netDb().reseedChecker().requestReseed();
     }

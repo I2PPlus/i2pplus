@@ -33,9 +33,12 @@ public class RequestVariableLeaseSetMessage extends I2CPMessageImpl {
      * I2CP message type number of a variable LeaseSet request.
      */
     public static final int MESSAGE_TYPE = 37;
+    /** The session asking for the lease set. */
     private SessionId _sessionId;
+    /** The leases to include in the reply. */
     private final List<Lease> _endpoints;
 
+    /** Oldest router that understands this message. */
     private static final String MIN_VERSION = "0.9.7";
 
     /**
@@ -56,8 +59,8 @@ public class RequestVariableLeaseSetMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Session id.
-     * @return the session id
+     * Session requesting the lease set.
+     * @return the session id, null until set or read
      */
     public SessionId getSessionId() {
         return _sessionId;

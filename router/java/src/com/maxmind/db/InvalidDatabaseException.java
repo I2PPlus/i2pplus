@@ -9,6 +9,7 @@ import java.io.IOException;
  */
 public class InvalidDatabaseException extends IOException {
 
+    /** Pinned for serialized-form compatibility. */
     private static final long serialVersionUID = 6161763462364823003L;
 
     /**

@@ -3,15 +3,17 @@ package org.bouncycastle.crypto;
 import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
 
 /**
- * a holding class for public/private parameter pairs.
+ * A holding class for public/private parameter pairs.
  */
 public class AsymmetricCipherKeyPair
 {
+    /** The public key's parameters. */
     private AsymmetricKeyParameter    publicParam;
+    /** The private key's parameters. */
     private AsymmetricKeyParameter    privateParam;
 
     /**
-     * basic constructor.
+     * Creates a key pair from its parts.
      *
      * @param publicParam a public key parameters object.
      * @param privateParam the corresponding private key parameters.
@@ -25,7 +27,7 @@ public class AsymmetricCipherKeyPair
     }
 
     /**
-     * basic constructor.
+     * Creates a key pair from its parts.
      *
      * @param publicParam a public key parameters object.
      * @param privateParam the corresponding private key parameters.
@@ -40,7 +42,7 @@ public class AsymmetricCipherKeyPair
     }
 
     /**
-     * return the public key parameters.
+     * Return the public key parameters.
      *
      * @return the public key parameters.
      */
@@ -50,7 +52,7 @@ public class AsymmetricCipherKeyPair
     }
 
     /**
-     * return the private key parameters.
+     * Return the private key parameters.
      *
      * @return the private key parameters.
      */

@@ -13,8 +13,11 @@ import net.i2p.util.KeyRing;
  */
 public class PersistentKeyRing extends KeyRing {
 
+    /** Pinned for serialized-form compatibility. */
     private static final long serialVersionUID = 1L;
+    /** The context whose properties hold the keys. */
     private final transient RouterContext _ctx;
+    /** Start of each stored key's property name. */
     private static final String PROP_PFX = "router.keyring.key.";
 
     /**
@@ -61,6 +64,7 @@ public class PersistentKeyRing extends KeyRing {
         return rv;
     }
 
+    /** Loads the keys saved in the router's properties. */
     private void addFromProperties() {
         for (String prop : _ctx.getPropertyNames()) {
             if (!prop.startsWith(PROP_PFX))

@@ -15,7 +15,9 @@ package org.minidns.util;
  * Provides basic Base64 encoding functionality using standard Base64 alphabet with padding.
  */
 public final class Base64 {
+    /** The 64 characters used as digits */
     private static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    /** Padding appended to reach a whole quantum. */
     private static final String PADDING = "==";
 
     /**

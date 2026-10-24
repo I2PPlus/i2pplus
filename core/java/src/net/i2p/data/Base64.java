@@ -209,6 +209,11 @@ public class Base64 {
         runApp(args);
     }
 
+    /**
+     * Runs the command line encoder and decoder.
+     *
+     * @param args the command line arguments
+     */
     private static void runApp(String[] args) {
         String cmd = args[0].toLowerCase(Locale.US);
         if ("encodestring".equals(cmd)) {
@@ -256,18 +261,39 @@ public class Base64 {
         }
     }
 
+    /**
+     * Reads a whole stream.
+     *
+     * @param in the stream to read
+     * @return the bytes read
+     * @throws IOException if the stream cannot be read
+     */
     private static byte[] read(InputStream in) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream(1024);
         DataHelper.copy(in, baos);
         return baos.toByteArray();
     }
 
+    /**
+     * Base64-encodes one stream into another.
+     *
+     * @param in the bytes to encode
+     * @param out where the encoded text is written
+     * @throws IOException if either stream fails
+     */
     private static void encode(InputStream in, OutputStream out) throws IOException {
         String encoded = encode(read(in));
         for (int i = 0; i < encoded.length(); i++)
             out.write((byte)(encoded.charAt(i) & 0xFF));
     }
 
+    /**
+     * Base64-decodes one stream into another.
+     *
+     * @param in the encoded text to decode
+     * @param out where the bytes are written
+     * @throws IOException if either stream fails
+     */
     private static void decode(InputStream in, OutputStream out) throws IOException {
         byte[] decoded = decode(DataHelper.getUTF8(read(in)));
         if (decoded == null)

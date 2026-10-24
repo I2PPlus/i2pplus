@@ -14,8 +14,11 @@ import net.i2p.router.RouterContext;
  *
  */
 class TunnelGatewayZeroHop extends TunnelGateway {
+    /** The tunnel this hop is the gateway of. */
     private final TunnelCreatorConfig _config;
+    /** Sends messages to the next hop. */
     private OutboundMessageDistributor _outDistributor;
+    /** Reads messages back from the next hop. */
     private InboundMessageDistributor _inDistributor;
 
     /**

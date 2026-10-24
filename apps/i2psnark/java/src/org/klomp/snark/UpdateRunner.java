@@ -17,22 +17,38 @@ import org.klomp.snark.comments.CommentSet;
  * @since 0.9.4
  */
 class UpdateRunner implements UpdateTask, CompleteListener {
+    /** The app context. */
     private final I2PAppContext _context;
+    /** Logger for the plugin update. */
     private final Log _log;
+    /** The update manager that started us. */
     private final UpdateManager _umgr;
+    /** The snark manager being updated. */
     private final SnarkManager _smgr;
+    /** The type of update being run. */
     private final UpdateType _type;
+    /** The URLs to download from. */
     private final List<URI> _urls;
+    /** True while the runner is running. */
     private volatile boolean _isRunning;
+    /** True once the metainfo has been fetched. */
     private volatile boolean _hasMetaInfo;
+    /** True once the download is complete. */
     private volatile boolean _isComplete;
+    /** The new version string being fetched. */
     private final String _newVersion;
+    /** The URL being fetched now. */
     private URI _currentURI;
+    /** The download doing the work. */
     private Snark _snark;
 
+    /** Largest update download accepted, in bytes. */
     private static final long MAX_LENGTH = 128 * (long) 1024 * 1024;
+    /** Time allowed to fetch the metainfo. */
     private static final long METAINFO_TIMEOUT = 60 * (long) 60 * 1000;
+    /** Time allowed for the download to complete. */
     private static final long COMPLETE_TIMEOUT = 12 * 60 * (long) 60 * 1000;
+    /** Interval between progress checks. */
     private static final long CHECK_INTERVAL = 3 * (long) 60 * 1000;
 
     /**
@@ -61,7 +77,6 @@ class UpdateRunner implements UpdateTask, CompleteListener {
         _newVersion = newVersion;
     }
 
-    //////// begin UpdateTask methods
 
     /**
      * Whether the runner is running.
@@ -124,7 +139,6 @@ class UpdateRunner implements UpdateTask, CompleteListener {
         return "";
     }
 
-    //////// end UpdateTask methods
 
     /**
      * Start the runner.
@@ -193,8 +207,10 @@ class UpdateRunner implements UpdateTask, CompleteListener {
      * Runs twice, once at the metainfo timeout and once at the complete timeout.
      */
     private class Timeout extends SimpleTimer2.TimedEvent {
+        /** When the timer was created. */
         private final long _start = _context.clock().now();
 
+        /** Builds the update timeout event. */
         public Timeout() {
             super(_context.simpleTimer2(), METAINFO_TIMEOUT);
         }
@@ -218,8 +234,10 @@ class UpdateRunner implements UpdateTask, CompleteListener {
      * Rarely used - only if the user added the torrent, so we aren't a complete listener.
      */
     private class Watcher extends SimpleTimer2.TimedEvent {
+        /** When the timer was created. */
         private final long _start = _context.clock().now();
 
+        /** Builds the update progress watcher. */
         public Watcher() {
             super(_context.simpleTimer2(), CHECK_INTERVAL);
         }
@@ -241,6 +259,11 @@ class UpdateRunner implements UpdateTask, CompleteListener {
         }
     }
 
+    /**
+     * Marks the update as failed.
+     *
+     * @param error the error message to show
+     */
     private void fatal(String error) {
         if (_snark != null) {
             if (_hasMetaInfo) {
@@ -271,6 +294,11 @@ class UpdateRunner implements UpdateTask, CompleteListener {
         }
     }
 
+    /**
+     * Handles a completed update download.
+     *
+     * @param snark the finished download
+     */
     private void processComplete(Snark snark) {
         String dataFile = snark.getBaseName();
         File f = new File(_smgr.getDataDir(), dataFile);
@@ -280,6 +308,7 @@ class UpdateRunner implements UpdateTask, CompleteListener {
         _isComplete = true;
     }
 
+    /** Reports the download progress to the manager. */
     private void notifyProgress() {
         if (_hasMetaInfo) {
             long total = _snark.getTotalLength();
@@ -289,8 +318,6 @@ class UpdateRunner implements UpdateTask, CompleteListener {
         }
     }
 
-    //////// begin CompleteListener methods
-    //////// all pass through to SnarkManager
 
     /**
      * Handle torrent completion.
@@ -421,7 +448,6 @@ class UpdateRunner implements UpdateTask, CompleteListener {
         return _smgr.getBandwidthListener();
     }
 
-    //////// end CompleteListener methods
 
     /**
      * Convert a URL to an HTML link.
@@ -438,6 +464,11 @@ class UpdateRunner implements UpdateTask, CompleteListener {
         return "<a target=_blank href=\"" + DataHelper.escapeHTML(url) + "\"/>" + durl + "</a>";
     }
 
+    /**
+     * Updates the status message shown in the console.
+     *
+     * @param s the status text
+     */
     private void updateStatus(String s) {
         _umgr.notifyProgress(this, s);
     }

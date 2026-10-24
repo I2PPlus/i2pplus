@@ -105,7 +105,9 @@ public class HTTPStatus {
     ////////////////////////////////////////////////
 
     private String version = "";
+    /** Numeric status of the response. */
     private int statusCode = 0;
+    /** Text reason for the status code. */
     private String reasonPhrase = "";
 
     /**

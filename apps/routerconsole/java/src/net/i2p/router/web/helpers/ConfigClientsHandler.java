@@ -227,6 +227,7 @@ public class ConfigClientsHandler extends FormHandler {
 
     }
 
+    /** Saves the client changes from the form. */
     private void saveClientChanges() {
         try {
             synchronized(ClientAppConfig.class) {
@@ -239,6 +240,11 @@ public class ConfigClientsHandler extends FormHandler {
         }
     }
 
+    /**
+     * Writes the client changes to the config.
+     *
+     * @throws IOException if the writing fails
+     */
     private void saveClientChanges2() throws IOException {
         // will save if not split config
         List<ClientAppConfig> clients = ClientAppConfig.getClientApps(_context);
@@ -344,6 +350,11 @@ public class ConfigClientsHandler extends FormHandler {
         }
     }
 
+    /**
+     * Starts the client at the index.
+     *
+     * @param i the index of the client
+     */
     private void startClient(int i) {
         List<ClientAppConfig> clients = ClientAppConfig.getClientApps(_context);
         if (i >= clients.size()) {
@@ -362,6 +373,11 @@ public class ConfigClientsHandler extends FormHandler {
         }
     }
 
+    /**
+     * Deletes the client at the index.
+     *
+     * @param i the index of the client
+     */
     private void deleteClient(int i) {
         List<ClientAppConfig> clients = ClientAppConfig.getClientApps(_context);
         if (i < 0 || i >= clients.size()) {
@@ -378,6 +394,7 @@ public class ConfigClientsHandler extends FormHandler {
         }
     }
 
+    /** Saves the webapp changes from the form. */
     private void saveWebAppChanges() {
         Properties props = RouterConsoleRunner.webAppProperties(_context);
         Set<String> keys = props.stringPropertyNames();
@@ -393,6 +410,7 @@ public class ConfigClientsHandler extends FormHandler {
         addFormNotice(_t("WebApp configuration saved."), true);
     }
 
+    /** Saves the plugin changes from the form. */
     private void savePluginChanges() {
         Properties props = PluginStarter.pluginProperties();
         Set<String> keys = props.stringPropertyNames();
@@ -431,6 +449,7 @@ public class ConfigClientsHandler extends FormHandler {
         addFormError(_t("Failed to find server."), true);
     }
 
+    /** Installs the plugin from the form. */
     private void installPlugin() {
         String url = getJettyString("pluginURL");
         if (url == null || url.length() <= 0) {
@@ -507,6 +526,11 @@ public class ConfigClientsHandler extends FormHandler {
         }
     }
 
+    /**
+     * Updates the plugin from the update site.
+     *
+     * @param app the name of the plugin
+     */
     private void updatePlugin(String app) {
         Properties props = PluginStarter.pluginProperties(_context, app);
         String url = props.getProperty("updateURL.su3");
@@ -600,6 +624,11 @@ public class ConfigClientsHandler extends FormHandler {
         }
     }
 
+    /**
+     * Checks the plugin for an update.
+     *
+     * @param app the name of the plugin
+     */
     private void checkPlugin(String app) {
         ConsoleUpdateManager mgr = UpdateHandler.updateManager(_context);
         if (mgr == null) {
@@ -640,6 +669,11 @@ public class ConfigClientsHandler extends FormHandler {
         return rv;
     }
 
+    /**
+     * Starts the plugin.
+     *
+     * @param app the name of the plugin
+     */
     private void startPlugin(String app) {
         try {
             // Can't start a webapp from a webapp with this classloader because Jetty hides config classes

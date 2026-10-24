@@ -43,6 +43,7 @@ public class I2PTunnelDCCServer extends I2PTunnelServer {
     private final ConcurrentHashMap<Integer, LocalAddress> _active;
     /** Key is the server's local I2P port. */
     private final ConcurrentHashMap<Integer, LocalAddress> _resume;
+    /** The open DCC sockets. */
     private final List<I2PSocket> _sockList;
 
     /** Just to keep super() happy. */
@@ -55,11 +56,17 @@ public class I2PTunnelDCCServer extends I2PTunnelServer {
         DUMMY = dummy;
     }
 
+    /** Smallest DCC port accepted. */
     private static final int MIN_I2P_PORT = 1;
+    /** Largest DCC port accepted. */
     private static final int MAX_I2P_PORT = 65535;
+    /** Outgoing DCC connections allowed pending. */
     private static final int MAX_OUTGOING_PENDING = 20;
+    /** Outgoing DCC connections allowed open. */
     private static final int MAX_OUTGOING_ACTIVE = 20;
+    /** Time before an unused local address expires. */
     private static final long OUTBOUND_EXPIRE = 30*(long) 60*1000;
+    /** Default idle time before a DCC socket is dropped. */
     private static final long DEFAULT_DCC_READ_TIMEOUT = -1;
 
     /**
@@ -251,6 +258,7 @@ public class I2PTunnelDCCServer extends I2PTunnelServer {
         return -1;
     }
 
+    /** Drops the expired outgoing DCC connections. */
     private void expireOutbound() {
         for (Iterator<LocalAddress> iter = _outgoing.values().iterator(); iter.hasNext(); ) {
             LocalAddress a = iter.next();
@@ -265,12 +273,24 @@ public class I2PTunnelDCCServer extends I2PTunnelServer {
         }
     }
 
+    /** One local address handed out for a DCC connection. */
     private static class LocalAddress {
+        /** The fake address sent to the peer. */
         public final InetAddress ia;
+        /** The fake port sent to the peer. */
         public final int port;
+        /** When the address expires if unused. */
         public long expire;
+        /** The socket connected to the address, once opened. */
         public I2PSocket socket;
 
+        /**
+         * Records one local address.
+         *
+         * @param a the fake address sent to the peer
+         * @param p the fake port sent to the peer
+         * @param exp when the address expires if unused
+         */
         public LocalAddress(InetAddress a, int p, long exp) {
             ia = a;
             port = p;

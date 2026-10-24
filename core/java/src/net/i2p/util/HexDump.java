@@ -25,9 +25,13 @@ public class HexDump {
     /** Utility class. */
     private HexDump() {}
 
+    /** Width of the offset column. */
     private static final int FORMAT_OFFSET_PADDING = 8;
+    /** Bytes shown on one line. */
     private static final int FORMAT_BYTES_PER_ROW = 16;
+    /** Width of one formatted line. */
     private static final int OUTPUT_BYTES_PER_ROW = 79;
+    /** Digits used when writing hex. */
     private static final byte[] HEXCHARS = DataHelper.getASCII("0123456789abcdef");
 
     /**

@@ -39,29 +39,49 @@ import java.nio.charset.StandardCharsets;
  *
  */
 public class SAMStreamSend {
+    /** The app context. */
     private final I2PAppContext _context;
+    /** Logger for the SAM client. */
     private final Log _log;
+    /** Host of the SAM bridge. */
     private final String _samHost;
+    /** Port of the SAM bridge. */
     private final String _samPort;
+    /** File holding the peer destination. */
     private final String _destFile;
+    /** File holding the data to send. */
     private final String _dataFile;
+    /** Extra connection options from the command line. */
     private String _conOptions;
+    /** Reader for the SAM session replies. */
     private SAMReader _reader;
+    /** Reader for the second master session stream. */
     private SAMReader _reader2;
+    /** Whether SAM version 3 is used. */
     private boolean _isV3;
+    /** Whether SAM version 3.2 or later is used. */
     private boolean _isV32;
+    /** Session id used with SAM version 3. */
     private String _v3ID;
 
     /** Connection id (Integer) to peer (Flooder). */
     private final Map<String, Sender> _remotePeers;
+    /** Factory for the SSL bridge connections. */
     private static I2PSSLSocketFactory sslSocketFactory;
 
+    /** Mode number for stream send. */
     private static final int STREAM=0;
+    /** Mode number for datagram send. */
     private static final int DG=1;
+    /** Mode number for version 1 datagram send. */
     private static final int V1DG=2;
+    /** Mode number for raw send. */
     private static final int RAW=3;
+    /** Mode number for version 1 raw send. */
     private static final int V1RAW=4;
+    /** Mode number for a master session. */
     private static final int MASTER=8;
+    /** The usage message printed on bad arguments. */
     private static final String USAGE = "Usage: SAMStreamSend [-s] [-x] [-m mode] [-v version] [-b samHost] [-p samPort]\n" +
                                         "                     [-o opt=val] [-u user] [-w password] peerDestFile dataDir\n" +
                                         "       modes: stream: 0; datagram: 1; v1datagram: 2; raw: 3; v1raw: 4\n" +
@@ -245,6 +265,7 @@ public class SAMStreamSend {
         }
     }
 
+    /** Handles session events for the send. */
     private class SendEventHandler extends SAMEventHandler {
         /**
          * Creates the handler that tracks stream closes reported by the bridge.
@@ -272,6 +293,13 @@ public class SAMStreamSend {
         }
     }
 
+    /**
+     * Opens the connection to the SAM bridge.
+     *
+     * @param isSSL whether to connect over SSL
+     * @return the connected socket
+     * @throws IOException if the bridge cannot be reached
+     */
     private Socket connect(boolean isSSL) throws IOException {
         int port;
         try {
@@ -422,6 +450,14 @@ public class SAMStreamSend {
         }
     }
 
+    /**
+     * Sends the data file over the SAM session.
+     *
+     * @param samOut the SAM command stream
+     * @param eventHandler handler for the session events
+     * @param mode the send mode
+     * @throws IOException if the send fails
+     */
     private void send(OutputStream samOut, SAMEventHandler eventHandler, int mode) throws IOException {
         Sender sender = new Sender(samOut, eventHandler, mode);
         boolean ok = sender.openConnection();
@@ -433,17 +469,29 @@ public class SAMStreamSend {
         }
     }
 
+    /** One open SAM session sending data. */
     private class Sender implements Runnable {
+        /** The SAM connection id. */
         private final String _connectionId;
+        /** The destination being sent to. */
         private String _remoteDestination;
+        /** Stream the data is read from. */
         private InputStream _in;
+        /** Whether the session has been closed. */
         private volatile boolean _closed;
+        /** When the session opened. */
         private long _started;
+        /** Total bytes sent so far. */
         private long _totalSent;
+        /** Stream for sending through this session. */
         private final OutputStream _samOut;
+        /** Handler for this session's events. */
         private final SAMEventHandler _eventHandler;
+        /** The send mode to run. */
         private final int _mode;
+        /** Datagram socket for datagram modes. */
         private final DatagramSocket _dgSock;
+        /** Bridge address for datagram sends. */
         private final InetSocketAddress _dgSAM;
 
         /**

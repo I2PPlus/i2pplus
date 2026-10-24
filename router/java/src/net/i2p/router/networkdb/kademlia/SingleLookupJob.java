@@ -23,6 +23,7 @@ import net.i2p.util.SystemVersion;
  * to prevent resource exhaustion during high-volume search responses.
  */
 class SingleLookupJob extends JobImpl {
+    /** The search reply being processed. */
     private final DatabaseSearchReplyMessage _dsrm;
 
     /**

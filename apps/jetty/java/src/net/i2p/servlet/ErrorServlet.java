@@ -41,6 +41,7 @@ import org.eclipse.jetty.server.Server;
  */
 public class ErrorServlet extends HttpServlet {
 
+    /** Fixed id, the servlet is never serialized across versions. */
     private static final long serialVersionUID = 99356750L;
     /** The context */
     private final I2PAppContext _context;
@@ -192,17 +193,38 @@ public class ErrorServlet extends HttpServlet {
         else {printUnsupportedError(out, errorCode);}
     }
 
+    /**
+     * Links the theme's stylesheet into the error page.
+     *
+     * @param out where the page is written
+     * @param themePath path of the active theme
+     */
     private void printStylesheet(PrintWriter out, String themePath) {
         out.print("<link href=\"" + themePath + PROXY_CSS + "\" rel=stylesheet>\n");
         out.print("<style>#xhr{opacity:1!important;animation:none!important}</style>\n");
     }
 
+    /**
+     * Writes the not-found error page.
+     *
+     * @param out where the page is written
+     * @param errorURI the address that was not found
+     */
     private void print404Error(PrintWriter out, String errorURI) {
         out.print("<p>" + _t("Sorry! You appear to be requesting a non-existent Router Console page or resource.") + "</p>\n");
         out.print("<hr>\n");
         out.print("<p><b>" + _t("Error {0}", 404) + ": " + errorURI + "&nbsp;" + _t("not found") + "</b></p>\n");
     }
 
+    /**
+     * Writes the internal error page.
+     *
+     * @param out where the page is written
+     * @param errorCode the HTTP status to show
+     * @param errorMsg the message to show
+     * @param errorURI the address that failed
+     * @param errorCause the exception, may be null
+     */
     private void printInternalError(PrintWriter out, int errorCode, String errorMsg, String errorURI, Throwable errorCause) {
         out.print("<p><b>" + _t("Sorry! There has been an internal error.") + "</b></p>\n");
         out.print("<hr>\n");
@@ -228,10 +250,22 @@ public class ErrorServlet extends HttpServlet {
         out.print("<p>" + _t("Note that system information, log timestamps, and log messages may provide clues to your location; please review everything you include in a bug report.") + "</p>\n");
     }
 
+    /**
+     * Writes the method-not-supported page.
+     *
+     * @param out where the page is written
+     * @param errorCode the HTTP status to show
+     */
     private void printUnsupportedError(PrintWriter out, int errorCode) {
         out.print("<p>" + _t("Unsupported error") + " " + errorCode + "</p>\n");
     }
 
+    /**
+     * Formats a stack trace with the paths stripped.
+     *
+     * @param errorCause the exception to format
+     * @return the trace to show, null if there is none
+     */
     private String getSanitizedStackTrace(Throwable errorCause) {
         StringWriter sw = new StringWriter(2048);
         PrintWriter pw = new PrintWriter(sw);
@@ -245,6 +279,11 @@ public class ErrorServlet extends HttpServlet {
         return trace;
     }
 
+    /**
+     * Writes the router version block of the error page.
+     *
+     * @param out where the page is written
+     */
     private void printSystemInfo(PrintWriter out) {
         String version = System.getProperty("router.version", CoreVersion.VERSION);
         out.print("<p id=sysinfo>");
@@ -267,7 +306,7 @@ public class ErrorServlet extends HttpServlet {
     }
 
     /**
-     * translate a string, with webapp bundle
+     * Translate a string using the webapp bundle.
      *
      * @param s the string to translate
      * @return the translated string
@@ -275,7 +314,7 @@ public class ErrorServlet extends HttpServlet {
     protected String _w(String s) {return Translate.getString(s, _context, _defaultBundle);}
 
     /**
-     * translate a string, console bundle
+     * Translate a string using the console bundle.
      *
      * @param s the string to translate
      * @return the translated string
@@ -283,7 +322,7 @@ public class ErrorServlet extends HttpServlet {
     protected String _t(String s) {return Translate.getString(s, _context, CONSOLE_BUNDLE_NAME);}
 
     /**
-     * translate a string, console bundle
+     * Translate a string using the console bundle.
      *
      * @param s the string to translate
      * @param o argument substituted into the translation
@@ -292,7 +331,7 @@ public class ErrorServlet extends HttpServlet {
     protected String _t(String s, Object o) {return Translate.getString(s, o, _context, CONSOLE_BUNDLE_NAME);}
 
     /**
-     * translate a string, console bundle
+     * Translate a string using the console bundle.
      *
      * @param s the string to translate
      * @param o argument substituted into the translation

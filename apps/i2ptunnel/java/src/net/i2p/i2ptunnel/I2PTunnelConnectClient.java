@@ -40,6 +40,7 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
     /** HTTP authentication realm for SSL CONNECT proxy. */
     public static final String AUTH_REALM = "I2P SSL Proxy";
 
+    /** SOCKS reply refusing an unsupported version. */
     private final static String ERR_BAD_PROTOCOL =
          "HTTP/1.1 405 Bad Method\r\n"+
          "Content-Type: text/html; charset=iso-8859-1\r\n"+
@@ -50,6 +51,7 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
          "The request uses a bad protocol. "+
          "The Connect Proxy supports CONNECT requests ONLY. Other methods such as GET are not allowed - Maybe you wanted the HTTP Proxy?.<BR>";
 
+    /** SOCKS reply refusing a connection to localhost. */
     private final static String ERR_LOCALHOST =
          "HTTP/1.1 403 Access Denied\r\n"+
          "Content-Type: text/html; charset=iso-8859-1\r\n"+

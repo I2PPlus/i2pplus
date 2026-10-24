@@ -5,11 +5,16 @@ package com.southernstorm.noise.crypto.chacha20;
  */
 public final class ChaChaCore {
 
+    /** First state word, part of the ChaCha sigma constant. */
     private static final int INIT0 = char4('e', 'x', 'p', 'a');
+    /** Second state word, part of the ChaCha sigma constant. */
     private static final int INIT1 = char4('n', 'd', ' ', '3');
+    /** Third state word, part of the ChaCha sigma constant. */
     private static final int INIT2 = char4('2', '-', 'b', 'y');
+    /** Fourth state word, part of the ChaCha sigma constant. */
     private static final int INIT3 = char4('t', 'e', ' ', 'k');
 
+    /** Not called, the core class is never instantiated. */
     private ChaChaCore() {}
 
     /**
@@ -47,10 +52,26 @@ public final class ChaChaCore {
         }
     }
 
+    /**
+     * Packs four characters into one state word.
+     *
+     * @param c1 the first character
+     * @param c2 the second character
+     * @param c3 the third character
+     * @param c4 the fourth character
+     * @return the packed word
+     */
     private static int char4(char c1, char c2, char c3, char c4) {
         return (((int)c1) & 0xFF) | ((((int)c2) & 0xFF) << 8) | ((((int)c3) & 0xFF) << 16) | ((((int)c4) & 0xFF) << 24);
     }
 
+    /**
+     * Reads four bytes as a little endian word.
+     *
+     * @param key the bytes to read
+     * @param offset where to read from
+     * @return the word read
+     */
     private static int fromLittleEndian(byte[] key, int offset) {
         return (key[offset] & 0xFF) | ((key[offset + 1] & 0xFF) << 8) | ((key[offset + 2] & 0xFF) << 16) | ((key[offset + 3] & 0xFF) << 24);
     }
@@ -99,11 +120,44 @@ public final class ChaChaCore {
         output[15] = (int)(iv >> 32);
     }
 
+    /**
+     * Rotates the word left by 16 bits.
+     *
+     * @param v the word to rotate
+     * @return the rotated word
+     */
     private static int leftRotate16(int v) {return v << 16 | (v >>> 16);}
+    /**
+     * Rotates the word left by 12 bits.
+     *
+     * @param v the word to rotate
+     * @return the rotated word
+     */
     private static int leftRotate12(int v) {return v << 12 | (v >>> 20);}
+    /**
+     * Rotates the word left by 8 bits.
+     *
+     * @param v the word to rotate
+     * @return the rotated word
+     */
     private static int leftRotate8(int v) {return v << 8 | (v >>> 24);}
+    /**
+     * Rotates the word left by 7 bits.
+     *
+     * @param v the word to rotate
+     * @return the rotated word
+     */
     private static int leftRotate7(int v) {return v << 7 | (v >>> 25);}
 
+    /**
+     * Applies the ChaCha quarter round to four state words.
+     *
+     * @param v the state words
+     * @param a index of the first word
+     * @param b index of the second word
+     * @param c index of the third word
+     * @param d index of the fourth word
+     */
     private static void quarterRound(int[] v, int a, int b, int c, int d) {
         v[a] += v[b];
         v[d] = leftRotate16(v[d] ^ v[a]);

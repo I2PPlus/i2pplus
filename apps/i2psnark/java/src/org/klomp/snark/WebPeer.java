@@ -22,34 +22,51 @@ import net.i2p.util.EepGet;
  */
 class WebPeer extends Peer implements EepGet.StatusListener {
 
+    /** The coordinator requesting the pieces. */
     private final PeerCoordinator _coordinator;
+    /** The HTTP URL of the web seed. */
     private final URI _uri;
-    // as received from coordinator
+    /** The requests from the coordinator awaiting their responses. */
     private final List<Request> outstandingRequests = new ArrayList<>();
+    /** True if the torrent has several files. */
     private final boolean isMultiFile;
-    // needed?
+    /** The request most recently sent. */
     private Request lastRequest;
+    /** Listener notified of the peer's messages. */
     private PeerListener listener;
+    /** The pieces the seed has. */
     private BitField bitfield;
+    /** The thread reading from the seed. */
     private Thread thread;
+    /** True while the connection is open. */
     private boolean connected;
+    /** When the last data arrived. */
     private long lastRcvd;
+    /** Requests allowed in flight at once. */
     private int maxRequests;
 
-    // to be recognized by the UI
-    /** IDBytes. */
+    /**
+     * The bytes identifying a BEP19 web seed, matched by the UI
+     * when it recognizes the connection.
+     */
     public static final byte[] IDBytes = DataHelper.getASCII("WebSeedBEP19");
+    /** Time allowed for a response header. */
     private static final long HEADER_TIMEOUT = (long) 60 * 1000;
+    /** Total time allowed for one request. */
     private static final long TOTAL_TIMEOUT = 10 * (long) 60 * 1000;
+    /** Idle time before the seed is dropped. */
     private static final long INACTIVITY_TIMEOUT = 2 * (long) 60 * 1000;
+    /** Time a piece should be fetched within. */
     private static final long TARGET_FETCH_TIME = 2 * (long) 60 * 1000;
     /** BEP 47: zeros for serving padding ranges, written in blocks. */
     private static final byte[] ZERO_BUFFER = new byte[4096];
-    // 128 KB
+    /** Fewest requests allowed in flight, 128 KB of pieces. */
     private static final int ABSOLUTE_MIN_REQUESTS = 8;
-    // 2 MB
+    /** Most requests allowed in flight, 2 MB of pieces. */
     private static final int ABSOLUTE_MAX_REQUESTS = 128;
+    /** Requests in flight we aim to keep at least. */
     private final int MIN_REQUESTS;
+    /** Requests in flight we stay below. */
     private final int MAX_REQUESTS;
 
     /**
@@ -591,8 +608,6 @@ class WebPeer extends Peer implements EepGet.StatusListener {
         return false;
     }
 
-    // begin BandwidthListener interface overrides
-    // Because super doesn't have a PeerState
 
     /**
      * {@inheritDoc}
@@ -618,7 +633,6 @@ class WebPeer extends Peer implements EepGet.StatusListener {
         return _coordinator.shouldRequest(this, size);
     }
 
-    // end BandwidthListener interface overrides
 
     /**
      * Add requests for outstanding pieces, implementing part of PeerState.

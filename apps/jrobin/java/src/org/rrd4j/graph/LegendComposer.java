@@ -8,7 +8,9 @@ import java.util.List;
  * spacing within the legend area.
  */
 class LegendComposer implements RrdGraphConstants {
+    /** The graph definition being composed. */
     private final RrdGraphDef gdef;
+    /** Where the legend is drawn. */
     private final ImageWorker worker;
 
     /** X-coordinate for legend placement */
@@ -75,10 +77,15 @@ class LegendComposer implements RrdGraphConstants {
      */
 
     class Line {
+        /** The marker last processed. */
         private Markers lastMarker;
+        /** Width of the widest legend line so far. */
         private double width;
+        /** Leading spaces used to align the current line. */
         private int spaceCount;
+        /** True to skip right-justifying the values. */
         private boolean noJustification;
+        /** Comment lines waiting to be drawn. */
         private final List<CommentText> comments = new ArrayList<>();
 
         /**
@@ -187,6 +194,12 @@ class LegendComposer implements RrdGraphConstants {
             }
         }
 
+        /**
+         * Measures a comment line.
+         *
+         * @param comment the line to measure
+         * @return its width, in pixels
+         */
         private double getCommentWidth(CommentText comment) {
             double commentWidth =
                     worker.getStringWidth(comment.resolvedText, gdef.getFont(FONTTAG_LEGEND));

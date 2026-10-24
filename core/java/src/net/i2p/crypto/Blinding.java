@@ -27,18 +27,27 @@ import java.util.zip.Checksum;
  */
 public final class Blinding {
 
+    /** Signature type of blinded Ed25519. */
     private static final SigType TYPE = SigType.EdDSA_SHA512_Ed25519;
+    /** Signature type of blinded RedDSA. */
     private static final SigType TYPER = SigType.RedDSA_SHA512_Ed25519;
+    /** The HKDF info string of the blinding. */
     private static final String INFO = "i2pblinding1";
+    /** The HKDF info string for generating alpha. */
     private static final byte[] INFO_ALPHA = DataHelper.getASCII("I2PGenerateAlpha");
 
+    /** Flag for a two byte blinding factor. */
     private static final byte FLAG_TWOBYTE = 0x01;
+    /** Flag for a secret blinding factor. */
     private static final byte FLAG_SECRET = 0x02;
+    /** Flag for authenticated blinding. */
     private static final byte FLAG_AUTH = 0x04;
 
-    // following copied from RouterKeyGenerator
+    /** Date format of the blinding epochs. */
     private static final String FORMAT = "yyyyMMdd";
+    /** Length of the epoch date string. */
     private static final int LENGTH = FORMAT.length();
+    /** The date formatter, one per thread. */
     private static final ThreadLocal<SimpleDateFormat> _DATE_FMT = new ThreadLocal<SimpleDateFormat>() {
         @Override
         protected SimpleDateFormat initialValue() {
@@ -58,6 +67,7 @@ public final class Blinding {
     /** The context {@link #_hkdf} was built for, so a context change forces a rebuild. */
     private static volatile I2PAppContext _hkdfCtx;
 
+    /** Not called, the blinding class is never instantiated. */
     private Blinding() {}
 
     /**

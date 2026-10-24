@@ -32,10 +32,15 @@ import net.i2p.util.Log;
  */
 public class RequestWrapper {
 
+    /** The request being wrapped. */
     private final HttpServletRequest httpRequest;
+    /** True when the body is a multipart form. */
     private final boolean isMultiPartRequest;
+    /** Parameter values decoded from the body. */
     private final Hashtable<String, String> cache;
+    /** Parameter names already enumerated. */
     private Hashtable<String, Integer> cachedParameterNames;
+    /** Largest parameter value read, in bytes. */
     private static final int MAX_STRING_SIZE = 64*1024;
 
     /**

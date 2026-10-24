@@ -47,11 +47,13 @@ import net.i2p.util.ObjectCounterUnsafe;
  * For /tunnels.jsp, used by {@link TunnelHelper}.
  */
 class TunnelRenderer {
+    /** Matches the parenthesised name in a tunnel nickname. */
     private static final Pattern TUNNEL_PAREN = Pattern.compile("\\([^)]+\\)");
     /** "AT&amp;T" followed by anything (whois cleanup). */
     private static final Pattern ATT_PREFIX = Pattern.compile("(?i)AT\\s*&\\s*T\\s+.*");
     /** A bare "&amp;T" run (whois cleanup). */
     private static final Pattern AMP_T_RUN = Pattern.compile("(?i)&\\s*T\\b.*");
+    /** The router context. */
     private final RouterContext _context;
 
     /**
@@ -62,8 +64,14 @@ class TunnelRenderer {
      */
     @SuppressWarnings("java:S2975")
     private static class BoundedCache<K, V> extends LinkedHashMap<K, V> {
+        /** Entries the cache holds before dropping the oldest. */
         private final int _maxSize;
 
+        /**
+         * Builds a cache with a size limit.
+         *
+         * @param maxSize the entries to keep
+         */
         public BoundedCache(int maxSize) {
             super(maxSize, 0.75f, true);
             _maxSize = maxSize;
@@ -91,6 +99,7 @@ class TunnelRenderer {
         }
     }
 
+    /** Tunnels listed before the display is truncated. */
     private int DISPLAY_LIMIT = 100;
     /** Render rows in a single write up to this count; above it, flush every {@link #STREAM_BATCH} rows so the page paints progressively. */
     private static final int MAX_BEFORE_STREAMING = 100;
@@ -100,12 +109,14 @@ class TunnelRenderer {
     private boolean _fragmentKeys;
     /** Length of the truncated base64 hash used as a per-row data-key in fragment mode. */
     private static final int KEY_LEN = 16;
+    /** Tunnels rendered so far on this page. */
     private int displayed;
     /** Locale symbols snapshotted once at class load, cloned by every formatter. */
     private static final DecimalFormatSymbols FORMAT_SYMBOLS = DecimalFormatSymbols.getInstance();
     /** DecimalFormat is not thread-safe, so tunnel rows get one formatter per thread. */
     private static final ThreadLocal<DecimalFormat> TWO_DECIMALS =
             ThreadLocal.withInitial(() -> new DecimalFormat("#0.00", FORMAT_SYMBOLS));
+    /** Per-thread formatter for whole numbers. */
     private static final ThreadLocal<DecimalFormat> ZERO_DECIMALS = ThreadLocal.withInitial(() -> {
         DecimalFormat fmt = new DecimalFormat("#0", FORMAT_SYMBOLS);
         fmt.setRoundingMode(RoundingMode.HALF_UP);
@@ -181,8 +192,11 @@ class TunnelRenderer {
         _context = ctx;
     }
 
+    /** Cached router infos for the tunnel graph. */
     private final BoundedCache<Hash, RouterInfo> routerInfoCache = new BoundedCache<>(5000);
+    /** Cached reverse lookups for the tunnel graph. */
     private final BoundedCache<Hash, ReverseLookupResult> reverseLookupResults = new BoundedCache<>(5000);
+    /** Cached peer to IP mappings for the tunnel graph. */
     private final BoundedCache<Hash, String> peerToIP = new BoundedCache<>(5000);
 
     /**
@@ -826,10 +840,17 @@ class TunnelRenderer {
      * validated, sorted peer list shared by the full and fragment renders.
      */
     private static class PeerRows {
+        /** Holds one peer's rows in the tunnel table. */
+        private PeerRows() {}
+        /** Times each peer appears in our local tunnels. */
         final ObjectCounter<Hash> localCount = new ObjectCounter<>();
+        /** Times each peer appears in our transit tunnels. */
         final ObjectCounter<Hash> transitCount = new ObjectCounter<>();
+        /** Tunnels counted for the graph. */
         int tunnelCount;
+        /** Tunnel partitions counted for the graph. */
         int partCount;
+        /** Peers included in the graph. */
         final List<Hash> validPeerList = new ArrayList<>();
     }
 
@@ -980,9 +1001,15 @@ class TunnelRenderer {
      * @since 0.9.68+
      */
     private static class ReverseLookupResult {
+        /** Holds the answer to a reverse lookup. */
+        private ReverseLookupResult() {}
+        /** The peer's IP address text. */
         String ip;
+        /** The peer's canonical host name, may be null. */
         String canonicalHostName;
+        /** The peer's domain name, may be null. */
         String domain;
+        /** The peer's whois text, may be null. */
         String whois;
     }
 
@@ -1119,11 +1146,14 @@ class TunnelRenderer {
         return Math.round(f * 1.024f) + " - " + (Math.round(t * 1.024f) - 1) + " KB/s";
     }
 
+    /** Sorts tunnels by hop configuration. */
     private static class TunnelComparator implements Comparator<HopConfig>, Serializable {
           /**
            * Order participating tunnels by expiration, latest first. An
            * expiration before the epoch is treated as 0.
            */
+          /** Orders hops by their tunnel. */
+          private TunnelComparator() {}
           @Override
           public int compare(HopConfig l, HopConfig r) {
              long le = l.getExpiration();
@@ -1147,6 +1177,8 @@ class TunnelRenderer {
            * seconds so a very old tunnel is not credited with its whole life,
            * and divide by at least one second.
            */
+          /** Orders hops by their tunnel's bandwidth. */
+          private TunnelComparatorBySpeed() {}
           @Override
           public int compare(HopConfig l, HopConfig r) {
              long now = System.currentTimeMillis();
@@ -1162,10 +1194,13 @@ class TunnelRenderer {
         }
     }
 
+    /** Sorts tunnel infos for the display. */
     private static class TunnelInfoComparator implements Comparator<TunnelInfo>, Serializable {
           /**
            * Order the tunnels of a pool by expiration, latest first.
            */
+          /** Orders tunnels by their info. */
+          private TunnelInfoComparator() {}
           @Override
           public int compare(TunnelInfo l, TunnelInfo r) {
              long le = l.getExpiration();
@@ -1181,6 +1216,9 @@ class TunnelRenderer {
      * @since 0.9.57
      */
     private class TPComparator implements Comparator<TunnelPool> {
+          /** Orders tunnel pools by name. */
+          private TPComparator() {}
+          /** Collator comparing the peer names. */
           private final Collator _comp = Collator.getInstance();
           /**
            * Order pools by locale-collated display name, falling back to the
@@ -1240,6 +1278,14 @@ class TunnelRenderer {
         return DataHelper.escapeHTML(members);
     }
 
+    /**
+     * Renders one tunnel pool's table.
+     *
+     * @param out where the HTML is written
+     * @param in the inbound pool, may be null
+     * @param outPool the outbound pool, may be null
+     * @throws IOException if the write fails
+     */
     private void renderPool(Writer out, TunnelPool in, TunnelPool outPool) throws IOException {
         Comparator<TunnelInfo> comp = new TunnelInfoComparator();
         List<TunnelInfo> tunnels;
@@ -1588,7 +1634,6 @@ class TunnelRenderer {
         buf.setLength(0);
     }
 
-    /* duplicate of that in tunnelPoolManager for now */
     /**
      * Tally the exploratory and client tunnels longer than one hop, counting
      * each of their peers into lc.
@@ -1632,10 +1677,13 @@ class TunnelRenderer {
         return participating.size();
     }
 
+    /** Sorts peers by country then name. */
     private static class CountryComparator implements Comparator<Hash> {
         /**
          * Order router hashes by the country code they resolve to, with an
          * unknown country sorted last.
+         *
+         * @param comm the source of the peer locations
          */
         public CountryComparator(CommSystemFacade comm) {this.comm = comm;}
         /**
@@ -1656,13 +1704,26 @@ class TunnelRenderer {
             return lc.compareTo(rc);
         }
 
+        /** Source of the peer locations. */
         private CommSystemFacade comm;
     }
 
+    /**
+     * Builds the netdb link for one peer.
+     *
+     * @param peer the peer hash
+     * @return the HTML link
+     */
     private String netDbLink(Hash peer) {
         return _context.commSystem().renderPeerHTML(peer, true);
     }
 
+    /**
+     * Builds the country flag image for one peer.
+     *
+     * @param peer the peer hash
+     * @return the HTML image tag, empty if unknown
+     */
     private String peerFlag(Hash peer) {
         return _context.commSystem().renderPeerFlag(peer);
     }

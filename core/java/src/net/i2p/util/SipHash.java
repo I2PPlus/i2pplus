@@ -8,7 +8,9 @@ import net.i2p.crypto.SipHashInline;
  * @since 0.9.5
  */
 public abstract class SipHash {
+    /** First key word, random per JVM so the hash is not predictable */
     private static final long K0 = RandomSource.getInstance().nextLong();
+    /** Second key word, random per JVM */
     private static final long K1 = RandomSource.getInstance().nextLong();
 
     /**

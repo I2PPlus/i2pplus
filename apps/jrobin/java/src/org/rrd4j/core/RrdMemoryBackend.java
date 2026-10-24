@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicReference;
 /** Backend to be used to store all RRD bytes in memory. */
 public class RrdMemoryBackend extends ByteBufferBackend {
 
+    /** The buffer, replaced atomically when the file grows. */
     private final AtomicReference<ByteBuffer> refbb;
 
     /**

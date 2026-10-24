@@ -14,14 +14,22 @@ import net.i2p.util.SimpleTimer2;
  */
 public class Subscriber implements Sink {
 
+    /** The app context. */
     private final I2PAppContext ctx = I2PAppContext.getGlobalContext();
+    /** The log for the subscriber. */
     private final Log log = ctx.logManager().getLog(getClass());
+    /** The subscribers, with their expiration times. */
     private final Map<MultiSource.MSink, Long> subscriptions;
+    /** The multi source being subscribed to. */
     private final MultiSource multi;
+    /** The timer expiring the subscribers. */
     private final SimpleTimer2.TimedEvent timer;
+    /** True while the timer runs. */
     private volatile boolean timerRunning;
 
+    /** Most subscribers allowed. */
     private static final int MAX_SUBSCRIPTIONS = 10;
+    /** Time before a subscriber expires. */
     private static final long EXPIRATION = (long) 60*1000;
 
     /**
@@ -96,6 +104,7 @@ public class Subscriber implements Sink {
      */
     private class Expire extends SimpleTimer2.TimedEvent {
 
+        /** Starts the expiration timer. */
         public Expire() {
             super(ctx.simpleTimer2());
         }

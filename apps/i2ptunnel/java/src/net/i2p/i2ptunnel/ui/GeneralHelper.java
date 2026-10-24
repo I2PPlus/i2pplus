@@ -56,8 +56,10 @@ public class GeneralHelper {
     /** Property key for enabling blacklist filtering. */
     protected static final String PROP_ENABLE_BLACKLIST = "i2cp.enableBlackList";
 
+    /** Prefix of a tunnel option's property name. */
     private static final String OPT = TunnelController.PFX_OPTION;
 
+    /** The context the tunnel settings live in. */
     private final I2PAppContext _context;
     /** The group of tunnel controllers, or null if the helper was constructed without one. */
     protected final TunnelControllerGroup _group;
@@ -1535,6 +1537,14 @@ public class GeneralHelper {
     // Internal helpers
     //
 
+    /**
+     * Reads one numeric tunnel option.
+     *
+     * @param tunnel which tunnel's option to read
+     * @param prop the option's name
+     * @param def the value to use when it is not set
+     * @return the option's value
+     */
     private int getProperty(int tunnel, String prop, int def) {
         TunnelController tun = getController(tunnel);
         if (tun != null) {
@@ -1549,6 +1559,14 @@ public class GeneralHelper {
         return def;
     }
 
+    /**
+     * Reads one text tunnel option.
+     *
+     * @param tunnel which tunnel's option to read
+     * @param prop the option's name
+     * @param def the value to use when it is not set
+     * @return the option's value
+     */
     private String getProperty(int tunnel, String prop, String def) {
         TunnelController tun = getController(tunnel);
         if (tun != null) {
@@ -1572,6 +1590,14 @@ public class GeneralHelper {
         return getBooleanProperty(tunnel, prop, false);
     }
 
+    /**
+     * Reads one true/false tunnel option.
+     *
+     * @param tunnel which tunnel's option to read
+     * @param prop the option's name
+     * @param def the value to use when it is not set
+     * @return the option's value
+     */
     private boolean getBooleanProperty(int tunnel, String prop, boolean def) {
         TunnelController tun = getController(tunnel);
         if (tun != null) {

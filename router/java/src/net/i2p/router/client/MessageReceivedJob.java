@@ -23,10 +23,15 @@ import net.i2p.util.Log;
  * or just send it directly if specified.
  */
 class MessageReceivedJob extends JobImpl {
+    /** Logger for this class. */
     private final Log _log;
+    /** The runner delivering the message. */
     private final ClientConnectionRunner _runner;
+    /** The destination the message is addressed to. */
     private final Destination _toDest;
+    /** The message being delivered. */
     private final Payload _payload;
+    /** True if the message arrived directly, not through a tunnel. */
     private final boolean _sendDirect;
 
     /**

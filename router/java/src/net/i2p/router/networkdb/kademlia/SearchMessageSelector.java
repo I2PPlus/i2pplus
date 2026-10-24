@@ -24,13 +24,21 @@ import net.i2p.util.Log;
  * between sent queries and received replies.
  */
 class SearchMessageSelector implements MessageSelector {
+    /** The log for the selector. */
     private final Log _log;
+    /** The router context. */
     private final RouterContext _context;
+    /** The next selector id. */
     private static final AtomicInteger __searchSelectorId = new AtomicInteger();
+    /** The peer being searched for. */
     private final Hash _peer;
+    /** True once a matching message was found. */
     private volatile boolean _found;
+    /** The id of this selector. */
     private final int _id;
+    /** When the selector expires. */
     private final long _exp;
+    /** The state of the search. */
     private final SearchState _state;
 
     /**

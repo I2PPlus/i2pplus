@@ -7,7 +7,9 @@ import net.i2p.I2PAppContext;
  * layers, and forward it on to the first hop.
  */
 class OutboundSender implements TunnelGateway.Sender {
+    /** The tunnel this sender sends on. */
     private final TunnelCreatorConfig _config;
+    /** The gateway processor feeding this sender. */
     private final OutboundGatewayProcessor _processor;
 
     /**

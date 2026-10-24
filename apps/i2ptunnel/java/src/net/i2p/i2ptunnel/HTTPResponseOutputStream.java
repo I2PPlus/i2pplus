@@ -30,10 +30,13 @@ import net.i2p.util.Log;
  * but chunked transfer encoding adds complexity.
  */
 class HTTPResponseOutputStream extends FilterOutputStream {
+    /** Logger for the HTTP response stream. */
     private final Log _log;
     /** Pooled buffer holding the response header block while it is parsed, null once emitted. */
     protected ByteArray _headerBuffer;
+    /** True once the header was written. */
     private volatile boolean _headerWritten;
+    /** Buffer for single byte writes. */
     private final byte[] _buf1;
     /** Set when the response carries Content-Encoding: x-i2p-gzip, so the body is gunzipped. */
     protected volatile boolean _gzip;
@@ -51,6 +54,7 @@ class HTTPResponseOutputStream extends FilterOutputStream {
     protected String _contentType;
     /** Response Content-Encoding header value, lower-case and trimmed. */
     protected String _contentEncoding;
+    /** Callback invoked when the stream finishes. */
     private final DoneCallback _callback;
     /** Entity-body bytes delivered after the first header block (Range resume offset). */
     private volatile long _bodyReceived;
@@ -68,13 +72,17 @@ class HTTPResponseOutputStream extends FilterOutputStream {
      */
     private volatile boolean _transientResumeFailure;
 
+    /** Size of the cached buffers. */
     private static final int CACHE_SIZE = 16*1024;
+    /** Cache supplying the write buffers. */
     private static final ByteCache _cache = ByteCache.getInstance(8, CACHE_SIZE);
-    // OOM DOS prevention
+    /** Largest header buffered before sending, to stop an OOM denial of service. */
     private static final int MAX_HEADER_SIZE = 64*1024;
     /** We ignore any potential \r, since we trim it on write anyway. */
     private static final byte NL = '\n';
+    /** The Connection close header line. */
     private static final byte[] CONNECTION_CLOSE = DataHelper.getASCII("Connection: close\r\n");
+    /** The bare CRLF line. */
     private static final byte[] CRLF = DataHelper.getASCII("\r\n");
 
     /**
@@ -89,6 +97,7 @@ class HTTPResponseOutputStream extends FilterOutputStream {
     /**
      * Optionally call callback when we're done.
      *
+     * @param raw the underlying output stream
      * @param cb may be null
      * @since 0.9.62
      */

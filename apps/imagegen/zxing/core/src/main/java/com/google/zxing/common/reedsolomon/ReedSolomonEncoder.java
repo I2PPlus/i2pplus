@@ -25,7 +25,9 @@ import java.util.List;
  */
 public final class ReedSolomonEncoder {
 
+  /** The Galois field the codewords live in. */
   private final GenericGF field;
+  /** Generators already built, by degree. */
   private final List<GenericGFPoly> cachedGenerators;
 
   /**
@@ -39,6 +41,12 @@ public final class ReedSolomonEncoder {
     cachedGenerators.add(new GenericGFPoly(field, new int[]{1}));
   }
 
+  /**
+   * Builds or reuses the generator polynomial of a degree.
+   *
+   * @param degree the number of check symbols
+   * @return the generator polynomial
+   */
   private GenericGFPoly buildGenerator(int degree) {
     if (degree >= cachedGenerators.size()) {
       GenericGFPoly lastGenerator = cachedGenerators.get(cachedGenerators.size() - 1);

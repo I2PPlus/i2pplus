@@ -19,9 +19,11 @@ import net.i2p.util.Log;
 class HopProcessor {
     /** Router or client context, supplying the log and the AES engine. */
     protected final I2PAppContext _context;
+    /** Logger for this class. */
     private final Log _log;
     /** Config for this hop, holding the IV and layer keys and the expected previous hop. */
     protected final HopConfig _config;
+    /** Checks the IV of each relay message. */
     private final IVValidator _validator;
 
     /**

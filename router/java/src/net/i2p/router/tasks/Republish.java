@@ -58,6 +58,7 @@ import net.i2p.util.SimpleTimer2;
  * @since 0.8.12 moved from Router.java
  */
 public class Republish extends SimpleTimer2.TimedEvent {
+    /** The router whose router info is republished. */
     private final RouterContext _context;
 
     /**

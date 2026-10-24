@@ -195,6 +195,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      */
     private static final ConcurrentHashMap<Object, ThreadPoolExecutor> _ioPools =
         new ConcurrentHashMap<>(4);
+    /** Lock for creating the shared IO executor. */
     private static final Object _ioExecutorLock = new Object();
     /**
      * Default I/O transfer threads (global budget); Tuner adjusts via {@link TunnelControllerGroup}.
@@ -376,6 +377,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
     /** Minimum interval between shed warnings for this listener. */
     private static final long SHED_LOG_THROTTLE_MS = 5 * 60 * 1000L;
+    /** When the last overload shed was logged. */
     private volatile long _lastShedLog;
 
     /**
@@ -954,46 +956,81 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
     /** Client request headers to remove. */
     private static final String HASH_HEADER = "X-I2P-DestHash";
+    /** Header carrying the server's destination in base64. */
     private static final String DEST64_HEADER = "X-I2P-DestB64";
+    /** Header carrying the server's destination in base32. */
     private static final String DEST32_HEADER = "X-I2P-DestB32";
+    /** The Proxy-Connection header. */
     private static final String PROXY_CONN_HEADER = "proxy-connection";
+    /** Header carrying the browser's request priority. */
     private static final String PRIORITY_HEADER = "Priority";
+    /** Header carrying the Global Privacy Control signal. */
     private static final String SEC_GPC_HEADER = "Sec-GPC";
+    /** Header a proxy uses to name the client address. */
     private static final String X_REAL_IP_HEADER = "X-Real-Ip";
 
-    /* MUST ALL BE LOWER CASE */
+    /** Headers stripped from the client's request. */
     private static final Set<String> CLIENT_SKIPHEADERS = new HashSet<>();
+    /** Headers stripped from the server's response. */
     private static final Set<String> SERVER_SKIPHEADERS = new HashSet<>();
 
-    /* server response headers to remove */
+    /** Age header, stripped for anonymity. */
     private static final String AGE_HEADER = "age"; // possible anonymity implications, informational
+    /** Alt-Svc header pointing elsewhere, stripped. */
     private static final String ALT_SVC_HEADER = "alt-svc"; // superfluous
+    /** Date header, replaced by the proxy. */
     private static final String DATE_HEADER = "date";
+    /** Expires header, stripped as it conflicts with cache-control. */
     private static final String EXPIRES_HEADER = "expires"; // not needed with cache-control max-age, and php inserts erroneous header
+    /** Obsolete Pragma header, stripped. */
     private static final String PRAGMA_HEADER = "pragma"; // obsolete
+    /** Referer header, stripped as it does not belong in responses. */
     private static final String REFERER_HEADER = "referer"; // shouldn't be in response headers
+    /** Server header naming the web server, stripped. */
     private static final String SERVER_HEADER = "server";
+    /** HSTS header, useless through the proxy, stripped. */
     private static final String STRICT_TRANSPORT_SECURITY_HEADER = "strict-transport-security"; // superfluous
+    /** Via header listing proxies, stripped for anonymity. */
     private static final String VIA_HEADER = "via"; // possible anonymity implications, informational
+    /** X-Cache header revealing cache state, stripped. */
     private static final String X_CACHE_HEADER = "x-cache"; // possible anonymity implications, informational
+    /** X-Cache-Hits header revealing cache state, stripped. */
     private static final String X_CACHE_HITS_HEADER = "x-cache-hits"; // possible anonymity implications, informational
+    /** Google Cloud trace header, stripped. */
     private static final String X_CLOUD_TRACE_CONTEXT_HEADER = "x-cloud-trace-context"; // superfluous
+    /** X-Contextid header, stripped. */
     private static final String X_CONTEXTID_HEADER = "x-contextid";
+    /** Google Cloud Storage generation header, stripped. */
     private static final String X_GOOG_GENERATION_HEADER = "x-goog-generation"; // superfluous
+    /** Google Cloud Storage hash header, stripped. */
     private static final String X_GOOG_HASH_HEADER = "x-goog-hash"; // superfluous
+    /** Google upload id header, stripped. */
     private static final String X_GUPLOADER_UPLOADID_HEADER = "x-guploader-uploadid"; // superfluous
+    /** Wordpress X-Hacker header, stripped. */
     private static final String X_HACKER_HEADER = "x-hacker"; // Wordpress
+    /** Wordpress Batcache header, stripped. */
     private static final String X_NANANANA_HEADER = "x-nananana"; // wordpress batcache, informational
+    /** Pantheon hosting host name, stripped for anonymity. */
     private static final String X_PANTHEON_STYX_HOSTNAME_HEADER = "x-pantheon-styx-hostname"; // possible anonymity implications, informational
+    /** X-Powered-By header naming the framework, stripped. */
     private static final String X_POWERED_BY_HEADER = "x-powered-by";
+    /** Rails runtime header, stripped. */
     private static final String X_RUNTIME_HEADER = "x-runtime"; // Rails
+    /** Host that served the response, stripped for anonymity. */
     private static final String X_SERVED_BY_HEADER = "x-served-by"; // possible anonymity implications, informational
+    /** Request id on Pantheon responses, stripped. */
     private static final String X_STYX_REQ_ID_HEADER = "x-styx-req-id"; // possible anonymity implications, informational
 
-    // https://httpoxy.org
+    /**
+     * Proxy header, checked against the httpoxy attack.
+     * See also: <a href="https://httpoxy.org">httpoxy</a>
+     */
     private static final String PROXY_HEADER = "proxy";
+    /** Pattern splitting a request line at CRLF. */
     private static final Pattern NEWLINE_SPLIT = Pattern.compile("\r\n");
+    /** Pattern splitting a request line at spaces. */
     private static final Pattern SPACE_SPLIT = Pattern.compile(" ");
+    /** Pattern splitting a path at slashes. */
     private static final Pattern SLASH_SPLIT = Pattern.compile("/");
 
     static {
@@ -1056,6 +1093,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     private static final long HEADER_FINISH_TIMEOUT = DEFAULT_HEADER_TIMEOUT_MS;
     /** Min time before socket error is escalated to ERROR level. */
     private static final long START_INTERVAL = (60 * 1000) * 3;
+    /** Longest request header line accepted. */
     private static final int MAX_LINE_LENGTH = 8*1024;
     /**
      * Ridiculously long, just to prevent OOM DOS.
@@ -1067,15 +1105,22 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      * @since 0.9.20
      */
     private static final int MAX_TOTAL_HEADER_SIZE = 32*1024;
-    // Does not apply to header reads.
-    // We set it to forever so that it won't timeout when sending a large response.
-    // The server will presumably have its own timeout implemented for POST
+    /**
+     * Default read timeout for the server socket, -1 for none.
+     * It does not apply to header reads; forever keeps a large
+     * response from timing out, and the web server presumably
+     * implements its own timeout for POST requests.
+     */
     private static final long DEFAULT_HTTP_READ_TIMEOUT = -1;
-    // Set a relatively short timeout for GET/HEAD,
-    // and a long failsafe timeout for POST/CONNECT, since the user
-    // could be POSTing a massive file
+    /**
+     * Read timeout while reading a GET request, relatively
+     * short; POST and CONNECT get a long failsafe timeout
+     * since the user may be uploading a massive file.
+     */
     private static final int SERVER_READ_TIMEOUT_GET = 60*1000;
+    /** Read timeout for medium uploads. */
     private static final int SERVER_READ_TIMEOUT_MEDIUM = 3*60*1000;
+    /** Read timeout while reading a POST body. */
     private static final int SERVER_READ_TIMEOUT_POST = 5*60*1000;
 
     /** Timestamp when the tunnel started, used for error-level escalation timing. */
@@ -2426,6 +2471,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         return host;
     }
 
+    /** Copies a gzipped request through to the web server. */
     private static class CompressedRequestor implements Runnable {
         /**
          * Far-side label for transfer logs, e.g. {@code [skank / aanoquc2]}.
@@ -2433,18 +2479,29 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          * @since 0.9.71+
          */
         private final String _tunnelId;
+        /** The web server socket. */
         private final Socket _webserver;
+        /** The browser's I2P socket. */
         private final I2PSocket _browser;
+        /** The request headers to forward. */
         private final String _headers;
+        /** The app context. */
         private final I2PAppContext _ctx;
-        // shadows _log in super()
+        /** Logger, shadows the one in the superclass. */
         private final Log _log;
+        /** True when the request is gzipped. */
         private final boolean _shouldCompress;
+        /** True for an upgrade request. */
         private final boolean _upgrade;
+        /** The executor running this task. */
         private final ThreadPoolExecutor _tpe;
+        /** Whether the browser connection stays open. */
         private volatile boolean _keepalive;
+        /** Waiter count for the IO pool. */
         private final AtomicInteger _waiter;
+        /** Supplier of the shared IO pool. */
         private final Supplier<ThreadPoolExecutor> _ioPool;
+        /** Copy buffer size. */
         private static final int BUF_SIZE = 16*1024;
 
         /**
@@ -2506,6 +2563,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             _ioPool = ioPool;
         }
 
+        /**
+         * Returns the URL suffix of a request line.
+         *
+         * @param req the request line
+         * @return the path after the method, empty if malformed
+         */
         private static String urlSuffix(String req) {
             return req != null && !req.isEmpty() && !req.equals("Unknown request") ? "\n* URL: " + req : "";
         }
@@ -2904,13 +2967,21 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         /** SimpleTimer2 rejects periods below 5s. */
         private static final long POLL_MS = 5000L;
 
+        /** The sender copying the request body. */
         private final Sender _body;
+        /** Set when the copy is finished. */
         private final AtomicBoolean _finished;
+        /** Callback run when the copy finishes. */
         private final Runnable _finish;
+        /** The browser's input stream. */
         private final InputStream _browserin;
+        /** The browser's output stream. */
         private final OutputStream _browserout;
+        /** The web server's input stream. */
         private final InputStream _serverin;
+        /** The web server's output stream. */
         private final OutputStream _serverout;
+        /** Logger for this copy. */
         private final Log _log;
 
         /**
@@ -2981,8 +3052,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     static class Sender implements Runnable {
         /** Copy buffer size for both directions. */
         private static final int BUF_SIZE = 16*1024;
+        /** The output stream to the browser. */
         private final OutputStream _out;
+        /** The input stream from the browser. */
         private final InputStream _in;
+        /** Connection name used in the logs. */
         private final String _name;
         /**
          * Identity of the far side, e.g. {@code [skank / aanoquc2]}. The
@@ -3001,8 +3075,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          * @since 0.9.71+
          */
         private volatile String _requestLabel;
-        // shadows _log in super()
+        /** Logger, shadows the one in the superclass. */
         private final Log _log;
+        /** The failure that ended the copy, if any. */
         private volatile IOException _failure;
         /** Total bytes transferred successfully (read from _in, written to _out). */
         private volatile long _bytesTransferred;
@@ -3278,8 +3353,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      */
     private static final int MIN_TO_COMPRESS = 1024;
 
+    /** Gzips the response on its way to the browser. */
     private static class CompressedResponseOutputStream extends HTTPResponseOutputStream {
+        /** The gzip stream for the response. */
         private GZIPOutputStream _gzipOut;
+        /** Request headers used to judge compression. */
         private final String _requestHeaders;
 
         /**

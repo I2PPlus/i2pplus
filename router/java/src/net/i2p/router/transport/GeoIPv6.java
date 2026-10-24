@@ -1,8 +1,4 @@
 package net.i2p.router.transport;
-/*
- * free (adj.): unencumbered; not under the control of others
- * Use at your own risk.
- */
 
 /**
  * Generates and manages compressed IPv6 geoip database.
@@ -45,9 +41,13 @@ public class GeoIPv6 {
     /** Utility class. */
     private GeoIPv6() {}
 
+    /** Default GeoIP directory name. */
     private static final String GEOIP_DIR_DEFAULT = "geoip";
+    /** Default GeoIPv6 data file name. */
     private static final String GEOIP_FILE_DEFAULT = "geoipv6.dat.gz";
+    /** Magic tag of the compressed data file. */
     private static final String MAGIC = "I2PGeoIPv6\0\001\0\0\0\0";
+    /** Comment stored in the data file. */
     private static final String COMMENT = "I2P compressed geoipv6 file. See GeoIPv6.java for format.";
     /** Includes magic. */
     private static final int HEADER_LEN = 256;
@@ -271,10 +271,20 @@ public class GeoIPv6 {
      * Used to temporarily hold, sort, and merge entries before compressing.
      */
     private static class V6Entry implements Comparable<V6Entry> {
+        /** First address of the range, as a long. */
         public final long from;
+        /** Last address of the range, as a long. */
         public final long to;
+        /** Two letter country code of the range. */
         public final String cc;
 
+        /**
+         * Builds one range from address bytes.
+         *
+         * @param f the first address of the range
+         * @param t the last address of the range
+         * @param c the two letter country code
+         */
         public V6Entry(byte[] f, byte[] t, String c) {
             if (f.length != 16 || t.length != 16 || c.length() != 2)
                 throw new IllegalArgumentException();
@@ -285,6 +295,13 @@ public class GeoIPv6 {
                 throw new IllegalArgumentException(toString());
         }
 
+        /**
+         * Builds one range from long addresses.
+         *
+         * @param f the first address as a long
+         * @param t the last address as a long
+         * @param c the two letter country code
+         */
         public V6Entry(long f, long t, String c) {
             from = f;
             to = t;
@@ -314,6 +331,12 @@ public class GeoIPv6 {
         }
     }
 
+    /**
+     * Converts an address to a long.
+     *
+     * @param ip the address bytes
+     * @return the address as a long
+     */
     private static long toLong(byte[] ip) {
         long rv = 0;
         for (int i = 0; i < 8; i++)

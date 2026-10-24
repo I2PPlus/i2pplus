@@ -29,15 +29,23 @@ public class Header implements RrdUpdater<Header> {
     /** Version identifier for RRDTool version 3 compatibility. */
     static final String RRDTOOL_VERSION3 = "0003";
 
+    /** The RRD file versions this library can read. */
     private static final String[] VERSIONS = {"version 0.1", "version 0.2"};
 
+    /** The database whose header this is. */
     private final RrdDb parentDb;
+    /** Index into VERSIONS, -1 until read. */
     private int version = -1;
 
+    /** The file's signature text. */
     private final RrdString<Header> signature;
+    /** Base time step of the file, in seconds. */
     private final RrdLong<Header> step;
+    /** Number of data sources in the file. */
     private final RrdInt<Header> dsCount;
+    /** Number of archives in the file. */
     private final RrdInt<Header> arcCount;
+    /** Time of the most recent update, in epoch seconds. */
     private final RrdLong<Header> lastUpdateTime;
 
     /**
@@ -115,7 +123,7 @@ public class Header implements RrdUpdater<Header> {
     }
 
     /**
-     * Info string (everything after the signature prefix).
+     * Reads the info string following the signature prefix.
      * @return the info string (everything after the signature prefix)
      * @throws java.io.IOException if an I/O error occurs
      */
@@ -259,7 +267,7 @@ public class Header implements RrdUpdater<Header> {
 
     /**
      * True if the header matches RRD4J or JRobin format.
-     * @return true if the header matches RRD4J or JRobin format
+     * @return true if the signature starts with RRD4J or JR, false on read errors
      */
     boolean isRrd4jHeader() {
         try {

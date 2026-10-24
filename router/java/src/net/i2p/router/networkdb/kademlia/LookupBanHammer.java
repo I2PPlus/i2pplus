@@ -20,15 +20,24 @@ import net.i2p.util.SimpleTimer2;
  * @since 0.9.59
  */
 class LookupBanHammer {
+    /** The lookup counts, by reply tunnel. */
     private final ConcurrentHashMap<ReplyTunnel, ConcurrentLinkedDeque<Long>> burstTimestamps;
+    /** The banned reply tunnels, by expiry time. */
     private final ConcurrentHashMap<ReplyTunnel, Long> banExpiration;
 
+    /** Tunnel id standing in for an unknown id. */
     private static final TunnelId DUMMY_ID = new TunnelId();
+    /** Lookups per window before a peer is banned. */
     private static final int MAX_LOOKUPS = 120;
+    /** Interval of the counter cleanup. */
     private static final long CLEAN_TIME = 30 * 1000L;
+    /** Lookups per window counted as a burst. */
     private static volatile int _burstThreshold = 10;
+    /** Length of the lookup counting window. */
     private static final long BURST_WINDOW_MS = 1000L;
+    /** Time a banned peer stays banned. */
     private static final long BAN_DURATION_MS = 5 * 60 * 1000L;
+    /** Most counted tunnels held at once. */
     private static volatile int _maxEntries = 50000;
     /**
      * Interval between cleanup passes in milliseconds. The first pass is
@@ -37,6 +46,7 @@ class LookupBanHammer {
      */
     static volatile long _cleanTimeMs = CLEAN_TIME;
 
+    /** Timer cleaning the counters and bans. */
     private final Cleaner _cleaner;
 
     /** Create the tracker maps and schedule the first cleanup pass. */
@@ -176,6 +186,7 @@ class LookupBanHammer {
 
     /** Periodic cleanup: remove expired bans, prune idle burst trackers, size-bound. */
     private class Cleaner extends SimpleTimer2.TimedEvent {
+        /** Builds the cleanup timer. */
         public Cleaner() { super(SimpleTimer2.getInstance()); }
 
         @Override
@@ -221,10 +232,19 @@ class LookupBanHammer {
 
     /** (peer, tunnel) key with cached hash. */
     private static class ReplyTunnel {
+        /** The hash of the peer that replied. */
         public final Hash h;
+        /** The tunnel id the reply came through. */
         public final TunnelId id;
+        /** Cached hash code of the pair. */
         private final int cachedHash;
 
+        /**
+         * Identifies one reply tunnel.
+         *
+         * @param h the hash of the peer that replied
+         * @param id the tunnel id the reply came through
+         */
         ReplyTunnel(Hash h, TunnelId id) {
             this.h = h;
             this.id = (id != null) ? id : DUMMY_ID;

@@ -17,31 +17,56 @@ public class ConfigBanHandler extends FormHandler {
      */
     public ConfigBanHandler() {}
 
+    /** Form value for the maximum offenses before a ban. */
     private String _maxOffenses;
+    /** Form value for the offense window, in minutes. */
     private String _offenseWindow;
+    /** Form value for the startup grace period, in minutes. */
     private String _startupGrace;
+    /** Form value for the bad packet ban duration, in minutes. */
     private String _badPacketDuration;
+    /** Form flag for the bad packet ban. */
     private boolean _enableBadPacketBan;
+    /** Form flag for the corrupt connection ban. */
     private boolean _enableCorruptConnectionBan;
+    /** Form flag for the port hopping ban. */
     private boolean _enablePortHoppingBan;
+    /** Form flag for the blocklist. */
     private boolean _enableBlocklist;
+    /** Form flag for the Tor blocklist. */
     private boolean _enableTorBlocklist;
+    /** Form flag for the country ban. */
     private boolean _enableCountryBan;
+    /** Form flag for the Xfer-Gosset ban. */
     private boolean _enableXgBan;
+    /** Form flag for the LU ban. */
     private boolean _enableLuBan;
+    /** Form flag for the introducer ban. */
     private boolean _enableIntroducerBan;
+    /** Form flag for the invalid version ban. */
     private boolean _enableInvalidVersionBan;
+    /** Form flag for the publish date ban. */
     private boolean _enablePubDateBan;
+    /** Form flag for the restricted usage caps ban. */
     private boolean _enableRUCapsBan;
+    /** Form flag for blocking our own country. */
     private boolean _enableBlockMyCountry;
+    /** Form flag for the unresponsive floodfill ban. */
     private boolean _enableUnresponsiveFloodfillBan;
+    /** Form flag for the missing version ban. */
     private boolean _enableNoVersionBan;
+    /** Form flag for the excessive tunnel requests ban. */
     private boolean _enableExcessiveTunnelRequestsBan;
+    /** Form flag for banning the next hop as well. */
     private boolean _banNextHop;
+    /** Form value for the custom capability bans. */
     private String _customCapabilityBans;
+    /** Form value for the custom country codes. */
     private String _customCountryCodes;
 
+    /** Splits the form's comma-separated lists. */
     private static final Pattern COMMA_SPLIT = Pattern.compile("[,\\s]+");
+    /** Matches one two-letter country code. */
     private static final Pattern COUNTRY_CODE = Pattern.compile("[a-z][a-z]");
 
     @Override
@@ -60,12 +85,14 @@ public class ConfigBanHandler extends FormHandler {
         }
     }
 
+    /** Turns every ban setting off. */
     private void clearAllBans() {
         _context.banlist().clearSessionBans();
         _context.blocklist().clearAll();
         addFormNotice(_t("All session bans and blocklists cleared"), true);
     }
 
+    /** Sets every ban setting back to its default. */
     private void resetToDefaults() {
         Map<String, String> defaults = new HashMap<>();
         defaults.put(PROP_MAX_OFFENSES, "3");
@@ -364,6 +391,12 @@ public class ConfigBanHandler extends FormHandler {
      */
     private static final String VALID_CAP_CHARS = "KLMNOPXfGDEURH!";
 
+    /**
+     * Checks the custom capability list is well formed.
+     *
+     * @param s the capability list from the form
+     * @return true if the list may be saved
+     */
     private static boolean isValidCaps(String s) {
         for (int i = 0; i < s.length(); i++) {
             if (VALID_CAP_CHARS.indexOf(s.charAt(i)) < 0) {return false;}

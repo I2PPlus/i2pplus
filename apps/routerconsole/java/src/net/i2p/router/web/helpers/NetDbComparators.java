@@ -20,6 +20,7 @@ import net.i2p.util.Translate;
  *  @since 0.9.71+
  */
 final class NetDbComparators {
+    /** Utility class, not intended for instantiation. */
     private NetDbComparators() {}
 
     /**
@@ -73,6 +74,7 @@ final class NetDbComparators {
      *  @since 0.7.14
      */
     static class LeaseSetRoutingKeyComparator implements Comparator<LeaseSet>, Serializable {
+        /** Pinned for serialized-form compatibility. */
         private static final long serialVersionUID = 1L;
         /** The destination whose routing key entries are being ordered. */
         private final transient Hash _us;
@@ -114,6 +116,12 @@ final class NetDbComparators {
             return coll.compare(translated(l), translated(r));
         }
 
+        /**
+         * Translates a country code for display.
+         *
+         * @param code the two-letter code
+         * @return the name to show
+         */
         private String translated(String code) {
             return Translate.getString(_context.commSystem().getCountryName(code), _context, Messages.COUNTRY_BUNDLE_NAME);
         }
@@ -124,6 +132,7 @@ final class NetDbComparators {
      *  @since 0.9.38
      */
     static class RAComparator implements Comparator<RouterAddress>, Serializable {
+        /** Pinned for serialized-form compatibility. */
         private static final long serialVersionUID = 1L;
 
         /**

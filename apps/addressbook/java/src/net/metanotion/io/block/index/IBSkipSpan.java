@@ -32,6 +32,7 @@ import net.metanotion.util.skiplist.SkipSpan;
  */
 public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K, V> {
 
+    /** Smallest key held in this span. */
     private K firstKey;
 
     /**
@@ -225,10 +226,17 @@ public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K,
         return null;
     }
 
+        /** Nothing to repair in a B-skip span. */
         private void repair() {
     /* no-op */
     }
 
+    /**
+     * Recreates a span from the file.
+     *
+     * @param bf the block file
+     * @param bsl the B-skip list
+     */
     private IBSkipSpan(BlockFile bf, BSkipList<K, V> bsl) {
         super(bf, bsl);
     }

@@ -6,9 +6,13 @@ package net.i2p.addressbook;
  */
 class Subscription {
 
+    /** Where the subscription list is fetched from. */
     private final String location;
+    /** Entity tag of the last fetch, for a conditional request. */
     private String etag;
+    /** Modified time of the last fetch. */
     private String lastModified;
+    /** When the list was last fetched, in ms. */
     private long lastFetched;
 
     /**

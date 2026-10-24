@@ -53,8 +53,10 @@ import net.i2p.util.Log;
  */
 class OutboundClientMessageJobHelper {
 
+    /** Utility class, not intended for instantiation. */
     private OutboundClientMessageJobHelper() {}
 
+    /** Extra ms an ack lives beyond its payload's expiry */
     private static final long ACK_EXTRA_EXPIRATION = 60*1000L;
 
     /**

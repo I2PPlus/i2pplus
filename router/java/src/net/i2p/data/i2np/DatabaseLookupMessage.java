@@ -34,20 +34,29 @@ import net.i2p.util.VersionComparator;
  *
  */
 public class DatabaseLookupMessage extends FastI2NPMessageImpl {
+    /** Logger for the lookup messages. */
     private final static Log _log = new Log(DatabaseLookupMessage.class);
     /**
      * The I2NP message type number identifying a database lookup.
      */
     public final static int MESSAGE_TYPE = 2;
+    /** The hash being looked up. */
     private Hash _key;
+    /** The hash of the requester. */
     private Hash _fromHash;
+    /** Tunnel id to reply through. */
     private TunnelId _replyTunnel;
     /** This must be kept as a list to preserve the order and not break the checksum. */
     private List<Hash> _dontIncludePeers;
+    /** Key to encrypt the reply with. */
     private SessionKey _replyKey;
+    /** Tag identifying the reply. */
     private SessionTag _replyTag;
+    /** Ratchet tag identifying the reply. */
     private RatchetSessionTag _ratchetReplyTag;
+    /** Ratchet key to encrypt the reply to. */
     private PublicKey _ratchetPubKey;
+    /** The record type the requester wants. */
     private Type _type;
 
     /**
@@ -59,15 +68,21 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
         Have to prevent a huge alloc on rcv of a malicious msg though. */
     private static final int MAX_NUM_PEERS = 512;
 
+    /** Flag that the reply goes through a tunnel. */
     private static final byte FLAG_TUNNEL = 0x01;
-    // any flags below here will confuse routers 0.9.5 or lower
+    /** Flag that the reply is encrypted, unknown to old routers. */
     private static final byte FLAG_ENCRYPT = 0x02;
+    /** Mask of the record type bits. */
     private static final byte FLAG_TYPE_MASK = 0x0c;
+    /** Type bits asking for any record. */
     private static final byte FLAG_TYPE_ANY = 0;
+    /** Type bits asking for a lease set. */
     private static final byte FLAG_TYPE_LS = 0x04;
+    /** Type bits asking for a router info. */
     private static final byte FLAG_TYPE_RI = 0x08;
+    /** Type bits asking for an exploratory search. */
     private static final byte FLAG_TYPE_EXPL = 0x0c;
-    // 0.9.46 or higher
+    /** Flag that the reply uses a ratchet key, 0.9.46 or newer. */
     private static final byte FLAG_RATCHET = 0x10;
 
     /** Database lookup type enumeration. @since 0.9.16. */
@@ -89,6 +104,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
      *  the receiver rejecting the whole message as invalid.
      */
     private static final String MIN_ENCRYPTION_VERSION = "0.9.7";
+    /** Oldest version understanding ratchet replies. */
     private static final String MIN_RATCHET_VERSION = "0.9.46";
 
     /**

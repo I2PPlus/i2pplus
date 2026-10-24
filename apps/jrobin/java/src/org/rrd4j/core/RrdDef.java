@@ -51,12 +51,18 @@ public class RrdDef {
     /** Default RRD file format version. */
     public static final int DEFAULTVERSION = 2;
 
+    /** Where the RRD file will be created. */
     private URI uri;
+    /** Time of the first step the file can hold. */
     private long startTime = Util.getTime() + DEFAULT_INITIAL_SHIFT;
+    /** Seconds between steps. */
     private long step = DEFAULT_STEP;
+    /** File format version to write. */
     private int version = DEFAULTVERSION;
 
+    /** The data sources to create. */
     private final List<DsDef> dsDefs = new ArrayList<>();
+    /** The archives to create. */
     private final List<ArcDef> arcDefs = new ArrayList<>();
 
     /**
@@ -576,8 +582,8 @@ public class RrdDef {
     }
 
     /**
-     * Rrdtool command.
-     * @return the rrdtool command
+     * Builds the rrdtool command line for this definition.
+     * @return the command, identical to dump()
      */
     String getRrdToolCommand() {
         return dump();

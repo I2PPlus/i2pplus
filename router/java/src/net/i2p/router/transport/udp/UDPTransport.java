@@ -65,9 +65,13 @@ import net.i2p.router.util.CoDelPriorityBlockingQueue;
 
 /** SSU/SSU2 transport implementation with UDP endpoint management and packet dispatch. */
 public class UDPTransport extends TransportImpl {
+    /** Logger for this class. */
     private final Log _log;
+    /** Logger for peers banned by this transport. */
     private final BanLogger _banLogger;
+    /** The sockets listened on, one per local address. */
     private final List<UDPEndpoint> _endpoints;
+    /** Lock serializing peer adds against drop-list changes. */
     private final Object _addDropLock = new Object();
     /**
      * Map of known peers, keyed by their identity hash.
@@ -79,40 +83,64 @@ public class UDPTransport extends TransportImpl {
      * Used to identify peers based on source address in incoming packets.
      */
     private final Map<RemoteHostId, PeerState> _peersByRemoteHost;
+    /** Connected peers, by connection id. */
     private final Map<Long, PeerState2> _peersByConnID;
+    /** Recently closed peers, by connection id, for late packets. */
     private final Map<Long, PeerStateDestroyed> _recentlyClosedConnIDs;
+    /** Thread reading packets off the sockets. */
     private PacketHandler _handler;
+    /** Runs the SSU2 handshakes. */
     private EstablishmentManager _establisher;
+    /** Queue of outbound message fragments. */
     private final OutboundMessageFragments _fragments;
+    /** Thread pushing queued packets to the sockets. */
     private volatile PacketPusher _pusher;
+    /** Queue of inbound message fragments. */
     private final InboundMessageFragments _inboundFragments;
     /**
      * Manages peer reachability testing to determine if we are firewalled or reachable.
      */
     private final PeerTestManager _testManager;
+    /** Manages introducers and introductions. */
     private final IntroductionManager _introManager;
+    /** Timer expiring idle peers. */
     private final ExpirePeerEvent _expireEvent;
+    /** Timer running reachability peer tests. */
     private final PeerTestEvent _testEvent;
+    /** Our measured reachability. */
     private volatile Status _reachabilityStatus;
+    /** A new reachability awaiting confirmation. */
     private volatile Status _reachabilityStatusPending;
-    // only for logging, to be removed
+    /** Loops the reachability has been unchanged, logging only. */
     private volatile int _reachabilityStatusUnchanged;
+    /** Time the IPv4 introducer set was last chosen. */
     private long _v4IntroducersSelectedOn;
+    /** Time the IPv6 introducer set was last chosen. */
     private long _v6IntroducersSelectedOn;
+    /** Time the last inbound packet arrived. */
     private volatile long _lastInboundReceivedOn;
+    /** The MTU in use, in bytes. */
     private int _mtu = PeerState.MIN_MTU;
+    /** The SSU2 MTU in use, in bytes. */
     private int _mtu_ssu2;
+    /** The SSU2 IPv6 MTU in use, in bytes. */
     private int _mtu_ssu2_ipv6;
+    /** The MTU configured at startup, in bytes. */
     private final int _defaultMTU;
+    /** True once the MTU mismatch has been logged. */
     private boolean _mismatchLogged;
+    /** Network id of the packets we accept. */
     private final int _networkID;
 
     /**
      * Do we have a public IPv6 address?
      */
     private volatile boolean _haveIPv6Address;
+    /** Time the last inbound IPv6 packet arrived. */
     private volatile long _lastInboundIPv6;
+    /** Fewest peers to keep connected. */
     private final int _min_peers;
+    /** Fewest IPv6-capable peers to keep connected. */
     private final int _min_v6_peers;
 
     /**
@@ -120,6 +148,7 @@ public class UDPTransport extends TransportImpl {
      * This is typically set after significant network changes or reachability updates.
      */
     private volatile boolean _needsRebuild;
+    /** Lock serializing external-address rebuilds. */
     private final Object _rebuildLock = new Object();
 
     /** Introduction key. */
@@ -131,20 +160,30 @@ public class UDPTransport extends TransportImpl {
      */
     private final Set<RemoteHostId> _dropList;
 
+    /** Idle time at which a peer is expired, in ms. */
     private volatile long _expireTimeout;
 
     /** Last report from a peer of our IP. */
     private Hash _lastFromv4;
+    /** Hash of the last peer reached over IPv6. */
     private Hash _lastFromv6;
+    /** Source of the last inbound IPv4 packet. */
     private byte[] _lastFromIPv4;
+    /** Source of the last inbound IPv6 packet. */
     private byte[] _lastFromIPv6;
+    /** Local address the last outbound IPv4 packet left. */
     private byte[] _lastOurIPv4;
+    /** Local address the last outbound IPv6 packet left. */
     private byte[] _lastOurIPv6;
+    /** Local port the last outbound IPv4 packet left. */
     private int _lastOurPortv4;
+    /** Local port the last outbound IPv6 packet left. */
     private int _lastOurPortv6;
+    /** True once a UPnP port mapping exists. */
     private boolean _haveUPnP;
     /** We don't publish our IP/port if introduced, so we need to store it somewhere. */
     private RouterAddress _currentOurV4Address;
+    /** Our current IPv6 endpoint as a router address. */
     private RouterAddress _currentOurV6Address;
 
     /** Adaptive tuner. */
@@ -157,7 +196,6 @@ public class UDPTransport extends TransportImpl {
      */
     public Tuner getTuner() { return _tuner; }
 
-    // SSU2
     /** Style identifier for the SSU2 protocol variant. Value sourced from {@link Transport#STYLE_SSU2}. */
     public static final String STYLE2 = Transport.STYLE_SSU2;
     /** SSU2 protocol version. */
@@ -166,19 +204,28 @@ public class UDPTransport extends TransportImpl {
     static final String SSU2_VERSION = Integer.toString(SSU2_INT_VERSION);
     /** "2,". */
     static final String SSU2_VERSION_ALT = SSU2_VERSION + ',';
+    /** Builds the SSU2 packets we send. */
     private final PacketBuilder2 _packetBuilder2;
+    /** Shared X25519 factory for the handshakes. */
     private final X25519KeyFactory _xdhFactory;
+    /** Our SSU2 static public key. */
     private final byte[] _ssu2StaticPubKey;
+    /** Our SSU2 static private key. */
     private final byte[] _ssu2StaticPrivKey;
+    /** Our SSU2 introducer-only static key. */
     private final byte[] _ssu2StaticIntroKey;
+    /** The static public key, base64, for the router info. */
     private final String _ssu2B64StaticPubKey;
+    /** The introducer key, base64, for the router info. */
     private final String _ssu2B64StaticIntroKey;
     /** Config key for the base-64 SSU2 static private key. Value sourced from {@link Transport#PROP_SSU2_SP}. */
     public static final String PROP_SSU2_SP = Transport.PROP_SSU2_SP;
     /** Config key for the base-64 SSU2 static IV. Value sourced from {@link Transport#PROP_SSU2_IKEY}. */
     public static final String PROP_SSU2_IKEY = Transport.PROP_SSU2_IKEY;
+    /** Hidden routers re-key after 24 hours of downtime. */
     private static final long MIN_DOWNTIME_TO_REKEY_HIDDEN = 24*60*60*1000L;
 
+    /** Stale drop-list entries are removed every 10 minutes. */
     private static final int DROPLIST_PERIOD = 10*60*1000;
     /** Style identifier for the SSU transport. Value sourced from {@link Transport#STYLE_SSU}. */
     public static final String STYLE = Transport.STYLE_SSU;
@@ -190,6 +237,7 @@ public class UDPTransport extends TransportImpl {
     public static final String PROP_EXTERNAL_PORT = Transport.PROP_EXTERNAL_PORT;
     /** Config key to prefer UDP transport. */
     public static final String PROP_PREFER_UDP = "i2np.udp.preferred";
+    /** Default for preferring UDP over NTCP. */
     private static final String DEFAULT_PREFER_UDP = "false";
 
     /** Override whether we will change our advertised port no matter what our peers tell us.
@@ -230,9 +278,13 @@ public class UDPTransport extends TransportImpl {
      */
     public static final String PROP_INTRO_KEY = Transport.PROP_INTRO_KEY;
 
+    /** Capacity letter for a peer under testing. */
     private static final String CAP_TESTING = Character.toString(UDPAddress.CAPACITY_TESTING);
+    /** Capacity letters for a testing introducer. */
     private static final String CAP_TESTING_INTRO = CAP_TESTING + UDPAddress.CAPACITY_INTRODUCER;
+    /** Capacity letters for a testing IPv4 peer. */
     private static final String CAP_TESTING_4 = CAP_TESTING + CAP_IPV4;
+    /** Capacity letters for a testing IPv6 peer. */
     private static final String CAP_TESTING_6 = CAP_TESTING + CAP_IPV6;
 
     /** How many relays offered to us will we use at a time? */
@@ -243,7 +295,7 @@ public class UDPTransport extends TransportImpl {
 
     /**
      * The outbound establish timeout in ms.
-     * @return the outbound establish timeout in ms
+     * @return the timeout, in ms
      */
     public static long getMaxObEstablishTime() { return EstablishmentManager.MAX_OB_ESTABLISH_TIME.get(); }
     /**
@@ -260,7 +312,7 @@ public class UDPTransport extends TransportImpl {
 
     /**
      * The inbound establish timeout in ms.
-     * @return the inbound establish timeout in ms
+     * @return the timeout, in ms
      */
     public static long getMaxIbEstablishTime() { return EstablishmentManager.MAX_IB_ESTABLISH_TIME.get(); }
     /**
@@ -274,7 +326,7 @@ public class UDPTransport extends TransportImpl {
 
     /**
      * The data message timeout in ms.
-     * @return the data message timeout in ms
+     * @return the timeout, in ms
      */
     public static long getDataMessageTimeout() { return EstablishmentManager.DATA_MESSAGE_TIMEOUT.get(); }
     /**
@@ -287,28 +339,42 @@ public class UDPTransport extends TransportImpl {
 
     /** Default cost value for SSU peer selection. */
     public static final int DEFAULT_COST = 5;
+    /** Relative cost of sending via SSU, against NTCP's 10. */
     private static final int SSU_OUTBOUND_COST = 14;
     /** Short-term rate limits for SSU. */
     static final long[] RATES = RateConstants.SHORT_TERM_RATES;
     /** Minimum active peers to maintain IP detection, etc. */
     private static final int MIN_PEERS = 80;
+    /** Peer target once we are reachable over IPv6. */
     private static final int MIN_PEERS_IF_HAVE_V6 = 100;
     /** Minimum peers volunteering to be introducers if we need that. */
     private static final int MIN_INTRODUCER_POOL = 30;
     /** Default introducer expiration in ms. */
     static final long INTRODUCER_EXPIRATION_MARGIN = 20*60*1000L;
+    /** We re-key after 7 days of downtime. */
     private static final long MIN_DOWNTIME_TO_REKEY = 7*24*60*60*1000L;
 
+    /** Bid values for each peer class, worst last. */
     private static final int[] BID_VALUES = { 15, 20, 50, 65, 80, 95, 100, 115, TransportBid.TRANSIENT_FAIL };
+    /** Bid index for a fast peer we prefer. */
     private static final int FAST_PREFERRED_BID = 0;
+    /** Bid index for a slow peer we prefer. */
     private static final int SLOW_PREFERRED_BID = 1;
+    /** Bid index for a fast peer. */
     private static final int FAST_BID = 2;
+    /** Bid index for a slow peer. */
     private static final int SLOW_BID = 3;
+    /** Bid index for the slowest tier. */
     private static final int SLOWEST_BID = 4;
+    /** Bid index for the slowest tier by cost. */
     private static final int SLOWEST_COST_BID = 5;
+    /** Bid index for a peer near its capacity. */
     private static final int NEAR_CAPACITY_BID = 6;
+    /** Bid index for a peer near capacity by cost. */
     private static final int NEAR_CAPACITY_COST_BID = 7;
+    /** Bid index for a peer with a recent failure. */
     private static final int TRANSIENT_FAIL_BID = 8;
+    /** Precomputed bids, indexed by the constants above. */
     private final TransportBid[] _cachedBid;
 
     /**
@@ -317,17 +383,17 @@ public class UDPTransport extends TransportImpl {
      */
     private static final String MIN_SIGTYPE_VERSION = "0.9.17";
 
-    // SSU2 stable
+    /** Oldest version whose SSU2 peer tests are trusted, SSU2 having become stable then. */
     private static final String MIN_PEER_TEST_VERSION = "0.9.62";
 
-    // various state bitmaps
-
+    /** Statuses in which our IPv4 reachability is unknown. */
     private static final Set<Status> STATUS_IPV4_UNK =   EnumSet.of(Status.UNKNOWN,
                                                                     Status.DISCONNECTED,
                                                                     Status.HOSED,
                                                                     Status.IPV4_UNKNOWN_IPV6_OK,
                                                                     Status.IPV4_UNKNOWN_IPV6_FIREWALLED);
 
+    /** Statuses in which our IPv6 reachability is unknown. */
     private static final Set<Status> STATUS_IPV6_UNK =   EnumSet.of(Status.UNKNOWN,
                                                                     Status.DISCONNECTED,
                                                                     Status.HOSED,
@@ -336,6 +402,7 @@ public class UDPTransport extends TransportImpl {
                                                                     Status.IPV4_SNAT_IPV6_UNKNOWN,
                                                                     Status.IPV4_DISABLED_IPV6_UNKNOWN);
 
+    /** Statuses in which our IPv4 is firewalled. */
     private static final Set<Status> STATUS_IPV4_FW =    EnumSet.of(Status.DIFFERENT,
                                                                     Status.REJECT_UNSOLICITED,
                                                                     Status.IPV4_FIREWALLED_IPV6_OK,
@@ -343,10 +410,12 @@ public class UDPTransport extends TransportImpl {
                                                                     Status.IPV4_SNAT_IPV6_UNKNOWN,
                                                                     Status.IPV4_FIREWALLED_IPV6_UNKNOWN);
 
+    /** Statuses in which our IPv6 is firewalled. */
     private static final Set<Status> STATUS_IPV6_FW =    EnumSet.of(Status.IPV4_OK_IPV6_FIREWALLED,
                                                                     Status.IPV4_UNKNOWN_IPV6_FIREWALLED,
                                                                     Status.IPV4_DISABLED_IPV6_FIREWALLED);
 
+    /** Statuses in which either family is firewalled. */
     private static final Set<Status> STATUS_FW =         EnumSet.of(Status.DIFFERENT,
                                                                     Status.REJECT_UNSOLICITED,
                                                                     Status.IPV4_FIREWALLED_IPV6_OK,
@@ -357,26 +426,30 @@ public class UDPTransport extends TransportImpl {
                                                                     Status.IPV4_UNKNOWN_IPV6_FIREWALLED,
                                                                     Status.IPV4_DISABLED_IPV6_FIREWALLED);
 
+    /** Statuses treating IPv6 as firewalled, ambiguous ones included. */
     private static final Set<Status> STATUS_IPV6_FW_2 =  EnumSet.of(Status.IPV4_OK_IPV6_FIREWALLED,
                                                                     Status.IPV4_UNKNOWN_IPV6_FIREWALLED,
                                                                     Status.IPV4_DISABLED_IPV6_FIREWALLED,
                                                                     Status.DIFFERENT,
                                                                     Status.REJECT_UNSOLICITED);
 
+    /** Statuses in which our IPv6 is reachable. */
     private static final Set<Status> STATUS_IPV6_OK =    EnumSet.of(Status.OK,
                                                                     Status.IPV4_UNKNOWN_IPV6_OK,
                                                                     Status.IPV4_FIREWALLED_IPV6_OK,
                                                                     Status.IPV4_DISABLED_IPV6_OK,
                                                                     Status.IPV4_SNAT_IPV6_OK);
 
+    /** Statuses in which our IPv4 is reachable. */
     private static final Set<Status> STATUS_OK =         EnumSet.of(Status.OK,
                                                                     Status.IPV4_DISABLED_IPV6_OK);
 
+    /** Statuses in which IPv4 sits behind a symmetric NAT. */
     private static final Set<Status> STATUS_IPV4_SYMNAT =  EnumSet.of(Status.DIFFERENT,
                                                                     Status.IPV4_SNAT_IPV6_OK,
                                                                     Status.IPV4_SNAT_IPV6_UNKNOWN);
 
-    // States where we cannot be a v4 Charlie
+    /** Statuses in which we cannot be a v4 Charlie. */
     private static final Set<Status> STATUS_IPV4_NO_TEST = EnumSet.of(Status.DIFFERENT,
                                                                       Status.DISCONNECTED,
                                                                       Status.HOSED,
@@ -389,7 +462,7 @@ public class UDPTransport extends TransportImpl {
                                                                       Status.IPV4_SNAT_IPV6_OK,
                                                                       Status.IPV4_SNAT_IPV6_UNKNOWN);
 
-    // States where we cannot be a v6 Charlie
+    /** Statuses in which we cannot be a v6 Charlie. */
     private static final Set<Status> STATUS_IPV6_NO_TEST = EnumSet.of(Status.DIFFERENT,
                                                                       Status.DISCONNECTED,
                                                                       Status.HOSED,
@@ -1319,8 +1392,9 @@ public class UDPTransport extends TransportImpl {
         }
     }
 
-    // temp prevent multiples
+    /** True once the IPv4 address has been reported, to stop repeats. */
     private boolean gotIPv4Addr = false;
+    /** True once the IPv6 address has been reported, to stop repeats. */
     private boolean gotIPv6Addr = false;
 
     /**
@@ -2079,6 +2153,12 @@ public class UDPTransport extends TransportImpl {
         }
     }
 
+    /**
+     * Adds a connected peer under the add/drop lock.
+     *
+     * @param peer the peer to add
+     * @return true if it was added
+     */
     private boolean locked_addRemotePeerState(PeerState peer) {
         Hash remotePeer = peer.getRemotePeer();
         long oldEstablishedOn = -1;
@@ -2260,7 +2340,9 @@ public class UDPTransport extends TransportImpl {
         super.messageReceived(inMsg, remoteIdent, remoteIdentHash, msToReceive, bytesReceived);
     }
 
+    /** Timer removing a peer from the drop list when it ages out. */
     private class RemoveDropList extends SimpleTimer2.TimedEvent {
+        /** The peer whose entry is being removed. */
         private final RemoteHostId _peer;
         /**
          * Create a drop-list entry for the given peer.
@@ -2753,11 +2835,21 @@ public class UDPTransport extends TransportImpl {
         return null;
     }
 
+    /**
+     * Whether the config prefers UDP over NTCP.
+     *
+     * @return true to prefer UDP
+     */
     private boolean preferUDP() {
         String pref = _context.getProperty(PROP_PREFER_UDP, DEFAULT_PREFER_UDP);
         return !"false".equals(pref);
     }
 
+    /**
+     * Whether UDP is preferred in every situation.
+     *
+     * @return true to always prefer UDP
+     */
     private boolean alwaysPreferUDP() {
         return "always".equals(_context.getProperty(PROP_PREFER_UDP)) ||
                "cn".equals(_context.commSystem().getOurCountry());
@@ -2765,6 +2857,7 @@ public class UDPTransport extends TransportImpl {
 
     /** Default introducer expiration in ms. */
     public static final int EXPIRE_TIMEOUT = 20*60*1000;
+    /** Idle time past which a peer is disconnected. */
     private static final int MAX_IDLE_TIME = EXPIRE_TIMEOUT;
     /** Minimum introducer expiration in ms. */
     public static final int MIN_EXPIRE_TIMEOUT = 3*60*1000;
@@ -2974,8 +3067,7 @@ public class UDPTransport extends TransportImpl {
         }
     }
 
-    // we don't need the following, since we have our own queueing
-    /** Not used for UDP. */
+    /** Not used for UDP, which does its own queueing. */
     protected void outboundMessageReady() { throw new UnsupportedOperationException("Not used for UDP"); }
 
     /**
@@ -2989,6 +3081,11 @@ public class UDPTransport extends TransportImpl {
         replaceAddress(null);
     }
 
+    /**
+     * Whether the config pins our external address.
+     *
+     * @return true if a host or port is configured
+     */
     private boolean explicitAddressSpecified() {
         String h = _context.getProperty(PROP_EXTERNAL_HOST);
         // Bug in config.jsp prior to 0.7.14, sets an empty host config
@@ -3138,6 +3235,14 @@ public class UDPTransport extends TransportImpl {
         return null;
     }
 
+    /**
+     * Rebuilds the router address for our external endpoint.
+     *
+     * @param host the external host
+     * @param port the external port
+     * @param allowRebuildRouterInfo true to publish the change
+     * @return the new address, null if unchanged
+     */
     private RouterAddress rebuildExternalAddress(String host, int port, boolean allowRebuildRouterInfo) {
         /** Lock for rebuilding external address. */
         synchronized (_rebuildLock) {
@@ -3472,7 +3577,6 @@ public class UDPTransport extends TransportImpl {
      */
     public RouterAddress getCurrentExternalAddress(boolean isIPv6) {
         // deadlock thru here ticket #1699
-        /** Lock for rebuilding external address. */
         synchronized (_rebuildLock) {
             return isIPv6 ? _currentOurV6Address : _currentOurV4Address;
         }
@@ -3985,9 +4089,7 @@ public class UDPTransport extends TransportImpl {
         // Deprecated - moved to routerconsole
     }
 
-    /*
-     * Cache the bid to reduce object churn
-     */
+    /** A bid shared by all peers in one class, cached to reduce object churn. */
     private class SharedBid extends TransportBid {
         /**
          * Latency ms.
@@ -4006,22 +4108,37 @@ public class UDPTransport extends TransportImpl {
         public String toString() { return "UDP bid @ " + getLatencyMs(); }
     }
 
-    // we've seen firewalls change ports after 40 seconds
+    /**
+     * Time past which a ping keeps the firewall open, 30 seconds; firewalls
+     * have been seen to change ports after 40.
+     */
     private static final long PING_FIREWALL_TIME = 30*1000L;
+    /** Half of that, the time by which the ping must be sent. */
     private static final long PING_FIREWALL_CUTOFF = PING_FIREWALL_TIME / 2;
-    // ping 1/4 of the peers every loop
+    /** Peer slices pinged one per loop. */
     private static final int SLICES = 4;
+    /** Loop interval while pings are due. */
     private static final long SHORT_LOOP_TIME = PING_FIREWALL_CUTOFF / (SLICES + 1);
+    /** Loop interval while no pings are due. */
     private static final long LONG_LOOP_TIME = 25*1000L;
+    /** Amount the expire timeout grows per adjustment. */
     private static final long EXPIRE_INCREMENT = 15*1000L;
+    /** Amount the expire timeout shrinks per adjustment. */
     private static final long EXPIRE_DECREMENT = 45*1000L;
+    /** Idle time past which a peer may be disconnected. */
     private static final long MAY_DISCON_TIMEOUT = 15*1000L;
+    /** The router info is re-stored every 29 minutes. */
     private static final long RI_STORE_INTERVAL = 29*60*1000L;
 
+    /** Timer expiring idle peers and pinging the rest. */
     private class ExpirePeerEvent extends SimpleTimer2.TimedEvent {
+        /** Scratch list for the peers examined each loop. */
         private final List<PeerState> _expireBuffer;
+        /** True while the timer should keep rescheduling. */
         private volatile boolean _alive;
+        /** Loops run since the transport started. */
         private int _runCount;
+        /** True if the last loop used the short interval. */
         private boolean _lastLoopShort;
 
         /** Expire peer event. */
@@ -4612,6 +4729,7 @@ if (_alive)
         NONE
     }
 
+    /** Property overriding the measured reachability. */
     private static final String PROP_REACHABILITY_STATUS_OVERRIDE = "i2np.udp.status";
 
     /** Current reachability status, possibly overridden by configuration. */

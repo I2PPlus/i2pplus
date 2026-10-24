@@ -42,6 +42,7 @@ public final class ChaCha20 {
     private static final ThreadLocal<int[][]> _SCRATCH =
             ThreadLocal.withInitial(() -> new int[2][STATE_WORDS]);
 
+    /** Utility class, not intended for instantiation. */
     private ChaCha20() {}
 
     /**

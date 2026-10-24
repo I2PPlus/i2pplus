@@ -24,26 +24,40 @@ import java.io.InputStream;
  * @see BlindData
  * @see net.i2p.crypto.Blinding
  *
- * @since 0.9.43; do not send to routers older than 0.9.43.
+ * @since 0.9.43, do not send to routers older than 0.9.43
  */
 public class BlindingInfoMessage extends I2CPMessageImpl {
     /** The message type. */
     public static final int MESSAGE_TYPE = 42;
 
+    /** The session id of the blinded destination. */
     private SessionId _sessionId;
+    /** The endpoint type of the blinded destination. */
     private int _endpointType;
+    /** The authorization type of the destination. */
     private int _authType;
+    /** The signature type of the blinded key. */
     private SigType _blindType;
+    /** When the blind data expires. */
     private long _expiration;
+    /** The hash of the blinded destination. */
     private Hash _hash;
+    /** The host offering the destination. */
     private String _host;
+    /** The blinded destination. */
     private Destination _dest;
+    /** The blinded signing public key. */
     private SigningPublicKey _pubkey;
+    /** The authorization private key, if any. */
     private PrivateKey _privkey;
+    /** The secret code required to use the destination. */
     private String _secret;
+    /** The blind data built from the message. */
     private BlindData _blindData;
 
+    /** Mask of the authorization type bits. */
     private static final int FLAG_AUTH = 0x0f;
+    /** Flag that a secret code is required. */
     private static final int FLAG_SECRET = 0x10;
 
     /** Endpoint type for hash. */
@@ -168,6 +182,16 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
         _endpointType = TYPE_KEY;
     }
 
+    /**
+     * Builds the message from its parsed parts.
+     *
+     * @param id the session id of the destination
+     * @param expiration when the blind data expires
+     * @param authType the authorization type
+     * @param blindType the signature type of the blinded key
+     * @param privKey the authorization private key, null if none
+     * @param secret the secret code, null if none
+     */
     private BlindingInfoMessage(SessionId id, long expiration, int authType, SigType blindType, PrivateKey privKey, String secret) {
         if (id == null || blindType == null) throw new IllegalArgumentException();
         if (authType != BlindData.AUTH_NONE && authType != BlindData.AUTH_DH && authType != BlindData.AUTH_PSK) throw new IllegalArgumentException("Bad auth type");

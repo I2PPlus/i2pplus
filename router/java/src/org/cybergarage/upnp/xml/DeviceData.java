@@ -47,6 +47,7 @@ public class DeviceData extends NodeData {
     ////////////////////////////////////////////////
 
     private String descriptionURI = null;
+    /** The device description file. */
     private File descriptionFile = null;
 
     /**
@@ -90,6 +91,7 @@ public class DeviceData extends NodeData {
     ////////////////////////////////////////////////
 
     private String location = "";
+    /** The IPv6 location url of the device. */
     private String location_ipv6 = "";
 
     /**
@@ -182,6 +184,7 @@ public class DeviceData extends NodeData {
         return this.httpServerList;
     }
 
+    /** The addresses the http server binds to. */
     private InetAddress[] httpBinds = null;
 
     /**
@@ -246,9 +249,13 @@ public class DeviceData extends NodeData {
     ////////////////////////////////////////////////
 
     private SSDPSearchSocketList ssdpSearchSocketList = null;
+    /** The IPv4 multicast address for SSDP. */
     private String ssdpMulticastIPv4 = SSDP.ADDRESS;
+    /** The IPv6 multicast address for SSDP. */
     private String ssdpMulticastIPv6 = SSDP.getIPv6Address();
+    /** The port used for SSDP. */
     private int ssdpPort = SSDP.PORT;
+    /** The addresses SSDP binds to. */
     private InetAddress[] ssdpBinds = null;
 
     /**
@@ -355,6 +362,7 @@ public class DeviceData extends NodeData {
     ////////////////////////////////////////////////
 
     private SSDPPacket ssdpPacket = null;
+    /** The IPv6 SSDP packet received. */
     private SSDPPacket ssdpPacket_ipv6 = null;
 
     /**

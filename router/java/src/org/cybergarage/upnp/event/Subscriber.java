@@ -123,8 +123,11 @@ public class Subscriber {
         }
     }
 
+    /** Host notifications are sent to. */
     private String deliveryHost = "";
+    /** Path notifications are sent to. */
     private String deliveryPath = "";
+    /** Port notifications are sent to. */
     private int deliveryPort = 0;
 
     /**
@@ -186,10 +189,8 @@ public class Subscriber {
     public boolean isExpired() {
         long currTime = System.currentTimeMillis();
 
-        // Thanks for Oliver Newell (10/26/04)
         if (timeOut == Subscription.INFINITE_VALUE) return false;
 
-        // Thanks for Oliver Newell (10/26/04)
         long expiredTime = getSubscriptionTime() + getTimeOut() * 1000;
         if (expiredTime < currTime) return true;
 

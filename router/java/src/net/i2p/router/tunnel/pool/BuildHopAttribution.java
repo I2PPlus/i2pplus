@@ -21,6 +21,7 @@ import java.util.Locale;
  */
 public class BuildHopAttribution {
 
+    /** Utility class, not intended for instantiation. */
     private BuildHopAttribution() {}
 
     /**

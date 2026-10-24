@@ -41,7 +41,9 @@ import net.i2p.util.Log;
  * @since 0.9.16 moved from net.i2p.data.RoutingKeyGenerator
  */
 public class RouterKeyGenerator extends RoutingKeyGenerator {
+    /** The log for the key generator. */
     private final Log _log;
+    /** The app context. */
     private final I2PAppContext _context;
     /**
      * Constructor that initializes GMT date formatter and generates current routing key modifier data.
@@ -54,14 +56,22 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
         generateDateBasedModData();
     }
 
+    /** The modulus data of the current key. */
     private volatile byte[] _currentModData;
+    /** The modulus data of the next key. */
     private volatile byte[] _nextModData;
+    /** When the keys change next. */
     private volatile long _nextMidnight;
+    /** When the keys last changed. */
     private volatile long _lastChanged;
 
+    /** The time zone of the key dates. */
     private static final ZoneId GMT = ZoneId.of("GMT");
+    /** Date format of the key modulus. */
     private static final String FORMAT = "yyyyMMdd";
+    /** Length of the formatted key date. */
     private static final int LENGTH = FORMAT.length();
+    /** The per-thread date format. */
     private final ThreadLocal<DateFormat> _fmt = new ThreadLocal<DateFormat>() {
         @Override
         protected DateFormat initialValue() {

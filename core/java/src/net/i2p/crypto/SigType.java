@@ -161,7 +161,6 @@ public enum SigType {
             "1.3.101.101",
             "0.9.25"),
 
-    // 9 and 10 reserved for GOST - see proposal 134
 
     /**
      * Blinded version of EdDSA, use for encrypted LS2
@@ -182,55 +181,36 @@ public enum SigType {
             "1.3.101.101",
             "0.9.39");
 
-    // TESTING....................
 
-    // others..........
 
-    // EC mix and match
-    // ECDSA_SHA256_P192(5, 48, 24, 32, 48, SigAlgo.EC, "SHA-256", "SHA256withECDSA", ECConstants.P192_SPEC),
-    // ECDSA_SHA256_P384(6, 96, 48, 32, 96, SigAlgo.EC, "SHA-256", "SHA256withECDSA", ECConstants.P384_SPEC),
-    // ECDSA_SHA256_P521(7, 132, 66, 32, 132, SigAlgo.EC, "SHA-256", "SHA256withECDSA", ECConstants.P521_SPEC),
-    // ECDSA_SHA384_P256(8, 64, 32, 48, 64, SigAlgo.EC, "SHA-384", "SHA384withECDSA", ECConstants.P256_SPEC),
-    // ECDSA_SHA384_P521(9, 132, 66, 48, 132, SigAlgo.EC, "SHA-384", "SHA384withECDSA", ECConstants.P521_SPEC),
-    // ECDSA_SHA512_P256(10, 64, 32, 64, 64, SigAlgo.EC, "SHA-512", "SHA512withECDSA", ECConstants.P256_SPEC),
-    // ECDSA_SHA512_P384(11, 96, 48, 64, 96, SigAlgo.EC, "SHA-512", "SHA512withECDSA", ECConstants.P384_SPEC),
 
-    // Koblitz
-    // ECDSA_SHA256_K163(12, 42, 21, 32, 42, SigAlgo.EC, "SHA-256", "SHA256withECDSA", ECConstants.K163_SPEC),
-    // ECDSA_SHA256_K233(13, 60, 30, 32, 60, SigAlgo.EC, "SHA-256", "SHA256withECDSA", ECConstants.K233_SPEC),
-    // ECDSA_SHA256_K283(14, 72, 36, 32, 72, SigAlgo.EC, "SHA-256", "SHA256withECDSA", ECConstants.K283_SPEC),
-    // ECDSA_SHA256_K409(15, 104, 52, 32, 104, SigAlgo.EC, "SHA-256", "SHA256withECDSA", ECConstants.K409_SPEC),
-    // ECDSA_SHA256_K571(16, 144, 72, 32, 144, SigAlgo.EC, "SHA-256", "SHA256withECDSA", ECConstants.K571_SPEC),
 
-    // too short..............
-    // Pubkey 48 bytes; privkey 24 bytes; hash 20 bytes; sig 48 bytes */
-    // ECDSA_SHA1_P192(1, 48, 24, 20, 48, SigAlgo.EC, "SHA-1", "SHA1withECDSA", ECConstants.P192_SPEC),
-    // RSA_SHA1(17, 128, 256, 20, 128, SigAlgo.RSA, "SHA-1", "SHA1withRSA", RSAConstants.F4_1024_SPEC),
-    // MD5
-    // RSA_SHA1
 
-    // ELGAMAL_SHA256
-    // DSA_2048_224(2, 256, 28, 32, 56, "SHA-256"),
-    // Nonstandard, used by Syndie.
-    // Pubkey 128 bytes; privkey 20 bytes; hash 32 bytes; sig 40 bytes
-    // DSA_1024_160_SHA256(1, 128, 20, 32, 40, "SHA-256", "?"),
-    // Pubkey 256 bytes; privkey 32 bytes; hash 32 bytes; sig 64 bytes
-    // DSA_2048_256(2, 256, 32, 32, 64, "SHA-256", "?"),
-    // Pubkey 384 bytes; privkey 32 bytes; hash 32 bytes; sig 64 bytes
-    // DSA_3072_256(3, 384, 32, 32, 64, "SHA-256", "?"),
 
+    /** The two byte signature type code. */
     private final int code;
+    /** Length of the public key, in bytes. */
     private final int pubkeyLen;
+    /** Length of the private key, in bytes. */
     private final int privkeyLen;
+    /** Length of the hash signed, in bytes. */
     private final int hashLen;
+    /** Length of the signature, in bytes. */
     private final int sigLen;
 
+    /** The underlying algorithm family. */
     private final SigAlgo base;
+    /** Name of the digest algorithm used. */
     private final String digestName;
+    /** Name of the signature algorithm for display. */
     private final String algoName;
+    /** The object identifier of the algorithm, if any. */
     private final String oid;
+    /** Version that introduced this type. */
     private final String since;
+    /** Parameters of the algorithm, if any. */
     private final AlgorithmParameterSpec params;
+    /** True if the implementation is available. */
     private final boolean isAvail;
 
     /**
@@ -242,6 +222,21 @@ public enum SigType {
      */
     private volatile MessageDigest digestProto;
 
+    /**
+     * Creates a signature type with its parameters.
+     *
+     * @param cod the two byte signature type code
+     * @param pubLen length of the public key, in bytes
+     * @param privLen length of the private key, in bytes
+     * @param hLen length of the hash signed, in bytes
+     * @param sLen length of the signature, in bytes
+     * @param baseAlgo the underlying algorithm family
+     * @param mdName name of the digest algorithm used
+     * @param aName name of the signature algorithm for display
+     * @param pSpec parameters of the algorithm, null if none
+     * @param oid the object identifier of the algorithm, null if none
+     * @param supportedSince version that introduced this type
+     */
     SigType(
             int cod,
             int pubLen,
@@ -428,9 +423,9 @@ public enum SigType {
     }
 
     /**
-     * The OID for the signature.
+     * The object identifier assigned to the signature algorithm.
      *
-     * @return the OID
+     * @return the dotted decimal OID, null if none is assigned
      * @since 0.9.25
      */
     public String getOID() {
@@ -447,6 +442,11 @@ public enum SigType {
         return isAvail;
     }
 
+    /**
+     * Checks whether the implementation loads.
+     *
+     * @return true if the signatures can be verified
+     */
     private boolean x_isAvailable() {
         if (DSA_SHA1 == this) return true;
         try {
@@ -505,6 +505,7 @@ public enum SigType {
         return type.isAvailable();
     }
 
+    /** The types indexed by their code. */
     private static final SigType[] BY_CODE;
 
     static {

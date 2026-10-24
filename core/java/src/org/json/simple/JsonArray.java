@@ -150,6 +150,12 @@ public class JsonArray extends ArrayList<Object> implements Jsonable {
         return ((Number) returnable).doubleValue();
     }
 
+    /**
+     * True when a name is safe to instantiate while reading JSON.
+     *
+     * @param className the name to check
+     * @return true if the name may be instantiated
+     */
     private static boolean isValidClassName(String className) {
         if (className == null || className.isEmpty()) {
             return false;

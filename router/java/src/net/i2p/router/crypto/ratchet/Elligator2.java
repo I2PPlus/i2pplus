@@ -23,27 +23,45 @@ import net.i2p.util.NativeBigInteger;
  */
 class Elligator2 {
 
+    /** The app context. */
     private final I2PAppContext _context;
 
+    /** The Curve25519 field prime. */
     private static final BigInteger p;
+    /** The exponent (p+3)/8 for the square root. */
     private static final BigInteger divide_plus_p_3_8;
+    /** The exponent (p-1)/2 for the Legendre check. */
     private static final BigInteger divide_minus_p_1_2;
+    /** The exponent (p-1)/4 for the square root. */
     private static final BigInteger divide_minus_p_1_4;
+    /** A square root of -1 in the field. */
     private static final BigInteger square_root_negative_1;
+    /** The curve constant A as a long. */
     private static final long A_INT = 486662;
+    /** The curve constant A. */
     private static final BigInteger A = new BigInteger(Long.toString(A_INT));
+    /** The negated curve constant -A. */
     private static final BigInteger negative_A;
+    /** A non-square multiplier chosen for the mapping. */
     private static final BigInteger u;
+    /** The inverse of u in the field. */
     private static final BigInteger inverted_u;
+    /** The value two, for exponent math. */
     private static final BigInteger TWO = new NativeBigInteger("2");
 
+    /** Bytes in a field element representative. */
     private static final int REPRESENTATIVE_LENGTH = 32;
 
+    /** The named curve the field comes from. */
     private static final EdDSANamedCurveSpec SPEC = EdDSANamedCurveTable.getByName("ed25519-sha-512");
+    /** The Curve25519 curve. */
     private static final Curve CURVE = SPEC.getCurve();
+    /** The field the mapping works in. */
     private static final Field FIELD = CURVE.getField();
+    /** Encoder of field elements to and from bytes. */
     private static final BigIntegerLittleEndianEncoding ENCODING = new BigIntegerLittleEndianEncoding();
 
+    /** Developer switch disabling the mapping. */
     private static final boolean DISABLE = false;
 
     static {
@@ -263,6 +281,12 @@ class Elligator2 {
         return new PublicKey(EncType.ECIES_X25519, dec);
     }
 
+    /**
+     * Computes the square root in the field.
+     *
+     * @param x the value to take the root of
+     * @return the root, x if there is none
+     */
     private static BigInteger square_root(BigInteger x) {
         // t = x ^ ((p - 1) / 4) (mod p)
         if (!(x instanceof NativeBigInteger))

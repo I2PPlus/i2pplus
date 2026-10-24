@@ -232,7 +232,7 @@ public abstract class GettextResource extends ResourceBundle {
         return (n != 1 ? msgid_plural : msgid);
     }
 
-  /* The separator between msgctxt and msgid.  */
+  /** The separator between msgctxt and msgid.  */
     private static final String CONTEXT_GLUE = "\u0004";
 
   /**

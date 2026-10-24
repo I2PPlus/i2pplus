@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
  */
 public class TryCache<T> {
 
+    /** True to log duplicate releases. */
     private static final boolean DEBUG_DUP = false;
 
     /**
@@ -27,13 +28,21 @@ public class TryCache<T> {
         T newInstance();
     }
 
+    /** The factory making missing objects. */
     private final ObjectFactory<T> factory;
+    /** Most objects to keep cached. */
     private volatile int capacity;
+    /** The objects held in the cache. */
     private final ConcurrentLinkedDeque<T> items = new ConcurrentLinkedDeque<>();
+    /** When the cache last ran empty. */
     private volatile long _lastUnderflow = System.currentTimeMillis();
+    /** Objects taken from the cache. */
     private volatile long _acquireCount;
+    /** Times the cache was empty. */
     private volatile long _missCount;
+    /** Objects returned to the cache. */
     private volatile long _releaseCount;
+    /** Objects dropped instead of cached. */
     private volatile long _discardCount;
 
     /**
@@ -95,9 +104,9 @@ public class TryCache<T> {
     }
 
     /**
-     * Current number of cached items.
+     * Number of items currently held.
      *
-     * @return the current number of cached items
+     * @return the count of cached items, 0 to capacity
      */
     public int size() {
         return items.size();
@@ -143,9 +152,9 @@ public class TryCache<T> {
     }
 
     /**
-     * Timestamp of the last underflow.
+     * When the cache last fell below its target size.
      *
-     * @return the timestamp of the last underflow
+     * @return the time in milliseconds since the epoch
      */
     public long getLastUnderflowTime() {
         return _lastUnderflow;

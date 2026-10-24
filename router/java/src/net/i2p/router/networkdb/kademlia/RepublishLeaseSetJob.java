@@ -167,8 +167,10 @@ public class RepublishLeaseSetJob extends JobImpl {
     private static final int MAX_REMINT_DEFERS = 3;
     /** Staleness threshold for cleaning up tracking maps. */
     private static final long CACHE_CLEANUP_THRESHOLD = 15L * 60 * 1000;
-    // Last time cleanupStaleEntries() ran — guards against redundant sweeps
-    /** Last cleanup time. */
+    /**
+     * When the stale entry cleanup last ran, to guard against
+     * redundant sweeps.
+     */
     private static volatile long _lastCleanupTime;
     /** Tracks destinations currently being retried to prevent duplicate retries. */
     private static final ConcurrentHashMap<Hash, Boolean> _retryInProgress = new ConcurrentHashMap<>();
@@ -186,9 +188,11 @@ public class RepublishLeaseSetJob extends JobImpl {
     private static final ConcurrentHashMap<Hash, Long> _lastNotRequeueLogTime = new ConcurrentHashMap<>();
     /** Last log timestamp per destination to throttle missing-LeaseSet log messages. */
     private static final ConcurrentHashMap<Hash, Long> _lastMissingLogTime = new ConcurrentHashMap<>();
-    // Persistent per-destination failure count — never reset, survives job instances.
-    // Used to decide when to perform expensive floodfill verification.
-    /** Persistent per-destination store failure count. */
+    /**
+     * Persistent per-destination store failure count, never reset,
+     * surviving job instances, used to decide when to do the
+     * expensive floodfill verification.
+     */
     private static final ConcurrentHashMap<Hash, AtomicInteger> _globalFailCount = new ConcurrentHashMap<>();
     /** Consecutive re-mint deferral count per destination, to bound fresh-build waiting. */
     private static final ConcurrentHashMap<Hash, AtomicInteger> _remintDefers = new ConcurrentHashMap<>();
@@ -196,8 +200,10 @@ public class RepublishLeaseSetJob extends JobImpl {
     private static final ConcurrentHashMap<Hash, Long> _lastIneffectiveRemint = new ConcurrentHashMap<>();
     /** Max verifications per destination before falling back to direct retry. */
     private static final int MAX_FLOODFILL_VERIFICATIONS = 3;
-    // Tracks defer start for startup-gate; cleared on success or FIRST_PUBLISH_TIMEOUT
-    /** Timestamp when first publish was deferred, per destination. */
+    /**
+     * When the first publish was deferred, per destination, cleared
+     * on success or on the first publish timeout.
+     */
     private static final ConcurrentHashMap<Hash, Long> _firstDeferredAt = new ConcurrentHashMap<>();
     /** Max time to defer first publish while waiting for target tunnels. */
     private static final long FIRST_PUBLISH_TIMEOUT = 60L * 1000;
@@ -292,8 +298,7 @@ public class RepublishLeaseSetJob extends JobImpl {
         }
     }
 
-    // Client has indicated it should no longer publish this LeaseSet
-    /** Handle should not publish. */
+    /** Handles the client asking to stop publishing this lease set. */
     private void handleShouldNotPublish() {
         LeaseSet ls = _facade.lookupLeaseSetLocally(_dest);
         if (ls != null && _log.shouldDebug()) {
@@ -306,8 +311,7 @@ public class RepublishLeaseSetJob extends JobImpl {
         _facade.stopPublishing(_dest);
     }
 
-    // Handle a local LeaseSet that needs publication
-    /** Handle local lease set. */
+    /** Handles a local lease set that needs publication. */
     private void handleLocalLeaseSet() {
         LeaseSet ls = _facade.lookupLeaseSetLocally(_dest);
         if (ls != null) {
@@ -354,8 +358,7 @@ public class RepublishLeaseSetJob extends JobImpl {
         scheduleRepublish(30L * 1000);
     }
 
-    // No LeaseSet exists locally — ask the client to create one
-    /** Handle missing lease set. */
+    /** Handles a missing lease set by asking the client to create one. */
     private void handleMissingLeaseSet() {
         long now = getContext().clock().now();
         Long lastLog = _lastMissingLogTime.get(_dest);
@@ -382,8 +385,10 @@ public class RepublishLeaseSetJob extends JobImpl {
         scheduleRepublish(MISSING_LEASESET_RETRY);
     }
 
-    // Client is no longer local — clean up and stop publishing
-    /** Handle not local. */
+    /**
+     * Handles a client that is no longer local, cleaning up and
+     * stopping publication.
+     */
     private void handleNotLocal() {
         if (_log.shouldInfo()) {
             _log.info("Client [" + shortHash() +
@@ -536,18 +541,38 @@ public class RepublishLeaseSetJob extends JobImpl {
      */
     public String getName() {return "Republish Local LeaseSet" + (highPriority ? " [High priority]" : "");}
 
+    /**
+     * The time allowed for one publish.
+     *
+     * @return the timeout, in milliseconds
+     */
     private long getPublishTimeout() {
         return getContext().getProperty(PROP_TIMEOUT, REPUBLISH_LEASESET_TIMEOUT_DEFAULT);
     }
 
+    /**
+     * The delay before a retry.
+     *
+     * @return the delay, in milliseconds
+     */
     private int getRetryDelay() {
         return getContext().getProperty(PROP_RETRY_DELAY, RETRY_DELAY_DEFAULT);
     }
 
+    /**
+     * The largest retry delay allowed.
+     *
+     * @return the delay, in milliseconds
+     */
     private int getMaxRetryDelay() {
         return getContext().getProperty(PROP_MAX_RETRY_DELAY, RETRY_MAX_DELAY_DEFAULT);
     }
 
+    /**
+     * The interval between republishes.
+     *
+     * @return the interval, in milliseconds
+     */
     private long getRepublishInterval() {
         return getContext().getProperty("i2p.netdb.republishInterval", 5L * 60 * 1000);
     }
@@ -937,6 +962,13 @@ public class RepublishLeaseSetJob extends JobImpl {
         return countFreshLeases(fresh, now) > 0;
     }
 
+    /**
+     * Counts the leases that are still fresh.
+     *
+     * @param ls the lease set to check
+     * @param now the current time
+     * @return the number of fresh leases
+     */
     private int countFreshLeases(LeaseSet ls, long now) {
         if (ls == null) {
             return 0;
@@ -962,7 +994,12 @@ public class RepublishLeaseSetJob extends JobImpl {
         return settings != null ? settings.getQuantity() : 1;
     }
 
-    // Register a successor RepublishLeaseSetJob with timing set.
+    /**
+     * Schedules the next republish job.
+     *
+     * @param delayMs the delay before the next job
+     * @return the new job
+     */
     private RepublishLeaseSetJob registerSuccessor(long delayMs) {
         RepublishLeaseSetJob job = new RepublishLeaseSetJob(getContext(), _facade, _dest);
         if (!job.registerSelf()) {
@@ -995,10 +1032,11 @@ public class RepublishLeaseSetJob extends JobImpl {
             getContext().jobQueue().addJob(next);
     }
 
-    // Schedule a retry after a failed publish.
-    // Exponential backoff with aggressive first-retry delay;
-    // every 4th attempt is promoted to high-priority.
-    /** Requeue republish. */
+    /**
+     * Requeues the republish after a failed publish, with exponential
+     * backoff, an aggressive first retry, and every fourth attempt
+     * promoted to high priority.
+     */
     void requeueRepublish() {
         if (_retryInProgress.putIfAbsent(_dest, Boolean.TRUE) != null) {
             if (_log.shouldDebug()) {
@@ -1046,6 +1084,11 @@ public class RepublishLeaseSetJob extends JobImpl {
         _retryInProgress.remove(_dest);
     }
 
+    /**
+     * The short hash of the local destination for logs.
+     *
+     * @return the first eight base32 characters
+     */
     private String shortHash() {
         return _dest.toBase32().substring(0, 8);
     }
@@ -1152,13 +1195,20 @@ public class RepublishLeaseSetJob extends JobImpl {
      */
     Hash getDestHash() {return _dest;}
 
-    // Handles store timeout: retries (with floodfill verification on recurring failures)
-    // or cancels if a newer LeaseSet appeared locally.
-    /** Handles publish timeout and schedules retries with floodfill verification. */
+    /**
+     * Handles a publish timeout, retrying with floodfill verification
+     * on recurring failures, or cancelling when a newer lease set
+     * appeared locally.
+     */
     private class OnRepublishFailure extends JobImpl {
         /** LeaseSet that failed to publish. */
         private final LeaseSet _ls;
 
+        /**
+         * Handles a failed republish.
+         *
+         * @param ls the lease set that failed
+         */
         public OnRepublishFailure(LeaseSet ls) {
             super(RepublishLeaseSetJob.this.getContext());
             _ls = ls;
@@ -1263,10 +1313,13 @@ public class RepublishLeaseSetJob extends JobImpl {
         }
     }
 
-    // Fired on successful store — resets global fail counter and clears
-    // the first-publish gate so subsequent renewals proceed immediately.
-    /** Fired on successful store to reset counters and log confirmation. */
+    /**
+     * Fired on a successful store, resetting the global fail counter
+     * and clearing the first-publish gate so later renewals proceed
+     * immediately.
+     */
     private class OnRepublishSuccess extends JobImpl {
+        /** Handles a successful republish. */
         public OnRepublishSuccess() {
             super(RepublishLeaseSetJob.this.getContext());
         }

@@ -23,6 +23,7 @@ import net.i2p.data.i2np.I2NPMessage;
  * garlic wrapping.
  */
 public class PayloadGarlicConfig extends GarlicConfig {
+    /** The message carried inside the clove. */
     private final I2NPMessage _payload;
 
     /**

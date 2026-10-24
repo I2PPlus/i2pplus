@@ -69,6 +69,12 @@ public class VersionComparator implements Comparator<String>, Serializable {
         }
     }
 
+    /**
+     * True for a character that separates version parts.
+     *
+     * @param c the character to test
+     * @return true if it separates parts
+     */
     private static boolean isSeparator(char c) {
         switch (c) {
             case '.':
@@ -80,10 +86,22 @@ public class VersionComparator implements Comparator<String>, Serializable {
         }
     }
 
+    /**
+     * True for a decimal digit.
+     *
+     * @param c the character to test
+     * @return true if it is a digit
+     */
     private static boolean isDigit(char c) {
         return c >= '0' && c <= '9';
     }
 
+    /**
+     * The value of a decimal digit.
+     *
+     * @param c the character to convert
+     * @return its value
+     */
     private static int getDigit(char c) {
         return c - '0';
     }

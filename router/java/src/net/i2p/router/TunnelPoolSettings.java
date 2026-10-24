@@ -16,22 +16,39 @@ import net.i2p.util.SystemVersion;
  * Wrap up the settings for a pool of tunnels.
  */
 public class TunnelPoolSettings {
+    /** The tunnel's destination hash. */
     private final Hash _destination;
+    /** Nickname for the destination, may be null. */
     private String _destinationNickname;
+    /** Active tunnels wanted. */
     private int _quantity;
+    /** Backup tunnels wanted. */
     private int _backupQuantity;
+    /** Hop count of the tunnels. */
     private int _length;
+    /** Allowed random variation of the hop count. */
     private int _lengthVariance;
+    /** Hop count override for the next tunnels, -1 if none. */
     private int _lengthOverride;
+    /** True for an inbound tunnel pool. */
     private final boolean _isInbound;
+    /** True for the exploratory pools. */
     private final boolean _isExploratory;
+    /** True to allow zero-hop tunnels. */
     private boolean _allowZeroHop;
+    /** True to test the tunnels. */
     private boolean _shouldTest = true;
+    /** IP restriction level of the pool. */
     private int _IPRestriction;
+    /** Session options this version does not know. */
     private final Properties _unknownOptions;
+    /** Random key used for strict peer ordering. */
     private SessionKey _randomKey;
+    /** Priority of the pool for bandwidth and builds. */
     private int _priority;
+    /** Destination hashes aliasing this pool. */
     private final Set<Hash> _aliases;
+    /** Destination this pool is an alias of, null if none. */
     private Hash _aliasOf;
     /**
      * Peers excluded as the first hop of a new tunnel, for diversity. Null if
@@ -105,15 +122,21 @@ public class TunnelPoolSettings {
      * Default tunnel lifetime in milliseconds.
      */
     public static final int         DEFAULT_DURATION = 10*60*1000;
+    /** True on devices where defaults are reduced. */
     private static final boolean    IS_SLOW = SystemVersion.isSlow();
     /** Default inbound tunnel length for client pools. */
     private static final int        DEFAULT_IB_LENGTH = 3;
+    /** Default hop count of outbound tunnels. */
     private static final int        DEFAULT_OB_LENGTH = 3;
+    /** Default hop count variance. */
     private static final int        DEFAULT_LENGTH_VARIANCE = 0;
     /** Default inbound tunnel length for exploratory pools. */
     private static final int        DEFAULT_IB_EXPL_LENGTH = IS_SLOW ? 2 : 3;
+    /** Default outbound exploratory hop count. */
     private static final int        DEFAULT_OB_EXPL_LENGTH = IS_SLOW ? 2 : 3;
+    /** Default inbound exploratory hop variance. */
     private static final int        DEFAULT_IB_EXPL_LENGTH_VARIANCE = IS_SLOW ? 0 : 1;
+    /** Default outbound exploratory hop variance. */
     private static final int        DEFAULT_OB_EXPL_LENGTH_VARIANCE = IS_SLOW ? 0 : 1;
     /**
      * Default for PROP_ALLOW_ZERO_HOP: zero-hop tunnels are off.
@@ -123,9 +146,13 @@ public class TunnelPoolSettings {
      * Default for PROP_IP_RESTRICTION, restricting peers to a class B (/16) address range.
      */
     public static final int         DEFAULT_IP_RESTRICTION = 2;    // class B (/16)
+    /** Lowest tunnel priority allowed. */
     private static final int        MIN_PRIORITY = -25;
+    /** Highest tunnel priority allowed. */
     private static final int        MAX_PRIORITY = 25;
+    /** Priority of the exploratory pools. */
     private static final int        EXPLORATORY_PRIORITY = 30;
+    /** XOR value randomizing the message id bloom filter. */
     private final long _msgIDBloomXor;
 
     /**
@@ -541,21 +568,46 @@ public class TunnelPoolSettings {
         return buf.toString();
     }
 
-    // used for strict peer ordering
+    /**
+     * Generates the random key for peer ordering.
+     *
+     * @return the new key
+     */
     private static SessionKey generateRandomKey() {
         byte data[] = new byte[SessionKey.KEYSIZE_BYTES];
         RandomSource.getInstance().nextBytes(data);
         return new SessionKey(data);
     }
 
+    /**
+     * Parses a boolean option with a fallback.
+     *
+     * @param str the option text, may be null
+     * @param defaultValue the value to return if unparseable
+     * @return the parsed value
+     */
     private static final boolean getBoolean(String str, boolean defaultValue) {
         if (str == null) return defaultValue;
         return Boolean.parseBoolean(str) ||
                     "YES".equals(str.toUpperCase(Locale.US));
     }
 
+    /**
+     * Parses an integer option with a fallback.
+     *
+     * @param str the option text, may be null
+     * @param defaultValue the value to return if unparseable
+     * @return the parsed value
+     */
     private static final int getInt(String str, int defaultValue) { return (int)getLong(str, defaultValue); }
 
+    /**
+     * Parses a long option with a fallback.
+     *
+     * @param str the option text, may be null
+     * @param defaultValue the value to return if unparseable
+     * @return the parsed value
+     */
     private static final long getLong(String str, long defaultValue) {
         if (str == null) return defaultValue;
         try {

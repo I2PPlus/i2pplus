@@ -3,6 +3,7 @@ package com.mpatric.mp3agic;
 import java.util.ArrayList;
 import java.util.Map;
 
+/** A whole ID3v2 tag - the ID3v1 fields plus the frames. */
 public interface ID3v2 extends ID3v1 {
 
     /**

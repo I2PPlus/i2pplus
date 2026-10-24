@@ -11,7 +11,9 @@ package i2p.susi.dns;
  * Bean providing SusDNS application version and URL information.
  */
 public class VersionBean {
+    /** Version the JSON API reports when none is configured. */
     private static String version = "0.7";
+    /** Home page of the address book service. */
     private static String url = "http://susi.i2p/";
 
     /** Constructor for bean instantiation. */

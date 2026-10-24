@@ -11,8 +11,11 @@ import net.i2p.util.SimpleTimer2;
  * @since 0.9.3
  */
 class IPThrottler {
+    /** Recent messages counted per IP address. */
     private ObjectCounter<Integer> _counter;
+    /** Most messages allowed from one IP in a window. */
     private final int _max;
+    /** How often the counts are decayed, in ms. */
     private final long _cleanTime;
 
     /**
@@ -45,6 +48,12 @@ class IPThrottler {
         return _counter.increment(key) > _max;
     }
 
+    /**
+     * Reduces an IP address to a map key.
+     *
+     * @param ip the address bytes
+     * @return the key for that address
+     */
     private static Integer toInt(byte[] ip) {
         int rv = 0;
         for (int i = 0; i < 4; i++)
@@ -66,7 +75,9 @@ class IPThrottler {
         return Integer.valueOf(rv);
     }
 
+    /** Decays the per-IP counts on a schedule. */
     private class Cleaner extends SimpleTimer2.TimedEvent {
+        /** Starts the cleaning schedule. */
         public Cleaner() { super(SimpleTimer2.getInstance()); }
         public void timeReached() {
             _counter.clear();

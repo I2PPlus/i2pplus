@@ -11,7 +11,9 @@ import java.security.spec.AlgorithmParameterSpec;
  *  @since 0.9.18, moved from net.i2p.crypto in 0.9.25
  */
 public class ElGamalParameterSpec implements AlgorithmParameterSpec {
+    /** The prime modulus. */
     private final BigInteger p;
+    /** The generator. */
     private final BigInteger g;
 
     /**

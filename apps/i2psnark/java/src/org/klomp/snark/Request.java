@@ -17,6 +17,7 @@ import java.io.IOException;
  * @since 0.1.0
  */
 class Request {
+    /** The piece this request covers. */
     private final PartialPiece piece;
     /** Offset in the piece. */
     final int off;

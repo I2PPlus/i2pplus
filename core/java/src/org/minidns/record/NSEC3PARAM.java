@@ -71,6 +71,15 @@ public class NSEC3PARAM extends Data {
         return new NSEC3PARAM(hashAlgorithm, flags, iterations, salt);
     }
 
+    /**
+     * Creates a record from its parts.
+     *
+     * @param hashAlgorithm the algorithm of the hash
+     * @param hashAlgorithmByte the wire value of the algorithm
+     * @param flags the flags of the record
+     * @param iterations the number of extra hash rounds
+     * @param salt the salt of the hash
+     */
     private NSEC3PARAM(HashAlgorithm hashAlgorithm, byte hashAlgorithmByte, byte flags, int iterations, byte[] salt) {
         assert hashAlgorithmByte == (hashAlgorithm != null ? hashAlgorithm.value : hashAlgorithmByte);
         this.hashAlgorithmByte = hashAlgorithmByte;

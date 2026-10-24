@@ -35,7 +35,9 @@ class SAMDatagramSession extends SAMMessageSession {
      * Receiver this session hands assembled incoming datagrams to.
      */
     protected SAMDatagramReceiver recv;
+    /** Makes the datagrams this session sends. */
     private final I2PDatagramMaker dgramMaker;
+    /** Dissects the datagrams this session receives */
     private final I2PDatagramDissector dgramDissector = new I2PDatagramDissector();
 
     /**

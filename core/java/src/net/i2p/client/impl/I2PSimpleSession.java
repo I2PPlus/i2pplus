@@ -41,6 +41,7 @@ import java.util.Properties;
 @SuppressWarnings("PMD.CloseResource")
 public class I2PSimpleSession extends I2PSessionImpl2 {
 
+    /** Size of the stream copy buffer, in bytes. */
     private static final int BUF_SIZE = 1024;
 
     /**
@@ -163,6 +164,11 @@ public class I2PSimpleSession extends I2PSessionImpl2 {
      * Only map message handlers that we will use.
      */
     private static class SimpleMessageHandlerMap extends I2PClientMessageHandlerMap {
+        /**
+         * Registers the handlers a simple session needs.
+         *
+         * @param context the router context
+         */
         public SimpleMessageHandlerMap(I2PAppContext context) {
             // 39 = highest type expected from router
             // http://i2p-projekt.i2p/spec/i2cp#message-types

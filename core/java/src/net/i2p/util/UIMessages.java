@@ -17,10 +17,15 @@ import java.util.List;
  */
 public class UIMessages {
 
+    /** Most messages kept before the oldest is dropped. */
     private final int _maxSize;
+    /** Id the next message will get. */
     private int _count;
+    /** The messages still being shown. */
     private final LinkedList<Message> _messages;
+    /** Rendered messages, rebuilt when they change. */
     private List<String> _cachedStrings;
+    /** Message count the cache was built at. */
     private int _cachedCount = -1;
 
     /**
@@ -164,6 +169,12 @@ public class UIMessages {
         /** The message text. */
         public final String message;
 
+        /**
+         * Records one message with its id.
+         *
+         * @param i the message's id
+         * @param msg the text to show
+         */
         private Message(int i, String msg) {
             id = i;
             message = msg;

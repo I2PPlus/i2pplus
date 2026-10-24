@@ -13,9 +13,13 @@ import net.i2p.util.Log;
  *
  */
 class InboundEndpointProcessor {
+    /** The router ending the tunnel. */
     private final RouterContext _context;
+    /** Logger for this class. */
     private final Log _log;
+    /** The tunnel's configuration. */
     private final TunnelCreatorConfig _config;
+    /** Rejects reused initialization vectors. */
     private final IVValidator _validator;
 
     /**

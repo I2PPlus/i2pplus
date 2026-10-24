@@ -66,13 +66,17 @@ import org.cybergarage.xml.ParserException;
  *
  */
 public class ControlPoint implements HTTPRequestListener {
+    /** Default port for the event subscription callback. */
     private static final int DEFAULT_EVENTSUB_PORT = 8058;
+    /** Default port for SSDP discovery. */
     private static final int DEFAULT_SSDP_PORT = 8008;
+    /** Default expired device check interval, in seconds. */
     private static final int DEFAULT_EXPIRED_DEVICE_MONITORING_INTERVAL = 60;
 
+    /** Default URI for the event subscription callback. */
     private static final String DEFAULT_EVENTSUB_URI = "/evetSub";
 
-    // I2P
+    /** True to allow IPv6 location URLs. */
     private static final boolean ALLOW_IPV6_LOCATION = true;
 
     ////////////////////////////////////////////////
@@ -80,6 +84,7 @@ public class ControlPoint implements HTTPRequestListener {
     ////////////////////////////////////////////////
 
     private SSDPNotifySocketList ssdpNotifySocketList;
+    /** Sockets receiving the SSDP search responses. */
     private SSDPSearchResponseSocketList ssdpSearchResponseSocketList;
 
     /**
@@ -108,9 +113,6 @@ public class ControlPoint implements HTTPRequestListener {
         UPnP.initialize();
     }
 
-    ////////////////////////////////////////////////
-    //	Constructor
-    ////////////////////////////////////////////////
 
     /**
      * Create a control point with specified ports and network bindings.
@@ -248,10 +250,20 @@ public class ControlPoint implements HTTPRequestListener {
 
     private NodeList devNodeList = new NodeList();
 
+    /**
+     * Adds a device described by the node.
+     *
+     * @param rootNode the device description node
+     */
     private void addDevice(Node rootNode) {
         devNodeList.add(rootNode);
     }
 
+    /**
+     * Adds a device found in an SSDP packet.
+     *
+     * @param ssdpPacket the SSDP packet announcing the device
+     */
     private synchronized void addDevice(SSDPPacket ssdpPacket) {
         if (ssdpPacket.isRootDevice() == false) return;
 
@@ -330,7 +342,6 @@ public class ControlPoint implements HTTPRequestListener {
                     new Exception("received on " + ssdpPacket.getLocalAddress()));
             addDevice(rootNode);
 
-            // Thanks for Oliver Newell (2004/10/16)
             // After node is added, invoke the AddDeviceListener to notify high-level
             // control point application that a new device has been added. (The
             // control point application must implement the DeviceChangeListener interface
@@ -343,6 +354,12 @@ public class ControlPoint implements HTTPRequestListener {
         }
     }
 
+    /**
+     * Finds the device matching the description node.
+     *
+     * @param rootNode the device description node
+     * @return the device, null if absent
+     */
     private Device getDevice(Node rootNode) {
         if (rootNode == null) return null;
         Node devNode = rootNode.getNode(Device.ELEM_NAME);
@@ -410,8 +427,12 @@ public class ControlPoint implements HTTPRequestListener {
         return (getDevice(name) != null) ? true : false;
     }
 
+    /**
+     * Removes the device matching the description node.
+     *
+     * @param rootNode the device description node
+     */
     private void removeDevice(Node rootNode) {
-        // Thanks for Oliver Newell (2004/10/16)
         // Invoke device removal listener prior to actual removal so Device node
         // remains valid for the duration of the listener (application may want
         // to access the node)
@@ -441,6 +462,11 @@ public class ControlPoint implements HTTPRequestListener {
         removeDevice(dev);
     }
 
+    /**
+     * Removes the device announced in an SSDP packet.
+     *
+     * @param packet the SSDP packet announcing the device
+     */
     private void removeDevice(SSDPPacket packet) {
         if (packet.isByeBye() == false) return;
         String usn = packet.getUSN();
@@ -453,6 +479,7 @@ public class ControlPoint implements HTTPRequestListener {
     ////////////////////////////////////////////////
 
     private Disposer deviceDisposer;
+    /** Interval between the expired device checks. */
     private long expiredDeviceMonitoringInterval;
 
     /** Remove all expired devices */
@@ -641,9 +668,6 @@ public class ControlPoint implements HTTPRequestListener {
         }
     }
 
-    ////////////////////////////////////////////////
-    //	SSDPPacket
-    ////////////////////////////////////////////////
 
     /**
      * Handle a received SSDP notification packet.
@@ -740,7 +764,6 @@ public class ControlPoint implements HTTPRequestListener {
     public void httpRequestRecieved(HTTPRequest httpReq) {
         if (Debug.isOn() == true) httpReq.print();
 
-        // Thanks for Giordano Sassaroli <sassarol@cefriel.it> (09/08/03)
         if (httpReq.isNotifyRequest() == true) {
             NotifyRequest notifyReq = new NotifyRequest(httpReq);
             String uuid = notifyReq.getSID();
@@ -824,6 +847,12 @@ public class ControlPoint implements HTTPRequestListener {
         eventSubURI = url;
     }
 
+    /**
+     * The callback URL for event subscriptions.
+     *
+     * @param host the local host name
+     * @return the callback URL
+     */
     private String getEventSubCallbackURL(String host) {
         return HostInterface.getHostURL(host, getHTTPPort(), getEventSubURI());
     }
@@ -959,9 +988,6 @@ public class ControlPoint implements HTTPRequestListener {
         }
     }
 
-    ////////////////////////////////////////////////
-    //	getSubscriberService
-    ////////////////////////////////////////////////
 
     /**
      * Find the service holding a subscription.
@@ -980,9 +1006,6 @@ public class ControlPoint implements HTTPRequestListener {
         return null;
     }
 
-    ////////////////////////////////////////////////
-    //	getSubscriberService
-    ////////////////////////////////////////////////
 
     /**
      * Renew the subscriptions of a device and of its embedded devices.
@@ -1052,9 +1075,6 @@ public class ControlPoint implements HTTPRequestListener {
         return renewSubscriber;
     }
 
-    ////////////////////////////////////////////////
-    //	run
-    ////////////////////////////////////////////////
 
     /**
      * Start the listening sockets and search for devices.

@@ -27,8 +27,11 @@ import net.i2p.util.Log;
  * Collects and publishes router performance statistics to the network database. Provides bandwidth, tunnel, and peer metrics for router capability advertising.
  */
 public class StatisticsManager {
+    /** The log for the statistics. */
     private final Log _log;
+    /** The router context. */
     private final RouterContext _context;
+    /** The network id to report. */
     private final String _networkID;
 
     /**
@@ -37,9 +40,12 @@ public class StatisticsManager {
     public static final String PROP_PUBLISH_RANKINGS = "router.publishPeerRankings";
     /** Enhance anonymity by only including build stats one out of this many times. */
     private static final int RANDOM_INCLUDE_STATS = 1024;
+    /** Whether the simple stats format is used. */
     private static final boolean SIMPLE_STATS = true;
 
+    /** The number format of the stats. */
     private final DecimalFormat _fmt;
+    /** The percent format of the stats. */
     private final DecimalFormat _pct;
 
     /**
@@ -229,6 +235,7 @@ public class StatisticsManager {
         return buf.toString();
     }
 
+    /** The names of the tunnel build stats. */
     private static final String[] tunnelStats = { "Expire", "Reject", "Success" };
 
     /**
@@ -290,13 +297,31 @@ public class StatisticsManager {
         return buf.toString();
     }
 
+    /**
+     * The period label of a rate.
+     *
+     * @param rate the rate to label
+     * @return the formatted period
+     */
     private static String getPeriod(Rate rate) { return DataHelper.formatDuration(rate.getPeriod()); }
 
+    /**
+     * Formats a number for the stats.
+     *
+     * @param num the number to format
+     * @return the formatted text
+     */
     private final String num(double num) {
         if (num < 0) num = 0;
         synchronized (_fmt) { return _fmt.format(num); }
     }
 
+    /**
+     * Formats a percentage for the stats.
+     *
+     * @param num the percentage to format
+     * @return the formatted text
+     */
     private final String pct(double num) {
         if (num < 0) num = 0;
         synchronized (_pct) { return _pct.format(num); }

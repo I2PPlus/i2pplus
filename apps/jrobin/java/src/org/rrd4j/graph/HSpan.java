@@ -26,6 +26,14 @@ class HSpan extends Span {
         this.end = end;
         assert (start < end);
     }
+    /**
+     * Returns true when the value lies between the bounds, inclusive.
+     *
+     * @param v the value to test
+     * @param min the lower bound
+     * @param max the upper bound
+     * @return true if the value lies between the bounds, inclusive
+     */
     private boolean checkRange(double v, double min, double max) {
         return v >= min && v <= max;
     }

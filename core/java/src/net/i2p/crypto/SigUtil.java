@@ -63,12 +63,18 @@ import java.util.Map;
  */
 public final class SigUtil {
 
+    /** How many times more EdDSA than DSA signatures are allowed. */
     private static final int FACTOR = SystemVersion.isAndroid() ? 1 : 4;
+    /** Converted EC public keys, by signing key. */
     private static final Map<SigningPublicKey, ECPublicKey> _ECPubkeyCache = new LHMCache<>(FACTOR * 8);
+    /** Converted EC private keys, by signing key. */
     private static final Map<SigningPrivateKey, ECPrivateKey> _ECPrivkeyCache = new LHMCache<>(8);
+    /** Converted EdDSA public keys, by signing key. */
     private static final Map<SigningPublicKey, EdDSAPublicKey> _EdPubkeyCache = new LHMCache<>(FACTOR * 64);
+    /** Converted EdDSA private keys, by signing key. */
     private static final Map<SigningPrivateKey, EdDSAPrivateKey> _EdPrivkeyCache = new LHMCache<>(FACTOR * 4);
 
+    /** Utility class, not intended for instantiation. */
     private SigUtil() {}
 
     /**

@@ -171,6 +171,7 @@ public class SimpleTimer2 {
      */
     static final int WATCHDOG_RECOVERY_SAMPLES = 3;
 
+    /** The pool running the scheduled events. */
     private final ScheduledThreadPoolExecutor _executor;
 
     /**
@@ -246,11 +247,17 @@ public class SimpleTimer2 {
      * @since 0.9.71+
      */
     private static final int DELAY_SAMPLES = 32;
+    /** Name prefix for the timer threads. */
     private final String _name;
+    /** Counter numbering the timer threads. */
     private final AtomicInteger _count = new AtomicInteger();
+    /** The app context, for the clock and stats. */
     private final I2PAppContext _context;
+    /** Hook stopping the timer on JVM exit. */
     private final Runnable _onShutdown = () -> stop(false);
+    /** Events completed since startup. */
     private final AtomicLong _completed = new AtomicLong();
+    /** Watchdog watching for a saturated timer. */
     private final SaturationWatchdog _watchdog;
 
     /**
@@ -340,7 +347,14 @@ public class SimpleTimer2 {
         _executor.shutdownNow();
     }
 
+    /** Executor that rejects work after shutdown. */
     private static class CustomScheduledThreadPoolExecutor extends ScheduledThreadPoolExecutor {
+        /**
+         * Builds the timer's executor.
+         *
+         * @param threads the pool size
+         * @param factory the thread factory
+         */
         public CustomScheduledThreadPoolExecutor(int threads, ThreadFactory factory) {
             super(threads, factory);
             setRemoveOnCancelPolicy(true);
@@ -356,7 +370,10 @@ public class SimpleTimer2 {
         }
     }
 
+    /** Factory naming the timer threads. */
     private class CustomThreadFactory implements ThreadFactory {
+        /** Names the timer's event threads. */
+        private CustomThreadFactory() {}
         @Override
         public Thread newThread(Runnable r) {
             Thread rv = Executors.defaultThreadFactory().newThread(r);
@@ -519,8 +536,14 @@ public class SimpleTimer2 {
      * apart from the pool threads it monitors.
      */
     private static class WatchdogThreadFactory implements ThreadFactory {
+        /** Name prefix for the watchdog threads. */
         private final String _name;
 
+        /**
+         * Builds the watchdog's thread factory.
+         *
+         * @param name the name prefix for the threads
+         */
         WatchdogThreadFactory(String name) {
             _name = name;
         }
@@ -549,10 +572,15 @@ public class SimpleTimer2 {
      */
     private class SaturationWatchdog {
 
+        /** Samples seen with the queue saturated. */
         private int _saturatedSamples;
+        /** True once the saturation was logged. */
         private boolean _saturationReported;
+        /** Completed count seen at the last saturated sample. */
         private long _saturatedCompleted;
+        /** Samples seen with no completions. */
         private int _stalledSamples;
+        /** True once the stall was logged. */
         private boolean _stallReported;
         /** Consecutive samples that completed a task; recovery needs this many. */
         private int _progressSamples;
@@ -560,6 +588,7 @@ public class SimpleTimer2 {
         private boolean _workDueThisEpisode;
         /** Completion count when the current quiet episode began. */
         private long _stallStartCompleted;
+        /** Completed count at the previous sample. */
         private long _lastCompleted;
         /** Wall clock at which we last saw the completion count rise. */
         private long _lastProgressAt;
@@ -572,6 +601,7 @@ public class SimpleTimer2 {
         /** Guarded by this. */
         private boolean _stopped;
 
+        /** Builds the saturation watchdog. */
         SaturationWatchdog() {
             _lastProgressAt = System.currentTimeMillis();
             start();
@@ -794,6 +824,13 @@ public class SimpleTimer2 {
         }
     }
 
+    /**
+     * Schedules one event on the executor.
+     *
+     * @param t the event to run
+     * @param timeoutMs the delay before it runs
+     * @return the scheduled future
+     */
     private ScheduledFuture<?> schedule(TimedEvent t, long timeoutMs) {
         // Only the pathological path is counted, so a healthy timer pays nothing.
         // This is what distinguishes "the queue is full of periodic work" from
@@ -868,9 +905,13 @@ public class SimpleTimer2 {
      * anything else is invalid.
      */
     private enum TimedEventState {
+        /** Not scheduled, waiting for schedule(). */
         IDLE,
+        /** Queued on the executor, not started yet. */
         SCHEDULED,
+        /** Running doPass() right now. */
         RUNNING,
+        /** Cancelled before it could run. */
         CANCELLED
     };
 
@@ -884,11 +925,15 @@ public class SimpleTimer2 {
      * reschedule() and {@link #forceReschedule} replace the existing timer.
      */
     public static abstract class TimedEvent implements Runnable {
+        /** Logger for problems running the event. */
         private Log _log;
+        /** The timer this event is scheduled on. */
         private SimpleTimer2 _pool;
+        /** Random jitter added to the delay, in ms. */
         private int _fuzz;
         /** Default fuzz threshold in milliseconds. */
         protected static final int DEFAULT_FUZZ = 100;
+        /** The pending schedule for this event, null if not scheduled. */
         private ScheduledFuture<?> _future;
 
         /** State of the current event. All access should be under lock. */
@@ -1118,6 +1163,9 @@ public class SimpleTimer2 {
             }
         }
 
+        /**
+         * Runs the event's doPass() and reschedules it.
+         */
         @SuppressWarnings("PMD.AvoidThrowingNewInstanceOfSameException")
         private void execute() {
             if (_log.shouldDebug())
@@ -1262,7 +1310,7 @@ public class SimpleTimer2 {
     /**
      * Timer name.
      *
-     * @return the timer name
+     * @return the name prefix of this timer's threads
      */
     @Override
     public String toString() {

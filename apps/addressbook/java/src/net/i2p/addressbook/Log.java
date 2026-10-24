@@ -19,9 +19,12 @@ import java.nio.charset.StandardCharsets;
  */
 class Log {
 
+    /** Lines kept before the oldest are dropped. */
     private static final int MAX_LINES = 600;
+    /** Matches the date at the start of a log line. */
     private static final Pattern DATE_PATTERN = Pattern.compile("\\d{4}-\\d{2}-\\d{2}T.*Z--.*");
 
+    /** The log file being written. */
     private final File file;
 
     /**
@@ -51,6 +54,7 @@ class Log {
         } catch (IOException exp) { /* ignored */ }
     }
 
+    /** Drops the oldest lines once the log grows too long. */
     private void trimLog() {
         try {
             Path path = file.toPath();
@@ -66,6 +70,12 @@ class Log {
         } catch (IOException e) { /* ignored */ }
     }
 
+    /**
+     * Turns one raw line into a displayable entry.
+     *
+     * @param line the line as stored
+     * @return the line to show
+     */
     private String fixEntry(String line) {
         if (DATE_PATTERN.matcher(line).matches()) {
             return line.replaceFirst("Z--", "Z -- ");

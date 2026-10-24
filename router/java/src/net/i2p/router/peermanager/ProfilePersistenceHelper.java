@@ -40,7 +40,9 @@ import net.i2p.util.SystemVersion;
  * Now migrated to a ".txt.gz" extension.
  */
 class ProfilePersistenceHelper {
+    /** Logger for the profile storage. */
     private final Log _log;
+    /** The router context. */
     private final RouterContext _context;
 
     /**
@@ -65,24 +67,36 @@ class ProfilePersistenceHelper {
      * Default peer profile directory name, relative to the router directory.
      */
     public static final String DEFAULT_PEER_PROFILE_DIR = "peerProfiles";
+    /** The platform line separator. */
     private static final String NL = System.getProperty("line.separator");
+    /** Comment rule line of the profile file. */
     private static final String HR = "# ----------------------------------------------------------------------------------------";
+    /** Filename prefix of the profile files. */
     private static final String PREFIX = "profile-";
+    /** Filename suffix of the compressed profile files. */
     private static final String SUFFIX = ".txt.gz";
+    /** Filename suffix of the uncompressed profile files. */
     private static final String UNCOMPRESSED_SUFFIX = ".txt";
+    /** Filename suffix of the old serialized profile files. */
     private static final String OLD_SUFFIX = ".dat";
+    /** Shortest valid profile file name. */
     private static final int MIN_NAME_LENGTH = PREFIX.length() + 44 + OLD_SUFFIX.length();
+    /** Prefix of the profile subdirectory names. */
     private static final String DIR_PREFIX = "p";
+    /** Alphabet of the base64 hash in the file names. */
     private static final String B64 = Base64.ALPHABET_I2P;
-    // Max to read in at startup
+    /** Profiles kept on disk. */
     private static final int LIMIT_PROFILES = SystemVersion.isSlow() ? 2000 : 8000;
 
+    /** Directory holding the profile files. */
     private final File _profileDir;
+    /** Our router hash. */
     private Hash _us;
 
     /** Last known number of profile files on disk, from the most recent load or purge. */
     private volatile int _storedProfileCount;
 
+    /** Stat name for the number of stored profiles. */
     private static final String STAT_STORED_PROFILES = "peer.storedProfileCount";
 
     /**
@@ -99,6 +113,7 @@ class ProfilePersistenceHelper {
 
     /** Profiles that loaded carrying the persisted low-latency flag. */
     private static final String STAT_LOADED_LOW_LATENCY = "peer.loadedLowLatency";
+    /** Rate stat periods for the profile statistics. */
     private static final long[] RATES = {
         RateConstants.ONE_MINUTE,
         RateConstants.FIVE_MINUTES,
@@ -440,6 +455,7 @@ List<PeerProfile> profiles = new ArrayList<>(Math.min(LIMIT_PROFILES, freshFiles
         return profiles;
     }
 
+    /** Filter selecting the profile files. */
     private static class ProfileFilter implements FilenameFilter {
         /**
          * Filter accepting filenames that match the profile naming pattern.
@@ -457,6 +473,11 @@ List<PeerProfile> profiles = new ArrayList<>(Math.min(LIMIT_PROFILES, freshFiles
         }
     }
 
+    /**
+     * Picks the profile files to load, newest first.
+     *
+     * @return the files selected
+     */
     private List<File> selectFiles() {
         FilenameFilter filter = new ProfileFilter();
         File[] files = _profileDir.listFiles(filter);
@@ -718,6 +739,13 @@ List<PeerProfile> profiles = new ArrayList<>(Math.min(LIMIT_PROFILES, freshFiles
         return 0;
     }
 
+    /**
+     * Reads a float property with a default of zero.
+     *
+     * @param props the properties read
+     * @param key the property name
+     * @return the value, zero if unparseable
+     */
     private static final float getFloat(Properties props, String key) {
         String val = props.getProperty(key);
         if (val != null) {
@@ -728,6 +756,13 @@ List<PeerProfile> profiles = new ArrayList<>(Math.min(LIMIT_PROFILES, freshFiles
         return 0.0f;
     }
 
+    /**
+     * Loads one profile file's properties.
+     *
+     * @param props the properties to fill
+     * @param file the file to read
+     * @throws IOException if the file cannot be read
+     */
     private void loadProps(Properties props, File file) throws IOException {
         try (InputStream fin = new BufferedInputStream(new FileInputStream(file), 1)) {
             fin.mark(1);
@@ -767,6 +802,12 @@ List<PeerProfile> profiles = new ArrayList<>(Math.min(LIMIT_PROFILES, freshFiles
      */
     void setMissingRouterInfoSink(Set<Hash> missingRouterInfo) { _missingRouterInfo = missingRouterInfo; }
 
+    /**
+     * Extracts the router hash from a profile file name.
+     *
+     * @param name the file name
+     * @return the hash, null if the name is malformed
+     */
     private Hash getHash(String name) {
         if (name.length() < PREFIX.length() + 44)
             return null;
@@ -783,6 +824,12 @@ List<PeerProfile> profiles = new ArrayList<>(Math.min(LIMIT_PROFILES, freshFiles
         }
     }
 
+    /**
+     * Chooses the profile file for a peer.
+     *
+     * @param profile the profile to name
+     * @return the file to use
+     */
     private File pickFile(PeerProfile profile) {
         String hash = profile.getPeer().toBase64();
         File dir = new File(_profileDir, DIR_PREFIX + hash.charAt(0));
@@ -955,12 +1002,20 @@ List<PeerProfile> profiles = new ArrayList<>(Math.min(LIMIT_PROFILES, freshFiles
         static final Comparator<FileMetadata> BY_AGE =
             (a, b) -> Long.compare(a.lastActivity, b.lastActivity);
 
+        /** The profile file on disk. */
         private final File file;
         /** Newest recorded activity, or 0 if the profile records none. */
         private final long lastActivity;
         /** Whether the peer is genuinely stale rather than merely surplus. */
         private final boolean stale;
 
+        /**
+         * Records one profile file's metadata.
+         *
+         * @param f the profile file
+         * @param lastActivity the last activity time from the file
+         * @param stale true if the file is past its expiry
+         */
         FileMetadata(File f, long lastActivity, boolean stale) {
             file = f;
             this.lastActivity = lastActivity;

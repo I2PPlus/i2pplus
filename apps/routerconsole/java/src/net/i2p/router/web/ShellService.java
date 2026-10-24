@@ -50,24 +50,39 @@ import net.i2p.util.SystemVersion;
  * @since 1.6.0/0.9.52, moved from net.i2p.app in 0.9.53
  */
 public class ShellService implements ClientApp {
+    /** Option naming the service internally. */
     private static final String NAME_OPTION = "-shellservice.name";
+    /** Option naming the service for display. */
     private static final String DISPLAY_NAME_OPTION = "-shellservice.displayname";
+    /** Directory the command is looked up in. */
     private static final String PLUGIN_DIR = "plugins";
+    /** Splits a command line argument on the equals sign. */
     private static final Pattern EQUALS_SPLIT = Pattern.compile("=");
 
+    /** Logger for the shell service. */
     private final Log _log;
+    /** Builder launching the external command. */
     private final ProcessBuilder _pb;
+    /** The app context. */
     private final I2PAppContext _context;
+    /** The manager notified of the state changes. */
     private final ClientAppManager _cmgr;
+    /** The command line being run. */
     private final String _commandPath;
+    /** File the command's errors are written to. */
     private final File _errorLog;
+    /** File the command's output is written to. */
     private final File _outputLog;
 
+    /** Current state of the service. */
     private ClientAppState _state = ClientAppState.UNINITIALIZED;
 
+    /** Internal name of the service. */
     private volatile String name = "unnamedClient";
+    /** Name of the service shown in the console. */
     private volatile String displayName = "unnamedClient";
 
+    /** The running process, while started. */
     private Process _p;
 
     /**
@@ -178,6 +193,13 @@ public class ShellService implements ClientApp {
         return newargs;
     }
 
+    /**
+     * Changes the app state and notifies listeners.
+     *
+     * @param newState the new state
+     * @param message the message for the listeners
+     * @param ex the exception, null if none
+     */
     private synchronized void changeState(ClientAppState newState, String message, Exception ex) {
         if (_state != newState) {
             _state = newState;
@@ -185,6 +207,12 @@ public class ShellService implements ClientApp {
         }
     }
 
+    /**
+     * Changes the app state and notifies listeners.
+     *
+     * @param newState the new state
+     * @param message the message for the listeners
+     */
     private synchronized void changeState(ClientAppState newState, String message) {
         changeState(newState, message, null);
     }

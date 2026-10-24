@@ -26,21 +26,36 @@ import net.i2p.util.SystemVersion;
  */
 public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
 
+    /** The factory created last, for reuse. */
     private static volatile MLKEMKeyFactory lastInstance;
+    /** The app context. */
     private final I2PAppContext _context;
+    /** Logger for the key precalculation. */
     private final Log _log;
+    /** Keys kept in the queue at least. */
     private volatile int _minSize;
+    /** Keys kept in the queue at most. */
     private volatile int _maxSize;
+    /** Delay between precalculation batches. */
     private volatile int _calcDelay;
+    /** Queue of the precalculated key pairs. */
     private final LinkedBlockingQueue<KeyPair> _keys;
+    /** The ML-KEM parameter set generated. */
     private final EncType _type;
+    /** True while the factory thread runs. */
     private volatile boolean _isRunning;
+    /** Delay before checking the queue again. */
     private long _checkDelay = 10 * 1000L;
+    /** Times the queue was found empty. */
     private final AtomicInteger _emptyCount = new AtomicInteger();
+    /** Keys taken from the queue. */
     private final AtomicInteger _usedCount = new AtomicInteger();
 
+    /** Config key for the minimum queue size. */
     private static final String PROP_MLKEM_PRECALC_MIN = "crypto.mlkem.precalc.min";
+    /** Config key for the maximum queue size. */
     private static final String PROP_MLKEM_PRECALC_MAX = "crypto.mlkem.precalc.max";
+    /** Config key for the precalculation delay. */
     private static final String PROP_MLKEM_PRECALC_DELAY = "crypto.mlkem.precalc.delay";
     /**
      * Approximate heap size of one pooled ML-KEM-768 keypair, in bytes. The
@@ -55,9 +70,13 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
      * @since 0.9.72+
      */
     static final long MAX_POOL_BYTES = 16L * 1024 * 1024;
+    /** Default minimum queue size. */
     private static final int DEFAULT_MLKEM_PRECALC_MIN = 64;
+    /** Default maximum queue size. */
     private static final int DEFAULT_MLKEM_PRECALC_MAX = 256;
+    /** Default precalculation delay, in ms. */
     private static final int DEFAULT_MLKEM_PRECALC_DELAY = 25;
+    /** Largest queue size allowed. */
     private static final int HARD_MAX = 32768;
     /**
      * The byte budget expressed in keypairs. This, not {@link #HARD_MAX}, is
@@ -282,6 +301,11 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
         }
     }
 
+    /**
+     * Runs the precalculation loop.
+     *
+     * @throws GeneralSecurityException if a key pair cannot be generated
+     */
     private void run2() throws GeneralSecurityException {
         _isRunning = true;
         while (_isRunning) {
@@ -353,6 +377,12 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
         return rv;
     }
 
+    /**
+     * Generates one key pair.
+     *
+     * @return the new key pair
+     * @throws GeneralSecurityException if the generation fails
+     */
     private KeyPair precalc() throws GeneralSecurityException {
         return MLKEM.getKeys(_type);
     }

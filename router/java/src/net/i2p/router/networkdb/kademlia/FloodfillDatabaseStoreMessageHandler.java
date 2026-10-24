@@ -31,8 +31,11 @@ import net.i2p.util.RandomSource;
  * store message processing in the Kademlia network database system.
  */
 public class FloodfillDatabaseStoreMessageHandler implements HandlerJobBuilder {
+    /** The router context handling the store. */
     private RouterContext _context;
+    /** The store the profile is checked against. */
     private FloodfillNetworkDatabaseFacade _facade;
+    /** Random mask hiding which message ids were seen. */
     private final long _msgIDBloomXor = RandomSource.getInstance().nextLong(I2NPMessage.MAX_ID_VALUE);
 
     /**

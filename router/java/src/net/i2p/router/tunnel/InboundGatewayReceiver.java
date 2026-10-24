@@ -12,11 +12,16 @@ import net.i2p.router.RouterContext;
  *  Not used for zero-hop IBGWs.
  */
 class InboundGatewayReceiver implements TunnelGateway.Receiver {
+    /** The router context. */
     private final RouterContext _context;
+    /** The hop config of this gateway. */
     private final HopConfig _config;
+    /** The router info of the next hop. */
     private RouterInfo _target;
 
+    /** Most time spent looking up the target. */
     private static final long MAX_LOOKUP_TIME = 15*1000L;
+    /** The priority of the participating messages. */
     private static final int PRIORITY = OutNetMessage.PRIORITY_PARTICIPATING;
 
     /**
@@ -90,12 +95,17 @@ class InboundGatewayReceiver implements TunnelGateway.Receiver {
         return _config.getSendTo();
     }
 
+    /** Job receiving one message for the next hop. */
     private class ReceiveJob extends JobImpl {
+        /** The encrypted message data. */
         private final byte[] _encrypted;
 
         /**
          * Holds the encrypted gateway message so it can be handed to the
          * receiver once the job queue reaches it.
+         *
+         * @param ctx the router context
+         * @param data the encrypted gateway message
          */
         public ReceiveJob(RouterContext ctx, byte[] data) {
             super(ctx);

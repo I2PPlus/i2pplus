@@ -14,9 +14,13 @@ import net.i2p.data.Base32;
  */
 public class MagnetURI {
 
+    /** Trackers named in the link. */
     private final List<String> _trackers;
+    /** Torrent name, null if the link gives none. */
     private final String _name;
+    /** The info hash, if the link gives one. */
     private final byte[] _ih;
+    /** Total length, -1 if the link gives none. */
     private final long _length;
 
     /** BEP 9 magnet prefix. */
@@ -30,8 +34,9 @@ public class MagnetURI {
 
     /**
      * Link will contain two xt params.
-     * See https://blog.libtorrent.org/2020/09/bittorrent-v2/
-     * TODO dup param parsing, as a dual v1/v2
+     * Duplicate xt params are not parsed yet, needed for dual v1/v2
+     * links.
+     * See also: <a href="https://blog.libtorrent.org/2020/09/bittorrent-v2/">BitTorrent v2</a>
      *
      * @since 0.9.48
      */

@@ -26,10 +26,14 @@ import net.i2p.i2ptunnel.TunnelControllerGroup;
  */
 public class ConfigServiceHandler extends FormHandler {
 
+    /** Listener for the wrapper service commands. */
     private static WrapperListener wrapperListener;
 
+    /** Wrapper version with the listener API. */
     private static final String LISTENER_AVAILABLE = "3.2.0";
+    /** Wrapper version with the properties command. */
     private static final String PROPERTIES_AVAILABLE = "3.2.0";
+    /** Wrapper version with the location command. */
     private static final String LOCATION_AVAILABLE = "3.3.7";
 
     /** Creates a handler; the container calls it with no arguments before each submission. */
@@ -69,13 +73,23 @@ public class ConfigServiceHandler extends FormHandler {
      * Rekey and/or tell the wrapper we are stopping.
      */
     private static class UpdateWrapperOrRekeyTask implements Runnable {
+        /** True to change the router identity as well. */
         private final boolean _rekey;
+        /** True to tell the wrapper service as well. */
         private final boolean _tellWrapper;
+        /** Logger for the restart task. */
         private final Log _log;
+        /** Hash code identifying this task class. */
         private static final int HASHCODE = -123999871;
-        // RPi takes a long time to write out the peer profiles
+        /** Time allowed for the restart to finish, longer on ARM. */
         private static final int WAIT = SystemVersion.isARM() ? 4*60*1000 : 2*60*1000;
 
+        /**
+         * Builds the restart task.
+         *
+         * @param rekey true to change the router identity as well
+         * @param tellWrapper true to tell the wrapper service as well
+         */
         public UpdateWrapperOrRekeyTask(boolean rekey, boolean tellWrapper) {
             _rekey = rekey;
             _tellWrapper = tellWrapper;
@@ -130,10 +144,18 @@ public class ConfigServiceHandler extends FormHandler {
      * @since 0.8.8
      */
     private static class FinalWrapperTask implements Runnable {
+        /** Exit code to stop the wrapper with. */
         private final int _exitCode;
+        /** Logger for the stop task. */
         private final Log _log;
+        /** Hash code identifying this task class. */
         private static final int HASHCODE = 123999871;
 
+        /**
+         * Builds the wrapper stop task.
+         *
+         * @param exitCode the exit code to stop the wrapper with
+         */
         public FinalWrapperTask(int exitCode) {
             _exitCode = exitCode;
             _log = ContextHelper.getContext(null).logManager().getLog(FinalWrapperTask.class);
@@ -331,6 +353,7 @@ public class ConfigServiceHandler extends FormHandler {
         return f;
     }
 
+    /** Enables the router as a system service. */
     private void enableService() {
         try {
             execServiceAction("Enable");
@@ -340,6 +363,7 @@ public class ConfigServiceHandler extends FormHandler {
         }
     }
 
+    /** Disables the router as a system service. */
     private void disableService() {
         try {
             execServiceAction("Disable");
@@ -371,6 +395,11 @@ public class ConfigServiceHandler extends FormHandler {
         }
     }
 
+    /**
+     * Sets whether the browser opens at startup.
+     *
+     * @param shouldLaunchBrowser true to open the browser on startup
+     */
     private void browseOnStartup(boolean shouldLaunchBrowser) {
         List<ClientAppConfig> clients = ClientAppConfig.getClientApps(_context);
         ClientAppConfig ca = null;

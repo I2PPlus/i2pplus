@@ -67,15 +67,24 @@ public class IndexBean {
     protected final TunnelControllerGroup _group;
     /** Reads tunnel properties, shared with subclasses. */
     protected final GeneralHelper _helper;
+    /** Fatal error message shown instead of the form. */
     private final String _fatalError;
+    /** Action requested by the form. */
     private String _action;
+    /** Tunnel number being edited. */
     private int _tunnel;
+    /** The current form nonce for this session. */
     private String _curNonce;
+    /** Message id to highlight on the page. */
     private int _msgID = -1;
+    /** The tunnel config being edited. */
     private final TunnelConfig _config;
+    /** True if tunnel removal was confirmed. */
     private boolean _removeConfirmed;
 
+    /** Certificate type to display. */
     private int _certType;
+    /** Certificate signer to display. */
     private String _certSigner;
 
     /** Tunnel status: running. */
@@ -86,23 +95,45 @@ public class IndexBean {
     public static final int NOT_RUNNING = GeneralHelper.NOT_RUNNING;
     /** Tunnel status: standby. */
     public static final int STANDBY = GeneralHelper.STANDBY;
-    /** 3 wasn't enough for some browsers. They are reloading the page for some reason - maybe HEAD? @since 0.8.1. */
+    /**
+     * 3 wasn't enough for some browsers. They are reloading the page for some reason - maybe HEAD?
+     *
+     * @since 0.8.1
+     */
     private static final int MAX_NONCES = 8;
-    /** Store nonces in a static FIFO instead of in System Properties @since 0.8.1. */
+    /**
+     * Store nonces in a static FIFO instead of in System Properties
+     *
+     * @since 0.8.1
+     */
     private static final List<String> _nonces = new ArrayList<>(MAX_NONCES + 1);
 
-    /** Session-bound nonce for CSRF protection, replaces static nonces @since 0.9.69. */
+    /**
+     * Session-bound nonce for CSRF protection, replaces static nonces
+     *
+     * @since 0.9.69
+     */
     private static final String SESSION_NONCE = "__i2ptunnel.nonce.queue__";
+    /** Nonces kept per session. */
     private static final int SESSION_NONCE_QUEUE_SIZE = 10;
 
+    /** Form keys kept for the session. */
     private static final int MAX_FORM_KEYS = 100;
+    /** Form keys, by session id. */
     private static final Map<Integer, SessionKey> _formKeys = new HashMap<>();
+    /** Messages shown on the page. */
     private static final UIMessages _messages = new UIMessages(100);
+    /** Messages with their timestamps. */
     private static final List<TimestampedMessage> _timestampedMessages = Collections.synchronizedList(new ArrayList<TimestampedMessage>(100));
+    /** Seen messages remembered to avoid repeats. */
     private static final int MAX_SEEN_MESSAGES = 500;
+    /** Texts of the messages already seen. */
     private static final Set<String> _seenMessages = new LinkedHashSet<>(MAX_SEEN_MESSAGES);
+    /** Config key for the console theme. */
     private static final String PROP_THEME_NAME = "routerconsole.theme";
+    /** Default console theme. */
     private static final String DEFAULT_THEME = "dark";
+    /** Config key enabling the Sora display font. */
     private static final String PROP_ENABLE_SORA_FONT = "routerconsole.displayFontSora";
 
     /**
@@ -184,7 +215,11 @@ public class IndexBean {
         _curNonce = nonce;
     }
 
-    /** Add a random nonce to the head of the queue @since 0.8.1. */
+    /**
+     * Add a random nonce to the head of the queue
+     *
+     * @since 0.8.1
+     */
     private void addNonce() {
         String nextNonce = Long.toString(_context.random().nextLong());
         synchronized (_nonces) {
@@ -576,13 +611,16 @@ public class IndexBean {
      * Used to show ordered status updates with time information.
      */
     private static class TimestampedMessage {
+        /** Per-thread formatter for the message timestamps. */
         private static final ThreadLocal<DateFormat> _FORMAT = new ThreadLocal<DateFormat>() {
             @Override
             protected DateFormat initialValue() {
                 return new SimpleDateFormat("dd/MM HH:mm:ss", Locale.US);
             }
         };
+        /** When the message was created. */
         final long timestamp;
+        /** The message text. */
         final String message;
 
         /**
@@ -703,9 +741,6 @@ public class IndexBean {
      */
     public int getLastMessageID() {return _messages.getLastMessageID();}
 
-    ////
-    // The remaining methods are simple bean props for the jsp to query
-    ////
 
     /**
      * Get the theme path.
@@ -771,6 +806,9 @@ public class IndexBean {
      * @since 0.9.57
      */
     private class TCComparator implements Comparator<Integer> {
+         /** Orders tunnel controllers for display. */
+         private TCComparator() {}
+         /** Collator comparing the tunnel names. */
          private final Collator _comp = Collator.getInstance();
          /**
           * Compare two tunnel numbers by tunnel name, then by number.
@@ -1170,9 +1208,6 @@ public class IndexBean {
      */
     public String getSpoofedHost(int tunnel) {return DataHelper.escapeHTML(_helper.getSpoofedHost(tunnel));}
 
-    ///
-    /// bean props for form submission
-    ///
 
     /**
      * What type of tunnel (httpclient, ircclient, client, or server).
@@ -2259,6 +2294,11 @@ public class IndexBean {
         return _helper.getController(tunnel);
     }
 
+    /**
+     * Collects the messages to show on the page.
+     *
+     * @param msgs the list to fill
+     */
     private static void getMessages(List<String> msgs) {
         if (msgs == null) return;
         for (int i = 0; i < msgs.size(); i++) {

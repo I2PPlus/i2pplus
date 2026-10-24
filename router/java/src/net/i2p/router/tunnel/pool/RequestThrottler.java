@@ -28,51 +28,118 @@ import net.i2p.util.SimpleTimer2;
  * @since 0.9.5
  */
 public class RequestThrottler {
+    /** The router context. */
     private final RouterContext context;
+    /** Build requests counted per peer. */
     private final ObjectCounter<Hash> counter;
+    /** Logger for throttling decisions. */
     private final Log _log;
+    /** Records why routers were banned. */
     private BanLogger _banLogger;
+    /** When our firewall status was last checked. */
     private volatile long lastFirewallCheckTime;
+    /** Cached result of the firewall status check. */
     private volatile boolean cachedFirewalledStatus;
+    /** Interval between firewall status checks. */
     private static final long FIREWALL_CHECK_INTERVAL = 10*60*1000L; // Check every 10 minutes
 
-    // Cached properties
+    /** When the config values were last re-read. */
     private volatile long lastPropertyCheckTime;
+    /** Cached flag for whether to throttle at all. */
     private volatile Boolean cachedShouldThrottle;
+    /** Cached flag for disconnecting excessive requesters. */
     private volatile Boolean cachedShouldDisconnect;
+    /** Cached flag for rejecting old routers. */
     private volatile Boolean cachedShouldBlockOldRouters;
+    /** Cached flag for banning excessive requesters. */
     private volatile boolean cachedShouldBanExcessive = true;
+    /** Interval between config re-reads. */
     private static final long PROPERTY_CHECK_INTERVAL = 30*1000L; // Check every 30 seconds
 
-    /** Minimum request limit per peer. @since 0.9.70+. */
+    /**
+     * Minimum request limit per peer.
+     *
+     * @since 0.9.70+
+     */
     public static volatile int _reqMinLimit = 10;
-    /** Maximum request limit per peer. @since 0.9.70+. */
+    /**
+     * Maximum request limit per peer.
+     *
+     * @since 0.9.70+
+     */
     public static volatile int _reqMaxLimit = 300;
-    /** Request limit as percentage of participating tunnel count. @since 0.9.70+. */
+    /**
+     * Request limit as percentage of participating tunnel count.
+     *
+     * @since 0.9.70+
+     */
     public static volatile int _reqPercentLimit = 20;
-    /** Burst threshold for 1-second sliding window (requests per second). @since 0.9.70+. */
+    /**
+     * Burst threshold for 1-second sliding window (requests per second).
+     *
+     * @since 0.9.70+
+     */
     public static volatile int _reqBurst1sThreshold = 10;
-    /** Rejection threshold: start rejecting at count/limit ratio this high (30-100, default 70%). @since 0.9.70+. */
+    /**
+     * Rejection threshold: start rejecting at count/limit ratio this high (30-100, default 70%).
+     *
+     * @since 0.9.70+
+     */
     public static volatile int _reqRejectThreshold = 70;
-    /** Rejection steepness: 100=linear ramp, 200=quadratic. @since 0.9.70+. */
+    /**
+     * Rejection steepness: 100=linear ramp, 200=quadratic.
+     *
+     * @since 0.9.70+
+     */
     public static volatile int _reqRejectSteepness = 200;
-    /** Load weight: how much load inflates effective ratio (0-300%, default 100%). @since 0.9.70+. */
+    /**
+     * Load weight: how much load inflates effective ratio (0-300%, default 100%).
+     *
+     * @since 0.9.70+
+     */
     public static volatile int _reqLoadWeight = 100;
 
-    // Sustained load thresholds — require load to persist before gating
-    /** High-load job lag threshold (ms) @since 0.9.70+. */
+    /**
+     * High-load job lag threshold (ms)
+     *
+     * @since 0.9.70+
+     */
     public static volatile int _highLoadLagMs = 1000;
-    /** High-load CPU threshold (percent) @since 0.9.70+. */
+    /**
+     * High-load CPU threshold (percent)
+     *
+     * @since 0.9.70+
+     */
     public static volatile int _highLoadCpuPct = 95;
-    /** High-load system load threshold (percent, normalized by cores) @since 0.9.70+. */
+    /**
+     * High-load system load threshold (percent, normalized by cores)
+     *
+     * @since 0.9.70+
+     */
     public static volatile int _highLoadSysLoadPct = 90;
-    /** Moderate-load job lag threshold (ms) @since 0.9.70+. */
+    /**
+     * Moderate-load job lag threshold (ms)
+     *
+     * @since 0.9.70+
+     */
     public static volatile int _moderateLoadLagMs = 500;
-    /** Moderate-load CPU threshold (percent) @since 0.9.70+. */
+    /**
+     * Moderate-load CPU threshold (percent)
+     *
+     * @since 0.9.70+
+     */
     public static volatile int _moderateLoadCpuPct = 90;
-    /** Moderate-load system load threshold (percent, normalized by cores) @since 0.9.70+. */
+    /**
+     * Moderate-load system load threshold (percent, normalized by cores)
+     *
+     * @since 0.9.70+
+     */
     public static volatile int _moderateLoadSysLoadPct = 80;
-    /** Duration (ms) moderate load must persist before disconnecting low-share peers @since 0.9.70+. */
+    /**
+     * Duration (ms) moderate load must persist before disconnecting low-share peers
+     *
+     * @since 0.9.70+
+     */
     public static volatile long _sustainedModerateLoadMs = 60_000;
 
     /**
@@ -272,6 +339,7 @@ public class RequestThrottler {
      */
     public static void setSustainedModerateLoadMs(long val) { _sustainedModerateLoadMs = Math.max(10_000, Math.min(300_000, val)); }
 
+    /** Interval between request count resets. */
     private static final long CLEAN_TIME = 90 * 1000L; // Reset limits every 90 seconds
     /** Ban length for LU prev-hops under load. */
     private static final long LU_BAN_MS = 5 * 60 * 1000L;
@@ -281,20 +349,28 @@ public class RequestThrottler {
     private static final long BURST_BAN_BASE_MS = 5 * 60 * 1000L;
     /** Ceiling for burst bans. */
     private static final long BURST_BAN_MAX_MS = 30 * 60 * 1000L;
+    /** Rate stat periods for the throttle statistics. */
     private static final long[] RATES = { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR };
 
-    // Burst detection configuration
+    /** Length of the burst detection window. */
     private static final long BURST_WINDOW_MS = 10 * 1000L; // 10 second sliding window
+    /** Buckets in the burst window, one second each. */
     private static final int BURST_BUCKET_COUNT = 10; // 1 second per bucket
+    /** Lowest burst threshold allowed. */
     private static final int BURST_THRESHOLD_MIN = 50; // Minimum burst threshold
+    /** Highest burst threshold allowed. */
     private static final int BURST_THRESHOLD_MAX = 200; // Maximum burst threshold
+    /** Share of the 90 second limit used as the burst threshold. */
     private static final double BURST_THRESHOLD_PERCENT = 0.50; // 50% of 90s limit scaled to 10s window
+    /** Idle time before burst offenses are forgotten. */
     private static final long BURST_OFFENSE_RESET = 15 * 60 * 1000L; // Reset after 15 minutes
 
+    /** Sliding window counter for burst detection. */
     private final BurstWindowCounter _burstCounter;
+    /** Burst offenses recorded per peer. */
     private final Map<Hash, BurstOffenseRecord> _burstOffenses = new ConcurrentHashMap<>();
 
-    // Sustained load tracking — timestamp when load first exceeded threshold
+    /** When the request load first reached the moderate level. */
     private volatile long _moderateLoadStart;
 
     /** Whether count-based transit throttling applies when the property is unset. */
@@ -351,9 +427,13 @@ public class RequestThrottler {
         return Math.min(rv, BURST_BAN_MAX_MS);
     }
 
+    /** Rejecting old routers is on by default. */
     private static final boolean DEFAULT_BLOCK_OLD_ROUTERS = true;
+    /** Config key for rejecting routers with old profiles. */
     private static final String PROP_BLOCK_OLD_ROUTERS = "router.blockOldRouters";
+    /** Banning excessive requesters is off by default. */
     private static final boolean DEFAULT_BAN_EXCESSIVE_REQUESTS = false;
+    /** Config key turning the excessive request ban on or off. */
     private static final String PROP_BAN_EXCESSIVE_REQUESTS = "router.banlist.enableExcessiveTunnelRequestsBan";
 
     /**
@@ -609,6 +689,7 @@ public class RequestThrottler {
      * memory and eventually rejecting requests on stale accumulated counts.
      */
     private class Cleaner extends SimpleTimer2.TimedEvent {
+        /** Schedules the periodic counter cleanup. */
         public Cleaner() { super(context.simpleTimer2()); }
         @Override
         public void timeReached() {
@@ -628,8 +709,16 @@ public class RequestThrottler {
      * @since 0.9.52
      */
     private class Disconnector extends SimpleTimer2.TimedEvent {
+        /** The router to disconnect. */
         private final Hash h;
+        /** The router's version, for the log. */
         private final String version;
+        /**
+         * Prepares to disconnect one router.
+         *
+         * @param h the router to disconnect
+         * @param version the router's version for the log
+         */
         public Disconnector(Hash h, String version) { super(context.simpleTimer2()); this.h = h; this.version = version; }
         public void timeReached() {
             String reason = (version == null || version.isEmpty()) ? "Old version" : "Old version (" + version + ")";
@@ -637,6 +726,12 @@ public class RequestThrottler {
         }
     }
 
+    /**
+     * Checks whether a router is known to be unreachable.
+     *
+     * @param ri the router info
+     * @return true if the router is unreachable
+     */
     private boolean isUnreachable(RouterInfo ri) {
         if (ri == null) return false;
         return ri.getCapabilities().contains("U");
@@ -710,10 +805,15 @@ public class RequestThrottler {
      * Tracks per-peer request counts using 1-second buckets in a 10-second window.
      */
     static class BurstWindowCounter {
+        /** Total length of the sliding window. */
         private final long windowSizeMs;
+        /** Buckets making up the window. */
         private final int bucketCount;
+        /** Length of one bucket. */
         private final long bucketSizeMs;
+        /** Per-peer request counts by bucket. */
         private final Map<Hash, AtomicIntegerArray> peerBuckets;
+        /** When the bucket maps were last pruned. */
         private final AtomicLong lastCleanupTime;
 
         /**
@@ -791,6 +891,13 @@ public class RequestThrottler {
             return count > burstLimit;
         }
 
+        /**
+         * Sums one peer's counts across the whole window.
+         *
+         * @param array the peer's bucket counts
+         * @param currentBucket the bucket being written now
+         * @return the total requests in the window
+         */
         private int getWindowSum(AtomicIntegerArray array, int currentBucket) {
             int sum = 0;
             for (int i = 0; i < bucketCount; i++) {
@@ -824,14 +931,24 @@ public class RequestThrottler {
      * Tracks burst offense history for escalation.
      */
     private static class BurstOffenseRecord {
+        /** Holds one source's burst offenses. */
+        private BurstOffenseRecord() {}
+        /** Burst offenses in a row for this peer. */
         private final AtomicInteger consecutiveOffenses = new AtomicInteger(0);
+        /** When the last burst offense was recorded. */
         private volatile long lastOffenseTime = 0;
 
+        /** Records one more burst offense for this peer. */
         void recordOffense() {
             consecutiveOffenses.incrementAndGet();
             lastOffenseTime = System.currentTimeMillis();
         }
 
+        /**
+         * Returns the offenses in a row for this peer.
+         *
+         * @return the consecutive offense count
+         */
         int getConsecutiveOffenses() {
             if (System.currentTimeMillis() - lastOffenseTime > BURST_OFFENSE_RESET) {
                 consecutiveOffenses.set(0);

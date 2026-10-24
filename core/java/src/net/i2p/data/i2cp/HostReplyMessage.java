@@ -26,10 +26,15 @@ public class HostReplyMessage extends I2CPMessageImpl {
      */
     public static final int MESSAGE_TYPE = 39;
 
+    /** The destination being replied with. */
     private Destination _dest;
+    /** The request this answers, as a number. */
     private long _reqID;
+    /** Result of the lookup. */
     private int _code;
+    /** The session the reply belongs to. */
     private SessionId _sessionId;
+    /** Options for opening the session. */
     private Properties _options;
 
     /**
@@ -80,6 +85,7 @@ public class HostReplyMessage extends I2CPMessageImpl {
      */
     public static final int RESULT_LOOKUP_TYPE_UNSUPPORTED = 7;
 
+    /** Largest request id that fits on the wire. */
     private static final long MAX_INT = (1L << 32) - 1;
 
     /**
@@ -132,8 +138,8 @@ public class HostReplyMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Session id.
-     * @return the session id
+     * Session the reply belongs to.
+     * @return the session id, null until set or read
      */
     public SessionId getSessionId() {
         return _sessionId;
@@ -177,7 +183,7 @@ public class HostReplyMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Non-null only if result code is zero and options are present.
+     * Session config overrides carried by the reply.
      * @return non-null only if result code is zero and options are present
      * @since 0.9.69 see proposal 167
      */

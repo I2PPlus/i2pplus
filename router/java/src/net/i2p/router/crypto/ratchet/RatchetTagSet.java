@@ -40,52 +40,78 @@ class RatchetTagSet implements TagSetHandle {
     private static final Log _log =
         I2PAppContext.getGlobalContext().logManager().getLog(RatchetTagSet.class);
 
+    /** Listener notified when a tag is consumed. */
     private final SessionTagListener _lsnr;
+    /** The peer's ratchet public key. */
     private final PublicKey _remoteKey;
     /** The session key. */
     protected final SessionKey _key;
-    // NSR only, else null
+    /** Handshake state, set for NSR only. */
     private final HandshakeState _state;
-    // inbound only, else null
-    // The receive window in tag-number order. A tag is an object wrapper over its
-    // 8 bytes so it can key the _tagNumbers index below; a presented tag is
-    // resolved through that index, not by scanning this array
+    /** The tags by index, resolved through this map. */
     private final SparseArray<RatchetSessionTag> _sessionTags;
-    // inbound ES only, else null
-    // We use byte[] for key to save space, because we don't need indexOfValueByValue()
+    /** Derived keys by index, stored as byte arrays. */
     private final SparseArray<byte[]> _sessionKeys;
+    /** Key derivation function for the ratchet steps. */
     private final HKDF hkdf;
+    /** When the tag set was created. */
     private final long _created;
+    /** When the tag set expires. */
     private final long _timeout;
+    /** When the tag set was last used. */
     private long _date;
+    /** Id of the ratchet step this set belongs to. */
     private final int _id;
+    /** Id of the ratchet key this set derives from. */
     private final int _keyid;
+    /** Number of tags when the set was created. */
     private final int _originalSize;
+    /** Number of tags the set can hold. */
     private final int _maxSize;
+    /** True once the peer has acked the set. */
     private boolean _acked;
+    /** Root key for the next receive chain. */
     private final byte[] _nextRootKey;
+    /** Chaining key for the session tag chain. */
     private final byte[] _sesstag_ck;
+    /** Constant mixed into the session tag derivation. */
     private final byte[] _sesstag_constant;
+    /** Chaining key for the symmetric key chain. */
     private final byte[] _symmkey_ck;
+    /** Constant mixed into the symmetric key derivation. */
     private final byte[] _symmkey_constant;
+    /** Index of the last tag consumed, -1 if none. */
     private int _lastTag = -1;
+    /** Index of the last key derived, -1 if none. */
     private int _lastKey = -1;
+    /** Our next ratchet key pair. */
     private KeyPair _nextKeys;
+    /** Our next key, sent ahead of use. */
     private NextSessionKey _nextKey;
     /** For debugging. */
     private static final AtomicInteger __tagSetID = new AtomicInteger();
+    /** Unique id of this set for the logs. */
     private final int _tagSetID = __tagSetID.incrementAndGet();
 
+    /** HKDF info string for the ratchet step. */
     private static final String INFO_1 = "KDFDHRatchetStep";
+    /** HKDF info string for the tag and key generation. */
     private static final String INFO_2 = "TagAndKeyGenKeys";
+    /** HKDF info string for the session tag init. */
     private static final String INFO_3 = "STInitialization";
+    /** HKDF info string for the session tag key generation. */
     private static final String INFO_4 = "SessionTagKeyGen";
+    /** HKDF info string for the symmetric ratchet. */
     private static final String INFO_5 = "SymmetricRatchet";
+    /** Shared empty array for zero-length values. */
     private static final byte[] ZEROLEN = new byte[0];
+    /** Largest ratchet index value. */
     private static final int MAX = 65535;
+    /** Debug flag for extra ratchet logging. */
     private static final boolean DEBUG = false;
+    /** Test flag for the ratchet wrap-around values. */
     private static final boolean TEST_RATCHET = false;
-    // 4 * max streaming window
+    /** Index below which the tag set is running low. */
     private static final int LOW = TEST_RATCHET ? (MAX - 512) : (MAX - 4096);
     /** Debug flag for outbound New Session Requests. */
     static final int DEBUG_OB_NSR = 0x10001;
@@ -93,7 +119,7 @@ class RatchetTagSet implements TagSetHandle {
     static final int DEBUG_IB_NSR = 0x10002;
     /** Debug flag for a single encrypted session. */
     static final int DEBUG_SINGLE_ES = 0x10003;
-    // Start empty (no allocations), we only use storage for gaps
+    /** Initial capacity of the derived key array. */
     private static final int INITIAL_KEY_CAPACITY = 0;
     /**
      * Tags registered in the SKM's _inboundTagSets map.

@@ -21,17 +21,29 @@ class SessionIdleTimer extends SimpleTimer2.TimedEvent {
      * Lower bound on the configured reduce and shutdown times, in milliseconds.
      */
     public static final long MINIMUM_TIME = (long) 60 * 1000; // allow close time of 60 seconds
+    /** Default idle time before reducing tunnels. */
     private static final long DEFAULT_REDUCE_TIME = 20 * (long) 60 * 1000;
+    /** Default idle time before closing the session. */
     private static final long DEFAULT_CLOSE_TIME = 30 * (long) 60 * 1000;
+    /** Logger for the session idle timer. */
     private final Log _log;
+    /** The app context. */
     private final I2PAppContext _context;
+    /** The session watched for idleness. */
     private final I2PSessionImpl _session;
+    /** True to reduce tunnels when the session idles. */
     private final boolean _reduceEnabled;
+    /** Tunnels to reduce by when the session idles. */
     private final int _reduceQuantity;
+    /** Idle time before the tunnels are reduced. */
     private final long _reduceTime;
+    /** True to close the session when it idles. */
     private final boolean _shutdownEnabled;
+    /** Idle time before the session is closed. */
     private final long _shutdownTime;
+    /** Shortest interval between the timer runs. */
     private final long _minimumTime;
+    /** When the session was last active. */
     private long _lastActive;
 
     /**

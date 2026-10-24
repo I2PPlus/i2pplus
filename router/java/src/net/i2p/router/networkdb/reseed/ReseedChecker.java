@@ -24,12 +24,19 @@ import net.i2p.util.SimpleTimer2;
  * @since 0.9
  */
 public class ReseedChecker {
+    /** The router context. */
     private final RouterContext _context;
+    /** The log for the checker. */
     private final Log _log;
+    /** True while a check runs. */
     private final AtomicBoolean _inProgress = new AtomicBoolean();
+    /** The status message of the last check. */
     private volatile String _lastStatus = "";
+    /** The error message of the last check. */
     private volatile String _lastError = "";
+    /** True once the network error was logged. */
     private volatile boolean _networkLogged;
+    /** True once the startup check ran. */
     private volatile boolean _alreadyRun;
 
     /** Minimum number of router infos before automatic reseed attempted. */
@@ -288,9 +295,18 @@ public class ReseedChecker {
      * @since 0.9
      */
     private class StatusCleaner extends SimpleTimer2.TimedEvent {
+        /** The status message to clear. */
         private final String _status;
+        /** The error message to clear. */
         private final String _error;
 
+        /**
+         * Clears the messages after a delay.
+         *
+         * @param ctx the router context
+         * @param status the status message to clear
+         * @param error the error message to clear
+         */
         public StatusCleaner(RouterContext ctx, String status, String error) {
             super(ctx.simpleTimer2());
             _status = status;

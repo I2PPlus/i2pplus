@@ -26,8 +26,10 @@ import java.io.Serializable;
  */
 public class MTU {
 
+    /** False on Java 5, which has no MTU discovery. */
     private static final boolean HAS_MTU = SystemVersion.isJava6();
 
+    /** Utility class, not intended for instantiation. */
     private MTU() { /* no-op */ }
 
     /**
@@ -209,8 +211,9 @@ public class MTU {
 
     /**
      * CLI test.
+     *
      * @param args hostnames or IP addresses of interfaces to report MTU for;
-              with no arguments, every local interface is reported
+     *             with no arguments, every local interface is reported
      */
     public static void main(String[] args) {
         if (args.length > 0) {
@@ -266,6 +269,8 @@ public class MTU {
 
     /** Comparator for InetAddress by host address. */
     private static class IAComparator implements Comparator<InetAddress>, Serializable {
+        /** Orders addresses by their host address. */
+        private IAComparator() {}
         @Override
         public int compare(InetAddress l, InetAddress r) {
              return (l.getHostAddress()).compareTo((r.getHostAddress()));

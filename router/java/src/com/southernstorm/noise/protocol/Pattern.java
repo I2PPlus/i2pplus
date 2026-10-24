@@ -52,6 +52,7 @@ class Pattern {
     /** Flag bit: remote hybrid required */
     public static final short FLAG_REMOTE_HYBRID_REQ = 0x2000;
 
+    /** Token sequence of the Noise N handshake pattern. */
     private static final short[] noise_pattern_N = {
         FLAG_LOCAL_EPHEMERAL |
         FLAG_REMOTE_STATIC |
@@ -61,6 +62,7 @@ class Pattern {
         ES
     };
 
+    /** Token sequence of the Noise XK handshake pattern. */
     private static final short[] noise_pattern_XK = {
         FLAG_LOCAL_STATIC |
         FLAG_LOCAL_EPHEMERAL |
@@ -78,6 +80,7 @@ class Pattern {
         SE
     };
 
+    /** Token sequence of the Noise IK handshake pattern. */
     private static final short[] noise_pattern_IK = {
         FLAG_LOCAL_STATIC |
         FLAG_LOCAL_EPHEMERAL |
@@ -96,6 +99,8 @@ class Pattern {
     };
 
     /**
+     * The flags of the IKhfs handshake pattern.
+     *
      * @since 0.9.67
      */
     private static final short[] noise_pattern_IKhfs = {
@@ -121,6 +126,8 @@ class Pattern {
     };
 
     /**
+     * The flags of the XKhfs handshake pattern.
+     *
      * @since 0.9.69
      */
     private static final short[] noise_pattern_XKhfs = {

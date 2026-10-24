@@ -93,7 +93,12 @@ public class I2PSocketAddress extends SocketAddress {
         return new I2PSocketAddress(port, host);
     }
 
-    /** I2P socket address. */
+    /**
+     * Creates an address without resolving anything.
+     *
+     * @param port the TCP port, from 0 to 65535
+     * @param host the hostname or address, may be null
+     */
     private I2PSocketAddress(int port, String host) {
         if (port < 0 || port > 65535)
             throw new IllegalArgumentException("Bad port " + port);

@@ -210,6 +210,9 @@ public class BEncoder {
      * ordered first.
      */
     private static class StringKeyComparator implements Comparator<String>, Serializable {
+        /** Orders bencode keys so the output is stable. */
+        private StringKeyComparator() {}
+        /** Pinned for serialized-form compatibility. */
         private static final long serialVersionUID = 1L;
 
         /**
@@ -227,6 +230,9 @@ public class BEncoder {
 
     /** Comparator for bencode map keys given as byte arrays. */
     private static class ByteKeyComparator implements Comparator<byte[]>, Serializable {
+        /** Orders bencode keys given as bytes. */
+        private ByteKeyComparator() {}
+        /** Pinned for serialized-form compatibility. */
         private static final long serialVersionUID = 1L;
 
         /**

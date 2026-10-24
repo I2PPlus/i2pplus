@@ -24,22 +24,35 @@ import net.i2p.data.Destination;
  */
 public class HostPing {
 
+    /** The app context. */
     private final I2PAppContext _context;
+    /** Resolver of the local destination names. */
     private final NamingService _namingService;
 
-    // Default settings matching I2PIng
+    /** Pings sent by default. */
     private static final int DEFAULT_COUNT = 10;
+    /** Time allowed for one reply, in ms. */
     private static final int DEFAULT_TIMEOUT = 8000;
+    /** Default lease set encryption types to try. */
     private static final String DEFAULT_LEASESET_TYPE = "6,4";
+    /** Matches a full destination in a command line argument. */
     private static final Pattern DEST_PATTERN = Pattern.compile("^[A-Za-z0-9~\\-]+$");
+    /** Matches a base32 address in a command line argument. */
     private static final Pattern B32_PATTERN = Pattern.compile("^[a-z2-7]+$");
+    /** Matches a hostname to resolve in a command line argument. */
     private static final Pattern HOSTNAME_PATTERN = Pattern.compile("^[a-zA-Z0-9\\-]+$");
+    /** Splits a command line argument on the equals sign. */
     private static final Pattern EQUALS_SPLIT = Pattern.compile("=");
 
+    /** Number of pings to send. */
     private int _count = DEFAULT_COUNT;
+    /** Time allowed for one reply, in ms. */
     private int _timeout = DEFAULT_TIMEOUT;
+    /** The lease set encryption types to try. */
     private String _leaseSetType = DEFAULT_LEASESET_TYPE;
+    /** True to send the pings one after another. */
     private boolean _consecutiveMode = false;
+    /** True to print the debug detail. */
     private boolean _debug = false;
 
     /**

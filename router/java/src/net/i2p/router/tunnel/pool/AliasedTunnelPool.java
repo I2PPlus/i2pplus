@@ -19,6 +19,7 @@ import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
  */
 public class AliasedTunnelPool extends TunnelPool {
 
+    /** The pool this one is a handle on. */
     private final TunnelPool _aliasOf;
 
     /**

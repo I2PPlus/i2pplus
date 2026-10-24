@@ -27,9 +27,13 @@ import net.i2p.util.Log;
  */
 
 class IterativeLookupJob extends JobImpl {
+    /** One hour's duration, in ms. */
     private static final long ONE_HOUR_MS = 60 * 60 * 1000L;
+    /** Logger for this class. */
     private final Log _log;
+    /** The reply being explored. */
     private final DatabaseSearchReplyMessage _dsrm;
+    /** The search this reply belongs to. */
     private final IterativeSearchJob _search;
 
     /**

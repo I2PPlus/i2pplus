@@ -46,37 +46,63 @@ public class TunnelConfig {
     /** Nickname for the shared client tunnel config. */
     public static final String SHARED_CLIENT_NICKNAME = "Shared Clients";
 
+    /** Prefix shared by the tunnel option keys. */
     private static final String OPT = TunnelController.PFX_OPTION;
 
     /** App context, for the global context and key generation. */
     protected final I2PAppContext _context;
 
+    /** The tunnel type name. */
     private String _type;
+    /** The tunnel's display name. */
     private String _name;
+    /** The tunnel's description. */
     private String _description;
+    /** Host of the I2CP router. */
     private String _i2cpHost;
+    /** Port of the I2CP router. */
     private String _i2cpPort;
+    /** Inbound tunnel depth, -1 for the default. */
     private int _tunnelDepth = -1;
+    /** Inbound tunnel count, -1 for the default. */
     private int _tunnelQuantity = -1;
-    // -2 or higher is valid
+    /** Inbound tunnel variance, -4 for the default. */
     private int _tunnelVariance = -4;
+    /** Backup inbound tunnels, -1 for the default. */
     private int _tunnelBackupQuantity = -1;
+    /** Outbound tunnel depth, -1 for the default. */
     private int _tunnelDepthOut = -1;
+    /** Outbound tunnel count, -1 for the default. */
     private int _tunnelQuantityOut = -1;
+    /** Outbound tunnel variance, -4 for the default. */
     private int _tunnelVarianceOut = -4;
+    /** Backup outbound tunnels, -1 for the default. */
     private int _tunnelBackupQuantityOut = -1;
+    /** Whether the tunnel starts with a delay. */
     private boolean _connectDelay;
+    /** Extra I2CP options typed by the user. */
     private String _customOptions;
+    /** Proxy list for the browsing proxy. */
     private String _proxyList;
+    /** Local port the tunnel listens on. */
     private int _port = -1;
+    /** Restriction on who may connect to the tunnel. */
     private String _reachableBy;
+    /** Destination of the peer tunnel, for client tunnels. */
     private String _targetDestination;
+    /** Host the client tunnel connects to. */
     private String _targetHost;
+    /** Port the client tunnel connects to. */
     private int _targetPort = -1;
+    /** Host name the server tunnel claims. */
     private String _spoofedHost;
+    /** File holding the tunnel's private keys. */
     private String _privKeyFile;
+    /** Advanced profile name for the tunnel. */
     private String _profile;
+    /** Whether the tunnel starts when the router boots. */
     private boolean _startOnLoad;
+    /** Whether the client tunnel is shared. */
     private boolean _sharedClient;
     /** Minimum startup delay in seconds for server tunnels @since 0.9.68+. */
     private int _startupDelayMin;
@@ -86,19 +112,31 @@ public class TunnelConfig {
     private int _shutdownDelayMin;
     /** Maximum shutdown delay in seconds for server tunnels @since 0.9.68+. */
     private int _shutdownDelayMax;
+    /** On/off options read from the config. */
     private final Set<String> _booleanOptions;
+    /** Valued options read from the config. */
     private final Map<String, String> _otherOptions;
+    /** User name for the proxy's basic auth. */
     private String _newProxyUser;
+    /** Password for the proxy's basic auth. */
     private String _newProxyPW;
+    /** The tunnel's destination, for server tunnels. */
     private Destination _dest;
+    /** Access filter definition for the tunnel. */
     private String _filterDefinition;
+    /** Encryption level requested for the tunnel. */
     private int _encryptMode;
+    /** Client authorization names, base64. */
     private String[] _clientNames;
+    /** Client authorization keys, base64. */
     private String[] _clientKeys;
+    /** Indices of the client entries to remove. */
     private Set<Integer> _clientRevocations;
-    // b64name : b64key
+    /** Name for a newly added client entry. */
     private String _newClientName;
+    /** Key for a newly added client entry. */
     private String _newClientKey;
+    /** Whether a new client entry was submitted. */
     private boolean _addClientAuth;
 
     /**
@@ -326,8 +364,8 @@ public class TunnelConfig {
     }
 
     /**
-     * The minimum startup delay in seconds.
-     * @return the minimum startup delay in seconds
+     * Returns the configured minimum startup delay.
+     * @return the delay, in seconds
      * @since 0.9.68+
      */
     public int getStartupDelayMin() {
@@ -344,8 +382,8 @@ public class TunnelConfig {
     }
 
     /**
-     * The maximum startup delay in seconds.
-     * @return the maximum startup delay in seconds
+     * Returns the configured maximum startup delay.
+     * @return the delay, in seconds
      * @since 0.9.68+
      */
     public int getStartupDelayMax() {
@@ -362,8 +400,8 @@ public class TunnelConfig {
     }
 
     /**
-     * The minimum shutdown delay in seconds.
-     * @return the minimum shutdown delay in seconds
+     * Returns the configured minimum shutdown delay.
+     * @return the delay, in seconds
      * @since 0.9.68+
      */
     public int getShutdownDelayMin() {
@@ -380,8 +418,8 @@ public class TunnelConfig {
     }
 
     /**
-     * The maximum shutdown delay in seconds.
-     * @return the maximum shutdown delay in seconds
+     * Returns the configured maximum shutdown delay.
+     * @return the delay, in seconds
      * @since 0.9.68+
      */
     public int getShutdownDelayMax() {
@@ -1485,16 +1523,19 @@ public class TunnelConfig {
         }
     }
 
+    /** Options hidden from the tunnel config form. */
     private static final String[] _noShowOpts = {
         "inbound.length", "outbound.length", "inbound.lengthVariance", "outbound.lengthVariance",
         "inbound.backupQuantity", "outbound.backupQuantity", "inbound.quantity", "outbound.quantity",
         "inbound.nickname", "outbound.nickname", "i2p.streaming.connectDelay", "i2p.streaming.maxWindowSize",
         I2PTunnelIRCClient.PROP_DCC
         };
+    /** On/off options shown for client tunnels. */
     private static final String[] _booleanClientOpts = {
         "i2cp.reduceOnIdle", "i2cp.closeOnIdle", "i2cp.newDestOnResume", "persistentClientKey", "i2cp.delayOpen",
         I2PTunnelClientBase.PROP_USE_SSL,
         };
+    /** On/off options shown for proxy tunnels. */
     private static final String[] _booleanProxyOpts = {
         I2PTunnelHTTPClientBase.PROP_OUTPROXY_AUTH,
         I2PTunnelHTTPClientBase.PROP_USE_OUTPROXY_PLUGIN,
@@ -1504,6 +1545,7 @@ public class TunnelConfig {
         I2PTunnelHTTPClient.PROP_INTERNAL_SSL,
         I2PTunnelHTTPClient.PROP_SSL_SET
         };
+    /** On/off options shown for server tunnels. */
     private static final String[] _booleanServerOpts = {
         "i2cp.reduceOnIdle", "i2cp.encryptLeaseSet", PROP_ENABLE_ACCESS_LIST, PROP_ENABLE_BLACKLIST,
         I2PTunnelServer.PROP_USE_SSL,
@@ -1514,6 +1556,7 @@ public class TunnelConfig {
         "shouldBundleReplyInfo",
         TunnelController.PROP_LIMITS_SET
         };
+    /** Valued options shown for client tunnels. */
     private static final String[] _otherClientOpts = {
         "i2cp.reduceIdleTime", "i2cp.reduceQuantity", "i2cp.closeIdleTime",
         "outproxyUsername", "outproxyPassword",
@@ -1526,6 +1569,7 @@ public class TunnelConfig {
         "inbound.randomKey", "outbound.randomKey", "i2cp.leaseSetSigningPrivateKey", "i2cp.leaseSetPrivateKey",
         "i2cp.leaseSetEncType"
         };
+    /** Valued options shown for server tunnels. */
     private static final String[] _otherServerOpts = {
         "i2cp.reduceIdleTime", "i2cp.reduceQuantity", "i2cp.leaseSetKey", "i2cp.accessList",
          PROP_MAX_CONNS_MIN, PROP_MAX_CONNS_HOUR, PROP_MAX_CONNS_DAY,
@@ -1536,6 +1580,7 @@ public class TunnelConfig {
          "i2cp.leaseSetSecret", "i2cp.leaseSetType", "i2cp.leaseSetAuthType", "i2cp.leaseSetPrivKey",
         "i2cp.leaseSetEncType"
         };
+    /** Options specific to the http server tunnel. */
     private static final String[] _httpServerOpts = {
         I2PTunnelHTTPServer.OPT_POST_WINDOW,
         I2PTunnelHTTPServer.OPT_POST_BAN_TIME,
@@ -1568,6 +1613,11 @@ public class TunnelConfig {
         _nonProxyNoShowSet.addAll(Arrays.asList(_otherProxyOpts));
     }
 
+    /**
+     * Writes the shared tunnel settings into the config.
+     *
+     * @param config the tunnel's properties
+     */
     private void updateConfigGeneric(Properties config) {
         config.setProperty(TunnelController.PROP_TYPE, _type);
         if (_name != null)

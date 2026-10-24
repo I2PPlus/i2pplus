@@ -26,11 +26,13 @@ public class RRDatabase implements Closeable {
     /** The RRD file */
     final RRDFile rrdFile;
 
-    // RRD file name
+    /** The RRD file's name. */
     private final String name;
     /** The header */
     final Header header;
+    /** The file's data sources. */
     private final ArrayList<DataSource> dataSources;
+    /** The file's archives. */
     private final ArrayList<Archive> archives;
 
     /** Timestamp of last data modification */
@@ -352,9 +354,15 @@ public class RRDatabase implements Closeable {
         return chunk;
     }
 
-    /*
-     * This is almost a verbatim copy of the original C code by Tobias Oetiker.
-     * I need to put more of a Java style on it - CT
+    /**
+     * Chooses the archive that answers a request most accurately, almost a
+     * verbatim copy of the original C code by Tobias Oetiker.
+     *
+     * @param start the requested start time
+     * @param end the requested end time
+     * @param step the requested resolution
+     * @param archives the archives to choose from
+     * @return the archive that fits best
      */
     private Archive findBestArchive(long start, long end, long step, ArrayList<Archive> archives) {
 

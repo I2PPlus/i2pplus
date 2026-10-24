@@ -29,8 +29,10 @@ import net.i2p.util.SystemVersion;
  */
 public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlockingQueue<E> {
 
-    // following 4 are state variables defined by sample code, locked by this
-    /** Time when we'll declare we're above target (0 if below). */
+    /**
+     * Time when we'll declare we're above target (0 if below).
+     * Part of the CoDel sample-code state, locked by this queue.
+     */
     private long _first_above_time;
     /** Time to drop next packet. */
     private long _drop_next;
@@ -50,6 +52,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     /** Instance ID. */
     private final long _id;
 
+    /** Rate windows kept for the backlog statistics. */
     private static final long[] CODEL_RATES = RateConstants.SHORT_TERM_RATES;
 
     /**
@@ -119,9 +122,11 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     private final String STAT_DELAY;
     /** Minimum priority. */
     public static final int MIN_PRIORITY = 100;
+    /** Priority values assigned to the job classes. */
     private static final int[] PRIORITIES = {0, MIN_PRIORITY, 200, 300, 400, 500};
     /** Priorities at or above this value are never dropped. */
     public static final int DONT_DROP_PRIORITY = 1000;
+    /** How long a job may wait before it counts as backlog, in ms. */
     private static final long BACKLOG_TIME = SystemVersion.isSlow() ? 1000 : 500;
 
     /**
@@ -362,6 +367,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
         return ok_to_drop;
     }
 
+    /** Takes the current time for the backlog measurement. */
     private void getCurrentTime() {_now = _context.clock().now();}
 
     /**
@@ -437,6 +443,11 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
         return rv;
     }
 
+    /**
+     * Drops a job that waited too long in the backlog.
+     *
+     * @param entry the job to drop
+     */
     private void drop(E entry) {
         getCurrentTime();
         long delay = _now - entry.getEnqueueTime();

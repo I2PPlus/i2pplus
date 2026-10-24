@@ -54,8 +54,11 @@ import net.i2p.util.Log;
  * @since 0.9.68+
  */
 public class GhostPeerManager {
+    /** Logger for the ghost peer manager. */
     private final Log _log;
+    /** The router context. */
     private final RouterContext _context;
+    /** The marked peers, by hash. */
     private final ConcurrentHashMap<Hash, GhostMark> _ghostMarks;
 
 /**
@@ -67,14 +70,32 @@ public class GhostPeerManager {
  */
 static final int DEFAULT_COOLDOWN_MS = 90 * 1000;
 
+/**
+ * Reads the timeout count that marks a peer.
+ *
+ * @param ctx the router context
+ * @return the threshold, clamped to a sane range
+ */
 private static int getTimeoutThreshold(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.ghostPeer.timeoutThreshold", 1);
     }
 
+/**
+ * Reads the ghost peer cooldown time.
+ *
+ * @param ctx the router context
+ * @return the cooldown, in ms, clamped to a sane range
+ */
 private static long getCooldownMs(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.ghostPeer.cooldownMs", DEFAULT_COOLDOWN_MS);
     }
 
+/**
+ * Checks whether the build success rate means an attack.
+ *
+ * @param buildSuccess the cached tunnel build success rate
+ * @return true if the rate is below the attack threshold
+ */
 private static boolean isUnderAttack(double buildSuccess) {
         return buildSuccess < ProfileOrganizer.ATTACK_THRESHOLD;
     }
@@ -99,8 +120,10 @@ private static boolean isUnderAttack(double buildSuccess) {
  */
 static final long OFFENSE_DECAY_MS = 30 * 60 * 1000L;
 
+    /** Silence between the ghost peer warning logs. */
     private static final long GHOST_WARN_INTERVAL_MS = 60 * 1000L;
 
+    /** When the ghost peer warning was last logged. */
     private volatile long _lastGhostWarnTime;
 
     /**
@@ -113,10 +136,19 @@ static final long OFFENSE_DECAY_MS = 30 * 60 * 1000L;
      */
     private volatile CountSnapshot _activeSnapshot = new CountSnapshot(0, 0L);
 
+    /** Counts captured at one point in time. */
     private static final class CountSnapshot {
+        /** Marks active at the snapshot. */
         final int active;
+        /** Marks expiring by the snapshot time. */
         final long due;
 
+        /**
+         * Records one count snapshot.
+         *
+         * @param active the marks active at the snapshot
+         * @param due the marks expiring by the snapshot time
+         */
         CountSnapshot(int active, long due) {
             this.active = active;
             this.due = due;
@@ -165,10 +197,20 @@ static final long OFFENSE_DECAY_MS = 30 * 60 * 1000L;
      * decay.
      */
     private static final class GhostMark {
+        /** When the mark expires. */
         final long until;
+        /** Times the peer was marked. */
         final int offenses;
+        /** When the mark was applied. */
         final long markedAt;
 
+        /**
+         * Records one peer mark.
+         *
+         * @param until when the mark expires
+         * @param offenses the number of times the peer was marked
+         * @param markedAt when the mark was applied
+         */
         GhostMark(long until, int offenses, long markedAt) {
             this.until = until;
             this.offenses = offenses;

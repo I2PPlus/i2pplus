@@ -34,9 +34,12 @@ public final class BrowserApiInstaller {
 
     /** Base name of the generated XDG .desktop file, also the MIME cache entry key. */
     public static final String DESKTOP_ID = "i2psnark-browserapi.desktop";
+    /** Mime type of the magnet scheme handler. */
     private static final String MAGNET_MIME = "x-scheme-handler/magnet";
+    /** Mime type of the torrent files. */
     private static final String TORRENT_MIME = "application/x-bittorrent";
 
+    /** Not called, the installer class is never instantiated. */
     private BrowserApiInstaller() {}
 
     /**
@@ -152,8 +155,13 @@ public final class BrowserApiInstaller {
         return rv.toString();
     }
 
-    //////////////// Linux ////////////////
-
+    /**
+     * Writes the text to the file.
+     *
+     * @param f the file to write
+     * @param content the text to write
+     * @throws IOException if the writing fails
+     */
     private static void writeFile(File f, String content) throws IOException {
         try (java.io.Writer w = Files.newBufferedWriter(f.toPath(), StandardCharsets.UTF_8)) {
             w.write(content);
@@ -219,6 +227,12 @@ public final class BrowserApiInstaller {
         writeFile(file, join(lines) + "\n");
     }
 
+    /**
+     * Joins the lines with newlines.
+     *
+     * @param lines the lines to join
+     * @return the joined text
+     */
     private static String join(List<String> lines) {
         StringBuilder rv = new StringBuilder(1024);
         boolean first = true;
@@ -230,8 +244,13 @@ public final class BrowserApiInstaller {
         return rv.toString();
     }
 
-    //////////////// Windows ////////////////
-
+    /**
+     * Builds the Windows registry script for the handlers.
+     *
+     * @param consoleBaseUrl the URL of the console
+     * @return the script text
+     * @throws IOException if the files cannot be written
+     */
     private static String installWindows(String consoleBaseUrl) throws IOException {
         String cmd = buildCommand(consoleBaseUrl, false);
         String torrentId = "I2PSnarkTorrent";

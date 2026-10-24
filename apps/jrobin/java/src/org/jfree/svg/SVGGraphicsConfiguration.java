@@ -16,9 +16,12 @@ import java.awt.image.WritableRaster;
 /** A graphics configuration for the {@link SVGGraphics2D} class. */
 public class SVGGraphicsConfiguration extends GraphicsConfiguration {
 
+    /** The device this configuration belongs to. */
     private GraphicsDevice device;
 
+    /** Width of the SVG canvas, in pixels. */
     private final int width;
+    /** Height of the SVG canvas, in pixels. */
     private final int height;
 
     /**
@@ -119,7 +122,9 @@ public class SVGGraphicsConfiguration extends GraphicsConfiguration {
         return new BufferedImage(model, raster, model.isAlphaPremultiplied(), null);
     }
 
+    /** Stand-in image the fake device draws into. */
     private BufferedImage img;
+    /** The configuration the fake device reports. */
     private GraphicsConfiguration gc;
 
     /**

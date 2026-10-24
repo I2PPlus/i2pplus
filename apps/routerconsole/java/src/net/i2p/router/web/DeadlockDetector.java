@@ -22,10 +22,15 @@ import net.i2p.util.SimpleTimer2;
  */
 public class DeadlockDetector extends SimpleTimer2.TimedEvent {
 
+    /** The router being watched. */
     private final RouterContext _context;
+    /** Logger for this class. */
     private final Log _log;
+    /** Property giving how many hours between deadlock checks. */
     private static final String PROP_INTERVAL = "router.deadlockDetectIntervalHours";
+    /** Default hours between deadlock checks. */
     private static final long DEFAULT_INTERVAL = 1;
+    /** True while a deadlock is believed to be held. */
     private static final AtomicBoolean _isDeadlocked = new AtomicBoolean();
 
     /**
@@ -42,6 +47,11 @@ public class DeadlockDetector extends SimpleTimer2.TimedEvent {
             schedule(interval);
     }
 
+    /**
+     * Reads the check interval from the config.
+     *
+     * @return the interval, in hours
+     */
     private long getInterval() {
         long rv = _context.getProperty(PROP_INTERVAL, DEFAULT_INTERVAL);
         return rv * 60*60*1000L;
@@ -64,6 +74,11 @@ public class DeadlockDetector extends SimpleTimer2.TimedEvent {
         }
     }
 
+    /**
+     * Looks for a lock cycle among the router's threads.
+     *
+     * @return true if a deadlock was found
+     */
     private boolean detect() {
         return detect(_context);
     }

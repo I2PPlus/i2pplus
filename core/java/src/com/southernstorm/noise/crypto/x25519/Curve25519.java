@@ -17,8 +17,9 @@ import java.util.Arrays;
  */
 public final class Curve25519 {
 
-    // Numbers modulo 2^255 - 19 are broken up into ten 26-bit words.
+    /** Limbs of a field element, ten 26 bit words modulo 2^255 - 19. */
     private static final int NUM_LIMBS_255BIT = 10;
+    /** Limbs holding a doubled width value. */
     private static final int NUM_LIMBS_510BIT = 20;
 
     /**
@@ -44,21 +45,37 @@ public final class Curve25519 {
      */
     private static final ThreadLocal<Curve25519> _SCRATCH = ThreadLocal.withInitial(Curve25519::new);
 
+    /** The x coordinate of the input point. */
     private final int[] x_1;
+    /** The x coordinate of the accumulator point. */
     private final int[] x_2;
+    /** The x coordinate of the difference point. */
     private final int[] x_3;
+    /** The z coordinate of the accumulator point. */
     private final int[] z_2;
+    /** The z coordinate of the difference point. */
     private final int[] z_3;
+    /** Sum x_2 plus z_2, a ladder intermediate. */
     private final int[] A;
+    /** Difference x_2 minus z_2, a ladder intermediate. */
     private final int[] B;
+    /** Sum x_3 plus z_3, a ladder intermediate. */
     private final int[] C;
+    /** Difference x_3 minus z_3, a ladder intermediate. */
     private final int[] D;
+    /** Difference AA minus BB, a ladder intermediate. */
     private final int[] E;
+    /** A squared, a ladder intermediate. */
     private final int[] AA;
+    /** B squared, a ladder intermediate. */
     private final int[] BB;
+    /** D times A, a ladder intermediate. */
     private final int[] DA;
+    /** C times B, a ladder intermediate. */
     private final int[] CB;
+    /** Wide temporary for the field arithmetic. */
     private final long[] t1;
+    /** Narrow temporary for the field arithmetic. */
     private final int[] t2;
 
     /**

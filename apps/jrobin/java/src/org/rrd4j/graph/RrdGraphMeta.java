@@ -30,14 +30,23 @@ import java.util.Map;
  */
 public final class RrdGraphMeta {
 
+    /** The x origin of the graph. */
     private int xOrigin;
+    /** The y origin of the graph. */
     private int yOrigin;
+    /** The width of the graph. */
     private int xSize;
+    /** The height of the graph. */
     private int ySize;
+    /** The start time of the graph. */
     private long start;
+    /** The end time of the graph. */
     private long end;
+    /** The lowest value of the y axis. */
     private double yMin;
+    /** The highest value of the y axis. */
     private double yMax;
+    /** The data series of the graph. */
     private List<double[]> series = Collections.emptyList();
 
     /**

@@ -44,7 +44,9 @@ public class HTTPMUSocket {
     ////////////////////////////////////////////////
 
     private InetSocketAddress ssdpMultiGroup = null;
+    /** The multicast socket used for SSDP. */
     private MulticastSocket ssdpMultiSock = null;
+    /** Interface the multicast socket is bound to. */
     private NetworkInterface ssdpMultiIf = null;
 
     /** I2P */
@@ -290,8 +292,6 @@ public class HTTPMUSocket {
         SSDPPacket recvPacket = new SSDPPacket(ssdvRecvBuf, ssdvRecvBuf.length);
         recvPacket.setLocalAddress(getLocalAddress());
 
-        // Thanks for Kazuyuki Shudo (08/23/07)
-        // Thanks for Stephan Mehlhase (2010-10-26)
         if (ssdpMultiSock != null)
             ssdpMultiSock.receive(recvPacket.getDatagramPacket()); // throws IOException
         else throw new IOException("Multicast socket has already been closed.");

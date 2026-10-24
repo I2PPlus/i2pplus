@@ -16,8 +16,11 @@ import net.i2p.util.SystemVersion;
  * decaying bloom filter.
  */
 public class BloomFilterIVValidator implements IVValidator {
+    /** The router doing the validating. */
     private final RouterContext _context;
+    /** Logger for this class. */
     private final Log _log;
+    /** Remembers the initialization vectors already seen. */
     private volatile DecayingBloomFilter _filter;
     /**
      * Manages the filter's size. Kept behind a field so the router can hold
@@ -57,6 +60,7 @@ public class BloomFilterIVValidator implements IVValidator {
      * using. Below it the set is only kept when memory is genuinely tight.
      */
     private static final int MIN_SHARE_KBPS_TO_USE_BLOOM = 64;
+    /** Least free heap for which the bloom filter is worth using. */
     private static final long MIN_MEM_TO_USE_BLOOM = 64*1024*1024L;
     /** For testing. */
     private static final String PROP_FORCE = "router.forceDecayingBloomFilter";
@@ -213,8 +217,11 @@ public class BloomFilterIVValidator implements IVValidator {
     public static class IVFilterSizer {
         /** False positive rate to size for, well inside what callers tolerate. */
         public static final double TARGET_FPR = 1.5E-3d;
+        /** The validator whose rate is adjusted. */
         private final BloomFilterIVValidator _validator;
+        /** The router the validator runs on. */
         private final RouterContext _ctx;
+        /** The bandwidth limit last applied. */
         private int _KBps;
 
         /**

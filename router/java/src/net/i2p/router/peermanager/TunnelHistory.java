@@ -15,22 +15,39 @@ import net.i2p.util.Log;
  * Tunnel related history information.
  */
 public class TunnelHistory {
+    /** The router context. */
     private final RouterContext _context;
+    /** Logger for the tunnel history. */
     private final Log _log;
+    /** Build requests we agreed to, lifetime. */
     private final AtomicLong _lifetimeAgreedTo = new AtomicLong();
+    /** Build requests we rejected, lifetime. */
     private final AtomicLong _lifetimeRejected = new AtomicLong();
+    /** Builds that timed out, lifetime. */
     private final AtomicLong _lifetimeTimedOut = new AtomicLong();
+    /** When we last agreed to a build request. */
     private volatile long _lastAgreedTo;
+    /** When we last rejected for a critical reason. */
     private volatile long _lastRejectedCritical;
+    /** When we last rejected for bandwidth. */
     private volatile long _lastRejectedBandwidth;
+    /** When we last rejected for a transient reason. */
     private volatile long _lastRejectedTransient;
+    /** When we last rejected probabilistically. */
     private volatile long _lastRejectedProbabalistic;
+    /** When a build last timed out. */
     private volatile long _lastTimedOut;
+    /** Tunnels that failed, lifetime. */
     private final AtomicLong _lifetimeFailed = new AtomicLong();
+    /** When a tunnel last failed. */
     private volatile long _lastFailed;
+    /** When a tunnel last passed a test. */
     private volatile long _lastTestedSuccessfully;
+    /** Rate stat for the rejections. */
     private final RateStat _rejectRate;
+    /** Rate stat for the failures. */
     private final RateStat _failRate;
+    /** When the history was last written. */
     private volatile long _lastCoalesce = System.currentTimeMillis();
     /** Rate periods for history tracking. */
     static final long[] RATES = new long[] {RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR };
@@ -254,7 +271,9 @@ public class TunnelHistory {
      * @since 0.9.71+
      */
     static final long DECAY_INTERVAL_MS = 8 * 60 * 60 * 1000L;
+    /** Numerator of the rejection rate decay. */
     private static final long DECAY_NUMERATOR = 3;
+    /** Denominator of the rejection rate decay. */
     private static final long DECAY_DENOMINATOR = 4;
 
     /**
@@ -316,7 +335,9 @@ public class TunnelHistory {
         }
     }
 
+    /** The platform line separator. */
     private static final String NL = System.getProperty("line.separator");
+    /** Comment rule line of the history file. */
     private static final String HR = "# ----------------------------------------------------------------------------------------";
 
     /**
@@ -359,6 +380,15 @@ public class TunnelHistory {
         _failRate.store(out, "tunnelHistory.failRate", addComments);
     }
 
+    /**
+     * Appends the date line to the history file.
+     *
+     * @param buf where the line is appended
+     * @param addComments true to write the line as a comment
+     * @param name the statistic name
+     * @param val the statistic value, used as the date
+     * @param description the text shown before the date
+     */
     private static void addDate(StringBuilder buf, boolean addComments, String name, long val, String description) {
         if (addComments) {
             String when = val > 0 ? (new Date(val)).toString() : "Never";
@@ -367,6 +397,15 @@ public class TunnelHistory {
         } else {add(buf, false, name, val, description);}
     }
 
+    /**
+     * Appends one statistic to the history file.
+     *
+     * @param buf where the line is appended
+     * @param addComments true to write the line as a comment
+     * @param name the statistic name
+     * @param val the statistic value
+     * @param description the text shown with the value
+     */
     private static void add(StringBuilder buf, boolean addComments, String name, long val, String description) {
         if (addComments) {buf.append("# ").append(description).append(NL);}
         else {buf.append("tunnels.").append(name).append('=').append(val).append(NL);}
@@ -400,6 +439,13 @@ public class TunnelHistory {
         }
     }
 
+    /**
+     * Reads a long property with a default of zero.
+     *
+     * @param props the properties read
+     * @param key the property name
+     * @return the value, zero if unparseable
+     */
     private static final long getLong(Properties props, String key) {
         return ProfilePersistenceHelper.getLong(props, key);
     }

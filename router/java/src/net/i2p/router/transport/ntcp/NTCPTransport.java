@@ -96,20 +96,33 @@ import net.i2p.util.VersionComparator;
  * @since 0.9.16
  */
 public class NTCPTransport extends TransportImpl {
+    /** Logger for NTCP connections. */
     private final Log _log;
+    /** Records why routers were banned. */
     private final BanLogger _banLogger;
+    /** Peer selection bid for fast peers. */
     private final SharedBid _fastBid;
+    /** Peer selection bid for slow peers. */
     private final SharedBid _slowBid;
+    /** Bid raising the cost of slow peers. */
     private final SharedBid _slowCostBid;
     /** Save some conns for inbound. */
     private final SharedBid _nearCapacityBid;
+    /** Bid raising costs when near capacity. */
     private final SharedBid _nearCapacityCostBid;
+    /** Bid for peers with transient failures. */
     private final SharedBid _transientFail;
+    /** Lock for the connection maps. */
     private final Object _conLock;
+    /** Open connections, by peer hash. */
     private final ConcurrentHashMap<Hash, NTCPConnection> _conByIdent;
+    /** NIO event pumper for the connections. */
     private final EventPumper _pumper;
+    /** The accept and connect thread. */
     private final Reader _reader;
+    /** The write thread, null until started. */
     private Writer _writer;
+    /** SSU port advertised in NTCP2 handshakes. */
     private int _ssuPort;
     /**
      * Bound listening endpoints. All entries MUST be resolved InetSocketAddress
@@ -119,6 +132,7 @@ public class NTCPTransport extends TransportImpl {
      * on unresolved entries.
      */
     private final Set<InetSocketAddress> _endpoints;
+    /** The network id we communicate on. */
     private final int _networkID;
 
     /**
@@ -133,7 +147,9 @@ public class NTCPTransport extends TransportImpl {
      * Do we have a public IPv6 address?
      */
     private boolean _haveIPv6Address;
+    /** When the last inbound IPv4 connection arrived. */
     private long _lastInboundIPv4;
+    /** When the last inbound IPv6 connection arrived. */
     private long _lastInboundIPv6;
 
     /**
@@ -159,17 +175,24 @@ public class NTCPTransport extends TransportImpl {
      * Value sourced from {@link Transport#PROP_I2NP_NTCP_AUTO_IP}.
      */
     public static final String PROP_I2NP_NTCP_AUTO_IP = Transport.PROP_I2NP_NTCP_AUTO_IP;
+    /** Default peer selection cost for NTCP. */
     private static final int DEFAULT_COST = 10;
+    /** Peer selection cost for outbound NTCP2. */
     private static final int NTCP2_OUTBOUND_COST = 14;
 
     /** This is rarely if ever used, default is to bind to wildcard address. */
     public static final String PROP_BIND_INTERFACE = "i2np.ntcp.bindInterface";
 
+    /** Closes connections after their writes finish. */
     private final NTCPSendFinisher _finisher;
+    /** Factory for the NTCP2 ephemeral key pairs. */
     private final X25519KeyFactory _xdhFactory;
+    /** When a bad clock skew was last logged. */
     private long _lastBadSkew;
+    /** Rate stat periods for the connection statistics. */
     private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
 
+    /** Disconnect reasons with repetitive log suppression. */
     private static final Set<String> SUPPRESSION_PATTERNS = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
         "Old and slow",
         "RouterInfo store fail"
@@ -204,14 +227,23 @@ public class NTCPTransport extends TransportImpl {
     public static final String PROP_NTCP2_SP = Transport.PROP_NTCP2_SP;
     /** Config key for the base-64 NTCP2 static IV. Value sourced from {@link Transport#PROP_NTCP2_IV}. */
     public static final String PROP_NTCP2_IV = Transport.PROP_NTCP2_IV;
+    /** NTCP2 handshake IV length, in bytes. */
     private static final int NTCP2_IV_LEN = OutboundNTCP2State.IV_SIZE;
+    /** NTCP2 handshake key length, in bytes. */
     private static final int NTCP2_KEY_LEN = OutboundNTCP2State.KEY_SIZE;
+    /** Downtime after which the NTCP2 static key is replaced. */
     private static final long MIN_DOWNTIME_TO_REKEY = 7*24*60*60*1000L;
+    /** Downtime after which a hidden router rekeys. */
     private static final long MIN_DOWNTIME_TO_REKEY_HIDDEN = 24*60*60*1000L;
+    /** Our NTCP2 static public key. */
     private final byte[] _ntcp2StaticPubkey;
+    /** Our NTCP2 static private key. */
     private final byte[] _ntcp2StaticPrivkey;
+    /** Our NTCP2 static initialization vector. */
     private final byte[] _ntcp2StaticIV;
+    /** Static public key, base64, for the router info. */
     private final String _b64Ntcp2StaticPubkey;
+    /** Static IV, base64, for the router info. */
     private final String _b64Ntcp2StaticIV;
 
     /**
@@ -2142,6 +2174,12 @@ public int getEstimatedRTT(Hash peer) {
         return ipstrings.get(0);
     }
 
+    /**
+     * Returns the peer selection cost for this transport.
+     *
+     * @param isIPv6 true to price an IPv6 connection
+     * @return the default cost
+     */
     private int getDefaultCost(boolean isIPv6) {
         int rv = DEFAULT_COST;
         if (isIPv6) {

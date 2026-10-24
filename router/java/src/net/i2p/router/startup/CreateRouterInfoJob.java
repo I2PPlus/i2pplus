@@ -44,7 +44,9 @@ import net.i2p.util.SecureFileOutputStream;
  * and saves all the keys. This is generally run only once, on a new install.
  */
 public class CreateRouterInfoJob extends JobImpl {
+    /** Logger for this class. */
     private final Log _log;
+    /** The job to run after the router info is published. */
     private final Job _next;
 
     /** Router info filename. */
@@ -58,8 +60,11 @@ public class CreateRouterInfoJob extends JobImpl {
     /** Property for router encryption type.
      * @since 0.9.48 */
     static final String PROP_ROUTER_ENCTYPE = "router.encType";
+    /** Signature type chosen for a new router. */
     private static final SigType DEFAULT_SIGTYPE = SigType.EdDSA_SHA512_Ed25519;
+    /** Encryption type chosen for a new router. */
     private static final EncType DEFAULT_ENCTYPE = EncType.ECIES_X25519;
+    /** Bits of entropy in the packet padding choice. */
     private static final int PADDING_ENTROPY = 32;
 
     /**

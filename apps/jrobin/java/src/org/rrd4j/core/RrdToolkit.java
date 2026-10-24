@@ -31,9 +31,11 @@ import org.rrd4j.ConsolFun;
  */
 public class RrdToolkit {
 
+    /** Error text when a copy would overwrite its own source. */
     private static final String SOURCE_AND_DESTINATION_PATHS_ARE_THE_SAME =
             "Source and destination paths are the same";
 
+    /** Utility class, not intended for instantiation. */
     private RrdToolkit() {}
 
     /**
@@ -323,6 +325,14 @@ public class RrdToolkit {
         copyFile(destPath, sourcePath, saveBackup);
     }
 
+    /**
+     * Copies a file, keeping a backup when asked.
+     *
+     * @param sourcePath the file to read
+     * @param destPath where to write it
+     * @param saveBackup true to keep the file being overwritten
+     * @throws RrdException if the copy fails
+     */
     private static void copyFile(String sourcePath, String destPath, boolean saveBackup)
             throws IOException {
 
@@ -335,6 +345,12 @@ public class RrdToolkit {
         Files.move(source, destination, StandardCopyOption.REPLACE_EXISTING);
     }
 
+    /**
+     * Names the backup for a file about to be overwritten.
+     *
+     * @param destPath the file being overwritten
+     * @return the backup's path
+     */
     private static String getBackupPath(String destPath) {
         StringBuilder backupPath = new StringBuilder(destPath);
         do {
@@ -562,6 +578,16 @@ public class RrdToolkit {
         return result;
     }
 
+    /**
+     * Collects the canonical paths of the files with a given extension,
+     * descending into subdirectories when asked.
+     *
+     * @param directory the directory to walk
+     * @param extension the file extension to look for, e.g. ".rrd"
+     * @param recursive true to descend into subdirectories
+     * @param list where the paths found are collected, in encounter order
+     * @throws IOException if a directory cannot be read
+     */
     private static void traverseDirectory(
             File directory, String extension, boolean recursive, List<String> list)
             throws IOException {
@@ -576,6 +602,13 @@ public class RrdToolkit {
         }
     }
 
+    /**
+     * Names the file a split-out data source is written to.
+     *
+     * @param dsName the data source's name
+     * @param sourcePath the file being split
+     * @return the new file's path
+     */
     private static String createSplitPath(String dsName, String sourcePath) {
         File file = new File(sourcePath);
         String newName = dsName + "-" + file.getName();

@@ -6,6 +6,7 @@ package net.i2p.router.crypto.ratchet;
  */
 class ContainerHelpers {
 
+    /** Utility class, not intended for instantiation. */
     private ContainerHelpers() {}
 
     /**

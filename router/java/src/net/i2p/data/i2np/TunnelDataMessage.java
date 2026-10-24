@@ -22,9 +22,13 @@ import net.i2p.util.ByteCache;
  * because this is a high-usage class.
  */
 public class TunnelDataMessage extends FastI2NPMessageImpl {
+    /** The tunnel this message is routed on. */
     private long _tunnelId;
+    /** The tunnel id in object form. */
     private TunnelId _tunnelIdObj;
+    /** The message's payload bytes. */
     private byte[] _data;
+    /** The payload as a buffer, for reuse. */
     private ByteArray _dataBuf;
     /** Message type ID for this I2NP message. */
 
@@ -34,6 +38,7 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
     /** If we can't deliver a tunnel message in 10s, forget it. */
     private static final int EXPIRATION_PERIOD = 10*1000;
 
+    /** Pooled buffers for message payloads. */
     private static final ByteCache _cache;
     /**
      * When true, this tunnelDataMessage is used as part of a tunnel processing

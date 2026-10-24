@@ -705,7 +705,9 @@ public abstract class CommSystemFacade implements Service {
         /** Reachability has not been determined on any transport. */
         UNKNOWN(STATUS_UNKNOWN, _x("Testing"));
 
+        /** Number for this status. */
         private final int code;
+        /** Text describing the status. */
         private final String status;
 
         /**

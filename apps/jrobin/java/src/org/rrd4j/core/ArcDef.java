@@ -18,9 +18,13 @@ import org.rrd4j.ConsolFun;
  *
  */
 public class ArcDef {
+    /** How raw values are consolidated into this archive. */
     private final ConsolFun consolFun;
+    /** Fraction of unknown values still allowed, 0 to 1. */
     private final double xff;
+    /** Raw steps combined into one consolidated value. */
     private final int steps;
+    /** Consolidated values the archive holds. */
     private int rows;
 
     /**

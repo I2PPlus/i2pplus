@@ -16,24 +16,42 @@ import net.i2p.util.Log;
  * Brought back to life for asynchronous status delivery to the client.
  */
 class MessageState {
+    /** The app context. */
     private final I2PAppContext _context;
+    /** Logger for the message status. */
     private final Log _log;
+    /** The nonce of the message being tracked. */
     private final long _nonce;
+    /** Log prefix naming the session. */
     private final String _prefix;
+    /** The id assigned by the connection, once sent. */
     private MessageId _id;
+    /** When the message was queued. */
     private final long _created;
+    /** When the message expires. */
     private final long _expires;
+    /** Listener notified of the message status. */
     private final SendMessageStatusListener _listener;
+    /** The session the message was sent on. */
     private final I2PSession _session;
 
+    /**
+     * Status of the message being tracked.
+     */
     private enum State {
+        /** The message was queued, not sent yet. */
         INIT,
+        /** The connection accepted the message. */
         ACCEPTED,
+        /** The message will probably fail. */
         PROBABLE_FAIL,
+        /** The message failed. */
         FAIL,
+        /** The message was sent. */
         SUCCESS
     };
 
+    /** Current status of the message. */
     private State _state = State.INIT;
 
     /**

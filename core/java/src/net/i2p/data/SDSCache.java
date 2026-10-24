@@ -43,8 +43,11 @@ import java.util.concurrent.atomic.AtomicReferenceArray;
  */
 public class SDSCache<V extends SimpleDataStructure> {
 
+    /** Smallest scaling factor applied to the expected size. */
     private static final double MIN_FACTOR = 0.20;
+    /** Largest scaling factor applied to the expected size. */
     private static final double MAX_FACTOR = 5.0;
+    /** Scaling factor from the available memory. */
     private static final double FACTOR;
 
     static {
@@ -86,7 +89,13 @@ public class SDSCache<V extends SimpleDataStructure> {
      * @since 0.8.8
      */
     private static class Shutdown implements Runnable {
+        /** The cache being shut down. */
         private final SDSCache _cache;
+        /**
+         * Builds the hook closing one cache.
+         *
+         * @param cache the cache to close
+         */
         Shutdown(SDSCache cache) { _cache = cache; }
         /** Clear the cache on shutdown. */
         @Override
@@ -208,10 +217,18 @@ public class SDSCache<V extends SimpleDataStructure> {
 
         /** Replaced wholesale (never resized in place) so a reader always sees a complete table. */
         private static final class Table {
+            /** Mask selecting the slot from a key. */
             private final int mask;
+            /** The keys held in the table. */
             private final int[] keys;
+            /** The cached objects, weakly held. */
             private final AtomicReferenceArray<WeakReference<?>> refs;
 
+            /**
+             * Builds an empty table of the capacity.
+             *
+             * @param capacity the number of slots, a power of two
+             */
             Table(int capacity) {
                 keys = new int[capacity];
                 refs = new AtomicReferenceArray<>(capacity);
@@ -219,18 +236,30 @@ public class SDSCache<V extends SimpleDataStructure> {
             }
         }
 
+        /** The table in use now. */
         private volatile Table _table;
 
         /** Occupied slots in the current table. Guarded by this. */
         private int _size;
 
+        /**
+         * Builds a cache for the expected size.
+         *
+         * @param expectedSize the number of entries expected
+         */
         IntWeakCache(int expectedSize) {
             int capacity = 16;
             while (capacity < expectedSize && capacity < MAX_INITIAL_CAPACITY) capacity <<= 1;
             _table = new Table(capacity);
         }
 
-        /** Mixes the key, so that nearby keys land in different slots. */
+        /**
+         * Mixes the key, so that nearby keys land in different slots.
+         *
+         * @param key the key to hash
+         * @param mask the mask of the table
+         * @return the slot the key hashes to
+         */
         private static int slot(int key, int mask) {
             int h = key * 0x9E3779B1;
             h ^= h >>> 16;
@@ -286,7 +315,11 @@ public class SDSCache<V extends SimpleDataStructure> {
             t.refs.set(idx, ref);
         }
 
-        /** Double the table. Callers must synchronize on this. */
+        /**
+         * Doubles the table. Callers must synchronize on this.
+         *
+         * @return the new table
+         */
         private Table grow() {
             Table old = _table;
             Table t = new Table(old.keys.length * 2);

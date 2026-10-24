@@ -16,8 +16,11 @@ public class ConfigPeerHandler extends FormHandler {
      */
     public ConfigPeerHandler() {}
 
+    /** Base64 of the peer being configured. */
     private String _peer;
+    /** Speed limit asked for, in kB/s. */
     private String _speed;
+    /** Capacity limit asked for, in kB/s. */
     private String _capacity;
 
     @Override
@@ -75,6 +78,11 @@ public class ConfigPeerHandler extends FormHandler {
         }
     }
 
+    /**
+     * Parses the peer's hash from the form.
+     *
+     * @return the peer's hash, null if it is not valid
+     */
     private Hash getHash() {
         if (_peer != null && _peer.length() == 44) {
             byte[] b = Base64.decode(_peer);

@@ -76,15 +76,23 @@ public class HostCheckStatus {
 
     /** Rows carry at least timestamp, host and reachable. */
     private static final int MIN_FIELDS = 3;
+    /** Field index of the host in a results line. */
     private static final int FIELD_HOST = 1;
+    /** Field index of the reachable flag in a results line. */
     private static final int FIELD_REACHABLE = 2;
 
+    /** Longest results line read, in bytes. */
     private static final int MAX_LINE = 4096;
 
+    /** Directory the cached results were read from. */
     private static File _cachedDir;
+    /** Reachability results, by host. */
     private static Map<String, Boolean> _probed = Collections.emptyMap();
+    /** Hosts excluded from the checks. */
     private static Set<String> _blacklisted = Collections.emptySet();
+    /** Time the cached results were read. */
     private static long _loadedAt;
+    /** Age past which the cached results are refreshed. */
     private static long _ttl = DEFAULT_INTERVAL_MS;
 
     /**

@@ -31,6 +31,7 @@ import net.i2p.util.ArraySet;
  */
 class ClientPeerSelector extends TunnelPeerSelector {
 
+    /** Build success ratio entering severe attack mode. */
     private static final double SEVERE_ATTACK_THRESHOLD = 0.30;
     /** Startup grace period: strict first-hop gates and soft fallbacks are relaxed for the first 15 minutes. */
     private static final long STARTUP_GRACE_MS = 15 * 60 * 1000L;
@@ -114,11 +115,22 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     static final double CROSS_POOL_EXCLUSION_RATIO = 0.50;
 
 
+    /**
+     * Returns the configured peer selection strategy.
+     *
+     * @return the strategy name
+     */
     private String getStrategy() {
         return ctx.getProperty(PROP_STRATEGY, STRATEGY_DEFAULT);
     }
 
 
+    /**
+     * Formats a peer list for the log.
+     *
+     * @param peers the peers to format
+     * @return the base64 peer hashes, space separated
+     */
     private static String formatPeerList(List<Hash> peers) {
         if (peers == null || peers.isEmpty()) {return "[empty]";}
         StringBuilder sb = new StringBuilder(peers.size() * 10);
@@ -129,12 +141,17 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         return sb.toString();
     }
 
+    /** Config key for the legacy selection code. */
     private static final String PROP_LEGACY_SELECTION = "router.tunnel.useLegacyPeerSelection";
 
+    /** Config key naming the selection strategy. */
     private static final String PROP_STRATEGY = "i2p.tunnel.peerSelector.clientStrategy";
 
+    /** Strategy name of the default selection. */
     private static final String STRATEGY_DEFAULT = "default";
+    /** Strategy name of the reliability selection. */
     private static final String STRATEGY_RELIABILITY = "reliability";
+    /** Strategy name of the diversity selection. */
     private static final String STRATEGY_DIVERSITY = "diversity";
 
     /**
@@ -2008,15 +2025,37 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
      * {@link #selectPeers(TunnelPoolSettings)} call.
      */
     private static final class SelectionParams {
+        /** True when selecting for an inbound pool. */
         final boolean isInbound;
+        /** Build success ratio cached for this pass. */
         final double buildSuccess;
+        /** True to prefer high capacity peers. */
         final boolean useHighCapPrimary;
+        /** True to check the closest hop constraint. */
         final boolean checkClosestHop;
+        /** True in hidden mode. */
         final boolean hidden;
+        /** True for hidden inbound tunnels only. */
         final boolean hiddenInbound;
+        /** True for hidden outbound tunnels only. */
         final boolean hiddenOutbound;
+        /** IP restriction level of the pool. */
         final int ipRestriction;
+        /** Masked IPs allowed by the restriction. */
         final MaskedIPSet ipSet;
+        /**
+         * Records the selection settings shared by one pass.
+         *
+         * @param isInbound true when selecting for an inbound pool
+         * @param buildSuccess the build success ratio for this pass
+         * @param useHighCapPrimary true to prefer high capacity peers
+         * @param checkClosestHop true to check the closest hop constraint
+         * @param hidden true in hidden mode
+         * @param hiddenInbound true for hidden inbound tunnels only
+         * @param hiddenOutbound true for hidden outbound tunnels only
+         * @param ipRestriction the IP restriction level
+         * @param ipSet the masked IPs allowed by the restriction
+         */
         SelectionParams(boolean isInbound, double buildSuccess, boolean useHighCapPrimary, boolean checkClosestHop,
                         boolean hidden, boolean hiddenInbound, boolean hiddenOutbound, int ipRestriction, MaskedIPSet ipSet) {
             this.isInbound = isInbound;
@@ -2033,15 +2072,30 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
 
     /** Excluder + exclusion counts gathered once per selectPeers() call; exclude is wrapped by the hop helpers. */
     private static final class SelectionExclusions {
+        /** Excluder of pool and session peers. */
         final Excluder excluder;
+        /** Peers explicitly excluded from the selection. */
         Set<Hash> exclude;
         /** The vetted first hop already in rv, or null when the slot is empty. */
         Hash firstHop;
+        /** Peers skipped for a fresh cooldown. */
         final int peerCooldownExcluded;
+        /** Recent first-hop failures counted. */
         final int firstHopFailCount;
+        /** Peers to skip at the first hop. */
         final Set<Hash> firstPeerExclusions;
         /** Fresh shared-cooldown peers, first-hop-only filter (null when cooldowns are in the base exclude set). */
         final Set<Hash> firstHopCooldowns;
+        /**
+         * Records what must not be selected in one pass.
+         *
+         * @param excluder the excluder of pool and session peers
+         * @param exclude the peers explicitly excluded
+         * @param peerCooldownExcluded the peers skipped for a fresh cooldown
+         * @param firstHopFailCount the recent first-hop failure count
+         * @param firstPeerExclusions the peers to skip at the first hop
+         * @param firstHopCooldowns the first hop peers still cooling down
+         */
         SelectionExclusions(Excluder excluder, Set<Hash> exclude,
                             int peerCooldownExcluded, int firstHopFailCount, Set<Hash> firstPeerExclusions,
                             Set<Hash> firstHopCooldowns) {

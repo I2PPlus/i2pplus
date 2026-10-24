@@ -41,6 +41,7 @@ class SOCKSServerFactory {
      */
     SOCKSServerFactory() {}
 
+    /** SOCKS5 reply refusing the request. */
     private final static String ERR_REQUEST_DENIED =
         "HTTP/1.1 403 Access Denied - This is a SOCKS proxy, not a HTTP proxy\r\n" +
         "Content-Type: text/html; charset=iso-8859-1\r\n" +

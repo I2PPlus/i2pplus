@@ -38,6 +38,7 @@ abstract class SAMHandler implements Runnable, Handler {
      */
     protected final SAMBridge bridge;
 
+    /** Held while writing to the SAM socket. */
     private final Object socketWLock = new Object(); // Guards writings on socket
     /**
      * Client channel this handler reads commands from.
@@ -209,8 +210,8 @@ abstract class SAMHandler implements Runnable, Handler {
      * these are expected - the router's client manager may not be
      * listening yet - so log at warn level; after that they are errors.
      *
-     * @param msg the message
-     * @param e the failure
+     * @param msg the message received
+     * @param e the error that occurred
      * @since 0.9.71+
      */
     protected void logSessionError(String msg, Exception e) {

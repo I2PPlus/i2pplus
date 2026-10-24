@@ -27,11 +27,17 @@ class NTCP2Payload {
     /** Block header size in bytes. */
     public static final int BLOCK_HEADER_SIZE = 3;
 
+    /** Block type of the date and time. */
     private static final int BLOCK_DATETIME = 0;
+    /** Block type of the session options. */
     private static final int BLOCK_OPTIONS = 1;
+    /** Block type of the router info. */
     private static final int BLOCK_ROUTERINFO = 2;
+    /** Block type of the I2NP message. */
     private static final int BLOCK_I2NP = 3;
+    /** Block type of the termination reason. */
     private static final int BLOCK_TERMINATION = 4;
+    /** Block type of the padding. */
     private static final int BLOCK_PADDING = 254;
 
     /**
@@ -342,6 +348,7 @@ class NTCP2Payload {
      * Not used for receive; we use callbacks instead.
      */
     public abstract static class Block {
+        /** Type of the block being read or written. */
         private final int type;
 
         /**
@@ -405,7 +412,9 @@ class NTCP2Payload {
      * Block containing router information.
      */
     public static class RIBlock extends Block {
+        /** The encoded router info. */
         private final byte[] data;
+        /** True if the receiver should flood the router info. */
         private final boolean f;
 
         /**
@@ -441,6 +450,7 @@ class NTCP2Payload {
      * Block containing I2NP message.
      */
     public static class I2NPBlock extends Block {
+        /** The message carried in the block. */
         private I2NPMessage m;
 
         /**
@@ -481,7 +491,9 @@ class NTCP2Payload {
      * Block containing padding data.
      */
     public static class PaddingBlock extends Block {
+        /** Size of the padding, in bytes. */
         private int sz;
+        /** The app context. */
         private final I2PAppContext ctx;
 
         /**
@@ -537,6 +549,7 @@ class NTCP2Payload {
      * Used for time synchronization in NTCP2 protocol.
      */
     public static class DateTimeBlock extends Block {
+        /** The date and time sent in the payload. */
         private final long now;
 
         /**
@@ -569,6 +582,7 @@ class NTCP2Payload {
      * Block containing options data.
      */
     public static class OptionsBlock extends Block {
+        /** The option flags sent in the payload. */
         private final byte[] opts;
 
         /**
@@ -601,7 +615,9 @@ class NTCP2Payload {
      * Block containing termination data.
      */
     public static class TerminationBlock extends Block {
+        /** The termination reason sent in the payload. */
         private final byte rsn;
+        /** When the message was received, per the sender. */
         private final long rcvd;
 
         /**

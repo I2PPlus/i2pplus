@@ -9,6 +9,7 @@ import net.i2p.stat.RateConstants;
  */
 class IntegrationCalculator {
 
+    /** Utility class, not intended for instantiation. */
     private IntegrationCalculator() {}
 
     /**

@@ -15,6 +15,7 @@ import java.util.List;
 public class RandomTrimmer<T extends SimpleDataStructure> implements KBucketTrimmer<T> {
     /** The app context, used for its random() source. */
     protected final I2PAppContext _ctx;
+    /** Entries kept before the oldest are trimmed away. */
     private final int _max;
 
     /**

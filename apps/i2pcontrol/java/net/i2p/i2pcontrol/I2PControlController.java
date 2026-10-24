@@ -52,21 +52,31 @@ import org.eclipse.jetty.util.ssl.SslContextFactory;
  * This class is NOT used for the webapp or the bare ServerSocket implementation.
  */
 public class I2PControlController implements RouterApp {
-    // non-null
+    /** The app context, never null. */
     private final I2PAppContext _appContext;
-    // warning, null in app context
+    /** The router context, null when run standalone in an app context. */
     private final RouterContext _context;
+    /** The manager that starts the apps. */
     private final ClientAppManager _mgr;
+    /** Logger for the I2PControl server. */
     private final Log _log;
+    /** Directory holding the plugin configs. */
     private final String _pluginDir;
+    /** The configuration manager. */
     private final ConfigurationManager _conf;
+    /** Provider of the TLS key store. */
     private final KeyStoreProvider _ksp;
+    /** The jetty security manager. */
     private final SecurityManager _secMan;
+    /** The embedded jetty server. */
     private final Server _server;
+    /** Current state of the app. */
     private ClientAppState _state = UNINITIALIZED;
     /** Allowed hosts config property */
     static final String PROP_ALLOWED_HOSTS = "i2pcontrol.allowedhosts";
+    /** Port mapper name of the HTTPS service. */
     private static final String SVC_HTTPS_I2PCONTROL = "https_i2pcontrol";
+    /** Default HTTPS port of the API. */
     private static final int DEFAULT_PORT = 7650;
 
     /**
@@ -151,6 +161,13 @@ public class I2PControlController implements RouterApp {
         changeState(state, null, null);
     }
 
+    /**
+     * Changes the app state and notifies listeners.
+     *
+     * @param state the new state
+     * @param msg the message for the listeners
+     * @param e the exception, null if none
+     */
     private synchronized void changeState(ClientAppState state, String msg, Exception e) {
         _state = state;
         if (_mgr != null)
@@ -164,6 +181,11 @@ public class I2PControlController implements RouterApp {
     }
 
 
+    /**
+     * Starts the jetty server.
+     *
+     * @throws Exception if the server cannot be started
+     */
     private synchronized void start() throws Exception {
         _appContext.logManager().getLog(JSONRPC2Servlet.class).setMinimumPriority(Log.DEBUG);
         _server.start();
@@ -276,8 +298,7 @@ public class I2PControlController implements RouterApp {
     /**
      * Stop it
      */
-    private synchronized void stopServer()
-    {
+    private synchronized void stopServer() {
         try {
             if (_server != null) {
                 _appContext.portMapper().unregister(SVC_HTTPS_I2PCONTROL);
@@ -292,6 +313,7 @@ public class I2PControlController implements RouterApp {
         }
     }
 
+    /** Stops the jetty server. */
     private synchronized void stop() {
         _conf.writeConfFile();
         _secMan.stopTimedEvents();

@@ -25,6 +25,7 @@ public class CreateSessionMessage extends I2CPMessageImpl {
      * I2CP message type number identifying a session creation request.
      */
     public static final int MESSAGE_TYPE = 1;
+    /** The options the client asked the session to use. */
     private SessionConfig _sessionConfig;
 
     /**
@@ -44,8 +45,8 @@ public class CreateSessionMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Session config.
-     * @return the session config
+     * Configuration requested for the new session.
+     * @return never null, the no-arg constructor creates an empty config
      */
     public SessionConfig getSessionConfig() {
         return _sessionConfig;

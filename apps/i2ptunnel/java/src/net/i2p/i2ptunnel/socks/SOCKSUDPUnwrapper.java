@@ -12,7 +12,9 @@ import net.i2p.util.Log;
  * Ref: RFC 1928.
  */
 public class SOCKSUDPUnwrapper implements Source, Sink {
+    /** Where the unwrapped datagram is passed on. */
     private Sink sink;
+    /** Headers remembered for each peer address */
     private final Map<I2PSocketAddress, SOCKSHeader> cache;
 
     /**

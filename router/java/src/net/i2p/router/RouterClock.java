@@ -35,16 +35,22 @@ public class RouterClock extends Clock {
      * NTP stratum assumed before any external time source is known.
      */
     public static final int DEFAULT_STRATUM = 8;
+    /** Worst NTP stratum accepted. */
     private static final int WORST_STRATUM = 16;
 
     /** The max NTP Timestamper delay is 30m right now, make this longer than that. */
     private static final long MIN_DELAY_FOR_WORSE_STRATUM = 45L*60*1000;
+    /** The clock offset being sought. */
     private volatile long _desiredOffset;
+    /** When the clock was last slewed. */
     private volatile long _lastSlewed;
     /** Use system time for this. */
     private long _lastChanged;
+    /** The stratum of the last proposal. */
     private int _lastStratum;
+    /** The offset of the last proposal. */
     private long _lastProposedOffset;
+    /** The timestamper making the proposals. */
     private final RouterTimestamper _timeStamper;
 
     /**
@@ -54,12 +60,15 @@ public class RouterClock extends Clock {
      * @since 0.8.8
      */
     private static final long MASSIVE_SHIFT_FORWARD = 360L*1000;
+    /** Backward shift that counts as massive. */
     private static final long MASSIVE_SHIFT_BACKWARD = 61L*1000;
 
     /** Testing only - disables clock adjustment when set. */
     private static final String PROP_DISABLE_ADJUSTMENT = "time.disableOffset";
 
+    /** The listeners for clock shifts. */
     private final Set<ClockShiftListener> _shiftListeners;
+    /** When the clock was last shifted. */
     private volatile long _lastShiftNanos;
 
     /**
@@ -318,10 +327,10 @@ public class RouterClock extends Clock {
         return offset + systemNow;
     }
 
-    /*
-     * A large system clock shift happened. Tell people about it.
+    /**
+     * Notifies the listeners of a massive shift.
      *
-     * @since 0.8.8
+     * @param shift the size of the shift, in milliseconds
      */
     private synchronized void notifyMassive(long shift) {
         long nowNanos = System.nanoTime();

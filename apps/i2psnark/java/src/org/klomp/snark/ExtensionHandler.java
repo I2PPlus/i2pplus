@@ -88,6 +88,7 @@ abstract class ExtensionHandler {
     /** Pieces * SHA1 Hash length, + 25% extra for file names, bencoding overhead, etc. */
     private static final int MAX_METADATA_SIZE = Storage.MAX_PIECES * 20 * 5 / 4;
 
+    /** Extension requests in flight per peer. */
     private static final int PARALLEL_REQUESTS = 8;
 
     /**
@@ -300,8 +301,11 @@ abstract class ExtensionHandler {
         }
     }
 
+    /** Extension message asking for data. */
     private static final int TYPE_REQUEST = 0;
+    /** Extension message carrying data. */
     private static final int TYPE_DATA = 1;
+    /** Extension message refusing a request. */
     private static final int TYPE_REJECT = 2;
 
     /**
@@ -423,6 +427,7 @@ abstract class ExtensionHandler {
         sendExtension(peer, TYPE_METADATA, payload);
     }
 
+    /** Length of the piece hashes, in bytes. */
     private static final int HASH_LENGTH = 32;
 
     /**
@@ -566,6 +571,7 @@ abstract class ExtensionHandler {
         }
     }
 
+    /** Filter saying comment requests are not wanted. */
     private static final byte[] COMMENTS_FILTER = new byte[64];
 
     /**

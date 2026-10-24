@@ -22,6 +22,7 @@ import java.security.cert.X509Certificate;
  */
 public class DirKeyRing implements KeyRing {
 
+    /** Directory the key files are read from and written to. */
     private final File _base;
 
     /**

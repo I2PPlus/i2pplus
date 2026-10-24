@@ -60,12 +60,19 @@ public final class GenericGF {
    */
   public static final GenericGF MAXICODE_FIELD_64 = AZTEC_DATA_6;
 
+  /** Exponent lookup table for the field. */
   private final int[] expTable;
+  /** Logarithm lookup table for the field. */
   private final int[] logTable;
+  /** The zero polynomial of this field. */
   private final GenericGFPoly zero;
+  /** The one polynomial of this field. */
   private final GenericGFPoly one;
+  /** Number of elements in the field. */
   private final int size;
+  /** The primitive polynomial defining the field. */
   private final int primitive;
+  /** Base of the generator used to build polynomials. */
   private final int generatorBase;
 
   /**

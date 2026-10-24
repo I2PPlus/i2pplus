@@ -78,6 +78,7 @@ public class IterativeSearchJob extends FloodSearchJob {
     private final Hash _rkey;
     /** This is a marker to register with the MessageRegistry, it is never sent. */
     private OutNetMessage _out;
+    /** The local destination to search from, null if none. */
     private final Hash _fromLocalDest;
     /** Hash to always query first, set from a router property for testing. */
     private static Hash _alwaysQueryHash;
@@ -90,7 +91,9 @@ public class IterativeSearchJob extends FloodSearchJob {
      * port or a family. See {@link #collectFingerprint} for the encoding.
      */
     private final Set<Long> _maskedIPs;
+    /** The service ports the results must match. */
     private final Set<Integer> _ports;
+    /** The families the results must match. */
     private final Set<String> _families;
     /**
      * Scratch buffers for one candidate's keys, filled by
@@ -101,6 +104,7 @@ public class IterativeSearchJob extends FloodSearchJob {
      * keys any one peer can contribute. Reused across candidates.
      */
     private final long[] _fingerprintIPs;
+    /** Ports used for the fingerprint matching. */
     private final int[] _fingerprintPorts;
     /** The one family option of the current candidate, or null. */
     private String _fingerprintFamily;
@@ -108,12 +112,14 @@ public class IterativeSearchJob extends FloodSearchJob {
     private int _fingerprintIPCount;
     /** Number of entries used in {@link #_fingerprintPorts}. */
     private int _fingerprintPortCount;
+    /** The peers left out of the search. */
     private final Set<Hash> _skippedPeers;
     /** Floodfill peers we've sent queries to in this search — for active-query tracking. */
     private final Set<Hash> _queriedFloodfills;
     /** Set once the candidate set has been widened for beta confirmation. Guarded by this. @since 0.9.71+. */
     private boolean _widened;
 
+    /** Most non-floodfill peers queried. */
     private static final int MAX_NON_FF = 5;
     /** Max number of peers to query. */
     private static final int TOTAL_SEARCH_LIMIT = 32;
@@ -121,6 +127,7 @@ public class IterativeSearchJob extends FloodSearchJob {
     private static final int TOTAL_SEARCH_LIMIT_WHEN_FF = 24;
     /** Extra peers to get from peer selector, as we may discard some before querying. */
     private static final int EXTRA_PEERS = 2;
+    /** Leading IP bytes counted as close. */
     private static final int IP_CLOSE_BYTES = 3;
     /**
      * Kademlia's beta: before a search may die with candidates exhausted,
@@ -281,6 +288,7 @@ public class IterativeSearchJob extends FloodSearchJob {
 
     /** Cache size for recently completed peer replies to avoid false positive bans. */
     private static final int COMPLETED_CACHE_SIZE = 8192;
+    /** Config key for the late reply grace period. */
     private static final String PROP_LATE_REPLY_GRACE = "netDb.lateReplyGracePeriod";
     /** Default grace period for late replies (5 min). */
     private static final long LATE_REPLY_GRACE_PERIOD_DEFAULT = 5L*60*1000;
@@ -298,6 +306,11 @@ public class IterativeSearchJob extends FloodSearchJob {
         _lateReplyGracePeriod = period;
         return period;
     }
+    /**
+     * Reads the grace period for late replies.
+     *
+     * @return the period, in ms
+     */
     private static long getGracePeriod() {
         return _lateReplyGracePeriod;
     }
@@ -314,6 +327,7 @@ public class IterativeSearchJob extends FloodSearchJob {
      * The default single search time.
      */
     private static final long SINGLE_SEARCH_TIME = 6L*1000;
+    /** Smallest single search time, in ms. */
     private static final long MIN_SINGLE_SEARCH_TIME = 1000;
 
     /** The actual expire time for a search message. */
@@ -422,7 +436,9 @@ public class IterativeSearchJob extends FloodSearchJob {
         this(ctx, facade, key, onFind, onFailed, timeoutMs, isLease, null);
     }
 
+    /** Tuner-set search limit, negative if unset. */
     private static volatile int _tunedSearchLimit = -1;
+    /** Tuner-set single search time, negative if unset. */
     private static volatile int _tunedSingleSearchTime = -1;
 
     /**

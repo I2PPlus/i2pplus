@@ -17,6 +17,7 @@ import org.klomp.snark.BandwidthGraph;
  */
 public final class DatagramSender {
 
+    /** Utility class, not intended for instantiation. */
     private DatagramSender() {}
 
     /**

@@ -37,9 +37,13 @@ import java.io.Serializable;
  * See http://i2p-projekt.i2p/spec/ssu2 for documentation.
  */
 class IntroductionManager {
+    /** The router context. */
     private final RouterContext _context;
+    /** Logger for the SSU introductions. */
     private final Log _log;
+    /** The SSU transport we serve. */
     private final UDPTransport _transport;
+    /** Builder for the SSU2 packets. */
     private final PacketBuilder2 _builder2;
     /** Map of relay tag to Charlie PeerState that should receive the introduction (we are Bob). */
     private final Map<Long, PeerState> _outbound;
@@ -47,9 +51,13 @@ class IntroductionManager {
     private final Map<Long, PeerState> _inbound;
     /** Map of relay nonce to Alice PeerState who requested it. */
     private final ConcurrentHashMap<Long, PeerState2> _nonceToAlice;
+    /** Hole punch nonces recently sent. */
     private final Set<Long> _recentHolePunches;
+    /** When the hole punch set was last cleaned. */
     private long _lastHolePunchClean;
+    /** Relay requests recently handled as Bob. */
     private final Map<Long, Object> _recentRelaysAsBob;
+    /** Placeholder value for the relay map. */
     private static final Object DUMMY = new Object();
 
     /**
@@ -64,10 +72,15 @@ class IntroductionManager {
      */
     public static final int MAX_OUTBOUND = 200;
 
+    /** Time an introducer stays valid. */
     private static final long INTRODUCER_EXPIRATION = 80*60*1000L;
+    /** First version supporting IPv6 introducers. */
     private static final String MIN_IPV6_INTRODUCER_VERSION = "0.9.50";
+    /** Maximum clock skew accepted in an introduction. */
     private static final long MAX_SKEW = 2*60*1000L;
+    /** Interval between hole punch cleanups. */
     private static final long PUNCH_CLEAN_TIME = 5*1000L;
+    /** Hole punches remembered at once. */
     private static final int MAX_PUNCHES = 20;
 
     /**
@@ -323,6 +336,8 @@ class IntroductionManager {
      */
     private static class PeerStateComparator implements Comparator<PeerState>, Serializable {
 
+        /** Orders peers by how recently they were introduced. */
+        private PeerStateComparator() {}
         public int compare(PeerState l, PeerState r) {
             long d = r.getKeyEstablishedTime() - l.getKeyEstablishedTime();
             if (d < 0)
@@ -338,8 +353,11 @@ class IntroductionManager {
      * @since 0.9.18
      */
     private static class Introducer implements Comparable<Introducer> {
+        /** Session tag of the introduction. */
         public final String stag;
+        /** Session key of the introduction. */
         public final String sexp;
+        /** Session hash of the introduction. */
         public final String shash;
 
         /**
@@ -649,6 +667,12 @@ class IntroductionManager {
         receiveRelayIntro(bob, alice, data, 0);
     }
 
+    /**
+     * Sends a relay reject when Bob is over the limit.
+     *
+     * @param bob Bob's peer state
+     * @param data the relay request data
+     */
     private void sendRelayRejectLimit(PeerState2 bob, byte[] data) {
         long nonce = DataHelper.fromLong(data, 0, 4);
         int rcode = SSU2Util.RELAY_REJECT_CHARLIE_LIMIT;
@@ -707,12 +731,24 @@ class IntroductionManager {
      * @since 0.9.55
      */
     private class DelayIntro extends SimpleTimer2.TimedEvent {
+        /** Bob's peer state being relayed through. */
         private final PeerState2 bob;
+        /** Alice's router hash. */
         private final Hash alice;
+        /** The relay request data. */
         private final byte[] data;
+        /** Relays sent for this request so far. */
         private volatile int count;
+        /** Delay between relay retries, in ms. */
         private static final long DELAY = 50;
 
+        /**
+         * Schedules a delayed introduction relay.
+         *
+         * @param b Bob's peer state
+         * @param a Alice's router hash
+         * @param d the relay request data
+         */
         public DelayIntro(PeerState2 b, Hash a, byte[] d) {
             super(_context.simpleTimer2());
             bob = b;
@@ -735,8 +771,15 @@ class IntroductionManager {
      * @since 0.9.57
      */
     private class DelaySend extends SimpleTimer2.TimedEvent {
+        /** The packet to send late. */
         private final UDPPacket pkt;
 
+        /**
+         * Schedules a delayed packet send.
+         *
+         * @param packet the packet to send
+         * @param delay how long to wait
+         */
         public DelaySend(UDPPacket packet, long delay) {
             super(_context.simpleTimer2());
             pkt = packet;

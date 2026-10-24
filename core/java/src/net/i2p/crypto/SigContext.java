@@ -29,10 +29,13 @@ public enum SigContext {
     /** Test context for development. */
     SC_TEST("test1234test5678");
 
+    /** The curve parameters this context uses. */
     private final SigContextSpec spec;
 
     /**
-     * The 16 bytes for this type, or null for none.
+     * Creates a context for the named signature type.
+     *
+     * @param p the name of the signature type
      */
     SigContext(String p) {
         spec = new SigContextSpec(p);
@@ -96,6 +99,7 @@ public enum SigContext {
      * @since 0.9.40
      */
     public static class SigContextSpec implements AlgorithmParameterSpec {
+        /** The context string as ASCII bytes, 16 of them. */
         private final byte[] b;
 
         /**

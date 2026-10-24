@@ -22,7 +22,9 @@ import net.i2p.router.RouterContext;
  * Stores through this class always request a reply.
  */
 class FloodfillStoreJob extends StoreJob {
+    /** Property turning on the check that a stored router info is valid. */
     private static final String PROP_RI_VERIFY = "router.verifyRouterInfoStore";
+    /** How long after startup the router info check is skipped - 90 minutes. */
     private static final long RI_VERIFY_STARTUP_TIME = 90 * 60 * 1000L;
 
     /** Length of Base32 key prefix for logging. */
@@ -30,6 +32,7 @@ class FloodfillStoreJob extends StoreJob {
     /** Length of Base64 key prefix for logging. */
     private static final int LOG_KEY_B64_LENGTH = 6;
 
+    /** The store the entry is saved to. */
     private final FloodfillNetworkDatabaseFacade _facade;
 
     /**

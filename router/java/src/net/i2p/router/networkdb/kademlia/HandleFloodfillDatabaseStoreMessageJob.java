@@ -51,17 +51,30 @@ import net.i2p.util.VersionComparator;
  * maintains detailed statistics for store operation performance and security.
  */
 class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
+    /** Logger for the floodfill store job. */
     private final Log _log;
+    /** Logs the misbehaving routers. */
     private final BanLogger _banLogger;
+    /** The store message being handled. */
     private final DatabaseStoreMessage _message;
+    /** The sender's router identity. */
     private final RouterIdentity _from;
+    /** The sender's hash, computed when needed. */
     private Hash _fromHash;
+    /** The floodfill network database. */
     private final FloodfillNetworkDatabaseFacade _facade;
+    /** Time allowed for the sender's reply. */
     private static final int REPLY_TIMEOUT = (int) (60L * 1000);
+    /** Send priority of the store replies. */
     private static final int MESSAGE_PRIORITY = OutNetMessage.PRIORITY_NETDB_REPLY;
-    // Must be lower than LIMIT_ROUTERS in StartExplorersJob because exploration does not register a reply job
+    /**
+     * Most routers the entry is sent to, lower than the explorers'
+     * limit since exploration registers no reply job.
+     */
     private static final int LIMIT_ROUTERS = SystemVersion.isSlow() ? 1000 : 4000;
+    /** The bloom filter XOR of the message ids. */
     private final long _msgIDBloomXor;
+    /** Delay before a reply is resent. */
     private static final int RESEND_DELAY = 500;
 
     /**
@@ -608,6 +621,11 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
         }
     }
 
+    /**
+     * Sends the store reply to the sender.
+     *
+     * @param storedKey the key that was stored
+     */
     private void sendAck(Hash storedKey) {
         DeliveryStatusMessage msg = new DeliveryStatusMessage(getContext());
         msg.setMessageId(_message.getReplyToken());

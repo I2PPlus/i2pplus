@@ -3,34 +3,60 @@ package com.mpatric.mp3agic;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 
+/** An ID3v1 tag of an MP3 file. */
 public class ID3v1Tag implements ID3v1 {
 
+    /** Length of a packed ID3v1 tag, in bytes. */
     public static final int TAG_LENGTH = 128;
 
+    /** Version string of a v1.0 tag. */
     private static final String VERSION_0 = "0";
+    /** Version string of a v1.1 tag. */
     private static final String VERSION_1 = "1";
+    /** Magic string at the start of the tag. */
     private static final String TAG = "TAG";
+    /** Offset of the title field. */
     private static final int TITLE_OFFSET = 3;
+    /** Length of the title field, in bytes. */
     private static final int TITLE_LENGTH = 30;
+    /** Offset of the artist field. */
     private static final int ARTIST_OFFSET = 33;
+    /** Length of the artist field, in bytes. */
     private static final int ARTIST_LENGTH = 30;
+    /** Offset of the album field. */
     private static final int ALBUM_OFFSET = 63;
+    /** Length of the album field, in bytes. */
     private static final int ALBUM_LENGTH = 30;
+    /** Offset of the year field. */
     private static final int YEAR_OFFSET = 93;
+    /** Length of the year field, in bytes. */
     private static final int YEAR_LENGTH = 4;
+    /** Offset of the comment field. */
     private static final int COMMENT_OFFSET = 97;
+    /** Length of the v1.0 comment field, in bytes. */
     private static final int COMMENT_LENGTH_V1_0 = 30;
+    /** Length of the v1.1 comment field, in bytes. */
     private static final int COMMENT_LENGTH_V1_1 = 28;
+    /** Offset of the v1.1 track marker byte. */
     private static final int TRACK_MARKER_OFFSET = 125;
+    /** Offset of the v1.1 track number byte. */
     private static final int TRACK_OFFSET = 126;
+    /** Offset of the genre byte. */
     private static final int GENRE_OFFSET = 127;
 
+    /** The track number, as text. */
     private String track = null;
+    /** The artist name. */
     private String artist = null;
+    /** The track title. */
     private String title = null;
+    /** The album name. */
     private String album = null;
+    /** The release year. */
     private String year = null;
+    /** The genre id, -1 if unset. */
     private int genre = -1;
+    /** The comment text. */
     private String comment = null;
 
     /**
@@ -48,6 +74,12 @@ public class ID3v1Tag implements ID3v1 {
         unpackTag(bytes);
     }
 
+    /**
+     * Reads the tag fields from the packed bytes.
+     *
+     * @param bytes the 128 packed tag bytes
+     * @throws NoSuchTagException if the bytes are not a tag
+     */
     private void unpackTag(byte[] bytes) throws NoSuchTagException {
         sanityCheckTag(bytes);
         title =
@@ -90,6 +122,12 @@ public class ID3v1Tag implements ID3v1 {
         }
     }
 
+    /**
+     * Checks the packed bytes are an ID3v1 tag.
+     *
+     * @param bytes the packed tag bytes
+     * @throws NoSuchTagException if the magic string is missing
+     */
     private void sanityCheckTag(byte[] bytes) throws NoSuchTagException {
         if (bytes.length != TAG_LENGTH) {
             throw new NoSuchTagException("Buffer length wrong");
@@ -117,6 +155,11 @@ public class ID3v1Tag implements ID3v1 {
         packTag(bytes);
     }
 
+    /**
+     * Writes the tag fields into the packed bytes.
+     *
+     * @param bytes the 128-byte buffer to fill
+     */
     public void packTag(byte[] bytes) {
         Arrays.fill(bytes, (byte) 0);
         try {
@@ -147,6 +190,14 @@ public class ID3v1Tag implements ID3v1 {
         }
     }
 
+    /**
+     * Writes one field into the packed bytes.
+     *
+     * @param bytes the buffer to fill
+     * @param value the field value, may be null
+     * @param maxLength the field length in bytes
+     * @param offset where the field starts
+     */
     private void packField(byte[] bytes, String value, int maxLength, int offset) {
         if (value != null) {
             try {
@@ -156,6 +207,12 @@ public class ID3v1Tag implements ID3v1 {
         }
     }
 
+    /**
+     * Keeps only the digits of a string.
+     *
+     * @param s the text to filter, may be null
+     * @return the digits only
+     */
     private String numericsOnly(String s) {
         StringBuilder stringBuffer = new StringBuilder();
         for (int i = 0; i < s.length(); i++) {

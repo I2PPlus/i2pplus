@@ -75,6 +75,7 @@ public class PrivateKeyFile {
 
     /** The key file. */
     protected final File file;
+    /** Client format whose version is recorded. */
     private final I2PClient client;
     /** The destination. */
     protected Destination dest;
@@ -82,11 +83,16 @@ public class PrivateKeyFile {
     protected PrivateKey privKey;
     /** The signing private key. */
     protected SigningPrivateKey signingPrivKey;
+    /** When the offline signing part expires, 0 for none. */
     private long _offlineExpiration;
+    /** Signature made by the offline key, if any. */
     private Signature _offlineSignature;
+    /** The transient private signing key. */
     private SigningPrivateKey _transientSigningPrivKey;
+    /** The transient public signing key. */
     private SigningPublicKey _transientSigningPubKey;
 
+    /** Random bytes stored in the padding section. */
     private static final int PADDING_ENTROPY = 32;
 
     /**
@@ -391,6 +397,7 @@ public class PrivateKeyFile {
         }
     }
 
+    /** Prints the command-line help. */
     private static void usage() {
         System.err.println("Usage: PrivateKeyFile filename (generates if nonexistent, then prints)\n"
                 + "\n"

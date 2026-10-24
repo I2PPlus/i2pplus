@@ -12,7 +12,9 @@ import java.util.Locale;
  */
 public class FileSuffixFilter implements FileFilter {
 
+    /** The name must start with this, or null. */
     private final String begin;
+    /** The name must end with this, or null. */
     private final String end;
 
     /**

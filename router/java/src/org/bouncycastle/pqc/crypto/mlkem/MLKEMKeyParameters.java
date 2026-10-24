@@ -9,6 +9,7 @@ import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
 public class MLKEMKeyParameters
     extends AsymmetricKeyParameter
 {
+    /** The parameter set this key belongs to. */
     private MLKEMParameters params;
 
     /**

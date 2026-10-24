@@ -185,13 +185,24 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     private static I2PSocketManager socketManager;
 
     /**
-     * Only destroy and replace a static shared client socket manager if it's been connected before.
+     * Whether the shared client socket manager has been connected at least
+     * once. Only destroy and replace a static shared client socket manager
+     * if it's been connected before.
+     *
      * @since 0.9.20
      */
-    private enum SocketManagerState { INIT, CONNECTED }
-    /** Socket manager state. */
+    /**
+     * The state of the shared socket manager.
+     */
+    private enum SocketManagerState {
+        /** Not connected yet. */
+        INIT,
+        /** Connected and usable. */
+        CONNECTED
+    }
+    /** Whether this router's shared socket manager has connected yet. */
     private static SocketManagerState socketManagerState = SocketManagerState.INIT;
-    /** Property for SSL enable. */
+    /** Property turning on SSL between the proxy and the client. */
     public static final String PROP_USE_SSL = I2PTunnelServer.PROP_USE_SSL;
 
     /**
@@ -457,7 +468,9 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         return buildSocketManager(tunnel, null);
     }
 
+    /** Pause before retrying a failed tunnel: 15 seconds. */
     private static final int RETRY_DELAY = 15*1000;
+    /** Most tunnel rebuild attempts before giving up. */
     private static final int MAX_RETRIES = 50;
 
     /**
@@ -661,6 +674,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         startup();
     }
 
+    /** Opens the tunnel and starts the socket manager. */
     private void startup() {
         I2PTunnel tun = getTunnel();
         if (tun == null) {
@@ -1554,7 +1568,13 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * Blocking runner, used during the connection establishment.
      */
     private class BlockingRunner implements Runnable {
+        /** The client socket being served. */
         private final Socket _s;
+        /**
+         * Copies bytes between one client socket and the tunnel.
+         *
+         * @param s the client socket to serve
+         */
         public BlockingRunner(Socket s) { _s = s; }
         @Override
         public void run() {

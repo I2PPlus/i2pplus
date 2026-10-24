@@ -18,6 +18,7 @@ public class DestLookupMessage extends I2CPMessageImpl {
      * I2CP message type code for a destination lookup request.
      */
     public static final int MESSAGE_TYPE = 34;
+    /** The destination being looked up. */
     private Hash _hash;
 
     /**

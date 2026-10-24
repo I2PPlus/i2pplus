@@ -45,12 +45,14 @@ import net.i2p.util.SocketTimeout;
  *
  */
 public class I2PSocketEepGet extends EepGet {
+    /** The manager used to open the connection. */
     private final I2PSocketManager _socketManager;
     /** This replaces _proxy in the superclass. Sadly, I2PSocket does not extend Socket. */
     private I2PSocket _socket;
 
     /** From ConnectionOptions. */
     private static final String PROP_CONNECT_DELAY = "i2p.streaming.connectDelay";
+    /** Default milliseconds to wait before connecting */
     private static final String CONNECT_DELAY = "500";
 
     /**

@@ -26,16 +26,24 @@ import net.metanotion.io.RandomAccessInterface;
  * </pre>
  */
 class FreeListBlock {
+/** Magic tag of a free list block, "#frList#". */
 private static final long MAGIC = 0x2366724c69737423L;  // "#frList#"
+    /** Magic tag of a freed block, "~!FREE!~". */
     private static final long MAGIC_FREE = 0x7e2146524545217eL;  // "~!FREE!~"
+    /** Header size of the block, in bytes. */
     private static final int HEADER_LEN = 16;
+    /** Most free pages one block holds. */
     private static final int MAX_SIZE = (BlockFile.PAGESIZE - HEADER_LEN) / 4;
 
     /** Page number of this free list block. */
     public final int page;
+    /** The next block in the free list chain. */
     private int nextPage;
+    /** Free pages held in this block. */
     private int len;
+    /** The free pages stored in this block. */
     private final int[] branches;
+    /** The file the block is read and written through. */
     private final RandomAccessInterface file;
 
     /**
@@ -201,11 +209,24 @@ private static final long MAGIC = 0x2366724c69737423L;  // "#frList#"
         return rv;
     }
 
+    /**
+     * Marks the free block as freed.
+     *
+     * @param freePage the page to mark
+     * @throws IOException if the writing fails
+     */
     private void markFree(int freePage) throws IOException {
         BlockFile.pageSeek(file, freePage);
         file.writeLong(MAGIC_FREE);
     }
 
+    /**
+     * Reads the magic tag of the block.
+     *
+     * @param freePage the page to read
+     * @return the magic tag
+     * @throws IOException if the reading fails
+     */
     private long getMagic(int freePage) throws IOException {
         BlockFile.pageSeek(file, freePage);
         long magic = file.readLong();

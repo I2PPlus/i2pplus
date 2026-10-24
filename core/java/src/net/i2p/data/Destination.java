@@ -86,8 +86,11 @@ public class Destination extends KeysAndCert {
     /** Cached b64. */
     private String _cachedB64;
 
+    /** Number of destinations cached, sized from free memory. */
     private static final int CACHE_SIZE;
+    /** Smallest destination cache allowed. */
     private static final int MIN_CACHE_SIZE = 32;
+    /** Largest destination cache allowed. */
     private static final int MAX_CACHE_SIZE = 512;
 
     static {
@@ -95,6 +98,7 @@ public class Destination extends KeysAndCert {
         CACHE_SIZE = (int) Math.min(MAX_CACHE_SIZE, Math.max(MIN_CACHE_SIZE, maxMemory / 512 * 1024));
     }
 
+    /** Destinations by signing key. */
     private static final Map<SigningPublicKey, Destination> _cache = new LHMCache<>(CACHE_SIZE);
 
     /**
@@ -152,6 +156,10 @@ public class Destination extends KeysAndCert {
     /**
      * Creates a destination from its components.
      *
+     * @param pk the encryption public key
+     * @param sk the signing public key
+     * @param c the certificate type, usually null
+     * @param padding the lease key padding
      * @since 0.9.9
      */
     private Destination(PublicKey pk, SigningPublicKey sk, Certificate c, byte[] padding) {
@@ -259,8 +267,8 @@ public class Destination extends KeysAndCert {
     }
 
     /**
-     * Whether h code is present.
-     * @return whether h code is present
+     * Hash code of this destination.
+     * @return the signing key's hash code, or 0 if there is none
      */
     @Override
     public int hashCode() {

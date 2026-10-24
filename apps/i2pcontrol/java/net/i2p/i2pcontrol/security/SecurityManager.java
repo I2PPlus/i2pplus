@@ -36,10 +36,15 @@ public class SecurityManager {
      * Seed password stored when no auth.password has been configured yet.
      */
     public final static String DEFAULT_AUTH_PASSWORD = "itoopie";
+    /** Live tokens, by token string. */
     private final HashMap<String, AuthToken> authTokens;
+    /** Expires the tokens as they age out. */
     private final SimpleTimer2.TimedEvent timer;
+    /** Logger for this class. */
     private final Log _log;
+    /** Supplies the configured passwords. */
     private final ConfigurationManager _conf;
+    /** The context the manager runs in. */
     private final I2PAppContext _context;
 
     /**

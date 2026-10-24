@@ -40,11 +40,16 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class SyntheticREDQueue implements BandwidthEstimator {
 
+    /** Largest drop probability used. */
     private static volatile float _maxDropProbability = 0.005f;
+    /** Divisor of the queue size decay. */
     private static final int DECAY_FACTOR = 8;
+    /** Smallest round trip time assumed, in ms. */
     private static final int WESTWOOD_RTT_MIN = 50; // ms
 
+    /** Divisor giving the low queue threshold. */
     private static final int DEFAULT_LOW_THRESHOLD_DIV = 4;
+    /** Divisor giving the high queue threshold. */
     private static final int DEFAULT_HIGH_THRESHOLD_DIV = 2;
 
     /** Active instances for dynamic tuning — weak refs prevent leak when tunnels expire. */
@@ -170,24 +175,40 @@ public class SyntheticREDQueue implements BandwidthEstimator {
         return result;
     }
 
+    /** The app context. */
     private final I2PAppContext _context;
+    /** Logger for the queue. */
     private final Log _log;
+    /** Random source for the drop decisions. */
     private final Random _random;
 
+    /** When the last ack was received. */
     private volatile long _lastAckTime;
+    /** Filtered bandwidth-delay estimate. */
     private volatile float _bKFiltered;
+    /** Unsmoothed bandwidth-delay estimate. */
     private float _bKNonSmoothed;
+    /** Bytes acknowledged in the current period. */
     private volatile int _bytesAcked;
 
+    /** Packets dropped since the last ack, -1 if none. */
     private int _dropCount = -1;
+    /** Average queue size estimate. */
     private volatile float _avgQueueSize;
+    /** Current queue size estimate. */
     private float _queueSizeEstimate;
+    /** Bytes queued but not sent yet. */
     private int _newDataSize;
+    /** When the queue estimate was last updated. */
     private volatile long _lastQueueUpdateTime;
 
+    /** Queue size where dropping starts. */
     private int _minThresholdBytes;
+    /** Queue size where dropping is certain. */
     private int _maxThresholdBytes;
+    /** The link bandwidth, in bytes per second. */
     private final int _bandwidthBps;
+    /** The link bandwidth, in bytes per ms. */
     private final float _bandwidthBytesPerMs;
 
     /**

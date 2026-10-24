@@ -2,19 +2,39 @@ package com.mpatric.mp3agic;
 
 import java.io.UnsupportedEncodingException;
 
+/** The URL held by a WWW frame. */
 public class ID3v2WWWFrameData extends AbstractID3v2FrameData {
 
+    /** The frame's URL. */
     protected String url;
 
+    /**
+     * Creates an empty WWW frame.
+     *
+     * @param unsynchronisation whether the frame uses unsynchronisation
+     */
     public ID3v2WWWFrameData(boolean unsynchronisation) {
         super(unsynchronisation);
     }
 
+    /**
+     * Creates a WWW frame with a given URL.
+     *
+     * @param unsynchronisation whether the frame uses unsynchronisation
+     * @param url the frame's URL
+     */
     public ID3v2WWWFrameData(boolean unsynchronisation, String url) {
         super(unsynchronisation);
         this.url = url;
     }
 
+    /**
+     * Reads a WWW frame from frame bytes.
+     *
+     * @param unsynchronisation whether the frame uses unsynchronisation
+     * @param bytes the frame contents to parse
+     * @throws InvalidDataException if the frame data is corrupt
+     */
     public ID3v2WWWFrameData(boolean unsynchronisation, byte[] bytes) throws InvalidDataException {
         super(unsynchronisation);
         synchroniseAndUnpackFrameData(bytes);
@@ -47,10 +67,20 @@ public class ID3v2WWWFrameData extends AbstractID3v2FrameData {
         return length;
     }
 
+    /**
+     * Reads the frame's URL.
+     *
+     * @return the URL, null if unset
+     */
     public String getUrl() {
         return url;
     }
 
+    /**
+     * Sets the frame's URL.
+     *
+     * @param url the URL to hold
+     */
     public void setUrl(String url) {
         this.url = url;
     }

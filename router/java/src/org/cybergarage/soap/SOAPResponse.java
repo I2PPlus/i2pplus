@@ -74,10 +74,20 @@ public class SOAPResponse extends HTTPResponse {
 
     private Node rootNode;
 
+    /**
+     * Sets the SOAP body's root node.
+     *
+     * @param node the new root node
+     */
     private void setRootNode(Node node) {
         rootNode = node;
     }
 
+    /**
+     * The SOAP body's root node.
+     *
+     * @return the root node
+     */
     private Node getRootNode() {
         return rootNode;
     }
@@ -226,7 +236,6 @@ public class SOAPResponse extends HTTPResponse {
      * @param node the XML node to set as content
      */
     public void setContent(Node node) {
-        // Thanks for Ralf G. R. Bergs <Ralf@Ber.gs>, Inma Marin Lopez <inma@dif.um.es>.
         String conStr = "";
         conStr += SOAP.VERSION_HEADER;
         conStr += "\n";

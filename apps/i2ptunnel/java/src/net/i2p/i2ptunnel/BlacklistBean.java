@@ -27,8 +27,11 @@ public class BlacklistBean {
     /** Creates an empty blacklist bean. */
     public BlacklistBean() {}
 
+    /** Logger for this class. */
     private static final Log _log = new Log(BlacklistBean.class);
+    /** The blacklist text, one entry per line. */
     private String content;
+    /** Splits the blacklist text at line breaks. */
     private static final Pattern NEWLINE_SPLIT = Pattern.compile("\\n");
 
     /**

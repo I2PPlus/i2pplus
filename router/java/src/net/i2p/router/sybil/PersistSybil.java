@@ -39,13 +39,20 @@ import net.i2p.util.SecureFileOutputStream;
  */
 public class PersistSybil {
 
+    /** The router the analysis runs on. */
     private final I2PAppContext _context;
+    /** Logger for this class. */
     private final Log _log;
 
+    /** Directory the analysis data is kept in. */
     private static final String SDIR = "sybil-analysis";
+    /** Subdirectory the result files are written to. */
     private static final String DIR = SDIR + "/results";
+    /** Start of a result file name. */
     private static final String PFX = "sybil-";
+    /** End of a result file name. */
     private static final String SFX = ".txt.gz";
+    /** File naming the routers blocked as sybils. */
     private static final String BLOCKLIST_SYBIL_FILE = "blocklist-sybil.txt";
 
     /**

@@ -34,10 +34,14 @@ public class Clock implements Timestamper.UpdateListener {
     protected volatile long _offset;
     /** Whether the offset has ever been changed. */
     protected boolean _alreadyChanged;
+    /** Notified when the clock is reconfigured. */
     private final Set<ClockUpdateListener> _listeners;
 
+    /** How many times the clock has been reconfigured. */
     private AtomicInteger _iter = new AtomicInteger(0);
+    /** How often the clock is reconfigured, in ms. */
     private AtomicInteger _frequency = new AtomicInteger(0);
+    /** Last time read from the saved clock file. */
     private AtomicLong _savedTime = new AtomicLong(0);
 
     /**
@@ -76,9 +80,9 @@ public class Clock implements Timestamper.UpdateListener {
     }
 
     /**
-     * Global clock instance.
+     * Shared clock for code without a router context.
      *
-     * @return the global clock instance
+     * @return the clock of the global context, never null
      */
     public static Clock getInstance() {
         return I2PAppContext.getGlobalContext().clock();

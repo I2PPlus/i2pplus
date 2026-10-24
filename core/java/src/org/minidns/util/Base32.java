@@ -15,7 +15,9 @@ package org.minidns.util;
  * Provides basic Base32 encoding functionality using Base32 alphabet with padding.
  */
 public final class Base32 {
+    /** The 32 characters used as digits */
     private static final String ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUV";
+    /** Padding appended to reach a whole quantum. */
     private static final String PADDING = "======";
 
     /**

@@ -6,14 +6,20 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+/** An ID3v2 popularimeter frame, a play rating. */
 public class ID3v2PopmFrameData extends AbstractID3v2FrameData {
 
+    /** Address marking the WMP9 rating encoding. */
     protected static final String WMP9_ADDRESS = "Windows Media Player 9 Series";
 
+    /** The player address that recorded the rating. */
     protected String address = "";
+    /** The rating from 0 to 255, negative if none. */
     protected int rating = -1;
 
+    /** The WMP9 rating bytes mapped to 0 to 255. */
     private static final Map<Byte, Integer> byteToRating = new HashMap<>(5);
+    /** The WMP9 rating bytes in ascending order. */
     private static final byte[] wmp9encodedRatings = {
         (byte) 0x00, (byte) 0x01, (byte) 0x40, (byte) 0x80, (byte) 0xC4, (byte) 0xFF
     };
@@ -24,11 +30,24 @@ public class ID3v2PopmFrameData extends AbstractID3v2FrameData {
         }
     }
 
+    /**
+     * Builds a popularimeter frame from the frame bytes.
+     *
+     * @param unsynchronisation true for the unsynchronisation scheme
+     * @param bytes the raw frame bytes
+     * @throws InvalidDataException if the frame data is invalid
+     */
     public ID3v2PopmFrameData(boolean unsynchronisation, byte[] bytes) throws InvalidDataException {
         super(unsynchronisation);
         synchroniseAndUnpackFrameData(bytes);
     }
 
+    /**
+     * Builds a WMP9 popularimeter frame with a rating.
+     *
+     * @param unsynchronisation true for the unsynchronisation scheme
+     * @param rating the rating from 0 to 255
+     */
     public ID3v2PopmFrameData(boolean unsynchronisation, int rating) {
         super(unsynchronisation);
         this.address = WMP9_ADDRESS;
@@ -59,18 +78,38 @@ public class ID3v2PopmFrameData extends AbstractID3v2FrameData {
         return bytes;
     }
 
+    /**
+     * Returns the player address of the rating.
+     *
+     * @return the player's address
+     */
     public String getAddress() {
         return address;
     }
 
+    /**
+     * Sets the player address of the rating.
+     *
+     * @param address the address to set
+     */
     public void setAddress(String address) {
         this.address = address;
     }
 
+    /**
+     * Returns the rating of the frame.
+     *
+     * @return the rating from 0 to 255
+     */
     public int getRating() {
         return rating;
     }
 
+    /**
+     * Sets the rating of the frame.
+     *
+     * @param rating the rating from 0 to 255
+     */
     public void setRating(int rating) {
         this.rating = rating;
     }

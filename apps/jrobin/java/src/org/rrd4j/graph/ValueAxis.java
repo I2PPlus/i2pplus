@@ -11,6 +11,7 @@ import org.rrd4j.core.Util;
  * with automatic tick placement. Supports linear, logarithmic, and MRTG-style axis formatting.
  */
 class ValueAxis extends Axis {
+    /** Names of the axes that can be labelled. */
     private static final YLabel[] ylabels = {
         new YLabel(0.1, 1, 2, 5, 10),
         new YLabel(0.2, 1, 5, 10, 20),
@@ -33,9 +34,13 @@ class ValueAxis extends Axis {
         new YLabel(100000.0, 1, 2, 5, 10),
         new YLabel(0.0, 0, 0, 0, 0)
     };
+    /** Where the axis is drawn. */
     private final ImageParameters im;
+    /** The worker drawing the graph. */
     private final ImageWorker worker;
+    /** The graph being drawn. */
     private final RrdGraphDef gdef;
+    /** Maps data values to pixels. */
     private final Mapper mapper;
 
     /**
@@ -64,7 +69,7 @@ class ValueAxis extends Axis {
     }
     /**
      * True if axis labels were drawn.
-     * @return true if axis labels were drawn
+     * @return true if labels were drawn, false for a NaN range
      */
     boolean draw() {
         Font font = gdef.getFont(FONTTAG_AXIS);
@@ -323,8 +328,8 @@ class ValueAxis extends Axis {
     }
 
     /**
-     * Scaled range.
-     * @return the scaled range
+     * The axis range in scaled units.
+     * @return maxval minus minval, divided by the magnitude factor
      */
     private double getScaledRange() {
         double range = im.maxval - im.minval;

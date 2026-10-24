@@ -19,7 +19,9 @@ public class RrdGraphInfo {
     Supplier<Integer> bytesCount;
     /** The image information comment carried through from the graph definition. */
     String imgInfo;
+    /** The lines produced by the print option */
     private final List<String> printLines = new ArrayList<>();
+    /** The graph's metadata. */
     private RrdGraphMeta meta;
 
     /** Prevent instantiation */

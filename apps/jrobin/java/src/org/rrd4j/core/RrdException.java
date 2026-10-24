@@ -9,6 +9,7 @@ import java.io.IOException;
  */
 public class RrdException extends IOException {
 
+    /** Pinned for serialized-form compatibility. */
     private static final long serialVersionUID = 1L;
 
     /**

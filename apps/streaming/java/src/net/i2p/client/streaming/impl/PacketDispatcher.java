@@ -87,11 +87,17 @@ class PacketDispatcher {
      */
     private final ReentrantReadWriteLock _lock = new ReentrantReadWriteLock();
 
+    /** Most packets in the dispatcher queue. */
     private final int _queueCapacity;
+    /** The processor handling the packets. */
     private final PacketProcessor _processor;
+    /** The app context. */
     private final I2PAppContext _context;
+    /** The log for the dispatcher. */
     private final Log _log;
+    /** The threads processing the packets. */
     private volatile Worker[] _workers;
+    /** True while the dispatcher runs. */
     private volatile boolean _running = true;
 
     /**
@@ -290,8 +296,11 @@ class PacketDispatcher {
 
     /** One worker drains its own bounded queue; started in the dispatcher ctor. */
     class Worker extends Thread {
+        /** The packets waiting for this worker. */
         private final LinkedBlockingQueue<Entry> _queue;
+        /** The processor handling the packets. */
         private final PacketProcessor _processor;
+        /** The app context. */
         private final I2PAppContext _context;
         /** Entries currently inside process(); read by resize to prove idle. */
         volatile int _busy;

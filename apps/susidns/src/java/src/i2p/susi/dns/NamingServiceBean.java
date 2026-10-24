@@ -50,12 +50,19 @@ public class NamingServiceBean extends AddressbookBean {
      */
     public NamingServiceBean() {}
 
+    /** Logger for this class. */
     private static final Log _log = new Log(NamingServiceBean.class);
+    /** Naming service used when none is configured. */
     private static final String DEFAULT_NS = "BlockfileNamingService";
+    /** Detail line shown for the service on the page. */
     private String detail;
+    /** Notes shown for the service on the page. */
     private String notes;
+    /** True if the lookup through this service failed. */
     private boolean fail = false;
+    /** How many found entries the blacklist removed. */
     private int filteredCount;
+    /** The entries that survived filtering. */
     private AddressBean[] fullFilteredEntries;
 
     /** True when the last load applied skip/limit server-side; total is then {@link #totalSize()}. */

@@ -55,6 +55,7 @@ public class PluginStarter implements Runnable {
      * The router context the plugins are started in.
      */
     protected RouterContext _context;
+    /** File listing the enabled plugins. */
     private static final String CONFIG_FILE = "plugins.config";
     /**
      * Prefix of every plugin property key.
@@ -73,14 +74,20 @@ public class PluginStarter implements Runnable {
      * Directory under the router base holding the installed plugins.
      */
     public static final String PLUGIN_DIR = "plugins";
+    /** The webapps that ship with the router. */
     private static final String[] STANDARD_WEBAPPS = { "i2psnark", "i2ptunnel", "imagegen", "susidns",
                                                        "susimail", "addressbook", "routerconsole" };
+    /** The themes that ship with the router. */
     private static final String[] STANDARD_THEMES = { "images", "light", "dark", "classic",
                                                       "midnight" };
+    /** The thread groups, by plugin name. */
     private static Map<String, ThreadGroup> pluginThreadGroups = new ConcurrentHashMap<>();   // one thread group per plugin (map key=plugin name)
+    /** Delayed clients waiting for their plugins. */
     private static Map<String, Collection<SimpleTimer2.TimedEvent>> _pendingPluginClients =
                    new ConcurrentHashMap<>();
+    /** The cached class loaders, by plugin name. */
     private static Map<String, ClassLoader> _clCache = new ConcurrentHashMap<>();
+    /** The webapps each plugin provides. */
     private static Map<String, Collection<String>> pluginWars = new ConcurrentHashMap<>();
 
     /**
@@ -167,6 +174,7 @@ public class PluginStarter implements Runnable {
      * @since 0.8.13
      */
     private static class PluginUpdater implements Runnable {
+        /** The router context. */
         private final RouterContext _ctx;
 
         /**
@@ -364,10 +372,27 @@ public class PluginStarter implements Runnable {
             storePluginProperties(props);
     }
 
-    @SuppressWarnings("deprecation")
     /**
      * Reject a plugin with incompatible requirements: log, disable, and throw.
+     *
+     * @param log the plugin's logger
+     * @param ctx the router context
+     * @param appName the plugin directory name
+     * @param detail the technical reason for the log
+     * @param userMessage the message for the thrown exception
+     * @throws Exception always, carrying the user message
      * @since 0.9.71+
+     */
+    @SuppressWarnings("deprecation")
+    /**
+     * Logs and reports a plugin that cannot run.
+     *
+     * @param log the log to record the error in
+     * @param ctx the router context
+     * @param appName the name of the plugin
+     * @param detail why the plugin is incompatible
+     * @param userMessage the message to show the user
+     * @throws Exception always, carrying the user message
      */
     private static void pluginIncompatible(Log log, RouterContext ctx, String appName,
                                            String detail, String userMessage) throws Exception {
@@ -1066,8 +1091,21 @@ public class PluginStarter implements Runnable {
      * @since 0.9.6
      */
     private static class TrackedDelayedClient extends LoadClientAppsJob.DelayedRunClient {
+        /** The plugin that started the client. */
         private final String _pluginName;
 
+        /**
+         * Builds a delayed client tracked to its plugin.
+         *
+         * @param pluginName the plugin that started the client
+         * @param pool the timer pool to schedule on
+         * @param enclosingContext the router context
+         * @param className the client class to run
+         * @param clientName the name of the client
+         * @param args the arguments for the client
+         * @param threadGroup the group for the client's threads
+         * @param cl the plugin's class loader
+         */
         public TrackedDelayedClient(String pluginName,
                                     SimpleTimer2 pool, RouterContext enclosingContext, String className, String clientName,
                                     String[] args, ThreadGroup threadGroup, ClassLoader cl) {

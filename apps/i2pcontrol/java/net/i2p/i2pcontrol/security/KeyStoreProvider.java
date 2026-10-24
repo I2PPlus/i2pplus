@@ -45,7 +45,9 @@ public class KeyStoreProvider {
      * Password protecting the I2PControl key store.
      */
     public static final String DEFAULT_KEYSTORE_PASSWORD = KeyStoreUtil.DEFAULT_KEYSTORE_PASSWORD;
+    /** Logger for this class. */
     private static final Log _log = new Log(KeyStoreProvider.class);
+    /** Password used for generated certificates, set once at startup. */
     private static String DEFAULT_CERTIFICATE_PASSWORD;
 
     static {
@@ -66,7 +68,9 @@ public class KeyStoreProvider {
     public static String getCertificatePassword() {
         return DEFAULT_CERTIFICATE_PASSWORD;
     }
+    /** Directory plugins are installed in. */
     private final String _pluginDir;
+    /** The keystore, opened on first use. */
     private KeyStore _keystore;
 
     /**

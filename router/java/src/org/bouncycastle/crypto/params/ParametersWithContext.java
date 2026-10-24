@@ -10,7 +10,9 @@ import org.bouncycastle.util.Util;
 public class ParametersWithContext
     implements CipherParameters
 {
+    /** The parameters being wrapped. */
     private CipherParameters  parameters;
+    /** The context bytes mixed into the operation. */
     private byte[] context;
 
     /**

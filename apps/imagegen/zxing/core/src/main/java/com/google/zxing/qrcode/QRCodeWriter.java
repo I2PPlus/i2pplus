@@ -42,6 +42,7 @@ public final class QRCodeWriter implements Writer {
    */
   public QRCodeWriter() {}
 
+  /** Blank modules left around the symbol */
   private static final int QUIET_ZONE_SIZE = 4;
 
   @Override
@@ -86,8 +87,17 @@ public final class QRCodeWriter implements Writer {
     return renderResult(code, width, height, quietZone);
   }
 
-  // Note that the input matrix uses 0 == white, 1 == black, while the output matrix uses
-  // 0 == black, 255 == white (i.e. an 8 bit greyscale bitmap).
+  /**
+   * Renders the QR code as a bit matrix, padding with the quiet zone. Note
+   * that the input matrix uses 0 == white, 1 == black, while the output
+   * matrix uses 0 == black, 255 == white (i.e. an 8 bit greyscale bitmap).
+   *
+   * @param code the QR code to render
+   * @param width the requested width, in modules
+   * @param height the requested height, in modules
+   * @param quietZone the quiet zone width, in modules
+   * @return the rendered bit matrix
+   */
   private static BitMatrix renderResult(QRCode code, int width, int height, int quietZone) {
     ByteMatrix input = code.getMatrix();
     if (input == null) {

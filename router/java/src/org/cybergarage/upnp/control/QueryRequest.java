@@ -91,6 +91,12 @@ public class QueryRequest extends ControlRequest {
     //	Contents
     ////////////////////////////////////////////////
 
+    /**
+     * Builds the response content node with the variable's value.
+     *
+     * @param stateVar the state variable being queried
+     * @return the content node
+     */
     private Node createContentNode(StateVariable stateVar) {
         Node queryVarNode = new Node();
         queryVarNode.setName(Control.NS, Control.QUERY_STATE_VARIABLE);

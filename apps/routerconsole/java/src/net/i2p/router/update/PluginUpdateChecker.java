@@ -24,7 +24,9 @@ import net.i2p.util.PortMapper;
  * @since 0.7.12
  */
 class PluginUpdateChecker extends UpdateRunner {
+    /** Name of the plugin being checked. */
     private final String _appName;
+    /** Version currently installed. */
     private final String _oldVersion;
 
     /**

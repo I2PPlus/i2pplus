@@ -29,8 +29,10 @@ public final class RrdLog {
         void log(String severity, String message, Throwable cause);
     }
 
+    /** Where the messages go, installed once. */
     private static volatile Delegate _delegate;
 
+    /** Utility class, not intended for instantiation. */
     private RrdLog() {}
 
     /**
@@ -80,6 +82,13 @@ public final class RrdLog {
         log("error", message, cause);
     }
 
+    /**
+     * Passes one message to the installed delegate.
+     *
+     * @param severity the level name
+     * @param message the text to log
+     * @param cause the exception, or null
+     */
     private static void log(String severity, String message, Throwable cause) {
         Delegate d = _delegate;
         if (d == null) {

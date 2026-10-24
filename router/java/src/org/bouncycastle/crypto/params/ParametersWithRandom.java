@@ -11,7 +11,9 @@ import org.bouncycastle.crypto.CryptoServicesRegistrar;
 public class ParametersWithRandom
     implements CipherParameters
 {
+    /** The random the operation should use. */
     private SecureRandom        random;
+    /** The parameters being wrapped. */
     private CipherParameters    parameters;
 
     /**

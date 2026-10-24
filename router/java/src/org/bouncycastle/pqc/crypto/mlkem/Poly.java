@@ -6,12 +6,18 @@ package org.bouncycastle.pqc.crypto.mlkem;
  */
 class Poly
 {
+    /** The polynomial coefficients, one per ring element. */
     private short[] coeffs;
+    /** The engine whose Kyber parameters this polynomial uses. */
     private MLKEMEngine engine;
+    /** Bytes one compressed polynomial takes in the encoding. */
     private int polyCompressedBytes;
+    /** Noise bound eta1, used when generating secret polynomials. */
     private int eta1;
+    /** Noise bound eta2, used for rounding noise. */
     private int eta2;
 
+    /** The engine's hash and PRF primitives. */
     private Symmetric symmetric;
 
     /**

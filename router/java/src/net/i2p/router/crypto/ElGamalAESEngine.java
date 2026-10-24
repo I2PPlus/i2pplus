@@ -36,12 +36,17 @@ import net.i2p.util.SimpleByteCache;
  * @since 0.9.38 moved from net.i2p.crypto
  */
 public final class ElGamalAESEngine {
+    /** Logger for this class. */
     private final Log _log;
+    /** Smallest possible encrypted result, in bytes. */
     private static final int MIN_ENCRYPTED_SIZE = 80; // smallest possible resulting size
+    /** The context supplying the random. */
     private final I2PAppContext _context;
     /** Enforced since release 0.6. */
     public static final int MAX_TAGS_RECEIVED = 200;
+    /** Payload length a single ElGamal block can carry, in bytes. */
     private static final int ELG_CLEARTEXT_LENGTH = 222;
+    /** Length of one encrypted ElGamal block, in bytes. */
     private static final int ELG_ENCRYPTED_LENGTH = 514;
     /**
      * Creates engine with given context and initializes crypto frequency stats.

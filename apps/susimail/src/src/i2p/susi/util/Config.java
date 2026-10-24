@@ -19,8 +19,11 @@ public class Config {
     /** Creates an empty config. */
     public Config() {}
 
+	/** Defaults shipped with the webmail. */
 	private static Properties properties;
+	/** Values the user has set. */
 	private static Properties config;
+	/** Prefix naming this component's properties. */
 	private static String configPrefix;
 
 	/**
@@ -30,8 +33,7 @@ public class Config {
 	 * @param name the property name (prefix will be added if set)
 	 * @return the property value, or null if not found
 	 */
-	public synchronized static String getProperty( String name )
-	{
+	public synchronized static String getProperty( String name ) {
 		if( configPrefix != null )
 			name = configPrefix + name;
 
@@ -72,8 +74,7 @@ public class Config {
 	 * Reload the configuration from the properties resource and the
 	 * susimail.config file in the config directory.
 	 */
-	public synchronized static void reloadConfiguration()
-	{
+	public synchronized static void reloadConfiguration() {
 		I2PAppContext ctx = I2PAppContext.getGlobalContext();
 		properties = new Properties();
 		InputStream iv = null;
@@ -159,8 +160,7 @@ public class Config {
 	 * @param defaultValue the value to return if the property is not found
 	 * @return the property value, or defaultValue if not found
 	 */
-	public synchronized static String getProperty( String name, String defaultValue )
-	{
+	public synchronized static String getProperty( String name, String defaultValue ) {
 		String result = getProperty( name );
 		return result != null ? result : defaultValue;
 	}
@@ -172,8 +172,7 @@ public class Config {
 	 * @param defaultValue the value to return if the property is not found or not a valid integer
 	 * @return the property value as an integer, or defaultValue
 	 */
-	public synchronized static int getProperty( String name, int defaultValue )
-	{
+	public synchronized static int getProperty( String name, int defaultValue ) {
 		int result = defaultValue;
 
 		String str = getProperty( name );
@@ -196,8 +195,7 @@ public class Config {
 	 *
 	 * @param prefix the prefix to prepend to property names
 	 */
-	public synchronized static void setPrefix( String prefix )
-	{
+	public synchronized static void setPrefix( String prefix ) {
 		configPrefix = prefix.endsWith( "." ) ? prefix : prefix + ".";
 	}
 }

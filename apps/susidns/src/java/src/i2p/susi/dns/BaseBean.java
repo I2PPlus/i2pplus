@@ -33,17 +33,27 @@ public class BaseBean {
     protected String serial;
     /** The HTTP method. */
     protected String method;
+    /** When the config file was last loaded. */
     private long configLastLoaded;
+    /** Config key of the private address book. */
     private static final String PRIVATE_BOOK = "private_addressbook";
+    /** Default path of the private address book. */
     private static final String DEFAULT_PRIVATE_BOOK = "../privatehosts.txt";
+    /** Router console key of the theme name. */
     private static final String RC_PROP_THEME_NAME = "routerconsole.theme";
+    /** Addressbook key of the theme name. */
     private static final String PROP_THEME_NAME = "theme";
+    /** The theme used by default. */
     private static final String DEFAULT_THEME = "dark";
+    /** Base path of the theme files. */
     private static final String BASE_THEME_PATH = "/themes/susidns/";
     /** Property for password enable. */
     public static final String PROP_PW_ENABLE = "routerconsole.auth.enable";
+    /** Config key enabling the Sora font. */
     private static final String RC_PROP_ENABLE_SORA_FONT = "routerconsole.displayFontSora";
+    /** Directory holding the addressbook files. */
     private static final String ADDRESSBOOK_DIR = "addressbook";
+    /** Name of the addressbook config file. */
     private static final String CONFIG_FILE = "config.txt";
 
     /**

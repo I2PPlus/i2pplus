@@ -12,7 +12,9 @@ public final class I2PProvider extends Provider {
      * Name this provider registers itself under in the JCA.
      */
     public static final String PROVIDER_NAME = "I2P";
+    /** Description the provider reports about itself. */
     private static final String INFO = "I2P Security Provider v0.1, implementing" + "several algorithms used by I2P.";
+    /** True once the provider has been added. */
     private static boolean _installed;
 
     /**
@@ -33,6 +35,7 @@ public final class I2PProvider extends Provider {
         setup();
     }
 
+    /** Registers the ciphers and key managers offered. */
     private void setup() {
         // TODO: Implement SPIs for existing code
         // However -

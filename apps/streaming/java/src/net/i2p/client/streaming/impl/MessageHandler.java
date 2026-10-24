@@ -18,10 +18,15 @@ import net.i2p.util.Log;
  * I2PSession -&gt; MessageHandler -&gt; PacketHandler -&gt; ConnectionPacketHandler -&gt; MessageInputStream.
  */
 class MessageHandler implements I2PSessionMuxedListener {
+    /** The manager whose messages are handled. */
     private final ConnectionManager _manager;
+    /** The context the handler runs in. */
     private final I2PAppContext _context;
+    /** Logger for this class. */
     private final Log _log;
+    /** Notified when a destination disconnects. */
     private final Set<I2PSocketManager.DisconnectListener> _listeners;
+    /** True while a session restart is queued. */
     private final AtomicBoolean _restartPending = new AtomicBoolean();
 
     /**

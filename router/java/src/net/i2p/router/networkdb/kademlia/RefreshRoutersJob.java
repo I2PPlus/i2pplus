@@ -34,7 +34,9 @@ import net.i2p.util.VersionComparator;
  * @since 0.8.9
  */
 class RefreshRoutersJob extends JobImpl {
+    /** Logger for this class. */
     private final Log _log;
+    /** The facade whose routers are refreshed. */
     private final FloodfillNetworkDatabaseFacade _facade;
     /**
      * The routers still to visit this cycle, highest-value first. A deque, not
@@ -44,9 +46,10 @@ class RefreshRoutersJob extends JobImpl {
      */
     private Deque<Hash> _routers;
 
-    private long _restartDelayMs = 60 * 1000L;            // Default restart delay 1 min
+    /** How long to wait before restarting a stalled refresh - 1 minute. */
+    private long _restartDelayMs = 60 * 1000L;
 
-    // Shared Random instance for efficient random number generation
+    /** Shared instance, for the jitter and delays below. */
     private static final Random _random = new Random();
 
     /**
@@ -418,7 +421,9 @@ class RefreshRoutersJob extends JobImpl {
         }
     }
 
+    /** Disconnects a router whose refresh has stalled. */
     private class Disconnector extends SimpleTimer2.TimedEvent {
+        /** The router to disconnect. */
         private final Hash h;
         /**
          * Force a disconnect for the peer on refresh timeout.

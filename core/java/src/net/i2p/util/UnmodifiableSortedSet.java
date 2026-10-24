@@ -22,7 +22,9 @@ import java.util.SortedSet;
  */
 public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E> {
 
+    /** The order the set is kept in. */
     private final Comparator<? super E> comp;
+    /** True once the set being wrapped has been supplied */
     private final boolean initialized;
 
     /**

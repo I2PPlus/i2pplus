@@ -29,6 +29,7 @@ import java.util.Arrays;
  */
 public class RadialGradientPaintKey {
 
+    /** The paint this instance is a cache key for. */
     private final RadialGradientPaint paint;
 
     /**

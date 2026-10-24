@@ -85,7 +85,6 @@ import net.i2p.crypto.KeyStoreUtil;
 import net.i2p.data.DataHelper;
 
 import java.nio.charset.StandardCharsets;
-// TODO extend SSLSocketFactory
 /**
  * Loads trusted ASCII certs from ~/.i2p/certificates/ and $I2P/certificates/.
  *
@@ -93,21 +92,34 @@ import java.nio.charset.StandardCharsets;
 */
 public class I2PSSLSocketFactory {
 
+    /** Config key for disabling hostname verification. */
     private static final String PROP_DISABLE = "i2p.disableSSLHostnameVerification";
+    /** Config key of the GeoIP directory. */
     private static final String PROP_GEOIP_DIR = "geoip.dir";
+    /** Default GeoIP directory name. */
     private static final String GEOIP_DIR_DEFAULT = "geoip";
+    /** Default country list file name. */
     private static final String COUNTRY_FILE_DEFAULT = "countries.txt";
+    /** File holding the public suffix list. */
     private static final String PUBLIC_SUFFIX_LIST = "public-suffix-list.txt";
+    /** The cached public suffix matcher. */
     private static volatile PublicSuffixMatcher DEFAULT_MATCHER;
+    /** True once the matcher was loaded. */
     private static volatile boolean _matcherLoaded;
-    // not in countries.txt, but only the public ones, not the private ones
+    /**
+     * The public top level domains allowed by default, not the
+     * private ones, from the country list.
+     */
     private static final String[] DEFAULT_TLDS = {
         "arpa", "asia", "biz", "cat", "com", "coop",
         "edu", "gov", "info", "int", "jobs", "mil",
         "mobi", "museum", "name", "net", "org", "post",
         "pro", "tel", "travel", "xxx"
     };
-    // not in countries.txt or public-suffix-list.txt
+    /**
+     * Extra top level domains that are allowed, missing from the
+     * country list and the public suffix list.
+     */
     private static final String[] ADDITIONAL_TLDS = {"i2p", "mooo.com", "onion"};
 
     /**
@@ -227,6 +239,7 @@ public class I2PSSLSocketFactory {
     /** The "real" factory. */
     private final SSLSocketFactory _factory;
 
+    /** The app context. */
     private final I2PAppContext _context;
 
     /**

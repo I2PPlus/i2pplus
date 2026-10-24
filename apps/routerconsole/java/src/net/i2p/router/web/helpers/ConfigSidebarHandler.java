@@ -22,8 +22,11 @@ public class ConfigSidebarHandler extends FormHandler {
         super();
     }
 
+    /** Form field prefix of the section ordering. */
     private static final String ORDER_PREFIX = "order_";
+    /** Form field prefix of the section deletions. */
     private static final String DELETE_PREFIX = "delete_";
+    /** Form field prefix of the section moves. */
     private static final String MOVE_PREFIX = "move_";
 
     /**
@@ -53,6 +56,12 @@ public class ConfigSidebarHandler extends FormHandler {
         else if (adding || deleting || moving) {moveSection(action);}
     }
 
+    /**
+     * Saves the sidebar settings from the form.
+     *
+     * @param currentUnifiedSidebar true if the unified sidebar is on now
+     * @param currentStickySidebar true if the sticky sidebar is on now
+     */
     private void handleSave(boolean currentUnifiedSidebar, boolean currentStickySidebar) {
         Map<String, String> toAdd = new HashMap<>(4);
         try {
@@ -84,6 +93,7 @@ public class ConfigSidebarHandler extends FormHandler {
         }
     }
 
+    /** Saves the sidebar graph settings. */
     private void handleGraphSave() {
         Map<String, String> toAdd = new HashMap<>(4);
         boolean legacy = "true".equals(getJettyStringOrDefault("sidebarGraphLegacy", "false"));
@@ -110,17 +120,36 @@ public class ConfigSidebarHandler extends FormHandler {
         addFormNotice(_t("Graph preferences updated"), true);
     }
 
+    /**
+     * Parses the graph refresh interval from the form.
+     *
+     * @param refreshStr the string from the form
+     * @return the interval, in seconds
+     * @throws NumberFormatException if it is not a number
+     */
     private int parseRefreshInterval(String refreshStr) throws NumberFormatException {
         int refresh = Integer.parseInt(refreshStr);
         if (refresh < 0) {return 0;}
         return refresh;
     }
 
+    /**
+     * Reads a Jetty config value.
+     *
+     * @param key the config key
+     * @param defaultVal the value to use if unset
+     * @return the value in use
+     */
     private String getJettyStringOrDefault(String key, String defaultVal) {
         String val = getJettyString(key);
         return val != null ? val : defaultVal;
     }
 
+    /**
+     * Restores the default sidebar settings.
+     *
+     * @param full true to restore the sections as well
+     */
     private void restoreDefault(boolean full) {
         String prop = SidebarHelper.PROP_SUMMARYBAR + "default";
         String value = isAdvanced() ? (full ? SidebarHelper.DEFAULT_FULL_ADVANCED : SidebarHelper.DEFAULT_MINIMAL_ADVANCED)
@@ -169,6 +198,11 @@ public class ConfigSidebarHandler extends FormHandler {
         addFormNotice(_t("Saved order of sections.") + " " + _t("Sidebar will refresh shortly."), true);
     }
 
+    /**
+     * Adds a sidebar section from the form.
+     *
+     * @param sections the current sections, by position
+     */
     private void handleAddSection(Map<Integer, String> sections) {
         String name = getJettyString("name");
         if (name == null || name.isEmpty()) {
@@ -191,6 +225,11 @@ public class ConfigSidebarHandler extends FormHandler {
         }
     }
 
+    /**
+     * Deletes the sections marked in the form.
+     *
+     * @param sections the current sections, by position
+     */
     private void handleDeleteSections(Map<Integer, String> sections) {
         Set<Integer> toDelete = new HashSet<>();
         for (Object o : _settings.keySet()) {
@@ -213,6 +252,11 @@ public class ConfigSidebarHandler extends FormHandler {
         }
     }
 
+    /**
+     * Moves one sidebar section.
+     *
+     * @param sections the current sections, by position
+     */
     private void handleMoveSection(Map<Integer, String> sections) {
         String[] parts = DataHelper.split(_action, "_");
         try {

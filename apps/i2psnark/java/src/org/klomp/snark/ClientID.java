@@ -44,7 +44,9 @@ public final class ClientID {
      */
     public ClientID() {}
 
+    /** Operating system named in the client id. */
     private static final String OS_NAME = System.getProperty("os.name", "");
+    /** Java version named in the client id. */
     private static final String JAVA_VERSION = System.getProperty("java.version", "");
 
     /** Random tail charset for generated peer IDs, per the BiglyBT/Azureus convention. */
@@ -58,15 +60,28 @@ public final class ClientID {
      * @since 0.9.71+
      */
     public static final class Profile {
+        /** Client name shown in the logs. */
         private final String name;
+        /** Peer id prefix this profile sends, null for none. */
         private final String peerIdPrefixStr;
         /** Exact leading peer ID bytes, 5-8 long, e.g. "-AZ5770-" or "TIX34". */
         private final byte[] peerIdPrefix;
         /** User-Agent base; ";&lt;OS&gt;;Java &lt;ver&gt;" appended when appendOsJava is set. */
         private final String uaBase;
+        /** True to name the OS and Java in the peer id. */
         private final boolean appendOsJava;
+        /** Extension version advertised in the peer id. */
         private final String extV;
 
+        /**
+         * Describes one client identity profile.
+         *
+         * @param n the client name
+         * @param prefix the peer id prefix, null for none
+         * @param ua the user agent for trackers
+         * @param osJava true to name the OS and Java in the peer id
+         * @param v the extension version advertised
+         */
         private Profile(String n, String prefix, String ua, boolean osJava, String v) {
             name = n;
             peerIdPrefixStr = prefix;
@@ -135,26 +150,29 @@ public final class ClientID {
         }
     }
 
-    // Version data verified against upstream releases/captures as of 2026-08.
-    // Vuze sends brand "Azureus" with OS/Java in the tracker UA but plain
-    // "Vuze" in the handshake; the mismatch is authentic.
-    /** Vuze 5.7.7.0: Azureus-branded peer ID and tracker UA, plain "Vuze" handshake. */
+    /**
+     * Vuze 5.7.7.0: Azureus-branded peer ID and tracker UA, plain "Vuze"
+     * handshake. The mismatch is authentic; version data verified against
+     * upstream releases and captures as of 2026-08.
+     */
     public static final Profile VUZE =
             new Profile("Vuze", "-AZ5770-", "Azureus 5.7.7.0", true, "Vuze 5.7.7.0");
-    // BiglyBT sends no OS/Java by default (upstream config default off).
-    /** BiglyBT 4.1.0.0: no OS/Java suffix in either the tracker UA or handshake. */
+    /**
+     * BiglyBT 4.1.0.0: no OS/Java suffix in either the tracker UA or
+     * handshake, matching the upstream config default.
+     */
     public static final Profile BIGLYBT =
             new Profile("BiglyBT", "-BI4100-", "BiglyBT 4.1.0.0", false, "BiglyBT 4.1.0.0");
-    // Transmission uses a slash in the UA but a space in the handshake.
     /** Transmission 4.1.3: slash-separated UA, space-separated handshake string. */
     public static final Profile TRANSMISSION =
             new Profile("Transmission", "-TR4130-", "Transmission/4.1.3", false, "Transmission 4.1.3");
-    // Gear-era peer ID digits and handshake string unverified against a capture.
     /** KTorrent 26.04.3: Gear-era identity, both strings unverified against a capture. */
     public static final Profile KTORRENT =
             new Profile("KTorrent", "-KT2604-", "KTorrent/26.04.3", false, "KTorrent 26.04.3");
-    // Deluge's libtorrent part should pair with a plausible bundled libtorrent.
-    /** Deluge 2.2.0 paired with libtorrent 2.0.13, announced in both strings. */
+    /**
+     * Deluge 2.2.0 paired with libtorrent 2.0.13, announced in both strings.
+     * The libtorrent part should pair with a plausible bundled version.
+     */
     public static final Profile DELUGE =
             new Profile(
                     "Deluge",
@@ -165,16 +183,18 @@ public final class ClientID {
     /** QBittorrent 5.2.3: mixed-case "-qB5230-" prefix, no OS/Java suffix. */
     public static final Profile QBITTORRENT =
             new Profile("qBittorrent", "-qB5230-", "qBittorrent/5.2.3", false, "qBittorrent/5.2.3");
-    // Real libtorrent 2.x uses a lowercase -lt prefix we do not recognize, so
-    // this profile pins the last fully-authentic 1.2.x identity instead.
-    /** Libtorrent 1.2.19: the last fully-authentic 1.2.x identity. */
+    /**
+     * Libtorrent 1.2.19: the last fully-authentic 1.2.x identity. Real
+     * libtorrent 2.x uses a lowercase -lt prefix we do not recognize, so
+     * this profile pins 1.2.x instead.
+     */
     public static final Profile LIBTORRENT =
             new Profile("libtorrent", "-LT1219-", "libtorrent/1.2.19", false, "libtorrent/1.2.19");
-    // Tixati peer ID has no dashes; UA and handshake strings unverified.
     /** Tixati 3.44: dash-free "TIX34" peer ID; both strings unverified. */
     public static final Profile TIXATI =
             new Profile("Tixati", "TIX34", "Tixati/3.44", false, "Tixati 3.44");
 
+    /** The known identity profiles, current one first. */
     private static final List<Profile> PROFILES;
 
     static {

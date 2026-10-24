@@ -18,12 +18,18 @@ import org.klomp.snark.dht.DHT;
  * select which Peers get (un)choked.
  */
 class PeerCheckerTask implements Runnable {
+    /** Transfer rate implied by one check per period, in bytes per second. */
     private static final long KILOPERSECOND = 1024 * (PeerCoordinator.CHECK_PERIOD / 1000);
 
+    /** The coordinator whose peers are checked. */
     private final PeerCoordinator coordinator;
+    /** The torrent the peers belong to. */
     private final I2PSnarkUtil _util;
+    /** Logger for this class. */
     private final Log _log;
+    /** Chooses which peers to check. */
     private final Random random;
+    /** How many times the task has run. */
     private int _runCount;
 
     /**

@@ -36,7 +36,9 @@ import java.util.regex.Pattern;
  * @since 0.9.17
  */
 public class XMLParser extends JaxpParser {
+    /** Matches spaces, tabs and line breaks */
     private static final Pattern WHITESPACE = Pattern.compile("[ \t\r\n]");
+    /** Logger for this class. */
     private final Log _log;
 
     /**

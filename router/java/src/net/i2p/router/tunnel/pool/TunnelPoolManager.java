@@ -36,23 +36,37 @@ import net.i2p.util.SimpleTimer2;
  * Run the tunnel builder and handler threads.
  */
 public class TunnelPoolManager implements TunnelManagerFacade {
+    /** The router context. */
     private final RouterContext _context;
+    /** Logger for pool management. */
     private final Log _log;
     /** Hash (destination) to TunnelPool. */
     private final Map<Hash, TunnelPool> _clientInboundPools;
     /** Hash (destination) to TunnelPool. */
     private final Map<Hash, TunnelPool> _clientOutboundPools;
+    /** The router's inbound exploratory pool. */
     private final TunnelPool _inboundExploratory;
+    /** The router's outbound exploratory pool. */
     private final TunnelPool _outboundExploratory;
+    /** Runs the tunnel build requests. */
     private final BuildExecutor _executor;
+    /** Matches build replies to the requests. */
     private final BuildHandler _handler;
+    /** Peer selector shared by the client pools. */
     private final TunnelPeerSelector _clientPeerSelector;
+    /** Tracks peers that keep failing builds. */
     private final GhostPeerManager _ghostPeerManager;
+    /** True once the manager has shut down. */
     private volatile boolean _isShutdown;
+    /** Threads running the build handler. */
     private static volatile int _numHandlerThreads = 4;
+    /** Counter naming the handler threads. */
     private static final AtomicInteger _handlerThreadId = new AtomicInteger(1);
+    /** The running handler threads. */
     private final CopyOnWriteArrayList<I2PThread> _handlerThreads;
+    /** Steady-state share of tunnels allowed to clients. */
     private final int _defaultMaxPctTunnels;
+    /** Larger share allowed while the router starts up. */
     private final int _startupMaxPctTunnels;
     /**
      * Wall-clock ms at which some pool last published an incomplete LeaseSet,
@@ -72,14 +86,23 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     static final long INCOMPLETE_LEASESET_WINDOW_MS = 5L * 60 * 1000;
     /** Minimum ms between participation-share limit log lines. */
     private static final long SHARE_LIMIT_LOG_INTERVAL_MS = 60L * 1000;
+    /** Config key turning tunnel testing off. */
     private static final String PROP_DISABLE_TUNNEL_TESTING = "router.disableTunnelTesting";
+    /** Config key for the slow tunnel latency threshold. */
     private static final String PROP_SLOW_TUNNEL_THRESHOLD = "router.tunnel.slowThreshold";
+    /** Config key for the floor on the slow tunnel threshold. */
     private static final String PROP_SLOW_TUNNEL_MIN = "router.tunnel.slowThresholdMin";
+    /** Config key for how often slow tunnels are checked. */
     private static final String PROP_SLOW_TUNNEL_INTERVAL = "router.tunnel.slowTunnelInterval";
+    /** Zero means derive the threshold from average latency. */
     private static final int DEFAULT_SLOW_THRESHOLD_MS = 0; // 0 means use avg latency with min
+    /** The derived threshold never falls below 10 seconds. */
     private static final int DEFAULT_MIN_SLOW_THRESHOLD = 10000; // 10s minimum threshold if not configured
+    /** Slow tunnels are checked every 60 seconds. */
     private static final int DEFAULT_RUN_INTERVAL_MS = (int) ((long) 60 * 1000); // 60s — throttled to reduce RemoveSlowTunnelsJob CPU (was 15s, burned 97% on ArraySet.remove)
+    /** Replacement tunnels get 15 seconds to build before a refresh. */
     private static final long REFRESH_DELAY_AFTER_REMOVAL = 15*1000L; // wait for new tunnels to build
+    /** Largest client share ratio accepted. */
     private static final double MAX_SHARE_RATIO = 100000d;
 
     /**
@@ -389,19 +412,19 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
     /**
      * Number of valid (non-failed, non-expired) inbound exploratory tunnels.
-     * @return number of valid (non-failed, non-expired) inbound exploratory tunnels
+     * @return the count of usable inbound exploratory tunnels
      */
     public int getFreeTunnelCount() {return _inboundExploratory.getValidTunnelCount();}
 
     /**
      * Number of valid (non-failed, non-expired) outbound exploratory tunnels.
-     * @return number of valid (non-failed, non-expired) outbound exploratory tunnels
+     * @return the count of usable outbound exploratory tunnels
      */
     public int getOutboundTunnelCount() {return _outboundExploratory.getValidTunnelCount();}
 
     /**
      * Number of GOOD (tested+passed, non-failed, non-expired) inbound client tunnels across all destinations.
-     * @return number of GOOD (tested+passed, non-failed, non-expired) inbound client tunnels across all destinations
+     * @return the count of good inbound client tunnels over all clients
      */
     public int getInboundClientTunnelCount() {
         int count = 0;
@@ -413,7 +436,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
     /**
      * Number of GOOD (tested+passed, non-failed, non-expired) outbound client tunnels across all destinations.
-     * @return number of GOOD (tested+passed, non-failed, non-expired) outbound client tunnels across all destinations
+     * @return the count of good outbound client tunnels over all clients
      */
     public int getOutboundClientTunnelCount() {
         int count = 0;
@@ -578,6 +601,13 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         setSettings(_clientOutboundPools, client, settings);
     }
 
+    /**
+     * Applies settings to one client's pools.
+     *
+     * @param pools the client pools by destination
+     * @param client the client's destination
+     * @param settings the settings to apply
+     */
     private static void setSettings(Map<Hash, TunnelPool> pools, Hash client, TunnelPoolSettings settings) {
         TunnelPool pool = pools.get(client);
         if (pool != null) {pool.setSettings(settings);}
@@ -725,6 +755,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
     /** Property: outbound tunnel startup retries. */
     static final String PROP_OUTBOUND_STARTUP_RETRIES = "router.tunnel.outboundStartupRetries";
+    /** Tries to bring up the outbound pool at startup. */
     private static final int DEFAULT_OUTBOUND_STARTUP_RETRIES = 5;
 
     /**
@@ -733,16 +764,29 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      * This prevents "Destination not reachable (no LeaseSet found)" at startup.
      */
     private static class ConditionalOutboundStartup extends SimpleTimer2.TimedEvent {
+        /** The outbound pool being waited on. */
         private final TunnelPool outbound;
+        /** The inbound pool paired with it. */
         private final TunnelPool inbound;
+        /** The manager owning the pools. */
         private final TunnelPoolManager _mgr;
+        /** The client's destination. */
         private final Hash _dest;
+        /** Tries allowed before giving up. */
         private final int maxAttempts;
+        /** Set to stop waiting early. */
         private volatile boolean _cancelled;
+        /** Tries made so far. */
         private int attempts;
 
         /**
          * Schedule a startup that is abandoned unless the pools are ready in time.
+         *
+         * @param out the outbound pool to start
+         * @param in the inbound pool to wait for
+         * @param mgr the pool manager
+         * @param context the router context
+         * @param dest the client's destination hash
          */
         public ConditionalOutboundStartup(TunnelPool out, TunnelPool in, TunnelPoolManager mgr,
                                           RouterContext context, Hash dest) {
@@ -881,11 +925,15 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      * @since 0.9.69+
      */
     private class DelayedPoolCleanup extends SimpleTimer2.TimedEvent {
+        /** The client whose pools are being cleaned up. */
         private final Hash _destination;
+        /** Set to skip the cleanup. */
         private volatile boolean _cancelled = false;
 
         /**
          * Remove an unused client pool after the re-registration window expires.
+         *
+         * @param dest the destination of the pool to remove
          */
         public DelayedPoolCleanup(Hash dest) {super(_context.simpleTimer2()); _destination = dest;}
 
@@ -1004,6 +1052,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      * @since 0.9.71+
      */
     static class FastTierProbeJob extends JobImpl {
+        /** The manager whose pools are tested. */
         private final TunnelPoolManager _mgr;
         /** Peers probed per pass. Bounds the burst so a pass is not a flood. */
         static final int PROBE_BATCH = 128;
@@ -1235,16 +1284,25 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         _numHandlerThreads = _handlerThreads.size();
     }
 
+    /** Builds tunnels for a pool that never came up. */
     private static class BootstrapPool extends JobImpl {
+        /** The manager owning the pool. */
         private final TunnelPoolManager _mgr;
+        /** The pool being bootstrapped. */
         private final TunnelPool _pool;
+        /** Bootstrap attempts are 10 seconds apart. */
         private static final long BOOTSTRAP_INTERVAL_MS = 10_000L; // 10s between bootstrap attempts
+        /** Tunnels that end the bootstrap pass. */
         private static final int MIN_BOOTSTRAP_TUNNELS = 2; // Minimum tunnels before stopping bootstrap
 
         /**
          * Build bootstrap tunnels for exploratory pools after the startup delay.
          * For exploratory pools, builds 2-hop tunnels (not zero-hop) to provide
          * usable reply paths. Reschedules until pool has sufficient tunnels.
+         *
+         * @param ctx the router context
+         * @param mgr the pool manager
+         * @param pool the pool to bootstrap
          */
         public BootstrapPool(RouterContext ctx, TunnelPoolManager mgr, TunnelPool pool) {
             super(ctx);
@@ -1286,13 +1344,20 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         }
     }
 
+    /** Periodically drops tunnels that fail the latency test. */
     private static class RemoveSlowTunnelsJob extends JobImpl {
+        /** The manager whose pools are checked. */
         private final TunnelPoolManager _mgr;
+        /** The first pass runs 90 seconds after startup. */
         private static final long STARTUP_DELAY = 90*1000L; // 90s after startup
+        /** Passes run so far. */
         private static final AtomicInteger _runCount = new AtomicInteger(0);
 
         /**
          * Remove slow tunnels periodically, starting after the startup delay.
+         *
+         * @param ctx the router context
+         * @param mgr the pool manager
          */
         public RemoveSlowTunnelsJob(RouterContext ctx, TunnelPoolManager mgr) {
             super(ctx);
@@ -1399,10 +1464,14 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      * RepublishLeaseSetJob for NetDB publication.
      */
     private static class RefreshLeaseSetsJob extends JobImpl {
+        /** The manager whose lease sets are refreshed. */
         private final TunnelPoolManager _mgr;
 
         /**
          * Refresh the lease sets after slow tunnels are removed.
+         *
+         * @param ctx the router context
+         * @param mgr the pool manager
          */
         public RefreshLeaseSetsJob(RouterContext ctx, TunnelPoolManager mgr) {
             super(ctx);
@@ -1729,6 +1798,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         if (evt != null) {evt.cancelStartup();}
     }
 
+    /** Shuts down the two exploratory pools. */
     private void shutdownExploratory() {
         _inboundExploratory.shutdown();
         _outboundExploratory.shutdown();
@@ -1811,7 +1881,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
     /**
      * The ghost peer manager for tracking unresponsive peers.
-     * @return the ghost peer manager for tracking unresponsive peers
+     * @return the manager of peers excluded after build failures
      * @since 0.9.69+
      */
     public GhostPeerManager getGhostPeerManager() { return _ghostPeerManager; }

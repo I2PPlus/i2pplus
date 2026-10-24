@@ -11,7 +11,8 @@ import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
 
 /**
  * Represents a JSON-RPC 2.0 error that occured during the processing of a
- * request.
+ * request. The implementation defined errors below use the reserved
+ * range -32099 .. -32000.
  *
  * <p>The protocol expects error objects to be structured like this:
  *
@@ -61,10 +62,8 @@ import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
  */
 public class JSONRPC2ExtendedError extends JSONRPC2Error {
 
+    /** Pinned for serialized-form compatibility. */
     private static final long serialVersionUID = -6574632977222371077L;
-
-    // The errors below are all JSON-RPC 2.0 implementation defined errors,
-    // in the reserved range -32099 .. -32000.
 
     /** Invalid password provided. */
     public static final JSONRPC2Error INVALID_PASSWORD = new JSONRPC2ExtendedError(-32001, "Invalid password provided.");

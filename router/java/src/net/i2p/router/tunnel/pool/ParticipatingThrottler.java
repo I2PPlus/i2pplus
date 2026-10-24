@@ -31,9 +31,13 @@ import net.i2p.util.SimpleTimer2;
  * @since 0.8.4
  */
 public class ParticipatingThrottler {
+    /** The router context. */
     private final RouterContext context;
+    /** How many tunnels each router participates in. */
     private final ObjectCounter<Hash> counter;
+    /** Logger for the participation throttler. */
     private final Log _log;
+    /** Logs the routers rejected as too old. */
     private BanLogger _banLogger;
     /**
      * True on platforms we treat as slow. Selects a more conservative
@@ -43,7 +47,9 @@ public class ParticipatingThrottler {
      * @since 0.9.71+
      */
     static final boolean IS_SLOW = SystemVersion.isSlow();
+    /** Whether old routers are blocked unless configured. */
     private static final boolean DEFAULT_BLOCK_OLD_ROUTERS = true;
+    /** Config key for blocking the old router versions. */
     private static final String PROP_BLOCK_OLD_ROUTERS = "router.blockOldRouters";
 
     /**
@@ -79,6 +85,7 @@ public class ParticipatingThrottler {
 
     /** Cached RateStat handle for the shared load-score computation; refreshed when the context changes. */
     private static volatile RouterContext _scoreCtx;
+    /** Rate stat tracking the participation queue. */
     private static volatile RateStat _bwQueueRateStat;
 
     /**
@@ -190,9 +197,11 @@ public class ParticipatingThrottler {
      * @param val how much system load inflates the effective ratio, clamped to 0-300
      */
     public static void setLoadWeight(int val) { _loadWeight = Math.max(0, Math.min(300, val)); }
-    // Cleanup interval in ms - 90 seconds
+    /** Interval between clearing the participation counts. */
     private static final long CLEAN_TIME = 90 * 1000L;
+    /** Time windows of the bandwidth rate stats. */
     private static final long[] RATES = { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR };
+    /** Oldest router version allowed to participate. */
     private static final String MIN_VERSION = "0.9.66";
 
     /**
@@ -576,7 +585,9 @@ public class ParticipatingThrottler {
         _recentLookups.put(h, Long.valueOf(now));
         context.netDb().lookupRouterInfo(h, null, null, 15*1000);
     }
+    /** Router hashes looked up recently, with the time. */
     private final LHMCache<Hash, Long> _recentLookups = new LHMCache<>(256);
+    /** Time before a failed router lookup is retried. */
     private static final long ROUTER_LOOKUP_RETRY_MS = 10*60*1000L;
 
     /**
@@ -918,7 +929,9 @@ public class ParticipatingThrottler {
      * Timer event that disconnects a router after a delay.
      */
     private class Disconnector extends SimpleTimer2.TimedEvent {
+        /** The router's hash. */
         private final Hash h;
+        /** The router's version string. */
         private final String version;
         /**
          * Force disconnect the peer on timer expiry.

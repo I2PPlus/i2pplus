@@ -9,9 +9,13 @@ package net.i2p.i2ptunnel.access;
  */
 class FilterDefinition {
 
+    /** Limit applied when an element names none. */
     private final Threshold defaultThreshold;
+    /** The rules of this definition. */
     private final FilterDefinitionElement[] elements;
+    /** Counters kept for the definition. */
     private final Recorder[] recorders;
+    /** How long a record is kept, in seconds. */
     private final int purgeSeconds;
 
     /**

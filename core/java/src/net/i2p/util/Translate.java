@@ -48,12 +48,15 @@ public abstract class Translate {
     /** Non-null, two-letter upper case, may be "". */
     private static final String _localeCountry = Locale.getDefault().getCountry();
 
+    /** Bundles already loaded, by name. */
     private static final Map<String, ResourceBundle> _bundles = new ConcurrentHashMap<>(16);
+    /** Bundle names found to be absent. */
     private static final Set<String> _missing = new ConcurrentHashSet<>(16);
 
     /** Use to look for untagged strings. */
     private static final String TEST_LANG = "xx";
 
+    /** Probe string used to pick a locale. */
     private static final String TEST_STRING = "XXXX";
 
     /**

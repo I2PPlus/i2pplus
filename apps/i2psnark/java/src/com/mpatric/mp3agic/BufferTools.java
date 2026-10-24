@@ -2,10 +2,13 @@ package com.mpatric.mp3agic;
 
 import java.io.UnsupportedEncodingException;
 
+/** Byte array helpers shared by the tag classes. */
 public final class BufferTools {
 
+    /** Charset used when a tag does not name one. */
     protected static final String defaultCharsetName = "ISO-8859-1";
 
+    /** Utility class, not intended for instantiation. */
     private BufferTools() {}
 
     /**

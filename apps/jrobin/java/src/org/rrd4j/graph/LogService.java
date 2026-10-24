@@ -33,6 +33,7 @@ class LogService {
         }
     }
 
+    /** Utility class, not intended for instantiation. */
     private LogService() {}
 
     /**

@@ -20,9 +20,13 @@ import net.i2p.util.SyntheticREDQueue;
  * Optimized for hosting many tunnels efficiently.
  */
 class TunnelParticipant {
+    /** The router context. */
     private final RouterContext _context;
+    /** Logger for the tunnel participant. */
     private final Log _log;
+    /** The hop configuration of our tunnel. */
     private final HopConfig _config;
+    /** Processes the messages for the next hop. */
     private final HopProcessor _processor;
 
     /**
@@ -42,18 +46,28 @@ class TunnelParticipant {
             return bps + "B/s";
         }
     }
+    /** Processes the messages when we are the endpoint. */
     private final InboundEndpointProcessor _inboundEndpointProcessor;
+    /** Distributes the messages we relay onward. */
     private final InboundMessageDistributor _inboundDistributor;
+    /** Reassembles the fragmented lease sets. */
     private final FragmentHandler _handler;
+    /** Queue estimating the outbound share used while relaying. */
     private final SyntheticREDQueue _partBWE;
 
+    /** The cached next hop router info. */
     private volatile RouterInfo _nextHopCache;
 
+    /** Time allowed for a next hop lookup. */
     private static final long MAX_LOOKUP_TIME = 15 * 1000L;
+    /** Longer lookup time for the inbound gateway. */
     private static final long LONG_MAX_LOOKUP_TIME = 25 * 1000L;
+    /** Send priority of the messages we relay. */
     private static final int PRIORITY = OutNetMessage.PRIORITY_PARTICIPATING;
-    // 200 messages * 2KB in 10 minutes = 340 Bps - optimized for high bandwidth contexts
-    /** Default bandwidth per tunnel estimate. */
+    /**
+     * Default bandwidth per tunnel estimate, about 340 Bps, sized for
+     * high bandwidth contexts.
+     */
     static final int DEFAULT_BW_PER_TUNNEL_ESTIMATE = RouterThrottleImpl.DEFAULT_MESSAGES_PER_TUNNEL_ESTIMATE * 2048 / (10 * 60);
 
     /**
@@ -375,6 +389,7 @@ class TunnelParticipant {
      * Job to send a message after router lookup completes.
      */
     private class SendJob extends JobImpl {
+        /** The message being sent. */
         private final TunnelDataMessage _msg;
 
         /**
@@ -426,6 +441,7 @@ class TunnelParticipant {
      * Job to handle timeout for router lookup.
      */
     private class TimeoutJob extends JobImpl {
+        /** The message that failed to send. */
         private final TunnelDataMessage _msg;
 
         /**

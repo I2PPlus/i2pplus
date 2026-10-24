@@ -29,12 +29,16 @@ import net.i2p.util.SimpleByteCache;
  */
 class BuildReplyHandler {
 
+    /** The context handling the reply. */
     private final I2PAppContext ctx;
+    /** Logger for this class. */
     private final Log log;
 
-    // cached results
+    /** Cached result for a failed build. */
     private static final Result RESULT_NG = new Result(-1, null);
+    /** Cached result for a successful build. */
     private static final Result RESULT_OK = new Result(0, null);
+    /** Cached result for a build rejected for bandwidth. */
     private static final Result RESULT_BW = new Result(TunnelHistory.TUNNEL_REJECT_BANDWIDTH, null);
 
     /**

@@ -44,6 +44,7 @@ import net.i2p.util.Log;
  */
 public class GarlicMessageBuilder {
 
+    /** Utility class, not intended for instantiation. */
     private GarlicMessageBuilder() {}
 
     /**
@@ -419,12 +420,26 @@ public class GarlicMessageBuilder {
         return baos.toByteArray();
     }
 
+    /**
+     * Builds one clove's encrypted payload.
+     *
+     * @param ctx the router context
+     * @param config what to include in the clove
+     * @return the clove's data
+     */
     private static byte[] buildClove(RouterContext ctx, PayloadGarlicConfig config) {
         GarlicClove clove = new GarlicClove(ctx);
         clove.setData(config.getPayload());
         return buildCommonClove(clove, config);
     }
 
+    /**
+     * Builds the part of a clove common to all types.
+     *
+     * @param clove the clove to build
+     * @param config what to include
+     * @return the clove's data
+     */
     private static byte[] buildCommonClove(GarlicClove clove, GarlicConfig config) {
         clove.setCertificate(config.getCertificate());
         clove.setCloveId(config.getId());

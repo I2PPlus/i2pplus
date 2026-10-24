@@ -264,15 +264,30 @@ public class DebugOverviewHelper extends HelperBase {
         return buf.toString();
     }
 
+    /**
+     * Counts the running services for the page.
+     *
+     * @return the service count
+     */
     private int _services() {
         return _context.portMapper().getForwardedServices().size();
     }
 
+    /**
+     * Counts the running apps for the page.
+     *
+     * @return the counts shown on the page
+     */
     private int[] _appCounts() {
         net.i2p.router.startup.RouterAppManager ram = _context.routerAppManager();
         return ram != null ? ram.getDebugCounts() : null;
     }
 
+    /**
+     * Counts the available updates for the page.
+     *
+     * @return the counts shown on the page
+     */
     private int[] _updateCounts() {
         net.i2p.app.ClientAppManager cmgr = _context.clientAppManager();
         if (cmgr == null) {return null;}
@@ -281,6 +296,11 @@ public class DebugOverviewHelper extends HelperBase {
                ((net.i2p.router.update.ConsoleUpdateManager) app).getDebugCounts() : null;
     }
 
+    /**
+     * Reads the router's session key counts for the page.
+     *
+     * @return the counts shown on the page
+     */
     private long[] _routerSKM() {
         return _context.sessionKeyManager().getDebugStats();
     }
@@ -306,10 +326,20 @@ public class DebugOverviewHelper extends HelperBase {
         return sum;
     }
 
+    /**
+     * Counts the open streaming connections for the page.
+     *
+     * @return the counts shown on the page
+     */
     private int[] _streamCounts() {
         return StreamHelper.countStreams(net.i2p.i2ptunnel.TunnelControllerGroup.getInstance());
     }
 
+    /**
+     * Reads the torrent DHT statistics for the page.
+     *
+     * @return the counts shown on the page
+     */
     private long[] _dhtStats() {
         return _context.netDb().getDebugStats();
     }

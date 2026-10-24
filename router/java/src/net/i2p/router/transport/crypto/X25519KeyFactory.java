@@ -26,22 +26,35 @@ import net.i2p.util.SystemVersion;
  */
 public class X25519KeyFactory extends I2PThread implements KeyFactory {
 
+    /** The most recently created factory, reused on reconfigure. */
     private static volatile X25519KeyFactory lastInstance;
+    /** The app context. */
     private final I2PAppContext _context;
+    /** Logger for the key factory. */
     private final Log _log;
+    /** Smallest key queue allowed. */
     private volatile int _minSize;
+    /** Largest key queue allowed. */
     private volatile int _maxSize;
+    /** Delay between the key calculations, in ms. */
     private volatile int _calcDelay;
+    /** Keys we want in the queue at least. */
     private volatile int _targetMin;
+    /** Keys we stop calculating above. */
     private volatile int _targetMax;
+    /** The precalculated key pairs. */
     private final LinkedBlockingQueue<KeyPair> _keys;
+    /** True while the factory thread runs. */
     private volatile boolean _isRunning;
+    /** Interval of the settings recheck. */
     private long _checkDelay = 10 * 1000L;
     /** Empties observed since last refresh — drives pool growth. */
     private final AtomicInteger _emptyCount = new AtomicInteger();
     /** Key consumption count since last refresh — drives fill ceiling. */
     private final AtomicInteger _usedCount = new AtomicInteger();
+    /** Config key for the key calculation delay. */
     private static final String PROP_DH_PRECALC_DELAY = "crypto.xdh.precalc.delay";
+    /** Default key calculation delay, in ms. */
     private static final int DEFAULT_DH_PRECALC_DELAY = 25;
     /** Absolute floor — never go below this even under memory pressure. */
     private static final int HARD_MIN = 128;
@@ -275,6 +288,7 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
         }
     }
 
+    /** Fills the key queue in the background. */
     private void run2() {
         _isRunning = true;
         while (_isRunning) {
@@ -335,6 +349,11 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
         return rv;
     }
 
+    /**
+     * Calculates one key pair.
+     *
+     * @return the new key pair
+     */
     private KeyPair precalc() {
         long start = System.currentTimeMillis();
         KeyPair rv = _context.keyGenerator().generatePKIKeys(EncType.ECIES_X25519);

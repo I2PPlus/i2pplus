@@ -40,41 +40,74 @@ import net.i2p.util.KeyRing;
  * Manages subsystem access, configuration, and resource isolation to enable multiple router instances within the same JVM without conflicts.
  */
 public class RouterContext extends I2PAppContext {
+    /** The router object that created this context. */
     private final Router _router;
+    /** Manager of the I2CP client connections. */
     private ClientManagerFacade _clientManagerFacade;
+    /** Manager of the router's internal clients. */
     private InternalClientManager _internalClientManager;
+    /** Pool of reusable client messages. */
     private ClientMessagePool _clientMessagePool;
+    /** Queue of scheduled router jobs. */
     private JobQueue _jobQueue;
+    /** Pool of inbound network messages. */
     private InNetMessagePool _inNetMessagePool;
+    /** Pool of outbound network messages. */
     private OutNetMessagePool _outNetMessagePool;
+    /** Recent message ids for duplicate detection. */
     private MessageHistory _messageHistory;
+    /** Registry of outbound message handlers. */
     private OutboundMessageRegistry _messageRegistry;
+    /** The router's network database. */
     private SegmentedNetworkDatabaseFacade _netDb;
+    /** Manager of our session keys. */
     private KeyManager _keyManager;
+    /** The transport and message comm system. */
     private CommSystemFacade _commSystem;
+    /** Organizer of the peer profiles. */
     private ProfileOrganizer _profileOrganizer;
+    /** Manager of peer connections and tests. */
     private PeerManagerFacade _peerManagerFacade;
+    /** Manager of the peer profiles. */
     private ProfileManager _profileManager;
+    /** The bandwidth limiter for transports. */
     private FIFOBandwidthLimiter _bandwidthLimiter;
+    /** Manager of the tunnel pools. */
     private TunnelManagerFacade _tunnelManager;
+    /** Dispatcher of messages through tunnels. */
     private TunnelDispatcher _tunnelDispatcher;
+    /** Publisher of the router statistics. */
     private StatisticsManager _statPublisher;
+    /** The banlist of bad routers. */
     private Banlist _banlist;
+    /** The blocklist of bad networks. */
     private Blocklist _blocklist;
+    /** Validator of inbound messages. */
     private MessageValidator _messageValidator;
+    /** The router's connection throttle. */
     private RouterThrottle _throttle;
+    /** Manager of the router's internal apps. */
     private RouterAppManager _appManager;
+    /** Generator of our routing keys. */
     private RouterKeyGenerator _routingKeyGenerator;
+    /** Parser of garlic messages. */
     private GarlicMessageParser _garlicMessageParser;
+    /** Engine for the legacy ElGamal-AES encryption. */
     private ElGamalAESEngine _elGamalAESEngine;
+    /** Engine for the ratchet encryption types. */
     private ECIESAEADEngine _eciesEngine;
+    /** Tasks run at the end of final shutdown. */
     private final Set<Runnable> _finalShutdownTasks;
-    // split up big lock on this to avoid deadlocks
+    /** True once the context components are built. */
     private volatile boolean _initialized;
+    /** Lock for the first group of components. */
     private final Object _lock1 = new Object();
+    /** Lock for the second group of components. */
     private final Object _lock2 = new Object();
+    /** Lock for the third group of components. */
     private final Object _lock3 = new Object();
 
+    /** All live router contexts. */
     private static final List<RouterContext> _contexts = new CopyOnWriteArrayList<>();
 
     /**
@@ -578,7 +611,7 @@ public class RouterContext extends I2PAppContext {
     /**
      * New Properties with system and context properties.
      *
-     * @return new Properties with system and context properties
+     * @return a fresh copy, never null
      * @since 0.8.4
      */
     @Override
@@ -727,9 +760,10 @@ public class RouterContext extends I2PAppContext {
      * how to skew.
      * <p>
      * Returns same thing as {@link #routerKeyGenerator()}.
+     * Overrides I2PAppContext, returns non-null in RouterContext and null in I2PAppContext.
      *
      * @return non-null
-     * @since 0.9.16 Overrides I2PAppContext. Returns non-null in RouterContext and null in I2PAppcontext.
+     * @since 0.9.16
      */
     @Override
     public RoutingKeyGenerator routingKeyGenerator() {
@@ -807,8 +841,14 @@ public class RouterContext extends I2PAppContext {
      * This prevents memory leaks when routers are shut down.
      */
     private static class CleanupTask implements Runnable {
+        /** The context being cleaned up. */
         private final RouterContext _ctx;
 
+        /**
+         * Prepares to clean up a dead context.
+         *
+         * @param ctx the context to clean up
+         */
         CleanupTask(RouterContext ctx) {
             _ctx = ctx;
         }

@@ -44,10 +44,15 @@ import net.i2p.util.SystemVersion;
  * Entry point from {@code clients.config}.
  */
 public class TunnelControllerGroup implements ClientApp {
+    /** Logger for the tunnel controllers. */
     private final Log _log;
+    /** Current state of the tunnel apps. */
     private volatile ClientAppState _state;
+    /** The app context. */
     private final I2PAppContext _context;
+    /** The manager that starts the apps. */
     private final ClientAppManager _mgr;
+    /** The single instance of the group. */
     private static volatile TunnelControllerGroup instance;
     /** Default config file name. */
     static final String DEFAULT_CONFIG_FILE = "i2ptunnel.config";
@@ -56,10 +61,15 @@ public class TunnelControllerGroup implements ClientApp {
     /** Config key prefix. */
     private static final String PREFIX = "tunnel.";
 
+    /** The client and server controllers. */
     private final List<TunnelController> _controllers;
+    /** Lock for the controller list. */
     private final ReadWriteLock _controllersLock;
+    /** True once the configs were read. */
     private boolean _controllersLoaded;
+    /** File holding the tunnel definitions. */
     private final String _configFile;
+    /** Directory of the per-tunnel configs. */
     private final String _configDirectory;
 
     /** Service name for ClientApp registration. */
@@ -102,7 +112,9 @@ public class TunnelControllerGroup implements ClientApp {
      * @since 0.9.71+
      */
     private volatile ThreadPoolExecutor _executor;
+    /** Client handler threads created. */
     private static final AtomicLong _executorThreadCount = new AtomicLong();
+    /** Lock for the client thread pool. */
     private final Object _executorLock = new Object();
     /** How long to wait before dropping an idle thread. */
     private static final long HANDLER_KEEPALIVE_MS = (long) 30*1000;
@@ -115,8 +127,11 @@ public class TunnelControllerGroup implements ClientApp {
      * @since 0.9.71+
      */
     private final ConcurrentHashMap<I2PTunnelServer, ServerHandler> _serverHandlers = new ConcurrentHashMap<>(4);
+    /** Server handler threads created. */
     private static final AtomicLong _serverExecutorThreadCount = new AtomicLong();
+    /** Lock for the server thread pool. */
     private final Object _serverExecutorLock = new Object();
+    /** True once the server pool stats are registered. */
     private boolean _serverHandlerStatsRegistered;
     /** Server handler idle keepalive. */
     private static final long SERVER_KEEPALIVE_MS = (long) 30*1000;
@@ -157,8 +172,11 @@ public class TunnelControllerGroup implements ClientApp {
      * @since 0.9.71+
      */
     private final ConcurrentHashMap<Object, RunnerHandler> _runnerPools = new ConcurrentHashMap<>(8);
+    /** Runner threads created. */
     private static final AtomicLong _runnerPoolThreadCount = new AtomicLong();
+    /** Lock for the runner thread pool. */
     private final Object _runnerPoolLock = new Object();
+    /** True once the runner pool stats are registered. */
     private boolean _runnerPoolStatsRegistered;
     /** Absolute floor for a live tunnel's runner pool (shares of clientRunnerMax). */
     static final int RUNNER_POOL_FLOOR = 4;
@@ -703,6 +721,8 @@ public class TunnelControllerGroup implements ClientApp {
 
     /** Warning - destroys the singleton. */
     private class Shutdown implements Runnable {
+        /** Stops the group's controllers when the router exits. */
+        private Shutdown() {}
         @Override
         public void run() {shutdown();}
     }
@@ -1101,11 +1121,13 @@ public class TunnelControllerGroup implements ClientApp {
         }
     }
 
-    /*
-     * Migrate tunnels from file to individual files in dir
+    /**
+     * Copies old tunnel configs into the new format.
      *
-     * @return success
-     * @since 0.9.42
+     * @param tunnels the tunnel configs to migrate
+     * @param from the directory of the old configs
+     * @param dir the directory to write the new configs to
+     * @return true if any config was migrated
      */
     private boolean migrate(List<Properties> tunnels, File from, File dir) {
         if (!dir.isDirectory() && !dir.mkdirs())
@@ -1152,6 +1174,8 @@ public class TunnelControllerGroup implements ClientApp {
 
     /** Start all configured tunnels. */
     private class StartControllers implements Runnable {
+        /** Starts the tunnels the group is configured for. */
+        private StartControllers() {}
         @Override
         public void run() {
             synchronized(TunnelControllerGroup.this) {
@@ -2859,6 +2883,8 @@ public class TunnelControllerGroup implements ClientApp {
 
     /** Thread factory that sets daemon flag and names threads. */
     private static class CustomThreadFactory implements ThreadFactory {
+        /** Names the group's threads after their tunnel. */
+        private CustomThreadFactory() {}
         @Override
         public Thread newThread(Runnable r) {
             Thread rv = Executors.defaultThreadFactory().newThread(r);

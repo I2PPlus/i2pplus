@@ -30,24 +30,33 @@ import net.i2p.util.SecureFile;
  */
 class PartialPiece implements Comparable<PartialPiece> {
 
+    /** The piece being filled in. */
     private final Piece piece;
+    /** In-memory storage if the piece is small. */
     private final byte[] bs; // in-memory storage if piece is small
+    /** Length of the piece in bytes. */
     private final int pclen; // piece length in bytes
+    /** Directory for the temp file of a large piece. */
     private final File tempDir;
     /** BEP 47: to recognize padding-only chunks and skip requesting them; may be null. */
     private final MetaInfo _meta;
     /** BEP 47: per-piece padding sub-block mask, lazily computed; null until first use. */
     private volatile BitField _paddingMask;
 
+    /** The temp file holding the piece data. */
     private File tempfile;
+    /** File the piece data is written through. */
     private RandomAccessFile raf;
 
-    // BitField tracking which sub-blocks have been downloaded
+    /** Which chunks have arrived so far. */
     private final BitField bitfield;
 
+    /** Offset of the next expected chunk start. */
     private int off; // offset of next expected chunk start
 
+    /** Size of a chunk part. */
     private static final int BUFSIZE = PeerState.PARTSIZE; // size of chunk parts
+    /** Cache supplying the chunk buffers. */
     private static final ByteCache _cache = ByteCache.getInstance(64, BUFSIZE);
 
     /**
@@ -64,8 +73,12 @@ class PartialPiece implements Comparable<PartialPiece> {
      */
     private static final int SUB_PARTSIZE = PeerState.PARTSIZE / 4;
 
-    // Threshold for using in-memory storage vs temp file; can be dynamically reduced on OOM
+    /** Largest piece kept in memory by default. */
     private static final int MAX_IN_MEM = 1024 * 1024;
+    /**
+     * Threshold below which pieces are kept in memory rather than a
+     * temp file, can be reduced dynamically.
+     */
     private static int maxInMem = MAX_IN_MEM;
 
     /**

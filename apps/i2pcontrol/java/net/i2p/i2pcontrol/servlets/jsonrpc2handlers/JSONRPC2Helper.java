@@ -29,6 +29,7 @@ public class JSONRPC2Helper {
      */
     public final static Boolean USE_AUTH = true;
 
+    /** The manager consulted to validate the token a request carries. */
     private final SecurityManager _secMan;
 
     /**

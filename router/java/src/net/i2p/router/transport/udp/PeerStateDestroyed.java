@@ -32,36 +32,53 @@ import net.i2p.util.SimpleTimer2;
  * @since 0.9.57
  */
 class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
+    /** The router context. */
     private final RouterContext _context;
+    /** Logger for the destroyed peer state. */
     private final Log _log;
+    /** The SSU transport we serve. */
     private final UDPTransport _transport;
+    /** The peer's host id. */
     private final RemoteHostId _remoteHostId;
+    /** The MTU for sending to the peer. */
     private final int _mtu;
+    /** Connection id we send with. */
     private final long _sendConnID;
+    /** Connection id we receive with. */
     private final long _rcvConnID;
+    /** Next packet number to send. */
     private final AtomicInteger _packetNumber;
+    /** ChaCha20 state for encrypting sent packets. */
     private final CipherState _sendCha;
+    /** ChaCha20 state for decrypting received packets. */
     private final CipherState _rcvCha;
+    /** First header encryption key for sending. */
     private final byte[] _sendHeaderEncryptKey1;
+    /** First header encryption key for receiving. */
     private final byte[] _rcvHeaderEncryptKey1;
+    /** Second header encryption key for sending. */
     private final byte[] _sendHeaderEncryptKey2;
+    /** Second header encryption key for receiving. */
     private final byte[] _rcvHeaderEncryptKey2;
+    /** Bitfield of received message numbers. */
     private final SSU2Bitfield _receivedMessages;
+    /** Timer scheduling acks and retransmits. */
     private final ACKTimer _ackTimer;
+    /** Timer killing this state when it expires. */
     private final KillTimer _killTimer;
+    /** When the state was destroyed. */
     private final long _destroyedOn;
     /**
      * Redeclares the base class field: zero means no termination ACK is owed,
      * nonzero is when one first became due.
      */
     protected volatile long _wantACKSendSince;
-    // This is the mode we are in.
-    // If this is 1, we have sent a termination ack.
-    // Otherwise, this is the original reason we sent, and may possibly retransmit.
+    /** Reason code for the destroy. */
     private volatile int _destroyReason;
 
+    /** Maximum lifetime of a destroyed state. */
     private static final long MAX_LIFETIME = 2*60*1000L;
-    // retx at 7, 21, 49, 105
+    /** Interval between Destroyed packet retransmits. */
     private static final long TERMINATION_RETX_TIME = 7*1000L;
 
     /**
@@ -153,7 +170,6 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
         _rcvCha.destroy();
     }
 
-    /// begin SSU2Sender interface ///
 
     /**
      * The remote host ID.
@@ -168,9 +184,9 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
      */
     public boolean isIPv6() { return _remoteHostId.getIP().length == 16; }
     /**
-     * The remote IP address.
+     * The peer's IP address, built from its host id.
      *
-     * @return the remote IP address
+     * @return the peer's address
      */
     public InetAddress getRemoteIPAddress() {
         try {
@@ -252,7 +268,6 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
      */
     public byte getFlags() { return 0; }
 
-    /// end SSU2Sender interface ///
 
     /**
      * The inbound connection ID for this session.
@@ -261,6 +276,7 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
      */
     long getRcvConnID() { return _rcvConnID; }
 
+    /** Keeps the state alive while a message is partially received. */
     private synchronized void messagePartiallyReceived() {
         if (_wantACKSendSince <= 0) {
             long now = _context.clock().now();
@@ -358,9 +374,6 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
         }
     }
 
-    /////////////////////////////////////////////////////////
-    // begin payload callbacks
-    /////////////////////////////////////////////////////////
 
     /**
      * Process a received DateTime block; no-op after destruction.
@@ -521,14 +534,12 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
         // No-op - intentionally empty
     }
 
-    /////////////////////////////////////////////////////////
-    // end payload callbacks
-    /////////////////////////////////////////////////////////
 
     /**
      * A timer to send an ack+destroy packet.
      */
     private class ACKTimer extends SimpleTimer2.TimedEvent {
+        /** Delay before the next Destroyed retransmit. */
         private long _delay = TERMINATION_RETX_TIME;
 
         /**

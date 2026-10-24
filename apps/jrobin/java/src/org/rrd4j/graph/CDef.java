@@ -8,6 +8,7 @@ import org.rrd4j.data.DataProcessor;
  * operations and data transformations within the graphing system.
  */
 class CDef extends Source {
+    /** The RPN expression that computes this source's values. */
     private final String rpnExpression;
 
     /**

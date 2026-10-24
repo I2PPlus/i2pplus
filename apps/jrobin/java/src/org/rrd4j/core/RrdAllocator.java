@@ -5,6 +5,7 @@ package org.rrd4j.core;
  *
  */
 public class RrdAllocator {
+    /** Offset of the next free byte in the file. */
     private long allocationPointer = 0L;
 
     /**
@@ -17,7 +18,7 @@ public class RrdAllocator {
     /**
      * Next available byte offset in the allocation space.
      * @param byteCount how many bytes to reserve; must not be negative
-     * @return the next available byte offset in the allocation space
+     * @return the start offset of the reserved space
      */
     long allocate(long byteCount) {
         long pointer = allocationPointer;

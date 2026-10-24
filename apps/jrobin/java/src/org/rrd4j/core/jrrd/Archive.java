@@ -19,8 +19,11 @@ import java.util.Locale;
  */
 public class Archive {
 
+    /** Indexes the CDP fields of an archive. */
     private enum rra_par_en {
+        /** The consolidated primary value. */
         RRA_cdp_xff_val,
+        /** The smoothing coefficient. */
         RRA_hw_alpha
     }
 

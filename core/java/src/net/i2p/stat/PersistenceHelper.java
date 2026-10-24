@@ -13,6 +13,7 @@ import java.util.Properties;
  * must be compatible.
  */
 class PersistenceHelper {
+    /** Line separator of the persisted file. */
     private static final String NL = System.getProperty("line.separator");
 
     /**

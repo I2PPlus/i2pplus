@@ -11,6 +11,7 @@ import org.rrd4j.data.LinearInterpolator;
  */
 public class DataChunk {
 
+    /** Line separator of the text form */
     private static final String NEWLINE = System.getProperty("line.separator");
 
     /** Start time in seconds since epoch */
@@ -30,6 +31,7 @@ public class DataChunk {
 
     /** The data values */
     final double[][] data;
+    /** Number of rows in the chunk. */
     private final int rows;
 
     /** Map datasource name to datasource index */

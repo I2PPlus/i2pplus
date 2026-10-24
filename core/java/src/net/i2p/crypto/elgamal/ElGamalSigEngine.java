@@ -24,6 +24,7 @@ import java.security.SignatureException;
 @Deprecated
 public final class ElGamalSigEngine extends Signature {
     private final MessageDigest digest;
+    /** The key used to sign or verify, set for each operation. */
     private ElGamalKey key;
 
     /**
@@ -75,8 +76,8 @@ public final class ElGamalSigEngine extends Signature {
     }
 
     /**
-     *  ASN.1 R,S.
-     *  @return ASN.1 R,S
+     * Sign the accumulated data.
+     * @return the DER-encoded ASN.1 sequence of the r and s values
      */
     @Override
     protected byte[] engineSign() throws SignatureException {
@@ -155,8 +156,9 @@ public final class ElGamalSigEngine extends Signature {
     }
 
     /**
-     * Nothing, always throws.
-     * @return nothing, always throws
+     * Always throws, parameter access is unsupported.
+     * @return nothing, never returns
+     * @throws UnsupportedOperationException for any parameter name
      * @deprecated
      */
     @Override

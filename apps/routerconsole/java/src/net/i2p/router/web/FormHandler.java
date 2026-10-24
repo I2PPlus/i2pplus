@@ -35,14 +35,19 @@ public abstract class FormHandler {
     protected Map _settings;
     /** Only for multipart/form-data. Warning, parameters are NOT XSS filtered. */
     protected RequestWrapper _requestWrapper;
+    /** The form nonce to check. */
     private String _nonce;
     /** Form action. */
     protected String _action;
     /** Request method. */
     protected String _method;
+    /** The error messages to display. */
     private final List<Message> _errors;
+    /** The notice messages to display. */
     private final List<Message> _notices;
+    /** True once the form was processed. */
     private boolean _processed;
+    /** True when the form input was valid. */
     private boolean _valid;
     /** Output writer. */
     protected Writer _out;
@@ -514,6 +519,7 @@ public abstract class FormHandler {
         _valid = false;
     }
 
+    /** Processes the submitted form. */
     private void process() {
         if (!_processed) {
             if (_valid) {processForm();}
@@ -521,6 +527,12 @@ public abstract class FormHandler {
         }
     }
 
+    /**
+     * Renders the messages as html.
+     *
+     * @param source the messages to render
+     * @return the html text
+     */
     private static String render(List<Message> source) {
         if (source.isEmpty()) {return "";}
         else {
@@ -581,7 +593,9 @@ public abstract class FormHandler {
      * Message class to encapsulate the message text and the canClose flag.
      */
     public static class Message {
+        /** The text of the message. */
         private String text;
+        /** True if the message can be closed. */
         private boolean canClose;
 
         /**
@@ -604,8 +618,8 @@ public abstract class FormHandler {
         }
 
         /**
-         * Whether can close.
-         * @return whether can close
+         * Whether the user may close this form message.
+         * @return true if the message can be closed by the user
          */
         public boolean isCanClose() {
             return canClose;

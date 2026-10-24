@@ -28,8 +28,11 @@ public class UpdateHandler {
      * Log scoped to this handler's class.
      */
     protected Log _log;
+    /** What the form asked for. */
     private String _action;
+    /** Nonce proving the form came from this router. */
     private String _nonce;
+    /** Session the update is being checked on. */
     private HttpSession _session;
 
     /**
@@ -136,6 +139,11 @@ public class UpdateHandler {
         }
     }
 
+    /**
+     * Starts an update of the given kind.
+     *
+     * @param type what to update
+     */
     private void update(UpdateType type) {
         ConsoleUpdateManager mgr = updateManager(_context);
         if (mgr == null) {return;}

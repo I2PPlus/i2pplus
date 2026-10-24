@@ -35,34 +35,63 @@ public class NetDbHelper extends FormHandler {
      */
     public NetDbHelper() {}
 
+    /** Router hash prefix to filter on. */
     private String _routerPrefix;
+    /** Version string to filter on. */
     private String _version;
+    /** Country code to filter on. */
     private String _country;
+    /** Family name to filter on. */
     private String _family;
+    /** Capability string to filter on. */
     private String _caps;
+    /** IP address to filter on. */
     private String _ip;
+    /** Sybil classification to filter on. */
     private String _sybil;
+    /** MTU value to filter on. */
     private String _mtu;
+    /** SSU capability string to filter on. */
     private String _ssucaps;
+    /** IPv6 flag to filter on. */
     private String _ipv6;
+    /** Transport name to filter on. */
     private String _transport;
+    /** Hostname to filter on. */
     private String _hostname;
+    /** Column name to sort by. */
     private String _sort;
+    /** Nonzero to show the full summary view. */
     private int _full;
+    /** Port number to filter on. */
     private int _port;
+    /** Cost value to filter on. */
     private int _cost;
+    /** Page number being displayed. */
     private int _page;
+    /** Display mode of the peer list. */
     private int _mode;
+    /** Nonzero to filter on high ports. */
     private int _highPort;
+    /** Intro key count to filter on. */
     private int _icount;
+    /** Publication date to filter on. */
     private long _date;
+    /** Rows shown per page. */
     private int _limit = DEFAULT_LIMIT;
+    /** True to include lease sets in the search. */
     private boolean _lease;
+    /** True to show client-capable routers only. */
     private boolean _clientOnly;
+    /** True for extra search logging. */
     private boolean _debug;
+    /** Signature type to filter on. */
     private SigType _type;
+    /** Encryption type to filter on. */
     private EncType _etype;
+    /** True when the POST values parsed cleanly. */
     private boolean _postOK;
+    /** Default rows shown per page. */
     private static final int DEFAULT_LIMIT = SystemVersion.isSlow() ? 100 : 200;
     /**
      * Whether the router is a floodfill router.
@@ -71,6 +100,7 @@ public class NetDbHelper extends FormHandler {
      */
     public boolean isFloodfill() {return _context.netDb().floodfillEnabled();}
 
+    /** Column titles of the netdb peer list. */
     private static final String[] titles =
                                           {_x("Summary"),                       // 0  -
                                            _x("Local Router"),                  // 1  - r=.
@@ -87,6 +117,7 @@ public class NetDbHelper extends FormHandler {
                                            _x("Sybil Analysis"),                // 12 - f=3
                                           };
 
+    /** Column link targets of the netdb peer list. */
     private static final String[] links =
                                            {"",                                  // 0
                                             "?show=local",                       // 1

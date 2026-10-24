@@ -26,7 +26,9 @@ import net.i2p.util.Addresses;
  * Ref: RFC 1928.
  */
 public class SOCKSHeader {
+    /** The SOCKS UDP request header. */
     private byte[] header;
+    /** Fixed bytes a SOCKS UDP associate request starts with */
     private static final byte[] beg = {0,0,0,3,60};
 
     /**

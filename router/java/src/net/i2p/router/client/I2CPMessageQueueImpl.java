@@ -15,7 +15,9 @@ import net.i2p.internal.I2CPMessageQueue;
  * @since 0.8.3
  */
 class I2CPMessageQueueImpl extends I2CPMessageQueue {
+    /** Queue messages from the client arrive on. */
     private final BlockingQueue<I2CPMessage> _in;
+    /** Queue messages to the client are written to. */
     private final BlockingQueue<I2CPMessage> _out;
     /**
      * Wrap a pair of queues as an I2CP message queue.

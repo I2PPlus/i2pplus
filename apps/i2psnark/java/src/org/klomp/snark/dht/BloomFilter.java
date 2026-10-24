@@ -32,6 +32,7 @@ class BloomFilter {
     /** Size of the filter in bytes, as specified in BEP 33. */
     static final int SIZE = M / 8;
 
+    /** The filter's bits. */
     private final byte[] _bloom;
 
     /** Create a new empty filter. */
@@ -81,10 +82,21 @@ class BloomFilter {
         return isSet(index1 % M) && isSet(index2 % M);
     }
 
+    /**
+     * Sets the bit at an index, spanning bytes as needed.
+     *
+     * @param index the bit position
+     */
     private void setBit(int index) {
         _bloom[index / 8] |= (byte) (0x01 << (index % 8));
     }
 
+    /**
+     * True if the bit at an index is set.
+     *
+     * @param index the bit position
+     * @return true if that bit is set
+     */
     private boolean isSet(int index) {
         return (_bloom[index / 8] & (0x01 << (index % 8))) != 0;
     }

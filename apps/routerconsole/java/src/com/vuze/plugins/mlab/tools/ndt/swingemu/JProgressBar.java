@@ -32,6 +32,7 @@ JProgressBar
 	{
 	}
 
+	/** True while the bar animates without a known value. */
 	private boolean indeterminate;
 
 	/**

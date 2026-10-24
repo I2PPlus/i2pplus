@@ -55,11 +55,14 @@ import net.i2p.util.Log;
  */
 class SAMv3StreamSession extends SAMStreamSession implements Session {
 
+    /** Buffer size for the stream forwarding, in bytes. */
     private static final int BUFFER_SIZE = 4096;
+    /** Largest accept queue allowed. */
     private static final int MAX_ACCEPT_QUEUE = 16384;
     /** Seconds to wait for a queued socket before returning null. */
     private static final int ACCEPT_POLL_TIMEOUT_SECS = 60;
 
+    /** Lock for the socket server state. */
     private final Object socketServerLock = new Object();
     /** This is ONLY set for FORWARD, not for ACCEPT. */
     private I2PServerSocket socketServer;
@@ -68,8 +71,10 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
     /** For subsession only, null otherwise. */
     private final LinkedBlockingQueue<I2PSocket> _acceptQueue;
 
+    /** Shared factory for the SSL forwarder sockets. */
     private static I2PSSLSocketFactory sslSocketFactory;
 
+    /** Nickname of the session, for the logs. */
     private final String nick;
 
     /**
@@ -236,12 +241,26 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
      * SAM client.
      */
     private class ConnectTask implements Runnable {
+        /** The handler that started the connect. */
         private final SAMv3Handler handler;
+        /** The destination to connect to. */
         private final Destination dest;
+        /** Socket options for the connect. */
         private final I2PSocketOptions opts;
+        /** True for extra logging. */
         private final boolean verbose;
+        /** Nickname of the session, for the logs. */
         private final String nick;
 
+        /**
+         * Builds the connect task.
+         *
+         * @param handler the handler that started the connect
+         * @param dest the destination to connect to
+         * @param opts the socket options
+         * @param verbose true for extra logging
+         * @param nick the session nickname, for the logs
+         */
         ConnectTask(SAMv3Handler handler, Destination dest, I2PSocketOptions opts,
                     boolean verbose, String nick) {
             this.handler = handler;
@@ -321,6 +340,12 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
             }
         }
 
+        /**
+         * Sends an error reply to the client.
+         *
+         * @param status the error status to send
+         * @param e the exception to log, may be null
+         */
         private void reportError(String status, Exception e) {
             if (_log.shouldWarn())
                 _log.warn("STREAM CONNECT failed: " + status + " - " + e.getClass().getName() + ": " + e.getMessage());
@@ -507,12 +532,26 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
      * @since 0.9.60
      */
     private class SocketForwarder implements Runnable {
+        /** The clearnet host to forward to. */
         private final String host;
+        /** The clearnet port to forward to. */
         private final int port;
+        /** True to connect to the host with SSL. */
         private final boolean isSSL;
+        /** True for extra logging. */
         private final boolean verbose;
+        /** True to report the ports in the replies. */
         private final boolean sendPorts;
 
+        /**
+         * Builds the forwarder for one clearnet connection.
+         *
+         * @param host the clearnet host to forward to
+         * @param port the clearnet port to forward to
+         * @param isSSL true to connect to the host with SSL
+         * @param verbose true for extra logging
+         * @param sendPorts true to report the ports in the replies
+         */
         SocketForwarder(String host, int port, boolean isSSL, boolean verbose, boolean sendPorts) {
             this.host = host;
             this.port = port;
@@ -638,11 +677,17 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
      * @since 0.9.60
      */
     private static class Pipe implements Runnable, Handler {
+        /** Channel the data is read from. */
         private final ReadableByteChannel in;
+        /** Channel the data is written to. */
         private final WritableByteChannel out;
+        /** Buffer used for the copies. */
         private final ByteBuffer buf;
+        /** The bridge that started the session. */
         private final SAMBridge bridge;
+        /** Nickname of the session, for the logs. */
         private final String nick;
+        /** When data last flowed in either direction. */
         private long lastTouch;
 
         /**

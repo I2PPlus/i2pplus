@@ -54,6 +54,8 @@ public class ActionResponse extends ControlResponse {
     }
 
     /**
+     * Creates the response node for one action.
+     *
      * @param action the action to create response node for
      * @return the created response node
      */
@@ -85,6 +87,8 @@ public class ActionResponse extends ControlResponse {
     ////////////////////////////////////////////////
 
     /**
+     * Gets the completed action response node.
+     *
      * @return the action response node
      */
     private Node getActionResponseNode() {

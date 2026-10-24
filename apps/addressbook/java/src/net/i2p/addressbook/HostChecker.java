@@ -74,31 +74,54 @@ import net.i2p.util.PortMapper;
  */
 public class HostChecker {
 
+    /** Sorts ping results by timestamp, oldest first. */
     private static final Comparator<Map.Entry<String, PingResult>> PING_TIMESTAMP_COMPARATOR =
             Comparator.comparingLong((Map.Entry<String, PingResult> e) -> e.getValue().timestamp);
 
+    /** The app context. */
     private final I2PAppContext _context;
+    /** Logger for the host checks. */
     private final Log _log;
+    /** Naming service holding the hosts to check. */
     private final NamingService _namingService;
+    /** Executor running the ping cycles. */
     private final ScheduledExecutorService _scheduler;
+    /** Latest ping result by host name. */
     private final Map<String, PingResult> _pingResults;
+    /** Category assigned to each host. */
     private Map<String, String> _hostCategories;
+    /** True while the checker is running. */
     private final AtomicBoolean _running;
+    /** Whether the category list has been downloaded. */
     private final AtomicBoolean _categoriesDownloaded;
+    /** Whether the last category download succeeded. */
     private final AtomicBoolean _categoriesDownloadSuccessful;
+    /** True while a ping cycle is running. */
     private final AtomicBoolean _cycleInProgress;
+    /** File storing the ping results. */
     private final File _hostsCheckFile;
+    /** File storing the host categories. */
     private final File _categoriesFile;
+    /** File listing hosts never to ping. */
     private final File _blacklistFile;
+    /** File holding the checker's settings. */
     private final File _configFile;
+    /** Limits how many hosts ping at once. */
     private final DynamicSemaphore _pingSemaphore;
+    /** Shared socket manager for the pings. */
     private volatile I2PSocketManager _sharedPingSocketManager;
+    /** Hosts excluded from checking. */
     private Set<String> _blacklistedHosts;
+    /** Modification time of the blacklist file. */
     private volatile long _blacklistLastModified;
+    /** Modification time of the config file. */
     private volatile long _configLastModified;
+    /** The scheduled ping task, kept for cancellation. */
     private volatile ScheduledFuture<?> _pingTaskFuture;
+    /** Category download attempts so far. */
     private int _categoryRetryCount = 0;
 
+    /** Per-thread date format for the result display. */
     private static final ThreadLocal<DateFormat> _DATE_FORMAT = new ThreadLocal<DateFormat>() {
         @Override
         protected DateFormat initialValue() {
@@ -106,9 +129,11 @@ public class HostChecker {
         }
     };
 
-    // Configuration defaults
+    /** Default interval between ping cycles, four hours. */
     private static final long DEFAULT_PING_INTERVAL = 4 * 60 * 60 * 1000L; // 4 hours
+    /** Default timeout for one ping is 60 seconds. */
     private static final long DEFAULT_PING_TIMEOUT = 60 * 1000L; // 60 seconds
+    /** Default hosts pinged at once. */
     private static final int DEFAULT_MAX_CONCURRENT = 16;
     /**
      * Cap on outbound tunnels for the shared ping session; pings are a
@@ -118,8 +143,9 @@ public class HostChecker {
     /** A host confirmed up within this window stays up when its LeaseSet can't be fetched this cycle. */
     private static final long KEEP_UP_MS = 24 * 60 * 60 * 1000L;
 
-    // Configuration property names
+    /** Config key for the ping cycle interval. */
     private static final String PROP_PING_INTERVAL = "pingInterval";
+    /** Config key for the concurrent ping limit. */
     private static final String PROP_MAX_CONCURRENT = "maxConcurrentPings";
 
     /**
@@ -251,29 +277,34 @@ public class HostChecker {
         }
     }
 
-    // Startup delay to allow router and socket manager to fully initialize
+    /** Wait after startup before the first ping cycle. */
     private static final long STARTUP_DELAY_MS = 60 * 1000L; // 1 minute
 
-    // Additional delay for category download to allow HTTP proxy to be ready
+    /** Wait before downloading the category list. */
     private static final long CATEGORY_DOWNLOAD_DELAY_MS = 90 * 1000L; // 90 seconds
 
-    // Category download timeout settings
+    /** Connect timeout for the category download. */
     private static final int CATEGORY_CONNECT_TIMEOUT = 60 * 1000; // 1 minute
+    /** Inactivity timeout for the category download. */
     private static final int CATEGORY_INACTIVITY_TIMEOUT = 60 * 1000; // 1 minute
+    /** Total timeout for the category download. */
     private static final int CATEGORY_TOTAL_TIMEOUT = 120 * 1000; // 2 minutes
 
-    // Category retry settings
+    /** Wait before retrying a failed category download. */
     private static final long CATEGORY_RETRY_INTERVAL = 10 * 60 * 1000L; // 10 minutes
+    /** Splits a category line on commas. */
     private static final Pattern COMMA_SPLIT = Pattern.compile(",");
 
-    // Bound on waiting for a single ping task, covering the internal lease-set lookup,
-    // ping, and EepHead fallback plus semaphore wait, so a stalled task cannot hang
-    // the whole update cycle forever.
+    /** Limit on one ping cycle before it is cancelled. */
     private static final long PING_TASK_TIMEOUT = 5 * 60 * 1000L; // 5 minutes
 
+    /** Ping cycle interval in effect right now. */
     private volatile long _pingInterval = DEFAULT_PING_INTERVAL;
+    /** Timeout for one ping, in effect right now. */
     private long _pingTimeout = DEFAULT_PING_TIMEOUT;
+    /** Hosts pinged at once, in effect right now. */
     private volatile int _maxConcurrent = DEFAULT_MAX_CONCURRENT;
+    /** Whether a lease set reply counts as a successful ping. */
     private boolean _useLeaseSetCheck = true;
 
     /**
@@ -339,10 +370,18 @@ public class HostChecker {
      * never in-flight ones.
      */
     private static final class DynamicSemaphore {
+        /** Lock guarding the permit counts. */
         private final Object _lock = new Object();
+        /** Permits currently available. */
         private int _permits;
+        /** Permits allowed after a resize. */
         private volatile int _maxPermits;
 
+        /**
+         * Creates a semaphore that can be resized.
+         *
+         * @param maxPermits the initial permit limit
+         */
         DynamicSemaphore(int maxPermits) {
             _maxPermits = maxPermits;
         }
@@ -1807,6 +1846,8 @@ public class HostChecker {
      * Task to retry category downloads if they initially failed.
      */
     private class CategoryRetryTask implements Runnable {
+        /** Retries the subscriptions of one category later. */
+        private CategoryRetryTask() {}
         @Override
         public void run() {
             Thread.currentThread().setName("CatRetry");
@@ -2111,6 +2152,8 @@ public class HostChecker {
      * Task to ping all destinations in address book.
      */
     private class PingTask implements Runnable {
+        /** Pings one host to check it is still up. */
+        private PingTask() {}
         @Override
         public void run() {
             // Set custom thread name for better debugging
@@ -2305,6 +2348,7 @@ public class HostChecker {
         }
     }
 
+    /** Reads the blacklisted hosts from the file. */
     private void loadBlacklist() {
         try {
             if (!_blacklistFile.exists()) {
@@ -2342,6 +2386,12 @@ public class HostChecker {
         }
     }
 
+    /**
+     * Checks whether a host is excluded from checking.
+     *
+     * @param hostname the host to check
+     * @return true if the host is blacklisted
+     */
     private boolean isHostBlacklisted(String hostname) {
         try {
             loadBlacklist();

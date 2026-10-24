@@ -32,7 +32,9 @@ final class ECUtil {
      */
     ECUtil() {}
 
+    /** The constant 2. */
     private static final BigInteger TWO = new BigInteger("2");
+    /** The constant 3. */
     private static final BigInteger THREE = new BigInteger("3");
 
     /**
@@ -71,6 +73,14 @@ final class ECUtil {
         return r;
     }
 
+    /**
+     * Adds two points on a curve.
+     *
+     * @param r the first point
+     * @param s the second point
+     * @param curve the curve they lie on
+     * @return the sum of the two points
+     */
     private static ECPoint addPoint(ECPoint r, ECPoint s, EllipticCurve curve) {
         if (r.equals(s)) return doublePoint(r, curve);
         else if (r.equals(ECPoint.POINT_INFINITY)) return s;
@@ -86,6 +96,13 @@ final class ECUtil {
         return new ECPoint(xOut, yOut);
     }
 
+    /**
+     * Doubles a point on a curve.
+     *
+     * @param r the point to double
+     * @param curve the curve it lies on
+     * @return twice the point
+     */
     private static ECPoint doublePoint(ECPoint r, EllipticCurve curve) {
         if (r.equals(ECPoint.POINT_INFINITY)) return r;
         BigInteger slope = (r.getAffineX().pow(2)).multiply(THREE);

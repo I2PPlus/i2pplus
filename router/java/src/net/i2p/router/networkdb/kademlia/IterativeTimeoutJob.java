@@ -23,7 +23,9 @@ import net.i2p.router.RouterContext;
  * @since 0.8.9
  */
 class IterativeTimeoutJob extends JobImpl {
+    /** The search this timeout belongs to. */
     private final IterativeSearchJob _search;
+    /** The peer that did not answer. */
     private final Hash _peer;
 
     /**

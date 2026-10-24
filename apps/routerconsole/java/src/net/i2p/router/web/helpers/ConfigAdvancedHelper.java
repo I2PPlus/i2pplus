@@ -29,8 +29,10 @@ public class ConfigAdvancedHelper extends HelperBase {
      * The floodfill configuration property.
      */
     static final String PROP_FLOODFILL_PARTICIPANT = "router.floodfillParticipant";
+    /** Prefix of the per-user authentication properties. */
     private static final String PROP_AUTH_PFX = RouterConsoleRunner.PROP_CONSOLE_PW + '.';
 
+    /** Properties never shown on the page. */
     private static final Set<String> _hideKeys;
     static {
         // do not show these settings in the UI
@@ -45,6 +47,7 @@ public class ConfigAdvancedHelper extends HelperBase {
         _hideKeys = new HashSet<>(Arrays.asList(keys));
     }
 
+    /** Property key to the heading shown above it. */
     private static final Map<String, String> _headers = new HashMap<>(16);
     static {
         _headers.put("crypto", "Crypto");

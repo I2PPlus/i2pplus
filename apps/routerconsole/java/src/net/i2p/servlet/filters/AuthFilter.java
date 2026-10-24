@@ -29,14 +29,22 @@ import net.i2p.util.Log;
 public class AuthFilter implements Filter {
     /** Create an instance; the servlet container calls this with no arguments. */
     public AuthFilter() {}
+    /** Logger for the authentication filter. */
     private static final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(AuthFilter.class);
+    /** Config key for the authentication type. */
     private static final String PROP_AUTH_TYPE = "routerconsole.auth.type";
+    /** Auth type value selecting the custom handler. */
     private static final String AUTH_TYPE_CUSTOM = "custom";
+    /** Config key enabling the password authentication. */
     private static final String PROP_PW_ENABLE = "routerconsole.auth.enable";
+    /** Config key requiring the login for every page. */
     private static final String PROP_ENFORCE_LOGIN = "routerconsole.enforceLogin";
+    /** Theme used when none is configured. */
     private static final String DEFAULT_THEME = "dark";
 
+    /** The paths that need no authentication. */
     private static final Set<String> PUBLIC_PATHS = new HashSet<>();
+    /** The files that need no authentication. */
     private static final Set<String> PUBLIC_FILES = new HashSet<>();
     static {
         PUBLIC_PATHS.add("/index.jsp");
@@ -128,6 +136,12 @@ if ("/prefs".equals(path)) {
         resp.sendRedirect(loginUrl);
     }
 
+    /**
+     * Checks whether a path needs no authentication.
+     *
+     * @param path the request path
+     * @return true if the path is public
+     */
     private boolean isPublicPath(String path) {
         for (String publicPath : PUBLIC_PATHS) {
             if (path.equals(publicPath) || path.startsWith(publicPath)) {
@@ -142,6 +156,11 @@ if ("/prefs".equals(path)) {
         return false;
     }
 
+    /**
+     * Reads the theme in use now.
+     *
+     * @return the theme name
+     */
     private String getActiveTheme() {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         if (ctx instanceof RouterContext) {
@@ -153,6 +172,12 @@ if ("/prefs".equals(path)) {
         return DEFAULT_THEME;
     }
 
+    /**
+     * Checks whether any console password is set.
+     *
+     * @param ctx the router context
+     * @return true if a password exists
+     */
     private boolean hasAnyPassword(RouterContext ctx) {
         ConsolePasswordManager mgr = new ConsolePasswordManager(ctx);
         boolean hasMD5 = !mgr.getMD5(RouterConsoleRunner.PROP_CONSOLE_PW).isEmpty();
@@ -172,6 +197,12 @@ if ("/prefs".equals(path)) {
         return false;
     }
 
+    /**
+     * Returns the session cookie of the request.
+     *
+     * @param req the request to check
+     * @return the session id, null if absent
+     */
     private String getSessionCookie(HttpServletRequest req) {
         Cookie[] cookies = req.getCookies();
         if (cookies == null) return null;
@@ -183,6 +214,14 @@ if ("/prefs".equals(path)) {
         return null;
     }
 
+    /**
+     * Authenticates the basic auth header of the request.
+     *
+     * @param req the request to authenticate
+     * @param resp the response to send the challenge to
+     * @param ctx the router context
+     * @return the user name, null if the credentials fail
+     */
     private String authenticateBasicAuth(HttpServletRequest req, HttpServletResponse resp, RouterContext ctx) {
         String authHeader = req.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Basic ")) {
@@ -213,6 +252,14 @@ if ("/prefs".equals(path)) {
         return null;
     }
 
+    /**
+     * Creates a login session and sends its cookie.
+     *
+     * @param req the request to log in
+     * @param resp the response to set the cookie on
+     * @param username the user to log in
+     * @return the user name of the session
+     */
     private String createSessionAndSetCookie(HttpServletRequest req, HttpServletResponse resp, String username) {
         RouterContext ctx = (RouterContext) I2PAppContext.getGlobalContext();
         boolean hasPasswords = hasAnyPassword(ctx);

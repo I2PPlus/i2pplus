@@ -22,13 +22,11 @@ class OutboundEstablishState {
     protected final RouterContext _context;
     /** Logger. */
     protected final Log _log;
-    // SessionRequest message
-    /** Bob's IP. */
+    /** Bob's IP, from the SessionRequest message. */
     protected byte[] _bobIP;
     /** Bob's port. */
     protected int _bobPort;
-    // SessionCreated message
-    /** Alice's IP. */
+    /** Alice's IP, from the SessionCreated message. */
     protected byte[] _aliceIP;
     /** Alice's port. */
     protected int _alicePort;
@@ -36,11 +34,8 @@ class OutboundEstablishState {
     protected long _receivedRelayTag;
     /** Received signed on time. */
     private long _receivedSignedOnTime;
-    // includes trailing padding to mod 16
-    // SessionConfirmed messages
-    /** Sent signed on time. */
+    /** Sent signed on time, from the SessionConfirmed message. */
     private long _sentSignedOnTime;
-    // general status
     /** Establish begin time. */
     protected final long _establishBegin;
     /** Last send time. */
@@ -67,19 +62,16 @@ class OutboundEstablishState {
     private long _introductionNonce;
     /** Whether first message is our DSM. */
     private boolean _isFirstMessageOurDSM;
-    // intro
     /** Remote address. */
     private final UDPAddress _remoteAddress;
     /** Whether establishment complete. */
     private boolean _complete;
-    // counts for backoff
     /** Confirmed sent count. */
     private int _confirmedSentCount;
     /** Request sent count. */
     protected int _requestSentCount;
     /** Intro sent count. */
     private int _introSentCount;
-    // Times for timeout
     /** Confirmed sent time. */
     private long _confirmedSentTime;
     /** Request sent time. */
@@ -147,6 +139,10 @@ class OutboundEstablishState {
     /** Max delay including backoff (15 seconds). */
     protected static final long MAX_DELAY = 15*1000L;
 
+    /**
+     * Milliseconds before a peer is contacted again so the firewall
+     * hole opens
+     */
     private static final long WAIT_FOR_HOLE_PUNCH_DELAY = 500;
 
     /**

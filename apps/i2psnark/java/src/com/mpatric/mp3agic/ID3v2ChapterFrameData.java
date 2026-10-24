@@ -4,19 +4,41 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
+/** Data of an ID3v2 chapter frame. */
 public class ID3v2ChapterFrameData extends AbstractID3v2FrameData {
 
+    /** The chapter id text. */
     protected String id;
+    /** Chapter start time, in ms. */
     protected int startTime;
+    /** Chapter end time, in ms. */
     protected int endTime;
+    /** Chapter start offset. */
     protected int startOffset;
+    /** Chapter end offset. */
     protected int endOffset;
+    /** The chapter's subframes. */
     protected ArrayList<ID3v2Frame> subframes = new ArrayList<>();
 
+    /**
+     * Builds an empty chapter frame body.
+     *
+     * @param unsynchronisation true if the frame is unsynchronised
+     */
     public ID3v2ChapterFrameData(boolean unsynchronisation) {
         super(unsynchronisation);
     }
 
+    /**
+     * Builds a chapter frame body from the field values.
+     *
+     * @param unsynchronisation true if the frame is unsynchronised
+     * @param id the chapter id text
+     * @param startTime the start time, in ms
+     * @param endTime the end time, in ms
+     * @param startOffset the start offset
+     * @param endOffset the end offset
+     */
     public ID3v2ChapterFrameData(
             boolean unsynchronisation,
             String id,
@@ -32,6 +54,13 @@ public class ID3v2ChapterFrameData extends AbstractID3v2FrameData {
         this.endOffset = endOffset;
     }
 
+    /**
+     * Parses a chapter frame body from the frame bytes.
+     *
+     * @param unsynchronisation true if the frame is unsynchronised
+     * @param bytes the packed frame body
+     * @throws InvalidDataException if the bytes are not a chapter frame
+     */
     public ID3v2ChapterFrameData(boolean unsynchronisation, byte[] bytes)
             throws InvalidDataException {
         super(unsynchronisation);
@@ -57,6 +86,12 @@ public class ID3v2ChapterFrameData extends AbstractID3v2FrameData {
         }
     }
 
+    /**
+     * Adds one subframe to the chapter.
+     *
+     * @param id the subframe id
+     * @param frame the subframe data
+     */
     public void addSubframe(String id, AbstractID3v2FrameData frame) {
         subframes.add(new ID3v2Frame(id, frame.toBytes()));
     }
@@ -82,50 +117,110 @@ public class ID3v2ChapterFrameData extends AbstractID3v2FrameData {
         return bb.array();
     }
 
+    /**
+     * Returns the chapter id text.
+     *
+     * @return the chapter id text
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * Sets the chapter id text.
+     *
+     * @param id the id to set
+     */
     public void setId(String id) {
         this.id = id;
     }
 
+    /**
+     * Returns the chapter start time.
+     *
+     * @return the time, in ms
+     */
     public int getStartTime() {
         return startTime;
     }
 
+    /**
+     * Sets the chapter start time.
+     *
+     * @param startTime the time, in ms
+     */
     public void setStartTime(int startTime) {
         this.startTime = startTime;
     }
 
+    /**
+     * Returns the chapter end time.
+     *
+     * @return the time, in ms
+     */
     public int getEndTime() {
         return endTime;
     }
 
+    /**
+     * Sets the chapter end time.
+     *
+     * @param endTime the time, in ms
+     */
     public void setEndTime(int endTime) {
         this.endTime = endTime;
     }
 
+    /**
+     * Returns the chapter start offset.
+     *
+     * @return the start offset
+     */
     public int getStartOffset() {
         return startOffset;
     }
 
+    /**
+     * Sets the chapter start offset.
+     *
+     * @param startOffset the start offset
+     */
     public void setStartOffset(int startOffset) {
         this.startOffset = startOffset;
     }
 
+    /**
+     * Returns the chapter end offset.
+     *
+     * @return the end offset
+     */
     public int getEndOffset() {
         return endOffset;
     }
 
+    /**
+     * Sets the chapter end offset.
+     *
+     * @param endOffset the end offset
+     */
     public void setEndOffset(int endOffset) {
         this.endOffset = endOffset;
     }
 
+    /**
+     * Returns the chapter's subframes.
+     *
+     * @return the chapter's subframes
+     */
     public ArrayList<ID3v2Frame> getSubframes() {
         return subframes;
     }
 
+    /**
+     * Sets the chapter's subframes.
+     *
+     * @param subframes the subframes to set
+     */
     public void setSubframes(ArrayList<ID3v2Frame> subframes) {
         this.subframes = subframes;
     }

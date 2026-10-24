@@ -21,12 +21,16 @@ package com.google.zxing.qrcode.encoder;
  */
 final class MaskUtil {
 
-  // Penalty weights from section 6.8.2.1
+  /** Penalty weight for runs of five like modules, spec section 6.8.2.1. */
   private static final int N1 = 3;
+  /** Penalty weight for 2x2 blocks of like modules. */
   private static final int N2 = 3;
+  /** Penalty weight for finder-like patterns. */
   private static final int N3 = 40;
+  /** Penalty weight for dark-light imbalance. */
   private static final int N4 = 10;
 
+  /** Utility class, not intended for instantiation. */
   private MaskUtil() {
     // do nothing
   }
@@ -110,6 +114,14 @@ final class MaskUtil {
     return numPenalties * N3;
   }
 
+  /**
+   * Checks whether a stretch of one row is all white.
+   *
+   * @param rowArray the row's modules
+   * @param from the first column to check
+   * @param to the last column to check
+   * @return true if every module in the stretch is white
+   */
   private static boolean isWhiteHorizontal(byte[] rowArray, int from, int to) {
     from = Math.max(from, 0);
     to = Math.min(to, rowArray.length);
@@ -121,6 +133,15 @@ final class MaskUtil {
     return true;
   }
 
+  /**
+   * Checks whether a stretch of one column is all white.
+   *
+   * @param array the symbol's rows
+   * @param col the column to check
+   * @param from the first row to check
+   * @param to the last row to check
+   * @return true if every module in the stretch is white
+   */
   private static boolean isWhiteVertical(byte[][] array, int col, int from, int to) {
     from = Math.max(from, 0);
     to = Math.min(to, array.length);

@@ -7,14 +7,6 @@ import net.i2p.router.JobImpl;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 
-/*
- * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain
- * with no warranty of any kind, either expressed or implied.
- * It probably won't make your computer catch on fire, or eat
- * your children, but it might.  Use at your own risk.
- *
- */
 
 /**
  * Processes DatabaseSearchReplyMessage responses from floodfill peers.
@@ -32,13 +24,21 @@ import net.i2p.util.Log;
  * @since 0.9.16
  */
 class SearchReplyJob extends JobImpl {
+    /** The search reply being processed. */
     private final DatabaseSearchReplyMessage _msg;
+    /** The log for the reply job. */
     private final Log _log;
+    /** The peer that sent the reply. */
     private final Hash _peer;
+    /** Peers seen in the reply. */
     private int _seenPeers;
+    /** New peers added from the reply. */
     private int _newPeers;
+    /** Duplicate peers in the reply. */
     private int _duplicatePeers;
+    /** How long the search took. */
     private final long _duration;
+    /** The search job this reply answers. */
     private final SearchJob _searchJob;
 
     /**
@@ -85,6 +85,11 @@ class SearchReplyJob extends JobImpl {
         if (_newPeers > 0) {_searchJob.newPeersFound(_newPeers);}
     }
 
+    /**
+     * Processes one peer of the reply.
+     *
+     * @param curIndex the index of the peer
+     */
     private void processPeer(int curIndex) {
             Hash peer = _msg.getReply(curIndex);
 

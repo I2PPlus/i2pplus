@@ -4,13 +4,19 @@ package org.bouncycastle.crypto.digests;
 import org.bouncycastle.crypto.CryptoServicePurpose;
 
 /**
- * implementation of SHA-3 based on following KeccakNISTInterface.c from <a href="https://keccak.team/">keccak.team</a>
+ * Implementation of SHA-3 based on following KeccakNISTInterface.c from <a href="https://keccak.team/">keccak.team</a>
  * <p>
  * Following the naming conventions used in the C source code to enable easy review of the implementation.
  */
 public class SHA3Digest
     extends KeccakDigest
 {
+    /**
+     * Rejects a bit length that is not a multiple of 8.
+     *
+     * @param bitLength the length to check
+     * @return the length, if valid
+     */
     private static int checkBitLength(int bitLength)
     {
         switch (bitLength)

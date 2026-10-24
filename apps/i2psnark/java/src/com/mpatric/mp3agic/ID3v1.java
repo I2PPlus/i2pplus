@@ -1,5 +1,9 @@
 package com.mpatric.mp3agic;
 
+/**
+ * Accessors for the ID3v1 tag fields, inherited by the
+ * ID3v2 tag types.
+ */
 public interface ID3v1 {
 
     /**

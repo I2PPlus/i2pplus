@@ -35,18 +35,31 @@ import net.i2p.util.Log;
  * Optimized for high-latency I2P connections with pipelining and idle timeout management.
  */
 public class POP3MailBox implements NewMailListener {
+    /** The mail server host. */
     private final String host;
+    /** The login user name. */
     private final String user;
+    /** The login password. */
     private final String pass;
+    /** Logger for the mailbox. */
     private final Log _log;
+    /** Last line received from the server. */
     private String lastLine;
+    /** Last error line received, null if none. */
     private String lastError;
+    /** The mail server port. */
     private final int port;
+    /** Messages the server reported. */
     private int mails;
+    /** True while connected to the server. */
     private boolean connected;
+    /** True once the server capabilities are known. */
     private boolean gotCAPA;
+    /** True if the server supports pipelining. */
     private boolean supportsPipelining;
+    /** True if the server supports the TOP command. */
     private boolean supportsTOP;
+    /** True if the server supports the UIDL command. */
     private boolean supportsUIDL;
 
     /** ID to size. */
@@ -54,16 +67,22 @@ public class POP3MailBox implements NewMailListener {
     /** UIDL to ID. */
     private final HashMap<String, Integer> uidlToID;
 
+    /** The connection to the server, null while closed. */
     private Socket socket;
+    /** When a webmail request last used the mailbox. */
     private final AtomicLong lastActive;
+    /** When the mailbox was last checked for new mail. */
     private final AtomicLong lastChecked;
 
+    /** Lock for the mailbox operations. */
     private final Object synchronizer;
+    /** Deletes the mailbox when it goes idle. */
     private final DelayedDeleter delayedDeleter;
-    // instantiated after first successful connection
+    /** Checker polling for new mail in the background. */
     private BackgroundChecker backgroundChecker;
-    // instantiated after every successful connection
+    /** Timer closing the connection when idle. */
     private IdleCloser idleCloser;
+    /** Listener notified of new mail, may be null. */
     private volatile NewMailListener newMailListener;
 
     /**
@@ -550,6 +569,7 @@ public class POP3MailBox implements NewMailListener {
      * @since 0.9.34
      */
     private class ConnectRunner implements Runnable {
+        /** The listener being notified. */
         private final NewMailListener _nml;
 
         /**
@@ -573,6 +593,7 @@ public class POP3MailBox implements NewMailListener {
      * @since 0.9.34
      */
     private class RecheckRunner implements Runnable {
+        /** The listener being removed. */
         private final NewMailListener _nml;
 
         /**
@@ -589,6 +610,11 @@ public class POP3MailBox implements NewMailListener {
             finally {_nml.foundNewMail(result);}
         }
 
+        /**
+         * Checks the server for new messages.
+         *
+         * @return true if new mail was found
+         */
         private boolean check() {
             boolean result = false;
             try {result = doCheckMail();}
@@ -1308,15 +1334,19 @@ public class POP3MailBox implements NewMailListener {
      * @since 0.9.13
      */
     private static class SendRecv {
+        /** The command line to send. */
         public final String send;
+        /** How to read the command's response. */
         public final Mode mode;
+        /** The single-line response, when read. */
         public String response;
         /** True for success. */
         public boolean result;
         /** Buffer holding the returned lines, non-null in LS mode only. */
         public final Buffer rb;
+        /** The multi-line response, when read. */
         public List<String> ls;
-        // to remember things
+        /** Caller's object carried with the command. */
         public Object savedObject;
 
         /**

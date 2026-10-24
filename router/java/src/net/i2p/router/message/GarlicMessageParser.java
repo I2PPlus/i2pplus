@@ -28,7 +28,9 @@ import net.i2p.util.Log;
  * Public as it's now in the RouterContext.
  */
 public class GarlicMessageParser {
+    /** Logger for this class. */
     private final Log _log;
+    /** The router context the parser runs in. */
     private final RouterContext _context;
 
     /**
@@ -52,7 +54,7 @@ public class GarlicMessageParser {
      * Supports ELGAMAL_2048, ECIES_X25519, and PQ.
      *
      * @param message the garlic message to decrypt
-     * @param encryptionKey either type
+     * @param encryptionKey an ElGamal or ECIES_X25519 key
      * @param skm use tags from this session key manager
      * @return null on error
      */

@@ -55,12 +55,16 @@ public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sin
     /** The logging facility the owning tunnel reports through. */
     protected Logging l;
 
+    /** Reads wait forever unless the config says otherwise. */
     private static final long DEFAULT_READ_TIMEOUT = -1;
     /** Default timeout to 3 minutes - override if desired. */
     protected long readTimeout = DEFAULT_READ_TIMEOUT;
 
+    /** The session carrying the datagrams. */
     private I2PSession _session;
+    /** Reads datagrams arriving from I2P. */
     private Source _i2pSource;
+    /** Sends datagrams out over I2P. */
     private Sink _i2pSink;
 
     /**
@@ -86,6 +90,12 @@ public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sin
         }
     }
 
+    /**
+     * Opens the session and wires up the source and sink.
+     *
+     * @param privData the private key data to open with
+     * @param l where to log
+     */
     private void init(InputStream privData, Logging l) {
         this.l = l;
 

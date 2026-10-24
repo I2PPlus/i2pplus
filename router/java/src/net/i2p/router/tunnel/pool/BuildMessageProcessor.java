@@ -30,8 +30,11 @@ import net.i2p.util.SystemVersion;
  * @since 0.9.51 moved to {@code tunnel.pool} package
  */
 class BuildMessageProcessor {
+    /** The router context the builds happen in. */
     private final RouterContext ctx;
+    /** Logger for this class. */
     private final Log log;
+    /** Build ids already seen, to drop duplicates. */
     private final DecayingBloomFilter _filter;
 
     /**

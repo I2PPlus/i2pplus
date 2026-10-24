@@ -18,7 +18,9 @@ import net.i2p.util.EventDispatcherImpl;
  */
 public abstract class I2PTunnelTask extends EventDispatcherImpl {
 
+    /** Tunnel number, unique within the tunnel manager. */
     private int id;
+    /** Description shown in the tunnel list. */
     private String name;
     /** True while the tunnel is running and accepting connections. */
     protected volatile boolean open;

@@ -2,21 +2,43 @@ package com.mpatric.mp3agic;
 
 import java.io.UnsupportedEncodingException;
 
+/** An ID3v2 user URL frame. */
 public class ID3v2UrlFrameData extends AbstractID3v2FrameData {
 
+    /** The URL of the frame. */
     protected String url;
+    /** The description of the URL. */
     protected EncodedText description;
 
+    /**
+     * Builds an empty URL frame.
+     *
+     * @param unsynchronisation true for the unsynchronisation scheme
+     */
     public ID3v2UrlFrameData(boolean unsynchronisation) {
         super(unsynchronisation);
     }
 
+    /**
+     * Builds a URL frame from its parts.
+     *
+     * @param unsynchronisation true for the unsynchronisation scheme
+     * @param description the description of the URL
+     * @param url the URL itself
+     */
     public ID3v2UrlFrameData(boolean unsynchronisation, EncodedText description, String url) {
         super(unsynchronisation);
         this.description = description;
         this.url = url;
     }
 
+    /**
+     * Builds a URL frame from the frame bytes.
+     *
+     * @param unsynchronisation true for the unsynchronisation scheme
+     * @param bytes the raw frame bytes
+     * @throws InvalidDataException if the frame data is invalid
+     */
     public ID3v2UrlFrameData(boolean unsynchronisation, byte[] bytes) throws InvalidDataException {
         super(unsynchronisation);
         synchroniseAndUnpackFrameData(bytes);
@@ -70,18 +92,38 @@ public class ID3v2UrlFrameData extends AbstractID3v2FrameData {
         return length;
     }
 
+    /**
+     * Returns the description of the URL.
+     *
+     * @return the description of the URL
+     */
     public EncodedText getDescription() {
         return description;
     }
 
+    /**
+     * Sets the description of the URL.
+     *
+     * @param description the description to set
+     */
     public void setDescription(EncodedText description) {
         this.description = description;
     }
 
+    /**
+     * Returns the URL of the frame.
+     *
+     * @return the URL of the frame
+     */
     public String getUrl() {
         return url;
     }
 
+    /**
+     * Sets the URL of the frame.
+     *
+     * @param url the URL to set
+     */
     public void setUrl(String url) {
         this.url = url;
     }

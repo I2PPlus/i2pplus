@@ -25,9 +25,13 @@ public class ReportAbuseMessage extends I2CPMessageImpl {
      * I2CP message type number identifying an abuse report.
      */
     public static final int MESSAGE_TYPE = 29;
+    /** The session the report is about. */
     private SessionId _sessionId;
+    /** How serious the abuse was. */
     private AbuseSeverity _severity;
+    /** What the client objects to. */
     private AbuseReason _reason;
+    /** The message the abuse was seen on. */
     private MessageId _messageId;
 
     /**
@@ -36,8 +40,8 @@ public class ReportAbuseMessage extends I2CPMessageImpl {
     public ReportAbuseMessage() { /* required for I2CP deserialization */ }
 
     /**
-     * Session id.
-     * @return the session id
+     * Session making the report.
+     * @return the session id, null until set or read
      */
     public SessionId getSessionId() {
         return _sessionId;
@@ -97,8 +101,8 @@ public class ReportAbuseMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Message id.
-     * @return the message id
+     * Message the abuse was seen on.
+     * @return the message id, null until set or read
      */
     public MessageId getMessageId() {
         return _messageId;

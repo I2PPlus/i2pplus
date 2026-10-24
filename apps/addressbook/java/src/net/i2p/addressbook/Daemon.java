@@ -34,10 +34,13 @@ public class Daemon {
 
     /** Version string. */
     public static final String VERSION = "2.0.4";
+    /** Cleared to stop the subscription checks. */
     private volatile boolean _running;
+    /** Checks the hosts the service will answer for. */
     private static HostChecker hostChecker;
+    /** Logger writing to the addressbook's own log file. */
     private final Log _log = new Log(new File(I2PAppContext.getGlobalContext().getLogDir(), "addressbook.log"));
-    // If you change this, change in SusiDNS SubscriptionBean also
+    /** Subscriptions added on a first run. Keep in step with SubscriptionBean. */
     private static final String DEFAULT_SUB = "http://stats.i2p/cgi-bin/newhosts.txt" + "\n" +
                                               "http://skank.i2p/hosts.txt" + "\n" +
                                               "http://notbob.i2p/hosts.txt";

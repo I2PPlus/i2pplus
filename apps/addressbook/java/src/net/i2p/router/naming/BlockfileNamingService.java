@@ -99,45 +99,78 @@ import java.nio.charset.StandardCharsets;
  */
 public class BlockfileNamingService extends DummyNamingService {
 
+    /** The block file holding the naming data. */
     private final BlockFile _bf;
+    /** Random access view of the block file. */
     private final RAIFile _raf;
+    /** Names of the lists in the database. */
     private final List<String> _lists;
+    /** Entries that failed to parse. */
     private final List<InvalidEntry> _invalid;
+    /** Cached lookups that found nothing. */
     private final Map<String, String> _negativeCache;
+    /** True once the service is closed. */
     private volatile boolean _isClosed;
+    /** True if the database may not be written. */
     private final boolean _readOnly;
+    /** Version string of the database format. */
     private String _version = "0";
+    /** True if the database uses the version 4 format. */
     private volatile boolean _isVersion4;
+    /** True if the database needs a format upgrade. */
     private boolean _needsUpgrade;
 
+    /** Serializer for the info block. */
     private static final Serializer<Properties> _infoSerializer = new PropertiesSerializer();
+    /** Serializer for host names. */
     private static final Serializer<String> _stringSerializer = new UTF8StringBytes();
+    /** Serializer for version 1 destination entries. */
     private static final Serializer<DestEntry> _destSerializerV1 = new DestEntrySerializer();
+    /** Serializer for version 4 destination entries. */
     private static final Serializer<DestEntry> _destSerializerV4 = new DestEntrySerializerV4();
-    // upgrade(), initExisting(), and initNew() will change this to _destSerializerV4
+    /** Serializer in effect for destination entries. */
     private volatile Serializer<DestEntry> _destSerializer = _destSerializerV1;
+    /** Serializer for hash index keys. */
     private static final Serializer<Integer> _hashIndexSerializer = new IntBytes();
 
+    /** File name of the block file database. */
     private static final String HOSTS_DB = "hostsdb.blockfile";
+    /** File name of the fallback hosts list. */
     private static final String FALLBACK_LIST = "hosts.txt";
+    /** Config key allowing writes in the app context. */
     private static final String PROP_FORCE = "i2p.naming.blockfile.writeInAppContext";
 
+    /** Skiplist holding the info block. */
     private static final String INFO_SKIPLIST = "%%__INFO__%%";
+    /** Skiplist holding the reverse lookups. */
     private static final String REVERSE_SKIPLIST = "%%__REVERSE__%%";
+    /** Info block key in the skiplist. */
     private static final String PROP_INFO = "info";
+    /** Version key in the info properties. */
     private static final String PROP_VERSION = "version";
+    /** List version key in the info properties. */
     private static final String PROP_LISTVERSION = "listversion";
+    /** Lists key in the info properties. */
     private static final String PROP_LISTS = "lists";
+    /** Creation date key in the info properties. */
     private static final String PROP_CREATED = "created";
+    /** Upgrade date key in the info properties. */
     private static final String PROP_UPGRADED = "upgraded";
+    /** Database format version this code writes. */
     private static final String VERSION = "4";
 
+    /** Entry added-date key. */
     private static final String PROP_ADDED = "a";
+    /** Entry source key. */
     private static final String PROP_SOURCE = "s";
 
+    /** Placeholder value where none is needed. */
     private static final String DUMMY = "";
+    /** Entries kept in the negative cache. */
     private static final int NEGATIVE_CACHE_SIZE = 32;
+    /** Longest destination value accepted. */
     private static final int MAX_VALUE_LENGTH = 4096;
+    /** Destinations allowed for one host. */
     private static final int MAX_DESTS_PER_HOST = 8;
 
     /**
@@ -599,6 +632,12 @@ public class BlockfileNamingService extends DummyNamingService {
         sl.put(key, de);
     }
 
+    /**
+     * Returns the files backing one naming list.
+     *
+     * @param list the list name
+     * @return the backing file names
+     */
     private static List<String> getFilenames(String list) {
         StringTokenizer tok = new StringTokenizer(list, ",");
         List<String> rv = new ArrayList<>(tok.countTokens());
@@ -620,7 +659,6 @@ public class BlockfileNamingService extends DummyNamingService {
         return sl.remove(key);
     }
 
-    /* Reverse index methods */
 
     /**
      * Caller must synchronize.
@@ -767,7 +805,6 @@ public class BlockfileNamingService extends DummyNamingService {
         return Integer.valueOf(i);
     }
 
-    /* Start NamingService API */
 
     /**
      * Lookup a hostname. Will strip a "www." prefix and retry if lookup fails.
@@ -1670,9 +1707,7 @@ public class BlockfileNamingService extends DummyNamingService {
         close();
     }
 
-    ////////// End NamingService API
 
-    /* Begin new API for multiple Destinations */
 
     /**
      * Return all of the entries found in the first list found, or in the list
@@ -1802,7 +1837,6 @@ public class BlockfileNamingService extends DummyNamingService {
         return false;
     }
 
-    /* End new API for multiple Destinations */
 
     /**
      * Continuously validate anything we read in.
@@ -1870,6 +1904,7 @@ public class BlockfileNamingService extends DummyNamingService {
         _invalid.clear();
     }
 
+    /** Closes the block file and stops the service. */
     private void close() {
         synchronized(_bf) {
             try {
@@ -1902,7 +1937,10 @@ public class BlockfileNamingService extends DummyNamingService {
         I2PAppContext.getGlobalContext().logManager().getLog(BlockfileNamingService.class).error(msg, t);
     }
 
+    /** Closes the service when the JVM exits. */
     private class Shutdown implements Runnable {
+        /** Closes the service when the JVM exits. */
+        private Shutdown() {}
         @Override
         public void run() {
             close();
@@ -1921,6 +1959,8 @@ public class BlockfileNamingService extends DummyNamingService {
          * A format error on the properties is non-fatal (returns an empty properties).
          * @return the serialized properties, or two zero bytes on a format error
          */
+        /** Writes and reads the hosts.txt format. */
+        private PropertiesSerializer() {}
         public byte[] getBytes(Properties p) {
             try {
                 return DataHelper.toProperties(p);
@@ -1949,9 +1989,11 @@ public class BlockfileNamingService extends DummyNamingService {
      * and is serialized in that order.
      */
     private static class DestEntry {
+        /** One entry of the naming file. */
+        private DestEntry() {}
         /**
-         * May be null.
-         * If more than one dest, contains the first props.
+         * The entry's properties, may be null.
+         * If more than one dest, contains the first dest's props.
          */
         public Properties props;
 
@@ -1996,6 +2038,8 @@ public class BlockfileNamingService extends DummyNamingService {
          * A format error on the destination is fatal.
          * @return the serialized entry, or just its empty properties on a format error
          */
+        /** Writes and reads one entry of the current format. */
+        private DestEntrySerializer() {}
         @Override
         public byte[] getBytes(DestEntry de) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream(1024);
@@ -2045,6 +2089,8 @@ public class BlockfileNamingService extends DummyNamingService {
          * Serialize a DestEntry to bytes, including the destination list if present.
          * @return the serialized entry, prefixed by its destination count
          */
+        /** Writes and reads one entry of the older format. */
+        private DestEntrySerializerV4() {}
         @Override
         public byte[] getBytes(DestEntry de) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream(1024);
@@ -2238,7 +2284,9 @@ public class BlockfileNamingService extends DummyNamingService {
      * Used to store entries that need deleting.
      */
     private static class InvalidEntry {
+        /** The bad entry's key. */
         public final String key;
+        /** The list the bad entry came from. */
         public final String list;
 
         /**

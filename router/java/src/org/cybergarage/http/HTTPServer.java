@@ -74,7 +74,9 @@ public class HTTPServer implements Runnable {
     /** ServerSocket */
     private ServerSocket serverSock = null;
 
+    /** Address the server listens on. */
     private InetAddress bindAddr = null;
+    /** Port the server listens on. */
     private int bindPort = 0;
 
     /**
@@ -225,6 +227,7 @@ public class HTTPServer implements Runnable {
 
     /* httpRequest */
 
+    /** Listeners notified of each request. */
     private ListenerList httpRequestListenerList = new ListenerList();
 
     /**

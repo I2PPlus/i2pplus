@@ -42,18 +42,29 @@ import net.i2p.util.SimpleTimer2;
  * @since 0.9.54
  */
 public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback, SSU2Bitfield.Callback, SSU2Sender {
+    /** Connection id we send with. */
     private final long _sendConnID;
+    /** Connection id we receive with. */
     private final long _rcvConnID;
+    /** Next SSU2 packet number to send. */
     private final AtomicLong _packetNumber = new AtomicLong();
     /** Last usable outbound packet number, see getNextPacketNumber(). @since 0.9.71+ */
     private static final long MAX_PACKET_NUMBER = 0xFFFFFF00L;
+    /** Hash of the last ack sent, to skip duplicates. */
     private final AtomicInteger _lastAckHashCode = new AtomicInteger(-1);
+    /** ChaCha20 state for encrypting sent packets. */
     private final CipherState _sendCha;
+    /** ChaCha20 state for decrypting received packets. */
     private final CipherState _rcvCha;
+    /** First header encryption key for sending. */
     private final byte[] _sendHeaderEncryptKey1;
+    /** First header encryption key for receiving. */
     private final byte[] _rcvHeaderEncryptKey1;
+    /** Second header encryption key for sending. */
     private final byte[] _sendHeaderEncryptKey2;
+    /** Second header encryption key for receiving. */
     private final byte[] _rcvHeaderEncryptKey2;
+    /** Bitfield of received message numbers. */
     private final SSU2Bitfield _receivedMessages;
     /**
      * PS1 has _ackedMessages which is a map of message ID to sequence number.
@@ -61,9 +72,12 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      * and map of unacked packet (sequence) numbers to the fragments that packet contained.
      */
     private final SSU2Bitfield _ackedMessages;
+    /** Sent messages awaiting acks, by message id. */
     private final ConcurrentHashMap<Long, List<PacketBuilder2.Fragment>> _sentMessages;
+    /** Timer scheduling acks and retransmits. */
     private final ACKTimer _ackTimer;
 
+    /** When sent messages were last expired. */
     private long _sentMessagesLastExpired;
     /**
      * Incremental expiry cursor over a snapshot of _sentMessages, so a tick
@@ -71,18 +85,27 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      * touched from the PacketPusher thread via finishAndAllocate().
      */
     private final ArrayDeque<Map.Entry<Long, List<PacketBuilder2.Fragment>>> _sentMessagesExpiryCursor = new ArrayDeque<>();
+    /** Our IP as the peer sees it. */
     private volatile byte[] _ourIP;
+    /** Our port as the peer sees it. */
     private volatile int _ourPort;
+    /** Reason code for destroying this state. */
     private volatile int _destroyReason;
 
-    // Session Confirmed retransmit
+    /** Session Confirmed packets held for retransmission. */
     private byte[][] _sessConfForReTX;
+    /** When a Session Confirmed was last sent. */
     private long _sessConfSentTime;
+    /** Session Confirmed retransmit attempts so far. */
     private int _sessConfSentCount;
 
-    // Connection Migration, synch on _migrationLock
+    /**
+     * State of one SSU2 connection migration.
+     */
     private enum MigrationState {
+        /** No migration in progress. */
         MIGRATION_STATE_NONE,
+        /** A migration was chosen and is being attempted. */
         MIGRATION_STATE_PENDING
     }
 
@@ -103,12 +126,19 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         /** a third address entirely, do not switch. */
         THIRD_ADDRESS
     }
+    /** Lock for the connection migration state. */
     private final Object _migrationLock = new Object();
+    /** Current connection migration state. */
     private MigrationState _migrationState = MigrationState.MIGRATION_STATE_NONE;
+    /** When the current migration started. */
     private long _migrationStarted;
+    /** When the next migration path challenge is due. */
     private long _migrationNextSendTime;
+    /** Data of the path challenge we sent. */
     private byte[] _pathChallengeData;
+    /** Path challenges sent for the current migration. */
     private long _pathChallengeSendCount;
+    /** New host id pending confirmation during migration. */
     private RemoteHostId _pendingRemoteHostId;
     /** Path challenge retransmissions before the migration is declared expired. */
     static final int MAX_PATH_CHALLENGE_SENDS = 4;
@@ -162,12 +192,19 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      */
     public static final int MIN_MLKEM768_IPV6_MTU = 1338;
 
+    /** Message numbers tracked in the received bitfield. */
     private static final int BITFIELD_SIZE = 512;
+    /** Session Confirmed retransmits before giving up. */
     private static final int MAX_SESS_CONF_RETX = 5;
     /** Configurable sent-messages sweep interval. Default 60s, shortened under load. */
     private static volatile long _sentMessagesCleanTime = 60*1000L;
     /** Max _sentMessages entries examined per {@link #expireSentMessages(long)} call. @since 0.9.71+. */
     private static final int SENT_MESSAGES_EXPIRE_BATCH = 32;
+    /**
+     * Whether debug logging is on for this peer.
+     *
+     * @return true if debug logging is enabled
+     */
     private boolean shouldLogDebug() { return _log.shouldDebug(); }
 
     /**

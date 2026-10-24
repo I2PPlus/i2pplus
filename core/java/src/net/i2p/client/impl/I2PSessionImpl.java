@@ -107,19 +107,24 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     private volatile SessionId _sessionId;
     /** Currently granted lease set, or null. */
     protected volatile LeaseSet _leaseSet;
+    /** When the offline lease set expires. */
     private long _offlineExpiration;
+    /** Signature for the offline lease set. */
     private Signature _offlineSignature;
     /** Transient signing public key for offline signatures. */
     protected SigningPublicKey _transientSigningPublicKey;
+    /** When the lease set was last signed for LS2. */
     private AtomicLong _lastLS2SignTime;
 
-    // subsession stuff
-    // registered subsessions
+    /** The registered subsessions. */
     private final List<SubSession> _subsessions;
-    // established subsessions
+    /** The established subsessions by id. */
     private final ConcurrentHashMap<SessionId, SubSession> _subsessionMap;
+    /** Lock guarding the subsession lists. */
     private final Object _subsessionLock = new Object();
+    /** Router version that first supported subsessions. */
     private static final String MIN_SUBSESSION_VERSION = "0.9.21";
+    /** Whether the router supports subsessions. */
     private volatile boolean _routerSupportsSubsessions;
 
     /** Hostname of router - will be null if in RouterContext. */
@@ -151,12 +156,15 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
 
     /** Hashes of lookups we are waiting for. */
     protected final LinkedBlockingQueue<LookupWaiter> _pendingLookups = new LinkedBlockingQueue<>();
+    /** Counter handing out lookup ids. */
     private final AtomicInteger _lookupID = new AtomicInteger();
     /** Lock for bandwidth limit updates. */
     protected final Object _bwReceivedLock = new Object();
     /** Current bandwidth limits. */
     protected volatile int[] _bwLimits;
+    /** The router's version string. */
     private volatile String _routerVersion;
+    /** Short hash of the local destination. */
     private volatile String _shortHash;
 
     /** Handler map for I2CP message types. */
@@ -168,8 +176,9 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /** Monitor for waiting until a lease set has been granted. */
     protected final Object _leaseSetWait = new Object();
 
-    /** Updated in propagateError(), synchronized with _stateLock. */
+    /** The message describing the last session error. */
     private String _errorMessage;
+    /** Why the session failed, if it did. */
     private Throwable _errorCause;
 
     /**
@@ -198,9 +207,13 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         CLOSED
     }
 
+    /** States counted as closed. */
     private static final Set<State> STATES_CLOSED = EnumSet.of(State.INIT, State.CLOSED);
+    /** States counted as opening. */
     private static final Set<State> STATES_OPENING = EnumSet.of(State.INIT, State.OPENING);
+    /** States counted as closed or opening. */
     private static final Set<State> STATES_CLOSED_OR_OPENING = EnumSet.of(State.INIT, State.CLOSED, State.OPENING);
+    /** States counted as closed or closing. */
     private static final Set<State> STATES_CLOSED_OR_CLOSING = EnumSet.of(State.INIT, State.CLOSED, State.CLOSING);
     /** Current session state. */
     protected State _state = State.INIT;
@@ -214,12 +227,19 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      */
     protected AvailabilityNotifier _availabilityNotifier;
 
+    /** When the session last sent or received. */
     private AtomicLong _lastActivity;
+    /** Whether the session is in reduced functionality mode. */
     private volatile boolean _isReduced;
+    /** Whether fast receive was requested. */
     private final boolean _fastReceive;
+    /** Whether the router supports fast receive. */
     private volatile boolean _routerSupportsFastReceive;
+    /** Whether the router supports host lookups. */
     private volatile boolean _routerSupportsHostLookup;
+    /** Whether the router supports LS2. */
     private volatile boolean _routerSupportsLS2;
+    /** Whether the router returns blinding info. */
     private volatile boolean _routerSupportsBlindingInfo;
 
     /** Listeners for tunnel status changes (tunnel failures and removals). */
@@ -235,8 +255,9 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * @since 0.8.9
      */
     private static final Map<Object, Destination> _lookupCache = new LHMCache<>(CACHE_MAX_SIZE);
+    /** Router version that first supported host lookups. */
     private static final String MIN_HOST_LOOKUP_VERSION = "0.9.11";
-    // cached failure
+    /** Cached failure result for lookups. */
     private static final LookupResult LOOKUP_FAILURE = new LkupResult(LookupResult.RESULT_FAILURE, null);
 
     /**
@@ -245,10 +266,15 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * @since 0.9.14
      */
     protected static final String PROP_DOMAIN_SOCKET = "i2cp.domainSocket";
+    /** Usage quota checks run every 1 minute. */
     private static final long VERIFY_USAGE_TIME = (long) 60*1000;
+    /** The wait for send capacity is at most 10 seconds. */
     private static final long MAX_SEND_WAIT = (long) 10*1000;
+    /** Router version that first supported fast receive. */
     private static final String MIN_FAST_VERSION = "0.9.30";
+    /** Router version that first supported LS2. */
     private static final String MIN_LS2_VERSION = "0.9.38";
+    /** Router version that first returned blinding info. */
     private static final String MIN_BLINDINFO_VERSION = "0.9.43";
 
     /**
@@ -277,6 +303,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /** Default I2CP listen port. */
     public static final int LISTEN_PORT = I2PClient.DEFAULT_LISTEN_PORT;
 
+    /** Receive buffer size. */
     private static final int BUF_SIZE = SystemVersion.isSlow() ? 32*1024 : 128*1024;
     /** Dummy session ID for messages before a real session is established. */
     static final SessionId DUMMY_SESSION = new SessionId(65535);
@@ -312,8 +339,13 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     }
 
     /**
-     * Basic setup of finals.
+     * Basic setup of the session's final fields.
      *
+     * @param context the app context
+     * @param options the session options
+     * @param handlerMap the map of the message handlers
+     * @param producer the I2CP message producer
+     * @param hasDest true if a destination was supplied
      * @since 0.9.7
      */
     private I2PSessionImpl(I2PAppContext context, Properties options,
@@ -429,7 +461,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
 
     /**
      * List of subsessions, non-null, does not include the primary session.
-     * @return a list of subsessions, non-null, does not include the primary session
+     * @return the subsessions, in registration order
      * @since 0.9.21
      */
     @Override
@@ -722,7 +754,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
 
     /**
      * Java time (ms) or 0 if not initialized or does not have offline keys.
-     * @return Java time (ms) or 0 if not initialized or does not have offline keys
+     * @return the expiry time, or 0 when unavailable
      * @since 0.9.38
      */
     @Override
@@ -730,7 +762,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
 
     /**
      * Null on error or if not initialized or does not have offline keys.
-     * @return null on error or if not initialized or does not have offline keys
+     * @return the signature, or null when unavailable
      * @since 0.9.38
      */
     @Override
@@ -738,7 +770,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
 
     /**
      * Null on error or if not initialized or does not have offline keys.
-     * @return null on error or if not initialized or does not have offline keys
+     * @return the signature, or null when unavailable
      * @since 0.9.38
      */
     @Override
@@ -1046,8 +1078,10 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * message. Just copy all unclaimed ones and check some time later.
      */
     private class VerifyUsage extends SimpleTimer2.TimedEvent {
+        /** Message ids whose usage needs checking. */
         private final List<Long> toCheck = new ArrayList<>();
 
+        /** Prepares the periodic usage quota check. */
         public VerifyUsage() {
             super(_context.simpleTimer2(), VERIFY_USAGE_TIME);
         }
@@ -1074,8 +1108,11 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * Needs work.
      */
     protected class AvailabilityNotifier implements Runnable {
+        /** Message ids waiting for a send slot. */
         private final List<Long> _pendingIds;
+        /** Sizes of the messages waiting for a send slot. */
         private final List<Integer> _pendingSizes;
+        /** Whether the sender thread should keep running. */
         private volatile boolean _alive;
 
         /**
@@ -1570,7 +1607,9 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         synchronized (_leaseSetWait) {_leaseSetWait.notifyAll();} // break out of wait for initial LS in connect()
     }
 
+    /** The wait between reconnect tries tops out at 320 seconds. */
     private final static int MAX_RECONNECT_DELAY = 320*1000;
+    /** The first reconnect try waits 10 seconds. */
     private final static int BASE_RECONNECT_DELAY = 10*1000;
 
     /**
@@ -1806,11 +1845,18 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
          */
         public final LookupCallback callback;
 
+        /**
+         * Waits for one destination lookup.
+         *
+         * @param h the destination hash to look up
+         */
         public LookupWaiter(Hash h) {this(h, -1);}
 
         /**
          * Waits for a destination lookup by hash.
          *
+         * @param h the hash to look up
+         * @param nonce the nonce to match the reply with
          * @since 0.9.11
          */
         public LookupWaiter(Hash h, long nonce) {
@@ -1823,6 +1869,8 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         /**
          * Waits for a destination lookup by name.
          *
+         * @param name the local name to look up
+         * @param nonce the nonce to match the reply with
          * @since 0.9.11
          */
         public LookupWaiter(String name, long nonce) {
@@ -1833,8 +1881,9 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         }
 
         /**
-         * Dummy, completed.
+         * A completed lookup, for a destination we already have.
          *
+         * @param d the destination, taken as the answer
          * @since 0.9.43
          */
         public LookupWaiter(Destination d) {
@@ -1848,6 +1897,9 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         /**
          * Waits for a destination lookup by hash, with a callback.
          *
+         * @param h the hash to look up
+         * @param nonce the nonce to match the reply with
+         * @param callback the callback to run with the result
          * @since 0.9.67
          */
         public LookupWaiter(Hash h, long nonce, LookupCallback callback) {
@@ -1860,6 +1912,9 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         /**
          * Waits for a destination lookup by name, with a callback.
          *
+         * @param name the local name to look up
+         * @param nonce the nonce to match the reply with
+         * @param callback the callback to run with the result
          * @since 0.9.67
          */
         public LookupWaiter(String name, long nonce, LookupCallback callback) {
@@ -2174,8 +2229,15 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * @since 0.9.67
      */
     private class LookupExpiration extends SimpleTimer2.TimedEvent {
+        /** The waiter whose lookup timed out. */
         private final LookupWaiter w;
 
+        /**
+         * Prepares to time out one destination lookup.
+         *
+         * @param waiter the waiter to expire
+         * @param maxWait ms to wait before expiring
+         */
         public LookupExpiration(LookupWaiter waiter, long maxWait) {
             super(_context.simpleTimer2(), maxWait + 100);
             w = waiter;
@@ -2268,6 +2330,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /** Mark the session as reduced. */
     public void setReduced() {_isReduced = true;}
 
+    /** Starts the thread that closes idle sessions. */
     private void startIdleMonitor() {
         _isReduced = false;
         boolean reduce = Boolean.parseBoolean(_options.getProperty("i2cp.reduceOnIdle"));

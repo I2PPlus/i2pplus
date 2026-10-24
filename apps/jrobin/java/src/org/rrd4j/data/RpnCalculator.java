@@ -16,6 +16,7 @@ import org.rrd4j.core.Util;
 class RpnCalculator {
     /** Token_Symbol class. */
     private enum Token_Symbol {
+        /** Token referencing a data source variable. */
         TKN_VAR("") {
             /** Do method */
             @Override
@@ -24,6 +25,7 @@ class RpnCalculator {
                 s.token_rpi = s.rpi;
             }
         },
+        /** Token holding a literal number. */
         TKN_NUM("") {
             /** Do method */
             @Override
@@ -32,7 +34,7 @@ class RpnCalculator {
             }
         },
 
-        // Arithmetics
+        /** Token adding two values. */
         TKN_PLUS("+") {
             /** Do method */
             @Override
@@ -40,6 +42,7 @@ class RpnCalculator {
                 c.push(c.pop() + c.pop());
             }
         },
+        /** Token adding two values, treating unknown as zero. */
         TKN_ADDNAN("ADDNAN") {
             /** Do method */
             @Override
@@ -49,6 +52,7 @@ class RpnCalculator {
                 c.push(Double.isNaN(x1) ? x2 : (Double.isNaN(x2) ? x1 : x1 + x2));
             }
         },
+        /** Token subtracting two values. */
         TKN_MINUS("-") {
             /** Do method */
             @Override
@@ -58,6 +62,7 @@ class RpnCalculator {
                 c.push(x1 - x2);
             }
         },
+        /** Token multiplying two values. */
         TKN_MULT("*") {
             /** Do method */
             @Override
@@ -65,6 +70,7 @@ class RpnCalculator {
                 c.push(c.pop() * c.pop());
             }
         },
+        /** Token dividing two values. */
         TKN_DIV("/") {
             /** Do method */
             @Override
@@ -74,6 +80,7 @@ class RpnCalculator {
                 c.push(x1 / x2);
             }
         },
+        /** Token taking the remainder of a division. */
         TKN_MOD("%") {
             /** Do method */
             @Override
@@ -84,6 +91,7 @@ class RpnCalculator {
             }
         },
 
+        /** Token taking the sine of an angle in radians. */
         TKN_SIN("SIN") {
             /** Do method */
             @Override
@@ -91,6 +99,7 @@ class RpnCalculator {
                 c.push(Math.sin(c.pop()));
             }
         },
+        /** Token taking the cosine of an angle in radians. */
         TKN_COS("COS") {
             /** Do method */
             @Override
@@ -98,6 +107,7 @@ class RpnCalculator {
                 c.push(Math.cos(c.pop()));
             }
         },
+        /** Token taking the base-10 logarithm. */
         TKN_LOG("LOG") {
             /** Do method */
             @Override
@@ -105,6 +115,7 @@ class RpnCalculator {
                 c.push(Math.log(c.pop()));
             }
         },
+        /** Token raising e to a power. */
         TKN_EXP("EXP") {
             /** Do method */
             @Override
@@ -112,6 +123,7 @@ class RpnCalculator {
                 c.push(Math.exp(c.pop()));
             }
         },
+        /** Token taking the square root. */
         TKN_SQRT("SQRT") {
             /** Do method */
             @Override
@@ -119,6 +131,7 @@ class RpnCalculator {
                 c.push(Math.sqrt(c.pop()));
             }
         },
+        /** Token taking the arctangent, in radians. */
         TKN_ATAN("ATAN") {
             /** Do method */
             @Override
@@ -126,6 +139,7 @@ class RpnCalculator {
                 c.push(Math.atan(c.pop()));
             }
         },
+        /** Token taking the two-argument arctangent, in radians. */
         TKN_ATAN2("ATAN2") {
             /** Do method */
             @Override
@@ -136,6 +150,7 @@ class RpnCalculator {
             }
         },
 
+        /** Token rounding down to an integer. */
         TKN_FLOOR("FLOOR") {
             /** Do method */
             @Override
@@ -143,6 +158,7 @@ class RpnCalculator {
                 c.push(Math.floor(c.pop()));
             }
         },
+        /** Token rounding up to an integer. */
         TKN_CEIL("CEIL") {
             /** Do method */
             @Override
@@ -151,6 +167,7 @@ class RpnCalculator {
             }
         },
 
+        /** Token converting degrees to radians. */
         TKN_DEG2RAD("DEG2RAD") {
             /** Do method */
             @Override
@@ -158,6 +175,7 @@ class RpnCalculator {
                 c.push(Math.toRadians(c.pop()));
             }
         },
+        /** Token converting radians to degrees. */
         TKN_RAD2DEG("RAD2DEG") {
             /** Do method */
             @Override
@@ -165,6 +183,7 @@ class RpnCalculator {
                 c.push(Math.toDegrees(c.pop()));
             }
         },
+        /** Token rounding to the nearest integer. */
         TKN_ROUND("ROUND") {
             /** Do method */
             @Override
@@ -172,6 +191,7 @@ class RpnCalculator {
                 c.push(Math.round(c.pop()));
             }
         },
+        /** Token raising one value to the power of another. */
         TKN_POW("POW") {
             /** Do method */
             @Override
@@ -181,6 +201,7 @@ class RpnCalculator {
                 c.push(Math.pow(x1, x2));
             }
         },
+        /** Token taking the absolute value. */
         TKN_ABS("ABS") {
             /** Do method */
             @Override
@@ -188,6 +209,7 @@ class RpnCalculator {
                 c.push(Math.abs(c.pop()));
             }
         },
+        /** Token pushing a pseudo-random value. */
         TKN_RANDOM("RANDOM") {
             /** Do method */
             @Override
@@ -195,6 +217,7 @@ class RpnCalculator {
                 c.push(Math.random());
             }
         },
+        /** Token rounding to the nearest integer, alias of ROUND. */
         TKN_RND("RND") {
             /** Do method */
             @Override
@@ -203,7 +226,7 @@ class RpnCalculator {
             }
         },
 
-        // Boolean operators
+        /** Token testing whether a value is unknown. */
         TKN_UN("UN") {
             /** Do method */
             @Override
@@ -211,6 +234,7 @@ class RpnCalculator {
                 c.push(Double.isNaN(c.pop()) ? 1 : 0);
             }
         },
+        /** Token testing whether a value is infinite. */
         TKN_ISINF("ISINF") {
             /** Do method */
             @Override
@@ -218,6 +242,7 @@ class RpnCalculator {
                 c.push(Double.isInfinite(c.pop()) ? 1 : 0);
             }
         },
+        /** Token testing less-than. */
         TKN_LT("LT") {
             /** Do method */
             @Override
@@ -227,6 +252,7 @@ class RpnCalculator {
                 c.push(x1 < x2 ? 1 : 0);
             }
         },
+        /** Token testing less-or-equal. */
         TKN_LE("LE") {
             /** Do method */
             @Override
@@ -236,6 +262,7 @@ class RpnCalculator {
                 c.push(x1 <= x2 ? 1 : 0);
             }
         },
+        /** Token testing greater-than. */
         TKN_GT("GT") {
             /** Do method */
             @Override
@@ -245,6 +272,7 @@ class RpnCalculator {
                 c.push(x1 > x2 ? 1 : 0);
             }
         },
+        /** Token testing greater-or-equal. */
         TKN_GE("GE") {
             /** Do method */
             @Override
@@ -254,6 +282,7 @@ class RpnCalculator {
                 c.push(x1 >= x2 ? 1 : 0);
             }
         },
+        /** Token testing equality. */
         TKN_EQ("EQ") {
             /** Do method */
             @Override
@@ -263,6 +292,7 @@ class RpnCalculator {
                 c.push(x1 == x2 ? 1 : 0);
             }
         },
+        /** Token testing inequality. */
         TKN_NE("NE") {
             /** Do method */
             @Override
@@ -272,6 +302,7 @@ class RpnCalculator {
                 c.push(x1 != x2 ? 1 : 0);
             }
         },
+        /** Token choosing one of two values by a condition. */
         TKN_IF("IF") {
             /** Do method */
             @Override
@@ -283,7 +314,7 @@ class RpnCalculator {
             }
         },
 
-        // Comparing values
+        /** Token keeping the smaller of two values. */
         TKN_MIN("MIN") {
             /** Do method */
             @Override
@@ -291,6 +322,7 @@ class RpnCalculator {
                 c.push(Math.min(c.pop(), c.pop()));
             }
         },
+        /** Token keeping the larger of two values. */
         TKN_MAX("MAX") {
             /** Do method */
             @Override
@@ -298,6 +330,7 @@ class RpnCalculator {
                 c.push(Math.max(c.pop(), c.pop()));
             }
         },
+        /** Token keeping the smaller value, unknowns ignored. */
         TKN_MINNAN("MINNAN") {
             /** Do method */
             @Override
@@ -307,6 +340,7 @@ class RpnCalculator {
                 c.push(Double.isNaN(x1) ? x2 : (Double.isNaN(x2) ? x1 : Math.min(x1, x2)));
             }
         },
+        /** Token keeping the larger value, unknowns ignored. */
         TKN_MAXNAN("MAXNAN") {
             /** Do method */
             @Override
@@ -316,6 +350,7 @@ class RpnCalculator {
                 c.push(Double.isNaN(x1) ? x2 : (Double.isNaN(x2) ? x1 : Math.max(x1, x2)));
             }
         },
+        /** Token limiting a value to a range. */
         TKN_LIMIT("LIMIT") {
             /** Do method */
             @Override
@@ -327,7 +362,7 @@ class RpnCalculator {
             }
         },
 
-        // Processing the stack directly
+        /** Token duplicating the top of the stack. */
         TKN_DUP("DUP") {
             /** Do method */
             @Override
@@ -335,6 +370,7 @@ class RpnCalculator {
                 c.push(c.peek());
             }
         },
+        /** Token exchanging the top two stack entries. */
         TKN_EXC("EXC") {
             /** Do method */
             @Override
@@ -345,6 +381,7 @@ class RpnCalculator {
                 c.push(x1);
             }
         },
+        /** Token discarding the top of the stack. */
         TKN_POP("POP") {
             /** Do method */
             @Override
@@ -353,7 +390,7 @@ class RpnCalculator {
             }
         },
 
-        // Special values
+        /** Token pushing an unknown value. */
         TKN_UNKN("UNKN") {
             /** Do method */
             @Override
@@ -361,6 +398,7 @@ class RpnCalculator {
                 c.push(Double.NaN);
             }
         },
+        /** Token pushing pi. */
         TKN_PI("PI") {
             /** Do method */
             @Override
@@ -368,6 +406,7 @@ class RpnCalculator {
                 c.push(Math.PI);
             }
         },
+        /** Token pushing e. */
         TKN_E("E") {
             /** Do method */
             @Override
@@ -375,6 +414,7 @@ class RpnCalculator {
                 c.push(Math.E);
             }
         },
+        /** Token pushing positive infinity. */
         TKN_INF("INF") {
             /** Do method */
             @Override
@@ -382,6 +422,7 @@ class RpnCalculator {
                 c.push(Double.POSITIVE_INFINITY);
             }
         },
+        /** Token pushing negative infinity. */
         TKN_NEGINF("NEGINF") {
             /** Do method */
             @Override
@@ -390,7 +431,7 @@ class RpnCalculator {
             }
         },
 
-        // Logical operator
+        /** Token taking the logical and of two values. */
         TKN_AND("AND") {
             /** Do method */
             @Override
@@ -400,6 +441,7 @@ class RpnCalculator {
                 c.push((x1 != 0 && x2 != 0) ? 1 : 0);
             }
         },
+        /** Token taking the logical or of two values. */
         TKN_OR("OR") {
             /** Do method */
             @Override
@@ -409,6 +451,7 @@ class RpnCalculator {
                 c.push((x1 != 0 || x2 != 0) ? 1 : 0);
             }
         },
+        /** Token taking the logical exclusive or of two values. */
         TKN_XOR("XOR") {
             /** Do method */
             @Override
@@ -419,6 +462,7 @@ class RpnCalculator {
             }
         },
 
+        /** Token pushing the previous step's value. */
         TKN_PREV("PREV") {
             /** Do method */
             @Override
@@ -427,7 +471,7 @@ class RpnCalculator {
             }
         },
 
-        // Time and date operator
+        /** Token pushing the consolidation step, in seconds. */
         TKN_STEP("STEP") {
             /** Do method */
             @Override
@@ -435,6 +479,7 @@ class RpnCalculator {
                 c.push(c.timeStep);
             }
         },
+        /** Token pushing the current time. */
         TKN_NOW("NOW") {
             /** Do method */
             @Override
@@ -442,6 +487,7 @@ class RpnCalculator {
                 c.push(Util.getTime());
             }
         },
+        /** Token pushing the current time slot. */
         TKN_TIME("TIME") {
             /** Do method */
             @Override
@@ -449,6 +495,7 @@ class RpnCalculator {
                 c.push(c.timestamps[s.slot]);
             }
         },
+        /** Token pushing the current local time. */
         TKN_LTIME("LTIME") {
             /** Do method */
             @Override
@@ -457,6 +504,7 @@ class RpnCalculator {
                 c.push(c.timestamps[s.slot] + ((long) tz.getOffset(c.timestamps[s.slot]) / 1000D));
             }
         },
+        /** Token pushing the year of the current time. */
         TKN_YEAR("YEAR") {
             /** Do method */
             @Override
@@ -464,6 +512,7 @@ class RpnCalculator {
                 c.push(c.getCalendarField(c.pop(), Calendar.YEAR));
             }
         },
+        /** Token pushing the month of the current time. */
         TKN_MONTH("MONTH") {
             /** Do method */
             @Override
@@ -471,6 +520,7 @@ class RpnCalculator {
                 c.push(c.getCalendarField(c.pop(), Calendar.MONTH) + 1);
             }
         },
+        /** Token pushing the day of the month. */
         TKN_DATE("DATE") {
             /** Do method */
             @Override
@@ -478,6 +528,7 @@ class RpnCalculator {
                 c.push(c.getCalendarField(c.pop(), Calendar.DAY_OF_MONTH));
             }
         },
+        /** Token pushing the hour of the day. */
         TKN_HOUR("HOUR") {
             /** Do method */
             @Override
@@ -485,6 +536,7 @@ class RpnCalculator {
                 c.push(c.getCalendarField(c.pop(), Calendar.HOUR_OF_DAY));
             }
         },
+        /** Token pushing the minute of the hour. */
         TKN_MINUTE("MINUTE") {
             /** Do method */
             @Override
@@ -492,6 +544,7 @@ class RpnCalculator {
                 c.push(c.getCalendarField(c.pop(), Calendar.MINUTE));
             }
         },
+        /** Token pushing the second of the minute. */
         TKN_SECOND("SECOND") {
             /** Do method */
             @Override
@@ -499,6 +552,7 @@ class RpnCalculator {
                 c.push(c.getCalendarField(c.pop(), Calendar.SECOND));
             }
         },
+        /** Token pushing the day of the week. */
         TKN_WEEK("WEEK") {
             /** Do method */
             @Override
@@ -506,6 +560,7 @@ class RpnCalculator {
                 c.push(c.getCalendarField(c.pop(), Calendar.WEEK_OF_YEAR));
             }
         },
+        /** Token pushing the sign of a value. */
         TKN_SIGN("SIGN") {
             /** Do method */
             @Override
@@ -514,6 +569,7 @@ class RpnCalculator {
                 c.push(Double.isNaN(x1) ? Double.NaN : x1 > 0 ? +1 : x1 < 0 ? -1 : 0);
             }
         },
+        /** Token sorting a variable's values. */
         TKN_SORT("SORT") {
             /** Do method */
             @Override
@@ -529,6 +585,7 @@ class RpnCalculator {
                 }
             }
         },
+        /** Token reversing a variable's values. */
         TKN_REV("REV") {
             /** Do method */
             @Override
@@ -543,6 +600,7 @@ class RpnCalculator {
                 }
             }
         },
+        /** Token averaging a variable's values. */
         TKN_AVG("AVG") {
             /** Do method */
             @Override
@@ -567,6 +625,7 @@ class RpnCalculator {
                 }
             }
         },
+        /** Token counting a variable's known values. */
         TKN_COUNT("COUNT") {
             /** Do method */
             @Override
@@ -574,6 +633,7 @@ class RpnCalculator {
                 c.push(s.slot + 1.0);
             }
         },
+        /** Token computing a moving-average trend. */
         TKN_TREND("TREND") {
             /** Do method */
             @Override
@@ -611,6 +671,7 @@ class RpnCalculator {
                 }
             }
         },
+        /** Token computing a moving-average trend, unknowns kept. */
         TKN_TRENDNAN("TRENDNAN") {
             /** Do method */
             @Override
@@ -618,6 +679,7 @@ class RpnCalculator {
                 TKN_TREND.do_method(c, s);
             }
         },
+        /** Token predicting a value from a trend. */
         TKN_PREDICT("PREDICT") {
             /** Do method */
             @Override
@@ -705,6 +767,7 @@ class RpnCalculator {
                 c.push(val);
             }
         },
+        /** Token giving the sigma of a trend prediction. */
         TKN_PREDICTSIGMA("PREDICTSIGMA") {
             /** Do method */
             @Override
@@ -716,6 +779,11 @@ class RpnCalculator {
         /** token_string. */
         public final String token_string;
 
+        /**
+         * Binds a token to its source text.
+         *
+         * @param token_string the text that names this token
+         */
         Token_Symbol(String token_string) {
             this.token_string = token_string;
         }
@@ -727,7 +795,9 @@ class RpnCalculator {
          */
         abstract void do_method(RpnCalculator c, State s);
     }
+    /** Every token, for name lookup. */
     private static final Token_Symbol[] symbols;
+    /** Perfect hash mapping token text to its symbol. */
     private static final PerfectStringHash perfect;
 
     static {
@@ -754,7 +824,9 @@ class RpnCalculator {
     private final String sourceName;
     /** Data processor */
     private final DataProcessor dataProcessor;
+    /** The parsed RPN expression. */
     private final Token[] tokens;
+    /** The stack the expression evaluates on. */
     private final RpnStack stack = new RpnStack();
     /** Calculated values */
     private final double[] calculatedValues;
@@ -846,7 +918,7 @@ class RpnCalculator {
      *
      * @param timestamp the unix time in seconds
      * @param field the java.util.Calendar field constant to read
-     * @return calendar field value from timestamp
+     * @return the value of that field at the time
      */
     private double getCalendarField(double timestamp, int field) {
         Calendar calendar = Util.getCalendar((long) (timestamp));
@@ -886,8 +958,8 @@ class RpnCalculator {
     }
 
     /**
-     * True if stack is empty.
-     * @return true if stack is empty
+     * Whether the stack holds no values.
+     * @return true if the stack is empty
      */
     private boolean isStackEmpty() {
         return stack.isEmpty();
@@ -895,6 +967,8 @@ class RpnCalculator {
     /** RpnStack class. */
 
     private static final class RpnStack {
+        /** The stack an RPN expression is evaluated on. */
+        private RpnStack() {}
         /** Maximum RPN stack depth */
         private static final int MAX_STACK_SIZE = 1000;
         /** RPN stack storage */
@@ -941,8 +1015,8 @@ class RpnCalculator {
         }
 
         /**
-         * True if stack is empty.
-         * @return true if stack is empty
+         * Whether the stack holds no values.
+         * @return true if the stack is empty
          */
         boolean isEmpty() {
             return pos <= 0;
@@ -951,11 +1025,22 @@ class RpnCalculator {
     /** State class. */
 
     private final class State {
+        /** Holds the calculator's position in the data. */
+        private State() {}
+        /** Index of the token being evaluated. */
         private int token_rpi;
+        /** Index of the RRA row being evaluated. */
         private int rpi;
+        /** The token being evaluated. */
         Token token;
+        /** Stack slot being written. */
         int slot;
 
+        /**
+         * Gives the zone the date tokens use.
+         *
+         * @return the time zone
+         */
         TimeZone getTimeZone() {
             return RpnCalculator.this.dataProcessor.getTimeZone();
         }
@@ -963,11 +1048,20 @@ class RpnCalculator {
     /** Token class. */
 
     private static final class Token {
+        /** The token this represents. */
         final Token_Symbol id;
+        /** The literal number, if this is one. */
         final double number;
+        /** The variable's name, if this is one. */
         final String variable;
+        /** The variable's values, if this is one. */
         final double[] values;
 
+        /**
+         * Creates an operator or constant token.
+         *
+         * @param id the token to create
+         */
         Token(Token_Symbol id) {
             this.id = id;
             this.values = null;
@@ -975,6 +1069,13 @@ class RpnCalculator {
             this.number = Double.NaN;
         }
 
+        /**
+         * Creates a variable token.
+         *
+         * @param id the token to create
+         * @param variable the variable's name
+         * @param values the variable's values
+         */
         Token(Token_Symbol id, String variable, double[] values) {
             this.id = id;
             this.variable = variable;
@@ -982,6 +1083,12 @@ class RpnCalculator {
             this.number = Double.NaN;
         }
 
+        /**
+         * Creates a literal-number token.
+         *
+         * @param id the token to create
+         * @param number the literal value
+         */
         Token(Token_Symbol id, double number) {
             this.id = id;
             this.values = null;

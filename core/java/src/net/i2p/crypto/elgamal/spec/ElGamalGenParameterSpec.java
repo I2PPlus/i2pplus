@@ -11,6 +11,7 @@ import java.security.spec.AlgorithmParameterSpec;
  * cryptographic security at the cost of computational performance.
  */
 public class ElGamalGenParameterSpec implements AlgorithmParameterSpec {
+    /** Bit size of the prime to generate. */
     private final int primeSize;
 
     /**

@@ -44,13 +44,16 @@ public enum Mode {
   /** See GBT 18284-2000; "Hanzi" is a transliteration of this mode name. */
   HANZI(new int[]{8, 10, 12}, 0x0D);
 
+  /** Count-field size for each of the three version groups. */
   private final int[] characterCountBitsForVersions;
+  /** The four bits naming the mode in the data. */
   private final int bits;
 
   /**
    * Creates a mode with its character-count bit tables.
    *
    * @param characterCountBitsForVersions per-version bit counts
+   * @param bits the mode indicator bits
    */
   Mode(int[] characterCountBitsForVersions, int bits) {
     this.characterCountBitsForVersions = characterCountBitsForVersions;

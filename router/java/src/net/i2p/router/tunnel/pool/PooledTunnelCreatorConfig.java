@@ -10,11 +10,18 @@ import net.i2p.router.tunnel.TunnelCreatorConfig;
  * Data about a tunnel we created.
  */
 public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
+    /** The pool this config belongs to. */
     private final TunnelPool _pool;
-    // we don't store the config, that leads to OOM
+    /**
+     * The gateway tunnel paired with this one, by id only - storing the
+     * config itself leads to OOM.
+     */
     private TunnelId _pairedGW;
+    /** When the tunnel last carried a message. */
     private volatile long _lastActivity;
+    /** True to use the tunnel only when nothing better is available. */
     private volatile boolean _lastResort;
+    /** True to send through the tunnel without waiting for pacing. */
     private volatile boolean _bypassPacing;
     /**
      * I2NP message ID of the most recent build request sent for this config.
@@ -34,6 +41,7 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
      * @since 0.9.71+
      */
     private volatile long _lastRequestMsgId;
+    /** Quiet time past which the tunnel counts as inactive: 30 seconds. */
     private static final long ACTIVITY_TIMEOUT = 30*1000L;
 
     /**

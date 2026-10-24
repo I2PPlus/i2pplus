@@ -81,9 +81,11 @@ import java.util.Arrays;
  *
  */
 public class SigningPublicKey extends SimpleDataStructure {
+    /** Type assumed when a key names none. */
     private static final SigType DEF_TYPE = SigType.DSA_SHA1;
     /** Default key size in bytes (128 for DSA-SHA1). */
     public static final int KEYSIZE_BYTES = DEF_TYPE.getPubkeyLen();
+    /** Keys held in the shared cache. */
     private static final int CACHE_SIZE = 1024;
     /**
      * Shared result for the no-padding case. Zero-length arrays cannot be
@@ -96,8 +98,10 @@ public class SigningPublicKey extends SimpleDataStructure {
      */
     private static final int B64_PREFIX_BYTES = 5;
 
+    /** Shared cache of parsed keys. */
     private static final SDSCache<SigningPublicKey> _cache = new SDSCache<>(SigningPublicKey.class, KEYSIZE_BYTES, CACHE_SIZE);
 
+    /** The signature type of this key. */
     private final SigType _type;
 
     /**
@@ -180,8 +184,9 @@ public class SigningPublicKey extends SimpleDataStructure {
     }
 
     /**
-     * If type unknown, the length of the data, or 128 if no data.
-     * @return if type unknown, the length of the data, or 128 if no data
+     * Length of this public key.
+     * @return the key length in bytes: from the signature type if known,
+     *         otherwise the data length, or 128 if no data
      */
     @Override
     public int length() {

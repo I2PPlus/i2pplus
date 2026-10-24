@@ -31,6 +31,7 @@ import net.i2p.util.Translate;
  */
 class I2PSnarkConfigure {
 
+    /** The servlet whose settings are being edited. */
     private final I2PSnarkServlet srv;
 
     /**
@@ -40,6 +41,7 @@ class I2PSnarkConfigure {
      */
     I2PSnarkConfigure(I2PSnarkServlet srv) {this.srv = srv;}
 
+    /** Refresh intervals offered on the page, in seconds. */
     private static final int[] times = { 5, 15, 30, 60, 2*60, 5*60, 10*60, 30*60, 60*60, -1 };
 
     /**
@@ -841,10 +843,12 @@ class I2PSnarkConfigure {
 
     /** Copied from ConfigTunnelsHelper. */
     private static final String HOP = "hop";
+    /** Form value naming the tunnel settings section. */
     private static final String TUNNEL = "tunnel";
 
     /** Dummies for translation; prevents the ngettext line below from getting tagged. */
     private static final String DUMMY0 = "{0} ";
+    /** Placeholder option so a select is never empty. */
     private static final String DUMMY1 = "1 ";
 
     /**
@@ -933,6 +937,7 @@ class I2PSnarkConfigure {
                 maxFiles, preallocateFiles, tempDir, torrentDir, preserveFileNames);
     }
 
+    /** Tunnel parameters shown on the config page. */
     private static final String[] iopts = {"inbound.length", "inbound.quantity", "outbound.length", "outbound.quantity" };
 
     /**

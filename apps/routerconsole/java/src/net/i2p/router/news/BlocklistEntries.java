@@ -61,6 +61,7 @@ public class BlocklistEntries {
     private boolean verified;
     /**  Maximum number of entries allowed in a blocklist. */
     public static final int MAX_ENTRIES = 2000;
+    /** Section name for the router's own entries. */
     private static final String CONTENT_ROUTER = "router";
     /** Maximum future timestamp allowed for blocklist validation (2 days). */
     public static final long MAX_FUTURE = 2*24*60*60*1000L;

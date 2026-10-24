@@ -18,12 +18,20 @@ import net.i2p.util.SystemVersion;
  *  @since 0.9.14
  */
 public class XSSRequestWrapper extends HttpServletRequestWrapper {
-    // Adapted from https://owasp-esapi-java.googlecode.com/svn/trunk/configuration/esapi/ESAPI.properties
+    /**
+     * Whitelist of characters allowed in a parameter value, adapted from the
+     * OWASP ESAPI validation patterns.
+     *
+     * See also: <a href="https://github.com/ESAPI/esapi-java-legacy/blob/develop/configuration/esapi/ESAPI.properties">ESAPI.properties</a>
+     */
     private static final String NON_WIN_PATTERN = "^[\\p{L}\\p{Nd}.,:\\-\\/+=~\\[\\]?@_ \r\n]*$";
-    // Same as above but with backslash for file paths
+    /** As above, with backslash added for Windows paths. */
     private static final String WIN_PATTERN     = "^[\\p{L}\\p{Nd}.,:\\-\\/+=~\\[\\]?@_ \r\n\\\\]*$";
+    /** Compiled whitelist for parameter values. */
     private static final Pattern parameterValuePattern = Pattern.compile(SystemVersion.isWindows() ? WIN_PATTERN : NON_WIN_PATTERN);
+    /** Whitelist for header values, ASCII letters and common punctuation. */
     private static final Pattern headerValuePattern = Pattern.compile("^[a-zA-Z0-9()\\-=\\*\\.\\?;,+\\/:&_ \"]*$");
+    /** Parameter prefix marking a value to pass through unfiltered. */
     private static final String NOFILTER = "nofilter_";
 
     /**
@@ -132,6 +140,13 @@ public class XSSRequestWrapper extends HttpServletRequestWrapper {
         return rv;
     }
 
+    /**
+     * Removes cross-site scripting constructs from a value.
+     *
+     * @param value the value to clean
+     * @param whitelistPattern characters that are always safe
+     * @return the value to use
+     */
     private static String stripXSS(String value, Pattern whitelistPattern) {
         if (value != null) {
             // Remove bad parameters entirely.

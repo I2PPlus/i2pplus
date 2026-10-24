@@ -6,6 +6,7 @@ package net.i2p.router.tunnel;
  * Implements IVValidator interface with permissive validation behavior.
  */
 class DummyValidator implements IVValidator {
+    /** The single instance, shared by all callers. */
     private static final DummyValidator _instance = new DummyValidator();
     /**
      * The shared DummyValidator instance.
@@ -13,6 +14,7 @@ class DummyValidator implements IVValidator {
      * @return the shared stateless instance
      */
     public static DummyValidator getInstance() { return _instance; }
+    /** Utility class, not intended for instantiation. */
     private DummyValidator() {}
 
     /**

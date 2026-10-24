@@ -25,10 +25,14 @@ import net.i2p.util.I2PAppThread;
  * <p><b>Thread Safety:</b> This class is not thread-safe. It is expected to be used by a single connection thread.
  */
 public class I2PTunnelHTTPClientRunner extends I2PTunnelRunner {
+    /** Time allowed for closing a socket. */
     private static final int CLOSE_SOCKET_TIMEOUT = 5000;
+    /** Delay before closing a socket. */
     private static final int SOCKET_CLOSE_DELAY = 100;
 
+    /** The stream writing the HTTP response. */
     private HTTPResponseOutputStream _hout;
+    /** True for a HEAD request. */
     private final boolean _isHead;
 
     /**
@@ -240,6 +244,13 @@ public class I2PTunnelHTTPClientRunner extends I2PTunnelRunner {
         }
     }
 
+    /**
+     * Flushes or closes the socket output.
+     *
+     * @param i2pout the socket output to flush
+     * @param keepaliveI2P true to keep the socket open
+     * @throws IOException if the flushing fails
+     */
     private static void flushOrCloseI2POut(OutputStream i2pout, boolean keepaliveI2P) throws IOException {
         if (keepaliveI2P) {
             if (i2pout != null) {i2pout.flush();}
@@ -252,10 +263,20 @@ public class I2PTunnelHTTPClientRunner extends I2PTunnelRunner {
      * Background thread to close I2P socket without blocking the main thread.
      */
     private class I2PSocketCloser extends I2PAppThread {
+        /** The socket input to drain. */
         private final InputStream in;
+        /** The socket output to close. */
         private final OutputStream out;
+        /** The socket to close. */
         private final I2PSocket s;
 
+        /**
+         * Closes one client socket in the background.
+         *
+         * @param i2pin the socket input to drain
+         * @param i2pout the socket output to close
+         * @param i2ps the socket to close
+         */
         public I2PSocketCloser(InputStream i2pin, OutputStream i2pout, I2PSocket i2ps) {
             this.in = i2pin;
             this.out = i2pout;

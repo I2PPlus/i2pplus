@@ -110,6 +110,7 @@ public class CPUID {
 
     /** did we load the native lib correctly? */
     private static boolean _nativeOk = false;
+    /** Version of the loaded jcpuid library. */
     private static int _jcpuidVersion;
 
     /**
@@ -126,15 +127,25 @@ public class CPUID {
     private static boolean _doLog = System.getProperty("jcpuid.dontLog") == null &&
                                     I2PAppContext.getGlobalContext().isRouterContext();
 
+    /** True on an x86 CPU. */
     private static final boolean isX86 = SystemVersion.isX86();
+    /** True on Windows. */
     private static final boolean isWindows = SystemVersion.isWindows();
+    /** The lower case name of the operating system. */
     private static final String OS_NAME = System.getProperty("os.name", "").toLowerCase(Locale.US);
+    /** True on Linux. */
     private static final boolean isLinux = OS_NAME.contains("linux");
+    /** True on kFreeBSD. */
     private static final boolean isKFreebsd = OS_NAME.contains("kfreebsd");
+    /** True on FreeBSD, not counting kFreeBSD. */
     private static final boolean isFreebsd = (!isKFreebsd) && OS_NAME.contains("freebsd");
+    /** True on NetBSD. */
     private static final boolean isNetbsd = OS_NAME.contains("netbsd");
+    /** True on OpenBSD. */
     private static final boolean isOpenbsd = OS_NAME.contains("openbsd");
+    /** True on Solaris. */
     private static final boolean isSunos = OS_NAME.contains("sunos");
+    /** True on a Mac. */
     private static final boolean isMac = SystemVersion.isMac();
 
     /**
@@ -744,6 +755,11 @@ public class CPUID {
         return getLibraryPrefix() + getLibraryMiddlePart() + getLibrarySuffix();
     }
 
+    /**
+     * File name prefix of the native library for this OS.
+     *
+     * @return the prefix, empty if none
+     */
     private static final String getLibraryPrefix() {
         if (isWindows) {return "";}
         else {return "lib";}
@@ -765,6 +781,11 @@ public class CPUID {
         return "jcpuid-x86_64-linux";
     }
 
+    /**
+     * File name suffix of the native library for this OS.
+     *
+     * @return the suffix, empty if none
+     */
     private static final String getLibrarySuffix() {
         if (isWindows) {return ".dll";}
         if (isMac) {return ".jnilib";}

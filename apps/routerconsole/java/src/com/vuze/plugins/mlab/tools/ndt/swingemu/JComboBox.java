@@ -32,6 +32,7 @@ JComboBox
 	{
 	}
 
+	/** Index of the selected item. */
 	private int index;
 
 	/**

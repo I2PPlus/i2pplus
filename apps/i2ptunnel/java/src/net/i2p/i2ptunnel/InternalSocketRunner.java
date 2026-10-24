@@ -14,10 +14,15 @@ import net.i2p.util.Log;
  */
 /** Listens for in-JVM connections on internal socket. */
 class InternalSocketRunner extends I2PAppThread {
+    /** The tunnel client the socket serves. */
     private final I2PTunnelClientBase client;
+    /** The local port being listened on. */
     private final int port;
+    /** Name shown in the logs for this tunnel. */
     private final String label;
+    /** The listening socket, null once closed. */
     private ServerSocket ss;
+    /** False once the socket has been closed. */
     private volatile boolean open;
 
     /**

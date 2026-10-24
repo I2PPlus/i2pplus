@@ -13,10 +13,15 @@ import java.util.Arrays;
  * @since 0.9.15
  */
 public class EdDSAPrivateKeySpec implements KeySpec {
+    /** The 32-byte seed the key was derived from. */
     private final byte[] seed;
+    /** The hash of the seed, from which the scalar and prefix come. */
     private final byte[] h;
+    /** The private scalar. */
     private final byte[] a;
+    /** The matching public point. */
     private final GroupElement A;
+    /** The curve parameters the key belongs to. */
     private final EdDSAParameterSpec spec;
 
     /**

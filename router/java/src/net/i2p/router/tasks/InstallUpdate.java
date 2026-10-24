@@ -54,8 +54,10 @@ import net.i2p.util.SystemVersion;
  */
 public class InstallUpdate {
 
+    /** Utility class, not intended for instantiation. */
     private InstallUpdate() {}
 
+    /** File listing what the previous update installed. */
     private static final String DELETE_FILE = "deletelist.txt";
 
     /**

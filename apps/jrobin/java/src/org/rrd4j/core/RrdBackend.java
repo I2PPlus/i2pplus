@@ -49,20 +49,31 @@ public abstract class RrdBackend {
     /** All {@link java.nio.ByteBuffer} usage should use this standard order. */
     protected static final ByteOrder BYTEORDER = ByteOrder.BIG_ENDIAN;
 
+    /** First character of the unicode private area. */
     private static final char STARTPRIVATEAREA = '\ue000';
+    /** Last character of the unicode private area. */
     private static final char ENDPRIVATEAREA = '\uf8ff';
+    /** Code point of the first private character. */
     private static final int STARTPRIVATEAREACODEPOINT =
             Character.codePointAt(new char[] {STARTPRIVATEAREA}, 0);
+    /** Code point of the last private character. */
     private static final int ENDPRIVATEAREACODEPOINT =
             Character.codePointAt(new char[] {ENDPRIVATEAREA}, 0);
+    /** Number of characters in the private area. */
     private static final int PRIVATEAREASIZE =
             ENDPRIVATEAREACODEPOINT - STARTPRIVATEAREACODEPOINT + 1;
+    /** Largest value held in an unsigned short. */
     private static final int MAXUNSIGNEDSHORT = Short.MAX_VALUE - Short.MIN_VALUE;
 
+    /** True once a single use backend was created. */
     private static volatile boolean instanceCreated = false;
+    /** The path of the backend's storage. */
     private final String path;
+    /** The factory that created the backend. */
     private RrdBackendFactory factory;
+    /** Where the next big string is written. */
     private long nextBigStringOffset = -1;
+    /** Reference to the database using the backend. */
     private PhantomReference<RrdDb> ref;
 
     /**
@@ -484,8 +495,13 @@ public abstract class RrdBackend {
         }
     }
 
-    // static helper methods
 
+    /**
+     * Encodes an int in big endian bytes.
+     *
+     * @param value the value to encode
+     * @return the four bytes
+     */
     private static byte[] getIntBytes(int value) {
         byte[] b = new byte[4];
         b[0] = (byte) ((value >>> 24) & 0xFF);
@@ -495,6 +511,12 @@ public abstract class RrdBackend {
         return b;
     }
 
+    /**
+     * Encodes a long in big endian bytes.
+     *
+     * @param value the value to encode
+     * @return the eight bytes
+     */
     private static byte[] getLongBytes(long value) {
         byte[] b = new byte[8];
         b[0] = (byte) ((int) (value >>> 56) & 0xFF);
@@ -508,10 +530,22 @@ public abstract class RrdBackend {
         return b;
     }
 
+    /**
+     * Encodes a double in big endian bytes.
+     *
+     * @param value the value to encode
+     * @return the eight bytes
+     */
     private static byte[] getDoubleBytes(double value) {
         return getLongBytes(Double.doubleToLongBits(value));
     }
 
+    /**
+     * Decodes an int from big endian bytes.
+     *
+     * @param b the four bytes to read
+     * @return the integer decoded
+     */
     private static int getInt(byte[] b) {
         assert b.length == 4 : "Invalid number of bytes for integer conversion";
         return ((b[0] << 24) & 0xFF000000)
@@ -520,6 +554,12 @@ public abstract class RrdBackend {
                 + (b[3] & 0x000000FF);
     }
 
+    /**
+     * Decodes a long from big endian bytes.
+     *
+     * @param b the eight bytes to read
+     * @return the long decoded
+     */
     private static long getLong(byte[] b) {
         assert b.length == 8 : "Invalid number of bytes for long conversion";
         int high = getInt(new byte[] {b[0], b[1], b[2], b[3]});
@@ -527,6 +567,12 @@ public abstract class RrdBackend {
         return ((long) (high) << 32) + (low & 0xFFFFFFFFL);
     }
 
+    /**
+     * Decodes a double from big endian bytes.
+     *
+     * @param b the eight bytes to read
+     * @return the double decoded
+     */
     private static double getDouble(byte[] b) {
         assert b.length == 8 : "Invalid number of bytes for double conversion";
         return Double.longBitsToDouble(getLong(b));

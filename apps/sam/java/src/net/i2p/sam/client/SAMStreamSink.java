@@ -42,31 +42,54 @@ import java.nio.charset.StandardCharsets;
  *
  */
 public class SAMStreamSink {
+    /** The app context. */
     private final I2PAppContext _context;
+    /** Logger for the SAM client. */
     private final Log _log;
+    /** Host of the SAM bridge. */
     private final String _samHost;
+    /** Port of the SAM bridge. */
     private final String _samPort;
+    /** File holding our destination. */
     private final String _destFile;
+    /** Directory the received files are written to. */
     private final String _sinkDir;
+    /** Extra connection options from the command line. */
     private String _conOptions;
+    /** Reader for the SAM session replies. */
     private SAMReader _reader;
+    /** Reader for the second master session stream. */
     private SAMReader _reader2;
+    /** Whether SAM version 3 is used. */
     private boolean _isV3;
+    /** Whether SAM version 3.2 or later is used. */
     private boolean _isV32;
+    /** Session id used with SAM version 3. */
     private String _v3ID;
     /** Connection id (Integer) to peer (Flooder). */
     private final Map<String, Sink> _remotePeers;
+    /** Factory for the SSL bridge connections. */
     private static I2PSSLSocketFactory sslSocketFactory;
 
+    /** Mode number for stream receive. */
     private static final int STREAM=0;
+    /** Mode number for datagram receive. */
     private static final int DG=1;
+    /** Mode number for version 1 datagram receive. */
     private static final int V1DG=2;
+    /** Mode number for raw receive. */
     private static final int RAW=3;
+    /** Mode number for version 1 raw receive. */
     private static final int V1RAW=4;
+    /** Mode number for raw receive with headers. */
     private static final int RAWHDR = 5;
+    /** Mode number for stream forwarding. */
     private static final int FORWARD = 6;
+    /** Mode number for SSL stream forwarding. */
     private static final int FORWARDSSL=7;
+    /** Mode number for a master session. */
     private static final int MASTER=8;
+    /** The usage message printed on bad arguments. */
     private static final String USAGE = "Usage: SAMStreamSink [-s] [-m mode] [-v version] [-b samHost] [-p samPort]\n" +
                                         "                     [-o opt=val] [-u user] [-w password] myDestFile sinkDir\n" +
                                         "       modes: stream: 0; datagram: 1; v1datagram: 2;\n" +
@@ -76,7 +99,9 @@ public class SAMStreamSink {
                                         "       -s: use SSL to connect to bridge\n" +
                                         "       -x: use master session (forces -v 3.3)\n" +
                                         "       multiple -o session options are allowed";
+    /** Default forward port for SAM version 3. */
     private static final int V3FORWARDPORT=9998;
+    /** Default datagram port for SAM version 3. */
     private static final int V3DGPORT=9999;
 
     /**
@@ -270,7 +295,9 @@ public class SAMStreamSink {
         }
     }
 
+    /** Receives datagram or raw messages and writes them to files. */
     private class DGRcvr extends I2PAppThread {
+        /** The receive mode to run. */
         private final int _mode;
 
         /**
@@ -334,9 +361,11 @@ public class SAMStreamSink {
         }
     }
 
+    /** Forwards received messages to a local port. */
     private class FwdRcvr extends I2PAppThread {
+        /** Whether the forward connection uses SSL. */
         private final boolean _isSSL;
-        // for SSL only
+        /** SSL options for the forward connection. */
         private final Properties _opts;
 
         /**
@@ -414,7 +443,9 @@ public class SAMStreamSink {
         }
     }
 
+    /** Sends periodic ping messages on the stream. */
     private static class Pinger extends I2PAppThread {
+        /** Stream the pings are written to. */
         private final OutputStream _out;
 
         /**
@@ -449,6 +480,7 @@ public class SAMStreamSink {
         }
     }
 
+    /** Handles session events and writes received messages to files. */
     private class SinkEventHandler extends SAMEventHandler {
 
         /**
@@ -571,8 +603,10 @@ public class SAMStreamSink {
         }
     }
 
+    /** Handler for the second master session stream. */
     private class SinkEventHandler2 extends SinkEventHandler {
 
+        /** Stream the second session's messages arrive on. */
         private final InputStream _in;
 
         /**
@@ -652,6 +686,13 @@ public class SAMStreamSink {
         }
     }
 
+    /**
+     * Opens the connection to the SAM bridge.
+     *
+     * @param isSSL whether to connect over SSL
+     * @return the connected socket
+     * @throws IOException if the bridge cannot be reached
+     */
     private Socket connect(boolean isSSL) throws IOException {
         int port;
         try {
@@ -873,6 +914,12 @@ public class SAMStreamSink {
         }
     }
 
+    /**
+     * Writes our destination to the destination file.
+     *
+     * @param dest the destination to write
+     * @return true on success
+     */
     private boolean writeDest(String dest) {
         File f = new File(_destFile);
 
@@ -891,12 +938,19 @@ public class SAMStreamSink {
         return true;
     }
 
+    /** One open SAM session receiving messages. */
     private class Sink {
+        /** The SAM connection id. */
         private final String _connectionId;
+        /** The remote destination, for datagram modes. */
         private final String _remoteDestination;
+        /** Whether the session has been closed. */
         private volatile boolean _closed;
+        /** When the session opened. */
         private final long _started;
+        /** When the last message arrived. */
         private long _lastReceivedOn;
+        /** Stream for sending through this session. */
         private final OutputStream _out;
 
         /**

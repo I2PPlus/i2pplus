@@ -25,14 +25,23 @@ import net.i2p.util.SystemVersion;
  * Supports graceful startup and shutdown signaling using a poison packet.
  */
 public class UDPSender {
+    /** The router context. */
     private final RouterContext _context;
+    /** The log for the sender. */
     private final Log _log;
+    /** The socket to send the datagrams on. */
     private final DatagramSocket _socket;
+    /** The thread name of the sender. */
     private String _name;
+    /** The packets waiting to be sent. */
     private final BlockingQueue<UDPPacket> _outboundQueue;
+    /** True while the sender should keep running. */
     private volatile boolean _keepRunning;
+    /** The thread sending the packets. */
     private final Runner _runner;
+    /** True in dummy mode, which sends nothing. */
     private final boolean _dummy;
+    /** The listener owning the socket. */
     private final SocketListener _endpoint;
 
     /**
@@ -45,6 +54,7 @@ public class UDPSender {
      * Queue sizes are tuned to compete with NTCP bandwidth requests and to optimize CoDel behavior.
      */
     private static final int MIN_QUEUE_SIZE = 128;
+    /** Most packets queued for sending. */
     private static final int MAX_QUEUE_SIZE = 1024;
 
     /** CoDel algorithm target delay in milliseconds and interval to control pacing. */
@@ -217,6 +227,9 @@ public class UDPSender {
      * This class runs on its own dedicated high-priority thread.
      */
     private class Runner implements Runnable {
+
+        /** Writes packets to the socket. */
+        private Runner() {}
 
         /**
          * Dequeue and send UDP packets until shutdown.

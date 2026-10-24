@@ -9,8 +9,11 @@ import net.i2p.data.Hash;
  */
 class DestTracker {
 
+    /** The destination this rule tracks. */
     private final Hash hash;
+    /** The limit applied to that destination. */
     private final Threshold threshold;
+    /** Counts the connections in the window. */
     private final AccessCounter counter;
 
     /**

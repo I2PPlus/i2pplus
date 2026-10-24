@@ -31,8 +31,11 @@ import net.i2p.util.SimpleTimer2;
  * @since 0.9.56
  */
 class NegativeLookupCache {
+    /** Failed lookups per hash. */
     private final ObjectCounter<Hash> counter;
+    /** Timed out lookups per hash. */
     private final ObjectCounter<Hash> timeoutCounter;
+    /** The destinations known to be bad. */
     private final Map<Hash, Destination> badDests;
     /** Last time a fail was recorded for the key (streak / age tracking). */
     private final Map<Hash, Long> lastFailAt;
@@ -40,19 +43,28 @@ class NegativeLookupCache {
     private final Map<Hash, Long> cachedUntil;
     /** How many times the key has tripped the threshold (TTL backoff). */
     private final Map<Hash, Integer> tripCount;
+    /** Failed lookups before a destination is bad. */
     private final int _maxFails;
+    /** Timed out lookups before a destination is bad. */
     private final int _maxTimeoutFails;
+    /** Timer event expiring the cached entries. */
     private final SimpleTimer2.TimedEvent cleaner;
+    /** Interval between the cleanup runs. */
     private final long cleanTime;
+    /** Base lifetime of a cached entry. */
     private final long entryTtlBase;
+    /** Longest lifetime of a cached entry. */
     private final long entryTtlMax;
+    /** The router context. */
     private final RouterContext _context;
 
     /** Maximum failures before caching (definitive peer replies, zero-lease). */
     static final int MAX_FAILS = 6;
     /** Pure-timeout failures trip at a higher bar so a brief outage doesn't lock a live key. */
     static final int MAX_TIMEOUT_FAILS = MAX_FAILS * 2;
+    /** Most bad destinations remembered. */
     private static final int MAX_BAD_DESTS = 128;
+    /** Default interval between the cleanup runs. */
     private static final long CLEAN_TIME = 2*60*1000L;
     /** First-trip hold once the threshold is crossed (ms). */
     static final long ENTRY_TTL_BASE_MS = 30 * 1000L;
@@ -334,6 +346,7 @@ class NegativeLookupCache {
         cachedUntil.put(h, now + ttl);
     }
 
+    /** Timer event expiring the cached lookups. */
     private class Cleaner extends SimpleTimer2.TimedEvent {
         /**
          * Schedules itself.

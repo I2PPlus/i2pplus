@@ -14,11 +14,13 @@ import net.i2p.data.ByteArray;
  */
 class MsgID extends ByteArray {
 
+    /** Pinned for serialized-form compatibility. */
     private static final long serialVersionUID = 1L;
 
     /** BEP 5: 2 bytes, incremented. */
     private static final int MY_TOK_LEN = 8;
 
+    /** Longest token accepted in a message. */
     private static final int MAX_TOK_LEN = 16;
 
     /**

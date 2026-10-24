@@ -7,6 +7,7 @@ import java.io.IOException;
  * Exception for decoding errors.
  */
 public class DecodingException extends IOException {
+	/** Pinned for serialized-form compatibility. */
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -25,8 +26,7 @@ public class DecodingException extends IOException {
 	 * @param cause the underlying exception that made decoding fail
 	 * @since 0.9.34
 	 */
-	public DecodingException(String msg, Exception cause)
-	{
+	public DecodingException(String msg, Exception cause) {
 		super(msg, cause);
 	}
 }

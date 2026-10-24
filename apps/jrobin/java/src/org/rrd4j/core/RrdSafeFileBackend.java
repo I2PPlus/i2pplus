@@ -14,8 +14,10 @@ import java.util.concurrent.atomic.AtomicLong;
  * class).
  */
 public class RrdSafeFileBackend extends RrdRandomAccessFileBackend {
+    /** Lock counts shared by every backend. */
     private static final Counters counters = new Counters();
 
+    /** The lock held on the file, null when unlocked. */
     private FileLock lock;
 
     /**
@@ -37,6 +39,13 @@ public class RrdSafeFileBackend extends RrdRandomAccessFileBackend {
         }
     }
 
+    /**
+     * Takes an exclusive lock, retrying until the wait ends.
+     *
+     * @param lockWaitTime ms to keep retrying
+     * @param lockRetryPeriod ms between attempts
+     * @throws IOException if the lock cannot be taken
+     */
     private void lockFile(long lockWaitTime, long lockRetryPeriod) throws IOException {
         long entryTime = System.currentTimeMillis();
         FileChannel channel = rafile.getChannel();

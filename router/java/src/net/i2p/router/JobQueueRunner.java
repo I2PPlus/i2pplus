@@ -6,18 +6,26 @@ import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
 /**
-  Worker thread that executes jobs from the router job queue.
-  Handles job execution, timing collection, error handling,
-  and performance monitoring for individual job processing threads.
-*/
+ * Worker thread that executes jobs from the router job queue.
+ * Handles job execution, timing collection, error handling,
+ * and performance monitoring for individual job processing threads.
+ */
 class JobQueueRunner extends I2PThread {
+    /** The log for the runner. */
     private final Log _log;
+    /** The router context. */
     private final RouterContext _context;
+    /** True while the runner should keep running. */
     private volatile boolean _keepRunning;
+    /** The id of this runner. */
     private final int _id;
+    /** The job running right now. */
     private volatile Job _currentJob;
+    /** The job that ran last. */
     private volatile Job _lastJob;
+    /** When the last job began. */
     private volatile long _lastBegin;
+    /** When the last job ended. */
     private volatile long _lastEnd;
 
     /**
@@ -50,21 +58,21 @@ class JobQueueRunner extends I2PThread {
     }
 
     /**
-     *  The job currently being executed.
+     * The job currently being executed.
      *
-     *  @return the current job
+     * @return the current job
      */
     public Job getCurrentJob() {return _currentJob;}
     /**
-     *  The most recently completed job.
+     * The most recently completed job.
      *
-     *  @return the last job
+     * @return the last job
      */
     public Job getLastJob() {return _lastJob;}
     /**
-     *  Identifier for this runner.
+     * Identifier for this runner.
      *
-     *  @return the runner id
+     * @return the runner id
      */
     public int getRunnerId() {return _id;}
     /** Stop the runner. */
@@ -72,15 +80,15 @@ class JobQueueRunner extends I2PThread {
     /** Start the runner. */
     public void startRunning() {_keepRunning = true;}
     /**
-     *  Time the last job began.
+     * When the job that ran most recently started.
      *
-     *  @return the time the last job began
+     * @return adjusted time in ms, 0 until the first job has started
      */
     public long getLastBegin() {return _lastBegin;}
     /**
-     *  Time the last job ended.
+     * When the job that ran most recently finished, stats update included.
      *
-     *  @return the time the last job ended
+     * @return adjusted time in ms, 0 until the first job has finished
      */
     public long getLastEnd() {return _lastEnd;}
 
@@ -180,6 +188,7 @@ class JobQueueRunner extends I2PThread {
         _context.jobQueue().removeRunner(_id);
     }
 
+    /** Runs the job taken from the queue. */
     private void runCurrentJob() {
         try {
             if (_currentJob != null) {_currentJob.runJob();}

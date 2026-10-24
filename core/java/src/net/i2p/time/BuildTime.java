@@ -30,9 +30,13 @@ import java.util.jar.Manifest;
  */
 public class BuildTime {
 
+    /** When this build was made. */
     private static final long _buildTime;
+    /** Oldest time a build could plausibly have happened. */
     private static final long _earliestTime;
+    /** Newest time a build could plausibly have happened. */
     private static final long _latestTime;
+    /** Twenty-five years, in ms. */
     private static final long YEARS_25 = 25L * 365 * 24 * 60 * 60 * 1000;
 
     /**
@@ -41,10 +45,7 @@ public class BuildTime {
      */
     private static final String EARLIEST = "2025-01-01 12:00:00 UTC";
 
-    // Fallback if EARLIEST fails to parse (I2P ticket #1976):
-    // 2025-01-02 00:00:00 UTC, 12 hours later than EARLIEST, so it is a
-    // weaker bound. Regenerate with:
-    // date -u -d '2025-01-01 12:00:00 UTC' +%s
+    /** Lower bound for a sane build date, 2025-01-02 00:00 UTC. */
     private static final long EARLIEST_LONG = 1735776000 * 1000L;
 
     static {
@@ -115,6 +116,7 @@ public class BuildTime {
         return _latestTime;
     }
 
+    /** Utility class, not intended for instantiation. */
     private BuildTime() {}
 
     /**
@@ -147,6 +149,12 @@ public class BuildTime {
         return 0;
     }
 
+    /**
+     * Reads a file's timestamps.
+     *
+     * @param f the file to stat
+     * @return its attributes, null if it cannot be read
+     */
     private static Attributes attributes(File f) {
         InputStream in = null;
         try {

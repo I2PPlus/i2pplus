@@ -13,8 +13,11 @@ import net.i2p.util.Log;
  *
  */
 public class MessageValidator {
+    /** Logger for this class. */
     private final Log _log;
+    /** The router validating messages. */
     private final RouterContext _context;
+    /** Recent message ids, to catch replays. */
     private DecayingBloomFilter _filter;
 
 
@@ -82,6 +85,7 @@ public class MessageValidator {
         return null;
     }
 
+    /** Bits of the timestamp that form the filter's time window. */
     private static final long TIME_MASK = 0xFFFFFC00;
 
     /**

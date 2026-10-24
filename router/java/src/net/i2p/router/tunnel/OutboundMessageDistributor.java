@@ -22,17 +22,26 @@ import net.i2p.util.SystemVersion;
  * honors the instructions.
  */
 class OutboundMessageDistributor {
+    /** The router context. */
     private final RouterContext _context;
+    /** Send priority of the distributed messages. */
     private final int _priority;
+    /** Logger for the message distributor. */
     private final Log _log;
-    // following only for somebody else's OBEP, not for zero-hop
+    /** The routers the message was already sent to. */
     private final Set<Hash> _toRouters;
+    /** Queue estimating the outbound share, only for somebody else's endpoint. */
     private final SyntheticREDQueue _partBWE;
+    /** New routers added in the current period. */
     private int _newRouterCount;
+    /** When the new router period started. */
     private long _newRouterTime;
 
+    /** Time allowed for one distribution. */
     private static final long MAX_DISTRIBUTE_TIME = 15*1000L;
+    /** Most routers sent to in one period. */
     private static final int MAX_ROUTERS_PER_PERIOD = SystemVersion.isSlow() ? 32 : 64;
+    /** Length of the new router allowance period. */
     private static final long NEW_ROUTER_PERIOD = SystemVersion.isSlow() ? 30*1000L : 15*1000L;
 
     /**
@@ -193,11 +202,23 @@ class OutboundMessageDistributor {
         }
     }
 
+    /** Job sending one message to the next routers. */
     private class DistributeJob extends JobImpl {
+        /** The message to distribute. */
         private final I2NPMessage _message;
+        /** The hash the message searches for. */
         private final Hash _target;
+        /** The tunnel the reply comes back on. */
         private final TunnelId _tunnel;
 
+        /**
+         * Builds the distribution job.
+         *
+         * @param ctx the router context
+         * @param msg the message to distribute
+         * @param target the hash the message searches for
+         * @param id the tunnel the reply comes back on
+         */
         public DistributeJob(RouterContext ctx, I2NPMessage msg, Hash target, TunnelId id) {
             super(ctx);
             _message = msg;

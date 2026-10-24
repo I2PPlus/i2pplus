@@ -175,7 +175,6 @@ public class LogManager implements Flushable {
     /**
      * Default date format pattern; blank means default short date and medium time for the locale.
      */
-    // TODO: Sync time format for router and wrapper logs and dates in router log messages (currently 3 different formats)
     /**
      * Date pattern used when none is configured.
      */
@@ -209,11 +208,16 @@ public class LogManager implements Flushable {
      * Default on-screen log level string.
      */
     public static final String DEFAULT_ONSCREENLEVEL = Log.STR_ERROR;
+    /** Smallest log file size allowed. */
     private static final int MIN_FILESIZE_LIMIT = 16 * 1024;
+    /** Default for compressing the rotated logs. */
     private static final boolean DEFAULT_GZIP = false;
+    /** Default smallest log size to compress. */
     private static final int DEFAULT_MIN_GZIP_SIZE = 64 * 1024;
 
+    /** The app context. */
     private final I2PAppContext _context;
+    /** Logger for the log manager itself. */
     private final Log _log;
 
     /** When was the config file last read (or -1 if never). */
@@ -241,6 +245,7 @@ public class LogManager implements Flushable {
      */
     private volatile LogWriter _writer;
 
+    /** True once the manager has shut down. */
     private volatile boolean _shutdown;
 
     /**
@@ -279,15 +284,22 @@ public class LogManager implements Flushable {
     /** The actual "recent logs" list. */
     private final LogConsoleBuffer _consoleBuffer;
 
+    /** Size of the in memory log buffer. */
     private int _logBufferSize = MAX_BUFFER;
+    /** True to drop records when the buffer is full. */
     private volatile boolean _dropOnOverflow;
+    /** True to drop repeated records. */
     private boolean _dropDuplicates;
+    /** Records dropped since startup. */
     private final AtomicLong _droppedRecords = new AtomicLong();
-    // in seconds
+    /** Flush interval of the writers, in seconds. */
     private int _flushInterval = (int) (LogWriter.FLUSH_INTERVAL / 1000);
+    /** True to compress the rotated logs. */
     private volatile boolean _gzip;
+    /** Smallest rotated log that gets compressed. */
     private long _minGzipSize;
 
+    /** True once the missing config file was logged. */
     private boolean _alreadyNoticedMissingConfig;
 
     /**
@@ -892,7 +904,7 @@ public class LogManager implements Flushable {
     /**
      * Base log filename pattern.
      *
-     * @return the base log filename pattern
+     * @return the pattern with the substitutions unexpanded
      */
     public String getBaseLogfilename() {
         return _baseLogfilename;
@@ -976,6 +988,11 @@ public class LogManager implements Flushable {
         }
     }
 
+    /**
+     * Writes the default logging configuration.
+     *
+     * @return the properties written
+     */
     private Properties createConfig() {
         Properties rv = new OrderedProperties();
         rv.setProperty(PROP_FORMAT, new String(_format));
@@ -1024,7 +1041,7 @@ public class LogManager implements Flushable {
     /**
      * Log format characters.
      *
-     * @return the log format characters
+     * @return the format, as a character array
      */
     public char[] getFormat() {
         return _format;
@@ -1050,7 +1067,7 @@ public class LogManager implements Flushable {
     /**
      * Date format pattern string.
      *
-     * @return the date format pattern string
+     * @return the pattern used for the log dates
      */
     public String getDateFormatPattern() {
         return _dateFormatPattern;
@@ -1103,7 +1120,11 @@ public class LogManager implements Flushable {
         _consoleBuffer.clear();
     }
 
+    /** Thread flushing the logs at shutdown. */
     private class ShutdownHook extends I2PAppThread {
+        /** Flushes the logs when the JVM exits. */
+        private ShutdownHook() {}
+
         /**
          * Shut down the log manager.
          */

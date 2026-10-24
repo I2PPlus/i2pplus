@@ -42,10 +42,15 @@ import net.i2p.util.SyntheticREDQueue;
  */
 public class BandwidthManager implements BandwidthListener {
 
+    /** The context the limiter runs in. */
     private final I2PAppContext _context;
+    /** Logger for this class. */
     private final Log _log;
+    /** Gate for uploads. */
     private SyntheticREDQueue _up;
+    /** Gate for downloads. */
     private SyntheticREDQueue _down;
+    /** Gate for metadata requests. */
     private SyntheticREDQueue _req;
 
     /**

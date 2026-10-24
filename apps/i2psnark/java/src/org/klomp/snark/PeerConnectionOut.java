@@ -31,28 +31,33 @@ import net.i2p.util.Log;
  * @since 0.1
  */
 class PeerConnectionOut implements Runnable {
+    /** Logger for the outbound peer connection. */
     private final Log _log =
             I2PAppContext.getGlobalContext().logManager().getLog(PeerConnectionOut.class);
+    /** The peer this connection serves. */
     private final Peer peer;
+    /** Stream the messages are written to. */
     private final DataOutputStream dout;
+    /** The thread draining the send queue. */
     private Thread thread;
+    /** True once the connection should close. */
     private boolean quit;
-    // Contains Messages.
-    // Bounded queue to prevent unbounded memory growth under slow network conditions
+    /**
+     * The messages waiting to be written, a bounded queue so a slow
+     * network cannot grow the memory without limit.
+     */
     private static final int MAX_QUEUE_SIZE = 1000;
     /** Max consecutive PIECE messages the priority scan walks before giving up. */
     private static final int MAX_PRIORITY_SCAN = 16;
+    /** The messages waiting to be written. */
     private final BlockingQueue<Message> sendQueue = new LinkedBlockingQueue<>(MAX_QUEUE_SIZE);
 
-    // ---- PIECE prefetch --------------------------------------------------
-    // Disk reads for queued PIECE messages run on this shared elastic pool
-    // instead of inline on the sender thread, so a slow (cold) read no longer
-    // stalls the bytes already ready to go out behind it. The pool spawns a
-    // thread per concurrent burst up to MAX_PREFETCH_THREADS and lets idle
-    // threads die, so cost at rest is zero. When all threads are busy or the
-    // per-connection depth cap is hit, new pieces simply stay lazy and fall
-    // back to the pre-existing inline load in Message.sendMessage().
-    /** Max threads across all connections; Storage reads lock per-file, so more buys little. */
+    /**
+     * Pool running the piece prefetches, one thread per concurrent burst
+     * up to the thread limit, with idle threads dying so the cost at rest
+     * is zero. When all threads are busy or the per connection depth cap
+     * is hit, new pieces stay lazy and fall back to the inline load.
+     */
     private static final int MAX_PREFETCH_THREADS = 4;
     /** Idle prefetch threads exit after this long. */
     private static final long PREFETCH_THREAD_IDLE_MS = 60 * 1000;
@@ -60,7 +65,9 @@ class PeerConnectionOut implements Runnable {
     static volatile int MAX_PREFETCH_INFLIGHT = 2;
     /** Loads slower than this are logged; sustained counts confirm cold-read stalls. */
     private static final long SLOW_LOAD_WARN_MS = 1000;
+    /** Sequence number of the prefetch threads. */
     private static final AtomicInteger _prefetchThreadId = new AtomicInteger();
+    /** Pool running the piece prefetches. */
     private static final ThreadPoolExecutor _prefetchExec =
             new ThreadPoolExecutor(
                     0,
@@ -81,9 +88,11 @@ class PeerConnectionOut implements Runnable {
         _prefetchExec.allowCoreThreadTimeOut(true);
     }
 
-    // Load timing stats: cheap instrumentation to verify cold-read stall share.
+    /** Prefetches measured, cheap instrumentation for the cold read stall share. */
     private static final AtomicLong _loadCount = new AtomicLong();
+    /** Total prefetch time measured, in ms. */
     private static final AtomicLong _loadTotalMs = new AtomicLong();
+    /** Slowest prefetch measured, in ms. */
     private static volatile long _maxLoadMs;
 
     /**
@@ -114,7 +123,9 @@ class PeerConnectionOut implements Runnable {
         }
     }
 
+    /** Sequence number of the created connections. */
     private static final AtomicLong __id = new AtomicLong();
+    /** This connection's position in that sequence. */
     private final long _id;
     /** Last send time. */
     long lastSent;

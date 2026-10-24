@@ -25,12 +25,16 @@ import net.i2p.util.EventDispatcher;
  */
 public class I2PTunnelDCCClient extends I2PTunnelClientBase {
 
-    // delay resolution until connect time
+    /** Destination of the DCC peer, resolved only at connect time. */
     private final String _dest;
+    /** Port the DCC peer listens on. */
     private final int _remotePort;
+    /** When this client's tunnel stops being kept alive, in ms. */
     private long _expires;
 
+    /** How long an inbound DCC tunnel is kept - 30 minutes. */
     private static final long INBOUND_EXPIRE = 30*(long) 60*1000;
+    /** How long after the last use an inbound DCC tunnel is stopped - 30 minutes. */
     private static final long INBOUND_STOP_EXPIRE = 30*(long) 60*1000;
     /** Event fired when DCC connection starts. */
     public static final String CONNECT_START_EVENT = "connectionStarted";

@@ -43,9 +43,13 @@ class PersistNews {
      */
     PersistNews() {}
 
+    /** Directory the saved news items live in. */
     private static final String DIR = "docs/feed/news";
+    /** Start of a saved news item's name. */
     private static final String PFX = "news-";
+    /** End of a saved news item's name. */
     private static final String SFX = ".xml.gz";
+    /** Opening of each saved news item. */
     private static final String XML_START = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
 
     /**

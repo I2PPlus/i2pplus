@@ -14,9 +14,10 @@ import org.rrd4j.ConsolFun;
  *
  */
 public class Archive implements RrdUpdater<Archive> {
+    /** The database the archive belongs to. */
     private final RrdDb parentDb;
 
-    // definition
+    /** How raw values are consolidated, from the definition. */
     private final RrdEnum<Archive, ConsolFun> consolFun;
     /** X-files factor */
     protected final RrdDouble<Archive> xff;
@@ -25,8 +26,9 @@ public class Archive implements RrdUpdater<Archive> {
     /** Number of archive rows */
     protected final RrdInt<Archive> rows;
 
-    // state
+    /** The stored values, one ring per data source. */
     private final Robin[] robins;
+    /** Consolidation state, one per data source. */
     private final ArcState[] states;
 
     /**
@@ -82,7 +84,6 @@ public class Archive implements RrdUpdater<Archive> {
         }
     }
 
-    // read from XML
     /**
      * Create an archive by importing from XML data.
      * @param parentDb the parent RRD database
@@ -192,6 +193,13 @@ public class Archive implements RrdUpdater<Archive> {
         }
     }
 
+    /**
+     * Folds one sample into the archive's state.
+     *
+     * @param state the state to update
+     * @param value the sample's value
+     * @throws IOException if the state cannot be written
+     */
     private void accumulate(ArcState state, double value) throws IOException {
         if (Double.isNaN(value)) {
             state.setNanSteps(state.getNanSteps() + 1);
@@ -219,6 +227,13 @@ public class Archive implements RrdUpdater<Archive> {
         }
     }
 
+    /**
+     * Writes the consolidated value at the end of a step.
+     *
+     * @param state the state to consolidate
+     * @param robin where the value is stored
+     * @throws IOException if the value cannot be written
+     */
     private void finalizeStep(ArcState state, Robin robin) throws IOException {
         // should store
         long arcSteps = steps.get();

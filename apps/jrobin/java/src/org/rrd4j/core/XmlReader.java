@@ -17,8 +17,11 @@ import org.w3c.dom.Node;
  */
 class XmlReader extends DataImporter {
 
+    /** The document's root element. */
     private final Element root;
+    /** The data source elements. */
     private final Node[] dsNodes;
+    /** The archive elements. */
     private final Node[] arcNodes;
 
     /**

@@ -55,19 +55,33 @@ class IntelInfoImpl extends CPUIDCPUInfo implements IntelCPUInfo
      */
     IntelInfoImpl() {}
 
+    /** True for a Pentium class CPU or better. */
     private static boolean isPentiumCompatible;
+    /** True for a Pentium MMX class CPU or better. */
     private static boolean isPentiumMMXCompatible;
+    /** True for a Pentium II class CPU or better. */
     private static boolean isPentium2Compatible;
+    /** True for a Pentium III class CPU or better. */
     private static boolean isPentium3Compatible;
+    /** True for a Pentium 4 class CPU or better. */
     private static boolean isPentium4Compatible;
+    /** True for a Pentium M class CPU or better. */
     private static boolean isPentiumMCompatible;
+    /** True for an Atom class CPU or better. */
     private static boolean isAtomCompatible;
+    /** True for a Core 2 class CPU or better. */
     private static boolean isCore2Compatible;
+    /** True for a Core i class CPU or better. */
     private static boolean isCoreiCompatible;
+    /** True for a Sandy Bridge class CPU or better. */
     private static boolean isSandyCompatible;
+    /** True for an Ivy Bridge class CPU or better. */
     private static boolean isIvyCompatible;
+    /** True for a Haswell class CPU or better. */
     private static boolean isHaswellCompatible;
+    /** True for a Broadwell class CPU or better. */
     private static boolean isBroadwellCompatible;
+    /** True for a Skylake class CPU or better. */
     private static boolean isSkylakeCompatible;
 
     /** Identified processor name from {@link #identifyCPU}, or {@code null} if unrecognized. */

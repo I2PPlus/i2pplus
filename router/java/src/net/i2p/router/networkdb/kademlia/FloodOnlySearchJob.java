@@ -19,7 +19,9 @@ import net.i2p.router.RouterContext;
  * @since 0.8.9
  */
 abstract class FloodOnlySearchJob extends FloodSearchJob {
+    /** Whether a search reply should be processed. */
     private boolean _shouldProcessDSRM;
+    /** Peers that did not answer this search. */
     private final HashSet<Hash> _unheardFrom;
 
     /** This is a marker to register with the MessageRegistry, it is never sent. */

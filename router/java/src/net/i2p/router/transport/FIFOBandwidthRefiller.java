@@ -51,12 +51,15 @@ import net.i2p.util.SystemVersion;
  * Public only for properties and defaults.
  */
 public class FIFOBandwidthRefiller implements Runnable {
+    /** Logger for the bandwidth refiller. */
     private final Log _log;
+    /** The router context. */
     private final RouterContext _context;
+    /** The limiter whose queues are refilled. */
     private final FIFOBandwidthLimiter _limiter;
-    // This is only changed if the config changes
+    /** Queue estimating the outbound share. */
     private volatile SyntheticREDQueue _partBWE;
-    // Inbound bandwidth limiter for participating tunnels
+    /** Queue estimating the inbound share. */
     private volatile SyntheticREDQueue _partBWEIn;
 
     /** How many KBps to allow. */
@@ -73,6 +76,7 @@ public class FIFOBandwidthRefiller implements Runnable {
     private volatile long _lastCheckConfigTime;
     /** How frequently we check the config for updates. */
     private volatile long _configCheckPeriodMs = 60*1000L;
+    /** True while the refiller runs. */
     private volatile boolean _isRunning;
 
     /** Property for inbound bandwidth. */
@@ -87,8 +91,7 @@ public class FIFOBandwidthRefiller implements Runnable {
     public static final String PROP_INBOUND_BANDWIDTH_PEAK = "i2np.bandwidth.inboundBurstKBytes";
     /** Property for outbound bandwidth peak. */
     public static final String PROP_OUTBOUND_BANDWIDTH_PEAK = "i2np.bandwidth.outboundBurstKBytes";
-    // no longer allow unlimited bandwidth - the user must specify a value, else use defaults below (KBps)
-    /** Default inbound bandwidth. */
+    /** Default inbound bandwidth, in KBps, unlimited is not allowed. */
     public static final int DEFAULT_INBOUND_BANDWIDTH = 1024;
     /**
      * Caution, do not make DEFAULT_OUTBOUND_BANDWIDTH * DEFAULT_SHARE_PCT &gt; 32
@@ -124,7 +127,9 @@ public class FIFOBandwidthRefiller implements Runnable {
                                                      SystemVersion.getCores() >= 8 && SystemVersion.getMaxMemory() >= 4096*1024*1024L ? 262144 :
                                                      131072;
 
+    /** Largest share of the capacity we take. */
     private static final float MAX_SHARE_PERCENTAGE = 0.90f;
+    /** Share of the limit the refill stays under. */
     private static final float SHARE_LIMIT_FACTOR = 0.95f;
 
     /**
@@ -198,6 +203,13 @@ public class FIFOBandwidthRefiller implements Runnable {
         _lastCheckConfigTime = _lastRefillTime;
     }
 
+    /**
+     * Refills the queues and reports any change.
+     *
+     * @param buffer the queues to refill
+     * @param now the current time, in ms
+     * @return true if any limit changed
+     */
     private boolean updateQueues(List<FIFOBandwidthLimiter.Request> buffer, long now) {
         long numMs = (now - _lastRefillTime);
         if (_log.shouldDebug())
@@ -241,6 +253,7 @@ public class FIFOBandwidthRefiller implements Runnable {
         return (int) (maxKBps * share * 1024f * SHARE_LIMIT_FACTOR);
     }
 
+    /** Re-reads the bandwidth settings if they changed. */
     private void checkConfig() {
         updateInboundRate();
         updateOutboundRate();
@@ -259,6 +272,7 @@ public class FIFOBandwidthRefiller implements Runnable {
 
     }
 
+    /** Refills the inbound bandwidth queue. */
     private void updateInboundRate() {
         int in = _context.getProperty(PROP_INBOUND_BANDWIDTH, DEFAULT_INBOUND_BANDWIDTH);
         if (in != _inboundKBytesPerSecond) {
@@ -275,6 +289,7 @@ public class FIFOBandwidthRefiller implements Runnable {
             _inboundKBytesPerSecond = DEFAULT_INBOUND_BANDWIDTH;
     }
 
+    /** Refills the outbound bandwidth queue. */
     private void updateOutboundRate() {
         int out = _context.getProperty(PROP_OUTBOUND_BANDWIDTH, DEFAULT_OUTBOUND_BANDWIDTH);
         if (out != _outboundKBytesPerSecond) {
@@ -293,6 +308,7 @@ public class FIFOBandwidthRefiller implements Runnable {
             _outboundKBytesPerSecond = DEFAULT_OUTBOUND_BANDWIDTH;
     }
 
+    /** Refills the inbound burst queue. */
     private void updateInboundBurstRate() {
         int in = _context.getProperty(PROP_INBOUND_BURST_BANDWIDTH, DEFAULT_INBOUND_BURST_BANDWIDTH);
         if (in != _inboundBurstKBytesPerSecond) {
@@ -312,6 +328,7 @@ public class FIFOBandwidthRefiller implements Runnable {
         _limiter.setInboundBurstKBps(_inboundBurstKBytesPerSecond);
     }
 
+    /** Refills the outbound burst queue. */
     private void updateOutboundBurstRate() {
         int out = _context.getProperty(PROP_OUTBOUND_BURST_BANDWIDTH, DEFAULT_OUTBOUND_BURST_BANDWIDTH);
         if (out != _outboundBurstKBytesPerSecond) {
@@ -331,6 +348,7 @@ public class FIFOBandwidthRefiller implements Runnable {
         _limiter.setOutboundBurstKBps(_outboundBurstKBytesPerSecond);
     }
 
+    /** Updates the peak inbound rate estimate. */
     private void updateInboundPeak() {
         int in = _context.getProperty(PROP_INBOUND_BANDWIDTH_PEAK,
                                       DEFAULT_BURST_SECONDS * _inboundBurstKBytesPerSecond);
@@ -349,6 +367,7 @@ public class FIFOBandwidthRefiller implements Runnable {
                 }
         }
     }
+    /** Updates the peak outbound rate estimate. */
     private void updateOutboundPeak() {
         int in = _context.getProperty(PROP_OUTBOUND_BANDWIDTH_PEAK,
                                       DEFAULT_BURST_SECONDS * _outboundBurstKBytesPerSecond);

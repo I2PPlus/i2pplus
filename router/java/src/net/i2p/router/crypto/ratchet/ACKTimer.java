@@ -20,15 +20,22 @@ import net.i2p.util.SimpleTimer2;
  * @since 0.9.47
  */
 class ACKTimer extends SimpleTimer2.TimedEvent {
+    /** The router the timer runs on. */
     private final RouterContext _context;
+    /** Logger for this class. */
     private final Log _log;
+    /** The peer we sent the message to. */
     private final Destination _from;
+    /** The peer we received the message from. */
     private final Destination _to;
 
+    /** How long an unacknowledged message is kept - 60 seconds. */
     private static final long EXPIRATION = 60*1000L;
-    // SendMessageOptions.LS_MASK, don't send LS
-    // Never bundle our LS with a ratchet-layer ACK, because we don't need to,
-    // and because it will be the wrong LS for subsessions
+    /**
+     * SendMessageOptions.LS_MASK, don't send LS. Never bundle our lease set
+     * with a ratchet-layer ACK: we don't need to, and it would be the wrong
+     * lease set for subsessions.
+     */
     private static final int LS_MASK = 0x0100;
 
 /**

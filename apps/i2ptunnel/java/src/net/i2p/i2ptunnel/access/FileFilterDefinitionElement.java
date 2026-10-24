@@ -19,8 +19,11 @@ import net.i2p.util.Log;
  */
 class FileFilterDefinitionElement extends FilterDefinitionElement {
 
+    /** The file of blocked destinations. */
     private final File file;
+    /** When each destination was last seen in the file. */
     private final Map<Hash, DestTracker> lastLoaded = new HashMap<>();
+    /** When the file was last loaded, 0 if never. */
     private volatile long lastLoading;
 
     /**

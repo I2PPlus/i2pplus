@@ -77,15 +77,19 @@ class ClientConnectionRunner {
     /** Output stream of the socket that I2CP messages bound to the client should be written to. */
     private OutputStream _out;
 
+    /** The client's sessions, by destination hash. */
     private final ConcurrentHashMap<Hash, SessionParams> _sessions;
 
+    /** The client's version string. */
     private String _clientVersion;
     /**
      * Mapping of MessageId to Payload, storing messages for retrieval.
      * Unused for {@code i2cp.fastReceive} = "true" (_dontSendMSMOnRecive = true).
      */
     private final Map<MessageId, Payload> _messages;
+    /** Lease set publish failures in a row. */
     private int _consecutiveLeaseRequestFails;
+    /** When a lease set publish last failed. */
     private long _lastLeaseFailTime;
     /**
      * Set of messageIds created but not yet ACCEPTED.
@@ -103,6 +107,7 @@ class ClientConnectionRunner {
      * delivered to the client (so that we can be sure only to update when necessary).
      */
     private final List<MessageId> _alreadyProcessed;
+    /** The thread writing replies to the client. */
     private ClientWriterRunner _writer;
     /** True once the connection has been shut down. */
     private volatile boolean _dead;
@@ -110,13 +115,12 @@ class ClientConnectionRunner {
     private boolean _dontSendMSM;
     /** For inbound traffic. True if {@code i2cp.fastReceive} = "true". @since 0.9.4. */
     private boolean _dontSendMSMOnReceive;
+    /** Counter handing out message ids. */
     private final AtomicInteger _messageId; // messageId counter
+    /** Hash of the client's encrypted lease set. */
     private Hash _encryptedLSHash;
 
-    // Was 32767 since the beginning (04-2004).
-    // But it's 4 bytes in the I2CP spec and stored as a long in MessageID....
-    // If this is too low and wraps around, I2CP VerifyUsage could delete the wrong message,
-    // e.g. on local access
+    /** Largest message id before wrapping. */
     private static final int MAX_MESSAGE_ID = 0x4000000;
 
     /**
@@ -127,7 +131,9 @@ class ClientConnectionRunner {
     private static final int MAX_LEASE_FAILS = 10;
     /** Reset consecutive-fail counter if this much time has elapsed since last failure. */
     private static final long LEASE_FAIL_DECAY_MS = 5*60*1000;
+    /** Socket buffer size, in bytes. */
     private static final int BUF_SIZE = 32*1024;
+    /** Sessions allowed per client connection. */
     private static final int MAX_SESSIONS = 4;
 
     /**
@@ -144,6 +150,7 @@ class ClientConnectionRunner {
      * @since 0.9.2
      */
     private static final String PROP_TAGS = "crypto.tagsToSend";
+    /** Config key for the low tag threshold. */
     private static final String PROP_THRESH = "crypto.lowTagThreshold";
 
     /**
@@ -152,17 +159,29 @@ class ClientConnectionRunner {
      * @since 0.9.21
      */
     private static class SessionParams {
+        /** The session's destination. */
         final Destination dest;
+        /** True for the client's primary session. */
         final boolean isPrimary;
+        /** Id identifying the session in the stream. */
         SessionId sessionId;
+        /** The session's negotiated config. */
         SessionConfig config;
+        /** State of the current lease set request. */
         LeaseRequestState leaseRequest;
+        /** Timer re-requesting the lease set. */
         Rerequest rerequestTimer;
         /** Current lease set, possibly decrypted. */
         LeaseSet currentLeaseSet;
         /** Encrypted lease set, present only if the client uses encrypted lease sets. */
         LeaseSet currentEncryptedLeaseSet;
 
+        /**
+         * Holds one client session's state.
+         *
+         * @param d the session's destination
+         * @param isPrimary true for the primary session
+         */
         SessionParams(Destination d, boolean isPrimary) {
             dest = d;
             this.isPrimary = isPrimary;
@@ -189,6 +208,7 @@ class ClientConnectionRunner {
         _messageId = new AtomicInteger(_context.random().nextInt());
     }
 
+    /** Counter naming the client connections. */
     private static final AtomicInteger __id = new AtomicInteger();
 
     /**
@@ -1193,17 +1213,27 @@ class ClientConnectionRunner {
         _context.jobQueue().addJob(new RequestLeaseSetJob(_context, this, state));
     }
 
+    /**
+     * Re-requests a lease set until it is published.
+     */
     @SuppressWarnings("ReferenceEquality")
     private class Rerequest extends SimpleTimer2.TimedEvent {
+        /** The lease set being published. */
         private final LeaseSet _ls;
+        /** When the re-request gives up. */
         private final long _expirationTime;
+        /** Job run when the publish succeeds. */
         private final Job _onCreate;
+        /** Job run when the publish fails. */
         private final Job _onFailed;
 
         /**
          * Caller must schedule().
          *
          * @param ls dest must be set
+         * @param expirationTime when the re-request gives up
+         * @param onCreate job run when the publish succeeds
+         * @param onFailed job run when the publish fails
          */
         public Rerequest(LeaseSet ls, long expirationTime, Job onCreate, Job onFailed) {
             super(_context.simpleTimer2());
@@ -1332,6 +1362,7 @@ class ClientConnectionRunner {
      * So, we just wait REQUEUE_DELAY ms before trying again.
      */
     private static final long REQUEUE_DELAY = 500;
+    /** Status update requeues before it is dropped. */
     private static final int MAX_REQUEUE = 60;  // retries
 
     /**
@@ -1346,17 +1377,25 @@ class ClientConnectionRunner {
         return _floodfillNetworkDatabaseFacade;
     }
 
+    /** Sends a message status update to the client. */
     private class MessageDeliveryStatusUpdate extends JobImpl {
+        /** The session the message belongs to. */
         private final SessionId _sessId;
+        /** The message being updated. */
         private final MessageId _messageId;
+        /** Nonce the client matches the update to. */
         private final long _messageNonce;
+        /** The status code to report. */
         private final int _status;
+        /** When the update was last queued. */
         private long _lastTried;
+        /** Times the update has been requeued. */
         private int _requeueCount;
 
         /**
          * Do not use for status = STATUS_SEND_ACCEPTED; use ackSendMessage() for that.
          *
+         * @param sid the session the message belongs to
          * @param id the router's ID for this message
          * @param messageNonce the client's ID for this message
          * @param status see I2CP MessageStatusMessage for success/failure codes

@@ -27,17 +27,27 @@ import java.io.IOException;
  */
 public final class I2PDatagramDissector {
 
+    /** Largest datagram buffer allocated. */
     private static final int DGRAM_BUFSIZE = 32768;
+    /** Smallest size of a valid datagram. */
     private static final int MIN_DGRAM_SIZE = 387 + 40;
 
+    /** The engine verifying the signature. */
     private final DSAEngine dsaEng = DSAEngine.getInstance();
+    /** The hash of the payload. */
     private final SHA256Generator hashGen = SHA256Generator.getInstance();
 
+    /** The hash received with the datagram. */
     private byte[] rxHash;
+    /** The signature received with the datagram. */
     private Signature rxSign;
+    /** The destination received with the datagram. */
     private Destination rxDest;
+    /** The buffer holding the payload. */
     private final byte[] rxPayload = new byte[DGRAM_BUFSIZE];
+    /** Length of the received payload. */
     private int rxPayloadLen;
+    /** True when the datagram passed the checks. */
     private boolean valid;
 
     /**

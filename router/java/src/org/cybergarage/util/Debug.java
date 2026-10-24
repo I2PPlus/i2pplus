@@ -25,6 +25,7 @@ public final class Debug {
     /** Private constructor to prevent instantiation */
     private Debug() {}
 
+    /** Logger for this class. */
     private static Log _log;
 
     /**

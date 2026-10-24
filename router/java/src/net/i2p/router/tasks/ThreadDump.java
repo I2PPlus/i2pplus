@@ -31,6 +31,7 @@ import net.i2p.util.SystemVersion;
  */
 abstract class ThreadDump {
 
+    /** Utility class, not intended for instantiation. */
     private ThreadDump() {}
 
     /**

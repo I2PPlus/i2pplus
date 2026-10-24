@@ -30,12 +30,19 @@ public class ConfigUIHandler extends FormHandler {
         super();
     }
 
+    /** Pattern of characters allowed in config keys. */
     private static final Pattern CONFIG_PATTERN = Pattern.compile("[a-zA-Z0-9_-]");
+    /** True if the form is to be saved. */
     private boolean _shouldSave;
+    /** True to allow theming of all pages. */
     private boolean _universalTheming;
+    /** True to force the mobile console. */
     private boolean _forceMobileConsole;
+    /** True to embed the apps in the console. */
     private boolean _embedApps;
+    /** True to display the Sora font. */
     private boolean _useSoraFont;
+    /** The name of the config being edited. */
     private String _config;
 
     @Override
@@ -127,6 +134,7 @@ public class ConfigUIHandler extends FormHandler {
         }
     }
 
+    /** Adds a console user from the form. */
     private void addUser() {
         String name = getJettyString("name");
         if (name == null || name.length() <= 0) {
@@ -167,6 +175,7 @@ public class ConfigUIHandler extends FormHandler {
         }
     }
 
+    /** Deletes a console user from the form. */
     private void delUser() {
         ConsolePasswordManager mgr = new ConsolePasswordManager(_context);
         boolean success = false;
@@ -185,6 +194,11 @@ public class ConfigUIHandler extends FormHandler {
         if (success) {addFormError(_t("Restart required to take effect"), true);}
     }
 
+    /**
+     * Updates the theme of the login page.
+     *
+     * @param theme the new theme name
+     */
     private void updateLoginTheme(String theme) {
         File themeFile = new File(_context.getBaseDir(), "docs/themes/login/theme.txt");
         try {

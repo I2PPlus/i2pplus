@@ -28,20 +28,32 @@ import net.i2p.util.SystemVersion;
  *
  */
 class ConnectionHandler {
+    /** The app context. */
     private final I2PAppContext _context;
+    /** Logger for the connection handler. */
     private final Log _log;
+    /** Cache supplying the packet buffers. */
     private final ByteCache _cache = ByteCache.getInstance(32, 4*1024);
+    /** The manager owning this handler. */
     private final ConnectionManager _manager;
+    /** Packets waiting to be sent. */
     private final LinkedBlockingDeque<Packet> _synQueue;
+    /** The connections waiting for a worker. */
     private final LinkedBlockingQueue<Connection> _resultQueue;
+    /** The threads accepting connections. */
     private final List<Thread> _acceptWorkers;
+    /** Workers currently handling a connection. */
     private final AtomicInteger _activeWorkerCount;
+    /** Sequence number of the worker threads. */
     private final AtomicInteger _workerId;
+    /** Timer running the reaper tasks. */
     private final SimpleTimer2 _timer;
+    /** True while the handler accepts work. */
     private volatile boolean _active;
     /** Explicit per-manager override, or -1 to use the live configured {@link #getAcceptTimeout}.
      * @since 0.9.71+ */
     private volatile int _acceptTimeout = -1;
+    /** True to restart the handler after the current pass. */
     private boolean _restartPending;
 
     /**
@@ -524,6 +536,8 @@ class ConnectionHandler {
      * and puts resulting connections into the result queue.
      */
     private class AcceptWorker implements Runnable {
+        /** Accepts one incoming streaming connection. */
+        private AcceptWorker() {}
         @Override
         public void run() {
             try {
@@ -934,6 +948,7 @@ class ConnectionHandler {
      * entry is left alone for the next sweep.
      */
     private class SynReaper extends SimpleTimer2.TimedEvent {
+        /** Builds the half open connection reaper. */
         SynReaper() {super();}
 
         public void timeReached() {
@@ -993,8 +1008,10 @@ class ConnectionHandler {
      * an evil user can't use this to shut us down.
      */
     private static class PoisonPacket extends Packet {
+        /** Delay request that stops a sender thread. */
         public static final int POISON_MAX_DELAY_REQUEST = Packet.MAX_DELAY_REQUEST + 1;
 
+        /** Builds the packet that stops a sender thread. */
         public PoisonPacket() {super(null);}
 
         @Override

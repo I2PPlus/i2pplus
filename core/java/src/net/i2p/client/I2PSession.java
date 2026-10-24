@@ -682,7 +682,9 @@ public interface I2PSession {
  * @since 0.9.69+
  */
     public static class TunnelPair {
+        /** The tunnel messages arrive on. */
         private final TunnelId _inboundTunnelId;
+        /** The tunnel messages are sent on. */
         private final TunnelId _outboundTunnelId;
 
         /**

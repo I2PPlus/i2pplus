@@ -55,7 +55,7 @@ public class EditBean extends IndexBean {
     /**
      * The target host for the tunnel.
      * @param tunnel index of the tunnel in the configured list
-     * @return the target host for the tunnel
+     * @return the host, escaped for html
      * @since 0.8.3
      */
     public String getTargetHost(int tunnel) {
@@ -297,7 +297,7 @@ public class EditBean extends IndexBean {
     /**
      * The reduce count for the tunnel.
      * @param tunnel index of the tunnel in the configured list
-     * @return the reduce count for the tunnel
+     * @return the count, 1 if unset
      * @since 0.8.3
      */
     public int getReduceCount(int tunnel) {
@@ -307,7 +307,7 @@ public class EditBean extends IndexBean {
     /**
      * The reduce time in minutes for the tunnel.
      * @param tunnel index of the tunnel in the configured list
-     * @return the reduce time in minutes for the tunnel
+     * @return the time, 20 if unset
      * @since 0.8.3
      */
     public int getReduceTime(int tunnel) {
@@ -317,7 +317,7 @@ public class EditBean extends IndexBean {
     /**
      * The certificate for the tunnel.
      * @param tunnel index of the tunnel in the configured list
-     * @return the certificate for the tunnel
+     * @return the certificate type number
      * @since 0.8.3
      */
     public int getCert(int tunnel) {
@@ -327,7 +327,7 @@ public class EditBean extends IndexBean {
     /**
      * The encryption effort for the tunnel.
      * @param tunnel index of the tunnel in the configured list
-     * @return the encryption effort for the tunnel
+     * @return the configured effort level
      * @since 0.8.3
      */
     public int getEffort(int tunnel) {
@@ -337,7 +337,7 @@ public class EditBean extends IndexBean {
     /**
      * The signer for the tunnel.
      * @param tunnel index of the tunnel in the configured list
-     * @return the signer for the tunnel
+     * @return the signing key file name, empty if default
      * @since 0.8.3
      */
     public String getSigner(int tunnel) {
@@ -476,7 +476,7 @@ public class EditBean extends IndexBean {
     /**
      * The encrypted outbound random key.
      * @param tunnel index of the tunnel in the configured list
-     * @return the encrypted outbound random key
+     * @return the key as base64, empty or null if unset
      * @since 0.8.3
      */
     public String getKey2(int tunnel) {
@@ -487,7 +487,7 @@ public class EditBean extends IndexBean {
     /**
      * The encrypted lease set signing private key.
      * @param tunnel index of the tunnel in the configured list
-     * @return the encrypted lease set signing private key
+     * @return the key as base64, empty or null if unset
      * @since 0.8.3
      */
     public String getKey3(int tunnel) {
@@ -498,7 +498,7 @@ public class EditBean extends IndexBean {
     /**
      * The encrypted lease set private key.
      * @param tunnel index of the tunnel in the configured list
-     * @return the encrypted lease set private key
+     * @return the key as base64, empty or null if unset
      * @since 0.8.3
      */
     public String getKey4(int tunnel) {
@@ -519,7 +519,7 @@ public class EditBean extends IndexBean {
     /**
      * The encryption key for the tunnel.
      * @param tunnel index of the tunnel in the configured list
-     * @return the encryption key for the tunnel
+     * @return the key, escaped for html, empty if unset
      * @since 0.8.3
      */
     public String getEncryptKey(int tunnel) {
@@ -529,7 +529,7 @@ public class EditBean extends IndexBean {
     /**
      * The access mode for the tunnel.
      * @param tunnel index of the tunnel in the configured list
-     * @return the access mode for the tunnel
+     * @return the mode as a decimal string
      * @since 0.8.3
      */
     public String getAccessMode(int tunnel) {
@@ -539,7 +539,7 @@ public class EditBean extends IndexBean {
     /**
      * The access list for the tunnel.
      * @param tunnel index of the tunnel in the configured list
-     * @return the access list for the tunnel
+     * @return the client hosts, escaped for html
      * @since 0.8.3
      */
     public String getAccessList(int tunnel) {
@@ -560,7 +560,7 @@ public class EditBean extends IndexBean {
     /**
      * The jump list for the tunnel.
      * @param tunnel index of the tunnel in the configured list
-     * @return the jump list for the tunnel
+     * @return the jump routers, escaped for html
      * @since 0.8.3
      */
     public String getJumpList(int tunnel) {
@@ -580,7 +580,7 @@ public class EditBean extends IndexBean {
     /**
      * The close time in minutes for the tunnel.
      * @param tunnel index of the tunnel in the configured list
-     * @return the close time in minutes for the tunnel
+     * @return the time, 30 if unset
      * @since 0.8.3
      */
     public int getCloseTime(int tunnel) {
@@ -674,7 +674,7 @@ public class EditBean extends IndexBean {
     /**
      * The user agents string.
      * @param tunnel index of the tunnel in the configured list
-     * @return the user agents string
+     * @return the user agent strings, escaped for html
      * @since 0.9.25
      */
     public String getUserAgents(int tunnel) {
@@ -725,7 +725,7 @@ public class EditBean extends IndexBean {
     /**
      * The SSL proxies string.
      * @param tunnel index of the tunnel in the configured list
-     * @return the SSL proxies string
+     * @return the outbound proxies, escaped for html
      * @since 0.9.11
      */
     public String getSslProxies(int tunnel) {
@@ -755,7 +755,7 @@ public class EditBean extends IndexBean {
     /**
      * The per-minute limit for the tunnel.
      * @param tunnel index of the tunnel in the configured list
-     * @return the per-minute limit for the tunnel
+     * @return the maximum connections per source, per minute
      * @since 0.8.3
      */
     public int getLimitMinute(int tunnel) {
@@ -765,7 +765,7 @@ public class EditBean extends IndexBean {
     /**
      * The per-hour limit for the tunnel.
      * @param tunnel index of the tunnel in the configured list
-     * @return the per-hour limit for the tunnel
+     * @return the maximum connections per source, per hour
      * @since 0.8.3
      */
     public int getLimitHour(int tunnel) {
@@ -775,7 +775,7 @@ public class EditBean extends IndexBean {
     /**
      * The per-day limit for the tunnel.
      * @param tunnel index of the tunnel in the configured list
-     * @return the per-day limit for the tunnel
+     * @return the maximum connections per source, per day
      * @since 0.8.3
      */
     public int getLimitDay(int tunnel) {
@@ -785,7 +785,7 @@ public class EditBean extends IndexBean {
     /**
      * The per-minute total for the tunnel.
      * @param tunnel index of the tunnel in the configured list
-     * @return the per-minute total for the tunnel
+     * @return the connections allowed from all sources, per minute
      * @since 0.8.3
      */
     public int getTotalMinute(int tunnel) {
@@ -795,7 +795,7 @@ public class EditBean extends IndexBean {
     /**
      * The per-hour total for the tunnel.
      * @param tunnel index of the tunnel in the configured list
-     * @return the per-hour total for the tunnel
+     * @return the connections allowed from all sources, per hour
      * @since 0.8.3
      */
     public int getTotalHour(int tunnel) {
@@ -805,7 +805,7 @@ public class EditBean extends IndexBean {
     /**
      * The per-day total for the tunnel.
      * @param tunnel index of the tunnel in the configured list
-     * @return the per-day total for the tunnel
+     * @return the connections allowed from all sources, per day
      * @since 0.8.3
      */
     public int getTotalDay(int tunnel) {
@@ -815,7 +815,7 @@ public class EditBean extends IndexBean {
     /**
      * The maximum number of streams for the tunnel.
      * @param tunnel index of the tunnel in the configured list
-     * @return the maximum number of streams for the tunnel
+     * @return the stream limit
      * @since 0.8.3
      */
     public int getMaxStreams(int tunnel) {
@@ -835,7 +835,7 @@ public class EditBean extends IndexBean {
     /**
      * The POST total max for the tunnel.
      * @param tunnel index of the tunnel in the configured list
-     * @return the POST total max for the tunnel
+     * @return the posts allowed from all sources in the window
      * @since 0.9.9
      */
     public int getPostTotalMax(int tunnel) {
@@ -845,7 +845,7 @@ public class EditBean extends IndexBean {
     /**
      * The POST check time for the tunnel.
      * @param tunnel index of the tunnel in the configured list
-     * @return the POST check time for the tunnel
+     * @return the window the posts are counted over, in seconds
      * @since 0.9.9
      */
     public int getPostCheckTime(int tunnel) {
@@ -855,7 +855,7 @@ public class EditBean extends IndexBean {
     /**
      * The POST ban time for the tunnel.
      * @param tunnel index of the tunnel in the configured list
-     * @return the POST ban time for the tunnel
+     * @return the ban length for the offending source, in seconds
      * @since 0.9.9
      */
     public int getPostBanTime(int tunnel) {
@@ -865,7 +865,7 @@ public class EditBean extends IndexBean {
     /**
      * The POST total ban time for the tunnel.
      * @param tunnel index of the tunnel in the configured list
-     * @return the POST total ban time for the tunnel
+     * @return the ban length for all sources, in seconds
      * @since 0.9.9
      */
     public int getPostTotalBanTime(int tunnel) {
@@ -893,7 +893,7 @@ public class EditBean extends IndexBean {
 
     /**
      * The set of network interfaces.
-     * @return the set of network interfaces
+     * @return the usable addresses, excluding ipv6 temporaries
      * @since 0.8.3
      */
     public Set<String> interfaceSet() {
@@ -913,7 +913,7 @@ public class EditBean extends IndexBean {
     /**
      * The I2CP host for the tunnel.
      * @param tunnel index of the tunnel in the configured list
-     * @return the I2CP host for the tunnel
+     * @return the host, or "internal" on the router
      * @since 0.8.3
      */
     public String getI2CPHost(int tunnel) {
@@ -926,7 +926,7 @@ public class EditBean extends IndexBean {
     /**
      * The I2CP port for the tunnel.
      * @param tunnel index of the tunnel in the configured list
-     * @return the I2CP port for the tunnel
+     * @return the port, or "internal" on the router
      * @since 0.8.3
      */
     public String getI2CPPort(int tunnel) {
@@ -939,18 +939,24 @@ public class EditBean extends IndexBean {
     /**
      * The custom options string for the tunnel.
      * @param tunnel index of the tunnel in the configured list
-     * @return the custom options string for the tunnel
+     * @return the options as url parameters, escaped for html, empty if none
      * @since 0.8.3
      */
     public String getCustomOptions(int tunnel) {
         return _helper.getCustomOptionsString(tunnel);
     }
 
+    /** Property showing the advanced tunnel options. */
     private static final String PROP_ADVANCED = "routerconsole.advanced";
+    /** Default hops in a tunnel. */
     private static final int DFLT_LENGTH = 3;
+    /** Default tunnels of a kind. */
     private static final int DFLT_QUANTITY = 2;
+    /** Most tunnels the advanced page offers. */
     private static final int MAX_ADVANCED_QUANTITY = 16;
+    /** Most client tunnels the page offers. */
     private static final int MAX_CLIENT_QUANTITY = 8;
+    /** Most server tunnels the page offers. */
     private static final int MAX_SERVER_QUANTITY = 8;
 
     /**

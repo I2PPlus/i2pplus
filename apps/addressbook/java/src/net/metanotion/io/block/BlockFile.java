@@ -52,13 +52,22 @@ public class BlockFile implements Closeable {
     /** The underlying file interface for this block file */
     public final RandomAccessInterface file;
 
+    /** Major version of the file format written. */
     private static final int MAJOR = 0x01;
+    /** Minor version of the file format written. */
     private static final int MINOR = 0x02;
+    /** Oldest major version that can be read. */
     private static final int MIN_MAJOR = 0x01;
+    /** Oldest minor version that can be read. */
     private static final int MIN_MINOR = 0x01;
-    // I2P changed magic number, format changed, magic numbers now on all pages
+    /**
+     * The magic number with the version bits cleared. I2P changed the
+     * magic number and the format, the magic numbers are now on all pages.
+     */
     private static final long MAGIC_BASE = 0x3141de4932500000L;   // 0x3141de I 2 P 00 00
+    /** The magic number of the current format, version included. */
     private static final long MAGIC = MAGIC_BASE | (MAJOR << 8) | MINOR;
+    /** The magic number read from or written to the file. */
     private long magicBytes = MAGIC;
     /** Magic number for continuation pages ("CONT") */
     public static final int MAGIC_CONT = 0x434f4e54;   // "CONT"
@@ -66,7 +75,9 @@ public class BlockFile implements Closeable {
     public static final int METAINDEX_PAGE = 2;
     /** new BlockFile length, containing a superblock page and a metaindex page. */
     private long fileLen = PAGESIZE * 2;
+    /** First block of the free block list. */
     private int freeListStart = 0;
+    /** True once the file header was read. */
     private int mounted = 0;
     /** Default span size for new skiplists */
     public int spanSize = 16;
@@ -74,18 +85,31 @@ public class BlockFile implements Closeable {
     /** I2P was the file locked when we opened it? */
     private final boolean _wasMounted;
 
+    /** Index of the metadata records. */
     private final BSkipList<String, Integer> metaIndex;
+    /** True once the file is closed. */
     private boolean _isClosed;
     /** cached list of free pages, only valid if freListStart &gt; 0 */
     private FreeListBlock flb;
+    /** The indices kept open, by name. */
     private final HashMap<String, BSkipList> openIndices = new HashMap<>();
 
+    /**
+     * Reads the file header or writes a new one.
+     *
+     * @throws IOException if the header cannot be read
+     */
     private void mount() throws IOException {
         file.seek(BlockFile.OFFSET_MOUNTED);
         mounted = 1;
         file.writeShort(mounted);
     }
 
+    /**
+     * Writes the file header block.
+     *
+     * @throws IOException if the header cannot be written
+     */
     private void writeSuperBlock() throws IOException {
         file.seek(0);
         file.writeLong( magicBytes);
@@ -97,6 +121,11 @@ public class BlockFile implements Closeable {
         file.writeInt(PAGESIZE);
     }
 
+    /**
+     * Reads and validates the file header block.
+     *
+     * @throws IOException if the header is missing, short, or from a newer version
+     */
     private void readSuperBlock() throws IOException {
         file.seek(0);
         magicBytes      = file.readLong();

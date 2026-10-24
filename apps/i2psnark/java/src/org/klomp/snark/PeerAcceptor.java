@@ -25,8 +25,10 @@ import net.i2p.util.Log;
  * new peer if the PeerCoordinator wants more peers.
  */
 class PeerAcceptor {
+    /** Logger for this class. */
     private final Log _log =
             I2PAppContext.getGlobalContext().logManager().getLog(PeerAcceptor.class);
+    /** Told about the peers that connect in. */
     private final PeerCoordinator coordinator;
     /** The coordinators this acceptor feeds. */
     final PeerCoordinatorSet coordinators;
@@ -158,9 +160,13 @@ class PeerAcceptor {
         }
     }
 
+    /** Protocol string expected in a handshake. */
     private static final String PROTO_STR = "BitTorrent protocol";
+    /** Length of that protocol string. */
     private static final int PROTO_STR_LEN = PROTO_STR.length();
+    /** Length including the length byte. */
     private static final int PROTO_LEN = PROTO_STR_LEN + 1;
+    /** The protocol string as bytes, for matching. */
     private static final int[] PROTO = new int[PROTO_LEN];
 
     static {
@@ -206,6 +212,7 @@ class PeerAcceptor {
      * @since 0.9.1
      */
     public static class ProtocolException extends IOException {
+        /** Fixed id, the runnable's format is never cross-versioned. */
         private static final long serialVersionUID = 1L;
         /**
          * Create an acceptor exception.

@@ -99,10 +99,15 @@ class FragmentHandler {
     protected final RouterContext _context;
     /** The log. */
     protected final Log _log;
+    /** The messages being fragmented, by id. */
     private final Map<Integer, FragmentedMessage> _fragmentedMessages;
+    /** The receiver of the defragmented messages. */
     private final DefragmentedReceiver _receiver;
+    /** Messages fully sent or received. */
     private final AtomicInteger _completed = new AtomicInteger();
+    /** Messages that failed to send. */
     private final AtomicInteger _failed = new AtomicInteger();
+    /** True for the inbound handler. */
     private final boolean _isInbound;
     /**
      * Per-thread I2NP message reader, used for inbound data only.
@@ -129,6 +134,7 @@ class FragmentHandler {
      * @since 0.9.71+
      */
     static final int MAX_FRAGMENTED_MESSAGES = 1024;
+    /** The cache supplying the write buffers. */
     private static final ByteCache _cache = ByteCache.getInstance(512, TrivialPreprocessor.PREPROCESSED_SIZE);
 
     /**
@@ -597,6 +603,11 @@ class FragmentHandler {
         return offset;
     }
 
+    /**
+     * Handles a fully received message.
+     *
+     * @param msg the complete message
+     */
     private void receiveComplete(FragmentedMessage msg) {
         if (msg == null)
             return;
@@ -711,9 +722,16 @@ class FragmentHandler {
         public void receiveComplete(I2NPMessage msg, Hash toRouter, TunnelId toTunnel);
     }
 
+    /** Removes a failed message after a delay. */
     private class RemoveFailed extends SimpleTimer2.TimedEvent {
+        /** The message to remove. */
         private final FragmentedMessage _msg;
 
+        /**
+         * Schedules the removal of one message.
+         *
+         * @param msg the message to remove
+         */
         public RemoveFailed(FragmentedMessage msg) {
             super(_context.simpleTimer2());
             _msg = msg;

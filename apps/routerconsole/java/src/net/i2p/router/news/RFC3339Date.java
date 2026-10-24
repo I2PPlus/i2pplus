@@ -36,7 +36,9 @@ public abstract class RFC3339Date {
     public RFC3339Date() {}
 
 
+    /** First timezone format accepted when parsing. */
     private static final String TZF1;
+    /** Second timezone format accepted when parsing. */
     private static final String TZF2;
     static {
         if (SystemVersion.isJava7() && !SystemVersion.isAndroid()) {
@@ -48,6 +50,7 @@ public abstract class RFC3339Date {
         }
     }
 
+    /** Formatter writing an RFC 3339 date. */
     private static final ThreadLocal<DateFormat> OUTPUT_FORMAT = new ThreadLocal<DateFormat>() {
         @Override
         protected DateFormat initialValue() {
@@ -57,6 +60,7 @@ public abstract class RFC3339Date {
         }
     };
 
+    /** Formatters tried when parsing a date. */
     private static final ThreadLocal<DateFormat[]> DATE_FORMATS = new ThreadLocal<DateFormat[]>() {
         @Override
         protected DateFormat[] initialValue() {

@@ -39,6 +39,7 @@ import net.i2p.util.SystemVersion;
          * @since 0.9.71+
          */
         static final String EPS_ALL_BANNED_STAT = "tunnel.peerSelection.epsAllBannedDiscarded";
+        /** Rate windows kept for the selector's stats. */
         private static final long[] EPS_STAT_RATES = {
             RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR
         };
@@ -553,12 +554,30 @@ import net.i2p.util.SystemVersion;
         return rv;
     }
 
+    /**
+     * Minimum share of pools that must be building.
+     *
+     * @param ctx the router's context
+     * @return the percentage, from the config
+     */
     private static int getMinNonfailingPct(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.exploratoryPeer.minNonfailingPct", 15);
     }
+    /**
+     * Minimum active peers before the startup gate lifts.
+     *
+     * @param ctx the router's context
+     * @return the count, from the config
+     */
     private static int getMinActivePeersStartup(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.exploratoryPeer.minActivePeersStartup", 6);
     }
+    /**
+     * Minimum active peers for a normal selection.
+     *
+     * @param ctx the router's context
+     * @return the count, from the config
+     */
     private static int getMinActivePeers(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.exploratoryPeer.minActivePeers", 12);
     }
@@ -644,6 +663,12 @@ import net.i2p.util.SystemVersion;
         return (100 * (e-c)) / (100-c);
     }
 
+    /**
+     * Failure rate of one tunnel type.
+     *
+     * @param t the tunnel type's name
+     * @return the failure percentage
+     */
     private int getFailPercentage(String t) {
         String pfx = "tunnel.build" + t;
         int timeout = getEvents(pfx + "Expire", 10*60*1000L);

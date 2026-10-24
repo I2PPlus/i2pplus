@@ -12,6 +12,7 @@ import net.i2p.data.router.RouterInfo;
  * @since 0.9.64
  */
 class RouterInfoComparator implements Comparator<RouterInfo>, Serializable {
+     /** Pinned for serialized-form compatibility. */
      private static final long serialVersionUID = 1;
      /**
       * Shared stateless instance; this comparator holds no state.

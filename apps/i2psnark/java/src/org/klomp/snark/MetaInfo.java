@@ -49,23 +49,39 @@ import org.klomp.snark.bencode.InvalidBEncodingException;
  * @since 0.1.0
  */
 public class MetaInfo {
+    /** Logger for the torrent metadata. */
     private final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(MetaInfo.class);
+    /** The announce URL of the tracker. */
     private final String announce;
+    /** The SHA-1 hash of the info dictionary. */
     private final byte[] info_hash;
+    /** The suggested name of the download. */
     private final String name;
+    /** The file paths and lengths of a multi file torrent. */
     private final List<List<String>> files;
+    /** The file attributes, path components first. */
     private final List<String> attributes;
+    /** The file lengths, in bytes. */
     private final List<Long> lengths;
+    /** The piece length, in bytes. */
     private final int piece_length;
+    /** The SHA-1 hash of each piece. */
     private final byte[] piece_hashes;
     /** Cumulative exclusive end offset of each file, lazily computed; null for single-file. */
     private volatile long[] _fileEnds;
+    /** The total length, in bytes. */
     private final long length;
+    /** 1 if the private flag is set, -1 if cleared, 0 if absent. */
     private final int privateTorrent; // 0: not present; 1: = 1; -1: = 0
+    /** The DHT and tracker announce groups. */
     private final List<List<String>> announce_list;
+    /** The comment from the torrent file. */
     private final String comment;
+    /** The program that created the torrent. */
     private final String created_by;
+    /** When the torrent was created, epoch seconds. */
     private final long creation_date;
+    /** Extra web seeds, HTTP URLs. */
     private final List<String> url_list;
     /** Original bencoded info dictionary, preserved to keep infohash consistent on re-encode. */
     private Map<String, BEValue> infoMap;
@@ -226,6 +242,10 @@ public class MetaInfo {
     /**
      * Creates a new MetaInfo from the given BDecoder. The BDecoder must have a complete dictionary
      * describing the torrent.
+     *
+     * @param be the decoder holding the torrent dictionary
+     * @throws IOException if the stream cannot be read
+     * @throws Throwable if the dictionary is malformed or a field has the wrong type
      */
     private MetaInfo(BDecoder be) throws IOException, Throwable {
         // Note that evaluation order matters here...

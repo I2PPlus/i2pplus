@@ -28,14 +28,17 @@ import java.util.Date;
  */
 public class RequestLeaseSetMessage extends I2CPMessageImpl {
 
+    /** The serialization version of the message. */
     private static final long serialVersionUID = 1L;
     /**
      * I2CP message type of a lease set request.
      */
     public static final int MESSAGE_TYPE = 21;
+    /** The session asking for the lease set. */
     private SessionId _sessionId;
-    // ArrayList is Serializable, List is not
+    /** The requested tunnel endpoints, an array list because list is not serializable. */
     private final ArrayList<TunnelEndpoint> _endpoints;
+    /** When the lease set expires. */
     private Date _end;
 
     /**
@@ -46,8 +49,8 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Session id.
-     * @return the session id
+     * Session requesting the lease set.
+     * @return the session id, null until set or read
      */
     public SessionId getSessionId() {
         return _sessionId;
@@ -94,9 +97,9 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Tunnel id.
+     * Tunnel of one of the requested endpoints.
      * @param endpoint index into the endpoint list; out of range returns null
-     * @return the tunnel id
+     * @return the endpoint's tunnel id, or null if the index is out of range
      */
     public TunnelId getTunnelId(int endpoint) {
         if ((endpoint < 0) || (_endpoints.size() <= endpoint)) {
@@ -122,8 +125,8 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
     }
 
     /**
-     * End date.
-     * @return the end date
+     * When the lease set should expire.
+     * @return the end date, null until set or read
      */
     public Date getEndDate() {
         return _end;
@@ -207,13 +210,20 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
         return buf.toString();
     }
 
+    /** One tunnel endpoint of the lease set. */
     private static class TunnelEndpoint implements Serializable {
+        /** The serialization version of the endpoint. */
         private static final long serialVersionUID = 1L;
+        /** The gateway router's hash. */
         private final transient Hash _router;
+        /** The gateway's tunnel id. */
         private final transient TunnelId _tunnelId;
 
         /**
          * One requested tunnel, pairing a router with one of its tunnel ids.
+         *
+         * @param router the gateway router's hash
+         * @param id the gateway's tunnel id
          */
         public TunnelEndpoint(Hash router, TunnelId id) {
             _router = router;
@@ -229,8 +239,8 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
         }
 
         /**
-         * Tunnel id.
-         * @return the tunnel id
+         * Tunnel this endpoint reaches the router over.
+         * @return the tunnel id, never null
          */
         public TunnelId getTunnelId() {
             return _tunnelId;

@@ -226,6 +226,15 @@ public final class DefaultHostnameVerifier implements HostnameVerifier {
                 || host.charAt(host.length() - domainRoot.length() - 1) == '.');
     }
 
+    /**
+     * True when the certificate identity may be used for the host.
+     *
+     * @param host the host name being connected to
+     * @param identity the name from the certificate
+     * @param publicSuffixMatcher the public suffix matcher, or null
+     * @param strict whether a wildcard must match a single label
+     * @return true if the identity matches the host
+     */
     private static boolean matchIdentity(final String host, final String identity,
                                          final PublicSuffixMatcher publicSuffixMatcher,
                                          final boolean strict) {

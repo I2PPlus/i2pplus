@@ -123,6 +123,6 @@ final class GrowingArrayUtils {
         return currentSize <= 4 ? 8 : currentSize * 2;
     }
 
-    // Uninstantiable
+    /** Utility class, not intended for instantiation. */
     private GrowingArrayUtils() {}
 }

@@ -13,6 +13,7 @@ import java.io.Serializable;
  */
 public class TorrentCreateFilter implements Serializable {
 
+    /** Pinned for serialized-form compatibility. */
     private static final long serialVersionUID = -4345254904315868015L;
 
     /** Label shown in the create-torrent filter list, such as ".nfo files". */

@@ -173,27 +173,27 @@ public class SearchJob extends JobImpl {
     }
 
     /**
-     * Search state tracking attempted/pending/failed peers.
+     * Get the per-search record of which peers have been tried.
      *
-     * @return search state tracking attempted/pending/failed peers
+     * @return the state with the attempted, pending and failed peers, never null
      */
     protected SearchState getState() {return _state;}
     /**
-     * The network database facade.
+     * Get the netdb that started this search.
      *
-     * @return the network database facade
+     * @return the facade, used for local lookups, storing results and peer selection
      */
     protected KademliaNetworkDatabaseFacade getFacade() {return _facade;}
     /**
-     * Absolute time when this search expires.
+     * When this search gives up if no peer has answered.
      *
-     * @return absolute time when this search expires
+     * @return absolute adjusted time in ms, the creation time plus the timeout
      */
     public long getExpiration() {return _expiration;}
     /**
-     * Timeout duration in milliseconds.
+     * How long the search is allowed to run before it is abandoned.
      *
-     * @return timeout duration in milliseconds
+     * @return the duration in ms given to the constructor
      */
     public long getTimeoutMs() {return _timeoutMs;}
 
@@ -927,17 +927,32 @@ public class SearchJob extends JobImpl {
             _onFail = onFail;
             _expiration = expiration;
         }
+        /**
+         * The job scheduled when the search finds the hash.
+         *
+         * @return the job to run on success, null if there is none
+         */
         public Job getOnFind() {return _onFind;}
+        /**
+         * The job scheduled when the search fails.
+         *
+         * @return the job to run on failure, null if there is none
+         */
         public Job getOnFail() {return _onFail;}
+        /**
+         * When the search is abandoned if nothing has answered.
+         *
+         * @return the deadline, in ms
+         */
         public long getExpiration() {return _expiration;}
     }
 
     public String getName() {return "Start Kademlia NetDb Search";}
 
     /**
-     * Debug string with elapsed time since search started.
+     * Describe the search, and how long it has been running, for the logs.
      *
-     * @return debug string with elapsed time since search started
+     * @return the job id and class name, then the time since the search started
      */
     @Override
     public String toString() {
@@ -954,9 +969,9 @@ public class SearchJob extends JobImpl {
     boolean wasAttempted(Hash peer) {return _state.wasAttempted(peer);}
 
     /**
-     * The search timeout in ms.
+     * The timeout this search was created with, for other netdb classes.
      *
-     * @return the search timeout in ms
+     * @return the duration in ms, added to the start time to get the expiration
      */
     long timeoutMs() {return _timeoutMs;}
 

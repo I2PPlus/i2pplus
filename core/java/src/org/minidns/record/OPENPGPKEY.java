@@ -23,6 +23,7 @@ import java.io.IOException;
  */
 public class OPENPGPKEY extends Data {
 
+    /** The OpenPGP key packet, as raw bytes. */
     private final byte[] publicKeyPacket;
 
     /**
@@ -63,6 +64,7 @@ public class OPENPGPKEY extends Data {
         return getPublicKeyPacketBase64();
     }
 
+    /** Base64 of the packet, computed once and kept */
     private transient String publicKeyPacketBase64Cache;
 
     /**

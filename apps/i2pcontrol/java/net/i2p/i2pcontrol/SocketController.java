@@ -46,20 +46,31 @@ import java.nio.charset.StandardCharsets;
  * This class is NOT used for the webapp or the HTTP/HTTPS implementation.
  */
 public class SocketController implements RouterApp {
-    // non-null
+    /** The router context, never null. */
     private final RouterContext _context;
+    /** The manager that starts the app. */
     private final ClientAppManager _mgr;
+    /** Logger for the control socket. */
     private final Log _log;
+    /** Directory of the installed plugins. */
     private final String _pluginDir;
+    /** The configuration manager used. */
     private final ConfigurationManager _conf;
+    /** The key store provider used. */
     private final KeyStoreProvider _ksp;
+    /** The security manager used. */
     private final SecurityManager _secMan;
+    /** The listening socket, while running. */
     private ServerSocket _server;
+    /** The sockets of the connected clients. */
     private final List<Socket> _listeners;
+    /** Current state of the app. */
     private ClientAppState _state = UNINITIALIZED;
     /** Allowed hosts config property */
     static final String PROP_ALLOWED_HOSTS = "i2pcontrol.allowedhosts";
+    /** Service name of the control port. */
     private static final String SVC_SKT_I2PCONTROL = "skt_i2pcontrol";
+    /** Default control socket port. */
     private static final int DEFAULT_PORT = 7640;
 
     /**
@@ -82,7 +93,6 @@ public class SocketController implements RouterApp {
         _state = INITIALIZED;
     }
 
-    /////// ClientApp methods
 
     /** Start the socket server */
     @Override
@@ -111,7 +121,7 @@ public class SocketController implements RouterApp {
     /**
      * Current state of the managed client app.
      *
-     * @return current state
+     * @return the state of the app
      */
     @Override
     public synchronized ClientAppState getState() {
@@ -140,10 +150,22 @@ public class SocketController implements RouterApp {
 
     /////// end ClientApp methods
 
+    /**
+     * Changes the app state with no result or error.
+     *
+     * @param state the new state of the client app
+     */
     private void changeState(ClientAppState state) {
         changeState(state, null, null);
     }
 
+    /**
+     * Changes the app state and notifies listeners.
+     *
+     * @param state the new state
+     * @param msg the message for the listeners
+     * @param e the exception, null if none
+     */
     private synchronized void changeState(ClientAppState state, String msg, Exception e) {
         _state = state;
         if (_mgr != null)
@@ -156,6 +178,11 @@ public class SocketController implements RouterApp {
         }
     }
 
+    /**
+     * Opens the control socket and accepts clients.
+     *
+     * @throws Exception if the socket cannot be opened
+     */
     private synchronized void start() throws Exception {
         _context.logManager().getLog(JSONRPC2Servlet.class).setMinimumPriority(Log.DEBUG);
         _server = buildServer();
@@ -181,11 +208,15 @@ public class SocketController implements RouterApp {
         return server;
     }
 
+    /** Handles one connected client. */
     private class Handler implements Runnable {
+        /** The client's socket. */
         private final Socket s;
 
         /**
          * Wraps one accepted socket, whose stream this handler drains.
+         *
+         * @param skt the client's socket
          */
         public Handler(Socket skt) { s = skt; }
 
@@ -217,8 +248,7 @@ public class SocketController implements RouterApp {
     /**
      * Stop it
      */
-    private synchronized void stopServer()
-    {
+    private synchronized void stopServer() {
         try {
             if (_server != null) {
                 _context.portMapper().unregister(SVC_SKT_I2PCONTROL);
@@ -237,6 +267,7 @@ public class SocketController implements RouterApp {
         }
     }
 
+    /** Closes the control socket and the clients. */
     private synchronized void stop() {
         _conf.writeConfFile();
         _secMan.stopTimedEvents();

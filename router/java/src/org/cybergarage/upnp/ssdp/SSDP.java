@@ -46,6 +46,7 @@ public class SSDP {
     /** IPv6 global multicast address for SSDP messages */
     public static final String IPV6_GLOBAL_ADDRESS = "FF0E::C";
 
+    /** The link-local IPv6 address used for SSDP, resolved once */
     private static String IPV6_ADDRESS;
 
     /**

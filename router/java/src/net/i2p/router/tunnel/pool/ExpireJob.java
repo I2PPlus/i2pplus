@@ -24,24 +24,33 @@ import net.i2p.util.Log;
  * @since 0.9.68+ Batch expiry
  */
 class ExpireJob extends JobImpl {
+    /** The tunnels being expired, by tunnel key. */
     private static final ConcurrentHashMap<Long, TunnelExpiration> _expirations = new ConcurrentHashMap<>();
+    /** True while the job is scheduled. */
     private static volatile boolean _isScheduled = false;
 
+    /** Expiration window handled per run. */
     private static final long BATCH_WINDOW = 5 * 1000L;
+    /** How early outbound tunnels are replaced. */
     private static final long OB_EARLY_EXPIRE = 30*1000L;
+    /** How early inbound tunnels are replaced. */
     private static final long IB_EARLY_EXPIRE = OB_EARLY_EXPIRE + 7500;
     /**
      * Keep tunnels alive for 10 minutes after LeaseSet refresh so clients
      * with cached (stale) LeaseSets can still connect using old tunnel IDs.
      */
     private static final long LEASESET_GRACE_PERIOD = 10 * 60 * 1000L;
-    // Must be greater than tunnel lifetime (11 min) + LEASESET_GRACE_PERIOD (10 min)
-    // to allow Phase 2 (dispatcher removal) to fire.  With early expiration,
-    // entries live up to ~21 min total; 25 min provides safety margin for
-    // clock skew and slow job execution.
+    /**
+     * Longest an entry may stay in the map. With early expiration the
+     * entries live about 21 minutes; the extra time covers clock skew
+     * and slow job execution.
+     */
     private static final long MAX_ENTRY_LIFETIME = 25 * 60 * 1000L;
+    /** Entries examined per normal run. */
     private static final int MAX_ITERATE_PER_RUN = 2000;
+    /** Entries examined when pools are short. */
     private static final int MAX_ITERATE_BACKED_UP = 5000;
+    /** Build failures counting as backed up. */
     private static final int BACKED_UP_THRESHOLD = 100;
 
     @Override
@@ -181,7 +190,9 @@ class ExpireJob extends JobImpl {
     }
 
     /**
-     * Constructor for batch job (no config).
+     * Constructor for the batch job, with no tunnel config.
+     *
+     * @param ctx the router context
      */
     private ExpireJob(RouterContext ctx) {
         super(ctx);
@@ -218,6 +229,12 @@ class ExpireJob extends JobImpl {
         }
     }
 
+    /**
+     * Runs one expiration phase.
+     *
+     * @param log the logger for the phase
+     * @param now the current time
+     */
     private void runPhase(Log log, long now) {
         List<TunnelExpiration> readyToExpire = new ArrayList<>();
         List<TunnelExpiration> readyToDrop = new ArrayList<>();
@@ -377,15 +394,32 @@ class ExpireJob extends JobImpl {
      */
     static final long UNTESTED_EXTENSION_MS = 30 * 1000L;
 
+    /** One tunnel tracked for expiration. */
     private static class TunnelExpiration {
+        /** The tunnel's config. */
         final PooledTunnelCreatorConfig config;
+        /** The tunnel's key in the map. */
         final Long tunnelKey;
+        /** When the tunnel expires. */
         volatile long expirationTime;
+        /** When the tunnel was added to the map. */
         final long dropTime;
+        /** When the tunnel was created. */
         final long createdAt;
+        /** True once the first phase was done. */
         volatile boolean phase1Complete = false;
+        /** Extensions granted while untested. */
         int untestedExtensions = 0;
 
+        /**
+         * Tracks one tunnel for expiration.
+         *
+         * @param cfg the tunnel's config
+         * @param key the tunnel's key in the map
+         * @param expire when the tunnel expires
+         * @param drop when the tunnel was added to the map
+         * @param created when the tunnel was created
+         */
         TunnelExpiration(PooledTunnelCreatorConfig cfg, Long key, long expire, long drop, long created) {
             this.config = cfg;
             this.tunnelKey = key;

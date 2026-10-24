@@ -25,7 +25,9 @@ public class SessionStatusMessage extends I2CPMessageImpl {
      * I2CP message type of a session status report.
      */
     public static final int MESSAGE_TYPE = 20;
+    /** The session the status is about. */
     private SessionId _sessionId;
+    /** The status code being reported. */
     private int _status;
 
     /**
@@ -67,8 +69,8 @@ public class SessionStatusMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Session id.
-     * @return the session id
+     * Session the status applies to.
+     * @return the session id, null until set or read
      */
     public SessionId getSessionId() {
         return _sessionId;

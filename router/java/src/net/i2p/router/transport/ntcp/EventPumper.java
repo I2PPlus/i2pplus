@@ -64,49 +64,73 @@ import net.i2p.util.TryCache;
  * </ul>
  */
 class EventPumper implements Runnable {
+    /** The router context. */
     private final RouterContext _context;
+    /** Logger for the pumper thread. */
     private final Log _log;
+    /** False once the pumper has been asked to stop. */
     private volatile boolean _alive;
+    /** The selector watching all NTCP channels. */
     private Selector _selector;
+    /** Connections waiting for the selector to watch writes. */
     private final Set<NTCPConnection> _wantsWrite = new ConcurrentHashSet<>(32);
     /**
      * The following 3 are unbounded and lockless for performance in {@link #runDelayedEvents()}.
      */
     private final Queue<NTCPConnection> _wantsRead = new ConcurrentLinkedQueue<>();
+    /** Server channels waiting for selector registration. */
     private final Queue<ServerSocketChannel> _wantsRegister = new ConcurrentLinkedQueue<>();
+    /** Outbound connections waiting for selector registration. */
     private final Queue<NTCPConnection> _wantsConRegister = new ConcurrentLinkedQueue<>();
+    /** The transport this pumper serves. */
     private final NTCPTransport _transport;
+    /** Recent connection attempts from blocked IPs. */
     private final ObjectCounter<String> _blockedIPs;
+    /** Recent inbound handshake decryption failures by IP. */
     private final ObjectCounter<String> _failedInboundEncryption;
+    /** When idle write interest is next expired. */
     private long _expireIdleWriteTime;
     /** Tracks consecutive select() calls that returned immediately (tight loop guard). */
     private int _consecutiveFastSelects;
     /** After this many consecutive immediate select returns, yield briefly. */
     private static final int MAX_CONSECUTIVE_FAST_SELECTS = 100;
+    /** Whether socket buffers use direct byte buffers. */
     private static final boolean USE_DIRECT = false;
+    /** Whether TCP_NODELAY is set on connections. */
     private final boolean _nodelay;
 
-    // Outbound retry throttling (non-hot path, kept for robustness)
+    /** When an outbound connection to a peer was last attempted. */
     private final Map<Hash, Long> _failedOutboundAttempts = new ConcurrentHashMap<>();
+    /** Failed outbound attempts per peer, for backoff. */
     private final Map<Hash, Integer> _failedOutboundCount = new ConcurrentHashMap<>();
+    /** A failed peer is retried no sooner than 500 ms. */
     private static final long MIN_RETRY_INTERVAL = 500;
+    /** Longest interval between pumper restart tries. */
     private static final int MAX_RETRY_INTERVAL = 5 * 60 * 1000; // 5 minutes
+    /** Multiplier applied to the retry wait per failure. */
     private static final float RETRY_BACKOFF_FACTOR = 1.5f;
     /** Max consecutive failures before giving up on a peer entirely (until map clearance). */
     private static final int MAX_OUTBOUND_RETRY_COUNT = 3;
+    /** When the retry maps were last pruned. */
     private long _lastRetryMapClear = System.currentTimeMillis();
+    /** The retry maps are pruned every 5 minutes. */
     private static final long RETRY_MAP_CLEAR_INTERVAL = 5 * 60 * 1000L; // 5 minutes
     /** Max entries before clearing retry maps to prevent unbounded growth under DoS. */
     private static final int MAX_RETRY_MAP_SIZE = 1024;
 
-    // Cached snapshot of the ntcp.inboundConn one-minute rate, refreshed at most
-    // once per INBOUND_RATE_REFRESH_MS. Reading the four volatile fields below is
-    // lock-free, so the accept path no longer grabs the global Rate monitor and
-    // runs computeAverages() (six bucket reads) per connection during a flood.
+    /**
+     * How often the inbound rate snapshot is refreshed, one second.
+     * The snapshot is lock-free, so the accept path does not grab the
+     * global rate monitor during a flood.
+     */
     private static final long INBOUND_RATE_REFRESH_MS = 1000;
+    /** When the inbound rate snapshot was taken. */
     private volatile long _inboundSnapshotAt;
+    /** Inbound connections in the current rate period. */
     private volatile int _inboundCurrentCount;
+    /** Inbound connections in the previous rate period. */
     private volatile int _inboundLastCount;
+    /** When the current rate period began. */
     private volatile long _inboundPeriodStart;
 
     /**
@@ -116,6 +140,7 @@ class EventPumper implements Runnable {
      */
     private static final int BUF_SIZE = 8 * 1024;
 
+    /** Creates byte buffers for the read buffer cache. */
     private static class BufferFactory implements TryCache.ObjectFactory<ByteBuffer> {
         /**
          * Factory for the pooled read buffers.
@@ -144,8 +169,11 @@ class EventPumper implements Runnable {
      * True if the runtime is slow enough to throttle the failsafe iteration.
      */
     private static final boolean IS_SLOW = SystemVersion.isSlow();
+    /** How often the failsafe pass runs, tunable. */
     private static volatile long _failsafeIterationFreq = 2 * 1000L;
+    /** Fastest allowed failsafe interval. */
     private static final long MIN_FAILSAFE_FREQ = 2 * 1000L;
+    /** Slowest allowed failsafe interval. */
     private static final long MAX_FAILSAFE_FREQ = 30 * 1000L;
     /**
      * Max idle loop iterations per second before the pumper sleeps to cap CPU.
@@ -154,17 +182,25 @@ class EventPumper implements Runnable {
      * time (1e9 / this) instead of the old fixed 25ms-per-2048-loops failsafe.
      */
     private static volatile int _maxIdleLps = 1000;
+    /** Lowest max idle loop setting. */
     private static final int MIN_MAX_IDLE_LPS = 1;
+    /** Highest max idle loop setting. */
     private static final int MAX_MAX_IDLE_LPS = 5000;
+    /** Delay between selector passes when idle. */
     private static volatile long _selectorLoopDelay = IS_SLOW ? 100 : 5;
     /** Max delay when idle — must stay low for client responsiveness. */
     private static final long SELECTOR_MAX_DELAY = 20;
+    /** Selector delay in effect right now. */
     private static volatile long _currentDelay = _selectorLoopDelay;
+    /** Blocked-IP statistics are logged every 43 minutes. */
     private static final long BLOCKED_IP_FREQ = 43 * 60 * 1000L;
     /** Tunnel test now disabled, but this should be long enough to allow an active tunnel to get started. */
     private static final long MIN_EXPIRE_IDLE_TIME = 120 * 1000L;
+    /** Longest a connection may stay idle before being closed. */
     private static final long MAX_EXPIRE_IDLE_TIME = 11 * 60 * 1000L;
+    /** A disconnect notice gets a 10 second grace period. */
     private static final long MAY_DISCON_TIMEOUT = 10 * 1000L;
+    /** The router info is re-stored every 29 minutes. */
     private static final long RI_STORE_INTERVAL = 29 * 60 * 1000L;
 
     /**
@@ -176,14 +212,18 @@ class EventPumper implements Runnable {
      * @see java.nio.ByteBuffer
      */
     private static final String PROP_NODELAY = "i2np.ntcp.nodelay";
+    /** Lowest minimum buffer count. */
     private static final int MIN_MINB = SystemVersion.isSlow() ? 4 : 8;
+    /** Highest minimum buffer count. */
     private static final int MAX_MINB = SystemVersion.isSlow() ? 12 : Math.max(16, SystemVersion.getCores());
+    /** Fewest buffers the pumper uses. */
     private static final int MIN_BUFS;
     static {
         long maxMemory = SystemVersion.getMaxMemory();
         MIN_BUFS = (int) Math.max(MIN_MINB, Math.min(MAX_MINB, 1 + (maxMemory / (16 * 1024 * 1024L))));
     }
 
+    /** Pooled byte buffers for socket reads. */
     private static final TryCache<ByteBuffer> _bufferCache = new TryCache<>(new BufferFactory(), MIN_BUFS);
 
     /**
@@ -197,6 +237,7 @@ class EventPumper implements Runnable {
      */
     private static final int WRITE_BUFSIZE = NTCPConnection.BUFFER_SIZE + OutboundNTCP2State.MAC_SIZE + 2;
 
+    /** Creates byte arrays for the write buffer cache. */
     private static class WriteBufferFactory implements TryCache.ObjectFactory<byte[]> {
         /**
          * Factory for the pooled NTCP2 write buffers.
@@ -251,7 +292,9 @@ class EventPumper implements Runnable {
         _writeBufCache.release(data);
     }
 
+    /** Reachability statuses that allow inbound connections. */
     private static final Set<Status> STATUS_OK = EnumSet.of(Status.OK, Status.IPV4_OK_IPV6_UNKNOWN, Status.IPV4_OK_IPV6_FIREWALLED);
+    /** Rate stat periods for inbound connection rates. */
     private static final long[] RATES = { 60*1000L, 10*60*1000L };
 
     /**
@@ -745,6 +788,11 @@ class EventPumper implements Runnable {
         return false;
     }
 
+    /**
+     * Handles the keys the selector reported as ready.
+     *
+     * @param selected the ready keys
+     */
     private void processKeys(Set<SelectionKey> selected) {
         for (SelectionKey key : selected) {
             try {
@@ -824,6 +872,11 @@ class EventPumper implements Runnable {
         _bufferCache.release(buf);
     }
 
+    /**
+     * Accepts one inbound connection and starts a handshake.
+     *
+     * @param key the server channel's selection key
+     */
     private void processAccept(SelectionKey key) {
         Object att = key.attachment();
         if (!(att instanceof ServerSocketChannel)) {
@@ -950,6 +1003,11 @@ class EventPumper implements Runnable {
         } catch (IOException ioe) { /* ignored */ }
     }
 
+    /**
+     * Decides whether load allows another inbound connection.
+     *
+     * @return true to accept the connection
+     */
     private boolean shouldAllowInboundEstablishment() {
         refreshInboundRateIfStale();
         InboundFloodDecision verdict = evaluateInboundFlood(_context.clock().now(),
@@ -1064,9 +1122,13 @@ class EventPumper implements Runnable {
         /** Constant for "accept, nothing to report", reused on every non-drop path. */
         static final InboundFloodDecision ALLOW = new InboundFloodDecision(false, 0, 0, 0);
 
+        /** Whether the throttle drops connections outright. */
         private final boolean _drop;
+        /** Percent of connections the throttle allows through. */
         private final int _percent;
+        /** Connection count used to compute the current rate. */
         private final int _lastConnections;
+        /** Inbound connections per minute right now. */
         private final int _currentConnectionsPerMinute;
 
         /**
@@ -1103,6 +1165,11 @@ class EventPumper implements Runnable {
         int getCurrentConnectionsPerMinute() { return _currentConnectionsPerMinute; }
     }
 
+    /**
+     * Completes one outbound connection's handshake.
+     *
+     * @param key the channel's selection key
+     */
     private void processConnect(SelectionKey key) {
         Object att = key.attachment();
         if (!(att instanceof NTCPConnection)) {
@@ -1203,12 +1270,23 @@ class EventPumper implements Runnable {
         _failedOutboundCount.merge(peerHash, 1, Integer::sum);
     }
 
+    /**
+     * Decides whether to enable TCP keep-alive on a channel.
+     *
+     * @param chan the channel to check
+     * @return true to enable keep-alive
+     */
     private boolean shouldSetKeepAlive(SocketChannel chan) {
         if (chan.socket().getInetAddress() instanceof Inet6Address) return false;
         Status status = _context.commSystem().getStatus();
         return !STATUS_OK.contains(status);
     }
 
+    /**
+     * Reads from one connection until drained.
+     *
+     * @param key the channel's selection key
+     */
     private void processRead(SelectionKey key) {
         Object att = key.attachment();
         if (!(att instanceof NTCPConnection)) {
@@ -1429,6 +1507,11 @@ class EventPumper implements Runnable {
         con.closeOnTimeout(connectFailReason(ioe), ioe);
     }
 
+    /**
+     * Writes queued data to one connection.
+     *
+     * @param key the channel's selection key
+     */
     private void processWrite(SelectionKey key) {
         Object att = key.attachment();
         if (!(att instanceof NTCPConnection)) {
@@ -1582,8 +1665,10 @@ class EventPumper implements Runnable {
         }
     }
 
+    /** Most messages written in one pass. */
     private static final int MAX_BATCH = SystemVersion.isSlow() ? 1024 : 16384;
 
+    /** Runs the periodic events queued for the pumper thread. */
     private void runDelayedEvents() {
         boolean debug = _log.shouldDebug();
         boolean warn = _log.shouldWarn();
@@ -1598,6 +1683,12 @@ class EventPumper implements Runnable {
         }
     }
 
+    /**
+     * Registers connections that asked to be read.
+     *
+     * @param debug true for debug logging
+     * @param warn true to log slow passes
+     */
     private void processReadRequests(boolean debug, boolean warn) {
         NTCPConnection con;
         int count = 0;
@@ -1620,6 +1711,12 @@ class EventPumper implements Runnable {
         }
     }
 
+    /**
+     * Registers connections that asked to be written to.
+     *
+     * @param debug true for debug logging
+     * @param warn true to log slow passes
+     */
     private void processWriteRequests(boolean debug, boolean warn) {
         if (_wantsWrite.isEmpty()) return;
         for (Iterator<NTCPConnection> iter = _wantsWrite.iterator(); iter.hasNext(); ) {
@@ -1643,6 +1740,12 @@ class EventPumper implements Runnable {
         }
     }
 
+    /**
+     * Registers new listening channels with the selector.
+     *
+     * @param debug true for debug logging
+     * @param warn true to log slow passes
+     */
     private void processServerSocketRegistrations(boolean debug, boolean warn) {
         ServerSocketChannel chan;
         int count = 0;
@@ -1657,6 +1760,12 @@ class EventPumper implements Runnable {
         }
     }
 
+    /**
+     * Registers new outbound channels with the selector.
+     *
+     * @param debug true for debug logging
+     * @param warn true to log slow passes
+     */
     private void processOutboundConnectionRegistrations(boolean debug, boolean warn) {
         NTCPConnection con;
         int count = 0;
@@ -1798,7 +1907,9 @@ class EventPumper implements Runnable {
         trackFailedInboundHandshake(ip, null);
     }
 
+    /** When idle connections were last expired. */
     private long _lastExpired;
+    /** Closes connections that have been idle too long. */
     private void expireTimedOut() {
         _transport.expireTimedOut();
     }

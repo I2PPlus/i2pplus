@@ -61,10 +61,15 @@ public final class KeyStoreUtil {
      * Well-known JKS password used when no other is configured.
      */
     public static final String DEFAULT_KEYSTORE_PASSWORD = "changeit";
+    /** Default algorithm for the router keys. */
     private static final String DEFAULT_KEY_ALGORITHM = "RSA";
+    /** Default router key size, in bits. */
     private static final int DEFAULT_KEY_SIZE = 2048;
+    /** Default algorithm for the CA keys. */
     private static final String DEFAULT_CA_KEY_ALGORITHM = "EC";
+    /** Default CA key size, in bits. */
     private static final int DEFAULT_CA_KEY_SIZE = 256;
+    /** Default time a generated certificate stays valid. */
     private static final int DEFAULT_KEY_VALID_DAYS = 3652; // 10 years
 
     static {
@@ -136,6 +141,7 @@ public final class KeyStoreUtil {
         "58:11:9f:0e:12:82:87:ea:50:fd:d9:87:45:6f:4f:78:dc:fa:d6:d4"
     };
 
+    /** Fingerprint hashes of revoked certificates. */
     private static final Set<SHA1Hash> _blacklist = new HashSet<>(16);
 
     static {
@@ -558,8 +564,9 @@ public final class KeyStoreUtil {
     }
 
     /**
-     * 48 char b32 string (30 bytes of entropy).
-     * @return 48 char b32 string (30 bytes of entropy)
+     * Generates a random password for the keystore.
+     *
+     * @return 48 base32 characters, 30 bytes of entropy
      */
     public static String randomString() {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
@@ -940,6 +947,7 @@ public final class KeyStoreUtil {
 
     /** Env var names used by createKeysCLI() to pass passwords to keytool via :env. */
     private static final String STOREPASS_ENV = "I2P_KEYSTORE_STOREPASS";
+    /** Environment variable holding the keystore password. */
     private static final String KEYPASS_ENV = "I2P_KEYSTORE_KEYPASS";
 
     /**
@@ -1104,6 +1112,13 @@ public final class KeyStoreUtil {
         return success;
     }
 
+    /**
+     * Picks the signature algorithm for a key.
+     *
+     * @param size the key size, in bits
+     * @param keyalg the key algorithm name
+     * @return the signature algorithm to use
+     */
     private static String getSigAlg(int size, String keyalg) {
         if (keyalg.equals("EC")) keyalg = "ECDSA";
         else if (keyalg.equals("Ed")) keyalg = "EdDSA";
@@ -1357,6 +1372,11 @@ public final class KeyStoreUtil {
         return false;
     }
 
+    /**
+     * Prints an informational line for the tool.
+     *
+     * @param msg the text to print
+     */
     private static void info(String msg) {
         log(I2PAppContext.getGlobalContext(), Log.INFO, msg, null);
     }
@@ -1372,10 +1392,24 @@ public final class KeyStoreUtil {
         log(I2PAppContext.getGlobalContext(), Log.WARN, msg, t);
     }
 
+    /**
+     * Prints an error line for the tool.
+     *
+     * @param msg the text to print
+     * @param t the cause, null if none
+     */
     private static void error(String msg, Throwable t) {
         log(I2PAppContext.getGlobalContext(), Log.ERROR, msg, t);
     }
 
+    /**
+     * Writes one entry to the router log.
+     *
+     * @param ctx the app context, null for the console only
+     * @param level the log level
+     * @param msg the text to log
+     * @param t the cause, null if none
+     */
     private static void log(I2PAppContext ctx, int level, String msg, Throwable t) {
         if (level >= Log.WARN && !ctx.isRouterContext()) {
             System.out.println(msg);
@@ -1462,6 +1496,7 @@ public final class KeyStoreUtil {
         }
     }
 
+    /** Prints the command line usage text. */
     private static void usage() {
         System.err.println("Usage: KeyStoreUtil create keystore.ks (create empty keystore)\n"
                 + "       KeyStoreUtil export keystore.ks alias keypw (exports private key from keystore)\n"
@@ -1474,6 +1509,12 @@ public final class KeyStoreUtil {
                 + "       KeyStoreUtil keystore.ks (loads from system keystore and from keystore.ks)");
     }
 
+    /**
+     * Runs the import test command.
+     *
+     * @param args the command line arguments
+     * @throws Exception if the import fails
+     */
     private static void testImport(String[] args) throws Exception {
         File ksf = new File(args[1]);
         InputStream in = new FileInputStream(args[2]);
@@ -1482,6 +1523,12 @@ public final class KeyStoreUtil {
         importPrivateKey(ksf, DEFAULT_KEYSTORE_PASSWORD, alias, pw, in);
     }
 
+    /**
+     * Runs the export test command.
+     *
+     * @param args the command line arguments
+     * @throws Exception if the export fails
+     */
     private static void testExport(String[] args) throws Exception {
         if (args.length != 4) {
             usage();
@@ -1493,6 +1540,11 @@ public final class KeyStoreUtil {
         exportPrivateKey(ksf, DEFAULT_KEYSTORE_PASSWORD, alias, pw, System.out);
     }
 
+    /**
+     * Runs the key generation test command.
+     *
+     * @param args the command line arguments
+     */
     private static void testKeygen(String[] args) {
         File ksf = new File(args[1]);
         String alias = args[2];
@@ -1543,6 +1595,12 @@ public final class KeyStoreUtil {
         System.out.println("EdDSA genkey ok? " + ok);
     }
 
+    /**
+     * Runs the second key generation test.
+     *
+     * @param args the command line arguments
+     * @throws Exception if the generation fails
+     */
     private static void testKeygen2(String[] args) throws Exception {
         // keygen test using the I2PProvider
         SigType type = SigType.EdDSA_SHA512_Ed25519;
@@ -1575,6 +1633,11 @@ public final class KeyStoreUtil {
         System.out.println("Signature test: " + sig);
     }
 
+    /**
+     * Lists the keys in the keystore.
+     *
+     * @param args the command line arguments
+     */
     private static void listKeys(String[] args) {
         if (args.length != 2) {
             usage();

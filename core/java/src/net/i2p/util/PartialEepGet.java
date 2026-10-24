@@ -26,6 +26,7 @@ import net.i2p.I2PAppContext;
  */
 @SuppressWarnings("PMD.CloseResource")
 public class PartialEepGet extends EepGet {
+    /** Size of the byte range to fetch. */
     private final long _fetchSize;
 
     /**
@@ -192,6 +193,7 @@ public class PartialEepGet extends EepGet {
         }
     }
 
+    /** Prints how to fetch part of a file from the command line. */
     private static void usage() {
         System.err.println("PartialEepGet [-p 127.0.0.1[:4444]] [-c] [-o outputFile]\n"
                 + "              [-l #bytes] (default 56)\n" + "              [-u username] [-x password] url\n"

@@ -6,7 +6,9 @@ package com.maxmind.geoip;
  */
 public class Country {
 
+    /** Two-letter country code. */
     private String code;
+    /** Country name in English. */
     private String name;
 
     /**

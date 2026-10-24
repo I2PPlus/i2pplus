@@ -95,7 +95,9 @@ import org.klomp.snark.bencode.InvalidBEncodingException;
  */
 public class KRPC implements I2PSessionMuxedListener, DHT {
 
+    /** The app context. */
     private final I2PAppContext _context;
+    /** Logger for the DHT. */
     private final Log _log;
 
     /** Our tracker. */
@@ -122,7 +124,9 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /** False to answer no tracker queries, keeping the instance routing-only. */
     private volatile boolean _serveAll = true;
 
+    /** Queued cleanup event, kept for cancellation. */
     private SimpleTimer2.TimedEvent _cleaner;
+    /** Queued exploration event, kept for cancellation. */
     private SimpleTimer2.TimedEvent _explorer;
 
     /** Hook to inject and receive datagrams. */
@@ -143,19 +147,27 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /** Signed datagrams. */
     protected int _qPort;
 
+    /** File storing known DHT nodes. */
     private final File _dhtFile;
+    /** Backup copy of the node file. */
     private final File _backupDhtFile;
     /** True between {@link #start()} and stop(), so the reply threads know to keep going. */
     protected volatile boolean _isRunning;
+    /** True once the DHT has been joined. */
     private volatile boolean _hasBootstrapped;
 
     /** Stats. */
     private final AtomicLong _rxPkts = new AtomicLong();
 
+    /** DHT packets sent. */
     private final AtomicLong _txPkts = new AtomicLong();
+    /** DHT bytes received. */
     private final AtomicLong _rxBytes = new AtomicLong();
+    /** DHT bytes sent. */
     private final AtomicLong _txBytes = new AtomicLong();
+    /** When the DHT was started. */
     private long _started;
+    /** When the node list was last saved. */
     private long _nodesLastSaved;
 
     /** All-zero NID used for pings. */
@@ -173,9 +185,13 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /** Overloads error codes which start with 201. */
     private static final int REPLY_NONE = 0;
 
+    /** Reply code for a ping response. */
     private static final int REPLY_PONG = 1;
+    /** Reply code for a peer response. */
     private static final int REPLY_PEERS = 2;
+    /** Reply code for a node response. */
     private static final int REPLY_NODES = 3;
+    /** Reply code for a network failure. */
     private static final int REPLY_NETWORK_FAIL = 4;
 
     /**
@@ -186,28 +202,37 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /** How long since generated do we delete - BEP 5 says 10 minutes. */
     private static final long MAX_TOKEN_AGE = 10 * (long) 60 * 1000;
 
+    /** Age limit for inbound crypto tokens. */
     private static final long MAX_INBOUND_TOKEN_AGE = MAX_TOKEN_AGE - 2 * 60 * 1000;
+    /** Outbound crypto tokens held at once. */
     private static final int MAX_OUTBOUND_TOKENS = 5000;
 
     /** How long since sent do we wait for a reply. */
     private static final long DEFAULT_QUERY_TIMEOUT = (long) 75 * 1000;
 
+    /** Timeout for a destination lookup. */
     private static final long DEST_LOOKUP_TIMEOUT = (long) 10 * 1000;
 
     /** Stagger with other cleaners. */
     private static final long CLEAN_TIME = (long) 63 * 1000;
 
+    /** Interval between DHT explorations. */
     private static final long EXPLORE_TIME = 10 * (long) 60 * 1000;
+    /** Interval between blacklist cleanups. */
     private static final long BLACKLIST_CLEAN_TIME = 5 * (long) 60 * 1000;
+    /** Peers held in the DHT blacklist. */
     private static final int BLACKLIST_MAX_PEERS = 500;
+    /** How often the local dht node list is saved, in milliseconds. */
     private static final long NODES_SAVE_TIME =
-            30 * (long) 60 * 1000; // frequency of save of local dht node list
+            30 * (long) 60 * 1000;
     /**
      * File suffix for DHT persistent storage.
      */
     public static final String DHT_FILE_SUFFIX = ".dht.dat";
 
+    /** Crypto tags sent per session. */
     private static final int SEND_CRYPTO_TAGS = 8;
+    /** Tag count below which more are sent. */
     private static final int LOW_CRYPTO_TAGS = 4;
 
     /**
@@ -338,7 +363,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /**
      * The UDP query port.
      *
-     * @return The UDP query port
+     * @return the port number
      */
     public int getPort() {
         return _qPort;
@@ -347,7 +372,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /**
      * The UDP response port.
      *
-     * @return The UDP response port
+     * @return the port number
      */
     public int getRPort() {
         return _rPort;
@@ -1059,9 +1084,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         return sendResponse(nInfo, msgID, map);
     }
 
-    // Low-level send methods
 
-    // TODO sendQuery with onReply / onTimeout args
 
     /**
      * Send a query message.
@@ -1171,7 +1194,6 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
 
     /**
      * The dest for a NodeInfo lacking it, stored there. Blocking.
-
      *
      * @param nInfo the node to look up
      * @return true if a destination was resolved and cached on the node
@@ -1913,12 +1935,19 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
 
     /** Callback for replies. */
     protected class ReplyWaiter extends SimpleTimer2.TimedEvent {
+        /** The message id being tracked. */
         private final MsgID mid;
+        /** The node the request was sent to. */
         private final NodeInfo sentTo;
+        /** Runnable run when the reply arrives. */
         private final Runnable onReply;
+        /** Runnable run when the reply times out. */
         private final Runnable onTimeout;
+        /** Reply code received, zero until it arrives. */
         private volatile int replyCode;
+        /** Object sent with the request. */
         private Object sentObject;
+        /** Object returned by the reply. */
         private Object replyObject;
 
         /**
@@ -2133,6 +2162,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /** Cleaner-upper. */
     private class Cleaner extends SimpleTimer2.TimedEvent {
 
+        /** Schedules the periodic cleanup pass. */
         public Cleaner() {
             super(SimpleTimer2.getInstance(), 7 * CLEAN_TIME);
         }
@@ -2212,6 +2242,11 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /** Fire off explorer thread. */
     private class Explorer extends SimpleTimer2.TimedEvent {
 
+        /**
+         * Schedules the next DHT exploration.
+         *
+         * @param delay the initial delay
+         */
         public Explorer(long delay) {
             super(SimpleTimer2.getInstance(), delay);
         }
@@ -2231,6 +2266,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /** Explorer thread. */
     private class ExplorerThread implements Runnable {
 
+        /** Runs one DHT exploration. */
+        private ExplorerThread() {}
         public void run() {
             if (!_isRunning) {
                 return;

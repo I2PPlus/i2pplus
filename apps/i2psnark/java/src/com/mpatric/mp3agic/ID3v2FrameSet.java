@@ -3,28 +3,52 @@ package com.mpatric.mp3agic;
 import java.util.ArrayList;
 import java.util.List;
 
+/** All the frames sharing one id. */
 public class ID3v2FrameSet {
 
+    /** The id the frames share. */
     private String id;
+    /** The frames in the set. */
     private ArrayList<ID3v2Frame> frames;
 
+    /**
+     * Creates an empty set for one frame id.
+     *
+     * @param id the id the frames share
+     */
     public ID3v2FrameSet(String id) {
         this.id = id;
         frames = new ArrayList<>();
     }
 
+    /**
+     * Reads the shared frame id.
+     *
+     * @return the id shared by the frames in this set
+     */
     public String getId() {
         return id;
     }
 
+    /** Removes every frame from the set. */
     public void clear() {
         frames.clear();
     }
 
+    /**
+     * Adds a frame to the set.
+     *
+     * @param frame the frame to add
+     */
     public void addFrame(ID3v2Frame frame) {
         frames.add(frame);
     }
 
+    /**
+     * Reads the frames in the set.
+     *
+     * @return the frames, in the order added
+     */
     public List<ID3v2Frame> getFrames() {
         return frames;
     }

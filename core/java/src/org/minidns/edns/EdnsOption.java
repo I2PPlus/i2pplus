@@ -78,6 +78,7 @@ public abstract class EdnsOption {
      */
     public abstract OptionCode getOptionCode();
 
+    /** The rendered form, computed once and kept. */
     private volatile String toStringCache;
 
     /**
@@ -104,6 +105,7 @@ public abstract class EdnsOption {
      */
     protected abstract CharSequence toStringInternal();
 
+    /** The terminal-rendered form, computed once and kept. */
     private String terminalOutputCache;
 
     /**

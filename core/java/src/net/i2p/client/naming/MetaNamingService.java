@@ -24,7 +24,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class MetaNamingService extends DummyNamingService {
 
+    /** Property naming the naming services to use. */
     private static final String PROP_NAME_SERVICES = "i2p.nameservicelist";
+    /** The services used when the property is unset. */
     private static final String DEFAULT_NAME_SERVICES = "net.i2p.client.naming.HostsTxtNamingService";
 
     /**

@@ -30,11 +30,17 @@ import net.i2p.util.RandomSource;
  * honors the instructions (safely).
  */
 class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
+    /** The router the tunnel terminates on. */
     private final RouterContext _context;
+    /** Logger for this class. */
     private final Log _log;
+    /** The client at the end of the tunnel. */
     private final Hash _client;
+    /** Where garlic messages are handed on. */
     private final GarlicMessageReceiver _receiver;
+    /** Client name shown in the logs. */
     private final String _clientNickname;
+    /** Xor mask for this tunnel's message ids. */
     private final long _msgIDBloomXor;
     /**
      * Create a new inbound message distributor.

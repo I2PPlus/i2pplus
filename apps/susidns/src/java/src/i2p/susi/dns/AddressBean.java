@@ -18,8 +18,11 @@ import net.i2p.data.Destination;
  * Provides methods for handling I2P addresses and their properties.
  */
 public class AddressBean {
+    /** The name being resolved. */
     private final String name;
+    /** The destination bytes, if the name has one. */
     private final byte[] dest;
+    /** Properties stored with the destination, if any. */
     private Properties props;
     /** Available as of Java 6. */
     static final boolean haveIDN;
@@ -105,9 +108,13 @@ public class AddressBean {
         return haveIDN && !IDN.toUnicode(name, IDN.ALLOW_UNASSIGNED).equals(name);
     }
 
+    /** ASCII dot separating name labels. */
     private static final char DOT = '.';
+    /** Ideographic dot treated as a label separator too. */
     private static final char DOT2 = 0x3002;
+    /** Fullwidth dot treated as a label separator too. */
     private static final char DOT3 = 0xFF0E;
+    /** Halfwidth ideographic dot treated as a label separator too. */
     private static final char DOT4 = 0xFF61;
 
     /**

@@ -199,7 +199,10 @@ public class HeaderLine extends Encoding {
 		return out.toString();
 	}
 
-	// could be 75 for quoted-printable only
+	/**
+	 * Largest encoded-word the decoder accepts. It could be 75 for
+	 * quoted-printable only, but base64 words are longer.
+	 */
 	private static final int DECODE_MAX = 256;
 
 	/**

@@ -18,20 +18,33 @@ import net.i2p.util.SystemVersion;
  * for the SSU and SSU2 transport styles.
  */
 class UDPAddress {
+    /** The host name or literal address. */
     private final String _host;
+    /** The resolved host address. */
     private InetAddress _hostAddress;
+    /** The UDP port. */
     private final int _port;
+    /** Our introduction key. */
     private final byte[] _introKey;
+    /** The introducer host names. */
     private final String[] _introHosts;
+    /** The resolved introducer addresses. */
     private final InetAddress[] _introAddresses;
+    /** The introducer ports. */
     private final int[] _introPorts;
+    /** The introducer keys. */
     private final byte[] _introKeys[];
+    /** The introducer tags. */
     private final long[] _introTags;
+    /** When the introducers expire. */
     private final long[] _introExps;
+    /** The introducer hashes. */
     private final Hash[] _introHashes;
+    /** The MTU of the address. */
     private final int _mtu;
-    // could be both
+    /** True if the address supports IPv4, both flags if both. */
     private final boolean _isIPv4;
+    /** True if the address supports IPv6. */
     private final boolean _isIPv6;
 
     /** Config key for SSU port. */
@@ -65,12 +78,17 @@ class UDPAddress {
 
     /** Maximum number of introducers per address. */
     static final int MAX_INTRODUCERS = 5;
+    /** Config keys of the introducer hosts. */
     private static final String[] PROP_INTRO_HOST;
+    /** Config keys of the introducer ports. */
     private static final String[] PROP_INTRO_PORT;
+    /** Config keys of the introducer keys. */
     private static final String[] PROP_INTRO_IKEY;
     /** Introducer tag property names indexed by position. */
     static final String[] PROP_INTRO_TAG;
+    /** Config keys of the introducer expirations. */
     private static final String[] PROP_INTRO_EXP;
+    /** Config keys of the introducer hashes. */
     private static final String[] PROP_INTRO_HASH;
     /** Static initializer. */
     static {
@@ -535,7 +553,6 @@ class UDPAddress {
         return rv.toString();
     }
 
-    ////////////////
 
     /**
      * Textual IP to InetAddress, because {@link java.net.InetAddress#getByName} is slow.
@@ -568,14 +585,12 @@ class UDPAddress {
         if (host == null)
             return null;
         InetAddress rv;
-        /** InetAddress cache synchronized block. */
         synchronized (_inetAddressCache) {
             rv = _inetAddressCache.get(host);
         }
         if (rv == null && Addresses.isIPAddress(host)) {
             try {
                 rv = InetAddress.getByName(host);
-                /** InetAddress cache synchronized block. */
                 synchronized (_inetAddressCache) {
                     _inetAddressCache.put(host, rv);
                 }

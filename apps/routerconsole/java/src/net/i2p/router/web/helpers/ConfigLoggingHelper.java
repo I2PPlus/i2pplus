@@ -15,6 +15,7 @@ import net.i2p.util.Translate;
  * @since 0.9.33
  */
 public class ConfigLoggingHelper extends HelperBase {
+    /** The router's log manager. */
     private LogManager _mgr;
 
     /**
@@ -125,6 +126,14 @@ public class ConfigLoggingHelper extends HelperBase {
         return buf.toString();
     }
 
+    /**
+     * Appends the select box choosing a logger's level.
+     *
+     * @param buf where the control is appended
+     * @param name the control's name
+     * @param cur the level now in use
+     * @param showRemove whether to offer removing the entry
+     */
     private void getLogLevelBox(StringBuilder buf, String name, String cur, boolean showRemove) {
         buf.append("<select name=\"").append(name).append("\">\n");
 
@@ -208,6 +217,7 @@ public class ConfigLoggingHelper extends HelperBase {
         return buf.toString();
     }
 
+    /** Bundle with the core's translated strings. */
     private static final String CORE_BUNDLE_NAME = "net.i2p.util.messages";
 
     /**

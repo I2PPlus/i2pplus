@@ -32,6 +32,7 @@ import net.i2p.data.SimpleDataStructure;
  */
 @SuppressWarnings({"PMD.OverrideBothEqualsAndHashcode", "checkstyle:EqualsHashCode"})
 public class SHA1Hash extends SimpleDataStructure {
+    /** Hash of the data, computed on demand and then kept. */
     private int _cachedHashCode;
 
     /**
@@ -58,8 +59,8 @@ public class SHA1Hash extends SimpleDataStructure {
     }
 
     /**
-     * Hash length in bytes.
-     * @return the hash length in bytes
+     * Length of a SHA-1 hash.
+     * @return 20, the hash length in bytes
      */
     @Override
     public int length() {

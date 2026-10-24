@@ -40,8 +40,7 @@ public class Base64 extends Encoding {
 	 * @return Base64-encoded String.
 	 * @throws EncodingException if encoding fails
 	 */
-	public String encode( byte[] in ) throws EncodingException
-	{
+	public String encode( byte[] in ) throws EncodingException {
 		try (Writer strBuf = new StringBuilderWriter()) {
 			encode(new ByteArrayInputStream(in), strBuf);
 			return strBuf.toString();
@@ -58,8 +57,7 @@ public class Base64 extends Encoding {
 	 * @since 0.9.33
 	 */
 	@Override
-	public void encode(InputStream in, Writer strBuf) throws IOException
-	{
+	public void encode(InputStream in, Writer strBuf) throws IOException {
 		int[] buf = new int[3];
 		int[] out = new int[4];
 		int l = 0;
@@ -138,6 +136,13 @@ public class Base64 extends Encoding {
 		return b;
 	}
 
+	/**
+	 * Maps one base64 character to its 6-bit value.
+	 *
+	 * @param c the character read
+	 * @return the value, 0 for the = padding character
+	 * @throws IOException if the input ended before a character
+	 */
 	private static byte decodeByte( int c ) throws IOException {
 		if (c < 0)
 			throw new EOFException();
@@ -159,6 +164,13 @@ public class Base64 extends Encoding {
 		return b;
 	}
 
+	/**
+	 * Reads the next byte that is not a space or a line break.
+	 *
+	 * @param in the stream to read
+	 * @return the byte, or -1 at the end of the stream
+	 * @throws IOException if the read fails
+	 */
 	private static int readIn(InputStream in) throws IOException {
 		int c;
 		do {

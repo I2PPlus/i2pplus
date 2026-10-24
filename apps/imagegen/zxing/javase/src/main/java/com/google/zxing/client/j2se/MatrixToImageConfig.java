@@ -28,7 +28,9 @@ public final class MatrixToImageConfig {
   /** Default white off color. */
   public static final int WHITE = 0xFFFFFFFF;
 
+  /** ARGB of a set module. */
   private final int onColor;
+  /** ARGB of an unset module. */
   private final int offColor;
 
   /**
@@ -86,6 +88,12 @@ public final class MatrixToImageConfig {
     return BufferedImage.TYPE_INT_RGB;
   }
 
+  /**
+   * True when a colour is not fully opaque.
+   *
+   * @param argb the colour to test
+   * @return true if its alpha channel is set
+   */
   private static boolean hasTransparency(int argb) {
     return (argb & 0xFF000000) != 0xFF000000;
   }

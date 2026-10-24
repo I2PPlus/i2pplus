@@ -58,6 +58,7 @@ public class PeerState {
      * A positive number means our clock is ahead of theirs.
      */
     private long _clockSkew;
+    /** Lock for the clock skew calculations. */
     private final Object _clockSkewLock = new Object();
 
     /** When did we last send them a packet? */
@@ -78,12 +79,17 @@ public class PeerState {
     private final AtomicInteger _sendWindowBytes = new AtomicInteger();
     /** How many bytes can we send to the peer in the current second. */
     private volatile int _sendWindowBytesRemaining;
+    /** Lock for the send window calculations. */
     private final Object _sendWindowBytesRemainingLock = new Object();
+    /** Estimator of the peer's bandwidth. */
     private final SimpleBandwidthEstimator _bwEstimator;
-    // smoothed value, for display only
+    /** Smoothed receive rate, for display only. */
     private int _receiveBps;
+    /** Bytes received in the current period. */
     private int _receiveBytes;
+    /** When the receive period began. */
     private long _receivePeriodBegin;
+    /** When congestion last occurred. */
     private volatile long _lastCongestionOccurred;
     /** When the path-unverified send-window growth freeze expires; 0 = not frozen. */
     private volatile long _pathUnverifiedUntil;
@@ -114,13 +120,17 @@ public class PeerState {
     private long _theyRelayToUsAs;
     /** What is the largest packet we can currently send to the peer? */
     protected volatile int _mtu;
+    /** The MTU for receiving from the peer. */
     private int _mtuReceive;
     /** What is the largest packet we will ever send to the peer? */
     private int _largeMTU;
+    /** Smallest MTU allowed for this peer. */
     private final int _minMTU;
-    /* how many consecutive packets at or under the min MTU have been received */
+    /** Consecutive small packets seen for MTU probing. */
     private long _consecutiveSmall;
+    /** MTU increases counted for this peer. */
     private int _mtuIncreases;
+    /** MTU decreases counted for this peer. */
     private int _mtuDecreases;
     /** Current round trip time estimate. */
     protected volatile int _rtt;
@@ -132,11 +142,15 @@ public class PeerState {
     /** How many packets will be considered within the retransmission rate calculation. */
     static final long RETRANSMISSION_PERIOD_WIDTH = SystemVersion.isSlow() ? 100 : 200;
 
+    /** Messages received from the peer. */
     private int _messagesReceived;
+    /** Messages sent to the peer. */
     private final AtomicInteger _messagesSent = new AtomicInteger();
     /** Last time we logged a send rejection (for rate-limited logging). */
     private long _lastRejectionLogTime;
+    /** Interval between rejection log messages. */
     private static final long REJECTION_LOG_INTERVAL = 1000;  // 1 second
+    /** Packets transmitted to the peer. */
     private int _packetsTransmitted;
     /** How many packets were retransmitted within the last RETRANSMISSION_PERIOD_WIDTH packets. */
     private int _packetsRetransmitted;
@@ -152,12 +166,16 @@ public class PeerState {
      * @since 0.9.71+
      */
     private final int _lossyMinPackets;
+    /** Next outbound message sequence number. */
     private long _nextSequenceNumber;
+    /** True while a fast retransmit is pending. */
     private final AtomicBoolean _fastRetransmit = new AtomicBoolean();
 
     /** How many duplicate packets were received within the last RETRANSMISSION_PERIOD_WIDTH packets. */
     protected volatile int _packetsReceivedDuplicate;
+    /** Packets received from the peer. */
     private int _packetsReceived;
+    /** True when the peer may be disconnected. */
     private volatile boolean _mayDisconnect;
 
     /** List of InboundMessageState for active messages. */
@@ -375,11 +393,6 @@ public class PeerState {
     static final int MAX_SEND_WINDOW_CEILING =
             Math.max(1024 * 1024, Math.min(16 * 1024 * 1024, (int) (SystemVersion.getMaxMemory() / 256)));
 
-    /*
-     * Was 32 before 0.9.2, but since the streaming lib goes up to 128,
-     * we would just drop our own msgs right away during slow start.
-     * May need to adjust based on memory.
-     */
 
     /** Default MTU. */
     public static final int DEFAULT_MTU = 1484;
@@ -453,6 +466,7 @@ public class PeerState {
     private static volatile int MIN_RTO = 1000;
     /** Initial RTO before first RTT sample — configurable via {@code i2p.transport.udp.initRTO}. */
     private static volatile int INIT_RTO = 1000;
+    /** Initial round trip time estimate. */
     private static final int INIT_RTT = 0;
     /** Maximum retransmission timeout — configurable via {@code i2p.transport.udp.maxRTO}. */
     private static volatile int MAX_RTO = 60*1000;
@@ -629,17 +643,17 @@ public class PeerState {
     public static int getMaxSendWindowCeiling() { return MAX_SEND_WINDOW_CEILING; }
 
     /**
-     * Initial concurrent messages per peer.
+     * Concurrent messages a new peer starts with.
      *
-     * @return the initial concurrent messages per peer
+     * @return the initial window, in messages
      * @since 0.9.70+
      */
     public static int getInitConcurrentMsgs() { return INIT_CONCURRENT_MSGS; }
 
     /**
-     * Minimum concurrent messages per peer.
+     * Concurrent messages a degraded peer is limited to.
      *
-     * @return the minimum concurrent messages per peer
+     * @return the minimum window, in messages
      * @since 0.9.70+
      */
     public static int getMinConcurrentMsgs() { return MIN_CONCURRENT_MSGS; }
@@ -664,6 +678,7 @@ public class PeerState {
 
     /** Reusable lists for finishAndAllocate() — avoids per-volley allocation churn. */
     private final List<OutboundMessageState> _succeededBuffer = new ArrayList<>(4);
+    /** Messages that failed, buffered for retry. */
     private final List<OutboundMessageState> _failedBuffer = new ArrayList<>(4);
 
     /**
@@ -1376,8 +1391,9 @@ public class PeerState {
     }
 
     /**
-     * Inactivity time.
-     * @return the inactivity time
+     * Time since the peer was last heard from or sent to fully.
+     *
+     * @return the time, in ms
      */
     public long getInactivityTime() {
         long now = _context.clock().now();
@@ -2180,6 +2196,7 @@ public class PeerState {
         synchronized (_inboundLock) {return _packetsReceivedDuplicate;}
     }
 
+    /** Receive MTU change shown in the log. */
     private static final int MTU_RCV_DISPLAY_THRESHOLD = 20;
     /** IPv4 packet overhead in bytes (IP + UDP + MAC + IV, 60). */
     private static final int OVERHEAD_SIZE = PacketBuilder2.IP_HEADER_SIZE + PacketBuilder2.UDP_HEADER_SIZE +

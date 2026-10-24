@@ -48,9 +48,13 @@ import net.i2p.util.SimpleTimer2;
  * @since 0.8.12 moved from Router.java
  */
 public class MarkLiveliness extends SimpleTimer2.TimedEvent {
+    /** The router whose liveliness is marked. */
     private final Router _router;
+    /** File rewritten to mark the router alive. */
     private final File _pingFile;
+    /** How often the ping file is written, in ms. */
     private final long _period;
+    /** True once a write failure has been logged. */
     private volatile boolean _errorLogged;
 
     /**
@@ -88,6 +92,7 @@ public class MarkLiveliness extends SimpleTimer2.TimedEvent {
         schedule(_period);
     }
 
+    /** Writes the ping file. */
     private void ping() {
         try (FileOutputStream fos = new SecureFileOutputStream(_pingFile)) {
             fos.write(DataHelper.getASCII(Long.toString(System.currentTimeMillis())));

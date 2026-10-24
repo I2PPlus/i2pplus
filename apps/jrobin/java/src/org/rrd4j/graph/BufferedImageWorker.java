@@ -25,23 +25,33 @@ class BufferedImageWorker extends ImageWorker {
      * <p>Use {@link BufferedImageWorker#getBuilder} to create a new builder instance.</p>
      */
     static class Builder {
+        /** Image width set in the builder. */
         private int width = 1;
+        /** Image height set in the builder. */
         private int height = 1;
+        /** Graph definition set in the builder. */
         private RrdGraphDef gdef;
+        /** Image writer selected in the builder. */
         private ImageWriter writer;
+        /** Image write parameters selected in the builder. */
         private ImageWriteParam imageWriteParam;
 
         /** Use {@link BufferedImageWorker#getBuilder} to obtain an instance. */
         Builder() {}
 
         /**
-         * Built BufferedImageWorker.
-         * @return the built BufferedImageWorker
+         * Creates the worker from the builder's settings.
+         * @return a new BufferedImageWorker
          */
         BufferedImageWorker build() {
             return new BufferedImageWorker(this);
         }
 
+        /**
+         * Finds the write parameters for the image format.
+         *
+         * @return the parameters for the writer in use
+         */
         private ImageWriteParam getImageParams() {
             ImageWriteParam iwp = writer.getDefaultWriteParam();
             ImageWriterSpi imgProvider = writer.getOriginatingProvider();
@@ -133,14 +143,24 @@ class BufferedImageWorker extends ImageWorker {
     public static Builder getBuilder() {
         return new Builder();
     }
+    /** The image being written out. */
     private BufferedImage img;
+    /** Width of the image. */
     private int imgWidth;
+    /** Height of the image. */
     private int imgHeight;
     /** Initial affine transform */
     private AffineTransform initialAffineTransform;
+    /** Writer that writes the image out. */
     private final ImageWriter writer;
+    /** Parameters given to the writer. */
     private final ImageWriteParam iwp;
 
+    /**
+     * Builds the worker from its builder.
+     *
+     * @param builder the builder holding the image and parameters
+     */
     private BufferedImageWorker(Builder builder) {
         this.imgHeight = builder.height;
         this.imgWidth = builder.width;

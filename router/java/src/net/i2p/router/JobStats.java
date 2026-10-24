@@ -12,40 +12,72 @@ import java.util.concurrent.atomic.AtomicLong;
  * For use by the router only. Not to be used by applications or plugins.
  */
 public class JobStats {
+    /** The name of the job being tracked. */
     private final String _job;
+    /** Runs of the job counted. */
     private final AtomicLong _numRuns = new AtomicLong();
+    /** Runs of the job dropped. */
     private final AtomicLong _numDropped = new AtomicLong();
+    /** Total run time, in ms. */
     private final AtomicLong _totalTime = new AtomicLong();
+    /** Longest run so far, in ms. */
     private volatile long _maxTime;
+    /** Shortest run so far, in ms. */
     private volatile long _minTime;
+    /** Total time spent pending, in ms. */
     private final AtomicLong _totalPendingTime = new AtomicLong();
+    /** Longest pending time so far, in ms. */
     private volatile long _maxPendingTime;
+    /** Shortest pending time so far, in ms. */
     private volatile long _minPendingTime;
+    /** When the job last ran. */
     private volatile long _lastRunTime;
 
+    /** Recent executions kept for a normal job. */
     private static final int DEFAULT_MAX_RECENT_ENTRIES = 500;
+    /** Recent executions kept for a high frequency job. */
     private static final int HIGH_FREQ_MAX_RECENT_ENTRIES = 5000;
+    /** Jobs whose recent window is enlarged. */
     private static final Set<String> HIGH_FREQ_JOBS = new HashSet<>(Arrays.asList(
         "NetDb Direct RouterInfo Lookup",
         "Direct Lookup Match",
         "Verify NetDb Lookup for Failing Peer"
     ));
+    /** Time window covered by the recent executions. */
     private static final long RECENT_WINDOW_MS = 10 * 1000L;
 
+    /** True while recent executions are recorded. */
     private static volatile boolean recentTrackingEnabled;
+    /** When a viewer last requested the tracking. */
     private static volatile long lastTrackingEnableTime;
+    /** Time tracking stays on after the last viewer. */
     private static final long TRACKING_TIMEOUT_MS = 60 * 1000L;  // Keep tracking for 60s after last view
 
+    /** Recent executions this job keeps. */
     private final int _maxRecentEntries;
+    /** Ring holding the recent executions. */
     private final RecentExecution[] _recentExecutions;
+    /** Write index into the recent ring. */
     private volatile int _recentIndex = 0;
+    /** Recent executions recorded so far. */
     private final AtomicInteger _recentCount = new AtomicInteger();
 
+    /** One recorded recent execution. */
     private static class RecentExecution {
+        /** When the execution ran. */
         final long timestamp;
+        /** Run time of the execution, in ms. */
         final long runTime;
+        /** Pending time of the execution, in ms. */
         final long lag;
 
+        /**
+         * Records one recent execution.
+         *
+         * @param timestamp when the execution ran
+         * @param runTime the run time, in ms
+         * @param lag the pending time, in ms
+         */
         RecentExecution(long timestamp, long runTime, long lag) {
             this.timestamp = timestamp;
             this.runTime = runTime;

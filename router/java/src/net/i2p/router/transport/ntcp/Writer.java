@@ -21,14 +21,23 @@ import net.i2p.util.SystemVersion;
  * @since 0.9.16 (dynamic resizing since 0.9.70+)
  */
 public class Writer {
+    /** Logger for the NTCP writer. */
     private final Log _log;
+    /** Connections waiting for a runner. */
     private final Set<NTCPConnection> _pendingConnections;
+    /** Connections being written by a runner. */
     private final Set<NTCPConnection> _liveWrites;
+    /** Connections to write after the live ones. */
     private final Set<NTCPConnection> _writeAfterLive;
+    /** The running writer threads. */
     private final CopyOnWriteArrayList<Runner> _runners;
+    /** Number of writer threads. */
     private static volatile int _threadCount = SystemVersion.isSlow() ? 2 : Math.max(SystemVersion.getCores() / 2, 3);
+    /** Fewest writer threads allowed. */
     private static final int MIN_THREADS = 2;
+    /** Most writer threads allowed. */
     private static final int MAX_THREADS = 16;
+    /** Sequence number of the writer threads. */
     private static final AtomicInteger _threadNum = new AtomicInteger();
     /** Tracks how many runner threads are actively processing (not parked). */
     private final AtomicInteger _activeCount = new AtomicInteger();
@@ -93,6 +102,7 @@ public class Writer {
         }
     }
 
+    /** Starts one more writer thread if needed. */
     private void startRunner() {
         Runner r = new Runner();
         _runners.add(r);
@@ -179,11 +189,13 @@ public class Writer {
         }
     }
 
+    /** Thread writing the assigned connections. */
     private class Runner implements Runnable {
 
         /** A scratch space to serialize and encrypt messages. */
         private final NTCPConnection.PrepBuffer _prepBuffer;
 
+        /** True to stop the runner after the current pass. */
         private volatile boolean _stop;
 
         /** Writer runner with its own scratch buffer. */

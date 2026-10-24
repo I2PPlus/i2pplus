@@ -25,6 +25,7 @@ import net.i2p.util.SystemVersion;
  * @since 0.9.33
  */
 public class InfoHelper extends HelperBase {
+    /** Set when the full status page is shown. */
     private boolean _full;
 
     /**
@@ -263,6 +264,12 @@ public class InfoHelper extends HelperBase {
       return db.getASNBuildInfo();
     }
 
+    /**
+     * Writes the status page's HTML.
+     *
+     * @param out where the page is written
+     * @throws IOException if the writer fails
+     */
     private void renderStatusHTML(Writer out) throws IOException {
         StringBuilder buf = new StringBuilder(4*1024);
         RouterInfo ri = _context.router().getRouterInfo();

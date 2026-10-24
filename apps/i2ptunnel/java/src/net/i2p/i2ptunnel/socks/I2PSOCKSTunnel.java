@@ -44,6 +44,7 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
      */
     protected static final int INITIAL_SO_TIMEOUT = 30*1000;
 
+    /** Proxy settings by port, with a "default" entry for the rest */
     private final HashMap<String, List<String>> proxies;  // port# + "" or "default" -> hostname list
 
     /**
@@ -131,6 +132,7 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
         super.optionsUpdated(tunnel);
     }
 
+    /** Reads the proxy settings out of the tunnel's options. */
     private void parseOptions() {
         Properties opts = getTunnel().getClientOptions();
         if (!opts.containsKey(PROP_PROXY_DEFAULT)) {

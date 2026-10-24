@@ -43,8 +43,11 @@ public abstract class NamingService {
     /** What classname should be used as the naming service impl? */
     public static final String PROP_IMPL = "i2p.naming.impl";
 
+    /** Naming service used when the property is unset. */
     private static final String DEFAULT_IMPL = "net.i2p.router.naming.BlockfileNamingService";
+    /** The previous default, still accepted. */
     private static final String OLD_DEFAULT_IMPL = "net.i2p.client.naming.BlockfileNamingService";
+    /** Service tried when the configured one fails. */
     private static final String BACKUP_IMPL = "net.i2p.client.naming.HostsTxtNamingService";
 
     /**
@@ -166,9 +169,8 @@ public abstract class NamingService {
         return true;
     }
 
-    // These are for daisy chaining (MetaNamingService)
-
     /**
+     * For daisy chaining (MetaNamingService).
      * This implementation returns null.
      * Subclasses implementing chaining should override.
      *
@@ -227,10 +229,6 @@ public abstract class NamingService {
     public boolean removeNamingService(NamingService ns) {
         return false;
     }
-
-    // options would be used to specify public / private / master ...
-    // or should we just daisy chain 3 HostsTxtNamingServices ?
-    // that might be better... then addressbook only talks to the 'router' HostsTxtNamingService
 
     /**
      * The number of entries in this naming service.

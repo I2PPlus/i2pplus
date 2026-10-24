@@ -35,6 +35,7 @@ import java.time.Instant;
  *
  */
 public class TimeParser {
+    /** Operator for "previous", used in place of + or -. */
     private static final int PREVIOUS_OP = -1;
 
     /** Current token */
@@ -231,6 +232,13 @@ public class TimeParser {
         }
     }
 
+    /**
+     * Sets the day, month and year of the result.
+     *
+     * @param mday day of the month
+     * @param mon the month number, 1 to 12
+     * @param year the year, with the century
+     */
     private void assignDate(long mday, long mon, long year) {
         if (year >= 0 && year < 38) {
             // 00-37  means post 2000
@@ -244,6 +252,7 @@ public class TimeParser {
         spec.day = (int) mday;
     }
 
+    /** Parses a day: a name, a month-day, or a full date. */
     private void day() {
         long mday = 0;
         long wday;

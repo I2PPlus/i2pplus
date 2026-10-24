@@ -8,13 +8,19 @@ import java.util.Arrays;
  */
 public final class Poly1305 implements Destroyable, Cloneable {
 
-    // The 130-bit intermediate values are broken up into five 26-bit words.
+    /** The 16-byte nonce of the final tag. */
     private final byte[] nonce;
+    /** The message block being absorbed. */
     private final byte[] block;
+    /** The 130-bit accumulator, broken up into five 26-bit words. */
     private final int[] h;
+    /** The secret key, in intermediate form. */
     private final int[] r;
+    /** The final tag, in intermediate form. */
     private final int[] c;
+    /** Scratch space for the intermediate sums. */
     private final long[] t;
+    /** Bytes absorbed into the current block. */
     private int posn;
 
     /**

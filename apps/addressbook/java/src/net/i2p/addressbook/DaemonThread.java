@@ -12,7 +12,9 @@ import net.i2p.util.I2PAppThread;
  */
 public class DaemonThread extends I2PAppThread implements NamingServiceUpdater {
 
+    /** Arguments passed to the daemon's main method. */
     private final String[] args;
+    /** The class whose main method is run. */
     private final Daemon daemon;
 
     /**

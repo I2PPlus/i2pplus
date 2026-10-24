@@ -38,10 +38,14 @@ import org.tanukisoftware.wrapper.WrapperManager;
  * Controls router operations including shutdown, restart, graceful shutdown, graceful restart, reseeding, and update management.
  */
 public class RouterManagerHandler implements RequestHandler {
+    /** Logger for this class. */
     private static final Log _log = new Log(RouterManagerHandler.class);
+    /** Reads the request's arguments. */
     private final JSONRPC2Helper _helper;
+    /** The router being managed. */
     private final RouterContext _context;
 
+    /** How long the shutdown may drain, in ms. */
     private final static int SHUTDOWN_WAIT = 1500;
 
 
@@ -78,6 +82,12 @@ public class RouterManagerHandler implements RequestHandler {
         }
     }
 
+    /**
+     * Runs the requested router management action.
+     *
+     * @param req the request to answer
+     * @return the reply to send
+     */
     private JSONRPC2Response process(JSONRPC2Request req) {
         JSONRPC2Error err = _helper.validateParams(null, req);
         if (err != null)
@@ -240,6 +250,7 @@ public class RouterManagerHandler implements RequestHandler {
 
     /** Task to update the wrapper manager with a specific exit code */
     public static class UpdateWrapperManagerTask implements Runnable {
+        /** Exit code to use when the router stops. */
         private int _exitCode;
         /**
          * Holds the exit code to report to the wrapper manager when run.

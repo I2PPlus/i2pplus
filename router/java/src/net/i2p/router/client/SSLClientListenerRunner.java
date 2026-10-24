@@ -30,11 +30,16 @@ import net.i2p.util.SecureDirectory;
  */
 class SSLClientListenerRunner extends ClientListenerRunner {
 
+    /** Factory for the encrypted listener's sockets. */
     private SSLServerSocketFactory _factory;
 
+    /** Property holding the keystore's password. */
     private static final String PROP_KEYSTORE_PASSWORD = "i2cp.keystorePassword";
+    /** Property holding the key's password. */
     private static final String PROP_KEY_PASSWORD = "i2cp.keyPassword";
+    /** Alias of the key in the keystore. */
     private static final String KEY_ALIAS = "i2cp";
+    /** File the certificate is written out as text. */
     private static final String ASCII_KEYFILE = "i2cp.local.crt";
     /**
      * Creates an SSL listener on the given port, opening the client manager.

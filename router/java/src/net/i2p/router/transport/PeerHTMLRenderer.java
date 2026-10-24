@@ -28,16 +28,21 @@ import net.i2p.util.Translate;
  */
 public class PeerHTMLRenderer {
 
+    /** Bundle of the common translated strings. */
     private static final String BUNDLE_NAME = "net.i2p.router.web.messages";
+    /** Bundle of the translated country names. */
     private static final String COUNTRY_BUNDLE_NAME = "net.i2p.router.countries.messages";
 
     /** Removes the leading D/E/G bandwidth marker from a visible capacity string. */
     private final RouterContext _context;
+    /** The lookup of the peer countries. */
     private final CountryLookup _countryLookup;
+    /** The reverse dns lookup of peer addresses. */
     private final ReverseDnsLookup _rdns;
 
-    // Cache RouterInfo and Capacity to improve repeated lookup efficiency
+    /** The cached router infos, by peer, to speed repeated lookups. */
     private final Map<Hash, RouterInfo> routerInfoCache = Collections.synchronizedMap(new LHMCache<>(5000));
+    /** The cached capacity strings, by peer. */
     private final Map<Hash, String> capacityCache = Collections.synchronizedMap(new LHMCache<>(5000));
 
     /**
@@ -203,6 +208,12 @@ public class PeerHTMLRenderer {
         return buf.toString();
     }
 
+    /**
+     * Gets the router info from the cache.
+     *
+     * @param peer the hash of the peer
+     * @return the router info, null if absent
+     */
     private RouterInfo getRouterInfoCached(Hash peer) {
         RouterInfo rv = routerInfoCache.get(peer);
         if (rv == null) {
@@ -214,6 +225,12 @@ public class PeerHTMLRenderer {
         return rv;
     }
 
+    /**
+     * Gets the capacity text from the cache.
+     *
+     * @param peer the hash of the peer
+     * @return the capacity text
+     */
     private String getCapacityCached(Hash peer) {
         String rv = capacityCache.get(peer);
         if (rv == null) {

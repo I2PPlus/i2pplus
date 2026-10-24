@@ -9,8 +9,11 @@ import net.i2p.data.PublicKey;
  * @since 0.9.44
  */
 class NextSessionKey extends PublicKey {
+    /** Which key in the sequence this one is. */
     private final int _id;
+    /** True for the key sent by the other side. */
     private final boolean _isReverse;
+    /** True when this key is asked for, not offered. */
     private final boolean _isRequest;
 
     /**
@@ -46,9 +49,9 @@ class NextSessionKey extends PublicKey {
     }
 
     /**
-     * The session identifier.
+     * Which key in the sequence this one is.
      *
-     * @return the session identifier
+     * @return the id as carried on the wire, 0-65535
      */
     public int getID() {
         return _id;

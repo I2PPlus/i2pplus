@@ -127,6 +127,17 @@ public class ByteArray implements Serializable, Comparable<ByteArray> {
         return false;
     }
 
+    /**
+     * True when the two ranges hold the same bytes.
+     *
+     * @param lhs the first array
+     * @param loff where its range starts
+     * @param llen its range length
+     * @param rhs the second array
+     * @param roff where its range starts
+     * @param rlen its range length
+     * @return true if the ranges are equal
+     */
     private static final boolean compare(byte[] lhs, int loff, int llen, byte[] rhs, int roff, int rlen) {
         return (llen == rlen) && DataHelper.eq(lhs, loff, rhs, roff, llen);
     }

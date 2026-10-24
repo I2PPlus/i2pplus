@@ -62,6 +62,8 @@ public class StreamrConsumer extends I2PTunnelUDPClientBase {
         return super.close(forced);
     }
 
+    /** Where received messages are delivered. */
     private final UDPSink sink;
+    /** Sends the keep-alive pings. */
     private final Pinger pinger;
 }

@@ -154,12 +154,12 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
 
     /** Is this a follow-up byte? */
     private static final byte MASK_IS_SUBSEQUENT = FragmentHandler.MASK_IS_SUBSEQUENT;
-    /** How should this be delivered? Shift right 5 to get TYPE_*. */
-    //private static final byte MASK_TYPE = FragmentHandler.MASK_TYPE;
     /** Is this the first fragment of a fragmented message? */
     private static final byte MASK_FRAGMENTED = FragmentHandler.MASK_FRAGMENTED;
 
+    /** Type bits of a tunnel fragment */
     private static final byte MASK_TUNNEL = (byte)(FragmentHandler.TYPE_TUNNEL << 5);
+    /** Type bits of a router fragment */
     private static final byte MASK_ROUTER = (byte)(FragmentHandler.TYPE_ROUTER << 5);
 
     /**

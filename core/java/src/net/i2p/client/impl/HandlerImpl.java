@@ -19,6 +19,7 @@ import net.i2p.util.Log;
 abstract class HandlerImpl implements I2CPMessageHandler {
     /** The logger. */
     protected final Log _log;
+    /** The message type this handler is registered for. */
     private final int _type;
     /** The application context. */
     protected final I2PAppContext _context;

@@ -43,9 +43,13 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  */
 final class YKGenerator {
+    /** Fewest builder threads allowed. */
     private final int MIN_NUM_BUILDERS;
+    /** Most builder threads allowed. */
     private final int MAX_NUM_BUILDERS;
+    /** Delay between the value calculations. */
     private final int CALC_DELAY;
+    /** The precalculated Y values waiting for use. */
     private final LinkedBlockingQueue<BigInteger[]> _values;
     /**
      * Pool occupancy, maintained alongside {@link #_values}: sampling
@@ -65,7 +69,9 @@ final class YKGenerator {
      * back into it.
      */
     private final AtomicBoolean _pinged = new AtomicBoolean();
+    /** The app context. */
     private final I2PAppContext ctx;
+    /** True while the generator runs. */
     private volatile boolean _isRunning;
 
     /** Property: minimum pool threshold. */
@@ -202,6 +208,7 @@ final class YKGenerator {
         _pinged.set(false);
     }
 
+    /** The big integer two. */
     private static final BigInteger TWO = new NativeBigInteger(1, new byte[] {0x02});
 
     /**
@@ -236,7 +243,9 @@ final class YKGenerator {
          */
         private static final int MIN_SLACK = 5;
 
+        /** Smallest size of the value queue. */
         private final int _minSize;
+        /** Largest size of the value queue. */
         private final int _maxSize;
 
         /** Check every 30 seconds whether fewer than the minimum YK pairs remain. */
@@ -247,6 +256,12 @@ final class YKGenerator {
         /** Wall clock time at the end of the previous cycle. */
         private long _lastSample;
 
+        /**
+         * Builds one precalculation runner.
+         *
+         * @param minSize the smallest size of the value queue
+         * @param maxSize the largest size of the value queue
+         */
         private YKPrecalcRunner(int minSize, int maxSize) {
             _minSize = minSize;
             _maxSize = maxSize;

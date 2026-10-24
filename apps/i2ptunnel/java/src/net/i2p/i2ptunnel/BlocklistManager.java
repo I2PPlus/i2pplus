@@ -48,13 +48,21 @@ public class BlocklistManager {
     /** Default maximum number of entries in the client blocklist. */
     public static final int DEFAULT_CLIENT_LIMIT = 512;
 
+    /** Logger for this class. */
     private final Log _log;
+    /** Directory the blocklist file is read from. */
     private final File _configDir;
+    /** Compiled pattern matching blocked addresses. */
     private Pattern _regexPattern = null;
+    /** File timestamp the pattern was built at. */
     private long _blocklistLastModified;
+    /** The blocked addresses read from the file. */
     private List<String> _clientBlockList = new ArrayList<>();
+    /** File timestamp the shared list was read at. */
     private static long blocklistClientsLastModified;
+    /** Size of the shared list, -1 before first read. */
     private static int cachedClientBlockListSize = -1;
+    /** Most clients this tunnel allows, from the blocklist. */
     private int _clientLimit;
 
     /**

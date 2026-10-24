@@ -36,6 +36,7 @@ import java.util.Hashtable;
 /** A collection of static utility methods for shapes and images. */
 public final class GraphicsUtils {
 
+    /** Utility class, not intended for instantiation. */
     private GraphicsUtils() {
         // no need to instantiate this
     }

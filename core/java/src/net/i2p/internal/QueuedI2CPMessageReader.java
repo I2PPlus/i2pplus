@@ -20,7 +20,9 @@ import net.i2p.util.Log;
  * @since 0.8.3
  */
 public class QueuedI2CPMessageReader extends I2CPMessageReader {
+    /** The queue messages are read from. */
     private final I2CPMessageQueue in;
+    /** True while the reader is registered with the dispatcher. */
     private volatile boolean registered;
     /**
      * Set while a worker is serving this reader.
@@ -31,6 +33,7 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
      */
     private final AtomicBoolean _claimed = new AtomicBoolean();
 
+    /** The shared dispatcher feeding all the readers. */
     private static final InternalI2CPDispatcher DISPATCHER = new InternalI2CPDispatcher();
 
     /** Messages one worker takes from a reader before requeueing it. */
@@ -179,6 +182,9 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
      * its departure.
      */
     private static class InternalI2CPDispatcher implements Runnable {
+        /** Dispatches the messages read from the client. */
+        private InternalI2CPDispatcher() {}
+        /** The readers currently registered. */
         private final Set<QueuedI2CPMessageReader> readers =
             Collections.newSetFromMap(new ConcurrentHashMap<QueuedI2CPMessageReader, Boolean>());
         /** Readers waiting to be served. Requeued readers go to the back, so no client monopolises it. */
@@ -240,12 +246,20 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
             new I2PThread(this, "I2CPDisp." + threadCount++, true).start();
         }
 
-        /** Whether any reader is registered, and so whether the pool must stay up. */
+        /**
+         * Whether any reader is registered, and so whether the pool must stay up.
+         *
+         * @return true if a reader is registered
+         */
         private synchronized boolean hasReaders() {
             return !readers.isEmpty();
         }
 
-        /** Whether this worker can retire, keeping at least one for the registered readers. */
+        /**
+         * Whether this worker can retire, keeping at least one for the registered readers.
+         *
+         * @return true if more workers are live than the readers need
+         */
         private synchronized boolean isSurplus() {
             return liveThreads > 1;
         }

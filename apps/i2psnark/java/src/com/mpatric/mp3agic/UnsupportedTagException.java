@@ -6,6 +6,7 @@ package com.mpatric.mp3agic;
  */
 public class UnsupportedTagException extends BaseException {
 
+    /** Pinned for serialized-form compatibility. */
     private static final long serialVersionUID = 1L;
 
     /**

@@ -21,7 +21,9 @@ import net.i2p.util.SimpleTimer2;
  * it'll get queued up for starting 2 minutes later.
  */
 public class LoadClientAppsJob extends JobImpl {
+    /** Logger for the client app loading. */
     private final Log _log;
+    /** True once the client apps have been loaded. */
     private static boolean _loaded = false;
 
     /**
@@ -85,11 +87,17 @@ public class LoadClientAppsJob extends JobImpl {
          * The router context used to start the app when this event fires.
          */
         protected final RouterContext _ctx;
+        /** Class name of the app to load. */
         private final String _className;
+        /** Name of the client from the config. */
         private final String _clientName;
+        /** Arguments passed to the app. */
         private final String[] _args;
+        /** Logger for the app loading. */
         private final Log _log;
+        /** Thread group for the app's threads. */
         private final ThreadGroup _threadGroup; // NOSONAR S3014 ThreadGroup used for thread naming, not pool management
+        /** Class loader for the app's classes. */
         private final ClassLoader _cl;
 
         /**
@@ -137,7 +145,17 @@ public class LoadClientAppsJob extends JobImpl {
         }
     }
 
+    /** Job waiting for the netdb before loading a client. */
     private static class WaitForRunningClient extends DelayedRunClient {
+        /**
+         * Builds the netdb wait job.
+         *
+         * @param pool the timer to reschedule on
+         * @param enclosingContext the router context
+         * @param className the class name of the app to load
+         * @param clientName the name of the client app to wait for
+         * @param args the arguments for the app
+         */
         WaitForRunningClient(SimpleTimer2 pool, RouterContext enclosingContext, String className, String clientName,
                              String[] args) {
             super(pool, enclosingContext, className, clientName, args, null, null);
@@ -311,16 +329,30 @@ public class LoadClientAppsJob extends JobImpl {
         t.start();
     }
 
+    /** Runner that loads and starts one client app. */
     private static final class RunApp implements Runnable {
+        /** Class name of the app to run. */
         private final String _className;
+        /** Name of the app for the logs. */
         private final String _appName;
+        /** Arguments passed to the app. */
         private final String[] _args;
+        /** The router context. */
         private final RouterContext _ctx;
+        /** Logger for the app loading. */
         private final Log _log;
+        /** Class loader for the app's classes. */
         private final ClassLoader _cl;
 
         /**
          * Creates the runnable that loads and starts one client application class.
+         *
+         * @param className the class name of the app to run
+         * @param appName the name of the app for the logs
+         * @param args the arguments passed to the app
+         * @param ctx the router context
+         * @param log the logger for the app loading
+         * @param cl the class loader for the app's classes, null for the default
          */
         public RunApp(String className, String appName, String[] args, RouterContext ctx, Log log, ClassLoader cl) {
             _className = className;
@@ -372,14 +404,33 @@ public class LoadClientAppsJob extends JobImpl {
             }
         }
 
+        /**
+         * Checks whether the class is a router app.
+         *
+         * @param cls the class to check
+         * @return true if it is a router app
+         */
         private static boolean isRouterApp(Class<?> cls) {
             return isInterface(cls, RouterApp.class);
         }
 
+        /**
+         * Checks whether the class is a client app.
+         *
+         * @param cls the class to check
+         * @return true if it is a client app
+         */
         private static boolean isClientApp(Class<?> cls) {
             return isInterface(cls, ClientApp.class);
         }
 
+        /**
+         * Checks whether the class implements an interface.
+         *
+         * @param cls the class to check
+         * @param intfc the interface to look for
+         * @return true if the interface is implemented
+         */
         private static boolean isInterface(Class<?> cls, Class<?> intfc) {
             try {
                 Class<?>[] intfcs = cls.getInterfaces();

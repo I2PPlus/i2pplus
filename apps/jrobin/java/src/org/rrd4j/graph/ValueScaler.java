@@ -5,8 +5,11 @@ package org.rrd4j.graph;
  * selection and value scaling for optimal display.
  */
 class ValueScaler {
+    /** Values are scaled to multiples of this. */
     private final double base;
+    /** The scale factor applied, -1 before the first scaling. */
     private double magfact = -1; // nothing scaled before, rescale
+    /** Unit suffix chosen by the scaling. */
     private String unit;
 
     /**
@@ -46,6 +49,12 @@ class ValueScaler {
         }
         return scaled;
     }
+    /**
+     * Picks a scale that keeps the value readable.
+     *
+     * @param value the value to scale
+     * @return the scaled value and its unit
+     */
     private Scaled rescale(double value) {
         int sindex;
         if (value == 0.0 || Double.isNaN(value)) {

@@ -10,6 +10,7 @@ import java.security.spec.AlgorithmParameterSpec;
  *
  */
 public class EdDSAGenParameterSpec implements AlgorithmParameterSpec {
+    /** Name of the curve to generate the key pair on. */
     private final String name;
 
     /**

@@ -25,6 +25,7 @@ public class DestroySessionMessage extends I2CPMessageImpl {
      * I2CP message type code for a session teardown request.
      */
     public static final int MESSAGE_TYPE = 3;
+    /** The session the client is closing. */
     private SessionId _sessionId;
 
     /**
@@ -33,8 +34,8 @@ public class DestroySessionMessage extends I2CPMessageImpl {
     public DestroySessionMessage() { /* required for I2CP deserialization */ }
 
     /**
-     * Session id.
-     * @return the session id
+     * Session being closed.
+     * @return the session id, null until set or read
      */
     public SessionId getSessionId() {
         return _sessionId;

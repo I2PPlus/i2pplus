@@ -21,9 +21,13 @@ import net.i2p.data.SigningPrivateKey;
  * Used by {@link KeyManager}, ClientMessageEventListener, GarlicMessageReceiver.
  */
 public class LeaseSetKeys {
+    /** Key that revokes the lease set. */
     private final SigningPrivateKey _revocationKey;
+    /** The ElGamal decryption key. */
     private final PrivateKey _decryptionKey;
+    /** The ECIES decryption key. */
     private final PrivateKey _decryptionKeyEC;
+    /** The post-quantum decryption key. */
     private final PrivateKey _decryptionKeyPQ;
 
     /**
@@ -40,6 +44,7 @@ public class LeaseSetKeys {
      * Unmodifiable, ElGamal and ECIES-X25519.
      */
     public static final Set<EncType> SET_BOTH = Collections.unmodifiableSet(EnumSet.of(EncType.ELGAMAL_2048, EncType.ECIES_X25519));
+    /** The empty set, for a lease set that accepts nothing. */
     private static final Set<EncType> SET_NONE = Collections.emptySet();
     /**
      * Unmodifiable, PQ only.

@@ -12,10 +12,15 @@ class VIAInfoImpl extends CPUIDCPUInfo implements VIACPUInfo {
      */
     VIAInfoImpl() {}
 
+    /** True if the CPU takes C3 instructions. */
     private static boolean isC3Compatible;
+    /** True if the CPU takes Nano instructions. */
     private static boolean isNanoCompatible;
 
-    // If modelString != null, the cpu is considered correctly identified.
+    /**
+     * The CPU's model string, null if it could not be read; a non-null model
+     * means the CPU was correctly identified as a VIA.
+     */
     private static final String smodel = identifyCPU();
 
     public boolean IsC3Compatible(){ return isC3Compatible; }
@@ -37,6 +42,11 @@ class VIAInfoImpl extends CPUIDCPUInfo implements VIACPUInfo {
     }
 
 
+    /**
+     * Reads the CPU's model string from /proc.
+     *
+     * @return the model, null if it cannot be read
+     */
     private static String identifyCPU()
     {
         // http://en.wikipedia.org/wiki/Cpuid

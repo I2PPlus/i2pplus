@@ -25,18 +25,23 @@ class MagnetState {
      */
     public static final int CHUNK_SIZE = 16 * 1024;
 
+    /** The torrent's info hash. */
     private final byte[] infohash;
+    /** True once the metadata is fully fetched. */
     private boolean complete;
 
     /** If false, nothing below is valid. */
     private boolean isInitialized;
 
+    /** Total size of the metadata, in bytes. */
     private int metaSize;
+    /** Number of metadata pieces. */
     private int totalChunks;
 
     /** Bitfield for the metainfo chunks; remains null if we start out complete. */
     private BitField requested;
 
+    /** Which metadata pieces have arrived. */
     private BitField have;
 
     /** Bitfield for the metainfo. */

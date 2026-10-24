@@ -64,12 +64,15 @@ public class Jsoner {
         INITIAL,
         /** Parsing error, ParsingException should be thrown. */
         PARSED_ERROR,
+        /** State while reading an array. */
         PARSING_ARRAY,
         /** Parsing a key-value pair inside of an object. */
         PARSING_ENTRY,
+        /** State while reading an object. */
         PARSING_OBJECT;
     }
 
+    /** Utility class, not intended for instantiation. */
     private Jsoner() {
         /* Keeping it classy. */
     }

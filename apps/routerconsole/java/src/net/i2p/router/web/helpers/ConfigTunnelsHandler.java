@@ -18,6 +18,7 @@ public class ConfigTunnelsHandler extends FormHandler {
     /** Creates a handler; the container calls it with no arguments before each submission. */
     public ConfigTunnelsHandler() {}
 
+    /** Set when the form was submitted for saving. */
     private boolean _shouldSave;
 
     @Override
@@ -143,6 +144,12 @@ public class ConfigTunnelsHandler extends FormHandler {
         }
     }
 
+    /**
+     * Reads an integer out of a form value.
+     *
+     * @param val the value to read
+     * @return the number, 0 if it is not a number
+     */
     private static final int getInt(Object val) {
         if (val == null) return 0;
         String str = null;

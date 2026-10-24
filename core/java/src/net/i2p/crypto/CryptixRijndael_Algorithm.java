@@ -17,30 +17,47 @@ public final class CryptixRijndael_Algorithm {
      */
     private CryptixRijndael_Algorithm() {}
 
-    // Constants and variables
-    //...........................................................................
 
+    /** Block size of the cipher, in bytes. */
     private static final int _BLOCK_SIZE = 16; // default block size in bytes
 
+    /** Table mapping an exponent to a field element. */
     private static final int[] _alog = new int[256];
+    /** Table mapping a field element to its exponent. */
     private static final int[] _log = new int[256];
 
+    /** The forward S-box. */
     private static final byte[] _S = new byte[256];
+    /** The inverse S-box. */
     private static final byte[] _Si = new byte[256];
+    /** Forward round table 1. */
     private static final int[] _T1 = new int[256];
+    /** Forward round table 2. */
     private static final int[] _T2 = new int[256];
+    /** Forward round table 3. */
     private static final int[] _T3 = new int[256];
+    /** Forward round table 4. */
     private static final int[] _T4 = new int[256];
+    /** Forward round table 5. */
     private static final int[] _T5 = new int[256];
+    /** Forward round table 6. */
     private static final int[] _T6 = new int[256];
+    /** Forward round table 7. */
     private static final int[] _T7 = new int[256];
+    /** Forward round table 8. */
     private static final int[] _T8 = new int[256];
+    /** Inverse round table 1. */
     private static final int[] _U1 = new int[256];
+    /** Inverse round table 2. */
     private static final int[] _U2 = new int[256];
+    /** Inverse round table 3. */
     private static final int[] _U3 = new int[256];
+    /** Inverse round table 4. */
     private static final int[] _U4 = new int[256];
+    /** The round constants. */
     private static final byte[] _rcon = new byte[30];
 
+    /** The row shift offsets, by key length. */
     private static final int[][][] _shifts = new int[][][] { { { 0, 0}, { 1, 3}, { 2, 2}, { 3, 1}},
                                                              { { 0, 0}, { 1, 5}, { 2, 4}, { 3, 3}},
                                                              { { 0, 0}, { 1, 7}, { 3, 5}, { 4, 4}}};
@@ -181,12 +198,24 @@ public final class CryptixRijndael_Algorithm {
         }
     }
 
-    // multiply two elements of GF(2^m)
+    /**
+     * Multiplies two elements in GF(2^8).
+     *
+     * @param a the first element
+     * @param b the second element
+     * @return the field product
+     */
     private static final int mul(int a, int b) {
         return (a != 0 && b != 0) ? _alog[(_log[a & 0xFF] + _log[b & 0xFF]) % 255] : 0;
     }
 
-    // convenience method used in generating Transposition boxes
+    /**
+     * Multiplies an element by a four byte value.
+     *
+     * @param a the element to multiply by
+     * @param b the four bytes to multiply
+     * @return the packed product
+     */
     private static final int mul4(int a, byte[] b) {
         if (a == 0) return 0;
         a = _log[a & 0xFF];
@@ -197,8 +226,6 @@ public final class CryptixRijndael_Algorithm {
         return a0 << 24 | a1 << 16 | a2 << 8 | a3;
     }
 
-    // Basic API methods
-    //...........................................................................
 
     /**
      * Convenience method to expand a user-supplied key material into a
@@ -348,8 +375,6 @@ public final class CryptixRijndael_Algorithm {
         result[outOffset++] = (byte) (_Si[t0 & 0xFF] ^ tt);
     }
 
-    // Rijndael own methods
-    //...........................................................................
 
     /**
      * Default input block length for Rijndael.

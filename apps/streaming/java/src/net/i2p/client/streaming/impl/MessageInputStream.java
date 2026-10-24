@@ -61,6 +61,7 @@ class MessageInputStream extends InputStream {
      */
     private static final int MAX_PACKET_COUNT = 2048;
 
+    /** Logger for the message input stream. */
     private final Log _log;
     /** Ordered list of fully received data blocks ready for reading. */
     private final List<ByteArray> _readyDataBlocks;
@@ -84,7 +85,9 @@ class MessageInputStream extends InputStream {
     /** Total number of bytes read from this stream. */
     private long _readTotal;
 
+    /** Largest size of one message block. */
     private final int _maxMessageSize; // Max size per message block
+    /** Most messages in the receive window. */
     private final int _maxWindowSize;  // Max number of messages in window
 
     /**
@@ -93,6 +96,7 @@ class MessageInputStream extends InputStream {
      */
     private static final int MAX_GROW_BUFFER = 8 * 1024 * 1024;
 
+    /** Largest total buffer size in bytes. */
     private int _maxBufferSize;  // Max total buffer size in bytes
 
     /**
@@ -109,9 +113,12 @@ class MessageInputStream extends InputStream {
      */
     private int _peakBuffered;
 
+    /** Most packets held regardless of size. */
     private final int _maxPacketCount; // Max number of packets regardless of size
 
+    /** Buffer for single byte reads. */
     private final byte[] _oneByte = new byte[1]; // For single-byte reads
+    /** Lock for the synchronized buffer access. */
     private final Object _dataLock = new Object(); // Lock for synchronized access
 
     /**
@@ -125,7 +132,10 @@ class MessageInputStream extends InputStream {
      */
     private static final ByteArray DUMMY_BA = new ByteArray(null);
 
-    // Total size of all ready data blocks (for fast available() and canAccept())
+    /**
+     * Total bytes of the ready data blocks, for a fast available and
+     * canAccept.
+     */
     private int _readyDataSize = 0;
 
     /**
@@ -376,6 +386,12 @@ class MessageInputStream extends InputStream {
         return false;
     }
 
+    /**
+     * Logs a message that did not fit the buffer.
+     *
+     * @param messageId the message that did not fit
+     * @param available bytes still available in the buffer
+     */
     private void logBufferFull(long messageId, int available) {
         if (_log.shouldWarn()) {
             _log.warn("Dropping message " + messageId + ", buffer size exceeded: available=" + available);
@@ -385,6 +401,11 @@ class MessageInputStream extends InputStream {
         }
     }
 
+    /**
+     * Logs a block beyond the receive window.
+     *
+     * @param messageId the message that was too far ahead
+     */
     private void logBufferBlockWindowExceeded(long messageId) {
         if (_log.shouldWarn()) {
             _log.warn("Dropping message " + messageId + ", exceeds allowed buffer blocks window");
@@ -394,6 +415,11 @@ class MessageInputStream extends InputStream {
         }
     }
 
+    /**
+     * Logs a block held back by too many ready blocks.
+     *
+     * @param messageId the message that was held back
+     */
     private void logTooManyReadyBlocks(long messageId) {
         if (_log.shouldWarn()) {
             _log.warn("Dropping message " + messageId + ", too many ready blocks");

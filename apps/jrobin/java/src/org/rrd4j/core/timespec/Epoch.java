@@ -70,6 +70,7 @@ public class Epoch extends JFrame {
     private final SimpleDateFormat OUTPUT_DATE_FORMAT =
             new SimpleDateFormat("MM/dd/yy HH:mm:ss EEE");
 
+    /** Starts the epoch converter window. */
     private Epoch() {
         super("Epoch");
         for (int i = 0; i < parsers.length; i++) {
@@ -93,6 +94,7 @@ public class Epoch extends JFrame {
         timer.start();
     }
 
+    /** Builds the converter's text fields and buttons. */
     private void constructUI() {
         JPanel c = (JPanel) getContentPane();
         c.setLayout(new BorderLayout(3, 3));
@@ -118,6 +120,7 @@ public class Epoch extends JFrame {
         setVisible(true);
     }
 
+    /** Places the window in the middle of the screen. */
     private void centerOnScreen() {
         Toolkit t = Toolkit.getDefaultToolkit();
         Dimension screenSize = t.getScreenSize();
@@ -127,6 +130,7 @@ public class Epoch extends JFrame {
         setLocation((int) x, (int) y);
     }
 
+    /** Converts the entered epoch or date and shows the result. */
     private void convert() {
         String time = inputField.getText().trim();
         if (time.length() > 0) {
@@ -146,15 +150,27 @@ public class Epoch extends JFrame {
         }
     }
 
+    /** Shows the current time as an epoch value. */
     private void showTimestamp() {
         long timestamp = Util.getTime();
         setTitle(timestamp + " seconds since epoch");
     }
 
+    /**
+     * Writes a date into the epoch field.
+     *
+     * @param date the date to show
+     */
     private synchronized void formatDate(Date date) {
         inputField.setText(OUTPUT_DATE_FORMAT.format(date));
     }
 
+    /**
+     * Reads a date from the text field.
+     *
+     * @param time the text to parse
+     * @return the epoch seconds it names
+     */
     private synchronized long parseDate(String time) {
         for (SimpleDateFormat parser : parsers) {
             try {

@@ -30,6 +30,10 @@ import net.metanotion.util.skiplist.*;
  * @param <V> type of mapped values
  */
 public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V> implements Closeable {
+    /**
+     * Written first in a persisted list, so a wrong file is
+     * recognised
+     */
     private static final long MAGIC = 0x536b69704c697374L;  // "SkipList"
     /** Page number of the first span */
     public int firstSpanPage = 0;
@@ -47,6 +51,7 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
     /** Level cache */
     final HashMap<Integer, SkipLevels<K, V>> levelHash = new HashMap<>();
 
+    /** True when the list is stored entirely on disk. */
     private final boolean fileOnly;
 
     /**

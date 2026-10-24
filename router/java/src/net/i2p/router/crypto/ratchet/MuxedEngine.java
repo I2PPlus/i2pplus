@@ -13,7 +13,9 @@ import net.i2p.util.Log;
  * @since 0.9.44
  */
 final class MuxedEngine {
+    /** The router context the engine runs in. */
     private final RouterContext _context;
+    /** Logger for this class. */
     private final Log _log;
 
     /**

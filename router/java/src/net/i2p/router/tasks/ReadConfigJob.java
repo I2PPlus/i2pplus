@@ -27,8 +27,11 @@ import net.i2p.util.Log;
  * to set {@code routerconsole.advanced}=true without restarting.
  */
 public class ReadConfigJob extends JobImpl {
+    /** How often the config is reread - every minute. */
     private static final long DELAY = 60*1000L; // reread every minute
+    /** When the config file was last read, in ms. */
     private volatile long _lastRead;
+    /** Property the advanced settings live under. */
     private static final String PROP_ADVANCED = "routerconsole.advanced";
 
     /**
@@ -88,6 +91,12 @@ public class ReadConfigJob extends JobImpl {
             requeue(DELAY / 2 * 3L); // 90 seconds
     }
 
+    /**
+     * Checks whether the config file changed since the last read.
+     *
+     * @param configFile the config file to check
+     * @return true if it is newer than the last read
+     */
     private boolean shouldReread(File configFile) {
         // lastModified() returns 0 if not found
         return configFile.lastModified() > _lastRead;

@@ -26,6 +26,7 @@ import java.util.Set;
  * @since 0.9.58
  */
 public class ObjectCounterUnsafe<K> {
+    /** Counts by key. */
     private final HashMap<K, Int> map = new HashMap<>();
 
     /**
@@ -117,8 +118,14 @@ public class ObjectCounterUnsafe<K> {
      * Modifiable integer.
      */
     private static class Int {
+        /** How many times the key was seen. */
         int c;
 
+        /**
+         * Starts the count at a given value.
+         *
+         * @param i the initial count
+         */
         public Int(int i) {
             c = i;
         }
@@ -128,6 +135,8 @@ public class ObjectCounterUnsafe<K> {
      * Reverse sort.
      */
     private class ObjComparator implements Comparator<K> {
+        /** Orders keys by how often they were seen. */
+        private ObjComparator() {}
         @Override
         public int compare(K l, K r) {
             int rv = map.get(r).c - map.get(l).c;

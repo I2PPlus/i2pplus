@@ -8,6 +8,7 @@ import java.io.Serializable;
  *
  */
 public class Curve implements Serializable {
+    /** Pinned for serialized-form compatibility. */
     private static final long serialVersionUID = 4578920872509827L;
     /** The finite field. */
     private final Field f;

@@ -34,10 +34,15 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     private final HopConfig[] _config;
     /** Gateway first. */
     private final Hash[] _peers;
+    /** When the tunnel expires. */
     private volatile long _expiration;
+    /** The hop order of the tunnel. */
     private List<Integer> _order;
+    /** Message id the build reply arrives on. */
     private long _replyMessageId;
+    /** True for an inbound tunnel. */
     private final boolean _isInbound;
+    /** Messages processed on the tunnel. */
     private final AtomicInteger _messagesProcessed = new AtomicInteger();
     /**
      * Total verified bytes on this tunnel.  A {@link LongAdder} so the
@@ -74,7 +79,9 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      * @since 0.9.71+
      */
     private final long _creationTime = System.currentTimeMillis();
+    /** Hard failures counted on the tunnel. */
     private final AtomicInteger _failures = new AtomicInteger();
+    /** Soft failures counted on the tunnel. */
     private final AtomicInteger _softFailures = new AtomicInteger();
     /**
      * Wall-clock time of the most recent soft best-effort timeout, 0 if none.
@@ -109,9 +116,12 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      * @since 0.9.71+
      */
     private volatile boolean _firstHopFailed;
+    /** Current test status of the tunnel. */
     private volatile TunnelTestStatus _testStatus = TunnelTestStatus.UNTESTED;
 
+    /** True if the tunnel was reused for another pool. */
     private volatile boolean _reused;
+    /** Priority of the tunnel for bandwidth and builds. */
     private volatile int _priority;
     /**
      * Whether a transport session to our local hop existed when this tunnel entered
@@ -141,13 +151,19 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      * @since 0.9.71+
      */
     private volatile long _peakThroughputLastCoallesce = System.currentTimeMillis();
+    /** Blank hash used for the reply keys. */
     private Hash _blankHash;
+    /** ChaCha20 reply keys, by hop. */
     private SessionKey[] _ChaReplyKeys;
+    /** ChaCha20 reply additional data, by hop. */
     private byte[][] _ChaReplyADs;
+    /** AES reply keys, by hop. */
     private final SessionKey[] _AESReplyKeys;
+    /** AES reply IVs, by hop. */
     private final byte[][] _AESReplyIVs;
-    // short record OBEP only
+    /** Garlic reply keys for the outbound endpoint only. */
     private OneTimeSession _garlicReplyKeys;
+    /** Logger for the tunnel. */
     private Log _log;
 
     /**
@@ -156,7 +172,6 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      */
     public static final int REPLY_IV_LENGTH = 16;
 
-    // Make configurable? - but can't easily get to pool options from here
     /**
      * Maximum consecutive test failures before the tunnel is retired.
      */
@@ -224,11 +239,17 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      * @since 0.9.71+
      */
     private static final long PEAK_THROUGHPUT_COALESCE_MS = 60 * 1000L;
+    /** Latency samples kept per tunnel. */
     private static final int LATENCY_SAMPLE_SIZE = 3;
+    /** Most recent latency sample, in ms, -1 if none. */
     private volatile int _lastLatency = -1;
+    /** Ring of the recent latency samples. */
     private final int[] _latencyHistory = new int[LATENCY_SAMPLE_SIZE];
+    /** Write index into the latency ring. */
     private volatile int _latencyIdx = 0;
+    /** Latency samples recorded so far. */
     private volatile int _latencyCount = 0;
+    /** True when the tunnel needs an expedited test. */
     private volatile boolean _needsExpeditedTest = false;
     /**
      * Recent-traffic test exemptions used.
@@ -1247,8 +1268,11 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
         STALE_UNTESTED
     }
 
+    /** Reason the tunnel was given a last chance. */
     private volatile LastChanceReason _lastChanceReason = LastChanceReason.NONE;
+    /** Deadline of the last chance window. */
     private volatile long _lastChanceDeadline;
+    /** When the tunnel entered the last chance window. */
     private volatile long _lastChanceAdmission;
 
     /**

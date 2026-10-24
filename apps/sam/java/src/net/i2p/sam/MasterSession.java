@@ -40,15 +40,22 @@ import net.i2p.util.Log;
  */
 class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, SAMRawReceiver,
                                                           SAMMessageSess, I2PSessionMuxedListener {
+    /** The handler serving the SAM sessions. */
     private final SAMv3Handler handler;
+    /** The server for the datagram sessions. */
     private final SAMv3DatagramServer dgs;
+    /** The message sessions, by name. */
     private final Map<String, SAMMessageSess> sessions;
+    /** The thread accepting the stream connections. */
     private final StreamAcceptor streamAcceptor;
+    /** Session options that are not allowed. */
     private static final String[] INVALID_OPTS = { "PORT", "HOST", "FROM_PORT", "TO_PORT",
                                                    "PROTOCOL", "LISTEN_PORT", "LISTEN_PROTOCOL" };
     /** Log overflow warnings at most once per 5 seconds to avoid flooding. */
     private static final long OVERFLOW_LOG_INTERVAL_MS = 5000;
+    /** When the session overflow was last logged. */
     private volatile long _lastOverflowLog;
+    /** Sessions over the limit since the last log. */
     private volatile int _overflowCount;
 
     /**
@@ -268,12 +275,11 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
     public void stopRawReceiving() { /* no-op */ }
 
 
-    /////// stream session overrides
 
     /**
      * Throws, use a STREAM subsession instead.
      *
-     * @throws DataFormatException always
+     * @throws DataFormatException always, the master session does not connect
      */
     @Override
     public void connectAsync(SAMv3Handler handler, String dest, Properties props) throws DataFormatException {
@@ -283,7 +289,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
     /**
      * Throws, use a STREAM subsession instead.
      *
-     * @throws SAMException always
+     * @throws SAMException always, the master session does not do this
      */
     @Override
     public void accept(SAMv3Handler handler, boolean verbose) throws SAMException {
@@ -293,7 +299,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
     /**
      * Throws, use a STREAM subsession instead.
      *
-     * @throws SAMException always
+     * @throws SAMException always, the master session does not do this
      */
     @Override
     public void startForwardingIncoming(Properties props, boolean sendPorts) throws SAMException {
@@ -334,10 +340,9 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
         super.close();
     }
 
-    // I2PSessionMuxedImpl interface
-
         /**
-         * Called when the I2P session is disconnected.
+         * Called when the I2P session is disconnected, from the session
+         * muxed interface.
          *
          * @param session the disconnected session
          */
@@ -436,10 +441,13 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
      */
     private class StreamAcceptor implements Runnable {
 
+        /** True to end the accept loop. */
         private volatile boolean stop;
 
+        /** Creates the stream acceptor. */
         public StreamAcceptor() { /* no-op */ }
 
+        /** Stops accepting new stream connections. */
         public void stopRunning() {
             stop = true;
         }

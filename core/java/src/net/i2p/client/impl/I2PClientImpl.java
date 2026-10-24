@@ -40,8 +40,10 @@ import java.util.Properties;
  */
 public class I2PClientImpl implements I2PClient {
 
+    /** Bytes of random data behind the padding pattern. */
     private static final int PADDING_ENTROPY = 32;
 
+    /** The router context the client runs in. */
     private final I2PAppContext _context;
 
     /**

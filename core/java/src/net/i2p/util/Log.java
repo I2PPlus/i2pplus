@@ -21,11 +21,17 @@ import java.util.Locale;
  *
  */
 public class Log {
+    /** The class logging through this. */
     private final Class<?> _class;
+    /** Name of that class, for the records. */
     private final String _className;
+    /** Logger name, usually the class name. */
     private final String _name;
+    /** Priority below which messages are dropped. */
     private int _minPriority;
+    /** The scope whose settings apply. */
     private final LogScope _scope;
+    /** The manager holding this logger. */
     private final LogManager _manager;
 
     /**
@@ -531,7 +537,9 @@ public class Log {
         return name + "" + cls.getName();
     }
 
+    /** One named logging scope and its settings. */
     private static final class LogScope {
+        /** The scope name this cache was built for. */
         private final String _scopeCache;
 
         /**

@@ -29,7 +29,9 @@ import net.i2p.util.SystemVersion;
  * @since 0.8.12 moved from Router.java
  */
 public class OOMListener implements I2PThread.OOMEventListener {
+    /** The router context to log and act on. */
     private final RouterContext _context;
+    /** True once the listener has fired. */
     private final AtomicBoolean _wasCalled = new AtomicBoolean();
 
     /**

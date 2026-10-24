@@ -34,8 +34,11 @@ import net.i2p.util.SystemVersion;
  */
 public class ExploreJob extends SearchJob {
 
+    /** Chooses the floodfills to explore through. */
     private final FloodfillPeerSelector _peerSelector;
+    /** False for a search that only keeps the router active. */
     private final boolean _isRealExplore;
+    /** The peer that answered the last explore. */
     private volatile Hash _lastReplyFrom;
 
     /**

@@ -182,7 +182,7 @@ public class Certificate extends DataStructureImpl {
 
     /** Certificate type.
      *
-     * @return the certificate type
+     * @return one of the CERTIFICATE_TYPE_* constants, 0 for none
      */
     public int getCertificateType() {
         return _type;
@@ -202,9 +202,9 @@ public class Certificate extends DataStructureImpl {
     }
 
     /**
-     * Certificate payload, or null.
+     * Payload carried by this certificate.
      *
-     * @return the certificate payload, or null
+     * @return the payload bytes, or null if the certificate has no payload
      */
     public byte[] getPayload() {
         return _payload;
@@ -309,9 +309,9 @@ public class Certificate extends DataStructureImpl {
     }
 
     /**
-     * Serialized size in bytes.
+     * Serialized size of this certificate.
      *
-     * @return the serialized size in bytes
+     * @return the size in bytes: 3 plus the payload length
      */
     public int size() {
         return 1 + 2 + (_payload != null ? _payload.length : 0);
@@ -378,9 +378,12 @@ public class Certificate extends DataStructureImpl {
      */
     @SuppressWarnings("checkstyle:EqualsHashCode")
     private static final class NullCert extends Certificate {
+        /** Bytes in the empty certificate. */
         private static final int NULL_LENGTH = 1 + 2;
+        /** The bytes of the empty certificate. */
         private static final byte[] NULL_DATA = new byte[NULL_LENGTH];
 
+        /** The certificate that carries nothing. */
         public NullCert() {
         }
 

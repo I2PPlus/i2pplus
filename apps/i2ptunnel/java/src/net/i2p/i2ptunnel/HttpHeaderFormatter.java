@@ -23,6 +23,7 @@ public class HttpHeaderFormatter {
      */
     public HttpHeaderFormatter() {}
 
+    /** Splits a header block at each CRLF. */
     private static final Pattern NEWLINE_SPLIT = Pattern.compile("\r\n");
 
     /**

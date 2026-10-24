@@ -25,8 +25,12 @@ public abstract class ImageWorker {
      */
     public ImageWorker() {}
 
+    /**
+     * Placeholder text used to measure text extents before the
+     * real text is known
+     */
     private static final String DUMMY_TEXT = "Dummy";
-    //    private static final int IMG_BUFFER_CAPACITY = 10000; // bytes
+    /** Largest image the buffer holds, in bytes */
     private static final int IMG_BUFFER_CAPACITY = 40 * 1024; // bytes
 
     /** Default pixels of width given to a transition narrower than one pixel. */

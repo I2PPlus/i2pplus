@@ -16,8 +16,11 @@ import java.net.Socket;
  */
 @SuppressWarnings("PMD.CloseResource")
 public class InternalSocket extends Socket {
+    /** Stream the peer's bytes are read from. */
     private InputStream _is;
+    /** Stream bytes are written to the peer on. */
     private OutputStream _os;
+    /** Port the socket is connected to. */
     private final int _port;
 
     /**
@@ -151,8 +154,6 @@ public class InternalSocket extends Socket {
         if (_is != null && _is instanceof TimeoutPipedInputStream) ((TimeoutPipedInputStream) _is).setReadTimeout(timeout);
     }
 
-    // ignored stuff
-
     /**
      *  Always returns 0, even if {@link #setSoTimeout} was called.
      * @return the so timeout
@@ -161,9 +162,6 @@ public class InternalSocket extends Socket {
     public int getSoTimeout() {
         return 0;
     }
-
-    // everything below here unsupported unless otherwise noted
-
 
     /**
      * Supported as of 0.9.33, prior to that threw UnsupportedOperationException.

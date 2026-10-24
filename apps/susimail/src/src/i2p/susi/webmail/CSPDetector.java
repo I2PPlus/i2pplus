@@ -13,7 +13,7 @@ class CSPDetector {
     CSPDetector() {}
 
     /**
-     * ref: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
+     * See also: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy">Content-Security-Policy header</a>
      * @param ua the user agent string
      * @return true if supported
      */
@@ -50,6 +50,13 @@ class CSPDetector {
         return false;
     }
 
+    /**
+     * Reads the run of digits starting at idx in the user-agent string.
+     *
+     * @param ua the user-agent string
+     * @param idx where to start reading
+     * @return the number, or 0 if the character at idx is not a digit
+     */
     private static int getVersion(String ua, int idx) {
         int rv = 0;
         for (int i = idx; i < ua.length(); i++) {

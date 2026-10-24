@@ -40,10 +40,13 @@ class RRDFile implements Constants {
         0x2F, 0x25, (byte) 0xC0, (byte) 0xC7, 0x43, 0x2B, 0x1F, 0x5B
     };
 
-    // Reflective unmap support (mirrors RrdNioBackend pattern)
+    /** Reflected cleaner method of the mapped buffer. */
     private static final Method CLEANER_METHOD;
+    /** Reflected clean method of the mapped buffer. */
     private static final Method CLEAN_METHOD;
+    /** Reflected unsafe method cleaning a buffer. */
     private static final Method INVOKE_CLEANER;
+    /** Unsafe instance for unmapping, null if unavailable. */
     private static final Object UNSAFE;
 
     static {
@@ -80,12 +83,17 @@ class RRDFile implements Constants {
         UNSAFE = us;
     }
 
+    /** Byte alignment of the values in the file. */
     private int alignment;
+    /** Byte size of a long in the file. */
     private int longSize = 4;
 
+    /** Stream backing the mapped file. */
     private final FileInputStream underlying;
+    /** Mapping of the whole file. */
     private final MappedByteBuffer mappedByteBuffer;
 
+    /** Byte order of the values in the file. */
     private ByteOrder order;
 
     /**
@@ -127,6 +135,12 @@ class RRDFile implements Constants {
         }
     }
 
+    /**
+     * Reads the data layout header of the file.
+     *
+     * @param file the RRD file to read
+     * @throws IOException if the file cannot be read
+     */
     private void initDataLayout(File file) throws IOException {
 
         if (file.exists()) { // Load the data formats from the file
@@ -172,14 +186,21 @@ class RRDFile implements Constants {
         mappedByteBuffer.rewind();
     }
 
+    /**
+     * Finds a byte pattern in an array.
+     *
+     * @param pattern the bytes to find
+     * @param array the array to search
+     * @return the position, negative if absent
+     */
     private int indexOf(byte[] pattern, byte[] array) {
         return (new String(array, StandardCharsets.UTF_8))
                 .indexOf(new String(pattern, StandardCharsets.UTF_8));
     }
 
     /**
-     * True if big endian.
-     * @return true if big endian
+     * Reports the byte order of the mapped file.
+     * @return true when the order is big endian
      */
     boolean isBigEndian() {
         return order == ByteOrder.BIG_ENDIAN;
@@ -242,9 +263,9 @@ class RRDFile implements Constants {
     }
 
     /**
-     * Skip count.
+     * Advances the read position to the given alignment boundary.
      * @param boundary the alignment boundary in bytes to advance to
-     * @return the skip count
+     * @return the bytes skipped, 0 if already aligned
      */
     int align(int boundary) {
 
@@ -258,8 +279,8 @@ class RRDFile implements Constants {
     }
 
     /**
-     * Skip count.
-     * @return the skip count
+     * Advances the read position to the file's own alignment.
+     * @return the bytes skipped, 0 if already aligned
      */
     int align() {
         return align(alignment);
@@ -274,13 +295,14 @@ class RRDFile implements Constants {
     }
 
     /**
-     * File pointer.
-     * @return the file pointer
+     * Reports the current read position.
+     * @return the byte offset of the next read
      */
     long getFilePointer() {
         return mappedByteBuffer.position();
     }
 
+    /** Unmaps the file so it can be deleted. */
     private void unmapFile() {
         if (mappedByteBuffer != null && mappedByteBuffer.isDirect()) {
             try {
@@ -328,17 +350,17 @@ class RRDFile implements Constants {
     }
 
     /**
-     * Unival array.
+     * Allocates a unival array at the current position.
      * @param size the number of elements the array holds
-     * @return the unival array
+     * @return a new array of size elements
      */
     UnivalArray getUnivalArray(int size) {
         return new UnivalArray(this, size);
     }
 
     /**
-     * Long size in bits for this file.
-     * @return the long size in bits for this file
+     * Width of a long in this file, in bits.
+     * @return 32 or 64, the long size times 8
      */
     int getBits() {
         return longSize * 8;

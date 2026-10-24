@@ -17,14 +17,20 @@ import java.util.concurrent.atomic.AtomicReference;
  * addresses can be looked up using the <code>get</code> method.
  */
 public final class Reader implements Closeable {
+    /** Size of the separator before the data section, in bytes. */
     private static final int DATA_SECTION_SEPARATOR_SIZE = 16;
+    /** Marker preceding the database metadata. */
     private static final byte[] METADATA_START_MARKER = {(byte) 0xAB,
             (byte) 0xCD, (byte) 0xEF, 'M', 'a', 'x', 'M', 'i', 'n', 'd', '.',
             'c', 'o', 'm'};
 
+    /** Index of the IPv4 subtree's start node. */
     private final int ipV4Start;
+    /** Metadata read from the database. */
     private final Metadata metadata;
+    /** Holder for the database data, for reloads. */
     private final AtomicReference<BufferHolder> bufferHolderReference;
+    /** Cache of the tree nodes read. */
     private final NodeCache cache;
 
     /**
@@ -118,6 +124,14 @@ public final class Reader implements Closeable {
         this(new BufferHolder(database, fileMode), database.getName(), cache);
     }
 
+    /**
+     * Opens a reader on an already loaded database.
+     *
+     * @param bufferHolder the holder for the database data
+     * @param name the database name for the error messages
+     * @param cache the node cache to use
+     * @throws IOException if the metadata cannot be read
+     */
     private Reader(BufferHolder bufferHolder, String name, NodeCache cache) throws IOException {
         this.bufferHolderReference = new AtomicReference<>(
                 bufferHolder);
@@ -167,22 +181,30 @@ public final class Reader implements Closeable {
     }
 
     /**
-     * I2P
+     * Walks the search tree writing the IPv4 ranges of one country.
+     *
      * @since 0.9.48
      */
     private class Walker {
+        /** The country code being walked. */
         private final String _country;
+        /** Where the walk writes its output. */
         private final Writer _out;
+        /** Number of nodes in the search tree. */
         private final int _nodeCount;
+        /** Buffer holding the database data. */
         private final ByteBuffer _buffer;
+        /** Node numbers already reported as not found. */
         private final Set<Integer> _negativeCache;
-        //private boolean _ipv6;
+        /** Record number of the country being walked, -1 until found. */
         private int _countryRecord = -1;
 
         /**
          * Write all IPv4 address ranges for the given country to out.
          *
          * @param country the ISO 3166-1 alpha-2 code, upper case
+         * @param out where the ranges are written, in CIDR form
+         * @throws IOException declared by the signature, not thrown here
          */
         public Walker(String country, Writer out) throws IOException {
             _country = country;
@@ -192,7 +214,11 @@ public final class Reader implements Closeable {
             _negativeCache = new HashSet<>(256);
         }
 
-        /** only call once */
+        /**
+         * Writes the IPv4 ranges of the country, call once only.
+         *
+         * @throws IOException if the output write fails
+         */
         public void walk() throws IOException {
             _out.write("# IPs for country " + _country + " from GeoIP2 database\n");
             int record = startNode(32);
@@ -202,7 +228,10 @@ public final class Reader implements Closeable {
 
         /**
          * Recursive, depth first
+         * @param record the node number being visited
          * @param ip the IPv4 prefix walked so far, packed into the high bits of an int
+         * @param depth the number of address bits already walked
+         * @throws IOException if the output write fails
          */
         private void walk(int record, int ip, int depth) throws IOException {
             if (record == _nodeCount) {
@@ -266,6 +295,12 @@ public final class Reader implements Closeable {
         }
     }
 
+    /**
+     * Returns the holder for the database data.
+     *
+     * @return the current holder
+     * @throws ClosedDatabaseException if the database is closed
+     */
     private BufferHolder getBufferHolder() throws ClosedDatabaseException {
         BufferHolder bufferHolder = this.bufferHolderReference.get();
         if (bufferHolder == null) {
@@ -274,6 +309,14 @@ public final class Reader implements Closeable {
         return bufferHolder;
     }
 
+    /**
+     * Finds the node or data pointer for an address.
+     *
+     * @param buffer the buffer holding the database data
+     * @param address the address to locate
+     * @return the record number, or -1 if not found
+     * @throws InvalidDatabaseException if the tree is corrupt
+     */
     private int findAddressInTree(ByteBuffer buffer, InetAddress address)
             throws InvalidDatabaseException {
         byte[] rawAddress = address.getAddress();
@@ -299,6 +342,12 @@ public final class Reader implements Closeable {
         throw new InvalidDatabaseException("Something bad happened");
     }
 
+    /**
+     * Returns the first node to search for an address family.
+     *
+     * @param bitLength the address family size, in bits
+     * @return the start node number
+     */
     private int startNode(int bitLength) {
         // Check if we are looking up an IPv4 address in an IPv6 tree. If this
         // is the case, we can skip over the first 96 nodes.
@@ -310,6 +359,13 @@ public final class Reader implements Closeable {
         return 0;
     }
 
+    /**
+     * Finds the start node of the IPv4 subtree.
+     *
+     * @param buffer the buffer holding the database data
+     * @return the start node number, 0 if the tree is smaller
+     * @throws InvalidDatabaseException if the tree is corrupt
+     */
     private int findIpV4StartNode(ByteBuffer buffer)
             throws InvalidDatabaseException {
         if (this.metadata.getIpVersion() == 4) {
@@ -323,6 +379,15 @@ public final class Reader implements Closeable {
         return node;
     }
 
+    /**
+     * Reads one node from the tree.
+     *
+     * @param buffer the buffer holding the database data
+     * @param nodeNumber the node to read
+     * @param index the index of the node's data
+     * @return the node value
+     * @throws InvalidDatabaseException if the tree is corrupt
+     */
     private int readNode(ByteBuffer buffer, int nodeNumber, int index)
             throws InvalidDatabaseException {
         int baseOffset = nodeNumber * this.metadata.getNodeByteSize();
@@ -350,6 +415,14 @@ public final class Reader implements Closeable {
         }
     }
 
+    /**
+     * Resolves a data pointer to its value.
+     *
+     * @param buffer the buffer holding the database data
+     * @param pointer the pointer to resolve
+     * @return the decoded value
+     * @throws IOException if the data cannot be read
+     */
     private Object resolveDataPointer(ByteBuffer buffer, int pointer)
             throws IOException {
         int resolved = (pointer - this.metadata.getNodeCount())
@@ -368,13 +441,13 @@ public final class Reader implements Closeable {
         return decoder.decode(resolved);
     }
 
-    /*
-     * Apparently searching a file for a sequence is not a solved problem in
-     * Java. This searches from the end of the file for metadata start.
+    /**
+     * Finds the start of the database metadata in the buffer.
      *
-     * This is an extremely naive but reasonably readable implementation. There
-     * are much faster algorithms (e.g., Boyer-Moore) for this if speed is ever
-     * an issue, but I suspect it won't be.
+     * @param buffer the buffer holding the database data
+     * @param databaseName the database name for the error message
+     * @return the metadata offset
+     * @throws InvalidDatabaseException if the marker is missing
      */
     private int findMetadataStart(ByteBuffer buffer, String databaseName)
             throws InvalidDatabaseException {

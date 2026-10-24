@@ -15,8 +15,10 @@ import org.cybergarage.upnp.*;
  * both action and query control requests.
  */
 public class ControlRequest extends SOAPRequest {
-    // I2P see setRequestHost();
-    /** Service type for WAN IPv6 firewall control (used for I2P) */
+    /**
+     * Service type for WAN IPv6 firewall control, the service I2P
+     * uses, see {@link #setRequestHost(Service)}.
+     */
     private static final String WAN_IPV6_CONNECTION =
             "urn:schemas-upnp-org:service:WANIPv6FirewallControl:1";
 
@@ -70,7 +72,6 @@ public class ControlRequest extends SOAPRequest {
     protected void setRequestHost(Service service) {
         String ctrlURL = service.getControlURL();
 
-        // Thanks for Thomas Schulz (2004/03/20)
         String urlBase = service.getRootDevice().getURLBase();
         if (urlBase != null && 0 < urlBase.length()) {
             try {
@@ -83,18 +84,14 @@ public class ControlRequest extends SOAPRequest {
             } catch (MalformedURLException e) { /* ignored */ }
         }
 
-        // Thanks for Giordano Sassaroli <sassarol@cefriel.it> (05/21/03)
         setURI(ctrlURL, true);
 
-        // Thanks for Giordano Sassaroli <sassarol@cefriel.it> and Suzan Foster (09/02/03)
-        // Thanks for Andre <andre@antiheld.net> (02/18/04)
         String postURL = "";
         if (HTTP.isAbsoluteURL(ctrlURL) == true) postURL = ctrlURL;
 
         if (postURL == null || postURL.length() <= 0)
             postURL = service.getRootDevice().getURLBase();
 
-        // Thanks for Rob van den Boomen <rob.van.den.boomen@philips.com> (02/17/04)
         // BUGFIX, set urlbase from location string if not set in description.xml
         if (postURL == null || postURL.length() <= 0) {
             // I2P

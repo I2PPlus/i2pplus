@@ -35,9 +35,13 @@ import java.util.concurrent.atomic.AtomicInteger;
  * and tunnel settings to be applied accordingly.
  */
 public class GarlicMessageReceiver {
+    /** The router receiving the message. */
     private final RouterContext _context;
+    /** Logger for this class. */
     private final Log _log;
+    /** Where the opened cloves are handed on. */
     private final CloveReceiver _receiver;
+    /** The client the message is for. */
     private final Hash _clientDestination;
 
     /**
@@ -48,6 +52,7 @@ public class GarlicMessageReceiver {
      * @since 0.9.71+
      */
     private static final AtomicInteger _decryptFailCount = new AtomicInteger();
+    /** Failures between warnings in the log. */
     private static final int FAIL_WARN_INTERVAL = 50;
 
     /**

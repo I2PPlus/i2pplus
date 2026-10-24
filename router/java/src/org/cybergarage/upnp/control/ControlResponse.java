@@ -73,6 +73,13 @@ public class ControlResponse extends SOAPResponse {
     //	createFaultResponseNode
     ////////////////////////////////////////////////
 
+    /**
+     * Builds the SOAP fault node for an error.
+     *
+     * @param errCode the UPnP error code
+     * @param errDescr the description of the error
+     * @return the fault response node
+     */
     private Node createFaultResponseNode(int errCode, String errDescr) {
         // <s:Fault>
         Node faultNode = new Node(SOAP.XMLNS + SOAP.DELIM + SOAP.FAULT);
@@ -109,6 +116,12 @@ public class ControlResponse extends SOAPResponse {
         return faultNode;
     }
 
+    /**
+     * Builds a SOAP fault element with a default description.
+     *
+     * @param errCode the UPnP error number
+     * @return the fault node
+     */
     private Node createFaultResponseNode(int errCode) {
         return createFaultResponseNode(errCode, UPnPStatus.code2String(errCode));
     }

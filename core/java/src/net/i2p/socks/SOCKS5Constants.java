@@ -13,6 +13,7 @@ package net.i2p.socks;
  */
 public class SOCKS5Constants {
 
+    /** Utility class, not intended for instantiation. */
     private SOCKS5Constants() {}
 
     /**

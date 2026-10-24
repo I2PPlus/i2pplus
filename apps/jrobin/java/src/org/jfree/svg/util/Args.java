@@ -21,6 +21,7 @@ package org.jfree.svg.util;
 /** A utility class that performs checks for method argument validity. */
 public class Args {
 
+    /** Utility class, not intended for instantiation. */
     private Args() {
         // no need to instantiate this
     }

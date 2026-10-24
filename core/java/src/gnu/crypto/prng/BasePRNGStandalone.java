@@ -127,6 +127,11 @@ public abstract class BasePRNGStandalone implements IRandomStandalone, Serializa
         return initialised;
     }
 
+    /**
+     * Takes the next byte from the buffer, refilling the block when it
+     * runs out.
+     * @return the next byte
+     */
     private byte nextByteInternal() {//throws LimitReachedException {
         if (buffer == null)
             throw new IllegalStateException("Random is shut down - do you have a static ref?");

@@ -25,15 +25,20 @@ import org.klomp.snark.bencode.InvalidBEncodingException;
  * Compact format 2 - One big string of concatenated hashes - official format.
  */
 class TrackerInfo {
+    /** Why the last announce failed, null on success. */
     private final String failure_reason;
+    /** Seconds the tracker asks between announces. */
     private final int interval;
     /**
      * The peers from the response, unmodifiable and never null: a failure response has no
      * peers, and is reported by {@link #getFailureReason} instead.
      */
     private final Set<Peer> peers;
+    /** Peers reported as complete. */
     private int complete;
+    /** Peers reported as incomplete. */
     private int incomplete;
+    /** Peers reported as downloading. */
     private int downloaders;
 
     /**
@@ -47,18 +52,50 @@ class TrackerInfo {
      * @throws IOException if the response stream cannot be read
      * @throws Throwable if the bencoded map is malformed, including InvalidBEncodingException
      */
+    /**
+     * Reads a tracker response from a stream and parses it.
+     *
+     * @param in the stream to read
+     * @param my_id our peer id to send
+     * @param infohash the torrent's info hash
+     * @param metainfo the torrent being announced to
+     * @param util the snark instance running the announce
+     * @throws IOException if the response stream cannot be read
+     * @throws Throwable if the bencoded map is malformed, including InvalidBEncodingException
+     */
     public TrackerInfo(
             InputStream in, byte[] my_id, byte[] infohash, MetaInfo metainfo, I2PSnarkUtil util)
             throws IOException, Throwable {
         this(new BDecoder(in), my_id, infohash, metainfo, util);
     }
 
+    /**
+     * Parses a tracker response from a decoder.
+     *
+     * @param be the decoder to read from
+     * @param my_id our peer id to send
+     * @param infohash the torrent's info hash
+     * @param metainfo the torrent being announced to
+     * @param util the snark instance running the announce
+     * @throws IOException if the response stream cannot be read
+     * @throws Throwable if the bencoded map is malformed, including InvalidBEncodingException
+     */
     private TrackerInfo(
             BDecoder be, byte[] my_id, byte[] infohash, MetaInfo metainfo, I2PSnarkUtil util)
             throws IOException, Throwable {
         this(be.bdecodeMap().getMap(), my_id, infohash, metainfo, util);
     }
 
+    /**
+     * Reads a tracker response into a record.
+     *
+     * @param m the decoded map from the tracker
+     * @param my_id our node id
+     * @param infohash the info hash of the torrent
+     * @param metainfo the metadata of the torrent
+     * @param util the snark utilities
+     * @throws IOException if the tracker reported a failure
+     */
     private TrackerInfo(
             Map<String, BEValue> m,
             byte[] my_id,
@@ -193,6 +230,7 @@ class TrackerInfo {
         return peers;
     }
 
+    /** Length of the info hash, in bytes. */
     private static final int HASH_LENGTH = 32;
 
     /**

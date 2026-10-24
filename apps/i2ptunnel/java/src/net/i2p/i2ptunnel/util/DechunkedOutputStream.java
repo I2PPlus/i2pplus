@@ -10,13 +10,34 @@ import java.io.OutputStream;
  * @since 0.9.62
  */
 public class DechunkedOutputStream extends LimitOutputStream {
+    /** True to strip the chunk headers and footers. */
     private final boolean _strip;
+    /** The current state of the chunk parser. */
     private State _state = State.LEN;
-    // During main part, how much is remaining in the chunk
-    // During the trailer, counts the trailer header size
+    /** Bytes left in the current chunk, or the trailer header size. */
     private int _remaining;
 
-    private enum State { LEN, CR, LF, DATA, DATACR, DATALF, TRAILER, DONE }
+    /**
+     * The states of the chunk parser.
+     */
+    private enum State {
+        /** Reading the chunk length digits. */
+        LEN,
+        /** Reading the CR after the length. */
+        CR,
+        /** Reading the LF after the length. */
+        LF,
+        /** Reading the chunk data. */
+        DATA,
+        /** Reading the CR after the data. */
+        DATACR,
+        /** Reading the LF after the data. */
+        DATALF,
+        /** Reading the trailer headers. */
+        TRAILER,
+        /** The chunked data fully parsed. */
+        DONE
+    }
 
     /**
      * Creates a new dechunked output stream.

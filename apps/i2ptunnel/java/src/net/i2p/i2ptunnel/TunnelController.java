@@ -51,14 +51,23 @@ import net.i2p.util.SystemVersion;
  * take care to maintain the public methods as a stable API.
  */
 public class TunnelController implements Logging {
+    /** Logger for the tunnel controller. */
     private final Log _log;
+    /** The tunnel's configuration properties. */
     private Properties _config;
+    /** File the configuration is saved to. */
     private File _configFile;
+    /** The tunnel object being controlled. */
     private final I2PTunnel _tunnel;
+    /** Status messages shown on the tunnel page. */
     private final List<String> _messages;
+    /** The tunnel's open I2CP sessions. */
     private List<I2PSession> _sessions;
+    /** Current state of the tunnel. */
     private volatile TunnelState _state;
+    /** The queued private key file check event. */
     private volatile SimpleTimer2.TimedEvent _pkfc;
+    /** When the startup delay ends, zero while running. */
     private volatile long _startupDelayEndTime;
     /** Suppress log messages during tunnel restart. */
     private boolean _suppressLog;
@@ -88,9 +97,6 @@ public class TunnelController implements Logging {
     /** Key backup directory name. */
     public static final String KEY_BACKUP_DIR = "i2ptunnel-keyBackup";
 
-    /*
-     * Tunnel configuration property names.
-     */
     /** Human-readable description, shown in the tunnel list. */
     public static final String PROP_DESCR = "description";
     /** Base64-encoded I2P destination, for the client types that require one. */
@@ -164,9 +170,6 @@ public class TunnelController implements Logging {
     /** Default maximum shutdown delay in seconds. */
     public static final int DEFAULT_SHUTDOWN_DELAY_MAX = 0;
 
-    /*
-     * Streaming connection limit properties, moved from TunnelConfig.
-     */
     /** Per-source connection limit over a one-minute window. */
     public static final String PROP_MAX_CONNS_MIN = "i2p.streaming.maxConnsPerMinute";
     /** Per-source connection limit over a one-hour window. */
@@ -204,40 +207,53 @@ public class TunnelController implements Logging {
         /** Option prefix. */
         public static final String PFX_OPTION = "option.";
 
+    /** Option keeping the client key across restarts. */
     private static final String OPT_PERSISTENT = PFX_OPTION + "persistentClientKey";
     /** Config key to bundle reply keys. */
     public static final String OPT_BUNDLE_REPLY = PFX_OPTION + "shouldBundleReplyInfo";
+    /** Option setting the transient tags sent per session. */
     private static final String OPT_TAGS_SEND = PFX_OPTION + "crypto.tagsToSend";
+    /** Option setting the low tag replenishment threshold. */
     private static final String OPT_LOW_TAGS = PFX_OPTION + "crypto.lowTagThreshold";
+    /** Option setting the signature type of the tunnel key. */
     private static final String OPT_SIG_TYPE = PFX_OPTION + I2PClient.PROP_SIGTYPE;
+        /** Option naming an alternate private key file. */
         private static final String OPT_ALT_PKF = PFX_OPTION + I2PTunnelServer.PROP_ALT_PKF;
 
     /**
      * Streaming connection limit options.
      */
     private static final String OPT_MAX_CONNS_MIN = PFX_OPTION + PROP_MAX_CONNS_MIN;
+    /** Option limiting connections per hour. */
     private static final String OPT_MAX_CONNS_HOUR = PFX_OPTION + PROP_MAX_CONNS_HOUR;
+    /** Option limiting connections per day. */
     private static final String OPT_MAX_CONNS_DAY = PFX_OPTION + PROP_MAX_CONNS_DAY;
+    /** Option limiting all connections per minute. */
     private static final String OPT_MAX_TOTAL_CONNS_MIN = PFX_OPTION + PROP_MAX_TOTAL_CONNS_MIN;
+    /** Option limiting all connections per hour. */
     private static final String OPT_MAX_TOTAL_CONNS_HOUR = PFX_OPTION + PROP_MAX_TOTAL_CONNS_HOUR;
+    /** Option limiting all connections per day. */
     private static final String OPT_MAX_TOTAL_CONNS_DAY = PFX_OPTION + PROP_MAX_TOTAL_CONNS_DAY;
+    /** Option limiting simultaneous streams. */
     private static final String OPT_MAX_STREAMS = PFX_OPTION + PROP_MAX_STREAMS;
+    /** Option marking the connection limits as set. */
     private static final String OPT_LIMITS_SET = PFX_OPTION + PROP_LIMITS_SET;
     /** Config key for max posts (delegated to HTTPServer). */
     public static final String OPT_POST_MAX = PFX_OPTION + I2PTunnelHTTPServer.OPT_POST_MAX;
     /** Config key for max total posts (delegated to HTTPServer). */
     public static final String OPT_POST_TOTAL_MAX = PFX_OPTION + I2PTunnelHTTPServer.OPT_POST_TOTAL_MAX;
 
+        /** Option choosing the action when limits are hit. */
         private static final String OPT_LIMIT_ACTION = PFX_OPTION + PROP_LIMIT_ACTION;
+    /** Option turning I2CP gzip compression on or off. */
     private static final String OPT_I2CP_GZIP = PFX_OPTION + I2PClient.PROP_GZIP;
 
+    /** Option listing the lease set encryption types. */
     private static final String OPT_ENCTYPE = PFX_OPTION + "i2cp.leaseSetEncType";
 
+        /** Option setting the outbound message priority. */
         private static final String OPT_PRIORITY = PFX_OPTION + "outbound.priority";
 
-    /*
-     * Tunnel type values.
-     */
     /** Outbound HTTP CONNECT proxy for tunnelling, optionally via an outproxy. */
     public static final String TYPE_CONNECT = "connectclient";
     /** HTTP server that also runs a proxy port on the same destination. */
@@ -600,6 +616,7 @@ public class TunnelController implements Logging {
         }
     }
 
+    /** Starts an http proxy client tunnel. */
     private void startHttpClient() {
         setListenOn();
         String listenPort = getListenPort();
@@ -611,6 +628,7 @@ public class TunnelController implements Logging {
             _tunnel.runHttpClient(new String[] { listenPort, sharedClient, proxyList }, this);
     }
 
+    /** Starts a connect client tunnel. */
     private void startConnectClient() {
         setListenOn();
         String listenPort = getListenPort();
@@ -622,6 +640,7 @@ public class TunnelController implements Logging {
             _tunnel.runConnectClient(new String[] { listenPort, sharedClient, proxyList }, this);
     }
 
+    /** Starts an IRC client tunnel. */
     private void startIrcClient() {
         setListenOn();
         String listenPort = getListenPort();
@@ -635,6 +654,7 @@ public class TunnelController implements Logging {
         }
     }
 
+    /** Starts a SOCKS proxy client tunnel. */
     private void startSocksClient() {
         setListenOn();
         String listenPort = getListenPort();
@@ -654,6 +674,7 @@ public class TunnelController implements Logging {
         }
     }
 
+        /** Starts a combined SOCKS and IRC client tunnel. */
         private void startSocksIRCClient() {
         setListenOn();
         String listenPort = getListenPort();
@@ -673,9 +694,7 @@ public class TunnelController implements Logging {
         }
     }
 
-    /*
-     * Streamr client is a UDP server, use the listenPort field for targetPort
-     */
+    /** Starts a streaming client tunnel. */
     private void startStreamrClient() {
         String targetHost = getTargetHost();
         String targetPort = getListenPort();
@@ -757,6 +776,7 @@ public class TunnelController implements Logging {
         return sessions;
     }
 
+    /** Starts a generic client tunnel. */
     private void startClient() {
         setListenOn();
         String listenPort = getListenPort();
@@ -768,6 +788,7 @@ public class TunnelController implements Logging {
         } else {_tunnel.runClient(new String[] { listenPort, dest, sharedClient }, this);}
     }
 
+    /** Starts a generic server tunnel. */
     private void startServer() {
         String targetHost = getTargetHost();
         String targetPort = getTargetPort();
@@ -775,6 +796,7 @@ public class TunnelController implements Logging {
         _tunnel.runServer(new String[] { targetHost, targetPort, privKeyFile }, this);
     }
 
+    /** Starts an http server tunnel. */
     private void startHttpServer() {
         String targetHost = getTargetHost();
         String targetPort = getTargetPort();
@@ -783,6 +805,7 @@ public class TunnelController implements Logging {
         _tunnel.runHttpServer(new String[] { targetHost, targetPort, spoofedHost, privKeyFile }, this);
     }
 
+    /** Starts a bidirectional http server tunnel. */
     private void startHttpBidirServer() {
         setListenOn();
         String targetHost = getTargetHost();
@@ -793,6 +816,7 @@ public class TunnelController implements Logging {
         _tunnel.runHttpBidirServer(new String[] { targetHost, targetPort, listenPort, spoofedHost, privKeyFile }, this);
     }
 
+    /** Starts an IRC server tunnel. */
     private void startIrcServer() {
         String targetHost = getTargetHost();
         String targetPort = getTargetPort();
@@ -800,6 +824,7 @@ public class TunnelController implements Logging {
         _tunnel.runIrcServer(new String[] { targetHost, targetPort, privKeyFile }, this);
     }
 
+    /** Sets the local address the tunnel listens on. */
     private void setListenOn() {
         String listenOn = getListenOnInterface();
         if ( (listenOn != null) && (!listenOn.isEmpty()) ) {
@@ -827,6 +852,7 @@ public class TunnelController implements Logging {
         return opts;
     }
 
+    /** Applies the session-level options to the tunnel. */
     private void setSessionOptions() {
         Properties opts = getClientOptionProps();
         // targetDestination does NOT start with "option.", but we still want
@@ -853,6 +879,7 @@ public class TunnelController implements Logging {
         _tunnel.setClientOptions(opts);
     }
 
+    /** Applies the I2CP options from the config to the tunnel. */
     private void setI2CPOptions() {
         String host = getI2CPHost();
         if ( (host != null) && (!host.isEmpty()) )
@@ -1295,18 +1322,18 @@ public class TunnelController implements Logging {
     public void setConfigFile(File file) { _configFile = file; }
 
     /**
-     * The tunnel type.
-     * @return the tunnel type
+     * Returns the tunnel's type as configured.
+     * @return the type name from the config
      */
     public String getType() { return _config.getProperty(PROP_TYPE); }
     /**
-     * The tunnel name.
-     * @return the tunnel name
+     * Returns the tunnel's display name.
+     * @return the name from the config
      */
     public String getName() { return _config.getProperty(PROP_NAME); }
     /**
-     * The tunnel description.
-     * @return the tunnel description
+     * Returns the tunnel's description.
+     * @return the free-text description from the config
      */
     public String getDescription() { return _config.getProperty(PROP_DESCR); }
     /**
@@ -1635,8 +1662,11 @@ public class TunnelController implements Logging {
      * Log if about to expire.
      */
     private class PKFChecker extends SimpleTimer2.TimedEvent {
+        /** The private key files to watch. */
         private final List<File> files;
+        /** Modification times seen for those files. */
         private final List<Long> stamps;
+        /** Whether a check pass has completed. */
         private boolean wasRun;
 
         /**

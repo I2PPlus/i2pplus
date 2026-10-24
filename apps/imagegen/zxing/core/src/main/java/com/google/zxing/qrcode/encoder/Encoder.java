@@ -52,8 +52,13 @@ public final class Encoder {
   private Encoder() {
   }
 
-  // The mask penalty calculation is complicated.  See Table 21 of JISX0510:2004 (p.45) for details.
-  // Basically it applies four rules and summate all penalties.
+  /**
+   * Scores a mask pattern by applying the four penalty rules and summing
+   * them; see Table 21 of JISX0510:2004 (p.45) for the details.
+   *
+   * @param matrix the masked symbol
+   * @return the penalty, lower is better
+   */
   private static int calculateMaskPenalty(ByteMatrix matrix) {
     return MaskUtil.applyMaskPenaltyRule1(matrix)
         + MaskUtil.applyMaskPenaltyRule2(matrix)
@@ -211,6 +216,15 @@ public final class Encoder {
     return chooseVersion(bitsNeeded, ecLevel);
   }
 
+  /**
+   * Counts the bits needed to encode the content at a version.
+   *
+   * @param mode the encoding mode
+   * @param headerBits the mode and length header
+   * @param dataBits the encoded content
+   * @param version the version to size for
+   * @return the number of bits
+   */
   private static int calculateBitsNeeded(Mode mode,
                                          BitArray headerBits,
                                          BitArray dataBits,
@@ -275,6 +289,12 @@ public final class Encoder {
     return Mode.BYTE;
   }
 
+  /**
+   * Checks whether the content is all double-byte Kanji.
+   *
+   * @param content the text to check
+   * @return true if Kanji encoding is the only option
+   */
   private static boolean isOnlyDoubleByteKanji(String content) {
     byte[] bytes;
     try {
@@ -295,6 +315,16 @@ public final class Encoder {
     return true;
   }
 
+  /**
+   * Picks the mask pattern with the lowest penalty.
+   *
+   * @param bits the encoded data
+   * @param ecLevel the level in use
+   * @param version the symbol version
+   * @param matrix the symbol being built
+   * @return the pattern number to use
+   * @throws WriterException if a mask cannot be applied
+   */
   private static int chooseMaskPattern(BitArray bits,
                                        ErrorCorrectionLevel ecLevel,
                                        Version version,
@@ -314,6 +344,14 @@ public final class Encoder {
     return bestMaskPattern;
   }
 
+  /**
+   * Picks the smallest version that fits the data.
+   *
+   * @param numInputBits the bits to encode
+   * @param ecLevel the level to fit within
+   * @return the version, null if none is large enough
+   * @throws WriterException if no version can hold the data
+   */
   private static Version chooseVersion(int numInputBits, ErrorCorrectionLevel ecLevel) throws WriterException {
     for (int versionNum = 1; versionNum <= 40; versionNum++) {
       Version version = Version.getVersionForNumber(versionNum);
@@ -716,6 +754,12 @@ public final class Encoder {
     }
   }
 
+  /**
+   * Appends the ECI header naming the character set.
+   *
+   * @param eci the character set to name
+   * @param bits the bits to append to
+   */
   private static void appendECI(CharacterSetECI eci, BitArray bits) {
     bits.appendBits(Mode.ECI.getBits(), 4);
     // This is correct for values up to 127, which is all we need now.

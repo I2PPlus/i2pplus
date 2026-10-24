@@ -29,6 +29,10 @@ abstract class PersistDHT {
      PersistDHT() {}
 
 
+    /**
+     * On a routine save, entries older than this (one hour in ms)
+     * are dropped; a full save keeps everything.
+     */
     private static final long MAX_AGE = 60 * (long) 60 * 1000;
 
     /**

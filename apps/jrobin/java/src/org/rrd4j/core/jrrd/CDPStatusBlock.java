@@ -9,16 +9,27 @@ import java.io.PrintStream;
  */
 public class CDPStatusBlock {
 
+    /** The jrrd parameter index of each consolidated data point field. */
     private enum cdp_par_en {
+        /** The current consolidated value. */
         CDP_val,
+        /** The count of unknown primary data points. */
         CDP_unkn_pdp_cnt,
+        /** The current heart beat wire intercept. */
         CDP_hw_intercept,
+        /** The previous heart beat wire intercept. */
         CDP_hw_last_intercept,
+        /** The current heart beat wire slope. */
         CDP_hw_slope,
+        /** The previous heart beat wire slope. */
         CDP_hw_last_slope,
+        /** The count of unknown values. */
         CDP_null_count,
+        /** The previous count of unknown values. */
         CDP_last_null_count,
+        /** The primary consolidated value. */
         CDP_primary_val,
+        /** The secondary consolidated value. */
         CDP_secondary_val
     }
 

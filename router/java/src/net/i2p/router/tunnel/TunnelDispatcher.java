@@ -71,7 +71,9 @@ import net.i2p.util.SimpleTimer2;
  * </pre>
  */
 public class TunnelDispatcher implements Service {
+    /** The router context. */
     private final RouterContext _context;
+    /** Logger for the tunnel dispatcher. */
     private final Log _log;
 
     /** Map of outbound gateways we created. */
@@ -111,6 +113,7 @@ public class TunnelDispatcher implements Service {
  * @since 0.9.70+
  */
     private volatile float _transitThrottleFactor = 0.95f;
+    /** Throttle applied to inbound transit bandwidth. */
     private volatile float _inboundTransitThrottleFactor = 0.0f;
 
     /**
@@ -144,6 +147,7 @@ public class TunnelDispatcher implements Service {
         return def;
     }
 
+    /** Tuner override for the per tunnel bandwidth divisor. */
     private static volatile int _tunedPerTunnelBweDivisor = -1;
 
     /**
@@ -232,6 +236,7 @@ public class TunnelDispatcher implements Service {
 
     /** Tunnel count thresholds for scaling cleanup interval. */
     private static final int CLEANUP_THRESHOLD_HIGH = 2000;
+    /** Job queue depth treated as medium stress. */
     private static final int CLEANUP_THRESHOLD_MED = 1000;
 
     /** Fudge factor for tunnel expiration check - simplifies complex calculation. */
@@ -253,6 +258,7 @@ public class TunnelDispatcher implements Service {
         IBGW
     }
 
+    /** Rate stat periods for the tunnel statistics. */
     private static final long[] RATES = { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR };
 
     /** Lock used when joining tunnels as participant, endpoint, or gateway. */
@@ -326,8 +332,9 @@ public class TunnelDispatcher implements Service {
         }
     }
 
-    // Transit pool trend counters, reset each summary period
+    /** Tunnel joins since the last stats log, a transit pool trend counter. */
     private final AtomicLong _joinsSinceLast = new AtomicLong();
+    /** Tunnel expirations since the last stats log. */
     private final AtomicLong _expiresSinceLast = new AtomicLong();
 
 /**
@@ -934,6 +941,11 @@ public class TunnelDispatcher implements Service {
         }
     }
 
+    /**
+     * Records a tunnel id as recently expired.
+     *
+     * @param id the tunnel that expired
+     */
     private void addRecentlyExpired(TunnelId id) {
         _recentlyExpired.put(id, _context.clock().now());
     }
@@ -1412,27 +1424,50 @@ public class TunnelDispatcher implements Service {
         return rv;
     }
 
+    /** Job removing hops from a tunnel. */
     private class LeaveTunnel extends JobImpl {
+        /** The hop configs to remove. */
         private final ConcurrentLinkedQueue<HopConfig> _configs = new ConcurrentLinkedQueue<>();
 
+        /**
+         * Builds the leave tunnel job.
+         *
+         * @param ctx the router context
+         */
         public LeaveTunnel(RouterContext ctx) {
             super(ctx);
             getTiming().setStartAfter(ctx.clock().now() + 10 * 60 * 1000L);
             ctx.jobQueue().addJob(this);
         }
 
+        /**
+         * Queues one hop to remove.
+         *
+         * @param cfg the hop config to remove
+         */
         public void add(HopConfig cfg) {
             _configs.offer(cfg);
         }
 
+        /** Drops all queued hop configs. */
         public void clear() {
             _configs.clear();
         }
 
+        /**
+         * Dequeues one hop config.
+         *
+         * @param cfg the hop config to drop
+         */
         public void remove(HopConfig cfg) {
             _configs.remove(cfg);
         }
 
+        /**
+         * Returns the queued hop configs.
+         *
+         * @return the hops waiting to be removed
+         */
         public Collection<HopConfig> getConfigs() {
             return _configs;
         }
@@ -1489,7 +1524,6 @@ public class TunnelDispatcher implements Service {
         }
     }
 
-    // ==================== Tuner delegation ====================
 
     /**
      * The delay before an idle gateway pumper is requeued.

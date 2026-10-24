@@ -26,10 +26,12 @@ import java.nio.charset.StandardCharsets;
 */
 class ConfigParser {
 
+    /** Utility class, not intended for instantiation. */
     private ConfigParser() {
         // Utility class - prevent instantiation
     }
 
+    /** True on Windows, where the path separators differ. */
     private static final boolean isWindows = SystemVersion.isWindows();
 
     /**

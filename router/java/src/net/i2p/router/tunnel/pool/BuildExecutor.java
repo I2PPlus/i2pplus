@@ -47,6 +47,12 @@ import net.i2p.util.SystemVersion;
  * As of 0.8.11, inbound request handling is done in a separate thread.
  */
 public class BuildExecutor implements Runnable {
+    /**
+     * Returns the configured minimum tunnel target.
+     *
+     * @param ctx the router context
+     * @return the minimum target count
+     */
     private static int getTunnelTargetMin(RouterContext ctx) {
         return ctx != null ? ctx.getProperty("i2p.tunnel.build.targetMin", 2) : 2;
     }
@@ -283,19 +289,33 @@ public class BuildExecutor implements Runnable {
                                     wantedCount + getTunnelTargetBuffer(ctx)));
     }
 
+    /** Build ids recently sent, for duplicate replies. */
     private final Set<Long> _recentBuildIds = new LinkedHashSet<>(129);
+    /** The router context. */
     private final RouterContext _context;
+    /** Logger for tunnel builds. */
     private final Log _log;
+    /** The tunnel pool manager we build for. */
     private final TunnelPoolManager _manager;
+    /** Tracks peers whose builds keep failing. */
     private final GhostPeerManager _ghostPeerManager;
+    /** Notify lock for the building map. */
     private final Object _currentlyBuilding; // Notify lock
+    /** Tunnels currently being built, by reply id. */
     private final ConcurrentHashMap<Long, PooledTunnelCreatorConfig> _currentlyBuildingMap; // indexed by ptcc.getReplyMessageId()
+    /** Recently finished builds, by reply id. */
     private final ConcurrentHashMap<Long, PooledTunnelCreatorConfig> _recentlyBuildingMap; // indexed by ptcc.getReplyMessageId()
+    /** True while the executor thread runs. */
     private volatile boolean _isRunning;
+    /** True to force another build pass. */
     private boolean _repoll;
+    /** When the last build pass started. */
     private long _lastBuildPassTime;
+    /** Successful builds counted in the window. */
     private final AtomicInteger _buildSuccessCount = new AtomicInteger();
+    /** Failed builds counted in the window. */
     private final AtomicInteger _buildFailureCount = new AtomicInteger();
+    /** When each pool last rebuilt its tunnels. */
     private final ConcurrentHashMap<TunnelPool, Long> _lastRebuildTime = new ConcurrentHashMap<>(64);
     /**
      * Throttle for peer-selection hot path: BldExecutor was pegging at 98%
@@ -308,7 +328,9 @@ public class BuildExecutor implements Runnable {
      * @since 0.9.71+
      */
     private final ConcurrentHashMap<TunnelPool, Long> _lastConfigureTime = new ConcurrentHashMap<>(16);
+    /** Minimum interval between pool reconfigures. */
     private static final long CONFIGURE_THROTTLE_MS = 10000L;
+    /** Timed-out builds counted in the window. */
     private final AtomicInteger _buildTimeoutCount = new AtomicInteger();
     /**
      * Sliding window of recent first-hop outcomes, the same shape as
@@ -321,6 +343,7 @@ public class BuildExecutor implements Runnable {
      * @since 0.9.72+
      */
     private final byte[] _firstHopResults = new byte[WINDOW_SIZE];
+    /** Write index into the first hop window. */
     private final AtomicInteger _firstHopWriteIndex = new AtomicInteger();
     /** {@link #_firstHopResults} entry for a first hop that replied. */
     private static final byte FIRST_HOP_SUCCESS = 1;
@@ -336,7 +359,9 @@ public class BuildExecutor implements Runnable {
      * @since 0.9.71+
      */
     private static final int WINDOW_SIZE = 100;
+    /** Ring of recent build results. */
     private final byte[] _buildResults = new byte[WINDOW_SIZE];
+    /** Write index into the result ring. */
     private final AtomicInteger _windowWriteIndex = new AtomicInteger();
     /**
      * How many recorded builds pass before the adaptive timeout is recalculated
@@ -356,6 +381,7 @@ public class BuildExecutor implements Runnable {
      * @since 0.9.71+
      */
     private volatile double _timeoutRate;
+    /** Current limit on concurrent builds. */
     private volatile int _adaptiveMaxConcurrentBuilds;
     /**
      * Concurrency ceiling for the current dispatch pass: the adaptive ceiling,
@@ -498,6 +524,7 @@ public class BuildExecutor implements Runnable {
      * when the underlying issue was transient.
      */
     private static volatile int _consecutiveFailureThreshold = 5;
+    /** Current backoff between pool build passes. */
     private static volatile long _poolBackoffMs = 12 * 1000L;
 
     /**
@@ -537,9 +564,13 @@ public class BuildExecutor implements Runnable {
      * @since 0.9.70+
      */
     public static void setPoolBackoffMs(long val) { _poolBackoffMs = Math.max(1000, Math.min(60000, val)); }
+    /** Per-pool failure tracking state. */
     private final ConcurrentHashMap<TunnelPool, long[]> _poolFailureState = new ConcurrentHashMap<>(64);
+    /** When the keepalive pass last ran. */
     private long _lastKeepAliveTime;
+    /** Current adaptive build timeout. */
     private volatile long _adaptiveTimeout;
+    /** Current adaptive first hop timeout. */
     private volatile long _adaptiveFirstHopTimeout;
 
     /**
@@ -690,6 +721,7 @@ public class BuildExecutor implements Runnable {
      */
     public static void setMaxConcurrentBuilds(int val) { _maxConcurrentBuilds = Math.max(8, Math.min(256, val)); }
 
+    /** Interval between executor passes. */
     private static final int LOOP_TIME = 15000;
 
     /**
@@ -730,13 +762,21 @@ public class BuildExecutor implements Runnable {
         return Math.max(0, MIN_BUILD_SPACING_MS - (now - lastPassTime));
     }
 
+    /** Pools considered per build pass. */
     private static final int TUNNEL_POOLS = 8;
     /** keepAlive() cadence in the executor loop (see run2()). */
     private static final long KEEPALIVE_INTERVAL_MS = 30 * 1000L;
 
+    /**
+     * Returns the startup grace period for builds.
+     *
+     * @param ctx the router context
+     * @return the grace period, in ms
+     */
     private static long getGracePeriod(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.build.gracePeriod", 60*1000);
     }
+    /** Rate stat periods for the build statistics. */
     private static final long[] RATES = { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR };
     /**
      * Check if full statistics are enabled.
@@ -1178,7 +1218,9 @@ public class BuildExecutor implements Runnable {
      * @since 0.9.71+
      */
     private static double _concurrencyThrottleThreshold = 0.30;
+    /** Build success ratio at which concurrency may start restoring. */
     private static double _concurrencyRestoreThreshold = 0.15;
+    /** Build success ratio needed to fully restore concurrency. */
     private static double _concurrencyRestoreSuccessThreshold = 0.80;
 
     /**
@@ -1658,8 +1700,11 @@ public class BuildExecutor implements Runnable {
      */
     /** Interval between emitted build-expiry reports. */
     private static final long BUILD_EXPIRY_LOG_INTERVAL_MS = 60 * 1000L;
+    /** Interval between build budget log lines. */
     private static final long BUDGET_EXHAUSTED_LOG_INTERVAL_MS = 60 * 1000L;
+    /** When build expiry was last logged. */
     private static final AtomicLong _lastBuildExpiryLog = new AtomicLong();
+    /** When budget exhaustion was last logged. */
     private static final AtomicLong _lastBudgetExhaustedLog = new AtomicLong();
 
     /**

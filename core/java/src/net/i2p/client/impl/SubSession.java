@@ -33,6 +33,7 @@ import java.util.Properties;
  * @since 0.9.21
  */
 class SubSession extends I2PSessionMuxedImpl {
+    /** The session this one shares its connection with. */
     private final I2PSessionMuxedImpl _primary;
 
     /**
@@ -85,8 +86,8 @@ class SubSession extends I2PSessionMuxedImpl {
     public void updateOptions(Properties options) { /* nop */ }
 
     /**
-     * Primary options.
-     * @return the primary options
+     * Options the primary session was created with.
+     * @return the primary session's options, never null
      * @since 0.9.33
      */
     public Properties getPrimaryOptions() {
@@ -302,7 +303,7 @@ class SubSession extends I2PSessionMuxedImpl {
     /**
      * Looks up a Destination, blocking up to the given wait for the answer.
      *
-     * @param maxWait ms
+     * @param maxWait the maximum time to wait, in milliseconds
      * @return null on failure
      */
     @Override
@@ -335,7 +336,7 @@ class SubSession extends I2PSessionMuxedImpl {
      * Ask the router to lookup a Destination by host name.
      * Blocking. See above for details.
      *
-     * @param maxWait ms
+     * @param maxWait the maximum time to wait, in milliseconds
      * @return null on failure
      */
     @Override

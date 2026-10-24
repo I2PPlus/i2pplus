@@ -34,13 +34,24 @@ public class InNetMessagePool implements Service {
      * Ensures message and sender are always processed together to prevent mismatches.
      */
     private static class QueuedMessage {
+        /** The message waiting to be handled. */
         final I2NPMessage message;
+        /** The peer the message came from. */
         final Hash from;
+        /**
+         * Records one queued message.
+         *
+         * @param m the message to handle
+         * @param f the peer it came from
+         */
         QueuedMessage(I2NPMessage m, Hash f) { message = m; from = f; }
     }
 
+    /** Logger for the message pool. */
     private final Log _log;
+    /** The router context. */
     private final RouterContext _context;
+    /** Job builders, indexed by message type. */
     private final HandlerJobBuilder[] _handlerJobBuilders;
 
     /**
@@ -49,26 +60,37 @@ public class InNetMessagePool implements Service {
      * Uses QueuedMessage wrapper to ensure message/sender pairing is preserved.
      */
     private final LinkedBlockingQueue<QueuedMessage> _pendingDataMessages;
+    /** Messages waiting for a gateway job. */
     private final LinkedBlockingQueue<I2NPMessage> _pendingGatewayMessages;
 
+    /** Job handling messages on the caller's thread. */
     private SharedShortCircuitDataJob _shortCircuitDataJob;
+    /** Gateway job handling messages directly. */
     private SharedShortCircuitGatewayJob _shortCircuitGatewayJob;
 
+    /** True while the pool is running. */
     private final AtomicBoolean _alive = new AtomicBoolean(false);
+    /** True to handle messages on job threads. */
     private final boolean _dispatchThreaded;
 
     /** Config flags for dispatch mode. */
     private static final String PROP_DISPATCH_THREADED = "router.dispatchThreaded";
+    /** Default for threaded dispatch. */
     private static final boolean DEFAULT_DISPATCH_THREADED = false;
 
+    /** Config key for direct dispatch. */
     private static final String PROP_DISPATCH_DIRECT = "router.dispatchDirect";
+    /** Default for direct dispatch. */
     private static final boolean DEFAULT_DISPATCH_DIRECT = true;
 
+    /** True to handle some messages without a job. */
     private final boolean DISPATCH_DIRECT;
 
     /** Maximum valid I2NP message type. */
     private static final int MAX_I2NP_MESSAGE_TYPE = 31;
+    /** Clock latitude allowed for delivery times. */
     private static final int MAX_DELIVERY_SKEW = 5000; // 5s latitude
+    /** Rate stat periods for the pool statistics. */
     private static final long[] RATES = RateConstants.BASIC_RATES;
 
     /**
@@ -484,6 +506,11 @@ public class InNetMessagePool implements Service {
      * Only used when dispatch not direct and not threaded.
      */
     private class SharedShortCircuitDataJob extends JobImpl {
+        /**
+         * Builds the shared data handling job.
+         *
+         * @param ctx the router context
+         */
         public SharedShortCircuitDataJob(RouterContext ctx) { super(ctx); }
 
         @Override
@@ -504,6 +531,11 @@ public class InNetMessagePool implements Service {
      * Only used when dispatch not direct and not threaded.
      */
     private class SharedShortCircuitGatewayJob extends JobImpl {
+        /**
+         * Builds the shared gateway handling job.
+         *
+         * @param ctx the router context
+         */
         public SharedShortCircuitGatewayJob(RouterContext ctx) { super(ctx); }
 
         @Override
@@ -524,6 +556,8 @@ public class InNetMessagePool implements Service {
      * Only used when dispatchThreaded == true.
      */
     private class TunnelGatewayDispatcher implements Runnable {
+        /** Dispatches messages arriving at a tunnel gateway. */
+        private TunnelGatewayDispatcher() {}
         @Override
         public void run() {
             while (_alive.get()) {
@@ -550,6 +584,8 @@ public class InNetMessagePool implements Service {
      * Only used when dispatchThreaded == true.
      */
     private class TunnelDataDispatcher implements Runnable {
+        /** Dispatches messages arriving for a tunnel client. */
+        private TunnelDataDispatcher() {}
         @Override
         public void run() {
             while (_alive.get()) {

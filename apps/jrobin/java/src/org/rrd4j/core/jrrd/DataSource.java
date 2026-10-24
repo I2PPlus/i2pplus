@@ -10,21 +10,36 @@ import java.text.NumberFormat;
  */
 public class DataSource {
 
+    /** The jrrd parameter index of each data source field. */
     private enum ds_param_en {
+        /** The minimum heartbeat count parameter. */
         DS_mrhb_cnt,
+        /** The minimum value parameter. */
         DS_min_val,
+        /** The maximum value parameter. */
         DS_max_val,
+        /** The encoding type code parameter. */
         DS_cde
     }
 
+    /** Offset of this data source in the buffer. */
     private final long offset;
+    /** Size of this data source in the buffer. */
     private final long size;
+    /** The name of the data source. */
     private final String name;
+    /** The type of the data source. */
     private final DataSourceType type;
+    /** Longest allowed interval between updates. */
     private final int minimumHeartbeat;
+    /** Smallest valid value, NaN if there is none. */
     private final double minimum;
+    /** Largest valid value, NaN if there is none. */
     private final double maximum;
-    // initialized during RRDatabase construction
+    /**
+     * Status block of the current primary data point, initialized during
+     * database construction.
+     */
     private PDPStatusBlock pdpStatusBlock;
 
     /**

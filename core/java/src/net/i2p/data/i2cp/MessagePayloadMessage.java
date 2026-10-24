@@ -25,8 +25,11 @@ public class MessagePayloadMessage extends I2CPMessageImpl {
      * I2CP message type code for a payload message.
      */
     public static final int MESSAGE_TYPE = 31;
+    /** The session the payload is for. */
     private int _sessionId;
+    /** The message the payload belongs to. */
     private long _messageId;
+    /** The message contents. */
     private Payload _payload;
 
     /**

@@ -18,6 +18,7 @@ import net.i2p.util.SystemVersion;
 
 /** This actually boots almost everything. */
 class BootCommSystemJob extends JobImpl {
+    /** Logger for this class. */
     private final Log _log;
 
     /** Property to enable trusted links. */
@@ -61,6 +62,7 @@ class BootCommSystemJob extends JobImpl {
         ((RouterClock) getContext().clock()).addShiftListener(getContext().router());
     }
 
+    /** Starts the network database once the comm system is up. */
     private void startupDb() {
         Job bootDb = new BootNetworkDbJob(getContext());
         boolean useTrusted = getContext().getBooleanProperty(PROP_USE_TRUSTED_LINKS);

@@ -51,7 +51,9 @@ import net.i2p.util.SipHash;
  */
 class SOCKS5Server extends SOCKSServer {
 
+    /** True once the SOCKS handshake has finished. */
     private boolean setupCompleted;
+    /** Whether a username and password were configured. */
     private final boolean authRequired;
     /**
      * Torsocks support
@@ -645,9 +647,14 @@ class SOCKS5Server extends SOCKSServer {
         return picked;
     }
 
-    // This isn't really the right place for this, we can't stop the tunnel once it starts.
+    /**
+     * The shared UDP tunnel, started on first use. This isn't really the
+     * right place for it, since we can't stop the tunnel once it starts.
+     */
     private static SOCKSUDPTunnel tunnel;
+    /** Guards starting the shared UDP tunnel. */
     private static final Object _startLock = new Object();
+    /** Zero address sent when the client's real address is hidden. */
     private static final byte[] dummyIP = new byte[4];
 
     /**

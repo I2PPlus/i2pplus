@@ -16,6 +16,7 @@ import net.i2p.util.PasswordManager;
  * @since 1.8.0
  */
 public class SAMSecureSession implements SAMSecureSessionInterface {
+    /** Logger for this class. */
     private final Log log = I2PAppContext.getGlobalContext().logManager().getLog(SAMHandlerFactory.class);
 
     /**

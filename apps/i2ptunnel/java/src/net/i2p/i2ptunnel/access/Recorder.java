@@ -11,7 +11,9 @@ import java.io.File;
  */
 class Recorder {
 
+    /** File the access log is written to. */
     private final File file;
+    /** Limit that must be exceeded before an entry is written. */
     private final Threshold threshold;
 
     /**

@@ -40,12 +40,16 @@ import org.cybergarage.util.Debug;
  * @since 1.0
  */
 public abstract class Parser {
-    // I2P
+    /** Agent name sent when fetching a description. */
     private static final String USER_AGENT = "Debian/buster/sid, UPnP/1.1, MiniUPnPc/2.1";
-    // HttpURLConnection proxy
-    // https://docs.oracle.com/javase/8/docs/api/java/net/doc-files/net-properties.html#Proxies
-    // socks and system proxies are checked in TransportManager
+    /**
+     * Property naming the HttpURLConnection proxy used to fetch a description.
+     * Socks and system proxies are checked in TransportManager.
+     *
+     * See also: <a href="https://docs.oracle.com/javase/8/docs/api/java/net/doc-files/net-properties.html#Proxies">Proxies</a>
+     */
     private static final String PROP_HURLC_PROXY1 = "http.proxyHost";
+    /** True when a proxy is configured for fetching descriptions. */
     private static final boolean HURLC_PROXY_ENABLED =
             System.getProperty(PROP_HURLC_PROXY1) != null
                     && System.getProperty(PROP_HURLC_PROXY1).length() > 0;
@@ -98,7 +102,6 @@ public abstract class Parser {
             throw new ParserException("Bad host " + host);
 
         int port = locationURL.getPort();
-        // Thanks for Hao Hu
         if (port == -1) port = 80;
         String uri = locationURL.getPath();
         // I2P note: Roku port 9080 now ignored in ControlPoint.addDevice()

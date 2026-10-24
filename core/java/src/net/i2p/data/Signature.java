@@ -58,11 +58,13 @@ import java.util.Arrays;
  *
  */
 public class Signature extends SimpleDataStructure {
+    /** Type assumed when a signature gives none. */
     private static final SigType DEF_TYPE = SigType.DSA_SHA1;
 
     /** Default signature length in bytes. */
     public static final int SIGNATURE_BYTES = DEF_TYPE.getSigLen();
 
+    /** The algorithm this signature was made with. */
     private final SigType _type;
 
     /** Creates a new Signature with the default DSA-SHA1 type. */

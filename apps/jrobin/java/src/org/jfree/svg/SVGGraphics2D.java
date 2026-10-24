@@ -113,10 +113,13 @@ public final class SVGGraphics2D extends Graphics2D {
     /** The prefix for keys used to identify clip paths. */
     private static final String CLIP_KEY_PREFIX = "clip-";
 
+    /** The width of the drawing area. */
     private final int width;
 
+    /** The height of the drawing area. */
     private final int height;
 
+    /** The units of the drawing area. */
     private final SVGUnits units;
 
     /**
@@ -205,10 +208,13 @@ public final class SVGGraphics2D extends Graphics2D {
     /** The current transform. */
     private AffineTransform transform = new AffineTransform();
 
+    /** The paint used for filling. */
     private Paint paint = Color.BLACK;
 
+    /** The color used for drawing text. */
     private Color color = Color.BLACK;
 
+    /** The alpha composite applied to the draws. */
     private Composite composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f);
 
     /** The current stroke. */
@@ -216,10 +222,12 @@ public final class SVGGraphics2D extends Graphics2D {
 
     /** Cached strokeStyle() result, invalidated on setStroke/setPaint/setComposite. */
     private String strokeStyleCache;
+    /** True while the cached stroke style is current. */
     private boolean strokeStyleCacheValid;
 
     /** Cached getSVGFillStyle() result, invalidated on setPaint/setComposite. */
     private String fillStyleCache;
+    /** True while the cached fill style is current. */
     private boolean fillStyleCacheValid;
 
     /** When true, the next draw(Path2D) emits a glow-filtered path before the original. */
@@ -284,6 +292,7 @@ public final class SVGGraphics2D extends Graphics2D {
     /** A hidden image used for font metrics. */
     private BufferedImage fmImage;
 
+    /** Graphics of the cached font metric image. */
     private Graphics2D fmImageG2D;
 
     /**
@@ -1442,7 +1451,9 @@ public final class SVGGraphics2D extends Graphics2D {
         return b.toString();
     }
 
+    /** SVG name of the default stroke cap. */
     private static final String DEFAULT_STROKE_CAP = "butt";
+    /** SVG name of the default stroke join. */
     private static final String DEFAULT_STROKE_JOIN = "miter";
 
     /**
@@ -2036,6 +2047,12 @@ public final class SVGGraphics2D extends Graphics2D {
         return CLIP_KEY_PREFIX + index;
     }
 
+    /**
+     * Formats a number for a transform value.
+     *
+     * @param d the value to format
+     * @return the formatted text
+     */
     private String transformDP(final double d) {
         return doubleToString(d, transformDP);
     }
@@ -2066,10 +2083,22 @@ public final class SVGGraphics2D extends Graphics2D {
         return value.contains(".") ? value.replaceAll("0+$", "").replaceAll("\\.$", "") : value;
     }
 
+    /**
+     * Formats a number for a geometry value.
+     *
+     * @param d the value to format
+     * @return the formatted text
+     */
     private String geomDP(final double d) {
         return doubleToString(d, geometryDP);
     }
 
+    /**
+     * Converts a transform to its SVG text.
+     *
+     * @param t the transform to convert
+     * @return the SVG transform text
+     */
     private String getSVGTransform(AffineTransform t) {
         StringBuilder b = new StringBuilder("matrix(");
         b.append(transformDP(t.getScaleX()))
@@ -2766,6 +2795,12 @@ public final class SVGGraphics2D extends Graphics2D {
         this.themeName = name;
     }
 
+    /**
+     * Detects the theme used in the SVG text.
+     *
+     * @param svg the SVG text to inspect
+     * @return the theme found
+     */
     private Theme detectTheme(String svg) {
         if (themeName != null) {
             for (Theme t : Theme.values()) {
@@ -2879,6 +2914,12 @@ public final class SVGGraphics2D extends Graphics2D {
                 "<line $1class=\"axis\"");
     }
 
+    /**
+     * Cleans up the generated SVG text.
+     *
+     * @param svgRaw the SVG text as generated
+     * @return the text ready to write
+     */
     private String postProcessSvg(String svgRaw) {
         Theme theme = detectTheme(svgRaw);
 

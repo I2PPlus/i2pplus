@@ -24,18 +24,30 @@ import net.i2p.util.SystemVersion;
  * It generates a LARGE log file.</p>
  */
 public class MessageHistory {
+    /** Logger for the message history. */
     private final Log _log;
+    /** The router context. */
     private final RouterContext _context;
+    /** The entries not yet written to the file. */
     private final Queue<String> _unwrittenEntries; // list of raw entries (strings) yet to be written
+    /** The file the entries are written to. */
     private String _historyFile; // where to write
+    /** The router hash, written into each entry. */
     private String _localIdent; // placed in each entry to uniquely identify the local router
+    /** True while logging is enabled. */
     private volatile boolean _doLog; // true == we want to log
+    /** True to pause the writes briefly. */
     private volatile boolean _doPause; // true == briefly stop writing data to the log (used while submitting it)
+    /** Job reopening the history file. */
     private final ReinitializeJob _reinitializeJob;
+    /** Job writing the queued entries. */
     private final WriteJob _writeJob;
+    /** True until the first write completes. */
     private volatile boolean _firstPass;
 
+    /** The platform line separator bytes. */
     private static final byte[] NL = DataHelper.getUTF8(System.getProperty("line.separator"));
+    /** Entries forcing a write to the file. */
     private static final int FLUSH_SIZE = 1000; // write out at least once every 1000 entries
 
     /** Config property determining whether we want to debug with the message history - default false. */
@@ -74,9 +86,9 @@ public class MessageHistory {
     }
 
     /**
-     * Whether logging is enabled.
+     * Whether the history logging is turned on.
      *
-     * @return whether logging is enabled
+     * @return true if the entries are being logged
      */
     public boolean getDoLog() { return _doLog; }
 
@@ -87,6 +99,7 @@ public class MessageHistory {
      */
     String getFilename() { return _historyFile; }
 
+    /** Reads the logging settings from the config. */
     private void updateSettings() {
         _doLog = _context.getBooleanProperty(PROP_KEEP_MESSAGE_HISTORY);
         _historyFile = _context.getProperty(PROP_MESSAGE_HISTORY_FILENAME, DEFAULT_MESSAGE_HISTORY_FILENAME);
@@ -130,7 +143,9 @@ public class MessageHistory {
         }
     }
 
+    /** Job reopening the history file. */
     private final class ReinitializeJob extends JobImpl {
+        /** Builds the reinitialize job. */
         private ReinitializeJob() {
             super(MessageHistory.this._context);
         }
@@ -613,10 +628,21 @@ public class MessageHistory {
         return str.substring(0, 6);
     }
 
+    /**
+     * Returns the prefix naming this router.
+     *
+     * @return the prefix text
+     */
     private final String getPrefix() {
         return getTime(_context.clock().now()) + ' ' + _localIdent + ": ";
     }
 
+    /**
+     * Formats a time for a history entry.
+     *
+     * @param when the time to format
+     * @return the formatted text
+     */
     private final String getTime(long when) {
         return DataHelper.formatTime(when);
     }
@@ -666,6 +692,7 @@ public class MessageHistory {
 
     /** Write out the message history once per minute, if not sooner. */
     private static final long WRITE_DELAY = 60*1000L;
+    /** Job writing the queued entries to the file. */
     private class WriteJob extends JobImpl {
         /**
          * The write job that flushes the pending message history.

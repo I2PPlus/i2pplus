@@ -47,12 +47,16 @@ import net.i2p.util.SystemVersion;
  */
 public class PortableWorkingDir {
 
+    /** Utility class, not intended for instantiation. */
     private PortableWorkingDir() {}
 
+    /** Property naming the installation directory. */
     private static final String PROP_BASE_DIR = "i2p.dir.base";
+    /** Property naming the working directory. */
     private static final String PROP_WORKING_DIR = "i2p.dir.config";
     /** We do a couple of things differently if this is the username. */
     private static final String PROP_WRAPPER_LOG = "wrapper.logfile";
+    /** Wrapper log moved out of the way when it sits in the home directory. */
     private static final String DEFAULT_WRAPPER_LOG = "wrapper.log";
 
     /**

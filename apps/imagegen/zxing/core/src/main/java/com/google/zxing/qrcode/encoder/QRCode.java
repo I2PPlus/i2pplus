@@ -30,10 +30,15 @@ public final class QRCode {
    */
   public static final int NUM_MASK_PATTERNS = 8;
 
+  /** The encoding mode the data was encoded with. */
   private Mode mode;
+  /** The error correction level chosen. */
   private ErrorCorrectionLevel ecLevel;
+  /** The symbol size chosen. */
   private Version version;
+  /** The data mask pattern chosen, -1 before it is picked. */
   private int maskPattern;
+  /** The finished symbol, null before it is built. */
   private ByteMatrix matrix;
 
   /**

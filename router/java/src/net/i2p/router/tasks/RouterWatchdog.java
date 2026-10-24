@@ -44,13 +44,20 @@ import net.i2p.util.SystemVersion;
  * and ensures automatic recovery from transient issues.
  */
 public class RouterWatchdog implements Runnable {
+    /** The log for the watchdog. */
     private final Log _log;
+    /** The router context. */
     private final RouterContext _context;
+    /** Consecutive check errors so far. */
     private int _consecutiveErrors;
+    /** True while the watchdog runs. */
     private volatile boolean _isRunning;
+    /** When the status was last dumped. */
     private long _lastDump;
 
+    /** Most a job may lag before a hang. */
     private static final long MAX_JOB_RUN_LAG = 60*1000L;
+    /** Least interval between the status dumps. */
     private static final long MIN_DUMP_INTERVAL= 6*60*60*1000L;
 
     /**
@@ -108,6 +115,11 @@ public class RouterWatchdog implements Runnable {
         return _context.clientManager().verifyClientLiveliness();
     }
 
+    /**
+     * Whether a hang should restart the router.
+     *
+     * @return true with enough consecutive errors and a wrapper
+     */
     private boolean shutdownOnHang() {
         if (!_context.getBooleanProperty("watchdog.haltOnHang")) {return false;} // prop default false
 
@@ -116,6 +128,7 @@ public class RouterWatchdog implements Runnable {
         return _consecutiveErrors >= 20 && SystemVersion.hasWrapper();
     }
 
+    /** Writes the router status to the log. */
     private void dumpStatus() {
         if (_log.shouldError()) {
             RateStat rs = _context.statManager().getRate("transport.sendProcessingTime");

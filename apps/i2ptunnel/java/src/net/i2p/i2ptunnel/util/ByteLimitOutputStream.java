@@ -12,7 +12,9 @@ import java.io.OutputStream;
  */
 public class ByteLimitOutputStream extends LimitOutputStream {
 
+    /** Most bytes the stream will accept. */
     private final long _limit;
+    /** Bytes written so far. */
     private long _count;
 
     /**

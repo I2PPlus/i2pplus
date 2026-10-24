@@ -31,15 +31,22 @@ import java.io.IOException;
  */
 public final class I2PDatagramMaker {
 
+    /** Starting size of the datagram buffer, in bytes. */
     private static final int INIT_DGRAM_BUFSIZE = 2*1024;
+    /** Largest datagram that can be made, in bytes. */
     private static final int MAX_DGRAM_BUFSIZE = 61*1024;
 
+    /** Hashes the datagram contents. */
     private final SHA256Generator hashGen = SHA256Generator.getInstance();
+    /** Signs the datagram. */
     private final DSAEngine dsaEng = DSAEngine.getInstance();
 
+    /** Key that signs the datagrams. */
     private SigningPrivateKey sxPrivKey;
+    /** This maker's destination, embedded in each datagram. */
     private byte[] sxDestBytes;
 
+    /** Buffer the datagram is assembled in. */
     private final ByteArrayOutputStream sxDGram = new ByteArrayOutputStream(INIT_DGRAM_BUFSIZE);
 
     /**

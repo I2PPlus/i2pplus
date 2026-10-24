@@ -41,40 +41,51 @@ import net.i2p.util.SystemVersion;
  * - Close() flushes any remaining data and releases internal buffers.
  */
 class MessageOutputStream extends OutputStream {
+    /** The app context. */
     private final I2PAppContext _context;
+    /** Logger for the output stream. */
     private final Log _log;
 
-    // Buffer and buffer management
-    // _buf is fetched from ByteCache, length == _originalBufferSize
+    /** The buffer accumulating the written data. */
     private byte[] _buf;
+    /** Valid bytes held in the buffer. */
     private int _valid;  // Number of valid bytes currently in buffer
 
+    /** Lock for the write buffer. */
     private final Object _dataLock = new Object();
 
-    // Reusable buffer for single-byte write(int) to avoid per-call allocation.
-    // Guarded by _oneByteLock (not _dataLock, which write(byte[],int,int) acquires).
+    /**
+     * Reusable buffer for single byte writes, guarded by _oneByteLock,
+     * not _dataLock.
+     */
     private final byte[] _oneByte = new byte[1];
+    /** Lock for the single byte writes. */
     private final Object _oneByteLock = new Object();
 
+    /** The connection receiving the data. */
     private final DataReceiver _dataReceiver;
 
-    // Track any stream IOException to propagate on next I/O call
+    /** The stream error, kept to rethrow on the next call. */
     private final AtomicReference<IOException> _streamError = new AtomicReference<>();
 
-    // Whether this stream is closed
+    /** True once the stream is closed. */
     private final AtomicBoolean _closed = new AtomicBoolean(false);
 
-    // Total bytes written since creation
+    /** Total bytes written to the connection since creation. */
     private long _written;
 
-    // Write timeout in milliseconds for blocking waits, -1 indicates infinite
+    /** Blocking write timeout, in ms, -1 for no timeout. */
     private volatile int _writeTimeout = -1;
 
-    // Buffer caching utility
+    /** Cache supplying the write buffer. */
     private final ByteCache _dataCache;
 
-    // Original and current buffer sizes controlling maximum buffer flush size
+    /**
+     * Buffer size requested at construction, the two sizes control
+     * when the buffer is flushed.
+     */
     private final int _originalBufferSize;
+    /** Buffer size in use now. */
     private int _currentBufferSize;
 
     /** Buffer size requested by the next flush, updated when buffer drains. */
@@ -715,6 +726,7 @@ class MessageOutputStream extends OutputStream {
      * Ensures data does not stay buffered indefinitely.
      */
     private class Flusher extends SimpleTimer2.TimedEvent {
+        /** True while the stream waits in the event queue. */
         private volatile boolean _enqueued = false;
 
         /**

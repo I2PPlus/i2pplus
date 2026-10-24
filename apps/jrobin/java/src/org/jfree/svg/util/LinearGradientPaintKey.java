@@ -31,6 +31,7 @@ import java.util.Arrays;
  */
 public class LinearGradientPaintKey {
 
+    /** The paint this instance is a cache key for. */
     private final LinearGradientPaint paint;
 
     /**

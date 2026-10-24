@@ -19,9 +19,13 @@ import net.i2p.data.DataHelper;
  */
 class Draft extends Mail {
 
+	/** Files attached to the draft. */
 	private final List<Attachment> attachments;
+	/** Blind copies, addresses only, enclosed by angle brackets. */
 	private String[] bcc;        // addresses only, enclosed by <>
+	/** Size of the draft's contents, in bytes. */
 	private long size;
+	/** Header marking an attachment in a sent message. */
 	private static final String HDR_ATTACH = "X-I2P-Attachment: ";
 	/**
 	 * Header line carrying the blind-copy recipients of a draft, which a draft

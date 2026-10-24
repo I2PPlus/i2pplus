@@ -158,8 +158,11 @@ public class BuildRequestRecord {
     public static final int IV_SIZE = 16;
     /** We show 16 bytes of the peer hash outside the elGamal block. */
     public static final int PEER_SIZE = 16;
+    /** Default life of the record - 10 minutes, stored in seconds. */
     private static final int DEFAULT_EXPIRATION_SECONDS = 10*60;
+    /** Length of an X25519 public key, in bytes. */
     private static final int EC_LEN = EncType.ECIES_X25519.getPubkeyLen();
+    /** An all-zero key, for records that carry none. */
     private static final byte[] NULL_KEY = new byte[EC_LEN];
 
     /**

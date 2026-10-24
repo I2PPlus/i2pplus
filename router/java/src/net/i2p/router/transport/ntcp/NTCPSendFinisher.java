@@ -21,14 +21,22 @@ import net.i2p.util.SystemVersion;
  * @since 0.9.16
  */
 class NTCPSendFinisher {
+    /** Threads in the finisher pool. */
     private static volatile int _maxThreads = SystemVersion.isSlow() ? 2 : 3;
+    /** Events queued for the finishers. */
     private static volatile int _queueCapacity = SystemVersion.isSlow() ? 1000 : 4096;
+    /** The app context. */
     private final I2PAppContext _context;
+    /** The transport whose sends are finished. */
     private final NTCPTransport _transport;
+    /** Logger for the send finisher. */
     private final Log _log;
+    /** Sequence number of the finish events. */
     private static final AtomicInteger _count = new AtomicInteger();
+    /** Pool running the finish events. */
     private ThreadPoolExecutor _executor;
 
+    /** Time windows of the send rate stats. */
     private static final long[] RATES = {60*1000L, 10*60*1000L, 60*60*1000L};
 
     /**
@@ -207,7 +215,13 @@ class NTCPSendFinisher {
         }
     }
 
+    /** Executor growing and shrinking the finisher pool. */
     private static class CustomThreadPoolExecutor extends ThreadPoolExecutor {
+        /**
+         * Builds the finisher pool.
+         *
+         * @param num the threads to start with
+         */
         public CustomThreadPoolExecutor(int num) {
             super(num, num, 10_000, TimeUnit.MILLISECONDS,
                   new LinkedBlockingQueue<>(_queueCapacity),
@@ -216,7 +230,10 @@ class NTCPSendFinisher {
         }
     }
 
+    /** Factory naming the finisher pool's threads. */
     private static class CustomThreadFactory implements ThreadFactory {
+        /** Names the finisher's threads. */
+        private CustomThreadFactory() {}
         public Thread newThread(Runnable r) {
             Thread rv = Executors.defaultThreadFactory().newThread(r);
             rv.setName("NTCPFinis." + _count.incrementAndGet());
@@ -229,8 +246,14 @@ class NTCPSendFinisher {
      * Executes the transport's afterSend callback for the message.
      */
     private class RunnableEvent implements Runnable {
+        /** The message whose send finished. */
         private final OutNetMessage _msg;
 
+        /**
+         * Builds the event for one finished send.
+         *
+         * @param msg the message whose send finished
+         */
         public RunnableEvent(OutNetMessage msg) {
             _msg = msg;
         }

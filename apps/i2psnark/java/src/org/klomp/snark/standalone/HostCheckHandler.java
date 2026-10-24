@@ -21,8 +21,11 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
  * @since 0.9.34 adapted from router console
  */
 public class HostCheckHandler extends AbstractHandler {
+    /** Supplies the configuration and the log. */
     private final I2PAppContext _context;
+    /** Host names the service will answer for. */
     private final Set<String> _listenHosts;
+    /** Property listing the hosts that may use the service. */
     private static final String PROP_ALLOWED_HOSTS = "i2psnark.allowedHosts";
 
     /**

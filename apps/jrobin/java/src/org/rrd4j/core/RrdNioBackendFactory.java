@@ -28,13 +28,16 @@ public class RrdNioBackendFactory extends RrdFileBackendFactory {
      */
     public static final int DEFAULT_SYNC_PERIOD = 300; // seconds
 
+    /** Writes between forced syncs, for factories that name none. */
     private static int defaultSyncPeriod = DEFAULT_SYNC_PERIOD;
 
     /** The core pool size for the sync executor. Defaults to 6. */
     public static final int DEFAULT_SYNC_CORE_POOL_SIZE = 6;
 
+    /** Threads in the shared sync pool. */
     private static int defaultSyncPoolSize = DEFAULT_SYNC_CORE_POOL_SIZE;
 
+    /** Factory naming the sync pool's threads. */
     private static volatile ThreadFactory _threadFactory;
 
     /**
@@ -79,6 +82,7 @@ public class RrdNioBackendFactory extends RrdFileBackendFactory {
         RrdNioBackendFactory.defaultSyncPoolSize = syncPoolSize;
     }
 
+    /** Writes between forced syncs for this factory's backends. */
     private final int syncPeriod;
 
     /** The thread pool to pass to newly-created RrdNioBackend instances. */
@@ -180,11 +184,13 @@ public class RrdNioBackendFactory extends RrdFileBackendFactory {
         _threadFactory = factory;
     }
 
+    /** The shared pool that flushes writes to disk. */
     private static class DefaultSyncThreadPool {
         /** The default thread pool used to periodically sync the mapped file to disk with. */
         static final RrdSyncThreadPool INSTANCE =
             new RrdSyncThreadPool(defaultSyncPoolSize, _threadFactory);
 
+        /** Singleton holder for the shared sync pool. */
         private DefaultSyncThreadPool() {}
     }
 }

@@ -17,10 +17,14 @@ import net.i2p.router.RouterContext;
  * @since 0.9.71+
  */
 class NetDbRouterCache {
+    /** How long the router list is reused - 10 seconds. */
     private static final long NETDB_REFRESH_PERIOD = 10 * 1000L;
+    /** When the cached list stops being usable. */
     private static volatile long _routersCachedUntil;
+    /** The routers read last time. */
     private static volatile List<RouterInfo> _cachedRouters;
 
+    /** The router whose netdb is read. */
     private final RouterContext _context;
 
     /**

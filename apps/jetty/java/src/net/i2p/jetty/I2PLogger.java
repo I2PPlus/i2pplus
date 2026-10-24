@@ -27,18 +27,18 @@ import org.eclipse.jetty.util.log.Logger;
  *
  * @since Jetty 6
  */
-public class I2PLogger implements Logger
-{
+public class I2PLogger implements Logger {
+    /** The I2P logger messages go to. */
     private final Log _log;
 
+    /** Builds the formatted message. */
     private final StringBuilder _buffer = new StringBuilder();
 
 
     /**
      * Construct a logger against the global application context.
      */
-    public I2PLogger()
-    {
+    public I2PLogger() {
         this(I2PAppContext.getGlobalContext());
     }
 
@@ -47,20 +47,17 @@ public class I2PLogger implements Logger
      *
      * @param ctx the I2P application context
      */
-    public I2PLogger(I2PAppContext ctx)
-    {
+    public I2PLogger(I2PAppContext ctx) {
         _log = ctx.logManager().getLog(Server.class);
         if (System.getProperty("DEBUG") != null)
             setDebugEnabled(true);
     }
 
-    public boolean isDebugEnabled()
-    {
+    public boolean isDebugEnabled() {
         return _log.shouldDebug();
     }
 
-    public void setDebugEnabled(boolean enabled)
-    {
+    public void setDebugEnabled(boolean enabled) {
         if (enabled)
             _log.setMinimumPriority(Log.DEBUG);
         else
@@ -72,12 +69,11 @@ public class I2PLogger implements Logger
      * Throwable when it is the only non-null argument
      * together with the formatted line
      *
-     * @param msg the message @param arg0 first arg @param arg1 second arg
+     * @param msg the message to log @param arg0 first arg @param arg1 second arg
      * @param arg0 substituted for the first {} placeholder in msg, or logged as the
      * @param arg1 substituted for the second {} placeholder, or logged as the throwable
      */
-    public void info(String msg,Object arg0, Object arg1)
-    {
+    public void info(String msg,Object arg0, Object arg1) {
         if (arg0 == null && arg1 == null) {
             _log.info(msg);
         } else if (arg0 != null && arg1 == null && arg0 instanceof Throwable) {
@@ -96,10 +92,9 @@ public class I2PLogger implements Logger
     /**
      * Log a debug message with a throwable.
      *
-     * @param msg the message @param th the throwable
+     * @param msg the message to log @param th the throwable
      */
-    public void debug(String msg,Throwable th)
-    {
+    public void debug(String msg,Throwable th) {
         _log.debug(msg,th);
     }
 
@@ -107,12 +102,11 @@ public class I2PLogger implements Logger
      * Throwable when it is the only non-null argument
      * together with the formatted line
      *
-     * @param msg the message @param arg0 first arg @param arg1 second arg
+     * @param msg the message to log @param arg0 first arg @param arg1 second arg
      * @param arg0 substituted for the first {} placeholder in msg, or logged as the
      * @param arg1 substituted for the second {} placeholder, or logged as the throwable
      */
-    public void debug(String msg,Object arg0, Object arg1)
-    {
+    public void debug(String msg,Object arg0, Object arg1) {
         if (arg0 == null && arg1 == null) {
             _log.debug(msg);
         } else if (arg0 != null && arg1 == null && arg0 instanceof Throwable) {
@@ -132,12 +126,11 @@ public class I2PLogger implements Logger
      * Throwable when it is the only non-null argument
      * together with the formatted line
      *
-     * @param msg the message @param arg0 first arg @param arg1 second arg
+     * @param msg the message to log @param arg0 first arg @param arg1 second arg
      * @param arg0 substituted for the first {} placeholder in msg, or logged as the
      * @param arg1 substituted for the second {} placeholder, or logged as the throwable
      */
-    public void warn(String msg,Object arg0, Object arg1)
-    {
+    public void warn(String msg,Object arg0, Object arg1) {
         if (arg0 == null && arg1 == null) {
             _log.warn(msg);
         } else if (arg0 != null && arg1 == null && arg0 instanceof Throwable) {
@@ -153,8 +146,7 @@ public class I2PLogger implements Logger
         }
     }
 
-    public void warn(String msg, Throwable th)
-    {
+    public void warn(String msg, Throwable th) {
         // some of these are serious, some aren't
         // no way to get it right
         if (th != null) {
@@ -167,8 +159,14 @@ public class I2PLogger implements Logger
         }
     }
 
-    private void format(String msg, Object arg0, Object arg1)
-    {
+    /**
+     * Writes one message with two arguments.
+     *
+     * @param msg the message to log with placeholders
+     * @param arg0 the first argument
+     * @param arg1 the second argument
+     */
+    private void format(String msg, Object arg0, Object arg1) {
         _buffer.setLength(0);
         int i0=msg==null?-1:msg.indexOf("{}");
         int i1=i0<0?-1:msg.indexOf("{}",i0+2);
@@ -210,22 +208,24 @@ public class I2PLogger implements Logger
         }
     }
 
-    private void format(String msg)
-    {
+    /**
+     * Writes one message with no arguments.
+     *
+     * @param msg the message to log
+     */
+    private void format(String msg) {
         if (msg == null)
             _buffer.append("null");
         else
             _buffer.append(msg);
     }
 
-    public Logger getLogger(String name)
-    {
+    public Logger getLogger(String name) {
             return this;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "I2PLogger";
     }
 
@@ -234,8 +234,7 @@ public class I2PLogger implements Logger
      *
      * @since Jetty 7
      */
-    public void ignore(Throwable ignored)
-    {
+    public void ignore(Throwable ignored) {
             debug("IGNORED", ignored);
     }
 
@@ -244,8 +243,7 @@ public class I2PLogger implements Logger
      *
      * @since Jetty 7
      */
-    public void debug(Throwable thrown)
-    {
+    public void debug(Throwable thrown) {
             debug("", thrown);
     }
 
@@ -254,8 +252,7 @@ public class I2PLogger implements Logger
      *
      * @since Jetty 7
      */
-    public void debug(String msg, Object... args)
-    {
+    public void debug(String msg, Object... args) {
             Object a1 = args.length > 0 ? args[0] : null;
             Object a2 = args.length > 1 ? args[1] : null;
             debug(msg, a1, a2);
@@ -266,8 +263,7 @@ public class I2PLogger implements Logger
      *
      * @since Jetty 7
      */
-    public void info(Throwable thrown)
-    {
+    public void info(Throwable thrown) {
             info("", thrown);
     }
 
@@ -276,8 +272,7 @@ public class I2PLogger implements Logger
      *
      * @since Jetty 7
      */
-    public void info(String msg, Object... args)
-    {
+    public void info(String msg, Object... args) {
             Object a1 = args.length > 0 ? args[0] : null;
             Object a2 = args.length > 1 ? args[1] : null;
             info(msg, a1, a2);
@@ -288,8 +283,7 @@ public class I2PLogger implements Logger
      *
      * @since Jetty 7
      */
-    public void info(String msg, Throwable th)
-    {
+    public void info(String msg, Throwable th) {
         _log.info(msg,th);
     }
 
@@ -298,8 +292,7 @@ public class I2PLogger implements Logger
      *
      * @since Jetty 7
      */
-    public void warn(Throwable thrown)
-    {
+    public void warn(Throwable thrown) {
             warn("", thrown);
     }
 
@@ -308,8 +301,7 @@ public class I2PLogger implements Logger
      *
      * @since Jetty 7
      */
-    public void warn(String msg, Object... args)
-    {
+    public void warn(String msg, Object... args) {
             Object a1 = args.length > 0 ? args[0] : null;
             Object a2 = args.length > 1 ? args[1] : null;
             warn(msg, a1, a2);

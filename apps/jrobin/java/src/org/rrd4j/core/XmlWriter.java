@@ -17,11 +17,14 @@ import java.util.Locale;
 public class XmlWriter implements AutoCloseable {
     /** Indentation string for XML output */
     static final String INDENT_STR = "   ";
+    /** Attribute name carrying the RRD tool style. */
     private static final String STYLE = "style";
+    /** Timestamp format written into the XML, in UTC. */
     private static final DateTimeFormatter ISOLIKE =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSZ")
                     .withLocale(Locale.ENGLISH)
                     .withZone(ZoneId.of("UTC"));
+    /** How NaN is written when no other form is given. */
     private static final String DEFAULT_NAN_STRING = Double.toString(Double.NaN);
 
     /**
@@ -41,14 +44,24 @@ public class XmlWriter implements AutoCloseable {
          */
         String format(double value, String nanString);
     }
+    /** Where the XML is written. */
     private final PrintWriter writer;
+    /** Indentation of the element currently being written. */
     private final StringBuilder indent = new StringBuilder();
+    /** Elements not yet closed, innermost last. */
     private final Deque<String> openTags = new LinkedList<>();
     /** Time formatter */
     private final DateTimeFormatter timeFormatter;
     /** Double formatter */
     private final DoubleFormater doubleFormatter;
 
+    /**
+     * Creates a writer for one XML document.
+     *
+     * @param writer where the XML is written
+     * @param timeFormatter how timestamps are written
+     * @param doubleFormatter how numbers are written
+     */
     private XmlWriter(
             PrintWriter writer, DateTimeFormatter timeFormatter, DoubleFormater doubleFormatter) {
         this.writer = writer;

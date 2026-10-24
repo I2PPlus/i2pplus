@@ -81,6 +81,7 @@ public class AddressbookBean extends BaseBean {
     /** Ending index for pagination. */
     protected int endIndex;
 
+    /** Subscriptions by name. */
     private Properties addressbook;
     /** Parsed #! properties per hostname, built once per load. */
     private Map<String, Properties> _propsByHost;
@@ -89,6 +90,7 @@ public class AddressbookBean extends BaseBean {
     /** Comparator for sorting addresses. */
     protected static final Comparator<AddressBean> sorter;
 
+    /** Subscriptions listed on one page. */
     private static final int DISPLAY_SIZE = 100;
 
     static {
@@ -623,6 +625,11 @@ public class AddressbookBean extends BaseBean {
         return message;
     }
 
+    /**
+     * Writes the subscriptions back to the file.
+     *
+     * @throws IOException if the file cannot be written
+     */
     private void save() throws IOException {
         String filename = properties.getProperty(getBook() + "_addressbook");
         FileOutputStream fos = null;

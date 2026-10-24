@@ -31,6 +31,7 @@ public final class ActionTokens {
     /** Floor for readability/stability: tokens shorter than this are too collision-prone. */
     private static final int MIN_TOKEN_LEN = 4;
 
+    /** Utility class, not intended for instantiation. */
     private ActionTokens() {}
 
     /**

@@ -41,8 +41,11 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * @since 0.9.2 in i2psnark, moved to core in 0.9.10
  */
 public class KBucketSet<T extends SimpleDataStructure> {
+    /** Logger for the routing table. */
     private final Log _log;
+    /** The app context. */
     private final I2PAppContext _context;
+    /** The local node's key. */
     private final T _us;
 
     /**
@@ -55,7 +58,9 @@ public class KBucketSet<T extends SimpleDataStructure> {
      */
     private final List<KBucket<T>> _buckets;
 
+    /** Calculator of the bucket range for a key. */
     private final Range<T> _rangeCalc;
+    /** Trimmer deciding which entries to drop. */
     private final KBucketTrimmer<T> _trimmer;
 
     /**
@@ -65,10 +70,15 @@ public class KBucketSet<T extends SimpleDataStructure> {
      */
     private final ReentrantReadWriteLock _bucketsLock = new ReentrantReadWriteLock(false);
 
+    /** Number of bits in a key. */
     private final int KEYSIZE_BITS;
+    /** Number of buckets in the set. */
     private final int NUM_BUCKETS;
+    /** Entries one bucket holds. */
     private final int BUCKET_SIZE;
+    /** B value from the kademlia paper. */
     private final int B_VALUE;
+    /** Factor scaling the bucket ranges. */
     private final int B_FACTOR;
 
     /**
@@ -116,10 +126,12 @@ public class KBucketSet<T extends SimpleDataStructure> {
         makeKey(new byte[us.length()]); // this verifies the zero-argument constructor
     }
 
+    /** Takes the read lock. */
     private void getReadLock() {
         _bucketsLock.readLock().lock();
     }
 
+    /** Releases the read lock. */
     private void releaseReadLock() {
         _bucketsLock.readLock().unlock();
     }
@@ -141,6 +153,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
         return false;
     }
 
+    /** Releases the write lock. */
     private void releaseWriteLock() {
         _bucketsLock.writeLock().unlock();
     }
@@ -420,7 +433,11 @@ public class KBucketSet<T extends SimpleDataStructure> {
         return removed;
     }
 
-    /** Clear all buckets. @since 0.8.8. */
+    /**
+     * Clear all buckets.
+     *
+     * @since 0.8.8
+     */
     public void clear() {
         getReadLock();
         try {
@@ -672,6 +689,11 @@ public class KBucketSet<T extends SimpleDataStructure> {
         }
     }
 
+    /**
+     * Builds the initial bucket list.
+     *
+     * @return the new buckets
+     */
     private List<KBucket<T>> createBuckets() {
         // just an initial size
         List<KBucket<T>> buckets = new ArrayList<>(4 * B_FACTOR);
@@ -679,6 +701,13 @@ public class KBucketSet<T extends SimpleDataStructure> {
         return buckets;
     }
 
+    /**
+     * Builds one bucket covering a range.
+     *
+     * @param start the first bit of the range
+     * @param end the last bit of the range
+     * @return the new bucket
+     */
     private KBucket<T> createBucket(int start, int end) {
         if (end - start >= B_FACTOR && (((end + 1) & B_FACTOR - 1) != 0 || (start & B_FACTOR - 1) != 0)) throw new IllegalArgumentException("Sub-bkt crosses K-bkt boundary: " + start + '-' + end);
         KBucket<T> bucket = new KBucketImpl<>(_context, start, end, BUCKET_SIZE, _trimmer);
@@ -900,11 +929,25 @@ public class KBucketSet<T extends SimpleDataStructure> {
         return rv;
     }
 
+    /**
+     * Calculator of the bucket range for a key.
+     *
+     * @param <T> the key type of the buckets
+     */
     private static class Range<T extends SimpleDataStructure> {
+        /** B value from the kademlia paper. */
         private final int _bValue;
+        /** Our key as a big integer. */
         private final BigInteger _bigUs;
+        /** Cached range numbers, by key. */
         private final Map<T, Integer> _distanceCache;
 
+        /**
+         * Builds the range calculator.
+         *
+         * @param us the local node's key
+         * @param bValue the B value from the kademlia paper
+         */
         public Range(T us, int bValue) {
             _bValue = bValue;
             _bigUs = new BigInteger(1, us.getData());
@@ -914,6 +957,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
         /**
          * XOR distance range number for the given key — the B-aligned bucket
          * range containing the key's distance from us.
+         * @param key the key to measure
          * @return the range number, or -1 for us
          */
         public int getRange(T key) {
@@ -941,6 +985,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
             return rv.intValue();
         }
 
+        /** Clears the cached range numbers. */
         public void clear() {
             synchronized (_distanceCache) {
                 _distanceCache.clear();
@@ -951,10 +996,18 @@ public class KBucketSet<T extends SimpleDataStructure> {
     /**
      * For Collections.binarySearch.
      * getRangeBegin == getRangeEnd.
+     *
+     * @param <T> the key type of the bucket set
      */
     private static class DummyBucket<T extends SimpleDataStructure> implements KBucket<T> {
+        /** Range number of the dummy bucket. */
         private final int r;
 
+        /**
+         * Builds a dummy bucket for a range.
+         *
+         * @param range the range number
+         */
         public DummyBucket(int range) {
             r = range;
         }
@@ -1015,6 +1068,8 @@ public class KBucketSet<T extends SimpleDataStructure> {
      * @param <T> type of SimpleDataStructure objects being ordered
      */
     private static class BucketComparator<T extends SimpleDataStructure> implements Comparator<KBucket<T>>, Serializable {
+        /** Orders the buckets by their range. */
+        private BucketComparator() {}
         @Override
         public int compare(KBucket<T> l, KBucket<T> r) {
             if (l.getRangeEnd() < r.getRangeBegin()) {

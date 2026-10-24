@@ -15,11 +15,17 @@ import org.rrd4j.ConsolFun;
  *
  */
 public class FetchRequest {
+    /** The database being read. */
     private final RrdDb parentDb;
+    /** Consolidation function to read with. */
     private final ConsolFun consolFun;
+    /** First time to fetch. */
     private final long fetchStart;
+    /** Last time to fetch. */
     private final long fetchEnd;
+    /** Spacing between fetched values, in seconds. */
     private final long resolution;
+    /** Data sources to fetch, all if empty. */
     private String[] filter;
 
     /**

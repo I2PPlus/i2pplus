@@ -28,10 +28,15 @@ import net.i2p.data.Destination;
  * @since 0.8.4
  */
 public class StandardSocket extends Socket {
+    /** The streaming socket being wrapped. */
     private final I2PSocket _socket;
+    /** False once the connection is lost. */
     private volatile boolean _connected = true;
+    /** True once reading has stopped. */
     private volatile boolean _inputShutdown;
+    /** True once writing has stopped. */
     private volatile boolean _outputShutdown;
+    /** True once the socket is closed. */
     private volatile boolean _closed;
 
     /**
@@ -313,8 +318,8 @@ public class StandardSocket extends Socket {
     }
 
     /**
-     * Whether input shutdown.
-     * @return whether input shutdown
+     * Whether the input side has been shut down.
+     * @return true if shutdownInput has been called
      */
     @Override
     public boolean isInputShutdown() {
@@ -322,8 +327,8 @@ public class StandardSocket extends Socket {
     }
 
     /**
-     * Whether output shutdown.
-     * @return whether output shutdown
+     * Whether the output side has been shut down.
+     * @return true if shutdownOutput has been called
      */
     @Override
     public boolean isOutputShutdown() {

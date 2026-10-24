@@ -41,12 +41,19 @@ public final class PrioritySendPool {
     private int _head;
     /** Dead prefix length above which the backing array is compacted. */
     private static final int COMPACT_MIN_HEAD = 64;
+    /** Hands out the ordering sequence number. */
     private final AtomicLong _seqNum = new AtomicLong();
+    /** Most messages the pool holds. */
     private volatile int _capacity;
 
-    // Monotonically increasing counters — callers read diff over interval
+    /**
+     * Messages added since startup; a monotonically increasing counter,
+     * callers read the difference over an interval.
+     */
     private volatile int _addedCount;
+    /** Messages evicted for a higher priority one. */
     private volatile int _evictedCount;
+    /** Messages dropped because the pool was full. */
     private volatile int _droppedCount;
 
     /**

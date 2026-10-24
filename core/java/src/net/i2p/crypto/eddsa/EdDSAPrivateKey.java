@@ -22,6 +22,7 @@ import java.util.Arrays;
  * @since 0.9.15
  */
 public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
+    /** Pinned for serialized-form compatibility. */
     private static final long serialVersionUID = 23495873459878957L;
     /** The 32-byte seed, or null if constructed from H. */
     private final byte[] seed;
@@ -36,10 +37,13 @@ public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
     /** Ed dsa spec. */
     private final EdDSAParameterSpec edDsaSpec;
 
-    // OID 1.3.101.xxx
+    /** First object identifier in the 1.3.101.xxx range. */
     private static final int OID_OLD = 100;
+    /** Object identifier for Ed25519. */
     private static final int OID_ED25519 = 112;
+    /** Offset of the object identifier in the encoded key. */
     private static final int OID_BYTE = 11;
+    /** Offset of the identifier length in the encoded key. */
     private static final int IDLEN_BYTE = 6;
 
     /**

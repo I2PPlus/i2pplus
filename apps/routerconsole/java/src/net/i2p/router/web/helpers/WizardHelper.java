@@ -30,14 +30,20 @@ public class WizardHelper extends HelperBase {
      * Fraction of the measured bandwidth applied to the limiter settings.
      */
     public static final float BW_SCALE = 0.75f; // scale bw test results by this for limiter settings
+    /** Smallest download bandwidth the wizard accepts, in KBps. */
     private static final float MIN_DOWN_BW = 32.0f; // KBps
+    /** Smallest upload bandwidth the wizard accepts, in KBps. */
     private static final float MIN_UP_BW = 12.0f;
+    /** The bandwidth test runner, a singleton under the hood. */
     private MLabRunner _mlab; // session scope, but it's an underlying singleton
 
-    // session scope
+    /** Listener recording the test results, session scope. */
     private TestListener _listener;
+    /** The test running now, null if none. */
     private MLabRunner.ToolRun _runner;
+    /** Status text of the last test. */
     private String _lastTestStatus;
+    /** Number of tests run so far. */
     private int _lastTestCount;
 
     /**
@@ -168,6 +174,12 @@ public class WizardHelper extends HelperBase {
         return DataHelper.escapeHTML(buf.toString());
     }
 
+    /**
+     * Reads a numeric result of the last test.
+     *
+     * @param key the result name
+     * @return the value, zero if absent
+     */
     private synchronized long getLongResult(String key) {
         if (_listener != null) {
             Map<String, Object> results = _listener.getResults();
@@ -179,6 +191,12 @@ public class WizardHelper extends HelperBase {
         return 0;
     }
 
+    /**
+     * Reads a text result of the last test.
+     *
+     * @param key the result name
+     * @return the value, null if absent
+     */
     private synchronized String getStringResult(String key) {
         if (_listener != null) {
             Map<String, Object> results = _listener.getResults();
@@ -301,8 +319,13 @@ public class WizardHelper extends HelperBase {
 
     /** Test results. */
     private static class TestListener implements MLabRunner.ToolListener {
+        /** Receives the setup wizard's speed test results. */
+        private TestListener() {}
+        /** Summary line of the finished test. */
         private String _summary;
+        /** Detail text of the finished test. */
         private String _detail;
+        /** The raw results of the finished test, by name. */
         private Map<String, Object> _results;
         /**
          * Store the progress line the speed test reports.

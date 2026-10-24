@@ -31,7 +31,9 @@ public class
 JTextArea
 	extends Component
 {
+	/** Logger for this class. */
 	private final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(Tcpbw100.class);
+	/** The text held by the area. */
 	private final StringBuilder text = new StringBuilder();
 
 	/**

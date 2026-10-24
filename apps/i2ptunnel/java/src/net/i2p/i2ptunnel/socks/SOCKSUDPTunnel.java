@@ -39,7 +39,9 @@ import net.i2p.i2ptunnel.udpTunnel.I2PTunnelUDPClientBase;
  * Preliminary, untested, possibly incomplete.
  */
 public class SOCKSUDPTunnel extends I2PTunnelUDPClientBase {
+    /** Open UDP ports, by SOCKS port number. */
     private final Map<Integer, SOCKSUDPPort> ports;
+    /** Hands each received datagram to its port. */
     private final MultiSink<SOCKSUDPPort> demuxer;
 
     /**
@@ -115,6 +117,7 @@ public class SOCKSUDPTunnel extends I2PTunnelUDPClientBase {
     /** You should really add() after {@link #startRunning()}. */
     private void startall() { /* no-op */ }
 
+    /** Closes every open UDP port. */
     private void stopall() {
          for (SOCKSUDPPort sup : this.ports.values()) {
               sup.stop();

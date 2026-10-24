@@ -49,6 +49,12 @@ public class InetAddressUtil {
         }
     }
 
+    /**
+     * Parses a dotted-quad address into bytes.
+     *
+     * @param ip the address to parse
+     * @return the four bytes
+     */
     private static byte[] parseIPv4(String ip) {
         String[] parts = ip.split("\\.");
         byte[] addr = new byte[4];
@@ -78,6 +84,12 @@ public class InetAddressUtil {
         }
     }
 
+    /**
+     * Parses a colon-hex address into bytes.
+     *
+     * @param ip the address to parse
+     * @return the sixteen bytes
+     */
     private static byte[] parseIPv6(String ip) {
         String[] parts = ip.split(":", -1);
         byte[] addr = new byte[16];
@@ -93,8 +105,10 @@ public class InetAddressUtil {
         return addr;
     }
 
-    // IPV4_REGEX from http://stackoverflow.com/a/46168/194894 by Kevin Wong (http://stackoverflow.com/users/4792/kevin-wong) licensed under
-    // CC BY-SA 3.0.
+    /**
+     * Matches a dotted-quad address. Regex from the IPv4 validation answer by
+     * Kevin Wong on stackoverflow.com, licensed CC BY-SA 3.0.
+     */
     private static final Pattern IPV4_PATTERN = Pattern.compile("\\A(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)(\\.(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)){3}\\z");
 
     /**
@@ -110,8 +124,10 @@ public class InetAddressUtil {
         return IPV4_PATTERN.matcher(address).matches();
     }
 
-    // IPv6 Regular Expression from http://stackoverflow.com/a/17871737/194894 by David M. Syzdek
-    // (http://stackoverflow.com/users/903194/david-m-syzdek) licensed under CC BY-SA 3.0.
+    /**
+     * Matches a colon-hex address. Regex from the IPv6 validation answer by
+     * David M. Syzdek on stackoverflow.com, licensed CC BY-SA 3.0.
+     */
     private static final Pattern IPV6_PATTERN = Pattern.compile("(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))");
 
     /**

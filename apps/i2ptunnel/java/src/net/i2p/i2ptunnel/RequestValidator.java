@@ -23,9 +23,13 @@ import net.i2p.util.Log;
  */
 public class RequestValidator {
 
+    /** Logger for this class. */
     private final Log _log;
+    /** Base32 of the peer being checked. */
     private final String _peerB32;
+    /** Tunnel options the request arrived on. */
     private final Properties _opts;
+    /** Lists the peer may be blocked by. */
     private final BlocklistManager _blocklistManager;
 
     /**

@@ -11,16 +11,27 @@ import net.i2p.util.Log;
  *
  */
 public class SAMEventHandler extends SAMClientEventListenerImpl {
+    /** Logger for the SAM event handling. */
     private final Log _log;
+    /** True if the hello succeeded, null while waiting. */
     private Boolean _helloOk;
+    /** The SAM version reported by the hello. */
     private String _version;
+    /** Lock for waiting on the hello reply. */
     private final Object _helloLock = new Object();
+    /** True if session create succeeded, null while waiting. */
     private Boolean _sessionCreateOk;
+    /** True if session add succeeded, null while waiting. */
     private Boolean _sessionAddOk;
+    /** True if stream status succeeded, null while waiting. */
     private Boolean _streamStatusOk;
+    /** Lock for waiting on the session create reply. */
     private final Object _sessionCreateLock = new Object();
+    /** Lock for waiting on the naming reply. */
     private final Object _namingReplyLock = new Object();
+    /** Lock for waiting on the stream status reply. */
     private final Object _streamStatusLock = new Object();
+    /** The naming replies received, by name. */
     private final Map<String,String> _namingReplies = new HashMap<>();
 
     /**
@@ -100,9 +111,6 @@ public class SAMEventHandler extends SAMClientEventListenerImpl {
     }
 
 
-    //
-    // blocking lookup calls below
-    //
 
     /**
      * Wait for the connection to be established, returning the server version if everything

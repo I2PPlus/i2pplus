@@ -32,19 +32,33 @@ import net.i2p.util.Log;
  * again when the lookup succeeds or times out.
  */
 public class SendMessageDirectJob extends JobImpl {
+    /** Logger for the direct send job. */
     private final Log _log;
+    /** The message to send. */
     private final I2NPMessage _message;
+    /** The hash of the target router. */
     private final Hash _targetHash;
+    /** The target's router info, once found. */
     private RouterInfo _router;
+    /** When the message is too old to send. */
     private final long _expiration;
+    /** Send priority of the message. */
     private final int _priority;
+    /** Job run after a successful send. */
     private final Job _onSend;
+    /** Job run when the reply arrives. */
     private final ReplyJob _onSuccess;
+    /** Job run when the send fails. */
     private final Job _onFail;
+    /** Selector matching the expected reply. */
     private final MessageSelector _selector;
+    /** True once the floodfill search started. */
     private volatile boolean _alreadySearched;
+    /** True once the message was sent. */
     private volatile boolean _sent;
+    /** When to start the floodfill search. */
     private long _searchOn;
+    /** Random mask for the message id bloom filter. */
     private final long _msgIDBloomXor;
 
     /**
@@ -213,6 +227,7 @@ public class SendMessageDirectJob extends JobImpl {
         }
     }
 
+    /** Sends the message to the target's router info. */
     private void send() {
         if (_sent) {
             if (_log.shouldWarn())

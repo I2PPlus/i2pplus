@@ -30,15 +30,20 @@ import org.klomp.snark.bencode.InvalidBEncodingException;
  * Manages the state and protocol logic for a BitTorrent peer connection.<br>
  * This class tracks peer interest/choking status, piece availability, request queues, and handles
  * all BitTorrent protocol message processing.
+ * Methods that inspect or change the state synchronize (on this).
+ *
  * @since 0.1
  */
 class PeerState implements DataLoader {
+    /** Logger for this class. */
     private final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(PeerState.class);
+    /** The peer this state describes. */
     private final Peer peer;
 
     /** Fixme, used by {@code Peer.disconnect()} to get to the coordinator. */
     final PeerListener listener;
 
+    /** Told about bytes transferred with this peer. */
     private final BandwidthListener bwListener;
 
     /** Null before we have it. locking: this. */
@@ -86,7 +91,7 @@ class PeerState implements DataLoader {
     /** Outbound connection. */
     final PeerConnectionOut out;
 
-    // Outstanding request
+    /** Piece requests sent but not yet answered. */
     private final List<Request> outstandingRequests = new LinkedList<>();
 
     /** Bytes of piece data the peer cancelled after requesting. */
@@ -104,6 +109,7 @@ class PeerState implements DataLoader {
     /** The tail (NOT the head) of the request queue. */
     private Request lastRequest;
 
+    /** Most requests that may be outstanding at once. */
     private int currentMaxPipeline;
 
     /** Default minimum request pipeline depth for outbound requests. */
@@ -164,6 +170,7 @@ class PeerState implements DataLoader {
      * @since 0.9.71+
      */
     public static volatile int MAX_PARTSIZE = DEFAULT_MAX_PARTSIZE;
+    /** Sentinel meaning every piece rather than one. */
     private static final Integer PIECE_ALL = Integer.valueOf(-1);
 
     /**
@@ -239,8 +246,6 @@ class PeerState implements DataLoader {
     BandwidthListener getBandwidthListener() {
         return bwListener;
     }
-
-    // NOTE Methods that inspect or change the state synchronize (on this).
 
     /** Handle a keepalive message from the peer. */
     void keepAliveMessage() {
@@ -601,7 +606,7 @@ class PeerState implements DataLoader {
 
     /**
      * Called when some bytes have left the outgoing connection.
-     * XXX - Should indicate whether it was a real piece or overhead.
+     * Does not indicate whether the bytes were a real piece or overhead.
      *
      * @param size the number of bytes just sent to the peer
      */
@@ -694,6 +699,12 @@ class PeerState implements DataLoader {
         }
     }
 
+    /**
+     * Finds the first outstanding request for a piece.
+     *
+     * @param piece the piece number asked about, or PIECE_ALL
+     * @return its position, -1 if there is none
+     */
     private synchronized int getFirstOutstandingRequest(int piece) {
         for (int i = 0; i < outstandingRequests.size(); i++) {
             if (outstandingRequests.get(i).getPiece() == piece) {
@@ -818,10 +829,10 @@ class PeerState implements DataLoader {
     }
 
     /**
-     * The lowest offset of any request for the piece.
+     * Finds the outstanding request for the piece with the lowest offset.
      *
      * @param piece the piece number to look for among the outstanding requests
-     * @return lowest offset of any request for the piece
+     * @return the request, null if none outstanding for the piece
      * @since 0.8.2
      */
     private synchronized Request getLowestOutstandingRequest(int piece) {

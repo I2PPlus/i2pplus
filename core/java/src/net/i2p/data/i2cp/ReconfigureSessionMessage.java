@@ -25,7 +25,9 @@ public class ReconfigureSessionMessage extends I2CPMessageImpl {
      * I2CP message type number identifying a session reconfiguration request.
      */
     public static final int MESSAGE_TYPE = 2;
+    /** The session being reconfigured. */
     private SessionId _sessionId;
+    /** The new options for that session. */
     private SessionConfig _sessionConfig;
 
     /**
@@ -34,8 +36,8 @@ public class ReconfigureSessionMessage extends I2CPMessageImpl {
     public ReconfigureSessionMessage() { /* required for I2CP deserialization */ }
 
     /**
-     * Session id.
-     * @return the session id
+     * Session being reconfigured.
+     * @return the session id, null until set or read
      */
     public SessionId getSessionId() {
         return _sessionId;
@@ -61,8 +63,8 @@ public class ReconfigureSessionMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Session config.
-     * @return the session config
+     * New configuration to apply to the session.
+     * @return the session config, null until set or read
      */
     public SessionConfig getSessionConfig() {
         return _sessionConfig;

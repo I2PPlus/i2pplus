@@ -28,6 +28,7 @@ public final class SimpleByteCache {
      */
     private static final IntCacheMap _caches = new IntCacheMap(8);
 
+    /** Default number of buffers cached. */
     private static final int DEFAULT_SIZE = 64;
 
     /** How often do we cleanup all caches. */
@@ -131,7 +132,9 @@ public final class SimpleByteCache {
         }
     }
 
+    /** The buffers available for reuse. */
     private final TryCache<byte[]> _available;
+    /** Size of each cached buffer. */
     private final int _entrySize;
 
     /**
@@ -140,8 +143,14 @@ public final class SimpleByteCache {
      * @since 0.9.36
      */
     private static class ByteArrayFactory implements TryCache.ObjectFactory<byte[]> {
+        /** Size of the arrays this factory makes. */
         private final int sz;
 
+        /**
+         * Builds the array factory.
+         *
+         * @param entrySize the size of the arrays to make
+         */
         ByteArrayFactory(int entrySize) {
             sz = entrySize;
         }
@@ -152,6 +161,12 @@ public final class SimpleByteCache {
         }
     }
 
+    /**
+     * Builds a cache of byte arrays.
+     *
+     * @param maxCachedEntries most buffers cached
+     * @param entrySize the size of each buffer
+     */
     private SimpleByteCache(int maxCachedEntries, int entrySize) {
         _available = new TryCache<>(new ByteArrayFactory(entrySize), maxCachedEntries);
         _entrySize = entrySize;
@@ -245,10 +260,18 @@ public final class SimpleByteCache {
 
         /** Replaced wholesale on growth, so a reader always sees a complete one. */
         private static final class Table {
+            /** Mask hashing keys into the table. */
             private final int mask;
+            /** The keys stored in the table. */
             private final int[] keys;
+            /** The caches stored in the table. */
             private final AtomicReferenceArray<SimpleByteCache> vals;
 
+            /**
+             * Builds an empty hash table.
+             *
+             * @param capacity slots in the table
+             */
             Table(int capacity) {
                 keys = new int[capacity];
                 vals = new AtomicReferenceArray<>(capacity);
@@ -256,11 +279,17 @@ public final class SimpleByteCache {
             }
         }
 
+        /** The current hash table. */
         private volatile Table _table;
 
         /** Occupied slots in the current table. Guarded by this. */
         private int _size;
 
+        /**
+         * Builds the map of caches by size.
+         *
+         * @param expectedSize entries expected in the map
+         */
         IntCacheMap(int expectedSize) {
             int capacity = 16;
             while (capacity < expectedSize * 2) capacity <<= 1;

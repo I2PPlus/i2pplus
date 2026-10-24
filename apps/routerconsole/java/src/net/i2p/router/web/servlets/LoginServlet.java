@@ -44,6 +44,7 @@ public class LoginServlet extends HttpServlet {
      */
     public LoginServlet() {}
 
+    /** Logger for the login servlet. */
     private static final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(LoginServlet.class);
 
     @Override
@@ -52,10 +53,15 @@ public class LoginServlet extends HttpServlet {
         loadPersistedSessions();
     }
 
+    /** Form parameter carrying the user name. */
     private static final String PARAM_USERNAME = "nofilter_username";
+    /** Form parameter carrying the password. */
     private static final String PARAM_PASSWORD = "nofilter_password";
+    /** The authentication realm name. */
     private static final String REALM = "i2prouter";
+    /** Default login page theme. */
     private static final String DEFAULT_THEME = "dark";
+    /** Config key for the persisted session count. */
     private static final String PROP_PERSISTED_SESSIONS = "routerconsole.persistedSessions";
     /**
      * Serializes the read-modify-write of the persisted-session list. Two
@@ -75,8 +81,11 @@ public class LoginServlet extends HttpServlet {
      * on the peer address of the connection, which a client cannot forge.
      */
     private static final String PROP_TRUST_FORWARDED_FOR = "routerconsole.trustForwardedFor";
+    /** Splits a stored session record on colons. */
     private static final Pattern COLON_SPLIT = Pattern.compile(":");
+    /** Splits the list of stored session records. */
     private static final Pattern PIPE_SPLIT = Pattern.compile("\\|");
+    /** Random source for the CSRF tokens. */
     private static final SecureRandom CSRF_RANDOM = new SecureRandom();
 
     @Override
@@ -131,12 +140,23 @@ public class LoginServlet extends HttpServlet {
         req.getRequestDispatcher("/login.jsp").forward(req, resp);
     }
 
+    /**
+     * Checks whether any console password is configured.
+     *
+     * @return true if a password exists
+     */
     private boolean isPasswordConfigured() {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         if (!(ctx instanceof RouterContext)) return false;
         return hasAnyPassword((RouterContext) ctx);
     }
 
+    /**
+     * Checks the password files for any usable password.
+     *
+     * @param ctx the router context
+     * @return true if a password exists
+     */
     private boolean hasAnyPassword(RouterContext ctx) {
         ConsolePasswordManager mgr = new ConsolePasswordManager(ctx);
         boolean hasMD5 = !mgr.getMD5(RouterConsoleRunner.PROP_CONSOLE_PW).isEmpty();
@@ -156,6 +176,11 @@ public class LoginServlet extends HttpServlet {
         return false;
     }
 
+    /**
+     * Returns the configured login page theme.
+     *
+     * @return the theme name
+     */
     private String getLoginTheme() {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         if (ctx instanceof RouterContext) {
@@ -167,6 +192,7 @@ public class LoginServlet extends HttpServlet {
         return DEFAULT_THEME;
     }
 
+    /** Themes the login page accepts. */
     private static final Set<String> ALLOWED_THEMES =
             Collections.unmodifiableSet(
                 new HashSet<>(Arrays.asList("dark", "classic", "light", "midnight")));
@@ -184,11 +210,23 @@ public class LoginServlet extends HttpServlet {
                     "ro", "ru", "sk", "sl", "sv", "sw", "th", "tl", "tr", "uk",
                     "ur", "vi", "zh", "zh_TW")));
 
+    /**
+     * Keeps only the known theme names.
+     *
+     * @param theme the theme from the request, may be null
+     * @return a safe theme name
+     */
     private static String sanitizeTheme(String theme) {
         if (theme != null && ALLOWED_THEMES.contains(theme)) return theme;
         return "dark";
     }
 
+    /**
+     * Keeps only a well formed language tag.
+     *
+     * @param lang the language from the request, may be null
+     * @return a safe language tag
+     */
     private static String sanitizeLang(String lang) {
         if (lang != null && ALLOWED_LANGS.contains(lang)) return lang;
         return "en";
@@ -382,6 +420,12 @@ public class LoginServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Parses a session duration like 7d.
+     *
+     * @param duration the text from the form
+     * @return the duration, in ms
+     */
     private long parseDuration(String duration) {
         if (duration == null || duration.isEmpty()) {
             return 60 * (long) 60 * 1000; // default 1 hour
@@ -397,6 +441,12 @@ public class LoginServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Returns the client address of the request.
+     *
+     * @param req the request to read the client address from
+     * @return the address text
+     */
     private String getClientIP(HttpServletRequest req) {
         boolean trust = false;
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
@@ -470,6 +520,13 @@ public class LoginServlet extends HttpServlet {
         return ip;
     }
 
+    /**
+     * Checks the submitted password against the stored hashes.
+     *
+     * @param username the user name from the form
+     * @param password the password from the form
+     * @return true if the password matches
+     */
     private boolean verifyPassword(String username, String password) {
         I2PAppContext appCtx = I2PAppContext.getGlobalContext();
         if (!(appCtx instanceof RouterContext)) {
@@ -538,6 +595,12 @@ public class LoginServlet extends HttpServlet {
         return result;
     }
 
+    /**
+     * Returns the persisted session cookie value.
+     *
+     * @param req the request to read the cookie from
+     * @return the cookie value, null if absent
+     */
     private String getSessionCookie(HttpServletRequest req) {
         Cookie[] cookies = req.getCookies();
         if (cookies == null) return null;
@@ -549,6 +612,13 @@ public class LoginServlet extends HttpServlet {
         return null;
     }
 
+    /**
+     * Saves a session to survive a restart.
+     *
+     * @param token the session token
+     * @param username the user name
+     * @param expiryMs the expiry time, in ms since epoch
+     */
     private void persistSession(String token, String username, long expiryMs) {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         if (!(ctx instanceof RouterContext)) return;
@@ -620,6 +690,7 @@ public class LoginServlet extends HttpServlet {
         return String.join("|", kept);
     }
 
+    /** Loads the saved sessions from the config. */
     private void loadPersistedSessions() {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         if (!(ctx instanceof RouterContext)) return;
@@ -650,12 +721,23 @@ public class LoginServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Generates a random CSRF token.
+     *
+     * @return the token, hex
+     */
     private String generateCSRFToken() {
         byte[] randomBytes = new byte[24];
         CSRF_RANDOM.nextBytes(randomBytes);
         return DataHelper.toHexString(randomBytes);
     }
 
+    /**
+     * Writes one console preference to the config.
+     *
+     * @param key the preference name
+     * @param value the preference value
+     */
     private void updatePreference(String key, String value) {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         if (!(ctx instanceof RouterContext)) return;

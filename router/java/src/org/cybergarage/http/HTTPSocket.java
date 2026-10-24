@@ -47,6 +47,11 @@ public class HTTPSocket {
 
     private Socket socket = null;
 
+    /**
+     * Sets the connection the request arrived on.
+     *
+     * @param socket the socket to use
+     */
     private void setSocket(Socket socket) {
         this.socket = socket;
     }
@@ -87,8 +92,14 @@ public class HTTPSocket {
     ////////////////////////////////////////////////
 
     private InputStream sockIn = null;
+    /** Stream responses are written to. */
     private OutputStream sockOut = null;
 
+    /**
+     * Sets the stream requests are read from.
+     *
+     * @param in the stream to use
+     */
     private void setInputStream(InputStream in) {
         sockIn = in;
     }
@@ -102,10 +113,20 @@ public class HTTPSocket {
         return sockIn;
     }
 
+    /**
+     * Sets the stream responses are written to.
+     *
+     * @param out the stream to use
+     */
     private void setOutputStream(OutputStream out) {
         sockOut = out;
     }
 
+    /**
+     * Gives the stream responses are written to.
+     *
+     * @return the stream, null if the socket is closed
+     */
     private OutputStream getOutputStream() {
         return sockOut;
     }
@@ -195,7 +216,6 @@ public class HTTPSocket {
             boolean isChunkedResponse = httpRes.isChunked();
 
             if (isChunkedResponse == true) {
-                // Thanks for Lee Peik Feng <pflee@users.sourceforge.net> (07/07/05)
                 String chunSizeBuf = Long.toHexString(contentLength);
                 out.write(chunSizeBuf.getBytes(StandardCharsets.UTF_8));
                 out.write(HTTP.CRLF.getBytes(StandardCharsets.UTF_8));
@@ -266,7 +286,6 @@ public class HTTPSocket {
             int readLen = in.read(readBuf, 0, (int) readSize);
             while (0 < readLen && readCnt < contentLength) {
                 if (isChunkedResponse == true) {
-                    // Thanks for Lee Peik Feng <pflee@users.sourceforge.net> (07/07/05)
                     String chunSizeBuf = Long.toHexString(readLen);
                     out.write(chunSizeBuf.getBytes(StandardCharsets.UTF_8));
                     out.write(HTTP.CRLF.getBytes(StandardCharsets.UTF_8));

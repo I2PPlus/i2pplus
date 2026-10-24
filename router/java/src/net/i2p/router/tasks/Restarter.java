@@ -11,6 +11,7 @@ import net.i2p.util.Log;
  * @since 0.8.8, moved from Router in 0.8.12
  */
 public class Restarter implements Runnable {
+    /** The router to restart. */
     private final RouterContext _context;
 
     /**

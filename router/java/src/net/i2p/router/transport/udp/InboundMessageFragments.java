@@ -15,11 +15,15 @@ import net.i2p.router.util.DecayingHashSet;
  *
  */
 class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
+    /** The router receiving the datagrams. */
     private final RouterContext _context;
     /** List of message IDs recently received, so we can ignore in flight dups. */
     private volatile DecayingBloomFilter _recentlyCompletedMessages;
+    /** The transport the datagrams arrived on. */
     private final UDPTransport _transport;
+    /** Where complete messages are handed on. */
     private final MessageReceiver _messageReceiver;
+    /** False once the job has been cancelled. */
     private volatile boolean _alive;
 
     /** Decay the recently completed every 10 seconds. */

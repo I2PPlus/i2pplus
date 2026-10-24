@@ -37,6 +37,7 @@ public class NSEC3 extends Data {
      */
     public static final byte FLAG_OPT_OUT = 0x1;
 
+    /** Hash algorithms by their number on the wire. */
     private static final Map<Byte, HashAlgorithm> HASH_ALGORITHM_LUT = new HashMap<>();
 
     /**
@@ -53,6 +54,12 @@ public class NSEC3 extends Data {
         SHA1(1, "SHA-1"),
        ;
 
+        /**
+         * Names a hash algorithm by its wire number.
+         *
+         * @param value the number on the wire
+         * @param description the human-readable name
+         */
         HashAlgorithm(int value, String description) {
             if (value < 0 || value > 255) {
                 throw new IllegalArgumentException();
@@ -155,6 +162,17 @@ public class NSEC3 extends Data {
         return new NSEC3(hashAlgorithm, flags, iterations, salt, nextHashed, types);
     }
 
+    /**
+     * Builds a record from its parts.
+     *
+     * @param hashAlgorithm the algorithm of the hash
+     * @param hashAlgorithmByte the wire value of the algorithm
+     * @param flags the flags of the record
+     * @param iterations the number of extra hash rounds
+     * @param nextHashed the next hashed owner name
+     * @param salt the salt of the hash
+     * @param types the types covered by the record
+     */
     private NSEC3(HashAlgorithm hashAlgorithm, byte hashAlgorithmByte, byte flags, int iterations, byte[] salt, byte[] nextHashed, List<TYPE> types) {
         assert hashAlgorithmByte == (hashAlgorithm != null ? hashAlgorithm.value : hashAlgorithmByte);
         this.hashAlgorithmByte = hashAlgorithmByte;
@@ -270,6 +288,7 @@ public class NSEC3 extends Data {
         return nextHashed.clone();
     }
 
+    /** Cache of the next hashed owner name, base32. */
     private String nextHashedBase32Cache;
 
     /**
@@ -285,6 +304,7 @@ public class NSEC3 extends Data {
         return nextHashedBase32Cache;
     }
 
+    /** Cache of the next hashed owner name, as a label. */
     private DnsLabel nextHashedDnsLabelCache;
 
     /**

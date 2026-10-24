@@ -35,6 +35,7 @@ import java.awt.geom.GeneralPath;
  */
 final class MonotoneSpline {
 
+    /** Utility class, not intended for instantiation. */
     private MonotoneSpline() {}
 
     /**

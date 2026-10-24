@@ -85,10 +85,20 @@ import net.i2p.util.VersionComparator;
  * Optimized for performance with parallel rendering and optional reverse DNS lookups.
  */
 class NetDbRenderer {
+    /** The router context. */
     private final RouterContext _context;
+    /** Cache of router infos for the display. */
     private final NetDbRouterCache _routerCache;
+    /** Logger for the netdb page. */
     private final Log _log;
+    /** Formatter for numbers with two decimals. */
     private static final DecimalFormat TWO_DECIMALS = new DecimalFormat("#0.00");
+    /**
+     * Formats a number with two decimals.
+     *
+     * @param val the number to format
+     * @return the formatted text
+     */
     private static String fmt(double val) { synchronized (TWO_DECIMALS) { return TWO_DECIMALS.format(val); } }
 
     /**
@@ -102,6 +112,7 @@ class NetDbRenderer {
         _organizer = ctx.profileOrganizer();
         _routerCache = new NetDbRouterCache(ctx);
     }
+    /** Splits a comma or space separated list. */
     private static final Pattern COMMA_SPACE_SPLIT = Pattern.compile("[, ]+");
     /**
      * How long to wait for a router lookup before giving up.
@@ -127,7 +138,9 @@ class NetDbRenderer {
  * per request, so no reset is needed.
  */
     private final Set<Hash> _renderedLeaseSetKeys = new HashSet<>();
+    /** Source of the peer profiles. */
     private final ProfileOrganizer _organizer;
+    /** Router lookups run per batch. */
     private final int BATCH_SIZE = SystemVersion.isSlow() ? 8 : Math.max(SystemVersion.getCores() - 2, 16);
     /** Bound on a single parallel render task so a stalled common pool cannot hang the netdb page. */
     private static final long RENDER_TASK_TIMEOUT = 30 * 1000L;
@@ -141,6 +154,7 @@ class NetDbRenderer {
     private volatile boolean _memoryUsedValid;
     /** Memoized capability tooltip for this render pass, null until first use. */
     private volatile String _capTooltip;
+    /** The current time for the age calculations. */
     private long now;
 
 /**
@@ -496,6 +510,12 @@ class NetDbRenderer {
         }
     }
 
+    /**
+     * Checks whether the router is marked unreachable.
+     *
+     * @param ri the router info to check
+     * @return true if unreachable
+     */
     private boolean isUnreachable(RouterInfo ri) {
         String caps = ri.getCapabilities();
         return caps != null && (caps.contains("U"));
@@ -506,6 +526,7 @@ class NetDbRenderer {
      * @since 0.9.48
      */
     private class LookupWaiter extends JobImpl {
+        /** Job that waits for a router lookup to finish. */
         public LookupWaiter() {super(_context);}
         public void runJob() {synchronized(this) {notifyAll();}}
         public String getName() {return "Console NetDb Lookup";}
@@ -548,6 +569,7 @@ class NetDbRenderer {
      */
     private static final int LOOKUPS_BEFORE_PAUSE = 500;
 
+    /** Pause between lookup batches, in ms. */
     private static final long PAUSE_AFTER_BATCH_MS = 1000;
 
     /** Pending IPs for background reverse DNS resolution. */
@@ -819,6 +841,7 @@ class NetDbRenderer {
         out.append("</div>\n");
     }
 
+    /** True once the summary was rendered. */
     private boolean isRendered = false;
 
     /**
@@ -1278,6 +1301,7 @@ class NetDbRenderer {
         buf.append("</tbody>\n</table>\n");
     }
 
+    /** Symbols marking the bandwidth tiers. */
     private static final char[] BW_CAPS = {
         FloodfillNetworkDatabaseFacade.CAPABILITY_BW12,
         FloodfillNetworkDatabaseFacade.CAPABILITY_BW32,
@@ -1287,9 +1311,11 @@ class NetDbRenderer {
         FloodfillNetworkDatabaseFacade.CAPABILITY_BW512,
         FloodfillNetworkDatabaseFacade.CAPABILITY_BW_UNLIMITED
     };
+    /** Labels for the bandwidth tiers. */
     private static final String[] BW_LABELS = {
         "K", "L", "M", "N", "O", "P", "X"
     };
+    /** Descriptions of the bandwidth tiers. */
     private static final String[] BW_DESCRIPTIONS = {
         _x("Under 12 KB/s"), "12 - 48 KB/s", "49 - 65 KB/s",
         "66 - 130 KB/s", "131 - 261 KB/s", "262 - 2047 KB/s", _x("Over 2048 KB/s")
@@ -1445,6 +1471,7 @@ class NetDbRenderer {
         /** Country code to [X-tier count, floodfill count]. */
         final Map<String, int[]> countryTiers;
 
+        /** Builds the tally of routers by category. */
         RouterTallies() {
             versions = new ObjectCounterUnsafe<>();
             countries = new ObjectCounterUnsafe<>();
@@ -1542,12 +1569,25 @@ class NetDbRenderer {
      * Internal class to hold reverse DNS cache entries with expiration time.
      */
     private static class CacheEntry {
+        /** The cached value of a display cache entry. */
         String value;
+        /** When the cache entry expires. */
         long expiresAt;
+        /**
+         * Builds one display cache entry.
+         *
+         * @param value the value to cache
+         * @param ttlMillis how long the entry stays valid
+         */
         CacheEntry(String value, long ttlMillis) {
             this.value = value;
             this.expiresAt = System.currentTimeMillis() + ttlMillis;
         }
+        /**
+         * Checks whether the entry is past its expiry.
+         *
+         * @return true if expired
+         */
         boolean isExpired() {
             return System.currentTimeMillis() > expiresAt;
         }
@@ -1558,6 +1598,7 @@ class NetDbRenderer {
      * Small cache since we rely on file-backed rdnsCache in {@link CommSystemFacadeImpl}.
      */
     private final LHMCache<String, CacheEntry> reverseLookupCache = new LHMCache<>(50);
+    /** Cache lifetime of 24 hours, in ms. */
     private static final long TTL_24_HOURS = 24 * 60 * (long) 60 * 1000; // 24 hours
 
     /**
@@ -2076,10 +2117,15 @@ class NetDbRenderer {
         return true;
     }
 
+    /** Filter bit for SSU routers. */
     private static final int SSU = 1;
+    /** Filter bit for SSU introducers. */
     private static final int SSUI = 2;
+    /** Filter bit for NTCP routers. */
     private static final int NTCP = 4;
+    /** Filter bit for IPv6 routers. */
     private static final int IPV6 = 8;
+    /** Display names of the transport filter bits. */
     private static final String[] TNAMES = { _x("Hidden or starting up"), _x("SSU"), _x("SSU with Introducers"), "",
                                              _x("NTCP"), _x("NTCP &amp; SSU"), _x("NTCP &amp; SSU with Introducers"), "",
                                              "", _x("SSU [IPv6]"), _x("SSU [IPv6 Only] with Introducers"), _x("SSU [IPv6] with Introducers"),

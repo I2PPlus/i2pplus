@@ -8,7 +8,9 @@ import org.rrd4j.data.Variable;
  * values using variables like MIN, MAX, AVERAGE, etc.
  */
 class VDef extends Source {
+    /** Name other definitions use to refer to this one. */
     private final String defName;
+    /** The variable holding the defined value. */
     private final Variable var;
 
     /**

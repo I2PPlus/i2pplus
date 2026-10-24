@@ -68,6 +68,7 @@ private static final boolean VALIDATE = true;
         }
     }
 
+    /** Cached non-ASCII form of the label. */
     private transient String internationalizedRepresentation;
 
     /**
@@ -97,6 +98,7 @@ private static final boolean VALIDATE = true;
         return getClass().getSimpleName();
     }
 
+    /** Cached printable form of the label. */
     private transient String safeToStringRepresentation;
 
     /**
@@ -144,6 +146,7 @@ private static final boolean VALIDATE = true;
         return label.hashCode();
     }
 
+    /** Cached lower-case form of the label. */
     private transient DnsLabel lowercasedVariant;
 
     /**
@@ -158,8 +161,10 @@ private static final boolean VALIDATE = true;
         return lowercasedVariant;
     }
 
+    /** Cached wire encoding of the label. */
     private transient byte[] byteCache;
 
+    /** Fills the byte cache if it is still empty. */
     private void setBytesIfRequired() {
         if (byteCache == null) {
             byteCache = label.getBytes(StandardCharsets.US_ASCII);
@@ -292,6 +297,13 @@ private static final boolean VALIDATE = true;
         return sb.toString();
     }
 
+    /**
+     * Checks whether a character is a letter, digit, dash or allowed underscore.
+     *
+     * @param c the character to check
+     * @param underscore true to allow underscores
+     * @return true if the character is allowed
+     */
     private static boolean isLdhOrMaybeUnderscore(char c, boolean underscore) {
             // CHECKSTYLE:OFF
             return (c >= 'a' && c <= 'z')
@@ -303,6 +315,13 @@ private static final boolean VALIDATE = true;
             // CHECKSTYLE:ON
     }
 
+    /**
+     * Checks whether a whole string is LDH plus allowed underscores.
+     *
+     * @param string the string to check
+     * @param underscore true to allow underscores
+     * @return true if every character is allowed
+     */
     private static boolean consistsOnlyOfLdhAndMaybeUnderscore(String string, boolean underscore) {
         for (int i = 0; i < string.length(); i++) {
             char c = string.charAt(i);

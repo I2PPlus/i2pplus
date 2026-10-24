@@ -15,7 +15,9 @@ import net.i2p.util.Log;
  *
  */
 public class OutNetMessagePool {
+    /** Logger for this class. */
     private final Log _log;
+    /** The router context the pool belongs to. */
     private final RouterContext _context;
 
     /**

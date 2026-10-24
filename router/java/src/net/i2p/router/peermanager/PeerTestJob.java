@@ -50,10 +50,13 @@ import net.i2p.util.VersionComparator;
  * </ul>
  */
 public class PeerTestJob extends JobImpl {
+    /** Logger for peer tests. */
     private final Log _log;
+    /** The peer manager we report results to. */
     private PeerManager _manager;
     /** Whether to continue testing. */
     private boolean _keepTesting;
+    /** Peers tested before the random ones. */
     private final List<Hash> _priorityPeers = new ArrayList<>();
     /** Default delay between peer tests. */
     private static final long DEFAULT_PEER_TEST_DELAY = 5*60*1000L;
@@ -625,14 +628,23 @@ public class PeerTestJob extends JobImpl {
      * Simple selector looking for a dbStore of the peer specified.
      */
     private class ReplySelector implements MessageSelector {
+        /** When the selector stops matching. */
         private final long _expiration;
+        /** The nonce the reply must carry. */
         private final long _nonce;
+        /** The peer being tested. */
         private final Hash _peer;
+        /** Base64 prefix of the peer, for the logs. */
         private final String _shortHash;
+        /** True once the reply matched. */
         private boolean _matchFound;
 
         /**
          * Records the peer, nonce and expiry this outstanding test expects.
+         *
+         * @param peer the peer being tested
+         * @param nonce the nonce the reply must carry
+         * @param expiration when the selector stops matching
          */
         public ReplySelector(Hash peer, long nonce, long expiration) {
             _nonce = nonce;
@@ -688,11 +700,22 @@ public class PeerTestJob extends JobImpl {
             return false;
         }
 
+        /**
+         * Checks whether the peer is in the slow tier.
+         *
+         * @param data the peer's test data
+         * @return true if the peer is slow
+         */
         private boolean isSlowTier(PeerData data) {
             return data.bandwidthTier.equals("L") || data.bandwidthTier.equals("M") ||
                    data.bandwidthTier.equals("N") || !data.isReachable;
         }
 
+        /**
+         * Handles a successful test of a slow-tier peer.
+         *
+         * @param prof the peer's profile
+         */
         private void handleSlowTier(PeerProfile prof) {
             try {
                 getContext().profileOrganizer().demoteIfHighLatency(_peer);
@@ -701,6 +724,12 @@ public class PeerTestJob extends JobImpl {
             } catch (NumberFormatException nfe) { /* ignored */ }
         }
 
+        /**
+         * Handles a peer test timeout.
+         *
+         * @param data the peer's test data
+         * @param timeLeft time left in the job
+         */
         private void handleTimeout(PeerData data, long timeLeft) {
             if (_log.shouldInfo())
                 _log.info("[" + _shortHash + "] Test reply took too long: " + (0-timeLeft) + "ms too slow");
@@ -716,11 +745,26 @@ public class PeerTestJob extends JobImpl {
             }
         }
 
+        /**
+         * Checks whether the peer is in the high bandwidth tier.
+         *
+         * @param data the peer's test data
+         * @return true if the peer is high bandwidth
+         */
         private boolean isHighBandwidthTier(PeerData data) {
             return data.bandwidthTier.equals("N") || data.bandwidthTier.equals("O") ||
                    data.bandwidthTier.equals("P") || data.bandwidthTier.equals("X");
         }
 
+        /**
+         * Records a successful test and updates the profile.
+         *
+         * @param data the peer's test data
+         * @param timeout the test timeout used
+         * @param testAvg the peer's average test time
+         * @param timeLeft time left in the job
+         * @return true if the peer should be failed
+         */
         private boolean handleSuccessfulTest(PeerData data, int timeout, float testAvg, long timeLeft) {
             getContext().statManager().addRateData("peer.testOK", getTestTimeout() - timeLeft);
 
@@ -755,12 +799,20 @@ public class PeerTestJob extends JobImpl {
             return false;
         }
 
+        /**
+         * Checks whether the peer is high or mid bandwidth.
+         *
+         * @param data the peer's test data
+         * @return true if the peer is high or mid bandwidth
+         */
         private boolean isHighOrMidBandwidthTier(PeerData data) {
             return data.bandwidthTier.equals("O") || data.bandwidthTier.equals("P") ||
                    data.bandwidthTier.equals("X") || data.bandwidthTier.equals("N");
         }
         /**
          * Whether a matching reply was found.
+         *
+         * @return true if the reply matched
          */
         public boolean matchFound() { return _matchFound; }
         /**
@@ -776,13 +828,22 @@ public class PeerTestJob extends JobImpl {
      * Called when the peer's response is found.
      */
     private class PeerReplyFoundJob extends JobImpl implements ReplyJob {
+        /** The peer that replied. */
         private final RouterInfo _peer;
+        /** When the test started. */
         private final long _testBegin;
+        /** The tunnel the reply arrived on. */
         private final TunnelInfo _replyTunnel;
+        /** The tunnel the test was sent on. */
         private final TunnelInfo _sendTunnel;
 
         /**
          * Starts the clock when the tested peer's reply arrived.
+         *
+         * @param context the router context
+         * @param peer the peer that replied
+         * @param replyTunnel the tunnel the reply arrived on
+         * @param sendTunnel the tunnel the test was sent on
          */
         public PeerReplyFoundJob(RouterContext context, RouterInfo peer, TunnelInfo replyTunnel, TunnelInfo sendTunnel) {
             super(context);
@@ -872,13 +933,23 @@ public class PeerTestJob extends JobImpl {
      * Called when the peer's response times out.
      */
     private class PeerReplyTimeoutJob extends JobImpl {
+        /** The peer whose test timed out. */
         private final RouterInfo _peer;
+        /** The tunnel the reply was expected on. */
         private final TunnelInfo _replyTunnel;
+        /** The tunnel the test was sent on. */
         private final TunnelInfo _sendTunnel;
+        /** The selector to remove from the job queue. */
         private final ReplySelector _selector;
 
         /**
          * Schedules timeout handling when no reply arrived in time.
+         *
+         * @param context the router context
+         * @param peer the peer whose test timed out
+         * @param replyTunnel the tunnel the reply was expected on
+         * @param sendTunnel the tunnel the test was sent on
+         * @param sel the selector to remove from the job queue
          */
         public PeerReplyTimeoutJob(RouterContext context, RouterInfo peer, TunnelInfo replyTunnel, TunnelInfo sendTunnel, ReplySelector sel) {
             super(context);
@@ -894,6 +965,11 @@ public class PeerTestJob extends JobImpl {
          *         "Timeout Peer Test"
          */
         public String getName() { return "Timeout Peer Test"; }
+        /**
+         * Whether a test timeout should fail the peer.
+         *
+         * @return true, always
+         */
         private boolean getShouldFailPeer() { return true; }
         /**
          * Run the timeout handling job.

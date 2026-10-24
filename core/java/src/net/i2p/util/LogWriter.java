@@ -26,9 +26,11 @@ abstract class LogWriter implements Runnable {
 
     /** Ajax refresh interval. */
     static final long FLUSH_INTERVAL = (long) 15 * 1000;
+    /** Shortest interval between the flushes. */
     private static final long MIN_FLUSH_INTERVAL = (long) 2 * 1000;
+    /** Longest interval between the flushes. */
     private static final long MAX_FLUSH_INTERVAL = 5 * (long) 60 * 1000;
-    // true for newest first on /logs page; false for oldest first
+    /** Whether the displayed buffer shows newest first, false for oldest first. */
     private static final boolean BUFFER_DISPLAYED_REVERSE = true;
     /** Timestamp of last config reread. */
     private volatile long _lastReadConfig;
@@ -39,9 +41,11 @@ abstract class LogWriter implements Runnable {
 
     /** Whether the writer should continue writing. */
     protected volatile boolean _write;
+    /** The last record displayed. */
     private LogRecord _last;
+    /** Timestamp of the first record displayed. */
     private long _firstTimestamp;
-    // ms
+    /** The current interval between the flushes, in milliseconds. */
     private volatile long _flushInterval = FLUSH_INTERVAL;
 
     /**
@@ -215,7 +219,9 @@ abstract class LogWriter implements Runnable {
         return LogRecordFormatter.getWhen(_manager, lastRecord) + " | " + arrows + ' ' + ngettext("{0} similar message omitted", "{0} similar messages omitted", dupCount) + LogRecordFormatter.NL;
     }
 
+    /** Bundle of the common translated strings. */
     private static final String BUNDLE_NAME = "net.i2p.util.messages";
+    /** Bundle of the router translated strings. */
     private static final String ROUTER_BUNDLE_NAME = "net.i2p.router.web.messages";
 
     /**
@@ -231,6 +237,7 @@ abstract class LogWriter implements Runnable {
         return Translate.getString(a, b, c, _manager.getContext(), BUNDLE_NAME);
     }
 
+    /** Re-reads the display settings from the config. */
     private void rereadConfig() {
         long now = Clock.getInstance().now();
         if (now - _lastReadConfig > CONFIG_READ_INTERVAL) {
@@ -239,6 +246,11 @@ abstract class LogWriter implements Runnable {
         }
     }
 
+    /**
+     * Writes one record to the log file.
+     *
+     * @param rec the record to write
+     */
     private void writeRecord(LogRecord rec) {
         String val = LogRecordFormatter.formatRecord(_manager, rec, true);
         writeRecord(rec, val);

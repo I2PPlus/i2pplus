@@ -8,6 +8,7 @@ import java.util.Locale;
  * appropriate grid lines and labels for log-scale graphs.
  */
 class ValueAxisLogarithmic extends Axis {
+    /** The table of logarithmic axis labels. */
     private static final double[][] yloglab = {
         {1e9, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         {1e3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -28,12 +29,17 @@ class ValueAxisLogarithmic extends Axis {
          * @param formatPattern the decimal format applied to the label
          */
         void accept(int a, double b, String formatPattern);
-        /** Accept a numeric label at the given position using default format. */
+        /**
+         * Accept a numeric label at the given position using default format.
+         *
+         * @param a the tick index
+         * @param b the tick value to label
+         */
         default void accept(int a, double b) {
             accept(a, b, "%.0e");
         }
     }
-    /** IntDoubleLineConsumer class. */
+    /** Consumer that draws a line at a position. */
     @FunctionalInterface
     private interface IntDoubleLineConsumer {
         /**
@@ -45,11 +51,17 @@ class ValueAxisLogarithmic extends Axis {
          */
         void accept(int a, double b, Paint color);
     }
+    /** The image parameters being built. */
     private final ImageParameters im;
+    /** The worker drawing the image. */
     private final ImageWorker worker;
+    /** The definition of the graph. */
     private final RrdGraphDef gdef;
+    /** Height of the font, in pixels. */
     private final int fontHeight;
+    /** The mapper between values and pixels. */
     private final Mapper mapper;
+    /** The locale for formatting the labels. */
     private final Locale locale;
 
     /**
@@ -83,6 +95,13 @@ class ValueAxisLogarithmic extends Axis {
         this.mapper = rrdGraph.mapper;
         this.locale = locale;
     }
+    /**
+     * Finds the start value of the log scale.
+     *
+     * @param positive the positive reference value
+     * @param idx the index in the label table
+     * @return the start value of the scale
+     */
     private double findStart(double positive, int idx) {
         return Math.pow(
                 10,
@@ -91,7 +110,7 @@ class ValueAxisLogarithmic extends Axis {
     }
     /**
      * True if axis labels were drawn.
-     * @return true if axis labels were drawn
+     * @return true if labels were drawn, false for a range under 1e-10
      */
     boolean draw() {
         Font font = gdef.getFont(FONTTAG_AXIS);

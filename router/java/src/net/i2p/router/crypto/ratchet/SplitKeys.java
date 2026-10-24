@@ -12,6 +12,10 @@ import net.i2p.data.SessionKey;
  */
 class SplitKeys {
 
+    /**
+     * A shared empty array, so no allocation is needed for an empty
+     * value
+     */
     private static final byte[] ZEROLEN = new byte[0];
     /** The chain key. */
     public final SessionKey ck;

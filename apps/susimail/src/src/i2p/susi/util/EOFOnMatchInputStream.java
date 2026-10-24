@@ -15,8 +15,11 @@ import net.i2p.data.DataHelper;
  * @since 0.9.34
  */
 public class EOFOnMatchInputStream extends PushbackInputStream implements ReadCounter {
+    /** Bytes that end the stream when seen. */
     private final byte[] match;
+    /** Bytes kept while looking for the match. */
     private final int size;
+    /** Stream the bytes are read from. */
     private final ReadCounter cis;
 
     /**
@@ -44,6 +47,12 @@ public class EOFOnMatchInputStream extends PushbackInputStream implements ReadCo
         cis = ctr;
     }
 
+    /**
+     * Reverses bytes, for the Boyer-Moore skip table.
+     *
+     * @param m the bytes to reverse
+     * @return them in the other order
+     */
     private static byte[] reverse(byte[] m) {
         int j = m.length;
         byte[] rv = new byte[j];

@@ -33,9 +33,13 @@ import java.util.Arrays;
  */
 public final class BitMatrix implements Cloneable {
 
+  /** Width of the matrix, in bits. */
   private final int width;
+  /** Height of the matrix, in bits. */
   private final int height;
+  /** Ints used per row of the packed storage. */
   private final int rowSize;
+  /** The bits, packed into ints. */
   private final int[] bits;
 
   /**
@@ -63,6 +67,14 @@ public final class BitMatrix implements Cloneable {
     bits = new int[rowSize * height];
   }
 
+  /**
+   * Wraps dimensions and storage already packed into ints.
+   *
+   * @param width the width in bits
+   * @param height the height in bits
+   * @param rowSize ints used per row
+   * @param bits the packed bits
+   */
   private BitMatrix(int width, int height, int rowSize, int[] bits) {
     this.width = width;
     this.height = height;
@@ -493,6 +505,14 @@ public final class BitMatrix implements Cloneable {
     return buildToString(setString, unsetString, lineSeparator);
   }
 
+  /**
+   * Renders the matrix as text.
+   *
+   * @param setString the text for a set bit
+   * @param unsetString the text for an unset bit
+   * @param lineSeparator the text between rows
+   * @return the text rendering
+   */
   private String buildToString(String setString, String unsetString, String lineSeparator) {
     StringBuilder result = new StringBuilder(height * (width + 1));
     for (int y = 0; y < height; y++) {

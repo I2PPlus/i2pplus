@@ -42,15 +42,21 @@ import java.util.Arrays;
  */
 
 public class BloomSHA1 {
+    /** Bits in the filter. */
     private final int m;
+    /** Keys set per added item. */
     private final int k;
+    /** Items added to the filter. */
     private int count;
 
+    /** The words holding the filter bits. */
     private int[] filter;
+    /** Selector of the hash keys for an item. */
     private final KeySelector ks;
 
-    // convenience variables
+    /** Bits in the filter array. */
     private final int filterBits;
+    /** Words holding the filter bits. */
     private final int filterWords;
 
     /**
@@ -168,8 +174,14 @@ public class BloomSHA1 {
      *  @since 0.9.71+
      */
     public static final class Reset {
+        /** The filter words to restore. */
         private final int[] bits;
 
+        /**
+         * Builds the job restoring the filter.
+         *
+         * @param bits the filter words to restore
+         */
         private Reset(int[] bits) {
             this.bits = bits;
         }
@@ -201,7 +213,7 @@ public class BloomSHA1 {
     /**
      * Add a key to the set represented by the filter.
      *
-     * XXX This version does not maintain 4-bit counters, it is not
+     * This version does not maintain 4-bit counters, it is not
      * a counting Bloom filter.
      *
      * @param b byte array representing a key (SHA1 digest)
@@ -211,7 +223,7 @@ public class BloomSHA1 {
     /**
      * Add a key to the set represented by the filter.
      *
-     * XXX This version does not maintain 4-bit counters, it is not
+     * This version does not maintain 4-bit counters, it is not
      * a counting Bloom filter.
      *
      * @param b byte array representing a key (SHA1 digest)
@@ -412,9 +424,17 @@ public class BloomSHA1 {
      */
     public static class FilterKey {
 
+        /** Bit offsets of the key in the filter. */
         private final int[] bitOffset;
+        /** Word offsets of the key in the filter. */
         private final int[] wordOffset;
 
+        /**
+         * Records one key's bit positions.
+         *
+         * @param bitOffset the bit offsets of the key
+         * @param wordOffset the word offsets of the key
+         */
         private FilterKey(int[] bitOffset, int[] wordOffset) {
             this.bitOffset = bitOffset;
             this.wordOffset = wordOffset;

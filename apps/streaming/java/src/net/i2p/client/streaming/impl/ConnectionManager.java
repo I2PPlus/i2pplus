@@ -35,16 +35,27 @@ import net.i2p.util.SimpleTimer2;
  * Coordinate all of the connections for a single local destination.
  */
 class ConnectionManager {
+    /** The app context. */
     private final I2PAppContext _context;
+    /** Logger for the streaming session. */
     private final Log _log;
+    /** The session carrying the packets. */
     private final I2PSession _session;
+    /** Handles the session's messages. */
     private final MessageHandler _messageHandler;
+    /** Processes inbound packets. */
     private final PacketHandler _packetHandler;
+    /** Runs the connection state machines. */
     private final ConnectionHandler _connectionHandler;
+    /** Queue of outbound packets. */
     private final PacketQueue _outboundQueue;
+    /** Chooses the outbound packet scheduler. */
     private final SchedulerChooser _schedulerChooser;
+    /** Handles packets for one connection. */
     private final ConnectionPacketHandler _conPacketHandler;
+    /** Shares the congestion window between connections. */
     private final TCBShare _tcbShare;
+    /** Decides whether to accept inbound connections. */
     private final IncomingConnectionFilter _connectionFilter;
     /** Inbound stream ID (Long) to Connection map. */
     private final ConcurrentHashMap<Long, Connection> _connectionByInboundId;
@@ -52,17 +63,27 @@ class ConnectionManager {
     private final ConcurrentHashMap<Long, Connection> _connectionByOutboundId;
     /** Ping ID (Long) to PingRequest. */
     private final ConcurrentHashMap<Long, PingRequest> _pendingPings;
+    /** Whether the throttlers have been created. */
     private volatile boolean _throttlersInitialized;
+    /** Options used for new connections. */
     private final ConnectionOptions _defaultOptions;
+    /** Threads waiting for an inbound connection slot. */
     private final AtomicInteger _numWaiting = new AtomicInteger();
+    /** Socket read timeout in ms. */
     private long _soTimeout;
+    /** Limits inbound connections per minute. */
     private volatile ConnThrottler _minuteThrottler;
+    /** Limits inbound connections per hour. */
     private volatile ConnThrottler _hourThrottler;
+    /** Limits inbound connections per day. */
     private volatile ConnThrottler _dayThrottler;
-    /** Since 0.9, each manager instantiates its own timer. */
+    /** The retransmission timer for this manager. */
     private final RetransmissionTimer _timer;
+    /** Recently closed connections, to reject quick reopens. */
     private final Map<Long, Object> _recentlyClosed;
+    /** Pooled buffers for packet payloads. */
     private final ByteCache _cache = ByteCache.getInstance(32, 4*1024);
+    /** Placeholder value in the recently-closed map. */
     private static final Object DUMMY = new Object();
 
     /**
@@ -208,6 +229,7 @@ class ConnectionManager {
         }
     }
 
+    /** Rate stat periods for the throttler stats. */
     private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
 
     /**
@@ -253,6 +275,7 @@ class ConnectionManager {
 
     /** Cache of the property to detect changes. */
     private static volatile String currentBlacklist = "";
+    /** Destinations blacklisted across all managers. */
     private static final Set<Hash> _globalBlacklist = new ConcurrentHashSet<>();
 
     /**
@@ -369,6 +392,7 @@ class ConnectionManager {
      * @since 0.9.71+
      */
     private volatile long _synRateMs = DEFAULT_TEMP_BAN_RATE_MS;
+    /** SYNs in a burst that trigger a temp ban. */
     private volatile int _synBurst = DEFAULT_TEMP_BAN_SYN_BURST;
     /**
      * Cached strikes-to-ban count, refreshed by the BanExpiry sweeper. 0 or 1
@@ -386,6 +410,7 @@ class ConnectionManager {
      * @since 0.9.71+
      */
     private volatile long _tempBanMs = DEFAULT_TEMP_BAN_MINUTES * 60L * 1000L;
+    /** Refusals that trigger a temp ban. */
     private volatile long _tempBanRefusals = DEFAULT_TEMP_BAN_REFUSALS;
 
     /**
@@ -413,6 +438,7 @@ class ConnectionManager {
      * Tunable via {@code i2p.streaming.tempBanMinutes}. 0 disables autoban. @since 0.9.71+.
      */
     public static final String PROP_TEMP_BAN_MINUTES = "i2p.streaming.tempBanMinutes";
+    /** The default temp ban lasts 5 minutes. */
     private static final long DEFAULT_TEMP_BAN_MINUTES = 5;
 
     /**
@@ -423,6 +449,7 @@ class ConnectionManager {
      * config keeps refreshing while enforcement is off. @since 0.9.71+.
      */
     public static final String PROP_AUTOBAN = "i2p.streaming.autoban";
+    /** Negative means no permanent autoban. */
     private static final int DEFAULT_AUTOBAN = -1;
 
     /**
@@ -431,6 +458,7 @@ class ConnectionManager {
      * Tunable via {@code i2p.streaming.tempBanRefusals}. @since 0.9.71+.
      */
     public static final String PROP_TEMP_BAN_REFUSALS = "i2p.streaming.tempBanRefusals";
+    /** Default refused connections that trigger a temp ban. */
     private static final long DEFAULT_TEMP_BAN_REFUSALS = 100;
 
     /**
@@ -442,6 +470,7 @@ class ConnectionManager {
      * @since 0.9.71+
      */
     public static final String PROP_TEMP_BAN_RATE_MS = "i2p.streaming.tempBanSynRate";
+    /** The default SYN rate window is 1 second. */
     private static final long DEFAULT_TEMP_BAN_RATE_MS = 1000;
 
     /**
@@ -455,6 +484,7 @@ class ConnectionManager {
      * @since 0.9.71+
      */
     public static final String PROP_TEMP_BAN_SYN_BURST = "i2p.streaming.tempBanSynBurst";
+    /** Default SYNs in a burst that trigger a temp ban. */
     private static final int DEFAULT_TEMP_BAN_SYN_BURST = 40;
 
     /**
@@ -473,6 +503,7 @@ class ConnectionManager {
      * @since 0.9.71+
      */
     public static final String PROP_TEMP_BAN_STRIKES = "i2p.streaming.tempBanStrikes";
+    /** Temp bans before a permanent ban. */
     private static final int DEFAULT_TEMP_BAN_STRIKES = 3;
 
     /**
@@ -1163,6 +1194,11 @@ class ConnectionManager {
         return false;
     }
 
+    /**
+     * Returns the temp ban length from the config.
+     *
+     * @return the ban length in minutes
+     */
     private long getTempBanMinutes() {
         return _context.getProperty(PROP_TEMP_BAN_MINUTES, (int) DEFAULT_TEMP_BAN_MINUTES);
     }
@@ -1215,6 +1251,7 @@ class ConnectionManager {
         return _context.getProperty("i2p.streaming.maxPingTimeout", 5*60*1000);
     }
 
+    /** Largest pong payload accepted, in bytes. */
     private static final int MAX_PONG_PAYLOAD = 32;
 
     /**
@@ -1232,14 +1269,18 @@ class ConnectionManager {
      * @since 0.9.54+
      */
     private static final String PROP_ENABLE_PONG_DELAY = "i2p.streaming.enablePongDelay";
+    /** Pong delay is off by default. */
     private static final boolean DEFAULT_ENABLE_PONG_DELAY = false;
+    /** Longest artificial pong delay, in ms. */
     private static final int MAX_PONG_DELAY = 50;
     /** Property: maximum pong delay in ms. */
     static final String PROP_MAX_PONG_DELAY = "i2p.streaming.maxPongDelay";
 
-    // https://stackoverflow.com/questions/16022624/examples-of-http-api-rate-limiting-http-response-headers
-    // RFC 6585
-
+    /**
+     * The http 429 response sent when over the limit.
+     * See also: <a href="https://datatracker.ietf.org/doc/html/rfc6585">RFC 6585 (additional HTTP status codes)</a>
+     * See also: <a href="https://stackoverflow.com/questions/16022624/examples-of-http-api-rate-limiting-http-response-headers">rate limit responses</a>
+     */
     private static final String LIMIT_HTTP_RESPONSE =
          "HTTP/1.1 429 Too Many Requests\r\n" +
          "Content-Type: text/html; charset=iso-8859-1\r\n" +
@@ -2207,8 +2248,11 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
      * @since 0.9.49
      */
     private static class Reason {
+        /** The refusal message to log. */
         private final String txt;
+        /** How long the ban lasts. */
         private final int seconds;
+        /** True to keep the refusal out of the logs. */
         private final boolean silent;
 
         /**
@@ -2253,6 +2297,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
         public boolean isSilent() { return silent; }
     }
 
+    /** Largest ban length accepted, effectively forever. */
     private static final int MAX_TIME = 9999999;
 
 
@@ -2406,12 +2451,12 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
     public void updateShareOpts(Connection con) { _tcbShare.updateShareOpts(con); }
     /**
      * Connection handler for this manager.
-     * @return the connection handler
+     * @return the handler running the connection state machines
      */
     public ConnectionHandler getConnectionHandler() { return _connectionHandler; }
     /**
      * Outbound packet queue.
-     * @return the outbound packet queue
+     * @return the queue of packets waiting to be sent
      */
     public PacketQueue getPacketQueue() { return _outboundQueue; }
     /**
@@ -2512,22 +2557,41 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
      * @since 0.9.71+
      */
     private static class PooledConnection {
+        /** The pooled connection. */
         final Connection connection;
+        /** When the connection entered the pool. */
         final long pooledAt;
+        /** When the connection was last used. */
         final AtomicLong lastUsed;
 
+        /**
+         * Puts one connection in the pool.
+         *
+         * @param con the connection to pool
+         * @param now the current time
+         */
         PooledConnection(Connection con, long now) {
             this.connection = con;
             this.pooledAt = now;
             this.lastUsed = new AtomicLong(now);
         }
 
-        /** Whether the pooled connection has exceeded max idle time. */
+        /**
+         * Whether the pooled connection has exceeded max idle time.
+         *
+         * @param maxIdleMs the most time a connection may sit idle, in milliseconds
+         * @param now the current time
+         * @return true when idle past the maximum
+         */
         boolean isStale(long maxIdleMs, long now) {
             return now - lastUsed.get() > maxIdleMs;
         }
 
-        /** Update the last-used timestamp. */
+        /**
+         * Update the last-used timestamp.
+         *
+         * @param now the time to record
+         */
         void touch(long now) {
             lastUsed.set(now);
         }
@@ -3058,11 +3122,16 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
      * and notifies the caller on timeout.
      */
     private class PingFailed extends SimpleTimer2.TimedEvent {
+        /** The ping id that timed out. */
         private final Long _id;
+        /** Notified that the ping failed. */
         private final PingNotifier _notifier;
 
         /**
          * Create the timeout event for one outstanding ping.
+         *
+         * @param id the id of the outstanding ping
+         * @param notifier the notifier to call on timeout
          */
         public PingFailed(Long id, PingNotifier notifier) {
             super(_timer.getSharedTimer());
@@ -3137,6 +3206,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
      * @since 0.9.71+
      */
     private class BanExpiry extends SimpleTimer2.TimedEvent {
+        /** Ban expiry passes run every 1 minute. */
         private static final long PERIOD = 60 * 1000;
 
         /**
@@ -3149,6 +3219,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
          */
         private volatile boolean _stopped;
 
+        /** Prepares the periodic ban expiry pass. */
         BanExpiry() {
             super(_context.simpleTimer2());
             schedule(PERIOD + (PERIOD / 2));
@@ -3272,8 +3343,11 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
      * optional payload and notification callback.
      */
     private static class PingRequest {
+        /** Whether the pong has arrived. */
         private boolean _ponged;
+        /** The payload echoed back by the pong. */
         private ByteArray _payload;
+        /** Notified when the pong arrives. */
         private final PingNotifier _notifier;
 
         /**
@@ -3301,6 +3375,8 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
 
         /**
          * Whether a pong has been received.
+         *
+         * @return true when the pong arrived
          */
         public synchronized boolean pongReceived() { return _ponged; }
 

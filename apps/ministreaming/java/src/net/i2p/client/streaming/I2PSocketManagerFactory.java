@@ -469,6 +469,15 @@ public class I2PSocketManagerFactory {
         return sockMgr;
     }
 
+    /**
+     * Wraps a session as a socket manager.
+     *
+     * @param session the session to wrap
+     * @param opts the socket options
+     * @param name the manager's name
+     * @param filter filter for incoming connections
+     * @return the new manager
+     */
     private static I2PSocketManager createManager(I2PSession session, Properties opts, String name,
                                                   IncomingConnectionFilter filter) {
         I2PAppContext context = I2PAppContext.getGlobalContext();
@@ -495,10 +504,20 @@ public class I2PSocketManagerFactory {
 
     }
 
+    /**
+     * Host taken from the options or the environment.
+     *
+     * @return the host to connect to
+     */
     private static String getHost() {
         return System.getProperty(I2PClient.PROP_TCP_HOST, "127.0.0.1");
     }
 
+    /**
+     * Port taken from the options or the environment.
+     *
+     * @return the port to connect to
+     */
     private static int getPort() {
         int i2cpPort = I2PClient.DEFAULT_LISTEN_PORT;
         String i2cpPortStr = System.getProperty(I2PClient.PROP_TCP_PORT);

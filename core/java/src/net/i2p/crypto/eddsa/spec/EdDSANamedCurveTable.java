@@ -27,11 +27,13 @@ public class EdDSANamedCurveTable {
     /** Old name for the Ed25519 curve. */
     public static final String CURVE_ED25519_SHA512 = "ed25519-sha-512";
 
+    /** The Ed25519 field. */
     private static final Field ed25519field = new Field(
                     256, // b
                     Utils.hexToBytes("edffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7f"), // q
                     new Ed25519LittleEndianEncoding());
 
+    /** The Ed25519 curve's parameters. */
     private static final Curve ed25519curve = new Curve(ed25519field,
             Utils.hexToBytes("a3785913ca4deb75abd841414d0a700098e879777940c78c73fe6f2bee6c0352"), // d
             ed25519field.fromByteArray(Utils.hexToBytes("b0a00e4a271beec478e42fad0618432fa7d7fb3d99004d2b0bdfc14f8024832b"))); // I
@@ -48,8 +50,15 @@ public class EdDSANamedCurveTable {
                     Utils.hexToBytes("5866666666666666666666666666666666666666666666666666666666666666"),
                     true)); // Precompute tables for B
 
+    /** The registered curves, by name. */
     private static volatile HashMap<String, EdDSANamedCurveSpec> curves = new HashMap<>();
 
+    /**
+     * Registers a curve under a name.
+     *
+     * @param name the name to register it as
+     * @param curve the curve to register
+     */
     private static synchronized void putCurve(String name, EdDSANamedCurveSpec curve) {
         HashMap<String, EdDSANamedCurveSpec> newCurves = new HashMap<>(curves);
         newCurves.put(name, curve);

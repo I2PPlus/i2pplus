@@ -19,9 +19,13 @@ import net.i2p.util.SimpleTimer2;
  * @since 0.7.11
  */
 class FloodThrottler {
+    /** Lookup floods counted per peer. */
     private final ObjectCounter<Hash> counter;
+    /** Timer clearing the counts periodically. */
     private final Cleaner _cleaner;
+    /** Most floods from one peer before it is throttled. */
     private static final int MAX_FLOODS = 3;
+    /** How often the counts are cleared: 45 sec. */
     private static final long CLEAN_TIME = 45*1000L;
 
     /** Creates a new FloodThrottler. */
@@ -41,12 +45,18 @@ class FloodThrottler {
         return this.counter.increment(h) > MAX_FLOODS;
     }
 
-    /** Stop the periodic cleaner. Call on facade shutdown. @since 0.9.70+. */
+    /**
+     * Stop the periodic cleaner. Call on facade shutdown.
+     *
+     * @since 0.9.70+
+     */
     void cancel() {
         _cleaner.cancel();
     }
 
+    /** Clears the flood counts on a schedule. */
     private class Cleaner extends SimpleTimer2.TimedEvent {
+        /** Starts the cleaning schedule. */
         public Cleaner() { super(SimpleTimer2.getInstance()); }
         public void timeReached() {
             FloodThrottler.this.counter.decay(2);

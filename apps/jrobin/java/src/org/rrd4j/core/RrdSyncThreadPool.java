@@ -24,6 +24,7 @@ public class RrdSyncThreadPool {
     /** The reference to the shutdown hook, or null. */
     private final AtomicReference<Thread> shutdownHook = new AtomicReference<>();
 
+    /** Runs the periodic write-back of changed rrd files. */
     private final ScheduledExecutorService syncExecutor;
 
     /**

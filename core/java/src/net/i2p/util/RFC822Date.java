@@ -20,8 +20,10 @@ public abstract class RFC822Date {
     public RFC822Date() {}
 
 
+    /** Formatter for rendering a date, one per thread */
     private static final ThreadLocal<SimpleDateFormat> OUTPUT_FORMAT = ThreadLocal.withInitial(() -> new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z", Locale.US));
 
+    /** Formatters tried when parsing, one set per thread */
     private static final ThreadLocal<SimpleDateFormat[]> RFC822_DATE_FORMATS = ThreadLocal.withInitial(RFC822Date::createDateFormats);
 
     /**

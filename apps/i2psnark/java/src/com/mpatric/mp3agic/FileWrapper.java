@@ -8,12 +8,17 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
 
+/** Gives access to a file's contents by path. */
 public class FileWrapper {
 
+    /** Where the file is. */
     protected Path path;
+    /** Size of the file, in bytes. */
     protected long length;
+    /** When the file last changed, in ms. */
     protected long lastModified;
 
+    /** For subclasses that set the path themselves. */
     protected FileWrapper() {}
 
     /**
@@ -53,6 +58,11 @@ public class FileWrapper {
         init();
     }
 
+    /**
+     * Reads the file's size and modification time.
+     *
+     * @throws IOException if the file cannot be read
+     */
     private void init() throws IOException {
         if (!Files.exists(path)) throw new FileNotFoundException("File not found " + path);
         if (!Files.isReadable(path)) throw new IOException("File not readable");

@@ -7,6 +7,7 @@ package org.rrd4j.core;
  */
 public class InvalidRrdException extends RrdException {
 
+    /** Pinned for serialized-form compatibility. */
     private static final long serialVersionUID = 1L;
 
     /**

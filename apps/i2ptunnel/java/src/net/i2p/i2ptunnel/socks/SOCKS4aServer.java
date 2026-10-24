@@ -40,8 +40,10 @@ import net.i2p.util.HexDump;
  */
 class SOCKS4aServer extends SOCKSServer {
 
+    /** Longest hostname a request may carry. */
     private static final int MAX_STRING_LEN = 1024;
 
+    /** True once the tunnel setup has finished. */
     private boolean setupCompleted;
 
     /** Sticky proxy cache: host -&gt; selected proxy. */
@@ -163,6 +165,13 @@ class SOCKS4aServer extends SOCKSServer {
             connHostName = readString(in);
     }
 
+    /**
+     * Reads a NUL-terminated string from the request.
+     *
+     * @param in the stream to read
+     * @return the string read, without the terminator
+     * @throws IOException if the stream ends early
+     */
     private static String readString(DataInputStream in) throws IOException {
         StringBuilder sb = new StringBuilder(16);
         int i = 0;

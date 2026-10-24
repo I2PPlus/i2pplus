@@ -17,8 +17,11 @@ import net.i2p.util.Log;
  * format: { tunnelId, sizeof(i2npMessage.toByteArray()), i2npMessage.toByteArray() }.
  */
 public class TunnelGatewayMessage extends FastI2NPMessageImpl {
+    /** The tunnel this message enters. */
     private TunnelId _tunnelId;
+    /** The message carried inside. */
     private I2NPMessage _msg;
+    /** The carried message, as bytes. */
     private byte[] _msgData;
     /** Message type ID for this I2NP message. */
 

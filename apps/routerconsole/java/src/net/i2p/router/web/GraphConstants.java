@@ -6,6 +6,7 @@ package net.i2p.router.web;
  * @since 0.9.33 pulled out of GraphHelper
  */
 public class GraphConstants {
+    /** Utility class, not intended for instantiation. */
     private GraphConstants() {}
     /** Default graph width. */
     public static final int DEFAULT_X = 400;

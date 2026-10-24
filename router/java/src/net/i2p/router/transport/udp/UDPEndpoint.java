@@ -17,18 +17,30 @@ import net.i2p.util.SystemVersion;
  * UDPReceiver.
  */
 class UDPEndpoint implements SocketListener {
+    /** The router context. */
     private final RouterContext _context;
+    /** Logger for the UDP endpoint. */
     private final Log _log;
+    /** The port this endpoint listens on. */
     private int _listenPort;
+    /** The transport that owns this endpoint. */
     private final UDPTransport _transport;
+    /** The thread sending the packets. */
     private UDPSender _sender;
+    /** The thread receiving the packets. */
     private UDPReceiver _receiver;
+    /** The socket read and written by the endpoint. */
     private DatagramSocket _socket;
+    /** The address the socket is bound to. */
     private final InetAddress _bindAddress;
+    /** True for the IPv4 endpoint. */
     private final boolean _isIPv4;
+    /** True for the IPv6 endpoint. */
     private final boolean _isIPv6;
+    /** Sequence number of the created endpoints. */
     private static final AtomicInteger _counter = new AtomicInteger();
 
+    /** Smallest socket buffer size asked for. */
     private static final int MIN_SOCKET_BUFFER = 256*1024;
 
     /**
@@ -95,6 +107,7 @@ class UDPEndpoint implements SocketListener {
      * @param newPort the port to request at the next bind, or below 1 to pick randomly
      */
     public void setListenPort(int newPort) { _listenPort = newPort; }
+    /** Times a different port is tried before failing. */
     private static final int MAX_PORT_RETRIES = 20;
 
     /**

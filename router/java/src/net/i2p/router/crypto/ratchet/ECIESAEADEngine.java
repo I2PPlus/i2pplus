@@ -51,52 +51,75 @@ import net.i2p.util.Log;
  * @since 0.9.44
  */
 public final class ECIESAEADEngine {
+    /** The router context. */
     private final RouterContext _context;
+    /** Logger for ratchet decryption. */
     private final Log _log;
+    /** Engine for the legacy muxed encryption types. */
     private final MuxedEngine _muxedEngine;
+    /** Engine for the post-quantum muxed types. */
     private final MuxedPQEngine _muxedPQEngine;
+    /** Key derivation function for the ratchet. */
     private final HKDF _hkdf;
+    /** Key factory for the X25519 ratchet. */
     private final Elg2KeyFactory _edhThread;
-    // For now, started on demand, see getHybridKeyFactory()
+    /** Key factory for ML-KEM 768, started on demand. */
     private MLKEMKeyFactory _mlkem768Thread;
+    /** True while the engine is running. */
     private volatile boolean _isRunning;
 
+    /** Shared empty array for zero-length values. */
     private static final byte[] ZEROLEN = new byte[0];
+    /** Length of a short ratchet tag, in bytes. */
     private static final int TAGLEN = 8;
+    /** Length of a truncated MAC, in bytes. */
     private static final int MACLEN = 16;
+    /** Length of an X25519 key, in bytes. */
     private static final int KEYLEN = 32;
+    /** Length of a block header, in bytes. */
     private static final int BHLEN = RatchetPayload.BLOCK_HEADER_SIZE;  // 3
+    /** Size of a datetime block, in bytes. */
     private static final int DATETIME_SIZE = BHLEN + 4; // 7
+    /** Overhead of a NS-encrypted payload, in bytes. */
     private static final int NS_OVERHEAD = KEYLEN + KEYLEN + MACLEN + MACLEN; // 96
+    /** Overhead of an NS-N encrypted payload, in bytes. */
     private static final int NS_N_OVERHEAD = KEYLEN + MACLEN; // 48
+    /** Overhead of an NSR-encrypted payload, in bytes. */
     private static final int NSR_OVERHEAD = TAGLEN + KEYLEN + MACLEN + MACLEN; // 72
+    /** Overhead of an ES-encrypted payload, in bytes. */
     private static final int ES_OVERHEAD = TAGLEN + MACLEN; // 24
-    // Package-visible: MuxedPQEngine sizes its decrypt attempts with these
     /** Minimum new-session message size in bytes (103). */
     static final int MIN_NS_SIZE = NS_OVERHEAD + DATETIME_SIZE; // 103
+    /** Smallest valid NS-N encrypted payload, in bytes. */
     private static final int MIN_NS_N_SIZE = NS_N_OVERHEAD + DATETIME_SIZE; // 55
+    /** Smallest valid NSR-encrypted payload, in bytes. */
     private static final int MIN_NSR_SIZE = NSR_OVERHEAD; // 72
+    /** Smallest valid ES-encrypted payload, in bytes. */
     private static final int MIN_ES_SIZE = ES_OVERHEAD; // 24
+    /** Smallest payload any encryption type accepts. */
     private static final int MIN_ENCRYPTED_SIZE = MIN_ES_SIZE;
+    /** All-zero public key for comparisons. */
     private static final byte[] NULLPK = new byte[KEYLEN];
+    /** Maximum padding added to an encrypted payload. */
     private static final int MAXPAD = 16;
     /** Maximum age of a New Session request in ms. */
     static final long MAX_NS_AGE = 5*60*1000L;
+    /** An NS datetime may be up to 2 minutes in the future. */
     private static final long MAX_NS_FUTURE = 2*60*1000L;
-    // debug, send ACKREQ in every ES
+    /** Debug flag to send an ACKREQ in every ES. */
     private static final boolean ACKREQ_IN_ES = false;
-    // return value for a payload failure after a successful decrypt,
-    // so we don't continue with ElG
+    /** Empty clove array for failed ElGamal decryptions. */
     private static final GarlicClove[] NO_GARLIC = new GarlicClove[] {};
+    /** Empty clove set returned on failure. */
     private static final CloveSet NO_CLOVES = new CloveSet(NO_GARLIC, Certificate.NULL_CERT, 0, 0);
 
+    /** HKDF info string for the attach payload key. */
     private static final String INFO_6 = "AttachPayloadKDF";
 
+    /** Rate stat period for the decryption statistics. */
     private static final long[] RATES = new long[] { 60*1000L };
 
-    // These are the min sizes for the MLKEM New Session Message.
-    // It contains an extra MLKEM key and MAC.
-    // 112
+    /** Next session overhead for the ML-KEM types: 112 bytes. */
     private static final int NS_MLKEM_OVERHEAD = NS_OVERHEAD + MACLEN;
     /** Minimum ML-KEM-512 new-session message size, 800 + 112 + 7 = 919 bytes. */
     static final int MIN_NS_MLKEM512_SIZE =
@@ -107,11 +130,11 @@ public final class ECIESAEADEngine {
     /** Minimum ML-KEM-1024 new-session message size, 1568 + 112 + 7 = 1687 bytes. */
     static final int MIN_NS_MLKEM1024_SIZE =
         EncType.MLKEM1024_X25519_INT.getPubkeyLen() + NS_MLKEM_OVERHEAD + DATETIME_SIZE;
-    // 856
+    /** Smallest next session request with ML-KEM-512: 856 bytes. */
     private static final int MIN_NSR_MLKEM512_SIZE = EncType.MLKEM512_X25519_CT.getPubkeyLen() + MIN_NSR_SIZE + MACLEN;
-    // 1176
+    /** Smallest next session request with ML-KEM-768: 1176 bytes. */
     private static final int MIN_NSR_MLKEM768_SIZE = EncType.MLKEM768_X25519_CT.getPubkeyLen() + MIN_NSR_SIZE + MACLEN;
-    // 1656
+    /** Smallest next session request with ML-KEM-1024: 1656 bytes. */
     private static final int MIN_NSR_MLKEM1024_SIZE = EncType.MLKEM1024_X25519_CT.getPubkeyLen() + MIN_NSR_SIZE + MACLEN;
     /**
      * Caller MUST call {@link #startup()} to get threaded generation.
@@ -154,7 +177,6 @@ public final class ECIESAEADEngine {
         }
     }
 
-    /* start decrypt */
 
     /**
      * Try to decrypt the message with one or both of the given private keys.
@@ -217,6 +239,15 @@ public final class ECIESAEADEngine {
         }
     }
 
+    /**
+     * Decrypts a received message into cloves.
+     *
+     * @param data the message bytes
+     * @param targetPrivateKey the key to decrypt with
+     * @param keyManager the manager of the session keys
+     * @return the decrypted clove set
+     * @throws DataFormatException if the message is invalid
+     */
     private CloveSet x_decrypt(byte[] data, PrivateKey targetPrivateKey,
                                RatchetSKM keyManager) throws DataFormatException {
         checkType(targetPrivateKey.getType());
@@ -1152,7 +1183,6 @@ public final class ECIESAEADEngine {
         }
     }
 
-    /* end decrypt, start encrypt */
 
     /**
      * Encrypt the data to the target using the given key and deliver the specified tags
@@ -1594,7 +1624,9 @@ public final class ECIESAEADEngine {
     private class PLCallback implements RatchetPayload.PayloadCallback {
         /** Non-null, may be empty. */
         public final List<GarlicClove> cloveSet = new ArrayList<>(3);
+        /** The session key manager for the sender. */
         private final RatchetSKM skm;
+        /** The sender's ratchet public key. */
         private final PublicKey remote;
         /** The datetime value. */
         public long datetime;
@@ -1743,9 +1775,11 @@ public final class ECIESAEADEngine {
         return createPayload(cloves, expiration, false, null, null, null, overhead);
     }
 
-    // see below
+    /** First size bucket for the padding distribution. */
     private static final int B1 = 944;
+    /** Second size bucket for the padding distribution. */
     private static final int B2 = 1936;
+    /** Third size bucket for the padding distribution. */
     private static final int B3 = 2932;
 
     /**
@@ -1862,12 +1896,12 @@ public final class ECIESAEADEngine {
         return payload;
     }
 
-    /*
-     * Set a timer for a ratchet-layer reply if the application does not respond.
-     * NS only. CloveSet must include a LS for validation.
+    /**
+     * Schedules the delayed reply to an NS message.
      *
-     * @param skm must have non-null destination
-     * @since 0.9.46
+     * @param from the sender's ratchet key
+     * @param cloveSet the decrypted cloves to reply with
+     * @param skm the session key manager for the sender
      */
     private void setResponseTimerNS(PublicKey from, List<GarlicClove> cloveSet, RatchetSKM skm) {
         Destination us = skm.getDestination();
@@ -1907,12 +1941,12 @@ public final class ECIESAEADEngine {
             _log.info("Unvalidated NewSession sender: " + from);
     }
 
-    /*
-     * Set a timer for a ratchet-layer reply if the application does not respond.
-     * NSR/ES only.
+    /**
+     * Schedules the delayed reply to an NSR message.
      *
-     * @param skm must have non-null destination
-     * @since 0.9.47
+     * @param from the sender's ratchet key
+     * @param cloveSet the decrypted cloves to reply with
+     * @param skm the session key manager for the sender
      */
     private void setResponseTimer(PublicKey from, List<GarlicClove> cloveSet, RatchetSKM skm) {
         Destination d = skm.getDestination(from);
@@ -1949,12 +1983,19 @@ public final class ECIESAEADEngine {
          */
         BlockPool() {}
 
+        /** Blocks taken from the pool, returned on release. */
         private final List<Block> blocks = new ArrayList<>(8);
+        /** Pooled garlic blocks. */
         private final List<GarlicBlock> cloveBlocks = new ArrayList<>(4);
+        /** Pooled padding blocks. */
         private final List<PaddingBlock> paddingBlocks = new ArrayList<>(2);
+        /** Pooled datetime blocks. */
         private final List<DateTimeBlock> datetimeBlocks = new ArrayList<>(1);
+        /** Pooled next-key blocks. */
         private final List<NextKeyBlock> nextKeyBlocks = new ArrayList<>(1);
+        /** Pooled ack blocks. */
         private final List<AckBlock> ackBlocks = new ArrayList<>(1);
+        /** Pooled ack-request blocks. */
         private final List<AckRequestBlock> ackReqBlocks = new ArrayList<>(1);
 
         /**
@@ -2085,6 +2126,7 @@ public final class ECIESAEADEngine {
         }
     }
 
+    /** Per-thread pool of ratchet payload blocks. */
     private static final ThreadLocal<BlockPool> _blockPool = new ThreadLocal<BlockPool>() {
         @Override
         protected BlockPool initialValue() {

@@ -5,7 +5,7 @@ import org.bouncycastle.crypto.CryptoServicePurpose;
 import org.bouncycastle.crypto.Xof;
 
 /**
- * implementation of SHAKE based on following KeccakNISTInterface.c from <a href="https://keccak.team/">keccak.team</a>
+ * Implementation of SHAKE based on following KeccakNISTInterface.c from <a href="https://keccak.team/">keccak.team</a>
  * <p>
  * Following the naming conventions used in the C source code to enable easy review of the implementation.
  */
@@ -13,6 +13,12 @@ public class SHAKEDigest
     extends KeccakDigest
     implements Xof
 {
+    /**
+     * Rejects a bit strength that is not a multiple of 8.
+     *
+     * @param bitStrength the strength to check
+     * @return the strength, if valid
+     */
     private static int checkBitLength(int bitStrength)
     {
         switch (bitStrength)

@@ -28,7 +28,9 @@ public class Servlet extends HttpServlet {
      */
     public Servlet() {}
 
+    /** Pinned for serialized-form compatibility. */
     private static final long serialVersionUID = 1L;
+    /** The worker thread, left out of the serialized form */
     private transient Thread thread;
 
     /**

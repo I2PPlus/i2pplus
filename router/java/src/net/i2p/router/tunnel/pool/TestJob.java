@@ -56,10 +56,15 @@ import net.i2p.util.SystemVersion;
  * flood the job queue.  Retests reuse this instance via {@link #scheduleRetest}.
  */
 public class TestJob extends JobImpl {
+    /** Logger for tunnel test results. */
     private final Log _log;
+    /** The pool whose tunnels are tested. */
     private final TunnelPool _pool;
+    /** The pool's tunnel configuration. */
     private final PooledTunnelCreatorConfig _cfg;
+    /** The outbound tunnel carrying the test. */
     private TunnelInfo _outTunnel;
+    /** The inbound tunnel expected to carry the reply. */
     private TunnelInfo _replyTunnel;
     /**
      * True when the partner for the current round came from the exploratory
@@ -92,9 +97,13 @@ public class TestJob extends JobImpl {
      * @since 0.9.71+
      */
     private TunnelInfo _excludedPartner;
+    /** Session tag for the ElGamal test message. */
     private SessionTag _encryptTag;
+    /** Session tag for the ratchet test message. */
     private RatchetSessionTag _ratchetEncryptTag;
+    /** Counter handing out test ids. */
     private static final AtomicInteger __id = new AtomicInteger();
+    /** This test's id, matched against the reply. */
     private int _testId;
     /**
      * Test period for the current round, computed once at send time so the
@@ -112,6 +121,7 @@ public class TestJob extends JobImpl {
      * @since 0.9.69+
      */
     private static final int MAX_DEFERRED = 3;
+    /** Times this test was deferred by the concurrency cap. */
     private int _deferredCount = 0;
     /**
      * Lifetime budget of paired-pool kicks issued by the deferral escape in
@@ -130,6 +140,7 @@ public class TestJob extends JobImpl {
      * @since 0.9.71+
      */
     static final int MAX_PARTNER_DEFERRALS = 3;
+    /** Times the paired pool kicked this test. */
     private int _pairedPoolKicks = 0;
     /**
      * Maximum number of deferrals allowed after the paired-pool kick budget
@@ -141,6 +152,7 @@ public class TestJob extends JobImpl {
      * @since 0.9.71+
      */
     private static final int MAX_POST_KICK_DEFERRALS = 2 * MAX_DEFERRED;
+    /** Deferrals since a pool kick. */
     private int _postKickDeferrals = 0;
     /**
      * Upper bound on remembered reply partners, so a router that churns
@@ -306,6 +318,7 @@ public class TestJob extends JobImpl {
         // A creation time in the future means a clock step; do not excuse it.
         return age >= 0 && age < YOUNG_TUNNEL_GRACE_MS;
     }
+    /** Deferrals waiting for a reply partner. */
     private int _replyPartnerDeferrals = 0;
     /**
      * Failure rate at or above which a reply partner counts as implicated in
@@ -323,6 +336,7 @@ public class TestJob extends JobImpl {
      * @since 0.9.71+
      */
     private static final Map<Hash, long[]> _inboundReplyPartnerTally = new ConcurrentHashMap<>();
+    /** Outbound test results tallied per reply partner peer. */
     private static final Map<Hash, long[]> _outboundReplyPartnerTally = new ConcurrentHashMap<>();
 
     /**
@@ -419,22 +433,42 @@ public class TestJob extends JobImpl {
         return inbound ? _inboundReplyPartnerTally : _outboundReplyPartnerTally;
     }
 
+    /**
+     * Tally this round's result against the peer that relayed the reply.
+     *
+     * @param inbound true for an inbound test
+     * @param replyPartner the peer that relayed the reply
+     * @param failed true if the round failed
+     */
     private void attributeRoundToReplyPartner(boolean inbound, TunnelInfo replyPartner, boolean failed) {
         noteReplyPartnerRound(replyPartnerMemory(inbound), replyPartner, failed);
     }
 
+    /** Context the cached config values were read from. */
     private static volatile RouterContext _cfgCtx;
+    /** When the cached config values were last read. */
     private static volatile long _cfgRefreshed;
+    /** Cached limit on concurrent tests. */
     private static volatile int _cachedMaxConcurrent;
+    /** Cached shortest interval between tests. */
     private static volatile int _cachedMinTestPeriod;
+    /** Cached longest interval between tests. */
     private static volatile int _cachedMaxTestPeriod;
+    /** Cached shortest delay before a test times out. */
     private static volatile int _cachedMinTestDelay;
+    /** Cached longest delay before a test times out. */
     private static volatile int _cachedMaxTestDelay;
+    /** Cached pool coverage needed to skip testing. */
     private static volatile double _cachedPoolCoverageThreshold;
+    /** Cached test limit for exploratory pools. */
     private static volatile int _cachedMaxExploratoryPerPool;
+    /** Cached test limit for client pools. */
     private static volatile int _cachedMaxClientPerPool;
+    /** Cached base limit on queued tests. */
     private static volatile int _cachedBaseMaxQueued;
+    /** Cached hard limit on queued tests. */
     private static volatile int _cachedHardLimit;
+    /** How often the cached config values are refreshed. */
     private static final long CONFIG_REFRESH_MS = 30 * 1000L;
 
     /**
@@ -443,8 +477,11 @@ public class TestJob extends JobImpl {
      * @since 0.9.71+
      */
     private static volatile int _tunedMinTestPeriod = -1;
+    /** Tuner-set longest test interval, -1 when untuned. */
     private static volatile int _tunedMaxTestPeriod = -1;
+    /** Tuner-set shortest test timeout, -1 when untuned. */
     private static volatile int _tunedMinTestDelay = -1;
+    /** Tuner-set longest test timeout, -1 when untuned. */
     private static volatile int _tunedMaxTestDelay = -1;
 
     /**
@@ -613,8 +650,9 @@ public class TestJob extends JobImpl {
         return getMaxTestPeriod(getContext());
     }
 
-    // Adaptive testing frequency constants
+    /** Recent test results kept for the success rate. */
     private static final int SUCCESS_HISTORY_SIZE = 3; // Track last 3 results
+    /** Job queue lag in ms above which testing is deferred. */
     private static final int MAX_LAG_FOR_SCHEDULE = 150;
     /**
      * Hard ceiling on consecutive test failures for server pool tunnels.
@@ -623,14 +661,32 @@ public class TestJob extends JobImpl {
      * At 10+ failures the tunnel is clearly dead — mark it conclusively.
      */
     private static final int MAX_SERVER_POOL_TEST_FAILURES = 10;
+    /**
+     * Returns the pool coverage needed to skip testing.
+     *
+     * @param ctx the router context
+     * @return the coverage fraction
+     */
     private static double getPoolCoverageThreshold(RouterContext ctx) {
         refreshTestJobConfig(ctx);
         return _cachedPoolCoverageThreshold;
     }
+    /**
+     * Returns the test limit for exploratory pools.
+     *
+     * @param ctx the router context
+     * @return the maximum concurrent tests
+     */
     private static int getMaxExploratoryPerPool(RouterContext ctx) {
         refreshTestJobConfig(ctx);
         return _cachedMaxExploratoryPerPool;
     }
+    /**
+     * Returns the test limit for client pools.
+     *
+     * @param ctx the router context
+     * @return the maximum concurrent tests
+     */
     private static int getMaxClientPerPool(RouterContext ctx) {
         refreshTestJobConfig(ctx);
         return _cachedMaxClientPerPool;
@@ -657,6 +713,7 @@ public class TestJob extends JobImpl {
         int coverageCap = Math.max(1, (int) Math.ceil(activeCount * getPoolCoverageThreshold(ctx)));
         return Math.min(Math.min(Tuner.getTestClientBudget(), coverageCap), getMaxClientPerPool(ctx));
     }
+    /** Success rate assumed for a tunnel with no history. */
     private static final float DEFAULT_SUCCESS_RATE = 0.5f; // 50% for new tunnels
 
     /**
@@ -2984,8 +3041,14 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
      * this job is dropped under overload (the next offer revives it).
      */
     private static class PumpJob extends JobImpl {
+        /** The router context, for scheduling. */
         private final RouterContext _ctx;
 
+        /**
+         * Prepares to pump test messages through the tunnels.
+         *
+         * @param ctx the router context
+         */
         PumpJob(RouterContext ctx) {
             super(ctx);
             _ctx = ctx;
@@ -3040,6 +3103,7 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
             batchState(_ctx).pumpQueued.set(false);
         }
 
+        /** Schedules the next pump pass. */
         private void scheduleNext() {
             PumpJob next = new PumpJob(_ctx);
             next.getTiming().setStartAfter(_ctx.clock().now() +
@@ -3726,6 +3790,11 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
         return (int) Math.max(delayMs, minGapMs);
     }
 
+    /**
+     * Returns the delay before the next test pass.
+     *
+     * @return the delay in ms
+     */
     private int getDelay() {
         // Minimum 30s between retests; scale up for reliable tunnels
         // so the test queue prioritizes UNTESTED and failing tunnels.
@@ -3784,11 +3853,21 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
           return applyMinRetestGap(scaled + jitter, minGap, _cfg.needsExpeditedTest());
     }
 
+    /**
+     * Returns the recent test success rate for this pool.
+     *
+     * @return the success fraction
+     */
     private float getSuccessRate() {
         if (_successCount == 0) return DEFAULT_SUCCESS_RATE;
         return (float) _successCount / SUCCESS_HISTORY_SIZE;
     }
 
+    /**
+     * Records one test result in the rolling window.
+     *
+     * @param success true if the test passed
+     */
     private void updateSuccessHistory(boolean success) {
         // Remove old success from count if it exists
         if (_successHistory[_successHistoryIndex]) {
@@ -3824,6 +3903,12 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
         }
     }
 
+    /**
+     * Records a successful round trip and its time.
+     *
+     * @param ms the round trip time
+     * @param tunnel the tunnel that carried the reply
+     */
     private void noteSuccess(long ms, TunnelInfo tunnel) {
         if (tunnel != null) {
             for (int i = 0; i < tunnel.getLength(); i++) {
@@ -3833,8 +3918,11 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
     }
 
 
+    /** Rolling window of recent test results. */
     private volatile boolean _successHistory[] = new boolean[SUCCESS_HISTORY_SIZE];
+    /** Write index into the success history. */
     private volatile int _successHistoryIndex = 0;
+    /** Successes held in the success history. */
     private volatile int _successCount = 0;
 
     /**
@@ -4045,6 +4133,11 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
                        localHop.toBase64().substring(0,6) + "] -> " + _cfg);
     }
 
+    /**
+     * Handles a test that timed out or failed.
+     *
+     * @param timeToFail ms spent before the failure was noticed
+     */
     private void testFailed(long timeToFail) {
         if (_pool == null || !_pool.isAlive()) {
             cleanupTunnelTracking();
@@ -4372,6 +4465,11 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
         return Math.max(lo, Math.min(hi, period));
     }
 
+    /**
+     * Returns the interval before the next test of this pool.
+     *
+     * @return the interval in ms
+     */
     private int getTestPeriod() {
         final RouterContext ctx = getContext();
         double successTime = Double.NaN;
@@ -4425,6 +4523,12 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
         return floor;
     }
 
+    /**
+     * Schedules another test of the same tunnels.
+     *
+     * @param asap true to test as soon as possible
+     * @return true if the retest was scheduled
+     */
     private boolean scheduleRetest(boolean asap) {return scheduleRetest(asap, false);}
 
     /**
@@ -4581,8 +4685,11 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
         return false;
     }
 
+    /** Matches the reply for one test message. */
     private class ReplySelector implements MessageSelector {
+        /** The test id the reply must carry. */
         private final long _id;
+        /** The round this reply belongs to. */
         private final RoundToken _token;
 
         /**
@@ -4611,9 +4718,13 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
         }
     }
 
+    /** Handles the reply to one test message. */
     private class OnTestReply extends JobImpl implements ReplyJob {
+        /** When the reply arrived, zero until it does. */
         private long _successTime;
+        /** The outbound message awaiting its reply. */
         private OutNetMessage _sentMessage;
+        /** The round this reply belongs to. */
         private final RoundToken _token;
 
         /**
@@ -4629,6 +4740,11 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
          * Store the outbound message sent to the gateway for cleanup.
          */
         @Override public String getName() { return "Verify Tunnel Test"; }
+        /**
+         * Remembers the message so its reply can release it.
+         *
+         * @param m the message awaiting a reply
+         */
         public void setSentMessage(OutNetMessage m) { _sentMessage = m; }
 
         /**
@@ -4660,9 +4776,13 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
         }
     }
 
+    /** Times out one test message. */
     private class OnTestTimeout extends JobImpl {
+        /** When the test was sent. */
         private final long _started;
+        /** The round being timed out. */
         private final RoundToken _token;
+        /** The outbound message awaiting its reply. */
         private OutNetMessage _sentMessage;
 
         /**
@@ -4706,6 +4826,11 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
         }
     }
 
+    /**
+     * Returns the session key manager for test tags.
+     *
+     * @return the key manager
+     */
     private SessionKeyManager getSessionKeyManager() {
         final RouterContext ctx = getContext();
         if (_cfg.isInbound() && !_pool.getSettings().isExploratory()) {
@@ -4717,6 +4842,11 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
         }
     }
 
+    /**
+     * Returns the ratchet session key manager for test tags.
+     *
+     * @return the ratchet key manager
+     */
     private RatchetSKM getRatchetKeyManager() {
         SessionKeyManager skm = getSessionKeyManager();
         if (skm == null) return null;

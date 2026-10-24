@@ -52,12 +52,15 @@ public class Location {
      */
     public int metro_code;
 
+    /** Earth's diameter, in km, for the distance formula. */
     private final static double EARTH_DIAMETER = 2 * 6378.2;
+    /** Pi, to the precision the formula needs. */
     private final static double PI = 3.14159265;
+    /** Multiplies degrees to get radians. */
     private final static double RAD_CONVERT = PI / 180;
 
     /**
-     * great-circle distance is measured between
+     * Great-circle distance from this location to another.
      *
      * @param loc the other endpoint, supplying the latitude and longitude the
      * @return approximate great-circle distance in km

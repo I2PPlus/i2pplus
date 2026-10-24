@@ -31,6 +31,7 @@ import net.i2p.util.Log;
  */
 class MailPart {
 
+    /** Sink discarding a part that has no destination. */
     private static final OutputStream DUMMY_OUTPUT = new DummyOutputStream();
     /**
      * The raw header lines of this part, in the order they were received.
@@ -75,7 +76,9 @@ class MailPart {
      * beginBody is after them, and end is exclusive.
      */
     private final int beginBody;
+    /** Offset in the message where the part starts. */
     private final int begin;
+    /** Offset in the message where the part ends. */
     private final int end;
     /** Always null, reserved for future use. */
     public final String filename = null;
@@ -95,6 +98,7 @@ class MailPart {
      * The shared mailbox buffer this part was parsed from.
      */
     public final Buffer buffer;
+    /** Logger for this class. */
     private final Log _log;
 
     /**
@@ -108,6 +112,7 @@ class MailPart {
      * @since 0.9.33
      */
     public final String uidl;
+    /** Id used to address this part in the URL. */
     private final int intID;
 
     /**
@@ -447,6 +452,12 @@ class MailPart {
         return new LimitInputStream(in, end - beginBody - offset);
     }
 
+    /**
+     * Reads the first attribute value from a header line.
+     *
+     * @param line the header line to read
+     * @return the value, null if there is none
+     */
     private static String getFirstAttribute( String line) {
         String result = null;
         int i = line.indexOf( ": ");
@@ -466,8 +477,7 @@ class MailPart {
      * @param attributeName must be lower case, will be matched case-insensitively
      * @return as found, not necessarily lower case
      */
-    private static String getHeaderLineAttribute( String line, String attributeName)
-    {
+    private static String getHeaderLineAttribute( String line, String attributeName) {
         String lineLC = line.toLowerCase(Locale.US);
         String result = null;
         int h = 0;

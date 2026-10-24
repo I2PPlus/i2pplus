@@ -20,6 +20,7 @@ import javax.net.ssl.SSLSocket;
  */
 class SSLSocketChannel extends SocketChannel {
 
+    /** The SSL socket wrapped as a channel. */
     private final SSLSocket _socket;
 
     /**

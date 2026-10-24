@@ -54,14 +54,23 @@ import net.i2p.util.Translate;
  */
 public class Analysis extends JobImpl implements RouterApp, Runnable {
 
+    /** The router context. */
     private final RouterContext _context;
+    /** Logger for the sybil analysis. */
     private final Log _log;
+    /** Records why routers were banned. */
     private BanLogger _banLogger;
+    /** Manager that starts and stops this analysis. */
     private final ClientAppManager _cmgr;
+    /** Saves the analysis results to disk. */
     private final PersistSybil _persister;
+    /** Current state of the analysis client app. */
     private volatile ClientAppState _state = UNINITIALIZED;
+    /** Formatter for the displayed scores. */
     private final DecimalFormat fmt = new DecimalFormat("#0.00");
+    /** Whether an analysis pass has completed. */
     private boolean _wasRun;
+    /** Family names exempt from the /24 points. */
     private final List<String> _familyExemptPoints24 = new ArrayList<>(2);
 
     /**
@@ -80,7 +89,9 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     public static final String PROP_BLOCKTIME = "router.sybilBlockPeriod";
     /** Property to set the delete old period. */
     public static final String PROP_REMOVETIME = "router.sybilDeleteOld";
+    /** Shortest interval between analysis runs, one hour. */
     private static final long MIN_FREQUENCY = 60*60*1000L;
+    /** Router uptime needed before the first run is 75 minutes. */
     private static final long MIN_UPTIME = 75*60*1000L;
     /** Default scan frequency. */
     public static final long DEFAULT_FREQUENCY = 4*60*60*1000L;
@@ -89,39 +100,56 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     public static final int PAIRMAX = 20;
     /** Maximum entries to process. */
     public static final int MAX = 10;
-    // multiplied by size - 1, will also get POINTS24 added
+    /** Points for a /32 pair, scaled by group size. */
     private static final double POINTS32 = 5.0;
-    // multiplied by size - 1, will also get POINTS16 added
+    /** Points for a /24 pair, scaled by group size. */
     private static final double POINTS24 = 4.0;
-    // multiplied by size - 1
+    /** Points for a /16 pair, scaled by group size. */
     private static final double POINTS16 = 0.25;
+    /** Points for a US /32 pair. */
     private static final double POINTS_US32 = 25.0;
+    /** Points for a US /24 pair. */
     private static final double POINTS_US24 = 20.0;
+    /** Points for a US /16 pair. */
     private static final double POINTS_US16 = 10.0;
 
-    // IPv6 since 0.9.57, likely to be on top of IPv4, so make lower
+    /** Points for a US IPv6 /64 pair. */
     private static final double POINTS_V6_US64 = 12.5;
+    /** Points for a US IPv6 /48 pair. */
     private static final double POINTS_V6_US48 = 5.0;
+    /** Points for an IPv6 /64 pair. */
     private static final double POINTS64 = 2.0;
+    /** Points for an IPv6 /48 pair. */
     private static final double POINTS48 = 0.5;
 
+    /** Points removed for routers in the same family. */
     private static final double POINTS_FAMILY = -20.0;
+    /** Points removed for a verified family match. */
     private static final double POINTS_FAMILY_VERIFIED = POINTS_FAMILY * 10;
+    /** Points removed when neither router is a floodfill. */
     private static final double POINTS_NONFF = -5.0;
+    /** Points added for a family mismatch. */
     private static final double POINTS_BAD_FAMILY = 75.0;
+    /** Points added when our family does not match. */
     private static final double POINTS_BAD_OUR_FAMILY = 100.0;
+    /** Points removed when our family matches. */
     private static final double POINTS_OUR_FAMILY = -100.0;
+    /** Points added for a different router version. */
     private static final double POINTS_BAD_VERSION = 30.0;
+    /** Points added for an unreachable router. */
     private static final double POINTS_UNREACHABLE = 10.0;
+    /** Points added for a recently seen router. */
     private static final double POINTS_NEW = 4.0;
-    // since we're blocking by default now, don't make this too high,
-    // so we don't always turn a temporary block into a permanent one.
+    /** Points added for a banlisted router, below the permanent ban threshold. */
     private static final double POINTS_BANLIST = 5.0;
 
     /** Minimum close value for family detection. */
     public static final double MIN_CLOSE = 242.0;
+    /** Multiplier for the pair distance points. */
     private static final double PAIR_DISTANCE_FACTOR = 2.0;
+    /** Multiplier for points against our own key. */
     private static final double OUR_KEY_FACTOR = 4.0;
+    /** Multiplier for the version difference points. */
     private static final double VERSION_FACTOR = 2.0;
 
     /** Default is blocking enabled. */
@@ -136,9 +164,10 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     public static final long SHORT_REMOVE_TIME = 12*60*60*1000L;
     /** Minimum points to block. */
     public static final float MIN_BLOCK_POINTS = 12.01f;
+    /** IPv6 loopback address, never scored. */
     private static final byte[] IPV6_LOCALHOST = new byte[16];
     static { IPV6_LOCALHOST[15] = 1; }
-    // i2pd bug 64:ff9b::/96
+    /** NAT64 prefix seen from i2pd routers. */
     private static final byte[] IPV6_NAT64 = new byte[16];
     static { IPV6_NAT64[1] = 0x64; IPV6_NAT64[2] = (byte) 0xff; IPV6_NAT64[3] = (byte) 0x9b; }
 
@@ -192,6 +221,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
      * @since 0.9.50
      */
     private class InitJob extends JobImpl {
+        /** Schedules the first analysis pass. */
         public InitJob() { super(_context); }
 
         public String getName() { return "Load Sybil Blocklist"; }
@@ -260,8 +290,6 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
         }
     }
 
-    /////// end Job methods
-    /////// begin ClientApp methods
 
     /**
      * Initializes and starts the Sybil analysis service.
@@ -325,6 +353,11 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
 
     /////// end ClientApp methods
 
+    /**
+     * Records the new app state and notifies the console manager.
+     *
+     * @param state the new state of the client app
+     */
     private synchronized void changeState(ClientAppState state) {
         _state = state;
         if (_cmgr != null)
@@ -359,7 +392,9 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
         }
     }
 
+    /** Orders router infos by distance from us in the keyspace. */
     private static class RouterInfoRoutingKeyComparator implements Comparator<RouterInfo>, Serializable {
+         /** Our hash, the distance reference. */
          private final transient Hash _us;
          /**
           * Comparator using the routing key.
@@ -374,6 +409,14 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
         }
     }
 
+    /**
+     * Adds scored points for one router.
+     *
+     * @param points the score map
+     * @param h the router hash
+     * @param d the points to add
+     * @param reason the scoring rule that applied
+     */
     private void addPoints(Map<Hash, Points> points, Hash h, double d, String reason) {
         Points dd = points.get(h);
         if (dd != null) {
@@ -517,6 +560,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
      * @since 0.9.57
      */
     private static class DummyList extends ArrayList<RouterInfo> {
+        /** Creates an empty placeholder list. */
         public DummyList() { super(0); }
         @Override
         public boolean add(RouterInfo ri) { return true; }
@@ -627,8 +671,16 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
         return avg;
     }
 
+    /** One past the largest routing key, for wrap-around math. */
     private static final BigInteger BI_MAX = (new BigInteger("2")).pow(256);
 
+    /**
+     * Finds the keyspace distance to the nearest listed router.
+     *
+     * @param h the router hash
+     * @param ris routers ordered by distance
+     * @return the smallest distance
+     */
     private static double closestDistance(Hash h, List<RouterInfo> ris) {
         BigInteger min = BI_MAX;
         for (RouterInfo info : ris) {
@@ -1167,6 +1219,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
         return rv;
     }
 
+    /** One day in milliseconds. */
     private static final long DAY = 24*60*60*1000L;
 
     /**
@@ -1317,8 +1370,15 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
         return Util.biLog2(a);
     }
 
+    /** Bundle holding the translated console strings. */
     private static final String BUNDLE_NAME = "net.i2p.router.web.messages";
 
+    /**
+     * Translates a console string.
+     *
+     * @param s the string to translate
+     * @return the translated text
+     */
     private String _t(String s) {
         return Translate.getString(s, _context, BUNDLE_NAME);
     }

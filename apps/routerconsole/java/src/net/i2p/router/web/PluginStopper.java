@@ -13,6 +13,7 @@ import org.eclipse.jetty.server.Server;
  */
 class PluginStopper extends PluginStarter {
 
+    /** The webapp server being stopped. */
     private final Server _server;
 
     /**

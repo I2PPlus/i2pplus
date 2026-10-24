@@ -57,13 +57,19 @@ import net.i2p.util.SystemVersion;
  * @since 0.8.12 moved from Router.java
  */
 public class CoalesceStatsEvent extends SimpleTimer2.TimedEvent {
+    /** The router whose stats are coalesced. */
     private final RouterContext _ctx;
+    /** Heap the JVM will use, in bytes. */
     private final long _maxMemory;
+    /** Free heap that counts as low: 5 MB. */
     private static final long LOW_MEMORY_THRESHOLD = 5 * 1024 * 1024L;
+    /** Logger for this class. */
     private final Log _log;
 
-    // Cumulative GC pause time (ms) observed at the previous coalesce cycle,
-    // used to derive per-minute GC latency. -1 = uninitialized.
+    /**
+     * Cumulative GC pause time, in ms, observed at the previous coalesce
+     * cycle, used to derive per-minute GC latency; -1 means uninitialized.
+     */
     private long _lastGcPauseTime = -1;
 
     /**

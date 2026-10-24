@@ -22,6 +22,7 @@ public class I2PSource implements Source {
     private final int port;
     /** Datagram dissector for parsing I2P UDP frames. */
     private final I2PDatagramDissector diss;
+    /** Logger for this tunnel's datagram traffic. */
     private final Log log;
 
     /**

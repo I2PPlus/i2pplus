@@ -9,14 +9,22 @@ import org.bouncycastle.util.Util;
  */
 class MLKEMIndCpa
 {
+    /** The engine providing the primitives. */
     private MLKEMEngine engine;
+    /** The dimension K of the parameter set. */
     private int kyberK;
+    /** Public key size of the IND-CPA scheme. */
     private int indCpaPublicKeyBytes;
+    /** Size of an uncompressed polynomial vector. */
     private int polyVecBytes;
+    /** Ciphertext size of the IND-CPA scheme. */
     private int indCpaBytes;
+    /** Size of a compressed polynomial vector. */
     private int polyVecCompressedBytes;
+    /** Size of a compressed polynomial. */
     private int polyCompressedBytes;
 
+    /** The symmetric primitives for the hashing. */
     private Symmetric symmetric;
 
     /**
@@ -185,6 +193,13 @@ class MLKEMIndCpa
         return outputCipherText;
     }
 
+    /**
+     * Packs the two parts into the ciphertext.
+     *
+     * @param b the vector part
+     * @param v the polynomial part
+     * @return the packed ciphertext
+     */
     private byte[] packCipherText(PolyVec b, Poly v)
     {
         byte[] outBuf = new byte[indCpaBytes];
@@ -195,6 +210,13 @@ class MLKEMIndCpa
         return outBuf;
     }
 
+    /**
+     * Unpacks the ciphertext into its two parts.
+     *
+     * @param b the vector part to fill
+     * @param v the polynomial part to fill
+     * @param cipherText the packed ciphertext
+     */
     private void unpackCipherText(PolyVec b, Poly v, byte[] cipherText)
     {
         byte[] compressedPolyVecCipherText = Arrays.copyOfRange(cipherText, 0, engine.getKyberPolyVecCompressedBytes());
@@ -301,6 +323,16 @@ class MLKEMIndCpa
 
     }
 
+    /**
+     * Fills the polynomial by rejection sampling.
+     *
+     * @param outputBuffer the polynomial to fill
+     * @param coeffOff where to start writing coefficients
+     * @param len the number of coefficients to read
+     * @param inpBuf the random bytes to sample from
+     * @param inpBufLen the length of the random bytes
+     * @return the number of input bytes consumed
+     */
     private static int rejectionSampling(Poly outputBuffer, int coeffOff, int len, byte[] inpBuf, int inpBufLen)
     {
         int ctr, pos;

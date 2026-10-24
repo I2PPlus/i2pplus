@@ -8,13 +8,14 @@ import org.bouncycastle.crypto.ExtendedDigest;
 import org.bouncycastle.util.Pack;
 
 /**
- * implementation of Keccak based on following KeccakNISTInterface.c from <a href="https://keccak.team/">keccak.team</a>
+ * Implementation of Keccak based on following KeccakNISTInterface.c from <a href="https://keccak.team/">keccak.team</a>
  * <p>
  * Following the naming conventions used in the C source code to enable easy review of the implementation.
  */
 public class KeccakDigest
     implements ExtendedDigest
 {
+    /** The round constants of the Keccak permutation. */
     private static long[] KeccakRoundConstants = new long[]{ 0x0000000000000001L, 0x0000000000008082L,
         0x800000000000808aL, 0x8000000080008000L, 0x000000000000808bL, 0x0000000080000001L, 0x8000000080008081L,
         0x8000000000008009L, 0x000000000000008aL, 0x0000000000000088L, 0x0000000080008009L, 0x000000008000000aL,
@@ -200,6 +201,11 @@ public class KeccakDigest
         return rate / 8;
     }
 
+    /**
+     * Sets up the digest for a given output size.
+     *
+     * @param bitLength the output size, in bits
+     */
     private void init(int bitLength)
     {
         switch (bitLength)
@@ -217,6 +223,11 @@ public class KeccakDigest
         }
     }
 
+    /**
+     * Sets up the sponge for a given rate.
+     *
+     * @param rate the sponge rate, in bits
+     */
     private void initSponge(int rate)
     {
         if ((rate <= 0) || (rate >= 1600) || ((rate % 64) != 0))
@@ -336,6 +347,7 @@ public class KeccakDigest
         bitsInQueue += bits;
     }
 
+    /** Applies the padding and moves to the squeezing phase. */
     private void padAndSwitchToSqueezingPhase()
     {
         dataQueue[bitsInQueue >>> 3] |= (byte)(1 << (bitsInQueue & 7));
@@ -401,6 +413,12 @@ public class KeccakDigest
         }
     }
 
+    /**
+     * Absorbs one block of input.
+     *
+     * @param data the input bytes
+     * @param off where the block starts
+     */
     private void KeccakAbsorb(byte[] data, int off)
     {
 //        assert 0 == bitsInQueue || (dataQueue == data && 0 == off);
@@ -415,6 +433,7 @@ public class KeccakDigest
         KeccakPermutation();
     }
 
+    /** Copies the current state into the output buffer. */
     private void KeccakExtract()
     {
 //        assert 0 == bitsInQueue;
@@ -426,6 +445,7 @@ public class KeccakDigest
         this.bitsInQueue = rate;
     }
 
+    /** Runs the permutation over the state. */
     private void KeccakPermutation()
     {
         long[] A = state;

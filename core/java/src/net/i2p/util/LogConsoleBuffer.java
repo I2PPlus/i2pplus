@@ -9,8 +9,11 @@ import java.util.List;
  * Maintains two buffers, one normal and one critical.
  */
 public class LogConsoleBuffer {
+    /** Most messages kept for the console. */
     private final int lim;
+    /** Messages shown to the user. */
     private final UIMessages _buffer;
+    /** Critical messages, kept even when the buffer is full. */
     private final UIMessages _critBuffer;
 
     /**

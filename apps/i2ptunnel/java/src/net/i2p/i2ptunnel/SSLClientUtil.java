@@ -29,14 +29,23 @@ public class SSLClientUtil {
      */
     public SSLClientUtil() {}
 
+    /** Property of the keystore password. */
     private static final String PROP_KEYSTORE_PASSWORD = "keystorePassword";
+    /** Property of the key password. */
     private static final String PROP_KEY_PASSWORD = "keyPassword";
+    /** Property of the key alias. */
     private static final String PROP_KEY_ALIAS = "keyAlias";
+    /** Suffix of the exported ASCII certificate. */
     private static final String ASCII_KEYFILE_SUFFIX = ".local.crt";
+    /** Property of the keystore file name. */
     private static final String PROP_KS_NAME = "keystoreFile";
+    /** Directory holding the keystores. */
     private static final String KS_DIR = "keystore";
+    /** Prefix of the tunnel keystore names. */
     private static final String PREFIX = "i2ptunnel-";
+    /** Suffix of the keystore file names. */
     private static final String KS_SUFFIX = ".ks";
+    /** Directory holding the exported certificates. */
     private static final String CERT_DIR = "certificates/i2ptunnel";
 
     /**
@@ -215,10 +224,20 @@ public class SSLClientUtil {
         }
     }
 
+    /**
+     * Logs an error message.
+     *
+     * @param s the error message
+     */
     private static void error(String s) {
         I2PAppContext.getGlobalContext().logManager().getLog(SSLClientUtil.class).error(s);
     }
 
+    /**
+     * Logs a message the console always shows.
+     *
+     * @param s the message to show
+     */
     private static void logAlways(String s) {
         I2PAppContext.getGlobalContext().logManager().getLog(SSLClientUtil.class).logAlways(Log.INFO, s);
     }

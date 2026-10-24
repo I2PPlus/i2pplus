@@ -52,10 +52,17 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     private final static long SEND_TIMEOUT = (long) 60 * 1000; // 60 seconds to send
     /** Should we gzip each payload prior to sending it? */
     private final static boolean SHOULD_COMPRESS = true;
+    /** Whether the router may send compressed lease sets. */
     private final static boolean SHOULD_DECOMPRESS = true;
-    /** Don't expect any MSMs from the router for outbound traffic @since 0.8.1. */
+    /**
+     * Don't expect any MSMs from the router for outbound traffic.
+     *
+     * @since 0.8.1
+     */
     protected boolean _noEffort;
+    /** How often expired leases are dropped - every 63 seconds. */
     private static final long REMOVE_EXPIRED_TIME = (long) 63*1000;
+    /** Reflected accessor for the tunnel manager. */
     private static Method _tunnelManagerMethod;
 
     /**
@@ -446,7 +453,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
         MessageState state = new MessageState(_context, nonce, getPrefix());
 
         /**
-         * Since this is 'best effort', all we're waiting for is a status update saying
+         * This is 'best effort', so all we wait for is a status update saying
          * that the router received it - in theory, that should come back immediately,
          * but in practice can take up to a second (though usually much quicker).
          * Setting this to false will short-circuit that delay.
@@ -661,6 +668,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
         _currentTunnelPair = pair;
     }
 
+    /** The tunnels carrying this session now. */
     private volatile TunnelPair _currentTunnelPair;
 
     /**

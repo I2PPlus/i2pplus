@@ -51,7 +51,6 @@ public class RouterAddress extends DataStructureImpl {
     private String _transportStyle;
     /** Transport options. */
     private final Properties _options;
-    // cached values
     /** Cached IP address. */
     private byte[] _ip = NOT_LOOKED_UP;
     /** Cached port number. */
@@ -61,6 +60,7 @@ public class RouterAddress extends DataStructureImpl {
     public static final String PROP_HOST = "host";
     /** Property key for port. */
     public static final String PROP_PORT = "port";
+    /** Marker for a cost that has not been measured yet */
     private static final byte[] NOT_LOOKED_UP = new byte[0];
     /**
      * Create an address with empty options.
@@ -377,6 +377,7 @@ public class RouterAddress extends DataStructureImpl {
      */
     private static final int HTML_LABEL_WIDTH = 12;
 
+    /** Pool of spaces used to pad the rendered HTML */
     private static final String HTML_PAD = "            ";
 
     /**

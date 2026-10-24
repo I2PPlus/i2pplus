@@ -17,6 +17,7 @@ class ReadLine {
     /** Creates a new ReadLine instance (utility class). */
     private ReadLine() {}
 
+    /** Longest line accepted from the client: 8 KB. */
     private static final int MAX_LINE_LENGTH = 8*1024;
 
     /**
@@ -71,7 +72,13 @@ class ReadLine {
         }
     }
 
+    /** Thrown when a client line exceeds the limit. */
     private static class LineTooLongException extends IOException {
+        /**
+         * Names what was too long.
+         *
+         * @param s what was too long
+         */
         public LineTooLongException(String s) {
             super(s);
         }

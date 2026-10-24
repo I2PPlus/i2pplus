@@ -103,6 +103,15 @@ public class DNSKEY extends Data {
         return new DNSKEY(flags, protocol, algorithm, key);
     }
 
+    /**
+     * Creates a record from its parts.
+     *
+     * @param flags the flags of the key
+     * @param protocol the protocol of the key, always dnssec
+     * @param algorithm the signature algorithm
+     * @param algorithmByte the wire value of the algorithm
+     * @param key the key material
+     */
     private DNSKEY(short flags, byte protocol, SignatureAlgorithm algorithm, byte algorithmByte, byte[] key) {
         this.flags = flags;
         this.protocol = protocol;
@@ -222,6 +231,7 @@ public class DNSKEY extends Data {
         return new DataInputStream(new ByteArrayInputStream(key));
     }
 
+    /** Cache of the key in Base 64. */
     private transient String keyBase64Cache;
 
     /**
@@ -236,6 +246,7 @@ public class DNSKEY extends Data {
         return keyBase64Cache;
     }
 
+    /** Cache of the key as a number. */
     private transient BigInteger keyBigIntegerCache;
 
     /**

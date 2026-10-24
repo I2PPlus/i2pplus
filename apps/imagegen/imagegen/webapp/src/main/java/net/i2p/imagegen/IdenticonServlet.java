@@ -67,13 +67,21 @@ public class IdenticonServlet extends HttpServlet {
      */
     public IdenticonServlet() {}
 
+    /** Fixed id, the servlet is never serialized across versions. */
     private static final long serialVersionUID = -3507466186902317988L;
+    /** Init parameter naming the cache version. */
     private static final String INIT_PARAM_VERSION = "version";
+    /** Init parameter naming the cache implementation. */
     private static final String INIT_PARAM_CACHE_PROVIDER = "cacheProvider";
+    /** Request parameter naming the identicon size. */
     private static final String PARAM_IDENTICON_SIZE_SHORT = "s";
+    /** Request parameter naming the identicon seed. */
     private static final String PARAM_IDENTICON_CODE_SHORT = "c";
+    /** Image format the servlet writes identicons in. */
     private static final String IDENTICON_IMAGE_FORMAT = "PNG";
+    /** Content type sent with an identicon. */
     private static final String IDENTICON_IMAGE_MIMETYPE = "image/png";
+    /** Identicons are cached for 24 hours by default. */
     private static final long DEFAULT_IDENTICON_EXPIRES_IN_MILLIS = 24 * 60 * (long) 60 * 1000;
     /** Requested size when the "s" parameter is missing or unparsable. */
     static final int DEFAULT_IDENTICON_SIZE = 32;

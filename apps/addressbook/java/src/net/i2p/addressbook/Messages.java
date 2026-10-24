@@ -9,6 +9,7 @@ import net.i2p.util.Translate;
 public class Messages {
     /** The bundle name. */
     static final String BUNDLE_NAME = "net.i2p.addressbook.messages";
+    /** Supplies the locale the translated strings are looked up in. */
     private final I2PAppContext _context;
 
     /**

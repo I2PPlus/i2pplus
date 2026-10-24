@@ -24,7 +24,9 @@ import java.util.Arrays;
 public class SessionTag {
     /** Tag length in bytes (32). */
     public static final int BYTE_LENGTH = 32;
+    /** Hash of the tag, computed once at construction. */
     private final int _cachedHashCode;
+    /** The 32 bytes of the tag. */
     private final byte[] _data;
 
     /**
@@ -67,8 +69,8 @@ public class SessionTag {
     }
 
     /**
-     * 32 (tag length in bytes).
-     * @return 32 (tag length in bytes)
+     * Length of the session tag.
+     * @return 32, the tag length in bytes
      */
     public int length() {
         return BYTE_LENGTH;

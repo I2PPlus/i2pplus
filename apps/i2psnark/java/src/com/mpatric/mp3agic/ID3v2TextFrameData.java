@@ -1,18 +1,38 @@
 package com.mpatric.mp3agic;
 
+/** The text held by a text frame. */
 public class ID3v2TextFrameData extends AbstractID3v2FrameData {
 
+    /** The frame's text. */
     protected EncodedText text;
 
+    /**
+     * Creates an empty text frame.
+     *
+     * @param unsynchronisation whether the frame uses unsynchronisation
+     */
     public ID3v2TextFrameData(boolean unsynchronisation) {
         super(unsynchronisation);
     }
 
+    /**
+     * Creates a text frame with given text.
+     *
+     * @param unsynchronisation whether the frame uses unsynchronisation
+     * @param text the frame's text
+     */
     public ID3v2TextFrameData(boolean unsynchronisation, EncodedText text) {
         super(unsynchronisation);
         this.text = text;
     }
 
+    /**
+     * Reads a text frame from frame bytes.
+     *
+     * @param unsynchronisation whether the frame uses unsynchronisation
+     * @param bytes the frame contents to parse
+     * @throws InvalidDataException if the frame data is corrupt
+     */
     public ID3v2TextFrameData(boolean unsynchronisation, byte[] bytes) throws InvalidDataException {
         super(unsynchronisation);
         synchroniseAndUnpackFrameData(bytes);
@@ -43,10 +63,20 @@ public class ID3v2TextFrameData extends AbstractID3v2FrameData {
         return length;
     }
 
+    /**
+     * Reads the frame's text.
+     *
+     * @return the text, null if unset
+     */
     public EncodedText getText() {
         return text;
     }
 
+    /**
+     * Sets the frame's text.
+     *
+     * @param text the text to hold
+     */
     public void setText(EncodedText text) {
         this.text = text;
     }

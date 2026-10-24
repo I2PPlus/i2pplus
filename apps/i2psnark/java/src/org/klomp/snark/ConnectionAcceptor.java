@@ -55,14 +55,22 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @since 0.1.0
  */
 class ConnectionAcceptor implements Runnable {
+    /** Logger for the incoming peer connections. */
     private final Log _log =
             I2PAppContext.getGlobalContext().logManager().getLog(ConnectionAcceptor.class);
+    /** The acceptor for the peer handshakes. */
     private final PeerAcceptor peeracceptor;
+    /** The thread running the accept loop. */
     private Thread thread;
+    /** The plugin's shared utilities. */
     private final I2PSnarkUtil _util;
+    /** The torrent destination being advertised. */
     private final TorrentDest _td;
+    /** Bad handshakes counted per peer hash. */
     private final ObjectCounter<Hash> _badCounter = new ObjectCounter<>();
+    /** Bad handshake reasons, by peer hash. */
     private final Map<Hash, String> _badReasons = new ConcurrentHashMap<>();
+    /** Timer cleaning the bad peer records. */
     private final SimpleTimer2.TimedEvent _cleaner;
     /** Accept loops per destination, shared by the torrents pooled on it. */
     private final Map<TorrentDest, TorrentAcceptLoop> _torrentAcceptors = new ConcurrentHashMap<>();
@@ -70,9 +78,11 @@ class ConnectionAcceptor implements Runnable {
     private volatile boolean stop;
     /** Protocol errors within a window before the client is rejected. */
     private static final int MAX_BAD = 3;
+    /** Interval between bad peer record cleanups. */
     private static final long BAD_CLEAN_INTERVAL = 15 * (long) 60 * 1000;
     /** Maximum concurrent incoming connections in handshake. */
     private static final int MAX_HANDLERS = 64;
+    /** Handshake handlers currently running. */
     private final AtomicInteger activeHandlers = new AtomicInteger();
 
     /**
@@ -227,9 +237,9 @@ class ConnectionAcceptor implements Runnable {
     }
 
     /**
-     * The server socket for this acceptor's destination, or null.
+     * The server socket for this acceptor's destination.
      *
-     * @return the server socket for this acceptor's destination, or null
+     * @return the socket, null if there is none
      */
     private I2PServerSocket getServerSocket() {
         if (_td != null) {
@@ -239,9 +249,9 @@ class ConnectionAcceptor implements Runnable {
     }
 
     /**
-     * The destination of this acceptor, or null.
+     * The destination of this acceptor.
      *
-     * @return the destination of this acceptor, or null
+     * @return the destination, null if there is none
      */
     private Destination getMyDestination() {
         if (_td != null) {
@@ -283,6 +293,7 @@ class ConnectionAcceptor implements Runnable {
         }
     }
 
+    /** Runs the accept loop until stopped. */
     private void run2() {
         while (!stop) {
             I2PServerSocket serverSocket = getServerSocket();
@@ -456,12 +467,23 @@ class ConnectionAcceptor implements Runnable {
      * @since 0.9.71+
      */
     private class TorrentAcceptLoop implements Runnable {
+        /** The torrent destination being served. */
         private final TorrentDest _td;
+        /** The acceptor for the peer handshakes. */
         private final PeerAcceptor _pa;
+        /** The coordinators to hand accepted peers to. */
         private final PeerCoordinatorSet _set;
+        /** True once the loop should stop. */
         private volatile boolean _stop;
+        /** The thread running this loop. */
         private Thread _thread;
 
+        /**
+         * Prepares to accept connections for one torrent.
+         *
+         * @param td the torrent destination to advertise
+         * @param set the coordinators to hand accepted peers to
+         */
         public TorrentAcceptLoop(TorrentDest td, PeerCoordinatorSet set) {
             _td = td;
             _set = set;
@@ -495,6 +517,7 @@ class ConnectionAcceptor implements Runnable {
             return !_set.iterator().hasNext();
         }
 
+        /** Starts the accept loop if it is not running. */
         public synchronized void start() {
             if (_thread != null) {
                 return;
@@ -505,6 +528,7 @@ class ConnectionAcceptor implements Runnable {
             _thread.start();
         }
 
+        /** Stops the accept loop and releases the destination. */
         public synchronized void halt() {
             if (_stop) {
                 return;
@@ -533,6 +557,7 @@ class ConnectionAcceptor implements Runnable {
             }
         }
 
+        /** Runs the accept loop until stopped. */
         private void runLoop() {
             while (!_stop) {
                 I2PServerSocket ss = _td.getServerSocket();
@@ -570,6 +595,11 @@ class ConnectionAcceptor implements Runnable {
             }
         }
 
+        /**
+         * Sleeps, returning early if interrupted.
+         *
+         * @param ms how long to sleep
+         */
         private void sleep(long ms) {
             try {
                 Thread.sleep(ms);
@@ -580,10 +610,19 @@ class ConnectionAcceptor implements Runnable {
         }
     }
 
+    /** Handles one incoming peer handshake. */
     private class Handler implements Runnable {
+        /** The socket the peer connected on. */
         private final I2PSocket _socket;
+        /** The acceptor for the peer handshake. */
         private final PeerAcceptor _pa;
 
+        /**
+         * Builds the handler for one incoming peer.
+         *
+         * @param socket the socket the peer connected on
+         * @param pa the acceptor for the peer handshake
+         */
         public Handler(I2PSocket socket, PeerAcceptor pa) {
             _socket = socket;
             _pa = pa;
@@ -669,6 +708,7 @@ class ConnectionAcceptor implements Runnable {
      */
     private class Cleaner extends SimpleTimer2.TimedEvent {
 
+        /** Builds the bad peer record cleaner. */
         public Cleaner() {
             super(_util.getContext().simpleTimer2());
         }

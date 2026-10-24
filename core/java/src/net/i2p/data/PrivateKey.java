@@ -54,12 +54,14 @@ import javax.security.auth.Destroyable;
  *
  */
 public class PrivateKey extends SimpleDataStructure implements Destroyable {
+    /** Type assumed when a key names none. */
     private static final EncType DEF_TYPE = EncType.ELGAMAL_2048;
     /** Default key size in bytes (256 for ElGamal). */
     public static final int KEYSIZE_BYTES = DEF_TYPE.getPrivkeyLen();
 
+    /** The encryption type of this key. */
     private final EncType _type;
-    // cache
+    /** Cache of the matching public key, derived on first use. */
     private PublicKey _pubKey;
 
     /**

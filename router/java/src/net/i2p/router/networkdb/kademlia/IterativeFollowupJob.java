@@ -19,6 +19,7 @@ import net.i2p.router.RouterContext;
  * @since 0.8.9
  */
 class IterativeFollowupJob extends SingleSearchJob {
+    /** The iterative search this job follows up on. */
     private final IterativeSearchJob _search;
 
     /**

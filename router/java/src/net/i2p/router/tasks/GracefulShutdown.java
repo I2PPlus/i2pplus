@@ -10,8 +10,11 @@ import net.i2p.util.Log;
  * before finalizing a restart/shutdown after signaling.
  */
 public class GracefulShutdown implements Runnable {
+    /** The router being shut down. */
     private final RouterContext _context;
+    /** Cleared to let the loop finish. */
     private volatile boolean running = true;
+    /** Held while waiting between passes. */
     private final Object _wakeLock = new Object();
 
     /**

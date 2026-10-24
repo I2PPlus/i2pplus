@@ -17,8 +17,11 @@ import net.i2p.update.*;
  * @since 0.9.4
  */
 class UpdateHandler implements Updater {
+    /** The context the update manager runs in. */
     private final I2PAppContext _context;
+    /** The manager that checks and installs updates. */
     private final UpdateManager _umgr;
+    /** The torrents paused while an update is installed. */
     private final SnarkManager _smgr;
 
     /**

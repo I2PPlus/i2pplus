@@ -30,21 +30,35 @@ import net.i2p.util.SystemVersion;
  * The job is scheduled to run repeatedly with delays adapted to system load and network state.
  */
 class StartExplorersJob extends JobImpl {
+    /** Explorations started in one run. */
     private static final int MAX_PER_RUN = 256;
+    /** Explore jobs queued at once. */
     private static final int MAX_EXPLORE_JOBS = 16;
+    /** Shortest delay before the job runs again. */
     private static final int MIN_RERUN_DELAY_MS = 90 * 1000;
+    /** Longest delay before the job runs again. */
     private static final int MAX_RERUN_DELAY_MS = 15 * 60 * 1000;
+    /** Startup time treated as a cold network database. */
     private static final int STARTUP_TIME = 2 * 60 * 60 * 1000; // 2 hours
+    /** Router count below which we explore more. */
     private static final int MIN_ROUTERS = 2000;
+    /** Router count treated as a thin network. */
     private static final int LOW_ROUTERS = 3000;
+    /** Router count treated as a full network. */
     private static final int MAX_ROUTERS = 5000;
+    /** Floodfills we want in the network database. */
     private static final int MIN_FFS = 400;
     /** Low floodfills threshold. */
     static final int LOW_FFS = 2 * MIN_FFS;
+    /** Job queue lag that counts as behind. */
     private static final long MAX_LAG = 1000;
+    /** Message delay that counts as behind. */
     private static final long MAX_MSG_DELAY = 650;
+    /** Base spread of the rerun delays. */
     private static final long DELAY_SPREAD_BASE = 500;
+    /** Random extra spread of the rerun delays. */
     private static final long DELAY_SPREAD_VARIANCE = 500;
+    /** Rerun delay while the router is lagged. */
     private static final long LAGGED_DELAY_MS = 3 * 60 * 1000L; // 3 minutes
 
     /** Property to configure exploration delay. */
@@ -54,8 +68,11 @@ class StartExplorersJob extends JobImpl {
     /** Property to force exploration even when floodfill. */
     static final String PROP_FORCE_EXPLORE = "router.exploreWhenFloodfill";
 
+    /** Logger for the explorer startup. */
     private final Log _log;
+    /** The facade the explorers serve. */
     private final KademliaNetworkDatabaseFacade _facade;
+    /** Random mask for the message id bloom filter. */
     private final long _msgIDBloomXor = RandomSource.getInstance().nextLong(I2NPMessage.MAX_ID_VALUE);
 
     /**

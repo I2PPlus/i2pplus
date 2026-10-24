@@ -32,7 +32,9 @@ import net.i2p.i2pcontrol.security.SecurityManager;
  */
 public class I2PControlHandler implements RequestHandler {
 
+    /** The manager that validates request tokens. */
     private final SecurityManager _secMan;
+    /** Checks the token a request carries. */
     private final JSONRPC2Helper _helper;
 
     /**
@@ -69,6 +71,12 @@ public class I2PControlHandler implements RequestHandler {
     }
 
 
+    /**
+     * Runs one JSON-RPC request and returns its reply.
+     *
+     * @param req the request to run
+     * @return the reply to send back
+     */
     private JSONRPC2Response process(JSONRPC2Request req) {
         JSONRPC2Error err = _helper.validateParams(null, req);
         if (err != null)

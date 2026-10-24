@@ -53,21 +53,21 @@ import net.i2p.util.SystemVersion;
  *
  */
 class ClientManager {
+    /** Logger for the client manager. */
     private final Log _log;
     /** Registered client listener runners. */
     protected final List<ClientListenerRunner> _listeners;
-    // Destination --> ClientConnectionRunner
-    // Locked for adds/removes but not lookups
-    // If a runner has multiple sessions it will be in here multiple times, one for each dest
+    /** The runners, by destination. */
     private final Map<Destination, ClientConnectionRunner>  _runners;
-    // Same as what's in _runners, but for fast lookup by Hash
-    // Locked for adds/removes but not lookups
-    // If a runner has multiple sessions it will be in here multiple times, one for each dest
+    /** The runners, by destination hash. */
     private final Map<Hash, ClientConnectionRunner>  _runnersByHash;
-    // ClientConnectionRunner for clients w/out a Dest yet
+    /** Runners waiting for their session to start. */
     private final Set<ClientConnectionRunner> _pendingRunners;
+    /** Session ids taken by the runners. */
     private final Set<SessionId> _runnerSessionIds;
+    /** Destinations of the metadata sessions. */
     private final Set<Destination> _metaDests;
+    /** Destination hashes of the metadata sessions. */
     private final Set<Hash> _metaHashes;
     /** Router context. */
     protected final RouterContext _ctx;
@@ -77,6 +77,7 @@ class ClientManager {
     protected volatile boolean _isStarted;
     /** True if start() was ever called. */
     protected volatile boolean _wasStarted;
+    /** Timer stamping the client sessions' clocks. */
     private final SimpleTimer2.TimedEvent _clientTimestamper;
 
     /**
@@ -94,9 +95,12 @@ class ClientManager {
      * @since 0.9.44
      */
     private static final String PROP_DISABLE_LOOPBACK = "i2cp.disableLoopback";
+    /** Time to wait for a requested lease set. */
     private static final long REQUEST_LEASESET_TIMEOUT = 60L*1000;
+    /** Largest session id assignable. */
     private static final int MAX_SESSION_ID = 65534; /** 2 bytes; 65535 is reserved for unknown. */
     private static final String PROP_MAX_SESSIONS = "i2cp.maxSessions";
+    /** Default session id pool size. */
     private static final int DEFAULT_MAX_SESSIONS = SystemVersion.isSlow() ? 4096 : 16384;
     /** Sentinel session ID for unknown/unidentified sessions. */
     public static final SessionId UNKNOWN_SESSION_ID = new SessionId(MAX_SESSION_ID + 1);
@@ -514,13 +518,21 @@ class ClientManager {
         }
     }
 
+    /** Job delivering a message to a local destination. */
     private static class DistributeLocal extends JobImpl {
+        /** The destination the message goes to. */
         private final Destination _toDest;
+        /** The runner delivering the message. */
         private final ClientConnectionRunner _to;
+        /** The runner the message came from, null from the network. */
         private final ClientConnectionRunner _from;
+        /** The destination the message came from. */
         private final Destination _fromDest;
+        /** The message payload. */
         private final Payload _payload;
+        /** The message id. */
         private final MessageId _msgId;
+        /** The message nonce for replay checks. */
         private final long _messageNonce;
 
         /**
@@ -827,9 +839,16 @@ class ClientManager {
         return rv;
     }
 
+    /** Job handling one message from a client session. */
     private class HandleJob extends JobImpl {
+        /** The message to handle. */
         private final ClientMessage _msg;
 
+        /**
+         * Builds the job for one client message.
+         *
+         * @param msg the message to handle
+         */
         public HandleJob(ClientMessage msg) {
             super(_ctx);
             _msg = msg;
@@ -861,6 +880,7 @@ class ClientManager {
      */
     private class ClientTimestamper extends SimpleTimer2.TimedEvent {
 
+        /** Interval of the client housekeeping loop. */
         public static final long LOOP_TIME = 5L*60*1000;
 
         /** Must call schedule() later. */

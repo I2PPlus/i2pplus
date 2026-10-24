@@ -29,6 +29,7 @@ public class ConfigUIHelper {
     /** Utility class, not intended for instantiation. */
     private ConfigUIHelper() {}
 
+    /** Marks a form control as already selected. */
     private static final String CHECKED = " selected ";
 
     /**

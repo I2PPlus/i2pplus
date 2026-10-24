@@ -22,22 +22,33 @@ import net.i2p.util.Log;
  */
 public class SimpleBandwidthEstimator implements BandwidthEstimator {
 
+    /** The app context. */
     private final I2PAppContext _context;
+    /** Logger for the bandwidth estimator. */
     private final Log _log;
+    /** The peer state being estimated. */
     private final PeerState _state;
 
+    /** When the last ack arrived. */
     private long _tAck;
+    /** Filtered bandwidth estimate from the acks. */
     private float _bKFiltered;
+    /** Estimate excluding the zero-hop peers. */
     private float _bK_ns_est;
+    /** Messages acked so far. */
     private int _acked;
 
+    /** Default decay factor of the estimate. */
     private static final int DEFAULT_DECAY_FACTOR = 8;
+    /** Current decay factor from the config. */
     private static volatile int _decayFactor = DEFAULT_DECAY_FACTOR;
+    /** Smallest RTT used in the estimate, in ms. */
     private static final int WESTWOOD_RTT_MIN = 500;
 
-    // Snapshot of the global decay factor taken at construction, so runtime
-    // tuning applies only to new estimators and never perturbs a live stream's
-    // EWMA state mid-flight.
+    /**
+     * Decay factor used for the zero-hop peers, snapshotted at
+     * construction so runtime tuning never perturbs a live stream.
+     */
     private final int _localDecayFactor;
 
     /**
@@ -200,6 +211,12 @@ public class SimpleBandwidthEstimator implements BandwidthEstimator {
         }
     }
 
+    /**
+     * Formats a byte rate for the debug log.
+     *
+     * @param value the rate in bytes per second
+     * @return the formatted rate
+     */
     private String formatRate(double value) {
         return DataHelper.formatSize2Decimal((long) value, false).trim();
     }

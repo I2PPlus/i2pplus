@@ -6,7 +6,9 @@ package org.bouncycastle.pqc.crypto.mlkem;
  */
 public class MLKEMExtractor
 {
+    /** The private key decapsulating the secret. */
     private final MLKEMPrivateKeyParameters privateKey;
+    /** The ML-KEM engine doing the work. */
     private final MLKEMEngine engine;
 
     /**

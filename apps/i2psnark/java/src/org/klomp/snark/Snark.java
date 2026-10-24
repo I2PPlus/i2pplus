@@ -36,36 +36,63 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     /** Most of these used to be public; use accessors below instead. */
     private String torrent;
 
+    /** Metadata of the torrent being downloaded. */
     private MetaInfo meta;
+    /** Storage of the downloaded files. */
     private Storage storage;
+    /** Coordinator of the peer connections. */
     private PeerCoordinator coordinator;
+    /** Acceptor of incoming peer connections. */
     private ConnectionAcceptor acceptor;
+    /** The tracker client. */
     private TrackerClient trackerclient;
+    /** Root directory of the downloaded data. */
     private final File rootDataDir;
+    /** Listener notified when the download completes. */
     private final CompleteListener completeListener;
+    /** True once the download has stopped. */
     private volatile boolean stopped;
+    /** True while the download is starting up. */
     private volatile boolean starting;
+    /** Our 20-byte peer id for this download. */
     private final byte[] id;
+    /** The torrent's info hash. */
     private final byte[] infoHash;
+    /** Extra tracker URL from the config, may be null. */
     private String additionalTrackerURL;
     /** The transient destination, when multi-dest is enabled; null otherwise or on stop. */
     private volatile TorrentDest _dest;
     /** The util. */
     protected final I2PSnarkUtil _util;
+    /** Logger for the download. */
     private final Log _log;
+    /** Shared set of connected peers. */
     private final PeerCoordinatorSet _peerCoordinatorSet;
+    /** Last tracker error message, null if none. */
     private volatile String trackerProblems;
+    /** When the tracker last replied. */
     private volatile long lastTrackerResponse;
+    /** Peers reported by the tracker. */
     private volatile int trackerSeenPeers;
+    /** Seeders from the last scrape. */
     private volatile int _scrapeSeeders;
+    /** Leechers from the last scrape. */
     private volatile int _scrapeLeechers;
+    /** Partial completions from the last scrape. */
     private volatile int _scrapePartials;
+    /** True if the download may stop itself. */
     private volatile boolean _autoStoppable;
+    /** Uploaded bytes saved in the stats file. */
     private long savedUploaded;
+    /** When the download started. */
     private long _startedTime;
+    /** Comments fetched for the torrent. */
     private CommentSet _comments;
+    /** Lock for the comments state. */
     private final Object _commentLock = new Object();
+    /** Counter numbering the downloads for the console. */
     private static final AtomicInteger __RPCID = new AtomicInteger();
+    /** This download's console id. */
     private final int _rpcID = __RPCID.incrementAndGet();
 
     /**
@@ -454,6 +481,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         }
     }
 
+    /** Starts the torrent's components. */
     private void x_startTorrent() {
         boolean ok = _util.connect();
         if (!ok) {
@@ -767,7 +795,6 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         }
     }
 
-    // Accessors
 
     /**
      * The file name of the .torrent file.
@@ -1409,6 +1436,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * @since 0.9.46
      */
     static class RouterException extends RuntimeException {
+        /** Serial version of the saved state. */
         private static final long serialVersionUID = 1L;
         /**
          * With message only.
@@ -1517,19 +1545,19 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         }
     }
 
-    ///////////// Begin StorageListener methods
 
     /** StorageListener no-op. */
     @Override
     public void storageCreateFile(Storage storage, String name, long length) { /* no-op */ }
 
-    // How much storage space has been allocated
 
     /** No-op; deliberately empty. */
     @Override
     public void storageAllocated(Storage storage, long length) { /* no-op */ }
 
+    /** True when every file has been checked. */
     private boolean allChecked;
+    /** True while a file check is running. */
     private boolean checking;
 
     /**
@@ -1614,7 +1642,6 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         }
     }
 
-    ///////////// End StorageListener methods
 
     /** SnarkShutdown callback unused. */
     @Override
@@ -1730,6 +1757,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         }
     }
 
+    /** True once the completion notice was sent. */
     private boolean notificationSent;
 
     /**

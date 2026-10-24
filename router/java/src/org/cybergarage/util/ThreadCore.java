@@ -80,7 +80,6 @@ public class ThreadCore implements Runnable {
             // threadObject.destroy();
             // threadObject.stop();
 
-            // Thanks for Kazuyuki Shudo (08/23/07)
             threadObject.interrupt();
 
             setThreadObject(null);

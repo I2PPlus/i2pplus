@@ -21,10 +21,13 @@ import java.io.File;
  * @since 0.9.64
  */
 public class TempDirScanner extends SimpleTimer2.TimedEvent {
+    /** Context whose temp directory is scanned. */
     private final I2PAppContext ctx;
 
-    // systemd default is 10 days for /tmp? distro dependent.
-    // go a little faster than 1 day just in case
+    /**
+     * Milliseconds between scans, a little under a day. systemd's default for
+     * /tmp is 10 days, distro dependent, so scan sooner to be safe.
+     */
     private static final long DELAY = 23 * 60 * 60 * 1000L;
 
     /**

@@ -69,14 +69,19 @@ public class ClientAppConfig {
     /** Wait 15s before starting up non-boot client apps. */
     private static final long DEFAULT_STARTUP_DELAY = 15*1000L;
 
+    /** Property naming the client config file. */
     private static final String PROP_CLIENT_CONFIG_FILENAME = "router.clientConfigFile";
+    /** Default name of the client config file. */
     private static final String DEFAULT_CLIENT_CONFIG_FILENAME = "clients.config";
+    /** Directory of drop-in client config fragments. */
     private static final String CLIENT_CONFIG_DIR = "clients.config.d";
+    /** Prefix of every client app property. */
     private static final String PREFIX = "clientApp.";
 
-    // let's keep this really simple
-    // Following 4 may be edited in router console
-    /** The main class name. */
+    /**
+     * The main class name. This and the three fields below may be edited in
+     * the router console.
+     */
     public String className;
     /** The display name. */
     public String clientName;
@@ -262,10 +267,15 @@ public class ClientAppConfig {
         return rv;
     }
 
-    /*
-     * Migrate apps from file to individual files in dir
+    /**
+     * Copies the app configs from the old file to individual files
+     * in the new directory.
      *
-     * @return success
+     * @param ctx the app context
+     * @param apps the apps already loaded
+     * @param from the file to copy from
+     * @param dir the directory to copy to
+     * @return true if any config moved
      * @since 0.9.42
      */
     private static boolean migrate(I2PAppContext ctx, List<ClientAppConfig> apps, File from, File dir) {
@@ -303,9 +313,11 @@ public class ClientAppConfig {
         return ok;
     }
 
-    /*
-     * Go through the properties, and return a List of ClientAppConfig structures
+    /**
+     * Reads all the app configs from the properties.
      *
+     * @param clientApps the properties to read
+     * @return the app configs found
      * @since 0.7.12
      */
     private static List<ClientAppConfig> getClientApps(Properties clientApps) {
@@ -321,12 +333,13 @@ public class ClientAppConfig {
         return rv;
     }
 
-    /*
-     * Go through the properties, and get a single ClientAppConfig structure
-     * with this prefix
+    /**
+     * Reads one app config by its key prefix.
      *
-     * @return null if none
-     * @since 0.9.42 split out from above
+     * @param clientApps the properties to read
+     * @param prefix the prefix of the app's keys
+     * @return the config, null if absent
+     * @since 0.9.42
      */
     private static ClientAppConfig getClientApp(Properties clientApps, String prefix) {
             String className = clientApps.getProperty(prefix + ".main");

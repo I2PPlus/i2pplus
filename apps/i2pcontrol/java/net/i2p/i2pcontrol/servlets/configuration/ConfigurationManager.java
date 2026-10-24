@@ -16,17 +16,22 @@ import net.i2p.util.OrderedProperties;
  * Manage the configuration of I2PControl.
  */
 public class ConfigurationManager {
+    /** Name of the config file. */
     private final String CONFIG_FILE = "I2PControl.conf";
+    /** Name of the webapp default config file. */
     private final String WEBAPP_CONFIG_FILE = "i2pcontrol.config";
+    /** Where the config file is read and written. */
     private final File configLocation;
+    /** Logger for this class. */
     private final Log _log;
+    /** True since settings changed without a save. */
     private boolean _changed;
 
-    //Configurations with a String as value
+    /** Settings whose value is a string. */
     private final Map<String, String> stringConfigurations = new HashMap<>();
-    //Configurations with a Boolean as value
+    /** Settings whose value is a boolean. */
     private final Map<String, Boolean> booleanConfigurations = new HashMap<>();
-    //Configurations with an Integer as value
+    /** Settings whose value is an integer. */
     private final Map<String, Integer> integerConfigurations = new HashMap<>();
 
 

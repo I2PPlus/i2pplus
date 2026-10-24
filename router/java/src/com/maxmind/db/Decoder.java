@@ -19,8 +19,10 @@ import java.util.Map;
  */
 final class Decoder {
 
+    /** Charset the database strings are decoded with. */
     private static final Charset UTF_8 = Charset.forName("UTF-8");
 
+    /** Value offsets added for each pointer size. */
     private static final int[] POINTER_VALUE_OFFSETS = { 0, 0, 1 << 11, (1 << 19) + ((1) << 11), 0 };
 
     /**
@@ -29,12 +31,16 @@ final class Decoder {
      */
     boolean POINTER_TEST_HACK = false;
 
+    /** Cache of the tree nodes read. */
     private final NodeCache cache;
 
+    /** Offset of the data section start. */
     private final long pointerBase;
 
+    /** Decoder for the database strings. */
     private final CharsetDecoder utfDecoder = UTF_8.newDecoder();
 
+    /** Buffer holding the database data. */
     private final ByteBuffer buffer;
 
     /**
@@ -90,6 +96,12 @@ final class Decoder {
             return Type.values[i];
         }
 
+        /**
+         * Returns the type described by a control byte.
+         *
+         * @param b the control byte to interpret
+         * @return the type and its payload size
+         */
         private static Type get(byte b) {
             // bytes are signed, but we want to treat them as unsigned here
             return Type.get(b & 0xFF);
@@ -120,6 +132,7 @@ final class Decoder {
         this.buffer = buffer;
     }
 
+    /** Loader supplying the nodes to be cached. */
     private final NodeCache.Loader cacheLoader = new NodeCache.Loader() {
         /**
          * Decode the value stored at an offset in the data section.
@@ -214,6 +227,14 @@ final class Decoder {
         return this.decodeByType(type, size);
     }
 
+    /**
+     * Decodes one value of the given type.
+     *
+     * @param type the type of the value
+     * @param size the payload size from the control byte
+     * @return the decoded value
+     * @throws IOException if the data cannot be read
+     */
     private Object decodeByType(Type type, int size)
             throws IOException {
         switch (type) {
@@ -247,6 +268,13 @@ final class Decoder {
         }
     }
 
+    /**
+     * Decodes a string value.
+     *
+     * @param size the number of bytes to read
+     * @return the decoded text
+     * @throws CharacterCodingException if the bytes are not valid UTF-8
+     */
     private String decodeString(int size) throws CharacterCodingException {
         int oldLimit = buffer.limit();
         buffer.limit(buffer.position() + size);
@@ -255,14 +283,32 @@ final class Decoder {
         return s;
     }
 
+    /**
+     * Decodes a 16-bit unsigned integer.
+     *
+     * @param size the number of bytes to read
+     * @return the value, 0 to 65535
+     */
     private Integer decodeUint16(int size) {
         return Integer.valueOf(this.decodeInteger(size));
     }
 
+    /**
+     * Decodes a 32-bit signed integer.
+     *
+     * @param size the number of bytes to read
+     * @return the value, signed 32-bit
+     */
     private Integer decodeInt32(int size) {
         return Integer.valueOf(this.decodeInteger(size));
     }
 
+    /**
+     * Decodes a 64-bit signed integer.
+     *
+     * @param size the number of bytes to read
+     * @return the value, signed 64-bit
+     */
     private long decodeLong(int size) {
         long integer = 0;
         for (int i = 0; i < size; i++) {
@@ -271,14 +317,33 @@ final class Decoder {
         return integer;
     }
 
+    /**
+     * Decodes a 32-bit unsigned integer.
+     *
+     * @param size the number of bytes to read
+     * @return the value, 0 to 2^32-1
+     */
     private Long decodeUint32(int size) {
         return Long.valueOf(this.decodeLong(size));
     }
 
+    /**
+     * Decodes an integer at the current position.
+     *
+     * @param size the number of bytes to read
+     * @return the value read
+     */
     private int decodeInteger(int size) {
         return this.decodeInteger(0, size);
     }
 
+    /**
+     * Decodes an integer from a buffer position.
+     *
+     * @param base the buffer position to read from
+     * @param size the number of bytes to read
+     * @return the value read
+     */
     private int decodeInteger(int base, int size) {
         return Decoder.decodeInteger(this.buffer, base, size);
     }
@@ -299,11 +364,24 @@ final class Decoder {
         return integer;
     }
 
+    /**
+     * Decodes an arbitrary precision integer.
+     *
+     * @param size the number of bytes to read
+     * @return the value, always positive
+     */
     private BigInteger decodeBigInteger(int size) {
         byte[] bytes = this.getByteArray(size);
         return new BigInteger(1, bytes);
     }
 
+    /**
+     * Decodes a double value.
+     *
+     * @param size the number of bytes, must be 8
+     * @return the number read
+     * @throws InvalidDatabaseException if the size is not 8
+     */
     private Double decodeDouble(int size) throws InvalidDatabaseException {
         if (size != 8) {
             throw new InvalidDatabaseException(
@@ -313,6 +391,13 @@ final class Decoder {
         return Double.valueOf(this.buffer.getDouble());
     }
 
+    /**
+     * Decodes a float value.
+     *
+     * @param size the number of bytes, must be 4
+     * @return the number read
+     * @throws InvalidDatabaseException if the size is not 4
+     */
     private Float decodeFloat(int size) throws InvalidDatabaseException {
         if (size != 4) {
             throw new InvalidDatabaseException(
@@ -322,6 +407,13 @@ final class Decoder {
         return Float.valueOf(this.buffer.getFloat());
     }
 
+    /**
+     * Decodes a boolean value.
+     *
+     * @param size the payload size, 0 for false or 1 for true
+     * @return the flag read
+     * @throws InvalidDatabaseException if the size is neither 0 nor 1
+     */
     private static Boolean decodeBoolean(int size)
             throws InvalidDatabaseException {
         switch (size) {
@@ -374,10 +466,23 @@ final class Decoder {
         return map;
     }
 
+    /**
+     * Reads bytes from the current position.
+     *
+     * @param length the number of bytes to read
+     * @return the bytes read
+     */
     private byte[] getByteArray(int length) {
         return Decoder.getByteArray(this.buffer, length);
     }
 
+    /**
+     * Reads bytes from a buffer position.
+     *
+     * @param buffer the buffer to read from
+     * @param length the number of bytes to read
+     * @return the bytes read
+     */
     private static byte[] getByteArray(ByteBuffer buffer, int length) {
         byte[] bytes = new byte[length];
         buffer.get(bytes);

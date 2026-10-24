@@ -22,8 +22,10 @@ import net.i2p.data.Destination;
  */
 class SocketWrapper implements I2PSocket {
 
+    /** The java.net socket whose reads and writes are wrapped. */
     private final Socket socket;
 
+    /** Placeholder destination for a connection with no real one */
     private static final Destination DUMMY_DEST = new Destination();
     static {
         try {

@@ -35,10 +35,15 @@ import java.io.Serializable;
  * @since 0.8.9
  */
 class ExpireLeasesJob extends JobImpl {
+    /** Logger for this class. */
     private final Log _log;
+    /** The facade whose leases expire. */
     private final KademliaNetworkDatabaseFacade _facade;
+    /** Pause before the next pass - 30 seconds. */
     private static final long RERUN_DELAY_MS = 30*1000L;
+    /** Most leases a floodfill checks in one pass. */
     private static final int LIMIT_LEASES_FF = 1250;
+    /** Most leases a normal router checks in one pass. */
     private static final int LIMIT_LEASES_CLIENT = SystemVersion.isSlow() ? 300 : 750;
     /** Refresh leasesets with less than this much time remaining before expiry. */
     private static final long REFRESH_THRESHOLD_MS = 2 * 60 * 1000L;

@@ -25,8 +25,11 @@ public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
      * I2NP message type ID written to the wire header.
      */
     public final static int MESSAGE_TYPE = 3;
+    /** The hash that was looked up. */
     private Hash _key;
+    /** The peers found, closest first. */
     private final List<Hash> _peerHashes;
+    /** The router sending the reply. */
     private Hash _from;
 
     /**
@@ -77,7 +80,6 @@ public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
      * @param peer the hash of the router answering the search, appended to the reply list
      */
     public void addReply(Hash peer) { _peerHashes.add(peer); }
-    //public void addReplies(Collection replies) { _peerHashes.addAll(replies); }
 
     /**
      * The router that sent this reply.

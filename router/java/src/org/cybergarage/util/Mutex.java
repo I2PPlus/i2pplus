@@ -10,6 +10,7 @@ package org.cybergarage.util;
  * mechanisms using synchronized methods and wait/notify for inter-thread communication.
  */
 public class Mutex {
+    /** True while a thread holds the lock. */
     private boolean syncLock;
 
     ////////////////////////////////////////////////

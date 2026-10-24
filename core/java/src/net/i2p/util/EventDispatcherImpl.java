@@ -37,8 +37,11 @@ public class EventDispatcherImpl implements EventDispatcher {
      */
     public EventDispatcherImpl() {}
 
+    /** True while events are dropped, not dispatched. */
     private boolean _ignore = false;
+    /** Listeners registered for each event name. */
     private final Map<String, Object> _events = new ConcurrentHashMap<>(4);
+    /** Dispatchers that also receive these events. */
     private final List<EventDispatcher> _attached = new CopyOnWriteArrayList<>();
 
     @Override

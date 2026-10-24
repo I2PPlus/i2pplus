@@ -27,12 +27,19 @@ import net.i2p.data.router.RouterInfo;
  * not just configuration metadata.
  */
 class GarlicConfig {
+    /** The router the clove is for. */
     private RouterInfo _recipient;
+    /** Key to encrypt the clove to. */
     private PublicKey _recipientPublicKey;
+    /** Certificate to include, if any. */
     private final Certificate _cert;
+    /** Id of the clove being configured. */
     private final long _id;
+    /** Time past which the clove is invalid. */
     private final long _expiration;
+    /** Nested cloves, for garlic within garlic. */
     private final List<GarlicConfig> _cloveConfigs;
+    /** How the recipient should deliver the clove. */
     private final DeliveryInstructions _instructions;
 
     /**
@@ -167,6 +174,7 @@ class GarlicConfig {
      */
     protected String getSubData() { return ""; }
 
+    /** Line separator for the tag dump. */
     private static final String NL = System.getProperty("line.separator");
 
     @Override

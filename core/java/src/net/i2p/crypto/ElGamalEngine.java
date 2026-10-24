@@ -33,13 +33,20 @@ import java.math.BigInteger;
  * @since 0.8.0
  */
 public final class ElGamalEngine {
+    /** Logger for this class. */
     private final Log _log;
+    /** Supplies the random source and precomputation. */
     private final I2PAppContext _context;
+    /** Precomputed y-k pairs for encryption. */
     private final YKGenerator _ykgen;
 
+    /** The ElGamal prime minus one, for range checks. */
     private static final BigInteger ELGPM1 = CryptoConstants.elgp.subtract(BigInteger.ONE);
+    /** Largest cleartext an ElGamal block can carry, in bytes. */
     private static final int ELG_CLEARTEXT_LENGTH = 222;
+    /** Size of an ElGamal block on the wire, in bytes. */
     private static final int ELG_ENCRYPTED_LENGTH = 514;
+    /** Half of that block, the size of each of its two halves. */
     private static final int ELG_HALF_LENGTH = ELG_ENCRYPTED_LENGTH / 2;
 
     /**
@@ -81,6 +88,11 @@ public final class ElGamalEngine {
      */
     public void restart() { /* noop, cannot be restarted */ }
 
+    /**
+     * Takes the next precomputed y-k pair.
+     *
+     * @return the pair, freshly generated if none is ready
+     */
     private BigInteger[] getNextYK() {
         return _ykgen.getNextYK();
     }

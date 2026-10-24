@@ -50,17 +50,19 @@ import java.util.NoSuchElementException;
 
 public class CachedIteratorCollection<E> extends AbstractCollection<E> {
 
-    // FOR DEBUGGING & LOGGING PURPOSES
-    //Log log = I2PAppContext.getGlobalContext().logManager().getLog(CachedIteratorCollection.class);
 
-    // Thread-local iterators to avoid concurrent modification when multiple threads iterate.
-    // Uses WeakReference to prevent stale ThreadLocal entries from retaining the collection
-    // (and its owning PeerState) after clear().
+    /**
+     * The per-thread cached iterators, weakly referenced so stale
+     * thread local entries do not retain the collection and its
+     * owning peer state after a clear.
+     */
     private volatile ThreadLocal<CachedIterator<E>> _iterator = ThreadLocal.withInitial(() -> new CachedIterator<>(this));
 
-    // Set to true in clear() to signal all iterator instances the collection is gone.
-    // ThreadLocalMap entries for other threads will be cleaned lazily via WeakRef key.
-    /** True after {@link #clear()} to signal iterator instances the collection is gone. */
+    /**
+     * True after {@link #clear()} to signal iterator instances the
+     * collection is gone. The thread local map entries of other
+     * threads are cleaned lazily through the weak reference key.
+     */
     volatile boolean _cleared;
 
     /** Size of the collection. */
@@ -75,10 +77,19 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
      * @param <E> the type of the element held in the node
      */
     private static class Node<E> {
+        /** The element held by the node. */
         E item;
+        /** The next node in the list. */
         Node<E> next;
+        /** The previous node in the list. */
         Node<E> prev;
 
+        /**
+         * Links one node after another.
+         *
+         * @param prev the previous node
+         * @param element the element to hold
+         */
         Node(Node<E> prev, E element) {
             this.item = element;
             this.prev = prev;
@@ -220,10 +231,12 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
     @SuppressWarnings("ReferenceEquality")
     public static class CachedIterator<E> implements Iterator<E> {
 
+        /** Weak link to the iterated collection. */
         private final WeakReference<CachedIteratorCollection<E>> collRef;
+        /** True once next was called. */
         private boolean nextCalled;
 
-        // Iteration Index
+        /** The node at the current index. */
         private Node<E> itrIndexNode;
 
         /**

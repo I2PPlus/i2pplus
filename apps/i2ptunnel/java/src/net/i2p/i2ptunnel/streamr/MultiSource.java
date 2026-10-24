@@ -11,8 +11,11 @@ import net.i2p.util.Log;
  * Multi-source data distributor that forwards data to multiple sink destinations.
  */
 public class MultiSource implements Source, Sink {
+    /** Where the incoming data is sent. */
     private Sink sink;
+    /** The listeners this source feeds. */
     private final List<MSink> sinks;
+    /** Logger for this class. */
     private final Log log = I2PAppContext.getGlobalContext().logManager().getLog(getClass());
 
     /**

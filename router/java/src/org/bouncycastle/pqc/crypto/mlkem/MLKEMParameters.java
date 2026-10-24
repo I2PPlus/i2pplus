@@ -22,10 +22,20 @@ public class MLKEMParameters
      */
     public static final MLKEMParameters ml_kem_1024 = new MLKEMParameters("ML-KEM-1024", 4, 256);
 
+    /** Name of the parameter set. */
     private final String name;
+    /** The security parameter k of the set. */
     private final int k;
+    /** Session key length of the set, in bytes. */
     private final int sessionKeySize;
 
+    /**
+     * Names one parameter set.
+     *
+     * @param name the set's name
+     * @param k the security parameter
+     * @param sessionKeySize the session key length in bytes
+     */
     private MLKEMParameters(String name, int k, int sessionKeySize)
     {
         this.name = name;

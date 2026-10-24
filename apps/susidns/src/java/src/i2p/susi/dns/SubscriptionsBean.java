@@ -34,10 +34,16 @@ public class SubscriptionsBean extends BaseBean {
      */
     public SubscriptionsBean() {}
 
+    /** The subscriptions file being edited. */
     private String fileName;
+    /** Contents of that file. */
     private String content;
+    /** Name of the subscriptions file. */
     private static final String SUBS_FILE = "subscriptions.txt";
-    // If you change this, change in Addressbook Daemon also
+    /**
+     * The default subscriptions, the hosts.txt feeds. If you change these,
+     * change the addressbook daemon's defaults as well.
+     */
     private static final String DEFAULT_SUB = "http://stats.i2p/cgi-bin/newhosts.txt" + "\n" +
                                               "http://skank.i2p/hosts.txt" + "\n" +
                                               "http://notbob.i2p/hosts.txt";
@@ -60,6 +66,7 @@ public class SubscriptionsBean extends BaseBean {
      */
     private File subsFile() {return new File(addressbookDir(), SUBS_FILE);}
 
+    /** Re-reads the subscriptions file. */
     private void reloadSubs() {
         synchronized(SubscriptionsBean.class) {locked_reloadSubs();}
     }

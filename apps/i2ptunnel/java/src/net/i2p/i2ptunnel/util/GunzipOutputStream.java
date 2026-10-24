@@ -28,20 +28,71 @@ import net.i2p.util.Log;
  * @since 0.9.21, public since 0.9.50 for LocalHTTPServer, moved to util in 0.9.62
  */
 public class GunzipOutputStream extends InflaterOutputStream {
+    /** Size of the gzip footer, in bytes. */
     private static final int FOOTER_SIZE = 8; // CRC32 + ISIZE
+    /** One-byte read buffer. */
     private final byte[] _buf1 = new byte[1];
+    /** True once the gzip stream is complete. */
     private boolean _complete;
+    /** True once the footer checks passed. */
     private boolean _validated;
+    /** Footer bytes read so far. */
     private final byte[] _footer = new byte[FOOTER_SIZE];
+    /** Total bytes fed to the stream. */
     private long _bytesReceived;
+    /** Byte count when the stream completed. */
     private long _bytesReceivedAtCompletion;
 
-    private enum HeaderState { MB1, MB2, CF, MT0, MT1, MT2, MT3, EF, OS, FLAGS,
-                               EH1, EH2, EHDATA, NAME, COMMENT, CRC1, CRC2, DONE }
+    /**
+     * State of the gzip header parse.
+     */
+    private enum HeaderState {
+        /** First magic byte expected. */
+        MB1,
+        /** Second magic byte expected. */
+        MB2,
+        /** Compression format byte expected. */
+        CF,
+        /** First modification time byte, ignored. */
+        MT0,
+        /** Second modification time byte, ignored. */
+        MT1,
+        /** Third modification time byte, ignored. */
+        MT2,
+        /** Fourth modification time byte, ignored. */
+        MT3,
+        /** Extended flags byte expected. */
+        EF,
+        /** Operating system byte, ignored. */
+        OS,
+        /** Header flags byte, saved for later fields. */
+        FLAGS,
+        /** Low byte of the extra header length. */
+        EH1,
+        /** High byte of the extra header length. */
+        EH2,
+        /** Extra header body bytes. */
+        EHDATA,
+        /** File name field, ends at a NUL. */
+        NAME,
+        /** Comment field, ends at a NUL. */
+        COMMENT,
+        /** First header CRC byte. */
+        CRC1,
+        /** Second header CRC byte. */
+        CRC2,
+        /** Header complete, compressed data follows. */
+        DONE
+    }
+    /** Current state of the header parse. */
     private HeaderState _state = HeaderState.MB1;
+    /** The gzip flags read from the header. */
     private int _flags;
+    /** Bytes left of the extra header field. */
     private int _extHdrToRead;
+    /** Callback run when the stream completes. */
     private final DoneCallback _callback;
+    /** Logger for the gunzip stream. */
     private final Log _log;
 
     /**
@@ -369,8 +420,14 @@ public class GunzipOutputStream extends InflaterOutputStream {
      */
     private static class CRC32OutputStream extends FilterOutputStream {
 
+        /** Running CRC of the data written. */
         private final CRC32 _crc32;
 
+        /**
+         * Wraps a stream, tracking its CRC.
+         *
+         * @param out the stream to wrap
+         */
         public CRC32OutputStream(OutputStream out) {
             super(out);
             _crc32 = new CRC32();
@@ -388,6 +445,11 @@ public class GunzipOutputStream extends InflaterOutputStream {
             out.write(buf, off, len);
         }
 
+        /**
+         * Returns the CRC of the data written.
+         *
+         * @return the CRC32 value
+         */
         public long getValue() {
             return _crc32.getValue();
         }

@@ -6,8 +6,11 @@ import net.i2p.data.Destination;
 /** Return value of {@link net.i2p.client.I2PSession#lookupDest2}. */
 public class LkupResult implements LookupResult {
 
+    /** Result code from the lookup. */
     private final int _code;
+    /** The destination found, null if there was none. */
     private final Destination _dest;
+    /** Nonce echoed back to the requester. */
     private final int _nonce;
 
     /**
@@ -44,7 +47,7 @@ public class LkupResult implements LookupResult {
     }
 
     /**
-     * Zero for success, nonzero for failure.
+     * Result code of the lookup.
      * @return zero for success, nonzero for failure
      */
     @Override
@@ -53,8 +56,8 @@ public class LkupResult implements LookupResult {
     }
 
     /**
-     * Destination on success, null on failure.
-     * @return Destination on success, null on failure
+     * Destination found by the lookup.
+     * @return the destination on success, null on failure
      */
     @Override
     public Destination getDestination() {

@@ -47,6 +47,7 @@ import net.i2p.util.SimpleTimer2;
  * Public only for TunnelRenderer in router console.
  */
 public class TunnelPool {
+    /** Sorts tunnel infos by expiration, soonest first. */
     private static final Comparator<TunnelInfo> EXPIRATION_COMPARATOR =
             Comparator.comparingLong(TunnelInfo::getExpiration);
     /**
@@ -79,25 +80,39 @@ public class TunnelPool {
         if (lb < 0) {return -1;}
         return Integer.compare(la, lb);
     }
+    /** Configs with builds in flight, guarded by the manager. */
     private final List<PooledTunnelCreatorConfig> _inProgress = new ArrayList<>();
             /** The router context. */
     protected final RouterContext _context;
             /** The log. */
     protected final Log _log;
+    /** The pool's current settings. */
     private TunnelPoolSettings _settings;
+    /** The pool's live tunnels. */
     private final List<TunnelInfo> _tunnels;
+    /** Lock guarding the tunnel list. */
     private final ReentrantLock _tunnelsLock = new ReentrantLock();
+    /** Selector choosing peers for this pool's tunnels. */
     private final TunnelPeerSelector _peerSelector;
+    /** The manager that owns this pool. */
     private final TunnelPoolManager _manager;
+    /** The opposite-direction pool for the same destination. */
     private TunnelPool _pairedPool;  // Inbound or outbound pool for same destination
             /** Whether this pool is running. */
     protected volatile boolean _alive;
+    /** Total lifetime of tunnels this pool has used. */
     private long _lifetimeProcessed;
+    /** When the pool was started. */
     private long _started;
+    /** When the pool's rates were last recomputed. */
     private long _lastRateUpdate;
+    /** Lifetime total at the last rate update. */
     private long _lastLifetimeProcessed;
+    /** Stat name prefix for this pool's rates. */
     private final String _rateName;
+    /** When the pool was first installed. */
     private final long _firstInstalled;
+    /** Build timeouts in a row, for stress detection. */
     private final AtomicInteger _consecutiveBuildTimeouts = new AtomicInteger();
     /**
      * Fixed (tumbling) window of build outcomes for the per-pool timeout
@@ -141,8 +156,11 @@ public class TunnelPool {
     private static final long ZOMBIE_LOG_INTERVAL_MS = 60 * 1000L;
     /** Wall-clock guard for the zombie warning; see {@link #ZOMBIE_LOG_INTERVAL_MS}. */
     private long _nextZombieLog;
+    /** Build attempts in the current stats window. */
     private final AtomicLong _windowAttempts = new AtomicLong();
+    /** Build timeouts in the current stats window. */
     private final AtomicLong _windowTimeouts = new AtomicLong();
+    /** When the current stats window began. */
     private volatile long _windowStartMs;
             /** Guards the window rotation; one lock per build completion. */
     private final Object _rateWindowLock = new Object();
@@ -176,15 +194,23 @@ public class TunnelPool {
     static final int MAX_LAST_CHANCE_PER_SWEEP = 2;
             /** Cached rate-stat handles so per-build lookups skip the StatManager map. */
     private final RateStat[] _expireStatSlot = new RateStat[1];
+    /** Holds the rejected-build stat once registered. */
     private final RateStat[] _rejectStatSlot = new RateStat[1];
+    /** Holds the successful-build stat once registered. */
     private final RateStat[] _successStatSlot = new RateStat[1];
+    /** Holds the build success rate stat once registered. */
     private final RateStat[] _buildSuccessRateStatSlot = new RateStat[1];
+    /** Holds the average bandwidth stat once registered. */
     private final RateStat[] _avgBWStatSlot = new RateStat[1];
+    /** When the last no-tunnels warning was logged. */
     private long _lastNoTunnelsWarningTime;
+    /** When the last last-resort tunnel log was written. */
     private long _lastLastResortLogTime;
+    /** When the last selectPeers failure warning was logged. */
     private long _lastSelectPeersFailureWarnTime;
             /** Rate-limit stamps for the data-phase failure / condemnation log lines. */
     private long _lastSendFailureLogTime;
+    /** When the last condemn warning was logged. */
     private long _lastCondemnWarnTime;
     /**
      * Dynamic pool scaling: when a pool repeatedly collapses (EMERGENCY fires),
@@ -193,6 +219,7 @@ public class TunnelPool {
      * picks the best tunnels, so excess is fine.
      */
     private volatile int _consecutiveEmergencies = 0;
+    /** Most tunnels an emergency pass may add. */
     private static final int MAX_EMERGENCY_BOOST = 10;
     /**
      * Hard cap on concurrent builds per pool direction in normal operation.
@@ -442,8 +469,11 @@ public class TunnelPool {
        * @since 0.9.71+
        */
       private volatile int _lastThinPoolWarned = -1;
+      /** Pre-build passes are at least 1 minute apart. */
       private static final long PRE_BUILD_THROTTLE_MS = 60_000;
+    /** When the last emergency build pass ran. */
     private volatile long _lastEmergencyBuildTime;
+    /** An emergency build pass is followed by a 30 second wait. */
     private static final long EMERGENCY_COOLDOWN_MS = 30_000;
     /**
      * Shorter cooldown during total collapse — when a pool has zero usable AND
@@ -453,6 +483,7 @@ public class TunnelPool {
      * connection attempts to the associated destination fail.
      */
     private static final long EMERGENCY_COLLAPSE_COOLDOWN_MS = 5_000;
+    /** Set when a lease set republish is queued. */
     private volatile boolean _leaseSetRepublishPending;
     /**
      * Reentrancy guard for ensureSufficientTunnels().
@@ -614,6 +645,7 @@ public class TunnelPool {
 
             /** Default early expiration time for pruned tunnels (120 seconds). */
     static final long DEFAULT_PRUNE_EARLY_EXPIRY = 120L * 1000;
+    /** Config key for the early tunnel expiry margin. */
     private static final String PROP_PRUNE_EARLY_EXPIRY = "router.pruneEarlyExpiryDelay";
             /** Legacy alias for {@link #PROP_PRUNE_EARLY_EXPIRY}, read only as a fallback. */
     private static final String LEGACY_PROP_PRUNE_EARLY_EXPIRY = "router.tunnel.pruneEarlyExpiryDelay";
@@ -623,8 +655,11 @@ public class TunnelPool {
     private static final long PRUNE_NEAR_EXPIRY_MS = 5L * 60 * 1000;
             /** If less than one success in this many, reduce length (exploratory only). */
     private static final int BUILD_TRIES_LENGTH_OVERRIDE_1 = 10;
+    /** Build tries override for the second consecutive failure. */
     private static final int BUILD_TRIES_LENGTH_OVERRIDE_2 = 12;
+    /** Build tries override for a client pool's first failure. */
     private static final int BUILD_TRIES_LENGTH_OVERRIDE_CLIENT_1 = 4;
+    /** Build tries override for a client pool's second failure. */
     private static final int BUILD_TRIES_LENGTH_OVERRIDE_CLIENT_2 = 5;
     /**
      * Lease end is set this long before the tunnel expires, so peers re-fetch
@@ -993,6 +1028,7 @@ public class TunnelPool {
         return (int) (((float) rate.getAvgOrLifetimeAvg()) / count);
     }
 
+    /** Re-reads the pool's settings from the config. */
     private void refreshSettings() {
         if (!_settings.isExploratory()) {return;} // don't override client specified settings
         Properties props = new Properties();
@@ -1124,9 +1160,19 @@ public class TunnelPool {
      * fallback candidate, and the recorded last-resort tunnel.
      */
     private static class ScanResult {
+        /** The tunnel selected for a lease. */
         final TunnelInfo chosen;
+        /** A tunnel held back for backlog, used if needed. */
         final TunnelInfo backlogged;
+        /** A tunnel used only when nothing better exists. */
         final TunnelInfo lastResort;
+        /**
+         * Holds one pass over the tunnel list.
+         *
+         * @param chosen the tunnel selected
+         * @param backlogged the tunnel held for backlog
+         * @param lastResort the fallback tunnel
+         */
         ScanResult(TunnelInfo chosen, TunnelInfo backlogged, TunnelInfo lastResort) {
             this.chosen = chosen;
             this.backlogged = backlogged;
@@ -3048,7 +3094,11 @@ public class TunnelPool {
     private boolean _hasGoodLeaseSet;
             /** True when last built LeaseSet had fewer leases than wanted — bypass cache. */
     private boolean _hasIncompleteLeaseSet;
-            /**  When this pool last reported a materially short LeaseSet  @since 0.9.71+. */
+            /**
+             *  When this pool last reported a materially short LeaseSet 
+             *
+             * @since 0.9.71+
+             */
     private volatile long _lastShortfallLog;
     /**
      * Whether this pool is struggling to meet its tunnel targets.
@@ -3072,6 +3122,7 @@ public class TunnelPool {
     private long _lastPublishedEarliestLeaseEnd;
             /** Track if a deferred refresh is already scheduled. */
     private final AtomicBoolean _pendingRefreshScheduled = new AtomicBoolean();
+    /** Tunnels added recently, by id, for duplicate suppression. */
     private final Map<TunnelId, Long> _recentlyAddedTunnels = new ConcurrentHashMap<>();
 
     /**
@@ -3707,8 +3758,16 @@ public class TunnelPool {
      * fallback UNTESTED) tunnels and the single best zero-hop tunnel.
      */
     private static class LeaseTunnels {
+        /** The tunnels chosen for the lease set. */
         final List<TunnelInfo> good;
+        /** A zero-hop tunnel, used only if the good list is short. */
         final TunnelInfo zeroHop;
+        /**
+         * Holds the tunnels picked for a lease set.
+         *
+         * @param good the chosen tunnels
+         * @param zeroHop the fallback zero-hop tunnel
+         */
         LeaseTunnels(List<TunnelInfo> good, TunnelInfo zeroHop) {
             this.good = good;
             this.zeroHop = zeroHop;
@@ -4031,6 +4090,14 @@ public class TunnelPool {
         return true;
     }
 
+    /**
+     * Builds the lease set from the chosen leases.
+     *
+     * @param leases the leases to publish
+     * @param wanted the number of leases wanted
+     * @param now the current time
+     * @return the lease set, or null if it could not be built
+     */
     private LeaseSet finalizeLeaseSet(TreeSet<Lease> leases, int wanted, long now) {
         if (leases.size() < wanted) {
             // The incomplete-set handling below runs for any shortfall, which is correct:
@@ -4377,6 +4444,11 @@ public class TunnelPool {
         return _context.clientManager().shouldPublishLeaseSet(dest);
     }
 
+    /**
+     * Marks a tunnel as failed and schedules its replacement.
+     *
+     * @param cfg the failed tunnel
+     */
     private void fail(TunnelInfo cfg) {
         failWithCount(cfg, cfg.getConsecutiveFailures());
     }
@@ -4496,7 +4568,11 @@ public class TunnelPool {
         _context.simpleTimer2().addEvent(new LeaseSetRepublishEvent(), 10000);
     }
 
+    /** Republishes the lease set after a delay. */
     private class LeaseSetRepublishEvent extends SimpleTimer2.TimedEvent {
+        /** Republishes the tunnel's lease set in time. */
+        private LeaseSetRepublishEvent() {}
+
         /**
          * Republish the LeaseSet and prune non-good tunnels.
          */
@@ -4625,6 +4701,7 @@ public class TunnelPool {
         }
     }
 
+    /** Recomputes the pool's bandwidth and lifetime rates. */
     private void updateRate() {
         long now = _context.clock().now();
         long et = now - _lastRateUpdate;
@@ -4948,6 +5025,8 @@ public class TunnelPool {
         /**
          * Perform the deferred LeaseSet refresh.
          */
+        /** Rechecks tunnels whose refresh was deferred. */
+        private DeferredRefreshEvent() {}
         public void timeReached() {
             _pendingRefreshScheduled.set(false);
             refreshLeaseSet(false);
@@ -5111,6 +5190,7 @@ public class TunnelPool {
      *
      */
     static class LeaseComparator implements Comparator<Lease>, Serializable {
+        /** Fixed serial version for the outer class. */
         private static final long serialVersionUID = 1L;
 
         /**
@@ -5178,8 +5258,11 @@ public class TunnelPool {
      * @since 0.8.10
      */
     private static class TunnelInfoComparator implements Comparator<TunnelInfo>, Serializable {
+        /** Fixed serial version for the inner class. */
         private static final long serialVersionUID = 1L;
+        /** Destination prefix used to match peers. */
         private final byte[] _base;
+        /** Whether zero-hop tunnels are avoided. */
         private final boolean _avoidZero;
 
         /**
@@ -5776,12 +5859,21 @@ public class TunnelPool {
 
             /** Counts of tunnel states gathered in one sweep of the pool. */
     private static final class TunnelStats {
+        /** Holds one tunnel's counters. */
+        private TunnelStats() {}
+        /** Tunnels with more than 3 minutes left. */
         private int safeActive;       // tunnels with > 3min remaining
+        /** Tunnels with 3 minutes or less left, not yet expired. */
         private int nearExpiry;       // tunnels with <= 3min remaining but not yet expired
+        /** Tunnels past expiration still sitting in the pool. */
         private int expiredZombies;   // tunnels past expiration still in pool
+        /** Tunnels in the pool that have never been tested. */
         private int untestedCount;    // tunnels awaiting first test — in pool, just unproven
+        /** Untested tunnels the test queue never reached. */
         private int staleUntestedCount;  // UNTESTED tunnels the test queue never reached
+        /** Tunnels that failed tests and are likely to be dropped. */
         private int failingCount;     // tunnels that have failed tests — likely to die soon
+        /** Live tunnels whose soft failures reach the ensure threshold. */
         private int softDegraded;     // live tunnels with soft failures >= SOFT_DEGRADED_FOR_ENSURE
                         /** Lazily created: stale UNTESTED tunnels kept for one last-chance test. */
         private List<PooledTunnelCreatorConfig> lastChanceTests;
@@ -5995,6 +6087,13 @@ public class TunnelPool {
      */
     public int getNearExpiryCount() {return _nearExpiryCount;}
 
+    /**
+     * Drops expired tunnels and counts the rest.
+     *
+     * @param now the current time
+     * @param preBuildThreshold cutoff for the pre-build decision
+     * @return the counts for the pool's tunnels
+     */
     private TunnelStats sweepExpiredAndCountTunnels(long now, long preBuildThreshold) {
         TunnelStats stats = new TunnelStats();
         _tunnelsLock.lock();
@@ -7861,6 +7960,12 @@ public class TunnelPool {
         return true;
     }
 
+    /**
+     * Logs a new tunnel's config and peers at debug level.
+     *
+     * @param cfg the tunnel's config
+     * @param peers the chosen peers
+     */
     private void logConfigDebug(PooledTunnelCreatorConfig cfg, List<Hash> peers) {
         if (_log.shouldDebug()) {
             StringBuilder sb = new StringBuilder("Tunnel created for pool: " + cfg);

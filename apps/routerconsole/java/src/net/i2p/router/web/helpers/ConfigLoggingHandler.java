@@ -14,14 +14,23 @@ import net.i2p.util.LogManager;
 public class ConfigLoggingHandler extends FormHandler {
     /** Handler for logging configuration form submissions. */
     public ConfigLoggingHandler() {}
+    /** True if the form is to be saved. */
     private boolean _shouldSave;
+    /** The log levels from the form. */
     private String _levels;
+    /** The default log level from the form. */
     private String _defaultLevel;
+    /** The record format from the form. */
     private String _recordFormat;
+    /** The date format from the form. */
     private String _dateFormat;
+    /** The log file size from the form. */
     private String _fileSize;
+    /** The class of a new log. */
     private String _newLogClass;
+    /** The level of a new log. */
     private String _newLogLevel = "WARN";
+    /** True to compress the log files. */
     private boolean _logCompress;
 
     @Override

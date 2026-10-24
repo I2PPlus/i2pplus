@@ -8,9 +8,12 @@ import java.io.IOException;
  *
  */
 public class ArcState implements RrdUpdater<ArcState> {
+    /** The archive this state belongs to. */
     private final Archive parentArc;
 
+    /** Running total of the consolidated values. */
     private final RrdDouble<ArcState> accumValue;
+    /** Steps that were never updated. */
     private final RrdLong<ArcState> nanSteps;
 
     /**

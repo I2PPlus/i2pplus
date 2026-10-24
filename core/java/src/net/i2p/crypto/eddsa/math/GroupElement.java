@@ -11,6 +11,7 @@ import net.i2p.crypto.eddsa.Utils;
  * @since 0.9.15
  */
 public class GroupElement implements Serializable {
+    /** Pinned for serialized-form compatibility. */
     private static final long serialVersionUID = 2395879087349587L;
 
     /**

@@ -23,8 +23,14 @@ public enum SigAlgo {
      */
     ElGamal("ElGamal");
 
+    /** Name of the signature algorithm. */
     private final String name;
 
+    /**
+     * Creates a value with its algorithm name.
+     *
+     * @param name the algorithm name
+     */
     SigAlgo(String name) {
         this.name = name;
     }

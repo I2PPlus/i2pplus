@@ -29,16 +29,26 @@ import net.i2p.util.Log;
  * Or, since 0.9.11, lookup a host name in the naming service.
  */
 class LookupDestJob extends JobImpl {
+    /** Logger for the destination lookup job. */
     private final Log _log;
+    /** The client runner that asked for the lookup. */
     private final ClientConnectionRunner _runner;
+    /** The client request id to reply to. */
     private final long _reqID;
+    /** Time allowed for the lookup. */
     private final long _timeout;
+    /** The hash being looked up. */
     private final Hash _hash;
+    /** The local name to look up, null if a hash was given. */
     private final String _name;
+    /** The session that asked for the lookup. */
     private final SessionId _sessID;
+    /** The local destination to search from, null if none. */
     private final Hash _fromLocalDest;
+    /** The blinded lookup data, null if not blinded. */
     private final BlindData _blindData;
 
+    /** Time allowed for a lookup unless given one. */
     private static final long DEFAULT_TIMEOUT = 15*1000L;
     /**
      * Create a lookup job with the default timeout.
@@ -200,7 +210,13 @@ class LookupDestJob extends JobImpl {
         } else {returnFail(HostReplyMessage.RESULT_DECRYPTION_FAILURE);} // blinding decode fail
     }
 
+    /** Job cleaning up when the lookup finishes. */
     private class DoneJob extends JobImpl {
+        /**
+         * Builds the done job.
+         *
+         * @param enclosingContext the router context
+         */
         public DoneJob(RouterContext enclosingContext) {super(enclosingContext);}
         /** Return the name. */
 
@@ -231,6 +247,11 @@ class LookupDestJob extends JobImpl {
         }
     }
 
+    /**
+     * Sends the destination found to the client.
+     *
+     * @param d the destination to return, null if none was found
+     */
     private void returnDest(Destination d) {
         I2CPMessage msg;
         if (_reqID >= 0) {msg = new HostReplyMessage(_sessID, d, _reqID, null);}

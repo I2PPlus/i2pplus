@@ -10,6 +10,7 @@ import java.io.InputStream;
  */
 public class LimitInputStream extends CountingInputStream {
 
+    /** Most bytes the stream will read. */
     private final long maxx;
 
     /**

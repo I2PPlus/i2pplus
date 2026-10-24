@@ -25,13 +25,21 @@ class LeaseRequestState {
      */
     static final int MAX_TRANSIENT_PUBLISH_RETRIES = 3;
 
+    /** The lease set being requested. */
     private final LeaseSet _requestedLeaseSet;
+    /** Job run when the request succeeds. */
     private final Job _onGranted;
+    /** Job run when the request fails. */
     private final Job _onFailed;
+    /** Time past which the request is abandoned. */
     private final long _expiration;
+    /** Earliest lease end seen so far. */
     private final long _currentEarliestLeastDate;
+    /** True once the request has succeeded. */
     private volatile boolean _successful;
+    /** Publish retries used so far. */
     private int _transientPublishRetries;
+    /** True once the outcome has been acted on. */
     private boolean _resolutionClaimed;
 
     /**
@@ -57,8 +65,8 @@ class LeaseRequestState {
     }
 
     /**
-     * The lease set that is being requested.
-     * @return the lease set that is being requested
+     * The lease set this request is for.
+     * @return the unsigned lease set, updated in place once it is signed
      */
     public LeaseSet getRequested() {return _requestedLeaseSet;}
 
@@ -75,8 +83,8 @@ class LeaseRequestState {
     public Job getOnFailed() { return _onFailed; }
 
     /**
-     * When the request for the lease set expires.
-     * @return when the request for the lease set expires
+     * When the request is abandoned if the client has not answered.
+     * @return absolute adjusted time in ms, not the lease set's own expiration
      */
     public long getExpiration() { return _expiration; }
 

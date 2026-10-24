@@ -33,6 +33,7 @@ JTextPane
 	{
 	}
 
+	/** Style document backing the pane's text. */
 	private StyledDocument sd = new StyledDocument();
 
 	/**

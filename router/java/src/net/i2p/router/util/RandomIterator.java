@@ -53,7 +53,9 @@ public class RandomIterator<E> implements Iterator<E> {
 
     /** The amount of items served so far. */
     private int servedCount;
+    /** The list being traversed in random order. */
     private final List<E> list;
+    /** Size of that list. */
     private final int LIST_SIZE;
 
     /**
@@ -70,8 +72,10 @@ public class RandomIterator<E> implements Iterator<E> {
 
     /** Used to narrow the range to take random indexes from. */
     private int lower;
+    /** How many of the remaining elements may still be picked. */
     private int upper;
 
+    /** True on the Android versions whose bit operations are broken. */
     private static final boolean HAS_ANDROID_BUG;
     static {
         if (SystemVersion.isAndroid()) {
@@ -138,6 +142,12 @@ public class RandomIterator<E> implements Iterator<E> {
         return list.get(index);
     }
 
+    /**
+     * Finds the last unset bit at or below a position.
+     *
+     * @param n the position to search down from
+     * @return the highest unset bit at or below n
+     */
     private int previousClearBit(int n) {
         return served.previousClearBit(n);
     }

@@ -31,18 +31,23 @@ import net.i2p.util.Translate;
  */
 public class Main implements RouterApp, NotificationService {
 
-    // non-null
+    /** The app context, always present. */
     private final I2PAppContext _appContext;
-    // warning, null in app context
+    /** The router context, null when running without a router. */
     private final RouterContext _context;
+    /** Starts and stops the client apps. */
     private final ClientAppManager _mgr;
+    /** Logger for this class. */
     private final Log log;
+    /** The state the GUI is currently showing. */
     private ClientAppState _state = UNINITIALIZED;
+    /** The system tray icon, null before startup. */
     private TrayManager _trayManager;
     /**
      * Property to enable or disable the desktop GUI.
      */
     public static final String PROP_ENABLE = "desktopgui.enabled";
+    /** Property selecting the Swing implementation over AWT. */
     private static final String PROP_SWING = "desktopgui.swing";
 
     /**

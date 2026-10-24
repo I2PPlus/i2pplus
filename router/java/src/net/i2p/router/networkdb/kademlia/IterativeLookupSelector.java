@@ -15,9 +15,13 @@ import net.i2p.util.Log;
  *  @since 0.8.9
  */
 class IterativeLookupSelector implements MessageSelector {
+    /** The router running the lookup. */
     private final RouterContext _context;
+    /** The search choosing these peers. */
     private final IterativeSearchJob _search;
+    /** True once a peer holding the key answered. */
     private boolean _matchFound;
+    /** Logger for this class. */
     private final Log _log;
 
     /**

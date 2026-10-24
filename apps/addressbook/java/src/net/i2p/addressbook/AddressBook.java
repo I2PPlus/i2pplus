@@ -22,14 +22,20 @@ import net.i2p.util.SecureFile;
  */
 class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
 
+    /** Path of the hosts.txt file, for the logs. */
     private final String location;
     /** Either addresses or subFile will be non-null, but not both. */
     private final Map<String, HostTxtEntry> addresses;
+    /** The subscription file whose contents are shown, null if the addresses are cached. */
     private final File subFile;
+    /** True when entries changed since the last save. */
     private boolean modified;
+    /** Logger for this class. */
     private static final net.i2p.util.Log _log = new net.i2p.util.Log(AddressBook.class);
 
+    /** Shortest a full destination can be in the text, in characters. */
     private static final int MIN_DEST_LENGTH = 516;
+    /** Longest a full destination can be, allowing for any known cert type. */
     private static final int MAX_DEST_LENGTH = MIN_DEST_LENGTH + 100;  // longer than any known cert type for now
 
     /**
@@ -311,6 +317,14 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
         }
     }
 
+    /**
+     * Merges entries from another book into this one.
+     *
+     * @param other the book being merged from
+     * @param iter the entries to consider
+     * @param overwrite true to replace existing entries
+     * @param log where merge decisions are logged
+     */
     private void merge2(AddressBook other, Iterator<Map.Entry<String, HostTxtEntry>> iter, boolean overwrite, Log log) {
         while(iter.hasNext()) {
             Map.Entry<String, HostTxtEntry> entry = iter.next();

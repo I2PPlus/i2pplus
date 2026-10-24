@@ -16,6 +16,7 @@ public final class BridgeVersion {
     /** The HTTP header the extension adds to router requests to self-report. */
     public static final String HEADER = "X-I2PSnark-Bridge";
 
+    /** Utility class, not intended for instantiation. */
     private BridgeVersion() {}
 
     /**
@@ -94,11 +95,24 @@ public final class BridgeVersion {
         return installed != null && bundled != null && compare(installed, bundled) < 0;
     }
 
+    /**
+     * Splits a version string on dots, empty if it is null.
+     *
+     * @param v the version string
+     * @return the parts between the dots
+     */
     private static String[] split(String v) {
         if (v == null) {return new String[0];}
         return v.split("\\.");
     }
 
+    /**
+     * The leading digits of one part, 0 if there are none.
+     *
+     * @param parts the version parts
+     * @param i which part to read
+     * @return the value of those digits
+     */
     private static int segment(String[] parts, int i) {
         if (i >= parts.length) {return 0;}
         String p = parts[i];

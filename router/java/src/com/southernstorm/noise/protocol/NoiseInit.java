@@ -13,6 +13,7 @@ import net.i2p.data.DataHelper;
  */
 public class NoiseInit {
 
+        /** Prevents instantiating the utility class. */
         private NoiseInit() {}
 
         /** NTCP2 */
@@ -65,22 +66,26 @@ public class NoiseInit {
          * @since 0.9.67
          */
         private static final String PATTERN_ID_IKHFS_512 = "IKhfs512";
+        /** Name of the 768 bit IKhfs handshake pattern. */
         private static final String PATTERN_ID_IKHFS_768 = "IKhfs768";
+        /** Name of the 1024 bit IKhfs handshake pattern. */
         private static final String PATTERN_ID_IKHFS_1024 = "IKhfs1024";
         /**
          * Hybrid NTCP2
          * @since 0.9.69
          */
         private static final String PATTERN_ID_XKHFS_512 = "XKhfs512";
+        /** Name of the 768 bit XKhfs handshake pattern. */
         private static final String PATTERN_ID_XKHFS_768 = "XKhfs768";
+        /** Name of the 1024 bit XKhfs handshake pattern. */
         private static final String PATTERN_ID_XKHFS_1024 = "XKhfs1024";
         /**
          * Hybrid SSU2
          * @since 0.9.69
          */
         private static final String PATTERN_ID_XKHFS_512_SSU2 = "XKhfs512-SSU2";
+        /** Name of the SSU2 768 bit XKhfs handshake pattern. */
         private static final String PATTERN_ID_XKHFS_768_SSU2 = "XKhfs768-SSU2";
-        // no 1024, too big
 
         /**
          * Pattern identifiers for Noise protocol handshake patterns.
@@ -113,14 +118,23 @@ public class NoiseInit {
             /** Hybrid SSU2 MLKEM768 */
             XKHFS_768_SSU2(PATTERN_ID_XK, protocolName12);
 
+            /** The name prefix of the pattern. */
             private final String prefix;
+            /** The name identifying the pattern. */
             private final String patternId;
+            /** The protocol name for the handshake. */
             private final String protoName;
+            /** The Diffie-Hellman cipher name. */
             private final String dh;
+            /** The symmetric cipher name. */
             private final String scipher;
+            /** The hash algorithm name. */
             private final String shash;
+            /** The token list of the pattern. */
             private short[] pattern;
+            /** The initial chaining key. */
             private final byte[] ck;
+            /** The initial handshake hash. */
             private final byte[] h;
 
             /**

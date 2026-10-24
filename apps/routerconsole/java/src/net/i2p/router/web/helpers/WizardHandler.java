@@ -22,6 +22,7 @@ public class WizardHandler extends FormHandler {
      */
     public WizardHandler() {}
 
+    /** Holds the wizard's state between requests. */
     private WizardHelper _helper;
 
     /**

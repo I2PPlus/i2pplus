@@ -52,11 +52,14 @@ import net.i2p.util.VersionComparator;
  */
 public abstract class BuildRequestor {
 
+    /** Prevents instantiating the utility class. */
     private BuildRequestor() {}
 
-    // Configuration constants
+    /** Oldest version with the new tunnel build messages. */
     private static final String MIN_NEWTBM_VERSION = "0.9.51";
+    /** Developer switch for the variable build records. */
     private static final boolean SEND_VARIABLE = true;
+    /** Build records sent by the short variant. */
     private static final int SHORT_RECORDS = 4;
     /** 5 records (~2600 bytes) fit well within 3 tunnel messages. */
     private static final int MEDIUM_RECORDS = 5;
@@ -77,10 +80,15 @@ public abstract class BuildRequestor {
      */
     static final long PRECONNECT_RETRY_WINDOW_MS = 2 * 60 * 1000L;
 
+    /** Context the cached config values came from. */
     private static volatile RouterContext _cfgCtx;
+    /** When the config values were last read. */
     private static volatile long _cfgRefreshed;
+    /** Cached build reply timeout, in ms. */
     private static volatile int _cachedRequestTimeout;
+    /** Cached first hop reply timeout, in ms. */
     private static volatile int _cachedFirstHopTimeout;
+    /** Time the cached config values stay valid. */
     private static final long CONFIG_REFRESH_MS = 30 * 1000L;
 
     /**
@@ -89,6 +97,7 @@ public abstract class BuildRequestor {
      * @since 0.9.71+
      */
     private static volatile int _tunedRequestTimeout = -1;
+    /** Tuner override for the first hop timeout. */
     private static volatile int _tunedFirstHopTimeout = -1;
 
     /**
@@ -121,9 +130,11 @@ public abstract class BuildRequestor {
         _cfgRefreshed = now;
     }
 
-    // Static immutable order lists for randomized record placement
+    /** Record order for a full length build. */
     private static final List<Integer> ORDER;
+    /** Record order for the short build variant. */
     private static final List<Integer> SHORT_ORDER;
+    /** Record order for the medium build variant. */
     private static final List<Integer> MEDIUM_ORDER;
 
     static {
@@ -147,6 +158,7 @@ public abstract class BuildRequestor {
         MEDIUM_ORDER = Collections.unmodifiableList(mediumOrder);
     }
 
+    /** Send priority of our own build messages. */
     private static final int PRIORITY = OutNetMessage.PRIORITY_MY_BUILD_REQUEST;
 
     /**
@@ -464,6 +476,17 @@ public abstract class BuildRequestor {
         return true;
     }
 
+    /**
+     * Builds and sends the records for one outbound tunnel.
+     *
+     * @param ctx the router context
+     * @param cfg the tunnel being built
+     * @param pairedTunnel the inbound tunnel it is paired with, null if none
+     * @param msg the build message being replaced, null for a new build
+     * @param exec the executor to run the build on
+     * @param log the logger for the build
+     * @param firstHopTimeout the reply timeout for the first hop, in ms
+     */
     private static void handleOutboundBuild(RouterContext ctx, PooledTunnelCreatorConfig cfg,
                                              TunnelInfo pairedTunnel, I2NPMessage msg,
                                              BuildExecutor exec, Log log, long firstHopTimeout) {
@@ -730,6 +753,13 @@ public abstract class BuildRequestor {
         return msg;
     }
 
+    /**
+     * Sends the records for a zero hop tunnel.
+     *
+     * @param ctx the router context
+     * @param cfg the tunnel being built
+     * @param exec the executor to run the build on
+     */
     private static void buildZeroHop(RouterContext ctx, PooledTunnelCreatorConfig cfg, BuildExecutor exec) {
         Log log = ctx.logManager().getLog(BuildRequestor.class);
         if (log.shouldDebug()) {
@@ -746,9 +776,18 @@ public abstract class BuildRequestor {
      * Notifies the executor and updates peer profile.
      */
     private static class TunnelBuildFirstHopFailJob extends JobImpl {
+        /** The tunnel whose build failed. */
         private final PooledTunnelCreatorConfig _cfg;
+        /** The executor running the build. */
         private final BuildExecutor _exec;
 
+        /**
+         * Records a failed first hop reply.
+         *
+         * @param ctx the router context
+         * @param cfg the tunnel being built
+         * @param exec the executor running the build
+         */
         TunnelBuildFirstHopFailJob(RouterContext ctx, PooledTunnelCreatorConfig cfg, BuildExecutor exec) {
             super(ctx);
             _cfg = cfg;

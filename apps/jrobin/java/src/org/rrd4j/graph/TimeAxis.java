@@ -14,6 +14,7 @@ import java.util.Set;
  * graph time range and pixel density.
  */
 class TimeAxis extends Axis {
+    /** Tick spacing and labels for each time span. */
     private static final TimeAxisSetting[] tickSettings = {
         new TimeAxisSetting(0, TimeUnit.SECOND, 30, TimeUnit.MINUTE, 5, TimeUnit.MINUTE, 5, 0),
         new TimeAxisSetting(2, TimeUnit.MINUTE, 1, TimeUnit.MINUTE, 5, TimeUnit.MINUTE, 5, 0),
@@ -49,13 +50,19 @@ class TimeAxis extends Axis {
                 1,
                 365 * 24 * 3600),
     };
+    /** The image being drawn. */
     private final ImageParameters im;
+    /** Where the axis is drawn. */
     private final ImageWorker worker;
+    /** The graph definition being drawn. */
     private final RrdGraphDef gdef;
+    /** Maps between time and pixel positions. */
     private final Mapper mapper;
     /** Tick setting */
     private TimeAxisSetting tickSetting;
+    /** Seconds each horizontal pixel covers. */
     private final double secPerPix;
+    /** Calendar used to break times into fields. */
     private final Calendar calendar;
 
     /**
@@ -269,6 +276,11 @@ class TimeAxis extends Axis {
         }
     }
 
+    /**
+     * Chooses how far labels are shifted for readability.
+     *
+     * @return the shift, in pixels
+     */
     private int getTimeShift() {
         long time = calendar.getTime().getTime() / 1000L;
         return (time < im.start) ? -1 : (time > im.end) ? +1 : 0;

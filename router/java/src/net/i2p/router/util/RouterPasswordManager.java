@@ -33,10 +33,13 @@ public class RouterPasswordManager extends PasswordManager {
     /** The router context. */
     protected final RouterContext _context;
 
+    /** Property marking the old passwords as already moved. */
     private static final String PROP_MIGRATED = "router.passwordManager.migrated";
-    // migrate these to hash
+    /** Old I2CP password property, migrated to per-destination properties. */
     private static final String PROP_I2CP_OLD_PW = I2PClient.PROP_PW;
+    /** Old I2CP username property, migrated to the new store. */
     private static final String PROP_I2CP_OLD_USER = I2PClient.PROP_USER;
+    /** Property the migrated I2CP credentials live under. */
     private static final String PROP_I2CP_NEW = "i2cp.auth";
 /*
     // migrate these to b64

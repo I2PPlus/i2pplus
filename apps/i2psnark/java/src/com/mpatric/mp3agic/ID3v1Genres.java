@@ -1,6 +1,8 @@
 package com.mpatric.mp3agic;
 
+/** The genre names an ID3v1 tag may store. */
 public final class ID3v1Genres {
+    /** Genre names, indexed by the number kept in a tag. */
     public static final String[] GENRES = {
         "Blues",
         "Classic Rock",
@@ -152,6 +154,7 @@ public final class ID3v1Genres {
         "Synthpop"
     };
 
+    /** Utility class, not intended for instantiation. */
     private ID3v1Genres() {}
 
     /**

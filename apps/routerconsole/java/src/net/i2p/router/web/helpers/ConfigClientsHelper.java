@@ -30,6 +30,7 @@ import net.i2p.util.SystemVersion;
  * @since 0.9.33
  */
 public class ConfigClientsHelper extends HelperBase {
+    /** Name of the app selected for editing, if any. */
     private String _edit;
 
     /** From ClientListenerRunner. */
@@ -256,10 +257,20 @@ public class ConfigClientsHelper extends HelperBase {
      * @since 0.9.20
      */
     private static class CAC {
+        /** Position of the app in the config file. */
         public final int index;
+        /** The app's configuration. */
         public final ClientAppConfig config;
+        /** Name used to address the app in the form. */
         public final String xname;
 
+        /**
+         * Bundles one app for display on the page.
+         *
+         * @param idx position in the config file
+         * @param cfg the app's configuration
+         * @param xn name used in the form
+         */
         public CAC(int idx, ClientAppConfig cfg, String xn) {
             index = idx; config = cfg; xname = xn;
         }
@@ -270,9 +281,12 @@ public class ConfigClientsHelper extends HelperBase {
      * @since 0.9.20
      */
     private class CACComparator implements Comparator<CAC> {
+         /** Fixed id, the comparator is never serialized across versions. */
          private static final long serialVersionUID = 1L;
+         /** Orders app names by locale collation. */
          private final Collator coll;
 
+         /** Creates the comparator with the default locale. */
          public CACComparator() {
              super();
              coll = Collator.getInstance(new Locale(Messages.getLanguage(_context)));

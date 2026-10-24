@@ -21,6 +21,7 @@ import java.util.Set;
  */
 public class SecureFileOutputStream extends FileOutputStream {
 
+    /** True on Java 6, where the file-open options differ */
     private static final boolean oneDotSix = SystemVersion.isJava6();
 
     /**

@@ -6,6 +6,7 @@ package net.i2p.router.crypto.ratchet;
  */
 class ArrayUtils {
 
+    /** Utility class, not intended for instantiation. */
     private ArrayUtils() { /* cannot be instantiated */ }
 
     /**

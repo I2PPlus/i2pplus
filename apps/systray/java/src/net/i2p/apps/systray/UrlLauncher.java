@@ -40,18 +40,30 @@ import net.i2p.util.SystemVersion;
  */
 public class UrlLauncher implements ClientApp {
 
+    /** Helper running the browser command. */
     private final ShellCommand _shellCommand;
+    /** Current state of the launcher. */
     private volatile ClientAppState _state;
+    /** The app context. */
     private final I2PAppContext _context;
+    /** The manager notified of the state changes. */
     private final ClientAppManager _mgr;
+    /** The command line arguments given. */
     private final String[] _args;
+    /** Logger for the URL launcher. */
     private final Log _log;
 
+    /** Time between the console readiness checks. */
     private static final int WAIT_TIME = 5*1000;
+    /** Longest wait for the console to come up. */
     private static final int MAX_WAIT_TIME = 5*60*1000;
+    /** Most readiness checks before giving up. */
     private static final int MAX_TRIES = 99;
+    /** Name the launcher registers with the manager. */
     private static final String REGISTERED_NAME = "UrlLauncher";
+    /** Config key of the browser command. */
     private static final String PROP_BROWSER = "routerconsole.browser";
+    /** True when running as a system service. */
     private static final boolean IS_SERVICE = SystemVersion.isService();
 
     /**
@@ -474,6 +486,12 @@ public class UrlLauncher implements ClientApp {
         return argList.toArray(new String[argList.size()]);
     }
 
+    /**
+     * Checks whether a URL is safe to open.
+     *
+     * @param urlString the URL to check
+     * @return true if the format is acceptable
+     */
     private static boolean validateUrlFormat(String urlString) {
          try {
             // just to check validity
@@ -507,7 +525,10 @@ public class UrlLauncher implements ClientApp {
         t.start();
     }
 
+    /** Thread waiting for the console then opening it. */
     private class Runner implements Runnable {
+        /** Opens a URL in the user's browser. */
+        private Runner() {}
         @Override
         public void run() {
             changeState(RUNNING);

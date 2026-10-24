@@ -20,14 +20,18 @@ public final class CryptixAESKeyCache {
      */
     public CryptixAESKeyCache() {}
 
+    /** Key length, 32 bytes for AES-256. */
     private static final int KEYSIZE = 32; // 256bit AES
+    /** AES block size, in bytes. */
     private static final int BLOCKSIZE = 16;
+    /** Number of encryption rounds for the key size. */
     private static final int ROUNDS = CryptixRijndael_Algorithm.getRounds(KEYSIZE, BLOCKSIZE);
+    /** Block size measured in 4-byte words. */
     private static final int BC = BLOCKSIZE / 4;
 
     /**
-     * New key cache entry.
-     * @return a new key cache entry
+     * Allocate a key cache entry.
+     * @return a new entry with no round keys populated yet
      */
     public static final KeyCacheEntry createNew() {
         return new KeyCacheEntry();

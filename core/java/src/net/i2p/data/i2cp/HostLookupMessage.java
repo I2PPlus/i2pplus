@@ -16,9 +16,10 @@ import java.io.InputStream;
 
 /**
  * Request the router look up the dest for a hash
- * or a host. Replaces DestLookupMessage.
+ * or a host. Replaces DestLookupMessage. Do not send to routers
+ * older than 0.9.11.
  *
- * @since 0.9.11; do not send to routers older than 0.9.11.
+ * @since 0.9.11
  */
 public class HostLookupMessage extends I2CPMessageImpl {
     /**
@@ -26,11 +27,17 @@ public class HostLookupMessage extends I2CPMessageImpl {
      */
     public static final int MESSAGE_TYPE = 38;
 
+    /** Id matching the reply to the request. */
     private long _reqID;
+    /** How long the router may take, in ms. */
     private long _timeout;
+    /** What kind of lookup to perform. */
     private int _lookupType;
+    /** The hash to look up, for hash lookups. */
     private Hash _hash;
+    /** The host name to look up, for name lookups. */
     private String _host;
+    /** The session that asked for the lookup. */
     private SessionId _sessionId;
 
     /**
@@ -42,6 +49,7 @@ public class HostLookupMessage extends I2CPMessageImpl {
      */
     public static final int LOOKUP_HOST = 1;
 
+    /** Largest id that fits on the wire. */
     private static final long MAX_INT = (1L << 32) - 1;
 
     /**
@@ -86,8 +94,8 @@ public class HostLookupMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Session id.
-     * @return the session id
+     * Session making the lookup request.
+     * @return the session id, null until set or read
      */
     public SessionId getSessionId() {
         return _sessionId;

@@ -89,31 +89,46 @@ public class RouterConsoleRunner implements RouterApp {
         }
     }
 
+    /** The router context. */
     private final RouterContext _context;
+    /** Manager starting and stopping the app. */
     private final ClientAppManager _mgr;
+    /** Logger for the console. */
     private final Log _log;
+    /** Helper building the navigation menu. */
     private final NavHelper _navHelper;
+    /** Current state of the console app. */
     private volatile ClientAppState _state = UNINITIALIZED;
+    /** The Jetty server, null until started. */
     private Server _server;
+    /** Shared Jetty timer thread. */
     private static ScheduledExecutorScheduler _jettyTimer;
+    /** HTTP port the console listens on. */
     private String _listenPort;
+    /** Host addresses the console listens on. */
     private String _listenHost;
+    /** HTTPS port the console listens on. */
     private String _sslListenPort;
+    /** Host addresses the HTTPS listener uses. */
     private String _sslListenHost;
+    /** Directory holding the webapps to deploy. */
     private String _webAppsDir;
 
+    /** File listing the webapps to deploy. */
     private static final String DEFAULT_WEBAPP_CONFIG_FILENAME = "webapps.config";
 
-    // Jetty Auth
+    /** Jetty authenticator for the console login. */
     private static final DigestAuthenticator authenticator = new DigestAuthenticator();
     static {
         // default changed from 0 (forever) in Jetty 6 to 60*1000 ms in Jetty 7
         // reduced from 7 days to 1 hour for security (reported by bottomlineit.za)
         authenticator.setMaxNonceAge(60*60*1000L);
     }
+    /** Name of this client app. */
     private static final String NAME = "console";
     /** Realm name for console authentication. */
     public static final String JETTY_REALM = "i2prouter";
+    /** Jetty role required by the protected pages. */
     private static final String JETTY_ROLE = "routerAdmin";
     /** Property name for the console authentication password. */
     public static final String PROP_CONSOLE_PW = "routerconsole.auth." + JETTY_REALM;
@@ -134,7 +149,9 @@ public class RouterConsoleRunner implements RouterApp {
     public static final String PROP_KEY_PASSWORD = "routerconsole.keyPassword";
     /** Default HTTP listen port for the console. */
     public static final int DEFAULT_LISTEN_PORT = PortMapper.DEFAULT_CONSOLE_PORT;
+    /** Default webapps directory. */
     private static final String DEFAULT_WEBAPPS_DIR = "./webapps/";
+    /** Text shown for bad console arguments. */
     private static final String USAGE = "Bad RouterConsoleRunner arguments, check clientApp.0.args in your clients.config file! " +
                                         "Usage: [[port host[,host]] [-s sslPort [host[,host]]] [webAppsDir]]";
 
@@ -143,7 +160,9 @@ public class RouterConsoleRunner implements RouterApp {
     /** Handler thread counts, adjusted for connectors and acceptors in startConsole(). */
     private static final int MAX_THREADS = 48;
 
+    /** Idle time before Jetty closes a connection. */
     private static final int MAX_IDLE_TIME = 30*1000;
+    /** Name of the console's app thread. */
     private static final String THREAD_NAME = "Console";
     /** Property name for the desktop GUI enable flag. */
     public static final String PROP_DTG_ENABLED = "desktopgui.enabled";
@@ -245,7 +264,6 @@ public class RouterConsoleRunner implements RouterApp {
         runner.startup();
     }
 
-    /////// ClientApp methods
 
     /**
      * Start the console web server.
@@ -329,6 +347,11 @@ public class RouterConsoleRunner implements RouterApp {
 
     /////// end ClientApp methods
 
+    /**
+     * Records the new app state and notifies the app manager.
+     *
+     * @param state the state to move to
+     */
     private synchronized void changeState(ClientAppState state) {
         _state = state;
         if (_mgr != null)
@@ -378,6 +401,7 @@ public class RouterConsoleRunner implements RouterApp {
         return context.getProperty(PROP_DTG_ENABLED, false);
     }
 
+    /** Starts the system tray icon if enabled. */
     private void startTrayApp() {
         // if no permissions, don't even try
         // isLaunchedAsService() always returns true on Linux
@@ -1144,8 +1168,16 @@ public class RouterConsoleRunner implements RouterApp {
      * @since 0.9.28
      */
     private static class CustomHashLoginService extends HashLoginService {
+        /** Logger for the login service. */
         private final Log _log;
 
+        /**
+         * Builds the console login service.
+         *
+         * @param realm the authentication realm
+         * @param webapp the webapp name used for the config
+         * @param log the logger to use
+         */
         public CustomHashLoginService(String realm, String webapp, Log log) {
             super(realm);
             _log = log;
@@ -1167,12 +1199,19 @@ public class RouterConsoleRunner implements RouterApp {
      * @since 0.8.8
      */
     private class ServerShutdown implements Runnable {
+        /** Stops the console's server. */
+        private ServerShutdown() {}
         @Override
         public void run() {
             shutdown(null);
         }
     }
 
+    /**
+     * Loads the webapps config file.
+     *
+     * @return the properties read, empty if missing
+     */
     private Properties webAppProperties() {
         return webAppProperties(_context.getConfigDir().getAbsolutePath());
     }
@@ -1260,9 +1299,12 @@ public class RouterConsoleRunner implements RouterApp {
         }
     }
 
+    /** Filter selecting the war files to deploy. */
     private static class WarFilenameFilter extends FileSuffixFilter {
+        /** File name of the router console war. */
         private static final String RCWAR = ROUTERCONSOLE + ".war";
 
+        /** Matches files ending in .war. */
         public WarFilenameFilter() { super(".war"); }
 
         @Override
@@ -1276,6 +1318,8 @@ public class RouterConsoleRunner implements RouterApp {
      * @since 0.9.24
      */
     private static class HostComparator implements Comparator<String>, Serializable {
+        /** Orders console host names. */
+        private HostComparator() {}
         @Override
         public int compare(String l, String r) {
             boolean l4 = l.contains(".");

@@ -53,9 +53,13 @@ public class GraphListener implements RateSummaryListener {
     /** Number of primary steps per consolidation. */
     private static final int STEPS = 1;
 
+    /** The context whose stats are graphed. */
     private final I2PAppContext _context;
+    /** Logger for this class. */
     private final Log _log;
+    /** Rate the samples are recorded into. */
     private final Rate _rate;
+    /** True if the rate is saved between runs. */
     private final boolean _isPersistent;
     /** RRD datasource name for the primary stat value. */
     private String _name;

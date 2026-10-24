@@ -23,7 +23,9 @@ public class NewsFeedHelper extends HelperBase {
      */
     public NewsFeedHelper() {super();}
 
+    /** Index of the first item to show. */
     private int _start;
+    /** How many items to show. */
     private int _limit = 2;
 
     /**

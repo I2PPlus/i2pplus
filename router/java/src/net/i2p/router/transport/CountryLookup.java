@@ -47,23 +47,39 @@ import net.i2p.util.SystemVersion;
  */
 public class CountryLookup {
 
+    /** The router context. */
     private final RouterContext _context;
+    /** The GeoIP databases. */
     private final GeoIP _geoIP;
+    /** Logger for the country lookup. */
     private final Log _log;
 
-    /* We hope the routerinfos are read in and things have settled down by now, but it's not required to be so */
+    /**
+     * Delay before the first lookup run, hoping the router infos are
+     * read in by then, though that is not required.
+     */
     private static final int START_DELAY = SystemVersion.isSlow() ? 60*1000 : 5*1000;
+    /** Time allowed for one lookup run. */
     private static final int LOOKUP_TIME = 75*1000;
-    // Re-queue the entire netDb for GeoIP lookup periodically so peers learned
-    // after startup are resolved even if their page is never explicitly viewed.
+    /**
+     * Interval between the lookup runs, re-queueing the whole net DB so
+     * peers learned after startup are resolved even if their page is
+     * never viewed explicitly.
+     */
     private static final int QUEUE_TIME = 10*60*1000;
 
+    /** Most routers cached with a country. */
     private static final int MAX_COUNTRY_CACHE_SIZE = 20000;
+    /** Age after which a cached country expires. */
     private static final long COUNTRY_CACHE_EXPIRY = 60*60*1000L; // 1 hour
 
+    /** When the unknown-country entries were last purged. */
     private long lastUnknownPurge = 0;
+    /** When the country cache was last cleaned up. */
     private long lastCacheCleanup = 0;
+    /** The cached countries, by router hash. */
     private final ConcurrentHashMap<Hash, String> countryCache = new ConcurrentHashMap<>(MAX_COUNTRY_CACHE_SIZE);
+    /** When each cached country was stored. */
     private final ConcurrentHashMap<Hash, Long> countryCacheTimestamps = new ConcurrentHashMap<>(MAX_COUNTRY_CACHE_SIZE);
 
     /**
@@ -96,6 +112,7 @@ public class CountryLookup {
      * As of 0.9.32, works only for literal IPs, ignores host names.
      */
     private class QueueAll extends SimpleTimer2.TimedEvent {
+        /** True for the first lookup run. */
         private boolean _firstRun = true;
         /**
          * Creates a one-shot timer for queueing every known router.
@@ -126,6 +143,7 @@ public class CountryLookup {
         }
     }
 
+    /** Periodic job looking up the new routers' countries. */
     private class Lookup extends SimpleTimer2.TimedEvent {
         /**
          * Creates a timer that re-arms the GeoIP lookup.

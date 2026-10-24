@@ -51,23 +51,46 @@ public abstract class SystemVersion {
      */
     public static final String GENTOO_USER = "i2p";
 
+    /** True if running on Windows. */
     private static final boolean _isWin = System.getProperty("os.name").startsWith("Win");
+    /** True if running on macOS. */
     private static final boolean _isMac = System.getProperty("os.name").startsWith("Mac");
+    /**
+     * System.getProperty("os.arch").startsWith("aarch");
+     * True if the CPU is ARM.
+     */
     private static final boolean _isArm = System.getProperty("os.arch").startsWith("arm") || System.getProperty("os.arch").startsWith("aarch");
+    /**
+     * System.getProperty("os.arch").equals("amd64");
+     * True if the CPU is x86.
+     */
     private static final boolean _isX86 = System.getProperty("os.arch").contains("86") || System.getProperty("os.arch").equals("amd64");
+    /**
+     * System.getProperty("os.version").contains("hardened"); // Funtoo
+     * True if the kernel is a Gentoo build.
+     */
     private static final boolean _isGentoo = System.getProperty("os.version").contains("gentoo") || System.getProperty("os.version").contains("hardened"); // Funtoo
-    // Could also check for java.vm.info = "interpreted mode"
+    /** True if the JVM uses the Zero interpreter. */
     private static final boolean _isZero = System.getProperty("java.vm.name").contains("Zero");
+    /** True if running on Android. */
     private static final boolean _isAndroid;
+    /** True if running on the Apache Harmony JVM. */
     private static final boolean _isApache;
+    /** True if running on the GNU Java runtime. */
     private static final boolean _isGNU;
+    /** True if running on OpenJDK. */
     private static final boolean _isOpenJDK;
+    /** True if the JVM is 64-bit. */
     private static final boolean _is64;
+    /** True if the Tanuki wrapper runs us. */
     private static final boolean _hasWrapper = System.getProperty("wrapper.version") != null;
+    /** True if running as a Linux service. */
     private static final boolean _isLinuxService;
-    // found in Tanuki WrapperManager source so we don't need the WrapperManager class here
+    /** True if running as a Windows service. */
     private static final boolean _isWindowsService = _isWin && _hasWrapper && Boolean.parseBoolean(System.getProperty("wrapper.service"));
+    /** True if running as a service of any kind. */
     private static final boolean _isService;
+    /** True on devices where features should be limited. */
     private static final boolean _isSlow;
     /** Cached CPU core count, computed lazily on first {@link #getCores()} call. */
     private static volatile int _cores;
@@ -119,25 +142,45 @@ public abstract class SystemVersion {
     /** Context that {@link #_cpuLoadStat} was resolved against. */
     private static volatile StatManager _cpuLoadStatCtx;
 
+    /** True if the JVM is Java 1.6. */
     private static final boolean _oneDotSix;
+    /** True if the JVM is Java 1.7. */
     private static final boolean _oneDotSeven;
+    /** True if the JVM is Java 1.8. */
     private static final boolean _oneDotEight;
+    /** True if the JVM is Java 9. */
     private static final boolean _oneDotNine;
+    /** True if the JVM is Java 10. */
     private static final boolean _oneDotTen;
+    /** True if the JVM is Java 11. */
     private static final boolean _oneDotEleven;
+    /** True if the JVM is Java 12. */
     private static final boolean _twelve;
+    /** True if the JVM is Java 13. */
     private static final boolean _thirteen;
+    /** True if the JVM is Java 14. */
     private static final boolean _fourteen;
+    /** True if the JVM is Java 15. */
     private static final boolean _fifteen;
+    /** True if the JVM is Java 16. */
     private static final boolean _sixteen;
+    /** True if the JVM is Java 17. */
     private static final boolean _seventeen;
+    /** True if the JVM is Java 18. */
     private static final boolean _eighteen;
+    /** True if the JVM is Java 19. */
     private static final boolean _nineteen;
+    /** True if the JVM is Java 20. */
     private static final boolean _twenty;
+    /** True if the JVM is Java 21. */
     private static final boolean _twentyOne;
+    /** True if the JVM is Java 22. */
     private static final boolean _twentyTwo;
+    /** True if the JVM is Java 23. */
     private static final boolean _twentyThree;
+    /** True if the JVM is Java 24. */
     private static final boolean _twentyFour; // NOSONAR S1068
+    /** Android SDK level we run on, zero if not Android. */
     private static final int _androidSDK;
 
     /**
@@ -154,7 +197,9 @@ public abstract class SystemVersion {
      * With no override configured, slow platforms are still detected automatically.
      */
     public static final boolean DEFAULT_OVERRIDE_IS_SLOW = false;
+    /** Splits a comma-separated list. */
     private static final Pattern COMMA_SPLIT = Pattern.compile(",");
+    /** The global app context, for the config. */
     private static final I2PAppContext _ctx = I2PAppContext.getGlobalContext();
 
     static {
@@ -338,7 +383,7 @@ public abstract class SystemVersion {
 
     /**
      * Gij or JamVM with GNU Classpath.
-     * @return whether GNU
+     * @return true if running on the GNU Java runtime
      */
     public static boolean isGNU() {
         return _isGNU;
@@ -1038,6 +1083,14 @@ public abstract class SystemVersion {
         return threadMXBean.getThreadCount();
     }
 
+    /**
+     * Returns one stat's rate for a period.
+     *
+     * @param sm the stat manager
+     * @param name the stat name
+     * @param duration the rate period, in ms
+     * @return the rate, or null if the stat is unknown
+     */
     private static Rate getStatRate(StatManager sm, String name, int duration) {
         RateStat rateStat = sm.getRate(name);
         return rateStat != null ? rateStat.getRate(duration) : null;

@@ -32,6 +32,7 @@ public class StateVariable extends NodeData {
     ////////////////////////////////////////////////
 
     private Node stateVariableNode;
+    /** The XML node the variable was read from. */
     private Node serviceNode;
 
     /**
@@ -160,7 +161,9 @@ public class StateVariable extends NodeData {
     ////////////////////////////////////////////////
 
     private static final String SENDEVENTS = "sendEvents";
+    /** Value of the send-events flag that turns events on. */
     private static final String SENDEVENTS_YES = "yes";
+    /** Value of the send-events flag that turns events off. */
     private static final String SENDEVENTS_NO = "no";
 
     /**
@@ -443,6 +446,11 @@ public class StateVariable extends NodeData {
         return getStateVariableData().getQueryResponse();
     }
 
+    /**
+     * Records the answer to a query on this variable.
+     *
+     * @param res the response to store
+     */
     private void setQueryResponse(QueryResponse res) {
         getStateVariableData().setQueryResponse(res);
     }
@@ -473,7 +481,6 @@ public class StateVariable extends NodeData {
         QueryResponse queryRes = queryReq.post();
         if (Debug.isOn() == true) queryRes.print();
         setQueryResponse(queryRes);
-        // Thanks for Dimas <cyberrate@users.sourceforge.net> and Stefano Lenzi
         // <kismet-sl@users.sourceforge.net> (07/09/04)
         if (queryRes.isSuccessful() == false) {
             setValue(queryRes.getReturnValue());
@@ -518,11 +525,11 @@ public class StateVariable extends NodeData {
         return upnpStatus;
     }
 
+    /** Tag naming a variable's default value in the XML. */
     private static final String DEFAULT_VALUE = "defaultValue";
 
-    ////////////////////////////////////////////////
     /**
-     * Gets the defaultValue of this StateVariable.
+     * Gives the declared default value of this state variable.
      *
      * @return the declared default, or null if none is set
      */

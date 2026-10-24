@@ -19,6 +19,7 @@ import net.i2p.data.DataHelper;
 public class DataMessage extends FastI2NPMessageImpl {
     /** The message type identifier. */
     public final static int MESSAGE_TYPE = 20;
+    /** The opaque payload. */
     private byte[] _data;
 
     /**

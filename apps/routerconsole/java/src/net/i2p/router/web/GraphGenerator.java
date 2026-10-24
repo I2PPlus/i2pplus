@@ -46,17 +46,23 @@ import org.rrd4j.core.RrdNioBackendFactory;
  * To control memory, the number of simultaneous renderings is limited.
  */
 public class GraphGenerator implements Runnable, ClientApp {
+    /** The router context. */
     private final RouterContext _context;
+    /** Logger for the graph renderer. */
     private final Log _log;
     /** List of GraphListener instances, preserved for iteration by UI helpers. */
     private final List<GraphListener> _listeners;
     /** Index of listener by rate for O(1) lookup during rendering. */
     private final Map<Rate, GraphListener> _listenerByRate = new ConcurrentHashMap<>();
+    /** Graph renders allowed at once. */
     private static final int MAX_CONCURRENT_RENDER = SystemVersion.isARM() ? Math.max(2, SystemVersion.getCores() / 2) :
                                                   SystemVersion.getMaxMemory() < 256*1024*1024 ? Math.max(8, SystemVersion.getCores() / 2) :
                                                   Math.max(12, SystemVersion.getCores());
+    /** Permits limiting the concurrent renders. */
     private final Semaphore _sem;
+    /** True while the generator runs. */
     private volatile boolean _isRunning;
+    /** Scheduler running the periodic renders. */
     private ScheduledExecutorService _scheduler;
     /** Health watchdog scheduler, separate from {@link #_scheduler} so a stuck
      * sync task cannot stop the thing that is meant to notice it is stuck. */
@@ -85,11 +91,13 @@ public class GraphGenerator implements Runnable, ClientApp {
      * would log one at all.
      */
     private boolean _stallReported;
+    /** True once the rrd drift was logged. */
     private boolean _driftReported;
     /** Coalesce delta across all tracked listeners at the previous watchdog tick. */
     private long _lastCoalesceSum;
     /** Consecutive watchdog ticks on which no tracked rate coalesced at all. */
     private int _coalesceStalledTicks;
+    /** Thread name of the generator. */
     private static final String NAME = "GraphGen";
 
     /** Emit a liveness heartbeat every N sync ticks (~27min at the 90s period). */
@@ -111,11 +119,16 @@ public class GraphGenerator implements Runnable, ClientApp {
     private static final int COALESCE_STALL_TICKS = (int) (COALESCE_STALL_MS / HEALTH_INTERVAL_MS);
     /** Upper bound on how many retained samples one backfill is asked for. */
     static final int MAX_BACKFILL_STEPS = 8;
-    /** Repeat period for a report whose numbers have not changed. @since 0.9.71+. */
+    /**
+     * Repeat period for a report whose numbers have not changed.
+     *
+     * @since 0.9.71+
+     */
     private static final long REPORT_REPEAT_MS = 120_000L;
     /** Wall-clock time when graph generation started; lets the never-yet-written staleness
      * test distinguish an empty startup window from a genuinely stalled writer. */
     private final long _startedMs = System.currentTimeMillis();
+    /** Renders completed by the current job. */
     private int _ticks;
 
     /**
@@ -424,7 +437,9 @@ public class GraphGenerator implements Runnable, ClientApp {
      * @since 0.9.71+
      */
     static final class CauseTally {
+        /** Why the data source was reported stale. */
         private final StaleCause _cause;
+        /** Times this cause was seen. */
         private int _count;
         /** Largest age recorded, in ms. */
         private long _ageMs;
@@ -432,6 +447,7 @@ public class GraphGenerator implements Runnable, ClientApp {
         private boolean _sinceLastWrite;
         /** Names of the listeners in this tally, bounded by {@link #MAX_NAMED}. */
         private final List<String> _names = new ArrayList<>(4);
+        /** Stale sources without a name. */
         private int _unnamed;
 
         /**
@@ -523,7 +539,11 @@ public class GraphGenerator implements Runnable, ClientApp {
     /** Most listener names a single tally will list before summarising the rest as a count. */
     static final int MAX_NAMED = 5;
 
-    /** Origin wording for an age measured from the last successful write. @since 0.9.71+. */
+    /**
+     * Origin wording for an age measured from the last successful write.
+     *
+     * @since 0.9.71+
+     */
     private static final String staleAgeSinceLastWrite = "since last write";
     /**
      * Origin wording for an age with no earlier write to measure back from.
@@ -1322,7 +1342,9 @@ public class GraphGenerator implements Runnable, ClientApp {
         /** One per reported condition, so each carries its own last report and signature. */
         ReportThrottle() {}
 
+        /** Render time of the last graph, in ms. */
         private long _lastMs;
+        /** Signature of the last rendered data. */
         private long _lastSignature;
 
         /**
@@ -1488,6 +1510,12 @@ public class GraphGenerator implements Runnable, ClientApp {
      */
     public int countGraphs() {return _listeners.size();}
 
+    /**
+     * Rewrites the rrd file paths in a data source spec.
+     *
+     * @param oldSpecs the specs as configured
+     * @return the specs with the paths adjusted
+     */
     private String adjustDatabases(String oldSpecs) {
         // Read the property every tick so config changes take effect; the string
         // compare is the common case, parsing only runs after a change
@@ -2106,6 +2134,7 @@ GraphListener lsnr = _listenerByRate.get(rate);
         FileUtil.rmdir(rrdDir, false);
     }
 
+    /** True when running on Windows. */
     private static final boolean IS_WIN = SystemVersion.isWindows();
 
     /**
@@ -2127,6 +2156,9 @@ GraphListener lsnr = _listenerByRate.get(rate);
      * @since 0.8.7
      */
     private class Shutdown implements Runnable {
+        /** Stops the generators when the router exits. */
+        private Shutdown() {}
+
         /**
          * Close all persistent RRDs and clean up.
          * <p>Ordered: watchdog, sync task, listeners, backend factory. The factory is

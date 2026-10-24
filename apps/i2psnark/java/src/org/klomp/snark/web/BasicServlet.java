@@ -68,6 +68,7 @@ import org.klomp.snark.URIUtil;
  * </pre>
  */
 class BasicServlet extends HttpServlet {
+    /** The serialization version of the servlet. */
     private static final long serialVersionUID = 1L;
     /** The global application context, transient so the servlet stays serializable. */
     protected final transient I2PAppContext _context;
@@ -78,16 +79,21 @@ class BasicServlet extends HttpServlet {
      * request threads never lock to read it.
      */
     protected volatile File _resourceBase;
+    /** Filesystem path of the unpacked war content. */
     private String _warBase;
 
+    /** Resolver of the served files' mime types. */
     private final transient MimeTypes _mimeTypes;
 
     /** Same as PeerState.PARTSIZE. */
     private static final int BUFSIZE = 16 * 1024;
 
+    /** Cache supplying the file transfer buffers. */
     private transient ByteCache _cache = ByteCache.getInstance(16, BUFSIZE);
 
+    /** Browser cache time of war resources, in seconds. */
     private static final int WAR_CACHE_CONTROL_SECS = 7 * 24 * 60 * 60;
+    /** Browser cache time of the torrent files, in seconds. */
     private static final int FILE_CACHE_CONTROL_SECS = 30 * 24 * 60 * 60;
 
     /** Bind to the global context and build a fresh MIME table. */
@@ -461,7 +467,6 @@ class BasicServlet extends HttpServlet {
         }
     }
 
-    /* I2P additions below here */
 
     /** From Jetty HttpContent.java. */
     public interface HttpContent {
@@ -502,9 +507,16 @@ class BasicServlet extends HttpServlet {
         InputStream getInputStream() throws IOException;
     }
 
+    /** HTTP content backed by a file on disk. */
     private class FileContent implements HttpContent {
+        /** The file to serve. */
         private final File _file;
 
+        /**
+         * Builds the content for one file.
+         *
+         * @param file the file to serve
+         */
         public FileContent(File file) {
             _file = file;
         }
@@ -568,6 +580,7 @@ class BasicServlet extends HttpServlet {
 
     /** File content with byte limit. */
     private class LimitFileContent extends FileContent {
+        /** Most bytes to read, negative for all of them. */
         private final long _limit;
 
         /**
@@ -592,9 +605,16 @@ class BasicServlet extends HttpServlet {
         }
     }
 
+    /** HTTP content backed by an entry in the war file. */
     private class JarContent implements HttpContent {
+        /** Path of the entry inside the war file. */
         private final String _path;
 
+        /**
+         * Builds the content for one war entry.
+         *
+         * @param path the path of the entry inside the war file
+         */
         public JarContent(String path) {
             _path = path;
         }

@@ -54,7 +54,9 @@ import net.i2p.crypto.SHA256Generator;
  */
 @SuppressWarnings("java:S2975")
 public class FortunaStandalone extends BasePRNGStandalone implements Serializable {
+    /** Fixed id, the generator is never serialized across versions. */
     private static final long serialVersionUID = 0xFACADE;
+    /** Bytes stored in the seed file. */
     private static final int SEED_FILE_SIZE = 64;
     /** Number of entropy pools. */
     static final int NUM_POOLS = 32;
@@ -147,10 +149,12 @@ public class FortunaStandalone extends BasePRNGStandalone implements Serializabl
         pool = (pool + 1) % NUM_POOLS;
     }
 
-    // Reading and writing this object is equivalent to storing and retrieving the seed.
     /**
-     * Write object.
-     * @param out the stream the SEED_FILE_SIZE bytes of generator state are written to
+     * Writes the generator state as SEED_FILE_SIZE bytes of seed, so that
+     * reading and writing this object is equivalent to storing and retrieving
+     * the seed.
+     *
+     * @param out the stream the seed bytes are written to
      * @throws IOException if the stream rejects the seed bytes or the write fails
      */
     private void writeObject(ObjectOutputStream out) throws IOException {
@@ -177,13 +181,19 @@ public class FortunaStandalone extends BasePRNGStandalone implements Serializabl
      */
     @SuppressWarnings("java:S2975")
     private static class Generator extends BasePRNGStandalone implements Cloneable {
+        /** Most bytes one generator instance may return. */
         private static final int LIMIT = 1 << 20;
+        /** The SHA-256 digest used for reseeding. */
         private final MessageDigest hash;
+        /** The counter incremented between generations. */
         private final byte[] counter;
+        /** The current 32-byte key. */
         private final byte[] key;
         /** Current encryption key built from the keying material. */
         private Object cryptixKey;
+        /** AES key buffer reused to avoid reallocating. */
         private CryptixAESKeyCache.KeyCacheEntry cryptixKeyBuf;
+        /** True once the generator has been seeded. */
         private boolean seeded;
 
         /** PRNG generator instance. */

@@ -35,6 +35,7 @@ import net.i2p.util.SecureFileOutputStream;
  * {@code router.info.rebuild} file is deleted.
  */
 class RebuildRouterInfoJob extends JobImpl {
+    /** Logger for this class. */
     private final Log _log;
 
 

@@ -11,13 +11,21 @@ import net.i2p.data.DataHelper;
  */
 class NTCP2Options {
 
+    /** Lowest padding ratio we will send at. */
     private final float _sendMin;
+    /** Highest padding ratio we will send at. */
     private final float _sendMax;
+    /** Lowest padding ratio we will accept. */
     private final float _recvMin;
+    /** Highest padding ratio we will accept. */
     private final float _recvMax;
+    /** Dummy data rate we send, in bytes per second. */
     private final int _sendDummy;
+    /** Dummy data rate we accept, in bytes per second. */
     private final int _recvDummy;
+    /** Delay we ask the peer to apply, in milliseconds. */
     private final int _sendDelay;
+    /** Delay we apply ourselves, in milliseconds. */
     private final int _recvDelay;
 
     /**

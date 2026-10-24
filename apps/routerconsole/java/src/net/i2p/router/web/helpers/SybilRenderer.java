@@ -53,16 +53,31 @@ import net.i2p.util.Translate;
  */
 public class SybilRenderer {
 
+    /** The router context. */
     private final RouterContext _context;
+    /** Logger for the sybil page. */
     private final Log _log;
+    /** Formatter for numbers with two decimals. */
     private static final DecimalFormat TWO_DECIMALS = new DecimalFormat("#0.00");
+    /**
+     * Formats a number with two decimals.
+     *
+     * @param val the number to format
+     * @return the formatted text
+     */
     private static String fmt(double val) { synchronized (TWO_DECIMALS) { return TWO_DECIMALS.format(val); } }
 
+    /** Maximum pairs counted per router. */
     private static final int PAIRMAX = Analysis.PAIRMAX;
+    /** Maximum points counted per router. */
     private static final int MAX = Analysis.MAX;
+    /** Minimum closeness counted as a match. */
     private static final double MIN_CLOSE = Analysis.MIN_CLOSE;
+    /** Minimum points shown on the page. */
     private static final double MIN_DISPLAY_POINTS = 20.0;
+    /** Hour ranges offered on the page. */
     private static final int[] HOURS = { 1, 3, 6, 12, 24, 7*24, 30*24, 0 };
+    /** Day ranges offered on the page. */
     private static final int[] DAYS = { 2, 7, 30, 90, 365, 0 };
 
     /**
@@ -90,11 +105,15 @@ public class SybilRenderer {
         return "";
     }
 
+    /** Orders router hashes by sybil points. */
     private static class PointsComparator implements Comparator<Hash>, Serializable {
+         /** The points, by router hash. */
          private final transient Map<Hash, Points> _points;
 
          /**
           * Orders hashes by sybil score, most points first.
+          *
+          * @param points the points to compare by, by router hash
           */
          public PointsComparator(Map<Hash, Points> points) {
              _points = points;
@@ -114,6 +133,9 @@ public class SybilRenderer {
      * @since 0.9.38
      */
     private static class ReasonComparator implements Comparator<String>, Serializable {
+          /** Orders the sybil reasons by weight. */
+          private ReasonComparator() {}
+
           /**
            * Orders two reason strings by their point count.
            */
@@ -819,10 +841,18 @@ public class SybilRenderer {
         writeBuf(out, buf);
     }
 
+    /**
+     * Orders keys by how many routers share each.
+     *
+     * @param <K> the key type compared
+     */
     private static class FooComparator<K extends Comparable> implements Comparator<K>, Serializable {
+         /** The routers, by key. */
          private final Map<K, List<RouterInfo>> _o;
          /**
           * Orders keys by how many routers share each, most first.
+          *
+          * @param o the routers, by key, to compare by
           */
          public FooComparator(Map<K, List<RouterInfo>> o) { _o = o;}
           /**
@@ -840,11 +870,16 @@ public class SybilRenderer {
         }
     }
 
+    /** Orders names by how many routers share each. */
     private static class FoofComparator implements Comparator<String>, Serializable {
+         /** The routers, by name. */
          private final Map<String, List<RouterInfo>> _o;
+         /** Collator comparing the names. */
          private final Collator _comp = Collator.getInstance();
          /**
           * Orders names by how many routers share each, most first.
+          *
+          * @param o the routers, by name, to compare by
           */
          public FoofComparator(Map<String, List<RouterInfo>> o) { _o = o;}
           /**
@@ -1197,6 +1232,13 @@ public class SybilRenderer {
         writeBuf(out, buf);
     }
 
+    /**
+     * Writes the buffer out and clears it.
+     *
+     * @param out where the text is written
+     * @param buf the buffer to write
+     * @throws IOException if the write fails
+     */
     private static void writeBuf(Writer out, StringBuilder buf) throws IOException {
         out.append(buf);
         out.flush();

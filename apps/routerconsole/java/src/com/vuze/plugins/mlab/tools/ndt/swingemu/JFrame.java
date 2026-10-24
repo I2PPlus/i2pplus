@@ -24,6 +24,7 @@ public class
 JFrame
 	extends Component
 {
+	/** The panel returned as this frame's content pane. */
 	private Panel content_pane = new Panel();
 
 	/**

@@ -26,6 +26,7 @@ import com.google.zxing.qrcode.decoder.Version;
  */
 final class MatrixUtil {
 
+  /** The 7 by 7 position detection pattern. */
   private static final int[][] POSITION_DETECTION_PATTERN = {
       {1, 1, 1, 1, 1, 1, 1},
       {1, 0, 0, 0, 0, 0, 1},
@@ -36,6 +37,7 @@ final class MatrixUtil {
       {1, 1, 1, 1, 1, 1, 1},
   };
 
+  /** The 5 by 5 position adjustment pattern. */
   private static final int[][] POSITION_ADJUSTMENT_PATTERN = {
       {1, 1, 1, 1, 1},
       {1, 0, 0, 0, 1},
@@ -44,7 +46,10 @@ final class MatrixUtil {
       {1, 1, 1, 1, 1},
   };
 
-  // From Appendix E. Table 1, JIS0510X:2004 (p 71). The table was double-checked by komatsu.
+  /**
+   * The adjustment pattern centers, by version, from JISX 0510,
+   * with the coordinates doubled.
+   */
   private static final int[][] POSITION_ADJUSTMENT_PATTERN_COORDINATE_TABLE = {
       {-1, -1, -1, -1,  -1,  -1,  -1},  // Version 1
       { 6, 18, -1, -1,  -1,  -1,  -1},  // Version 2
@@ -88,7 +93,10 @@ final class MatrixUtil {
       { 6, 30, 58, 86, 114, 142, 170},  // Version 40
   };
 
-  // Type info cells at the left top corner.
+  /**
+   * The type info bit positions in the matrix, copied at the top
+   * left corner.
+   */
   private static final int[][] TYPE_INFO_COORDINATES = {
       {8, 0},
       {8, 1},
@@ -107,13 +115,15 @@ final class MatrixUtil {
       {0, 8},
   };
 
-  // From Appendix D in JISX0510:2004 (p. 67)
+  /** Generator polynomial of the version bits, from JISX 0510. */
   private static final int VERSION_INFO_POLY = 0x1f25;  // 1 1111 0010 0101
 
-  // From Appendix C in JISX0510:2004 (p.65).
+  /** Generator polynomial of the type info bits, from JISX 0510. */
   private static final int TYPE_INFO_POLY = 0x537;
+  /** Mask XORed into the type info bits. */
   private static final int TYPE_INFO_MASK_PATTERN = 0x5412;
 
+  /** Prevents instantiating the utility class. */
   private MatrixUtil() {
     // do nothing
   }
@@ -371,11 +381,21 @@ final class MatrixUtil {
     }
   }
 
-  // Check if "value" is empty.
+  /**
+   * Checks whether a matrix cell is unset.
+   *
+   * @param value the cell value to check
+   * @return true if the cell is still empty
+   */
   private static boolean isEmpty(int value) {
     return value == -1;
   }
 
+  /**
+   * Draws the timing patterns into the matrix.
+   *
+   * @param matrix the matrix to draw on
+   */
   private static void embedTimingPatterns(ByteMatrix matrix) {
     // -8 is for skipping position detection patterns (size 7), and two horizontal/vertical
     // separation patterns (size 1). Thus, 8 = 7 + 1.
@@ -392,7 +412,12 @@ final class MatrixUtil {
     }
   }
 
-  // Embed the lonely dark dot at left bottom corner. JISX0510:2004 (p.46)
+  /**
+   * Draws the always dark bottom left module.
+   *
+   * @param matrix the matrix to draw on
+   * @throws WriterException if the module is already set
+   */
   private static void embedDarkDotAtLeftBottomCorner(ByteMatrix matrix) throws WriterException {
     if (matrix.get(8, matrix.getHeight() - 8) == 0) {
       throw new WriterException();
@@ -400,6 +425,14 @@ final class MatrixUtil {
     matrix.set(8, matrix.getHeight() - 8, 1);
   }
 
+  /**
+   * Draws the horizontal separator beside a pattern.
+   *
+   * @param xStart the left column of the separator
+   * @param yStart the top row of the separator
+   * @param matrix the matrix to draw on
+   * @throws WriterException if a module is already set
+   */
   private static void embedHorizontalSeparationPattern(int xStart,
                                                        int yStart,
                                                        ByteMatrix matrix) throws WriterException {
@@ -411,6 +444,14 @@ final class MatrixUtil {
     }
   }
 
+  /**
+   * Draws the vertical separator beside a pattern.
+   *
+   * @param xStart the left column of the separator
+   * @param yStart the top row of the separator
+   * @param matrix the matrix to draw on
+   * @throws WriterException if a module is already set
+   */
   private static void embedVerticalSeparationPattern(int xStart,
                                                      int yStart,
                                                      ByteMatrix matrix) throws WriterException {
@@ -422,6 +463,13 @@ final class MatrixUtil {
     }
   }
 
+  /**
+   * Draws one position adjustment pattern.
+   *
+   * @param xStart the left column of the pattern
+   * @param yStart the top row of the pattern
+   * @param matrix the matrix to draw on
+   */
   private static void embedPositionAdjustmentPattern(int xStart, int yStart, ByteMatrix matrix) {
     for (int y = 0; y < 5; ++y) {
       int[] patternY = POSITION_ADJUSTMENT_PATTERN[y];
@@ -431,6 +479,13 @@ final class MatrixUtil {
     }
   }
 
+  /**
+   * Draws one position detection pattern.
+   *
+   * @param xStart the left column of the pattern
+   * @param yStart the top row of the pattern
+   * @param matrix the matrix to draw on
+   */
   private static void embedPositionDetectionPattern(int xStart, int yStart, ByteMatrix matrix) {
     for (int y = 0; y < 7; ++y) {
       int[] patternY = POSITION_DETECTION_PATTERN[y];
@@ -440,7 +495,12 @@ final class MatrixUtil {
     }
   }
 
-  // Embed position detection patterns and surrounding vertical/horizontal separators.
+  /**
+   * Draws the three position detection patterns with their separators.
+   *
+   * @param matrix the matrix to draw on
+   * @throws WriterException if a module is already set
+   */
   private static void embedPositionDetectionPatternsAndSeparators(ByteMatrix matrix) throws WriterException {
     // Embed three big squares at corners.
     int pdpWidth = POSITION_DETECTION_PATTERN[0].length;
@@ -472,7 +532,12 @@ final class MatrixUtil {
         matrix);
   }
 
-  // Embed position adjustment patterns if need be.
+  /**
+   * Draws the adjustment patterns the version needs.
+   *
+   * @param version the QR code version
+   * @param matrix the matrix to draw on
+   */
   private static void maybeEmbedPositionAdjustmentPatterns(Version version, ByteMatrix matrix) {
     if (version.getVersionNumber() < 2) {  // The patterns appear if version >= 2
       return;

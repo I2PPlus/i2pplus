@@ -93,13 +93,19 @@ import net.i2p.util.SystemVersion;
  */
 public class Tuner extends SimpleTimer2.TimedEvent {
 
+    /** The router context supplying stats and config. */
     private final RouterContext _context;
+    /** Logger for this class. */
     private final Log _log;
+    /** The tunable parameters, in registration order. */
     private final List<TunableParam> _params;
+    /** The autotune settings read from the config. */
     private final AutotuneConfig _autotune;
     /** Transport worker thread params updated every 5s instead of the 15s cycle. */
     private final Set<TunableParam> _fastParams = new HashSet<TunableParam>();
+    /** Time of the last fast tuning pass. */
     private long _lastFastCycle;
+    /** Time of the last slow tuning pass. */
     private long _lastSlowCycle;
     /** Health from the most recent slow cycle, shared with fast-cycle params. */
     private SystemHealth _lastHealth;
@@ -145,6 +151,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /** Consecutive cycles at or above 75% of a core. */
         int streak;
 
+        /**
+         * Creates the CPU record for one named stage.
+         *
+         * @param name the stage name
+         */
         StageCpu(String name) { this.name = name; }
     }
 
@@ -315,6 +326,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             /** Entries in use. */
             int size;
 
+            /**
+             * Creates an open-addressed id table of the given capacity.
+             *
+             * @param capacity minimum number of ids it must hold
+             */
             Slots(int capacity) {
                 int cap = 64;
                 while (cap < capacity * 2) cap <<= 1;
@@ -325,6 +341,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 size = 0;
             }
 
+            /** Empties the table. */
             void clear() {
                 Arrays.fill(ids, EMPTY);
                 Arrays.fill(cpu, NO_CPU);
@@ -332,7 +349,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 size = 0;
             }
 
-            /** Slot holding {@code id}, or -1 when it is absent. */
+            /**
+             * Finds the slot holding the id in the open addressed table.
+             *
+             * @param id the id to look up
+             * @return the slot holding it, -1 when it is absent
+             */
             int index(long id) {
                 int idx = hash(id) & mask;
                 while (ids[idx] != EMPTY) {
@@ -342,6 +364,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 return -1;
             }
 
+            /**
+             * Records a build id with its stage and CPU time.
+             *
+             * @param id the build id to record
+             * @param stageVal the stage index
+             * @param cpuNs the CPU time used, in ns
+             * @return the slot the record was placed in
+             */
             int insert(long id, int stageVal, long cpuNs) {
                 if ((size + 1) * 2 > ids.length) rehash();
                 int idx = hash(id) & mask;
@@ -354,6 +384,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 return idx;
             }
 
+            /** Doubles the table and reinserts every record. */
             private void rehash() {
                 long[] oldIds = ids;
                 byte[] oldStage = stage;
@@ -462,6 +493,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          */
         int size() { return _live.size; }
 
+        /**
+         * Mixes an id into a table slot index.
+         *
+         * @param id the build id
+         * @return the slot index
+         */
         private static int hash(long id) {
             int h = (int) (id ^ (id >>> 32));
             h *= 0x9E3779B1;
@@ -567,6 +604,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * @since 0.9.72+
      */
     private static volatile int codelTargetMs = -1;
+    /** Cached CoDel interval in ms, -1 until first set. */
     private static volatile int codelIntervalMs = -1;
 
     /**
@@ -671,7 +709,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * The max dispatch age in ms.
-     * @return the max dispatch age in ms
+     * @return the age, in ms
      * @since 0.9.70+
      */
     public static int getMaxDispatchAgeMs() { return maxDispatchAgeMs; }
@@ -751,11 +789,15 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /** Transit subsystem identifier. */
     public static final String SUB_TRANSIT = "Transit";
 
-    // System capability factors for scaling defaults
+    /** Maximum heap available, in bytes. */
     private static final long MAX_MEMORY = SystemVersion.getMaxMemory();
+    /** CPU cores available. */
     private static final int CORES = SystemVersion.getCores();
+    /** True on a machine too slow for the default budgets. */
     private static final boolean IS_SLOW = SystemVersion.isSlow();
+    /** Memory scale factor, one per 256 MB of heap, at least 1. */
     private static final int MEM_FACTOR = Math.max(1, (int)(MAX_MEMORY / (256L * 1024 * 1024)));
+    /** Core count for scaling, at least 1. */
     private static final int CORE_FACTOR = Math.max(1, CORES);
 
     /**
@@ -801,7 +843,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     }
     /** ML-KEM precalc min/max — each pair ~3.5KB, scale with cores and memory. */
     private static final int MLKEM_FACTOR = Math.max(MEM_FACTOR, CORE_FACTOR);
+    /** Smallest ML-KEM precomputation pool allowed. */
     private static final int MLKEM_PRECALC_MIN = Math.max(512, 8 * MLKEM_FACTOR);
+    /** Largest ML-KEM precomputation pool allowed. */
     private static final int MLKEM_PRECALC_MAX = Math.max(16384, 64 * MLKEM_FACTOR);
 
     /**
@@ -818,9 +862,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     }
     /** X25519/EDH precalc — each pair ~64 bytes, scale with cores and memory. */
     private static final int XDH_FACTOR = Math.max(MEM_FACTOR, CORE_FACTOR);
+    /** Smallest X25519 precomputation pool allowed. */
     private static final int XDH_PRECALC_MIN = Math.max(256, 128 * XDH_FACTOR);
+    /** Largest X25519 precomputation pool allowed. */
     private static final int XDH_PRECALC_MAX = Math.max(32768, 2048 * XDH_FACTOR);
+    /** Smallest EDH precomputation pool allowed. */
     private static final int EDH_PRECALC_MIN = Math.max(128, 64 * XDH_FACTOR);
+    /** Largest EDH precomputation pool allowed. */
     private static final int EDH_PRECALC_MAX = Math.max(16384, 1024 * XDH_FACTOR);
 
     /**
@@ -874,12 +922,19 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * @since 0.9.70+
      */
     public static class AutotuneConfig {
+        /** File the tuned values are saved to. */
         private static final String FILENAME = "autotune.config";
+        /** Shortest time between saves of the tuned values. */
         private static final long SAVE_INTERVAL_MS = 5 * 60 * 1000L;
+        /** The autotune.config file. */
         private final File _file;
+        /** The tuned values read from or written to the file. */
         private final Properties _props;
+        /** Logger for this class. */
         private final Log _log;
+        /** True since a tuned value changed without a save. */
         private volatile boolean _dirty;
+        /** Time of the last save of the tuned values. */
         private volatile long _lastSaveMs;
 
         /**
@@ -894,6 +949,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             load();
         }
 
+        /** Reads the saved tuned values from the file. */
         private void load() {
             if (!_file.exists()) return;
             FileInputStream fis = null;
@@ -921,6 +977,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             write();
         }
 
+        /** Writes the tuned values to the file. */
         private void write() {
             FileOutputStream fos = null;
             try {
@@ -1378,7 +1435,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private final Map<String, Long> _lastParamFailureLog = new HashMap<>();
     /** Minimum gap between repeated failure logs for the same param, ms. */
     private static final long PARAM_FAILURE_LOG_INTERVAL_MS = 5L * 60 * 1000;
-    /** Counts params that threw during a tuning cycle. @see #noteParamUpdateFailure. */
+    /**
+     * Counts params that threw during a tuning cycle.
+     *
+     * @see #noteParamUpdateFailure
+     */
     static final String PARAM_UPDATE_FAILED_STAT = "tuner.paramUpdateFailed";
 
     /** Refresh XDH, EDH and MLKEM precomputation pool sizes. */
@@ -1552,7 +1613,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         return _lastHealthScore;
     }
 
+    /** Overall health score from the last computation, NaN before the first. */
     private volatile double _lastHealthScore = Double.NaN;
+    /** Per-subsystem scores from the last computation. */
     private volatile Map<String, double[]> _lastSubsystemScores = Collections.emptyMap();
 
     /**
@@ -1684,8 +1747,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     public interface TunableParam {
         /**
-         * The param name.
-         * @return the param name
+         * The unique name of this parameter.
+         * @return the name, as used in the config
          */
         String getName();
         /**
@@ -1732,7 +1795,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         void setOverride(int value);
         /**
          * Snapshot of this param.
-         * @return a snapshot of this param
+         * @return the snapshot for display
          */
         ParamSnapshot snapshot();
         /**
@@ -1880,9 +1943,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * @since 0.9.71+
          */
         private final String _keyMin;
+        /** Config key the tuned maximum is stored under. */
         private final String _keyMax;
+        /** Config key the tuned step is stored under. */
         private final String _keyStep;
+        /** Config key the tuned value is stored under. */
         private final String _keyValue;
+        /** Config key the original default is remembered under. */
         private final String _keyDefault;
         /** Default minimum value from code or config. */
         protected final int _defaultMin;
@@ -2168,12 +2235,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         public int getStep() { return _step; }
         /**
          * Default value.
-         * @return the default value
+         * @return the value before any tuning
          */
         public int getDefaultValue() { return _defaultValue; }
         /**
          * Whether auto-tuning is enabled.
-         * @return whether auto tuning
+         * @return true if auto-tuning is enabled
          */
         public boolean isAutoTuning() { return _autoTuning; }
 
@@ -2368,13 +2435,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /**
          * Rolling window of recent tunable values.
          *
-         * @return rolling window of recent tunable values
+         * @return the values, oldest first
          */
         public int[] getValueHistory() { return _valueHistory; }
         /**
          * Rolling window of recent stat values.
          *
-         * @return rolling window of recent stat values
+         * @return the stat values, oldest first
          */
         public double[] getStatHistory() { return _statHistory; }
 
@@ -2683,7 +2750,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          */
         protected double getCoDelDropEventCount(RouterContext ctx, String prefix) {
             // CoDelPriorityBlockingQueue priorities: {0, 100, 200, 300, 400, 500}
-            /** Priority level values for CoDel queue. */
             final int[] priorities = {0, 100, 200, 300, 400, 500};
             double total = 0;
             boolean found = false;
@@ -2788,8 +2854,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         /**
-         * Current value.
-         * @return the current value
+         * The value in effect right now.
+         * @return the runtime value
          */
         public int getCurrentValue() { return getRuntimeValue(); }
 
@@ -2811,7 +2877,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             }
         }
 
+        /** Health score below which the tuner reverts its changes. */
         private static final double DEGRADED_THRESHOLD = 0.3;
+        /** True once the tuner has reverted to defaults. */
         private boolean _reverted;
 
         /**
@@ -3374,12 +3442,24 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private static class StreamingReflector {
 
-        /** Call a static int getter via reflection. */
+        /** Mirrors the streaming parameters into the running context. */
+        private StreamingReflector() {}
+        /**
+         * Calls a static int getter via reflection.
+         *
+         * @param methodName the getter to call
+         * @return the value, -1 if it cannot be resolved
+         */
         static int invokeGetInt(String methodName) {
             return callStaticInt(reflectorTargetClass(methodName), methodName, -1);
         }
 
-        /** Call a static int setter via reflection. */
+        /**
+         * Calls a static int setter via reflection.
+         *
+         * @param methodName the setter to call
+         * @param value the value to set
+         */
         static void invokeSetInt(String methodName, int value) {
             callStaticSetInt(reflectorTargetClass(methodName), methodName, value);
         }
@@ -3394,31 +3474,56 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private static class I2PTunnelReflector {
 
-        /** Call a static int getter via reflection. */
+        /** Mirrors the tunnel parameters into the running context. */
+        private I2PTunnelReflector() {}
+        /**
+         * Calls a static int getter via reflection.
+         *
+         * @param methodName the getter to call
+         * @return the value, -1 if it cannot be resolved
+         */
         static int invokeGetInt(String methodName) {
             return callStaticInt(reflectorTargetClass(methodName), methodName, -1);
         }
 
         /**
-         * Call a static double getter via reflection.
+         * Calls a static double getter via reflection.
          * Returns {@code -1.0d} when the class or method cannot be resolved —
          * a sentinel the caller must treat as "no data", not as a measurement.
+         *
+         * @param methodName the getter to call
+         * @return the value, -1.0 if it cannot be resolved
          */
         static double invokeGetDouble(String methodName) {
             return callStaticDouble(reflectorTargetClass(methodName), methodName, -1.0d);
         }
 
-        /** Call a static int setter via reflection. */
+        /**
+         * Calls a static int setter via reflection.
+         *
+         * @param methodName the setter to call
+         * @param value the value to set
+         */
         static void invokeSetInt(String methodName, int value) {
             callStaticSetInt(reflectorTargetClass(methodName), methodName, value);
         }
 
-        /** Call a static long getter via reflection. */
+        /**
+         * Calls a static long getter via reflection.
+         *
+         * @param methodName the getter to call
+         * @return the value, -1 if it cannot be resolved
+         */
         static long invokeGetLong(String methodName) {
             return callStaticLong(reflectorTargetClass(methodName), methodName, -1L);
         }
 
-        /** Call a static long setter via reflection. */
+        /**
+         * Calls a static long setter via reflection.
+         *
+         * @param methodName the setter to call
+         * @param value the value to set
+         */
         static void invokeSetLong(String methodName, long value) {
             callStaticSetLong(reflectorTargetClass(methodName), methodName, value);
         }
@@ -3433,9 +3538,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * increase (fewer ACKs) when RTT is low and no loss.
      */
     private class AckFrequencyParam extends BaseParam {
+        /** Observed RTT below which the ACK interval is lowered, in ms. */
         private static final double LOW_THRESHOLD = 200;
+        /** Observed RTT above which the ACK interval is raised, in ms. */
         private static final double HIGH_THRESHOLD = 500;
 
+        /** Creates the parameter that tunes the ACK interval in packets. */
         AckFrequencyParam() {
             super("ACK_FREQUENCY", "ACK interval (packets)",
                   SUB_TRANSPORT, 50, 300, 10, "udp.sendConfirmTime", _context);
@@ -3502,6 +3610,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * {@code wip/decaying-filter-adaptive-sizing-20260928.md}.
          */
         private class TunnelIVFilterMParam extends BaseParam {
+            /** Creates the parameter that tunes the tunnel IV filter size as a bits exponent. */
             TunnelIVFilterMParam() {
                 super("i2p.tunnel.ivFilterM", "Tunnel IV filter size (bits exponent)",
                       SUB_TUNNEL,
@@ -3510,6 +3619,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                       null, BloomFilterIVValidator.DEFAULT_FILTER_M);
             }
 
+            /**
+             * Gives the sizer this parameter drives.
+             *
+             * @return the IV filter sizer
+             */
             private BloomFilterIVValidator.IVFilterSizer sizer() {
                 TunnelDispatcher td = _context.tunnelDispatcher();
                 if (td == null)
@@ -3541,7 +3655,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             }
 
             /**
-             * observed = entries in the last decay window.
+             * Observed is the number of entries in the last decay window.
              * Cross-refs: the live false positive rate and the heap pressure the
              *              sizer reads for itself.
              */
@@ -3565,6 +3679,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class DataMessageTimeoutParam extends BaseParam {
 
+        /** Creates the parameter that tunes the streaming data timeout in ms. */
         DataMessageTimeoutParam() {
             super("DATA_MESSAGE_TIMEOUT", "Streaming data timeout (ms)",
                   SUB_TRANSPORT, 15000, 120000, 2000, "udp.sendConfirmTime", _context);
@@ -3693,8 +3808,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         return Math.max(min, (int) (observed * 4));
     }
 
+    /** Tunes the outbound SSU2 handshake timeout. */
     private class ObEstablishTimeParam extends BaseParam {
 
+        /** Creates the parameter that tunes the outbound establish timeout in ms. */
         ObEstablishTimeParam() {
             super("MAX_OB_ESTABLISH_TIME", "Outbound establish timeout (ms)",
                   SUB_TRANSPORT,
@@ -3753,6 +3870,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class IbEstablishTimeParam extends BaseParam {
 
+        /** Creates the parameter that tunes the inbound establish timeout in ms. */
         IbEstablishTimeParam() {
             super("MAX_IB_ESTABLISH_TIME", "Inbound establish timeout (ms)",
                   SUB_TRANSPORT,
@@ -3817,6 +3935,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class NtcpEstablishTimeParam extends BaseParam {
 
+        /** Creates the parameter that tunes the NTCP handshake timeout in ms. */
         NtcpEstablishTimeParam() {
             super("NTCP_ESTABLISH_TIMEOUT", "NTCP establish timeout (ms)",
                   SUB_TRANSPORT,
@@ -3894,6 +4013,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class RdnsPoolSizeParam extends BaseParam {
 
+        /** Creates the parameter that tunes the rDNS executor thread count. */
         RdnsPoolSizeParam() {
             super("rdns.corePoolSize", "rDNS executor threads",
                   SUB_TRANSPORT,
@@ -3951,6 +4071,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class MaxDispatchAgeParam extends BaseParam {
 
+        /** Creates the parameter that tunes the maximum message queue age in ms. */
         MaxDispatchAgeParam() {
             super("i2p.router.maxDispatchAge", "Max message queue age (ms)",
                   SUB_TRANSPORT,
@@ -3973,7 +4094,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         /**
-         * The runtime value for this parameter.
+         * Sets the runtime value for this parameter.
+         *
+         * @param value the value to apply
          */
         protected void setRuntimeValue(int value) {
             setMaxDispatchAgeMs(value);
@@ -4060,6 +4183,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class HandlerThreadPriorityParam extends BaseParam {
 
+        /** Creates the parameter that tunes the I/O thread priority. */
         HandlerThreadPriorityParam() {
             super("i2p.router.handlerThreadPriority", "I/O thread priority",
                   SUB_TRANSPORT,
@@ -4141,6 +4265,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class RequeueTimeParam extends BaseParam {
 
+        /** Creates the parameter that tunes the tunnel pumper requeue delay in ms. */
         RequeueTimeParam() {
             super("REQUEUE_TIME", "Tunnel pumper requeue delay (ms)",
                   SUB_TUNNEL,
@@ -4213,6 +4338,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class PumperQueueCapacityParam extends BaseParam {
 
+        /** Creates the parameter that tunes the tunnel pumper queue capacity. */
         PumperQueueCapacityParam() {
             super("tunnel.pumper.queueCapacity", "Tunnel pumper queue capacity",
                   SUB_TUNNEL,
@@ -4281,6 +4407,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class PumperThreadsParam extends BaseParam {
 
+        /** Creates the parameter that tunes the tunnel pumper thread count. */
         PumperThreadsParam() {
             super("tunnel.pumper.threads", "Tunnel pumper threads",
                   SUB_TUNNEL,
@@ -4352,6 +4479,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class ReplenishFrequencyParam extends BaseParam {
 
+        /** Creates the parameter that tunes the bandwidth token refill interval in ms. */
         ReplenishFrequencyParam() {
             super("REPLENISH_FREQUENCY", "Bandwidth token refill interval (ms)",
                   SUB_TUNNEL,
@@ -4412,6 +4540,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class PumperIdleLpsParam extends BaseParam {
 
+        /** Creates the parameter that caps the NTCP pumper idle loops per second. */
         PumperIdleLpsParam() {
             super("ntcp.pumper.maxIdleLps", "NTCP pumper max idle loops/s",
                   SUB_TRANSPORT,
@@ -4465,6 +4594,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class SelectorLoopDelayParam extends BaseParam {
 
+        /** Creates the parameter that tunes the NTCP selector sleep in ms. */
         SelectorLoopDelayParam() {
             super("SELECTOR_LOOP_DELAY", "NTCP selector sleep (ms)",
                   SUB_TRANSPORT,
@@ -4548,6 +4678,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class ObMsgsPerPumpParam extends BaseParam {
 
+        /** Creates the parameter that tunes the outbound gateway batch size. */
         ObMsgsPerPumpParam() {
             super("MAX_OB_MSGS_PER_PUMP", "Outbound gateway batch size",
                   SUB_TUNNEL,
@@ -4617,6 +4748,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class IbMsgsPerPumpParam extends BaseParam {
 
+        /** Creates the parameter that tunes the inbound gateway batch size. */
         IbMsgsPerPumpParam() {
             super("MAX_IB_MSGS_PER_PUMP", "Inbound gateway batch size",
                   SUB_TUNNEL,
@@ -4691,6 +4823,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class InitialWindowSizeParam extends BaseParam {
 
+        /** Creates the parameter that tunes the initial congestion window. */
         InitialWindowSizeParam() {
             super("INITIAL_WINDOW_SIZE", "Initial congestion window",
                   SUB_STREAMING,
@@ -4806,6 +4939,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class InitialRTOParam extends BaseParam {
 
+        /** Creates the parameter that tunes the first retransmit timeout in ms. */
         InitialRTOParam() {
             super("INITIAL_RTO", "First retransmit timeout (ms)",
                     SUB_STREAMING,
@@ -4920,6 +5054,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class StreamingReceiveWorkersParam extends BaseParam {
 
+        /** Creates the parameter that tunes the streaming receive worker threads. */
         StreamingReceiveWorkersParam() {
             super("i2p.streaming.receiveWorkerThreads", "Receive worker threads",
                   SUB_STREAMING,
@@ -4983,6 +5118,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class ConnectTimeoutMultiplierParam extends BaseParam {
 
+        /** Creates the parameter that scales the connect timeout, 30 to 200 percent. */
         ConnectTimeoutMultiplierParam() {
             super("CONNECT_TIMEOUT_MULTIPLIER", "Connect timeout multiplier (30-200%)",
                   SUB_STREAMING,
@@ -5028,6 +5164,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class MaxInboundBufferParam extends BaseParam {
 
+        /** Creates the parameter that tunes the streaming inbound buffer cap in bytes. */
         MaxInboundBufferParam() {
             super("i2p.streaming.maxInboundBuffer", "Max inbound buffer (bytes)",
                     SUB_STREAMING,
@@ -5096,6 +5233,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class InitialAckDelayParam extends BaseParam {
 
+        /** Creates the parameter that tunes the piggyback ACK wait in ms. */
         InitialAckDelayParam() {
             super("INITIAL_ACK_DELAY", "Piggyback ACK wait (ms)",
                     SUB_STREAMING,
@@ -5164,6 +5302,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class PassiveFlushDelayParam extends BaseParam {
 
+        /** Creates the parameter that tunes the Nagle flush delay in ms. */
         PassiveFlushDelayParam() {
             super("PASSIVE_FLUSH_DELAY", "Nagle flush delay (ms)",
                     SUB_STREAMING,
@@ -5232,6 +5371,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class MaxSlowStartWindowParam extends BaseParam {
 
+        /** Creates the parameter that caps the streaming slow start window. */
         MaxSlowStartWindowParam() {
             super("i2p.streaming.maxSlowStartWindow", "Streaming slow start cap",
                     SUB_STREAMING,
@@ -5795,6 +5935,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class TimerThreadsParam extends BaseParam {
 
+        /** Creates the parameter that tunes the timer thread count. */
         TimerThreadsParam() {
             // No observed stat: the timer reports its own backlog directly rather
             // than through a RateStat, so the reading is exact and costs nothing.
@@ -5847,8 +5988,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /** Backlog at or below which the timer releases a worker, in ms. */
     private static final int TIMER_SHRINK_MS = 1_000;
 
+    /** Tunes the streaming maximum congestion window, scaled to available memory. */
     private class MaxWindowSizeParam extends BaseParam {
 
+        /** Creates the parameter that tunes the streaming max window size. */
         MaxWindowSizeParam() {
             super("i2p.streaming.maxWindowSize", "Streaming max window size",
                     SUB_STREAMING,
@@ -6027,6 +6170,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class WriterQueueSizeParam extends BaseParam {
 
+        /** Creates the parameter that tunes the I2CP write queue in messages. */
         WriterQueueSizeParam() {
             super("CLIENT_WRITER_QUEUE_SIZE", "I2CP write queue (messages)",
                   SUB_I2CP,
@@ -6103,6 +6247,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class CodelTargetParam extends BaseParam {
 
+        /** Creates the parameter that tunes the CoDel queuing target. */
         CodelTargetParam() {
             super("CODEL_TARGET",
                   "CoDel drop target",
@@ -6173,6 +6318,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class CodelIntervalParam extends BaseParam {
 
+        /** Creates the parameter that tunes the CoDel sliding interval. */
         CodelIntervalParam() {
             super("CODEL_INTERVAL",
                   "CoDel measurement window",
@@ -6239,6 +6385,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class WestwoodDecayFactorParam extends BaseParam {
 
+        /** Creates the parameter that tunes the Westwood window decay factor. */
         WestwoodDecayFactorParam() {
             super("WESTWOOD_DECAY_FACTOR",
                   "Westwood EWMA smoothing",
@@ -6295,6 +6442,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class REDMinThresholdParam extends BaseParam {
 
+        /** Creates the parameter that tunes the RED drop floor. */
         REDMinThresholdParam() {
             super("RED_MIN_THRESHOLD",
                   "RED min queue threshold",
@@ -6371,6 +6519,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class REDMaxThresholdParam extends BaseParam {
 
+        /** Creates the parameter that tunes the RED drop ceiling. */
         REDMaxThresholdParam() {
             super("RED_MAX_THRESHOLD",
                   "RED max queue threshold",
@@ -6454,6 +6603,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class REDMaxDropProbParam extends BaseParam {
 
+        /** Creates the parameter that caps the RED drop probability. */
         REDMaxDropProbParam() {
             // Convert float probability to integer micro-units for BaseParam (long integer type)
             // 0.005f = 5000 micro-units, min 100 (0.01%), max 50000 (5%), step 1000
@@ -6523,6 +6673,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class XDHPreCalcMinParam extends BaseParam {
 
+        /** Creates the parameter that tunes the minimum precomputed X25519 key pairs. */
         XDHPreCalcMinParam() {
             super("crypto.x25519.precalcMin", "Min precomputed X25519 key pairs",
                   SUB_CRYPTO,
@@ -6586,6 +6737,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class EDHPreCalcMinParam extends BaseParam {
 
+        /** Creates the parameter that tunes the minimum precomputed EDH key pairs. */
         EDHPreCalcMinParam() {
             super("crypto.edh.precalcMin", "Min precomputed EDH key pairs",
                   SUB_CRYPTO,
@@ -6643,6 +6795,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class MLKEMPreCalcMinParam extends BaseParam {
 
+        /** Creates the parameter that tunes the minimum precomputed ML-KEM key pairs. */
         MLKEMPreCalcMinParam() {
             super("crypto.mlkem.precalcMin", "Min precomputed ML-KEM key pairs",
                   SUB_CRYPTO,
@@ -6719,6 +6872,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class NTCPQueueCapacityParam extends BaseParam {
 
+        /** Creates the parameter that tunes the NTCP send queue capacity. */
         NTCPQueueCapacityParam() {
             super("ntcp.sendFinisher.queueCapacity", "NTCP send queue capacity",
                   SUB_TRANSPORT,
@@ -6793,6 +6947,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class UDPHandlerThreadsParam extends BaseParam {
 
+        /** Creates the parameter that caps the UDP packet handler threads. */
         UDPHandlerThreadsParam() {
             super("udp.packetHandler.maxThreads", "Max UDP packet handler threads",
                   SUB_TRANSPORT,
@@ -6895,6 +7050,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class UDPMessageReceiverThreadsParam extends BaseParam {
 
+        /** Creates the parameter that tunes the UDP message receiver threads. */
         UDPMessageReceiverThreadsParam() {
             super("udp.messageReceiver.threads", "UDP message receiver threads",
                   SUB_TRANSPORT,
@@ -7005,6 +7161,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class SentMessagesCleanTimeParam extends BaseParam {
 
+        /** Creates the parameter that tunes the SSU2 sent-message ACK sweep interval. */
         SentMessagesCleanTimeParam() {
             super("udp.peer.sentMessagesCleanTime", "SSU2 sent-messages ACK sweep interval",
                   SUB_TRANSPORT,
@@ -7074,6 +7231,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class OutboundMsgExpirationParam extends BaseParam {
 
+        /** Creates the parameter that tunes the outbound message expiration timeout. */
         OutboundMsgExpirationParam() {
             super("udp.peer.outboundMsgExpiration", "Outbound message expiration timeout",
                   SUB_TRANSPORT,
@@ -7138,6 +7296,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class PeerOutboundQueueParam extends BaseParam {
 
+        /** Creates the parameter that caps router outbound messages per peer. */
         PeerOutboundQueueParam() {
             super("router.peerOutboundQueueSize", "Max router outbound messages (per peer)",
                   SUB_ROUTER,
@@ -7211,6 +7370,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class TransitThrottleFactorParam extends BaseParam {
 
+        /** Creates the parameter that tunes how aggressively transit load is throttled. */
         TransitThrottleFactorParam() {
             super("router.transitThrottleFactor", "Transit throttle aggressiveness",
                   SUB_ROUTER,
@@ -7308,6 +7468,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class MessageProcessingThrottleParam extends BaseParam {
 
+        /** Creates the parameter that tunes the message processing time throttle in ms. */
         MessageProcessingThrottleParam() {
             super("router.defaultProcessingTimeThrottle", "Message processing throttle (ms)",
                   SUB_ROUTER,
@@ -7373,6 +7534,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class ThrottleRejectExponentParam extends BaseParam {
 
+        /** Creates the parameter that tunes the steepness of the rejection curve. */
         ThrottleRejectExponentParam() {
             super("router.throttleRejectExponent", "Rejection curve steepness",
                   SUB_ROUTER,
@@ -7441,6 +7603,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class PerTunnelBweDivisorParam extends BaseParam {
 
+        /** Creates the parameter that divides bandwidth estimates across tunnels. */
         PerTunnelBweDivisorParam() {
             // Cap at 40 so even on high-bandwidth routers each tunnel gets ≥2.5% of share.
             // Higher values starve individual tunnels — the per-tunnel floor does not compensate.
@@ -7512,6 +7675,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class TunnelGrowthFactorParam extends BaseParam {
 
+        /** Creates the parameter that tunes how far tunnels may grow past their share. */
         TunnelGrowthFactorParam() {
             super("router.tunnelGrowthFactor", "Tunnel growth tolerance",
                   SUB_TRANSIT,
@@ -7567,6 +7731,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class MaxParticipatingTunnelsParam extends BaseParam {
 
+        /** Creates the parameter that caps the tunnels used for transit. */
         MaxParticipatingTunnelsParam() {
             super("router.maxParticipatingTunnels", "Max transit tunnels",
                   SUB_ROUTER,
@@ -7645,6 +7810,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class BuildHandlerMaxQueueParam extends BaseParam {
 
+        /** Creates the parameter that tunes the tunnel build handler queue size. */
         BuildHandlerMaxQueueParam() {
             super("router.buildHandlerMaxQueue", "Tunnel build handler queue",
                   SUB_ROUTER,
@@ -7712,6 +7878,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class GoodDeficitThrottleParam extends BaseParam {
 
+        /** Creates the parameter that throttles rebuilds of good tunnels, in ms. */
         GoodDeficitThrottleParam() {
             super("i2p.tunnel.goodDeficitThrottle", "Rebuild throttle interval (ms)",
                   SUB_ROUTER,
@@ -7784,6 +7951,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class MaxRTOParam extends BaseParam {
 
+        /** Creates the parameter that caps the streaming retransmit timeout in ms. */
         MaxRTOParam() {
             super("i2p.streaming.maxRTO", "Streaming max RTO (ms)",
                   SUB_STREAMING,
@@ -7841,6 +8009,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class RTOMultiplierParam extends BaseParam {
 
+        /** Creates the parameter that tunes the RTO backoff multiplier in percent. */
         RTOMultiplierParam() {
             super("i2p.streaming.rtoMultiplier", "RTO backoff multiplier (%)",
                   SUB_STREAMING,
@@ -7901,6 +8070,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class MaxResendDelayParam extends BaseParam {
 
+        /** Creates the parameter that caps the streaming resend delay in ms. */
         MaxResendDelayParam() {
             super("i2p.streaming.maxResendDelay", "Streaming max resend delay (ms)",
                   SUB_STREAMING,
@@ -7958,6 +8128,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class MaxRetransmissionsParam extends BaseParam {
 
+        /** Creates the parameter that caps the streaming retransmission count. */
         MaxRetransmissionsParam() {
             super("i2p.streaming.maxRetransmissions", "Streaming max retransmissions",
                   SUB_STREAMING,
@@ -8021,6 +8192,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class MinResendDelayParam extends BaseParam {
 
+        /** Creates the parameter that floors the streaming resend delay in ms. */
         MinResendDelayParam() {
             super("i2p.streaming.minResendDelay", "Streaming min resend delay (ms)",
                   SUB_STREAMING,
@@ -8083,6 +8255,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class CongestionAvoidanceGrowthParam extends BaseParam {
 
+        /** Creates the parameter that tunes the streaming congestion-avoidance growth rate. */
         CongestionAvoidanceGrowthParam() {
             super("i2p.streaming.congestionAvoidanceGrowthRateFactor", "Streaming CA growth rate",
                   SUB_STREAMING,
@@ -8260,6 +8433,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class SlowStartGrowthParam extends BaseParam {
 
+        /** Creates the parameter that tunes the streaming slow-start growth rate. */
         SlowStartGrowthParam() {
             super("i2p.streaming.slowStartGrowthRateFactor", "Streaming SS growth rate",
                   SUB_STREAMING,
@@ -8410,6 +8584,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class MinPacingRateParam extends BaseParam {
 
+        /** Creates the parameter that floors the pacing rate in KB/s. */
         MinPacingRateParam() {
             super("i2p.streaming.minPacingRate", "Min pacing rate (KB/s)",
                   SUB_STREAMING,
@@ -8471,6 +8646,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class MaxRttParam extends BaseParam {
 
+        /** Creates the parameter that caps the streaming RTT estimate in ms. */
         MaxRttParam() {
             super("i2p.streaming.maxRtt", "Streaming RTT cap (ms)",
                   SUB_STREAMING,
@@ -8527,6 +8703,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class InitialResendDelayParam extends BaseParam {
 
+        /** Creates the parameter that tunes the first streaming resend delay in ms. */
         InitialResendDelayParam() {
             super("i2p.streaming.initialResendDelay", "Streaming initial resend delay (ms)",
                   SUB_STREAMING,
@@ -8581,6 +8758,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class ImmediateAckDelayParam extends BaseParam {
 
+        /** Creates the parameter that tunes the duplicate ACK delay in ms. */
         ImmediateAckDelayParam() {
             super("i2p.streaming.immediateAckDelay", "Streaming dup ACK delay (ms)",
                   SUB_STREAMING,
@@ -8642,6 +8820,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class InactivityTimeoutParam extends BaseParam {
 
+        /** Creates the parameter that tunes the streaming inactivity timeout in ms. */
         InactivityTimeoutParam() {
             super("i2p.streaming.inactivityTimeout", "Streaming inactivity timeout (ms)",
                   SUB_STREAMING,
@@ -8698,6 +8877,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class MaxSynResendsParam extends BaseParam {
 
+        /** Creates the parameter that caps streaming SYN retransmissions. */
         MaxSynResendsParam() {
             super("i2p.streaming.maxSynResends", "Streaming max SYN sends",
                   SUB_STREAMING,
@@ -8763,6 +8943,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class MaxStreamsParam extends BaseParam {
 
+        /** Creates the parameter that caps concurrent streams. */
         MaxStreamsParam() {
             super("MAX_STREAMS", "Concurrent stream cap (streams)",
                   SUB_STREAMING,
@@ -8979,6 +9160,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class NetDBSearchLimitParam extends BaseParam {
 
+        /** Creates the parameter that tunes the NetDB search candidate limit. */
         NetDBSearchLimitParam() {
             // 16..40 brackets the untuned values (32 normally, 24 on a floodfill);
             // the old 8..24 range sat entirely below stock, so the tuner could only
@@ -9047,6 +9229,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class NetDBMaxSearchTimeParam extends BaseParam {
 
+        /** Creates the parameter that tunes the total NetDB search time budget in ms. */
         NetDBMaxSearchTimeParam() {
             // Floor is the untuned default (15s). The old 10s floor let the tuner
             // cut the cap below stock, which is where live routers were pinning it
@@ -9123,6 +9306,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class NetDBMaxConcurrentParam extends BaseParam {
 
+        /** Creates the parameter that caps concurrent NetDB searches. */
         NetDBMaxConcurrentParam() {
             super("netdb.maxConcurrent", "NetDB max concurrent searches",
                   SUB_NETDB,
@@ -9188,6 +9372,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class NetDBSingleSearchTimeParam extends BaseParam {
 
+        /** Creates the parameter that tunes one NetDB search round in ms. */
         NetDBSingleSearchTimeParam() {
             // 2500..8000 brackets the untuned SINGLE_SEARCH_TIME of 6s. The old
             // 1000ms floor was a sixth of stock, and live routers were pinned there
@@ -9265,6 +9450,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class LsLookupTimeoutParam extends BaseParam {
 
+        /** Creates the parameter that tunes the LeaseSet lookup timeout in ms. */
         LsLookupTimeoutParam() {
             super("MAX_LS_LOOKUP_TIME", "LeaseSet lookup timeout (ms)",
                   SUB_NETDB,
@@ -9358,6 +9544,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class RiLookupTimeoutParam extends BaseParam {
 
+        /** Creates the parameter that tunes the RouterInfo lookup timeout in ms. */
         RiLookupTimeoutParam() {
             // Primary signal is netDb.successTime: "Time for successful NetDb lookup"
             // (RouterInfo AND LeaseSet), which fires on every successful iterative
@@ -9469,6 +9656,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class ResendTimeoutParam extends BaseParam {
 
+        /** Creates the parameter that tunes the NetDB republish window in ms. */
         ResendTimeoutParam() {
             // Floor 15s: the untuned value is 30s and a 5s window was measured to
             // drop the heal stores outright, so the tuner may relax only this far.
@@ -9532,6 +9720,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class LeaseResendCountParam extends BaseParam {
 
+        /** Creates the parameter that tunes the lease republish fanout. */
         LeaseResendCountParam() {
             super("netdb.leaseResendCount", "Lease republish fanout",
                   SUB_NETDB,
@@ -9586,6 +9775,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class ExploreBredthParam extends BaseParam {
 
+        /** Creates the parameter that tunes the exploratory search breadth. */
         ExploreBredthParam() {
             super("router.exploreBredth", "Exploratory search breadth",
                   SUB_NETDB,
@@ -9643,6 +9833,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class MaxConcurrentEstablishParam extends BaseParam {
 
+        /** Creates the parameter that caps concurrent I2NP handshakes. */
         MaxConcurrentEstablishParam() {
             super("i2np.udp.maxConcurrentEstablish", "I2NP max concurrent handshakes",
                   SUB_TRANSPORT,
@@ -9723,6 +9914,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class MaxProfilesParam extends BaseParam {
 
+        /** Creates the parameter that caps the peer profiles kept in RAM. */
         MaxProfilesParam() {
             super("profileOrganizer.maxProfiles", "Max peer profiles in RAM",
                   SUB_PEER,
@@ -9797,6 +9989,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class MinFastPeersParam extends BaseParam {
 
+        /** Creates the parameter that floors the fast-tier peer count. */
         MinFastPeersParam() {
             super("profileOrganizer.minFastPeers", "Min fast-tier peers",
                   SUB_PEER,
@@ -9879,6 +10072,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /** Config property for the multiplier over the average peer loss ratio. */
         private static final String PROP_LOSSY_FACTOR = "profileOrganizer.lossyFactor";
 
+        /** Creates the parameter that sets the lossy-peer demotion threshold in percent. */
         LossyThresholdParam() {
             super("profileOrganizer.lossyThreshold", "Lossy peer demotion threshold (%)",
                   SUB_PEER,
@@ -9912,6 +10106,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class MaxFastPeersParam extends BaseParam {
 
+        /** Creates the parameter that caps the fast-tier peer count. */
         MaxFastPeersParam() {
             super("profileOrganizer.maxFastPeers", "Max fast-tier peers",
                   SUB_PEER,
@@ -9970,6 +10165,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class MinHighCapPeersParam extends BaseParam {
 
+        /** Creates the parameter that floors the high-capacity peer count. */
         MinHighCapPeersParam() {
             super("profileOrganizer.minHighCapacityPeers", "Min high-capacity peers",
                   SUB_PEER,
@@ -10034,6 +10230,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class MaxHighCapPeersParam extends BaseParam {
 
+        /** Creates the parameter that caps the high-capacity peer count. */
         MaxHighCapPeersParam() {
             super("profileOrganizer.maxHighCapacityPeers", "Max high-capacity peers",
                   SUB_PEER,
@@ -10104,6 +10301,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class BuildRequestTimeoutParam extends BaseParam {
 
+        /** Creates the parameter that tunes the build request reply timeout in ms. */
         BuildRequestTimeoutParam() {
             super("i2p.tunnel.build.requestTimeout", "Build request reply timeout (ms)",
                   SUB_ROUTER,
@@ -10218,6 +10416,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class BuildFirstHopTimeoutParam extends BaseParam {
 
+        /** Creates the parameter that tunes the build first-hop delivery timeout in ms. */
         BuildFirstHopTimeoutParam() {
             super("i2p.tunnel.build.firstHopTimeout", "Build first-hop delivery timeout (ms)",
                   SUB_ROUTER,
@@ -10312,6 +10511,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class MaxConcurrentBuildsParam extends BaseParam {
 
+        /** Creates the parameter that caps concurrent tunnel builds. */
         MaxConcurrentBuildsParam() {
             super("tunnel.build.maxConcurrent", "Tunnel max concurrent builds",
                   SUB_TUNNEL,
@@ -10503,6 +10703,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class ActivityWindowParam extends BaseParam {
 
+        /** Creates the parameter that multiplies the peer selection activity window. */
         ActivityWindowParam() {
             super("tunnel.peerSelection.activityWindowMultiplier",
                   "Peer activity window multiplier",
@@ -10576,6 +10777,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class LookupLimitParam extends BaseParam {
 
+        /** Creates the parameter that caps concurrent RouterInfo lookups for builds. */
         LookupLimitParam() {
             super("i2p.tunnel.build.maxLookupLimit", "Tunnel max concurrent RI lookups",
                   SUB_TUNNEL,
@@ -10642,6 +10844,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class PercentLookupLimitParam extends BaseParam {
 
+        /** Creates the parameter that tunes the next-hop lookup share in percent. */
         PercentLookupLimitParam() {
             super("i2p.tunnel.build.percentLookupLimit", "Tunnel next-hop lookup %",
                   SUB_TUNNEL,
@@ -10738,6 +10941,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class NtcpReaderThreadsParam extends BaseParam {
 
+        /** Creates the parameter that tunes the NTCP reader threads. */
         NtcpReaderThreadsParam() {
             super("ntcp.reader.threads", "NTCP reader threads",
                   SUB_TRANSPORT,
@@ -10844,6 +11048,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class NtcpWriterThreadsParam extends BaseParam {
 
+        /** Creates the parameter that tunes the NTCP writer threads. */
         NtcpWriterThreadsParam() {
             super("ntcp.writer.threads", "NTCP writer threads",
                   SUB_TRANSPORT,
@@ -10951,6 +11156,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class NtcpFailsafeFreqParam extends BaseParam {
 
+        /** Creates the parameter that tunes the NTCP pumper failsafe interval in ms. */
         NtcpFailsafeFreqParam() {
             super("ntcp.failsafe.iterationFreq", "NTCP pumper failsafe interval (ms)",
                   SUB_TRANSPORT,
@@ -11016,6 +11222,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class NtcpSendFinisherThreadsParam extends BaseParam {
 
+        /** Creates the parameter that tunes the NTCP send finisher threads. */
         NtcpSendFinisherThreadsParam() {
             super("ntcp.sendFinisher.threads", "NTCP send finisher threads",
                   SUB_TRANSPORT,
@@ -11098,6 +11305,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class MaxConcurrentMessagesParam extends BaseParam {
 
+        /** Creates the parameter that caps concurrent UDP messages per peer. */
         MaxConcurrentMessagesParam() {
             super("udp.peer.concurrentMaxMessages", "Max UDP concurrent messages",
                   SUB_TRANSPORT,
@@ -11245,6 +11453,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * Dynamic ceiling based on current free heap, so we never push the
          * initial concurrency higher than the JVM can currently sustain even
          * if the constructor ceiling was computed against a larger max heap.
+         *
+         * @return the concurrency ceiling scaled to the current heap
          */
         private int memoryScaledMax() {
             Runtime rt = Runtime.getRuntime();
@@ -11285,6 +11495,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class MinConcurrentMsgsParam extends BaseParam {
 
+        /** Creates the parameter that floors the concurrent UDP messages per peer. */
         MinConcurrentMsgsParam() {
             super("udp.peer.minConcurrentMsgs", "Min UDP concurrent messages",
                   SUB_TRANSPORT,
@@ -11329,6 +11540,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class InitRTOParam extends BaseParam {
 
+        /** Creates the parameter that tunes the initial UDP retransmit timeout in ms. */
         InitRTOParam() {
             super("udp.peer.initRTO", "Initial UDP RTO (ms)",
                   SUB_TRANSPORT,
@@ -11388,6 +11600,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class MinRTOParam extends BaseParam {
 
+        /** Creates the parameter that floors the UDP retransmit timeout in ms. */
         MinRTOParam() {
             super("udp.peer.minRTO", "Min UDP RTO (ms)",
                   SUB_TRANSPORT,
@@ -11458,6 +11671,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class UdpMaxRtoParam extends BaseParam {
 
+        /** Creates the parameter that caps the UDP retransmit timeout in ms. */
         UdpMaxRtoParam() {
             super("udp.peer.maxRTO", "Max UDP RTO (ms)",
                   SUB_TRANSPORT,
@@ -11535,6 +11749,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class MaxSendWindowParam extends BaseParam {
 
+        /** Creates the parameter that caps the UDP send window in bytes. */
         MaxSendWindowParam() {
             super("udp.peer.maxSendWindow", "Max UDP send window (bytes)",
                   SUB_TRANSPORT,
@@ -11760,6 +11975,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class PostRTOWindowParam extends BaseParam {
 
+        /** Creates the parameter that tunes the post-RTO restart window in MTUs. */
         PostRTOWindowParam() {
             super("udp.peer.postRTOWindowMTUs", "Post-RTO window restart (MTUs)",
                   SUB_CONGESTION,
@@ -11829,6 +12045,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     private class SendPoolCapacityParam extends BaseParam {
 
+/** Creates the parameter that tunes the NTCP send pool capacity. */
 SendPoolCapacityParam() {
             super("ntcp.sendPool.capacity", "NTCP send pool capacity",
                   SUB_TRANSPORT,
@@ -11965,6 +12182,7 @@ protected int computeTarget(double observed) {
      */
     private class InternalQueueSizeParam extends BaseParam {
 
+        /** Creates the parameter that tunes the I2CP internal queue in messages. */
         InternalQueueSizeParam() {
             super("i2cp.internalQueueSize", "I2CP internal queue (messages)",
                   SUB_I2CP,
@@ -12039,6 +12257,7 @@ protected int computeTarget(double observed) {
      */
     private class MaxQueuedOutboundParam extends BaseParam {
 
+        /** Creates the parameter that caps pending UDP handshakes. */
         MaxQueuedOutboundParam() {
             super("udp.establish.maxQueuedOutbound", "Max pending UDP handshakes",
                   SUB_TRANSPORT,
@@ -12102,6 +12321,7 @@ protected int computeTarget(double observed) {
      */
     private class MaxWriteBufsParam extends BaseParam {
 
+        /** Creates the parameter that caps NTCP write buffers per connection. */
         MaxWriteBufsParam() {
             super("ntcp.maxWriteBufs", "NTCP max write buffers per connection",
                   SUB_TRANSPORT,
@@ -12186,6 +12406,7 @@ protected int computeTarget(double observed) {
      */
     private class TestJobMaxQueuedParam extends BaseParam {
 
+        /** Creates the parameter that caps concurrent tunnel test jobs. */
         TestJobMaxQueuedParam() {
             super("tunnel.testJob.maxQueued", "Tunnel max concurrent test jobs",
                   SUB_TUNNEL,
@@ -12249,6 +12470,7 @@ protected int computeTarget(double observed) {
      */
     private class TestJobMinDelayParam extends BaseParam {
 
+        /** Creates the parameter that floors the tunnel test delay in ms. */
         TestJobMinDelayParam() {
             super("tunnel.testJob.minTestDelay", "Tunnel min test delay (ms)",
                   SUB_TUNNEL,
@@ -12318,6 +12540,7 @@ protected int computeTarget(double observed) {
      */
     private class TestJobMaxDelayParam extends BaseParam {
 
+        /** Creates the parameter that caps the tunnel test delay in ms. */
         TestJobMaxDelayParam() {
             super("tunnel.testJob.maxTestDelay", "Tunnel max test delay (ms)",
                   SUB_TUNNEL,
@@ -12385,6 +12608,7 @@ protected int computeTarget(double observed) {
      */
     private class TestJobMaxPeriodParam extends BaseParam {
 
+        /** Creates the parameter that tunes the tunnel test failure window in ms. */
         TestJobMaxPeriodParam() {
             super("i2p.tunnel.testJob.maxTestPeriod", "Tunnel test failure window (ms)",
                   SUB_TUNNEL,
@@ -12446,6 +12670,7 @@ protected int computeTarget(double observed) {
      */
     private class TestJobMinPeriodParam extends BaseParam {
 
+        /** Creates the parameter that floors the tunnel test failure window in ms. */
         TestJobMinPeriodParam() {
             super("i2p.tunnel.testJob.minTestPeriod", "Tunnel test failure window floor (ms)",
                   SUB_TUNNEL,
@@ -12496,6 +12721,7 @@ protected int computeTarget(double observed) {
      * @since 0.9.70+
      */
     private class I2PTunnelServerHandlerThreadsParam extends BaseParam {
+        /** Creates the parameter that tunes the shared I2PTunnel server handler threads. */
         I2PTunnelServerHandlerThreadsParam() {
 
             super("i2ptunnel.serverHandler.threads", "I2PTunnel server threads",
@@ -12792,6 +13018,7 @@ protected int computeTarget(double observed) {
      * @since 0.9.71+
      */
     private class I2PTunnelServerThreadsParam extends BaseParam {
+        /** Creates the parameter that tunes the default per-tunnel I2PTunnel server threads. */
         I2PTunnelServerThreadsParam() {
             super("i2ptunnel.server.threads", "I2PTunnel server threads per tunnel (default)",
                   SUB_TUNNEL,
@@ -12842,6 +13069,7 @@ protected int computeTarget(double observed) {
      */
     private class I2PTunnelServerBacklogParam extends BaseParam {
 
+        /** Creates the parameter that tunes the I2PTunnel server queue capacity. */
         I2PTunnelServerBacklogParam() {
             super("i2ptunnel.serverHandler.queueCapacity", "I2PTunnel server queue capacity",
                   SUB_TUNNEL,
@@ -12883,6 +13111,7 @@ protected int computeTarget(double observed) {
      */
     private class I2PTunnelServerIOTransferParam extends BaseParam {
 
+        /** Creates the parameter that tunes the I2PTunnel server I/O transfer budget. */
         I2PTunnelServerIOTransferParam() {
             // Ceiling from available heap, matching the I/O pool's own derived
             // maximum. The two must agree: a Tuner max above the pool's ceiling
@@ -13013,9 +13242,12 @@ protected int computeTarget(double observed) {
         return Math.max(floor, Math.min(maxMs, target));
     }
 
+    /** Tunes the timeout after which a stalled I2PTunnel server connection is closed. */
     private class I2PTunnelServerIOStallTimeoutParam extends BaseParam {
+        /** Stall count at the last check, to spot new stalls. */
         private long _prevStallCount;
 
+        /** Creates the parameter that tunes the I2PTunnel I/O stall timeout in ms. */
         I2PTunnelServerIOStallTimeoutParam() {
             super("i2ptunnel.serverIO.stallTimeoutMs", "I2PTunnel I/O stall timeout (ms)",
                   SUB_TUNNEL,
@@ -13139,6 +13371,7 @@ protected int computeTarget(double observed) {
      */
     private class I2PTunnelClientRunnerMaxParam extends BaseParam {
 
+        /** Creates the parameter that caps the I2PTunnel client runner threads. */
         I2PTunnelClientRunnerMaxParam() {
             // TunnelControllerGroup.setClientRunnerMax floors the value at the tunnel's
             // admission gate, so a lower target was rewritten back every cycle.
@@ -13206,6 +13439,7 @@ protected int computeTarget(double observed) {
      */
     private class I2PTunnelClientMaxConnectionsParam extends BaseParam {
 
+        /** Creates the parameter that tunes the default I2PTunnel client connection cap. */
         I2PTunnelClientMaxConnectionsParam() {
             super("i2ptunnel.maxConnections", "I2PTunnel client connection cap (default)",
                   SUB_TUNNEL,
@@ -13258,6 +13492,7 @@ protected int computeTarget(double observed) {
      */
     private class SocketConnectTimeoutParam extends BaseParam {
 
+        /** Creates the parameter that tunes the server socket connect timeout in ms. */
         SocketConnectTimeoutParam() {
             super("i2p.tunnel.socketConnectTimeout", "Server socket connect timeout (ms)",
                   SUB_TUNNEL,
@@ -13317,6 +13552,7 @@ protected int computeTarget(double observed) {
      */
     private class BuildHandlerThreadsParam extends BaseParam {
 
+        /** Creates the parameter that tunes the tunnel build handler threads. */
         BuildHandlerThreadsParam() {
             super("router.buildHandlerThreads", "Tunnel build handler threads",
                   SUB_ROUTER,
@@ -13431,8 +13667,11 @@ protected int computeTarget(double observed) {
          */
         static final double MIN_FACTOR_SCORE = 0.05;
 
+        /** The router being scored. */
         private final RouterContext _ctx;
+        /** The computed health score, NaN before the first computation. */
         private double _score = Double.NaN;
+        /** Router uptime when this score was created. */
         private final long _uptime;
 
         /**
@@ -13481,6 +13720,7 @@ protected int computeTarget(double observed) {
             return (weightSum > 0) ? Math.pow(product, 1.0 / weightSum) : 1.0;
         }
 
+        /** Scores every subsystem and combines them into the health score. */
         private void compute() {
             // Defer assessment during startup — too few events = unreliable
             if (_uptime < STARTUP_GRACE_MS) {
@@ -13661,7 +13901,7 @@ protected int computeTarget(double observed) {
         /**
          * True if any transport reports firewalled status.
          *
-         * @return true if any transport reports firewalled status
+         * @return true if a transport is firewalled
          */
         private boolean isFirewalled() {
             CommSystemFacade.Status status = _ctx.commSystem().getStatus();
@@ -13871,6 +14111,12 @@ protected int computeTarget(double observed) {
             return weightedSum / totalWeight;
         }
 
+        /**
+         * Limits a score to the valid range.
+         *
+         * @param v the raw score
+         * @return the score, clamped to 0 to 1
+         */
         private static double clamp(double v) {
             return Math.max(0.0, Math.min(1.0, v));
         }
@@ -13960,6 +14206,11 @@ protected int computeTarget(double observed) {
             return scores;
         }
 
+        /**
+         * Scores transit capacity against the tunnels offered.
+         *
+         * @return the score, 0 to 1
+         */
         private double scoreTransit() {
             double accepts = getEventCount("tunnel.throttleParticipatingAccept");
             double rejects = getEventCount("tunnel.throttleParticipatingReject");
@@ -13987,12 +14238,22 @@ protected int computeTarget(double observed) {
             return Math.min(Math.min(rejectScore, bwScore), utilScore);
         }
 
+        /**
+         * Scores the tunnel build handler queue depth.
+         *
+         * @return the score, 0 to 1
+         */
         private double scoreBuildQueue() {
             double qs = getStatValue("tunnel.buildHandler.queueSize");
             if (Double.isNaN(qs) || qs <= 0) return Double.NaN;
             return clamp(1.0 - (qs / 200.0));
         }
 
+        /**
+         * Scores how often peers are banned on contact.
+         *
+         * @return the score, 0 to 1
+         */
         private double scoreBanHit() {
             double hits = getEventCount("tunnel.buildBanHit", STAT_PERIOD_LONG);
             if (hits <= 0) return Double.NaN;
@@ -14001,6 +14262,11 @@ protected int computeTarget(double observed) {
             return clamp(1.0 - (hits / 1000.0));
         }
 
+        /**
+         * Scores the UDP send pool saturation.
+         *
+         * @return the score, 0 to 1
+         */
         private double scoreSendPool() {
             double util = getStatValue("ntcp.sendPool.utilization");
             if (Double.isNaN(util) || util <= 0) return Double.NaN;
@@ -14008,6 +14274,11 @@ protected int computeTarget(double observed) {
             return clamp(1.0 - (util / 1.5));
         }
 
+        /**
+         * Scores the average UDP retransmit timeout.
+         *
+         * @return the score, 0 to 1
+         */
         private double scoreAvgRTO() {
             double rto = getStatValue("udp.avgRTO");
             if (Double.isNaN(rto) || rto <= 0) return Double.NaN;
@@ -14015,6 +14286,11 @@ protected int computeTarget(double observed) {
             return clamp(1.0 - ((rto - 1000) / 9000.0));
         }
 
+        /**
+         * Scores network database lookup success and speed.
+         *
+         * @return the score, 0 to 1
+         */
         private double scoreNetDbHealth() {
             double known = getStatValue("router.knownPeers");
             double knownScore = !Double.isNaN(known) && known >= 0 ? clamp(known / 500.0) : Double.NaN;
@@ -14035,6 +14311,11 @@ protected int computeTarget(double observed) {
             return best;
         }
 
+        /**
+         * Scores I2CP client session health.
+         *
+         * @return the score, 0 to 1
+         */
         private double scoreI2cpHealth() {
             double handlerDepth = getStatValue("i2ptunnel.serverHandler.queueDepth");
             double handlerScore = Double.NaN;
@@ -14055,6 +14336,11 @@ protected int computeTarget(double observed) {
             return Double.isNaN(best) ? 1.0 : best;
         }
 
+        /**
+         * Scores peer connectivity and profile quality.
+         *
+         * @return the score, 0 to 1
+         */
         private double scorePeerHealth() {
             double fast = getStatValue("peer.fastPeerCount");
             double highCap = getStatValue("peer.highCapPeerCount");
@@ -14186,6 +14472,7 @@ protected int computeTarget(double observed) {
      * Raises when we have capacity (high build success, low CPU), lowers under stress.
      */
     private class ParticipatingThrottleMinParam extends BaseParam {
+        /** Creates the parameter that floors the transit tunnel throttle, in tunnels. */
         ParticipatingThrottleMinParam() {
             super("i2p.tunnel.participatingThrottle.minLimit", "Transit throttle min (tunnels)",
                   SUB_TRANSIT, 20, 500, 4, "tunnel.buildSuccessRate", _context);
@@ -14229,6 +14516,7 @@ protected int computeTarget(double observed) {
      * Tunes the maximum per-participant transit tunnel limit in ParticipatingThrottler.
      */
     private class ParticipatingThrottleMaxParam extends BaseParam {
+        /** Creates the parameter that caps the transit tunnel throttle, in tunnels. */
         ParticipatingThrottleMaxParam() {
             super("i2p.tunnel.participatingThrottle.maxLimit", "Transit throttle max (tunnels)",
                   SUB_TRANSIT, 50, 1000, 8, "tunnel.buildSuccessRate", _context);
@@ -14269,6 +14557,7 @@ protected int computeTarget(double observed) {
      * Tunes the percentage-based transit tunnel limit in ParticipatingThrottler.
      */
     private class ParticipatingThrottlePctParam extends BaseParam {
+        /** Creates the parameter that tunes the transit throttle target in percent. */
         ParticipatingThrottlePctParam() {
             super("i2p.tunnel.participatingThrottle.percentLimit", "Transit throttle target (%)",
                   SUB_TRANSIT, 5, 100, 1, "tunnel.buildSuccessRate", _context);
@@ -14310,6 +14599,7 @@ protected int computeTarget(double observed) {
      * Lower = more aggressive (reject earlier). Modulated by load score at runtime.
      */
     private class TransitRejectThresholdParam extends BaseParam {
+        /** Creates the parameter that sets the transit rejection threshold in percent. */
         TransitRejectThresholdParam() {
             super("i2p.tunnel.participatingThrottle.rejectThreshold", "Transit reject threshold (%)",
                   SUB_TRANSIT, 30, 100, 2, "jobQueue.loadRecoveryTime", _context);
@@ -14337,6 +14627,7 @@ protected int computeTarget(double observed) {
      * Higher values escalate rejection probability more quickly past the threshold.
      */
     private class TransitRejectSteepnessParam extends BaseParam {
+        /** Creates the parameter that tunes the transit rejection curve steepness. */
         TransitRejectSteepnessParam() {
             super("i2p.tunnel.participatingThrottle.rejectSteepness", "Transit reject steepness",
                   SUB_TRANSIT, 100, 500, 10, "jobQueue.loadRecoveryTime", _context);
@@ -14364,6 +14655,7 @@ protected int computeTarget(double observed) {
      * 0 = no load sensitivity, 100 = 2x at full load, 300 = 4x at full load.
      */
     private class TransitLoadWeightParam extends BaseParam {
+        /** Creates the parameter that weights transit load in percent. */
         TransitLoadWeightParam() {
             super("i2p.tunnel.participatingThrottle.loadWeight", "Transit load weight (%)",
                   SUB_TRANSIT, 0, 300, 10, "jobQueue.loadRecoveryTime", _context);
@@ -14390,6 +14682,7 @@ protected int computeTarget(double observed) {
      * Tunes the minimum per-peer request throttle limit.
      */
     private class RequestThrottleMinParam extends BaseParam {
+        /** Creates the parameter that floors the build request throttle in ms. */
         RequestThrottleMinParam() {
             super("i2p.tunnel.requestThrottle.minLimit", "Build request throttle min (ms)",
                   SUB_TRANSIT, 1, 100, 2, "tunnel.throttleParticipatingReject", _context);
@@ -14423,6 +14716,7 @@ protected int computeTarget(double observed) {
      * Tunes the maximum per-peer request throttle limit.
      */
     private class RequestThrottleMaxParam extends BaseParam {
+        /** Creates the parameter that caps the build request throttle in ms. */
         RequestThrottleMaxParam() {
             super("i2p.tunnel.requestThrottle.maxLimit", "Build request throttle max (ms)",
                   SUB_TRANSIT, 10, 1000, 8, "tunnel.throttleParticipatingReject", _context);
@@ -14459,6 +14753,7 @@ protected int computeTarget(double observed) {
      * with the capacity factor in RequestThrottle.
      */
     private class RequestThrottlePctParam extends BaseParam {
+        /** Creates the parameter that tunes the build request throttle target in percent. */
         RequestThrottlePctParam() {
             super("i2p.tunnel.requestThrottle.percentLimit", "Build request throttle target (%)",
                   SUB_TRANSIT, 1, 100, 1, "tunnel.throttleParticipatingReject", _context);
@@ -14494,6 +14789,7 @@ protected int computeTarget(double observed) {
      * Relax when healthy, tighten under stress.
      */
     private class RequestThrottleBurstParam extends BaseParam {
+        /** Creates the parameter that sets the one-second build request burst threshold. */
         RequestThrottleBurstParam() {
             super("i2p.tunnel.requestThrottle.burst1sThreshold", "Build request burst threshold",
                   SUB_TRANSIT, 5, 20, 1, "tunnel.throttleParticipatingReject", _context);
@@ -14528,6 +14824,7 @@ protected int computeTarget(double observed) {
      * this high. Lower = more aggressive. Modulated by load score at runtime.
      */
     private class RequestRejectThresholdParam extends BaseParam {
+        /** Creates the parameter that sets the build request rejection threshold in percent. */
         RequestRejectThresholdParam() {
             super("i2p.tunnel.requestThrottle.rejectThreshold", "Request reject threshold (%)",
                   SUB_TRANSIT, 30, 100, 2, "jobQueue.loadRecoveryTime", _context);
@@ -14555,6 +14852,7 @@ protected int computeTarget(double observed) {
      * Higher values escalate rejection probability more quickly past the threshold.
      */
     private class RequestRejectSteepnessParam extends BaseParam {
+        /** Creates the parameter that tunes the request rejection curve steepness. */
         RequestRejectSteepnessParam() {
             super("i2p.tunnel.requestThrottle.rejectSteepness", "Request reject steepness",
                   SUB_TRANSIT, 100, 500, 10, "jobQueue.loadRecoveryTime", _context);
@@ -14582,6 +14880,7 @@ protected int computeTarget(double observed) {
      * 0 = no load sensitivity, 100 = 2x at full load, 300 = 4x at full load.
      */
     private class RequestLoadWeightParam extends BaseParam {
+        /** Creates the parameter that weights request load in percent. */
         RequestLoadWeightParam() {
             super("i2p.tunnel.requestThrottle.loadWeight", "Request load weight (%)",
                   SUB_TRANSIT, 0, 300, 10, "jobQueue.loadRecoveryTime", _context);
@@ -14616,6 +14915,7 @@ protected int computeTarget(double observed) {
      * @since 0.9.70+
      */
     private class RequestHighLoadLagParam extends BaseParam {
+        /** Creates the parameter that sets the high-load job lag threshold in ms. */
         RequestHighLoadLagParam() {
             super("i2p.tunnel.requestThrottle.highLoadLagMs", "High-load lag threshold (ms)",
                   SUB_TRANSIT, 200, 5000, 100, "jobQueue.jobLag", _context);
@@ -14657,6 +14957,7 @@ protected int computeTarget(double observed) {
      * @since 0.9.70+
      */
     private class RequestHighLoadCpuParam extends BaseParam {
+        /** Creates the parameter that sets the high-load CPU threshold in percent. */
         RequestHighLoadCpuParam() {
             super("i2p.tunnel.requestThrottle.highLoadCpuPct", "High-load CPU threshold (%)",
                   SUB_TRANSIT, 50, 100, 1, "jobQueue.jobLag", _context);
@@ -14696,6 +14997,7 @@ protected int computeTarget(double observed) {
      * @since 0.9.70+
      */
     private class RequestModerateLoadLagParam extends BaseParam {
+        /** Creates the parameter that sets the moderate-load job lag threshold in ms. */
         RequestModerateLoadLagParam() {
             super("i2p.tunnel.requestThrottle.moderateLoadLagMs", "Moderate-load lag threshold (ms)",
                   SUB_TRANSIT, 100, 3000, 50, "jobQueue.jobLag", _context);
@@ -14746,6 +15048,7 @@ protected int computeTarget(double observed) {
      * @since 0.9.70+
      */
     private class RequestModerateLoadCpuParam extends BaseParam {
+        /** Creates the parameter that sets the moderate-load CPU threshold in percent. */
         RequestModerateLoadCpuParam() {
             super("i2p.tunnel.requestThrottle.moderateLoadCpuPct", "Moderate-load CPU threshold (%)",
                   SUB_TRANSIT, 40, 100, 1, "jobQueue.jobLag", _context);
@@ -14770,6 +15073,7 @@ protected int computeTarget(double observed) {
      * @since 0.9.70+
      */
     private class RequestSustainedModerateLoadParam extends BaseParam {
+        /** Creates the parameter that sets the sustained moderate-load window in ms. */
         RequestSustainedModerateLoadParam() {
             super("i2p.tunnel.requestThrottle.sustainedModerateLoadMs", "Sustained moderate-load window (ms)",
                   SUB_TRANSIT, 10_000, 300_000, 5000, "jobQueue.jobLag", _context);
@@ -14794,6 +15098,7 @@ protected int computeTarget(double observed) {
      * Lower = more sensitive (backoff kicks in sooner).
      */
     private class PoolFailureThresholdParam extends BaseParam {
+        /** Creates the parameter that sets the pool failure count threshold. */
         PoolFailureThresholdParam() {
             super("tunnel.pool.failureThreshold", "Pool failure threshold (count)",
                   SUB_TUNNEL, 3, 20, 1, "tunnel.buildSuccessRate", _context);
@@ -14824,6 +15129,7 @@ protected int computeTarget(double observed) {
      * Shorter = faster recovery after failures. Longer = more cooling during storms.
      */
     private class PoolBackoffMsParam extends BaseParam {
+        /** Creates the parameter that tunes the pool rebuild backoff in ms. */
         PoolBackoffMsParam() {
             super("tunnel.pool.backoffMs", "Pool rebuild backoff (ms)",
                   SUB_TUNNEL, 1000, 30000, 2000, "tunnel.buildSuccessRate", _context);
@@ -14863,6 +15169,7 @@ protected int computeTarget(double observed) {
      * zero when pools are healthy and at target (saves bandwidth).
      */
     private class TunnelTargetBufferParam extends BaseParam {
+        /** Creates the parameter that tunes the spare tunnel buffer per pool. */
         TunnelTargetBufferParam() {
             super("i2p.tunnel.targetBuffer", "Pool spare tunnel buffer",
                   SUB_TUNNEL, 2, 8, 1, "tunnel.buildSuccessRate", _context);
@@ -14932,6 +15239,7 @@ protected int computeTarget(double observed) {
      * Decreases toward default when healthy (prevents wasteful backlog).
      */
     private class UntestedMultiplierParam extends BaseParam {
+        /** Creates the parameter that multiplies the cap on untested tunnels. */
         UntestedMultiplierParam() {
             super("i2p.tunnel.untestedMultiplier", "Untested tunnel cap multiplier",
                   SUB_TUNNEL, 1, 8, 1, "tunnel.buildSuccessRate", _context);
@@ -15017,7 +15325,9 @@ protected int computeTarget(double observed) {
         return !Double.isNaN(observed) && observed >= 50;
     }
 
+    /** Tunes the cooldown applied after repeated first-hop build failures. */
     private class FirstHopFailureCooldownParam extends BaseParam {
+        /** Creates the parameter that tunes the first-hop failure cooldown. */
         FirstHopFailureCooldownParam() {
             super("tunnel.build.firstHopCooldown",
                     // Ceiling lowered from 600_000. A ten-minute skip on a first-hop
@@ -15069,6 +15379,7 @@ protected int computeTarget(double observed) {
      * lower values skip peers after fewer failures.
      */
     private class FirstHopFailureThresholdParam extends BaseParam {
+        /** Creates the parameter that sets the first-hop failure count threshold. */
         FirstHopFailureThresholdParam() {
             super("tunnel.build.firstHopThreshold",
                   "First-hop threshold",
@@ -15108,6 +15419,7 @@ protected int computeTarget(double observed) {
      * (more tolerant). Lower values prune sooner (more aggressive).
      */
     private class StaleBuildThresholdParam extends BaseParam {
+        /** Creates the parameter that sets the age at which builds are pruned. */
         StaleBuildThresholdParam() {
             super("tunnel.build.staleThreshold",
                   "Stale build pruning threshold",
@@ -15146,6 +15458,7 @@ protected int computeTarget(double observed) {
      * higher values allow more timeouts before throttling.
      */
     private class ConcurrencyThrottleThresholdParam extends BaseParam {
+        /** Creates the parameter that sets the concurrency throttle threshold. */
         ConcurrencyThrottleThresholdParam() {
             super("tunnel.build.concurrencyThrottle",
                   "Concurrency throttle threshold",

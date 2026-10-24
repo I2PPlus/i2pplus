@@ -37,8 +37,11 @@ import net.i2p.util.EepGet;
  */
 public class EepGetNamingService extends DummyNamingService {
 
+    /** Property listing the naming sites to query. */
     private static final String PROP_EEPGET_LIST = "i2p.naming.eepget.list";
+    /** The naming sites queried when the property is unset. */
     private static final String DEFAULT_EEPGET_LIST = "http://i2host.i2p/cgi-bin/i2hostquery?";
+    /** Characters allowed in a name being looked up. */
     private static final Pattern VALID_DEST_CHARS = Pattern.compile("[a-zA-Z0-9~-]");
 
     /**
@@ -52,6 +55,11 @@ public class EepGetNamingService extends DummyNamingService {
         super(context);
     }
 
+    /**
+     * Reads the naming sites from the config.
+     *
+     * @return the sites to try, in order
+     */
     private List<String> getURLs() {
         String list = _context.getProperty(PROP_EEPGET_LIST, DEFAULT_EEPGET_LIST);
         StringTokenizer tok = new StringTokenizer(list, ",");
@@ -96,8 +104,16 @@ public class EepGetNamingService extends DummyNamingService {
     }
 
     // FIXME allow larger Dests for non-null Certs
+    /** Largest response accepted for a destination, allowing for the headers. */
     private static final int MAX_RESPONSE = DEST_SIZE + 68 + 10; // allow for hostname= and some trailing stuff
 
+    /**
+     * Fetches one destination from a naming site.
+     *
+     * @param url the site's query URL
+     * @param hostname the name being looked up
+     * @return the destination, null if the site has none
+     */
     private String fetchAddr(String url, String hostname) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream(MAX_RESPONSE);
 

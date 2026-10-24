@@ -135,7 +135,6 @@ public class HTTP {
     /** BOOTID.UPNP.ORG header for UPnP device boot ID */
     public static final String BOOTID_UPNP_ORG = "BOOTID.UPNP.ORG";
 
-    // Thanks for Brent Hills (10/20/04)
     /** MYNAME header for UPnP device identification */
     public static final String MYNAME = "MYNAME";
 
@@ -197,7 +196,6 @@ public class HTTP {
     public static final int getPort(String urlStr) {
         try {
             URL url = new URL(urlStr);
-            // Thanks for Giordano Sassaroli <sassarol@cefriel.it> (08/30/03)
             int port = url.getPort();
             if (port <= 0) port = DEFAULT_PORT;
             return port;

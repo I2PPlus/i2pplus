@@ -10,8 +10,11 @@ import org.rrd4j.core.InvalidRrdException;
  */
 public class Header implements Constants {
 
+    /** Value marking a file written with floats. */
     private static final double FLOAT_COOKIE = 8.642135E130;
+    /** Start of the header within the buffer. */
     private static final long offset = 0;
+    /** Size of the header in bytes. */
     private final long size;
     /** the database version string */
     final String version;

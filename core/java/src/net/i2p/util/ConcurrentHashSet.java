@@ -13,7 +13,9 @@ import java.util.concurrent.ConcurrentHashMap;
  *  @param <E> type of elements in this set
  */
 public class ConcurrentHashSet<E> extends AbstractSet<E> implements Set<E> {
+    /** Placeholder value - only the map's keys matter */
     private static final Object DUMMY = new Object();
+    /** The backing map holding the set's elements. */
     private final Map<E, Object> _map;
 
     /**

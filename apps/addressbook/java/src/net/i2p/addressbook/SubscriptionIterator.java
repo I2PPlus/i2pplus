@@ -15,9 +15,13 @@ import net.i2p.util.PortMapper;
  */
 class SubscriptionIterator implements Iterator<AddressBook> {
 
+    /** The subscriptions being walked. */
     private final Iterator<Subscription> subIterator;
+    /** Proxy to fetch the subscription through, if any. */
     private final String proxyHost;
+    /** Port of that proxy. */
     private final int proxyPort;
+    /** Pause between fetches, in ms. */
     private final long delay;
 
     /**

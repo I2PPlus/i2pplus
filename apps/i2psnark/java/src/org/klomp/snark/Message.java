@@ -108,14 +108,16 @@ class Message {
     /** The payload length. */
     final int len;
 
-    // Used to do deferred fetch of data
+    /** The loader for a deferred fetch of the message data. */
     private final DataLoader dataLoader;
 
-    // Prefetch coordination for PIECE messages with a deferred loader.
-    // The buffer may be loaded off the sender thread by PeerConnectionOut's
-    // prefetch executor; all state transitions below are guarded by 'this'
-    // so the sender thread, the executor, and purge paths agree.
-    /** Cache-backed buffer owned by this message, non-null between successful load and release. */
+    /**
+     * Cache-backed buffer owned by this message, non-null between
+     * successful load and release. It may be loaded off the sender
+     * thread by the prefetch executor, so the state transitions below
+     * are guarded by this, keeping the sender, the executor and the
+     * purge paths in agreement.
+     */
     private ByteArray _ba;
     /** Set exactly once by the winner of the race to execute the loader. */
     private boolean _loadClaimed;
@@ -128,7 +130,9 @@ class Message {
     /** Max time the sender thread will wait for an in-flight prefetch before falling back to a drop. */
     private static final int AWAIT_PREFETCH_TIMEOUT = 30 * 1000;
 
+    /** Size of a chunk part. */
     private static final int BUFSIZE = PeerState.PARTSIZE;
+    /** Cache supplying the message buffers. */
     private static final ByteCache _cache = ByteCache.getInstance(16, BUFSIZE);
 
     /**
@@ -202,6 +206,14 @@ class Message {
     /**
      * Creates a peer protocol message from its fields.
      *
+     * @param type the protocol message type
+     * @param piece the piece number
+     * @param begin the offset within the piece
+     * @param length the length of the message data
+     * @param data the data bytes, null for a deferred load
+     * @param off the offset within the data array
+     * @param len the length of the data in the array
+     * @param loader the loader supplying the data
      * @since 0.9.32
      */
     private Message(
@@ -479,7 +491,7 @@ class Message {
     /**
      * A string representation of the message.
      *
-     * @return a string representation of the message
+     * @return the type name, with fields in parentheses for data messages
      */
     @Override
     public String toString() {

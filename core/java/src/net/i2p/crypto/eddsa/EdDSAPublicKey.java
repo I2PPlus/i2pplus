@@ -22,6 +22,7 @@ import java.util.Arrays;
  * @since 0.9.15
  */
 public class EdDSAPublicKey implements EdDSAKey, PublicKey {
+    /** Pinned for serialized-form compatibility. */
     private static final long serialVersionUID = 9837459837498475L;
     /** The public key point. */
     private final GroupElement A;
@@ -32,10 +33,13 @@ public class EdDSAPublicKey implements EdDSAKey, PublicKey {
     /** Ed dsa spec. */
     private final EdDSAParameterSpec edDsaSpec;
 
-    // OID 1.3.101.xxx
+    /** First object identifier in the 1.3.101.xxx range. */
     private static final int OID_OLD = 100;
+    /** Object identifier for Ed25519. */
     private static final int OID_ED25519 = 112;
+    /** Offset of the object identifier in the encoded key. */
     private static final int OID_BYTE = 8;
+    /** Offset of the identifier length in the encoded key. */
     private static final int IDLEN_BYTE = 3;
 
     /**
@@ -235,7 +239,7 @@ public class EdDSAPublicKey implements EdDSAKey, PublicKey {
     /**
      * The public key point A.
      *
-     * @return The public key point A.
+     * @return A as a group element on the curve
      */
     public GroupElement getA() {
         return A;
@@ -244,7 +248,7 @@ public class EdDSAPublicKey implements EdDSAKey, PublicKey {
     /**
      * The negated public key point.
      *
-     * @return The negated public key point.
+     * @return -A, computed on first use and cached
      */
     public GroupElement getNegativeA() {
         // Only read Aneg once, otherwise read re-ordering might occur between

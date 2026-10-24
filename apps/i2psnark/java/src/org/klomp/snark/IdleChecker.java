@@ -40,15 +40,20 @@ import net.i2p.util.SimpleTimer2;
  */
 class IdleChecker extends SimpleTimer2.TimedEvent {
 
+    /** The torrent being watched. */
     private final I2PSnarkUtil _util;
+    /** The coordinators that get stopped when idle. */
     private final PeerCoordinatorSet _pcs;
+    /** Logger for this class. */
     private final Log _log;
     /** Consecutive checks in which no torrent was running; drives the shrink hysteresis. */
     private int _noRunningConsec;
     /** Quantity last pushed to the shared session, which is also its floor. */
     private int _sharedQuantity = MIN_TUNNEL_QTY;
+    /** Guards the idle state. */
     private final Object _lock = new Object();
 
+    /** Quiet time that counts as idle - 63 seconds. */
     private static final long CHECK_TIME = (long) 63 * 1000;
     /**
      * Consecutive checks with no running torrent required before reducing. Growth is immediate;
@@ -85,6 +90,7 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
         }
     }
 
+    /** Reacts to the idle timeout, with the lock held. */
     private void locked_timeReached() {
         if (_util.connected()) {
             // A started-but-peerless torrent still needs its tunnels, so activity is keyed on the

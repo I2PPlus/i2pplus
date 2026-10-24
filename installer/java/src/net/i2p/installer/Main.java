@@ -17,6 +17,7 @@ public class Main {
      */
     public Main() {}
 
+    /** The command line shown when the installer is called wrongly */
     private static final String USAGE = "Usage: {copy|delete|exec|fixwinpaths} [args...]";
 
     /**

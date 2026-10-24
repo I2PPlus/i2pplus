@@ -28,7 +28,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 0.7.1
  */
 public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
+    /** Logger for this class. */
     private final Log _log;
+    /** Muxed listeners, by protocol and port. */
     private final Map<Integer, I2PSessionMuxedListener> _listeners;
 
     /**
@@ -209,18 +211,38 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
         return rv;
     }
 
+    /**
+     * Finds the listener for a protocol and port pair.
+     *
+     * @param proto the protocol number
+     * @param port the port number
+     * @return the listener, null if none is registered
+     */
     private I2PSessionMuxedListener getListener(int proto, int port) {
         return _listeners.get(key(proto, port));
     }
 
+    /**
+     * Combines a protocol and port into one map key.
+     *
+     * @param proto the protocol number
+     * @param port the port number
+     * @return the key
+     */
     private static Integer key(int proto, int port) {
         return Integer.valueOf(((port << 8) & 0xffff00) | proto);
     }
 
     /** For listeners that don't care about proto and ports. */
     private static class NoPortsListener implements I2PSessionMuxedListener {
+        /** The listener messages are passed to. */
         private I2PSessionListener _l;
 
+        /**
+         * Wraps a listener that has no muxed ports.
+         *
+         * @param l the listener to wrap
+         */
         public NoPortsListener(I2PSessionListener l) {
             _l = l;
         }

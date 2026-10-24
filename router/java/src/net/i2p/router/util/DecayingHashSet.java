@@ -40,7 +40,9 @@ import net.i2p.util.ConcurrentHashSet;
  *
  */
 public class DecayingHashSet extends DecayingBloomFilter {
+    /** The entries of the current period. */
     private ConcurrentHashSet<ArrayWrapper> _current;
+    /** The entries of the previous period. */
     private ConcurrentHashSet<ArrayWrapper> _previous;
 
     /**
@@ -277,6 +279,13 @@ public class DecayingHashSet extends DecayingBloomFilter {
         } finally { releaseReadLock(); }
     }
 
+    /**
+     * Adds one entry to the set.
+     *
+     * @param entry the entry to add
+     * @param addIfNew true to add only when absent
+     * @return true if the entry was added
+     */
     private boolean add(long entry, boolean addIfNew) {
         forceDecayIfOverCap();
         ArrayWrapper w = new ArrayWrapper(entry);
@@ -442,9 +451,17 @@ public class DecayingHashSet extends DecayingBloomFilter {
      * @since 0.9.71+
      */
     private static final class DecayCounters {
+        /** The entries added in the period. */
         private final int count;
+        /** The duplicate entries of the period. */
         private final long dups;
 
+        /**
+         * Reports the counters of one period.
+         *
+         * @param count the entries added
+         * @param dups the duplicate entries
+         */
         DecayCounters(int count, long dups) {
             this.count = count;
             this.dups = dups;
@@ -458,8 +475,16 @@ public class DecayingHashSet extends DecayingBloomFilter {
      * the maximum entropy given the length of the data.
      */
     private static class ArrayWrapper {
+        /** The hash of the wrapped bytes. */
         private final long _longhashcode;
 
+        /**
+         * Wraps part of a byte array.
+         *
+         * @param b the array to wrap
+         * @param offset where the wrapped part starts
+         * @param len the length of the wrapped part
+         */
         public ArrayWrapper(byte[] b, int offset, int len) {
             int idx = offset;
             int shift = Math.min(8, 64 / len);
@@ -471,7 +496,11 @@ public class DecayingHashSet extends DecayingBloomFilter {
             _longhashcode = lhc;
         }
 
-        /** Faster version for when storing <= 8 bytes. */
+        /**
+         * Faster version for when storing 8 bytes or fewer.
+         *
+         * @param b the entry as a long value
+         */
         public ArrayWrapper(long b) {
             _longhashcode = b;
         }
@@ -480,6 +509,11 @@ public class DecayingHashSet extends DecayingBloomFilter {
              return (int) _longhashcode;
         }
 
+        /**
+         * The hash of the wrapped data.
+         *
+         * @return the hash as a long
+         */
         public long longHashCode() {
              return _longhashcode;
         }

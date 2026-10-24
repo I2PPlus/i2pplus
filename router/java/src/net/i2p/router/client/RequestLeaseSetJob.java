@@ -31,11 +31,16 @@ import net.i2p.util.Log;
  * the pending LeaseRequestState so new requests can proceed.
  */
 class RequestLeaseSetJob extends JobImpl {
+    /** The log for the lease request. */
     private final Log _log;
+    /** The runner that asked for the lease set. */
     private final ClientConnectionRunner _runner;
+    /** The state of the lease request. */
     private final LeaseRequestState _requestState;
 
+    /** Default maximum clock fudge. */
     private static final long DEFAULT_MAX_FUDGE = 5L*1000;
+    /** Config key of the maximum clock fudge. */
     private static final String PROP_MAX_FUDGE = "router.requestLeaseSetMaxFudge";
     /**
      * Property overriding {@link #DEFAULT_SEND_WAIT}: ms to wait for the client to drain
@@ -44,12 +49,16 @@ class RequestLeaseSetJob extends JobImpl {
      * @since 0.9.71+
      */
     static final String PROP_SEND_WAIT = "router.requestLeaseSetSendWait";
+    /** Ten minutes, in milliseconds. */
     private static final long TEN_MINUTES_MS = 10L * 60 * 1000;
-    // Maximum future time for lease expiration: the hardcoded 10-minute lease
-    // ceiling plus a small clock fudge, so requested leases never extend past
-    // the 11-minute tunnel lifetime. Must stay inside the
-    // KademliaNetworkDatabaseFacade.MAX_LEASE_FUTURE (15 min) netdb cap.
+    /**
+     * Most a lease may be in the future, the ten minute lease ceiling
+     * plus a small clock fudge, so requested leases never extend past
+     * the eleven minute tunnel lifetime. Must stay inside the fifteen
+     * minute network database lease cap.
+     */
     private static final long MAX_LEASE_FUTURE = 10L * 60 * 1000;
+    /** Clock fudge allowed for lease times. */
     private static final long CLOCK_FUDGE_FACTOR = 30L * 1000;
     /** Jitter added to timeout to spread thundering-herd retries. */
     private static final long TIMEOUT_JITTER_MS = 2000;
@@ -317,7 +326,9 @@ class RequestLeaseSetJob extends JobImpl {
      * many clients do not all timeout and retry at the same instant.
      */
     private class CheckLeaseRequestStatus extends JobImpl {
+        /** When the check began. */
         private final long _start;
+        /** Starts checking the lease request. */
         public CheckLeaseRequestStatus() {
             super(RequestLeaseSetJob.this.getContext());
             _start = RequestLeaseSetJob.this.getContext().clock().now();

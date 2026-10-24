@@ -29,6 +29,7 @@ import java.util.List;
  */
 public final class SVGHints {
 
+    /** Utility class, not intended for instantiation. */
     private SVGHints() {
         // no need to instantiate this
     }
@@ -384,6 +385,13 @@ public final class SVGHints {
         return (getJFreeChartBeginElementKey() != null);
     }
 
+    /**
+     * Loads a hint key by naming its class and field reflectively.
+     *
+     * @param className the class holding the key
+     * @param fieldName the key's field name
+     * @return the key, null if it cannot be loaded
+     */
     private static RenderingHints.Key fetchKey(String className, String fieldName) {
         Class<?> hintsClass;
         try {
@@ -403,22 +411,47 @@ public final class SVGHints {
         }
     }
 
+    /**
+     * The key for the Orson Charts begin-element hint.
+     *
+     * @return the hint key
+     */
     private static RenderingHints.Key getOrsonChartsBeginElementKey() {
         return fetchKey("com.orsoncharts.Chart3DHints", "KEY_BEGIN_ELEMENT");
     }
 
+    /**
+     * The key for the Orson Charts end-element hint.
+     *
+     * @return the hint key
+     */
     private static RenderingHints.Key getOrsonChartsEndElementKey() {
         return fetchKey("com.orsoncharts.Chart3DHints", "KEY_END_ELEMENT");
     }
 
+    /**
+     * The key for the Orson Charts element-title hint.
+     *
+     * @return the hint key
+     */
     private static RenderingHints.Key getOrsonChartsElementTitleKey() {
         return fetchKey("com.orsoncharts.Chart3DHints", "KEY_ELEMENT_TITLE");
     }
 
+    /**
+     * The key for the JFreeChart begin-element hint.
+     *
+     * @return the hint key
+     */
     private static RenderingHints.Key getJFreeChartBeginElementKey() {
         return fetchKey("org.jfree.chart.ChartHints", "KEY_BEGIN_ELEMENT");
     }
 
+    /**
+     * The key for the JFreeChart end-element hint.
+     *
+     * @return the hint key
+     */
     private static RenderingHints.Key getJFreeChartEndElementKey() {
         return fetchKey("org.jfree.chart.ChartHints", "KEY_END_ELEMENT");
     }

@@ -14,19 +14,33 @@ import net.i2p.util.TryCache;
 
 /** UDP datagram wrapper implementing CDPQEntry for priority queue dispatch. */
 class UDPPacket implements CDPQEntry {
+    /** The router context. */
     private RouterContext _context;
+    /** The datagram wrapper for sending. */
     private final DatagramPacket _packet;
+    /** The packet data. */
     private final byte[] _data;
+    /** Send priority of the packet. */
     private int _priority;
+    /** When the packet was initialized. */
     private volatile long _initializeTime;
+    /** Packet type read from the header. */
     private volatile int _markedType;
+    /** The peer the packet goes to or came from. */
     private volatile RemoteHostId _remoteHost;
+    /** True once the packet is returned to the cache. */
     private volatile boolean _released;
+    /** When the packet entered the send queue. */
     private long _enqueueTime;
+    /** When the packet arrived. */
     private volatile long _receivedTime;
+    /** The bandwidth reservation for sending. */
     private final AtomicReference<FIFOBandwidthLimiter.Request> _bandwidthRequest = new AtomicReference<>();
+    /** Sequence number matching replies. */
     private long _seqNum;
+    /** I2NP message type, for the statistics. */
     private int _messageType;
+    /** Fragments this message was split into. */
     private int _fragmentCount;
 
     /**
@@ -34,6 +48,8 @@ class UDPPacket implements CDPQEntry {
      * Provides new instances for the {@link TryCache}.
      */
     private static class PacketFactory implements TryCache.ObjectFactory<UDPPacket> {
+        /** Creates packets for the reuse cache. */
+        private PacketFactory() {}
         /** I2P context for logging. */
         static volatile RouterContext context;
 
@@ -48,10 +64,15 @@ class UDPPacket implements CDPQEntry {
         }
     }
 
+    /** Developer switch enabling the packet cache. */
     private static final boolean CACHE = true;
+    /** Packets the cache keeps at least. */
     private static final int MIN_CACHE_SIZE = 16;
+    /** Packets the cache keeps at most. */
     private static final int MAX_CACHE_SIZE = 128;
+    /** Factory creating the cached packets. */
     private static final TryCache.ObjectFactory<UDPPacket> _packetFactory;
+    /** Pool of the reusable packets. */
     private static final TryCache<UDPPacket> _packetCache;
 
     /** Static initializer. */
@@ -74,7 +95,6 @@ class UDPPacket implements CDPQEntry {
     /** Size of MAC (Message Authentication Code) in bytes. */
     public static final int MAC_SIZE = 16;
 
-    // Payload type constants
     /** Packet type: session request. */
     public static final int PAYLOAD_TYPE_SESSION_REQUEST = 0;
     /** Packet type: session created. */

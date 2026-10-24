@@ -25,6 +25,7 @@ import net.i2p.util.Log;
  */
 public class GarlicClove extends DataStructureImpl {
 
+    /** Pinned for serialized-form compatibility. */
     private static final long serialVersionUID = 1L;
     /** Application context for logging and configuration. */
     private transient final I2PAppContext _context;

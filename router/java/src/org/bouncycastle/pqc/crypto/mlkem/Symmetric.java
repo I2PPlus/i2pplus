@@ -82,9 +82,13 @@ abstract class Symmetric
     static class ShakeSymmetric
         extends Symmetric
         {
+        /** The extendable output function G. */
         private final SHAKEDigest xof;
+        /** The hash H, SHA3-512. */
         private final SHA3Digest sha3Digest512;
+        /** The hash H', SHA3-256. */
         private final SHA3Digest sha3Digest256;
+        /** The extendable output function J. */
         private final SHAKEDigest shakeDigest;
 
         /** Create shake symmetric. */

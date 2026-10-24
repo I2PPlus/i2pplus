@@ -82,6 +82,12 @@ public class QueryResponse extends ControlResponse {
         setContent(envNodee);
     }
 
+    /**
+     * Builds the response node carrying one variable's value.
+     *
+     * @param var the variable name
+     * @return the new node
+     */
     private Node createResponseNode(String var) {
         Node queryResNode = new Node();
         queryResNode.setName(Control.NS, Control.QUERY_STATE_VARIABLE_RESPONSE);

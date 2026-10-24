@@ -40,6 +40,7 @@ import net.i2p.router.web.Messages;
  * Helper class to refactor HTML rendering from out of the ProfileOrganizer.
  */
 class ProfileOrganizerRenderer {
+    /** Matches the parenthesized note in a WHOIS name. */
     private static final Pattern WHOIS_PAREN = Pattern.compile("\\([^)]+\\)");
     /** Render rows in a single write up to this count; above it, flush every {@link #STREAM_BATCH} rows so the page paints progressively. */
     private static final int MAX_BEFORE_STREAMING = 100;
@@ -47,7 +48,9 @@ class ProfileOrganizerRenderer {
     private static final int STREAM_BATCH = 100;
     /** Length of the truncated base64 hash used as a per-row data-key in fragment mode; 16 chars = 96 bits, collision-free at 10K-20K rows. */
     private static final int KEY_LEN = 16;
+    /** The router context. */
     private final RouterContext _context;
+    /** The organizer holding the peer profiles. */
     private final ProfileOrganizer _organizer;
     /** Emit a data-key (peer hash) per row for worker-side row diffing; fragment renders only, so full pages stay byte-for-byte identical. */
     private final boolean _fragmentKeys;
@@ -129,7 +132,9 @@ class ProfileOrganizerRenderer {
      * @since 0.9.70+
      */
     private static class ProfileSelection {
+        /** The profiles in display order. */
         final Set<PeerProfile> order;
+        /** Profiles older than the display window. */
         final int older;
         /** Hide window for stale profiles, 0 for none. */
         final long hideWindow;
@@ -139,6 +144,16 @@ class ProfileOrganizerRenderer {
         final Set<Hash> highCapSet;
         /** Snapshot of well-integrated hashes, taken once under organizer read lock. */
         final Set<Hash> integratedSet;
+        /**
+         * The profiles and sets for one page.
+         *
+         * @param order the profiles in display order
+         * @param older the profiles older than the window
+         * @param hideWindow the age beyond which profiles are hidden
+         * @param fastSet the hashes of the fast peers
+         * @param highCapSet the hashes of the high capacity peers
+         * @param integratedSet the hashes of the integrated peers
+         */
         ProfileSelection(Set<PeerProfile> order, int older, long hideWindow,
                          Set<Hash> fastSet, Set<Hash> highCapSet, Set<Hash> integratedSet) {
             this.order = order;
@@ -1221,8 +1236,16 @@ class ProfileOrganizerRenderer {
      * @since 0.9.70+
      */
     private static class ProfileComparator extends ProfComparator {
+        /** The hashes of the fast peers. */
         private final Set<Hash> _fastSet;
+        /** The hashes of the high capacity peers. */
         private final Set<Hash> _highCapSet;
+        /**
+         * Orders the profiles for the page.
+         *
+         * @param fastSet the hashes of the fast peers
+         * @param highCapSet the hashes of the high capacity peers
+         */
         ProfileComparator(Set<Hash> fastSet, Set<Hash> highCapSet) {
             _fastSet = fastSet;
             _highCapSet = highCapSet;
@@ -1271,8 +1294,16 @@ class ProfileOrganizerRenderer {
      * @since 0.9.70+
      */
     private static class FloodfillRow {
+        /** The profile shown in the row. */
         final PeerProfile prof;
+        /** Build failure percent over the last hour. */
         final int hourFailPct;
+        /**
+         * One row of the floodfill table.
+         *
+         * @param prof the profile shown in the row
+         * @param ra the rate averages for the row
+         */
         FloodfillRow(PeerProfile prof, RateAverages ra) {
             this.prof = prof;
             this.hourFailPct = failRatePct(prof, ra);
@@ -1316,8 +1347,16 @@ class ProfileOrganizerRenderer {
         return (int) avg;
     }
 
+    /** Formatter for the numbers in the table. */
     private final static DecimalFormat _fmt = new DecimalFormat("###,##0.00");
+    /**
+     * Formats a number for the table.
+     *
+     * @param num the number to format
+     * @return the formatted text
+     */
     private final static String num(double num) { synchronized (_fmt) { return _fmt.format(num); } }
+    /** Placeholder for a missing value. */
     private final static String NA = "&ensp;";
 
     /**
@@ -1371,6 +1410,13 @@ class ProfileOrganizerRenderer {
      */
     private String _t(String s) {return Messages.getString(s, _context);}
 
+    /**
+     * Translates a string with one parameter.
+     *
+     * @param s the string to translate
+     * @param o the parameter to substitute
+     * @return the translated text
+     */
     private String _t(String s, Object o) {return Messages.getString(s, o, _context);}
 
     /**

@@ -69,9 +69,13 @@ abstract class TrayManager {
      */
     protected JMenuItem _jnotificationItem2;
 
+    /** Where the tray icons are loaded from. */
     private static final String PNG_DIR = "/desktopgui/resources/images/";
+    /** Icon used on macOS. */
     private static final String MAC_ICON = "itoopie_black_24.png";
+    /** Icon used on Windows. */
     private static final String WIN_ICON = "itoopie_white_24.png";
+    /** Icon used on Linux. */
     private static final String LIN_ICON = "logo.png";
     /**
      * Config key holding the tray notification preference.

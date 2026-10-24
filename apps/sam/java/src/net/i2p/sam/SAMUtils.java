@@ -40,6 +40,7 @@ class SAMUtils {
       */
      SAMUtils() {}
 
+     /** Logger for this class. */
      private final static Log _log = new Log(SAMUtils.class);
 
     /** The key for the command portion of a parsed SAM message. */

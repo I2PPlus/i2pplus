@@ -38,23 +38,23 @@ import org.cybergarage.xml.Node;
  */
 public class NewsManager implements ClientApp {
 
+    /** The app context. */
     private final I2PAppContext _context;
+    /** The log for the news. */
     private final Log _log;
+    /** The manager registering the news app. */
     private final ClientAppManager _cmgr;
+    /** The state of the news client app. */
     private volatile ClientAppState _state = UNINITIALIZED;
+    /** The current news entries. */
     private List<NewsEntry> _currentNews;
 
-    /*
-     * TODO:
-     * Metadata is persisted in the old news.xml format by NewsFetcher.outputOldNewsXML()
-     * and read in at startup by ConsoleUpdateManager.startup() and NewsFetcher.checkForUpdates().
-     * While running, the UpdateManager keeps the metadata. NewsHelper looks at the news.xml timestamp.
-     */
 
     /**
      * ClientApp name this manager registers under with the update manager.
      */
     public static final String APP_NAME = "news";
+    /** The bundle of the translated news strings. */
     private static final String BUNDLE_NAME = "net.i2p.router.news.messages";
 
     /**
@@ -175,11 +175,21 @@ public class NewsManager implements ClientApp {
     @Override
     public String getDisplayName() {return "News Manager";}
 
+    /**
+     * Changes the state of the client app.
+     *
+     * @param state the new state
+     */
     private synchronized void changeState(ClientAppState state) {
         _state = state;
         if (_cmgr != null) {_cmgr.notify(this, state, null, null);}
     }
 
+    /**
+     * Reads the news saved by a previous run.
+     *
+     * @return the saved entries
+     */
     private List<NewsEntry> parseOldNews() {
         File file = new File(_context.getConfigDir(), "docs/news.xml");
         String newsContent = FileUtil.readTextFile(file.toString(), -1, true);
@@ -202,6 +212,11 @@ public class NewsManager implements ClientApp {
         return rv;
     }
 
+    /**
+     * Reads the news shipped with the router.
+     *
+     * @return the built-in entries
+     */
     private List<NewsEntry> parseInitialNews() {
         File file = new File(_context.getBaseDir(), "docs/initialNews/initialNews.xml");
         Reader reader = null;

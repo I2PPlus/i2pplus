@@ -15,7 +15,9 @@ public class HostCheckerBridge {
      */
     public HostCheckerBridge() {}
 
+    /** The shared checker, created on first use. */
     private static HostChecker hostChecker;
+    /** Guards creating and replacing the checker. */
     private static final Object lock = new Object();
 
     /**

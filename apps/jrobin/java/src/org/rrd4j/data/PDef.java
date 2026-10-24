@@ -5,6 +5,7 @@ package org.rrd4j.data;
  * Creates data sources from plottable objects that can provide values based on timestamps.
  */
 class PDef extends Source implements NonRrdSource {
+    /** The object whose rendering is exposed as a graph source. */
     private final IPlottable plottable;
 
     /**

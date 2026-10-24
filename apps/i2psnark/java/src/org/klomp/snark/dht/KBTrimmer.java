@@ -25,7 +25,9 @@ import net.i2p.kademlia.KBucketTrimmer;
  * @since 0.9.2
  */
 class KBTrimmer implements KBucketTrimmer<NID> {
+    /** Supplies the clock and the log. */
     private final I2PAppContext _ctx;
+    /** Buckets kept before the farthest are trimmed away. */
     private final int _max;
 
     /**

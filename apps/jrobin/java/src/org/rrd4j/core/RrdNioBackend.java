@@ -27,14 +27,21 @@ import java.util.concurrent.TimeUnit;
  */
 public class RrdNioBackend extends ByteBufferBackend implements RrdFileBackend {
 
-    // Path 1: DirectBuffer.cleaner() -> clean() (no Unsafe, preferred on Java 8)
+    /**
+     * Method cleaning a mapped buffer without unsafe, the preferred
+     * path on Java 8.
+     */
     private static final Method cleanerMethod;
+    /** Method invoked on the cleaner, old JDKs. */
     private static final Method cleanMethod;
-    // Path 2: sun.misc.Unsafe.invokeCleaner (Java 9+). The JVM reports this call
-    // as terminally deprecated on every use, and on POSIX a live mapping never
-    // blocks the file - it is released when the buffer is collected. Resolve it
-    // only where a mapping does hold the file open, which is Windows.
+    /**
+     * Method cleaning a mapped buffer via unsafe, for newer JDKs. The
+     * call is terminally deprecated and a live mapping never blocks the
+     * file on POSIX, so it is resolved only where a mapping does hold
+     * the file open, which is Windows.
+     */
     private static final Method invokeCleaner;
+    /** The unsafe object the cleaner runs on, if any. */
     private static final Object unsafe;
 
     static {
@@ -97,10 +104,14 @@ public class RrdNioBackend extends ByteBufferBackend implements RrdFileBackend {
         unsafe = unsafeTemp;
     }
 
+    /** The mapped file buffer. */
     private MappedByteBuffer byteBuffer;
+    /** The channel of the rrd file. */
     private final FileChannel file;
+    /** True if the file is opened read only. */
     private final boolean readOnly;
 
+    /** The running periodic sync task, if any. */
     private ScheduledFuture<?> syncRunnableHandle = null;
 
     /** Path to the single temporary file used to buffer all stat files data sequentially. */
@@ -133,10 +144,20 @@ public class RrdNioBackend extends ByteBufferBackend implements RrdFileBackend {
      * Helper class representing a buffered stat file segment's location in the temp buffer file.
      */
     private static class StatFileSegment {
+        /** Where the segment's data sits in the temp file. */
         final long offset; // offset within temp buffer file where this stat file data begins
+        /** Size of the segment's data, in bytes. */
         final int length; // length of this stat file data in bytes
+        /** Where the segment's data belongs in the rrd file. */
         final long targetFileOffset; // offset within the mapped (RRD) file where this stat belongs
 
+        /**
+         * Records one segment of the deferred write.
+         *
+         * @param offset where the data sits in the temp file
+         * @param length the size of the data, in bytes
+         * @param targetFileOffset where the data belongs in the rrd file
+         */
         StatFileSegment(long offset, int length, long targetFileOffset) {
             this.offset = offset;
             this.length = length;
@@ -229,6 +250,12 @@ public class RrdNioBackend extends ByteBufferBackend implements RrdFileBackend {
         }
     }
 
+    /**
+     * Maps the file into memory.
+     *
+     * @param length the length to map
+     * @throws IOException if the file cannot be mapped
+     */
     private void mapFile(long length) throws IOException {
         if (length > 0) {
             FileChannel.MapMode mapMode =
@@ -238,6 +265,7 @@ public class RrdNioBackend extends ByteBufferBackend implements RrdFileBackend {
         }
     }
 
+    /** Cleans and releases the mapped buffer. */
     private void unmapFile() {
         if (byteBuffer != null && byteBuffer.isDirect()) {
             try {
@@ -306,6 +334,7 @@ public class RrdNioBackend extends ByteBufferBackend implements RrdFileBackend {
         }
     }
 
+    /** Closes and deletes the temp buffer file. */
     private void closeTempResources() {
         try {
             if (tempBufferFileChannel != null) {

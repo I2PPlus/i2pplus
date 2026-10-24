@@ -22,10 +22,13 @@ import java.nio.charset.StandardCharsets;
 
 public class OsfwWorker implements Runnable {
 
+    /** Socket the test connections arrive on. */
     private final ServerSocket _srvSocket;
+    /** How long the test should run, in seconds. */
     private final int _iTestTime;
+    /** True once the results have been sent. */
     private boolean _iFinalized = false;
-    // local Tcpbw100 Applet reference
+    /** The local test application, for the queue state. */
     private final Tcpbw100 _localTcpAppObj;
 
     /**

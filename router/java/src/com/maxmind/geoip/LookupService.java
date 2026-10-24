@@ -59,6 +59,7 @@ public class LookupService {
      * Random access handle on the database file.
      */
     private RandomAccessFile file;
+    /** The GeoIP database file. */
     private final File databaseFile;
 
     /**
@@ -66,7 +67,9 @@ public class LookupService {
      */
     private DatabaseInfo databaseInfo;
 
+    /** Charset used for the database strings. */
     private static final Charset charset = Charset.forName("ISO-8859-1");
+    /** Decoder for the database strings. */
     private final CharsetDecoder charsetDecoder = charset.newDecoder();
 
     /**
@@ -74,22 +77,38 @@ public class LookupService {
      */
     private byte databaseType = DatabaseInfo.COUNTRY_EDITION;
 
+    /** Segment start offsets in the database. */
     private int[] databaseSegments;
+    /** Record length in bits, from the file. */
     private int recordLength;
 
+    /** Database type flags for this file. */
     private int dboptions;
+    /** The whole database, when memory-mapped mode is off. */
     private byte[] dbbuffer;
+    /** Cache of the first-level index records. */
     private byte[] index_cache;
+    /** Modification time of the database file. */
     private long mtime;
+    /** Netmask of the last lookup. */
     private int last_netmask;
+    /** Country table offset for US state records. */
     private static final int US_OFFSET = 1;
+    /** Country table offset for Canadian province records. */
     private static final int CANADA_OFFSET = 677;
+    /** Country table offset for world region records. */
     private static final int WORLD_OFFSET = 1353;
+    /** Size of the FIPS country code range. */
     private static final int FIPS_RANGE = 360;
+    /** Database offset where country records begin. */
     private static final int COUNTRY_BEGIN = 16776960;
+    /** State record start in revision 0 databases. */
     private static final int STATE_BEGIN_REV0 = 16700000;
+    /** State record start in revision 1 databases. */
     private static final int STATE_BEGIN_REV1 = 16000000;
+    /** Longest structure info field read. */
     private static final int STRUCTURE_INFO_MAX_SIZE = 20;
+    /** Longest database info field read. */
     private static final int DATABASE_INFO_MAX_SIZE = 100;
     /**
      * No cache: every node visit is a disk read.
@@ -124,16 +143,24 @@ public class LookupService {
      */
     public static final int GEOIP_CORPORATE_SPEED = 3;
 
+    /** Record length for segment regions, in bytes. */
     private static final int SEGMENT_RECORD_LENGTH = 3;
+    /** Record length for standard databases, in bytes. */
     private static final int STANDARD_RECORD_LENGTH = 3;
+    /** Record length for org databases, in bytes. */
     private static final int ORG_RECORD_LENGTH = 4;
+    /** Longest record length supported. */
     private static final int MAX_RECORD_LENGTH = 4;
 
+    /** Longest org record read. */
     private static final int MAX_ORG_RECORD_LENGTH = 300;
+    /** Scratch buffer size for a full record. */
     private static final int FULL_RECORD_LENGTH = 60;
 
+    /** Country returned when nothing matches. */
     private final Country UNKNOWN_COUNTRY = new Country("--", "N/A");
 
+    /** Country codes indexed by the database. */
     private static final String[] countryCode = { "--", "AP", "EU", "AD", "AE",
             "AF", "AG", "AI", "AL", "AM", "CW", "AO", "AQ", "AR", "AS", "AT",
             "AU", "AW", "AZ", "BA", "BB", "BD", "BE", "BF", "BG", "BH", "BI",
@@ -159,6 +186,7 @@ public class LookupService {
             "WS", "YE", "YT", "RS", "ZA", "ZM", "ME", "ZW", "A1", "A2", "O1",
             "AX", "GG", "IM", "JE", "BL", "MF", "BQ", "SS", "O1" };
 
+    /** Country names indexed by the database. */
     private static final String[] countryName = { "N/A", "Asia/Pacific Region",
             "Europe", "Andorra", "United Arab Emirates", "Afghanistan",
             "Antigua and Barbuda", "Anguilla", "Albania", "Armenia", "Curacao",
@@ -548,28 +576,44 @@ public class LookupService {
      * @since 0.9.48
      */
     private class Walker {
+        /** Country segment index to walk. */
         private final int _country;
+        /** Where the walk writes its output. */
         private final Writer _out;
+        /** Scratch buffer for one node pair. */
         private final byte[] _buf = new byte[2 * MAX_RECORD_LENGTH];
+        /** Child offsets read from a node. */
         private final int[] _x = new int[2];
+        /** Start offset of the first database segment. */
         private final int _dbs0 = databaseSegments[0];
 
         /**
+         * Prepares to walk the database records for one country.
          * @param country the segment index of the country's record
+         * @param out where the walk writes its output
+         * @throws IOException declared by the signature, not thrown here
          */
         public Walker(int country, Writer out) throws IOException {
             _country = country;
             _out = out;
         }
 
-        /** only call once */
+        /**
+         * Only call once.
+         *
+         * @throws IOException if the database read fails
+         */
         public void walk() throws IOException {
             walk(0, 0, 31);
         }
 
         /**
-         * Recursive, depth first
+         * Recursive, depth first.
+         *
+         * @param offset the node offset to walk from
          * @param ip the IPv4 address being walked, packed big endian
+         * @param depth the current depth in the tree
+         * @throws IOException if the database read fails
          */
         private void walk(int offset, int ip, int depth) throws IOException {
             if (offset >= _dbs0) {
@@ -888,6 +932,13 @@ public class LookupService {
         }
     }
 
+    /**
+     * Reads the city record for a country seek position.
+     *
+     * @param seekCountry the country record offset
+     * @return the location, or null if absent
+     * @throws IOException if the database read fails
+     */
     private Location readCityRecord(int seekCountry) throws IOException {
         if (seekCountry == databaseSegments[0]) {
             return null;
@@ -918,6 +969,14 @@ public class LookupService {
         return record;
     }
 
+    /**
+     * Reads a record's bytes into a buffer.
+     *
+     * @param seek the offset to read from
+     * @param maxLength the most bytes to read
+     * @return the record bytes
+     * @throws IOException if the database read fails
+     */
     private ByteBuffer readRecordBuf(int seek, int maxLength) throws IOException {
 
         int recordPointer = seek + (2 * recordLength - 1)
@@ -937,6 +996,13 @@ public class LookupService {
         return buffer;
     }
 
+    /**
+     * Reads a NUL-terminated string from the buffer.
+     *
+     * @param buffer the record buffer
+     * @return the decoded text
+     * @throws CharacterCodingException if the bytes are not decodable
+     */
     private String readString(ByteBuffer buffer) throws CharacterCodingException {
         int start = buffer.position();
         int oldLimit = buffer.limit();
@@ -955,6 +1021,12 @@ public class LookupService {
         return str;
     }
 
+    /**
+     * Reads a latitude or longitude value from the buffer.
+     *
+     * @param buffer the record buffer
+     * @return the angle in degrees
+     */
     private static float readAngle(ByteBuffer buffer) {
         if (buffer.remaining() < 3) {
             throw new InvalidDatabaseException("Unexpected end of data record when reading angle");
@@ -966,6 +1038,12 @@ public class LookupService {
         return (float) num / 10000 - 180;
     }
 
+    /**
+     * Reads the combined metro area code from the buffer.
+     *
+     * @param buffer the record buffer
+     * @return the metro area code
+     */
     private static int readMetroAreaCombo(ByteBuffer buffer) {
         if (buffer.remaining() < 3) {
             throw new InvalidDatabaseException("Unexpected end of data record when reading metro area");
@@ -1050,6 +1128,13 @@ public class LookupService {
         }
     }
 
+    /**
+     * Reads the organization name for a seek position.
+     *
+     * @param seekOrg the record offset
+     * @return the organization name
+     * @throws IOException if the database read fails
+     */
     private String readOrgRecord(int seekOrg) throws IOException {
         if (seekOrg == databaseSegments[0]) {
             return null;
@@ -1139,6 +1224,13 @@ public class LookupService {
                 + ipAddress);
     }
 
+    /**
+     * Reads one node's two child offsets into x.
+     *
+     * @param buf the buffer holding the node
+     * @param x where the child offsets are stored
+     * @param offset the node offset in the database
+     */
     private void readNode(byte[] buf, int[] x, int offset) {
         if ((dboptions & GEOIP_MEMORY_CACHE) == 1) {
             // read from memory
@@ -1186,6 +1278,12 @@ public class LookupService {
         return ipnum;
     }
 
+    /**
+     * Converts a byte to its unsigned value.
+     *
+     * @param b the byte
+     * @return the value from 0 to 255
+     */
     private static int unsignedByteToInt(byte b) {
         return (int) b & 0xFF;
     }

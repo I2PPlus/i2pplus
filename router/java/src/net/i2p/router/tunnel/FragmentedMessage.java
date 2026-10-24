@@ -17,22 +17,36 @@ import net.i2p.util.SimpleTimer2;
  *
  */
 class FragmentedMessage {
+    /** The app context. */
     private final I2PAppContext _context;
+    /** Logger for the fragmented message. */
     private final Log _log;
+    /** Id of the message being reassembled. */
     private final long _messageId;
+    /** The router the message goes to. */
     private Hash _toRouter;
+    /** The tunnel the message goes through. */
     private TunnelId _toTunnel;
+    /** The fragments received so far. */
     private final ByteArray[] _fragments;
+    /** True once the final fragment arrived. */
     private volatile boolean _lastReceived;
+    /** Highest fragment number received. */
     private volatile int _highFragmentNum;
+    /** When the reassembly started. */
     private final long _createdOn;
+    /** True once all fragments are in. */
     private volatile boolean _completed;
+    /** When the reassembly is dropped if incomplete. */
     private volatile long _releasedAfter;
+    /** Timer dropping the incomplete reassembly. */
     private SimpleTimer2.TimedEvent _expireEvent;
 
+    /** Cache supplying the fragment buffers. */
     private static final ByteCache _cache = ByteCache.getInstance(512, TrivialPreprocessor.PREPROCESSED_SIZE);
-    // 64 is pretty absurd, 32 is too, most likely
+    /** Most fragments in one message, even 32 is unlikely. */
     private static final int MAX_FRAGMENTS = 64;
+    /** Largest fragment, in bytes. */
     private static final int MAX_FRAGMENT_SIZE = 996;
 
     /**
@@ -259,6 +273,12 @@ class FragmentedMessage {
      */
     public boolean getReleased() { return _completed; }
 
+    /**
+     * Writes the reassembled message to the buffer.
+     *
+     * @param target the buffer to write into
+     * @param offset where to start writing
+     */
     private void writeComplete(byte[] target, int offset) {
         if (_releasedAfter > 0) {
             RuntimeException e = new RuntimeException("use after free in FragmentedMessage");

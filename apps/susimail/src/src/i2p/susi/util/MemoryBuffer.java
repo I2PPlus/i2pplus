@@ -14,8 +14,11 @@ import java.io.OutputStream;
  */
 public class MemoryBuffer implements Buffer {
 
+	/** Buffer collecting the bytes written. */
 	private ByteArrayOutputStream _baos;
+	/** The bytes read back, filled in when the buffer closes. */
 	private byte[] content;
+	/** Initial buffer size, in bytes. */
 	private final int _size;
 	
 	/**

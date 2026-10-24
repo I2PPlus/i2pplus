@@ -26,7 +26,9 @@ import net.i2p.update.*;
  * @since 0.9.20
  */
 class DevSU3UpdateHandler implements Checker, Updater {
+    /** The router context the handler runs in. */
     private final RouterContext _context;
+    /** The manager that installs the update. */
     private final ConsoleUpdateManager _mgr;
 
     /**

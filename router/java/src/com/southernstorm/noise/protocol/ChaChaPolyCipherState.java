@@ -11,15 +11,22 @@ import javax.crypto.ShortBufferException;
  */
 public class ChaChaPolyCipherState implements CipherState {
 
+    /** The Poly1305 MAC calculator. */
     private final Poly1305 poly;
+    /** Scratch words for the ChaCha20 block. */
     private final int[] input;
+    /** Output words of the ChaCha20 block. */
     private final int[] output;
+    /** The one-time key for the MAC. */
     private final byte[] polyKey;
+    /** The nonce counter. */
     private long n;
+    /** True once a key has been set. */
     private boolean haskey;
-    // Debug only
+    /** Copy of the initial key, debug only. */
     private byte[] initialKey;
 
+    /** Switch for the key-dump debug logs. */
     private static final boolean DEBUG = false;
 
     /**

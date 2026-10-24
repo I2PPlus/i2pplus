@@ -21,6 +21,7 @@ import net.i2p.stat.RateStat;
  */
 class CapacityCalculator {
 
+    /** Prevents instantiating the utility class. */
     private CapacityCalculator() {}
 
     /** Property for bonus applied to peers in the same country. */
@@ -32,27 +33,45 @@ class CapacityCalculator {
     /** The calculator estimates over a 1 hour period. */
     private static long ESTIMATE_PERIOD = 60*60*1000L;
 
-    // total of all possible bonuses should be less than 4, since
-    // crappy peers start at 1 and the base is 5.
+    /**
+     * Bonus for a peer we are connected to. The total of all the
+     * bonuses stays under 4, since bad peers start at 1 and the base is 5.
+     */
     private static final double BONUS_ESTABLISHED = 0.65;
+    /** Bonus for a peer close in XOR distance. */
     private static final double BONUS_XOR = .25;
+    /** Penalty for a peer never tried. */
     private static final double PENALTY_NEW = 4;
+    /** Penalty for a peer marked unreachable. */
     private static final double PENALTY_UNREACHABLE = 3;
+    /** Penalty for a peer with no router info. */
     private static final double PENALTY_NO_RI = 4;
+    /** Penalty for a peer with the low bandwidth flag. */
     private static final double PENALTY_L_CAP = 3;
+    /** Penalty for a peer without the reachable flag. */
     private static final double PENALTY_NO_R_CAP = 2;
+    /** Penalty for a peer with the unreachable flag. */
     private static final double PENALTY_U_CAP = 3;
+    /** Penalty when the last send to the peer failed. */
     private static final double PENALTY_LAST_SEND_FAIL = 4;
+    /** Config key for the moderate congestion penalty. */
     private static final String PROP_D_CAP = "router.penaltyCapD";
+    /** Default penalty for moderate congestion. */
     private static final double PENALTY_CAP_D = 2.5;
+    /** Config key for the severe congestion penalty. */
     private static final String PROP_E_CAP = "router.penaltyCapE";
+    /** Default penalty for severe congestion. */
     private static final double PENALTY_CAP_E = 4.75;
+    /** Penalty for a recent send failure. */
     private static final double PENALTY_RECENT_SEND_FAIL = 4;
 
-    // Cached parsed config values
+    /** Config text the cached D penalty was parsed from. */
     private static String _cachedDcapProp;
+    /** Cached moderate congestion penalty. */
     private static double _cachedDcap = PENALTY_CAP_D;
+    /** Config text the cached E penalty was parsed from. */
     private static String _cachedEcapProp;
+    /** Cached severe congestion penalty. */
     private static double _cachedEcap = PENALTY_CAP_E;
 
     /**
@@ -87,10 +106,14 @@ class CapacityCalculator {
         return _cachedEcap;
     }
 
+    /** Bonus when the last send to the peer succeeded. */
     private static final double BONUS_LAST_SEND_SUCCESS = 1;
+    /** Bonus for a recent send success. */
     private static final double BONUS_RECENT_SEND_SUCCESS = 1;
-    // we make this a bonus for non-ff, not a penalty for ff, so we
-    // don't drive the ffs below the default
+    /**
+     * Bonus for a peer that is not a floodfill. A bonus for the others,
+     * not a penalty for floodfills, keeps the floodfills at the default.
+     */
     private static final double BONUS_NON_FLOODFILL = 1.0;
 
     /**

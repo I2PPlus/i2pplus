@@ -295,7 +295,7 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
         private static final long serialVersionUID = 9087390587254111L;
 
         /**
-         * Empty constructor.
+         * Creates an empty set.
          */
         public SetFullException() {
             super();
@@ -307,6 +307,9 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
      * Iterator implementation for ArraySet.
      */
     private class ASIterator implements Iterator<E>, Serializable {
+        /** Walks the set's elements. */
+        private ASIterator() {}
+
         /**
          * Index of element to be returned by subsequent call to next.
          */
@@ -366,6 +369,7 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
             }
         }
 
+        /** Throws if the set changed since the iterator was made. */
         final void checkForComodification() {
             if (modCount != expectedModCount) throw new ConcurrentModificationException();
         }

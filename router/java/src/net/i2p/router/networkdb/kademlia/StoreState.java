@@ -27,17 +27,29 @@ import net.i2p.router.RouterContext;
  * with validation, timeout handling, and operation completion tracking.
  */
 class StoreState {
+    /** The router context. */
     private final RouterContext _context;
+    /** The key being stored. */
     private final Hash _key;
+    /** The entry being stored. */
     private final DatabaseEntry _data;
+    /** The peers not yet replied. */
     private final HashSet<Hash> _pendingPeers;
+    /** When each pending peer was contacted. */
     private final Map<Hash, Long> _pendingPeerTimes;
+    /** The sent messages awaiting a reply. */
     private final Map<Hash, MessageWrapper.WrappedMessage> _pendingMessages;
+    /** The peers that stored the entry. */
     private final Set<Hash> _successfulPeers;
+    /** The peers contacted so far. */
     private final Set<Hash> _attemptedPeers;
+    /** Replies received so far. */
     private int _completeCount;
+    /** Peers contacted so far. */
     private int _attempted;
+    /** When the store finished, zero while running. */
     private volatile long _completed;
+    /** When the store started. */
     private volatile long _started;
 
     /**

@@ -37,9 +37,13 @@ import net.i2p.util.RandomSource;
  */
 class NodeInfo extends SimpleDataStructure {
 
+    /** The node's DHT id. */
     private final NID nID;
+    /** The node's router hash. */
     private final Hash hash;
+    /** The node's destination, resolved when needed. */
     private Destination dest;
+    /** The KRPC port the node listens on. */
     private final int port;
 
     /**

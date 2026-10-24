@@ -15,32 +15,46 @@ import net.i2p.util.Log;
  * All methods are thread-safe.
  */
 class OutboundMessageState implements CDPQEntry {
+    /** The app context. */
     private final I2PAppContext _context;
+    /** Logger for the outbound message state. */
     private final Log _log;
     /** May be null if we are part of the establishment. */
     private final OutNetMessage _message;
+    /** The message being tracked. */
     private final I2NPMessage _i2npMessage;
     /** Will be null, unless we are part of the establishment. */
     private final PeerState _peer;
+    /** When the message expires. */
     private final long _expiration;
+    /** The message bytes prepared for sending. */
     private final byte[] _messageBuf;
     /** Fixed fragment size across the message. */
     private final int _fragmentSize;
     /** Bitmask, 0 if acked, all 0 = complete. */
     private long _fragmentAcks;
+    /** Fragments the message was split into. */
     private final int _numFragments;
     /** Sends for each fragment, or null if only one fragment. */
     private final byte[] _fragmentSends;
+    /** When the message sending started. */
     private final long _startedOn;
     /** Time of first fragment send (for network RTT measurement, excludes queue time). */
     private volatile long _firstSendTime;
+    /** Times the message has been pushed. */
     private int _pushCount;
+    /** Most sends of the message allowed. */
     private int _maxSends;
-    // we can't use the ones in _message since it is null for injections
+    /**
+     * When the message was last enqueued, tracked here since the
+     * message itself is null for injections.
+     */
     private volatile long _enqueueTime;
+    /** Sequence number of the message. */
     private volatile long _seqNum;
     /** How many bytes {@link #push(List)} is allowed to send. */
     private int _allowedSendBytes;
+    /** Nacks received for the fragments. */
     private final AtomicInteger _nacks = new AtomicInteger();
     /**
      * Largest message body SSU will carry, in bytes; larger ones are rejected.
@@ -50,8 +64,8 @@ class OutboundMessageState implements CDPQEntry {
     private static volatile long _messageExpiration = 60*1000L;
 
     /**
-     * The current outbound message expiration in ms.
-     * @return current outbound message expiration in ms
+     * How long an outbound SSU message stays in flight before it is dropped.
+     * @return the duration in ms, 5000-300000, 60000 unless the Tuner changed it
      * @since 0.9.70+
      */
     public static long getMessageExpiration() { return _messageExpiration; }
@@ -245,8 +259,8 @@ class OutboundMessageState implements CDPQEntry {
     }
 
     /**
-     * Count of unacked fragments.
-     * @return count of unacked fragments
+     * How many fragments of the message still need an ack.
+     * @return 0 when the message is complete, otherwise 1 to the fragment count
      * @since 0.9.49
      */
     public synchronized int getUnackedFragments() {

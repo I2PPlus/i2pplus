@@ -764,10 +764,8 @@ public class Node {
         String xmlStr = toString();
         xmlStr = xmlStr.replace("<", "&lt;");
         xmlStr = xmlStr.replace(">", "&gt;");
-        // Thanks for Theo Beisch (11/09/04)
         xmlStr = xmlStr.replace("&", "&amp;");
         xmlStr = xmlStr.replace("\"", "&quot;");
-        // Thanks for Brian Owens (12/02/04)
         xmlStr = xmlStr.replace("'", "&apos;");
         return xmlStr;
     }

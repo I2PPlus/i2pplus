@@ -13,17 +13,23 @@ import net.i2p.util.SimpleTimer2;
  * @since 0.7.14
  */
 class ConnThrottler {
+    /** Open connections counted per peer. */
     private final ObjectCounter<Hash> counter;
+    /** Most connections allowed from one peer. */
     private volatile int _max;
+    /** Most connections allowed from all peers together. */
     private volatile int _totalMax;
+    /** Connections open right now. */
     private final AtomicInteger _currentTotal;
+    /** Timer decaying the counts periodically. */
     private final Cleaner _cleaner;
 
     /**
      * Connection throttle for incoming connection rates.
+     *
      * @param max per-peer, 0 for unlimited
      * @param totalMax for all peers, 0 for unlimited
-     * @param period ms
+     * @param period how often the counters are reset, in ms
      * @param timer the timer pool the periodic counter reset is scheduled on
      */
     ConnThrottler(int max, int totalMax, long period, SimpleTimer2 timer) {
@@ -88,9 +94,17 @@ class ConnThrottler {
         return false;
     }
 
+    /** Decays the per-peer counts on a schedule. */
     private class Cleaner extends SimpleTimer2.TimedEvent {
+        /** How long between decays, in ms. */
         private final long _period;
 
+        /**
+         * Starts the decay schedule.
+         *
+         * @param pool the timer the decays run on
+         * @param period how long between decays, in ms
+         */
         Cleaner(SimpleTimer2 pool, long period) {
             super(pool);
             _period = period;

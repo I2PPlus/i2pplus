@@ -14,6 +14,7 @@ import net.i2p.router.RouterContext;
  * @since 0.8.3
  */
 class QueuedClientConnectionRunner extends ClientConnectionRunner {
+    /** The queue shared with the client. */
     private final I2CPMessageQueue queue;
 
     /**

@@ -14,6 +14,7 @@ package net.i2p.sam;
  */
 public class SAMException extends Exception {
 
+    /** Pinned for serialized-form compatibility. */
     private static final long serialVersionUID = 1;
 
     /**

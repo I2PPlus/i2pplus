@@ -20,13 +20,20 @@ import net.i2p.util.SimpleTimer2;
  * @since 0.9.4 moved from {@link NewsFetcher}
  */
 class NewsTimerTask extends SimpleTimer2.TimedEvent {
+    /** The router context. */
     private final RouterContext _context;
+    /** The log for the news task. */
     private final Log _log;
+    /** The update manager fetching the news. */
     private final ConsoleUpdateManager _mgr;
+    /** True for the first run after startup. */
     private volatile boolean _firstRun = true;
 
+    /** Delay before the first run. */
     private static final long INITIAL_DELAY = 5 * (long) 60 * 1000;
+    /** Delay before the first run on a new install. */
     private static final long NEW_INSTALL_DELAY = 25 * (long) 60 * 1000;
+    /** Delay between the runs. */
     private static final long RUN_DELAY = 10 * (long) 60 * 1000;
 
     /**
@@ -68,6 +75,11 @@ class NewsTimerTask extends SimpleTimer2.TimedEvent {
         _firstRun = false;
     }
 
+    /**
+     * Whether to fetch the news now.
+     *
+     * @return true when it is time to fetch
+     */
     private boolean shouldFetchNews() {
         if (_context.router().gracefulShutdownInProgress())
             return false;
@@ -100,6 +112,11 @@ class NewsTimerTask extends SimpleTimer2.TimedEvent {
         _mgr.checkAvailable(NEWS, (long) 60*1000);
     }
 
+    /**
+     * Whether to fetch unsigned news.
+     *
+     * @return true when unsigned news is allowed
+     */
     private boolean shouldFetchUnsigned() {
         String url = _context.getProperty(ConfigUpdateHandler.PROP_ZIP_URL);
         return url != null && !url.isEmpty() &&

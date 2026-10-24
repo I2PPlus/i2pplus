@@ -23,6 +23,7 @@ import java.io.OutputStream;
  *
  */
 public class MessageId {
+    /** The message's 64-bit identifier. */
     private long _messageId;
 
     /**

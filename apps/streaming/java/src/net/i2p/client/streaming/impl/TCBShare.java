@@ -22,28 +22,41 @@ import net.i2p.util.SimpleTimer2;
  * same router.
  */
 class TCBShare {
+    /** The app context. */
     private final I2PAppContext _context;
+    /** Logger for the streaming congestion cache. */
     private final Log _log;
+    /** Congestion control entries, by destination. */
     private final Map<Destination, Entry> _cache;
+    /** Timer cleaning expired entries. */
     private final CleanEvent _cleaner;
+    /** Dampening factor applied to the round trip time. */
     private final double _rttDampening;
+    /** Dampening factor applied to the window. */
     private final double _wdwDampening;
+    /** Dampening factor applied to the RTT deviation. */
     private final double _rttDevDampening;
 
-    // Must be less than SessionKeyManager outbound timeout (12 minutes)
-    // to avoid large number of DH operations
+    /** Time an unused entry stays in the cache. */
     private static final long EXPIRE_TIME = 10 * (long) 60 * 1000;
+    /** Interval between cache cleanups. */
     private static final long CLEAN_TIME = 5 * (long) 60 * 1000;
     ///// constants defined in rfc 2140
     ///// do not change unless you know what you're doing
     private static final double RTT_DAMPENING = 0.75;
+    /** Default dampening for the RTT deviation. */
     private static final double RTTDEV_DAMPENING = 0.75;
+    /** Default dampening for the window. */
     private static final double WDW_DAMPENING = 0.75;
+    /** Config key for the round trip time dampening. */
     private static final String RTT_DAMP_PROP="i2p.streaming.tcbcache.rttDampening";
+    /** Config key for the window dampening. */
     private static final String WDW_DAMP_PROP="i2p.streaming.tcbcache.wdwDampening";
+    /** Config key for the RTT deviation dampening. */
     private static final String RTTDEV_DAMP_PROP="i2p.streaming.tcbcache.rttdevDampening";
     /////
     private static final int MAX_RTT = Connection.getMaxResendDelay() / 2;
+    /** Largest RTT deviation allowed. */
     private static final int MAX_RTT_DEV = (int) (MAX_RTT * 1.5);
 
     /**
@@ -177,9 +190,13 @@ class TCBShare {
      * A cached entry holding dampened TCB parameters for a remote peer.
      */
     private class Entry {
+        /** The round trip time estimate, in ms. */
         int _rtt;
+        /** The congestion window estimate. */
         int _wdw;
+        /** The RTT deviation estimate. */
         int _rttDev;
+        /** When the entry was last updated. */
         long _updated;
 
         /**
@@ -195,27 +212,62 @@ class TCBShare {
             _rttDev = rttDev;
             _updated = _context.clock().now();
         }
+        /**
+         * Returns the round trip time estimate.
+         *
+         * @return the estimate, in ms
+         */
         public synchronized int getRTT() { return _rtt; }
+        /**
+         * Sets the round trip time estimate.
+         *
+         * @param ms the estimate, in ms
+         */
         public synchronized void setRTT(int ms) {
             _rtt = (int)(_rttDampening*_rtt + (1-_rttDampening)*ms);
             if (_rtt > MAX_RTT)
                 _rtt = MAX_RTT;
             _updated = _context.clock().now();
         }
+        /**
+         * Returns the RTT deviation estimate.
+         *
+         * @return the estimate, in ms
+         */
         public synchronized int getRTTDev() { return _rttDev; }
+        /**
+         * Sets the RTT deviation estimate.
+         *
+         * @param count the new RTT deviation sample, in ms
+         */
         public synchronized void setRTTDev(int count) {
             _rttDev = (int)(_rttDevDampening*_rttDev + (1-_rttDevDampening)*count);
             if (_rttDev > MAX_RTT_DEV)
                 _rttDev = MAX_RTT_DEV;
             _updated = _context.clock().now();
         }
+        /**
+         * Returns the congestion window estimate.
+         *
+         * @return the estimate, in bytes
+         */
         public synchronized int getWindowSize() { return _wdw; }
+        /**
+         * Sets the congestion window estimate.
+         *
+         * @param wdw the new window sample, in bytes
+         */
         public synchronized void setWindowSize(int wdw) {
             _wdw = (int)(0.5 + _wdwDampening*_wdw + (1-_wdwDampening)*wdw);
             if (_wdw > getMaxWindowSize())
                 _wdw = getMaxWindowSize();
             _updated = _context.clock().now();
         }
+        /**
+         * Checks whether the entry has gone unused past the expire time.
+         *
+         * @return true if expired
+         */
         public synchronized boolean isExpired() {
             return _updated < _context.clock().now() - EXPIRE_TIME;
         }
@@ -225,6 +277,11 @@ class TCBShare {
      * Periodic timer event that removes expired entries from the cache.
      */
     private class CleanEvent extends SimpleTimer2.TimedEvent {
+        /**
+         * Builds the timer that cleans expired entries.
+         *
+         * @param timer the timer to schedule on
+         */
         public CleanEvent(SimpleTimer2 timer) {
             // Use router's SimpleTimer2
             super(timer);

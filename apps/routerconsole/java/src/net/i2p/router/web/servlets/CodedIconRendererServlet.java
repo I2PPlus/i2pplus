@@ -25,9 +25,13 @@ public class CodedIconRendererServlet extends HttpServlet {
      */
     public CodedIconRendererServlet() {}
 
+    /** Pinned for serialized-form compatibility. */
     private static final long serialVersionUID = 16851750L;
+    /** The router's data directory. */
     private static final String base = I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath();
+    /** Path separator of this system. */
     private static final String slash = String.valueOf(File.separatorChar);
+    /** Where the console theme icons are kept. */
     private static final String file = "docs" + slash + "themes" + slash + "console" + slash + "images" + slash + "plugin.png";
 
      @Override

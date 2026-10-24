@@ -23,17 +23,29 @@ import net.i2p.util.SimpleTimer2;
  * @since 0.9.9
  */
 class ConnThrottler {
+    /** Connections allowed per peer in the period. */
     private int _max;
+    /** Connections allowed in total in the period. */
     private int _totalMax;
+    /** Window the connection counts cover. */
     private long _checkPeriod;
+    /** Time a peer over its limit is throttled. */
     private long _throttlePeriod;
+    /** Time all peers are throttled when over the total. */
     private long _totalThrottlePeriod;
+    /** Connections accepted in the current period. */
     private int _currentTotal;
+    /** Connection records, by peer hash. */
     private final Map<Hash, Record> _peers;
+    /** When the total throttle expires. */
     private long _totalThrottleUntil;
+    /** Config prefix of the throttler settings. */
     private final String _action;
+    /** Logger for the connection throttling. */
     private final Log _log;
+    /** Timer clearing the old records. */
     private final SimpleTimer2.TimedEvent _cleaner;
+    /** True while the throttler is running. */
     private boolean _isRunning;
 
     /**
@@ -192,15 +204,24 @@ class ConnThrottler {
      *  Caller must sync all methods.
      */
     private static class Record {
+        /** When this peer's connections arrived. */
         private final List<Long> times;
+        /** When this peer's throttle expires. */
         private long until;
 
+        /** Builds an empty record for one peer. */
         public Record() {
             times = new ArrayList<>(8);
             increment();
         }
 
-        /** Caller must synch. */
+        /**
+         * Counts this peer's connections since the given time, dropping
+         * the older ones. Caller must synch.
+         *
+         * @param time drop the connections before this time
+         * @return the connections counted since then
+         */
         public int countSince(long time) {
             for (Iterator<Long> iter = times.iterator(); iter.hasNext(); ) {
                 if (iter.next().longValue() < time)
@@ -216,14 +237,22 @@ class ConnThrottler {
             times.add(Long.valueOf(Clock.getInstance().now()));
         }
 
-        /** Caller must synch. */
+        /**
+         * Throttles this peer until the given time. Caller must synch.
+         *
+         * @param untilTime when the throttle expires
+         */
         public void ban(long untilTime) {
             until = untilTime;
             // don't need to save times if banned
             times.clear();
         }
 
-        /** Caller must synch. */
+        /**
+         * When this peer's throttle expires. Caller must synch.
+         *
+         * @return the expiry time, 0 if not throttled
+         */
         public long getUntil() {
             if (until < Clock.getInstance().now())
                 until = 0;
@@ -231,6 +260,7 @@ class ConnThrottler {
         }
     }
 
+    /** Timer clearing the old peer records. */
     private class Cleaner extends SimpleTimer2.TimedEvent {
         /** Must call schedule() later. */
         public Cleaner() {

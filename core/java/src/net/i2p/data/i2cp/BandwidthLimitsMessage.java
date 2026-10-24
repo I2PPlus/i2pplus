@@ -19,7 +19,9 @@ import java.io.InputStream;
 public class BandwidthLimitsMessage extends I2CPMessageImpl {
     /** Message type identifier for bandwidth limit messages. */
     public static final int MESSAGE_TYPE = 23;
+    /** Number of limit values in the message. */
     private static final int LIMITS = 16;
+    /** The limit values. */
     private int[] data;
 
     /** Creates a new BandwidthLimitsMessage with default values. */
@@ -77,9 +79,10 @@ public class BandwidthLimitsMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Current bandwidth limits array.
+     * The bandwidth limit slots of this message.
      *
-     * @return the current bandwidth limits array
+     * @return the live array of limit slots, not a copy; slots 0-6 as
+     *         defined by the constructors, slots 7-15 undefined
      */
     public int[] getLimits() {
         return data;

@@ -17,13 +17,14 @@ import java.util.zip.Deflater;
  * expand, but never release, the BAOS memory buffer.
  */
 public class ReusableGZIPOutputStream extends ResettableGZIPOutputStream {
-    // Apache Harmony 5.0M13 Deflater doesn't work after reset()
-    // Neither does Android
-    // attempt to fix #1915
-    // Same guard as ReusableGZIPInputStream: on those platforms every instance
-    // is destroyed on release rather than reset and pooled.
+        /**
+     * On Apache Harmony 5.0M13 the Deflater does not work after reset(), and
+     * neither does Android's - on those platforms every instance is destroyed
+     * on release rather than reset and pooled, so caching is disabled there.
+     */
     private static final boolean ENABLE_CACHING = !(SystemVersion.isApache() ||
                                                    SystemVersion.isAndroid());
+    /** Streams ready for reuse. */
     private static final LinkedBlockingQueue<ReusableGZIPOutputStream> _available;
 
     static {
@@ -64,8 +65,10 @@ public class ReusableGZIPOutputStream extends ResettableGZIPOutputStream {
         }
     }
 
+    /** Compressed bytes waiting to be written out. */
     private final ByteArrayOutputStream _buffer;
 
+    /** Makes a stream with an empty buffer. */
     private ReusableGZIPOutputStream() {
         super(new ByteArrayOutputStream(DataHelper.MAX_UNCOMPRESSED));
         _buffer = (ByteArrayOutputStream) out;

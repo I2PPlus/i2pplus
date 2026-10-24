@@ -8,6 +8,7 @@ import java.math.BigInteger;
  * @see ElGamalPublicKeySpec
  */
 public class ElGamalPrivateKeySpec extends ElGamalKeySpec {
+    /** The private exponent. */
     private final BigInteger x;
 
     /**

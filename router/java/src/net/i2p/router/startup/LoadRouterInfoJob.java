@@ -38,11 +38,15 @@ import net.i2p.util.Log;
  * and then runs BootCommSystemJob.
  */
 class LoadRouterInfoJob extends JobImpl {
+    /** Logger for this class. */
     private final Log _log;
+    /** Records routers that send bad data. */
     private final BanLogger _banLogger;
+    /** Our own router info, read once. */
     private RouterInfo _us;
+    /** True once the key length has been checked. */
     private static final AtomicBoolean _keyLengthChecked = new AtomicBoolean();
-    // 1 chance in this many to rekey if the defaults changed
+    /** One chance in this many to rekey if the key is too short. */
     private static final int REKEY_PROBABILITY = 1;
 
     /**
@@ -275,7 +279,11 @@ class LoadRouterInfoJob extends JobImpl {
         return uselong != haslong;
     }
 
-    /** Key data container for router information. @since 0.9.16. */
+    /**
+     * Key data container for router information.
+     *
+     * @since 0.9.16
+     */
     public static class KeyData {
         /**
          * Router identity of this router.

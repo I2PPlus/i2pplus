@@ -35,16 +35,21 @@ import net.i2p.util.SystemVersion;
  */
 public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<E> {
 
+    /** Fixed id, the format is never serialized across versions. */
     private static final long serialVersionUID = 1L;
+    /** Supplies the clock and the statistics. */
     private final transient I2PAppContext _context;
+    /** Logger for this class. */
     private final transient Log _log;
     /** Queue name. */
     private final String _name;
     /** Maximum queue capacity. */
     private final int _capacity;
 
-    // following 4 are state variables defined by sample code, locked by this
-    /** Time when we'll declare we're above target (0 if below). */
+    /**
+     * Time when we'll declare we're above target (0 if below). One of four
+     * CoDel state variables below, all locked by this.
+     */
     private long _first_above_time;
     /** Time to drop next packet. */
     private long _drop_next;
@@ -143,6 +148,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     private volatile long _interval;
     /** RateStat name for message delay. */
     private final String STAT_DELAY;
+    /** How long an item may sit before the queue counts as backlogged, in ms. */
     private static final long BACKLOG_TIME = SystemVersion.isSlow() ? 1000 : 500;
 
     /**
@@ -386,6 +392,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
         return codel(rv);
     }
 
+    /** Most items dropped in one control-law call. */
     private static final int MAX_DROPS_PER_CALL = 8;
 
     /**
@@ -459,6 +466,11 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
         return rv;
     }
 
+    /**
+     * Discards a backlogged item and logs it.
+     *
+     * @param entry the item to drop
+     */
     private void drop(E entry) {
         long delay = _context.clock().now() - entry.getEnqueueTime();
         if (_log.shouldWarn())

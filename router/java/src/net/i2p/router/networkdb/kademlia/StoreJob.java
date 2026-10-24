@@ -70,8 +70,11 @@ abstract class StoreJob extends JobImpl {
     private final ConnectChecker _connectChecker;
     /** Bitmask for connection types we can use (IPv4, IPv6, etc.). */
     private final int _connectMask;
-    private static final int PARALLELIZATION = 8; // how many sent at a time
-    private static final int REDUNDANCY = 8; // we want the data sent to 8 peers
+    /** Lookups sent at a time. */
+    private static final int PARALLELIZATION = 8;
+    /** Peers the data should end up stored on. */
+    private static final int REDUNDANCY = 8;
+    /** Priority of this router's own netdb store. */
     private static final int STORE_PRIORITY = OutNetMessage.PRIORITY_MY_NETDB_STORE;
 
     /**
@@ -144,7 +147,9 @@ abstract class StoreJob extends JobImpl {
      * @return true if the operation has timed out
      */
     private boolean isExpired() {return getContext().clock().now() >= _expiration;}
+    /** Most peers one store job sends to in total. */
     private static final int MAX_PEERS_SENT = 8;
+    /** Pause before the next batch of sends: 1 second. */
     private static final int RESEND_DELAY = 1000; // upstream is 3s
 
     /**
@@ -714,6 +719,11 @@ abstract class StoreJob extends JobImpl {
      * @since 0.7.10
      */
     private class WaitJob extends JobImpl {
+        /**
+         * Creates the wait job for this router.
+         *
+         * @param enclosingContext the router context the job runs on
+         */
         public WaitJob(RouterContext enclosingContext) {super(enclosingContext);}
         /**
          * Execute the wait and then continue sending.

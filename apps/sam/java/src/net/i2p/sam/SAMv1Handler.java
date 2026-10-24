@@ -70,7 +70,9 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
      * Identifier of this connection, unique among a router's SAM handlers.
      */
     protected final long _id;
+    /** Counts the sessions created. */
     private static final AtomicLong __id = new AtomicLong();
+    /** How long the first read may wait - 60 seconds. */
     private static final int FIRST_READ_TIMEOUT = 60*1000;
     /**
      * Reply sent to a SESSION CREATE whose stream could not be established.
@@ -362,9 +364,19 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
     }
 
 
+  /**
+   * Opens a stream session for the destination named on the command line.
+   *
+   * @param destKeystream the destination and key parameters from the command line
+   * @param direction whether the session is client or server
+   * @param props the parameters of the session
+   * @return the new stream session
+   * @throws IOException if the session cannot talk to the router
+   * @throws DataFormatException if the destination keys are invalid
+   * @throws SAMException if the session cannot be set up
+   */
   private SAMStreamSession newSAMStreamSession(String destKeystream, String direction, Properties props )
-    throws IOException, DataFormatException, SAMException
-  {
+    throws IOException, DataFormatException, SAMException {
     return new SAMStreamSession(destKeystream, direction, props, this);
   }
 
@@ -512,16 +524,13 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
     }
 
 
-    /*
-     * Parse and execute a RAW or DATAGRAM SEND message.
-     * This is for v1/v2 compatible sending only.
-     * For v3 sending, see SAMv3DatagramServer.
+    /**
+     * Runs a datagram or raw message command.
      *
-     * Note that props are from the command line only.
-     * Session defaults from CREATE are NOT honored here.
-     * FIXME if we care, but nobody's probably using v3.2 options for v1/v2 sending.
-     *
-     * @since 0.9.25 consolidated from execDatagramMessage() and execRawMessage()
+     * @param isRaw true for the raw message form
+     * @param opcode the name of the command
+     * @param props the parameters of the command
+     * @return true if the command ran
      */
     private boolean execDgOrRawMessage(boolean isRaw, String opcode, Properties props) {
         if (opcode.equals("SEND")) {
@@ -673,8 +682,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
             return false;
         }
 
-        int id;
-        {
+        int id; {
             String strid = props.getProperty("ID");
             if (strid == null) {
                 if (_log.shouldDebug())
@@ -690,8 +698,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
             }
         }
 
-        int size;
-        {
+        int size; {
             String strsize = props.getProperty("SIZE");
             if (strsize == null) {
                 if (_log.shouldDebug())
@@ -751,8 +758,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
             return false;
         }
 
-        int id;
-        {
+        int id; {
             String strid = (String) props.remove("ID");
             if (strid == null) {
                 if (_log.shouldDebug())
@@ -831,8 +837,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
             return false;
         }
 
-        int id;
-        {
+        int id; {
             String strid = props.getProperty("ID");
             if (strid == null) {
                 if (_log.shouldDebug())
@@ -989,10 +994,8 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
      * @param bufferState the current buffer state
      * @throws IOException if writing to the client socket fails
      */
-    public void streamSendAnswer( int id, String result, String bufferState ) throws IOException
-    {
-        if ( streamSession == null )
-        {
+    public void streamSendAnswer( int id, String result, String bufferState ) throws IOException {
+        if ( streamSession == null ) {
             _log.error ( "BUG! Want to answer to stream SEND, but session is null!" );
             return;
         }
@@ -1000,8 +1003,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
         if ( !writeString ( "STREAM SEND ID=" + id
                         + " RESULT=" + result
                         + " STATE=" + bufferState
-                        + "\n" ) )
-        {
+                        + "\n" ) ) {
             throw new IOException ( "Error notifying connection to SAM client" );
         }
     }
@@ -1013,16 +1015,13 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
      * @param id the stream connection ID
      * @throws IOException if writing to the client socket fails
      */
-    public void notifyStreamSendBufferFree( int id ) throws IOException
-    {
-        if ( streamSession == null )
-        {
+    public void notifyStreamSendBufferFree( int id ) throws IOException {
+        if ( streamSession == null ) {
             _log.error ( "BUG! Stream outgoing buffer is free, but session is null!" );
             return;
         }
 
-        if ( !writeString ( "STREAM READY_TO_SEND ID=" + id + "\n" ) )
-        {
+        if ( !writeString ( "STREAM READY_TO_SEND ID=" + id + "\n" ) ) {
             throw new IOException ( "Error notifying connection to SAM client" );
         }
     }
@@ -1053,10 +1052,8 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
      *
      * @param msg may be null
      */
-    public void notifyStreamOutgoingConnection ( int id, String result, String msg ) throws IOException
-    {
-        if ( streamSession == null )
-        {
+    public void notifyStreamOutgoingConnection ( int id, String result, String msg ) throws IOException {
+        if ( streamSession == null ) {
             _log.error ( "BUG! Received stream connection, but session is null!" );
             return;
         }
@@ -1066,8 +1063,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
                         + result
                         + " ID=" + id
                         + msgString
-                        + "\n" ) )
-        {
+                        + "\n" ) ) {
             throw new IOException ( "Error notifying connection to SAM client" );
         }
     }

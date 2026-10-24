@@ -37,8 +37,11 @@ import net.i2p.util.SimpleTimer2;
  */
 class AccessFilter implements StatefulConnectionFilter {
 
+    /** Interval between the expired entry purges. */
     private static final long PURGE_INTERVAL = 1000;
+    /** Interval between the writes to disk. */
     private static final long SYNC_INTERVAL = (long) 5 * 1000;
+    /** Destinations remembered between the writes. */
     private static final int MAX_STORED_DESTS = 1024;
 
     /**
@@ -60,6 +63,7 @@ class AccessFilter implements StatefulConnectionFilter {
         });
     }
 
+    /** Stops the timer writing the filter to disk. */
     private static void shutdownDiskWriter() {
         DISK_WRITER.shutdown();
         try {
@@ -72,8 +76,11 @@ class AccessFilter implements StatefulConnectionFilter {
         }
     }
 
+    /** The definition the filter was built from. */
     private final FilterDefinition definition;
+    /** The app context. */
     private final I2PAppContext context;
+    /** True while the purge and sync timers run. */
     private final AtomicBoolean timersRunning = new AtomicBoolean();
 
     /**
@@ -92,6 +99,7 @@ class AccessFilter implements StatefulConnectionFilter {
      */
     private final Map<Hash, DestTracker> unknownDests = new HashMap<>();
 
+    /** The timer writing the filter to disk. */
     private volatile Syncer syncer;
 
     /**
@@ -176,6 +184,11 @@ class AccessFilter implements StatefulConnectionFilter {
         return !tracker.recordAccess(now);
     }
 
+    /**
+     * Re-reads the filter definitions from disk.
+     *
+     * @throws IOException if the definitions cannot be read
+     */
     private void reload() throws IOException {
         Map<Hash, DestTracker> tmp = new HashMap<>();
         for (FilterDefinitionElement element : definition.getElements()) {
@@ -194,6 +207,11 @@ class AccessFilter implements StatefulConnectionFilter {
 
     }
 
+    /**
+     * Writes the recorded connections to disk.
+     *
+     * @throws IOException if the records cannot be written
+     */
     private void record() throws IOException {
         final long now = context.clock().now();
         for (Recorder recorder : definition.getRecorders()) {
@@ -325,6 +343,7 @@ class AccessFilter implements StatefulConnectionFilter {
         }
     }
 
+    /** Drops the expired entries from the filter. */
     private void purge() {
         long olderThan = context.clock().now() - (long) definition.getPurgeSeconds() * 1000;
 
@@ -344,7 +363,9 @@ class AccessFilter implements StatefulConnectionFilter {
         }
     }
 
+    /** Timer purging the expired entries. */
     private class Purger extends SimpleTimer2.TimedEvent {
+        /** Builds the purge timer. */
         Purger() {
             super(context.simpleTimer2(), PURGE_INTERVAL);
         }
@@ -371,7 +392,9 @@ class AccessFilter implements StatefulConnectionFilter {
         }
     }
 
+    /** Timer writing the filter to disk. */
     private class Syncer extends SimpleTimer2.TimedEvent {
+        /** Builds the sync timer. */
         Syncer() {
             super(context.simpleTimer2(), SYNC_INTERVAL);
         }

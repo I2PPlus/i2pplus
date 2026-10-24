@@ -26,7 +26,9 @@ import net.i2p.util.Log;
  * Ref: RFC 1928.
  */
 public class SOCKSUDPWrapper implements Source, Sink {
+    /** Where the wrapped datagram is sent. */
     private Sink sink;
+    /** Headers remembered for each peer address */
     private final Map<I2PSocketAddress, SOCKSHeader> cache;
 
     /**

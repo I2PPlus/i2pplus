@@ -26,12 +26,16 @@ import java.nio.charset.StandardCharsets;
  */
 public class UTF8Reader extends Reader {
 
+    /** The bytes being decoded. */
     private final InputStream _in;
-    // following three are lazily initialized when needed
+    /** Bytes buffered while decoding, initialized lazily when needed. */
     private ByteBuffer _bb;
+    /** Characters decoded ahead of the reader, initialized lazily. */
     private CharBuffer _cb;
+    /** The UTF-8 decoder, initialized lazily. */
     private CharsetDecoder _dc;
 
+    /** Character substituted for an undecodable byte. */
     private static final int REPLACEMENT = 0xfffd;
 
     /**

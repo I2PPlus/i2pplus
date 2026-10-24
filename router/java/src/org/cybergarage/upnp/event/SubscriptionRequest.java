@@ -57,10 +57,14 @@ public class SubscriptionRequest extends HTTPRequest {
     //	setRequest
     ////////////////////////////////////////////////
 
+    /**
+     * Sets the service the subscription targets.
+     *
+     * @param service the service being subscribed to
+     */
     private void setService(Service service) {
         String eventSubURL = service.getEventSubURL();
 
-        // Thanks for Giordano Sassaroli <sassarol@cefriel.it> (05/21/03)
         setURI(eventSubURL, true);
 
         String urlBaseStr = "";
@@ -78,7 +82,6 @@ public class SubscriptionRequest extends HTTPRequest {
             if (rootDev != null) urlBaseStr = rootDev.getLocation();
         }
 
-        // Thanks for Giordano Sassaroli <sassarol@cefriel.it> (09/02/03)
         if (urlBaseStr == null || urlBaseStr.length() <= 0) {
             if (HTTP.isAbsoluteURL(eventSubURL)) urlBaseStr = eventSubURL;
         }
@@ -169,6 +172,7 @@ public class SubscriptionRequest extends HTTPRequest {
     ////////////////////////////////////////////////
 
     private static final String CALLBACK_START_WITH = "<";
+    /** Character a callback URL ends with. */
     private static final String CALLBACK_END_WITH = ">";
 
     /**
@@ -219,7 +223,6 @@ public class SubscriptionRequest extends HTTPRequest {
      *         unset or carries no SID
      */
     public String getSID() {
-        // Thanks for Grzegorz Lehmann and Stefano Lenzi(12/06/04)
         String sid = Subscription.getSID(getHeaderValue(HTTP.SID));
         if (sid == null) return "";
         return sid;

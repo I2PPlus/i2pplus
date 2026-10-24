@@ -14,6 +14,7 @@ import net.i2p.util.Addresses;
  */
 public class ConfigPeerHelper extends HelperBase {
 
+    /** Most peers listed on the page, however many are configured. */
     private static final int MAX_DISPLAY = 1000;
 
     /** Constructs a new ConfigPeerHelper. */

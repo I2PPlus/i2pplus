@@ -54,6 +54,7 @@ class Yylex {
    */
   private static final int [] ZZ_ACTION = zzUnpackAction();
 
+  /** Packed table of the scanner actions. */
   private static final String ZZ_ACTION_PACKED_0 =
     "\2\0\2\1\1\2\1\3\1\4\3\1\1\5\1\6"+
     "\1\7\1\10\1\11\1\12\1\13\1\14\1\15\5\0"+
@@ -61,6 +62,11 @@ class Yylex {
     "\1\0\1\2\1\0\1\2\4\0\1\25\1\26\2\0"+
     "\1\27";
 
+  /**
+   * Unpacks the action table.
+   *
+   * @return the unpacked actions
+   */
   private static int [] zzUnpackAction() {
     int [] result = new int[45];
     int offset = 0;
@@ -68,6 +74,14 @@ class Yylex {
     return result;
   }
 
+  /**
+   * Unpacks one range of the packed action table.
+   *
+   * @param packed the packed table
+   * @param offset where unpacking starts
+   * @param result the array to fill
+   * @return the next free position in the array
+   */
   private static int zzUnpackAction(String packed, int offset, int [] result) {
     int i = 0;       /* index in packed string  */
     int j = offset;  /* index in unpacked array */
@@ -86,6 +100,7 @@ class Yylex {
    */
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
+  /** Packed table of the state row offsets. */
   private static final String ZZ_ROWMAP_PACKED_0 =
     "\0\0\0\33\0\66\0\121\0\154\0\207\0\66\0\242"+
     "\0\275\0\330\0\66\0\66\0\66\0\66\0\66\0\66"+
@@ -94,6 +109,11 @@ class Yylex {
     "\0\u01b0\0\u01cb\0\u01e6\0\u01e6\0\u0201\0\u021c\0\u0237\0\u0252"+
     "\0\66\0\66\0\u026d\0\u0288\0\66";
 
+  /**
+   * Unpacks the row map.
+   *
+   * @return the unpacked row map
+   */
   private static int [] zzUnpackRowMap() {
     int [] result = new int[45];
     int offset = 0;
@@ -101,6 +121,14 @@ class Yylex {
     return result;
   }
 
+  /**
+   * Unpacks one range of the packed row map.
+   *
+   * @param packed the packed table
+   * @param offset where unpacking starts
+   * @param result the array to fill
+   * @return the next free position in the array
+   */
   private static int zzUnpackRowMap(String packed, int offset, int [] result) {
     int i = 0;  /* index in packed string  */
     int j = offset;  /* index in unpacked array */
@@ -186,12 +214,14 @@ class Yylex {
     -1, -1, -1, -1, -1,
   };
 
-  /* error codes */
+  /** Error code for an unknown scanner error. */
   private static final int ZZ_UNKNOWN_ERROR = 0;
+  /** Error code for input matching no rule. */
   private static final int ZZ_NO_MATCH = 1;
+  /** Error code for a pushback larger than the buffer. */
   private static final int ZZ_PUSHBACK_2BIG = 2;
 
-  /* error messages for the codes above */
+  /** The message for each scanner error code. */
   private static final String[] ZZ_ERROR_MSG = {
     "Unkown internal scanner error",
     "Error: could not match input",
@@ -203,11 +233,17 @@ class Yylex {
    */
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
+  /** Packed table of the state attributes. */
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
     "\2\0\1\11\3\1\1\11\3\1\6\11\2\1\1\11"+
     "\5\0\10\11\1\0\1\1\1\0\1\1\4\0\2\11"+
     "\2\0\1\11";
 
+  /**
+   * Unpacks the attribute table.
+   *
+   * @return the unpacked attributes
+   */
   private static int [] zzUnpackAttribute() {
     int [] result = new int[45];
     int offset = 0;
@@ -215,6 +251,14 @@ class Yylex {
     return result;
   }
 
+  /**
+   * Unpacks one range of the packed attribute table.
+   *
+   * @param packed the packed table
+   * @param offset where unpacking starts
+   * @param result the array to fill
+   * @return the next free position in the array
+   */
   private static int zzUnpackAttribute(String packed, int offset, int [] result) {
     int i = 0;       /* index in packed string  */
     int j = offset;  /* index in unpacked array */
@@ -236,7 +280,7 @@ class Yylex {
   /** the current lexical state */
   private int zzLexicalState = YYINITIAL;
 
-  /** this buffer contains the current text to be matched and is
+  /** This buffer contains the current text to be matched and is
       the source of the {@link #yytext()} string */
   private char[] zzBuffer = new char[ZZ_BUFFERSIZE];
 
@@ -260,7 +304,7 @@ class Yylex {
   private int yychar;
 
   /**
-   * the number of characters from the last newline up to the start of the
+   * The number of characters from the last newline up to the start of the
    * matched text
    */
   private int yycolumn;
@@ -276,7 +320,7 @@ class Yylex {
   /** denotes if the user-EOF-code has already been executed */
   private boolean zzEOFDone;
 
-  /* user code: */
+/** Builder collecting the text of the current token. */
 private StringBuilder sb=new StringBuilder();
 
 /**

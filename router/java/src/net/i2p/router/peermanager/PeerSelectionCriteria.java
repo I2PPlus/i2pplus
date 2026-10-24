@@ -26,8 +26,11 @@ class PeerSelectionCriteria {
      */
     PeerSelectionCriteria() {}
 
+    /** Fewest peers the caller can accept. */
     private int _minReq;
+    /** Most peers the caller will take. */
     private int _maxReq;
+    /** What the peers are for, from the constants above. */
     private int _purpose;
 
     /**

@@ -41,18 +41,25 @@ public class Folder<O extends Object> {
 		UP;
 	}
 
+	/** How many pages of messages the folder has. */
 	private int pages;
+	/** Messages shown on one page. */
 	private int pageSize;
+	/** The page currently being shown. */
 	private int currentPage;
+	/** The elements in the folder, in the current sort order. */
 	private O[] elements;
+	/** The available sorters, by id. */
 	private final Map<String, Comparator<O>> sorter;
+	/** The direction elements are currently sorted in. */
 	private SortOrder sortingDirection;
+	/** The sorter currently applied. */
 	private Comparator<O> currentSorter;
+	/** Id of the sorter currently applied. */
 	private String currentSortID;
 
 	/** Creates an empty folder. */
-	public Folder()
-	{
+	public Folder() {
 		pages = 1;
 		currentPage = 1;
 		sorter = new HashMap<>();
@@ -141,8 +148,7 @@ public class Folder<O extends Object> {
 	 *
 	 * @since 0.9.33
 	 */
-	public synchronized void sort()
-	{
+	public synchronized void sort() {
 		if (currentSorter != null && elements != null && elements.length > 1)
 			DataHelper.sort(elements, currentSorter);
 	}
@@ -154,8 +160,7 @@ public class Folder<O extends Object> {
 	 *
 	 * @param elements Array of Os.
 	 */
-	public synchronized void setElements( O[] elements )
-	{
+	public synchronized void setElements( O[] elements ) {
 		if (elements.length > 0) {
 			this.elements = elements;
 			sort();
@@ -251,8 +256,7 @@ public class Folder<O extends Object> {
 	 *
 	 * @return Iterator containing the elements on the current page.
 	 */
-	public synchronized Iterator<O> currentPageIterator()
-	{
+	public synchronized Iterator<O> currentPageIterator() {
 		ArrayList<O> list = new ArrayList<>();
 		if ( elements != null ) {
 			int pageSize = getPageSize();
@@ -268,8 +272,7 @@ public class Folder<O extends Object> {
 	/**
 	 * Turns folder to next page.
 	 */
-	public synchronized void nextPage()
-	{
+	public synchronized void nextPage() {
 		currentPage++;
 		if ( currentPage > pages )
 			currentPage = pages;
@@ -278,8 +281,7 @@ public class Folder<O extends Object> {
 	/**
 	 * Turns folder to previous page.
 	 */
-	public synchronized void previousPage()
-	{
+	public synchronized void previousPage() {
 		currentPage--;
 		if ( currentPage < 1 )
 			currentPage = 1;
@@ -288,16 +290,14 @@ public class Folder<O extends Object> {
 	/**
 	 * Sets folder to display first page.
 	 */
-	public synchronized void firstPage()
-	{
+	public synchronized void firstPage() {
 		currentPage = 1;
 	}
 
 	/**
 	 * Sets folder to display last page.
 	 */
-	public synchronized void lastPage()
-	{
+	public synchronized void lastPage() {
 		currentPage = pages;
 	}
 
@@ -308,8 +308,7 @@ public class Folder<O extends Object> {
 	 * @param id identifier for this comparator, used with {@link #setSortBy(String, SortOrder)}
 	 * @param sorter a Comparator to sort the elements
 	 */
-	public synchronized void addSorter( String id, Comparator<O> sorter )
-	{
+	public synchronized void addSorter( String id, Comparator<O> sorter ) {
 		this.sorter.put( id, sorter );
 	}
 
@@ -323,8 +322,7 @@ public class Folder<O extends Object> {
 	 * @param id identifier for the Comparator
 	 * @param direction UP or DOWN. UP is reverse sort.
 	 */
-	public synchronized void setSortBy(String id, SortOrder direction)
-	{
+	public synchronized void setSortBy(String id, SortOrder direction) {
 		sortingDirection = direction;
 		currentSorter = sorter.get( id );
 		if (currentSorter != null) {
@@ -361,8 +359,7 @@ public class Folder<O extends Object> {
 	 *
 	 * @return the first element in sort order, or null if the folder is empty
 	 */
-	public synchronized O getFirstElement()
-	{
+	public synchronized O getFirstElement() {
 		return elements == null ? null : getElement( 0 );
 	}
 
@@ -371,8 +368,7 @@ public class Folder<O extends Object> {
 	 *
 	 * @return the last element in sort order, or null if the folder is empty
 	 */
-	public synchronized O getLastElement()
-	{
+	public synchronized O getLastElement() {
 		return elements == null ? null : getElement(  elements.length - 1 );
 	}
 
@@ -382,8 +378,7 @@ public class Folder<O extends Object> {
 	 * @param element the entry to locate, compared with equals()
 	 * @return the index, or -1 if not found
 	 */
-	private int getIndexOf( O element )
-	{
+	private int getIndexOf( O element ) {
 		if ( elements != null ) {
 			for( int i = 0; i < elements.length; i++ )
 				if ( elements[i].equals( element ) )
@@ -398,8 +393,7 @@ public class Folder<O extends Object> {
 	 * @param element the current element
 	 * @return the next element, or null if this is the last
 	 */
-	public synchronized O getNextElement( O element )
-	{
+	public synchronized O getNextElement( O element ) {
 		O result = null;
 
 		int i = getIndexOf( element );
@@ -418,8 +412,7 @@ public class Folder<O extends Object> {
 	 * @param element the current element
 	 * @return the previous element, or null if this is the first
 	 */
-	public synchronized O getPreviousElement( O element )
-	{
+	public synchronized O getPreviousElement( O element ) {
 		O result = null;
 
 		int i = getIndexOf( element );
@@ -437,8 +430,7 @@ public class Folder<O extends Object> {
 	 * @param i the index into the backing array, counting from zero
 	 * @return the element, or null if empty
 	 */
-	private O getElement( int i )
-	{
+	private O getElement( int i ) {
 		O result = null;
 
 		if ( elements != null ) {
@@ -452,8 +444,7 @@ public class Folder<O extends Object> {
 	 *
 	 * @return true if on the last page
 	 */
-	public synchronized boolean isLastPage()
-	{
+	public synchronized boolean isLastPage() {
 		return currentPage == pages;
 	}
 
@@ -462,8 +453,7 @@ public class Folder<O extends Object> {
 	 *
 	 * @return true if on the first page
 	 */
-	public synchronized boolean isFirstPage()
-	{
+	public synchronized boolean isFirstPage() {
 		return currentPage == 1;
 	}
 
@@ -473,8 +463,7 @@ public class Folder<O extends Object> {
 	 * @param element the entry to compare against the last one
 	 * @return true if the element is the last
 	 */
-	public synchronized boolean isLastElement( O element )
-	{
+	public synchronized boolean isLastElement( O element ) {
 		if ( elements == null )
 			return false;
 		return elements[elements.length - 1].equals( element );
@@ -486,8 +475,7 @@ public class Folder<O extends Object> {
 	 * @param element the entry to compare against the first one
 	 * @return true if the element is the first
 	 */
-	public synchronized boolean isFirstElement( O element )
-	{
+	public synchronized boolean isFirstElement( O element ) {
 		if ( elements == null )
 			return false;
 		return elements[0].equals( element );
@@ -500,8 +488,7 @@ public class Folder<O extends Object> {
 	 * @return the page number (1-based)
 	 * @since 0.9.33
 	 */
-	public synchronized int getPageOf(O element)
-	{
+	public synchronized int getPageOf(O element) {
 		if (pages <= 1)
 			return 1;
 		if (elements == null)

@@ -824,19 +824,29 @@ public class EepGet {
      * and a summary line every lineSize marks.
      */
     protected class CLIStatusListener implements StatusListener {
+        /** Size of the mark buffer, in bytes. */
         private final int _markSize;
+        /** Size of the line buffer, in bytes. */
         private final int _lineSize;
+        /** When the read started. */
         private final long _startedOn;
+        /** Bytes written to the output so far. */
         private long _written;
+        /** Bytes written at the last progress check. */
         private long _previousWritten;
+        /** Bytes discarded from the output. */
         private long _discarded;
+        /** When the last complete line was read. */
         private long _lastComplete;
+        /** True until the first line is read. */
         private boolean _firstTime;
         /**
          * Default constructor, 1024-byte marks and 40 marks per line.
          */
         public CLIStatusListener() {this(1024, 40);}
+        /** Smoothed transfer rate, for display. */
         private double _smoothedRate = 0.0;
+        /** Weight of the newest sample in the rate. */
         private static final double SMOOTHING_FACTOR = 0.1; // Tune between 0.1 and 0.5
 
         /**
@@ -2183,6 +2193,12 @@ public class EepGet {
         }
     }
 
+    /**
+     * Handles one header from the response.
+     *
+     * @param key the header name
+     * @param val the header value
+     */
     private void handle(String key, String val) {
         key = key.trim();
         val = val.trim();
@@ -2253,17 +2269,30 @@ public class EepGet {
         }
     }
 
+    /**
+     * Adds one to the counter in the lookahead buffer.
+     *
+     * @param lookahead the buffer holding the counter
+     * @param cur the position of the counter
+     */
     private static void increment(byte[] lookahead, int cur) {
         lookahead[0] = lookahead[1];
         lookahead[1] = lookahead[2];
         lookahead[2] = (byte)cur;
     }
 
+    /**
+     * Checks whether the headers have ended.
+     *
+     * @param lookahead the buffer to check
+     * @return true if the blank line was seen
+     */
     private static boolean isEndOfHeaders(byte[] lookahead) {
         return lookahead[2] == NL &&
                (lookahead[0] == NL || lookahead[1] == NL);    // \n\n or \n\r\n
     }
 
+    /** The line terminator byte. */
     private static final byte NL = '\n';
 
     /**
@@ -3196,21 +3225,28 @@ public class EepGet {
      * @since 0.9.12
      */
     protected class AuthState {
+        /** The proxy user name. */
         private final String username;
+        /** The proxy password. */
         private final String password;
         /**
          * Auth mode as received in the 407 response.
          */
         public AUTH_MODE authMode = AUTH_MODE.NONE;
-        // as recvd in 407, after the mode string
+        /**
+         * The authentication challenge received in the 407 response,
+         * after the mode string.
+         */
         private String authChallenge;
         /**
          * Whether the auth header has been sent.
          */
         public boolean authSent;
+        /** Nonce count sent in the digest response. */
         private int nonceCount;
+        /** Client nonce sent in the digest response. */
         private String cnonce;
-        // as parsed from authChallenge
+        /** Parameters parsed from the auth challenge. */
         private Map<String, String> args;
 
         /**
@@ -3416,7 +3452,9 @@ public class EepGet {
      * @since 0.8.10
      */
     protected class Gunzipper implements Runnable {
+        /** Stream the raw data is read from. */
         private final InputStream _inRaw;
+        /** Stream the data is written to. */
         private final OutputStream _out;
 
         /**

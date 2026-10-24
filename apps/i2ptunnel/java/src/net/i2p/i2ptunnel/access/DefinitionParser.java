@@ -12,9 +12,23 @@ import net.i2p.data.DataHelper;
  */
 class DefinitionParser {
 
+    /** Prevents instantiating the utility class. */
     private DefinitionParser() {}
 
-    private static enum Rule { DEFAULT, EXPLICIT, FILE, RECORDER }
+    /** The access rule kinds a definition line can name. */
+    /**
+     * The access rule kinds a definition line can name.
+     */
+    private static enum Rule {
+        /** The built-in default rule. */
+        DEFAULT,
+        /** The rule using the configured address lists. */
+        EXPLICIT,
+        /** The rule reading addresses from a file. */
+        FILE,
+        /** The rule recording the connections it sees. */
+        RECORDER,
+    }
 
     /**
      * <p>
@@ -165,6 +179,13 @@ class DefinitionParser {
         return builder.build();
     }
 
+    /**
+     * Parses the threshold word of a definition line.
+     *
+     * @param s the word to parse
+     * @return the threshold found
+     * @throws InvalidDefinitionException if the word is not a threshold
+     */
     private static Threshold parseThreshold(String s) throws InvalidDefinitionException {
         if ("allow".equals(s))
             return Threshold.ALLOW;
@@ -188,6 +209,13 @@ class DefinitionParser {
         }
     }
 
+    /**
+     * Parses the rule word of a definition line.
+     *
+     * @param s the word to parse
+     * @return the rule found
+     * @throws InvalidDefinitionException if the word is not a rule
+     */
     private static Rule parseRule(String s) throws InvalidDefinitionException {
         if ("default".equals(s))
             return Rule.DEFAULT;
@@ -201,6 +229,14 @@ class DefinitionParser {
         throw new InvalidDefinitionException("Unknown rule "+s);
     }
 
+    /**
+     * Parses the file name of a definition line.
+     *
+     * @param s the name to parse
+     * @param split the fields of the line
+     * @return the file named
+     * @throws InvalidDefinitionException if the name is missing or invalid
+     */
     private static File parseFileName(String s, String[] split) throws InvalidDefinitionException {
         if (split.length < 3)
             throw new InvalidDefinitionException("invalid definition "+s);
@@ -211,25 +247,52 @@ class DefinitionParser {
     }
 
 
+    /** Accumulates the parts of one definition. */
     private static class DefinitionBuilder {
+        /** Accumulates one access definition while parsing. */
+        private DefinitionBuilder() {}
+        /** The default threshold of the definition. */
         private Threshold threshold;
+        /** The filter elements of the definition. */
         private List<FilterDefinitionElement> elements = new ArrayList<>();
+        /** The recorders of the definition. */
         private List<Recorder> recorders = new ArrayList<>();
 
+        /**
+         * Sets the default threshold, once only.
+         *
+         * @param threshold the threshold to set
+         * @throws InvalidDefinitionException if a threshold was already set
+         */
         void setDefaultThreshold(Threshold threshold) throws InvalidDefinitionException {
             if (this.threshold != null)
                 throw new InvalidDefinitionException("default already set!");
             this.threshold = threshold;
         }
 
+        /**
+         * Adds one filter element.
+         *
+         * @param element the element to add
+         */
         void addElement(FilterDefinitionElement element) {
             elements.add(element);
         }
 
+        /**
+         * Adds one recorder.
+         *
+         * @param recorder the recorder to add
+         */
         void addRecorder(Recorder recorder) {
             recorders.add(recorder);
         }
 
+        /**
+         * Builds the definition from the parts added.
+         *
+         * @return the definition built
+         */
         FilterDefinition build() {
             if (threshold == null)
                 threshold = Threshold.ALLOW;

@@ -20,6 +20,7 @@ import org.bouncycastle.util.Pack;
 public class SHA512Digest
     extends LongDigest
 {
+    /** Digest size in bytes. */
     private static final int    DIGEST_LENGTH = 64;
 
     /**
@@ -102,7 +103,7 @@ public class SHA512Digest
     }
 
     /**
-     * reset the chaining variables
+     * Reset the chaining variables
      */
     public void reset()
     {

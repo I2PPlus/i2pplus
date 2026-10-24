@@ -12,8 +12,11 @@ import java.net.Socket;
  */
 
 public class Protocol {
+    /** Control messages read from the test server. */
     private final InputStream _ctlInStream;
+    /** Control messages sent to the test server. */
     private final OutputStream _ctlOutStream;
+    /** True when the server supports JSON output. */
     private boolean jsonSupport = true;
 
     /**

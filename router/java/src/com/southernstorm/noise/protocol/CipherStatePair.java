@@ -7,7 +7,9 @@ package com.southernstorm.noise.protocol;
  */
 public final class CipherStatePair implements Destroyable {
 
+    /** Cipher protecting outgoing messages. */
     private CipherState send;
+    /** Cipher protecting incoming messages. */
     private CipherState recv;
 
     /**

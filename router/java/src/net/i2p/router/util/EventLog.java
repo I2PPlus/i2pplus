@@ -40,7 +40,9 @@ import net.i2p.util.SystemVersion;
  */
 public class EventLog {
 
+    /** The router context the log belongs to. */
     private final I2PAppContext _context;
+    /** File the events are appended to. */
     private final File _file;
     /** Event to cached map. */
     private final Map<String, SortedMap<Long, String>> _cache;

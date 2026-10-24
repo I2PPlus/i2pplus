@@ -37,10 +37,13 @@ import net.i2p.util.SystemVersion;
  * </ul>
  */
 class PumpedTunnelGateway extends TunnelGateway {
+    /** Messages waiting to enter the tunnel queue. */
     private final BlockingQueue<PendingGatewayMessage> _prequeue;
+    /** The thread pumping messages into the tunnel. */
     private final TunnelGatewayPumper _pumper;
     /** Whether this gateway is inbound (vs outbound). */
     public final boolean _isInbound;
+    /** The hash of the next hop. */
     private final Hash _nextHop;
     /**
      * Gateway queue depths observed since the last flush, reported as one
@@ -53,10 +56,15 @@ class PumpedTunnelGateway extends TunnelGateway {
      */
     private final RateStatMeanBatch _queueSizeBatch = new RateStatMeanBatch();
 
+    /** Most outbound messages pumped at once. */
     private static volatile int _maxObMsgsPerPump;
+    /** Most inbound messages pumped at once. */
     private static volatile int _maxIbMsgsPerPump;
+    /** Initial size of the outbound queue. */
     private static final int INITIAL_OB_QUEUE;
+    /** Largest size of the inbound queue. */
     private static final int MAX_IB_QUEUE;
+    /** True once the stats were created. */
     private static volatile boolean _statsCreated;
 
     /** Property key for max outbound messages per pump. */

@@ -34,8 +34,11 @@ import org.cybergarage.xml.*;
  * @since 1.0
  */
 public class NotifyRequest extends SOAPRequest {
+    /** Element name for the event namespace declaration. */
     private static final String XMLNS = "e";
+    /** Element name for one property in the set. */
     private static final String PROPERTY = "property";
+    /** Element name wrapping the property set. */
     private static final String PROPERTYSET = "propertyset";
 
     ////////////////////////////////////////////////
@@ -168,6 +171,13 @@ public class NotifyRequest extends SOAPRequest {
         return true;
     }
 
+    /**
+     * Builds the propertyset element holding one named value.
+     *
+     * @param varName the state variable's name
+     * @param value the new value
+     * @return the propertyset node
+     */
     private Node createPropertySetNode(String varName, String value) {
         Node propSetNode = new Node(/*XMLNS + SOAP.DELIM + */ PROPERTYSET);
 
@@ -176,7 +186,6 @@ public class NotifyRequest extends SOAPRequest {
         Node propNode = new Node(/*XMLNS + SOAP.DELIM + */ PROPERTY);
         propSetNode.addNode(propNode);
 
-        // Thanks for Giordano Sassaroli <sassarol@cefriel.it> (05/22/03)
         // Node varNameNode = new Node(XMLNS + SOAP.DELIM + varName);
         Node varNameNode = new Node(varName);
         varNameNode.setValue(value);
@@ -185,6 +194,11 @@ public class NotifyRequest extends SOAPRequest {
         return propSetNode;
     }
 
+    /**
+     * Finds the propertyset element in the request body.
+     *
+     * @return the node, null if the body has none
+     */
     private Node getVariableNode() {
         Node rootNode = getEnvelopeNode();
         if (rootNode == null) return null;
@@ -194,7 +208,12 @@ public class NotifyRequest extends SOAPRequest {
         return propNode.getNode(0);
     }
 
-    // Thanks for Giordano Sassaroli <sassarol@cefriel.it> (09/08/03)
+    /**
+     * Reads a Property element out of a variable node.
+     *
+     * @param varNode the variable node to read, null yields an empty property
+     * @return the property, never null but empty if there was nothing to read
+     */
     private Property getProperty(Node varNode) {
         Property prop = new Property();
         if (varNode == null) return prop;
@@ -207,7 +226,6 @@ public class NotifyRequest extends SOAPRequest {
         return prop;
     }
 
-    // Thanks for Giordano Sassaroli <sassarol@cefriel.it> (09/08/03)
     /**
      * Reads the changed variables carried in the notification body.
      *

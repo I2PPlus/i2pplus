@@ -33,12 +33,17 @@ import javax.crypto.spec.SecretKeySpec;
  *
  */
 public final class CryptixAESEngine extends AESEngine {
+    /** Initialized ciphers ready for reuse. */
     private final LinkedBlockingQueue<Cipher> _ciphers;
 
+    /** Smallest message where the system AES is worth using, in bytes. */
     private static final int MIN_SYSTEM_AES_LENGTH = 640;
+    /** True to use the JVM's AES when it is genuinely faster. */
     private static final boolean USE_SYSTEM_AES = hasAESNI() && CryptoCheck.isUnlimited();
 
+    /** Whether initialized ciphers are pooled. */
     private static final boolean CACHE = true;
+    /** Ciphers held for reuse. */
     private static final int CACHE_SIZE = 8;
 
     /**

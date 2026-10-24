@@ -20,9 +20,13 @@ public class StatHelper extends HelperBase {
      */
     public StatHelper() {}
 
+    /** Peer whose stats are shown, if filtered. */
     private String _peer;
+    /** True to show every stat, not just the summary. */
     private boolean _full;
+    /** Only stats containing this are shown. */
     private String _statFilter;
+    /** Format asked for when exporting the stats. */
     private String _export;
 
     /**

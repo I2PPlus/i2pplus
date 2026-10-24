@@ -28,6 +28,7 @@ import java.nio.charset.StandardCharsets;
 @SuppressWarnings("PMD.CloseResource")
 public class SOCKS5Client {
 
+    /** Utility class, not intended for instantiation. */
     private SOCKS5Client() {}
 
     /**

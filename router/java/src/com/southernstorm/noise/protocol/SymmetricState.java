@@ -12,11 +12,17 @@ import javax.crypto.ShortBufferException;
  */
 class SymmetricState implements Destroyable, Cloneable {
 
+    /** The cipher state, unused until the handshake ends. */
     private final CipherState cipher;
+    /** The hash used for the handshake. */
     private final MessageDigest hash;
+    /** The chaining key. */
     private final byte[] ck;
+    /** The handshake hash. */
     private final byte[] h;
+    /** The handshake hash before the last mix. */
     private final byte[] prev_h;
+    /** True once the state's keys have been wiped. */
     private boolean isDestroyed;
 
     /**

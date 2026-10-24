@@ -160,6 +160,10 @@ public class ConfigReseedHelper extends HelperBase {
         return getChecked(Reseeder.PROP_SPROXY_AUTH_ENABLE);
     }
 
+    /**
+     * The reseed URLs the reseed job is currently working through.
+     * @return the URLs, an empty list if the job is not running
+     */
     private List<String> reseedList() {
         String urls = _context.getProperty(Reseeder.PROP_RESEED_URL, Reseeder.DEFAULT_SEED_URL + ',' + Reseeder.DEFAULT_SSL_SEED_URL);
         StringTokenizer tok = new StringTokenizer(urls, " ,\r\n");

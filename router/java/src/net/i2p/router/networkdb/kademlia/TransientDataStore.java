@@ -47,11 +47,13 @@ class TransientDataStore implements DataStore {
      * Logger for this data store.
      */
     protected final Log _log;
+    /** Entries held only for this router's uptime. */
     private final ConcurrentHashMap<Hash, DatabaseEntry> _data;
     /**
      * Router context this store was constructed with.
      */
     protected final RouterContext _context;
+    /** Peers that have sent bad data. */
     private final BanLogger _banLogger;
 
     /**
@@ -360,6 +362,13 @@ class TransientDataStore implements DataStore {
         return _data.remove(key);
     }
 
+    /**
+     * True if the router offers the capability.
+     *
+     * @param ri the router to check
+     * @param capability the capability letter to look for
+     * @return true if it offers it
+     */
     private boolean containsCapability(RouterInfo ri, char capability) {
         if (ri == null) return false;
         String caps = ri.getCapabilities();

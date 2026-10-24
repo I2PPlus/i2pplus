@@ -26,7 +26,9 @@ import net.i2p.util.EepGet;
  */
 public class NewsHandler extends UpdateHandler implements Checker {
 
+    /** Fallback news feed URL for SU3 updates. */
     private static final String DEFAULT_BACKUP_NEWS_URL_SU3 = "http://dn3tvalnjz432qkqsvpfdqrwpqkw3ye4n4i2uyfr4jexvo3sp5ka.b32.i2p/news/news.su3";
+    /** Property overriding the fallback news feed URL */
     private static final String PROP_BACKUP_NEWS_URL_SU3 = "router.backupNewsURL";
 
     /**

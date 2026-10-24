@@ -113,6 +113,7 @@ public class CommandLine {
         }
     }
 
+    /** Prints how to invoke this command-line tool. */
     private static void usage() {
         System.err.println(
                 "I2P Core version " + CoreVersion.VERSION + '\n' + "USAGE: java -jar /path/to/i2p.jar command [args]");

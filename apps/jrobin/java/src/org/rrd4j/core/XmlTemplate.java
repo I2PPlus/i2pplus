@@ -18,11 +18,15 @@ import org.xml.sax.InputSource;
  * variable values are collected. You have to extend this class to do something more useful.
  */
 public abstract class XmlTemplate {
+    /** Matches a ${name} placeholder. */
     private static final String PATTERN_STRING = "\\$\\{(\\w+)\\}";
+    /** Compiled form of the placeholder pattern. */
     private static final Pattern PATTERN = Pattern.compile(PATTERN_STRING);
     /** the parsed root element of the template */
     protected Element root;
+    /** Replacement value for each placeholder name. */
     private final HashMap<String, Object> valueMap = new HashMap<>();
+    /** Nodes already checked against the template. */
     private final HashSet<Node> validatedNodes = new HashSet<>();
 
     /**

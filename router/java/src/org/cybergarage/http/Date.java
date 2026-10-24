@@ -13,6 +13,7 @@ import java.util.TimeZone;
  * dates according to HTTP standards and create date instances for different time zones.
  */
 public class Date {
+    /** The moment this date stands for. */
     private Calendar cal;
 
     /**
@@ -43,7 +44,6 @@ public class Date {
      * @return the hour (0-23)
      */
     public int getHour() {
-        // Thanks for Theo Beisch (10/20/04)
         return getCalendar().get(Calendar.HOUR_OF_DAY);
     }
 
@@ -84,7 +84,6 @@ public class Date {
      * @return Date instance with GMT time
      */
     public static final Date getInstance() {
-        // Thanks for Theo Beisch (10/20/04)
         return new Date(Calendar.getInstance(TimeZone.getTimeZone("GMT")));
     }
 
@@ -103,6 +102,7 @@ public class Date {
         return Integer.toString(value);
     }
 
+    /** Month names, in calendar order. */
     private static final String[] MONTH_STRING = {
         "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
     };
@@ -119,6 +119,7 @@ public class Date {
         return "";
     }
 
+    /** Weekday names, starting on Sunday. */
     private static final String[] WEEK_STRING = {
         "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat",
     };
@@ -154,7 +155,6 @@ public class Date {
      * @return formatted date string
      */
     public String getDateString() {
-        // Thanks for Theo Beisch (10/20/04)
         Calendar cal = getCalendar();
         return toWeekString(cal.get(Calendar.DAY_OF_WEEK))
                 + ", "
@@ -183,7 +183,6 @@ public class Date {
      * @return formatted time string with blinking colon
      */
     public String getTimeString() {
-        // Thanks for Theo Beisch (10/20/04)
         Calendar cal = getCalendar();
         return toDateString(cal.get(Calendar.HOUR_OF_DAY))
                 + (((cal.get(Calendar.SECOND) % 2) == 0) ? ":" : " ")

@@ -81,11 +81,13 @@ import org.klomp.snark.dht.DHT;
  */
 public class I2PSnarkServlet extends BasicServlet {
 
+    /** Fixed serial version for the servlet. */
     private static final long serialVersionUID = 1L;
     /** Context path, generally "/i2psnark"; set once in {@link #init()}. */
     private String _contextPath;
     /** Context display name, generally "i2psnark"; set once in init(). */
     private String _contextName;
+    /** The manager holding this webapp's torrents. */
     private transient SnarkManager _manager;
     /** Rotating CSRF nonce, rotates every 5 minutes. */
     private long _currentNonce;
@@ -93,21 +95,30 @@ public class I2PSnarkServlet extends BasicServlet {
     private final long[] _recentNonces = new long[2];
     /** When the current nonce was minted, ms since epoch; drives rotation. */
     private long _lastRotation;
+    /** Form nonces rotate every 5 minutes. */
     private static final long NONCE_ROTATION_MS = 5 * (long) 60 * 1000; // 5 minutes
     /** Version of the bundled I2PSnark Bridge XPI, read lazily from the war; null if unknown. */
     private static volatile String _bridgeVersion;
     /** Set once when an outdated I2PSnark Bridge extension reported itself; one screen-log notice per webapp start. */
     private static volatile boolean _bridgeUpdateLogged;
 
+    /** Splits a pasted info hash from a trailing parenthetical. */
     private static final Pattern INFOHASH_PAREN = Pattern.compile(" \\(");
     /** Cumulative stats array indices: [downloaded, uploaded, download rate, upload rate, peers, total size]. */
     private static final int STAT_DOWNLOADED = 0;
+    /** Sort key for the uploaded column. */
     private static final int STAT_UPLOADED = 1;
+    /** Sort key for the download rate column. */
     private static final int STAT_DOWNLOAD_RATE = 2;
+    /** Sort key for the upload rate column. */
     private static final int STAT_UPLOAD_RATE = 3;
+    /** Sort key for the peers column. */
     private static final int STAT_PEERS = 4;
+    /** Sort key for the total size column. */
     private static final int STAT_TOTAL_SIZE = 5;
+    /** Matches a hex info hash. */
     private static final Pattern HEX_PATTERN = Pattern.compile("[a-fA-F0-9]+");
+    /** Matches a base32 name without the suffix. */
     private static final Pattern BASE32_PATTERN = Pattern.compile("[a-zA-Z2-7]+");
 
     /** Web path of the active theme's resources; recomputed per request. */
@@ -119,6 +130,7 @@ public class I2PSnarkServlet extends BasicServlet {
     /** Announce URL of the torrent being edited; preselects its tracker radio button. */
     private String _lastAnnounceURL;
 
+    /** Webapp name used in paths and config keys. */
     private static final String DEFAULT_NAME = "i2psnark";
     /**
      * Config file path property.
@@ -130,20 +142,25 @@ public class I2PSnarkServlet extends BasicServlet {
     public static final String WARBASE = "/.res/";
     /** Ellipsis character used to truncate long names. */
     static final char HELLIP = '\u2026';
+    /** Config key for the console's advanced mode. */
     private static final String PROP_ADVANCED = "routerconsole.advanced";
+    /** Config key for the console's Sora font option. */
     private static final String RC_PROP_ENABLE_SORA_FONT = "routerconsole.displayFontSora";
+    /** Per-thread date format for the torrent list. */
     private static final ThreadLocal<DateFormat> _DATE_FMT1 = new ThreadLocal<DateFormat>() {
         @Override
         protected DateFormat initialValue() {
             return new SimpleDateFormat("HH:mm, EEE dd MMM yyyy", Locale.US);
         }
     };
+    /** Per-thread date format including the time. */
     private static final ThreadLocal<DateFormat> _DATE_FMT2 = new ThreadLocal<DateFormat>() {
         @Override
         protected DateFormat initialValue() {
             return new SimpleDateFormat("HH:mm, EEE dd MMMM yyyy", Locale.US);
         }
     };
+    /** Per-thread date format for file timestamps. */
     private static final ThreadLocal<DateFormat> _DATE_FMT3 = new ThreadLocal<DateFormat>() {
         @Override
         protected DateFormat initialValue() {
@@ -334,10 +351,31 @@ public class I2PSnarkServlet extends BasicServlet {
      */
     I2PSnarkConfigure configForms() {return configForms;}
 
+    /**
+     * Writes the download and torrent settings form.
+     *
+     * @param out where to write the form
+     * @param req the request being served
+     * @throws IOException if the write fails
+     */
     private void writeConfigForm(PrintWriter out, HttpServletRequest req) throws IOException {configForms().writeConfigForm(out, req);}
 
+    /**
+     * Writes the torrent creation filter form.
+     *
+     * @param out where to write the form
+     * @param req the request being served
+     * @throws IOException if the write fails
+     */
     private void writeTorrentCreateFilterForm(PrintWriter out, HttpServletRequest req) throws IOException {configForms().writeTorrentCreateFilterForm(out, req);}
 
+    /**
+     * Writes the tracker announce settings form.
+     *
+     * @param out where to write the form
+     * @param req the request being served
+     * @throws IOException if the write fails
+     */
     private void writeTrackerForm(PrintWriter out, HttpServletRequest req) throws IOException {configForms().writeTrackerForm(out, req);}
 
     /**
@@ -4020,13 +4058,17 @@ public class I2PSnarkServlet extends BasicServlet {
      * @since 0.9.71+
      */
     private static class RowContext {
+        /** The torrent whose row is being drawn. */
         final Snark snark;
         /** Zero-based index within the current page; drives parity styling. */
         final int index;
+        /** Whether the peer list is shown. */
         final boolean showPeers;
         /** Render-scope accumulator; reference is shared, contents mutate. */
         final long[] stats;
+        /** Whether thin spaces are omitted in numbers. */
         final boolean noThinsp;
+        /** Whether the user may change this torrent. */
         final boolean canWrite;
         /** Active filter value, "" for none; never null. */
         final String filterParam;
@@ -4044,6 +4086,20 @@ public class I2PSnarkServlet extends BasicServlet {
          */
         final String token;
 
+        /**
+         * Holds what one download row needs.
+         *
+         * @param snark the download the row describes
+         * @param index the number of the row
+         * @param showPeers true to show the peer counts
+         * @param stats the stats of the row
+         * @param noThinsp true to skip the thin separators
+         * @param canWrite true if the user may change the download
+         * @param filterParam the current filter parameter
+         * @param sortParam the current sort parameter
+         * @param badgeCache the cached badge info
+         * @param token the security token of the form
+         */
         RowContext(Snark snark, int index, boolean showPeers, long[] stats,
                    boolean noThinsp, boolean canWrite, String filterParam, String sortParam,
                    Map<ByteArray, BadgeInfo> badgeCache, String token) {
@@ -4068,9 +4124,17 @@ public class I2PSnarkServlet extends BasicServlet {
      * @since 0.9.71+
      */
     private static class BadgeInfo {
+        /** Base32 prefix of the peer's destination. */
         final String destPrefix;
+        /** The peer's client name from the badge service. */
         final String clientName;
 
+        /**
+         * Holds one peer's badge data.
+         *
+         * @param destPrefix base32 prefix of the destination
+         * @param clientName the peer's client name
+         */
         BadgeInfo(String destPrefix, String clientName) {
             this.destPrefix = destPrefix;
             this.clientName = clientName;
@@ -4613,9 +4677,17 @@ public class I2PSnarkServlet extends BasicServlet {
      * Encapsulates result of status building with HTML output and status keyword.
      */
     private static class StatusResult {
+        /** The status text as HTML. */
         final String statusHtml;
+        /** The status text as plain text. */
         final String snarkStatus;
 
+        /**
+         * Holds one torrent's status in both forms.
+         *
+         * @param statusHtml the status as HTML
+         * @param snarkStatus the status as plain text
+         */
         StatusResult(String statusHtml, String snarkStatus) {
             this.statusHtml = statusHtml;
             this.snarkStatus = snarkStatus;
@@ -4995,6 +5067,9 @@ public class I2PSnarkServlet extends BasicServlet {
      * @since 0.8.1
      */
     private static class PeerComparator implements Comparator<Peer>, Serializable {
+        /** Orders a torrent's peers for display. */
+        private PeerComparator() {}
+        /** Fixed serial version for the renderer. */
         private static final long serialVersionUID = 1L;
 
         public int compare(Peer l, Peer r) {
@@ -5386,7 +5461,9 @@ public class I2PSnarkServlet extends BasicServlet {
                 .replace("[", "%5B").replace("]", "%5D");
     }
 
+    /** Document type line opening every page. */
     private static final String DOCTYPE = "<!DOCTYPE HTML>\n";
+    /** Opening of the torrent list table. */
     private static final String TABLE_HEADER = "<table id=torrents width=100% border=0>\n" + "<thead id=snarkHead>";
 
     /**
@@ -5408,6 +5485,7 @@ public class I2PSnarkServlet extends BasicServlet {
         return buf.toString();
     }
 
+    /** The html footer of the page. */
     private static final String FOOTER = "</div>\n<span id=endOfPage data-iframe-height></span>\n" +
         "<script src=/js/iframeResizer/iframeResizer.contentWindow.js id=iframeResizer type=module></script>\n" +
         "<script src=/js/iframeResizer/updatedEvent.js type=module></script>\n" +
@@ -5417,10 +5495,12 @@ public class I2PSnarkServlet extends BasicServlet {
         "<link rel=stylesheet href=/i2psnark/.res/snarkAlert.css>\n" +
         "</body>\n</html>";
 
+    /** The html footer of the standalone page. */
     private static final String FOOTER_STANDALONE = "</div>\n" +
         "<script src=/i2psnark/.res/js/detectPageZoom.js type=module></script>\n" +
         "<link rel=stylesheet href=/i2psnark/.res/snarkAlert.css>\n" + "</body>\n</html>";
 
+    /** Hidden iframe that receives form posts. */
     private static final String IFRAME_FORM = "<iframe name=processForm id=processForm hidden></iframe>\n";
 
     /**
@@ -6117,30 +6197,52 @@ public class I2PSnarkServlet extends BasicServlet {
     /** Known postman tracker base64 announce, both old and new. */
     private static final String POSTMAN_B64 =
             "lnQ6yoBTxQuQU8EQ1FlF395ITIQF-HGJxUeFvzETLFnoczNjQvKDbtSB7aHhn853zjVXrJBgwlB9sO57KakBDaJ50lUZgVPhjlI19TgJ-CxyHhHSCeKx5JzURdEW-ucdONMynr-b2zwhsx8VQCJwCEkARvt21YkOyQDaB9IdV8aTAmP~PUJQxRwceaTMn96FcVenwdXqleE16fI8CVFOV18jbJKrhTOYpTtcZKV4l1wNYBDwKgwPx5c0kcrRzFyw5~bjuAKO~GJ5dR7BQsL7AwBoQUS4k1lwoYrG1kOIBeDD3XF8BWb6K3GOOoyjc1umYKpur3G~FxBuqtHAsDRICkEbKUqJ9mPYQlTSujhNxiRIW-oLwMtvayCFci99oX8MvazPS7~97x0Gsm-onEK1Td9nBdmq30OqDxpRtXBimbzkLbR1IKObbg9HvrKs3L-kSyGwTUmHG9rSQSoZEvFMA-S0EXO~o4g21q1oikmxPMhkeVwQ22VHB0-LZJfmLr4SAAAA";
+    /** Base64 destination of the Postman tracker's new address. */
     private static final String POSTMAN_B64_NEW =
             "lnQ6yoBTxQuQU8EQ1FlF395ITIQF-HGJxUeFvzETLFnoczNjQvKDbtSB7aHhn853zjVXrJBgwlB9sO57KakBDaJ50lUZgVPhjlI19TgJ-CxyHhHSCeKx5JzURdEW-ucdONMynr-b2zwhsx8VQCJwCEkARvt21YkOyQDaB9IdV8aTAmP~PUJQxRwceaTMn96FcVenwdXqleE16fI8CVFOV18jbJKrhTOYpTtcZKV4l1wNYBDwKgwPx5c0kcrRzFyw5~bjuAKO~GJ5dR7BQsL7AwBoQUS4k1lwoYrG1kOIBeDD3XF8BWb6K3GOOoyjc1umYKpur3G~FxBuqtHAsDRICrsRuil8qK~whOvj8uNTv~ohZnTZHxTLgi~sDyo98BwJ-4Y4NMSuF4GLzcgLypcR1D1WY2tDqMKRYFVyLE~MTPVjRRgXfcKolykQ666~Go~A~~CNV4qc~zlO6F4bsUhVZDU7WJ7mxCAwqaMiJsL-NgIkb~SMHNxIzaE~oy0agHJMBQAEAAcAAA==";
     /** Known tracker base32 announces. */
     private static final String BT_B32 = "ev5dpxvcmshi6mil7gaon3b2wbplwylzraxs4wtz7dd5lzdsc2dq.b32.i2p";
+    /** Base32 address of the Chudo tracker. */
     private static final String CHUDO_B32 = "swhb5i7wcjcohmus3gbt3w6du6pmvl3isdvxvepuhdxxkfbzao6q.b32.i2p";
+    /** Base32 address of the Cryptopolis tracker. */
     private static final String CRYPT_B32 = "ri5a27ioqd4vkik72fawbcryglkmwyy4726uu5j3eg6zqh2jswfq.b32.i2p";
+    /** Base32 address of the Freedom tracker. */
     private static final String FREEDOM_B32 = "nfrjvknwcw47itotkzmk6mdlxmxfxsxhbhlr5ozhlsuavcogv4hq.b32.i2p";
+    /** Base32 address of the ICU812 tracker. */
     private static final String ICU812_B32 = "h77hk3pr622mx5c6qmybvbtrdo5la7pxo6my4kzr47x2mlpnvm2a.b32.i2p";
+    /** Base32 address of the Lodikon tracker. */
     private static final String LODIKON_B32 = "q2a7tqlyddbyhxhtuia4bmtqpohpp266wsnrkm6cgoahdqrjo3ra.b32.i2p";
+    /** Base32 address of the Lyoko tracker. */
     private static final String LYOKO_B32 = "afuuortfaqejkesne272krqvmafn65mhls6nvcwv3t7l2ic2p4kq.b32.i2p";
+    /** Base32 address of the Odift tracker. */
     private static final String ODIFT_B32 = "bikpeyxci4zuyy36eau5ycw665dplun4yxamn7vmsastejdqtfoq.b32.i2p";
+    /** Base32 address of the Omirack tracker. */
     private static final String OMITRACK_B32 = "a5ruhsktpdhfk5w46i6yf6oqovgdlyzty7ku6t5yrrpf4qedznjq.b32.i2p";
+    /** Base32 address of the OnionTracker tracker. */
     private static final String OTDG_B32 = "w7tpbzncbcocrqtwwm3nezhnnsw4ozadvi2hmvzdhrqzfxfum7wa.b32.i2p";
+    /** Base32 address of the Postman tracker's new address. */
     private static final String POSTMAN_B32_NEW = "6a4kxkg5wp33p25qqhgwl6sj4yh4xuf5b3p3qldwgclebchm3eea.b32.i2p";
+    /** Base32 address of the R4SAS tracker. */
     private static final String R4SAS_B32 = "punzipidirfqspstvzpj6gb4tkuykqp6quurj6e23bgxcxhdoe7q.b32.i2p";
+    /** Base32 address of the Skank tracker. */
     private static final String SKANK_B32 = "by7luzwhx733fhc5ug2o75dcaunblq2ztlshzd7qvptaoa73nqua.b32.i2p";
+    /** Base32 address of the SIMP tracker. */
     private static final String SIMP_B32 = "wc4sciqgkceddn6twerzkfod6p2npm733p7z3zwsjfzhc4yulita.b32.i2p";
+    /** Base32 address of The Bland tracker. */
     private static final String THEBLAND_B32 = "s5ikrdyjwbcgxmqetxb3nyheizftms7euacuub2hic7defkh3xhq.b32.i2p";
+    /** Base32 address of the Sigma tracker. */
     private static final String SIGMA_B32 = "qimlze77z7w32lx2ntnwkuqslrzlsqy7774v3urueuarafyqik5a.b32.i2p";
+    /** Base32 address of the Actix tracker. */
     private static final String ACTIX_B32 = "cbrjdqygiogbtn4w5ngducnc3l3ipkt7e2muisfnuea4zek4bmhq.b32.i2p";
+    /** Base32 address of the FattyDove tracker. */
     private static final String FATTYDOVE_B32 = "svece3bxv4vqlt2zuut5ww4ztkwunfcnab55pmnjjb6zfei3noha.b32.i2p";
+    /** Base32 address of the LocalCache tracker. */
     private static final String LOCALCACHE_B32 = "trackfmu3by6nhkibnw5exyhibjrvxl6k3e4y54wmjy4bvqgs3ha.b32.i2p";
+    /** Base32 address of the Observations tracker. */
     private static final String OBSERVATIONS_B32 = "7o3d4x4jpk3pvmmposhfqhc44zsy2dbtayfapuic3nuhh3r4grqq.b32.i2p";
+    /** Base32 address of the Public tracker. */
     private static final String PUBLIC_B32 = "vej4thpwphy6vit6v6abirqyvhporm7whrbyk74vvjhppfmd3plq.b32.i2p";
+    /** Base32 address of the YetAnother tracker. */
     private static final String YETANOTHER_B32 = "ybi4axxg4bduwsenutmsynz2plfdb4jzr2vhapvprvzcxskx2foa.b32.i2p";
 
     /**
@@ -7180,7 +7282,11 @@ public class I2PSnarkServlet extends BasicServlet {
      * key is a suffix of another - see {@link #suffixIcon}.
      */
     private static class IconMaps {
+        /** Holds the icon state for the torrent page. */
+        private IconMaps() {}
+        /** Icon file name for each MIME type. */
         static final Map<String, String> MIME_ICON_MAP;
+        /** Icon file name for each file suffix. */
         static final Map<String, String> SUFFIX_ICON_MAP;
 
         static {

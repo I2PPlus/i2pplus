@@ -12,7 +12,9 @@ import java.net.Socket;
  * connection, reading requests and delegating them to the server's request listeners.
  */
 public class HTTPServerThread extends Thread {
+    /** The server handling the request. */
     private HTTPServer httpServer;
+    /** The client connection being served. */
     private Socket sock;
 
     ////////////////////////////////////////////////

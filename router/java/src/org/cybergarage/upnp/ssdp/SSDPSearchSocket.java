@@ -36,11 +36,8 @@ import org.cybergarage.util.*;
  * @since 1.0
  */
 public class SSDPSearchSocket extends HTTPMUSocket implements Runnable {
+    /** True when this socket binds an IPv6 address. */
     private boolean useIPv6Address;
-
-    ////////////////////////////////////////////////
-    //	Constructor
-    ////////////////////////////////////////////////
 
     /**
      * Binds the search socket for SSDP multicast traffic.
@@ -73,9 +70,6 @@ public class SSDPSearchSocket extends HTTPMUSocket implements Runnable {
         if (!ok) throw new IOException("Bind to " + bindAddr + " failed");
     }
 
-    ////////////////////////////////////////////////
-    //	Constructor
-    ////////////////////////////////////////////////
     /**
      * Opens the socket joined to the IPv4 SSDP multicast group.
      *
@@ -134,10 +128,7 @@ public class SSDPSearchSocket extends HTTPMUSocket implements Runnable {
         return open(addr, SSDP.PORT, bindAddr);
     }
 
-    ////////////////////////////////////////////////
-    //	deviceSearch
-    ////////////////////////////////////////////////
-
+    /** Listeners notified of each device search. */
     private ListenerList deviceSearchListenerList = new ListenerList();
 
     /**
@@ -171,10 +162,7 @@ public class SSDPSearchSocket extends HTTPMUSocket implements Runnable {
         }
     }
 
-    ////////////////////////////////////////////////
-    //	run
-    ////////////////////////////////////////////////
-
+    /** The thread listening for searches. */
     private Thread deviceSearchThread = null;
 
     /**
@@ -186,7 +174,6 @@ public class SSDPSearchSocket extends HTTPMUSocket implements Runnable {
         while (deviceSearchThread == thisThread) {
             Thread.yield();
 
-            // Thanks for Kazuyuki Shudo (08/23/07)
             SSDPPacket packet = null;
             try {
                 packet = receive();
@@ -194,7 +181,6 @@ public class SSDPSearchSocket extends HTTPMUSocket implements Runnable {
                 break;
             }
 
-            // Thanks for Mikael Hakman (04/20/05)
             if (packet == null) continue;
 
             // TODO perform delegation with Thread Pooling
@@ -225,7 +211,6 @@ public class SSDPSearchSocket extends HTTPMUSocket implements Runnable {
      * Closes the socket and unhooks the receive thread.
      */
     public void stop() {
-        // Thanks for Mikael Hakman (04/20/05)
         close();
 
         deviceSearchThread = null;

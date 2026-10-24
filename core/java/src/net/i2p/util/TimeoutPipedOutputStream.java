@@ -15,6 +15,7 @@ import java.io.PipedOutputStream;
  */
 class TimeoutPipedOutputStream extends PipedOutputStream {
 
+    /** The stream that receives the bytes written here. */
     private final TimeoutPipedInputStream sink;
 
     /**

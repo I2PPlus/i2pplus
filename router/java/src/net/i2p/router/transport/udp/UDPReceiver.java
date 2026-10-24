@@ -18,18 +18,28 @@ import net.i2p.util.SystemVersion;
  * Received packets are queued in the common PacketHandler queue.
  */
 class UDPReceiver {
+    /** The router context. */
     private final RouterContext _context;
+    /** Logger for the UDP receiver. */
     private final Log _log;
+    /** The socket being read. */
     private final DatagramSocket _socket;
+    /** Thread name of the receiver. */
     private String _name;
+    /** True while the receiver should run. */
     private volatile boolean _keepRunning;
+    /** The thread reading the socket. */
     private final Runner _runner;
+    /** The transport that owns this receiver. */
     private final UDPTransport _transport;
+    /** Handler of the received packets. */
     private final PacketHandler _handler;
+    /** Listener for the socket events. */
     private final SocketListener _endpoint;
     /** Reused inbound bandwidth request, only touched on the runner thread. */
     private FIFOBandwidthLimiter.Request _bandwidthRequest;
 
+    /** True when running on Android. */
     private static final boolean IS_ANDROID = SystemVersion.isAndroid();
     /** How long to sleep between throttle checks while inbound is throttled. */
     private static final int THROTTLE_WAIT_MS = 10;
@@ -119,7 +129,11 @@ class UDPReceiver {
         return 0;
     }
 
+    /** Thread reading packets off the socket. */
     private class Runner implements Runnable {
+
+        /** Reads packets from the socket. */
+        private Runner() {}
 
         /**
          * Main receive loop: throttle-check, acquire packet, wait for datagram, push to handler.

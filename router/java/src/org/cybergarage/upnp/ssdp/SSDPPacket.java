@@ -130,7 +130,6 @@ public class SSDPPacket {
      * @return the IP address string this datagram was sent from
      */
     public String getRemoteAddress() {
-        // Thanks for Theo Beisch (11/09/04)
         return getDatagramPacket().getAddress().getHostAddress();
     }
 
@@ -298,7 +297,6 @@ public class SSDPPacket {
      */
     public boolean isRootDevice() {
         if (NT.isRootDevice(getNT()) == true) return true;
-        // Thanks for Theo Beisch (11/01/04)
         if (ST.isRootDevice(getST()) == true) return true;
         return USN.isRootDevice(getUSN());
     }

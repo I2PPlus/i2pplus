@@ -26,8 +26,11 @@ import net.i2p.data.DataHelper;
 @SuppressWarnings("PMD.CloseResource")
 public class EepPost extends EepGet {
 
+    /** Line ending in an HTTP header. */
     private static final String CRLF = "\r\n";
+    /** The header line ending, as bytes. */
     private static final byte[] CRLFB = DataHelper.getASCII(CRLF);
+    /** Most of a POST body kept in memory, in bytes. */
     private static final int PROP_MAX_POST_PAYLOAD_RAM = 32 * 1024;
 
     /**

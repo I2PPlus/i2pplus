@@ -19,9 +19,13 @@ import net.i2p.router.web.FormHandler;
 public class ConfigAdvancedHandler extends FormHandler {
     /** Creates a handler; the container calls it with no arguments before each submission. */
     public ConfigAdvancedHandler() {}
+    /** True when the form asks for the settings to be written. */
     private boolean _shouldSave;
+    /** Settings as they were before the form. */
     private String _oldConfig;
+    /** Settings as the form submitted them. */
     private String _config;
+    /** Property filter the page is showing. */
     private String _ff;
 
     @Override

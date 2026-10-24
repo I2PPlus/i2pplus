@@ -1,8 +1,4 @@
 package net.i2p.router.transport;
-/*
- * free (adj.): unencumbered; not under the control of others
- * Use at your own risk.
- */
 
 /**
  * Manages geographic IP lookups using Tor geoip format.
@@ -72,28 +68,40 @@ import net.i2p.util.SystemVersion;
  *
  */
 public class GeoIP {
+    /** Logger for the GeoIP lookups. */
     private final Log _log;
+    /** The app context. */
     private final I2PAppContext _context;
+    /** Records why routers were banned. */
     private static volatile BanLogger _banLogger;
+    /** Country names, by country code. */
     private final Map<String, String> _codeToName;
     /** Code to itself to prevent String proliferation. */
     private final Map<String, String> _codeCache;
 
-    // In the following structures, an IPv4 IP is stored as a non-negative long, 0 to 2**32 - 1,
-    // and the first 8 bytes of an IPv6 IP are stored as a signed long.
+    /**
+     * Country codes, keyed by the IP: an IPv4 address as a non-negative
+     * long, the first 8 bytes of an IPv6 address as a signed long.
+     */
     private final Map<Long, String> _IPToCountry;
     /** Cap for _IPToCountry to prevent unbounded growth. */
     private static final int MAX_IP_CACHE_SIZE = 32768;
 
+    /** IPv4 addresses queued for lookup. */
     private final Set<Long> _pendingSearch;
+    /** IPv6 addresses queued for lookup. */
     private final Set<Long> _pendingIPv6Search;
+    /** Addresses searched already without a result. */
     private final Set<Long> _notFound;
 
+    /** True while a lookup run is in progress. */
     private final AtomicBoolean _lock;
+    /** Lookups run in the current batch. */
     private int _lookupRunCount;
+    /** Countries treated as one, by country code. */
     private static final Map<String, List<String>> _associatedCountries;
 
-    // ASN database for IP → org name lookups
+    /** Reader for the ASN to organization name lookups. */
     private volatile com.maxmind.db.Reader _asnReader;
 
     /** Property: whether GeoIP lookups are enabled. */
@@ -132,9 +140,16 @@ public class GeoIP {
      * PROP_DEBIAN_GEOIPV6.
      */
     public static final String PROP_DEBIAN_GEOIPV6 = "geoip.v6.dat";
+    /** Debian's IPv4 GeoIP database path. */
     private static final String DEBIAN_GEOIP_FILE = "/usr/share/GeoIP/GeoIP.dat";
+    /** Debian's IPv6 GeoIP database path. */
     private static final String DEBIAN_GEOIPV6_FILE = "/usr/share/GeoIP/GeoIPv6.dat";
+    /** Developer switch disabling the Debian databases. */
     private static final boolean DISABLE_DEBIAN = false;
+    /**
+     * SystemVersion.isAndroid())
+     * True where the Debian databases are usable.
+     */
     private static final boolean ENABLE_DEBIAN = !DISABLE_DEBIAN && !(SystemVersion.isWindows() || SystemVersion.isAndroid());
     /**
      * Property: whether to refuse tunnels to destinations in our own country.
@@ -214,7 +229,11 @@ public class GeoIP {
         }
     }
 
+    /** Runs the GeoIP lookups for the console. */
     private class LookupJob implements Runnable {
+        /** Runs one GeoIP lookup for the console. */
+        private LookupJob() {}
+        /** Lookups between clears of the not-found set. */
         private static final int CLEAR = 8;
 
         /**
@@ -623,7 +642,6 @@ public class GeoIP {
         return null;
     }
 
-    // --- ISP Name Normalization (ported from Python normalize-asn.py) ---
 
     /** Known broken org names in the MaxMind ASN DB — straight replacements. */
     private static final Map<String, String> ASN_DB_OVERRIDES;
@@ -975,6 +993,7 @@ public class GeoIP {
 
     /** Embedded ASN numbers (e.g. AS12345). */
     private static final Pattern ASN_EMBEDDED = Pattern.compile("\\bAS\\d+\\b\\s*", Pattern.CASE_INSENSITIVE);
+    /** Matches a trailing AS number in an organization name. */
     private static final Pattern ASN_TRAILING = Pattern.compile("\\s*\\bAS\\d+\\b$", Pattern.CASE_INSENSITIVE);
 
     /** Paired single quotes around text (e.g. 'TIMEWEB') — keeps internal apostrophes like O'Brien. */
@@ -988,8 +1007,11 @@ public class GeoIP {
 
     /** Leading/trailing junk. */
     private static final Pattern LEADING_JUNK = Pattern.compile("^[-\u2013\u2014\\s\"']+");
+    /** Matches trailing punctuation in an organization name. */
     private static final Pattern TRAILING_JUNK = Pattern.compile("[-\u2013\u2014\\s\"']+$");
+    /** Matches doubled commas in an organization name. */
     private static final Pattern DOUBLE_COMMA = Pattern.compile(",\\s*,");
+    /** Matches doubled spaces in an organization name. */
     private static final Pattern DOUBLE_SPACE = Pattern.compile("  +");
     /** Whitespace split. */
     private static final Pattern SPACE_SPLIT = Pattern.compile("\\s+");
@@ -1667,7 +1689,6 @@ public class GeoIP {
     * This is identical to the Tor geoip file, which can be found in
     * src/config/geoip in their distribution, or /usr/local/lib/share/tor/geoip
     * in their installation.
-    * Thanks to Tor for finding a source for the data, and the format script.
     * <p>
     * To create:
     * wget https://web.archive.org/web/2010id_/http://ip-to-country.webhosting.info/downloads/ip-to-country.csv.zip

@@ -35,14 +35,22 @@ import org.cybergarage.xml.ParserException;
  * @since 0.9.17
  */
 public class NewsXMLParser {
+    /** The app context. */
     private final I2PAppContext _context;
+    /** Logger for the news parser. */
     private final Log _log;
+    /** The news entries parsed from the feed. */
     private List<NewsEntry> _entries;
+    /** The CRL entries parsed from the feed. */
     private List<CRLEntry> _crlEntries;
+    /** The blocklist entries parsed from the feed. */
     private BlocklistEntries _blocklistEntries;
+    /** The feed metadata parsed from the feed. */
     private NewsMetadata _metadata;
+    /** The XHTML sanitizing mode of the parser. */
     private XHTMLMode _mode;
 
+    /** The XHTML tags allowed in feed content. */
     private static final Set<String> xhtmlWhitelist = new HashSet<>(Arrays.asList(new String[] {
         "a", "b", "br", "div", "i", "p", "span", "font", "blockquote", "hr",
         "del", "ins", "em", "strong", "mark", "sub", "sup", "tt", "code", "strike", "s", "u",
@@ -53,7 +61,10 @@ public class NewsXMLParser {
         XMLParser.TEXT_NAME
     }));
 
-    // http://www.w3.org/TR/html-markup/global-attributes.html#common.attrs.event-handler
+    /**
+     * The HTML attributes stripped from feed content.
+     * See also: <a href="http://www.w3.org/TR/html-markup/global-attributes.html#common.attrs.event-handler">global HTML attributes</a>
+     */
     private static final Set<String> attributeBlacklist = new HashSet<>(Arrays.asList(new String[] {
         "onabort", "onblur", "oncanplay", "oncanplaythrough", "onchange", "onclick",
         "oncontextmenu", "ondblclick", "ondrag", "ondragend", "ondragenter", "ondragleave",
@@ -181,6 +192,12 @@ public class NewsXMLParser {
         return _blocklistEntries;
     }
 
+    /**
+     * Extracts the feed contents from the root node.
+     *
+     * @param root the feed's root node
+     * @throws I2PParserException if the feed structure is invalid
+     */
     private void extract(Node root) throws I2PParserException {
         if (!root.getName().equals("feed"))
             throw new I2PParserException("no feed in XML");
@@ -190,6 +207,13 @@ public class NewsXMLParser {
         _blocklistEntries = extractBlocklistEntries(root);
     }
 
+    /**
+     * Extracts the metadata of the feed.
+     *
+     * @param feed the feed node
+     * @return the parsed metadata
+     * @throws I2PParserException if the metadata is invalid
+     */
     private static NewsMetadata extractNewsMetadata(Node feed) throws I2PParserException {
         NewsMetadata rv = new NewsMetadata();
         Node n = feed.getNode("title");
@@ -592,10 +616,20 @@ public class NewsXMLParser {
      * Extend IOE since cybergarage ParserException extends Exception.
      */
     private static class I2PParserException extends IOException {
+        /**
+         * Builds the exception with a message.
+         *
+         * @param s the error message
+         */
         public I2PParserException(String s) {
             super(s);
         }
 
+        /**
+         * Builds the exception from a cause.
+         *
+         * @param t the cause of the failure
+         */
         public I2PParserException(Throwable t) {
             super("XML Parse Error", t);
         }

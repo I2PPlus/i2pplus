@@ -11,6 +11,7 @@ import java.io.OutputStream;
  */
 public class CountingOutputStream extends FilterOutputStream {
 
+    /** Bytes written so far. */
     private long count;
 
     /**

@@ -42,13 +42,17 @@ import org.klomp.snark.dht.DatagramSender;
  * @since 0.9.53, unused until protocol finalized in 0.9.67
  */
 class UDPTrackerClient implements I2PSessionMuxedListener {
+    /** The app context. */
     private final I2PAppContext _context;
+    /** Logger for UDP tracker traffic. */
     private final Log _log;
 
     /** Hook to inject and receive datagrams. */
     private final I2PSession _session;
 
+    /** The webapp's configuration helper. */
     private final I2PSnarkUtil _util;
+    /** Hash of this client's destination. */
     private final Hash _myHash;
 
     /** Unsigned datagrams. */
@@ -60,8 +64,10 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     /** Our TID to tracker. */
     private final Map<Integer, ReplyWaiter> _sentQueries;
 
+    /** True while the client thread is running. */
     private boolean _isRunning;
 
+    /** Initial connection id sent in the connect request. */
     private static final long INIT_CONN_ID = 0x41727101980L;
 
     /**
@@ -87,9 +93,13 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
      */
     public static final int EVENT_PAUSED = 5;
 
+    /** Action value for a connection request. */
     private static final int ACTION_CONNECT = 0;
+    /** Action value for an announce request. */
     private static final int ACTION_ANNOUNCE = 1;
+    /** Action value for a scrape request. */
     private static final int ACTION_SCRAPE = 2;
+    /** Action value marking an error reply. */
     private static final int ACTION_ERROR = 3;
 
 
@@ -251,7 +261,6 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         return null;
     }
 
-    //////// private below here
 
     /**
      * Scrape for swarm composition for a torrent. Blocking! Caller should run in a thread.
@@ -384,7 +393,6 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         return ndp;
     }
 
-    ///// Sending.....
 
     /**
      * Send one time with a new tid.
@@ -702,7 +710,6 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
     }
 
-    ///// Reception.....
 
     /**
      * Receive a message.
@@ -808,6 +815,12 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
     }
 
+    /**
+     * Parses an announce reply and hands it to the waiter.
+     *
+     * @param waiter the request the reply answers
+     * @param payload the reply body
+     */
     private void receiveAnnounce(ReplyWaiter waiter, byte[] payload) {
         Tracker tr = waiter.getSentTo();
         if (payload.length >= 20) {
@@ -868,6 +881,13 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
     }
 
+    /**
+     * Parses an error reply and fails the waiter.
+     *
+     * @param waiter the request the reply answers
+     * @param payload the reply body
+     * @param expected the action the reply should have carried
+     */
     private void receiveError(ReplyWaiter waiter, byte[] payload, int expected) {
         String msg;
         if (payload.length > 8) {
@@ -882,8 +902,6 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         // TODO if we were waiting for an announce reply, fire off a new connection request
         // No action needed for announce response
     }
-
-    // I2PSessionMuxedListener interface ----------------
 
     /**
      * Instruct the client that the given session has received a message.
@@ -970,10 +988,15 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
      */
     public static class TrackerResponse {
 
+        /** Seconds until the next announce, set by the tracker. */
         private final int interval;
+        /** Peers with the torrent complete. */
         private final int complete;
+        /** Peers still downloading. */
         private final int incomplete;
+        /** Error message from the tracker, or null. */
         private final String error;
+        /** Peers returned by the reply. */
         private final Set<Hash> peers;
 
         /**
@@ -1059,14 +1082,18 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
     }
 
+    /** A tracker host and port. */
     private static class HostPort {
 
+        /** The tracker host name. */
         protected final String host;
+        /** The tracker port. */
         protected final int port;
 
         /**
          * Create a host/port pair.
          *
+         * @param host the tracker host
          * @param port the announce port
          */
         public HostPort(String host, int port) {
@@ -1077,7 +1104,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         /**
          * The announce port.
          *
-         * @return the announce port
+         * @return the port advertised in the announce
          */
         public int getPort() {
             return port;
@@ -1114,22 +1141,38 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
     }
 
+    /** State of the connection id for one tracker. */
     private enum ConnState {
+        /** No valid id held, a connect is needed. */
         INVALID,
+        /** A connect request is outstanding. */
         IN_PROGRESS,
+        /** A valid id is held. */
         VALID
     }
 
+    /** One UDP tracker and its connection state. */
     private class Tracker extends HostPort {
 
+        /** Lock guarding the tracker destination. */
         private final Object destLock = new Object();
+        /** Destination used for the connection to this tracker. */
         private Destination dest;
-        // we store as a Long because all values are valid, so null is unset
+        /** Connection id from the tracker, null when none is held. */
         private Long cid;
+        /** When the connection id expires. */
         private long expires;
+        /** Consecutive failed requests to this tracker. */
         private int consecFails;
+        /** Current state of the connection id. */
         private ConnState state = ConnState.INVALID;
 
+        /**
+         * Prepares to talk to one UDP tracker.
+         *
+         * @param host the tracker host
+         * @param port the tracker port
+         */
         public Tracker(String host, int port) {
             super(host, port);
         }
@@ -1151,6 +1194,8 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
 
         /**
          * Store whether a connection to the tracker is in progress.
+         *
+         * @param yes true while a connection is in progress
          */
         public synchronized void setConnInProgress(boolean yes) {
             if (yes) {
@@ -1197,6 +1242,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         /**
          * Store the connection ID and expiration.
          *
+         * @param cid the connection ID to store
          * @param lifetime milliseconds from now until the ID expires
          */
         public synchronized void setConnection(long cid, long lifetime) {
@@ -1258,25 +1304,42 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
     }
 
+    /** State of one outstanding tracker request. */
     private enum WaitState {
+        /** Waiting for the reply. */
         INIT,
+        /** The reply arrived. */
         SUCCESS,
+        /** The reply timed out. */
         TIMEOUT,
+        /** The request failed. */
         FAIL
     }
 
     /** Callback for replies. */
     private class ReplyWaiter extends SimpleTimer2.TimedEvent {
+        /** Transaction id matching the reply. */
         private final int tid;
+        /** The tracker the request was sent to. */
         private final Tracker sentTo;
+        /** The action the request carried. */
         private final int action;
+        /** The request payload that was sent. */
         private final byte[] data;
+        /** The parsed reply, until it arrives. */
         private TrackerResponse replyObject;
+        /** Current state of this request. */
         private WaitState state = WaitState.INIT;
 
         /**
          * Either wait on this object with a timeout, or use non-null Runnables. Any sent data to be
          * remembered may be stored by setSentObject(). Reply object may be in {@link #getReplyObject()}.
+         *
+         * @param tid the transaction id of the request
+         * @param tracker the tracker being queried
+         * @param action the tracker action number
+         * @param payload the request bytes to send
+         * @param toWait the time to wait for the reply, in ms
          */
         public ReplyWaiter(int tid, Tracker tracker, int action, byte[] payload, long toWait) {
             super(SimpleTimer2.getInstance(), toWait);
@@ -1331,7 +1394,11 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
             return replyObject;
         }
 
-        /** If true, we got a reply, and getReplyObject() may contain something. */
+        /**
+         * The current state of this request.
+         *
+         * @return the wait state
+         */
         public synchronized WaitState getState() {
             return state;
         }
@@ -1339,6 +1406,8 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         /**
          * Will notify this. Also removes from _sentQueries and calls heardFrom(). Sets state to
          * SUCCESS or FAIL.
+         *
+         * @param success true if the tracker replied without an error
          */
         public synchronized void gotReply(boolean success) {
             cancel();
@@ -1348,6 +1417,8 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
 
         /**
          * Will notify this and run onReply. Also removes from _sentQueries and calls heardFrom().
+         *
+         * @param state the new state of this request
          */
         private synchronized void setState(WaitState state) {
             this.state = state;
@@ -1357,6 +1428,8 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         /**
          * Will notify this. Also removes from _sentQueries and calls heardFrom(). Sets state to
          * SUCCESS.
+         *
+         * @param resp the response received
          */
         public synchronized void gotResponse(TrackerResponse resp) {
             replyObject = resp;

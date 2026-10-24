@@ -30,15 +30,26 @@ import org.w3c.dom.NodeList;
  */
 public class RunStandalone {
 
+    /** The web server hosting the torrent page. */
     private final JettyStart _jettyStart;
+    /** The context the standalone app runs in. */
     private final I2PAppContext _context;
+    /** Address the server listens on. */
     private String _host;
+    /** Port the server listens on. */
     private int _port;
+    /** The one running instance. */
     private static RunStandalone _instance;
 
     /** The app context config file name. */
     static final File APP_CONFIG_FILE = new File("i2psnark-appctx.config");
 
+    /**
+     * Parses the command line and starts the server.
+     *
+     * @param args the command line arguments
+     * @throws Exception if the server cannot start
+     */
     private RunStandalone(String[] args) throws Exception {
         Properties p = new Properties();
 

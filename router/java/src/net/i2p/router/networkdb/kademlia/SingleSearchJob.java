@@ -20,9 +20,12 @@ import net.i2p.router.TunnelInfo;
  * reliable single-peer communication.
  */
 class SingleSearchJob extends FloodOnlySearchJob {
+    /** The hash being looked up. */
     private final Hash _to;
+    /** The lookup message awaiting a reply. */
     private OutNetMessage _onm;
 
+    /** How long to wait for the reply - 8 seconds. */
     private static final int TIMEOUT = 8*1000;
 
     /**

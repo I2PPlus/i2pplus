@@ -21,7 +21,9 @@ public class FileBuffer implements Buffer {
 	protected final int _offset;
 	/** The sub-length. */
 	protected final int _sublen;
+	/** Stream the bytes are read from. */
 	private InputStream _is;
+	/** Stream the bytes are written to. */
 	private OutputStream _os;
 
 	/**

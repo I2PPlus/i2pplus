@@ -26,13 +26,18 @@ import java.util.stream.Stream;
  * <p>In case of interruptions, it throws IllegalStateException.
  */
 public class RrdDbPool {
+    /** Holder for the one pool instance. */
     private static class RrdDbPoolSingletonHolder {
+        /** The one pool instance. */
         static final RrdDbPool instance = new RrdDbPool();
 
+        /** Not instantiable, holder only. */
         private RrdDbPoolSingletonHolder() {}
     }
 
+    /** Thrown when the pool is at capacity. */
     private static class PoolFullException extends RuntimeException {
+        /** Builds the pool-full exception. */
         PoolFullException() {
             super("", null, false, false);
         }
@@ -44,24 +49,28 @@ public class RrdDbPool {
      */
     public static final int INITIAL_CAPACITY = 200;
 
-    /*
-     * The RrdEntry stored in the pool can be of tree kind:
-     * - null, the URI is available, just take it and play
-     * - placeholder is true, it's not the real RrdDb entry, just a place holder
-     *   meaning that some other thread is using it. Wait until the real entry is put back.
-     * - placeholder is false, this is the active entry pointing to a RrdDb. It's
-     *   only used by the current thread.
-     *
-     */
+    /** One pooled database with its usage state. */
     private static class RrdEntry {
+        /** The pooled database, null while a placeholder. */
         RrdDb rrdDb = null;
+        /** Open requests against this entry. */
         int count = 0;
+        /** Latch signaled when the entry becomes empty. */
         final CountDownLatch waitempty;
+        /** Lock guarding the entry's use. */
         final ReentrantReadWriteLock inuse;
+        /** Convenience view of the write lock. */
         final Lock lock;
+        /** True if the entry only reserves the key. */
         final boolean placeholder;
+        /** The canonical URI this entry holds. */
         final URI uri;
 
+        /**
+         * Builds an entry for one URI.
+         *
+         * @param canonicalPath the canonical URI to hold
+         */
         RrdEntry(URI canonicalPath) {
             placeholder = false;
             uri = canonicalPath;
@@ -70,6 +79,11 @@ public class RrdDbPool {
             waitempty = new CountDownLatch(1);
         }
 
+        /**
+         * Builds a placeholder copying the parent's state.
+         *
+         * @param parent the entry to copy locks from
+         */
         RrdEntry(RrdEntry parent) {
             assert !parent.placeholder;
             placeholder = true;
@@ -102,16 +116,23 @@ public class RrdDbPool {
         return RrdDbPoolSingletonHolder.instance;
     }
 
+    /** Entries the pool may hold at once. */
     private int maxCapacity = INITIAL_CAPACITY;
+    /** Permits limiting concurrent pool use. */
     private Semaphore usage = new Semaphore(maxCapacity);
+    /** Write lock for capacity changes. */
     private final ReentrantReadWriteLock.WriteLock usageWLock;
+    /** Read lock for normal pool use. */
     private final ReentrantReadWriteLock.ReadLock usageRLock;
+    /** Condition awaited when the pool is full. */
     private final Condition fullCondition;
-    // Needed because external threads can detect waiting condition
+    /** True while a thread waits for pool capacity. */
     private final AtomicBoolean waitFull = new AtomicBoolean(false);
 
+    /** Pooled entries, by canonical URI. */
     private final ConcurrentMap<URI, RrdEntry> pool = new ConcurrentHashMap<>(INITIAL_CAPACITY);
 
+    /** Factory used for URIs without a scheme. */
     private RrdBackendFactory defaultFactory;
 
     /**
@@ -174,6 +195,14 @@ public class RrdDbPool {
         return pool.keySet().stream().map(URI::getPath).toArray(String[]::new);
     }
 
+    /**
+     * Finds or creates the pooled entry for a URI.
+     *
+     * @param uri the canonical URI
+     * @param cancreate true to create a missing entry
+     * @return the entry, or null if not found
+     * @throws InterruptedException if interrupted while waiting
+     */
     private RrdEntry getEntry(URI uri, boolean cancreate) throws InterruptedException {
         RrdEntry ref = null;
         try {
@@ -255,11 +284,22 @@ public class RrdDbPool {
         }
     }
 
+    /**
+     * What to do with a freed pool slot.
+     */
     private enum ACTION {
+        /** Hand the entry to the next waiting request. */
         SWAP,
+        /** Discard the slot and wake a waiter to start over. */
         DROP
     }
 
+    /**
+     * Hands the freed slot to the next waiting request.
+     *
+     * @param a the action chosen for the waiter
+     * @param e the entry being passed, may be null
+     */
     private void passNext(ACTION a, RrdEntry e) {
         if (e == null) {
             return;
@@ -503,6 +543,15 @@ public class RrdDbPool {
         }
     }
 
+    /**
+     * Opens or creates the database for a request.
+     *
+     * @param builder the database builder
+     * @param uri the canonical URI
+     * @param factory the backend factory
+     * @return the open database
+     * @throws IOException if the database cannot be opened
+     */
     private RrdDb requestRrdDb(RrdDb.Builder builder, URI uri, RrdBackendFactory factory)
             throws IOException {
         RrdEntry ref = null;
@@ -725,6 +774,12 @@ public class RrdDbPool {
         return getCanonicalUriUsage(checkFactory(uri).getCanonicalUri(uri));
     }
 
+    /**
+     * Counts entries sharing a canonical path.
+     *
+     * @param uri the URI to count
+     * @return the number of users
+     */
     private int getCanonicalUriUsage(URI uri) {
         RrdEntry ref = null;
         try {
@@ -760,6 +815,12 @@ public class RrdDbPool {
         return usageWLock;
     }
 
+    /**
+     * Resolves the backend factory for a URI.
+     *
+     * @param uri the URI to resolve
+     * @return the factory to use
+     */
     private RrdBackendFactory checkFactory(URI uri) {
         return defaultFactory.canStore(uri) ? defaultFactory : RrdBackendFactory.findFactory(uri);
     }

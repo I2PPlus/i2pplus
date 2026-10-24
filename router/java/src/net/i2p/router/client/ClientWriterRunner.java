@@ -15,8 +15,11 @@ import net.i2p.router.RouterContext;
  * For external I2CP connections only.
  */
 class ClientWriterRunner implements Runnable {
+    /** Messages waiting to go out to the client. */
     private final BlockingQueue<I2CPMessage> _messagesToWrite;
+    /** The connection these messages belong to. */
     private final ClientConnectionRunner _runner;
+    /** The router context the writer runs in. */
     private final RouterContext _context;
     /**
      * Max messages queued per client before blocking.

@@ -21,12 +21,14 @@ abstract class IRCFilter {
      IRCFilter() {}
 
 
+    /** Whether inbound DCC connections are allowed at all. */
     private static final boolean ALLOW_ALL_DCC_IN = false;
     /** Does not override DCC handling. */
     private static final boolean ALLOW_ALL_CTCP_IN = false;
     /** Does not override DCC handling. */
     private static final boolean ALLOW_ALL_CTCP_OUT = false;
 
+    /** Commands accepted from the remote side. */
     private static final Set<String> _allowedInbound;
     static {
         final String[] allowedCommands =
@@ -112,8 +114,7 @@ abstract class IRCFilter {
         }
 
         // Allow PRIVMSG, but block CTCP.
-        if("PRIVMSG".equals(command) || "NOTICE".equals(command))
-        {
+        if("PRIVMSG".equals(command) || "NOTICE".equals(command)) {
             String msg;
             msg = field[idx++];
             if (idx < field.length)
@@ -160,6 +161,7 @@ abstract class IRCFilter {
         return null;
     }
 
+    /** Commands accepted from the local side. */
     private static final Set<String> _allowedOutbound;
     static {
         final String[] allowedCommands =

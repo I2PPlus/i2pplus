@@ -55,7 +55,9 @@ import net.i2p.util.Log;
  * @since 0.9.71+
  */
 class IntroducerLookupJob extends JobImpl {
+    /** Logger for this class. */
     private final Log _log;
+    /** The facade running the lookups. */
     private final FloodfillNetworkDatabaseFacade _facade;
 
     /**
@@ -69,9 +71,11 @@ class IntroducerLookupJob extends JobImpl {
 
     /** Base delay between cycles, jittered ±CYCLE_JITTER before each requeue. */
     private static final long CYCLE_INTERVAL = 5 * 60 * 1000L;
+    /** Random spread added to or subtracted from the cycle delay, up to 2 minutes. */
     private static final long CYCLE_JITTER = 2 * 60 * 1000L;
     /** First run 8-12 minutes after startup: let the netdb fill from bootstrap first. */
     private static final long STARTUP_DELAY_MIN = 8 * 60 * 1000L;
+    /** Random spread of the first lookup after startup, up to 4 min. */
     private static final long STARTUP_DELAY_JITTER = 4 * 60 * 1000L;
     /**
      * Wall-time budget for one cycle's query phase: lookups are issued until
@@ -91,6 +95,7 @@ class IntroducerLookupJob extends JobImpl {
     private static final long MIN_RETRY_MS = 10 * 60 * 1000L;
     /** Base backoff after a failed lookup, doubling per consecutive failure. */
     private static final long FAIL_BACKOFF_MS = 30 * 60 * 1000L;
+    /** Longest backoff after repeated failures - 6 hours. */
     private static final long MAX_FAIL_BACKOFF_MS = 6L * 60 * 60 * 1000L;
     /** Prune threshold for the attempts map. */
     private static final int ATTEMPT_MAP_MAX = 256;

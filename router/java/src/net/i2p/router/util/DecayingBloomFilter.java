@@ -120,6 +120,7 @@ public class DecayingBloomFilter {
      * </pre>
      */
     private static final int DEFAULT_M = 23;
+    /** Hash functions used per entry by default. */
     private static final int DEFAULT_K = 11;
     /** True for debugging. */
     private static final boolean ALWAYS_MISS = false;
@@ -293,6 +294,9 @@ public class DecayingBloomFilter {
      * @since 0.8.8
      */
     private class Shutdown implements Runnable {
+        /** Stops the filter's decay thread when the JVM exits. */
+        private Shutdown() {}
+
         /**
          * Clear on shutdown.
          */
@@ -389,9 +393,9 @@ public class DecayingBloomFilter {
     }
 
     /**
-     * False positive rate.
+     * Estimated chance that a lookup of an entry never added reports a hit.
      *
-     * @return the false positive rate
+     * @return a probability from 0.0 to 1.0, computed for the current generation
      */
     public double getFalsePositiveRate() {
             return _current.falsePositives();
@@ -533,6 +537,15 @@ public class DecayingBloomFilter {
         } finally { releaseReadLock(); }
     }
 
+    /**
+     * Adds or tests an entry with the lock already held.
+     *
+     * @param entry the entry bytes
+     * @param offset where the entry starts
+     * @param len the entry length
+     * @param addIfNew true to add when not already present
+     * @return true if the entry may be new
+     */
     private boolean locked_add(byte[] entry, int offset, int len, boolean addIfNew) {
         if (_extenders != null) {
             // extend the entry to 32 bytes
@@ -639,6 +652,7 @@ public class DecayingBloomFilter {
                        + " elements and " + dups + " duplicates with FPR = " + fpr);
     }
 
+    /** Rotates the filter to a fresh hour on a schedule. */
     private class DecayEvent extends SimpleTimer2.TimedEvent {
         /**
          * Caller MUST schedule.
@@ -666,8 +680,11 @@ public class DecayingBloomFilter {
      * @since 0.9.24
      */
     private class DecayHourlyEvent extends SimpleTimer2.TimedEvent {
+        /** One hour, in ms. */
         private static final long HOUR = 60 * 60 * 1000L;
+        /** How long past the hour rotation may wait: 5 minutes. */
         private static final long LAG = 5 * 60 * 1000L;
+        /** The hour the current filter covers. */
         private volatile long _currentHour;
 
         /**
@@ -695,7 +712,11 @@ public class DecayingBloomFilter {
             }
         }
 
-        /** Side effect: sets the current hour. */
+        /**
+         * Side effect: sets the current hour.
+         *
+         * @return the milliseconds until the next hour
+         */
         private long getTimeTillNextHour() {
             long now = _context.clock().now();
             long currentHour = now / HOUR;

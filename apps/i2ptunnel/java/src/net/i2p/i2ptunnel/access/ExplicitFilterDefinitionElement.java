@@ -12,6 +12,7 @@ import net.i2p.data.Hash;
  */
 class ExplicitFilterDefinitionElement extends FilterDefinitionElement {
 
+    /** The destination this rule matches, decoded from its address. */
     private final Hash hash;
 
     /**

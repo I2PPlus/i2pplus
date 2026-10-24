@@ -18,8 +18,11 @@ import net.i2p.util.Translate;
 public class RouterThrottleImpl implements RouterThrottle {
     /** Router context, used for the job queue, tunnel counts, bandwidth limits and rates. */
     protected final RouterContext _context;
+    /** Logger for the throttle. */
     private final Log _log;
+    /** Tunnel status text for the reject log. */
     private volatile String _tunnelStatus;
+    /** Startup time before the throttle may reject. */
     private final long _rejectStartupTime;
 
     /** Arbitrary hard limit - if it's taking this long to get to a job, we're congested. */
@@ -43,11 +46,16 @@ public class RouterThrottleImpl implements RouterThrottle {
      * @since 0.9.70+
      */
     public static void setDefaultMaxTunnels(int val) { defaultMaxTunnels = Math.max(500, Math.min(20000, val)); }
+    /** Config key for the processing time limit. */
     private static final String PROP_MAX_PROCESSINGTIME = "router.defaultProcessingTimeThrottle";
+    /** Default startup delay before rejecting. */
     private static final long DEFAULT_REJECT_STARTUP_TIME = 3*60*1000L;
+    /** Shortest reject startup delay allowed. */
     private static final long MIN_REJECT_STARTUP_TIME = 90*1000L;
+    /** Config key for the reject startup delay. */
     private static final String PROP_REJECT_STARTUP_TIME = "router.rejectStartupTime";
 
+    /** Config key for the minimum tunnels before throttling. */
     private static final String PROP_MIN_THROTTLE_TUNNELS = "router.minThrottleTunnels";
 
     /**
@@ -64,6 +72,7 @@ public class RouterThrottleImpl implements RouterThrottle {
     /** Timestamp (ms) the message-delay average first crossed the threshold, or -1. */
     private volatile long _msgDelayOverSince = -1;
 
+    /** Default processing time limit, in ms. */
     private static final int DEFAULT_MAX_PROCESSINGTIME = SystemVersion.isSlow() ? 3000 : 2000;
 
     /** Tunnel acceptance. */
@@ -103,9 +112,6 @@ public class RouterThrottleImpl implements RouterThrottle {
         }
     }
 
-    // FIXME only called by SSU Receiver, not NTCP!
-    // FIXME should put warning on the console
-    // FIXME or should we do this at all? We have Codel queues all over now...
     /**
      * Should we accept any more data from the network for any sort of message,
      * taking into account our current load, or should we simply slow down?
@@ -358,6 +364,7 @@ public class RouterThrottleImpl implements RouterThrottle {
 
     /** Also limited to 90% - see below. */
     private static final int MIN_AVAILABLE_BPS = 4*1024; // always leave at least 4KBps free when allowing
+    /** Log text for a bandwidth-limit rejection. */
     private static final String LIMIT_STR = _x("Declining requests" + ": " + "Bandwidth limit");
 
     /**
@@ -485,11 +492,16 @@ public class RouterThrottleImpl implements RouterThrottle {
         return (getMaxTunnels() / 3) * 2;
     }
 
+    /** Config key for the tunnel growth factor. */
     private static final String PROP_TUNNEL_GROWTH_FACTOR = "router.tunnelGrowthFactor";
+    /** Config key for the test time growth factor. */
     private static final String PROP_TUNNEL_TEST_TIME_GROWTH_FACTOR = "router.tunnelTestTimeGrowthFactor";
+    /** Default tunnel growth factor. */
     private static final double DEFAULT_TUNNEL_GROWTH_FACTOR = 2.0d;
+    /** Default test time growth factor. */
     private static final double DEFAULT_TUNNEL_TEST_TIME_GROWTH_FACTOR = 1.5d;
 
+    /** Tuner override for the growth factor, -1 if unset. */
     private static volatile double _tunedGrowthFactor = -1.0d;
 
     /**
@@ -515,17 +527,32 @@ public class RouterThrottleImpl implements RouterThrottle {
         return DEFAULT_TUNNEL_GROWTH_FACTOR;
     }
 
+    /** Config value the cached growth factor was read from. */
     private String _cachedGrowthFactorProp;
+    /** Cached tunnel growth factor. */
     private double _cachedGrowthFactor = DEFAULT_TUNNEL_GROWTH_FACTOR;
+    /** Config value the cached test time factor was read from. */
     private String _cachedTestTimeGrowthFactorProp;
+    /** Cached test time growth factor. */
     private double _cachedTestTimeGrowthFactor = DEFAULT_TUNNEL_TEST_TIME_GROWTH_FACTOR;
+    /** Config value the cached max tunnels was read from. */
     private String _cachedMaxTunnelsProp;
+    /** Cached maximum tunnel count. */
     private int _cachedMaxTunnels = defaultMaxTunnels;
+    /** Config value the cached processing time was read from. */
     private String _cachedMaxProcessingTimeProp;
+    /** Cached processing time limit, in ms. */
     private int _cachedMaxProcessingTime = DEFAULT_MAX_PROCESSINGTIME;
+    /** Config value the cached minimum throttle tunnels was read from. */
     private String _cachedMinThrottleTunnelsProp;
+    /** Cached minimum tunnels before throttling, -1 if unset. */
     private int _cachedMinThrottleTunnels = -1;
 
+    /**
+     * Returns the cached maximum tunnel count.
+     *
+     * @return the maximum tunnels
+     */
     private int getMaxTunnels() {
         String p = _context.getProperty(PROP_MAX_TUNNELS);
         if (p != null && p.equals(_cachedMaxTunnelsProp)) {
@@ -544,6 +571,7 @@ public class RouterThrottleImpl implements RouterThrottle {
         return _cachedMaxTunnels;
     }
 
+    /** Tuner override for the processing time, -1 if unset. */
     private static volatile int _tunedMaxProcessingTime = -1;
 
     /**
@@ -565,6 +593,7 @@ public class RouterThrottleImpl implements RouterThrottle {
         return ctx.getProperty(PROP_MAX_PROCESSINGTIME, DEFAULT_MAX_PROCESSINGTIME);
     }
 
+    /** Tuner override for the reject exponent, -1 if unset. */
     private static volatile int _tunedThrottleRejectExponent = -1;
 
     /**
@@ -608,6 +637,11 @@ public class RouterThrottleImpl implements RouterThrottle {
      */
     public static int throttleRejectExponentMax() { return 20; }
 
+    /**
+     * Returns the cached processing time limit.
+     *
+     * @return the limit, in ms
+     */
     private int getMaxProcessingTime() {
         int tuned = _tunedMaxProcessingTime;
         if (tuned >= 0) return tuned;
@@ -628,6 +662,11 @@ public class RouterThrottleImpl implements RouterThrottle {
         return _cachedMaxProcessingTime;
     }
 
+    /**
+     * Returns the tunnel growth factor in effect.
+     *
+     * @return the growth factor
+     */
     private double getTunnelGrowthFactor() {
         double tuned = _tunedGrowthFactor;
         if (tuned >= 0.0d) return tuned;
@@ -648,6 +687,11 @@ public class RouterThrottleImpl implements RouterThrottle {
         return _cachedGrowthFactor;
     }
 
+    /**
+     * Returns the test time growth factor in effect.
+     *
+     * @return the growth factor
+     */
     private double getTunnelTestTimeGrowthFactor() {
         String p = _context.getProperty(PROP_TUNNEL_TEST_TIME_GROWTH_FACTOR);
         if (p != null && p.equals(_cachedTestTimeGrowthFactorProp)) {
@@ -705,6 +749,7 @@ public class RouterThrottleImpl implements RouterThrottle {
         return Translate.getString(_tunnelStatus, _context, CommSystemFacade.ROUTER_BUNDLE_NAME);
     }
 
+    /** Rebuilds the tunnel status text for the reject log. */
     private void setTunnelStatus() {
         setTunnelStatus("[starting]" + _x("Starting up") + "&hellip;");
     }

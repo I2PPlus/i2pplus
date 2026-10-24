@@ -27,8 +27,9 @@ import java.util.Map;
  */
 public enum CharacterSetECI {
 
-  // Enum name is a Java encoding valid for java.lang and java.io
-  /** Cp437 (0, 2) */
+  /**
+   * Cp437 (0, 2). The enum name is a Java encoding valid for java.lang and java.io.
+   */
   Cp437(new int[]{0,2}),
   /** ISO-8859-1 (1, 3) */
   ISO8859_1(new int[]{1,3}, "ISO-8859-1"),
@@ -83,7 +84,9 @@ public enum CharacterSetECI {
   /** EUC-KR (30) */
   EUC_KR(30, "EUC-KR");
 
+  /** ECI instances by their number. */
   private static final Map<Integer,CharacterSetECI> VALUE_TO_ECI = new HashMap<>();
+  /** ECI instances by their name. */
   private static final Map<String,CharacterSetECI> NAME_TO_ECI = new HashMap<>();
   static {
     for (CharacterSetECI eci : values()) {
@@ -97,18 +100,37 @@ public enum CharacterSetECI {
     }
   }
 
+  /** The ECI numbers this instance answers to. */
   private final int[] values;
+  /** Alternate encoding names for this ECI. */
   private final String[] otherEncodingNames;
 
+  /**
+   * Registers an ECI under one number.
+   *
+   * @param value the ECI number
+   */
   CharacterSetECI(int value) {
     this(new int[] {value});
   }
 
+  /**
+   * Registers an ECI under one number with alternate names.
+   *
+   * @param value the ECI number
+   * @param otherEncodingNames alternate encoding names
+   */
   CharacterSetECI(int value, String... otherEncodingNames) {
     this.values = new int[] {value};
     this.otherEncodingNames = otherEncodingNames;
   }
 
+  /**
+   * Registers an ECI under several numbers.
+   *
+   * @param values the ECI numbers
+   * @param otherEncodingNames alternate encoding names
+   */
   CharacterSetECI(int[] values, String... otherEncodingNames) {
     this.values = values;
     this.otherEncodingNames = otherEncodingNames;

@@ -17,8 +17,9 @@ import net.i2p.app.NavService;
  * @since 0.9.35
  */
 public class NavHelper implements NavService, ClientApp {
-    // both indexed by standard (untranslated) app name
+    /** The console apps, by untranslated name */
     private final Map<String, App> _apps = new ConcurrentHashMap<>(4);
+    /** Binary icon data for an app, by untranslated name */
     private final Map<String, byte[]> _binary = new ConcurrentHashMap<>(4);
 
     /**

@@ -19,6 +19,7 @@ public class LogoutServlet extends HttpServlet {
  */
 public LogoutServlet() {
 }
+    /** Logger for this class. */
     private static final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(LogoutServlet.class);
 
     @Override
@@ -56,6 +57,12 @@ public LogoutServlet() {
         resp.getWriter().write("<!DOCTYPE html><html><head><script>location.replace('" + loginPath + "');</script><noscript><meta http-equiv=refresh content=\"0;url=" + loginPath + "\"></noscript></head><body><noscript>Redirecting to <a href=\"" + loginPath + "\">login page</a>...</noscript></body></html>");
     }
 
+    /**
+     * The session cookie the request carries.
+     *
+     * @param req the request to read
+     * @return the cookie value, or null if absent
+     */
     private String getSessionCookie(HttpServletRequest req) {
         Cookie[] cookies = req.getCookies();
         if (cookies == null) return null;

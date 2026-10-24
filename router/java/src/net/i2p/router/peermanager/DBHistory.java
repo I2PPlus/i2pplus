@@ -29,18 +29,31 @@ import net.i2p.util.Log;
  * rate as "fraction of NetDb requests this peer failed to answer".
  */
 public class DBHistory {
+    /** Logger for the network database statistics. */
     private final Log _log;
+    /** The router context. */
     private final RouterContext _context;
+    /** Lookups that found a result. */
     private final AtomicLong _successfulLookups = new AtomicLong();
+    /** Lookups that found nothing. */
     private final AtomicLong _failedLookups = new AtomicLong();
+    /** Rate of the failed lookups. */
     private final RateStat _failedLookupRate;
+    /** Rate of the invalid replies. */
     private final RateStat _invalidReplyRate;
+    /** When the last successful lookup happened. */
     private volatile long _lastLookupSuccessful;
+    /** When the last failed lookup happened. */
     private volatile long _lastLookupFailed;
+    /** When the last successful store happened. */
     private volatile long _lastStoreSuccessful;
+    /** When the last failed store happened. */
     private volatile long _lastStoreFailed;
+    /** Unprompted stores of new profiles. */
     private final AtomicLong _unpromptedDbStoreNew = new AtomicLong();
+    /** Unprompted stores of old profiles. */
     private final AtomicLong _unpromptedDbStoreOld = new AtomicLong();
+    /** When the profiles were last coalesced. */
     private volatile long _lastCoalesce = System.currentTimeMillis();
 
     /**
@@ -242,7 +255,9 @@ public class DBHistory {
      * @since 0.9.71+
      */
     private static final long DECAY_INTERVAL_MS = 8 * 60 * 60 * 1000L;
+    /** Numerator of the decay factor applied per hour. */
     private static final long DECAY_NUMERATOR = 3;
+    /** Denominator of the decay factor applied per hour. */
     private static final long DECAY_DENOMINATOR = 4;
 
     /**
@@ -296,7 +311,9 @@ public class DBHistory {
         }
     }
 
+    /** The platform line separator. */
     private static final String NL = System.getProperty("line.separator");
+    /** The comment header line of the stats file. */
     private static final String HR = "# ----------------------------------------------------------------------------------------";
     /**
      * Write out the data from the profile to the stream including comments.
@@ -336,6 +353,15 @@ public class DBHistory {
         _invalidReplyRate.store(out, "dbHistory.invalidReplyRate", addComments);
     }
 
+    /**
+     * Appends one named statistic to the buffer.
+     *
+     * @param buf the buffer to append to
+     * @param addComments true to write the value as a comment
+     * @param name the name of the statistic
+     * @param val the value to write
+     * @param description the description of the statistic
+     */
     private static void add(StringBuilder buf, boolean addComments, String name, long val, String description) {
         if (addComments) {buf.append("# ").append(description).append(": ").append(val).append(NL);}
     }
@@ -366,6 +392,13 @@ public class DBHistory {
         catch (IllegalArgumentException iae) {_log.warn("Db History Invalid Reply rate is corrupt -> " + iae.getMessage());}
     }
 
+    /**
+     * Reads one long property from the saved stats.
+     *
+     * @param props the properties read from the file
+     * @param key the property name to read
+     * @return the value, 0 if missing or invalid
+     */
     private static final long getLong(Properties props, String key) {
         return ProfilePersistenceHelper.getLong(props, key);
     }

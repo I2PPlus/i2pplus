@@ -11,6 +11,7 @@ import org.jfree.svg.SVGGraphics2D;
  *
  */
 public class SVGImageWorker extends ImageWorker {
+    /** The graphics context drawing the SVG. */
     private SVGGraphics2D g2d;
     /** Console theme, reapplied on every resize since that rebuilds {@link #g2d}. */
     private String themeName;
@@ -18,7 +19,9 @@ public class SVGImageWorker extends ImageWorker {
     private int imgWidth;
     /** Img height */
     private int imgHeight;
+    /** True when the graph is drawn with a glow effect. */
     private boolean glow;
+    /** True when lines are drawn smoothed. */
     private boolean smoothing;
 
    /**

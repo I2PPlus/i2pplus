@@ -46,16 +46,24 @@ import net.i2p.util.SystemVersion;
  */
 public class WorkingDir {
 
+    /** Not called, the class is only a collection of static methods. */
     private WorkingDir() {}
 
+    /** Config key of the base directory. */
     private static final String PROP_BASE_DIR = "i2p.dir.base";
+    /** Config key of the working directory. */
     private static final String PROP_WORKING_DIR = "i2p.dir.config";
+    /** Default working directory on Windows. */
     private static final String WORKING_DIR_DEFAULT_WINDOWS = "I2P";
+    /** Default working directory on Mac. */
     private static final String WORKING_DIR_DEFAULT_MAC = "i2p";
+    /** Default working directory on other systems. */
     private static final String WORKING_DIR_DEFAULT = ".i2p";
+    /** Default working directory in daemon mode. */
     private static final String WORKING_DIR_DEFAULT_DAEMON = "i2p-config";
     /** We do a couple of things differently if this is the username. */
     private static final String PROP_WRAPPER_LOG = "wrapper.logfile";
+    /** Default wrapper log file name. */
     private static final String DEFAULT_WRAPPER_LOG = "wrapper.log";
     /** Feb 16 2006. */
     private static final long EEPSITE_TIMESTAMP = 1140048000000L;
@@ -353,6 +361,14 @@ public class WorkingDir {
         "hosts.txt,i2psnark.config,i2ptunnel.config,jetty-i2psnark.xml," +
         "logger.config,router.config,susimail.config,systray.config,webapps.config";
 
+    /**
+     * Moves the listed files to the new directory.
+     *
+     * @param list the file names to move
+     * @param olddir the directory to move from
+     * @param todir the directory to move to
+     * @return true if the files moved
+     */
     private static boolean migrate(String list, File olddir, File todir) {
         boolean rv = true;
         String[] files = DataHelper.split(list, ",");

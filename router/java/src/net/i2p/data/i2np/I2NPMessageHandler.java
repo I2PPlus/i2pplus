@@ -15,8 +15,11 @@ import net.i2p.util.Log;
  * Handle messages from router to router.  This class is NOT threadsafe.
  */
 public class I2NPMessageHandler {
+    /** Logger for this class. */
     private final Log _log;
+    /** The context the messages are read for. */
     private final I2PAppContext _context;
+    /** The message read last, reused between reads. */
     private I2NPMessage _lastRead;
 
     /**

@@ -30,7 +30,9 @@ import net.i2p.util.SimpleByteCache;
  * @since 0.7.12 but broken before 0.8.12
  */
 public class UnknownI2NPMessage extends FastI2NPMessageImpl {
+    /** The message contents, as read from the wire. */
     private byte[] _data;
+    /** The message type number. */
     private final int _type;
 
     /**

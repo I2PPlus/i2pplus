@@ -23,7 +23,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 0.8.12
  */
 public class PortMapper {
+    /** Mapped ports, by tunnel name. */
     private final ConcurrentHashMap<String, InetSocketAddress> _dir;
+    /** Names that get the eepsite port mapping. */
     private final Set<String> _eepsites;
 
     /** Property to prefer HTTPS. */
@@ -311,10 +313,13 @@ public class PortMapper {
         return convertWildcard(ia.getHostName(), def);
     }
 
-    /*
-     * See above
-     * @param def default
-     * @return def if no ips
+    /**
+     * Like the public convertWildcard above, for the case where the caller
+     * already knows there is more than one address.
+     *
+     * @param ip the address to convert
+     * @param def the address to use when there is nothing to convert
+     * @return def if there are no IPs, otherwise the converted address
      * @since 0.9.24
      */
     private static String convertWildcard(String ip, String def) {

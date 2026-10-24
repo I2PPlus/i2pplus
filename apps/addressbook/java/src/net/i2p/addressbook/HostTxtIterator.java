@@ -30,8 +30,11 @@ import net.i2p.util.Log;
  */
 class HostTxtIterator implements Iterator<Map.Entry<String, HostTxtEntry>>, Closeable {
 
+    /** The addressbook's own log. */
     private static final Log _log = new Log(HostTxtIterator.class);
+    /** The hosts.txt file being read. */
     private BufferedReader input;
+    /** The entry read ahead of the current position. */
     private MapEntry next;
 
     /**
@@ -117,7 +120,9 @@ class HostTxtIterator implements Iterator<Map.Entry<String, HostTxtEntry>>, Clos
      * The object returned by the iterator.
      */
     private static class MapEntry implements Map.Entry<String, HostTxtEntry> {
+        /** The entry's subscription key. */
         private final String key;
+        /** The entry's address and timing. */
         private final HostTxtEntry value;
 
         /**

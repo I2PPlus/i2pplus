@@ -8,7 +8,7 @@ import java.security.SecureRandom;
  */
 public class CryptoServicesRegistrar {
 
-    /** default constructor */
+    /** Creates an instance, all useful members are static. */
     public CryptoServicesRegistrar() {}
 
     /**
@@ -18,6 +18,7 @@ public class CryptoServicesRegistrar {
      */
     public static void checkConstraints(CryptoServiceProperties csp) {}
 
+    /** The secure random used when none is configured. */
     private static final SecureRandom sr = new SecureRandom();
 
     /**

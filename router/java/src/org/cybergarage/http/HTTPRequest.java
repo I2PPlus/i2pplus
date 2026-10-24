@@ -155,7 +155,6 @@ public class HTTPRequest extends HTTPPacket {
     public void setURI(String value, boolean isCheckRelativeURL) {
         uri = value;
         if (isCheckRelativeURL == false) return;
-        // Thanks for Giordano Sassaroli <sassarol@cefriel.it> (09/02/03)
         uri = HTTP.toRelativeURL(uri);
     }
 
@@ -257,6 +256,7 @@ public class HTTPRequest extends HTTPPacket {
         return requestHost;
     }
 
+    /** Port the request was sent to, -1 until known. */
     private int requestPort = -1;
 
     /**
@@ -439,7 +439,6 @@ public class HTTPRequest extends HTTPPacket {
             long firstPos = getContentRangeFirstPosition();
             long lastPos = getContentRangeLastPosition();
 
-            // Thanks for Brent Hills (10/26/04)
             if (lastPos <= 0) lastPos = length - 1;
             if ((firstPos > length) || (lastPos > length))
                 return returnResponse(HTTPStatus.INVALID_RANGE);
@@ -459,6 +458,7 @@ public class HTTPRequest extends HTTPPacket {
 
     private Socket postSocket = null;
 
+    /** Local address the connection is bound to. */
     private String bindTo = null;
 
     /**
@@ -532,7 +532,6 @@ public class HTTPRequest extends HTTPPacket {
 
             if (0 < contentLength) {
                 if (isChunkedRequest == true) {
-                    // Thanks for Lee Peik Feng <pflee@users.sourceforge.net> (07/07/05)
                     String chunSizeBuf = Long.toHexString(contentLength);
                     pout.print(chunSizeBuf);
                     pout.print(HTTP.CRLF);

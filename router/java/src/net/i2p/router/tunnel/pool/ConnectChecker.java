@@ -21,11 +21,17 @@ import net.i2p.util.Log;
     /** The logger. */
     protected final Log log;
 
+    /** Bit for an NTCP connection to an IPv4 address. */
     private static final int NTCP_V4 = 0x01;
+    /** Bit for an NTCP connection to an IPv6 address. */
     private static final int NTCP_V6 = 0x04;
+    /** Bit for an SSU connection to an IPv4 address. */
     private static final int SSU_V4 = 0x02;
+    /** Bit for an SSU connection to an IPv6 address. */
     private static final int SSU_V6 = 0x08;
+    /** Bit for an SSU2 connection to an IPv4 address. */
     private static final int SSU2_V4 = 0x10;
+    /** Bit for an SSU2 connection to an IPv6 address. */
     private static final int SSU2_V6 = 0x20;
     /** Any IPv4 transport. */
     public static final int ANY_V4 = NTCP_V4 | SSU_V4 | SSU2_V4;

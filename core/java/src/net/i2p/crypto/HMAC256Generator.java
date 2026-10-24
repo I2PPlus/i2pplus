@@ -33,9 +33,12 @@ import javax.crypto.SecretKey;
  */
 public final class HMAC256Generator extends HMACGenerator {
 
+    /** Initialized MACs ready for reuse. */
     private final LinkedBlockingQueue<Mac> _macs;
 
+    /** Whether initialized MACs are pooled. */
     private static final boolean CACHE = true;
+    /** MACs held for reuse. */
     private static final int CACHE_SIZE = 8;
 
     /**
@@ -170,6 +173,7 @@ public final class HMAC256Generator extends HMACGenerator {
      * @since 0.9.38
      */
     static final class HMACKey implements SecretKey {
+        /** The data being authenticated. */
         private final byte[] _data;
 
         /**

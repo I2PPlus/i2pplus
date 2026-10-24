@@ -9,6 +9,7 @@ import java.io.Serializable;
  * @since 0.9.15
  */
 public abstract class FieldElement implements Serializable {
+    /** Pinned for serialized-form compatibility. */
     private static final long serialVersionUID = 1239527465875676L;
 
     /** The field this element belongs to. */

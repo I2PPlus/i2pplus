@@ -97,6 +97,14 @@ public abstract class DelegatingDnssecRR extends Data {
         /** the digest */
         final byte[] digest;
 
+        /**
+         * Creates the shared data from its parts.
+         *
+         * @param keyTag the tag of the key
+         * @param algorithm the algorithm of the key
+         * @param digestType the type of the digest
+         * @param digest the digest itself
+         */
         private SharedData(int keyTag, byte algorithm, byte digestType, byte[] digest) {
             this.keyTag = keyTag;
             this.algorithm = algorithm;
@@ -190,6 +198,7 @@ public abstract class DelegatingDnssecRR extends Data {
         return sb.toString();
     }
 
+    /** Cache of the digest as a number. */
     private transient BigInteger digestBigIntCache;
 
     /**
@@ -204,6 +213,7 @@ public abstract class DelegatingDnssecRR extends Data {
         return digestBigIntCache;
     }
 
+    /** Cache of the digest in hex. */
     private transient String digestHexCache;
 
     /**

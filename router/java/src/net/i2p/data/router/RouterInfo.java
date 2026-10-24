@@ -94,7 +94,9 @@ public class RouterInfo extends DatabaseEntry {
     public static final String PROP_CAPABILITIES = "caps";
     /** Capability flag for hidden. */
     public static final char CAPABILITY_HIDDEN = 'H';
+    /** Most addresses one router info may carry. */
     private static final int MAX_ADDRESSES = 16;
+    /** Most introducers a floodfill will return. */
     private static final int MAX_INTRODUCERS = 5;
 
     /**

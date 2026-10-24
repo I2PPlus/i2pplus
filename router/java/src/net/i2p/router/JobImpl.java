@@ -15,12 +15,18 @@ import java.util.concurrent.atomic.AtomicLong;
  * For use by the router only. Not to be used by applications or plugins.
  */
 public abstract class JobImpl implements Job {
+    /** The router context the job runs in. */
     private final RouterContext _context;
+    /** When the job was scheduled and ran. */
     private final JobTiming _timing;
+    /** Hands out the next job id. */
     private static final AtomicLong _idSrc = new AtomicLong();
-    // make this public so we can reference the job number for tunnel builds on /jobs
-    /** Unique job identifier. */
+    /**
+     * Unique job identifier. Public so the job number can be referenced for
+     * tunnel builds on /jobs.
+     */
     public final long _id;
+    /** When the job was last made ready, in ms. */
     private volatile long _madeReadyOn;
 
     /**

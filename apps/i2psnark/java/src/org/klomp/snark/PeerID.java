@@ -22,16 +22,23 @@ import org.klomp.snark.bencode.InvalidBEncodingException;
  * dest hash.
  */
 public class PeerID implements Comparable<PeerID> {
+    /** The 20-byte peer id, null if the peer sent none. */
     private byte[] id;
+    /** The peer's I2P destination. */
     private Destination address;
+    /** The peer's torrent port, for HTTP trackers. */
     private final int port;
+    /** Hash of the peer's destination, for the shared cache. */
     private byte[] destHash;
 
     /** Whether we have tried to get the dest from the hash; only do once. */
     private boolean triedDestLookup;
 
+    /** Precomputed hashCode. */
     private final int hash;
+    /** Supplies the shared destination hash cache. */
     private final I2PSnarkUtil util;
+    /** Cached display string. */
     private String _toStringCache;
 
     /**
@@ -144,6 +151,11 @@ public class PeerID implements Comparable<PeerID> {
         return destHash;
     }
 
+    /**
+     * Computes the hashCode from the id bytes.
+     *
+     * @return the hash code computed from the id bytes
+     */
     private int calculateHash() {
         return DataHelper.hashCode(destHash);
     }

@@ -14,6 +14,7 @@ import org.jfree.svg.util.Args;
 /** Utility methods related to the {@link SVGGraphics2D} implementation. */
 public class SVGUtils {
 
+    /** Utility class, not intended for instantiation. */
     private SVGUtils() {
         // no need to instantiate this
     }

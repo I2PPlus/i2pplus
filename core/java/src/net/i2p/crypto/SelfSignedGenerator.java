@@ -58,45 +58,54 @@ public final class SelfSignedGenerator {
      */
     public SelfSignedGenerator() {}
 
+    /** Developer switch for extra logging. */
     private static final boolean DEBUG = false;
 
+    /** Per-thread formatter for the certificate dates. */
     private static final ThreadLocal<SimpleDateFormat> _DATE_FMT = ThreadLocal.withInitial(() -> {
         SimpleDateFormat fmt = new SimpleDateFormat("yyMMddHHmmss", Locale.US);
         fmt.setTimeZone(TimeZone.getTimeZone("GMT"));
         return fmt;
     });
 
-    // Policy Qualifier CPS URI
+    /** OID of the CPS URI policy qualifier. */
     private static final String OID_QT_CPSURI = "1.3.6.1.5.5.7.2.1";
-    // Policy Qualifier User Notice
+    /** OID of the user notice policy qualifier. */
     private static final String OID_QT_UNOTICE = "1.3.6.1.5.5.7.2.2";
+    /** OID of the common name attribute. */
     private static final String OID_CN = "2.5.4.3";
+    /** OID of the country attribute. */
     private static final String OID_C = "2.5.4.6";
+    /** OID of the locality attribute. */
     private static final String OID_L = "2.5.4.7";
+    /** OID of the state or province attribute. */
     private static final String OID_ST = "2.5.4.8";
+    /** OID of the organization attribute. */
     private static final String OID_O = "2.5.4.10";
+    /** OID of the organizational unit attribute. */
     private static final String OID_OU = "2.5.4.11";
-    // Subject Key Identifier
+    /** OID of the subject key identifier. */
     private static final String OID_SKI = "2.5.29.14";
-    // Key Usage
+    /** OID of the key usage extension. */
     private static final String OID_USAGE = "2.5.29.15";
-    // Subject Alternative Name
+    /** OID of the subject alternative name. */
     private static final String OID_SAN = "2.5.29.17";
-    // Basic Constraints
+    /** OID of the basic constraints extension. */
     private static final String OID_BASIC = "2.5.29.19";
-    // CRL number
+    /** OID of the CRL number extension. */
     private static final String OID_CRLNUM = "2.5.29.20";
-    // Certificate Policy
+    /** OID of the certificate policy extension. */
     private static final String OID_POLICY = "2.5.29.32";
-    // Certificate Policy - Any
+    /** OID of the any certificate policy. */
     private static final String OID_POLICY_ANY = "2.5.29.32.0";
-    // Authority Key Identifier
+    /** OID of the authority key identifier. */
     private static final String OID_AKI = "2.5.29.35";
-    // Extended Key Usage
+    /** OID of the extended key usage extension. */
     private static final String OID_EKU = "2.5.29.37";
-    // ID-KP-ServerAuth
+    /** OID of the TLS server authentication purpose. */
     private static final String OID_ID_KP_SERVERAUTH = "1.3.6.1.5.5.7.3.1";
 
+    /** The OID strings, by name. */
     private static final Map<String, String> OIDS;
 
     static {
@@ -1103,6 +1112,7 @@ public final class SelfSignedGenerator {
         }
     }
 
+    /** Prints the command line usage text. */
     private static void usage() {
         System.err.println(
                 "Usage: selfsignedgenerator keygen [-t type|code] [-p keystorepw] [-r crlFile.crl] publicKeyFile.crt"

@@ -33,9 +33,13 @@ abstract class RrdPrimitive<U extends RrdUpdater<U>> {
      */
     static final int[] RRD_PRIM_SIZES = {4, 8, 8, 2 * STRING_LENGTH};
 
+    /** Where the value is read and written. */
     private final RrdBackend backend;
+    /** Size of the value on disk, in bytes. */
     private final int byteCount;
+    /** Offset of the value within the backend. */
     private final long pointer;
+    /** False to read every value from the backend. */
     private final boolean cachingAllowed;
 
     /**
@@ -66,7 +70,7 @@ abstract class RrdPrimitive<U extends RrdUpdater<U>> {
 
     /**
      * Raw byte array from backend storage.
-     * @return raw byte array from backend storage
+     * @return the byteCount bytes stored at this primitive's pointer
      * @throws IOException if the backend storage cannot be read
      */
     final byte[] readBytes() throws IOException {
@@ -87,8 +91,8 @@ abstract class RrdPrimitive<U extends RrdUpdater<U>> {
     }
 
     /**
-     * Int value from backend storage.
-     * @return int value from backend storage
+     * Reads the int value from backend storage.
+     * @return the value stored at this primitive's pointer
      * @throws IOException if the backend storage cannot be read
      */
     final int readInt() throws IOException {
@@ -105,8 +109,8 @@ abstract class RrdPrimitive<U extends RrdUpdater<U>> {
     }
 
     /**
-     * Long value from backend storage.
-     * @return long value from backend storage
+     * Reads the long value from backend storage.
+     * @return the value stored at this primitive's pointer
      * @throws IOException if the backend storage cannot be read
      */
     final long readLong() throws IOException {
@@ -123,8 +127,8 @@ abstract class RrdPrimitive<U extends RrdUpdater<U>> {
     }
 
     /**
-     * Double value from backend storage.
-     * @return double value from backend storage
+     * Reads the double value from backend storage.
+     * @return the value stored at this primitive's pointer
      * @throws IOException if the backend storage cannot be read
      */
     final double readDouble() throws IOException {
@@ -188,8 +192,8 @@ abstract class RrdPrimitive<U extends RrdUpdater<U>> {
     }
 
     /**
-     * String value from backend storage.
-     * @return string value from backend storage
+     * Reads the string value from backend storage.
+     * @return the value stored at this primitive's pointer
      * @throws IOException if the backend storage cannot be read
      */
     final String readString() throws IOException {

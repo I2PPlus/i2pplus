@@ -24,21 +24,30 @@ import net.i2p.util.Log;
  */
 class SimpleBandwidthEstimator implements BandwidthEstimator {
 
+    /** The app context. */
     private final I2PAppContext _context;
+    /** Logger for the bandwidth estimator. */
     private final Log _log;
+    /** The connection options being estimated. */
     private final ConnectionOptions _opts;
 
+    /** When the last ack arrived. */
     private long _tAck;
-    // bw_est, bw_ns_est
+    /** Filtered bandwidth estimate from the acks, the kernel's bw_est. */
     private float _bKFiltered;
+    /** Estimate excluding zero-hop connections, the kernel's bw_ns_est. */
     private float _bK_ns_est;
-    // bk
+    /** Messages acked so far, the kernel's bk counter. */
     private int _acked;
 
-    // As in kernel tcp_westwood.c
-    // Should probably match ConnectionOptions.TCP_ALPHA
+    /**
+     * Default decay factor of the estimate, as in the kernel Westwood
+     * code, matching the TCP alpha.
+     */
     private static final int DEFAULT_DECAY_FACTOR = 8;
+    /** Current decay factor from the config. */
     private static volatile int decayFactor = DEFAULT_DECAY_FACTOR;
+    /** Smallest RTT used in the estimate, in ms. */
     private static final int WESTWOOD_RTT_MIN = 500;
 
     /**
@@ -121,6 +130,12 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
         return _bKFiltered;
     }
 
+    /**
+     * Computes the current bandwidth estimate.
+     *
+     * @param now the current time
+     * @return the estimate in bytes per second
+     */
     private float computeBWE(final long now) {
         if (_acked < 0)
             return 0.0f; // nothing ever sampled

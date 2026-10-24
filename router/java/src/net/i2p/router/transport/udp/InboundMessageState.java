@@ -13,25 +13,40 @@ import java.util.Arrays;
  * Hold the raw data fragments of an inbound message.
  */
 class InboundMessageState implements CDQEntry {
+    /** The router context. */
     private final RouterContext _context;
+    /** Logger for the inbound message. */
     private final Log _log;
+    /** The message id being reassembled. */
     private final long _messageId;
+    /** The peer the message came from. */
     private final Hash _from;
+    /** Fragments received, by fragment number. */
     private ByteArray[] _fragments;
+    /** Highest fragment number seen. */
     private int _lastFragment;
+    /** When the first fragment arrived. */
     private final long _receiveBegin;
+    /** When the complete message is enqueued. */
     private long _enqueueTime;
+    /** Total size of the reassembled message. */
     private int _completeSize;
+    /** True once the message was released to the job queue. */
     private volatile boolean _released;
+    /** Fragments received so far. */
     private int _receivedCount;
+    /** Lock for the reassembly state. */
     private final Object lock = new Object();
 
+    /** Time allowed to reassemble a message. */
     private static final long MAX_RECEIVE_TIME = 10*1000L;
     /**
      * Maximum number of fragments per message.
      */
     public static final int MAX_FRAGMENTS = 32;
+    /** Largest fragment size, in bytes. */
     private static final int MAX_FRAGMENT_SIZE = UDPPacket.MAX_PACKET_SIZE;
+    /** Pooled buffers for the fragments. */
     private static final ByteCache _fragmentCache = ByteCache.getInstance(64, MAX_FRAGMENT_SIZE);
 
     /**
@@ -258,13 +273,26 @@ class InboundMessageState implements CDQEntry {
         }
     }
 
+    /** Bitfield of the fragments received so far. */
     private static final class PartialBitfield implements ACKBitfield {
+        /** The message id the bitfield refers to. */
         private final long _bitfieldMessageId;
+        /** Total fragments of the message. */
         private final int _fragmentCount;
+        /** Fragments acknowledged in the bitfield. */
         private final int _ackCount;
+        /** Highest fragment number in the bitfield. */
         private final int _highestReceived;
+        /** The fragment ack bits. */
         private final long _fragmentAcks;
 
+        /**
+         * Builds the bitfield from the fragments received.
+         *
+         * @param messageId the message id
+         * @param data the fragment array
+         * @param size the total fragment count
+         */
         public PartialBitfield(long messageId, Object[] data, int size) {
             if (size > MAX_FRAGMENTS)
                 throw new IllegalArgumentException();
@@ -285,6 +313,12 @@ class InboundMessageState implements CDQEntry {
             _highestReceived = highestReceived;
         }
 
+        /**
+         * Returns the ack bit for a fragment number.
+         *
+         * @param fragment the fragment number
+         * @return the bit mask
+         */
         private static long mask(int fragment) {
             return 1L << fragment;
         }

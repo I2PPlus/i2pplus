@@ -23,19 +23,31 @@ import net.i2p.util.Log;
  * delivery and jobs to be fired off if particular events occur.
  */
 public class OutNetMessage implements CDPQEntry {
+    /** The router context. */
     private final RouterContext _context;
+    /** The peer the message goes to. */
     private final RouterInfo _target;
+    /** The message to send. */
     private final I2NPMessage _message;
+    /** Type id of the message. */
     private final int _messageTypeId;
     /** Cached message ID, for use after we discard the message. */
     private final long _messageId;
+    /** Size of the message, in bytes. */
     private final int _messageSize;
+    /** Send priority of the message. */
     private final int _priority;
+    /** When the message is too old to send. */
     private final long _expiration;
+    /** Job run after a successful send. */
     private Job _onSend;
+    /** Job run after a failed send. */
     private Job _onFailedSend;
+    /** Job run when the reply arrives. */
     private ReplyJob _onReply;
+    /** Job run when the reply fails. */
     private Job _onFailedReply;
+    /** Selector matching the expected reply. */
     private MessageSelector _replySelector;
     /**
      * The transports that failed to deliver this message. Copy-on-write, since
@@ -44,11 +56,17 @@ public class OutNetMessage implements CDPQEntry {
      * own at the same time.
      */
     private List<String> _failedTransports;
+    /** When the send started, 0 until sent. */
     private long _sendBegin;
+    /** When the message was created. */
     private long _created;
+    /** When the message entered the send pool. */
     private long _enqueueTime;
+    /** When the transport took the message. */
     private long _transportQueued;
+    /** Sequence id used to match the reply. */
     private long _seqNum;
+    /** True to record the send timing. */
     private final boolean _shouldTimestamp;
     /** For debugging, maps each event name to a timestamp (e.g. "begin sending", "handleOutbound", etc). */
     private HashMap<String, Long> _timestamps;
@@ -158,6 +176,7 @@ public class OutNetMessage implements CDPQEntry {
         }
     }
 
+    /** Stamps the message's timing fields. */
     private void locked_initTimestamps() {
         if (_timestamps == null) {
             _timestamps = new HashMap<>(8);
@@ -194,13 +213,13 @@ public class OutNetMessage implements CDPQEntry {
     /**
      * Message type ID.
      *
-     * @return the message type ID
+     * @return the type id, 0 to 31
      */
     public int getMessageTypeId() {return _messageTypeId;}
     /**
      * Message ID.
      *
-     * @return the message ID
+     * @return the id to match the reply with
      */
     public long getMessageId() {return _messageId;}
 
@@ -360,7 +379,7 @@ public class OutNetMessage implements CDPQEntry {
     /**
      * When the sending process began.
      *
-     * @return when the sending process began
+     * @return the time, in epoch ms
      */
     public long getSendBegin() {return _sendBegin;}
 
@@ -370,7 +389,7 @@ public class OutNetMessage implements CDPQEntry {
     /**
      * Creation time.
      *
-     * @return the creation time
+     * @return the time, in epoch ms
      */
     public long getCreated() {return _created;}
 
@@ -378,16 +397,16 @@ public class OutNetMessage implements CDPQEntry {
     public void resetCreatedTime() {_created = _context.clock().now();}
 
     /**
-     * Remaining lifetime.
+     * How long the message has existed.
      *
-     * @return the remaining lifetime
+     * @return the age, in ms
      */
     public long getLifetime() {return _context.clock().now() - _created;}
 
     /**
-     * Send time.
+     * How long the send has been under way.
      *
-     * @return the send time
+     * @return the elapsed time, in ms
      */
     public long getSendTime() {return _context.clock().now() - _sendBegin;}
 
@@ -414,9 +433,9 @@ public class OutNetMessage implements CDPQEntry {
     public void setTransportQueued(long now) {_transportQueued = now;}
 
     /**
-     * When the message was queued.
+     * When the transport took the message.
      *
-     * @return when the message was queued
+     * @return the time, in epoch ms
      */
     public long getTransportQueued() {return _transportQueued;}
 

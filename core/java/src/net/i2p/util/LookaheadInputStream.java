@@ -13,11 +13,15 @@ import java.io.InputStream;
  * ResettableGZIPInputStream.
  */
 public class LookaheadInputStream extends FilterInputStream {
+    /** True once the footer has been seen. */
     private boolean _eofReached;
+        /** The footer bytes to watch for. */
     private final byte[] _footerLookahead;
+    /** Length of the footer to look ahead for. */
     private final int size;
-    // Next byte to read.
+    /** Next footer byte to read. */
     private int index;
+    /** Empty stream returned once the footer has been reached. */
     private static final InputStream _fakeInputStream = new ByteArrayInputStream(new byte[0]);
 
     /**

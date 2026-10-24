@@ -29,7 +29,9 @@ public class GetDateMessage extends I2CPMessageImpl {
      * I2CP message type ID written to the wire header.
      */
     public static final int MESSAGE_TYPE = 32;
+    /** Version string of the client asking. */
     private String _version;
+    /** Configuration options of the client asking. */
     private Properties _options;
 
     /**

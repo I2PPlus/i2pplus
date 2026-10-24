@@ -25,9 +25,11 @@ import java.util.Arrays;
  */
 public class BitField {
 
+    /** The bits, packed into bytes. */
     private final byte[] data;
     /** Number of bits this field spans, one per piece of the torrent. */
     protected final int size;
+    /** How many bits are set. */
     private int count;
 
     /**

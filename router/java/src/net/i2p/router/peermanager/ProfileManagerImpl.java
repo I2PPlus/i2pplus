@@ -17,7 +17,9 @@ import net.i2p.util.Log;
  * Unless otherwise noted, methods are blocking on the reorganize lock.
  */
 public class ProfileManagerImpl implements ProfileManager {
+    /** Logger for this class. */
     private final Log _log;
+    /** The router context the profiles belong to. */
     private final RouterContext _context;
 
     /**

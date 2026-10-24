@@ -44,6 +44,11 @@ public class SnarkCommandLine extends CommandLine {
         System.exit(1);
     }
 
+    /**
+     * Prints the version line, the usage line, and every available command.
+     *
+     * @param classes the command classes to list
+     */
     private static void usage(List<String> classes) {
         System.err.println(
                 "I2PSnark version "

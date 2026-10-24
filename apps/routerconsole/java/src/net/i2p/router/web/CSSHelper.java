@@ -24,8 +24,11 @@ public class CSSHelper extends HelperBase {
     /** The context is injected by setContextId(), not by the ctor. */
     public CSSHelper() {}
 
+    /** The log for the CSS helper. */
     private static final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(CSSHelper.class);
+    /** Pattern of characters allowed in language names. */
     private static final Pattern LANG_PATTERN = Pattern.compile("[a-zA-Z_]");
+    /** Pattern that splits text on whitespace. */
     private static final Pattern SPACE_SPLIT = Pattern.compile("\\s+");
 
     /** Max User-Agent strings retained by {@link #_UACache} before LRU eviction. */
@@ -60,6 +63,7 @@ public class CSSHelper extends HelperBase {
      * Console-relative path each theme's directory is served under.
      */
     public static final String BASE_THEME_PATH = "/themes/console/";
+    /** Theme name that forces the classic console. */
     private static final String FORCE = "classic";
     /**
      * Property key holding the summary page refresh interval in seconds.
@@ -77,6 +81,7 @@ public class CSSHelper extends HelperBase {
      * Property key that suppresses the summary page's automatic refresh.
      */
     public static final String PROP_DISABLE_REFRESH = "routerconsole.summaryDisableRefresh";
+    /** Config key for disabling the X-Frame protection. */
     private static final String PROP_XFRAME = "routerconsole.disableXFrame";
     /**
      * Property key forcing the narrow mobile console on wide screens.
@@ -94,8 +99,11 @@ public class CSSHelper extends HelperBase {
     public static final boolean DEFAULT_ENABLE_SORA_FONT = false;
     /** Rotating nonce for CSRF protection, rotates every 5 minutes. */
     private static String currentNonce;
+    /** The nonces accepted for the current and previous rotation. */
     private static final String[] _recentNonces = new String[2];
+    /** When the content nonces were last rotated. */
     private static long lastRotation;
+    /** Interval between the nonce rotations. */
     private static final long NONCE_ROTATION_MS = 5 * (long) 60 * 1000; // 5 minutes
     /** Whether the sidebar is unified with the main content column.
      * @since 0.9.67+ */
@@ -111,7 +119,7 @@ public class CSSHelper extends HelperBase {
      * Whether a short sidebar sticks to the top while the page scrolls.
      */
     public static final boolean DEFAULT_STICKY_SIDEBAR = true;
-    /** true = legacy RRD4J minigraph renderer; false = dual-baseline canvas.
+    /** True for the legacy RRD4J minigraph renderer, false for the dual-baseline canvas.
      * @since 0.9.70+ */
     public static final String PROP_SIDEBAR_GRAPH_LEGACY = "routerconsole.sidebarGraphLegacy";
     /** Default true for legacy RRD4J; set false for dual-baseline canvas.
@@ -120,18 +128,19 @@ public class CSSHelper extends HelperBase {
     /** Sidebar graph time period in minutes (2–30, default 20).
      * @since 0.9.70+ */
     public static final String PROP_SIDEBAR_GRAPH_MINUTES = "routerconsole.sidebarGraphMinutes";
-    /** true = split display (inbound top, outbound bottom); false = overlay.
+    /** True to split the display (inbound top, outbound bottom), false to overlay.
      * @since 0.9.70+ */
     public static final String PROP_SIDEBAR_GRAPH_SPLIT = "routerconsole.sidebarGraphSplit";
     /** Sidebar graph render direction: "ltr" or "rtl".
      * @since 0.9.70+ */
     public static final String PROP_SIDEBAR_GRAPH_DIRECTION = "routerconsole.sidebarGraphDirection";
-    /** true = continuous scrolling graph; false = full-buffer redraw (default).
+    /** True for a continuous scrolling graph, false for a full-buffer redraw (default).
      * @since 0.9.70+ */
     public static final String PROP_SIDEBAR_GRAPH_CONTINUOUS = "routerconsole.sidebarGraphContinuous";
 
     /** Session-bound nonce for CSRF protection, replaces static nonces @since 0.9.69. */
     private static final String SESSION_CONSOLE_NONCE = "__router.console.nonce.queue__";
+    /** Number of issued nonces kept for checking. */
     private static final int NONCE_QUEUE_SIZE = 50;
 
     /**
@@ -547,6 +556,12 @@ public class CSSHelper extends HelperBase {
         return _UACache.size();
     }
 
+    /**
+     * Whether the user agent may embed the console in a frame.
+     *
+     * @param ua the user agent string
+     * @return true to allow the frame
+     */
     private static boolean shouldAllowIFrame(String ua) {
         return !ServletUtil.isSmallBrowser(ua);
     }

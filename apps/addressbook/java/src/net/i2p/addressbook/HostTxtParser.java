@@ -28,10 +28,12 @@ import java.nio.charset.StandardCharsets;
  */
 public class HostTxtParser {
 
+    /** Utility class, not intended for instantiation. */
     private HostTxtParser() {
         // Utility class - prevent instantiation
     }
 
+    /** True on Windows, where the path separators differ. */
     private static final boolean isWindows = SystemVersion.isWindows();
 
     /**

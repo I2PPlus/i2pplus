@@ -26,6 +26,7 @@ public final class DnssecConstants {
      */
     private DnssecConstants() {}
 
+    /** Signature algorithms by their number on the wire. */
     private static final Map<Byte, SignatureAlgorithm> SIGNATURE_ALGORITHM_LUT = new HashMap<>();
 
     /**
@@ -67,6 +68,12 @@ public final class DnssecConstants {
         PRIVATEOID(254, "private algorithm oid"),
        ;
 
+        /**
+         * Names an algorithm by its wire number.
+         *
+         * @param number the number on the wire
+         * @param description the human-readable name
+         */
         SignatureAlgorithm(int number, String description) {
             if (number < 0 || number > 255) {
                 throw new IllegalArgumentException();
@@ -91,6 +98,7 @@ public final class DnssecConstants {
         }
     }
 
+    /** Digest algorithms by their number on the wire. */
     private static final Map<Byte, DigestAlgorithm> DELEGATION_DIGEST_LUT = new HashMap<>();
 
     /**
@@ -111,6 +119,12 @@ public final class DnssecConstants {
         SHA384(4, "SHA-384"),
        ;
 
+        /**
+         * Names a digest by its wire number.
+         *
+         * @param value the number on the wire
+         * @param description the human-readable name
+         */
         DigestAlgorithm(int value, String description) {
             if (value < 0 || value > 255) {
                 throw new IllegalArgumentException();

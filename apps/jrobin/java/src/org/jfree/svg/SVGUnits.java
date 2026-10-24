@@ -31,8 +31,14 @@ public enum SVGUnits {
     /** Inch length unit. */
     IN("in");
 
+    /** The name used for this value in the SVG attribute. */
     private final String label;
 
+    /**
+     * Creates a value with the name used in the attribute.
+     *
+     * @param label the attribute name
+     */
     SVGUnits(String label) {
         this.label = label;
     }

@@ -13,9 +13,12 @@ import org.bouncycastle.util.Util;
 public class SecretWithEncapsulationImpl
     implements SecretWithEncapsulation
 {
+    /** Set once the key material has been wiped. */
     private final AtomicBoolean hasBeenDestroyed = new AtomicBoolean(false);
 
+    /** The shared secret that was established. */
     private final byte[] sessionKey;
+    /** The encapsulated key sent to the other side. */
     private final byte[] cipher_text;
 
     /**

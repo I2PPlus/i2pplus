@@ -12,6 +12,7 @@ import java.io.IOException;
  * @param <U> The type of RrdUpdater this primitive belongs to
  */
 class RrdDoubleArray<U extends RrdUpdater<U>> extends RrdPrimitive<U> {
+    /** Number of doubles the primitive occupies. */
     private final int length;
 
     /**
@@ -72,7 +73,7 @@ class RrdDoubleArray<U extends RrdUpdater<U>> extends RrdPrimitive<U> {
      * Array of count double values starting at index.
      * @param index the index of the first value to read
      * @param count how many consecutive values to read, bounded by the array length
-     * @return array of count double values starting at index
+     * @return a new array with the values copied out
      * @throws java.io.IOException if the backing store cannot be read
      */
     double[] get(int index, int count) throws IOException {

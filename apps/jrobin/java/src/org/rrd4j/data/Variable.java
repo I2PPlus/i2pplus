@@ -47,6 +47,7 @@ public abstract class Variable {
 
     /** Represents an invalid value with NaN (Not a Number) value. */
     public static final Value INVALIDVALUE = new Value(0, Double.NaN);
+    /** The computed value, null until the value has been filled in. */
     private Value val = null;
 
     /**

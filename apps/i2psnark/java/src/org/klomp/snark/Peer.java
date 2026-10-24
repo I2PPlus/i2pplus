@@ -45,9 +45,10 @@ import org.klomp.snark.bencode.InvalidBEncodingException;
 public class Peer implements Comparable<Peer>, BandwidthListener {
     /** Logger for this peer instance. */
     protected final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(getClass());
-    // Identifying property, the peer id of the other side.
+    /** The remote peer's id. */
     private final PeerID peerID;
 
+    /** Our 20-byte peer id. */
     private final byte[] my_id;
     /** SHA-1 of this torrent's info dictionary, sent in the handshake and checked against the remote copy. */
     protected final byte[] infohash;
@@ -55,16 +56,18 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     /** Will start out null in magnet mode. */
     protected MetaInfo metainfo;
 
+    /** The handshake map received from the peer. */
     private Map<String, BEValue> handshakeMap;
 
-    // The data in/output streams set during the handshake and used by
-    // the actual connections.
+    /** Stream reading the data from the peer. */
     private DataInputStream din;
+    /** Stream writing the data to the peer. */
     private DataOutputStream dout;
 
     /** Running counters. */
     private final AtomicLong downloaded = new AtomicLong();
 
+    /** Bytes uploaded to this peer. */
     private final AtomicLong uploaded = new AtomicLong();
 
     /**
@@ -77,11 +80,16 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     /** Shared across all peers on this torrent. */
     MagnetState magnetState;
 
+    /** The socket connected to the peer. */
     private I2PSocket sock;
 
+    /** True to deregister the peer when it disconnects. */
     private boolean deregister = true;
+    /** Counter numbering the peer objects. */
     private static final AtomicLong __id = new AtomicLong();
+    /** This peer's id, for the logs. */
     private final long _id;
+    /** True once the peer has been disconnected. */
     private final AtomicBoolean _disconnected = new AtomicBoolean();
 
     /** How often to recompute upload slots and UI download speeds. */
@@ -89,21 +97,32 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     /** Number of samples in the upload/download rate windows. */
     static final int RATE_DEPTH =
             PeerCoordinator.RATE_DEPTH; // make following arrays RATE_DEPTH long
+    /** Upload totals at the rate stat boundaries. */
     private final long[] uploaded_old = {-1, -1, -1};
+    /** Download totals at the rate stat boundaries. */
     private final long[] downloaded_old = {-1, -1, -1};
 
+    /** Protocol name sent in the handshake. */
     private static final byte[] HANDSHAKE = DataHelper.getASCII("BitTorrent protocol");
-    // See BEP 4 for definitions
-    //  bytes per bt spec:                         0011223344556677
+    /** Extension protocol option bit. */
     private static final long OPTION_EXTENSION = 0x0000000000100000L;
+    /** Fast extension option bit. */
     private static final long OPTION_FAST = 0x0000000000000004L;
+    /** Options negotiated with the peer. */
     private long options;
+    /** True if we accepted the connection. */
     private final boolean _isIncoming;
+    /** True if the peer only receives uploads. */
     private volatile boolean _uploadOnly;
+    /** Pieces the peer told us it does not have. */
     private final DontHaveMemo _dontHave = new DontHaveMemo();
+    /** Comments sent to the peer so far. */
     private int _totalCommentsSent;
+    /** Maximum pipelined requests for the peer. */
     private int _maxPipeline = PeerState.MIN_PIPELINE;
+    /** When the peer connected. */
     private long connected;
+    /** When PEX was last sent to the peer. */
     private long pexLastSent;
 
     /**

@@ -47,9 +47,13 @@ import net.i2p.util.Log;
  * </ul>
  */
 public class FIFOBandwidthLimiter {
+    /** Logger for the bandwidth limiter. */
     private final Log _log;
+    /** The router context. */
     private final RouterContext _context;
+    /** Inbound requests waiting for capacity. */
     private final List<SimpleRequest> _pendingInboundRequests;
+    /** Outbound requests waiting for capacity. */
     private final List<SimpleRequest> _pendingOutboundRequests;
     /** How many bytes we can consume for inbound transmission immediately. */
     private final AtomicInteger _availableInbound = new AtomicInteger();
@@ -75,19 +79,28 @@ public class FIFOBandwidthLimiter {
     private final AtomicLong _totalAllocatedInboundBytes = new AtomicLong();
     /** Lifetime counter of bytes sent. */
     private final AtomicLong _totalAllocatedOutboundBytes = new AtomicLong();
-    // following is temp until switch to PBQ
+    /** Counter handing out request ids. */
     private static final AtomicLong __requestId = new AtomicLong();
 
 
+    /** Job that refills the capacity buckets. */
     private final FIFOBandwidthRefiller _refiller;
+    /** Thread running the refiller. */
     private final Thread _refillerThread;
 
+    /** Total sent when the stats were last updated. */
     private volatile long _lastTotalSent;
+    /** Total received when the stats were last updated. */
     private volatile long _lastTotalReceived;
+    /** When the rate stats were last updated. */
     private volatile long _lastStatsUpdated;
+    /** Cached send rate, in bytes per second. */
     private volatile float _sendBps;
+    /** Cached receive rate, in bytes per second. */
     private volatile float _recvBps;
+    /** Cached send rate over 15 seconds. */
     private volatile float _sendBps15s;
+    /** Cached receive rate over 15 seconds. */
     private volatile float _recvBps15s;
 
     /**
@@ -447,6 +460,13 @@ public class FIFOBandwidthLimiter {
         return false;
     }
 
+    /**
+     * Queues an outbound request for capacity.
+     *
+     * @param req the request to queue
+     * @param bytesOut bytes of capacity wanted
+     * @param purpose the request purpose for the log
+     */
     private void requestOutbound(SimpleRequest req, int bytesOut, String purpose) {
         int pending;
         synchronized (_pendingOutboundRequests) {
@@ -605,6 +625,7 @@ public class FIFOBandwidthLimiter {
         updateStats();
     }
 
+    /** Recomputes the cached rate statistics. */
     private void updateStats() {
         long now = now();
         long time = now - _lastStatsUpdated;
@@ -965,22 +986,35 @@ public class FIFOBandwidthLimiter {
         // no-op
     }
 
+    /** One bandwidth capacity request. */
     private static class SimpleRequest implements Request {
+        /** Capacity granted so far. */
         private int _allocated;
+        /** Capacity requested in total. */
         private int _total;
+        /** Unique id of the request. */
         private long _requestId;
+        /** When the request was made. */
         private long _requestTime;
+        /** Grants made since the request last waited. */
         private int _allocationsSinceWait;
+        /** True if the requester gave up. */
         private volatile boolean _aborted;
+        /** True if the request has ever waited. */
         private boolean _waited;
+        /** Requests satisfied in the same pass. */
         final List<Request> satisfiedBuffer;
+        /** Listener notified when the request completes. */
         private CompleteListener _lsnr;
+        /** Caller's object stored with the request. */
         private Object _attachment;
+        /** Priority of the request. */
         private int _priority;
 
         /**
          * Allocation request for the given byte count.
          *
+         * @param bytes bytes of capacity wanted
          * @param priority 0 for now
          */
         public SimpleRequest(int bytes, int priority) {
@@ -1059,6 +1093,11 @@ public class FIFOBandwidthLimiter {
             }
         }
 
+        /**
+         * Checks whether the request got all its capacity.
+         *
+         * @return true if fully allocated
+         */
         private synchronized boolean isComplete() { return _allocated >= _total; }
 
         /**
@@ -1088,12 +1127,16 @@ public class FIFOBandwidthLimiter {
          * Only returns nonzero if there's no listener and {@link #waitForNextAllocation()}
          * has been called (i.e. SSU)
          * Now unused.
+         *
+         * @return grants since the last wait, zero if there is a listener
          */
         synchronized int getAllocationsSinceWait() { return _waited ? _allocationsSinceWait : 0; }
 
         /**
          * Increments allocationsSinceWait only if there is a listener.
          * Does not notify; caller must call notifyAllocation().
+         *
+         * @param bytes bytes of capacity granted
          */
         synchronized void allocateBytes(int bytes) {
             _allocated += bytes;
@@ -1101,6 +1144,7 @@ public class FIFOBandwidthLimiter {
                 _allocationsSinceWait++;
         }
 
+        /** Counts one grant since the last wait. */
         void notifyAllocation() {
             boolean complete = false;
             synchronized (this) {
@@ -1211,9 +1255,14 @@ public class FIFOBandwidthLimiter {
         public void complete(Request req);
     }
 
+    /** The shared request that consumes no capacity. */
     private static final NoopRequest _noop = new NoopRequest();
 
+    /** A request that always succeeds without capacity. */
     private static class NoopRequest implements Request {
+        /** A bandwidth request that transfers nothing. */
+        private NoopRequest() {}
+
         /**
          * Abort the request; no-op.
          */

@@ -69,19 +69,33 @@ import org.freenetproject.ForwardPortStatus;
  * @since 0.7.4
  */
 class UPnPManager {
+    /** Logger for the UPnP forwarding. */
     private final Log _log;
+    /** The router context. */
     private final RouterContext _context;
+    /** The UPnP protocol implementation. */
     private final UPnP _upnp;
+    /** Callback for the UPnP results. */
     private final UPnPCallback _upnpCallback;
+    /** Callback for the gateway scans. */
     private final UPnPScannerCallback _scannerCallback;
+    /** Callback for the delayed retries. */
     private final DelayedCallback _delayedCallback;
+    /** True while UPnP is running. */
     private volatile boolean _isRunning;
+    /** True if the config wants UPnP on. */
     private volatile boolean _shouldBeRunning;
+    /** When the gateway was last rescanned. */
     private volatile long _lastRescan;
+    /** True once the current error was logged. */
     private boolean _errorLogged;
+    /** True once the gateway loss was logged. */
     private boolean _disconLogged;
+    /** The gateway address detected. */
     private InetAddress _detectedAddress;
+    /** The transport manager we forward for. */
     private final TransportManager _manager;
+    /** Timer rescanning the gateway. */
     private final SimpleTimer2.TimedEvent _rescanner;
     /**
      * This is the TCP HTTP Event listener
@@ -89,18 +103,21 @@ class UPnPManager {
      * UPnP also binds to port 1900 UDP for multicast reception - this cannot be changed.
      */
     private static final String PROP_HTTP_PORT = "i2np.upnp.HTTPPort";
+    /** Default HTTP port for the callbacks. */
     private static final int DEFAULT_HTTP_PORT = 7652;
     /** This is the UDP SSDP search reply listener. */
     private static final String PROP_SSDP_PORT = "i2np.upnp.SSDPPort";
+    /** Default SSDP port for discovery. */
     private static final int DEFAULT_SSDP_PORT = 7653;
+    /** Shortest delay between rescans. */
     private static final long RESCAN_MIN_DELAY = 60*1000L;
+    /** Rescan delay after a failure. */
     private static final long RESCAN_SHORT_DELAY = 2*60*1000L;
-    // minimum UPnP announce interval is 30 minutes. Let's be faster
-    // 30 minutes is also the default "lease time" in cybergarage.
-    // It expires after 31 minutes.
+    /** Rescan delay while everything works. */
     private static final long RESCAN_LONG_DELAY = 14*60*1000L;
-    // make these generic so we don't advertise we're running I2P
+    /** Port mapping name for TCP. */
     private static final String TCP_PORT_NAME = "TCP";
+    /** Port mapping name for UDP. */
     private static final String UDP_PORT_NAME = "UDP";
 
     /**
@@ -366,6 +383,11 @@ class UPnPManager {
             }
         }
 
+        /**
+         * Logs the port forwarding results, lock held.
+         *
+         * @param statuses the results, by port mapping
+         */
         private void locked_PFS(Map<ForwardPort,ForwardPortStatus> statuses) {
             byte[] ipaddr = null;
             DetectedIP[] ips = _upnp.getAddress();
@@ -445,6 +467,7 @@ class UPnPManager {
         return _upnp.renderStatusHTML();
     }
 
+    /** Bundle holding the translated console strings. */
     private static final String BUNDLE_NAME = "net.i2p.router.web.messages";
 
     /**

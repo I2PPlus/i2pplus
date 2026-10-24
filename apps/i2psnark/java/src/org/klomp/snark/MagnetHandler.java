@@ -29,10 +29,14 @@ import java.nio.charset.StandardCharsets;
  */
 public final class MagnetHandler {
 
+    /** Where to hand a magnet link's parameters on. */
     private static final String DEFAULT_BASE_URL = "http://127.0.0.1:7657/i2psnark";
+    /** How long to wait for the connection - 10 seconds. */
     private static final int CONNECT_TIMEOUT_MS = 10 * 1000;
+    /** How long to wait for the reply - 60 seconds. */
     private static final int READ_TIMEOUT_MS = 60 * 1000;
 
+    /** Utility class, not intended for instantiation. */
     private MagnetHandler() {}
 
     /**

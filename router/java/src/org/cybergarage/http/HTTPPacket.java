@@ -156,7 +156,6 @@ public class HTTPPacket {
             if (firstLine == null || firstLine.length() <= 0) return false;
             setFirstLine(firstLine);
 
-            // Thanks for Giordano Sassaroli <sassarol@cefriel.it> (09/03/03)
             HTTPStatus httpStatus = new HTTPStatus(firstLine);
             int statCode = httpStatus.getStatusCode();
             if (statCode == HTTPStatus.CONTINUE) {
@@ -199,7 +198,6 @@ public class HTTPPacket {
             if (isChunkedRequest == true) {
                 try {
                     String chunkSizeLine = readLine(reader);
-                    // Thanks for Lee Peik Feng <pflee@users.sourceforge.net> (07/07/05)
                     // contentLen = Long.parseLong(new String(chunkSizeLine.getBytes(), 0,
                     // chunkSizeLine.length()-2), 16);
                     contentLen =
@@ -219,7 +217,6 @@ public class HTTPPacket {
                 long readCnt = 0;
                 while (readCnt < contentLen) {
                     try {
-                        // Thanks for Mark Retallack (02/02/05)
                         long bufReadLen = contentLen - readCnt;
                         if (chunkSize < bufReadLen) bufReadLen = chunkSize;
                         int readLen = reader.read(readBuf, 0, (int) bufReadLen);
@@ -242,7 +239,6 @@ public class HTTPPacket {
                     // read next chunk size
                     try {
                         String chunkSizeLine = readLine(reader);
-                        // Thanks for Lee Peik Feng <pflee@users.sourceforge.net> (07/07/05)
                         contentLen =
                                 Long.parseLong(
                                         new String(
@@ -952,10 +948,8 @@ public class HTTPPacket {
         range[0] = range[1] = range[2] = 0;
         if (hasContentRange() == false) return range;
         String rangeLine = getHeaderValue(HTTP.CONTENT_RANGE);
-        // Thanks for Brent Hills (10/20/04)
         if (rangeLine.length() <= 0) rangeLine = getHeaderValue(HTTP.RANGE);
         if (rangeLine.length() <= 0) return range;
-        // Thanks for Brent Hills (10/20/04)
         StringTokenizer strToken = new StringTokenizer(rangeLine, " =");
         // Skip bytes
         if (strToken.hasMoreTokens() == false) return range;

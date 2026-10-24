@@ -53,19 +53,32 @@ import java.util.Properties;
  */
 public class Datagram2 {
 
+    /** The sender of the datagram. */
     private final Destination _from;
+    /** The data carried by the datagram. */
     private final byte[] _payload;
+    /** The options sent along with the datagram. */
     private final Properties _options;
 
+    /** Smallest datagram that can be parsed. */
     private static final int MIN_DGRAM_SIZE = 387 + 2 + 40;
+    /** Largest datagram buffer allocated. */
     private static final int MAX_DGRAM_BUFSIZE = 61 * 1024;
+    /** Mask for the version bits of the first byte. */
     private static final byte VERSION_MASK = 0x0f;
+    /** Flag saying the options follow. */
     private static final byte OPTIONS = 0x10;
+    /** Flag saying the signature is offline. */
     private static final byte OFFLINE = 0x20;
+    /** The version of this datagram format. */
     private static final byte VERSION = 2;
 
     /**
-     * As returned from {@link #load()}.
+     * As returned from {@link #load(I2PAppContext, I2PSession, byte[])}.
+     *
+     * @param dest the sender of the datagram
+     * @param data the data carried by the datagram
+     * @param options the options sent with the datagram
      */
     private Datagram2(Destination dest, byte[] data, Properties options) {
         _from = dest;

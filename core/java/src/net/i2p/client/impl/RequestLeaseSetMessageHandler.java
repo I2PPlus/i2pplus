@@ -58,28 +58,39 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  */
 class RequestLeaseSetMessageHandler extends HandlerImpl {
+    /** The lease sets already published, by destination. */
     private final Map<Destination, LeaseInfo> _existingLeaseSets;
     /**
      * _ls2Type.
      */
     protected volatile int _ls2Type = DatabaseEntry.KEY_TYPE_LS2;
 
-    // LS 1
+    /** Config key enabling lease set encryption. */
     private static final String PROP_LS_ENCRYPT = "i2cp.encryptLeaseSet";
+    /** Config key of the lease set encryption key. */
     private static final String PROP_LS_KEY = "i2cp.leaseSetKey";
+    /** Config key of the lease set private key. */
     private static final String PROP_LS_PK = "i2cp.leaseSetPrivateKey";
+    /** Config key of the lease set signing key. */
     private static final String PROP_LS_SPK = "i2cp.leaseSetSigningPrivateKey";
     /**
      * PROP_LS_TYPE — used for LS2.
      */
     public static final String PROP_LS_TYPE = "i2cp.leaseSetType";
+    /** Config key of the lease set encryption type. */
     private static final String PROP_LS_ENCTYPE = "i2cp.leaseSetEncType";
+    /** Config key of the destination's secret code. */
     private static final String PROP_SECRET = "i2cp.leaseSetSecret";
+    /** Config key of the destination's auth type. */
     private static final String PROP_AUTH_TYPE = "i2cp.leaseSetAuthType";
+    /** Config key of the destination's private key. */
     private static final String PROP_PRIV_KEY = "i2cp.leaseSetPrivKey";
+    /** Config key of the client's DH crypto settings. */
     private static final String PROP_DH = "i2cp.leaseSetClient.dh.";
+    /** Config key of the client's pre shared key. */
     private static final String PROP_PSK = "i2cp.leaseSetClient.psk.";
 
+    /** True to prefer the new style lease set encryption. */
     private static final boolean PREFER_NEW_ENC = true;
 
     /**
@@ -881,9 +892,13 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
      * Multiple encryption keys supported, as of 0.9.39, for LS2.
      */
     private static class LeaseInfo {
+        /** The encryption public keys of the destination. */
         private final List<PublicKey> _pubKeys;
+        /** The encryption private keys of the destination. */
         private final List<PrivateKey> _privKeys;
+        /** The signing public key of the destination. */
         private final SigningPublicKey _signingPubKey;
+        /** The signing private key of the destination. */
         private final SigningPrivateKey _signingPrivKey;
 
         /**
@@ -1040,6 +1055,9 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
          * @since 0.9.39
          */
         private static class PrivKeyComparator implements Comparator<PrivateKey>, Serializable {
+            /** Orders private keys by their destination. */
+            private PrivKeyComparator() {}
+            /** Serial version of the serialized form. */
             private static final long serialVersionUID = 1L;
 
             /**

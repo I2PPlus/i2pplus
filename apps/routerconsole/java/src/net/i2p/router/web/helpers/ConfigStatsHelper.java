@@ -23,17 +23,25 @@ import net.i2p.util.Log;
  * @since 0.9.33
  */
 public class ConfigStatsHelper extends HelperBase {
+    /** Logger for this class. */
     private Log _log;
+    /** Names of the stats that have graphs. */
     private final Set<String> _graphs;
     /** List of names of stats which are remaining, ordered by nested groups. */
     private final List<String> _stats;
+    /** Name of the stat being shown. */
     private String _currentStatName;
+    /** Graph file name for the stat being shown. */
     private String _currentGraphName;
+    /** Description shown for the stat being shown. */
     private String _currentStatDescription;
+    /** Group the stat being shown belongs to. */
     private String _currentGroup;
     /** True if the current stat is the first in the group. */
     private boolean _currentIsFirstInGroup;
+    /** True if the stat being shown is currently graphed. */
     private boolean _currentIsGraphed;
+    /** True if the stat being shown could be graphed. */
     private boolean _currentCanBeGraphed;
 
     /**
@@ -244,6 +252,8 @@ public class ConfigStatsHelper extends HelperBase {
      * @since 0.9.4
      */
     private class AlphaComparator implements Comparator<String> {
+        /** Orders stat names alphabetically. */
+        private AlphaComparator() {}
         @Override
         public int compare(String lhs, String rhs) {
             // compare raw keys, not translated

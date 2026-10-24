@@ -24,10 +24,15 @@ public class ConfigKeyringHandler extends FormHandler {
      */
     public ConfigKeyringHandler() {}
 
+    /** Base64 of the peer being keyed. */
     private String _peer;
+    /** The session key being added. */
     private String _key;
+    /** The tag secret being added. */
     private String _secret;
+    /** Tags the form asks to revoke. */
     private String[] _revokes;
+    /** What the form asked to do. */
     private int _mode;
 
     @Override

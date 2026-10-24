@@ -11,7 +11,9 @@ import net.i2p.router.util.CDPQEntry;
  * @since 0.9.3
  */
 class OutboundGatewayMessage extends PendingGatewayMessage implements CDPQEntry {
+    /** Sequence number in the tunnel's CDP window. */
     private long _seqNum;
+    /** Priority level the message was sent at. */
     private final int _priority;
 
     /**

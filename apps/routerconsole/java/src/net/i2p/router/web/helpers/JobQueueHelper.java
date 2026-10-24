@@ -35,9 +35,12 @@ public class JobQueueHelper extends HelperBase {
      */
     public JobQueueHelper() {}
 
+    /** Most jobs listed on the page. */
     private static int MAX_JOBS_DISPLAYED = 30;
+    /** Window counting a job as recently run. */
     private static final long RECENT_WINDOW_MS = (long) 10 * 1000;
 
+    /** URI of the request being rendered. */
     private String _requestURI;
 
     /**
@@ -49,6 +52,11 @@ public class JobQueueHelper extends HelperBase {
         _requestURI = uri;
     }
 
+    /**
+     * Whether the page shows the recently run jobs.
+     *
+     * @return true in the recent view
+     */
     private boolean isRecentMode() {
         if (_requestURI == null) return true;
         return !_requestURI.contains("period=all");
@@ -398,6 +406,12 @@ public class JobQueueHelper extends HelperBase {
         long timeFor(Job job);
     }
 
+    /**
+     * Renders the job statistics table.
+     *
+     * @param out the writer to render into
+     * @throws IOException if the writing fails
+     */
     private void renderJobStatsHTML(Writer out) throws IOException {
         StringBuilder buf = new StringBuilder(32*1024);
         getJobStats(buf);
@@ -634,6 +648,9 @@ public class JobQueueHelper extends HelperBase {
      * @since 0.8.9
      */
     private static class JobStatsComparator implements Comparator<JobStats>, Serializable {
+        /** Orders jobs by how long they have run. */
+        private JobStatsComparator() {}
+        /** Collator comparing the job names. */
         private final Collator coll = Collator.getInstance();
 
         @Override
@@ -649,6 +666,9 @@ public class JobQueueHelper extends HelperBase {
      * @since 0.9.5
      */
     private static class JobCountComparator implements Comparator<String>, Serializable {
+        /** Orders job groups by how many jobs they hold. */
+        private JobCountComparator() {}
+        /** Collator comparing the job names. */
         private final Collator coll = Collator.getInstance();
 
         @Override
@@ -665,11 +685,22 @@ public class JobQueueHelper extends HelperBase {
      * @since 0.9.70+
      */
     private static class JobGroup implements Comparable<JobGroup>, Serializable {
+        /** The name of the job group. */
         final String jobName;
+        /** The time the group's jobs are bucketed by. */
         final long time;
+        /** The jobs in the group. */
         final List<Job> jobs;
+        /** Collator comparing the job names. */
         private static final Collator coll = Collator.getInstance();
 
+        /**
+         * Groups the jobs of one name and time.
+         *
+         * @param jobName the name of the group
+         * @param time the time the jobs are bucketed by
+         * @param jobs the jobs in the group
+         */
         JobGroup(String jobName, long time, List<Job> jobs) {
             this.jobName = jobName;
             this.time = time;
@@ -709,6 +740,8 @@ public class JobQueueHelper extends HelperBase {
      * @since 0.9.70+
      */
     private static class JobGroupNameTimeComparator implements Comparator<JobGroup>, Serializable {
+        /** Orders job groups by name, then by time. */
+        private JobGroupNameTimeComparator() {}
         @Override
         public int compare(JobGroup l, JobGroup r) {
             int c = l.jobName.compareTo(r.jobName);
@@ -726,6 +759,8 @@ public class JobQueueHelper extends HelperBase {
      * @since 0.9.70+
      */
     private static class JobGroupTimeDescComparator implements Comparator<JobGroup>, Serializable {
+        /** Orders job groups by time, newest first. */
+        private JobGroupTimeDescComparator() {}
         @Override
         public int compare(JobGroup l, JobGroup r) {
             return Long.compare(r.time, l.time);

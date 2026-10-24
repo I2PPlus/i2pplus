@@ -47,19 +47,31 @@ import net.i2p.util.VersionComparator;
  * DOES preserve everything in the migration to 9.
  */
 abstract class MigrateJetty {
+    /** Not called, the migration class is never instantiated. */
     private MigrateJetty() {}
 
+    /** True once the migration was checked. */
     private static boolean _wasChecked;
+    /** True if the latest Jetty is installed. */
     private static boolean _hasLatestJetty;
 
+    /** Class present only in the old Jetty 6. */
     private static final String OLD_CLASS = "org.mortbay.jetty.Server";
+    /** Main class present only in the old Jetty 6. */
     private static final String OLD_CLASS_6 = "org.mortbay.start.Main";
+    /** Class of the current Jetty launcher. */
     private static final String NEW_CLASS = "net.i2p.jetty.JettyStart";
+    /** Class testing that the new Jetty works. */
     private static final String TEST_CLASS = "org.eclipse.jetty.server.Server";
+    /** Suffix of the Jetty 6 config backups. */
     private static final String BACKUP_SUFFIX = ".jetty6";
+    /** Suffix of the Jetty 8 config backups. */
     private static final String BACKUP_SUFFIX_8 = ".jetty8";
+    /** Suffix of the Jetty 9 config backups. */
     private static final String BACKUP_SUFFIX_9 = ".jetty9-id";
+    /** Config key marking the Jetty 9 migration done. */
     private static final String PROP_JETTY9_MIGRATED = "router.startup.jetty9.migrated";
+    /** Config key marking the second migration done. */
     private static final String PROP_JETTY9_MIGRATED_2 = "router.startup.jetty-ids.migrated";
 
     /**

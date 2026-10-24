@@ -10,6 +10,7 @@ import java.math.BigInteger;
  */
 public class Util {
 
+    /** Utility class, not intended for instantiation. */
     private Util() {}
 
     /**

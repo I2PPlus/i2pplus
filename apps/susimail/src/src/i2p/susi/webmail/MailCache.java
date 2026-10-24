@@ -46,19 +46,29 @@ class MailCache {
         HEADER_CACHE_ONLY
     }
 
+    /** The mailbox the messages come from. */
     private final POP3MailBox mailbox;
+    /** The cached messages, by id. */
     private final Map<String, Mail> mails;
+    /** The on disk copy of the cache. */
     private final PersistentMailCache disk;
+    /** The app context. */
     private final I2PAppContext _context;
+    /** The folder holding the messages. */
     private final Folder<String> folder;
+    /** The name of the folder. */
     private final String folderName;
     /**
      * Serializes draft/sent full-mail writes. @since 0.9.71+.
      */
     private final Object _writeLock = new Object();
+    /** Listener of the load currently running. */
     private NewMailListener _loadInProgress;
+    /** True once the folder was loaded. */
     private boolean _isLoaded;
+    /** True if this cache holds the drafts. */
     private final boolean _isDrafts;
+    /** Logger for the mail cache. */
     private final Log _log;
 
     /**
@@ -289,6 +299,7 @@ class MailCache {
      * @since 0.9.34
      */
     private class LoadMailRunner implements Runnable {
+        /** Listener notified of the new messages. */
         private final NewMailListener _nml;
 
         /**
@@ -668,7 +679,9 @@ class MailCache {
          * The message this request fetches.
          */
         public final Mail mail;
+        /** True to fetch only the message headers. */
         private boolean headerOnly;
+        /** True if the load finished without errors. */
         private boolean success;
         /**
          * The buffer the fetched message is written into.
@@ -736,6 +749,7 @@ class MailCache {
         /**
          * Whether the fetch succeeded.
          *
+         * @return true if the fetch finished without errors
          * @since 0.9.34
          */
         public synchronized boolean getSuccess() {

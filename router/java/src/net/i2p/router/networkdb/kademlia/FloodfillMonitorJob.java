@@ -29,17 +29,27 @@ import net.i2p.util.SystemVersion;
  *
  */
 class FloodfillMonitorJob extends JobImpl {
+    /** Logger for the floodfill monitor. */
     private final Log _log;
+    /** The network database being monitored. */
     private final FloodfillNetworkDatabaseFacade _facade;
+    /** When the floodfill flag last changed. */
     private long _lastChanged;
+    /** True if the floodfill offer was deferred. */
     private boolean _deferredFlood;
 
+    /** Interval between the monitor runs. */
     private static final int REQUEUE_DELAY = 15*60*1000;
+    /** Uptime needed before offering as floodfill. */
     private static final long MIN_UPTIME = 2*60*60*1000L;
+    /** Time between floodfill flag changes. */
     private static final long MIN_CHANGE_DELAY = 3*60*60*1000L;
 
+    /** Floodfills needed before we stop offering. */
     private static final int MIN_FF = 2000;
+    /** Floodfills at which offering stops. */
     private static final int MAX_FF = 999999;
+    /** True for the automatic floodfill offering. */
     private boolean autoff = true;
 
     /**
@@ -103,6 +113,12 @@ class FloodfillMonitorJob extends JobImpl {
         requeue(delay);
     }
 
+    /**
+     * Whether we should offer as a floodfill.
+     *
+     * @param wasFF true if we were a floodfill
+     * @return true if we should offer
+     */
     private boolean shouldBeFloodfill(boolean wasFF) {
         // Hidden trumps netDb.floodfillParticipant=true
         if (getContext().router().isHidden()) {

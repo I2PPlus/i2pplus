@@ -30,8 +30,11 @@ import net.i2p.util.SystemVersion;
  * - {@code router.idleTunnelScanInterval}: How often to scan (default: 60000ms).
  */
 class IdleTunnelMonitor extends SimpleTimer2.TimedEvent {
+    /** The router context. */
     private final RouterContext _context;
+    /** The log for the idle monitor. */
     private final Log _log;
+    /** The dispatcher whose tunnels are checked. */
     private TunnelDispatcher _dispatcher;
 
     /**
@@ -53,11 +56,14 @@ class IdleTunnelMonitor extends SimpleTimer2.TimedEvent {
     private static final long DEFAULT_DETECTION_PERIOD = 300 * 1000L;
     /** Floor of 1 drops only zero-message tunnels; higher values re-enable low-traffic culling. */
     private static final int DEFAULT_MIN_MESSAGES = 1;
+    /** Default interval between the idle scans. */
     private static final long DEFAULT_SCAN_INTERVAL = 60 * 1000L; // 60 seconds
 
-    // Only these properties are configurable
+    /** Config key of the idle detection period, one of the only configurable settings. */
     private static final String PROP_DETECTION_PERIOD = "router.idleTunnelDetectionPeriod";
+    /** Config key of the minimum messages for activity. */
     private static final String PROP_MIN_MESSAGES = "router.idleTunnelMinMessages";
+    /** Config key of the idle scan interval. */
     private static final String PROP_SCAN_INTERVAL = "router.idleTunnelScanInterval";
 
     /**
@@ -65,8 +71,10 @@ class IdleTunnelMonitor extends SimpleTimer2.TimedEvent {
      * capacity is not under pressure and expiration alone handles lifecycle.
      */
     protected static final double CULL_CAPACITY_FRACTION = 0.80;
+    /** Config key of the most participating tunnels. */
     private static final String PROP_MAX_PARTICIPATING = "router.maxParticipatingTunnels";
 
+    /** True once the monitor shut down. */
     private volatile boolean _isShutdown = false;
 
     /**

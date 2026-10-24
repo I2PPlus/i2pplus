@@ -213,8 +213,7 @@ class SAMStreamSession implements SAMMessageSess {
      * @param listenport port for the listener, 1-65535 or PORT_ANY (0) for all
      * @since 0.9.25
      */
-    protected SAMStreamSession(I2PSocketManager mgr, Properties props, SAMStreamReceiver recv, int listenport)
- {
+    protected SAMStreamSession(I2PSocketManager mgr, Properties props, SAMStreamReceiver recv, int listenport) {
         this.recv = recv;
         _log = I2PAppContext.getGlobalContext().logManager().getLog(getClass());
         if (_log.shouldDebug())
@@ -570,6 +569,7 @@ class SAMStreamSession implements SAMMessageSess {
 
         /** Lock for server running state. */
         private final Object runningLock = new Object();
+        /** Cleared to tell the reader thread to stop. */
         private volatile boolean stillRunning = true;
 
         /** Server socket. */
@@ -669,8 +669,7 @@ class SAMStreamSession implements SAMMessageSess {
      * @param nolimit true for no limit
      * @return always false
      */
-    boolean setReceiveLimit ( int id, long limit, boolean nolimit )
-    {
+    boolean setReceiveLimit ( int id, long limit, boolean nolimit ) {
         if (_log.shouldDebug())
             _log.debug ( "Protocol v1 does not support a receive limit for streams" );
 	return false;
@@ -896,8 +895,7 @@ class SAMStreamSession implements SAMMessageSess {
     }
 
     /** SAM V1 stream session sender. */
-    private class V1StreamSender extends StreamSender
-      {
+    private class V1StreamSender extends StreamSender {
         /** Pending outbound data buffers. */
         private final List<ByteArray> _data;
         /** Byte cache for packet buffers. */

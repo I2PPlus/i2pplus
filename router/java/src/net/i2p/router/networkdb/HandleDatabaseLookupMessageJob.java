@@ -39,14 +39,22 @@ import net.i2p.util.Log;
  * Unused directly - see kademlia/ for extension.
  */
 public class HandleDatabaseLookupMessageJob extends JobImpl {
+    /** The log for the lookup job. */
     private final Log _log;
+    /** The lookup message being handled. */
     private final DatabaseLookupMessage _message;
+    /** True once the reply key was used. */
     private boolean _replyKeyConsumed;
+    /** Our own router hash. */
     private final Hash _us;
+    /** The bloom filter xor of the message id. */
     private final long _msgIDBloomXor;
 
+    /** Most routers returned in a reply. */
     private static final int MAX_ROUTERS_RETURNED = 3;
+    /** Time allowed for sending a reply. */
     private static final int REPLY_TIMEOUT = 60*1000;
+    /** The priority of the reply messages. */
     private static final int MESSAGE_PRIORITY = OutNetMessage.PRIORITY_NETDB_REPLY;
 
     /**
@@ -227,6 +235,14 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
                                                        dontInclude);
     }
 
+    /**
+     * Sends the data that was found.
+     *
+     * @param key the key that was searched
+     * @param data the entry that was found
+     * @param toPeer the peer to reply to
+     * @param replyTunnel the tunnel for the reply
+     */
     private void sendData(Hash key, DatabaseEntry data, Hash toPeer, TunnelId replyTunnel) {
         if (!key.equals(data.getHash())) {
             if (_log.shouldWarn()) {
@@ -291,6 +307,13 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
         }
     }
 
+    /**
+     * Sends the message through the reply tunnel.
+     *
+     * @param message the message to send
+     * @param toPeer the peer to send to
+     * @param replyTunnel the tunnel for the reply
+     */
     private void sendThroughTunnel(I2NPMessage message, Hash toPeer, TunnelId replyTunnel) {
         if (_us.equals(toPeer)) {
             // if we are the gateway, act as if we received it

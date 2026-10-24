@@ -43,10 +43,15 @@ public class NtpClient {
 
     /** Difference between the Unix epoch and Jan 1 1900, the epoch used by NTP. */
     static final double SECONDS_1900_TO_EPOCH = 2208988800.0;
+    /** The standard NTP port. */
     private static final int NTP_PORT = 123;
+    /** How long a reply may take: 10 seconds. */
     private static final int DEFAULT_TIMEOUT = 10 * 1000;
+    /** Offset of the originate timestamp in a packet. */
     private static final int OFF_ORIGTIME = 24;
+    /** Offset of the transmit timestamp in a packet. */
     private static final int OFF_TXTIME = 40;
+    /** Shortest a valid NTP packet can be, in bytes. */
     private static final int MIN_PKT_LEN = 48;
 
     /**
@@ -54,7 +59,9 @@ public class NtpClient {
      * KoD is a special NTP stratum 0 response indicating the server requests the client to stop querying temporarily.
      */
     private static final Map<String, String> kisses = new ConcurrentHashMap<>(2);
+    /** Property selecting DNS-over-HTTPS for server lookups. */
     private static final String PROP_USE_DNS_OVER_HTTPS = "time.useDNSOverHTTPS";
+    /** Whether DoH is used when the property is unset. */
     private static final boolean DEFAULT_USE_DNS_OVER_HTTPS = false;
 
     /**

@@ -14,9 +14,13 @@ import java.util.Locale;
 public class AuthToken {
     /** The VALIDITY_TIME. */
     static final int VALIDITY_TIME = 1; // Measured in days
+    /** Format for writing and reading the expiry date. */
     private static final ThreadLocal<DateFormat> EXPIRY_FORMAT = ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US));
+    /** The manager that issued this token. */
     private final SecurityManager _secMan;
+    /** Identifies the user the token belongs to. */
     private final String id;
+    /** When the token stops being accepted. */
     private final Date expiry;
 
     /**

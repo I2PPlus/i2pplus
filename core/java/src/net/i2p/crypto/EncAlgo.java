@@ -32,8 +32,14 @@ public enum EncAlgo {
      */
     ECIES_MLKEM_INT("ECIES-MLKEM-Internal");
 
+    /** Name of the encryption algorithm. */
     private final String name;
 
+    /**
+     * Creates a value with its algorithm name.
+     *
+     * @param name the algorithm name
+     */
     EncAlgo(String name) {
         this.name = name;
     }

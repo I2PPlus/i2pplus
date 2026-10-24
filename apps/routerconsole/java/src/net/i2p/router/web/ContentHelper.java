@@ -21,8 +21,11 @@ public class ContentHelper extends HelperBase {
      * Absolute path of the content file to include, empty until set.
      */
     protected String _page;
+    /** Most lines shown on the page. */
     private int _maxLines;
+    /** True to show the start of the log, not the end. */
     private boolean _startAtBeginning;
+    /** Language of the page being rendered. */
     private String _lang;
 
     /**

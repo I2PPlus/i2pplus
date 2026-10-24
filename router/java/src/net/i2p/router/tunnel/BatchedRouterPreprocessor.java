@@ -10,9 +10,11 @@ import net.i2p.util.SystemVersion;
  * router config setting, and track fragmentation.
  */
 class BatchedRouterPreprocessor extends BatchedPreprocessor {
+    /** The tunnel the batch is built for. */
     private final TunnelCreatorConfig _config;
     /** The hop config for inbound gateways. */
     protected final HopConfig _hopConfig;
+    /** Delay before the first batch is sent, in ms. */
     private final long _sendDelay;
 
     /**
@@ -56,6 +58,12 @@ class BatchedRouterPreprocessor extends BatchedPreprocessor {
         _sendDelay = initialSendDelay();
     }
 
+    /**
+     * Names a hop for the log.
+     *
+     * @param cfg the hop's configuration
+     * @return the name to show
+     */
     private static String getName(HopConfig cfg) {
         if (cfg == null) return "[Inbound ??]";
         long id = cfg.getReceiveTunnelId();
@@ -68,6 +76,12 @@ class BatchedRouterPreprocessor extends BatchedPreprocessor {
             return "[Inbound ??]";
     }
 
+    /**
+     * Names a tunnel for the log.
+     *
+     * @param cfg the tunnel's configuration
+     * @return the name to show
+     */
     private static String getName(TunnelCreatorConfig cfg) {
         if (cfg == null) return "[Outbound ??]";
         long id = cfg.getConfig(0).getReceiveTunnelId();
@@ -81,19 +95,23 @@ class BatchedRouterPreprocessor extends BatchedPreprocessor {
     }
 
     /**
-     * How long should we wait before flushing.
-     * @return the send delay
+     * How long we should wait before flushing a batch.
+     *
+     * @return the send delay, in ms
+     * @since 0.9.72
      */
     @Override
     protected long getSendDelay() { return _sendDelay; }
 
-    /*
-     * Extend the batching time for exploratory OBGWs, they have a lot of small
-     * tunnel test messages, and build messages that don't fit perfectly.
-     * And these are not as delay-sensitive.
+    /**
+     * Chooses the delay before the first batch is sent, extending the
+     * batching time for exploratory OBGWs: they carry many small tunnel test
+     * messages and build messages that don't fit perfectly, and those are not
+     * as delay-sensitive. Config changes are not picked up after the
+     * preprocessor is created, but a preprocessor's lifetime is only 10
+     * minutes, so just wait.
      *
-     * We won't pick up config changes after the preprocessor is created,
-     * but a preprocessor lifetime is only 10 minutes, so just wait...
+     * @return the delay, in ms
      */
     private long initialSendDelay() {
         if (_config != null) {

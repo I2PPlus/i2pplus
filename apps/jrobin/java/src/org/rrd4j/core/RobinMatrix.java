@@ -15,10 +15,15 @@ import java.util.Arrays;
  *
  */
 class RobinMatrix implements Robin {
+    /** The archive whose values are stored. */
     private final Archive parentArc;
+    /** Where the next row is written. */
     private final RrdInt<Archive> pointer;
+    /** The stored rows, in a ring. */
     private final RrdDoubleMatrix<Archive> values;
+    /** How many rows the ring holds. */
     private final int rows;
+    /** Which column of the archive this matrix holds. */
     private final int column;
 
     /**
@@ -50,7 +55,6 @@ class RobinMatrix implements Robin {
         return getValues(0, rows);
     }
 
-    // stores single value
     /** {@inheritDoc} */
     public void store(double newValue) throws IOException {
         int position = pointer.get();
@@ -58,7 +62,6 @@ class RobinMatrix implements Robin {
         pointer.set((position + 1) % rows);
     }
 
-    // stores the same value several times
     /** {@inheritDoc} */
     public void bulkStore(double newValue, int bulkCount) throws IOException {
         assert bulkCount <= rows : "Invalid number of bulk updates: " + bulkCount + " rows=" + rows;

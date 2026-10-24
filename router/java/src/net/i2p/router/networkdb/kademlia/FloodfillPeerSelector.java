@@ -42,14 +42,22 @@ import net.i2p.stat.RateStat;
  */
 public class FloodfillPeerSelector extends PeerSelector {
 
+    /** Records why floodfills were banned. */
     private BanLogger _banLogger;
+    /** The floodfill's own database facade. */
     private final KademliaNetworkDatabaseFacade _facade;
 
+    /** Context the cached config values were read from. */
     private static volatile RouterContext _cfgCtx;
+    /** When the config values were last refreshed. */
     private static volatile long _cfgRefreshed;
+    /** Cached ban setting for unresponsive floodfills. */
     private static volatile boolean _cachedEnableUnresponsiveFloodfillBan;
+    /** Interval between config refreshes. */
     private static final long CONFIG_REFRESH_MS = 30 * 1000L;
+    /** Rate stat slots for the failed lookups. */
     private final RateStat[] _failedLookupRateStatSlot = new RateStat[1];
+    /** Rate stat slots for the test success times. */
     private final RateStat[] _testSuccessTimeStatSlot = new RateStat[1];
 
     /**
@@ -68,6 +76,12 @@ public class FloodfillPeerSelector extends PeerSelector {
         _cfgRefreshed = now;
     }
 
+    /**
+     * Reads the unresponsive floodfill ban setting.
+     *
+     * @param ctx the context to read the config from
+     * @return true to ban unresponsive floodfills
+     */
     private static boolean getEnableUnresponsiveFloodfillBan(RouterContext ctx) {
         refreshConfig(ctx);
         return _cachedEnableUnresponsiveFloodfillBan;
@@ -230,14 +244,17 @@ public class FloodfillPeerSelector extends PeerSelector {
         return selectFloodfillParticipants(key, maxNumRouters, ignore, kbuckets);
     }
 
+    /** Age a no-fail floodfill counts as OK. */
     private static final int NO_FAIL_STORE_OK = 5*60*1000;
+    /** Age a no-fail floodfill counts as good. */
     private static final int NO_FAIL_STORE_GOOD = NO_FAIL_STORE_OK * 2;
     /** This must be longer than the max streaming timeout (60s). */
     private static final int NO_FAIL_LOOKUP_OK = 70*1000;
+    /** Age a lookup counts as good with no failures. */
     private static final int NO_FAIL_LOOKUP_GOOD = NO_FAIL_LOOKUP_OK * 3;
+    /** Response time still counted as good, in ms. */
     private static final int MAX_GOOD_RESP_TIME = 2000;
-    // TODO we need better tracking of floodfill first-heard-about times
-    // before we can do this. Old profiles get deleted.
+    /** Age after which a floodfill counts as recently heard about. */
     private static final long HEARD_AGE = 45*60*1000L;
     /**
      * Grace period after router startup before enforcing HEARD_AGE.
@@ -741,13 +758,21 @@ public class FloodfillPeerSelector extends PeerSelector {
         }
     }
 
+    /** Collector picking the closest floodfills. */
     private class FloodfillSelectionCollector implements SelectionCollector<Hash> {
+        /** Candidate hashes, sorted by distance. */
         private final TreeSet<Hash> _sorted;
+        /** Floodfill hashes matching the search. */
         private final List<Hash>  _floodfillMatches;
+        /** The hash being searched for. */
         private final Hash _key;
+        /** Hashes to skip in the search. */
         private final Set<Hash> _toIgnore;
+        /** Matches counted so far. */
         private int _matches;
+        /** Matches wanted from the search. */
         private final int _wanted;
+        /** Router infos cached during the search. */
         private final Map<Hash, RouterInfo> _infoCache = new HashMap<>(64);
 
         /**
@@ -764,6 +789,7 @@ public class FloodfillPeerSelector extends PeerSelector {
             _toIgnore = toIgnore;
             _wanted = wanted;
         }
+        /** Extra matches the collector keeps beyond the wanted count. */
         private static final int EXTRA_MATCHES = 200;
         /**
          * Add an entry to the selection, skipping ignored, banlisted,

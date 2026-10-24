@@ -24,14 +24,21 @@ package com.google.zxing;
  */
 public final class FormatException extends ReaderException {
 
+  /** Shared instance, as the exception carries no message. */
   private static final FormatException INSTANCE = new FormatException();
   static {
     INSTANCE.setStackTrace(NO_TRACE); // since it's meaningless
   }
 
+  /** Creates the shared instance. */
   private FormatException() {
   }
 
+  /**
+   * Records what went wrong.
+   *
+   * @param cause the underlying failure
+   */
   private FormatException(Throwable cause) {
     super(cause);
   }

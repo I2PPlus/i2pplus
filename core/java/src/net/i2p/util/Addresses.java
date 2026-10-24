@@ -49,21 +49,33 @@ public abstract class Addresses {
     private Addresses() {
     }
 
+    /** Proc file listing the IPv6 interfaces. */
     private static final File IF_INET6_FILE = new File("/proc/net/if_inet6");
+    /** Time the interface cache stays valid. */
     private static final long INET6_CACHE_EXPIRE = 10 * (long) 60 * 1000;
+    /** True where the proc interface cache is usable. */
     private static final boolean INET6_CACHE_ENABLED = !SystemVersion.isMac() && !SystemVersion.isWindows() &&
                                                     !SystemVersion.isAndroid() && IF_INET6_FILE.exists();
+    /** Flag of a permanent interface address. */
     private static final int FLAG_PERMANENT = 0x80;
+    /** Flag of a deprecated interface address. */
     private static final int FLAG_DEPRECATED = 0x20;
+    /** Flag of a temporary interface address. */
     private static final int FLAG_TEMPORARY = 0x01;
+    /** When the interface cache was read. */
     private static long ifCacheTime;
+    /** Cached interface addresses, null if disabled. */
     private static final Map<Inet6Address, Inet6Addr> _ifCache = INET6_CACHE_ENABLED ? new HashMap<>(8) : null;
     /** 12 char hex lower case. */
     private static final Set<String> _macCache = new HashSet<>();
 
-    // Convert IPv6 to canonical RFC 5952
-    // https://stackoverflow.com/questions/7043983/ipv6-address-into-compressed-form-in-java
+    /**
+     * Regex matching the longest zero run.
+     * See also: <a href="https://datatracker.ietf.org/doc/html/rfc5952">RFC 5952 (IPv6 address text representation)</a>
+     * See also: <a href="https://stackoverflow.com/questions/7043983/ipv6-address-into-compressed-form-in-java">compressed IPv6 form</a>
+     */
     private static final String RFC5952_MATCH = "((?:(?:^|:)0+\\b){2,}):?(?!\\S*\\b\\1:0+\\b)(\\S*)";
+    /** Compiled matcher for the zero run. */
     private static final Pattern RFC5952_PATTERN = Pattern.compile(RFC5952_MATCH);
 
 /**
@@ -357,6 +369,15 @@ public abstract class Addresses {
         return ip;
     }
 
+    /**
+     * Checks whether an address counts as one of ours.
+     *
+     * @param ia the address to check
+     * @param includeSiteLocal true to accept site local addresses
+     * @param includeLoopbackAndWildcard true to accept loopback and wildcard
+     * @param includeIPv6 true to accept IPv6 addresses
+     * @return true if the address is local
+     */
     private static boolean shouldInclude(InetAddress ia, boolean includeSiteLocal,
                                          boolean includeLoopbackAndWildcard, boolean includeIPv6) {
         byte[] ip = ia.getAddress();
@@ -521,7 +542,9 @@ public abstract class Addresses {
      * @since 0.9.3
      */
     private static final Map<String, byte[]> _IPAddress;
+    /** Hosts recently found not to resolve. */
     private static final Map<String, Long> _negativeCache;
+    /** Time a failed lookup is remembered. */
     private static final long NEG_CACHE_TIME = 60*60*1000L;
 
     static {
@@ -843,7 +866,6 @@ public abstract class Addresses {
         return rv;
     }
 
-    /* ////// IPv6 Cache Utils /////// */
 
     /**
      * Cached IPv6 address with its scope.
@@ -851,11 +873,21 @@ public abstract class Addresses {
      * @since 0.9.28
      */
     private static class Inet6Addr {
+        /** The interface address. */
         private final Inet6Address addr;
+        /** True unless the address is flagged permanent. */
         private final boolean isDyn;
+        /** True if the address is flagged deprecated. */
         private final boolean isDep;
+        /** True if the address is flagged temporary. */
         private final boolean isTemp;
 
+        /**
+         * Records one interface address with its flags.
+         *
+         * @param a the interface address
+         * @param flags the flags from the proc file
+         */
         public Inet6Addr(Inet6Address a, int flags) {
             addr = a;
             isDyn = (flags & FLAG_PERMANENT) == 0;
@@ -863,9 +895,29 @@ public abstract class Addresses {
             isTemp = (flags & FLAG_TEMPORARY) != 0;
         }
 
+        /**
+         * Returns the interface address.
+         *
+         * @return the address of the interface
+         */
         public Inet6Address getAddress() { return addr; }
+        /**
+         * Checks whether the address may change.
+         *
+         * @return true unless the address is permanent
+         */
         public boolean isDynamic() { return isDyn; }
+        /**
+         * Checks whether the address is deprecated.
+         *
+         * @return true if deprecated
+         */
         public boolean isDeprecated() { return isDep; }
+        /**
+         * Checks whether the address is temporary.
+         *
+         * @return true if temporary
+         */
         public boolean isTemporary() { return isTemp; }
     }
 
@@ -1003,7 +1055,6 @@ public abstract class Addresses {
         return a.isTemporary();
     }
 
-    /* ////// End IPv6 Cache Utils /////// */
 
     /**
      * Clears all internal caches.

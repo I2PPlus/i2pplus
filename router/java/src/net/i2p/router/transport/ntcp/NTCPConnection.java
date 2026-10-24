@@ -57,12 +57,19 @@ import net.i2p.util.SystemVersion;
  * @since 0.9.16
  */
 public class NTCPConnection implements Closeable {
+    /** The router running this transport. */
     private final RouterContext _context;
+    /** Logger for this class. */
     private final Log _log;
+    /** Logger for peers banned by this transport. */
     private static BanLogger _banLogger;
+    /** The socket channel, null once closed. */
     private volatile SocketChannel _chan;
+    /** The selector key for this connection. */
     private volatile SelectionKey _conKey;
+    /** Bandwidth callback fired after inbound reads. */
     private final FIFOBandwidthLimiter.CompleteListener _inboundListener;
+    /** Bandwidth callback fired after outbound writes. */
     private final FIFOBandwidthLimiter.CompleteListener _outboundListener;
     /**
      * Queue of ByteBuffer containing data we have read and are ready to process, oldest first.
@@ -116,17 +123,27 @@ public class NTCPConnection implements Closeable {
     public static void setMaxWriteBufs(int max) {
         MAX_WRITE_BUFS = Math.max(128, Math.min(2048, max));
     }
+    /** Buffers queued for writing. */
     private final Queue<ByteBuffer> _writeBufs;
     /** Requests that were not granted immediately. */
     private final Set<FIFOBandwidthLimiter.Request> _bwInRequests;
+    /** Outstanding outbound bandwidth requests. */
     private final Set<FIFOBandwidthLimiter.Request> _bwOutRequests;
+    /** Time the handshake completed. */
     private long _establishedOn;
+    /** Phase of the handshake. */
     private volatile EstablishState _establishState;
+    /** The transport that owns this connection. */
     private final NTCPTransport _transport;
+    /** True if the peer connected to us. */
     private final boolean _isInbound;
+    /** True once the connection is closed. */
     private final AtomicBoolean _closed = new AtomicBoolean();
+    /** The peer's address as configured. */
     private final RouterAddress _remAddr;
+    /** The peer's identity, once established. */
     private RouterIdentity _remotePeer;
+    /** Our clock minus the peer's, in seconds. */
     private long _clockSkew; // in seconds
     /**
      * Pending unprepared OutNetMessage instances.
@@ -138,9 +155,13 @@ public class NTCPConnection implements Closeable {
     private final List<OutNetMessage> _currentOutbound;
     /** Current partially read I2NP message. */
     private ReadState _curReadState;
+    /** Messages read on this connection. */
     private final AtomicInteger _messagesRead = new AtomicInteger();
+    /** Messages written on this connection. */
     private final AtomicInteger _messagesWritten = new AtomicInteger();
+    /** Time of the last write. */
     private long _lastSendTime;
+    /** Time of the last read. */
     private long _lastReceiveTime;
     /**
      * Round trip time of the handshake that established this session, in ms, or
@@ -172,6 +193,7 @@ public class NTCPConnection implements Closeable {
      * @since 0.9.71+
      */
     private volatile long _establishmentRttTime;
+    /** Time the byte rates were last computed. */
     private long _lastRateUpdated;
     /**
      * Last time "{@code ntcp.writeBufs.size}" was recorded, to throttle the per-frame
@@ -179,37 +201,44 @@ public class NTCPConnection implements Closeable {
      * Best-effort throttle only; no _writeLock needed.
      */
     private long _lastWriteBufsStat;
+    /** Time the connection object was created. */
     private final long _created;
-    // prevent sending meta before established
+    /** Time before which metadata must not be sent, kept past establish. */
     private long _nextMetaTime = Long.MAX_VALUE;
+    /** Reads returning zero in a row. */
     private final AtomicInteger _consecutiveZeroReads = new AtomicInteger();
-    // This lock covers:
-    // _curReadState
+    /** Lock guarding _curReadState, the current read state. */
     private final Object _readLock = new Object();
-    // This lock covers:
-    // _currentOutbound, _outbound, _sendSipk1, _sendSipk2, _sendSipIV, _sender
-    // _writeBufs is drained only by the pumper thread (ConcurrentLinkedQueue),
-    // so it no longer needs this lock
+    /**
+     * Lock guarding _currentOutbound, _outbound, _sendSipk1, _sendSipk2,
+     * _sendSipIV and _sender. _writeBufs is drained only by the pumper
+     * thread (ConcurrentLinkedQueue), so it no longer needs this lock.
+     */
     private final Object _writeLock = new Object();
-    // This lock covers:
-    // _bytesReceived, _bytesSent, _lastBytesReceived, _lastBytesSent, _sendBps, _recvBps
+    /**
+     * Lock guarding the byte and rate counters: _bytesReceived, _bytesSent,
+     * _lastBytesReceived, _lastBytesSent, _sendBps and _recvBps.
+     */
     private final Object _statLock = new Object();
 
     /** How many consecutive sends were failed due to (estimated) send queue time. */
     private long _nextInfoTime;
+    /** True once either side may disconnect. */
     private volatile boolean _mayDisconnect;
+    /** True while a write-interest change awaits the selector. */
     private final AtomicBoolean _writeInterestPending = new AtomicBoolean(false);
+    /** Time of the last read or write. */
     private volatile long _lastActiveTime = System.currentTimeMillis();
+    /** Time of the last zero-length read. */
     private volatile long _lastZeroReadTime = 0;
 
-    /*
-     *  Update frequency for send/recv rates in console peers page
-     */
+    /** How often send and receive rates are recomputed for the console peers page. */
     private static final long STAT_UPDATE_TIME_MS = 60*1000L;
 
-    /*
-     *  Should be longer than 2 * EventPumper.MAX_EXPIRE_IDLE_TIME so it doesn't
-     *  interfere with the timeout, at least at first
+    /**
+     * Interval between the pool test messages, longer than twice the
+     * pumper maximum idle time so it does not interfere with the
+     * idle timeout.
      */
     private static final int META_FREQUENCY = 45*60*1000;
 
@@ -223,11 +252,14 @@ public class NTCPConnection implements Closeable {
      * In the meantime, don't let the transport bid on big messages.
      */
     static final int BUFFER_SIZE = 16*1024;
+    /** Size of the pooled read-buffer cache. */
     private static final int MAX_DATA_READ_BUFS = SystemVersion.isSlow() ? 4 : 16;
+    /** The cache supplying the data read buffers. */
     private static final ByteCache _dataReadBufs = ByteCache.getInstance(MAX_DATA_READ_BUFS, BUFFER_SIZE);
+    /** Source of unique connection ids. */
     private static final AtomicLong __connID = new AtomicLong();
+    /** Id of this connection, for logs. */
     private final long _connID = __connID.incrementAndGet();
-    //// NTCP2 things
 
     /**
      * See spec. Max Noise payload 65535,
@@ -235,13 +267,17 @@ public class NTCPConnection implements Closeable {
      * Includes 9-byte I2NP header.
      */
     static final int NTCP2_MAX_MSG_SIZE = 65516;
+    /** Largest padding a single message may carry, in bytes. */
     private static final int PADDING_MAX = 64;
+    /** Length of the SipHash IV, in bytes. */
     private static final int SIP_IV_LENGTH = 8;
+    /** Cap on the junk read after a failed handshake, in bytes. */
     private static final int NTCP2_FAIL_READ = 1024;
+    /** Time allowed for that junk read, in ms. */
     private static final long NTCP2_FAIL_TIMEOUT = 8*1000L;
+    /** Delay before closing after a termination block, in ms. */
     private static final long NTCP2_TERMINATION_CLOSE_DELAY = 50;
-    // don't make combined messages too big, to minimize latency
-    // Tunnel data msgs are 1024 + 4 + 9 + 3 = 1040, allow 5
+    /** Preferred cap for a combined payload, in bytes. Tunnel data messages are 1024 + 4 + 9 + 3 = 1040, so five fit; keeping combined messages small minimizes latency. */
     private static final int NTCP2_PREFERRED_PAYLOAD_MAX = 5 * 1040;
     /** Unspecified reason. */
     static final int REASON_UNSPEC = 0;
@@ -281,23 +317,34 @@ public class NTCPConnection implements Closeable {
     static final int PADDING_MIN_DEFAULT_INT = 0;
     /** Default maximum padding integer. */
     static final int PADDING_MAX_DEFAULT_INT = 1;
+    /** Default minimum padding, as a fraction of the message. */
     private static final float PADDING_MIN_DEFAULT = PADDING_MIN_DEFAULT_INT / 16.0f;
+    /** Default maximum padding, as a fraction of the message. */
     private static final float PADDING_MAX_DEFAULT = PADDING_MAX_DEFAULT_INT / 16.0f;
     /** Default dummy value. */
     static final int DUMMY_DEFAULT = 0;
     /** Default delay value. */
     static final int DELAY_DEFAULT = 0;
+    /** The padding options we advertise. */
     private static final NTCP2Options OUR_PADDING = new NTCP2Options(PADDING_MIN_DEFAULT, PADDING_MAX_DEFAULT,
                                                                      PADDING_MIN_DEFAULT, PADDING_MAX_DEFAULT,
                                                                      DUMMY_DEFAULT, DUMMY_DEFAULT,
                                                                      DELAY_DEFAULT, DELAY_DEFAULT);
+    /** Smallest padding range allowed. */
     private static final int MIN_PADDING_RANGE = 16;
+    /** Largest padding range allowed. */
     private static final int MAX_PADDING_RANGE = 128;
+    /** The padding options in effect for this connection. */
     private volatile NTCP2Options _paddingConfig = OUR_PADDING;
+    /** The NTCP version in use. */
     private int _version;
+    /** Cipher state for outbound data. */
     private CipherState _sender;
+    /** First SipHash ratchet key for outbound data. */
     private long _sendSipk1;
+    /** Second SipHash ratchet key for outbound data. */
     private long _sendSipk2;
+    /** SipHash IV for outbound data. */
     private byte[] _sendSipIV;
 
     /**
@@ -1037,7 +1084,9 @@ void noteEstablishmentRtt(int rttMs) {
     static class BlockPool {
         /** Blocks allocated for the frame being built. */
         final List<Block> blocks = new ArrayList<>(4);
+        /** I2NP blocks of the payload being built. */
         private final List<NTCP2Payload.I2NPBlock> i2npBlocks = new ArrayList<>(4);
+        /** Padding blocks of the payload being built. */
         private final List<NTCP2Payload.PaddingBlock> paddingBlocks = new ArrayList<>(4);
 
         /**
@@ -1089,6 +1138,7 @@ void noteEstablishmentRtt(int rttMs) {
         }
     }
 
+    /** Per-thread pool of payload blocks, avoiding allocator churn. */
     private static final ThreadLocal<BlockPool> _blockPool = new ThreadLocal<BlockPool>() {
         @Override
         protected BlockPool initialValue() {
@@ -1096,7 +1146,6 @@ void noteEstablishmentRtt(int rttMs) {
         }
     };
 
-    //// Frame packing decisions (package-visible for testing) ////
 
     /**
      * NTCP2 frame-size contribution of one message.
@@ -1247,7 +1296,7 @@ void noteEstablishmentRtt(int rttMs) {
      * stored before (or there was no previous copy, so the store is new).
      * copy claims a later publication time.
      * <p>Used on the flood path in {@link NTCP2Payload.PayloadCallback#gotRI}.
-
+     *
      * @param old the previously stored RouterInfo, or null if this is a new store
      * @param ri the RouterInfo that was just stored
      * @return true if flooding is justified by freshness
@@ -1657,6 +1706,8 @@ void noteEstablishmentRtt(int rttMs) {
      * read buffer is delivered or released exactly once across those racers.
      */
     private class InboundListener implements FIFOBandwidthLimiter.CompleteListener {
+        /** Runs when the limiter releases read bandwidth. */
+        private InboundListener() {}
         @Override
         public void complete(FIFOBandwidthLimiter.Request req) {
             // Lost the hand-off: the other racer owns the attached buffer now.
@@ -1684,6 +1735,8 @@ void noteEstablishmentRtt(int rttMs) {
      * Does the delayed write.
      */
     private class OutboundListener implements FIFOBandwidthLimiter.CompleteListener {
+        /** Runs when the limiter releases write bandwidth. */
+        private OutboundListener() {}
         @Override
         public void complete(FIFOBandwidthLimiter.Request req) {
             removeOBRequest(req);
@@ -1712,14 +1765,29 @@ void noteEstablishmentRtt(int rttMs) {
         return _bwInRequests.remove(req);
     }
 
+    /**
+     * Tracks an inbound bandwidth request.
+     *
+     * @param req the request to track
+     */
     private void addIBRequest(FIFOBandwidthLimiter.Request req) {
         _bwInRequests.add(req);
     }
 
+    /**
+     * Stops tracking an outbound bandwidth request.
+     *
+     * @param req the request to forget
+     */
     private void removeOBRequest(FIFOBandwidthLimiter.Request req) {
         _bwOutRequests.remove(req);
     }
 
+    /**
+     * Tracks an outbound bandwidth request.
+     *
+     * @param req the request to track
+     */
     private void addOBRequest(FIFOBandwidthLimiter.Request req) {
         _bwOutRequests.add(req);
     }
@@ -2003,26 +2071,29 @@ void noteEstablishmentRtt(int rttMs) {
         } // synchronized(_writeLock)
     }
 
-    // following fields covered by _statLock
+    /** Bytes received so far, guarded by _statLock. */
     private long _bytesReceived;
+    /** Bytes sent so far, guarded by _statLock. */
     private long _bytesSent;
     /** _bytesReceived when we last updated the rate. */
     private long _lastBytesReceived;
     /** _bytesSent when we last updated the rate. */
     private long _lastBytesSent;
+    /** Current send rate, in bytes per second. */
     private float _sendBps;
+    /** Current receive rate, in bytes per second. */
     private float _recvBps;
 
     /**
      * Current send rate in Bps.
      *
-     * @return current send rate in Bps
+     * @return the rate, in bytes per second
      */
     public float getSendRate() { synchronized(_statLock) { return _sendBps; } }
     /**
      * Current receive rate in Bps.
      *
-     * @return current receive rate in Bps
+     * @return the rate, in bytes per second
      */
     public float getRecvRate() { synchronized(_statLock) { return _recvBps; } }
 
@@ -2101,17 +2172,39 @@ void noteEstablishmentRtt(int rttMs) {
         _clockSkew = newSkew;
     }
 
+    /**
+     * Takes a read buffer from the cache.
+     *
+     * @return the buffer, zeroed
+     */
     private static ByteArray acquireReadBuf() {
         return _dataReadBufs.acquire();
     }
 
+    /**
+     * Returns a read buffer to the cache.
+     *
+     * @param buf the buffer to return
+     */
     private static void releaseReadBuf(ByteArray buf) {
         _dataReadBufs.release(buf, false);
     }
 
+    /** The current phase of reading from the socket. */
     private interface ReadState {
+        /**
+         * Feeds freshly read data to this state.
+         *
+         * @param buf the data read
+         */
         public void receive(ByteBuffer buf);
+        /** Releases the buffers this state holds. */
         public void destroy();
+        /**
+         * Gives the valid frames read so far.
+         *
+         * @return the frame count
+         */
         public int getFramesReceived();
     }
 
@@ -2198,7 +2291,6 @@ void noteEstablishmentRtt(int rttMs) {
         return false;
     }
 
-    //// NTCP2 below here
 
     /**
      * We are Alice. NTCP2 only.
@@ -2332,26 +2424,31 @@ void noteEstablishmentRtt(int rttMs) {
      * @since 0.9.36
      */
     private class NTCP2ReadState implements ReadState, NTCP2Payload.PayloadCallback {
-        // temp to read the encrypted lengh into
+        /** Scratch buffer for the encrypted frame length. */
         private final byte[] _recvLen = new byte[2];
+        /** First SipHash ratchet key for inbound data. */
         private final long _sipk1;
+        /** Second SipHash ratchet key for inbound data. */
         private final long _sipk2;
-        // the siphash ratchet, as a byte array
+        /** The SipHash ratchet IV, as a byte array. */
         private final byte[] _sipIV = new byte[SIP_IV_LENGTH];
+        /** Cipher state for inbound data. */
         private final CipherState _rcvr;
-        // the size of the next frame, only valid if _received >= 0
+        /** Size of the next frame, valid only once _received is non-negative. */
         private int _framelen;
-        // bytes received, -2 to _framelen
+        /** Bytes received of the current frame, -2 until the length is known. */
         private int _received = -2;
+        /** Buffer holding the frame being read. */
         private ByteArray _dataBuf;
-        // Valid frames received in data phase
+        /** Valid frames received in this data phase. */
         private int _frameCount;
-        // for logging only
+        /** True once a termination block was seen, logging only. */
         private boolean _terminated;
 
         /**
          * NTCP2 read state initialized from the given key data.
          *
+         * @param rcvr the cipher state receiving the data
          * @param keyData using first 24 bytes
          */
         public NTCP2ReadState(CipherState rcvr, byte[] keyData) {
@@ -2473,8 +2570,11 @@ void noteEstablishmentRtt(int rttMs) {
          * Side effects: Sets _received = -2, increments _frameCount and _blockCount if valid,
          * calls {@link #destroy()} and sets _terminated if termination block received or if invalid.
          * <p>
-         * Does not call close() on failure. Caller MUST call {@link #delayedClose()} if this returns false.
+         * Does not call close() on failure. Caller MUST call
+         * {@link #delayedClose(ByteBuffer, int)} if this returns false.
          *
+         * @param data the buffer holding the packet
+         * @param off the offset of the packet in the buffer
          * @return success, false for fatal error (AEAD) only
          */
         private boolean decryptAndProcess(byte[] data, int off) {
@@ -2696,8 +2796,11 @@ void noteEstablishmentRtt(int rttMs) {
      * @since 0.9.36
      */
     private class NTCP2FailState extends SimpleTimer2.TimedEvent implements ReadState {
+        /** Bytes still to read in this handshake phase. */
         private final int _toRead;
+        /** Valid frames received before this phase. */
         private final int _validFramesRcvd;
+        /** Bytes read so far in this phase. */
         private int _read;
 
         /**
@@ -2764,7 +2867,6 @@ void noteEstablishmentRtt(int rttMs) {
         }
     }
 
-    //// Utils
 
     /**
      * Little endian.
@@ -2837,6 +2939,7 @@ void noteEstablishmentRtt(int rttMs) {
         return _lastActiveTime;
     }
 
+    /** The interest ops currently set on the selector key. */
     private volatile int _currentInterestOps = 0;
 
     /**

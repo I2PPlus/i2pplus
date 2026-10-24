@@ -18,16 +18,17 @@ final class RSAConstants {
     RSAConstants() {}
 
     /**
-     * Parameter spec.
+     * Build a key generation parameter spec.
      *
      * @param size the key size in bits
      * @param exp the public exponent
-     * @return the parameter spec
+     * @return the spec for a key of that size and exponent
      */
     private static RSAKeyGenParameterSpec genSpec(int size, BigInteger exp) {
         return new RSAKeyGenParameterSpec(size, exp);
     }
 
+    /** The Fermat prime 65537, the usual RSA public exponent. */
     private static final BigInteger F4 = new NativeBigInteger(RSAKeyGenParameterSpec.F4);
 
     /** RSA 1024-bit with F4 exponent. */

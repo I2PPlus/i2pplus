@@ -7,6 +7,7 @@ import net.i2p.util.Translate;
  * Translate strings for this package.
  */
 public class Messages extends Translate {
+    /** The bundle holding the console's translated strings. */
     private static final String BUNDLE_NAME = "net.i2p.router.web.messages";
 
     /**

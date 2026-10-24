@@ -26,6 +26,7 @@ import javax.crypto.spec.DHPublicKeySpec;
  * supports X.509 encoding for standardized key storage and transmission.
  */
 public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
+    /** Pinned for serialized-form compatibility. */
     private static final long serialVersionUID = 8712728417091216948L;
 
     /** The public value y = g^x mod p. */
@@ -215,8 +216,8 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
     }
 
     /**
-     * True if the keys are equal.
-     * @return true if the keys are equal
+     * Compare this key with another object.
+     * @return true if the y values and DH parameters are equal
      */
     @Override
     public boolean equals(Object obj) {
@@ -227,8 +228,8 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
     }
 
     /**
-     * Whether h code is present.
-     * @return whether h code is present
+     * Hash code of this key.
+     * @return the y value and DH parameters hashed together
      */
     @Override
     public int hashCode() {

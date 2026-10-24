@@ -26,7 +26,9 @@ package com.google.zxing.common.reedsolomon;
  */
 final class GenericGFPoly {
 
+  /** The Galois field the coefficients are arithmetic in. */
   private final GenericGF field;
+  /** Coefficients, highest power first, with no leading zeroes */
   private final int[] coefficients;
 
   /**
@@ -101,7 +103,7 @@ final class GenericGFPoly {
   }
 
   /**
-   * evaluate at.
+   * Evaluate this polynomial at a value.
    * @param a the field element at which to evaluate
    * @return evaluation of this polynomial at a given point
    */
@@ -127,7 +129,7 @@ final class GenericGFPoly {
   }
 
   /**
-   * add or subtract.
+   * Add or subtract another polynomial.
    * @param other the polynomial to add, which must be over the same field
    * @return the field sum if the field is characteristic two, the difference otherwise
    */
@@ -215,7 +217,7 @@ final class GenericGFPoly {
   }
 
   /**
-   * multiply by monomial.
+   * Multiply by a monomial term.
    * @param degree the power of x to multiply by, which must not be negative
    * @param coefficient the field element scaling each existing coefficient
    * @return a new polynomial shifted up by degree and scaled by coefficient

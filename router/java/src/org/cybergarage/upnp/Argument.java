@@ -31,6 +31,7 @@ public class Argument {
     ////////////////////////////////////////////////
 
     private Node argumentNode;
+    /** The node of the service this argument belongs to. */
     private Node serviceNode;
 
     /**

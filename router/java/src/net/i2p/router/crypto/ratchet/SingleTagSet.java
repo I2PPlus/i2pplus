@@ -10,7 +10,9 @@ import net.i2p.data.SessionKey;
  */
 class SingleTagSet extends RatchetTagSet {
 
+    /** The one tag this set holds. */
     private final RatchetSessionTag _tag;
+    /** True once the tag has been used. */
     private boolean _isUsed;
 
     /**

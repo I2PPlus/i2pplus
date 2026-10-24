@@ -47,9 +47,17 @@ public enum StorageError {
     /** Unclassified error; the raw exception text is preserved by {@link #describe}. */
     OTHER("I/O error", false);
 
+    /** Short name shown for this error. */
     private final String label;
+    /** True when the error stops the download. */
     private final boolean fatal;
 
+    /**
+     * Describes one error condition.
+     *
+     * @param label the name shown to the user
+     * @param fatal whether it stops the download
+     */
     StorageError(String label, boolean fatal) {
         this.label = label;
         this.fatal = fatal;

@@ -1,6 +1,8 @@
 package com.mpatric.mp3agic;
 
+/** Creates the tag implementation a version calls for. */
 public final class ID3v2TagFactory {
+    /** Utility class, not intended for instantiation. */
     private ID3v2TagFactory() {}
 
     /**
@@ -27,6 +29,15 @@ public final class ID3v2TagFactory {
         throw new UnsupportedTagException("Tag version not supported");
     }
 
+    /**
+     * Makes an ID3v2.2 tag from the bytes of a file's header.
+     *
+     * @param bytes the header bytes
+     * @return the new tag
+     * @throws InvalidDataException if the tag data is corrupt
+     * @throws NoSuchTagException if the header is not an ID3v2 tag
+     * @throws UnsupportedTagException if the tag version is unknown
+     */
     private static AbstractID3v2Tag createID3v22Tag(byte[] bytes)
             throws NoSuchTagException, UnsupportedTagException, InvalidDataException {
         ID3v22Tag tag = new ID3v22Tag(bytes);

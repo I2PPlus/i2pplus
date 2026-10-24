@@ -24,7 +24,9 @@ import java.util.Arrays;
  */
 public final class BitArray implements Cloneable {
 
+  /** The bits, packed into ints. */
   private int[] bits;
+  /** How many bits are stored. */
   private int size;
 
   /**
@@ -71,6 +73,11 @@ public final class BitArray implements Cloneable {
     return (size + 7) / 8;
   }
 
+  /**
+   * Grows the storage if it is too small.
+   *
+   * @param size the number of bits needed
+   */
   private void ensureCapacity(int size) {
     if (size > bits.length * 32) {
       int[] newBits = makeArray(size);
@@ -376,6 +383,12 @@ public final class BitArray implements Cloneable {
     bits = newBits;
   }
 
+  /**
+   * Allocates enough ints to hold a number of bits.
+   *
+   * @param size the number of bits
+   * @return the storage to hold them
+   */
   private static int[] makeArray(int size) {
     return new int[(size + 31) / 32];
   }

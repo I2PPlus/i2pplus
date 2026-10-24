@@ -53,18 +53,31 @@ import net.i2p.util.Log;
  * Direct instantiation by others is deprecated.
  */
 public class I2PSocketManagerFull implements I2PSocketManager {
+    /** The app context. */
     private final I2PAppContext _context;
+    /** Logger for the socket manager. */
     private final Log _log;
+    /** The session serving this manager. */
     private final I2PSession _session;
+    /** Extra sessions opened for bandwidth. */
     private final Set<I2PSession> _subsessions;
+    /** Options each subsession was opened with. */
     private final Map<I2PSession, ConnectionOptions> _subsessionsOptions;
+    /** The server socket wrapper for this manager. */
     private final I2PServerSocketFull _serverSocket;
+    /** The real server socket, null until bound. */
     private StandardServerSocket _realServerSocket;
+    /** Default options for new connections. */
     private final ConnectionOptions _defaultOptions;
+    /** Time accept() waits, in ms. */
     private long _acceptTimeout;
+    /** Name of this manager, for the logs. */
     private String _name;
+    /** Counter numbering the managers. */
     private static final AtomicInteger _managerId = new AtomicInteger();
+    /** The manager of the streaming connections. */
     private final ConnectionManager _connectionManager;
+    /** True once the manager is destroyed. */
     private final AtomicBoolean _isDestroyed = new AtomicBoolean();
 
     /**
@@ -72,6 +85,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      * @since 0.9.21
      */
     private static final Set<Hash> _ecUnsupported = new HashSet<>(16);
+    /** Signature types an EC destination cannot use. */
     private static final String[] EC_UNSUPPORTED_HASHES = {
         // list from http://zzz.i2p/topics/1682?page=1#p8414
         // bzr.welterde.i2p
@@ -109,6 +123,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      * @since 0.9.23
      */
     private static final Set<Hash> _edUnsupported = new HashSet<>(16);
+    /** Signature types an EdDSA destination cannot use. */
     private static final String[] ED_UNSUPPORTED_HASHES = {
         // list from http://zzz.i2p/topics/1682?page=1#p8414
         // minus those tested to support Ed
@@ -158,7 +173,9 @@ public class I2PSocketManagerFull implements I2PSocketManager {
 
     /** Cached property value to detect changes. */
     private static volatile String userDsaList = "";
+    /** Destinations pinned to DSA by configuration. */
     private static final Set<Hash> _userDsaOnly = new ConcurrentHashSet<>(4);
+    /** Config key listing the DSA-only destinations. */
     private static final String PROP_DSALIST = "i2p.streaming.dsalist";
 
     /**
@@ -534,8 +551,9 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      }
 
      /**
-      * Accept timeout in milliseconds.
-      * @return the accept timeout in milliseconds
+      * Time accept() waits for an incoming connection.
+      *
+      * @return the timeout, in ms
       */
      public long getAcceptTimeout() { return _acceptTimeout; }
 
@@ -905,12 +923,15 @@ public class I2PSocketManagerFull implements I2PSocketManager {
         _connectionManager.getMessageHandler().removeDisconnectListener(lsnr);
     }
 
+    /** Lock for the pcap initialization. */
     private static final Object _pcapInitLock = new Object();
+    /** True once the pcap writer is set up. */
     private static boolean pcapInitialized;
     /** The PCAP writer. */
     static PcapWriter pcapWriter;
     /** The PCAP property. */
     static final String PROP_PCAP = "i2p.streaming.pcap";
+    /** File name of the streaming pcap capture. */
     private static final String PCAP_FILE = "streaming.pcap";
 
     /**
@@ -948,8 +969,9 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     public static void setInitialWindowSize(int val) { ConnectionOptions.setInitialWindowSize(val); }
 
     /**
-     * Initial retransmission timeout.
-     * @return the initial retransmission timeout
+     * Initial retransmission timeout used for new connections.
+     *
+     * @return the timeout, in ms
      * @since 0.9.70+
      */
     public static int getInitialRTO() { return ConnectionOptions.getInitialRTO(); }
@@ -962,8 +984,9 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     public static void setInitialRTO(int val) { ConnectionOptions.setInitialRTO(val); }
 
     /**
-     * Default initial ACK delay.
-     * @return the default initial ACK delay
+     * Default delay before the first ACK is sent.
+     *
+     * @return the delay, in ms
      * @since 0.9.70+
      */
     public static int getDefaultInitialAckDelay() { return ConnectionOptions.getDefaultInitialAckDelay(); }
@@ -976,8 +999,9 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     public static void setDefaultInitialAckDelay(int val) { ConnectionOptions.setDefaultInitialAckDelay(val); }
 
     /**
-     * Default passive flush delay.
-     * @return the default passive flush delay
+     * Default delay before a passive stream is flushed.
+     *
+     * @return the delay, in ms
      * @since 0.9.70+
      */
     public static int getDefaultPassiveFlushDelay() { return MessageOutputStream.getDefaultPassiveFlushDelay(); }
@@ -990,8 +1014,9 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     public static void setDefaultPassiveFlushDelay(int val) { MessageOutputStream.setDefaultPassiveFlushDelay(val); }
 
     /**
-     * Default inactivity timeout.
-     * @return the default inactivity timeout
+     * Default time an idle connection is kept before closing.
+     *
+     * @return the timeout, in ms
      * @since 0.9.70+
      */
     public static int getDefaultInactivityTimeout() { return ConnectionOptions.getDefaultInactivityTimeout(); }
@@ -1080,6 +1105,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      */
     public static void setMaxMaxConcurrentStreams(int val) { ConnectionOptions.setMaxMaxConcurrentStreams(val); }
 
+    /** Largest SYN queue allowed, Tuner override. */
     private static volatile int _maxSYNQueueSize;
 
     /**
@@ -1096,6 +1122,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      */
     public static void setMaxSYNQueueSize(int val) { _maxSYNQueueSize = val; }
 
+    /** SYN timeout scale, Tuner override. */
     private static volatile int _rttSynTimeoutScale;
 
     /**
@@ -1119,6 +1146,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      */
     public static void setRttSynTimeoutScale(int val) { _rttSynTimeoutScale = val; }
 
+    /** SYN expiry threshold, Tuner override. */
     private static volatile int _synExprExpireThresh;
 
     /**

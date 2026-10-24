@@ -17,7 +17,9 @@ class DevRandom implements IRandomStandalone {
     /** Creates a reader for /dev/random. */
     DevRandom() {}
 
+    /** Path of the device the entropy is read from. */
     private static final String F = "/dev/random";
+    /** The device file, opened for each read. */
     private final File file = new File(F);
 
     /**

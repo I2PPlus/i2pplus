@@ -21,7 +21,9 @@ import net.i2p.router.web.HelperBase;
 public class ConfigTunnelsHelper extends HelperBase {
     /** Creates a helper for the tunnels config page. */
     public ConfigTunnelsHelper() { super(); }
+    /** Form field prefix of the hop settings. */
     private static final String HOP = "hop";
+    /** Form field prefix of the tunnel settings. */
     private static final String TUNNEL = "tunnel";
     /**
      * Render the tunnel configuration form.
@@ -105,6 +107,9 @@ public class ConfigTunnelsHelper extends HelperBase {
      * @since 0.9.57
      */
     private class TPComparator implements Comparator<TunnelPoolSettings> {
+         /** Orders tunnel pools by name. */
+         private TPComparator() {}
+         /** Collator sorting the tunnel names for display. */
          private final Collator _comp = Collator.getInstance();
          @Override
          public int compare(TunnelPoolSettings l, TunnelPoolSettings r) {
@@ -131,16 +136,35 @@ public class ConfigTunnelsHelper extends HelperBase {
         return ins.getDestination().toBase32();
     }
 
+    /** Tunnel length that warns in the basic form. */
     private static final int WARN_LENGTH = 4;
+    /** Tunnel length allowed in the basic form. */
     private static final int MAX_LENGTH = 5;
+    /** Tunnel length allowed in the advanced form. */
     private static final int MAX_ADVANCED_LENGTH = 7;
+    /** Tunnel quantity that warns in the basic form. */
     private static final int WARN_QUANTITY = 5;
+    /** Tunnel quantity allowed in the basic form. */
     private static final int MAX_QUANTITY = 6;
+    /** Tunnel quantity allowed in the advanced form. */
     private static final int MAX_ADVANCED_QUANTITY = 16;
+    /** Backup tunnels allowed in the advanced form. */
     private static final int MAX_ADVANCED_BACKUP_QUANTITY = 16;
+    /** Hop length variance allowed. */
     private static final int MAX_VARIANCE = 3;
+    /** Most negative hop length variance allowed. */
     private static final int MIN_NEG_VARIANCE = -2;
 
+    /**
+     * Renders the tuning form for one tunnel.
+     *
+     * @param buf the buffer to render into
+     * @param index the tunnel number
+     * @param prefix the form field prefix
+     * @param name the tunnel name
+     * @param in the inbound pool settings
+     * @param out the outbound pool settings
+     */
     private void renderForm(StringBuilder buf, int index, String prefix, String name, TunnelPoolSettings in, TunnelPoolSettings out) {
 
         boolean advanced = isAdvanced();
@@ -300,6 +324,16 @@ public class ConfigTunnelsHelper extends HelperBase {
     /** To fool xgettext so the following isn't tagged. */
     private static final String DUMMY2 = "{0} ";
 
+    /**
+     * Renders the number options from min to max.
+     *
+     * @param buf the buffer to render into
+     * @param min the smallest value offered
+     * @param max the largest value offered
+     * @param now the value selected
+     * @param prefix the form field prefix
+     * @param name the field name
+     */
     private void renderOptions(StringBuilder buf, int min, int max, int now, String prefix, String name) {
         for (int i = min; i <= max; i++) {
             buf.append("<option value=\"").append(i).append("\" ");

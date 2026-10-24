@@ -18,15 +18,19 @@ import net.i2p.util.Log;
  * @since 0.1
  */
 class PeerConnectionIn implements Runnable {
+    /** Logger for this class. */
     private final Log _log =
             I2PAppContext.getGlobalContext().logManager().getLog(PeerConnectionIn.class);
+    /** The peer being read from. */
     private final Peer peer;
+    /** The stream read from the peer. */
     private final DataInputStream din;
 
-    // The max length of a complete message in bytes.
-    // The biggest is the piece message, for which the length is the
-    // request size (32K) plus 9. (we could also check if Storage.MAX_PIECES / 8
-    // in the bitfield message is bigger but it's currently 5000/8 = 625 so don't bother)
+    /**
+     * Largest complete message accepted, in bytes. The biggest is the piece
+     * message, the request size (32K) plus 9; the bitfield message could
+     * exceed it only if Storage.MAX_PIECES / 8 grew past the current 625.
+     */
     private static final int MAX_MSG_SIZE = Math.max(PeerState.PARTSIZE + 9, MagnetState.CHUNK_SIZE + 100); // 100 for the ext msg dictionary
 
     /** Flood guard: maximum inbound messages per window, generous to tolerate bursts. */
@@ -35,8 +39,11 @@ class PeerConnectionIn implements Runnable {
     /** Flood guard: length of the counting window. */
     private static final long FLOOD_WINDOW_MS = 10 * 1000;
 
+    /** The thread reading messages, null once stopped. */
     private volatile Thread thread;
+    /** Set to end the read loop. */
     private volatile boolean quit;
+    /** True when running outside the router. */
     private final boolean isStandalone = !I2PAppContext.getGlobalContext().isRouterContext();
 
     /** Last rcvd. */

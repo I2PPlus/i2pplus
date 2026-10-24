@@ -6,6 +6,7 @@ package org.rrd4j.data;
  * sources.
  */
 class CDef extends Source implements NonRrdSource {
+    /** The RPN expression that computes this source's values. */
     private final String rpnExpression;
 
     /**

@@ -35,11 +35,15 @@ import net.i2p.util.Log;
  *
  */
 public class ClientManagerFacadeImpl extends ClientManagerFacade implements InternalClientManager {
+    /** Logger for this class. */
     private final Log _log;
+    /** The manager doing the work, null while rebuilding. */
     private ClientManager _manager;
+    /** The router running the clients. */
     private final RouterContext _context;
     /** Throttle lease expiration logging - only log once per client per interval. */
     private static final long LOG_THROTTLE = 10L * 60 * 1000; // 10 minutes
+    /** When each client's expiration was last logged. */
     private final ConcurrentHashMap<Hash, Long> _lastExpiredLogTime = new ConcurrentHashMap<>();
     /** Note that this is different than the property the client side uses, {@code i2cp.tcp.port}. */
     public static final String PROP_CLIENT_PORT = "i2cp.port";
@@ -99,6 +103,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     @Override
     public boolean isAlive() {return _manager != null && _manager.isAlive();}
 
+    /** Longest to wait for a rebuild - up to 10 minutes. */
     private static final long MAX_TIME_TO_REBUILD = 10L*60*1000;
 
     /**

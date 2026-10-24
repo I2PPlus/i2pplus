@@ -26,6 +26,7 @@ import net.i2p.crypto.SHA1Hash;
  * @since 0.9.2
  */
 class PeerCoordinatorSet implements Iterable<PeerCoordinator> {
+    /** Keyed by the info hash of the torrent each coordinator works on. */
     private final Map<SHA1Hash, PeerCoordinator> _coordinators;
 
     /**

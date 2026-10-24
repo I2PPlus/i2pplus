@@ -56,8 +56,11 @@ public class ProtocolRttBaseline {
      */
     public static final int SAMPLES_AVERAGED = 50;
 
+    /** Round-trip times kept, in ms. */
     private final int[] _samples;
+    /** How many samples are stored. */
     private int _count;
+    /** Where the next sample is written. */
     private int _next;
 
     /**

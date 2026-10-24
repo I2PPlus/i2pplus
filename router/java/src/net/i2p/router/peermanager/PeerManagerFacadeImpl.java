@@ -20,12 +20,18 @@ import net.i2p.util.Log;
  * Base implementation that has simple algorithms and periodically saves state.
  */
 public class PeerManagerFacadeImpl implements PeerManagerFacade {
+    /** Logger for this class. */
     private final Log _log;
+    /** The manager doing the actual work, null until started. */
     private PeerManager _manager;
+    /** The router the manager runs on. */
     private final RouterContext _context;
+    /** Saves and restores the peer profiles. */
     private final ProfilePersistenceHelper _persistenceHelper;
+    /** Job that tests peers for transport support. */
     private final PeerTestJob _testJob;
 
+    /** Switch for the peer testing subsystem. */
     private static final boolean ENABLE_PEER_TEST = true;
 
     /**

@@ -30,14 +30,17 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 @SuppressWarnings("PMD.CloseResource")
 public class InternalServerSocket extends ServerSocket {
+    /** The open sockets, by port. */
     private static final ConcurrentHashMap<Integer, InternalServerSocket> _sockets =
             new ConcurrentHashMap<>(4);
+    /** Connections waiting to be accepted. */
     private final BlockingQueue<InternalSocket> _acceptQueue;
+    /** The port being listened on. */
     private final Integer _port;
+    /** Name shown in the logs for this socket. */
     private final String _label;
+    /** False once the socket is closed. */
     private volatile boolean _running;
-
-    // private static Log _log = I2PAppContext.getGlobalContext().logManager().getLog(InternalServerSocket.class);
 
     /**
      * Claim an internal port for this router. The claim is tracked in a static map,
@@ -123,6 +126,12 @@ public class InternalServerSocket extends ServerSocket {
         iss.queueConnection(new InternalSocket(sis, sos));
     }
 
+    /**
+     * Hands a new connection to the accept queue.
+     *
+     * @param sock the connection to queue
+     * @throws IOException if the socket is closed
+     */
     private void queueConnection(InternalSocket sock) throws IOException {
         if (!_running) throw new IOException("Server closed for port: " + _port);
         try {
@@ -135,8 +144,6 @@ public class InternalServerSocket extends ServerSocket {
         return _port.intValue();
     }
 
-    // ignored stuff
-
     /** Unsupported, ignored. */
     @Override
     public void setSoTimeout(int timeout) {
@@ -146,8 +153,6 @@ public class InternalServerSocket extends ServerSocket {
     public int getSoTimeout() {
         return 0;
     }
-
-    // most below here unsupported
 
     /**
      * Returns null as of 0.9.33, prior to that threw IllegalArgumentException.

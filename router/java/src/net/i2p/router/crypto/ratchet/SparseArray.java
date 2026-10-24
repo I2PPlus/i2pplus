@@ -29,13 +29,20 @@ package net.i2p.router.crypto.ratchet;
 
 @SuppressWarnings("ReferenceEquality")
 class SparseArray<E> implements Cloneable {
+    /** The empty key array. */
     private static final char[] EMPTY_CHARS = new char[0];
+    /** The empty value array. */
     private static final Object[] EMPTY_OBJECTS = new Object[0];
+    /** The marker of a deleted value. */
     private static final Object DELETED = new Object();
+    /** True when deleted entries await collection. */
     private boolean mGarbage = false;
 
+    /** The array of keys. */
     private char[] mKeys;
+    /** The array of values. */
     private Object[] mValues;
+    /** The number of entries. */
     private int mSize;
 
     /**
@@ -67,6 +74,8 @@ class SparseArray<E> implements Cloneable {
 
     /**
      * Copy constructor.
+     *
+     * @param source the array to copy
      */
     private SparseArray(SparseArray<E> source) {
         mKeys = source.mKeys.clone();
@@ -208,6 +217,7 @@ class SparseArray<E> implements Cloneable {
         }
     }
 
+    /** Removes the deleted entries. */
     private void gc() {
         // Log.e("SparseArray", "gc start with " + mSize);
 

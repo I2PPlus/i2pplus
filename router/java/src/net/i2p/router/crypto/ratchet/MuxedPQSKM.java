@@ -19,10 +19,15 @@ import net.i2p.util.Log;
  */
 public class MuxedPQSKM extends SessionKeyManager {
 
+    /** The ratcheted ECIES session keys. */
     private final RatchetSKM _ec;
+    /** The ratcheted post-quantum session keys. */
     private final RatchetSKM _pq;
+    /** Counts the ECIES keys handed out. */
     private final AtomicInteger _ecCounter = new AtomicInteger();
+    /** Counts the post-quantum keys handed out. */
     private final AtomicInteger _pqCounter = new AtomicInteger();
+    /** Logger for this class. */
     private final Log _log = new Log(MuxedPQSKM.class);
     /**
      * How much slower the PQ slow decrypt is than the ratchet one, so its

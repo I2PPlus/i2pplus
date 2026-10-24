@@ -28,7 +28,9 @@ class SAMHandlerFactory {
      */
     SAMHandlerFactory() {}
 
+    /** SAM protocol version announced in the hello message */
     private static final String VERSION = "3.3";
+    /** Milliseconds to wait for the hello command */
     private static final int HELLO_TIMEOUT = 75 * 1000;
 
     /**

@@ -74,7 +74,11 @@ import java.util.stream.Stream;
  */
 public abstract class RrdBackendFactory implements Closeable {
 
+    /** Holds the registered backend factories. */
     private static final class Registry {
+        /** Holds the backends registered by name. */
+        private Registry() {}
+        /** The registered factories, by name. */
         private static final Map<String, RrdBackendFactory> factories = new HashMap<>();
 
         static {
@@ -89,6 +93,7 @@ public abstract class RrdBackendFactory implements Closeable {
             defaultFactory = factories.get(DEFAULTFACTORY);
         }
 
+        /** The factory used when none is named. */
         private static final RrdBackendFactory defaultFactory;
     }
 
@@ -96,6 +101,7 @@ public abstract class RrdBackendFactory implements Closeable {
     /** Default backend factory name. */
     public static final String DEFAULTFACTORY = "NIO";
 
+    /** The factories with backends currently open. */
     private static final List<RrdBackendFactory> activeFactories = new ArrayList<>();
 
     /**
@@ -133,8 +139,6 @@ public abstract class RrdBackendFactory implements Closeable {
         }
     }
 
-    /**
-    /**
     /**
      * Returns the default backend factory. This factory is used to construct {@link
      * org.rrd4j.core.RrdDb} objects if no factory is specified in the RrdDb constructor.
@@ -192,7 +196,6 @@ public abstract class RrdBackendFactory implements Closeable {
     }
 
     /**
-    /**
      * Add factories to the list of active factories, i.e. the factory used to resolve URI.
      *
      * @param newFactories active factories to add.
@@ -222,6 +225,7 @@ public abstract class RrdBackendFactory implements Closeable {
         }
     }
 
+    /** Parses a backend URI into scheme, authority, path, query and fragment. */
     private static final Pattern URIPATTERN =
             Pattern.compile(
                     "^(?:(?<scheme>[a-zA-Z][a-zA-Z0-9+-\\.]*):)?(?://(?<authority>[^/\\?#]*))?(?<path>[^\\?#]*)(?:\\?(?<query>[^#]*))?(?:#(?<fragment>.*))?$");
@@ -264,6 +268,7 @@ public abstract class RrdBackendFactory implements Closeable {
 
     /** Phantom reference that closes the backend when the RRD database is garbage collected. */
     private static class ClosingReference extends PhantomReference<RrdDb> {
+        /** The backend to close, null once it has been closed. */
         private RrdBackend backend;
 
         /**
@@ -291,6 +296,7 @@ public abstract class RrdBackendFactory implements Closeable {
         }
     }
 
+    /** Queue the closing references enqueue themselves on. */
     private final ReferenceQueue<RrdDb> refQueue = new ReferenceQueue<>();
 
     /**

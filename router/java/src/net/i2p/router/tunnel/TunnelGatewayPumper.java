@@ -35,35 +35,41 @@ import net.i2p.util.SimpleTimer2;
  * - Gateway drops are tracked via {@code tunnel.pumperQueueFull} stat.
  */
 class TunnelGatewayPumper implements Runnable {
+    /** The router context. */
     private final RouterContext _context;
+    /** Logger for the gateway pumper. */
     private final Log _log;
 
-    // Queue of gateways awaiting pumping (dynamically resizable)
+    /** Gateways waiting for a pump thread, a dynamically resizable queue. */
     private volatile BlockingQueue<PumpedTunnelGateway> _wantsPumping;
 
-    // Concurrent set of gateways already in the queue, prevents duplicate offers
+    /** Gateways already in the wants queue. */
     private final Set<PumpedTunnelGateway> _inQueue;
 
-    // Concurrent set of backlogged gateways waiting to be requeued
+    /** Gateways whose sends are falling behind, waiting to be requeued. */
     private final Set<PumpedTunnelGateway> _backlogged;
 
-    // Pool of threads pumping gateways
+    /** The running pump threads. */
     private final List<Thread> _threads;
 
     /** Tracks how many pumper threads are actively processing (not parked on take()). */
     private final AtomicInteger _activeCount = new AtomicInteger();
 
-    // Volatile stop flag visible to all threads
+    /** True to stop the pump threads. */
     private volatile boolean _stop;
 
+    /** Capacity of the wants queue. */
     private static volatile int _queueCapacity;
+    /** Most pump threads allowed. */
     private static volatile int _maxPumpers;
 
+    /** Sequence number of the pump threads. */
     private static final AtomicInteger _threadNum = new AtomicInteger();
 
     /** Running instance for dynamic resize from Tuner. */
     private static volatile TunnelGatewayPumper _instance;
 
+    /** Pump threads running now. */
     private volatile int _pumpers;
 
     /**
@@ -348,6 +354,7 @@ class TunnelGatewayPumper implements Runnable {
         }
     }
 
+    /** Pumps gateways from the wants queue. */
     private void run2() {
         PumpedTunnelGateway gw = null;
         List<PendingGatewayMessage> queueBuf = new ArrayList<>(_queueCapacity);
@@ -406,8 +413,14 @@ class TunnelGatewayPumper implements Runnable {
      * Timer event for requeuing backlogged gateways after delay.
      */
     private class Requeue extends SimpleTimer2.TimedEvent {
+        /** The gateway to requeue. */
         private final PumpedTunnelGateway _ptg;
 
+        /**
+         * Builds the job requeueing one gateway.
+         *
+         * @param ptg the gateway to requeue
+         */
         public Requeue(PumpedTunnelGateway ptg) {
             super(_context.simpleTimer2());
             _ptg = ptg;
@@ -426,6 +439,11 @@ class TunnelGatewayPumper implements Runnable {
      * Special poison pill PumpedTunnelGateway to signal thread shutdown.
      */
     private static class PoisonPTG extends PumpedTunnelGateway {
+        /**
+         * Builds the gateway that stops a pump thread.
+         *
+         * @param ctx the router context
+         */
         public PoisonPTG(RouterContext ctx) {
             super(ctx, null, null, new NoOpReceiver(), null);
         }
@@ -445,6 +463,8 @@ class TunnelGatewayPumper implements Runnable {
          * No-op receiver for poison pill to avoid null pointer issues.
          */
         private static class NoOpReceiver implements Receiver {
+            /** A receiver that discards the message. */
+            private NoOpReceiver() {}
             @Override
             public long receiveEncrypted(byte[] encrypted) {
                 // No-op for poison pill

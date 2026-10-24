@@ -19,9 +19,13 @@ import net.i2p.util.Log;
  * I2PSession -&gt; MessageHandler -&gt; PacketHandler -&gt; ConnectionPacketHandler -&gt; MessageInputStream.
  */
 class PacketHandler {
+    /** The manager whose packets are handled. */
     private final ConnectionManager manager;
+    /** The context the handler runs in. */
     private final I2PAppContext context;
+    /** Logger for this class. */
     private final Log log;
+    /** Pooled buffers for incoming packets. */
     private final ByteCache cache = ByteCache.getInstance(128, 32 * 1024);
 
     /**
@@ -52,6 +56,7 @@ class PacketHandler {
      */
     private volatile PacketDispatcher _dispatcher;
 
+    /** Formatter for the date in packet options. */
     private static final ThreadLocal<SimpleDateFormat> DATE_FORMAT = ThreadLocal.withInitial(
         () -> new SimpleDateFormat("HH:mm:ss.SSS", Locale.US));
 

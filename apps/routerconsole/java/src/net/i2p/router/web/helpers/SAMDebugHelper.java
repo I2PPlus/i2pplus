@@ -45,6 +45,12 @@ public class SAMDebugHelper extends HelperBase {
         }
     }
 
+    /**
+     * Writes the SAM debug page's table of current connections.
+     *
+     * @param out where the page is written
+     * @throws IOException if the writer fails
+     */
     private void renderSAMD(Writer out) throws IOException {
         SAMBridge bridge = getBridge();
         if (bridge == null) {

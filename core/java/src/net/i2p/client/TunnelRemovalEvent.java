@@ -9,10 +9,15 @@ import net.i2p.data.TunnelId;
  * @since 0.9.69
  */
 public class TunnelRemovalEvent {
+    /** The pool the tunnel was in. */
     private final String _poolName;
+    /** The tunnel being removed. */
     private final TunnelId _tunnelId;
+    /** True for an inbound tunnel. */
     private final boolean _isInbound;
+    /** Why the tunnel is going away. */
     private final RemovalReason _reason;
+    /** When the removal happened, in ms. */
     private final long _timestamp;
 
     /** Why a tunnel was removed from a client's pool. */

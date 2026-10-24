@@ -13,9 +13,13 @@ import net.i2p.data.SessionKey;
  * @since 0.9.44
  */
 class SessionKeyAndNonce extends SessionKey {
+    /** The session's id. */
     private final int _id;
+    /** The nonce for the session's next message. */
     private final int _nonce;
+    /** The handshake state the keys came from. */
     private final HandshakeState _state;
+    /** The remote peer's key, for a reply. */
     private final PublicKey _remoteKey;
 
     /**

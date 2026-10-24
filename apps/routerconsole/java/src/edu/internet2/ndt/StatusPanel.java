@@ -19,8 +19,11 @@ public class StatusPanel extends JPanel {
      */
     private static final long serialVersionUID = 2609233901130079136L;
 
+    /** Tests finished so far. */
     private int _iTestsCompleted;
+    /** Tests the run will perform. */
     private int _iTestsNum;
+    /** Set to stop the test run. */
     private boolean _bStop = false;
 
     /*

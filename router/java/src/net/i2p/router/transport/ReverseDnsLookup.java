@@ -59,6 +59,7 @@ import net.i2p.util.Translate;
  * @since 0.9.71
  */
 public class ReverseDnsLookup {
+    /** Logger for the reverse DNS lookups. */
     private static final Log _slog = I2PAppContext.getGlobalContext().logManager().getLog(ReverseDnsLookup.class);
 
     /** Rate-stat aggregation periods for the executor signals. */
@@ -70,10 +71,14 @@ public class ReverseDnsLookup {
     /** Property that enables reverse lookups; the single source of truth. */
     static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
 
+    /** File caching the reverse DNS results. */
     private static final String RDNS_CACHE_FILE = I2PAppContext.getGlobalContext().getConfigDir() +
                                                   File.separator + "rdnscache.txt";
+    /** Interval between cache file writes. */
     private static final int RDNS_WRITE_INTERVAL = 15 * 60 * 1000 + 30;
+    /** True if the JVM has at least 512 MB. */
     private static final boolean HAS_512_MB = SystemVersion.getMaxMemory() >= 512 * 1024 * 1024;
+    /** True if the JVM has at least 1 GB. */
     private static final boolean HAS_1_GB = SystemVersion.getMaxMemory() >= 1024 * 1024 * 1024;
 
     /** In-memory entry lifetime, e.g. 24/36/48 hours depending on memory. */
@@ -85,6 +90,7 @@ public class ReverseDnsLookup {
     /** "unknown" entries expire after 15 minutes — no point keeping dead lookups. */
     private static final long UNKNOWN_ENTRY_EXPIRE_MS = 15L * 60 * 1000;
 
+    /** Entries kept in the reverse DNS cache. */
     private static final int MAX_RDNS_CACHE_SIZE = maxCacheSize(HAS_512_MB, HAS_1_GB);
 
     /**
@@ -105,19 +111,27 @@ public class ReverseDnsLookup {
      */
     static final int CLEANUP_BITS = 10;
 
+    /** Mask counting the periodic cache cleanups. */
     private static final int CLEANUP_MASK = (1 << CLEANUP_BITS) - 1;
+    /** Lookups since the last cache cleanup. */
     private static int _rdnsCleanupCounter;
 
+    /** The router context. */
     private final RouterContext _context;
+    /** The GeoIP service the results feed. */
     private final GeoIP _geoIP;
 
     /** In-flight background lookups; guards against duplicate submissions. */
     private final Set<String> _pendingLookups = ConcurrentHashMap.newKeySet();
 
+    /** Pool running the lookups. */
     private ExecutorService _executor;
+    /** Lock for the lookup pool. */
     private final Object _executorLock = new Object();
 
+    /** Threads kept in the lookup pool. */
     private static volatile int _corePoolSize = 2;
+    /** Threads allowed in the lookup pool. */
     private static volatile int _maxPoolSize = 8;
 
     /**
@@ -133,6 +147,7 @@ public class ReverseDnsLookup {
     /** Flag set after the first normalize sweep to avoid re-processing every 15 minutes. */
     private static volatile boolean _normalizeSweepDone;
 
+    /** Timer writing the cache file. */
     private static Timer _rdnsTimer;
 
     /**
@@ -324,8 +339,9 @@ public class ReverseDnsLookup {
     }
 
     /**
-     * The computed maximum rDNS cache size based on available memory.
-     * @return the computed maximum rDNS cache size based on available memory
+     * The maximum rDNS cache size, computed from the memory available.
+     *
+     * @return the entries the cache holds
      * @since 0.9.71
      */
     public static int getMaxRdnsCacheSize() {
@@ -489,8 +505,11 @@ public class ReverseDnsLookup {
      * Cache entry for IP address and hostname mappings.
      */
     public static class CacheEntry {
+        /** The IP address looked up. */
         private final String ipAddress;
+        /** The host name found for it. */
         private final String hostname;
+        /** When the entry was cached, in ms. */
         private final long timestamp; // epoch millis when entry was cached
 
         /**
@@ -641,6 +660,7 @@ public class ReverseDnsLookup {
         return null;
     }
 
+    /** Writes the reverse DNS cache to disk. */
     private static synchronized void createRdnsCacheFile() {
         File cacheFile = new File(RDNS_CACHE_FILE);
         if (!cacheFile.exists()) {
@@ -654,6 +674,7 @@ public class ReverseDnsLookup {
         }
     }
 
+    /** Timer writing the cache file periodically. */
     private static class RDNSCacheFileWriter extends TimerTask {
         /**
          * Creates a writer task for flushing the cache to disk.
@@ -682,6 +703,7 @@ public class ReverseDnsLookup {
         }
     }
 
+    /** Drops the stale reverse DNS cache entries. */
     private static void cleanupRDNSCache() {
         long now = System.currentTimeMillis();
         int removed = 0;

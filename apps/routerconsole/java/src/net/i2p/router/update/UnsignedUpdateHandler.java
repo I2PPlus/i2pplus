@@ -23,7 +23,9 @@ import net.i2p.update.*;
  * </p>
  */
 class UnsignedUpdateHandler implements Checker, Updater {
+    /** The router context the handler runs in. */
     private final RouterContext _context;
+    /** The manager that installs the update. */
     private final ConsoleUpdateManager _mgr;
 
     /**

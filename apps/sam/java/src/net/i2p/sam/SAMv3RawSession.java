@@ -16,10 +16,15 @@ import net.i2p.data.DataHelper;
  */
 class SAMv3RawSession extends SAMRawSession implements Session, SAMRawReceiver {
 
+    /** Name the client gave this session. */
     private final String nick;
+    /** The handler that created this session. */
     private final SAMv3Handler handler;
+    /** The UDP server the session is registered with. */
     private final SAMv3DatagramServer server;
+    /** Where the client's datagrams come from. */
     private final SocketAddress clientAddress;
+    /** True to prefix replies with the destination's key. */
     private final boolean _sendHeader;
 
     /**

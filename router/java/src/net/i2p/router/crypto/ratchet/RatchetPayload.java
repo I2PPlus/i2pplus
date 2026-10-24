@@ -22,15 +22,24 @@ class RatchetPayload {
     /** Block header size in bytes. */
     public static final int BLOCK_HEADER_SIZE = 3;
 
+    /** Block type of the date and time. */
     private static final int BLOCK_DATETIME = 0;
 
+    /** Block type of the termination reason. */
     private static final int BLOCK_TERMINATION = 4;
+    /** Block type of the session options. */
     private static final int BLOCK_OPTIONS = 5;
+    /** Block type of the message number. */
     private static final int BLOCK_MSGNUM = 6;
+    /** Block type of the next ratchet key. */
     private static final int BLOCK_NEXTKEY = 7;
+    /** Block type of the ack. */
     private static final int BLOCK_ACK = 8;
+    /** Block type of the ack request. */
     private static final int BLOCK_ACKREQ = 9;
+    /** Block type of the garlic clove. */
     private static final int BLOCK_GARLIC = 11;
+    /** Block type of the padding. */
     private static final int BLOCK_PADDING = 254;
 
     /**
@@ -269,6 +278,7 @@ class RatchetPayload {
      * Not used for receive; we use callbacks instead.
      */
     public abstract static class Block {
+        /** Type of the block being read or written. */
         private final int type;
 
         /**
@@ -323,9 +333,9 @@ class RatchetPayload {
         public abstract int writeData(byte[] tgt, int off);
 
         /**
-         * Debug string with block type and length.
+         * A debug string naming the block type and length.
          *
-         * @return debug string with block type and length
+         * @return the debug text
          */
         @Override
         public String toString() {
@@ -337,6 +347,7 @@ class RatchetPayload {
      * Garlic clove block for embedding I2NP messages in ratchet payload.
      */
     public static class GarlicBlock extends Block {
+        /** The clove carried in the garlic block. */
         private GarlicClove c;
 
         /**
@@ -372,7 +383,9 @@ class RatchetPayload {
      * Padding block for ratchet payload size alignment and obfuscation.
      */
     public static class PaddingBlock extends Block {
+        /** Encoded size of the clove block. */
         private int sz;
+        /** The app context. */
         private final I2PAppContext ctx;
 
         /**
@@ -426,6 +439,7 @@ class RatchetPayload {
      * Timestamp block for ratchet payload synchronization and timing.
      */
     public static class DateTimeBlock extends Block {
+        /** The date and time sent in the payload. */
         private long now;
 
         /**
@@ -462,6 +476,7 @@ class RatchetPayload {
      * Options block for ratchet protocol configuration and negotiation.
      */
     public static class OptionsBlock extends Block {
+        /** The option flags sent in the payload. */
         private final byte[] opts;
 
         /**
@@ -488,6 +503,7 @@ class RatchetPayload {
      * Next session key block for ratchet key exchange operations.
      */
     public static class NextKeyBlock extends Block {
+        /** The next ratchet key sent in the payload. */
         private NextSessionKey next;
 
         /**
@@ -536,6 +552,7 @@ class RatchetPayload {
      * @since 0.9.46
      */
     public static class AckBlock extends Block {
+        /** The message number bytes sent in the payload. */
         private byte[] data;
         /**
          * Builds an ACK block for a single key ID and count.
@@ -620,6 +637,7 @@ class RatchetPayload {
      * Termination block for ratchet session closure with reason codes.
      */
     public static class TerminationBlock extends Block {
+        /** The termination reason sent in the payload. */
         private final byte rsn;
 
         /**
@@ -648,6 +666,7 @@ class RatchetPayload {
      * @since 0.9.46
      */
     public static class PNBlock extends Block {
+        /** The packet number being acked. */
         private final int pn;
         /**
          * Builds a packet number block.

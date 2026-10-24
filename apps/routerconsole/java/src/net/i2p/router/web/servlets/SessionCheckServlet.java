@@ -51,6 +51,11 @@ public class SessionCheckServlet extends HttpServlet {
         }
     }
 
+    /**
+     * True if any console password is configured.
+     *
+     * @return true if a password exists
+     */
     private boolean hasAnyPassword() {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         if (!(ctx instanceof RouterContext)) return false;
@@ -72,6 +77,12 @@ public class SessionCheckServlet extends HttpServlet {
         return false;
     }
 
+    /**
+     * The session cookie the request carries.
+     *
+     * @param req the request to read
+     * @return the cookie value, or null if absent
+     */
     private String getSessionCookie(HttpServletRequest req) {
         Cookie[] cookies = req.getCookies();
         if (cookies == null) return null;

@@ -23,7 +23,9 @@ import java.util.concurrent.atomic.AtomicLong;
  *
  */
 public class StatManager {
+    /** The context whose stats are managed. */
     private final I2PAppContext _context;
+    /** Logger for this class. */
     private final Log _log;
 
     /** Stat name to FrequencyStat. */
@@ -72,6 +74,7 @@ public class StatManager {
      */
     private static final long COALESCE_FAILURE_LOG_INTERVAL = 1000;
 
+    /** Writes since the stats files were last coalesced. */
     private int coalesceCounter;
 
     /** Frequency stats are coalesced every this many minutes. */

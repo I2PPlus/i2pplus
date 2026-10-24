@@ -81,10 +81,12 @@ import javax.security.auth.Destroyable;
  *
  */
 public class SigningPrivateKey extends SimpleDataStructure implements Destroyable {
+    /** Type assumed when a key gives none. */
     private static final SigType DEF_TYPE = SigType.DSA_SHA1;
     /** Default key size in bytes (20 for DSA-SHA1). */
     public static final int KEYSIZE_BYTES = DEF_TYPE.getPrivkeyLen();
 
+    /** The algorithm this key signs with. */
     private final SigType _type;
 
     /** Creates a new SigningPrivateKey with the default DSA-SHA1 type. */

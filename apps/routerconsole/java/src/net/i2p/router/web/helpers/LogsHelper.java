@@ -38,22 +38,37 @@ public class LogsHelper extends HelperBase {
      */
     public LogsHelper() {}
 
+    /** Matches the log level of a console line. */
     private static final Pattern LOG_LEVEL_PATTERN = Pattern.compile("\\|\\s*(DEBUG|INFO|WARN|ERROR|CRIT)\\s");
+    /** Matches the doubled brackets around a status icon. */
     private static final Pattern BRACKET_CLEANUP_PATTERN = Pattern.compile("\\[\\[(&#10004;|&#10008;)\\]\\]");
+    /** Matches a wrapped log line continuation. */
     private static final Pattern NEWLINE_STAR_PATTERN = Pattern.compile("\n(\\t)?\\* ");
+    /** Splits a log entry into its lines. */
     private static final Pattern NEWLINE_SPLIT = Pattern.compile("\n");
+    /** Splits a log entry on spaces. */
     private static final Pattern SPACE_SPLIT = Pattern.compile(" ");
+    /** Matches an update manager log line. */
     private static final Pattern LOG_HUTD = Pattern.compile("\\|.*\\[.*hutd.*\\].*?:");
+    /** Matches the date field of a log line. */
     private static final Pattern LOG_DATE = Pattern.compile("\\|.*\\[.*date.*\\].*?:");
+    /** Matches a connection log line. */
     private static final Pattern LOG_CONNECTION = Pattern.compile("\\|.*\\[.*-Connection].*?:");
+    /** Matches a restart log line. */
     private static final Pattern LOG_RESTART = Pattern.compile("\\|.*\\[.*Restart].*?:");
+    /** Matches a read error log line. */
     private static final Pattern LOG_READ = Pattern.compile("\\|.*\\[.*Read.*\\].*?:");
+    /** Matches a directory monitor log line. */
     private static final Pattern LOG_DIRMON = Pattern.compile("\\|.*\\[.*DirMon.*\\].*?:");
+    /** Matches a job queue log line. */
     private static final Pattern LOG_QUEUE = Pattern.compile("\\|.*\\[.*Queue.*\\].*?:");
     /** Anchor-stripping runs on every rendered line, so its patterns are hoisted. */
     private static final Pattern ANCHOR_ESCAPED = Pattern.compile("&lt;a[^&]*&gt;");
+    /** Matches an escaped closing anchor tag. */
     private static final Pattern ANCHOR_CLOSE_ESCAPED = Pattern.compile("&lt;/a&gt;");
+    /** Matches an opening anchor tag. */
     private static final Pattern ANCHOR = Pattern.compile("<a[^>]*>");
+    /** Matches a closing anchor tag. */
     private static final Pattern ANCHOR_CLOSE = Pattern.compile("</a>");
 
 /**
@@ -165,9 +180,13 @@ public class LogsHelper extends HelperBase {
      * @param context the context injected by the servlet container before any log call
      */
     public void setContext(RouterContext context) {this._context = context;}
+    /** Version of the JSTL library in use. */
     private static final String _jstlVersion = jstlVersion();
+    /** Log lines shown on the wrapper log page. */
     private static final int MAX_WRAPPER_LINES = 320;
+    /** Config key of the last wrapper entry shown. */
     private static final String PROP_LAST_WRAPPER = "routerconsole.lastWrapperLogEntry";
+    /** Buffer accumulating a log message. */
     private final StringBuilder _msgBuf = new StringBuilder(12*1024);
 
     /**
@@ -480,6 +499,7 @@ public class LogsHelper extends HelperBase {
         return "";
     }
 
+    /** The platform line separator. */
     private final static String NL = System.getProperty("line.separator");
 
 /**
@@ -643,6 +663,7 @@ public class LogsHelper extends HelperBase {
         }
     }
 
+    /** Bundle holding the core translated strings. */
     private static final String CORE_BUNDLE_NAME = "net.i2p.util.messages";
 
     /**

@@ -41,6 +41,7 @@ public class CreateLeaseSet2Message extends CreateLeaseSetMessage {
      * Format changed as of 0.9.39, changed type to 41.
      */
     public final static int MESSAGE_TYPE = 41;
+    /** The private keys, when the lease set is built from more than one. */
     private List<PrivateKey> _privateKeys; // only used if more than one key, otherwise null
     /**
      * CreateLeaseSet2Message.

@@ -17,10 +17,15 @@ import java.nio.charset.StandardCharsets;
  */
 public class IrcOutboundFilter implements Runnable {
 
+    /** The local IRC client's socket. */
     private final Socket local;
+    /** The I2P socket to the IRC server. */
     private final I2PSocket remote;
+    /** The PONG reply awaited from the client. */
     private final StringBuffer expectedPong;
+    /** Logger for this class. */
     private final Log _log;
+    /** Rewrites DCC lines for I2P addresses. */
     private final DCCHelper _dccHelper;
 
     /**

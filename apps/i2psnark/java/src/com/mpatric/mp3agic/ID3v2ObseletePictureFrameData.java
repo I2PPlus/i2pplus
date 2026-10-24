@@ -2,12 +2,27 @@ package com.mpatric.mp3agic;
 
 import java.io.UnsupportedEncodingException;
 
+/** A picture frame in the older APIC layout. */
 public class ID3v2ObseletePictureFrameData extends ID3v2PictureFrameData {
 
+    /**
+     * Starts an empty picture frame.
+     *
+     * @param unsynchronisation whether the frame is unsynchronised
+     */
     public ID3v2ObseletePictureFrameData(boolean unsynchronisation) {
         super(unsynchronisation);
     }
 
+    /**
+     * Makes a picture frame from its parts.
+     *
+     * @param unsynchronisation whether the frame is unsynchronised
+     * @param mimeType the image type, e.g. image/png
+     * @param pictureType what the picture shows, per the ID3 spec
+     * @param description a short caption, may be null
+     * @param imageData the image itself
+     */
     public ID3v2ObseletePictureFrameData(
             boolean unsynchronisation,
             String mimeType,
@@ -17,6 +32,13 @@ public class ID3v2ObseletePictureFrameData extends ID3v2PictureFrameData {
         super(unsynchronisation, mimeType, pictureType, description, imageData);
     }
 
+    /**
+     * Reads a picture frame from the bytes of a tag.
+     *
+     * @param unsynchronisation whether the frame is unsynchronised
+     * @param bytes the frame's bytes
+     * @throws InvalidDataException if the bytes are not a valid frame
+     */
     public ID3v2ObseletePictureFrameData(boolean unsynchronisation, byte[] bytes)
             throws InvalidDataException {
         super(unsynchronisation, bytes);

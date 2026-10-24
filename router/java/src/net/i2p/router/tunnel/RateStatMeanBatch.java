@@ -44,8 +44,11 @@ import net.i2p.router.RouterContext;
  */
 class RateStatMeanBatch {
 
+    /** Sum of the values recorded. */
     private final LongAdder _valueSum = new LongAdder();
+    /** Sum of the durations recorded, in ms. */
     private final LongAdder _durationSum = new LongAdder();
+    /** How many values were recorded. */
     private final LongAdder _count = new LongAdder();
 
     /** Start with no pending samples. */

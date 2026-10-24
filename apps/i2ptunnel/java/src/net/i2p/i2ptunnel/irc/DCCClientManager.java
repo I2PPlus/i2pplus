@@ -27,10 +27,15 @@ import net.i2p.util.Log;
  * @since 0.8.9
  */
 public class DCCClientManager extends EventReceiver {
+    /** Opens the DCC tunnels. */
     private final I2PSocketManager sockMgr;
+    /** Dispatches the events the DCC clients raise. */
     private final EventDispatcher _dispatch;
+    /** Sends status lines to the IRC client. */
     private final Logging l;
+    /** The IRC tunnel being served. */
     private final I2PTunnel _tunnel;
+    /** Logger for this class. */
     private final Log _log;
 
     /** Key is the DCC client's local port. */
@@ -40,10 +45,12 @@ public class DCCClientManager extends EventReceiver {
     /** Key is the DCC client's local port. */
     private final ConcurrentHashMap<Integer, I2PTunnelDCCClient> _complete;
 
-    // list of client tunnels?
+    /** Counter for generating unique DCC session ids. */
     private static long id;
 
+    /** Most inbound DCC tunnels waiting to be accepted. */
     private static final int MAX_INCOMING_PENDING = 10;
+    /** Most inbound DCC tunnels running at once. */
     private static final int MAX_INCOMING_ACTIVE = 10;
     /**
      * Create a new manager for DCC client tunnels.

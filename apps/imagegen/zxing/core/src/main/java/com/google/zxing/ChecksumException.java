@@ -23,15 +23,22 @@ package com.google.zxing;
  */
 public final class ChecksumException extends ReaderException {
 
+  /** Shared instance, as the exception carries no message. */
   private static final ChecksumException INSTANCE = new ChecksumException();
   static {
     INSTANCE.setStackTrace(NO_TRACE); // since it's meaningless
   }
 
+  /** Creates the shared instance. */
   private ChecksumException() {
     // do nothing
   }
 
+  /**
+   * Records what went wrong.
+   *
+   * @param cause the underlying failure
+   */
   private ChecksumException(Throwable cause) {
     super(cause);
   }

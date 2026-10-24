@@ -25,11 +25,17 @@ import net.i2p.util.SimpleTimer2;
  */
 class DHTNodes {
 
+    /** The app context. */
     private final I2PAppContext _context;
+    /** Age after which a cached node expires. */
     private long _expireTime;
+    /** Logger for the DHT node cache. */
     private final Log _log;
+    /** The known nodes, by node id. */
     private final ConcurrentHashMap<NID, NodeInfo> _nodeMap;
+    /** The Kademlia buckets of the known nodes. */
     private final KBucketSet<NID> _kad;
+    /** True while the node cache runs. */
     private volatile boolean _isRunning;
 
     /** Stagger with other cleaners. */
@@ -37,13 +43,18 @@ class DHTNodes {
 
     /** How long since last heard before deletion; BEP 5 says 15 minutes. */
     private static final long MAX_EXPIRE_TIME = 60 * (long) 60 * 1000;
+    /** Shortest time before a node expires. */
     private static final long MIN_EXPIRE_TIME = 30 * (long) 60 * 1000;
+    /** Step adjusting the expire time by node count. */
     private static final long DELTA_EXPIRE_TIME = 6 * (long) 60 * 1000;
+    /** Most nodes stored at once. */
     private static final int MAX_PEERS = 1000;
 
     /** Buckets older than this are refreshed - BEP 5 says 15 minutes. */
     private static final long MAX_BUCKET_AGE = 15 * (long) 60 * 1000;
+    /** Nodes per Kademlia bucket. */
     private static final int KAD_K = 20;
+    /** Extra Kademlia buckets beyond the bucket size. */
     private static final int KAD_B = 1;
 
     /**
@@ -72,7 +83,6 @@ class DHTNodes {
         _isRunning = false;
     }
 
-    // begin ConcurrentHashMap methods
 
     /**
      * Number of known nodes, not total net size.
@@ -135,7 +145,6 @@ class DHTNodes {
         return _nodeMap.values();
     }
 
-    // end ConcurrentHashMap methods
 
     /**
      * Find the closest nodes to a given hash or node ID.
@@ -175,8 +184,10 @@ class DHTNodes {
         buf.append(_kad.toString().replace("\n", "<br>\n"));
     }
 
+    /** Timer event expiring the cached nodes. */
     private class Cleaner extends SimpleTimer2.TimedEvent {
 
+        /** Builds the cleaner timer event. */
         public Cleaner() {
             super(SimpleTimer2.getInstance(), 5 * CLEAN_TIME);
         }

@@ -27,10 +27,15 @@ import java.util.Map;
  */
 public class HostTxtEntry {
 
+    /** The subscription's name. */
     private final String name;
+    /** The destination, as text. */
     private final String dest;
+    /** Timing and other properties of the entry. */
     private final OrderedProperties props;
+    /** True once the entry has been checked. */
     private boolean isValidated;
+    /** False if the line was malformed. */
     private boolean isValid;
 
     /** Separator between name and destination in the hosts.txt line. */

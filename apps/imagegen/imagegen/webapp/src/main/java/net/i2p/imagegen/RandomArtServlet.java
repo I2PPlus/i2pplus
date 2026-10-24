@@ -23,9 +23,13 @@ public class RandomArtServlet extends HttpServlet {
      */
     public RandomArtServlet() {}
 
+    /** Pinned for serialized-form compatibility. */
     private static final long serialVersionUID = -3507466186902317988L;
+    /** Request parameter naming the identicon code. */
     private static final String PARAM_IDENTICON_CODE_SHORT = "c";
+    /** Request parameter naming the identicon mode. */
     private static final String PARAM_IDENTICON_MODE_SHORT = "m";
+    /** How long a generated identicon may be cached - 24 hours. */
     private static final long DEFAULT_IDENTICON_EXPIRES_IN_MILLIS = 24 * 60 * (long) 60 * 1000;
     /** Bumped when the rendered output format changes. */
     private int version = 1;

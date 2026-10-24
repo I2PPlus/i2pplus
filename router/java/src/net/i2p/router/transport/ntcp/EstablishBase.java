@@ -38,12 +38,10 @@ abstract class EstablishBase implements EstablishState {
      */
     protected final Log _log;
 
-    // bob receives (and alice sends)
     /**
      * Key block Bob receives and Alice sends, doubled as padding on inbound handshakes.
      */
     protected final byte[] _X;
-    // alice receives (and bob sends)
     /**
      * Key block Alice receives and Bob sends, null on outbound handshakes.
      */
@@ -82,7 +80,9 @@ abstract class EstablishBase implements EstablishState {
      * Current handshake state, replaced under the state lock.
      */
     protected volatile State _state;
+    /** Set when the handshake has failed for good. */
     private final AtomicBoolean _isCorrupt = new AtomicBoolean();
+    /** Set when the handshake has finished. */
     private final AtomicBoolean _isComplete = new AtomicBoolean();
     /**
      * Why the handshake failed, or null while it is still viable.
@@ -152,6 +152,7 @@ abstract class EstablishBase implements EstablishState {
      */
     protected static final Set<State> STATES_DONE = EnumSet.of(State.VERIFIED, State.CORRUPT);
 
+    /** Creates the instance used only for its constants, with no context. */
     private EstablishBase() {
         _context = null;
         _log = null;
@@ -490,10 +491,10 @@ protected void changeState(State state) {
     }
 
     /**
-     * i18n marker function, returns the string unchanged.
+     * Marker function for i18n, returns the string unchanged.
      *
      * @param s the string to mark for translation
-     * @return s, unchanged
+     * @return the same string passed in
      */
     protected static final String _x(String s) { // NOSONAR S1845 i18n marker convention
         return s;

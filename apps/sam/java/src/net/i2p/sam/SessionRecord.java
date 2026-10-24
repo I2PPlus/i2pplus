@@ -19,10 +19,15 @@ import java.util.Properties;
  * @since 0.9.25 moved from {@link SAMv3Handler}
  */
 class SessionRecord {
+	/** The session's destination. */
 	private final String m_dest;
+	/** Options the session was opened with. */
 	private final Properties m_props;
+	/** Threads reading and writing for the session. */
 	private final List<Thread> m_threads = new ArrayList<Thread>();
+	/** The handler serving the session's commands. */
 	private final SAMv3Handler m_handler;
+	/** When the session was last used, in ms. */
 	private volatile long _lastAccessed; // NOSONAR volatile is correct: assigned and read as a timestamp, not read-modify-written
 
 	/**

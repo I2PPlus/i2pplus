@@ -67,24 +67,36 @@ import java.nio.charset.StandardCharsets;
  * @since 0.9.4 moved from NewsFetcher and make an Updater
  */
 class NewsFetcher extends UpdateRunner {
+    /** Last-Modified header of the news file on disk. */
     private String _lastModified;
+    /** Last-Modified time of the fetched news. */
     private long _newLastModified;
+    /** The local news file. */
     private final File _newsFile;
+    /** Temp file for the news being fetched. */
     private final File _tempFile;
+    /** Time allowed for the fetch, in ms. */
     private final long _timeout;
+    /** True to log the fetch progress. */
     private final boolean _showStatus;
+    /** Message shown when the fetch fails. */
     private String _failMsg;
     /** Is the news newer. */
     private boolean _isNewer;
+    /** True when the fetch succeeded. */
     private boolean _success;
     /** Did we get a new news entry. */
     private boolean _gotNewEntry;
 
+    /** Name of the temp news file. */
     private static final String TEMP_NEWS_FILE = "news.xml.temp";
     /** Property: current blocklist version. */
     static final String PROP_BLOCKLIST_TIME = "router.blocklistVersion";
+    /** Docs subdirectory holding the blocklist. */
     private static final String BLOCKLIST_DIR = "docs/feed/blocklist";
+    /** Name of the blocklist file. */
     private static final String BLOCKLIST_FILE = "blocklist.txt";
+    /** Default fetch timeout, in ms. */
     private static final long DEFAULT_TIMEOUT = (long) 60*1000;
 
     /**
@@ -251,24 +263,29 @@ class NewsFetcher extends UpdateRunner {
         return !lang.equals(old);
     }
 
-    // Fake XML parsing
-    // Line must contain this, and full entry must be on one line
+    /** Start of the release element in the feed. */
     private static final String VERSION_PREFIX = "<i2p.release ";
-    // all keys mapped to lower case by parseArgs()
+    /** Feed key of the latest version. */
     private static final String VERSION_KEY = "version";
-    // you have to be at least this version to update to the new version
+    /** Feed key of the minimum version required. */
     private static final String MIN_VERSION_KEY = "minversion";
+    /** Feed key of the minimum Java version. */
     private static final String MIN_JAVA_VERSION_KEY = "minjavaversion";
+    /** Feed key of the SU3 torrent source. */
     private static final String SU3_KEY = "su3torrent";
+    /** Feed key of the clearnet HTTP SU3 source. */
     private static final String CLEARNET_HTTP_SU3_KEY = "su3clearnet";
+    /** Feed key of the clearnet HTTPS SU3 source. */
     private static final String CLEARNET_HTTPS_SU3_KEY = "su3ssl";
 
-    /*  @since 0.9.59+ */
+    /** Config key enabling torrent updates. */
     private static final String PROP_ENABLE_TORRENT_UPDATES = "router.enableTorrentUpdates";
+    /** Default setting for torrent updates. */
     private static final boolean DEFAULT_ENABLE_TORRENT_UPDATES = false;
 
-    /*  @since 0.9.64+ */
+    /** Config key enabling vanilla updates. */
     private static final String PROP_ENABLE_VANILLA_UPDATES = "router.enableVanillaUpdates";
+    /** Default setting for vanilla updates. */
     private static final boolean DEFAULT_ENABLE_VANILLA_UPDATES = false;
 
     /** SU3 key for I2P @since 0.9.52. */
@@ -431,6 +448,12 @@ class NewsFetcher extends UpdateRunner {
         return rv;
     }
 
+    /**
+     * Splits a space separated URL list.
+     *
+     * @param urls the URL list from the feed
+     * @return the URIs parsed
+     */
     private static List<URI> tokenize(String urls) {
         StringTokenizer tok = new StringTokenizer(urls, " ,\r\n");
         List<URI> rv = new ArrayList<>();

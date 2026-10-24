@@ -97,6 +97,11 @@ public class HostInterface {
         return ifAddress;
     }
 
+    /**
+     * True if the host has an interface worth using.
+     *
+     * @return true if an address was assigned
+     */
     private static final boolean hasAssignedInterface() {
         return (0 < ifAddress.length()) ? true : false;
     }
@@ -105,8 +110,14 @@ public class HostInterface {
     //	Network Interfaces
     ////////////////////////////////////////////////
 
-    // Thanks for Theo Beisch (10/27/04)
 
+    /**
+     * Whether the address is usable for a network interface,
+     * loopbacks only when they are enabled.
+     *
+     * @param addr the address to check
+     * @return true if the address may be used
+     */
     private static final boolean isUsableAddress(InetAddress addr) {
         if (USE_LOOPBACK_ADDR == false) {
             if (addr.isLoopbackAddress() == true) return false;

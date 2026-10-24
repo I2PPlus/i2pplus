@@ -85,14 +85,23 @@ import java.nio.charset.StandardCharsets;
  * @since 0.1.0
  */
 public class I2PSnarkUtil implements DisconnectListener {
+    /** The app context. */
     private final I2PAppContext _context;
+    /** Logger for the webapp's operations. */
     private final Log _log;
+    /** Webapp name used in config keys. */
     private final String _baseName;
+    /** Whether downloads go through the proxy. */
     private boolean _shouldProxy;
+    /** Host of the outproxy or proxy. */
     private String _proxyHost;
+    /** Port of the outproxy or proxy. */
     private int _proxyPort;
+    /** Host of the I2CP router. */
     private String _i2cpHost;
+    /** Port of the I2CP router. */
     private int _i2cpPort;
+    /** Extra I2CP session options from the config. */
     private final Map<String, String> _opts;
     /**
      * The shared session. Cleared by {@link #disconnect} and {@link #sessionDisconnected},
@@ -101,38 +110,67 @@ public class I2PSnarkUtil implements DisconnectListener {
      * still see null on the second read. Read it once into a local and use the local.
      */
     private volatile I2PSocketManager _manager;
+    /** Whether a session connection is in progress. */
     private volatile boolean _connecting;
+    /** Peers banned for bad data. */
     private final Set<Hash> _banlist;
+    /** Maximum uploaders per torrent. */
     private int _maxUploaders;
+    /** Maximum upload bandwidth in KBps. */
     private int _maxUpBW;
+    /** Maximum connections per torrent. */
     private int _maxConnections;
     /** Discard-ratio auto-ban toggle, set by {@link SnarkManager} from config. */
     private volatile boolean _banDiscardRatio;
     /** Discard-ratio auto-ban period in ms, set by SnarkManager from config. */
     private volatile long _banDiscardPeriod;
+    /** Directory for temp and torrent files. */
     private final File _tmpDir;
+    /** Shortest delay before starting a torrent. */
     private int _startupDelayMin;
+    /** Longest delay before starting a torrent. */
     private int _startupDelayMax;
+    /** Whether the console panels start collapsed. */
     private boolean _collapsePanels;
+    /** Whether the status filter row is shown. */
     private boolean _showStatusFilter;
+    /** Whether the lightbox image viewer is on. */
     private boolean _enableLightbox;
+    /** Whether the add and create tabs are shown. */
     private boolean _enableAddCreate;
+    /** Whether open trackers are used. */
     private boolean _shouldUseOT;
+    /** Whether the DHT is used. */
     private boolean _shouldUseDHT;
+    /** Whether torrent ratings are enabled. */
     private boolean _enableRatings;
+    /** Whether torrent comments are enabled. */
     private boolean _enableComments;
+    /** Name used when posting comments. */
     private String _commentsName;
+    /** Whether downloaded files are served publicly. */
     private boolean _areFilesPublic;
+    /** Whether files are preallocated on add. */
     private boolean _shouldPreallocateFiles = true;
+    /** Whether the torrent's file names are kept as-is. */
     private boolean _preserveFileNames;
+    /** Whether files are padded against size analysis. */
     private boolean _shouldPadFiles = false;
+    /** Configured temp directory path. */
     private String _tempDirProp;
+    /** Whether inbound hop counts vary per torrent. */
     private boolean _varyInboundHops;
+    /** Whether outbound hop counts vary per torrent. */
     private boolean _varyOutboundHops;
+    /** The open tracker URLs. */
     private List<String> _openTrackers;
+    /** The DHT instance for peer discovery. */
     private DHT _dht;
+    /** Whether UDP trackers are enabled. */
     private boolean _enableUDP = ENABLE_UDP_TRACKER;
+    /** The UDP tracker client, when enabled. */
     private UDPTrackerClient _udpTracker;
+    /** Whether each torrent gets its own destination. */
     private boolean _multiDest;
     /** Maximum shared destinations in multi-dest mode, 0 for one per torrent. */
     private int _maxDest = SnarkManager.DEFAULT_MULTI_DEST_MAX;
@@ -161,13 +199,21 @@ public class I2PSnarkUtil implements DisconnectListener {
             new ConcurrentHashMap<String, ClientID.Profile>();
     /** Sequential pool number for the tunnel nickname, one per pool destination created. */
     private int _nextPoolNum;
+    /** Per-torrent destinations by info hash. */
     private final Map<String, TorrentDest> _torrentDests = new ConcurrentHashMap<>();
+    /** When the webapp started. */
     private long _startedTime;
+    /** Listener for session disconnects. */
     private final DisconnectListener _discon;
+    /** Maximum files allowed per torrent. */
     private int _maxFilesPerTorrent = SnarkManager.DEFAULT_MAX_FILES_PER_TORRENT;
+    /** Target address for API requests. */
     private String _apiTarget;
+    /** API key for remote control requests. */
     private String _apiKey;
+    /** The connect timeout for downloads is 75 seconds. */
     private static final int EEPGET_CONNECT_TIMEOUT = 75 * 1000;
+    /** The short connect timeout for quick fetches is 30 seconds. */
     private static final int EEPGET_CONNECT_TIMEOUT_SHORT = 30 * 1000;
     /** Default for the collapsible page panels: start them collapsed. */
     public static final boolean DEFAULT_COLLAPSE_PANELS = true;
@@ -210,7 +256,9 @@ public class I2PSnarkUtil implements DisconnectListener {
      * @since 0.9.71+
      */
     public static final String PROP_CLIENT_IDS = "i2psnark.clientIds";
+    /** Whether UDP tracker support is built in. */
     private static final boolean ENABLE_UDP_TRACKER = true;
+    /** The I2CP options not shown on the config page. */
     private static final List<String> HIDDEN_I2CP_OPTS =
             Arrays.asList(
                     new String[] {
@@ -927,7 +975,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     /**
      * Whether each torrent runs on its own destination.
      *
-     * @return whether each torrent runs on its own destination
+     * @return true if each torrent has its own destination
      * @since 0.9.71+
      */
     public boolean getMultiDest() {
@@ -1162,6 +1210,7 @@ public class I2PSnarkUtil implements DisconnectListener {
         return "I2PSnark - " + nick;
     }
 
+    /** Longest torrent name accepted. */
     private static final int MAX_NAME_LENGTH = 64;
 
     /** Parenthesized and bracketed segments, e.g. "(2026)", "[WEBRip]". */
@@ -1474,7 +1523,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     /**
      * The main DHT instance, or null if disabled.
      *
-     * @return the main DHT instance, or null if disabled
+     * @return the instance when the DHT is a KRPC, else null
      */
     private KRPC getKRPC() {
         if (_dht instanceof KRPC) {
@@ -1690,9 +1739,16 @@ public class I2PSnarkUtil implements DisconnectListener {
         }
     }
 
+    /** Unbans a peer after a delay. */
     private class Unbanlist extends SimpleTimer2.TimedEvent {
+        /** The peer to unban. */
         private Hash _dest;
 
+        /**
+         * Prepares to unban a peer later.
+         *
+         * @param dest the peer to unban
+         */
         public Unbanlist(Hash dest) {
             _dest = dest;
         }
@@ -2045,6 +2101,7 @@ public class I2PSnarkUtil implements DisconnectListener {
         }
     }
 
+    /** Length of a base32 hash without the suffix. */
     private static final int BASE32_HASH_LENGTH = 52; // 1 + Hash.HASH_LENGTH * 8 / 5
 
     /**
@@ -2542,6 +2599,7 @@ public class I2PSnarkUtil implements DisconnectListener {
         catch (NumberFormatException nfe) {return dflt;}
     }
 
+    /** Bundle holding the webapp's translated strings. */
     private static final String BUNDLE_NAME = "org.klomp.snark.web.messages";
 
     /**
@@ -2597,9 +2655,12 @@ public class I2PSnarkUtil implements DisconnectListener {
         return Translate.getString(n, s, p, _context, BUNDLE_NAME);
     }
 
+    /** True to sync data to disk, off on android and arm. */
     private static final boolean SHOULD_SYNC =
             !(SystemVersion.isAndroid() || SystemVersion.isARM());
+    /** Characters not allowed in a config key. */
     private static final Pattern ILLEGAL_KEY = Pattern.compile("[#=\\r\\n;]");
+    /** Characters not allowed in a config value. */
     private static final Pattern ILLEGAL_VALUE = Pattern.compile("[\\r\\n]");
 
     /**

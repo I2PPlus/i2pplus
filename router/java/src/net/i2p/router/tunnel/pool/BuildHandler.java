@@ -57,18 +57,31 @@ import net.i2p.util.VersionComparator;
  * including sending responses and updating tunnel lists.
  */
 public class BuildHandler implements Runnable {
+    /** The router running these tunnels. */
     private final RouterContext _context;
+    /** Logger for this class. */
     private final Log _log;
+    /** The tunnel pools the built tunnels join. */
     private final TunnelPoolManager _manager;
+    /** Executor running the build requests. */
     private final BuildExecutor _exec;
+    /** Job handling inbound build requests. */
     private final Job _buildMessageHandlerJob;
+    /** Job handling inbound build replies. */
     private final Job _buildReplyMessageHandlerJob;
+    /** Queue of received build messages. */
     private final BlockingQueue<BuildMessageState> _inboundBuildMessages;
+    /** Thread draining that queue. */
     private final BuildMessageProcessor _processor;
+    /** Throttles inbound build requests under load. */
     private final RequestThrottler _requestThrottler;
+    /** Throttles transit participation under load. */
     private final ParticipatingThrottler _throttler;
+    /** Matches build replies to the requests they answer. */
     private final BuildReplyHandler _buildReplyHandler;
+    /** Monitor expiring idle tunnels. */
     private final IdleTunnelMonitor _idleTunnelMonitor;
+    /** Logger for peers banned by build handling. */
     private final BanLogger _banLogger;
     /**
      * Distinct next-hop keys currently being resolved, each carrying the
@@ -80,16 +93,34 @@ public class BuildHandler implements Runnable {
     private final ConcurrentHashMap<Hash, AtomicInteger> _lookupKeys = new ConcurrentHashMap<>(32);
     /** FIFO of deferred lookups waiting for a concurrent-lookup slot. */
     private final ConcurrentLinkedDeque<PendingLookup> _pendingLookups = new ConcurrentLinkedDeque<>();
+    /** True while the handler is running. */
     private volatile boolean _isRunning;
+    /** Lock serializing handler startup. */
     private final Object _startupLock = new Object();
+    /** Which exploratory tunnels exist, if any. */
     private ExplState _explState = ExplState.NONE; // NOSONAR S1170
+    /** Oldest peer version that honors capacity flags. */
     private final String _minVersionHonorCaps = "0.9.58";
+    /** Property turning the transit throttle on or off. */
     private static final String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
-    private enum ExplState {NONE, IB, OB, BOTH}
+    /** Which of the exploratory tunnels are up. */
+    private enum ExplState {
+        /** Neither exploratory tunnel is up. */
+        NONE,
+        /** Only the inbound exploratory tunnel is up. */
+        IB,
+        /** Only the outbound exploratory tunnel is up. */
+        OB,
+        /** Both exploratory tunnels are up. */
+        BOTH}
+    /** True on a machine too slow for the default queue size. */
     private static final boolean IS_SLOW = SystemVersion.isSlow();
     // TODO these may be too high, review and adjust
+    /** Most build messages queued before dropping. */
     private static volatile int _maxQueue = IS_SLOW ? 64 : 512;
+    /** Property overriding the build queue cap. */
     private static final String PROP_MAX_QUEUE = "router.buildHandlerMaxQueue";
+    /** Budget for a next-hop lookup, in ms. */
     private static final int NEXT_HOP_LOOKUP_TIMEOUT = 5*1000;
     /**
      * Extra RI lookup attempts allowed after a next-hop lookup times out.
@@ -101,6 +132,7 @@ public class BuildHandler implements Runnable {
      * @since 0.9.71+
      */
     static final int MAX_NEXT_HOP_LOOKUP_RETRIES = 1;
+    /** Message priority for build replies. */
     private static final int PRIORITY = OutNetMessage.PRIORITY_BUILD_REPLY;
     /**
      * Concurrent next-hop search ceiling. Deliberately NOT cores-scaled:
@@ -128,18 +160,31 @@ public class BuildHandler implements Runnable {
      */
     private static final long STARTUP_LOOKUP_BOOST_MS = 30 * 60 * 1000L;
 
+    /** The context the cached config values belong to. */
     private static volatile RouterContext _cfgCtx;
+    /** Time the cached config values were last read. */
     private static volatile long _cfgRefreshed;
+    /** Cached next-hop lookup timeout, in ms. */
     private static volatile int _cachedNextHopLookupTimeout;
+    /** Cached floor for concurrent RI lookups. */
     private static volatile int _cachedMinLookupLimit;
+    /** Cached cap for concurrent RI lookups. */
     private static volatile int _cachedMaxLookupLimit;
+    /** Cached next-hop lookup share, in percent. */
     private static volatile int _cachedPercentLookupLimit;
+    /** Cached cap on pending next-hop lookups. */
     private static volatile int _cachedMaxPendingLookups;
+    /** Cached future clock skew a request may show, in ms. */
     private static volatile long _cachedMaxRequestFuture;
+    /** Cached oldest accepted build request age, in ms. */
     private static volatile long _cachedMaxRequestAge;
+    /** Same for ECIES-encrypted requests, in ms. */
     private static volatile long _cachedMaxRequestAgeEcies;
+    /** Cached job lag past which requests are dropped, in ms. */
     private static volatile long _cachedJobLagLimitTunnel;
+    /** Cached cap on tunnels offered for transit. */
     private static volatile int _cachedMaxParticipatingTunnels;
+    /** Age past which the cached config is re-read. */
     private static final long CONFIG_REFRESH_MS = 30 * 1000L;
 
     /**
@@ -148,7 +193,9 @@ public class BuildHandler implements Runnable {
      * @since 0.9.71+
      */
     private static volatile int _tunedNextHopLookupTimeout = -1;
+    /** Tuner-set lookup cap, -1 when untuned. */
     private static volatile int _tunedMaxLookupLimit = -1;
+    /** Tuner-set lookup share, -1 when untuned. */
     private static volatile int _tunedPercentLookupLimit = -1;
 
     /**
@@ -231,6 +278,12 @@ public class BuildHandler implements Runnable {
         _cfgRefreshed = now;
     }
 
+    /**
+     * Gives the floor for concurrent RI lookups.
+     *
+     * @param ctx the router being configured
+     * @return the floor for concurrent RouterInfo lookups
+     */
     private static int getMinLookupLimit(RouterContext ctx) {
         refreshBuildConfig(ctx);
         return _cachedMinLookupLimit;
@@ -422,19 +475,43 @@ public class BuildHandler implements Runnable {
         long rv = requestTimeoutMs - nextHopLookupTimeoutMs;
         return rv > 0 ? rv : Math.max(2 * nextHopLookupTimeoutMs, 1);
     }
+    /**
+     * Gives the future clock skew a request may show.
+     *
+     * @param ctx the router being configured
+     * @return the skew, in ms
+     */
     private static long getMaxRequestFuture(RouterContext ctx) {
         refreshBuildConfig(ctx);
         return _cachedMaxRequestFuture;
     }
+    /**
+     * Gives the oldest accepted build request age.
+     *
+     * @param ctx the router being configured
+     * @return the age, in ms
+     */
     private static long getMaxRequestAge(RouterContext ctx) {
         refreshBuildConfig(ctx);
         return _cachedMaxRequestAge;
     }
+    /**
+     * Same age limit for ECIES-encrypted requests.
+     *
+     * @param ctx the router being configured
+     * @return the age, in ms
+     */
     private static long getMaxRequestAgeEcies(RouterContext ctx) {
         refreshBuildConfig(ctx);
         return _cachedMaxRequestAgeEcies;
     }
 
+    /**
+     * Gives the job lag past which tunnel requests are dropped.
+     *
+     * @param ctx the router being configured
+     * @return the lag, in ms
+     */
     private static long getJobLagLimitTunnel(RouterContext ctx) {
         refreshBuildConfig(ctx);
         return _cachedJobLagLimitTunnel;
@@ -451,8 +528,15 @@ public class BuildHandler implements Runnable {
         refreshBuildConfig(ctx);
         return _cachedMaxParticipatingTunnels;
     }
+    /** Rate periods shown in the throttle stats. */
     private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
 
+    /**
+     * Formats a rate for the stats display.
+     *
+     * @param bps the rate, in bytes per second
+     * @return the text to show
+     */
     private static String formatBandwidth(int bps) {
         if (bps >= 1000000000) {
             return String.format("%.2fGB/s", bps / 1000000000.0);
@@ -643,7 +727,9 @@ public class BuildHandler implements Runnable {
      * the log is needed for something else.
      */
     private static final long BAN_DROP_WARN_INTERVAL_MS = 60_000L;
+    /** Time of the last ban-on-drop warning. */
     private volatile long _lastBanDropWarn;
+    /** Drops counted since that warning. */
     private volatile int _banDropsSinceWarn;
 
     /**
@@ -1091,13 +1177,28 @@ public class BuildHandler implements Runnable {
         handleReply(msg, state.cfg, System.currentTimeMillis() - state.recvTime);
     }
 
+    /** Job that forwards one build request after its lookup. */
     private class HandleReq extends JobImpl {
+        /** The build message being handled. */
         private final BuildMessageState _state;
+        /** The record of the request being answered. */
         private final BuildRequestRecord _req;
+        /** The next hop the lookup found. */
         private final Hash _nextPeer;
+        /** Guard so the pending count drops only once. */
         private final AtomicBoolean _decremented;
+        /** Time the next-hop lookup began. */
         private final long lookupStartTime;
 
+        /**
+         * Prepares to forward one build request.
+         *
+         * @param ctx the router doing the forwarding
+         * @param state the build message to handle
+         * @param req the record of the request
+         * @param nextPeer the next hop found
+         * @param decremented guard so the pending count drops once
+         */
         HandleReq(RouterContext ctx, BuildMessageState state, BuildRequestRecord req, Hash nextPeer, AtomicBoolean decremented) {
             super(ctx);
             _state = state;
@@ -1156,13 +1257,29 @@ public class BuildHandler implements Runnable {
         }
     }
 
+    /** Job that times out one unanswered build request. */
     private class TimeoutReq extends JobImpl {
+        /** The build message being timed out. */
         private final BuildMessageState _state;
+        /** The record of the request being timed out. */
         private final BuildRequestRecord _req;
+        /** The next hop that never answered. */
         private final Hash _nextPeer;
+        /** Guard so the pending count drops only once. */
         private final AtomicBoolean _decremented;
+        /** Retries still allowed for this request. */
         private final int _retriesLeft;
 
+        /**
+         * Prepares to time out one build request.
+         *
+         * @param ctx the router doing the timing out
+         * @param state the build message to time out
+         * @param req the record of the request
+         * @param nextPeer the next hop that never answered
+         * @param decremented guard so the pending count drops once
+         * @param retriesLeft retries still allowed
+         */
         TimeoutReq(RouterContext ctx, BuildMessageState state, BuildRequestRecord req, Hash nextPeer,
                    AtomicBoolean decremented, int retriesLeft) {
             super(ctx);
@@ -1263,11 +1380,22 @@ public class BuildHandler implements Runnable {
      * @since 0.9.70+
      */
     private static class PendingLookup {
+        /** The message waiting on a next-hop lookup. */
         final BuildMessageState state;
+        /** The record of the waiting request. */
         final BuildRequestRecord req;
+        /** The next hop found for it. */
         final Hash nextPeer;
+        /** Time the lookup was queued. */
         final long queuedTime;
 
+        /**
+         * Records a request waiting on a next-hop lookup.
+         *
+         * @param state the waiting message
+         * @param req the record of the request
+         * @param nextPeer the hop found
+         */
         PendingLookup(BuildMessageState state, BuildRequestRecord req, Hash nextPeer) {
             this.state = state;
             this.req = req;
@@ -1778,6 +1906,9 @@ public class BuildHandler implements Runnable {
      * but could also be the reply where we are the IBEP.
      */
     private class TunnelBuildMessageHandlerJobBuilder implements HandlerJobBuilder {
+        /** Builds the job that handles a build request. */
+        private TunnelBuildMessageHandlerJobBuilder() {}
+
         /**
          * Either from or fromHash may be null, but both should be null only if
          * we're to be a IBGW and it came from us as a OBEP.
@@ -1846,10 +1977,13 @@ public class BuildHandler implements Runnable {
         }
     }
 
+    /** Builds the job that handles one inbound build reply. */
     private class TunnelBuildReplyMessageHandlerJobBuilder implements HandlerJobBuilder {
         /**
          * Queue the reply message state and return the handler job.
          */
+        /** Builds the job that handles a build reply. */
+        private TunnelBuildReplyMessageHandlerJobBuilder() {}
         @Override
         public Job createJob(I2NPMessage receivedMessage, RouterIdentity from, Hash fromHash) {
             if (_log.shouldDebug()) {
@@ -1871,11 +2005,17 @@ public class BuildHandler implements Runnable {
 
     /** Normal inbound requests from other people. */
     private static class BuildMessageState implements CDQEntry {
+        /** The router receiving the message. */
         private final RouterContext _ctx;
+        /** The received build message. */
         final TunnelBuildMessage msg;
+        /** The sender's identity. */
         final RouterIdentity from;
+        /** The sender's hash. */
         final Hash fromHash;
+        /** Time the message arrived. */
         final long recvTime;
+        /** Time the next-hop lookup began, -1 until it does. */
         private long lookupStartTime = -1;
         /** Guards against a deferred lookup completing after its timeout fired, or vice versa. */
         private final AtomicBoolean _handled = new AtomicBoolean(false);
@@ -1942,7 +2082,9 @@ public class BuildHandler implements Runnable {
 
     /** Replies for outbound tunnels that we have created. */
     private static class BuildReplyMessageState {
+        /** The reply being handled. */
         final TunnelBuildReplyMessage msg;
+        /** Time the reply arrived. */
         final long recvTime;
         /**
          * The reply message and the time it was received.
@@ -1957,8 +2099,11 @@ public class BuildHandler implements Runnable {
 
     /** Replies for inbound tunnels we have created. */
     private static class BuildEndMessageState {
+        /** The build message to answer. */
         final TunnelBuildMessage msg;
+        /** The tunnel being built. */
         final PooledTunnelCreatorConfig cfg;
+        /** Time the message arrived. */
         final long recvTime;
         /**
          * The tunnel config, message, and receive time of a build end reply.
@@ -1975,6 +2120,11 @@ public class BuildHandler implements Runnable {
 
     /** No-op job returned once a tunnel build message is handled. */
     private static class TunnelBuildMessageHandlerJob extends JobImpl {
+        /**
+         * Creates the job for one build message.
+         *
+         * @param ctx the router handling it
+         */
         private TunnelBuildMessageHandlerJob(RouterContext ctx) {super(ctx);}
         /**
          * No-op; the message was already handled.
@@ -1994,6 +2144,11 @@ public class BuildHandler implements Runnable {
 
     /** No-op job returned once a tunnel build reply message is handled. */
     private static class TunnelBuildReplyMessageHandlerJob extends JobImpl {
+        /**
+         * Creates the job for one build reply.
+         *
+         * @param ctx the router handling it
+         */
         private TunnelBuildReplyMessageHandlerJob(RouterContext ctx) {super(ctx);}
         /**
          * No-op; the message was already handled.
@@ -2017,7 +2172,14 @@ public class BuildHandler implements Runnable {
      * but it affects capacity calculations.
      */
     private static class TunnelBuildNextHopFailJob extends JobImpl {
+        /** The hop whose build failed. */
         private final HopConfig _cfg;
+        /**
+         * Creates the job reporting a next-hop failure.
+         *
+         * @param ctx the router reporting it
+         * @param cfg the hop that failed
+         */
         private TunnelBuildNextHopFailJob(RouterContext ctx, HopConfig cfg) {
             super(ctx);
             _cfg = cfg;
@@ -2071,10 +2233,19 @@ public class BuildHandler implements Runnable {
      * @since 0.9.71+
      */
     static final int NEXT_HOP_REPLIED = 0;
-    /** Next hop did not answer within the hop-contact window. @since 0.9.71+. */
+    /**
+     * Next hop did not answer within the hop-contact window.
+     *
+     * @since 0.9.71+
+     */
     static final int NEXT_HOP_TIMEOUT = 1;
-    /** We declined the inbound build request. @since 0.9.71+. */
+    /**
+     * We declined the inbound build request.
+     *
+     * @since 0.9.71+
+     */
     static final int NEXT_HOP_DROPPED = 2;
+    /** Number of next-hop outcome counters. */
     private static final int NEXT_HOP_OUTCOMES = 3;
 
     /**
@@ -2085,7 +2256,9 @@ public class BuildHandler implements Runnable {
      */
     static final long NEXT_HOP_SUMMARY_INTERVAL_MS = 5 * 60 * 1000;
 
+    /** Counters for each next-hop lookup outcome. */
     private static final AtomicLong[] _nextHopOutcomes = new AtomicLong[NEXT_HOP_OUTCOMES];
+    /** Time of the next next-hop summary log line. */
     private static final AtomicLong _nextHopSummaryLog = new AtomicLong();
 
     static {

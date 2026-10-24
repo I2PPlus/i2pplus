@@ -14,7 +14,9 @@ package org.cybergarage.xml;
  * @since 1.0
  */
 public class Attribute {
+    /** The attribute's name. */
     private String name = new String();
+    /** The attribute's value. */
     private String value = new String();
 
     /** Creates an empty Attribute with empty name and value. */

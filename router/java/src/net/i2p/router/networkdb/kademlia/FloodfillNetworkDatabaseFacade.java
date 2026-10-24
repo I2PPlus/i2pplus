@@ -122,6 +122,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     private static final int PUBLISH_JOB_DELAY = 15*1000;
     /** Rate-limit Client subDb exploratory drop WARN (10s). @since 0.9.71+. */
     private static volatile long _lastClientSubDbWarn;
+    /** Interval between the client subDB warnings. */
     private static final long CLIENT_SUBDB_WARN_INTERVAL = 10*1000L;
     /**
      * Config property for floodfill participation.
@@ -287,7 +288,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      * Lightweight entry for batched timeout processing.
      */
     private static class TimeoutEntry {
+        /** The peer being searched for. */
         final Hash peer;
+        /** The search job being timed out. */
         final IterativeSearchJob search;
 
         /**
@@ -322,7 +325,11 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             reschedule(2000);
         }
 
-        /** Job name for the job queue display. */
+        /**
+         * Job name for the job queue display.
+         *
+         * @return the name of the job
+         */
         public String getName() { return "BatchedSearchTimeout"; }
     }
 
@@ -406,6 +413,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      * @since 0.9.65
      */
     private class DelayedPublish extends SimpleTimer2.TimedEvent {
+        /** Our own router info. */
         private final RouterInfo localRouterInfo;
         /**
          * Publish this RouterInfo once the delay has elapsed.
@@ -769,6 +777,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 
     /** Record the store failure in the peer profile. */
     private static class FloodFailedJob extends JobImpl {
+        /** The peer whose reply is awaited. */
         private final Hash _peer;
 
         /**
@@ -792,6 +801,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      * @since 0.9.19
      */
     private static class FloodSuccessJob extends JobImpl {
+        /** The peer being processed. */
         private final Hash _peer;
 
         /**
@@ -841,9 +851,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     }
 
     /**
-     * Whether this router participates in floodfill.
+     * Whether this router is currently acting as a floodfill.
      *
-     * @return whether this router participates in floodfill
+     * @return true if enabled, as set from the config or the floodfill monitor
      */
     @Override
     public boolean floodfillEnabled() {
@@ -1282,6 +1292,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 
     /** Remove a failing peer after a lookup timeout. */
     private class DropLookupFailedJob extends JobImpl {
+        /** The peer being searched for. */
         private final Hash _peer;
 
         /**
@@ -1312,7 +1323,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 
     /** Verify a failing peer after a successful lookup. */
     private class DropLookupFoundJob extends JobImpl {
+        /** The peer the reply goes to. */
         private final Hash _peer;
+        /** The router info being stored. */
         private final RouterInfo _info;
 
         /**

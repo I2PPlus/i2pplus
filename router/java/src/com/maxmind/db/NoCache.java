@@ -7,8 +7,10 @@ import java.io.IOException;
  */
 public class NoCache implements NodeCache {
 
+    /** The single instance, shared by every reader. */
     private static final NoCache INSTANCE = new NoCache();
 
+    /** Utility class, not intended for instantiation. */
     private NoCache() {
     }
 

@@ -14,10 +14,15 @@ import net.i2p.router.crypto.pqc.MLKEM;
  */
 class MLKEMDHState implements DHState, Cloneable {
 
+    /** The KEM variant in use. */
     private final EncType type;
+    /** The public key for the current mode. */
     private final byte[] publicKey;
+    /** The private key for the current mode. */
     private final byte[] privateKey;
+    /** Whether this side holds a key pair or not. */
     private int mode;
+    /** The HDHG factory that mixes the shared secret. */
     private final KeyFactory _hdh;
 
     /**
@@ -42,6 +47,10 @@ class MLKEMDHState implements DHState, Cloneable {
 
     /**
      *  Selects the ML-KEM parameter set from the handshake pattern and allocates the key buffers.
+     *
+     *  @param isAlice true for the initiator
+     *  @param hdh the key factory to clone
+     *  @param patternId the handshake pattern selecting the set
      */
     private MLKEMDHState(boolean isAlice, KeyFactory hdh, NoiseInit.PatternID patternId)
     {
@@ -133,6 +142,8 @@ class MLKEMDHState implements DHState, Cloneable {
     }
 
     /**
+     * Not supported by this state, always throws.
+     *
      * @deprecated
      */
     @Deprecated
@@ -142,6 +153,8 @@ class MLKEMDHState implements DHState, Cloneable {
     }
 
     /**
+     * Not supported by this state, always throws.
+     *
      * @deprecated
      */
     @Deprecated
@@ -193,6 +206,8 @@ class MLKEMDHState implements DHState, Cloneable {
     }
 
     /**
+     * Not supported by this state, always throws.
+     *
      * @deprecated
      */
     @Deprecated

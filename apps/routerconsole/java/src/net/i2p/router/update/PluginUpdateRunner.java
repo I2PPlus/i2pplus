@@ -47,19 +47,28 @@ import net.i2p.util.VersionComparator;
  */
 class PluginUpdateRunner extends UpdateRunner {
 
+    /** The name of the app being updated. */
     private String _appName;
+    /** The display name of the app. */
     private final String _appDisplayName;
+    /** The URI of the update site. */
     private final URI _uri;
+    /** The URL of the xpi2p file. */
     private final String _xpi2pURL;
+    /** True when the plugin was updated. */
     private boolean _updated;
+    /** The error message to display. */
     private String _errMsg = "";
 
+    /** File name of the downloaded plugin. */
     private static final String XPI2P = "app.xpi2p";
+    /** File name of the zipped plugin. */
     private static final String ZIP = XPI2P + ".zip";
     /**
      * Directory plugins are installed into, relative to the router install.
      */
     public static final String PLUGIN_DIR = PluginStarter.PLUGIN_DIR;
+    /** Config key allowing untrusted plugins. */
     private static final String PROP_ALLOW_NEW_KEYS = "routerconsole.allowUntrustedPlugins";
 
     /**
@@ -694,6 +703,11 @@ class PluginUpdateRunner extends UpdateRunner {
         statusDone("<b>" + _t("Failed to download plugin from {0}", url) + "</b>");
     }
 
+    /**
+     * Marks the update done with a status message.
+     *
+     * @param msg the message to display
+     */
     private void statusDone(String msg) {
         // if we fail, we will pass this back in notifyTaskFailed()
         _errMsg = msg;

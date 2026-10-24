@@ -79,8 +79,14 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      */
 
     private static class FileImageSource implements ImageSource {
+        /** The image file to embed. */
         private final File imagesource;
 
+        /**
+         * Names the image file to embed.
+         *
+         * @param imagesource the file's path
+         */
         FileImageSource(String imagesource) {
             this.imagesource = new File(imagesource);
         }
@@ -97,8 +103,14 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      */
 
     private static class UrlImageSource implements ImageSource {
+        /** The image URL to embed. */
         private final URL imagesource;
 
+        /**
+         * Names the image URL to embed.
+         *
+         * @param imagesource where the image is
+         */
         private UrlImageSource(URL imagesource) {
             this.imagesource = imagesource;
         }

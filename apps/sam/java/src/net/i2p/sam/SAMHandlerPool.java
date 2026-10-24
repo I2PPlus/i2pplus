@@ -43,23 +43,37 @@ import net.i2p.util.Log;
  */
 class SAMHandlerPool {
 
+    /** Time to wait for a pong before disconnecting. */
     private static final int PONG_TIMEOUT = 3 * 60 * 1000;
+    /** Time allowed for the first command line. */
     private static final int FIRST_READ_TIMEOUT = 60 * 1000;
+    /** Interval between idle connection checks. */
     private static final int IDLE_CHECK_INTERVAL = 30 * 1000;
 
+    /** Logger for the SAM handler pool. */
     private final Log _log;
+    /** Selector watching the client connections. */
     private final Selector _selector;
+    /** Pool running the command handlers. */
     private final ThreadPoolExecutor _workers;
+    /** Pool running the session opens. */
     private final ThreadPoolExecutor _connectors;
+    /** Pool running the session closes. */
     private final ThreadPoolExecutor _teardowns;
+    /** Connection state, by channel. */
     private final Map<SocketChannel, ConnContext> _contexts;
+    /** True while the pool is running. */
     private volatile boolean _running;
+    /** The thread running the selector loop. */
     private I2PAppThread _selectThread;
 
     /**
      * Thread factory for worker threads with sequential numbering.
      */
     private static class NamedThreadFactory implements java.util.concurrent.ThreadFactory {
+        /** Names the handler threads. */
+        private NamedThreadFactory() {}
+        /** Open client connections counted. */
         private final AtomicInteger _count = new AtomicInteger();
         /**
          * Starts a named daemon thread for the password-authentication worker.
@@ -75,13 +89,24 @@ class SAMHandlerPool {
      * Per-connection context tracked by the pool.
      */
     private static class ConnContext {
+        /** The handler serving this connection. */
         final SAMv3Handler handler;
+        /** Buffer accumulating a partial command line. */
         final StringBuilder buf = new StringBuilder(1024);
+        /** True once the first command line arrived. */
         boolean gotFirstLine;
+        /** When data last arrived from the client. */
         long lastDataTime;
+        /** When a ping was last sent to the client. */
         long lastPingTime;
+        /** When the connection opened. */
         long created;
 
+        /**
+         * Builds the state for one client connection.
+         *
+         * @param handler the handler serving the connection
+         */
         ConnContext(SAMv3Handler handler) {
             this.handler = handler;
             this.created = System.currentTimeMillis();
@@ -360,6 +385,8 @@ class SAMHandlerPool {
         /**
          * Selects over registered channels and dispatches their lines.
          */
+        /** Runs the selector loop for one handler pool. */
+        private SelectorRunnable() {}
         public void run() {
             while (_running) {
                 try {
@@ -432,6 +459,10 @@ class SAMHandlerPool {
          * Read available data from a channel, split into lines,
          * and dispatch complete lines. PING/PONG are handled inline;
          * other commands are dispatched to the worker pool.
+         *
+         * @param ctx the connection's state
+         * @param ch the channel to read from
+         * @throws IOException if the read fails
          */
         private void readFromChannel(ConnContext ctx, SocketChannel ch) throws IOException {
             ByteBuffer tmp = ByteBuffer.allocate(2048);
@@ -460,6 +491,9 @@ class SAMHandlerPool {
          * All commands from the same handler are synchronized on the handler
          * instance to ensure serial per-connection execution. Commands from
          * different connections run in parallel.
+         *
+         * @param ctx the connection's state
+         * @param line the complete command line to dispatch
          */
         private void dispatchLine(final ConnContext ctx, final String line) {
             if (line.equals("PING") || line.startsWith(PING_PREFIX) ||
@@ -495,6 +529,9 @@ class SAMHandlerPool {
 
         /**
          * Handle a PING or PONG from the client inline.
+         *
+         * @param ctx the connection's state
+         * @param line the PING or PONG line received
          */
         private void handlePing(ConnContext ctx, String line) {
             if (line.startsWith("PING")) {
@@ -508,6 +545,9 @@ class SAMHandlerPool {
 
         /**
          * Send a PING to the client and record the timestamp.
+         *
+         * @param ctx the connection's state
+         * @param now the current time, in ms
          */
         private void sendPing(ConnContext ctx, long now) {
             if (!SAMHandler.writeString(PING_PREFIX + now + '\n', ctx.handler.getClientSocket())) {
@@ -520,6 +560,9 @@ class SAMHandlerPool {
         /**
          * Remove the context from the pool and stop the handler.
          * Called when a read error or timeout is detected.
+         *
+         * @param ctx the connection's state
+         * @param reason why the connection is being dropped, for the log
          */
         private void disconnect(ConnContext ctx, String reason) {
             synchronized (_contexts) {
@@ -533,6 +576,8 @@ class SAMHandlerPool {
         /**
          * Hand this context's teardown to the pool built for that work, so the
          * selector thread stays free for the other connections it serves.
+         *
+         * @param ctx the connection's state
          */
         private void closeOffSelector(ConnContext ctx) {
             runTeardown(() -> ctx.handler.stopHandling());

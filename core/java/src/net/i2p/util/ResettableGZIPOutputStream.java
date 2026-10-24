@@ -18,12 +18,15 @@ public class ResettableGZIPOutputStream extends DeflaterOutputStream {
     /** Has the header been written out yet? */
     private boolean _headerWritten;
 
+    /** True once the gzip footer has been written. */
     private boolean _footerWritten;
 
     /** How much data is in the uncompressed stream? */
     private long _writtenSize;
 
+    /** Checksum of the bytes written. */
     private final CRC32 _crc32;
+    /** True to log the stream's internals. */
     private static final boolean DEBUG = false;
 
     /**
@@ -49,6 +52,7 @@ public class ResettableGZIPOutputStream extends DeflaterOutputStream {
         _footerWritten = false;
     }
 
+    /** The gzip header written at the start of each stream. */
     private static final byte[] HEADER = new byte[] {
         (byte) 0x1F,
         (byte) 0x8b, // magic bytes
@@ -74,6 +78,11 @@ public class ResettableGZIPOutputStream extends DeflaterOutputStream {
         _headerWritten = true;
     }
 
+    /**
+     * Writes the checksum and size footer at the end of the stream.
+     *
+     * @throws IOException if the footer cannot be written
+     */
     private void writeFooter() throws IOException {
         if (_footerWritten) return;
         // damn RFC writing their bytes backwards...

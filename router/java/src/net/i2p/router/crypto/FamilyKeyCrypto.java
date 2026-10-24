@@ -39,16 +39,25 @@ import net.i2p.util.SimpleTimer2;
  */
 public class FamilyKeyCrypto {
 
+    /** The router context. */
     private final RouterContext _context;
+    /** Logger for the family certificates. */
     private final Log _log;
+    /** The verified family members, by hash. */
     private final Map<Hash, Verified> _verified;
+    /** The family signing keys, by family name. */
     private final Map<String, SigningPublicKey> _knownKeys;
+    /** The failed verifications, by hash. */
     private final Map<Hash, Result> _negativeCache;
+    /** The hashes of our own family members. */
     private final Set<Hash> _ourFamily;
-    // following for verification only, otherwise null
+    /** The family name we serve. */
     private final String _fname;
+    /** Our family signing private key. */
     private final SigningPrivateKey _privkey;
+    /** Our family signing public key. */
     private final SigningPublicKey _pubkey;
+    /** Consecutive certificate operation failures. */
     private final AtomicInteger _failCount = new AtomicInteger();
     /** Property key for keystore password. */
 
@@ -67,13 +76,21 @@ public class FamilyKeyCrypto {
     public static final String KEYSTORE_SUFFIX = ".ks";
     /** Common name suffix. */
     public static final String CN_SUFFIX = ".family.i2p.net";
+    /** Default time a family certificate stays valid. */
     private static final int DEFAULT_KEY_VALID_DAYS = 3652;  // 10 years
-    // Note that we can't use RSA here, as the b64 sig would exceed the 255 char limit for a Mapping
-    // Note that we can't use EdDSA here, as keystore doesn't know how, and encoding/decoding is unimplemented
+    /**
+     * Default algorithm for the family keys. RSA is excluded because
+     * its signature would exceed the 255 character limit for a family
+     * tag, and EdDSA because the keystore cannot encode or decode it.
+     */
     private static final String DEFAULT_KEY_ALGORITHM = SigType.ECDSA_SHA256_P256.isAvailable() ? "EC" : "DSA";
+    /** Default family key size, in bits. */
     private static final int DEFAULT_KEY_SIZE = SigType.ECDSA_SHA256_P256.isAvailable() ? 256 : 1024;
+    /** Directory holding the key stores. */
     private static final String KS_DIR = "keystore";
+    /** Directory holding the family certificates. */
     private static final String CERT_DIR = "certificates/family";
+    /** Directory holding the revocation lists. */
     private static final String CRL_DIR = "crls";
     /** Option key for family name. */
     public static final String OPT_NAME = "family";

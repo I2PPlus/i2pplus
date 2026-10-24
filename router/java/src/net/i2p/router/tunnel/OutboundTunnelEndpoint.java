@@ -18,23 +18,35 @@ import net.i2p.util.SyntheticREDQueue;
  * Gather fragments and honor the instructions as received.
  */
 class OutboundTunnelEndpoint {
+    /** The router context. */
     private final RouterContext _context;
+    /** Logger for the outbound tunnel endpoint. */
     private final Log _log;
+    /** The hop configuration of our tunnel. */
     private final HopConfig _config;
+    /** Processes the messages for the previous hop. */
     private final HopProcessor _processor;
+    /** Reassembles the fragmented lease sets. */
     private final FragmentHandler _handler;
+    /** Distributes the messages we relay onward. */
     private final OutboundMessageDistributor _outDistributor;
+    /** Queue estimating the outbound share used while relaying. */
     private final SyntheticREDQueue _partBWE;
+    /** Lease set store messages relayed. */
     private int _lsdsm;
+    /** Router info store messages relayed. */
     private int _ridsm;
+    /** Other messages relayed. */
     private int _i2npmsg;
+    /** Total messages relayed. */
     private int _totalmsg;
 
     /**
      * Binds the context, config, and processor, sizing the RED queue to the allocated bandwidth.
+     *
      * @param ctx the router context
      * @param config the hop configuration, whose allocated bandwidth sizes the RED queue and
-              may be raised to the per-tunnel maximum when it is still at its estimate
+     *               may be raised to the per-tunnel maximum when it is still at its estimate
      * @param processor the inbound hop processor, used to decrypt each message before handling
      */
     public OutboundTunnelEndpoint(RouterContext ctx, HopConfig config, HopProcessor processor) {
@@ -90,7 +102,11 @@ class OutboundTunnelEndpoint {
         }
     }
 
+    /** Handler for the reassembled lease sets. */
     private class DefragmentedHandler implements FragmentHandler.DefragmentedReceiver {
+
+        /** Handles a message reassembled from fragments. */
+        private DefragmentedHandler() {}
 
         /**
          *  Warning - as of 0.9.63, msg will be an UnknownI2NPMessage,

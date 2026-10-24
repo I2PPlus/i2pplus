@@ -18,6 +18,7 @@ public class ThinPoolLogState {
     /** Sentinel for "no thin-pool warning emitted yet". */
     public static final int NEVER_WARNED = -1;
 
+    /** Per-pool state for rate-limiting the thin-pool warnings. */
     private ThinPoolLogState() {}
 
     /**

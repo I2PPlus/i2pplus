@@ -310,10 +310,6 @@ public class KeyCertificate extends Certificate {
         return rv;
     }
 
-    // todo
-    // constructor w/ crypto type
-    // getCryptoType()
-    // getCryptoDataOffset()
 
     /** Returns this certificate as a KeyCertificate. */
     @Override
@@ -340,11 +336,18 @@ public class KeyCertificate extends Certificate {
      */
     @SuppressWarnings("checkstyle:EqualsHashCode")
     private static final class ECDSA256Cert extends KeyCertificate {
+        /** The fixed bytes of the ECDSA 256 certificate. */
         private static final byte[] ECDSA256_DATA = new byte[] {CERTIFICATE_TYPE_KEY, 0, HEADER_LENGTH, 0, (byte) SigType.ECDSA_SHA256_P256.getCode(), 0, 0};
+        /** Length of the ECDSA 256 certificate bytes. */
         private static final int ECDSA256_LENGTH = ECDSA256_DATA.length;
+        /** The cached hash code. */
         private final int _hashcode;
 
-        /** Creates an immutable ElG/ECDSA-P256 certificate. */
+        /**
+         * Creates an immutable ElG/ECDSA-P256 certificate.
+         *
+         * @throws DataFormatException if the built certificate data is invalid
+         */
         public ECDSA256Cert() throws DataFormatException {
             super(ECDSA256_PAYLOAD);
             _hashcode = super.hashCode();
@@ -407,11 +410,18 @@ public class KeyCertificate extends Certificate {
      */
     @SuppressWarnings("checkstyle:EqualsHashCode")
     private static final class Ed25519Cert extends KeyCertificate {
+        /** The fixed bytes of the Ed25519 certificate. */
         private static final byte[] ED_DATA = new byte[] {CERTIFICATE_TYPE_KEY, 0, HEADER_LENGTH, 0, (byte) SigType.EdDSA_SHA512_Ed25519.getCode(), 0, 0};
+        /** Length of the Ed25519 certificate bytes. */
         private static final int ED_LENGTH = ED_DATA.length;
+        /** The cached hash code. */
         private final int _hashcode;
 
-        /** Creates an immutable ElG/Ed25519 certificate. */
+        /**
+         * Creates an immutable ElG/Ed25519 certificate.
+         *
+         * @throws DataFormatException if the built certificate data is invalid
+         */
         public Ed25519Cert() throws DataFormatException {
             super(Ed25519_PAYLOAD);
             _hashcode = super.hashCode();
@@ -474,11 +484,18 @@ public class KeyCertificate extends Certificate {
      */
     @SuppressWarnings("checkstyle:EqualsHashCode")
     private static final class X25519_Ed25519Cert extends KeyCertificate {
+        /** The fixed bytes of the X25519 Ed25519 certificate. */
         private static final byte[] ED_DATA = new byte[] {CERTIFICATE_TYPE_KEY, 0, HEADER_LENGTH, 0, (byte) SigType.EdDSA_SHA512_Ed25519.getCode(), 0, (byte) EncType.ECIES_X25519.getCode()};
+        /** Length of the X25519 Ed25519 certificate bytes. */
         private static final int ED_LENGTH = ED_DATA.length;
+        /** The cached hash code. */
         private final int _hashcode;
 
-        /** Creates an immutable X25519/Ed25519 certificate. */
+        /**
+         * Creates an immutable X25519/Ed25519 certificate.
+         *
+         * @throws DataFormatException if the built certificate data is invalid
+         */
         public X25519_Ed25519Cert() throws DataFormatException {
             super(X25519_Ed25519_PAYLOAD);
             _hashcode = super.hashCode();

@@ -22,11 +22,17 @@ import java.util.concurrent.atomic.AtomicLong;
  *
  */
 class ClientWriterRunner implements Runnable {
+    /** Where messages are written to the router. */
     private final OutputStream _out;
+    /** The session whose messages are written. */
     private final I2PSessionImpl _session;
+    /** Messages waiting to reach the router. */
     private final BlockingQueue<I2CPMessage> _messagesToWrite;
+    /** Counts the writer threads created. */
     private static final AtomicLong __Id = new AtomicLong();
+    /** Most messages queued before writes start blocking. */
     private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 64 : 256;
+    /** Longest a send waits for the queue to drain, in ms. */
     private static final long MAX_SEND_WAIT = SystemVersion.isSlow() ? 10 * 1000 : 5 * 1000;
 
     /**

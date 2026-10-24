@@ -16,7 +16,9 @@ import net.i2p.data.PublicKey;
  */
 public class KeyPair {
 
+    /** The public half of the pair. */
     private final PublicKey pub;
+    /** The private half of the pair. */
     private final PrivateKey priv;
 
     /**

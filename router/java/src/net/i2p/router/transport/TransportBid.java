@@ -15,7 +15,9 @@ package net.i2p.router.transport;
  *
  */
 public class TransportBid {
+    /** Latency the transport promises, in milliseconds. */
     private int _latencyMs;
+    /** The transport making this bid. */
     private Transport _transport;
     /**
      * Sentinel cost a transport bids when it cannot deliver the message right now.

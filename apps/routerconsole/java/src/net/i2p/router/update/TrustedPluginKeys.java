@@ -17,6 +17,7 @@ class TrustedPluginKeys {
      */
     TrustedPluginKeys() {}
 
+    /** The plugin signing keys trusted out of the box. */
     private static final String[] KEYS = {
         "zzz-plugin@mail.i2p",
         "Z3xbCcZiIA44W65~q4u5Rm9ZZWvBIv1bCvTx8DrbsKefu0PZ1134xzkI~vyXuRmmujvSwTVTfgEnxL81hwmpuB4aXMBLDlBmckspFnGKte~HefYI-6WcK79rnZPvNQCffdgi~EgWnUMYDR20PBWQKaGwajkSb-LOK~l2Z69G6aI="

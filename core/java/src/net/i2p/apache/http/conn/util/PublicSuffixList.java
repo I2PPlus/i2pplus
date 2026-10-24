@@ -41,7 +41,9 @@ import net.i2p.apache.http.util.Args;
  */
 public final class PublicSuffixList {
 
+    /** The suffix rules. */
     private final List<String> rules;
+    /** Rules that override a matching rule. */
     private final List<String> exceptions;
 
     /**

@@ -33,38 +33,32 @@ import java.nio.charset.StandardCharsets;
  */
 @SuppressWarnings("PMD.CloseResource")
 public class TrustedUpdate {
-    /* zzz's key */
+    /** Base64 of the default trusted signing key, zzz's key. */
     private static final String DEFAULT_TRUSTED_KEY = "lT54eq3SH0TWWwQ1wgH6XPelIno7wH7UfiZOpQg-ZuxdNhc4UjjrohKdK" + "Zqfswt1ANPnmOlMewLGBESl7kJB9c5sByz~IOlNyz5BMLRC~R~ZC9QI4W" + "XwUBYW8BhYO2mkvtdOrcy690lDkwzdf5xLxlCBpQlTaLYzQVjVWBcvbCA=";
-    /*
-    -----BEGIN PGP SIGNATURE-----
-    Version: GnuPG v1.4.6 (GNU/Linux)
 
-    iD8DBQFHdupcQVV2uqduC+0RAocuAKCR4ILLuz3RB8QT7zkadmS2LmFuMwCgweqG
-    lFm5Fqx/iW5+k0QaQZ3W9mY=
-    =V3i7
-    -----END PGP SIGNATURE-----
-    */
-    /*
-    -----BEGIN PGP SIGNED MESSAGE-----
-    Hash: SHA1
-    */
-
+    /** Bytes in the version field. */
     private static final int VERSION_BYTES = 16;
     /**
      * Bytes preceding the version in an update file: a signature followed by a 16-byte version.
      */
     public static final int HEADER_BYTES = Signature.SIGNATURE_BYTES + VERSION_BYTES;
+    /** Config key of the trusted update keys. */
     private static final String PROP_TRUSTED_KEYS = "router.trustedUpdateKeys";
 
+    /** The app context. */
     private final I2PAppContext _context;
 
+    /** The log for update verification. */
     private final Log _log;
+    /** The trusted keys, by signing key, named by signer. */
     private final Map<SigningPublicKey, String> _trustedKeys;
+    /** The version of the verified update. */
     private String _newVersion;
 
     /** Key size in base64 bytes (padding + key data, 172). */
     private static final int KEYSIZE_B64_BYTES = 2 + (SigningPublicKey.KEYSIZE_BYTES * 4 / 3);
 
+    /** The built-in trusted keys. */
     private static final Map<String, String> DEFAULT_KEYS = new HashMap<>(4);
 
     static {
@@ -263,6 +257,7 @@ public class TrustedUpdate {
         return true;
     }
 
+    /** Shows the command line usage. */
     private static final void showUsageCLI() {
         System.err.println("Usage: TrustedUpdate keygen        publicKeyFile privateKeyFile");
         System.err.println("       TrustedUpdate showversion   signedFile");

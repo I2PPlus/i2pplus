@@ -19,8 +19,11 @@ import net.i2p.util.SecureFileOutputStream;
  */
 public class GzipFileBuffer extends FileBuffer {
 
+	/** Length of the decoded data, in bytes. */
 	private long _actualLength;
+	/** Stream counting the bytes read. */
 	private CountingInputStream _cis;
+	/** Stream counting the bytes written. */
 	private CountingOutputStream _cos;
 
 	/**

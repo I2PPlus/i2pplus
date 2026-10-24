@@ -45,18 +45,28 @@ import net.i2p.util.SimpleTimer2;
  * - Profiles older than EXPIRE_AGE (7 days) are deleted after store.
  */
 class PeerManager {
+    /** Logger for the peer manager. */
     private final Log _log;
+    /** The router context. */
     private final RouterContext _context;
+    /** The organizer holding the peer profiles. */
     private final ProfileOrganizer _organizer;
+    /** Helper reading and writing the profiles. */
     private final ProfilePersistenceHelper _persistenceHelper;
+    /** Peer hashes, by capability flag. */
     private final Map<Character, Set<Hash>> _peersByCapability;
     /** Value strings are lower case. */
     private final Map<Hash, String> _capabilitiesByPeer;
+    /** True while the profiles are being stored. */
     private final AtomicBoolean _storeLock = new AtomicBoolean();
+    /** When the profiles were last stored. */
     private volatile long _lastStore;
+    /** Alternates the half of the peers evicted. */
     private boolean _evictToggle;
 
+    /** Interval between profile reorganizations. */
     private static final long REORGANIZE_TIME = 30*1000L;
+    /** Reorganization interval on slow routers. */
     private static final long REORGANIZE_TIME_MEDIUM = 90*1000L;
     /**
      * We don't want this much longer than the average connect time,
@@ -67,8 +77,9 @@ class PeerManager {
     static final long REORGANIZE_TIME_LONG = 250*1000L;
     /** After first two hours of uptime ~= 246. */
     static final int REORGANIZES_PER_DAY = 256;
+    /** Interval between profile stores. */
     private static final long STORE_TIME = 15*60*1000L; // how frequently we write profiles to disk
-    // for profiles stored to disk
+    /** Age after which a profile is dropped. */
     private static final long EXPIRE_AGE = 7*24*60*60*1000L;
     /**
      * Timeout for a RouterInfo lookup issued on behalf of a stored profile whose peer
@@ -118,6 +129,7 @@ class PeerManager {
         loadProfilesInBackground();
     }
 
+    /** Timer reorganizing the peer profiles. */
     private class Reorg extends SimpleTimer2.TimedEvent {
         /**
          * Create the timer event for periodic profile reorganization.
@@ -144,6 +156,7 @@ class PeerManager {
      * @since 0.9.10
      */
     private class ReorgThread extends I2PThread {
+        /** The reorganization timer instance. */
         private final SimpleTimer2.TimedEvent _event;
 
         /**
@@ -237,7 +250,7 @@ class PeerManager {
     /**
      * All tracked peers from the organizer.
      *
-     * @return all tracked peers from the organizer
+     * @return the peer hashes, never null, empty if none are tracked
      */
     Set<Hash> selectPeers() {return _organizer.selectAllPeers();}
 
@@ -311,7 +324,11 @@ class PeerManager {
      */
 
     private class ProfileLoader implements Runnable {
+        /** Reads the stored peer profiles at startup. */
+        private ProfileLoader() {}
+        /** The router, used for its uptime. */
         Router r = _context.router();
+        /** How long the router has been up, in milliseconds. */
         long uptime = (r != null) ? r.getUptime() : 0L;
 
         /**
@@ -368,6 +385,7 @@ class PeerManager {
      */
     private class MissingRouterInfoDrain extends SimpleTimer2.TimedEvent {
 
+        /** Builds the timer draining the missing router info set. */
         MissingRouterInfoDrain() {super(_context.simpleTimer2(), 0);}
 
         @Override

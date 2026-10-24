@@ -29,7 +29,9 @@ public class SetDateMessage extends I2CPMessageImpl {
      * I2CP message type code for a peer clock synchronization request.
      */
     public static final int MESSAGE_TYPE = 33;
+    /** The date the client asks the router to set. */
     private Date _date;
+    /** Version string of the client asking. */
     private String _version;
 
     /**

@@ -69,28 +69,43 @@ import org.klomp.snark.dht.DHT;
  * @since 0.1.0
  */
 public class TrackerClient implements Runnable {
+    /** Logger for this torrent's tracker traffic. */
     private final Log _log;
+    /** Event value when no event is being reported. */
     private static final String NO_EVENT = "";
+    /** Event sent when the torrent starts downloading. */
     private static final String STARTED_EVENT = "started";
+    /** Event sent when the download finishes. */
     private static final String COMPLETED_EVENT = "completed";
+    /** Event sent when the torrent stops. */
     private static final String STOPPED_EVENT = "stopped";
+    /** Event sent when the torrent is paused. */
     private static final String PAUSED_EVENT = "paused";
+    /** Tracker error for an unregistered torrent, from ByteMonsoon. */
     private static final String NOT_REGISTERED = "torrent not registered"; // bytemonsoon
+    /** Tracker error for an unregistered torrent, from DifTracker. */
     private static final String NOT_REGISTERED_2 = "torrent not found"; // diftracker
+    /** Tracker error for an unregistered torrent, from Vuze. */
     private static final String NOT_REGISTERED_3 = "torrent unauthorised"; // vuze
+    /** Error when the tracker returns an HTML page instead of data. */
     private static final String ERROR_GOT_HTML = "received html (invalid response)"; // fake return
 
     /** BEP 48 scrape path segment. */
     private static final String SCRAPE = "scrape";
 
+    /** Minutes between tracker status checks. */
     private static final int SLEEP = 5; // 5 minutes.
+    /** Threads draining the unannounce queue. */
     private static final int UNANNOUNCE_THREADS = 32;
+    /** Unannounce requests held before they are dropped. */
     private static final int UNANNOUNCE_QUEUE = 16384;
+    /** An unannounce thread exits after 1 minute idle. */
     private static final long UNANNOUNCE_KEEPALIVE = 60 * 1000;
     /** One wave of unannounces, latency-bound, through an established tunnel. */
     private static final long UNANNOUNCE_WAVE = 3 * 1000;
     /** Dispatch window is scaled to the batch, clamped between these. */
     private static final long UNANNOUNCE_MIN_WAIT = UNANNOUNCE_WAVE;
+    /** An unannounce waits at most 10 seconds for a session. */
     private static final long UNANNOUNCE_MAX_WAIT = 10 * 1000;
     /** When the queue is this many waves deep, only the primary tracker per torrent gets a slot. */
     private static final int UNANNOUNCE_PRIMARY_THRESHOLD = UNANNOUNCE_THREADS * 2;
@@ -145,9 +160,13 @@ public class TrackerClient implements Runnable {
         long window = ((pending / UNANNOUNCE_THREADS) + 1) * UNANNOUNCE_WAVE;
         return Math.max(UNANNOUNCE_MIN_WAIT, Math.min(UNANNOUNCE_MAX_WAIT, window));
     }
+    /** Tracker requests are spaced at least 2 seconds apart. */
     private static final int DELAY_MIN = 2000; // 2 secs.
+    /** Random delay added to the minimum, up to 6 seconds. */
     private static final int DELAY_RAND = 6 * 1000;
+    /** Failed registrations before giving up on a tracker. */
     private static final int MAX_REGISTER_FAILS = 15; // * INITIAL_SLEEP = 15m to register
+    /** A failed registration is retried after 90 seconds. */
     private static final int INITIAL_SLEEP = 90 * 1000;
 
     /**
@@ -156,6 +175,7 @@ public class TrackerClient implements Runnable {
      * enough that a batch of magnets added at once still does not announce in lockstep.
      */
     static final int MAGNET_INITIAL_SLEEP = 3 * 1000;
+    /** Tracker requests slow down after this many consecutive failures. */
     private static final int MAX_CONSEC_FAILS = 10; // slow down after this
     /**
      * Global cap on tracker HTTP requests in flight across ALL torrents, so
@@ -177,7 +197,9 @@ public class TrackerClient implements Runnable {
      * @since 0.9.71+
      */
     private static final int MAX_PER_TRACKER_PER_MINUTE = 20;
+    /** Requests to one tracker are spaced across a 1 minute window. */
     private static final long TRACKER_THROTTLE_WINDOW_MS = 60_000L;
+    /** Recent request times per tracker, for spacing requests. */
     private static final Map<String, java.util.Deque<Long>> _trackerRequestTimes = new java.util.concurrent.ConcurrentHashMap<>();
 
     /**
@@ -284,43 +306,62 @@ public class TrackerClient implements Runnable {
      * Default BitTorrent tracker port.
      */
     public static final int PORT = 6881;
+    /** UDP tracker port used when none is given. */
     private static final int DEFAULT_UDP_TRACKER_PORT = 6969;
+    /** Trackers used per torrent at most. */
     private static final int MAX_TRACKERS = 32;
+    /** Util providing the session and proxy settings. */
     private final I2PSnarkUtil _util;
-    // non-final for reinitialize()
+    /** The torrent's metadata, reassigned by reinitialize. */
     private MetaInfo meta;
+    /** Hex info hash identifying the torrent. */
     private final String infoHash;
+    /** Random peer id sent to the trackers. */
     private final String peerID;
+    /** Extra tracker from the user's config, may be null. */
     private final String additionalTrackerURL;
+    /** Coordinator sharing peers with other torrents. */
     private final PeerCoordinator coordinator;
+    /** The snark downloading this torrent. */
     private final Snark snark;
+    /** Listen port advertised to the trackers. */
     private final int port;
+    /** Name prefix for this torrent's threads. */
     private final String _threadName;
 
+    /** Set to stop the tracker loop. */
     private volatile boolean stop = true;
+    /** Set once the started event has been sent. */
     private volatile boolean started;
+    /** Set once the trackers are registered. */
     private volatile boolean _initialized;
+    /** Number of loop runs so far. */
     private volatile int _runCount;
-    // running thread so it can be interrupted
+    /** The running tracker thread, kept for interrupts. */
     private volatile Thread _thread;
-    // running DHT fetch thread so it can be interrupted
+    /** The running DHT fetch thread, kept for interrupts. */
     private volatile Thread _dhtThread;
-    // peers last seen in the DHT fetch, updated by the fetch thread
+    /** Peers seen in the last DHT fetch, updated by that thread. */
     private volatile int _dhtPeersSeen;
-    // queued event so it can be cancelled
+    /** The queued timer event, kept for cancellation. */
     private volatile SimpleTimer2.TimedEvent _event;
-    // these 2 used in loop()
+    /** Set while the loop body is running. */
     private volatile boolean runStarted;
+    /** Consecutive failed requests in the loop. */
     private volatile int consecutiveFails;
+    /** Whether the last response carried fresh metadata. */
     private volatile boolean lastHadMeta;
-    // if we don't want anything else.
-    // Not necessarily seeding, as we may have skipped some files.
+    /** Whether the torrent is complete, not necessarily seeding, as files may be skipped. */
     private boolean completed;
+    /** Set to unannounce from the trackers early. */
     private volatile boolean _fastUnannounce;
-    // read by the loop thread, written by the DHT fetch thread
+    /** When the last DHT announce ran, written by the fetch thread. */
     private volatile long lastDHTAnnounce;
+    /** The active trackers for this torrent. */
     private final List<TCTracker> trackers;
+    /** Backup trackers used when the others fail. */
     private final List<TCTracker> backupTrackers;
+    /** When this client was started. */
     private long _startedOn;
 
     /**
@@ -461,11 +502,22 @@ public class TrackerClient implements Runnable {
         }
     }
 
+    /**
+     * Queues the next loop run after the delay.
+     *
+     * @param delay the seconds to wait
+     */
     private void queueLoop(long delay) {
         _event = new Runner(delay);
     }
 
+    /** Queues the next announce on the shared timer. */
     private class Runner extends SimpleTimer2.TimedEvent {
+        /**
+         * Schedules a run after the delay.
+         *
+         * @param delay the seconds to wait
+         */
         public Runner(long delay) {
             super(_util.getContext().simpleTimer2(), delay);
         }
@@ -479,6 +531,11 @@ public class TrackerClient implements Runnable {
         }
     }
 
+    /**
+     * Checks that the session is usable for a request.
+     *
+     * @return true if the session is connected
+     */
     private boolean verifyConnected() {
         while (!stop && !_util.connected()) {
             boolean ok = _util.connect();
@@ -1277,8 +1334,14 @@ public class TrackerClient implements Runnable {
      * @since 0.9.71+
      */
     private class DHTFetcher implements Runnable {
+        /** The DHT to fetch peers from. */
         private final DHT dht;
 
+        /**
+         * Stores the DHT to fetch from.
+         *
+         * @param dht the DHT to query
+         */
         public DHTFetcher(DHT dht) {
             this.dht = dht;
         }
@@ -1467,9 +1530,17 @@ public class TrackerClient implements Runnable {
      * @since 0.9.1
      */
     private class Unannouncer implements Runnable {
+        /** The tracker being unannounced. */
         private final TCTracker tr;
+        /** Counted down when the unannounce finishes. */
         private final CountDownLatch latch;
 
+        /**
+         * Prepares to unannounce from one tracker.
+         *
+         * @param tr the tracker to unannounce from
+         * @param latch counted down when done
+         */
         public Unannouncer(TCTracker tr, CountDownLatch latch) {
             this.tr = tr;
             this.latch = latch;
@@ -2039,6 +2110,8 @@ public class TrackerClient implements Runnable {
      * @since 0.9.67
      */
     private static class URLComparator implements Comparator<String> {
+        /** Orders tracker URLs by name. */
+        private URLComparator() {}
         public int compare(String l, String r) {
             boolean ul = l.startsWith("udp://");
             boolean ur = r.startsWith("udp://");
@@ -2052,21 +2125,37 @@ public class TrackerClient implements Runnable {
         }
     }
 
+    /** One tracker's URL and per-tracker state. */
     private static class TCTracker {
+        /** The announce URL for this tracker. */
         final String announce;
+        /** The tracker's host name. */
         final String host;
+        /** True for the torrent's own announce list. */
         final boolean isPrimary;
+        /** True for a UDP tracker. */
         final boolean isUDP;
+        /** The UDP tracker's port. */
         final int port;
+        /** Seconds between announces, set by the tracker. */
         long interval;
+         /** When the last request was sent. */
          long lastRequestTime;
+         /** When the last response arrived. */
          long lastResponseTime;
+         /** When the next scrape is due. */
          long nextScrapeTime;
+        /** The last error message from this tracker. */
         String trackerProblems;
+        /** Set to stop announcing to this tracker. */
         boolean stop;
+        /** Set once an announce has been sent. */
         boolean started;
+        /** Failed registrations with this tracker. */
         int registerFails;
+        /** Consecutive failed requests to this tracker. */
         int consecutiveFails;
+        /** Peers returned by the last response. */
         int seenPeers;
 
         /**

@@ -15,8 +15,10 @@ public class ProfilesHelper extends HelperBase {
      */
     public ProfilesHelper() {}
 
+    /** Which version of the page is shown. */
     private int _full;
 
+    /** Heading for each profile row. */
     private static final String[] titles = {
                                             _x("All"),             // 0
                                             _x("Fast"),            // 1
@@ -25,6 +27,7 @@ public class ProfilesHelper extends HelperBase {
                                             _x("Banned")           // 4
                                            };
 
+    /** Help link for each profile row. */
     private static final String[] links =  {
                                             "",                    // 0
                                             "?show=fast",          // 1

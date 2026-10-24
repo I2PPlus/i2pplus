@@ -49,6 +49,7 @@ import java.util.logging.Logger;
  */
 public class DnsMessage {
 
+    /** Logger for the DNS message code. */
     private static final Logger LOGGER = Logger.getLogger(DnsMessage.class.getName());
 
     /**
@@ -482,6 +483,12 @@ public class DnsMessage {
         optRrPosition = message.optRrPosition;
     }
 
+    /**
+     * Position of the OPT record in the additional section.
+     *
+     * @param additionalSection the additional records
+     * @return the position, negative if absent
+     */
     private static int getOptRrPosition(List<Record<? extends Data>> additionalSection) {
         int optRrPosition = -1;
         for (int i = 0; i < additionalSection.size(); i++) {
@@ -558,6 +565,11 @@ public class DnsMessage {
      */
     private byte[] byteCache;
 
+    /**
+     * Writes the message out as bytes.
+     *
+     * @return the message bytes
+     */
     private byte[] serialize() {
         if (byteCache != null) {
             return byteCache;
@@ -938,12 +950,25 @@ public class DnsMessage {
         return hashCodeCache;
     }
 
+    /** The names of the message sections. */
     private enum SectionName {
+        /** The answer section. */
         answer,
+        /** The authority section. */
         authority,
+        /** The additional section. */
         additional,
     }
 
+    /**
+     * Filters a section's records by data type.
+     *
+     * @param <D> the data type of the records
+     * @param stopOnFirst true to stop after the first match
+     * @param sectionName the section to filter
+     * @param type the data class to keep
+     * @return the matching records
+     */
     private <D extends Data> List<Record<D>> filterSectionByType(boolean stopOnFirst, SectionName sectionName, Class<D> type) {
         List<Record<?>> sectionToFilter;
         switch (sectionName) {
@@ -971,10 +996,26 @@ public class DnsMessage {
         return res;
     }
 
+    /**
+     * Filters a section's records by data type.
+     *
+     * @param <D> the data type of the records
+     * @param sectionName the section to filter
+     * @param type the data class to keep
+     * @return the matching records
+     */
     private <D extends Data> List<Record<D>> filterSectionByType(SectionName sectionName, Class<D> type) {
         return filterSectionByType(false, sectionName, type);
     }
 
+    /**
+     * The first record of the given type.
+     *
+     * @param <D> the data type of the record
+     * @param sectionName the section to search
+     * @param type the data class
+     * @return the record, null if absent
+     */
     private <D extends Data> Record<D> getFirstOfType(SectionName sectionName, Class<D> type) {
         List<Record<D>> result = filterSectionByType(true, sectionName, type);
         if (result.isEmpty()) {
@@ -1494,6 +1535,11 @@ public class DnsMessage {
             return new DnsMessage(this);
         }
 
+        /**
+         * Appends this record to the string builder.
+         *
+         * @param sb the builder to append to
+         */
         private void writeToStringBuilder(StringBuilder sb) {
             sb.append('(').append(id).append(' ').append(opcode).append(' ').append(responseCode).append(' ');
             if (query) {

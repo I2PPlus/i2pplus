@@ -18,6 +18,7 @@ import org.cybergarage.util.Debug;
  * @version 1.8
  */
 public class SSDPNotifySocket extends HTTPMUSocket implements Runnable {
+    /** True when this socket binds an IPv6 address. */
     private boolean useIPv6Address;
 
     ////////////////////////////////////////////////

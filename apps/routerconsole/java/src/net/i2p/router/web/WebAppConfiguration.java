@@ -42,6 +42,7 @@ public class WebAppConfiguration implements Configuration {
      */
     public WebAppConfiguration() {}
 
+    /** Name of the file listing a webapp's extra classpath entries. */
     private static final String CLASSPATH = ".classpath";
 
     /**

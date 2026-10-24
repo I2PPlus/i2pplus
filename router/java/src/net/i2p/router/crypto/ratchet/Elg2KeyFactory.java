@@ -21,26 +21,46 @@ import net.i2p.util.SystemVersion;
  */
 public class Elg2KeyFactory extends I2PThread implements KeyFactory {
 
+    /** The factory created last, for reuse. */
     private static volatile Elg2KeyFactory lastInstance;
+    /** The router context. */
     private final RouterContext _context;
+    /** Logger for the key precalculation. */
     private final Log _log;
+    /** Mapping that makes the Decloak keys. */
     private final Elligator2 _elg2;
+    /** Keys kept in the queue at least. */
     private volatile int _minSize;
+    /** Keys kept in the queue at most. */
     private volatile int _maxSize;
+    /** Delay between precalculation batches. */
     private volatile int _calcDelay;
+    /** Queue of the precalculated key pairs. */
     private final LinkedBlockingQueue<Elg2KeyPair> _keys;
+    /** True while the factory thread runs. */
     private volatile boolean _isRunning;
+    /** Delay before checking the queue again. */
     private long _checkDelay = 10 * 1000L;
+    /** Times the queue was found empty. */
     private final AtomicInteger _emptyCount = new AtomicInteger();
+    /** Keys taken from the queue. */
     private final AtomicInteger _usedCount = new AtomicInteger();
 
+    /** Config key for the minimum queue size. */
     private static final String PROP_DH_PRECALC_MIN = "crypto.edh.precalc.min";
+    /** Config key for the maximum queue size. */
     private static final String PROP_DH_PRECALC_MAX = "crypto.edh.precalc.max";
+    /** Config key for the precalculation delay. */
     private static final String PROP_DH_PRECALC_DELAY = "crypto.edh.precalc.delay";
+    /** Default minimum queue size. */
     private static final int DEFAULT_DH_PRECALC_MIN = SystemVersion.isSlow() ? 20 : 50;
+    /** Default maximum queue size. */
     private static final int DEFAULT_DH_PRECALC_MAX = SystemVersion.isSlow() ? 100 : 200;
+    /** Default precalculation delay, in ms. */
     private static final int DEFAULT_DH_PRECALC_DELAY = 25;
+    /** Largest queue size allowed. */
     private static final int HARD_MAX = 65536;
+    /** True to return unused keys to the X25519 factory. */
     private final boolean RETURN_UNUSED_TO_XDH;
     /**
      * Creates factory and starts background key precomputation thread.
@@ -171,6 +191,7 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
         }
     }
 
+    /** Runs the precalculation loop. */
     private void run2() {
         _isRunning = true;
         while (_isRunning) {
@@ -230,6 +251,11 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
         return rv;
     }
 
+    /**
+     * Generates one key pair.
+     *
+     * @return the new key pair
+     */
     private Elg2KeyPair precalc() {
         long start = System.currentTimeMillis();
         KeyPair rv;

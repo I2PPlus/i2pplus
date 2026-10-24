@@ -24,7 +24,9 @@ import net.i2p.util.Log;
  *
  */
 class CreateSessionJob extends JobImpl {
+    /** Logger for this class. */
     private final Log _log;
+    /** Options for the session being created. */
     private final SessionConfig _config;
     /**
      * Create a job to request tunnels and then a LeaseSet for one client session.

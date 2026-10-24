@@ -35,8 +35,11 @@ import net.i2p.util.Log;
  * @since 0.9.54
  */
 class PacketBuilder2 {
+    /** The router context. */
     private final RouterContext _context;
+    /** Logger for the packet builder. */
     private final Log _log;
+    /** The transport the packets go out on. */
     private final UDPTransport _transport;
 
     /**
@@ -49,12 +52,23 @@ class PacketBuilder2 {
      * @since 0.9.71+
      */
     private static final class BlockPool {
+        /** Holds blocks ready for reuse. */
+        private BlockPool() {}
         /** The list passed to writePayload(); cleared and refilled per call. */
         final List<Block> blocks = new ArrayList<>(8);
+        /** Pooled I2NP blocks ready for reuse. */
         final List<I2NPBlock> i2npBlocks = new ArrayList<>(4);
+        /** Pooled first fragment blocks ready for reuse. */
         final List<FirstFragBlock> firstFragBlocks = new ArrayList<>(4);
+        /** Pooled follow-on fragment blocks ready for reuse. */
         final List<FollowFragBlock> followFragBlocks = new ArrayList<>(4);
 
+        /**
+         * Takes an I2NP block from the pool.
+         *
+         * @param state the message state to fill in
+         * @return a pooled block ready to fill in
+         */
         I2NPBlock acquireI2NP(OutboundMessageState state) {
             if (i2npBlocks.isEmpty())
                 return new I2NPBlock(state);
@@ -63,6 +77,12 @@ class PacketBuilder2 {
             return b;
         }
 
+        /**
+         * Takes a first fragment block from the pool.
+         *
+         * @param state the message state to fill in
+         * @return a pooled block ready to fill in
+         */
         FirstFragBlock acquireFirstFrag(OutboundMessageState state) {
             if (firstFragBlocks.isEmpty())
                 return new FirstFragBlock(state);
@@ -71,6 +91,13 @@ class PacketBuilder2 {
             return b;
         }
 
+        /**
+         * Takes a follow-on fragment block from the pool.
+         *
+         * @param state the message state to fill in
+         * @param fragment the fragment number to carry
+         * @return a pooled block ready to fill in
+         */
         FollowFragBlock acquireFollowFrag(OutboundMessageState state, int fragment) {
             if (followFragBlocks.isEmpty())
                 return new FollowFragBlock(state, fragment);
@@ -79,7 +106,11 @@ class PacketBuilder2 {
             return b;
         }
 
-        /** Return all blocks to their type pools for reuse. */
+        /**
+         * Returns all the blocks to their type pools for reuse.
+         *
+         * @param used the blocks to return
+         */
         void release(List<Block> used) {
             for (Block b : used) {
                 if (b instanceof I2NPBlock)
@@ -92,6 +123,7 @@ class PacketBuilder2 {
         }
     }
 
+    /** The block pool, one per thread. */
     private static final ThreadLocal<BlockPool> _blockPool = new ThreadLocal<BlockPool>() {
         @Override
         protected BlockPool initialValue() {
@@ -146,6 +178,7 @@ class PacketBuilder2 {
     /** Minimum IPv6 data packet overhead with MAC in bytes (80). */
     public static final int MIN_IPV6_DATA_PACKET_OVERHEAD = IPV6_HEADER_SIZE + UDP_HEADER_SIZE + DATA_HEADER_SIZE + MAC_LEN;
 
+    /** Most ack ranges allowed in one packet. */
     private static final int ABSOLUTE_MAX_ACK_RANGES = 512;
 
     /**
@@ -153,9 +186,10 @@ class PacketBuilder2 {
      * and will be shown in the {@code codel.UDP-Sender.drop.500} stat.
      */
     static final int PRIORITY_HIGH = 550;
+    /** Send priority of the medium class messages. */
     private static final int PRIORITY_MEDIUM = OutNetMessage.PRIORITY_MEDIUM;
 
-    // every this many packets
+    /** Packets between date and time blocks. */
     private static final int DATETIME_SEND_FREQUENCY = 256;
 
     /**
@@ -1243,6 +1277,13 @@ class PacketBuilder2 {
         return packet;
     }
 
+    /**
+     * Sets the destination address of the packet.
+     *
+     * @param packet the packet to set
+     * @param ip the destination address
+     * @param port the destination port
+     */
     private static void setTo(UDPPacket packet, InetAddress ip, int port) {
         DatagramPacket pkt = packet.getPacket();
         pkt.setAddress(ip);
@@ -1708,6 +1749,8 @@ class PacketBuilder2 {
     }
 
     /**
+     * Encrypts the payload of one data packet and appends the MAC.
+     *
      * @param packet containing 16 byte header and all data with
      *               length set to the end of the data.
      *               This will extend the length by 16 for the MAC.

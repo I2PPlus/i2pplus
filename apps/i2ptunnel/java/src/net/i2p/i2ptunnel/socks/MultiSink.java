@@ -12,6 +12,7 @@ import net.i2p.util.Log;
  * @param <S> type of Sink objects managed by this MultiSink
  */
 public class MultiSink<S extends Sink> implements Source, Sink {
+    /** Open streams keyed by their SOCKS stream number. */
     private final Map<Integer, S> cache;
 
     /**

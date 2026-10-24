@@ -35,7 +35,9 @@ class LogRecordFormatter {
     private static final int MAX_THREAD_LENGTH = 12;
     /** Max length for the priority label column. */
     private static final int MAX_PRIORITY_LENGTH = 5;
+    /** Joins the fields of a log line. */
     private static final String SEPARATOR = "| ";
+    /** Marks text shortened to fit the column. */
     private static final String ELLIPSIS = "...";
     /** Anchor open tag stripped from messages in the LogManager.MESSAGE format. */
     private static final Pattern LINK_OPEN = Pattern.compile("<a[^>]*>");
@@ -127,7 +129,10 @@ class LogRecordFormatter {
         }
     }
 
-    /* don't translate */
+    /**
+     * Name of the bundle for the level names, deliberately not translated
+     * outside that bundle.
+     */
     private static final String BUNDLE_NAME = "net.i2p.util.messages";
 
     static {

@@ -34,16 +34,23 @@ import org.rrd4j.data.Variable;
  */
 @SuppressWarnings("deprecation")
 public class FetchData {
-    // anything funny will do
+    /** The RPN compiler source name, anything funny will do. */
     private static final String RPN_SOURCE_NAME = "WHERE THE SPEECHLES UNITE IN A SILENT ACCORD";
 
+    /** The request that produced this data. */
     private final FetchRequest request;
+    /** The names of the data sources. */
     private String[] dsNames;
+    /** The timestamps of the fetched rows. */
     private long[] timestamps;
+    /** The fetched values, by row and source. */
     private double[][] values;
 
+    /** The archive that matched the request. */
     private final Archive matchingArchive;
+    /** The step of the matching archive. */
     private final long arcStep;
+    /** The end time of the matching archive. */
     private final long arcEndTime;
 
     /**
@@ -286,6 +293,13 @@ public class FetchData {
         return buff.toString();
     }
 
+    /**
+     * Pads the text with blanks to the width.
+     *
+     * @param input the text to pad
+     * @param width the target width
+     * @return the padded text
+     */
     private static String padWithBlanks(String input, int width) {
         StringBuilder buff = new StringBuilder();
         int diff = width - input.length();
@@ -438,6 +452,12 @@ public class FetchData {
         return arcEndTime;
     }
 
+    /**
+     * Builds the processor for an RPN expression.
+     *
+     * @param rpnExpression the expression to compile
+     * @return the processor for the expression
+     */
     private DataProcessor createDataProcessor(String rpnExpression) {
         DataProcessor dataProcessor =
                 new DataProcessor(request.getFetchStart(), request.getFetchEnd());

@@ -14,12 +14,19 @@ import java.util.Map;
  */
 class SubscriptionList implements Iterable<AddressBook> {
 
+    /** The subscriptions, in file order. */
     private final List<Subscription> subscriptions;
+    /** Where each subscription's ETag is remembered. */
     private final File etagsFile;
+    /** Where each subscription's last-modified date is remembered. */
     private final File lastModifiedFile;
+    /** Where each subscription's last fetch time is remembered. */
     private final File lastFetchedFile;
+    /** Pause between fetches, in ms. */
     private final long delay;
+    /** Proxy used for the fetches, null for none. */
     private final String proxyHost;
+    /** Port of that proxy. */
     private final int proxyPort;
 
     /**

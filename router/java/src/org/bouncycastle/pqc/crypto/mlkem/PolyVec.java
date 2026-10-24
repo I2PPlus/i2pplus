@@ -12,8 +12,11 @@ class PolyVec
      * The polynomials held by this vector, in order, always kyberK long.
      */
     Poly[] vec;
+    /** The engine whose arithmetic this vector uses. */
     private MLKEMEngine engine;
+    /** How many polynomials the vector holds. */
     private int kyberK;
+    /** Length of the encoded vector, in bytes. */
     private int polyVecBytes;
 
     /**

@@ -18,8 +18,11 @@ import net.i2p.util.Log;
  */
 public class AdvancedSettingsHandler implements RequestHandler {
 
+    /** The router whose settings are read and written. */
     private final RouterContext _context;
+    /** Validates requests and formats replies. */
     private final JSONRPC2Helper _helper;
+    /** No method here requires arguments. */
     private static final String[] requiredArgs = {};
 
     /**
@@ -172,15 +175,32 @@ public class AdvancedSettingsHandler implements RequestHandler {
         }
     }
 
+    /**
+     * Reads one router config setting.
+     *
+     * @param key the config parameter name
+     * @return the value, null if unset
+     */
     private String getAdvancedSetting(String key) {
         return _context.router().getConfigSetting(key);
     }
 
 
+    /**
+     * Reads the whole router config map.
+     *
+     * @return every setting, by name
+     */
     private Map<String, String> getAdvancedSettings() {
         return _context.router().getConfigMap();
     }
 
+    /**
+     * Checks every supplied value is a string.
+     *
+     * @param newSettings the values from the request
+     * @return true if all the values are strings
+     */
     private boolean checkTypes(Map<String, Object> newSettings) {
         for (Map.Entry<String, Object> entry : newSettings.entrySet()) {
             if (!(entry.getValue() instanceof String)) {
@@ -191,6 +211,13 @@ public class AdvancedSettingsHandler implements RequestHandler {
         return true;
     }
 
+    /**
+     * Writes the new settings to the router config.
+     *
+     * @param newSettings the values to write
+     * @param clearConfig true to unset every setting not in newSettings
+     * @return true if the settings were written
+     */
     private boolean setAdvancedSettings(Map<String, String> newSettings, boolean clearConfig) {
         Set<String> unsetKeys = null;
 

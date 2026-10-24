@@ -34,6 +34,10 @@ import net.metanotion.util.skiplist.SkipSpan;
  * @param <V> the type of mapped values
  */
 public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<K, V> {
+    /**
+     * Written first in a persisted level, so a wrong file is
+     * recognised
+     */
     private static final long MAGIC = 0x42534c6576656c73L;  // "BSLevels"
     /** Fixed header length in bytes */
     static final int HEADER_LEN = 16;
@@ -372,6 +376,9 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
      * @param <V> the value type
      */
     private static class LevelComparator<K extends Comparable<? super K>, V> implements Comparator<SkipLevels<K, V>>, Serializable {
+        /** Orders the levels by their span counts. */
+        private LevelComparator() {}
+
         /**
          * Compare two SkipLevels.
          *

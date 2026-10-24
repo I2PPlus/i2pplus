@@ -22,12 +22,19 @@ import java.time.Instant;
  * Use socket.setsotimeout instead?
  */
 public class SocketTimeout extends SimpleTimer2.TimedEvent {
+    /** The socket this timeout watches. */
     private volatile Socket _targetSocket;
+    /** When the timeout was created. */
     private final long _startTime;
+    /** Quiet time past which the socket times out, in ms. */
     private volatile long _inactivityDelay;
+    /** When the socket last carried data. */
     private volatile long _lastActivity;
+    /** Absolute deadline past which the socket times out. */
     private volatile long _totalTimeoutTime;
+    /** True once the timeout will not fire. */
     private volatile boolean _cancelled;
+    /** What runs when the timeout fires. */
     private volatile Runnable _command;
 
     /**

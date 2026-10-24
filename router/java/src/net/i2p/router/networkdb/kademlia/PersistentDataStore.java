@@ -245,14 +245,7 @@ public class PersistentDataStore extends TransientDataStore {
     /** Interval between batch disk write cycles. */
     private static final long WRITE_DELAY = 10*60*1000L;
 
-    /*
-     * Queue up writes, write unlimited files every 10 minutes.
-     * Since we write all we have, don't save the write order.
-     * We store a reference to the data here too,
-     * rather than simply pull it from super.get(), because
-     * we will soon have to implement a scheme for keeping only
-     * a subset of all DatabaseEntrys in memory and keeping the rest on disk.
-     */
+    /** Thread writing the store changes to disk. */
     private class Writer implements Runnable, Flushable {
         /** Queue of entries pending disk write. */
         private final Map<Hash, DatabaseEntry>_keys;
@@ -263,6 +256,7 @@ public class PersistentDataStore extends TransientDataStore {
         /** Flag to signal the write loop to exit. */
         private volatile boolean _quit;
 
+        /** Builds the disk writer thread. */
         public Writer() {
             _keys = new ConcurrentHashMap<>(64);
             _keysToRemove = new ConcurrentHashSet<>();
@@ -293,9 +287,7 @@ public class PersistentDataStore extends TransientDataStore {
             _keysToRemove.add(key);
         }
 
-        /*
-         * @since 0.9.50 was in separate RemoveJob
-         */
+        /** Drops queued entries that were replaced. */
         private void removeQueued() {
 
             if (_keysToRemove.isEmpty()) {return;}
@@ -417,21 +409,53 @@ public class PersistentDataStore extends TransientDataStore {
 
     /** Pre-computed classification flags for a RouterInfo being written. */
     private static class RiFlags {
+        /** Version string of the router info. */
         final String version;
+        /** Capabilities string of the router info. */
         final String caps;
+        /** Bandwidth class of the router info. */
         final String bw;
+        /** IP address text of the router info. */
         final String ip;
+        /** Our IP as the peer sees it. */
         final String ourIP;
+        /** True if the router info has an IP. */
         final boolean hasIP;
+        /** True if the router was marked unreachable. */
         final boolean unreachable;
+        /** True if the router was marked reachable. */
         final boolean reachable;
+        /** True if the router info is old. */
         final boolean isOld;
+        /** True if the version string is invalid. */
         final boolean isInvalidVersion;
+        /** True if the router is in the L tier. */
         final boolean isLTier;
+        /** True if the router is in the S tier. */
         final boolean isSlow;
+        /** True if the router is degraded. */
         final boolean isDegraded;
+        /** True if the router is banned. */
         final boolean isBanned;
 
+        /**
+         * Records the searchable fields of a router info.
+         *
+         * @param version the version string
+         * @param caps the capabilities string
+         * @param bw the bandwidth class
+         * @param ip the IP address text
+         * @param ourIP our IP as the peer sees it
+         * @param hasIP true if the router info has an IP
+         * @param unreachable true if the router was marked unreachable
+         * @param reachable true if the router was marked reachable
+         * @param isOld true if the router info is old
+         * @param isInvalidVersion true if the version is invalid
+         * @param isLTier true if the router is in the L tier
+         * @param isSlow true if the router is in the S tier
+         * @param isDegraded true if the router is degraded
+         * @param isBanned true if the router is banned
+         */
         RiFlags(String version, String caps, String bw, String ip, String ourIP,
                 boolean hasIP, boolean unreachable, boolean reachable,
                 boolean isOld, boolean isInvalidVersion, boolean isLTier, boolean isSlow,
@@ -649,8 +673,11 @@ public class PersistentDataStore extends TransientDataStore {
         if (shouldDelete && dbFile != null) {dbFile.delete();}
     }
 
+    /** Cached count of the router info entries. */
     private int cachedRiCount = 0;
+    /** When the cached count was taken. */
     private long lastRiCountTime = 0;
+    /** How long the cached count stays valid. */
     private static final long RI_CACHE_TTL = WRITE_DELAY;
 
     /**
@@ -694,6 +721,12 @@ public class PersistentDataStore extends TransientDataStore {
         return count;
     }
 
+    /**
+     * Returns the publish date of an entry.
+     *
+     * @param data the entry to read
+     * @return the publish date
+     */
     private static long getPublishDate(DatabaseEntry data) {return data.getDate();}
 
     /**
@@ -719,6 +752,7 @@ public class PersistentDataStore extends TransientDataStore {
         /** Whether the initial scan has completed at least once. */
         private volatile boolean hasRun = false;
 
+        /** Job reading the stored entries at startup. */
         public ReadJob() {super(PersistentDataStore.this._context);}
 
         @Override
@@ -1252,6 +1286,12 @@ public class PersistentDataStore extends TransientDataStore {
      */
     public static final FileFilter RI_FILTER = new FileSuffixFilter(ROUTERINFO_PREFIX, ROUTERINFO_SUFFIX);
 
+    /**
+     * Builds the router info file name for a hash.
+     *
+     * @param hash the hash to name
+     * @return the file name
+     */
     private String getRouterInfoName(Hash hash) {
         String b64 = hash.toBase64();
         if (_flat)
@@ -1328,6 +1368,12 @@ public class PersistentDataStore extends TransientDataStore {
         private final Hash h;
         /** Reason for the disconnect. */
         private final String reason;
+        /**
+         * Job disconnecting a peer after a delay.
+         *
+         * @param h the peer hash
+         * @param reason the reason for the disconnect
+         */
         public Disconnector(Hash h, String reason) {super(_context.simpleTimer2()); this.h = h; this.reason = reason;}
         public void timeReached() {_context.commSystem().forceDisconnect(h, reason);}
     }

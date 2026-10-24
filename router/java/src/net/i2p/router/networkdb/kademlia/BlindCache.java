@@ -40,16 +40,20 @@ import net.i2p.util.SecureFileOutputStream;
  */
 class BlindCache {
 
+    /** The router doing the lookups. */
     private final RouterContext _context;
-    // unblinded key
+    /** The blind data, by our unblinded signing key. */
     private final ConcurrentHashMap<SigningPublicKey, BlindData> _cache;
-    // blinded key
+    /** The blind data, by the blinded peer signing key. */
     private final ConcurrentHashMap<SigningPublicKey, BlindData> _reverseCache;
-    // dest hash
+    /** The blind data, by destination hash. */
     private final ConcurrentHashMap<Hash, BlindData> _hashCache;
+    /** True when the cache awaits a save. */
     private boolean _changed;
 
+    /** File the cache is persisted to. */
     private static final String PERSIST_FILE = "router.blindcache.dat";
+    /** Most entries kept in the cache. */
     private static final int MAX_CACHE_SIZE = 32;
 
     /**
@@ -361,6 +365,7 @@ class BlindCache {
             log.info("Loaded " + count + " entries from " + file);
     }
 
+    /** Writes the cache to the file. */
     private synchronized void store() {
         if (_cache.isEmpty())
             return;

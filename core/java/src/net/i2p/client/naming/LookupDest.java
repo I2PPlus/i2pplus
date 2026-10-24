@@ -34,6 +34,7 @@ import java.util.Properties;
  */
 public class LookupDest {
 
+    /** Milliseconds a blocking lookup waits when no timeout is given (15 seconds). */
     private static final long DEFAULT_TIMEOUT = (long) 15 * 1000;
 
     /**

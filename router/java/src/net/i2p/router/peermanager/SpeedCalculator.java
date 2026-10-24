@@ -19,16 +19,24 @@ import net.i2p.router.RouterContext;
  */
 class SpeedCalculator {
 
+    /** Not called, the calculator class is never instantiated. */
     private SpeedCalculator() {}
 
     /** Base scores for profiled bandwidth tiers. */
     private static final double BASE_X = 10000;
+    /** Base speed score of a tier P peer. */
     private static final double BASE_P = 5000;
+    /** Base speed score of a tier O peer. */
     private static final double BASE_O = 2500;
+    /** Base speed score of a tier N peer. */
     private static final double BASE_N = 1250;
+    /** Base speed score of a tier M peer. */
     private static final double BASE_M = 625;
+    /** Base speed score of a tier L peer. */
     private static final double BASE_L = 312;
+    /** Base speed score of a tier K peer. */
     private static final double BASE_K = 125;
+    /** Base speed score of an untracked peer. */
     private static final double BASE_UNKNOWN = 100;
 
     /** RTT threshold where speed is fully penalized (16s). */
@@ -36,6 +44,7 @@ class SpeedCalculator {
 
     /** Congestion capability multipliers. */
     private static final double CONGESTION_D = 0.75;
+    /** Factor penalizing a congested peer. */
     private static final double CONGESTION_E = 0.50;
 
     /**
@@ -69,6 +78,13 @@ class SpeedCalculator {
         return Math.max(speed, 0.0d);
     }
 
+    /**
+     * The base speed score of the peer.
+     *
+     * @param context the router context
+     * @param profile the peer's profile
+     * @return the base score
+     */
     private static double getBaseScore(RouterContext context, PeerProfile profile) {
         NetworkDatabaseFacade ndb = context.netDb();
         if (ndb == null) return BASE_O; // Default to medium if netDb unavailable
@@ -87,6 +103,12 @@ class SpeedCalculator {
         return BASE_UNKNOWN;
     }
 
+    /**
+     * Factor scaling the score by the round trip time.
+     *
+     * @param profile the peer's profile
+     * @return the factor, one if unknown
+     */
     @SuppressWarnings("deprecation")
     private static double getRTTFactor(PeerProfile profile) {
         float avgRTT = profile.getTunnelTestTimeAverage();
@@ -95,6 +117,13 @@ class SpeedCalculator {
         return Math.max(0.1, factor);
     }
 
+    /**
+     * Factor scaling the score by the network congestion.
+     *
+     * @param context the router context
+     * @param profile the peer's profile
+     * @return the factor, one if uncongested
+     */
     private static double getCongestionFactor(RouterContext context, PeerProfile profile) {
         NetworkDatabaseFacade ndb = context.netDb();
         if (ndb == null) return 1.0;

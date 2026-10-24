@@ -34,7 +34,9 @@ import net.i2p.stat.RateStat;
  */
 public class GetRateHandler implements RequestHandler {
 
+    /** The argument names this method requires. */
     private static final String[] requiredArgs = {"Stat", "Period"};
+    /** Checks the token a request carries. */
     private final JSONRPC2Helper _helper;
 
     /**

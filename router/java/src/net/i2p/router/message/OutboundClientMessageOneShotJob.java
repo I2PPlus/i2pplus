@@ -99,24 +99,53 @@ import net.i2p.util.Log;
  * The per-session and per-message overrides are set via I2CP.
  */
 public class OutboundClientMessageOneShotJob extends JobImpl {
+    /** Logger for this send attempt. */
     private final Log _log;
+    /** Cache consulted for the target's lease set. */
     private final OutboundCache _cache;
+    /** When this send attempt gives up entirely. */
     private final long _overallExpiration;
+    /** The message being sent. */
     private final ClientMessage _clientMessage;
+    /** Id of the message being sent. */
     private final MessageId _clientMessageId;
+    /** Size of the message in bytes. */
     private final int _clientMessageSize;
+    /** The sending client's destination. */
     private final Destination _from;
+    /** The target destination. */
     private final Destination _to;
+    /** Base32 prefix of the target, for the logs. */
     private final String _toString;
-    private LeaseSet _leaseSet; /** Target destination's leaseSet, if known. */
-    private Lease _lease; /** Actual lease the message is being routed through. */
-    private PublicKey _encryptionKey; /** Actual target encryption key from the LS being used. */
+    /** The target's lease set, if known. */
+    private LeaseSet _leaseSet;
+    /** The actual lease the message is being routed through. */
+    private Lease _lease;
+    /** Actual target encryption key from the LS being used. */
+    private PublicKey _encryptionKey;
+    /** When the job started. */
     private final long _start;
-    private enum Result {NONE, FAIL, SUCCESS} /** Note we can succeed after failure, but not vice versa. */
+    /**
+     * Outcome of one send attempt.
+     * We can succeed after failure, but not vice versa.
+     */
+    private enum Result {
+        /** Nothing has happened yet. */
+        NONE,
+        /** The send or the reply failed. */
+        FAIL,
+        /** The reply arrived. */
+        SUCCESS
+    }
+    /** The result reported when the job finishes. */
     private Result _finished = Result.NONE;
+    /** When the lease set lookup started. */
     private long _leaseSetLookupBegin;
+    /** The outbound tunnel the message was sent on. */
     private TunnelInfo _outTunnel;
+    /** The inbound tunnel the reply arrived on. */
     private TunnelInfo _inTunnel;
+    /** Whether the client asked for an ack. */
     private boolean _wantACK;
 
     /** Key used to cache things with, based on source + dest. */
@@ -128,13 +157,22 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      * (the client's session config takes precedence).
      */
     public static final String OVERALL_TIMEOUT_MS_PARAM = "clientMessageTimeout";
+    /** Default overall send timeout, one minute. */
     private static final long OVERALL_TIMEOUT_MS_DEFAULT = 60*1000L;
+    /** Shortest overall send timeout allowed. */
     private static final long OVERALL_TIMEOUT_MS_MIN = 8*1000L;
+    /** Longest overall send timeout allowed. */
     private static final long OVERALL_TIMEOUT_MS_MAX = 90*1000L;
+    /** Timeout for the lease set lookup. */
     private static final long LS_LOOKUP_TIMEOUT = 25*1000L;
+    /** Minimum overall timeout when a lookup is needed. */
     private static final long OVERALL_TIMEOUT_NOLS_MIN = OVERALL_TIMEOUT_MS_MIN + LS_LOOKUP_TIMEOUT;
+    /** Minimum time left for the reply after sending. */
     private static final long REPLY_TIMEOUT_MS_MIN = OVERALL_TIMEOUT_MS_DEFAULT - 5*1000L;
-    // callback timeout. Longer so we can have success-after-failure
+    /**
+     * Least time left for the ratchet reply callback, longer than
+     * the send timeout so a success after a failure still counts.
+     */
     private static final long RATCHET_REPLY_TIMEOUT_MS_MIN = 30*1000L;
 
     /**
@@ -171,6 +209,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      */
     public static final String BUNDLE_REPLY_LEASESET = "shouldBundleReplyInfo";
 
+    /** Interval between cached reply requests. */
     private static final int REPLY_REQUEST_INTERVAL = 60*1000;
 
     /**
@@ -188,6 +227,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      */
     private static final int MAX_ROTATION_CANDIDATES = 6;
 
+    /** Rate stat period for the send statistics. */
     private static final long[] RATES = new long[] { 60*1000L };
 
     /**
@@ -492,6 +532,11 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      * It is only run on the job queue after a LS lookup.
      */
     private class SendJob extends JobImpl {
+        /**
+         * Schedules the actual send pass.
+         *
+         * @param enclosingContext the router context
+         */
         public SendJob(RouterContext enclosingContext) {super(enclosingContext);}
 
         public String getName() {return "Delay OB Client Message Send";}
@@ -668,6 +713,11 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      * We couldn't even find the leaseSet, so die.
      */
     private class LookupLeaseSetFailedJob extends JobImpl {
+        /**
+         * Schedules handling of a failed lease set lookup.
+         *
+         * @param enclosingContext the router context
+         */
         public LookupLeaseSetFailedJob(RouterContext enclosingContext) {super(enclosingContext);}
         public String getName() {return "Timeout OB Client Message Lease Lookup";}
         public void runJob() {
@@ -866,14 +916,17 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         if (!wantACK) {getContext().statManager().addRateData("client.dispatchNoACK", 1);}
     }
 
-    // TODO replace with a method
     /**
      * Note: This is run inline by {@link #send()}, not on the job queue.
     */
     private class DispatchJob extends JobImpl {
+        /** The message being sent. */
         private final GarlicMessage _msg;
+        /** Selector matching the reply. */
         private final ReplySelector _selector;
+        /** Job run when the reply arrives. */
         private final SendSuccessJob _replyFound;
+        /** Job run when the reply times out. */
         private final SendTimeoutJob _replyTimeout;
 
         /**
@@ -1456,9 +1509,17 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      * sent down the various tunnels to deliver this message.
      */
     private static class ReplySelector implements MessageSelector {
+        /** Token the reply must carry. */
         private final long _pendingToken;
+        /** When the selector stops matching. */
         private final long _expiration;
 
+        /**
+         * Matches the reply for one pending send.
+         *
+         * @param token the token the reply must carry
+         * @param expiration when the selector stops matching
+         */
         public ReplySelector(long token, long expiration) {
             _pendingToken = token;
             _expiration = expiration;
@@ -1485,9 +1546,13 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      * This may be run after failure.
      */
     private class SendSuccessJob extends JobImpl implements ReplyJob {
+        /** Key for decrypting the reply. */
         private final SessionKey _key;
+        /** Tags the reply was encrypted with. */
         private final TagSetHandle _tags;
+        /** Lease set the message was delivered to. */
         private final LeaseSet _deliveredLS;
+        /** Job to cancel when the reply arrives. */
         private final SendTimeoutJob _replyTimeout;
 
         /**
@@ -1602,6 +1667,12 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      * @since 0.9.46
      */
     private class ECIESReplyCallback extends SendSuccessJob implements ReplyCallback {
+        /**
+         * Handles an ECIES reply with no ratchet keys.
+         *
+         * @param ls the lease set to receive the reply through
+         * @param timeout the send timeout job to cancel on a reply
+         */
         public ECIESReplyCallback(LeaseSet ls, SendTimeoutJob timeout) {super(null, null, ls, timeout);}
 
         public long getExpiration() {
@@ -1617,7 +1688,9 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      * We'll accept successes later, but won't expect them.
      */
     private class SendTimeoutJob extends JobImpl {
+        /** Key for decrypting the reply. */
         private final SessionKey _key;
+        /** Tags the reply was encrypted with. */
         private final TagSetHandle _tags;
 
         /**

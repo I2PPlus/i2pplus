@@ -38,8 +38,11 @@ import net.i2p.util.Log;
  * @since 0.8.12 moved from Router.java
  */
 public class ShutdownHook extends Thread {
+    /** The router being shut down. */
     private final RouterContext _context;
+    /** Counts the hooks created. */
     private static final AtomicInteger __id = new AtomicInteger();
+    /** This hook's number, used in its name. */
     private final int _id;
 
     /**

@@ -14,6 +14,10 @@ import java.util.Locale;
  * </ul>
  */
 public class SimpleTimeLabelFormat implements TimeLabelFormat {
+    /**
+     * The pattern to render with - an strftime pattern or a
+     * simple date format.
+     */
     private final String format;
 
     /**

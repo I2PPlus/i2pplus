@@ -15,18 +15,15 @@ import net.i2p.router.RouterVersion;
 import net.i2p.router.transport.TransportUtil;
 import net.i2p.router.transport.ntcp.NTCPTransport;
 
-/*
- *  Copyright 2011 hottuna (dev@robertfoss.se)
- *  Licensed under the Apache License, Version 2.0
- *  http://www.apache.org/licenses/LICENSE-2.0
- */
 
 /**
  * JSON-RPC2 handler for the RouterInfo method.
  * Provides read-only access to router status information including version, uptime, network status, bandwidth usage, and peer statistics.
  */
 public class RouterInfoHandler implements RequestHandler {
+    /** The JSON-RPC helper for this request. */
     private final JSONRPC2Helper _helper;
+    /** The router context. */
     private final RouterContext _context;
 
     /**
@@ -61,6 +58,12 @@ public class RouterInfoHandler implements RequestHandler {
         }
     }
 
+    /**
+     * Handles one router info request.
+     *
+     * @param req the request to handle
+     * @return the response to send
+     */
     @SuppressWarnings("unchecked")
     private JSONRPC2Response process(JSONRPC2Request req) {
         JSONRPC2Error err = _helper.validateParams(null, req);
@@ -146,25 +149,47 @@ public class RouterInfoHandler implements RequestHandler {
         return new JSONRPC2Response(outParams, req.getID());
     }
 
+    /**
+     * Router network status, as reported by the console sidebar.
+     */
     private static enum NETWORK_STATUS {
+        /** Network works and the TCP address is publicly routable. */
         OK,
+        /** Network status still unknown, under test. */
         TESTING,
+        /** Firewalled, no inbound connections. */
         FIREWALLED,
+        /** Hidden mode, no public address published. */
         HIDDEN,
+        /** Firewalled while claiming a fast bandwidth flag. */
         WARN_FIREWALLED_AND_FAST,
+        /** Firewalled while floodfill is enabled. */
         WARN_FIREWALLED_AND_FLOODFILL,
+        /** Firewalled but a public NTCP2 address is published. */
         WARN_FIREWALLED_WITH_INBOUND_TCP,
+        /** Firewalled with UDP disabled. */
         WARN_FIREWALLED_WITH_UDP_DISABLED,
+        /** No client sessions alive after startup. */
         ERROR_I2CP,
+        /** Peer clock skew over a minute. */
         ERROR_CLOCK_SKEW,
+        /** Network works but the NTCP2 address is not public. */
         ERROR_PRIVATE_TCP_ADDRESS,
+        /** Symmetric NAT detected. */
         ERROR_SYMMETRIC_NAT,
+        /** The UDP port is in use by another process. */
         ERROR_UDP_PORT_IN_USE,
+        /** No active peers at all. */
         ERROR_NO_ACTIVE_PEERS_CHECK_CONNECTION_AND_FIREWALL,
+        /** UDP disabled and the TCP address is unset. */
         ERROR_UDP_DISABLED_AND_TCP_UNSET,
     };
 
-    // Ripped out of SidebarHelper.java
+    /**
+     * Returns the router's network status.
+     *
+     * @return the status name
+     */
     private NETWORK_STATUS getNetworkStatus() {
         if (_context.router().getUptime() > 60 * 1000
                 && (!_context.router().gracefulShutdownInProgress())

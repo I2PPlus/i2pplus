@@ -33,8 +33,11 @@ public class TuningHelper extends HelperBase {
      */
     public TuningHelper() {}
 
+    /** Width of a sparkline graph, in pixels. */
     private static final int SPARK_W = 140;
+    /** Height of a sparkline graph, in pixels. */
     private static final int SPARK_H = 36;
+    /** Nonce proving the tuner form came from this router. */
     private String _nonce;
 
     /**
@@ -352,7 +355,7 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("router.defaultProcessingTimeThrottle", _x("Max average message delay before rejecting transit (ms)."));
     }
 
-    // display order for subsystems (alphabetical)
+    /** Subsystems in the order the tuner page displays them, alphabetical. */
     private static final String[] SUBSYSTEM_ORDER = {
         Tuner.SUB_CONGESTION,
         Tuner.SUB_CRYPTO,
@@ -366,7 +369,7 @@ public class TuningHelper extends HelperBase {
         Tuner.SUB_TRANSPORT
     };
 
-    // single-word section headings
+    /** Single-word section heading for each subsystem. */
     private static final Map<String, String> SECTION_LABELS = new LinkedHashMap<>();
     static {
         SECTION_LABELS.put(Tuner.SUB_TRANSPORT, _x("Transport"));
@@ -606,6 +609,12 @@ public class TuningHelper extends HelperBase {
         return sb.toString();
     }
 
+    /**
+     * Escapes a value for display in HTML.
+     *
+     * @param s the text to escape
+     * @return the text to show
+     */
     private static String esc(String s) {
         if (s == null) return "";
         return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;");

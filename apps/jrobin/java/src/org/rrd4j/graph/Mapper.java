@@ -5,8 +5,11 @@ package org.rrd4j.graph;
  * time/value coordinates and screen pixel positions.
  */
 class Mapper {
+    /** The graph being drawn. */
     private final RrdGraphDef gdef;
+    /** Where the drawing happens. */
     private final ImageParameters im;
+    /** Pixels per data unit, in each direction. */
     private final double pixieX, pixieY;
 
     /**

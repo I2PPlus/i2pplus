@@ -23,12 +23,15 @@ public final class EdDSABlinding {
      * Order of the Ed25519 prime-order subgroup, as used to reduce exponents.
      */
     public static final BigInteger ORDER = new BigInteger("2").pow(252).add(new BigInteger("27742317777372353535851937790883648493"));
+    /** The value 1, little-endian, for scalar arithmetic. */
     private static final byte[] ONE =
             Utils.hexToBytes("0100000000000000000000000000000000000000000000000000000000000000");
     /** -1 mod l, little endian; used by unblind to subtract alpha. */
     private static final byte[] MINUS_ONE = toLittleEndian(ORDER.subtract(BigInteger.ONE));
+    /** The field the curve's points live in. */
     private static final Field CURVE_FIELD = EdDSANamedCurveTable.getByName("Ed25519").getCurve().getField();
 
+    /** Utility class, not intended for instantiation. */
     private EdDSABlinding() {}
 
     /**

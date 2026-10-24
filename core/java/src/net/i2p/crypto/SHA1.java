@@ -64,6 +64,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
      * the 56 last bytes are kept in the padding history.
      */
     private byte[] pad;
+    /** Bytes of padding still to be added. */
     private int padding;
 
     /**
@@ -76,11 +77,16 @@ public final class SHA1 extends MessageDigest implements Cloneable {
      * Private context that contains the current digest key.
      */
     private int hA;
+    /** Chaining variable B. */
     private int hB;
+    /** Chaining variable C. */
     private int hC;
+    /** Chaining variable D. */
     private int hD;
+    /** Chaining variable E. */
     private int hE;
 
+    /** True to use the original implementation rather than the JVM's. */
     private static final boolean _useBitzi;
     static {
         // oddly, Bitzi is faster than Oracle - see test results below
@@ -130,8 +136,8 @@ public final class SHA1 extends MessageDigest implements Cloneable {
     }
 
     /**
-     * Clone of this object.
-     * @return a clone of this object
+     * Copy this SHA-1 object.
+     * @return a copy with its own pad buffer
      */
     @Override
     public SHA1 clone() throws CloneNotSupportedException {

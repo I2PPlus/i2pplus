@@ -38,7 +38,9 @@ import net.i2p.util.SystemVersion;
  * For use by the router only. Not to be used by applications or plugins.
  */
 public class JobQueue {
+    /** Logger for the job queue. */
     private final Log _log;
+    /** The router context. */
     private final RouterContext _context;
 
     /** Integer (runnerId) to JobQueueRunner for created runners. */
@@ -79,12 +81,15 @@ public class JobQueue {
     private final AtomicInteger _queuedTestJobs;
     /** Job name to JobStat for that job. */
     private final ConcurrentHashMap<String, JobStats> _jobStats;
+    /** Thread pumping the ready jobs to the runners. */
     private final QueuePumper _pumper;
     /** Will we allow the # job runners to grow beyond 1? */
     private volatile boolean _allowParallelOperation;
     /** Have we been killed or are we alive? */
     private volatile boolean _alive;
+    /** Lock for the job queues. */
     private final Object _jobLock;
+    /** When the pumper wakes next. */
     private volatile long _nextPumperRun;
 
     /** How many when we go parallel. */
@@ -100,18 +105,23 @@ public class JobQueue {
     static final String PROP_MAX_RUNNERS = "router.maxJobRunners";
     /** If a job is this lagged, spit out a warning, but keep going. */
     private static final long DEFAULT_LAG_WARNING = 5*1000L;
+    /** Job delay that logs a warning. */
     private long _lagWarning = DEFAULT_LAG_WARNING;
     /** If a job is this lagged, the router is hosed, so spit out a warning (don't shut it down). */
     private static final long DEFAULT_LAG_FATAL = 30*1000L;
+    /** Job delay that restarts the router. */
     private long _lagFatal = DEFAULT_LAG_FATAL;
     /** If a job takes this long to run, spit out a warning, but keep going. */
     private static final long DEFAULT_RUN_WARNING = 5*1000L;
+    /** Job run time that logs a warning. */
     private long _runWarning = DEFAULT_RUN_WARNING;
     /** If a job takes this long to run, the router is hosed, so spit out a warning (don't shut it down). */
     private static final long DEFAULT_RUN_FATAL = 30*1000L;
+    /** Job run time that logs an error. */
     private long _runFatal = DEFAULT_RUN_FATAL;
     /** Don't enforce fatal limits until the router has been up for this long. */
     private static final long DEFAULT_WARMUP_TIME = 15*60*1000L;
+    /** Startup time the lag checks ignore. */
     private long _warmupTime = DEFAULT_WARMUP_TIME;
     /** Max ready and waiting jobs before we start dropping 'em - scale with runner count. */
     private static final int DEFAULT_MAX_WAITING_JOBS = SystemVersion.isSlow() ? 24 : 48;
@@ -146,6 +156,7 @@ public class JobQueue {
     /** Dynamic scaling controller for adjusting runner count based on load. */
     private final JobQueueScaler _scaler;
 
+    /** Rate stat periods for the job statistics. */
     private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
 
     /** Track dropped jobs for UI display. */
@@ -561,6 +572,13 @@ public class JobQueue {
         return jobCount > 0 ? totalLag / jobCount : 0;
     }
 
+    /**
+     * Checks whether a late job should be dropped.
+     *
+     * @param job the job being considered
+     * @param numReady the jobs already waiting to run
+     * @return true to drop the job instead of running it
+     */
     private boolean shouldDrop(Job job, int numReady) {
         if (_maxWaitingJobs <= 0) return false;
         if (!_allowParallelOperation) return false;
@@ -916,6 +934,7 @@ public class JobQueue {
         return removed;
     }
 
+    /** Thread pumping the ready jobs to the runners. */
     private final class QueuePumper implements Runnable, Clock.ClockUpdateListener, RouterClock.ClockShiftListener {
         /**
          * Scratch buffer for the jobs a single pass promotes out of _timedJobs,
@@ -924,6 +943,7 @@ public class JobQueue {
          */
         private final List<Job> _toMove = new ArrayList<>();
 
+        /** Builds the queue pumper thread. */
         public QueuePumper() {
             _context.clock().addUpdateListener(this);
             ((RouterClock) _context.clock()).addShiftListener(this);
@@ -1042,6 +1062,11 @@ public class JobQueue {
         }
     }
 
+    /**
+     * Shifts the scheduled job times by a clock change.
+     *
+     * @param delta the clock change, in ms
+     */
     private void updateJobTimings(long delta) {
         synchronized (_jobLock) {
             for (Job j : _timedJobs) j.getTiming().offsetChanged(delta);
@@ -1105,8 +1130,10 @@ public class JobQueue {
         }
     }
 
+    /** Job id that stops the pumper. */
     private static final int POISON_ID = -99999;
 
+    /** Queue entry that stops the pumper. */
     private static class PoisonJob implements Job {
         /**
          * Sentinel job that ends a runner thread when dequeued.
@@ -1125,6 +1152,7 @@ public class JobQueue {
         public void dropped() { /* No-op - poison sentinel, not a real job */ }
     }
 
+    /** Orders the jobs by their next run time. */
     private static class JobComparator implements Comparator<Job>, Serializable {
         /**
          * Orders jobs by scheduled start time, then by job ID.

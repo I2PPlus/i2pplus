@@ -14,8 +14,10 @@ import net.i2p.data.SessionKey;
  */
 public class X25519DH {
 
+    /** The encryption type this engine implements. */
     private static final EncType TYPE = EncType.ECIES_X25519;
 
+    /** Utility class, not intended for instantiation. */
     private X25519DH() {}
 
     /**

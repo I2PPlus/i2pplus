@@ -57,27 +57,31 @@ public class DataProcessor implements DataHolder {
     /** Pixel count */
 
     private int pixelCount = 0;
+    /** Whether the shared database pool is used. */
     private boolean poolUsed = DEFAULT_POOL_USAGE_POLICY;
+    /** The pool databases are opened through. */
     private RrdDbPool pool = null;
+    /** First time of the data being processed. */
     private long tStart;
+    /** Last time of the data being processed. */
     private long tEnd;
     /** Array of timestamps for the data series */
     private long[] timestamps;
     /** Last rrd archive update time */
     private long lastRrdArchiveUpdateTime = 0;
-    // this will be adjusted later
-    /** Time step in seconds between data points */
+    /**
+     * Time step in seconds between data points; adjusted during processing
+     * to match the archives actually read.
+     */
     private long step = 0;
-    // resolution to be used for RRD fetch operation
-    /** Fetch request resolution */
+    /** Resolution of the fetch from each RRD file, in seconds. */
     private long fetchRequestResolution = 1;
-    // The timezone to use
+    /** Timezone dates are interpreted in. */
     private TimeZone tz = TimeZone.getDefault();
 
-    // the order is important, ordinary HashMap is unordered
+    /** Sources by name, in insertion order - a plain HashMap would lose that order. */
     private final Map<String, Source> sources = new LinkedHashMap<>();
-    /** Def sources */
-
+    /** Sources defined by a DEF graph definition rather than read from a file. */
     private Def[] defSources;
 
     /**
@@ -1012,11 +1016,9 @@ public class DataProcessor implements DataHolder {
         return lastRrdArchiveUpdateTime;
     }
 
-    // PRIVATE METHODS
     /**
-     * Extract defs
+     * Reads each DEF source's values from the RRD file it names.
      */
-
     private void extractDefs() {
         defSources = sources.values().stream().filter(Def.class::isInstance).toArray(Def[]::new);
     }

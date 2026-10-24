@@ -35,13 +35,17 @@ abstract class SAMMessageSession implements SAMMessageSess {
      * Logger for this session's messages.
      */
     protected final Log _log;
+    /** The I2P session of this SAM session. */
     private final I2PSession session;
     /**
      * True for a session we opened, false for a remote peer's.
      */
     protected final boolean _isOwnSession;
+    /** The handler processing the messages. */
     private final SAMMessageSessionHandler handler;
+    /** The protocol listened for. */
     private final int listenProtocol;
+    /** The port listened on. */
     private final int listenPort;
 
     /**
@@ -281,8 +285,11 @@ abstract class SAMMessageSession implements SAMMessageSess {
      */
     private class SAMMessageSessionHandler implements Runnable, I2PSessionMuxedListener {
 
+        /** The session whose messages are received. */
         private final I2PSession _session;
+        /** The lock held while the receiver runs. */
         private final Object runningLock = new Object();
+        /** True while the receiver runs. */
         private volatile boolean stillRunning = true;
 
         /**
@@ -290,7 +297,7 @@ abstract class SAMMessageSession implements SAMMessageSess {
          *
          * @param destStream Input stream containing the destination keys
          * @param props Properties to setup the I2P session
-         * @throws I2PSessionException
+         * @throws I2PSessionException if the session cannot be created
          */
         public SAMMessageSessionHandler(InputStream destStream, Properties props) throws I2PSessionException {
             if (_log.shouldDebug())
@@ -319,6 +326,7 @@ abstract class SAMMessageSession implements SAMMessageSess {
         /**
          * Create a new SAM message-based session handler on an existing I2PSession.
          *
+         * @param sess the session to receive from
          * @since 0.9.25
          */
         public SAMMessageSessionHandler(I2PSession sess) {

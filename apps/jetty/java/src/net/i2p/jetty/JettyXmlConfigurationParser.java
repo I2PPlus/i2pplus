@@ -20,18 +20,20 @@ import org.xml.sax.SAXException;
  *
  *  @since 0.9.35
  */
-public class JettyXmlConfigurationParser
-{
+public class JettyXmlConfigurationParser {
     /**
      * Constructor. Each parse call builds its own SAX parser through
      * {@link #initParser()}, so an instance carries no state.
      */
-    public JettyXmlConfigurationParser()
-    {
+    public JettyXmlConfigurationParser() {
     }
 
-    private static XmlParser initParser()
-    {
+    /**
+     * Builds the XML parser used to read the jetty configuration.
+     *
+     * @return the new parser
+     */
+    private static XmlParser initParser() {
         XmlParser parser = new XmlParser();
         URL config60 = Loader.getResource(XmlConfiguration.class, "org/eclipse/jetty/xml/configure_6_0.dtd");
         URL config76 = Loader.getResource(XmlConfiguration.class,"org/eclipse/jetty/xml/configure_7_6.dtd");

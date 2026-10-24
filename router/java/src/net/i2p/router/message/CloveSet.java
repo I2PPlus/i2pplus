@@ -20,9 +20,13 @@ import net.i2p.data.i2np.GarlicClove;
  * Certificate.NULL_CERT at construction time.
  */
 public class CloveSet {
+    /** The cloves carried in the set. */
     private final GarlicClove[] _cloves;
+    /** Certificate accompanying the cloves, if any. */
     private final Certificate _cert;
+    /** Message id of the set. */
     private final long _msgId;
+    /** When the set stops being valid, in ms. */
     private final long _expiration;
 
     /**

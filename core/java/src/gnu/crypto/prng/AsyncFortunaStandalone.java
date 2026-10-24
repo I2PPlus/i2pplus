@@ -21,7 +21,9 @@ import net.i2p.util.SystemVersion;
  */
 @SuppressWarnings("java:S2975")
 public class AsyncFortunaStandalone extends FortunaStandalone implements Runnable {
+    /** Number of buffers filled in the background. */
     private static final int DEFAULT_BUFFERS = 2;
+    /** Size of each background buffer, in bytes. */
     private static final int DEFAULT_BUFSIZE = SystemVersion.isAndroid() ? 64*1024 : 256*1024;
     /** How many buffers are cycled through, never less than 2. */
     private final int _bufferCount;
@@ -98,11 +100,16 @@ public class AsyncFortunaStandalone extends FortunaStandalone implements Runnabl
         init(props);
     }
 
+    /** One buffer filled with random bytes in the background. */
     private static class AsyncBuffer {
         /** The buffer data. */
         public final byte[] buffer;
 
-        /** Creates a buffer of the given size. */
+        /**
+         * Creates a buffer of the given size.
+         *
+         * @param size the size of the buffer, in bytes
+         */
         public AsyncBuffer(int size) {
             buffer = new byte[size];
         }
@@ -160,6 +167,11 @@ public class AsyncFortunaStandalone extends FortunaStandalone implements Runnabl
     @Override
     public void fillBlock() {rotateBuffer();}
 
+    /**
+     * Fills one buffer with random bytes.
+     *
+     * @param buf the buffer to fill
+     */
     private void doFill(byte[] buf) {
         if (pools != null) {
             if (pool0Count >= MIN_POOL_SIZE && System.currentTimeMillis() - lastReseed > 100) {

@@ -28,6 +28,7 @@ import net.i2p.router.tunnel.TunnelCreatorConfig;
  */
 abstract class BuildMessageGenerator {
 
+    /** Utility class, not intended for instantiation. */
     private BuildMessageGenerator() {}
 
     /**

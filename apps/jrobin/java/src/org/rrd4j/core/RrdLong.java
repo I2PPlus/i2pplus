@@ -11,7 +11,9 @@ import java.io.IOException;
  * @param <U> The type of RrdUpdater this primitive belongs to
  */
 class RrdLong<U extends RrdUpdater<U>> extends RrdPrimitive<U> {
+    /** Value read from or written to the file. */
     private long cache;
+    /** True while the cache holds the current value. */
     private boolean cached = false;
 
     /**

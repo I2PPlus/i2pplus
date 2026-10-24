@@ -96,9 +96,9 @@ public class FrequencyStat {
     }
 
     /**
-     * Lifetime event count.
+     * Total number of events recorded.
      *
-     * @return lifetime event count
+     * @return the count over the lifetime period, or 0 if no periods are defined
      * @since 0.8.2
      */
     public long getEventCount() {
@@ -124,13 +124,18 @@ public class FrequencyStat {
         return _statName.hashCode();
     }
 
-    /** Compares this frequency stat to another object for equality. @since 0.8.2. */
+    /**
+     * Compares this frequency stat to another object for equality.
+     *
+     * @since 0.8.2
+     */
     @Override
     public boolean equals(Object obj) {
         if ((obj == null) || !(obj instanceof FrequencyStat)) return false;
         return _statName.equals(((FrequencyStat) obj)._statName);
     }
 
+    /** Line separator of the persisted file. */
     private static final String NL = System.getProperty("line.separator");
 
     /**

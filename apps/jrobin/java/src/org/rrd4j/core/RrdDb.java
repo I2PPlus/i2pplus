@@ -50,16 +50,26 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
      * @since 3.5
      */
     public static class Builder {
+        /** Path of the database file. */
         private String path = null;
+        /** The URI of the database. */
         private URI uri = null;
+        /** The backend factory for the database. */
         private RrdBackendFactory factory = RrdBackendFactory.getDefaultFactory();
+        /** True if the database is opened read-only. */
         private boolean readOnly = false;
+        /** External file to import data from. */
         private String externalPath = null;
+        /** The importer for the external data. */
         private DataImporter importer = null;
+        /** Definition of a database being created. */
         private RrdDef rrdDef = null;
+        /** True if the db pool is used. */
         private boolean usePool = false;
+        /** The pool holding the database. */
         private RrdDbPool pool;
 
+        /** Builds a builder for a database request. */
         private Builder() {}
 
         /**
@@ -300,6 +310,13 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
             return this;
         }
 
+        /**
+         * Resolves the backend factory for a request.
+         *
+         * @param uri the database URI
+         * @param factory the requested factory, may be null
+         * @return the factory to use
+         */
         private static RrdBackendFactory checkFactory(URI uri, RrdBackendFactory factory) {
             if (factory == null) {
                 return RrdBackendFactory.findFactory(uri);
@@ -308,6 +325,14 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
             }
         }
 
+        /**
+         * Builds the URI for a database request.
+         *
+         * @param rrdPath the database path
+         * @param rrdUri the requested URI, may be null
+         * @param factory the backend factory
+         * @return the built URI
+         */
         private static URI buildUri(String rrdPath, URI rrdUri, RrdBackendFactory factory) {
             if (rrdUri != null) {
                 return rrdUri;
@@ -318,6 +343,14 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
             }
         }
 
+        /**
+         * Resolves the importer for an external file.
+         *
+         * @param externalPath the external file path
+         * @param importer the requested importer, may be null
+         * @return the importer to use
+         * @throws IOException if the importer cannot be created
+         */
         private static DataImporter resoleImporter(String externalPath, DataImporter importer)
                 throws IOException {
             if (importer != null) {
@@ -335,6 +368,12 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
             }
         }
 
+        /**
+         * Returns the pool to use or the default.
+         *
+         * @param pool the requested pool, may be null
+         * @return the pool in effect
+         */
         private static RrdDbPool resolvePool(RrdDbPool pool) {
             return pool != null ? pool : RrdDbPool.getInstance();
         }
@@ -358,14 +397,21 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
     /** XML buffer capacity in bytes */
     static final int XML_BUFFER_CAPACITY = 100000; // bytes
 
+    /** The backend holding the data. */
     private final RrdBackend backend;
+    /** Allocator handing out file positions. */
     private final RrdAllocator allocator = new RrdAllocator();
 
+    /** The header of the database. */
     private final Header header;
+    /** The datasources of the database. */
     private final Datasource[] datasources;
+    /** The archives of the database. */
     private final Archive[] archives;
+    /** The pool holding this database. */
     private final RrdDbPool pool;
 
+    /** True once the database is closed. */
     private boolean closed = false;
 
     /**
@@ -489,6 +535,14 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
         this(rrdDef, factory, null);
     }
 
+    /**
+     * Creates a new database from a definition.
+     *
+     * @param rrdDef the database definition
+     * @param factory the backend factory
+     * @param pool the pool to hold the database
+     * @throws IOException if the database cannot be created
+     */
     private RrdDb(RrdDef rrdDef, RrdBackendFactory factory, RrdDbPool pool) throws IOException {
         this.pool = pool;
         factory = Builder.checkFactory(rrdDef.getUri(), factory);
@@ -657,6 +711,16 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
         this(path, null, false, factory, null);
     }
 
+    /**
+     * Opens an existing database.
+     *
+     * @param rrdPath the database path
+     * @param rrdUri the database URI, may be null
+     * @param readOnly true to open read-only
+     * @param factory the backend factory
+     * @param pool the pool to hold the database
+     * @throws IOException if the database cannot be opened
+     */
     private RrdDb(
             String rrdPath, URI rrdUri, boolean readOnly, RrdBackendFactory factory, RrdDbPool pool)
             throws IOException {
@@ -879,6 +943,17 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
         this(rrdPath, null, externalPath, null, factory, null);
     }
 
+    /**
+     * Opens a database importing an external file.
+     *
+     * @param rrdPath the database path
+     * @param rrdUri the database URI, may be null
+     * @param externalPath the external file to import
+     * @param importer the importer for the external data
+     * @param factory the backend factory
+     * @param pool the pool to hold the database
+     * @throws IOException if the database cannot be opened
+     */
     private RrdDb(
             String rrdPath,
             URI rrdUri,

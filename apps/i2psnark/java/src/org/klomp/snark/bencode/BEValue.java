@@ -19,7 +19,9 @@ import java.nio.charset.StandardCharsets;
  * you will get a InvalidBEncodingException.
  */
 public class BEValue {
-    // This is either a byte[], Number, List or Map.
+    /**
+     * The decoded value - a byte array, a Number, a List or a Map.
+     */
     private final Object value;
 
     /**

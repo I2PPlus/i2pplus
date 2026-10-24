@@ -36,8 +36,11 @@ import net.i2p.util.Log;
  * @since 0.9.70
  */
 class ProbeStalePeerJob extends JobImpl {
+    /** The log for the probe job. */
     private final Log _log;
+    /** The floodfill facade being probed. */
     private final FloodfillNetworkDatabaseFacade _facade;
+    /** When each peer was last probed. */
     private final Map<Hash, Long> _lastProbed;
     /**
      * Probe scores for the current cycle's candidates, keyed by hash. Filled as
@@ -46,15 +49,22 @@ class ProbeStalePeerJob extends JobImpl {
      * {@code STARTUP_MAX_PROBES_PER_CYCLE * 2}.
      */
     private final Map<Hash, Integer> _scores = new ConcurrentHashMap<>();
+    /** Times the job has run. */
     private int _runCount;
 
+    /** Interval between the probe cycles. */
     private static final long CYCLE_INTERVAL = 60L * 1000;
+    /** Most probes in one cycle. */
     private static final int MAX_PROBES_PER_CYCLE = 50;
     /** More aggressive during startup to establish transport connections faster. */
     private static final int STARTUP_MAX_PROBES_PER_CYCLE = 100;
+    /** Time before probing a peer again. */
     private static final long PROBE_COOLDOWN = 10L * 60 * 1000;
+    /** Time a peer counts as recently alive. */
     private static final long PROOF_OF_LIFE_WINDOW_MS = 60L * 60 * 1000;
+    /** Interval of the startup burst cycles. */
     private static final long STARTUP_BURST_PERIOD = 5L * 60 * 1000;
+    /** Number of startup burst cycles. */
     private static final int STARTUP_BURST_CYCLES = 3;
 
     /**

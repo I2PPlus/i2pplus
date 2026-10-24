@@ -23,16 +23,26 @@ import net.i2p.util.SystemVersion;
  * @since 0.9.16 (dynamic resizing since 0.9.70+)
  */
 public class Reader {
+    /** Logger for the NTCP reader. */
     private final Log _log;
+    /** The router context. */
     private final RouterContext _context;
 
+    /** Connections waiting for a runner. */
     private final Set<NTCPConnection> _pendingConnections;
+    /** Connections being read by a runner. */
     private final Set<NTCPConnection> _liveReads;
+    /** Connections to read after the live ones. */
     private final Set<NTCPConnection> _readAfterLive;
+    /** The running reader threads. */
     private final CopyOnWriteArrayList<Runner> _runners;
+    /** Number of reader threads. */
     private static volatile int _threadCount = SystemVersion.isSlow() ? 2 : Math.max(SystemVersion.getCores() / 2, 3);
+    /** Fewest reader threads allowed. */
     private static final int MIN_THREADS = 2;
+    /** Most reader threads allowed. */
     private static final int MAX_THREADS = 16;
+    /** Sequence number of the reader threads. */
     private static final AtomicInteger _threadNum = new AtomicInteger();
     /** Tracks how many runner threads are actively processing (not parked). */
     private final AtomicInteger _activeCount = new AtomicInteger();
@@ -88,6 +98,7 @@ public class Reader {
         }
     }
 
+    /** Starts one more reader thread if needed. */
     private void startRunner() {
         Runner r = new Runner();
         _runners.add(r);
@@ -166,13 +177,17 @@ public class Reader {
         }
     }
 
+    /** Thread reading the assigned connections. */
     private class Runner implements Runnable {
+        /** True to stop the runner after the current pass. */
         private volatile boolean _stop;
 
+        /** Builds a reader runner thread. */
         public Runner() {
             // Intentionally empty - default constructor
         }
 
+        /** Asks the runner to stop. */
         public void stop() { _stop = true; }
 
         public void run() {

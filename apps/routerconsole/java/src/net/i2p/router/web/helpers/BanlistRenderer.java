@@ -43,12 +43,19 @@ import net.i2p.util.Log;
  * Moved from Banlist.java for separation of concerns.
  */
 class BanlistRenderer {
+    /** The router context. */
     private final RouterContext _context;
+    /** Pattern normalizing an IP or hostname for display. */
     private static final Pattern IP_HOSTNAME_NORMALIZE = Pattern.compile("[.:]");
+    /** Pattern splitting a ban record on the pipes. */
     private static final Pattern PIPE_SPLIT = Pattern.compile("\\s*\\|\\s*");
+    /** Pattern matching the local update suffix of a version. */
     private static final Pattern VERSION_LU_SUFFIX = Pattern.compile("\\s*\\(0\\.9\\.\\d+(?:\\.\\d+)?(?:-\\d+)?\\s*/\\s*LU\\)\\s*$");
+    /** Pattern matching the trailing junk of a version string. */
     private static final Pattern VERSION_SUFFIX = Pattern.compile("\\s*\\(0\\.9\\.\\d+(?:\\.\\d+)?(?:-\\d+)?\\)\\s*$");
+    /** Pattern matching the leading junk of a version string. */
     private static final Pattern VERSION_PREFIX = Pattern.compile("\\s*/\\s*0\\.9\\.\\d+(?:\\.\\d+)?(?:-\\d+)?\\s*$");
+    /** Pattern extracting the version numbers from a string. */
     private static final Pattern VERSION_EXTRACT = Pattern.compile("(?:^|\\()(\\d+\\.\\d+(?:\\.\\d+)?(?:-\\d+)?)");
 
     /**
@@ -69,6 +76,12 @@ class BanlistRenderer {
         _context = context;
     }
 
+    /**
+     * Looks up the hostname for a banned IP.
+     *
+     * @param ip the address to look up
+     * @return the hostname, null if not found
+     */
     private String reverseLookup(String ip) {
         if (ip == null || ip.isEmpty()) return null;
         // Use fast local lookup — never blocks on network DNS
@@ -271,12 +284,26 @@ class BanlistRenderer {
      * Entry for IP-only bans from sessionbans.txt.
      */
     private static class IPBanEntry {
+        /** The banned address. */
         final String ip;
+        /** The resolved hostname, if any. */
         final String hostname;
+        /** The reason for the ban. */
         final String reason;
+        /** When the ban expires. */
         final long expires;
+        /** The ban duration for display. */
         final String durationStr;
 
+        /**
+         * One row of the ban table.
+         *
+         * @param ip the banned address
+         * @param hostname the resolved hostname, null if none
+         * @param reason the reason for the ban
+         * @param expires when the ban expires
+         * @param durationStr the ban duration for display
+         */
         IPBanEntry(String ip, String hostname, String reason, long expires, String durationStr) {
             this.ip = ip;
             this.hostname = hostname;
@@ -711,6 +738,13 @@ class BanlistRenderer {
         return "";
     }
 
+    /**
+     * Rewrites a ban reason for display.
+     *
+     * @param reason the reason as logged
+     * @param routerVersion the version string extracted from it
+     * @return the reason cleaned for display
+     */
     private String cleanReason(String reason, String routerVersion) {
         if (reason == null) {
             return reason;

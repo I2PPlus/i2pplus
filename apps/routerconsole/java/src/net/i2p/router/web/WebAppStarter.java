@@ -39,29 +39,31 @@ public class WebAppStarter {
     /** All methods are static; the ctor exists only for javadoc. */
     public WebAppStarter() {}
 
+    /** The webapp file times, by name. */
     private static final Map<String, Long> warModTimes = new ConcurrentHashMap<>();
     /** Init parameters for webapps. */
     static final Map<String, String> INIT_PARAMS = new HashMap<>(4);
     /** Plugin name parameter. */
     static final String PARAM_PLUGIN_NAME = "net.i2p.router.web.WebAppStarter.PLUGIN_NAME";
 
-    // There are 4 additional jars that are required to do the Servlet 3.0 annotation scanning.
-    // The following 4 classes were the first to get thrown as not found, for each jar.
-    // So use them to see if we have the 4 jars.
-    // jetty-annotations.jar
+    /** Class checked for annotation support. */
     private static final String CLASS_ANNOT = "org.eclipse.jetty.annotations.AnnotationConfiguration";
-    // jetty-plus.jar
+    /** Class checked for lifecycle callbacks, from jetty-plus.jar. */
     private static final String CLASS_ANNOT2 = "org.eclipse.jetty.plus.annotation.LifeCycleCallback";
-    // asm.jar
+    /** Class checked for asm support, from asm.jar. */
     private static final String CLASS_ANNOT3 = "org.objectweb.asm.Type";
-    // javax-annotations-api.jar
+    /** Class checked for the run as annotation, from the annotations api jar. */
     private static final String CLASS_ANNOT4 = "javax.annotation.security.RunAs";
 
+    /** Class checked for the webxml configuration. */
     private static final String CLASS_CONFIG = "org.eclipse.jetty.webapp.JettyWebXmlConfiguration";
 
+    /** True when the annotation classes are present. */
     private static final boolean HAS_ANNOTATION_CLASSES;
+    /** The names of the built-in webapps. */
     private static final Set<String> BUILTINS = new HashSet<>(8);
 
+    /** The log for the webapp starter. */
     private static Log _log;
     static {
         try { _log = ContextHelper.getContext(null).logManager().getLog(WebAppStarter.class); } catch (Throwable t) { /* no context during static init; _log stays null and the class continues without logging */ }

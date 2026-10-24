@@ -253,10 +253,20 @@ public final class GraphThemeColors {
      * would otherwise need a router restart to show up.
      */
     private static final class Entry {
+        /** When the theme file was last modified. */
         final long modified;
+        /** When the theme file was parsed. */
         final long parsedAt;
+        /** The CSS variables parsed from the file. */
         final Map<String, String> variables;
 
+        /**
+         * Caches one parsed theme file.
+         *
+         * @param modified when the file was last modified
+         * @param parsedAt when the file was parsed
+         * @param variables the parsed CSS variables
+         */
         Entry(long modified, long parsedAt, Map<String, String> variables) {
             this.modified = modified;
             this.parsedAt = parsedAt;
@@ -264,6 +274,13 @@ public final class GraphThemeColors {
         }
 
         /** Whether this entry may still be served, given the files' stamps and the clock. */
+        /**
+         * Whether the cached entry still matches its file.
+         *
+         * @param modified the file's current modified time
+         * @param now the current time
+         * @return true if the entry matches the file and has not aged out
+         */
         boolean usable(long modified, long now) {
             return this.modified == modified && now - this.parsedAt < maxCacheAgeMs;
         }
@@ -434,11 +451,13 @@ public final class GraphThemeColors {
      * of covering the data is not a theme's to choose.
      */
     private static final float MIN_LINE_WIDTH = 0.1f;
+    /** Largest line width of the graphs. */
     private static final float MAX_LINE_WIDTH = 16f;
 
     /** Longest dash array accepted: one dot and one gap. */
     private static final int MAX_DASH_VALUES = 2;
 
+    /** Not called, the class is only a collection of static methods. */
     private GraphThemeColors() {}
 
     /**
@@ -920,6 +939,12 @@ public final class GraphThemeColors {
         return out;
     }
 
+    /**
+     * Limits the plot index to the color range.
+     *
+     * @param plot the index of the plot
+     * @return the index within the colors
+     */
     private static int clampPlot(int plot) {
         return plot < 0 ? 0 : (plot >= PLOTS ? PLOTS - 1 : plot);
     }

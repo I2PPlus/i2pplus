@@ -33,14 +33,23 @@ class SSLUtil {
      * certificate and key settings.
      */
     public static final String DEFAULT_SAMCLIENT_CONFIGFILE = "samclient.config";
+    /** Property of the keystore password. */
     private static final String PROP_KEYSTORE_PASSWORD = "samclient.keystorePassword";
+    /** Property of the key password. */
     private static final String PROP_KEY_PASSWORD = "samclient.keyPassword";
+    /** Property of the key alias. */
     private static final String PROP_KEY_ALIAS = "samclient.keyAlias";
+    /** Suffix of the exported ASCII certificate. */
     private static final String ASCII_KEYFILE_SUFFIX = ".local.crt";
+    /** Property of the keystore file name. */
     private static final String PROP_KS_NAME = "samclient.keystoreFile";
+    /** Directory holding the keystores. */
     private static final String KS_DIR = "keystore";
+    /** Prefix of the client keystore names. */
     private static final String PREFIX = "samclient-";
+    /** Suffix of the keystore file names. */
     private static final String KS_SUFFIX = ".ks";
+    /** Directory holding the exported certificates. */
     private static final String CERT_DIR = "certificates/samclient";
 
     /**
@@ -188,10 +197,20 @@ class SSLUtil {
         }
     }
 
+    /**
+     * Logs an error message.
+     *
+     * @param s the error message
+     */
     private static void error(String s) {
         I2PAppContext.getGlobalContext().logManager().getLog(SSLUtil.class).error(s);
     }
 
+    /**
+     * Logs a message the client always shows.
+     *
+     * @param s the message to show
+     */
     private static void logAlways(String s) {
         I2PAppContext.getGlobalContext().logManager().getLog(SSLUtil.class).logAlways(Log.INFO, s);
     }

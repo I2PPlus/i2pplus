@@ -67,9 +67,11 @@ public class Util {
                         return ldf;
                     });
 
+    /** Matches a sprintf-style placeholder in a format string. */
     private static final Pattern SPRINTF_PATTERN =
             Pattern.compile("([^%]|^)%([^a-zA-Z%]*)l(f|g|e)");
 
+    /** Utility class, not intended for instantiation. */
     private Util() {}
 
     /**
@@ -562,6 +564,9 @@ public class Util {
          */
 
         private static class SingletonHelper {
+            /** Holds the one Util instance, created on demand. */
+            private SingletonHelper() {}
+            /** Shared factory for parsing XML. */
             private static final DocumentBuilderFactory factory;
 
             static {
@@ -585,6 +590,7 @@ public class Util {
             }
         }
 
+        /** Handler reporting XML errors through the logging system. */
         private static final ErrorHandler eh =
                 new ErrorHandler() {
                     /**
@@ -602,6 +608,7 @@ public class Util {
                     }
                 };
 
+        /** Utility class, not intended for instantiation. */
         private Xml() {}
 
         /**
@@ -661,7 +668,6 @@ public class Util {
             return childs.length > 0;
         }
 
-        // -- Wrapper around getChildValue with trim
         /**
          * Returns the trimmed text of the first child element carrying the requested name
          *
@@ -694,7 +700,6 @@ public class Util {
             throw new IllegalStateException("XML Error, no such child: " + childName);
         }
 
-        // -- Wrapper around getValue with trim
         /**
          * Returns the trimmed text of the node's first child
          *
@@ -874,6 +879,7 @@ public class Util {
         }
     }
 
+    /** When the previous lap of the timer ended. */
     private static long lastLap = System.currentTimeMillis();
 
     /**

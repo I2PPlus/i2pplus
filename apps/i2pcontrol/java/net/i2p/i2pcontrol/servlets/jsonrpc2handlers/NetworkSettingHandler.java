@@ -38,9 +38,13 @@ import net.i2p.router.transport.udp.UDPTransport;
  * Manages router network configuration including transport ports, hostnames, bandwidth settings, and UPnP.
  */
 public class NetworkSettingHandler implements RequestHandler {
+    /** Percent of the limit the burst allowance gives. */
     private static final int BW_BURST_PCT = 110;
+    /** Burst allowance window, in seconds. */
     private static final int BW_BURST_TIME = 20;
+    /** Reads the request's arguments. */
     private final JSONRPC2Helper _helper;
+    /** The router being configured. */
     private final RouterContext _context;
 
     /**
@@ -76,6 +80,12 @@ public class NetworkSettingHandler implements RequestHandler {
     }
 
 
+    /**
+     * Applies or reports the network settings.
+     *
+     * @param req the request to answer
+     * @return the reply to send
+     */
     private JSONRPC2Response process(JSONRPC2Request req) {
         JSONRPC2Error err = _helper.validateParams(null, req);
         if (err != null)

@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class ContentOnly {
 
+    /** Utility class, not intended for instantiation. */
     private ContentOnly() {}
 
     /** Splits the contentonly parameter on commas and whitespace. */

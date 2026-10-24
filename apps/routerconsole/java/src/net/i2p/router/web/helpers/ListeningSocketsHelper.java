@@ -30,7 +30,9 @@ public class ListeningSocketsHelper {
      */
     private ListeningSocketsHelper() {}
 
+    /** Label for a stream running inside this JVM */
     private static final String IN_JVM = "in-JVM";
+    /** Label for a stream that gives no name */
     private static final String UNLABELLED = "internal";
 
     /** Row order for the table: port (column 2) ascending, then service label (column 0). */

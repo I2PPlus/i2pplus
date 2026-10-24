@@ -45,20 +45,28 @@ import java.nio.charset.StandardCharsets;
  */
 @SuppressWarnings("PMD.CloseResource")
 public class DNSOverHTTPS implements EepGet.StatusListener {
+    /** The app context, for the clock and stats. */
     private final I2PAppContext ctx;
+    /** Logger for the DoH lookups. */
     private final Log _log;
+    /** Buffer accumulating the DNS response. */
     private final ByteArrayOutputStream baos;
+    /** SSL result of the last fetch. */
     private SSLEepGet.SSLState state;
+    /** When the current fetch started. */
     private long fetchStart;
+    /** Nonzero once a date source was seen. */
     private int gotDate;
 
+    /** Cached IPv4 lookup results, by host. */
     private static final Map<String, Result> v4Cache = new LHMCache<>(32);
+    /** Cached IPv6 lookup results, by host. */
     private static final Map<String, Result> v6Cache = new LHMCache<>(32);
-    // v4 URLs to query, ending with '&'
+    /** DoH URLs to query for IPv4 results. */
     private static final List<String> v4urls = new ArrayList<>(8);
-    // v6 URLs to query, ending with '&'
+    /** DoH URLs to query for IPv6 results. */
     private static final List<String> v6urls = new ArrayList<>(8);
-    // consecutive failures
+    /** Consecutive failures counted per URL. */
     private static final ObjectCounter<String> fails = new ObjectCounter<>();
 
     /**
@@ -66,14 +74,21 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
      */
     public static final String UA_CLEARNET = "Mozilla/5.0 (Windows NT 10.0; rv:128.0) Gecko/20100101 Firefox/128.0";
 
+    /** Largest DNS response accepted, in bytes. */
     private static final int MAX_RESPONSE_SIZE = 2048;
+    /** Developer switch for extra logging. */
     private static final boolean DEBUG = false;
 
-    // Don't look up any of these TLDs
-    // RFC 2606, 3166, 6303, 7393
-    // https://www.iana.org/assignments/locally-served-dns-zones/locally-served-dns-zones.xhtml
-    // https://ithi.research.icann.org/graph-m3.html#M332
-    // https://tools.ietf.org/html/draft-ietf-dnsop-private-use-tld-00
+    /**
+     * The local domains and top level domains never looked up.
+     * See also: <a href="https://datatracker.ietf.org/doc/html/rfc2606">RFC 2606 (reserved top level domains)</a>
+     * See also: <a href="https://datatracker.ietf.org/doc/html/rfc3166">RFC 3166 (reverse DNS labels)</a>
+     * See also: <a href="https://datatracker.ietf.org/doc/html/rfc6303">RFC 6303 (domain namespace reservations)</a>
+     * See also: <a href="https://datatracker.ietf.org/doc/html/rfc7393">RFC 7393 (dotless IPv4 hostnames)</a>
+     * See also: <a href="https://www.iana.org/assignments/locally-served-dns-zones/locally-served-dns-zones.xhtml">IANA locally served zones</a>
+     * See also: <a href="https://ithi.research.icann.org/graph-m3.html#M332">ICANN M332 study</a>
+     * See also: <a href="https://tools.ietf.org/html/draft-ietf-dnsop-private-use-tld-00">private use TLD draft</a>
+     */
     private static final List<String> locals = Arrays.asList(new String[] {
         "localhost",
         "in-addr.arpa",
@@ -202,18 +217,19 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
         loadURLs();
     }
 
-    // keep the timeout very short, as we try multiple addresses,
-    // and will be falling back to regular DNS.
+    /** Timeout for one DoH fetch, in ms. */
     private static final long TIMEOUT = (long) 3 * 1000;
-    // total for v4 + v6
+    /** Total timeout for the v4 and v6 fetches, in ms. */
     private static final long OVERALL_TIMEOUT = (long) 10 * 1000;
+    /** Longest TTL accepted for a result, in seconds. */
     private static final int MAX_TTL = 24 * 60 * 60;
-    // don't use a URL after this many consecutive failures
+    /** Consecutive failures after which a URL is skipped. */
     private static final int MAX_FAILS = 3;
-    // each for v4 and v6
+    /** DoH requests attempted per family. */
     private static final int MAX_REQUESTS = 4;
+    /** Date sources consulted per lookup. */
     private static final int MAX_DATE_SETS = 2;
-    // From RouterClock
+    /** Default clock stratum when no date source answered. */
     private static final int DEFAULT_STRATUM = 8;
 
     /**
@@ -254,10 +270,19 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
         V6_PREFERRED
     }
 
+    /** One resolved IP with its expiry time. */
     private static class Result {
+        /** The resolved IP address text. */
         public final String ip;
+        /** When the result expires, in ms since epoch. */
         public final long expires;
 
+        /**
+         * Builds one result.
+         *
+         * @param i the IP address text
+         * @param e the expiry time, in ms since epoch
+         */
         public Result(String i, long e) {
             ip = i;
             expires = e;
@@ -605,12 +630,22 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
         }
     }
 
-    // End of EepGet status listeners
 
+    /**
+     * Logs a message when debug logging is on.
+     *
+     * @param msg the message to log
+     */
     private void log(String msg) {
         log(msg, null);
     }
 
+    /**
+     * Logs a message with an exception when debug logging is on.
+     *
+     * @param msg the message to log
+     * @param t the exception to log
+     */
     private void log(String msg, Throwable t) {
         int level = (t != null) ? Log.WARN : Log.INFO;
         _log.log(level, msg, t);
@@ -760,6 +795,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
         }
     }
 
+    /** Prints the command line usage text. */
     private static void usage() {
         System.err.println("DNSOverHTTPS [-fstu46] hostname\n" + "             [-f] (IPv4 preferred)\n"
                 + "             [-s] (IPv6 preferred)\n" + "             [-t] (test all servers)\n"

@@ -10,6 +10,7 @@ import java.math.BigInteger;
  * A particular element of the field \Z/(2^255-19).
  */
 public class BigIntegerFieldElement extends FieldElement implements Serializable {
+    /** Pinned for serialized-form compatibility. */
     private static final long serialVersionUID = 4890398908392808L;
 
     /**

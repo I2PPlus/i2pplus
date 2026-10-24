@@ -25,10 +25,15 @@ import org.eclipse.jetty.server.handler.gzip.GzipHandler;
  */
 public class HostCheckHandler extends GzipHandler
 {
+    /** The context reading the settings. */
     private final I2PAppContext _context;
+    /** Gives the console's configured addresses. */
     private final PortMapper _portMapper;
+    /** Host names the console answers on. */
     private final Set<String> _listenHosts;
+    /** Property asking for HTTP requests to be redirected. */
     private static final String PROP_REDIRECT = "routerconsole.redirectToHTTPS";
+    /** Property enabling response compression. */
     private static final String PROP_GZIP = "routerconsole.enableCompression";
 
     /**

@@ -38,8 +38,11 @@ final class SSU2Header {
          */
         private Scratch() {}
 
+        /** Reusable buffer for a session request header. */
         final Header session = new Header(SESSION_HEADER_SIZE);
+        /** Reusable buffer for a long header. */
         final Header longHdr = new Header(LONG_HEADER_SIZE);
+        /** Reusable buffer for a short header. */
         final Header shortHdr = new Header(SHORT_HEADER_SIZE);
         /**
          * Reused by {@link #decryptDestConnID(DatagramPacket, byte[])},
@@ -48,11 +51,13 @@ final class SSU2Header {
         final byte[] xor = new byte[HEADER_PROT_DATA_LEN];
     }
 
+    /** Per-thread buffers for building headers. */
     private static final ThreadLocal<Scratch> SCRATCH = new ThreadLocal<Scratch>() {
         @Override
         protected Scratch initialValue() {return new Scratch();}
     };
 
+    /** Utility class, not intended for instantiation. */
     private SSU2Header() { /* no-op */ }
 
     /**

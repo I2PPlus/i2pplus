@@ -15,6 +15,7 @@ public class DesktopguiTranslator {
      */
     public DesktopguiTranslator() {}
 
+    /** The resource bundle holding this application's translated strings. */
     private static final String BUNDLE_NAME = "net.i2p.desktopgui.messages";
 
     /**

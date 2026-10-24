@@ -20,15 +20,25 @@ import net.i2p.util.Log;
  * Used only by {@link SearchJob} which is only {@link ExploreJob}ploreJob.
  */
 class SearchUpdateReplyFoundJob extends JobImpl implements ReplyJob {
+    /** The log for the search update. */
     private final Log _log;
+    /** The reply message that was found. */
     private I2NPMessage _message;
+    /** The hash of the searched peer. */
     private final Hash _peer;
+    /** The state of the search. */
     private final SearchState _state;
+    /** The network database facade. */
     private final KademliaNetworkDatabaseFacade _facade;
+    /** The search job being updated. */
     private final SearchJob _job;
+    /** The tunnel the request was sent through. */
     private final TunnelInfo _outTunnel;
+    /** The tunnel the reply came back through. */
     private final TunnelInfo _replyTunnel;
+    /** True if the peer is a floodfill. */
     private final boolean _isFloodfillPeer;
+    /** When the request was sent. */
     private final long _sentOn;
 
     /**

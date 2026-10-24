@@ -21,16 +21,22 @@ public class IdenticonUtil {
 	 */
 	public IdenticonUtil() {}
 
+	/** Identicon size used when none is asked for, in pixels. */
 	private static final int DEFAULT_IDENTICON_SIZE = 16;
 
+	/** Smallest identicon that can be drawn, in pixels. */
 	private static final int MINIMUM_IDENTICON_SIZE = 15;
 
+	/** Largest identicon that can be drawn, in pixels. */
 	private static final int MAXIMUM_IDENTICON_SIZE = 64;
 
+	/** Address bits used when none are masked away. */
 	private static final int DEFAULT_INET_MASK = 0xffffffff;
 
+	/** Address bits currently used for the pattern. */
 	private static int inetMask = DEFAULT_INET_MASK;
 
+	/** Salt mixed into the address before hashing. */
 	private static String inetSalt;
 
 	/**

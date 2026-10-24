@@ -70,11 +70,15 @@ import java.nio.charset.StandardCharsets;
  */
 public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implements Runnable {
 
+    /** Length of the proxy nonce, in bytes. */
     private static final int PROXYNONCE_BYTES = 8;
+    /** Length of a SHA-256 hash, in bytes. */
     private static final int SHA256_BYTES = 32;
     /** Nonce size in bytes (date + SHA256). */
     private static final int NONCE_BYTES = DataHelper.DATE_LENGTH + SHA256_BYTES;
+    /** Age after which a used nonce is forgotten. */
     private static final long MAX_NONCE_AGE = 60*60*1000L;
+    /** Nonces tracked per user. */
     private static final int MAX_NONCE_COUNT = 1024;
     /**
      * Property to use local outproxy plugin.
@@ -84,6 +88,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      * Property for SSL outproxies.
      */
     public static final String PROP_SSL_OUTPROXIES = "i2ptunnel.httpclient.SSLOutproxies";
+    /** The platform file separator. */
     private static final String SLASH = System.getProperty("file.separator");
 
     /**
@@ -119,13 +124,14 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      */
     protected static final int BROWSER_READ_TIMEOUT = 4*60*60*1000;
 
+    /** Headers of the proxy authentication error response. */
     private static final String ERR_AUTH1 =
             "HTTP/1.1 407 Proxy Authentication Required\r\n" +
             "Content-Type: text/html; charset=UTF-8\r\n" +
             "Cache-Control: no-cache\r\n" +
             "Connection: close\r\n"+
             "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.5\r\n"; // try to get a UTF-8-encoded response back for the password
-    // put the auth type and realm in between
+    /** Body of the proxy authentication error response. */
     private static final String ERR_AUTH2 =
             "\r\n" +
             "<html><body><H1>I2P ERROR: PROXY AUTHENTICATION REQUIRED</H1>" +
@@ -165,16 +171,19 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
          "Proxy-agent: I2P\r\n"+
          "\r\n";
 
+    /** The nonce this tunnel issues with. */
     private final byte[] _proxyNonce;
+    /** Used nonces, by user name. */
     private final ConcurrentHashMap<String, NonceInfo> _nonces;
+    /** Counter scheduling the nonce cleanup. */
     private final AtomicInteger _nonceCleanCounter = new AtomicInteger();
-    // clearnet host to proxy
+    /** Selected HTTP proxy, by clearnet host. */
     private final Map<String, String> _proxyCache = new LHMCache<>(32);
-    // very simple, remember last-failed only
+    /** The last HTTP proxy that failed. */
     private String _lastFailedProxy;
-    // clearnet host to proxy
+    /** Selected HTTPS proxy, by clearnet host. */
     private final Map<String, String> _proxySSLCache = new LHMCache<>(32);
-    // very simple, remember last-failed only
+    /** The last HTTPS proxy that failed. */
     private String _lastFailedSSLProxy;
 
     /** Available as of Java 6 and Android API 9. */
@@ -202,10 +211,6 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         return "[HTTPClient] [Request: " + _clientId + '/' + requestId + "] ";
     }
 
-    // TODO standard proxy config changes require tunnel restart;
-    // SSL proxy config is parsed on the fly;
-    // allow both to be changed and store the SSL proxy list.
-    // TODO should track more than one failed proxy
 
     /**
      * Selects an appropriate outproxy for the given host from the proxy pool.
@@ -390,7 +395,6 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         _nonces = new ConcurrentHashMap<>();
     }
 
-    //////// Authorization stuff
 
     /** All auth.  */
     public static final String PROP_AUTH = "proxyAuth";
@@ -445,7 +449,9 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
 
     /** Tracks nonce values for digest authentication. */
     private static class NonceInfo {
+        /** When the nonce record expires. */
         private final long expires;
+        /** Bits marking the nonces already used. */
         private final BitSet counts;
 
         /**
@@ -1234,7 +1240,6 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         return EepGet.parseAuthArgs(args);
     }
 
-    //////// Error page stuff
 
     /**
      * Load the error page header file, e.g. foo =&gt; errordir/foo-header_xx.ht for lang xx,
@@ -1273,6 +1278,14 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
     /** These strings go in the jar, not the war. */
     private static final String BUNDLE_NAME = "net.i2p.i2ptunnel.proxy.messages";
 
+    /**
+     * Reads a small text file into a string.
+     *
+     * @param ctx the app context
+     * @param file the file to read
+     * @return the file contents
+     * @throws IOException if the file cannot be read
+     */
     private static String readFile(I2PAppContext ctx, File file) throws IOException {
         char[] buf = new char[512];
         StringBuilder out = new StringBuilder(2048);
@@ -1330,13 +1343,21 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      * Callback for timeout events.
      */
     protected class OnTimeout implements I2PTunnelRunner.FailCallback {
+        /** The browser socket being served. */
         private final Socket _socket;
+        /** Stream the response is written to. */
         private final OutputStream _out;
+        /** The request target URL. */
         private final String _target;
+        /** True when an outproxy serves the request. */
         private final boolean _usingProxy;
+        /** The proxy chosen for the request, may be null. */
         private final String _wwwProxy;
+        /** Id pairing the request with its logs. */
         private final long _requestId;
+        /** The host name being requested. */
         private final String _targetHost;
+        /** True if the request arrived over SSL. */
         private final boolean _isSSL;
 
         /**
@@ -1408,8 +1429,11 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      * Callback for successful proxy connections.
      */
     protected class OnProxySuccess implements I2PTunnelRunner.SuccessCallback {
+        /** The proxy selected for the request. */
         private final String _proxy;
+        /** The clearnet host being requested. */
         private final String _host;
+        /** True if the proxy connection uses SSL. */
         private final boolean _isSSL;
 
         /**
@@ -1686,6 +1710,11 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         out.flush();
     }
 
+    /**
+     * Returns the HTML footer added to error pages.
+     *
+     * @return the footer text
+     */
     private static String getFooter() {
         // The css is hiding this div for now, but we'll keep it here anyway
         // Tag the strings below for translation if we unhide it.

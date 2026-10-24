@@ -309,6 +309,7 @@ public abstract class AbstractID3v2Tag implements ID3v2 {
     /** Map of frame sets keyed by frame ID. */
     private final Map<String, ID3v2FrameSet> frameSets;
 
+    /** Creates an empty tag. */
     public AbstractID3v2Tag() {
         frameSets = new TreeMap<>();
     }
@@ -532,6 +533,13 @@ public abstract class AbstractID3v2Tag implements ID3v2 {
         }
     }
 
+    /**
+     * Writes the tag marker, version, flags and length.
+     *
+     * @param bytes the buffer to write into
+     * @param offset where the header starts
+     * @return the offset just past the header
+     */
     private int packHeader(byte[] bytes, int offset) {
         try {
             BufferTools.stringIntoByteBuffer(TAG, 0, TAG.length(), bytes, offset);
@@ -558,6 +566,13 @@ public abstract class AbstractID3v2Tag implements ID3v2 {
      */
     protected abstract void packFlags(byte[] bytes, int i);
 
+    /**
+     * Writes the extended header's length and data.
+     *
+     * @param bytes the buffer to write into
+     * @param offset where the header starts
+     * @return the offset just past the header
+     */
     private int packExtendedHeader(byte[] bytes, int offset) {
         BufferTools.packSynchsafeInteger(extendedHeaderLength, bytes, offset);
         BufferTools.copyIntoByteBuffer(

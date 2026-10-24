@@ -11,7 +11,7 @@ import org.bouncycastle.pqc.crypto.util.SecretWithEncapsulationImpl;
  */
 public class MLKEMGenerator
 {
-    // the source of randomness
+    /** The source of randomness. */
     private final SecureRandom sr;
 
     /**

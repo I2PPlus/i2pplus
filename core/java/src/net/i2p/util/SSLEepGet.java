@@ -61,11 +61,16 @@ public class SSLEepGet extends EepGet {
     /** May be null if init failed. */
     private SavingTrustManager _stm;
 
+    /** The type of proxy used for the connection. */
     private final ProxyType _proxyType;
+    /** Zero to ask the config, one off, two on, three on with IPv6. */
     private int _forceDoH;
 
+    /** Directory holding the saved SSL certificates. */
     private static final String CERT_DIR = "certificates/ssl";
+    /** Config key for DNS over HTTPS lookups. */
     private static final String PROP_USE_DNS_OVER_HTTPS = "eepget.useDNSOverHTTPS";
+    /** Whether DNS over HTTPS is used unless configured. */
     private static final boolean DEFAULT_USE_DNS_OVER_HTTPS = true;
 
     /**
@@ -380,9 +385,16 @@ public class SSLEepGet extends EepGet {
      * @since 0.8.2
      */
     private static class SavingTrustManager implements X509TrustManager {
+        /** The trust manager this one delegates to. */
         private final X509TrustManager tm;
+        /** The certificate chain received from the peer. */
         private X509Certificate[] chain;
 
+        /**
+         * Wraps the trust manager to save the chain.
+         *
+         * @param tm the trust manager to delegate to
+         */
         SavingTrustManager(X509TrustManager tm) {
             this.tm = tm;
         }
@@ -453,8 +465,14 @@ public class SSLEepGet extends EepGet {
      * @since 0.8.2
      */
     public static class SSLState {
+        /** The SSL context being cached. */
         private final SSLContext context;
 
+        /**
+         * Caches one SSL context.
+         *
+         * @param ctx the SSL context to cache
+         */
         private SSLState(SSLContext ctx) {
             context = ctx;
         }

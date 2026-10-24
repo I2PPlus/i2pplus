@@ -78,15 +78,19 @@ public abstract class TransportUtil {
      * @since 0.9.28
      */
     private static final String PROP_PORT_PFX = "i2np.";
+    /** Suffix of a transport's minimum-port property. */
     private static final String PROP_MIN_PORT_SFX = ".minPort";
+    /** Suffix of a transport's maximum-port property. */
     private static final String PROP_MAX_PORT_SFX = ".maxPort";
     /**
      * 8998 is monotone, and 31000 is the wrapper outbound, so let's stay between those
      * Was 9111, increase to skip Tor browser at 9050.
      */
     private static final int MIN_RANDOM_PORT = 9151;
+    /** Highest port chosen by the random picker. */
     private static final int MAX_RANDOM_PORT = 30777;
 
+    /** Matches an address on the Yggdrasil network. */
     private static final Pattern YGGDRASIL_PATTERN = Pattern.compile("^[2-3][0-9a-fA-F]{2}:[0-9a-fA-F:]*");
 
     /**
@@ -115,8 +119,14 @@ public abstract class TransportUtil {
          */
         IPV6_FORCE_ON("force");
 
+        /** The config value this mode was named by. */
         private final String cfgstr;
 
+        /**
+         * Names an IPv6 mode after its config value.
+         *
+         * @param cfgstr the config value
+         */
         IPv6Config(String cfgstr) {
             this.cfgstr = cfgstr;
         }
@@ -131,6 +141,7 @@ public abstract class TransportUtil {
         }
     }
 
+    /** The IPv6 modes, by config value. */
     private static final Map<String, IPv6Config> BY_NAME = new HashMap<>();
     /**
      * DEFAULT_IPV6_CONFIG.

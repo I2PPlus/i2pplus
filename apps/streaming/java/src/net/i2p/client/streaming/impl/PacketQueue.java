@@ -26,21 +26,36 @@ import net.i2p.util.SimpleTimer2;
  * MessageOutputStream -&gt; ConnectionDataReceiver -&gt; Connection -&gt; PacketQueue -&gt; I2PSession.
  */
 class PacketQueue implements SendMessageStatusListener, Closeable {
+    /** The app context. */
     private final I2PAppContext _context;
+    /** Logger for the packet queue. */
     private final Log _log;
+    /** Cache supplying the packet buffers. */
     private final ByteCache _cache = ByteCache.getInstance(128, 64*1024);
+    /** Connections awaiting status, by message id. */
     private final Map<Long, Connection> _messageStatusMap;
+    /** True once the queue is shut down. */
     private volatile boolean _dead;
 
+    /** Flags of the first tags packet. */
     private static final int FLAGS_INITIAL_TAGS = Packet.FLAG_SYNCHRONIZE;
+    /** Flags of the final tags packet. */
     private static final int FLAGS_FINAL_TAGS = Packet.FLAG_CLOSE | Packet.FLAG_RESET | Packet.FLAG_ECHO;
+    /** Tags sent in the first packet. */
     private static final int INITIAL_TAGS_TO_SEND = 32;
+    /** Tags kept in hand before sending more. */
     private static final int MIN_TAG_THRESHOLD = 10;
+    /** Window share of the tags sent per packet. */
     private static final int TAG_WINDOW_FACTOR = 8;
+    /** Tags sent in the final packet. */
     private static final int FINAL_TAGS_TO_SEND = 4;
+    /** Tags left before the final packet. */
     private static final int FINAL_TAG_THRESHOLD = 2;
+    /** Interval of the expired message cleanup. */
     private static final long REMOVE_EXPIRED_TIME = (long) 67*1000;
+    /** True to request the send status callbacks. */
     private static final boolean ENABLE_STATUS_LISTEN = true;
+    /** Latitude allowed on the I2CP expiration times. */
     private static final long I2CP_EXPIRATION_ADJUST = Math.min(25, Connection.getMinResendDelay() / 4);
 
     /**
@@ -52,6 +67,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
     private static final int TELEMETRY_SAMPLE_PERIOD = 16;
     /** Sample counters for the per-packet size stats (one per call site). */
     private int _sendMsgSizeCnt;
+    /** Times a duplicate message size was seen. */
     private int _sendDupMsgSizeCnt;
 
     /**

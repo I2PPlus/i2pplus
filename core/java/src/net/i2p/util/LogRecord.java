@@ -12,12 +12,19 @@ package net.i2p.util;
  * Keep track of a log entry, unformatted.
  */
 class LogRecord {
+    /** When the message was logged. */
     private final long _date;
+    /** The class that logged the message. */
     private final Class<?> _source;
+    /** The logger's name. */
     private final String _name;
+    /** The thread that logged the message. */
     private final String _threadName;
+    /** The message's priority. */
     private final int _priority;
+    /** The message text. */
     private final String _message;
+    /** The exception logged with the message, if any. */
     private final Throwable _throwable;
 
     /**
@@ -103,6 +110,7 @@ class LogRecord {
         return _throwable;
     }
 
+    /** Message prefix length used to match repeats. */
     private static final int MATCH_LEN = 40;
 
     /**

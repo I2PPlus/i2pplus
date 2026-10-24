@@ -35,13 +35,17 @@ public class BandwidthGraph extends SimpleTimer2.TimedEvent {
     /** Flush to disk every five minutes. */
     private static final long FLUSH_INTERVAL_MS = 5 * 60 * 1000;
 
+    /** File holding the saved samples. */
     private static final String FILE_NAME = "i2p-snark-bandwidth.dat";
 
-    // Cumulative counter hooks; instrumentation sites add raw bytes here.
 
+    /** Bytes sent over the datagram sockets. */
     private static final AtomicLong _datagramTx = new AtomicLong();
+    /** Bytes received over the datagram sockets. */
     private static final AtomicLong _datagramRx = new AtomicLong();
+    /** Bytes sent over the HTTP proxies. */
     private static final AtomicLong _httpTx = new AtomicLong();
+    /** Bytes received over the HTTP proxies. */
     private static final AtomicLong _httpRx = new AtomicLong();
 
     /**
@@ -69,6 +73,7 @@ public class BandwidthGraph extends SimpleTimer2.TimedEvent {
         if (rxBytes > 0) {_httpRx.addAndGet(rxBytes);}
     }
 
+    /** The single instance of the graph. */
     private static volatile BandwidthGraph _instance;
 
     /**
@@ -120,20 +125,35 @@ public class BandwidthGraph extends SimpleTimer2.TimedEvent {
         return g != null ? g.serialize() : "";
     }
 
+    /** The manager whose torrents are counted. */
     private final SnarkManager _manager;
+    /** Logger for the bandwidth graph. */
     private final Log _log;
+    /** The sample times, in a ring. */
     private final long[] _times = new long[CAPACITY];
+    /** The received bytes per sample. */
     private final long[] _rx = new long[CAPACITY];
+    /** The sent bytes per sample. */
     private final long[] _tx = new long[CAPACITY];
+    /** Position of the newest sample in the ring. */
     private int _head;
+    /** Samples held in the ring. */
     private int _count;
+    /** Increments whenever a sample is added. */
     private long _version;
+    /** When the samples were last saved to disk. */
     private long _lastFlush;
 
     /** Counter snapshots taken at the previous tick, for delta computation. */
     private long _lastDatagramTx, _lastDatagramRx, _lastHttpTx, _lastHttpRx;
+    /** When the last sample was taken. */
     private long _lastSampleTime;
 
+    /**
+     * Builds the graph for one manager.
+     *
+     * @param manager the manager whose torrents are counted
+     */
     private BandwidthGraph(SnarkManager manager) {
         super(I2PAppContext.getGlobalContext().simpleTimer2());
         _manager = manager;

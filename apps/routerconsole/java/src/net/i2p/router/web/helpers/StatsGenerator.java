@@ -22,6 +22,7 @@ import net.i2p.stat.RateStat;
  * Dump the stats to the web admin interface.
  */
 public class StatsGenerator {
+    /** The router whose stats are written. */
     private final RouterContext _context;
 
     /**
@@ -188,6 +189,12 @@ public class StatsGenerator {
         out.flush();
     }
 
+    /**
+     * Writes one frequency statistic.
+     *
+     * @param name the stat's name
+     * @param buf where the text is written
+     */
     private void renderFrequency(String name, StringBuilder buf) {
         FrequencyStat freq = _context.statManager().getFrequency(name);
         if (freq == null) {return;}
@@ -224,6 +231,13 @@ public class StatsGenerator {
            .append(")</li></ul><br>\n");
     }
 
+    /**
+     * Writes one rate statistic.
+     *
+     * @param name the stat's name
+     * @param buf where the text is written
+     * @param showAll true to write every time period
+     */
     private void renderRate(String name, StringBuilder buf, boolean showAll) {
         RateStat rate = _context.statManager().getRate(name);
         if (rate == null) {return;}
@@ -308,6 +322,13 @@ public class StatsGenerator {
            .append(")<br></li></ul><br>\n");
     }
 
+    /**
+     * Writes one period column of a rate table.
+     *
+     * @param buf where the text is written
+     * @param period the period length, in ms
+     * @param name the stat's name
+     */
     private static void renderPeriod(StringBuilder buf, long period, String name) {
         buf.append("<b>").append(DataHelper.formatDuration2(period)).append(" ").append(name).append(":</b> ");
     }
@@ -329,7 +350,14 @@ public class StatsGenerator {
         return DataHelper.escapeHTML(name.replace('.', '_').replace(' ', '_'));
     }
 
+    /** Formatter for plain numbers. */
     private static final ThreadLocal<DecimalFormat> _fmt = ThreadLocal.withInitial(() -> new DecimalFormat("###,##0.0##"));
+    /**
+     * Formats a plain number.
+     *
+     * @param num the value to format
+     * @return the text to show
+     */
     private static final String num(double num) {
         try {
             return _fmt.get().format(num);
@@ -338,7 +366,14 @@ public class StatsGenerator {
         }
     }
 
+    /** Formatter for percentages. */
     private static final ThreadLocal<DecimalFormat> _pct = ThreadLocal.withInitial(() -> new DecimalFormat("#0.00%"));
+    /**
+     * Formats a percentage.
+     *
+     * @param num the value to format
+     * @return the text to show
+     */
     private static final String pct(double num) {
         try {
             return _pct.get().format(num);
@@ -353,6 +388,9 @@ public class StatsGenerator {
      * @since 0.9.3
      */
     private class AlphaComparator implements Comparator<String> {
+        /** Orders stat names alphabetically. */
+        private AlphaComparator() {}
+
         /**
          * Order the router sections first, then the translated section names.
          */

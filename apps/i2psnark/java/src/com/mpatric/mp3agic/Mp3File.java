@@ -9,35 +9,62 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
+/** Reads and writes MP3 files with their ID3 tags. */
 public class Mp3File extends FileWrapper {
 
+    /** Default read buffer size, in bytes. */
     private static final int DEFAULT_BUFFER_LENGTH = 65536;
+    /** Smallest read buffer size allowed. */
     private static final int MINIMUM_BUFFER_LENGTH = 40;
+    /** First candidate offset of the Xing marker. */
     private static final int XING_MARKER_OFFSET_1 = 13;
+    /** Second candidate offset of the Xing marker. */
     private static final int XING_MARKER_OFFSET_2 = 21;
+    /** Third candidate offset of the Xing marker. */
     private static final int XING_MARKER_OFFSET_3 = 36;
 
+    /** Read buffer size, in bytes. */
     protected int bufferLength;
+    /** Offset of the Xing header, -1 if absent. */
     private int xingOffset = -1;
+    /** Offset of the first MPEG frame. */
     private int startOffset = -1;
+    /** Offset just past the last MPEG frame. */
     private int endOffset = -1;
+    /** Number of MPEG frames found. */
     private int frameCount = 0;
+    /** Counts of frames at each bitrate. */
     private Map<Integer, MutableInteger> bitrates = new HashMap<>();
+    /** Bitrate reported by the Xing header. */
     private int xingBitrate;
+    /** Average bitrate of the file, in bps. */
     private double bitrate = 0;
+    /** Channel mode of the first frame. */
     private String channelMode;
+    /** Emphasis setting of the first frame. */
     private String emphasis;
+    /** MPEG layer of the first frame. */
     private String layer;
+    /** Mode extension of the first frame. */
     private String modeExtension;
+    /** Sample rate of the first frame, in Hz. */
     private int sampleRate;
+    /** Whether the frames are marked copyrighted. */
     private boolean copyright;
+    /** Whether the frames are marked original. */
     private boolean original;
+    /** MPEG version of the first frame. */
     private String version;
+    /** The ID3v1 tag, if present. */
     private ID3v1 id3v1Tag;
+    /** The ID3v2 tag, if present. */
     private ID3v2 id3v2Tag;
+    /** Bytes of a custom tag, if present. */
     private byte[] customTag;
+    /** Whether every frame is scanned on load. */
     private boolean scanFile;
 
+    /** Constructor leaving the file unloaded. */
     protected Mp3File() {}
 
     /**
@@ -181,6 +208,15 @@ public class Mp3File extends FileWrapper {
         init(bufferLength, scanFile);
     }
 
+    /**
+     * Reads the header and the tags of the file.
+     *
+     * @param bufferLength the size of the read buffer
+     * @param scanFile true to scan the whole file for frames
+     * @throws IOException if the file cannot be read
+     * @throws UnsupportedTagException if the tag version is unknown
+     * @throws InvalidDataException if the tag data is corrupt
+     */
     private void init(int bufferLength, boolean scanFile)
             throws IOException, UnsupportedTagException, InvalidDataException {
         if (bufferLength < MINIMUM_BUFFER_LENGTH + 1)
@@ -203,6 +239,12 @@ public class Mp3File extends FileWrapper {
         }
     }
 
+    /**
+     * Finds where the MPEG frames start after any tags.
+     *
+     * @param seekableByteChannel the file to scan
+     * @return the offset of the first frame area
+     */
     protected int preScanFile(SeekableByteChannel seekableByteChannel) {
         ByteBuffer byteBuffer = ByteBuffer.allocate(AbstractID3v2Tag.HEADER_LENGTH);
         try {
@@ -229,6 +271,13 @@ public class Mp3File extends FileWrapper {
         return 0;
     }
 
+    /**
+     * Scans the whole file for mpeg frames.
+     *
+     * @param seekableByteChannel the file to scan
+     * @throws IOException if the file cannot be read
+     * @throws InvalidDataException if a frame is corrupt
+     */
     private void scanFile(SeekableByteChannel seekableByteChannel)
             throws IOException, InvalidDataException {
         ByteBuffer byteBuffer = ByteBuffer.allocate(bufferLength);
@@ -277,6 +326,15 @@ public class Mp3File extends FileWrapper {
         }
     }
 
+    /**
+     * Finds the first valid frame in a block.
+     *
+     * @param bytes the block read
+     * @param bytesRead the valid byte count in the block
+     * @param absoluteOffset the file offset of the block start
+     * @param offset the position within the block
+     * @return the file offset of the first frame, or -1
+     */
     private int scanBlockForStart(byte[] bytes, int bytesRead, int absoluteOffset, int offset) {
         while (offset < bytesRead - MINIMUM_BUFFER_LENGTH) {
             if (bytes[offset] == (byte) 0xFF && (bytes[offset + 1] & (byte) 0xE0) == (byte) 0xE0) {
@@ -316,6 +374,16 @@ public class Mp3File extends FileWrapper {
         return offset;
     }
 
+    /**
+     * Scans one block for mpeg frames.
+     *
+     * @param bytes the bytes of the block
+     * @param bytesRead how many bytes are valid
+     * @param absoluteOffset where the block starts in the file
+     * @param offset where to start in the block
+     * @return the offset reached in the block
+     * @throws InvalidDataException if a frame is corrupt
+     */
     private int scanBlock(byte[] bytes, int bytesRead, int absoluteOffset, int offset)
             throws InvalidDataException {
         while (offset < bytesRead - MINIMUM_BUFFER_LENGTH) {
@@ -336,12 +404,24 @@ public class Mp3File extends FileWrapper {
         return offset;
     }
 
+    /**
+     * Returns the largest offset a frame scan can reach.
+     *
+     * @return the end offset limit
+     */
     private int maxEndOffset() {
         int maxEndOffset = (int) getLength();
         if (hasId3v1Tag()) maxEndOffset -= ID3v1Tag.TAG_LENGTH;
         return maxEndOffset;
     }
 
+    /**
+     * Checks whether the frame holds a Xing header.
+     *
+     * @param bytes the block read
+     * @param offset the position within the block
+     * @return true if the Xing marker is present
+     */
     private boolean isXingFrame(byte[] bytes, int offset) {
         if (bytes.length >= offset + XING_MARKER_OFFSET_1 + 3) {
             if ("Xing"
@@ -376,6 +456,13 @@ public class Mp3File extends FileWrapper {
         return false;
     }
 
+    /**
+     * Checks a frame against the first frame's properties.
+     *
+     * @param frame the frame to check
+     * @param offset the frame's file offset
+     * @throws InvalidDataException if the frame is inconsistent
+     */
     private void sanityCheckFrame(MpegFrame frame, int offset) throws InvalidDataException {
         if (sampleRate != frame.getSampleRate())
             throw new InvalidDataException("Inconsistent frame header");
@@ -387,6 +474,11 @@ public class Mp3File extends FileWrapper {
             throw new InvalidDataException("Frame would extend beyond end of file");
     }
 
+    /**
+     * Counts one frame at the given bitrate.
+     *
+     * @param bitrate the frame bitrate, in bps
+     */
     private void addBitrate(final int bitrate) {
         MutableInteger count = bitrates.get(bitrate);
         if (count != null) {
@@ -397,6 +489,12 @@ public class Mp3File extends FileWrapper {
         this.bitrate = ((this.bitrate * (frameCount - 1)) + bitrate) / frameCount;
     }
 
+    /**
+     * Reads the ID3v1 tag from the end of the file.
+     *
+     * @param seekableByteChannel the file to read
+     * @throws IOException if the file cannot be read
+     */
     private void initId3v1Tag(SeekableByteChannel seekableByteChannel) throws IOException {
         ByteBuffer byteBuffer = ByteBuffer.allocate(ID3v1Tag.TAG_LENGTH);
         seekableByteChannel.position(getLength() - ID3v1Tag.TAG_LENGTH);
@@ -410,6 +508,14 @@ public class Mp3File extends FileWrapper {
         }
     }
 
+    /**
+     * Reads the ID3v2 tag at the file start.
+     *
+     * @param seekableByteChannel the file to read
+     * @throws IOException if the file cannot be read
+     * @throws UnsupportedTagException if the tag version is unknown
+     * @throws InvalidDataException if the tag data is corrupt
+     */
     private void initId3v2Tag(SeekableByteChannel seekableByteChannel)
             throws IOException, UnsupportedTagException, InvalidDataException {
         if (xingOffset == 0 || startOffset == 0) {
@@ -431,6 +537,12 @@ public class Mp3File extends FileWrapper {
         }
     }
 
+    /**
+     * Reads any custom tag before the MPEG frames.
+     *
+     * @param seekableByteChannel the file to read
+     * @throws IOException if the file cannot be read
+     */
     private void initCustomTag(SeekableByteChannel seekableByteChannel) throws IOException {
         int bufferLength = (int) (getLength() - (endOffset + 1));
         if (hasId3v1Tag()) bufferLength -= ID3v1Tag.TAG_LENGTH;
@@ -758,6 +870,12 @@ public class Mp3File extends FileWrapper {
         }
     }
 
+    /**
+     * Copies the MPEG frames to the save file.
+     *
+     * @param saveFile the file to write
+     * @throws IOException if the file cannot be written
+     */
     private void saveMpegFrames(SeekableByteChannel saveFile) throws IOException {
         int filePos = xingOffset;
         if (filePos < 0) filePos = startOffset;

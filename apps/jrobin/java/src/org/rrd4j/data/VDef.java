@@ -7,7 +7,9 @@ import java.util.Arrays;
  * Creates computed data sources by applying aggregation functions to existing data sources.
  */
 class VDef extends Source implements NonRrdSource {
+    /** Name other definitions use to refer to this one. */
     private final String defName;
+    /** The variable holding the defined value. */
     private final Variable var;
 
     /**

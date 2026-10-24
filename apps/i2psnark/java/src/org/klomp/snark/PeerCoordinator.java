@@ -65,6 +65,7 @@ import org.klomp.snark.dht.DHT;
  * @since 0.1.0
  */
 class PeerCoordinator implements PeerListener, BandwidthListener {
+    /** Logger for the peer coordinator. */
     private final Log _log;
 
     /** Will be null when in magnet mode. */
@@ -73,9 +74,9 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /** Will be null when in magnet mode. */
     Storage storage;
 
+    /** The download we coordinate peers for. */
     private final Snark snark;
 
-    // package local for access by CheckDownLoadersTask
     /** How often to recompute upload slots and UI download speeds. */
     static final long CHECK_PERIOD =
             (long) 5 * 1000; // update download speed in UI and choke/unchoke tests
@@ -113,11 +114,15 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /** External use by {@link PeerCheckerTask} only. */
     private final AtomicInteger interestedAndChoking = new AtomicInteger();
 
+    /** Bytes uploaded to peers. */
     private final AtomicLong uploaded = new AtomicLong();
+    /** Bytes downloaded from peers. */
     private final AtomicLong downloaded = new AtomicLong();
     /** Number of samples in the upload/download rate windows. */
     static final int RATE_DEPTH = 3; // make following arrays RATE_DEPTH long
+    /** Upload totals at the rate stat boundaries. */
     private final long[] uploaded_old = {-1, -1, -1};
+    /** Download totals at the rate stat boundaries. */
     private final long[] downloaded_old = {-1, -1, -1};
 
     /**
@@ -144,13 +149,18 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /** Timer to handle all periodical tasks. */
     private final CheckEvent timer;
 
-    // RerequestEvent and related values
+    /** Timer re-requesting peers from the tracker. */
     private final SimpleTimer2.TimedEvent rerequestTimer;
+    /** Lock for the re-request state. */
     private final Object rerequestLock = new Object();
+    /** Whether the last tracker request was allowed. */
     private boolean wasRequestAllowed;
+    /** True while a re-request is scheduled. */
     private boolean isRerequestScheduled;
 
+    /** Our 20-byte peer id. */
     private final byte[] id;
+    /** The torrent's info hash. */
     private final byte[] infohash;
 
     /**
@@ -166,8 +176,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      */
     private long wantedBytes;
 
-        // Partial pieces; lock by synching on wantedPieces. TODO store Requests, not PartialPieces.
 
+    /** Pieces received but not yet complete. */
     private final List<PartialPiece> partialPieces;
 
     /**
@@ -191,23 +201,35 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      */
     private boolean wantedDirty = true;
 
+    /** True once the coordinator has halted. */
     private volatile boolean halted;
 
+    /** Magnet fetch state, null for a normal torrent. */
     private final MagnetState magnetState;
+    /** Listener for progress events. */
     private final CoordinatorListener listener;
+    /** Listener for bandwidth events, may be null. */
     private final BandwidthListener bwListener;
+    /** The plugin's shared utilities. */
     private final I2PSnarkUtil _util;
+    /** Random source for peer and piece selection. */
     private final RandomSource _random;
 
+    /** When torrent comments were last requested. */
     private final AtomicLong _commentsLastRequested = new AtomicLong();
+    /** Peers that did not ask for comments. */
     private final AtomicInteger _commentsNotRequested = new AtomicInteger();
+    /** Interval between comment requests. */
     private static final long COMMENT_REQ_INTERVAL = 12 * 60 * 60 * 1000L;
+    /** Delay before the first comment request. */
     private static final long COMMENT_REQ_DELAY = 60 * 60 * 1000L;
+    /** Non-requesting peers that trigger a request. */
     private static final int MAX_COMMENT_NOT_REQ = 10;
 
     /** Hostname to expire time. Sync on this. */
     private Map<String, Long> _webPeerBans;
 
+    /** How long a bad web peer is banned. */
     private static final long WEBPEER_BAN_TIME = 30 * 60 * 1000L;
 
     /**
@@ -270,10 +292,14 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * @since 0.8.2
      */
     private static class CheckEvent extends SimpleTimer2.TimedEvent {
+        /** The checker task being scheduled. */
         private final PeerCheckerTask _task;
 
         /**
          * Wrapper to reschedule the checker task on each fire.
+         *
+         * @param ctx the app context, for the timer
+         * @param task the checker task to reschedule
          */
         public CheckEvent(I2PAppContext ctx, PeerCheckerTask task) {
             super(ctx.simpleTimer2());
@@ -2229,9 +2255,17 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
 
     /** A stalled piece and the snapshot of its requesters, taken under the wantedPieces lock. */
     private static class StalledPiece {
+        /** The piece that stalled. */
         final Piece piece;
+        /** Peers that had the piece requested. */
         final Set<PeerID> requesters;
 
+        /**
+         * Records one stalled piece.
+         *
+         * @param piece the piece that stalled
+         * @param requesters the peers it was requested from
+         */
         StalledPiece(Piece piece, Set<PeerID> requesters) {
             this.piece = piece;
             this.requesters = requesters;

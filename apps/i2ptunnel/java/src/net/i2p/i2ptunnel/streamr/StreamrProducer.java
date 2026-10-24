@@ -66,6 +66,8 @@ public class StreamrProducer extends I2PTunnelUDPServerBase {
         return super.close(forced);
     }
 
+    /** Hands the incoming feed to this tunnel's listeners. */
     private final MultiSource multi;
+    /** The UDP socket the feed arrives on. */
     private final UDPSource server;
 }

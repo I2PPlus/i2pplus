@@ -50,21 +50,37 @@ import java.time.Instant;
  */
 public class BlindData {
 
+    /** The app context. */
     private final I2PAppContext _context;
+    /** The clear signing key of the destination. */
     private final SigningPublicKey _clearSPK;
+    /** The secret code required to use the destination. */
     private final String _secret;
+    /** The blinded signing key, once calculated. */
     private volatile SigningPublicKey _blindSPK;
+    /** The signature type of the blinded key. */
     private final SigType _blindType;
+    /** The authorization type of the destination. */
     private final int _authType;
+    /** The key proving the authorization, if any. */
     private final PrivateKey _authKey;
+    /** The hash of the blinded destination. */
     private volatile Hash _blindHash;
+    /** The blinding private key, for the server side. */
     private volatile SigningPrivateKey _alpha;
+    /** The blinded destination, once calculated. */
     private volatile Destination _dest;
+    /** Modifier for the blinded routing key derivation. */
     private volatile long _routingKeyGenMod;
+    /** True if the secret code must be presented. */
     private volatile boolean _secretRequired;
+    /** True if the authorization key must be presented. */
     private volatile boolean _authRequired;
+    /** When the blind data was created. */
     private volatile long _date;
+    /** When the blind data expires. */
     private volatile long _expiration;
+    /** Cached base32 address of the destination. */
     private volatile String _b32;
 
     /**
@@ -274,6 +290,7 @@ public class BlindData {
         return _authKey;
     }
 
+    /** Calculates the blinded key, hash and destination. */
     private synchronized void calculate() {
         if (_context.isRouterContext()) {
             RoutingKeyGenerator gen = _context.routingKeyGenerator();

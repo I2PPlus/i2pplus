@@ -17,11 +17,17 @@ import net.i2p.util.Log;
  *
  */
 public class SAMReader {
+    /** Logger for this class. */
     private final Log _log;
+    /** The stream read from the SAM server. */
     private final InputStream _inRaw;
+    /** Told about the messages read. */
     private final SAMClientEventListener _listener;
+    /** False once the reader is stopping. */
     private volatile boolean _live;
+    /** The thread reading messages, null before start. */
     private Thread _thread;
+    /** Counts the readers created, for thread names. */
     private static final AtomicInteger _count = new AtomicInteger();
 
     /**
@@ -246,7 +252,11 @@ public class SAMReader {
         public void unknownMessageReceived(String major, String minor, Properties params);
     }
 
+    /** Reads SAM messages on its own thread. */
     private class Runner implements Runnable {
+        /** Reads the SAM server's replies. */
+        private Runner() {}
+
         /**
          * Reads SAM lines off the stream and dispatches them until stopped.
          */

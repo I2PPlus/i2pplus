@@ -29,6 +29,7 @@ import net.i2p.data.Hash;
  */
 public class HashDistance {
 
+    /** Utility class, not intended for instantiation. */
     private HashDistance() {}
 
     /**

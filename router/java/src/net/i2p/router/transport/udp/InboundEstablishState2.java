@@ -43,26 +43,47 @@ import net.i2p.util.VersionComparator;
  * @since 0.9.54
  */
 class InboundEstablishState2 extends InboundEstablishState implements SSU2Payload.PayloadCallback {
+    /** Records why routers were banned. */
     private final BanLogger _banLogger;
+    /** The SSU transport we serve. */
     private final UDPTransport _transport;
+    /** Alice's socket address. */
     private final InetSocketAddress _aliceSocketAddress;
+    /** Connection id we receive with. */
     private final long _rcvConnID;
+    /** Connection id we send with. */
     private final long _sendConnID;
+    /** The handshake token echoed to Alice. */
     private final long _token;
+    /** Handshake state for the ratchet keys. */
     private final HandshakeState _handshakeState;
+    /** Version of the handshake. */
     private final int _version;
+    /** First header encryption key for sending. */
     private byte[] _sendHeaderEncryptKey1;
+    /** Second header encryption key for sending. */
     private byte[] _sendHeaderEncryptKey2;
+    /** Second header encryption key for receiving. */
     private byte[] _rcvHeaderEncryptKey2;
+    /** Session Created packet held for retransmission. */
     private byte[] _sessCrForReTX;
+    /** Session Confirmed fragments for retransmission. */
     private byte[][] _sessConfFragments;
+    /** When the handshake started. */
     private long _timeReceived;
+    /** Our clock skew to Alice, in ms. */
     private long _skew; // not adjusted for RTT
+    /** The MTU agreed for the new peer. */
     private int _mtu;
+    /** The peer state being built, once created. */
     private PeerState2 _pstate;
+    /** Data packets queued before the handshake finished. */
     private List<UDPPacket> _queuedDataPackets;
+    /** True to enforce the handshake token. */
     private static final boolean ENFORCE_TOKEN = true; // testing
+    /** Maximum clock skew accepted in a handshake. */
     private static final long MAX_SKEW = 2*60*1000L;
+    /** First version supporting SSU2 relays. */
     private static final String MIN_RELAY_VERSION = "0.9.57"; // SSU2 fixes (2.1.0)
 
     /**
@@ -245,6 +266,15 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         return ourmtu > 0 ? Math.min(_mtu, ourmtu) : _mtu;
     }
 
+    /**
+     * Processes one handshake payload.
+     *
+     * @param payload the packet payload
+     * @param offset where the handshake data starts
+     * @param length the handshake data length
+     * @param isHandshake true for a handshake packet
+     * @throws GeneralSecurityException if the decryption or MAC fails
+     */
     private void processPayload(byte[] payload, int offset, int length, boolean isHandshake) throws GeneralSecurityException {
         try {
             int blocks = SSU2Payload.processPayload(_context, this, payload, offset, length, isHandshake, null);
@@ -374,6 +404,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
 
     /** A yggdrasil IPv6 address starts with 0x02 or 0x03 (first byte 0b0000001x). */
     private static final int YGGDRASIL_FIRST_BYTE_MASK = 0xfe;
+    /** First byte of the Yggdrasil protocol. */
     private static final int YGGDRASIL_FIRST_BYTE = 0x02;
 
     /** Bytes of the source IPv6 prefix that identify an address as this router's own. */
@@ -910,23 +941,27 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
      */
     public HandshakeState getHandshakeState() {return _handshakeState;}
     /**
-     * The send header encrypt key1.
-     * @return the send header encrypt key1
+     * First header encryption key for packets sent to the peer.
+     *
+     * @return the key bytes
      */
     public byte[] getSendHeaderEncryptKey1() {return _sendHeaderEncryptKey1;}
     /**
-     * The rcv header encrypt key1.
-     * @return the rcv header encrypt key1
+     * First header encryption key for packets received from the peer.
+     *
+     * @return the key bytes
      */
     public byte[] getRcvHeaderEncryptKey1() {return _transport.getSSU2StaticIntroKey();}
     /**
-     * The send header encrypt key2.
-     * @return the send header encrypt key2
+     * Second header encryption key for packets sent to the peer.
+     *
+     * @return the key bytes
      */
     public byte[] getSendHeaderEncryptKey2() {return _sendHeaderEncryptKey2;}
     /**
-     * The rcv header encrypt key2.
-     * @return the rcv header encrypt key2
+     * Second header encryption key for packets received from the peer.
+     *
+     * @return the key bytes
      */
     public synchronized byte[] getRcvHeaderEncryptKey2() {return _rcvHeaderEncryptKey2;}
     /**
@@ -1534,6 +1569,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
      * @since 0.9.57
      */
     static class RIException extends DataFormatException {
+        /** Reason code for rejecting the handshake. */
         private final int rsn;
         /**
          * Creates the RI exception.

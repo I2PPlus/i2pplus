@@ -52,16 +52,12 @@ import net.i2p.router.OutNetMessage;
  * <strong>Note:</strong> API is subject to change. Please contact the
  * I2P development team if you're writing a new transport or
  * transport plugin to ensure compatibility and guidance.
+ * <p>
+ * The style and config-key constants are the single source of truth;
+ * the concrete transports keep legacy aliases for them (e.g.
+ * NTCPTransport.STYLE == Transport.STYLE_NTCP).
  */
 public interface Transport {
-
-    // Transport style and config-key constants.
-    //
-    // Single source of truth: transport styles and cross-package configuration
-    // keys that were historically declared on the concrete NTCP/SSU transports.
-    // The concrete transports re-export them under their legacy names as aliases
-    // (e.g. NTCPTransport.STYLE == Transport.STYLE_NTCP) so existing callers
-    // compile unchanged while every value is defined here, once.
 
     /**
      * Style identifier for the NTCP transport, used in {@link RouterAddress} style tags,
@@ -322,8 +318,14 @@ public interface Transport {
         /** Address from the SSU transport. */
         SOURCE_SSU("ssu");
 
+        /** Name written for this source in the transport's config. */
         private final String cfgstr;
 
+        /**
+         * Names a source by its configuration string.
+         *
+         * @param cfgstr the configuration string
+         */
         AddressSource(String cfgstr) {
             this.cfgstr = cfgstr;
         }

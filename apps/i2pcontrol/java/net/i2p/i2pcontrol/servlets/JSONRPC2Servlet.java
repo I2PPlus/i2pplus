@@ -44,9 +44,13 @@ import java.nio.charset.StandardCharsets;
  */
 public class JSONRPC2Servlet extends HttpServlet {
 
+    /** Pinned for serialized-form compatibility. */
     private static final long serialVersionUID = -45075606818515212L;
+    /** Bytes read at a time from the request. */
     private static final int BUFFER_LENGTH = 2048;
+    /** Service name checked for HTTP access. */
     private static final String SVC_HTTP_I2PCONTROL = "http_i2pcontrol";
+    /** Service name checked for HTTPS access. */
     private static final String SVC_HTTPS_I2PCONTROL = "https_i2pcontrol";
     /** JSON-RPC 2.0 request dispatcher. */
     private Dispatcher disp;
@@ -281,6 +285,13 @@ public class JSONRPC2Servlet extends HttpServlet {
         }
     }
 
+    /**
+     * Reads the whole request body as text.
+     *
+     * @param sis the stream to read from
+     * @return the request body
+     * @throws IOException if the stream cannot be read
+     */
     private String getRequest(ServletInputStream sis) throws IOException {
         Writer writer = new StringWriter();
 

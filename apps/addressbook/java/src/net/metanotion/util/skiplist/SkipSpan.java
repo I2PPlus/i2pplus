@@ -81,6 +81,12 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
         return buf.toString();
     }
 
+    /**
+     * Finds the key among this span's entries.
+     *
+     * @param key the key to look for
+     * @return where it is, or where it belongs
+     */
     private int binarySearch(K key) {
         int high = nKeys - 1;
         int low = 0;
@@ -151,6 +157,11 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
         return vals[loc];
     }
 
+    /**
+     * Moves entries left to close a hole.
+     *
+     * @param hole the entry removed to make room
+     */
     private void pushTogether(int hole) {
         for(int i=hole;i<(nKeys - 1);i++) {
             keys[i] = keys[i+1];
@@ -159,6 +170,11 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
         nKeys--;
     }
 
+    /**
+     * Moves entries right to open a hole.
+     *
+     * @param start where the hole is opened
+     */
     private void pushApart(int start) {
         for(int i=(nKeys-1);i>=start;i--) {
             keys[i+1] = keys[i];
@@ -167,6 +183,14 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
         nKeys++;
     }
 
+    /**
+     * Divides this span in two at a point.
+     *
+     * @param loc where to split
+     * @param key the key being inserted
+     * @param val its value
+     * @param sl the list being changed
+     */
     private void split(int loc, K key, V val, SkipList<K, V> sl) {
         SkipSpan<K, V> right = newInstance(sl);
 

@@ -32,10 +32,15 @@ import net.i2p.util.PortMapper;
  */
 class SAMv3DatagramServer implements Handler {
 
+	/** The UDP socket the clients connect to. */
 	private final DatagramChannel _server;
+	/** Thread reading from the socket. */
 	private final Thread _listener;
+	/** The bridge serving the destination. */
 	private final SAMBridge _parent;
+	/** The host the socket is bound to. */
 	private final String _host;
+	/** The port the socket is bound to. */
 	private final int _port;
 
 	/**
@@ -110,15 +115,18 @@ class SAMv3DatagramServer implements Handler {
 	 */
 	public int getPort() { return _port; }
 
+	/** Thread reading the datagrams from the clients. */
 	private class Listener implements Runnable {
 
+		/** The socket being read. */
 		private final DatagramChannel server;
 
 		/**
 		 * Holds the channel this listener receives the SAM datagrams on.
+		 *
+		 * @param server the channel to receive on
 		 */
-		public Listener(DatagramChannel server)
-		{
+		public Listener(DatagramChannel server) {
 			this.server = server;
 		}
 
@@ -134,11 +142,11 @@ class SAMv3DatagramServer implements Handler {
 			}
 		}
 
+		/** Reads and dispatches the datagrams. */
 		private void run2() {
 			ByteBuffer inBuf = ByteBuffer.allocateDirect(SAMRawSession.RAW_SIZE_MAX+1024);
 
-			while (!Thread.interrupted())
-			{
+			while (!Thread.interrupted()) {
 				// not ByteBuffer to avoid Java 8/9 issues
 				(inBuf).clear();
 				try {
@@ -159,12 +167,17 @@ class SAMv3DatagramServer implements Handler {
 		}
 	}
 
+	/** Thread handling one received datagram. */
 	private static class MessageDispatcher implements Runnable {
+		/** Stream reading the received message lines. */
 		private final ByteArrayInputStream is;
+		/** Longest message line accepted. */
 		private static final int MAX_LINE_LENGTH = 2*1024;
 
 		/**
 		 * Holds one received datagram for parsing and dispatch.
+		 *
+		 * @param buf the bytes of the received datagram
 		 */
 		public MessageDispatcher(byte[] buf) {
 			this.is = new ByteArrayInputStream(buf);
@@ -294,8 +307,9 @@ class SAMv3DatagramServer implements Handler {
 		}
 
 		/**
-		 * Log a warning to the router log.
+		 * Logs a warning to the router log.
 		 *
+		 * @param s the message to log
 		 * @since 0.9.22
 		 */
 		private static void warn(String s) {
@@ -305,6 +319,8 @@ class SAMv3DatagramServer implements Handler {
 		/**
 		 * Log a warning with its cause.
 		 *
+		 * @param s the message to log
+		 * @param t the cause, null if none
 		 * @since 0.9.22
 		 */
 		private static void warn(String s, Throwable t) {

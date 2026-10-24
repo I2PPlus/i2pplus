@@ -24,7 +24,9 @@ import net.i2p.util.SimpleTimer2;
  */
 class DHTTracker {
 
+    /** The app context. */
     private final I2PAppContext _context;
+    /** The torrents whose peers are tracked. */
     private final Torrents _torrents;
 
     /** How long built bloom filters are reused before being rebuilt. */
@@ -35,8 +37,11 @@ class DHTTracker {
 
     /** How long built bloom filters are reused before being rebuilt. */
     private final long _filterCacheTime;
+    /** Age after which a tracked entry expires. */
     private long _expireTime;
+    /** Logger for the DHT tracker. */
     private final Log _log;
+    /** True while the tracker runs. */
     private volatile boolean _isRunning;
 
     /** Not current; updated by the cleaner. */
@@ -50,6 +55,7 @@ class DHTTracker {
 
     /** No guidance in BEP 5; Vuze is 8h. Under sustained pressure the cleaner descends here. */
     private static final long MIN_EXPIRE_TIME = 15 * (long) 60 * 1000;
+    /** Step adjusting the expire time by entry count. */
     private static final long DELTA_EXPIRE_TIME = 3 * (long) 60 * 1000;
 
     /**
@@ -64,7 +70,9 @@ class DHTTracker {
 
     /** How many recent peers to retain per torrent; admission allows up to twice this between sweeps. */
     static final int MAX_PEERS_PER_TORRENT = 250;
+    /** Most peers stored for one torrent. */
     private static final int ABSOLUTE_MAX_PER_TORRENT = MAX_PEERS_PER_TORRENT * 2;
+    /** Most torrents tracked at once. */
     private static final int MAX_TORRENTS = 2000;
 
     /** Upper bound on cached filter entries; the swarm map holds up to {@link #MAX_TORRENTS}. */
@@ -287,9 +295,17 @@ class DHTTracker {
      * is amortized and the filters are rebuilt once they age out.
      */
     private static class FilterCache {
+        /** The cached bloom filters, one per torrent. */
         final BloomFilter[] filters;
+        /** When the cached filters were built. */
         final long created;
 
+        /**
+         * Caches the bloom filters of all torrents.
+         *
+         * @param filters the cached bloom filters
+         * @param created when they were built
+         */
         FilterCache(BloomFilter[] filters, long created) {
             this.filters = filters;
             this.created = created;
@@ -318,8 +334,10 @@ class DHTTracker {
                 .append(separator); // append blacklisted peers info here
     }
 
+    /** Timer event expiring the tracked entries. */
     private class Cleaner extends SimpleTimer2.TimedEvent {
 
+        /** Builds the cleaner timer event. */
         public Cleaner() {
             super(SimpleTimer2.getInstance(), 2 * CLEAN_TIME);
         }

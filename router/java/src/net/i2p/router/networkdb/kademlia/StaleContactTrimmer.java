@@ -27,6 +27,7 @@ class StaleContactTrimmer implements KBucketTrimmer<Hash> {
      */
     static final long GRACE = 24 * 60 * 60 * 1000L;
 
+    /** Supplies the clock and the peer list. */
     private final RouterContext _context;
 
     /**

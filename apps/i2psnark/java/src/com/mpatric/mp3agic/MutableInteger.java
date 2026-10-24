@@ -6,6 +6,7 @@ package com.mpatric.mp3agic;
  */
 public class MutableInteger {
 
+    /** The wrapped count, read and written through the accessors. */
     private int value;
 
     /**

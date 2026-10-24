@@ -36,20 +36,25 @@ import java.nio.charset.StandardCharsets;
  */
 public class TranslateReader extends FilterReader {
 
-    /** All states may transition to START. */
+    /**
+     * The states of the parser, all of which may transition to START.
+     */
     private enum S {
+        /** Looking for the start of a tag. */
         START,
-        /** Next state LPAREN. */
+        /** Inside a tag name, before the parenthesis. */
         UNDER,
-        /** Next state QUOTE. */
+        /** Inside the parenthesis, before the quoted text. */
         LPAREN,
-        /** Next state LPAREN or BACK. */
+        /** Inside the quoted text. */
         QUOTE,
-        /** Next state QUOTE. */
+        /** Inside the quoted text, after a backslash. */
         BACK
     }
 
+    /** The bundle being read. */
     private final String _bundle;
+    /** The app context. */
     private final I2PAppContext _ctx;
 
     /** Parse in progress. */
@@ -64,9 +69,12 @@ public class TranslateReader extends FilterReader {
     /** Parsed string and parameters. */
     private final List<String> _args;
 
+    /** Current state of the parser. */
     private S _state = S.START;
+    /** The hook handling the tags found. */
     private TagHook _hook;
 
+    /** Most arguments a tag may take. */
     private static final int MAX_ARGS = 9;
 
     /**
@@ -104,6 +112,12 @@ public class TranslateReader extends FilterReader {
         return parse();
     }
 
+    /**
+     * Reads the file and passes the strings to the hook.
+     *
+     * @return the number of tags processed
+     * @throws IOException if the file cannot be read
+     */
     private int parse() throws IOException {
         while (true) {
             int c = in.read();
@@ -350,15 +364,31 @@ public class TranslateReader extends FilterReader {
         _outBuf.append(tx);
     }
 
+    /** Callback handling each translated string. */
     private interface TagHook extends Closeable {
+        /**
+         * Handles one tag found in the file.
+         *
+         * @param args the arguments of the tag
+         */
         public void tag(List<String> args);
     }
 
+    /** Hook writing the tags out as a properties file. */
     private static class Tagger implements TagHook {
+        /** The stream the output is written to. */
         private final PrintStream _out;
+        /** The output file name. */
         private final String _name;
+        /** Tags written so far. */
         private int _count;
 
+        /**
+         * Builds the tagger writing to a file.
+         *
+         * @param file the output file name
+         * @throws IOException if the file cannot be opened
+         */
         public Tagger(String file) throws IOException {
             _name = file;
             _out = new PrintStream(file, "UTF-8");
@@ -410,6 +440,12 @@ public class TranslateReader extends FilterReader {
         }
     }
 
+    /**
+     * Runs the reader over one file from the command line.
+     *
+     * @param file the file to read
+     * @throws IOException if the file cannot be read
+     */
     private static void test(String file) throws IOException {
         try (TranslateReader r = new TranslateReader(
                 I2PAppContext.getGlobalContext(), "net.i2p.router.web.messages", new FileInputStream(file))) {

@@ -37,8 +37,9 @@ public class I2PDefaultServlet extends DefaultServlet {
      */
     public I2PDefaultServlet() {}
 
-    // shadows of private fields in super
-    /** The context handler */
+    /**
+     * The context handler, a shadow of a private field in the superclass.
+     */
     private ContextHandler _contextHandler;
     /** Whether directory listing is allowed */
     private boolean _dirAllowed = true;
@@ -98,7 +99,14 @@ public class I2PDefaultServlet extends DefaultServlet {
         return rv;
     }
 
-    /* copied from DefaultServlet unchanged */
+    /**
+     * Reads an init parameter as a true/false value, copied from Tomcat's
+     * DefaultServlet unchanged.
+     *
+     * @param name the parameter's name
+     * @param dft the value to use when it is not set
+     * @return the parameter's value, or the default
+     */
     private boolean getInitBoolean(String name, boolean dft) {
         String value = getInitParameter(name);
         if (value == null || value.isEmpty()) {return dft;}
@@ -259,7 +267,9 @@ public class I2PDefaultServlet extends DefaultServlet {
      * @since 0.9.51
      */
     private static class FileComparator implements Comparator<String> {
+        /** Order to apply to the file names. */
         private final Comparator<Object> _coll;
+        /** The directory whose contents are compared. */
         private final Resource _base;
 
         /**

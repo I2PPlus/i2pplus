@@ -13,8 +13,10 @@ import java.util.Arrays;
  */
 public abstract class ByteBufferBackend extends RrdBackend {
 
+    /** True while the buffer holds changes not yet written. */
     private volatile boolean dirty = false;
 
+    /** The file contents held in memory. */
     private ByteBuffer byteBuffer;
 
     /**

@@ -13,6 +13,7 @@ import javax.crypto.spec.SecretKeySpec;
  */
 public class CryptoCheck {
 
+    /** True when the unlimited strength policy is installed. */
     private static final boolean _isUnlimited;
 
     static {
@@ -60,6 +61,7 @@ public class CryptoCheck {
         _isUnlimited = unlimited;
     }
 
+    /** Utility class, not intended for instantiation. */
     private CryptoCheck() {}
 
     /**

@@ -202,8 +202,7 @@ class Connection {
      */
     long _caWindowAccumulator;
 
-    // Pacing fields for smooth transmission
-    /** Pacing rate in bytes per second. */
+    /** Pacing rate in bytes per second, for smooth transmission. */
     private volatile long _pacingRate; // bytes per second; refreshed on window/RTT change, read by calculatePacingDelay
     /** Last packet send time. */
     private volatile long _lastPacketSendTime;
@@ -364,7 +363,11 @@ class Connection {
     // acting on the verdict is the router layer's decision.
     // ---------------------------------------------------------------------
 
-    /** Verdict of one floor evaluation. @since 0.9.71+. */
+    /**
+     * Verdict of one floor evaluation.
+     *
+     * @since 0.9.71+
+     */
     enum StallState {
         /** Healthy, or not enough history to judge. */
         NONE,
@@ -386,7 +389,11 @@ class Connection {
      */
     private static final int FLOOR_REBASE_WINDOWS = 10;
 
-    /** Rolling goodput sample window. @since 0.9.71+. */
+    /**
+     * Rolling goodput sample window.
+     *
+     * @since 0.9.71+
+     */
     private static final long FLOOR_SAMPLE_MS = 10000;
 
     /**
@@ -419,7 +426,11 @@ class Connection {
      */
     private static final long STALL_GRACE_MS = 30000;
 
-    /** Weight of a new goodput sample in the baseline EWMA, scaled by 100. @since 0.9.71+. */
+    /**
+     * Weight of a new goodput sample in the baseline EWMA, scaled by 100.
+     *
+     * @since 0.9.71+
+     */
     private static final int FLOOR_EWMA_PERCENT = 30;
 
     /**
@@ -3762,7 +3773,7 @@ if (!on) {
 
     /**
      * Highest outbound packet we have received an ack for.
-     * @return the highest outbound packet we have received an ack for
+     * @return the message id, -1 until the first ack
      */
     public long getHighestAckedThrough() {return _highestAckedThrough.get();}
 
@@ -4140,9 +4151,14 @@ if (!on) {
         /** Whether a probe is already scheduled. */
         private volatile boolean _pending;
 
+        /** The timer event that fires a throughput probe. */
         TLProbeEvent() { super(_timer); }
 
-        /** Schedule probe. */
+        /**
+         * Schedules a throughput probe.
+         *
+         * @param delayMs how long to wait before probing, in milliseconds
+         */
         synchronized void scheduleProbe(int delayMs) {
             if (!_pending) {
                 _pending = true;
@@ -4702,6 +4718,7 @@ synchronized boolean checkRetransmitStall() {
      */
     private class PacedPacketEvent extends SimpleTimer2.TimedEvent {
 
+        /** The timer event that sends the next paced packet. */
         PacedPacketEvent() {
             super(_timer);
         }

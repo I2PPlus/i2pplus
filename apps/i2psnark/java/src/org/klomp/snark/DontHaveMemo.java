@@ -18,7 +18,9 @@ class DontHaveMemo {
     /** How long a dont_have keeps a piece unrequestable from that peer. */
     private static final long DEFAULT_MEMO_TIME = 5 * 60 * 1000;
 
+    /** When the memo was made, for expiring it. */
     private final long _memoTime;
+    /** Blocks the peer refused, by block number, with the time of each */
     private final Map<Integer, Long> _dontHave = new HashMap<>(8);
 
     /** Create a memo using the default five minute suppression window. */

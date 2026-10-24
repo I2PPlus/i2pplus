@@ -62,14 +62,18 @@ import net.i2p.util.PasswordManager;
  * necessary).
  */
 class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventListener {
+    /** Logger for this class. */
     private final Log _log;
     /** The router context. */
     protected final RouterContext _context;
     /** The client connection runner. */
     protected final ClientConnectionRunner _runner;
+    /** True when the client must present credentials. */
     private final boolean  _enforceAuth;
+    /** True once the client has authenticated. */
     private volatile boolean _authorized;
 
+    /** Property naming the client's credentials. */
     private static final String PROP_AUTH = "i2cp.auth";
     /** If true, user/pw must be in {@link GetDateMessage}. */
     private static final String PROP_AUTH_STRICT = "i2cp.strictAuth";
@@ -594,6 +598,11 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
         _runner.removePayload(new MessageId(message.getMessageId()));
     }
 
+    /**
+     * Tears down the session the client asked to destroy.
+     *
+     * @param message the request to act on
+     */
     private void handleDestroySession(DestroySessionMessage message) {
         // spec says to respond with a SessionStatusMessage(destroyed)
         // but we don't do that, we just close the session here,
@@ -890,6 +899,12 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
         sendStatusMessage(id, SessionStatusMessage.STATUS_UPDATED);
     }
 
+    /**
+     * Sends a status report to the client.
+     *
+     * @param id the session the status is about
+     * @param status the status code to send
+     */
     private void sendStatusMessage(SessionId id, int status) {
         SessionStatusMessage msg = new SessionStatusMessage();
         msg.setSessionId(id);

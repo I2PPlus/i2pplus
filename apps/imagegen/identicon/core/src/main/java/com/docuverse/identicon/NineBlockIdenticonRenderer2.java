@@ -16,12 +16,18 @@ import java.math.BigInteger;
  */
 public class NineBlockIdenticonRenderer2 implements IdenticonRenderer {
 
+    /** Patch shapes per identicon. */
     private static final int PATCH_GRIDS = 5;
+    /** Default patch size, in pixels. */
     private static final float DEFAULT_PATCH_SIZE = 20.0f;
+    /** Flag of a symmetric patch shape. */
     private static final byte PATCH_SYMMETRIC = 1;
+    /** Flag of an inverted patch shape. */
     private static final byte PATCH_INVERTED = 2;
+    /** Patch coordinate starting a new subpath. */
     private static final int PATCH_MOVETO = -1;
 
+    /** The patch shape coordinates, by shape. */
     private static final int[][] PATCH_TYPES = {
             {0, 4, 24, 20},
             {0, 4, 20},
@@ -41,6 +47,7 @@ public class NineBlockIdenticonRenderer2 implements IdenticonRenderer {
             {0, 4, 24, 20}
     };
 
+    /** The flags of each patch shape. */
     private static final byte[] PATCH_FLAGS = {
             PATCH_SYMMETRIC, 0, 0, 0,
             PATCH_SYMMETRIC, 0, 0, 0,
@@ -48,11 +55,16 @@ public class NineBlockIdenticonRenderer2 implements IdenticonRenderer {
             0, 0, 0, PATCH_SYMMETRIC + PATCH_INVERTED
     };
 
+    /** The patch shapes allowed in the center. */
     private static final int[] CENTER_PATCH_TYPES = {0, 4, 8, 15};
 
+    /** The patch size, in pixels. */
     private float patchSize;
+    /** The scaled shapes of the identicon. */
     private GeneralPath[] patchShapes;
+    /** Half the patch line width, for centering. */
     private float patchOffset;
+    /** The background color of the image. */
     private Color backgroundColor = Color.WHITE;
 
     /**
@@ -135,6 +147,13 @@ public class NineBlockIdenticonRenderer2 implements IdenticonRenderer {
         return renderQuilt(code, size);
     }
 
+    /**
+     * Draws the nine patch image for a hash code.
+     *
+     * @param code the hash code driving the pattern
+     * @param size the image size, in pixels
+     * @return the image drawn
+     */
     private BufferedImage renderQuilt(int code, int size) {
         int middleType = CENTER_PATCH_TYPES[code & 0x3];
         boolean middleInvert = ((code >> 2) & 0x1) != 0;
@@ -174,6 +193,19 @@ public class NineBlockIdenticonRenderer2 implements IdenticonRenderer {
         return targetImage;
     }
 
+    /**
+     * Draws one patch of the image.
+     *
+     * @param g the graphics to draw on
+     * @param x the left edge of the patch
+     * @param y the top edge of the patch
+     * @param size the patch size, in pixels
+     * @param patch the patch shape index
+     * @param turn the number of quarter turns to apply
+     * @param invert true to draw the inverted colors
+     * @param fillColor the color to fill the patch with
+     * @param strokeColor the color to outline the patch with
+     */
     private void drawPatch(Graphics2D g, float x, float y, float size, int patch, int turn, boolean invert, Color fillColor, Color strokeColor) {
         assert(patch >= 0);
         assert(turn >= 0);
@@ -206,6 +238,13 @@ public class NineBlockIdenticonRenderer2 implements IdenticonRenderer {
         g.setTransform(saveTransform);
     }
 
+    /**
+     * Measures how far apart two colors are.
+     *
+     * @param c1 the first color
+     * @param c2 the second color
+     * @return the distance, larger for more different
+     */
     private float getColorDistance(Color c1, Color c2) {
         float dr = c1.getRed() - c2.getRed();
         float dg = c1.getGreen() - c2.getGreen();
@@ -213,6 +252,12 @@ public class NineBlockIdenticonRenderer2 implements IdenticonRenderer {
         return dr * dr + dg * dg + db * db;
     }
 
+    /**
+     * Returns the color opposite on the wheel.
+     *
+     * @param color the color to complement
+     * @return the complementary color
+     */
     private Color getComplementaryColor(Color color) {
         return new Color(255 - color.getRed(), 255 - color.getGreen(), 255 - color.getBlue());
     }

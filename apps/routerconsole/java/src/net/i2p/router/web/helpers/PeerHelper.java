@@ -37,27 +37,32 @@ import net.i2p.util.Addresses;
  * @since 0.9.33
  */
 public class PeerHelper extends HelperBase {
+    /** Flags selecting the peer list sort order. */
     private int _sortFlags;
+    /** Base URL for the peer list page. */
     private String _urlBase;
+    /** Transport name being displayed. */
     private String _transport;
     /** Emit a data-key (peer hash) per row for worker-side row diffing; fragment renders only, so full pages stay byte-for-byte identical. */
     private boolean _fragmentKeys;
     /** Length of the truncated base64 hash used as a per-row data-key in fragment mode. */
     private static final int KEY_LEN = 16;
 
+    /** Column titles of the peer list. */
     private static final String[] titles = {
                                             _x("Summary"),
                                              "NTCP",
                                              "SSU"
                                            };
 
+    /** Column link targets of the peer list. */
     private static final String[] links = {
                                              "",
                                              "?transport=ntcp",
                                              "?transport=ssu"
                                            };
 
-    // Opera doesn't have the char, TODO check UA
+    /** Separator used in the peer list. */
     private static final String THINSP = " / ";
 
     /**
@@ -447,6 +452,13 @@ public class PeerHelper extends HelperBase {
         out.append(buf);
     }
 
+    /**
+     * Sums peer counts and bandwidth for one transport.
+     *
+     * @param transport the transport to measure
+     * @param peerCounts out: peers per bandwidth tier
+     * @param bandwidths out: bandwidth per tier
+     */
     private void getTransportBandwidth(Transport transport, int[] peerCounts, int[] bandwidths) {
         if (transport instanceof NTCPTransport) {
             NTCPTransport nt = (NTCPTransport) transport;
@@ -702,7 +714,6 @@ public class PeerHelper extends HelperBase {
         out.append(buf);
     }
 
-    /* begin NTCP */
 
     /**
      * Render the NTCP transport peer listing.
@@ -1002,40 +1013,71 @@ public class PeerHelper extends HelperBase {
      * @since 0.9.70+
      */
     private static final class NTCPTotals {
+        /** Sums the NTCP connection counts. */
+        private NTCPTotals() {}
+        /** Current send rate, in bytes per second. */
         float bpsSend;
+        /** Current receive rate, in bytes per second. */
         float bpsRecv;
+        /** Total peer uptime, in ms. */
         long totalUptime;
+        /** Summed clock offsets, in ms. */
         long offsetTotal;
+        /** Total bytes sent to peers. */
         long totalSend;
+        /** Total bytes received from peers. */
         long totalRecv;
     }
 
+    /** Formatter for the rate display. */
     private static final NumberFormat _rateFmt = new DecimalFormat("#,##0.00");
     static {_rateFmt.setRoundingMode(RoundingMode.HALF_UP);}
 
+    /**
+     * Formats a rate for the peer list.
+     *
+     * @param rate the rate, in bytes per second
+     * @return the formatted text
+     */
     private static String formatRate(float rate) {
         if (rate < 0.005f) {return "0";}
         synchronized (_rateFmt) {return _rateFmt.format(rate);}
     }
 
+    /**
+     * Returns the comparator for the chosen sort.
+     *
+     * @param sortFlags the sort flags
+     * @return the comparator to use
+     */
     private Comparator<NTCPConnection> getNTCPComparator(int sortFlags) {
         Comparator<NTCPConnection> rv = AlphaComparator.instance();
         if (sortFlags < 0) {rv = Collections.reverseOrder(rv);}
         return rv;
     }
 
+    /** Sorts peers alphabetically. */
     private static class AlphaComparator extends PeerComparator {
+        /** The shared alphabetical comparator. */
         private static final AlphaComparator _instance = new AlphaComparator();
         /**
          * Returns the shared comparator, ordering connections by remote peer hash.
+         *
+         * @return the shared instance
          */
         public static final AlphaComparator instance() {return _instance;}
+
+        /** Created once, as the shared instance below. */
+        private AlphaComparator() {}
     }
 
+    /** Sorts NTCP connections by a chosen field. */
     private static class PeerComparator implements Comparator<NTCPConnection>, Serializable {
         /**
          * Orders two connections by their remote peer's router hash.
          */
+        /** Orders NTCP peers by connection time. */
+        private PeerComparator() {}
         @Override
         public int compare(NTCPConnection l, NTCPConnection r) {
             if (l == null || r == null) {throw new IllegalArgumentException();}
@@ -1043,8 +1085,6 @@ public class PeerHelper extends HelperBase {
         }
     }
 
-    /* end NTCP */
-    /* begin SSU */
 
     /**
      * Render the SSU/UDP transport peer listing.
@@ -1497,24 +1537,46 @@ public class PeerHelper extends HelperBase {
      * @since 0.9.70+
      */
     private static final class SSUTotals {
+        /** Sums the SSU connection counts. */
+        private SSUTotals() {}
+        /** Current inbound rate, in bytes per second. */
         int bpsIn;
+        /** Current outbound rate, in bytes per second. */
         int bpsOut;
+        /** Total SSU peer uptime, in ms. */
         long uptimeMsTotal;
+        /** Summed clock skews, in ms. */
         long skewTotal;
+        /** Summed congestion windows, in bytes. */
         long cwinTotal;
+        /** Summed round trip times, in ms. */
         long rttTotal;
+        /** Summed retransmission timeouts, in ms. */
         long rtoTotal;
+        /** Total bytes sent over SSU. */
         long sendTotal;
+        /** Total bytes received over SSU. */
         long recvTotal;
+        /** Total bytes resent over SSU. */
         long resentTotal;
+        /** Total duplicate bytes received over SSU. */
         long dupRecvTotal;
+        /** Number of SSU peers summed. */
         int numPeers;
+        /** SSU peers with a round trip time. */
         int numRTTPeers;
     }
 
+    /** Formatter for the SSU stats display. */
     private static final DecimalFormat _fmt = new DecimalFormat("#,##0.00");
     static {_fmt.setRoundingMode(RoundingMode.HALF_UP);}
 
+    /**
+     * Formats a byte rate for display.
+     *
+     * @param bps the rate, in bytes per second
+     * @return the formatted text
+     */
     private static final String formatKBps(int bps) {
         if (bps < 5) {return "0";}
         synchronized (_fmt) {return _fmt.format((float)bps/1024);}

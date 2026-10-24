@@ -81,20 +81,46 @@ public class WebMail extends HttpServlet {
 
     /** Router log for this servlet. */
     private final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(WebMail.class);
+    /** Fixed id, the servlet is never serialized across versions. */
     private static final long serialVersionUID = 1L;
+    /** Mail server host used when none is configured. */
     private static final String DEFAULT_HOST = "127.0.0.1";
+    /** POP3 port used when none is configured. */
     private static final int DEFAULT_POP3PORT = 7660;
+    /** SMTP port used when none is configured. */
     private static final int DEFAULT_SMTPPORT = 7659;
-    private enum State {AUTH, LOADING, LIST, SHOW, NEW, CONFIG }
+    /** The page the servlet shows next. */
+    private enum State {
+        /** Waiting for the login form. */
+        AUTH,
+        /** Fetching the mailbox for the first time. */
+        LOADING,
+        /** Showing the message list. */
+        LIST,
+        /** Showing one message. */
+        SHOW,
+        /** Composing a message. */
+        NEW,
+        /** Editing the settings. */
+        CONFIG }
 
     /**
      * How HTML parts are displayed.
      *
      * @since 0.9.62
      */
-    private enum HtmlMode {NONE, LINK, ALLOW, PREFER }
+    private enum HtmlMode {
+        /** Show the text part only. */
+        NONE,
+        /** Offer a link to the HTML part. */
+        LINK,
+        /** Show the HTML part when the user allows it. */
+        ALLOW,
+        /** Show the HTML part unless the user opts out. */
+        PREFER }
 
     // TODO generate from servlet name to allow for renaming or multiple instances
+    /** Path prefix used to build the page's own links. */
     private static final String myself = "/susimail/";
 
     /**
@@ -104,84 +130,136 @@ public class WebMail extends HttpServlet {
      */
     private static final String cspNonce = Integer.toHexString(RandomSource.getInstance().nextInt());
 
-    /*
-     * form keys on login page
-     */
+    /** Parameter for the login action. */
     private static final String LOGIN = "login";
+    /** Parameter set while the mail server is unreachable. */
     private static final String OFFLINE = "offline";
+    /** Parameter carrying the login user. */
     private static final String USER = "user";
+    /** Parameter carrying the login password. */
     private static final String PASS = "pass";
+    /** Parameter carrying the mail server host. */
     private static final String HOST = "host";
+    /** Parameter carrying the POP3 port. */
     private static final String POP3 = "pop3";
+    /** Parameter carrying the SMTP port. */
     private static final String SMTP = "smtp";
 
-    /*
-     * GET params
-     */
+    /** Parameter carrying the page number. */
     private static final String CUR_PAGE  = "page";
 
-    /*
-     * hidden params
-     */
+    /** Parameter carrying the form nonce. */
     private static final String SUSI_NONCE = "susiNonce";
+    /** Parameter naming the message to show, by base64 UIDL. */
     private static final String B64UIDL = "msg";
+    /** Parameter naming a newly arrived message. */
     private static final String NEW_UIDL = "newmsg";
+    /** Parameter naming the previous message. */
     private static final String PREV_B64UIDL = "prevmsg";
+    /** Parameter naming the next message. */
     private static final String NEXT_B64UIDL = "nextmsg";
+    /** Parameter carrying the previous page number. */
     private static final String PREV_PAGE_NUM = "prevpagenum";
+    /** Parameter carrying the next page number. */
     private static final String NEXT_PAGE_NUM = "nextpagenum";
+    /** Parameter naming the sort in effect. */
     private static final String CURRENT_SORT = "currentsort";
+    /** Parameter naming the folder being shown. */
     private static final String CURRENT_FOLDER = "folder";
+    /** Parameter naming a folder to create. */
     private static final String NEW_FOLDER  = "newfolder";
+    /** Parameter set when a draft is already stored. */
     private static final String DRAFT_EXISTS = "draftexists";
+    /** Parameter reporting the current state, for debugging. */
     private static final String DEBUG_STATE = "currentstate";
 
-    /*
-     * button names
-     */
+    /** Button ending the session. */
     private static final String LOGOUT = "logout";
+    /** Button saving the settings. */
     private static final String SAVE = "save";
+    /** Button saving the settings under a new name. */
     private static final String SAVE_AS = "saveas";
+    /** Button re-fetching the mailbox. */
     private static final String REFRESH = "refresh";
+    /** Button opening the settings page. */
     private static final String CONFIGURE = "configure"; // also a GET param
+    /** Button starting a new message. */
     private static final String NEW = "new";
+    /** Button replying to the message. */
     private static final String REPLY = "reply";
+    /** Button replying to all recipients. */
     private static final String REPLYALL = "replyall";
+    /** Button forwarding the message. */
     private static final String FORWARD = "forward";
+    /** Button moving the message to the trash. */
     private static final String DELETE = "delete";
+    /** Button deleting the message for good. */
     private static final String REALLYDELETE = "really_delete";
+    /** Button moving the message to another folder. */
     private static final String MOVE_TO = "moveto";
+    /** Button switching to another folder. */
     private static final String SWITCH_TO = "switchto";
+    /** Button showing one message. */
     private static final String SHOW = "show"; // also a GET param
+    /** Button downloading an attachment. */
     private static final String DOWNLOAD = "download";
+    /** Parameter naming an attachment to download. */
     private static final String RAW_ATTACHMENT = "att";
+    /** Parameter naming an inline part by content id. */
     private static final String CID_ATTACHMENT = "cid";
+    /** Parameter naming a draft's attachment. */
     private static final String DRAFT_ATTACHMENT = "datt";
+    /** Parameter requesting the HTML view. */
     private static final String HTML = "html";
+    /** Button marking every message read. */
     private static final String MARKALL = "markall";
+    /** Button clearing the message selection. */
     private static final String CLEAR = "clearselection";
+    /** Button inverting the message selection. */
     private static final String INVERT = "invertselection";
+    /** Button showing the previous page. */
     private static final String PREVPAGE = "prevpage";
+    /** Button showing the next page. */
     private static final String NEXTPAGE = "nextpage";
+    /** Button showing the first page. */
     private static final String FIRSTPAGE = "firstpage";
+    /** Button showing the last page. */
     private static final String LASTPAGE = "lastpage";
+    /** Parameter carrying the current page size. */
     private static final String PAGESIZE = "pagesize";
+    /** Button changing the page size. */
     private static final String SETPAGESIZE = "setpagesize";
+    /** Button sending the composed message. */
     private static final String SEND = "send";
+    /** Button saving the composed message as a draft. */
     private static final String SAVE_AS_DRAFT = "saveasdraft";
+    /** Button discarding the composed message. */
     private static final String CANCEL = "cancel";
+    /** Button dropping an attachment from the draft. */
     private static final String DELETE_ATTACHMENT = "delete_attachment";
+    /** Compose field for the sender address. */
     private static final String NEW_FROM = "new_from";
+    /** Compose field for the subject. */
     private static final String NEW_SUBJECT = "new_subject";
+    /** Compose field for the recipients. */
     private static final String NEW_TO = "new_to";
+    /** Compose field for the cc list. */
     private static final String NEW_CC = "new_cc";
+    /** Compose field for the bcc list. */
     private static final String NEW_BCC = "new_bcc";
+    /** Compose field for the message body. */
     private static final String NEW_TEXT = "new_text";
+    /** Compose field naming an attachment to upload. */
     private static final String NEW_FILENAME = "new_filename";
+    /** Compose field carrying the uploaded attachment. */
     private static final String NEW_UPLOAD = "new_upload";
+    /** Button returning to the message list. */
     private static final String LIST = "list";
+    /** Button showing the previous message. */
     private static final String PREV = "prev";
+    /** Button showing the next message. */
     private static final String NEXT = "next";
+    /** Parameter naming the sort to apply. */
     private static final String SORT = "sort"; // SORT is a GET or POST param, SORT_XX are the values, possibly prefixed by '-'
     /** Sort value for the message id. */
     static final String SORT_ID = "id";
@@ -197,6 +275,7 @@ public class WebMail extends HttpServlet {
     static final String SORT_DEFAULT = SORT_DATE;
     /** Default sort order. */
     static final SortOrder SORT_ORDER_DEFAULT = SortOrder.UP;
+    /** The sort values accepted from a request, anything else is rejected. */
     private static final List<String> VALID_SORTS = Arrays.asList(new String[] {// for XSS
                                       SORT_ID, SORT_SENDER, SORT_SUBJECT, SORT_DATE, SORT_SIZE,
                                       '-' + SORT_ID, '-' + SORT_SENDER, '-' + SORT_SUBJECT, '-' +
@@ -207,32 +286,52 @@ public class WebMail extends HttpServlet {
     public static final String DIR_DRAFTS = _x("Drafts"); // MailDir-like
     /** Translated "Sent" folder name. */
     public static final String DIR_SENT = _x("Sent"); // MailDir-like
+    /** Display name of the trash folder. */
     private static final String DIR_TRASH = _x("Trash"); // MailDir-like
+    /** Display name of the spam folder. */
     private static final String DIR_SPAM = _x("Bulk Mail"); // MailDir-like
+    /** The folder names, in internal order. */
     private static final String[] DIRS = {DIR_FOLDER, DIR_DRAFTS, DIR_SENT, DIR_TRASH, DIR_SPAM }; // internal/on-disk names
+    /** The folder names as shown, translated on use. */
     private static final String[] DISPLAY_DIRS = {_x("Inbox"), DIR_DRAFTS, DIR_SENT, DIR_TRASH, DIR_SPAM }; // untranslated, translate on use
+    /** Compose-style field carrying the raw config text. */
     private static final String CONFIG_TEXT = "config_text";
+    /** Switch enabling the HTML view of a message. */
     private static final boolean SHOW_HTML = true;
+    /** Switch forcing the text-only view of every message. */
     private static final boolean TEXT_ONLY = false;
 
-    /*
-     * name of configuration properties
-     */
+    /** Config key for the mail server host. */
     private static final String CONFIG_HOST = "host";
+    /** Config key pinning the POP3 and SMTP ports. */
     private static final String CONFIG_PORTS_FIXED = "ports.fixed";
+    /** Config key for the POP3 port. */
     private static final String CONFIG_PORTS_POP3 = "ports.pop3";
+    /** Config key for the SMTP port. */
     private static final String CONFIG_PORTS_SMTP = "ports.smtp";
+    /** Config key pinning the sender address. */
     private static final String CONFIG_SENDER_FIXED = "sender.fixed";
+    /** Config key for the sender domain. */
     private static final String CONFIG_SENDER_DOMAIN = "sender.domain";
+    /** Config key for the display name sent with mail. */
     private static final String CONFIG_SENDER_NAME = "sender.name";
+    /** Config key for the composer width in columns. */
     private static final String CONFIG_COMPOSER_COLS = "composer.cols";
+    /** Config key for the composer height in rows. */
     private static final String CONFIG_COMPOSER_ROWS = "composer.rows";
+    /** Config key allowing HTML mail at all. */
     private static final String CONFIG_HTML_ALLOWED = "view.html.allowed";
+    /** Config key preferring the HTML view. */
     private static final String CONFIG_HTML_PREFERRED = "view.html.preferred";
+    /** Config key showing a warning before HTML mail. */
     private static final String CONFIG_HTML_SHOW_WARNING = "view.html.warning";
+    /** Config key inverting HTML mail for dark themes. */
     private static final String CONFIG_HTML_ENABLE_DARKMODE = "view.html.darkMode";
+    /** Config key marking blocked images in HTML mail. */
     private static final String CONFIG_HTML_SHOW_BLOCKED_IMAGES = "view.html.blockedImages";
+    /** Config key enabling one-line message previews. */
     private static final String CONFIG_ENABLE_MAIL_PREVIEWS = "view.enableMailPreviews";
+    /** Config key copying sent mail to the sent folder. */
     private static final String CONFIG_COPY_TO_SENT = "composer.copy.to.sent";
     /** Config key: leave mail on the server. */
     static final String CONFIG_LEAVE_ON_SERVER = "pop3.leave.on.server";
@@ -248,30 +347,50 @@ public class WebMail extends HttpServlet {
      * Property key setting the POP3 idle timeout, in seconds.
      */
     public static final String CONFIG_IDLE_SECONDS = "pop3.idle.timeout.seconds";
+    /** Console property naming the theme. */
     private static final String RC_PROP_THEME = "routerconsole.theme";
+    /** Console property applying one theme to all apps. */
     private static final String RC_PROP_UNIVERSAL_THEMING = "routerconsole.universal.theme";
+    /** Console property forcing the mobile layout. */
     private static final String RC_PROP_FORCE_MOBILE_CONSOLE = "routerconsole.forceMobileConsole";
+    /** Console property selecting the Sora font. */
     private static final String RC_PROP_ENABLE_SORA_FONT = "routerconsole.displayFontSora";
+    /** Config key for the susimail theme. */
     private static final String CONFIG_THEME = "theme";
+    /** Theme used when none is configured. */
     private static final String DEFAULT_THEME = "dark";
+    /** Spacer cell text, spacing is better done with CSS. */
     private static final String spacer = ""; /* this is best done with css */
+    /** Bundle holding the console's translated strings. */
     private static final String CONSOLE_BUNDLE_NAME = "net.i2p.router.web.messages";
     static {Config.setPrefix("susimail");}
 
     /** Data structure to hold any persistent data (to store them in session dictionary). */
     private static class SessionObject implements HttpSessionBindingListener, NewMailListener {
 
+        /** SMTP port this session sends through. */
         int smtpPort;
+        /** The connected mailbox, null until login succeeds. */
         POP3MailBox mailbox;
+        /** The message caches, by folder. */
         final Map<String, MailCache> caches;
+        /** True while the threaded connector is fetching. */
         boolean isFetching;
+        /** Error from the threaded connector, null if it connected. */
         String connectError; // Set by threaded connector. Error or null
+        /** New messages from the last fetch, -1 until it completes. */
         int newMails = -1; // Set by threaded connector. -1 if nothing to report, 0 or more after fetch complete
+        /** The login user. */
         String user;
+        /** The login password. */
         String pass;
+        /** The mail server host. */
         String host;
+        /** Error message to show the user. */
         String error = "";
+        /** Info message to show the user. */
         String info = "";
+        /** UIDL of the draft being edited. */
         String draftUIDL; // Just convenience to pass from PSCB to P-R-G
         /** Local password verification for session protection @since 0.9.70+. */
         private String _sessionSalt;
@@ -289,10 +408,15 @@ public class WebMail extends HttpServlet {
          * P-R-G.
          */
         public boolean reallyDelete; // This is only for multi-delete. Single-message delete is handled with P-R-G
+        /** Path prefix for the theme's links. */
         String themePath;
+        /** Path prefix for the images' links. */
         String imgPath;
+        /** True when serving the mobile layout. */
         boolean isMobile;
+        /** The form nonces still accepted. */
         private final List<String> nonces;
+        /** How many issued nonces stay valid. */
         private static final int MAX_NONCES = 15;
         /**
          * Log scoped to this session's requests.
@@ -311,6 +435,11 @@ public class WebMail extends HttpServlet {
          */
         public String lastNotice = "";
 
+        /**
+         * Creates the session state for one browser.
+         *
+         * @param log the logger to report through
+         */
         SessionObject(Log log) {
             nonces = new ArrayList<>(MAX_NONCES + 1);
             caches = new HashMap<>(8);
@@ -319,6 +448,8 @@ public class WebMail extends HttpServlet {
 
         /**
          * Hash and store a local password.
+         *
+         * @param password the plain text password to store
          * @since 0.9.70+
          */
         public void setLocalPassword(String password) {
@@ -329,6 +460,8 @@ public class WebMail extends HttpServlet {
 
         /**
          * Verify a password against the stored hash.
+         *
+         * @param password the password to check
          * @return true if password matches
          * @since 0.9.70+
          */
@@ -342,7 +475,10 @@ public class WebMail extends HttpServlet {
 
         /**
          * PBKDF2 hash for password verification with high iteration count.
-         * @return whether h password is present
+         *
+         * @param password the password to hash
+         * @param salt the per-user salt
+         * @return the hashed password
          * @since 0.9.70+
          */
         private static String hashPassword(String password, String salt) {
@@ -399,6 +535,7 @@ public class WebMail extends HttpServlet {
         /**
          * Record a form nonce for the session.
          *
+         * @param nonce the nonce to record
          * @since 0.9.27
          */
         public void addNonce(String nonce) {
@@ -411,6 +548,8 @@ public class WebMail extends HttpServlet {
         /**
          * Check and consume a form nonce.
          *
+         * @param nonce the nonce to check
+         * @return true if the nonce was issued and not yet used
          * @since 0.9.27
          */
         public boolean isValidNonce(String nonce) {
@@ -775,7 +914,13 @@ public class WebMail extends HttpServlet {
         buf.setLength(0);
     }
 
-    /* @since 0.9.64+ */
+    /**
+     * Capitalizes the first letter of each word.
+     *
+     * @param input the text to convert
+     * @return the text in title case
+     * @since 0.9.64+
+     */
     private static String toTitleCase(String input) {
         if (input == null || input.isEmpty()) {return input;}
         return Character.toUpperCase(input.charAt(0)) + input.substring(1);
@@ -979,7 +1124,9 @@ public class WebMail extends HttpServlet {
      * @since 0.9.34
      */
     private static class LoadWaiter implements NewMailListener {
+        /** The session rendering the page. */
         private final SessionObject _so;
+        /** The folder being listed. */
         private final MailCache _mc;
 
         /**
@@ -1014,7 +1161,9 @@ public class WebMail extends HttpServlet {
      * @since 0.9.34
      */
     private static class ConnectWaiter implements NewMailListener, Runnable {
+        /** The session waiting for the fetch. */
         private final SessionObject _so;
+        /** The mailbox being fetched. */
         private final POP3MailBox _mb;
 
         /**
@@ -1889,8 +2038,11 @@ public class WebMail extends HttpServlet {
         return page;
     }
 
-    /*
-     * process sorting buttons
+    /**
+     * Applies the sort buttons found in the request.
+     *
+     * @param sessionObject the session to update
+     * @param request the request to read
      */
     private static void processSortingButtons(SessionObject sessionObject, RequestWrapper request) {
         String str = request.getParameter(SORT); // GET param
@@ -1907,10 +2059,14 @@ public class WebMail extends HttpServlet {
         }
     }
 
-    /*
-     * process config buttons, both entering and exiting
+    /**
+     * Processes the config buttons, both entering and exiting the page.
+     *
+     * @param sessionObject the session to update
+     * @param request the request to read
      * @param isPOST disallow button pushes if false
-     * @return new state, or null if unknown
+     * @param state the state assumed so far
+     * @return the new state, or null if unknown
      */
     private static State processConfigButtons(SessionObject sessionObject, RequestWrapper request, boolean isPOST, State state) {
         if (buttonPressed(request, CONFIGURE)) {return state.CONFIG;}
@@ -3247,18 +3403,40 @@ public class WebMail extends HttpServlet {
      * @since 0.9.35
      */
     private static class EmailSender implements Runnable {
+        /** The session sending the mail. */
         private final SessionObject sessionObject;
+        /** The draft being sent. */
         private final Draft draft;
+        /** The SMTP host to connect to. */
         private final String host;
+        /** The SMTP login user. */
         private final String user;
+        /** The SMTP login password. */
         private final String pass;
+        /** The sender address to announce. */
         private final String sender;
+        /** The MIME boundary separating the parts. */
         private final String boundary;
+        /** The SMTP port to connect to. */
         private final int port;
+        /** The addresses to send to. */
         private final List<String> recipients;
+        /** The message body text. */
         private final StringBuilder body;
+        /** The attachments to include. */
         private final List<Attachment> attachments;
 
+        /**
+         * Prepares to send one draft through SMTP.
+         *
+         * @param so the session sending the mail
+         * @param d the draft to send
+         * @param s the sender address
+         * @param recip the addresses to send to
+         * @param bod the body text
+         * @param att the attachments to include
+         * @param b the MIME boundary
+         */
         public EmailSender(SessionObject so, Draft d, String s, List<String> recip,
                            StringBuilder bod, List<Attachment> att, String b) {
             sessionObject = so; draft = d;

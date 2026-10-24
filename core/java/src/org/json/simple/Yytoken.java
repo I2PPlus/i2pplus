@@ -33,7 +33,12 @@ class Yytoken {
         RIGHT_SQUARE;
     }
 
+    /**
+     * Kind of token: an object or array delimiter, a separator,
+     * or a value
+     */
     private final Types type;
+    /** The value carried by a value token. */
     private final Object value;
 
         /**

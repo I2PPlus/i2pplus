@@ -26,7 +26,9 @@ import net.i2p.router.RouterContext;
  * Provides basic router info storage and lookup functionality without persistence or network communication.
  */
 public class DummyNetworkDatabaseFacade extends NetworkDatabaseFacade {
+    /** Routers this dummy database knows. */
     private final Map<Hash, RouterInfo> _routers;
+    /** The router context the facade belongs to. */
     private final RouterContext _context;
     /**
      * Create an empty in-memory database; nothing is read from disk.

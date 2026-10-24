@@ -1,11 +1,25 @@
 package com.mpatric.mp3agic;
 
+/** A frame of an ID3v2.4 tag. */
 public class ID3v24Frame extends ID3v2Frame {
 
+    /**
+     * Reads a frame out of a tag buffer.
+     *
+     * @param buffer the tag bytes
+     * @param offset where the frame starts
+     * @throws InvalidDataException if the frame is malformed
+     */
     public ID3v24Frame(byte[] buffer, int offset) throws InvalidDataException {
         super(buffer, offset);
     }
 
+    /**
+     * Creates a frame from an id and its contents.
+     *
+     * @param id the four-character frame id
+     * @param data the frame's contents
+     */
     public ID3v24Frame(String id, byte[] data) {
         super(id, data);
     }

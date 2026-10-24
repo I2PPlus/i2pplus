@@ -10,25 +10,36 @@ import java.util.Map;
  * and various structural information about the database.
  */
 public final class Metadata {
+    /** Major version of the database's binary format. */
     private final int binaryFormatMajorVersion;
+    /** Minor version of the database's binary format. */
     private final int binaryFormatMinorVersion;
 
+    /** When the database was built, seconds since 1970. */
     private final long buildEpoch;
 
+    /** The type name of the database. */
     private final String databaseType;
 
+    /** The database descriptions, by language. */
     private final Map<String, String> description;
 
+    /** The IP version the database holds, 4 or 6. */
     private final int ipVersion;
 
+    /** The languages the descriptions are in. */
     private final List<String> languages;
 
+    /** Bytes stored in one search tree node. */
     private final int nodeByteSize;
 
+    /** Nodes in the search tree. */
     private final int nodeCount;
 
+    /** Bits in one search tree record. */
     private final int recordSize;
 
+    /** Bytes of the search tree in the file. */
     private final int searchTreeSize;
 
     /**
@@ -52,6 +63,13 @@ public final class Metadata {
         this.searchTreeSize = this.nodeCount * this.nodeByteSize;
     }
 
+    /**
+     * Reads an integer field of the metadata map.
+     *
+     * @param m the metadata map
+     * @param key the field name
+     * @return the field value
+     */
     private static int getInt(Object m, String key) {
         Map map = (Map) m;
         Number i = (Number) map.get(key);
@@ -60,6 +78,13 @@ public final class Metadata {
         return 0;
     }
 
+    /**
+     * Reads a long field of the metadata map.
+     *
+     * @param m the metadata map
+     * @param key the field name
+     * @return the field value
+     */
     private static long getLong(Object m, String key) {
         Map map = (Map) m;
         Number i = (Number) map.get(key);
@@ -68,6 +93,13 @@ public final class Metadata {
         return 0;
     }
 
+    /**
+     * Reads a string field of the metadata map.
+     *
+     * @param m the metadata map
+     * @param key the field name
+     * @return the field value
+     */
     private static String getString(Object m, String key) {
         Map map = (Map) m;
         return (String) map.get(key);
@@ -176,11 +208,6 @@ public final class Metadata {
         return this.searchTreeSize;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.lang.Object#toString()
-     */
     /**
      * Return a description of the database metadata, for diagnostics.
      */

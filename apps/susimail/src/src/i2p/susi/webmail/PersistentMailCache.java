@@ -27,7 +27,6 @@ import net.i2p.util.SecureDirectory;
 import net.i2p.util.SecureFile;
 import net.i2p.util.SystemVersion;
 
-// TODO cached server caps and config.
 /**
  * Manages persistent on-disk email cache with custom compressed format.
  *
@@ -54,16 +53,24 @@ class PersistentMailCache {
      */
     private static final ConcurrentHashMap<String, Object> _locks = new ConcurrentHashMap<>();
 
+    /** Lock for the cache state. */
     private final Object _lock;
+    /** Directory holding the cached mail. */
     private final File _cacheDir;
-    // non-null only for Drafts
+    /** Directory for the drafts' attachments. */
     private final File _attachmentDir;
+    /** The app context. */
     private final I2PAppContext _context;
+    /** Logger for the mail cache. */
     private final Log _log;
+    /** True for the drafts folder cache. */
     private final boolean _isDrafts;
 
+    /** Name of the mail data directory. */
     private static final String DIR_SUSI = "susimail";
+    /** Name of the cache subdirectory. */
     private static final String DIR_CACHE = "cache";
+    /** Prefix of the cache file names. */
     private static final String CACHE_PREFIX = "cache-";
     /**
      * Directory beside the cache holding imported .eml files, debug only.
@@ -73,10 +80,15 @@ class PersistentMailCache {
      * Directory holding draft attachment files, created only by the drafts cache.
      */
     public static final String DIR_ATTACHMENTS = "attachments"; // Flat with draft attachment files
+    /** Prefix of the per-user directory names. */
     private static final String DIR_PREFIX = "s";
+    /** Prefix of the mail file names. */
     private static final String FILE_PREFIX = "mail-";
+    /** Suffix of the header-only cache files. */
     private static final String HDR_SUFFIX = ".hdr.txt.gz";
+    /** Suffix of the full-message cache files. */
     private static final String FULL_SUFFIX = ".full.txt.gz";
+    /** Alphabet of the base64 mail uids. */
     private static final String B64 = Base64.ALPHABET_I2P;
 
     /**
@@ -126,6 +138,12 @@ class PersistentMailCache {
         }
     }
 
+    /**
+     * Lists the cached mails, lock held.
+     *
+     * @param folder the folder to list
+     * @return the mails found in the cache
+     */
     private Collection<Mail> locked_getMails(String folder) {
         Queue<File> fq = new LinkedBlockingQueue<>();
         for (int j = 0; j < B64.length(); j++) {
@@ -168,8 +186,11 @@ class PersistentMailCache {
      * @since 0.9.34
      */
     private static class Loader implements Runnable {
+        /** Files being read from the cache. */
         private final Queue<File> _in;
+        /** Mails being written to the cache. */
         private final Queue<Mail> _out;
+        /** True when reading from the cache. */
         private final boolean _isD;
 
         /**
@@ -211,6 +232,13 @@ class PersistentMailCache {
         synchronized(_lock) {return locked_getMail(mail, headerOnly);}
     }
 
+    /**
+     * Loads one cached mail, lock held.
+     *
+     * @param mail the mail to load
+     * @param headerOnly true to load the headers only
+     * @return true if the cache had the mail
+     */
     private boolean locked_getMail(Mail mail, boolean headerOnly) {
         if (headerOnly) {
             File hf = getHeaderFile(mail.uidl);
@@ -275,6 +303,12 @@ class PersistentMailCache {
         synchronized(_lock) {return locked_saveMail(mail);}
     }
 
+    /**
+     * Writes one mail to the cache, lock held.
+     *
+     * @param mail the mail to save
+     * @return true if the mail was written
+     */
     private boolean locked_saveMail(Mail mail) {
         Buffer rb = mail.getBody();
         if (rb != null) {
@@ -313,6 +347,14 @@ class PersistentMailCache {
         }
     }
 
+    /**
+     * Returns the lock shared by one account.
+     *
+     * @param host the mail host
+     * @param port the mail port
+     * @param user the user name
+     * @return the lock for that account
+     */
     private static Object getLock(String host, int port, String user) {
         Object lock = new Object();
         Object old = _locks.putIfAbsent(user + host + port, lock);
@@ -381,6 +423,13 @@ class PersistentMailCache {
      */
     public File getAttachmentDir() {return _attachmentDir;}
 
+    /**
+     * Builds the cache file name for a uid.
+     *
+     * @param uidl the mail uid
+     * @param suffix the file suffix to use
+     * @return the file to use
+     */
     private File getFile(String uidl, String suffix) {
         byte[] raw = DataHelper.getASCII(uidl);
         byte[] md5 = PasswordManager.md5Sum(raw);

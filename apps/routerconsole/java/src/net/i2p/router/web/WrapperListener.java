@@ -19,8 +19,10 @@ import org.tanukisoftware.wrapper.event.WrapperServiceControlEvent;
  *  @since 0.8.13
  */
 class WrapperListener {
+    /** Notified of wrapper events. */
     private final WrapperEventListener _listener;
 
+    /** Property asking for a graceful stop on HUP. */
     private static final String PROP_GRACEFUL_HUP = "router.gracefulHUP";
 
     /**
@@ -54,8 +56,14 @@ class WrapperListener {
      *  @since 0.8.13
      */
     private static class SignalHandler implements WrapperEventListener {
+        /** The router being signalled. */
         private final RouterContext _ctxt;
 
+        /**
+         * Records the router to stop.
+         *
+         * @param ctx the router being signalled
+         */
         public SignalHandler(RouterContext ctx) {
             _ctxt = ctx;
         }

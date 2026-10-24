@@ -71,30 +71,34 @@ import org.freenetproject.ForwardPortStatus;
  * @since 0.7.4
  */
 
-/*
- * TODO: Advertise the node like the MDNS plugin does
- * TODO: Implement EventListener and react on ip-change
- *
- * Public for CommandLine main()
- */
 /**
  * Discovers UPnP internet gateways and forwards local ports through them.
  */
 public class UPnP extends ControlPoint implements DeviceChangeListener, EventListener {
+    /** Logger for UPnP port forwarding. */
     private final Log _log;
+    /** The app context. */
     private final I2PAppContext _context;
 
     /** Some schemas. */
     private static final String ROUTER_DEVICE = "urn:schemas-upnp-org:device:InternetGatewayDevice:1";
+    /** UPnP version 1 WAN device type. */
     private static final String WAN_DEVICE = "urn:schemas-upnp-org:device:WANDevice:1";
+    /** UPnP version 1 WAN connection device type. */
     private static final String WANCON_DEVICE = "urn:schemas-upnp-org:device:WANConnectionDevice:1";
+    /** UPnP version 1 IP connection service type. */
     private static final String WAN_IP_CONNECTION = "urn:schemas-upnp-org:service:WANIPConnection:1";
+    /** UPnP version 1 PPP connection service type. */
     private static final String WAN_PPP_CONNECTION = "urn:schemas-upnp-org:service:WANPPPConnection:1";
     /** IGD 2 flavors, since 0.9.34. */
     private static final String ROUTER_DEVICE_2 = "urn:schemas-upnp-org:device:InternetGatewayDevice:2";
+    /** UPnP version 2 WAN device type. */
     private static final String WAN_DEVICE_2 = "urn:schemas-upnp-org:device:WANDevice:2";
+    /** UPnP version 2 WAN connection device type. */
     private static final String WANCON_DEVICE_2 = "urn:schemas-upnp-org:device:WANConnectionDevice:2";
+    /** UPnP version 2 IP connection service type. */
     private static final String WAN_IP_CONNECTION_2 = "urn:schemas-upnp-org:service:WANIPConnection:2";
+    /** UPnP IPv6 firewall control service type. */
     private static final String WAN_IPV6_CONNECTION = "urn:schemas-upnp-org:service:WANIPv6FirewallControl:1";
 
     /**
@@ -102,16 +106,23 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
      */
     public static final int LEASE_TIME_SECONDS = 3*60*60;
 
+    /** The WAN device found on the network. */
     private Device _router;
+    /** The IPv4 port mapping service in use. */
     private Service _service;
+    /** The IPv6 firewall service, if found. */
     private Service _service6;
-    // UDN -> device
+    /** Other devices found, by unique device name. */
     private final Map<String, Device> _otherUDNs;
+    /** Last event variable values, by name. */
     private final Map<String, String> _eventVars;
+    /** True if the service lacks automatic port mapping. */
     private volatile boolean _serviceLacksAPM;
+    /** True if only permanent leases work on this device. */
     private volatile boolean _permanentLeasesOnly;
+    /** Lock guarding the port mapping state. */
     private final Object lock = new Object();
-    // FIXME: detect it for real and deal with it! @see #2524
+    /** Guess that an upstream NAT defeats our mapping. */
     private volatile boolean thinksWeAreDoubleNatted = false;
 
     /** List of ports we want to forward. */
@@ -121,7 +132,9 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
     /** Callback to call when a forward fails or succeeds. */
     private ForwardPortCallback forwardCallback;
 
+    /** Config key for the console's advanced mode. */
     private static final String PROP_ADVANCED = "routerconsole.advanced";
+    /** Config key turning UPnP off entirely. */
     private static final String PROP_IGNORE = "i2np.upnp.ignore";
     /** True to talk to UPnP on the same host as us, probably for testing. */
     private static final boolean ALLOW_SAME_HOST = false;
@@ -467,6 +480,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
         registerPortMappings();
     }
 
+    /** Adds the port mappings the router needs. */
     private void registerPortMappings() {
         Set<ForwardPort> ports;
         synchronized(lock) {
@@ -526,6 +540,15 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
         return null;
     }
 
+    /**
+     * Tries one port mapping on the service.
+     *
+     * @param protocol tcp or udp
+     * @param port the external port
+     * @param description the mapping name shown on the device
+     * @param fp the forward port request
+     * @return true if the mapping was added
+     */
     private boolean tryAddMapping(String protocol, int port, String description, ForwardPort fp) {
         if (_log.shouldWarn())
             _log.warn("Registering a port mapping for " + port + "/" + protocol + " IPv" + (fp.isIP6 ? '6' : '4'));
@@ -896,7 +919,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 
     /**
      * Whether we are behind an UPnP-enabled NAT/router.
-     * @return whether we are behind an UPnP-enabled NAT/router
+     * @return true if a device and service were found
      */
     private boolean isNATPresent() {
         synchronized(lock) {
@@ -1048,10 +1071,21 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
      * combinations of arguments so we don't get old data.
      */
     private String _lastAction;
+    /** Service of the last failed action, for the log. */
     private Service _lastService;
+    /** Arguments of the last failed action, for the log. */
     private ArgumentList _lastArgumentList;
+    /** Lock for building the debug strings. */
     private final Object toStringLock = new Object();
 
+    /**
+     * Formats a failed action for the log.
+     *
+     * @param action the action name
+     * @param arg the argument name
+     * @param serv the service called
+     * @return the formatted text
+     */
     private String toString(String action, String arg, Service serv) {
         synchronized(toStringLock) {
             if ((!action.equals(_lastAction)) ||
@@ -1074,6 +1108,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
         }
     }
 
+        /** Largest unsigned 32 bit value, for lease durations. */
         private static final long UINT_MAX = (1L << 32) - 1;
 
     /**
@@ -1139,7 +1174,12 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
         return Boolean.toString("1".equals(rv));
     }
 
-    // TODO: extend it! RTFM
+    /**
+     * Lists a device's services in the debug output.
+     *
+     * @param dev the device to list
+     * @param sb where the text is appended
+     */
     private void listSubServices(Device dev, StringBuilder sb) {
         ServiceList sl = dev.getServiceList();
         if (sl.isEmpty())
@@ -1229,6 +1269,13 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
         sb.append("</ul>\n");
     }
 
+    /**
+     * Lists a device and its children in the debug output.
+     *
+     * @param prefix the indentation for this level
+     * @param dev the device to list
+     * @param sb where the text is appended
+     */
     private void listSubDev(String prefix, Device dev, StringBuilder sb){
                 if (prefix == null) {
             sb.append("<p><b>").append(_t("Found Device")).append(":</b> ");
@@ -1362,6 +1409,9 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
      * @since 0.9.46
      */
     private static class UDNComparator implements Comparator<Map.Entry<String, Device>>, Serializable {
+        /** Orders UPnP devices by their unique name. */
+        private UDNComparator() {}
+
         /**
          * Compare the two devices by friendly name.
          */
@@ -1932,6 +1982,12 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
         registerPorts(portsToForwardNow);
     }
 
+        /**
+         * Names a firewall protocol number.
+         *
+         * @param p the protocol number
+         * @return tcp, udp, or the number itself
+         */
         private static String protoToString(int p) {
         if(p == ForwardPort.PROTOCOL_UDP_IPV4)
             return "UDP";
@@ -1940,6 +1996,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
         return "?";
     }
 
+    /** Counter naming the UPnP jobs. */
     private static final AtomicInteger __id = new AtomicInteger();
 
     /**
@@ -1983,6 +2040,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
      * This also renews all subscriptions.
      */
     private class RegisterPortsThread implements Runnable {
+        /** The ports to add mappings for. */
         private final Set<ForwardPort> portsToForwardNow;
 
         /**
@@ -2046,11 +2104,15 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
         t.start();
     }
 
+    /** Removes our port mappings on a thread. */
     private class UnregisterPortsThread implements Runnable {
+        /** The mappings to remove. */
         private final Set<ForwardPort> portsToForwardNow;
 
         /**
          * Collects the ports this thread is to un-forward.
+         *
+         * @param ports the ports to un-forward
          */
         public UnregisterPortsThread(Set<ForwardPort> ports) {
             portsToForwardNow = ports;
@@ -2076,8 +2138,11 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
      * @since 0.9.50
      */
     static class IPv6ForwardPort extends ForwardPort {
+        /** The external IP address we mapped. */
         private final String _ip;
+        /** Device id of the mapping, -1 if unknown. */
         private int _uid = -1;
+        /** When the mapping lease expires. */
         private long _expires;
 
         /**
@@ -2221,6 +2286,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
         System.exit(0);
     }
 
+    /** Bundle holding the translated console strings. */
     private static final String BUNDLE_NAME = "net.i2p.router.web.messages";
 
     /**

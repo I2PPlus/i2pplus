@@ -22,9 +22,13 @@ public class DsDef {
     /** Force zeros for NaNs suffix */
     static final String FORCE_ZEROS_FOR_NANS_SUFFIX = "!";
 
+    /** Name of the data source. */
     private final String dsName;
+    /** How the source's values are interpreted. */
     private final DsType dsType;
+    /** Longest gap between updates before the source is unknown, in seconds. */
     private final long heartbeat;
+    /** Range of accepted values, NaN for unbounded. */
     private final double minValue, maxValue;
 
     /**

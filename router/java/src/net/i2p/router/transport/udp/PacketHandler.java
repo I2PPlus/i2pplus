@@ -25,24 +25,42 @@ import net.i2p.util.SystemVersion;
  * @since 0.9.14 (dynamic resizing since 0.9.70+)
  */
 class PacketHandler {
+    /** The router context. */
     private final RouterContext _context;
+    /** Logger for the packet handler. */
     private final Log _log;
+    /** The transport the packets belong to. */
     private final UDPTransport _transport;
+    /** Handler of the peer setup packets. */
     private final EstablishmentManager _establisher;
+    /** Handler of the peer test packets. */
     private final PeerTestManager _testManager;
+    /** True while the handler threads keep reading. */
     private volatile boolean _keepReading;
+    /** The running handler threads. */
     private final CopyOnWriteArrayList<Handler> _handlers;
+    /** Handler threads currently reading. */
     private final AtomicInteger _activeHandlers = new AtomicInteger();
+    /** Packets being processed right now. */
     private final AtomicInteger _processingCount = new AtomicInteger();
+    /** Packets waiting to be processed. */
     private final BlockingQueue<UDPPacket> _inboundQueue;
+    /** Network id the packets must match. */
     private final int _networkID;
 
+    /** Queue entry type that stops a handler. */
     private static final int TYPE_POISON = -99999;
+    /** Smallest packet queue allowed. */
     private static final int MIN_QUEUE_SIZE = SystemVersion.isSlow() ? 16 : 64;
+    /** Largest packet queue allowed. */
     private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 64 : 512;
+    /** Most handler threads allowed. */
     private static volatile int _maxHandlers = Math.max(SystemVersion.getCores() / 2, 4);
+    /** Sequence number of the handler threads. */
     private static final AtomicInteger _threadNum = new AtomicInteger();
+    /** Oldest SSU version accepted. */
     private static final int MIN_VERSION = 2;
+    /** Newest SSU version accepted. */
     private static final int MAX_VERSION = 4;
 
     /**
@@ -237,6 +255,7 @@ class PacketHandler {
         return rv;
     }
 
+    /** Thread processing the queued packets. */
     private class Handler implements Runnable {
 
         /**

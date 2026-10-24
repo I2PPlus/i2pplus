@@ -221,6 +221,7 @@ public final class Record<D extends Data> {
          */
         private static final Map<Integer, TYPE> INVERSE_LUT = new HashMap<>();
 
+        /** Record data class to the type it belongs to. */
         private static final Map<Class<?>, TYPE> DATA_LUT = new HashMap<>();
 
         static {
@@ -529,6 +530,17 @@ public final class Record<D extends Data> {
         this(name, type, CLASS.NONE, clazzValue, ttl, payloadData, false);
     }
 
+    /**
+     * Builds a record from its fields.
+     *
+     * @param name the record name
+     * @param type the record type
+     * @param clazz the record class
+     * @param clazzValue the class number from the wire
+     * @param ttl the time to live in seconds
+     * @param payloadData the record's data
+     * @param unicastQuery true when this is a unicast query
+     */
     private Record(DnsName name, TYPE type, CLASS clazz, int clazzValue, long ttl, D payloadData, boolean unicastQuery) {
         this.name = name;
         this.type = type;

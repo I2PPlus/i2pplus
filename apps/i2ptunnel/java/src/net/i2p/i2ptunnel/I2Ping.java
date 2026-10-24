@@ -33,17 +33,31 @@ public class I2Ping extends I2PTunnelClientBase {
 
     /** Config key for the ping command string. */
     public static final String PROP_COMMAND = "command";
+    /** Pings sent to a tunnel peer. */
     private static final int PING_COUNT = 10;
+    /** Pings sent to a client destination. */
     private static final int CPING_COUNT = 5;
+    /** Time allowed for one ping reply. */
     private static final int PING_TIMEOUT = 90 * 1000;
+    /** True once the ping run is over. */
     private volatile boolean finished;
 
+    /** True if the destination came from the local list. */
     private boolean fromList = false;
 
+    /** The outcome of one ping. */
     private static class PingResult {
+        /** True if a reply arrived. */
         final boolean success;
+        /** Time the reply took, in ms. */
         final long duration;
 
+        /**
+         * Records one ping result.
+         *
+         * @param success true if a reply arrived
+         * @param duration the time the reply took, in ms
+         */
         PingResult(boolean success, long duration) {
             this.success = success;
             this.duration = duration;
@@ -291,15 +305,34 @@ public class I2Ping extends I2PTunnelClientBase {
     @Override
     protected void clientConnectionRun(Socket s) { /* no-op */ }
 
+    /** Thread running one ping session. */
     private class PingHandler extends I2PAppThread {
+        /** The destination being pinged. */
         private final String destination;
+        /** Number of pings to send. */
         private final int cnt;
+        /** Time allowed for one reply. */
         private final long timeout;
+        /** True to count the replies toward the tunnel stats. */
         private final boolean countPing;
+        /** True to report each reply time. */
         private final boolean reportTimes;
+        /** The local I2CP port to send from. */
         private final int localPort;
+        /** The remote I2CP port to send to. */
         private final int remotePort;
 
+        /**
+         * Runs one ping session.
+         *
+         * @param dest the destination to ping
+         * @param count the number of pings to send
+         * @param fromPort the local port to send from
+         * @param toPort the remote port to send to
+         * @param timeout the time allowed for one reply
+         * @param countPings true to count replies toward the tunnel stats
+         * @param report true to report each reply time
+         */
         public PingHandler(String dest, int count, int fromPort, int toPort,
                            long timeout, boolean countPings, boolean report) {
             this.destination = dest;
@@ -419,6 +452,13 @@ public class I2Ping extends I2PTunnelClientBase {
             l.log(result.toString());
         }
 
+        /**
+         * Finds the destination for a name or address.
+         *
+         * @param name the base32 or base64 address, or a local name
+         * @return the destination found
+         * @throws I2PException if the name cannot be resolved
+         */
         private Destination lookup(String name) throws I2PException {
             if (name == null || name.isEmpty()) {
                 return null;

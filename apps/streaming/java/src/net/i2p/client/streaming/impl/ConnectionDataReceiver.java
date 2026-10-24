@@ -138,6 +138,8 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
 
         /**
          * Holds the I/O error to rethrow from the wait methods.
+         *
+         * @param error the io error to rethrow
          */
         public FailedWriteStatus(IOException error) {
             _error = error;
@@ -289,6 +291,9 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
      * Used if no new packet was sent.
      */
     private static final class DummyStatus implements MessageOutputStream.WriteStatus {
+        /** A write status that records nothing. */
+        private DummyStatus() {}
+
         /**
          * Wait for the write to be accepted.
          */

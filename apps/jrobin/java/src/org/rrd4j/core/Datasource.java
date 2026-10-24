@@ -13,22 +13,32 @@ import org.rrd4j.DsType;
  *
  */
 public class Datasource implements RrdUpdater<Datasource> {
+    /** Largest value representable in 32 bits. */
     private static final double MAX_32_BIT = Math.pow(2, 32);
+    /** Largest value representable in 64 bits. */
     private static final double MAX_64_BIT = Math.pow(2, 64);
+    /** Error text for an out of range min or max. */
     private static final String INVALID_MIN_MAX_VALUES = "Invalid min/max values: ";
+    /** Interpolated value at the last update. */
     private double accumLastValue;
 
+    /** The database holding this data source. */
     private final RrdDb parentDb;
 
-    // definition
+    /** The name of the data source. */
     private final RrdString<Datasource> dsName;
+    /** The type of the data source. */
     private final RrdEnum<Datasource, DsType> dsType;
+    /** The heartbeat, in seconds. */
     private final RrdLong<Datasource> heartbeat;
+    /** The minimum and maximum accepted values. */
     private final RrdDouble<Datasource> minValue, maxValue;
 
-    // state variables
+    /** The value at the last update. */
     private final RrdDouble<Datasource> lastValue;
+    /** Seconds of unknown data accumulated. */
     private final RrdLong<Datasource> nanSeconds;
+    /** Value accumulated since the last step. */
     private final RrdDouble<Datasource> accumValue;
 
     /**
@@ -236,6 +246,16 @@ public class Datasource implements RrdUpdater<Datasource> {
         }
     }
 
+    /**
+     * Interpolates the value to store for an update.
+     *
+     * @param oldTime the time of the previous update
+     * @param oldValue the value at the previous update
+     * @param newTime the time of the new update
+     * @param newValue the value given for the new update
+     * @return the interpolated value
+     * @throws IOException if the archive data cannot be read
+     */
     private double calculateUpdateValue(
             long oldTime, double oldValue, long newTime, double newValue) throws IOException {
         double updateValue = Double.NaN;
@@ -285,6 +305,14 @@ public class Datasource implements RrdUpdater<Datasource> {
         return updateValue;
     }
 
+    /**
+     * Adds an update to the accumulated value.
+     *
+     * @param oldTime the start of the accumulation
+     * @param newTime the time of the update
+     * @param updateValue the value to accumulate
+     * @throws IOException if the archive data cannot be read
+     */
     private void accumulate(long oldTime, long newTime, double updateValue) throws IOException {
         if (Double.isNaN(updateValue)) {
             nanSeconds.set(nanSeconds.get() + (newTime - oldTime));
@@ -294,6 +322,14 @@ public class Datasource implements RrdUpdater<Datasource> {
         }
     }
 
+    /**
+     * Integrates the consolidated values over a range.
+     *
+     * @param startTime the start of the range
+     * @param boundaryTime the end of the range
+     * @return the total over the range
+     * @throws IOException if the archive data cannot be read
+     */
     private double calculateTotal(long startTime, long boundaryTime) throws IOException {
         double totalValue = Double.NaN;
         long validSeconds = boundaryTime - startTime - nanSeconds.get();
@@ -309,6 +345,14 @@ public class Datasource implements RrdUpdater<Datasource> {
         return totalValue;
     }
 
+    /**
+     * Integrates up to the last known value.
+     *
+     * @param startTime the start of the range
+     * @param boundaryTime the end of the range
+     * @return the total over the range
+     * @throws IOException if the archive data cannot be read
+     */
     private double calculateLastTotal(long startTime, long boundaryTime) throws IOException {
         double totalValue = Double.NaN;
         long validSeconds = boundaryTime - startTime - nanSeconds.get();

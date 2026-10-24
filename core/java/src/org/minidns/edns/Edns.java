@@ -48,6 +48,7 @@ public class Edns {
         NSID(3, Nsid.class),
        ;
 
+        /** The option codes, by number. */
         private static Map<Integer, OptionCode> INVERSE_LUT = new HashMap<>(OptionCode.values().length);
 
         static {
@@ -65,6 +66,12 @@ public class Edns {
          */
         public final Class<? extends EdnsOption> clazz;
 
+        /**
+         * Names one option type.
+         *
+         * @param optionCode the number of the option
+         * @param clazz the class of the option
+         */
         OptionCode(int optionCode, Class<? extends EdnsOption> clazz) {
             this.asInt = optionCode;
             this.clazz = clazz;
@@ -120,6 +127,7 @@ public class Edns {
      */
     public final boolean dnssecOk;
 
+    /** The OPT record carrying the version. */
     private Record<OPT> optRecord;
 
     /**
@@ -196,6 +204,7 @@ public class Edns {
         return optRecord;
     }
 
+    /** The cached rendered output. */
     private String terminalOutputCache;
 
     /**
@@ -261,12 +270,18 @@ public class Edns {
      * Builder for creating EDNS instances.
      */
     public static final class Builder {
+        /** The UDP payload size to advertise. */
         private int udpPayloadSize;
+        /** The extended response code. */
         private int extendedRcode;
+        /** The EDNS version. */
         private int version;
+        /** True when DNSSEC is acceptable. */
         private boolean dnssecOk;
+        /** The EDNS options to carry. */
         private List<EdnsOption> variablePart;
 
+        /** Builds a builder with default values. */
         private Builder() {}
 
         /**

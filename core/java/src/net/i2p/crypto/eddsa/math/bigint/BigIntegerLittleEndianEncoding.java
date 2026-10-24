@@ -18,6 +18,7 @@ import java.math.BigInteger;
 public class BigIntegerLittleEndianEncoding extends Encoding implements Serializable {
     /** New encoding instance; no initialization is required. */
     public BigIntegerLittleEndianEncoding() {}
+    /** Pinned for serialized-form compatibility. */
     private static final long serialVersionUID = 3984579843759837L;
 
     /**

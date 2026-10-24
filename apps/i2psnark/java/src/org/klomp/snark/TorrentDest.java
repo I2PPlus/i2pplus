@@ -25,6 +25,7 @@ import org.klomp.snark.dht.TorrentKRPC;
  */
 public class TorrentDest {
 
+    /** The context the destination runs in. */
     private final I2PAppContext _context;
     /** Base64-encoded info hash of the first torrent assigned, for thread names and logs. */
     private final String _key;
@@ -32,7 +33,9 @@ public class TorrentDest {
     private final int _poolIndex;
     /** Sequential pool number for the "I2PSnark - Pool N" nickname, -1 when dedicated. */
     private final int _poolNum;
+    /** Opens this destination's sockets. */
     private final I2PSocketManager _mgr;
+    /** Accepts incoming connections for the torrent. */
     private final I2PServerSocket _serverSocket;
     /** Session property carrying the pool's torrent names, for the /tunnels pool tooltip. */
     public static final String PROP_POOL_MEMBERS = "i2psnark.poolMembers";
@@ -48,7 +51,9 @@ public class TorrentDest {
     private final Map<String, InfoHash> _torrents = new HashMap<>(1);
     /** Assigned torrent names by Base64-encoded info hash key, for the pool tooltip. */
     private final Map<String, String> _names = new HashMap<>(1);
+    /** The DHT node serving the torrent, if any. */
     private TorrentKRPC _dht;
+    /** The UDP tracker client, if any. */
     private UDPTrackerClient _udpTracker;
 
     /**
@@ -74,16 +79,16 @@ public class TorrentDest {
     /**
      * The Base64-encoded info hash of the first torrent assigned.
      *
-     * @return the Base64-encoded info hash of the first torrent assigned
+     * @return the info hash as base64
      */
     public String getKey() {
         return _key;
     }
 
     /**
-     * The shared pool index, or -1 when dedicated to a single torrent.
+     * Identifies the shared tunnel pool serving this destination.
      *
-     * @return the shared pool index, or -1 when dedicated to a single torrent
+     * @return the pool index, or -1 when dedicated to a single torrent
      */
     public int getPoolIndex() {
         return _poolIndex;
@@ -149,9 +154,9 @@ public class TorrentDest {
     }
 
     /**
-     * The destination, or null.
+     * This router's own destination.
      *
-     * @return the destination, or null
+     * @return null if the session is not open
      */
     public Destination getMyDestination() {
         I2PSession sess = _mgr.getSession();

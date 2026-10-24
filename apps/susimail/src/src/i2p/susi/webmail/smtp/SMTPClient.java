@@ -47,15 +47,21 @@ public class SMTPClient {
      */
     public static final long BINARY_MAX_SIZE = (long) ((DEFAULT_MAX_SIZE * 57.0d / 78) - 32*1024);
 
+    /** Logger for this class. */
     private final Log _log;
     /** Socket connection to the SMTP server. */
     private Socket socket;
     /** Error message from the last failed operation, or empty if none. */
     public String error;
+    /** The server's reply to the last command. */
     private String lastResponse;
+    /** True if the server accepts pipelined commands. */
     private boolean supportsPipelining;
+    /** True if the server accepts 8-bit message bodies. */
     private boolean supports8BitMime;
+    /** Largest message the server accepts, in bytes. */
     private long maxSize = DEFAULT_MAX_SIZE;
+    /** Encoder for base64-authenticated logins. */
     private static final Encoding base64;
     static {base64 = EncodingFactory.getEncoding("base64");}
 

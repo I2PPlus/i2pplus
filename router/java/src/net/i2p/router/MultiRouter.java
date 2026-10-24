@@ -52,12 +52,17 @@ public class MultiRouter {
      */
     public MultiRouter() {}
 
+    /** First port given to the test routers. */
     private static final int BASE_PORT = 5000;
 
+    /** Number of test routers to run. */
     private static int nbrRouters;
 
+    /** Stream for the test output. */
     private static PrintStream out;
+    /** The test routers running. */
     private static ArrayList<Router> routers = new ArrayList<>(8);
+    /** The default context shared by the test routers. */
     private static I2PAppContext _defaultContext; // NOSONAR S1450: set in main()
 
     /**
@@ -142,6 +147,7 @@ public class MultiRouter {
         waitForCompletion();
     }
 
+    /** Reseeds the test routers in the background. */
     private static void internalReseed() {
 
         HashSet<RouterInfo> riSet = new HashSet<>();
@@ -156,6 +162,12 @@ public class MultiRouter {
         out.println(riSet.size() + " RouterInfos were reseeded");
     }
 
+    /**
+     * Writes the router config file for one test router.
+     *
+     * @param id the router number
+     * @return the properties written
+     */
     private static Properties buildRouterProps(int id) {
         Properties props = getRouterProps(id);
         File f = new File(props.getProperty("router.configLocation"));
@@ -170,6 +182,12 @@ public class MultiRouter {
         return props;
     }
 
+    /**
+     * Reads the router config file for one test router.
+     *
+     * @param id the router number
+     * @return the properties read
+     */
     private static Properties getRouterProps(int id) {
         Properties props = new Properties();
 
@@ -207,6 +225,12 @@ public class MultiRouter {
         return props;
     }
 
+    /**
+     * Writes the client config file for one test router.
+     *
+     * @param id the router number
+     * @return the properties written
+     */
     private static Properties buildClientProps(int id) {
         Properties rProps = getRouterProps(id);
         Properties props = getClientProps();
@@ -222,6 +246,11 @@ public class MultiRouter {
         return props;
     }
 
+    /**
+     * Reads the client config file.
+     *
+     * @return the properties read
+     */
     private static Properties getClientProps() {
         Properties props = new Properties();
 
@@ -237,11 +266,18 @@ public class MultiRouter {
         return props;
     }
 
+    /**
+     * The data directory for one test router.
+     *
+     * @param id the router number
+     * @return the directory path
+     */
     private static String getBaseDir(int id) {
         File f = new File(".");
         return f.getAbsoluteFile().getParentFile().toString() + "/multirouter/"+ Integer.toString(id);
     }
 
+    /** Waits for all the test routers to exit. */
     private static void waitForCompletion() {
         while (true) {
             int alive = 0;
@@ -262,6 +298,7 @@ public class MultiRouter {
         out.println("All routers shut down");
     }
 
+    /** Prints the command line usage. */
     private static void usage() {
         System.err.println("Usage: MultiRouter nbr_routers"); // NOSONAR CLI tool
         System.err.println("       Where nbr_routers > 0"); // NOSONAR CLI tool

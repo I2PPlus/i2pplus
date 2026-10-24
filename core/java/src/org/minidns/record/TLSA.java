@@ -25,6 +25,7 @@ import java.util.Map;
  */
 public class TLSA extends Data {
 
+        /** Certificate usages by their number on the wire. */
         private static final Map<Byte, CertUsage> CERT_USAGE_LUT = new HashMap<>();
 
     /**
@@ -84,12 +85,18 @@ public class TLSA extends Data {
          */
         public final byte byteValue;
 
+        /**
+         * Names a usage by its wire number.
+         *
+         * @param byteValue the number on the wire
+         */
         CertUsage(byte byteValue) {
             this.byteValue = byteValue;
             CERT_USAGE_LUT.put(byteValue, this);
         }
     }
 
+    /** Certificate selectors by their number on the wire. */
     private static final Map<Byte, Selector> SELECTOR_LUT = new HashMap<>();
 
     /**
@@ -107,12 +114,18 @@ public class TLSA extends Data {
          */
         public final byte byteValue;
 
+        /**
+         * Names a selector by its wire number.
+         *
+         * @param byteValue the number on the wire
+         */
         Selector(byte byteValue) {
             this.byteValue = byteValue;
             SELECTOR_LUT.put(byteValue, this);
         }
     }
 
+    /** Data matching types by their number on the wire. */
     private static final Map<Byte, MatchingType> MATCHING_TYPE_LUT = new HashMap<>();
 
     /**
@@ -132,6 +145,11 @@ public class TLSA extends Data {
          */
         public final byte byteValue;
 
+        /**
+         * Names a matching type by its wire number.
+         *
+         * @param byteValue the number on the wire
+         */
         MatchingType(byte byteValue) {
             this.byteValue = byteValue;
             MATCHING_TYPE_LUT.put(byteValue, this);

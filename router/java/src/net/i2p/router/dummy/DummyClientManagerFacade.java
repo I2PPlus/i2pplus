@@ -26,6 +26,7 @@ import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
  *
  */
 public class DummyClientManagerFacade extends ClientManagerFacade {
+    /** The router context the dummy facade reports on. */
     private RouterContext _context;
     /**
      * Initializes this facade with the router context.

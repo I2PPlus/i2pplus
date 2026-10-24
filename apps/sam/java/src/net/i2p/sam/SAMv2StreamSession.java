@@ -116,8 +116,11 @@ class SAMv2StreamSession extends SAMStreamSession {
      *
      */
     private class StreamConnector implements Runnable {
+        /** The id of this session. */
         private final int id;
+        /** The destination the session connects to. */
         private final Destination dest;
+        /** The socket options of the session. */
         private final I2PSocketOptions opts;
 
         /**
@@ -127,8 +130,7 @@ class SAMv2StreamSession extends SAMStreamSession {
          * @param dest Destination to reach
          * @param opts Socket options (I2PSocketOptions)
          */
-        public StreamConnector(int id, Destination dest, I2PSocketOptions opts) // throws IOException
-                {
+        public StreamConnector(int id, Destination dest, I2PSocketOptions opts) {
             if (_log.shouldDebug()) _log.debug("Instantiating new SAM STREAM connector");
 
             this.id = id;
@@ -195,17 +197,29 @@ class SAMv2StreamSession extends SAMStreamSession {
         return new SAMv2StreamSessionSocketReader(s, id);
     }
 
+    /** Thread sending the v2 stream data. */
     private class V2StreamSender extends StreamSender {
+        /** The data chunks waiting to be sent. */
         private final List<ByteArray> _data;
+        /** Total bytes queued in the chunks. */
         private int _dataSize;
+        /** Cache supplying the chunk buffers. */
         private final ByteCache _cache;
+        /** Stream the data is written to. */
         private final OutputStream _out;
+        /** True while the sender thread runs. */
         private volatile boolean _stillRunning;
+        /** True to drain the queue before closing. */
         private volatile boolean _shuttingDownGracefully;
+        /** Lock for the sender thread state. */
         private final Object runningLock = new Object();
 
         /**
-         * V2StreamSender.
+         * Builds the sender for one stream session.
+         *
+         * @param s the socket the data is written to
+         * @param id the id of the session
+         * @throws IOException if the socket's output stream cannot be opened
          */
         public V2StreamSender(I2PSocket s, int id) throws IOException {
             super(s, id);

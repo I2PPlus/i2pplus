@@ -9,6 +9,7 @@ import java.io.Writer;
  */
 public class StringBuilderWriter extends Writer {
 
+    /** The builder this writer appends to. */
     private final StringBuilder buf;
 
     /**

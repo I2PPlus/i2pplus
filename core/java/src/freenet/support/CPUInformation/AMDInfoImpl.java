@@ -9,23 +9,41 @@ package freenet.support.CPUInformation;
  *  @since 0.8.7
  */
 class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo {
+    /** True if the CPU is a K6 or later AMD. */
     private static boolean isK6Compatible;
+    /** True if the CPU is a K6-2 or later AMD. */
     private static boolean isK6_2_Compatible;
+    /** True if the CPU is a K6-III or later AMD. */
     private static boolean isK6_3_Compatible;
+    /** True if the CPU is a Geode or later AMD. */
     private static boolean isGeodeCompatible;
+    /** True if the CPU is an Athlon or later AMD. */
     private static boolean isAthlonCompatible;
+    /** True if the CPU is an Athlon 64 or later AMD. */
     private static boolean isAthlon64Compatible;
+    /** True if the CPU uses the K10 family or later. */
     private static boolean isK10Compatible;
+    /** True if the CPU is a Bobcat or later AMD. */
     private static boolean isBobcatCompatible;
+    /** True if the CPU is a Jaguar or later AMD. */
     private static boolean isJaguarCompatible;
+    /** True if the CPU is a Bulldozer or later AMD. */
     private static boolean isBulldozerCompatible;
+    /** True if the CPU is a Piledriver or later AMD. */
     private static boolean isPiledriverCompatible;
+    /** True if the CPU is a Steamroller or later AMD. */
     private static boolean isSteamrollerCompatible;
+    /** True if the CPU is an Excavator or later AMD. */
     private static boolean isExcavatorCompatible;
+    /** True if the CPU uses the Zen family or later. */
     private static boolean isZenCompatible;
+    /** True if the CPU uses the Zen 2 family or later. */
     private static boolean isZen2Compatible;
+    /** True if the CPU uses the Zen 3 family or later. */
     private static boolean isZen3Compatible;
+    /** True if the CPU uses the Zen 4 family or later. */
     private static boolean isZen4Compatible;
+    /** True if the CPU uses the Zen 5 family or later. */
     private static boolean isZen5Compatible;
 
     /** No-op, all state is static. */
@@ -101,6 +119,11 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo {
                                       CPUID.getCPUExtendedModel());
     }
 
+    /**
+     * Finds the CPU's model name from the vendor data.
+     *
+     * @return the model name, null if unknown
+     */
     private String identifyCPU() {
         // The name and the compatibility flags are resolved separately, and both
         // passes always run. The flags are what jbigi library selection depends

@@ -30,14 +30,20 @@ import java.nio.charset.StandardCharsets;
  * @since 0.9.26 moved from {@link LogWriter}
  */
 class FileLogWriter extends LogWriter {
-    // volatile as it changes on log file rotation
+    /** The writer for the current log file, volatile as it changes on rotation. */
     private volatile Writer _currentOut;
+    /** Number of the current rotation. */
     private int _rotationNum = -1;
+    /** The file being written now. */
     private File _currentFile;
+    /** Bytes written to the current file. */
     private long _numBytesInCurrentFile;
+    /** True to make the log files group readable. */
     private boolean _groupReadable;
 
+    /** Most disk full errors logged. */
     private static final int MAX_DISKFULL_MESSAGES = 8;
+    /** Disk full errors logged so far. */
     private int _diskFullMessageCount;
 
     /**
@@ -302,6 +308,13 @@ class FileLogWriter extends LogWriter {
         return oldest;
     }
 
+    /**
+     * Puts the rotation number into the file name.
+     *
+     * @param pattern the name with a hash placeholder
+     * @param num the rotation number
+     * @return the file name
+     */
     private static final String replace(String pattern, int num) {
         int len = pattern.length();
         StringBuilder buf = new StringBuilder(len + 1);
@@ -319,12 +332,15 @@ class FileLogWriter extends LogWriter {
      * @since 0.9.55
      */
     private static class Gzipper extends I2PAppThread {
+        /** The file to compress. */
         private final File _f;
+        /** True to make the result group readable. */
         private final boolean _groupReadable;
 
         /**
          * Creates a background thread that gzips one rotated log file.
          *
+         * @param f the rotated log file to compress
          * @param groupReadable apply 660 perms to the compressed file
          */
         public Gzipper(File f, boolean groupReadable) {

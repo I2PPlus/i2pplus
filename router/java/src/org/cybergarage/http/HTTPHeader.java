@@ -24,7 +24,9 @@ public class HTTPHeader {
      */
     private static int MAX_LENGTH = 1024;
 
+    /** The header's field name. */
     private String name;
+    /** The header's field value. */
     private String value;
 
     /**
@@ -139,7 +141,6 @@ public class HTTPHeader {
                     continue;
                 }
                 String bigLineHeaderName = header.getName().toUpperCase(Locale.US);
-                // Thanks for Jan Newmarch <jan.newmarch@infotech.monash.edu.au> (05/26/04)
                 if (bigLineHeaderName.equals(bigName) == false) {
                     lineStr = reader.readLine();
                     continue;

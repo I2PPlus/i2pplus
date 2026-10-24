@@ -39,6 +39,9 @@ public class ShellCommand {
      * @since 0.9.3
      */
     private static class Result {
+        /** Holds a command's exit status and output. */
+        private Result() {}
+        /** False if the command exited with an error. */
         public volatile boolean commandSuccessful;
     }
 
@@ -47,8 +50,11 @@ public class ShellCommand {
      *
      */
     private class CommandThread extends I2PAppThread {
+        /** The command to run, a String or a String array. */
         private final Object shellCommand;
+        /** Environment for the command, null to inherit. */
         private final String[] envp;
+        /** Collects the command's exit code and output. */
         private final Result result;
 
         /**
@@ -81,8 +87,14 @@ public class ShellCommand {
      *
      */
     private static class StreamConsumer extends I2PAppThread {
+        /** The stream being consumed. */
         private final BufferedReader bufferedReader;
 
+        /**
+         * Reads a stream on its own thread.
+         *
+         * @param inputStream the stream to consume
+         */
         public StreamConsumer(InputStream inputStream) {
             super("ShellCommand Consumer");
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
@@ -233,8 +245,9 @@ public class ShellCommand {
 
     /**
      * Just does exec, this is NOT a test of ShellCommand.
-     * @param args the command to run as an exec() argument array; ignored when empty,
-                which prints the usage line instead
+     *
+     * @param args the command to run as an exec() argument array; ignored when
+     *             empty, which prints the usage line instead
      */
     public static void main(String[] args) {
         if (args.length <= 0) {

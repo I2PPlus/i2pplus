@@ -40,22 +40,39 @@ import net.i2p.util.Log;
  * condemn a flood that is merely in flight.
  */
 class FloodfillVerifyStoreJob extends JobImpl {
+    /** Logger for the verification job. */
     private final Log _log;
+    /** Records why routers were banned. */
     private final BanLogger _banLogger;
+    /** The key being verified. */
     private final Hash _key;
+    /** The client that published the data. */
     private final Hash _client;
+    /** The floodfill currently holding the data. */
     private volatile Hash _target;
+    /** The floodfill the query was sent to. */
     private final Hash _sentTo;
+    /** The floodfill netdb we serve. */
     private final FloodfillNetworkDatabaseFacade _facade;
+    /** When the verified data expires. */
     private long _expiration;
+    /** When the current query was sent. */
     private long _sendTime;
+    /** Floodfills queried so far. */
     private int _attempted;
+    /** When the client published the data. */
     private final long _published;
+    /** The message type used for the query. */
     private final int _type;
+    /** True if verifying a router info. */
     private final boolean _isRouterInfo;
+    /** True if verifying an LS2 lease set. */
     private final boolean _isLS2;
+    /** The reply being verified. */
     private MessageWrapper.WrappedMessage _wrappedMessage;
+    /** Floodfills not to query again. */
     private final Set<Hash> _ignore;
+    /** Masked IPs of floodfills already tried. */
     private final MaskedIPSet _ipSet;
 
     /** Phase 1: confirm the store peer still has the entry. */
@@ -63,6 +80,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
     /** Phase 2: confirm a different floodfill received the flood. */
     private static final int PHASE_FLOOD_CHECK = 1;
 
+    /** Current phase of the verification. */
     private int _phase;
     /** One same-peer flood-check retry already spent. */
     private boolean _floodRetried;
@@ -70,23 +88,38 @@ class FloodfillVerifyStoreJob extends JobImpl {
     private boolean _requerySame;
     /** When this verify job was created (store success time). */
     private final long _created;
+    /** Delay before the first verification phase. */
     private final long _phase1DelayMs;
+    /** Delay before the second verification phase. */
     private final long _phase2DelayMs;
+    /** Delay before retrying a query. */
     private final long _retryDelayMs;
 
+    /** Config key for the first phase delay. */
     private static final String PROP_PHASE1_DELAY = "router.netDb.verifyPhase1Delay";
+    /** Config key for the lease set phase 2 delay. */
     private static final String PROP_PHASE2_DELAY_LS = "router.netDb.verifyPhase2Delay";
+    /** Config key for the router info phase 2 delay. */
     private static final String PROP_PHASE2_DELAY_RI = "router.netDb.verifyPhase2RiDelay";
+    /** Config key for the query retry delay. */
     private static final String PROP_RETRY_DELAY = "router.netDb.verifyRetryDelay";
 
+    /** Default delay before the first phase. */
     private static final int DEFAULT_PHASE1_DELAY = 5 * 1000;
+    /** Default phase 2 delay for lease sets. */
     private static final int DEFAULT_PHASE2_DELAY_LS = 20 * 1000;
+    /** Default phase 2 delay for router infos. */
     private static final int DEFAULT_PHASE2_DELAY_RI = 5 * 1000;
+    /** Default delay before a retry. */
     private static final int DEFAULT_RETRY_DELAY = 5 * 1000;
 
+    /** Total time allowed for one verification. */
     private static final int VERIFY_TIMEOUT = 30 * 1000;
+    /** Floodfills queried for one verification. */
     private static final int MAX_PEERS_TO_TRY = 8;
+    /** Leading address bytes that count as a close IP. */
     private static final int IP_CLOSE_BYTES = 3;
+    /** Rate stat periods for the verification statistics. */
     private static final long[] RATES = RateConstants.TUNNEL_VERIFY_RATES;
 
     /**
@@ -763,7 +796,10 @@ class FloodfillVerifyStoreJob extends JobImpl {
         failFloodCheck(result, delayMs);
     }
 
+    /** Matches the reply to one verification query. */
     private class VerifyReplySelector implements MessageSelector {
+        /** Matches the reply to a store verification. */
+        private VerifyReplySelector() {}
         public boolean continueMatching() {return false;} // only want one match
         public long getExpiration() { return _expiration; }
         public boolean isMatch(I2NPMessage message) {
@@ -779,8 +815,15 @@ class FloodfillVerifyStoreJob extends JobImpl {
         }
     }
 
+    /** Handles a verification reply. */
     private class VerifyReplyJob extends JobImpl implements ReplyJob {
+        /** The reply message being handled. */
         private I2NPMessage _message;
+        /**
+         * Schedules handling of a verification reply.
+         *
+         * @param ctx the router context
+         */
         public VerifyReplyJob(RouterContext ctx) {super(ctx);}
         public String getName() { return "Handle Floodfill Verification Reply"; }
 
@@ -845,7 +888,13 @@ class FloodfillVerifyStoreJob extends JobImpl {
         }
     }
 
+    /** Handles a verification reply timeout. */
     private class VerifyTimeoutJob extends JobImpl {
+        /**
+         * Schedules handling of a verification timeout.
+         *
+         * @param ctx the router context
+         */
         public VerifyTimeoutJob(RouterContext ctx) {super(ctx);}
         public String getName() { return "Timeout Floodfill Verification"; }
         public void runJob() {

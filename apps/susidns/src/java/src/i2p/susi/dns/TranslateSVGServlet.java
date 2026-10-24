@@ -27,9 +27,11 @@ import net.i2p.util.TranslateReader;
  */
 public class TranslateSVGServlet extends HttpServlet {
 
+    /** Pinned for serialized-form compatibility. */
     private static final long serialVersionUID = 18638760L;
     /** App context for naming and other services. */
     private final I2PAppContext _context;
+    /** Directory under the webapp holding the SVG files. */
     private static final String DIR = "/svg";
 
     /**

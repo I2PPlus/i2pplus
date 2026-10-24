@@ -41,9 +41,11 @@ import net.i2p.util.Translate;
  * @since 0.9.44
  */
 public class RatchetSKM extends SessionKeyManager implements SessionTagListener {
+    /** Logger for ratchet session management. */
     private final Log _log;
     /** Map allowing us to go from the targeted PublicKey to the OutboundSession used. */
     private final ConcurrentHashMap<PublicKey, OutboundSession> _outboundSessions;
+    /** Outbound sessions waiting for a reply, by key. */
     private final HashMap<PublicKey, List<OutboundSession>> _pendingOutboundSessions;
     /** Map allowing us to go from a SessionTag to the containing RatchetTagSet. */
     private final ConcurrentHashMap<RatchetSessionTag, RatchetTagSet> _inboundTagSets;
@@ -53,16 +55,25 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
      * tag lookup miss), never per tag.
      */
     private final LongAdder _sessionsCreated = new LongAdder();
+    /** Sessions replaced by a newer one. */
     private final LongAdder _sessionsReplaced = new LongAdder();
+    /** Inbound handshakes completed. */
     private final LongAdder _inboundCompleted = new LongAdder();
+    /** Tag mismatches seen. */
     private final LongAdder _tagMisses = new LongAdder();
     /** The router context. */
     protected final RouterContext _context;
+    /** False once the manager has shut down. */
     private volatile boolean _alive;
+    /** The queued cleanup event, kept for cancellation. */
     private CleanupEvent _cleanupEvent;
+    /** Key derivation function for the ratchet tags. */
     private final HKDF _hkdf;
+    /** Filter rejecting replayed messages. */
     private final DecayingHashSet _replayFilter;
+    /** The destination these sessions serve. */
     private final Destination _destination;
+    /** The encryption type these sessions use. */
     private final EncType _type;
 
     /**
@@ -82,9 +93,10 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
 
     /** How long a session stays pending in ms. */
     static final long SESSION_PENDING_DURATION_MS = 3 * 60 * 1000L;
-    // replace an old session created before this if we get a new NS
+    /** Age after which a session created earlier is replaced when a new NS arrives. */
     private static final long SESSION_REPLACE_AGE = 2*60*1000L;
 
+    /** Shared empty array for zero-length values. */
     private static final byte[] ZEROLEN = new byte[0];
 
     /**
@@ -149,6 +161,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         _replayFilter.stopDecaying();
     }
 
+    /** Periodically cleans up stale ratchet sessions. */
     private class CleanupEvent extends SimpleTimer2.TimedEvent {
         /** Creates cleanup timer with initial delay for first expiration pass. */
         public CleanupEvent() {
@@ -188,7 +201,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     /**
      * A snapshot of all inbound ratchet tag sets.
      *
-     * @return a snapshot of all inbound ratchet tag sets
+     * @return a new set, safe to iterate
      */
     private Set<RatchetTagSet> getRatchetTagSets() {
         synchronized (_inboundTagSets) {
@@ -747,6 +760,12 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         return key;
     }
 
+    /**
+     * Returns the pending session for a target key.
+     *
+     * @param target the peer's ratchet key
+     * @return the session, or null if none is pending
+     */
     private OutboundSession getSession(PublicKey target) {
         return _outboundSessions.get(target);
     }
@@ -1083,6 +1102,15 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         return summaryText(created, replaced, completed, misses);
     }
 
+    /**
+     * Formats the session statistics for the log.
+     *
+     * @param created sessions created since startup
+     * @param replaced sessions replaced by newer ones
+     * @param completed inbound handshakes completed
+     * @param misses decrypts with no matching tag
+     * @return the summary line
+     */
     private String summaryText(long created, long replaced, long completed, long misses) {
         return Translate.getString("Sessions created: {0}; replaced: {1}; inbound sessions completed: {2}; inbound tag misses: {3}",
                                    _context, "net.i2p.router.web.messages",
@@ -1258,13 +1286,21 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
      * The state for a crypto session to a single public key.
      */
     class OutboundSession {
+        /** The peer's ratchet public key. */
         private final PublicKey _target;
+        /** Current state of the handshake. */
         private final HandshakeState _state;
+        /** Callback for an NS reply. */
         private ReplyCallback _NScallback;
+        /** Callback for an NSR reply. */
         private ReplyCallback _NSRcallback;
+        /** Key used for the most recent messages. */
         private SessionKey _currentKey;
+        /** When the session was created. */
         private final long _established;
+        /** When we last sent through the session. */
         private long _lastUsed;
+        /** When we last received through the session. */
         private long _lastReceived;
         /**
          * Before the first ack, all tagsets go here. These are dropped by
@@ -1279,34 +1315,54 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
          * Synch on _unackedTagSets to access this.
          */
         private RatchetTagSet _tagSet;
+        /** Reply callbacks by tag id. */
         private final ConcurrentHashMap<Integer, ReplyCallback> _callbacks;
+        /** Acknowledgements waiting to be sent. */
         private final LinkedBlockingQueue<Integer> _acksToSend;
+        /** Timer that flushes the pending acks. */
         private SimpleTimer2.TimedEvent _ackTimer;
+        /** The local destination owning the session. */
         private Destination _destination;
 
-        // next key
+        /** Key id for our next outbound ratchet key. */
         private int _myOBKeyID = -1;
+        /** Key id for our next inbound ratchet key. */
         private int _myIBKeyID = -1;
+        /** Messages sent under our current inbound key. */
         private int _myIBKeySendCount;
+        /** Our current inbound ratchet key pair. */
         private KeyPair _myIBKeys;
+        /** Our current outbound ratchet key pair. */
         private KeyPair _myOBKeys;
+        /** Our next inbound key, sent ahead of use. */
         private NextSessionKey _myIBKey;
-        // last received, may not have data, for dup check
+        /** The last key received from the peer, possibly without data, for the duplicate check. */
         private NextSessionKey _hisIBKey;
+        /** Their latest outbound key, possibly without data. */
         private NextSessionKey _hisOBKey;
-        // last received, with data
+        /** The last key received from the peer that carried data. */
         private NextSessionKey _hisIBKeyWithData;
+        /** Their latest outbound key that carried data. */
         private NextSessionKey _hisOBKeyWithData;
+        /** Root key for the next inbound receive chain. */
         private SessionKey _nextIBRootKey;
 
+        /** Smallest NSR receive window, in keys. */
         private static final int MIN_RCV_WINDOW_NSR = 12;
+        /** Largest NSR receive window, in keys. */
         private static final int MAX_RCV_WINDOW_NSR = 12;
+        /** Smallest ES receive window, in keys. */
         private static final int MIN_RCV_WINDOW_ES = 24;
+        /** Largest ES receive window, in keys. */
         private static final int MAX_RCV_WINDOW_ES = 320;
 
+        /** HKDF info string for the reply tags. */
         private static final String INFO_0 = "SessionReplyTags";
+        /** HKDF info string for the ratchet tag set. */
         private static final String INFO_7 = "XDHRatchetTagSet";
+        /** Most acknowledgements sent in one message. */
         private static final int MAX_SEND_ACKS = 16;
+        /** Most reverse keys sent in one message. */
         private static final int MAX_SEND_REVERSE_KEY = 128;
 
         /**

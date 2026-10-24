@@ -23,8 +23,10 @@ import net.i2p.data.Hash;
  * @since 0.7.14
  */
 class LocalHash extends Hash {
+    /** Distances already computed, by peer hash. */
     private Map<Hash, byte[]> _xorCache;
 
+    /** Distances kept before the cache is dropped. */
     private static final int MAX_CACHED_XOR = 1024;
 
     /**

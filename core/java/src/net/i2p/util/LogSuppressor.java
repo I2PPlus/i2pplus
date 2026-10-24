@@ -67,15 +67,25 @@ public class LogSuppressor {
         /** Wall-clock ms when this key was last written. */
         final long lastReportMs;
 
+        /**
+         * Records when a key was last reported.
+         *
+         * @param lastReportCount the message count at that report
+         * @param lastReportMs when that report was made, in ms
+         */
         State(long lastReportCount, long lastReportMs) {
             this.lastReportCount = lastReportCount;
             this.lastReportMs = lastReportMs;
         }
     }
 
+    /** Messages seen per key since the last report. */
     private final ConcurrentHashMap<String, AtomicLong> _counts = new ConcurrentHashMap<>();
+    /** When each key was last reported. */
     private final ConcurrentHashMap<String, State> _reported = new ConcurrentHashMap<>();
+    /** Messages allowed per key before suppression. */
     private final int _burst;
+    /** How long a key stays suppressed, in ms. */
     private final long _windowMs;
 
     /**

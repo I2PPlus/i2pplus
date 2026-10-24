@@ -20,7 +20,9 @@ public class DeliveryStatusMessage extends FastI2NPMessageImpl {
      * I2NP message type number identifying a delivery status reply.
      */
     public final static int MESSAGE_TYPE = 10;
+    /** Message ID being reported on. */
     private long _id;
+    /** Time the message arrived at its destination. */
     private long _arrival;
 
     /** 4 bytes unsigned. */

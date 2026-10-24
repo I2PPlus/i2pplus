@@ -50,13 +50,18 @@ import net.i2p.util.EventDispatcher;
     /** Default connect timeout. */
     static final long DEFAULT_CONNECT_TIMEOUT = (long) 60 * 1000;
 
+    /** Counts the client ids handed out. */
     private static final AtomicLong __clientId = new AtomicLong();
     /** Unique client identifier. */
     protected long _clientId;
 
+    /** Guards starting the destination's sockets. */
     private final Object startLock = new Object();
+    /** The session carrying the datagrams. */
     private final I2PSession _session;
+    /** Reads datagrams arriving from I2P. */
     private final Source _i2pSource;
+    /** Sends datagrams out over I2P. */
     private final Sink _i2pSink;
 
     /**

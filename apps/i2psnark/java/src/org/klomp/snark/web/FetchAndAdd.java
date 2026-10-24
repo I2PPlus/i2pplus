@@ -39,23 +39,39 @@ import org.klomp.snark.Storage;
  */
 public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnable {
 
+    /** Tries allowed to fetch the torrent. */
     private static final int RETRIES = 20;
+    /** The app context. */
     private final I2PAppContext _ctx;
+    /** Logger for the torrent fetch. */
     private final Log _log;
+    /** The manager the torrent is added to. */
     private final SnarkManager _mgr;
+    /** The URL the torrent is fetched from. */
     private final String _url;
+    /** Placeholder hash shown while fetching. */
     private final byte[] _fakeHash;
+    /** Name given to the torrent. */
     private final String _name;
+    /** Directory the torrent downloads to. */
     private final File _dataDir;
+    /** Bytes left to fetch, -1 until known. */
     private volatile long _remaining = -1;
+    /** Total size of the fetch, -1 until known. */
     private volatile long _total = -1;
+    /** Bytes fetched so far. */
     private volatile long _transferred;
+    /** True while the fetch thread runs. */
     private volatile boolean _isRunning;
+    /** True while the fetch is being shown. */
     private volatile boolean _active;
+    /** When the fetch started. */
     private volatile long _started;
+    /** Reason the fetch failed. */
     private String _failCause;
-    // infrequently-touched runtime state is kept together below
+    /** The thread running the fetch. */
     private Thread _thread;
+    /** The client doing the fetch. */
     private EepGet _eepGet;
 
     /**
@@ -222,7 +238,6 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
         return prefix + ": " + DataHelper.stripHTML(t.getMessage());
     }
 
-    // Snark overrides so all the buttons and stats on the web page work
 
     /**
      * Begin (or restart) the fetch on a fresh background thread.
@@ -365,11 +380,7 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
         return (_transferred > 0) ? 1 : 0;
     }
 
-    // End Snark overrides
 
-    // EepGet status listeners to maintain the state for the web page.
-    // Each callback collapses down to updateState(), which derives the total size, the bytes
-    // remaining, the bytes transferred, and the active flag used by the Snark overrides above.
 
     /**
      * Called when a download attempt fails.
@@ -482,16 +493,34 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
         _active = active;
     }
 
-    // End of EepGet status listeners
 
+    /**
+     * Translates a string for the page.
+     *
+     * @param s the string to translate
+     * @return the translated text
+     */
     private String _t(String s) {
         return _mgr.util().getString(s);
     }
 
+    /**
+     * Translates a string with one parameter.
+     *
+     * @param s the string to translate
+     * @param o the parameter to substitute
+     * @return the translated text
+     */
     private String _t(String s, String o) {
         return _mgr.util().getString(s, o);
     }
 
+    /**
+     * Turns a URL in the text into a link.
+     *
+     * @param s the text to convert
+     * @return the text with the link added
+     */
     private static String urlify(String s) {
         return I2PSnarkServlet.urlify(s);
     }

@@ -40,10 +40,15 @@ import net.i2p.util.VersionComparator;
  */
 public class ReseedBundler {
 
+    /** The router building the bundle. */
     private final RouterContext _context;
+    /** Start of a router info file's name. */
     private static final String ROUTERINFO_PREFIX = "routerInfo-";
+    /** End of a router info file's name. */
     private static final String ROUTERINFO_SUFFIX = ".dat";
+    /** Fewest routers that make a bundle worth reseeding with. */
     private static final int MINIMUM = 200;
+    /** Oldest router version included in a bundle. */
     private static final String MIN_VERSION = "0.9.64";
 
     /**

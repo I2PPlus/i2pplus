@@ -31,6 +31,7 @@ import net.i2p.util.I2PAppThread;
  */
 public class I2PSOCKSIRCTunnel extends I2PSOCKSTunnel {
 
+    /** Hands out the client number for each new connection. */
     private static final AtomicInteger __clientId = new AtomicInteger();
 
     /**

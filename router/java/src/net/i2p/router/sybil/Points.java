@@ -12,8 +12,11 @@ import net.i2p.data.DataHelper;
  */
 @SuppressWarnings("PMD.AvoidFieldNameMatchingTypeName")
 public class Points implements Comparable<Points> {
+    /** The peer's standing, lower is more suspicious. */
     private double points;
+    /** Why the points are what they are. */
     private final List<String> reasons;
+    /** Format used when writing the points out. */
     private static final DecimalFormat TWO_DECIMALS = new DecimalFormat("#0.00");
 
     /**

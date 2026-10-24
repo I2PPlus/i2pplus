@@ -11,6 +11,7 @@ import java.io.OutputStream;
  */
 public class OutputStreamBuffer implements Buffer {
 
+	/** Where the buffered bytes are written. */
 	private final OutputStream _out;
 
 	/**

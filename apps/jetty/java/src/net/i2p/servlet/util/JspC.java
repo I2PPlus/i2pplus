@@ -40,15 +40,16 @@ public class JspC {
      */
     public JspC() {}
 
-    // First Tomcat version to support multiple threads and -threadCount arg
+    /** First Tomcat 8.x version to support multiple threads and the -threadCount arg. */
     private static final String THREADS_VERSION_8 = "8.5.33";
+    /** First Tomcat 9.x version to support multiple threads and the -threadCount arg. */
     private static final String THREADS_VERSION_9 = "9.0.11";
-    // if true, try to make web.xml reproducible
+    /** True to try to make the generated web.xml byte-for-byte reproducible. */
     private static final boolean REPRODUCIBLE = Boolean.parseBoolean(System.getProperty("build.reproducible"));
-    // if true, we must get the Tomcat version out of the jasper jar's manifest
+    /** True to get the Tomcat version out of the jasper jar's manifest instead of ours. */
     private static final boolean SYSTEM_TOMCAT = Boolean.parseBoolean(System.getProperty("with-libtomcat8-java")) ||
                                                  Boolean.parseBoolean(System.getProperty("with-libtomcat9-java"));
-    // path to the jasper jar
+    /** Path to the Jasper jar, used when the system's own Tomcat is in play. */
     private static final String JASPER_JAR = System.getProperty("jasper.jar");
 
     /**

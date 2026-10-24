@@ -28,11 +28,17 @@ class Sorters {
 
     /** See below. */
     private static final Pattern PATTERN_DE;
+    /** Extracts the sort key from an English torrent name. */
     private static final Pattern PATTERN_EN;
+    /** Extracts the sort key from a Spanish torrent name. */
     private static final Pattern PATTERN_ES;
+    /** Extracts the sort key from a French torrent name. */
     private static final Pattern PATTERN_FR;
+    /** Extracts the sort key from an Italian torrent name. */
     private static final Pattern PATTERN_IT;
+    /** Extracts the sort key from a Dutch torrent name. */
     private static final Pattern PATTERN_NL;
+    /** Extracts the sort key from a Portuguese torrent name. */
     private static final Pattern PATTERN_PT;
 
     /**
@@ -150,9 +156,12 @@ class Sorters {
      */
     private static class TorrentNameComparator implements Comparator<Snark>, Serializable {
 
+        /** Fixed id, the sorter is never serialized across versions. */
         private static final long serialVersionUID = 1L;
 
+        /** Pattern extracting the name's sort key. */
         private final Pattern _p;
+        /** Collator ordering the names for the language. */
         private final Collator _c;
 
         /**
@@ -172,8 +181,11 @@ class Sorters {
         /**
          * Compare two torrents by name.
          *
+         * @param l the first torrent
+         * @param r the second torrent
          * @param p may be null
          * @param c may be null
+         * @return the order of the two torrents
          */
         public static int comp(Snark l, Snark r, Pattern p, Collator c) {
             // put downloads and magnets first
@@ -215,12 +227,22 @@ class Sorters {
     /** Forward or reverse sort, but the fallback is always forward. */
     private abstract static class Sort implements Comparator<Snark>, Serializable {
 
+        /** Fixed id, the comparator is never serialized across versions. */
         private static final long serialVersionUID = 1L;
 
+        /** True to reverse the order. */
         private final boolean _rev;
+        /** Pattern extracting the name's sort key. */
         private final Pattern _p;
+        /** Collator ordering the names for the language. */
         private final Collator _c;
 
+        /**
+         * Creates a sorter for one direction and language.
+         *
+         * @param rev true to reverse the order
+         * @param lang the language whose collation to use
+         */
         public Sort(boolean rev, String lang) {
             _rev = rev;
             _p = getPattern(lang);
@@ -244,6 +266,13 @@ class Sorters {
          */
         protected abstract int compareIt(Snark l, Snark r);
 
+        /**
+         * Compares two longs without overflow.
+         *
+         * @param l the first value
+         * @param r the second value
+         * @return negative, zero or positive as l is less, equal or greater
+         */
         protected static int compLong(long l, long r) {
             if (l < r) {
                 return -1;
@@ -255,24 +284,45 @@ class Sorters {
         }
     }
 
+    /** Sort rank for a magnet-only torrent. */
     private static final int STATUS_MAGNET = 10;
+    /** Sort rank for an unknown state. */
     private static final int STATUS_UNKNOWN = 20;
+    /** Sort rank while allocating space. */
     private static final int STATUS_ALLOCATION = 30;
+    /** Sort rank while checking existing data. */
     private static final int STATUS_CHECKING = 40;
+    /** Sort rank while starting up. */
     private static final int STATUS_STARTING = 50;
+    /** Sort rank while downloading. */
     private static final int STATUS_DOWNLOADING = 60;
+    /** Sort rank for a stalled download. */
     private static final int STATUS_STALLED = 70;
+    /** Sort rank with peers but none active. */
     private static final int STATUS_NO_ACTIVE_PEERS = 80;
+    /** Sort rank with no peers at all. */
     private static final int STATUS_NO_PEERS = 90;
+    /** Sort rank while seeding with takers. */
     private static final int STATUS_SEEDING_ACTIVE = 100;
+    /** Sort rank while seeding with no takers. */
     private static final int STATUS_SEEDING_INACTIVE = 110;
+    /** Sort rank while seeding without activity. */
     private static final int STATUS_SEEDING_IDLE = 120;
+    /** Sort rank offset added for a stopped torrent. */
     private static final int STATUS_STOPPED_OFFSET = 150;
 
+    /** Orders torrents by their download state. */
     private static class StatusComparator extends Sort {
 
+        /** Fixed id, the comparator is never serialized across versions. */
         private static final long serialVersionUID = 1L;
 
+        /**
+         * Creates the state comparator.
+         *
+         * @param rev true to reverse the order
+         * @param lang the language whose collation to use
+         */
         private StatusComparator(boolean rev, String lang) {
             super(rev, lang);
         }
@@ -284,6 +334,10 @@ class Sorters {
         /**
          * Compare two torrents by status, with ties broken by swarm size
          * for idle, inactive and magnet states, otherwise by active peer count.
+         *
+         * @param l the first torrent
+         * @param r the second torrent
+         * @return the order of the two torrents
          */
         static int comp(Snark l, Snark r) {
             int sl = getStatus(l);
@@ -305,6 +359,12 @@ class Sorters {
             }
         }
 
+        /**
+         * Gives the sort rank for a torrent's state.
+         *
+         * @param snark the torrent to rank
+         * @return its state rank
+         */
         static int getStatus(Snark snark) {
             boolean isMagnet = snark.getRemainingLength() < 0;
             if (snark.isStopped() && !isMagnet) {
@@ -314,6 +374,12 @@ class Sorters {
             }
         }
 
+        /**
+         * Computes the state rank, stopped torrents offset.
+         *
+         * @param snark the torrent to rank
+         * @return its state rank
+         */
         private static int getStatusImpl(Snark snark) {
             long remaining = snark.getRemainingLength();
             int activePeers = snark.getPeerCount();
@@ -362,8 +428,15 @@ class Sorters {
      */
     private static class StatusPoolComparator extends Sort {
 
+        /** Fixed id, the comparator is never serialized across versions. */
         private static final long serialVersionUID = 1L;
 
+        /**
+         * Creates the state-and-pool comparator.
+         *
+         * @param rev true to reverse the order
+         * @param lang the language whose collation to use
+         */
         private StatusPoolComparator(boolean rev, String lang) {
             super(rev, lang);
         }
@@ -393,10 +466,18 @@ class Sorters {
         }
     }
 
+    /** Orders torrents by peer count. */
     private static class PeersComparator extends Sort {
 
+        /** Fixed id, the comparator is never serialized across versions. */
         private static final long serialVersionUID = 1L;
 
+        /**
+         * Creates the peer-count comparator.
+         *
+         * @param rev true to reverse the order
+         * @param lang the language whose collation to use
+         */
         public PeersComparator(boolean rev, String lang) {
             super(rev, lang);
         }
@@ -406,10 +487,18 @@ class Sorters {
         }
     }
 
+    /** Orders torrents by bytes left to download. */
     private static class RemainingComparator extends Sort {
 
+        /** Fixed id, the comparator is never serialized across versions. */
         private static final long serialVersionUID = 1L;
 
+        /**
+         * Creates the remaining-bytes comparator.
+         *
+         * @param rev true to reverse the order
+         * @param lang the language whose collation to use
+         */
         public RemainingComparator(boolean rev, String lang) {
             super(rev, lang);
         }
@@ -419,10 +508,18 @@ class Sorters {
         }
     }
 
+    /** Orders torrents by estimated finish time. */
     private static class ETAComparator extends Sort {
 
+        /** Fixed id, the comparator is never serialized across versions. */
         private static final long serialVersionUID = 1L;
 
+        /**
+         * Creates the ETA comparator.
+         *
+         * @param rev true to reverse the order
+         * @param lang the language whose collation to use
+         */
         public ETAComparator(boolean rev, String lang) {
             super(rev, lang);
         }
@@ -432,6 +529,12 @@ class Sorters {
                     eta(l), eta(r)); // TODO For completed torrents, sort by date of completion
         }
 
+        /**
+         * Estimates when a download will finish.
+         *
+         * @param snark the torrent to estimate
+         * @return seconds until done, Long.MAX_VALUE if never
+         */
         private static long eta(Snark snark) {
             long needed = snark.getNeededLength();
             long remaining = snark.getRemainingLength();
@@ -484,10 +587,18 @@ class Sorters {
         }
     }
 
+    /** Orders torrents by total size. */
     private static class SizeComparator extends Sort {
 
+        /** Fixed id, the comparator is never serialized across versions. */
         private static final long serialVersionUID = 1L;
 
+        /**
+         * Creates the size comparator.
+         *
+         * @param rev true to reverse the order
+         * @param lang the language whose collation to use
+         */
         public SizeComparator(boolean rev, String lang) {
             super(rev, lang);
         }
@@ -497,10 +608,18 @@ class Sorters {
         }
     }
 
+    /** Orders torrents by bytes downloaded. */
     private static class DownloadedComparator extends Sort {
 
+        /** Fixed id, the comparator is never serialized across versions. */
         private static final long serialVersionUID = 1L;
 
+        /**
+         * Creates the downloaded-bytes comparator.
+         *
+         * @param rev true to reverse the order
+         * @param lang the language whose collation to use
+         */
         public DownloadedComparator(boolean rev, String lang) {
             super(rev, lang);
         }
@@ -512,10 +631,18 @@ class Sorters {
         }
     }
 
+    /** Orders torrents by bytes uploaded. */
     private static class UploadedComparator extends Sort {
 
+        /** Fixed id, the comparator is never serialized across versions. */
         private static final long serialVersionUID = 1L;
 
+        /**
+         * Creates the uploaded-bytes comparator.
+         *
+         * @param rev true to reverse the order
+         * @param lang the language whose collation to use
+         */
         public UploadedComparator(boolean rev, String lang) {
             super(rev, lang);
         }
@@ -525,10 +652,18 @@ class Sorters {
         }
     }
 
+    /** Orders torrents by download rate. */
     private static class DownRateComparator extends Sort {
 
+        /** Fixed id, the comparator is never serialized across versions. */
         private static final long serialVersionUID = 1L;
 
+        /**
+         * Creates the download-rate comparator.
+         *
+         * @param rev true to reverse the order
+         * @param lang the language whose collation to use
+         */
         public DownRateComparator(boolean rev, String lang) {
             super(rev, lang);
         }
@@ -538,10 +673,18 @@ class Sorters {
         }
     }
 
+    /** Orders torrents by upload rate. */
     private static class UpRateComparator extends Sort {
 
+        /** Fixed id, the comparator is never serialized across versions. */
         private static final long serialVersionUID = 1L;
 
+        /**
+         * Creates the upload-rate comparator.
+         *
+         * @param rev true to reverse the order
+         * @param lang the language whose collation to use
+         */
         public UpRateComparator(boolean rev, String lang) {
             super(rev, lang);
         }
@@ -551,10 +694,18 @@ class Sorters {
         }
     }
 
+    /** Orders torrents by upload-to-download ratio. */
     private static class RatioComparator extends Sort {
 
+        /** Fixed id, the comparator is never serialized across versions. */
         private static final long serialVersionUID = 1L;
 
+        /**
+         * Creates the ratio comparator.
+         *
+         * @param rev true to reverse the order
+         * @param lang the language whose collation to use
+         */
         public RatioComparator(boolean rev, String lang) {
             super(rev, lang);
         }
@@ -574,12 +725,22 @@ class Sorters {
         }
     }
 
+    /** Orders torrents by the type of their main file. */
     private static class FileTypeComparator extends Sort {
 
+        /** Fixed id, the comparator is never serialized across versions. */
         private static final long serialVersionUID = 1L;
 
+        /** Servlet consulted for the torrents' file names. */
         private final I2PSnarkServlet servlet;
 
+        /**
+         * Creates the file-type comparator.
+         *
+         * @param rev true to reverse the order
+         * @param lang the language whose collation to use
+         * @param servlet the servlet consulted for file names
+         */
         public FileTypeComparator(boolean rev, String lang, I2PSnarkServlet servlet) {
             super(rev, lang);
             this.servlet = servlet;
@@ -591,6 +752,12 @@ class Sorters {
             return ls.compareTo(rs);
         }
 
+        /**
+         * Gives the torrent name used for the type comparison.
+         *
+         * @param snark the torrent to name
+         * @return the name compared
+         */
         private String toName(Snark snark) {
             MetaInfo meta = snark.getMetaInfo();
             if (meta == null) {
@@ -721,6 +888,9 @@ class Sorters {
      */
     private static class FileNameComparator implements Comparator<FileAndIndex>, Serializable {
 
+        /** Orders a torrent's files by name. */
+        private FileNameComparator() {}
+        /** Fixed id, the comparator is never serialized across versions. */
         private static final long serialVersionUID = 1L;
 
         /** Cached, case-insensitive at secondary strength. */
@@ -734,6 +904,13 @@ class Sorters {
             return comp(l, r);
         }
 
+        /**
+         * Compares two files of a torrent.
+         *
+         * @param l the first file
+         * @param r the second file
+         * @return negative, zero or positive as l sorts before, with or after r
+         */
         public static int comp(FileAndIndex l, FileAndIndex r) {
             boolean ld = l.isDirectory;
             boolean rd = r.isDirectory;
@@ -750,10 +927,17 @@ class Sorters {
     /** Forward or reverse sort, but the fallback is always forward. */
     private abstract static class FAISort implements Comparator<FileAndIndex>, Serializable {
 
+        /** Fixed id, the sorter is never serialized across versions. */
         private static final long serialVersionUID = 1L;
 
+        /** True to reverse the order. */
         private final boolean _rev;
 
+        /**
+         * Creates a file sorter for one direction.
+         *
+         * @param rev true to reverse the order
+         */
         public FAISort(boolean rev) {
             _rev = rev;
         }
@@ -768,9 +952,20 @@ class Sorters {
 
         /**
          * Compare two file/index entries.
+         *
+         * @param l the first entry
+         * @param r the second entry
+         * @return the order of the two entries
          */
         protected abstract int compareIt(FileAndIndex l, FileAndIndex r);
 
+        /**
+         * Compares two longs without overflow.
+         *
+         * @param l the first value
+         * @param r the second value
+         * @return negative, zero or positive as l is less, equal or greater
+         */
         protected static int compLong(long l, long r) {
             if (l < r) {
                 return -1;
@@ -782,10 +977,17 @@ class Sorters {
         }
     }
 
+    /** Orders files by bytes left to download. */
     private static class FAIRemainingComparator extends FAISort {
 
+        /** Fixed id, the comparator is never serialized across versions. */
         private static final long serialVersionUID = 1L;
 
+        /**
+         * Creates the file remaining-bytes comparator.
+         *
+         * @param rev true to reverse the order
+         */
         public FAIRemainingComparator(boolean rev) {
             super(rev);
         }
@@ -795,10 +997,17 @@ class Sorters {
         }
     }
 
+    /** Orders files by size. */
     private static class FAISizeComparator extends FAISort {
 
+        /** Fixed id, the comparator is never serialized across versions. */
         private static final long serialVersionUID = 1L;
 
+        /**
+         * Creates the file size comparator.
+         *
+         * @param rev true to reverse the order
+         */
         public FAISizeComparator(boolean rev) {
             super(rev);
         }
@@ -808,12 +1017,21 @@ class Sorters {
         }
     }
 
+    /** Orders files by type. */
     private static class FAITypeComparator extends FAISort {
 
+        /** Fixed id, the comparator is never serialized across versions. */
         private static final long serialVersionUID = 1L;
 
+        /** Servlet consulted for the files' names. */
         private final I2PSnarkServlet servlet;
 
+        /**
+         * Creates the file type comparator.
+         *
+         * @param rev true to reverse the order
+         * @param servlet the servlet consulted for file names
+         */
         public FAITypeComparator(boolean rev, I2PSnarkServlet servlet) {
             super(rev);
             this.servlet = servlet;
@@ -825,6 +1043,12 @@ class Sorters {
             return ls.compareTo(rs);
         }
 
+        /**
+         * Gives the file name used for the type comparison.
+         *
+         * @param fai the file to name
+         * @return the name compared
+         */
         private String toName(FileAndIndex fai) {
             if (fai.isDirectory) return "0";
             // arbitrary sort based on icon name
@@ -832,10 +1056,17 @@ class Sorters {
         }
     }
 
+    /** Orders files by download priority. */
     private static class FAIPriorityComparator extends FAISort {
 
+        /** Fixed id, the comparator is never serialized across versions. */
         private static final long serialVersionUID = 1L;
 
+        /**
+         * Creates the file priority comparator.
+         *
+         * @param rev true to reverse the order
+         */
         public FAIPriorityComparator(boolean rev) {
             super(rev);
         }

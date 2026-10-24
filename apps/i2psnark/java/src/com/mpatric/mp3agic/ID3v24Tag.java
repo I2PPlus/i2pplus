@@ -1,16 +1,28 @@
 package com.mpatric.mp3agic;
 
+/** An ID3v2.4 tag. */
 public class ID3v24Tag extends AbstractID3v2Tag {
 
+    /** Version string identifying this tag format. */
     public static final String VERSION = "4.0";
 
+    /** Id of the recording-time frame, replacing the 2.3 date frames. */
     public static final String ID_RECTIME = "TDRC";
 
+    /** Creates an empty tag. */
     public ID3v24Tag() {
         super();
         version = VERSION;
     }
 
+    /**
+     * Reads a tag from a buffer of a file's start.
+     *
+     * @param buffer the bytes to parse
+     * @throws InvalidDataException if the tag data is corrupt
+     * @throws NoSuchTagException if the header is not an ID3v2 tag
+     * @throws UnsupportedTagException if the tag is not version 2.4
+     */
     public ID3v24Tag(byte[] buffer)
             throws NoSuchTagException, UnsupportedTagException, InvalidDataException {
         super(buffer);
@@ -70,12 +82,22 @@ public class ID3v24Tag extends AbstractID3v2Tag {
      * 'TRDA - Recording dates' and 'TYER - Year' in 4.0
      */
 
+    /**
+     * Reads the recording-time frame.
+     *
+     * @return the time, null if the frame is absent
+     */
     public String getRecordingTime() {
         ID3v2TextFrameData frameData = extractTextFrameData(ID_RECTIME);
         if (frameData != null && frameData.getText() != null) return frameData.getText().toString();
         return null;
     }
 
+    /**
+     * Writes the recording-time frame.
+     *
+     * @param recTime the time to write, ignored when null or empty
+     */
     public void setRecordingTime(String recTime) {
         if (recTime != null && recTime.length() > 0) {
             invalidateDataLength();

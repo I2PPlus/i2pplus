@@ -19,21 +19,33 @@ import net.i2p.util.Log;
  * retries, etc.
  */
 class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
+    /** The app context. */
     private final I2PAppContext _context;
+    /** Logger for the local packet record. */
     private final Log _log;
+    /** The connection the packet was sent on. */
     private final Connection _connection;
+    /** The peer the packet was sent to. */
     private final Destination _to;
+    /** When the packet was created. */
     private final long _createdOn;
+    /** Times the packet has been sent. */
     private final AtomicInteger _numSends = new AtomicInteger();
     /** Resend attempts triggered by a router soft failure (NO_TUNNELS / EXPIRED / LOCAL). */
     private final AtomicInteger _numSoftResends = new AtomicInteger();
+    /** When the packet was last sent. */
     private volatile long _lastSend;
+    /** When the packet was acked, 0 while unacked. */
     private long _acceptedOn;
     /** LOCKING: this. */
     private long _ackOn;
+    /** When the packet was cancelled, 0 while active. */
     private long _cancelledOn;
+    /** Nacks received for the packet. */
     private final AtomicInteger _nackCount = new AtomicInteger();
+    /** True once the packet was retransmitted. */
     private volatile boolean _retransmitted;
+    /** Timeout used waiting for the packet's ack. */
     private volatile int _timeout;
     /** Whether this packet has been enqueued for I2CP send. */
     private volatile boolean _enqueued;
@@ -94,8 +106,9 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
     }
 
     /**
-     * Destination this packet is being sent to.
-     * @return the destination this packet is being sent to
+     * The peer this packet was sent to.
+     *
+     * @return the peer's destination
      */
     public Destination getTo() { return _to; }
 
@@ -171,6 +184,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
         return _payloadCache;
     }
 
+    /** Cache supplying the payload buffers. */
     private static final ByteCache _payloadCache = ByteCache.getInstance(128, Packet.MAX_PAYLOAD_SIZE);
 
     /**
@@ -440,7 +454,6 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
         return buf;
     }
 
-    ////// begin WriteStatus methods
 
     /**
      * Blocks until outbound window is not full. See {@link net.i2p.client.streaming.impl.Connection#packetSendChoke}.
@@ -616,7 +629,6 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
      */
     public synchronized boolean writeReleased() { return _ackOn > 0 || _cancelledOn > 0; }
 
-    ////// end WriteStatus methods
 
     /**
      * Generate a pcap/tcpdump-compatible format,

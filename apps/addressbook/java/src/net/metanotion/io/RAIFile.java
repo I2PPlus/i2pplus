@@ -13,9 +13,13 @@ import java.io.RandomAccessFile;
  * Provides file-based random access with {@link DataInput} and DataOutput capabilities.
  */
 public class RAIFile implements RandomAccessInterface, DataInput, DataOutput {
+    /** The file on disk. */
     private final File f;
+    /** The access this class forwards to. */
     private final RandomAccessFile delegate;
+    /** True if the file was opened for reading. */
     private final boolean r;
+    /** True if the file was opened for writing. */
     private final boolean w;
 
     /**
@@ -113,7 +117,6 @@ public class RAIFile implements RandomAccessInterface, DataInput, DataOutput {
      */
     public void setLength(long newLength) throws IOException { delegate.setLength(newLength); }
 
-    // Closeable Methods
     /**
      * {@inheritDoc}
      *
@@ -121,7 +124,6 @@ public class RAIFile implements RandomAccessInterface, DataInput, DataOutput {
      */
     public void close() throws IOException { delegate.close(); }
 
-    // DataInput Methods
     /**
      * {@inheritDoc}
      *
@@ -239,7 +241,6 @@ public class RAIFile implements RandomAccessInterface, DataInput, DataOutput {
      */
     public int skipBytes(int n) throws IOException { return delegate.skipBytes(n); }
 
-    // DataOutput Methods
     /**
      * {@inheritDoc}
      *

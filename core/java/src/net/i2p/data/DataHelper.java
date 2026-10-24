@@ -209,7 +209,9 @@ public class DataHelper {
         }
     }
 
+    /** Characters not allowed in a property key. */
     private static final Pattern ILLEGAL_KEY = Pattern.compile("[#=\\r\\n; ]");
+    /** Characters not allowed in a property value. */
     private static final Pattern ILLEGAL_VALUE = Pattern.compile("[#\\r\\n]");
 
     /**
@@ -219,8 +221,11 @@ public class DataHelper {
      */
     private static final DateFormat DATE_FORMAT = DateFormat.getDateInstance(DateFormat.MEDIUM);
 
+    /** Formatter for the date and time strings. */
     private static final DateFormat TIME_FORMAT = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT);
+    /** True once the date formatter's time zone is set. */
     private static boolean dateTzSet;
+    /** True once the time formatter's time zone is set. */
     private static boolean timeTzSet;
 
     /**
@@ -780,6 +785,7 @@ public class DataHelper {
         return toString(buf, buf.length);
     }
 
+    /** Shared empty byte array, to avoid allocating one. */
     private static final byte[] EMPTY_BUFFER = new byte[0];
 
     /** Lower-case hex digits, so toString(byte[], int) never calls {@link java.lang.Integer#toHexString}. */
@@ -1229,10 +1235,6 @@ public class DataHelper {
         }
     }
 
-    //
-    // The following comparator helpers make it simpler to write consistently comparing
-    // functions for objects based on their value, not JVM memory address
-    //
 
     /**
      * Helper util to compare two objects, including null handling.
@@ -1461,10 +1463,6 @@ public class DataHelper {
         }
     }
 
-    //
-    // The following hashcode helpers make it simpler to write consistently hashing
-    // functions for objects based on their value, not JVM memory address
-    //
 
     /**
      * Calculate the hashcode of the object, using 0 for null.
@@ -1866,12 +1864,27 @@ public class DataHelper {
         return t.replace(" ", "&nbsp;");
     }
 
+    /** Name of the translation resource bundle. */
     private static final String BUNDLE_NAME = "net.i2p.util.messages";
 
+    /**
+     * Translates a string in the default bundle.
+     *
+     * @param key the string to translate
+     * @return the translated string
+     */
     private static String _t(String key) {
         return Translate.getString(key, I2PAppContext.getGlobalContext(), BUNDLE_NAME);
     }
 
+    /**
+     * Translates a countable string, picking the plural form.
+     *
+     * @param s the singular form
+     * @param p the plural form
+     * @param n the count to match
+     * @return the form matching the count
+     */
     private static String ngettext(String s, String p, int n) {
         return Translate.getString(n, s, p, I2PAppContext.getGlobalContext(), BUNDLE_NAME);
     }
@@ -2111,7 +2124,9 @@ public class DataHelper {
         return rv;
     }
 
+    /** The characters escaped for HTML output. */
     private static final String[] escapeChars = {"&", "\"", "<", ">", "'"};
+    /** The HTML codes for each escaped character. */
     private static final String[] escapeCodes = {"&amp;", "&quot;", "&lt;", "&gt;", "&apos;"};
 
     /**
@@ -2301,6 +2316,7 @@ public class DataHelper {
         /** Not a DataHelper static field - see the class comment. */
         private static final ByteCache CACHE = ByteCache.getInstance(8, MAX_UNCOMPRESSED);
 
+        /** Not called, the cache holder class is never instantiated. */
         private DecompressCacheHolder() {}
     }
 
@@ -2495,6 +2511,7 @@ public class DataHelper {
         return split(s, regex, 0);
     }
 
+    /** Cache of the compiled patterns. */
     private static final ConcurrentHashMap<String, Pattern> patterns = new ConcurrentHashMap<>(64);
 
     /**
@@ -2554,6 +2571,7 @@ public class DataHelper {
         /** Not a DataHelper static field - see DecompressCacheHolder. */
         private static final ByteCache CACHE = ByteCache.getInstance(8, 8 * 1024);
 
+        /** Not called, the cache holder class is never instantiated. */
         private CopyCacheHolder() {}
     }
 

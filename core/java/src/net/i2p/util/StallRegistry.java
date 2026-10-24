@@ -45,8 +45,10 @@ public class StallRegistry {
      */
     private static final long PRUNE_AGE_MS = 30 * 60 * 1000L;
 
+    /** Last stall time for each peer */
     private static final Map<Hash, Long> _stalls = new ConcurrentHashMap<>(256, 0.9f, 16);
 
+    /** Utility class, not intended for instantiation. */
     private StallRegistry() {}
 
     /**

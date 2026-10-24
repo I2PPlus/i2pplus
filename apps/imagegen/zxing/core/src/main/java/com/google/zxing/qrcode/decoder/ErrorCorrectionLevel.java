@@ -32,10 +32,17 @@ public enum ErrorCorrectionLevel {
   /** H = ~30% correction */
   H(0x02);
 
+  /** Levels in the order the format bits select them. */
   private static final ErrorCorrectionLevel[] FOR_BITS = {M, L, H, Q};
 
+  /** The two bits stored in the format information. */
   private final int bits;
 
+  /**
+   * Creates a level with its format bits.
+   *
+   * @param bits the two bits naming this level
+   */
   ErrorCorrectionLevel(int bits) {
     this.bits = bits;
   }

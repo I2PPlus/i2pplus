@@ -34,53 +34,98 @@ public class GraphHelper extends FormHandler {
      */
     public GraphHelper() {}
 
+    /** Number of stat periods shown on the graph. */
     private int _periodCount;
+    /** Whether event markers are drawn. */
     private boolean _showEvents;
+    /** Graph width in pixels. */
     private int _width;
+    /** Graph height in pixels. */
     private int _height;
+    /** Seconds between graph refreshes. */
     private int _refreshDelaySeconds;
+    /** Whether the settings are saved to the config. */
     private boolean _persistent;
+    /** Whether the legend is hidden. */
     private boolean _graphHideLegend;
+    /** Whether restart markers are hidden. */
     private boolean _graphHideRestarts;
+    /** Whether the graph line glows. */
     private boolean _graphGlow;
+    /** Whether the graph line is smoothed. */
     private boolean _graphSmooth;
+    /** Whether the area under the line is filled. */
     private boolean _graphFill;
+    /** Whether in and out rates share one line. */
     private boolean _graphCombine;
+    /** Whether graph times are shown in UTC. */
     private boolean _useUtc;
+    /** The stat name being graphed. */
     private String _stat;
+    /** Which of the two stat values to graph, -1 for both. */
     private int _end;
+    /** Config key for the graph width. */
     private static final String PROP_X = "routerconsole.graphX";
+    /** Config key for the graph height. */
     private static final String PROP_Y = "routerconsole.graphY";
+    /** Config key for the refresh delay. */
     private static final String PROP_REFRESH = "routerconsole.graphRefresh";
+    /** Config key for the period count. */
     private static final String PROP_PERIODS = "routerconsole.graphPeriods";
+    /** Config key for showing event markers. */
     private static final String PROP_EVENTS = "routerconsole.graphEvents";
+    /** Config key for hiding the legend. */
     private static final String PROP_HIDE_LEGEND = "routerconsole.graphHideLegend";
+    /** Config key for hiding restart markers. */
     private static final String PROP_HIDE_RESTARTS = "routerconsole.graphHideRestarts";
+    /** Config key for the glow effect. */
     private static final String PROP_GLOW = "routerconsole.graphGlow";
+    /** Config key for line smoothing. */
     private static final String PROP_SMOOTH = "routerconsole.graphSmooth";
+    /** Config key for area filling. */
     private static final String PROP_FILL = "routerconsole.graphFill";
+    /** Config key for combining the rates. */
     private static final String PROP_COMBINE = "routerconsole.graphCombine";
+    /** Config key for UTC graph times. */
     private static final String PROP_UTC = "routerconsole.graphUtc";
+    /** Default refresh delay, in seconds. */
     private static final int DEFAULT_REFRESH = 1*60;
+    /** Default number of stat periods shown. */
     private static final int DEFAULT_PERIODS = 60;
+    /** The legend is shown by default. */
     private static final boolean DEFAULT_HIDE_LEGEND = false;
+    /** Restart markers are shown by default. */
     private static final boolean DEFAULT_HIDE_RESTARTS = false;
+    /** Smallest graph width accepted. */
     private static final int MIN_X = 160;
+    /** Smallest graph height accepted. */
     private static final int MIN_Y = 40;
+    /** Smallest period count accepted. */
     private static final int MIN_C = 5; // minimum period (minutes)
+    /** Largest period count accepted. */
     private static final int MAX_C = GraphListener.MAX_ROWS;
+    /** Smallest refresh delay accepted, in seconds. */
     private static final int MIN_REFRESH = 5;
 
-    // Cached common constant substrings for URL building (optimization)
+    /** Escaped ampersand reused in the graph links. */
     private static final String AMP = "&amp;";
+    /** Query parameter for the event markers. */
     private static final String SHOW_EVENTS_PARAM = AMP + "showEvents=";
+    /** Query parameter for the legend. */
     private static final String HIDE_LEGEND_PARAM = AMP + "hideLegend=";
+    /** Query parameter for the restart markers. */
     private static final String HIDE_RESTARTS_PARAM = AMP + "hideRestarts=";
+    /** Query parameter for the period count. */
     private static final String PERIOD_COUNT_PARAM = AMP + "periodCount=";
+    /** Query parameter for the graph width. */
     private static final String WIDTH_PARAM = AMP + "width=";
+    /** Query parameter for the graph height. */
     private static final String HEIGHT_PARAM = AMP + "height=";
+    /** Query parameter for the graph end time. */
     private static final String TIME_PARAM = AMP + "time=";
+    /** Link prefix to the stat detail page. */
     private static final String STAT_PARAM = "/viewstat.jsp?stat=";
+    /** Link prefix to the graph page. */
     private static final String GRAPH_HREF = "/graph?stat=";
 
     /** Hex digits for the percent-escapes urlStatName() emits. */
@@ -693,6 +738,7 @@ public class GraphHelper extends FormHandler {
         return buf.toString();
     }
 
+    /** Whether this graph hides its legend. */
     private boolean _hideLegend;
 
     /**
@@ -756,6 +802,7 @@ public class GraphHelper extends FormHandler {
                + "\">";
     }
 
+    /** Period lengths offered on the graph page. */
     private static final int[] times = { 5, 10, 15, 30, 60, 2*60, 5*60, 10*60, 30*60, 60*60, -1 };
 
     /**
@@ -977,6 +1024,9 @@ public class GraphHelper extends FormHandler {
      * alphabetically, then by stat name and period.
      */
     private static class AlphaComparator implements Comparator<GraphListener>, Serializable {
+        /** Orders graph listeners by name. */
+        private AlphaComparator() {}
+
         /**
          * Orders listeners by rate group name, with Router first.
          */

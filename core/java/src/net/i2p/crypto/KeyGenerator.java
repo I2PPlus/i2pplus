@@ -65,6 +65,7 @@ import net.i2p.util.SystemVersion;
  * @since 0.8.0
  */
 public final class KeyGenerator {
+    /** Supplies the random used to generate keys. */
     private final I2PAppContext _context;
 
     static {
@@ -172,6 +173,7 @@ public final class KeyGenerator {
      */
     private static final boolean DEFAULT_USE_LONG_EXPONENT = !SystemVersion.isSlow();
 
+    /** Property asking for a 2048-bit ElGamal key. */
     private static final String PROP_LONG_EXPONENT = "crypto.elGamal.useLongKey";
 
     /**
@@ -525,6 +527,13 @@ public final class KeyGenerator {
         }
     }
 
+    /**
+     * Times signing and verifying with one type.
+     *
+     * @param type the signature type to test
+     * @param runs how many signatures to make
+     * @throws GeneralSecurityException if the type is unusable
+     */
     private static void testSig(SigType type, int runs) throws GeneralSecurityException {
         byte[] src = new byte[512];
         double gtime = 0;

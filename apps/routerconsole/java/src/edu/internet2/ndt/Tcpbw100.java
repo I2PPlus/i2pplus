@@ -78,24 +78,6 @@ import net.i2p.util.I2PSSLSocketFactory;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 
-/*
- * Naming convention used: Hungarian, with the following details
- * _VarName: Instance variables
- * __Varname: Static variables (instead of c_VarName to reduce length)
- * iVarName: Integer variable
- * sVarName: String variable
- * bVarName: boolean variable
- * dVarName: double variable
- * _iaVarName: Integer "Array"  variable
- * ...and some other self descriptive examples are..
- * _rscBundleMessages : class scoped ResourceBundle Variable called "Messages"
- * _cmboboxIpV6 : Class scoped combo-box variable to indicate IpV6 choice..
- *
- * Some variables which were called "pub_xxx" are declared to have "accessor" methods for use by
- * other clients. I have left this untouched. These are private variables. Though the type is
- * not evident from the declaration immediately, the "getter/setter" methods for them will immediately
- * indicate their types
- */
 
 /**
  * Main Applet class that creates UI, defines tests and interprets results from the tests.
@@ -169,16 +151,17 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     /** Scratch buffer for writing test data to the client. */
     byte[] _yabuff2Write;
 
-    /*
-     * Added by Martin Sandsmark, UNINETT AS Internationalization
-     */
+    /** Locale selected for the test display. */
     private Locale _localeObj;
+    /** Bundle of translated test messages. */
     private ResourceBundle _resBundDisplayMsgs;
+    /** Language code for the display messages. */
     private String _sLang = "en";
+    /** Country code for the display messages. */
     private String _sCountry = "US";
+    /** Client type reported to the test server. */
     private String _sClient = "applet";
 
-    // These variables are self-explanatory. Do not follow naming convention, but left that way
     /** Half duplex. */
     int half_duplex, congestion, bad_cable, mismatch;
     /** Measured link speed. */
@@ -189,10 +172,10 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     double order, rwintime, sendtime, cwndtime, rwin, swin, cwin;
     /** Achievable speed. */
     double aspd;
-    // end naming convention-not-followed variables
 
     /** Set when the client is a native application rather than a browser. */
     boolean _bIsApplication = false;
+    /** True while a bandwidth test is running. */
     private final AtomicBoolean _bTestInProgress = new AtomicBoolean();
     /** Server host name used for the test. */
     String sHostName = null;
@@ -207,65 +190,96 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     /** Middlebox (firewall) verdict for the server-to-client test. */
     int _iS2cSFWResult = NDTConstants.SFW_NOTTESTED;
 
-    /*
-     * JavaScript access API extension added by Seth Peery and Gregory Wilson,
-     * Virginia Tech October 28, 2009 This section adds classwide variables,
-     * written to at runtime, which are then exposed by public accessor methods
-     * that can be called from web applications using NDT as a back-end.
-     *
-     * These variables are accessed by the setter/getter methods.
-     * While they do not follow naming convention, they are left this way.
-     * pub_c2sspd is assigned the value of _dC2sspd (declared above).
-     * The pub_xxx version seems to be used for making public to javascript.
-     * No other details known.
-     */
+    /** Upload speed from client to server, in Kbps. */
     private double pub_c2sspd = 0.0;
+    /** Download speed from server to client, in Kbps. */
     private double pub_s2cspd = 0.0;
+    /** Current receive window advertised by the server. */
     private int pub_CurRwinRcvd = 0; // source variable does not exist
+    /** Largest receive window advertised by the server. */
     private int pub_MaxRwinRcvd = 0;
+    /** Shortest round trip time during the test, in ms. */
     private int pub_MinRTT = 0; // source variable does not exist
+    /** Longest round trip time during the test, in ms. */
     private int pub_MaxRTT = 0; // source variable does not exist
+    /** Packet loss during the test, as a fraction. */
     private double pub_loss = 0.0;
+    /** Average round trip time during the test, in ms. */
     private double pub_avgrtt = 0.0;
-    // TODO:Getter/setter commented out for both below. Why?
+    /** Shortest retransmission timeout during the test. */
     private int pub_MinRTO = 0; // source variable does not exist
+    /** Longest retransmission timeout during the test. */
     private int pub_MaxRTO = 0; // source variable does not exist
+    /** Current retransmission timeout during the test. */
     private int pub_CurRTO = 0;
+    /** Selective acknowledgements received during the test. */
     private int pub_SACKsRcvd = 0;
+    /** Client OS version reported by the plugin. */
     private String pub_osVer = "unknown";
+    /** Client plugin version reported to the server. */
     private String pub_pluginVer = "unknown";
+    /** Client host name reported to the server. */
     private String pub_host = "unknown";
+    /** Client OS name reported to the server. */
     private String pub_osName = "unknown";
+    /** Client OS architecture reported to the server. */
     private String pub_osArch = "unknown";
+    /** Flag for a client-server version mismatch. */
     private int pub_mismatch = 0;
+    /** Flag for a bad cable modem condition. */
     private int pub_Bad_cable = 0;
+    /** Flag for network congestion during the test. */
     private int pub_congestion = 0;
+    /** Share of the test spent in congestion window growth. */
     private double pub_cwndtime = 0.0;
+    /** Share of the test limited by the receiver. */
     private double pub_pctRcvrLimited = 0.0;
+    /** Client access technology, such as cable or DSL. */
     private String pub_AccessTech = "unknown";
+    /** Client NAT box type reported by the plugin. */
     private String pub_natBox = "unknown";
+    /** Duplicate acknowledgements sent during the test. */
     private int pub_DupAcksOut = 0;
+    /** Duplicate acknowledgements received during the test. */
     private int pub_DupAcksIn = 0;
+    /** When the test finished. */
     private Date pub_TimeStamp;
+    /** Client IP address as seen by the server. */
     private String pub_clientIP = "unknown";
+    /** Retransmission timeouts during the test. */
     private int pub_Timeouts = 0;
+    /** Error message from the test, if it failed. */
     private String pub_errmsg = "Test not run.";
+    /** Diagnosis of what limited the test result. */
     private String pub_diagnosis = "Test not run.";
+    /** Test statistics formatted for display. */
     private String pub_statistics = "Test not run.";
+    /** Status string shown to the test UI. */
     private String pub_status = "notStarted";
+    /** Elapsed time of the test, in seconds. */
     private double pub_time = 0.0;
+    /** Bytes transferred during the test. */
     private long pub_bytes = 0;
+    /** Parameter telling the applet to run automatically. */
     private String _sIsAutoRun;
+    /** Browser user agent string, if supplied. */
     private String _sUserAgent = null;
+    /** Whether the server supports JSON results. */
     private boolean jsonSupport = true;
+    /** Whether to retry a failed test. */
     private boolean retry = false;
 
-    // I2P
+    /** Status text shown in the applet. */
     private String _displayStatus = "";
+    /** The app context. */
     private final I2PAppContext _context = I2PAppContext.getGlobalContext();
+    /** Logger for the test. */
     private final Log _log = _context.logManager().getLog(Tcpbw100.class);
+    /** Whether the test connects over SSL. */
     private final boolean _useSSL;
+    /** Factory for the SSL test sockets. */
     private final I2PSSLSocketFactory _sslFactory;
+    /** Panel showing the test status. */
     private StatusPanel _sPanel;
 
     /**
@@ -321,9 +335,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
         return applet;
     }
 
-    //
-    // Accessor methods for public variables
-    //
 
     /**
      * Measured upload (client-to-server) speed as a plain decimal string.
@@ -613,11 +624,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
      */
     public void setS2cSFWTestResults(int iParamS2CRes) {this._iS2cSFWResult = iParamS2CRes;}
 
-    //
-    // End of accessor methods
-    //
 
-    /* I2P */
 
     /**
      * Reports whether a test run is currently in progress.
@@ -648,6 +655,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             } else {_log.warn("Test in progress, not running another one");}
         }
 
+        /** Runs the bandwidth test from connection to results. */
         private void run2() {
             int testNo = 1;
             int testsNum = ((Integer) _spinnerTestCount.getValue()).intValue();
@@ -2320,10 +2328,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
 
     } // end testResults()
 
-    /*
-     * This routine saves the specific value into the variable of the same name.
-     * There should probably be an easier way to do this.
-     */
 
     /**
      * Save double values of various keys from the test results string.
@@ -2482,6 +2486,11 @@ public class Tcpbw100 extends JApplet implements ActionListener {
         return null;
     }
 
+    /**
+     * Sets the host name of the test server.
+     *
+     * @param sHostName the server host name
+     */
     private void setsHostName(String sHostName) {
         this.sHostName = sHostName;
         InetAddress[] addresses;
@@ -2561,6 +2570,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
         }
     }
 
+    /** Thread group holding the test threads. */
     private ThreadGroup _thread_group;
 
     /**

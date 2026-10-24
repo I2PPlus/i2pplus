@@ -15,6 +15,7 @@ import net.i2p.router.RouterContext;
  * For future restricted routes. Does nothing now.
  */
 class BuildTrustedLinksJob extends JobImpl {
+    /** The job to run once the trusted links are built. */
     private final Job _next;
 
     /**

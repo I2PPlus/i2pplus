@@ -60,8 +60,11 @@ import java.io.InputStream;
  */
 @SuppressWarnings({"PMD.OverrideBothEqualsAndHashcode", "checkstyle:EqualsHashCode"})
 public class Hash extends SimpleDataStructure {
+    /** Cache of the Base64 form. */
     private volatile String _base64ed;
+    /** Cache of the Base32 form. */
     private volatile String _base32ed;
+    /** Cache of the computed hash code. */
     private volatile int _cachedHashCode;
 
     /** Length of SHA-256 hash in bytes. */
@@ -71,6 +74,7 @@ public class Hash extends SimpleDataStructure {
     /** Initial cache capacity, scaled by available memory by {@link SDSCache}. */
     private static final int CACHE_SIZE = 2048;
 
+    /** Shared cache of parsed hashes. */
     private static final SDSCache<Hash> _cache = new SDSCache<>(Hash.class, HASH_LENGTH, CACHE_SIZE);
 
     /**

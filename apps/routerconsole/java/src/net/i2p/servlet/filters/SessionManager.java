@@ -14,17 +14,27 @@ import net.i2p.util.Log;
  * Stores sessions in memory with expiration.
  */
 public class SessionManager {
+    /** Logger for the console sessions. */
     private static final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(SessionManager.class);
+    /** Time an idle session stays valid. */
     private static final int SESSION_TIMEOUT_MS = 30 * 60 * 1000; // 30 minutes
+    /** Interval between cleanup runs. */
     private static final int CLEANUP_INTERVAL_MS = 60 * 1000; // 1 minute
 
+    /** The single instance of the filter. */
     private static final SessionManager INSTANCE = new SessionManager();
+    /** Random source for the session tokens. */
     private static final SecureRandom RANDOM = new SecureRandom();
 
+    /** The active sessions, by token. */
     private final Map<String, Session> _sessions = new ConcurrentHashMap<>();
+    /** Failed logins, by user name. */
     private final Map<String, FailedLogin> _failedLogins = new ConcurrentHashMap<>();
+    /** Scheduler for the cleanup jobs. */
     private final ScheduledExecutorService _cleanup;
+    /** Failed logins before a lockout. */
     private static final int MAX_FAILED_ATTEMPTS = 5;
+    /** Window the failed logins count in. */
     private static final long FAILURE_WINDOW_MS = 5 * (long) 60 * 1000; // 5 minutes
     /**
      * Name of the cookie carrying the session token to the console.
@@ -35,6 +45,7 @@ public class SessionManager {
      */
     public static final String SESSION_ATTR_USER = "user";
 
+    /** Builds the singleton and starts the cleanup. */
     private SessionManager() {
         _cleanup = Executors.newSingleThreadScheduledExecutor(r -> {
             Thread t = new Thread(r, "SessCleanup");
@@ -122,6 +133,11 @@ public class SessionManager {
         }
     }
 
+    /**
+     * Generates a random session token.
+     *
+     * @return the token, base64
+     */
     private String generateToken() {
         byte[] bytes = new byte[32];
         RANDOM.nextBytes(bytes);
@@ -132,6 +148,7 @@ public class SessionManager {
         return sb.toString();
     }
 
+    /** Removes the sessions past their expiry. */
     private void cleanupExpiredSessions() {
         long now = System.currentTimeMillis();
         int removed = 0;
@@ -197,6 +214,7 @@ public class SessionManager {
         _failedLogins.remove(ip);
     }
 
+    /** Drops the failed logins outside the window. */
     private void cleanupFailedLogins() {
         long now = System.currentTimeMillis();
         for (Map.Entry<String, FailedLogin> entry : _failedLogins.entrySet()) {
@@ -206,19 +224,37 @@ public class SessionManager {
         }
     }
 
+    /** One user's failed login count. */
     private static class FailedLogin {
+        /** Failed logins counted. */
         final int attempts;
+        /** When the first failure happened. */
         final long firstAttempt;
+        /**
+         * Records one user's failures.
+         *
+         * @param attempts the failures counted
+         * @param firstAttempt when the first failure happened
+         */
         FailedLogin(int attempts, long firstAttempt) {
             this.attempts = attempts;
             this.firstAttempt = firstAttempt;
         }
     }
 
+    /** One logged-in console session. */
     private static class Session {
+        /** The user name of the session. */
         final String username;
+        /** When the session expires. */
         long expiresAt;
 
+        /**
+         * Builds one session record.
+         *
+         * @param username the user name of the session
+         * @param expiresAt when the session expires
+         */
         Session(String username, long expiresAt) {
             this.username = username;
             this.expiresAt = expiresAt;

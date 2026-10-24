@@ -139,8 +139,10 @@ public class OutboundCache {
      */
     final ConcurrentHashMap<Hash, Long> lsLastLookup = new ConcurrentHashMap<>(128, 0.9f, 16);
 
+    /** The router sending the messages. */
     private final RouterContext _context;
 
+    /** How often expired tags are dropped - every 2 minutes. */
     private static final int CLEAN_INTERVAL = 2 * 60 * 1000; // 2 minutes cleaning interval
 
     /**
@@ -160,7 +162,9 @@ public class OutboundCache {
      * @since 0.8.3
      */
     static class HashPair {
+        /** The session's remote hash. */
         private final Hash sh;
+        /** The session's local hash. */
         private final Hash dh;
 
         /**

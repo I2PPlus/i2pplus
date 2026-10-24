@@ -27,11 +27,16 @@ import net.i2p.util.Log;
  */
 public class StreamHelper extends HelperBase {
 
+    /** Markup starting a table row. */
     private static final String ROW_OPEN = "<tr>";
+    /** Markup ending a table row. */
     private static final String ROW_CLOSE = "</tr>\n";
+    /** Markup starting a table cell. */
     private static final String TD_OPEN = "<td>";
+    /** Markup ending a table cell. */
     private static final String TD_CLOSE = "</td>";
 
+    /** Only streams in this direction are shown, if set. */
     private String _direction;
 
     /**
@@ -134,6 +139,12 @@ public class StreamHelper extends HelperBase {
         return new int[] {in, out};
     }
 
+    /**
+     * Writes the table of open streams.
+     *
+     * @param out where the table is written
+     * @throws IOException if the page cannot be written
+     */
     private void renderStreamsHTML(Writer out) throws IOException {
         TunnelControllerGroup tcg = TunnelControllerGroup.getInstance();
         if (tcg == null) {

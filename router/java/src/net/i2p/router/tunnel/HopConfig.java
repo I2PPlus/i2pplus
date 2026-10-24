@@ -15,23 +15,33 @@ import net.i2p.data.TunnelId;
  * TunnelCreatorConfig to save space.
  */
 public class HopConfig {
+    /** The tunnel id we receive on. */
     private TunnelId _receiveTunnel;
+    /** The router we receive from. */
     private Hash _receiveFrom;
+    /** The tunnel id we send on. */
     private TunnelId _sendTunnel;
+    /** The router we send to. */
     private Hash _sendTo;
+    /** The layer key for the decryption. */
     private SessionKey _layerKey;
+    /** The initialization vector key. */
     private SessionKey _ivKey;
+    /** When the tunnel was created. */
     private long _creation;
+    /** When the tunnel expires. */
     private long _expiration;
 
-    /*
-     * These 4 were longs, let's save some space
-     * 2 billion * 1KB / 10 minutes = 3 GBps in a single tunnel
-     * Lock-free access keeps the pumped-message counters off the monitor,
-     * which is contended by every message through every participating tunnel.
+    /**
+     * Messages processed so far. An int rather than a long to save
+     * space, two billion messages of 1KB per 10 minutes is 3 GBps in
+     * one tunnel, and the lock-free access keeps the pumped-message
+     * counters off the monitor contended by every participating tunnel.
      */
     private final AtomicInteger _messagesProcessed = new AtomicInteger();
+    /** Old messages processed so far. */
     private volatile int _oldMessagesProcessed;
+    /** Allocated bandwidth, in KBps. */
     private volatile int _allocatedBW;
 
     /** Creates a new HopConfig with default values. */
@@ -218,9 +228,9 @@ public class HopConfig {
     public void incrementProcessedMessages() { _messagesProcessed.incrementAndGet(); }
 
     /**
-     * Processed messages count.
+     * The messages processed so far.
      *
-     * @return the processed messages count
+     * @return the count of processed messages
      */
     public int getProcessedMessagesCount() { return _messagesProcessed.get(); }
 

@@ -7,6 +7,7 @@ import org.rrd4j.core.jrrd.RRDatabase;
 
 /** Reader for RRDTool format RRD files. */
 class RrdToolReader extends DataImporter {
+    /** The database being read, set when one is opened. */
     private RRDatabase rrd;
 
     /**

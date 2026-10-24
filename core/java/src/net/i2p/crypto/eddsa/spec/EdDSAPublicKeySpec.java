@@ -10,8 +10,11 @@ import java.security.spec.KeySpec;
  * @since 0.9.15
  */
 public class EdDSAPublicKeySpec implements KeySpec {
+    /** The public key's point. */
     private final GroupElement A;
+    /** The negated point, computed on first use. */
     private GroupElement Aneg = null;
+    /** The curve parameters the key belongs to. */
     private final EdDSAParameterSpec spec;
 
     /**

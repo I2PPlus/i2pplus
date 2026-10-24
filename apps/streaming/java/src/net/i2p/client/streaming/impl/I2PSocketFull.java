@@ -15,10 +15,15 @@ import net.i2p.util.Log;
  * Bridge between the full streaming lib and the I2PSocket API.
  */
 class I2PSocketFull implements I2PSocket {
+    /** Logger for this class. */
     private final Log log;
+    /** The connection the socket is full on, if any. */
     private volatile Connection _connection;
+    /** The remote end of the connection. */
     private final Destination _remotePeer;
+    /** The local end of the connection. */
     private final Destination _localPeer;
+    /** True once the event has been consumed. */
     private final AtomicBoolean _closed = new AtomicBoolean();
 
     /**
@@ -140,8 +145,8 @@ class I2PSocketFull implements I2PSocket {
     }
 
     /**
-     * Remote peer destination.
-     * @return the remote peer destination
+     * Gets the remote peer's destination.
+     * @return the destination at the other end of the connection
      */
     public Destination getPeerDestination() { return _remotePeer; }
 
@@ -158,8 +163,8 @@ class I2PSocketFull implements I2PSocket {
     }
 
     /**
-     * Local peer destination.
-     * @return the local peer destination
+     * Gets this side's destination.
+     * @return the destination of the local session
      */
     public Destination getThisDestination() { return _localPeer; }
 

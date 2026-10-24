@@ -78,6 +78,7 @@ import java.util.Arrays;
  *
  */
 public class PublicKey extends SimpleDataStructure {
+    /** Type assumed when a key names none. */
     private static final EncType DEF_TYPE = EncType.ELGAMAL_2048;
     /** Default key size in bytes (256 for ElGamal). */
     public static final int KEYSIZE_BYTES = DEF_TYPE.getPubkeyLen();
@@ -86,9 +87,13 @@ public class PublicKey extends SimpleDataStructure {
      * mutated, so a single instance may be handed to every caller.
      */
     private static final byte[] EMPTY = new byte[0];
+    /** Keys held in the shared cache. */
     private static final int CACHE_SIZE = 1024;
+    /** Shared cache of parsed keys. */
     private static final SDSCache<PublicKey> _cache = new SDSCache<>(PublicKey.class, KEYSIZE_BYTES, CACHE_SIZE);
+    /** The encryption type of this key. */
     private final EncType _type;
+    /** The type number when the type is not known. */
     private final int _unknownTypeCode;
 
     /**

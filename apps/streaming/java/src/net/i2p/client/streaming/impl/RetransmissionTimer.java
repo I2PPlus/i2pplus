@@ -20,7 +20,9 @@ public class RetransmissionTimer {
      * round-robin, halving the chance that concurrent connections share a
      * timer queue. */
     private static final int SHARDS = 2;
+    /** The timers, split into shards to spread the locking */
     private final SimpleTimer2[] _shards;
+    /** Round-robin index choosing the next shard */
     private final AtomicInteger _counter = new AtomicInteger();
 
     /**

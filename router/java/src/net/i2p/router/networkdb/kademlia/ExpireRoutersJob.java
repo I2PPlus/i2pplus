@@ -32,11 +32,14 @@ import net.i2p.util.SystemVersion;
  *
  */
 class ExpireRoutersJob extends JobImpl {
+    /** Logger for this class. */
     private final Log _log;
+    /** The store whose entries are expired. */
     private final KademliaNetworkDatabaseFacade _facade;
 
     /** Rerun fairly often, so the fails don't queue up too many netdb searches at once. */
     private static final long RERUN_DELAY_MS = 15*60*1000L;
+    /** Most router entries examined in one run. */
     private static final int LIMIT_ROUTERS = SystemVersion.isSlow() ? 4000 : 8000;
     /** Attested more recently than this: never dropped by the size-pressure path. */
     static final long PROTECTED_ATTESTED = 12*60*60*1000L;

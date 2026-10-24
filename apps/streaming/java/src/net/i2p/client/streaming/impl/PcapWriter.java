@@ -55,29 +55,46 @@ public class PcapWriter implements Closeable, Flushable {
     private static final byte[] MAC_HEADER = { 1, 2, 3, 4, 5, 6,
                                                1, 2, 3, 4, 5, 6,
                                                (byte) 0x08, 0 };
+    /** First half of the fake IP header. */
     private static final byte[] IP_HEADER_1 = { 0x45, 0 };  // the length goes after this
+    /** Second half of the fake IP header. */
     private static final byte[] IP_HEADER_2 = { 0x12, 0x34, 0x40, 0, 64, 6 };  // ID, flags, TTL and TCP
+    /** Placeholder address of an unknown peer. */
     private static final byte[] UNK_IP = { (byte) 0xff, 0, 0, 0};
+    /** Placeholder address of our side. */
     private static final byte[] MY_UNK_IP = {127, 0, 0, 0};
     /** Max # of streaming lib payload bytes to dump. */
     private static final int MAX_PAYLOAD_BYTES = 10;
 
     /** Options - give our custom ones some mnemonics. */
     private static final int MAX_OPTION_LEN = 40;
+    /** Option marking the end of the options. */
     private static final byte OPTION_END = 0;
+    /** Option carrying the maximum segment size. */
     private static final byte OPTION_MSS = 2;
+    /** Option of the ping request. */
     private static final byte OPTION_PING = 6;
+    /** Option of the ping reply. */
     private static final byte OPTION_PONG = 7;
+    /** Option requesting the signature. */
     private static final byte OPTION_SIGREQ = 0x55;
+    /** Option carrying the signature. */
     private static final byte OPTION_SIG = 0x56;
+    /** Option carrying our receive delay. */
     private static final byte OPTION_RDELAY = (byte) 0xde;
+    /** Option carrying our send delay. */
     private static final byte OPTION_ODELAY = (byte) 0xd0;
+    /** Option carrying the sender's port. */
     private static final byte OPTION_FROM = (byte) 0xf0;
+    /** Option of the negative ack. */
     private static final byte OPTION_NACK = (byte) 0xac;
 
 
+    /** Stream the pcap records are written to. */
     private final OutputStream _fos;
+    /** The app context. */
     private final I2PAppContext _context;
+    /** Logger for the pcap writer. */
     private final Log _log;
 
     /**
@@ -362,9 +379,12 @@ public class PcapWriter implements Closeable, Flushable {
      * Builder for TCP option blocks in the pcap output.
      */
     private static class Options {
+        /** Buffer holding the options read. */
         private final byte[] _b;
+        /** Valid length of the options buffer. */
         private int _len;
 
+        /** Reads the options of one packet. */
         public Options() {
             _b = new byte[MAX_OPTION_LEN];
         }

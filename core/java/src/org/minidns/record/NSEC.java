@@ -31,6 +31,7 @@ import java.util.logging.Logger;
  */
 public class NSEC extends Data {
 
+    /** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(NSEC.class.getName());
 
     /**
@@ -168,6 +169,13 @@ public class NSEC extends Data {
         return baos.toByteArray();
     }
 
+    /**
+     * Writes the block, stopping after its last non-zero byte.
+     *
+     * @param values the block's bytes
+     * @param dos where to write
+     * @throws IOException if the write fails
+     */
     private static void writeOutBlock(byte[] values, DataOutputStream dos) throws IOException {
         int n = 0;
         for (int i = 0; i < values.length; i++) {

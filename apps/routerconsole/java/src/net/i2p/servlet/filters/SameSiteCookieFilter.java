@@ -17,6 +17,7 @@ import net.i2p.util.Log;
  * Primary SameSite is set in web.xml session-config.
  */
 public class SameSiteCookieFilter implements Filter {
+    /** Logger for this class. */
     private static final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(SameSiteCookieFilter.class);
 
     /**

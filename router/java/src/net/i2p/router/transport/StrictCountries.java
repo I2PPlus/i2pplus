@@ -14,6 +14,7 @@ import java.util.Arrays;
  */
 public abstract class StrictCountries {
 
+    /** Utility class, not intended for instantiation. */
     private StrictCountries() { /* no-op */ }
 
     /** Sorted ascending for binary search; each key = ((c0 &amp; 0xDF) &lt;&lt; 8) | (c1 &amp; 0xDF). */

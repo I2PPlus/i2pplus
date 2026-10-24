@@ -45,28 +45,50 @@ import java.io.Writer;
  */
 public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
 {
+    /** File name of the request log. */
     private String _filename;
+    /** True for the extended log format. */
     private boolean _extended;
+    /** True to append to an existing log file. */
     private boolean _append;
+    /** Days of rotated log files kept. */
     private int _retainDays;
+    /** True to log a final entry when closing. */
     private boolean _closeOut;
+    /** True to prefer the proxied remote address. */
     private boolean _preferProxiedForAddress;
+    /** Date format of the log entries. */
     private String _logDateFormat="dd/MMM/yyyy:HH:mm:ss Z";
+    /** Date format appended to the log file name. */
     private String _filenameDateFormat = null;
+    /** Locale used for the log dates. */
     private Locale _logLocale = Locale.getDefault();
+    /** Time zone of the log dates. */
     private String _logTimeZone = "GMT";
+    /** Request paths excluded from the log. */
     private String[] _ignorePaths;
+    /** True to log the request latency. */
     private boolean _logLatency = false;
+    /** True to log the request cookies. */
     private boolean _logCookies = false;
+    /** True to log the server name and port. */
     private boolean _logServer = false;
+    /** True to write the log entries base64 encoded. */
     private boolean _b64;
 
+    /** Stream the log entries are written to. */
     private transient OutputStream _out;
+    /** The underlying file stream. */
     private transient OutputStream _fileOut;
+    /** Cache of the formatted request dates. */
     private transient DateCache _logDateCache;
+    /** Mappings of the ignored request paths. */
     private transient PathMappings<String> _ignorePathMap;
+    /** Writer for the formatted log entries. */
     private transient Writer _writer;
+    /** Buffers holding the log entry fields. */
     private transient ArrayList<Utf8StringBuilder> _buffers;
+    /** Scratch buffer for copying between buffers. */
     private transient char[] _copy;
 
     /**

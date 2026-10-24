@@ -72,35 +72,60 @@ import net.i2p.util.SystemVersion;
  * In-memory supports both IPv4 and IPv6.
  */
 public class Blocklist {
+    /** Logger for blocklist operations. */
     private final Log _log;
+    /** The router context. */
     private final RouterContext _context;
+    /** Records why routers were banned. */
     private final BanLogger _banLogger;
+    /** Blocked network ranges as packed longs. */
     private long[] _blocklist;
+    /** Entries held in the blocklist. */
     private volatile int _blocklistSize;
+    /** Blocked country ranges as packed longs. */
     private long[] _countryBlocklist;
+    /** Entries held in the country blocklist. */
     private int _countryBlocklistSize;
+    /** Known Tor exit ranges as packed longs. */
     private long[] _torBlocklist;
+    /** Entries held in the Tor blocklist. */
     private volatile int _torBlocklistSize;
+    /** Lock guarding the blocklist arrays. */
     private final Object _lock = new Object();
+    /** Entry held open while writing a range across lines. */
     private Entry _wrapSave;
+    /** Routers whose banlisting is already queued. */
     private final Set<Hash> _inProcess = new HashSet<>(4);
+    /** File listing the blocklist feeds to fetch. */
     private final File _blocklistFeedFile;
+    /** Whether any IPv6 ranges are blocked. */
     private volatile boolean _haveIPv6;
+    /** True once the blocklist has been read in. */
     private volatile boolean _started;
+    /** When expired entries were last removed. */
     private long _lastExpired = 0;
-    // temp
+    /** Temporarily banned routers by hash, with reasons. */
     private final Map<Hash, String> _peerBlocklist = new HashMap<>(4);
-    // Configurable properties
+    /** Whether the blocklist is enabled. */
     private volatile boolean _blocklistEnabled;
+    /** Whether the Tor blocklist is enabled. */
     private volatile boolean _blocklistTorEnabled;
+    /** Whether the country blocklist is enabled. */
     private volatile boolean _blocklistCountryEnabled;
 
+    /** Config key turning the blocklist on or off. */
     private static final String PROP_BLOCKLIST_ENABLED = "router.blocklist.enable";
+    /** Config key turning feed fetching on or off. */
     private static final String PROP_BLOCKLIST_FEEDLIST_ENABLED = "router.blocklistFeed.enable";
+    /** Config key turning the Tor blocklist on or off. */
     private static final String PROP_BLOCKLIST_TOR_ENABLED = "router.blocklistTor.enable";
+    /** Config key turning the country blocklist on or off. */
     private static final String PROP_BLOCKLIST_COUNTRIES_ENABLED = "router.blocklistCountries.enable";
+    /** Config key for the detail level in ban messages. */
     private static final String PROP_BLOCKLIST_DETAIL = "router.blocklist.detail";
+    /** Config key for the blocklist file name. */
     private static final String PROP_BLOCKLIST_FILE = "router.blocklist.file";
+    /** Config key for how long bans stay in effect. */
     private static final String PROP_BLOCKLIST_EXPIRE_INTERVAL = "router.blocklist.expireInterval";
     /**
      * Default blocklist filename in the installation directory.
@@ -123,11 +148,15 @@ public class Blocklist {
      * the tables by a determined attacker, esp. on IPv6.
      */
     private static final int MAX_IPV4_SINGLES = SystemVersion.isSlow() ? 2048 : 8192;
+    /** IPv6 addresses held in the singles blocklist. */
     private static final int MAX_IPV6_SINGLES = SystemVersion.isSlow() ? 1024 : 4096;
 
+    /** Singly blocked IPv4 addresses. */
     private final Map<Integer, Object> _singleIPBlocklist = new LHMCache<>(MAX_IPV4_SINGLES);
+    /** Singly blocked IPv6 addresses. */
     private final Map<BigInteger, Object> _singleIPv6Blocklist;
 
+    /** Placeholder value in the singles maps. */
     private static final Object DUMMY = Integer.valueOf(0);
 
     /**
@@ -350,9 +379,18 @@ public class Blocklist {
      * @since 0.9.48
      */
     private static class BLFile {
+        /** The blocklist file. */
         public final File file;
+        /** Identifier for the feed this file came from. */
         public final String id;
+        /** Version read from the file header. */
         public long version;
+        /**
+         * Names one blocklist file.
+         *
+         * @param f the blocklist file
+         * @param s the feed identifier
+         */
         public BLFile(File f, String s) {file = f; id = s;}
     }
 
@@ -362,8 +400,14 @@ public class Blocklist {
      * @since 0.9.48
      */
     private class VersionNotifier extends SimpleTimer2.TimedEvent {
+        /** The blocklist files to check. */
         public final List<BLFile> blfs;
 
+        /**
+         * Prepares to notify on blocklist version changes.
+         *
+         * @param bf the blocklist files
+         */
         public VersionNotifier(List<BLFile> bf) {
             super(_context.simpleTimer2(), 2*60*1000L);
             blfs = bf;
@@ -384,7 +428,9 @@ public class Blocklist {
         }
     }
 
+    /** Periodically removes expired blocklist entries. */
     private class CleanupJob extends JobImpl {
+        /** Schedules the cleanup pass. */
         public CleanupJob() {super(_context);}
         public String getName() {
             if (expireInterval() > 0) {
@@ -400,6 +446,7 @@ public class Blocklist {
         }
     }
 
+    /** Empties all the blocklists and their caches. */
     private void clear() {
         synchronized(_singleIPBlocklist) {_singleIPBlocklist.clear();}
         if (_singleIPv6Blocklist != null) {
@@ -407,7 +454,9 @@ public class Blocklist {
         }
     }
 
+    /** Reads the blocklist files into memory. */
     private class ReadinJob extends JobImpl {
+        /** The files to read in. */
         private final List<BLFile> _files;
 
         /**
@@ -434,6 +483,11 @@ public class Blocklist {
             new VersionNotifier(_files); // schedules itself
         }
 
+        /**
+         * Reads the blocklist files and counts the entries.
+         *
+         * @return the number of entries read
+         */
         private int process() {
             int count = 0;
             int torCount = 0;
@@ -472,10 +526,26 @@ public class Blocklist {
         }
     }
 
+    /**
+     * Queues a ban for a router by hash.
+     *
+     * @param peer the router hash
+     * @param reason the ban category
+     * @param comment extra detail for the log
+     */
     private void banlistRouter(Hash peer, String reason, String comment) {
         banlistRouter(peer, reason, comment, expireInterval());
     }
 
+    /**
+     * Queues a ban for a router with its info and address.
+     *
+     * @param peer the router hash
+     * @param reason the ban category
+     * @param comment extra detail for the log
+     * @param ri the router info, may be null
+     * @param ip the offending IP address, may be null
+     */
     private void banlistRouterWithRI(Hash peer, String reason, String comment, RouterInfo ri, String ip) {
         long duration = expireInterval();
         if (duration > 0) {
@@ -497,6 +567,14 @@ public class Blocklist {
         }
     }
 
+    /**
+     * Queues a ban for a router given its info.
+     *
+     * @param peer the router hash
+     * @param reason the ban category
+     * @param comment extra detail for the log
+     * @param ri the router info, may be null
+     */
     private void banlistRouter(Hash peer, String reason, String comment, RouterInfo ri) {
         String ip = null;
         if (ri != null) {
@@ -987,6 +1065,12 @@ public class Blocklist {
         synchronized(_singleIPBlocklist) {_singleIPBlocklist.remove(iip);}
     }
 
+    /**
+     * Checks whether an IPv4 address is singly blocked.
+     *
+     * @param ip the address as an int
+     * @return true if the address is blocked
+     */
     private boolean isOnSingleList(int ip) {
         Integer iip = Integer.valueOf(ip);
         synchronized(_singleIPBlocklist) {return _singleIPBlocklist.get(iip) != null;}
@@ -1215,7 +1299,6 @@ public class Blocklist {
      */
     private static boolean isHigher(int ip, long entry) {return ip > getFrom(entry);}
 
-    /* Methods to get and store the from/to values in the array */
 
     /**
      * Extract the starting IP from a compressed blocklist entry.
@@ -1336,6 +1419,13 @@ public class Blocklist {
         banlist(peer, ip, null);
     }
 
+    /**
+     * Queues a ban for a peer matching a blocklist entry.
+     *
+     * @param peer the router hash
+     * @param ip the offending address
+     * @param ri the router info, may be null
+     */
     private void banlist(Hash peer, byte[] ip, RouterInfo ri) {
         if (ip == null) {return;}
         if (!_haveIPv6 && ip.length == 16) {return;} // Don't bother unless we have IPv6
@@ -1376,9 +1466,18 @@ public class Blocklist {
         _context.jobQueue().addJob(job);
     }
 
+    /** Bans a peer for a set of its IP addresses. */
     private class BanlistJob extends JobImpl {
+        /** The router to ban. */
         private final Hash _peer;
+        /** The offending addresses. */
         private final List<byte[]> _ips;
+        /**
+         * Prepares to ban one router.
+         *
+         * @param p the router hash
+         * @param ips the offending addresses
+         */
         public BanlistJob (Hash p, List<byte[]> ips) {
             super(_context);
             _peer = p;
@@ -1415,6 +1514,13 @@ public class Blocklist {
         }
     }
 
+    /**
+     * Bans a router and its addresses for a duration.
+     *
+     * @param peer the router hash
+     * @param ips the offending addresses
+     * @param duration how long the ban lasts
+     */
     private synchronized void banlistRouter(Hash peer, List<byte[]> ips, long duration) {
         // This only checks one file for now, pick the best one
         File blFile = null; // user specified

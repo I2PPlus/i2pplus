@@ -37,8 +37,14 @@ public enum PreserveAspectRatio {
     /** Value 'xMaxYMax'. */
     XMAX_YMAX("xMaxYMax");
 
+    /** The name used for this value in the SVG attribute. */
     private final String label;
 
+    /**
+     * Creates a value with the name used in the attribute.
+     *
+     * @param label the attribute name
+     */
     PreserveAspectRatio(String label) {
         this.label = label;
     }

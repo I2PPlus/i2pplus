@@ -18,9 +18,12 @@ import net.i2p.util.Log;
  * @since 0.9.21
  */
 class FloodfillRouterInfoFloodJob extends JobImpl {
+    /** Logger for this class. */
     private final Log _log;
+    /** The store whose entry is flooded. */
     private final FloodfillNetworkDatabaseFacade _facade;
 
+    /** How many peers receive the flood, twice the floodfill count. */
     private static final int FLOOD_PEERS = 2 * FloodfillNetworkDatabaseFacade.MAX_TO_FLOOD;
 
     /**

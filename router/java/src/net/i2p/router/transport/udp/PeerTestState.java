@@ -13,37 +13,61 @@ import net.i2p.data.SessionKey;
  * Used only by {@link PeerTestManager}.
  */
 class PeerTestState {
+    /** Nonce identifying this peer test. */
     private final long _testNonce;
+    /** Our role in the test. */
     private final Role _ourRole;
+    /** True for an IPv6 test. */
     private final boolean _isIPv6;
+    /** Alice's peer state, when we are Bob. */
     private PeerState2 _alice;
+    /** Alice's IP as seen by Bob or Charlie. */
     private InetAddress _aliceIP;
+    /** Alice's port as seen by Bob or Charlie. */
     private int _alicePort;
+    /** Bob's peer state, when we are Alice or Charlie. */
     private final PeerState _bob;
+    /** Charlie's IP as seen by us. */
     private InetAddress _charlieIP;
+    /** Charlie's port as seen by us. */
     private int _charliePort;
+    /** Alice's IP as Charlie reported it. */
     private InetAddress _aliceIPFromCharlie;
+    /** Alice's port as Charlie reported it. */
     private int _alicePortFromCharlie;
+    /** Alice's introduction key. */
     private SessionKey _aliceIntroKey;
+    /** Alice's cipher key for the test. */
     private SessionKey _aliceCipherKey;
+    /** Alice's MAC key for the test. */
     private SessionKey _aliceMACKey;
+    /** Charlie's introduction key. */
     private SessionKey _charlieIntroKey;
-    // SSU2 only
+    /** Alice's router hash, for SSU2 tests. */
     private Hash _aliceHash;
-    // SSU2 only
+    /** Charlie's router hash, for SSU2 tests. */
     private Hash _charlieHash;
-    // SSU2 BOB only
+    /** Test data for an SSU2 Bob. */
     private byte[] _testData;
-    // SSU2 BOB only
+    /** Previous Charlies to avoid reusing, for SSU2 Bob. */
     private final List<Hash> _previousCharlies;
+    /** When the test began. */
     private final long _beginTime;
+    /** When we last sent a test packet. */
     private long _lastSendTime;
+    /** When we last received from Alice. */
     private long _receiveAliceTime;
+    /** When we last received from Bob. */
     private long _receiveBobTime;
+    /** When we last received from Charlie. */
     private long _receiveCharlieTime;
+    /** When we last sent to Alice. */
     private long _sendAliceTime;
+    /** When we last sent to Charlie. */
     private long _sendCharlieTime;
+    /** Current status of the test. */
     private int _status;
+    /** Test packets relayed so far. */
     private final AtomicInteger _packetsRelayed = new AtomicInteger();
 
     /**
@@ -126,7 +150,7 @@ class PeerTestState {
     /**
      * Alice's IP, port, and hash.
      * @param ip Alice's IP address
-     * @param port Alice's port
+     * @param port Alice's port, as seen by the reporter
      * @param hash Alice's Hash (SSU2 only), null for SSU1
      * @since 0.9.54
      */
@@ -157,7 +181,7 @@ class PeerTestState {
      * Charlie's IP, port, and hash.
      * Saves the previous Charlie hash for tracking rotations.
      * @param ip Charlie's IP address
-     * @param port Charlie's port
+     * @param port Charlie's port, as seen by us
      * @param hash Charlie's Hash (SSU2 only), null for SSU1
      * @since 0.9.54
      */

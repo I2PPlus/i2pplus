@@ -29,6 +29,7 @@ import net.i2p.util.SystemVersion;
  */
 public class PriBlockingQueue<E extends PQEntry> extends PriorityBlockingQueue<E> {
 
+    /** Pinned for serialized-form compatibility. */
     private static final long serialVersionUID = 1L;
 
     /** The I2P application context. */
@@ -134,6 +135,9 @@ public class PriBlockingQueue<E extends PQEntry> extends PriorityBlockingQueue<E
      * @param <E> type of elements extending PQEntry
      */
     private static class PriorityComparator<E extends PQEntry> implements Comparator<E>, Serializable {
+        /** Orders queue entries by priority. */
+        private PriorityComparator() {}
+        /** Pinned for serialized-form compatibility. */
         private static final long serialVersionUID = 1L;
 
         @Override

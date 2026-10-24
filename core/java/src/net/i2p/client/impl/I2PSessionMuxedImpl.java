@@ -51,7 +51,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * I2PSocketManager sockMgr = getSocketManager();
  * I2PSession session = sockMgr.getSession();
  * session.addMuxedSessionListener(myI2PSessionMuxedListener, I2PSession.PROTO_DATAGRAM, I2PSession.PORT_ANY);
- * * or *
+ * or
  * session.addSessionListener(myI2PSessionListener, I2PSession.PROTO_DATAGRAM, I2PSession.PORT_ANY);
  * session.sendMessage(dest, payload, I2PSession.PROTO_DATAGRAM, fromPort, toPort);
  * <p>
@@ -60,7 +60,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * ...
  * I2PSession session = client.createSession(...);
  * session.addMuxedSessionListener(myI2PSessionMuxedListener, I2PSession.PROTO_DATAGRAM, I2PSession.PORT_ANY);
- * * or *
+ * or
  * session.addSessionListener(myI2PSessionListener, I2PSession.PROTO_DATAGRAM, I2PSession.PORT_ANY);
  * session.sendMessage(dest, payload, I2PSession.PROTO_DATAGRAM, fromPort, toPort);
  * <p>
@@ -71,6 +71,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 class I2PSessionMuxedImpl extends I2PSessionImpl2 {
 
+    /** The demultiplexer delivering the messages. */
     private final I2PSessionDemultiplexer _demultiplexer;
 
     /**
@@ -378,9 +379,13 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
      * MuxedAvailabilityNotifier Extends AvailabilityNotifier.
      */
     protected class MuxedAvailabilityNotifier extends AvailabilityNotifier {
+        /** The messages waiting to be delivered. */
         private final LinkedBlockingQueue<MsgData> _msgs;
+        /** True while the queue runs. */
         private volatile boolean _alive;
+        /** The poison size that ends the queue. */
         private static final int POISON_SIZE = -99999;
+        /** True once stopping was asked. */
         private final AtomicBoolean stopping = new AtomicBoolean();
 
         /**
@@ -494,21 +499,6 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
         }
     }
 
-    /*
-     *  No, we couldn't put any protocol byte in front of everything and
-     *  keep backward compatibility. But there are several bytes that
-     *  are unused AND unchecked in the gzip header in releases &lt;= 0.7.
-     *  So let's use 5 of them for a protocol and two 2-byte ports.
-     *
-     *  Following are all the methods to hide the
-     *  protocol, fromPort, and toPort in the gzip header
-     *
-     *  The fields used are all ignored on receive in ResettableGzipInputStream
-     *
-     *  See also ResettableGzipOutputStream.
-     *  Ref: RFC 1952
-     *
-     */
 
     /** OS byte in gzip header. */
     private static final int PROTO_BYTE = 9;
@@ -550,19 +540,44 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
         return (((getByte(msg, TOPORT_BYTES) & 0xff) << 8) | (getByte(msg, TOPORT_BYTES + 1) & 0xff));
     }
 
+    /**
+     * Reads one payload byte of the message.
+     *
+     * @param msg the message to read
+     * @param i the index of the byte
+     * @return the payload byte
+     */
     private static int getByte(MessagePayloadMessage msg, int i) {
         return msg.getPayload().getUnencryptedData()[i] & 0xff;
     }
 
+    /**
+     * Sets the protocol byte of the payload.
+     *
+     * @param payload the payload to change
+     * @param p the protocol to set
+     */
     private static void setProto(byte[] payload, int p) {
         payload[PROTO_BYTE] = (byte) (p & 0xff);
     }
 
+    /**
+     * Sets the from port of the payload.
+     *
+     * @param payload the payload to change
+     * @param p the port to set
+     */
     private static void setFromPort(byte[] payload, int p) {
         payload[FROMPORT_BYTES] = (byte) ((p >> 8) & 0xff);
         payload[FROMPORT_BYTES + 1] = (byte) (p & 0xff);
     }
 
+    /**
+     * Sets the to port of the payload.
+     *
+     * @param payload the payload to change
+     * @param p the port to set
+     */
     private static void setToPort(byte[] payload, int p) {
         payload[TOPORT_BYTES] = (byte) ((p >> 8) & 0xff);
         payload[TOPORT_BYTES + 1] = (byte) (p & 0xff);

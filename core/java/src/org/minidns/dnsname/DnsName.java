@@ -48,6 +48,7 @@ import org.minidns.util.SafeCharSequence;
  */
 public final class DnsName extends SafeCharSequence implements Serializable, Comparable<DnsName> {
 
+    /** Serial version of the serialized form. */
     private static final long serialVersionUID = 1L;
 
     /**
@@ -98,14 +99,19 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
      */
     private final String rawAce;
 
+    /** Cached wire format of the name. */
     private transient byte[] bytes;
 
+    /** Cached wire format including the root label. */
     private transient byte[] rawBytes;
 
+    /** Cached internationalized form of the name. */
     private transient String idn;
 
+    /** Cached domain part of the name. */
     private transient String domainpart;
 
+    /** Cached host part of the name. */
     private transient String hostpart;
 
     /**
@@ -113,17 +119,30 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
      */
     private transient DnsLabel[] labels;
 
+    /** Cached labels of the name. */
     private transient DnsLabel[] rawLabels;
 
+    /** Cached hash code, 0 until computed. */
     private transient int hashCode;
 
     /** Size */
     private int size = -1;
 
+    /**
+     * Builds a name from a unicode string.
+     *
+     * @param name the name to parse
+     */
     private DnsName(String name) {
         this(name, true);
     }
 
+    /**
+     * Builds a name from a string in either form.
+     *
+     * @param name the name to parse
+     * @param inAce true if the name is already ACE encoded
+     */
     private DnsName(String name, boolean inAce) {
         if (name.isEmpty()) {
             rawAce = ROOT.rawAce;
@@ -155,6 +174,12 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
         validateMaxDnsnameLengthInOctets();
     }
 
+    /**
+     * Builds a name from its labels.
+     *
+     * @param rawLabels the labels of the name
+     * @param validateMaxDnsnameLength true to check the total length
+     */
     private DnsName(DnsLabel[] rawLabels, boolean validateMaxDnsnameLength) {
         this.rawLabels = rawLabels;
         this.labels = new DnsLabel[rawLabels.length];
@@ -178,6 +203,13 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
         validateMaxDnsnameLengthInOctets();
     }
 
+    /**
+     * Joins the labels into one name.
+     *
+     * @param labels the labels to join
+     * @param stringLength the expected length of the result
+     * @return the name as a string
+     */
     private static String labelsToString(DnsLabel[] labels, int stringLength) {
         StringBuilder sb = new StringBuilder(stringLength);
         for (int i = labels.length - 1; i >= 0; i--) {
@@ -187,6 +219,11 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
         return sb.toString();
     }
 
+    /**
+     * Checks the name against the DNS length limit.
+     *
+     * @throws IllegalArgumentException if the name is too long
+     */
     private void validateMaxDnsnameLengthInOctets() {
         setBytesIfRequired();
         if (bytes.length > MAX_DNSNAME_LENGTH_IN_OCTETS) {
@@ -231,6 +268,7 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
         return rawBytes.clone();
     }
 
+    /** Computes the cached wire form of the name. */
     private void setBytesIfRequired() {
         if (bytes != null) return;
 
@@ -238,6 +276,12 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
         bytes = toBytes(labels);
     }
 
+    /**
+     * Encodes the labels in the wire format.
+     *
+     * @param labels the labels to encode
+     * @return the encoded name
+     */
     private static byte[] toBytes(DnsLabel[] labels) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream(64);
         for (int i = labels.length - 1; i >= 0; i--) {
@@ -251,6 +295,7 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
         return baos.toByteArray();
     }
 
+    /** Computes the cached labels of the name. */
     private void setLabelsIfRequired() {
         if (labels != null && rawLabels != null) return;
 
@@ -263,6 +308,12 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
         rawLabels = getLabels(rawAce);
     }
 
+    /**
+     * Splits an ACE name into its labels.
+     *
+     * @param ace the name in ACE form
+     * @return the labels found
+     */
     private static DnsLabel[] getLabels(String ace) {
         String[] labels = ace.split(LABEL_SEP_REGEX, MAX_LABELS);
 
@@ -323,9 +374,9 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
     }
 
     /**
-     * Domainpart in ACE representation.
+     * The domain part of the name, in ACE form.
      *
-     * @return the domainpart in ACE representation.
+     * @return the domain part, ACE encoded
      */
     public String getDomainpart() {
         setHostnameAndDomainpartIfRequired();
@@ -333,9 +384,9 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
     }
 
     /**
-     * Hostpart in ACE representation.
+     * The host part of the name, in ACE form.
      *
-     * @return the hostpart in ACE representation.
+     * @return the host part, ACE encoded
      */
     public String getHostpart() {
         setHostnameAndDomainpartIfRequired();
@@ -352,6 +403,7 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
         return labels[labels.length - 1];
     }
 
+    /** Computes the cached host and domain parts. */
     private void setHostnameAndDomainpartIfRequired() {
         if (hostpart != null) return;
 
@@ -381,6 +433,7 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
         return size;
     }
 
+    /** Cached printable form of the name. */
     private transient String safeToStringRepresentation;
 
     /**
