@@ -3,6 +3,7 @@ package org.klomp.snark;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.util.Properties;
 
 import org.junit.After;
 import org.junit.Before;
@@ -18,10 +19,21 @@ public class SnarkManagerLookupTest {
 
     private SnarkManager mgr;
     private I2PAppContext ctx;
+    private File baseDir;
 
     @Before
     public void setUp() {
-        ctx = new I2PAppContext();
+        // I2PAppContext defaults i2p.dir.base - and with it config, router and
+        // app dirs - to the current working directory, so a bare context lets
+        // SnarkManager create test-i2psnark-lookup/ and
+        // test-i2psnark-lookup.config.d/ wherever the suite happens to run.
+        // Point the whole directory tree at a scratch dir we own instead.
+        baseDir = new File(System.getProperty("java.io.tmpdir"),
+                            "i2p-snark-lookup-" + System.nanoTime());
+        assertTrue(baseDir.mkdirs());
+        Properties props = new Properties();
+        props.setProperty("i2p.dir.base", baseDir.getAbsolutePath());
+        ctx = new I2PAppContext(props);
         // Use a fresh SnarkManager with in-memory config; do not start DirMonitor
         mgr = new SnarkManager(ctx, "/test-i2psnark-lookup", "test-i2psnark-lookup");
         // Do not call mgr.start() - we test validation paths that don't require DHT
@@ -39,6 +51,10 @@ public class SnarkManagerLookupTest {
             for (File f : leftovers) {
                 try { net.i2p.util.FileUtil.rmdir(f, false); } catch (Exception ignore) {}
             }
+        }
+        // and the whole scratch base, including the snark config dir
+        if (baseDir != null) {
+            try { net.i2p.util.FileUtil.rmdir(baseDir, false); } catch (Exception ignore) {}
         }
     }
 
