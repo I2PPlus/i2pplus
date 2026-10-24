@@ -23,8 +23,9 @@ public class SingleFileNamingServiceTest extends TestCase {
 
     @Override
     public void tearDown() {
-        File f = new File("testhosts.txt");
-        f.delete();
+        // The service resolves a relative name against the context's router dir,
+        // not the cwd, so delete what it actually wrote - wherever that is.
+        new File(_context.getRouterDir(), "testhosts.txt").delete();
     }
 
     public void testAddRemoveLookup() throws Exception {
