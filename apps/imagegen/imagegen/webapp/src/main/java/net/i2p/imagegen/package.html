@@ -5,7 +5,12 @@
 </head>
 <body>
 <p>
-    Webapp (imagegen.war) generating QR codes and identicon images for I2P destinations.
+    Webapp (imagegen.war) serving identification images for I2P destinations:
+    identicons at <code>/imagegen/id</code>, QR codes at <code>/imagegen/qr</code>,
+    and random-art images at <code>/imagegen/ra</code>. It is an
+    optional built-in webapp, so consumers must guard on
+    {@link net.i2p.util.PortMapper#isRegistered} for the {@code imagegen}
+    service before linking its images.
 </p>
 </body>
 </html>

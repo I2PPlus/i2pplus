@@ -107,16 +107,6 @@
     </condition>
   </target>
 
-  <target name="javadoc">
-    <mkdir dir="${build.dir}"/>
-    <mkdir dir="${build.dir}/javadoc"/>
-    <javadoc
-      sourcepath="./webapp/src/main/java" destdir="${build.dir}/javadoc"
-      packagenames="*"
-      use="true"
-      splitindex="true"
-      windowtitle="imagegen webapp"/>
-  </target>
   <target name="clean">
     <delete dir="${build.dir}"/>
     <delete dir="./buildTest"/>

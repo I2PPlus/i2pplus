@@ -1,33 +1,19 @@
 package com.docuverse.identicon;
 
 import java.awt.image.BufferedImage;
-import java.math.BigInteger;
 
 /**
- * Identicon renderer interface.
+ * Renders an identicon image from a 32-bit hash code, implemented by the
+ * geometric patch renderers in this package.
  */
 public interface IdenticonRenderer {
 
 	/**
-	 * Returns rendered identicon image for given identicon code encoded as a
-	 * 32-bit signed integer.
+	 * Renders the identicon for a hash code.
 	 *
-	 * @param code
-	 *            identicon code
-	 * @param size
-	 *            image size
+	 * @param code hash code driving the pattern, colours, and rotations
+	 * @param size image edge length in pixels
 	 * @return the rendered image, of exactly {@code size} by {@code size}
 	 */
 	public BufferedImage render(int code, int size);
-
-	/**
-	 * Returns rendered identicon image for given identicon code.
-	 *
-	 * @param code
-	 *            identicon code
-	 * @param size
-	 *            image size
-	 * @return the rendered image, of exactly {@code size} by {@code size}
-	 */
-	public BufferedImage render(BigInteger code, int size);
 }

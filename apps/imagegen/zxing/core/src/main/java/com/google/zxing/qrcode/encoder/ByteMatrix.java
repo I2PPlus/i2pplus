@@ -19,9 +19,9 @@ package com.google.zxing.qrcode.encoder;
 import java.util.Arrays;
 
 /**
- * JAVAPORT: The original code was a 2D array of ints, but since it only ever gets assigned
- * -1, 0, and 1, I'm going to use less memory and go with bytes.
- *
+ * A mutable 2D matrix of byte-valued modules, used while assembling a QR code.
+ * The upstream original was a 2D array of ints, but the cells only ever hold
+ * -1, 0, and 1, so this keeps the memory smaller with bytes.
  */
 public final class ByteMatrix {
 

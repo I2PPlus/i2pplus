@@ -5,7 +5,15 @@
 </head>
 <body>
 <p>
-    ZXing barcode library core subset (<a href="https://github.com/zxing/zxing">zxing</a>), used by {@link net.i2p.imagegen} for QR code generation. Not for use by apps, clients or plugins.
+    QR-code encoding subset: the writer, its encoder, the supporting decoder
+    data classes, and bit matrices. No readers or detectors are included.
+    Used by {@link net.i2p.imagegen} for QR code generation; apps, clients and
+    plugins should consume those HTTP endpoints rather than these classes.
+</p>
+
+<p>
+    See also: <a href="https://github.com/zxing/zxing">zxing</a>, from which
+    this subset is taken.
 </p>
 </body>
 </html>

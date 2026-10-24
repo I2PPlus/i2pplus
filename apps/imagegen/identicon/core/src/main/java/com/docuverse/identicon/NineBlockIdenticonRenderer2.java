@@ -8,7 +8,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.math.BigInteger;
 
 /**
  * Generates 3x3 geometric identicons from hash codes using
@@ -75,19 +74,11 @@ public class NineBlockIdenticonRenderer2 implements IdenticonRenderer {
     }
 
     /**
-     * Size of each patch in the identicon.
-     * @return the patch size
-     */
-    public float getPatchSize() {
-        return patchSize;
-    }
-
-    /**
      * Set the size for each patch and rebuild the patch shapes.
      *
      * @param size the edge length in pixels of one patch of the 3x3 grid
      */
-    public void setPatchSize(float size) {
+    private void setPatchSize(float size) {
         this.patchSize = size;
         this.patchOffset = patchSize / 2.0f;
         float patchScale = patchSize / 4.0f;
@@ -117,32 +108,13 @@ public class NineBlockIdenticonRenderer2 implements IdenticonRenderer {
     }
 
     /**
-     * Background color of the identicon.
-     * @return the background color
-     */
-    public Color getBackgroundColor() {
-        return backgroundColor;
-    }
-
-    /**
-     * Set the background color of the identicon.
-     *
-     * @param backgroundColor the color filled behind the patches
-     */
-    public void setBackgroundColor(Color backgroundColor) {
-        this.backgroundColor = backgroundColor;
-    }
-
-    /**
-     * Render an identicon from a BigInteger hash code.
-     */
-    public BufferedImage render(BigInteger code, int size) {
-        return renderQuilt((int)code.longValue(), size);
-    }
-
-    /**
      * Render an identicon from an integer hash code.
+     *
+     * @param code hash code driving the pattern, colours, and rotations
+     * @param size image edge length in pixels
+     * @return the rendered image, of exactly {@code size} by {@code size}
      */
+    @Override
     public BufferedImage render(int code, int size) {
         return renderQuilt(code, size);
     }

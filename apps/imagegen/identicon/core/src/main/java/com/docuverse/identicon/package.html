@@ -5,11 +5,16 @@
 </head>
 <body>
 <p>
-    Identicon generation library (identicon-core by Don Park), modified to remove the commons-logging and org.cache2k dependencies. The servlet interface is in {@link net.i2p.imagegen}. Not for use by apps, clients or plugins.
+    Renders 3x3 geometric identicons from a hash code, with a pluggable image
+    cache. Used by {@link net.i2p.imagegen} to serve destination identicon
+    images; apps, clients and plugins should consume those HTTP endpoints
+    rather than these classes.
 </p>
 
 <p>
-    See also: <a href="https://github.com/donpark/identicon">identicon-core</a>.
+    See also: <a href="https://github.com/donpark/identicon">identicon-core</a>
+    (Don Park), of which this is a trimmed copy with the commons-logging and
+    cache2k dependencies removed.
 </p>
 </body>
 </html>

@@ -1,7 +1,9 @@
 package com.docuverse.identicon;
 
 /**
- * Represents a I2P identiconcache.
+ * A cache of rendered identicon images, supplied reflectively by the imagegen
+ * servlets via their {@code cache} init-param; implementations need a public
+ * no-arg constructor.
  */
 
 public interface IdenticonCache {
