@@ -157,22 +157,6 @@ public class TranslationStatus {
         return code;
     }
 
-/*
-   only useful if we bundle this at runtime
-
-    public String getStatus() throws IOException {
-        File base = _context.getBaseDir();
-        File jars = new File(base, "lib");
-        File wars = new File(base, "webapps");
-        File[] files = new File[JARS.length];
-        for (int i = 0; i < JARS.length; i++) {
-            String f = JARS[i];
-            files[i] = new File(f.endsWith(".jar") ? jars : wars, f);
-        }
-        return getStatus(files);
-    }
-*/
-
     /**
      * Build the report.
      *

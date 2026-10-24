@@ -26,12 +26,6 @@ public final class I2PProvider extends Provider {
         // following constructor deprecated in Java 9,
         // replaced by (String,String,String) added in Java 9
         super(PROVIDER_NAME, 0.1, INFO);
-
-        /*
-                AccessController.doPrivileged(new PrivilegedAction<Void>() {
-                    @Override
-                    public Void run() {
-        */
         setup();
     }
 

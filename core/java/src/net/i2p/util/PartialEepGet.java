@@ -61,10 +61,6 @@ public class PartialEepGet extends EepGet {
     public PartialEepGet(
             I2PAppContext ctx, String proxyHost, int proxyPort, OutputStream outputStream, String url, long size,
             int numRetries) {
-        // we're using this constructor:
-        // public EepGet(I2PAppContext ctx, boolean shouldProxy, String proxyHost, int proxyPort, int numRetries,
-        //               long minSize, long maxSize, String outputFile, OutputStream outputStream, String url, boolean
-        // allowCaching, String etag, String postData) {
         super(
                 ctx,
                 proxyHost != null && proxyPort > 0,

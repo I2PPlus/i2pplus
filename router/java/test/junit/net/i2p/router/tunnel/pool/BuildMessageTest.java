@@ -36,15 +36,14 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Simple test to create an encrypted TunnelBuildMessage, decrypt its layers (as it would be
- * during transmission), inject replies, then handle the TunnelBuildReplyMessage (unwrapping
- * the reply encryption and reading the replies).
+ * Creates an encrypted TunnelBuildMessage, decrypts its layers (as it would be
+ * during transmission), injects replies, then handles the TunnelBuildReplyMessage
+ * (unwrapping the reply encryption and reading the replies).
  *
- * ===
- * Update 1/5/2013 :
- * This test is renamed so it does not match the JUnit wildcard.
+ * <p>Runs all six build types: outbound and inbound, each in ElGamal, ECIES and
+ * short-ECIES form.
  */
-public class BuildMessageTestStandalone extends TestCase {
+public class BuildMessageTest extends TestCase {
     private Hash _peers[];
     private PrivateKey _privKeys[];
     private PublicKey _pubKeys[];
@@ -290,25 +289,5 @@ public class BuildMessageTestStandalone extends TestCase {
             }
         }
         return cfg;
-    }
-
-    /**
-     * Run the standalone tunnel build message test.
-     *
-     * @param args ignored, all six build message types are always run
-     * @since 0.9.51
-     */
-    public static void main(String[] args) {
-        BuildMessageTestStandalone test = new BuildMessageTestStandalone();
-        Router r = new Router(RouterTestHelper.routerConfig());
-        RouterContext ctx = r.getContext();
-        ctx.initAll();
-        try {
-            for (int i = 1; i <= 6; i++) {
-                test.x_testBuildMessage(ctx, i);
-            }
-        } finally {
-            ctx.logManager().flush();
-        }
     }
 }

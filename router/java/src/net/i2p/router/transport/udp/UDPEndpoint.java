@@ -90,11 +90,14 @@ class UDPEndpoint implements SocketListener {
 
     /**
      * Shut down the sender, receiver, and socket.
+     * The receiver runs only when a transport was given, so it may be absent.
      */
     public synchronized void shutdown() {
         if (_sender != null) {
             _sender.shutdown();
-            _receiver.shutdown();
+            if (_receiver != null) {
+                _receiver.shutdown();
+            }
         }
         if (_socket != null) {
             _socket.close();

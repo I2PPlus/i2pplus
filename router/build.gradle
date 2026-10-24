@@ -15,8 +15,6 @@ sourceSets {
             exclude {
                 it.name.endsWith('IT.java')
             }
-            // Needs rewriting
-            exclude 'net/i2p/router/tunnel/BuildMessageTestStandalone.java'
         }
     }
 }

@@ -29,10 +29,7 @@ public class XORComparator<T extends SimpleDataStructure> implements Comparator<
      */
     @Override
     public int compare(T lhs, T rhs) {
-        // same as the following but byte-by-byte for efficiency
-        // byte[] lhsDelta = DataHelper.xor(lhs.getData(), _base);
-        // byte[] rhsDelta = DataHelper.xor(rhs.getData(), _base);
-        // return DataHelper.compareTo(lhsDelta, rhsDelta);
+        // same as DataHelper.xor() + compareTo() but byte-by-byte for efficiency
         byte[] lhsb = lhs.getData();
         byte[] rhsb = rhs.getData();
         for (int i = 0; i < _base.length; i++) {

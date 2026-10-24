@@ -45,12 +45,6 @@ public class EepPost extends EepGet {
      * @param url URL to post to
      */
     public EepPost(I2PAppContext ctx, String proxyHost, int proxyPort, int numRetries, String outputFile, String url) {
-        /*
-         * We're using this constructor:
-         * public EepGet(I2PAppContext ctx, boolean shouldProxy, String proxyHost, int proxyPort, int numRetries, long minSize,
-         * long maxSize, String outputFile, OutputStream outputStream, String url, boolean allowCaching, String etag,
-         * String postData) {
-         */
         super(ctx, true, proxyHost, proxyPort, numRetries, -1, -1, outputFile, null, url, true, null, null);
     }
 
