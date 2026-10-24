@@ -576,18 +576,37 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     public InetSocketAddress getSentAddress() { return _bobSocketAddress; }
 
     /**
-     * What is the largest packet we can send to the peer?
-     * Only used for Session Confirmed packets.
-     * Session Request is very small.
+     * What is the largest packet we can send to the peer? His MTU, capped by
+     * ours. Only used for Session Confirmed packets.
+     * Session Request is very small, except for MLKEM768.
      *
      * @return the MTU in bytes
      */
     public int getMTU() {
-        // To avoid PMTU problems on brokered IPv6 tunnels, make it the minimum.
-        // Data phase will probe and increase if possible
-        if (_bobIP == null || _bobIP.length == 16)
+        boolean ipv6 = _bobIP != null && _bobIP.length == 16;
+        return effectiveMTU(_version, _bobIP, _mtu, _transport.getSSU2MTU(ipv6));
+    }
+
+    /**
+     * The MTU to size a packet to this peer against: his MTU, capped by our own
+     * for that address family. IPv6, and a peer whose address family we do not
+     * know, is held to {@link PeerState2#MIN_MTU} to avoid PMTU problems on
+     * brokered IPv6 tunnels - the data phase probes and increases if possible.
+     * Version 4 is exempt, because its ML-KEM frame is already larger than that
+     * minimum and the version gate only negotiates it where the real MTU fits;
+     * clamping it would leave the handshake no padding room at all.
+     *
+     * @param version the negotiated SSU2 version
+     * @param bobIP the peer's address bytes, 4 or 16 of them, null if unknown
+     * @param peerMTU the peer's MTU in bytes
+     * @param ourMTU our own MTU for that address family, 0 if unavailable
+     * @return the MTU in bytes to size packets against
+     */
+    static int effectiveMTU(int version, byte[] bobIP, int peerMTU, int ourMTU) {
+        boolean ipv6 = bobIP != null && bobIP.length == 16;
+        if ((bobIP == null || ipv6) && version != 4)
             return PeerState2.MIN_MTU;
-        return _mtu;
+        return ourMTU > 0 ? Math.min(peerMTU, ourMTU) : peerMTU;
     }
 
     /**
@@ -752,10 +771,10 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
             case 2:
                 break;
             case 3:
-                overhead += MAC_LEN + EncType.MLKEM512_X25519_CT.getPubkeyLen();
+                overhead += pqCreatedExtra(_version);
                 break;
             case 4:
-                overhead += MAC_LEN + EncType.MLKEM768_X25519_CT.getPubkeyLen();
+                overhead += pqCreatedExtra(_version);
                 break;
             default:
                 throw new IllegalArgumentException("Bad version " + _version);

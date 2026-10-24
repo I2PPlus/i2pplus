@@ -114,7 +114,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                     _mtu = Math.max(PeerState2.MIN_MTU, len + ipOverhead);
                 }
                 pattern = NoiseInit.PatternID.XKHFS_512_SSU2;
-                overhead += MAC_LEN + EncType.MLKEM512_X25519_INT.getPubkeyLen();
+                overhead += pqRequestExtra(_version);
                 hkf = _context.eciesEngine().getHybridKeyFactory(EncType.MLKEM512_X25519);
                 _handshakeState = new HandshakeState(pattern, HandshakeState.RESPONDER, transport.getXDHFactory(), hkf);
                 break;
@@ -132,7 +132,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                     _mtu = Math.max(min, len + ipOverhead);
                 }
                 pattern = NoiseInit.PatternID.XKHFS_768_SSU2;
-                overhead += MAC_LEN + EncType.MLKEM768_X25519_INT.getPubkeyLen();
+                overhead += pqRequestExtra(_version);
                 hkf = _context.eciesEngine().getHybridKeyFactory(EncType.MLKEM768_X25519);
                 _handshakeState = new HandshakeState(pattern, HandshakeState.RESPONDER, transport.getXDHFactory(), hkf);
                 break;
@@ -228,6 +228,22 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
      */
     @Override
     public int getVersion() {return _version;}
+
+    /**
+     * The MTU to use for packets to this peer: his MTU, as learned from his
+     * address options or from the size of the request he sent, capped by our
+     * own when we know it. The version 4 handshake needs an MTU of
+     * {@link PeerState2#MIN_MLKEM768_IPV4_MTU} or
+     * {@link PeerState2#MIN_MLKEM768_IPV6_MTU}, and the padding in a session
+     * created is sized from this.
+     *
+     * @return the MTU in bytes, 0 if unknown
+     */
+    public int getMTU() {
+        boolean ipv6 = _aliceIP.length == 16;
+        int ourmtu = _transport.getSSU2MTU(ipv6);
+        return ourmtu > 0 ? Math.min(_mtu, ourmtu) : _mtu;
+    }
 
     private void processPayload(byte[] payload, int offset, int length, boolean isHandshake) throws GeneralSecurityException {
         try {
@@ -1055,7 +1071,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             case 2:
                 break;
             case 3: {
-                overhead += MAC_LEN + EncType.MLKEM512_X25519_INT.getPubkeyLen();
+                overhead += pqRequestExtra(_version);
                 _handshakeState.mixHash(_context.routerHash().getData(), 0, 32);
                 boolean isIPv6 = _aliceIP.length == 16;
                 int ipOverhead = (isIPv6 ? PacketBuilder2.IPV6_HEADER_SIZE : PacketBuilder2.IP_HEADER_SIZE) + PacketBuilder2.UDP_HEADER_SIZE;
@@ -1065,7 +1081,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                 break;
             }
             case 4: {
-                overhead += MAC_LEN + EncType.MLKEM768_X25519_INT.getPubkeyLen();
+                overhead += pqRequestExtra(_version);
                 _handshakeState.mixHash(_context.routerHash().getData(), 0, 32);
                 boolean isIPv6 = _aliceIP.length == 16;
                 int ipOverhead = (isIPv6 ? PacketBuilder2.IPV6_HEADER_SIZE : PacketBuilder2.IP_HEADER_SIZE) + PacketBuilder2.UDP_HEADER_SIZE;

@@ -66,6 +66,57 @@ final class SSU2Util {
     /** 64 bytes, combined long header and key. */
     public static final int SESSION_HEADER_SIZE = LONG_HEADER_SIZE + KEY_LEN;
 
+    /**
+     * Bytes the Noise F token adds to the session request (message 1) for the
+     * post-quantum versions: the ML-KEM encapsulation key plus its MAC. Zero
+     * for version 2, which has no PQ frame. Noise writes this frame between
+     * the ephemeral key and the encrypted payload, so the payload staging
+     * offset, the packet length, and the padding budget all have to account
+     * for it. An unsupported version is an error rather than a zero-length
+     * frame, which would silently omit the frame and fail the tag check.
+     *
+     * @param version the negotiated SSU2 version
+     * @return the PQ frame length in bytes, 0 for version 2
+     * @throws IllegalArgumentException if the version is not 2, 3 or 4
+     */
+    static int pqRequestExtra(int version) {
+        switch (version) {
+            case 2:
+                return 0;
+            case 3:
+                return MAC_LEN + EncType.MLKEM512_X25519_INT.getPubkeyLen();
+            case 4:
+                return MAC_LEN + EncType.MLKEM768_X25519_INT.getPubkeyLen();
+            default:
+                throw new IllegalArgumentException("Bad version " + version);
+        }
+    }
+
+    /**
+     * Bytes the Noise F token adds to the session created (message 2) for the
+     * post-quantum versions: the ML-KEM ciphertext plus its MAC. Zero for
+     * version 2, which has no PQ frame. Same position rules as
+     * {@link #pqRequestExtra(int)}, but the ciphertext is smaller than the
+     * encapsulation key for MLKEM-768, which is why a session created fits a
+     * smaller MTU than a session request.
+     *
+     * @param version the negotiated SSU2 version
+     * @return the PQ frame length in bytes, 0 for version 2
+     * @throws IllegalArgumentException if the version is not 2, 3 or 4
+     */
+    static int pqCreatedExtra(int version) {
+        switch (version) {
+            case 2:
+                return 0;
+            case 3:
+                return MAC_LEN + EncType.MLKEM512_X25519_CT.getPubkeyLen();
+            case 4:
+                return MAC_LEN + EncType.MLKEM768_X25519_CT.getPubkeyLen();
+            default:
+                throw new IllegalArgumentException("Bad version " + version);
+        }
+    }
+
     // header fields
     /** Offset of destination connection ID in header. */
     public static final int DEST_CONN_ID_OFFSET = 0;

@@ -666,7 +666,10 @@ class PacketBuilder2 {
         DatagramPacket pkt = packet.getPacket();
         pkt.setLength(LONG_HEADER_SIZE);
         byte[] introKey = state.getSendHeaderEncryptKey1();
-        encryptSessionRequest(packet, state.getHandshakeState(), introKey, introKey, state.needIntroduction());
+        byte[] sentIP = state.getSentIP();
+        boolean isIPv6 = sentIP != null && sentIP.length == 16;
+        encryptSessionRequest(packet, state.getHandshakeState(), isIPv6, state.getMTU(), introKey, introKey,
+                              state.needIntroduction(), state.getVersion(), state.getRemoteIdentity().getHash());
         pkt.setSocketAddress(state.getSentAddress());
         packet.setMessageType(TYPE_SREQ);
         packet.setPriority(PRIORITY_HIGH);
@@ -690,10 +693,10 @@ class PacketBuilder2 {
         byte[] sentIP = state.getSentIP();
         pkt.setLength(LONG_HEADER_SIZE);
         int port = state.getSentPort();
-        encryptSessionCreated(packet, state.getHandshakeState(), state.getSendHeaderEncryptKey1(),
+        encryptSessionCreated(packet, state.getHandshakeState(), state.getMTU(), state.getSendHeaderEncryptKey1(),
                               state.getSendHeaderEncryptKey2(), state.getSentRelayTag(),
                               null, // state.getNextToken(), // send with termination only
-                              sentIP, port);
+                              sentIP, port, state.getVersion());
         pkt.setSocketAddress(state.getSentAddress());
         packet.setMessageType(TYPE_CREAT);
         packet.setPriority(PRIORITY_HIGH);
@@ -1247,18 +1250,121 @@ class PacketBuilder2 {
     }
 
     /**
+     * On-wire size of a handshake packet before padding: the IP and UDP
+     * headers, the long header and ephemeral key, the PQ frame if any, the MAC,
+     * and the payload blocks written so far. A version 4 session request fills
+     * the minimum MTU with no padding at all - see
+     * {@link PeerState2#MIN_MLKEM768_IPV4_MTU} - so that version needs the
+     * exact figure to size its padding, while the others fit with room to
+     * spare.
+     *
+     * @param isIPv6 the address family of the packet
+     * @param blockLen total length of the payload blocks written so far
+     * @param pqlen the PQ frame length from {@link SSU2Util#pqRequestExtra(int)}
+     *              or {@link SSU2Util#pqCreatedExtra(int)}, 0 for version 2
+     * @return the total on-wire size in bytes
+     */
+    static int handshakeWireSize(boolean isIPv6, int blockLen, int pqlen) {
+        int size = blockLen + SESSION_HEADER_SIZE + pqlen + MAC_LEN;
+        size += isIPv6 ? IPV6_HEADER_SIZE : IP_HEADER_SIZE;
+        size += UDP_HEADER_SIZE;
+        return size;
+    }
+
+    /**
+     * Offset within the packet, measured from the start of the long header,
+     * where the plaintext payload blocks of a handshake message are staged.
+     * Noise writes the ephemeral key, and for the PQ versions the ML-KEM frame,
+     * into the message buffer before it reads the payload, so staging the
+     * blocks any earlier makes writeMessage() encrypt its own key material as
+     * the payload - a well-formed message whose blocks are garbage, with a tag
+     * that still verifies.
+     *
+     * @param pqlen the PQ frame length from {@link SSU2Util#pqRequestExtra(int)}
+     *              or {@link SSU2Util#pqCreatedExtra(int)}, 0 for version 2
+     * @return the staging offset from the start of the long header
+     */
+    static int handshakePayloadOffset(int pqlen) {
+        return LONG_HEADER_SIZE + KEY_LEN + pqlen;
+    }
+
+    /**
+     * The size a handshake packet's padding budget is measured against. Version
+     * 4 needs the exact on-wire figure, because its ML-KEM frame already fills
+     * the minimum MTU; the other versions have room to spare and are measured
+     * against the payload blocks alone, as before the PQ work.
+     *
+     * @param version the negotiated SSU2 version
+     * @param isIPv6 the address family of the packet
+     * @param blockLen total length of the payload blocks written so far
+     * @param pqlen the PQ frame length from {@link SSU2Util#pqRequestExtra(int)}
+     *              or {@link SSU2Util#pqCreatedExtra(int)}, 0 for version 2
+     * @return the size in bytes the padding budget is measured against
+     */
+    static int handshakePaddingBase(int version, boolean isIPv6, int blockLen, int pqlen) {
+        return version == 4 ? handshakeWireSize(isIPv6, blockLen, pqlen) : blockLen;
+    }
+
+    /**
+     * The MTU a handshake packet's padding is sized against. Version 4 uses the
+     * peer's MTU, because its frame alone exceeds {@link PeerState2#MIN_MTU};
+     * the other versions are sized against the minimum, as before the PQ work.
+     *
+     * @param version the negotiated SSU2 version
+     * @param mtu the peer's MTU in bytes
+     * @return the MTU budget in bytes
+     */
+    static int handshakePaddingMTU(int version, int mtu) {
+        return version == 4 ? mtu : PeerState2.MIN_MTU;
+    }
+
+    /**
+     * Adds the padding block a handshake packet can afford to the block list,
+     * returning the new payload length. The budget comes from the version's own
+     * geometry - see {@link #handshakePaddingBase(int, boolean, int, int)} and
+     * {@link #handshakePaddingMTU(int, int)} - and running out of room is not
+     * fatal, the packet simply goes out without padding.
+     *
+     * @param blocks the payload blocks staged so far, appended to if there is padding
+     * @param len total length of those blocks
+     * @param version the negotiated SSU2 version
+     * @param isIPv6 the address family of the packet
+     * @param pqlen the PQ frame length from {@link SSU2Util#pqRequestExtra(int)}
+     *              or {@link SSU2Util#pqCreatedExtra(int)}, 0 for version 2
+     * @param mtu the peer's MTU in bytes
+     * @param maxPadding the house cap on the padding for this message type
+     * @return the payload length, including the padding block if one was added
+     */
+    private int addHandshakePadding(List<Block> blocks, int len, int version,
+                                    boolean isIPv6, int pqlen, int mtu, int maxPadding) {
+        Block block = getPadding(handshakePaddingBase(version, isIPv6, len, pqlen),
+                                 handshakePaddingMTU(version, mtu), maxPadding);
+        if (block != null) {
+            blocks.add(block);
+            len += block.getTotalLength();
+        }
+        return len;
+    }
+
+    /**
      * Encrypt and write out message 1 of the handshake, the SessionRequest.
      *
      * @param packet containing only 32 byte header
      * @param state the Noise handshake state, already started with our
      *              ephemeral key pair
+     * @param isIPv6 the peer's address family, for the version 4 padding budget
+     * @param mtu the peer's MTU, for the version 4 padding budget
      * @param hdrKey1 32-byte ChaCha20 key protecting header bytes 0-7
      * @param hdrKey2 32-byte ChaCha20 key protecting header bytes 8-31
      * @param needIntro append a relay tag request block, for a peer that asked
      *                  us to introduce it to a third peer
+     * @param version the negotiated SSU2 version, 2 to 4
+     * @param bob the peer's router hash, mixed into the handshake for the PQ
+     *            versions, unused for version 2
      */
-    private void encryptSessionRequest(UDPPacket packet, HandshakeState state,
-                                       byte[] hdrKey1, byte[] hdrKey2, boolean needIntro) {
+    private void encryptSessionRequest(UDPPacket packet, HandshakeState state, boolean isIPv6, int mtu,
+                                       byte[] hdrKey1, byte[] hdrKey2, boolean needIntro,
+                                       int version, Hash bob) {
         DatagramPacket pkt = packet.getPacket();
         byte[] data = pkt.getData();
         int off = pkt.getOffset();
@@ -1274,23 +1380,34 @@ class PacketBuilder2 {
                 len += block.getTotalLength();
                 blocks.add(block);
             }
-            // plenty of room
-            block = getPadding(len, 1280, PADDING_MAX_SESSION_REQUEST);
-            if (block == null) {return;}
-            len += block.getTotalLength();
-            blocks.add(block);
+            // The PQ frame goes on the wire ahead of the blocks, so it comes out
+            // of the padding budget. Only version 4 is tight: header, key, frame
+            // and MAC are already 1280 bytes, so a version 4 request needs an MTU
+            // of MIN_MLKEM768_IPV4_MTU or MIN_MLKEM768_IPV6_MTU with no padding.
+            int pqlen = pqRequestExtra(version);
+            // No room for padding is not fatal, send the packet without it
+            len = addHandshakePadding(blocks, len, version, isIPv6, pqlen, mtu,
+                                      PADDING_MAX_SESSION_REQUEST);
 
-            // If we skip past where the ephemeral key will be, we can
-            // use the packet for the plaintext and Noise will symmetric encrypt in-place
-            SSU2Payload.writePayload(data, off + LONG_HEADER_SIZE + KEY_LEN, blocks);
+            // If we skip past where the ephemeral key, and for the PQ versions
+            // also the ML-KEM encapsulation key, will be, we can use the packet
+            // for the plaintext and Noise will symmetric encrypt in-place. Any
+            // earlier and writeMessage() encrypts its own key material as the
+            // payload, with a valid tag over garbage.
+            int payloadOff = off + handshakePayloadOffset(pqlen);
+            SSU2Payload.writePayload(data, payloadOff, blocks);
             state.start();
             if (_log.shouldDebug())
                 _log.debug("[SSU] State after start: " + state);
+            // the PQ handshake hashes the peer's router hash, as i2pd does, and
+            // the peer hashes their own, so both sides must, or the tags differ
+            if (version != 2)
+                state.mixHash(bob.getData(), 0, 32);
             state.mixHash(data, off, LONG_HEADER_SIZE);
             if (_log.shouldDebug())
                 _log.debug("[SSU] State after mixHash 1: " + state);
-            state.writeMessage(data, off + LONG_HEADER_SIZE, data, off + LONG_HEADER_SIZE + KEY_LEN, len);
-            pkt.setLength(pkt.getLength() + KEY_LEN + len + MAC_LEN);
+            state.writeMessage(data, off + LONG_HEADER_SIZE, data, payloadOff, len);
+            pkt.setLength(pkt.getLength() + KEY_LEN + pqlen + len + MAC_LEN);
         } catch (RuntimeException re) {
             if (_log.shouldWarn())
                 _log.warn("[SSU] BAD message 1 out", re);
@@ -1314,6 +1431,7 @@ class PacketBuilder2 {
      * @param packet containing only 32 byte header
      * @param state the Noise handshake state, already started with our
      *              ephemeral key pair
+     * @param mtu the peer's MTU, for the version 4 padding budget
      * @param hdrKey1 32-byte ChaCha20 key protecting header bytes 0-7
      * @param hdrKey2 32-byte ChaCha20 key protecting header bytes 8-31
      * @param relayTag relay tag for the peer to send us, or 0 to omit the relay
@@ -1321,10 +1439,12 @@ class PacketBuilder2 {
      * @param token may be null
      * @param ip the peer's address for the address block, 4 or 16 bytes
      * @param port the peer's UDP port for the address block
+     * @param version the negotiated SSU2 version, 2 to 4
      */
-    private void encryptSessionCreated(UDPPacket packet, HandshakeState state,
+    private void encryptSessionCreated(UDPPacket packet, HandshakeState state, int mtu,
                                        byte[] hdrKey1, byte[] hdrKey2, long relayTag,
-                                       EstablishmentManager.Token token, byte[] ip, int port) {
+                                       EstablishmentManager.Token token, byte[] ip, int port,
+                                       int version) {
         DatagramPacket pkt = packet.getPacket();
         byte[] data = pkt.getData();
         int off = pkt.getOffset();
@@ -1346,21 +1466,28 @@ class PacketBuilder2 {
                 len += block.getTotalLength();
                 blocks.add(block);
             }
-            // plenty of room
-            block = getPadding(len, 1280, PADDING_MAX_SESSION_CREATED);
-            if (block == null) {return;}
-            len += block.getTotalLength();
-            blocks.add(block);
+            // The PQ frame goes on the wire ahead of the blocks, so it comes out
+            // of the padding budget. Only version 4 is tight, and less so than
+            // the session request, because the ML-KEM ciphertext is smaller than
+            // the encapsulation key.
+            int pqlen = pqCreatedExtra(version);
+            // No room for padding is not fatal, send the packet without it
+            len = addHandshakePadding(blocks, len, version, ip.length == 16, pqlen, mtu,
+                                      PADDING_MAX_SESSION_CREATED);
 
-            // If we skip past where the ephemeral key will be, we can
-            // use the packet for the plaintext and Noise will symmetric encrypt in-place
-            SSU2Payload.writePayload(data, off + LONG_HEADER_SIZE + KEY_LEN, blocks);
+            // If we skip past where the ephemeral key, and for the PQ versions
+            // also the ML-KEM ciphertext, will be, we can use the packet for the
+            // plaintext and Noise will symmetric encrypt in-place. Any earlier
+            // and writeMessage() encrypts its own key material as the payload,
+            // with a valid tag over garbage.
+            int payloadOff = off + handshakePayloadOffset(pqlen);
+            SSU2Payload.writePayload(data, payloadOff, blocks);
 
             state.mixHash(data, off, LONG_HEADER_SIZE);
             if (_log.shouldDebug())
                 _log.debug("[SSU] State after mixHash 2: " + state);
-            state.writeMessage(data, off + LONG_HEADER_SIZE, data, off + LONG_HEADER_SIZE + KEY_LEN, len);
-            pkt.setLength(pkt.getLength() + KEY_LEN + len + MAC_LEN);
+            state.writeMessage(data, off + LONG_HEADER_SIZE, data, payloadOff, len);
+            pkt.setLength(pkt.getLength() + KEY_LEN + pqlen + len + MAC_LEN);
         } catch (RuntimeException re) {
             if (_log.shouldWarn())
                 _log.warn("[SSU] BAD message 2 out", re);
