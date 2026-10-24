@@ -2139,7 +2139,40 @@
     <echo message="Clean completed successfully."/>
   </target>
 
-  <target name="distclean" depends="clean">
+  <!-- Test runtime state a run may have left in the tree. Every junit target
+       passes i2p.dir.base pointing at the build root, but a context built
+       without them writes into the module dir instead; run-tests.sh fails the
+       suite on these names (check_no_runtime_artifacts), and this removes what
+       an older run left behind. Keep the two name sets in step. Only the
+       installer's sample data (a tracked placeholder), the build output and
+       installed JS dependencies are spared - a logs/ under a vendored tool
+       distribution is cruft like the rest. -->
+  <target name="cleanTestArtifacts">
+    <delete includeemptydirs="true" quiet="true">
+      <fileset dir=".">
+        <include name="**/autotune.config"/>
+        <include name="**/dht.dat"/>
+        <include name="**/testhosts.txt"/>
+        <include name="**/sessionbans/**"/>
+        <include name="**/sessionbans/"/>
+        <include name="**/peerProfiles/**"/>
+        <include name="**/peerProfiles/"/>
+        <include name="**/netDb/**"/>
+        <include name="**/netDb/"/>
+        <include name="**/logs/**"/>
+        <include name="**/logs/"/>
+        <include name="**/*.config.d/**"/>
+        <include name="**/*.config.d/"/>
+        <include name="**/test-i2psnark-lookup/**"/>
+        <include name="**/test-i2psnark-lookup/"/>
+        <exclude name="installer/resources/**"/>
+        <exclude name="dist/**"/>
+        <exclude name="**/node_modules/**"/>
+      </fileset>
+    </delete>
+  </target>
+
+  <target name="distclean" depends="clean, cleanTestArtifacts">
     <echo message="Performing comprehensive clean including Gradle artifacts..."/>
     <sequential>
       <delete includeemptydirs="false" quiet="true">
