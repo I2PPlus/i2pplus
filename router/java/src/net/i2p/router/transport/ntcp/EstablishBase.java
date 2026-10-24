@@ -4,7 +4,7 @@ import java.nio.ByteBuffer;
 import java.util.EnumSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
-import net.i2p.crypto.EncType;
+
 import net.i2p.data.Hash;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
@@ -173,27 +173,14 @@ abstract class EstablishBase implements EstablishState {
         _transport = transport;
         _con = con;
         if (_con.isInbound()) {
-            // NOTE: this is the max NTCP2 padding because we reuse the _X buffer for padding.
-            int sz;
-            switch (NTCPTransport.PQ_INT_VERSION) {
-                case 0:
-                    //  Fall through, use same max padding as for MLKEM-512
-                case 3:
-                    sz = OutboundNTCP2State.MSG1_SIZE +
-                         OutboundNTCP2State.MAC_SIZE + EncType.MLKEM512_X25519_INT.getPubkeyLen();
-                    break;
-                case 4:
-                    sz = OutboundNTCP2State.MSG1_SIZE +
-                         OutboundNTCP2State.MAC_SIZE + EncType.MLKEM768_X25519_INT.getPubkeyLen();
-                    break;
-                case 5:
-                    sz = OutboundNTCP2State.MSG1_SIZE +
-                         OutboundNTCP2State.MAC_SIZE + EncType.MLKEM1024_X25519_INT.getPubkeyLen();
-                    break;
-                default:
-                    throw new IllegalArgumentException("Bad version");
-            }
-            _X = SimpleByteCache.acquire(sz);
+            // _X holds message 1, then gets reused from offset 0 for its
+            // padding, so it only has to be as large as the larger of the two,
+            // not the sum. Sized from our configured intro version, which is
+            // the version an inbound peer must use for its PQ frame; PQ off is
+            // a version 2 session, and 880 bytes of padding headroom is the
+            // same buffer as before the PQ work.
+            int v = NTCPTransport.PQ_INT_VERSION < 3 ? 2 : NTCPTransport.PQ_INT_VERSION;
+            _X = SimpleByteCache.acquire(OutboundNTCP2State.msg1BufSize(v));
             _Y = null;
         } else {
             // OutboundNTCP2State does not extend this,

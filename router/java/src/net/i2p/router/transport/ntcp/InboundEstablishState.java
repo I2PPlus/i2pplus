@@ -17,7 +17,6 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
-import net.i2p.crypto.EncType;
 import net.i2p.data.Base64;
 import net.i2p.data.ByteArray;
 import net.i2p.data.DataFormatException;
@@ -101,8 +100,6 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
 
     /** Maximum padding for probing resistance strategy (128 bytes). */
     private static final int PADDING1_FAIL_MAX = 128;
-    /** Maximum padding length in message 2 (64 bytes). */
-    private static final int PADDING2_MAX = 64;
     /** Minimum RouterInfo size: DSA signature (40) + overhead (8+1+1+2+387). */
     private static final int RI_MIN = 387 + 8 + 1 + 1 + 2 + 40;
     /** Minimum message 3 part 2 size: header (1+2+1) + RI_MIN + MAC (16). */
@@ -197,23 +194,13 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         // remainder of message except padding
         if (_state == State.IB_NTCP2_GOT_X && src.hasRemaining()) {
             int remaining = src.remaining();
-            int extralen = 0;
-            switch (_version) {
-                case 2:
-                    break;
-                case 3:
-                    extralen = MAC_SIZE + EncType.MLKEM512_X25519_INT.getPubkeyLen();
-                    break;
-                case 4:
-                    extralen = MAC_SIZE + EncType.MLKEM768_X25519_INT.getPubkeyLen();
-                    break;
-                case 5:
-                    extralen = MAC_SIZE + EncType.MLKEM1024_X25519_INT.getPubkeyLen();
-                    break;
-                default:
-                    throw new IllegalArgumentException("Bad version " + _version);
-            }
-            int sz = MSG1_SIZE + extralen;
+            // Message 1 is X (32) + options (16) + options MAC (16), plus the
+            // PQ frame (PQ MAC + encapsulation key) for versions 3-5: 1264
+            // bytes for MLKEM-768, with exactly two AEAD tags, the PQ frame and
+            // the options. Counting a third MAC here would make readMessage
+            // swallow padding bytes as part of the options block and the tag
+            // check would then fail.
+            int sz = msg1Size(_version);
             if (remaining + _received < sz) {
                 // Less than full message 1 received, so we defer the handling.
                 // Buffer in _X.
@@ -261,6 +248,13 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 return;
             }
             if ((_X[KEY_SIZE - 1] & 0x80) != 0) {
+                if (NTCPTransport.PQ_INT_VERSION < 3) {
+                    // She asked for a PQ handshake and we have PQ disabled, so
+                    // there is no version to continue with. Fail cleanly rather
+                    // than carrying version 0 into the message 1 parse.
+                    fail("PQ handshake requested but PQ is disabled");
+                    return;
+                }
                 _version = NTCPTransport.PQ_INT_VERSION;
                 _X[KEY_SIZE - 1] &= (byte) 0x7f;
             }
@@ -399,7 +393,6 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      */
     private synchronized void receiveInboundNTCP2(ByteBuffer src) {
         if (_state == State.IB_NTCP2_GOT_X && src.hasRemaining()) {
-            int extralen = 0;
             NoiseInit.PatternID pattern;
             try {
                 switch (_version) {
@@ -408,15 +401,12 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                         break;
                     case 3:
                         pattern = NoiseInit.PatternID.XKHFS_512;
-                        extralen = MAC_SIZE + EncType.MLKEM512_X25519_INT.getPubkeyLen();
                         break;
                     case 4:
                         pattern = NoiseInit.PatternID.XKHFS_768;
-                        extralen = MAC_SIZE + EncType.MLKEM768_X25519_INT.getPubkeyLen();
                         break;
                     case 5:
                         pattern = NoiseInit.PatternID.XKHFS_1024;
-                        extralen = MAC_SIZE + EncType.MLKEM1024_X25519_INT.getPubkeyLen();
                         break;
                     default:
                         throw new IllegalArgumentException("Bad version " + _version);
@@ -426,7 +416,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 throw new IllegalStateException("bad proto", gse);
             }
             // use _X for the buffer
-            int toGet = Math.min(src.remaining(), MSG1_SIZE + extralen - _received);
+            int toGet = Math.min(src.remaining(), msg1Size(_version) - _received);
             src.get(_X, _received, toGet);
             changeState(State.IB_NTCP2_GOT_MSG1);
             _received = 0;
@@ -437,7 +427,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 _handshakeState.start();
                 if (_log.shouldDebug())
                     _log.debug("After start: " + _handshakeState.toString());
-                _handshakeState.readMessage(_X, 0, MSG1_SIZE + extralen, options, 0);
+                _handshakeState.readMessage(_X, 0, msg1Size(_version), options, 0);
             } catch (GeneralSecurityException gse) {
                  // Read a random number of bytes, store wanted in _padlen1
                  _padlen1 = _context.random().nextInt(PADDING1_FAIL_MAX) - src.remaining();
@@ -501,9 +491,9 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 return;
             }
             _padlen1 = (int) DataHelper.fromLong(options, 2, 2);
-            if (_padlen1 > _X.length) {
-                // we reuse _X to read the padding, length set in EstablishBase
-                // limits are specified in the PQ spec
+            if (_padlen1 > padding1RecvMax(_version)) {
+                // we reuse _X to read the padding, and EstablishBase sizes it for
+                // this ceiling, which is i2pd's maxPaddingLength for the version
                 fail("Padlen too large: " + _padlen1);
                 return;
             }
@@ -536,8 +526,6 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 prepareOutbound2(); // Write msg 2
                 return;
             }
-            // We don't enforce max _padlen1 here
-            // if it is more than our buffer size we will fail below.
         }
 
         // Delayed fail for probing resistance
@@ -649,7 +637,9 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      * <ul>
      * <li>Bob's Noise public key (Y), 32 bytes</li>
      * <li>Options: padding length (2 bytes), timestamp (4 bytes)</li>
-     * <li>Padding (variable length, 0-64 bytes)</li>
+     * <li>Padding (variable length, scaled to the peer's message 1 padding:
+     * 0-222 bytes, or up to the version's limit once the peer used long
+     * padding)</li>
      * <li>AES-CBC MAC (16 bytes)</li>
      * </ul>
      * <p>The IV for CBC encryption must be in _prevEncrypted (extracted from
@@ -660,23 +650,12 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      */
     private synchronized void prepareOutbound2() {
         // create msg 2 payload
-        int padlen2 = _context.random().nextInt(PADDING2_MAX);
-        int len = MSG2_SIZE + padlen2;
-        switch (_version) {
-            case 2:
-                break;
-            case 3:
-                len += MAC_SIZE + EncType.MLKEM512_X25519_CT.getPubkeyLen();
-                break;
-            case 4:
-                len += MAC_SIZE + EncType.MLKEM768_X25519_CT.getPubkeyLen();
-                break;
-            case 5:
-                len += MAC_SIZE + EncType.MLKEM1024_X25519_CT.getPubkeyLen();
-                break;
-            default:
-                throw new IllegalArgumentException("Bad version " + _version);
-        }
+        // i2pd's Bob scales its padding to Alice's: long padding only if her
+        // message 1 came in longer than the 287-byte short handshake
+        // (ProcessSessionRequestMessage sets m_IsLongPadding). Doing the same
+        // puts our reply in the same size class as i2pd's Bob.
+        int padlen2 = _context.random().nextInt(msg2PaddingMax(_version, _padlen1));
+        int len = msg2Size(_version) + padlen2;
         byte[] tmp = new byte[len];
         // write options directly to tmp with offset so it doesn't get clobbered
         int off = len - (OPTIONS2_SIZE + MAC_SIZE + padlen2);

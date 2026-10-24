@@ -62,12 +62,208 @@ class OutboundNTCP2State implements EstablishState {
     public static final int OPTIONS1_SIZE = 16;
     /** NTCP2 message 1 size in bytes (64). */
     public static final int MSG1_SIZE = KEY_SIZE + OPTIONS1_SIZE + MAC_SIZE;
-    private static final int PADDING1_MAX = 64;
+    /**
+     * i2pd's short handshake message total (287). It compares the message it
+     * just built or received against this to decide which padding scale to use.
+     */
+    static final int MSG_SHORT_MAX = 287;
+    /**
+     * Exclusive upper bound for the "short" handshake padding, i2pd's
+     * 287 - 64 (223). Used with a peer that does not advertise PQ support and
+     * may predate the 2026 padding increase.
+     */
+    static final int PADDING_SHORT_MAX = MSG_SHORT_MAX - MSG1_SIZE;
     private static final int PADDING3_MAX = 64;
+
+    /**
+     * Extra bytes in message 1 for the PQ frame (PQ AEAD MAC + encapsulation
+     * key), 0 for the non-PQ version 2. This is the Noise "F" token: the ML-KEM
+     * public key written via encryptAndHash(), so it carries one MAC.
+     * Mirrors i2pd's SessionRequest ML-KEM frame (keyLen + 16).
+     *
+     * @param version the negotiated NTCP2 intro version
+     * @return the extra byte count, 0 for version 2
+     */
+    static int pqMsg1Extra(int version) {
+        switch (version) {
+            case 2:  return 0;
+            case 3:  return MAC_SIZE + EncType.MLKEM512_X25519_INT.getPubkeyLen();
+            case 4:  return MAC_SIZE + EncType.MLKEM768_X25519_INT.getPubkeyLen();
+            case 5:  return MAC_SIZE + EncType.MLKEM1024_X25519_INT.getPubkeyLen();
+            default: throw new IllegalArgumentException("Bad version " + version);
+        }
+    }
+
+    /**
+     * Full message 1 length (no padding) for the version: X (32) + options (16)
+     * + options MAC (16) + PQ frame. For MLKEM-768 this is 1264, byte-identical
+     * to i2pd's SessionRequest (X + encapKey+tag + options+tag).
+     *
+     * @param version the negotiated NTCP2 intro version
+     * @return message 1 byte count excluding padding
+     */
+    static int msg1Size(int version) {
+        return MSG1_SIZE + pqMsg1Extra(version);
+    }
+
+    /**
+     * Upper bound (exclusive) for the message 1 padding we send, per version,
+     * equal to i2pd's maxPaddingLength in CreateSessionRequestMessage: offset +
+     * 32 for a PQ frame, clamped so the whole message fits i2pd's 2528-byte
+     * handshake budget (944 + MLKEM-1024 key + 16), which is what pulls
+     * MLKEM-1024 back down to 880. Version 2 takes i2pd's short bound: i2pd
+     * only uses long padding once the peer advertises PQ support (its pq
+     * address option), and we reach versions 3-5 for exactly those peers, so a
+     * peer predating the 2026 padding increase (Java _X = 256, i2pd m_Buffer =
+     * 287) never sees more than 222 bytes from us. Taking i2pd's value for
+     * every version also keeps our handshake size distribution the same as
+     * theirs.
+     *
+     * @param version the negotiated NTCP2 intro version
+     * @return exclusive upper bound for padlen1 (longest padding = value - 1)
+     */
+    static int padding1Max(int version) {
+        switch (version) {
+            case 2:  return PADDING_SHORT_MAX;  // 223, peer may predate long padding
+            case 3:  return 880;                // MLKEM-512
+            case 4:  return 1264;               // MLKEM-768
+            case 5:  return 880;                // MLKEM-1024, clamped by the 2528 budget
+            default: throw new IllegalArgumentException("Bad version " + version);
+        }
+    }
+
+    /**
+     * Largest message 1 padding we accept, per session version. Never below
+     * {@link #padding1Max(int)}: i2pd's Alice drops to a non-PQ session one
+     * time in four (ClientLogin) but keeps long padding because the peer
+     * advertises PQ, so a version 2 session may legally carry 880 bytes of
+     * padding even though we would only ever send 223 there.
+     *
+     * @param version the negotiated NTCP2 intro version
+     * @return inclusive maximum padlen1 a peer may announce
+     */
+    static int padding1RecvMax(int version) {
+        switch (version) {
+            case 2:  return 880;   // long padding from a PQ-capable peer that dropped PQ
+            case 3:  return 880;
+            case 4:  return 1264;
+            case 5:  return 880;
+            default: throw new IllegalArgumentException("Bad version " + version);
+        }
+    }
+
     /** Options block size in bytes. */
     public static final int OPTIONS2_SIZE = 16;
     /** NTCP2 message 2 size in bytes. */
     public static final int MSG2_SIZE = KEY_SIZE + OPTIONS2_SIZE + MAC_SIZE;
+
+    /**
+     * Extra bytes in message 2 for Bob's ML-KEM ciphertext and its MAC, 0 for
+     * the non-PQ version 2. Same Noise "F" token as message 1, with the
+     * ciphertext lengths instead of the encapsulation key lengths.
+     *
+     * @param version the negotiated NTCP2 intro version
+     * @return the extra byte count, 0 for version 2
+     */
+    static int pqMsg2Extra(int version) {
+        switch (version) {
+            case 2:  return 0;
+            case 3:  return MAC_SIZE + EncType.MLKEM512_X25519_CT.getPubkeyLen();
+            case 4:  return MAC_SIZE + EncType.MLKEM768_X25519_CT.getPubkeyLen();
+            case 5:  return MAC_SIZE + EncType.MLKEM1024_X25519_CT.getPubkeyLen();
+            default: throw new IllegalArgumentException("Bad version " + version);
+        }
+    }
+
+    /**
+     * Full message 2 length (no padding) for the version: Y (32) + options (16)
+     * + options MAC (16) + PQ ciphertext frame.
+     *
+     * @param version the negotiated NTCP2 intro version
+     * @return message 2 byte count excluding padding
+     */
+    static int msg2Size(int version) {
+        return MSG2_SIZE + pqMsg2Extra(version);
+    }
+
+    /**
+     * Upper bound (exclusive) for the message 2 padding, in both directions,
+     * equal to i2pd's maxPaddingLength in CreateSessionCreatedMessage (offset +
+     * 32, clamped by the same 2528-byte budget). Bob applies it only when Alice
+     * used long padding, otherwise {@link #PADDING_SHORT_MAX}.
+     *
+     * @param version the negotiated NTCP2 intro version
+     * @return exclusive upper bound for padlen2 (longest padding = value - 1)
+     */
+    static int padding2Max(int version) {
+        switch (version) {
+            case 2:  return 880;   // non-PQ long padding
+            case 3:  return 848;   // MLKEM-512 ciphertext frame
+            case 4:  return 1168;  // MLKEM-768
+            case 5:  return 880;   // MLKEM-1024, clamped by the 2528 budget
+            default: throw new IllegalArgumentException("Bad version " + version);
+        }
+    }
+
+    /**
+     * The padding cap for message 2, scaled to what Alice sent. i2pd's Bob uses
+     * long padding only when Alice's message 1 came in longer than the short
+     * handshake - ProcessSessionRequestMessage sets m_IsLongPadding - so a peer
+     * that kept its message 1 small gets a small answer back, and our reply
+     * lands in the same size class as i2pd's Bob.
+     *
+     * @param version the negotiated NTCP2 intro version
+     * @param padlen1 the padding Alice announced in message 1
+     * @return exclusive upper bound for padlen2 (longest padding = value - 1)
+     */
+    static int msg2PaddingMax(int version, int padlen1) {
+        return msg1Size(version) + padlen1 > MSG_SHORT_MAX
+               ? padding2Max(version)
+               : PADDING_SHORT_MAX;
+    }
+
+    /**
+     * Offset of the plaintext options block within the message 1 buffer. For
+     * versions 3-5 the Noise F token - the ML-KEM encapsulation key and its MAC -
+     * is written between X and the options, so the options have to be staged
+     * past it: writeMessage() lays down the F token first and only then reads
+     * the payload, so staging them at KEY_SIZE makes it encrypt the key
+     * material instead, and the peer gets a valid-looking tag over garbage
+     * options. For version 2 this is KEY_SIZE, as it always was.
+     *
+     * @param version the negotiated NTCP2 intro version
+     * @return offset of the options block within message 1
+     */
+    static int msg1PayloadOffset(int version) {
+        return msg1Size(version) - (OPTIONS1_SIZE + MAC_SIZE);
+    }
+
+    /**
+     * Bytes needed to hold message 1 or its padding, whichever is longer. The
+     * inbound handshake buffer holds message 1 first, then is reused from
+     * offset 0 for the padding, so the two do not add up.
+     *
+     * @param version the NTCP2 intro version to size for
+     * @return buffer size in bytes
+     */
+    static int msg1BufSize(int version) {
+        return Math.max(msg1Size(version), padding1RecvMax(version));
+    }
+
+    /**
+     * Bytes needed by the outbound handshake buffer. Message 1 and its padding
+     * are written back to back and sent as one block, so they add up; message 2
+     * and its padding are each read from offset 0, so each only has to fit on
+     * its own.
+     *
+     * @param version the negotiated NTCP2 intro version
+     * @return buffer size in bytes
+     */
+    static int tmpSize(int version) {
+        return Math.max(msg1Size(version) + padding1Max(version),
+                        Math.max(msg2Size(version), padding2Max(version)));
+    }
+
     /** NTCP2 message 3 part 1 size in bytes (48). */
     public static final int MSG3P1_SIZE = KEY_SIZE + MAC_SIZE;
     private static final int OPTIONS3_SIZE = 12;
@@ -125,7 +321,6 @@ class OutboundNTCP2State implements EstablishState {
         _con = con;
         _state = State.OB_INIT;
         _version = con.getVersion();
-        int len = MSG1_SIZE;
         try {
             NoiseInit.PatternID pattern;
             KeyFactory hkf;
@@ -133,28 +328,19 @@ class OutboundNTCP2State implements EstablishState {
                 case 2:
                     pattern = NoiseInit.PatternID.XK;
                     _handshakeState = new HandshakeState(pattern, HandshakeState.INITIATOR, _transport.getXDHFactory());
-                    // _tmp is used for both writing msg 1 and reading msg 2 and reading msg 1 padding.
-                    // Prior to 0.9.69, the max padding was 256; as of 0.9.69, we increase it to 880, same as MLKEM-512
-                    len += MAC_SIZE + EncType.MLKEM512_X25519_INT.getPubkeyLen();
                     break;
                 case 3:
                     pattern = NoiseInit.PatternID.XKHFS_512;
-                    // _tmp is used for both writing msg 1 and reading msg 2;
-                    // for PQ, msg 1 is larger, so we use the _INT length, not
-                    // the _CT length, plus room for the msg 1 padding.
-                    len += MAC_SIZE + EncType.MLKEM512_X25519_INT.getPubkeyLen() + PADDING1_MAX;
                     hkf = ctx.eciesEngine().getHybridKeyFactory(EncType.MLKEM512_X25519);
                     _handshakeState = new HandshakeState(pattern, HandshakeState.INITIATOR, _transport.getXDHFactory(), hkf);
                     break;
                 case 4:
                     pattern = NoiseInit.PatternID.XKHFS_768;
-                    len += MAC_SIZE + EncType.MLKEM768_X25519_INT.getPubkeyLen() + PADDING1_MAX;
                     hkf = ctx.eciesEngine().getHybridKeyFactory(EncType.MLKEM768_X25519);
                     _handshakeState = new HandshakeState(pattern, HandshakeState.INITIATOR, _transport.getXDHFactory(), hkf);
                     break;
                 case 5:
                     pattern = NoiseInit.PatternID.XKHFS_1024;
-                    len += MAC_SIZE + EncType.MLKEM1024_X25519_INT.getPubkeyLen() + PADDING1_MAX;
                     hkf = ctx.eciesEngine().getHybridKeyFactory(EncType.MLKEM1024_X25519);
                     _handshakeState = new HandshakeState(pattern, HandshakeState.INITIATOR, _transport.getXDHFactory(), hkf);
                     break;
@@ -164,7 +350,9 @@ class OutboundNTCP2State implements EstablishState {
         } catch (GeneralSecurityException gse) {
             throw new IllegalStateException("Bad protocol", gse);
         }
-        _tmp = new byte[len];
+        // _tmp holds msg 1 and its padding for the write, then msg 2 and, from
+        // offset 0 again, msg 2's padding for the reads.
+        _tmp = new byte[tmpSize(_version)];
         // save because we must know length
         _aliceRI = ctx.router().getRouterInfo();
         if (_aliceRI == null)
@@ -265,22 +453,27 @@ class OutboundNTCP2State implements EstablishState {
         }
         if (_log.shouldDebug())
             _log.debug(this + "\n* Send X");
-        // write options directly to tmp, offset 32, will encrypt in-place
+        // write options directly to tmp, at the end of the message so the PQ
+        // token written by writeMessage() cannot clobber them, encrypt in-place
         // network ID cross-check, proposal 147
-        _tmp[KEY_SIZE] = (byte) (_context.router().getNetworkID());
-        _tmp[KEY_SIZE + 1] = NTCPTransport.NTCP2_INT_VERSION;
-        int padlen1 = _context.random().nextInt(PADDING1_MAX);
-        DataHelper.toLong(_tmp, KEY_SIZE + 2, 2, padlen1);
+        int off = msg1PayloadOffset(_version);
+        _tmp[off] = (byte) (_context.router().getNetworkID());
+        _tmp[off + 1] = NTCPTransport.NTCP2_INT_VERSION;
+        // Draw the padding from i2pd's per-version range so our handshake is the
+        // same size distribution as theirs, and never larger than the peer's
+        // handshake buffer.
+        int padlen1 = _context.random().nextInt(padding1Max(_version));
+        DataHelper.toLong(_tmp, off + 2, 2, padlen1);
         int msg3p2len = NTCP2Payload.BLOCK_HEADER_SIZE + 1 + _aliceRISize +
                         NTCP2Payload.BLOCK_HEADER_SIZE + OPTIONS3_SIZE +
                         NTCP2Payload.BLOCK_HEADER_SIZE + _padlen3 +
                         MAC_SIZE;
-        DataHelper.toLong(_tmp, KEY_SIZE + 4, 2, msg3p2len);
-        _tmp[KEY_SIZE + 6] = 0;
-        _tmp[KEY_SIZE + 7] = 0;
+        DataHelper.toLong(_tmp, off + 4, 2, msg3p2len);
+        _tmp[off + 6] = 0;
+        _tmp[off + 7] = 0;
         long now = (_context.clock().now() + 500) / 1000;
-        DataHelper.toLong(_tmp, KEY_SIZE + 8, 4, now);
-        Arrays.fill(_tmp, KEY_SIZE + 12, KEY_SIZE + 16, (byte) 0);
+        DataHelper.toLong(_tmp, off + 8, 4, now);
+        Arrays.fill(_tmp, off + 12, off + 16, (byte) 0);
 
         // set keys
         String s = _con.getRemoteAddress().getOption("s");
@@ -304,10 +497,11 @@ class OutboundNTCP2State implements EstablishState {
             _handshakeState.start();
             if (_log.shouldDebug())
                 _log.debug("After start: " + _handshakeState.toString());
-            // encrypt in-place; for PQ versions this also appends the
-            // hybrid (ML-KEM) public key token, so the message is longer
-            // than MSG1_SIZE
-            written = _handshakeState.writeMessage(_tmp, 0, _tmp, KEY_SIZE, OPTIONS1_SIZE);
+            // encrypt in-place; for PQ versions this also inserts the hybrid
+            // (ML-KEM) public key token between X and the options, so the
+            // message is longer than MSG1_SIZE and the payload has to come from
+            // past that token - see msg1PayloadOffset()
+            written = _handshakeState.writeMessage(_tmp, 0, _tmp, off, OPTIONS1_SIZE);
         } catch (GeneralSecurityException gse) {
             boolean gseNotNull = gse.getMessage() != null && !gse.getMessage().equals("null");
             // buffer length error
@@ -341,26 +535,6 @@ class OutboundNTCP2State implements EstablishState {
     }
 
     /**
-     * Extra bytes in message 2 for the PQ ciphertext and its MAC,
-     * 0 for version 2. Mirrors the sizing in
-     * {@link InboundEstablishState#prepareOutbound2}.
-     *
-     * @return the extra byte count for the negotiated version, 0 for version 2
-     */
-    private int pqMsg2Extra() {
-        switch (_version) {
-            case 3:
-                return MAC_SIZE + EncType.MLKEM512_X25519_CT.getPubkeyLen();
-            case 4:
-                return MAC_SIZE + EncType.MLKEM768_X25519_CT.getPubkeyLen();
-            case 5:
-                return MAC_SIZE + EncType.MLKEM1024_X25519_CT.getPubkeyLen();
-            default:
-                return 0;
-        }
-    }
-
-    /**
      * We are Alice, so receive these bytes as part of an outbound connection.
      * This method receives message 2, and sends message 3.
      * <p>
@@ -378,7 +552,7 @@ class OutboundNTCP2State implements EstablishState {
         if (_state == State.OB_SENT_X && src.hasRemaining()) {
             // For PQ versions, message 2 also carries Bob's ML-KEM
             // ciphertext and its MAC
-            int msg2len = MSG2_SIZE + pqMsg2Extra();
+            int msg2len = msg2Size(_version);
             int toGet = Math.min(src.remaining(), msg2len - _received);
             src.get(_tmp, _received, toGet);
             _received += toGet;
@@ -402,9 +576,9 @@ class OutboundNTCP2State implements EstablishState {
             if (_log.shouldDebug())
                 _log.debug("After message #2: " + _handshakeState.toString());
             _padlen2 = (int) DataHelper.fromLong(options2, 2, 2);
-            if (_padlen2 > _tmp.length) {
-                // we reuse _tmp to read the padding
-                // limits are specified in the PQ spec
+            if (_padlen2 > padding2Max(_version)) {
+                // _tmp is sized for this ceiling and reused from offset 0 for
+                // the padding; the limit is i2pd's maxPaddingLength for msg 2
                 fail("Padlen too large: " + _padlen2);
                 return;
             }
