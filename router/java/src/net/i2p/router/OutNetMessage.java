@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.util.CDPQEntry;
@@ -36,6 +37,12 @@ public class OutNetMessage implements CDPQEntry {
     private ReplyJob _onReply;
     private Job _onFailedReply;
     private MessageSelector _replySelector;
+    /**
+     * The transports that failed to deliver this message. Copy-on-write, since
+     * the list is read - and formatted into log messages - on the send path of
+     * every transport while another transport may be recording a failure of its
+     * own at the same time.
+     */
     private List<String> _failedTransports;
     private long _sendBegin;
     private long _created;
@@ -320,7 +327,7 @@ public class OutNetMessage implements CDPQEntry {
     public synchronized int transportFailed(String transportStyle) {
         int rv;
         if (_failedTransports == null) {
-            _failedTransports = new ArrayList<>(2);
+            _failedTransports = new CopyOnWriteArrayList<>();
             rv = 0;
         } else {rv = _failedTransports.size();}
         _failedTransports.add(transportStyle);
@@ -340,7 +347,9 @@ public class OutNetMessage implements CDPQEntry {
     /**
      * The transports that have failed to deliver this message.
      * <p>
-     * As of 0.9.55, changed from a Set to a List.
+     * As of 0.9.55, changed from a Set to a List. The list is safe to iterate,
+     * format or query while another thread records another failure; what an
+     * iteration sees is a snapshot of the failures recorded so far.
      *
      * @return the list of failed transports
      */
