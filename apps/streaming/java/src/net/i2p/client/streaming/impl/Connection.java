@@ -1492,42 +1492,66 @@ class Connection {
     static final long SEQ_HALF = SEQ_MOD / 2;
 
     /**
-     * Next outbound packet sequence number. Never hands out a number whose
-     * low 32 bits are zero: the wire format uses sequence 0 to mean
-     * "ack-only, no data", so a data packet landing on 0 after 2^32 sends
-     * would have its payload stripped by the peer and by our own send path.
-     * The skip advances the counter past the reserved value in the same
-     * atomic step, so ids stay unique and monotonic across callers.
+     * Next outbound packet sequence number. The first number handed out is 0
+     * — the SYN/SYN-ACK consumes block 0, and the peer's promotion gate in
+     * {@link MessageInputStream#messageReceived(long, net.i2p.data.ByteArray)}
+     * ({@code _highestReadyBlockId + 1 == messageId}, ready id starting at -1)
+     * only accepts the stream's first data block when the SYN registered 0.
+     * After that, never hands out a number whose low 32 bits are zero: the
+     * wire format uses sequence 0 to mean "ack-only, no data", so a data
+     * packet landing on 0 after 2^32 sends would have its payload stripped by
+     * the peer and by our own send path. The skip advances the counter past
+     * the reserved value in the same atomic step, so ids stay unique and
+     * monotonic across callers.
      *
-     * @return the next sequence number, never congruent to 0 mod 2^32
+     * @return the next sequence number: 0 for the first packet, afterwards
+     *         never congruent to 0 mod 2^32
      */
     public long getNextOutboundPacketNum() {
         // CAS loop: unique and monotonic under concurrent callers, and a
-        // value congruent to 0 mod 2^32 is skipped (never handed out), so no
-        // two callers can collide on the replacement.
+        // wrapped value congruent to 0 mod 2^32 is skipped (never handed out),
+        // so no two callers can collide on the replacement.
         long cur, next;
         do {
             cur = _lastSendId.get();
-            next = cur + 1;
-            if ((next & 0xffffffffL) == 0)
-                next++;
+            next = nextSeqNumAfter(cur);
         } while (!_lastSendId.compareAndSet(cur, next));
         return next;
     }
 
     /**
-     * Pure form of the wire-zero skip used by tests: whether a raw counter
-     * value may be used as a sequence number, i.e. its low 32 bits are not
-     * zero. The CAS loop in {@link #getNextOutboundPacketNum()} steps over
-     * a rejected value in the same atomic update, so the skipped value is
-     * consumed and no two callers can collide on the replacement.
+     * Pure successor step used by the CAS loop in
+     * {@link #getNextOutboundPacketNum()}: increment cur, stepping over a
+     * wrapped wire-zero value. The first step (-1 to 0) is NOT a step-over —
+     * block 0 is the SYN's own block and the receiver's in-order gate
+     * requires the stream to start there.
+     *
+     * @param cur the current counter value, -1 when nothing has been sent yet
+     * @return the next counter value to publish
+     * @since 0.9.72+
+     */
+    static long nextSeqNumAfter(long cur) {
+        long next = cur + 1;
+        if (!isUsableSeqNum(next))
+            next++;
+        return next;
+    }
+
+    /**
+     * Pure wire-zero skip rule used by tests: whether a raw counter value may
+     * be used as a sequence number. 0 is usable exactly once — as block 0, the
+     * SYN/SYN-ACK's block — while a wrapped value whose low 32 bits are zero
+     * would go out as wire sequence 0 ("ack-only") and lose its payload. The
+     * CAS loop in {@link #getNextOutboundPacketNum()} steps over a rejected
+     * value in the same atomic update, so the skipped value is consumed and no
+     * two callers can collide on the replacement.
      *
      * @param id the raw counter value just incremented to
      * @return true if the value is usable on the wire
      * @since 0.9.72+
      */
     static boolean isUsableSeqNum(long id) {
-        return (id & 0xffffffffL) != 0;
+        return id == 0 || (id & 0xffffffffL) != 0;
     }
 
     /**
@@ -3723,8 +3747,9 @@ class Connection {
     public void setChoked(boolean on) {
         if (on != _isChoked) {
            _isChoked = on;
-           if (_log.shouldWarn()) {_log.warn("Choked changed to " + on + " on " + this);}
-if (!on) {
+           if (_log.shouldWarn())
+               _log.warn("Choke state changed -> " + (on ? "Choked" : "Unchoked") + " on " + this);
+           if (!on) {
                 // Episode boundary for the persist WARN gate: once the remote
                 // unchokes us, a fresh persist episode in a later window may log.
                 _lastPersistWarnTime = 0;
@@ -3752,8 +3777,8 @@ if (!on) {
                     updatePacingRate();
                     if (_log.shouldInfo()) {
                         _log.info("Restoring window to " + restored + " on unchoke for " + this +
-                                  " (pre-choke " + saved + ", ceiling " + ceiling +
-                                  ", ssthresh " + _ssthresh + ")");
+                                  "\n* Pre-Choke: " + saved + " * Ceiling: " + ceiling +
+                                  " * Slow-Start Threshold: " + _ssthresh);
                     }
                 }
                 windowAdjusted();

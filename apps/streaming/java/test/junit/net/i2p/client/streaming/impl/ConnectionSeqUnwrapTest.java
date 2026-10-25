@@ -82,17 +82,35 @@ public class ConnectionSeqUnwrapTest {
     // ---- the wire-zero skip rule ----
 
     /**
-     * A raw counter value congruent to 0 mod 2^32 must never be handed out:
-     * wire sequence 0 means "ack-only" and the payload would be stripped.
-     * getNextOutboundPacketNum() skips such values atomically; the pure
-     * predicate pins the rule.
+     * The stream starts at block 0: the SYN/SYN-ACK consumes it, and the
+     * receiver only promotes the first data block when the SYN registered 0
+     * (MessageInputStream's in-order gate is _highestReadyBlockId + 1 ==
+     * messageId, with the ready id starting at -1). The skip rule must not
+     * fire on the first step - skipping 0 there shifts every block by one and
+     * strands all stream data as out-of-order.
+     */
+    @Test
+    public void testFirstBlockIsZero() {
+        assertEquals(0, Connection.nextSeqNumAfter(-1));
+        assertEquals(1, Connection.nextSeqNumAfter(0));
+        assertTrue(Connection.isUsableSeqNum(0));
+    }
+
+    /**
+     * A wrapped raw counter value congruent to 0 mod 2^32 must never be
+     * handed out: wire sequence 0 means "ack-only" and the payload would be
+     * stripped. getNextOutboundPacketNum() skips such values atomically; the
+     * pure predicate and the pure step pin the rule.
      */
     @Test
     public void testWireZeroRejected() {
-        assertFalse(Connection.isUsableSeqNum(0));
         assertFalse(Connection.isUsableSeqNum(Connection.SEQ_MOD));
         assertFalse(Connection.isUsableSeqNum(2 * Connection.SEQ_MOD));
         assertTrue(Connection.isUsableSeqNum(Connection.SEQ_MOD - 1));
         assertTrue(Connection.isUsableSeqNum(Connection.SEQ_MOD + 1));
+        // the wrap step-over: the value just below 2^32 is usable and its
+        // wire-zero successor is skipped in one atomic step
+        assertEquals(Connection.SEQ_MOD + 1, Connection.nextSeqNumAfter(Connection.SEQ_MOD - 1));
+        assertEquals(2 * Connection.SEQ_MOD + 1, Connection.nextSeqNumAfter(2 * Connection.SEQ_MOD));
     }
 }
