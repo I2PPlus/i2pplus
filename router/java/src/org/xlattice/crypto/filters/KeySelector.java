@@ -149,9 +149,6 @@ public class KeySelector {
     private final static int[] MASK   = {
     ~0,~1,~3,~7,~15,~31,~63,~127,~255,~511,~1023,~2047,~4095,~8191,~16383,~32767};
 
-    /** 2 to the 15, the largest table size allowed. */
-    private final static int TWO_UP_15 = 32 * 1024;
-
     /**
      * Creates a key selector for a Bloom filter with specified parameters.
      *

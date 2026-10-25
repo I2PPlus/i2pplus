@@ -339,29 +339,6 @@ class SymmetricState implements Destroyable, Cloneable {
     }
 
     /**
-     * Hashes a single data buffer.
-     *
-     * @param data The buffer containing the data to hash.
-     * @param offset Offset into the data buffer of the first byte to hash.
-     * @param length Length of the data to be hashed.
-     * @param output The buffer to receive the output hash value.
-     * @param outputOffset Offset into the output buffer to place the hash value.
-     * @param outputLength The length of the hash output.
-     *
-     *                     The output buffer can be the same as the input data buffer.
-     */
-    private void hashOne(byte[] data, int offset, int length, byte[] output, int outputOffset, int outputLength)
-    {
-        hash.reset();
-        hash.update(data, offset, length);
-        try {
-            hash.digest(output, outputOffset, outputLength);
-        } catch (DigestException e) {
-            Arrays.fill(output, outputOffset, outputLength, (byte)0);
-        }
-    }
-
-    /**
      * Hashes two data buffers.
      *
      * @param data1 The buffer containing the first data to hash.

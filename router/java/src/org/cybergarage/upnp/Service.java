@@ -486,18 +486,6 @@ public class Service {
     }
 
     /**
-     * Gets the SCPD node by parsing from a file.
-     *
-     * @param scpdFile the file to parse SCPD from
-     * @return the parsed SCPD node
-     * @throws ParserException if parsing fails
-     */
-    private Node getSCPDNode(File scpdFile) throws ParserException {
-        Parser parser = UPnP.getXMLParser();
-        return parser.parse(scpdFile);
-    }
-
-    /**
      * Gets the SCPD node for this service, loading it if necessary.
      *
      * @return the SCPD node, or null if not available

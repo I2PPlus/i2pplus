@@ -5575,7 +5575,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * after a POST</li>
      * <li>{@link #renderHeader} - doctype, head, theme/font CSS, navbar</li>
      * <li>form open, {@link #appendTorrentInfo}, displayTorrentEdit()</li>
-     * <li>{@link #appendResourceError} when the path does not exist on disk</li>
+     * <li>error table when the path does not exist on disk</li>
      * <li>no-listing branch - {@link #appendMediaSection} player, comments section,
      * footer, return</li>
      * <li>file listing - {@link #wrapFileList} + sort, appendFileTableHead(),
@@ -5900,26 +5900,6 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("/configure id=nav_config class=snarkNav>")
            .append(_t("Configure"))
            .append("</a></div>\n");
-    }
-
-    /**
-     * Renders the error table shown when the requested path within the torrent
-     * does not exist on disk. Extracted from getListHTML.
-     *
-     * @param buf StringBuilder the markup is appended to
-     * @param r the missing resource path
-     * @param base the encoded base URL
-     * @param tName the torrent name, escaped here
-     * @since 0.9.71+
-     */
-    private void appendResourceError(StringBuilder buf, File r, String base, String tName) {
-        // fixup TODO
-        buf.append("<table class=resourceError id=DoesNotExist>\n<tr><th colspan=2>")
-           .append(_t("Resource Does Not Exist"))
-           .append("</th></tr><tr><td><b>").append(_t("Resource")).append(":</b></td><td>").append(r.toString())
-           .append("</td></tr><tr><td><b>").append(_t("Base")).append(":</b></td><td>").append(base)
-           .append("</td></tr><tr><td><b>").append(_t("Torrent")).append(":</b></td><td>").append(DataHelper.escapeHTML(tName))
-           .append("</td></tr>\n</table>");
     }
 
     /**

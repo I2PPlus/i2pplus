@@ -190,27 +190,6 @@ class Code extends Attribute.Holder {
             return map;
         }
     }
-    private int[] expandInstructionMap(Object map0) {
-        int[] imap;
-        if (map0 instanceof byte[]) {
-            byte[] map = (byte[]) map0;
-            imap = new int[map.length-1];
-            for (int i = 0; i < imap.length; i++) {
-                imap[i] = map[i] - Byte.MIN_VALUE;
-            }
-        } else if (map0 instanceof short[]) {
-            short[] map = (short[]) map0;
-            imap = new int[map.length-1];
-            for (int i = 0; i < imap.length; i++) {
-                imap[i] = map[i] - Byte.MIN_VALUE;
-            }
-        } else {
-            int[] map = (int[]) map0;
-            imap = Arrays.copyOfRange(map, 0, map.length - 1);
-        }
-        return imap;
-    }
-
     Object getInsnMap() {
         // Build a map of instruction boundaries.
         if (insnMap != null) {

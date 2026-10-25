@@ -19,10 +19,6 @@ public class StatusPanel extends JPanel {
      */
     private static final long serialVersionUID = 2609233901130079136L;
 
-    /** Tests finished so far. */
-    private int _iTestsCompleted;
-    /** Tests the run will perform. */
-    private int _iTestsNum;
     /** Set to stop the test run. */
     private boolean _bStop = false;
 
@@ -41,12 +37,6 @@ public class StatusPanel extends JPanel {
      * @param sParamEnableMultiple string indicating whether multiple tests have been scheduled
      */
     public StatusPanel(int iParamTestsNum, String sParamEnableMultiple) {}
-
-    /**
-     * Set Test number being run.
-     *
-     */
-    private void setTestNoLabelText() {}
 
     /**
      * Get intention to stop tests.

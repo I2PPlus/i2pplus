@@ -195,20 +195,6 @@ public class NotifyRequest extends SOAPRequest {
     }
 
     /**
-     * Finds the propertyset element in the request body.
-     *
-     * @return the node, null if the body has none
-     */
-    private Node getVariableNode() {
-        Node rootNode = getEnvelopeNode();
-        if (rootNode == null) return null;
-        if (rootNode.hasNodes() == false) return null;
-        Node propNode = rootNode.getNode(0);
-        if (propNode.hasNodes() == false) return null;
-        return propNode.getNode(0);
-    }
-
-    /**
      * Reads a Property element out of a variable node.
      *
      * @param varNode the variable node to read, null yields an empty property

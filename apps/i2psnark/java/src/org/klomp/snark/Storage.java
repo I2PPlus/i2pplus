@@ -2669,18 +2669,6 @@ public class Storage implements Closeable {
     }
 
     /**
-     * Reads a piece without checking its hash.
-     *
-     * @param piece the piece number
-     * @param bs the array to fill
-     * @return the bytes read
-     * @throws IOException if a file read fails
-     */
-    private int getUncheckedPiece(int piece, byte[] bs) throws IOException {
-        return getUncheckedPiece(piece, bs, 0, getPieceLength(piece));
-    }
-
-    /**
      * Verify a piece's hash without a whole piece-sized buffer: reads the piece
      * in windows no larger than the supplied buffer, feeding each window to the
      * SHA1 digest before comparing against the stored hash. Padding regions

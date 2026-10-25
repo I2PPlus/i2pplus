@@ -133,8 +133,6 @@ public class CPUID {
     private static final boolean isWindows = SystemVersion.isWindows();
     /** The lower case name of the operating system. */
     private static final String OS_NAME = System.getProperty("os.name", "").toLowerCase(Locale.US);
-    /** True on Linux. */
-    private static final boolean isLinux = OS_NAME.contains("linux");
     /** True on kFreeBSD. */
     private static final boolean isKFreebsd = OS_NAME.contains("kfreebsd");
     /** True on FreeBSD, not counting kFreeBSD. */

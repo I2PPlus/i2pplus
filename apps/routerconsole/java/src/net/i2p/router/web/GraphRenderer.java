@@ -106,9 +106,6 @@ class GraphRenderer {
              : GraphThemeColors.plotLineWidthFilled(themeDir, cfg.theme);
     }
 
-    /** Narrowest stroke a theme may ask for; below this a plot disappears. */
-    private static final float MIN_LINE_WIDTH = 0.5f;
-
     /**
      * Stroke width for the sidebar sparkline.
      * <p>A legibility decision: at 250x50 with nothing else drawn, a hairline nearly vanishes.
@@ -524,32 +521,6 @@ class GraphRenderer {
         configureCommentsAndSignature(def, cfg);
         configureGridAndRendering(def, cfg);
         renderGraph(def, out, cfg);
-    }
-
-    /**
-     * Builds the immutable render configuration from parameters and context.
-     *
-     * @param width image width in pixels
-     * @param height image height in pixels
-     * @param hideLegend true to omit the legend
-     * @param hideGrid true to omit the grid lines
-     * @param hideTitle true to omit the derived title
-     * @param showEvents true to plot the event count rather than the stat
-     * @param periodCount periods in the window; zero or more than the
-     *                    archive draws all of them
-     * @param endp number of periods before now; ignored unless positive
-     * @param showCredit true to show the signature line
-     * @param extras extra series in legend order, or null or empty for none
-     * @param titleOverride title to draw, or null for the primary stat
-     *                      description
-     * @param showRestarts true to draw a vertical line per router restart
-     * @return the assembled configuration, never null
-     */
-    private GraphRenderConfig buildRenderConfig(int width, int height, boolean hideLegend,
-            boolean hideGrid, boolean hideTitle, boolean showEvents, int periodCount, int endp,
-            boolean showCredit, List<GraphListener> extras, String titleOverride, boolean showRestarts) {
-        return buildRenderConfig(width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
-                                 endp, showCredit, extras, titleOverride, showRestarts, false, false);
     }
 
     /**

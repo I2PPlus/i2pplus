@@ -5402,16 +5402,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     * Matches ConnectionOptions.DEFAULT_MAX_MESSAGE_SIZE (1730), which is what the
-     *  streaming layer actually applies: i2ptunnel builds socket manager options
-     *  without maxMessageSize, so connections fall back to this default.  Hardcoded
-     *  here because the router module cannot reference the streaming app constant.
-     * @since 0.9.71+
-     */
-
-    private static final int STREAM_MSG_SIZE_DEFAULT = 1730;
-
-    /**
      * Streaming retransmission rate at or above which a path counts as lossy:
      * send-window growth is held and windows start backing off.
      * <p>Previously every streaming param compared {@code sendDuplicateSize}

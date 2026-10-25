@@ -116,16 +116,6 @@ public class ControlResponse extends SOAPResponse {
         return faultNode;
     }
 
-    /**
-     * Builds a SOAP fault element with a default description.
-     *
-     * @param errCode the UPnP error number
-     * @return the fault node
-     */
-    private Node createFaultResponseNode(int errCode) {
-        return createFaultResponseNode(errCode, UPnPStatus.code2String(errCode));
-    }
-
     ////////////////////////////////////////////////
     //	UPnP Error
     ////////////////////////////////////////////////

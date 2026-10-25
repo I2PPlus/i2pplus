@@ -2173,18 +2173,6 @@ public class TunnelPool {
     }
 
     /**
-     * Last time a lost-session cause was sampled. The probe reaches the transport
-     * and must not run per exclusion, so one sample per interval is all the split
-     * needs to accumulate.
-     *
-     * @since 0.9.71+
-     */
-    private volatile long _lastSessionLossProbe;
-
-    /** Interval between lost-session attribution samples. */
-    private static final long SESSION_LOSS_PROBE_INTERVAL_MS = 10_000L;
-
-    /**
      * Normalise a RouterInfo transport style into one of the known transports.
      *
      * <p>A zombie is a tunnel whose transport session died after the build

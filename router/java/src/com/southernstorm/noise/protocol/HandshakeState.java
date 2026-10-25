@@ -99,11 +99,6 @@ public class HandshakeState implements Destroyable, Cloneable {
     private static final int REMOTE_REQUIRED = 0x02;
 
     /**
-     * Pre-shared key is required for the handshake.
-     */
-    private static final int PSK_REQUIRED = 0x04;
-
-    /**
      * Ephemeral key for fallback pre-message has been provided.
      */
     private static final int FALLBACK_PREMSG = 0x08;
@@ -178,10 +173,6 @@ public class HandshakeState implements Destroyable, Cloneable {
     public static final String PATTERN_ID_N_NO_RESPONSE = "N!";
     /** SSU2 */
     public static final String PATTERN_ID_XK_SSU2 = "XK-SSU2";
-    /** Hybrid Base */
-    private static final String PATTERN_ID_IKHFS = "IKhfs";
-    /** Name of the I2P ratchet handshake pattern. */
-    private static final String PATTERN_ID_XKHFS = "XKhfs";
     /**
      * Hybrid Ratchet
      * @since 0.9.67
@@ -500,8 +491,6 @@ public static final String PATTERN_ID_XKHFS_512_SSU2 = "XKhfs512-SSU2";
     {
         return remoteHybrid;
     }
-    /** The empty prologue used when none is set. */
-    private static final byte[] emptyPrologue = new byte [0];
 
     /**
      * Starts the handshake running.
@@ -547,7 +536,6 @@ public static final String PATTERN_ID_XKHFS_512_SSU2 = "XKhfs512-SSU2";
 
         // Hash the prologue value.
         // Now precalculated in SymmetricState.
-        //symmetric.mixHash(emptyPrologue, 0, 0);
 
         // Mix the pre-supplied public keys into the handshake hash.
         if (isInitiator) {

@@ -198,8 +198,6 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     private static final int MAX_SESS_CONF_RETX = 5;
     /** Configurable sent-messages sweep interval. Default 60s, shortened under load. */
     private static volatile long _sentMessagesCleanTime = 60*1000L;
-    /** Max _sentMessages entries examined per {@link #expireSentMessages(long)} call. @since 0.9.71+. */
-    private static final int SENT_MESSAGES_EXPIRE_BATCH = 32;
     /**
      * Whether debug logging is on for this peer.
      *
@@ -373,7 +371,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         int examined = 0;
         // Work is bounded per fragment, but the sweep itself runs to completion
         // in one call. Capping it per tick pushed fragment-buffer release out to
-        // ceil(size / SENT_MESSAGES_EXPIRE_BATCH) ticks - around 8 minutes at a
+        // ceil(size / 32) ticks - around 8 minutes at a
         // thousand in-flight entries - where the old full scan released
         // everything in one.
         int budget = Integer.MAX_VALUE;

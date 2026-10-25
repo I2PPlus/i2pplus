@@ -150,22 +150,6 @@ public class JsonArray extends ArrayList<Object> implements Jsonable {
         return ((Number) returnable).doubleValue();
     }
 
-    /**
-     * True when a name is safe to instantiate while reading JSON.
-     *
-     * @param className the name to check
-     * @return true if the name may be instantiated
-     */
-    private static boolean isValidClassName(String className) {
-        if (className == null || className.isEmpty()) {
-            return false;
-        }
-        if (className.contains("..") || className.contains("/") || className.contains("\\")) {
-            return false;
-        }
-        return className.matches("^[a-zA-Z_][a-zA-Z0-9_$.]*$");
-    }
-
     /** A convenience method that assumes there is a Number or String value at the given index.
      * @param index represents where the value is expected to be at.
      * @return the value at the index provided cast to a float.

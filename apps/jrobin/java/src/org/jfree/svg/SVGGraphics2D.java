@@ -1435,22 +1435,6 @@ public final class SVGGraphics2D extends Graphics2D {
         return b.toString();
     }
 
-    /**
-     * Returns a string representing the specified color in RGBA format.
-     *
-     * @param c the color ({@code null} not permitted).
-     * @return The SVG RGBA color string.
-     */
-    private String rgbaColorStr(Color c) {
-        StringBuilder b = new StringBuilder("rgba(");
-        double alphaPercent = c.getAlpha() / 255.0;
-        b.append(c.getRed()).append(",")
-         .append(c.getGreen()).append(",").append(c.getBlue())
-         .append(",").append(transformDP(alphaPercent))
-         .append(")");
-        return b.toString();
-    }
-
     /** SVG name of the default stroke cap. */
     private static final String DEFAULT_STROKE_CAP = "butt";
     /** SVG name of the default stroke join. */
@@ -3546,43 +3530,6 @@ public final class SVGGraphics2D extends Graphics2D {
         StringBuilder b = new StringBuilder();
         b.append("clip-path=\"url(#").append(this.clipRef).append(")\"");
         return b.toString();
-    }
-
-    /**
-     * Expand a rectangular clip path by the given padding on all sides.
-     * Handles the format: d="M x y l w 0 l 0 h l -w 0 l 0 -h Z"
-     *
-     * @param pathData the full SVG path data attribute (d="...")
-     * @param padding pixels to expand on each side
-     * @return expanded path data attribute, or original if format unrecognized
-     */
-    private static String expandClipPath(String pathData, int padding) {
-        try {
-            // parse "d=\"M{x} {y}l{w} 0l0 {h}l-{w} 0l0 -{h}Z\""
-            String s = pathData.trim();
-            int dIdx = s.indexOf("d=\"");
-            int mIdx = s.indexOf('M', dIdx);
-            int spIdx = s.indexOf(' ', mIdx + 1);
-            int lIdx = s.indexOf('l', spIdx);
-            double x = Double.parseDouble(s.substring(mIdx + 1, spIdx).trim());
-            double y = Double.parseDouble(s.substring(spIdx + 1, lIdx).trim());
-            // l w 0
-            int sp2 = s.indexOf(' ', lIdx + 1);
-            double w = Double.parseDouble(s.substring(lIdx + 1, sp2).trim());
-            int l2 = s.indexOf('l', sp2);
-            // l 0 h
-            int sp3 = s.indexOf(' ', l2 + 1);
-            int l3 = s.indexOf('l', sp3);
-            double h = Double.parseDouble(s.substring(sp3 + 1, l3).trim());
-            int p = padding;
-            return "d=\"M" + (x - p) + " " + (y - p)
-                    + "l" + (w + 2 * p) + " 0"
-                    + "l0 " + (h + 2 * p)
-                    + "l" + -(w + 2 * p) + " 0"
-                    + "l0 " + -(h + 2 * p) + "Z\"";
-        } catch (Exception e) {
-            return pathData;
-        }
     }
 
     /**

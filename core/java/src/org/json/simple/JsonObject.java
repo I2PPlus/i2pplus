@@ -299,18 +299,6 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
     }
 
     /** A convenience method that assumes there is a Number or String value at the given key.
-
-    private static boolean isValidClassName(String className) {
-        if (className == null || className.isEmpty()) {
-            return false;
-        }
-        if (className.contains("..") || className.contains("/") || className.contains("\\")) {
-            return false;
-        }
-        return className.matches("^[a-zA-Z_][a-zA-Z0-9_$.]*$");
-    }
-
-    /** A convenience method that assumes there is a Number or String value at the given key.
      * @param key representing where the value ought to be paired with.
      * @return a Float representing the value paired with the key (which may involve rounding or truncation).
      * @throws ClassCastException if the value didn't match the assumed return type.
@@ -569,27 +557,6 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
             returnable = this.get(key.getKey());
         } else {
             returnable = key.getValue();
-        }
-        if (returnable instanceof Boolean) {
-            returnable = returnable.toString();
-        } else if (returnable instanceof Number) {
-            returnable = returnable.toString();
-        }
-        return (String) returnable;
-    }
-
-    /** A convenience method that assumes there is a Boolean, Number, or String value at the given key.
-     * @param key representing where the value ought to be stored at.
-     * @param defaultValue representing what is returned when the key isn't in the JsonObject.
-     * @return the value stored at the key or the default provided if the key doesn't exist.
-     * @throws ClassCastException if there was a value but didn't match the assumed return type.
-     */
-    private String getStringOrDefault(final String key, final String defaultValue) {
-        Object returnable;
-        if (this.containsKey(key)) {
-            returnable = this.get(key);
-        } else {
-            return defaultValue;
         }
         if (returnable instanceof Boolean) {
             returnable = returnable.toString();

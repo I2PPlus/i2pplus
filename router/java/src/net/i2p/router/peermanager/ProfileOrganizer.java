@@ -76,15 +76,12 @@ import net.i2p.util.SystemVersion;
 public class ProfileOrganizer {
     /** Threshold below which the network is considered under attack. */
     public static final double ATTACK_THRESHOLD = 0.40;
-    /** Sorts profiles by capacity, highest first. */
-    private static final Comparator<PeerProfile> CAPACITY_COMPARATOR =
-            Comparator.comparingDouble(PeerProfile::getCapacityValue);
     /**
      * Eviction order: least recently active first, then lowest capacity.
      * <p>Activity is the newest of last-sent-successfully, last-heard-from and
-     * last-heard-about, matching {@link #isStaleAbsentPeer}. Ties fall through to
-     * {@link #CAPACITY_COMPARATOR} so two equally idle peers are separated on what
-     * else is known about them rather than on map order.
+     * last-heard-about, matching {@link #isStaleAbsentPeer}. Ties fall through to a
+     * capacity comparison so two equally idle peers are separated on what else is
+     * known about them rather than on map order.
      *
      * @since 0.9.71+
      */
@@ -5045,19 +5042,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     }
 
     /**
-     * Puts a profile into the pool maps with the write lock held.
-     *
-     * @param profile the profile to place
-     * @param buildSuccess the current tunnel build success ratio
-     */
-    private void lockedPlaceProfile(PeerProfile profile, double buildSuccess) {
-        lockedPlaceProfile(profile, buildSuccess,
-                           getMinimumHighCapacityPeers(),
-                           getMaximumFastPeers(),
-                           getMaximumHighCapPeers());
-    }
-
-    /**
      * Variant taking the tier thresholds, which the caller has already fetched for
      * the whole scan.
      *
@@ -5083,22 +5067,6 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
 
         // Evaluate tier placement
         lockedPromoteProfileToTiers(profile, buildSuccess, minHighCap, maxFast, maxHighCap);
-    }
-
-    /**
-     * Evaluate a profile for promotion to fast/high-cap tiers without touching
-     * the notFailing structures.  Safe to call between reorganize cycles —
-     * does not add duplicates to _notFailingPeersList.
-     * Must be called with write lock held.
-     *
-     * @param profile the profile to evaluate for tier placement
-     * @param buildSuccess cached tunnel build success ratio, read once by the caller
-     */
-    private void lockedPromoteProfileToTiers(PeerProfile profile, double buildSuccess) {
-        lockedPromoteProfileToTiers(profile, buildSuccess,
-                                    getMinimumHighCapacityPeers(),
-                                    getMaximumFastPeers(),
-                                    getMaximumHighCapPeers());
     }
 
     /**
