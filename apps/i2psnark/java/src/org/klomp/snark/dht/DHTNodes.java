@@ -193,34 +193,40 @@ class DHTNodes {
         }
 
         public void timeReached() {
-            if (!_isRunning) return;
-            long now = _context.clock().now();
-            int peerCount = 0;
-            for (Iterator<NodeInfo> iter = DHTNodes.this.values().iterator(); iter.hasNext(); ) {
-                NodeInfo peer = iter.next();
-                if (peer.lastSeen() < now - _expireTime) {
-                    iter.remove();
-                    _kad.remove(peer.getNID());
-                } else {
-                    peerCount++;
+            // reschedule in finally so one exception cannot end node expiry
+            try {
+                if (!_isRunning) return;
+                long now = _context.clock().now();
+                int peerCount = 0;
+                for (Iterator<NodeInfo> iter = DHTNodes.this.values().iterator(); iter.hasNext(); ) {
+                    NodeInfo peer = iter.next();
+                    if (peer.lastSeen() < now - _expireTime) {
+                        iter.remove();
+                        _kad.remove(peer.getNID());
+                    } else {
+                        peerCount++;
+                    }
                 }
+
+                if (peerCount > MAX_PEERS)
+                    _expireTime = Math.max(_expireTime - DELTA_EXPIRE_TIME, MIN_EXPIRE_TIME);
+                else _expireTime = Math.min(_expireTime + DELTA_EXPIRE_TIME, MAX_EXPIRE_TIME);
+
+                if (_log.shouldDebug())
+                    _log.debug(
+                            "DHT storage cleaner done - now with "
+                                    + peerCount
+                                    + " / "
+                                    + MAX_PEERS
+                                    + " peers, "
+                                    + DataHelper.formatDuration(_expireTime)
+                                    + " expiration");
+
+                schedule(CLEAN_TIME);
+            } catch (Throwable t) {
+                _log.error("DHT storage cleaner cycle failed", t);
+                schedule(CLEAN_TIME);
             }
-
-            if (peerCount > MAX_PEERS)
-                _expireTime = Math.max(_expireTime - DELTA_EXPIRE_TIME, MIN_EXPIRE_TIME);
-            else _expireTime = Math.min(_expireTime + DELTA_EXPIRE_TIME, MAX_EXPIRE_TIME);
-
-            if (_log.shouldDebug())
-                _log.debug(
-                        "DHT storage cleaner done - now with "
-                                + peerCount
-                                + " / "
-                                + MAX_PEERS
-                                + " peers, "
-                                + DataHelper.formatDuration(_expireTime)
-                                + " expiration");
-
-            schedule(CLEAN_TIME);
         }
     }
 }

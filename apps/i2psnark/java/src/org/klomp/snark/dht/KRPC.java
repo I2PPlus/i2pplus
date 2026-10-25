@@ -206,6 +206,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     private static final long MAX_INBOUND_TOKEN_AGE = MAX_TOKEN_AGE - 2 * 60 * 1000;
     /** Outbound crypto tokens held at once. */
     private static final int MAX_OUTBOUND_TOKENS = 5000;
+    /** Cap on stored inbound tokens, enforced at put time as well as in the cleaner. */
+    private static final int MAX_INBOUND_TOKENS = 5000;
 
     /** How long since sent do we wait for a reply. */
     private static final long DEFAULT_QUERY_TIMEOUT = (long) 75 * 1000;
@@ -615,7 +617,6 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             announce(ih, isSeed);
             // announce to the closest we've heard from
             int annCnt = 0;
-            long start = _context.clock().now();
             for (Iterator<NodeInfo> iter = heardFrom.iterator();
                     iter.hasNext()
                             && annCnt < annMax
@@ -624,9 +625,13 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                 NodeInfo annTo = iter.next();
                 if (_log.shouldInfo()) _log.info("Announcing to closest from get_peers: " + annTo);
                 long toWait = annMaxWait > 0 ? Math.min(annMaxWait, (long) 60 * 1000) : 0;
+                // measure this announce only - subtracting the time since the
+                // loop start each pass charged every iteration for all the
+                // earlier ones and collapsed the budget early
+                long iterStart = _context.clock().now();
                 if (announce(ih, annTo, toWait, isSeed)) annCnt++;
                 if (annMaxWait > 0) {
-                    annMaxWait -= _context.clock().now() - start;
+                    annMaxWait -= _context.clock().now() - iterStart;
                     if (annMaxWait < 1000) break;
                 }
             }
@@ -696,14 +701,15 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     public int announce(byte[] ih, int max, long maxWait, boolean isSeed) {
         announce(ih, isSeed);
         int rv = 0;
-        long start = _context.clock().now();
         InfoHash iHash = new InfoHash(ih);
         List<NodeInfo> nodes = removeSelf(_knownNodes.findClosest(iHash, max), _myNodeInfo);
         if (_log.shouldInfo()) _log.info("Found " + nodes.size() + " to announce to for " + iHash);
         for (NodeInfo nInfo : nodes) {
             if (!_isRunning || Thread.currentThread().isInterrupted()) break;
+            // measure this announce only, see the getPeersAndAnnounce loop
+            long iterStart = _context.clock().now();
             if (announce(ih, nInfo, Math.min(maxWait, (long) 60 * 1000), isSeed)) rv++;
-            maxWait -= _context.clock().now() - start;
+            maxWait -= _context.clock().now() - iterStart;
             if (maxWait < 1000) break;
         }
         return rv;
@@ -1362,11 +1368,23 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             }
             // success
         } catch (Throwable e) {
+            // remote-triggerable: a malformed datagram must not print a
+            // full stack trace each one - log the message, with a stack
+            // trace at most once a minute
             if (_log.shouldWarn()) {
-                _log.warn("Received error for message", e);
+                long now = _context.clock().now();
+                if (now - _lastReceiveErrorLog > 60 * 1000L) {
+                    _lastReceiveErrorLog = now;
+                    _log.warn("Error processing received DHT message", e);
+                } else {
+                    _log.warn("Error processing received DHT message: " + e);
+                }
             }
         }
     }
+
+    /** When the last full stack trace for a receive error was logged. */
+    private volatile long _lastReceiveErrorLog;
 
     /**
      * Handle and respond to an incoming query. Adds sender to our DHT.
@@ -1643,7 +1661,22 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         }
         // generate and save random token
         Token token = new Token(_context);
-        _outgoingTokens.put(token, nInfo);
+        // Bound the map at put time: the periodic cleaner only runs minutes
+        // later, so a get_peers flood could otherwise pile up unbounded
+        // tokens in the gap (and a per-torrent TorrentKRPC has no cleaner
+        // at all)
+        if (_outgoingTokens.size() >= MAX_OUTBOUND_TOKENS) {
+            pruneOutgoingTokens();
+            if (_outgoingTokens.size() >= MAX_OUTBOUND_TOKENS) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Too many outbound tokens, dropping a get_peers token");
+                }
+            } else {
+                _outgoingTokens.put(token, nInfo);
+            }
+        } else {
+            _outgoingTokens.put(token, nInfo);
+        }
         if (_log.shouldInfo()) {
             _log.info("Stored new Outbound token " + token + "\n* Target: " + nInfo);
         }
@@ -1742,7 +1775,10 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             if (btok != null && ih != null) {
                 byte[] tok = btok.getBytes();
                 Token token = new Token(_context, tok);
-                _incomingTokens.put(nInfo.getNID(), token);
+                // bound at put time, see the outbound token guard
+                if (_incomingTokens.size() < MAX_INBOUND_TOKENS) {
+                    _incomingTokens.put(nInfo.getNID(), token);
+                }
                 if (_log.shouldDebug()) {
                     _log.debug("Received token " + token + ", must be a response to get_peers");
                 }
@@ -2159,6 +2195,29 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         }
     }
 
+    /**
+     * Drop expired outbound tokens, then trim toward MAX_OUTBOUND_TOKENS if
+     * still over. Shared by the periodic cleaner and the put-time guard in
+     * handleGetPeers, so a flood between cleaner runs cannot grow the map
+     * without bound.
+     *
+     * @since 0.9.72+
+     */
+    private void pruneOutgoingTokens() {
+        long expire = _context.clock().now() - MAX_TOKEN_AGE;
+        int cnt = 0;
+        for (Iterator<Token> iter = _outgoingTokens.keySet().iterator(); iter.hasNext(); ) {
+            Token tok = iter.next();
+            // just delete at random if we have too many
+            // TODO reduce the expire time and iterate again?
+            if (tok.lastSeen() < expire || cnt >= MAX_OUTBOUND_TOKENS) {
+                iter.remove();
+            } else {
+                cnt++;
+            }
+        }
+    }
+
     /** Cleaner-upper. */
     private class Cleaner extends SimpleTimer2.TimedEvent {
 
@@ -2168,74 +2227,74 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         }
 
         public void timeReached() {
-            if (!_isRunning) {
-                return;
-            }
-            long now = _context.clock().now();
-            if (_log.shouldDebug())
-                _log.debug(
-                        "KRPC cleaner starting with "
-                                + _blacklist.size()
-                                + " in blacklist, "
-                                + _outgoingTokens.size()
-                                + " sent Tokens, "
-                                + _incomingTokens.size()
-                                + " rcvd Tokens");
-            int cnt = 0;
-            long expire = now - MAX_TOKEN_AGE;
-            for (Iterator<Token> iter = _outgoingTokens.keySet().iterator(); iter.hasNext(); ) {
-                Token tok = iter.next();
-                // just delete at random if we have too many
-                // TODO reduce the expire time and iterate again?
-                if (tok.lastSeen() < expire || cnt >= MAX_OUTBOUND_TOKENS) {
-                    iter.remove();
-                } else {
-                    cnt++;
+            // one unexpected exception must not kill the expiry chain for
+            // the router's whole uptime - reschedule in finally
+            try {
+                if (!_isRunning) {
+                    return;
+                }
+                long now = _context.clock().now();
+                if (_log.shouldDebug())
+                    _log.debug(
+                            "KRPC cleaner starting with "
+                                    + _blacklist.size()
+                                    + " in blacklist, "
+                                    + _outgoingTokens.size()
+                                    + " sent Tokens, "
+                                    + _incomingTokens.size()
+                                    + " rcvd Tokens");
+                pruneOutgoingTokens();
+                long expire = now - MAX_INBOUND_TOKEN_AGE;
+                for (Iterator<Token> iter = _incomingTokens.values().iterator(); iter.hasNext(); ) {
+                    Token tok = iter.next();
+                    if (tok.lastSeen() < expire) {
+                        iter.remove();
+                    }
+                }
+                expire = now - BLACKLIST_CLEAN_TIME;
+                for (Iterator<NID> iter = _blacklist.iterator(); iter.hasNext(); ) {
+                    NID nid = iter.next();
+                    if (nid.lastSeen() < expire) {
+                        iter.remove();
+                    } // lastSeen() is actually when-added
+                }
+                int sz = _blacklist.size();
+                if (sz > BLACKLIST_MAX_PEERS) {
+                    // just remove random peers
+                    for (Iterator<NID> iter = _blacklist.iterator();
+                            iter.hasNext() && sz > BLACKLIST_MAX_PEERS;
+                            sz--) {
+                        iter.next();
+                        iter.remove();
+                    }
+                }
+                if (now - _nodesLastSaved > NODES_SAVE_TIME) {
+                    PersistDHT.saveDHT(_knownNodes, false, _dhtFile);
+                    _nodesLastSaved = now;
+                }
+                // TODO sent queries?
+                if (_log.shouldDebug())
+                    _log.debug(
+                            "KRPC cleaner done, now with "
+                                    + _blacklist.size()
+                                    + " in blacklist, "
+                                    + _outgoingTokens.size()
+                                    + " sent Tokens, "
+                                    + _incomingTokens.size()
+                                    + " rcvd Tokens, "
+                                    + _knownNodes.size()
+                                    + " known peers, "
+                                    + _sentQueries.size()
+                                    + " queries awaiting response");
+            } catch (Throwable t) {
+                _log.error("KRPC cleaner cycle failed", t);
+            } finally {
+                // must not re-arm after stop() cancelled the chain - a
+                // stopped KRPC would otherwise stay reachable forever
+                if (_isRunning) {
+                    schedule(CLEAN_TIME);
                 }
             }
-            expire = now - MAX_INBOUND_TOKEN_AGE;
-            for (Iterator<Token> iter = _incomingTokens.values().iterator(); iter.hasNext(); ) {
-                Token tok = iter.next();
-                if (tok.lastSeen() < expire) {
-                    iter.remove();
-                }
-            }
-            expire = now - BLACKLIST_CLEAN_TIME;
-            for (Iterator<NID> iter = _blacklist.iterator(); iter.hasNext(); ) {
-                NID nid = iter.next();
-                if (nid.lastSeen() < expire) {
-                    iter.remove();
-                } // lastSeen() is actually when-added
-            }
-            int sz = _blacklist.size();
-            if (sz > BLACKLIST_MAX_PEERS) {
-                // just remove random peers
-                for (Iterator<NID> iter = _blacklist.iterator();
-                        iter.hasNext() && sz > BLACKLIST_MAX_PEERS;
-                        sz--) {
-                    iter.next();
-                    iter.remove();
-                }
-            }
-            if (now - _nodesLastSaved > NODES_SAVE_TIME) {
-                PersistDHT.saveDHT(_knownNodes, false, _dhtFile);
-                _nodesLastSaved = now;
-            }
-            // TODO sent queries?
-            if (_log.shouldDebug())
-                _log.debug(
-                        "KRPC cleaner done, now with "
-                                + _blacklist.size()
-                                + " in blacklist, "
-                                + _outgoingTokens.size()
-                                + " sent Tokens, "
-                                + _incomingTokens.size()
-                                + " rcvd Tokens, "
-                                + _knownNodes.size()
-                                + " known peers, "
-                                + _sentQueries.size()
-                                + " queries awaiting response");
-            schedule(CLEAN_TIME);
         }
     }
 
@@ -2269,40 +2328,49 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         /** Runs one DHT exploration. */
         private ExplorerThread() {}
         public void run() {
-            if (!_isRunning) {
-                return;
-            }
-            if (!_hasBootstrapped) {
-                if (_log.shouldInfo()) {
-                    _log.info("Bootstrap start, size: " + _knownNodes.size());
-                }
-                explore(_myNID, 8, (long) 60 * 1000, 1);
-                if (_log.shouldInfo()) {
-                    _log.info("Bootstrap done, size: " + _knownNodes.size());
-                }
-                _hasBootstrapped = true;
-            }
-            if (!_isRunning) {
-                return;
-            }
-            if (_log.shouldInfo()) {
-                _log.info("Explore start. size: " + _knownNodes.size());
-            }
-            List<NID> keys = _knownNodes.getExploreKeys();
-            for (NID nid : keys) {
-                explore(nid, 8, (long) 60 * 1000, 1);
+            // a throwing explore() or bootstrap must not end the explore
+            // chain for the router's whole uptime - reschedule in finally
+            try {
                 if (!_isRunning) {
                     return;
                 }
+                if (!_hasBootstrapped) {
+                    if (_log.shouldInfo()) {
+                        _log.info("Bootstrap start, size: " + _knownNodes.size());
+                    }
+                    explore(_myNID, 8, (long) 60 * 1000, 1);
+                    if (_log.shouldInfo()) {
+                        _log.info("Bootstrap done, size: " + _knownNodes.size());
+                    }
+                    _hasBootstrapped = true;
+                }
+                if (!_isRunning) {
+                    return;
+                }
+                if (_log.shouldInfo()) {
+                    _log.info("Explore start. size: " + _knownNodes.size());
+                }
+                List<NID> keys = _knownNodes.getExploreKeys();
+                for (NID nid : keys) {
+                    explore(nid, 8, (long) 60 * 1000, 1);
+                    if (!_isRunning) {
+                        return;
+                    }
+                }
+                if (_log.shouldInfo()) {
+                    _log.info(
+                            "Explore of "
+                                    + keys.size()
+                                    + " buckets done, new size: "
+                                    + _knownNodes.size());
+                }
+            } catch (Throwable t) {
+                _log.error("DHT explore cycle failed", t);
+            } finally {
+                if (_isRunning) {
+                    _explorer = new Explorer(EXPLORE_TIME);
+                }
             }
-            if (_log.shouldInfo()) {
-                _log.info(
-                        "Explore of "
-                                + keys.size()
-                                + " buckets done, new size: "
-                                + _knownNodes.size());
-            }
-            _explorer = new Explorer(EXPLORE_TIME);
         }
     }
 }

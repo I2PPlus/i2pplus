@@ -200,14 +200,18 @@ class DHTTracker {
      * @param ih the info hash of the torrent
      * @param max maximum number of peers to return
      * @param noSeeds true if we do not want seeds in the result
-     * @return list or empty list (never null)
+     * @return mutable list or empty list (never null) - callers remove() from it
+     * @since 0.9.72+ the returned list is mutable, callers may remove()
      */
     List<Hash> getPeers(InfoHash ih, int max, boolean noSeeds) {
         Peers peers = _torrents.get(ih);
-        if (peers == null || max <= 0) return Collections.emptyList();
+        // Mutable so callers can remove() themselves; an immutable
+        // emptyList() here threw UOE on every inbound get_peers for a
+        // torrent with no stored peers
+        if (peers == null || max <= 0) return new ArrayList<>(0);
 
         int totalPeers = peers.size();
-        if (totalPeers == 0) return Collections.emptyList();
+        if (totalPeers == 0) return new ArrayList<>(0);
 
         // Pre-size result list to avoid resizing
         List<Hash> result = new ArrayList<>(Math.min(max, totalPeers));
@@ -343,64 +347,70 @@ class DHTTracker {
         }
 
         public void timeReached() {
-            if (!_isRunning) return;
-            long now = _context.clock().now();
-            int torrentCount = 0;
-            int peerCount = 0;
-            boolean tooMany = false;
-            for (Iterator<Peers> iter = _torrents.values().iterator(); iter.hasNext(); ) {
-                Peers p = iter.next();
-                int recent = 0;
-                for (Iterator<Peer> iterp = p.values().iterator(); iterp.hasNext(); ) {
-                    Peer peer = iterp.next();
-                    if (peer.lastSeen() < now - _expireTime) iterp.remove();
-                    else {
-                        recent++;
-                        peerCount++;
-                    }
-                }
-                if (recent > MAX_PEERS_PER_TORRENT) {
-                    // Too many, remove oldest peers (LRU eviction)
-                    // TODO per-torrent adjustable expiration?
-                    List<Peer> sortedPeers = new ArrayList<>(p.values());
-                    Collections.sort(sortedPeers, new Comparator<Peer>() {
-                        public int compare(Peer p1, Peer p2) {
-                            return Long.compare(p1.lastSeen(), p2.lastSeen());
+            // reschedule in finally so one exception cannot end peer expiry
+            try {
+                if (!_isRunning) return;
+                long now = _context.clock().now();
+                int torrentCount = 0;
+                int peerCount = 0;
+                boolean tooMany = false;
+                for (Iterator<Peers> iter = _torrents.values().iterator(); iter.hasNext(); ) {
+                    Peers p = iter.next();
+                    int recent = 0;
+                    for (Iterator<Peer> iterp = p.values().iterator(); iterp.hasNext(); ) {
+                        Peer peer = iterp.next();
+                        if (peer.lastSeen() < now - _expireTime) iterp.remove();
+                        else {
+                            recent++;
+                            peerCount++;
                         }
-                    });
-
-                    for (int i = 0; i < sortedPeers.size() && p.size() > MAX_PEERS_PER_TORRENT; i++) {
-                        Peer oldest = sortedPeers.get(i);
-                        p.remove(oldest);
-                        peerCount--;
                     }
-                    torrentCount++;
-                } else if (recent <= 0) {
-                    iter.remove();
-                } else {
-                    torrentCount++;
+                    if (recent > MAX_PEERS_PER_TORRENT) {
+                        // Too many, remove oldest peers (LRU eviction)
+                        // TODO per-torrent adjustable expiration?
+                        List<Peer> sortedPeers = new ArrayList<>(p.values());
+                        Collections.sort(sortedPeers, new Comparator<Peer>() {
+                            public int compare(Peer p1, Peer p2) {
+                                return Long.compare(p1.lastSeen(), p2.lastSeen());
+                            }
+                        });
+
+                        for (int i = 0; i < sortedPeers.size() && p.size() > MAX_PEERS_PER_TORRENT; i++) {
+                            Peer oldest = sortedPeers.get(i);
+                            p.remove(oldest);
+                            peerCount--;
+                        }
+                        torrentCount++;
+                    } else if (recent <= 0) {
+                        iter.remove();
+                    } else {
+                        torrentCount++;
+                    }
                 }
+
+                // Global pressure only: one torrent at its own cap is normal bookkeeping
+                // (the LRU trim already bounded it), not a reason to tighten expiry
+                // for every torrent and sweep 3x more often.
+                if (peerCount > getMaxPeers(torrentCount)) tooMany = true;
+                if (tooMany) _expireTime = Math.max(_expireTime - DELTA_EXPIRE_TIME, MIN_EXPIRE_TIME);
+                else _expireTime = Math.min(_expireTime + DELTA_EXPIRE_TIME, getMaxExpireTime(peerCount));
+
+                if (_log.shouldDebug())
+                    _log.debug(
+                            "DHT tracker cleaner done, now with "
+                                    + torrentCount
+                                    + " torrents, "
+                                    + peerCount
+                                    + " peers, "
+                                    + DataHelper.formatDuration(_expireTime)
+                                    + " expiration");
+                _peerCount = peerCount;
+                _torrentCount = torrentCount;
+                schedule(tooMany ? CLEAN_TIME / 3 : CLEAN_TIME);
+            } catch (Throwable t) {
+                _log.error("DHT tracker cleaner cycle failed", t);
+                schedule(CLEAN_TIME);
             }
-
-            // Global pressure only: one torrent at its own cap is normal bookkeeping
-            // (the LRU trim already bounded it), not a reason to tighten expiry
-            // for every torrent and sweep 3x more often.
-            if (peerCount > getMaxPeers(torrentCount)) tooMany = true;
-            if (tooMany) _expireTime = Math.max(_expireTime - DELTA_EXPIRE_TIME, MIN_EXPIRE_TIME);
-            else _expireTime = Math.min(_expireTime + DELTA_EXPIRE_TIME, getMaxExpireTime(peerCount));
-
-            if (_log.shouldDebug())
-                _log.debug(
-                        "DHT tracker cleaner done, now with "
-                                + torrentCount
-                                + " torrents, "
-                                + peerCount
-                                + " peers, "
-                                + DataHelper.formatDuration(_expireTime)
-                                + " expiration");
-            _peerCount = peerCount;
-            _torrentCount = torrentCount;
-            schedule(tooMany ? CLEAN_TIME / 3 : CLEAN_TIME);
         }
     }
 }

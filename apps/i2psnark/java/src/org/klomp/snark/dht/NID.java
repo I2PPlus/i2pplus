@@ -33,11 +33,17 @@ import net.i2p.util.Clock;
  */
 public class NID extends SHA1Hash {
 
-    /** Timestamp when this node was last successfully contacted. */
-    private long lastSeen;
+    /**
+     * Timestamp when this node was last successfully contacted.
+     * Volatile - updated from listener, lookup and cleaner threads.
+     */
+    private volatile long lastSeen;
 
-    /** Number of consecutive timeouts or failures. */
-    private int fails;
+    /**
+     * Number of consecutive timeouts or failures.
+     * Volatile - updated from listener and lookup threads.
+     */
+    private volatile int fails;
 
     /** Maximum allowed consecutive failures before considering node problematic. */
     private static final int MAX_FAILS = 5;

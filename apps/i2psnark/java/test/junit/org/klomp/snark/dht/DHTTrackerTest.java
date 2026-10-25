@@ -2,6 +2,7 @@ package org.klomp.snark.dht;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
 import net.i2p.I2PAppContext;
 import net.i2p.data.Hash;
 import org.junit.Test;
@@ -91,5 +92,29 @@ public class DHTTrackerTest {
         assertEquals(30 * minute, DHTTracker.getMaxExpireTime(4 * DHTTracker.MAX_PEERS_PER_TORRENT));
         // Never below the MIN_EXPIRE_TIME floor once tightening kicks in
         assertEquals(4 * hour, DHTTracker.getMaxExpireTime(0));
+    }
+
+    /**
+     * getPeers() returns a mutable list even when empty: KRPC removes the
+     * requesting peer from the result, and an immutable emptyList() threw
+     * UnsupportedOperationException on every inbound get_peers for a torrent
+     * with no stored peers.
+     */
+    @Test
+    public void testGetPeersResultIsMutable() {
+        DHTTracker tracker = new DHTTracker(I2PAppContext.getGlobalContext());
+        // no entry for this torrent
+        List<Hash> empty = tracker.getPeers(otherHash(), 10, false);
+        assertTrue(empty.isEmpty());
+        empty.remove(new Hash(new byte[32])); // must not throw
+        // entry exists but max <= 0
+        tracker.announce(IH, new Hash(new byte[32]), false);
+        List<Hash> capped = tracker.getPeers(IH, 0, false);
+        assertTrue(capped.isEmpty());
+        capped.remove(new Hash(new byte[32])); // must not throw
+        // non-empty result is mutable too
+        List<Hash> peers = tracker.getPeers(IH, 10, false);
+        assertEquals(1, peers.size());
+        peers.remove(0);
     }
 }
