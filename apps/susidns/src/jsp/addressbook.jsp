@@ -191,6 +191,15 @@
     for (String[] catArray : categories) {
         String cat = catArray[0];
         String categoryTooltip = cat;
+        // query-context encoding for the filter param; these values are
+        // hardcoded today, encode so a future feed-sourced value cannot
+        // inject & or = into the query string
+        String catEncoded;
+        try {
+            catEncoded = java.net.URLEncoder.encode(cat, "UTF-8");
+        } catch (java.io.UnsupportedEncodingException uee) {
+            catEncoded = cat;
+        }
         try {
             Object hostCheckerObj = application.getAttribute("hostChecker");
             if (hostCheckerObj != null) {
@@ -201,9 +210,9 @@
         boolean notActive = query != null && !query.matches(".*[?&]filter=" + cat + "(&|$).*");
         if (notActive) {
 %>
-<a href="/susidns/addressbook?book=${book.book}&amp;filter=<%=cat%>"><span class=<%=cat%> title="<%=categoryTooltip%>"><%=categoryTooltip%></span></a>
+<a href="/susidns/addressbook?book=${book.book}&amp;filter=<%=catEncoded%>"><span class="<%=cat%>" title="<%=categoryTooltip%>"><%=categoryTooltip%></span></a>
 <%      } else { %>
-<a id=activefilter href="/susidns/addressbook?book=${book.book}&amp;filter=<%=cat%>"><span class=<%=cat%> title="<%=categoryTooltip%>"><%=categoryTooltip%></span></a>
+<a id=activefilter href="/susidns/addressbook?book=${book.book}&amp;filter=<%=catEncoded%>"><span class="<%=cat%>" title="<%=categoryTooltip%>"><%=categoryTooltip%></span></a>
 <%      } %>
 <%  } %>
 </div>
@@ -247,14 +256,21 @@
                 String hostNameForCategory = (String) pageContext.getAttribute("hostnameForCategory");
                 Object categoryResult = getCategory.invoke(hostCheckerObj, hostNameForCategory);
                 if (categoryResult != null) {
-                    category = (String) categoryResult;
+                    // remote feed data - escape once here, every render site below is safe
+                    category = net.i2p.addressbook.HostCheckerBridge.escapeForDisplay((String) categoryResult);
                 }
-                categoryTooltip = net.i2p.addressbook.HostCheckerBridge.getCategoryDescription(category);
+                // the description lookup needs the raw value, and for unknown
+                // categories it echoes the category back - escape only the
+                // translated string so nothing is escaped twice
+                String catDesc = net.i2p.addressbook.HostCheckerBridge.getCategoryDescription((String) categoryResult);
+                if (catDesc != null && !catDesc.equals(categoryResult)) {
+                    categoryTooltip = net.i2p.addressbook.HostCheckerBridge.escapeForDisplay(catDesc);
+                }
             }
         } catch (Exception e) {
             // Silently ignore category errors
         }
-        if (!category.isEmpty()) { %><span class=<%=category%> title="<%=categoryTooltip.isEmpty() ? category : categoryTooltip%>"><%=categoryTooltip.isEmpty() ? category : categoryTooltip%></span><% }
+        if (!category.isEmpty()) { %><span class="<%=category%>" title="<%=categoryTooltip.isEmpty() ? category : categoryTooltip%>"><%=categoryTooltip.isEmpty() ? category : categoryTooltip%></span><% }
         else { %><span class=unknown title="<%=categoryTooltip.isEmpty() ? intl._t("unknown") : categoryTooltip%>"><%=intl._t("unknown")%></span><% } %>
 </td>
 <td class=names><a href="http://${addr.name}/" target=_blank>${addr.displayName}</a></td>

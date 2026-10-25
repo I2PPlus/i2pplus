@@ -141,4 +141,19 @@ public class HostCheckerBridge {
         return checker.getCategoryDescription(category);
     }
 
+    /**
+     * Escape a category name for display in the address book page. Categories
+     * come from a remotely downloaded feed over plaintext HTTP, so the value
+     * is untrusted: it is rendered into quoted attributes and as element text,
+     * and an unescaped quote or angle bracket could break out of either.
+     * Callers must also quote any attribute the value is written into.
+     *
+     * @param category the raw category, may be null
+     * @return the HTML-escaped category, or null if the input was null
+     * @since 0.9.72+
+     */
+    public static String escapeForDisplay(String category) {
+        return net.i2p.data.DataHelper.escapeHTML(category);
+    }
+
 }
