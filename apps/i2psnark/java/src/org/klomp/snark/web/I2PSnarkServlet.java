@@ -4318,7 +4318,9 @@ public class I2PSnarkServlet extends BasicServlet {
                 buf.append("<span class=copyMagnet></span></a>");
             }
 
-            buf.append("</td><td class=\"details").append(!isValid && !isMultiFile ? " fetching" : " data").append("\">");
+            buf.append("</td><td class=\"details")
+               .append(isLookup ? " lookup" : !isValid && !isMultiFile ? " fetching" : " data")
+               .append("\">");
 
             if (isValid) {
                 CommentSet comments = snark.getComments();

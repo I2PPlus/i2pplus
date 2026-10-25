@@ -7,3 +7,4 @@ td.status{position:relative;text-align:center}
 .status .pool{padding:2px 1px 1px;min-width:12px;display:inline-block;position:absolute;z-index:999;top:7px;right:6px;line-height:1;text-align:center;font-size:75%;font-weight:700;color:#fff;border-radius:2px;box-shadow:var(--highlight);background:#292a}
 #snarkSearch{z-index:999999}
 #torrents .tName{text-align:left}
+#torrents #snarkTbody td.details img[src$="search.svg"]{padding:2px;width:16px;height:16px}
