@@ -456,11 +456,20 @@ class MessageInputStream extends InputStream {
         }
         if (count == 0)
             return new long[0];
+        // The wire's NACK count is one byte (Packet.MAX_NACKS); keep the
+        // lowest gaps — they are the head-of-line ones the sender's recovery
+        // acts on first — and drop the rest rather than corrupting the
+        // packet with a wrapped count.
+        if (count > Packet.MAX_NACKS)
+            count = Packet.MAX_NACKS;
         long[] array = new long[count];
         int idx = 0;
         for (long i = _highestReadyBlockId + 1; i < _highestBlockId; i++) {
-            if (!_notYetReadyBlocks.containsKey(i))
+            if (!_notYetReadyBlocks.containsKey(i)) {
                 array[idx++] = i;
+                if (idx >= count)
+                    break;
+            }
         }
         return array;
     }

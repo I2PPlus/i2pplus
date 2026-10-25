@@ -169,6 +169,13 @@ class ConnectionPacketHandler {
 
         // Seq num.
         final long seqNum = packet.getSequenceNum();
+        // Whether the packet has the SYN flag set.
+        final boolean isSYN = packet.isFlagSet(Packet.FLAG_SYNCHRONIZE);
+        // The wire carries only 32 bits of the sequence space; resolve the
+        // value into our receive space before it is compared against anything
+        // we track locally (message ids, ready blocks). Sequence 0 means
+        // "ack-only" - or the SYN's first block - and needs no resolving.
+        final long msgNum = (seqNum > 0 && !isSYN) ? con.unwrapReceiveSeq(seqNum) : seqNum;
         if (con.getHardDisconnected()) {
             if ((seqNum > 0) || (packet.getPayloadSize() > 0) ||
                  (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE | Packet.FLAG_CLOSE))) {
@@ -259,7 +266,7 @@ class ConnectionPacketHandler {
             }
         }
 
-        if (!con.getInputStream().ensureCanAccept(seqNum, packet.getPayloadSize())) {
+        if (!con.getInputStream().ensureCanAccept(msgNum, packet.getPayloadSize())) {
             if (con.getInputStream().isLocallyClosed()) {
                 if (_log.shouldWarn())
                     _log.warn("More data received after local close on " + con + " -> Sending reset");
@@ -298,8 +305,6 @@ class ConnectionPacketHandler {
         }
 
         boolean allowAck = true;
-        // Whether the packet has the SYN flag set.
-        final boolean isSYN = packet.isFlagSet(Packet.FLAG_SYNCHRONIZE);
 
         // We allow the SendStreamID to be 0 so that the originator can send
         // multiple packets before he gets the first ACK back.
@@ -313,10 +318,10 @@ class ConnectionPacketHandler {
         // But not ack-only packets!
         boolean isNew;
         if (seqNum > 0 || isSYN) {
-            isNew = con.getInputStream().messageReceived(seqNum, packet.getPayload()) && allowAck;
+            isNew = con.getInputStream().messageReceived(msgNum, packet.getPayload()) && allowAck;
         } else {isNew = false;}
 
-        if (packet.getPayloadSize() > 512 && !shouldRemainChoked(con, seqNum, packet.getPayloadSize())) {
+        if (packet.getPayloadSize() > 512 && !shouldRemainChoked(con, msgNum, packet.getPayloadSize())) {
             con.setChoking(false);
         }
 
