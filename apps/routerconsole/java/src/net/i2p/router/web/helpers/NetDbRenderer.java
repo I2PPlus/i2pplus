@@ -1085,9 +1085,9 @@ class NetDbRenderer {
                                          : _t("Expired {0} ago", DataHelper.formatDuration2(0-exl));
                 buf.append("<li><b").append(" class=\"leaseNumber")
                    .append(expired ? " expired" : "").append("\" title=\"").append(expiry).append("\">")
-                   .append(i + 1).append("</b> <span class=tunnel_peer title=Gateway>")
+                   .append(i + 1).append("</b> <div class=tunnel_peer title=Gateway>")
                    .append(_context.commSystem().renderPeerHTML(lease.getGateway(), false))
-                   .append("</span></li>\n");
+                   .append("</div></li>\n");
             }
             buf.append("</ul>\n</td></tr>\n");
         }
