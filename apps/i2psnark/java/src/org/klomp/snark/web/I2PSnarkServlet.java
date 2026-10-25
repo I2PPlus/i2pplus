@@ -44,6 +44,7 @@ import net.i2p.data.ByteArray;
 import net.i2p.data.Hash;
 import net.i2p.servlet.RequestWrapper;
 import net.i2p.servlet.util.ServletUtil;
+import net.i2p.util.Escapes;
 import net.i2p.util.FileUtil;
 import net.i2p.util.SecureFile;
 import net.i2p.util.SecureFileOutputStream;
@@ -5021,32 +5022,23 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      * Escape a string for embedding in an HTML attribute value that page
      * scripts read back into JavaScript strings, e.g. the data-name and
-     * client attributes on the torrent action buttons. The backslash is
-     * escaped first so the generated escape sequences are not re-escaped,
-     * followed by the quote characters, the HTML-significant angle brackets
-     * and ampersand, and the line-break characters that cannot appear
-     * literally inside a JavaScript string literal. Output is ASCII-only.
-     *
-     * Escapes are emitted as JS short escapes for line breaks and two-digit
-     * hex escapes for everything else; they are deliberately spelled without
-     * the four-hex-digit unicode form because java's lexer processes such
-     * sequences before string escapes, even inside this comment.
+     * client attributes on the torrent action buttons. Delegates to
+     * {@link Escapes#jsString}: the backslash is escaped first so the
+     * generated escape sequences are not re-escaped, the quote characters,
+     * the HTML-significant angle brackets and ampersand become two-digit hex
+     * escapes, and everything that can terminate a JavaScript string literal
+     * line (CR, LF, U+2028, U+2029, and the other C0 controls) becomes a
+     * short or hex escape. Non-ASCII text otherwise passes through, so the
+     * output is not ASCII-only.
      *
      * Not for use in URL or CSS contexts.
      *
      * @param s non-null string to escape
-     * @return the escaped string, ASCII-only
+     * @return the escaped string
      * @since 0.9.15
      */
     static String escapeJSString(String s) {
-        return s.replace("\\", "\\\\")
-                .replace("\n", "\\n")
-                .replace("\r", "\\r")
-                .replace("<", "\\x3c")
-                .replace(">", "\\x3e")
-                .replace("\"", "\\x22")
-                .replace("'", "\\x27")
-                .replace("&", "\\x26");
+        return Escapes.jsString(s);
     }
 
     /**

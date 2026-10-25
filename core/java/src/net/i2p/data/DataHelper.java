@@ -57,6 +57,9 @@ import java.util.zip.CRC32;
 import java.util.zip.Deflater;
 
 import java.nio.charset.StandardCharsets;
+
+import net.i2p.util.Escapes;
+
 /**
  * Comprehensive utility class for I2P data structure serialization, encoding, and manipulation.
  * <p>DataHelper provides essential utilities for working with I2P data structures:</p>
@@ -2124,24 +2127,15 @@ public class DataHelper {
         return rv;
     }
 
-    /** The characters escaped for HTML output. */
-    private static final String[] escapeChars = {"&", "\"", "<", ">", "'"};
-    /** The HTML codes for each escaped character. */
-    private static final String[] escapeCodes = {"&amp;", "&quot;", "&lt;", "&gt;", "&apos;"};
-
     /**
      * Escape a string for inclusion in HTML.
+     * Delegates to {@link Escapes#html}, which also encodes the backtick.
      *
      * @param unescaped the unescaped string, may be null
      * @return the escaped string, or null if null is passed in
      */
     public static String escapeHTML(String unescaped) {
-        if (unescaped == null) return null;
-        String escaped = unescaped;
-        for (int i = 0; i < escapeChars.length; i++) {
-            escaped = escaped.replace(escapeChars[i], escapeCodes[i]);
-        }
-        return escaped;
+        return Escapes.html(unescaped);
     }
 
     /**

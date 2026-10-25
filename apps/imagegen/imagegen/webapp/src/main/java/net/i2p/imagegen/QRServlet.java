@@ -24,6 +24,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import net.i2p.util.Escapes;
 import net.i2p.util.SystemVersion;
 
 import java.nio.charset.StandardCharsets;
@@ -169,30 +170,14 @@ public class QRServlet extends HttpServlet {
     }
 
     /**
-     * Escape XML special characters.
+     * Escape XML special characters. Delegates to {@link Escapes#xml}.
      *
      * @param s the text to escape
      * @return s with &amp;, &lt;, &gt;, a double quote and an apostrophe
      *         replaced by their XML entities
      */
     private static String escapeXml(String s) {
-        StringBuilder sb = new StringBuilder(s.length());
-        for (int i = 0; i < s.length(); i++) {
-            char c = s.charAt(i);
-            if (c == '&')
-                sb.append("&amp;");
-            else if (c == '<')
-                sb.append("&lt;");
-            else if (c == '>')
-                sb.append("&gt;");
-            else if (c == '"')
-                sb.append("&quot;");
-            else if (c == '\'')
-                sb.append("&apos;");
-            else
-                sb.append(c);
-        }
-        return sb.toString();
+        return Escapes.xml(s);
     }
 
     /**
