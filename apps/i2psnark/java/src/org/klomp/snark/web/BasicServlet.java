@@ -375,16 +375,21 @@ class BasicServlet extends HttpServlet {
 
         if (reqRanges == null || !reqRanges.hasMoreElements()) {
             // If there were no ranges, send entire entity - write content normally
-            writeHeaders(response, content, content_length);
-            if (content_length >= 0 && request.getMethod().equals("HEAD")) {
-                // If we know the content length, don't send it to be counted
-                if (_log.shouldInfo()) {
-                    _log.info("HEAD: " + content);
-                }
+            // try/finally: writeHeaders or the HEAD branch throwing must not
+            // leak the content stream
+            try {
+                writeHeaders(response, content, content_length);
+                if (content_length >= 0 && request.getMethod().equals("HEAD")) {
+                    // If we know the content length, don't send it to be counted
+                    if (_log.shouldInfo()) {
+                        _log.info("HEAD: " + content);
+                    }
+                } else {
+                    copy(in, out);
+                } // GET or unknown size for HEAD
+            } finally {
                 in.close();
-            } else {
-                copy(in, out);
-            } // GET or unknown size for HEAD
+            }
             return;
         }
 

@@ -122,14 +122,21 @@ public class I2PSnarkServlet extends BasicServlet {
     /** Matches a base32 name without the suffix. */
     private static final Pattern BASE32_PATTERN = Pattern.compile("[a-zA-Z2-7]+");
 
-    /** Web path of the active theme's resources; recomputed per request. */
-    private String _themePath;
+    /**
+     * Web path of the active theme's resources; recomputed per request.
+     * Volatile: request threads read it from the helpers that render the
+     * page, and a non-volatile write has no happens-before with those reads.
+     */
+    private volatile String _themePath;
     /** Web path of static resources; set once in init(), never mutated per request. */
     private String _resourcePath;
-    /** Icon image base path derived from {@link #_themePath}. */
-    private String _imgPath;
-    /** Announce URL of the torrent being edited; preselects its tracker radio button. */
-    private String _lastAnnounceURL;
+    /** Icon image base path derived from {@link #_themePath}. Volatile, see above. */
+    private volatile String _imgPath;
+    /**
+     * Announce URL of the torrent being edited; preselects its tracker
+     * radio button. Written by the create/edit POST, read by the form GET.
+     */
+    private volatile String _lastAnnounceURL;
 
     /** Webapp name used in paths and config keys. */
     private static final String DEFAULT_NAME = "i2psnark";
@@ -169,8 +176,6 @@ public class I2PSnarkServlet extends BasicServlet {
         }
     };
 
-    /** Search results. */
-    private int searchResults;
     /** Csp nonce. */
     String cspNonce = Integer.toHexString(_context.random().nextInt());
     /**
@@ -530,7 +535,7 @@ public class I2PSnarkServlet extends BasicServlet {
         // Get HTTP method and servlet path
         String method = req.getMethod(); // since we are not overriding handle*(), do this here
         String path = req.getServletPath(); // this is the part after /i2psnark
-        String lang = req.getParameter("lang");
+        String lang = sanitizeLang(req.getParameter("lang"));
 
         req.setCharacterEncoding("UTF-8"); // Set request encoding early
 
@@ -622,7 +627,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         buf.append(head)
            .append("<body style=display:none;pointer-events:none id=snarkxhr class=\"")
-           .append(theme).append(" lang_").append(lang).append("\">\n");
+           .append(DataHelper.escapeHTML(theme)).append(" lang_").append(lang).append("\">\n");
 
         if (isIndex) {
             buf.append("<span id=toast hidden></span>\n").append(IFRAME_FORM);
@@ -881,9 +886,9 @@ public class I2PSnarkServlet extends BasicServlet {
             if (_manager.util().isKnownOpenTracker(t.announceURL)) continue;
             if (!t.baseURL.contains("postman")) continue;
             buf.append("<a href=\"")
-               .append(t.baseURL)
+               .append(urlEncode(t.baseURL))
                .append("\" class=\"snarkNav nav_tracker\" target=_blank>")
-               .append(t.name)
+               .append(DataHelper.escapeHTML(t.name))
                .append("</a>");
         }
     }
@@ -977,8 +982,7 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write(jsPath + "setFilterQuery.js type=module></script>\n");
         out.write(jsPath + "realtimeSearch.js type=module></script>\n");
 
-        if (!isStandalone()) {out.write(FOOTER);}
-        else {out.write(FOOTER_STANDALONE);}
+        out.write(footer());
     }
 
     /**
@@ -1050,13 +1054,13 @@ public class I2PSnarkServlet extends BasicServlet {
                    .append("<link rel=modulepreload href=").append(resourcePath).append("js/setFilterQuery.js>\n");
             }
             if (isIndex) {
-                buf.append("<script src=/i2psnark/.res/js/click.js type=module></script>\n")
-                   .append("<script src=/i2psnark/.res/js/snarkAlert.js type=module></script>\n");
+                buf.append("<script src=").append(resourcePath).append("js/click.js type=module></script>\n")
+                   .append("<script src=").append(resourcePath).append("js/snarkAlert.js type=module></script>\n");
             }
         }
 
         String v = CoreVersion.VERSION;
-        String fontPath = isStandalone() ? "/i2psnark/.res/themes/fonts" : "/themes/fonts";
+        String fontPath = isStandalone() ? _resourcePath + "themes/fonts" : "/themes/fonts";
         String displayFont = isStandalone() || useSoraFont() ? "Sora" : "OpenSans";
         buf.append("<link rel=preload href=").append(fontPath).append("/").append(displayFont).append(".css as=style>\n")
            .append("<link rel=preload href=").append(fontPath).append("/").append(displayFont).append("/").append(displayFont)
@@ -1327,6 +1331,9 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean isForm = isConnected || !noSnarks;
         boolean showStatusFilter = _manager.util().showStatusFilter();
         boolean searchActive = search != null && !search.isEmpty();
+        // per-request, not a field: concurrent index requests were
+        // overwriting each other's count and rendering the wrong badge
+        int searchResults = 0;
         boolean isUploading = false;
         boolean hasPeers = false;
         DHT dht = _manager.util().getDHT();
@@ -1364,7 +1371,7 @@ public class I2PSnarkServlet extends BasicServlet {
         }
 
         if (isForm) {
-            if (showStatusFilter) renderFilterBar(target, req);
+            if (showStatusFilter) renderFilterBar(target, req, snarks, searchResults);
             else target.write("<form id=torrentlist action=_post method=POST target=processForm>\n");
             writeHiddenInputs(target, req, null);
             target.flush();
@@ -1415,8 +1422,9 @@ public class I2PSnarkServlet extends BasicServlet {
             if (snark.getPeerCount() >= 1) {
                 if (snark.getUploadRate() > 0) { isUploading = true; }
                 hasPeers = true;
+                // bytes remaining / bytes per second = seconds; total is the
+                // torrent COUNT here, clamping bytes to it made the ETA nonsense
                 long needed = snark.getNeededLength();
-                if (needed > total) needed = total;
                 if (stats[STAT_DOWNLOAD_RATE] > 0 && needed > 0) totalETA += needed / stats[STAT_DOWNLOAD_RATE];
             }
         }
@@ -1439,7 +1447,7 @@ public class I2PSnarkServlet extends BasicServlet {
         target.write("</table>\n");
 
         if (isForm) target.write("</form>\n");
-        if (total > 0) target.write("<script src=/i2psnark/.res/js/convertTooltips.js type=module></script>");
+        if (total > 0) target.write("<script src=" + _resourcePath + "js/convertTooltips.js type=module></script>");
 
         // buffered mode: the staged table reaches the client as one write;
         // streamed mode: rows are already on the wire
@@ -1493,9 +1501,9 @@ public class I2PSnarkServlet extends BasicServlet {
         // with '&' - buildLink() owns any leading '?'
         String currentSearch = req.getParameter("search");
         StringBuilder fq = new StringBuilder("filter=");
-        fq.append(filterParam == null || filterParam.isEmpty() ? "all" : filterParam);
+        fq.append(filterParam == null || filterParam.isEmpty() ? "all" : urlEncode(filterParam));
         if (currentSearch != null && !currentSearch.isEmpty()) {
-            fq.append("&search=").append(currentSearch);
+            fq.append("&search=").append(urlEncode(currentSearch));
         }
         String filterQuery = fq.toString();
 
@@ -2299,9 +2307,14 @@ public class I2PSnarkServlet extends BasicServlet {
      *
      * @param out  the PrintWriter to write the generated HTML output
      * @param req  the current HttpServletRequest providing query parameters and URL
+     * @param sortedSnarks the already-sorted torrent list for the page, used for the
+     *                     total count so the bar does not re-sort it
+     * @param searchResults total number of torrents matching the active search, 0 if
+     *                      no search is active
      * @throws IOException if an I/O error occurs during writing to the output stream
      */
-    private void renderFilterBar(PrintWriter out, HttpServletRequest req) throws IOException {
+    private void renderFilterBar(PrintWriter out, HttpServletRequest req, List<Snark> sortedSnarks,
+                                 int searchResults) throws IOException {
         String filter = req.getParameter("filter");
         filter = filter != null ? filter : "";
         String peerParam = req.getParameter("p");
@@ -2311,16 +2324,19 @@ public class I2PSnarkServlet extends BasicServlet {
         String reqURL = req.getRequestURL().toString();
 
         int pageSizeConf = _manager.getPageSize();
-        List<Snark> snarks = getSortedSnarks(req);
-        int total = snarks.size();
+        // the caller already fetched and sorted the list for the table;
+        // re-sorting it here doubled the per-request work
+        int total = sortedSnarks.size();
         int maxPageSize = Math.max(pageSizeConf, 10);
         boolean searchActive = (search != null && !search.isEmpty());
 
         StringBuilder activeQuery = new StringBuilder("/i2psnark/?");
-        if (peerParam != null) activeQuery.append("p=").append(peerParam).append("&");
-        if (srt != null) activeQuery.append("sort=").append(srt).append("&");
-        if (searchActive) activeQuery.append("search=").append(search).append("&");
-        if (psize != null) activeQuery.append("ps=").append(psize).append("&");
+        // these go straight into href attributes - encode so a quote or
+        // ampersand in the search text cannot break out of the URL
+        if (peerParam != null) activeQuery.append("p=").append(urlEncode(peerParam)).append("&");
+        if (srt != null) activeQuery.append("sort=").append(urlEncode(srt)).append("&");
+        if (searchActive) activeQuery.append("search=").append(urlEncode(search)).append("&");
+        if (psize != null) activeQuery.append("ps=").append(urlEncode(psize)).append("&");
 
         // Remove existing filter parameter from activeQuery if present
         String existingFilter = "filter=" + filter;
@@ -2365,7 +2381,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append(buildSimpleFilterLink(buttonUrl, "stopped", _t("Stopped"), badge))
            .append("</div>\n");
         if (!reqURL.contains("/.ajax")) {
-            buf.append("<script src=/i2psnark/.res/js/filterBar.js type=module></script>\n");
+            buf.append("<script src=").append(_resourcePath).append("js/filterBar.js type=module></script>\n");
         }
         out.append(buf);
         buf.setLength(0);
@@ -2491,6 +2507,27 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("<input type=hidden name=").append(name).append(" value=\"")
            .append(esc ? DataHelper.escapeHTML(value) : DataHelper.stripHTML(value))
            .append("\">");
+    }
+
+    /** Language parameter shape: two or three-letter code plus optional country. */
+    private static final Pattern _LANG_PATTERN = Pattern.compile("[a-z]{2,3}([-_][A-Za-z]{2})?");
+
+    /**
+     * Validate the lang request parameter. The value is written into CSS
+     * class names and query strings, so anything outside the code shape the
+     * language selectors emit (two or three-letter ISO code, optional
+     * underscore or hyphen country suffix) is dropped rather than escaped
+     * at each use site.
+     *
+     * @param lang the raw parameter, may be null
+     * @return the validated code, or null if absent or malformed
+     * @since 0.9.72+
+     */
+    static String sanitizeLang(String lang) {
+        if (lang == null || !_LANG_PATTERN.matcher(lang).matches()) {
+            return null;
+        }
+        return lang;
     }
 
     /**
@@ -2671,7 +2708,7 @@ public class I2PSnarkServlet extends BasicServlet {
             int next = start + pageSize;
             buf.append("<a href=\"").append(_contextPath)
                .append(getQueryString(req, null, String.valueOf(next), null, null))
-               .append("\"").append(next + pageSize < total ? "" : " class=disabled")
+               .append("\"").append(next < total ? "" : " class=disabled")
                .append("><span id=next>");
             appendIcon(buf, "next", _t("Next"), _t("Next page"), true, true);
             buf.append("</span></a>");
@@ -4274,7 +4311,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 String announce = meta.getAnnounce();
                 String magnetLink = MagnetURI.MAGNET_FULL + hex;
                 buf.append("<a class=mLink href=\"").append(magnetLink);
-                if (announce != null) buf.append("&amp;tr=").append(announce);
+                if (announce != null) buf.append("&amp;tr=").append(urlEncode(announce));
                 if (encodedBaseName != null) buf.append("&amp;dn=").append(encodedBaseName.replace(".torrent", ""));
                 buf.append("\">");
                 appendIcon(buf, "magnet", "", "", false, true);
@@ -4822,12 +4859,13 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append(ch);
         } else {
             String client = getClientName(peer);
+            // the handshake "v" string is remote-controlled arbitrary bytes
             buf.append("<span class=peerclient><code title=\"")
                .append(_t("Destination (identity) of peer"))
                .append("\">")
                .append(peer.toString().substring(5, 9))
                .append("</code>&nbsp;<span class=clientid>")
-               .append(client)
+               .append(DataHelper.escapeHTML(client))
                .append("</span></span>");
         }
     }
@@ -5292,12 +5330,18 @@ public class I2PSnarkServlet extends BasicServlet {
             String name = t.name;
             String announceURL = t.announceURL.replace("&#61;", "=");
             String homeURL = t.baseURL;
+            // tracker names and announce URLs arrive from remote torrent
+            // files - escape every context they are written into; the
+            // backup_ parameter NAME is percent-encoded so the container
+            // decodes it back to the raw URL on submit
+            String nameHTML = DataHelper.escapeHTML(name);
+            String announceHTML = DataHelper.escapeHTML(announceURL);
             buf.append("<tr><td><span class=trackerName>")
-               .append("<a href=\"").append(homeURL).append("\" target=_blank>").append(name).append("</a>")
-               .append("</span></td><td><input type=radio class=optbox name=announceURL value=\"").append(announceURL).append("\"");
+               .append("<a href=\"").append(urlEncode(homeURL)).append("\" target=_blank>").append(nameHTML).append("</a>")
+               .append("</span></td><td><input type=radio class=optbox name=announceURL value=\"").append(announceHTML).append("\"");
             if (announceURL.equals(_lastAnnounceURL)) {buf.append(" checked");}
             buf.append("></td><td><input type=checkbox class=\"optbox slider\" name=\"backup_")
-               .append(announceURL).append("\" value=\"foo\"></td><td>");
+               .append(urlEncode(announceURL)).append("\" value=\"foo\"></td><td>");
 
             if (!(isOpen || isPrivate)) {buf.append(_t("Standard"));}
             if (isOpen) {buf.append(_t("Open"));}
@@ -5458,6 +5502,18 @@ public class I2PSnarkServlet extends BasicServlet {
                 .replace("[", "%5B").replace("]", "%5D");
     }
 
+    /**
+     * Percent/HTML-safe encoding for values written into HTML attribute
+     * contexts, exposed for the configure page's tracker parameter names.
+     *
+     * @param s the raw string
+     * @return the encoded string, safe inside a quoted attribute
+     * @since 0.9.72+
+     */
+    static String attrEncode(String s) {
+        return urlEncode(s);
+    }
+
     /** Document type line opening every page. */
     private static final String DOCTYPE = "<!DOCTYPE HTML>\n";
     /** Opening of the torrent list table. */
@@ -5482,20 +5538,39 @@ public class I2PSnarkServlet extends BasicServlet {
         return buf.toString();
     }
 
-    /** The html footer of the page. */
-    private static final String FOOTER = "</div>\n<span id=endOfPage data-iframe-height></span>\n" +
+    /** The html footer of the page, up to the snark-alert stylesheet. */
+    private static final String FOOTER_PREFIX = "</div>\n<span id=endOfPage data-iframe-height></span>\n" +
         "<script src=/js/iframeResizer/iframeResizer.contentWindow.js id=iframeResizer type=module></script>\n" +
         "<script src=/js/iframeResizer/updatedEvent.js type=module></script>\n" +
         "<script src=/js/setupIframe.js type=module></script>\n" +
         "<script src=/js/detectPageZoom.js type=module></script>\n" +
-        "<script src=/js/autologout.js></script>\n" +
-        "<link rel=stylesheet href=/i2psnark/.res/snarkAlert.css>\n" +
-        "</body>\n</html>";
+        "<script src=/js/autologout.js></script>\n";
 
-    /** The html footer of the standalone page. */
-    private static final String FOOTER_STANDALONE = "</div>\n" +
-        "<script src=/i2psnark/.res/js/detectPageZoom.js type=module></script>\n" +
-        "<link rel=stylesheet href=/i2psnark/.res/snarkAlert.css>\n" + "</body>\n</html>";
+    /** The html footer of the standalone page, up to its zoom script. */
+    private static final String FOOTER_STANDALONE_PREFIX = "</div>\n";
+
+    /** Closes every page. */
+    private static final String FOOTER_END = "</body>\n</html>";
+
+    /**
+     * The page footer for the current mode. The snark-alert resources are
+     * served under the deploy context's resource path, so the footer cannot
+     * be a constant with a hardcoded /i2psnark prefix.
+     *
+     * @return the footer HTML, never null
+     * @since 0.9.72+
+     */
+    private String footer() {
+        if (isStandalone()) {
+            return FOOTER_STANDALONE_PREFIX
+                    + "<script src=" + _resourcePath + "js/detectPageZoom.js type=module></script>\n"
+                    + "<link rel=stylesheet href=" + _resourcePath + "snarkAlert.css>\n"
+                    + FOOTER_END;
+        }
+        return FOOTER_PREFIX
+                + "<link rel=stylesheet href=" + _resourcePath + "snarkAlert.css>\n"
+                + FOOTER_END;
+    }
 
     /** Hidden iframe that receives form posts. */
     private static final String IFRAME_FORM = "<iframe name=processForm id=processForm hidden></iframe>\n";
@@ -5661,13 +5736,13 @@ public class I2PSnarkServlet extends BasicServlet {
                 boolean isAudio = mime != null && isAudio(mime);
                 boolean isVideo = !isAudio && mime != null && isVideo(mime);
                 if (isAudio || isVideo) {
-                    String imgPath = isStandalone() ? "/i2psnark/.res/icons/" : "/themes/console/images/";
+                    String imgPath = isStandalone() ? _resourcePath + "icons/" : "/themes/console/images/";
                     appendMediaSection(buf, base, tName, mime, isAudio, imgPath);
                 }
             }
             renderCommentsSection(snark, er, ec, esc, _t("Comments &amp; Ratings"), buf);
             if (includeForm) {buf.append("</form>\n");}
-            buf.append(isStandalone() ? FOOTER_STANDALONE : FOOTER);
+            buf.append(footer());
             return buf.toString();
         }
 
@@ -5675,7 +5750,8 @@ public class I2PSnarkServlet extends BasicServlet {
         long[][] arrays = (storage != null) ? storage.remaining2() : null;
         long[] remainingArray = (arrays != null) ? arrays[0] : null;
         long[] previewArray = (arrays != null) ? arrays[1] : null;
-        List<Sorters.FileAndIndex> fileList = wrapFileList(ls, storage, remainingArray, previewArray, isTopLevel);
+        List<Sorters.FileAndIndex> fileList = wrapFileList(ls, storage, remainingArray, previewArray, isTopLevel,
+                                                          storage != null ? storage.indexMap() : null);
 
         boolean showSort = fileList.size() > 1;
         if (showSort) {
@@ -5739,8 +5815,8 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("</table>\n</div>\n");
         if (counters.imgCount > 0) {buf.append("<script src=").append(_resourcePath).append("js/getImgDimensions.js></script>\n");}
         if (counters.txtCount > 0) {buf.append("<script src=").append(_resourcePath).append("js/textView.js></script>\n");}
-        buf.append("<script src=").append(_resourcePath).append("js/togglePriorities.js></script>\n");
-        buf.append("<script src=").append(_resourcePath).append("js/togglePanels.js type=module></script>\n");
+        buf.append("<script src=").append(_resourcePath).append("js/togglePriorities.js></script>\n")
+           .append("<script src=").append(_resourcePath).append("js/togglePanels.js type=module></script>\n");
 
         renderCommentsSection(snark, er, ec, esc, _t("Comments"), buf);
 
@@ -5759,9 +5835,8 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("  window.snarkRefreshDelay = ").append(delay).append(";\n")
            .append("  import {initSnarkRefresh} from \"").append(_resourcePath).append("js/refreshTorrents.js\";\n")
            .append("  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh, true);\n")
-           .append("</script>\n");
-        if (!isStandalone()) {buf.append(FOOTER);}
-        else {buf.append(FOOTER_STANDALONE);}
+           .append("</script>\n")
+           .append(footer());
         return buf.toString();
     }
 
@@ -5862,7 +5937,7 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         buf.append(cssLink("images/images.css", _themePath)).append("\n"); // images.css
 
-        String fontPath = standalone ? "/i2psnark/.res/themes/fonts/" : "/themes/fonts/";
+        String fontPath = standalone ? _resourcePath + "themes/fonts/" : "/themes/fonts/";
         if (standalone || useSoraFont()) {
             buf.append("<link rel=stylesheet href=").append(fontPath).append("Sora.css>\n");
         } else {
@@ -5973,10 +6048,28 @@ public class I2PSnarkServlet extends BasicServlet {
      */
     static List<Sorters.FileAndIndex> wrapFileList(File[] ls, Storage storage,
             long[] remainingArray, long[] previewArray, boolean skipPaddingDirs) {
+        return wrapFileList(ls, storage, remainingArray, previewArray, skipPaddingDirs, null);
+    }
+
+    /**
+     * Wrap a file listing, resolving storage indexes from a precomputed map.
+     *
+     * @param ls the raw listing, non-null
+     * @param storage may be null (magnet/dummy); arrays must then be null too
+     * @param remainingArray precomputed by {@link org.klomp.snark.Storage#remaining2}, null iff storage is null
+     * @param previewArray may be null
+     * @param skipPaddingDirs true hides ".pad"/"_pad" directories
+     * @param indexMap from {@link org.klomp.snark.Storage#indexMap()}, or null to scan per file
+     * @return wrapped entries, possibly empty, never null
+     * @since 0.9.72+ the indexMap form
+     */
+    static List<Sorters.FileAndIndex> wrapFileList(File[] ls, Storage storage,
+            long[] remainingArray, long[] previewArray, boolean skipPaddingDirs,
+            Map<String, Integer> indexMap) {
         List<Sorters.FileAndIndex> rv = new ArrayList<>(ls.length);
         for (File f : ls) {
             if (skipPaddingDirs && isPaddingDir(f)) {continue;}
-            rv.add(new Sorters.FileAndIndex(f, storage, remainingArray, previewArray));
+            rv.add(new Sorters.FileAndIndex(f, storage, remainingArray, previewArray, indexMap));
         }
         return rv;
     }
@@ -6378,7 +6471,9 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("<b>").append(_t("Files")).append(":</b> ").append(fileCount);
         }
         int pieces = snark.getPieces();
-        double completion = (pieces - snark.getNeeded()) / (double) pieces;
+        // 0 pieces (magnet without metadata yet) would divide to NaN and
+        // render as "Complete"; treat unknown as 0%
+        double completion = pieces > 0 ? (pieces - snark.getNeeded()) / (double) pieces : 0;
         buf.append("</span>&nbsp;<span class=nowrap");
         if (dates[0] > 0) {
             String date = fmt.format(new Date(dates[0]));
@@ -6417,7 +6512,8 @@ public class I2PSnarkServlet extends BasicServlet {
 
         buf.append("<b>").append(_t("Share ratio")).append(":</b> ");
         long uploaded = snark.getUploaded();
-        if (uploaded > 0) {
+        // 0-length data (magnet) would divide to Infinity and render "∞ x"
+        if (uploaded > 0 && snark.getDataLength() > 0) {
             double ratio = uploaded / ((double) snark.getDataLength());
             if (ratio < 0.1) {
                 buf.append((new DecimalFormat("0.000")).format(ratio));
@@ -6761,17 +6857,18 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param dir the directory to list
      * @param storage the storage for the torrent
      * @param remainingArray the precomputed remaining byte counts
+     * @param indexMap from {@link org.klomp.snark.Storage#indexMap()}, or null to scan per file
      * @return the wrapped file list, or null if the directory cannot be listed or is empty
      */
     private static List<Sorters.FileAndIndex> listFileAndIndex(
-            File dir, Storage storage, long[] remainingArray) {
+            File dir, Storage storage, long[] remainingArray, Map<String, Integer> indexMap) {
         File[] ls = dir.listFiles();
         if (ls == null || ls.length == 0) {
             return null;
         }
         List<Sorters.FileAndIndex> rv = new ArrayList<>(ls.length);
         for (int i = 0; i < ls.length; i++) {
-            rv.add(new Sorters.FileAndIndex(ls[i], storage, remainingArray));
+            rv.add(new Sorters.FileAndIndex(ls[i], storage, remainingArray, null, indexMap));
         }
         return rv;
     }
@@ -6850,7 +6947,8 @@ public class I2PSnarkServlet extends BasicServlet {
         if (!r.isDirectory()) {return null;}
         // precompute remaining for all files for efficiency
         long[] remainingArray = storage.remaining();
-        List<Sorters.FileAndIndex> fileList = listFileAndIndex(r, storage, remainingArray);
+        Map<String, Integer> indexMap = storage.indexMap();
+        List<Sorters.FileAndIndex> fileList = listFileAndIndex(r, storage, remainingArray, indexMap);
         if (fileList == null) {return null;}
 
         boolean showSort = fileList.size() > 1;
@@ -6862,7 +6960,7 @@ public class I2PSnarkServlet extends BasicServlet {
             DataHelper.sort(fileList, Sorters.getFileComparator(sort, this));
         }
         StringBuilder buf = new StringBuilder(512);
-        getPlaylist(buf, fileList, reqURL, sort, storage, remainingArray);
+        getPlaylist(buf, fileList, reqURL, sort, storage, remainingArray, indexMap);
         String rv = buf.toString();
         if (rv.length() <= 0) {return null;}
         return rv;
@@ -6880,18 +6978,19 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param storage the torrent's storage, for per-file remaining counts
      * @param remainingArray precomputed remaining byte counts, index-aligned
      *                       with each directory listing
+     * @param indexMap from {@link org.klomp.snark.Storage#indexMap()}, reused for every subdirectory
      * @since 0.9.44
      */
-    private void getPlaylist(StringBuilder buf, List<Sorters.FileAndIndex> fileList, String reqURL, int sort, Storage storage, long[] remainingArray) {
+    private void getPlaylist(StringBuilder buf, List<Sorters.FileAndIndex> fileList, String reqURL, int sort, Storage storage, long[] remainingArray, Map<String, Integer> indexMap) {
         for (Sorters.FileAndIndex fai : fileList) {
             if (fai.isDirectory) {
                 // recurse
-                List<Sorters.FileAndIndex> fl2 = listFileAndIndex(fai.file, storage, remainingArray);
+                List<Sorters.FileAndIndex> fl2 = listFileAndIndex(fai.file, storage, remainingArray, indexMap);
                 if (fl2 != null) {
                     if (fl2.size() > 1) {DataHelper.sort(fl2, Sorters.getFileComparator(sort, this));}
                     String name = fai.file.getName();
                     String url2 = reqURL + encodePath(name) + '/';
-                    getPlaylist(buf, fl2, url2, sort, storage, remainingArray);
+                    getPlaylist(buf, fl2, url2, sort, storage, remainingArray, indexMap);
                 }
                 continue;
             }
@@ -7521,20 +7620,17 @@ public class I2PSnarkServlet extends BasicServlet {
                    .append("</span></td><td>")
                    .append(s)
                    .append("</td><td>");
-                if (hc != null) {
-                    buf.append("<input type=radio class=optbox name=primary");
-                    if (s.equals(announce)) {buf.append(" checked ");}
-                    buf.append(" value=\"").append(hc).append("\"");
-                    if (isRunning) {buf.append(" disabled");}
-                    buf.append(">");
-                }
+                // hc is never null (Integer.toString), no guard needed
+                buf.append("<input type=radio class=optbox name=primary");
+                if (s.equals(announce)) {buf.append(" checked ");}
+                buf.append(" value=\"").append(hc).append("\"");
+                if (isRunning) {buf.append(" disabled");}
+                buf.append(">");
                 buf.append("</td><td>");
-                if (hc != null) {
-                    buf.append("<input type=checkbox class=optbox name=\"removeTracker-")
-                       .append(hc).append("\" title=\"").append(_t("Mark for deletion")).append("\"");
-                    if (isRunning) {buf.append(" disabled");}
-                    buf.append(">");
-                }
+                buf.append("<input type=checkbox class=optbox name=\"removeTracker-")
+                   .append(hc).append("\" title=\"").append(_t("Mark for deletion")).append("\"");
+                if (isRunning) {buf.append(" disabled");}
+                buf.append(">");
                 buf.append("</td></tr>\n");
             }
         }
@@ -7554,8 +7650,9 @@ public class I2PSnarkServlet extends BasicServlet {
                 String name = t.name;
                 int hc = t.announceURL.hashCode();
                 String announceURL = t.announceURL.replace("&#61;", "=");
-                buf.append("<tr><td><span class=info_tracker>").append(name).append("</span></td><td>")
-                   .append(announceURL).append("</td><td>")
+                // remote-sourced tracker name and URL
+                buf.append("<tr><td><span class=info_tracker>").append(DataHelper.escapeHTML(name)).append("</span></td><td>")
+                   .append(DataHelper.escapeHTML(announceURL)).append("</td><td>")
                    .append("<input type=radio class=optbox name=primary value=\"")
                    .append(hc).append("\"");
                 if (isRunning) {buf.append(" disabled");}
@@ -7755,7 +7852,9 @@ public class I2PSnarkServlet extends BasicServlet {
         String newCreatedBy = "";
         for (Map.Entry<String, String[]> entry : postParams.entrySet()) {
             String key = entry.getKey();
-            String val = entry.getValue()[0];   // jetty arrays
+            // jetty arrays; a malformed multipart body can yield an empty one
+            String[] vals = entry.getValue();
+            String val = (vals != null && vals.length > 0) ? vals[0] : "";
             if (key.startsWith("addTracker-")) {
                 int id = I2PSnarkUtil.parseInt(key.substring(11), -1);
                 if (id >= 0) {toAdd.add(id);}
@@ -7974,9 +8073,11 @@ public class I2PSnarkServlet extends BasicServlet {
         String oldPrimary = meta.getAnnounce();
         String oldComment = meta.getComment() == null ? "" : meta.getComment();
         String oldCreatedBy = meta.getCreatedBy() == null ? "" : meta.getCreatedBy();
+        // ep.primary is the hashCode of the chosen announce URL - compare it
+        // to the current primary's hashCode, not to the URL string
         return !ep.toAdd.isEmpty()
             || !ep.toDel.isEmpty()
-            || (ep.primary != null && !String.valueOf(ep.primary).equals(oldPrimary))
+            || (ep.primary != null && !ep.primary.equals(Integer.valueOf(oldPrimary != null ? oldPrimary.hashCode() : 0)))
             || !oldComment.equals(ep.newComment)
             || !oldCreatedBy.equals(ep.newCreatedBy);
     }

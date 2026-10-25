@@ -6,6 +6,7 @@ import java.text.Collator;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Locale;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.klomp.snark.MetaInfo;
@@ -797,7 +798,7 @@ class Sorters {
          * @param remainingArray precomputed, non-null iff storage is non-null
          */
         public FileAndIndex(File file, Storage storage, long[] remainingArray) {
-            this(file, storage, remainingArray, null);
+            this(file, storage, remainingArray, null, null);
         }
 
         /**
@@ -811,8 +812,35 @@ class Sorters {
          */
         public FileAndIndex(
                 File file, Storage storage, long[] remainingArray, long[] previewArray) {
+            this(file, storage, remainingArray, previewArray, null);
+        }
+
+        /**
+         * Create a file/index entry resolving the storage index from a
+         * precomputed map; pass {@link Storage#indexMap()} when building a
+         * whole listing so the per-file indexOf() scan does not make the
+         * listing quadratic.
+         *
+         * @param file the file or directory the entry describes
+         * @param storage may be null
+         * @param remainingArray precomputed, non-null iff storage is non-null
+         * @param previewArray precomputed preview lengths, or null
+         * @param indexMap from {@link Storage#indexMap()}, or null to fall
+         *                 back to the linear indexOf() scan
+         * @since 0.9.72+
+         */
+        public FileAndIndex(
+                File file, Storage storage, long[] remainingArray, long[] previewArray,
+                Map<String, Integer> indexMap) {
             this.file = file;
-            index = storage != null ? storage.indexOf(file) : -1;
+            if (storage == null) {
+                index = -1;
+            } else if (indexMap != null) {
+                Integer ix = indexMap.get(file.getAbsolutePath());
+                index = ix != null ? ix.intValue() : -1;
+            } else {
+                index = storage.indexOf(file);
+            }
             if (index >= 0) {
                 isDirectory = false;
                 remaining = remainingArray[index];
@@ -893,12 +921,15 @@ class Sorters {
         /** Fixed id, the comparator is never serialized across versions. */
         private static final long serialVersionUID = 1L;
 
-        /** Cached, case-insensitive at secondary strength. */
-        private static final Collator _c = Collator.getInstance();
-
-        static {
-            _c.setStrength(Collator.SECONDARY);
-        }
+        /**
+         * Collator is not thread-safe and request threads sort concurrently,
+         * so each thread keeps its own cached instance.
+         */
+        private static final ThreadLocal<Collator> _c = ThreadLocal.withInitial(() -> {
+            Collator c = Collator.getInstance();
+            c.setStrength(Collator.SECONDARY);
+            return c;
+        });
 
         public int compare(FileAndIndex l, FileAndIndex r) {
             return comp(l, r);
@@ -920,7 +951,7 @@ class Sorters {
             if (rd && !ld) {
                 return 1;
             }
-            return _c.compare(l.file.getName(), r.file.getName());
+            return _c.get().compare(l.file.getName(), r.file.getName());
         }
     }
 

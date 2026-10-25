@@ -176,7 +176,9 @@ class I2PSnarkConfigure {
            .append("title=\"");
         if (noCollapse) {
             String ua = req.getHeader("user-agent");
-            buf.append(srv._t("Your browser does not support this feature.")).append("[").append(ua).append("]").append("\" disabled");
+            // the header filter's whitelist permits quotes - escape for the
+            // title attribute, and show nothing when the header is absent
+            buf.append(srv._t("Your browser does not support this feature.")).append("[").append(ua != null ? DataHelper.escapeHTML(ua) : "").append("]").append("\" disabled");
         } else {
             buf.append(srv._t("Allow the 'Add Torrent' and 'Create Torrent' panels to be collapsed, and collapse by default in non-embedded mode")).append("\"");
         }
@@ -757,25 +759,30 @@ class I2PSnarkConfigure {
             boolean isPrivate = privateSet.contains(announceURL);
             boolean isKnownOpen = util.isKnownOpenTracker(announceURL);
             boolean isOpen = isKnownOpen || openSet.contains(announceURL);
+            // remote-sourced tracker data: escape text/attr contexts, and
+            // percent-encode the parameter NAMES so submit decodes them back
+            String nameHTML = DataHelper.escapeHTML(name);
+            String nameParam = I2PSnarkServlet.attrEncode(name);
+            String announceParam = I2PSnarkServlet.attrEncode(announceURL);
 
             rowsBatch.append("<tr class=knownTracker><td><input type=checkbox class=optbox id=\"")
-                     .append(name)
+                     .append(nameHTML)
                      .append("\" name=\"delete_")
-                     .append(name)
+                     .append(nameParam)
                      .append("\" title=\"")
                      .append(srv._t("Mark tracker for deletion"))
                      .append("\"></td><td><label for=\"")
-                     .append(name)
+                     .append(nameHTML)
                      .append("\">")
-                     .append(name)
+                     .append(nameHTML)
                      .append("</label></td><td>")
                      .append(I2PSnarkServlet.urlify(homeURL, 64))
                      .append("</td><td><input type=radio class=optbox value=\"0\" tabindex=-1 name=\"ttype_")
-                     .append(announceURL).append("\"");
+                     .append(announceParam).append("\"");
             if (!(isOpen || isPrivate)) {rowsBatch.append(" checked");}
             else if (isKnownOpen) {rowsBatch.append(" disabled");}
             rowsBatch.append("></td><td><input type=radio class=optbox value=1 tabindex=-1 name=\"ttype_")
-                     .append(announceURL)
+                     .append(announceParam)
                      .append("\"");
             if (isOpen) {rowsBatch.append(" checked");}
             else if ("http://diftracker.i2p/announce.php".equals(announceURL) ||
@@ -784,7 +791,7 @@ class I2PSnarkConfigure {
                 rowsBatch.append(" disabled");
             }
             rowsBatch.append("></td><td><input type=radio class=optbox value=2 tabindex=-1 name=\"ttype_")
-                     .append(announceURL)
+                     .append(announceParam)
                      .append("\"");
             if (isPrivate) {rowsBatch.append(" checked");}
             else if (isKnownOpen || "http://diftracker.i2p/announce.php".equals(announceURL) ||
