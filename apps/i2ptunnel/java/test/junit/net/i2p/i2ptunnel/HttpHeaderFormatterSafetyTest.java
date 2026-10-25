@@ -95,4 +95,21 @@ public class HttpHeaderFormatterSafetyTest {
             from = at + needle.length();
         }
     }
+
+    @Test
+    public void testCompactLonePeerIdNoAmpersand() {
+        // A lone peer_id=... query has no '&'; substring(0, -1) threw.
+        java.util.Map<String, java.util.List<String>> headers = new java.util.HashMap<>();
+        String out = HttpHeaderFormatter.formatHeadersCompact(headers,
+                new StringBuilder("GET /?peer_id=abc HTTP/1.1"));
+        assertTrue(out, out.contains("/..."));
+        assertFalse(out, out.contains("peer_id"));
+    }
+
+    @Test
+    public void testCompactHostNoSpace() {
+        assertEquals("example.com", HttpHeaderFormatter.getHostFromHeaders("Host:example.com\r\n"));
+        assertEquals("example.com", HttpHeaderFormatter.getHostFromHeaders("Host: example.com\r\n"));
+        assertEquals("example.com", HttpHeaderFormatter.getHostFromHeaders("Host:example.com:80\r\n"));
+    }
 }

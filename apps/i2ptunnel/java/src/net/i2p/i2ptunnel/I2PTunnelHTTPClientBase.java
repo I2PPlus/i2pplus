@@ -78,7 +78,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
     private static final int NONCE_BYTES = DataHelper.DATE_LENGTH + SHA256_BYTES;
     /** Age after which a used nonce is forgotten. */
     private static final long MAX_NONCE_AGE = 60*60*1000L;
-    /** Nonces tracked per user. */
+    /** Nonce-count window tracked within one nonce. */
     private static final int MAX_NONCE_COUNT = 1024;
     /**
      * Property to use local outproxy plugin.
@@ -173,7 +173,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
 
     /** The nonce this tunnel issues with. */
     private final byte[] _proxyNonce;
-    /** Used nonces, by user name. */
+    /** Used nonces, keyed by the base64 nonce itself. */
     private final ConcurrentHashMap<String, NonceInfo> _nonces;
     /** Counter scheduling the nonce cleanup. */
     private final AtomicInteger _nonceCleanCounter = new AtomicInteger();
@@ -708,9 +708,18 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
                 // We send Accept-Charset: UTF-8 in the 407 so hopefully it comes back that way inside the B64 ?
                 try {
                     String dec = new String(decoded, StandardCharsets.UTF_8);
-                    String[] parts = DataHelper.split(dec, ":");
-                    String user = parts[0];
-                    String pw = parts[1];
+                    // RFC 7617: the FIRST colon separates user from password;
+                    // a password may contain colons.
+                    String user;
+                    String pw;
+                    int colon = dec.indexOf(':');
+                    if (colon < 0) {
+                        user = dec;
+                        pw = "";
+                    } else {
+                        user = dec.substring(0, colon);
+                        pw = dec.substring(colon + 1);
+                    }
                     // first try pw for that user
                     String configPW = getTunnel().getClientOptions().getProperty(PROP_PW_PREFIX + user);
                     if (configPW == null) {
@@ -1664,12 +1673,18 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         try {
             URI u = new URI(uri);
             String h = u.getHost();
+            // getHost() is null for server-based authority-less URIs, and
+            // IDN.toUnicode throws IllegalArgumentException on malformed
+            // punycode (e.g. http://xn--/x) — neither may escape the
+            // error-page path, which only wraps IOException.
+            if (h == null) {return uri;}
             String hu = IDN.toUnicode(h, IDN.ALLOW_UNASSIGNED);
             if (hu == null || h.equals(hu)) {return uri;}
             int idx = uri.indexOf(h);
             if (idx < 0) {return uri;}
             return uri.substring(0, idx) + hu + uri.substring(idx + h.length(), uri.length());
-         } catch(URISyntaxException use) { /* ignored */ }
+         } catch(URISyntaxException use) { /* ignored */
+         } catch(IllegalArgumentException iae) { /* malformed punycode, keep uri */ }
          return uri;
     }
 

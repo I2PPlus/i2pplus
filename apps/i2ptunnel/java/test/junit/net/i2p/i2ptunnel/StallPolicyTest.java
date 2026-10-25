@@ -108,18 +108,19 @@ public class StallPolicyTest {
     }
 
     @Test
-    public void equallyStaleBeforeAnyProgressFallsBackToDestination() {
-        // A body that never moved cannot be "blocked writing": a blocked read
-        // is the only thing that fits, and the conservative answer avoids
-        // telling the operator to go inspect a healthy backend.
-        assertEquals(I2PTunnelHTTPServer.STALL_SIDE_DESTINATION,
+    public void equallyStaleBeforeAnyProgressMeansSourceSilent() {
+        // Equal stamps are only possible before the first read returns (both
+        // still hold the start value), so nothing has been read from the
+        // source yet — the source is the silent side.
+        assertEquals(I2PTunnelHTTPServer.STALL_SIDE_SOURCE,
                      I2PTunnelHTTPServer.classifyStalledSide(5_000, 5_000, 0));
     }
 
     @Test
-    public void indeterminateThresholdIsInclusive() {
-        assertEquals(I2PTunnelHTTPServer.STALL_SIDE_DESTINATION,
-                     I2PTunnelHTTPServer.classifyStalledSide(5_000, 5_000, 1_023));
+    public void equallyStaleAfterAnyProgressIsIndeterminate() {
+        // A post-progress nanoTime tie cannot prove which side blocked.
+        assertEquals(I2PTunnelHTTPServer.STALL_SIDE_INDETERMINATE,
+                     I2PTunnelHTTPServer.classifyStalledSide(5_000, 5_000, 1));
         assertEquals(I2PTunnelHTTPServer.STALL_SIDE_INDETERMINATE,
                      I2PTunnelHTTPServer.classifyStalledSide(5_000, 5_000, 1_024));
     }

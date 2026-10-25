@@ -145,10 +145,12 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      * still bounding an out-of-control client (hundreds of connections) far
      * below the network-path burst that trips the remote SYN-burst gate.
      * <p>A permit is acquired before {@code createI2PSocket()} and released when
-     * the I2P socket is closed (after the tunnel-runner completes).  With I2P
-     * keepalive the socket is reopened per request, so the permit lifecycle
-     * matches the actual connection lifetime.  A dual-race secondary socket
-     * holds an extra permit only until the race settles.
+     * the I2P socket is actually discarded — after the tunnel-runner completes
+     * for a non-keepalive connection, or when an I2P-keepalive socket is closed
+     * or replaced.  With I2P keepalive the socket (and its permit) persist
+     * across the request loop, so a long-lived connection is counted against
+     * the cap for exactly as long as it occupies one.  A dual-race secondary
+     * socket holds an extra permit only until the race settles.
      *
      * @since 0.9.71+
      */
@@ -1906,11 +1908,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             // the i2p-to-socket copier in-line. So we won't get here until the i2p socket is closed.
             Thread.currentThread().setName(name);
 
-            // Release the per-dest connection permit now that the I2P socket is closed.
-            if (heldPermitDest != null) {
-                releaseConnPermit(heldPermitDest);
-                heldPermitDest = null;
-            }
             cancelWarmSlot(warmSlot);
             warmSlot = null;
 
@@ -1919,9 +1916,16 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 break;
             }
             // The old I2P socket was closed, null it out so we'll get a new one
-            // next time around
+            // next time around. The per-dest permit is released only here — with
+            // I2P keepalive the socket stays open across the loop boundary, and
+            // releasing the permit while holding the socket let the steady-state
+            // keepalive connection run uncounted against the SYN-storm cap.
             if (hrunner != null && !hrunner.getKeepAliveI2P()) {
                 i2ps = null;
+                if (heldPermitDest != null) {
+                    releaseConnPermit(heldPermitDest);
+                    heldPermitDest = null;
+                }
             }
             // go around again
             requestCount++;
@@ -2724,7 +2728,10 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     private String getHostName(String host) {
         if (host == null) {return null;}
         if (NamingService.isB32Host(host)) {return host;}
-        Destination dest = _context.namingService().lookup(host);
+        // Bounded like every other naming lookup in this class: an uncached
+        // .i2p name can pin the NetDB search for minutes, and this one runs
+        // on the request thread during header parsing.
+        Destination dest = lookupWithTimeout(host, NAMING_SERVICE_TIMEOUT_MS);
         if (dest == null) {return "i2p";}
         return dest.toBase32();
     }

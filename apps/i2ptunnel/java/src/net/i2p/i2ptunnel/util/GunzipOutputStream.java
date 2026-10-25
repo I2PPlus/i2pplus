@@ -262,7 +262,10 @@ public class GunzipOutputStream extends InflaterOutputStream {
 
         long actualSize = inf.getTotalOut();
         long expectedSize = DataHelper.fromLongLE(footer, 4, 4);
-        if (expectedSize != actualSize)
+        // ISIZE is the uncompressed size mod 2^32 (RFC 1952), so compare the
+        // low half of the running count — a full 5 GiB body legitimately
+        // carries ISIZE of 5 GiB mod 2^32.
+        if (expectedSize != (actualSize & 0xFFFFFFFFL))
             throw new IOException("Gunzip expected " + expectedSize + " bytes, got " + actualSize);
 
         long actualCRC = ((CRC32OutputStream) out).getValue();
@@ -350,11 +353,15 @@ public class GunzipOutputStream extends InflaterOutputStream {
 
             case EH2:
                 _extHdrToRead += (c << 8);
+                // Single chain: XLEN > 0 skips the extra field first; only then
+                // do the optional name/comment/CRC follow. (A second unchained
+                // if used to overwrite EHDATA, feeding the extra bytes to the
+                // inflater and corrupting every FEXTRA stream.)
                 if (_extHdrToRead > 0)
                    _state = HeaderState.EHDATA;
                 else if (0 != (_flags & (1<<4)))
                     _state = HeaderState.NAME;
-                if (0 != (_flags & (1<<3)))
+                else if (0 != (_flags & (1<<3)))
                     _state = HeaderState.COMMENT;
                 else if (0 != (_flags & (1<<6)))
                     _state = HeaderState.CRC1;
@@ -367,7 +374,7 @@ public class GunzipOutputStream extends InflaterOutputStream {
                 if (--_extHdrToRead <= 0) {
                     if (0 != (_flags & (1<<4)))
                         _state = HeaderState.NAME;
-                    if (0 != (_flags & (1<<3)))
+                    else if (0 != (_flags & (1<<3)))
                         _state = HeaderState.COMMENT;
                     else if (0 != (_flags & (1<<6)))
                         _state = HeaderState.CRC1;

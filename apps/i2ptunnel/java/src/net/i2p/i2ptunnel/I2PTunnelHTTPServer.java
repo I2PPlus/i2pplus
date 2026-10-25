@@ -19,10 +19,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.HashSet;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionException;
@@ -178,12 +178,19 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      */
     static int trackedErrorClients() { return _lastErrorLogTime.size(); }
 
-    /** Dedicated executor for non-blocking DNS lookups with bounded timeout. */
-    private static final ExecutorService _dnsResolver = Executors.newCachedThreadPool(r -> {
-        Thread t = new Thread(r, "DNS-Resolver");
-        t.setDaemon(true);
-        return t;
-    });
+    /**
+     * Dedicated executor for non-blocking DNS lookups with bounded timeout.
+     * Fixed-size with a bounded queue: a cached pool spawns a thread per blocked
+     * lookup without bound, so hostile unique Host: headers could exhaust native
+     * threads, and its unbounded queue made the RejectedExecutionException
+     * handling below dead code. Rejections now surface and shed the request.
+     */
+    private static final ExecutorService _dnsResolver = new ThreadPoolExecutor(2, 4, 30, TimeUnit.SECONDS,
+        new ArrayBlockingQueue<>(64), r -> {
+            Thread t = new Thread(r, "DNS-Resolver");
+            t.setDaemon(true);
+            return t;
+        });
 
     /**
      * Per-tunnel I/O pools for Server→Client data transfer, keyed by this
@@ -617,24 +624,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      * @since 0.9.71+
      */
     public static long getStallEventCount() { return _stallEventCount.get(); }
-    /**
-     * Submit a Server→Client Sender to the I/O pool and return without
-     * waiting for the transfer to finish, so the handler thread is free
-     * for the next request. Falls back to an inline run when the pool is
-     * null or shut down. When the pool is <b>saturated</b> the body is
-     * aborted instead: it must never run on the handler thread, because
-     * pinning that thread for a multi-minute transfer exhausts the runner
-     * pool and stalls every other request to this service.
-     *
-     * @param pool I/O executor; may be null (headless/unit path)
-     * @param s the Sender to run
-     * @param desc descriptive name for error messages
-     * @return true if the body was submitted asynchronously, false if it ran
-     *         inline or was aborted
-     * @throws IOException part of the handoff API's signature; the body reports every
-     *                     failure through the Sender rather than throwing
-     * @since 0.9.71+
-     */
+
     /**
      * Publish a pool's load for the operator-facing view on /stats and the graphs
      * page.
@@ -836,23 +826,19 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      * @since 0.9.71+
      */
     static final String STALL_SIDE_DESTINATION = "destination (I2P egress congested)";
-    /**
-     * Below this many bytes a body has moved too little for a "moved nothing,
-     * and only a read is blocked" claim, so equally stale stamps are reported
-     * as destination anyway. @since 0.9.71+.
-     */
-    private static final long STALL_SIDE_INDETERMINATE_MAX_BYTES = 1024L;
 
     /**
      * Which side of a stalled body transfer stopped making progress.
-     * <p>Read and write stamps are updated either side of the same copy step,
-     * so a body blocked mid-write ages both equally: the read that fed the
-     * blocked write is stamped, then the write never completes to stamp
-     * itself. The two therefore look identical to a body blocked mid-read,
-     * and only the progress counter separates them -- a body that has moved
-     * meaningful bytes and then gone quiet is sitting in a blocked write,
-     * because a blocked read would have had nothing to hand the previous
-     * write.
+     * <p>Read and write stamps bracket the same copy step from opposite sides:
+     * the read stamp advances before the write runs, the write stamp only
+     * after it returns. A body blocked mid-write therefore leaves the read
+     * stamp fresh and the write stamp old; a body blocked mid-read leaves the
+     * write stamp fresh (from the last completed write) and the read stamp
+     * old. The two cases never look identical while a transfer is in flight —
+     * the age comparison alone separates them.
+     * <p>Equal stamps occur only before the first read completes, when both
+     * still hold the start value: nothing has been read from the source yet,
+     * so the source is the silent side.
      * <p>Reporting the ambiguous case as the source is actively misleading: a
      * 45MB download that stalled after 3.2MB was logged as "local backend
      * silent" while the same backend served the whole file in 4ms on a fresh
@@ -872,9 +858,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         // Read fresher than write: the source is moving, so the sink backed up.
         if (readAgeMs < writeAgeMs)
             return STALL_SIDE_DESTINATION;
-        // Equally stale: only progress separates a blocked read from a blocked write.
-        if (bytesTransferred < STALL_SIDE_INDETERMINATE_MAX_BYTES)
-            return STALL_SIDE_DESTINATION;
+        // Equally stale: only possible before the first read returns (both stamps
+        // still at the start value) — the source has sent nothing.
+        if (bytesTransferred == 0)
+            return STALL_SIDE_SOURCE;
+        // Post-progress nanoTime tie: too close to call.
         return STALL_SIDE_INDETERMINATE;
     }
 
@@ -1600,7 +1588,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                                                                        headerTimeout, keepAliveTimeout);
                 if (headers == null) {return;}
 
-                validateRequestHost(headers, socket, peerB32);
+                if (!validateRequestHost(headers, socket, peerB32)) {return;}
 
                 long afterHeaders = getTunnel().getContext().clock().now();
                 Properties opts = getTunnel().getClientOptions();
@@ -1673,7 +1661,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 // 'Content-Encoding: x-i2p-gzip' if it was one of the
                 // Accept-Encoding: values, and gzips the payload
                 boolean allowGZIP = isGzipAllowed(opts);
-                if (_log.shouldDebug() && (enc != null || altEnc != null)) {
+                if (_log.shouldDebug() && ((enc != null && !enc.isEmpty()) || altEnc != null && !altEnc.isEmpty())) {
                     _log.debug("[HTTPServer] Encoding header: " + enc + "/" + altEnc);
                 }
                 boolean alt = hasGzipEncoding(altEnc);
@@ -1723,6 +1711,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                             reportRunnerShed(tunnelId, peerB32);
                             try { sendError(socket, ERR_UNAVAILABLE); } catch (IOException ioe) { /* ignore */ }
                             try { socket.close(); } catch (IOException ioe) { /* ignore */ }
+                            // also close the raw TCP socket opened above - the runner
+                            // never ran, so its cleanup never runs (as in handlePort443)
+                            try { s.close(); } catch (IOException ioe) { /* ignore */ }
                             return;
                         }
                     }
@@ -2058,9 +2049,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      * @param headers the request headers map (to extract Host header)
      * @param socket the incoming I2P socket
      * @param peerB32 the peer's base32 address for logging/blocklisting
+     * @return true if the request may proceed, false if it was rejected and the
+     *         socket closed (the caller must not continue processing)
      * @throws IOException if blocklist writing fails
      */
-    private void validateRequestHost(Map<String, List<String>> headers, I2PSocket socket, String peerB32) throws IOException {
+    private boolean validateRequestHost(Map<String, List<String>> headers, I2PSocket socket, String peerB32) throws IOException {
         String tunnelId = getTunnelLogId(socket.getThisDestination());
         String hostname = null;
         boolean isValidRequest = true;
@@ -2072,7 +2065,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                       " -> Denying request to [" + hostname + "] \n* Client: " + peerB32);
             try {socket.close();}
             catch (IOException ioe) { /* ignored */ }
-            return;
+            return false;
         }
 
         if (host != null) {
@@ -2083,30 +2076,36 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         if (_log.shouldDebug()) {_log.debug("[HTTPServer] Incoming request for: " + hostname + " " + tunnelId + "\n* Client: " + peerB32);}
         if (hostname != null && !hostname.endsWith(".i2p") && !hostname.endsWith(".onion")) {
             InetAddress address;
+            Future<InetAddress> future = null;
             try {
                 final String lookupHost = hostname;
-                Future<InetAddress> future = _dnsResolver.submit(() -> InetAddress.getByName(lookupHost));
+                future = _dnsResolver.submit(() -> InetAddress.getByName(lookupHost));
                 address = future.get(DNS_TIMEOUT_MS, TimeUnit.MILLISECONDS);
             } catch (TimeoutException e) {
                 if (_log.shouldWarn()) {
                     _log.warn("[HTTPServer] DNS lookup timed out (" + DNS_TIMEOUT_MS + "ms) for " + hostname +
                               " " + tunnelId + "\n* Client: " + peerB32);
                 }
+                // Cancel so the resolver thread is not left parked in a JVM-level
+                // resolution (which can run far longer than our timeout) holding a
+                // pool slot; a queued task is dropped outright.
+                if (future != null) {future.cancel(true);}
                 try {socket.close();}
                 catch (IOException ioe) { /* ignored */ }
-                return;
+                return false;
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
+                if (future != null) {future.cancel(true);}
                 try {socket.close();}
                 catch (IOException ioe) { /* ignored */ }
-                return;
+                return false;
             } catch (ExecutionException e) {
                 if (_log.shouldWarn()) {
                     _log.warn("[HTTPServer] DNS lookup failed for " + hostname + " " + tunnelId + "\n* Client: " + peerB32);
                 }
                 try {socket.close();}
                 catch (IOException ioe) { /* ignored */ }
-                return;
+                return false;
             } catch (RejectedExecutionException e) {
                 // Executor saturated — do NOT block on synchronous DNS, which
                 // would stall the request handler thread under load.  Close the
@@ -2117,7 +2116,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 }
                 try {socket.close();}
                 catch (IOException ioe) { /* ignored */ }
-                return;
+                return false;
             }
             if (address.isLinkLocalAddress() || address.isLoopbackAddress() || address.isSiteLocalAddress()) {
                 if (_log.shouldWarn()) {
@@ -2161,8 +2160,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             if (!isValidRequest) {
                 try {socket.close();}
                 catch (IOException e) { /* ignored */ }
+                return false;
             }
         }
+        return true;
     }
 
     /**
@@ -2715,7 +2716,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 _webserver.setSoTimeout(SERVER_READ_TIMEOUT_GET);
 
                 if (_shouldCompress) {
-                    compressedout = new CompressedResponseOutputStream(browserout, _keepalive, _headers);
+                    // A HEAD response carries the GET's Content-Length but no body;
+                    // without the flag it would be gzipped and the empty gzip
+                    // member parsed as the next pipelined response. (isHead is the
+                    // request-method flag computed at the top of run().)
+                    compressedout = new CompressedResponseOutputStream(browserout, isHead, _keepalive, _headers);
                     compressedout.write(DataHelper.getUTF8(modifiedHeaders));
                     // Push headers before the body handoff so TTFB does not
                     // wait on MessageOutputStream's passive flush interval.
@@ -3246,6 +3251,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                                       " — no data for " + (stallNs / 1_000_000L) + "ms, " +
                                       _bytesTransferred + " bytes transferred");
                         }
+                        // Record the truncation as a failure: without it finishTransfer
+                        // sees a clean completion, keeps the connection alive, and the
+                        // next response is pipelined onto a body that stopped short of
+                        // Content-Length — the browser splices the two together.
+                        _failure = new IOException("Sender stalled mid-body in " + _name +
+                                                  " after " + _bytesTransferred + " bytes");
                         break;
                     }
                 }
@@ -3364,17 +3375,20 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          * Create a compressed response output stream.
          *
          * @param o the underlying output stream
+         * @param isHead true if this filters the response to a HEAD request — no
+         *               body is expected, so compression must stay off or the
+         *               empty gzip member would be parsed as the next pipelined response
          * @param keepalive if true, don't close the stream on finish
          * @param requestHeaders the HTTP request headers for Accept-Encoding check
          */
-        public CompressedResponseOutputStream(OutputStream o, boolean keepalive, String requestHeaders) {
-            super(o, false, keepalive, false, null);
+        public CompressedResponseOutputStream(OutputStream o, boolean isHead, boolean keepalive, String requestHeaders) {
+            super(o, false, keepalive, isHead, null);
             _requestHeaders = requestHeaders;
         }
 
         /**
          * Finish gzipping but don't close the output stream if keepalive is true.
-         * Overridden to peek at response code. Always returns line.
+         * With keepalive off (or no gzip stream active) this flushes and closes.
          *
          * @throws IOException if finishing the gzip stream fails
          * @since 0.9.62
@@ -3591,7 +3605,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 return headers;
             } else {
                 if (ctx.clock().now() > expire) {
-                    throw new SocketTimeoutException("Timeout (" + (initialTimeout + HEADER_FINISH_TIMEOUT / 1000) + "s) receiving headers");
+                    throw new SocketTimeoutException("Timeout (" + ((initialTimeout + HEADER_FINISH_TIMEOUT) / 1000) + "s) receiving headers");
                 }
                 int split = buf.indexOf(":");
                 if (split <= 0)

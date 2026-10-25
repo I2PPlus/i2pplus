@@ -25,15 +25,15 @@ import net.i2p.util.Log;
  * <p>
  * Extended in {@link I2PTunnelHTTPServer} for server-side compression.
  * Simple filtered response stream ensuring "Connection: close" header.
- * Could handle Content-Encoding: x-i2p-gzip transparently,
- * adjusting to Content-Encoding: identity. gzip encoding trivial,
- * but chunked transfer encoding adds complexity.
+ * Handles Content-Encoding: x-i2p-gzip transparently by gunzipping the
+ * body and dropping the header (the body arrives as identity). gzip
+ * encoding is trivial, but chunked transfer encoding adds complexity.
  */
 class HTTPResponseOutputStream extends FilterOutputStream {
     /** Logger for the HTTP response stream. */
     private final Log _log;
-    /** Pooled buffer holding the response header block while it is parsed, null once emitted. */
-    protected ByteArray _headerBuffer;
+    /** Pooled buffer holding the response header block while it is parsed, null once emitted or closed. Volatile: close() nulls it from a teardown thread while the writer reads it. */
+    protected volatile ByteArray _headerBuffer;
     /** True once the header was written. */
     private volatile boolean _headerWritten;
     /** Buffer for single byte writes. */
@@ -42,6 +42,8 @@ class HTTPResponseOutputStream extends FilterOutputStream {
     protected volatile boolean _gzip;
     /** Content-Length of the body in bytes, -1 if unknown or chunked, 0 for a bodyless response. */
     protected volatile long _dataExpected = -1;
+    /** True when filtering the response to a HEAD request: no body follows, so a carried Content-Length must not re-arm size or compression accounting. */
+    private volatile boolean _isHead;
     /** True if the outproxy (I2P) side connection may be reused after this response. */
     protected volatile boolean _keepAliveIn;
     /** True if the browser side socket may be reused after this response. */
@@ -127,8 +129,10 @@ class HTTPResponseOutputStream extends FilterOutputStream {
         this(raw, cb);
         _keepAliveIn = allowKeepAliveIn;
         _keepAliveOut = allowKeepAliveOut;
-        if (isHead)
+        if (isHead) {
+            _isHead = true;
             _dataExpected = 0;
+        }
         if (_log.shouldInfo())
             _log.info("Before headers: keepaliveIn? " + allowKeepAliveIn + " keepaliveOut? " + allowKeepAliveOut);
     }
@@ -257,12 +261,22 @@ class HTTPResponseOutputStream extends FilterOutputStream {
             writeBody(buf, off, len);
             return;
         }
+        // A concurrent close() (teardown thread) nulls the header buffer under
+        // the monitor; treat that as "stream closed" rather than NPE-ing out of
+        // a caller that only catches IOException.
+        if (_headerBuffer == null) {
+            throw new IOException("Stream closed during header write");
+        }
 
         for (int i = 0; i < len; i++) {
             ensureCapacity();
-            int valid = _headerBuffer.getValid();
-            _headerBuffer.getData()[valid] = buf[off+i];
-            _headerBuffer.setValid(valid + 1);
+            ByteArray hb = _headerBuffer;
+            if (hb == null) {
+                throw new IOException("Stream closed during header write");
+            }
+            int valid = hb.getValid();
+            hb.getData()[valid] = buf[off+i];
+            hb.setValid(valid + 1);
 
             if (headerReceived()) {
                 writeHeader();
@@ -417,8 +431,9 @@ class HTTPResponseOutputStream extends FilterOutputStream {
                    _statusCode == 503 || _statusCode == 504) {
             // Transient status on the Range request (header timeout / gateway
             // error).  Do not splice the error body over a partial download.
-            // Keep suppress mode so the next response can still be consumed
-            // without re-writing headers; clear Range eligibility so the next
+            // The throw leaves the resume loop to re-arm suppress mode on the
+            // next attempt (prepareBodyResume()), so the error body is consumed
+            // without being written; clear Range eligibility so the next
             // attempt re-requests from byte 0 (non-Range) and skips the
             // already-delivered prefix on a fresh 200.
             _transientResumeFailure = true;
@@ -528,10 +543,18 @@ class HTTPResponseOutputStream extends FilterOutputStream {
                     throw new IOException("Invalid header @ " + j);
                 String key = DataHelper.getUTF8(data, start, keyLen);
                 String val;
-                if (valLen == 0)
+                if (valLen == 0) {
                     val = "";
-                else
-                    val = DataHelper.getUTF8(data, j + 2, valLen).trim();
+                } else {
+                    // RFC 7230 allows zero or one space (or HTAB) after the colon;
+                    // assuming exactly one shifted the value by a byte for compact
+                    // headers ("Content-Length:5" read as "").
+                    int vstart = j + 1;
+                    while (vstart < end && (data[vstart] == ' ' || data[vstart] == '\t')) {
+                        vstart++;
+                    }
+                    val = DataHelper.getUTF8(data, vstart, end - vstart).trim();
+                }
 
                 if (_log.shouldInfo()) {
                     _log.info("Response header: [" + key + ": " + val + "]");
@@ -570,7 +593,11 @@ class HTTPResponseOutputStream extends FilterOutputStream {
                     if ("content-length".equals(lcKey)) {
                         // save for compress decision on server side
                         try {
-                            _dataExpected = Long.parseLong(val);
+                            // A HEAD response carries the GET's Content-Length but
+                            // sends no body; keep the 0 so size accounting and the
+                            // compression decision stay correct (RFC 2616 s14.23).
+                            if (!_isHead)
+                                _dataExpected = Long.parseLong(val);
                         } catch (NumberFormatException nfe) { /* ignored */ }
                     } else if ("content-type".equals(lcKey)) {
                         // save for compress decision on server side
@@ -633,7 +660,12 @@ class HTTPResponseOutputStream extends FilterOutputStream {
             if (_dataExpected > 0) {
                 // content-length
                 // filter output stream to count the data
-                out = new ByteLimitOutputStream(out, _callback, _dataExpected);
+                OutputStream wrapped = new ByteLimitOutputStream(out, _callback, _dataExpected);
+                synchronized (this) {
+                    // synch with the out field changes in beginProcessing() and the
+                    // close() that may run from a teardown thread
+                    out = wrapped;
+                }
             } else if (_dataExpected == 0) {
                 if (_callback != null)
                     _callback.streamDone();
@@ -641,7 +673,10 @@ class HTTPResponseOutputStream extends FilterOutputStream {
                 // -1, chunked
                 // filter output stream to look for the end
                 // do not strip the chunking; pass it through
-                out = new DechunkedOutputStream(out, _callback, false);
+                OutputStream wrapped = new DechunkedOutputStream(out, _callback, false);
+                synchronized (this) {
+                    out = wrapped;
+                }
             }
         }
     }

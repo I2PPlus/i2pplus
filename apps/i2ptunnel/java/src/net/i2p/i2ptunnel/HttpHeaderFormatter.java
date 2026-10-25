@@ -110,8 +110,11 @@ public class HttpHeaderFormatter {
         StringBuilder buf = new StringBuilder(command.length() + headers.size() * 64);
         String request = stripLineBreaks(command.toString().trim());
         if (request.contains("peer_id")) {
+            // Cut the query at the first continuation parameter; a lone
+            // peer_id=... query has no '&', and substring(0, -1) threw.
             int ampersand = request.indexOf("&");
-            String truncatedRequest = request.substring(0, ampersand) + "...";
+            int cut = ampersand >= 0 ? ampersand : request.indexOf("?");
+            String truncatedRequest = (cut > 0 ? request.substring(0, cut) : request) + "...";
             if (request.endsWith("HTTP/1.1")) {truncatedRequest += " HTTP/1.1";}
             else if (request.endsWith("HTTP/1.0")) {truncatedRequest += " HTTP/1.0";}
             request = truncatedRequest;
@@ -259,7 +262,9 @@ public class HttpHeaderFormatter {
         String[] headerLines = NEWLINE_SPLIT.split(headers);
         for (String headerLine : headerLines) {
             if (headerLine.startsWith("Host:")) {
-                String hostHeader = headerLine.substring(6).trim();
+                // "Host:" is 5 chars; substring(6) assumed the optional space
+                // and ate the first character of a compact Host:example.com.
+                String hostHeader = headerLine.substring(5).trim();
                 int index = hostHeader.indexOf(":");
                 return index != -1 ? hostHeader.substring(0, index) : hostHeader;
             }

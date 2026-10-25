@@ -416,4 +416,31 @@ public class HTTPResponseOutputStreamTest {
         java.util.Arrays.fill(big, (byte) 'a');
         out.write(big);
     }
+
+    @Test
+    public void testCompactHeaderNoSpaceAfterColon() throws IOException {
+        // RFC 7230 allows zero spaces after the colon; the old code assumed
+        // exactly one and read the value shifted by a byte ("5" -> "").
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        HTTPResponseOutputStream out = newKeepAlive(baos, new AtomicInteger());
+        out.write((RESPONSE_LINE + "Content-Length:5\r\n\r\nhello").getBytes());
+        assertEquals(5, out.getDataExpected());
+    }
+
+    @Test
+    public void testHeadContentLengthDoesNotRearm() throws IOException {
+        // A HEAD response carries the GET's Content-Length but sends no body;
+        // the size must stay 0 so keepalive accounting and the compression
+        // decision do not wait on a body that will never come.
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        AtomicInteger done = new AtomicInteger();
+        HTTPResponseOutputStream out = new HTTPResponseOutputStream(baos, true, true, true, new DoneCallback() {
+            public void streamDone() {
+                done.incrementAndGet();
+            }
+        });
+        out.write((RESPONSE_LINE + "Content-Length: 12345\r\n\r\n").getBytes());
+        assertEquals(0, out.getDataExpected());
+        assertEquals(1, done.get());
+    }
 }
