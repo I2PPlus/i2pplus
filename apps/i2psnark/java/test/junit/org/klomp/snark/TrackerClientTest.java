@@ -140,4 +140,18 @@ public class TrackerClientTest {
         assertEquals(120_000L, TrackerClient.longSleepWithJitter(120_000L, 15_000L));
         assertEquals(600_000L, TrackerClient.longSleepWithJitter(600_000L, 15_000L));
     }
+
+    /**
+     * The unannounce dispatch wait is live-pool-derived, so pin its bounds
+     * contract: never below the minimum window, never above the cap, so a
+     * stop never waits unbounded for the unannounce queue to drain.
+     */
+    @Test
+    public void testUnannounceDispatchWaitBounds() {
+        for (int i = 0; i < 100; i++) {
+            long wait = TrackerClient.unannounceDispatchWait();
+            assertTrue(wait >= TrackerClient.UNANNOUNCE_MIN_WAIT);
+            assertTrue(wait <= TrackerClient.UNANNOUNCE_MAX_WAIT);
+        }
+    }
 }

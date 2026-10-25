@@ -31,13 +31,13 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.crypto.SigType;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.util.ConvertToHash;
-import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 import org.klomp.snark.bencode.BDecoder;
@@ -103,21 +103,24 @@ public class TrackerClient implements Runnable {
     private static final long UNANNOUNCE_KEEPALIVE = 60 * 1000;
     /** One wave of unannounces, latency-bound, through an established tunnel. */
     private static final long UNANNOUNCE_WAVE = 3 * 1000;
-    /** Dispatch window is scaled to the batch, clamped between these. */
-    private static final long UNANNOUNCE_MIN_WAIT = UNANNOUNCE_WAVE;
-    /** An unannounce waits at most 10 seconds for a session. */
-    private static final long UNANNOUNCE_MAX_WAIT = 10 * 1000;
     /** When the queue is this many waves deep, only the primary tracker per torrent gets a slot. */
     private static final int UNANNOUNCE_PRIMARY_THRESHOLD = UNANNOUNCE_THREADS * 2;
+    /**
+     * Dispatch window is scaled to the batch, clamped between these.
+     * Package-visible so the bounds contract can be pinned by test.
+     */
+    static final long UNANNOUNCE_MIN_WAIT = UNANNOUNCE_WAVE;
+    /** An unannounce waits at most 10 seconds for a session. */
+    static final long UNANNOUNCE_MAX_WAIT = 10 * 1000;
 
     /**
      * Unannounces are sent from a shared, bounded pool instead of one thread
      * per tracker, so stopping thousands of torrents cannot exhaust threads.
      * Threads exist only while unannounces are pending and die back after
      * UNANNOUNCE_KEEPALIVE of idle time; the pool is capped at
-     * UNANNOUNCE_THREADS, sized to saturate the I2P tunnel (requests are
+     * UNANNOUNCE_THREADS, sized to saturate the I2P tunnel: requests are
      * latency-bound, so a few dozen workers drain a burst as fast as the
-     * network allows). The bounded queue absorbs the burst; only when the
+     * network allows. The bounded queue absorbs the burst; only when the
      * queue and pool are full is the unannounce skipped and the tracker
      * reset, the same degradation as the previous OutOfMemoryError fallback.
      * Threads are daemons, so they never hold up router shutdown.
@@ -144,6 +147,70 @@ public class TrackerClient implements Runnable {
     static {
         _unannouncers.allowCoreThreadTimeOut(true);
     }
+
+    /** Core workers of the shared announce pool (announce rounds and DHT fetches). */
+    static final int ANNOUNCE_THREADS = 8;
+    /** Ceiling the announce pool grows to when the burst queue is full. */
+    static final int MAX_ANNOUNCE_THREADS = 32;
+    /** Burst queue in front of the announce pool before extra workers spawn. */
+    static final int ANNOUNCE_QUEUE = 32;
+    /** Retry delay when a client's previous round still holds its slot. */
+    static final int ROUND_RETRY_SECONDS = 30;
+
+    /**
+     * The shared announce pool. Each announce round and each DHT fetch runs
+     * on this pool instead of a dedicated per-torrent thread: with one thread
+     * per torrent per round the router carried hundreds of mostly-parked
+     * threads (every thread is a GC root and pins its streaming connection),
+     * and each round paid full thread setup and teardown. The pool bounds the
+     * workers; the per-client slot guards below keep the queue at most one
+     * entry deep per client. Threads are daemons, mirroring _unannouncers.
+     *
+     * @since 0.9.72+
+     */
+    private static final ThreadPoolExecutor _announcers =
+            new ThreadPoolExecutor(
+                    ANNOUNCE_THREADS,
+                    MAX_ANNOUNCE_THREADS,
+                    UNANNOUNCE_KEEPALIVE,
+                    TimeUnit.MILLISECONDS,
+                    new ArrayBlockingQueue<Runnable>(ANNOUNCE_QUEUE),
+                    new ThreadFactory() {
+                        /** Sequence number for the pool thread names. */
+                        private final AtomicInteger _n = new AtomicInteger();
+
+                        /**
+                         * Make the pool worker: named for the console's thread
+                         * list, daemon so it never keeps the JVM up.
+                         *
+                         * @param r the task to run
+                         * @return the unstarted thread
+                         */
+                        public Thread newThread(Runnable r) {
+                            Thread t = new Thread(r, "SnarkAnn" + _n.incrementAndGet());
+                            t.setDaemon(true);
+                            return t;
+                        }
+                    });
+
+    static {
+        _announcers.allowCoreThreadTimeOut(true);
+    }
+
+    /**
+     * Ceiling on concurrent DHT fetches. A fetch blocks in getPeersAndAnnounce
+     * for up to eight minutes, so uncapped, a batch start would fill the whole
+     * announce pool with fetchers and starve the announce rounds that share
+     * it. A fetch that cannot get a permit is skipped this round and retried
+     * by the next announce round, the same degradation as a rejected one.
+     *
+     * @since 0.9.72+
+     */
+    static final int DHT_FETCH_PERMITS = 4;
+
+    /** Non-blocking cap on concurrent DHTFetcher runs, see DHT_FETCH_PERMITS. */
+    private static final Semaphore _dhtFetchPermits = new Semaphore(DHT_FETCH_PERMITS);
+
     /** Released when this client's last unannounce dispatch finishes; awaited by halt() callers. */
     private volatile CountDownLatch _unannounceLatch;
 
@@ -170,17 +237,18 @@ public class TrackerClient implements Runnable {
     private static final int INITIAL_SLEEP = 90 * 1000;
 
     /**
-     * First-announce delay for a torrent with no metainfo (a magnet, including every
-     * zzzot name lookup). Short enough that a lookup budget is not spent asleep, long
-     * enough that a batch of magnets added at once still does not announce in lockstep.
+     * First-announce delay for a torrent with no metainfo, a magnet
+     * including every zzzot name lookup. Short enough that a lookup budget
+     * is not spent asleep, long enough that a batch of magnets added at
+     * once still does not announce in lockstep.
      */
     static final int MAGNET_INITIAL_SLEEP = 3 * 1000;
     /** Tracker requests slow down after this many consecutive failures. */
     private static final int MAX_CONSEC_FAILS = 10; // slow down after this
     /**
      * Global cap on tracker HTTP requests in flight across ALL torrents, so
-     * simultaneous announce/scrape rounds cannot stampede a tracker (or our
-     * own netdb lookup path) when many TrackerClient threads wake together.
+     * simultaneous announce/scrape rounds cannot stampede a tracker, or our
+     * own netdb lookup path, when many TrackerClient threads wake together.
      * Requests beyond the cap queue on the permit; the fetch timeout clock
      * only starts once the permit is held.
      * Increased from 3 to 10 to allow parallel DHT metadata lookups
@@ -191,16 +259,38 @@ public class TrackerClient implements Runnable {
 
     /**
      * Per-tracker throttle: max 20 requests per tracker host per minute.
-     * Shared across all torrents to cap load on popular trackers (e.g.
-     * postman, torrfreedom) even when many torrents use the same tracker.
+     * Shared across all torrents to cap load on popular trackers, e.g.
+     * postman and torrfreedom, even when many torrents use the same tracker.
      * Guarded by itself.
-     * @since 0.9.71+
+     *
+     * @since 0.9.72+
      */
     private static final int MAX_PER_TRACKER_PER_MINUTE = 20;
     /** Requests to one tracker are spaced across a 1 minute window. */
     private static final long TRACKER_THROTTLE_WINDOW_MS = 60_000L;
     /** Recent request times per tracker, for spacing requests. */
     private static final Map<String, java.util.Deque<Long>> _trackerRequestTimes = new java.util.concurrent.ConcurrentHashMap<>();
+    /** When the stale entries of _trackerRequestTimes were last pruned. */
+    private static volatile long _lastThrottlePrune;
+
+    /**
+     * Remove per-host queues that have been idle for more than a throttle
+     * window, so the static map does not keep an entry for every tracker
+     * host ever contacted.
+     *
+     * @param now current time in ms
+     * @since 0.9.72+
+     */
+    private static void pruneThrottleMap(long now) {
+        for (Map.Entry<String, java.util.Deque<Long>> e : _trackerRequestTimes.entrySet()) {
+            java.util.Deque<Long> q = e.getValue();
+            synchronized (q) {
+                if (q.isEmpty() || now - q.peekLast() >= TRACKER_THROTTLE_WINDOW_MS) {
+                    _trackerRequestTimes.remove(e.getKey(), q);
+                }
+            }
+        }
+    }
 
     /**
      * Block until this tracker host has capacity under the 20/min throttle.
@@ -213,6 +303,11 @@ public class TrackerClient implements Runnable {
             return;
         while (true) {
             long now = System.currentTimeMillis();
+            // periodic housekeeping for the static map, at most once a window
+            if (now - _lastThrottlePrune > TRACKER_THROTTLE_WINDOW_MS) {
+                _lastThrottlePrune = now;
+                pruneThrottleMap(now);
+            }
             java.util.Deque<Long> q = _trackerRequestTimes.computeIfAbsent(host, k -> new java.util.ArrayDeque<>());
             long sleepMs = 0;
             synchronized (q) {
@@ -240,7 +335,9 @@ public class TrackerClient implements Runnable {
     private static final int LONG_SLEEP = 2 * 60 * 1000;
     /**
      * Max random spread added to the LONG_SLEEP failure floor so torrents
-     * that failed together don't re-announce in lockstep @since 0.9.71+.
+     * that failed together don't re-announce in lockstep.
+     *
+     * @since 0.9.72+
      */
     private static final int LONG_SLEEP_JITTER = 30 * 1000;
 
@@ -339,8 +436,14 @@ public class TrackerClient implements Runnable {
     private volatile int _runCount;
     /** The running tracker thread, kept for interrupts. */
     private volatile Thread _thread;
+    /** True from the moment a round is queued until it finishes; keeps at
+     *  most one announce round per client queued on the shared pool. */
+    private final AtomicBoolean _roundQueued = new AtomicBoolean();
     /** The running DHT fetch thread, kept for interrupts. */
     private volatile Thread _dhtThread;
+    /** True from the moment a DHT fetch is queued until it finishes; keeps at
+     *  most one fetch per client queued on the shared pool. */
+    private final AtomicBoolean _dhtQueued = new AtomicBoolean();
     /** Peers seen in the last DHT fetch, updated by that thread. */
     private volatile int _dhtPeersSeen;
     /** The queued timer event, kept for cancellation. */
@@ -400,7 +503,8 @@ public class TrackerClient implements Runnable {
     }
 
     /**
-     * Start the tracker client thread.
+     * Start this tracker client, scheduling the first announce round on the
+     * shared timer and pool.
      */
     public synchronized void start() {
         if (!stop) {
@@ -414,9 +518,14 @@ public class TrackerClient implements Runnable {
         runStarted = false;
         _fastUnannounce = false;
         snark.setTrackerProblems(null);
-        _thread = new I2PAppThread(this, _threadName, true);
-        ++_runCount;
-        _thread.start();
+        // Schedule the first round on the shared timer with the batch-start
+        // spread delay (SimpleTimer2 holds the delay; no pool worker sleeps),
+        // and let it drive the periodic rounds from there. If a pre-halt
+        // round is still queued on the pool it will run with stop cleared
+        // and announce for us.
+        queueLoop(firstRoundDelaySeconds(snark.getMetaInfo() != null,
+                                        _util.getContext().random().nextInt(INITIAL_SLEEP),
+                                        _util.getContext().random().nextInt(MAGNET_INITIAL_SLEEP)));
         started = true;
     }
 
@@ -463,6 +572,9 @@ public class TrackerClient implements Runnable {
             e.cancel();
             _event = null;
         }
+        // _thread and _dhtThread name pool workers; the worker may already
+        // have moved to another snark task, and every task on the pool
+        // tolerates a spurious interrupt via its stop checks
         Thread t = _thread;
         if (t != null) {
             if (_log.shouldDebug()) {
@@ -485,11 +597,11 @@ public class TrackerClient implements Runnable {
 
     /**
      * Wait, capped at ms, for the unannounces submitted by the last halt() to
-     * dispatch. Returns immediately when nothing was submitted or they are done.
+     * complete. Returns immediately when nothing was submitted or they are done.
      *
      * @param ms the longest to wait, in milliseconds, for the last halt()'s
+     *           unannounces to complete
      * @since 0.9.71+
-     *        unannounces to dispatch
      */
     public void awaitUnannounces(long ms) {
         CountDownLatch latch = _unannounceLatch;
@@ -524,10 +636,42 @@ public class TrackerClient implements Runnable {
 
         public void timeReached() {
             _event = null;
-            _thread =
-                    new I2PAppThread(TrackerClient.this, _threadName, true);
-                    ++_runCount;
-            _thread.start();
+            boolean slot = _roundQueued.compareAndSet(false, true);
+            if (!shouldSubmitRound(slot, stop)) {
+                if (slot) {
+                    // halted between the timer firing and this check - release the slot
+                    _roundQueued.set(false);
+                } else if (!stop) {
+                    // previous round still queued or parked (e.g. in a tunnel
+                    // connect); retry shortly instead of stacking on the pool.
+                    // When halted, drop the chain - the parked round exits on
+                    // its stop check, and re-arming here would retry forever
+                    queueLoop(ROUND_RETRY_SECONDS);
+                }
+                return;
+            }
+            if (!poolHasCapacity(_announcers.getPoolSize(), MAX_ANNOUNCE_THREADS,
+                                 _announcers.getQueue().remainingCapacity())) {
+                // saturated pool (batch start); retry shortly without
+                // paying for a rejected-execution stack trace
+                _roundQueued.set(false);
+                if (!stop) {
+                    queueLoop(ROUND_RETRY_SECONDS);
+                }
+                return;
+            }
+            try {
+                _announcers.execute(TrackerClient.this);
+                // count real rounds only - a rejected or capacity-skipped
+                // retry must not burn the failure-backoff budget
+                ++_runCount;
+            } catch (RejectedExecutionException ree) {
+                // pool and queue saturated; release the slot and retry shortly
+                _roundQueued.set(false);
+                if (!stop) {
+                    queueLoop(ROUND_RETRY_SECONDS);
+                }
+            }
         }
     }
 
@@ -553,11 +697,16 @@ public class TrackerClient implements Runnable {
      */
     @Override
     public void run() {
+        // pool workers are reused; a stale interrupt left by another client's
+        // halt() must not abort this round before the stop checks run
+        Thread.interrupted();
+        _thread = Thread.currentThread();
         long begin = _util.getContext().clock().now();
-        if (_log.shouldDebug()) _log.debug("Start " + Thread.currentThread().getName());
+        if (_log.shouldDebug()) _log.debug("Start " + _threadName);
         try {
             if (!_initialized) {
                 setup();
+                _initialized = true;
             }
             if (trackers.isEmpty() && _util.getDHTForTorrent(snark.getInfoHash()) == null) {
                 stop = true;
@@ -569,28 +718,17 @@ public class TrackerClient implements Runnable {
                 this.snark.stopTorrent();
                 return;
             }
-            if (!_initialized) {
-                _initialized = true;
-                // Spread first rounds so a batch start (router restart, many torrents
-                // added together) does not fire every announce at once. A magnet has no
-                // metainfo, which is the lookup case, and there the whole point is to
-                // hear from someone immediately - a lookup budget is far shorter than
-                // INITIAL_SLEEP, so spending up to 90s here means never announcing at all.
-                long delay = initialAnnounceDelayMs(snark.getMetaInfo() != null,
-                                                    _util.getContext().random().nextInt(INITIAL_SLEEP),
-                                                    _util.getContext().random().nextInt(MAGNET_INITIAL_SLEEP));
-                try {
-                    Thread.sleep(delay);
-                } catch (InterruptedException ie) { /* ignored */ }
-            }
+            // The first round's spread delay is held by the shared timer
+            // (scheduled in start()), never burned on a pool worker.
             loop();
         } finally {
             // don't hold ref
             _thread = null;
+            _roundQueued.set(false);
             if (_log.shouldDebug())
                 _log.debug(
                         "Finish "
-                                + Thread.currentThread().getName()
+                                + _threadName
                                 + " after "
                                 + DataHelper.formatDuration(
                                         _util.getContext().clock().now() - begin));
@@ -610,6 +748,30 @@ public class TrackerClient implements Runnable {
         backupTrackers.clear();
         meta = snark.getMetaInfo();
         setup();
+    }
+
+    /**
+     * Snapshot the primary tracker list under the instance lock.
+     * {@link #reinitialize()} clears and refills it, so a round still
+     * running from before a halt must iterate a stable copy, not the live
+     * ArrayList.
+     *
+     * @return the primary trackers as of this moment, never null
+     * @since 0.9.72+
+     */
+    private synchronized List<TCTracker> primaryTrackers() {
+        return new ArrayList<>(trackers);
+    }
+
+    /**
+     * Snapshot the backup tracker list under the instance lock, see
+     * {@link #primaryTrackers()}.
+     *
+     * @return the backup trackers as of this moment, never null
+     * @since 0.9.72+
+     */
+    private synchronized List<TCTracker> backupTrackers() {
+        return new ArrayList<>(backupTrackers);
     }
 
     /**
@@ -791,8 +953,13 @@ public class TrackerClient implements Runnable {
                 // add scrape traffic for a result nobody downloads. Keep trackers
                 // when the DHT is unavailable - then they are the only peer source.
                 boolean contactTrackers = shouldAnnounceToTrackers(snark.isLookup(), dht != null);
-                if (!trackers.isEmpty() && contactTrackers) {
-                    peersFromPrimaries = getPeersFromTrackers(trackers);
+                // snapshot under the instance lock: reinitialize() clears and
+                // refills the lists, and a round still running from before a
+                // halt would otherwise iterate a list being rebuilt (CME)
+                List<TCTracker> primaries = primaryTrackers();
+                List<TCTracker> backups = backupTrackers();
+                if (!primaries.isEmpty() && contactTrackers) {
+                    peersFromPrimaries = getPeersFromTrackers(primaries);
                     maxSeenPeers = peersFromPrimaries;
                     // fast update for UI at startup
                     if (maxSeenPeers > oldSeenPeers) snark.setTrackerSeenPeers(maxSeenPeers);
@@ -811,15 +978,15 @@ public class TrackerClient implements Runnable {
                 boolean wantMorePeers = coordinator.needOutboundPeers();
                 if (contactTrackers
                         && (needBackupTrackers(
-                        !trackers.isEmpty(),
-                        !backupTrackers.isEmpty(),
+                        !primaries.isEmpty(),
+                        !backups.isEmpty(),
                         dht != null,
                         dht != null ? dht.size() : 0,
                         wantMorePeers)
                         || shouldTryFallbackTrackers(peersFromPrimaries,
-                                                     !backupTrackers.isEmpty(),
+                                                     !backups.isEmpty(),
                                                      wantMorePeers))) {
-                    p = getPeersFromTrackers(backupTrackers);
+                    p = getPeersFromTrackers(backups);
                     if (p > maxSeenPeers) maxSeenPeers = p;
                 }
 
@@ -868,6 +1035,9 @@ public class TrackerClient implements Runnable {
         }
         catch (Throwable t) {
             _log.error("TrackerClient: " + t, t);
+            // the normal reschedule at the end of loop() was skipped; without
+            // this the torrent never announces again until a manual restart
+            queueLoop(ROUND_RETRY_SECONDS);
         }
     }
 
@@ -905,27 +1075,6 @@ public class TrackerClient implements Runnable {
     }
 
     /**
-     * Whether the configured backup trackers should be consulted for a
-     * trackerless torrent on this announce cycle.
-     *
-     * <p>Backup trackers are only populated when the torrent has no announce
-     * URL at all (magnet-links and torrents missing an announce), and are the
-     * only HTTP tracker peer source for such torrents. While actively
-     * downloading, the backup trackers must be consulted regardless of the DHT
-     * size: a healthy DHT may know many nodes yet hold no peers for this
-     * infohash, and with DHT disabled they are the only peer source left. For a
-     * seeding torrent no inbound peers are needed, so they are only used as a
-     * bootstrapping fallback while the DHT is still too small to be useful.
-     *
-     * @param havePrimary whether the torrent has its own primary trackers
-     * @param haveBackup whether backup trackers are configured
-     * @param dhtEnabled whether a DHT is available for this torrent
-     * @param dhtSize number of known DHT nodes, only meaningful if dhtEnabled
-     * @param downloading whether the torrent is actively seeking outbound peers
-     * @return true to query the backup trackers
-     * @since 0.9.71+
-     */
-    /**
      * Delay before a torrent's first announce.
      *
      * <p>Pure decision, separated so the magnet case can be pinned by test: the spread
@@ -940,6 +1089,22 @@ public class TrackerClient implements Runnable {
      */
     static long initialAnnounceDelayMs(boolean hasMeta, int fullSpread, int magnetSpread) {
         return hasMeta ? fullSpread : magnetSpread;
+    }
+
+    /**
+     * Delay before a torrent's first announce round, in whole seconds, for the
+     * shared timer. A nonzero delay is rounded up so it never collapses to
+     * zero seconds.
+     *
+     * @param hasMeta true once the torrent has its metainfo
+     * @param fullSpread random value in [0, INITIAL_SLEEP)
+     * @param magnetSpread random value in [0, MAGNET_INITIAL_SLEEP)
+     * @return seconds the shared timer waits before the first round
+     * @since 0.9.72+
+     */
+    static int firstRoundDelaySeconds(boolean hasMeta, int fullSpread, int magnetSpread) {
+        long ms = initialAnnounceDelayMs(hasMeta, fullSpread, magnetSpread);
+        return ms > 0 ? (int) ((ms + 999) / 1000) : 0;
     }
 
     /**
@@ -981,16 +1146,58 @@ public class TrackerClient implements Runnable {
     }
 
     /**
-     * Whether a trackerless torrent should consult its backup trackers this round. A download
-     * always does; a seed does only while the DHT is still short of its bootstrap node count,
-     * since once the DHT is warm the trackers add nothing.
+     * Whether a round (announce or DHT fetch) may be submitted to the shared
+     * pool now. The caller claims the client's single slot with compareAndSet;
+     * a claimed slot that is not submitted (client halted) must be released by
+     * the caller, and an unclaimed slot means the previous round is still
+     * queued or running, so the caller should retry later rather than stack.
      *
-     * @param havePrimary whether any primary tracker is configured
-     * @param haveBackup whether any fallback tracker is configured
-     * @param dhtEnabled whether a DHT instance is running for this torrent
-     * @param dhtSize the number of known nodes in that DHT
-     * @param downloading whether the torrent still wants peers, false for a seed
-     * @return true if the backup tracker round should run
+     * @param slotTaken true if this call just claimed the client's slot
+     * @param stopped true if the client has been halted
+     * @return true if the task should be submitted to the pool
+     * @since 0.9.72+
+     */
+    static boolean shouldSubmitRound(boolean slotTaken, boolean stopped) {
+        return slotTaken && !stopped;
+    }
+
+    /**
+     * Whether the shared announce pool can take one more task without
+     * rejecting it: it grows to MAX_ANNOUNCE_THREADS while the burst queue
+     * is full, then accepts only into queue space. Checking first keeps a
+     * saturated pool (a 1000-torrent batch start) from driving control flow
+     * through RejectedExecutionException, whose stack trace is pure GC
+     * churn at that scale; the catch remains as the rare race backstop.
+     *
+     * @param poolSize current worker count from getPoolSize()
+     * @param maxSize the pool's maximum, MAX_ANNOUNCE_THREADS
+     * @param queueRemaining free slots from the queue's remainingCapacity()
+     * @return true if execute() is expected to accept the task
+     * @since 0.9.72+
+     */
+    static boolean poolHasCapacity(int poolSize, int maxSize, int queueRemaining) {
+        return poolSize < maxSize || queueRemaining > 0;
+    }
+
+    /**
+     * Whether the configured backup trackers should be consulted for a
+     * trackerless torrent on this announce cycle.
+     *
+     * <p>Backup trackers are only populated when the torrent has no announce
+     * URL at all (magnet-links and torrents missing an announce), and are the
+     * only HTTP tracker peer source for such torrents. While actively
+     * downloading, the backup trackers must be consulted regardless of the DHT
+     * size: a healthy DHT may know many nodes yet hold no peers for this
+     * infohash, and with DHT disabled they are the only peer source left. For a
+     * seeding torrent no inbound peers are needed, so they are only used as a
+     * bootstrapping fallback while the DHT is still too small to be useful.
+     *
+     * @param havePrimary whether the torrent has its own primary trackers
+     * @param haveBackup whether backup trackers are configured
+     * @param dhtEnabled whether a DHT is available for this torrent
+     * @param dhtSize number of known DHT nodes, only meaningful if dhtEnabled
+     * @param downloading whether the torrent is actively seeking outbound peers
+     * @return true to query the backup trackers
      */
     static boolean needBackupTrackers(
             boolean havePrimary,
@@ -1095,6 +1302,8 @@ public class TrackerClient implements Runnable {
                         consecutiveFails = 0;
                     }
                     runStarted = true;
+                    // a successful announce ends the consecutive-failure run
+                    _runCount = 0;
                     tr.started = true;
                     tr.seenPeers = info.getPeerCount();
                     // update rising number quickly
@@ -1242,7 +1451,7 @@ public class TrackerClient implements Runnable {
         boolean anyActive = false;
         boolean allFailed = true;
         String firstProblem = null;
-        for (TCTracker tr : trackers) {
+        for (TCTracker tr : primaryTrackers()) {
             if (tr.stop) {
                 continue;
             }
@@ -1344,12 +1553,23 @@ public class TrackerClient implements Runnable {
                                         DHT_ANNOUNCE_JITTER)) {
             return;
         }
-        Thread t = _dhtThread;
-        if (t != null && t.isAlive()) {
+        if (!_dhtQueued.compareAndSet(false, true)) {
+            // a fetch is already queued or running for this client
             return;
         }
-        _dhtThread = new I2PAppThread(new DHTFetcher(dht), _threadName + ".DHT", true);
-        _dhtThread.start();
+        if (stop ||
+            !poolHasCapacity(_announcers.getPoolSize(), MAX_ANNOUNCE_THREADS,
+                             _announcers.getQueue().remainingCapacity())) {
+            // halted, or saturated pool; the next announce round retries
+            _dhtQueued.set(false);
+            return;
+        }
+        try {
+            _announcers.execute(new DHTFetcher(dht));
+        } catch (RejectedExecutionException ree) {
+            // pool and queue saturated; this round simply skips the DHT fetch
+            _dhtQueued.set(false);
+        }
     }
 
     /**
@@ -1372,6 +1592,34 @@ public class TrackerClient implements Runnable {
         }
 
         public void run() {
+            // cap concurrent fetchers so they cannot starve announce rounds
+            if (!_dhtFetchPermits.tryAcquire()) {
+                _dhtThread = null;
+                _dhtQueued.set(false);
+                return;
+            }
+            // pool workers are reused; a stale interrupt left by another
+            // client's halt() must not abort this fetch
+            Thread.interrupted();
+            _dhtThread = Thread.currentThread();
+            try {
+                // a fetch queued before halt() must not spend its multi-minute
+                // lookup on a dead client, holding a permit and a worker
+                if (!stop) {
+                    fetchAndAddPeers();
+                }
+            } finally {
+                _dhtFetchPermits.release();
+                _dhtThread = null;
+                _dhtQueued.set(false);
+            }
+        }
+
+        /**
+         * The DHT query and peer add, run while the client's pool slot and
+         * _dhtThread reference are held.
+         */
+        private void fetchAndAddPeers() {
             int numwant;
             if (!coordinator.needOutboundPeers()) {
                 numwant = 1;
@@ -1389,6 +1637,7 @@ public class TrackerClient implements Runnable {
                             numwant <= 1);
             if (!hashes.isEmpty()) {
                 runStarted = true;
+                _runCount = 0;
                 lastDHTAnnounce = _util.getContext().clock().now();
                 _dhtPeersSeen = hashes.size();
                 // fast update for UI
@@ -1397,6 +1646,10 @@ public class TrackerClient implements Runnable {
                 }
             } else {
                 lastDHTAnnounce = 0;
+                // a fetch that came back empty must retire the previous
+                // fetch's count, or the stale number keeps feeding
+                // maxSeenPeers and the UI forever shows the old DHT peers
+                _dhtPeersSeen = 0;
             }
             if (_log.shouldInfo()) {
                 _log.info(
@@ -1520,32 +1773,35 @@ public class TrackerClient implements Runnable {
         if (dht != null) {
             dht.unannounce(snark.getInfoHash());
         }
-        CountDownLatch latch = new CountDownLatch(1);
-        _unannounceLatch = latch;
-        int submitted = 0;
         // Over budget? Give every dest one slot (its primary tracker) instead
         // of letting the dispatch window starve the tail randomly
         boolean primaryOnly = _unannouncers.getQueue().size() >= UNANNOUNCE_PRIMARY_THRESHOLD;
-        for (TCTracker tr : trackers) {
+        // Two passes: the latch must count every submitted unannouncer, so
+        // awaitUnannounces() waits for the last one, not the first
+        List<TCTracker> toAnnounce = new ArrayList<>(trackers.size());
+        for (TCTracker tr : primaryTrackers()) {
             if (_util.connected() && tr.started && (!tr.stop) && tr.trackerProblems == null) {
-                if (primaryOnly && submitted > 0) {
+                if (primaryOnly && !toAnnounce.isEmpty()) {
                     tr.reset();
                     continue;
                 }
-                try {
-                    _unannouncers.execute(new Unannouncer(tr, latch));
-                    submitted++;
-                } catch (RejectedExecutionException ree) {
-                    tr.reset();
-                } catch (OutOfMemoryError oom) {
-                    tr.reset();
-                } // queue full or out of threads, ignore
+                toAnnounce.add(tr);
             } else {
                 tr.reset();
             }
         }
-        if (submitted == 0) {
-            latch.countDown();
+        CountDownLatch latch = new CountDownLatch(toAnnounce.size());
+        _unannounceLatch = latch;
+        for (TCTracker tr : toAnnounce) {
+            try {
+                _unannouncers.execute(new Unannouncer(tr, latch));
+            } catch (RejectedExecutionException ree) {
+                latch.countDown();
+                tr.reset();
+            } catch (OutOfMemoryError oom) {
+                latch.countDown();
+                tr.reset();
+            } // queue full or out of threads, ignore
         }
     }
 
@@ -2163,25 +2419,25 @@ public class TrackerClient implements Runnable {
         /** The UDP tracker's port. */
         final int port;
         /** Seconds between announces, set by the tracker. */
-        long interval;
+        volatile long interval;
          /** When the last request was sent. */
-         long lastRequestTime;
+         volatile long lastRequestTime;
          /** When the last response arrived. */
-         long lastResponseTime;
+         volatile long lastResponseTime;
          /** When the next scrape is due. */
-         long nextScrapeTime;
+         volatile long nextScrapeTime;
         /** The last error message from this tracker. */
-        String trackerProblems;
+        volatile String trackerProblems;
         /** Set to stop announcing to this tracker. */
-        boolean stop;
+        volatile boolean stop;
         /** Set once an announce has been sent. */
-        boolean started;
+        volatile boolean started;
         /** Failed registrations with this tracker. */
-        int registerFails;
+        volatile int registerFails;
         /** Consecutive failed requests to this tracker. */
-        int consecutiveFails;
+        volatile int consecutiveFails;
         /** Peers returned by the last response. */
-        int seenPeers;
+        volatile int seenPeers;
 
         /**
          * Create a tracker entry for the announce URL.
