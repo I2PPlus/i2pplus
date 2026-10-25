@@ -53,8 +53,8 @@ import net.i2p.util.SystemVersion;
 public class TunnelController implements Logging {
     /** Logger for the tunnel controller. */
     private final Log _log;
-    /** The tunnel's configuration properties. */
-    private Properties _config;
+    /** The tunnel's configuration properties. Volatile: replaced wholesale by setConfig() on the console thread while readers run on tunnel and log threads. */
+    private volatile Properties _config;
     /** File the configuration is saved to. */
     private File _configFile;
     /** The tunnel object being controlled. */
@@ -69,8 +69,8 @@ public class TunnelController implements Logging {
     private volatile SimpleTimer2.TimedEvent _pkfc;
     /** When the startup delay ends, zero while running. */
     private volatile long _startupDelayEndTime;
-    /** Suppress log messages during tunnel restart. */
-    private boolean _suppressLog;
+    /** Suppress log messages during tunnel restart. Volatile: toggled by the restarting thread, read by log callers. */
+    private volatile boolean _suppressLog;
 
     /**
      * The tunnel state.
@@ -1005,7 +1005,7 @@ public class TunnelController implements Logging {
       */
      public void destroyTunnel() {
         synchronized (this) {
-            if (_state != TunnelState.RUNNING)
+            if (!mayDestroy(_state))
                 return;
             changeState(TunnelState.DESTROYING);
         }
@@ -1019,6 +1019,26 @@ public class TunnelController implements Logging {
         _tunnel.runClose(new String[] { "destroy", "all" }, this);
         release(sessions);
         changeState(TunnelState.DESTROYED);
+    }
+
+    /**
+     * Decide whether {@link #destroyTunnel()} may proceed from a given state.
+     * Pure decision, no router context. A tunnel that is half-started
+     * (START_ON_LOAD, DELAYED_START_PENDING, STARTING) still holds created
+     * sessions, tasks and the private-key checker, so destroy must proceed to
+     * release them — the old RUNNING-only gate leaked exactly those.
+     * STOPPED / STOPPING / DESTROYING / DESTROYED tunnels have nothing left
+     * to release (or are mid-teardown), so destroy is a no-op there.
+     *
+     * @param state the tunnel's current state, non-null
+     * @return true if destroy should transition the tunnel to DESTROYING
+     * @since 0.9.72+
+     */
+    static boolean mayDestroy(TunnelState state) {
+        return state == TunnelState.START_ON_LOAD ||
+               state == TunnelState.DELAYED_START_PENDING ||
+               state == TunnelState.STARTING ||
+               state == TunnelState.RUNNING;
     }
 
     /**

@@ -26,6 +26,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
@@ -83,8 +84,8 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     /** The listen-on host. Sadly the listen-on port does not have a field. */
     public String listenHost = host;
 
-    /** Default read timeout for tunnel connections (-1 = no timeout). */
-    public long readTimeout = -1;
+    /** Default read timeout for tunnel connections (-1 = no timeout). Volatile: written by the CLI/console thread, read by connection threads. */
+    public volatile long readTimeout = -1;
 
     /**
      * Absolute path to filter definition file.
@@ -97,8 +98,8 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
 
     /** The tasks serving the connections. */
     private final List<I2PTunnelTask> tasks = new CopyOnWriteArrayList<>();
-    /** Id given to the next task. */
-    private int next_task_id = 1;
+    /** Id given to the next task. Atomic: tasks are added from console and delayed-startup threads. */
+    private final AtomicInteger next_task_id = new AtomicInteger(1);
 
     /** Listeners of the connection events. */
     private final Set<ConnectionEventListener> listeners = new CopyOnWriteArraySet<>();
@@ -117,12 +118,9 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     };
 
     /**
-     * How the tunnel session is being closed.
+     * How the tunnel is closed by the console or command line.
      *
      * @since 0.9.17
-     */
-    /**
-     * How the tunnel is closed by the console or command line.
      */
     private enum CloseMode {
         /** Close the tunnel, waiting for the connections to end. */
@@ -210,8 +208,11 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         _tunnelId = __tunnelId.incrementAndGet();
         _log = _context.logManager().getLog(I2PTunnel.class);
         _controller = tc;
-        // as of 0.8.4, include context properties
-        Properties p = _context.getProperties();
+        // as of 0.8.4, include context properties. Clone, do not alias:
+        // I2PAppContext.getProperties() returns the cached merged props shared
+        // process-wide, and clientoptions -c / setClientOptions / per-connection
+        // option overrides would clear or pollute the router's global view.
+        Properties p = (Properties) _context.getProperties().clone();
         _clientOptions = p;
         _sessions = new CopyOnWriteArraySet<>();
 
@@ -235,6 +236,11 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
 
             case 'n':  // -noc, -nog, -nocli, -nogui
                 String a = g.getOptarg();
+                if (a == null) {
+                    // -n with no argument: nothing to match
+                    error = true;
+                    break;
+                }
                 if (a.startsWith("oc")) {
                     gui = false;
                     cli = false;
@@ -449,8 +455,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     private void addtask(I2PTunnelTask tsk) {
         tsk.setTunnel(this);
         if (tsk.isOpen()) {
-            tsk.setId(next_task_id);
-            next_task_id++;
+            tsk.setId(next_task_id.getAndIncrement());
             tasks.add(tsk);
             if (_log.shouldInfo()) {_log.info("Adding task: " + tsk);}
         } else {
@@ -742,6 +747,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         if (args.length == 3) {
             InetAddress serverHost = parseServerHost(args[0], l);
             int portNum = parseServerPort(args[1], l);
+            if (portNum < 0) {return;}
             File privKeyFile = getPrivKeyFile(args[2], l);
             I2PTunnelServer serv = new I2PTunnelServer(serverHost, portNum, privKeyFile, args[2], l, this, this);
             serv.setReadTimeout(readTimeout);
@@ -769,6 +775,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         if (args.length == 3) {
             InetAddress serverHost = parseServerHost(args[0], l);
             int portNum = parseServerPort(args[1], l);
+            if (portNum < 0) {return;}
             File privKeyFile = getPrivKeyFile(args[2], l);
             I2PTunnelServer serv = new I2PTunnelIRCServer(serverHost, portNum, privKeyFile, args[2], l, this, this);
             serv.setReadTimeout(readTimeout);
@@ -800,6 +807,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         if (args.length == 4) {
             InetAddress serverHost = parseServerHost(args[0], l);
             int portNum = parseServerPort(args[1], l);
+            if (portNum < 0) {return;}
 
             String spoofedHost = args[2];
 
@@ -837,6 +845,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             InetAddress serverHost = parseServerHost(args[0], l);
             int portNum = parseServerPort(args[1], l);
             int port2Num = parseServerPort(args[2], l);
+            if (portNum < 0 || port2Num < 0) {return;}
 
             String spoofedHost = args[3];
 
@@ -875,6 +884,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         if (args.length == 3) {
             InetAddress serverHost = parseServerHost(args[0], l);
             int portNum = parseServerPort(args[1], l);
+            if (portNum < 0) {return;}
 
             I2PTunnelServer serv = new I2PTunnelServer(serverHost, portNum, args[2], l, this, this);
             serv.setReadTimeout(readTimeout);
@@ -1417,6 +1427,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
                 readTimeout = Long.parseLong(args[0]);
             } catch (NumberFormatException e) {
                 notifyEvent("read_timeoutResult", "error");
+                return;
             }
             notifyEvent("read_timeoutResult", "ok");
         } else {
@@ -1789,7 +1800,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     /**
      * Helper method to actually close the given task number (optionally forcing closure).
      *
-     * @param num the task id to look for, the search stops at a higher id
+     * @param num the task id to look for
      * @param mode how to close it: normal, forced, or destroy
      * @param l unused, the class logger is used instead
      * @return true if a task with that id was found and closed
@@ -1806,7 +1817,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             if (id == num) {
                 closed = closetask(t, mode);
                 break;
-            } else if (id > num) {break;}
+            }
         }
         return closed;
     }

@@ -65,8 +65,8 @@ public class TunnelControllerGroup implements ClientApp {
     private final List<TunnelController> _controllers;
     /** Lock for the controller list. */
     private final ReadWriteLock _controllersLock;
-    /** True once the configs were read. */
-    private boolean _controllersLoaded;
+    /** True once the configs were read. Volatile: read unsynchronized by delayed-startup helpers. */
+    private volatile boolean _controllersLoaded;
     /** File holding the tunnel definitions. */
     private final String _configFile;
     /** Directory of the per-tunnel configs. */
@@ -1178,68 +1178,73 @@ public class TunnelControllerGroup implements ClientApp {
         private StartControllers() {}
         @Override
         public void run() {
-            synchronized(TunnelControllerGroup.this) {
-                _controllersLock.readLock().lock();
-                try {
-                    if (_controllers.size() <= 0) {
-                        _log.logAlways(Log.WARN, "No configured tunnels to start");
-                        return;
-                    }
-                    for (TunnelController controller : _controllers) {
-                        if (!controller.getStartOnLoad())
-                            continue;
-                        if (!controller.isClient()) {
-                            int delayMin = controller.getStartupDelayMin();
-                            int delayMax = controller.getStartupDelayMax();
-                            if (delayMax > delayMin && delayMin >= 0) {
-                                int delay = delayMin + RandomSource.getInstance().nextInt(Math.max(1, delayMax - delayMin));
-                                String name = controller.getName();
-                                String type = controller.getType();
-                                String host = controller.getTargetHost();
-                                String port = controller.getTargetPort();
-                                String typeDesc;
-                                if ("httpserver".equals(type)) {
-                                    typeDesc = "HTTP Server";
-                                } else if ("ircserver".equals(type)) {
-                                    typeDesc = "IRC Server";
-                                } else if ("httpbidirserver".equals(type)) {
-                                    typeDesc = "Bidirectional HTTP Server";
-                                } else if ("streamrserver".equals(type)) {
-                                    typeDesc = "Streamr Server";
-                                } else {
-                                    typeDesc = "Server";
-                                }
-                                controller.changeState(TunnelController.TunnelState.DELAYED_START_PENDING);
-                                controller.setStartupDelayEndTime(delay * 1000L);
-                                final String msg = "‣ Delaying startup of " + name + " [" + typeDesc + " on " + host + ":" + port + "] for " + delay + "s...";
-                                final TunnelController tc = controller;
-                                new I2PAppThread(new Runnable() {
-                                    public void run() {
-                                        tc.log(msg);
-                                        try {
-                                            Thread.sleep((long) delay * 1000);
-                                        } catch (InterruptedException e) {
-                                            Thread.currentThread().interrupt();
-                                            tc.log("‣ Startup cancelled for " + name);
-                                            return;
-                                        }
-                                        synchronized(tc) {
-                                            if (tc.getState() != TunnelController.TunnelState.DELAYED_START_PENDING) {
-                                                return;
-                                            }
-                                        }
-                                        tc.log("‣ Starting " + name);
-                                        tc.startTunnelBackground();
-                                    }
-                                }, "Tunnel startup delay for " + name).start();
-                                continue;
-                            }
+            // Snapshot the controllers under the list lock, then iterate with no
+            // group or list monitor held. Holding TunnelControllerGroup.this
+            // across the whole walk serialized every controller monitor and
+            // thread-spawn behind the group lock — a latent AB-BA against any
+            // controller-side path that reaches a group-synchronized method.
+            List<TunnelController> snapshot;
+            _controllersLock.readLock().lock();
+            try {
+                snapshot = new ArrayList<>(_controllers);
+            } finally {
+                _controllersLock.readLock().unlock();
+            }
+            if (snapshot.isEmpty()) {
+                _log.logAlways(Log.WARN, "No configured tunnels to start");
+                return;
+            }
+    for (TunnelController controller : snapshot) {
+                if (!controller.getStartOnLoad())
+                    continue;
+                if (!controller.isClient()) {
+                    int delayMin = controller.getStartupDelayMin();
+                    int delayMax = controller.getStartupDelayMax();
+                    if (delayMax > delayMin && delayMin >= 0) {
+                        int delay = delayMin + RandomSource.getInstance().nextInt(Math.max(1, delayMax - delayMin));
+                        String name = controller.getName();
+                        String type = controller.getType();
+                        String host = controller.getTargetHost();
+                        String port = controller.getTargetPort();
+                        String typeDesc;
+                        if ("httpserver".equals(type)) {
+                            typeDesc = "HTTP Server";
+                        } else if ("ircserver".equals(type)) {
+                            typeDesc = "IRC Server";
+                        } else if ("httpbidirserver".equals(type)) {
+                            typeDesc = "Bidirectional HTTP Server";
+                        } else if ("streamrserver".equals(type)) {
+                            typeDesc = "Streamr Server";
+                        } else {
+                            typeDesc = "Server";
                         }
-                        controller.startTunnelBackground();
+                        controller.changeState(TunnelController.TunnelState.DELAYED_START_PENDING);
+                        controller.setStartupDelayEndTime(delay * 1000L);
+                        final String msg = "‣ Delaying startup of " + name + " [" + typeDesc + " on " + host + ":" + port + "] for " + delay + "s...";
+                        final TunnelController tc = controller;
+                        new I2PAppThread(new Runnable() {
+                            public void run() {
+                                tc.log(msg);
+                                try {
+                                    Thread.sleep((long) delay * 1000);
+                                } catch (InterruptedException e) {
+                                    Thread.currentThread().interrupt();
+                                    tc.log("‣ Startup cancelled for " + name);
+                                    return;
+                                }
+                                synchronized(tc) {
+                                    if (tc.getState() != TunnelController.TunnelState.DELAYED_START_PENDING) {
+                                        return;
+                                    }
+                                }
+                                tc.log("‣ Starting " + name);
+                                tc.startTunnelBackground();
+                            }
+                        }, "Tunnel startup delay for " + name).start();
+                        continue;
                     }
-                } finally {
-                    _controllersLock.readLock().unlock();
                 }
+                controller.startTunnelBackground();
             }
         }
     }

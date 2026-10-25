@@ -21,7 +21,6 @@ import java.security.GeneralSecurityException;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -260,7 +259,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      *                                  badly that we cant create a socketManager
      */
     public I2PTunnelServer(InetAddress host, int port, String privData, Logging l, EventDispatcher notifyThis, I2PTunnel tunnel) {
-        super("server at " + host + ':' + port, notifyThis, tunnel);
+        super("Server at " + host.toString().replace("/", "") + ':' + port, notifyThis, tunnel);
         _log = tunnel.getContext().logManager().getLog(getClass());
         this.l = l;
         init(host, port, tunnel);
@@ -286,7 +285,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      */
     public I2PTunnelServer(InetAddress host, int port, File privkey, String privkeyname, Logging l,
                            EventDispatcher notifyThis, I2PTunnel tunnel) {
-        super("server at " + host + ':' + port, notifyThis, tunnel);
+        super("Server at " + host.toString().replace("/", "") + ':' + port, notifyThis, tunnel);
         _log = tunnel.getContext().logManager().getLog(getClass());
         this.l = l;
         init(host, port, tunnel);
@@ -316,7 +315,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      *                                  badly that we cant create a socketManager
      */
     public I2PTunnelServer(InetAddress host, int port, InputStream privData, String privkeyname, Logging l,  EventDispatcher notifyThis, I2PTunnel tunnel) {
-        super("server at " + host + ':' + port, notifyThis, tunnel);
+        super("Server at " + host.toString().replace("/", "") + ':' + port, notifyThis, tunnel);
         _log = tunnel.getContext().logManager().getLog(getClass());
         this.l = l;
         init(host, port, tunnel);
@@ -338,7 +337,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      */
     public I2PTunnelServer(InetAddress host, int port, I2PSocketManager sktMgr,
                            Logging l, EventDispatcher notifyThis, I2PTunnel tunnel) {
-        super("server at " + host + ':' + port, notifyThis, tunnel);
+        super("Server at " + host.toString().replace("/", "") + ':' + port, notifyThis, tunnel);
         _log = tunnel.getContext().logManager().getLog(getClass());
         this.l = l;
         init(host, port, tunnel);
@@ -881,9 +880,15 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                 return false;
             }
             open = false;
+            // Stop the connection filter's background work as part of a completed
+            // close, not only on destroy — otherwise its housekeeping keeps
+            // running between a successful close and a later destroy or reopen.
+            StatefulConnectionFilter filter = _filter;
+            if (filter != null) {filter.stop();}
             // Deregister this tunnel's private handler and runner pools; their
             // queued tasks drain and worker threads exit, freeing the share of
-            // the global budgets.
+            // the global budgets. Done only once the close is committed, so a
+            // refused close keeps the pools registered for the still-open tunnel.
             TunnelControllerGroup tcg = TunnelControllerGroup.getInstance();
             if (tcg != null) {tcg.serverStopped(this);}
             try {
@@ -1044,8 +1049,9 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     /**
      * Runs the I2PTunnelServer to accept and handle incoming connections asynchronously.
      * <p>
-     * Accepts connections in a loop, submitting each to the thread pool via {@link CompletableFuture}.
-     * Handles expected exceptions with retries and logs errors. On shutdown, gracefully terminates the pool.
+     * Accepts connections in a loop, submitting each to the thread pool via
+     * {@code execute()}. Handles expected exceptions with retries and logs errors.
+     * On shutdown, gracefully terminates the pool.
      */
     public void run() {
         i2pss = sockMgr.getServerSocket();
@@ -1117,7 +1123,12 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
 
                 try {
                     if (serverExec != null) {
-                        CompletableFuture.runAsync(() -> {
+                        // execute(), not CompletableFuture.runAsync(): a saturated pool
+                        // throws RejectedExecutionException synchronously from execute(),
+                        // where runAsync() buries it in the returned future and the catch
+                        // below never fires — the reserved connection slot then leaks and
+                        // creeps to the cap permanently.
+                        serverExec.execute(() -> {
                             try {
                                 new Handler(socketToHandle).run();
                             } catch (Exception e) {
@@ -1126,7 +1137,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                             } finally {
                                 releaseConnection();
                             }
-                        }, serverExec);
+                        });
                     } else {
                         try {
                             new Handler(socketToHandle).run();
