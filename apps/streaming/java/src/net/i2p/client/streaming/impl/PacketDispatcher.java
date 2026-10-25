@@ -302,8 +302,19 @@ class PacketDispatcher {
         private final PacketProcessor _processor;
         /** The app context. */
         private final I2PAppContext _context;
-        /** Entries currently inside process(); read by resize to prove idle. */
+        /**
+         * Entries this worker has claimed from its queue and not finished
+         * processing yet; raised in the claim block under the worker monitor,
+         * so it is nonzero for the whole window in which the worker holds an
+         * entry. Read by awaitIdle() to prove the shard is idle.
+         */
         volatile int _busy;
+
+        /**
+         * Set only while the processor callback is executing. Test hook for
+         * parking a worker inside process().
+         */
+        volatile boolean _inProcess;
         /**
          * Set by retire() before it drains, under the same monitor as offer(),
          * so a handoff either lands before the drain (and is freed by it) or is
@@ -342,8 +353,10 @@ class PacketDispatcher {
         }
 
         /**
-         * Wait until this shard has nothing queued and nothing in process(), so
-         * retiring it cannot drop an entry that was already accepted.
+         * Wait until this shard has nothing queued and nothing claimed but
+         * unprocessed, so retiring it cannot drop an entry that was already
+         * accepted, and cannot retire a worker between taking an entry off
+         * the queue and processing it.
          *
          * @throws InterruptedException if interrupted while waiting
          */
@@ -363,6 +376,13 @@ class PacketDispatcher {
             }
         }
 
+        /**
+         * Drain the shard queue: poll one entry without holding the monitor
+         * (so producers are never blocked behind the poll wait), then claim
+         * it under the worker monitor — the same monitor as offer() and
+         * retire() — so the take-then-process handoff cannot race a resize.
+         * Keep running until the dispatcher stops and the queue empties.
+         */
         @Override
         public void run() {
             while (_running || !_queue.isEmpty()) {
@@ -372,21 +392,53 @@ class PacketDispatcher {
                 } catch (InterruptedException ie) {
                     break;
                 }
-                if (e != null) {
-                    _busy++;
-                    try {
-                        _processor.process(e.con, e.packet);
-                    } catch (RuntimeException re) {
-                        // A poisoned entry must not kill this thread: if the
-                        // worker died the producer would spin forever on this
-                        // full shard queue and stall every connection on the
-                        // destination. Release the payload and move on.
-                        if (_log != null && _log.shouldWarn())
-                            _log.warn("Error processing receive packet, packet dropped", re);
-                        e.packet.releasePayload();
-                    } finally {
-                        _busy--;
+                if (e == null)
+                    continue;
+                // Claim the entry under the monitor. A resize holds the write
+                // lock across awaitIdle() and retire(), so an entry taken
+                // between them is caught here: this worker is retired, the
+                // entry goes back on the queue, and retire()'s drain frees
+                // it. Without the claim, awaitIdle() could pass in the window
+                // after poll() returned but before _busy was raised, and the
+                // entry would be processed by a thread that no longer owns
+                // the shard — or lost.
+                synchronized (this) {
+                    if (_retired) {
+                        // The slot this entry vacated is free again and no
+                        // producer can refill it while resize holds the write
+                        // lock, so the offer cannot fail; release anyway to
+                        // stay safe if that ever changes.
+                        if (!_queue.offer(e))
+                            e.packet.releasePayload();
+                        break;
                     }
+                    _busy++;
+                }
+                _inProcess = true;
+                try {
+                    _processor.process(e.con, e.packet);
+                } catch (RuntimeException re) {
+                    // A poisoned entry must not kill this thread: if the
+                    // worker died the producer would spin forever on this
+                    // full shard queue and stall every connection on the
+                    // destination. Release the payload and move on.
+                    if (_log != null && _log.shouldWarn())
+                        _log.warn("Error processing receive packet, packet dropped", re);
+                    e.packet.releasePayload();
+                } catch (Throwable t) {
+                    // An Error (OOM, StackOverflow) also must not strand the
+                    // shard: release the payload first, and the finally block
+                    // still clears _busy, so a concurrent resize is not
+                    // blocked in awaitIdle() by a worker that is no longer
+                    // draining. Then rethrow — the thread dies, but nothing
+                    // hangs and no payload leaks.
+                    e.packet.releasePayload();
+                    if (_log != null && _log.shouldError())
+                        _log.error("Fatal error processing receive packet -> shard worker stopping", t);
+                    throw t;
+                } finally {
+                    _inProcess = false;
+                    _busy--;
                 }
             }
         }
