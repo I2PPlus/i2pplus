@@ -8,6 +8,7 @@ package org.klomp.snark;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -38,10 +39,10 @@ class PeerConnectionOut implements Runnable {
     private final Peer peer;
     /** Stream the messages are written to. */
     private final DataOutputStream dout;
-    /** The thread draining the send queue. */
-    private Thread thread;
-    /** True once the connection should close. */
-    private boolean quit;
+    /** The thread draining the send queue. Volatile: close() reads it from another thread. */
+    private volatile Thread thread;
+    /** True once the connection should close. Volatile: set by close(), polled by run(). */
+    private volatile boolean quit;
     /**
      * The messages waiting to be written, a bounded queue so a slow
      * network cannot grow the memory without limit.
@@ -61,7 +62,11 @@ class PeerConnectionOut implements Runnable {
     private static final int MAX_PREFETCH_THREADS = 4;
     /** Idle prefetch threads exit after this long. */
     private static final long PREFETCH_THREAD_IDLE_MS = 60 * 1000;
-    /** Max uncompleted prefetches per connection; bounds pinned buffers to depth x 16KB. */
+    /**
+     * Max uncompleted prefetches per connection; bounds pinned buffers to
+     * depth x the request part size (PeerState.PARTSIZE, 16KB by default,
+     * up to MAX_PARTSIZE 128KB when configured larger).
+     */
     static volatile int MAX_PREFETCH_INFLIGHT = 2;
     /** Loads slower than this are logged; sustained counts confirm cold-read stalls. */
     private static final long SLOW_LOAD_WARN_MS = 1000;
@@ -128,7 +133,8 @@ class PeerConnectionOut implements Runnable {
     /** This connection's position in that sequence. */
     private final long _id;
     /** Last send time. */
-    long lastSent;
+    /** Time of the last message sent. Volatile - read by the peer checker task. */
+    volatile long lastSent;
     /** Uncompleted prefetch tasks for this connection; bounds memory to depth x block size. */
     private final AtomicInteger _prefetchInFlight = new AtomicInteger();
 
@@ -215,6 +221,10 @@ class PeerConnectionOut implements Runnable {
                     dout.flush();
                 }
 
+                // REJECTs generated while pruning the queue under the monitor;
+                // written after the lock is released so a slow peer's write
+                // window cannot stall addMessage callers
+                List<Message> deferredRejects = null;
                 synchronized (sendQueue) {
                     while (!quit
                             && peer.isConnected()
@@ -256,7 +266,12 @@ class PeerConnectionOut implements Runnable {
                                         if (_log.shouldDebug()) {
                                             _log.debug("Sending [" + peer + "]: " + r);
                                         }
-                                        r.sendMessage(dout);
+                                        // defer the write: sendMessage blocks, and we
+                                        // are holding the sendQueue monitor
+                                        if (deferredRejects == null) {
+                                            deferredRejects = new ArrayList<>(4);
+                                        }
+                                        deferredRejects.add(r);
                                     }
                                 }
                                 nm = null;
@@ -306,6 +321,15 @@ class PeerConnectionOut implements Runnable {
                             }
                             m = sendQueue.poll();
                         }
+                    }
+                }
+
+                // write the deferred REJECTs with the monitor released
+                if (deferredRejects != null) {
+                    for (Message r : deferredRejects) {
+                        try {
+                            r.sendMessage(dout);
+                        } catch (IOException ioe) { /* peer going away */ }
                     }
                 }
 
@@ -406,6 +430,7 @@ class PeerConnectionOut implements Runnable {
      */
     private boolean removeMessage(int type) {
         boolean removed = false;
+        List<Message> deferredRejects = null;
         synchronized (sendQueue) {
             Iterator<Message> it = sendQueue.iterator();
             while (it.hasNext()) {
@@ -417,13 +442,22 @@ class PeerConnectionOut implements Runnable {
                     if (type == Message.PIECE && peer.supportsFast()) {
                         Message r = new Message(Message.REJECT, m.piece, m.begin, m.length);
                         if (_log.shouldDebug()) _log.debug("Sending [" + peer + "]: " + r);
-                        try {
-                            r.sendMessage(dout);
-                        } catch (IOException ioe) { /* ignored */ }
+                        // defer the write to outside the monitor
+                        if (deferredRejects == null) {
+                            deferredRejects = new ArrayList<>(4);
+                        }
+                        deferredRejects.add(r);
                     }
                 }
             }
             sendQueue.notifyAll();
+        }
+        if (deferredRejects != null) {
+            for (Message r : deferredRejects) {
+                try {
+                    r.sendMessage(dout);
+                } catch (IOException ioe) { /* ignored */ }
+            }
         }
         return removed;
     }

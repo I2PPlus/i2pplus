@@ -211,11 +211,9 @@ class MagnetState {
      * @return true if this was the last piece, false otherwise
      * @throws IllegalArgumentException if not initialized, chunk number is invalid, or length is
      *                                  incorrect
-     * @throws Exception if there's an error building the MetaInfo
-     * @throws StackOverflowError if the received metadata nests lists or maps deeply
-     *                            enough to exhaust the decoder's recursion
+     * @see #buildMetaInfo()
      */
-    public boolean saveChunk(int chunk, byte[] data, int off, int length) throws Throwable {
+    public boolean saveChunk(int chunk, byte[] data, int off, int length) {
         if (!isInitialized) throw new IllegalArgumentException("Not initialized");
         if (chunk < 0 || chunk >= totalChunks)
             throw new IllegalArgumentException("bad chunk number");
@@ -224,24 +222,29 @@ class MagnetState {
         if (size != length) throw new IllegalArgumentException("Bad chunk length");
         System.arraycopy(data, off, metainfoBytes, chunk * CHUNK_SIZE, size);
         have.set(chunk);
-        boolean done = have.complete();
-        if (done) {
-            metainfo = buildMetaInfo();
-            complete = true;
-        }
-        return done;
+        // deliberately NOT building the MetaInfo here: the caller holds this
+        // object's monitor, and bdecoding plus hashing up to MAX_METADATA_SIZE
+        // bytes under it stalls every other peer fetching metadata for the
+        // same torrent. The caller calls buildMetaInfo() after releasing it.
+        return have.complete();
     }
 
     /**
-     * Builds a MetaInfo from the collected metadata bytes. Verifies the info hash matches.
+     * Builds a MetaInfo from the collected metadata bytes and marks this
+     * state complete. Call after {@link #saveChunk} returns true, outside
+     * the monitor used for the chunk copies.
+     *
+     * <p>Verifies the info hash matches. metainfoBytes is fully written once
+     * the last chunk lands, so reading it outside the monitor is safe.
      *
      * @return the built MetaInfo
      * @throws IOException if the info hash doesn't match or data is corrupt
      * @throws Exception if there's an error parsing the metadata
      * @throws StackOverflowError if the bencoded metadata is nested too deeply
      *                            for the decoder
+     * @since 0.9.72+ public (was a private helper of saveChunk)
      */
-    private MetaInfo buildMetaInfo() throws Throwable {
+    public MetaInfo buildMetaInfo() throws Throwable {
         // top map has nothing in it but the info map (no announce)
         Map<String, BEValue> map = new HashMap<>();
         InputStream is = new ByteArrayInputStream(metainfoBytes);
@@ -254,9 +257,15 @@ class MagnetState {
             // the IOE and disconnect the peer, hopefully we will
             // find a new peer.
             // TODO: Count fails and give up eventually
-            have = new BitField(totalChunks);
-            requested = new BitField(totalChunks);
+            synchronized (this) {
+                have = new BitField(totalChunks);
+                requested = new BitField(totalChunks);
+            }
             throw new IOException("Info hash mismatch");
+        }
+        synchronized (this) {
+            metainfo = newmeta;
+            complete = true;
         }
         return newmeta;
     }

@@ -104,7 +104,12 @@ abstract class ExtensionHandler {
             int hisMsgCode = peer.getHandshakeMap().get("m").getMap().get(type).getInt();
             peer.sendExtension(hisMsgCode, payload);
         } catch (Throwable e) {
-            // NPE, no capability
+            // NPE, no capability - the peer never advertised the extension.
+            // Log at debug so a genuine bug in the chain above is not
+            // silently indistinguishable from "no capability"
+            Log log = I2PAppContext.getGlobalContext().logManager().getLog(ExtensionHandler.class);
+            if (log.shouldDebug())
+                log.debug("Not sending extension " + type + " to [" + peer + "] - " + e);
         }
     }
 
@@ -175,8 +180,9 @@ abstract class ExtensionHandler {
      */
     public static void handleMessage(Peer peer, PeerListener listener, int id, byte[] bs) {
         Log log = I2PAppContext.getGlobalContext().logManager().getLog(ExtensionHandler.class);
-        if (log.shouldInfo())
-            log.info(
+        // one of these per PEX/metadata message - INFO is a flood
+        if (log.shouldDebug())
+            log.debug(
                     "Received extension message "
                             + id
                             + " ("
@@ -252,6 +258,14 @@ abstract class ExtensionHandler {
             }
             int metaSize = msize.getInt();
             if (log.shouldDebug()) log.debug("Received the metainfo size: " + metaSize);
+            // a negative or zero size is a protocol error; the MAX check
+            // alone let it through to allocate/initialize the state
+            if (metaSize <= 0) {
+                if (log.shouldDebug())
+                    log.debug("Invalid metainfo size " + metaSize + " from [" + peer + "]");
+                peer.disconnect();
+                return;
+            }
 
             int remaining;
             synchronized (state) {
@@ -354,6 +368,11 @@ abstract class ExtensionHandler {
                 }
                 // out of the lock
                 if (done) {
+                    // Decode and hash the completed metadata here, outside
+                    // the state monitor, so the parse does not stall the
+                    // other peers' chunk saves; a hash mismatch throws and
+                    // the outer catch disconnects this peer
+                    state.buildMetaInfo();
                     // Done!
                     // PeerState will call the listener (peer coord), who will
                     // check to see if the MagnetState has it

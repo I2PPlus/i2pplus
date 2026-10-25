@@ -519,7 +519,8 @@ class Message {
             case PORT:
                 return "PORT(" + piece + ')';
             case EXTENSION:
-                return "EXTENSION(" + piece + ',' + data.length + ')';
+                // data is null for a queued-but-unsent extension message
+                return "EXTENSION(" + piece + ',' + (data != null ? data.length : 0) + ')';
             // fast extensions below here
             case SUGGEST:
                 return "SUGGEST(" + piece + ')';

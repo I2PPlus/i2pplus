@@ -119,7 +119,11 @@ class PeerAcceptor {
                                     coordinator.getID(),
                                     coordinator.getInfoHash(),
                                     coordinator.getMetaInfo());
-                    coordinator.addPeer(peer);
+                    // addPeer can still refuse (raced needPeers()); nothing
+                    // else closes a peer whose connection never ran
+                    if (!coordinator.addPeer(peer)) {
+                        peer.disconnect(false);
+                    }
                 } else socket.close();
             } else {
                 // it's for another infohash, but we are only single torrent capable.  b0rk.
@@ -143,7 +147,11 @@ class PeerAcceptor {
                                         cur.getID(),
                                         cur.getInfoHash(),
                                         cur.getMetaInfo());
-                        cur.addPeer(peer);
+                        // addPeer can still refuse (raced needPeers()); nothing
+                        // else closes a peer whose connection never ran
+                        if (!cur.addPeer(peer)) {
+                            peer.disconnect(false);
+                        }
                         return;
                     } else {
                         if (_log.shouldDebug())

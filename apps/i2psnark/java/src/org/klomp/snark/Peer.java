@@ -53,8 +53,11 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     /** SHA-1 of this torrent's info dictionary, sent in the handshake and checked against the remote copy. */
     protected final byte[] infohash;
 
-    /** Will start out null in magnet mode. */
-    protected MetaInfo metainfo;
+    /**
+     * Will start out null in magnet mode. Volatile: reassigned when the
+     * metadata arrives, read by the peer's connection threads.
+     */
+    protected volatile MetaInfo metainfo;
 
     /** The handshake map received from the peer. */
     private Map<String, BEValue> handshakeMap;

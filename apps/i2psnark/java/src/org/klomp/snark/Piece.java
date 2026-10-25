@@ -56,7 +56,10 @@ class Piece implements Comparable<Piece> {
      */
     public Piece(int id) {
         this.id = id;
-        this.peers = new HashSet<>(I2PSnarkUtil.MAX_CONNECTIONS / 2);
+        // Default capacity: the set holds the peers having this piece, most
+        // often none or a handful. Pre-sizing to MAX_CONNECTIONS/2 allocated
+        // a ~1KB table per piece - ~100MB for a 100k-piece torrent.
+        this.peers = new HashSet<>();
         _lastActive = System.currentTimeMillis();
         // defer creating requests to save memory
     }

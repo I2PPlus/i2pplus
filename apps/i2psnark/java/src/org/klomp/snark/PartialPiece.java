@@ -305,7 +305,11 @@ class PartialPiece implements Comparable<PartialPiece> {
         int count = bitfield.count();
         int downloaded = count * SUB_PARTSIZE;
         int remainder = pclen % SUB_PARTSIZE;
-        if (remainder != 0 && count > 0 && bitfield.get(count - 1)) {
+        // the short tail is the LAST sub-block, index size-1, not count-1
+        // (count is how many are set, which differs whenever pieces arrive
+        // out of order or the tail itself is missing)
+        int last = bitfield.size() - 1;
+        if (remainder != 0 && last >= 0 && bitfield.get(last)) {
             downloaded -= SUB_PARTSIZE - remainder;
         }
         return downloaded;

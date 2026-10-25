@@ -441,23 +441,42 @@ class ConnectionAcceptor implements Runnable {
             } catch (IOException ioe) { /* ignored */ }
             return;
         }
-        if (activeHandlers.get() >= MAX_HANDLERS) {
+        // CAS reserve: a plain check-then-increment let the cap overshoot,
+        // and if t.start() throws the increment must not leak a slot
+        while (true) {
+            int cur = activeHandlers.get();
+            if (cur >= MAX_HANDLERS) {
+                if (_log.shouldWarn()) {
+                    _log.warn(
+                            "[Snark] Too many incoming connections in handshake ("
+                                    + cur
+                                    + "), dropping connection from ["
+                                    + h.toBase32().substring(0, 8)
+                                    + "]");
+                }
+                try {
+                    socket.close();
+                } catch (IOException ioe) { /* ignored */ }
+                return;
+            }
+            if (activeHandlers.compareAndSet(cur, cur + 1)) {
+                break;
+            }
+        }
+        try {
+            Thread t = new I2PAppThread(new Handler(socket, pa), "SnarkInc");
+            t.start();
+        } catch (RuntimeException re) {
+            // thread creation failed (e.g. OOM) - give the slot back and drop
+            // this connection; rethrowing would end the whole accept loop
+            activeHandlers.decrementAndGet();
             if (_log.shouldWarn()) {
-                _log.warn(
-                        "[Snark] Too many incoming connections in handshake ("
-                                + activeHandlers.get()
-                                + "), dropping connection from ["
-                                + h.toBase32().substring(0, 8)
-                                + "]");
+                _log.warn("[Snark] Failed to start handler thread -> dropping connection", re);
             }
             try {
                 socket.close();
             } catch (IOException ioe) { /* ignored */ }
-            return;
         }
-        activeHandlers.incrementAndGet();
-        Thread t = new I2PAppThread(new Handler(socket, pa), "SnarkInc");
-        t.start();
     }
 
     /**
@@ -718,6 +737,9 @@ class ConnectionAcceptor implements Runnable {
                 return;
             }
             _badCounter.clear();
+            // the reasons map is keyed by the same peer hashes; clearing
+            // only the counter left _badReasons growing for the uptime
+            _badReasons.clear();
             schedule(BAD_CLEAN_INTERVAL);
         }
     }

@@ -46,8 +46,11 @@ class PeerState implements DataLoader {
     /** Told about bytes transferred with this peer. */
     private final BandwidthListener bwListener;
 
-    /** Null before we have it. locking: this. */
-    private MetaInfo metainfo;
+    /**
+     * Null before we have it. locking: this. Volatile: set in the
+     * constructor, read by the peer's connection threads.
+     */
+    private volatile MetaInfo metainfo;
 
     /** Null unless needed. Contains -1 for all. locking: this. */
     private List<Integer> havesBeforeMetaInfo;
@@ -94,8 +97,12 @@ class PeerState implements DataLoader {
     /** Piece requests sent but not yet answered. */
     private final List<Request> outstandingRequests = new LinkedList<>();
 
-    /** Bytes of piece data the peer cancelled after requesting. */
+    /** Bytes of piece data the peer cancelled after requesting, within the
+     * current CHECK_PERIOD window; reset in step with Peer's rolling
+     * uploaded counter so the discard ratio compares like windows. */
     private long _cancelledBytes;
+    /** Start of the current _cancelledBytes window, in millis. */
+    private long _cancelledWindowStart;
 
     /** Time of the last inbound request from the peer. */
     private long _lastRequestTime;
@@ -488,7 +495,7 @@ class PeerState implements DataLoader {
         if (piece < 0
                 || piece >= metainfo.getPieces()
                 || begin < 0
-                || begin > metainfo.getPieceLength(piece)
+                || begin >= metainfo.getPieceLength(piece)
                 || length <= 0
                 || length > MAX_PARTSIZE) {
             // XXX - Protocol error -> disconnect?
@@ -935,42 +942,72 @@ class PeerState implements DataLoader {
     }
 
     /**
-     * Count cancelled bytes and ban the peer if it cancels most of what it requests.
-     * Conservative: requires at least DISCARD_MIN_BYTES of volume and a cancel ratio above
+     * Count cancelled bytes and ban the peer if it cancels most of what it
+     * requests within one window. Conservative: requires at least
+     * DISCARD_MIN_BYTES of windowed volume and a cancel ratio above
      * DISCARD_BAN_PERCENT, so legitimate peers under congestion are not affected.
+     * The cancelled count is windowed to CHECK_PERIOD, matching the period of
+     * Peer's rolling uploaded counter, so numerator and denominator measure
+     * the same span. The disconnect runs outside this monitor: it takes the
+     * PeerCoordinator's peers lock, which callers take before entering
+     * PeerState monitors.
      *
      * @param length the number of cancelled bytes
      * @since 0.9.71+
      */
     private void checkDiscardRatio(int length) {
+        boolean ban;
+        long cancelled;
+        long uploaded;
         synchronized (this) {
-            _cancelledBytes += length;
-            long uploaded = peer.getUploaded();
-            long total = _cancelledBytes + uploaded;
-            if (total >= DISCARD_MIN_BYTES
-                    && _cancelledBytes * 100 >= total * DISCARD_BAN_PERCENT) {
-                long period = listener.getUtil().getBanDiscardPeriod();
-                Destination dest = peer.getPeerID().getAddress();
-                if (dest != null) {
-                    listener.getUtil().banPeer(dest.calculateHash(), period);
-                }
-                if (_log.shouldWarn()) {
-                    _log.warn(
-                            "Banning ["
-                                    + peer
-                                    + "] for "
-                                    + (period / 60000)
-                                    + " minutes for excessive discard ratio "
-                                    + (_cancelledBytes * 100 / total)
-                                    + "% ("
-                                    + _cancelledBytes
-                                    + " cancelled, "
-                                    + uploaded
-                                    + " uploaded)");
-                }
-                peer.disconnect();
+            long now = System.currentTimeMillis();
+            if (now - _cancelledWindowStart >= PeerCoordinator.CHECK_PERIOD) {
+                _cancelledWindowStart = now;
+                _cancelledBytes = 0;
             }
+            _cancelledBytes += length;
+            cancelled = _cancelledBytes;
+            uploaded = peer.getUploaded();
+            ban = shouldBanForDiscardRatio(cancelled, uploaded);
         }
+        if (ban) {
+            long period = listener.getUtil().getBanDiscardPeriod();
+            Destination dest = peer.getPeerID().getAddress();
+            if (dest != null) {
+                listener.getUtil().banPeer(dest.calculateHash(), period);
+            }
+            if (_log.shouldWarn()) {
+                _log.warn(
+                        "Banning ["
+                                + peer
+                                + "] for "
+                                + (period / 60000)
+                                + " minutes for excessive discard ratio "
+                                + (cancelled * 100 / (cancelled + uploaded))
+                                + "% ("
+                                + cancelled
+                                + " cancelled, "
+                                + uploaded
+                                + " uploaded)");
+            }
+            peer.disconnect();
+        }
+    }
+
+    /**
+     * Whether a peer's windowed cancel volume warrants a ban: at least
+     * DISCARD_MIN_BYTES of combined cancelled and uploaded bytes, with the
+     * cancelled share at or above DISCARD_BAN_PERCENT.
+     *
+     * @param cancelled bytes cancelled by the peer in the current window
+     * @param uploaded bytes uploaded to the peer over the matching window
+     * @return true to ban and disconnect the peer
+     * @since 0.9.72+
+     */
+    static boolean shouldBanForDiscardRatio(long cancelled, long uploaded) {
+        long total = cancelled + uploaded;
+        return total >= DISCARD_MIN_BYTES
+                && cancelled * 100 >= total * DISCARD_BAN_PERCENT;
     }
 
     /**

@@ -90,6 +90,16 @@ public class Storage implements Closeable {
 
     /** Which pieces are verified as present. */
     private /* FIXME final FIXME */ BitField bitfield; // BitField to represent the pieces
+    /**
+     * Guards every read-modify-write of {@link #bitfield} and {@link #needed}.
+     * The bitfield reference itself is swapped by the recheck path, so
+     * synchronizing on the bitfield object (the old "bogus synch") let a
+     * putPiece and a recheck lock different objects and lose set-bits or
+     * corrupt the needed count.
+     *
+     * @since 0.9.72+
+     */
+    private final Object _bitfieldLock = new Object();
     /** Pieces still missing from the torrent. */
     private int needed; // Number of pieces needed
     /** Whether files may be opened read-only. */
@@ -509,6 +519,23 @@ public class Storage implements Closeable {
     }
 
     /**
+     * Flush every open file handle to stable storage. Called when a download
+     * completes, so the piece data is durable before the complete state is
+     * recorded and trusted by the resume bitfile.
+     *
+     * @since 0.9.72+
+     */
+    private void syncAllRAFs() {
+        for (TorrentFile tf : _torrentFiles) {
+            try {
+                tf.syncRAF();
+            } catch (IOException ioe) {
+                _log.warn("[Snark] Sync failed for " + tf.name + " -> data may need re-check after a crash", ioe);
+            }
+        }
+    }
+
+    /**
      * Lists the files on disk matching the torrent.
      *
      * @param base the base directory
@@ -654,7 +681,8 @@ public class Storage implements Closeable {
             throws IOException {
         int max = _util.getMaxFilesPerTorrent();
 
-        for (int i = 0; i < filters.size(); i++) {
+        // main()'s torrent creation passes null for "no filters"
+        for (int i = 0; filters != null && i < filters.size(); i++) {
             TorrentCreateFilter filter = filters.get(i);
 
             switch (filter.filterType) {
@@ -878,6 +906,28 @@ public class Storage implements Closeable {
             }
         }
         return -1;
+    }
+
+    /**
+     * Precompute the file-to-index mapping for a whole listing: indexOf()
+     * scans linearly, so building n entries cost O(n^2) on torrents with
+     * thousands of files. Keys are absolute path strings, matching both the
+     * active and the final location like indexOf() does.
+     *
+     * @return map from absolute path to storage index, never null
+     * @since 0.9.72+
+     */
+    public Map<String, Integer> indexMap() {
+        Map<String, Integer> rv = new HashMap<>(_torrentFiles.size() * 2);
+        for (int i = 0; i < _torrentFiles.size(); i++) {
+            TorrentFile tf = _torrentFiles.get(i);
+            // _pathKey is the cached absolute path hashCode/equals already
+            // use - recomputing it here would be a second source of truth
+            rv.put(tf._pathKey, Integer.valueOf(i));
+            String rafPath = tf.RAFfile.getAbsolutePath();
+            rv.putIfAbsent(rafPath, Integer.valueOf(i));
+        }
+        return rv;
     }
 
     /**
@@ -1172,13 +1222,20 @@ public class Storage implements Closeable {
                     // already in the data dir; the movedToDataDir flag must reflect that
                     workFile = null;
                 } else {
-                    if (_base.exists() && !_base.delete()) {
-                        throw new IOException("Could not delete file " + _base);
-                    }
                     if (!_stagingBase.mkdir() && !_stagingBase.isDirectory()) {
                         throw new IOException("Could not create directory " + _stagingBase);
                     }
-                    if (!workFile.exists() && !workFile.createNewFile()) {
+                    if (_base.exists()) {
+                        // Salvage the partial data like the multi-file branch
+                        // does - deleting outright re-downloads from zero.
+                        // (rename may fail across filesystems; then the data
+                        // dir copy stays put and the staging file starts fresh)
+                        if (!_base.renameTo(workFile)
+                                && !workFile.exists()
+                                && !workFile.createNewFile()) {
+                            throw new IOException("Could not create file " + workFile);
+                        }
+                    } else if (!workFile.exists() && !workFile.createNewFile()) {
                         throw new IOException("Could not create file " + workFile);
                     }
                     active = workFile;
@@ -1416,6 +1473,28 @@ public class Storage implements Closeable {
                         tf.closeRAF();
                     } catch (IOException ioe) { /* ignored */ }
                 }
+                // The recreated file is zero-filled; any piece that overlaps
+                // it lost its data, so clear those bits or a "complete"
+                // torrent would serve zeros forever with no recheck scheduled.
+                // Pieces spanning the file boundary are cleared too - they
+                // keep the intact bytes in the neighbouring file but must be
+                // re-verified by re-download.
+                long start = 0;
+                for (int j = 0; j < i; j++) {
+                    start += _torrentFiles.get(j).length;
+                }
+                long end = start + tf.length;
+                int firstPiece = (int) (start / piece_size);
+                int lastPiece = (int) Math.min(pieces - 1, (end - 1) / piece_size);
+                synchronized (_bitfieldLock) {
+                    for (int p = firstPiece; p <= lastPiece; p++) {
+                        if (bitfield.get(p)) {
+                            bitfield.clear(p);
+                            needed++;
+                        }
+                    }
+                }
+                _probablyComplete = false;
                 String msg = "File '" + tf.name + "' was deleted, must be downloaded again";
                 if (listener != null) {
                     listener.addMessage(msg);
@@ -1574,7 +1653,10 @@ public class Storage implements Closeable {
                 for (int i = 0; i < WIN_ILLEGAL.length; i++) {
                     String w = WIN_ILLEGAL[i];
                     if (iname.equals(w)
-                            || (iname.startsWith(w + '.') && w.indexOf('.', w.length() + 1) < 0)) {
+                            // the old form tested w.indexOf('.', w.length() + 1),
+                            // always -1 (fromIndex past the end); test the NAME
+                            // for a dot at or after the reserved-word prefix
+                            || (iname.startsWith(w + '.'))) {
                         rvBuf.insert(0, '_');
                     }
                 }
@@ -1657,7 +1739,9 @@ public class Storage implements Closeable {
                 if (_preserveFileNames && !origName.equals(name)) {
                     String msg = "[Snark] Filename contained illegal characters, using safe fallback: " + origName + " -> " + name;
                     _log.warn(msg);
-                    listener.addMessage(msg);
+                    if (listener != null) {
+                        listener.addMessage(msg);
+                    }
                 }
             }
         }
@@ -1954,9 +2038,9 @@ public class Storage implements Closeable {
             lengthProgress += tf.length;
             boolean exists = tf.RAFfile.exists();
             if (exists && length == tf.length) {
-                if (listener != null) {
-                    listener.storageAllocated(this, length);
-                }
+                // no storageAllocated here - the shared path below calls
+                // allocateFile(), which reports the allocation; firing it
+                // in both places double-counted every full-length file
                 _checkProgress.set(0);
                 // a file that is already at its full length is assumed to hold the data
                 // its piece hashes describe, so it is hashed but not reallocated
@@ -2146,15 +2230,17 @@ public class Storage implements Closeable {
         _checkProgress.set(pieces);
         _probablyComplete = complete();
 
-        // do this here so we don't confuse the user during checking
-        needed = need;
         boolean rv = false;
         if (recheck) {
-            // FIXME bogus synch
-            synchronized (bitfield) {
+            // do this here so we don't confuse the user during checking;
+            // needed and the bitfield swap move together under one lock
+            synchronized (_bitfieldLock) {
+                needed = need;
                 rv = !bfield.equals(bitfield);
                 bitfield = bfield;
             }
+        } else {
+            needed = need;
         }
 
         if (listener != null) {
@@ -2246,7 +2332,17 @@ public class Storage implements Closeable {
             return null;
         }
         bs = rv.getData();
-        getUncheckedPiece(piece, bs, off, len);
+        try {
+            getUncheckedPiece(piece, bs, off, len);
+        } catch (IOException ioe) {
+            // the buffer is only handed back to the cache by
+            // Message.sendMessage() on success; a failed read must release
+            // it here or every error permanently drains the static cache
+            if (len == BUFSIZE) {
+                _cache.release(rv);
+            }
+            throw ioe;
+        }
         setActivity();
         return rv;
     }
@@ -2346,7 +2442,7 @@ public class Storage implements Closeable {
         int piece = pp.getPiece();
         boolean shouldPreallocate = _util.getPreallocateFiles();
         try {
-            synchronized (bitfield) {
+            synchronized (_bitfieldLock) {
                 if (bitfield.get(piece)) return true; // No need to store twice.
             }
 
@@ -2390,7 +2486,7 @@ public class Storage implements Closeable {
         // Do this after the write, so we know it succeeded, and we don't set the
         // needed count to zero, which would cause checkRAF() to open the file readonly.
         boolean complete = false;
-        synchronized (bitfield) {
+        synchronized (_bitfieldLock) {
             if (!bitfield.get(piece)) {
                 bitfield.set(piece);
                 needed--;
@@ -2405,6 +2501,12 @@ public class Storage implements Closeable {
         if (complete) {
             // do we also need to close all of the files and reopen
             // them readonly?
+
+            // Make the piece data durable before the "complete" state (and
+            // the resume bitfile trusted on restart) is recorded, so a power
+            // loss cannot leave a trusted-complete torrent with unflushed
+            // pieces
+            syncAllRAFs();
 
             // Do a complete check to be sure.
             // Temporarily resets the 'needed' variable and 'bitfield', then call
@@ -2796,7 +2898,9 @@ public class Storage implements Closeable {
                 // torrent creation path: metainfo is not built yet, walk the file list
                 i = 0;
                 start = pos;
-                while (start > _torrentFiles.get(i).length) {
+                // >= : a position exactly at a file's end belongs to the
+                // next file, not a zero-length chunk of this one
+                while (start >= _torrentFiles.get(i).length) {
                     start -= _torrentFiles.get(i).length;
                     i++;
                 }
@@ -2874,9 +2978,11 @@ public class Storage implements Closeable {
         /**
          * The active file: the staging-dir file while the file is incomplete,
          * the data-dir file after it has been moved. Never null. Not final:
-         * replaced by the final file when the move completes. Locking: this.
+         * replaced by the final file when the move completes. Locking: this;
+         * volatile so the unsynchronized readers (UI, file matching) see
+         * the new path after a move.
          */
-        public File RAFfile;
+        public volatile File RAFfile;
 
         /**
          * The final data-directory location of the file. Constant even while
@@ -2884,6 +2990,13 @@ public class Storage implements Closeable {
          * in the UI and used for file matching never change. Locking: none.
          */
         public final File finalFile;
+
+        /**
+         * Absolute path of {@link #finalFile}, computed once: hashCode and
+         * equals run inside the checkFileCompletions loops, and allocating a
+         * path string per call was measurable there.
+         */
+        private final String _pathKey;
 
         /**
          * The staging-dir location while the file is incomplete, null once the
@@ -2973,6 +3086,7 @@ public class Storage implements Closeable {
             length = len;
             RAFfile = active;
             this.finalFile = finalFile;
+            _pathKey = finalFile.getAbsolutePath();
             this.workFile = workFile;
             isPadding = padding;
             movedToDataDir = workFile == null;
@@ -3063,6 +3177,19 @@ public class Storage implements Closeable {
             }
         }
 
+        /**
+         * Flush this file's buffered writes to stable storage. No-op when the
+         * handle is not open (the data is already in the file).
+         *
+         * @throws IOException if the flush fails
+         * @since 0.9.72+
+         */
+        public synchronized void syncRAF() throws IOException {
+            if (raf != null) {
+                raf.getFD().sync();
+            }
+        }
+
         /** Can be called even if not open locking: this.
          *
          * @throws IOException if the handle cannot be closed
@@ -3094,6 +3221,12 @@ public class Storage implements Closeable {
             // "r" when the file is not writable, and setLength() then fails
             // with EINVAL (or the open fails with EACCES)
             checkRAF(true); // RW
+            // A resumed download re-allocates files that are already full
+            // length and already hold verified data; marking those sparse
+            // made the first piece write balloon (zero-fill) the whole file
+            // and destroy it. Only a file that was empty before extending
+            // is a sparse hole worth ballooning later.
+            boolean wasEmpty = raf.length() == 0;
             raf.setLength(length);
             boolean shouldPreallocate = _util.getPreallocateFiles();
             /*
@@ -3105,7 +3238,7 @@ public class Storage implements Closeable {
              * Also don't balloon on ARM, as a proxy for solid state disk, where fragmentation
              * doesn't matter much. Actual detection of SSD is almost impossible.
              */
-            if (!_isWindows && !_isARM && shouldPreallocate) {
+            if (wasEmpty && !_isWindows && !_isARM && shouldPreallocate) {
                 isSparse = true;
             } else if (_log.shouldWarn()) {
                 if (!shouldPreallocate) {
@@ -3167,7 +3300,7 @@ public class Storage implements Closeable {
          */
         @Override
         public int hashCode() {
-            return finalFile.getAbsolutePath().hashCode();
+            return _pathKey.hashCode();
         }
 
         /**
@@ -3176,8 +3309,7 @@ public class Storage implements Closeable {
         @Override
         public boolean equals(Object o) {
             return (o instanceof TorrentFile)
-                    && finalFile.getAbsolutePath()
-                            .equals(((TorrentFile) o).finalFile.getAbsolutePath());
+                    && _pathKey.equals(((TorrentFile) o)._pathKey);
         }
 
         /**

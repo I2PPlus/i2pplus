@@ -38,8 +38,11 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
 
     /** Metadata of the torrent being downloaded. */
     private MetaInfo meta;
-    /** Storage of the downloaded files. */
-    private Storage storage;
+    /**
+     * The torrent's storage. Volatile: reassigned on restart, read by
+     * web threads.
+     */
+    private volatile Storage storage;
     /** Coordinator of the peer connections. */
     private PeerCoordinator coordinator;
     /** Acceptor of incoming peer connections. */
@@ -191,6 +194,12 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
                     meta = new MetaInfo(in);
                     x_infoHash = meta.getInfoHash();
                 } catch (Throwable t) {
+                    // MetaInfo declares Throwable; an Error such as OOME
+                    // must reach the outer OOME handler, which escalates
+                    // to fatalRouter, not be wrapped into a recoverable IOE
+                    if (t instanceof Error) {
+                        throw (Error) t;
+                    }
                     throw new IOException(t);
                 }
             } else {
@@ -1236,9 +1245,11 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
             long needed = storage.needed();
             long length0 = meta.getPieceLength(0);
             long remaining = needed * length0;
-            // fixup if last piece is needed
+            // fixup if last piece is needed (last piece is 0-indexed, so
+            // test it directly; "last != 0" skipped the fixup for a
+            // single-piece torrent whose only piece is the last one)
             int last = meta.getPieces() - 1;
-            if (last != 0 && !storage.getBitField().get(last)) {
+            if (last >= 0 && !storage.getBitField().get(last)) {
                 remaining -= length0 - meta.getPieceLength(last);
             }
             return remaining;

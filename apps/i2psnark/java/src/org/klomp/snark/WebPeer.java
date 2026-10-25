@@ -117,7 +117,10 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     /** The hash code of a Peer is the hash code of the peerID. */
     @Override
     public int hashCode() {
-        return super.hashCode();
+        // was super.hashCode() (identity), contradicting both this javadoc
+        // and equals() below - a re-created WebPeer for the same web seed
+        // missed its entry in hash-based collections
+        return getPeerID().hashCode();
     }
 
     /** Two Peers are equal when they have the same PeerID. All other properties are ignored. */
@@ -669,6 +672,11 @@ class WebPeer extends Peer implements EepGet.StatusListener {
      *         false if nothing was added
      */
     private synchronized boolean requestNextPiece() {
+        // the coordinator can poke request() before runConnection's notify
+        // block assigns listener/bitfield - nothing to request until then
+        if (listener == null || bitfield == null) {
+            return false;
+        }
         // Check for adopting an orphaned partial piece
         PartialPiece pp = listener.getPartialPiece(this, bitfield);
         if (pp != null) {

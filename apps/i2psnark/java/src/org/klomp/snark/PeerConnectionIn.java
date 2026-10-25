@@ -47,7 +47,8 @@ class PeerConnectionIn implements Runnable {
     private final boolean isStandalone = !I2PAppContext.getGlobalContext().isRouterContext();
 
     /** Last rcvd. */
-    long lastRcvd;
+    /** Time of the last message received. Volatile - read by the peer checker task. */
+    volatile long lastRcvd;
 
     /**
      * Create a handler for incoming messages from a peer.

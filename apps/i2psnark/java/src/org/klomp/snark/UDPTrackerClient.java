@@ -372,6 +372,9 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
                 return null;
             }
             boolean success = waitAndRetransmit(w, untilTime);
+            // announce and scrape remove their waiters; the connect path
+            // must too, or timed-out entries pile up in _sentQueries forever
+            _sentQueries.remove(w.getID());
             if (success) return tr.getConnection();
         }
         return null;
@@ -793,6 +796,9 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
             long cid = DataHelper.fromLong8(payload, 8);
             long lifetime;
             if (payload.length >= 18) {
+                // fromLong is already unsigned (masks 0xFF) and returns a
+                // long, so * 1000 cannot overflow or go negative - a 0
+                // lifetime is the tracker's own "expire now", per BEP 15
                 lifetime = DataHelper.fromLong(payload, 16, 2) * 1000;
             } // extension to BEP 15
             else {

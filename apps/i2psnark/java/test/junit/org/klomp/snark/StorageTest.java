@@ -1353,9 +1353,16 @@ public class StorageTest {
         int pieceLength = PeerState.PARTSIZE + 2048; // not a multiple of 4096
         PartialPiece pp = new PartialPiece(new Piece(0), pieceLength, _dataDir);
         assertEquals(0, pp.getDownloaded());
-        // one sub-block received: 4096 - (4096 - 2048) short-tail correction
+        // one sub-block received: a full sub-block - the short tail is the
+        // LAST sub-block, which is not present, so no correction applies
+        // (the pre-fix code corrected by the set-bit count and returned 2048)
         pp.markSubBlock(0);
-        assertEquals(2048, pp.getDownloaded());
+        assertEquals(4096, pp.getDownloaded());
+        // the tail sub-block (the LAST one, index 4) alone credits its real
+        // short length
+        PartialPiece tail = new PartialPiece(new Piece(1), pieceLength, _dataDir);
+        tail.markSubBlock(4);
+        assertEquals(2048, tail.getDownloaded());
         // fully received: the full length, including the short tail
         markAll(pp, 1, 4);
         assertTrue(pp.isComplete());

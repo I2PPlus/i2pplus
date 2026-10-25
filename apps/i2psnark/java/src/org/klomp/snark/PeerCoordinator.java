@@ -68,11 +68,14 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /** Logger for the peer coordinator. */
     private final Log _log;
 
-    /** Will be null when in magnet mode. */
-    MetaInfo metainfo;
+    /**
+     * Will be null when in magnet mode. Volatile: set in the constructor,
+     * read by the peer and web threads that the coordinator starts later.
+     */
+    volatile MetaInfo metainfo;
 
-    /** Will be null when in magnet mode. */
-    Storage storage;
+    /** Will be null when in magnet mode. Volatile, see {@link #metainfo}. */
+    volatile Storage storage;
 
     /** The download we coordinate peers for. */
     private final Snark snark;
@@ -170,11 +173,15 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     private final List<Piece> wantedPieces;
 
     /**
-     * The total number of bytes in wantedPieces, or -1 if not yet known. Sync on wantedPieces.
+     * The total number of bytes in wantedPieces, or -1 if not yet known.
+     * Bytes left to download for this torrent. Volatile: a long, written by
+     * the checker and piece-completion paths and read by the web thread, so
+     * without it a 32-bit JVM could show a torn value and no happens-before
+     * exists for the other reads.
      *
      * @since 0.9.1
      */
-    private long wantedBytes;
+    private volatile long wantedBytes;
 
 
     /** Pieces received but not yet complete. */
@@ -332,6 +339,10 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
          * Check if unthrottled, poke peers if so, or reschedule.
          */
         public void timeReached() {
+            // a halted coordinator must not keep itself alive by rescheduling
+            if (halted) {
+                return;
+            }
             if (bwListener.shouldRequest(null, 0)) {
                 if (_log.shouldWarn()) {
                     _log.warn("Now unthrottled -> Rerequesting timer, poking all peers...");
@@ -920,6 +931,9 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         synchronized (peers) {
             // Stop peer checker task.
             timer.cancel();
+            // Stop the rerequest chain too - while throttled it reschedules
+            // itself every 2s and would keep this coordinator alive forever
+            rerequestTimer.cancel();
             // Stop peers.
             removed.addAll(peers);
             peers.clear();
@@ -1786,19 +1800,19 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             for (Peer p : toDisconnect) {
                 p.disconnect(true);
             }
-        }
 
-        // put msg on the console if partial, since Storage won't do it
-        if (!completed()) {
-            snark.storageCompleted(storage);
-        }
-
-        synchronized (wantedPieces) {
-            for (PartialPiece ppp : partialPieces) {
-                ppp.release();
+            // put msg on the console if partial, since Storage won't do it
+            if (!completed()) {
+                snark.storageCompleted(storage);
             }
-            partialPieces.clear();
-            partialIds.clear();
+
+            synchronized (wantedPieces) {
+                for (PartialPiece ppp : partialPieces) {
+                    ppp.release();
+                }
+                partialPieces.clear();
+                partialIds.clear();
+            }
         }
         return true;
     }
