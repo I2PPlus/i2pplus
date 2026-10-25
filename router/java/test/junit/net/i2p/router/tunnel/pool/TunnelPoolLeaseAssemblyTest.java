@@ -16,11 +16,13 @@ import org.junit.Test;
 
 import net.i2p.data.Hash;
 import net.i2p.data.Lease;
+import net.i2p.data.LeaseSet;
 import net.i2p.data.TunnelId;
 import net.i2p.router.RouterContext;
 import net.i2p.router.RouterTestHelper;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelPoolSettings;
+import net.i2p.util.Log;
 
 /**
  * Tests that every tunnel offered to a pool's LeaseSet survives assembly.
@@ -254,6 +256,33 @@ public class TunnelPoolLeaseAssemblyTest {
         // no receive tunnel id and no gateway set
         assertTrue("an incomplete tunnel must not be advertised",
                    pool(TUNNELS).buildLeases(Collections.singletonList(cfg), null).isEmpty());
+    }
+
+    /**
+     * Finalization must log at INFO without asking the fresh LeaseSet for its
+     * wire size: the set carries leases only until the caller adds the
+     * destination and signature, and {@code size()} dereferences both. The
+     * pre-fix log line threw NPE on every build once the pool logger reached
+     * INFO, aborting build completion and LeaseSet republish.
+     */
+    @Test
+    public void finalizationLogsAtInfoWithoutTouchingWireSize() {
+        List<TunnelInfo> tunnels = new ArrayList<>();
+        for (int i = 0; i < TUNNELS; i++) {
+            tunnels.add(tunnel(i));
+        }
+        TreeSet<Lease> leases = pool(TUNNELS).buildLeases(tunnels, null);
+        assertEquals(TUNNELS, leases.size());
+        TunnelPool pool = pool(TUNNELS);
+        Log log = _ctx.logManager().getLog(TunnelPool.class);
+        int saved = log.getMinimumPriority();
+        try {
+            log.setMinimumPriority(Log.INFO);
+            LeaseSet ls = pool.finalizeLeaseSet(leases, TUNNELS, _ctx.clock().now());
+            assertEquals("all leases made it into the set", TUNNELS, ls.getLeaseCount());
+        } finally {
+            log.setMinimumPriority(saved);
+        }
     }
 
     private static Lease lease(long end, long tunnelId, int gateway) {

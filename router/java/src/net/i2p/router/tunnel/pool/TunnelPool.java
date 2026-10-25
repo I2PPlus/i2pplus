@@ -4080,13 +4080,15 @@ public class TunnelPool {
 
     /**
      * Builds the lease set from the chosen leases.
+     * The returned LeaseSet is incomplete by contract: leases only, no
+     * destination or signature, so callers must not ask it for its wire size.
      *
      * @param leases the leases to publish
      * @param wanted the number of leases wanted
      * @param now the current time
      * @return the lease set, or null if it could not be built
      */
-    private LeaseSet finalizeLeaseSet(TreeSet<Lease> leases, int wanted, long now) {
+    LeaseSet finalizeLeaseSet(TreeSet<Lease> leases, int wanted, long now) {
         if (leases.size() < wanted) {
             // The incomplete-set handling below runs for any shortfall, which is correct:
             // even 7 of 8 is incomplete. Only the log is filtered, because it used to fire on
@@ -4116,7 +4118,9 @@ public class TunnelPool {
         Iterator<Lease> iter = leases.iterator();
         int count = Math.min(leases.size(), wanted);
         for (int i = 0; i < count; i++) {ls.addLease(iter.next());}
-        if (_log.shouldInfo()) {_log.info(toString() + " -> New LeaseSet built with " + ls.size() + " leases");}
+        // ls.size() is the wire size and needs the destination and signing key,
+        // which the caller sets later - count the leases we just added instead.
+        if (_log.shouldInfo()) {_log.info(toString() + " -> New LeaseSet built with " + count + " leases");}
         _cachedLeaseSet = ls;
         _lastLeaseSetBuildTime = now;
         _lastPublishedEarliestLeaseEnd = leases.isEmpty() ? 0 : leases.first().getEndTime();
