@@ -213,10 +213,17 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     public static int getMaxRTOStatic() { return maxRTO; }
     /**
      * Ceiling on the backed-off RTO in ms, clamped to [1000, 60000].
+     * Also capped at the max resend delay — the backoff ceiling must stay
+     * below the RTO ceiling {@link #computeRTO} applies, or the two clamps
+     * fight each other.
      * @param val the max RTO in ms
      * @since 0.9.70+
      */
-    public static void setMaxRTO(int val) { maxRTO = Math.max(1000, Math.min(60000, val)); }
+    public static void setMaxRTO(int val) {
+        maxRTO = Math.max(1000, Math.min(60000, val));
+        if (maxRTO > maxResendDelay)
+            maxRTO = maxResendDelay;
+    }
 
     /** RTO multiplier as percentage (e.g. 120 = 1.2x), clamped to [100, 500]. */
     static final String PROP_RTO_MULTIPLIER = "i2p.streaming.rtoMultiplier";
@@ -252,10 +259,17 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     public static int getMinResendDelayStatic() { return minResendDelay; }
     /**
      * Floor on the computed RTO in ms, clamped to [100, 5000].
+     * Must not exceed the max resend delay, so this also raises the max
+     * resend delay if the new minimum would exceed it — the pair can never be
+     * inverted no matter what order the Tuner applies the values in.
      * @param val the min resend delay in ms
      * @since 0.9.70+
      */
-    public static void setMinResendDelay(int val) { minResendDelay = Math.max(100, Math.min(5000, val)); }
+    public static void setMinResendDelay(int val) {
+        minResendDelay = Math.max(100, Math.min(5000, val));
+        if (minResendDelay > maxResendDelay)
+            maxResendDelay = minResendDelay;
+    }
 
     /**
      * Max resend delay (ms). Raised to 20000 to accommodate high-RTT paths without premature retransmit
@@ -271,10 +285,17 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     public static int getMaxResendDelayStatic() { return maxResendDelay; }
     /**
      * Ceiling on the computed RTO in ms, clamped to [1000, 60000].
+     * Never drops below the min resend delay — the min is lowered to match,
+     * keeping the [minResendDelay, maxResendDelay] clamp in {@link #computeRTO}
+     * well-ordered regardless of the order the values are applied in.
      * @param val the max resend delay in ms
      * @since 0.9.70+
      */
-    public static void setMaxResendDelay(int val) { maxResendDelay = Math.max(1000, Math.min(60000, val)); }
+    public static void setMaxResendDelay(int val) {
+        maxResendDelay = Math.max(1000, Math.min(60000, val));
+        if (minResendDelay > maxResendDelay)
+            minResendDelay = maxResendDelay;
+    }
 
     /**
      * Instance-scoped view of the global RTO backoff ceiling.
@@ -593,10 +614,15 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      */
     public static int getDefaultResendDelayStatic() { return defaultRetransmitDelay; }
     /**
-     * Default resend delay, clamped to [100, 3000] ms.
+     * Default resend delay, clamped to [100, 3000] ms and capped at the max
+     * resend delay so the initial timer never exceeds its own ceiling.
      * @param val the default resend delay in ms
      */
-    public static void setDefaultResendDelay(int val) { defaultRetransmitDelay = Math.max(100, Math.min(3000, val)); }
+    public static void setDefaultResendDelay(int val) {
+        defaultRetransmitDelay = Math.max(100, Math.min(3000, val));
+        if (defaultRetransmitDelay > maxResendDelay)
+            defaultRetransmitDelay = maxResendDelay;
+    }
 
     /**
      * Divisor the linear congestion-avoidance growth uses, so the window gains
@@ -1137,6 +1163,27 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         computeRTO();
     }
 
+    /**
+     * Clamp a retransmit timeout into the [minResendDelay, maxResendDelay] pair,
+     * tolerating an inverted pair.
+     * <p>The setters keep the pair ordered, but a clamp written as
+     * {@code max(min, min(v, max))} still resolves an inverted pair to its
+     * numerically larger bound — a 1500 ms timer becomes 5000 ms once the floor
+     * has been raised past the ceiling. Ordering the bounds first keeps the
+     * clamp well-defined either way.
+     *
+     * @param rto the timeout to clamp, in ms
+     * @param minRD the resend-delay floor in ms
+     * @param maxRD the resend-delay ceiling in ms
+     * @return the timeout limited to the ordered pair
+     * @since 0.9.72+
+     */
+    static int clampRto(int rto, int minRD, int maxRD) {
+        int lo = Math.min(minRD, maxRD);
+        int hi = Math.max(minRD, maxRD);
+        return Math.max(lo, Math.min(rto, hi));
+    }
+
     /** Recalculate RTO from current smoothed RTT and deviation per RFC 6298. */
     private synchronized void computeRTO() {
         switch(_rttState) {
@@ -1150,10 +1197,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
             break;
         }
 
-        int minRD = getMinResendDelay();
-        int maxRD = getMaxResendDelay();
-        if (_retransmitTimeout < minRD) {_retransmitTimeout = minRD;}
-        else if (_retransmitTimeout > maxRD) {_retransmitTimeout = maxRD;}
+        _retransmitTimeout = clampRto(_retransmitTimeout, getMinResendDelay(), getMaxResendDelay());
     }
 
     /**
@@ -1230,9 +1274,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * @param ms the retransmit timer delay in ms
      */
     public void setResendDelay(int ms) {
-        int minRD = getMinResendDelay();
-        int maxRD = getMaxResendDelay();
-        _retransmitDelay = Math.max(minRD, Math.min(ms, maxRD));
+        _retransmitDelay = clampRto(ms, getMinResendDelay(), getMaxResendDelay());
     }
 
     /**
