@@ -366,14 +366,24 @@ class PacketHandler {
     }
 
     /**
-     * Sends a reset packet back to the sender without verifying the packet signature.
-     * Packet MUST have a FROM option.
+     * Sends a reset packet back to the sender without verifying the packet
+     * signature. A packet without a FROM option, possible on a hostile or
+     * pre-FROM SYN, has no return address and is skipped with a WARN —
+     * callers reach this on failure paths where the FROM check cannot run
+     * first.
      *
-     * @param packet the received packet to answer; must carry a FROM option
+     * @param packet the received packet to answer; a FROM option is required
+     *               to have anywhere to send the reset
      * @since 0.9.39, public since 0.9.71 for ConnectionManager
      */
     public void sendResetUnverified(Packet packet) {
-        PacketLocal reply = new PacketLocal(context, packet.getOptionalFrom(), packet.getSession());
+        Destination from = packet.getOptionalFrom();
+        if (from == null) {
+            if (log.shouldWarn())
+                log.warn("Cannot send unverified reset -> no FROM option in " + packet);
+            return;
+        }
+        PacketLocal reply = new PacketLocal(context, from, packet.getSession());
         reply.setFlag(Packet.FLAG_RESET | Packet.FLAG_SIGNATURE_INCLUDED | Packet.FLAG_NO_ACK);
         reply.setSendStreamId(packet.getReceiveStreamId());
         reply.setReceiveStreamId(packet.getSendStreamId());
