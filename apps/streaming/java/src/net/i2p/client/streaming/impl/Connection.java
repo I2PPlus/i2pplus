@@ -11,6 +11,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PSession;
 import net.i2p.client.streaming.I2PSocketException;
@@ -55,7 +56,13 @@ class Connection {
     private final AtomicLong _resetSentOn = new AtomicLong();
     /** Timestamp when a RESET was received, or 0 if none. */
     private final AtomicLong _resetReceivedOn = new AtomicLong();
-    /** Wall-clock ms of the last SYN-ACK (initial or re-send) we sent for this connection. */
+    /**
+     * Wall-clock ms of the last SYN-ACK <em>re-send</em> recorded for this
+     * connection, or 0 when only the initial SYN-ACK has gone out. Only
+     * {@link #recordSynAckResend} writes it; the spacing gate in
+     * {@link #shouldResendSynAck} treats 0 as "never re-sent" and always
+     * allows the first re-send.
+     */
     private volatile long _lastSynAckSentOn;
     /** Count of SYN-ACK re-sends triggered by retransmitted SYNs for this connection. */
     private volatile int _synAckResends;
@@ -124,11 +131,20 @@ class Connection {
     /** Packet handler for this connection. */
     private final ConnectionPacketHandler _handler;
     /** Connection options. */
-    private ConnectionOptions _options;
+    /**
+     * Options for this connection. Volatile: {@link #setOptions} replaces it
+     * from an app thread while the retransmit timer and the receive path read
+     * it, and a non-volatile swap has no happens-before edge with those reads.
+     */
+    private volatile ConnectionOptions _options;
     /** Data receiver for outbound packets. */
     private final ConnectionDataReceiver _receiver;
-    /** I2P socket for this connection. */
-    private I2PSocketFull _socket;
+    /**
+     * I2P socket for this connection. Volatile: set on the connect thread,
+     * read and nulled by teardown on the timer thread, read by the app thread
+     * through {@link #getSocket}.
+     */
+    private volatile I2PSocketFull _socket;
     /** Error cause if the connection could not be established. */
     private volatile String _connectionError;
     /** Timestamp a disconnect was scheduled at, or 0. */
@@ -146,22 +162,27 @@ class Connection {
     private volatile long _lastCongestionHighestUnacked;
     /**
      * Consecutive loss events since the last recovery (graduated backoff).
-     *  Reset in {@link #ackPackets(long, long[])} once the lost window is fully recovered, and
-     *  decayed by one tier in {@link ResendPacketEvent#retransmit()} when a fresh strike arrives more
-     *  than one smoothed RTT after the previous one (see
-     *  {@link #decayLossStrikes(int, long, long, long)}).
+     * Reset in {@link #ackPackets(long, long[])} once the lost window is fully recovered, and
+     * decayed by one tier in {@link ResendPacketEvent#retransmit()} when a fresh strike arrives more
+     * than one smoothed RTT after the previous one (see
+     * {@link #decayLossStrikes(int, long, long, long)}).
      * Accessed only under the _outboundPacketsLock.
      */
     private int _lossStrikes;
-    /** Wall-clock ms of the most recent loss strike, for strike decay.
-     *  Same lock discipline as {@link #_lossStrikes}. */
+    /**
+     * Wall-clock ms of the most recent loss strike, for strike decay.
+     * Same lock discipline as {@link #_lossStrikes}.
+     */
     private long _lastLossStrikeTime;
     /**
-     * Whether the established-connection resume WARN was already logged (once per
-     *  connection) when a data packet exceeded its retransmit budget. Reset only
-     *  when the connection object is reused.
+     * Whether the established-connection resume WARN was already logged for
+     * this connection object when a data packet exceeded its retransmit
+     * budget. There is no reset — a pooled reconnect builds a new Connection,
+     * so "once per connection" is once per object. Volatile because the flag
+     * is written from the retransmit timer pass and read from the resend
+     * path.
      */
-    private boolean _establishedResumeWarned;
+    private volatile boolean _establishedResumeWarned;
     /**
      *  Whether an immediate retransmit-timer fire has already been granted for the
      *  current overdue head-of-line packet. Cleared as soon as the timer is no longer
@@ -235,11 +256,13 @@ class Connection {
      * Set when a soft failure triggers an immediate retransmit pass, so the
      * resend loop can tag those resends as soft (not consuming the hard
      * retransmit budget).  Written on the router callback thread in
-     * {@link #scheduleSoftFailureRetransmit}, read and cleared on the timer
-     * thread in {@link RetransmitEvent#timeReached}.  Cleared on cancel so a
-     * cancelled soft pass cannot leak into a later RTO-driven pass.
+     * {@link #scheduleSoftFailureRetransmit}, read and cleared atomically on
+     * the timer thread in {@link RetransmitEvent#timeReached}.  Cleared on
+     * cancel so a cancelled soft pass cannot leak into a later RTO-driven
+     * pass. An AtomicBoolean, not a plain flag, because the setter and the
+     * timer's read-then-clear run without a shared monitor.
      */
-    private volatile boolean _softFailureResendPending;
+    private final AtomicBoolean _softFailureResendPending = new AtomicBoolean();
     /**
      * Set when a soft failure triggers an immediate retransmit pass,
      * so the next send through {@link PacketQueue#enqueue(PacketLocal)}
@@ -250,24 +273,31 @@ class Connection {
      * packets reuse the already rotated tunnel, so the handover settles
      * before any data flows and an in-flight download is never disturbed.
      * Written on the router callback thread in
-     * {@link #scheduleSoftFailureRetransmit}, cleared on first use
-     * in {@link PacketQueue#enqueue(PacketLocal)} and on cancel.
+     * {@link #scheduleSoftFailureRetransmit}, consumed atomically on first use
+     * by {@link #consumeNextSendFreshConnection()} from
+     * {@link PacketQueue#enqueue(PacketLocal)}, and cleared on cancel — an
+     * AtomicBoolean because the setter and the consumer share no monitor.
      */
-    private volatile boolean _nextSendFreshConnection;
+    private final AtomicBoolean _nextSendFreshConnection = new AtomicBoolean();
      /**
       * Count of consecutive retransmit timer firings without ACK progress
       * (highestAckedThrough unchanged).  Used to detect stalled downloads
       * on slow/lossy paths where soft-failure rotation does not trigger.
       * Reset to 0 only when ackPackets() was called since the last
       * retransmit fire (i.e., when the peer actually delivered ACKs).
-      * Written and read on the router callback thread.
+      * Mutated on the retransmit timer thread inside
+      * {@link RetransmitEvent#checkRetransmitStall()}, a synchronized method,
+      * so under the Connection monitor; volatile for the unlocked reads
+      * elsewhere.
       */
     private volatile int _retransmitCount;
     /**
      * Flag set when ackPackets() recorded forward progress since the
      * last RetransmitEvent.fire.  Used to decide whether to reset
      * _retransmitCount in {@link RetransmitEvent#timeReached}.
-     * Written and read on the router callback thread.
+     * Written on the receive thread, consumed and reset to false by
+     * {@link RetransmitEvent#checkRetransmitStall()} on the timer thread
+     * under the Connection monitor.
      */
     private volatile boolean _ackProgress;
     /**
@@ -500,6 +530,15 @@ class Connection {
      * @since 0.9.71+
      */
     private volatile StallState _lastStallState = StallState.NONE;
+
+    /**
+     * CAS updater for {@link #_lastStallState} so the edge check and the
+     * update are one atomic step — a plain read-compare-write let the ACK
+     * path and FloorCheckEvent both see the old verdict and each emit the
+     * same rising edge (double stat, double WARN, double rotation mark).
+     */
+    private static final AtomicReferenceFieldUpdater<Connection, StallState> _lastStallStateUpdater =
+        AtomicReferenceFieldUpdater.newUpdater(Connection.class, StallState.class, "_lastStallState");
 
 
     /** Lifetime bytes sent, for stats. */
@@ -1107,7 +1146,7 @@ class Connection {
      * current one has stalled. Cleared on first use.
      * @since 0.9.71+
      */
-    synchronized void setNextSendFreshConnection() { _nextSendFreshConnection = true; }
+    synchronized void setNextSendFreshConnection() { _nextSendFreshConnection.set(true); }
     /**
      * Returns true if the next send should use a fresh connection
      * (tunnel rotation). Cleared on read so only the first send
@@ -1115,13 +1154,24 @@ class Connection {
      * @return true if the next send should rotate to a fresh connection
      * @since 0.9.71+
      */
-    synchronized boolean isNextSendFreshConnection() { return _nextSendFreshConnection; }
+    synchronized boolean isNextSendFreshConnection() { return _nextSendFreshConnection.get(); }
     /**
      * Clears the pending tunnel-rotation flag, so the next soft-failure pass
      * does not rotate again.
      * @since 0.9.71+
      */
-    synchronized void clearNextSendFreshConnection() { _nextSendFreshConnection = false; }
+    synchronized void clearNextSendFreshConnection() { _nextSendFreshConnection.set(false); }
+    /**
+     * Returns true (once) if the next send should rotate to a fresh
+     * connection, clearing the flag in the same atomic step. An AtomicBoolean
+     * getAndSet, not the is-then-clear pair, because the setter runs on the
+     * router callback thread without the Connection monitor — a check-then-act
+     * sequence can swallow a rotation requested between the two calls.
+     *
+     * @return true if this caller consumed the rotation request
+     * @since 0.9.72+
+     */
+    boolean consumeNextSendFreshConnection() { return _nextSendFreshConnection.getAndSet(false); }
     /**
      * Returns the current retransmit count (consecutive retransmit
      * timer firings without ACK progress). Used by external callers
@@ -1431,11 +1481,95 @@ class Connection {
     }
 
     /**
-     * Next outbound packet sequence number.
-     *
-     * @return the next sequence number
+     * Modulus of the 4-byte unsigned on-wire sequence field. Both sides count
+     * packets monotonically, but only the low 32 bits reach the wire.
      */
-    public long getNextOutboundPacketNum() {return _lastSendId.incrementAndGet();}
+    static final long SEQ_MOD = 0x100000000L;
+
+    /**
+     * Half the modulus - the range within which a wrapped value is resolved.
+     */
+    static final long SEQ_HALF = SEQ_MOD / 2;
+
+    /**
+     * Next outbound packet sequence number. Never hands out a number whose
+     * low 32 bits are zero: the wire format uses sequence 0 to mean
+     * "ack-only, no data", so a data packet landing on 0 after 2^32 sends
+     * would have its payload stripped by the peer and by our own send path.
+     * The skip advances the counter past the reserved value in the same
+     * atomic step, so ids stay unique and monotonic across callers.
+     *
+     * @return the next sequence number, never congruent to 0 mod 2^32
+     */
+    public long getNextOutboundPacketNum() {
+        // CAS loop: unique and monotonic under concurrent callers, and a
+        // value congruent to 0 mod 2^32 is skipped (never handed out), so no
+        // two callers can collide on the replacement.
+        long cur, next;
+        do {
+            cur = _lastSendId.get();
+            next = cur + 1;
+            if ((next & 0xffffffffL) == 0)
+                next++;
+        } while (!_lastSendId.compareAndSet(cur, next));
+        return next;
+    }
+
+    /**
+     * Pure form of the wire-zero skip used by tests: whether a raw counter
+     * value may be used as a sequence number, i.e. its low 32 bits are not
+     * zero. The CAS loop in {@link #getNextOutboundPacketNum()} steps over
+     * a rejected value in the same atomic update, so the skipped value is
+     * consumed and no two callers can collide on the replacement.
+     *
+     * @param id the raw counter value just incremented to
+     * @return true if the value is usable on the wire
+     * @since 0.9.72+
+     */
+    static boolean isUsableSeqNum(long id) {
+        return (id & 0xffffffffL) != 0;
+    }
+
+    /**
+     * Resolve a 4-byte on-wire sequence value into the unbounded local counter
+     * space against a reference point from the same stream. Past 2^32 packets a
+     * raw comparison sees the peer's ACK land "behind" our own counter and the
+     * send window wedges permanently, so every value taken off the wire must be
+     * mapped back before it is compared. This picks the value congruent to
+     * wire that is nearest ref - the only one a live stream can have meant,
+     * since the in-flight window is orders of magnitude below 2^31.
+     *
+     * @param wire the unsigned 32-bit value read off the wire
+     * @param ref a local sequence number from the same stream, or negative
+     *            when nothing has been seen yet
+     * @return the equivalent local sequence number
+     * @since 0.9.72+
+     */
+    static long unwrapSeq(long wire, long ref) {
+        long w = wire & 0xffffffffL;
+        if (ref < 0)
+            return w;
+        long v = (ref - (ref & 0xffffffffL)) | w;
+        if (v - ref > SEQ_HALF)
+            v -= SEQ_MOD;
+        else if (ref - v > SEQ_HALF)
+            v += SEQ_MOD;
+        return v;
+    }
+
+    /**
+     * Resolve a received packet's sequence number into this connection's
+     * receive space, referenced against the highest block the input stream
+     * already knows about.
+     *
+     * @param wire the unsigned 32-bit sequence from the received packet
+     * @return the equivalent local message id
+     * @since 0.9.72+
+     */
+    long unwrapReceiveSeq(long wire) {
+        MessageInputStream in = getInputStream();
+        return in != null ? unwrapSeq(wire, in.getHighestBlockId()) : (wire & 0xffffffffL);
+    }
 
     /**
      * This doesn't "send a choke". Rather, it blocks if the outbound window is full,
@@ -1992,10 +2126,15 @@ class Connection {
      * @since 0.9.71+
      */
     private void reportStallState(StallState verdict) {
-        if (verdict == _lastStallState) {
+        StallState prev = _lastStallState;
+        if (verdict == prev) {
             return;
         }
-        _lastStallState = verdict;
+        // CAS, not assign: whoever wins the edge reports it, the loser's
+        // verdict is already recorded by the winner.
+        if (!_lastStallStateUpdater.compareAndSet(this, prev, verdict)) {
+            return;
+        }
         switch (verdict) {
             case STALLED:
                 _context.statManager().addRateData("stream.con.stallDetected", 1);
@@ -2415,7 +2554,12 @@ class Connection {
         if (_outboundQueue.enqueue(reply)) {
             _unackedPacketsReceived.set(0);
             _lastSendTime = now;
-            resetActivityTimer();
+            // Don't re-arm the activity timer while tearing down — disconnect()
+            // cancels it just before calling this on the hard path, and
+            // re-arming here only burns a timer slot for a connection that is
+            // already gone (the timer's !_connected guard exits immediately).
+            if (_connected.get())
+                resetActivityTimer();
         }
     }
 
@@ -2476,8 +2620,8 @@ class Connection {
         // so we must cancel and re-schedule instead.
         // Mark the resulting pass as soft so the resend loop doesn't count it
         // against the hard retransmit budget (tunnel outage != on-wire loss).
-        _softFailureResendPending = true;
-        _nextSendFreshConnection = true;
+        _softFailureResendPending.set(true);
+        _nextSendFreshConnection.set(true);
         _retransmitEvent.forceRescheduleNow();
         if (_log.shouldInfo()) {
             _log.info("Soft failure -> Scheduled immediate retransmit to " +
@@ -2628,9 +2772,23 @@ class Connection {
      *          a shared mutable buffer, not a fresh copy
      */
     public List<PacketLocal> ackPackets(long ackThrough, long[] nacks) {
+        // The wire carries only 32 bits of the sequence space; resolve the
+        // peer's values into our counter space before comparing, or the
+        // window wedges once either side passes 2^32 packets.
+        final long ref = _lastSendId.get();
+        final long unwrappedAck;
+        if (ref >= SEQ_MOD) {
+            unwrappedAck = unwrapSeq(ackThrough, ref);
+            if (nacks != null) {
+                for (int i = 0; i < nacks.length; i++)
+                    nacks[i] = unwrapSeq(nacks[i], ref);
+            }
+        } else {
+            unwrappedAck = ackThrough;
+        }
         long oldHighest = _highestAckedThrough.get();
         if (nacks == null || nacks.length == 0) {
-            _highestAckedThrough.updateAndGet(cur -> Math.max(cur, ackThrough));
+            _highestAckedThrough.updateAndGet(cur -> Math.max(cur, unwrappedAck));
         } else {
             long lowest = -1;
             for (int i = 0; i < nacks.length; i++) {
@@ -4148,8 +4306,14 @@ if (!on) {
      *  deferring. Does NOT trigger congestion control (probe may not be lost).
      */
     private class TLProbeEvent extends SimpleTimer2.TimedEvent {
-        /** Whether a probe is already scheduled. */
-        private volatile boolean _pending;
+        /**
+         * Whether a probe is already scheduled. Every read and write,
+         * including the clear in timeReached(), happens under this event's
+         * monitor — clearing it unlocked let a scheduleProbe() racing the
+         * fire get dropped: the flag was still true for the scheduler, then
+         * the fire cleared it, leaving nothing armed.
+         */
+        private boolean _pending;
 
         /** The timer event that fires a throughput probe. */
         TLProbeEvent() { super(_timer); }
@@ -4180,7 +4344,9 @@ if (!on) {
          */
         @Override
         public void timeReached() {
-            _pending = false;
+            synchronized (this) {
+                _pending = false;
+            }
             sendTLProbe();
         }
     }
@@ -4206,6 +4372,11 @@ if (!on) {
             }
             if (oldest == null) return;
         }
+        // Re-check outside the lock, same use-after-release TOCTOU guard the
+        // retransmit loop applies: an ack or cancel can release the payload
+        // between the scan above and the enqueue here.
+        if (oldest.writeReleased())
+            return;
         if (_outboundQueue.enqueue(oldest)) {
             _unackedPacketsReceived.set(0);
             _lastSendTime = _context.clock().now();
@@ -4224,8 +4395,30 @@ if (!on) {
      */
     class RetransmitEvent extends SimpleTimer2.TimedEvent {
 
-        /** Whether the timer is active. */
+        /**
+         * Whether a timer event is pending. Every read and write happens
+         * under this event's monitor — including the clear at the top of
+         * timeReached() — so a schedule racing the pass cannot observe a
+         * half-updated state.
+         */
         private boolean _scheduled;
+
+        /**
+         * True while a retransmit pass (timeReached) is executing. Kept under
+         * this event's monitor so schedulers racing the pass can tell that
+         * _scheduled == false is transient (the pass is mid-flight) rather
+         * than "no timer pending, arm a fresh one the pass will overwrite".
+         */
+        private boolean _passRunning;
+
+        /**
+         * Set when a caller armed a fresh timer while a pass was running.
+         * The pass then skips its own end-of-pass re-arm, so a soft-failure
+         * immediate retry or an ACK-anchored deadline is not clobbered by a
+         * full-RTO push-back issued after the pass had already read the
+         * schedule state.
+         */
+        private boolean _freshArmedDuringPass;
 
         /** Retransmit event. */
         RetransmitEvent() {super(_timer);}
@@ -4236,39 +4429,48 @@ if (!on) {
         @Override
         public synchronized boolean cancel() {
             _scheduled = false;
-            _softFailureResendPending = false;
-            _nextSendFreshConnection = false;
+            _softFailureResendPending.set(false);
+            _nextSendFreshConnection.set(false);
             return super.cancel();
         }
 
         /**
          * Schedule the retransmit timer if it is not already running.
+         * While a pass is executing this reports "already running" without
+         * arming: the pass re-arms at its end, or has been superseded by a
+         * fresh arm which it then skips, so a caller racing the timer
+         * cannot end up with two events queued.
          *
          * @param delay how long from now to wait before firing the retransmit
          *              (ms), normally the packet's timeout
          * @return true if the timer was armed, false if one was already
-         *         running and the pending schedule was left untouched
+         *         running or a pass was mid-flight
          */
         public synchronized boolean scheduleIfNotRunning(long delay) {
-            if (_scheduled) {return false;}
+            if (_scheduled || _passRunning) {return false;}
             _scheduled = true;
             schedule(delay);
             return true;
         }
 
         /**
-         *  Force immediate reschedule with minimum delay, cancelling any
-         *  pending timer. Used by scheduleSoftFailureRetransmit() so that
-         *  a soft-failure notification triggers a retransmit without
-         *  waiting for the current RTO to elapse.
+         * Force immediate reschedule with minimum delay, cancelling any
+         * pending timer. Used by scheduleSoftFailureRetransmit() so that
+         * a soft-failure notification triggers a retransmit without
+         * waiting for the current RTO to elapse.
          * <p>
-         *  Unlike {@link #pushBackRTO}, this always schedules a new timer event
-         *  rather than relying on reschedule(..., false) which won't
-         *  shorten a running timer.
+         * Unlike {@link #pushBackRTO}, this always schedules a new timer event
+         * rather than relying on reschedule(..., false) which won't
+         * shorten a running timer. If a pass is mid-flight it still fires a
+         * fresh event, and marks that arm so the running pass skips its own
+         * end-of-pass re-arm instead of overwriting this immediate one.
          */
         public synchronized void forceRescheduleNow() {
             super.cancel();
             _scheduled = true;
+            if (_passRunning) {
+                _freshArmedDuringPass = true;
+            }
             schedule(0);
         }
 
@@ -4303,6 +4505,9 @@ if (!on) {
                 forceRescheduleNow();
             } else if (!_scheduled) {
                 _scheduled = true;
+                if (_passRunning) {
+                    _freshArmedDuringPass = true;
+                }
                 schedule(delayMs);
             } else {
                 reschedule(delayMs, true);
@@ -4310,16 +4515,57 @@ if (!on) {
         }
 
         /**
+         * Re-arm the timer at the end of a retransmit pass. Skipped when a
+         * caller armed a fresh event while the pass was running — a
+         * soft-failure immediate retry or an ACK-anchored deadline — since
+         * re-arming here would push that earlier fire time back out to a
+         * full RTO and swallow the fast retry.
+         *
+         * @param rto the retransmission timeout to arm (ms)
+         * @return true if the timer was re-armed by this call
+         * @since 0.9.72+
+         */
+        synchronized boolean reArmAfterPass(int rto) {
+            if (_freshArmedDuringPass) {
+                _freshArmedDuringPass = false;
+                return false;
+            }
+            pushBackRTO(rto);
+            return true;
+        }
+
+        /**
          * Retransmit packets and adjust congestion state when the timer fires.
          */
         @Override
         public void timeReached() {
-            _scheduled = false;
+            // Under the monitor: a sender racing this pass must never see a
+            // bare "_scheduled == false" and arm an event this pass then
+            // overwrites. _passRunning tells it the pass is mid-flight.
+            synchronized (this) {
+                _scheduled = false;
+                _passRunning = true;
+            }
+            try {
+                timeReachedInternal();
+            } finally {
+                synchronized (this) {
+                    _passRunning = false;
+                }
+            }
+        }
+
+        /**
+         * The retransmit pass itself, split out of timeReached() so the
+         * monitor-scoped bookkeeping around it stays legible. Runs with no
+         * lock held.
+         */
+        private void timeReachedInternal() {
             // Is this pass soft-failure-triggered?  If so, resends of unacked
             // packets are tagged as soft and don't consume the hard retransmit
-            // budget (see hardResendBudgetExceeded()).
-            final boolean softPass = _softFailureResendPending;
-            _softFailureResendPending = false;
+            // budget (see hardResendBudgetExceeded()). getAndSet so a soft tag
+            // raised while this pass is starting cannot be swallowed.
+            final boolean softPass = _softFailureResendPending.getAndSet(false);
 
            if (_resetSentOn.get() > 0 || _resetReceived.get() || _finalDisconnect.get()) {
                 if (_log.shouldDebug()) {
@@ -4358,41 +4604,70 @@ if (!on) {
 
             congestionOccurred();
 
-            // 1. RTO backoff: for established connections (ACK received), double RTO
+            // 1. Empty-window guard, checked BEFORE any re-arm. If nothing is
+            //    in flight there is nothing to retransmit and no timer to
+            //    re-arm — the next send arms it via scheduleIfNotRunning().
+            //    Re-arming first (as this used to) leaves a warn-every-RTO
+            //    chain when the window emptied via a path that did not cancel
+            //    the event. Exception: if a caller armed a fresh pass while
+            //    this one ran (scheduleIfNotRunning defers to us while
+            //    _passRunning is set), we own that arm — re-arm here or the
+            //    packet that requested it is left un-timed.
+            boolean freshDuringPass;
+            synchronized (this) {
+                freshDuringPass = _freshArmedDuringPass;
+            }
+            synchronized(_outboundPacketsLock) {
+                TreeMap<Long, PacketLocal> ob = _outboundPackets;
+                Map.Entry<Long, PacketLocal> e = ob == null ? null : ob.firstEntry();
+                if (e == null) {
+                    if (freshDuringPass) {
+                        reArmAfterPass(_options.getRTO());
+                    } else if (_log.shouldWarn()) {
+                        _log.warn(Connection.this + " Retransmission timer hit but nothing transmitted??");
+                    }
+                    return;
+                }
+            }
+
+            // 2. RTO backoff: for established connections (ACK received), double RTO
             //    per RFC 6298 sec 5.5-5.6. For SYN-phase connections, no congestion
             //    to manage — keep RTO fixed so each retry gets the same window.
             //    SYN retries are bounded by getMaxSynSends(), scaled so the budget
             //    (sends * interval) covers the connect() window.
             if (_highestAckedThrough.get() >= 0) {
-                pushBackRTO(_options.doubleRTO());
-                // Dark connection: re-arm the tail loss probe so a re-lost
-                // head-of-line packet is detected at ~2*RTT instead of waiting
-                // on the next, pushed-back RTO. Forward progress in ackPackets()
-                // still cancels/re-arms the probe as before.
-                _tlpEvent.scheduleProbe(getPTO());
+                if (_retransmitEvent.reArmAfterPass(_options.doubleRTO())) {
+                    // Dark connection: re-arm the tail loss probe so a re-lost
+                    // head-of-line packet is detected at ~2*RTT instead of waiting
+                    // on the next, pushed-back RTO. Forward progress in ackPackets()
+                    // still cancels/re-arms the probe as before.
+                    _tlpEvent.scheduleProbe(getPTO());
+                }
             } else {
                 // SYN phase: fixed interval, no backoff. Evidence-gated + RTT-aware so the
                 // interval tracks the measured path (packing more attempts into the connect
                 // window on a healthy but slower-than-default fabric) instead of always the
                 // 5000ms default; a path with no RTT evidence keeps the default unchanged.
-                pushBackRTO(getSynRetransmitInterval());
+                _retransmitEvent.reArmAfterPass(getSynRetransmitInterval());
             }
 
-            // 2. cut ssthresh to bandwidth estimate, window to 1
+            // 3. cut ssthresh to bandwidth estimate, window to 1
             List<PacketLocal> toResend = null;
-            // Sampled before taking _outboundPacketsLock: getWindowCeiling() may
-            // lock the estimator, and estimator-monitor → _outboundPacketsLock is
-            // the established order (packetSendChoke()/shouldWait() sample first);
-            // taking the ceiling inside would extend that hold across the whole
-            // resend section. The result only bounds the cut below.
+            // Sampled before taking _outboundPacketsLock: getWindowCeiling()
+            // locks the bandwidth estimator, and the nesting used elsewhere in
+            // this class is _outboundPacketsLock -> estimator (the resend
+            // section below calls _bwEstimator while holding the window lock),
+            // so sampling inside would invert that order and extend the window
+            // lock across the estimator call. The result only bounds the cut
+            // below.
             final int ceiling = getWindowCeiling();
             synchronized(_outboundPacketsLock) {
                 TreeMap<Long, PacketLocal> ob = _outboundPackets;
                 Map.Entry<Long, PacketLocal> e = ob == null ? null : ob.firstEntry();
                 if (e == null) {
-                    if (_log.shouldWarn()) {
-                        _log.warn(Connection.this + " Retransmission timer hit but nothing transmitted??");
-                    }
+                    // Emptied between the guard above and this lock; the
+                    // re-arm already happened, the resend loop below is a
+                    // no-op on an empty snapshot.
                     return;
                 }
 
@@ -4449,7 +4724,7 @@ if (!on) {
                 }
             }
 
-            // 3. Retransmit up to half of the packets in flight (RFC 6298 section 5.4 and RFC 5681 section 4.3)
+            // 4. Retransmit up to half of the packets in flight (RFC 6298 section 5.4 and RFC 5681 section 4.3)
             //    Send first 4 immediately, pace the rest to avoid I2CP burst.
             boolean sentAny = false;
             int burstCount = 0;
@@ -4766,8 +5041,12 @@ synchronized boolean checkRetransmitStall() {
 
     /** Reusable event to send an ACK for a duplicate packet after a short delay. */
     class AckDupEvent extends SimpleTimer2.TimedEvent {
-        /** Timestamp of the last ACK DUP mark. */
-        private long _created;
+        /**
+         * Timestamp of the last ACK DUP mark. Volatile: written on the
+         * receive thread by mark(), read on the timer thread by
+         * timeReached(); a plain long also permits a torn read.
+         */
+        private volatile long _created;
 
         /** Ack dup event. */
         AckDupEvent() {
@@ -4783,6 +5062,15 @@ synchronized boolean checkRetransmitStall() {
          * Send an ACK for a duplicate packet when the timer fires.
          */
         public void timeReached() {
+            // Same guard the other per-connection timers carry — a dup-ACK
+            // timer armed just before teardown must not ackImmediately() on
+            // a connection that is already gone.
+            if (!_connected.get()) {
+                if (_log.shouldDebug()) {
+                    _log.debug("ACK DUP timer fired on " + Connection.this + " -> already disconnected");
+                }
+                return;
+            }
             boolean sent = false;
             if (getLastSendTime() <= _created) {
                 if (getResetReceived() || getResetSent()) {
@@ -5013,6 +5301,15 @@ synchronized boolean checkRetransmitStall() {
             }
 
             int numSends = _packet.getNumSends() + 1;
+            // Snapshot the window size under its contract lock — all access
+            // to _outboundPackets, including reads, happens under
+            // _outboundPacketsLock. The value only gates the CLOSE-resend
+            // workaround below, so a slightly stale snapshot is fine; an
+            // unlocked TreeMap read is not.
+            final int windowSize;
+            synchronized (_outboundPacketsLock) {
+                windowSize = outboundSizeLocked();
+            }
             if (numSends - 1 > _options.getMaxResends() && !_packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
                 if (_log.shouldDebug()) {_log.debug("Disconnecting, too many resends of " + _packet);}
                 _packet.cancelled();
@@ -5021,7 +5318,7 @@ synchronized boolean checkRetransmitStall() {
             } else if (numSends >= 3 &&
                        _packet.isFlagSet(Packet.FLAG_CLOSE) &&
                        _packet.getPayloadSize() <= 0 &&
-                       (_outboundPackets == null ? 0 : _outboundPackets.size()) <= 1 &&
+                       windowSize <= 1 &&
                        getCloseReceivedOn() > 0) {
                 /*
                  * Bug workaround to prevent 5 minutes of retransmission
