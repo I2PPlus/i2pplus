@@ -206,11 +206,22 @@ class Packet {
     public static final int FLAG_SIGNATURE_OFFLINE = (1 << 11);
 
     /**
-     * DEFAULT_MAX_SIZE. 32768 is the largest value the 2-byte max-size wire
-     * field can carry (toLong(buffer, cur, 2, ...)); 128K would silently
-     * truncate to 0. Matches mainline's encodable 32768.
+     * DEFAULT_MAX_SIZE. 32768 is the value we advertise, matching mainline's
+     * encodable 32768; the 2-byte max-size wire field itself carries up to
+     * 65535 (read back unsigned), but a 16-bit-unfriendly value like 128K
+     * would truncate to 0 on the way out.
      */
     public static final int DEFAULT_MAX_SIZE = 32*1024;
+
+    /**
+     * Maximum number of NACKed sequence numbers in one packet. The NACK count
+     * is a single byte on the wire, so a longer list wraps the count — 300
+     * becomes 44 — and the receiver mis-parses the remaining NACK bytes as
+     * options or payload. NACK generation caps itself here; the write path
+     * asserts the same bound.
+     * @since 0.9.72+
+     */
+    static final int MAX_NACKS = 255;
     /**
      * Largest delay in milliseconds a peer may request before being choked.
      */
@@ -570,9 +581,12 @@ class Packet {
         DataHelper.toLong(buffer, cur, 4, _ackThrough > 0 ? _ackThrough : 0);
         cur += 4;
         if (_nacks != null) {
-            // if max win is ever > 255, limit to 255
-            buffer[cur++] = (byte) _nacks.length;
-            for (int i = 0; i < _nacks.length; i++) {
+            // The count field is one byte; generation caps the list at
+            // MAX_NACKS, and anything longer here would wrap the count and
+            // corrupt the rest of the packet for the receiver.
+            int nackCount = Math.min(_nacks.length, MAX_NACKS);
+            buffer[cur++] = (byte) nackCount;
+            for (int i = 0; i < nackCount; i++) {
                 DataHelper.toLong(buffer, cur, 4, _nacks[i]);
                 cur += 4;
             }
@@ -663,7 +677,7 @@ class Packet {
     int writtenSize(SigType keyType) {
         int size = 22;
 
-        if (_nacks != null) {size += 4 * _nacks.length;} // if max win is ever > 255, limit to 255
+        if (_nacks != null) {size += 4 * Math.min(_nacks.length, MAX_NACKS);} // matches the write path's cap
         if (isFlagSet(FLAG_DELAY_REQUESTED)) {size += 2;}
         if (isFlagSet(FLAG_FROM_INCLUDED)) {size += _optionFrom.size();}
         if (isFlagSet(FLAG_MAX_PACKET_SIZE_INCLUDED)) {size += 2;}
@@ -798,27 +812,41 @@ class Packet {
         // skip ahead to the payload
         _payload = new ByteArray(buffer, payloadBegin, payloadSize);
 
-        // ok now let's go back and deal with the options
+        // ok now let's go back and deal with the options.
+        // Every read below is bounded by payloadBegin — the end of the
+        // declared option region — so a hostile packet whose flags demand
+        // options its optionSize cannot hold fails here instead of reading
+        // payload bytes as option bytes or running off the packet end.
         if (isFlagSet(FLAG_DELAY_REQUESTED)) {
+            if (cur + 2 > payloadBegin)
+                throw new IllegalArgumentException("Options too small for delay");
             setOptionalDelay((int)DataHelper.fromLong(buffer, cur, 2));
             cur += 2;
         }
         if (isFlagSet(FLAG_FROM_INCLUDED)) {
-            try (ByteArrayInputStream bais = new ByteArrayInputStream(buffer, cur, length - cur)) {
+            try (ByteArrayInputStream bais = new ByteArrayInputStream(buffer, cur, offset + length - cur)) {
                 Destination optionFrom = Destination.create(bais);
                 cur += optionFrom.size();
+                if (cur > payloadBegin)
+                    throw new IllegalArgumentException("FROM option exceeds option region");
                 _optionFrom = optionFrom;
             } catch (IOException ioe) {
                 throw new IllegalArgumentException("BAD from field", ioe);
             } catch (DataFormatException dfe) {
                 throw new IllegalArgumentException("BAD from field", dfe);
+            } catch (IndexOutOfBoundsException ioobe) {
+                throw new IllegalArgumentException("BAD from field", ioobe);
             }
         }
         if (isFlagSet(FLAG_MAX_PACKET_SIZE_INCLUDED)) {
+            if (cur + 2 > payloadBegin)
+                throw new IllegalArgumentException("Options too small for max size");
             setOptionalMaxSize((int)DataHelper.fromLong(buffer, cur, 2));
             cur += 2;
         }
         if (isFlagSet(FLAG_SIGNATURE_OFFLINE)) {
+            if (cur + 6 > payloadBegin)
+                throw new IllegalArgumentException("Options too small for offline signature");
             _transientExpires = DataHelper.fromLong(buffer, cur, 4) * 1000;
             cur += 4;
             int itype = (int) DataHelper.fromLong(buffer, cur, 2);
@@ -829,6 +857,8 @@ class Packet {
             }
             _transientSigningPublicKey = new SigningPublicKey(type);
             byte[] buf = new byte[_transientSigningPublicKey.length()];
+            if (cur + buf.length > payloadBegin)
+                throw new IllegalArgumentException("Options too small for transient key");
             System.arraycopy(buffer, cur, buf, 0, buf.length);
             _transientSigningPublicKey.setData(buf);
             cur += buf.length;
@@ -836,6 +866,8 @@ class Packet {
             else {throw new IllegalArgumentException("Offline packet without FROM option");}
             _offlineSignature = new Signature(type);
             buf = new byte[_offlineSignature.length()];
+            if (cur + buf.length > payloadBegin)
+                throw new IllegalArgumentException("Options too small for offline signature");
             System.arraycopy(buffer, cur, buf, 0, buf.length);
             _offlineSignature.setData(buf);
             cur += buf.length;
@@ -872,6 +904,8 @@ class Packet {
                 }
                 optionSignature = new Signature(type);
             }
+            if (cur + siglen > payloadBegin)
+                throw new IllegalArgumentException("Options too small for signature (" + siglen + " bytes)");
             byte[] buf = new byte[optionSignature.length()];
             System.arraycopy(buffer, cur, buf, 0, buf.length);
             optionSignature.setData(buf);

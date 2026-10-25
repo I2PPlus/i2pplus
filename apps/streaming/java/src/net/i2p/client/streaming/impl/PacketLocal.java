@@ -380,7 +380,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
                               //+ 1 // nacksSize
                               + 22;
         if (_nacks != null)
-            signatureOffset += 4 *_nacks.length;
+            signatureOffset += 4 * Math.min(_nacks.length, MAX_NACKS); // matches writePacket's cap
         if (isFlagSet(FLAG_DELAY_REQUESTED))
             signatureOffset += 2;
         if (isFlagSet(FLAG_FROM_INCLUDED))
@@ -542,7 +542,14 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
                 }
             }
         } finally {
-            if (!writeSuccessful())
+            // Payload ownership: the buffer goes back to the pool exactly once.
+            // A packet that was enqueued and is neither acked nor cancelled is
+            // still tracked in the outbound window and WILL be retransmitted,
+            // and the ack/cancel path owns its release - releasing here would
+            // leave the retransmit carrying no payload. Only take it back when
+            // nothing else will: the packet never reached the queue, or it was
+            // already acked/cancelled (releasePayload is idempotent).
+            if (!writeSuccessful() && (!isEnqueued() || writeReleased()))
                 releasePayload();
         }
     }
@@ -613,8 +620,9 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
      * <p>Both {@link #ackReceived} and {@link #cancelled} call
      * {@code releasePayload()}, which returns this packet's buffer to the shared
      * outbound payload cache and clears {@code _payload}. Once either has run the
-     * packet must never be enqueued again — a (re)send would read a {@code null}
-     * payload and crash the I2CP write. {@link #isCancelled} alone is
+     * packet must never be enqueued again — {@code Packet.writePacket} tolerates
+     * a {@code null} payload, so a (re)send would go out as a header-only
+     * packet and the data would be lost silently. {@link #isCancelled} alone is
      * insufficient: an ACKed-but-not-cancelled packet also has a released
      * payload.
      * <p>This is the discriminator the retransmit timer uses to skip packets that
