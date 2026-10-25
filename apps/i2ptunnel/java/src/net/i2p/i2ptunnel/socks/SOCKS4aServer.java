@@ -251,7 +251,7 @@ class SOCKS4aServer extends SOCKSServer {
             throw new SOCKSException("Connection error", e);
         }
 
-        I2PSocket destSock;
+        I2PSocket destSock = null;
 
         try {
             String hostLowerCase = connHostName.toLowerCase(Locale.US);
@@ -314,16 +314,22 @@ class SOCKS4aServer extends SOCKSServer {
             confirmConnection();
             _log.debug("Connection confirmed - exchanging data...");
         } catch (DataFormatException e) {
+            closeDestSocket(destSock);
             try {
                 sendRequestReply(Reply.CONNECTION_REFUSED, InetAddress.getByName("127.0.0.1"), 0, out);
             } catch (IOException ioe) { /* ignored */ }
             throw new SOCKSException("Error in destination format: " + e.getMessage());
         } catch (IOException e) {
+            // confirmConnection() throws SOCKSException (an IOException) after
+            // the destination socket is already open — a local client that died
+            // between handshake and success reply must not leave it connected.
+            closeDestSocket(destSock);
             try {
                 sendRequestReply(Reply.CONNECTION_REFUSED, InetAddress.getByName("127.0.0.1"), 0, out);
             } catch (IOException ioe) { /* ignored */ }
             throw new SOCKSException("Error connecting: " + e.getMessage());
         } catch (I2PException e) {
+            closeDestSocket(destSock);
             try {
                 sendRequestReply(Reply.CONNECTION_REFUSED, InetAddress.getByName("127.0.0.1"), 0, out);
             } catch (IOException ioe) { /* ignored */ }
@@ -331,6 +337,19 @@ class SOCKS4aServer extends SOCKSServer {
         }
 
         return destSock;
+    }
+
+    /**
+     * Close a destination I2P socket left open when the SOCKS handshake fails
+     * after connecting, so a dead local client cannot accumulate idle streams.
+     *
+     * @param destSock the socket to close, null is ignored
+     */
+    private static void closeDestSocket(I2PSocket destSock) {
+        if (destSock != null) {
+            try {destSock.close();}
+            catch (IOException ioe) { /* ignored */ }
+        }
     }
 
     /**

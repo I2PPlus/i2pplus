@@ -177,7 +177,7 @@ class ConnThrottler {
                 _totalThrottleUntil = Clock.getInstance().now() + _totalThrottlePeriod;
                 String date = DataHelper.formatTime(_totalThrottleUntil);
                 _log.logAlways(Log.WARN, "*** Throttling " + _action + " from ALL peers until " + date +
-                                         " after exceeding max of " + _max +
+                                         " after exceeding max of " + _totalMax +
                                          " in " + DataHelper.formatDuration(_checkPeriod));
             }
             return true;

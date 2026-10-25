@@ -161,17 +161,23 @@ public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sin
      * @since 0.9.53
      */
     public boolean close(boolean forced) {
-        if (!open) return true;
+        // No early return on !open: a session created by a failed or aborted
+        // start (open still false) would otherwise never be destroyed.
         synchronized (lock) {
-            l.log("Shutting down server " + toString());
+            if (open) {
+                l.log("Shutting down server " + toString());
+            }
             try {
                 if (_session != null) {
                     _session.destroySession();
+                    _session = null;
                 }
             } catch (I2PException ex) {
                 _log.error("Error destroying the session", ex);
             }
-            l.log("Server shut down.");
+            if (open) {
+                l.log("Server shut down.");
+            }
             open = false;
             return true;
         }

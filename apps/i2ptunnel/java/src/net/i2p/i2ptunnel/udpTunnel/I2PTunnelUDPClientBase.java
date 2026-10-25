@@ -159,13 +159,17 @@ import net.i2p.util.EventDispatcher;
      */
     @Override
     public boolean close(boolean forced) {
-        if (!open) return true;
+        // No early return on !open: startRunning() can throw after the session
+        // is created (connect failure), leaving open false — the session would
+        // never be destroyed and its tunnels and streams leak.
         if (_session != null) {
             try {
                 _session.destroySession();
             } catch (I2PSessionException ise) { /* ignored */ }
         }
-        l.log("Closing client " + toString());
+        if (open) {
+            l.log("Closing client " + toString());
+        }
         open = false;
         return true;
     }

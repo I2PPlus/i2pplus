@@ -120,11 +120,15 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
      * @param host the IRC server to connect to on the far side of the tunnel
      * @param port the port on that server to connect to
      * @param privkey the file holding this tunnel's private key, or null if the
+     *                destination comes from elsewhere
      * @param privkeyname the name to show for the key in the console and logs
      * @param l the logging implementation shared with the owning I2PTunnel
      * @param notifyThis dispatcher told about connection events for this client
-     * @param tunnel the I2PTunnel this IRC client belongs to, whose client
+     * @param tunnel the I2PTunnel this IRC client tunnel server belongs to,
+     *               supplying the context, client options and host
      * @throws IllegalArgumentException if the I2PTunnel does not contain
+     *                                  usable I2CP configuration, or the key
+     *                                  file cannot be read
      */
 
     public I2PTunnelIRCServer(InetAddress host, int port, File privkey, String privkeyname, Logging l, EventDispatcher notifyThis, I2PTunnel tunnel) {
@@ -274,8 +278,12 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
         String hc;
 
         byte[] b = new byte[d.size() + this.cloakKey.length];
-        System.arraycopy(b, 0, d.toByteArray(), 0, d.size());
-        System.arraycopy(b, d.size(), this.cloakKey, 0, this.cloakKey.length);
+        // src, srcPos, dest, destPos, len — the destination bytes and the cloak
+        // key go INTO the hash buffer; the old argument order copied the fresh
+        // zeros out of it instead, hashing 48 zero bytes for every destination
+        // and overwriting cloakKey with zeros.
+        System.arraycopy(d.toByteArray(), 0, b, 0, d.size());
+        System.arraycopy(this.cloakKey, 0, b, d.size(), this.cloakKey.length);
         hc = Base32.encode(SHA256Generator.getInstance().calculateHash(b).getData());
 
         hf = Base32.encode(d.calculateHash().getData());
@@ -351,7 +359,7 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
      * Read a line terminated by newline, with a total read timeout.
      * <p>
      * Warning - strips \n but not \r
-     * Warning - 8KB line length limit as of 0.7.13, @throws IOException if exceeded
+     * Warning - 1KB line length limit (MAX_LINE_LENGTH) as of 0.7.13, @throws IOException if exceeded
      * Warning - not UTF-8.
      *
      * @param socket the socket to read one line from

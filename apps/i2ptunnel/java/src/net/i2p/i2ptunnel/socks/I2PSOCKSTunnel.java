@@ -44,8 +44,13 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
      */
     protected static final int INITIAL_SO_TIMEOUT = 30*1000;
 
-    /** Proxy settings by port, with a "default" entry for the rest */
-    private final HashMap<String, List<String>> proxies;  // port# + "" or "default" -> hostname list
+    /**
+     * Proxy settings by port, with a "default" entry for the rest.
+     * Replaced wholesale (never mutated in place) by parseOptions() on the
+     * config thread while connection threads read it — the volatile reference
+     * gives them a consistent snapshot.
+     */
+    private volatile Map<String, List<String>> proxies = new HashMap<>(2);
 
     /**
      * The HTTP auth realm presented to clients that authenticate.
@@ -127,12 +132,11 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
     public void optionsUpdated(I2PTunnel tunnel) {
         if (getTunnel() != tunnel)
             return;
-        proxies.clear();
         parseOptions();
         super.optionsUpdated(tunnel);
     }
 
-    /** Reads the proxy settings out of the tunnel's options. */
+    /** Reads the proxy settings out of the tunnel's options and swaps in the new map. */
     private void parseOptions() {
         Properties opts = getTunnel().getClientOptions();
         if (!opts.containsKey(PROP_PROXY_DEFAULT)) {
@@ -140,6 +144,7 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
             if (proxyList != null)
                 opts.setProperty(PROP_PROXY_DEFAULT, proxyList);
         }
+        Map<String, List<String>> newProxies = new HashMap<>(4);
         for (Map.Entry<Object, Object> e : opts.entrySet()) {
            String prop = (String)e.getKey();
            if ((!prop.startsWith(PROP_PROXY_PREFIX)) || prop.length() <= PROP_PROXY_PREFIX.length())
@@ -159,8 +164,9 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
                    _log.error(m);
                }
            }
-           proxies.put(port, proxyList);
+           newProxies.put(port, proxyList);
         }
+        proxies = newProxies;
     }
 
     /**
@@ -168,7 +174,7 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
      *
      * @return a map of port strings to proxy lists
      */
-    public HashMap<String, List<String>> getProxyMap() {return proxies;}
+    public Map<String, List<String>> getProxyMap() {return proxies;}
 
     /**
      * Get the default proxy list.
@@ -200,7 +206,11 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
      * @since 0.8.2
      */
     public I2PSocketOptions buildOptions(Properties overrides) {
-        Properties defaultOpts = getTunnel().getClientOptions();
+        // Merge into a copy — putAll on the tunnel's shared options wrote
+        // per-connection overrides (e.g. streaming.connectDelay) permanently
+        // into every consumer of getClientOptions().
+        Properties defaultOpts = new Properties();
+        defaultOpts.putAll(getTunnel().getClientOptions());
         defaultOpts.putAll(overrides);
         // delayed start
         verifySocketManager();

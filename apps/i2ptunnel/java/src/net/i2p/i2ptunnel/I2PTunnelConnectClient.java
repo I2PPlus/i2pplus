@@ -179,6 +179,10 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
         Outproxy outproxy = null;
         long requestId = __requestId.incrementAndGet();
         I2PSocket i2ps = null;
+        // True once a runner (I2PTunnelRunner or the outproxy runner) owns the
+        // sockets; every early return before that point must close the local
+        // socket here, or a scanner hitting the port leaks one fd per request.
+        boolean runnerStarted = false;
         try {
             s.setSoTimeout(INITIAL_SO_TIMEOUT);
             out = s.getOutputStream();
@@ -208,7 +212,15 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
                     method = line.substring(0, pos);
                     String request = line.substring(pos + 1);
 
-                    pos = request.indexOf(':');
+                    // A bracketed IPv6 literal ([::1]:443) has colons inside the
+                    // address; the port colon is the one after the closing bracket.
+                    int rbracket = request.startsWith("[") ? request.indexOf(']') : -1;
+                    if (rbracket > 0) {
+                        int after = request.indexOf(':', rbracket);
+                        pos = after > 0 ? after : rbracket + 1;
+                    } else {
+                        pos = request.indexOf(':');
+                    }
                     if (pos == -1) {
                        pos = request.indexOf(' ');
                     } else {
@@ -330,6 +342,10 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
                 Thread t = new I2PTunnelOutproxyRunner(s, outSocket, sockLock, null, response, onTimeout);
                 // Execute task (inline when called from unlimited thread pool)
                 executeTask(t);
+                // The runner owns both sockets from here; set only after
+                // executeTask() so a pool rejection still falls through to the
+                // finally cleanup below.
+                runnerStarted = true;
                 return;
             }
 
@@ -382,6 +398,10 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
             }
             // Execute task (inline when called from unlimited thread pool)
             executeTask(t);
+            // The runner owns both sockets from here; set only after
+            // executeTask() so a pool rejection still falls through to the
+            // finally cleanup below.
+            runnerStarted = true;
         } catch (IOException ex) {
             _log.info(getPrefix(requestId) + "Error trying to connect", ex);
             handleClientException(ex, out, targetRequest, usingWWWProxy, currentProxy, requestId);
@@ -393,9 +413,17 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
             _log.info(getPrefix(requestId) + "Error trying to connect", ex);
             handleClientException(ex, out, targetRequest, usingWWWProxy, currentProxy, requestId);
         } finally {
-            // Socket cleanup is handled by the runner's own finally block.
-            // No action needed here — the runner closes both the local socket
-            // and the I2P socket when it completes.
+            // Once a runner started, its own finally closes both the local
+            // socket and the I2P socket. Every early return before that point
+            // (bad protocol, no outproxy, auth refusal, unknown destination)
+            // must close them here, or each refused request leaks an fd.
+            if (!runnerStarted) {
+                closeSocket(s);
+                if (i2ps != null) {
+                    try {i2ps.close();}
+                    catch (IOException ioe) { /* ignored */ }
+                }
+            }
         }
     }
 

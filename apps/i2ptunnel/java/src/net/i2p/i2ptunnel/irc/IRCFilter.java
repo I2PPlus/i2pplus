@@ -96,13 +96,12 @@ abstract class IRCFilter {
 
 
         if ("PONG".equals(command)) {
-            // Turn the received ":irc.freshcoffee.i2p PONG irc.freshcoffee.i2p :127.0.0.1"
-            // into ":127.0.0.1 PONG 127.0.0.1 " so that the caller can append the client's extra parameter.
-            // The echoed token is whatever serverLocation the client itself sent (see
-            // filterPing), so a client is satisfied whatever address it believes it has,
-            // and no real proxy address is disclosed. If we haven't PINGed them, or the
-            // PING we sent isn't something we know how to filter, expectedPong is blank
-            // and the line passes through unchanged.
+            // Replace the server's PONG (e.g. ":irc.freshcoffee.i2p PONG irc.freshcoffee.i2p :12345678")
+            // with the exact reply filterPing staged for our rewritten PING — "PONG <serverLocation> :<nonce>"
+            // built from what the client itself sent, so a client is satisfied whatever address it
+            // believes it has, and no real proxy address is disclosed. The caller appends only the
+            // line terminator. If we haven't PINGed them, or the PING we sent isn't something we
+            // know how to filter, expectedPong is blank and the line passes through unchanged.
             String pong = expectedPong.length() > 0 ? expectedPong.toString() : s;
             expectedPong.setLength(0);
             return pong;
@@ -115,6 +114,8 @@ abstract class IRCFilter {
 
         // Allow PRIVMSG, but block CTCP.
         if("PRIVMSG".equals(command) || "NOTICE".equals(command)) {
+            if (idx >= field.length)
+                return null;  // bare PRIVMSG/NOTICE, nothing to filter
             String msg;
             msg = field[idx++];
             if (idx < field.length)
@@ -333,6 +334,8 @@ abstract class IRCFilter {
             return filterUser(s, field, idx);
 
         if ("PART".equals(command)) {
+            if (idx >= field.length)
+                return null;  // bare PART, no channel to rewrite
             // hide client message
             return "PART " + field[idx] + " :leaving";
         }

@@ -45,10 +45,12 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     protected long readTimeout = DEFAULT_READ_TIMEOUT;
     /** Whether DCC connections are supported. */
     private final boolean _dccEnabled;
-    /** Serves inbound DCC connections, if any. */
-    private I2PTunnelDCCServer _DCCServer;
-    /** Opens outbound DCC connections, if any. */
-    private DCCClientManager _DCCClientManager;
+    /** Serves inbound DCC connections, if any. Volatile: created on the filter thread, closed under the outer monitor. */
+    private volatile I2PTunnelDCCServer _DCCServer;
+    /** Opens outbound DCC connections, if any. Volatile as above. */
+    private volatile DCCClientManager _DCCClientManager;
+    /** True once close() has run, so the lazy DCC factories do not resurrect a closed pair. */
+    private volatile boolean _dccClosed;
 
     /**
      * Client option key enabling the DCC file transfer manager.
@@ -446,8 +448,11 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     @Override
     public void startRunning() {
         super.startRunning();
-        if (open)
+        if (open) {
+            // A reopened tunnel may create fresh DCC helpers again
+            _dccClosed = false;
             _context.portMapper().register(PortMapper.SVC_IRC, getTunnel().listenHost, getLocalPort());
+        }
     }
 
     /**
@@ -459,6 +464,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
         if (reg == getLocalPort())
             _context.portMapper().unregister(PortMapper.SVC_IRC);
         synchronized(this) {
+            _dccClosed = true;
             if (_DCCServer != null) {
                 _DCCServer.close(forced);
                 _DCCServer = null;
@@ -527,7 +533,13 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     @Override
     public int newOutgoing(byte[] ip, int port, String type) {
         I2PTunnelDCCServer server;
-        synchronized(this) {
+        // Monitor on the outer tunnel, the same one close() holds — the inner
+        // class's own monitor let a factory race resurrect a closed server.
+        synchronized (I2PTunnelIRCClient.this) {
+            if (_dccClosed) {
+                // Tunnel closed mid-line: -1 makes the filter drop the DCC line
+                return -1;
+            }
             if (_DCCServer == null) {
                 if (_log.shouldInfo())
                     _log.info("[IRC Client] Starting DCC Server...");
@@ -550,7 +562,10 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     @Override
     public int newIncoming(String b32, int port, String type) {
         DCCClientManager tracker;
-        synchronized(this) {
+        synchronized (I2PTunnelIRCClient.this) {
+            if (_dccClosed) {
+                return -1;
+            }
             if (_DCCClientManager == null) {
                 if (_log.shouldInfo())
                     _log.info("[IRC Client] Starting DCC Client...");

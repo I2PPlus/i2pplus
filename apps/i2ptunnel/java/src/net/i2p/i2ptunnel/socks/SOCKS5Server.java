@@ -372,9 +372,13 @@ class SOCKS5Server extends SOCKSServer {
             break;
 
             case AddressType.IPV6:
+                // RFC 1928: the 16 BND.ADDR bytes are present for ANY command;
+                // skipping them for UDP_ASSOCIATE left them in the stream, so the
+                // port was parsed from address bytes and every later command in
+                // the UDP loop desynced. Always consume them.
+                byte[] ip = new byte[16];
+                in.readFully(ip);
                 if (command != Command.UDP_ASSOCIATE) {
-                    byte[] ip = new byte[16];
-                    in.readFully(ip);
                     connHostName = Addresses.toString(ip);
                     if (_log.shouldWarn())
                         _log.warn("IPV6 address type in request! Is your client secure?");
@@ -530,26 +534,46 @@ class SOCKS5Server extends SOCKSServer {
             throw new SOCKSException("Connection error", e);
         }
 
+        I2PSocket destSock = null;
         try {
-            I2PSocket destSock = connectToDestination(t, out);
+            destSock = connectToDestination(t, out);
             confirmConnection();
             _log.debug("Connection confirmed - exchanging data...");
             return destSock;
         } catch (DataFormatException e) {
             if (_log.shouldWarn())
                 _log.warn("SOCKS error", e);
+            closeDestSocket(destSock);
             sendFailureReply(Reply.HOST_UNREACHABLE, out);
             throw new SOCKSException("Error in destination format");
         } catch (IOException e) {
             if (_log.shouldWarn())
                 _log.warn("SOCKS error", e);
+            // confirmConnection() throws SOCKSException (an IOException) after
+            // the destination socket is already open — a local client that died
+            // between handshake and success reply must not leave it connected.
+            closeDestSocket(destSock);
             sendFailureReply(Reply.HOST_UNREACHABLE, out);
             throw new SOCKSException("Connection error", e);
         } catch (I2PException e) {
             if (_log.shouldWarn())
                 _log.warn("SOCKS error", e);
+            closeDestSocket(destSock);
             sendFailureReply(Reply.HOST_UNREACHABLE, out);
             throw new SOCKSException("Connection error", e);
+        }
+    }
+
+    /**
+     * Close a destination I2P socket left open when the SOCKS handshake fails
+     * after connecting, so a dead local client cannot accumulate idle streams.
+     *
+     * @param destSock the socket to close, null is ignored
+     */
+    private static void closeDestSocket(I2PSocket destSock) {
+        if (destSock != null) {
+            try {destSock.close();}
+            catch (IOException ioe) { /* ignored */ }
         }
     }
 
@@ -606,8 +630,9 @@ class SOCKS5Server extends SOCKSServer {
                     sendFailureReply(Reply.CONNECTION_NOT_ALLOWED_BY_RULESET, out);
                     throw new SOCKSException(err);
                 }
-                // Sticky proxy selection: reuse the same proxy for the same host,
-                // skipping recently failed proxies
+                // Sticky proxy selection: reuse the same proxy for the same
+                // host; on failure the cached entry is dropped so the next
+                // connection re-picks from the list.
                 String cached = _proxyCache.get(connHostName);
                 String proxy;
                 if (cached != null && !proxies.contains(cached)) {
@@ -680,30 +705,36 @@ class SOCKS5Server extends SOCKSServer {
                 tunnel.startRunning();
             }
         }
-        while (true) {
-            // Set it up. connHostName and connPort are the client's info.
-            InetAddress ia = null;
-            try {
-                ia = InetAddress.getByAddress(connHostName, dummyIP);
-            } catch (UnknownHostException uhe) { /* ignored */ } // won't happen, no resolving done here
-            int myPort = tunnel.add(ia, connPort);
-            ports.add(Integer.valueOf(myPort));
-            try {
-                sendRequestReply(Reply.SUCCEEDED, AddressType.IPV4, InetAddress.getByName("127.0.0.1"), null, myPort, out);
-            } catch (IOException ioe) { break; }
+        // try/finally: tunnel.add() binds a relay DatagramSocket and a bind
+        // failure throws RuntimeException out of the loop — without the finally
+        // the already-bound relays (and their entries in the static tunnel's
+        // port map) would leak for the router's lifetime.
+        try {
+            while (true) {
+                // Set it up. connHostName and connPort are the client's info.
+                InetAddress ia = null;
+                try {
+                    ia = InetAddress.getByAddress(connHostName, dummyIP);
+                } catch (UnknownHostException uhe) { /* ignored */ } // won't happen, no resolving done here
+                int myPort = tunnel.add(ia, connPort);
+                ports.add(Integer.valueOf(myPort));
+                try {
+                    sendRequestReply(Reply.SUCCEEDED, AddressType.IPV4, InetAddress.getByName("127.0.0.1"), null, myPort, out);
+                } catch (IOException ioe) { break; }
 
-            // Block for the next control command; anything but another
-            // ASSOCIATE ends the loop and closes the UDP relays.
-            try {
-                int command = manageRequest(in, out);
-                // don't do this...
-                if (command != Command.UDP_ASSOCIATE)
-                    break;
-            } catch (IOException ioe) { break; }
+                // Block for the next control command; anything but another
+                // ASSOCIATE ends the loop and closes the UDP relays.
+                try {
+                    int command = manageRequest(in, out);
+                    // don't do this...
+                    if (command != Command.UDP_ASSOCIATE)
+                        break;
+                } catch (IOException ioe) { break; }
+            }
+        } finally {
+            for (Integer i : ports)
+                tunnel.remove(i);
         }
-
-        for (Integer i : ports)
-            tunnel.remove(i);
 
         // Prevent I2PSocksTunnel from calling getDestinationI2PSocket() above
         // to create a streaming lib connection...

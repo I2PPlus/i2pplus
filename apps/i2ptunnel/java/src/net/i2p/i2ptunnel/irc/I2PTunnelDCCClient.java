@@ -29,8 +29,8 @@ public class I2PTunnelDCCClient extends I2PTunnelClientBase {
     private final String _dest;
     /** Port the DCC peer listens on. */
     private final int _remotePort;
-    /** When this client's tunnel stops being kept alive, in ms. */
-    private long _expires;
+    /** When this client's tunnel stops being kept alive, in ms. Volatile: the runner writes it on stop, the filter and expiry sweep read it. */
+    private volatile long _expires;
 
     /** How long an inbound DCC tunnel is kept - 30 minutes. */
     private static final long INBOUND_EXPIRE = 30*(long) 60*1000;

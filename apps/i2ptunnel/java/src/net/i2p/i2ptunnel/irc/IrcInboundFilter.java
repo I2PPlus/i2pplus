@@ -21,7 +21,7 @@ public class IrcInboundFilter implements Runnable {
     private final Socket local;
     /** The I2P socket to the IRC server. */
     private final I2PSocket remote;
-    /** The PONG reply awaited from the client. */
+    /** Holds the PONG token expected back from the IRC server, staged by the outbound filter's PING rewrite. */
     private final StringBuffer expectedPong;
     /** Logger for this class. */
     private final Log _log;

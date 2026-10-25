@@ -138,6 +138,12 @@ public class I2PTunnelDCCServer extends I2PTunnelServer {
                 _log.error("Error relaying incoming DCC connection to IRC client at " + local.ia + ':' + local.port, ex);
             }
         } catch (IOException ex) {
+            // Non-SocketException failures (e.g. InterruptedIOException while the
+            // IRC client is shutting down) must not leave the peer's accepted
+            // I2P socket open with no relay and no close.
+            try {
+                socket.close();
+            } catch (IOException ioe) { /* ignored */ }
             _log.error("Error while waiting for I2PConnections", ex);
         }
     }
@@ -153,6 +159,7 @@ public class I2PTunnelDCCServer extends I2PTunnelServer {
     public boolean close(boolean forced) {
         _outgoing.clear();
         _active.clear();
+        _resume.clear();
         for (I2PSocket s : _sockList) {
             try {
                 s.close();
@@ -258,9 +265,16 @@ public class I2PTunnelDCCServer extends I2PTunnelServer {
         return -1;
     }
 
-    /** Drops the expired outgoing DCC connections. */
+    /** Drops the expired outgoing DCC connections, including unanswered RESUME reservations. */
     private void expireOutbound() {
         for (Iterator<LocalAddress> iter = _outgoing.values().iterator(); iter.hasNext(); ) {
+            LocalAddress a = iter.next();
+            if (a.expire < getTunnel().getContext().clock().now())
+                iter.remove();
+        }
+        // A RESUME whose peer never sends ACCEPT would otherwise sit in _resume
+        // for the tunnel's lifetime — unbounded growth outside the MAX_OUTGOING caps.
+        for (Iterator<LocalAddress> iter = _resume.values().iterator(); iter.hasNext(); ) {
             LocalAddress a = iter.next();
             if (a.expire < getTunnel().getContext().clock().now())
                 iter.remove();

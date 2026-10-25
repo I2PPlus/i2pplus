@@ -3,6 +3,7 @@ package net.i2p.i2ptunnel.irc;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.client.streaming.I2PSocketManager;
 import net.i2p.data.Base32;
 import net.i2p.i2ptunnel.I2PTunnel;
@@ -45,8 +46,8 @@ public class DCCClientManager extends EventReceiver {
     /** Key is the DCC client's local port. */
     private final ConcurrentHashMap<Integer, I2PTunnelDCCClient> _complete;
 
-    /** Counter for generating unique DCC session ids. */
-    private static long id;
+    /** Counter for generating unique DCC session ids. Atomic: managers for several IRC tunnels share it. */
+    private static final AtomicLong _nextId = new AtomicLong();
 
     /** Most inbound DCC tunnels waiting to be accepted. */
     private static final int MAX_INCOMING_PENDING = 10;
@@ -126,7 +127,7 @@ public class DCCClientManager extends EventReceiver {
             return -1;
         expireInbound();
         if (_incoming.size() >= MAX_INCOMING_PENDING ||
-            _active.size() >= MAX_INCOMING_PENDING) {
+            _active.size() >= MAX_INCOMING_ACTIVE) {
             _log.error("Too many incoming DCC, max is " + MAX_INCOMING_PENDING +
                        '/' + MAX_INCOMING_ACTIVE + " pending/active");
             return -1;
@@ -135,7 +136,7 @@ public class DCCClientManager extends EventReceiver {
             // Transparent tunnel used for all types...
             // Do we need to do any filtering for chat?
             I2PTunnelDCCClient cTunnel = new I2PTunnelDCCClient(b32, localPort, port, l, sockMgr,
-                                                                _dispatch, _tunnel, ++id);
+                                                                _dispatch, _tunnel, _nextId.incrementAndGet());
             cTunnel.attachEventDispatcher(this);
             cTunnel.startRunning();
             int lport = cTunnel.getLocalPort();
