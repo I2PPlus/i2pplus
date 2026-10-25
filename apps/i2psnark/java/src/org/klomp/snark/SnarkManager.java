@@ -158,6 +158,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private UpdateHandler _uhandler;
     /** Timer stopping idle torrents. */
     private SimpleTimer2.TimedEvent _idleChecker;
+    /**
+     * The destination cycling event, kept so stop() can cancel its chain.
+     * Volatile: written by start(), cancelled by stop() from another thread.
+     */
+    private volatile SimpleTimer2.TimedEvent _destCycle;
 
     /**
      * Max concurrent DHT lookup threads (zzzot lookups).
@@ -639,6 +644,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             return;
         }
         sleep(startDelay(_context.random()));
+        // an interrupt during the delay means shutdown; the auto-start loops
+        // check _running, so bail out instead of starting into a stopped manager
+        if (!_running) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     /**
@@ -653,7 +663,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * Sleep, ignoring interruption.
+     * Sleep, restoring the interrupt flag on interruption so callers' stop
+     * checks (and any later sleep) end the wait early instead of sleeping
+     * out the full delay during shutdown.
      *
      * @param ms delay in milliseconds
      * @since 0.9.71+
@@ -661,7 +673,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private static void sleep(long ms) {
         try {
             Thread.sleep(ms);
-        } catch (InterruptedException ie) { /* ignored */ }
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     /** Appended to the old flat config file name to form the config directory name. */
@@ -879,7 +893,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
         _idleChecker = new IdleChecker(this, _peerCoordinatorSet);
         _idleChecker.schedule(3 * (long) 60 * 1000);
-        new DestCycle().schedule(DEST_CYCLE_INTERVAL + _context.random().nextInt(DEST_CYCLE_JITTER));
+        _destCycle = new DestCycle();
+        _destCycle.schedule(DEST_CYCLE_INTERVAL + _context.random().nextInt(DEST_CYCLE_JITTER));
         if (!_context.isRouterContext()) {
             String lang = _config.getProperty(PROP_LANG);
             if (lang != null) {
@@ -964,9 +979,16 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
         _running = false;
         _stopping = true;
-        _monitor.interrupt();
+        if (_monitor != null) {
+            _monitor.interrupt();
+        }
         _connectionAcceptor.halt();
-        _idleChecker.cancel();
+        if (_idleChecker != null) {
+            _idleChecker.cancel();
+        }
+        if (_destCycle != null) {
+            _destCycle.cancel();
+        }
         _snarkScheduler.shutdownNow();
         stopAllTorrents(true);
         ClientAppManager cmgr = _context.clientAppManager();
@@ -1094,6 +1116,29 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private long lastAddedMessageTimestamp;
     /** Text of the last status message added. */
     private String lastAddedMessage;
+    /** Guards the dedupe pair above; addMessage is called from many threads. */
+    private final Object _messageDedupeLock = new Object();
+
+    /**
+     * Update the duplicate-suppression state and report whether this message
+     * should be queued: the same text within the same second is suppressed.
+     * The check and the update must be atomic, or concurrent callers both
+     * see "different" and queue the message twice, or leave a torn pair.
+     *
+     * @param currentTime the current time in seconds
+     * @param message the message text, not null
+     * @return true if the message should be added
+     * @since 0.9.72+
+     */
+    boolean shouldQueueMessage(long currentTime, String message) {
+        synchronized (_messageDedupeLock) {
+            boolean add = lastAddedMessageTimestamp != currentTime
+                    || !message.equals(lastAddedMessage);
+            lastAddedMessageTimestamp = currentTime;
+            lastAddedMessage = message;
+            return add;
+        }
+    }
 
     /**
      * Escape a message for HTML display, preserving intentional '&amp;nbsp;' spacers.
@@ -1117,11 +1162,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     public void addMessage(String message) {
         long currentTime = System.currentTimeMillis() / 1000;
-        if (lastAddedMessageTimestamp != currentTime || !lastAddedMessage.equals(message)) {
+        if (shouldQueueMessage(currentTime, message)) {
             addMessageNoEscape(escapeMessage(message));
         }
-        lastAddedMessageTimestamp = currentTime;
-        lastAddedMessage = message;
         if (_log.shouldInfo()) {
             _log.info(message);
         }
@@ -1135,11 +1178,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     public void addMessageNoEscape(String message) {
         long currentTime = System.currentTimeMillis() / 1000;
-        if (lastAddedMessageTimestamp != currentTime || !lastAddedMessage.equals(message)) {
+        if (shouldQueueMessage(currentTime, message)) {
             _messages.addMessageNoEscape(getTime() + "&nbsp; " + message);
         }
-        lastAddedMessageTimestamp = currentTime;
-        lastAddedMessage = message;
         if (_log.shouldInfo()) {
             _log.info(message);
         }
@@ -2188,6 +2229,28 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     * Whether a theme name is one of the available themes. Config ingress
+     * only: the value is rendered into a JS string literal and a class
+     * attribute, so a name outside the available set must never be stored.
+     *
+     * @param theme the requested theme name, may be null
+     * @param themes the available themes from {@link #getThemes()}
+     * @return true if the theme is available and may be stored
+     * @since 0.9.72+
+     */
+    static boolean isAvailableTheme(String theme, String[] themes) {
+        if (theme == null) {
+            return false;
+        }
+        for (String t : themes) {
+            if (t.equals(theme)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Call from DirMonitor since {@link #loadConfig(String)} is called before
      * router I2CP is up. We also use this as a test that the router is there for
      * standalone.
@@ -3157,9 +3220,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             changed = true;
         }
 
-        if (theme != null && !theme.equals(_config.getProperty(PROP_THEME))) {
-            _config.setProperty(PROP_THEME, theme);
-            changed = true;
+        if (theme != null && isAvailableTheme(theme, getThemes())) {
+            if (!theme.equals(_config.getProperty(PROP_THEME))) {
+                _config.setProperty(PROP_THEME, theme);
+                changed = true;
+            }
         }
 
         if (_util.collapsePanels() != collapsePanels) {
@@ -4560,12 +4625,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * Remove lookup torrents from _snarks that have been running longer than
-     * {@link #LOOKUP_STALE_MS}. Called periodically after a lookup is submitted.
-     *
-     * @since 0.9.71+
-     */
-    /**
      * Is this one of our own metadata-lookup torrents, as opposed to a user's?
      *
      * <p>Pure decision, separated from {@link #cleanupStaleLookupTorrents} so it can be
@@ -4599,7 +4658,12 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         return isLookupTorrent(name, basePath) && (now - createdAt) > LOOKUP_STALE_MS;
     }
 
-    /** Removes torrents left by abandoned magnet lookups. */
+    /**
+     * Remove lookup torrents from _snarks that have been running longer than
+     * {@link #LOOKUP_STALE_MS}. Called periodically after a lookup is submitted.
+     *
+     * @since 0.9.71+
+     */
     private void cleanupStaleLookupTorrents() {
         long now = System.currentTimeMillis();
         // Snapshot the map under its monitor, then decide staleness with the monitor
@@ -6818,6 +6882,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             if (started++ > 0) {
                 // No-op in single-dest mode or when randomize startup delay is off
                 multiDestStartDelay();
+                if (!_running) {
+                    break; // manager stopped during the delay
+                }
             }
             // Start each pool on its own thread: a pool's session creation
             // blocks until its tunnels build, and one slow pool must not hold
@@ -7077,6 +7144,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         /** Rotates the destination used for announces. */
         private DestCycle() {}
         public void timeReached() {
+            // stop() ends the chain; without this the self-reschedule keeps
+            // the whole manager (and every Snark) reachable after shutdown
+            if (_stopping) {
+                return;
+            }
             try {
                 cycleDestinations();
             } finally {
@@ -7119,6 +7191,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     boolean newPool = (pool < 0) || seenPools.add(pool);
                     if (started++ > 0 && newPool) {
                         multiDestStartDelay();
+                        // _running is shadowed by this class's list - check the manager's flag
+                        if (!SnarkManager.this._running) {
+                            break; // manager stopped during the delay
+                        }
                     }
                 }
                 snark.setStarting();
