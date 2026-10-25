@@ -211,8 +211,11 @@ build_jetty() {
   # (JDK 9+) pins the bootclasspath to the target platform; on JDK 8 only
   # -source/-target are available. Probing beats assuming a JDK version, and a
   # compiler that understands neither must fail here rather than at javac.
+  # Probe with -help, not --help: JDK 8's javac rejects --help outright ("invalid
+  # flag"), which leaves nothing to grep and reads as a compiler with no flags;
+  # -help is accepted by every javac from 8 to 25.
   local javac_help
-  javac_help=$(javac --help 2>&1 || true)
+  javac_help=$(javac -help 2>&1 || true)
   if printf '%s\n' "$javac_help" | grep -q -- '--release'; then
     JAVAC_RELEASE="--release 8"
   elif printf '%s\n' "$javac_help" | grep -q -- '-source'; then
