@@ -99,6 +99,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private final Log _log;
     /** The tunable parameters, in registration order. */
     private final List<TunableParam> _params;
+    /**
+     * The same parameters keyed by name, built once after registration, for the
+     * cross-parameter invariant checks in {@link #enforceInvariants}.
+     */
+    private final Map<String, BaseParam> _paramsByName = new HashMap<String, BaseParam>();
+    /** Whether the unregistered-invariant-name warning has been emitted. */
+    private boolean _invariantGapWarned;
     /** The autotune settings read from the config. */
     private final AutotuneConfig _autotune;
     /** Transport worker thread params updated every 5s instead of the 15s cycle. */
@@ -119,6 +126,72 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * every 5s = 10min).
      */
     static final int MAX_HISTORY = 120;
+
+    /**
+     * Cross-parameter ordering invariants, as {lower, upper} param-name pairs.
+     * <p>Each pair is tuned independently against its own feedback stat, so the
+     * hill-climber can drive the "lower" member to its ceiling while the "upper"
+     * member sits at its floor — a state no single param's range check can see.
+     * When the pair inverts, the code that consumes it degenerates: streaming's
+     * {@code computeRTO()} clamps to {@code [minResendDelay, maxResendDelay]},
+     * and an inverted pair clamps every RTO to a value below the path RTT, so
+     * every packet retransmits before its ACK can return.
+     * <p>Checked once per slow cycle; a violated pair resets both members to
+     * their factory defaults.
+     *
+     * @since 0.9.72+
+     */
+    static final String[][] ORDER_INVARIANTS = {
+        {"i2p.streaming.minResendDelay", "i2p.streaming.maxResendDelay"},
+        {"i2p.streaming.maxRTO", "i2p.streaming.maxResendDelay"},
+        {"i2p.streaming.initialResendDelay", "i2p.streaming.maxResendDelay"},
+        {"udp.peer.minRTO", "udp.peer.initRTO"},
+        {"udp.peer.initRTO", "udp.peer.maxRTO"},
+    };
+
+    /**
+     * Find the ordering invariants a set of parameter values violates.
+     * <p>Pure helper so the pairing logic is unit-testable without a router.
+     * A pair whose lower or upper member is not present in {@code values} is
+     * skipped — a param that is not registered (or not yet readable) cannot be
+     * said to violate anything.
+     *
+     * @param invariants pairs of {lower, upper} param names, see {@link #ORDER_INVARIANTS}
+     * @param values current value of each parameter, keyed by param name
+     * @return the violated pairs in table order; empty when every lower &lt;= upper
+     * @since 0.9.72+
+     */
+    static List<String[]> findInversions(String[][] invariants, Map<String, Integer> values) {
+        List<String[]> rv = new ArrayList<String[]>(invariants.length);
+        for (String[] pair : invariants) {
+            Integer lower = values.get(pair[0]);
+            Integer upper = values.get(pair[1]);
+            if (lower == null || upper == null)
+                continue;
+            if (lower.intValue() > upper.intValue())
+                rv.add(pair);
+        }
+        return rv;
+    }
+
+    /**
+     * Scale an observed round-trip time into a tuning floor for a timeout that
+     * must stay above it.
+     * <p>Pure helper so the no-data handling is unit-testable. A missing stat
+     * (NaN) or a zero/negative average means "no evidence", not "zero RTT", so
+     * the floor is 0 and the param's own range governs.
+     *
+     * @param observedRtt the observed RTT in ms, NaN when the stat has no events
+     * @param multiplier headroom to allow above the RTT, e.g. 1.5 for one and a half RTTs
+     * @return the floor in ms, or 0 when the RTT or the multiplier is unusable
+     * @since 0.9.72+
+     */
+    static int rttFloorMs(double observedRtt, double multiplier) {
+        if (Double.isNaN(observedRtt) || observedRtt <= 0 || multiplier <= 0)
+            return 0;
+        double floor = observedRtt * multiplier;
+        return floor > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) Math.round(floor);
+    }
 
     /** Stat prefix for per-stage CPU usage (pct of one core, 100 = full core). */
     static final String STAGE_STAT_PREFIX = "tuner.stageCpu.";
@@ -1249,6 +1322,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         _params.add(new LossyThresholdParam());
         _params.add(new MinHighCapPeersParam());
 
+        // Index the params by name for the cross-parameter invariant checks
+        for (TunableParam param : _params)
+            _paramsByName.put(param.getName(), (BaseParam) param);
+
         // Purge stale tuner.* keys from router.config (one-time cleanup)
         purgeOldTunerProps(ctx);
         // Per-stage CPU usage stats, one per tracked transport worker stage
@@ -1357,6 +1434,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             _lastHealthScore = health.getScore();
             _lastSubsystemScores = health.computeSubsystemScores();
             updateSlowParams(health);
+            // Heal cross-parameter inversions the independent hill-climbers can
+            // each stay inside their own range while creating together
+            enforceInvariants();
             refreshCryptoPoolSizes();
             // Compute derived test/build tuning values from subsystem scores
             computeTuningValues();
@@ -1390,6 +1470,86 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             } catch (Exception e) {
                 noteParamUpdateFailure(param, e);
             }
+        }
+    }
+
+    /**
+     * Reset the members of any ordering invariant the tuning has inverted.
+     * <p>Each parameter hill-climbs independently against its own stat, so a
+     * pair like {@code minResendDelay} / {@code maxResendDelay} can end up with
+     * the floor above the ceiling — both values legal for their own range, the
+     * combination fatal for the code that clamps between them. Streaming then
+     * clamps every RTO to the inverted pair's lower bound, which sits below the
+     * path RTT, so every packet retransmits before its ACK returns and the
+     * retransmit pressure the Tuner was reacting to keeps feeding itself.
+     * <p>Both members of a violated pair are reset to their factory defaults and
+     * persisted, so the healing survives a restart. Members the operator pinned
+     * with {@code .autoTuning = false} are left alone — the pin is deliberate,
+     * and the streaming setters clamp the pair into order at apply time anyway.
+     * <p>Runs on every slow cycle, so a poisoned {@code autotune.config} is
+     * healed within 15s of startup, before the first tunnels are built.
+     *
+     * @since 0.9.72+
+     */
+    private void enforceInvariants() {
+        Map<String, Integer> values = new HashMap<String, Integer>(16);
+        for (String[] pair : ORDER_INVARIANTS)
+            for (String name : pair)
+                if (!values.containsKey(name))
+                    readRuntimeValue(name, values);
+        List<String[]> violations = findInversions(ORDER_INVARIANTS, values);
+        if (violations.isEmpty())
+            return;
+        Set<BaseParam> reset = new HashSet<BaseParam>(violations.size() * 2);
+        for (String[] pair : violations) {
+            Integer lower = values.get(pair[0]);
+            Integer upper = values.get(pair[1]);
+            if (_log.shouldWarn())
+                _log.warn("Auto-Tuner parameters inverted -> Floor above ceiling" +
+                          "\n* " + pair[0] + ": " + lower + " * " + pair[1] + ": " + upper);
+            for (String name : pair) {
+                BaseParam bp = _paramsByName.get(name);
+                if (bp == null || !bp._autoTuning)
+                    continue;
+                reset.add(bp);
+            }
+        }
+        for (BaseParam bp : reset) {
+            try {
+                bp.resetToFactoryDefault("Ordering invariant violated");
+            } catch (RuntimeException re) {
+                if (_log.shouldWarn())
+                    _log.warn("Could not reset " + bp.getName() +
+                              " to its factory default", re);
+            }
+        }
+    }
+
+    /**
+     * Read one parameter's current runtime value into the invariant snapshot.
+     * <p>A parameter whose subsystem is still starting up throws out of
+     * {@code getRuntimeValue()}; leaving its key absent is what tells
+     * {@link #findInversions} to skip the pairs it belongs to, rather than
+     * comparing it against a half-initialized default. A name the tuner never
+     * registered is a defect in {@link #ORDER_INVARIANTS} itself, so it is
+     * reported once — otherwise a mistyped pair would silently never be checked.
+     *
+     * @param name the parameter's registered name
+     * @param values the snapshot being built; nothing is added when unreadable
+     */
+    private void readRuntimeValue(String name, Map<String, Integer> values) {
+        BaseParam bp = _paramsByName.get(name);
+        if (bp == null) {
+            if (!_invariantGapWarned) {
+                _invariantGapWarned = true;
+                _log.warn("Auto-Tuner invariant names an unregistered parameter -> " + name);
+            }
+            return;
+        }
+        try {
+            values.put(name, bp.getRuntimeValue());
+        } catch (RuntimeException re) {
+            // not readable yet
         }
     }
 
@@ -2960,6 +3120,33 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         /**
+         * Reset this param to its factory default and persist it, regardless of
+         * the current system health.
+         * <p>Used by the cross-parameter invariant check: an inverted pair is a
+         * defect in the tuning state itself, not a symptom of a degraded router,
+         * so it is repaired immediately instead of waiting for the health score
+         * to drop below {@link #DEGRADED_THRESHOLD}. Persisting the default also
+         * overwrites the poisoned value in autotune.config, so the same inversion
+         * cannot simply be reloaded on the next restart.
+         *
+         * @param why short capitalized clause naming the reason, logged after an arrow
+         * @since 0.9.72+
+         */
+        void resetToFactoryDefault(String why) {
+            int current = getRuntimeValue();
+            if (current == _factoryDefault)
+                return;
+            if (_log.shouldWarn())
+                _log.warn("Reset " + _name + " from " + current + " to factory default " +
+                          _factoryDefault + " -> " + why);
+            applyValue(_factoryDefault);
+            persistValue(_ctx, _factoryDefault);
+            _reverted = false;
+            _lastAppliedTarget = 0;
+            _noEffectReported = false;
+        }
+
+        /**
          * Dampen the computed target: reduce step size when system is degraded.
          *
          * @param target the target proposed by the param's feedback logic
@@ -2981,10 +3168,31 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         private boolean _clampWarned;
 
         /**
+         * Lower bound on this param's target derived from an observed round-trip
+         * time, for params that configure a timeout which must stay above the RTT
+         * it is guarding.
+         * <p>A param's own {@code [min, max]} range says nothing about the RTT of
+         * the path it applies to, so a hill-climber reacting to a transient can
+         * park a retransmit ceiling below one RTT — every packet then resends
+         * before its ACK can return, and the resulting retransmit pressure is the
+         * very signal that pushed the value down. Overriding this with an
+         * RTT-derived floor breaks that loop; the default 0 means "no RTT
+         * relationship, the range governs alone".
+         *
+         * @param ctx the router context to read the RTT stat from
+         * @return the floor in ms, 0 when this param has no RTT-derived floor
+         * @see #rttFloorMs(double, double)
+         * @since 0.9.72+
+         */
+        protected int rttFloor(RouterContext ctx) {
+            return 0;
+        }
+
+        /**
          * Hard clamp the target to [min, max] before comparison.
          *
          * @param target the proposed target, possibly outside the param's range
-         * @return the target limited to [_min, _max]
+         * @return the target limited to [_min, _max], raised to {@link #rttFloor}
          */
         private int clampTarget(int target) {
             // Hard clamp to [min, max] BEFORE comparison — prevents stale persisted values
@@ -3010,6 +3218,16 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                     _log.debug("Clamped target " + unclamped + " to " + target +
                                " for " + _name);
                 }
+            }
+            // Raise to the RTT-derived floor last, so a param whose range allows a
+            // sub-RTT value still cannot be tuned below the RTT it guards. Capped at
+            // _max so the floor can never push the value outside the param's range.
+            int floor = Math.min(rttFloor(_ctx), _max);
+            if (floor > target) {
+                if (_log.shouldDebug() && floor != getRuntimeValue())
+                    _log.debug("Raised target " + target + " to RTT floor " + floor +
+                               " for " + _name);
+                target = floor;
             }
             return target;
         }
@@ -7931,11 +8149,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Max retransmission timeout. Caps the upper bound for streaming RTO.
-     * <p>Primary signal: {@code stream.con.initialRTT.out} with
-     * {@code udp.sendConfirmTime} fallback. Cross-refs:
+     * <p>Primary signal: {@code stream.rtt} with {@code udp.sendConfirmTime}
+     * fallback for a lightly loaded router. Cross-refs:
      * {@code stream.con.sendDuplicateSize}, {@code stream.con.lifetimeRTT}.
      * <p>Increases when duplicates detected (congestion). Decreases when
-     * connection is healthy with low loss.
+     * connection is healthy with low loss, but never below {@link #rttFloor} —
+     * a ceiling under one RTT retransmits a healthy stream.
      *
      * @since 0.9.70+
      */
@@ -7946,7 +8165,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.streaming.maxRTO", "Streaming max RTO (ms)",
                   SUB_STREAMING,
 
-                  1000, 60000, 1000, "udp.sendConfirmTime", _context);
+                  1000, 60000, 1000, "stream.rtt", _context);
         }
 
         protected void applyValue(int value) {
@@ -7962,9 +8181,22 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return getObservedRTT(_context, _statName);
         }
 
+        /**
+         * One and a half streaming RTTs — the ceiling must stay above the path
+         * RTT or a backed-off RTO is already expired before its ACK returns.
+         *
+         * @param ctx the router context to read the RTT stat from
+         * @return the floor in ms, 0 while {@code stream.rtt} has no events
+         */
+        @Override
+        protected int rttFloor(RouterContext ctx) {
+            return rttFloorMs(getObservedRTT(ctx, _statName), 1.5);
+        }
+
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = udp.sendConfirmTime (ms, actual network RTT)
+            // observed = stream.rtt (ms, end-to-end streaming RTT; udp.sendConfirmTime
+            //            only as the lightly-loaded fallback in getObservedRTT())
             // Cross-refs: stream.con.sendDuplicateSize (retransmit pressure),
             //             transport.sendMessageFailureLifetime (congestion)
             double lossRate = getStreamingLossRate(_context);
@@ -8081,9 +8313,21 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return getObservedRTT(_context, _statName);
         }
 
+        /**
+         * One and a half streaming RTTs — this is the ceiling the computed RTO is
+         * clamped to, so a ceiling below one RTT retransmits every packet.
+         *
+         * @param ctx the router context to read the RTT stat from
+         * @return the floor in ms, 0 while {@code stream.rtt} has no events
+         */
+        @Override
+        protected int rttFloor(RouterContext ctx) {
+            return rttFloorMs(getObservedRTT(ctx, _statName), 1.5);
+        }
+
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = udp.sendConfirmTime (ms, actual network RTT)
+            // observed = stream.rtt (ms, end-to-end streaming RTT)
             // Cross-refs: stream.con.sendDuplicateSize (retransmit pressure),
             //             stream.sendsBeforeAck (ACK efficiency),
             //             transport.sendMessageFailureLifetime (congestion)
@@ -8205,7 +8449,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = udp.sendConfirmTime (ms, actual network RTT)
+            // observed = stream.rtt (ms, end-to-end streaming RTT)
             // Cross-refs: stream.con.sendDuplicateSize (spurious retransmit rate),
             //             transport.sendMessageFailureLifetime (congestion)
             double lossRate = getStreamingLossRate(_context);
@@ -8714,9 +8958,22 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return getObservedRTT(_context, _statName);
         }
 
+        /**
+         * One streaming RTT — the first retransmit timer must not fire before the
+         * first ACK of a healthy path can come back, or every connection looks
+         * lossy.
+         *
+         * @param ctx the router context to read the RTT stat from
+         * @return the floor in ms, 0 while {@code stream.rtt} has no events
+         */
+        @Override
+        protected int rttFloor(RouterContext ctx) {
+            return rttFloorMs(getObservedRTT(ctx, _statName), 1.0);
+        }
+
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = stream.con.initialRTT.out (RTT, ms)
+            // observed = stream.rtt (ms, end-to-end streaming RTT)
             // Cross-refs: sendsBeforeAck (ACK efficiency),
             //             sendDuplicateSize (spurious retransmit rate),
             //             sendMessageFailureLifetime (congestion)
@@ -11685,6 +11942,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
+        /**
+         * One and a half peer-confirm RTTs — a peer whose confirmations take
+         * {@code n} ms cannot have its retransmit ceiling parked below {@code n}.
+         *
+         * @param ctx the router context to read the RTT stat from
+         * @return the floor in ms, 0 while {@code udp.sendConfirmTime} has no events
+         */
+        @Override
+        protected int rttFloor(RouterContext ctx) {
+            return rttFloorMs(getAdditionalStat(ctx, _statName), 1.5);
+        }
+
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             double failures = getAdditionalStat(_context, "udp.sendExpired");
@@ -13710,6 +13979,17 @@ protected int computeTarget(double observed) {
             return (weightSum > 0) ? Math.pow(product, 1.0 / weightSum) : 1.0;
         }
 
+        /**
+         * Per-factor weights for the composite in {@link #compute()}, in the same
+         * order as the factors there: job lag, build success, send failure, build
+         * storms, latency, ghost peers, streaming. They must sum to 1.0 — the
+         * composite renormalizes over the weights that have data, so a table that
+         * does not sum to 1.0 silently rescales every factor's influence.
+         *
+         * @since 0.9.72+
+         */
+        static final double[] HEALTH_WEIGHTS = { 0.15, 0.15, 0.10, 0.10, 0.25, 0.10, 0.15 };
+
         /** Scores every subsystem and combines them into the health score. */
         private void compute() {
             // Defer assessment during startup — too few events = unreliable
@@ -13719,11 +13999,10 @@ protected int computeTarget(double observed) {
             }
             double[] factors = {
                 scoreJobLag(), scoreBuildSuccess(), scoreSendFailure(),
-                scoreBuildStorms(), scoreLatency(), scoreGhostPeers()
+                scoreBuildStorms(), scoreLatency(), scoreGhostPeers(),
+                scoreStreaming()
             };
-            // jobLag, buildSuccess, sendFailure, buildStorms, latency, ghosts
-            double[] weights = { 0.20, 0.15, 0.15, 0.10, 0.30, 0.10 };
-            _score = compositeScore(factors, weights);
+            _score = compositeScore(factors, HEALTH_WEIGHTS);
         }
 
         /**
