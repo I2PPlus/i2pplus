@@ -34,8 +34,12 @@
     /*
      * These are four keys that are generated automatically on first save, and we want to persist
      * in i2ptunnel.config, but don't want to show clogging up the custom options form.
+     * The form key token must be bound before the keys are decrypted on POST.
      */
-    String key = editBean.getKey1(curTunnel);
+    String key = editBean.getFormKeyToken(curTunnel);
+%>
+<input type=hidden name="formKeyToken" value="<%=key%>">
+<%  key = editBean.getKey1(curTunnel);
     if (key != null && key.length() > 0) {
 %>
 <input type=hidden name="key1" value="<%=key%>">

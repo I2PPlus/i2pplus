@@ -470,7 +470,7 @@ public class EditBean extends IndexBean {
      */
     public String getKey1(int tunnel) {
         String v = _helper.getInboundRandomKey(tunnel);
-        return encrypt(tunnel, "inbound.randomKey", v);
+        return encrypt(getFormKeyToken(tunnel), "inbound.randomKey", v);
     }
 
     /**
@@ -481,7 +481,7 @@ public class EditBean extends IndexBean {
      */
     public String getKey2(int tunnel) {
         String v = _helper.getOutboundRandomKey(tunnel);
-        return encrypt(tunnel, "outbound.randomKey", v);
+        return encrypt(getFormKeyToken(tunnel), "outbound.randomKey", v);
     }
 
     /**
@@ -492,7 +492,7 @@ public class EditBean extends IndexBean {
      */
     public String getKey3(int tunnel) {
         String v = _helper.getLeaseSetSigningPrivateKey(tunnel);
-        return encrypt(tunnel, "i2cp.leaseSetSigningPrivateKey", v);
+        return encrypt(getFormKeyToken(tunnel), "i2cp.leaseSetSigningPrivateKey", v);
     }
 
     /**
@@ -503,7 +503,7 @@ public class EditBean extends IndexBean {
      */
     public String getKey4(int tunnel) {
         String v = _helper.getLeaseSetPrivateKey(tunnel);
-        return encrypt(tunnel, "i2cp.leaseSetPrivateKey", v);
+        return encrypt(getFormKeyToken(tunnel), "i2cp.leaseSetPrivateKey", v);
     }
 
     /**
@@ -845,7 +845,7 @@ public class EditBean extends IndexBean {
     /**
      * The POST check time for the tunnel.
      * @param tunnel index of the tunnel in the configured list
-     * @return the window the posts are counted over, in seconds
+     * @return the window the posts are counted over, in minutes
      * @since 0.9.9
      */
     public int getPostCheckTime(int tunnel) {
@@ -855,7 +855,7 @@ public class EditBean extends IndexBean {
     /**
      * The POST ban time for the tunnel.
      * @param tunnel index of the tunnel in the configured list
-     * @return the ban length for the offending source, in seconds
+     * @return the ban length for the offending source, in minutes
      * @since 0.9.9
      */
     public int getPostBanTime(int tunnel) {
@@ -865,7 +865,7 @@ public class EditBean extends IndexBean {
     /**
      * The POST total ban time for the tunnel.
      * @param tunnel index of the tunnel in the configured list
-     * @return the ban length for all sources, in seconds
+     * @return the ban length for all sources, in minutes
      * @since 0.9.9
      */
     public int getPostTotalBanTime(int tunnel) {

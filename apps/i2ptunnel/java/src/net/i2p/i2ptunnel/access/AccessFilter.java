@@ -199,9 +199,15 @@ class AccessFilter implements StatefulConnectionFilter {
             knownDests.keySet().retainAll(tmp.keySet());
             for (Map.Entry<Hash, DestTracker> e : tmp.entrySet()) {
                 Hash newHash = e.getKey();
-                if (knownDests.containsKey(newHash))
-                    continue;
-                knownDests.put(newHash, e.getValue());
+                DestTracker existing = knownDests.get(newHash);
+                if (existing == null) {
+                    knownDests.put(newHash, e.getValue());
+                } else if (!existing.getThreshold().equals(e.getValue().getThreshold())) {
+                    // The rule for this destination changed (e.g. 15/5 explicit
+                    // -> deny). The threshold is final in DestTracker, so keep
+                    // the old tracker means the edit never takes effect.
+                    knownDests.put(newHash, e.getValue());
+                }
             }
         }
 
@@ -409,6 +415,10 @@ class AccessFilter implements StatefulConnectionFilter {
         public void timeReached() {
             if (!timersRunning.get())
                 return;
+            // Capture THIS syncer: if stop()/start() replaces it while the
+            // disk task is queued, rescheduling the *current* syncer from the
+            // old task's finally would double-schedule it.
+            final Syncer self = this;
             DISK_WRITER.submit(new Runnable() {
                 @Override
                 public void run() {
@@ -420,9 +430,9 @@ class AccessFilter implements StatefulConnectionFilter {
                         log.log(Log.CRIT, "Syncing access list for Tunnel Filter failed", bad);
                     } finally {
                         // always reschedule, even on I/O error, so reloads don't stop permanently
-                        Syncer syncer = AccessFilter.this.syncer;
-                        if (syncer != null)
-                            syncer.schedule(SYNC_INTERVAL);
+                        Syncer current = AccessFilter.this.syncer;
+                        if (current == self && current != null)
+                            current.schedule(SYNC_INTERVAL);
                     }
                 }
             });

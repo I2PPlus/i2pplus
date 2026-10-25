@@ -698,7 +698,7 @@ public class TunnelConfig {
      * @param val minutes of idleness before reducing
      */
     public void setReduceTime(int val) {
-        _otherOptions.put("i2cp.reduceIdleTime", Integer.toString(val * 60*1000));
+        _otherOptions.put("i2cp.reduceIdleTime", minutesToMillis(val));
     }
     /** Number of connections to reduce to when idle.
      * @param val connections left open while idle
@@ -707,11 +707,16 @@ public class TunnelConfig {
         _otherOptions.put("i2cp.reduceQuantity", Integer.toString(val));
     }
     /** Key for encrypting the lease set.
-     * @param val Base64 lease set encryption key, servers only
+     * @param val Base64 lease set encryption key, servers only; blank removes it
      */
     public void setEncryptKey(String val) {
-        if (val != null)
-            _otherOptions.put("i2cp.leaseSetKey", val.trim());
+        if (val != null) {
+            val = val.trim();
+            if (val.isEmpty())
+                _otherOptions.remove("i2cp.leaseSetKey");
+            else
+                _otherOptions.put("i2cp.leaseSetKey", val);
+        }
     }
 
     /** Comma-separated list of destinations to whitelist or blacklist.
@@ -734,7 +739,26 @@ public class TunnelConfig {
      * @param val minutes of idleness before closing
      */
     public void setCloseTime(int val) {
-        _otherOptions.put("i2cp.closeIdleTime", Integer.toString(val * 60*1000));
+        _otherOptions.put("i2cp.closeIdleTime", minutesToMillis(val));
+    }
+
+    /**
+     * Convert a minutes setting to the milliseconds the I2CP option needs,
+     * saturating instead of overflowing — 35853 minutes already wraps int to
+     * a negative idle time that the router then treats as "close immediately".
+     *
+     * @param minutes the configured minutes, negative values pass through scaled
+     * @return the value as a decimal milliseconds string
+     * @since 0.9.72+
+     */
+    static String minutesToMillis(int minutes) {
+        long ms = (long) minutes * 60 * 1000;
+        if (ms > Integer.MAX_VALUE) {
+            ms = Integer.MAX_VALUE;
+        } else if (ms < Integer.MIN_VALUE) {
+            ms = Integer.MIN_VALUE;
+        }
+        return Integer.toString((int) ms);
     }
 
     /** Allow the User-Agent header to pass through the HTTP client.
@@ -991,19 +1015,29 @@ public class TunnelConfig {
     }
 
     /** Random key for inbound tunnels.
-     * @param s Base64 persistent key, servers and persistent clients
+     * @param s Base64 persistent key, servers and persistent clients; blank removes it
      */
     public void setInboundRandomKey(String s) {
-        if (s != null)
-            _otherOptions.put("inbound.randomKey", s.trim());
+        if (s != null) {
+            s = s.trim();
+            if (s.isEmpty())
+                _otherOptions.remove("inbound.randomKey");
+            else
+                _otherOptions.put("inbound.randomKey", s);
+        }
     }
 
     /** Random key for outbound tunnels.
-     * @param s Base64 persistent key, servers and persistent clients
+     * @param s Base64 persistent key, servers and persistent clients; blank removes it
      */
     public void setOutboundRandomKey(String s) {
-        if (s != null)
-            _otherOptions.put("outbound.randomKey", s.trim());
+        if (s != null) {
+            s = s.trim();
+            if (s.isEmpty())
+                _otherOptions.remove("outbound.randomKey");
+            else
+                _otherOptions.put("outbound.randomKey", s);
+        }
     }
 
     /** Private key used to sign the lease set.

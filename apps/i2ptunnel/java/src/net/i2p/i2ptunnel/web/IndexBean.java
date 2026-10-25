@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -119,8 +120,8 @@ public class IndexBean {
 
     /** Form keys kept for the session. */
     private static final int MAX_FORM_KEYS = 100;
-    /** Form keys, by session id. */
-    private static final Map<Integer, SessionKey> _formKeys = new HashMap<>();
+    /** Form keys, keyed by a random per-form token echoed in the form. Insertion-order LinkedHashMap so eviction is genuinely FIFO — HashMap iteration order is unspecified. */
+    private static final Map<String, SessionKey> _formKeys = new LinkedHashMap<>();
     /** Messages shown on the page. */
     private static final UIMessages _messages = new UIMessages(100);
     /** Messages with their timestamps. */
@@ -665,6 +666,21 @@ public class IndexBean {
             }
         }
 
+        // A sigtype change rewrites the destination; deferred from the setter
+        // so it runs after every form field is bound, not against a half-
+        // updated config.
+        if (_sigTypeChanged) {
+            _sigTypeChanged = false;
+            try {
+                String result = modifyDestination();
+                if (!result.isEmpty()) {addUniqueMessage(result);}
+            } catch (RuntimeException e) {
+                _log.log(Log.CRIT, "Error rewriting destination after sigtype change", e);
+                String msg = "✖ Error: " + e.toString();
+                addUniqueMessage(msg);
+            }
+        }
+
         List<UIMessages.Message> oldMessages = _messages.getMessages();
         if (!oldMessages.isEmpty()) {
             for (UIMessages.Message msg : oldMessages) {addUniqueMessage(msg.message);}
@@ -676,30 +692,29 @@ public class IndexBean {
             for (String msg : groupMessages) {addUniqueMessage(msg);}
         }
 
-        List<TimestampedMessage> stored;
+        // One monitor across copy-sort-trim-writeback: two concurrent console
+        // renders interleaving clear()+addAll() would duplicate every message.
         synchronized (_timestampedMessages) {
-            stored = new ArrayList<>(_timestampedMessages);
-        }
-        stored.sort((a, b) -> Long.compare(b.timestamp, a.timestamp));
+            List<TimestampedMessage> stored = new ArrayList<>(_timestampedMessages);
+            stored.sort((a, b) -> Long.compare(b.timestamp, a.timestamp));
 
-        while (stored.size() > 100) {stored.remove(stored.size() - 1);}
+            while (stored.size() > 100) {stored.remove(stored.size() - 1);}
 
-        Set<String> addedMessages = new HashSet<>();
-        for (TimestampedMessage tm : stored) {
-            // Combine the message and the formatted timestamp to create a unique key
-            String messageKey = tm.message + "|" + tm.getFormattedTimestamp();
+            Set<String> addedMessages = new HashSet<>();
+            for (TimestampedMessage tm : stored) {
+                // Combine the message and the formatted timestamp to create a unique key
+                String messageKey = tm.message + "|" + tm.getFormattedTimestamp();
 
-            if (!addedMessages.contains(messageKey)) {
-                addedMessages.add(messageKey);
-                String escapedMessage = DataHelper.escapeHTML(tm.message.replace("->", "➜"));
-                String formattedMessage = "• " + tm.getFormattedTimestamp() + ' ' + escapedMessage;
-                String li = (tm.message.contains("Error") || tm.message.contains("✖") ? "<li class=error>" :
-                             tm.message.contains("Warn") || tm.message.contains("▲") ? "<li class=warn>" : "<li>");
-                buf.append(li).append(formattedMessage).append("</li>\n");
+                if (!addedMessages.contains(messageKey)) {
+                    addedMessages.add(messageKey);
+                    String escapedMessage = DataHelper.escapeHTML(tm.message.replace("->", "➜"));
+                    String formattedMessage = "• " + tm.getFormattedTimestamp() + ' ' + escapedMessage;
+                    String li = (tm.message.contains("Error") || tm.message.contains("✖") ? "<li class=error>" :
+                                 tm.message.contains("Warn") || tm.message.contains("▲") ? "<li class=warn>" : "<li>");
+                    buf.append(li).append(formattedMessage).append("</li>\n");
+                }
             }
-        }
 
-        synchronized (_timestampedMessages) {
             _timestampedMessages.clear();
             _timestampedMessages.addAll(stored);
         }
@@ -2054,12 +2069,18 @@ public class IndexBean {
             _config.setSigType(val);
             if (val.equals("0")) {_certType = 0;}
             else {_certType = 5;}
-        }
-        TunnelController tun = getController(_tunnel);
-        if (tun != null && !tun.getIsRunning() && !tun.getIsStarting()) {
-            modifyDestination();
+            // Defer the destination rewrite to getMessages(), after the whole
+            // form is bound — running it here rewrote and saved against a
+            // config where the later setters had not run yet.
+            TunnelController tun = getController(_tunnel);
+            if (tun != null && !tun.getIsRunning() && !tun.getIsStarting()) {
+                _sigTypeChanged = true;
+            }
         }
     }
+
+    /** Set by setSigType when the destination must be rewritten after binding. */
+    private boolean _sigTypeChanged;
 
     /**
      * Adds to existing, comma separated.
@@ -2105,6 +2126,9 @@ public class IndexBean {
         _config.setLeaseSetPrivateKey(s);
     }
 
+    /** The per-request form key token, set by the form on POST or generated on GET. */
+    private String _formKeyToken;
+
     /**
      * Decrypt a property using an in-memory key, for
      * interaction with the UI only, using {@link ChaCha20}.
@@ -2124,12 +2148,65 @@ public class IndexBean {
         byte[] enc = Base64.decode(v);
         if (enc == null) {return null;}
         if (enc.length < 12) {return null;}
+        String token = _formKeyToken;
+        if (token == null) {return null;}
         SessionKey key;
-        synchronized(_formKeys) {key = _formKeys.get(Integer.valueOf(_tunnel));}
+        synchronized(_formKeys) {key = _formKeys.get(token);}
         if (key == null) {return null;}
         byte[] plain = new byte[enc.length - 12];
         ChaCha20.decrypt(key.getData(), enc, 0, enc, 12, plain, 0, plain.length);
         return DataHelper.getUTF8(plain);
+    }
+
+    /**
+     * The random token identifying this form's encryption key. Generated when
+     * the form is rendered and echoed back as a hidden input; the POST binds
+     * it (before the key1-4 setters run) so the keys decrypt with the same
+     * key they were encrypted with, even if other tunnels were added or
+     * deleted in between. Keying by list index instead shifted the key on
+     * every concurrent delete, and ChaCha20 is unauthenticated, so the
+     * garbage plaintext was saved silently.
+     *
+     * @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
+     * @return 32 hex chars, registering a fresh form key for the form
+     * @since 0.9.72+
+     */
+    public String getFormKeyToken(int tunnel) {
+        if (_formKeyToken == null) {
+            byte[] tb = new byte[16];
+            _context.random().nextBytes(tb);
+            _formKeyToken = DataHelper.toHexString(tb);
+        }
+        synchronized (_formKeys) {
+            if (!_formKeys.containsKey(_formKeyToken)) {
+                if (_formKeys.size() >= MAX_FORM_KEYS) {
+                    // LinkedHashMap iteration is insertion order: drop the oldest half.
+                    int toRemove = _formKeys.size() / 2;
+                    Iterator<String> it = _formKeys.keySet().iterator();
+                    for (int i = 0; i < toRemove && it.hasNext(); i++) {
+                        it.next();
+                        it.remove();
+                    }
+                }
+                byte[] keyb = new byte[32];
+                _context.random().nextBytes(keyb);
+                _formKeys.put(_formKeyToken, new SessionKey(keyb));
+            }
+        }
+        return _formKeyToken;
+    }
+
+    /**
+     * Binds the form key token echoed by the edit form's hidden input. Bound
+     * by the generic request binding before the key1-4 setters decrypt.
+     *
+     * @param token the token from the form, ignored if not 32 hex chars
+     * @since 0.9.72+
+     */
+    public void setFormKeyToken(String token) {
+        if (token != null && token.length() == 32 && token.matches("[0-9a-f]{32}")) {
+            _formKeyToken = token;
+        }
     }
 
     /**
@@ -2141,33 +2218,34 @@ public class IndexBean {
      * These are transient keys by design, but are persisted to hide restarts.
      * They are hidden inputs in the edit form. Storage in config files is not encrypted.
      *
-     * @param tunnel index selecting the in-memory form key
+     * @param token the per-form token identifying the in-memory form key
      * @param k non-null
      * @param v may be empty or null
      * @return Base64, or empty, or null
      * @since 0.9.46
      */
-    protected String encrypt(int tunnel, String k, String v) {
+    protected String encrypt(String token, String k, String v) {
         if (v == null || v.length() <= 0) {return v;}
         byte[] dec = DataHelper.getUTF8(v);
         SessionKey key;
         synchronized(_formKeys) {
             // Clean up old form keys if we're approaching the limit
             if (_formKeys.size() >= MAX_FORM_KEYS) {
-                // Remove half of the entries (FIFO order for HashMap is insertion order since Java 8)
-                Iterator<Integer> it = _formKeys.keySet().iterator();
+                // Remove half of the entries. LinkedHashMap iterates in
+                // insertion order, so this really is the oldest half.
+                Iterator<String> it = _formKeys.keySet().iterator();
                 int toRemove = _formKeys.size() / 2;
                 for (int i = 0; i < toRemove && it.hasNext(); i++) {
                     it.next();
                     it.remove();
                 }
             }
-            key = _formKeys.get(Integer.valueOf(tunnel));
+            key = _formKeys.get(token);
             if (key == null) {
                 byte[] keyb = new byte[32];
                 _context.random().nextBytes(keyb);
                 key = new SessionKey(keyb);
-                _formKeys.put(Integer.valueOf(tunnel), key);
+                _formKeys.put(token, key);
             }
         }
         byte[] iv = new byte[12];

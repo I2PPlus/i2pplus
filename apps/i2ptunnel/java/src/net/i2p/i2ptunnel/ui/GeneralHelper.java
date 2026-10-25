@@ -718,12 +718,15 @@ public class GeneralHelper {
 
     /**
      * Check whether the tunnel is configured for interactive streaming (small window).
+     * True for the legacy maxWindowSize of 16 or the interactive streaming profile (2),
+     * so a profile-saved tunnel reopens with the right radio button.
      *
      * @param tunnel the index of the tunnel in the controller group, or -1 if there is none
-     * @return true if max window size is 16
+     * @return true if max window size is 16 or the streaming profile is interactive
      */
     public boolean isInteractive(int tunnel) {
-        return getProperty(tunnel, "i2p.streaming.maxWindowSize", 128) == 16;
+        return getProperty(tunnel, "i2p.streaming.maxWindowSize", 128) == 16 ||
+               getProperty(tunnel, "i2p.streaming.profile", 0) == 2;
     }
 
     /**
@@ -1357,7 +1360,7 @@ public class GeneralHelper {
      * @since 0.8.3
      */
     public int getTotalHour(int tunnel) {
-        return getProperty(tunnel, TunnelController.PROP_MAX_TOTAL_CONNS_HOUR, 0);
+        return getProperty(tunnel, TunnelController.PROP_MAX_TOTAL_CONNS_HOUR, TunnelController.DEFAULT_MAX_TOTAL_CONNS_HOUR);
     }
 
     /**
@@ -1368,7 +1371,7 @@ public class GeneralHelper {
      * @since 0.8.3
      */
     public int getTotalDay(int tunnel) {
-        return getProperty(tunnel, TunnelController.PROP_MAX_TOTAL_CONNS_DAY, 0);
+        return getProperty(tunnel, TunnelController.PROP_MAX_TOTAL_CONNS_DAY, TunnelController.DEFAULT_MAX_TOTAL_CONNS_DAY);
     }
 
     /**
@@ -1602,7 +1605,14 @@ public class GeneralHelper {
         TunnelController tun = getController(tunnel);
         if (tun != null) {
             Properties opts = tun.getClientOptionProps();
-            if (opts != null) {return Boolean.parseBoolean(opts.getProperty(prop));}
+            if (opts != null) {
+                // parseBoolean(null) is false — an unset option must fall back
+                // to the documented default, or true-default options (the local
+                // outproxy plugin, new destination on save) flip off when an
+                // old config is re-saved.
+                String val = opts.getProperty(prop);
+                if (val != null) {return Boolean.parseBoolean(val);}
+            }
         }
         return def;
     }

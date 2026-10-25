@@ -38,6 +38,17 @@ class DestTracker {
     }
 
     /**
+     * The rule threshold this tracker was built with, so a reload can tell
+     * whether the rule for a listed destination changed and rebuild it.
+     *
+     * @return the threshold, never null
+     * @since 0.9.72+
+     */
+    Threshold getThreshold() {
+        return threshold;
+    }
+
+    /**
      * The recorded access history, for callers that need to inspect it.
      *
      * @return the access counter

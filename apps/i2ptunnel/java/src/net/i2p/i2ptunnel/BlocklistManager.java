@@ -48,20 +48,29 @@ public class BlocklistManager {
     /** Default maximum number of entries in the client blocklist. */
     public static final int DEFAULT_CLIENT_LIMIT = 512;
 
+    /**
+     * Sentinel pattern that matches nothing, standing in for "the file has no
+     * usable entries" so an empty or comment-only blocklist is not re-read and
+     * re-compiled on every request.
+     */
+    private static final Pattern NO_PATTERNS = Pattern.compile("(?!)");
+
     /** Logger for this class. */
     private final Log _log;
     /** Directory the blocklist file is read from. */
     private final File _configDir;
-    /** Compiled pattern matching blocked addresses. */
-    private Pattern _regexPattern = null;
-    /** File timestamp the pattern was built at. */
-    private long _blocklistLastModified;
-    /** The blocked addresses read from the file. */
+    /**
+     * Compiled URL pattern together with the file mtime it was built from, as
+     * one immutable holder swapped in a single volatile write — connection
+     * threads must never see a pattern paired with another load's mtime.
+     */
+    private volatile UrlPattern _urlPattern;
+    /** The blocked addresses read from the file. Guarded by the instance monitor. */
     private List<String> _clientBlockList = new ArrayList<>();
-    /** File timestamp the shared list was read at. */
-    private static long blocklistClientsLastModified;
-    /** Size of the shared list, -1 before first read. */
-    private static int cachedClientBlockListSize = -1;
+    /** File timestamp this manager's client list was last read at. Instance state: each tunnel's manager tracks its own file view. */
+    private long _blocklistClientsLastModified;
+    /** Size of this manager's client list, -1 before first read. */
+    private int _cachedClientBlockListSize = -1;
     /** Most clients this tunnel allows, from the blocklist. */
     private int _clientLimit;
 
@@ -96,20 +105,22 @@ public class BlocklistManager {
     public boolean shouldBlockRequest(StringBuilder command) {
         File blocklistFile = new File(_configDir, HTTP_BLOCKLIST);
         if (!blocklistFile.exists()) {
-            _regexPattern = null;
+            _urlPattern = null;
             return false;
         }
 
         long currentLastModified = blocklistFile.lastModified();
-        if (currentLastModified != _blocklistLastModified || _regexPattern == null) {
-            _regexPattern = compileRegexPattern(blocklistFile);
-            _blocklistLastModified = currentLastModified;
+        UrlPattern holder = _urlPattern;
+        if (holder == null || holder.lastModified != currentLastModified) {
+            Pattern p = compileRegexPattern(blocklistFile);
+            // NO_PATTERNS for an empty or unreadable file still records the
+            // mtime, so the file is read once per edit, not once per request.
+            holder = new UrlPattern(p != null ? p : NO_PATTERNS, currentLastModified);
+            _urlPattern = holder;
         }
 
-        if (_regexPattern == null) {return false;}
-
         String lcCommand = command.toString().toLowerCase(Locale.US);
-        Matcher matcher = _regexPattern.matcher(lcCommand);
+        Matcher matcher = holder.pattern.matcher(lcCommand);
         return matcher.find();
     }
 
@@ -124,9 +135,10 @@ public class BlocklistManager {
      * @return the matched blocklist string, or null if no match
      */
     public String getMatchedBlocklistString(StringBuilder command) {
-        if (_regexPattern == null) {return null;}
+        UrlPattern holder = _urlPattern;
+        if (holder == null || holder.pattern == NO_PATTERNS) {return null;}
         String lcCommand = command.toString().toLowerCase(Locale.US);
-        Matcher matcher = _regexPattern.matcher(lcCommand);
+        Matcher matcher = holder.pattern.matcher(lcCommand);
         if (matcher.find()) {
             return matcher.group();
         }
@@ -142,7 +154,7 @@ public class BlocklistManager {
      * </p>
      *
      * @param blocklistFile the blocklist file to read
-     * @return compiled Pattern, or null on error
+     * @return compiled Pattern, or null if the file has no usable entries or could not be read
      */
     @SuppressWarnings("PMD.AvoidRecompilingPatterns")
     private Pattern compileRegexPattern(File blocklistFile) {
@@ -189,7 +201,9 @@ public class BlocklistManager {
      * </p>
      * <p>
      * The client blocklist has a maximum size limit. When the limit is reached,
-     * the oldest entry is removed before adding a new one.
+     * the oldest entry is removed before adding a new one, and the file is
+     * rewritten from the bounded list so evicted entries do not return on the
+     * next reload.
      * </p>
      *
      * @param destination the Base32-encoded destination to log
@@ -201,7 +215,7 @@ public class BlocklistManager {
         if (!blocklistClients.exists()) {
             try {
                 blocklistClients.createNewFile();
-                blocklistClientsLastModified = blocklistClients.lastModified();
+                _blocklistClientsLastModified = blocklistClients.lastModified();
             } catch (IOException e) {
                 _log.error("[HTTPServer] Error creating file for blocked destination (" + e.getMessage() + ")");
                 return;
@@ -213,15 +227,46 @@ public class BlocklistManager {
         if (!_clientBlockList.contains(destination)) {
             if (_clientBlockList.size() >= _clientLimit) {
                 _clientBlockList.remove(0);
+                // Record our own write in the in-memory list first, or the
+                // next refresh skips its own append (the mtime is already
+                // current) and a repeatedly blocked peer appends a duplicate
+                // line per request.
+                _clientBlockList.add(destination);
+                // The file is otherwise append-only, so a memory-side eviction
+                // would resurrect on the next reload — rewrite it from the
+                // bounded list instead.
+                rewriteClientBlocklist(blocklistClients);
+            } else {
+                try (BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(blocklistClients, true)), StandardCharsets.UTF_8))) {
+                    writer.write(destination);
+                    writer.newLine();
+                } catch (IOException e) {
+                    _log.error("[HTTPServer] Error logging blocked destination (" + e.getMessage() + ")");
+                    return;
+                }
+                _clientBlockList.add(destination);
             }
-            try (BufferedWriter writer = new BufferedWriter(
-                    new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(blocklistClients, true)), StandardCharsets.UTF_8))) {
-                writer.write(destination);
+            _cachedClientBlockListSize = _clientBlockList.size();
+            _blocklistClientsLastModified = blocklistClients.lastModified();
+        }
+    }
+
+    /**
+     * Rewrites the client blocklist file from the current in-memory list, so
+     * entries evicted by the size cap stay gone after a reload.
+     * Throws on failure; the caller leaves the in-memory list unchanged.
+     *
+     * @param blocklistClients the client blocklist file to rewrite
+     * @throws IOException if the file could not be written
+     */
+    private void rewriteClientBlocklist(File blocklistClients) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(
+                new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(blocklistClients, false)), StandardCharsets.UTF_8))) {
+            for (String dest : _clientBlockList) {
+                writer.write(dest);
                 writer.newLine();
-            } catch (IOException e) {
-                _log.error("[HTTPServer] Error logging blocked destination (" + e.getMessage() + ")");
             }
-            blocklistClientsLastModified = blocklistClients.lastModified();
         }
     }
 
@@ -233,7 +278,7 @@ public class BlocklistManager {
      */
     private synchronized void refreshClientBlocklist(File blocklistClients) throws IOException {
         long currentLastModified = blocklistClients.lastModified();
-        if (currentLastModified != blocklistClientsLastModified) {
+        if (currentLastModified != _blocklistClientsLastModified) {
             _clientBlockList.clear();
             try (BufferedReader reader = new BufferedReader(
                     new InputStreamReader(new BufferedInputStream(new FileInputStream(blocklistClients)), StandardCharsets.UTF_8))) {
@@ -248,8 +293,8 @@ public class BlocklistManager {
                 _log.error("[HTTPServer] Error reading client blocklist file (" + e.getMessage() + ")");
                 throw e;
             }
-            blocklistClientsLastModified = currentLastModified;
-            cachedClientBlockListSize = _clientBlockList.size();
+            _blocklistClientsLastModified = currentLastModified;
+            _cachedClientBlockListSize = _clientBlockList.size();
         }
     }
 
@@ -279,6 +324,31 @@ public class BlocklistManager {
      * @return the number of entries in the client blocklist, or -1 if not initialized
      */
     public int getClientBlocklistSize() {
-        return cachedClientBlockListSize;
+        return _cachedClientBlockListSize;
+    }
+
+    /**
+     * Immutable pair of the compiled URL pattern and the file mtime it was
+     * built from, swapped as one volatile write so readers never mix halves
+     * of two different reloads.
+     *
+     * @since 0.9.72+
+     */
+    private static class UrlPattern {
+        /** Compiled pattern matching blocked URL substrings, never null. */
+        final Pattern pattern;
+        /** Blocklist file mtime the pattern was compiled from. */
+        final long lastModified;
+
+        /**
+         * Pair a compiled pattern with the mtime it was built from.
+         *
+         * @param pattern the compiled pattern, never null (NO_PATTERNS for an empty file)
+         * @param lastModified the blocklist file mtime the pattern reflects
+         */
+        UrlPattern(Pattern pattern, long lastModified) {
+            this.pattern = pattern;
+            this.lastModified = lastModified;
+        }
     }
 }

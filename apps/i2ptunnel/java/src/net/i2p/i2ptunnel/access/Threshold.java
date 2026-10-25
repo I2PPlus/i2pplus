@@ -51,4 +51,32 @@ class Threshold {
     int getSeconds() {
         return seconds;
     }
+
+    /**
+     * Two thresholds are equal when both the connection count and the window
+     * length match, so the access-filter reload can tell whether a listed
+     * destination's rule actually changed and rebuild its tracker if so.
+     *
+     * @param o the object to compare
+     * @return true if o is a Threshold with the same count and window
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof Threshold))
+            return false;
+        Threshold other = (Threshold) o;
+        return connections == other.connections && seconds == other.seconds;
+    }
+
+    /**
+     * Hash code consistent with {@link #equals}.
+     *
+     * @return hash of the count and window pair
+     */
+    @Override
+    public int hashCode() {
+        return connections * 31 + seconds;
+    }
 }

@@ -152,6 +152,9 @@ class DefinitionParser {
             if (split.length < 2)
                 throw new InvalidDefinitionException("invalid definition " + line);
             split[0] = split[0].toLowerCase();
+            // The rule word is case-insensitive too — "15/5 Deny default" must
+            // parse like "15/5 deny default", not fail on the capital D.
+            split[1] = split[1].toLowerCase();
 
             Threshold threshold = parseThreshold(split[0]);
             Rule rule = parseRule(split[1]);

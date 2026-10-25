@@ -108,4 +108,40 @@ public class TunnelConfigTest {
         tc.setDescription("a#b");
         assertEquals("a b", tc.getConfig().getProperty(TunnelController.PROP_DESCR));
     }
+
+    @Test
+    public void testMinutesToMillisSaturates() {
+        // 35853 minutes already overflows int millis; the old wrap persisted a
+        // negative idle time.
+        assertEquals("215100000", TunnelConfig.minutesToMillis(3585));
+        assertEquals(Integer.toString(Integer.MAX_VALUE), TunnelConfig.minutesToMillis(35853));
+        assertEquals(Integer.toString(Integer.MAX_VALUE), TunnelConfig.minutesToMillis(Integer.MAX_VALUE));
+        assertEquals("-60000", TunnelConfig.minutesToMillis(-1));
+    }
+
+    @Test
+    public void testReduceTimeUsesSaturatingConversion() {
+        TunnelConfig tc = newConfig(TunnelController.TYPE_HTTP_SERVER);
+        tc.setReduceTime(Integer.MAX_VALUE);
+        assertEquals(Integer.toString(Integer.MAX_VALUE),
+                     tc.getConfig().getProperty(TunnelController.PFX_OPTION + "i2cp.reduceIdleTime"));
+    }
+
+    @Test
+    public void testBlankKeysRemoveNotPersist() {
+        TunnelConfig tc = newConfig(TunnelController.TYPE_HTTP_SERVER);
+        tc.setEncryptMode(1);
+        tc.setInboundRandomKey("inboundkey");
+        tc.setEncryptKey("originalkey");
+        String first = tc.getConfig().getProperty(TunnelController.PFX_OPTION + "i2cp.leaseSetKey");
+        assertEquals("originalkey", first);
+        // Blank must not persist as "": the old empty leaseSetKey suppressed
+        // LS encryption; removal lets the normal regeneration supply a real key.
+        tc.setEncryptKey("  ");
+        String after = tc.getConfig().getProperty(TunnelController.PFX_OPTION + "i2cp.leaseSetKey");
+        assertNotNull(after);
+        assertNotEquals("", after);
+        assertNotEquals("originalkey", after);
+        assertNull(tc.getConfig().getProperty(TunnelController.PFX_OPTION + "outbound.randomKey"));
+    }
 }

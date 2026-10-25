@@ -109,7 +109,16 @@ public class SSLClientUtil {
             if (!sdir.mkdirs())
                 throw new IOException("Unable to create keystore " + ks);
         }
-        boolean rv = createKeyStore(ks, opts, optPfx, altNames);
+        // Check-create under one monitor: two concurrent tunnel saves both
+        // passing the exists() test would each generate a key password, and
+        // the loser's opts password would not match the winning keystore —
+        // a keystore error at startup.
+        boolean rv;
+        synchronized (SSLClientUtil.class) {
+            if (ks.exists())
+                return false;
+            rv = createKeyStore(ks, opts, optPfx, altNames);
+        }
         if (!rv)
             throw new IOException("Unable to create keystore " + ks);
 

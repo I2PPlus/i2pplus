@@ -133,7 +133,7 @@ public class I2Ping extends I2PTunnelClientBase {
         int remotePort = 0;
         boolean error = false;
         String[] argv = DataHelper.split(cmd, " ");
-        Getopt g = new Getopt("ping", argv, "t:m:n:chl:f:p:");
+        Getopt g = new Getopt("ping", argv, "t:n:chl:f:p:");
         int c;
         while ((c = g.getopt()) != -1) {
             switch (c) {
@@ -250,9 +250,9 @@ public class I2Ping extends I2PTunnelClientBase {
             "  ping [opts] -l <file>        pings a list of hosts in specified file\n\n" +
             "Options:\n" +
             "  -c           require 5 consecutive pongs to report success\n" +
-            "  -m <value>   max concurrent pings (default 16)\n" +
             "  -n <value>   number of pings (default 10)\n" +
-            "  -t <value>   timeout in milliseconds (default 8000)\n" +
+            "  -t <value>   timeout in milliseconds (default 90000, " +
+            "values below 100 are taken as seconds)\n" +
             "  -f <value>   from (source) port\n" +
             "  -p <value>   to (destination) port";
     }
@@ -266,11 +266,14 @@ public class I2Ping extends I2PTunnelClientBase {
     @Override
     public boolean close(boolean forced) {
         if (!open) return true;
-        super.close(forced);
+        // Test the guard BEFORE super.close(): the base class destroys the
+        // session and clears open, so returning false afterwards would leave
+        // in-flight pings dead while claiming the close was refused.
         if (!forced && !finished) {
             l.log(" • There are still pings running!");
             return false;
         }
+        super.close(forced);
         l.log(" • I2Ping client closed");
         return true;
     }
