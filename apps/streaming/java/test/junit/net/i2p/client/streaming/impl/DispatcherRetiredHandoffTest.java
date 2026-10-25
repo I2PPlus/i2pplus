@@ -151,7 +151,10 @@ public class DispatcherRetiredHandoffTest {
                 }
             };
             assertTrue(w.offer(new PacketDispatcher.Entry(null, blocker)));
-            while (w._busy == 0) {
+            // Park the worker inside process() so its queue cannot drain.
+            // _inProcess is the precise marker; _busy is also raised during
+            // the take, so waiting on it alone could pass before process().
+            while (!w._inProcess) {
                 Thread.sleep(1);
             }
             assertTrue(w.offer(new PacketDispatcher.Entry(null, new ReleaseCountPacket("queued"))));
