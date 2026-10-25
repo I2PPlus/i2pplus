@@ -32,8 +32,15 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
     private final Log _log;
     /** Cache supplying the packet buffers. */
     private final ByteCache _cache = ByteCache.getInstance(128, 64*1024);
-    /** Connections awaiting status, by message id. */
-    private final Map<Long, Connection> _messageStatusMap;
+    /**
+     * Connections awaiting status, by message id. Each entry carries the
+     * time it was added so the expiry sweep prunes by ENTRY age — pruning by
+     * connection lifetime used to drop mappings for messages sent seconds
+     * ago just because the connection was older than the threshold, and a
+     * terminal failure status arriving afterwards then hit the unknown-
+     * connection branch and skipped its soft-failure handling.
+     */
+    private final Map<Long, StatusEntry> _messageStatusMap;
     /** True once the queue is shut down. */
     private volatile boolean _dead;
 
@@ -53,6 +60,14 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
     private static final int FINAL_TAG_THRESHOLD = 2;
     /** Interval of the expired message cleanup. */
     private static final long REMOVE_EXPIRED_TIME = (long) 67*1000;
+    /**
+     * How long a message-status mapping stays in the map before the sweep
+     * drops it, measured from the entry's own registration. Four sweep
+     * intervals: I2CP reports terminal statuses for streaming sends well
+     * inside that window, and an entry older than that can no longer expect
+     * a status worth acting on.
+     */
+    private static final long STATUS_ENTRY_TTL_MS = 4 * REMOVE_EXPIRED_TIME;
     /** True to request the send status callbacks. */
     private static final boolean ENABLE_STATUS_LISTEN = true;
     /** Latitude allowed on the I2CP expiration times. */
@@ -241,16 +256,15 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
             // outbound tunnel instead of retrying the same sick one.
             // Only the first packet triggers rotation; subsequent packets
             // reuse the already rotated tunnel (same as SYN semantics).
-            if (con != null && con.isNextSendFreshConnection()) {
+            if (con != null && con.consumeNextSendFreshConnection()) {
                 options.setFreshConnection(true);
-                con.clearNextSendFreshConnection();
             }
             I2PSession session = packet.getSession();
             if (listenForStatus) {
                 long id = session.sendMessage(packet.getTo(), buf, 0, size,
                                  I2PSession.PROTO_STREAMING, packet.getLocalPort(), packet.getRemotePort(),
                                  options, this);
-                _messageStatusMap.put(Long.valueOf(id), con);
+                _messageStatusMap.put(Long.valueOf(id), new StatusEntry(con, _context.clock().now()));
                 sent = true;
             } else {
                 sent = session.sendMessage(packet.getTo(), buf, 0, size,
@@ -334,7 +348,8 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
     public void messageStatus(I2PSession session, long msgId, int status) {
          if (_dead) {return;}
          Long id = Long.valueOf(msgId);
-         Connection con = _messageStatusMap.get(id);
+         StatusEntry entry = _messageStatusMap.get(id);
+         Connection con = entry != null ? entry._con : null;
          if (con == null) {
              // A status for a message already completed (its map entry was removed on the
              // prior terminal status) or never tracked locally. Benign under load — the
@@ -474,19 +489,47 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
         }
 
         /**
-         * Remove expired message status entries and reschedule.
+         * Remove expired message status entries and reschedule. Entries are
+         * pruned by their own age, not by the connection's lifetime — a
+         * long-lived connection's recent sends must keep their status
+         * mapping until the status arrives or the entry itself ages out.
          */
         public void timeReached() {
             if (_dead)
                 return;
             if (!_messageStatusMap.isEmpty()) {
-                for (Iterator<Connection> iter = _messageStatusMap.values().iterator(); iter.hasNext(); ) {
-                    Connection con = iter.next();
-                    if (!con.getIsConnected() || con.getLifetime() > 2*60*1000L)
+                long now = _context.clock().now();
+                for (Iterator<StatusEntry> iter = _messageStatusMap.values().iterator(); iter.hasNext(); ) {
+                    StatusEntry se = iter.next();
+                    Connection con = se._con;
+                    if (!con.getIsConnected() || now - se._addedOn > STATUS_ENTRY_TTL_MS)
                         iter.remove();
                 }
             }
             schedule(REMOVE_EXPIRED_TIME);
+        }
+    }
+
+    /**
+     * One entry in {@link #_messageStatusMap}: the connection awaiting a
+     * send status, plus the clock time the mapping was created so the expiry
+     * sweep can age out the entry itself.
+     */
+    private static class StatusEntry {
+        /** The connection that sent the message. */
+        final Connection _con;
+        /** Context clock ms when the mapping was registered. */
+        final long _addedOn;
+
+        /**
+         * Wrap a connection with its registration time.
+         *
+         * @param con the connection awaiting the send status
+         * @param addedOn context clock ms when the mapping was registered
+         */
+        StatusEntry(Connection con, long addedOn) {
+            _con = con;
+            _addedOn = addedOn;
         }
     }
 }
