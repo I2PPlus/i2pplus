@@ -161,6 +161,9 @@
       <copy todir="${build.dir}/res/.res">
         <fileset dir="../res/"/>
       </copy>
+      <!-- Search icon for zzzot metadata-lookup rows, pulled from the console theme -->
+      <copy file="../../../installer/resources/console/themes/console/images/search.svg"
+            todir="${build.dir}/res/.res/icons"/>
       <copy file="../../routerconsole/jsp/js/onVisible.js" todir="${build.dir}/res/.res/js"/>
       <copy file="../../routerconsole/jsp/js/morphdom.js" todir="${build.dir}/res/.res/js"/>
       <!-- mime.properties must be in with the classes -->
@@ -439,6 +442,8 @@
       </copy>
       <!-- Images and other resources pulled from the console themes/fonts dirs -->
       <copy quiet="true" file="../../../installer/resources/console/themes/console/images/newtab.svg"
+            todir="${build.dir}/standalone-resources/.res/icons"/>
+      <copy quiet="true" file="../../../installer/resources/console/themes/console/images/search.svg"
             todir="${build.dir}/standalone-resources/.res/icons"/>
       <copy quiet="true" file="../../../installer/resources/console/themes/console/dark/images/camotile2.png"
             todir="${build.dir}/standalone-resources/.res/themes/snark/dark/images"/>

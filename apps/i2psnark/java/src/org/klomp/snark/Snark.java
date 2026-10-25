@@ -1473,13 +1473,12 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     @Override
     public void gotMetaInfo(PeerCoordinator coordinator, MetaInfo metainfo) {
         // Metadata-only lookup (zzzot hashlist): don't create Storage or pre-allocate files.
-        // SnarkManager.lookupTorrentName creates magnets named "lookup-*" in a temp dir
-        // "zzzot-lookup-*". For those, we just capture the MetaInfo name and return;
+        // SnarkManager.lookupTorrentName creates magnets named "Lookup [hash8]" in a temp
+        // dir "zzzot-lookup-*". For those, we just capture the MetaInfo name and return;
         // the lookup's wait loop polls getMetaInfo(), extracts the name, and deletes
         // the magnet. Creating Storage here would pre-allocate files in temp and,
         // via SnarkManager.gotMetaInfo(), leak a .torrent into the data dir.
-        if ((torrent != null && (torrent.startsWith("lookup-") || torrent.contains("zzzot-lookup"))) ||
-            (rootDataDir != null && rootDataDir.getPath().contains("zzzot-lookup"))) {
+        if (isLookupTorrent(torrent, rootDataDir)) {
             meta = metainfo;
             if (completeListener != null) {
                 try { completeListener.gotMetaInfo(this); } catch (Exception ignore) { /* lookup poller did not take the notification; its wait loop simply times out instead */ }
@@ -1528,6 +1527,35 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
                             + ' '
                             + ioe.getMessage());
         }
+    }
+
+    /**
+     * Whether a torrent is a transient zzzot metadata lookup rather than a user
+     * torrent. Lookup magnets are named "Lookup [hash8]" and live under a
+     * "zzzot-lookup-*" temp directory; both markers are checked because the name
+     * can be replaced when the metadata arrives, while the data directory cannot.
+     * Lookups are display-only (name and size for zzzot's hashlist): they never
+     * create Storage and never announce to trackers.
+     *
+     * @param name the torrent display name, may be null
+     * @param dataDir the torrent's data directory, may be null
+     * @return true if this is a transient metadata-lookup torrent
+     * @since 0.9.72+
+     */
+    static boolean isLookupTorrent(String name, File dataDir) {
+        return (name != null && (name.startsWith("Lookup [") || name.startsWith("lookup-") ||
+                                 name.contains("zzzot-lookup"))) ||
+               (dataDir != null && dataDir.getPath().contains("zzzot-lookup"));
+    }
+
+    /**
+     * Whether this torrent is a transient zzzot metadata lookup.
+     *
+     * @return true if this is a transient metadata-lookup torrent
+     * @since 0.9.72+
+     */
+    public boolean isLookup() {
+        return isLookupTorrent(torrent, rootDataDir);
     }
 
     /**

@@ -4266,6 +4266,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
             String encodedBaseName = encodePath(fullBasename);
             String hex = I2PSnarkUtil.toHex(snark.getInfoHash());
+            boolean isLookup = snark.isLookup();
             String torrentPath = (encodedBaseName != null) ? "/i2psnark/" + encodedBaseName + "/" : "";
 
             buf.append("</td><td class=magnet>");
@@ -4297,7 +4298,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
             }
 
-            String icon = isMultiFile ? "folder" : (isValid ? toIcon(meta.getName()) : (snark instanceof FetchAndAdd ? "download" : "magnet"));
+            String icon = isMultiFile ? "folder" : (isValid ? toIcon(meta.getName()) : (snark instanceof FetchAndAdd ? "download" : (isLookup ? "search" : "magnet")));
             if (isValid) {
                 appendIcon(buf, icon, "", "", false, true);
                 buf.append("</a></span>");
@@ -4311,7 +4312,11 @@ public class I2PSnarkServlet extends BasicServlet {
                 buf.append("\" title=\"").append(isMultiFile ? _t("View files") : _t("Open file")).append("\">");
             }
 
-            if (basename.contains("Magnet")) {
+            if (isLookup) {
+                // zzzot metadata lookup: show the full infohash instead of the
+                // transient "Lookup [hash8]" magnet name
+                buf.append("<span class=\"infohash lookup\">").append(hex).append("</span>");
+            } else if (basename.contains("Magnet")) {
                 buf.append(DataHelper.escapeHTML(basename)
                     .replace("Magnet ", "<span class=infohash>")
                     .replaceFirst("\\(", "</span> <span class=magnetLabel>").replaceAll("\\)$", ""))

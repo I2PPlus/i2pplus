@@ -785,7 +785,13 @@ public class TrackerClient implements Runnable {
                 // queuing it behind all of them meant a magnet waited for every tracker
                 // to fail before DHT was even asked.
                 fetchPeersFromDHT();
-                if (!trackers.isEmpty()) {
+                // zzzot metadata lookups are display-only: name and size arrive via
+                // BEP 9 from DHT-discovered peers, so the tracker round would only
+                // leak interest to open trackers, burn shared announce permits and
+                // add scrape traffic for a result nobody downloads. Keep trackers
+                // when the DHT is unavailable - then they are the only peer source.
+                boolean contactTrackers = shouldAnnounceToTrackers(snark.isLookup(), dht != null);
+                if (!trackers.isEmpty() && contactTrackers) {
                     peersFromPrimaries = getPeersFromTrackers(trackers);
                     maxSeenPeers = peersFromPrimaries;
                     // fast update for UI at startup
@@ -803,7 +809,8 @@ public class TrackerClient implements Runnable {
                 // consult the configured trackers regardless of DHT size;
                 // for seeds, only fall back when the DHT still needs bootstrapping
                 boolean wantMorePeers = coordinator.needOutboundPeers();
-                if (needBackupTrackers(
+                if (contactTrackers
+                        && (needBackupTrackers(
                         !trackers.isEmpty(),
                         !backupTrackers.isEmpty(),
                         dht != null,
@@ -811,7 +818,7 @@ public class TrackerClient implements Runnable {
                         wantMorePeers)
                         || shouldTryFallbackTrackers(peersFromPrimaries,
                                                      !backupTrackers.isEmpty(),
-                                                     wantMorePeers)) {
+                                                     wantMorePeers))) {
                     p = getPeersFromTrackers(backupTrackers);
                     if (p > maxSeenPeers) maxSeenPeers = p;
                 }
@@ -953,6 +960,24 @@ public class TrackerClient implements Runnable {
     static boolean shouldTryFallbackTrackers(int peersFromPrimaries, boolean haveBackup,
                                              boolean downloading) {
         return haveBackup && downloading && peersFromPrimaries <= 0;
+    }
+
+    /**
+     * Whether this torrent's peer round should contact HTTP trackers at all.
+     * A transient zzzot metadata lookup resolves only the torrent name and size,
+     * via BEP 9 metadata exchange with DHT-discovered peers; announcing it would
+     * leak interest in the hash to every open tracker, consume a shared announce
+     * permit and add scrape traffic for a torrent nobody downloads. When the DHT
+     * is unavailable the tracker round stays, since it is then the only way to
+     * find any peer.
+     *
+     * @param isLookup true for a transient zzzot metadata-lookup torrent
+     * @param dhtAvailable true if a DHT instance is running for this torrent
+     * @return true if the tracker announce/scrape round should run
+     * @since 0.9.72+
+     */
+    static boolean shouldAnnounceToTrackers(boolean isLookup, boolean dhtAvailable) {
+        return !isLookup || !dhtAvailable;
     }
 
     /**
