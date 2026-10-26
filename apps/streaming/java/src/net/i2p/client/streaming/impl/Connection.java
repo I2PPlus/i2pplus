@@ -3747,8 +3747,7 @@ class Connection {
     public void setChoked(boolean on) {
         if (on != _isChoked) {
            _isChoked = on;
-           if (_log.shouldWarn())
-               _log.warn("Choke state changed -> " + (on ? "Choked" : "Unchoked") + " on " + this);
+           if (_log.shouldWarn()) {_log.warn("Choked state " + (on ? "enabled" : "disabled") + " on " + this);}
            if (!on) {
                 // Episode boundary for the persist WARN gate: once the remote
                 // unchokes us, a fresh persist episode in a later window may log.
@@ -3778,7 +3777,7 @@ class Connection {
                     if (_log.shouldInfo()) {
                         _log.info("Restoring window to " + restored + " on unchoke for " + this +
                                   "\n* Pre-Choke: " + saved + " * Ceiling: " + ceiling +
-                                  " * Slow-Start Threshold: " + _ssthresh);
+                                  " * SSThresh: " + _ssthresh);
                     }
                 }
                 windowAdjusted();
@@ -4282,39 +4281,39 @@ class Connection {
         // six hours, which buried the diagnostics the log exists to carry. It is
         // detail for investigating one connection, which is what debug is for.
         if  (_log.shouldDebug()) {
-            buf.append("\n* Up: ").append(DataHelper.formatDuration(now - _createdOn));
-            buf.append(" * Window size: ").append(_options.getWindowSize());
-            buf.append(" * Congestion window: ").append(_congestionWindowEnd - _highestAckedThrough.get());
-            buf.append(" * RTT: ").append(_options.getRTT());
-            buf.append(" * RTO: ").append(_options.getRTO());
+            buf.append("\n* Up: ").append(DataHelper.formatDuration(now - _createdOn))
+               .append(" * Window size: ").append(_options.getWindowSize())
+               .append(" * Congestion window: ").append(_congestionWindowEnd - _highestAckedThrough.get())
+               .append(" * RTT: ").append(_options.getRTT())
+               .append(" * RTO: ").append(_options.getRTO())
             // not synchronized to avoid some kooky races
-            buf.append(" * UnACKed out: ").append(_outboundPackets == null ? 0 : _outboundPackets.size()).append(" * ");
-            buf.append("UnACKed in: ").append(getUnackedPacketsReceived());
+               .append(" * UnACKed out: ").append(_outboundPackets == null ? 0 : _outboundPackets.size())
+               .append(" * UnACKed in: ").append(getUnackedPacketsReceived());
             int missing = 0;
             long[] nacks = _inputStream.getNacks();
             if (nacks != null) {
                 missing = nacks.length;
                 buf.append(" [").append(missing).append(" missing]");
             }
-            buf.append("\n* Sent: ").append(1 + _lastSendId.get());
-            buf.append(" * Received: ").append(1 + _inputStream.getHighestBlockId() - missing);
-            buf.append(" * ACKThru: ").append(_highestAckedThrough.get());
-            buf.append(" * SSThresh: ").append(_ssthresh);
-            buf.append(" * MinRTT: ").append(_options.getMinRTT());
-            buf.append(" * MaxWin: ").append(_options.getMaxWindowSize());
-            buf.append(" * MTU: ").append(_options.getMaxMessageSize());
+            buf.append("\n* Sent: ").append(1 + _lastSendId.get())
+               .append(" * Received: ").append(1 + _inputStream.getHighestBlockId() - missing)
+               .append(" * ACKThru: ").append(_highestAckedThrough.get())
+               .append(" * SSThresh: ").append(_ssthresh)
+               .append(" * MinRTT: ").append(_options.getMinRTT())
+               .append(" * MaxWin: ").append(_options.getMaxWindowSize())
+               .append(" * MTU: ").append(_options.getMaxMessageSize());
             if (getResetSent())
                 buf.append("\n* Reset sent: ").append(DataHelper.formatDuration(now - getResetSentOn())).append(" ago");
             if (getResetReceived())
-                buf.append("\n* Reset received: ").append(DataHelper.formatDuration(now - getResetReceivedOn())).append(" ago");
+                buf.append(" * Reset received: ").append(DataHelper.formatDuration(now - getResetReceivedOn())).append(" ago");
             if (getCloseSentOn() > 0) {
-                buf.append("\n* Close sent: ");
                 long timeSinceClose = now - getCloseSentOn();
-                buf.append(DataHelper.formatDuration(timeSinceClose));
-                buf.append(" ago");
+                buf.append(" * Close sent: ")
+                   .append(DataHelper.formatDuration(timeSinceClose))
+                   .append(" ago");
             }
             if (getCloseReceivedOn() > 0)
-                buf.append("\n* Close received: ").append(DataHelper.formatDuration(now - getCloseReceivedOn())).append(" ago");
+                buf.append(" * Close received: ").append(DataHelper.formatDuration(now - getCloseReceivedOn())).append(" ago");
         }
         return buf.toString();
     }
