@@ -59,6 +59,7 @@ const translate_requestedLS = "<%=intl._t("Requested client leaseset")%>";
 %>
 <link rel=prefetch href="<%=request.getRequestURI() + "?" + nextPageQuery.toString() %>">
 <link rel=prefetch href="/netdb?show=all&ps=10000">
+<link href=/themes/console/tablesort.css rel=stylesheet>
 <% } %>
 </head>
 <body>
@@ -168,7 +169,6 @@ const translate_requestedLS = "<%=intl._t("Requested client leaseset")%>";
 <noscript><style>body:not(.ready) .lazy{display:table!important}</style></noscript>
 <% } %>
 <style>#pagenav{display:block!important}</style>
-<link href=/themes/console/tablesort.css rel=stylesheet>
 <script src=/js/refreshElements.js type=module></script>
 <script src=/js/tablesort/sortShared.js></script>
 <script src=/js/tablesort/tablesort.js></script>
