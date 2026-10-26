@@ -24,8 +24,10 @@ class Peer extends Hash {
     /** Timestamp when this peer was last active in the torrent. */
     private volatile long lastSeen;
 
-    // todo we could pack this into the upper bit of lastSeen
-    /** Flag indicating whether this peer has the complete torrent. */
+    /**
+     * Flag indicating whether this peer has the complete torrent. It could
+     * be packed into the upper bit of {@link #lastSeen} instead.
+     */
     private volatile boolean isSeed;
 
     /**

@@ -6,12 +6,12 @@ import java.util.NoSuchElementException;
 
 /**
  * A basic iterator for a skip list.
-    This is not a complete ListIterator, in particular, since the
-    skip list is a map and is therefore indexed by Comparable objects instead
-    of int's, nextIndex and previousIndex methods are not really relevant.
-
-    To be clear, this is an iterator through values.
-    To get the key, call {@link #nextKey()} BEFORE calling next().
+ * This is not a complete ListIterator, in particular, since the
+ * skip list is a map and is therefore indexed by Comparable objects instead
+ * of int's, nextIndex and previousIndex methods are not really relevant.
+ * <p>
+ * To be clear, this is an iterator through values.
+ * To get the key, call {@link #nextKey()} BEFORE calling next().
  *
  * @param <K> type of keys maintained by this iterator
  * @param <V> type of values returned by this iterator
@@ -109,8 +109,9 @@ public boolean hasPrevious() {
         return ss.vals[index];
     }
 
-    // Optional ListIterator methods - all unsupported
-    /** Not supported. */
+    /**
+     * Not supported: the skip list is indexed by keys, not by position.
+     */
     public void add(V o) { throw new UnsupportedOperationException(); }
     /** Not supported. */
     public void remove() { throw new UnsupportedOperationException(); }

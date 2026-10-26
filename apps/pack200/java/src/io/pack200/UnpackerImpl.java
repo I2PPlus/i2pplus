@@ -68,11 +68,8 @@ public class UnpackerImpl extends TLGlobals implements Pack200.Unpacker {
         return Utils.getVersionString();
     }
 
-    //Driver routines
-
-    // The unpack worker...
     /**
-     * Takes a packed-stream InputStream, and writes to a JarOutputStream. Internally
+     * Driver routine: takes a packed-stream InputStream, and writes to a JarOutputStream. Internally
      * the entire buffer must be read, it may be more efficient to read the packed-stream
      * to a file and pass the File object, in the alternate method described below.
      * <p>

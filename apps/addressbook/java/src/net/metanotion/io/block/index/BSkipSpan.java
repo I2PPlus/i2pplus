@@ -61,8 +61,9 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
     /** Value serializer */
     protected Serializer<V> valSer;
 
-    // I2P
-    /** Number of keys this span can hold */
+    /**
+     * I2P addition: number of keys this span can hold.
+     */
     protected int spanSize;
     /** Whether this span has been killed/deleted */
     protected boolean isKilled;

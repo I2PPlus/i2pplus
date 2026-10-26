@@ -83,7 +83,6 @@ public class SOAP {
      */
     public static final String ERROR_DESCRIPTION = "errorDescription";
 
-    // public static final String XMLNS = "SOAP-ENV";
     /**
      * Short prefix declared for the SOAP envelope namespace.
      */

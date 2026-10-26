@@ -69,7 +69,6 @@ public interface RandomAccessInterface extends Closeable {
  */
     public boolean canWrite();
 
-    // Closeable Methods
     /**
      * Closes the file.
      *
@@ -77,7 +76,6 @@ public interface RandomAccessInterface extends Closeable {
      */
     public void close() throws IOException;
 
-    // DataInput Methods
     /**
      * Reads a single byte, reporting it as a boolean.
      * @see java.io.RandomAccessFile#readBoolean()
@@ -171,9 +169,10 @@ public interface RandomAccessInterface extends Closeable {
      * @throws IOException if the file cannot be read
      */
     public int readUnsignedShort() throws IOException;
-    // I2P
     /**
-     * Read a 4-byte big-endian unsigned int.
+     * I2P addition, not part of java.io.RandomAccessFile: read a 4-byte
+     * big-endian unsigned int.
+     *
      * @return the value read, which must be non-negative
      * @throws IOException if the value read is negative
      */
@@ -194,7 +193,6 @@ public interface RandomAccessInterface extends Closeable {
      */
     public int skipBytes(int n) throws IOException;
 
-    // DataOutput Methods
     /**
      * Writes the low eight bits of b.
      * @see java.io.RandomAccessFile#write(int)

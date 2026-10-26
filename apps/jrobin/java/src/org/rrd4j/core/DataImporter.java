@@ -15,7 +15,6 @@ public abstract class DataImporter implements Closeable {
     /** Creates an importer; every subclass reads its source in its own constructor */
     public DataImporter() {}
 
-    // header
     /**
      * Reads the RRD file format version the export was written with.
      *
@@ -56,7 +55,6 @@ public abstract class DataImporter implements Closeable {
      */
     public abstract int getArcCount() throws IOException;
 
-    // datasource
     /**
      * Reads the name of a data source.
      *
@@ -103,7 +101,6 @@ public abstract class DataImporter implements Closeable {
      */
     public abstract double getMaxValue(int dsIndex) throws IOException;
 
-    // datasource state
     /**
      * Reads the last value recorded for a data source.
      *
@@ -131,7 +128,6 @@ public abstract class DataImporter implements Closeable {
      */
     public abstract long getNanSeconds(int dsIndex) throws IOException;
 
-    // archive
     /**
      * Reads the consolidation function of an archive.
      *
@@ -168,7 +164,6 @@ public abstract class DataImporter implements Closeable {
      */
     public abstract int getRows(int arcIndex) throws IOException;
 
-    // archive state
     /**
      * Reads the value an archive is accumulating for one data source.
      *

@@ -23,14 +23,16 @@ public class IdentityBytes implements Serializer<byte[]> {
     /**
      * Return the bytes unchanged.
      *
-     * @return byte[]
+     * @param o the array to serialize, handed back as-is
+     * @return the same array object that was passed in, not a copy
      */
     public byte[] getBytes(byte[] o) { return o; }
 
     /**
      * Return the bytes unchanged.
      *
-     * @return b
+     * @param b the array to deserialize, handed back as-is
+     * @return the same array object that was passed in, not a copy
      */
     public byte[] construct(byte[] b) { return b; }
 }

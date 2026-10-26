@@ -21,23 +21,20 @@ import net.i2p.util.SimpleTimer2;
  * reply identifiers or multiple reply tunnels from malicious requestors.
  */
 class LookupThrottler {
-    /** Concurrent hash map. */
+    /** Concurrent lookups in flight, keyed by peer hash then reply tunnel ID. */
     private final ConcurrentHashMap<Hash, ConcurrentHashMap<TunnelId, AtomicInteger>> counter;
-    // Map to track timestamps of recent requests per (Hash, TunnelId) for burst detection.
-    // Outer key is Hash (peer), inner key is TunnelId (reply tunnel).
-    /** Map of peer hashes to sets of reply tunnel IDs for throttling. */
+    /** Request timestamps for burst detection, keyed by peer hash then reply tunnel ID. */
     private final Map<Hash, ConcurrentHashMap<TunnelId, Deque<Long>>> burstTimestamps;
 
-    /** The id of this is -1. */
+    /** Placeholder tunnel ID for lookups with no reply tunnel. */
     private static final TunnelId DUMMY_ID = new TunnelId();
-    /** This seems like plenty. */
+    /** Default max concurrent lookups per peer while floodfill. */
     private static final int DEFAULT_MAX_LOOKUPS = 30;
-    /** Max lookups per peer when not floodfill. */
+    /** Default max concurrent lookups per peer when not floodfill. */
     private static final int DEFAULT_MAX_NON_FF_LOOKUPS = 10;
-    /** Clean interval for expired throttle entries. */
+    /** Default interval between cleanups of expired throttle entries, in ms. */
     private static final long DEFAULT_CLEAN_TIME = 3*60*1000L;
-    // Max requests allowed in 1-second burst window
-    /** Max requests allowed per peer per burst window. */
+    /** Max requests allowed per peer within one burst window before the burst is throttled. */
     private static final int BURST_THRESHOLD = 5;
     /** Length of the burst detection window in ms. */
     private static final long BURST_WINDOW_MS = 1000L;
@@ -49,15 +46,15 @@ class LookupThrottler {
      */
     private static final int MAX_ENTRIES = 10000;
 
-    /** Max lookups limit. */
+    /** Max concurrent lookups per peer while floodfill. */
     private final int MAX_LOOKUPS;
-    /** Max non-FF lookups limit. */
+    /** Max concurrent lookups per peer when not floodfill. */
     private final int MAX_NON_FF_LOOKUPS;
-    /** Clean time. */
+    /** Milliseconds between cleanups of expired throttle entries. */
     private final long CLEAN_TIME;
     /** Floodfill network database facade for capability checks. */
     private final FloodfillNetworkDatabaseFacade _facade;
-    /** Max value. */
+    /** Current per-peer concurrent lookup cap, re-read from the facade as floodfill status changes. */
     private volatile int _max;
     /** Periodic cleanup task for stale throttle entries. */
     private final Cleaner _cleaner;
@@ -65,7 +62,7 @@ class LookupThrottler {
     /**
      * Throttle for the given floodfill facade.
      *
-     * @param facade floodfill network database facade
+     * @param facade the floodfill facade whose status selects the lookup caps
      */
     LookupThrottler(FloodfillNetworkDatabaseFacade facade) {
         this(facade, DEFAULT_MAX_LOOKUPS, DEFAULT_MAX_NON_FF_LOOKUPS, DEFAULT_CLEAN_TIME);
@@ -74,9 +71,9 @@ class LookupThrottler {
     /**
      * Throttle with configurable lookup limits.
      *
-     * @param facade floodfill network database facade
+     * @param facade the floodfill facade whose status selects the lookup caps
      * @param maxlookups the concurrent lookup limit while floodfill
-     * @param maxnonfflookups when not floodfill
+     * @param maxnonfflookups the concurrent lookup limit when not floodfill
      * @param cleanTime milliseconds between throttling table cleanups
      */
     LookupThrottler(FloodfillNetworkDatabaseFacade facade, int maxlookups, int maxnonfflookups, long cleanTime) {

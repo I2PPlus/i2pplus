@@ -68,10 +68,8 @@ public class PackerImpl  extends TLGlobals implements Pack200.Packer {
         return props;
     }
 
-    //Driver routines
-
     /**
-     * Takes a JarFile and converts into a pack-stream.
+     * Driver routine: takes a JarFile and converts into a pack-stream.
      * <p>
      * Closes its input but not its output.  (Pack200 archives are appendable.)
      * @param in the JarFile to read entries from; closed by this call

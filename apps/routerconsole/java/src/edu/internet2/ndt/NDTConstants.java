@@ -126,8 +126,10 @@ public class NDTConstants {
     /** Predefined buffer size for data transfers. */
     public static final int PREDEFINED_BUFFER_SIZE = 8192;
 
-    // Data rate indicator values returned by the server's link detection
-    /** Data rate indicator: insufficient data to determine rate. */
+    /**
+     * Data rate indicator returned by the server's link detection:
+     * insufficient data to determine rate.
+     */
     public static final int DATA_RATE_INSUFFICIENT_DATA = -2;
     /** Data rate indicator: system fault during rate detection. */
     public static final int DATA_RATE_SYSTEM_FAULT = -1;
@@ -152,7 +154,6 @@ public class NDTConstants {
     /** Data rate indicator: 10 Gigabit Ethernet connection. */
     public static final int DATA_RATE_10G_ETHERNET = 9;
 
-    // Human-readable data rate labels
     /** Human-readable label for T1 data rate. */
     public static final String T1_STR = "T1";
     /** Human-readable label for T3 data rate. */
@@ -198,7 +199,6 @@ public class NDTConstants {
     /** Maximum TCP receive window size in bytes (16-bit field). */
     public static final int TCP_MAX_RECV_WIN_SIZE = 65535;
 
-    // Unit conversion factors
     /** Base-10 kilo multiplier (1000). */
     public static final int KILO = 1000;
     /** Base-2 kilo multiplier (1024). */
@@ -206,7 +206,6 @@ public class NDTConstants {
     /** Conversion factor from bits to bytes (8.0). */
     public static final double EIGHT = 8.0;
 
-    // Duplex mismatch detection indicators
     /** Duplex status indicator: OK at both ends. */
     public static final int DUPLEX_OK_INDICATOR = 0;
     /** Duplex status indicator: mismatch detected. */
@@ -222,13 +221,11 @@ public class NDTConstants {
     /** Duplex status indicator: warning, switch half, host full. */
     public static final int DUPLEX_SWITCH_HALF_HOST_FULL_WARN = 7;
 
-    // Cable status values
     /** Cable status: OK (no fault detected). */
     public static final int CABLE_STATUS_OK = 0;
     /** Cable status: bad cable detected. */
     public static final int CABLE_STATUS_BAD = 1;
 
-    // Congestion status values
     /** Congestion status: no congestion detected. */
     public static final int CONGESTION_NONE = 0;
     /** Congestion status: congestion found. */

@@ -18,7 +18,6 @@ public class DetectedIP {
     public final short natType;
     /** The MTU as advertized by the JVM */
     public int mtu;
-    // Constants
     /** The plugin does not support detecting the NAT type. */
     public static final short NOT_SUPPORTED = 1;
     /** Full internet access! */

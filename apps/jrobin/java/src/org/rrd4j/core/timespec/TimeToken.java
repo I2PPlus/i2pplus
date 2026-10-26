@@ -24,7 +24,6 @@ package org.rrd4j.core.timespec;
  *
  */
 class TimeToken {
-    // ===== TIME OF DAY MARKERS =====
     /** Token for "midnight" - represents 00:00:00 of today or tomorrow */
     public static final int MIDNIGHT = 1;
 
@@ -34,14 +33,12 @@ class TimeToken {
     /** Token for "teatime" - represents 16:00:00 of today or tomorrow */
     public static final int TEATIME = 3;
 
-    // ===== TIME PERIOD MODIFIERS =====
     /** Token for "pm" - evening times for 0-12 hour clock */
     public static final int PM = 4;
 
     /** Token for "am" - morning times for 0-12 hour clock */
     public static final int AM = 5;
 
-    // ===== RELATIVE TIME REFERENCES =====
     /** Token for "yesterday" - one day before current date */
     public static final int YESTERDAY = 6;
 
@@ -54,14 +51,12 @@ class TimeToken {
     /** Token for "now" or "n" - current timestamp */
     public static final int NOW = 9;
 
-    // ===== RANGE MARKERS =====
     /** Token for "start" or "s" - beginning of time range */
     public static final int START = 10;
 
     /** Token for "end" or "e" - end of time range */
     public static final int END = 11;
 
-    // ===== TIME UNIT MULTIPLIERS =====
     /** Token for "second", "seconds", "sec", "s" - seconds multiplier */
     public static final int SECONDS = 12;
 
@@ -86,11 +81,9 @@ class TimeToken {
     /** Token for ambiguous "m" - requires context resolution to months or minutes */
     public static final int MONTHS_MINUTES = 19;
 
-    // ===== BASIC TOKEN TYPES =====
     /** Token for numeric values - sequences of digits */
     public static final int NUMBER = 20;
 
-    // ===== OPERATORS =====
     /** Token for "+" - addition operator */
     public static final int PLUS = 21;
 
@@ -106,14 +99,12 @@ class TimeToken {
     /** Token for "/" - date separator */
     public static final int SLASH = 25;
 
-    // ===== SPECIAL TOKEN TYPES =====
     /** Token for unrecognized identifiers - unknown words */
     public static final int ID = 26;
 
     /** Token for invalid/unparseable input */
     public static final int JUNK = 27;
 
-    // ===== MONTH NAMES =====
     /** Token for "jan", "january" - first month */
     public static final int JAN = 28;
 
@@ -150,7 +141,6 @@ class TimeToken {
     /** Token for "dec", "december" - twelfth month */
     public static final int DEC = 39;
 
-    // ===== DAY OF WEEK NAMES =====
     /** Token for "sun", "sunday" - first day of week */
     public static final int SUN = 40;
 
@@ -172,7 +162,6 @@ class TimeToken {
     /** Token for "sat", "saturday" - seventh day of week */
     public static final int SAT = 46;
 
-    // ===== CONTROL TOKENS =====
     /** Token for end of input - no more tokens available */
     public static final int EOF = -1;
 

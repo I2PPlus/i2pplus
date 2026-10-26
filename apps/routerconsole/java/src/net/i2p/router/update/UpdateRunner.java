@@ -299,20 +299,24 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
         if (!this.done) {_mgr.notifyTaskFailed(this, "", null);}
     }
 
-    // EepGet Listeners below.
-    // We use the same for both the partial and the full EepGet,
-    // with a couple of adjustments depending on which mode.
-
     /**
      * An attempt failed. We do not abort here - EepGet retries on its own -
      * so this only reports the failure to the user.
+     * <p>
+     * First of the EepGet listeners below; the same listeners are used for
+     * both the partial and the full EepGet, with a couple of adjustments
+     * depending on which mode.
      */
     public void attemptFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt, int numRetries, Exception cause) {
         if (_log.shouldDebug()) {_log.debug("Attempt failed on " + url, cause);}
         _mgr.notifyAttemptFailed(this, url, null); // ignored
     }
 
-    /** Subclasses should override. */
+    /**
+     * Download progress callback; updates the console status line with the
+     * bytes transferred so far. Ignored in partial-update mode, where the
+     * byte counts cover the whole archive, not the pending range.
+     */
     public void bytesTransferred(long alreadyTransferred, int currentWrite, long bytesTransferred, long bytesRemaining, String url) {
         if (_isPartial) {return;}
         long d = currentWrite + bytesTransferred;
@@ -324,7 +328,12 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
         _mgr.notifyProgress(this, status, d, d + bytesRemaining);
     }
 
-    /** Subclasses should override. */
+    /**
+     * Download finished. In partial-update mode extracts the new version
+     * from the downloaded data and compares it with what we have now,
+     * returning without an update if it is not newer; otherwise hands the
+     * update off to the update manager, which verifies the signature.
+     */
     public void transferComplete(long alreadyTransferred, long bytesTransferred, long bytesRemaining, String url, String outputFile, boolean notModified) {
         if (_isPartial) {
             // Compare version with what we have now
@@ -348,7 +357,10 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
         else {tmp.delete();} // corrupt
     }
 
-    /** Subclasses should override. */
+    /**
+     * One download attempt failed for good; EepGet retries on its own, so
+     * this reports the failure to the update manager for the console.
+     */
     public void transferFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt) {
         if (_log.shouldWarn()) {
             _log.warn("Update from " + url + " did not download completely (" + bytesRemaining +

@@ -39,9 +39,8 @@ public class HTTPUSocket {
     //	Member
     ////////////////////////////////////////////////
 
+    /** Socket the SSDP datagrams are sent and received on, null when not open. */
     private DatagramSocket ssdpUniSock = null;
-
-    // private MulticastSocket ssdpUniSock = null;
 
     /**
      * Open a datagram socket on an ephemeral port, for SSDP unicast traffic.

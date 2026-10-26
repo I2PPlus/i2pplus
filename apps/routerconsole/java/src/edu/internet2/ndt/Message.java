@@ -1,14 +1,14 @@
 package edu.internet2.ndt;
 
-// TODO for a later release: It may be worthwhile exploring whether MessageTypes could be
-// merged here instead of being located in NDTConstants. Message/Type could also be made into
-// an enumeration and checks for the current MessageType being assigned could be incorporated.
-
 /**
- * Class to define Message. Messages are composed of a "type" and a body.
- * Some examples of message types are: COMM_FAILURE, SRV_QUEUE, MSG_LOGIN, TEST_PREPARE.
- * Messages are defined to have a "length" field too. Currently, 2 bytes of the message
- * body" byte array are often used to store length (For example, second/third array positions).
+ * A message exchanged with the NDT server, composed of a type and a body.
+ * Message types include COMM_FAILURE, SRV_QUEUE, MSG_LOGIN and TEST_PREPARE.
+ * A message also carries a length; currently two bytes of the body array are
+ * often used to store it (for example, the second and third array positions).
+ * <p>
+ * TODO: the message types could be merged into this class rather than kept in
+ * {@link NDTConstants}, and Message/Type could become an enumeration so the
+ * current MessageType assignment can be checked.
  *
  * @see MessageType for more Message Types.
  */

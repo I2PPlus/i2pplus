@@ -1,7 +1,7 @@
 package org.bouncycastle.crypto;
 
 /**
- * all parameter classes implement this.
+ * Marker interface implemented by every class that carries cipher parameters.
  */
 public interface CipherParameters
 {

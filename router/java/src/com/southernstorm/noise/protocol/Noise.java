@@ -66,11 +66,10 @@ public final class Noise {
         throw new NoSuchAlgorithmException("Unknown Noise hash algorithm name: " + name);
     }
 
-    // The rest of this class consists of internal utility functions
-    // that are not part of the public API.
-
     /**
-     * I2P Release a hash object back to the pool.
+     * Release a hash object back to the pool. The remainder of this class
+     * consists of internal utility functions that are not part of the
+     * public API.
      *
      * @param hash the hash object to release
      * @since 0.9.66

@@ -35,8 +35,10 @@ import net.i2p.util.Log;
 public abstract class FastI2NPMessageImpl extends I2NPMessageImpl {
     /** One-byte checksum. */
     protected byte _checksum;
-    // We skip the fiction that CHECKSUM_LENGTH will ever be anything but 1
-    /** Whether the message includes a checksum. */
+    /**
+     * Whether the message includes the checksum. We skip the fiction that
+     * {@link I2NPMessageImpl#CHECKSUM_LENGTH} will ever be anything but 1.
+     */
     protected boolean _hasChecksum;
 
     /**

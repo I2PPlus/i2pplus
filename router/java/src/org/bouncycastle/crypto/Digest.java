@@ -1,42 +1,43 @@
 package org.bouncycastle.crypto;
 
 /**
- * interface that a message digest conforms to.
+ * A message digest: absorb data with {@link #update}, finish it with
+ * {@link #doFinal}, or discard the computation with {@link #reset}.
  */
 public interface Digest
 {
     /**
-     * return the algorithm name
+     * The name of the algorithm this digest implements.
      *
      * @return the algorithm name
      */
     public String getAlgorithmName();
 
     /**
-     * return the size, in bytes, of the digest produced by this message digest.
+     * The size of the digest this message digest produces.
      *
-     * @return the size, in bytes, of the digest produced by this message digest.
+     * @return the digest size in bytes
      */
     public int getDigestSize();
 
     /**
-     * update the message digest with a single byte.
+     * Absorb a single byte into the digest.
      *
-     * @param in the input byte to be entered.
+     * @param in the byte to absorb
      */
     public void update(byte in);
 
     /**
-     * update the message digest with a block of bytes.
+     * Absorb part of an array into the digest.
      *
-     * @param in the byte array containing the data.
-     * @param inOff the offset into the byte array where the data starts.
-     * @param len the length of the data.
+     * @param in the array holding the data to absorb
+     * @param inOff the offset into in where the data starts
+     * @param len the number of bytes to absorb
      */
     public void update(byte[] in, int inOff, int len);
 
     /**
-     * close the digest, producing the final digest value. The doFinal
+     * Close the digest, producing the final digest value. The doFinal
      * call leaves the digest reset.
      *
      * @param out the array the digest is to be copied into.
@@ -46,7 +47,7 @@ public interface Digest
     public int doFinal(byte[] out, int outOff);
 
     /**
-     * reset the digest back to it's initial state.
+     * Reset the digest back to its initial state.
      */
     public void reset();
 }

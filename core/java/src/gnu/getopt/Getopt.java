@@ -628,7 +628,7 @@ public class Getopt extends Object
     }
 
 /**
- * optind it the index in ARGV of the next element to be scanned.
+ * Optind is the index in ARGV of the next element to be scanned.
  * This is used for communication to and from the caller
  * and for communication between successive calls to `getopt'.
  *
@@ -638,7 +638,7 @@ public class Getopt extends Object
  * Otherwise, `optind' communicates from one call to the next
  * how much of ARGV has been scanned so far.
  *
- * @return the current value of the optind index
+ * @return the index in ARGV of the next element to be scanned
  */
     public int
         getOptind()

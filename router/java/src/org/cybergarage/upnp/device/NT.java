@@ -39,7 +39,8 @@ public class NT {
     public static final String EVENT = "upnp:event";
 
     /**
-     * method comment
+     * Whether an NT header value identifies the root device.
+     *
      * @param ntValue the NT header value to test, may be null
      * @return true if ntValue is non-null and begins with upnp:rootdevice,
      *         false otherwise, including for a null value

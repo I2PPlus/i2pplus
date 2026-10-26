@@ -105,7 +105,6 @@ import java.util.jar.JarOutputStream;
 public abstract class Pack200 {
     private Pack200() {} //prevent instantiation
 
-    // Static methods of the Pack200 class.
     /**
      * Obtain new instance of a class that implements Packer.
      * <ul>
@@ -158,13 +157,12 @@ public abstract class Pack200 {
         return (Unpacker) newInstance(UNPACK_PROVIDER);
     }
 
-    // Interfaces
     /**
      * The packer engine applies various transformations to the input JAR file,
      * making the pack stream highly compressible by a compressor such as
      * gzip or zip. An instance of the engine can be obtained
      * using {@link #newPacker}.
-
+     * <p>
      * The high degree of compression is achieved
      * by using a number of techniques described in the JSR 200 specification.
      * Some of the techniques are sorting, re-ordering and co-location of the

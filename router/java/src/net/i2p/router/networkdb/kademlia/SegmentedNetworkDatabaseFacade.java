@@ -40,7 +40,6 @@ public abstract class SegmentedNetworkDatabaseFacade {
     /**
      * Constructor for segmented NetDb implementations, which supply their segments after construction.
      */
-
     public SegmentedNetworkDatabaseFacade() {}
 
 
@@ -53,11 +52,12 @@ public abstract class SegmentedNetworkDatabaseFacade {
     public abstract NetworkDatabaseFacade mainNetDB();
 
     /**
-     * A client netDb for a given client Hash identifier. Will never
-     * return the mainNetDB.
+     * A client netDb for a given client Hash identifier. Implementations
+     * fall back to the main netDb when no client sub-database exists.
      *
      * @param dbid the destination hash naming which client sub-database to use
-     * @return may be null if the client netDb does not exist
+     * @return the client netDb, or the main netDb as a fallback; may be null
+     *         if that netDb is not initialized
      * @since 0.9.61
      */
     public abstract NetworkDatabaseFacade clientNetDB(Hash dbid);
