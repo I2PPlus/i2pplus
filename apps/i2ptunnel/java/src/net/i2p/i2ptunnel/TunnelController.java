@@ -1219,8 +1219,8 @@ public class TunnelController implements Logging {
 
     /**
      * Apply the default signature type for tunnels that support it,
-      * mirroring {@link net.i2p.i2ptunnel.web.EditBean#getSigType} and
-       * {@link net.i2p.i2ptunnel.ui.GeneralHelper#getSigType} .
+     * mirroring {@link net.i2p.i2ptunnel.web.EditBean#getSigType} and
+     * {@link net.i2p.i2ptunnel.ui.GeneralHelper#getSigType}.
      *
      * @param type the tunnel type
      */

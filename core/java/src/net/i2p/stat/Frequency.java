@@ -89,7 +89,7 @@ public class Frequency {
 
     /**
      * Over the lifetime of this stat, without any decay or weighting, what was the average interval
-      * between events? (ms).
+     * between events? (ms).
      *
      * @return milliseconds; returns Double.MAX_VALUE if no events ever
      */

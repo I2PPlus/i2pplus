@@ -121,8 +121,8 @@ public final class SHA1 extends MessageDigest implements Cloneable {
      * and the JVM's native MessageDigest based on performance characteristics.
      * On most systems, the JVM's native implementation is preferred for speed.</p>
      *
-      * @return fastest digest, either new SHA1() or a
-       * {@link java.security.MessageDigest#getInstance(String) MessageDigest} for "SHA-1"
+     * @return fastest digest, either new SHA1() or a
+     * {@link java.security.MessageDigest#getInstance(String) MessageDigest} for "SHA-1"
      * @since 0.8.7
      */
     @SuppressWarnings("PMD.SingletonClassReturningNewInstance")

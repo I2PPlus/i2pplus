@@ -238,8 +238,8 @@ public class KeysAndCert extends DataStructureImpl {
     /**
      * Padding bytes to set.
      *
-      * @param padding the padding to store, whose length must be 32 or a multiple of 32 for
-       * {@link #isCompressible} to become true
+     * @param padding the padding to store, whose length must be 32 or a multiple of 32 for
+     * {@link #isCompressible} to become true
      * @throws IllegalStateException if was already set
      * @since 0.9.12
      */

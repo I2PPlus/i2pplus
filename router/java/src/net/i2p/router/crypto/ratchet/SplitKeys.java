@@ -6,7 +6,7 @@ import net.i2p.data.SessionKey;
 
 /**
  * Container for Noise protocol split keys that prevents duplicate HKDF calculations by sharing
-  * derived keys between engine and session key manager components.
+ * derived keys between engine and session key manager components.
  *
  * @since 0.9.46
  */

@@ -1196,8 +1196,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
              _context.banlist().isBanlisted(peer) || uninteresting) {
             /**
              * Don't try to overload ourselves (e.g. failing 3000 router refs at once, and then firing off 3000 netDb lookup tasks)
-              * Also don't queue a search if we have plenty of routerinfos (KBucketSetSize() includes leasesets
-               * but avoids locking).
+             * Also don't queue a search if we have plenty of routerinfos (KBucketSetSize() includes leasesets
+             * but avoids locking).
              */
             if (_log.shouldInfo()) {
                 boolean ffEnabled;

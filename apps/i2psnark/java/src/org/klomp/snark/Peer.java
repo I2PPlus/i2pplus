@@ -648,10 +648,10 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     }
 
     /**
-     * Disconnects this peer if it was connected. {@link org.klomp.snark.PeerListener#disconnected} will
-      * be called when
-     * the connection is completely terminated. If deregister is true, partial pieces will be
-     * returned.
+     * Disconnects this peer if it was connected.
+     * {@link org.klomp.snark.PeerListener#disconnected} will be called when the
+     * connection is completely terminated. If deregister is true, partial pieces
+     * will be returned.
      *
      * @param deregister true if partial pieces should be returned
      */

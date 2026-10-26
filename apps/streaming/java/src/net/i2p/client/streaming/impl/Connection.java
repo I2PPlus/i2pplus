@@ -1729,8 +1729,8 @@ class Connection {
      * re-lock the synchronized estimator and re-read RTT on every write
      * attempt; the Westwood+ sample only moves on ACK cadence anyway. Both
      * writer threads may populate the cache; a ceiling from either is valid,
-      * and ceiling + timestamp are stored as one value ({@code WindowCeilingSample}) so a reader can
-       * never pair one writer's ceiling
+     * and ceiling + timestamp are stored as one value ({@code WindowCeilingSample}) so a reader can
+     * never pair one writer's ceiling
      * with the other writer's newer timestamp — which would pin the cache
      * hit to the older ceiling for extra BDP_CACHE_MS windows — nor invert
      * the age check by pairing a stale timestamp with a fresh ceiling.
@@ -1795,8 +1795,8 @@ class Connection {
      * @param globalMax Tuner-managed global or per-connection ceiling in messages; the guaranteed floor
      * @param bwePerMs Westwood+ estimate in packets/ms; NaN or {@code <= 0} means no sample yet
      * @param rttMs round-trip time in ms (caller applies the 500ms floor)
-      * @param floorMsgs minimum ceiling regardless of the estimate (the initial window, so the cap is
-       * never below a connection's starting cwnd)
+     * @param floorMsgs minimum ceiling regardless of the estimate (the initial window, so the cap is
+     *                  never below a connection's starting cwnd)
      * @param absMaxMsgs absolute ceiling regardless of inputs (ABSOLUTE_MAX_WINDOW)
      * @return ceiling in messages, in
      * {@code [min(absMax, max(1, globalMax, floorMsgs)), absMaxMsgs]}
@@ -2450,8 +2450,8 @@ class Connection {
      * budget. The subtraction is clamped at zero so an early-tagged paced
      * resend cannot undercount below the true hard count.
      *
-      * @param totalSends total send attempts incl. resends ({@link
-     * net.i2p.client.streaming.impl.PacketLocal#getNumSends})
+     * @param totalSends total send attempts incl. resends
+     *                   ({@link net.i2p.client.streaming.impl.PacketLocal#getNumSends})
      * @param softResends of those, resends tagged as soft-failure-triggered
      * ({@link net.i2p.client.streaming.impl.PacketLocal#getNumSoftResends})
      * @param maxResends configured per-packet retransmit budget (&gt; 0)
@@ -2502,8 +2502,8 @@ class Connection {
      * kill a connect in a few hundred ms with a spurious "SYN not acknowledged".
      * Only genuine on-wire retransmits should consume the give-up budget.
      *
-      * @param totalSends total SYN send attempts incl. resends ({@link
-     * net.i2p.client.streaming.impl.PacketLocal#getNumSends})
+     * @param totalSends total SYN send attempts incl. resends
+     *                   ({@link net.i2p.client.streaming.impl.PacketLocal#getNumSends})
      * @param softResends of those, resends tagged as soft-failure-triggered
      * ({@link net.i2p.client.streaming.impl.PacketLocal#getNumSoftResends})
      * @param maxSynSends per-connection SYN give-up budget ({@link #getMaxSynSends()})

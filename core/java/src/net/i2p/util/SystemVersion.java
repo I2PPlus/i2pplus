@@ -456,7 +456,7 @@ public abstract class SystemVersion {
 
     /**
      * Better than (new VersionComparator()).compare({@link java.lang.System#getProperty}"java.version"),
-      * "1.6") &gt;= 0
+     * "1.6") &gt;= 0
      * as it handles Android also, where java.version = "0".
      *
      * @return true if Java 1.6 or higher, or Android API 9 or higher
@@ -467,7 +467,7 @@ public abstract class SystemVersion {
 
     /**
      * Better than (new VersionComparator()).compare({@link java.lang.System#getProperty}"java.version"),
-      * "1.7") &gt;= 0
+     * "1.7") &gt;= 0
      * as it handles Android also, where java.version = "0".
      *
      * @return true if Java 1.7 or higher, or Android API 19 or higher

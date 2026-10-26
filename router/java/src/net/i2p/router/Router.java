@@ -264,8 +264,8 @@ public class Router implements RouterClock.ClockShiftListener {
      * RouterContext is created but not initialized.
      * You must call runRouter() after any constructor to start things up.
      * <p>
-      * Config file name is "{@code router.config}" unless {@code router.configLocation} set in envProps
-       * or system properties.
+     * Config file name is "{@code router.config}" unless {@code router.configLocation} set in envProps
+     * or system properties.
      * <p>
      * See two-arg constructor for more information.
      *
@@ -352,7 +352,7 @@ public class Router implements RouterClock.ClockShiftListener {
         String userDir = (!isPortable) ? WorkingDir.getWorkingDir(envProps, migrateFiles) : PortableWorkingDir.getWorkingDir(envProps);
         /**
          * Use the {@code router.config} file specified in the {@code router.configLocation} property
-          * (default "{@code router.config}")
+         * (default "{@code router.config}")
          * if it is an absolute path, otherwise look in the userDir returned by getWorkingDir replace relative
          * path with absolute.
          */

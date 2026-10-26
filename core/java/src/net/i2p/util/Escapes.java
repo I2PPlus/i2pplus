@@ -221,7 +221,7 @@ public class Escapes {
      *
      * @param s the string to escape, not null
      * @param html true to also encode the backtick (HTML contexts), false for
-     *              the XML character set
+     *             the XML character set
      * @return the escaped string, the same instance if nothing needed escaping
      */
     private static String markup(String s, boolean html) {
