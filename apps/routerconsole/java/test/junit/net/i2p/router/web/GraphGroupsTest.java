@@ -214,6 +214,7 @@ public class GraphGroupsTest {
         assertUnitsAgree("jobTiming", "ms");
         assertUnitsAgree("jobQueueDepth", "count");
         assertUnitsAgree("jobLoadEvents", "count");
+        assertUnitsAgree("jobScaleEvents", "events");
         assertUnitsAgree("buildRejectReceived", "count");
         assertUnitsAgree("buildRejectBanned", "count");
         assertUnitsAgree("netDbLookupTime", "ms");

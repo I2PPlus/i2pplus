@@ -126,6 +126,15 @@ public final class GraphGroups {
         g.put("jobLoadEvents", Arrays.asList(
                 "jobQueue.runnerScaleUp", "jobQueue.runnerScaleDown"));
 
+        // The scale events themselves, one per event, against the runners each moved
+        // above: the pair above is the volume, this pair is how often the scaler
+        // acts. A scale event changes the runner count by creating and destroying
+        // OS threads, so the event rate is the thread churn's cause.
+        // jobQueue.runnerThreadCreations is the cost side and stays on the stats
+        // page: the cap is two series, and the causes are what a reader compares.
+        g.put("jobScaleEvents", Arrays.asList(
+                "jobQueue.scaleUpEvents", "jobQueue.scaleDownEvents"));
+
         // Tunnel build rejections we received from a peer: probabalistic (the peer shed
         // load by design) against transient (an overload it did not expect). Both are
         // counters of the same event seen from the far end of the build.
@@ -317,6 +326,7 @@ public final class GraphGroups {
         t.put("jobTiming", "Queue Timing");
         t.put("jobQueueDepth", "Scheduled Jobs");
         t.put("jobLoadEvents", "Load Events");
+        t.put("jobScaleEvents", "Scale Events");
         t.put("buildRejectReceived", "Build Rejections Received");
         t.put("buildInboundOutcome", "Inbound Build Success");
         t.put("buildOutboundOutcome", "Outbound Build Success");
@@ -366,6 +376,7 @@ public final class GraphGroups {
         subsystems.put("jobTiming", "Jobs");
         subsystems.put("jobQueueDepth", "Jobs");
         subsystems.put("jobLoadEvents", "Jobs");
+        subsystems.put("jobScaleEvents", "Jobs");
         subsystems.put("buildRejectReceived", "Tunnel");
         subsystems.put("buildInboundOutcome", "Tunnel");
         subsystems.put("buildOutboundOutcome", "Tunnel");
