@@ -233,6 +233,14 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     private volatile boolean _isReduced;
     /** Whether fast receive was requested. */
     private final boolean _fastReceive;
+    /**
+     * Milliseconds a send waits for room in the write queue when it is full.
+     * The wait is a park, and a caller that holds a lock across the send is
+     * blocked for the whole of it, so the bound is settable rather than fixed.
+     *
+     * @since 0.9.72+
+     */
+    private final long _sendQueueTimeout;
     /** Whether the router supports fast receive. */
     private volatile boolean _routerSupportsFastReceive;
     /** Whether the router supports host lookups. */
@@ -266,10 +274,19 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * @since 0.9.14
      */
     protected static final String PROP_DOMAIN_SOCKET = "i2cp.domainSocket";
+    /**
+     * Milliseconds a send waits for room in the write queue when it is full,
+     * before the send fails. A caller that holds a lock across the send blocks
+     * everyone waiting on that lock for the whole of the wait, so the bound has
+     * to be settable. 0 fails at once when the queue is full.
+     *
+     * @since 0.9.72+
+     */
+    protected static final String PROP_SEND_QUEUE_TIMEOUT = "i2cp.sendQueueTimeout";
     /** Usage quota checks run every 1 minute. */
     private static final long VERIFY_USAGE_TIME = (long) 60*1000;
-    /** The wait for send capacity is at most 10 seconds. */
-    private static final long MAX_SEND_WAIT = (long) 10*1000;
+    /** The default wait for send capacity is 10 seconds. */
+    private static final long DEFAULT_SEND_WAIT = (long) 10*1000;
     /** Router version that first supported fast receive. */
     private static final String MIN_FAST_VERSION = "0.9.30";
     /** Router version that first supported LS2. */
@@ -362,6 +379,8 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         _hostname = getHost();
         _portNum = getPort();
         _fastReceive = Boolean.parseBoolean(_options.getProperty(I2PClient.PROP_FAST_RECEIVE));
+        _sendQueueTimeout = getSendQueueTimeout(_options.getProperty(PROP_SEND_QUEUE_TIMEOUT),
+                                                _context.getProperty(PROP_SEND_QUEUE_TIMEOUT));
         if (hasDest) {
             _producer = producer;
             _availableMessages = new ConcurrentHashMap<>();
@@ -529,6 +548,33 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
             }
         }
         return 60;
+    }
+
+    /**
+     * Milliseconds a send waits for room in the write queue when it is full,
+     * from the session options if set there, else the client context, else the
+     * 10 second default. The wait is a park, and a caller that holds a lock
+     * across the send is blocked for the whole of it, so the bound is settable.
+     *
+     * @param sessionValue the session option, may be null
+     * @param contextValue the client context value, may be null
+     * @return ms to wait, 0 to fail at once when the queue is full; unparseable
+     *         or negative values fall back to the 10 second default
+     * @since 0.9.72+
+     */
+    static long getSendQueueTimeout(String sessionValue, String contextValue) {
+        String value = sessionValue != null ? sessionValue : contextValue;
+        if (value != null) {
+            try {
+                long ms = Long.parseLong(value.trim());
+                if (ms >= 0) {
+                    return ms;
+                }
+            } catch (NumberFormatException nfe) {
+                /* unparseable value; use the 10 second default */
+            }
+        }
+        return DEFAULT_SEND_WAIT;
     }
 
     /**
@@ -1431,7 +1477,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         if (_queue != null) {
             // internal
             try {
-                if (!_queue.offer(message, MAX_SEND_WAIT)) {
+                if (!_queue.offer(message, _sendQueueTimeout)) {
                     throw new I2PSessionException("Timed out waiting while write queue was full");
                 }
             } catch (InterruptedException ie) {throw new I2PSessionException("Interrupted sending a message to the router", ie);}
