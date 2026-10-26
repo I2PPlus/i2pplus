@@ -65,17 +65,17 @@ class TimeoutPipedInputStream extends PipedInputStream {
     }
 
     /**
-     *  Must be called before blocking read call.
+     * Must be called before blocking read call.
      *
-     *  @param ms less than or equal to zero means forever
+     * @param ms less than or equal to zero means forever
      */
     public void setReadTimeout(int ms) {
         timeout = Math.max(0, ms);
     }
 
     /**
-     *  To save state.
-     *  We have to do this because can't get to closedByWriter in super.
+     * To save state.
+     * We have to do this because can't get to closedByWriter in super.
      */
     synchronized void x_receivedLast() {
         _closedByWriter = true;

@@ -4,10 +4,10 @@ import net.i2p.data.DataHelper;
 
 /**
  *
- *  NTCP2 Padding/Dummy/Delay configuration for data phase.
- *  Any other options TBD.
+ * NTCP2 Padding/Dummy/Delay configuration for data phase.
+ * Any other options TBD.
  *
- *  @since 0.9.36
+ * @since 0.9.36
  */
 class NTCP2Options {
 
@@ -94,7 +94,7 @@ class NTCP2Options {
     public int getRecvDelay() { return _recvDelay; }
 
     /**
-     *  Merge our options with the peer's options.
+     * Merge our options with the peer's options.
      * @param his the peer's advertised options, whose send values are clamped
      *            against our receive values and vice versa
      *  @return new merged options

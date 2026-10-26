@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *  Plugin keys we know about.
- *  Contact I2P devs to be added to this list.
+ * Plugin keys we know about.
+ * Contact I2P devs to be added to this list.
  *
- *  @since 0.9.14.1
+ * @since 0.9.14.1
  */
 class TrustedPluginKeys {
 

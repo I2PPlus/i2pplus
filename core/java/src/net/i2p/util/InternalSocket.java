@@ -8,9 +8,9 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 /**
- *  A simple in-JVM Socket using Piped Streams.
- *  We use port numbers just like regular sockets.
- *  Can only connect to InternalServerSocket.
+ * A simple in-JVM Socket using Piped Streams.
+ * We use port numbers just like regular sockets.
+ * Can only connect to InternalServerSocket.
  *
  * @since 0.7.9
  */
@@ -144,10 +144,10 @@ public class InternalSocket extends Socket {
     }
 
     /**
-     *  Supported as of 0.9.34, if constructed with {@link TimeoutPipedInputStream}
-     *  and TimeoutPipedOutputStream. Otherwise, does nothing.
+     * Supported as of 0.9.34, if constructed with {@link TimeoutPipedInputStream}
+     * and TimeoutPipedOutputStream. Otherwise, does nothing.
      *
-     *  @see TimeoutPipedInputStream
+     * @see TimeoutPipedInputStream
      */
     @Override
     public synchronized void setSoTimeout(int timeout) {
@@ -155,7 +155,7 @@ public class InternalSocket extends Socket {
     }
 
     /**
-     *  Always returns 0, even if {@link #setSoTimeout} was called.
+     * Always returns 0, even if {@link #setSoTimeout} was called.
      * @return the so timeout
      */
     @Override

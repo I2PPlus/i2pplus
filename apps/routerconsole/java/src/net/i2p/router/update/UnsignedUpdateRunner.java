@@ -12,10 +12,10 @@ import net.i2p.util.PortMapper;
 import net.i2p.util.RFC822Date;
 
 /**
- *  Eepget the .zip file to the temp dir, then notify.r
- *  Moved from {@link UnsignedUpdateHandler} and turned into an UpdateTask.
+ * Eepget the .zip file to the temp dir, then notify.r
+ * Moved from {@link UnsignedUpdateHandler} and turned into an UpdateTask.
  *
- *  @since 0.9.4
+ * @since 0.9.4
  */
 class UnsignedUpdateRunner extends UpdateRunner {
 

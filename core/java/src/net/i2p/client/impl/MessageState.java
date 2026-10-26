@@ -55,14 +55,14 @@ class MessageState {
     private State _state = State.INIT;
 
     /**
-     *  For synchronous waiting for accept with {@link #waitForAccept}.
-     *  UNUSED.
+     * For synchronous waiting for accept with {@link #waitForAccept}.
+     * UNUSED.
      *
-     *  @param ctx the context supplying the clock and log used for the
-     *             sixty second lifetime and for warnings
-     *  @param nonce the transaction nonce this message was sent under
-     *  @param prefix text prepended to every log line so this send can be
-     *                told apart from others
+     * @param ctx the context supplying the clock and log used for the
+     *            sixty second lifetime and for warnings
+     * @param nonce the transaction nonce this message was sent under
+     * @param prefix text prepended to every log line so this send can be
+     *               told apart from others
      */
     public MessageState(I2PAppContext ctx, long nonce, String prefix) {
         _context = ctx;
@@ -153,13 +153,13 @@ class MessageState {
     }
 
     /**
-     *  For guaranteed/best effort only. Not really used.
+     * For guaranteed/best effort only. Not really used.
      *
-     *  @param expiration absolute time in milliseconds at which the wait is
-     *                    abandoned, not an interval
+     * @param expiration absolute time in milliseconds at which the wait is
+     *                   abandoned, not an interval
      *
-     *  @throws InterruptedException if the waiting thread is interrupted
-     *                               before a status arrives or the deadline passes
+     * @throws InterruptedException if the waiting thread is interrupted
+     *                              before a status arrives or the deadline passes
      */
     public void waitForAccept(long expiration) throws InterruptedException {
         while (true) {

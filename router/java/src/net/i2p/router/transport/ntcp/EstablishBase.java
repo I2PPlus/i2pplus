@@ -271,16 +271,16 @@ protected void changeState(State state) {
     }
 
     /**
-     *  NTCP version.
-     *  @return 1, 2, or 0 if unknown
-     *  @since 0.9.35
+     * NTCP version.
+     * @return 1, 2, or 0 if unknown
+     * @since 0.9.35
      */
     public abstract int getVersion();
 
     /**
-     *  Release resources on timeout.
-     *  @param e may be null
-     *  @since 0.9.16
+     * Release resources on timeout.
+     * @param e may be null
+     * @since 0.9.16
      */
     public synchronized void close(String reason, Exception e) {
         fail(reason, e);
@@ -340,9 +340,9 @@ protected void changeState(State state) {
     }
 
     /**
-     *  Only call once. Caller must synch.
-     *  @param isVerified true when the handshake completed and was not marked corrupt
-     *  @since 0.9.16
+     * Only call once. Caller must synch.
+     * @param isVerified true when the handshake completed and was not marked corrupt
+     * @since 0.9.16
      */
     protected void releaseBufs(boolean isVerified) {
         // null or longer for OB
@@ -463,11 +463,11 @@ protected void changeState(State state) {
     }
 
     /**
-     *  Mark a string for extraction by xgettext and translation.
-     *  Use this only in static initializers.
-     *  It does not translate!
-     *  @param s the string to mark for translation
-     *  @return s, unchanged; the marker works by naming the literal
+     * Mark a string for extraction by xgettext and translation.
+     * Use this only in static initializers.
+     * It does not translate!
+     * @param s the string to mark for translation
+     * @return s, unchanged; the marker works by naming the literal
      */
     /**
      * The bare cause from a netdb store rejection, stripped of the

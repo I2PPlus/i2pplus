@@ -4,9 +4,9 @@ import java.math.BigInteger;
 import net.i2p.data.router.RouterInfo;
 
 /**
- *  A pair of routers and the distance between them.
+ * A pair of routers and the distance between them.
  *
- *  @since 0.9.38 moved from SybilRenderer
+ * @since 0.9.38 moved from SybilRenderer
  */
 public class Pair implements Comparable<Pair> {
     /**

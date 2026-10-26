@@ -12,10 +12,10 @@ import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 
 /**
- *  A tunnel pool with its own settings and Destination,
- *  but uses another pool for its tunnels.
+ * A tunnel pool with its own settings and Destination,
+ * but uses another pool for its tunnels.
  *
- *  @since 0.9.21
+ * @since 0.9.21
  */
 public class AliasedTunnelPool extends TunnelPool {
 
@@ -23,12 +23,12 @@ public class AliasedTunnelPool extends TunnelPool {
     private final TunnelPool _aliasOf;
 
     /**
-     *  Create an aliased tunnel pool.
+     * Create an aliased tunnel pool.
      *
-     *  @param ctx the router context
-     *  @param mgr the tunnel pool manager
-     *  @param settings the pool settings
-     *  @param aliasOf the pool to use for tunnel selection
+     * @param ctx the router context
+     * @param mgr the tunnel pool manager
+     * @param settings the pool settings
+     * @param aliasOf the pool to use for tunnel selection
      */
     AliasedTunnelPool(RouterContext ctx, TunnelPoolManager mgr, TunnelPoolSettings settings, TunnelPool aliasOf) {
         super(ctx, mgr, settings, null);
@@ -176,10 +176,10 @@ public class AliasedTunnelPool extends TunnelPool {
     }
 
     /**
-     *  Aliased pools have no tunnels of their own; the primary pool builds and
-     *  maintains tunnels for all aliases.  Running the full build-decision logic
-     *  on the empty local pool would log false "EMERGENCY: Zero usable tunnels"
-     *  warnings and waste cycles on every maintenance pass.
+     * Aliased pools have no tunnels of their own; the primary pool builds and
+     * maintains tunnels for all aliases.  Running the full build-decision logic
+     * on the empty local pool would log false "EMERGENCY: Zero usable tunnels"
+     * warnings and waste cycles on every maintenance pass.
      */
     @Override
     void ensureSufficientTunnels() {

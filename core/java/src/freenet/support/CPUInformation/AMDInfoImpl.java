@@ -1,12 +1,12 @@
 package freenet.support.CPUInformation;
 
 /**
- *  Moved out of CPUID.java
+ * Moved out of CPUID.java
  *
- *  Ref: https://en.wikipedia.org/wiki/List_of_AMD_CPU_microarchitectures
- *  Ref: https://gmplib.org/repo/gmp/file/tip/config.guess
+ * Ref: https://en.wikipedia.org/wiki/List_of_AMD_CPU_microarchitectures
+ * Ref: https://gmplib.org/repo/gmp/file/tip/config.guess
  *
- *  @since 0.8.7
+ * @since 0.8.7
  */
 class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo {
     /** True if the CPU is a K6 or later AMD. */

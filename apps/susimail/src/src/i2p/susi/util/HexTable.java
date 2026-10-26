@@ -6,8 +6,8 @@ package i2p.susi.util;
  */
 public class HexTable {
     /**
-     *  Constructor. The lookup table is built once in the static initializer,
-     *  so an instance holds nothing.
+     * Constructor. The lookup table is built once in the static initializer,
+     * so an instance holds nothing.
      */
     public HexTable() {}
 

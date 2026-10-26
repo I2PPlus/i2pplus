@@ -54,7 +54,7 @@ class ConnThrottler {
     }
 
     /**
-     *  Checks both individual and total. Increments before checking.
+     * Checks both individual and total. Increments before checking.
      *
      * @param h the destination hash of the peer asking to connect
      * @return true if the connection must be refused because a per-peer or overall limit
@@ -70,10 +70,10 @@ class ConnThrottler {
     }
 
     /**
-     *  Check if throttled without incrementing.
-     *  @param h the destination hash to test against the per-peer limit
-     *  @return true if this peer has already opened more connections than its limit allows
-     *  @since 0.9.70+
+     * Check if throttled without incrementing.
+     * @param h the destination hash to test against the per-peer limit
+     * @return true if this peer has already opened more connections than its limit allows
+     * @since 0.9.70+
      */
     boolean isThrottled(Hash h) {
         if (_max > 0)
@@ -82,11 +82,11 @@ class ConnThrottler {
     }
 
     /**
-     *  Checks if individual count is over the limit by this much. Does not increment.
-     *  @param h the destination hash to test against the per-peer limit
-     *  @param over the number of extra connections to allow beyond that limit
-     *  @return true if this peer's connection count exceeds its limit by more than over
-     *  @since 0.9.34
+     * Checks if individual count is over the limit by this much. Does not increment.
+     * @param h the destination hash to test against the per-peer limit
+     * @param over the number of extra connections to allow beyond that limit
+     * @return true if this peer's connection count exceeds its limit by more than over
+     * @since 0.9.34
      */
     boolean isOverBy(Hash h, int over) {
         if (_max > 0)

@@ -10,9 +10,9 @@ import net.i2p.data.SimpleDataStructure;
  */
 public interface SelectionCollector<T extends SimpleDataStructure> {
     /**
-     *  Add an entry to this collector.
+     * Add an entry to this collector.
      *
-     *  @param entry key being gathered, already matched against the search
+     * @param entry key being gathered, already matched against the search
      */
     public void add(T entry);
 }

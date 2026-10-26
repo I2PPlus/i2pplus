@@ -38,8 +38,8 @@ public class ConfigNavHelper extends HelperBase {
                                            _x("Auto-Tuning") };
 
     /**
-     *  A configuration tab entry with page name and display title.
-     *  @since 0.9.19
+     * A configuration tab entry with page name and display title.
+     * @since 0.9.19
      */
     private static class Tab {
         /** Page the tab links to. */
@@ -58,8 +58,8 @@ public class ConfigNavHelper extends HelperBase {
     }
 
     /**
-     *  Comparator for sorting tabs alphabetically by title.
-     *  @since 0.9.19
+     * Comparator for sorting tabs alphabetically by title.
+     * @since 0.9.19
      */
     private class TabComparator implements Comparator<Tab> {
          /** Fixed id, the comparator is never serialized across versions. */
@@ -80,10 +80,10 @@ public class ConfigNavHelper extends HelperBase {
     }
 
     /**
-     *  Render the configuration navigation bar.
+     * Render the configuration navigation bar.
      *
-     *  @param requestURI the current request URI
-     *  @throws java.io.IOException if writing to the output fails
+     * @param requestURI the current request URI
+     * @throws java.io.IOException if writing to the output fails
      */
     public void renderNavBar(String requestURI) throws IOException {
         StringBuilder buf = new StringBuilder(1024);

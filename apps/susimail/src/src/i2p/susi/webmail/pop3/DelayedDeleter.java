@@ -12,12 +12,12 @@ import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 
 /**
- *  Queue UIDLs for later deletion.
- *  We send deletions at close time but we don't wait around
- *  for the answer. Also, the user may delete mails when offline.
- *  So we queue them here and reconnect to delete.
+ * Queue UIDLs for later deletion.
+ * We send deletions at close time but we don't wait around
+ * for the answer. Also, the user may delete mails when offline.
+ * So we queue them here and reconnect to delete.
  *
- *  @since 0.9.13
+ * @since 0.9.13
  */
 class DelayedDeleter {
 

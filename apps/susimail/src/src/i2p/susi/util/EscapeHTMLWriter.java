@@ -137,7 +137,7 @@ public class EscapeHTMLWriter extends FilterWriter {
     }
 
     /**
-     *  Does nothing. Does not close the underlying writer.
+     * Does nothing. Does not close the underlying writer.
      */
     @Override
     public void close() { /* no-op */ }

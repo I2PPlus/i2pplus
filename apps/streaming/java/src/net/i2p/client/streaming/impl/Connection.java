@@ -118,8 +118,8 @@ class Connection {
     private boolean _updatedShareOpts;
     /**
      * Packet ID (Long) to PacketLocal for sent but unacked packets.
-     *  Lazily allocated on the first send so inbound-only connections allocate
-     *  no window at all. All access (including reads) happens under
+     * Lazily allocated on the first send so inbound-only connections allocate
+     * no window at all. All access (including reads) happens under
      * {@link #_outboundPacketsLock}; null until first write.
      */
     private TreeMap<Long, PacketLocal> _outboundPackets;
@@ -151,8 +151,8 @@ class Connection {
     private final AtomicLong _disconnectScheduledOn = new AtomicLong();
     /**
      * Last received on. Written on the receive/notification thread
-     *  (packetReceived), read by the inactivity backstop timer
-     *  (remoteSilentTooLong, getLastActivityOn) — volatile for a stable
+     * (packetReceived), read by the inactivity backstop timer
+     * (remoteSilentTooLong, getLastActivityOn) — volatile for a stable
      * reading across threads.
      */
     private volatile long _lastReceivedOn;
@@ -184,42 +184,42 @@ class Connection {
      */
     private volatile boolean _establishedResumeWarned;
     /**
-     *  Whether an immediate retransmit-timer fire has already been granted for the
-     *  current overdue head-of-line packet. Cleared as soon as the timer is no longer
-     *  overdue, so each new overdue period gets one immediate attempt. See
-     *  {@link #nextRetransmitDelay}.
+     * Whether an immediate retransmit-timer fire has already been granted for the
+     * current overdue head-of-line packet. Cleared as soon as the timer is no longer
+     * overdue, so each new overdue period gets one immediate attempt. See
+     * {@link #nextRetransmitDelay}.
      */
     private boolean _immediateRtoFired;
     /**
-     *  Whether the rising edge of a retransmit stall has already been logged for this
-     *  episode. Keeps the warning to one line per stall instead of one per timer firing;
-     *  cleared as soon as forward ACK progress resumes. See the retransmit timer.
+     * Whether the rising edge of a retransmit stall has already been logged for this
+     * episode. Keeps the warning to one line per stall instead of one per timer firing;
+     * cleared as soon as forward ACK progress resumes. See the retransmit timer.
      */
     private boolean _retransmitStallLogged;
     /**
-     *  Clock value at which the current run of retransmit firings without forward ACK
-     *  progress began, or 0 when there is no such run. The stall verdict is measured
-     *  from here rather than from a count of firings, because RTO doubling makes a
-     *  count mean a different duration on every connection.
+     * Clock value at which the current run of retransmit firings without forward ACK
+     * progress began, or 0 when there is no such run. The stall verdict is measured
+     * from here rather than from a count of firings, because RTO doubling makes a
+     * count mean a different duration on every connection.
      */
     private long _retransmitStallSince;
 
     /**
-     *  How long the retransmit timer must go without forward ACK progress before the
-     *  connection is called stalled. Matches {@link #STALL_GRACE_MS} so the timer-driven
-     *  and the goodput-driven detectors agree on what "stalled" means rather than one
-     *  firing on a condition the other considers normal.
+     * How long the retransmit timer must go without forward ACK progress before the
+     * connection is called stalled. Matches {@link #STALL_GRACE_MS} so the timer-driven
+     * and the goodput-driven detectors agree on what "stalled" means rather than one
+     * firing on a condition the other considers normal.
      */
     private static final long RETRANSMIT_STALL_MS = 30000;
     /**
-     *  Fixed-point congestion-avoidance credit for the deterministic growth
-     *  ratchet in {@code ConnectionPacketHandler.adjustWindow}. Increments are
-     *  derived from accumulated ACK credit instead of a per-ACK random draw,
-     *  giving the same expected growth rate as the probabilistic gate without
-     *  RNG noise. Holds the 20-bit fractional remainder of the accumulator.
-     *  Must only be read/written while holding {@link #_outboundPacketsLock};
-     *  zeroed in retransmit() when the window is cut.
-     *  @since 0.9.71+
+     * Fixed-point congestion-avoidance credit for the deterministic growth
+     * ratchet in {@code ConnectionPacketHandler.adjustWindow}. Increments are
+     * derived from accumulated ACK credit instead of a per-ACK random draw,
+     * giving the same expected growth rate as the probabilistic gate without
+     * RNG noise. Holds the 20-bit fractional remainder of the accumulator.
+     * Must only be read/written while holding {@link #_outboundPacketsLock};
+     * zeroed in retransmit() when the window is cut.
+     * @since 0.9.71+
      */
     long _caWindowAccumulator;
 
@@ -317,7 +317,7 @@ class Connection {
     private final PacedPacketEvent _pacedEvent;
     /**
      * Paced-send queue, lazy like {@link #_outboundPackets}: null until the
-     *  first paced packet, so connections that never pace allocate nothing.
+     * first paced packet, so connections that never pace allocate nothing.
      * All access happens under {@link #_pacedQueueLock}.
      */
     private LinkedList<PacketLocal> _pacedQueue;
@@ -343,16 +343,16 @@ class Connection {
 
     /**
      * Recompute the per-stream window ceiling at most this often. The ceiling
-     *  feathers at the RTT/estimator cadence anyway, so a cached value remains
-     *  accurate across the several write attempts an eagerly blocked app will
+     * feathers at the RTT/estimator cadence anyway, so a cached value remains
+     * accurate across the several write attempts an eagerly blocked app will
      * issue.
      */
     private static final long BDP_CACHE_MS = 250;
     /**
      * Headroom (%) applied to the BDP estimate for the per-stream ceiling.
-     *  The Westwood+ sample lags ACK cadence and the 500ms RTT floor
-     *  under-measures fast paths, so the raw estimate would park the window
-     *  just under the true pipe; loss — not the ceiling — bounds overshoot.
+     * The Westwood+ sample lags ACK cadence and the 500ms RTT floor
+     * under-measures fast paths, so the raw estimate would park the window
+     * just under the true pipe; loss — not the ceiling — bounds overshoot.
      * @since 0.9.71+
      */
     private static final int WINDOW_CEILING_HEADROOM_PCT = 125;
@@ -368,14 +368,14 @@ class Connection {
 
     /**
      * Record every Nth choke-size stat sample. These fire per packet sent or
-     *  released; sampling the aggregate (scaling the value by the period)
+     * released; sampling the aggregate (scaling the value by the period)
      * preserves the display stats with a fraction of the Rate lock traffic.
      */
     private static final int TELEMETRY_SAMPLE_PERIOD = 16;
     /**
      * Sample counters for the choke-size stats (one per call site).
-     *  Monotonic per connection: the emission test is a threshold on the counter,
-     *  so a counter that resets can only fire again once it has climbed back to
+     * Monotonic per connection: the emission test is a threshold on the counter,
+     * so a counter that resets can only fire again once it has climbed back to
      * the period.
      */
     private int _chokeSizeBeginCnt;
@@ -585,13 +585,13 @@ class Connection {
      */
     public static final int DEFAULT_CONNECT_TIMEOUT = 30*1000;
     /**
-     *  Router-wide absolute cap on the effective connect window, in
-     *  milliseconds.  Defaults to 75 seconds; an operator may raise or lower it
-     *  with {@link I2PSocketOptions#PROP_MAX_CONNECT_TIMEOUT}, and a
-     *  per-connection override (ConnectionOptions#setMaxConnectTimeout()) wins
-     *  when set.
-     *  @return the global cap in ms, never negative
-     *  @since 0.9.70+
+     * Router-wide absolute cap on the effective connect window, in
+     * milliseconds.  Defaults to 75 seconds; an operator may raise or lower it
+     * with {@link I2PSocketOptions#PROP_MAX_CONNECT_TIMEOUT}, and a
+     * per-connection override (ConnectionOptions#setMaxConnectTimeout()) wins
+     * when set.
+     * @return the global cap in ms, never negative
+     * @since 0.9.70+
      */
     static long getGlobalMaxConnectTimeout() {
         return I2PAppContext.getGlobalContext().getProperty(I2PSocketOptions.PROP_MAX_CONNECT_TIMEOUT, 75*1000);
@@ -684,10 +684,10 @@ class Connection {
     public static final int MAX_WINDOW_SIZE_DEFAULT = SystemVersion.isSlow() ? 1024 : 2048;
 
     /**
-     *  Absolute ceiling on in-flight packets regardless of BDP estimate.
-     *  Prevents runaway window growth from estimator noise or bugs.
-     *  Set to accommodate high-BDP paths (e.g. 50Mbps @ 1s RTT ~ 6250 packets @ 1KB).
-     *  Raised from 4096 to 8192 for high-throughput bulk transfers.
+     * Absolute ceiling on in-flight packets regardless of BDP estimate.
+     * Prevents runaway window growth from estimator noise or bugs.
+     * Set to accommodate high-BDP paths (e.g. 50Mbps @ 1s RTT ~ 6250 packets @ 1KB).
+     * Raised from 4096 to 8192 for high-throughput bulk transfers.
      */
     public static final int ABSOLUTE_MAX_WINDOW = 8192;
 
@@ -732,7 +732,7 @@ class Connection {
     private static final int MIN_SSTHR_FAST_RETX = 16;
     /**
      * Minimum RTT (ms) used when deriving the bandwidth slow-start threshold anchor.
-     *  A raw sub-second min-RTT would shrink the anchor toward the degenerate 16-packet
+     * A raw sub-second min-RTT would shrink the anchor toward the degenerate 16-packet
      * floor after the first loss event, locking a healthy pipe at ~10KB/s.
      */
     static final int SS_THRESH_BW_ANCHOR_MIN_RTT = 1000;
@@ -770,9 +770,9 @@ class Connection {
     private static volatile int maxSynResends = 12;
 
     /**
-     *  Minimum connect window (ms) after Tuner-multiplier scaling, so a fast network
-     *  never cuts a handshake below a full SYN retransmit cycle.
-     *  @since 0.9.71+
+     * Minimum connect window (ms) after Tuner-multiplier scaling, so a fast network
+     * never cuts a handshake below a full SYN retransmit cycle.
+     * @since 0.9.71+
      */
     static final long CONNECT_TIMEOUT_FLOOR_MS = 10*1000;
 
@@ -809,38 +809,38 @@ class Connection {
     private static final int SYN_RTO_HEADROOM_PCT = 150;
 
     /**
-     *  Whether this connection has unacknowledged data it could be stuck behind.
-     *  <p>Read without {@link #_outboundPacketsLock}: the verdict is evaluated from a
-     *  timer as well as from the ACK path, and taking the send lock from the timer
-     *  invites the established ordering problem with the bandwidth estimator. The
-     *  cheap proxy answers the question the verdict cares about - has anything ever
-     *  got through, so that silence afterwards is meaningful - without locking.
+     * Whether this connection has unacknowledged data it could be stuck behind.
+     * <p>Read without {@link #_outboundPacketsLock}: the verdict is evaluated from a
+     * timer as well as from the ACK path, and taking the send lock from the timer
+     * invites the established ordering problem with the bandwidth estimator. The
+     * cheap proxy answers the question the verdict cares about - has anything ever
+     * got through, so that silence afterwards is meaningful - without locking.
      *
-     *  @return true once forward progress has been made on this connection
+     * @return true once forward progress has been made on this connection
      */
     private boolean hasOutstandingData() {
         return _highestAckedThrough.get() >= 0;
     }
 
     /**
-     *  Decide whether the retransmit timer has gone long enough without forward ACK
-     *  progress to call it a stall.
-     *  <p>Time, not a count of firings. RTO doubles on every firing for an established
-     *  connection, so "two firings" is about three seconds early in a connection's life
-     *  and over a minute late in one that has been running - the same number meaning two
-     *  very different things, and always far too eager at the start. A duration has one
-     *  meaning.
-     *  <p>Requires an established session. Before the handshake completes there is no
-     *  forward ACK progress to be missing, so a connection still setting up cannot be
-     *  stalled; counting its ordinary SYN retransmissions produced a large volume of
-     *  warnings about connections that were never broken.
+     * Decide whether the retransmit timer has gone long enough without forward ACK
+     * progress to call it a stall.
+     * <p>Time, not a count of firings. RTO doubles on every firing for an established
+     * connection, so "two firings" is about three seconds early in a connection's life
+     * and over a minute late in one that has been running - the same number meaning two
+     * very different things, and always far too eager at the start. A duration has one
+     * meaning.
+     * <p>Requires an established session. Before the handshake completes there is no
+     * forward ACK progress to be missing, so a connection still setting up cannot be
+     * stalled; counting its ordinary SYN retransmissions produced a large volume of
+     * warnings about connections that were never broken.
      *
-     *  @param established true once any packet has been acknowledged
-     *  @param now current clock value in ms
-     *  @param stallSinceMs clock value at which the current no-progress run began, or 0
-     *  @param thresholdMs how long without progress counts as a stall
-     *  @return true only for an established connection idle past the threshold
-     *  @since 0.9.71+
+     * @param established true once any packet has been acknowledged
+     * @param now current clock value in ms
+     * @param stallSinceMs clock value at which the current no-progress run began, or 0
+     * @param thresholdMs how long without progress counts as a stall
+     * @return true only for an established connection idle past the threshold
+     * @since 0.9.71+
      */
     static boolean isRetransmitStalledNow(boolean established, long now, long stallSinceMs,
     long thresholdMs) {
@@ -851,17 +851,17 @@ class Connection {
     }
 
     /**
-     *  Whether this firing should produce a stall warning, given the latch state.
-     *  <p>The stall condition holds for as long as the path is stuck and the timer
-     *  keeps firing, so an unconditional warning emits once per RTO tick. That produced
-     *  over 90,000 identical lines in under an hour here, which is worse than no report
-     *  at all: it buries the lines that carry signal and trains the reader to skip the
-     *  class. One line per episode, and an INFO when it ends.
+     * Whether this firing should produce a stall warning, given the latch state.
+     * <p>The stall condition holds for as long as the path is stuck and the timer
+     * keeps firing, so an unconditional warning emits once per RTO tick. That produced
+     * over 90,000 identical lines in under an hour here, which is worse than no report
+     * at all: it buries the lines that carry signal and trains the reader to skip the
+     * class. One line per episode, and an INFO when it ends.
      *
-     *  @param stallDetached true when this firing meets the stall condition
-     *  @param alreadyLogged true when this episode has already been reported
-     *  @return true only on the rising edge of a stall
-     *  @since 0.9.71+
+     * @param stallDetached true when this firing meets the stall condition
+     * @param alreadyLogged true when this episode has already been reported
+     * @return true only on the rising edge of a stall
+     * @since 0.9.71+
      */
     static boolean shouldLogStallEdge(boolean stallDetached, boolean alreadyLogged) {
         return stallDetached && !alreadyLogged;
@@ -1189,10 +1189,10 @@ class Connection {
     synchronized boolean isRetransmitStall() { return _retransmitCount >= 2; }
 
     /**
-     *  Returns the number of milliseconds between the last send
-     *  and now, for external stall detection callers.
-     *  @return milliseconds elapsed since the last send
-     *  @since 0.9.71+
+     * Returns the number of milliseconds between the last send
+     * and now, for external stall detection callers.
+     * @return milliseconds elapsed since the last send
+     * @since 0.9.71+
      */
     long getTimeSinceLastSend() { return _context.clock().now() - _lastSendTime; }
 
@@ -1225,16 +1225,16 @@ class Connection {
     }
 
     /**
-     *  Effective SYN give-up count for this connection: {@link #maxSynResends} scaled up so
-     *  the retransmit budget (count * inter-SYN interval) covers the connect window, so the
-     *  retransmit timer cannot tear this connection down while {@link #waitForConnect(int)}
-     *  is still waiting.
-     *  <p>The base window mirrors {@link ConnectionManager#connect}: connectDelay is added to
-     *  connectTimeout only on the delayed-SYN path, which is exactly how waitForConnect is
-     *  invoked there ({@code connectDelay + connectTimeout}).
+     * Effective SYN give-up count for this connection: {@link #maxSynResends} scaled up so
+     * the retransmit budget (count * inter-SYN interval) covers the connect window, so the
+     * retransmit timer cannot tear this connection down while {@link #waitForConnect(int)}
+     * is still waiting.
+     * <p>The base window mirrors {@link ConnectionManager#connect}: connectDelay is added to
+     * connectTimeout only on the delayed-SYN path, which is exactly how waitForConnect is
+     * invoked there ({@code connectDelay + connectTimeout}).
      *
-     *  @return the number of SYN sends before giving up on an unacknowledged SYN
-     *  @since 0.9.71+
+     * @return the number of SYN sends before giving up on an unacknowledged SYN
+     * @since 0.9.71+
      */
     private int getMaxSynSends() {
         long window = getEffectiveConnectWindow();
@@ -1242,17 +1242,17 @@ class Connection {
     }
 
     /**
-     *  Assemble the un-scaled base connect window (ms) for a connection's options.
-     *  <p>connectDelay is added to connectTimeout only on the delayed-SYN path (both
-     *  set), so the base matches how {@link ConnectionManager#connect} invokes
-     *  {@code waitForConnect(int)} — there the SYN has not yet been sent and {@code
-     *  connectDelay} is added to the timeout so the handshake is not cut short while
-     *  the SYN is still waiting to be transmitted.
+     * Assemble the un-scaled base connect window (ms) for a connection's options.
+     * <p>connectDelay is added to connectTimeout only on the delayed-SYN path (both
+     * set), so the base matches how {@link ConnectionManager#connect} invokes
+     * {@code waitForConnect(int)} — there the SYN has not yet been sent and {@code
+     * connectDelay} is added to the timeout so the handshake is not cut short while
+     * the SYN is still waiting to be transmitted.
      *
-     *  @param connectTimeoutMs the option's connect timeout in ms (&lt;=0 means none)
-     *  @param connectDelayMs   the option's connect delay in ms
-     *  @return the base connect window in ms; 0 when no connect timeout is configured
-     *  @since 0.9.71+
+     * @param connectTimeoutMs the option's connect timeout in ms (&lt;=0 means none)
+     * @param connectDelayMs   the option's connect delay in ms
+     * @return the base connect window in ms; 0 when no connect timeout is configured
+     * @since 0.9.71+
      */
     static long computeConnectBase(long connectTimeoutMs, long connectDelayMs) {
         if (connectTimeoutMs <= 0) {return 0;}
@@ -1288,16 +1288,16 @@ class Connection {
     }
 
     /**
-     *  Constructor for this connection.
-     *  @param ctx application context supplying the clock, logger and stats
-     *  @param manager the owning connection manager
-     *  @param session the I2P session this connection runs over
-     *  @param chooser scheduler used for delayed connects
-     *  @param timer the shared timer that drives this connection's events
-     *  @param queue the outbound packet queue
-     *  @param handler the inbound packet handler
-     *  @param opts per-connection options; may be null, a default set is created
-     *  @param isInbound true for a connection we accepted rather than dialled
+     * Constructor for this connection.
+     * @param ctx application context supplying the clock, logger and stats
+     * @param manager the owning connection manager
+     * @param session the I2P session this connection runs over
+     * @param chooser scheduler used for delayed connects
+     * @param timer the shared timer that drives this connection's events
+     * @param queue the outbound packet queue
+     * @param handler the inbound packet handler
+     * @param opts per-connection options; may be null, a default set is created
+     * @param isInbound true for a connection we accepted rather than dialled
      */
     public Connection(I2PAppContext ctx, ConnectionManager manager,
                       I2PSession session, SchedulerChooser chooser,
@@ -1668,10 +1668,9 @@ class Connection {
                     if (timeoutMs > 0) {
                         if (timeLeft <= 0) {
                             if (_log.shouldInfo()) {
-                                _log.info("Outbound window is full (choked? " + _isChoked + ' ' + unacked
-                                          + " unacked with " + _activeResends + " active resends"
-                                          + " and we've waited too long (" + (0-(timeLeft - timeoutMs)) + "ms): "
-                                          + toString());
+                                _log.info("Outbound window full -> " + (_isChoked ? "choked" : "not choked")
+                                          + " * Unacked: " + unacked + " * Active resends: " + _activeResends
+                                          + " * Waited: " + (timeoutMs - timeLeft) + "ms\n* " + toString());
                             }
                             return false;
                         }
@@ -1813,12 +1812,12 @@ class Connection {
     }
 
     /**
-     *  Tail Loss Probe timeout (PTO).
-     *  Time after which we send a probe if no ACK has been received for the
-     *  oldest unacked packet. Fires at ~2*RTT to detect loss before RTO.
+     * Tail Loss Probe timeout (PTO).
+     * Time after which we send a probe if no ACK has been received for the
+     * oldest unacked packet. Fires at ~2*RTT to detect loss before RTO.
      *
-     *  @return probe timeout in ms — [200, 2000] once the RTT is known,
-     *          otherwise bounded by half the current RTO (up to 3000)
+     * @return probe timeout in ms — [200, 2000] once the RTT is known,
+     *         otherwise bounded by half the current RTO (up to 3000)
      */
     private int getPTO() {
         int rtt = _options.getRTT();
@@ -2093,14 +2092,14 @@ class Connection {
         }
     }
     /**
-     *  Periodic evaluation of the throughput floor.
-     *  <p>The ACK path can only reach the floor while bytes are being
-     *  acknowledged, so a connection that has gone entirely quiet would never
-     *  be examined and a hard stall would be undetectable from there. This
-     *  timer closes that gap. It is armed only once a baseline exists, so
-     *  connections that never transfer data do not pay for it.
+     * Periodic evaluation of the throughput floor.
+     * <p>The ACK path can only reach the floor while bytes are being
+     * acknowledged, so a connection that has gone entirely quiet would never
+     * be examined and a hard stall would be undetectable from there. This
+     * timer closes that gap. It is armed only once a baseline exists, so
+     * connections that never transfer data do not pay for it.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private class FloorCheckEvent extends SimpleTimer2.TimedEvent {
 
@@ -2164,14 +2163,14 @@ class Connection {
                 _context.statManager().addRateData("stream.con.stallDetected", 1);
                 markStalledForRotation();
                 if (_log.shouldWarn()) {
-                    _log.warn("Stream has made no progress for " + (STALL_GRACE_MS / 1000)
-                              + "s (no bytes acknowledged) on " + this);
+                    _log.warn("Stream stalled -> No bytes acknowledged for " +
+                              (STALL_GRACE_MS / 1000) + "s\n* " + this);
                 }
                 break;
             case THROTTLED:
                 _context.statManager().addRateData("stream.con.throttleDetected", 1);
                 if (_log.shouldWarn()) {
-                    _log.warn("Stream goodput fell well below this connection's own baseline on " + this);
+                    _log.warn("Stream throttled -> Goodput far below the baseline\n* " + this);
                 }
                 break;
             default:
@@ -2180,17 +2179,17 @@ class Connection {
     }
 
     /**
-     *  Publish a stall to the router so outbound tunnel selection can prefer a
-     *  different path for this destination.
-     *  <p>Only STALLED marks, not THROTTLED: a slow-but-delivering path is not
-     *  proven dead, and rotating on it would churn a destination that simply has
-     *  no better route. A hard stall is unambiguous.
-     *  <p>The connection is deliberately left open. Egress is chosen per message
-     *  in the router, so the router can move this stream onto another tunnel
-     *  without touching it, and the client sees a retransmitted gap rather than
-     *  an aborted download.
+     * Publish a stall to the router so outbound tunnel selection can prefer a
+     * different path for this destination.
+     * <p>Only STALLED marks, not THROTTLED: a slow-but-delivering path is not
+     * proven dead, and rotating on it would churn a destination that simply has
+     * no better route. A hard stall is unambiguous.
+     * <p>The connection is deliberately left open. Egress is chosen per message
+     * in the router, so the router can move this stream onto another tunnel
+     * without touching it, and the client sees a retransmitted gap rather than
+     * an aborted download.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private void markStalledForRotation() {
         try {
@@ -2219,20 +2218,20 @@ class Connection {
     }
 
     /**
-     *  Graduated congestion response: the window is cut by an amount that
-     *  scales with the number of CONSECUTIVE loss events since the last
-     *  recovery, so a single failed packet does not collapse the connection
-     *  while persistent loss still backs off.
-     *  <p>The 0.9.71+ profile ("ramp fast, decline slowly") makes every tier
-     *  gentler than the classic halves/quarters — a first strike cuts only
-     *  1/8, a second another 1/4, and persistent loss settles at half — so a
-     *  single loss event on a high-BDP connection does not undo an RTT of
-     *  window growth, while genuinely congested paths still concede capacity.
+     * Graduated congestion response: the window is cut by an amount that
+     * scales with the number of CONSECUTIVE loss events since the last
+     * recovery, so a single failed packet does not collapse the connection
+     * while persistent loss still backs off.
+     * <p>The 0.9.71+ profile ("ramp fast, decline slowly") makes every tier
+     * gentler than the classic halves/quarters — a first strike cuts only
+     * 1/8, a second another 1/4, and persistent loss settles at half — so a
+     * single loss event on a high-BDP connection does not undo an RTT of
+     * window growth, while genuinely congested paths still concede capacity.
      *
-     *  @param strikes consecutive loss events (&gt;= 1) since the last recovery
-     *  @param wsize current window size
-     *  @return new window size, floored at 4 (never below a usable minimum)
-     *  @since 0.9.71+
+     * @param strikes consecutive loss events (&gt;= 1) since the last recovery
+     * @param wsize current window size
+     * @return new window size, floored at 4 (never below a usable minimum)
+     * @since 0.9.71+
      */
     static int graduatedLossWindow(int strikes, int wsize) {
         if (strikes <= 1) {
@@ -2245,34 +2244,34 @@ class Connection {
     }
 
     /**
-     *  Slow-start threshold for a graduated loss response: never below the
-     *  graduated window (so the connection can regrow to at least its post-cut
-     *  capacity) and never below the bandwidth-derived estimate.
+     * Slow-start threshold for a graduated loss response: never below the
+     * graduated window (so the connection can regrow to at least its post-cut
+     * capacity) and never below the bandwidth-derived estimate.
      *
-     *  @param strikes consecutive loss events since the last recovery
-     *  @param wsize current window size
-     *  @param bwBasedSsthresh the bandwidth-estimate-derived threshold (&gt;= 1)
-     *  @return slow-start threshold, floored at 1
+     * @param strikes consecutive loss events since the last recovery
+     * @param wsize current window size
+     * @param bwBasedSsthresh the bandwidth-estimate-derived threshold (&gt;= 1)
+     * @return slow-start threshold, floored at 1
      */
     static int graduatedLossSsthresh(int strikes, int wsize, int bwBasedSsthresh) {
         return Math.max(graduatedLossWindow(strikes, wsize), Math.max(bwBasedSsthresh, 1));
     }
 
     /**
-     *  The bandwidth-derived slow-start threshold anchor: the packets the pipe
-     *  can hold, estimated as measured bandwidth times the effective RTT times
-     *  the growth factor, floored at the given minimum.
-     *  <p>The effective RTT is floored at {@link #SS_THRESH_BW_ANCHOR_MIN_RTT}
-     *  (1s): a raw sub-second min-RTT would otherwise shrink the anchor below
-     *  the classic fast-retransmit floor (16 packets) on a healthy path, and
-     *  once the window is pinned there the low ACK rate lowers the measured
-     *  bandwidth, confirming the low anchor — a self-reinforcing ~10KB/s lock.
+     * The bandwidth-derived slow-start threshold anchor: the packets the pipe
+     * can hold, estimated as measured bandwidth times the effective RTT times
+     * the growth factor, floored at the given minimum.
+     * <p>The effective RTT is floored at {@link #SS_THRESH_BW_ANCHOR_MIN_RTT}
+     * (1s): a raw sub-second min-RTT would otherwise shrink the anchor below
+     * the classic fast-retransmit floor (16 packets) on a healthy path, and
+     * once the window is pinned there the low ACK rate lowers the measured
+     * bandwidth, confirming the low anchor — a self-reinforcing ~10KB/s lock.
      *
-     *  @param bwEstPacketsPerMs measured bandwidth in packets/ms (&gt;= 0)
-     *  @param minRttMs the connection's raw min-RTT in ms (&gt;= 0)
-     *  @param factor growth factor applied to the BDP estimate (&gt;= 1)
-     *  @param floor minimum anchor in packets (&gt;= 1)
-     *  @return anchor in packets, never below {@code floor}
+     * @param bwEstPacketsPerMs measured bandwidth in packets/ms (&gt;= 0)
+     * @param minRttMs the connection's raw min-RTT in ms (&gt;= 0)
+     * @param factor growth factor applied to the BDP estimate (&gt;= 1)
+     * @param floor minimum anchor in packets (&gt;= 1)
+     * @return anchor in packets, never below {@code floor}
      */
     static int bandwidthSsthreshAnchor(float bwEstPacketsPerMs, int minRttMs, int factor, int floor) {
         // A min-RTT that has never been measured is Integer.MAX_VALUE, not zero, so a
@@ -2287,21 +2286,21 @@ class Connection {
 
 
     /**
-     *  Whether a congestion episode's lost window has been fully recovered.
-     *  <p>Recovery is declared once the ACK stream has passed the congestion
-     *  mark <em>and</em> no retransmits remain outstanding. The window itself
-     *  need not be empty: a pipe dribbling data must not stay locked in the
-     *  graduated tiers merely because it never fully drains. Requiring zero
-     *  outstanding retransmits still guards against a stale ACK claiming
-     *  recovery on a NACK path before the paced resends have cleared.
+     * Whether a congestion episode's lost window has been fully recovered.
+     * <p>Recovery is declared once the ACK stream has passed the congestion
+     * mark <em>and</em> no retransmits remain outstanding. The window itself
+     * need not be empty: a pipe dribbling data must not stay locked in the
+     * graduated tiers merely because it never fully drains. Requiring zero
+     * outstanding retransmits still guards against a stale ACK claiming
+     * recovery on a NACK path before the paced resends have cleared.
      *
-     *  @param hadCongestionMark true when a congestion cut has ever occurred
-     *  @param ackThrough highest contiguously-acked sequence number
-     *  @param lastCongestionHighestUnacked highest unacked sequence number at
-     *                                      the cut, -1 if none
-     *  @param activeResends retransmits still awaiting their ACK
-     *  @return true when the lost window has been recovered
-     *  @since 0.9.71+
+     * @param hadCongestionMark true when a congestion cut has ever occurred
+     * @param ackThrough highest contiguously-acked sequence number
+     * @param lastCongestionHighestUnacked highest unacked sequence number at
+     *                                     the cut, -1 if none
+     * @param activeResends retransmits still awaiting their ACK
+     * @return true when the lost window has been recovered
+     * @since 0.9.71+
      */
     static boolean lossEpisodeRecovered(boolean hadCongestionMark, long ackThrough,
                                         long lastCongestionHighestUnacked, int activeResends) {
@@ -2309,23 +2308,23 @@ class Connection {
     }
 
     /**
-     *  Strike decay: a single loss strike is forgiven once at least one
-     *  smoothed RTT (floored at 500 ms) has passed without another strike,
-     *  rolling the graduated backoff back down toward the gentle tier. One-off
-     *  losses are normal on I2P, and keying the decay to elapsed time rather
-     *  than ACK count means a stale lone strike cannot keep the window
-     *  depressed forever, while true back-to-back loss (strikes inside the RTT
-     *  window) still escalates.
-     *  <p>Pure and side-effect free for unit testing; call sites apply the
-     *  result and refresh {@code _lastLossStrikeTime} under
-     *  {@code _outboundPacketsLock}.
+     * Strike decay: a single loss strike is forgiven once at least one
+     * smoothed RTT (floored at 500 ms) has passed without another strike,
+     * rolling the graduated backoff back down toward the gentle tier. One-off
+     * losses are normal on I2P, and keying the decay to elapsed time rather
+     * than ACK count means a stale lone strike cannot keep the window
+     * depressed forever, while true back-to-back loss (strikes inside the RTT
+     * window) still escalates.
+     *
+     * <p>Pure and side-effect free for unit testing; call sites apply the result
+     * and refresh {@code _lastLossStrikeTime} under {@code _outboundPacketsLock}.
      *
      * @param strikes current consecutive-loss count (&gt;= 0)
      * @param lastLossTime wall-clock ms of the most recent strike (&lt;= 0 if none)
      * @param now wall-clock ms to compare the elapsed interval against
      * @param smoothedRtt the connection's smoothed RTT in ms (&gt;= 0)
-     * @return strikes - 1 when at least max(smoothedRtt, 500) ms have elapsed
-     *         since the last strike, otherwise the current count; never below 0
+     * @return strikes - 1 when at least max(smoothedRtt, 500) ms have elapsed since
+                         the last strike, otherwise the current count; never below 0
      * @since 0.9.71+
      */
     static int decayLossStrikes(int strikes, long lastLossTime, long now, long smoothedRtt) {
@@ -2434,6 +2433,25 @@ class Connection {
      */
     static int effectiveInactivityTimeout(int configured, int fallbackMs) {
         return configured > 0 ? configured : fallbackMs;
+    }
+
+    /**
+     * Human name of the configured inactivity action, so a log line says what
+     * the router will do instead of printing a bare option number.
+     *
+     * @param action one of {@link ConnectionOptions#INACTIVITY_ACTION_NOOP},
+     *               {@link ConnectionOptions#INACTIVITY_ACTION_DISCONNECT} or
+     *               {@link ConnectionOptions#INACTIVITY_ACTION_SEND}
+     * @return the action name; "Unknown" for a value outside that set
+     * @since 0.9.72+
+     */
+    static String inactivityActionName(int action) {
+        switch (action) {
+            case ConnectionOptions.INACTIVITY_ACTION_NOOP: return "No action";
+            case ConnectionOptions.INACTIVITY_ACTION_DISCONNECT: return "Disconnect";
+            case ConnectionOptions.INACTIVITY_ACTION_SEND: return "Send keepalive";
+            default: return "Unknown";
+        }
     }
 
     /**
@@ -2599,23 +2617,23 @@ class Connection {
     }
 
     /**
-     *  Trigger immediate retransmission of unacked packets after a soft failure
-     *  (e.g., tunnel expiry, no tunnels). This schedules the retransmit event
-     *  with zero delay to retry sending on a new tunnel without waiting for RTO.
-     *  <p>Immediate reschedules are rate-limited: when the router soft-fails
-     *  every message (STATUS_SEND_FAILURE_NO_LEASESET while the LeaseSet fetch for
-     *  a fresh destination is still in flight), each report used to cancel the
-     *  retransmit timer and fire IMMEDIATELY.  Back-to-back reports arrived at
-     *  the I2CP round-trip rate (~10ms) and each immediate pass bumped the
-     *  SYN's send count once, exhausting the SYN give-up budget
-     *  (getMaxSynSends()) in ~200ms and killing the connect with a spurious
-     *  "SYN not acknowledged" before the LeaseSet could be fetched.  During the
-     *  SYN phase the minimum gap is the SYN retransmit interval, so retries are
-     *  interval-spaced exactly as the give-up budget math assumes; for
-     *  established connections a small fixed floor prevents any spin while still
-     *  hopping a replacement tunnel far sooner than the (possibly doubled) RTO.
+     * Trigger immediate retransmission of unacked packets after a soft failure
+     * (e.g., tunnel expiry, no tunnels). This schedules the retransmit event
+     * with zero delay to retry sending on a new tunnel without waiting for RTO.
+     * <p>Immediate reschedules are rate-limited: when the router soft-fails
+     * every message (STATUS_SEND_FAILURE_NO_LEASESET while the LeaseSet fetch for
+     * a fresh destination is still in flight), each report used to cancel the
+     * retransmit timer and fire IMMEDIATELY.  Back-to-back reports arrived at
+     * the I2CP round-trip rate (~10ms) and each immediate pass bumped the
+     * SYN's send count once, exhausting the SYN give-up budget
+     * (getMaxSynSends()) in ~200ms and killing the connect with a spurious
+     * "SYN not acknowledged" before the LeaseSet could be fetched.  During the
+     * SYN phase the minimum gap is the SYN retransmit interval, so retries are
+     * interval-spaced exactly as the give-up budget math assumes; for
+     * established connections a small fixed floor prevents any spin while still
+     * hopping a replacement tunnel far sooner than the (possibly doubled) RTO.
      *
-     *  @since 0.9.70+
+     * @since 0.9.70+
      */
     void scheduleSoftFailureRetransmit() {
         synchronized (_outboundPacketsLock) {
@@ -2633,8 +2651,8 @@ class Connection {
             // phase) or the doubled RTO (established), so the deferred retry
             // happens automatically without an I2CP send burst.
             if (_log.shouldDebug()) {
-                _log.debug("[" + this + "] soft failure within " + minSpacing +
-                           "ms of last immediate retransmit, deferring to the retransmit timer");
+                _log.debug("[" + this + "] Soft failure, last retransmit " + minSpacing +
+                           "ms ago\n* Deferring to the retransmit timer");
             }
             return;
         }
@@ -2675,13 +2693,13 @@ class Connection {
     }
 
     /**
-     *  This sends all 'normal' packets (acks and data) for the first time.
-     *  Retransmits are done in ResendPacketEvent below.
-     *  Resets, pings, and pongs are done elsewhere in this class,
-     *  or in {@link ConnectionManager} or ConnectionHandler.
+     * This sends all 'normal' packets (acks and data) for the first time.
+     * Retransmits are done in ResendPacketEvent below.
+     * Resets, pings, and pongs are done elsewhere in this class,
+     * or in {@link ConnectionManager} or ConnectionHandler.
      *
-     *  @param packet the ACK or data packet to send for the first time;
-     *                null is ignored
+     * @param packet the ACK or data packet to send for the first time;
+     *               null is ignored
      */
     void sendPacket(PacketLocal packet) {
         if (packet == null) {
@@ -2780,20 +2798,20 @@ class Connection {
     }
 
     /**
-     *  Process the acks and nacks received in a packet.
-     *  <p>Note: the returned list is a reused, internally-owned buffer
-     *  ({@code _ackedList}) that is cleared at the start of the next
-     *  {@code ackPackets()} call. Callers MUST fully consume it before the
-     *  next ack is processed. This is safe because acks are serialized on the
-     *  receive thread; do not retain a reference across calls.
+     * Process the acks and nacks received in a packet.
+     * <p>Note: the returned list is a reused, internally-owned buffer
+     * ({@code _ackedList}) that is cleared at the start of the next
+     * {@code ackPackets()} call. Callers MUST fully consume it before the
+     * next ack is processed. This is safe because acks are serialized on the
+     * receive thread; do not retain a reference across calls.
      *
-     *  @param ackThrough the highest packet sequence number the peer has
-     *                    received contiguously; anything lower counts as ACKed unless
-     *                    NACKed
-     *  @param nacks sequence numbers explicitly reported as lost, or null or
-     *               empty if the peer sent none
-     *  @return List of packets acked for the first time (empty if none);
-     *          a shared mutable buffer, not a fresh copy
+     * @param ackThrough the highest packet sequence number the peer has
+     *                   received contiguously; anything lower counts as ACKed unless
+     *                   NACKed
+     * @param nacks sequence numbers explicitly reported as lost, or null or
+     *              empty if the peer sent none
+     * @return List of packets acked for the first time (empty if none);
+     *         a shared mutable buffer, not a fresh copy
      */
     public List<PacketLocal> ackPackets(long ackThrough, long[] nacks) {
         // The wire carries only 32 bits of the sequence space; resolve the
@@ -3013,8 +3031,8 @@ class Connection {
     }
 
     /**
-     *  Called by CPH when a CLOSE packet is sent.
-     *  Idempotent: only the first call sets the timestamp.
+     * Called by CPH when a CLOSE packet is sent.
+     * Idempotent: only the first call sets the timestamp.
      */
     public void notifyCloseSent() {
         if (!_closeSentOn.compareAndSet(0, _context.clock().now())) {
@@ -3032,10 +3050,9 @@ class Connection {
             _context.statManager().addRateData("streaming.duplicateCloseSent", 1);
             if (_log.shouldWarn() && shouldLogDuplicateClose(now)) {
                 long suppressed = _duplicateCloseSuppressed.getAndSet(0);
-                _log.warn("Duplicate CLOSE sent: " + toString()
-                          + " (" + duplicate + " total"
-                          + (suppressed > 0 ? ", " + suppressed + " suppressed since last report" : "")
-                          + ")");
+                _log.warn("Duplicate CLOSE sent -> Total: " + duplicate
+                          + (suppressed > 0 ? " * Suppressed since last report: " + suppressed : "")
+                          + "\n* " + toString());
             }
         }
         // that's it, wait for notifyLastPacketAcked() or closeReceived()
@@ -3054,10 +3071,10 @@ class Connection {
     private static final AtomicLong _lastDuplicateCloseLog = new AtomicLong();
 
     /**
-     *  Rate-limit the duplicate-close report.
+     * Rate-limit the duplicate-close report.
      *
-     *  @param now current time in milliseconds
-     *  @return true if this occurrence should be reported
+     * @param now current time in milliseconds
+     * @return true if this occurrence should be reported
      */
     private static boolean shouldLogDuplicateClose(long now) {
         long last = _lastDuplicateCloseLog.get();
@@ -3070,9 +3087,9 @@ class Connection {
     }
 
     /**
-     *  Notify that a close was received.
-     *  Called by CPH.
-     *  May be called multiple times.
+     * Notify that a close was received.
+     * Called by CPH.
+     * May be called multiple times.
      */
     public void closeReceived() {
         if (_closeReceivedOn.compareAndSet(0, _context.clock().now())) {
@@ -3099,9 +3116,9 @@ class Connection {
     }
 
     /**
-     *  Notify that a close that we sent, and all previous packets, were acked.
-     *  Called by CPH. Only call this once.
-     *  @since 0.9.9
+     * Notify that a close that we sent, and all previous packets, were acked.
+     * Called by CPH. Only call this once.
+     * @since 0.9.9
      */
     public void notifyLastPacketAcked() {
         long cso = _closeSentOn.get();
@@ -3113,8 +3130,8 @@ class Connection {
     }
 
     /**
-     *  Notify that a reset was received.
-     *  May be called multiple times.
+     * Notify that a reset was received.
+     * May be called multiple times.
      */
     public void resetReceived() {
         if (!_resetReceived.compareAndSet(false, true)) {return;}
@@ -3189,34 +3206,34 @@ class Connection {
     public long getDisconnectScheduledOn() {return _disconnectScheduledOn.get();}
 
     /**
-     *  Must be called when we are done with this connection.
-     *  Enters TIME-WAIT if necessary, and removes from connection manager.
-     *  May be called multiple times.
-     *  This closes the socket side.
-     *  In normal operation, this is called when a CLOSE has been received,
-     *  AND a CLOSE has been sent, AND EITHER:
-     *  received close before sent close AND our CLOSE has been acked
-     *  OR received close after sent close.
+     * Must be called when we are done with this connection.
+     * Enters TIME-WAIT if necessary, and removes from connection manager.
+     * May be called multiple times.
+     * This closes the socket side.
+     * In normal operation, this is called when a CLOSE has been received,
+     * AND a CLOSE has been sent, AND EITHER:
+     * received close before sent close AND our CLOSE has been acked
+     * OR received close after sent close.
      *
-     *  @param cleanDisconnect if true, normal close; if false, send a RESET
+     * @param cleanDisconnect if true, normal close; if false, send a RESET
      */
     public void disconnect(boolean cleanDisconnect) {
         disconnect(cleanDisconnect, true);
     }
 
     /**
-     *  Must be called when we are done with this connection.
-     *  May be called multiple times.
-     *  This closes the socket side.
-     *  In normal operation, this is called when a CLOSE has been received,
-     *  AND a CLOSE has been sent, AND EITHER:
-     *  received close before sent close AND our CLOSE has been acked
-     *  OR received close after sent close.
+     * Must be called when we are done with this connection.
+     * May be called multiple times.
+     * This closes the socket side.
+     * In normal operation, this is called when a CLOSE has been received,
+     * AND a CLOSE has been sent, AND EITHER:
+     * received close before sent close AND our CLOSE has been acked
+     * OR received close after sent close.
      *
-     *  @param cleanDisconnect if true, normal close; if false, send a RESET
-     *  @param removeFromConMgr if true, enters TIME-WAIT if necessary.
-     *                          if false, MUST call {@link #disconnectComplete()} later.
-     *                          Should always be true unless called from ConnectionManager.
+     * @param cleanDisconnect if true, normal close; if false, send a RESET
+     * @param removeFromConMgr if true, enters TIME-WAIT if necessary.
+     *                         if false, MUST call {@link #disconnectComplete()} later.
+     *                         Should always be true unless called from ConnectionManager.
      */
     public void disconnect(boolean cleanDisconnect, boolean removeFromConMgr) {
         if (!_connected.compareAndSet(true, false)) {
@@ -3237,8 +3254,8 @@ class Connection {
 
         if (cleanDisconnect) {
             if (_log.shouldDebug()) {
-                _log.debug("Clean disconnecting from " + getRemotePeerString() + " -> " +
-                           (removeFromConMgr ? "Removed from Connection Manager" : "Not removed from Connection Manager"));
+                _log.debug("Clean disconnecting from " + getRemotePeerString() +
+                           " -> " + disconnectManagerClause(removeFromConMgr));
             }
             _outputStream.closeInternal();
         } else {
@@ -3251,13 +3268,13 @@ class Connection {
                 // buried everything else and drove log rotation. The reported line still
                 // names a peer and states how many were collapsed.
                 _log.warnThrottled("connHardDisconnectReset",
-                                   "Hard disconnecting and sending RESET to " + getRemotePeerString() + " -> " +
-                                   (removeFromConMgr ? "Removed from Connection Manager" : "Not removed from Connection Manager"));
+                                   "Hard disconnecting, sending RESET to " + getRemotePeerString() +
+                                   " -> " + disconnectManagerClause(removeFromConMgr));
                 sendReset();
             } else {
                 _log.warnThrottled("connHardDisconnect",
-                                   "Hard disconnecting from " + getRemotePeerString() + " -> " +
-                                   (removeFromConMgr ? "Removed from Connection Manager" : "Not removed from Connection Manager"));
+                                   "Hard disconnecting from " + getRemotePeerString() +
+                                   " -> " + disconnectManagerClause(removeFromConMgr));
             }
             _outputStream.streamErrorOccurred(new IOException("Hard disconnect"));
         }
@@ -3275,7 +3292,7 @@ class Connection {
                 // timeout slot.
                 if (cro > 0 && cro < cso && getUnackedPacketsSent() <= 0) {
                     if (_log.shouldInfo()) {
-                        _log.info("Rcv close -> Send close -> Last ACKed, skip TIME-WAIT for " +
+                        _log.info("Received close, we sent close, all ACKed -> Skipping TIME-WAIT\n* " +
                                   toString());
                     }
                     // They sent the first CLOSE.
@@ -3289,9 +3306,9 @@ class Connection {
     }
 
     /**
-     *  Must be called when we are done with this connection.
-     *  Final disconnect. Remove from conn manager.
-     *  May be called multiple times.
+     * Must be called when we are done with this connection.
+     * Final disconnect. Remove from conn manager.
+     * May be called multiple times.
      */
     public void disconnectComplete() {
         if (!_finalDisconnect.compareAndSet(false, true)) {return;}
@@ -3361,8 +3378,8 @@ class Connection {
         DisconnectEvent() {
             super();
             if (_log.shouldInfo()) {
-                _log.info("Disconnect timer initiated on connection to " +
-                          getRemotePeerString() + " -> 5 minutes to drop");
+                _log.info("TIME-WAIT started on " + getRemotePeerString() +
+                          " -> Dropping in " + getDisconnectTimeout() / 1000 + "s");
             }
         }
         /**
@@ -3382,11 +3399,11 @@ class Connection {
     }
 
     /**
-     *  Schedule an event on our timer.
-     *  The event should use the no-arg constructor; the pool is set here.
+     * Schedule an event on our timer.
+     * The event should use the no-arg constructor; the pool is set here.
      *
-     *  @return the reusable AckDupEvent for duplicate ACK scheduling
-     *  @since 0.9.23
+     * @return the reusable AckDupEvent for duplicate ACK scheduling
+     * @since 0.9.23
      */
     AckDupEvent getAckDupEvent() { return _ackDupEvent; }
 
@@ -3407,8 +3424,8 @@ class Connection {
     }
 
     /**
-     *  Remote peer of this connection, non-null.
-     *  @param peer non-null
+     * Remote peer of this connection, non-null.
+     * @param peer non-null
      */
     public void setRemotePeer(Destination peer) {
         if (peer == null) {throw new NullPointerException();}
@@ -3423,13 +3440,13 @@ class Connection {
     }
 
     /**
-     *  The key to verify signatures with.
-     *  The transient SPK if previously received,
-     *  else {@link #getRemotePeer()}.getSigningPublicKey() if previously received,
-     *  else null.
+     * The key to verify signatures with.
+     * The transient SPK if previously received,
+     * else {@link #getRemotePeer()}.getSigningPublicKey() if previously received,
+     * else null.
      *
-     *  @return peer Destination or null if unset
-     *  @since 0.9.39
+     * @return peer Destination or null if unset
+     * @since 0.9.39
      */
     public synchronized SigningPublicKey getRemoteSPK() {
         if (_transientSPK != null) {return _transientSPK;}
@@ -3438,9 +3455,9 @@ class Connection {
     }
 
     /**
-     *  Transient signing public key of the remote peer.
-     *  @param transientSPK null ok
-     *  @since 0.9.39
+     * Transient signing public key of the remote peer.
+     * @param transientSPK null ok
+     * @since 0.9.39
      */
     public void setRemoteTransientSPK(SigningPublicKey transientSPK) {
         synchronized(this) {
@@ -3452,15 +3469,15 @@ class Connection {
     }
 
     /**
-     *  What stream do we send data to the peer on?
-     *  @return non-global stream sending ID, or 0 if unknown
+     * What stream do we send data to the peer on?
+     * @return non-global stream sending ID, or 0 if unknown
      */
     public long getSendStreamId() {return _sendStreamId.get();}
 
     /**
-     *  Stream ID that we send data on.
-     *  @param id 0 to 0xffffffff
-     *  @throws IllegalStateException if already set to nonzero
+     * Stream ID that we send data on.
+     * @param id 0 to 0xffffffff
+     * @throws IllegalStateException if already set to nonzero
      */
     public void setSendStreamId(long id) {
         if (!_sendStreamId.compareAndSet(0, id)) {
@@ -3470,21 +3487,21 @@ class Connection {
     }
 
     /**
-     *  The stream ID of a peer connection that sends data to us, or zero if unknown.
-     *  @return receive stream ID, or 0 if unknown
+     * The stream ID of a peer connection that sends data to us, or zero if unknown.
+     * @return receive stream ID, or 0 if unknown
      */
     public long getReceiveStreamId() {return _receiveStreamId.get();}
 
     /**
-     *  Claim this connection's slot release, once per generation. The winner
-     *  (first CAS false→true) owns the budget release; every other teardown
-     *  path — a disconnectAllHard() sweep racing disconnectComplete(), a
-     *  failed bind's catch racing a later teardown — sees true and must skip
-     *  its release, or the dest's stream count is decremented for slots it
-     *  never took.
+     * Claim this connection's slot release, once per generation. The winner
+     * (first CAS false→true) owns the budget release; every other teardown
+     * path — a disconnectAllHard() sweep racing disconnectComplete(), a
+     * failed bind's catch racing a later teardown — sees true and must skip
+     * its release, or the dest's stream count is decremented for slots it
+     * never took.
      *
-     *  @return true if the caller now owns the one release for this generation
-     *  @since 0.9.71+
+     * @return true if the caller now owns the one release for this generation
+     * @since 0.9.71+
      */
     boolean claimSlotRelease() {
         return _slotReleaseClaimed.compareAndSet(false, true);
@@ -3502,9 +3519,9 @@ class Connection {
     }
 
     /**
-     *  Stream ID that the peer sends data on.
-     *  @param id 0 to 0xffffffff
-     *  @throws IllegalStateException if already set to nonzero
+     * Stream ID that the peer sends data on.
+     * @param id 0 to 0xffffffff
+     * @throws IllegalStateException if already set to nonzero
      */
     public void setReceiveStreamId(long id) {
         if (!_receiveStreamId.compareAndSet(0, id)) {
@@ -3565,16 +3582,16 @@ class Connection {
     public void setSocket(I2PSocketFull socket) {_socket = socket;}
 
     /**
-     *  The remote port.
-     *  @return Default I2PSession.PORT_UNSPECIFIED (0) or PORT_ANY (0)
-     *  @since 0.8.9
+     * The remote port.
+     * @return Default I2PSession.PORT_UNSPECIFIED (0) or PORT_ANY (0)
+     * @since 0.8.9
      */
     public int getPort() {return _remotePort;}
 
     /**
-     *  Local port of this connection.
-     *  @return Default I2PSession.PORT_UNSPECIFIED (0) or PORT_ANY (0)
-     *  @since 0.8.9
+     * Local port of this connection.
+     * @return Default I2PSession.PORT_UNSPECIFIED (0) or PORT_ANY (0)
+     * @since 0.8.9
      */
     public int getLocalPort() {return _localPort;}
 
@@ -3714,10 +3731,10 @@ class Connection {
     }
 
     /**
-     *  Choking state toward the other side.
-     *  If on is true or the value has changed, this will call ackImmediately().
-     *  @param on true for choking
-     *  @since 0.9.29
+     * Choking state toward the other side.
+     * If on is true or the value has changed, this will call ackImmediately().
+     * @param on true for choking
+     * @since 0.9.29
      */
     public void setChoking(boolean on) {
         if (on != _isChoking) {
@@ -3740,9 +3757,9 @@ class Connection {
     }
 
     /**
-     *  Choked state set by the other side.
-     *  @param on true for choked
-     *  @since 0.9.29
+     * Choked state set by the other side.
+     * @param on true for choked
+     * @since 0.9.29
      */
     public void setChoked(boolean on) {
         if (on != _isChoked) {
@@ -3817,18 +3834,18 @@ class Connection {
     public boolean isChoked() {return _isChoked;}
 
     /**
-     *  The window to restore when the remote unchokes us.
-     *  <p>Restores the pre-choke window and nothing more, capped at the current
-     *  per-stream ceiling so a window saved under a more generous ceiling cannot
-     *  jump the queue past what the pipe and heap allow now.
-     *  <p>The window deliberately does <em>not</em> consider {@code ssthresh}.
-     *  Folding it in (the old {@code max(saved, ssthresh)}) made every unchoke
-     *  restore the ceiling instead of the demonstrated window, because ssthresh
-     *  starts at {@code maxSlowStartWindow} and is an asymptotic growth target
-     *  rather than a capacity measurement. A connection whose window had genuinely
-     *  collapsed to a handful of packets would be reinflated to the full ceiling
-     *  on every unchoke, and since a remote only chokes when it is overloaded,
-     *  that fixed burst fed the loss that caused the next cut.
+     * The window to restore when the remote unchokes us.
+     * <p>Restores the pre-choke window and nothing more, capped at the current
+     * per-stream ceiling so a window saved under a more generous ceiling cannot
+     * jump the queue past what the pipe and heap allow now.
+     * <p>The window deliberately does <em>not</em> consider {@code ssthresh}.
+     * Folding it in (the old {@code max(saved, ssthresh)}) made every unchoke
+     * restore the ceiling instead of the demonstrated window, because ssthresh
+     * starts at {@code maxSlowStartWindow} and is an asymptotic growth target
+     * rather than a capacity measurement. A connection whose window had genuinely
+     * collapsed to a handful of packets would be reinflated to the full ceiling
+     * on every unchoke, and since a remote only chokes when it is overloaded,
+     * that fixed burst fed the loss that caused the next cut.
      *
      * @param saved the window captured when the choke began, always positive at
      *              the call site
@@ -4094,6 +4111,22 @@ class Connection {
                           " -> Took: " + elapsedMs + "ms";
     }
 
+    /**
+     * The connection-manager half of a disconnect entry. Three disconnect paths
+     * report it, and printing the boolean would read as "true" where the reader
+     * needs to know whether the manager dropped the connection.
+     *
+     * @param removeFromConMgr true if the connection manager dropped it, false
+     *                         if the caller kept it and owes a
+     *                         {@link #disconnectComplete()} call later
+     * @return the clause, never null
+     * @since 0.9.72+
+     */
+    static String disconnectManagerClause(boolean removeFromConMgr) {
+        return removeFromConMgr ? "Removed from Connection Manager"
+                                : "Not removed from Connection Manager";
+    }
+
     /** Reset activity timer. */
     private void resetActivityTimer() {
         long howLong = _options.getInactivityTimeout();
@@ -4121,7 +4154,8 @@ class Connection {
             // uh, nothing more to do...
             if (!_connected.get()) {
                 if (_log.shouldDebug()) {
-                    _log.debug("Inactivity timeout reached, but we are already closed!");
+                    _log.debug("Inactivity timeout on " + getRemotePeerString() +
+                               " -> Already closed, ignoring");
                 }
                 return;
             }
@@ -4129,8 +4163,8 @@ class Connection {
             long left = getTimeLeft();
             if (left > 0) {
                 if (_log.shouldDebug()) {
-                    _log.debug("Inactivity timeout reached on connection to " + getRemotePeerString() +
-                               " but there is time left (" + left + "ms)");
+                    _log.debug("Inactivity timeout on " + getRemotePeerString() +
+                               " -> Rescheduled, " + left + "ms left");
                 }
                 schedule(left);
                 return;
@@ -4147,31 +4181,31 @@ class Connection {
                                                                 REMOTE_SILENT_FALLBACK_MS),
                                      _context.clock().now())) {
                 if (_log.shouldDebug()) {
-                    _log.debug("Inactivity timeout reached on connection to " + getRemotePeerString() +
-                               " but there are unACKed packets and remote is not yet silent!");
+                    _log.debug("Inactivity timeout on " + getRemotePeerString() +
+                               " -> Unacked packets and peer not silent\n* Keeping the connection open");
                 }
                 return;
             }
             // this shouldn't have been scheduled
             if (_options.getInactivityTimeout() <= 0) {
                 if (_log.shouldDebug()) {
-                    _log.debug("Inactivity timeout reached on connection to " +
-                               getRemotePeerString() + " but there is no timer!");
+                    _log.debug("Inactivity timeout on " + getRemotePeerString() +
+                               " -> Timeout disabled, ignoring the event");
                 }
                 return;
             }
 
             if (_log.shouldDebug()) {
-                _log.debug("Inactivity timeout reached on connection to " + getRemotePeerString() +
-                           " -> " + _options.getInactivityAction());
+                _log.debug("Inactivity timeout on " + getRemotePeerString() +
+                           " -> " + inactivityActionName(_options.getInactivityAction()));
             }
 
             // bugger it, might as well do the hard work now
             switch (_options.getInactivityAction()) {
                 case ConnectionOptions.INACTIVITY_ACTION_NOOP:
                     if (_log.shouldInfo()) {
-                        _log.info("Inactivity timer expired on connection to " + getRemotePeerString() +
-                                  " -> Not doing anything!");
+                        _log.info("Inactivity timeout on " + getRemotePeerString() +
+                                  " -> No action configured, keeping the connection");
                     }
                     break;
                 case ConnectionOptions.INACTIVITY_ACTION_SEND:
@@ -4188,14 +4222,15 @@ class Connection {
                 default:
                     if (_log.shouldInfo()) {
                         int timeout = _options.getInactivityTimeout() / 1000;
-                        _log.info("Closing INACTIVE connection to " + getRemotePeerString() + " -> " + timeout + "s timeout reached");
+                        _log.info("Closing connection -> Inactivity timeout of " + timeout +
+                                  "s reached on " + getRemotePeerString());
                     }
                     if (_log.shouldDebug()) {
                         StringBuilder buf = new StringBuilder(128);
                         long now = _context.clock().now();
-                        buf.append("Last sent packet: ").append(now - _lastSendTime);
-                        buf.append("ms ago, last received: ").append(now -_lastReceivedOn);
-                        buf.append("ms ago -> Inactivity timeout is: ").append(_options.getInactivityTimeout());
+                        buf.append("Last sent: ").append(now - _lastSendTime).append("ms ago");
+                        buf.append(" * Last received: ").append(now - _lastReceivedOn).append("ms ago");
+                        buf.append(" * Inactivity timeout: ").append(_options.getInactivityTimeout()).append("ms");
                         _log.debug(buf.toString());
                     }
 
@@ -4319,15 +4354,15 @@ class Connection {
     }
 
     /**
-     *  Tail Loss Probe: fire at ~2*RTT to detect loss before the RTO timer.
-     *  Re-sends the oldest unacked packet as a probe. If the original was lost,
-     *  the probe fills the gap and the peer's ACK triggers fast recovery.
-     *  If the original was delivered, the duplicate triggers ackImmediately().
+     * Tail Loss Probe: fire at ~2*RTT to detect loss before the RTO timer.
+     * Re-sends the oldest unacked packet as a probe. If the original was lost,
+     * the probe fills the gap and the peer's ACK triggers fast recovery.
+     * If the original was delivered, the duplicate triggers ackImmediately().
      * <p>
-     *  Re-armed in ackPackets() whenever the head of the window is stuck while
-     *  later packets are ACKed, so a single lost head-of-line packet is probed
-     *  at ~2*RTT instead of waiting on an RTO that partial-ACK push-back keeps
-     *  deferring. Does NOT trigger congestion control (probe may not be lost).
+     * Re-armed in ackPackets() whenever the head of the window is stuck while
+     * later packets are ACKed, so a single lost head-of-line packet is probed
+     * at ~2*RTT instead of waiting on an RTO that partial-ACK push-back keeps
+     * deferring. Does NOT trigger congestion control (probe may not be lost).
      */
     private class TLProbeEvent extends SimpleTimer2.TimedEvent {
         /**
@@ -4376,8 +4411,8 @@ class Connection {
     }
 
     /**
-     *  Send a tail loss probe: re-enqueue the oldest unacked packet.
-     *  No congestion control — TLP is a probe, not a confirmed loss.
+     * Send a tail loss probe: re-enqueue the oldest unacked packet.
+     * No congestion control — TLP is a probe, not a confirmed loss.
      */
     private void sendTLProbe() {
         PacketLocal oldest = null;
@@ -4412,10 +4447,10 @@ class Connection {
     }
 
     /**
-     *  A single retransmit timer for all packets.
-     *  See RFCs 5681 and 6298.
+     * A single retransmit timer for all packets.
+     * See RFCs 5681 and 6298.
      *
-     *  @since 0.9.46
+     * @since 0.9.46
      */
     class RetransmitEvent extends SimpleTimer2.TimedEvent {
 
@@ -4513,16 +4548,16 @@ class Connection {
         }
 
         /**
-         *  Push back the retransmission timer to the given DELAY FROM NOW, but
-         *  allow the fire time to move EARLIER if the new deadline is earlier
-         *  than the currently scheduled one. RFC 6298 section 5.3 restarts the
-         *  timer at the full RTO on every new ACK; with trickle ACKs that keeps
-         *  deferring an overdue head-of-line retransmission indefinitely (the
-         *  mid-download freeze). Callers anchor the delay to the oldest unacked
-         *  packet's send time + RTO so the timer is guaranteed to fire.
+         * Push back the retransmission timer to the given DELAY FROM NOW, but
+         * allow the fire time to move EARLIER if the new deadline is earlier
+         * than the currently scheduled one. RFC 6298 section 5.3 restarts the
+         * timer at the full RTO on every new ACK; with trickle ACKs that keeps
+         * deferring an overdue head-of-line retransmission indefinitely (the
+         * mid-download freeze). Callers anchor the delay to the oldest unacked
+         * packet's send time + RTO so the timer is guaranteed to fire.
          *
-         *  @param delayMs delay from now (the anchored deadline minus now); a
-         *                 value &lt;= 0 forces an immediate fire
+         * @param delayMs delay from now (the anchored deadline minus now); a
+         *                value &lt;= 0 forces an immediate fire
          */
         public synchronized void pushBackRTOBounded(int delayMs) {
             if (delayMs <= 0) {
@@ -4593,7 +4628,7 @@ class Connection {
 
            if (_resetSentOn.get() > 0 || _resetReceived.get() || _finalDisconnect.get()) {
                 if (_log.shouldDebug()) {
-                    _log.debug(Connection.this + " -> rtx event after close or reset");
+                    _log.debug(Connection.this + " -> Rtx event after close or reset");
                 }
                 return;
             }
@@ -4623,7 +4658,7 @@ class Connection {
                 }
             }
             if (_log.shouldDebug()) {
-                _log.debug(Connection.this + " -> rtx timer timeReached()");
+                _log.debug(Connection.this + " -> Rtx timer timeReached()");
             }
 
             congestionOccurred();
@@ -4648,7 +4683,7 @@ class Connection {
                     if (freshDuringPass) {
                         reArmAfterPass(_options.getRTO());
                     } else if (_log.shouldWarn()) {
-                        _log.warn(Connection.this + " Retransmission timer hit but nothing transmitted??");
+                        _log.warn(Connection.this + " -> Retransmission timer hit but nothing transmitted");
                     }
                     return;
                 }
@@ -4701,7 +4736,7 @@ class Connection {
                 // Cut the window on the first real loss (numSends <= 2).
                 if (oldest.getNumSends() <= 2) {
                     if (_log.shouldDebug()) {
-                        _log.debug(Connection.this + " cutting SlowStartThreshold and Window");
+                        _log.debug(Connection.this + " -> Cutting SlowStartThreshold and Window");
                     }
                     int wsize = _options.getWindowSize();
                     long now = _context.clock().now();
@@ -4727,7 +4762,7 @@ class Connection {
                     _options.setWindowSize(Math.min(ceiling, Math.min(maxSS, graduatedLossWindow(strikes, wsize))));
                     updatePacingRate();
                 } else if (_log.shouldDebug()) {
-                    _log.debug(Connection.this + " not cutting SlowStartThreshold and Window");
+                    _log.debug(Connection.this + " -> Not cutting SlowStartThreshold and Window");
                 }
 
                 // The window map is a TreeMap, so values() already returns
@@ -4773,7 +4808,7 @@ class Connection {
                         if (ob.remove(Long.valueOf(staleSeq)) != null) {
                             _outboundPacketsLock.notifyAll();
                             if (_log.shouldWarn()) {
-                                _log.warn(Connection.this + " removed cancelled/stale packet " + packet +
+                                _log.warn(Connection.this + "\n* Removed cancelled/stale packet " + packet +
                                           " from outbound window");
                             }
                         }
@@ -4811,8 +4846,8 @@ class Connection {
                 if (budgetExhausted && !_establishedResumeWarned) {
                     _establishedResumeWarned = true;
                     if (_log.shouldWarn()) {
-                        _log.warn(Connection.this + " packet " + packet +
-                                  " exceeded resend budget but connection is established; keeping alive and retransmitting");
+                        _log.warn(Connection.this + " Resend budget exceeded -> " + packet.formatAsString(false)
+                                  + "\n* Connection established, keeping alive and retransmitting");
                     }
                 }
                 if (packet.getNumSends() >= 3 &&
@@ -4825,7 +4860,7 @@ class Connection {
                     int maxClose = getCloseReceivedOn() > 0 ? 3 : 8;
                     if (packet.getNumSends() >= maxClose) {
                         if (_log.shouldDebug()) {
-                            _log.debug(Connection.this + " too many close resends, closing");
+                            _log.debug(Connection.this + " -> Too many close resends, closing");
                         }
                         packet.cancelled();
                         disconnect(false);
@@ -5091,7 +5126,7 @@ synchronized boolean checkRetransmitStall() {
             // a connection that is already gone.
             if (!_connected.get()) {
                 if (_log.shouldDebug()) {
-                    _log.debug("ACK DUP timer fired on " + Connection.this + " -> already disconnected");
+                    _log.debug("ACK DUP timer fired on " + Connection.this + " -> Already disconnected");
                 }
                 return;
             }

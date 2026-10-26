@@ -8,9 +8,9 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- *  Implement on top of a ConcurrentHashMap with a dummy value.
+ * Implement on top of a ConcurrentHashMap with a dummy value.
  *
- *  @param <E> type of elements in this set
+ * @param <E> type of elements in this set
  */
 public class ConcurrentHashSet<E> extends AbstractSet<E> implements Set<E> {
     /** Placeholder value - only the map's keys matter */

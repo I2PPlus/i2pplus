@@ -50,10 +50,10 @@ public class UDPSource implements Source, Runnable {
     }
 
     /**
-     *  Sets the sink for received UDP datagrams.
+     * Sets the sink for received UDP datagrams.
      *
-     *  @param sink the sink to receive processed datagrams
-     *  @since 0.9.53
+     * @param sink the sink to receive processed datagrams
+     * @since 0.9.53
      */
     @Override
     public void setSink(Sink sink) {
@@ -61,9 +61,9 @@ public class UDPSource implements Source, Runnable {
     }
 
     /**
-     *  Starts the source thread to begin receiving UDP datagrams.
+     * Starts the source thread to begin receiving UDP datagrams.
      *
-     *  @since 0.9.53
+     * @since 0.9.53
      */
     public void start() {
         this.thread.start();
@@ -98,19 +98,19 @@ public class UDPSource implements Source, Runnable {
     }
 
     /**
-     *  Local port of the DatagramSocket we are receiving on.
+     * Local port of the DatagramSocket we are receiving on.
      *
-     *  @return the local port of the DatagramSocket we are receiving on
-     *  @since 0.9.53
+     * @return the local port of the DatagramSocket we are receiving on
+     * @since 0.9.53
      */
     public int getPort() {
         return port;
     }
 
     /**
-     *  Stops the source thread and closes the socket.
+     * Stops the source thread and closes the socket.
      *
-     *  @since 0.9.53
+     * @since 0.9.53
      */
     public void stop() {
         this.sock.close();

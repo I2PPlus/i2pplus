@@ -51,8 +51,8 @@ class ClientWriterRunner implements Runnable {
     }
 
     /**
-     *  Starts the daemon thread that drains the queue and writes to the session's output stream.
-     *  @since 0.9.11
+     * Starts the daemon thread that drains the queue and writes to the session's output stream.
+     * @since 0.9.11
      */
     public void startWriting() {
         Thread t = new I2PAppThread(this, "I2CPWrtr." + __Id.incrementAndGet(), true);

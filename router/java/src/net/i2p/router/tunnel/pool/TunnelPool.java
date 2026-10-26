@@ -3083,7 +3083,7 @@ public class TunnelPool {
             /** True when last built LeaseSet had fewer leases than wanted — bypass cache. */
     private boolean _hasIncompleteLeaseSet;
             /**
-             *  When this pool last reported a materially short LeaseSet 
+             * When this pool last reported a materially short LeaseSet
              *
              * @since 0.9.71+
              */

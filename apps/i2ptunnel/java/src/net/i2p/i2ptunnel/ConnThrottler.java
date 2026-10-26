@@ -68,7 +68,7 @@ class ConnThrottler {
     }
 
     /**
-     *  Starts the throttler by scheduling the cleanup timer.
+     * Starts the throttler by scheduling the cleanup timer.
      * <p>
      * This method must be called to begin rate limiting. The cleanup timer
      * will run periodically to check for expired throttles and clean up
@@ -88,7 +88,7 @@ class ConnThrottler {
     }
 
     /**
-     *  Stops the throttler and resets all state.
+     * Stops the throttler and resets all state.
      * <p>
      * This method cancels the cleanup timer, clears all peer records,
      * and resets the total connection counter. The throttler may be
@@ -104,7 +104,7 @@ class ConnThrottler {
     }
 
     /**
-     *  Updates the rate limiting configuration.
+     * Updates the rate limiting configuration.
      * <p>
      * All period values are enforced with a minimum of 10 seconds.
      * </p>
@@ -125,7 +125,7 @@ class ConnThrottler {
     }
 
     /**
-     *  Checks if a peer or the total connection rate exceeds configured limits.
+     * Checks if a peer or the total connection rate exceeds configured limits.
      * <p>
      * This method increments the connection counter for the given peer and
      * checks if either the per-peer limit or the total connection limit has
@@ -186,7 +186,7 @@ class ConnThrottler {
     }
 
     /**
-     *  Resets all throttling state.
+     * Resets all throttling state.
      * <p>
      * This method clears all peer records, resets the total connection counter,
      * and clears the total throttle timer. After calling this method, all
@@ -200,8 +200,8 @@ class ConnThrottler {
     }
 
     /**
-     *  Keep a list of seen times, and a ban-until time.
-     *  Caller must sync all methods.
+     * Keep a list of seen times, and a ban-until time.
+     * Caller must sync all methods.
      */
     private static class Record {
         /** When this peer's connections arrived. */
@@ -268,7 +268,7 @@ class ConnThrottler {
         }
 
         /**
-         *  Called by the timer to clean up expired throttles.
+         * Called by the timer to clean up expired throttles.
          */
         @Override
         public void timeReached() {

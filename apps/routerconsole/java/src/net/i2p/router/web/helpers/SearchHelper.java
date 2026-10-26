@@ -6,9 +6,9 @@ import net.i2p.data.DataHelper;
 import net.i2p.router.web.HelperBase;
 
 /**
- *  Helper for searches.
+ * Helper for searches.
  *
- *  @since 0.9
+ * @since 0.9
  */
 public class SearchHelper extends HelperBase {
 
@@ -110,9 +110,9 @@ public class SearchHelper extends HelperBase {
     }
 
     /**
-     *  Build and return the search URL for the current query.
+     * Build and return the search URL for the current query.
      *
-     *  @return null on error
+     * @return null on error
      */
     public String getURL() {
         if (_engine == null || _query == null) {return null;}

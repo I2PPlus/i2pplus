@@ -26,4 +26,21 @@ public class ConnectionLogFormatTest {
         assertEquals("Connection still not open [abcdefgh] -> Gave up after: 10000ms",
                      Connection.connectDoneLine("[abcdefgh]", 10000L, true));
     }
+
+    /**
+     * The inactivity entry names the configured action instead of printing the
+     * bare option number, so the reader sees what the router is about to do.
+     */
+    @Test
+    public void inactivityActionNamesTheActionNotTheNumber() {
+        assertEquals("No action",
+                     Connection.inactivityActionName(ConnectionOptions.INACTIVITY_ACTION_NOOP));
+        assertEquals("Disconnect",
+                     Connection.inactivityActionName(ConnectionOptions.INACTIVITY_ACTION_DISCONNECT));
+        assertEquals("Send keepalive",
+                     Connection.inactivityActionName(ConnectionOptions.INACTIVITY_ACTION_SEND));
+        // A value outside the set must not read as one of the three real actions.
+        assertEquals("Unknown", Connection.inactivityActionName(-1));
+        assertEquals("Unknown", Connection.inactivityActionName(3));
+    }
 }

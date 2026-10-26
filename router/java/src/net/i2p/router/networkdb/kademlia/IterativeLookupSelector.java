@@ -9,10 +9,10 @@ import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 
 /**
- *  Slightly modified version of FloodOnlyLookupSelector.
- *  Always follows the DSRM entries.
+ * Slightly modified version of FloodOnlyLookupSelector.
+ * Always follows the DSRM entries.
  *
- *  @since 0.8.9
+ * @since 0.8.9
  */
 class IterativeLookupSelector implements MessageSelector {
     /** The router running the lookup. */
@@ -53,7 +53,7 @@ class IterativeLookupSelector implements MessageSelector {
     public long getExpiration() { return (_matchFound ? -1 : _search.getExpiration()); }
 
     /**
-     *  This only returns true for DSMs, not for DSRMs.
+     * This only returns true for DSMs, not for DSRMs.
      * @return true if the message carries the key being searched for; a DSRM
      *         naming the key only returns false
      */

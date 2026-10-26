@@ -8,15 +8,15 @@ package net.i2p.router.crypto.ratchet;
 public interface ReplyCallback {
 
     /**
-     *  When does this callback expire?
+     * When does this callback expire?
      *
-     *  @return when the callback expires, in milliseconds since the context
-     *          clock's epoch
+     * @return when the callback expires, in milliseconds since the context
+     *         clock's epoch
      */
     public long getExpiration();
 
     /**
-     *  A reply was received.
+     * A reply was received.
      */
     public void onReply();
 }

@@ -4,11 +4,11 @@ import java.math.BigInteger;
 import java.security.spec.AlgorithmParameterSpec;
 
 /**
- *  Copied from org.bouncycastle.jce.spec
- *  This can't actually be passed to the BC provider, we would have to
- *  use reflection to create a "real" org.bouncycasle.jce.spec.ElGamalParameterSpec.
+ * Copied from org.bouncycastle.jce.spec
+ * This can't actually be passed to the BC provider, we would have to
+ * use reflection to create a "real" org.bouncycasle.jce.spec.ElGamalParameterSpec.
  *
- *  @since 0.9.18, moved from net.i2p.crypto in 0.9.25
+ * @since 0.9.18, moved from net.i2p.crypto in 0.9.25
  */
 public class ElGamalParameterSpec implements AlgorithmParameterSpec {
     /** The prime modulus. */

@@ -19,11 +19,11 @@ public class UDPSink implements Sink {
     protected final int remotePort;
 
     /**
-     *  Opens a DatagramSocket and sends datagrams to the given host and port.
+     * Opens a DatagramSocket and sends datagrams to the given host and port.
      *
-     *  @param host where to send
-     *  @param port where to send
-     *  @throws IllegalArgumentException on DatagramSocket IOException
+     * @param host where to send
+     * @param port where to send
+     * @throws IllegalArgumentException on DatagramSocket IOException
      */
     public UDPSink(InetAddress host, int port) {
         try {
@@ -37,12 +37,12 @@ public class UDPSink implements Sink {
 
 
     /**
-     *  Sends datagrams through the given socket to the specified host and port.
+     * Sends datagrams through the given socket to the specified host and port.
      *
-     *  @param socket the socket to send through, owned by the caller
-     *  @param host where to send
-     *  @param port where to send
-     *  @since 0.9.53
+     * @param socket the socket to send through, owned by the caller
+     * @param host where to send
+     * @param port where to send
+     * @since 0.9.53
      */
     public UDPSink(DatagramSocket socket, InetAddress host, int port) {
         sock = socket;
@@ -51,13 +51,13 @@ public class UDPSink implements Sink {
     }
 
     /**
-     *  Sends the data to the configured remote host and port.
+     * Sends the data to the configured remote host and port.
      *
-     *  @param src unused; a datagram carries no source address
-     *  @param fromPort unused; the local port is fixed at construction
-     *  @param toPort unused; the remote port is fixed at construction
-     *  @throws RuntimeException on DatagramSocket IOException
-     *  @since 0.9.53 added fromPort and toPort parameters, breaking change, sorry
+     * @param src unused; a datagram carries no source address
+     * @param fromPort unused; the local port is fixed at construction
+     * @param toPort unused; the remote port is fixed at construction
+     * @throws RuntimeException on DatagramSocket IOException
+     * @since 0.9.53 added fromPort and toPort parameters, breaking change, sorry
      */
     public void send(Destination src, int fromPort, int toPort, byte[] data) {
         // if data.length > this.sock.getSendBufferSize() ...
@@ -72,20 +72,20 @@ public class UDPSink implements Sink {
     }
 
     /**
-     *  Local port of the DatagramSocket we are sending from.
+     * Local port of the DatagramSocket we are sending from.
      *
-     *  @return the local port of the DatagramSocket we are sending from
-     *  @since 0.9.53
+     * @return the local port of the DatagramSocket we are sending from
+     * @since 0.9.53
      */
     public int getPort() {
         return this.sock.getLocalPort();
     }
 
     /**
-     *  Returns the underlying DatagramSocket for use by {@link UDPSource} constructor.
+     * Returns the underlying DatagramSocket for use by {@link UDPSource} constructor.
      *
-     *  @return the DatagramSocket to hand to the matching UDPSource
-     *  @since 0.9.53
+     * @return the DatagramSocket to hand to the matching UDPSource
+     * @since 0.9.53
      */
     public DatagramSocket getSocket() {
         return this.sock;

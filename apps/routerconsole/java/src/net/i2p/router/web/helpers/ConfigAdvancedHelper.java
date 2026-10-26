@@ -65,8 +65,8 @@ public class ConfigAdvancedHelper extends HelperBase {
     }
 
     /**
-     *  Get the formatted settings HTML.
-     *  @return the settings as HTML
+     * Get the formatted settings HTML.
+     * @return the settings as HTML
      */
     public String getSettings() {
         StringBuilder buf = new StringBuilder(4*1024);
@@ -109,17 +109,17 @@ public class ConfigAdvancedHelper extends HelperBase {
     }
 
     /**
-     *  Get the path to the router config file.
-     *  @return the config file path
-     *  @since 0.9.14.1
+     * Get the path to the router config file.
+     * @return the config file path
+     * @since 0.9.14.1
      */
     public String getConfigFileName() {return _context.router().getConfigFilename();}
 
     /**
-     *  Get the checked attribute for floodfill radio buttons.
-     *  @param mode 0=disabled, 1=enabled, 2=auto
-     *  @return CHECKED if the mode matches the current setting
-     *  @since 0.9.20
+     * Get the checked attribute for floodfill radio buttons.
+     * @param mode 0=disabled, 1=enabled, 2=auto
+     * @return CHECKED if the mode matches the current setting
+     * @since 0.9.20
      */
     public String getFFChecked(int mode) {
         String ff = _context.getProperty(PROP_FLOODFILL_PARTICIPANT, "auto");
@@ -131,9 +131,9 @@ public class ConfigAdvancedHelper extends HelperBase {
     }
 
     /**
-     *  Whether the router is currently acting as a floodfill.
-     *  @return true if floodfill is enabled
-     *  @since 0.9.21
+     * Whether the router is currently acting as a floodfill.
+     * @return true if floodfill is enabled
+     * @since 0.9.21
      */
     public boolean isFloodfill() {return _context.netDb().floodfillEnabled();}
 }

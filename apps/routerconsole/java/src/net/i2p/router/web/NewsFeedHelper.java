@@ -39,19 +39,19 @@ public class NewsFeedHelper extends HelperBase {
      */
     public void setStart(int start) {_start = start;}
     /**
-     *  Get the formatted HTML entries.
-     *  @return non-null, "" if none
+     * Get the formatted HTML entries.
+     * @return non-null, "" if none
      */
     public String getEntries() {return getEntries(_context, _start, _limit, 0);}
 
     /**
-     *  Get the formatted HTML entries.
+     * Get the formatted HTML entries.
      *
-     *  @param ctx the router context
-     *  @param start the starting index
-     *  @param max less than or equal to zero means all
-     *  @param ageLimit time before now, less than or equal to zero means all (after the first)
-     *  @return non-null, "" if none
+     * @param ctx the router context
+     * @param start the starting index
+     * @param max less than or equal to zero means all
+     * @param ageLimit time before now, less than or equal to zero means all (after the first)
+     * @return non-null, "" if none
      */
     static String getEntries(I2PAppContext ctx, int start, int max, long ageLimit) {
         if (max <= 0) {max = Integer.MAX_VALUE;}

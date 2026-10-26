@@ -63,7 +63,7 @@ import net.i2p.util.SystemVersion;
 
 /**
  * General-purpose adaptive tuner. Observes network and system stats,
- *  adjusts tunable parameters to optimize router performance.
+ * adjusts tunable parameters to optimize router performance.
  * <p>Runs every 5 seconds via {@link SimpleTimer2}. Each tick samples
  * transport worker-stage CPU and updates the transport thread pool params;
  * every 15th-second tick runs the full cycle for all other params. Each
@@ -1342,12 +1342,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Apply the configured values at startup, clamped to the tunable ranges
-     *  enforced by MaxDispatchAgeParam / HandlerThreadPriorityParam. These
-     *  fields feed {@link #adjustHandlerPriority()} and GetBidsJob before the tunable
-     *  machinery takes over; an out-of-range priority would make setPriority()
-     *  throw in every handler loop, and a negative dispatch age is nonsense.
-     *  Kept in a static method (called once from the constructor) so the
-     *  statics are not written from instance construction.
+     * enforced by MaxDispatchAgeParam / HandlerThreadPriorityParam. These
+     * fields feed {@link #adjustHandlerPriority()} and GetBidsJob before the tunable
+     * machinery takes over; an out-of-range priority would make setPriority()
+     * throw in every handler loop, and a negative dispatch age is nonsense.
+     * Kept in a static method (called once from the constructor) so the
+     * statics are not written from instance construction.
      *
      * @param autotune the shared autotune config used as the BaseParam fallback
      * @param ctx the router context
@@ -1556,16 +1556,16 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /**
      * Record that a param's tuning cycle threw.
      * <p>A throwing param is invisible: the cycle handler swallows it, the
-     *  param never updates, and nothing anywhere shows it as dead. That is how
-     *  {@code i2p.tunnel.build.requestTimeout} sat permanently inert — it threw
-     *  on every cycle for the life of the router and the only evidence was a
-     *  repeated stack trace in a log file nobody reads.
+     * param never updates, and nothing anywhere shows it as dead. That is how
+     * {@code i2p.tunnel.build.requestTimeout} sat permanently inert — it threw
+     * on every cycle for the life of the router and the only evidence was a
+     * repeated stack trace in a log file nobody reads.
      * <p>Two things make it visible now: a counter on
-     *  {@code tuner.paramUpdateFailed} that appears on {@code /stats}, and a
-     *  per-param rate limit so a permanently broken param logs once with its
-     *  trace and then stays quiet instead of re-printing every 15 seconds.
-     *  Both are needed — the counter says a param is dead, the single trace
-     *  says why.
+     * {@code tuner.paramUpdateFailed} that appears on {@code /stats}, and a
+     * per-param rate limit so a permanently broken param logs once with its
+     * trace and then stays quiet instead of re-printing every 15 seconds.
+     * Both are needed — the counter says a param is dead, the single trace
+     * says why.
      *
      * @param param the param that failed
      * @param e     the exception the cycle handler swallowed
@@ -2137,8 +2137,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected boolean _firstTick = true;
         /**
          * True once a stale persisted default has been reported, so the
-         *  permanent condition is logged at DEBUG exactly once per param
-         *  instead of on every tuning cycle.
+         * permanent condition is logged at DEBUG exactly once per param
+         * instead of on every tuning cycle.
          * @since 0.9.71+
          */
         private boolean _staleDefaultLogged;
@@ -3991,15 +3991,15 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /**
      * Lowest value either establish-timeout param may be tuned to.
      * <p>Measured on a live router: at 2250 the outbound path abandoned roughly 117
-     *  session establishments per minute, every one expiring on the deadline rather than
-     *  on an observed peer failure, and 99.6% of them inside the SSU2 token exchange,
-     *  which costs one round trip more than SSU1. Raising the budget to 5000 took that to
-     *  zero - but build success fell from 64.5% to 56.0% and throughput 12%, because the
-     *  patience moves out of the establishment path and into the build slot. 4000 is the
-     *  compromise: comfortably above the value known to be harmful, below the one where
-     *  slot occupancy starts costing builds. The original floor of 1500 sat well below the
-     *  harmful value, so a slider drag or a restore-defaults could silently reintroduce
-     *  the failure.
+     * session establishments per minute, every one expiring on the deadline rather than
+     * on an observed peer failure, and 99.6% of them inside the SSU2 token exchange,
+     * which costs one round trip more than SSU1. Raising the budget to 5000 took that to
+     * zero - but build success fell from 64.5% to 56.0% and throughput 12%, because the
+     * patience moves out of the establishment path and into the build slot. 4000 is the
+     * compromise: comfortably above the value known to be harmful, below the one where
+     * slot occupancy starts costing builds. The original floor of 1500 sat well below the
+     * harmful value, so a slider drag or a restore-defaults could silently reintroduce
+     * the failure.
      *
      * @since 0.9.71+
      */
@@ -4008,11 +4008,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /**
      * Target establish timeout for an observed mean handshake duration.
      * <p>Four times the observed mean, floored by the param's own minimum. The floor must
-     *  come from {@code min} rather than a literal: a hardcoded floor here can sit far
-     *  below the value the setter enforces, and {@link BaseParam#clamp} walks the stored
-     *  value toward the target by {@code _step} without consulting {@code min} at all - so
-     *  the stored value would drift down while the runtime value stayed clamped, leaving
-     *  the console permanently displaying a number the router was not using.
+     * come from {@code min} rather than a literal: a hardcoded floor here can sit far
+     * below the value the setter enforces, and {@link BaseParam#clamp} walks the stored
+     * value toward the target by {@code _step} without consulting {@code min} at all - so
+     * the stored value would drift down while the runtime value stayed clamped, leaving
+     * the console permanently displaying a number the router was not using.
      *
      * @param observed mean successful handshake duration in ms, or NaN if unknown
      * @param min the param's configured minimum
@@ -9177,14 +9177,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Elastic, demand-following cap on concurrent streams shared by the streaming
-     *  subsystem. Normally the streaming jar uses the user-configured
-     *  {@code i2p.streaming.maxConcurrentStreams} (captured at init); this param
-     *  pushes the override UP as legitimate demand or cap-refusals appear (so bursts
-     *  on locally hosted services and the HTTP proxy are not dropped), and only steps
-     *  it DOWN under true router starvation (job-lag + congestion). The
-     *  <em>effective</em> cap in the streaming jar is {@code min(configured, override)},
-     *  so the Tuner can never exceed a user ceiling. Malicious floods are handled at
-     *  the refusal layer (SYN-rate gate + 24h auto-ban), not by crippling this cap.
+     * subsystem. Normally the streaming jar uses the user-configured
+     * {@code i2p.streaming.maxConcurrentStreams} (captured at init); this param
+     * pushes the override UP as legitimate demand or cap-refusals appear (so bursts
+     * on locally hosted services and the HTTP proxy are not dropped), and only steps
+     * it DOWN under true router starvation (job-lag + congestion). The
+     * <em>effective</em> cap in the streaming jar is {@code min(configured, override)},
+     * so the Tuner can never exceed a user ceiling. Malicious floods are handled at
+     * the refusal layer (SYN-rate gate + 24h auto-ban), not by crippling this cap.
      *
      * @since 0.9.71+
      */
@@ -10888,9 +10888,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Consecutive cycles with ample peer supply required before the activity
-     *  window tightens again. A single ample reading must not withdraw relief
-     *  from pools that are still refilling, so the window holds for this many
-     *  cycles rather than snapping to the floor immediately.
+     * window tightens again. A single ample reading must not withdraw relief
+     * from pools that are still refilling, so the window holds for this many
+     * cycles rather than snapping to the floor immediately.
      * @since 0.9.71+
      */
     private static final int HEALTHY_CYCLES_TO_TIGHTEN = 3;
@@ -10898,12 +10898,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /**
      * Next window multiplier for a tuning cycle, keyed on peer supply.
      * <p>Pure so the policy is testable without a router. The multiplier is the
-     *  ceiling {@link net.i2p.router.tunnel.pool.TunnelPeerSelector#windowMultiplierFor}
-     *  allows for the current fast-peer count, and widening applies in one step
-     *  because scarcity is not noisy the way a single build-success sample was.
-     *  Tightening waits for {@link #HEALTHY_CYCLES_TO_TIGHTEN} consecutive cycles
-     *  with ample supply, so a momentary dip cannot withdraw relief from a pool
-     *  that is still refilling.
+     * ceiling {@link net.i2p.router.tunnel.pool.TunnelPeerSelector#windowMultiplierFor}
+     * allows for the current fast-peer count, and widening applies in one step
+     * because scarcity is not noisy the way a single build-success sample was.
+     * Tightening waits for {@link #HEALTHY_CYCLES_TO_TIGHTEN} consecutive cycles
+     * with ample supply, so a momentary dip cannot withdraw relief from a pool
+     * that is still refilling.
      *
      * @param fastPeers    peers currently classified fast
      * @param startupGrace true during the startup grace period
@@ -10927,23 +10927,23 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Tunes the peer-selection activity-window multiplier to the recency window
-     *  that peer supply actually warrants.
+     * that peer supply actually warrants.
      * <p>The window exists to trade recency for pool thickness when, and only
-     *  when, the router is short of the peers selection would otherwise use. An
-     *  earlier version drove it from {@code tunnel.buildSuccessRate} instead,
-     *  which was a category error: build success measures outcomes, not supply,
-     *  and is depressed just as much by unresponsive peers, build timeouts and
-     *  unreachable destinations as by an over-tight recency window. Keying the
-     *  window to it closed a positive feedback loop — worse builds widened the
-     *  window, admitting older peers, which worsened the builds — and did so
-     *  while ample fast and high-capacity peers sat unused.
+     * when, the router is short of the peers selection would otherwise use. An
+     * earlier version drove it from {@code tunnel.buildSuccessRate} instead,
+     * which was a category error: build success measures outcomes, not supply,
+     * and is depressed just as much by unresponsive peers, build timeouts and
+     * unreachable destinations as by an over-tight recency window. Keying the
+     * window to it closed a positive feedback loop — worse builds widened the
+     * window, admitting older peers, which worsened the builds — and did so
+     * while ample fast and high-capacity peers sat unused.
      * <p>The sole gate is now peer supply, shared with
-     *  {@link net.i2p.router.tunnel.pool.TunnelPeerSelector} and the pool
-     *  starvation bypass so all three callers agree. Above
-     *  {@link net.i2p.router.tunnel.pool.TunnelPeerSelector#SCARCE_FAST_PEERS}
-     *  fast peers the multiplier stays at its floor regardless of build success.
-     *  The one exception is the startup grace period, where a cold profile set
-     *  makes every peer look stale for want of test history rather than fault.
+     * {@link net.i2p.router.tunnel.pool.TunnelPeerSelector} and the pool
+     * starvation bypass so all three callers agree. Above
+     * {@link net.i2p.router.tunnel.pool.TunnelPeerSelector#SCARCE_FAST_PEERS}
+     * fast peers the multiplier stays at its floor regardless of build success.
+     * The one exception is the startup grace period, where a cold profile set
+     * makes every peer look stale for want of test history rather than fault.
      * <p>Value is a multiplier (1-4) applied to the base activity window.
      *
      * @since 0.9.70+
@@ -10968,18 +10968,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * Consecutive cycles observed with ample peer supply, counting toward
-         *  {@link #HEALTHY_CYCLES_TO_TIGHTEN}. Reset whenever supply is scarce
-         *  or the router is in its startup grace period, so relief is withdrawn
-         *  only after sustained evidence that it is no longer needed.
+         * {@link #HEALTHY_CYCLES_TO_TIGHTEN}. Reset whenever supply is scarce
+         * or the router is in its startup grace period, so relief is withdrawn
+         * only after sustained evidence that it is no longer needed.
          * @since 0.9.71+
          */
         private int _healthyCycles;
 
         /**
          * Observed stat, retained for the base-class contract and the console
-         *  cross-reference only. This param no longer gates on it: build success
-         *  is an outcome, not a measure of peer supply, so widening the recency
-         *  window in response to it fed back on itself. See the class javadoc.
+         * cross-reference only. This param no longer gates on it: build success
+         * is an outcome, not a measure of peer supply, so widening the recency
+         * window in response to it fed back on itself. See the class javadoc.
          *
          * @return the current build success rate, or NaN when unavailable
          * @since 0.9.71+
@@ -11137,7 +11137,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
     /**
      * Pure starvation-first decision for next-hop lookup concurrency
-     *  (see PercentLookupLimitParam):
+     * (see PercentLookupLimitParam):
      * <ul>
      *    <li>queue full or overflowing while lookups succeed in time →
      *        demand exceeds the lid; raise aggressively so queued entries
@@ -13360,11 +13360,11 @@ protected int computeTarget(double observed) {
 
     /**
      * Tuner param for the I/O transfer pool size (Server→Client data forwarding).
-     *  Ceiling set by max heap (scales with available memory).
-     *  Budget is split across per-tunnel pools with an 8-thread floor so
-     *  concurrent downloads never starve a body Sender behind two threads.
-     *  Growth reacts to active+queued pressure on the 5s fast cycle with
-     *  large steps under saturation; shrink only when clearly idle.
+     * Ceiling set by max heap (scales with available memory).
+     * Budget is split across per-tunnel pools with an 8-thread floor so
+     * concurrent downloads never starve a body Sender behind two threads.
+     * Growth reacts to active+queued pressure on the 5s fast cycle with
+     * large steps under saturation; shrink only when clearly idle.
      *
      * @since 0.9.71+
      */
@@ -13404,13 +13404,13 @@ protected int computeTarget(double observed) {
 
     /**
      * Pure growth policy for the global Server→Client I/O budget.
-     *  Extracted (package-visible, static) so unit tests can exercise the
-     *  policy without a live RouterContext.
+     * Extracted (package-visible, static) so unit tests can exercise the
+     * policy without a live RouterContext.
      * <p>Observed is the busiest pool's utilization — active plus queued
-     *  transfers divided by that pool's present maximum — not a global sum.
-     *  Ten pools sharing one budget means the summed pressure divided by the
-     *  budget reads low even when one pool is saturated; the per-pool ratio
-     *  makes a saturated pool visible regardless of how quiet the others are.
+     * transfers divided by that pool's present maximum — not a global sum.
+     * Ten pools sharing one budget means the summed pressure divided by the
+     * budget reads low even when one pool is saturated; the per-pool ratio
+     * makes a saturated pool visible regardless of how quiet the others are.
      * Above 90% the step doubles the current budget so a download burst
      * cannot wait out a +2-per-cycle crawl; between 70–90% growth is
      * still aggressive. Below 20% the budget shrinks by one so a quiet
@@ -13445,23 +13445,23 @@ protected int computeTarget(double observed) {
 
     /**
      * Tuner param for the I/O stall timeout (ms). When no data arrives for
-     *  this long on a Server→Client transfer, the Sender is interrupted and
-     *  the handler thread continues to cleanup. Lower values free threads
-     *  faster when peers are unresponsive; higher values tolerate legitimate
-     *  slow transfers without premature cancellation.
+     * this long on a Server→Client transfer, the Sender is interrupted and
+     * the handler thread continues to cleanup. Lower values free threads
+     * faster when peers are unresponsive; higher values tolerate legitimate
+     * slow transfers without premature cancellation.
      * <p>
      * Signal: delta stall events per tuning cycle. A high stall rate means
-     *  the current timeout is too aggressive (legitimate transfers being killed);
-     *  tightening further would make it worse. A low stall rate means we can
-     *  safely loosen the timeout to tolerate slower peers.
+     * the current timeout is too aggressive (legitimate transfers being killed);
+     * tightening further would make it worse. A low stall rate means we can
+     * safely loosen the timeout to tolerate slower peers.
      *
      * @since 0.9.71+
      */
     /**
      * Floor and default for the I/O stall window, ms. Sized for a bulk
-     *  transfer: a large download over a congested path routinely pauses longer
-     *  than a few seconds between copy steps, and a window shorter than that
-     *  aborts healthy transfers rather than freeing threads.
+     * transfer: a large download over a congested path routinely pauses longer
+     * than a few seconds between copy steps, and a window shorter than that
+     * aborts healthy transfers rather than freeing threads.
      *
      * @since 0.9.71+
      */
@@ -13471,13 +13471,13 @@ protected int computeTarget(double observed) {
      * Next I/O stall window for an observed per-cycle stall delta.
      * <p>Pure, so the policy is testable without a router.
      * <p>The window only <b>loosens above the floor</b> when transfers are
-     *  being cut off, and relaxes back to the floor when they are not. It never
-     *  goes below the floor, and there is deliberately no "no stalls, tighten"
-     *  branch: a shorter window kills more legitimate transfers, which produces
-     *  more stall events, which loosens the window, which then tightens again on
-     *  the next quiet cycle. That limit cycle parked the window at its 5s
-     *  floor, shorter than any pause in a bulk transfer, and aborted 45MB
-     *  downloads partway through.
+     * being cut off, and relaxes back to the floor when they are not. It never
+     * goes below the floor, and there is deliberately no "no stalls, tighten"
+     * branch: a shorter window kills more legitimate transfers, which produces
+     * more stall events, which loosens the window, which then tightens again on
+     * the next quiet cycle. That limit cycle parked the window at its 5s
+     * floor, shorter than any pause in a bulk transfer, and aborted 45MB
+     * downloads partway through.
      *
      * @param current  the window in effect, ms
      * @param observed stall events in this cycle
@@ -13524,8 +13524,8 @@ protected int computeTarget(double observed) {
 
         /**
          * Observe the delta stall events since last tuning cycle.
-         *  A monotonically increasing counter; we return the per-cycle delta
-         *  so the Tuner sees a rate, not an accumulator.
+         * A monotonically increasing counter; we return the per-cycle delta
+         * so the Tuner sees a rate, not an accumulator.
          */
         protected double getObservedStat(RouterContext ctx) {
             long now = I2PTunnelReflector.invokeGetLong("getStallEventCount");

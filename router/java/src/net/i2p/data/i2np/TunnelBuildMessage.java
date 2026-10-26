@@ -3,7 +3,7 @@ package net.i2p.data.i2np;
 import net.i2p.I2PAppContext;
 
 /**
- *  The basic build message with 8 records.
+ * The basic build message with 8 records.
  */
 public class TunnelBuildMessage extends TunnelBuildMessageBase {
 

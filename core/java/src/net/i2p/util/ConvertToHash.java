@@ -24,8 +24,8 @@ import java.util.Locale;
 public class ConvertToHash {
 
     /**
-     *  Constructor. The class holds no state - every conversion is a static
-     *  call - so an instance is meaningful only as a placeholder for those calls.
+     * Constructor. The class holds no state - every conversion is a static
+     * call - so an instance is meaningful only as a placeholder for those calls.
      */
     public ConvertToHash() {}
 

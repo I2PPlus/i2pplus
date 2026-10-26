@@ -64,9 +64,9 @@ class UDPEndpoint implements SocketListener {
     }
 
     /**
-     *  Caller should call {@link #getListenPort()} after this to get the actual bound port and determine success .
+     * Caller should call {@link #getListenPort()} after this to get the actual bound port and determine success .
      * <p>
-     *  Can be restarted.
+     * Can be restarted.
      *
      * @throws SocketException if no port could be bound to _bindAddress
      */
@@ -114,10 +114,10 @@ class UDPEndpoint implements SocketListener {
     private static final int MAX_PORT_RETRIES = 20;
 
     /**
-     *  Open socket using requested port in _listenPort and  bind host in _bindAddress.
-     *  If _listenPort &lt;= 0, or requested port is busy, repeatedly try a new random port.
-     *  @return null on failure
-     *          Sets _listenPort to actual port or -1 on failure
+     * Open socket using requested port in _listenPort and  bind host in _bindAddress.
+     * If _listenPort &lt;= 0, or requested port is busy, repeatedly try a new random port.
+     * @return null on failure
+     *         Sets _listenPort to actual port or -1 on failure
      */
     private DatagramSocket getSocket() {
         DatagramSocket socket = null;
@@ -209,8 +209,8 @@ class UDPEndpoint implements SocketListener {
     }
 
     /**
-     *  Clear outbound queue, probably in preparation for sending destroy() to everybody.
-     *  @since 0.9.2
+     * Clear outbound queue, probably in preparation for sending destroy() to everybody.
+     * @since 0.9.2
      */
     public void clearOutbound() {
         if (_sender != null)

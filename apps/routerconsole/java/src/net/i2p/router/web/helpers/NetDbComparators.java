@@ -15,17 +15,17 @@ import net.i2p.router.web.Messages;
 import net.i2p.util.Translate;
 
 /**
- *  Comparators used when rendering the network database pages.
+ * Comparators used when rendering the network database pages.
  *
- *  @since 0.9.71+
+ * @since 0.9.71+
  */
 final class NetDbComparators {
     /** Utility class, not intended for instantiation. */
     private NetDbComparators() {}
 
     /**
-     *  Comparator for LeaseSets, used in the leaseset listing.
-     *  Prioritizes published, nicknamed, named, client, and meta leasesets.
+     * Comparator for LeaseSets, used in the leaseset listing.
+     * Prioritizes published, nicknamed, named, client, and meta leasesets.
      */
     static class LeaseSetComparator implements Comparator<LeaseSet> {
         /** The router context used to look up lease and country data. */
@@ -69,9 +69,9 @@ final class NetDbComparators {
     }
 
     /**
-     *  Comparator for LeaseSets sorted by hash distance from local router.
-     *  Used in debug/floodfill mode.
-     *  @since 0.7.14
+     * Comparator for LeaseSets sorted by hash distance from local router.
+     * Used in debug/floodfill mode.
+     * @since 0.7.14
      */
     static class LeaseSetRoutingKeyComparator implements Comparator<LeaseSet>, Serializable {
         /** Pinned for serialized-form compatibility. */
@@ -93,7 +93,7 @@ final class NetDbComparators {
     }
 
     /**
-     *  Comparator for countries by translated name.
+     * Comparator for countries by translated name.
      */
     static class CountryComparator implements Comparator<String> {
         /** The router context used to read the display language. */
@@ -128,8 +128,8 @@ final class NetDbComparators {
     }
 
     /**
-     *  Comparator for router addresses by transport then host.
-     *  @since 0.9.38
+     * Comparator for router addresses by transport then host.
+     * @since 0.9.38
      */
     static class RAComparator implements Comparator<RouterAddress>, Serializable {
         /** Pinned for serialized-form compatibility. */

@@ -8,9 +8,9 @@ import net.i2p.router.web.App;
 import net.i2p.router.web.FormHandler;
 
 /**
- *  Simple home page configuration.
+ * Simple home page configuration.
  *
- *  @since 0.9
+ * @since 0.9
  */
 public class ConfigHomeHandler extends FormHandler {
 

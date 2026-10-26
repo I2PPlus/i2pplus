@@ -28,10 +28,10 @@ public class SOCKSUDPUnwrapper implements Source, Sink {
     }
 
     /**
-     *  Sets the sink for outgoing unwrapped UDP datagrams.
+     * Sets the sink for outgoing unwrapped UDP datagrams.
      *
-     *  @param sink the sink to receive unwrapped datagrams
-     *  @since 0.9.53
+     * @param sink the sink to receive unwrapped datagrams
+     * @since 0.9.53
      */
     @Override
     public void setSink(Sink sink) {
@@ -39,9 +39,9 @@ public class SOCKSUDPUnwrapper implements Source, Sink {
     }
 
     /**
-     *  Starts the unwrapper. No-op for this implementation.
+     * Starts the unwrapper. No-op for this implementation.
      *
-     *  @since 0.9.53
+     * @since 0.9.53
      */
     @Override
     public void start() { /* no-op */ }

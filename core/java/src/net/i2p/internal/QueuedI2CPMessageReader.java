@@ -101,16 +101,16 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
     }
 
     /**
-     *  Drain at most maxMessages, then return even if the queue is not empty.
-     *  <p>The bound is what stops one backed-up client from starving every other in-JVM
-     *  client. Workers are pooled, so a reader that only returns once its queue is empty
-     *  lets a payload flood hold a worker indefinitely while unrelated clients' queues
-     *  back up until the router refuses to send to them at all. A full return value
-     *  means more may be waiting, and the caller requeues the reader to continue.
+     * Drain at most maxMessages, then return even if the queue is not empty.
+     * <p>The bound is what stops one backed-up client from starving every other in-JVM
+     * client. Workers are pooled, so a reader that only returns once its queue is empty
+     * lets a payload flood hold a worker indefinitely while unrelated clients' queues
+     * back up until the router refuses to send to them at all. A full return value
+     * means more may be waiting, and the caller requeues the reader to continue.
      *
-     *  @param maxMessages most messages to handle in this call
-     *  @return messages handled; equal to maxMessages when the queue was not drained
-     *  @since 0.9.71+
+     * @param maxMessages most messages to handle in this call
+     * @return messages handled; equal to maxMessages when the queue was not drained
+     * @since 0.9.71+
      */
     int drainOnce(int maxMessages) {
         int handled = 0;
@@ -121,21 +121,21 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
     }
 
     /**
-     *  Take exclusive ownership of this reader for the calling worker.
+     * Take exclusive ownership of this reader for the calling worker.
      *
-     *  @return false when another worker already owns it, or it stopped reading
-     *  @since 0.9.71+
+     * @return false when another worker already owns it, or it stopped reading
+     * @since 0.9.71+
      */
     private boolean claim() {return _claimed.compareAndSet(false, true);}
 
     /**
-     *  Give up ownership after a pass.
-     *  <p>Reports only that the reader is still registered, which is not the same as having
-     *  more to send: the dispatcher decides what to reoffer from the pass result and
-     *  {@link #needsService}.
+     * Give up ownership after a pass.
+     * <p>Reports only that the reader is still registered, which is not the same as having
+     * more to send: the dispatcher decides what to reoffer from the pass result and
+     * {@link #needsService}.
      *
-     *  @return true when the reader is still reading
-     *  @since 0.9.71+
+     * @return true when the reader is still reading
+     * @since 0.9.71+
      */
     private boolean release() {
         _claimed.set(false);
@@ -143,13 +143,13 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
     }
 
     /**
-     *  Whether this reader is still reading and has messages waiting for a worker.
-     *  <p>This is the question the dispatcher's idle tick asks. It is deliberately not the
-     *  same as {@link #release}: release reports only that the reader is still registered,
-     *  which says nothing about whether its queue holds anything.
+     * Whether this reader is still reading and has messages waiting for a worker.
+     * <p>This is the question the dispatcher's idle tick asks. It is deliberately not the
+     * same as {@link #release}: release reports only that the reader is still registered,
+     * which says nothing about whether its queue holds anything.
      *
-     *  @return true when a worker should serve this reader now
-     *  @since 0.9.71+
+     * @return true when a worker should serve this reader now
+     * @since 0.9.71+
      */
     boolean needsService() {return registered && in.pending() > 0;}
 
@@ -212,9 +212,9 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
         static final long SLOW_PASS_WARN_MS = 2000;
 
         /**
-         *  Add a reader and make sure something will serve it.
+         * Add a reader and make sure something will serve it.
          *
-         *  @param reader the reader to serve
+         * @param reader the reader to serve
          */
         synchronized void register(QueuedI2CPMessageReader reader) {
             readers.add(reader);
@@ -223,18 +223,18 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
         }
 
         /**
-         *  Stop serving a reader. No monitor: {@link #readers} is concurrent, and a
-         *  worker re-checks membership before requeueing, so an entry left in the ready
-         *  queue is skipped rather than served.
+         * Stop serving a reader. No monitor: {@link #readers} is concurrent, and a
+         * worker re-checks membership before requeueing, so an entry left in the ready
+         * queue is skipped rather than served.
          *
-         *  @param reader the reader to drop
+         * @param reader the reader to drop
          */
         void unregister(QueuedI2CPMessageReader reader) {
             readers.remove(reader);
         }
 
         /**
-         *  Add a worker when the ready backlog is deeper than the pool can serve serially.
+         * Add a worker when the ready backlog is deeper than the pool can serve serially.
          */
         synchronized void grow() {
             if (liveThreads < MAX_WORKERS && ready.size() > liveThreads) {startWorker();}
@@ -265,15 +265,15 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
         }
 
         /**
-         *  Reserve a retirement slot for the calling worker, shedding at most one worker
-         *  per idle tick.
-         *  <p>Every parked worker notices the same idle moment, so a plain surplus check would
-         *  let all of them decide to leave before any of them is counted, collapsing the pool
-         *  to zero and restarting it. Spacing the retirements by one tick steps the pool down
-         *  to the single worker the design promises instead. The count is decremented here,
-         *  under the monitor, so the caller must not decrement it again.
+         * Reserve a retirement slot for the calling worker, shedding at most one worker
+         * per idle tick.
+         * <p>Every parked worker notices the same idle moment, so a plain surplus check would
+         * let all of them decide to leave before any of them is counted, collapsing the pool
+         * to zero and restarting it. Spacing the retirements by one tick steps the pool down
+         * to the single worker the design promises instead. The count is decremented here,
+         * under the monitor, so the caller must not decrement it again.
          *
-         *  @return true if the caller is surplus and must exit
+         * @return true if the caller is surplus and must exit
          */
         private synchronized boolean mayRetire() {
             if (!isSurplus()) {return false;}
@@ -285,11 +285,11 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
         }
 
         /**
-         *  Offer every registered reader that has messages waiting.
-         *  <p>A reader whose queue was drained is not requeued by the worker that served it,
-         *  so this is how a message arriving afterwards is still noticed. Called once per
-         *  idle tick, which bounds the cost to one pass over the registered readers per
-         *  {@link #IDLE_POLL_MS} - the latency floor a queued message already had.
+         * Offer every registered reader that has messages waiting.
+         * <p>A reader whose queue was drained is not requeued by the worker that served it,
+         * so this is how a message arriving afterwards is still noticed. Called once per
+         * idle tick, which bounds the cost to one pass over the registered readers per
+         * {@link #IDLE_POLL_MS} - the latency floor a queued message already had.
          */
         private void offerPendingReaders() {
             for (QueuedI2CPMessageReader reader : readers) {
@@ -298,12 +298,12 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
         }
 
     /**
-     *  Account for a worker leaving, whatever the reason, and uphold the invariant
-     *  that a registered reader always has a worker. The check and the restart happen
-     *  in one critical section so a concurrent registration cannot be missed.
+     * Account for a worker leaving, whatever the reason, and uphold the invariant
+     * that a registered reader always has a worker. The check and the restart happen
+     * in one critical section so a concurrent registration cannot be missed.
      *
-     *  @param alreadyCounted true when the worker reserved its retirement slot in
-     *                        {@link #mayRetire} and so must not be counted again
+     * @param alreadyCounted true when the worker reserved its retirement slot in
+     *                       {@link #mayRetire} and so must not be counted again
      */
     private synchronized void workerStopped(boolean alreadyCounted) {
         if (!alreadyCounted) {liveThreads--;}
@@ -364,12 +364,12 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
         }
 
         /**
-         *  Warn when one pass over a reader took long enough to look like a blocked
-         *  handler. The stall that matters here is invisible from the router side: the
-         *  client simply stops draining its queue until the queue is full.
+         * Warn when one pass over a reader took long enough to look like a blocked
+         * handler. The stall that matters here is invisible from the router side: the
+         * client simply stops draining its queue until the queue is full.
          *
-         *  @param reader the reader that was served
-         *  @param startedMs wall-clock ms the pass began
+         * @param reader the reader that was served
+         * @param startedMs wall-clock ms the pass began
          */
         private static void warnIfSlowPass(QueuedI2CPMessageReader reader, long startedMs) {
             long elapsed = System.currentTimeMillis() - startedMs;

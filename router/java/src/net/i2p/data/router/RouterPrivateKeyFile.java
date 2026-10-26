@@ -32,8 +32,8 @@ public class RouterPrivateKeyFile extends PrivateKeyFile {
     }
 
     /**
-     *  Read it in from the file.
-     *  Also sets the local privKey and signingPrivKey.
+     * Read it in from the file.
+     * Also sets the local privKey and signingPrivKey.
      * @return the router identity
      * @throws IOException if the file cannot be opened or its bytes cannot be read
      * @throws DataFormatException if the identity or either key declares an unknown

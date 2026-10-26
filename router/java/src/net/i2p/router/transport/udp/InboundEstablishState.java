@@ -98,14 +98,14 @@ class InboundEstablishState {  // TODO do all these methods need to be synchroni
 
     /**
      * Basic delay before backoff
-     *  Transmissions at 0, 1, 3, 7 sec.
-     *  This should be a little shorter than for outbound.
+     * Transmissions at 0, 1, 3, 7 sec.
+     * This should be a little shorter than for outbound.
      */
     protected static final long RETRANSMIT_DELAY = SystemVersion.isSlow() ? 1000 : 750;
 
     /**
-     *  Max delay including backoff.
-     *  This should be a little shorter than for outbound.
+     * Max delay including backoff.
+     * This should be a little shorter than for outbound.
      * @return the max delay
      */
     protected static long getMaxDelay() { return EstablishmentManager.MAX_IB_ESTABLISH_TIME.get(); }
@@ -131,24 +131,24 @@ class InboundEstablishState {  // TODO do all these methods need to be synchroni
    }
 
     /**
-     *  Return the SSU protocol version for this state (always 1 for SSU1).
+     * Return the SSU protocol version for this state (always 1 for SSU1).
      *
-     *  @return the protocol version
-     *  @since 0.9.54
+     * @return the protocol version
+     * @since 0.9.54
      */
     public int getVersion() {return 1;}
 
     /**
-     *  Current state of the inbound session establishment.
+     * Current state of the inbound session establishment.
      *
-     *  @return the current InboundState
+     * @return the current InboundState
      */
     public synchronized InboundState getState() {return _currentState;}
 
     /**
-     *  Check if the inbound establish state is complete.
+     * Check if the inbound establish state is complete.
      *
-     *  @return true if complete or failed
+     * @return true if complete or failed
      */
     public synchronized boolean isComplete() {
         return _currentState == InboundState.IB_STATE_COMPLETE ||
@@ -156,7 +156,7 @@ class InboundEstablishState {  // TODO do all these methods need to be synchroni
    }
 
     /**
-     *  Notify successful completion of the inbound session establishment.
+     * Notify successful completion of the inbound session establishment.
      */
     public synchronized void complete() {_currentState = InboundState.IB_STATE_COMPLETE;}
 
@@ -180,78 +180,78 @@ class InboundEstablishState {  // TODO do all these methods need to be synchroni
     public OutNetMessage getNextQueuedMessage() {return _queuedMessages.poll();}
 
     /**
-     *  Whether the SessionRequest message has been received from Alice.
+     * Whether the SessionRequest message has been received from Alice.
      *
-     *  @return true if the initial request has arrived
+     * @return true if the initial request has arrived
      */
     public synchronized boolean sessionRequestReceived() {return _receivedX != null;}
 
     /**
-     *  The received X value from Alice's SessionRequest message.
+     * The received X value from Alice's SessionRequest message.
      *
-     *  @return session request data or null
+     * @return session request data or null
      */
     public synchronized byte[] getReceivedX() {return _receivedX;}
 
     /**
-     *  Our IP address as reported by Alice in the SessionRequest.
+     * Our IP address as reported by Alice in the SessionRequest.
      *
-     *  @return our IP bytes or null
+     * @return our IP bytes or null
      */
     public synchronized byte[] getReceivedOurIP() {return _bobIP;}
 
     /**
-     *  Whether Alice requested an introduction.
-     *  True by default if no extended options in session request,
-     *  or the value of the introduction flag bit in the extended options.
+     * Whether Alice requested an introduction.
+     * True by default if no extended options in session request,
+     * or the value of the introduction flag bit in the extended options.
      *
-     *  @return true if introduction was requested
-     *  @since 0.9.24
+     * @return true if introduction was requested
+     * @since 0.9.24
      */
     public synchronized boolean isIntroductionRequested() {return _introductionRequested;}
 
     /**
-     *  Alice's apparent IP address.
+     * Alice's apparent IP address.
      *
-     *  @return the IP address Alice appears to be connecting from
+     * @return the IP address Alice appears to be connecting from
      */
     public byte[] getSentIP() {return _aliceIP;}
 
     /**
-     *  Alice's apparent port number.
+     * Alice's apparent port number.
      *
-     *  @return the port Alice appears to be connecting from
+     * @return the port Alice appears to be connecting from
      */
     public int getSentPort() {return _alicePort;}
 
     /**
-     *  Mark this establishment attempt as failed.
+     * Mark this establishment attempt as failed.
      */
     public synchronized void fail() {_currentState = InboundState.IB_STATE_FAILED;}
 
     /**
-     *  The relay tag we sent to Alice in the SessionCreated message.
+     * The relay tag we sent to Alice in the SessionCreated message.
      *
-     *  @return the relay tag, or 0 if not yet sent
+     * @return the relay tag, or 0 if not yet sent
      */
     public synchronized long getSentRelayTag() {return _sentRelayTag;}
 
     /**
-     *  Set the relay tag to include in the SessionCreated message.
+     * Set the relay tag to include in the SessionCreated message.
      *
-     *  @param tag the relay tag
+     * @param tag the relay tag
      */
     public synchronized void setSentRelayTag(long tag) {_sentRelayTag = tag;}
 
     /**
-     *  The signed-on time we sent to Alice.
+     * The signed-on time we sent to Alice.
      *
-     *  @return the signed-on timestamp
+     * @return the signed-on timestamp
      */
     public synchronized long getSentSignedOnTime() {return _sentSignedOnTime;}
 
     /**
-     *  Record that a SessionCreated packet was just sent, update backoff state.
+     * Record that a SessionCreated packet was just sent, update backoff state.
      */
     public synchronized void createdPacketSent() {
         _lastSend = _context.clock().now();
@@ -267,56 +267,56 @@ class InboundEstablishState {  // TODO do all these methods need to be synchroni
    }
 
     /**
-     *  How long have we been trying to establish this session?
+     * How long have we been trying to establish this session?
      *
-     *  @return the elapsed time in milliseconds
+     * @return the elapsed time in milliseconds
      */
     public long getLifetime() {return getLifetime(_context.clock().now());}
 
     /**
-     *  How long have we been trying to establish this session, using the given time.
+     * How long have we been trying to establish this session, using the given time.
      *
-     *  @param now the reference time
-     *  @return the elapsed time in milliseconds
-     *  @since 0.9.57
+     * @param now the reference time
+     * @return the elapsed time in milliseconds
+     * @since 0.9.57
      */
     public long getLifetime(long now) {return now - _establishBegin;}
 
     /**
-     *  The wall clock time when this establishment attempt began.
+     * The wall clock time when this establishment attempt began.
      *
-     *  @return the start timestamp
+     * @return the start timestamp
      */
     public long getEstablishBeginTime() {return _establishBegin;}
 
     /**
-     *  The next time at which we should send a packet for this establishment.
-     *  Returns the receive time after receiving a packet (including after constructor),
-     *  or the send time plus backoff delay after sending a packet.
+     * The next time at which we should send a packet for this establishment.
+     * Returns the receive time after receiving a packet (including after constructor),
+     * or the send time plus backoff delay after sending a packet.
      *
-     *  @return the next scheduled send time
+     * @return the next scheduled send time
      */
     public synchronized long getNextSendTime() {return _nextSend;}
 
     /**
-     *  The estimated round-trip time for this establishment.
+     * The estimated round-trip time for this establishment.
      *
-     *  @return the RTT in milliseconds
+     * @return the RTT in milliseconds
      */
     synchronized int getRTT() {return _rtt;}
 
     /**
-     *  The RemoteHostId that uniquely identifies this establishment attempt.
+     * The RemoteHostId that uniquely identifies this establishment attempt.
      *
-     *  @return the remote host identifier
+     * @return the remote host identifier
      */
     RemoteHostId getRemoteHostId() {return _remoteHostId;}
 
     /**
-     *  Have we fully received the SessionConfirmed messages from Alice?
-     *  Caller must synchronize on this.
+     * Have we fully received the SessionConfirmed messages from Alice?
+     * Caller must synchronize on this.
      *
-     *  @return true if all fragments have been received
+     * @return true if all fragments have been received
      */
     protected boolean confirmedFullyReceived() {
         if (_receivedIdentity != null) {
@@ -328,25 +328,25 @@ class InboundEstablishState {  // TODO do all these methods need to be synchroni
     }
 
     /**
-     *  The confirmed identity of Alice (null if forged/unknown).
-     *  Note that this isn't really confirmed - see below.
+     * The confirmed identity of Alice (null if forged/unknown).
+     * Note that this isn't really confirmed - see below.
      *
-     *  @return Alice's RouterIdentity, or null
+     * @return Alice's RouterIdentity, or null
      */
     public synchronized RouterIdentity getConfirmedIdentity() {
         return _receivedConfirmedIdentity;
     }
 
     /**
-     *  Update the next send time to now, as we just received a packet.
-     *  Must call from synchronized method only.
+     * Update the next send time to now, as we just received a packet.
+     * Must call from synchronized method only.
      */
     protected void packetReceived() {_nextSend = _context.clock().now();}
 
     /**
-     *  Return a human-readable description of this establish state.
+     * Return a human-readable description of this establish state.
      *
-     *  @return debug string with peer address, lifetime, relay tag, and state
+     * @return debug string with peer address, lifetime, relay tag, and state
      */
     @Override
     public String toString() {

@@ -66,12 +66,12 @@ public class MuxedSKM extends SessionKeyManager {
     public RatchetSKM getECSKM() { return _ec; }
 
     /**
-     *  Should we try the Ratchet slow decrypt before ElG slow decrypt?
-     *  Adaptive test based on previous mix of traffic for this SKM,
-     *  as reported by reportDecryptResult().
+     * Should we try the Ratchet slow decrypt before ElG slow decrypt?
+     * Adaptive test based on previous mix of traffic for this SKM,
+     * as reported by reportDecryptResult().
      *
-     *  @return true if the ratchet slow decrypt should be tried before the ElGamal one
-     *  @since 0.9.46
+     * @return true if the ratchet slow decrypt should be tried before the ElGamal one
+     * @since 0.9.46
      */
     boolean preferRatchet() {
         int ec = _ecCounter.get();
@@ -130,11 +130,11 @@ public class MuxedSKM extends SessionKeyManager {
     }
 
     /**
-     *  Report the result of a slow decrypt attempt.
+     * Report the result of a slow decrypt attempt.
      *
-     *  @param isRatchet true for EC, false for ElG
-     *  @param success true for successful decrypt
-     *  @since 0.9.46
+     * @param isRatchet true for EC, false for ElG
+     * @param success true for successful decrypt
+     * @since 0.9.46
      */
     void reportDecryptResult(boolean isRatchet, boolean success) {
         if (success) {
@@ -217,17 +217,17 @@ public class MuxedSKM extends SessionKeyManager {
     }
 
     /**
-     *  Not used; tag management is handled by the ratchet protocol.
+     * Not used; tag management is handled by the ratchet protocol.
      *
-     *  @return 0, tag management is handled by ratchet protocol
+     * @return 0, tag management is handled by ratchet protocol
      */
     @Override
     public int getTagsToSend() { return 0; }
 
     /**
-     *  Not used; thresholds are not used for ratchet sessions.
+     * Not used; thresholds are not used for ratchet sessions.
      *
-     *  @return 0, threshold not used for ratchet sessions
+     * @return 0, threshold not used for ratchet sessions
      */
     @Override
     public int getLowThreshold() { return 0; }

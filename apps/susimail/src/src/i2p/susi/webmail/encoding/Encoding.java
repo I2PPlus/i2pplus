@@ -81,10 +81,10 @@ public abstract class Encoding {
     * unless escaped by a 2nd dot.
     * For some encodings, max line length is 76.
     *
-    *  This implementation just reads the whole stream into memory
-    *  and then calls encode(byte[]).
-    *  Subclasses should implement a more memory-efficient method
-    *  if large inputs are expected.
+    * This implementation just reads the whole stream into memory
+    * and then calls encode(byte[]).
+    * Subclasses should implement a more memory-efficient method
+    * if large inputs are expected.
     *
     * @param in the input stream to encode
     * @param out the writer to write encoded output to

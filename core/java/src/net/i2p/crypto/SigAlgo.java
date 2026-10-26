@@ -13,13 +13,13 @@ public enum SigAlgo {
     /** EdDSA signature. */
     EdDSA("EdDSA"),
     /**
-     *  For local use only, not for use in the network.
+     * For local use only, not for use in the network.
      */
     RSA("RSA"),
     /**
-     *  For local use only, not for use in the network.
+     * For local use only, not for use in the network.
      *
-     *  @since 0.9.25
+     * @since 0.9.25
      */
     ElGamal("ElGamal");
 

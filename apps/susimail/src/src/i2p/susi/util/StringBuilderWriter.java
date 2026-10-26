@@ -119,12 +119,12 @@ public class StringBuilderWriter extends Writer {
     }
 
     /**
-     *  Does nothing.
+     * Does nothing.
      */
     public void close() { /* no-op */ }
 
     /**
-     *  Does nothing.
+     * Does nothing.
      */
     public void flush() { /* no-op */ }
 

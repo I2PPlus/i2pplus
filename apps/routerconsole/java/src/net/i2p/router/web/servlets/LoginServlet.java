@@ -39,8 +39,8 @@ import net.i2p.data.DataHelper;
 public class LoginServlet extends HttpServlet {
 
     /**
-     *  Constructor, used by the servlet container. The container calls {@link #init()}
-     *  afterwards, which is where the persisted sessions are loaded.
+     * Constructor, used by the servlet container. The container calls {@link #init()}
+     * afterwards, which is where the persisted sessions are loaded.
      */
     public LoginServlet() {}
 
@@ -197,9 +197,9 @@ public class LoginServlet extends HttpServlet {
             Collections.unmodifiableSet(
                 new HashSet<>(Arrays.asList("dark", "classic", "light", "midnight")));
     /**
-     *  Languages offered by the login page flag bar (login.jsp langToCountry).
-     *  Any addition there MUST be mirrored here, or the selection is silently
-     *  discarded and falls back to "en".
+     * Languages offered by the login page flag bar (login.jsp langToCountry).
+     * Any addition there MUST be mirrored here, or the selection is silently
+     * discarded and falls back to "en".
      */
     private static final Set<String> ALLOWED_LANGS =
             Collections.unmodifiableSet(

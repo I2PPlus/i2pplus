@@ -11,12 +11,12 @@ import org.tanukisoftware.wrapper.event.WrapperEventListener;
 import org.tanukisoftware.wrapper.event.WrapperServiceControlEvent;
 
 /**
- *  Listen for events. Requires wrapper 3.2.0 or higher.
- *  Hides the actual listener so that
- *  ConfigServiceHandler can have a static field and not die on
- *  class not found error with wrapper 3.1.1.
+ * Listen for events. Requires wrapper 3.2.0 or higher.
+ * Hides the actual listener so that
+ * ConfigServiceHandler can have a static field and not die on
+ * class not found error with wrapper 3.1.1.
  *
- *  @since 0.8.13
+ * @since 0.8.13
  */
 class WrapperListener {
     /** Notified of wrapper events. */
@@ -26,8 +26,8 @@ class WrapperListener {
     private static final String PROP_GRACEFUL_HUP = "router.gracefulHUP";
 
     /**
-     *  Wrapper must be 3.2.0 or higher, or will throw class not found error.
-     *  Registers with the wrapper in the constructor.
+     * Wrapper must be 3.2.0 or higher, or will throw class not found error.
+     * Registers with the wrapper in the constructor.
      *
      * @param ctx the router context handed to the nested signal handler, which
      *            logs through it when the wrapper reports a signal
@@ -48,12 +48,12 @@ class WrapperListener {
     }
 
     /**
-     *  Catch signals.
-     *  The wrapper will potentially forward HUP, USR1, and USR2.
-     *  But USR1 and USR2 are used by the JVM GC and cannot be trapped.
-     *  So we will only get HUP.
+     * Catch signals.
+     * The wrapper will potentially forward HUP, USR1, and USR2.
+     * But USR1 and USR2 are used by the JVM GC and cannot be trapped.
+     * So we will only get HUP.
      *
-     *  @since 0.8.13
+     * @since 0.8.13
      */
     private static class SignalHandler implements WrapperEventListener {
         /** The router being signalled. */

@@ -26,8 +26,8 @@ public class I2PSource implements Source {
     private final Log log;
 
     /**
-     *  Protocol enum for I2P source handling.
-     *  @since 0.9.53
+     * Protocol enum for I2P source handling.
+     * @since 0.9.53
      */
     public enum Protocol {
         /** Repliable datagrams. */
@@ -111,9 +111,9 @@ public class I2PSource implements Source {
         protected Listener() {}
 
         /**
-         *  Always throws, since the muxed variant must be used.
+         * Always throws, since the muxed variant must be used.
          *
-         *  @throws IllegalStateException unconditionally, with the message "muxed"
+         * @throws IllegalStateException unconditionally, with the message "muxed"
          */
         public void messageAvailable(I2PSession sess, int id, long size) {
             throw new IllegalStateException("muxed");

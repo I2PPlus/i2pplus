@@ -11,12 +11,12 @@ import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 
 /**
- *  OutputStream to InputStream adapter.
- *  Zero-copy where possible. Unsynchronized.
- *  This is NOT a Pipe.
- *  Do NOT reset after writing.
+ * OutputStream to InputStream adapter.
+ * Zero-copy where possible. Unsynchronized.
+ * This is NOT a Pipe.
+ * Do NOT reset after writing.
  *
- *  @since 0.9.48
+ * @since 0.9.48
  */
 public class ByteArrayStream extends ByteArrayOutputStream {
 
@@ -28,7 +28,7 @@ public class ByteArrayStream extends ByteArrayOutputStream {
     }
 
     /**
-     *  Creates a new byte array output stream with the specified size.
+     * Creates a new byte array output stream with the specified size.
      *
      * @param size the initial size of the internal buffer
      */
@@ -37,9 +37,9 @@ public class ByteArrayStream extends ByteArrayOutputStream {
     }
 
     /**
-     *  Resets this stream to the beginning.
+     * Resets this stream to the beginning.
      *
-     *  @throws IllegalStateException if previously written
+     * @throws IllegalStateException if previously written
      */
     @Override
     public void reset() {
@@ -47,9 +47,9 @@ public class ByteArrayStream extends ByteArrayOutputStream {
     }
 
     /**
-     *  Returns the byte array containing the written data.
-     *  Zero-copy only if the data fills the buffer.
-     *  Use {@link #asInputStream()} for guaranteed zero-copy.
+     * Returns the byte array containing the written data.
+     * Zero-copy only if the data fills the buffer.
+     * Use {@link #asInputStream()} for guaranteed zero-copy.
      *
      * @return the byte array containing the written data
      */
@@ -60,9 +60,9 @@ public class ByteArrayStream extends ByteArrayOutputStream {
     }
 
     /**
-     *  Creates an input stream from the written data.
-     *  All data previously written. Zero-copy. Not a Pipe.
-     *  Data written after this call will not appear.
+     * Creates an input stream from the written data.
+     * All data previously written. Zero-copy. Not a Pipe.
+     * Data written after this call will not appear.
      *
      * @return an input stream containing the written data
      */
@@ -71,7 +71,7 @@ public class ByteArrayStream extends ByteArrayOutputStream {
     }
 
     /**
-     *  Copies all written data to the target array.
+     * Copies all written data to the target array.
      *
      * @param target the array to copy the written data into
      * @param offset the offset in the target array
@@ -81,7 +81,7 @@ public class ByteArrayStream extends ByteArrayOutputStream {
     }
 
     /**
-     *  Verifies the signature of the written data.
+     * Verifies the signature of the written data.
      *
      * @param signature the signature to verify
      * @param verifyingKey the public key to verify with
@@ -92,7 +92,7 @@ public class ByteArrayStream extends ByteArrayOutputStream {
     }
 
     /**
-     *  Verifies the signature of the written data.
+     * Verifies the signature of the written data.
      *
      * @param ctx the application context
      * @param signature the signature to verify
@@ -104,7 +104,7 @@ public class ByteArrayStream extends ByteArrayOutputStream {
     }
 
     /**
-     *  Signs the written data.
+     * Signs the written data.
      *
      * @param signingKey the private key to sign with
      * @return the signature, or null on error
@@ -114,7 +114,7 @@ public class ByteArrayStream extends ByteArrayOutputStream {
     }
 
     /**
-     *  Signs the written data.
+     * Signs the written data.
      *
      * @param ctx the application context
      * @param signingKey the private key to sign with

@@ -99,9 +99,9 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
 
 
     /**
-     *  It's not supported until 0.9.7, but as of
-     *  0.9.6 we can specify the bit in the flags without
-     *  the receiver rejecting the whole message as invalid.
+     * It's not supported until 0.9.7, but as of
+     * 0.9.6 we can specify the bit in the flags without
+     * the receiver rejecting the whole message as invalid.
      */
     private static final String MIN_ENCRYPTION_VERSION = "0.9.7";
     /** Oldest version understanding ratchet replies. */
@@ -116,10 +116,10 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     *  Lookup message for the given context.
+     * Lookup message for the given context.
      *
-     *  @param context the application context the message is created for
-     *  @param locallyCreated ignored; this constructor always behaves the same
+     * @param context the application context the message is created for
+     * @param locallyCreated ignored; this constructor always behaves the same
      */
     public DatabaseLookupMessage(I2PAppContext context, boolean locallyCreated) {
         super(context);
@@ -145,22 +145,22 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     *  Defines the type of data being searched for.
-     *  Default ANY.
+     * Defines the type of data being searched for.
+     * Default ANY.
      *
-     *  @return non-null
-     *  @since 0.9.16
+     * @return non-null
+     * @since 0.9.16
      */
     public Type getSearchType() { return _type; }
 
     /**
-     *  Defines the type of data being searched for.
-     *  Default ANY.
-     *  Must be ANY for queried routers 0.9.5 or lower, but there are few if
-     *  any floodfills that old left, so not even worth checking.
+     * Defines the type of data being searched for.
+     * Default ANY.
+     * Must be ANY for queried routers 0.9.5 or lower, but there are few if
+     * any floodfills that old left, so not even worth checking.
      *
-     *  @param type non-null
-     *  @since 0.9.16
+     * @param type non-null
+     * @since 0.9.16
      */
     public void setSearchType(Type type) {
         if (type == null)
@@ -207,11 +207,11 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     *  Does this router support encrypted replies?
+     * Does this router support encrypted replies?
      *
-     *  @param to null OK returns true as of 0.9.69
-     *  @return true if the router is new enough and its public key type can encrypt replies
-     *  @since 0.9.7
+     * @param to null OK returns true as of 0.9.69
+     * @return true if the router is new enough and its public key type can encrypt replies
+     * @since 0.9.7
      */
     public static boolean supportsEncryptedReplies(RouterInfo to) {
         if (to == null)
@@ -227,11 +227,11 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     *  Does this router support ratchet replies?
+     * Does this router support ratchet replies?
      *
-     *  @param to null OK returns true as of 0.9.69
-     *  @return true if the router is new enough and its public key type supports ratchets
-     *  @since 0.9.46
+     * @param to null OK returns true as of 0.9.69
+     * @return true if the router is new enough and its public key type supports ratchets
+     * @since 0.9.46
      */
     public static boolean supportsRatchetReplies(RouterInfo to) {
         // needed for ISJ where we may be querying peers we only have the hash for.
@@ -290,12 +290,12 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     public RatchetSessionTag getRatchetReplyTag() { return _ratchetReplyTag; }
 
     /**
-     *  Sets the reply session for ratchet encryption; only once per message.
+     * Sets the reply session for ratchet encryption; only once per message.
      *
-     *  @param encryptKey non-null
-     *  @param encryptTag non-null
-     *  @throws IllegalStateException if key or tag previously set, to protect saved checksum
-     *  @since 0.9.46
+     * @param encryptKey non-null
+     * @param encryptTag non-null
+     * @throws IllegalStateException if key or tag previously set, to protect saved checksum
+     * @since 0.9.46
      */
     public void setReplySession(SessionKey encryptKey, RatchetSessionTag encryptTag) {
         if (_replyKey != null || _replyTag != null ||
@@ -315,12 +315,12 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     public PublicKey getRatchetPublicKey() { return _ratchetPubKey; }
 
     /**
-     *  Sets the reply session's ratchet public key.
-     *  Preliminary, not fully supported, see proposal 154.
+     * Sets the reply session's ratchet public key.
+     * Preliminary, not fully supported, see proposal 154.
      *
-     *  @param pubKey non-null
-     *  @throws IllegalStateException if key or tag previously set, to protect saved checksum
-     *  @since 0.9.46
+     * @param pubKey non-null
+     * @throws IllegalStateException if key or tag previously set, to protect saved checksum
+     * @since 0.9.46
      */
     public void setReplySession(PublicKey pubKey) {
         _ratchetPubKey = pubKey;

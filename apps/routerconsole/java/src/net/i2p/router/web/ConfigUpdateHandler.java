@@ -72,13 +72,13 @@ public class ConfigUpdateHandler extends FormHandler {
     /** Default for update through proxy. */
     public static final boolean DEFAULT_SHOULD_PROXY = true;
     /**
-     *  Property for fetching news through proxy.
-     *  @since 0.9.9
+     * Property for fetching news through proxy.
+     * @since 0.9.9
      */
     public static final String PROP_SHOULD_PROXY_NEWS = "router.fetchNewsThroughProxy";
     /**
-     *  Default for fetching news through proxy.
-     *  @since 0.9.9
+     * Default for fetching news through proxy.
+     * @since 0.9.9
      */
     public static final boolean DEFAULT_SHOULD_PROXY_NEWS = true;
     /** Property for update proxy host. */
@@ -355,21 +355,21 @@ public class ConfigUpdateHandler extends FormHandler {
      */
     public void setZipURL(String url) {_zipURL = url;}
     /**
-     *  Set whether to fetch news through proxy.
-     *  @param foo ignored; the value only marks the setting as enabled
-     *  @since 0.9.9
+     * Set whether to fetch news through proxy.
+     * @param foo ignored; the value only marks the setting as enabled
+     * @since 0.9.9
      */
     public void setNewsThroughProxy(String foo) {_newsThroughProxy = true;}
     /**
-     *  Set whether to update development SU3 builds.
-     *  @param foo ignored; the value only marks the setting as enabled
-     *  @since 0.9.20
+     * Set whether to update development SU3 builds.
+     * @param foo ignored; the value only marks the setting as enabled
+     * @since 0.9.20
      */
     public void setUpdateDevSU3(String foo) {_updateDevSU3  = true;}
     /**
-     *  Set the development SU3 URL.
-     *  @param url the development SU3 zip URL to download
-     *  @since 0.9.20
+     * Set the development SU3 URL.
+     * @param url the development SU3 zip URL to download
+     * @since 0.9.20
      */
     public void setDevSU3URL(String url) {_devSU3URL = url;}
 

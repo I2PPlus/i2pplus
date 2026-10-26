@@ -61,9 +61,9 @@ public class ReusableGZIPInputStream extends ResettableGZIPInputStream {
     }
 
     /**
-     *  Clear the cache.
+     * Clear the cache.
      *
-     *  @since 0.9.21
+     * @since 0.9.21
      */
     public static void clearCache() {
         if (_available != null) _available.clear();

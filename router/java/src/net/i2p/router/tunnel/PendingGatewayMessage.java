@@ -51,59 +51,59 @@ class PendingGatewayMessage implements CDQEntry {
     }
 
     /**
-     *  The destination router.
-     *  @return may be null
+     * The destination router.
+     * @return may be null
      */
     public Hash getToRouter() { return _toRouter; }
 
     /**
-     *  The destination tunnel.
-     *  @return may be null
+     * The destination tunnel.
+     * @return may be null
      */
     public TunnelId getToTunnel() { return _toTunnel; }
 
     /**
-     *  Message ID.
+     * Message ID.
      *
-     *  @return the message ID
+     * @return the message ID
      */
     public long getMessageId() { return _messageId; }
 
     /**
-     *  Message expiration time.
+     * Message expiration time.
      *
-     *  @return the message expiration
+     * @return the message expiration
      */
     public long getExpiration() { return _expiration; }
 
     /**
-     *  The raw unfragmented message to send.
-     *  @return the message data
+     * The raw unfragmented message to send.
+     * @return the message data
      */
     public byte[] getData() { return _remaining; }
 
     /**
-     *  The index into the data to be sent.
-     *  @return the index of the next byte to send, 0 when the whole message is unsent
+     * The index into the data to be sent.
+     * @return the index of the next byte to send, 0 when the whole message is unsent
      */
     public int getOffset() { return _offset; }
 
     /**
-     *  Move the offset.
-     *  @param offset the new offset value
+     * Move the offset.
+     * @param offset the new offset value
      */
     public void setOffset(int offset) { _offset = offset; }
 
     /**
-     *  Lifetime in milliseconds.
+     * Lifetime in milliseconds.
      *
-     *  @return the lifetime in milliseconds
+     * @return the lifetime in milliseconds
      */
     public long getLifetime() { return System.currentTimeMillis()-_created; }
 
     /**
-     *  Which fragment are we working on (0 for the first fragment).
-     *  @return the fragment number
+     * Which fragment are we working on (0 for the first fragment).
+     * @return the fragment number
      */
     public int getFragmentNumber() { return _fragmentNumber; }
 

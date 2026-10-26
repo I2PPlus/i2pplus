@@ -58,29 +58,29 @@ public class SOCKSUDPPort implements Source, Sink {
     }
 
     /**
-     *  Returns the UDP port number that this port is listening on.
+     * Returns the UDP port number that this port is listening on.
      *
-     *  @return the local UDP port number
-     *  @since 0.9.53
+     * @return the local UDP port number
+     * @since 0.9.53
      */
     public int getPort() {
         return this.udpsink.getPort();
     }
 
     /**
-     *  Sets the sink for incoming UDP datagrams from I2P.
+     * Sets the sink for incoming UDP datagrams from I2P.
      *
-     *  @param sink the sink to receive processed UDP datagrams
-     *  @since 0.9.53
+     * @param sink the sink to receive processed UDP datagrams
+     * @since 0.9.53
      */
     public void setSink(Sink sink) {
         this.unwrapper.setSink(sink);
     }
 
     /**
-     *  Starts the UDP source to begin receiving datagrams.
+     * Starts the UDP source to begin receiving datagrams.
      *
-     *  @since 0.9.53
+     * @since 0.9.53
      */
     public void start() {
         // the other Sources don't use start
@@ -88,9 +88,9 @@ public class SOCKSUDPPort implements Source, Sink {
     }
 
     /**
-     *  Stops the UDP source and sink, closing the underlying sockets.
+     * Stops the UDP source and sink, closing the underlying sockets.
      *
-     *  @since 0.9.53
+     * @since 0.9.53
      */
     public void stop() {
         this.udpsink.stop();

@@ -8,8 +8,8 @@ import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
 
 /**
- *  Handle messages at the IBGW.
- *  Not used for zero-hop IBGWs.
+ * Handle messages at the IBGW.
+ * Not used for zero-hop IBGWs.
  */
 class InboundGatewayReceiver implements TunnelGateway.Receiver {
     /** The router context. */

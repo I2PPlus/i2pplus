@@ -12,10 +12,10 @@ import net.i2p.util.EepGet;
 import net.i2p.util.PortMapper;
 
 /**
- *  Eepget the .su3 file to the temp dir, then notify.
- *  ConsoleUpdateManager will do the rest.
+ * Eepget the .su3 file to the temp dir, then notify.
+ * ConsoleUpdateManager will do the rest.
  *
- *  @since 0.9.20
+ * @since 0.9.20
  */
 class DevSU3UpdateRunner extends UpdateRunner {
 

@@ -39,11 +39,11 @@ public class TunnelParticipatingHelper extends HelperBase {
     }
 
     /**
-     *  Render a single named element for the contentonly fragment mode of the
-     *  most-recent participating tunnels page.
+     * Render a single named element for the contentonly fragment mode of the
+     * most-recent participating tunnels page.
      *
-     *  @param id the element id
-     *  @since 0.9.70+
+     * @param id the element id
+     * @since 0.9.70+
      */
     public void renderFragment(String id) {
         TunnelRenderer renderer = new TunnelRenderer(_context);

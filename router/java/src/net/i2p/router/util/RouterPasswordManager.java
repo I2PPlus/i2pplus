@@ -181,11 +181,11 @@ public class RouterPasswordManager extends PasswordManager {
     }
 
     /**
-     *  Remove password, any kind.
+     * Remove password, any kind.
      *
-     *  @param realm e.g. i2cp, routerconsole, etc.
-     *  @param user null or "" for no user, already trimmed
-     *  @return true if every stored password form for the prefix was deleted
+     * @param realm e.g. i2cp, routerconsole, etc.
+     * @param user null or "" for no user, already trimmed
+     * @return true if every stored password form for the prefix was deleted
      */
     public boolean remove(String realm, String user) {
         String pfx = realm;

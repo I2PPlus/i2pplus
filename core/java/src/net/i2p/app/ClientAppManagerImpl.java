@@ -5,11 +5,11 @@ import net.i2p.I2PAppContext;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- *  A simple ClientAppManager that supports register/unregister only,
- *  so that client apps may find each other in AppContext.
- *  See RouterAppManager for the real thing in RouterContext.
+ * A simple ClientAppManager that supports register/unregister only,
+ * so that client apps may find each other in AppContext.
+ * See RouterAppManager for the real thing in RouterContext.
  *
- *  @since 0.9.30
+ * @since 0.9.30
  */
 public class ClientAppManagerImpl implements ClientAppManager {
 
@@ -17,32 +17,32 @@ public class ClientAppManagerImpl implements ClientAppManager {
     protected final ConcurrentHashMap<String, ClientApp> _registered;
 
     /**
-     *  Creates a new ClientAppManagerImpl.
-     *  @param ctx the I2P app context
+     * Creates a new ClientAppManagerImpl.
+     * @param ctx the I2P app context
      */
     public ClientAppManagerImpl(I2PAppContext ctx) {
         _registered = new ConcurrentHashMap<>(8);
     }
 
     /**
-     *  Does nothing.
+     * Does nothing.
      *
-     *  @param app non-null
-     *  @param state non-null
-     *  @param message may be null
-     *  @param e may be null
+     * @param app non-null
+     * @param state non-null
+     * @param message may be null
+     * @param e may be null
      */
     @Override
     public void notify(ClientApp app, ClientAppState state, String message, Exception e) {
     // TODO
     }
     /**
-     *  Register with the manager under the given name,
-     *  so that other clients may find it.
-     *  Only required for apps used by other apps.
+     * Register with the manager under the given name,
+     * so that other clients may find it.
+     * Only required for apps used by other apps.
      *
-     *  @param app non-null
-     *  @return true if successful, false if duplicate name
+     * @param app non-null
+     * @return true if successful, false if duplicate name
      */
     @Override
     public boolean register(ClientApp app) {
@@ -50,10 +50,10 @@ public class ClientAppManagerImpl implements ClientAppManager {
     }
 
     /**
-     *  Unregister with the manager. Name must be the same as that from {@link #register}.
-     *  Only required for apps used by other apps.
+     * Unregister with the manager. Name must be the same as that from {@link #register}.
+     * Only required for apps used by other apps.
      *
-     *  @param app non-null
+     * @param app non-null
      */
     @Override
     public void unregister(ClientApp app) {
@@ -61,13 +61,13 @@ public class ClientAppManagerImpl implements ClientAppManager {
     }
 
     /**
-     *  Get a registered app.
-     *  Only used for apps finding other apps.
-     *  Do not hold a static reference.
-     *  If you only need to find a port, use the PortMapper instead.
+     * Get a registered app.
+     * Only used for apps finding other apps.
+     * Do not hold a static reference.
+     * If you only need to find a port, use the PortMapper instead.
      *
-     *  @param name non-null
-     *  @return client app or null
+     * @param name non-null
+     * @return client app or null
      */
     @Override
     public ClientApp getRegisteredApp(String name) {

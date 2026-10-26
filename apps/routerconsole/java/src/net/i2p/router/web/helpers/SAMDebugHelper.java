@@ -100,7 +100,7 @@ public class SAMDebugHelper extends HelperBase {
     }
 
     /**
-     *  Get the SAM bridge instance if running.
+     * Get the SAM bridge instance if running.
      *
      * @return the SAMBridge instance, or null if not running
      */

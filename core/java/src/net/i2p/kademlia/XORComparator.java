@@ -25,7 +25,7 @@ public class XORComparator<T extends SimpleDataStructure> implements Comparator<
     }
 
     /**
-     *  Compare two entries by XOR distance to the base key.
+     * Compare two entries by XOR distance to the base key.
      */
     @Override
     public int compare(T lhs, T rhs) {

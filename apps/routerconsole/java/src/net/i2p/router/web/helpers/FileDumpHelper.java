@@ -223,7 +223,7 @@ public class FileDumpHelper extends HelperBase {
     }
 
     /**
-     *  Read the manifest attributes from the given jar file.
+     * Read the manifest attributes from the given jar file.
      *
      * @param f the jar whose META-INF/MANIFEST.MF main attributes to read
      * @return null if not found
@@ -245,7 +245,7 @@ public class FileDumpHelper extends HelperBase {
     }
 
     /**
-     *  Get a manifest attribute value with HTML stripped.
+     * Get a manifest attribute value with HTML stripped.
      *
      * @param atts non-null
      * @param s the attribute name

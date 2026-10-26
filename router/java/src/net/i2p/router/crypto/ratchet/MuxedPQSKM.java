@@ -65,9 +65,9 @@ public class MuxedPQSKM extends SessionKeyManager {
     public RatchetSKM getPQSKM() { return _pq; }
 
     /**
-     *  Should we try the Ratchet slow decrypt before PQ slow decrypt?
-     *  Adaptive test based on previous mix of traffic for this SKM,
-     *  as reported by reportDecryptResult().
+     * Should we try the Ratchet slow decrypt before PQ slow decrypt?
+     * Adaptive test based on previous mix of traffic for this SKM,
+     * as reported by reportDecryptResult().
      *
      * @return true if the Ratchet decrypt is tried first, false for PQ
      */
@@ -139,10 +139,10 @@ public class MuxedPQSKM extends SessionKeyManager {
     }
 
     /**
-     *  Report the result of a slow decrypt attempt.
+     * Report the result of a slow decrypt attempt.
      *
-     *  @param isRatchet true for EC, false for PQ
-     *  @param success true for successful decrypt
+     * @param isRatchet true for EC, false for PQ
+     * @param success true for successful decrypt
      */
     void reportDecryptResult(boolean isRatchet, boolean success) {
         if (success) {
@@ -241,17 +241,17 @@ public class MuxedPQSKM extends SessionKeyManager {
     }
 
     /**
-     *  Not used; tag management is handled by the ratchet protocol.
+     * Not used; tag management is handled by the ratchet protocol.
      *
-     *  @return 0, tag management is handled by ratchet protocol
+     * @return 0, tag management is handled by ratchet protocol
      */
     @Override
     public int getTagsToSend() { return 0; }
 
     /**
-     *  Not used; thresholds are not used for ratchet sessions.
+     * Not used; thresholds are not used for ratchet sessions.
      *
-     *  @return 0, threshold not used for ratchet sessions
+     * @return 0, threshold not used for ratchet sessions
      */
     @Override
     public int getLowThreshold() { return 0; }
