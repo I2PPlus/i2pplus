@@ -32,6 +32,7 @@ import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.IntConsumer;
 import java.util.function.Supplier;
 import java.util.Locale;
 import java.util.Map;
@@ -1681,9 +1682,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
                 boolean compress = allowGZIP && useGZIP;
                 AtomicInteger waiter = keepalive ? new AtomicInteger() : null;
-                 Runnable t = new CompressedRequestor(s, socket, modifiedHeader, getTunnel().getContext(),
-                                                      _log, compress, upgrade, _clientExecutor, keepalive, waiter,
-                                                      this::getIOExecutor, tunnelId);
+                Runnable t = new CompressedRequestor(s, socket, modifiedHeader, getTunnel().getContext(),
+                                                     _log, compress, upgrade, _clientExecutor, keepalive, waiter,
+                                                     this::getIOExecutor, tunnelId);
                 // Persistent connections run inline so the waiter can gate the
                 // next request on this connection. Non-keepalive requests
                 // (including GET/HEAD with keepalive off or Connection: close)
@@ -2586,6 +2587,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          * <p>
          * Used for keepalive responses (must wait before the next request)
          * and as a fallback when async handoff is not taken.
+         * <p>The idle window is re-evaluated every poll with
+         * {@link #computeStallWindowMs(long, long)}, exactly as the detached
+         * body path does: a keepalive response that has already moved
+         * megabytes earns the same patience as the same body handed off
+         * asynchronously, instead of being cut off at the flat configured
+         * floor.
          *
          * @param s the Sender to run
          * @param desc descriptive name for error messages
@@ -2619,8 +2626,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                  return;
              }
              sampleIOLoad(ioPool);
-            final long stallMs = ioStallTimeoutMs;
-            final long pollMs = Math.max(1_000L, Math.min(stallMs / 10, 5_000L));
+            final long baseStallMs = ioStallTimeoutMs;
+            final long pollMs = Math.max(1_000L, Math.min(baseStallMs / 10, 5_000L));
             final long started = System.nanoTime();
             try {
                 while (true) {
@@ -2633,6 +2640,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     long last = s.getLastReadNanos();
                     if (last <= 0) {last = started;}
                     long idleMs = (System.nanoTime() - last) / 1_000_000L;
+                    // Scale with body progress exactly as BodyWatchdog and the
+                    // Sender loop do: a keepalive body that has already moved
+                    // megabytes has demonstrably earned patience.
+                    long stallMs = computeStallWindowMs(baseStallMs, s.getBytesTransferred());
                     if (idleMs >= stallMs) {
                         f.cancel(true); // interrupts the Sender thread
                         _stallEventCount.incrementAndGet();
@@ -2712,8 +2723,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 try {serverin = new BufferedInputStream(_webserver.getInputStream(), BUF_SIZE);}
                 catch (NullPointerException npe) {throw new IOException("getInputStream NPE");}
                 String modifiedHeaders = readAndRewriteServerResponse(serverin, timeout, _ctx);
-                // after the headers, set a short timeout
-                _webserver.setSoTimeout(SERVER_READ_TIMEOUT_GET);
+                // After the headers, the body gets the same base window the
+                // I2P-side watchdogs use (floor 60s, raisable by the Tuner),
+                // and the Sender raises it further as the body crosses bulk
+                // progress tiers — one arbiter, one scale, both ends of the
+                // pump.
+                _webserver.setSoTimeout((int) computeStallWindowMs(ioStallTimeoutMs, 0));
 
                 if (_shouldCompress) {
                     // A HEAD response carries the GET's Content-Length but no body;
@@ -2734,6 +2749,14 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                       s = new Sender(browserout, serverin, "Server -> Client " +
                                      urlSuffix(req), _tunnelId, _log);
                 }
+                // Keep the local backend's read timeout in lockstep with the
+                // progress-scaled stall window, so a backend that pauses
+                // mid-body gets the same patience the I2P side would, instead
+                // of being killed at the flat header value.
+                s.setReadTimeoutTuner(ms -> {
+                    try {_webserver.setSoTimeout(ms);}
+                    catch (IOException ioe) { /* socket gone; the copy fails on its next read */ }
+                });
                 if (_log.shouldDebug())
                     _log.debug("[HTTPServer] Running server-to-browser Compressed? " + _shouldCompress + " KeepAlive? " + _keepalive +
                                urlSuffix(req));
@@ -3101,6 +3124,28 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          * @since 0.9.71+
          */
         private volatile long _lastWriteNanos;
+        /**
+         * Optional hook raising the source socket's read timeout as the body
+         * earns a larger stall window. A response Sender reads the local
+         * backend socket under a fixed soTimeout; without this hook that
+         * timeout stays at the header-read value for the whole body, so a
+         * slow-but-live backend generating a bulk response is killed at 60s
+         * while the I2P-side watchdog would tolerate up to
+         * {@link I2PTunnelHTTPServer#MAX_STALL_WINDOW_MS}. Null for senders
+         * with no tunable source (e.g. the I2P-side request direction).
+         *
+         * @since 0.9.72+
+         */
+        private volatile IntConsumer _readTimeoutTuner;
+        /**
+         * Stall window (ms) last pushed through {@link #_readTimeoutTuner};
+         * 0 until the first application. The tuner is only invoked when the
+         * progress-scaled window actually changes, so the per-chunk cost is
+         * a long compare.
+         *
+         * @since 0.9.72+
+         */
+        private long _lastAppliedWindowMs;
 
         /**
          * Create a Sender to copy data from input to output streams.
@@ -3155,6 +3200,35 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         void setRequestLabel(String request) {
             _requestLabel = (request != null && !request.isEmpty()
                              && !request.equals("Unknown request")) ? request : null;
+        }
+
+        /**
+         * Install the hook that raises the source socket read timeout as this
+         * body earns a larger stall window. Call before {@link #run()}; the
+         * first application happens after the first body chunk is read.
+         *
+         * @param tuner receives the new read timeout in ms, or null for none
+         * @since 0.9.72+
+         */
+        void setReadTimeoutTuner(IntConsumer tuner) {
+            _readTimeoutTuner = tuner;
+        }
+
+        /**
+         * Push the progress-scaled stall window through to the source socket's
+         * read timeout, but only when the window actually changes, a tier
+         * crossing, so the per-chunk cost is one long compare. A no-op when
+         * no tuner is installed.
+         *
+         * @since 0.9.72+
+         */
+        private void applySourceReadTimeout() {
+            IntConsumer tuner = _readTimeoutTuner;
+            if (tuner == null) {return;}
+            long windowMs = computeStallWindowMs(ioStallTimeoutMs, _bytesTransferred);
+            if (windowMs == _lastAppliedWindowMs) {return;}
+            _lastAppliedWindowMs = windowMs;
+            tuner.accept((int) Math.min(windowMs, Integer.MAX_VALUE));
         }
 
         /**
@@ -3237,6 +3311,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     // indistinguishable from a silent local source.
                     _lastReadNanos = now;
                     _bytesTransferred += read;
+                    // Raise the source read timeout in step with the earned
+                    // window before the next (possibly long) blocking read.
+                    applySourceReadTimeout();
                     _out.write(buf, 0, read);
                     _out.flush();
                     _lastWriteNanos = System.nanoTime();
