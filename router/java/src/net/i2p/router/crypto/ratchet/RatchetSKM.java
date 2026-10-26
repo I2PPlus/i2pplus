@@ -309,9 +309,9 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
             boolean rv = addSession(sess, true);
             if (_log.shouldInfo()) {
                 if (rv)
-                    _log.info("New Outbound session " + state.hashCode() + " as Bob. Alice: " + toString(target));
+                    _log.info("New outbound session as Bob [" + state.hashCode() + "] * Peer: " + toString(target));
                 else
-                    _log.info("Duplicate Outbound session " + state.hashCode() + " as Bob. Alice: " + toString(target));
+                    _log.info("Duplicate outbound session as Bob [" + state.hashCode() + "] * Peer: " + toString(target));
             }
             return rv;
         } else {
@@ -321,14 +321,14 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                 if (pending != null) {
                     pending.add(sess);
                     if (_log.shouldInfo())
-                        _log.info("Another new Outbound session " + state.hashCode() + " as Alice, total now: " + pending.size() +
-                                  ". Bob: " + toString(target));
+                        _log.info("Another new outbound session as Alice [" + state.hashCode() +
+                                  "] * Total pending: " + pending.size() + " * Peer: " + toString(target));
                 } else {
                     pending = new ArrayList<>(4);
                     pending.add(sess);
                     _pendingOutboundSessions.put(target, pending);
                     if (_log.shouldInfo())
-                        _log.info("First new Outbound session " + state.hashCode() + " as Alice. Bob: " + toString(target));
+                        _log.info("First new outbound session as Alice [" + state.hashCode() + "] * Peer: " + toString(target));
                 }
             }
             return true;
@@ -356,7 +356,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         if (isInbound) {
             // we are Bob, NSR sent
             if (_log.shouldInfo())
-                _log.info("Session " + state.hashCode() + " update as Bob. Alice: " + toString(target));
+                _log.info("Handshake " + state.hashCode() + " completed as Bob, NSR sent * Peer: " + toString(target));
             OutboundSession sess = getSession(target);
             if (sess == null) {
                 // Not recoverable, and no recovery is needed. The session is
@@ -367,21 +367,22 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                 // handshake state and returns no cloves; the next message to
                 // the peer starts a fresh handshake.
                 if (_log.shouldWarn())
-                    _log.warn("Update Bob session but no session found for "  + target);
+                    _log.warn("Bob session update -> No session found for peer: " + toString(target));
                 return false;
             }
             sess.updateSession(state, callback, split);
         } else {
             // we are Alice, NSR received
             if (_log.shouldInfo())
-                _log.info("Session " + oldState.hashCode() + " to " + state.hashCode() + " update as Alice. Bob: " + toString(target));
+                _log.info("Handshake " + oldState.hashCode() + " -> " + state.hashCode() +
+                          " completed as Alice, NSR received * Peer: " + toString(target));
             OutboundSession sess;
             List<OutboundSession> stale;
             synchronized (_pendingOutboundSessions) {
                 List<OutboundSession> pending = _pendingOutboundSessions.get(target);
                 if (pending == null) {
                     if (_log.shouldDebug())
-                        _log.debug("Update Alice session but no pending sessions for "  + target);
+                        _log.debug("Alice session update -> No pending sessions for peer: " + toString(target));
                     // Normal case for multiple NSRs, was already removed
                     return false;
                 }
@@ -396,7 +397,8 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                     // and returns no cloves. Retrying cannot help: the old
                     // state this reply belongs to is gone.
                     if (_log.shouldDebug())
-                        _log.debug("Update Alice session but no session found (out of " + pending.size() + ") for "  + target);
+                        _log.debug("Alice session update -> No matching session (of " + pending.size() +
+                                   ") for peer: " + toString(target));
                     return false;
                 }
                 // Whatever is still queued for this target came from a handshake
@@ -413,9 +415,9 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
             boolean ok = addSession(sess, false);
             if (_log.shouldDebug()) {
                 if (ok)
-                    _log.debug("Update Alice session from NSR to ES for "  + target);
+                    _log.debug("Alice session updated from NSR to ES * Peer: " + toString(target));
                 else
-                    _log.debug("Session already updated from NSR to ES for "  + target);
+                    _log.debug("Alice session already updated from NSR to ES * Peer: " + toString(target));
             }
             if (!stale.isEmpty()) {
                 for (OutboundSession other : stale) {
@@ -428,8 +430,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                     }
                 }
                 if (_log.shouldDebug())
-                    _log.debug("Cleaned up " + stale.size() +
-                               " stale pending sessions for " + target);
+                    _log.debug("Cleaned up " + stale.size() + " stale pending sessions * Peer: " + toString(target));
             }
         }
         return true;
