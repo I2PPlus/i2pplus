@@ -4171,6 +4171,7 @@
     <ant dir="router/java/" target="junit.test">
       <property name="build.dir" location="${build.root}router/java/build"/>
       <property name="apps.i2ptunnel.java.build.dir" location="${build.root}apps/i2ptunnel/java/build"/>
+      <property name="apps.streaming.java.build.dir" location="${build.root}apps/streaming/java/build"/>
       <property name="core.java.build.dir" location="${build.root}core/java/build"/>
       </ant>
     <ant dir="apps/ministreaming/java/" target="junit.test">
