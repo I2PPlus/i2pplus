@@ -201,6 +201,11 @@ public class JobQueue {
         _context.statManager().createRequiredRateStat("jobQueue.queuedJobs", "Scheduled jobs in queue", "JobQueue", RATES);
         _context.statManager().createRequiredRateStat("jobQueue.readyJobs", "Ready and waiting scheduled jobs", "JobQueue", RATES);
         _context.statManager().createRateStat("jobQueue.testJobCount", "Number of TestJob instances in queue", "JobQueue", RATES);
+        // Every scale event used to create or destroy OS threads, and nothing counted
+        // it: the add/remove lines are logged at INFO, which is off by default, so the
+        // churn was invisible in a running router. This is the counter that makes the
+        // scaler's thread traffic measurable. Read the add count, not the average.
+        _context.statManager().createRateStat("jobQueue.runnerThreadCreations", "Job runner threads created", "JobQueue", RATES);
         // Removed: jobQueue.testJobHardLimit (already documented in GraphGroups as removed from the console). It was never emitted, so it read as an
         // absent stat rather than a zero one, and every graph, Tuner rule and health
         // check that referenced it silently no-oped. Nothing here was measured.
@@ -834,6 +839,7 @@ public class JobQueue {
                 runner.setName("JobQueue." + _runnerId.incrementAndGet());
                 runner.setPriority(Thread.MAX_PRIORITY);
                 runner.start();
+                countRunnerCreated();
             }
         } else if (_log.shouldWarn()) {
             if (_queueRunners.size() == numThreads) {_log.warn("Already have " + numThreads + " threads");}
@@ -883,11 +889,13 @@ public class JobQueue {
 
     /**
      * Request additional job runners for an anticipated burst.
-     * Delegates to JobQueueScaler for tracking and auto-decay.
+     * Delegates to JobQueueScaler, which holds the request as a lease that
+     * expires on its own. Repeated calls under one reason accumulate, so a
+     * caller with a standing request should use {@link #setJobRunners} instead.
      *
      * @param count  number of additional runners to reserve
      * @param reason  label for logging and tracking
-     * @param autoReleaseMs  if &gt; 0, auto-decay after this many ms
+     * @param autoReleaseMs  if &gt; 0, the request stops counting after this many ms
      * @since 0.9.70+
      */
     public void requestJobRunners(int count, String reason, long autoReleaseMs) {
@@ -903,6 +911,21 @@ public class JobQueue {
      */
     public void releaseJobRunners(int count, String reason) {
         _scaler.releaseRunners(count, reason);
+    }
+
+    /**
+     * Set the runners a subsystem is holding, replacing any previous request
+     * under the same reason. A caller that wants to keep a standing request
+     * refreshes it here on each pass, in one call, so the floor never
+     * transiently drops to zero the way a release-then-request pair allows.
+     *
+     * @param reason  label for logging and tracking, non-null
+     * @param count  runners to hold; zero withdraws the request
+     * @param ttlMs  how long the request stays in force, refreshed by each call
+     * @since 0.9.72+
+     */
+    public void setJobRunners(String reason, int count, long ttlMs) {
+        _scaler.setRunners(reason, count, ttlMs);
     }
 
     /**
@@ -935,13 +958,26 @@ public class JobQueue {
             _queueRunners.put(Integer.valueOf(key), runner);
             runner.setName("JobQueue." + _runnerId.incrementAndGet());
             if (_log.shouldDebug())
-                _log.debug("Starting runner " + key + " total now " + _queueRunners.size());
+                _log.debug("Starting runner: " + key + " * Total: " + _queueRunners.size());
             runner.start();
+            countRunnerCreated();
         }
 
         if (_log.shouldInfo()) {
-            _log.info("Added " + count + " runners. Total: " + _queueRunners.size() + " after start");
+            _log.info("Added " + count + " runners -> Total: " + _queueRunners.size());
         }
+    }
+
+    /**
+     * Count one runner thread creation. A scale event used to create or destroy
+     * OS threads, and the only trace was an INFO line that the default log level
+     * hides, so the thread traffic was invisible and unmeasurable. Read the add
+     * count of the stat, not its average.
+     *
+     * @since 0.9.72+
+     */
+    private void countRunnerCreated() {
+        _context.statManager().addRateData("jobQueue.runnerThreadCreations", 1);
     }
 
     /**
@@ -968,7 +1004,7 @@ public class JobQueue {
             }
         }
         if (removed > 0 && _log.shouldInfo()) {
-            _log.info("Removed " + removed + " idle runners. Total: " + _queueRunners.size());
+            _log.info("Removed " + removed + " idle runners -> Total: " + _queueRunners.size());
         }
         return removed;
     }

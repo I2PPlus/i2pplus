@@ -9742,13 +9742,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean capBinding = failsElevated && !Double.isNaN(failTime) &&
                                  failTime >= current * 0.9;
 
-            // Release previous cycle's runner request; re-request if the cap
-            // is truncating searches. Growing the timeout means each search
-            // occupies a job runner longer — add headroom proactively.
-            _context.jobQueue().releaseJobRunners(2, "ls-lookup");
-            if (capBinding) {
-                _context.jobQueue().requestJobRunners(2, "ls-lookup", 30_000);
-            }
+            // Refresh this cycle's runner request in one call. Growing the
+            // timeout means each search occupies a job runner longer, so ask
+            // for headroom while the cap is truncating searches, and withdraw
+            // the claim when it is not. A release-then-request pair let the
+            // scaler's check land between the two and see a floor 2 lower.
+            _context.jobQueue().setJobRunners("ls-lookup", capBinding ? 2 : 0, 30_000);
 
             int target;
             if (Double.isNaN(observed)) {
@@ -9850,12 +9849,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             boolean lookupAllFailing = !Double.isNaN(buildLookupSuccess)
                                        && buildLookupSuccess < 0.5;
 
-            // Release previous cycle's runner request; re-request if all-fail.
-            // The release-then-request pattern prevents accumulation across cycles.
-            _context.jobQueue().releaseJobRunners(2, "ri-lookup");
-            if (lookupAllFailing) {
-                _context.jobQueue().requestJobRunners(2, "ri-lookup", 30_000);
-            }
+            // Refresh this cycle's runner request in one call, withdrawing it
+            // when the lookups are not all failing. Setting the claim replaces
+            // it, so it cannot accumulate across cycles the way a request with
+            // no matching release does.
+            _context.jobQueue().setJobRunners("ri-lookup", lookupAllFailing ? 2 : 0, 30_000);
 
             int target;
             if (Double.isNaN(observed)) {
