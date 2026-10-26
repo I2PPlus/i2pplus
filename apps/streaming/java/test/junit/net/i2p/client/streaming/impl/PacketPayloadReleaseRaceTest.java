@@ -207,7 +207,8 @@ public class PacketPayloadReleaseRaceTest {
      */
     private static void createTelemetryRates(I2PAppContext ctx) {
         long[] periods = new long[] {RateConstants.ONE_MINUTE, RateConstants.ONE_HOUR};
-        String[] names = new String[] {"stream.con.sendMessageSize", "stream.con.sendDuplicateSize"};
+        String[] names = new String[] {"stream.con.sendMessageSize", "stream.con.sendDuplicateSize",
+                                       "stream.con.sendMessageTime"};
         for (String name : names) {
             if (ctx.statManager().getRate(name) == null) {
                 ctx.statManager().createRateStat(name, "probe", "Stream", periods);

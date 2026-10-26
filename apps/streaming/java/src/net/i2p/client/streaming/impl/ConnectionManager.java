@@ -1374,6 +1374,11 @@ class ConnectionManager {
         // Stats for PacketQueue
         _context.statManager().createRequiredRateStat("stream.con.sendMessageSize", "Size of a message sent on a connection", "Stream", EVENT_RATES);
         _context.statManager().createRequiredRateStat("stream.con.sendDuplicateSize", "Size of a message resent on a connection", "Stream", EVENT_RATES);
+        // A send parks while the I2CP write queue is full. The output stream
+        // holds its data lock across the send, so the park blocks every writer
+        // on that stream, and nothing measured either the park or the hold.
+        _context.statManager().createRequiredRateStat("stream.con.sendMessageTime", "Time to hand a message to the session (ms)", "Stream", EVENT_RATES);
+        _context.statManager().createRequiredRateStat("stream.con.sendUnderLock", "Time a send takes while the stream data lock is held (ms)", "Stream", EVENT_RATES);
         // Always schedule the sweeper: it bounds the per-dest burst/strike/ban
         // maps and refreshes the cached autoban config, even when autoban
         // enforcement (i2p.streaming.autoban=0) is off.

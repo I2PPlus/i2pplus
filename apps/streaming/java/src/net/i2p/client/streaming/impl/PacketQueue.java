@@ -84,6 +84,13 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
     private int _sendMsgSizeCnt;
     /** Times a duplicate message size was seen. */
     private int _sendDupMsgSizeCnt;
+    /**
+     * Send-time telemetry sample counter. The send parks while the I2CP write
+     * queue is full, and a caller that holds the stream data lock across the
+     * send blocks every writer on that stream for the whole of it, so the wait
+     * has to be visible in the stats, not only in a warn line.
+     */
+    private int _sendTimeCnt;
 
     /**
      * Opens the log, creates the status map and starts expiring old entries.
@@ -274,20 +281,42 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
             end = _context.clock().now();
 
             if ((end-begin > 1000) && (_log.shouldWarn()))
-                _log.warn("Slow message delivery (" + (end-begin) + "ms) -> " + packet);
+                _log.warn("Slow message delivery: " + (end-begin) + "ms -> " + packet);
+
+            // Sampled every TELEMETRY_SAMPLE_PERIOD sends to keep the hot path
+            // cheap, and recorded unscaled. A uniform sample has the same average
+            // as the full series; scaling the value by the period multiplied
+            // getAverageValue() by 16, and the Tuner compares that against byte
+            // thresholds - a "large message" is over 1000 bytes - so a 63-byte
+            // message read as large and the small-message branch became
+            // unreachable. The event count is 1/16 of the sends, which is what
+            // the Tuner's loss-rate ratio needs: dupEvents / sendEvents, sampled
+            // on both sides, so the sampling cancels out.
+            if ((++_sendTimeCnt & (TELEMETRY_SAMPLE_PERIOD - 1)) == 0)
+                _context.statManager().addRateData("stream.con.sendMessageTime", end - begin);
 
             if ((++_sendMsgSizeCnt & (TELEMETRY_SAMPLE_PERIOD - 1)) == 0)
-                _context.statManager().addRateData("stream.con.sendMessageSize", size * (long) TELEMETRY_SAMPLE_PERIOD,
-                                                   packet.getLifetime() * (long) TELEMETRY_SAMPLE_PERIOD);
+                _context.statManager().addRateData("stream.con.sendMessageSize", size,
+                                                   packet.getLifetime());
             long lifetime = packet.getLifetime();
+            // Deliberate, and the Tuner is calibrated to it: incrementSends()
+            // runs after a successful send, so numSends is the count of
+            // completed earlier sends, and > 1 means "third transmission on".
+            // A packet resent exactly once is not counted, which makes
+            // sendDuplicateSize / sendMessageSize a conservative estimate of
+            // retransmission pressure — Tuner.streamingLossRate() says so, and
+            // its STREAM_LOSSY_RATE threshold assumes that conservatism.
+            // Loosening this gate to >= 1 retunes every streaming parameter
+            // that reads the loss rate.
             if (packet.getNumSends() > 1) {
                 if ((++_sendDupMsgSizeCnt & (TELEMETRY_SAMPLE_PERIOD - 1)) == 0)
-                    _context.statManager().addRateData("stream.con.sendDuplicateSize", size * (long) TELEMETRY_SAMPLE_PERIOD,
-                                                       lifetime * (long) TELEMETRY_SAMPLE_PERIOD);
+                    _context.statManager().addRateData("stream.con.sendDuplicateSize", size,
+                                                       lifetime);
             }
 
             if (con != null) {
                 con.incrementBytesSent(size);
+                // Same gate and same reason as the duplicate stat above.
                 if (packet.getNumSends() > 1) {
                     con.incrementDupMessagesSent(1);
                     con.incrementDupBytesSent(packet.getPayloadSize());

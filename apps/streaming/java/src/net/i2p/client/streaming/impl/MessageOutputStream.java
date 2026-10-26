@@ -27,11 +27,14 @@ import net.i2p.util.SystemVersion;
  * Thread safety:
  * - Write operations synchronize on an internal data lock when manipulating the buffer.
  * - Waiting for buffer acceptance and completion is done outside synchronization to avoid blocking other threads.
+ * - The send itself is made under the data lock, and it parks while the session's
+ *   write queue is full, so a flush can hold the lock for the whole of that park and
+ *   every writer on the stream is blocked behind it. {@code stream.con.sendUnderLock}
+ *   measures the hold, {@code stream.con.sendMessageTime} the park.
  * <p>
  * Performance:
  * - Uses a shared ByteCache for buffer byte arrays to reduce allocations.
  * - Supports a passive flush mechanism to flush buffered data after inactivity.
- * - Minimizes locking time by doing blocking waits outside of synchronized blocks.
  * <p>
  * Note:
  * - Buffer resizing only affects the max size used to determine flush boundaries,
@@ -261,6 +264,8 @@ class MessageOutputStream extends OutputStream {
 
         while (remaining > 0) {
             WriteStatus ws = null;
+            // -1: no send on this pass. 0 is a real send that returned at once.
+            long sendMs = -1;
             if (_closed.get()) throw new IOException("Output stream closed");
 
             synchronized (_dataLock) {
@@ -289,12 +294,15 @@ class MessageOutputStream extends OutputStream {
                     if (_log.shouldDebug()) {
                         _log.debug("write() buffer full, flushing " + _valid + " bytes");
                     }
+                    long sendStart = _context.clock().now();
                     ws = _dataReceiver.writeData(_buf, 0, _valid);
+                    sendMs = _context.clock().now() - sendStart;
                     _written += _valid;
                     _valid = 0;
                     throwAnyError();
                 }
             }
+            if (sendMs >= 0) {recordSendUnderLock(sendMs);}
             // Wait for acceptance outside lock to avoid blocking other writers
             if (ws != null) {
                 if (_log.shouldDebug()) {
@@ -390,6 +398,7 @@ class MessageOutputStream extends OutputStream {
     private void flush(boolean waitForAcceptOnly) throws IOException {
         long traceStart = _log.shouldDebug() ? _context.clock().now() : 0;
         WriteStatus ws = null;
+        long sendMs = -1;
 
         if (_log.shouldDebug() && _valid > 0) {
             _log.debug("flush() called, valid bytes: " + _valid);
@@ -406,12 +415,15 @@ class MessageOutputStream extends OutputStream {
             // matches mainline where writeData is unconditional ("this could
             // flush a CLOSE packet too").
             if (!waitForAcceptOnly) {
+                long sendStart = _context.clock().now();
                 ws = _dataReceiver.writeData(_buf, 0, _valid);
+                sendMs = _context.clock().now() - sendStart;
                 _written += _valid;
                 _valid = 0;
                 _dataLock.notifyAll();
             }
         }
+        if (sendMs >= 0) {recordSendUnderLock(sendMs);}
 
         if (waitForAcceptOnly) {
             flushAvailable(_dataReceiver, true);
@@ -533,13 +545,16 @@ class MessageOutputStream extends OutputStream {
      */
     private void clearData(boolean shouldFlush) {
         ByteArray ba = null;
+        long sendMs = -1;
         if (_log.shouldDebug() && _valid > 0) {
             _log.debug("clearData() clearing " + _valid + " bytes");
         }
         synchronized (_dataLock) {
             // flush any data, but don't wait for it
             if (_valid > 0 && shouldFlush) {
+                long sendStart = _context.clock().now();
                 _dataReceiver.writeData(_buf, 0, _valid);
+                sendMs = _context.clock().now() - sendStart;
             }
             _written += _valid;
             _valid = 0;
@@ -551,6 +566,7 @@ class MessageOutputStream extends OutputStream {
             }
             _dataLock.notifyAll();
         }
+        if (sendMs >= 0) {recordSendUnderLock(sendMs);}
         if (ba != null) {
             _dataCache.release(ba);
         }
@@ -599,17 +615,21 @@ class MessageOutputStream extends OutputStream {
      */
     void flushAvailable(DataReceiver target, boolean blocking) throws IOException {
         WriteStatus ws;
+        long sendMs = -1;
 
         if (_log.shouldDebug() && _valid > 0) {
             _log.debug("flushAvailable() flushing " + _valid + " bytes");
         }
 
         synchronized (_dataLock) {
+            long sendStart = _context.clock().now();
             ws = target.writeData(_buf, 0, _valid);
+            sendMs = _context.clock().now() - sendStart;
             _written += _valid;
             _valid = 0;
             _dataLock.notifyAll();
         }
+        if (sendMs >= 0) {recordSendUnderLock(sendMs);}
 
         if (blocking && ws != null) {
             try {
@@ -637,6 +657,24 @@ class MessageOutputStream extends OutputStream {
      */
     void flushAvailable(DataReceiver target) throws IOException {
         flushAvailable(target, true);
+    }
+
+    /**
+     * Record how long a send took while the data lock was held. The send parks
+     * while the session's write queue is full, and every writer on this stream
+     * is blocked behind the lock for the whole of that park, so the hold has to
+     * show up in the stats and not only in a warn line.
+     * <p>
+     * Call this for every send, including one that returned at once: a stat that
+     * only sees the slow sends has no denominator, and its average says nothing.
+     * Callers therefore initialize the duration to -1 for "no send on this pass",
+     * since 0 is a real send that was fast.
+     *
+     * @param ms the milliseconds the send took under the lock
+     * @since 0.9.72+
+     */
+    private void recordSendUnderLock(long ms) {
+        _context.statManager().addRateData("stream.con.sendUnderLock", ms);
     }
 
     /**
@@ -797,11 +835,14 @@ class MessageOutputStream extends OutputStream {
         private void doFlush() {
             WriteStatus ws = null;
             boolean sent = false;
+            long sendMs = -1;
             synchronized (_dataLock) {
                 long flushTimeThreshold = _lastBuffered + _passiveFlushDelay;
                 if (_valid > 0 && flushTimeThreshold <= _context.clock().now()) {
                     if (_buf != null) {
+                        long sendStart = _context.clock().now();
                         ws = _dataReceiver.writeData(_buf, 0, _valid);
+                        sendMs = _context.clock().now() - sendStart;
                         if (!ws.writeFailed()) {
                             _written += _valid;
                             _valid = 0;
@@ -810,9 +851,10 @@ class MessageOutputStream extends OutputStream {
                         }
                     }
                 } else if (_log.shouldInfo() && _valid > 0) {
-                    _log.info("Passive flush skipped, valid=" + _valid);
+                    _log.info("Passive flush skipped -> Valid bytes: " + _valid);
                 }
             }
+            if (sendMs >= 0) {recordSendUnderLock(sendMs);}
 
             if (sent && _log.shouldDebug()) {
                 _log.debug("Passive flush executed: " + ws);
