@@ -2219,6 +2219,32 @@
       <delete includeEmptyDirs="true" quiet="true">
         <fileset dir="." includes="apps/*/build/**,core/build/**,router/build/**"/>
       </delete>
+      <!-- Stray module-local copies of shared jars: a nested ant in a module's
+           test path inherits the caller's -Dbuild.dir, so an unconditional
+           dependency rebuild drops i2p.jar / i2ptest.jar / router.jar /
+           mstreaming.jar into whichever module's build dir triggered it.
+           Sweep them from every module build dir, in-tree and under the
+           redirected build root. -->
+      <delete quiet="true">
+        <fileset dir=".">
+          <include name="apps/**/build/i2p.jar"/>
+          <include name="apps/**/build/i2ptest.jar"/>
+          <include name="apps/**/build/router.jar"/>
+          <include name="apps/**/build/mstreaming.jar"/>
+          <include name="core/java/build/router.jar"/>
+          <include name="router/java/build/i2ptest.jar"/>
+        </fileset>
+      </delete>
+      <delete quiet="true">
+        <fileset dir="${build.root}">
+          <include name="apps/**/build/i2p.jar"/>
+          <include name="apps/**/build/i2ptest.jar"/>
+          <include name="apps/**/build/router.jar"/>
+          <include name="apps/**/build/mstreaming.jar"/>
+          <include name="core/java/build/router.jar"/>
+          <include name="router/java/build/i2ptest.jar"/>
+        </fileset>
+      </delete>
       <!-- Runtime/test artifacts that must never live in the source tree -->
       <delete includeEmptyDirs="true" quiet="true">
         <fileset dir=".">
