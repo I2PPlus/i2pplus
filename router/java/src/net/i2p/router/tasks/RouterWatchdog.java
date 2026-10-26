@@ -3,7 +3,7 @@ package net.i2p.router.tasks;
 import net.i2p.data.DataHelper;
 import net.i2p.router.ClientManagerFacade;
 import net.i2p.router.CommSystemFacade.Status;
-import net.i2p.router.Job;
+import net.i2p.router.JobQueue;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.client.ClientManagerFacadeImpl;
@@ -83,25 +83,44 @@ public class RouterWatchdog implements Runnable {
 
     /**
      * Verify that the job queue is processing jobs normally.
-     * Checks if any job has been running for too long, which could indicate
-     * a hung job queue.
+     * <p>Only a job that is in flight can be running too long, so this reads
+     * the longest-running in-flight job together with the instant it began, as
+     * one value. A queue whose runners are all parked between jobs is healthy:
+     * the start time of a job that finished a while ago says nothing about a
+     * run in progress, and treating it as if it did reported a healthy, idle
+     * queue as a 61-second stuck job.
      *
      * @return true if job queue appears healthy, false if a job has been
      *         running longer than the maximum allowed time
      */
     public boolean verifyJobQueueLiveliness() {
-        long when = _context.jobQueue().getLastJobBegin();
-        if (when < 0) {return true;}
-        long howLongAgo = _context.clock().now() - when;
-        if (howLongAgo > MAX_JOB_RUN_LAG) {
-            Job cur = _context.jobQueue().getLastJob();
-            if (cur != null) {
-                if (_log.shouldError()) {
-                    _log.error("Last job was queued up " + DataHelper.formatDuration(howLongAgo) + " ago: " + cur);
-                }
-                return false;
-            } else {return true;} // no prob, just normal lag
-        } else {return true;}
+        JobQueue.InFlight f = _context.jobQueue().getLongestRunningJob();
+        if (f == null) {return true;}
+        long running = runningTooLong(f._beganOn, _context.clock().now(), MAX_JOB_RUN_LAG);
+        if (running < 0) {return true;}
+        if (_log.shouldError()) {
+            _log.error("Job running too long -> Job: " + f._job.getName()
+                       + " * Running: " + DataHelper.formatDuration(running));
+        }
+        return false;
+    }
+
+    /**
+     * Pure decision: has the job that has been running longest run past the
+     * limit?
+     *
+     * @param beganOn the adjusted ms timestamp the run began; 0 or -1 when
+     *                nothing is in flight, which is never a hang
+     * @param now the current adjusted time in ms
+     * @param limitMs how long a job may run before it looks stuck
+     * @return the milliseconds the job has been running, when that exceeds
+     *         {@code limitMs}, otherwise -1 for nothing to report
+     * @since 0.9.72+
+     */
+    static long runningTooLong(long beganOn, long now, long limitMs) {
+        if (beganOn <= 0) {return -1;}
+        long running = now - beganOn;
+        return running > limitMs ? running : -1;
     }
 
     /**

@@ -38,6 +38,31 @@ import net.i2p.util.SystemVersion;
  * For use by the router only. Not to be used by applications or plugins.
  */
 public class JobQueue {
+    /**
+     * A job and the instant its run began, as one immutable value, so that a
+     * reader taking both cannot observe a torn pair. A runner publishes one of
+     * these in a single volatile write when it takes a job, and null when the
+     * job is done, so a reader never sees a job alongside the start time of an
+     * earlier run, and an idle runner reports nothing in flight.
+     *
+     * @since 0.9.72+
+     */
+    public static final class InFlight {
+        /** The job being executed, non-null. */
+        public final Job _job;
+        /** The adjusted millisecond timestamp the run began at, never 0. */
+        public final long _beganOn;
+
+        /**
+         * @param job the job being executed, non-null
+         * @param beganOn the adjusted millisecond timestamp the run began at
+         */
+        InFlight(Job job, long beganOn) {
+            _job = job;
+            _beganOn = beganOn;
+        }
+    }
+
     /** Logger for the job queue. */
     private final Log _log;
     /** The router context. */
@@ -502,13 +527,11 @@ public class JobQueue {
         long maxDuration = 0;
 
         for (JobQueueRunner runner : _queueRunners.values()) {
-            if (runner.getCurrentJob() != null) {
-                long beginTime = runner.getLastBegin();
-                if (beginTime > 0) {
-                    long duration = now - beginTime;
-                    if (duration > maxDuration) {
-                        maxDuration = duration;
-                    }
+            InFlight f = runner.getInFlight();
+            if (f != null && f._beganOn > 0) {
+                long duration = now - f._beganOn;
+                if (duration > maxDuration) {
+                    maxDuration = duration;
                 }
             }
         }
@@ -689,17 +712,39 @@ public class JobQueue {
     public boolean isAlive() {return _alive;}
 
     /**
-     * Timestamp of when the last job began execution.
+     * The in-flight job that has been running longest, with the instant its run
+     * began, read as one consistent value.
+     * <p>Each runner publishes its in-flight job and that job's start time in a
+     * single write, and a runner that is idle contributes nothing, so an idle
+     * queue reports null. Reading the two separately made it possible to pair a
+     * job that had just begun with the timestamp left over from the runner's
+     * previous run, and to report a job that had finished as one still running.
      *
-     * @return timestamp in milliseconds when the last job started, or -1 if no jobs have run
+     * @return the longest-running in-flight job, null when no job is in flight
+     * @since 0.9.72+
+     */
+    public InFlight getLongestRunningJob() {
+        InFlight longest = null;
+        for (JobQueueRunner runner : _queueRunners.values()) {
+            InFlight f = runner.getInFlight();
+            // earliest start = longest run; a runner that has never run a job
+            // reports 0 and is not in flight, so it is skipped
+            if (f != null && f._beganOn > 0
+                && (longest == null || f._beganOn < longest._beganOn)) {
+                longest = f;
+            }
+        }
+        return longest;
+    }
+
+    /**
+     * When the in-flight job that has been running longest began.
+     *
+     * @return timestamp in milliseconds, or -1 when no job is in flight
      */
     public long getLastJobBegin() {
-        long when = -1;
-        for (JobQueueRunner runner : _queueRunners.values()) {
-            long cur = runner.getLastBegin();
-            if (cur > when) {when = cur;}
-        }
-        return when;
+        InFlight f = getLongestRunningJob();
+        return f != null ? f._beganOn : -1;
     }
 
     /**
@@ -717,20 +762,14 @@ public class JobQueue {
     }
 
     /**
-     * Last job that was executed.
+     * The in-flight job that has been running longest - the one worth naming
+     * when the queue looks stuck.
      *
-     * @return the last Job that was executed, or null if no jobs have run
+     * @return the job, null when no job is in flight
      */
     public Job getLastJob() {
-        Job j = null;
-        long when = -1;
-        for (JobQueueRunner cur : _queueRunners.values()) {
-            if (cur.getLastBegin() > when) {
-                j = cur.getCurrentJob();
-                when = cur.getLastBegin();
-            }
-        }
-        return j;
+        InFlight f = getLongestRunningJob();
+        return f != null ? f._job : null;
     }
 
     /**

@@ -19,13 +19,25 @@ class JobQueueRunner extends I2PThread {
     private volatile boolean _keepRunning;
     /** The id of this runner. */
     private final int _id;
-    /** The job running right now. */
+    /** The job running right now. Only this runner's own thread reads or writes it. */
     private volatile Job _currentJob;
     /** The job that ran last. */
     private volatile Job _lastJob;
-    /** When the last job began. */
-    private volatile long _lastBegin;
-    /** When the last job ended. */
+    /**
+     * The job being executed and the instant its run began, published as one
+     * immutable value in a single volatile write. Every other thread reads the
+     * in-flight job and its start time through this field, so it can never pair
+     * a job with the start time of an earlier run. Publishing the job and the
+     * timestamp in two separate writes let the watchdog's liveliness check read
+     * a job that had just begun together with the timestamp left over from the
+     * runner's previous job, and report a run of the whole idle gap that
+     * preceded it. Null while this runner is idle, so an idle runner reports
+     * nothing in flight at all.
+     *
+     * @since 0.9.72+
+     */
+    private volatile JobQueue.InFlight _inFlight;
+    /** When the last job ended, stats update included. */
     private volatile long _lastEnd;
 
     /**
@@ -60,9 +72,12 @@ class JobQueueRunner extends I2PThread {
     /**
      * The job currently being executed.
      *
-     * @return the current job
+     * @return the current job, null while this runner is idle
      */
-    public Job getCurrentJob() {return _currentJob;}
+    public Job getCurrentJob() {
+        JobQueue.InFlight f = _inFlight;
+        return f != null ? f._job : null;
+    }
     /**
      * The most recently completed job.
      *
@@ -80,11 +95,27 @@ class JobQueueRunner extends I2PThread {
     /** Start the runner. */
     public void startRunning() {_keepRunning = true;}
     /**
-     * When the job that ran most recently started.
+     * The in-flight job and the instant its run began, as one consistent value.
+     * Callers that need both take them here, from a single read.
      *
-     * @return adjusted time in ms, 0 until the first job has started
+     * @return the snapshot, null while this runner is idle
+     * @since 0.9.72+
      */
-    public long getLastBegin() {return _lastBegin;}
+    public JobQueue.InFlight getInFlight() {return _inFlight;}
+
+    /**
+     * When the job being executed right now began. This is read together with
+     * {@link #getCurrentJob()} from {@link JobQueue.InFlight}, one value, so a
+     * caller cannot see a job alongside a timestamp from an earlier run.
+     *
+     * @return adjusted time in ms, -1 while this runner is idle
+     * @since 0.9.72+; replaces {@code getLastBegin()}, which reported the start
+     *        of the last job to run and stayed set, and stale, after it finished
+     */
+    public long getInFlightBegin() {
+        JobQueue.InFlight f = _inFlight;
+        return f != null ? f._beganOn : -1;
+    }
     /**
      * When the job that ran most recently finished, stats update included.
      *
@@ -143,8 +174,17 @@ class JobQueueRunner extends I2PThread {
                 long origStartAfter = job.getTiming().getStartAfter();
                 long doStart = now;
                 job.getTiming().start(doStart);
-                _lastBegin = doStart;
-                runCurrentJob();
+                // One volatile write publishes the job and its start instant
+                // together, so a reader cannot pair them inconsistently.
+                _inFlight = new JobQueue.InFlight(job, doStart);
+                try {
+                    runCurrentJob();
+                } finally {
+                    // Retire the record on every path: a job that dies with an
+                    // Error escaping runCurrentJob() must not leave the
+                    // watchdog reading a job that runs forever.
+                    _inFlight = null;
+                }
                 long beforeUpdate = _context.clock().now();
                 job.getTiming().end(beforeUpdate);
                 long duration = job.getTiming().getActualEnd() - job.getTiming().getActualStart();
