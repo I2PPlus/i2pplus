@@ -77,6 +77,33 @@ public class JobQueuePumperNotificationTest {
     }
 
     /**
+     * A job that parks inside runJob() until released. Seeding the
+     * ready queue with these keeps the runners occupied and the rest
+     * of the seed in the queue, so the drop-policy check cannot race
+     * against the seed being drained.
+     */
+    private static class ParkedJob extends JobImpl {
+        private final CountDownLatch _release;
+
+        ParkedJob(RouterContext ctx, CountDownLatch release) {
+            super(ctx);
+            _release = release;
+        }
+
+        @Override
+        public String getName() { return "ParkedJob"; }
+
+        @Override
+        public void runJob() {
+            try {
+                _release.await(30, TimeUnit.SECONDS);
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+            }
+        }
+    }
+
+    /**
      * Verify that a job scheduled slightly in the future (going through
      * the pumper path: _timedJobs -&gt; _timedJobsReady) is picked up
      * promptly. The lag between scheduled start and runner pickup must
@@ -174,8 +201,13 @@ public class JobQueuePumperNotificationTest {
     /**
      * Verify that the drop policy counts jobs in _timedJobsReady, not
      * just _readyJobs. Uses reflection to seed _timedJobsReady with
-     * enough dummy jobs to exceed the drop threshold, then adds a
+     * enough parked jobs to exceed the drop threshold, then adds a
      * droppable PeerTestJob and confirms it gets dropped.
+     *
+     * The seed jobs park in runJob() so the runners cannot drain the
+     * queue between seeding and the addJob() under test — on a fast
+     * runner an immediately-runnable seed is gone before the victim
+     * is added, getMaxLag() sees an empty queue, and no drop fires.
      *
      * Without the fix (numReady = _readyJobs.size()), the seeded
      * _timedJobsReady jobs are invisible and no drop fires.
@@ -190,7 +222,7 @@ public class JobQueuePumperNotificationTest {
     public void testDropPolicyCountsTimedJobsReady() throws Exception {
         JobQueue queue = _ctx.jobQueue();
 
-        // Seed _timedJobsReady with dummy jobs via reflection so we
+        // Seed _timedJobsReady with parked dummy jobs via reflection so we
         // don't depend on pumper timing. We need enough to exceed the
         // drop threshold (DEFAULT_MAX_WAITING_JOBS = 48) and also
         // satisfy the lag requirement (>= MIN_LAG_TO_DROP = 500ms).
@@ -201,24 +233,30 @@ public class JobQueuePumperNotificationTest {
 
         int seedCount = 60;
         long pastStart = _ctx.clock().now() - 1000; // 1000ms in the past → lag = 1000ms
-        for (int i = 0; i < seedCount; i++) {
-            TimedRecordJob sj = new TimedRecordJob(_ctx, new CountDownLatch(1));
-            sj.getTiming().setStartAfter(pastStart);
-            timedReady.offer(sj);
+        CountDownLatch release = new CountDownLatch(1);
+        try {
+            for (int i = 0; i < seedCount; i++) {
+                ParkedJob sj = new ParkedJob(_ctx, release);
+                sj.getTiming().setStartAfter(pastStart);
+                timedReady.offer(sj);
+            }
+
+            // Clear any prior drop count
+            queue.getAndResetDroppedCount();
+
+            // Now add a PeerTestJob (a class that shouldDrop() targets).
+            // With the fix, numReady = getReadyCount() = 60+ > threshold → drop.
+            // Without the fix, numReady = _readyJobs.size() = 0 → no drop.
+            PeerTestJob victim = new PeerTestJob(_ctx);
+            queue.addJob(victim);
+
+            int dropped = queue.getAndResetDroppedCount();
+            assertTrue("Expected drop when _timedJobsReady has " + seedCount +
+                       " jobs, got " + dropped + " dropped",
+                       dropped >= 1);
+        } finally {
+            // Let the parked runners finish before tearDown shuts the queue down.
+            release.countDown();
         }
-
-        // Clear any prior drop count
-        queue.getAndResetDroppedCount();
-
-        // Now add a PeerTestJob (a class that shouldDrop() targets).
-        // With the fix, numReady = getReadyCount() = 60+ > threshold → drop.
-        // Without the fix, numReady = _readyJobs.size() = 0 → no drop.
-        PeerTestJob victim = new PeerTestJob(_ctx);
-        queue.addJob(victim);
-
-        int dropped = queue.getAndResetDroppedCount();
-        assertTrue("Expected drop when _timedJobsReady has " + seedCount +
-                   " jobs, got " + dropped + " dropped",
-                   dropped >= 1);
     }
 }

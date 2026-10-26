@@ -380,7 +380,17 @@ public class RateSampleDeliveryTest {
             assertTrue("consumer died on a throwing listener",
                        good.received.await(10, TimeUnit.SECONDS));
             assertEquals(Arrays.asList(99.0), good.snapshot());
-            assertEquals("a throwing sample must not count as delivered", 1, delivery.getDelivered());
+            // The consumer counts the sample delivered only after the listener
+            // returns, so the receive latch can fire a hair before the counter
+            // lands on a loaded runner — poll instead of reading once.
+            long delivered = 0;
+            long deadline = System.currentTimeMillis() + 10_000;
+            while (delivered < 1 && System.currentTimeMillis() < deadline) {
+                delivered = delivery.getDelivered();
+                if (delivered < 1)
+                    Thread.sleep(5);
+            }
+            assertEquals("a throwing sample must not count as delivered", 1, delivered);
         } finally {
             delivery.shutdown();
         }
