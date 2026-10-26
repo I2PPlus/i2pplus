@@ -540,7 +540,7 @@ class ConnectionPacketHandler {
                 if (_log.shouldInfo() && (newrtt != oldrtt || newrto != oldrto || newdev != olddev)) {
                     _log.info("RTT updated * Highest RTT: " + highestRTT + " ms" +
                               "\n* RTT: " + oldrtt + " ms -> " + newrtt + " ms * RTO: " + oldrto + " ms -> " + newrto + " ms" +
-                              "\n* Deviation: " + olddev + " ms -> " + newdev + " ms" +
+                              " * Deviation: " + olddev + " ms -> " + newdev + " ms" +
                               "\n* " + con);
                 }
                 if (firstAck) {
