@@ -114,6 +114,18 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     /** Default reconnects on an empty upstream response before giving up. */
     private static final int DEFAULT_EMPTY_RETRIES = 9;
     /**
+     * Wall-clock ceiling on one {@code openEmptyReconnect} retry loop (ms).
+     * <p>The attempt budget bounds how many connects may be tried, but each
+     * attempt plus its backoff sleep can be slow on a churned fabric, so the
+     * loop's worst case in the unit the browser waits in was unbounded. This
+     * deadline is checked between attempts — never mid-connect, which has
+     * its own failover deadline — so a wedged pool surfaces the
+     * empty-response error to the caller instead of outliving its patience.
+     *
+     * @since 0.9.72+
+     */
+    static final long EMPTY_RECONNECT_DEADLINE_MS = 60 * 1000;
+    /**
      * In-session b32/b33 naming lookup budget, clamped to the shared
      * request connect deadline so naming cannot outlive the request.
      * @since 0.9.71+
@@ -2340,6 +2352,10 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      * reconnect, with the standard attempt budget and dead-pool fail-fast.
      * Shared by the {@code reconnect()} and {@code reconnectPair()} legs of
      * the callback so both paths get identical backoff and stop conditions.
+     * <p>The whole loop is additionally bounded by
+     * {@link #EMPTY_RECONNECT_DEADLINE_MS}, checked between attempts, so a
+     * slow-but-alive pool cannot stretch one reconnect cycle past the
+     * caller's patience.
      *
      * @param dest the destination to open the fresh socket to
      * @param port remote port (0 = default)
@@ -2347,12 +2363,21 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      * @param requestId logging prefix id
      * @param quiet when true, suppress per-attempt Info logs (used for the
      *              staggered first race leg so the second leg's log is the pair marker)
-     * @return a connected socket, or null if the budget / dead pool stopped us
+     * @return a connected socket, or null if the budget / deadline / dead pool stopped us
      * @since 0.9.71+
      */
     private I2PSocket openEmptyReconnect(Destination dest, int port, int emptyBudget,
                                          long requestId, boolean quiet) {
+        final long deadlineMs = System.currentTimeMillis() + EMPTY_RECONNECT_DEADLINE_MS;
         for (int attempt = 1; attempt <= emptyBudget; attempt++) {
+            if (isDeadlineExpired(deadlineMs, System.currentTimeMillis())) {
+                if (!quiet && _log.shouldInfo()) {
+                    _log.info(getPrefix(requestId) + "Empty-reconnect wall-clock deadline of " +
+                              (EMPTY_RECONNECT_DEADLINE_MS / 1000) + "s reached at attempt " +
+                              attempt + '/' + emptyBudget);
+                }
+                return null;
+            }
             try {
                 I2PSocketOptions opts = getDefaultOptions();
                 if (port > 0) {opts.setPort(port);}
