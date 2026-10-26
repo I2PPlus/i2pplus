@@ -148,14 +148,20 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
     static final long NO_DEADLINE = -1;
 
     /**
-     * Wall-clock ceiling on one entity's resume/reconnect sequence (ms),
-     * independent of Content-Length.
+     * No-progress wall-clock window on one entity's resume/reconnect
+     * sequence (ms), independent of Content-Length.
      * <p>The cycle caps in {@link #stallCycleLimit(long)} and
      * {@link #totalCycleLimit(long)} bound attempt <i>count</i>, but each
      * attempt may block for a full connect timeout, so a large entity's
      * 29x-scaled budget can keep a runner busy for hours against a
      * destination that is answering but never finishing. This deadline is
      * the only bound expressed in the unit the browser actually waits in.
+     * <p>It is a <i>no-progress</i> window, not an absolute one: every
+     * resume that delivers new body bytes slides it forward, capped by
+     * {@link #RESUME_BACKSTOP_MS}, so a multi-hundred-MB download crawling
+     * at a few hundred B/s is not abandoned at a flat 30 minutes while
+     * bytes keep flowing. A transfer that stops advancing still dies within
+     * one window of the last progress.
      * <p>Set well above what the baseline caps can consume (4 empty-reconnect
      * cycles, each bounded by a connect timeout) so ordinary small-entity
      * reconnects are never cut short; it only bounds the size-scaled ramp.
@@ -163,6 +169,20 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      * @since 0.9.71+
      */
     static final long RESUME_DEADLINE_MS = 30 * 60 * 1000;
+
+    /**
+     * Absolute ceiling on one entity's resume/reconnect sequence (ms) that
+     * progress-sliding of {@link #RESUME_DEADLINE_MS} can never pass.
+     * <p>Without it, a destination that dribbles a few bytes per attempt
+     * forever could hold a runner and its sockets indefinitely; the sliding
+     * window rewards progress but must not become a licence for an
+     * unbounded trickle. Four hours sits far beyond any honest transfer at
+     * the tunnel's sustained rate while still terminating the pathological
+     * case within one browser-session patience.
+     *
+     * @since 0.9.72+
+     */
+    static final long RESUME_BACKSTOP_MS = 4 * 60 * 60 * 1000;
 
     /**
      * Largest Content-Length that may enlarge the retry ramp (bytes).
@@ -228,6 +248,29 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      */
     static final long EMPTY_RACE_TIMEOUT_MS = 30 * 1000;
     /**
+     * Upstream silence (ms) after a request write before the runner races
+     * fresh sockets against the still-open primary connection.
+     * <p>The full {@link #INITIAL_RESPONSE_TIMEOUT_MS} (120s) is the right
+     * give-up bound for a slow-but-live peer, but it is the wrong bound for
+     * <i>recovery</i>: a peer that accepts and then says nothing used to
+     * block the empty-response retry for two full minutes per cycle, which
+     * on a churned fabric is where "some assets never load" came from. At
+     * this threshold the runner opens fresh connections and races them
+     * against the silent primary; whichever side answers first wins, so a
+     * genuinely slow peer is not punished — it just has to beat the fresh
+     * attempts fairly.
+     *
+     * @since 0.9.72+
+     */
+    static final long EARLY_RACE_RESPONSE_TIMEOUT_MS = 20 * 1000;
+    /**
+     * Effective early-race silence threshold (ms), read per watchdog tick.
+     * Non-positive disables the early race (the 120s close still applies).
+     * Test hook; do not modify in production.
+     * @since 0.9.72+
+     */
+    static volatile long earlyRaceResponseTimeoutMs = EARLY_RACE_RESPONSE_TIMEOUT_MS;
+    /**
      * No-bytes read timeout (ms) once a response body has started streaming.
      * Armed after the first body byte so a black-holed tunnel fails over to
      * Range resume instead of pinning the runner for the full browser window.
@@ -254,6 +297,44 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      * @since 0.9.71+
      */
     static final long INITIAL_WATCHDOG_POLL_MS = 5 * 1000;
+
+    /**
+     * Maximum a single write toward the local browser may block (ms) before
+     * the connection is torn down.
+     * <p>Java sockets have no write timeout: a browser that stops reading
+     * (full receive window, wedged tab) leaves the receive forwarder parked
+     * in {@code out.write()} indefinitely, pinning a runner thread and an
+     * I2P socket — up to the 4h read timeout — while the download is already
+     * dead from the browser's side. Only an <i>in-flight</i> write counts:
+     * an idle tunnel (CONNECT, keepalive between requests) never enters the
+     * write and is never touched.
+     *
+     * @since 0.9.72+
+     */
+    static final long BROWSER_WRITE_STALL_MS = 60 * 1000;
+
+    /**
+     * Effective browser-write stall threshold (ms), read per watchdog tick.
+     * Non-positive disables the watchdog entirely. Test hook; do not
+     * modify in production.
+     * @since 0.9.72+
+     */
+    static volatile long browserWriteStallMs = BROWSER_WRITE_STALL_MS;
+
+    /**
+     * Whether a browser-facing write has been in flight past the stall
+     * threshold (pure predicate).
+     *
+     * @param writeStartedMs epoch-ms the in-flight write began, 0 when no
+     *                       write is in progress
+     * @param nowMs current epoch-ms, comparable with writeStartedMs
+     * @param thresholdMs max allowed write duration; non-positive disables
+     * @return true if a write is stuck past the threshold
+     * @since 0.9.72+
+     */
+    static boolean browserWriteStalled(long writeStartedMs, long nowMs, long thresholdMs) {
+        return thresholdMs > 0 && writeStartedMs > 0 && nowMs - writeStartedMs >= thresholdMs;
+    }
 
     /**
      * Delay before empty-retry cycle {@code cycle} (1-based, after the cycle
@@ -301,6 +382,29 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
                                           long nowMs, long timeoutMs) {
         if (timeoutMs <= 0 || firstByteMs > 0 || lastRequestWriteMs <= 0) {return false;}
         return nowMs - lastRequestWriteMs >= timeoutMs;
+    }
+
+    /**
+     * Whether the early reconnect race is due for the current request
+     * attempt (pure predicate).
+     * <p>Same arming conditions as {@link #initialResponseExpired} — armed
+     * only before the first response byte and only after a request was
+     * written — but a much shorter threshold: this asks "should we start
+     * racing fresh sockets yet", not "should we give up".
+     *
+     * @param lastRequestWriteMs epoch-ms of the most recent request-side
+     *                           write upstream, 0 if none
+     * @param firstByteMs epoch-ms of the first response byte, 0 if none yet
+     * @param nowMs current epoch-ms, comparable with lastRequestWriteMs
+     * @param raceMs silence threshold for launching the race; non-positive
+     *               disables the early race
+     * @return true if the peer has been silent long enough to race
+     * @since 0.9.72+
+     */
+    static boolean earlyRaceDue(long lastRequestWriteMs, long firstByteMs,
+                                long nowMs, long raceMs) {
+        if (raceMs <= 0 || firstByteMs > 0 || lastRequestWriteMs <= 0) {return false;}
+        return nowMs - lastRequestWriteMs >= raceMs;
     }
 
     /**
@@ -428,6 +532,12 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      * {@link #MAX_EMPTY_RECONNECT_CYCLES}); any forward progress resets that
      * counter. {@link #totalCycleLimit(long)} bounds total attempts
      * regardless of progress so a pathological trickle still terminates.
+     * <p>The wall-clock bound is a no-progress window: the production
+     * constructor arms {@link #RESUME_DEADLINE_MS} from construction and
+     * every attempt that delivers new bytes slides it forward, capped by
+     * {@link #RESUME_BACKSTOP_MS}. A deadline passed to the two-arg
+     * constructor is absolute (no sliding) so tests and legacy callers keep
+     * their exact semantics.
      *
      * @since 0.9.71+
      */
@@ -438,8 +548,22 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
         private int totalCycles;
         /** Byte count seen at the last check. */
         private long lastBody = -1;
-        /** Total time the watchdog allows. */
-        private final long deadlineMs;
+        /**
+         * End of the current no-progress wall-clock window, or
+         * {@link #NO_DEADLINE}; slid forward by {@link #RESUME_DEADLINE_MS}
+         * on each attempt that moves bytes when {@link #slideMs} is set.
+         */
+        private long deadlineMs;
+        /**
+         * Absolute ceiling {@link #deadlineMs} may never slide past, or
+         * {@link #NO_DEADLINE} for an absolute (non-sliding) deadline.
+         */
+        private final long backstopMs;
+        /**
+         * How far new progress slides {@link #deadlineMs} forward (ms);
+         * 0 disables sliding and keeps the deadline absolute.
+         */
+        private final long slideMs;
         /** The clock for the deadline checks. */
         private final Clock _clock;
 
@@ -448,39 +572,58 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
          * historical behaviour and tests that pin the cycle arithmetic.
          */
         ResumeBudget() {
-            this(NO_DEADLINE, null);
+            this(NO_DEADLINE, NO_DEADLINE, 0, null);
         }
 
         /**
-         * Budget bounded by wall clock, so a stalled tunnel cannot spend the
-         * sequence, or {@link #NO_DEADLINE} to rely on the cycle caps
-         * alone.
+         * Budget bounded by an absolute wall-clock deadline, so a stalled
+         * tunnel cannot spend the sequence; the deadline does not slide on
+         * progress.
          *
          * @param deadlineMs absolute wall-clock deadline for the whole resume
          */
         ResumeBudget(long deadlineMs) {
-            this(deadlineMs, null);
+            this(deadlineMs, NO_DEADLINE, 0, null);
         }
 
         /**
-         * Production constructor: bounds the sequence by wall clock as well as
-         * by cycle count.
+         * Production constructor: a no-progress window of
+         * {@link #RESUME_DEADLINE_MS} that slides forward on every attempt
+         * that delivers new body bytes, capped by an absolute
+         * {@link #RESUME_BACKSTOP_MS} ceiling.
          *
          * @param clock the context clock, used for the deadline only
          */
         ResumeBudget(Clock clock) {
-            this(clock.now() + RESUME_DEADLINE_MS, clock);
+            this(clock.now() + RESUME_DEADLINE_MS, clock.now() + RESUME_BACKSTOP_MS,
+                 RESUME_DEADLINE_MS, clock);
         }
 
         /**
          * When a deadline is actually set (so the cycle-only path costs
-         * no clock lookup at all).
+         * no clock lookup at all). The deadline is absolute: no sliding.
          *
          * @param deadlineMs absolute wall-clock deadline, or {@link #NO_DEADLINE}
          * @param clock clock to read, or null to read the system clock only
          */
         ResumeBudget(long deadlineMs, Clock clock) {
+            this(deadlineMs, NO_DEADLINE, 0, clock);
+        }
+
+        /**
+         * Full control of the wall-clock shape, for tests that pin the
+         * sliding behaviour directly.
+         *
+         * @param deadlineMs end of the initial no-progress window, or {@link #NO_DEADLINE}
+         * @param backstopMs absolute ceiling on sliding, or {@link #NO_DEADLINE}
+         * @param slideMs ms a progress event slides {@code deadlineMs} forward; 0 disables sliding
+         * @param clock clock to read, or null to read the system clock only
+         * @since 0.9.72+
+         */
+        ResumeBudget(long deadlineMs, long backstopMs, long slideMs, Clock clock) {
             this.deadlineMs = deadlineMs;
+            this.backstopMs = backstopMs;
+            this.slideMs = slideMs;
             this._clock = clock;
         }
 
@@ -493,9 +636,20 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
          * @return true if another resume attempt may proceed
          */
         boolean tryConsume(long bodyReceived, long contentLength) {
-            if (resumeDeadlineExpired(deadlineMs, deadlineMs == NO_DEADLINE ? 0 : _nowMs())) {return false;}
+            boolean timed = deadlineMs != NO_DEADLINE || backstopMs != NO_DEADLINE;
+            long now = timed ? _nowMs() : 0;
+            if (resumeDeadlineExpired(deadlineMs, now) ||
+                resumeDeadlineExpired(backstopMs, now)) {return false;}
             boolean progressed = lastBody >= 0 && bodyReceived > lastBody;
-            if (progressed) {stallCycles = 0;}
+            if (progressed) {
+                stallCycles = 0;
+                // Reward demonstrable progress: a download that keeps moving
+                // keeps its patience, but never past the absolute backstop.
+                if (slideMs > 0) {
+                    long slid = now + slideMs;
+                    deadlineMs = backstopMs != NO_DEADLINE && slid > backstopMs ? backstopMs : slid;
+                }
+            }
             lastBody = bodyReceived;
             if (stallCycles >= stallCycleLimit(contentLength)) {return false;}
             if (totalCycles >= totalCycleLimit(contentLength)) {return false;}
@@ -598,11 +752,32 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      * a re-send starts a new attempt.
      */
     private volatile boolean _initialDeadlineFired;
+    /**
+     * One-shot latch per request attempt: set when the early reconnect race
+     * has been launched, cleared when a request is (re-)written so every
+     * fresh attempt may race once.
+     */
+    private volatile boolean _earlyRaceFired;
+    /**
+     * Early-race winner handed from the race thread to run()'s empty-response
+     * loop; null unless a fresh socket beat the silent primary. Cleared on
+     * adoption or in run()'s finally.
+     */
+    private volatile RaceWin _earlyRaceWin;
+    /**
+     * Attempt generation token, bumped on every request (re-)write. The race
+     * thread captures it at launch and only publishes its winner while the
+     * generation is unchanged, so a win for a retired attempt can never be
+     * adopted nor close the wrong socket.
+     */
+    private volatile long _attemptGen;
     /** Watchdog lifecycle: set on schedule, cleared on cancel, read by the
      * timer thread so a tick racing run()'s finally cannot re-arm. */
     private volatile boolean _initialWatchdogOn;
     /** Watchdog for the initial connection, kept for cancelling. */
     private volatile SimpleTimer2.TimedEvent _initialWatchdog;
+    /** Watchdog for a stalled browser-facing write, kept for cancelling. */
+    private volatile SimpleTimer2.TimedEvent _writeWatchdog;
     /** Keep I2P socket alive after data transfer. */
     protected volatile boolean _keepAliveI2P;
     /** Keep local socket alive after data transfer. */
@@ -1756,12 +1931,17 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
 
     /**
      * {@link #noteRequestWritten} with an explicit timestamp (test hook).
+     * Bumps the attempt generation, retiring any in-flight early race from
+     * the previous attempt, and re-arms the early-race latch for the fresh
+     * attempt.
      *
      * @param nowMs epoch-ms to record as the request write anchor
      */
     void noteRequestWritten(long nowMs) {
         _lastRequestWriteMs = nowMs;
         _initialDeadlineFired = false;
+        _earlyRaceFired = false;
+        _attemptGen++;
     }
 
     /**
@@ -1860,10 +2040,241 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
                 cancel();
                 return;
             }
-            checkInitialResponseDeadline(System.currentTimeMillis());
+            long now = System.currentTimeMillis();
+            checkInitialResponseDeadline(now);
+            maybeFireEarlyRace(now);
             if (_initialWatchdogOn) {schedule(INITIAL_WATCHDOG_POLL_MS);}
             else {cancel();}
         }
+    }
+
+    /**
+     * Launch the early reconnect race once per attempt if the peer has been
+     * silent past {@link #earlyRaceResponseTimeoutMs}. The work runs on its
+     * own thread: {@code reconnectPair} may sleep through backoff and the
+     * race waits up to {@link #EMPTY_RACE_TIMEOUT_MS}, none of which may
+     * block the shared SimpleTimer2 pool.
+     *
+     * @param nowMs current epoch-ms from the watchdog tick
+     * @since 0.9.72+
+     */
+    private void maybeFireEarlyRace(long nowMs) {
+        if (_earlyRaceFired || _reconnectCallback == null) {return;}
+        // Same idempotence guard as the empty-response retry loop: only a
+        // buffered GET/HEAD may be re-sent on the race sockets.
+        if (!isRetryableRequest(initialI2PData)) {return;}
+        if (!earlyRaceDue(_lastRequestWriteMs, _firstByteMs, nowMs,
+                          earlyRaceResponseTimeoutMs)) {return;}
+        _earlyRaceFired = true;
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                runEarlyRace();
+            }
+        }, "EarlyRace");
+        t.setDaemon(true);
+        t.start();
+    }
+
+    /**
+     * Race fresh connections against the still-silent primary on behalf of
+     * the watchdog. Opens sockets through the reconnect callback, so
+     * budget, permits and dead-pool fail-fast are identical to the
+     * post-mortem retry, then races them for the first response byte and
+     * hands the winner
+     * to run()'s empty-response loop via {@link #_earlyRaceWin} before
+     * closing the primary — closing it is what unblocks the parked receive
+     * forwarder. If the primary answers first, or the attempt was replaced
+     * (generation bump), the fresh sockets are discarded and nothing changes.
+     *
+     * @since 0.9.72+
+     */
+    private void runEarlyRace() {
+        final I2PSocket primary = i2ps;
+        final long gen = _attemptGen;
+        ReconnectCallback cb = _reconnectCallback;
+        I2PSocket[] pair;
+        try {
+            pair = cb.reconnectPair(null);
+        } catch (RuntimeException re) {
+            if (_log.shouldWarn()) {_log.warn("Early reconnect race could not open sockets", re);}
+            return;
+        }
+        if (pair == null || pair.length == 0) {return;}
+        RaceWin win = null;
+        try {
+            win = raceEarlyPair(pair, gen);
+        } finally {
+            cb.releaseRacePermit();
+        }
+        if (win == null) {return;}
+        if (_attemptGen != gen || _firstByteMs > 0 || finished) {
+            // The attempt moved on (primary answered, generation bumped, or
+            // run() already completed its retry loops) while the race
+            // settled; the winner is worthless.
+            closeQuietly(win.sock);
+            return;
+        }
+        _earlyRaceWin = win;
+        if (_log.shouldInfo()) {
+            _log.info("Early reconnect race beat a silent connection -> Swapping sockets");
+        }
+        // Unblock the receive forwarder parked on the silent primary; the
+        // empty-response loop adopts the published winner.
+        closeQuietly(primary);
+    }
+
+    /**
+     * Race freshly opened sockets against the live-but-silent primary for an
+     * early reconnect: write the buffered request to each new socket, then
+     * the first to deliver a non-EOF byte wins. The primary is not read
+     * here — its receive forwarder owns that stream — so it competes via
+     * liveness: if a first byte lands on it ({@link #_firstByteMs}) or the
+     * attempt is replaced ({@link #_attemptGen} bump) before a new socket
+     * wins, every new socket is discarded and the primary keeps running.
+     * Exactly the sockets not returned are closed on every exit path.
+     *
+     * @param pair one or two freshly connected sockets from
+     *             {@link ReconnectCallback#reconnectPair}
+     * @param gen the attempt generation captured before the race started
+     * @return the winner with its pushback stream, or null if the primary
+     *         stayed preferred (answered, replaced, or no new socket answered)
+     * @since 0.9.72+
+     */
+    RaceWin raceEarlyPair(I2PSocket[] pair, long gen) {
+        final AtomicReference<RaceWin> winner = new AtomicReference<>();
+        final AtomicInteger failures = new AtomicInteger();
+        final CountDownLatch settled = new CountDownLatch(1);
+        RaceWin win = null;
+        try {
+            PushbackInputStream[] streams = new PushbackInputStream[pair.length];
+            try {
+                for (int i = 0; i < pair.length; i++) {
+                    streams[i] = new PushbackInputStream(pair[i].getInputStream(), 32);
+                    if (initialI2PData != null) {
+                        // isRetryableRequest() guarantees GET/HEAD — no body, flush is safe.
+                        OutputStream out = pair[i].getOutputStream();
+                        out.write(initialI2PData);
+                        out.flush();
+                    }
+                }
+            } catch (IOException ioe) {
+                if (_log.shouldWarn()) {_log.warn("Early race: failed to prepare sockets", ioe);}
+                return null;
+            }
+            for (int i = 0; i < pair.length; i++) {
+                startRaceLeg("E" + i, pair[i], streams[i], winner, failures, settled);
+            }
+            // Wait out the race, but poll for the primary answering or the
+            // attempt being replaced — either retires the race immediately.
+            long until = System.currentTimeMillis() + EMPTY_RACE_TIMEOUT_MS;
+            try {
+                while (System.currentTimeMillis() < until) {
+                    if (settled.await(500, TimeUnit.MILLISECONDS)) {break;}
+                    if (_firstByteMs > 0 || _attemptGen != gen) {break;}
+                }
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+            }
+            RaceWin w = winner.get();
+            if (w == null || _firstByteMs > 0 || _attemptGen != gen) {
+                if (_log.shouldInfo() && w != null) {
+                    _log.info("Early race loser: the original connection answered first");
+                }
+                return null;
+            }
+            win = w;
+            return win;
+        } finally {
+            // Close exactly what was not returned.
+            for (I2PSocket sk : pair) {
+                if (sk != null && (win == null || sk != win.sock)) {closeQuietly(sk);}
+            }
+        }
+    }
+
+    /**
+     * Periodic tick enforcing {@link #browserWriteStallMs} on the
+     * browser-facing direction. A write parked toward a local side that
+     * stopped reading is invisible to every read timeout — Java has no
+     * write timeout — so without this the runner thread and its I2P socket
+     * stay
+     * pinned until the 4h socket timeout. Only an in-flight write counts —
+     * an idle CONNECT or keepalive connection never enters one and is never
+     * touched. On a confirmed stall the local socket is closed: that is what
+     * breaks the blocked {@code write()}, and the existing IOException path
+     * then tears both sides down exactly once.
+     * <p>Retires on {@code finished} (both forwarders ended) or after it
+     * fires; run()'s finally cancels it otherwise.
+     *
+     * @since 0.9.72+
+     */
+    private final class BrowserWriteWatchdog extends SimpleTimer2.TimedEvent {
+        /** Times out a write the browser stopped accepting. */
+        private BrowserWriteWatchdog() {}
+        @Override
+        public void timeReached() {
+            if (finished) {
+                cancel();
+                return;
+            }
+            StreamForwarder f = fromI2P;
+            long started = f != null ? f.getWriteStartedMs() : 0;
+            long now = System.currentTimeMillis();
+            if (!browserWriteStalled(started, now, browserWriteStallMs)) {
+                schedule(INITIAL_WATCHDOG_POLL_MS);
+                return;
+            }
+            // Re-check the stamp: if the write completed (or a new one
+            // started) since the read above, the browser is accepting again
+            // and this connection is not stuck.
+            if (f.getWriteStartedMs() != started) {
+                schedule(INITIAL_WATCHDOG_POLL_MS);
+                return;
+            }
+            if (_log.shouldWarn()) {
+                _log.warn("Browser stopped accepting data for " + ((now - started) / 1000) +
+                          "s of a blocked write (runner " + _runnerId +
+                          ") -> Closing local socket");
+            }
+            try {s.close();}
+            catch (IOException ioe) { /* ignored */ }
+            cancel();
+        }
+    }
+
+    /**
+     * Arm the browser-write stall watchdog. Idempotent; a no-op when the
+     * timer rejects scheduling (headless/broken context), in which case the
+     * transfer runs unsupervised exactly as it did before the watchdog
+     * existed.
+     *
+     * @since 0.9.72+
+     */
+    private void scheduleBrowserWriteWatchdog() {
+        if (_writeWatchdog != null) {return;}
+        SimpleTimer2.TimedEvent wd = new BrowserWriteWatchdog();
+        _writeWatchdog = wd;
+        try {
+            I2PAppContext.getGlobalContext().simpleTimer2()
+                         .addPeriodicEvent(wd, INITIAL_WATCHDOG_POLL_MS, INITIAL_WATCHDOG_POLL_MS);
+        } catch (RuntimeException re) {
+            _writeWatchdog = null;
+            if (_log.shouldWarn()) {_log.warn("Failed to schedule browser-write watchdog", re);}
+        }
+    }
+
+    /**
+     * Disarm the browser-write watchdog; called from run()'s finally so a
+     * completed runner never leaves a timer event behind. Safe to call when
+     * never scheduled.
+     *
+     * @since 0.9.72+
+     */
+    private void cancelBrowserWriteWatchdog() {
+        SimpleTimer2.TimedEvent wd = _writeWatchdog;
+        _writeWatchdog = null;
+        if (wd != null) {wd.cancel();}
     }
 
     /**
@@ -1953,6 +2364,9 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
                     t.start();
                 }
             }
+            // Arm the browser-write stall before the inline receive forwarder
+            // can park in a write to a local side that stopped reading.
+            scheduleBrowserWriteWatchdog();
             fromI2P = new StreamForwarder(i2pin, out, false, _onSuccess);
             // We are already a thread, so run the second one inline
             fromI2P.run();
@@ -2017,6 +2431,27 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
                     if (emptyCycleDelayMs(emptyReconnectCycles) > 0 &&
                         !sleepQuietly(emptyCycleDelayMs(emptyReconnectCycles))) {
                         break;
+                    }
+                    // The early race may already have won a fresh socket while
+                    // this attempt's primary sat silent (it closed the primary,
+                    // which is what ended the forwarder and brought us here).
+                    // Adopt that winner instead of paying for another round of
+                    // connects.
+                    RaceWin early = _earlyRaceWin;
+                    if (early != null) {
+                        _earlyRaceWin = null;
+                        if (sockList != null) {synchronized (slock) {sockList.remove(i2ps);}}
+                        try {i2ps.close();} catch (IOException ioe) {/* the race closed it already */}
+                        i2ps = early.sock;
+                        i2pin = early.in;
+                        i2pout = null;
+                        if (sockList != null) {synchronized (slock) {sockList.add(i2ps);}}
+                        totalReceived = 0;
+                        redriveReceiveForwarder(out, i2pin);
+                        // The race already sent the request on the winner;
+                        // restart the first-response deadline for this attempt.
+                        noteRequestWritten();
+                        continue;
                     }
                     Exception e = fromI2P.getFailure();
                     if (e == null && toI2P != null) {e = toI2P.getFailure();}
@@ -2145,6 +2580,14 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
             onNoDataFailure(e);
         } finally {
             cancelInitialResponseWatchdog();
+            cancelBrowserWriteWatchdog();
+            // An early-race winner run() never adopted (the attempt resolved
+            // another way) must not leak its open socket.
+            RaceWin leftover = _earlyRaceWin;
+            if (leftover != null) {
+                _earlyRaceWin = null;
+                closeQuietly(leftover.sock);
+            }
             removeRef();
             if (i2pReset) {
                 if (_log.shouldInfo()) {_log.warn("Received I2P reset, resetting socket...");}
@@ -2257,6 +2700,13 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
         public volatile boolean done;
         /** True once the stall read-timeout has been armed on the I2P socket. */
         private boolean _stallArmed;
+        /**
+         * Epoch-ms the current {@code out.write()} began, 0 when this
+         * forwarder is not inside a write. Read by the browser-write
+         * watchdog: a nonzero stamp older than the threshold means the
+         * local side stopped accepting data and the write is parked.
+         */
+        private volatile long _writeStartedMs;
 
         /**
          * Forwards data between a local socket and the tunnel.
@@ -2313,7 +2763,15 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
                             // a definitive answer as a retryable no-data failure.
                             totalReceived += len;
                         }
-                        out.write(buffer, 0, len);
+                        // Stamp the in-flight write so the browser-write
+                        // watchdog can see a parked write toward a local
+                        // side that stopped reading.
+                        _writeStartedMs = System.currentTimeMillis();
+                        try {
+                            out.write(buffer, 0, len);
+                        } finally {
+                            _writeStartedMs = 0;
+                        }
                         // Slide the first-response deadline so a slow request
                         // upload (POST body) never trips the initial-response
                         // watchdog mid-flight.
@@ -2411,6 +2869,16 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
          * @return the exception that ended this direction, or null if it ran to completion
          */
          public Exception getFailure() {return _failure;}
+
+        /**
+         * Epoch-ms the in-flight write toward this forwarder's output began,
+         * or 0 when no write is currently in progress. Consumed by the
+         * browser-write watchdog.
+         *
+         * @return the write start stamp, 0 when idle
+         * @since 0.9.72+
+         */
+        long getWriteStartedMs() {return _writeStartedMs;}
     }
 
 }
