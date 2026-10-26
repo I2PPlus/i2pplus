@@ -224,7 +224,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
                 // If they don't have a large payload, most of the rest of the packet
                 // is uncompressible: stream ids, destination and signature
                 options.setGzip(packet.getPayloadSize() > 50);
-// First transmission of an outbound SYN starts a new connection.
+                // First transmission of an outbound SYN starts a new connection.
                 // Ask the router to prefer a different outbound tunnel so a retry
                 // does not ride the same (possibly sick) tunnel that stalled the
                 // previous connection. Only the FIRST send carries the marker:
@@ -274,7 +274,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
             end = _context.clock().now();
 
             if ((end-begin > 1000) && (_log.shouldWarn()))
-                _log.warn("Slow message delivery (" + (end-begin) + "ms)\n* " + packet);
+                _log.warn("Slow message delivery (" + (end-begin) + "ms) -> " + packet);
 
             if ((++_sendMsgSizeCnt & (TELEMETRY_SAMPLE_PERIOD - 1)) == 0)
                 _context.statManager().addRateData("stream.con.sendMessageSize", size * (long) TELEMETRY_SAMPLE_PERIOD,
@@ -295,7 +295,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
             }
         } catch (I2PSessionException ise) {
             if (_log.shouldWarn()) {
-                _log.warn("Unable to send the packet " + packet + " -> " + ise.getMessage());
+                _log.warn("Unable to send packet " + packet + " -> " + ise.getMessage());
                 isLogged = true;
             }
         } finally {
@@ -304,10 +304,10 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
 
         long enqueueElapsed = _context.clock().now() - enqueueStart;
         if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE) && _log.shouldInfo())
-            _log.info("SYN packet enqueue: sent=" + sent + " elapsed=" + enqueueElapsed + "ms, " + packet);
+            _log.info("SYN packet enqueue -> Sent:" + sent + " * Elapsed:" + enqueueElapsed + "ms * " + packet);
 
         if (!sent) {
-            if (_log.shouldWarn() && !isLogged) {_log.warn("Packet send failed\n* " + packet);}
+            if (_log.shouldWarn() && !isLogged) {_log.warn("Packet send failed * " + packet);}
             if (con != null) {con.disconnect(false);} // handle race on b0rk
         } else {
             packet.incrementSends();

@@ -749,10 +749,10 @@ class RatchetTagSet implements TagSetHandle {
            .append("\n* Created:  ").append(DataHelper.formatTime(_created))
            .append("\n* Last used: ").append(DataHelper.formatTime(_date));
         PublicKey pk = getRemoteKey();
-        if (pk != null && !pk.toString().isEmpty())
+        if (pk != null && !pk.toString().trim().isEmpty())
             buf.append("\n* Remote Public Key: ").append(pk.toBase64());
         buf.append("\n* Root Key: ").append(_key.toBase64());
-        if (_nextKey != null && !_nextKey.toString().isEmpty())
+        if (_nextKey != null && !_nextKey.toString().trim().isEmpty())
             buf.append("\n* Next Key: ").append(_nextKey);
         int sz = size();
         buf.append("\n* Size: ").append(sz)
