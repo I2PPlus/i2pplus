@@ -126,9 +126,9 @@ public class MessagePayloadMessage extends I2CPMessageImpl {
      */
     @Override
     public synchronized void writeMessage(OutputStream out) throws I2CPMessageException, IOException {
-        if (_sessionId < 0) throw new I2CPMessageException("Unable to write out the message, as the session ID has not been defined");
-        if (_messageId < 0) throw new I2CPMessageException("Unable to write out the message, as the message ID has not been defined");
-        if (_payload == null) throw new I2CPMessageException("Unable to write out the message, as the payload has not been defined");
+        if (_sessionId < 0) throw new I2CPMessageException("Cannot write message -> Session ID not defined");
+        if (_messageId < 0) throw new I2CPMessageException("Cannot write message -> Message ID not defined");
+        if (_payload == null) throw new I2CPMessageException("Cannot write message -> Payload not defined");
 
         int size = 2 + 4 + 4 + _payload.getSize();
         try {
@@ -139,7 +139,7 @@ public class MessagePayloadMessage extends I2CPMessageImpl {
             DataHelper.writeLong(out, 4, _payload.getSize());
             out.write(_payload.getEncryptedData());
         } catch (DataFormatException dfe) {
-            throw new I2CPMessageException("Unable to write the message length or type", dfe);
+            throw new I2CPMessageException("Cannot write message length or type", dfe);
         }
     }
 
@@ -153,10 +153,9 @@ public class MessagePayloadMessage extends I2CPMessageImpl {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation
-        buf.append(" MessagePayloadMessage\n*");
-        buf.append(" SessionID: ").append(_sessionId);
-        buf.append(" [MsgID ").append(_messageId);
-        buf.append("] [").append(_payload).append("]");
+        buf.append(" MessagePayloadMessage").append(" [MsgID ").append(_messageId).append("]");
+        buf.append("\n* SessionID: ").append(_sessionId);
+        buf.append(" * Payload: [").append(_payload).append("]");
         return buf.toString();
     }
 }

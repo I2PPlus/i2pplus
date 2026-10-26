@@ -444,9 +444,9 @@ public class MessageStatusMessage extends I2CPMessageImpl {
         buf.append("MessageStatusMessage ");
         buf.append(" [MsgID ").append(_messageId).append("] -> ").append(getStatusString(_status));
         buf.append("\n* SessionID: ").append(_sessionId);
-        buf.append("; Nonce: ").append(_nonce);
+        buf.append(" * Nonce: ").append(_nonce);
         if (_size > 0) {
-            buf.append("; Size: ").append(_size).append(" bytes");
+            buf.append(" * Size: ").append(_size).append(" bytes");
         }
         return buf.toString();
     }

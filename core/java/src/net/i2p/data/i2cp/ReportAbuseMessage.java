@@ -169,16 +169,15 @@ public class ReportAbuseMessage extends I2CPMessageImpl {
     public int getType() {
         return MESSAGE_TYPE;
     }
-/** Returns a string representation of this message. */
+    /** Returns a string representation of this message. */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation
-        buf.append("ReportAbuseMessage: ");
-        buf.append("SessionID: ").append(getSessionId());
-        buf.append("; Severity: ").append(getSeverity());
-        buf.append("; Reason: ").append(getReason());
-        buf.append("; [MsgID ").append(getMessageId());
-        buf.append("]");
+        buf.append("ReportAbuseMessage ");
+        buf.append(" [MsgID ").append(getMessageId()).append("]");
+        buf.append("\n* SessionID: ").append(getSessionId());
+        buf.append(" * Severity: ").append(getSeverity());
+        buf.append(" * Reason: ").append(getReason());
         return buf.toString();
     }
 }
