@@ -234,8 +234,21 @@
     </jar>
   </target>
 
-  <target name="builddeptest">
-    <ant dir="../../../core/java" target="jar"/>
+  <target name="builddeptest" depends="probe-deptest-core, builddeptest-core"/>
+  <target name="probe-deptest-core">
+    <condition property="core.i2p.present">
+      <available file="${core.java.build.dir}/i2p.jar"/>
+    </condition>
+  </target>
+  <!-- The nested ant inherits the caller's -Dbuild.dir whatever we pass it,
+       so an unconditional rebuild of core here wrote i2p.jar into this
+       module's build dir — a stray that a parallel suite could catch
+       mid-write ("error in opening zip file"). Only build core when the
+       canonical jar is genuinely missing. -->
+  <target name="builddeptest-core" unless="core.i2p.present">
+    <ant dir="../../../core/java" target="jar" inheritall="false">
+      <property name="build.dir" location="${core.java.build.dir}"/>
+    </ant>
   </target>
   <target name="junit.compileTest" depends="builddeptest, compile">
 

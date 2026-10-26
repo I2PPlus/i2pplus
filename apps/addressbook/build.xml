@@ -141,8 +141,18 @@
     </condition>
   </target>
 
-  <target name="builddeptest">
-    <ant dir="../../core/java/" target="jarTest">
+  <target name="builddeptest" depends="probe-deptest, builddeptest-jartest"/>
+  <target name="probe-deptest">
+    <condition property="core.i2ptest.present">
+      <available file="${core.java.build.dir}/i2ptest.jar"/>
+    </condition>
+  </target>
+  <!-- Skip the nested build when the canonical i2ptest.jar exists: a
+       nested ant inherits the caller's -Dbuild.dir, and rebuilding here
+       would drop a stray i2ptest.jar into this module's build dir that
+       parallel suites can read mid-write. -->
+  <target name="builddeptest-jartest" unless="core.i2ptest.present">
+    <ant dir="../../core/java/" target="jarTest" inheritall="false">
       <property name="build.dir" location="${core.java.build.dir}"/>
     </ant>
   </target>

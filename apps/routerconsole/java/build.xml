@@ -814,9 +814,26 @@
   </target>
 
   <!-- unit tests -->
-  <target name="builddepscalatest">
-    <ant dir="../../../router/java/" target="jar"/>
-    <ant dir="../../../router/java/" target="jarScalaTest"/>
+  <target name="builddepscalatest" depends="probe-scalatest-deps, builddepscalatest-jar, builddepscalatest-scala"/>
+  <target name="probe-scalatest-deps">
+    <condition property="router.jar.present">
+      <available file="${router.java.build.dir}/router.jar"/>
+    </condition>
+  </target>
+  <!-- Skip the nested builds when the canonical router.jar exists: a
+       nested ant inherits the caller's -Dbuild.dir and would otherwise
+       write strays into this module's build dir. -->
+  <target name="builddepscalatest-jar" unless="router.jar.present">
+    <ant dir="../../../router/java/" target="jar" inheritall="false">
+      <property name="build.dir" location="${router.java.build.dir}"/>
+      <property name="core.java.build.dir" location="${core.java.build.dir}"/>
+    </ant>
+  </target>
+  <target name="builddepscalatest-scala" unless="router.jar.present">
+    <ant dir="../../../router/java/" target="jarScalaTest" inheritall="false">
+      <property name="build.dir" location="${router.java.build.dir}"/>
+      <property name="core.java.build.dir" location="${core.java.build.dir}"/>
+    </ant>
   </target>
   <target name="scalatest.compileTest" depends="builddepscalatest, compile, scala.init">
     <mkdir dir="${build.dir}"/>

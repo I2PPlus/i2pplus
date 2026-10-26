@@ -51,9 +51,29 @@
       <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>
-  <target name="builddeptest">
-    <ant dir="../../../core/java" target="jar"/>
-    <ant dir="../../../apps/ministreaming/java/" target="jar"/>
+  <target name="builddeptest" depends="probe-deptest, builddeptest-core, builddeptest-mstreaming"/>
+  <target name="probe-deptest">
+    <condition property="core.i2p.present">
+      <available file="${core.java.build.dir}/i2p.jar"/>
+    </condition>
+    <condition property="mstreaming.present">
+      <available file="${ministreaming.java.build.dir}/mstreaming.jar"/>
+    </condition>
+  </target>
+  <!-- See apps/ministreaming/java/build.xml builddeptest: the nested ant
+       would otherwise rebuild these jars into THIS module's build dir
+       (the caller's -Dbuild.dir always wins), leaving strays that
+       parallel suites can read mid-write. Skip when canonical. -->
+  <target name="builddeptest-core" unless="core.i2p.present">
+    <ant dir="../../../core/java" target="jar" inheritall="false">
+      <property name="build.dir" location="${core.java.build.dir}"/>
+    </ant>
+  </target>
+  <target name="builddeptest-mstreaming" unless="mstreaming.present">
+    <ant dir="../../../apps/ministreaming/java/" target="jar" inheritall="false">
+      <property name="build.dir" location="${ministreaming.java.build.dir}"/>
+      <property name="core.java.build.dir" location="${core.java.build.dir}"/>
+    </ant>
   </target>
   <target name="junit.compileTest" depends="builddeptest, compile">
 
