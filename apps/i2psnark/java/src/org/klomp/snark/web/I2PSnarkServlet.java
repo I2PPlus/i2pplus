@@ -5730,18 +5730,27 @@ public class I2PSnarkServlet extends BasicServlet {
         // For incomplete downloads, the data directory may not exist yet;
         // fall through to the info-only path instead of bailing out.
         File[] ls = null;
-        if (snark != null && r.exists() && r.isDirectory()) {ls = storage != null ? storage.listMerged(pathInTorrent) : r.listFiles();} // if r is not a directory, we are only showing torrent info section
+        boolean singleFile = false;
+        if (snark != null && r.exists() && r.isDirectory()) {ls = storage != null ? storage.listMerged(pathInTorrent) : r.listFiles();} // a single-file torrent's root is the file, listed below
+        if (listsSingleFile(ls, storage, pathInTorrent)) {
+            // The root of a single-file torrent is the file itself, not a
+            // directory, so the listing is that one entry. Listing it is what
+            // gives the page an Open link for a type the embedded player
+            // cannot show, and a progress bar while it is downloading. The
+            // file may not exist yet, which is why the torrent's shape, not
+            // File.isFile(), decides: a missing file has no size to read.
+            ls = new File[] {r};
+            singleFile = true;
+        }
+
+        // The HTML5 player for a completed single-media torrent. Rendered here,
+        // above the file table, so a video keeps its player now that the
+        // listing is no longer skipped.
+        if (singleFile) {appendSingleMediaSection(buf, storage, r, base, tName);}
+
         if (ls == null) {
-            // We are only showing the torrent info section unless audio or video...
-            if (storage != null && storage.complete()) {
-                String mime = getMimeType(r.getName());
-                boolean isAudio = mime != null && isAudio(mime);
-                boolean isVideo = !isAudio && mime != null && isVideo(mime);
-                if (isAudio || isVideo) {
-                    String imgPath = isStandalone() ? _resourcePath + "icons/" : "/themes/console/images/";
-                    appendMediaSection(buf, base, tName, mime, isAudio, imgPath);
-                }
-            }
+            // Nothing to list: only the torrent info section, plus the player
+            // for audio and video.
             renderCommentsSection(snark, er, ec, esc, _t("Comments &amp; Ratings"), buf);
             if (includeForm) {buf.append("</form>\n");}
             buf.append(footer());
@@ -5752,8 +5761,9 @@ public class I2PSnarkServlet extends BasicServlet {
         long[][] arrays = (storage != null) ? storage.remaining2() : null;
         long[] remainingArray = (arrays != null) ? arrays[0] : null;
         long[] previewArray = (arrays != null) ? arrays[1] : null;
+        long[] lengthsArray = (storage != null) ? storage.getFileLengths() : null;
         List<Sorters.FileAndIndex> fileList = wrapFileList(ls, storage, remainingArray, previewArray, isTopLevel,
-                                                          storage != null ? storage.indexMap() : null);
+                                                          storage != null ? storage.indexMap() : null, lengthsArray);
 
         boolean showSort = fileList.size() > 1;
         if (showSort) {
@@ -5788,7 +5798,9 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean drainOk = streamed;
         if (streamed) {drainOk = drainTo(out, buf);}
 
-        FileRowContext ctx = new FileRowContext(decodedBase, storage, showPriority, isTopLevel);
+        FileRowContext ctx = new FileRowContext(decodedBase,
+                singleFile ? singleFileLinkBase(decodedBase) : decodedBase,
+                storage, showPriority, isTopLevel);
         FileRowCounters counters = new FileRowCounters();
         boolean rowEven = true;
         try {
@@ -5977,6 +5989,33 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
+     * Appends the embedded player for a completed single-media torrent, and
+     * nothing at all for a torrent that is not complete, has no storage, or
+     * whose type the browser cannot play. The check lives here so the caller
+     * decides only where the player goes: it renders above the file table for
+     * a single-file torrent, which is listed there too, so the file also has a
+     * row linking to it in its own tab.
+     *
+     * @param buf destination for the markup
+     * @param storage the torrent's storage, null for a magnet link
+     * @param r the torrent root, which is the media file itself for a
+     *          single-file torrent
+     * @param base the encoded base URL with trailing slash
+     * @param tName the torrent name
+     * @since 0.9.72+
+     */
+    private void appendSingleMediaSection(StringBuilder buf, Storage storage, File r,
+                                          String base, String tName) {
+        if (storage == null || !storage.complete()) {return;}
+        String mime = getMimeType(r.getName());
+        if (mime == null) {return;}
+        boolean isAudio = isAudio(mime);
+        if (!isAudio && !isVideo(mime)) {return;}
+        String imgPath = isStandalone() ? _resourcePath + "icons/" : "/themes/console/images/";
+        appendMediaSection(buf, base, tName, mime, isAudio, imgPath);
+    }
+
+    /**
      * Renders the HTML5 audio/video player section for a complete single-media
      * torrent. Static: no servlet state required beyond the parameters.
      * Extracted from getListHTML.
@@ -6068,6 +6107,29 @@ public class I2PSnarkServlet extends BasicServlet {
     static List<Sorters.FileAndIndex> wrapFileList(File[] ls, Storage storage,
             long[] remainingArray, long[] previewArray, boolean skipPaddingDirs,
             Map<String, Integer> indexMap) {
+        return wrapFileList(ls, storage, remainingArray, previewArray, skipPaddingDirs,
+                            indexMap, null);
+    }
+
+    /**
+     * Wrap a file listing, also resolving each file's declared length so an
+     * unfinished file shows the size it is downloading to rather than the
+     * bytes written so far.
+     *
+     * @param ls the raw listing, non-null
+     * @param storage may be null (magnet/dummy); arrays must then be null too
+     * @param remainingArray precomputed by {@link org.klomp.snark.Storage#remaining2}, null iff storage is null
+     * @param previewArray may be null
+     * @param skipPaddingDirs true hides ".pad"/"_pad" directories
+     * @param indexMap from {@link org.klomp.snark.Storage#indexMap()}, or null to scan per file
+     * @param lengthsArray from {@link org.klomp.snark.Storage#getFileLengths()},
+     *                     index-aligned with remainingArray, or null
+     * @return wrapped entries, possibly empty, never null
+     * @since 0.9.72+ the lengthsArray form
+     */
+    static List<Sorters.FileAndIndex> wrapFileList(File[] ls, Storage storage,
+            long[] remainingArray, long[] previewArray, boolean skipPaddingDirs,
+            Map<String, Integer> indexMap, long[] lengthsArray) {
         List<Sorters.FileAndIndex> rv = new ArrayList<>(ls.length);
         for (File f : ls) {
             if (skipPaddingDirs && isPaddingDir(f)) {continue;}
@@ -6792,6 +6854,57 @@ public class I2PSnarkServlet extends BasicServlet {
             result[1] = "/";                              // pathInTorrent
         }
         return result;
+    }
+
+    /**
+     * Whether a torrent downloads a single file rather than a directory tree.
+     * {@link MetaInfo#getFiles()} is null exactly for the single-file form, so
+     * this answers from the metainfo and not the filesystem: a download that
+     * has not written anything yet has no file to test, and a missing path is
+     * indistinguishable from a missing directory by {@link File} alone.
+     *
+     * @param storage the torrent's storage, non-null
+     * @return true when the torrent's root is a file, not a directory
+     * @since 0.9.72+
+     */
+    static boolean isSingleFileStorage(Storage storage) {
+        return storage.getMetaInfo().getFiles() == null;
+    }
+
+    /**
+     * Whether a request's file listing is the one file of a single-file
+     * torrent. A directory listing that was already found wins, so a download
+     * staged in the temp directory keeps listing the staged tree the caller
+     * already produced; the single-file form is reached only when there is
+     * nothing to list, which is the case that used to render no files at all.
+     *
+     * @param listing the directory listing found for the request, null when its
+     *                path is not a directory that exists
+     * @param storage the torrent's storage, null for a magnet link
+     * @param pathInTorrent the path inside the torrent, "/" at the root
+     * @return true to list the torrent's own file as the one entry
+     * @since 0.9.72+
+     */
+    static boolean listsSingleFile(File[] listing, Storage storage, String pathInTorrent) {
+        return listing == null && storage != null && pathInTorrent.equals("/")
+               && isSingleFileStorage(storage);
+    }
+
+    /**
+     * The URL prefix a single-file torrent's row links under. The servlet
+     * serves that file at the torrent's own URL, so the listing's base ends
+     * with the file name and a slash, and appending the name to the base asks
+     * for it twice and 404s. Dropping the name leaves the directory the file
+     * is served from, which is what a file row expects to be joined with it.
+     *
+     * @param base the decoded base URL of the listing, normally ending with a slash
+     * @return the prefix ending with a slash, never empty
+     * @since 0.9.72+
+     */
+    static String singleFileLinkBase(String base) {
+        String noSlash = base.endsWith("/") ? base.substring(0, base.length() - 1) : base;
+        int last = noSlash.lastIndexOf('/');
+        return last >= 0 ? noSlash.substring(0, last + 1) : "/";
     }
 
     /**
@@ -7740,6 +7853,13 @@ public class I2PSnarkServlet extends BasicServlet {
     static class FileRowContext {
         /** Decoded base URL of the directory being listed. */
         final String decodedBase;
+        /**
+         * Decoded URL prefix the rows link under. The directory being listed,
+         * except at a single-file torrent's root: there the listed entry is
+         * the torrent's own file, which the servlet serves at the torrent URL,
+         * so appending the name to that URL asks for it twice and 404s.
+         */
+        final String linkBase;
         /** The torrent's storage, null for magnet links. */
         final Storage storage;
         /** Priority controls are shown for this directory. */
@@ -7756,7 +7876,25 @@ public class I2PSnarkServlet extends BasicServlet {
          * @param isTopLevel listing is at the torrent root, so no parent link is rendered
          */
         FileRowContext(String decodedBase, Storage storage, boolean showPriority, boolean isTopLevel) {
+            this(decodedBase, decodedBase, storage, showPriority, isTopLevel);
+        }
+
+        /**
+         * Captures the torrent state needed to render one file row, with the
+         * rows linking under a prefix other than the directory being listed.
+         *
+         * @param decodedBase decoded base URL of the directory being listed
+         * @param linkBase decoded prefix the rows link under, as from
+         *                 {@link #singleFileLinkBase}
+         * @param storage the torrent's storage, null for magnet links
+         * @param showPriority priority controls are shown for this directory
+         * @param isTopLevel listing is at the torrent root, so no parent link is rendered
+         * @since 0.9.72+
+         */
+        FileRowContext(String decodedBase, String linkBase, Storage storage,
+                       boolean showPriority, boolean isTopLevel) {
             this.decodedBase = decodedBase;
+            this.linkBase = linkBase;
             this.storage = storage;
             this.showPriority = showPriority;
             this.isTopLevel = isTopLevel;
@@ -7917,11 +8055,47 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
+     * The byte count a file row shows as its size and uses as its progress
+     * total: the length the torrent declares for the file when storage knows
+     * one, otherwise the size on disk.
+     * <p>The declared length is what {@link org.klomp.snark.Storage#remaining2}
+     * counts missing bytes against, so it is the total that is right for a file
+     * that is not finished: a file staged in the temp directory is short of it,
+     * and a file that has not been created yet has a size on disk of 0, which
+     * reads as finished. A 0-byte file keeps reading as finished, because a
+     * declared length of 0 falls through to the size on disk.
+     *
+     * @param fai the entry being rendered
+     * @return the total in bytes; 0 for a directory, an empty file, or an
+     *         entry storage has no declared length for
+     * @since 0.9.72+
+     */
+    static long rowTotalBytes(Sorters.FileAndIndex fai) {
+        // A directory has no length to show; File.length() answers with the
+        // size of its own entry, not the size of its contents.
+        if (fai.isDirectory) {return 0;}
+        return fai.declaredLength > 0 ? fai.declaredLength : fai.file.length();
+    }
+
+    /**
+     * Whether a file row is rendered as finished: nothing is left to download,
+     * or there is no positive total to show progress against.
+     *
+     * @param remaining bytes still needed, non-negative
+     * @param totalBytes the row's total, as from {@link #rowTotalBytes}
+     * @return true to show the row as complete
+     * @since 0.9.72+
+     */
+    static boolean rowIsComplete(long remaining, long totalBytes) {
+        return remaining == 0 || totalBytes <= 0;
+    }
+
+    /**
      * Renders a single file row for the torrent file browser table.
      * Extracted from getListHTML for testability and UI responsiveness.
      *
      * @param buf the StringBuilder to append HTML to
-     * @param ctx immutable context (decoded base path, storage, priority flag, top-level flag)
+     * @param ctx immutable context (link base, decoded base, storage, priority, top-level flags)
      * @param fai the file and its metadata from the sorted file list
      * @param rowEven true for even row (alternating row class)
      * @param counters mutable accumulators (video/img/text counts, save button flag)
@@ -7933,7 +8107,7 @@ public class I2PSnarkServlet extends BasicServlet {
         File item = fai.file;
         boolean complete = false;
         String status = "";
-        long length = item.length();
+        long total = rowTotalBytes(fai);
         int fileIndex = fai.index;
         int priority = 0;
 
@@ -7947,12 +8121,12 @@ public class I2PSnarkServlet extends BasicServlet {
             if (remaining < 0) {
                 complete = true;
                 status = warnIcon(_t("Unrecognized"), _t("File not found in torrent"));
-            } else if (remaining == 0 || length <= 0) {
+            } else if (rowIsComplete(remaining, total)) {
                 complete = true;
                 status = tickIcon();
             } else {
                 priority = fai.priority;
-                status = priorityIcon(priority) + buildProgressBar(length, remaining, true, false, false, true);
+                status = priorityIcon(priority) + buildProgressBar(total, remaining, true, false, false, true);
             }
         }
 
@@ -7960,7 +8134,7 @@ public class I2PSnarkServlet extends BasicServlet {
         String completed = (complete ? "completed" : "incomplete");
         buf.append("<tr class=\"").append(rowClass).append(' ').append(completed).append("\">");
 
-        String path = addPaths(ctx.decodedBase, item.getName());
+        String path = addPaths(ctx.linkBase, item.getName());
         if (fai.isDirectory) {
             complete = true;
             if (!path.endsWith("/")) {path = addPaths(path, "/");}
@@ -7994,10 +8168,10 @@ public class I2PSnarkServlet extends BasicServlet {
         String preview = null;
         if (isVideo && complete) {counters.videoCount++;}
         if (complete || (isAudio && fai.preview > 100 * 1024) ||
-            (isVideo && fai.preview > 5 * 1024 * 1024 && fai.preview / (double) fai.length >= 0.01d)) {
+            (isVideo && fai.preview > 5 * 1024 * 1024 && fai.preview / (double) total >= 0.01d)) {
             String ppath = complete ? path : path + "?limit=" + fai.preview;
             if (!complete) {
-                double pct = fai.preview / (double) fai.length;
+                double pct = fai.preview / (double) total;
                 preview = " &nbsp;<span class=audioPreview>" + _t("Preview") + ": " +
                            (new DecimalFormat("0.00%")).format(pct) + "</span>";
             }
@@ -8050,7 +8224,7 @@ public class I2PSnarkServlet extends BasicServlet {
             }
         } else if (preview != null) {buf.append(preview);}
         buf.append("</td><td class=fileSize>");
-        if (!fai.isDirectory) {buf.append(formatSize(length));}
+        if (!fai.isDirectory) {buf.append(formatSize(total));}
         buf.append("</td><td class=\"fileStatus volatile\">").append(status).append("</td>");
 
         if (ctx.showPriority) {

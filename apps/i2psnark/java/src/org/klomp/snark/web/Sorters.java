@@ -789,6 +789,15 @@ class Sorters {
         public final int priority;
         /** Index of the file in storage, or -1 when it was not found. */
         public final int index;
+        /**
+         * The length the torrent declares for the file, in bytes, or -1 when
+         * no declared lengths were supplied. Unlike {@link #length} this does
+         * not depend on what is on disk, so it is the total a progress bar and
+         * a size label should use: a file staged in the temp directory is
+         * shorter than this, and a file that has not been created yet reports 0
+         * for {@link File#length()}.
+         */
+        public final long declaredLength;
 
         /**
          * Create a file/index entry.
@@ -832,6 +841,27 @@ class Sorters {
         public FileAndIndex(
                 File file, Storage storage, long[] remainingArray, long[] previewArray,
                 Map<String, Integer> indexMap) {
+            this(file, storage, remainingArray, previewArray, indexMap, null);
+        }
+
+        /**
+         * Create a file/index entry resolving the storage index from a
+         * precomputed map and the declared length from a precomputed array.
+         *
+         * @param file the file or directory the entry describes
+         * @param storage may be null
+         * @param remainingArray precomputed, non-null iff storage is non-null
+         * @param previewArray precomputed preview lengths, or null
+         * @param indexMap from {@link Storage#indexMap()}, or null to fall
+         *                 back to the linear indexOf() scan
+         * @param lengthsArray from {@link Storage#getFileLengths()}, index-aligned
+         *                     with the other arrays, or null to leave
+         *                     {@link #declaredLength} unresolved
+         * @since 0.9.72+
+         */
+        public FileAndIndex(
+                File file, Storage storage, long[] remainingArray, long[] previewArray,
+                Map<String, Integer> indexMap, long[] lengthsArray) {
             this.file = file;
             if (storage == null) {
                 index = -1;
@@ -846,11 +876,13 @@ class Sorters {
                 remaining = remainingArray[index];
                 preview = previewArray != null ? previewArray[index] : 0;
                 priority = storage.getPriority(index);
+                declaredLength = lengthsArray != null ? lengthsArray[index] : -1;
             } else {
                 isDirectory = file.isDirectory();
                 remaining = -1;
                 preview = 0;
                 priority = -999;
+                declaredLength = -1;
             }
             length = isDirectory ? 0 : file.length();
         }

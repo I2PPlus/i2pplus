@@ -962,6 +962,31 @@ public class Storage implements Closeable {
     }
 
     /**
+     * The length in bytes every file in the torrent is declared to have,
+     * index-aligned with the arrays returned by {@link #remaining2} and with
+     * the names from {@link #getFileNames}.
+     * <p>These are the metainfo lengths, not the sizes on disk. A file staged
+     * in the temp directory is written in place and stays short of its declared
+     * length, and a file that has not been checked yet, or has been deleted
+     * since, is not there at all, where {@link #remaining2} counts its missing
+     * bytes against this total. A caller showing progress, or a size for a file
+     * that is not finished, needs this value and not {@link File#length()},
+     * which is 0 for a file that does not exist. {@link #check} pre-allocates a
+     * data-directory file to this length, so for a download in the data
+     * directory the two agree from the first check onward.
+     *
+     * @return a new array with one entry per torrent file, never null
+     * @since 0.9.72+
+     */
+    public long[] getFileLengths() {
+        long[] rv = new long[_torrentFiles.size()];
+        for (int i = 0; i < _torrentFiles.size(); i++) {
+            rv[i] = _torrentFiles.get(i).length;
+        }
+        return rv;
+    }
+
+    /**
      * For efficiency, calculate remaining bytes for all files at once. Remaining bytes is rv[0].
      * Preview bytes is rv[1].
      *
