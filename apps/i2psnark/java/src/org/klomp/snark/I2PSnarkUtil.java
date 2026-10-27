@@ -156,6 +156,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     private boolean _preserveFileNames;
     /** Whether files are padded against size analysis. */
     private boolean _shouldPadFiles = false;
+    /** Whether zzzot metadata lookups are hidden from the torrent list. */
+    private boolean _hideLookups = false;
     /** Configured temp directory path. */
     private String _tempDirProp;
     /** Whether inbound hop counts vary per torrent. */
@@ -678,6 +680,31 @@ public class I2PSnarkUtil implements DisconnectListener {
      */
     public void setShouldPadFiles(boolean yes) {
         _shouldPadFiles = yes;
+    }
+
+    /**
+     * Whether the transient zzzot metadata lookups are hidden from the torrent
+     * list. A lookup probes only for a torrent's name and size, so it is not a
+     * download the user started, and with the zzzot hashlist active it appears
+     * and disappears in the list on every request. Set by SnarkManager from
+     * {@code i2psnark.hideLookups} in i2psnark.config; there is no config-page
+     * control for it. Consumed by I2PSnarkServlet when listing and filtering.
+     *
+     * @return whether zzzot lookups are hidden
+     * @since 0.9.72+
+     */
+    public boolean hideLookups() {
+        return _hideLookups;
+    }
+
+    /**
+     * Sets whether the transient zzzot metadata lookups are hidden.
+     *
+     * @param yes true to hide zzzot lookups from the torrent list
+     * @since 0.9.72+
+     */
+    public void setHideLookups(boolean yes) {
+        _hideLookups = yes;
     }
 
     /**

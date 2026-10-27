@@ -363,6 +363,17 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public static final String DEFAULT_SHOULD_PAD_FILES = "false";
 
     /**
+     * Hide the transient zzzot metadata lookups from the torrent list. Config
+     * only, no config-page control.
+     *
+     * @since 0.9.72+
+     */
+    public static final String PROP_HIDE_LOOKUPS = "i2psnark.hideLookups";
+
+    /** {@code false}: show zzzot lookups in the torrent list. */
+    public static final String DEFAULT_HIDE_LOOKUPS = "false";
+
+    /**
      * Disconnect peers that cancel most of what they request. On by default; conservative
      * thresholds and a minimum-volume guard protect legitimate peers under congestion.
      *
@@ -2294,6 +2305,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         _util.setMaxFilesPerTorrent(
                 getInt(PROP_MAX_FILES_PER_TORRENT, DEFAULT_MAX_FILES_PER_TORRENT));
         _util.setShouldPadFiles(parseShouldPadFiles(_config));
+        _util.setHideLookups(parseHideLookups(_config));
         int startDelayMin = getInt(PROP_STARTUP_DELAY_MIN, DEFAULT_STARTUP_DELAY_MIN);
         int startDelayMax = getInt(PROP_STARTUP_DELAY_MAX, DEFAULT_STARTUP_DELAY_MAX);
         if (startDelayMax < startDelayMin) {
@@ -2442,6 +2454,20 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     static boolean parseShouldPadFiles(Properties props) {
         return Boolean.parseBoolean(
                 props.getProperty(PROP_SHOULD_PAD_FILES, DEFAULT_SHOULD_PAD_FILES));
+    }
+
+    /**
+     * Parses the {@link #PROP_HIDE_LOOKUPS} value from the given properties,
+     * applying the default when absent or unparsable. Pure decision, separated
+     * from the config read so it can be pinned by test.
+     *
+     * @param props the config properties
+     * @return whether zzzot metadata lookups are hidden from the torrent list
+     * @since 0.9.72+
+     */
+    static boolean parseHideLookups(Properties props) {
+        return Boolean.parseBoolean(
+                props.getProperty(PROP_HIDE_LOOKUPS, DEFAULT_HIDE_LOOKUPS));
     }
 
     /**
@@ -4656,6 +4682,25 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     static boolean isStaleLookup(String name, String basePath, long createdAt, long now) {
         return isLookupTorrent(name, basePath) && (now - createdAt) > LOOKUP_STALE_MS;
+    }
+
+    /**
+     * Should this torrent appear in the console at all?
+     *
+     * <p>A zzzot metadata lookup is a probe for a torrent's name and size, not
+     * a download the user started, so with {@link #PROP_HIDE_LOOKUPS} on it is
+     * left out of the list, the totals, and every status filter - "downloading"
+     * above all, since nothing is being downloaded. Pure decision, applied by
+     * I2PSnarkServlet to the list and to each status filter, and kept out of
+     * the servlet so it can be pinned by test.
+     *
+     * @param isLookup true if the torrent is one of our zzzot lookups
+     * @param hideLookups the {@link #PROP_HIDE_LOOKUPS} config value
+     * @return true if the torrent is listed
+     * @since 0.9.72+
+     */
+    public static boolean isListed(boolean isLookup, boolean hideLookups) {
+        return !hideLookups || !isLookup;
     }
 
     /**

@@ -903,7 +903,9 @@ public class I2PSnarkServlet extends BasicServlet {
      * @since 0.9.71+
      */
     private void appendSearchForm(StringBuilder buf, HttpServletRequest req) {
-        if (_manager.getTorrents().size() <= 1) {return;}
+        // Counted from the listed torrents, so a hidden zzzot lookup cannot
+        // bring the search box up on a console with one torrent.
+        if (listedSnarks().size() <= 1) {return;}
         String s = req.getParameter("search");
         boolean searchActive = (s != null && !s.isEmpty());
         buf.append("<form id=snarkSearch action=\"").append(_contextPath).append("\" method=GET hidden>\n")
@@ -1084,7 +1086,7 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("  const postRemoveMsg = \"").append(_t("Deleting {0} and associated metadata only...")).append("\";\n")
                .append("  const snarkPageSize = ").append(pageSize).append(";\n")
                .append("  const snarkRefreshDelay = ").append(delay).append(";\n")
-               .append("  const totalSnarks = ").append(_manager.getTorrents().size()).append(";\n")
+               .append("  const totalSnarks = ").append(listedSnarks().size()).append(";\n")
                .append("  window.snarkPageSize = snarkPageSize;\n")
                .append("  window.snarkRefreshDelay = snarkRefreshDelay;\n")
                 .append("  window.totalSnarks = totalSnarks;\n</script>\n");
@@ -2149,7 +2151,9 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("</span></span>");
         out.write(buf.toString());
 
-        ArrayList<Snark> snarks = new ArrayList<>(_manager.getTorrents());
+        // The header RX/TX badges count active downloads and uploads, so a
+        // hidden zzzot lookup must not be in the list it counts from.
+        List<Snark> snarks = listedSnarks();
 
         // actively downloading
         int downloads = 0;
@@ -4021,13 +4025,37 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
+     * The loaded torrents the console lists, honouring
+     * {@code i2psnark.hideLookups}. A zzzot metadata lookup is a probe for a
+     * torrent's name and size, not a download the user started, so when the
+     * option is on it is left out of the list, the header counters, the search,
+     * and the client-side page math - none of them may report a transfer that
+     * is not happening.
+     *
+     * @return the listed torrents in load order, never null
+     * @since 0.9.72+
+     */
+    private List<Snark> listedSnarks() {
+        Collection<Snark> torrents = _manager.getTorrents();
+        boolean hideLookups = _manager.util().hideLookups();
+        List<Snark> rv = new ArrayList<>(torrents.size());
+        for (Snark snark : torrents) {
+            if (SnarkManager.isListed(snark.isLookup(), hideLookups)) {
+                rv.add(snark);
+            }
+        }
+        return rv;
+    }
+
+    /**
      * Returns the list of torrents sorted according to the current request's sort parameter.
+     * Hidden zzzot lookups are not included.
      *
      * @param req the HTTP request containing the "sort" parameter
      * @return a new sorted list of Snark instances
      */
     private List<Snark> getSortedSnarks(HttpServletRequest req) {
-        ArrayList<Snark> rv = new ArrayList<>(_manager.getTorrents());
+        ArrayList<Snark> rv = new ArrayList<>(listedSnarks());
         if (rv.size() > 1) {
             int sort = 0;
             String ssort = normalizeSortParam(req.getParameter("sort"));
@@ -4056,13 +4084,19 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      * Checks whether a torrent matches the given filter based on its status string.
      *
+     * <p>A zzzot metadata lookup matches nothing when {@code i2psnark.hideLookups}
+     * is on: it is a probe for a torrent's name and size, so listing it under
+     * "downloading" would claim a transfer that is not happening.
+     *
      * @param s the Snark torrent to check
      * @param filter the filter name (e.g., "active", "downloading", "stopped")
      * @param snarkStatus the status keyword string for the torrent
      * @return true if the torrent matches the filter, or if filter is null/empty
      */
     private boolean snarkMatchesFilter(Snark s, String filter, String snarkStatus) {
-        if (s == null || filter == null || filter.isEmpty()) { return true; }
+        if (s == null) { return true; }
+        if (!SnarkManager.isListed(s.isLookup(), _manager.util().hideLookups())) { return false; }
+        if (filter == null || filter.isEmpty()) { return true; }
         if (snarkStatus == null) { return false; }
 
         switch (filter) {
