@@ -399,13 +399,13 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
                  // Throttled: peers send these often enough to bury the log.
                  _log.warnThrottled("statusBestEffortFail",
                                     "Received Best Effort Failure status [" + status +
-                                    "] for [MsgID " + msgId + "] * " + con);
+                                    "] for [MsgID " + msgId + "]\n* " + con);
                  _messageStatusMap.remove(id);
                  break;
              case MessageStatusMessage.STATUS_SEND_GUARANTEED_FAILURE:
                  // Guaranteed delivery failed — message definitely not sent, trigger retransmit
                  if (_log.shouldWarn()) {
-                     _log.warn("Received Guaranteed Failure status [" + status + "] for [MsgID " + msgId + "] * " + con);
+                     _log.warn("Received Guaranteed Failure status [" + status + "] for [MsgID " + msgId + "]\n* " + con);
                  }
                  _messageStatusMap.remove(id);
                  con.scheduleSoftFailureRetransmit();
@@ -417,7 +417,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
             // overflow in router-side I2CP queue, sent as of 0.9.29, trigger immediate retransmit
             case MessageStatusMessage.STATUS_SEND_FAILURE_LOCAL:
                 if (_log.shouldWarn()) {
-                    _log.warn("Received Soft Failure status [" + status + "] for [MsgID " + msgId + "] * " + con);
+                    _log.warn("Received Soft Failure status [" + status + "] for [MsgID " + msgId + "]\n* " + con);
                 }
                 _messageStatusMap.remove(id);
                 con.scheduleSoftFailureRetransmit();
@@ -432,7 +432,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
                 // fetched, so INFO (not WARN) keeps observability without
                 // treating expected network provisioning as an error.
                 if (_log.shouldInfo()) {
-                    _log.info("LeaseSet lookup: soft failure (retransmit after fetch) for [MsgID " + msgId + "] * " + con);
+                    _log.info("LeaseSet lookup: soft failure (retransmit after fetch) for [MsgID " + msgId + "]\n* " + con);
                 }
                 _messageStatusMap.remove(id);
                 con.scheduleSoftFailureRetransmit();
@@ -455,14 +455,14 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
                     // a retxed SYN succeeded before the first SYN failed
                     _log.warnThrottled("statusHardFailConnected",
                                        "Received Hard Failure but Already Connected status [" +
-                                       status + "] for [MsgID " + msgId + "] * " + con);
+                                       status + "] for [MsgID " + msgId + "]\n* " + con);
                 } else if (!con.getIsConnected() || con.getHighestAckedThrough() < 0) {
                     _log.warnThrottled("statusHardFailClosed",
                                        "Received Hard Failure but Already Closed status [" +
-                                       status + "] for [MsgID " + msgId + "] * " + con);
+                                       status + "] for [MsgID " + msgId + "]\n* " + con);
                 } else {
                     if (_log.shouldWarn())
-                        _log.warn("Received Hard Failure status [" + status + "] for [MsgID " + msgId + "] * " + con);
+                        _log.warn("Received Hard Failure status [" + status + "] for [MsgID " + msgId + "]\n* " + con);
                     _messageStatusMap.remove(id);
                     IOException ioe = new I2PSocketException(status);
                     con.getOutputStream().streamErrorOccurred(ioe);
@@ -486,18 +486,18 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
             case MessageStatusMessage.STATUS_SEND_GUARANTEED_SUCCESS:
             case MessageStatusMessage.STATUS_SEND_SUCCESS_LOCAL:
                 if (_log.shouldInfo())
-                    _log.info("Received Success status [" + status + "] for [MsgID " + msgId + "] * " + con);
+                    _log.info("Received Success status [" + status + "] for [MsgID " + msgId + "]\n* " + con);
                 _messageStatusMap.remove(id);
                 break;
 
             case MessageStatusMessage.STATUS_SEND_ACCEPTED:
                 if (_log.shouldInfo())
-                    _log.info("Received Accept status [" + status + "] for [MsgID " + msgId + "] * " + con);
+                    _log.info("Received Accept status [" + status + "] for [MsgID " + msgId + "]\n* " + con);
                 break;
 
             default:
                 if (_log.shouldWarn())
-                    _log.warn("Received UNKNOWN status [" + status + "] for [MsgID " + msgId + "] * " + con);
+                    _log.warn("Received UNKNOWN status [" + status + "] for [MsgID " + msgId + "]\n* " + con);
                 _messageStatusMap.remove(id);
                 break;
         }
