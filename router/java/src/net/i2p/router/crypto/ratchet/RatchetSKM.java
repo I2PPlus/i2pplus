@@ -1180,6 +1180,27 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         return s + '/' + debugID;
     }
 
+    /**
+     * Label a next-session key as its direction, a bracketed eight-character
+     * fingerprint, and its key id. The key itself goes on the wire in the
+     * PNBlock, so a log line needs only enough to identify it: the 44-character
+     * base64 of an X25519 key pushes the whole message onto continuation lines,
+     * and {@link NextSessionKey#toString()} opens with a newline of its own, so
+     * it cannot be prefixed on a single line at all.
+     *
+     * @param key the key to label, not null
+     * @param label the direction to name, e.g. Forward
+     * @return a segment like "Forward: [AbCdEfGh] ID: 3", never null
+     * @since 0.9.72+
+     */
+    static String keyFingerprint(NextSessionKey key, String label) {
+        String b64 = key.toBase64();
+        // A key built for an ack or a request carries no data at all
+        String fp = b64 == null ? "TBD" :
+                    '[' + b64.substring(0, Math.min(8, b64.length())) + ']';
+        return label + ": " + fp + " ID: " + key.getID();
+    }
+
     /** Row order for the peer/set tables: peer (column 0), then set (column 1). */
     private static final Comparator<String[]> ROW_PEER_SET =
         Comparator.comparing((String[] r) -> r[0]).thenComparing(r -> r[1]);
@@ -1903,9 +1924,10 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                             NextSessionKey fwd = _tagSet.getNextKey();
                             NextSessionKey rev = getReverseSendKey();
                             if ((fwd != null || rev != null) && _log.shouldInfo())
-                                _log.info("Sending fwd key: " + fwd +
-                                          " rev key: " + rev +
-                                          " for " + _tagSet);
+                                _log.info("Sending keys for Set " +
+                                          setIdLabel(_tagSet.getID(), _tagSet.getDebugID()) +
+                                          (fwd != null ? " * " + keyFingerprint(fwd, "Forward") : "") +
+                                          (rev != null ? " * " + keyFingerprint(rev, "Reverse") : ""));
                             return new RatchetEntry(tag, skn, _tagSet.getID(), 0, fwd,
                                                     rev, getAcksToSend());
                         } else if (_log.shouldInfo()) {
