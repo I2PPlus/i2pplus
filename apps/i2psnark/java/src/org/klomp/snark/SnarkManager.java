@@ -124,6 +124,12 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
     /** The loaded global config. */
     private Properties _config;
+    /**
+     * What we remember about the BEP 15 (udp) support of the trackers we
+     * announce to over http, with the probe that finds it out. Null until the
+     * config is loaded.
+     */
+    private TrackerProbe _trackerProbe;
     /** The application context. */
     private final I2PAppContext _context;
     /** Webapp context path used in links. */
@@ -862,6 +868,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             loadMetadata();
             migrateToMetadata();
         }
+        synchronized (_configLock) {
+            _trackerProbe = new TrackerProbe(_util, this, _config);
+        }
+        _util.setTrackerProbe(_trackerProbe);
         if (!ctx.isRouterContext()) {
             Runtime.getRuntime()
                     .addShutdownHook(
@@ -1001,6 +1011,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             _destCycle.cancel();
         }
         _snarkScheduler.shutdownNow();
+        _trackerProbe.stop();
         stopAllTorrents(true);
         ClientAppManager cmgr = _context.clientAppManager();
         if ("i2psnark".equals(_contextName)) { // only if default instance
@@ -2026,6 +2037,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public void loadConfig(String filename) {
         synchronized (_configLock) {
             locked_loadConfig(filename);
+            _trackerProbe.reload(_config);
         }
     }
 
@@ -3630,6 +3642,37 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             String msg = _t("Unable to save the config to {0}", _configFile.getAbsolutePath());
             addMessageAndPrint(msg);
         }
+    }
+
+    /**
+     * Set or clear one property of the global config, in memory. The caller
+     * saves the file. Used for the machine's own records, such as the learned
+     * BEP 15 support of a tracker, not for anything the user edits through a
+     * page.
+     *
+     * @param key the property key, not null
+     * @param value the value, null to remove the key
+     * @since 0.9.72+
+     */
+    void setConfigProperty(String key, String value) {
+        synchronized (_configLock) {
+            if (value == null) {
+                _config.remove(key);
+            } else {
+                _config.setProperty(key, value);
+            }
+        }
+    }
+
+    /**
+     * What we know about the BEP 15 (udp) support of the trackers we announce
+     * to over http, and the probe that finds it out.
+     *
+     * @return the probe, never null once the manager is constructed
+     * @since 0.9.72+
+     */
+    TrackerProbe getTrackerProbe() {
+        return _trackerProbe;
     }
 
     /**

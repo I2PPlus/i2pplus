@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.I2PAppContext;
 import net.i2p.client.streaming.I2PServerSocket;
@@ -1581,6 +1582,21 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         if (tc != null) {
             tc.reinitialize();
         }
+    }
+
+
+    /**
+     * The hosts of this torrent's announce set that we announce to over BEP 15
+     * (udp) rather than over http, so a page can label a tracker with the
+     * transport it is using.
+     *
+     * @return the host names, lower-cased, never null, empty when announcing
+     *         over udp to none
+     * @since 0.9.72+
+     */
+    public Set<String> getUDPTrackerHosts() {
+        TrackerClient tc = trackerclient;
+        return tc != null ? tc.udpHosts() : Collections.<String>emptySet();
     }
 
 

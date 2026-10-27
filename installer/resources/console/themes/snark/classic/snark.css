@@ -378,6 +378,7 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 .info_tracker:active{color:var(--bg);box-shadow:0 0 0 1px var(--hover),inset 3px 3px 3px #420;background:var(--hover) var(--tracker_active) no-repeat left 3px center/14px}
 .info_tracker a{display:inline-block;white-space:nowrap;vertical-align:middle;overflow:hidden;text-overflow:ellipsis}
 .info_tracker a[href*=".b32.i2p"]{max-width:70px}
+.info_tracker .tracker_transport{margin-left:5px;padding:0 3px;font-size:90%;color:#99f;box-shadow:0 0 0 1px #99c;border-radius:2px}
 #torrentEdit .info_tracker{min-width:120px;max-width:none;text-align:left;color:#5e6099;pointer-events:none}
 
 /* torrent control buttons */

@@ -404,7 +404,7 @@ public class TrackerClient implements Runnable {
      */
     public static final int PORT = 6881;
     /** UDP tracker port used when none is given. */
-    private static final int DEFAULT_UDP_TRACKER_PORT = 6969;
+    static final int DEFAULT_UDP_TRACKER_PORT = 6969;
     /** Trackers used per torrent at most. */
     private static final int MAX_TRACKERS = 32;
     /** Util providing the session and proxy settings. */
@@ -793,6 +793,31 @@ public class TrackerClient implements Runnable {
         }
         Set<Hash> trackerHashes = new HashSet<>(8);
 
+        // The other announce URLs this torrent names, plus the configured open
+        // trackers, gathered before the primary is chosen. A tracker that
+        // answers on both transports is listed twice, once per transport, and
+        // both entries are one host, which is what the announce set holds a
+        // slot for, so picking the URL for the primary's host has to see the
+        // pair, not just the declared one.
+        List<String> urls = new ArrayList<>(16);
+        if (meta == null || !meta.isPrivate()) {
+            if (meta != null) {
+                List<List<String>> list = meta.getAnnounceList();
+                if (list != null) {
+                    for (List<String> llist : list) {
+                        for (String url : llist) {
+                            urls.add(url);
+                        }
+                    }
+                }
+            }
+            // configured open trackers
+            urls.addAll(_util.getOpenTrackers());
+        }
+        if (primary != null) {
+            primary = preferUDP(primary, urls);
+        }
+
         // primary tracker
         if (primary != null) {
             if (isNewValidTracker(trackerHashes, primary)) {
@@ -817,19 +842,6 @@ public class TrackerClient implements Runnable {
         // When meta is null (magnet/lookup), skip the announce-list but still
         // add open trackers so we don't hit "No valid trackers" at startup.
         if (meta == null || !meta.isPrivate()) {
-            List<String> urls = new ArrayList<>(16);
-            if (meta != null) {
-                List<List<String>> list = meta.getAnnounceList();
-                if (list != null) {
-                    for (List<String> llist : list) {
-                        for (String url : llist) {
-                            urls.add(url);
-                        }
-                    }
-                }
-            }
-            // configured open trackers
-            urls.addAll(_util.getOpenTrackers());
             if (urls.size() > 1) {
                 Collections.shuffle(urls, _util.getContext().random());
                 if (_util.udpEnabled()) {
@@ -877,8 +889,91 @@ public class TrackerClient implements Runnable {
                 Collections.shuffle(backupTrackers, _util.getContext().random());
             }
         }
+        // Ask the http trackers in this announce set whether they answer BEP 15,
+        // so a later start can announce to them over udp. Off this thread, and
+        // best effort.
+        probeUDPTrackers();
         this.completed = coordinator.getLeft() == 0;
         _startedOn = _util.getContext().clock().now();
+    }
+
+    /**
+     * The announce URL to use for the primary tracker's host. Over BEP 15 when
+     * the torrent lists that host over udp, using the URL and port the torrent
+     * gives; over BEP 15 at the conventional port when a probe has learned that
+     * the host answers it there; the declared URL otherwise. A primary that is
+     * already udp, and a host nothing supports over udp, are left alone, so
+     * with the preference off this changes nothing.
+     * <p>
+     * The announce set holds one entry per host, and the declared primary takes
+     * that slot, so without this a torrent naming its own tracker twice, once
+     * per transport, announces to it over http only.
+     *
+     * @param primary the declared announce URL, not null
+     * @param candidates the other announce URLs of the torrent and the
+     *                   configured open trackers, not null
+     * @return the URL to announce to for the primary's host, never null
+     * @since 0.9.72+
+     */
+    private String preferUDP(String primary, List<String> candidates) {
+        TrackerProbe probe = _util.getTrackerProbe();
+        if (probe == null || !_util.udpEnabled() || !probe.preferEnabled()) {
+            return primary;
+        }
+        // A host the torrent lists over udp needs no probe to be trusted
+        Set<String> udpHosts = TrackerProbe.hosts(candidates, true);
+        String chosen =
+                TrackerProbe.preferUDP(primary, candidates,
+                                       h -> udpHosts.contains(h)
+                                            || probe.support(h) == TrackerProbe.Support.UDP);
+        if (!chosen.equals(primary) && _log.shouldInfo()) {
+            _log.info("Announcing to the primary over BEP 15 -> "
+                      + chosen
+                      + "\n* Torrent: "
+                      + snark.getBaseName());
+        }
+        return chosen;
+    }
+
+    /**
+     * Ask the trackers of this announce set that we reach over http whether
+     * they answer BEP 15 on the conventional port, so a later start can
+     * announce to them over udp. Best effort: the cache drops the request when
+     * probing is off, the host is not an I2P name, a verdict is already known,
+     * a probe is in flight, or the queue is full.
+     *
+     * @since 0.9.72+
+     */
+    private void probeUDPTrackers() {
+        TrackerProbe probe = _util.getTrackerProbe();
+        if (probe == null || !_util.udpEnabled() || !probe.probeEnabled()) {
+            return;
+        }
+        for (TCTracker t : primaryTrackers()) {
+            if (!t.isUDP && TrackerProbe.isProbeable(t.host)) {
+                probe.probe(t.host, DEFAULT_UDP_TRACKER_PORT);
+            }
+        }
+    }
+
+    /**
+     * The hosts of this torrent's announce set that we announce to over BEP 15
+     * (udp) rather than over http, so a page can say which transport a tracker
+     * pill is using.
+     *
+     * @return the host names, lower-cased where the URL parser gives them,
+     *         never null, empty when announcing over udp to none
+     * @since 0.9.72+
+     */
+    synchronized Set<String> udpHosts() {
+        List<TCTracker> list = primaryTrackers();
+        Set<String> rv = new HashSet<>(list.size() + 2);
+        for (TCTracker t : list) {
+            if (t.isUDP && t.host != null) {
+                rv.add(t.host.toLowerCase(Locale.US));
+            }
+        }
+        return rv;
     }
 
     /**

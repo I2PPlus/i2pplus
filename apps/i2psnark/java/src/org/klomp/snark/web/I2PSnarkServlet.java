@@ -24,6 +24,8 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.Locale;
@@ -4343,6 +4345,8 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("</td><td class=magnet>");
             if (isValid && meta != null) {
                 String announce = meta.getAnnounce();
+                // a clearnet announce has no place in a magnet link we hand out
+                if (announce != null && !isI2PTracker(announce, _manager.util().udpEnabled())) {announce = null;}
                 String magnetLink = MagnetURI.MAGNET_FULL + hex;
                 buf.append("<a class=mLink href=\"").append(magnetLink);
                 if (announce != null) buf.append("&amp;tr=").append(urlEncode(announce));
@@ -5211,70 +5215,315 @@ public class I2PSnarkServlet extends BasicServlet {
 
     /**
      * Full anchor to the home page or details page with shortened hostname as anchor text.
+     * The tags are always balanced: a tracker with no page to link to is plain
+     * text, and a linked one is closed.
      *
-     * @param announce the tracker announce URL; the scheme, path and port are
-     *                 stripped for the anchor text
+     * @param announce the tracker announce URL, run through prettyAnnounce
      * @param infohash the 20-byte info hash, used only for the details-page link
-     * @return the complete anchor, never null
+     * @return the fragment, never null
      * @since 0.9.5
      */
     private String getShortTrackerLink(String announce, byte[] infohash) {
-        StringBuilder buf = new StringBuilder(128);
-        String trackerLinkUrl = getTrackerLinkUrl(announce, infohash);
-        boolean isUDP = false;
+        return getShortTrackerLink(announce, infohash, true);
+    }
 
-        if (announce.startsWith("http://")) {announce = announce.substring(7);}
-        else if (announce.startsWith("https://")) {announce = announce.substring(8);}
-        else if (announce.startsWith("udp://") && announce.contains(".i2p")) {
-            announce = announce.substring(6);
-            isUDP = true;
+    /**
+     * As above, with the transport named in the label or not. A pill that
+     * carries its own transport badge asks the label not to repeat it.
+     *
+     * @param announce the tracker announce URL, run through prettyAnnounce
+     * @param infohash the torrent's info hash, for a tracker details link
+     * @param withTransport true to prefix the label with "UDP" for a udp tracker
+     * @return the fragment, never null, with balanced tags
+     * @since 0.9.72+
+     */
+    private String getShortTrackerLink(String announce, byte[] infohash, boolean withTransport) {
+        // The details-page link, when the tracker supports one, is a whole opening tag
+        String openTag = getTrackerLinkUrl(announce, infohash);
+        String home = openTag != null ? null : trackerHomeHref(announce);
+        if (openTag == null && home == null) {home = udpB32Href(announce);}
+        return trackerFragment(announce, openTag, home, withTransport);
+    }
+
+    /**
+     * The tracker label with the link it points at wrapped around it. The tags
+     * balance by construction: the closer is written whenever an opener was,
+     * which is what left every following tracker swallowed by the first
+     * unlinked udp tracker's anchor.
+     *
+     * @param announce the tracker announce URL, run through prettyAnnounce
+     * @param openTag a whole {@code <a>} opening tag, e.g. from
+     *                {@link #getTrackerLinkUrl}, or null
+     * @param homeHref a home-page href to open an anchor with, or null;
+     *                 ignored when openTag is set
+     * @return the fragment, never null, with balanced tags
+     * @since 0.9.72+
+     */
+    static String trackerFragment(String announce, String openTag, String homeHref) {
+        return trackerFragment(announce, openTag, homeHref, true);
+    }
+
+    /**
+     * As above, with the transport named in the label or not.
+     *
+     * @param announce the tracker announce URL, run through prettyAnnounce
+     * @param openTag a whole {@code <a>} opening tag, e.g. from
+     *                {@link #getTrackerLinkUrl}, or null
+     * @param homeHref a home-page href to open an anchor with, or null;
+     *                 ignored when openTag is set
+     * @param withTransport true to prefix the label with "UDP" for a udp tracker
+     * @return the fragment, never null, with balanced tags
+     * @since 0.9.72+
+     */
+    static String trackerFragment(String announce, String openTag, String homeHref,
+                                  boolean withTransport) {
+        String label = shortTrackerLabel(announce, withTransport);
+        StringBuilder buf = new StringBuilder(128 + label.length());
+        boolean linked = openTag != null || homeHref != null;
+        if (openTag != null) {
+            buf.append(openTag);
+        } else if (homeHref != null) {
+            buf.append("<a href=\"").append(homeHref).append("\" target=_blank>");
         }
-        // strip path
-        int slsh = announce.indexOf('/');
-        if (slsh > 0) {announce = announce.substring(0, slsh);}
-        if (trackerLinkUrl != null) {buf.append(trackerLinkUrl);}
-        else if (isUDP) {
-            // browsers don't like a full b64 dest, so convert it to b32
-            String host = announce;
-            if (host.length() >= 516) {
-                int colon = announce.indexOf(':');
-                String port = "";
-                if (colon > 0) {
-                    port = host.substring(colon);
-                    host = host.substring(0, colon);
-                }
-                if (host.endsWith(".i2p")) {host = host.substring(0, host.length() - 4);}
-                byte[] b = Base64.decode(host);
-                if (b != null) {
-                    Hash h = _context.sha().calculateHash(b);
-                    // should we add the port back or strip it?
-                    host = Base32.encode(h.getData()) + ".b32.i2p" + port;
+        buf.append(label);
+        if (linked) {buf.append("</a>");}
+        return buf.toString();
+    }
+
+    /**
+     * The tracker host as the UI shows it: scheme, path and port removed, and
+     * the boilerplate an I2P tracker puts in front of its name removed too, so
+     * the pill reads "postman" and not "tracker2.postman.i2p/announce.php". A
+     * non-I2P host is left unshortened, so a clearnet tracker is visibly one.
+     *
+     * @param announce the tracker announce URL, run through prettyAnnounce
+     * @return the label, html-escaped; empty for a null or empty URL
+     * @since 0.9.72+
+     */
+    static String shortTrackerLabel(String announce) {
+        return shortTrackerLabel(announce, true);
+    }
+
+    /**
+     * As above, with the transport named in the label or not. A pill that
+     * carries its own transport badge asks the label not to repeat it.
+     *
+     * @param announce the tracker announce URL, run through prettyAnnounce
+     * @param withTransport true to prefix the label with "UDP" for a udp tracker
+     * @return the label, html-escaped; empty for a null or empty URL
+     * @since 0.9.72+
+     */
+    static String shortTrackerLabel(String announce, boolean withTransport) {
+        if (announce == null || announce.isEmpty()) {return "";}
+        boolean isUDP = withTransport && announce.startsWith("udp://");
+        String host = stripScheme(announce);
+        if (host == null) {
+            // not http, https or udp - show what we were given, minus a path
+            host = announce;
+        }
+        int slsh = host.indexOf('/');
+        if (slsh > 0) {host = host.substring(0, slsh);}
+        int colon = host.indexOf(':');
+        if (colon > 0) {host = host.substring(0, colon);}
+        // I2P trackers are all named <something>.i2p and most of them share a
+        // prefix, so drop it; a b32 address is already unique, leave it alone.
+        if (host.endsWith(".i2p") && !host.endsWith(".b32.i2p")) {
+            host = host.substring(0, host.length() - 4);
+            if (host.equals("tracker2.postman")) {host = "postman";}
+            else if (host.startsWith("tracker.")) {host = host.substring(8);}
+            else if (host.startsWith("opentracker.")) {host = host.substring(12);}
+        }
+        if (host.length() > 67) {
+            // escape the two halves, so the joining entity stays an entity
+            return (isUDP ? "UDP " : "") + DataHelper.escapeHTML(host.substring(0, 40)) + "&hellip;" +
+                   DataHelper.escapeHTML(host.substring(host.length() - 8));
+        }
+        return isUDP ? "UDP " + DataHelper.escapeHTML(host) : DataHelper.escapeHTML(host);
+    }
+
+    /**
+     * The scheme of an announce URL, removed.
+     *
+     * @param announce the tracker announce URL, not null
+     * @return the host, port and path, null for a scheme that is not http,
+     *         https or udp
+     * @since 0.9.72+
+     */
+    private static String stripScheme(String announce) {
+        if (announce.startsWith("http://")) {return announce.substring(7);}
+        if (announce.startsWith("https://")) {return announce.substring(8);}
+        if (announce.startsWith("udp://")) {return announce.substring(6);}
+        return null;
+    }
+
+    /**
+     * The host an announce URL names, scheme, port and path removed, so the
+     * two URLs a tracker that answers on both transports is listed as group
+     * together. A URL whose scheme is not http, https or udp is keyed as
+     * given, since there is no host to take out of it.
+     *
+     * @param announce the tracker announce URL, run through prettyAnnounce,
+     *                 not null
+     * @return the host, lower-cased, never null, never empty
+     * @since 0.9.72+
+     */
+    static String trackerHost(String announce) {
+        String hostPort = stripScheme(announce);
+        if (hostPort == null) {return announce.toLowerCase(Locale.US);}
+        int slsh = hostPort.indexOf('/');
+        if (slsh > 0) {hostPort = hostPort.substring(0, slsh);}
+        int colon = hostPort.indexOf(':');
+        String host = colon > 0 ? hostPort.substring(0, colon) : hostPort;
+        return host.toLowerCase(Locale.US);
+    }
+
+    /**
+     * The URL of a host's group to render: the one for the transport we are
+     * announcing to that host over, so the pill's link and its badge agree,
+     * and the first of the group when none matches.
+     *
+     * @param urls the announce URLs of one host, not null, not empty
+     * @param usingUDP true when announcing to that host over BEP 15
+     * @return the URL to render, the first of the group if none matches
+     * @since 0.9.72+
+     */
+    static String pickTrackerURL(List<String> urls, boolean usingUDP) {
+        String first = null;
+        for (String s : urls) {
+            if (s == null) {continue;}
+            if (first == null) {first = s;}
+            if (usingUDP == s.startsWith("udp://")) {return s;}
+        }
+        return first;
+    }
+
+    /**
+     * The tracker pills of a torrent, one per tracker host, each labelled with
+     * the transport we are announcing to that host over. A torrent naming one
+     * tracker twice, once per transport, gets one pill saying which of the two
+     * is in use, not two pills that read as two trackers.
+     *
+     * @param shown the I2P announce URLs of the torrent, in tier order, not null
+     * @param primary the declared primary announce URL, may be null
+     * @param udpHosts the hosts of the announce set being announced to over BEP
+     *                 15, not null, empty when announcing over udp to none
+     * @param infohash the torrent's info hash, for a tracker details link
+     * @return the HTML of the pills, never null, with balanced tags
+     * @since 0.9.72+
+     */
+    private String trackerPills(List<String> shown, String primary, Set<String> udpHosts,
+                                byte[] infohash) {
+        Map<String, List<String>> byHost = new LinkedHashMap<>(8);
+        for (String s : shown) {
+            String url = prettyAnnounce(s);
+            byHost.computeIfAbsent(trackerHost(url), k -> new ArrayList<>(2)).add(url);
+        }
+        String primaryHost = primary != null ? trackerHost(prettyAnnounce(primary)) : null;
+        StringBuilder buf = new StringBuilder(256);
+        for (Map.Entry<String, List<String>> e : byHost.entrySet()) {
+            boolean usingUDP = udpHosts.contains(e.getKey());
+            String url = pickTrackerURL(e.getValue(), usingUDP);
+            // the label is shortened, and two hosts can shorten alike, so the
+            // full host goes in the title for a reader to tell them apart
+            buf.append("<span class=\"info_tracker")
+               .append(e.getKey().equals(primaryHost) ? " primary" : "")
+               .append("\" title=\"").append(DataHelper.escapeHTML(e.getKey())).append("\">")
+               .append(getShortTrackerLink(url, infohash, false))
+               .append(" <span class=tracker_transport>").append(usingUDP ? "UDP" : "HTTP")
+               .append("</span></span> ");
+        }
+        return buf.toString();
+    }
+
+    /**
+     * The tracker home page to link a label to, for an I2P host only. The
+     * console must not hand the browser a clearnet url for a torrent that is
+     * only announced to over I2P, so a non-I2P host gets no link.
+     *
+     * @param announce the tracker announce URL
+     * @return the href, scheme included, null when the label stays plain text
+     * @since 0.9.72+
+     */
+    static String trackerHomeHref(String announce) {
+        if (announce == null) {return null;}
+        String hostPort = stripScheme(announce);
+        if (hostPort == null) {return null;}
+        int slsh = hostPort.indexOf('/');
+        if (slsh > 0) {hostPort = hostPort.substring(0, slsh);}
+        int colon = hostPort.indexOf(':');
+        String host = colon > 0 ? hostPort.substring(0, colon) : hostPort;
+        // a full base-64 destination has to become a b32 address first, see udpB32Href
+        if (!host.endsWith(".i2p") || host.length() >= 516) {return null;}
+        return "http://" + urlEncode(hostPort) + '/';
+    }
+
+    /**
+     * The home page of a udp tracker whose host is a full base-64 destination,
+     * as a b32 address, because a browser will not follow a 516-character host.
+     *
+     * @param announce the tracker announce URL
+     * @return the href, scheme included, null for any other tracker
+     * @since 0.9.72+
+     */
+    private String udpB32Href(String announce) {
+        if (announce == null || !announce.startsWith("udp://")) {return null;}
+        String hostPort = stripScheme(announce);
+        int slsh = hostPort.indexOf('/');
+        if (slsh > 0) {hostPort = hostPort.substring(0, slsh);}
+        int colon = hostPort.indexOf(':');
+        String host = colon > 0 ? hostPort.substring(0, colon) : hostPort;
+        String port = colon > 0 ? hostPort.substring(colon) : "";
+        if (host.length() < 516) {return null;}
+        if (host.endsWith(".i2p")) {host = host.substring(0, host.length() - 4);}
+        byte[] b = Base64.decode(host);
+        if (b == null) {return null;}
+        Hash h = _context.sha().calculateHash(b);
+        return "http://" + Base32.encode(h.getData()) + ".b32.i2p" + port + '/';
+    }
+
+    /**
+     * The I2P trackers of an announce list, in tier order, with the duplicates
+     * a torrent that repeats a tracker across tiers collapsed to one.
+     *
+     * @param alist the announce list, tiers of announce URLs, may be null
+     * @param udpEnabled whether i2p udp trackers count as usable
+     * @return the usable announce URLs, never null, in first-seen order
+     * @since 0.9.72+
+     */
+    static List<String> i2pTrackers(List<List<String>> alist, boolean udpEnabled) {
+        Set<String> rv = new LinkedHashSet<>(16);
+        if (alist != null) {
+            for (List<String> tier : alist) {
+                if (tier == null) {continue;}
+                for (String s : tier) {
+                    if (isI2PTracker(s, udpEnabled)) {rv.add(s);}
                 }
             }
-            int space = host.indexOf(" ");
-            if (space == -1) {space = host.length();}
-            if (!host.endsWith("[ext]") || host.contains(".i2p")) {
-                buf.append("<a href=\"http://").append(urlEncode(host)).append("/\" target=_blank>");
-            } else {host = host.substring(0, space);}
         }
-        // strip port
-        int colon = announce.indexOf(':');
-        if (colon > 0) {announce = announce.substring(0, colon);}
-        if (isUDP) {announce = "UDP " + announce;}
-        int end = Math.max(0, announce.length() - 8); // Ensure the end index is not negative
-        if (announce.length() > 67) {
-            announce = DataHelper.escapeHTML(announce.substring(0, 40)) + "&hellip;" +
-                       DataHelper.escapeHTML(announce.substring(end));
+        return new ArrayList<>(rv);
+    }
+
+    /**
+     * How many distinct non-I2P trackers an announce list names. They are not
+     * used and their addresses are not shown, so the count is all the page
+     * carries about them.
+     *
+     * @param alist the announce list, tiers of announce URLs, may be null
+     * @param udpEnabled whether i2p udp trackers count as usable
+     * @return the number of distinct non-I2P announce URLs
+     * @since 0.9.72+
+     */
+    static int nonI2PTrackerCount(List<List<String>> alist, boolean udpEnabled) {
+        Set<String> rv = new LinkedHashSet<>(8);
+        if (alist != null) {
+            for (List<String> tier : alist) {
+                if (tier == null) {continue;}
+                for (String s : tier) {
+                    if (!isI2PTracker(s, udpEnabled)) {rv.add(s);}
+                }
+            }
         }
-        if (announce.endsWith(".i2p") && !announce.endsWith(".b32.i2p")) {
-            announce = announce.replace(".i2p", "");
-            if (announce.equals("tracker2.postman")) {announce = "postman";}
-            if (announce.startsWith("tracker.")) {announce = announce.substring(8, announce.length());}
-            if (announce.startsWith("opentracker.")) {announce = announce.substring(12, announce.length());}
-        }
-        buf.append(announce);
-        if (trackerLinkUrl != null) {buf.append("</a>");}
-        return buf.toString();
+        return rv.size();
     }
 
     /**
@@ -6453,7 +6702,16 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param announce the raw announce URL, non-null
      * @return the rewritten URL
      */
+    /**
+     * The announce URL as the UI shows it: html stripped, and a base-32 or
+     * base-64 address of a tracker we know replaced by its readable hostname,
+     * so the page says "postman" and not a 52-character address.
+     *
+     * @param announce the tracker announce URL, may be null
+     * @return the display form, null for a null URL
+     */
     static String prettyAnnounce(String announce) {
+        if (announce == null) {return null;}
         String s = DataHelper.stripHTML(announce);
         for (String[] tracker : KNOWN_TRACKERS) {
             if (s.contains(tracker[0])) {s = s.replace(tracker[0], tracker[1]);}
@@ -6511,6 +6769,8 @@ public class I2PSnarkServlet extends BasicServlet {
         if (meta != null) {
             announce = meta.getAnnounce();
             if (announce == null) { announce = snark.getTrackerURL(); }
+            // a clearnet announce has no place in a magnet link we hand out
+            if (announce != null && !isI2PTracker(announce, _manager.util().udpEnabled())) {announce = null;}
             announce = prettyAnnounce(announce);
         }
         if (meta != null && !meta.isPrivate()) {
@@ -6667,48 +6927,38 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("</td></tr>\n");
 
         List<List<String>> alist = (meta != null) ? meta.getAnnounceList() : null;
-        if (alist != null && !alist.isEmpty()) {
-            buf.append("<tr id=trackers title=\"")
-               .append(_t("Only I2P trackers will be used; non-I2P trackers are displayed for informational purposes only"))
-               .append("\"><td colspan=3>");
-            appendIcon(buf, "torrent", "", "", true, false);
-            buf.append("<b>").append(_t("Trackers")).append(":</b> ");
-
-            for (List<String> alist2 : alist) {
-                if (alist2.isEmpty()) {
-                    buf.append("<span class=\"info_tracker primary\">");
-                    boolean more = false;
-                    for (String s : alist2) {
-                        if (more) { buf.append("<span class=info_tracker>"); }
-                        else { more = true; }
-                        buf.append(getShortTrackerLink(prettyAnnounce(s), snark.getInfoHash()));
-                        buf.append("</span> ");
-                    }
-                }
-                buf.append("<span class=info_tracker>");
-                boolean more = false;
-                for (String s : alist2) {
-                    if (more) { buf.append("<span class=info_tracker>"); }
-                    else { more = true; }
-                    buf.append(getShortTrackerLink(prettyAnnounce(s), snark.getInfoHash()));
-                    buf.append("</span> ");
-                }
-            }
-            buf.append("</td></tr>\n");
-        } else if (meta != null) {
-            announce = meta.getAnnounce();
+        boolean udpEnabled = _manager.util().udpEnabled();
+        if (alist == null || alist.isEmpty()) {
+            // a single-announce torrent is one tier holding one url
+            announce = (meta != null) ? meta.getAnnounce() : null;
             if (announce == null) { announce = snark.getTrackerURL(); }
             if (announce != null) {
-                announce = prettyAnnounce(announce);
-                buf.append("<tr id=trackers title=\"")
-                   .append(_t("Only I2P trackers will be used; non-I2P trackers are displayed for informational purposes only"))
-                   .append("\"><td colspan=3>");
-                appendIcon(buf, "torrent", "", "", true, false);
-                buf.append("<b>").append(_t("Tracker")).append(":</b> <span class=\"info_tracker primary\">")
-                   .append(getShortTrackerLink(announce, snark.getInfoHash()))
-                   .append("</span> ")
-                   .append("</td></tr>\n");
+                List<String> one = new ArrayList<>(1);
+                one.add(announce);
+                alist = new ArrayList<>(1);
+                alist.add(one);
             }
+        }
+        List<String> shown = i2pTrackers(alist, udpEnabled);
+        int hidden = nonI2PTrackerCount(alist, udpEnabled);
+        if (!shown.isEmpty() || hidden > 0) {
+            String primary = (meta != null) ? meta.getAnnounce() : null;
+            if (primary == null) { primary = snark.getTrackerURL(); }
+            if (primary != null && !isI2PTracker(primary, udpEnabled)) {primary = null;}
+            buf.append("<tr id=trackers title=\"")
+               .append(_t("Only I2P trackers are used"))
+               .append("\"><td colspan=3>");
+            appendIcon(buf, "torrent", "", "", true, false);
+            buf.append("<b>").append(shown.size() > 1 ? _t("Trackers") : _t("Tracker")).append(":</b> ");
+            buf.append(trackerPills(shown, primary, snark.getUDPTrackerHosts(), snark.getInfoHash()));
+            if (hidden > 0) {
+                buf.append("<span class=info_tracker title=\"")
+                   .append(_t("Non-I2P trackers are not used, and their addresses are not shown"))
+                   .append("\">")
+                   .append(ngettext("1 non-I2P tracker hidden", "{0} non-I2P trackers hidden", hidden))
+                   .append("</span> ");
+            }
+            buf.append("</td></tr>\n");
         }
 
         List<String> weblist = (meta != null) ? meta.getWebSeedURLs() : null;

@@ -172,6 +172,11 @@ public class I2PSnarkUtil implements DisconnectListener {
     private boolean _enableUDP = ENABLE_UDP_TRACKER;
     /** The UDP tracker client, when enabled. */
     private UDPTrackerClient _udpTracker;
+    /**
+     * What we remember about the BEP 15 (udp) support of the http trackers,
+     * and the probe that finds it out. Set by SnarkManager.
+     */
+    private volatile TrackerProbe _trackerProbe;
     /** Whether each torrent gets its own destination. */
     private boolean _multiDest;
     /** Maximum shared destinations in multi-dest mode, 0 for one per torrent. */
@@ -1611,6 +1616,29 @@ public class I2PSnarkUtil implements DisconnectListener {
      */
     public UDPTrackerClient getUDPTrackerClient() {
         return _udpTracker;
+    }
+
+    /**
+     * What we remember about the BEP 15 (udp) support of the trackers we
+     * announce to over http, and the probe that finds it out. Set by
+     * SnarkManager, which owns the config file the verdicts are kept in;
+     * consumed by TrackerClient while building a torrent's announce set.
+     *
+     * @return the probe, null only before the manager has built it
+     * @since 0.9.72+
+     */
+    TrackerProbe getTrackerProbe() {
+        return _trackerProbe;
+    }
+
+    /**
+     * Sets the BEP 15 support cache and prober.
+     *
+     * @param probe the probe, not null
+     * @since 0.9.72+
+     */
+    void setTrackerProbe(TrackerProbe probe) {
+        _trackerProbe = probe;
     }
 
     /**

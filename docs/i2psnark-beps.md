@@ -145,6 +145,25 @@ Security/robustness:
   (BEP 21) is HTTP-only; not defined in the UDP protocol.
 - Connection IDs expire after 3 min; `INIT_CONN_ID = 0x41727101980` (the BEP 15
   magic constant).
+- **Preferring udp for a tracker listed over http** (`TrackerProbe.java`), off
+  by default: `i2psnark.preferUdpTrackers=true` announces to the primary's host
+  over BEP 15 when the torrent lists that host over udp, using the URL and port
+  the torrent gives, or at port 6969 when a probe has learned the host answers
+  there. The announce set holds one entry per host and the declared primary
+  takes that slot, so without this a torrent naming its own tracker twice, once
+  per transport, announces to it over http only.
+- **Probing** (`i2psnark.probeUdpTrackers=true`, and the preference above):
+  asks the http trackers of an announce set, at port 6969, whether they answer
+  BEP 15. The question is the connect, which carries a protocol id, an action
+  and a transaction id, and no info hash, so it names no torrent. One probe per
+  host, one thread, a 16-deep queue that drops, I2P host names only.
+- **Verdicts persist in `i2psnark.config`**, keyed by host:
+  `i2psnark.udpTracker.<host> = ok,<millis>` or `broken,<millis>`, the millis
+  being when it was learned. A "yes" is trusted 30 days, a "no" 24 hours, and
+  the 200 oldest verdicts are dropped, so a tracker that moves port or stops
+  answering decays on its own. Deleting the keys reverts the behaviour. Nothing
+  is written into a torrent's metadata, and the user's open-tracker list is
+  never edited.
 
 ## HTTP tracker announce — `TrackerClient.java`
 
@@ -317,6 +336,7 @@ fast-path piece check. `Storage.MAX_PIECES` bounds both piece count and the
 | `dht/BloomFilter.java` / `dht/DHTTracker.java`               | BEP 33                                                                                             |
 | `dht/TokenKey.java`                                          | BEP 5 token security                                                                               |
 | `UDPTrackerClient.java`                                      | BEP 15 + proposal 160                                                                              |
+| `TrackerProbe.java`                                          | BEP 15 connect probe; remembering which http trackers answer udp                                   |
 | `TrackerClient.java`                                         | HTTP announce + scrape (BEP 48) + BEP 21                                                           |
 | `PeerID.java` / `ClientID.java`                              | BEP 20 conventions + spoofing                                                                      |
 | `WebPeer.java`                                               | BEP 19 webseed + BEP 47 zero-padding                                                               |

@@ -329,6 +329,46 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     }
 
     /**
+     * Ask a tracker whether it answers BEP 15 at all, by running the connect
+     * handshake and nothing else. The connect carries a protocol id, an action
+     * and a transaction id, and no info hash, so the question names no torrent
+     * and asks for nothing but a connection id. Blocking, and the destination
+     * lookup may take seconds, so call from a thread.
+     *
+     * @param host the tracker hostname
+     * @param port the tracker udp port
+     * @param maxWait the maximum time to wait (ms), greater than 2000
+     * @return true if the tracker answered the connect
+     * @throws IllegalArgumentException if the port is not usable, or the time
+     *                                  is too short to resolve and connect
+     *                                  within
+     * @since 0.9.72+
+     */
+    boolean probe(String host, int port, long maxWait) {
+        if (port <= 0 || maxWait <= 2000) {
+            throw new IllegalArgumentException();
+        }
+        long now = _context.clock().now();
+        long end = now + maxWait;
+        Tracker tr = getTracker(host, port);
+        if (tr.getDest(false) == null) {
+            if (_log.shouldInfo()) {
+                _log.info("Cannot resolve " + tr + " for a probe");
+            }
+            return false;
+        }
+        long toWait = (end - _context.clock().now()) * 3 / 4;
+        if (toWait < 1000) {
+            if (_log.shouldInfo()) {
+                _log.info("Out of time after resolving: " + tr);
+            }
+            return false;
+        }
+        // A cached connection id counts as an answer, we spoke BEP 15 there recently
+        return getConnection(tr, _context.clock().now() + toWait) != null;
+    }
+
+    /**
      * Establish a connection to the tracker.
      *
      * @param tr the tracker to connect to
