@@ -4343,7 +4343,7 @@ class Connection {
                 buf.append(" * Reset received: ").append(DataHelper.formatDuration(now - getResetReceivedOn())).append(" ago");
             if (getCloseSentOn() > 0) {
                 long timeSinceClose = now - getCloseSentOn();
-                buf.append(" * Close sent: ")
+                buf.append("\n* Close sent: ")
                    .append(DataHelper.formatDuration(timeSinceClose))
                    .append(" ago");
             }

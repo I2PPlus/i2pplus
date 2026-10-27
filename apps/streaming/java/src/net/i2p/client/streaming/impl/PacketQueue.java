@@ -333,7 +333,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
 
         long enqueueElapsed = _context.clock().now() - enqueueStart;
         if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE) && _log.shouldInfo())
-            _log.info("SYN packet enqueue -> Sent:" + sent + " * Elapsed:" + enqueueElapsed + "ms * " + packet);
+            _log.info("SYN packet enqueue -> Sent: " + sent + " * Elapsed: " + enqueueElapsed + "ms * " + packet);
 
         if (!sent) {
             if (_log.shouldWarn() && !isLogged) {_log.warn("Packet send failed * " + packet);}
@@ -341,7 +341,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
         } else {
             packet.incrementSends();
             if (con != null && _log.shouldDebug()) {
-                String suffix = "Wsize " + con.getOptions().getWindowSize() + " RTO " + con.getOptions().getRTO();
+                String suffix = "Window size: " + con.getOptions().getWindowSize() + " * RTO: " + con.getOptions().getRTO();
                 con.getConnectionManager().getPacketHandler().displayPacket(packet, "SEND", suffix);
             }
             if (I2PSocketManagerFull.pcapWriter != null &&
