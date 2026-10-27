@@ -1481,6 +1481,9 @@ public class Storage implements Closeable {
         if (_torrentFiles.isEmpty()) {
             throw new IOException("Storage not checked yet");
         }
+        // Files lost since the last run are counted, then reported once
+        int deletedFiles = 0;
+        long deletedBytes = 0;
         for (int i = 0; i < _torrentFiles.size(); i++) {
             TorrentFile tf = _torrentFiles.get(i);
             if (tf.isPadding) {
@@ -1520,12 +1523,18 @@ public class Storage implements Closeable {
                     }
                 }
                 _probablyComplete = false;
-                String msg = "File '" + tf.name + "' was deleted, must be downloaded again";
-                if (listener != null) {
-                    listener.addMessage(msg);
+                deletedFiles++;
+                deletedBytes += tf.length;
+                if (_log.shouldDebug()) {
+                    _log.debug("Reopening: file " + tf.name + " was deleted -> recreated empty");
                 }
-                _log.error(msg);
             }
+        }
+        // One line for the whole restart, not one per file: a staging dir on
+        // tmpfs is wiped by a reboot, which takes every in-progress file with it.
+        if (deletedFiles > 0) {
+            reportCheckFinding(
+                    resetSummary(_base.getName(), 0, deletedFiles, deletedBytes, _stagingBase));
         }
     }
 
@@ -2052,6 +2061,16 @@ public class Storage implements Closeable {
         // The files should all exist as they have been created with zero length by
         // createFilesFromNames()
         long lengthProgress = 0;
+        // Files with nothing on disk are counted and reported once after the loop.
+        // A zero-length file is the normal state of a file the download has not
+        // written yet, and of a staging dir a restart cleared (a tmpfs temp dir
+        // does not survive a reboot), so one error per file was noise: a torrent
+        // with hundreds of files buried the log in "repairing corruption".
+        int emptyFiles = 0;
+        int deletedFiles = 0;
+        long resetBytes = 0;
+        int repairedFiles = 0;
+        long repairedBytes = 0;
         for (int i = 0; i < _torrentFiles.size(); i++) {
             TorrentFile tf = _torrentFiles.get(i);
             if (tf.isPadding) {
@@ -2076,17 +2095,14 @@ public class Storage implements Closeable {
                     // and we're now doing a recheck. Recreate at the active
                     // location (staging dir while incomplete, data dir otherwise).
                     recreateFile(tf);
-                    String msg =
-                            "Corrupt file '"
-                                    + tf.name
-                                    + "' was deleted (cannot repair), must be downloaded again";
-                    if (listener != null) {
-                        listener.addMessage(msg);
+                    deletedFiles++;
+                    resetBytes += tf.length;
+                    if (_log.shouldDebug()) {
+                        _log.debug("Recreating vanished file " + tf.name + " -> zero length");
                     }
-                    if (!ctx.isRouterContext()) {
-                        System.out.println(" • " + msg);
-                    }
-                    _log.error(msg);
+                } else {
+                    emptyFiles++;
+                    resetBytes += tf.length;
                 }
             }
             changed = true;
@@ -2101,21 +2117,22 @@ public class Storage implements Closeable {
                 _checkProgress.set((int) (pieces * lengthProgress / total_length));
             } else {
                 if (tf.length != length) {
-                    String msg =
-                            "File '"
-                                    + tf.name
-                                    + "' exists, but has wrong length (expected "
-                                    + tf.length
-                                    + " but found "
-                                    + length
-                                    + ") - repairing corruption...";
-                    if (listener != null) {
-                        listener.addMessage(msg);
+                    // Only a file with some bytes in it, short of (or longer than)
+                    // its declared length, is a partial write worth reporting; a
+                    // zero-length file is already counted above as empty.
+                    if (length > 0) {
+                        repairedFiles++;
+                        repairedBytes += Math.abs(tf.length - length);
                     }
-                    if (!ctx.isRouterContext()) {
-                        System.out.println(" • " + msg);
+                    if (_log.shouldDebug()) {
+                        _log.debug(
+                                "Resizing file "
+                                        + tf.name
+                                        + " -> expected: "
+                                        + tf.length
+                                        + " found: "
+                                        + length);
                     }
-                    _log.error(msg);
                 }
                 changed = true;
                 resume = true;
@@ -2129,6 +2146,17 @@ public class Storage implements Closeable {
                     } catch (IOException ioe) { /* ignored */ }
                 }
             }
+        }
+
+        // One line for the whole pass, not one per file. Only when resuming: for
+        // a new download every file is empty, and that is not worth reporting.
+        if (resume && (emptyFiles > 0 || deletedFiles > 0)) {
+            reportCheckFinding(
+                    resetSummary(
+                            _base.getName(), emptyFiles, deletedFiles, resetBytes, _stagingBase));
+        }
+        if (repairedFiles > 0) {
+            reportCheckFinding(repairSummary(_base.getName(), repairedFiles, repairedBytes));
         }
 
         // Check which pieces match and which don't
@@ -2275,6 +2303,113 @@ public class Storage implements Closeable {
             }
         }
         return rv;
+    }
+
+    /**
+     * Reports one finding from a check pass to the UI, to stdout for a
+     * standalone run, and to the log at warning level. A pass reports once for
+     * the whole torrent, never once per file, so a torrent with hundreds of
+     * files cannot bury the log in per-file noise.
+     *
+     * @param msg the finding to report
+     * @since 0.9.72+
+     */
+    private void reportCheckFinding(String msg) {
+        if (listener != null) {
+            listener.addMessage(msg);
+        }
+        if (!I2PAppContext.getGlobalContext().isRouterContext()) {
+            System.out.println(" • " + msg);
+        }
+        _log.warn(msg);
+    }
+
+    /**
+     * Builds the single line a check pass reports for files that have no data
+     * on disk. This is not corruption: a zero-length file is the normal state
+     * of a file the download has not written yet, and of a staging directory a
+     * restart cleared, as a tmpfs temp dir does not survive a reboot. The files
+     * are re-allocated and their pieces re-downloaded.
+     *
+     * @param baseName the torrent's base name, so the reader knows which torrent
+     * @param emptyFiles files present at zero length
+     * @param deletedFiles files that were missing and have been recreated
+     * @param bytes total declared length of the files being reset
+     * @param stagingDir the staging dir, or null when staging is disabled
+     * @return the summary line, with the staging dir on a continuation line
+     * @since 0.9.72+
+     */
+    static String resetSummary(
+            String baseName, int emptyFiles, int deletedFiles, long bytes, File stagingDir) {
+        int files = emptyFiles + deletedFiles;
+        StringBuilder buf = new StringBuilder(192);
+        buf.append("Resuming \"")
+                .append(baseName)
+                .append("\" -> ")
+                .append(files)
+                .append(files == 1 ? " file" : " files")
+                .append(" (")
+                .append(DataHelper.formatSize2(bytes))
+                .append(") ")
+                .append(files == 1 ? "has" : "have")
+                .append(" no data on disk");
+        if (deletedFiles > 0) {
+            buf.append(" * Deleted: ").append(deletedFiles);
+        }
+        buf.append(" * They will be downloaded again")
+                // The staging dir names its path, a single value that cannot be
+                // split, so it takes a continuation line of its own rather than
+                // joining the tally and pushing the line past the log width.
+                .append("\n* ")
+                .append(stagingState(stagingDir));
+        return buf.toString();
+    }
+
+    /**
+     * How the staging directory looks to a check pass, so a reader can tell a
+     * wiped tmpfs temp dir from a plain partial download.
+     *
+     * @param stagingDir the staging dir, or null when staging is disabled
+     * @return a prose key: value segment naming the directory and its state
+     */
+    private static String stagingState(File stagingDir) {
+        if (stagingDir == null) {
+            return "Staging: disabled";
+        }
+        if (!stagingDir.isDirectory()) {
+            return "Staging: " + stagingDir + " (missing, a tmpfs temp dir is cleared at restart)";
+        }
+        String[] children = stagingDir.list();
+        if (children == null) {
+            return "Staging: " + stagingDir + " (unreadable)";
+        }
+        if (children.length == 0) {
+            return "Staging: " + stagingDir + " (empty)";
+        }
+        return "Staging: " + stagingDir;
+    }
+
+    /**
+     * Builds the single line a check pass reports for files that hold some
+     * bytes but are short of, or longer than, the length the torrent declares.
+     * Those are real partial writes, resized back to the declared length so
+     * their pieces can be re-verified and re-downloaded.
+     *
+     * @param baseName the torrent's base name
+     * @param files how many files were resized
+     * @param bytes total bytes added or removed by the resize
+     * @return the summary line
+     * @since 0.9.72+
+     */
+    static String repairSummary(String baseName, int files, long bytes) {
+        return "Repairing \""
+                + baseName
+                + "\" -> "
+                + files
+                + (files == 1 ? " file" : " files")
+                + " with a partial length ("
+                + DataHelper.formatSize2(bytes)
+                + ") resized to the declared length";
     }
 
     /**
