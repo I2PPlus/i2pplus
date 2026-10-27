@@ -54,6 +54,9 @@ public class JobQueue {
         public final long _beganOn;
 
         /**
+         * Record one runner's job and the instant its run began, as the two
+         * values the runner publishes together.
+         *
          * @param job the job being executed, non-null
          * @param beganOn the adjusted millisecond timestamp the run began at
          */
