@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>I2PSnark web tests</title>
+</head>
+<body>
+<p>
+    The console servlet's decisions, extracted from the servlet as pure statics
+    so they can be tested without a router. The renderers: the torrent-list
+    header helpers, the list-page decision helpers, the two per-row render
+    helpers (including the suffix icon, which used to be found by scanning
+    every registered suffix), the single-file listing's row link, and the
+    status classifier whose branch order mirrors the historical cascade.
+    {@code StreamingEquivalenceTest} is the golden-equivalence harness: it
+    boots a real servlet through its production {@code init()} against a temp
+    I2P base and proves the streamed rendering matches the buffered one.
+</p>
+
+<p>
+    The validators, one per form: appending a peer row, displaying comments,
+    creating a torrent, saving a torrent edit. The request layer: the path
+    classifiers that route a GET or POST, the fetch-and-add state derivation,
+    the complete-file lookup, and the action tokens - minted and checked by
+    minimal unique prefix. The escaping: the JavaScript string escaper, the
+    urlify-and-quote pair (only the href was HTML-escaped), and the language
+    tag sanitiser. Plus the Bridge extension's version helpers and
+    {@code TrackerDisplayTest}, which pins the per-host tracker pills and their
+    transport badges. Run by <code>ant test</code> in
+    <code>apps/i2psnark/java</code>.
+</p>
+</body>
+</html>

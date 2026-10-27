@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Tunnel utility tests</title>
+</head>
+<body>
+<p>
+    The two stream helpers a tunnel's HTTP layer runs through:
+    {@code ByteLimitOutputStream} for the byte count and the completion it
+    reports at a limit, and {@code GunzipOutputStream} for the GZIP header
+    state machine - in particular the FEXTRA extra field, whose bytes must be
+    skipped by length rather than consumed as payload. Run by
+    <code>ant test</code> in <code>apps/i2ptunnel</code>.
+</p>
+</body>
+</html>

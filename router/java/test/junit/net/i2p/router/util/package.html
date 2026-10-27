@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Router utility tests</title>
+</head>
+<body>
+<p>
+    The router's own data structures. The cached-iterator pair is covered for
+    the contract that makes them cheap: the iterator is reused, and the view
+    reflects the collection as it changes. The decaying filters -
+    {@code DecayingBloomFilter} and {@code DecayingHashSet} - are covered for
+    entry and lookup semantics, including that {@code add()} reports "already
+    present" rather than "newly added", and separately for the sizing
+    accessors and the run-time cap setter. {@code PeerLogFormatterTest} pins
+    the peer sub-list layout the selectors emit: the label line, the three-space
+    indent, at most eight hashes per line, and the "more" tail. Run by
+    <code>ant test</code> in <code>router/java</code>.
+</p>
+</body>
+</html>

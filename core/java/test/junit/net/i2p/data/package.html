@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Data structure tests</title>
+</head>
+<body>
+<p>
+    The data structures on the wire: the encodings ({@code Base32},
+    {@code Base64}, {@code String}, {@code UnsignedInteger}, and
+    {@code DataHelper} with its edge cases); the structures
+    ({@code Certificate}, {@code KeyCertificate}, {@code Destination},
+    {@code Hash}, the key classes - public, private, signing, session -
+    {@code Signature}, {@code Date} and {@code DateAndFlags}, {@code Lease},
+    {@code LeaseSet} and the {@code LeaseSet2} expiry and option handling,
+    {@code TunnelId}, {@code Mapping}, {@code Payload}); and the shared
+    contract every {@code SimpleDataStructure} implementation must satisfy.
+</p>
+
+<p>
+    {@code DataTestSuite} gathers the group and {@code DataStructureImpl} is
+    the fixture implementation the shared contract runs against. The build
+    runs {@code *Test.java} by pattern and excludes {@code StructureTest},
+    the old upstream suite, from that run.
+</p>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>RRD graph rendering tests</title>
+</head>
+<body>
+<p>
+    The graph renderer the console's bandwidth and congestion plots go through,
+    checked on the SVG it emits rather than on pixels: that the axis keeps its
+    own class, the axis marker width, the series stroke, the dot pattern that
+    separates two series sharing an axis, a plot's stroke width, a gradient
+    stop's alpha reaching the SVG as a usable number, the glow filter, one
+    legend row per plotted series, and a series line shaded by its value. The
+    smoothing path is covered for the properties that must survive it -
+    {@code MonotoneSpline} behind the optional bezier renderer, the
+    run-collapsing {@code reduceVertices} step, no curve leaving the
+    smoothed band, and well-formed output when the renderer is switched on.
+</p>
+
+<p>
+    The theme contract is here too: graph text takes its face and colour from
+    the console theme, the theme survives the resize the renderer always
+    performs, and the metadata a graph hands a client that wants a cursor
+    readout. Run by <code>ant test</code> in <code>apps/jrobin/java</code>.
+</p>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>EdDSA field arithmetic tests</title>
+</head>
+<body>
+<p>
+    The curve arithmetic under Ed25519: the field constants, the group
+    element operations, the utility math, and the precomputation tables
+    checked against their published vectors.
+    {@code AbstractFieldElementTest} holds the cases every field-element
+    representation must pass.
+</p>
+
+<p>
+    The build runs {@code *Test.java} by pattern and excludes
+    {@code AbstractFieldElementTest} from that run, since it is the shared
+    base, not a suite of its own; {@code MathUtils} is a fixture, not a test.
+</p>
+</body>
+</html>

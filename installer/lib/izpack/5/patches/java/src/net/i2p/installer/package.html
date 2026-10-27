@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Patched IzPack 5 panels</title>
+</head>
+<body>
+<p>
+    The installer panels we replace. IzPack fetches an HTML panel's body with
+    {@code Resources.getURL()}, which never consults the langpack, so the stock
+    HTML hello panel shows one {@code welcome.html} in every language.
+    {@code LocalizedHTMLInfoPanel} resolves {@code welcome_<iso3>.html} and
+    falls back to {@code welcome.html}, so a language is added by registering
+    the file.
+</p>
+
+<p>
+    One panel is three classes here, because IzPack derives a panel's console
+    counterpart and automation helper from the declared class name: without
+    {@code LocalizedHTMLInfoConsolePanel} and
+    {@code LocalizedHTMLInfoPanelAutomationHelper}, a {@code -console} install
+    dies on this panel with "Console implementation not found". Built by
+    <code>ant izpack-panel-jar</code> onto the installer classpath.
+</p>
+</body>
+</html>

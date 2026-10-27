@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Tunnel pool tests</title>
+</head>
+<body>
+<p>
+    The tunnel pool's decisions, tested as pure statics rather than through a
+    running router - the largest suite in the tree, and the reason the pool's
+    rules are written as package-visible statics in the first place. The build
+    executor: pass spacing and the pacing rules, the sliding and first-hop
+    windows and their counts, the urgent ceiling, paired builds, dispatch
+    priority, FIFO trimming of recent build IDs, direction statistics over a
+    window, adaptive timeout with its recalculation, ramp and throttle, timeout
+    blame attributed to the one contacted hop, the ghost charge, and the
+    correlation ID. The build handler and requestor: the lookup key, limit and
+    retry, the pending lookup, the next-hop summary, the reject stat, hop
+    attribution, the pre-connect, the build message, build expiry, and what each
+    build failure reason means.
+</p>
+
+<p>
+    Peer selection: the client selector's quality cascade, ordering, tiers,
+    batches, cooldowns, eviction, pre-connect and its pruning, reliability and
+    the short-selection path, and its null-safety contract; the exploratory
+    selector's cooldown; and the shared base's build-success gate, regeneration,
+    stale peers, window stat and decisions. The test jobs: their period, round
+    scope, schedule gate, tier priority, untested-first rule, young-tunnel
+    grace, partner preference and deferral, minimum retest gap, deferral budget,
+    hard limit, removal threshold, refusal reasons, confirmation, data trust,
+    supersede leak, and batch queue and reset.
+</p>
+
+<p>
+    The pools themselves: target, buffer, stagger, throttle, scan gate, pool
+    state, build ceiling, condemnation, emergency and pre-emergency handling,
+    lease assembly, lifetime and surge, prune expiry, reuse candidates, select
+    tunnel, share limits, soft-degraded and last-chance decisions, send-failure
+    reporting and its log rate, shortfall logging, zombie transports, and the
+    warning rate limit on a failed selection. Beside them: the ghost peer
+    manager, the idle tunnel monitor's bandwidth and capacity decisions, the
+    keepalive tally, lease-set refresh deferral, the participating and request
+    throttlers (with the Lu-Ban counter), the peer quality filter, the fast-tier
+    probe, the difficulty spare, the excluder base, pool ensuring, the
+    proven-responder set, the pre-build window, tier and thin-pool log rate
+    limiting, the traffic proof, and the tunnel log format. Run by
+    <code>ant test</code> in <code>router/java</code>.
+</p>
+</body>
+</html>

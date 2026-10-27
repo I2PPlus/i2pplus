@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>NTCP transport tests</title>
+</head>
+<body>
+<p>
+    NTCP and NTCP2, tested as decisions rather than through a socket. The event
+    pumper: what it does when a connect fails, the pumper's run/stop decision,
+    its rate accounting, and its write pool and write path. The connection: the
+    backlog decision, the establishment RTT, the read pause, the router-info
+    decision, and the memory a failsafe close leaves behind. NTCP2's wire
+    format: frame packing, the payload block, the post-quantum handshake's
+    sizes, and the staging of its first message. The transport: the ban-check
+    throttle, the inbound flood decision, and the address, bid, reachability
+    and setup decisions. Run by <code>ant test</code> in <code>router/java</code>.
+</p>
+</body>
+</html>

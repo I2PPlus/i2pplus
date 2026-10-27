@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>SSU transport tests</title>
+</head>
+<body>
+<p>
+    SSU and SSU2, tested as decisions rather than through a socket. The peer
+    state: the eligibility decisions, congestion, inbound eviction, the
+    effective retransmission timeout as the clamp of the raw estimate, and the
+    peer test manager's retransmit decision. Establishment: the decision, its
+    timeout floor and slow-establish threshold, the idle-established decision,
+    peer expiry, the outbound establish expiry, the inbound reschedule that must
+    not outrun its own deadline, and how a corrupt confirm, an inbound giveup,
+    and a log line are reported. The wire format: the MTU, the packet builder,
+    outbound message fragments, the SSU2 bitfield - where an attacker-controlled
+    ACK-block span is bounded before any bitfield is allocated - the payload
+    block, the post-quantum handshake's sizes and message staging, and
+    {@code SSU2Util}.
+</p>
+
+<p>
+    Beside them: the endpoint, the IP throttler, the reachability and address
+    update and bid decisions, and {@code UDPFlooder}, a manual fixture that
+    sends random data to every UDP peer at a set rate - not a suite. Run by
+    <code>ant test</code> in <code>router/java</code>.
+</p>
+</body>
+</html>

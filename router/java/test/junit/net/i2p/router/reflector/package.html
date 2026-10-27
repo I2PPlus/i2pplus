@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Reflection fixtures for the tuner</title>
+</head>
+<body>
+<p>
+    No suites here, only {@code Fixtures}: a package-private class, in a package
+    the autotuner does not live in, carrying both public and package-private
+    static members. That is the shape of streaming's
+    <code>ConnectionOptions</code>, and the combination is the point -
+    {@code Class.getMethod} reports a missing method for the package-private
+    members and finds the public one only for {@code invoke} to refuse it with
+    {@code IllegalAccessException}, because the declaring class is not
+    accessible. Either way the tuner takes its fallback branch and tunes
+    nothing, and the tuner's own suite in {@code net.i2p.router} reaches this
+    fixture reflectively, the same way the tuner does.
+</p>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>I2PSnark engine tests</title>
+</head>
+<body>
+<p>
+    The torrent engine in <code>org.klomp.snark</code>, tested as decisions
+    rather than over a session. Metadata and storage: parsing a torrent's name
+    and file paths the way real releases write them, the declared per-file
+    lengths and their summary, and a created torrent's filter surviving
+    serialization. The peer and piece layer: the deferred-load state machine in
+    {@code Message} - exactly-once loader execution - piece stall detection that
+    re-queues a requested piece that receives no data, the downloaded byte count
+    behind a partial piece's progress, the discard-ratio ban, the peer state's
+    decisions, the bit field's string form, the client id, the
+    <code>dontHave</code> memo, and the outstanding-request count.
+</p>
+
+<p>
+    The tracker layer: the announce decision, the peer-discovery decisions that
+    decide how fast a magnet hears from someone, the peer set's contract
+    (never null, never the caller's set), the problems a tracker reports, the
+    BEP 15 UDP probe and its verdict cache, and the BEP 6 allowed-fast set.
+    The manager: the tunnel quantity decision in {@code IdleChecker}, the
+    single-destination session teardown guard, the two decisions behind
+    {@code i2psnark.hideLookups} and the lookup cleanup and detection they
+    drive, message deduplication, and the theme decision. {@code StorageTest},
+    {@code PeerStateTest} and {@code SnarkManagerTest} are the older upstream
+    suites. Run by <code>ant test</code> in <code>apps/i2psnark/java</code>.
+</p>
+</body>
+</html>

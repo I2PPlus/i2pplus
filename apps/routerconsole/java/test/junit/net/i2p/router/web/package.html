@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Console web tests</title>
+</head>
+<body>
+<p>
+    The console's web layer, tested as decisions. The graph subsystem is the
+    bulk of it: which listeners are judged write-stalled and what separates the
+    three faults that used to hide behind one number, the coalesce-stall
+    discriminator, the heal ladder and the watchdog report that drives it, the
+    listener's ledger and backfill decisions and its datasource-to-stat-name
+    map, the graph grouping, the y-axis floor a value axis is scaled against,
+    which tiles take the condensed plot width, and that the two plots on a
+    combined graph are told apart in every theme.
+</p>
+
+<p>
+    Beside them: the form layer - the effective action a form resolves to from
+    its hidden fallback and its named submit buttons, and the rate limiter's
+    window, which exists to slow nonce guessing on a failed submission; the
+    origin check that guards a POST, where the load-bearing case is DNS
+    rebinding; the boundedness of the User-Agent memo; and the console
+    password manager's hex decoding, the regression guard for a change that
+    delegated it. Run by <code>ant test</code> in
+    <code>apps/routerconsole</code>.
+</p>
+</body>
+</html>

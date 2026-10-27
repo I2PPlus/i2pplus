@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Tunnel subsystem tests</title>
+</head>
+<body>
+<p>
+    The tunnel data plane's decisions, tested without a router: fragment
+    handling - the count scan, the handler's cap, and batched fragments; the IV
+    filter's sizing decision, checked against the decaying filter's own model;
+    the per-flush stat accumulator that collapses N samples of a mean-valued
+    stat into one without changing what a reader computes; the hop config's
+    fields and its concurrency contract; the creator config's failure hooks -
+    a first-hop failure, a pre-connect retry, soft saturation and the soft
+    window; the dispatcher's expired-config cleanup and its bandwidth
+    bookkeeping; the dummy validator; and the preprocessed digest a build reply
+    verifies.
+</p>
+
+<p>
+    The gateway integration tests - {@code InboundGatewayIT},
+    {@code OutboundGatewayIT} - need a running router, so the build includes
+    <code>*IT.java</code> only when <code>runIntegrationTests</code> is set;
+    {@code RouterITBase} and {@code GatewayITBase} are their bases and
+    {@code TCConfig} the concrete creator config they need, since
+    {@code TunnelCreatorConfig} is abstract. {@code InboundTest} and
+    {@code OutboundTest} are the older upstream suites, run by the same
+    pattern. Run by <code>ant test</code> in <code>router/java</code>.
+</p>
+</body>
+</html>

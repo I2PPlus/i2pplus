@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Statistics tests</title>
+</head>
+<body>
+<p>
+    The statistics subsystem: {@code Rate} and {@code RateStat} themselves, and
+    the coalescing that keeps them cheap - the isolation of one period's
+    samples, the skipping of empty ones, the step between periods, the
+    heartbeat that closes a period, who owns a listener, which samples count as
+    recent, and how a listener is delivered to. {@code StatManager} is covered
+    for the coalesce heartbeat and the rate handle it hands out.
+</p>
+
+<p>
+    {@code SimpleStatDumper} and {@code SizeMeasure} are fixtures, not suites:
+    the first prints a stat tree for a test to assert on, the second measures
+    the footprint of an object. {@code StatTestSuite} gathers the group;
+    {@code ant test} in <code>core/java</code> runs each {@code *Test.java}.
+</p>
+</body>
+</html>

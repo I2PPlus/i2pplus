@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Peer manager tests</title>
+</head>
+<body>
+<p>
+    Peer profiling and selection, tested as pure decisions rather than through
+    a running router. The bulk is the {@code ProfileOrganizer}: candidate
+    eligibility and sampling, the cap on profiles, the active window, the ban
+    filter, subnet diversity, self-exclusion, the RTT ceiling, the selection
+    cost, the speed-rank and general decision paths, promotion and tier
+    admission with its floor and shortfall, the tier union, restore and purge
+    (including the purge lock), the refresh decision, strike counting, and the
+    neutral build-success value when there are no stats.
+</p>
+
+<p>
+    Beside it: {@code PeerProfile} itself, with the peak decay;
+    {@code ProfileManagerImpl} for floodfill reliability and demotion scope,
+    with the {@code FloodfillReliability} ordering; {@code TunnelHistory}; the
+    latency machinery - the DB-history metric, first-hop RTT, the protocol RTT
+    baseline, measurement fidelity, and the calibrated low-latency flag; the
+    profile retention and lossy-readmit decisions; the peer-selection bound; and
+    the router-info refresher's bound. Run by <code>ant test</code> in
+    <code>router/java</code>.
+</p>
+</body>
+</html>

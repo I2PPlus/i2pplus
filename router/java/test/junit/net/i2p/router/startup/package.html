@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Startup tests</title>
+</head>
+<body>
+<p>
+    The decisions made while the router comes up. {@code ClientAppConfigTest}
+    covers the config line parsed out of <code>clients.config</code>: the
+    constructors and their fields, a null argument, a zero or negative start
+    delay, and equality and hashing. {@code RouterAppManagerRowsTest} covers
+    the row merge for the console's clients page - a tracked app wins over its
+    registered twin, an untracked registration gets a "Registered" row - and
+    the state-to-dot-colour mapping. {@code WorkingDirTest} covers the file
+    helpers: copying with the timestamp preserved, overwriting an existing
+    file, a missing source, and the XML migration that rewrites paths in
+    <code>jetty.xml</code>. Run by <code>ant test</code> in
+    <code>router/java</code>.
+</p>
+</body>
+</html>

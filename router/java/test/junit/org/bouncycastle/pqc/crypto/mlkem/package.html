@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>ML-KEM tests</title>
+</head>
+<body>
+<p>
+    The post-quantum key encapsulation mechanism the handshake uses, piece by
+    piece: the centered-binomial noise sampler at eta 2 and eta 3, including
+    the all-zero and all-ones byte inputs; the number-theoretic transform and
+    its constants; polynomial and polynomial-vector arithmetic; the modular
+    reduction; and the symmetric layer (the SHAKE-derived generation and the
+    PRF) with its byte sizes. {@code MLKEMEngineTest} covers the engine over
+    the K-2, K-3 and K-4 parameter sets - the key, ciphertext and shared-secret
+    byte counts, an invalid parameter set, and the encapsulation/decapsulation
+    round trip. Run by <code>ant test</code> in <code>router/java</code>.
+</p>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Kademlia netdb tests</title>
+</head>
+<body>
+<p>
+    The floodfill netdb's decisions, tested as pure statics rather than through
+    a running router. The routing table: picking the closest top-K peers, the
+    bucket size, evicting the entry with the oldest contact evidence past the
+    grace window, the debug table's one-row-per-bucket rendering, and the
+    transient store's expiry. Searching and flooding: the iterative search, the
+    flood throttler, the masked-IP key a floodfill peer selector groups by, and
+    the negative lookup cache - repeated failures accumulate toward the cap, so
+    one transient search failure must not poison a router's key and cut off
+    transit through it.
+</p>
+
+<p>
+    Lease sets and lifetimes: reminting a router info, replacing a local lease
+    set, publishing and republishing it and the log a republish emits, the
+    local lease set's fallback, expiring routers, draining the refresh job,
+    probing a stale peer's score, the introducer cap and introducer lookup,
+    peer verification, the floodfill verify decision, and the ban decision out
+    of a netdb validation failure. Run by <code>ant test</code> in
+    <code>router/java</code>.
+</p>
+</body>
+</html>

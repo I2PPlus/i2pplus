@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Router task tests</title>
+</head>
+<body>
+<p>
+    The periodic jobs and events in <code>net.i2p.router.tasks</code>, tested as
+    decisions. {@code CoalesceStatsEventTest} covers the stats aggregation
+    event: that construction creates the rate stats it reports through, and
+    that a full pass completes and populates the coalesced rates.
+    {@code RouterWatchdogLivelinessTest} covers the watchdog's "a job has been
+    running too long" decision, the one that writes a CRIT line, dumps every
+    thread, and with the wrapper present can force a restart - so a false hit
+    on an idle, healthy queue is a real defect, not a cosmetic one. Run by
+    <code>ant test</code> in <code>router/java</code>.
+</p>
+</body>
+</html>

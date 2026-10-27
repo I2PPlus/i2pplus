@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>I2CP session implementation tests</title>
+</head>
+<body>
+<p>
+    The session implementation's decisions, tested without a router: the
+    lease-set request path ({@code RequestLeaseSetHandlerTest},
+    {@code RequestLeaseSetSignGuardTest} for the signature guard), the send
+    queue's timeout handling ({@code SendQueueTimeoutTest}), and what a session
+    does when a tunnel build times out ({@code TunnelBuildTimeoutTest}).
+</p>
+
+<p>
+    {@code I2PSessionIT} is the integration test of the same path against a
+    running router: the build runs {@code *Test.java} by pattern and includes
+    {@code *IT.java} only when <code>runIntegrationTests</code> is set.
+</p>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Crypto primitive tests</title>
+</head>
+<body>
+<p>
+    The primitives the router signs and encrypts with: AES-256 and the Cryptix
+    engine, cipher pool and Rijndael tables; ChaCha20; SipHash-2-4; DSA,
+    including the signature S-value edge and the zero-SS case; ElGamal;
+    HKDF and the blinding derivation; SHA-1 and SHA-256; signature type
+    registration and {@code SigUtil}; self-signed certificate generation,
+    down to the subject-key-identifier offset; and the trusted-update signing
+    round trip, with a tampered file and an over-long version.
+</p>
+
+<p>
+    {@code YKGeneratorPingTest} covers the ElGamal Y-precomputation thread's
+    wake-up under a burst of misses, and {@code DSABench} is a benchmark kept
+    beside the tests, not run by them. {@code CryptoTestSuite} gathers the
+    group; {@code ant test} in <code>core/java</code> runs each
+    <code>*Test.java</code> by name pattern.
+</p>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Client manager tests</title>
+</head>
+<body>
+<p>
+    The router side of I2CP: the client manager's session bookkeeping, the
+    facade's pruning of an expired client's log, the message event listener's
+    receive path, and the lease-request lifecycle - its states, what a failure
+    records, and what a failed request does to the client.
+</p>
+
+<p>
+    {@code LocalClientConnectionRunner}, {@code LocalClientListenerRunner} and
+    {@code LocalClientMessageEventListener} are the fixtures that stand in for
+    a connected local client, not suites. Run by {@code ant test} in
+    {@code router/java}.
+</p>
+</body>
+</html>

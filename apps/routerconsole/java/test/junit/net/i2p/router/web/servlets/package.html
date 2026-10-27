@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Console servlet tests</title>
+</head>
+<body>
+<p>
+    The login servlet's two decisions: which address the login blocklist keys
+    on - the load-bearing case being that a proxied or forwarded request must
+    not let one client's failures ban the address of another - and the
+    persisted "remember me" session list written to <code>router.config</code>,
+    which has to stay bounded: the writer used to append unconditionally, so
+    every login added an entry that was never dropped. Run by
+    <code>ant test</code> in <code>apps/routerconsole</code>.
+</p>
+</body>
+</html>

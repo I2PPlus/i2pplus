@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Patched Jetty utility classes</title>
+</head>
+<body>
+<p>
+    The Jetty classes we carry a patch for, compiled into
+    <code>jetty-util-patch.jar</code> and put on the classpath ahead of the
+    stock <code>jetty-util.jar</code>. Only what has to change is here.
+</p>
+
+<p>
+    {@code JavaVersion} is backported from Jetty 9.4.34: the 9.3.x parser
+    cannot read the version string of a modern JVM, and the router console does
+    not start without it. Jetty does not fix this on the 9.3.x branch.
+</p>
+
+<p>
+    See also: <a href="https://github.com/eclipse/jetty.project">jetty.project</a>,
+    from which these files are taken and patched.
+</p>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Ratchet tests</title>
+</head>
+<body>
+<p>
+    The NTCP2 and SSU2 ratchet: the payload block and its pool retention, the
+    key fingerprint, the session tag, the tag set - consuming a tag, its index,
+    and the next keys it derives - the multiplexed key manager's rows, its
+    post-quantum variant, and the order its decrypts are counted in, and the
+    promotion of a pending session once the handshake completes.
+    {@code Elligator2Test} covers the curve mapping the handshake hides the
+    static key in.
+</p>
+
+<p>
+    {@code GrowingArrayUtilsTest} and {@code SparseArrayTest} cover the two
+    containers the ratchet's tables are built on. Run by {@code ant test} in
+    {@code router/java}.
+</p>
+</body>
+</html>

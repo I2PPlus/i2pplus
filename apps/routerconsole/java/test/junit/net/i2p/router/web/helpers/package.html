@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Console helper tests</title>
+</head>
+<body>
+<p>
+    The helpers the console's JSP pages call, tested as pure statics rather
+    than through a rendered page. The graph helpers: the effective refresh
+    interval, whether a performance graph plots event counts or elapsed time,
+    and how a stat or group name is escaped on the way into a graph URL. The
+    streaming helpers: open sockets counted per tunnel, and the throughput
+    ring's math. The tuner helpers: the subsystem ring tooltips' formatting,
+    and the conformance of the param label and description tables - one
+    sentence, within the length the tuning page's layout allows, and Title Case
+    names - which is what keeps a new param from janking the page.
+</p>
+
+<p>
+    The renderers: the capabilities tier-state tables, the debug overview's
+    tiles, the listening-sockets rows, the netdb "{0} ago" per-render memo, the
+    tunnel renderer's number formatting and expiry bar, the log rewrites, the
+    stat label, the stat XML export's download filename, the health rings'
+    math, the Sites-of-Interest rule for hiding dead sites, and the client
+    session-key-manager debug section. Run by <code>ant test</code> in
+    <code>apps/routerconsole</code>.
+</p>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Transport subsystem tests</title>
+</head>
+<body>
+<p>
+    The transport layer's decisions, tested as pure statics rather than through
+    a running router: the usable-address gate a peer must pass before a tier
+    promotion, since a peer with no usable address cannot be built through; the
+    host:port a ban or ghost report names for a router info (bare IPv6 literals
+    bracketed, empty when nothing is usable); the bid a transport offers for a
+    peer; the country lookup and its strict-country membership, case
+    independent; the reverse-DNS lookup's cache sizing, eviction and expiry
+    thresholds, persistence freshness, and entry line format round trip; the
+    peer-list renderer's bandwidth-capability classification; and
+    {@code TransportUtil}.
+</p>
+
+<p>
+    The bandwidth limiter is covered for its pool and share accounting by
+    {@code FIFOBandwidthLimiterTest}, and by {@code BandwidthLimiterIT}, the
+    integration test that runs only when <code>runIntegrationTests</code> is
+    set. {@code BandwidthLimitedInputStream} and
+    {@code BandwidthLimitedOutputStream} are the fixtures that test it, not
+    suites. Run by <code>ant test</code> in <code>router/java</code>.
+</p>
+</body>
+</html>

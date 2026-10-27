@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>QR code encoding</title>
+</head>
+<body>
+<p>
+    Turns content into the symbol's bit matrix.
+    {@link com.google.zxing.qrcode.encoder.Encoder} chooses the mode and
+    version and lays out the data; {@link com.google.zxing.qrcode.encoder.QRCode}
+    holds the symbol while it is built;
+    {@link com.google.zxing.qrcode.encoder.MaskUtil} and
+    {@link com.google.zxing.qrcode.encoder.MatrixUtil} apply the mask and place
+    the format and version information;
+    {@link com.google.zxing.qrcode.encoder.ByteMatrix} is the byte grid they
+    write into, and {@link com.google.zxing.qrcode.encoder.BlockPair} a data
+    block with its error-correction block.
+</p>
+
+<p>
+    See also: <a href="https://github.com/zxing/zxing">zxing</a>, from which
+    this subset is taken.
+</p>
+</body>
+</html>

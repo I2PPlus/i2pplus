@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bencode tests</title>
+</head>
+<body>
+<p>
+    One test of {@code BEncoder}: that dictionary keys are written in the
+    sorted order bencode requires. A torrent file whose keys are out of order
+    has a different SHA-1 hash, so the info hash a peer computes stops
+    matching, and this is the property that keeps it from happening. Run by
+    <code>ant test</code> in <code>apps/i2psnark/java</code>.
+</p>
+</body>
+</html>

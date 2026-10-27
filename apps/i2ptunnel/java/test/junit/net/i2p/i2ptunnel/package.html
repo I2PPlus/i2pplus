@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>I2P tunnel tests</title>
+</head>
+<body>
+<p>
+    The tunnel clients and servers, tested as decisions rather than through a
+    live tunnel. The HTTP client: header formatting - both its log output and
+    its safety against a header that would forge a response line - the response
+    output stream, the helper's parsing, and the robustness cases. The HTTP
+    server: where a body starts, the request URL it reconstructs, its I/O
+    handling, the write timeout, the response it sheds when it cannot serve,
+    and the compressed requestor. The shared runner: the race against a
+    connection that arrives before the tunnel is up, the no-data path, the
+    connect deadline and failover, the connection gate, the stall policy, the
+    transfer log format, and the request error limiter.
+</p>
+
+<p>
+    The pool and capacity decisions: runner and server executor overflow, the
+    runner and IO pool sizing, handler allocation and demand, the warm slot,
+    the runner's elevation, and the client's maximum connections. The console
+    side: the tunnel controller and whether it may destroy a tunnel, the
+    tunnel snapshot list, the proxy target blocklist, the blocklist manager,
+    the auth log redaction, the IRC client's retry, and the body-resume budget
+    and its scaling. {@code TestI2PClientFactory} is the fixture that stands in
+    for a real client, not a suite. Run by <code>ant test</code> in
+    <code>apps/i2ptunnel</code>.
+</p>
+</body>
+</html>

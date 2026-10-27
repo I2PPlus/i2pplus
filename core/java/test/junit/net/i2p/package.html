@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Core test entry points</title>
+</head>
+<body>
+<p>
+    The entry points of the core suite rather than tests of a class:
+    {@link net.i2p.AllCoreTests} aggregates the per-package suites, and
+    {@link net.i2p.TestContext} hands a test an {@code I2PAppContext} with the
+    services it needs, without a router.
+</p>
+
+<p>
+    <code>ant test</code> in <code>core/java</code> runs every
+    <code>*Test.java</code> by name pattern, so these suites are one way to run
+    the group, not the only way.
+</p>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Utility tests</title>
+</head>
+<body>
+<p>
+    The core utilities: the encodings ({@code Base32} / {@code Base64} are in
+    the data suite; here {@code Escapes}, {@code HexDump}, {@code Addresses},
+    {@code ConvertToHash} and {@code RFC822Date}); the collections and caches
+    ({@code ArraySet}, {@code ConcurrentHashSet}, {@code LHMCache},
+    {@code TryCache}, {@code SimpleByteCache}, {@code ObjectCounter},
+    {@code OrderedProperties}); the streams (the resettable and reusable GZIP
+    pairs, {@code LookAheadInputStream}, {@code SecureFileOutputStream}); and
+    the files ({@code FileUtil.rmdir}, {@code SecureDirectory} permissions).
+</p>
+
+<p>
+    The timing and scheduling machinery is tested here too:
+    {@code SimpleTimer2} for scaling, thread count, stall cadence, and the
+    watchdog and work-due decisions; {@code StallRegistry};
+    {@code SyntheticREDQueue}; the {@code SystemVersion} load caches;
+    {@code FortunaRandomSource}; {@code PasswordManager}; {@code EepGet} for
+    its failure reasons and its usage output; {@code LogSettings},
+    {@code LogRecordFormatter} and the log-suppressor decision;
+    {@code NativeBigInteger} family detection; {@code VersionComparator}; and
+    the build-success ratio. {@code UtilTestSuite} gathers the group;
+    {@code ant test} in <code>core/java</code> runs each {@code *Test.java}.
+</p>
+</body>
+</html>

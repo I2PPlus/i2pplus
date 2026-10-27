@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bloom filter tests</title>
+</head>
+<body>
+<p>
+    One test of {@code BloomSHA1}, the SHA-1 bloom filter the netdb's
+    {@code Filter} uses to compress a set of hashes into a reply: insert and
+    membership semantics. A bloom filter may report false positives but never
+    false negatives, so every test asserts that an inserted value is found. It
+    replaces the commented-out {@code main()} that inserted 100 values into a
+    (24, 11) filter and asserted nothing; that sizing is used nowhere in the
+    tree, so the tests use the default constructor. Run by <code>ant test</code>
+    in <code>router/java</code>.
+</p>
+</body>
+</html>

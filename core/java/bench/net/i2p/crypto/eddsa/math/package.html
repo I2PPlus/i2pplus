@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>EdDSA benchmarks</title>
+</head>
+<body>
+<p>
+    JMH benchmark of Ed25519 sign and verify and the group-formula operations
+    behind them. It sits in the {@code math} package so the benchmarks can call
+    the package-private formula methods and the precomputation tables directly.
+    Run it with the gc profiler to get the allocation picture, bytes per
+    operation.
+</p>
+</body>
+</html>

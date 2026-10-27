@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>DHT tests</title>
+</head>
+<body>
+<p>
+    The DHT extensions I2PSnark answers with. The BEP 33 bloom filter is
+    checked against the specification's own test vector: the IPv4 range
+    192.0.2.0 - 192.0.2.255 and the IPv6 range 2001:DB8:: - 2001:DB8::3E7 must
+    produce the exact byte array the BEP gives, with the size estimate it
+    states. The DHT tracker is covered for the filter cache - one filter per
+    torrent, built once and reused until it ages out, the seed and non-seed
+    split matching the peers actually stored, and no filter at all for a
+    torrent with no peers.
+</p>
+
+<p>
+    The KRPC layer: a peer may echo our own node entry back, since we put our
+    NID in every query, and a remote may persist and re-advertise it, so the
+    filter is checked for never storing that entry in the routing table, never
+    returning it from a closest-nodes lookup, and dropping it from candidate
+    lists; and a torrent's KRPC is checked to run on its own identity, with its
+    own query and response ports. Run by <code>ant test</code> in
+    <code>apps/i2psnark/java</code>.
+</p>
+</body>
+</html>

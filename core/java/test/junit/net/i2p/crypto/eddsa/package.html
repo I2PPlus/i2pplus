@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>EdDSA tests</title>
+</head>
+<body>
+<p>
+    Ed25519 signing and verification as the router uses it: the JCA engine,
+    the key-pair generator, the encoding of public and private keys, the
+    blinded key pair, and the shared helpers. {@code Ed25519TestVectors} is the
+    RFC 8032 vector set the signature tests read.
+</p>
+
+<p>
+    {@code ant test} in <code>core/java</code> runs the {@code *Test.java}
+    classes by name pattern, so a fixture named for what it holds, like
+    {@code Ed25519TestVectors}, is compiled and used, not run on its own.
+</p>
+</body>
+</html>

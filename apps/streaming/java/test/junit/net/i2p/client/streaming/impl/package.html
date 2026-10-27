@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Streaming implementation tests</title>
+</head>
+<body>
+<p>
+    The streaming library, tested as decisions rather than over a socket. The
+    connection's congestion and loss response: slow-start threshold and its
+    bandwidth anchor, congestion-avoidance window growth, the window ceiling,
+    the throughput floor and its baseline policy, choke and unchoke with their
+    size sampling, graduated loss response, the retransmit delay and count, the
+    hard resend budget, the stall give-up budget and its verdict on
+    outstanding data, the soft-failure reschedule, recovery, the RTT and its
+    initial default, and the log line a connection emits.
+</p>
+
+<p>
+    The handshake: the SYN timeout, expiry, reaper and its rate, the
+    SYN-ACK resend decision and the SYN budget and retransmit interval, accept
+    timeout resolution, the worker, and the throttler and cooldown wait that
+    keep a flood of connects off the pool. The manager: its decisions, ping,
+    pool pruning, reject response, and shutdown. The packet layer: the
+    dispatcher and its retired-session hand-off, serialization, the signature
+    layout, ingress hardening, local ack starvation and RTT sampling, and the
+    payload release and its race. The streams: input and output, the buffer
+    decay, the NACK cap, output-stream destroy, and the standard socket's
+    contract.
+</p>
+
+<p>
+    Beside them: the option loading from the cached config and its RTO, RTT,
+    resend-delay order, max connect timeout and sample clamp; the scheduler's
+    dead-task decision; the live-stream stats cadence, send-size telemetry and
+    retransmit-ratio stat; stream reservation; the temporary-ban decision; the
+    duplicate-close limiter; field visibility for the peer's own fields; and
+    the rate limit on a repeated warning. {@code TaskSchedulerTestBase} is the
+    shared base, not a suite. Run by <code>ant test</code> in
+    <code>apps/streaming/java</code>.
+</p>
+</body>
+</html>

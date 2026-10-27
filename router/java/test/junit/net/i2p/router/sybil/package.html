@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Sybil analysis tests</title>
+</head>
+<body>
+<p>
+    The Sybil analyzer's scoring. {@code AnalysisTest} covers the IP grouping:
+    routers grouped by a shared /32 and /16 on IPv4, /64 and /48 on IPv6, and
+    the points awarded in proportion to how many peers share the prefix. The
+    {@code Analysis} instance is built reflectively so the grouping runs
+    without starting the analysis job. {@code PointsTest} covers the score
+    itself: accumulation, negative and zero awards, the reason strings that
+    carry the points, comparison, and persistence. {@code UtilTest} covers
+    {@code biLog2}, the fractional log-2 the analyzer and the netdb renderer
+    use to measure DHT distance. Run by <code>ant test</code> in
+    <code>router/java</code>.
+</p>
+</body>
+</html>

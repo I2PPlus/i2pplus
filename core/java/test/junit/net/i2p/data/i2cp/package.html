@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>I2CP message tests</title>
+</head>
+<body>
+<p>
+    One test per I2CP message type, each checking that a message written to a
+    stream reads back as the same message: session create, destroy,
+    reconfigure, and status; lease-set request and the offset form; destination
+    lookup and reply; bandwidth limits, date, message id, payload, status,
+    abuse report with its reason and severity, receive begin and end, and
+    send-message with its expiry. {@code SessionConfig} and {@code SessionId}
+    are covered beside them.
+</p>
+
+<p>
+    {@code I2CPTstBase} is the shared fixture base the round trips run
+    through, and {@code I2CPTestSuite} gathers the group; {@code ant test} in
+    <code>core/java</code> runs each {@code *Test.java}.
+</p>
+</body>
+</html>

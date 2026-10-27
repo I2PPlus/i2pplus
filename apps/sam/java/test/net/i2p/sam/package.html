@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>SAM tests</title>
+</head>
+<body>
+<p>
+    The SAM bridge's decisions, tested without a running router: connection
+    ownership and the {@code AUTH} authorization rule - which client may claim
+    a destination, and who is refused ({@code ClientOwnershipTest}); the
+    hand-off that keeps a handler's teardown off the pool's selector thread
+    ({@code SAMHandlerPoolTeardownTest}); the session debug table the console
+    renders ({@code SAMDebugTableTest}); and the standalone parsing in
+    {@code SAMUtils} - the master-key and destination forms, and the
+    destination-string grammar. Run by <code>ant test</code> in
+    <code>apps/sam/java</code>.
+</p>
+</body>
+</html>

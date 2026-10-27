@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Message subsystem tests</title>
+</head>
+<body>
+<p>
+    The outbound message path's decisions, tested as pure statics rather than
+    through a running router: which send failures count as tunnel-related, soft,
+    or pool starvation, and the key a starvation nudge is filed under
+    ({@code IsTunnelRelatedFailureTest}); when a send blames the outbound
+    tunnel that delivered the request, which it must not do for a destination
+    this router hosts ({@code OutboundClientMessageOneShotLocalBlameTest}); the
+    cooldown fast-fail versus the transient-gap probe when sending to a
+    LeaseSet ({@code LeaseSetSendSkipDecisionTest}); and the identity-based
+    rotation that spreads fresh connections over outbound tunnels without ever
+    dropping one ({@code TunnelRotationDecisionTest}).
+</p>
+
+<p>
+    {@code BuildTestMessageJob}, {@code SendGarlicJob} and
+    {@code OutboundClientMessageStatus} are fixtures the message tests drive,
+    not suites, and are named without the {@code Test} suffix for that reason.
+    Run by <code>ant test</code> in <code>router/java</code>.
+</p>
+</body>
+</html>

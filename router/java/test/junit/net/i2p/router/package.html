@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Router core tests</title>
+</head>
+<body>
+<p>
+    The router's own machinery, tested as decisions rather than through a
+    running router. The autotuner is the bulk of it: the parameter keys, the
+    bounds a callee may apply, the direction a ceiling moves in, the targets
+    for IO transfer, lookup limit, reflector, search budget, send window and
+    stall timeout, the health weights, signal freshness, the activity window,
+    the observed-stat context, the static overrides, the thread-CPU table, and
+    the invariants that must hold across all of them.
+</p>
+
+<p>
+    Beside it: the banlist (capability patterns, entry age, policy decisions)
+    and the blocklist; the {@code JobQueue} (in-flight accounting, its index,
+    the lease a job holds, pumper notification, rescheduling, and the scaler's
+    decision and feedback); {@code MessageValidator}; the transports a failed
+    outbound message reports; the streaming ceiling decision; the build-reply
+    timeout range; and tunnel test status. {@code RouterTestHelper} is a
+    fixture, not a suite. Run by {@code ant test} in {@code router/java}.
+</p>
+</body>
+</html>

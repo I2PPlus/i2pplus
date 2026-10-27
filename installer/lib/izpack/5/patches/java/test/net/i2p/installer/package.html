@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>IzPack panel tests</title>
+</head>
+<body>
+<p>
+    The two patched installer panels. {@code LocalizedResourcesTest} covers the
+    language-to-body mapping that is the whole point of the localized hello
+    panel, and that a missing translation surfaces as
+    {@code ResourceNotFoundException} rather than a null, so the panel falls
+    back to the English body. {@code BrandingSuppressedTest} proves "Made with
+    IzPack" is never rendered and the welcome panel shows no heading, in any
+    language: the distribution's langpacks are compiled into the installer and
+    cannot be replaced, so what has to be proven is that the custom langpack
+    merged over the selected one wins.
+</p>
+
+<p>
+    Neither is a JUnit suite: both have a {@code main()} and are run against
+    the built panel jar. {@code LocalizedResourcesTest} runs under the Gradle
+    task of the same name (needs no built installer);
+    {@code BrandingSuppressedTest} runs under <code>ant
+    izpack-branding-check</code> and its Gradle counterpart, against
+    <code>dist/install.jar</code>, using the real {@code LocaleDatabase} from
+    the IzPack core the installer runs on.
+</p>
+</body>
+</html>

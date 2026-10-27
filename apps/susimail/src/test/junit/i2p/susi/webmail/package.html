@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Webmail tests</title>
+</head>
+<body>
+<p>
+    The webmail layer, mostly its log: a message id's log form, since a UIDL is
+    a base64 blob of up to 70 characters and the reader needs something
+    identifiable, not the whole blob; the Jetty session id as it appears in the
+    request log; the wording of the request debug log, which has to say why a
+    message list came up empty; and how a character read while parsing a MIME
+    boundary is reported. Run by <code>ant test</code> in
+    <code>apps/susimail</code>.
+</p>
+</body>
+</html>

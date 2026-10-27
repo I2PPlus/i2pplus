@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Console servlet filters</title>
+</head>
+<body>
+<p>
+    The filters the router console runs in front of its pages.
+    {@link net.i2p.servlet.filters.AuthFilter} checks every request for a valid
+    console session and sends the reader to the login page when there is none;
+    {@link net.i2p.servlet.filters.SameSiteCookieFilter} adds
+    {@code SameSite=Lax} to the cookies on the way out, as defense in depth
+    behind the setting in web.xml.
+    {@link net.i2p.servlet.filters.SessionManager} is the in-memory session
+    store with expiries that the auth filter reads.
+</p>
+</body>
+</html>
