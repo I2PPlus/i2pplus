@@ -13,6 +13,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelManagerFacade;
 import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.util.MaskedIPSet;
+import net.i2p.router.util.PeerLogFormatter;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
@@ -278,7 +279,8 @@ import net.i2p.util.SystemVersion;
                 // If hidden and inbound, use connected peers to guarantee
                 // that the adjacent hop can connect to us.
                 if (log.shouldInfo()) {
-                    log.info("EPS SANFP closest " + (isInbound ? "IB " : "OB ") + closestExclude);
+                    log.info("EPS SANFP closest " + (isInbound ? "IB" : "OB") +
+                             formatExcludedPeers(closestExclude));
                 }
                 ctx.profileOrganizer().selectActiveNotFailingPeers(1, closestExclude, closest, ipRestriction, ipSet);
                 if (closest.isEmpty()) {
@@ -294,11 +296,13 @@ import net.i2p.util.SystemVersion;
                 }
             } else if (exploreHighCap) {
                 if (log.shouldInfo())
-                    log.info("EPS SHCP closest " + (isInbound ? "IB " : "OB ") + closestExclude);
+                    log.info("EPS SHCP closest " + (isInbound ? "IB" : "OB") +
+                             formatExcludedPeers(closestExclude));
                 ctx.profileOrganizer().selectHighCapacityPeers(1, closestExclude, closest, ipRestriction, ipSet);
             } else {
                 if (log.shouldInfo())
-                    log.info("EPS SNFP closest " + (isInbound ? "IB " : "OB ") + closestExclude);
+                    log.info("EPS SNFP closest " + (isInbound ? "IB" : "OB") +
+                             formatExcludedPeers(closestExclude));
                 ctx.profileOrganizer().selectNotFailingPeers(1, closestExclude, closest, false, ipRestriction, ipSet, true);
             }
             // D1: Post-selection first-hop quality check for closest hop
@@ -357,12 +361,14 @@ import net.i2p.util.SystemVersion;
             if (pickFurthest) {
                 ArraySet<Hash> furthest = new ArraySet<>(1);
                 if (log.shouldInfo())
-                    log.info("Exploratory outbound endpoint needs the furthest hop -> Excluding: " + formatExcludedPeers(exclude));
+                    log.info("EPS the outbound endpoint needs the furthest hop" +
+                             formatExcludedPeers(exclude));
                 ctx.profileOrganizer().selectActiveNotFailingPeers(1, exclude, furthest, ipRestriction, ipSet);
                 if (furthest.isEmpty()) {
                     // ANFP does not fall back to non-connected
                     if (log.shouldInfo())
-                        log.info("No connected peer for the furthest hop -> Retrying with fast peers, excluding: " + formatExcludedPeers(exclude));
+                        log.info("EPS no connected peer for the furthest hop -> Retrying with fast peers" +
+                                 formatExcludedPeers(exclude));
                     ctx.profileOrganizer().selectFastPeers(1, exclude, furthest, ipRestriction, ipSet);
                 }
                 // D1: Post-selection first-hop quality check for furthest hop
@@ -404,7 +410,7 @@ import net.i2p.util.SystemVersion;
             Set<Hash> matches = new ArraySet<>(length);
             if (exploreHighCap) {
                 if (log.shouldInfo())
-                    log.info("EPS SHCP " + length + (isInbound ? " IB " : " OB ") + formatExcludedPeers(exclude));
+                    log.info("EPS SHCP " + length + (isInbound ? " IB" : " OB") + formatExcludedPeers(exclude));
                 ctx.profileOrganizer().selectHighCapacityPeers(length, exclude, matches, ipRestriction, ipSet);
                 // Same widening rule as the client pools: when the network is struggling
                 // or the Fast tier is small, complete the draw from Fast rather than
@@ -424,7 +430,7 @@ import net.i2p.util.SystemVersion;
                     ctx.profileOrganizer().selectHighCapacityPeers(length - 2, exclude, matches);
                 // select will check both matches and exclude, no need to add matches to exclude here
                 if (log.shouldInfo())
-                    log.info("EPS SNFP " + length + (isInbound ? " IB " : " OB ") + formatExcludedPeers(exclude));
+                    log.info("EPS SNFP " + length + (isInbound ? " IB" : " OB") + formatExcludedPeers(exclude));
                 ctx.profileOrganizer().selectNotFailingPeers(length, exclude, matches, false, ipRestriction, ipSet, true);
                 if (matches.isEmpty()) {
                     // Fallback: try fast peers if not-failing is empty
@@ -435,7 +441,8 @@ import net.i2p.util.SystemVersion;
             rv.addAll(matches);
         }
         if (log.shouldInfo())
-            log.info("EPS " + length + (isInbound ? " IB " : " OB ") + "final: " + formatExcludedPeers(exclude));
+            log.info("EPS " + length + (isInbound ? " IB" : " OB") + " -> Final selection" +
+                     formatExcludedPeers(exclude));
 
         if (closestHop != null) {
             if (isInbound)

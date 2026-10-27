@@ -29,6 +29,7 @@ import net.i2p.router.BanLogger;
 import net.i2p.router.Router;
 import net.i2p.router.peermanager.DBHistory;
 import net.i2p.router.peermanager.PeerProfile;
+import net.i2p.router.util.PeerLogFormatter;
 import net.i2p.router.util.RandomIterator;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
@@ -44,6 +45,14 @@ public class FloodfillPeerSelector extends PeerSelector {
 
     /** Records why floodfills were banned. */
     private BanLogger _banLogger;
+
+    /**
+     * Peer hashes named in one debug list before the "more" tail, two lines of
+     * eight. The candidate set is bounded only by the netdb, so an uncapped
+     * list would emit a line of unbounded length.
+     */
+    private static final int MAX_LOGGED_PEERS = 16;
+
     /** The floodfill's own database facade. */
     private final KademliaNetworkDatabaseFacade _facade;
 
@@ -141,18 +150,11 @@ public class FloodfillPeerSelector extends PeerSelector {
         kbuckets.getAll(matches);
         List<Hash> rv = matches.get(maxNumRouters);
         if (_log.shouldDebug()) {
-            StringBuilder buf = new StringBuilder();
-            buf.append("Searching for ").append(maxNumRouters).append(" peers close to [").append(key.toBase64().substring(0,6)).append("]");
-            buf.append("\n* All Hashes: ").append(matches.size());
-            buf.append("\n* Ignoring: ");
-            for (Hash h : peersToIgnore) {
-                buf.append("[").append(h.toBase64().substring(0,6)).append("]").append(" ");
-            }
-            buf.append("\n* Matched: ");
-            for (Hash h : rv) {
-                buf.append("[").append(h.toBase64().substring(0,6)).append("]").append(" ");
-            }
-            _log.debug(buf.toString());
+            _log.debug("Searching for " + maxNumRouters + " peers close to [" +
+                       key.toBase64().substring(0, 6) + ']' +
+                       "\n* All hashes: " + matches.size() +
+                       PeerLogFormatter.peerList(peersToIgnore, "Ignoring", peersToIgnore.size(), MAX_LOGGED_PEERS) +
+                       PeerLogFormatter.peerList(rv, "Matched", rv.size(), MAX_LOGGED_PEERS));
         }
         return rv;
     }
@@ -737,26 +739,10 @@ public class FloodfillPeerSelector extends PeerSelector {
      */
     private void logSelectionResults(List<Hash> good, List<Hash> ok, List<Hash> bad) {
         if (_log.shouldDebug()) {
-            StringBuilder buf = new StringBuilder();
-            buf.append("Floodfill sort results:");
-            if (!good.isEmpty()) {
-                buf.append("\n* Good: ");
-                for (Hash h : good) {
-                    buf.append("[").append(h.toBase64().substring(0,6)).append("]"); buf.append(" ");
-                }
-            }
-            if (!ok.isEmpty()) {
-                buf.append("\n* OK: ");
-                for (Hash h : ok) {
-                    buf.append("[").append(h.toBase64().substring(0,6)).append("]"); buf.append(" ");
-                }
-            }
-            if (!bad.isEmpty()) {
-                buf.append("\n* Bad: ");
-                for (Hash h : bad) {
-                    buf.append("[").append(h.toBase64().substring(0,6)).append("]"); buf.append(" ");
-                }
-            }
+            StringBuilder buf = new StringBuilder("Floodfill sort results:");
+            if (!good.isEmpty()) {buf.append(PeerLogFormatter.peerList(good, "Good", good.size(), MAX_LOGGED_PEERS));}
+            if (!ok.isEmpty()) {buf.append(PeerLogFormatter.peerList(ok, "OK", ok.size(), MAX_LOGGED_PEERS));}
+            if (!bad.isEmpty()) {buf.append(PeerLogFormatter.peerList(bad, "Bad", bad.size(), MAX_LOGGED_PEERS));}
             _log.debug(buf.toString());
         }
     }

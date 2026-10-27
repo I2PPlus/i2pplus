@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Set;
 import net.i2p.data.Hash;
 
+import net.i2p.router.util.PeerLogFormatter;
+
 /**
  * A Set of Hashes that automatically adds to the
  * Set in the {@link #contains} check.
@@ -121,10 +123,13 @@ abstract class ExcluderBase implements Set<Hash> {
     }
 
     /**
-     * Format exclusion summary grouped by reason (counts only, no peer hashes).
-     * Uses raw reason strings from {@link #_reasons}.
+     * Format the exclusion summary as a flat tally grouped by reason, counts
+     * only, no peer hashes - the grouped form that names the peers is
+     * {@link TunnelPeerSelector.Excluder#formatByReasonWithPeers}. Reason keys
+     * are mapped through the shared display labels.
      *
-     * @return string like "128 excluded \n* Reason: 50 unreachable, 30 not-ibgw"
+     * @return "\n* Excluded: N" then the reason tally, empty when nothing is
+     *         excluded
      * @since 0.9.70+
      */
     protected String getReasonsSummary() {
@@ -134,15 +139,7 @@ abstract class ExcluderBase implements Set<Hash> {
             Integer c = counts.get(r);
             counts.put(r, c != null ? c + 1 : 1);
         }
-        StringBuilder sb = new StringBuilder(64);
-        sb.append(s.size()).append(" excluded \n* Reason: ");
-        boolean first = true;
-        for (Map.Entry<String, Integer> e : counts.entrySet()) {
-            if (!first) {sb.append(", ");}
-            sb.append(e.getValue()).append(' ').append(e.getKey());
-            first = false;
-        }
-        return sb.toString();
+        return PeerLogFormatter.reasonsTally(counts);
     }
 
     /**

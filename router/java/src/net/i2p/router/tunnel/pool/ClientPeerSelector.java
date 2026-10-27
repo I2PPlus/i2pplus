@@ -23,6 +23,7 @@ import net.i2p.router.peermanager.FloodfillReliability;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.peermanager.ProfileOrganizer;
 import net.i2p.router.util.MaskedIPSet;
+import net.i2p.router.util.PeerLogFormatter;
 import net.i2p.util.ArraySet;
 
 /**
@@ -124,22 +125,6 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         return ctx.getProperty(PROP_STRATEGY, STRATEGY_DEFAULT);
     }
 
-
-    /**
-     * Formats a peer list for the log.
-     *
-     * @param peers the peers to format
-     * @return the base64 peer hashes, space separated
-     */
-    private static String formatPeerList(List<Hash> peers) {
-        if (peers == null || peers.isEmpty()) {return "[empty]";}
-        StringBuilder sb = new StringBuilder(peers.size() * 10);
-        for (int i = 0; i < peers.size(); i++) {
-            sb.append('[').append(peers.get(i).toBase64(), 0, 6).append("]");
-            if (i < peers.size() - 1) {sb.append(" -> ");}
-        }
-        return sb.toString();
-    }
 
     /** Config key for the legacy selection code. */
     private static final String PROP_LEGACY_SELECTION = "router.tunnel.useLegacyPeerSelection";
@@ -732,14 +717,14 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
                 lastHopExclude = getClosestHopExclude(true, exclude);
             } else {lastHopExclude = exclude;}
             if (log.shouldInfo()) {
-                log.info("Selecting fast peer for closest Inbound..." +
-                         (lastHopExclude.size() > 0 ? "\n* Excluding: " + formatExcludedPeers(lastHopExclude) : ""));
+                log.info("Selecting a fast peer for the closest Inbound" +
+                         formatExcludedPeers(lastHopExclude));
             }
         } else {
             lastHopExclude = new OBEPExcluder(exclude);
             if (log.shouldInfo()) {
-                log.info("Selecting fast peer for OutboundEndpoint..." +
-                         (lastHopExclude.size() > 0 ? "\n* Excluding: " + formatExcludedPeers(lastHopExclude) : ""));
+                log.info("Selecting a fast peer for the OutboundEndpoint" +
+                         formatExcludedPeers(lastHopExclude));
             }
         }
         return lastHopExclude;
@@ -767,8 +752,8 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         if (params.hiddenInbound) {
             // IB closest hop
             if (log.shouldInfo()) {
-                log.info("Selecting fast/non-failing peer for (hidden) closest Inbound..." +
-                         (lastHopExclude.size() > 0 ? "\n* Excluding: " + formatExcludedPeers(lastHopExclude) : ""));
+                log.info("Selecting a fast/non-failing peer for the (hidden) closest Inbound" +
+                         formatExcludedPeers(lastHopExclude));
             }
             if (ctx.getBooleanProperty(PROP_LEGACY_SELECTION)) {
                 ctx.profileOrganizer().selectActiveNotFailingPeers(1, lastHopExclude, matches, params.ipRestriction, params.ipSet);
@@ -833,7 +818,8 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
             } else {pickFurthest = false;} // shouldn't happen
             if (pickFurthest) {
                 if (log.shouldInfo()) {
-                    log.info("Selecting non-failing peer for OutboundEndpoint... " + formatExcludedPeers(lastHopExclude));
+                    log.info("Selecting a non-failing peer for the OutboundEndpoint" +
+                             formatExcludedPeers(lastHopExclude));
                 }
                 if (ctx.getBooleanProperty(PROP_LEGACY_SELECTION)) {
                     ctx.profileOrganizer().selectFastPeers(1, lastHopExclude, matches, params.ipRestriction, params.ipSet);
@@ -940,8 +926,8 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         // middle hop(s)
         // group 2 or 3
         if (log.shouldInfo()) {
-            log.info("Selecting middle hop peers (Client style)..." +
-                     (ex.exclude.size() > 0 ? "\n* Excluding: " + formatExcludedPeers(ex.exclude) : ""));
+            log.info("Selecting the middle hop peers (client style)" +
+                     formatExcludedPeers(ex.exclude));
         }
         int middleCount = length - 2;
 
@@ -1038,16 +1024,16 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         if (params.isInbound) {
             exclude = new IBGWExcluder(exclude);
             if (log.shouldInfo()) {
-                log.info("Selecting InboundGateway..." +
-                         (exclude.size() > 0 ? "\n* Excluding: " + formatExcludedPeers(exclude) : ""));
+                log.info("Selecting the InboundGateway" +
+                         formatExcludedPeers(exclude));
             }
         } else {
             if (params.checkClosestHop) {
                 exclude = getClosestHopExclude(false, exclude);
             }
             if (log.shouldInfo()) {
-                log.info("Selecting closest Outbound..." +
-                         (exclude.size() > 0 ? "\n* Excluding: " + formatExcludedPeers(exclude) : ""));
+                log.info("Selecting the closest Outbound" +
+                         formatExcludedPeers(exclude));
             }
         }
         if (log.shouldInfo()) {
@@ -1993,9 +1979,11 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         if (rv.size() > 1) {
             if (!checkTunnel(isInbound, false, rv)) {
                 if (log.shouldWarn()) {
-                    log.warn("CPS checkTunnel failed for " + settings.getDestinationNickname() +
-                             " (" + (settings.isInbound() ? "in" : "out") + ")" +
-                             " rv: " + formatPeerList(rv));
+                    String nickname = settings.getDestinationNickname();
+                    log.warn("Client peer selection connectivity check failed for " +
+                             (nickname != null ? nickname : "the destination") +
+                             " (" + (settings.isInbound() ? "inbound" : "outbound") + ")" +
+                             PeerLogFormatter.peerListOrdered(rv, "Selected", rv.size()));
                 }
                 // No blanket client cooldown here: checkTunnel already blames
                 // the specific peers of the failing edge via tunnelTimedOut(),

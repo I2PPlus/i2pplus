@@ -40,6 +40,7 @@ import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.router.peermanager.FloodfillReliability;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.transport.TransportUtil;
+import net.i2p.router.util.PeerLogFormatter;
 import net.i2p.stat.RateConstants;
 import net.i2p.util.ArraySet;
 import net.i2p.util.Log;
@@ -337,27 +338,25 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     /**
      * Format a set of excluded peers for logging, with exclusion reasons when
-     * the set is an {@link Excluder} or {@link ExcluderBase}.
+     * the set is an {@link Excluder} or {@link ExcluderBase}. The plain form is
+     * a labelled sub-list of up to eight hashes per line, laid out by
+     * {@link PeerLogFormatter}.
+     *
      * @param peers the excluded peer hashes, or null for none
-     * @return a loggable string naming each excluded router by its 6-character base64 hash
+     * @return a loggable label line naming the exclusions, followed by the
+     *         indented peer sub-list; always led by "\n* ", so a caller appends
+     *         it to its own message without a separator
      * @since 0.9.71+
      */
     protected static String formatExcludedPeers(Set<Hash> peers) {
-        if (peers == null || peers.isEmpty()) {return "[no exclusions]";}
+        if (peers == null || peers.isEmpty()) {return PeerLogFormatter.excluding(null, 0);}
         if (peers instanceof Excluder) {
             return ((Excluder) peers).formatByReasonWithPeers();
         }
         if (peers instanceof ExcluderBase) {
             return ((ExcluderBase) peers).getReasonsSummary();
         }
-        StringBuilder sb = new StringBuilder(peers.size() * 10);
-        int count = 0;
-        for (Hash h : peers) {
-            if (count % 12 == 0) {sb.append("\n* ");}
-            sb.append('[').append(h.toBase64(), 0, 6).append("] ");
-            count++;
-        }
-        return sb.toString();
+        return PeerLogFormatter.excluding(peers, peers.size());
     }
 
     /** Peers that failed as first hop (first hop unreachable) excluded for this long. */
@@ -955,24 +954,18 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         }
 
         if (log.shouldInfo()) {
-            StringBuilder buf = new StringBuilder();
-            if (settings.getDestinationNickname() != null)
-                buf.append("peers for ").append(settings.getDestinationNickname());
-            else if (settings.getDestination() != null)
-                buf.append("peers for [").append(settings.getDestination().toBase64(), 0, 6).append("]");
-            else
-                buf.append("peers for Exploratory ");
-            if (settings.isInbound())
-                buf.append(" Inbound");
-            else
-                buf.append(" Outbound");
-            buf.append(" peers: ");
-            for (int i = 0; i < rv.size(); i++) {
-                if (i > 0) {buf.append(", ");}
-                buf.append("[").append(rv.get(i).toBase64(), 0, 6).append("]");
+            String who;
+            String nickname = settings.getDestinationNickname();
+            if (nickname != null) {
+                who = nickname;
+            } else if (settings.getDestination() != null) {
+                who = '[' + settings.getDestination().toBase64().substring(0, 6) + ']';
+            } else {
+                who = "Exploratory";
             }
-            buf.append(", out of ").append(sz).append(" (not including us)");
-            log.info(buf.toString());
+            log.info("Selected peers for " + who + (settings.isInbound() ? " Inbound" : " Outbound") +
+                     PeerLogFormatter.peerList(rv, "Selected", rv.size()) +
+                     "\n* Candidates: " + sz + " (not including us)");
         }
 
         if (settings.isInbound())
@@ -2011,12 +2004,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             Hash ht = tunnel.get(i);
             if (!canConnect(hf, ht)) {
                 if (log.shouldWarn()) {
-                    StringBuilder buf = new StringBuilder();
-                    for (Hash h : tunnel) {
-                        buf.append("[").append(h.toBase64().substring(0,6)).append("]"); buf.append(" ");
-                    }
                     log.warn("Connection check failed at hop [" + (i+1) + " -> " + i +
-                             "] in tunnel (Gateway -> Endpoint)\n* Tunnel: " + buf.toString());
+                             "] in the tunnel (Gateway -> Endpoint)" +
+                             PeerLogFormatter.peerListOrdered(tunnel, "Tunnel", tunnel.size()));
                 }
                 // Blame only the adjacent hop (hf = source) — matching
                 // BuildExecutor.penalizeTimeout() which blames only the
@@ -2034,21 +2024,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             }
         }
         return rv;
-    }
-
-    /** Display labels for the peer skip reasons. */
-    private static final Map<String, String> REASON_LABELS = new LinkedHashMap<>(8);
-    static {
-        REASON_LABELS.put("too-many-tunnels", "Too many tunnels");
-        REASON_LABELS.put("recently-rejected", "Recently rejected");
-        REASON_LABELS.put("unreachable", "Unreachable");
-        REASON_LABELS.put("no-routerinfo", "No RouterInfo");
-        REASON_LABELS.put("floodfill", "Floodfill");
-        REASON_LABELS.put("U-cap", "Unreachable cap");
-        REASON_LABELS.put("moderate-congestion", "Moderate congestion");
-        REASON_LABELS.put("severe-congestion", "Severe congestion");
-        REASON_LABELS.put("slow/capped", "Slow or capped");
-        REASON_LABELS.put("no-signal", "No signal");
     }
 
     /**
@@ -2210,11 +2185,16 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         }
 
         /**
-         * Format excluded peers grouped by reason, sorted by hash within each group.
-         * @return multi-line string like "Too many tunnels (128): peer1 peer2..."
+         * Format the excluded peers grouped by skip reason, sorted by hash
+         * within each group: a total line, then one labelled sub-list per
+         * reason, laid out by {@link PeerLogFormatter}. The raw reason key is
+         * shown beside its display label so the string stays greppable.
+         *
+         * @return "\n* Excluded: N" then a labelled sub-list per reason, the
+         *         sentence form when nothing is excluded
          */
         String formatByReasonWithPeers() {
-            if (_reasons.isEmpty()) return "";
+            if (_reasons.isEmpty()) {return PeerLogFormatter.excluding(null, 0);}
             Map<String, List<Hash>> byReason = new LinkedHashMap<>();
             List<String> reasonOrder = new ArrayList<>();
             for (Map.Entry<Hash, String> e : _reasons.entrySet()) {
@@ -2230,17 +2210,13 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             for (List<Hash> list : byReason.values()) {
                 list.sort(HASH_BASE64_COMPARATOR);
             }
-            StringBuilder sb = new StringBuilder();
-            sb.append(s.size()).append(" excluded\n");
-            for (int i = 0; i < reasonOrder.size(); i++) {
-                List<Hash> list = byReason.get(reasonOrder.get(i));
-                String label = REASON_LABELS.get(reasonOrder.get(i));
-                if (label == null) {label = reasonOrder.get(i);}
-                sb.append("* ").append(label).append(" (").append(list.size()).append("):");
-                for (Hash h : list) {
-                    sb.append(' ').append(h.toBase64(), 0, 6);
-                }
-                if (i + 1 < reasonOrder.size()) {sb.append('\n');}
+            StringBuilder sb = new StringBuilder(128);
+            sb.append("\n* Excluded: ").append(s.size());
+            for (String reason : reasonOrder) {
+                List<Hash> list = byReason.get(reason);
+                String label = PeerLogFormatter.reasonLabel(reason);
+                if (!label.equals(reason)) {label = label + " (" + reason + ')';}
+                sb.append(PeerLogFormatter.peerList(list, label, list.size()));
             }
             return sb.toString();
         }
