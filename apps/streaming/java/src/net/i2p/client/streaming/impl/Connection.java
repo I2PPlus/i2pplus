@@ -3004,12 +3004,12 @@ class Connection {
                 _retransmitEvent.pushBackRTOBounded(pushBackDelay);
             }
             if (_log.shouldDebug()) {
-                _log.debug("[" + Connection.this + "] Not all packets ACKed, pushing timer out " + pushBackDelay);
+                _log.debug("[" + Connection.this + "]\n* Not all packets ACKed, pushing timer out " + pushBackDelay + "ms");
             }
         } else if (doCancel) {
             _retransmitEvent.cancel();
             if (_log.shouldDebug()) {
-                _log.debug("[" + Connection.this + "] All outstanding packets ACKed, cancelling timer");
+                _log.debug("[" + Connection.this + "]\n* All outstanding packets ACKed, cancelling timer...");
             }
         }
         return _ackedList;

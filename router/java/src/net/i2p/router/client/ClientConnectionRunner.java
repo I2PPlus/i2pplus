@@ -736,7 +736,8 @@ class ClientConnectionRunner {
                         else if (sencaa.equals("4")) {hasEC = true;}
                         else if (sencaa.equals("5") || sencaa.equals("6") || sencaa.equals("7")) {
                             if (hasPQ) {
-                                _log.error("Bad encryption type combination in i2cp.leaseSetEncType for " + dest.toBase32());
+                                _log.error("Bad encryption type combination in i2cp.leaseSetEncType for [" +
+                                           dest.toBase32().substring(0, 8) + "]");
                                 return SessionStatusMessage.STATUS_INVALID;
                             }
                             try {pqType = Integer.parseInt(sencaa);}
@@ -748,7 +749,8 @@ class ClientConnectionRunner {
             } else {hasElg = true;}
             if (hasElg) {
                 if (hasPQ) {
-                    _log.error("Bad encryption type combination in i2cp.leaseSetEncType for " + dest.toBase32());
+                    _log.error("Bad encryption type combination in i2cp.leaseSetEncType for [" +
+                               dest.toBase32().substring(0, 8) + "]");
                     return SessionStatusMessage.STATUS_INVALID;
                 }
                 TransientSessionKeyManager tskm = new TransientSessionKeyManager(_context, tags, thresh);

@@ -1,6 +1,7 @@
 package net.i2p.router.util;
 
 import net.i2p.I2PAppContext;
+import net.i2p.data.DataHelper;
 import net.i2p.util.ConcurrentHashSet;
 
 /**
@@ -354,10 +355,10 @@ public class DecayingHashSet extends DecayingBloomFilter {
         if (now - _lastOverCapWarnNanos < _durationMs * 1000000L)
             return;
         _lastOverCapWarnNanos = now;
-        _log.warn("DecayingHashSet over the soft cap (" + getInsertedCount()
-                  + " > " + _maxEntries + ") less than " + (_durationMs / 1000)
-                  + "s after the last decay, deferring; memory now tracks traffic,"
-                  + " not the cap");
+        _log.warn("DecayingHashSet is over the soft cap"
+                  + " * Entries: " + getInsertedCount() + " * Soft cap: " + _maxEntries
+                  + "\n* Less than " + DataHelper.formatDuration(_durationMs) + " since the last decay, deferring"
+                  + "\n* Memory now tracks traffic, not the cap");
     }
 
     /**

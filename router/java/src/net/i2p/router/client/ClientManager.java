@@ -347,7 +347,9 @@ class ClientManager {
      * @return SessionStatusMessage return code, 1 for success, != 1 for failure
      */
     public int destinationEstablished(ClientConnectionRunner runner, Destination dest) {
-        if (_log.shouldDebug()) {_log.debug("DestinationEstablished called for: " + dest.toBase32());}
+        if (_log.shouldDebug()) {
+            _log.debug("DestinationEstablished called for: [" + dest.toBase32().substring(0, 8) + "]");
+        }
 
         synchronized (_pendingRunners) {_pendingRunners.remove(runner);}
         int rv;
@@ -382,7 +384,7 @@ class ClientManager {
             stale.disconnectClient("Replaced by a new connection for the same destination", Log.WARN);
         }
         if (rv == SessionStatusMessage.STATUS_REFUSED) {
-            _log.error("Max sessions exceeded for: " + dest.toBase32());
+            _log.error("Max sessions exceeded for: [" + dest.toBase32().substring(0, 8) + "]");
         }
         return rv;
     }
@@ -399,7 +401,7 @@ class ClientManager {
      * @since 0.9.39
      */
     public boolean registerEncryptedDestination(ClientConnectionRunner runner, Hash hash) {
-        if (_log.shouldDebug()) {_log.debug("New ENCRYPTED LeaseSet: " + hash.toBase32());}
+        if (_log.shouldDebug()) {_log.debug("New ENCRYPTED LeaseSet: [" + hash.toBase32().substring(0, 8) + "]");}
 
         boolean rv;
         synchronized (_runners) {

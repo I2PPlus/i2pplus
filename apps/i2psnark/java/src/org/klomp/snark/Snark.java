@@ -471,9 +471,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         }
         if (_storageCreationFailed) {
             if (_log.shouldWarn()) {
-                _log.warn("Not restarting " + getBaseName()
-                        + ": its data location could not be created, remove the leftover files"
-                        + " and add the torrent again");
+                _log.warn("Not restarting " + getBaseName() + " -> Cannot create the data location"
+                        + "\n* Remove the leftover files and add the torrent again");
             }
             return;
         }

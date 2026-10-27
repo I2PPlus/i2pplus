@@ -2275,17 +2275,12 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                 // TODO sent queries?
                 if (_log.shouldDebug())
                     _log.debug(
-                            "KRPC cleaner done, now with "
-                                    + _blacklist.size()
-                                    + " in blacklist, "
-                                    + _outgoingTokens.size()
-                                    + " sent Tokens, "
-                                    + _incomingTokens.size()
-                                    + " rcvd Tokens, "
-                                    + _knownNodes.size()
-                                    + " known peers, "
-                                    + _sentQueries.size()
-                                    + " queries awaiting response");
+                            "KRPC cleaner done"
+                                    + " * Blacklist: " + _blacklist.size()
+                                    + " * Sent tokens: " + _outgoingTokens.size()
+                                    + " * Received tokens: " + _incomingTokens.size()
+                                    + "\n* Known peers: " + _knownNodes.size()
+                                    + " * Queries awaiting response: " + _sentQueries.size());
             } catch (Throwable t) {
                 _log.error("KRPC cleaner cycle failed", t);
             } finally {

@@ -283,8 +283,12 @@ public class DecayingBloomFilter {
             _decayEvent.schedule(_durationMs);
         }
         if (_log.shouldWarn())
-           _log.warn("New DecayingBloomFilter " + name + "; m: " + m + "; k: " + k + "; entry bytes: " + entryBytes +
-                     "; extenders: " + numExtenders + "; cycle seconds: " + (durationMs / 1000));
+           _log.warn("New decaying bloom filter " + name
+                     + "\n* Bits: " + m
+                     + " * Hashes: " + k
+                     + " * Entry bytes: " + entryBytes
+                     + " * Extenders: " + numExtenders
+                     + " * Cycle seconds: " + (durationMs / 1000));
         context.addShutdownTask(new Shutdown());
     }
 

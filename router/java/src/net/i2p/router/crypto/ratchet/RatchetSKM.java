@@ -1616,9 +1616,9 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                     _tagSet = ts;
                     if (_log.shouldInfo())
                         _log.info("Received nextkey " + key +
-                                  "\n* From " + (_destination != null ? _destination.toBase32() : "???") +
-                                  "\n* Old OutBound TagSet: " + oldts +
-                                  "\n* Ratchet to new Outbound ES TS: " + ts);
+                                  (_destination != null ? " * From [" + _destination.toBase32().substring(0, 8) + "]" : "") +
+                                  "\n* Old outbound tag set: " + oldts +
+                                  "\n* Ratchet to new outbound ES TS: " + ts);
                 } else {
                     // this is about my inbound tag set
                     if (key.equals(_hisOBKey)) {
@@ -1958,11 +1958,14 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                     if (_destination == null)
                         _destination = d;
                     else if (_log.shouldWarn() && !_destination.equals(d))
-                        _log.warn("Destination mismatch? was: " + _destination.toBase32() + " now: " + d.toBase32());
+                        _log.warn("The ratchet session destination changed" +
+                                  "\n* Was: [" + _destination.toBase32().substring(0, 8) + "]" +
+                                  " * Now: [" + d.toBase32().substring(0, 8) + "]");
                 }
                 _ackTimer = timer;
                 if (_log.shouldDebug())
-                    _log.debug("Registered an ack timer to: " + (_destination != null ? _destination.toBase32() : _target.toString()));
+                    _log.debug("Registered an ack timer -> [" +
+                               (_destination != null ? _destination.toBase32().substring(0, 8) : _target.toString()) + "]");
             }
             return true;
         }

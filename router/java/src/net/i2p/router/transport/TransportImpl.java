@@ -524,21 +524,27 @@ public abstract class TransportImpl implements Transport {
 
         if (msToSend > 1500 && debug) {
             _log.debug("[" + style + "] afterSend slow: " + (sendSuccessful ? "Success! " : "FAIL! ") +
-                       String.format("%n* %d byte %s[MsgID %d] to [%s] took %d ms", msg.getMessageSize(),
-                       msg.getMessageType(), msg.getMessageId(), peerHash, msToSend));
+                       String.format("\n* %d byte %s[MsgID %d] to [%s] took %s", msg.getMessageSize(),
+                                     msg.getMessageType(), msg.getMessageId(), peerHash, DataHelper.formatDuration(msToSend)));
         }
 
         long lifetime = msg.getLifetime();
         long queueTime = msg.getTransportQueued() > 0 ? now - msg.getTransportQueued() : lifetime;
         if (lifetime > 3000) {
             if (_log.shouldLog(Log.DEBUG)) {
-                _log.log(Log.DEBUG, String.format("[%s] afterSend slow: %s(Lifetime: %dms / Time taken: %dms)%n* %d byte %s [MsgID %d] from [%s] to [%s]: %s",
-                                                 style, (sendSuccessful ? "Success! " : "FAIL! "), lifetime, msToSend,
-                                                 msg.getMessageSize(), msg.getMessageType(), msg.getMessageId(),
-                                                 routerHash, peerHash, msg));
+                _log.log(Log.DEBUG,
+                         String.format("[%s] afterSend slow: %s(Lifetime: %s * Time taken: %s)" +
+                                       "\n* %d byte %s [MsgID %d] from [%s] to [%s]" +
+                                       "\n* %s",
+                                       style, (sendSuccessful ? "Success! " : "FAIL! "),
+                                       DataHelper.formatDuration(lifetime), DataHelper.formatDuration(msToSend),
+                                       msg.getMessageSize(), msg.getMessageType(), msg.getMessageId(),
+                                       routerHash, peerHash, msg));
             }
         } else if (debug) {
-            _log.debug(String.format("[%s] afterSend: %s%n* %d byte %s [MsgID %d] from [%s] to [%s] %s",
+            _log.debug(String.format("[%s] afterSend: %s" +
+                                     "\n* %d byte %s [MsgID %d] from [%s] to [%s]" +
+                                     "\n* %s",
                       style, (sendSuccessful ? "Success! " : "FAIL! "), msg.getMessageSize(), msg.getMessageType(),
                       msg.getMessageId(), routerHash, peerHash, msg));
         }
@@ -552,7 +558,7 @@ public abstract class TransportImpl implements Transport {
             msg.discardData();
         } else {
             if (debug) {
-                _log.debug(String.format("[%s] Failed to send %s to [%s] %s", style, msg.getMessageType(), peerHash, msg));
+                _log.debug(String.format("[%s] Failed to send %s to [%s] * %s", style, msg.getMessageType(), peerHash, msg));
             }
             if (msg.getExpiration() < now) {
                 _context.statManager().addRateData("transport.expiredOnQueueLifetime", queueTime);
@@ -563,7 +569,8 @@ public abstract class TransportImpl implements Transport {
                 _context.outNetMessagePool().add(msg);
             } else {
                 if (debug) {
-                    _log.debug(String.format("[%s] Failed to send the %s (out of time) Expired: %s",
+                    _log.debug(String.format("[%s] Failed to send the %s (out of time)" +
+                                             "\n* Expired: %s",
                               style, msg.getMessageType(), new Date(msg.getExpiration())));
                 }
                 addJobIfPresent(msg.getOnFailedSendJob());
@@ -575,13 +582,19 @@ public abstract class TransportImpl implements Transport {
         long sendTime = now - msg.getSendBegin();
         long allTime = now - msg.getCreated();
         if (allTime > 5000 && debug) {
-            _log.debug(String.format("Took too long (%d ms) from preparation to afterSend (ok? %b)%n* Sent: %s after failing on %s%s",
-                      allTime, sendSuccessful, new Date(sendTime), msg.getFailedTransports(),
+            _log.debug(String.format("Took too long (%s) from preparation to afterSend -> Send OK: %b" +
+                                     "\n* Sent: %s after failing on %s%s",
+                      DataHelper.formatDuration(allTime), sendSuccessful, new Date(sendTime),
+                      msg.getFailedTransports(),
                       (sendSuccessful ? " and succeeding on " + style : "")));
         }
         if (allTime > 60000 && sendSuccessful && _log.shouldWarn()) {
-            _log.warn(String.format("Severe latency? More than a minute slow?%n* %s of [MsgID %d]%n* Send began: %s%n* Message created: %s%s",
-                    msg.getMessageType(), msg.getMessageId(), new Date(msg.getSendBegin()), new Date(msg.getCreated()), msg));
+            _log.warn(String.format("Severe latency, sending took more than a minute (%s)" +
+                                    "\n* %s of [MsgID %d] * Send began: %s" +
+                                    "\n* Message created: %s" +
+                                    "\n* %s",
+                    DataHelper.formatDuration(allTime), msg.getMessageType(), msg.getMessageId(),
+                    new Date(msg.getSendBegin()), new Date(msg.getCreated()), msg));
             _context.messageHistory().messageProcessingError(msg.getMessageId(), msg.getMessageType(),
                                                              "Took too long to send [" + allTime + "ms]");
         }

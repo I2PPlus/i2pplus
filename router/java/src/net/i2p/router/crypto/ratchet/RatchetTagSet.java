@@ -746,7 +746,7 @@ class RatchetTagSet implements TagSetHandle {
             buf.append("ES ");
         buf.append("TagSet #").append(_tagSetID)
            .append(" ID #").append(_id)
-           .append("\n* Created:  ").append(DataHelper.formatTime(_created))
+           .append("\n* Created: ").append(DataHelper.formatTime(_created))
            .append(" * Last used: ").append(DataHelper.formatTime(_date));
         PublicKey pk = getRemoteKey();
         if (pk != null && !pk.toString().trim().isEmpty())
@@ -756,10 +756,10 @@ class RatchetTagSet implements TagSetHandle {
             buf.append(_nextKey);
         int sz = size();
         buf.append("\n* Size: ").append(sz)
-           .append("; Original Size: ").append(_originalSize)
-           .append("; Max Size: ").append(_maxSize)
-           .append("; Remaining: ").append(remaining());
-        buf.append("; Acked? ").append(_acked);
+           .append(" * Original size: ").append(_originalSize)
+           .append(" * Max size: ").append(_maxSize)
+           .append(" * Remaining: ").append(remaining())
+           .append(" * Acked: ").append(_acked ? "Yes" : "No");
         if (_sessionTags != null) {
             for (int i = 0; i < sz; i++) {
                 int n = _sessionTags.keyAt(i);

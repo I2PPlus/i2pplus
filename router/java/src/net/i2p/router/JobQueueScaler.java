@@ -249,6 +249,8 @@ class JobQueueScaler implements Runnable {
         final long smoothMaxLag;
 
         /**
+         * Captures the queue values a scale-up verdict is judged against.
+         *
          * @param avgLag the average job lag at the capture, in milliseconds
          * @param runnersAdded the runners the scale event adds
          * @param messageDelay the transport send delay at the capture, in milliseconds
@@ -281,6 +283,8 @@ class JobQueueScaler implements Runnable {
         final long _expiresOn;
 
         /**
+         * Holds a subsystem's claim on job runners until the lease expires.
+         *
          * @param count runners held under this lease
          * @param expiresOn adjusted ms instant the lease stops counting, 0 for never
          */
@@ -1184,7 +1188,7 @@ class JobQueueScaler implements Runnable {
                 _scalingUpDisabled = true;
                 if (_log.shouldInfo()) {
                     _log.info("Circuit breaker open -> Scaling up disabled: " + _consecutiveFailedScaleUps
-                              + " failed attempts * Jobs may be CPU-bound * Retrying in "
+                              + " failed attempts * Jobs may be CPU-bound * Retry in "
                               + (cooldown / 1000) + "s");
                 }
             }

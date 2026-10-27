@@ -375,8 +375,8 @@ class PacketHandler {
                 header.getNetID() != _networkID) {
 
                 if (header != null && _log.shouldInfo()) {
-                    _log.info("Packet does not decrypt as Session Request, attempting to decrypt as Token Request / PeerTest / HolePunch \n* " +
-                              header + " from " + from);
+                    _log.info("Packet does not decrypt as a session request, attempting to decrypt" +
+                              "\n* As a token request, peer test, or hole punch key\n* " + header + " from " + from);
                 }
 
                 header = SSU2Header.trialDecryptLongHeader(packet, k1, k2);

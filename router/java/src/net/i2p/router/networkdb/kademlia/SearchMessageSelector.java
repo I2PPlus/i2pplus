@@ -113,9 +113,9 @@ class SearchMessageSelector implements MessageSelector {
             DatabaseStoreMessage msg = (DatabaseStoreMessage)message;
             if (msg.getKey().equals(_state.getTarget())) {
                 if (_log.shouldDebug())
-                    _log.debug("[ID " + _id + "] Received DbStore of the key we're looking for. " +
-                               "May not have been from peer we're checking against though, " +
-                               "but DBStore doesn't include that info");
+                    _log.debug("[ID " + _id + "] Received a DbStore of the key we are looking for" +
+                               "\n* It may not be from the peer we are checking against," +
+                               " because a DbStore does not say who sent it");
                 _found = true;
                 return true;
             }

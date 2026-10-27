@@ -299,9 +299,10 @@ class FragmentHandler {
             paddingEnd++;
             if (offset+paddingEnd >= length) {
                 if (_log.shouldWarn())
-                    _log.warn("Cannot verify message, going past the end [offset: "
-                              + offset + "; length: " + length + "; paddingEnd:"
-                              + paddingEnd + "]");
+                    _log.warn("Cannot verify the message, the offset runs past the end"
+                              + " * Offset: " + offset
+                              + " * Length: " + length
+                              + " * Padding end: " + paddingEnd);
                 return false;
             }
         }
@@ -326,8 +327,11 @@ class FragmentHandler {
             if (_log.shouldWarn()) {
                 _log.warn("Corrupt tunnel message - verification fails: " + Base64.encode(preprocessed, offset+HopProcessor.IV_LENGTH, 4)
                            + " != " + Base64.encode(v, 0, 4));
-                _log.warn("No matching endpoint: # pad bytes: " + (paddingEnd-(HopProcessor.IV_LENGTH+4)-1)
-                           + "; offset: " + offset + "; length: " + length + "; paddingEnd=" + paddingEnd);
+                _log.warn("No matching endpoint"
+                          + " * Pad bytes: " + (paddingEnd-(HopProcessor.IV_LENGTH+4)-1)
+                          + " * Offset: " + offset
+                          + " * Length: " + length
+                          + " * Padding end: " + paddingEnd);
             }
         }
         SimpleByteCache.release(v);

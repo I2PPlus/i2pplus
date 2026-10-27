@@ -206,8 +206,9 @@ class FileLogWriter extends LogWriter {
                 // the exact fix instead — otherwise group-readable logs look
                 // configured but remain unreadable to the group.
                 System.err.println("Group-readable logs requested (" + LogManager.PROP_GROUP_READABLE +
-                    "=true) but the log directory is not group-traversable: " + parent.getAbsolutePath() +
-                    " -- run: chmod g+x " + parent.getAbsolutePath());
+                    "=true) but the log directory is not group-traversable" +
+                    "\n* Directory: " + parent.getAbsolutePath() +
+                    "\n* Run: chmod g+x " + parent.getAbsolutePath());
             }
             if (!parent.isDirectory()) {
                 System.err.println("Cannot put the logs in a subdirectory of a plain file: " + f.getAbsolutePath());

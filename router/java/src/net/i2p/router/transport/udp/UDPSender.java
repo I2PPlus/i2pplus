@@ -218,7 +218,7 @@ public class UDPSender {
         }
 
         if (_log.shouldDebug()) {
-            _log.debug("UDP packet queued -> Lifetime: " + packet.getLifetime() + "ms; Size: " + psz + " bytes");
+            _log.debug("UDP packet queued -> Lifetime: " + packet.getLifetime() + "ms * Size: " + psz + " bytes");
         }
     }
 

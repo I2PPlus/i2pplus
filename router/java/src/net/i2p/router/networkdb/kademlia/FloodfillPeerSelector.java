@@ -577,7 +577,9 @@ public class FloodfillPeerSelector extends PeerSelector {
                     banAndDisconnect(entry, info, "L tier Floodfill " + verCaps, "L tier Floodfill " + verCaps,
                                      "L tier Floodfill", 4*60*60*1000L, 4*60*60*1000L, now);
                     if (_log.shouldWarn()) {
-                        _log.warn("Banning for 4h and disconnecting from Floodfill [" + entry.toBase64().substring(0,6) + "] -> L tier " + verCaps);
+                        _log.warn("Banning an L tier floodfill for " + DataHelper.formatDuration(4*60*60*1000L) +
+                                  " and disconnecting -> [" + entry.toBase64().substring(0,6) + "]" +
+                                  " * Version: " + info.getVersion() + " * Caps: " + caps);
                     }
                 }
             }
@@ -638,11 +640,12 @@ public class FloodfillPeerSelector extends PeerSelector {
                 banAndDisconnect(entry, info, "Unresponsive Floodfill", "Unresponsive Floodfill " + verCaps,
                                  "Unresponsive Floodfill", 60*60*1000L, 30*60*1000L, now);
                 if (_log.shouldWarn()) {
-                    _log.warn("Banning for 30m and disconnecting from unresponsive Floodfill [" + entry.toBase64().substring(0,6) + "] -> " +
-                              "Fail rate: " + String.format("%.2f", failRate.getAverageValue()) +
-                              ", Failures: " + failRate.getLifetimeEventCount() +
-                              ", IP: " + (ipPort != null ? ipPort : "UNKNOWN") +
-                              ", " + verCaps);
+                    _log.warn("Banning an unresponsive floodfill for " + DataHelper.formatDuration(30*60*1000L) +
+                              " and disconnecting -> [" + entry.toBase64().substring(0,6) + "]" +
+                              "\n* Fail rate: " + String.format("%.2f", failRate.getAverageValue()) +
+                              " * Failures: " + failRate.getLifetimeEventCount() +
+                              (ipPort != null ? " * IP: " + ipPort : "") +
+                              " * Version: " + info.getVersion() + " * Caps: " + caps);
                 }
             }
             return PeerClass.BAD;

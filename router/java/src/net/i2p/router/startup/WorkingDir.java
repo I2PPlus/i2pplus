@@ -192,8 +192,10 @@ public class WorkingDir {
         File test = new File(oldDirf, "hosts.txt");
         if (!test.exists()) {
             setupSystemOut(cwd);
-            System.err.println("ERROR - Cannot find I2P installation in " + cwd +
-                  " - Will probably be just a router with no apps or console at all!"); // NOSONAR S106 setup tool output
+            System.err.println("ERROR - Cannot find the I2P installation in " + cwd +
+                  "\n* The router will have no apps and no console" +
+                  "\n* Set the working directory to the I2P installation" +
+                  " and start the router from there"); // NOSONAR S106 setup tool output
             // we are probably doomed...
             return cwd;
         }

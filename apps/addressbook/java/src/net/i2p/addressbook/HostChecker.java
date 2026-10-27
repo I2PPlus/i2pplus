@@ -50,6 +50,7 @@ import net.i2p.client.streaming.I2PSocketManager;
 import net.i2p.client.streaming.I2PSocketManagerFactory;
 import net.i2p.crypto.EncType;
 import net.i2p.data.DatabaseEntry;
+import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.data.LeaseSet;
@@ -2316,8 +2317,10 @@ public class HostChecker {
                 if (cycleDurationMinutes > 0 && configuredIntervalMinutes > 0 && cycleDurationMinutes > configuredIntervalMinutes) {
                     long newInterval = cycleDuration + (bufferMinutes * 60000);
                     if (_log.shouldWarn()) {
-                        _log.warn("HostChecker cycle took " + cycleDurationMinutes + " minutes, which exceeds configured interval of " +
-                                  configuredIntervalMinutes + " minutes -> Adjusting interval to " + (newInterval / 60000) + " minutes");
+                        _log.warn("HostChecker cycle took " + DataHelper.formatDuration(cycleDuration) +
+                                  " -> Exceeds the configured interval of " +
+                                  DataHelper.formatDuration(_pingInterval) +
+                                  "\n* Adjusting the interval to " + DataHelper.formatDuration(newInterval));
                     }
                     _pingInterval = newInterval;
                     reschedulePingTask();

@@ -564,17 +564,24 @@ public class SyntheticREDQueue implements BandwidthEstimator {
     }
 
     /**
-     * Returns a human-readable string displaying the current bandwidth and queue size
-     * estimates, formatted for DEBUG logging.
+     * Returns the bandwidth estimate, the average queue size, and the configured
+     * limit as log-line segments, each led by the "\n* " continuation marker the
+     * router logs use between values. The caller appends this directly to a log
+     * message, so it supplies the leading separator itself and needs no label.
+     * The average queue size is an internal RED estimator depth, so it is only
+     * shown once it is meaningful.
      *
-     * @return formatted status string including bandwidth and average queue size
+     * @return formatted log segments for the bandwidth, queue size, and limit
      */
     @Override
     public String toString() {
-        return "\n* " + (_bKFiltered > 0 ? "Bandwidth: " + DataHelper.formatSize2Decimal((long) (_bKFiltered * 1000), false) +
-               "Bytes/s " : "") + (_avgQueueSize > 0 ?
-               "Average Queue Size: " : "") + (_avgQueueSize > 0 ? DataHelper.formatSize2((long) _avgQueueSize, false) + "B / " : "") +
-               "Limit: " + DataHelper.formatSize2Decimal( _bandwidthBps, false) + "Bytes/s";
+        StringBuilder buf = new StringBuilder(128);
+        buf.append("\n* Bandwidth: ").append(DataHelper.formatSize2Decimal((long) (_bKFiltered * 1000), false)).append("Bytes/s");
+        if (_avgQueueSize > 0) {
+            buf.append(" * Average queue size: ").append(DataHelper.formatSize2((long) _avgQueueSize, false)).append("B");
+        }
+        buf.append(" * Limit: ").append(DataHelper.formatSize2Decimal(_bandwidthBps, false)).append("Bytes/s");
+        return buf.toString();
     }
 
     /**

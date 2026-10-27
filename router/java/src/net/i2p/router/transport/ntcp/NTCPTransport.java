@@ -2313,7 +2313,12 @@ public int getEstimatedRTT(Hash peer) {
         String cport = _context.getProperty(PROP_I2NP_NTCP_PORT);
         String nport = chooseAutomaticPort(cport, port);
         if (_log.shouldInfo())
-            _log.info("Old port: " + oport + " Config: " + cport + " New: " + nport);
+            // the old port and the config value are both unset in the common
+            // auto-port case, so a null there is the normal state, not a value
+            _log.info("NTCP port check" +
+                      (isBlank(oport) ? "" : " * Old port: " + oport) +
+                      (isBlank(cport) ? "" : " * Config port: " + cport) +
+                      (isBlank(nport) ? "" : " * Auto port: " + nport));
 
         if (oport == null && !isBlank(nport)) {
             newProps.setProperty(RouterAddress.PROP_PORT, nport);
@@ -2337,7 +2342,12 @@ public int getEstimatedRTT(Hash peer) {
         // reachability query is not consulted here.
         boolean ssuOK = ip != null;
         if (_log.shouldInfo())
-            _log.info("Old: " + ohost + " Config: " + name + " Auto: " + enabled + " ssuOK? " + ssuOK);
+            // an unset old host or hostname config is the normal auto state,
+            // so those segments are left out rather than logged as null
+            _log.info("NTCP host check" +
+                      (isBlank(ohost) ? "" : " * Old host: " + ohost) +
+                      (isBlank(name) ? "" : " * Config host: " + name) +
+                      " * Auto enabled: " + enabled + " * SSU OK: " + ssuOK);
         if (wantsAutoHost(enabled, ssuOK)) {
             if (!ssuOK) {
                 if (_log.shouldWarn())
@@ -2347,7 +2357,8 @@ public int getEstimatedRTT(Hash peer) {
             // ip non-null
             String nhost = Addresses.toString(ip);
             if (_log.shouldInfo())
-                _log.info("Old: " + ohost + " Config: " + name + " New: " + nhost);
+                _log.info("Auto NTCP host -> Auto host: " + (isBlank(nhost) ? "none" : nhost) +
+                          (isBlank(ohost) ? "" : " * Old host: " + ohost));
             if (isBlank(nhost))
                 return false;
             if (isBlank(ohost) || !ohost.equalsIgnoreCase(nhost)) {
@@ -2361,7 +2372,8 @@ public int getEstimatedRTT(Hash peer) {
             // but we probably only get here if the port is auto,
             // otherwise createNTCPAddress() would have done it already
             if (_log.shouldInfo())
-                _log.info("Old host: " + ohost + " Config: " + name + " New: " + name);
+                _log.info("Configured NTCP host -> Config host: " + name +
+                          (isBlank(ohost) ? "" : " * Old host: " + ohost));
             newProps.setProperty(RouterAddress.PROP_HOST, name);
             if (cost == NTCP2_OUTBOUND_COST)
                 cost = DEFAULT_COST;
@@ -2378,7 +2390,8 @@ public int getEstimatedRTT(Hash peer) {
             // because UPnP was successful, but a subsequent SSU Peer Test determines
             // we are still firewalled (SW firewall, bad UPnP indication, etc.)
             if (_log.shouldInfo())
-                _log.info("Old host: " + ohost + " Config: " + name + " New: null");
+                _log.info("Removing the auto host -> Config: " + name +
+                          (isBlank(ohost) ? "" : " * Old host: " + ohost) + " * New host: none");
             // addNTCP2Options() called below
             newProps.clear();
             style = STYLE2;

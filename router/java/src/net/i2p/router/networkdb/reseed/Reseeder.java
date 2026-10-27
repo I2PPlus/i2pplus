@@ -389,29 +389,32 @@ public class Reseeder {
             if (total >= 20) {
                 String s = ngettext("Acquired {0} router info from reseed hosts",
                                     "Acquired {0} router infos from reseed hosts", total);
-                _log.info(s + getDisplayString(_url));
+                _log.info(s + " " + getDisplayString(_url));
                 _checker.setStatus(s);
                 _checker.setError("");
             } else if (total > 0) {
                 String s = ngettext("Acquired only 1 router info from reseed hosts",
                                     "Acquired only {0} router infos from reseed hosts", total);
-                _log.warn(s + getDisplayString(_url));
+                _log.warn(s + " " + getDisplayString(_url));
                 _checker.setError(s);
                 _checker.setStatus("");
             } else {
                 if (total == 0 && !_context.router().gracefulShutdownInProgress()) {
-                    _log.warn("Reseed failed " + getDisplayString(_url) + " -> Check network connection!");
-                    _log.warn("Ensure that nothing blocks outbound HTTP or HTTPS, check the logs, " +
-                                       "and if nothing helps, read the FAQ about reseeding manually.");
+                    _log.warn("Reseed failed -> Check the network connection" +
+                                      " " + getDisplayString(_url));
+                    _log.warn("Ensure that nothing blocks outbound HTTP or HTTPS, and check the logs" +
+                                      "\n* If nothing helps, read the FAQ about reseeding manually");
                     if (_url == null || "https".equals(_url.getScheme())) {
                         if (_sproxyHost != null && _sproxyPort > 0)
-                            _log.warn("Check current proxy setting! Type: " + getDisplayString(_sproxyType) +
-                                               " Host: " + _sproxyHost + " Port: " + _sproxyPort);
+                            _log.warn("Check the current proxy setting" +
+                                              " * Type: " + getDisplayString(_sproxyType) +
+                                              " * Host: " + _sproxyHost + " * Port: " + _sproxyPort);
                         else
                             _log.warn("Consider enabling a proxy for https on the reseed configuration page");
                     } else {
                         if (_proxyHost != null && _proxyPort > 0)
-                            _log.warn("Check HTTP proxy setting - host: " + _proxyHost + " port: " + _proxyPort);
+                            _log.warn("Check the HTTP proxy setting" +
+                                              " * Host: " + _proxyHost + " * Port: " + _proxyPort);
                         else
                             _log.warn("Consider enabling an HTTP proxy on the reseed configuration page");
                     }
@@ -745,7 +748,9 @@ public class Reseeder {
                     long bw = 1000 * sz / totalTime;
                     _bandwidths.add(Long.valueOf(bw));
                     if (_log.shouldDebug())
-                        _log.debug("Received " + sz + " bytes in " + totalTime + " ms " + getDisplayString(seedURL));
+                        _log.debug("Received " + sz + " bytes in " + DataHelper.formatDuration(totalTime) +
+                                   " * Bandwidth: " + DataHelper.formatSize2Decimal(bw, false) + "B/s" +
+                                   " " + getDisplayString(seedURL));
                 }
                 int[] stats;
                 if (isSU3) {stats = extractSU3(contentRaw);}

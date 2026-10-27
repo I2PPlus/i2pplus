@@ -2121,8 +2121,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             }
             if (address.isLinkLocalAddress() || address.isLoopbackAddress() || address.isSiteLocalAddress()) {
                 if (_log.shouldWarn()) {
-                    _log.warn("[HTTPServer] WARNING! Attempt to access localhost or loopback address via [" + hostname + "] " + tunnelId +
-                              " -> Adding dest to clients blocklist file \n* Client: " + peerB32);
+                    _log.warn("[HTTPServer] Attempt to access a localhost or loopback address via [" + hostname + "]" +
+                              " -> Adding the destination to the client blocklist" +
+                              "\n* Tunnel: " + tunnelId + " * Client: " + peerB32);
                 }
                 _blocklistManager.logBlockedDestination(peerB32);
                 isValidRequest = false;
@@ -2147,15 +2148,16 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             } else {
                 if (_log.shouldInfo() && !hostname.equals(address.getHostAddress())) {
                     _log.info("[HTTPServer] Hostname " + hostname + " validated" +
-                              " " + tunnelId + " -> Resolves to: " + address.getHostAddress());
+                              " * Tunnel: " + tunnelId + " -> Resolves to: " + address.getHostAddress());
                 }
                 isPossibleExploit = false;
             }
             if (isPossibleExploit) {
                 _blocklistManager.logBlockedDestination(peerB32);
                 if (_log.shouldWarn()) {
-                    _log.warn("[HTTPServer] Client attempted to access private or wildcard address " + hostname +
-                              " " + tunnelId + " -> Sending Error 403 and adding to blocklist \n* Client: " + peerB32);
+                    _log.warn("[HTTPServer] Client attempted to access a private or wildcard address " + hostname +
+                              " -> Sending Error 403 and adding to the blocklist" +
+                              "\n* Tunnel: " + tunnelId + " * Client: " + peerB32);
                 }
             }
             if (!isValidRequest) {

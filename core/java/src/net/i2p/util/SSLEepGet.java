@@ -455,8 +455,8 @@ public class SSLEepGet extends EepGet {
             CertUtil.saveCert(cert, new File(name));
         }
         System.out.println(
-                "NOTE: To trust them, copy the certificate file(s) to the certificates directory and rerun without the"
-                        + " -s option");
+                "NOTE: To trust them, copy the certificate file(s) to the certificates directory" +
+                        "\n* Then rerun without the -s option");
     }
 
     /**

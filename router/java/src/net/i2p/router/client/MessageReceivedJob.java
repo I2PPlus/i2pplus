@@ -107,7 +107,7 @@ class MessageReceivedJob extends JobImpl {
         SessionId sid = _runner.getSessionId(_toDest.calculateHash());
         if (sid == null) {
             if (_log.shouldWarn())
-                _log.warn("No session for " + _toDest.toBase32());
+                _log.warn("No session for [" + _toDest.toBase32().substring(0, 8) + "]");
             return;
         }
         msg.setSessionId(sid.getSessionId());
@@ -130,7 +130,7 @@ class MessageReceivedJob extends JobImpl {
         SessionId sid = _runner.getSessionId(_toDest.calculateHash());
         if (sid == null) {
             if (_log.shouldWarn())
-                _log.warn("No session for " + _toDest.toBase32());
+                _log.warn("No session for [" + _toDest.toBase32().substring(0, 8) + "]");
             return;
         }
         MessagePayloadMessage msg = new MessagePayloadMessage(sid.getSessionId(), id, _payload);

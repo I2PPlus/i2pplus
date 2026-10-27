@@ -4282,9 +4282,9 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
                     if (_log.shouldInfo()) {
                         _log.info("Tunnel Test failed -> keeping data-carrying" +
                                   " tunnel (exemption " + (recentExemptions + 1) + "/1)" +
-                                  " " + _cfg + " -> verified " +
-                                  _cfg.getVerifiedBytesTransferred() + " bytes," +
-                                  " last transfer " + staleMs + "ms ago");
+                                  "\n* " + _cfg + " * Verified bytes: " +
+                                  _cfg.getVerifiedBytesTransferred() +
+                                  " * Last transfer: " + DataHelper.formatDuration(staleMs) + " ago");
                     }
                     if (!scheduleRetest(false)) {
                         cleanupTunnelTracking();

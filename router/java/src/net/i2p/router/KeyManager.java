@@ -129,7 +129,7 @@ public class KeyManager {
      */
     public void registerKeys(Destination dest, SigningPrivateKey leaseRevocationPrivateKey, PrivateKey endpointDecryptionKey) {
         if (_log.shouldInfo())
-            _log.info("Registering keys for destination " + dest.toBase32());
+            _log.info("Registering keys for destination [" + dest.toBase32().substring(0, 8) + "]");
         LeaseSetKeys keys = new LeaseSetKeys(dest, leaseRevocationPrivateKey, endpointDecryptionKey);
         _leaseSetKeys.put(dest.calculateHash(), keys);
     }
@@ -144,7 +144,7 @@ public class KeyManager {
      */
     public void registerKeys(Destination dest, SigningPrivateKey leaseRevocationPrivateKey, List<PrivateKey> endpointDecryptionKeys) {
         if (_log.shouldInfo())
-            _log.info("Registering keys for destination " + dest.toBase32());
+            _log.info("Registering keys for destination [" + dest.toBase32().substring(0, 8) + "]");
         LeaseSetKeys keys = new LeaseSetKeys(dest, leaseRevocationPrivateKey, endpointDecryptionKeys);
         _leaseSetKeys.put(dest.calculateHash(), keys);
     }

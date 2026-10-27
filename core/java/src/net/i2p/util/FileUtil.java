@@ -185,7 +185,8 @@ public class FileUtil {
                         if (logLevel <= Log.ERROR) {
                             System.err.println("Error extracting the zip entry (" +
                                                entry.getName() + ')');
-                            if (ioe.getMessage() != null && ioe.getMessage().indexOf("CAFED00D") >= 0) System.err.println("This may be caused by a packed library that requires Java 1.6, your Java version is: " + System.getProperty("java.version"));
+                            if (ioe.getMessage() != null && ioe.getMessage().indexOf("CAFED00D") >= 0) System.err.println("This may be caused by a packed library that requires Java 1.6" +
+                                               "\n* Your Java version is: " + System.getProperty("java.version"));
                             ioe.printStackTrace();
                         }
                         return false;
