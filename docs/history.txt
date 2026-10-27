@@ -1,3 +1,168 @@
+2026-10-27 2.14.1+ (API 0.9.71) released
+
+2026-10-27 dr|z3d
+  * Logging: Sweep the presentation codebase-wide - emitted line width, " * "
+    separators, sentence-case keys, duration units, no null values, bracketed
+    hash truncations - and lay the peer lists the selectors log out in one
+    shared shape, capped at eight hashes per line with a "(+N more)" tail
+  * I2PSnark: Report a check pass that finds files with no data once per
+    torrent, at warning level, with the per-file detail at debug; and add
+    i2psnark.hideLookups, config only, to keep transient zzzot lookups out of
+    the torrent list, counters, search, filters, and the "actively
+    downloading" count
+  * Router: Report the ratchet keys a session sends as a bracketed
+    eight-character fingerprint on one line, and name an ack's sender and
+    target as parallel keys the console log links
+  * Streaming: Put the connection a delivery-status line names on its own
+    bullet line, so the entry stays inside the log width
+  * Core: Drop the payload label the payload's own toString already carries
+
+2026-10-26 dr|z3d
+  * Streaming: Start the first data block at sequence block 0, fixing
+    transfers that failed to resume; keep resend-delay bounds ordered in any
+    setter order; make the write-queue send wait configurable
+    (i2cp.sendQueueTimeout); and record sampled send sizes unscaled
+  * Job Queue: Stop the watchdog pairing an in-flight job with an earlier
+    run's start time, and steady the runner scale on smoothed values
+  * I2PTunnel: Fix tunnel lifecycle handling, the destroy gate, pool slot
+    leaks, IRC, SOCKS, CONNECT and UDP socket leaks and races, HTTP proxy
+    leaks, header parsing, and console config persistence
+  * I2PSnark: Show a single-file torrent's file in the file table with an
+    Open link, the player above it, and a progress bar and declared size for
+    a file not yet on disk
+  * Router: Say which ratchet handshake completed and in which role
+  * Core: Give the i2cp messages one toString shape, and shorten the
+    write-failure exceptions to name what is missing
+  * Console: Load the tablesort stylesheet from the page head
+  * Tuner: Enforce parameter invariants with RTT floors and a health factor
+  * Javadoc: Fold section-header comments into the docs they introduce
+  * Build: Sweep stray module-local jars in distclean, and stop the test-path
+    dependency rebuild writing jars into module directories
+
+2026-10-25 dr|z3d
+  * Streaming:
+    - Resolve the 32-bit sequence wrap in both directions, the timer
+      scheduling races, and payload ownership; cap the NACK count at the
+      one-byte field so a peer cannot overrun the window; and bound every
+      option read at the declared option region
+    - Claim queue entries under the worker monitor so a resize cannot strand
+      or lose a packet, prune send-status entries by age, consume the
+      fresh-connection flag atomically, and skip a reset with no FROM option
+  * I2PTunnel: Fix core tunnel lifecycle handling, the destroy gate, pool
+    slot leaks, the IRC, SOCKS, CONNECT and UDP socket leaks and races, the
+    HTTP proxy leaks, HEAD and gzip handling and header parsing, and console
+    config persistence and access-filter races
+  * I2PSnark:
+    - Fix the storage and peer-layer defects found by the full-subsystem
+      review; cap the DHT token maps, honour the announce budget, and keep
+      the cleaners alive
+    - Run every announce round on one shared bounded thread pool, spread a
+      1000-torrent startup, and end the destination cycle chain on stop
+    - Close the XSS gaps in the web pages and harden request ingress, and
+      show zzzot metadata lookups as search rows, kept off the trackers
+  * Console: Escape remote addressbook category feed data rendered in
+    susidns, and render netDb lease gateways as block elements
+  * Tunnels: Fix the NPE in the lease set build log when INFO is on
+  * Tuner: Enforce parameter invariants with RTT floors and a streaming
+    health factor
+  * Core: Consolidate the html escaping into one net.i2p.util.Escapes helper
+  * Cleanup: Delete unreferenced vendored and first-party code, 6.3k lines
+
+2026-10-24 dr|z3d
+  * Transport: Put the post-quantum frame on the wire in the SSU2 handshake,
+    and stage and size the NTCP2 post-quantum handshake to i2pd's geometry
+  * Router: Stop the failed-transport list from throwing mid-format
+  * Javadoc: Clear every doclint error and warning, private members
+    included, and upgrade the prose
+  * Imagegen: Purge the dead identicon and zxing code, and rewrite the
+    vendored package docs
+  * Build: Clear leftover test runtime state in distclean, give every ant
+    junit target a scratch I2P base under build.root, and fail the suite
+    when a test writes runtime state into the tree
+  * Core: Delete the naming file where the service actually wrote it
+  * Tuner: Stub getRouterDir so autotune.config leaves the source tree
+  * Cleanup: Delete dead demo and commented-out code and the dead deprecated
+    jrobin members hanging off them, and revive two dormant JUnit tests
+
+2026-10-23 dr|z3d
+  * Javadoc: Clear the last 484 doclint warnings and 8 errors across 260
+    files
+  * Console: Simplify the planet icon's gradient transform and path data
+  * Logging: Follow the house format in the ratchet and kademlia messages
+  * Build: Point junit.home and hamcrest.home at the repo's own test libs,
+    fetch only the jars the classpaths name, refetch unusable ones, and keep
+    ant's per-module logs so a build failure is not silent
+  * Docs: Document only the shipped scripts, and drop extract_untranslated
+
+2026-10-22 dr|z3d
+  * Tunnels: Fix the inverted /n subnet-diversity gate, unify the masked-IP
+    keys, and fix build-window accounting and adaptive timeouts
+  * Router: Bound the inbound UDP partials and cache the ban verdict, bound
+    the netdb top-K selection and keep republish state, and bound the
+    ratchet pools by bytes and index the ratchet tags
+  * Core: Release the pooled ciphers, guard the DSA signature s, and fix the
+    SKI offset read
+  * Streaming: Complete the payload ownership chain and make the handoff
+    retire-safe
+  * Tuner: Bind each reflective target to the class that declares it, reach
+    non-public statics, fit ranges to the setters, guard the lookups, and
+    verify what was applied
+  * Console: Percent-encode stat names in graph urls and download names
+  * Routerconsole: Stop the login blocklist being spoofed by a header
+  * I2PTunnel: Stop the request-line parse throwing on a short host
+  * SAM: Run handler teardowns off the selector thread
+  * I2PSnark: Escape quotes in the generated hrefs, and normalize the log tag
+  * Logging: Follow the house format across router, core and streaming,
+    label the peer and the error in the SSU2 warnings, throttle repeats, and
+    demote routine events
+  * Javadoc: Clear 318 doclint errors and 1708 warnings, then the remaining
+    2312 warnings across 381 files
+  * Docs: Fix the stale README claims, and rebase the translation links
+  * Build: Select the javadoc stylesheet path with a fallback, and probe for
+    a javac release flag the local JDK accepts
+  * CI: Fix the continuous release update, and build the docs as bonus
+    artifacts
+
+2026-10-21 dr|z3d
+  * NetDb: Enforce the 5-introducer cap at store, lookup and purge, with a
+    console toggle
+  * Banlist: Make the routerinfo validation bans configurable and purge the
+    banned routers from the netdb, and disable six optional peer bans by
+    default
+  * I2PTunnel: Hand the sockets to the runner instead of closing them at
+    hand-off, and condense the request header log dump
+  * MiniStreaming: Expand a tab to spaces in the request path guard
+  * SusiMail: Drop the debug dump of the raw message from the page, remove
+    the orphaned html-escaping output stream, and log what a request
+    resolved to and why a mailbox is empty
+  * Streaming: One line per ACK batch and per window adjustment, and the
+    arrow separator on the retransmit stall lines
+  * Crypto: Release the pooled buffer on the ElGamal too-small-payload guard
+  * Core: Always set the AMD compatibility flags and report the detected Zen
+    generation
+  * Routerconsole: Compare origin and host literally instead of resolving
+    them
+  * POP3: Guard the socket before setting the timeout
+  * Tuner: Key the netdb and tunnel-test parameters on their own outcomes
+  * Logging: Capitalize tally keys and add arrow separators to the pool
+    warnings, split the router address log and html renderers, and demote
+    forced disconnects and no-outbound-tunnels churn to info
+
+2026-10-20 dr|z3d
+  * Crypto: Harden the crypto engines - constant-time operations, replay
+    guards, PRNG seeding, and the NTCP2 post-quantum framing
+  * SSU2: Ban peers advertising more than 5 introducers
+  * Router: Throttle and fix the post-quantum decrypt-failure logging
+  * SAM: Warn on session errors during the startup window
+  * Core: Name the eepget failure reason when the exception carries no
+    message
+  * Logging: Demote routine timeouts, refusals, handshake, lookup, store
+    shed, connid and session churn to debug or info, fix the ban-log
+    durations and two shouldDebug/warn mismatches, add the signature-failure
+    context, and put the context first with every line inside 100 columns
+  * Javadoc: Fix the dead links, and replace the rrdtool man-page cruft with
+    live links
+
 2026-10-19 2.14+ (API 0.9.71) released
 
 2026-10-19 dr|z3d

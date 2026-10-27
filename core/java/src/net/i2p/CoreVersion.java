@@ -32,7 +32,7 @@ public class CoreVersion {
      * <p>
      * RouterVersion.FULL_VERSION is suggested for display to the user.
      */
-    public static final String VERSION = "2.14.0";
+    public static final String VERSION = "2.14.1";
 
     /**
      * The version published in the netdb via StatisticsManager. This is the API version.
