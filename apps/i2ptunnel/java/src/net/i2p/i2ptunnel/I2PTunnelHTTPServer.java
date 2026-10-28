@@ -97,6 +97,14 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     private static final int DNS_TIMEOUT_MS = 5000;
 
     /**
+     * Ceiling on a request host as it is logged. The Host header is
+     * attacker-controlled and a header line may be 8 KB, so an unbounded host
+     * would put an 8 KB value on one log line. 64 keeps the widest line under
+     * 100 characters, and a FQDN is 253 at most.
+     */
+    private static final int MAX_LOG_HOST_LEN = 64;
+
+    /**
      * Minimum interval between per-client "Request error" warnings. A single
      * torrent client reconnecting without sending a request produced 1000+
      * read timeouts in one rotation, which buried every other warning.
@@ -2062,19 +2070,27 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         List<String> host = headers.get("Host");
 
         if (peerB32.length() != 60) {
-            _log.warn("[HTTPServer] Invalid B32 (expected 60 characters, got " + peerB32.length() + ") " + tunnelId +
-                      " -> Denying request to [" + hostname + "] \n* Client: " + peerB32);
+            // The Host header has not been read at this point, so this line
+            // names the tunnel and the client, never a host.
+            _log.warn("[HTTPServer] Invalid B32 (expected 60 characters, got " + peerB32.length() + ")" +
+                      " -> Denying the request" +
+                      "\n* Tunnel: " + tunnelId + "\n* Client: " + peerB32);
             try {socket.close();}
             catch (IOException ioe) { /* ignored */ }
             return false;
         }
 
-        if (host != null) {
+        if (host != null && !host.isEmpty()) {
             hostname = host.get(0);
             int port = hostname.indexOf(":");
             if (port != -1) {hostname = hostname.substring(0, port);}
         }
-        if (_log.shouldDebug()) {_log.debug("[HTTPServer] Incoming request for: " + hostname + " " + tunnelId + "\n* Client: " + peerB32);}
+        // A hostname is neither a router hash nor a destination, so
+        // loggableHost() prints it whole, unbracketed and length-bounded.
+        if (_log.shouldDebug()) {
+            _log.debug("[HTTPServer] Incoming request for: " + loggableHost(hostname) +
+                       "\n* Tunnel: " + tunnelId + "\n* Client: " + peerB32);
+        }
         if (hostname != null && !hostname.endsWith(".i2p") && !hostname.endsWith(".onion")) {
             InetAddress address;
             Future<InetAddress> future = null;
@@ -2084,8 +2100,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 address = future.get(DNS_TIMEOUT_MS, TimeUnit.MILLISECONDS);
             } catch (TimeoutException e) {
                 if (_log.shouldWarn()) {
-                    _log.warn("[HTTPServer] DNS lookup timed out (" + DNS_TIMEOUT_MS + "ms) for " + hostname +
-                              " " + tunnelId + "\n* Client: " + peerB32);
+                    _log.warn("[HTTPServer] DNS lookup timed out -> Denying the request" +
+                              "\n* Host: " + loggableHost(hostname) + " * Timeout: " + DNS_TIMEOUT_MS + "ms" +
+                              " * Tunnel: " + tunnelId + "\n* Client: " + peerB32);
                 }
                 // Cancel so the resolver thread is not left parked in a JVM-level
                 // resolution (which can run far longer than our timeout) holding a
@@ -2102,7 +2119,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 return false;
             } catch (ExecutionException e) {
                 if (_log.shouldWarn()) {
-                    _log.warn("[HTTPServer] DNS lookup failed for " + hostname + " " + tunnelId + "\n* Client: " + peerB32);
+                    _log.warn("[HTTPServer] DNS lookup failed -> Denying the request" +
+                              "\n* Host: " + loggableHost(hostname) + " * Tunnel: " + tunnelId +
+                              "\n* Client: " + peerB32);
                 }
                 try {socket.close();}
                 catch (IOException ioe) { /* ignored */ }
@@ -2112,7 +2131,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 // would stall the request handler thread under load.  Close the
                 // socket so the client gets a clean failure instead of a hang.
                 if (_log.shouldWarn()) {
-                    _log.warn("[HTTPServer] DNS executor saturated, cannot resolve " + hostname + " " + tunnelId +
+                    _log.warn("[HTTPServer] DNS executor saturated, cannot resolve the host" +
+                              " -> Denying the request" +
+                              "\n* Host: " + loggableHost(hostname) + " * Tunnel: " + tunnelId +
                               "\n* Client: " + peerB32);
                 }
                 try {socket.close();}
@@ -2121,9 +2142,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             }
             if (address.isLinkLocalAddress() || address.isLoopbackAddress() || address.isSiteLocalAddress()) {
                 if (_log.shouldWarn()) {
-                    _log.warn("[HTTPServer] Attempt to access a localhost or loopback address via [" + hostname + "]" +
-                              " -> Adding the destination to the client blocklist" +
-                              "\n* Tunnel: " + tunnelId + " * Client: " + peerB32);
+                    _log.warn("[HTTPServer] Localhost or loopback address requested -> Blocking the client" +
+                              "\n* Host: " + loggableHost(hostname) + " * Tunnel: " + tunnelId +
+                              "\n* Client: " + peerB32 + " * Blocklist: added");
                 }
                 _blocklistManager.logBlockedDestination(peerB32);
                 isValidRequest = false;
@@ -2132,7 +2153,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 if (!hostname.equals("::") && !hostname.equals("0.0.0.0")) {
                     if (_log.shouldWarn()) {
                         _log.warn("[HTTPServer] DNS server appears to be blocking requests -> Sending Error 403" +
-                                  "\n* Host: " + hostname + " * Tunnel: " + tunnelId +
+                                  "\n* Host: " + loggableHost(hostname) + " * Tunnel: " + tunnelId +
                                   "\n* Client: " + peerB32);
                     }
                     try {sendError(socket, ERR_FORBIDDEN);}
@@ -2147,17 +2168,17 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 }
             } else {
                 if (_log.shouldInfo() && !hostname.equals(address.getHostAddress())) {
-                    _log.info("[HTTPServer] Hostname " + hostname + " validated" +
-                              " * Tunnel: " + tunnelId + " -> Resolves to: " + address.getHostAddress());
+                    _log.info("[HTTPServer] Hostname validated -> Resolves to: " + address.getHostAddress() +
+                              "\n* Host: " + loggableHost(hostname) + " * Tunnel: " + tunnelId);
                 }
                 isPossibleExploit = false;
             }
             if (isPossibleExploit) {
                 _blocklistManager.logBlockedDestination(peerB32);
                 if (_log.shouldWarn()) {
-                    _log.warn("[HTTPServer] Client attempted to access a private or wildcard address " + hostname +
-                              " -> Sending Error 403 and adding to the blocklist" +
-                              "\n* Tunnel: " + tunnelId + " * Client: " + peerB32);
+                    _log.warn("[HTTPServer] Private or wildcard address requested -> Sending Error 403" +
+                              "\n* Host: " + loggableHost(hostname) + " * Tunnel: " + tunnelId +
+                              "\n* Client: " + peerB32 + " * Blocklist: added");
                 }
             }
             if (!isValidRequest) {
@@ -2167,6 +2188,33 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             }
         }
         return true;
+    }
+
+    /**
+     * The request host as it is logged: the name the client sent, with the port
+     * already removed, or a fixed phrase when the client sent no usable Host
+     * header. A name longer than 64 characters is cut to 61 plus an ellipsis.
+     * <p>
+     * The name is printed whole and unbracketed. It is neither a router hash
+     * nor a destination, and the console log linkifier only recognizes
+     * bracketed hashes - 6 characters base64 for a router, 8 characters base32
+     * for a destination - so a bracketed host renders as a link to a
+     * destination that does not exist.
+     * <p>
+     * Package-visible and static so a test can drive the shapes the request
+     * path cannot: this site used to call substring(0, 8) on the name, which
+     * threw on any host shorter than 8 characters, and dereferenced a null
+     * hostname for a request with no Host header at all.
+     *
+     * @param hostname the host as the client named it, port removed, null or
+     *                 empty when there was no Host header
+     * @return a bounded, non-null, unbracketed host for the log
+     * @since 0.9.72+
+     */
+    static String loggableHost(String hostname) {
+        if (hostname == null || hostname.isEmpty()) {return "no host header";}
+        if (hostname.length() <= MAX_LOG_HOST_LEN) {return hostname;}
+        return hostname.substring(0, MAX_LOG_HOST_LEN - 3) + "...";
     }
 
     /**
