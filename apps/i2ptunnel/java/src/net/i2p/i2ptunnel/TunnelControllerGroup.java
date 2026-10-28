@@ -97,9 +97,13 @@ public class TunnelControllerGroup implements ClientApp {
 
     /**
      * Executor service for delayed shutdown tasks, used for cancellation.
+     * Volatile: it is assigned on the worker thread
+     * {@link #prepareGracefulShutdown()} starts, and read by
+     * {@link #cancelDelayedShutdown()} on the caller's, which is not inside the
+     * lock that guards the assignment.
      * @since 0.9.68+
      */
-    private ExecutorService _delayedShutdownExecutor;
+    private volatile ExecutorService _delayedShutdownExecutor;
 
     /** Session ownership map for preventing premature session close. */
     private final Map<I2PSession, Set<TunnelController>> _sessions;
@@ -782,10 +786,35 @@ public class TunnelControllerGroup implements ClientApp {
      * This should be called during graceful shutdown period, before
      * final shutdown is triggered. It stops server tunnels with delays
      * but does not unload controllers or release resources.
+     * <p>
+     * This returns without waiting for the servers to stop. It is called by
+     * {@link net.i2p.router.Router#shutdownGracefully}, whose contract is that it
+     * does not block, and the caller is the console's restart action running on a
+     * web-server request thread: stopping the delayed servers takes as long as the
+     * longest configured shutdown delay, so waiting for them there hangs the
+     * restart request for minutes with nothing rendered, which reads as a restart
+     * button that does nothing. The deferral state the console renders its
+     * countdown from is published here, synchronously, before returning, so the
+     * page shows the countdown as soon as the request returns.
+     *
      * @since 0.9.68+
      */
     public void prepareGracefulShutdown() {
-        shutdownDelayedServers();
+        List<TunnelController> delayedServers = getDelayedServers();
+        if (delayedServers.isEmpty()) {
+            return;
+        }
+        // Published before the worker starts, so a render that races the thread
+        // start still sees the deferral in progress and counts it down.
+        delayedShutdownInProgress = true;
+        delayedShutdownStartTime = System.currentTimeMillis();
+        cancelDelayedShutdown = false;
+        I2PAppThread waiter = new I2PAppThread(new Runnable() {
+            public void run() {
+                shutdownDelayedServers(delayedServers);
+            }
+        }, "TunGrShutdn", true);
+        waiter.start();
     }
 
     /**
@@ -855,17 +884,44 @@ public class TunnelControllerGroup implements ClientApp {
     }
 
     /**
-     * Stop server tunnels with shutdown delays independently.
-     * Each server with a delay gets its own timer and stops independently.
-     * <p>synchronized so concurrent invocations (e.g. a cancel racing a repeated
-     * graceful-shutdown) cannot both create and tear down the shared
-     * {@code _delayedShutdownExecutor}; otherwise one thread's cleanup can null
-     * the field while another is still dereferencing it.
+     * Stop the delayed server tunnels and wait for them, collecting the servers to
+     * stop first. This is the form the router's own shutdown path uses, where
+     * waiting for the delayed tunnels is the point of the call; the graceful
+     * shutdown path hands the wait to a worker thread, see
+     * {@link #prepareGracefulShutdown()}.
+     *
      * @since 0.9.68+
      */
-    private synchronized void shutdownDelayedServers() {
-        List<TunnelController> delayedServers = getDelayedServers();
+    private void shutdownDelayedServers() {
+        shutdownDelayedServers(getDelayedServers());
+    }
+
+    /**
+     * Stop server tunnels with shutdown delays independently.
+     * Each server with a delay gets its own timer and stops independently.
+     * <p>synchronized so concurrent invocations, e.g. a cancel racing a repeated
+     * graceful-shutdown, cannot both create and tear down the shared
+     * {@code _delayedShutdownExecutor}; otherwise one thread's cleanup can null
+     * the field while another is still dereferencing it.
+     * <p>This waits for the delayed servers, for up to {@link #maxWaitMs(int)},
+     * so it runs on the worker thread {@link #prepareGracefulShutdown} starts and
+     * never on a request thread.
+     *
+     * @param delayedServers the running server tunnels to stop, as collected by
+     *                       {@link #getDelayedServers()}
+     * @since 0.9.68+
+     */
+    private synchronized void shutdownDelayedServers(List<TunnelController> delayedServers) {
         if (delayedServers.isEmpty()) {
+            return;
+        }
+        if (cancelDelayedShutdown) {
+            // Cancelled between prepareGracefulShutdown() publishing the deferral
+            // state and this thread getting to the work. Nothing has been stopped,
+            // so unwind the state and leave the servers running.
+            delayedShutdownInProgress = false;
+            delayedShutdownStartTime = 0;
+            cancelDelayedShutdown = false;
             return;
         }
 
@@ -877,9 +933,11 @@ public class TunnelControllerGroup implements ClientApp {
             }
         }
 
-        delayedShutdownInProgress = true;
-        delayedShutdownStartTime = System.currentTimeMillis();
-        cancelDelayedShutdown = false;
+        if (!delayedShutdownInProgress) {
+            delayedShutdownInProgress = true;
+            delayedShutdownStartTime = System.currentTimeMillis();
+            cancelDelayedShutdown = false;
+        }
         List<TunnelController> stoppedServers = Collections.synchronizedList(new ArrayList<>());
         _delayedShutdownExecutor = Executors.newCachedThreadPool(r -> {
             Thread t = new Thread(r, "TunShutdown");
@@ -891,7 +949,7 @@ public class TunnelControllerGroup implements ClientApp {
 
         _delayedShutdownExecutor.shutdown();
         try {
-            long maxWait = Math.min(maxDelay + 30, 300) * 1000L;
+            long maxWait = maxWaitMs(maxDelay);
             boolean completed = _delayedShutdownExecutor.awaitTermination(maxWait, TimeUnit.MILLISECONDS);
             long elapsed = (System.currentTimeMillis() - delayedShutdownStartTime) / 1000;
             if (completed) {
@@ -909,6 +967,39 @@ public class TunnelControllerGroup implements ClientApp {
     }
 
     /**
+     * How long to wait for the delayed servers to stop before giving up on the
+     * wait. The delay is what the user configured for their servers, so it is
+     * honoured in full, plus a grace margin for a stop that started at the end of
+     * the window; the cap keeps a misconfigured delay from stalling the shutdown
+     * sequence that follows.
+     *
+     * @param maxDelaySeconds the longest shutdown delay configured among the
+     *                        servers being stopped, in seconds
+     * @return the wait in ms, {@code min(maxDelaySeconds + 30, 300) * 1000}, never
+     *         negative, and computed in long so an absurd configured delay cannot
+     *         overflow into a negative wait
+     * @since 0.9.72+
+     */
+    static long maxWaitMs(int maxDelaySeconds) {
+        long withMargin = (long) maxDelaySeconds + 30;
+        return Math.max(0, Math.min(withMargin, 300)) * 1000L;
+    }
+
+    /**
+     * Whether a server tunnel has a shutdown delay to honour, i.e. a range to
+     * pick from. A server with no range stops at once, so it is not part of the
+     * delayed shutdown and the router does not defer for it.
+     *
+     * @param delayMin the configured minimum delay, in seconds, negative if unset
+     * @param delayMax the configured maximum delay, in seconds
+     * @return true if the server stops on a timer of its own during a graceful shutdown
+     * @since 0.9.72+
+     */
+    static boolean isDelayedServer(int delayMin, int delayMax) {
+        return delayMax > delayMin && delayMin >= 0;
+    }
+
+    /**
      * Collect the running server tunnels that have a shutdown delay.
      *
      * @return the delayed servers, empty if none
@@ -922,7 +1013,7 @@ public class TunnelControllerGroup implements ClientApp {
                 if (!controller.isClient() && controller.getIsRunning()) {
                     int delayMin = controller.getShutdownDelayMin();
                     int delayMax = controller.getShutdownDelayMax();
-                    if (delayMax > delayMin && delayMin >= 0) {
+                    if (isDelayedServer(delayMin, delayMax)) {
                         delayedServers.add(controller);
                     }
                 }
