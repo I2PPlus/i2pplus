@@ -312,13 +312,20 @@ public class LogsHelper extends HelperBase {
      * @param wf filename of the wrapper log already shown, or null for none
      * @param session the console session holding the nonce, or null to fall back
      *                to the process-wide nonce
-     * @param consoleNonce the submitted anti-CSRF token, which must equal the
-     *                     session's nonce, or the process-wide one if no session was given
+     * @param consoleNonce the submitted anti-CSRF token: one of the nonces
+     *                     issued to this session and not yet used. When it is
+     *                     spent or unknown, nothing is cleared and the reason is
+     *                     left on the session as a notice for the next render
      * @since 0.9.46
      */
     public void clearThrough(int n, int crit, long wn, long wts, String wf, HttpSession session, String consoleNonce) {
         if (session != null) {
-            if (!CSSHelper.validateNonce(session, consoleNonce)) {return;}
+            if (!CSSHelper.validateNonce(session, consoleNonce)) {
+                // Clear logs is a plain link, so a spent nonce leaves the user
+                // with a link that appears to do nothing. Say why instead.
+                NonceNotices.refuse(session, "clear logs");
+                return;
+            }
         } else {
             // Fallback for backward compatibility
             if (!CSSHelper.getNonce().equals(consoleNonce)) {return;}
