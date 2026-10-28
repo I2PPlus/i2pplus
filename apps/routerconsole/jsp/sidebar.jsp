@@ -9,7 +9,7 @@
                            "shutdown immediately".equalsIgnoreCase(action) || "restart immediately".equalsIgnoreCase(action);
 
     if (!shutdownSoon) {
-        if (d != null && !d.isEmpty() && net.i2p.router.web.CSSHelper.getNonce().equals(conNonceParam)) {
+        if (d != null && !d.isEmpty() && net.i2p.router.web.CSSHelper.validateNonce(session, conNonceParam, true)) {
             d = net.i2p.data.DataHelper.stripHTML(d);
             intl.setRefresh(d);
             intl.setDisableRefresh(d);

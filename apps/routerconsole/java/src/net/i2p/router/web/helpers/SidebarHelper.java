@@ -43,7 +43,6 @@ import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
 import net.i2p.util.PortMapper;
 import net.i2p.util.SystemVersion;
-import javax.servlet.http.HttpServletRequest;
 import net.i2p.CoreVersion;
 import net.i2p.I2PAppContext;
 
@@ -1567,13 +1566,13 @@ public class SidebarHelper extends HelperBase {
      * @since 0.8.13 moved from SidebarRenderer
      */
     public String getRestartStatus() {
-        String nextNonce = null;
-        if (_request != null) {
-            nextNonce = (String) _request.getAttribute("pageConsoleNonce");
-        }
-        if (nextNonce == null) {
-            nextNonce = _session != null ? CSSHelper.getNonce(_session) : CSSHelper.getNonce();
-        }
+        // Issue a fresh nonce for this render. A nonce is consumed when it is
+        // validated, so a nonce shared with the page's own action link — as the
+        // log pages' Clear logs link and this form both used to be — leaves the
+        // other control dead as soon as one of them is used, and a nonce handed
+        // out on an earlier render stops validating once the session stops
+        // remembering it.
+        String nextNonce = _session != null ? CSSHelper.getNonce(_session) : CSSHelper.getNonce();
         return ConfigRestartBean.renderStatus(getRequestURI(), getAction(), _session, nextNonce, getConsoleNonce());
     }
 
@@ -1750,14 +1749,6 @@ public class SidebarHelper extends HelperBase {
      * @param s the request URI, HTML-stripped before storing
      */
     public void setRequestURI(String s) {_requestURI = s == null ? null : DataHelper.stripHTML(s);}
-
-    /** The HTTP servlet request. */
-    private HttpServletRequest _request;
-    /**
-     * Servlet request.
-     * @param s the servlet request
-     */
-    public void setRequest(HttpServletRequest s) {_request = s;}
 
     /**
      * Return the request URI, or /home as default.

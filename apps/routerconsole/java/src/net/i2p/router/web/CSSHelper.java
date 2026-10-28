@@ -3,7 +3,6 @@ package net.i2p.router.web;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.regex.Pattern;
-import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Map;
 
@@ -140,32 +139,35 @@ public class CSSHelper extends HelperBase {
 
     /** Session-bound nonce for CSRF protection, replaces static nonces @since 0.9.69. */
     private static final String SESSION_CONSOLE_NONCE = "__router.console.nonce.queue__";
-    /** Number of issued nonces kept for checking. */
-    private static final int NONCE_QUEUE_SIZE = 50;
 
     /**
      * Session-bound nonce generation - replaces static consoleNonce, updateNonce, reseedNonce, systemNonce.
+     * <p>Issue one nonce per nonce-guarded form or link. A nonce is consumed
+     * by {@link #validateNonce(HttpSession, String)}, so two controls that
+     * share one nonce leave the second of them silently dead once the first is
+     * used.
+     *
      * @param session returns an invalid nonce if null
      * @return a new nonce for each call
      * @since 0.9.69
      */
-    @SuppressWarnings("unchecked")
     public static String getNonce(HttpSession session) {
         if (session == null) {
             return "FAIL_SESSION_NOT_SET";
         }
         // add a prefix to distinguish from other nonces for debugging
         String rv = "CN" + RandomSource.getInstance().nextLong();
+        long now = System.currentTimeMillis();
         try {
             synchronized(session) {
-                LinkedList<String> nonces = (LinkedList<String>) session.getAttribute(SESSION_CONSOLE_NONCE);
-                if (nonces == null) {
-                    nonces = new LinkedList<>();
-                    session.setAttribute(SESSION_CONSOLE_NONCE, nonces);
-                }
-                nonces.offer(rv);
-                if (nonces.size() > NONCE_QUEUE_SIZE)
-                    nonces.poll();
+                Object queued = session.getAttribute(SESSION_CONSOLE_NONCE);
+                // Not a queue (a session built by an older console, or nothing
+                // at all) — start a fresh one, the old entries are unusable.
+                ConsoleNonceQueue nonces = queued instanceof ConsoleNonceQueue
+                                           ? (ConsoleNonceQueue) queued
+                                           : new ConsoleNonceQueue();
+                nonces.add(rv, now);
+                session.setAttribute(SESSION_CONSOLE_NONCE, nonces);
             }
         } catch (IllegalStateException ise) {
             // Session was invalidated/expired mid-render; Jetty throws ISE from
@@ -175,12 +177,6 @@ public class CSSHelper extends HelperBase {
                 _log.warn("CSSHelper.getNonce(): session invalid, using static nonce", ise);
             }
             return getNonce();
-        }
-        String logMsg = "CSSHelper.getNonce(): added " + rv +
-                        " session=" + System.identityHashCode(session) +
-                        " id=" + session.getId();
-        if (_log.shouldDebug()) {
-        	  _log.debug(logMsg);
         }
         return rv;
     }
@@ -198,13 +194,16 @@ public class CSSHelper extends HelperBase {
 
     /**
      * Session-bound nonce validation with preserve option.
+     * <p>Validation consumes the nonce, so a control that submits a nonce
+     * already used, or one the session has stopped remembering, is refused
+     * here and does nothing at its own call site.
+     *
      * @param session returns false if null
      * @param nonce returns false if null
      * @param preserve if true, do not delete the nonce. Use for early checks in jsps.
      * @return true if valid
      * @since 0.9.69
      */
-    @SuppressWarnings("unchecked")
     public static boolean validateNonce(HttpSession session, String nonce, boolean preserve) {
         if (nonce == null) {
             return false;
@@ -213,33 +212,14 @@ public class CSSHelper extends HelperBase {
             return false;
         }
         boolean rv;
+        long now = System.currentTimeMillis();
         try {
             synchronized(session) {
-                LinkedList<String> nonces = (LinkedList<String>) session.getAttribute(SESSION_CONSOLE_NONCE);
-                if (nonces != null) {
-                    if (_log.shouldDebug()) {
-                        _log.debug("CSSHelper.validateNonce(): queue=" + nonces.size() +
-                                   " session=" + System.identityHashCode(session) +
-                                   " id=" + session.getId());
-                    }
-                    if (preserve) {
-                        rv = nonces.lastIndexOf(nonce) >= 0;
-                    } else {
-                        rv = nonces.removeLastOccurrence(nonce);
-                    }
-                    if (_log.shouldDebug()) {
-                        _log.debug("CSSHelper.validateNonce(): MISS nonce=" + nonce +
-                                   " queue=" + nonces +
-                                   " session=" + System.identityHashCode(session) +
-                                   " id=" + session.getId());
-                    }
-                } else {
-                    rv = false;
-                    if (_log.shouldDebug()) {
-                        _log.debug("CSSHelper.validateNonce(): NO QUEUE session=" +
-                                   System.identityHashCode(session) + " id=" + session.getId());
-                    }
-                }
+                Object queued = session.getAttribute(SESSION_CONSOLE_NONCE);
+                ConsoleNonceQueue nonces = queued instanceof ConsoleNonceQueue
+                                           ? (ConsoleNonceQueue) queued
+                                           : null;
+                rv = nonces != null && nonces.validate(nonce, now, preserve);
             }
         } catch (IllegalStateException ise) {
             // Session invalidated/expired mid-request; Jetty throws ISE from getAttribute.
@@ -248,6 +228,10 @@ public class CSSHelper extends HelperBase {
                 _log.warn("CSSHelper.validateNonce(): session invalid, failing to static fallback", ise);
             }
             return false;
+        }
+        if (_log.shouldDebug()) {
+            _log.debug("CSSHelper.validateNonce(): " + (rv ? "Accepted" : "Rejected") +
+                       ", nonce: " + nonce + " session: " + System.identityHashCode(session));
         }
         return rv;
     }

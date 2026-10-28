@@ -47,7 +47,8 @@
   else if (uri.contains("themes") || uri.contains("js") || uri.contains("flags")) {response.setHeader("Cache-Control", "private, max-age=2628000, immutable");}
   else {response.setHeader("Cache-Control", "private, no-cache, max-age=2628000");}
   String conNonceParam = request.getParameter("consoleNonce");
-  if (net.i2p.router.web.CSSHelper.getNonce().equals(conNonceParam)) {
+  // Read-only early check, so preserve the nonce for the handler that acts on it.
+  if (net.i2p.router.web.CSSHelper.validateNonce(session, conNonceParam, true)) {
     intl.setLang(request.getParameter("lang"));
     intl.setNews(request.getParameter("news"));
   }
