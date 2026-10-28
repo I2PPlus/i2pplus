@@ -1420,9 +1420,10 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
-     * How long a finished update message stays in the sidebar, in ms. Long
-     * enough to read what the update did and act on it, short enough that it is
-     * gone before it starts describing a restart the user has already done.
+     * How long a finished update message that is not describing a downloaded
+     * router update stays in the sidebar, in ms. Long enough to read what the
+     * update did and act on it, short enough that it is gone before it starts
+     * describing a restart the user has already done.
      */
     static final long STATUS_NOTICE_TTL_MS = 5 * 60 * 1000L;
 
@@ -1430,22 +1431,28 @@ public class SidebarHelper extends HelperBase {
      * Whether the update manager's status line belongs in the sidebar right now.
      *
      * <p>An update in progress is always shown, since the line is the progress.
-     * A finished one - the plugin-updated and failure messages among them - is
-     * shown for {@link #STATUS_NOTICE_TTL_MS} from when the manager set it, then
-     * dropped: the sidebar re-renders every few seconds, so a finished message
-     * would otherwise sit in the nav indefinitely.
+     * So is a finished one while a router update sits downloaded and waits for
+     * a restart: that message is the reason the nav is asking for the restart,
+     * and the marker it hangs on outlives any window we could pick. Everything
+     * else - the plugin-updated line and a download failure - is shown for
+     * {@link #STATUS_NOTICE_TTL_MS} from when the manager set it, then dropped:
+     * the sidebar re-renders every few seconds, so a finished message would
+     * otherwise sit in the nav indefinitely.
      *
      * @param status the manager's status line, empty for none
      * @param inProgress true while an update is running
+     * @param awaitingRestart true while a router update is downloaded and
+     *                        waiting to be installed
      * @param statusTime when the manager set the line, in ms, 0 when unknown
      * @param now the current time in ms, passed in so the policy is testable
      *            without sleeping
      * @return true to show the line
      * @since 0.9.72+
      */
-    static boolean showUpdateStatus(String status, boolean inProgress, long statusTime, long now) {
+    static boolean showUpdateStatus(String status, boolean inProgress, boolean awaitingRestart,
+                                    long statusTime, long now) {
         if (status == null || status.isEmpty()) {return false;}
-        if (inProgress) {return true;}
+        if (inProgress || awaitingRestart) {return true;}
         // No stamp at all (a manager from before this build): show it, as we did.
         if (statusTime <= 0) {return true;}
         return now - statusTime < STATUS_NOTICE_TTL_MS;
@@ -1459,11 +1466,19 @@ public class SidebarHelper extends HelperBase {
     public String getUpdateStatus() {
         StringBuilder buf = new StringBuilder(512);
         // The manager's own line, including the final failure message and the
-        // plugin update messages, shown for STATUS_NOTICE_TTL_MS after it
-        // finished: a plugin update has said its piece once, and a heading that
-        // outlives the restart it describes is just noise in the nav.
+        // plugin update messages. A downloaded router update keeps it while it
+        // waits to be installed; anything else is shown for
+        // STATUS_NOTICE_TTL_MS after it finished - a plugin update has said its
+        // piece once, and a heading that outlives the restart it describes is
+        // just noise in the nav.
+        String dver = NewsHelper.updateVersionDownloaded();
+        if (dver == null) {
+            dver = NewsHelper.devSU3VersionDownloaded();
+            if (dver == null) {dver = NewsHelper.unsignedVersionDownloaded();}
+        }
+        boolean awaitingRestart = dver != null;
         String status = NewsHelper.getUpdateStatus();
-        if (!showUpdateStatus(status, NewsHelper.isUpdateInProgress(),
+        if (!showUpdateStatus(status, NewsHelper.isUpdateInProgress(), awaitingRestart,
                               NewsHelper.updateStatusTime(), System.currentTimeMillis())) {
             status = "";
         }
@@ -1474,11 +1489,6 @@ public class SidebarHelper extends HelperBase {
             if (NewsHelper.isUpdateInProgress()) {buf.append(" inProgress");}
             buf.append("\">").append(status).append("</h4>\n");
             needSpace = true;
-        }
-        String dver = NewsHelper.updateVersionDownloaded();
-        if (dver == null) {
-            dver = NewsHelper.devSU3VersionDownloaded();
-            if (dver == null) {dver = NewsHelper.unsignedVersionDownloaded();}
         }
         if (dver != null && !NewsHelper.isUpdateInProgress() && !_context.router().gracefulShutdownInProgress()) {
             if (needSpace) {buf.append("<hr>");}
