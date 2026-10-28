@@ -1136,13 +1136,54 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      */
     static int maxTimeoutConnectRetries(long remainingDeadlineMs, long observedAttemptMs,
                                         boolean poolBuilding) {
+        return maxTimeoutConnectRetries(remainingDeadlineMs, observedAttemptMs, poolBuilding,
+                                        MAX_CONNECT_SPEND_MS);
+    }
+
+    /**
+     * Whether the outer HTTP connect loop should retry after a failure, with the
+     * per-request connect-spend cap supplied by the caller.
+     *
+     * @param remainingDeadlineMs ms left before the shared connect deadline
+     *                            (negative or 0 means the budget is spent)
+     * @param observedAttemptMs wall time the attempt just failed after; 0 or less
+     *                          falls back to {@link #MIN_CONNECT_ATTEMPT_STEP_MS}
+     * @param poolBuilding true when {@link #poolState} reports builds in flight
+     * @param connectSpendCapMs ceiling on the wall time this request may spend on
+     *                          connect attempts, from
+     *                          {@link #MAX_CONNECT_SPEND_MS}; &lt;= 0 means no cap
+     *                          beyond the deadline
+     * @return the ceiling on timeout-classified attempts, at least 1
+     * @since 0.9.72+
+     */
+    static int maxTimeoutConnectRetries(long remainingDeadlineMs, long observedAttemptMs,
+                                        boolean poolBuilding, long connectSpendCapMs) {
         int floor = poolBuilding ? 2 : 1;
         if (remainingDeadlineMs <= 0) {return floor;}
+        long budget = connectSpendCapMs > 0
+                      ? Math.min(remainingDeadlineMs, connectSpendCapMs)
+                      : remainingDeadlineMs;
         long step = Math.max(MIN_CONNECT_ATTEMPT_STEP_MS, observedAttemptMs);
-        long affordable = remainingDeadlineMs / step;
+        long affordable = budget / step;
         if (affordable <= floor) {return floor;}
         return (int) Math.min(MAX_TIMEOUT_CONNECT_RETRIES, affordable);
     }
+
+    /**
+     * Ceiling on the wall time one request spends on connect attempts.
+     * <p>The shared request deadline is
+     * {@link I2PTunnelHTTPClient#REQUEST_CONNECT_DEADLINE_MS} (120s), which is
+     * far more than a browser should wait for the first byte of a small asset:
+     * sizing the retry ceiling against it allowed four 4s give-ups plus backoff,
+     * measured end-to-end at 25s for a single image, against a 10.9s p90 before
+     * the give-up existed. 15s keeps the worst case near that old p90 while
+     * still paying for three attempts, which is what the evidence says a
+     * destination needs — the fourth attempt in the measured trace opened in
+     * 596ms, so the attempts that work are cheap.
+     *
+     * @since 0.9.72+
+     */
+    static final long MAX_CONNECT_SPEND_MS = 15000;
 
     /**
      * Smallest per-attempt cost (ms) charged against the remaining deadline by

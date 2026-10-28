@@ -44,14 +44,17 @@ public class ConnectRetryBudgetTest {
 
     /**
      * The measured case: a 4 s handshake give-up with almost the whole 120 s
-     * request deadline left buys the full ceiling, so the retry that historically
-     * opens in under a second gets to run.
+     * request deadline left. The deadline alone would buy the full ceiling of
+     * four, which is what let one image take 25 s; the per-request spend cap
+     * brings that to three attempts.
      */
     @Test
-    public void testFastGiveUpBuysTheCeiling() {
+    public void testFastGiveUpBuysThreeAttempts() {
         long remaining = DEADLINE_MS - 4_000;
+        assertEquals(3, I2PTunnelClientBase.maxTimeoutConnectRetries(remaining, 4_000, false));
+        // Without the cap, the deadline alone buys the full ceiling.
         assertEquals(I2PTunnelClientBase.MAX_TIMEOUT_CONNECT_RETRIES,
-                     I2PTunnelClientBase.maxTimeoutConnectRetries(remaining, 4_000, false));
+                     I2PTunnelClientBase.maxTimeoutConnectRetries(remaining, 4_000, false, 0));
     }
 
     /** A connect that failed almost instantly is still charged a full step. */
@@ -154,5 +157,93 @@ public class ConnectRetryBudgetTest {
     @Test
     public void testBrowserClosedStops() {
         assertFalse(I2PTunnelClientBase.shouldOuterRetryConnect(1, 0, true, false, false, true, 4));
+    }
+
+    // ---------- the per-request connect-spend cap ----------
+
+    /**
+     * The measured regression the cap exists for: a 120s deadline with 4s
+     * give-ups bought four attempts, and one image took 25s end to end. Against
+     * the 15s cap the same inputs buy three.
+     */
+    @Test
+    public void testSpendCapBoundsTheCeiling() {
+        long remaining = DEADLINE_MS - 4_000;
+        assertEquals(3, I2PTunnelClientBase.maxTimeoutConnectRetries(remaining, 4_000,
+                                                                    false, 15_000));
+        // Uncapped, the same inputs buy the full ceiling.
+        assertEquals(I2PTunnelClientBase.MAX_TIMEOUT_CONNECT_RETRIES,
+                     I2PTunnelClientBase.maxTimeoutConnectRetries(remaining, 4_000, false, 0));
+    }
+
+    /** A cap of 0 or less means "no cap beyond the deadline", not "no budget". */
+    @Test
+    public void testNonPositiveCapMeansNoCap() {
+        assertEquals(I2PTunnelClientBase.MAX_TIMEOUT_CONNECT_RETRIES,
+                     I2PTunnelClientBase.maxTimeoutConnectRetries(DEADLINE_MS, 4_000, false, 0));
+        assertEquals(I2PTunnelClientBase.MAX_TIMEOUT_CONNECT_RETRIES,
+                     I2PTunnelClientBase.maxTimeoutConnectRetries(DEADLINE_MS, 4_000, false, -1));
+    }
+
+    /** The 3-arg overload applies the production cap. */
+    @Test
+    public void testLegacyOverloadAppliesTheCap() {
+        assertEquals(3, I2PTunnelClientBase.maxTimeoutConnectRetries(DEADLINE_MS - 4_000, 4_000, false));
+        assertEquals(15_000, I2PTunnelClientBase.MAX_CONNECT_SPEND_MS);
+    }
+
+    /** A cap tighter than one attempt still allows the historical floor. */
+    @Test
+    public void testTightCapKeepsTheFloor() {
+        assertEquals(1, I2PTunnelClientBase.maxTimeoutConnectRetries(DEADLINE_MS, 4_000, false, 2_000));
+        assertEquals(2, I2PTunnelClientBase.maxTimeoutConnectRetries(DEADLINE_MS, 4_000, true, 2_000));
+    }
+
+    /** A spent deadline outranks the cap. */
+    @Test
+    public void testSpentDeadlineBeatsTheCap() {
+        assertEquals(1, I2PTunnelClientBase.maxTimeoutConnectRetries(0, 4_000, false, 15_000));
+    }
+
+    /**
+     * The cap is what bounds the request, given the ladder the retries use:
+     * three 4s attempts plus the 0s and 1s delays stay inside it, and the
+     * fourth attempt is what the cap is refusing.
+     */
+    @Test
+    public void testAggregateStaysInsideTheCap() {
+        int ceiling = I2PTunnelClientBase.maxTimeoutConnectRetries(DEADLINE_MS, 4_000, false);
+        long spend = 0;
+        for (int attempt = 1; attempt <= ceiling; attempt++) {
+            spend += 4_000 + I2PTunnelHTTPClient.getConnectAttemptDelayMs(attempt);
+        }
+        assertTrue("aggregate connect spend " + spend + "ms must fit the cap",
+                   spend <= I2PTunnelClientBase.MAX_CONNECT_SPEND_MS + 4_000);
+    }
+
+    // ---------- the first retry is immediate ----------
+
+    /**
+     * The first retry waits for nothing: a fresh handshake to the same peer is
+     * measured to open in 596ms, so a 1s pause costs more than the attempt it
+     * precedes. The ladder then resumes at 1s, 2s, 4s, 8s.
+     */
+    @Test
+    public void testFirstConnectRetryIsImmediate() {
+        assertEquals(0, I2PTunnelHTTPClient.getConnectAttemptDelayMs(0));
+        assertEquals(0, I2PTunnelHTTPClient.getConnectAttemptDelayMs(1));
+        assertEquals(1_000, I2PTunnelHTTPClient.getConnectAttemptDelayMs(2));
+        assertEquals(2_000, I2PTunnelHTTPClient.getConnectAttemptDelayMs(3));
+        assertEquals(4_000, I2PTunnelHTTPClient.getConnectAttemptDelayMs(4));
+        assertEquals(8_000, I2PTunnelHTTPClient.getConnectAttemptDelayMs(5));
+        assertEquals(8_000, I2PTunnelHTTPClient.getConnectAttemptDelayMs(9));
+    }
+
+    /** The shared ladder is untouched, so the empty-response loop keeps its 1s start. */
+    @Test
+    public void testSharedLadderUnchanged() {
+        assertEquals(1_000, I2PTunnelHTTPClient.getConnectRetryDelayMs(1));
+        assertEquals(2_000, I2PTunnelHTTPClient.getConnectRetryDelayMs(2));
+        assertEquals(0, I2PTunnelHTTPClient.getConnectRetryDelayMs(0));
     }
 }

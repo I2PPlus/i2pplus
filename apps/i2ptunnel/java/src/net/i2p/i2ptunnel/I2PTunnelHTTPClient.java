@@ -1750,7 +1750,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         if (_log.shouldInfo()) {
                             _log.info(getPrefix(requestId) + "Retrying after connection failure -> " + ioe.getMessage());
                         }
-                        long delayMs = clampToDeadlineMs(getConnectRetryDelayMs(connectAttempts),
+                        long delayMs = clampToDeadlineMs(getConnectAttemptDelayMs(connectAttempts),
                                                          connectDeadline, System.currentTimeMillis());
                         if (delayMs <= 0) {
                             // No budget left to sleep in; fail now rather than
@@ -2506,6 +2506,25 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         if (attempt <= 0) {return 0;}
         return Math.min(8 * I2P_CONNECT_RETRY_BASE_DELAY,
                         I2P_CONNECT_RETRY_BASE_DELAY << Math.min(attempt - 1, 3));
+    }
+
+    /**
+     * Delay before a connect-loop retry, with the first retry taken immediately.
+     * <p>The shared ladder starts at 1s, which was calibrated for attempts that
+     * each burn most of a 30s connect timeout, where the pause is noise. A
+     * handshake that gives up on a stalled outbound tunnel now fails in a few
+     * seconds, and the retry that replaces it is measured to open in 596ms to
+     * the same peer — so a 1s pause costs more than the attempt it precedes, and
+     * the measured four-attempt request ran to 25s. Shift the ladder one step
+     * down: first retry now, then 1s, 2s, 4s.
+     *
+     * @param attempt the 1-based connect failure count (how many failures so far)
+     * @return the delay in ms: 0 for the first retry, then the shared ladder
+     * @since 0.9.72+
+     */
+    static long getConnectAttemptDelayMs(int attempt) {
+        if (attempt <= 1) {return 0;}
+        return getConnectRetryDelayMs(attempt - 1);
     }
 
     /**
