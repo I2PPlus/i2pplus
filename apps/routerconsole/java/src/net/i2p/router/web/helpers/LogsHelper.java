@@ -16,6 +16,7 @@ import java.util.regex.*;
 
 import javax.servlet.http.HttpSession;
 
+import net.i2p.I2PAppContext;
 import net.i2p.crypto.SigType;
 import net.i2p.data.DataHelper;
 import net.i2p.router.RouterContext;
@@ -23,6 +24,7 @@ import net.i2p.router.web.CSSHelper;
 import net.i2p.router.web.ConfigServiceHandler;
 import net.i2p.router.web.HelperBase;
 import net.i2p.router.web.RouterConsoleRunner;
+import net.i2p.util.Log;
 import net.i2p.util.Translate;
 import net.i2p.util.UIMessages;
 
@@ -31,6 +33,9 @@ import net.i2p.util.UIMessages;
  * @since 0.9.33
  */
 public class LogsHelper extends HelperBase {
+
+    /** The log for the logs page's own controls. */
+    private static final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(LogsHelper.class);
 
     /**
      * Constructor, used by the console when it builds this bean. The rewrite
@@ -314,16 +319,19 @@ public class LogsHelper extends HelperBase {
      *                to the process-wide nonce
      * @param consoleNonce the submitted anti-CSRF token: one of the nonces
      *                     issued to this session and not yet used. When it is
-     *                     spent or unknown, nothing is cleared and the reason is
-     *                     left on the session as a notice for the next render
+     *                     spent or unknown, nothing is cleared and the refusal
+     *                     is logged
      * @since 0.9.46
      */
     public void clearThrough(int n, int crit, long wn, long wts, String wf, HttpSession session, String consoleNonce) {
         if (session != null) {
             if (!CSSHelper.validateNonce(session, consoleNonce)) {
                 // Clear logs is a plain link, so a spent nonce leaves the user
-                // with a link that appears to do nothing. Say why instead.
-                NonceNotices.refuse(session, "clear logs");
+                // with a link that appears to do nothing. Log the refusal; the
+                // page itself stays clean.
+                if (_log.shouldDebug()) {
+                    _log.debug("Clear logs not run -> Session nonce spent");
+                }
                 return;
             }
         } else {

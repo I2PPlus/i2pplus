@@ -71,15 +71,4 @@ public class ConfigRestartBeanControlBoxTest {
         assertTrue(first >= 0);
         assertEquals("the id must not be duplicated", -1, wrapped.indexOf(BOX, first + 1));
     }
-
-    /** A refusal notice is rendered inside the box, so the iframe refresh brings it in. */
-    @Test
-    public void testNoticeTravelsWithTheBox() {
-        String content = "<div class=sb_notice>token spent</div>\n<form id=sb_routerControl></form>\n";
-        String wrapped = ConfigRestartBean.wrapControlBox(content);
-        int notice = wrapped.indexOf("sb_notice");
-        int open = wrapped.indexOf("<div id=" + BOX + ">");
-        int close = wrapped.lastIndexOf("</div>");
-        assertTrue("the notice sits inside the container", notice > open && notice < close);
-    }
 }

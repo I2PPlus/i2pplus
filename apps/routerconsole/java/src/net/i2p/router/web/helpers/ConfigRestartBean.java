@@ -2,6 +2,7 @@ package net.i2p.router.web.helpers;
 
 import javax.servlet.http.HttpSession;
 
+import net.i2p.I2PAppContext;
 import net.i2p.app.ClientApp;
 import net.i2p.app.ClientAppManager;
 import net.i2p.data.DataHelper;
@@ -13,11 +14,15 @@ import net.i2p.router.web.ConfigServiceHandler;
 import net.i2p.router.web.ContextHelper;
 import net.i2p.router.web.Messages;
 import net.i2p.router.web.NewsHelper;
+import net.i2p.util.Log;
 
 /**
  * Simple helper to control restarts/shutdowns in the left hand nav.
  */
 public class ConfigRestartBean {
+    /** The log for the sidebar's router control. */
+    private static final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(ConfigRestartBean.class);
+
     /** Creates a bean; the container calls it with no arguments before rendering the nav. */
     public ConfigRestartBean() {}
     /**
@@ -61,9 +66,11 @@ public class ConfigRestartBean {
         RouterContext ctx = ContextHelper.getContext(null);
         boolean authorized = action != null && CSSHelper.validateNonce(session, nonce);
         if (action != null && !authorized) {
-            // A spent nonce is what makes this button look dead, and the form
-            // handlers add their own error while this path said nothing at all.
-            NonceNotices.refuse(session, "router control");
+            // The control does nothing and says nothing: a sentence inside the
+            // control box reads as a broken widget, so the refusal is logged.
+            if (_log.shouldDebug()) {
+                _log.debug("Sidebar router control not run -> Session nonce spent");
+            }
         }
         if (authorized) {
             // Normal browsers send value, IE sends button label
@@ -150,13 +157,6 @@ public class ConfigRestartBean {
         } else {
             if (ctx.hasWrapper() || NewsHelper.isExternalRestartPending()) {buttons(ctx, buf, urlBase, nextNonce, SET3);}
             else {buttons(ctx, buf, urlBase, nextNonce, SET4);}
-        }
-        // A refusal recorded during this render, shown beside the buttons it
-        // describes: inside the control box, so the iframe submission that
-        // refreshes only that box still brings the reason onto the page.
-        String notice = NonceNotices.take(session);
-        if (!notice.isEmpty()) {
-            buf.insert(0, "<div class=sb_notice>" + notice + "</div>\n");
         }
         return wrapControlBox(buf.toString());
     }
