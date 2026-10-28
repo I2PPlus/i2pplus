@@ -1420,14 +1420,53 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
+     * How long a finished update message stays in the sidebar, in ms. Long
+     * enough to read what the update did and act on it, short enough that it is
+     * gone before it starts describing a restart the user has already done.
+     */
+    static final long STATUS_NOTICE_TTL_MS = 5 * 60 * 1000L;
+
+    /**
+     * Whether the update manager's status line belongs in the sidebar right now.
+     *
+     * <p>An update in progress is always shown, since the line is the progress.
+     * A finished one - the plugin-updated and failure messages among them - is
+     * shown for {@link #STATUS_NOTICE_TTL_MS} from when the manager set it, then
+     * dropped: the sidebar re-renders every few seconds, so a finished message
+     * would otherwise sit in the nav indefinitely.
+     *
+     * @param status the manager's status line, empty for none
+     * @param inProgress true while an update is running
+     * @param statusTime when the manager set the line, in ms, 0 when unknown
+     * @param now the current time in ms, passed in so the policy is testable
+     *            without sleeping
+     * @return true to show the line
+     * @since 0.9.72+
+     */
+    static boolean showUpdateStatus(String status, boolean inProgress, long statusTime, long now) {
+        if (status == null || status.isEmpty()) {return false;}
+        if (inProgress) {return true;}
+        // No stamp at all (a manager from before this build): show it, as we did.
+        if (statusTime <= 0) {return true;}
+        return now - statusTime < STATUS_NOTICE_TTL_MS;
+    }
+
+    /**
      * The update status and buttons.
      * @return the update status
      * @since 0.8.13 moved from {@link SidebarRenderer}
      */
     public String getUpdateStatus() {
         StringBuilder buf = new StringBuilder(512);
-        // display all the time so we display the final failure message, and plugin update messages too
+        // The manager's own line, including the final failure message and the
+        // plugin update messages, shown for STATUS_NOTICE_TTL_MS after it
+        // finished: a plugin update has said its piece once, and a heading that
+        // outlives the restart it describes is just noise in the nav.
         String status = NewsHelper.getUpdateStatus();
+        if (!showUpdateStatus(status, NewsHelper.isUpdateInProgress(),
+                              NewsHelper.updateStatusTime(), System.currentTimeMillis())) {
+            status = "";
+        }
         String source = _context.getProperty(ConfigUpdateHandler.PROP_ZIP_URL);
         boolean needSpace = false;
         if (!status.isEmpty()) {

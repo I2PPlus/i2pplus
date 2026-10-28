@@ -97,6 +97,13 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
 
     /** Status message shown in the console, null if none. */
     private volatile String _status;
+    /**
+     * When {@link #_status} was last set, in ms. The sidebar shows a finished
+     * update message for a bounded time only, so this is the age it measures
+     * from; snapshotting it at set time keeps a later status change from
+     * extending or shortening what is already on screen.
+     */
+    private volatile long _statusTime;
     /** True while an external restart is pending. */
     private volatile boolean _externalRestartPending;
 
@@ -306,6 +313,14 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      */
     @Override
     public String getStatus() {return _status;}
+
+    /**
+     * When the status message was last set.
+     *
+     * @return the time in ms, 0 when no status has been set since startup
+     * @since 0.9.72+
+     */
+    public long getStatusTime() {return _statusTime;}
 
     /**
      * Is an update available?
@@ -1537,11 +1552,15 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     public String _t(String s, Object o, Object o2) {return Messages.getString(s, o, o2, _context);}
 
     /**
-     * Sets the status message shown in the console.
+     * Sets the status message shown in the console, and stamps the time so the
+     * sidebar can bound how long a finished message stays on screen.
      *
      * @param s the message to show
      */
-    private void updateStatus(String s) {_status = s;}
+    private void updateStatus(String s) {
+        _status = s;
+        _statusTime = System.currentTimeMillis();
+    }
 
     /**
      * Shows the final status message and schedules its cleanup.

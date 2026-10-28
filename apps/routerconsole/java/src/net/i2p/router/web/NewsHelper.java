@@ -273,6 +273,20 @@ public class NewsHelper extends ContentHelper {
     }
 
     /**
+     * When the update manager last set its status line, so a finished update
+     * message can be dropped from the sidebar once it has been on screen long
+     * enough to read.
+     *
+     * @return the time in ms, 0 when no status has been set since startup
+     * @since 0.9.72+
+     */
+    public static long updateStatusTime() {
+        ConsoleUpdateManager mgr = ConsoleUpdateManager.getInstance();
+        if (mgr == null) return 0;
+        return mgr.getStatusTime();
+    }
+
+    /**
      * If we haven't downloaded news yet, use the translated initial news file.
      * @return up to three entries no older than 60 days
      */
