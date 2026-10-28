@@ -37,9 +37,16 @@ public class SessionManager {
     /** Window the failed logins count in. */
     private static final long FAILURE_WINDOW_MS = 5 * (long) 60 * 1000; // 5 minutes
     /**
-     * Name of the cookie carrying the session token to the console.
+     * Name of the cookie carrying the session token to the console. A cookie-name
+     * is an RFC 6265 token, and '+' is an HTTP separator, not a token character,
+     * so a browser that enforces the cookie grammar drops a cookie called
+     * I2P+AUTH: the console then hands out a fresh login session on every
+     * request. It is also kept distinct from the servlet session cookie
+     * I2PSESSIONID, which every webapp on the host shares (see
+     * apps/routerconsole/jsp/web.xml) - one name for both would let a login
+     * overwrite the session the CSRF nonces are recorded in.
      */
-    public static final String SESSION_COOKIE_NAME = "I2P+AUTH";
+    public static final String SESSION_COOKIE_NAME = "I2PAUTH";
     /**
      * Session attribute under which the console stores the logged-in username.
      */
