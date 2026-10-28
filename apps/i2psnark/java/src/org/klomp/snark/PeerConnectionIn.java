@@ -27,11 +27,24 @@ class PeerConnectionIn implements Runnable {
     private final DataInputStream din;
 
     /**
-     * Largest complete message accepted, in bytes. The biggest is the piece
-     * message, the request size (32K) plus 9; the bitfield message could
-     * exceed it only if Storage.MAX_PIECES / 8 grew past the current 625.
+     * Largest complete message body accepted, in bytes: the piece message is
+     * the block we asked for, at most {@link PeerState#PARTSIZE}, plus the type
+     * byte and the piece and begin fields; the extension message carries a
+     * magnet chunk plus its dictionary. A bitfield message exceeds the piece
+     * message only if Storage.MAX_PIECES / 8 grows past the current 625.
+     * <p>
+     * Measured per message rather than frozen at class load: PARTSIZE is a
+     * runtime setting read from <code>i2psnark.pipeline.partsize</code>, and a
+     * bound left at the 16 KiB default disconnects every peer that correctly
+     * answers a request for a larger part - our own request, so a behaving
+     * peer pays for it.
+     *
+     * @return the largest message body accepted, in bytes
+     * @since 0.9.72+
      */
-    private static final int MAX_MSG_SIZE = Math.max(PeerState.PARTSIZE + 9, MagnetState.CHUNK_SIZE + 100); // 100 for the ext msg dictionary
+    static int maxMessageSize() {
+        return Math.max(PeerState.PARTSIZE + 9, MagnetState.CHUNK_SIZE + 100); // 100 for the ext msg dictionary
+    }
 
     /** Flood guard: maximum inbound messages per window, generous to tolerate bursts. */
     private static final int MAX_MESSAGES_PER_WINDOW = 2000;
@@ -144,8 +157,9 @@ class PeerConnectionIn implements Runnable {
                                     + windowCount
                                     + " messages in window");
                 }
-                if (i < 0 || i > MAX_MSG_SIZE) {
-                    throw new IOException("Unexpected length prefix: " + i);
+                int maxMsg = maxMessageSize();
+                if (i < 0 || i > maxMsg) {
+                    throw new IOException("Unexpected length prefix: " + i + " (max: " + maxMsg + ')');
                 }
 
                 if (i == 0) {

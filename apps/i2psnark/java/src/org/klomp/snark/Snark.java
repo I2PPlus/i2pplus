@@ -1776,10 +1776,13 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * The current comment set for this torrent. Not a copy. Caller MUST synch on the returned
-     * object for all operations.
+     * A snapshot of the comment set for this torrent, built under the internal
+     * lock. The set is a copy, so the caller needs no synchronization on it and
+     * changes to it do not reach the torrent; additions go through
+     * {@link #addComments}. The {@link Comment} objects in it are shared with
+     * the stored set.
      *
-     * @return may be null if none
+     * @return a copy of the comments, null if the torrent has none
      * @since 0.9.31
      */
     public CommentSet getComments() {

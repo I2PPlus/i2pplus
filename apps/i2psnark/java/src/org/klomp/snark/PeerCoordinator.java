@@ -15,9 +15,11 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -167,10 +169,17 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     private final byte[] infohash;
 
     /**
-     * The wanted pieces. We could use a TreeSet but we'd have to clear and re-add everything when
-     * priorities change.
+     * The wanted pieces, in the order they are requested. A LinkedHashSet, not
+     * an ArrayList: a piece is removed from the middle once per completed
+     * piece, and a List remove() is an O(n) scan and shift under the monitor
+     * the request path iterates - quadratic on a torrent with many pieces. The
+     * set removes by hash in O(1) and leaves the remaining order alone, so the
+     * rarest-first order survives a removal; it is rebuilt by
+     * {@link #resortWanted} when {@link #wantedDirty} is set, and by
+     * {@link #reshuffleWanted} to break id order. We could use a TreeSet, but
+     * we would have to clear and re-add everything when priorities change.
      */
-    private final List<Piece> wantedPieces;
+    private final Set<Piece> wantedPieces;
 
     /**
      * The total number of bytes in wantedPieces, or -1 if not yet known.
@@ -271,7 +280,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         this.snark = torrent;
         bwListener = bwl;
 
-        wantedPieces = new ArrayList<>();
+        wantedPieces = new LinkedHashSet<>();
         setWantedPieces();
         partialPieces = new ArrayList<>(getMaxConnections() + 1);
         peers = new LinkedBlockingDeque<>();
@@ -403,7 +412,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 }
             }
             wantedBytes = count;
-            Collections.shuffle(wantedPieces, _random);
+            reshuffleWanted(wantedPieces, _random);
             wantedMap.clear();
             for (Piece p : wantedPieces) {
                 wantedMap.put(Integer.valueOf(p.getId()), p);
@@ -1317,6 +1326,42 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
+     * Reorder the wanted set into the request order - priority first, then
+     * rarest first - by rebuilding it from a sorted list. A Set cannot be
+     * sorted in place; a LinkedHashSet iterates in the order it was last
+     * rebuilt, so this is what establishes the rarest-first order the request
+     * path walks.
+     * <p>
+     * Called on the request path when the set is dirty, where the ArrayList
+     * this replaced already paid the O(n log n) sort.
+     *
+     * @param wanted the set to reorder; the caller holds its monitor
+     * @since 0.9.72+
+     */
+    static void resortWanted(Set<Piece> wanted) {
+        List<Piece> sorted = new ArrayList<>(wanted);
+        Collections.sort(sorted);
+        wanted.clear();
+        wanted.addAll(sorted);
+    }
+
+    /**
+     * Shuffle the wanted set so a batch of pieces added in id order is not
+     * requested in id order, which would have every peer in the swarm start
+     * from the same piece.
+     *
+     * @param wanted the set to reorder; the caller holds its monitor
+     * @param random the random to shuffle with
+     * @since 0.9.72+
+     */
+    static void reshuffleWanted(Set<Piece> wanted, Random random) {
+        List<Piece> shuffled = new ArrayList<>(wanted);
+        Collections.shuffle(shuffled, random);
+        wanted.clear();
+        wanted.addAll(shuffled);
+    }
+
+    /**
      * Returns one of the claimed pieces in the given BitField that is still wanted or null if none
      * of the given pieces are wanted.
      *
@@ -1345,7 +1390,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         int wantedSize = END_GAME_THRESHOLD + 1;
         synchronized (wantedPieces) {
             if (record && wantedDirty) {
-                Collections.sort(wantedPieces);
+                resortWanted(wantedPieces);
                 wantedDirty = false;
             } // Sort in order of rarest first.
             Iterator<Piece> it = wantedPieces.iterator();
@@ -1535,7 +1580,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 _log.debug("Updated piece priorities, now wanted: " + wantedPieces);
             }
             // if we added pieces, they will be in-order unless we shuffle
-            Collections.shuffle(wantedPieces, _random);
+            reshuffleWanted(wantedPieces, _random);
         }
 
         // cancel outside of wantedPieces lock to avoid deadlocks
