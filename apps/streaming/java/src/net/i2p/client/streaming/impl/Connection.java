@@ -970,6 +970,85 @@ class Connection {
     }
 
     /**
+     * Floor for the SYN-phase wall-clock budget (ms), used when RTT evidence
+     * would allow a shorter one.
+     *
+     * @since 0.9.72+
+     */
+    static final long SYN_PHASE_BUDGET_MIN_MS = 4000;
+
+    /**
+     * SYN sends to allow when the path has no RTT evidence yet, so the budget is
+     * sized from the retransmit interval alone.
+     *
+     * @since 0.9.72+
+     */
+    static final int SYN_PHASE_BUDGET_MIN_PROBES = 4;
+
+    /**
+     * Wall-clock budget (ms) for the unacknowledged-SYN phase of a handshake.
+     * <p>{@link #computeSynResendBudget} deliberately scales the send count so the
+     * retransmits cover the whole connect window, which is right for a peer that is
+     * slow but alive. It is wrong for a path that is dropping the SYN-ACK: measured
+     * on a remote eepsite, five of six handshakes to one peer completed in
+     * 647-1704 ms while the sixth retransmitted a SYN every ~916 ms for 10,446 ms
+     * before the reply landed. The send-count budget alone let that handshake run
+     * to the caller's full 39,650 ms window, so an interactive client — the HTTP
+     * proxy — sat on a dead path for ten seconds while a fresh connection to the
+     * same peer was consistently opening in under a second.
+     * <p>This bounds the phase by elapsed time so the caller's retry loop — which
+     * opens a fresh connection, and so a fresh outbound tunnel — gets to run.
+     * Sized from the measured path: {@link #SYN_PHASE_BUDGET_MIN_PROBES} probes at
+     * the live interval when there is no RTT sample, ten RTTs once there is,
+     * floored at {@link #SYN_PHASE_BUDGET_MIN_MS} so a fast path is not cut off
+     * before one healthy handshake would have finished, and capped at the connect
+     * window so this never fires before the window it lives inside.
+     *
+     * @param connectWindowMs the effective connect window from
+     *                        {@link #computeEffectiveConnectTimeout(long, int, long)}; 0
+     *                        means no connect timeout is configured, and 0 is
+     *                        returned to mean "no extra bound"
+     * @param measuredRttMs the connection's RTT sample, or &lt;= 0 when the peer
+     *                      has not been acknowledged yet
+     * @param synIntervalMs the live inter-SYN retransmit interval (ms) from
+     *                      {@link #computeSynRetransmitInterval(int, int)}
+     * @return the budget in ms, or 0 for no bound
+     * @since 0.9.72+
+     */
+    static long computeSynPhaseBudgetMs(long connectWindowMs, int measuredRttMs, int synIntervalMs) {
+        if (connectWindowMs <= 0) {return 0;}
+        long budget = measuredRttMs > 0
+                      ? (long) measuredRttMs * SYN_PHASE_BUDGET_RTT_PCT / 100
+                      : (long) SYN_PHASE_BUDGET_MIN_PROBES * Math.max(0, synIntervalMs);
+        if (budget < SYN_PHASE_BUDGET_MIN_MS) {budget = SYN_PHASE_BUDGET_MIN_MS;}
+        return Math.min(budget, connectWindowMs);
+    }
+
+    /**
+     * RTT multiplier for {@link #computeSynPhaseBudgetMs}, in percent, so 1000 is
+     * ten round trips. A healthy handshake needs one round trip; ten covers the
+     * retransmit ladder of a path that is losing single packets without letting a
+     * path that is losing everything run for the whole connect window.
+     *
+     * @since 0.9.72+
+     */
+    static final int SYN_PHASE_BUDGET_RTT_PCT = 1000;
+
+    /**
+     * Pure decision: has the unacknowledged-SYN phase spent its wall-clock budget?
+     *
+     * @param elapsedMs connection lifetime so far (ms)
+     * @param budgetMs  the budget from {@link #computeSynPhaseBudgetMs(long, int, int)};
+     *                  &lt;= 0 means no bound, so this never fires
+     * @return true if the SYN phase has run out of time and the connection should
+     *         be torn down so the caller can retry on a fresh one
+     * @since 0.9.72+
+     */
+    static boolean synPhaseBudgetExceeded(long elapsedMs, long budgetMs) {
+        return budgetMs > 0 && elapsedMs >= budgetMs;
+    }
+
+    /**
      * Minimum spacing (ms) between SYN-ACK re-sends to an existing connection in
      * response to retransmitted SYNs.
      * <p>This is the <em>floor</em>: the live spacing used by
@@ -1239,6 +1318,20 @@ class Connection {
     private int getMaxSynSends() {
         long window = getEffectiveConnectWindow();
         return computeSynResendBudget(maxSynResends, getSynRetransmitInterval(), window);
+    }
+
+    /**
+     * This connection's SYN-phase wall-clock budget, read from its own options so
+     * the retransmit loop applies one consistent view of the path.
+     *
+     * @return the budget in ms from {@link #computeSynPhaseBudgetMs(long, int, int)},
+     *         0 when no connect timeout is configured
+     * @since 0.9.72+
+     */
+    long getSynPhaseBudgetMs() {
+        int rtt = _options.getRTT();
+        if (!_options.receivedAck()) {rtt = -1;}
+        return computeSynPhaseBudgetMs(getEffectiveConnectWindow(), rtt, getSynRetransmitInterval());
     }
 
     /**
@@ -2530,6 +2623,56 @@ class Connection {
      */
     static boolean synGiveUpBudgetExceeded(int totalSends, int softResends, int maxSynSends) {
         return Math.max(0, totalSends - softResends) >= maxSynSends;
+    }
+
+    /**
+     * Hard SYN sends to allow on the outbound tunnel picked for a connect before
+     * a resend rotates to a fresh one.
+     *
+     * @since 0.9.72+
+     */
+    static final int SYN_RESEND_ROTATION_SENDS = 2;
+
+    /**
+     * Pure decision: should this SYN resend go out a fresh outbound tunnel?
+     * <p>A connect picks one outbound tunnel, and the SYN-ACK can go missing
+     * because that tunnel, or its gateway, is dropping the reply. The established
+     * path has a way out — a retransmit stall arms
+     * {@link #setNextSendFreshConnection()} so the next send rotates — but
+     * {@link #isRetransmitStalledNow(boolean, long, long, long)} deliberately
+     * returns false until the first ACK, and its threshold is
+     * {@link #RETRANSMIT_STALL_MS}, so a handshake never gets that recovery.
+     * Measured on a remote eepsite, one handshake retransmitted a SYN every
+     * ~916ms for 10,446ms with every copy on the same outbound tunnel, while
+     * handshakes to the same peer opened in 647-1704ms; the tunnel was the
+     * variable that changed between the two.
+     * <p>So rotate after {@code rotationSends} hard sends, giving the original
+     * tunnel enough attempts to cover ordinary one-off loss before blaming it.
+     * Soft-failure-triggered resends are excluded, as in
+     * {@link #synGiveUpBudgetExceeded(int, int, int)}: they never reached the
+     * fabric, and {@link #scheduleSoftFailureRetransmit()} already rotates for
+     * them. The subtraction is clamped at zero so an early-tagged resend cannot
+     * undercount below the true hard count.
+     *
+     * @param synPacket true if the packet being resent carries
+     *                  {@link Packet#FLAG_SYNCHRONIZE}
+     * @param synPhase true while the connection has no ACK yet
+     *                 ({@code _highestAckedThrough < 0}), so data resends of a
+     *                 live connection are never rotated
+     * @param totalSends total send attempts incl. resends
+     *                   ({@link net.i2p.client.streaming.impl.PacketLocal#getNumSends})
+     * @param softResends of those, resends tagged as soft-failure-triggered
+     *                    ({@link net.i2p.client.streaming.impl.PacketLocal#getNumSoftResends})
+     * @param rotationSends hard sends to allow before rotating
+     *                      ({@link #SYN_RESEND_ROTATION_SENDS})
+     * @return true if the next send should use a fresh outbound tunnel
+     * @since 0.9.72+
+     */
+    static boolean synResendNeedsFreshTunnel(boolean synPacket, boolean synPhase,
+                                             int totalSends, int softResends,
+                                             int rotationSends) {
+        if (!synPacket || !synPhase) {return false;}
+        return Math.max(0, totalSends - softResends) >= rotationSends;
     }
 
     /**
@@ -4867,18 +5010,22 @@ class Connection {
                         return;
                     }
                 } else if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE) &&
-                           synGiveUpBudgetExceeded(packet.getNumSends(),
-                                                   packet.getNumSoftResends(),
-                                                   getMaxSynSends())) {
-                    // The SYN was never ACKed and the retransmit budget has now covered
-                    // the entire connect window (getMaxSynSends(), scaled up from
-                    // maxSynResends), so the connect() caller has given up. Stop
-                     // resending instead of running to maxResends (~4 min). SYN
-                    // retransmits use a fixed RTO interval (no backoff), so the total
-                    // budget is getMaxSynSends() * interval. Soft-failure-triggered
-                    // resends are excluded (synGiveUpBudgetExceeded()): they never
-                    // reached the tunnel fabric and should not count as evidence of a
-                    // dead path (see scheduleSoftFailureRetransmit()).
+                           (synGiveUpBudgetExceeded(packet.getNumSends(),
+                                                    packet.getNumSoftResends(),
+                                                    getMaxSynSends())
+                            || synPhaseBudgetExceeded(getLifetime(), getSynPhaseBudgetMs()))) {
+                    // The SYN was never ACKed and the handshake has run out of
+                    // budget, so stop resending instead of running to maxResends
+                    // (~4 min). Two independent bounds: the send count
+                    // (getMaxSynSends(), scaled up from maxSynResends so it covers
+                    // the connect window) and the wall clock (getSynPhaseBudgetMs()),
+                    // which is what fires on a path that is dropping SYN-ACKs — see
+                    // computeSynPhaseBudgetMs(). SYN retransmits use a fixed RTO
+                    // interval (no backoff), so the count budget is
+                    // getMaxSynSends() * interval. Soft-failure-triggered resends are
+                    // excluded (synGiveUpBudgetExceeded()): they never reached the
+                    // tunnel fabric and should not count as evidence of a dead path
+                    // (see scheduleSoftFailureRetransmit()).
                     // Record an accurate error *before* the error-free disconnect, so
                     // waitForConnect() returns "Connection timed out: SYN not
                     // acknowledged" instead of the generic "Connection failed".
@@ -4910,6 +5057,29 @@ class Connection {
                         }
                         // clear flag
                         packet.setFlag(Packet.FLAG_DELAY_REQUESTED, false);
+                    }
+
+                    // SYN-phase tunnel rotation. The retransmit-stall detector
+                    // (isRetransmitStalledNow()) deliberately ignores a
+                    // connection with no ACK yet, and its threshold is 30s, so a
+                    // connect has no other way to abandon an outbound tunnel that
+                    // is dropping the SYN-ACK. Measured on a remote eepsite: one
+                    // handshake retransmitted a SYN every ~916ms for 10,446ms,
+                    // every copy going out the same outbound tunnel, while
+                    // handshakes to the same peer opened in 647-1704ms. Rotating
+                    // after SYN_RESEND_ROTATION_SENDS hard sends gives the
+                    // connect the same recovery the established path gets.
+                    if (synResendNeedsFreshTunnel(packet.isFlagSet(Packet.FLAG_SYNCHRONIZE),
+                                                  _highestAckedThrough.get() < 0,
+                                                  packet.getNumSends(),
+                                                  packet.getNumSoftResends(),
+                                                  SYN_RESEND_ROTATION_SENDS)) {
+                        setNextSendFreshConnection();
+                        if (_log.shouldDebug()) {
+                            _log.debug(Connection.this + " -> SYN unacked after " +
+                                       packet.getNumSends() + " sends, rotating to a " +
+                                       "fresh outbound tunnel");
+                        }
                     }
 
                     packet.setResendDelay(_options.getResendDelay() / 1000);
