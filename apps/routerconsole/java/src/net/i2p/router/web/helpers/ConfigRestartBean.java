@@ -53,12 +53,19 @@ public class ConfigRestartBean {
      * @param session the HTTP session
      * @param nextNonce the next nonce to output in the form
      * @param nonce the nonce to be validated for actions
-     * @return the rendered HTML
+     * @return the rendered HTML, inside the sb_routerControlBox container, empty
+     *         string when there is nothing to show
      * @since 0.9.69
      */
     public static String renderStatus(String urlBase, String action, HttpSession session, String nextNonce, String nonce) {
         RouterContext ctx = ContextHelper.getContext(null);
-        if (action != null && CSSHelper.validateNonce(session, nonce)) {
+        boolean authorized = action != null && CSSHelper.validateNonce(session, nonce);
+        if (action != null && !authorized) {
+            // A spent nonce is what makes this button look dead, and the form
+            // handlers add their own error while this path said nothing at all.
+            NonceNotices.refuse(session, "router control");
+        }
+        if (authorized) {
             // Normal browsers send value, IE sends button label
             if ("shutdownImmediate".equals(action) || _t("Shutdown immediately", ctx).equals(action)) {
                 if (ctx.hasWrapper()) {ConfigServiceHandler.registerWrapperNotifier(ctx, Router.EXIT_HARD, false);}
@@ -144,7 +151,36 @@ public class ConfigRestartBean {
             if (ctx.hasWrapper() || NewsHelper.isExternalRestartPending()) {buttons(ctx, buf, urlBase, nextNonce, SET3);}
             else {buttons(ctx, buf, urlBase, nextNonce, SET4);}
         }
-        return buf.toString();
+        // A refusal recorded during this render, shown beside the buttons it
+        // describes: inside the control box, so the iframe submission that
+        // refreshes only that box still brings the reason onto the page.
+        String notice = NonceNotices.take(session);
+        if (!notice.isEmpty()) {
+            buf.insert(0, "<div class=sb_notice>" + notice + "</div>\n");
+        }
+        return wrapControlBox(buf.toString());
+    }
+
+    /**
+     * Put the router-control block in a container of its own.
+     * <p>The sidebar's restart/shutdown form is submitted into a hidden iframe
+     * so the page is not reloaded, and the countdown that follows lives in this
+     * block: the status heading and the buttons are rendered as one run of
+     * markup, so refreshing the container updates both together and the sidebar
+     * cannot end up showing a countdown beside the buttons that started it.
+     * <p>The container deliberately carries no {@code volatile} class. The
+     * sidebar's periodic refresh targets {@code .volatile}, and a volatile
+     * wrapper around volatile children makes that selector match both the
+     * wrapper and the elements inside it, so each pass replaces the same
+     * markup twice.
+     *
+     * @param content the rendered status and buttons, as produced by this class
+     * @return the content inside its container div, empty string if there is no content
+     * @since 0.9.72+
+     */
+    static String wrapControlBox(String content) {
+        if (content == null || content.isEmpty()) {return "";}
+        return "<div id=sb_routerControlBox>\n" + content + "</div>\n";
     }
 
     /**

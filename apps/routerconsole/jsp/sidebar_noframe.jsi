@@ -6,3 +6,4 @@
 <script src=/js/sidebarState.js></script>
 <script src=/js/miniGraph.js></script>
 <script src=/js/refreshKick.js></script>
+<script type=module src=/js/routerControl.js></script>

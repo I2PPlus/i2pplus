@@ -9,11 +9,13 @@
  */
 
 import "./pure/uiLogic.test.js";
+import "./pure/routerControlState.test.js";
 import "./dom/refreshPayload.test.js";
 import "./dom/refreshElementsPositionKey.test.js";
 import "./dom/esmScriptTags.test.js";
 import "./dom/graphTooltip.test.js";
 import "./dom/toggleDebug.test.js";
+import "./dom/routerControl.test.js";
 import "./dom/vdomParser.test.js";
 
 await import("./dom/importAll.test.js");
