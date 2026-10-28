@@ -259,6 +259,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             ctx.clientNetDb(_from.calculateHash()).accessLeaseSet(toHash);
             // LS is available — clear any prior fail cooldown
             _cache.lsFailCooldown.remove(toHash);
+            _cache.lsLookupInFlight.remove(toHash);
             _cache.lsLastValid.put(toHash, _start);
         }
 
@@ -318,8 +319,9 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         ctx.statManager().createRequiredRateStat("client.dispatchTime", "Time to dispatch the message (since we started)", "ClientMessages", RATES);
         ctx.statManager().createRequiredRateStat("client.leaseSetFailedRemoteTime", "Time to look for a remote LeaseSet (when we failed)", "ClientMessages", RATES);
         ctx.statManager().createRequiredRateStat("client.leaseSetFoundRemoteTime", "Time to look for a remote LeaseSet (when we succeeded)", "ClientMessages", RATES);
-        ctx.statManager().createRateStat("client.leaseSetSkipNegCache", "LS lookup skipped (negative cache; no real search)", "ClientMessages", RATES);
-        ctx.statManager().createRateStat("client.leaseSetSkipCooldown", "Send skipped (LS fail cooldown or probe interval)", "ClientMessages", RATES);
+        ctx.statManager().createRateStat("client.leaseSetSkipNegCache", "Send skipped (LS negatively cached; no real search)", "ClientMessages", RATES);
+        ctx.statManager().createRateStat("client.leaseSetSkipCooldown", "Send skipped (LS fail cooldown active)", "ClientMessages", RATES);
+        ctx.statManager().createRateStat("client.leaseSetSkipInFlight", "Send skipped (LS lookup already running for this dest)", "ClientMessages", RATES);
         ctx.statManager().createRequiredRateStat("client.sendAckTime", "Message round trip time (ms)", "ClientMessages", RATES);
     }
 
@@ -416,31 +418,36 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             // here only makes the next send die before the main copy lands.
             boolean isLocalDest = getContext().clientManager().isLocal(toHash);
             Long cooldownEnd = _cache.lsFailCooldown.get(toHash);
+            Long inFlightEnd = _cache.lsLookupInFlight.get(toHash);
             Long lastValid = _cache.lsLastValid.get(toHash);
-            Long lastLookup = _cache.lsLastLookup.get(toHash);
             boolean recentlyValid = lastValid != null && now - lastValid <= OutboundCache.TRANSIENT_GAP_GRACE_MS;
-            if (!isLocalDest && OutboundCache.shouldSkipLeaseSetSend(cooldownEnd, now, lastValid, lastLookup,
-                                                     OutboundCache.TRANSIENT_GAP_GRACE_MS,
-                                                     OutboundCache.LS_PROBE_INTERVAL_MS)) {
-                getContext().statManager().addRateData("client.leaseSetSkipCooldown", 1);
+            OutboundCache.LsSkip skip = OutboundCache.leaseSetSendSkip(cooldownEnd, inFlightEnd, now);
+            if (!isLocalDest && skip != OutboundCache.LsSkip.NONE) {
+                // Counted apart: a lookup in flight is deduplication of work we are
+                // already doing, a cooldown is a destination we decided we cannot
+                // reach. Only the second is worth alerting on.
+                boolean cooling = skip == OutboundCache.LsSkip.COOLDOWN;
+                getContext().statManager().addRateData(cooling ? "client.leaseSetSkipCooldown"
+                                                               : "client.leaseSetSkipInFlight", 1);
                 if (_log.shouldInfo()) {
                     _log.info("Skipping send to " + _toString +
-                              " -> LeaseSet fail cooldown active, " +
-                              DataHelper.formatDuration(cooldownEnd - now) + " remaining");
+                              (cooling ? " -> LeaseSet fail cooldown active, "
+                                       + DataHelper.formatDuration(cooldownEnd - now) + " remaining"
+                                       : " -> LeaseSet lookup in flight, "
+                                       + DataHelper.formatDuration(inFlightEnd - now) + " remaining"));
                 }
                 dieFatal(MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET);
                 return;
             }
-            // Pure neg-cache abort (no real search): do not stack the 30s send
-            // cooldown on top of the NetDb negative-cache entry — the cache is
-            // already the gate, and a second timer thrashes against probe
-            // intervals. recentlyValid clears the cache below and does a real
-            // search, so only the non-probe path takes this shortcut.
+            // Pure neg-cache abort (no real search): do not stack a send cooldown on
+            // top of the NetDb negative-cache entry - the cache is already the gate,
+            // and a second timer thrashes against the probe windows. recentlyValid
+            // clears the cache below and does a real search, so only the non-probe
+            // path takes this shortcut.
             if (!isLocalDest && !recentlyValid && kndf.peekNegativeCached(toHash)) {
                 getContext().statManager().addRateData("client.leaseSetSkipNegCache", 1);
-                _cache.lsLastLookup.put(toHash, now);
                 if (_log.shouldInfo()) {
-                    _log.info("Skipping send to " + _toString + " — LeaseSet negatively cached");
+                    _log.info("Skipping send to " + _toString + " -> LeaseSet negatively cached");
                 }
                 // Fail job sees _leaseSetLookupBegin == 0 and will not record
                 // leaseSetFailedRemoteTime; permanent negatives still map to
@@ -449,13 +456,17 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 getContext().jobQueue().addJob(failed);
                 return;
             }
-            // Set cooldown optimistically before lookup — concurrent sends to the
-            // same dest will see this and skip. Cleared on success in SendJob/ctor.
-            // Not set on the pure neg-cache path above, or for local dests.
+            // Mark the lookup in flight before starting it, so the parallel sends
+            // this destination is already receiving deduplicate against one search
+            // instead of each starting their own. Cleared when the lookup completes,
+            // in success and in failure alike, so suppression ends with the search -
+            // the stamped end is only a safety net for a completion callback that
+            // never runs. The fail cooldown belongs to the failure path, which is
+            // the only one that knows what the lookup learned.
+            // Not marked on the pure neg-cache path above, or for local dests.
             if (!isLocalDest) {
-                _cache.lsFailCooldown.put(toHash, now + OutboundCache.LS_FAIL_COOLDOWN_MS);
+                _cache.lsLookupInFlight.put(toHash, now + LS_LOOKUP_TIMEOUT);
             }
-            _cache.lsLastLookup.put(toHash, now);
             if (recentlyValid) {
                 // Sweep any transient negative-cache abort so this probe actually
                 // searches the network instead of failing in ~2ms, then log loudly.
@@ -550,8 +561,10 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             int rc = getNextLease();
             if (rc == 0) {
                 // Clear any LS fail cooldown — destination is reachable again
-                _cache.lsFailCooldown.remove(_to.calculateHash());
-                _cache.lsLastValid.put(_to.calculateHash(), getContext().clock().now());
+                Hash toHash = _to.calculateHash();
+                _cache.lsFailCooldown.remove(toHash);
+                _cache.lsLookupInFlight.remove(toHash);
+                _cache.lsLastValid.put(toHash, getContext().clock().now());
                 send();
             }
             else {
@@ -721,13 +734,16 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         public LookupLeaseSetFailedJob(RouterContext enclosingContext) {super(enclosingContext);}
         public String getName() {return "Timeout OB Client Message Lease Lookup";}
         public void runJob() {
-            if (_leaseSetLookupBegin > 0) {
-                long lookupTime = getContext().clock().now() - _leaseSetLookupBegin;
+            long lookupTime = _leaseSetLookupBegin > 0 ?
+                              getContext().clock().now() - _leaseSetLookupBegin : 0;
+            if (lookupTime > 0) {
                 getContext().statManager().addRateData("client.leaseSetFailedRemoteTime", lookupTime);
             }
 
             int cause;
-            if (getContext().clientNetDb(_from.calculateHash()).isNegativeCachedForever(_to.calculateHash())) {
+            boolean provedUnusable =
+                getContext().clientNetDb(_from.calculateHash()).isNegativeCachedForever(_to.calculateHash());
+            if (provedUnusable) {
                 if (_log.shouldWarn()) {
                     _log.warn("Cannot send to " + _toString + " -> Unsupported Signature type");
                 }
@@ -736,13 +752,24 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 if (_log.shouldInfo()) {
                     if (_leaseSetLookupBegin > 0) {
                         _log.info("LeaseSet lookup failed for " + _toString + " after " +
-                                  DataHelper.formatDuration(getContext().clock().now() - _leaseSetLookupBegin));
+                                  DataHelper.formatDuration(lookupTime));
                     } else {
-                        // Pure neg-cache abort — no search ran, duration would be nonsense
-                        _log.info("LeaseSet lookup skipped for " + _toString + " — negatively cached");
+                        // Pure neg-cache abort - no search ran, duration would be nonsense
+                        _log.info("LeaseSet lookup skipped for " + _toString + " -> Negatively cached");
                     }
                 }
                 cause = MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET;
+            }
+            // The search is over, so stop deduplicating against it. Only a search
+            // that ran earns a cooldown: the pure neg-cache shortcut leaves that to
+            // the NetDb negative cache, which is already the gate. The length is
+            // decided by what the search learned, so a lookup that never reached
+            // the network no longer blackholes a destination we browsed minutes ago.
+            Hash toHash = _to.calculateHash();
+            _cache.lsLookupInFlight.remove(toHash);
+            if (_leaseSetLookupBegin > 0) {
+                long cooldown = OutboundCache.failCooldownMs(provedUnusable, lookupTime, LS_LOOKUP_TIMEOUT);
+                _cache.lsFailCooldown.put(toHash, getContext().clock().now() + cooldown);
             }
             dieFatal(cause);
         }

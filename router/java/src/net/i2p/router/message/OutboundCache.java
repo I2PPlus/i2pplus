@@ -85,40 +85,57 @@ public class OutboundCache {
     public final ConcurrentHashMap<Hash, LeaseSet> multihomedCache = new ConcurrentHashMap<>(128, 0.9f, 16);
 
     /**
-     * Per-destination cooldown timestamps (epoch ms) after a failed LeaseSet lookup.
-     * Gates rapid-fire sends to destinations whose LS is missing or negatively cached.
-     * Entries are cleaned by {@code OCMOSJCacheCleaner}.
+     * Per-destination cooldown timestamps (epoch ms) after a LeaseSet lookup that
+     * said something lasting about the destination: it proved unusable, or a full
+     * search of the network came back empty. Gates rapid-fire sends to
+     * destinations we cannot reach. The duration is chosen by
+     * {@link #failCooldownMs}; entries are cleaned by {@code OCMOSJCacheCleaner}.
      *
      * @since 0.9.71+
      */
     final ConcurrentHashMap<Hash, Long> lsFailCooldown = new ConcurrentHashMap<>(128, 0.9f, 16);
 
     /**
-     * Cooldown period (ms) after a failed LS lookup before another send is attempted
-     * to the same destination. Prevents message floods to unreachable destinations.
+     * Cooldown (ms) after a LeaseSet lookup that proved the destination unusable,
+     * or after a search that ran its whole window and came back empty. No retry
+     * can succeed inside it, so the full period saves the work.
      *
      * @since 0.9.71+
      */
     static final long LS_FAIL_COOLDOWN_MS = 30 * 1000L;
 
     /**
+     * Cooldown (ms) after a LeaseSet lookup that aborted without asking the
+     * network - throttled, dropped, no peers to query, or a negative-cache
+     * shortcut. That says nothing about the destination, and holding a
+     * destination we browsed minutes ago off the wire for the full
+     * {@link #LS_FAIL_COOLDOWN_MS} is the difference between a slow page load
+     * and a site that reads as down. Short enough that the caller's own
+     * retransmits (streaming resends a SYN every second or two) get through.
+     *
+     * @since 0.9.72+
+     */
+    static final long LS_TRANSIENT_FAIL_COOLDOWN_MS = 5 * 1000L;
+
+    /**
+     * A search is treated as having run its whole window when it took at least
+     * this much of it, so a lookup that died just short of the timeout is not
+     * mistaken for an early abort.
+     *
+     * @since 0.9.72+
+     */
+    static final long LOOKUP_WINDOW_SLACK_MS = 2 * 1000L;
+
+    /**
      * A destination whose LeaseSet was valid within this window is treated as
      * "transiently unreachable", not confirmed dead, so a missing local copy
-     * must not hard-fail sends for long: lookups keep being re-probed
-     * (see {@link #shouldSkipLeaseSetSend}).
+     * must not hard-fail sends for long: the negative cache is swept and a real
+     * search is run, see {@link #leaseSetSendSkip} and the probe in
+     * {@link OutboundClientMessageOneShotJob}.
      *
      * @since 0.9.71+
      */
     static final long TRANSIENT_GAP_GRACE_MS = 10 * 60 * 1000L;
-
-    /**
-     * Minimum gap between real (negative-cache-clearing) LeaseSet lookups for a
-     * destination whose LeaseSet was valid recently. Deduplicates concurrent
-     * sends while still allowing one recovery probe per window.
-     *
-     * @since 0.9.71+
-     */
-    static final long LS_PROBE_INTERVAL_MS = 30 * 1000L;
 
     /**
      * Timestamp (epoch ms) when a valid LeaseSet for the destination was last
@@ -130,14 +147,18 @@ public class OutboundCache {
     final ConcurrentHashMap<Hash, Long> lsLastValid = new ConcurrentHashMap<>(128, 0.9f, 16);
 
     /**
-     * Timestamp (epoch ms) when the most recent real LeaseSet lookup for the
-     * destination started. Used to deduplicate concurrent sends to a
-     * recently-valid destination that is undergoing a transient gap.
+     * End time (epoch ms) of an in-flight LeaseSet lookup for the destination.
+     * Deduplicates concurrent sends while a search is running: a browser loading
+     * a page fires many parallel requests, and each one would otherwise start its
+     * own search and pay for it. The marker is cleared the moment the lookup
+     * completes, in success and in failure alike, so suppression ends with the
+     * lookup - typically a few hundred ms - and the stamped end time is only a
+     * safety net for a completion callback that never runs.
      * Pruned by {@code OCMOSJCacheCleaner}.
      *
-     * @since 0.9.71+
+     * @since 0.9.72+
      */
-    final ConcurrentHashMap<Hash, Long> lsLastLookup = new ConcurrentHashMap<>(128, 0.9f, 16);
+    final ConcurrentHashMap<Hash, Long> lsLookupInFlight = new ConcurrentHashMap<>(128, 0.9f, 16);
 
     /** The router sending the messages. */
     private final RouterContext _context;
@@ -240,6 +261,7 @@ public class OutboundCache {
         lastReplyRequestCache.clear();
         multihomedCache.clear();
         lsFailCooldown.clear();
+        lsLookupInFlight.clear();
     }
 
     /**
@@ -365,31 +387,77 @@ public class OutboundCache {
     }
 
     /**
+     * Why a send to a destination whose LeaseSet was not found locally is being
+     * suppressed, or that it is not. The two suppressions are the same action
+     * (fail the send now, let the caller's own retransmits try again) with
+     * opposite lifetimes, so they are counted separately: a lookup that is
+     * running is routine deduplication, a cooldown is a destination we have
+     * decided we cannot reach.
+     *
+     * @since 0.9.72+
+     */
+    enum LsSkip {
+        /** No suppression: run the lookup and send. */
+        NONE,
+        /** A LeaseSet lookup for this destination is running; skip to deduplicate it. */
+        IN_FLIGHT,
+        /** A prior lookup left a cooldown that has not expired; skip to avoid a flood. */
+        COOLDOWN
+    }
+
+    /**
      * Decide whether a send to a destination whose LeaseSet was not found
-     * locally should be skipped without performing a lookup.
-     * <p>Failure can be confirmed or transient. A destination whose LeaseSet
-     * was valid within {@code transientGraceMs} is a <em>transient gap</em>:
-     * skipping must only deduplicate concurrent sends (one real probe every
-     * {@code probeIntervalMs}), never suppress the recovery search itself.
-     * A destination with no recent validity is treated as confirmed-dead and
-     * the full cooldown fast-fail applies.
+     * locally is suppressed, and why.
+     * <p>
+     * A cooldown is a decision about the <em>destination</em>, so it suppresses
+     * every send until it expires. An in-flight lookup is a decision about the
+     * <em>work</em>, so it suppresses only while the search runs: the marker is
+     * cleared when the search completes, and a destination that resolves in half
+     * a second is therefore off the wire for half a second. Suppressing on a
+     * fixed interval instead - the shape this replaces - is what made a page
+     * load: the first request started a search, and its parallel asset requests
+     * were failed for the whole interval even after the search had succeeded.
      *
      * @param cooldownEnd end time of the fail cooldown, or null if none (epoch ms)
+     * @param inFlightEnd end time of the in-flight lookup marker, or null if none
+     *                    (epoch ms)
      * @param now current time in ms
-     * @param lastValid last time a valid LeaseSet was observed, or null (epoch ms)
-     * @param lastLookup last time a real lookup started, or null (epoch ms)
-     * @param transientGraceMs treat as transient gap if now - lastValid &lt;= this
-     * @param probeIntervalMs minimum gap between real lookups for a transient gap
-     * @return true if the send should be skipped (dieFatal), false to probe
-     * @since 0.9.71+
+     * @return the suppression decision, never null
+     * @since 0.9.72+
      */
-    static boolean shouldSkipLeaseSetSend(Long cooldownEnd, long now, Long lastValid,
-                                          Long lastLookup, long transientGraceMs, long probeIntervalMs) {
-        if (cooldownEnd == null || now >= cooldownEnd) {return false;}
-        if (lastValid != null && now - lastValid <= transientGraceMs) {
-            return lastLookup != null && now - lastLookup < probeIntervalMs;
-        }
-        return true;
+    static LsSkip leaseSetSendSkip(Long cooldownEnd, Long inFlightEnd, long now) {
+        if (cooldownEnd != null && now < cooldownEnd) {return LsSkip.COOLDOWN;}
+        if (inFlightEnd != null && now < inFlightEnd) {return LsSkip.IN_FLIGHT;}
+        return LsSkip.NONE;
+    }
+
+    /**
+     * How long to suppress sends to a destination after a LeaseSet lookup
+     * failed.
+     * <p>
+     * Only a lookup that learned something earns the long cooldown: one that
+     * proved the destination unusable - negatively cached forever, so an
+     * unsupported signature type no retry can fix - or a search that ran its
+     * whole window and came back empty. A lookup that never asked the
+     * network - throttled, dropped, no peers to query, a negative-cache
+     * shortcut - is a statement about this router's momentary load, and
+     * blackholing a destination for the full period on that basis is the
+     * failure this replaces.
+     *
+     * @param provedUnusable true when the destination is negatively cached
+     *                       forever, so no search can succeed
+     * @param lookupTimeMs how long the lookup ran before failing, 0 when no
+     *                     search was started
+     * @param lookupWindowMs the window a full search is given, i.e. the
+     *                       caller's lookup timeout
+     * @return cooldown in ms, {@link #LS_FAIL_COOLDOWN_MS} for a lookup that
+     *         learned something, {@link #LS_TRANSIENT_FAIL_COOLDOWN_MS} otherwise
+     * @since 0.9.72+
+     */
+    static long failCooldownMs(boolean provedUnusable, long lookupTimeMs, long lookupWindowMs) {
+        if (provedUnusable) {return LS_FAIL_COOLDOWN_MS;}
+        if (lookupTimeMs >= lookupWindowMs - LOOKUP_WINDOW_SLACK_MS) {return LS_FAIL_COOLDOWN_MS;}
+        return LS_TRANSIENT_FAIL_COOLDOWN_MS;
     }
 
     /**
@@ -406,15 +474,17 @@ public class OutboundCache {
     }
 
     /**
-     * Prunes last-lookup timestamps older than two probe intervals.
+     * Prunes in-flight LeaseSet lookup markers whose stamped end has passed, so
+     * a lookup whose completion callback never ran cannot suppress a destination
+     * forever.
      *
      * @param ctx the router context for current time.
-     * @param mc  the last-lookup cache to clean.
-     * @since 0.9.71+
+     * @param mc  the in-flight marker cache to clean.
+     * @since 0.9.72+
      */
-    private static void cleanLsLastLookup(final RouterContext ctx, final Map<Hash, Long> mc) {
-        final long cutoff = ctx.clock().now() - 2 * LS_PROBE_INTERVAL_MS;
-        mc.entrySet().removeIf(e -> e.getValue() < cutoff);
+    private static void cleanLsLookupInFlight(final RouterContext ctx, final Map<Hash, Long> mc) {
+        final long now = ctx.clock().now();
+        mc.entrySet().removeIf(e -> e.getValue() < now);
     }
 
     /**
@@ -441,7 +511,7 @@ public class OutboundCache {
             cleanMultihomedCache(_context, multihomedCache);
             cleanLsFailCooldown(_context, lsFailCooldown);
             cleanLsLastValid(_context, lsLastValid);
-            cleanLsLastLookup(_context, lsLastLookup);
+            cleanLsLookupInFlight(_context, lsLookupInFlight);
             schedule(CLEAN_INTERVAL);
         }
     }
