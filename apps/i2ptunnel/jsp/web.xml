@@ -4,6 +4,17 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
 
+  <!-- One session cookie name for every I2P webapp: I2PSESSIONID. Cookies are
+       scoped by host and ignore the port, so all the webapps on 127.0.0.1 share
+       the jar, and a name of our own keeps a foreign JSESSIONID out of it. The
+       Jetty 9.3 this tree ships reads this context-param. Rationale in full:
+       apps/routerconsole/jsp/web.xml. Checked by
+       tools/scripts/check-session-cookies.py. -->
+  <context-param>
+    <param-name>org.eclipse.jetty.servlet.SessionCookie</param-name>
+    <param-value>I2PSESSIONID</param-value>
+  </context-param>
+
   <filter>
     <filter-name>XSSFilter</filter-name>
     <filter-class>net.i2p.servlet.filters.XSSFilter</filter-class>

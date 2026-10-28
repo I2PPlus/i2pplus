@@ -4,6 +4,16 @@
          version="3.0">
     <display-name>WebAppExample - Identicon</display-name>
 
+    <!-- One session cookie for every I2P webapp: I2PSESSIONID, named the way
+         the router console's descriptor explains (apps/routerconsole/jsp/web.xml).
+         This webapp creates no session, so the param is only here so the rule
+         covers every descriptor; Jetty 9.3 reads the param, not the Servlet 4.0
+         element below. Checked by tools/scripts/check-session-cookies.py. -->
+    <context-param>
+        <param-name>org.eclipse.jetty.servlet.SessionCookie</param-name>
+        <param-value>I2PSESSIONID</param-value>
+    </context-param>
+
     <servlet>
      <servlet-name>net.i2p.imagegen.IdenticonServlet</servlet-name>
      <servlet-class>net.i2p.imagegen.IdenticonServlet</servlet-class>

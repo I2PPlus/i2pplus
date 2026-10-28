@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app id="WebApp_ID" version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
+    <!-- One session cookie for every I2P webapp: I2PSESSIONID, named the way the
+         router console's descriptor explains (apps/routerconsole/jsp/web.xml).
+         This webapp creates no session, so the param is only here so the rule
+         covers every descriptor. Checked by tools/scripts/check-session-cookies.py. -->
+    <context-param>
+        <param-name>org.eclipse.jetty.servlet.SessionCookie</param-name>
+        <param-value>I2PSESSIONID</param-value>
+    </context-param>
+
     <servlet>
         <servlet-name>net.i2p.i2pcontrol.servlets.JSONRPC2Servlet</servlet-name>
         <servlet-class>net.i2p.i2pcontrol.servlets.JSONRPC2Servlet</servlet-class>

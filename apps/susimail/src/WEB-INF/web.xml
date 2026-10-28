@@ -81,14 +81,17 @@
     <param-name>crossContext</param-name>
     <param-value>false</param-value>
   </context-param>
-  <!-- jetty
-    -  This is required so the same session ID isn't shared with
-    -  the base context. When shared, it's expired after 30 minutes
-    -  in the base context which invalidates it in our context too.
-    -->
+  <!-- One session cookie for every I2P webapp: I2PSESSIONID, the name the
+       router console's descriptor explains in full (see
+       apps/routerconsole/jsp/web.xml). This webapp used a name of its own,
+       SUSIMAILJSESSIONID, because sharing the id with the base context couples
+       the expiries: the console's 30-minute timeout now also ends a webmail
+       session. One cookie for every webapp on 127.0.0.1 is the house choice, and
+       it keeps a foreign JSESSIONID out of the jar. Jetty 9.3 reads this
+       context-param. Checked by tools/scripts/check-session-cookies.py. -->
   <context-param>
     <param-name>org.eclipse.jetty.servlet.SessionCookie</param-name>
-    <param-value>SUSIMAILJSESSIONID</param-value>
+    <param-value>I2PSESSIONID</param-value>
   </context-param>
 
   <error-page>

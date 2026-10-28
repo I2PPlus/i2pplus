@@ -4,6 +4,29 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
 
+  <!-- One session cookie name for every I2P webapp: I2PSESSIONID.
+       Cookies are scoped by host and ignore the port, so on 127.0.0.1 every
+       webapp shares the jar, and a name of our own keeps a JSESSIONID set by
+       some other service on the host out of the console. That matters because
+       the console's CSRF nonces are recorded in the session (see
+       net.i2p.router.web.ConsoleNonceQueue): if the session cannot be found on
+       the next request, every nonce-guarded control on the page is refused and
+       the page says nothing.
+       Two ways to write this and get nothing. The Servlet 4.0
+       <cookie-config><name> element is not read by the Jetty 9.3 this tree
+       ships, so the cookie stays JSESSIONID; the context-param below is what
+       9.3 reads. And the name must be an RFC 6265 token: cookie-name is a
+       token, '+' is an HTTP separator, so a name like I2P+SESSIONID is dropped
+       by a browser that enforces the grammar, which loses the session the same
+       way. Susimail keeps a name of its own, deliberately, because sharing the
+       id with the base context couples the two expiries - see
+       apps/susimail/src/WEB-INF/web.xml.
+       Checked by tools/scripts/check-session-cookies.py. -->
+  <context-param>
+    <param-name>org.eclipse.jetty.servlet.SessionCookie</param-name>
+    <param-value>I2PSESSIONID</param-value>
+  </context-param>
+
   <filter>
     <filter-name>SameSiteCookieFilter</filter-name>
     <filter-class>net.i2p.servlet.filters.SameSiteCookieFilter</filter-class>
@@ -106,7 +129,7 @@
   <session-config>
     <session-timeout>30</session-timeout>
     <cookie-config>
-      <name>I2P+SESSIONID</name>
+      <name>I2PSESSIONID</name>
       <http-only>true</http-only>
       <same-site>Lax</same-site>
     </cookie-config>
