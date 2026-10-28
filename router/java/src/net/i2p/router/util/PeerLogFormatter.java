@@ -9,7 +9,7 @@ import net.i2p.data.Hash;
 /**
  * Renders the peer lists the peer selectors log, in one shape everywhere: a
  * label line ending in a colon, then the peers as an indented sub-list of at
- * most eight bracketed 6-character base64 hashes per line. The sub-list lines
+ * most sixteen bracketed 6-character base64 hashes per line. The sub-list lines
  * carry no bullet of their own, so each group reads as one block under its
  * label, and every hash in the block lines up in the same column. A label with
  * no peers to name is rendered as a sentence stating the count, never as a
@@ -24,10 +24,10 @@ import net.i2p.data.Hash;
 public class PeerLogFormatter {
 
     /** Peer hashes shown on one sub-list line before wrapping. */
-    static final int ENTRIES_PER_LINE = 8;
+    static final int ENTRIES_PER_LINE = 16;
 
     /** Spaces before the first hash on a sub-list line, lining the hashes up in one column. */
-    static final int INDENT = 3;
+    static final int INDENT = 5;
 
     /** Label used for the exclusion list, the one case every selector spells the same way. */
     private static final String EXCLUDING = "Excluding";
@@ -40,8 +40,8 @@ public class PeerLogFormatter {
 
     /**
      * Display labels for the peer skip reasons, in sentence case, keyed by the
-     * raw reason string recorded in the excluders. The grouped form prints the
-     * raw key beside the label, so it stays greppable.
+     * raw reason string recorded in the excluders. A reason with no label here
+     * is shown as recorded, so an unlabelled reason stays greppable.
      */
     private static final Map<String, String> REASON_LABELS;
     static {
@@ -121,7 +121,7 @@ public class PeerLogFormatter {
     /**
      * A labelled peer sub-list whose entries are joined by " -&gt; ", for a list
      * whose order is the point - a tunnel's gateway-to-endpoint sequence, for
-     * example. Eight entries per line, same indent as {@link #peerList}.
+     * example. Sixteen entries per line, same indent as {@link #peerList}.
      *
      * @param peers the peers to show, in the order to print them; null is shown
      *              as no peers

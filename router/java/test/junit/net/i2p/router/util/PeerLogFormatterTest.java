@@ -14,7 +14,7 @@ import net.i2p.data.Hash;
 import org.junit.Test;
 
 /**
- * Pins the peer sub-list layout: label line, three-space indent, at most eight
+ * Pins the peer sub-list layout: label line, five-space indent, at most sixteen
  * hashes per line, and the "more" tail. The layout is what the peer selectors
  * emit, so it is tested here rather than at each call site.
  *
@@ -54,65 +54,65 @@ public class PeerLogFormatterTest {
     @Test
     public void testSingleEntryShape() {
         String s = PeerLogFormatter.peerList(hashes(1), "Excluding", 1);
-        assertEquals("\n* Excluding (1):\n   [" + shortHash(1) + ']', s);
+        assertEquals("\n* Excluding (1):\n     [" + shortHash(1) + ']', s);
     }
 
     /** Entries share a line, separated by one space, so the hashes stay in one column. */
     @Test
     public void testEntriesShareOneLine() {
         String s = PeerLogFormatter.peerList(hashes(3), "Matched", 3);
-        assertEquals("\n* Matched (3):\n   [" + shortHash(1) + "] [" + shortHash(2) + "] [" + shortHash(3) + ']', s);
+        assertEquals("\n* Matched (3):\n     [" + shortHash(1) + "] [" + shortHash(2) + "] [" + shortHash(3) + ']', s);
     }
 
-    /** Eight is the last entry that fits on the first line. */
+    /** Sixteen is the last count that fits on the first entry line. */
     @Test
-    public void testEightOnOneLine() {
-        String s = PeerLogFormatter.peerList(hashes(8), "Good", 8);
+    public void testSixteenOnOneLine() {
+        String s = PeerLogFormatter.peerList(hashes(16), "Good", 16);
         String[] lines = splitLines(s);
         assertEquals(2, lines.length);
-        assertEquals("* Good (8):", lines[0]);
-        assertEquals(8, countHashes(lines[1]));
+        assertEquals("* Good (16):", lines[0]);
+        assertEquals(16, countHashes(lines[1]));
     }
 
-    /** The ninth entry opens a second indented line, not a wider first one. */
+    /** The seventeenth entry opens a second indented line, not a wider first one. */
     @Test
-    public void testNinthEntryWraps() {
-        String s = PeerLogFormatter.peerList(hashes(9), "Good", 9);
+    public void testSeventeenthEntryWraps() {
+        String s = PeerLogFormatter.peerList(hashes(17), "Good", 17);
         String[] lines = splitLines(s);
         assertEquals(3, lines.length);
-        assertEquals(8, countHashes(lines[1]));
+        assertEquals(16, countHashes(lines[1]));
         assertEquals(1, countHashes(lines[2]));
     }
 
-    /** Sixteen fills exactly two lines and does not open a third. */
+    /** Thirty-two fills exactly two entry lines and does not open a third. */
     @Test
-    public void testSixteenFillsTwoLines() {
-        String s = PeerLogFormatter.peerList(hashes(16), "Good", 16);
+    public void testThirtyTwoFillsTwoLines() {
+        String s = PeerLogFormatter.peerList(hashes(32), "Good", 32);
         String[] lines = splitLines(s);
         assertEquals(3, lines.length);
-        assertEquals(8, countHashes(lines[1]));
-        assertEquals(8, countHashes(lines[2]));
+        assertEquals(16, countHashes(lines[1]));
+        assertEquals(16, countHashes(lines[2]));
     }
 
-    /** Seventeen opens the third line. */
+    /** Thirty-three opens the third entry line. */
     @Test
-    public void testSeventeenOpensThirdLine() {
-        String s = PeerLogFormatter.peerList(hashes(17), "Good", 17);
+    public void testThirtyThreeOpensThirdEntryLine() {
+        String s = PeerLogFormatter.peerList(hashes(33), "Good", 33);
         String[] lines = splitLines(s);
         assertEquals(4, lines.length);
         assertEquals(1, countHashes(lines[3]));
     }
 
     /**
-     * Every entry line is indented by three spaces and carries no bullet, so
-     * the block reads as one group under its label.
+     * Every entry line is indented by five spaces and carries no bullet, so the
+     * block reads as one group under its label.
      */
     @Test
     public void testEntryLinesAreIndentedNotBulleted() {
         String s = PeerLogFormatter.peerList(hashes(20), "Ignoring", 20);
         String[] lines = splitLines(s);
         for (int i = 1; i < lines.length; i++) {
-            assertTrue("line " + i + " is not indented: [" + lines[i] + ']', lines[i].startsWith("   "));
+            assertTrue("line " + i + " is not indented: [" + lines[i] + ']', lines[i].startsWith("     "));
             assertFalse("line " + i + " carries a bullet: [" + lines[i] + ']', lines[i].contains("*"));
         }
     }
@@ -121,7 +121,7 @@ public class PeerLogFormatterTest {
     @Test
     public void testLabelLineShape() {
         String s = PeerLogFormatter.peerList(hashes(2), "Tunnel", 2);
-        assertEquals("\n* Tunnel (2):\n   [" + shortHash(1) + "] [" + shortHash(2) + ']', s);
+        assertEquals("\n* Tunnel (2):\n     [" + shortHash(1) + "] [" + shortHash(2) + ']', s);
     }
 
     /** A cap names that many peers, then reports the rest as a count. */
@@ -129,10 +129,9 @@ public class PeerLogFormatterTest {
     public void testCapAddsMoreTail() {
         String s = PeerLogFormatter.peerList(hashes(30), "Ignoring", 30, 16);
         String[] lines = splitLines(s);
-        assertEquals(4, lines.length);
-        assertEquals(8, countHashes(lines[1]));
-        assertEquals(8, countHashes(lines[2]));
-        assertEquals("   (+14 more)", lines[3]);
+        assertEquals(3, lines.length);
+        assertEquals(16, countHashes(lines[1]));
+        assertEquals("     (+14 more)", lines[2]);
     }
 
     /** A cap that is not reached adds no tail. */
@@ -150,7 +149,7 @@ public class PeerLogFormatterTest {
         String[] lines = splitLines(s);
         assertEquals(3, lines.length);
         assertEquals(8, countHashes(lines[1]));
-        assertEquals("   (+1 more)", lines[2]);
+        assertEquals("     (+1 more)", lines[2]);
     }
 
     /** The count in parentheses is the full size, not the number named. */
@@ -189,7 +188,7 @@ public class PeerLogFormatterTest {
         List<Hash> peers = hashes(2);
         peers.add(1, null);
         String s = PeerLogFormatter.peerList(peers, "Good", 2);
-        assertEquals("\n* Good (2):\n   [" + shortHash(1) + "] [" + shortHash(2) + ']', s);
+        assertEquals("\n* Good (2):\n     [" + shortHash(1) + "] [" + shortHash(2) + ']', s);
     }
 
     /**
@@ -200,25 +199,25 @@ public class PeerLogFormatterTest {
     public void testExcludingEmptyForm() {
         assertEquals("\n* Excluding 0 peers", PeerLogFormatter.excluding(null, 0));
         assertEquals("\n* Excluding 0 peers", PeerLogFormatter.excluding(Collections.<Hash> emptyList(), 0));
-        assertEquals("\n* Excluding (1):\n   [" + shortHash(1) + ']', PeerLogFormatter.excluding(hashes(1), 1));
+        assertEquals("\n* Excluding (1):\n     [" + shortHash(1) + ']', PeerLogFormatter.excluding(hashes(1), 1));
     }
 
     /** The ordered variant joins entries with an arrow, for a gateway-to-endpoint list. */
     @Test
     public void testOrderedJoinsWithArrow() {
         String s = PeerLogFormatter.peerListOrdered(hashes(3), "Tunnel", 3);
-        String want = "\n* Tunnel (3):\n   [" + shortHash(1) + "] -> [" + shortHash(2) + "] -> [" + shortHash(3) + ']';
+        String want = "\n* Tunnel (3):\n     [" + shortHash(1) + "] -> [" + shortHash(2) + "] -> [" + shortHash(3) + ']';
         assertEquals(want, s);
     }
 
-    /** The ordered variant wraps at eight, and the arrow does not start a line. */
+    /** The ordered variant wraps at sixteen, and the arrow does not start a line. */
     @Test
-    public void testOrderedWrapsAtEight() {
-        String s = PeerLogFormatter.peerListOrdered(hashes(9), "Tunnel", 9);
+    public void testOrderedWrapsAtSixteen() {
+        String s = PeerLogFormatter.peerListOrdered(hashes(17), "Tunnel", 17);
         String[] lines = splitLines(s);
         assertEquals(3, lines.length);
-        assertEquals(7, countArrows(lines[1]));
-        assertTrue(lines[2].startsWith("   [" + shortHash(9) + ']'));
+        assertEquals(15, countArrows(lines[1]));
+        assertTrue(lines[2].startsWith("     [" + shortHash(17) + ']'));
     }
 
     /** The tally leads with the total, then the reasons on one bullet line. */

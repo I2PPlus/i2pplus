@@ -2187,8 +2187,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         /**
          * Format the excluded peers grouped by skip reason, sorted by hash
          * within each group: a total line, then one labelled sub-list per
-         * reason, laid out by {@link PeerLogFormatter}. The raw reason key is
-         * shown beside its display label so the string stays greppable.
+         * reason, laid out by {@link PeerLogFormatter}. A reason with no
+         * display label is shown as recorded, so it stays greppable.
          *
          * @return "\n* Excluded: N" then a labelled sub-list per reason, the
          *         sentence form when nothing is excluded
@@ -2214,9 +2214,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             sb.append("\n* Excluded: ").append(s.size());
             for (String reason : reasonOrder) {
                 List<Hash> list = byReason.get(reason);
-                String label = PeerLogFormatter.reasonLabel(reason);
-                if (!label.equals(reason)) {label = label + " (" + reason + ')';}
-                sb.append(PeerLogFormatter.peerList(list, label, list.size()));
+                sb.append(PeerLogFormatter.peerList(list, PeerLogFormatter.reasonLabel(reason),
+                                                    list.size()));
             }
             return sb.toString();
         }
