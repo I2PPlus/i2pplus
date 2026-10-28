@@ -220,7 +220,7 @@ h4.sb_info{margin-top:-11px}
 #sidebar #sb_localtunnels td[colspan="3"],#sb_localtunnels #routerdown td,#sb_localtunnels #routerdown tr:hover td{padding:5px;box-shadow:0 0 0 1px #bbc inset,0 0 0 2px #fff inset,var(--btn_shadow_active);font-size:0;background:repeating-linear-gradient(135deg,#fffff2,#fffff2 10px,#ddddd2 10px,#ddddd2 20px);background-size:300%;animation:down linear 9s reverse infinite}
 #sidebar #sb_localtunnels td[colspan="3"]::after{min-height:12px;display:inline-block;vertical-align:middle;content:""}
 #sidebar #sb_shutdownStatus{margin:-7px -6px;padding:7px 4px;box-shadow:0 0 0 1px #bbc inset,0 0 0 2px #fff inset,0 0 0 3px rgba(148,0,0,.5) inset}
-#sidebar #sb_routerControl{margin-top:-5px}
+#sidebar #sb_routerControl{margin-top:8px}
 #sidebar #sb_tunnelBuildStatus{margin-top:2px;display:inline-block;width:18px;height:30px;vertical-align:middle;background:none;border:0;box-shadow:none}
 #sidebar #sb_tunnelBuildStatus::before{transform:scale(.7)}
 
@@ -330,7 +330,7 @@ input[type=checkbox].toggleSection:not(:checked){padding-top:6px}
 #sidebar #sb_advancedgeneral[hidden]~#sb_peers_condensed{margin-bottom:-7px}
 #sb_tunnels_condensed{margin-bottom:-10px}
 #sb_shortgeneral~#sb_peers_condensed{margin-bottom:-7px}
-#sb_peers[hidden]+#sb_peers_condensed,#sb_tunnels[hidden]+#sb_tunnels_condensed{display:table}
+#sb_peers[hidden]+#sb_peers_condensed,#sb_tunnels[hidden]+#sb_tunnels_condensed{margin-bottom:-7px;display:table}
 #sb_peers_condensed[hidden],#sb_tunnels_condensed[hidden]{display:none}
 #sb_peers_condensed:not([hidden])+hr,#sb_tunnels_condensed:not([hidden])+hr{display:block}
 #sidebar #sb_peers_condensed td,#sidebar #sb_tunnels_condensed td{padding:3px 0;display:flex;column-gap:1px;max-width:unset;text-align:center;background:none;vertical-align:middle;text-align:center}
@@ -2784,6 +2784,7 @@ p#pluginconfigtext{margin-top:11px}
 #sidebar #localtunnelSummary{margin-left:-8px;width:208px}
 #sidebar #localtunnelsActive span{letter-spacing:2px}
 #sidebar #sb_routerControl{margin-top:-6px}
+#sb_peers[hidden]+#sb_peers_condensed,#sb_tunnels[hidden]+#sb_tunnels_condensed{margin-bottom:-9px}
 #sidebar hr:not([hidden])+iframe+#sb_routerControl{margin-top:-3px}
 #sb_advancedgeneral:not([hidden])~#sb_updatesection{margin-bottom:-5px}
 #sitemap .applink img{padding-left:62px;padding-right:62px}
@@ -2801,6 +2802,7 @@ html:not(.unified) #homepage #sidebar #sb_routerControl{margin-top:-3px}
 #peers #ntcpconnections th.queue::after{width:16px;height:16px;display:inline-block;background:var(--err) no-repeat center center/16px;content:""}
 #peers .ipv6,#peers .rto,#peers .mtu,#peers .sst,#peers .cwnd,#peers .rtt{display:none}
 #peers #transportSummary .ipv6{display:table-cell}
+#sidebar #sb_internals.collapsed td{flex-wrap:wrap}
 }
 
 @media (max-width:1200px){
