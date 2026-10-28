@@ -891,8 +891,8 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
      * @since 0.9.46
      */
     void registerCallback(PublicKey target, int id, int n, ReplyCallback callback) {
-        if (_log.shouldInfo())
-            _log.info("Register callback target " + target + " id=" + id + " n=" + n + " callback " + callback);
+        if (_log.shouldDebug())
+            _log.debug("Registered callback target " + target + "\n* ID: " + id + " * N: " + n + " * Callback -> " + callback);
         OutboundSession sess = getSession(target);
         if (sess != null)
             sess.registerCallback(id, n, callback);

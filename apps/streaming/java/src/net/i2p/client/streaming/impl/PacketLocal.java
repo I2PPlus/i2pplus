@@ -463,7 +463,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
 
             Connection con = _connection;
             if (con != null) {
-                buf.append(" * From ");
+                buf.append("\n* From ");
                 Destination local = _session.getMyDestination();
                 if (local != null)
                     buf.append("[").append(local.calculateHash().toBase32().substring(0,8)).append("]");

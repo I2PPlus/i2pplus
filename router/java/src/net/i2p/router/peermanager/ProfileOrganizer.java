@@ -3205,11 +3205,11 @@ public class ProfileOrganizer {
         sm.addRateData("peer.tierEvicted.softPurgeActive",
                        (fastSoft ? 1 : 0) + (highCapSoft ? 1 : 0), 60L * 1000);
         if (_log.shouldInfo()) {
-            _log.info("Tier eviction: banned: " + count(reasons, PurgeReason.BANNED) +
-                      " * unreachable: " + count(reasons, PurgeReason.UNREACHABLE) +
-                      " * not-capable: " + count(reasons, PurgeReason.NOT_CAPABLE) +
-                      " * failures: " + count(reasons, PurgeReason.FAILURES) +
-                      " * acceptance: " + count(reasons, PurgeReason.ACCEPTANCE) +
+            _log.info("Tier eviction -> Banned: " + count(reasons, PurgeReason.BANNED) +
+                      " * Unreachable: " + count(reasons, PurgeReason.UNREACHABLE) +
+                      " * Not-capable: " + count(reasons, PurgeReason.NOT_CAPABLE) +
+                      " * Failures: " + count(reasons, PurgeReason.FAILURES) +
+                      " * Acceptance: " + count(reasons, PurgeReason.ACCEPTANCE) +
                       "\n* Soft purge threshold: " + threshold);
         }
     }
@@ -3377,8 +3377,8 @@ public class ProfileOrganizer {
      * @return whether the peer may be restored
      * @since 0.9.71+
      */
-private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, PeerProfile> tier,
-                                          double buildSuccess, long now, boolean highCap) {
+    private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, PeerProfile> tier,
+                                         double buildSuccess, long now, boolean highCap) {
         if (tier.containsKey(peer)) return false;
         // Use basic gates instead of isSelectable to avoid stale RouterInfo
         // proof-of-life filtering peers that were already vetted at tier entry.
@@ -3428,7 +3428,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
                 }
             }
             if (_log.shouldInfo()) {
-                _log.info("Tier fallback: restored " + restored + " peers to fast tier (was " +
+                _log.info("Tier fallback -> Restored " + restored + " peers to fast tier (was " +
                           (_fastPeers.size() - restored) + ", old " + oldFastSize + ")");
             }
         }
@@ -3446,7 +3446,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
                 }
             }
             if (_log.shouldInfo()) {
-                _log.info("Tier fallback: restored " + restored + " peers to high-cap tier (was " +
+                _log.info("Tier fallback -> Restored " + restored + " peers to high-cap tier (was " +
                           (_highCapacityPeers.size() - restored) + ", old " + oldHighCapSize + ")");
             }
         }
@@ -3621,7 +3621,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
                 // for as long as the condition holds.
                 _log.warn("Low tunnel build success (" + getTunnelBuildSuccess()
                           + " < " + ATTACK_THRESHOLD
-                          + ") — skipping profile eviction to preserve peer data");
+                          + ") -> Skipping profile eviction to preserve peer data");
             }
             return;
         }
