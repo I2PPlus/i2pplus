@@ -1680,8 +1680,13 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 // and none are being built - further retries cannot succeed.
                 int connectAttempts = 0;
                 int timeoutConnectAttempts = 0;
+                // Wall clock of the attempt in flight, so a handshake that gave up
+                // quickly is charged what it actually cost when sizing the retry
+                // ceiling, not the whole loop's accumulated time.
+                long attemptStartMs = System.currentTimeMillis();
                 while (true) {
                     try {
+                        attemptStartMs = System.currentTimeMillis();
                         i2ps = createI2PSocket(clientDest, sktOpts, connectDeadline);
                         break;
                     } catch (IOException ioe) {
@@ -1721,8 +1726,12 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             }
                         }
                         boolean deadlineExpired = isDeadlineExpired(connectDeadline, nowMs);
+                        int maxTimeoutRetries = maxTimeoutConnectRetries(connectDeadline - nowMs,
+                                                                         nowMs - attemptStartMs,
+                                                                         poolSnapshot == 0);
                         if (!shouldOuterRetryConnect(connectAttempts, timeoutConnectAttempts,
-                                                     timedOut, poolSnapshot, deadlineExpired)) {
+                                                     timedOut, poolSnapshot, deadlineExpired,
+                                                     maxTimeoutRetries)) {
                             if (_log.shouldWarn() && (timedOut || deadlineExpired)) {
                                 _log.warn(getPrefix(requestId) +
                                           (deadlineExpired

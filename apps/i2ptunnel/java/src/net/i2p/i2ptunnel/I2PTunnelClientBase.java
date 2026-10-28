@@ -1043,12 +1043,44 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     static boolean shouldOuterRetryConnect(int connectAttempts, int timeoutConnectAttempts,
                                            boolean timedOut, boolean poolDown,
                                            boolean poolBuilding, boolean browserClosed) {
+        return shouldOuterRetryConnect(connectAttempts, timeoutConnectAttempts, timedOut, poolDown,
+                                       poolBuilding, browserClosed, poolBuilding ? 2 : 1);
+    }
+
+    /**
+     * Whether the outer HTTP connect loop should retry after a failure, with the
+     * timeout-attempt ceiling supplied by the caller.
+     * <p>The ceiling is the one knob that decides whether a connect that died fast
+     * gets another chance. A handshake on a path that is dropping SYN-ACKs now
+     * tears itself down after a few seconds, per
+     * {@code Connection.computeSynPhaseBudgetMs()}, instead of grinding through the
+     * whole connect window, and the evidence says the next attempt is the good one:
+     * measured against one remote eepsite, handshakes that completed took
+     * 647-1704 ms, so a fresh connection is far cheaper than the handshake it
+     * replaces. Capping timeout-classified attempts at one throws that away and
+     * fails the request; the ceiling is therefore sized from the deadline budget
+     * that is actually left ({@link #maxTimeoutConnectRetries}).
+     *
+     * @param connectAttempts total connect attempts so far (1-based after failure)
+     * @param timeoutConnectAttempts timeout-style attempts so far
+     * @param timedOut true when the failure classified as a connect timeout
+     * @param poolDown true if {@link #poolIsDefinitivelyDown} was true
+     * @param poolBuilding true when {@link #poolState} reports builds in flight
+     * @param browserClosed true if the browser already hung up (abort now)
+     * @param maxTimeoutRetries ceiling on timeout-classified attempts, from
+     *                          {@link #maxTimeoutConnectRetries(long, long, boolean)}
+     * @return true to sleep and retry the outer connect loop
+     * @since 0.9.72+
+     */
+    static boolean shouldOuterRetryConnect(int connectAttempts, int timeoutConnectAttempts,
+                                           boolean timedOut, boolean poolDown,
+                                           boolean poolBuilding, boolean browserClosed,
+                                           int maxTimeoutRetries) {
         if (browserClosed) {return false;}
         if (poolDown) {return false;}
         if (connectAttempts >= I2PTunnelHTTPClient.I2P_CONNECT_MAX_RETRIES) {return false;}
         if (timedOut) {
-            int maxTimeout = poolBuilding ? 2 : 1;
-            return timeoutConnectAttempts < maxTimeout;
+            return timeoutConnectAttempts < Math.max(1, maxTimeoutRetries);
         }
         return true;
     }
@@ -1077,6 +1109,80 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         if (deadlineExpired) {return false;}
         return shouldOuterRetryConnect(connectAttempts, timeoutConnectAttempts, timedOut,
                                        poolState <= -1, poolState == 0, false);
+    }
+
+    /**
+     * Ceiling on timeout-classified connect attempts that the remaining request
+     * deadline can pay for.
+     * <p>The fixed ceiling of one (two while the pool is building) was calibrated
+     * for attempts that each burn most of a 30 s connect timeout, where a second
+     * try genuinely cannot fit. It is the wrong shape for an attempt that fails
+     * fast: the shared request deadline is
+     * {@link I2PTunnelHTTPClient#REQUEST_CONNECT_DEADLINE_MS}, so a handshake that
+     * gave up after a few seconds leaves the budget almost untouched, and the next
+     * attempt is measured to be the cheap one. Size the ceiling from what is left
+     * instead, charging each attempt the time the last one actually took, and
+     * bound the total by {@link #MAX_TIMEOUT_CONNECT_RETRIES} so a destination that
+     * is simply gone still fails in bounded time.
+     *
+     * @param remainingDeadlineMs ms left before the shared connect deadline
+     *                            (negative or 0 means the budget is spent)
+     * @param observedAttemptMs wall time the attempt just failed after; 0 or less
+     *                          falls back to {@link #MIN_CONNECT_ATTEMPT_STEP_MS}
+     * @param poolBuilding true when {@link #poolState} reports builds in flight,
+     *                     which keeps the historical two-attempt floor
+     * @return the ceiling on timeout-classified attempts, at least 1
+     * @since 0.9.72+
+     */
+    static int maxTimeoutConnectRetries(long remainingDeadlineMs, long observedAttemptMs,
+                                        boolean poolBuilding) {
+        int floor = poolBuilding ? 2 : 1;
+        if (remainingDeadlineMs <= 0) {return floor;}
+        long step = Math.max(MIN_CONNECT_ATTEMPT_STEP_MS, observedAttemptMs);
+        long affordable = remainingDeadlineMs / step;
+        if (affordable <= floor) {return floor;}
+        return (int) Math.min(MAX_TIMEOUT_CONNECT_RETRIES, affordable);
+    }
+
+    /**
+     * Smallest per-attempt cost (ms) charged against the remaining deadline by
+     * {@link #maxTimeoutConnectRetries}, so a connect that failed almost
+     * immediately cannot make the budget look like it buys an unlimited number of
+     * attempts.
+     *
+     * @since 0.9.72+
+     */
+    static final long MIN_CONNECT_ATTEMPT_STEP_MS = 1000;
+
+    /**
+     * Hard ceiling on timeout-classified connect attempts, however much deadline
+     * budget is left, so an unreachable destination fails in bounded time instead
+     * of spending the whole request budget on handshakes.
+     *
+     * @since 0.9.72+
+     */
+    static final int MAX_TIMEOUT_CONNECT_RETRIES = 4;
+
+    /**
+     * Whether the outer HTTP connect loop should retry after a failure, given the
+     * single pool-state snapshot and the deadline budget left for this request.
+     *
+     * @param connectAttempts total connect attempts so far (1-based after failure)
+     * @param timeoutConnectAttempts timeout-style attempts so far
+     * @param timedOut true when the failure classified as a connect timeout
+     * @param poolState the single {@link #poolState} reading for this failure
+     * @param deadlineExpired true when the shared request deadline has passed
+     * @param maxTimeoutRetries ceiling on timeout-classified attempts, from
+     *                          {@link #maxTimeoutConnectRetries(long, long, boolean)}
+     * @return true to sleep and retry the outer connect loop
+     * @since 0.9.72+
+     */
+    static boolean shouldOuterRetryConnect(int connectAttempts, int timeoutConnectAttempts,
+                                           boolean timedOut, int poolState,
+                                           boolean deadlineExpired, int maxTimeoutRetries) {
+        if (deadlineExpired) {return false;}
+        return shouldOuterRetryConnect(connectAttempts, timeoutConnectAttempts, timedOut,
+                                       poolState <= -1, poolState == 0, false, maxTimeoutRetries);
     }
 
     /**
