@@ -299,6 +299,7 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 .headerpriority br{display:none}
 .magnetLabel{display:inline-block;vertical-align:middle;position:relative;font-style:italic}
 .mLink,.tLink{margin:0 2px;padding:3px;vertical-align:middle}
+.info_tracker .tLink{padding:0}
 .mLink:hover,.mLink:focus,.tLink:hover,.tLink:focus{transform:scale(1.1)}
 .mLink:active,.tLink:active{box-shadow:inset 2px 2px 3px #7f3000;transform:scale(0.9)}
 .mLink img,.tLink img,.mLink img:hover,.tLink img:hover{margin:0;padding:0}
@@ -388,7 +389,7 @@ input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_
 .info_tracker:active{color:#fff;box-shadow:0 0 0 1px var(--hover),inset 3px 3px 3px #420;background:var(--hover) var(--tracker_active) no-repeat left 3px center/14px}
 .info_tracker:hover,.info_tracker:hover a{color:var(--hover)}
 .info_tracker:hover{background:var(--tracker_hover) no-repeat 3px center/12px,linear-gradient(180deg,#fff 50%,#ddf 50%)}
-.info_tracker{margin:2px 1px;padding:2px 6px 2px 16px;max-width:150px;line-height:1;box-shadow:0 0 0 1px #ccf;border-radius:3px;background:#fff var(--tracker) no-repeat 3px center/12px}
+.info_tracker{margin:2px 1px;padding:2px 6px 2px 16px;line-height:1;box-shadow:0 0 0 1px #ccf;border-radius:3px;background:#fff var(--tracker) no-repeat 3px center/12px}
 .knownTracker .optbox[type=radio]{margin:2px 10px}
 .numeric{max-width:60px;min-width:60px}
 .optbox:checked::before{transition:linear all .05s}

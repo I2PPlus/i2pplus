@@ -564,7 +564,7 @@ td.subHeaderPriority{padding:0 1px;font-size:7.5pt;font-weight:700;background-im
 .headerpriority br{display:none}
 .headerpriority img{padding:4px}
 .headerstatus{text-align:center}
-.info_tracker{margin:3px 2px;padding:2px 6px 2px 18px;max-width:155px;display:inline-block;white-space:nowrap;vertical-align:middle;line-height:1.4;overflow:hidden;text-overflow:ellipsis;color:#484;box-shadow:var(--outline);background:var(--tracker) no-repeat left 2px center/14px,var(--badge);background-blend-mode:luminosity,normal}
+.info_tracker{margin:3px 2px;padding:2px 6px 2px 18px;display:inline-block;white-space:nowrap;vertical-align:middle;line-height:1.4;overflow:hidden;text-overflow:ellipsis;color:#484;box-shadow:var(--outline);background:var(--tracker) no-repeat left 2px center/14px,var(--badge);background-blend-mode:luminosity,normal}
 .info_tracker:hover,.info_tracker:hover a{color:var(--hover)}
 .info_tracker:hover{box-shadow:0 0 0 1px rgba(200,80,0,.7);background:var(--tracker_hover) no-repeat left 2px center/14px,linear-gradient(180deg,#020 50%,#000 50%);background-blend-mode:normal,normal;transition:ease all .15s}
 .info_tracker:active,.info_tracker:active a{color:#fff}
@@ -577,7 +577,7 @@ td.subHeaderPriority{padding:0 1px;font-size:7.5pt;font-weight:700;background-im
 .ParentDir img{padding-left:3px}
 .priorityIndicator{margin-right:5px;display:none}
 .snarkFileSize{padding-right:10px;white-space:nowrap}
-.mLink,#torrentInfo .infohash,#torrentInfo .tLink{margin:0 2px 0 3px;padding:4px 5px 4px 3px;vertical-align:middle;border-radius:1px;box-shadow:var(--outline);background:var(--badge)}
+.mLink,#torrentInfo .infohash{margin:0 2px 0 3px;padding:4px 5px 4px 3px;vertical-align:middle;border-radius:1px;box-shadow:var(--outline);background:var(--badge)}
 #torrentInfo .tLink{margin-right:-2px}
 .mLink:hover,.mLink:focus,#torrentInfo .tLink:hover,#torrentInfo .tLink:focus{box-shadow:var(--outline),inset 0 0 0 1px rgba(255,96,0,.5)}
 .tLink img:hover,.mLink img:hover{filter:none}

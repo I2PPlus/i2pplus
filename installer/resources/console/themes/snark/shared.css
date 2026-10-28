@@ -8,3 +8,4 @@ td.status{position:relative;text-align:center}
 #snarkSearch{z-index:999999}
 #torrents .tName{text-align:left}
 #torrents #snarkTbody td.details img[src$="search.svg"]{padding:2px;width:16px;height:16px}
+.tracker_transport{vertical-align:2px;letter-spacing:-0.05em;font-size:70%;font-weight:600}

@@ -326,6 +326,7 @@ thead img.disable,img.disable:hover{opacity:.4}
 .headerpriority{padding:5px;text-align:center}
 .mLink img,.tLink img{margin:-2px 0;padding:0}
 .mLink,.tLink{margin:0 0 0 5px;padding:4px;display:inline-block;line-height:1.3;box-shadow:0 0 0 1px #cfc6c0;background:#fff5ef}
+#torrentInfo .tLink{box-shadow:none;background:none}
 .mainsection #torrentInfo td{padding:4px 3px 4px 1px;vertical-align:middle;text-align:left;background:#efe6e0}
 .ParentDir{padding:4px 0 4px 4px;text-align:left;border-bottom:var(--border)}
 .ParentDir img{width:18px;filter:sepia(100%) hue-rotate(340deg)}
@@ -621,7 +622,7 @@ img{font-size:0;overflow:hidden}
 #metacomment{padding:0;line-height:1.4;text-align:justify}
 
 #trackers .info_tracker,#trackers .info_tracker a,#trackers .info_tracker a:visited,#torrentEdit .info_tracker a,#torrentEdit .info_tracker a:visited{color:#3f271b}
-.info_tracker{margin:2px 1px;padding:0 6px 0 16px;max-width:155px;display:inline-block;vertical-align:middle;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;box-shadow:0 0 0 1px #cfc6c0;border-radius:2px;background:#fff5ef var(--b_tracker) no-repeat left 3px center;background-size:12px}
+.info_tracker{margin:2px 1px;padding:0 6px 0 16px;display:inline-block;vertical-align:middle;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;box-shadow:0 0 0 1px #cfc6c0;border-radius:2px;background:#fff5ef var(--b_tracker) no-repeat left 3px center;background-size:12px}
 #trackers .info_tracker:hover,#trackers .info_tracker:hover a,#trackers .info_tracker:hover a:visited{color:#930}
 .info_tracker:hover{box-shadow:var(--highlight),0 0 0 1px #bfb6b0;background:var(--b_tracker_hover) no-repeat left 3px center,linear-gradient(180deg,#efefef 50%,#cfc7c2 50%);background-size:12px,100%}
 #trackers .info_tracker:active,#trackers .info_tracker:active a,#trackers .info_tracker:active a:visited{color:#fff}

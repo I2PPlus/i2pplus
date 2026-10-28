@@ -348,6 +348,7 @@ th .mLink img,th .tLink img{margin:0}
 #torrentInfo .infohash{margin:-1px 6px -1px 10px;padding:4px 3px 4px 18px;max-width:100px;display:inline-block;line-height:1.2;vertical-align:middle;font-weight:400;color:#000;border-radius:2px;background:#bb0 var(--hash) no-repeat 4px center/12px}
 .infohash::selection,.snarkAddInfo code::selection{color:#cc0;background:#000;user-select:all}
 li .infohash::selection,#torrents .infohash::selection{color:#000;background:#cc0}
+#torrentInfo .tLink{margin:0;padding:0;border:0;box-shadow:none;background:none}
 #dirInfo{margin-top:10px;margin-bottom:-1px;border-bottom:var(--border)}
 #dirInfo th{padding:4px 6px}
 #dirInfo th img{margin:0}
@@ -607,7 +608,7 @@ td .commentAuthorName{padding-right:8px;width:120px;white-space:nowrap;overflow:
 #showRatings td[colspan]{text-align:left}
 
 .info_tracker,.info_tracker a{ display:inline-block;vertical-align:middle}
-.info_tracker{margin:1px -1px 1px 0;padding:1px 6px 1px 18px;display:inline-block;white-space:nowrap;max-width:155px;color:var(--a);border-radius:1px;border:var(--border_soft);background:#001 var(--tracker) no-repeat 3px center;background-size:14px}
+.info_tracker{margin:1px -1px 1px 0;padding:1px 6px 1px 18px;display:inline-block;white-space:nowrap;color:var(--a);border-radius:1px;border:var(--border_soft);background:#001 var(--tracker) no-repeat 3px center;background-size:14px}
 #trackers .info_tracker{padding:2px 8px 4px 20px;line-height:1.2;background-position:4px center}
 .info_tracker a{max-width:140px;display:inline-block;overflow:hidden;text-overflow:ellipsis}
 .info_tracker a[href*="b32.i2p"]{margin-right:-5px;max-width:90px}
