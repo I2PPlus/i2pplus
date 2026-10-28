@@ -4280,10 +4280,182 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     }
 
     /**
+     * The value the max-dispatch-age loop rests at when nothing is measurably
+     * wrong. The band is the point: the old loop raised on a healthy delivery
+     * ratio and lowered on a high average lifetime of expired messages, and on a
+     * busy router both are true at once, so the two branches traded the value
+     * every cycle - a measured 2000 to 3000 limit cycle every 15 seconds. A
+     * decrease branch that stops at the band and a recovery branch that stops at
+     * the band cannot trade, so the loop rests.
+     *
+     * @since 0.9.72+
+     */
+    public static final int DISPATCH_AGE_BAND_MS = 2500;
+
+    /**
+     * Outbound messages queued across all peers at which the queue counts as
+     * backlogged, so holding messages longer starts costing slots.
+     *
+     * @since 0.9.72+
+     */
+    static final int DEEP_QUEUE_MESSAGES = 2000;
+
+    /**
+     * Job-lag under which the router counts as having CPU to spare.
+     *
+     * @since 0.9.72+
+     */
+    static final int CPU_FREE_LAG_MS = 20;
+
+    /**
+     * Messages per minute the age cap must be dropping for the cap to count as
+     * the binding constraint. Below this the cap is not what is costing sends,
+     * so there is nothing for raising it to buy.
+     *
+     * @since 0.9.72+
+     */
+    static final int CAP_DROP_EVENTS_PER_MIN = 100;
+
+    /**
+     * Expiration share of completed sends at which expirations are a volume
+     * problem worth reacting to, paired with {@link #HEAVY_EXPIRATION_EVENTS_PER_MIN}
+     * so a busy router's small share of a huge count stays quiet.
+     *
+     * @since 0.9.72+
+     */
+    static final double HEAVY_EXPIRATION_SHARE = 0.2;
+
+    /**
+     * Expirations per minute at which expirations are a volume problem worth
+     * reacting to, paired with {@link #HEAVY_EXPIRATION_SHARE}.
+     *
+     * @since 0.9.72+
+     */
+    static final int HEAVY_EXPIRATION_EVENTS_PER_MIN = 100;
+
+    /**
+     * Expiration share of completed sends at which delivery has collapsed: most
+     * of what the outbound path finishes is expiring, not being sent.
+     *
+     * @since 0.9.72+
+     */
+    static final double COLLAPSE_EXPIRATION_SHARE = 0.7;
+
+    /**
+     * Share of completed sends that expired while queued.
+     * <p>The volume of expirations has to be measured against the volume of
+     * successful sends. The stat the old loop used for this - the average
+     * <em>lifetime</em> of expired messages - carries no count at all: a router
+     * delivering 25,766 messages a minute against 55 expirations was read as
+     * "lots of expirations" purely because the dead messages had been alive for
+     * nine seconds.
+     *
+     * @param delivered messages delivered per minute, NaN when unknown
+     * @param expiredQ messages expired while queued, per minute, NaN when unknown
+     * @return the share of completions that expired, 0 to 1, NaN when neither
+     *         side is known
+     * @since 0.9.72+
+     */
+    static double expirationShare(double delivered, double expiredQ) {
+        double sent = Double.isNaN(delivered) ? 0 : delivered;
+        double expired = Double.isNaN(expiredQ) ? 0 : expiredQ;
+        double total = sent + expired;
+        return total <= 0 ? Double.NaN : expired / total;
+    }
+
+    /**
+     * Are queue expirations a volume problem: at least
+     * {@link #HEAVY_EXPIRATION_EVENTS_PER_MIN} per minute <em>and</em> at least
+     * {@link #HEAVY_EXPIRATION_SHARE} of completed sends.
+     * <p>Both halves are needed. A raw count of 500 expirations a minute is noise
+     * against a million deliveries; a 50% share of a handful of sends is a
+     * near-idle router, not a backlog.
+     *
+     * @param delivered messages delivered per minute, NaN when unknown
+     * @param expiredQ messages expired while queued, per minute, NaN when unknown
+     * @return true when the volume of expirations is worth reacting to
+     * @since 0.9.72+
+     */
+    static boolean expirationsAreHeavy(double delivered, double expiredQ) {
+        if (Double.isNaN(expiredQ) || expiredQ < HEAVY_EXPIRATION_EVENTS_PER_MIN) {return false;}
+        double share = expirationShare(delivered, expiredQ);
+        return !Double.isNaN(share) && share >= HEAVY_EXPIRATION_SHARE;
+    }
+
+    /**
+     * Target max dispatch age from the measured pressure on the outbound path.
+     * <p>
+     * The cap is the thing being tuned, so the loop is driven by what the cap
+     * does: {@code transport.dispatchExpired} counts the messages the cap itself
+     * dropped, and raising the cap is only worth anything when that count is
+     * high. The old loop's primary signal was
+     * {@code transport.expiredOnQueueLifetime} - the lifetime of messages that
+     * expired on their <em>own</em> deadline in the requeue path, a different
+     * expiry path the cap does not govern. Measured on a live router, the cap
+     * had never dropped a message - zero lifetime events on
+     * {@code transport.dispatchExpired} - while the loop moved the value every
+     * 15 seconds, and the expirations it was reacting to averaged 8.9 seconds of
+     * lifetime - three times the cap's ceiling, so no setting in the range could
+     * have reached them.
+     *
+     * @param current the value in effect, in ms
+     * @param capDrops messages per minute dropped by the cap, from
+     *                 {@code transport.dispatchExpired}, NaN when none
+     * @param queueDepth messages queued across all peers, NaN when unknown
+     * @param jobLag job lag in ms, NaN when unknown
+     * @param delivered messages delivered per minute, NaN when unknown
+     * @param expiredQ messages expired while queued, per minute, NaN when unknown
+     * @param min the param's configured minimum, in ms
+     * @param step the param's configured step, in ms
+     * @return the target in ms; the caller clamps it to the param's range
+     * @since 0.9.72+
+     */
+    static int maxDispatchAgeTarget(int current, double capDrops, double queueDepth, double jobLag,
+                                    double delivered, double expiredQ, int min, int step) {
+        boolean deepQueue = !Double.isNaN(queueDepth) && queueDepth > DEEP_QUEUE_MESSAGES;
+        boolean cpuFree = Double.isNaN(jobLag) || jobLag < CPU_FREE_LAG_MS;
+        boolean heavy = expirationsAreHeavy(delivered, expiredQ);
+        double share = expirationShare(delivered, expiredQ);
+        boolean collapsing = !Double.isNaN(share) && share >= COLLAPSE_EXPIRATION_SHARE;
+
+        // Delivery collapsed under a backlog: almost everything the outbound path
+        // finishes is expiring, so messages are dying before a transport slot
+        // opens. Lowering the cap cannot create a slot, it only guarantees the
+        // death, so the answer is patience - up to the cap above the band, and
+        // only while the value is below it.
+        if (collapsing && deepQueue && current < DISPATCH_AGE_BAND_MS + step)
+            return Math.min(DISPATCH_AGE_BAND_MS + step, current + step);
+
+        // The cap is the binding constraint: it is dropping messages the router
+        // could otherwise have sent, with no backlog and CPU to spare. Widen it.
+        if (!Double.isNaN(capDrops) && capDrops >= CAP_DROP_EVENTS_PER_MIN && !deepQueue && cpuFree)
+            return current + step;
+
+        // Backlogged and expiring, but still delivering most of what it finishes:
+        // free slots by dropping stale messages sooner. This is the only branch
+        // allowed below the band, and it is gated against the collapse case above,
+        // so the two cannot point in opposite directions on the same signals -
+        // that pair is exactly what made the old loop oscillate.
+        if (deepQueue && heavy && !collapsing && current > min)
+            return Math.max(min, current - 2 * step);
+
+        // Expiring, no backlog: same direction, one step, and never below the band,
+        // so it cannot trade the value with the branches above. Gated against the
+        // collapse case, which is the same signals read the other way: lowering a
+        // cap while delivery is collapsing only guarantees the messages die.
+        if (heavy && !collapsing && current > DISPATCH_AGE_BAND_MS)
+            return Math.max(DISPATCH_AGE_BAND_MS, current - step);
+
+        return current;
+    }
+
+    /**
      * Tunes max message dispatch age — messages older than this are dropped
      * instead of cycling through bid/send/fail/requeue until expiry.
-     * <p>Primary signal: {@code transport.expiredOnQueueLifetime}.
-     * Cross-refs: {@code transport.bidFailAllTransports}.
+     * <p>Primary signal: {@code transport.dispatchExpired}, the drops the cap
+     * itself causes. Cross-refs: {@code udp.outboundQueueDepth},
+     * {@code transport.expiredOnQueueCount}, {@code transport.messagesDelivered},
+     * {@code jobQueue.jobLag}.
      *
      * @since 0.9.70+
      */
@@ -4294,7 +4466,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.router.maxDispatchAge", "Max message queue age (ms)",
                   SUB_TRANSPORT,
 
-                  2000, 30000, 1000, "transport.expiredOnQueueLifetime", _context);
+                  2000, 30000, 1000, "transport.dispatchExpired", _context);
         }
 
         protected void applyValue(int value) {
@@ -4329,63 +4501,16 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected int computeTarget(double observed) {
-            int current = getRuntimeValue();
-            // observed = transport.expiredOnQueueLifetime (ms, avg lifetime of expired messages)
-            // Cross-refs: transport.bidFailAllTransports (messages with no transport),
-            //             udp.outboundQueueDepth (total outbound pressure),
-            //             transport.expiredOnQueueCount (expired per min),
-            //             transport.messagesDelivered (delivered per min)
-            double bidFails = getAdditionalEventCount(_context, "transport.bidFailAllTransports");
+            // capDrops is the event count, not the average: the average is the
+            // lifetime of the messages the cap dropped, which says how old they
+            // were, not how many the cap cost us.
+            double capDrops = getAdditionalEventCount(_context, "transport.dispatchExpired");
             double queueDepth = getAdditionalStat(_context, "udp.outboundQueueDepth");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
-            double peerCount = getAdditionalStat(_context, "udp.peerCount");
-            double expiredCount = getAdditionalStat(_context, "udp.peerExpired");
             double delivered = getAdditionalEventCount(_context, "transport.messagesDelivered");
             double expiredQ = getAdditionalEventCount(_context, "transport.expiredOnQueueCount");
-
-            boolean lotsOfExpirations = observed > 5000;
-            boolean lotsOfBidFails = !Double.isNaN(bidFails) && bidFails > 10;
-            boolean deepQueue = !Double.isNaN(queueDepth) && queueDepth > 2000;
-            boolean cpuFree = Double.isNaN(jobLag) || jobLag < 20;
-            boolean atFloor = current <= _min;
-            double totalCompleted = !Double.isNaN(delivered) && !Double.isNaN(expiredQ) ? delivered + expiredQ : Double.NaN;
-            double deliveryRatio = !Double.isNaN(totalCompleted) && totalCompleted > 0 ? delivered / totalCompleted : Double.NaN;
-            boolean deathSpiral = !Double.isNaN(deliveryRatio) && deliveryRatio < 0.3 && atFloor && deepQueue;
-            boolean healthyDelivery = !Double.isNaN(deliveryRatio) && deliveryRatio > 0.8;
-            boolean lowThroughput = !Double.isNaN(delivered) && delivered < 10 && !Double.isNaN(expiredQ) && expiredQ > 50;
-
-            // Death spiral: at floor + deep queue + <30% delivery ratio.
-            // Messages expire before they can be dispatched. Raise age so they
-            // survive long enough for a transport slot to open up.
-            if (deathSpiral)
-                return Math.min(3000, current + _step * 2);
-
-            // Near death spiral: low throughput even without deep queue
-            if (lowThroughput && atFloor && !healthyDelivery)
-                return Math.min(3000, current + _step);
-
-            // Deep queue + lots of expirations with healthy delivery = queue is filling
-            // faster than it drains. Drop stale messages faster to free slots.
-            if (deepQueue && lotsOfExpirations && !atFloor)
-                return Math.max(_min, current - _step * 2);
-
-            // Many expirations = lower age limit (stop hoarding dead messages)
-            if (lotsOfExpirations && !atFloor)
-                return Math.max(_min, current - _step);
-
-            // Bid fails + expirations + no delivery = can't route, stop trying
-            if (lotsOfBidFails && lotsOfExpirations && !atFloor && !healthyDelivery)
-                return Math.max(_min, current - _step * 2);
-
-            // Recovery: healthy delivery + queue clearing + CPU free = raise toward default
-            if (healthyDelivery && !deepQueue && cpuFree && current < 3000)
-                return Math.min(3000, current + _step * 2);
-
-            // Clear: few expirations + few bid fails + no delivery pressure = raise
-            if (observed < 1000 && !lotsOfBidFails && !deepQueue && healthyDelivery)
-                return Math.min(3000, current + _step);
-
-            return current;
+            return maxDispatchAgeTarget(getRuntimeValue(), capDrops, queueDepth, jobLag,
+                                        delivered, expiredQ, _min, _step);
         }
     }
 
@@ -11391,11 +11516,97 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     }
 
     /**
+     * Connection count above which the failsafe sweep is numerous enough to be
+     * worth spacing out - only when the sweep is measurably costing something
+     * (see {@link #failsafeFreqTarget}).
+     *
+     * @since 0.9.72+
+     */
+    static final int FAILSAFE_HIGH_CONNECTIONS = 500;
+
+    /**
+     * Iteration time in ms above which a failsafe pass counts as slow, so
+     * spacing the passes out is a saving.
+     *
+     * @since 0.9.72+
+     */
+    static final int FAILSAFE_SLOW_ITERATION_MS = 50;
+
+    /**
+     * Iteration time in ms below which a failsafe pass counts as cheap, so a
+     * long interval is buying nothing. The gap between this and
+     * {@link #FAILSAFE_SLOW_ITERATION_MS} is the dead band that keeps the two
+     * directions from trading the value every cycle.
+     *
+     * @since 0.9.72+
+     */
+    static final int FAILSAFE_CHEAP_ITERATION_MS = 10;
+
+    /**
+     * Job lag in ms above which the router counts as CPU-contended, so the
+     * sweep's cost matters even when the sweep itself measures fast.
+     *
+     * @since 0.9.72+
+     */
+    static final int FAILSAFE_CPU_PRESSURE_LAG_MS = 50;
+
+    /**
+     * Target failsafe iteration interval from the measured cost of the sweep.
+     * <p>
+     * The interval is sized against the cost of iterating the connections, so
+     * that cost is what moves it: raise when a pass is slow, or when the sweep is
+     * large <em>and</em> the router is CPU-contended, and lower when a pass is
+     * measurably cheap and CPU is free. The connection count alone is not
+     * evidence of cost, and treating it as such is what made this loop a one-way
+     * ratchet: it raised above 500 connections and lowered only below 100, so a
+     * router sitting at 1,288 connections could only ever climb. Measured there,
+     * a failsafe pass took 0.0 ms with a job lag of 0.8 ms, and the interval had
+     * ratcheted to 28,000 ms of its 30,000 ms ceiling - a 28 second idle window
+     * on every NTCP connection, in exchange for saving a sweep that costs nothing.
+     *
+     * @param current the value in effect, in ms
+     * @param observed mean failsafe iteration time in ms, NaN when no pass in
+     *                 the window ran
+     * @param keysetSize connection count, NaN when unknown
+     * @param jobLag job lag in ms, NaN when unknown
+     * @param min the param's configured minimum, in ms
+     * @param max the param's configured maximum, in ms
+     * @param step the param's configured step, in ms
+     * @return the target in ms, inside [min, max]
+     * @since 0.9.72+
+     */
+    static int failsafeFreqTarget(int current, double observed, double keysetSize, double jobLag,
+                                  int min, int max, int step) {
+        boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > FAILSAFE_CPU_PRESSURE_LAG_MS;
+        boolean slowSweep = !Double.isNaN(observed) && observed > FAILSAFE_SLOW_ITERATION_MS;
+        boolean cheapSweep = !Double.isNaN(observed) && observed < FAILSAFE_CHEAP_ITERATION_MS;
+        int connections = !Double.isNaN(keysetSize) ? (int) keysetSize : 0;
+        boolean manyConnections = connections > FAILSAFE_HIGH_CONNECTIONS;
+
+        // CPU is contended and the sweep is big or slow: space the passes out.
+        if ((slowSweep || manyConnections) && cpuPressure)
+            return Math.min(max, current + step);
+
+        // The pass itself is slow: spacing it out is a direct saving.
+        if (slowSweep)
+            return Math.min(max, current + step);
+
+        // The pass is measurably cheap and CPU is free, so the interval is paying
+        // for nothing: walk it back toward the default. A stale stat reads as NaN,
+        // which fails this test, so the loop never relaxes on no data.
+        if (cheapSweep && !cpuPressure && current > min)
+            return Math.max(min, current - step);
+
+        return current;
+    }
+
+    /**
      * Tunes NTCP failsafe iteration frequency based on connection count.
      * <p>Primary signal: {@code ntcp.failsafeIterationTime} (ms, iteration duration).
      * Cross-refs: {@code ntcp.pumperKeySetSize} (connection count), {@code jobQueue.jobLag} (CPU).
-     * <p>Increases interval under high connection counts to reduce pumper overhead.
-     * Decreases interval under low connection counts for faster idle detection.
+     * <p>Increases interval when a pass is slow, or the sweep is large under CPU
+     * pressure, to reduce pumper overhead. Decreases it when passes are measurably
+     * cheap, for faster idle detection.
      *
      * @since 0.9.70+
      */
@@ -11426,33 +11637,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         protected int computeTarget(double observed) {
-            int current = getRuntimeValue();
             // observed = ntcp.failsafeIterationTime (ms, time to iterate all connections)
             // Cross-refs: ntcp.pumperKeySetSize (connection count), jobQueue.jobLag (CPU)
             double keysetSize = getAdditionalStat(_context, "ntcp.pumperKeySetSize");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
-            boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 50;
-            int connections = !Double.isNaN(keysetSize) ? (int) keysetSize : 0;
-            boolean highIterationTime = observed > 50;
-            boolean manyConnections = connections > 500;
-
-            // High iteration time or many connections + CPU pressure = increase interval
-            if ((highIterationTime || manyConnections) && cpuPressure)
-                return Math.min(_max, current + _step);
-
-            // High iteration time without CPU pressure = moderate increase
-            if (highIterationTime && current < _max)
-                return Math.min(_max, current + _step);
-
-            // Many connections = increase interval to reduce overhead
-            if (manyConnections && current < _max)
-                return Math.min(_max, current + _step);
-
-            // Low iteration time + few connections + no CPU pressure = decrease interval
-            if (observed < 10 && connections < 100 && !cpuPressure && current > _min)
-                return Math.max(_min, current - _step);
-
-            return current;
+            return failsafeFreqTarget(getRuntimeValue(), observed, keysetSize, jobLag,
+                                      _min, _max, _step);
         }
     }
 
