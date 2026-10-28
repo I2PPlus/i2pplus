@@ -537,8 +537,8 @@ class ConnectionPacketHandler {
                 int newdev = con.getOptions().getRTTDev();
                 // Worth a line only when the sample actually moved a timer, since
                 // this path runs for every ACK on every connection.
-                if (_log.shouldInfo() && (newrtt != oldrtt || newrto != oldrto || newdev != olddev)) {
-                    _log.info("RTT updated * Highest RTT: " + highestRTT + " ms" +
+                if (_log.shouldDebug() && (newrtt != oldrtt || newrto != oldrto || newdev != olddev)) {
+                    _log.debug("RTT updated * Highest RTT: " + highestRTT + " ms" +
                               "\n* RTT: " + oldrtt + " ms -> " + newrtt + " ms * RTO: " + oldrto + " ms -> " + newrto + " ms" +
                               " * Deviation: " + olddev + " ms -> " + newdev + " ms" +
                               "\n* " + con);

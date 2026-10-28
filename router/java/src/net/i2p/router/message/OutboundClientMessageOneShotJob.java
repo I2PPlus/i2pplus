@@ -279,8 +279,10 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 long minTimeout = _leaseSet != null ? OVERALL_TIMEOUT_MS_MIN : OVERALL_TIMEOUT_NOLS_MIN;
                 overallExpiration = Math.max(overallExpiration, _start + minTimeout);
                 overallExpiration = Math.min(overallExpiration, _start + OVERALL_TIMEOUT_MS_MAX);
-                if (_log.shouldInfo()) {
-                    _log.info("Message Expiration: " + (overallExpiration - _start) + "ms");
+                // Per-message routine state, not an event - INFO here is one line
+                // per outbound client message.
+                if (_log.shouldDebug()) {
+                    _log.debug("Message Expiration: " + (overallExpiration - _start) + "ms");
                 }
             } else if (_log.shouldInfo()) {
                 _log.info("Message expired before it could be processed"); // runJob() will call dieFatal()
@@ -654,7 +656,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                     // and that time may change in subsequent publication
                     if (_lease.getTunnelId().equals(lease.getTunnelId()) &&
                         _lease.getGateway().equals(lease.getGateway())) {
-                        if (_log.shouldInfo()) {_log.info("Lease for " + _toString + " found in cache");}
+                        if (_log.shouldDebug()) {_log.debug("Lease for " + _toString + " found in cache");}
                         return 0;
                     }
                 }
@@ -932,10 +934,10 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                            + _lease.getTunnelId() + "] on Gateway ["
                            + _lease.getGateway().toBase64().substring(0,6) + "]");
         }
-        if (_log.shouldInfo()) {
-            _log.info("Dispatching to " + _toString + " via OB tunnel " + _outTunnel.getSendTunnelId(0) +
-                      " -> Lease tunnel " + _lease.getTunnelId() + " @ GW [" +
-                      _lease.getGateway().toBase64().substring(0, 6) + "]");
+        if (_log.shouldDebug()) {
+            _log.debug("Dispatching to " + _toString + " via OB tunnel " + _outTunnel.getSendTunnelId(0) +
+                       " -> Lease tunnel " + _lease.getTunnelId() + " @ GW [" +
+                       _lease.getGateway().toBase64().substring(0, 6) + "]");
         }
 
         DispatchJob dispatchJob = new DispatchJob(msg, selector, onReply, onFail);
@@ -1007,8 +1009,8 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 _replyTimeout.getTiming().setStartAfter(expiration);
                 getContext().jobQueue().addJob(_replyTimeout);
             }
-            if (_log.shouldInfo()) {
-                _log.info("[Job " + OutboundClientMessageOneShotJob.this.getJobId() + "] Dispatching message to " + _toString + _msg);
+            if (_log.shouldDebug()) {
+                _log.debug("[Job " + OutboundClientMessageOneShotJob.this.getJobId() + "] Dispatching message to " + _toString + _msg);
             }
             long before = getContext().clock().now();
 

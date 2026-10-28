@@ -1652,13 +1652,13 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 socket.setReadTimeout(readTimeout);
                 Socket s = getSocket(peerHash, socket.getLocalPort());
                 long afterSocket = getTunnel().getContext().clock().now();
-                if (_log.shouldInfo()) {
+                if (_log.shouldDebug()) {
                     // The local port is client-driven (socket.getLocalPort()), not
                     // read from any eepgsite config, so a failing request is
                     // otherwise impossible to attribute to a backend. Log the
                     // resolved target and both timeout budgets: the I2P-side
                     // per-read budget and the local socket's header-read budget.
-                    _log.info("[HTTPServer] " + toString()
+                    _log.debug("[HTTPServer] " + toString()
                               + "\n* Read timeout: " + readTimeout
                               + " * Header Read timeout: " + SERVER_READ_TIMEOUT_GET
                               + "\n* Client: " + peerB32);
