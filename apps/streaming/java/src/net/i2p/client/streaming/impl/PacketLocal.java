@@ -33,6 +33,14 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
     private final AtomicInteger _numSends = new AtomicInteger();
     /** Resend attempts triggered by a router soft failure (NO_TUNNELS / EXPIRED / LOCAL). */
     private final AtomicInteger _numSoftResends = new AtomicInteger();
+    /**
+     * Tail loss probes of this packet. A probe is a re-send, so it lands in
+     * {@link #_numSends}, but it is a loss *hypothesis* raised by the PTO timer,
+     * not a retransmit of confirmed loss, and it fires routinely on a healthy
+     * connection. Keep it counted separately so the SYN-phase logic can tell a
+     * peer that is not answering from a peer whose probe simply arrived.
+     */
+    private final AtomicInteger _numTlpProbes = new AtomicInteger();
     /** When the packet was last sent. */
     private volatile long _lastSend;
     /** When the packet was acked, 0 while unacked. */
@@ -275,6 +283,25 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
      * @since 0.9.71+
      */
     public int getNumSoftResends() { return _numSoftResends.get(); }
+
+    /**
+     * Record a tail loss probe of this packet. A probe re-sends the packet, so
+     * it is included in {@link #getNumSends()}; this counter lets a caller
+     * subtract it back out and count only real retransmits.
+     *
+     * @since 0.9.72+
+     */
+    public void incrementTlpProbes() {
+        _numTlpProbes.incrementAndGet();
+    }
+
+    /**
+     * Number of tail loss probes sent for this packet.
+     *
+     * @return the number of PTO-timer probes, never negative
+     * @since 0.9.72+
+     */
+    public int getNumTlpProbes() { return _numTlpProbes.get(); }
 
     /**
      * Time of the last send.

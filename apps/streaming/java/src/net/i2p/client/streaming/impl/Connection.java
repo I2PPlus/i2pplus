@@ -279,17 +279,30 @@ class Connection {
      * AtomicBoolean because the setter and the consumer share no monitor.
      */
     private final AtomicBoolean _nextSendFreshConnection = new AtomicBoolean();
-     /**
-      * Count of consecutive retransmit timer firings without ACK progress
-      * (highestAckedThrough unchanged).  Used to detect stalled downloads
-      * on slow/lossy paths where soft-failure rotation does not trigger.
-      * Reset to 0 only when ackPackets() was called since the last
-      * retransmit fire (i.e., when the peer actually delivered ACKs).
-      * Mutated on the retransmit timer thread inside
-      * {@link RetransmitEvent#checkRetransmitStall()}, a synchronized method,
-      * so under the Connection monitor; volatile for the unlocked reads
-      * elsewhere.
-      */
+
+    /**
+     * Whether this connect has already rotated its outbound tunnel once. A
+     * rotation costs a fresh tunnel selection from the pool and discards the
+     * tunnel a SYN-ACK may be travelling back on, so it is a one-shot recovery
+     * attempt. Measured un-latched, one connect rotated on every resend: 2,186
+     * rotations after two sends, 2,087 after three, 1,898 after four, down to 3
+     * after thirteen, 12,918 rotations against 1,046 successful opens, and the
+     * SYN cadence collapsed to roughly one send per 9s against a nominal 916ms
+     * interval. Rotating repeatedly slows the handshakes it is meant to rescue.
+     */
+    private final AtomicBoolean _synRotated = new AtomicBoolean();
+
+    /**
+     * Count of consecutive retransmit timer firings without ACK progress
+     * (highestAckedThrough unchanged).  Used to detect stalled downloads
+     * on slow/lossy paths where soft-failure rotation does not trigger.
+     * Reset to 0 only when ackPackets() was called since the last
+     * retransmit fire (i.e., when the peer actually delivered ACKs).
+     * Mutated on the retransmit timer thread inside
+     * {@link RetransmitEvent#checkRetransmitStall()}, a synchronized method,
+     * so under the Connection monitor; volatile for the unlocked reads
+     * elsewhere.
+     */
     private volatile int _retransmitCount;
     /**
      * Flag set when ackPackets() recorded forward progress since the
@@ -970,12 +983,19 @@ class Connection {
     }
 
     /**
-     * Floor for the SYN-phase wall-clock budget (ms), used when RTT evidence
-     * would allow a shorter one.
+     * Floor for the SYN-phase wall-clock budget (ms), used when the path's own
+     * evidence would allow a shorter one.
+     * <p>8s, not 4s. Measured after deploying a 4s floor: the give-ups landed on
+     * connections that had sent one or two SYNs and simply had not been answered
+     * yet (2,014 at two sends, 473 at one, every one with no ACK), against 1,046
+     * successful opens. The floor has to outlast the widest observed inter-SYN
+     * interval (4s, from a peer RTT of 2s at the 200% headroom) twice over, so a
+     * connect gets two full probes before it is called dead; it is also well
+     * above the slowest healthy handshake measured on a warm router (1,704ms).
      *
      * @since 0.9.72+
      */
-    static final long SYN_PHASE_BUDGET_MIN_MS = 4000;
+    static final long SYN_PHASE_BUDGET_MIN_MS = 8000;
 
     /**
      * SYN sends to allow when the path has no RTT evidence yet, so the budget is
@@ -1008,8 +1028,12 @@ class Connection {
      *                        {@link #computeEffectiveConnectTimeout(long, int, long)}; 0
      *                        means no connect timeout is configured, and 0 is
      *                        returned to mean "no extra bound"
-     * @param measuredRttMs the connection's RTT sample, or &lt;= 0 when the peer
-     *                      has not been acknowledged yet
+     * @param measuredRttMs the peer's RTT evidence (ms), or &lt;= 0 when there is
+     *                      none. Take it from {@link ConnectionOptions#getRTT()}
+     *                      directly: gating it on this connection having an ACK
+     *                      makes the branch dead code in exactly the phase it
+     *                      governs, because a connection in the SYN phase has by
+     *                      definition never been acknowledged
      * @param synIntervalMs the live inter-SYN retransmit interval (ms) from
      *                      {@link #computeSynRetransmitInterval(int, int)}
      * @return the budget in ms, or 0 for no bound
@@ -1037,7 +1061,8 @@ class Connection {
     /**
      * Pure decision: has the unacknowledged-SYN phase spent its wall-clock budget?
      *
-     * @param elapsedMs connection lifetime so far (ms)
+     * @param elapsedMs the SYN phase's age so far (ms), from
+     *                  {@link #synPhaseAgeMs(long, long)}
      * @param budgetMs  the budget from {@link #computeSynPhaseBudgetMs(long, int, int)};
      *                  &lt;= 0 means no bound, so this never fires
      * @return true if the SYN phase has run out of time and the connection should
@@ -1046,6 +1071,31 @@ class Connection {
      */
     static boolean synPhaseBudgetExceeded(long elapsedMs, long budgetMs) {
         return budgetMs > 0 && elapsedMs >= budgetMs;
+    }
+
+    /**
+     * Age of the SYN phase (ms), measured from when the SYN packet was created.
+     * <p>Not the connection's lifetime. A connect is constructed before it has a
+     * route, a LeaseSet, or the first SYN: {@link
+     * ConnectionOptions#getConnectDelay()} delays the SYN send via
+     * {@link SchedulerPreconnect}, so measuring from {@link #getCreatedOn()}
+     * spends the handshake budget on waiting that has nothing to do with the
+     * peer answering. Measured after
+     * deploying a connection-anchored clock: 473 give-ups had sent exactly one
+     * SYN, and the give-up dumps were spaced ~9s apart, so the clock was
+     * expiring on connects that had barely started.
+     *
+     * @param nowMs the current time (ms)
+     * @param synPacketCreatedOnMs {@link
+     *                             net.i2p.client.streaming.impl.PacketLocal#getCreatedOn()}
+     *                             of the SYN being resent; &lt;= 0 (no clock)
+     *                             yields 0, so the budget never fires
+     * @return the SYN phase's age in ms, never negative
+     * @since 0.9.72+
+     */
+    static long synPhaseAgeMs(long nowMs, long synPacketCreatedOnMs) {
+        if (synPacketCreatedOnMs <= 0) {return 0;}
+        return Math.max(0, nowMs - synPacketCreatedOnMs);
     }
 
     /**
@@ -1226,6 +1276,21 @@ class Connection {
      * @since 0.9.71+
      */
     synchronized void setNextSendFreshConnection() { _nextSendFreshConnection.set(true); }
+
+    /**
+     * Claim this connect's one outbound-tunnel rotation, if it is still unspent.
+     * <p>A rotation is not free: it discards the tunnel a SYN-ACK may be
+     * travelling back on and asks the pool for a fresh selection, which on a
+     * degraded pool is itself a delay. Spending it on every resend measured as
+     * one SYN per ~9s, so the recovery starved the handshakes it was chasing.
+     * One rotation per connect, then the wall-clock budget
+     * ({@link #getSynPhaseBudgetMs()}) decides.
+     *
+     * @return true on the first call for this connection, false on every
+     *         subsequent one
+     * @since 0.9.72+
+     */
+    boolean claimSynRotation() { return _synRotated.compareAndSet(false, true); }
     /**
      * Returns true if the next send should use a fresh connection
      * (tunnel rotation). Cleared on read so only the first send
@@ -1329,9 +1394,11 @@ class Connection {
      * @since 0.9.72+
      */
     long getSynPhaseBudgetMs() {
-        int rtt = _options.getRTT();
-        if (!_options.receivedAck()) {rtt = -1;}
-        return computeSynPhaseBudgetMs(getEffectiveConnectWindow(), rtt, getSynRetransmitInterval());
+        // The peer's cached RTT, not this connection's: a connection in the SYN
+        // phase has never been acknowledged, so gating on receivedAck() left the
+        // RTT branch unreachable and made every connect take the floor.
+        return computeSynPhaseBudgetMs(getEffectiveConnectWindow(), _options.getRTT(),
+                                       getSynRetransmitInterval());
     }
 
     /**
@@ -2634,6 +2701,37 @@ class Connection {
     static final int SYN_RESEND_ROTATION_SENDS = 2;
 
     /**
+     * SYN sends that count as evidence the peer is not answering.
+     * <p>{@link net.i2p.client.streaming.impl.PacketLocal#getNumSends} counts
+     * every send, including two kinds that say nothing about the peer:
+     * <ul>
+     *   <li>router soft-failure resends, which never reached the tunnel fabric
+     *       and which {@link #scheduleSoftFailureRetransmit()} rotates for
+     *       already, as in {@link #synGiveUpBudgetExceeded(int, int, int)};</li>
+     *   <li>tail loss probes, which the PTO timer raises as a loss
+     *       <em>hypothesis</em> and which fire routinely on a healthy connect —
+     *       measured at 17,700 probes on the SYN packet in a single log
+     *       rotation, with 2,656 of them reading as a second "send" on a
+     *       connection that had sent one SYN.</li>
+     * </ul>
+     * Counting probes as sends made every healthy connect look like a stalled
+     * one. The subtraction is clamped at zero so a probe tagged before its send
+     * lands cannot undercount below the true hard count.
+     *
+     * @param totalSends total send attempts incl. resends and probes
+     *                   ({@link net.i2p.client.streaming.impl.PacketLocal#getNumSends})
+     * @param softResends of those, resends tagged as soft-failure-triggered
+     *                    ({@link net.i2p.client.streaming.impl.PacketLocal#getNumSoftResends})
+     * @param tlpProbes of those, tail loss probes
+     *                  ({@link net.i2p.client.streaming.impl.PacketLocal#getNumTlpProbes})
+     * @return the send count that is evidence of an unanswered SYN, at least 0
+     * @since 0.9.72+
+     */
+    static int synHardSends(int totalSends, int softResends, int tlpProbes) {
+        return Math.max(0, totalSends - softResends - tlpProbes);
+    }
+
+    /**
      * Pure decision: should this SYN resend go out a fresh outbound tunnel?
      * <p>A connect picks one outbound tunnel, and the SYN-ACK can go missing
      * because that tunnel, or its gateway, is dropping the reply. The established
@@ -2648,31 +2746,26 @@ class Connection {
      * variable that changed between the two.
      * <p>So rotate after {@code rotationSends} hard sends, giving the original
      * tunnel enough attempts to cover ordinary one-off loss before blaming it.
-     * Soft-failure-triggered resends are excluded, as in
-     * {@link #synGiveUpBudgetExceeded(int, int, int)}: they never reached the
-     * fabric, and {@link #scheduleSoftFailureRetransmit()} already rotates for
-     * them. The subtraction is clamped at zero so an early-tagged resend cannot
-     * undercount below the true hard count.
+     * Feed it {@link #synHardSends(int, int, int)}, not the raw send count:
+     * counting probes rotated the tunnel of healthy connects at the first PTO,
+     * 12,918 rotations in one log rotation against 1,046 successful opens.
      *
      * @param synPacket true if the packet being resent carries
      *                  {@link Packet#FLAG_SYNCHRONIZE}
      * @param synPhase true while the connection has no ACK yet
      *                 ({@code _highestAckedThrough < 0}), so data resends of a
      *                 live connection are never rotated
-     * @param totalSends total send attempts incl. resends
-     *                   ({@link net.i2p.client.streaming.impl.PacketLocal#getNumSends})
-     * @param softResends of those, resends tagged as soft-failure-triggered
-     *                    ({@link net.i2p.client.streaming.impl.PacketLocal#getNumSoftResends})
+     * @param hardSends the SYN sends that are evidence of an unanswered SYN,
+     *                  from {@link #synHardSends(int, int, int)}
      * @param rotationSends hard sends to allow before rotating
      *                      ({@link #SYN_RESEND_ROTATION_SENDS})
      * @return true if the next send should use a fresh outbound tunnel
      * @since 0.9.72+
      */
     static boolean synResendNeedsFreshTunnel(boolean synPacket, boolean synPhase,
-                                             int totalSends, int softResends,
-                                             int rotationSends) {
+                                             int hardSends, int rotationSends) {
         if (!synPacket || !synPhase) {return false;}
-        return Math.max(0, totalSends - softResends) >= rotationSends;
+        return Math.max(0, hardSends) >= rotationSends;
     }
 
     /**
@@ -4441,6 +4534,19 @@ class Connection {
     }
 
     /**
+     * One-line identity for log lines that have to stay short: the local service
+     * tag, the stream ids, and the peer. {@link #toString()} is a multi-line
+     * diagnostic dump, and a per-event line built from it buries the log — the
+     * tail loss probe alone emitted 17,700 dumps in one log rotation.
+     *
+     * @return a single-line label, e.g. {@code [462diuko] 73SKgw/AAAAAA [4bpcp4fm]}
+     * @since 0.9.72+
+     */
+    private String shortLabel() {
+        return '[' + localTag() + "] " + streamIds() + ' ' + getRemotePeerString();
+    }
+
+    /**
      * Human-readable summary of this connection.
      */
     @Override
@@ -4583,8 +4689,13 @@ class Connection {
             _unackedPacketsReceived.set(0);
             _lastSendTime = _context.clock().now();
             resetActivityTimer();
-            if (_log.shouldInfo()) {
-                _log.info("TLP sent for seq " + oldest.getSequenceNum() + " on " + Connection.this);
+            // Counted apart from the send it adds to getNumSends(): a probe is a
+            // loss hypothesis from the PTO timer, and it fires routinely on a
+            // healthy connect, so the SYN-phase decision must be able to exclude
+            // it (see synHardSends()).
+            oldest.incrementTlpProbes();
+            if (_log.shouldDebug()) {
+                _log.debug("TLP sent for seq " + oldest.getSequenceNum() + " on " + shortLabel());
             }
         }
     }
@@ -5013,24 +5124,29 @@ class Connection {
                            (synGiveUpBudgetExceeded(packet.getNumSends(),
                                                     packet.getNumSoftResends(),
                                                     getMaxSynSends())
-                            || synPhaseBudgetExceeded(getLifetime(), getSynPhaseBudgetMs()))) {
+                            || synPhaseBudgetExceeded(synPhaseAgeMs(_context.clock().now(),
+                                                                    packet.getCreatedOn()),
+                                                      getSynPhaseBudgetMs()))) {
                     // The SYN was never ACKed and the handshake has run out of
                     // budget, so stop resending instead of running to maxResends
                     // (~4 min). Two independent bounds: the send count
                     // (getMaxSynSends(), scaled up from maxSynResends so it covers
-                    // the connect window) and the wall clock (getSynPhaseBudgetMs()),
-                    // which is what fires on a path that is dropping SYN-ACKs — see
-                    // computeSynPhaseBudgetMs(). SYN retransmits use a fixed RTO
-                    // interval (no backoff), so the count budget is
-                    // getMaxSynSends() * interval. Soft-failure-triggered resends are
-                    // excluded (synGiveUpBudgetExceeded()): they never reached the
-                    // tunnel fabric and should not count as evidence of a dead path
+                    // the connect window) and the wall clock, measured from the SYN
+                    // packet's own creation (synPhaseAgeMs()) against
+                    // getSynPhaseBudgetMs() — not from the connection's creation,
+                    // which includes route lookup, LeaseSet fetch and the
+                    // delayed-SYN wait, none of which are the peer's silence.
+                    // SYN retransmits use a fixed RTO interval (no backoff), so the
+                    // count budget is getMaxSynSends() * interval.
+                    // Soft-failure-triggered resends are excluded
+                    // (synGiveUpBudgetExceeded()): they never reached the tunnel
+                    // fabric and should not count as evidence of a dead path
                     // (see scheduleSoftFailureRetransmit()).
                     // Record an accurate error *before* the error-free disconnect, so
                     // waitForConnect() returns "Connection timed out: SYN not
                     // acknowledged" instead of the generic "Connection failed".
                     if (_log.shouldDebug()) {
-                        _log.debug(Connection.this + " too many SYN resends, closing");
+                        _log.debug(shortLabel() + " -> SYN not acknowledged, closing");
                     }
                     packet.cancelled();
                     if (_connectionError == null) {setConnectionError(ERR_SYN_NOT_ACKNOWLEDGED);}
@@ -5066,17 +5182,22 @@ class Connection {
                     // is dropping the SYN-ACK. Measured on a remote eepsite: one
                     // handshake retransmitted a SYN every ~916ms for 10,446ms,
                     // every copy going out the same outbound tunnel, while
-                    // handshakes to the same peer opened in 647-1704ms. Rotating
-                    // after SYN_RESEND_ROTATION_SENDS hard sends gives the
-                    // connect the same recovery the established path gets.
+                    // handshakes to the same peer opened in 647-1704ms.
+                    // Counting tail loss probes as sends made this fire on
+                    // healthy connects at the first PTO (2,656 rotations after a
+                    // single real SYN), and re-arming it on every resend collapsed
+                    // the SYN cadence to ~1 send per 9s, so: hard sends only, and
+                    // one rotation per connect.
                     if (synResendNeedsFreshTunnel(packet.isFlagSet(Packet.FLAG_SYNCHRONIZE),
                                                   _highestAckedThrough.get() < 0,
-                                                  packet.getNumSends(),
-                                                  packet.getNumSoftResends(),
-                                                  SYN_RESEND_ROTATION_SENDS)) {
+                                                  synHardSends(packet.getNumSends(),
+                                                               packet.getNumSoftResends(),
+                                                               packet.getNumTlpProbes()),
+                                                  SYN_RESEND_ROTATION_SENDS)
+                        && claimSynRotation()) {
                         setNextSendFreshConnection();
                         if (_log.shouldDebug()) {
-                            _log.debug(Connection.this + " -> SYN unacked after " +
+                            _log.debug(shortLabel() + " -> SYN unacked after " +
                                        packet.getNumSends() + " sends, rotating to a " +
                                        "fresh outbound tunnel");
                         }

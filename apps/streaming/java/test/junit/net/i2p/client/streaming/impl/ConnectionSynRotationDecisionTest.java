@@ -5,15 +5,23 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 /**
- * Pins the SYN-phase decision to rotate a connect onto a fresh outbound tunnel.
+ * Pins the SYN-phase decision to rotate a connect onto a fresh outbound tunnel,
+ * and the send count that feeds it.
  *
  * <p>A connect picks one outbound tunnel, and the SYN-ACK can go missing because
  * that tunnel is dropping the reply. The established path escapes a sick tunnel
  * via a retransmit stall, but {@link Connection#isRetransmitStalledNow} returns
- * false until the first ACK, so a handshake never gets that recovery. Measured
- * against one remote eepsite, a handshake retransmitted a SYN every ~916 ms for
- * 10,446 ms with every copy on the same outbound tunnel, while handshakes to the
- * same peer opened in 647-1704 ms.
+ * false until the first ACK, so a handshake never
+ * gets that recovery. Measured against one remote eepsite, a handshake
+ * retransmitted a SYN every ~916 ms for 10,446 ms with every copy on the same
+ * outbound tunnel, while handshakes to the same peer opened in 647-1704 ms.
+ *
+ * <p>The send count is the part that broke when first shipped: counting
+ * {@link net.i2p.client.streaming.impl.PacketLocal#getNumSends()} raw rotated
+ * healthy connects at the first tail loss probe, 2,656 rotations after a single
+ * real SYN, and re-arming on every resend collapsed the SYN cadence to about
+ * one send per 9 s. Hence {@link Connection#synHardSends(int, int, int)} and one
+ * rotation per connect.
  *
  * @since 0.9.72+
  */
@@ -31,26 +39,65 @@ public class ConnectionSynRotationDecisionTest {
      */
     public ConnectionSynRotationDecisionTest() {}
 
+    // ---------- what counts as an unanswered SYN ----------
+
+    /** One SYN send, no probe, no soft failure: one hard send. */
+    @Test
+    public void testPlainSendCounts() {
+        assertEquals(1, Connection.synHardSends(1, 0, 0));
+        assertEquals(3, Connection.synHardSends(3, 0, 0));
+    }
+
+    /**
+     * A tail loss probe is a PTO loss hypothesis, not a retransmit of loss, and
+     * it fires routinely on a healthy connect: 17,700 probes landed on the SYN
+     * packet in one log rotation. Counting them made every healthy connect look
+     * stalled, so the probe must come back out of the count.
+     */
+    @Test
+    public void testTlpProbeIsNotASynResend() {
+        // The measured false positive: one real SYN plus one probe.
+        assertEquals(1, Connection.synHardSends(2, 0, 1));
+        assertFalse(Connection.synResendNeedsFreshTunnel(true, true,
+                                                         Connection.synHardSends(2, 0, 1),
+                                                         ROTATE_AFTER));
+    }
+
+    /** Soft-failure resends never reached the fabric, so they are not loss. */
+    @Test
+    public void testSoftResendsAreExcluded() {
+        assertEquals(2, Connection.synHardSends(5, 3, 0));
+        assertEquals(0, Connection.synHardSends(9, 9, 0));
+    }
+
+    /** Both exclusions together, and the clamp at zero. */
+    @Test
+    public void testExclusionsAndClamp() {
+        assertEquals(2, Connection.synHardSends(6, 3, 1));
+        assertEquals(0, Connection.synHardSends(2, 3, 4));
+        assertEquals(0, Connection.synHardSends(0, 0, 0));
+    }
+
     // ---------- only the SYN phase rotates ----------
 
     /** A data packet of a live connection is never rotated by this rule. */
     @Test
     public void testNonSynPacketNeverRotates() {
-        assertFalse(Connection.synResendNeedsFreshTunnel(false, true, 10, 0, ROTATE_AFTER));
-        assertFalse(Connection.synResendNeedsFreshTunnel(false, false, 10, 0, ROTATE_AFTER));
+        assertFalse(Connection.synResendNeedsFreshTunnel(false, true, 10, ROTATE_AFTER));
+        assertFalse(Connection.synResendNeedsFreshTunnel(false, false, 10, ROTATE_AFTER));
     }
 
     /** Once the connection is established, the retransmit-stall path owns rotation. */
     @Test
     public void testEstablishedConnectionNeverRotatesHere() {
-        assertFalse(Connection.synResendNeedsFreshTunnel(true, false, 10, 0, ROTATE_AFTER));
+        assertFalse(Connection.synResendNeedsFreshTunnel(true, false, 10, ROTATE_AFTER));
     }
 
     /** Both conditions are needed: a SYN on an established connection is a late duplicate. */
     @Test
     public void testRequiresBothSynAndUnacked() {
-        assertFalse(Connection.synResendNeedsFreshTunnel(true, false, 100, 0, ROTATE_AFTER));
-        assertTrue(Connection.synResendNeedsFreshTunnel(true, true, 100, 0, ROTATE_AFTER));
+        assertFalse(Connection.synResendNeedsFreshTunnel(true, false, 100, ROTATE_AFTER));
+        assertTrue(Connection.synResendNeedsFreshTunnel(true, true, 100, ROTATE_AFTER));
     }
 
     // ---------- the original tunnel gets its attempts first ----------
@@ -58,72 +105,43 @@ public class ConnectionSynRotationDecisionTest {
     /** The initial send is one hard send: the first resend stays on the same tunnel. */
     @Test
     public void testFirstResendKeepsTheOriginalTunnel() {
-        assertFalse(Connection.synResendNeedsFreshTunnel(true, true, 0, 0, ROTATE_AFTER));
-        assertFalse(Connection.synResendNeedsFreshTunnel(true, true, 1, 0, ROTATE_AFTER));
+        assertFalse(Connection.synResendNeedsFreshTunnel(true, true, 0, ROTATE_AFTER));
+        assertFalse(Connection.synResendNeedsFreshTunnel(true, true, 1, ROTATE_AFTER));
     }
 
     /** The boundary is inclusive: two hard sends unacked, so the third rotates. */
     @Test
     public void testRotatesAtTheThreshold() {
-        assertTrue(Connection.synResendNeedsFreshTunnel(true, true, 2, 0, ROTATE_AFTER));
-        assertTrue(Connection.synResendNeedsFreshTunnel(true, true, 3, 0, ROTATE_AFTER));
+        assertTrue(Connection.synResendNeedsFreshTunnel(true, true, 2, ROTATE_AFTER));
+        assertTrue(Connection.synResendNeedsFreshTunnel(true, true, 3, ROTATE_AFTER));
     }
 
     /** The measured stall rotates from its third send onward, not at its tenth. */
     @Test
     public void testMeasuredStallRotatesEarly() {
-        // The stall retransmitted 10 times; the rotation had to be available
-        // well before the ladder ran out, at the 2-send threshold.
-        assertTrue(Connection.synResendNeedsFreshTunnel(true, true, 2, 0, ROTATE_AFTER));
-        assertTrue(Connection.synResendNeedsFreshTunnel(true, true, 10, 0, ROTATE_AFTER));
+        assertTrue(Connection.synResendNeedsFreshTunnel(true, true, 2, ROTATE_AFTER));
+        assertTrue(Connection.synResendNeedsFreshTunnel(true, true, 10, ROTATE_AFTER));
         assertEquals(2, Connection.SYN_RESEND_ROTATION_SENDS);
     }
 
-    // ---------- soft-failure resends do not consume the budget ----------
-
-    /**
-     * Soft-failure resends never reached the tunnel fabric, and
-     * scheduleSoftFailureRetransmit() rotates for them already, so they must not
-     * be counted as evidence that this tunnel is dropping the SYN-ACK.
-     */
+    /** A negative hard count is treated as none, so nothing rotates. */
     @Test
-    public void testSoftResendsAreExcluded() {
-        // 5 sends, 3 of them soft -> 2 hard -> rotates.
-        assertTrue(Connection.synResendNeedsFreshTunnel(true, true, 5, 3, ROTATE_AFTER));
-        // 3 sends, 2 of them soft -> 1 hard -> stays.
-        assertFalse(Connection.synResendNeedsFreshTunnel(true, true, 3, 2, ROTATE_AFTER));
-        // All soft -> 0 hard -> stays.
-        assertFalse(Connection.synResendNeedsFreshTunnel(true, true, 9, 9, ROTATE_AFTER));
+    public void testNegativeCountStaysPut() {
+        assertFalse(Connection.synResendNeedsFreshTunnel(true, true, -1, ROTATE_AFTER));
+        assertFalse(Connection.synResendNeedsFreshTunnel(true, true, Integer.MIN_VALUE,
+                                                         ROTATE_AFTER));
     }
-
-    /** A soft count above the send count cannot undercount below zero hard sends. */
-    @Test
-    public void testSoftCountIsClamped() {
-        assertFalse(Connection.synResendNeedsFreshTunnel(true, true, 1, 5, ROTATE_AFTER));
-        assertFalse(Connection.synResendNeedsFreshTunnel(true, true, 0, 9, ROTATE_AFTER));
-    }
-
-    // ---------- degenerate thresholds ----------
 
     /** A threshold of 0 rotates every SYN-phase send, which is what it says. */
     @Test
     public void testZeroThresholdRotatesImmediately() {
-        assertTrue(Connection.synResendNeedsFreshTunnel(true, true, 0, 0, 0));
-        assertTrue(Connection.synResendNeedsFreshTunnel(true, true, 1, 0, 0));
+        assertTrue(Connection.synResendNeedsFreshTunnel(true, true, 0, 0));
     }
 
     /** A threshold above the send count never rotates. */
     @Test
     public void testHighThresholdNeverRotates() {
-        assertFalse(Connection.synResendNeedsFreshTunnel(true, true, 10, 0, 11));
-        assertFalse(Connection.synResendNeedsFreshTunnel(true, true, 10, 0, Integer.MAX_VALUE));
-    }
-
-    /** Negative send counts are treated as no sends, so nothing rotates. */
-    @Test
-    public void testNegativeCountsStayPut() {
-        assertFalse(Connection.synResendNeedsFreshTunnel(true, true, -1, 0, ROTATE_AFTER));
-        assertFalse(Connection.synResendNeedsFreshTunnel(true, true, -5, -5, ROTATE_AFTER));
-        assertFalse(Connection.synResendNeedsFreshTunnel(true, true, -9, -10, ROTATE_AFTER));
+        assertFalse(Connection.synResendNeedsFreshTunnel(true, true, 10, 11));
+        assertFalse(Connection.synResendNeedsFreshTunnel(true, true, 10, Integer.MAX_VALUE));
     }
 }

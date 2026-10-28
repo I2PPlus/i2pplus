@@ -5,24 +5,31 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 /**
- * Pins the SYN-phase wall-clock budget that bounds an unacknowledged handshake.
+ * Pins the SYN-phase wall-clock budget that bounds an unacknowledged handshake,
+ * and the clock it is measured on.
  *
  * <p>The send-count budget ({@link Connection#computeSynResendBudget(int, int, long)})
  * is deliberately window-scaled so a slow-but-alive peer keeps getting SYN
  * retransmits for the whole connect window. That is the wrong shape for a path
  * that is dropping SYN-ACKs: measured against one remote eepsite, five of six
  * handshakes to a peer completed in 647-1704 ms while the sixth retransmitted a
- * SYN every ~916 ms for 10,446 ms, and the send-count budget alone allowed up to
- * the caller's full 39,650 ms window. The wall-clock bound is what lets the
+ * SYN every ~916 ms for 10,446 ms, and the send-count budget alone allowed up
+ * to the caller's full 39,650 ms window. The wall-clock bound is what lets the
  * caller's retry loop — which opens a fresh connection, and so a fresh outbound
  * tunnel — get to run.
+ *
+ * <p>The first shipped bound was 4 s measured from connection creation, and it
+ * tore down 5,444 handshakes against 1,046 successful opens: the give-ups landed
+ * on connects that had sent one or two SYNs and had not been answered, because
+ * the clock included route lookup, LeaseSet fetch and the delayed-SYN wait. Both
+ * halves are pinned here.
  *
  * @since 0.9.72+
  */
 public class ConnectionSynPhaseBudgetTest {
 
-    /** The measured stall's inputs: no RTT sample, 916 ms retransmit interval. */
-    private static final int MEASURED_RTT = -1;
+    /** The measured stall's inputs: no peer RTT evidence, 916 ms interval. */
+    private static final int NO_RTT = -1;
 
     private static final int MEASURED_INTERVAL_MS = 916;
 
@@ -46,58 +53,73 @@ public class ConnectionSynPhaseBudgetTest {
         assertEquals(0, Connection.computeSynPhaseBudgetMs(-1, 458, MEASURED_INTERVAL_MS));
     }
 
-    // ---------- sized from the live interval when there is no RTT sample ----------
+    // ---------- the floor outlasts a working handshake ----------
 
     /**
-     * The measured case: the peer has never been acknowledged, so there is no RTT
-     * sample and the budget is the probe count at the live 916 ms interval —
-     * 3,664 ms, under the floor, so the floor wins and the handshake is cut off at
-     * 4 s instead of grinding to 10,446 ms.
+     * The floor is 8 s, not the 4 s that produced 5,444 give-ups against 1,046
+     * opens. It has to cover two of the widest observed inter-SYN intervals, 4 s
+     * from a 2 s peer RTT at the 200% headroom, and stay well above the slowest
+     * healthy handshake measured on a warm router, 1,704 ms.
      */
     @Test
-    public void testMeasuredStallIsCutByTheFloor() {
-        long budget = Connection.computeSynPhaseBudgetMs(MEASURED_WINDOW_MS,
-                                                         MEASURED_RTT, MEASURED_INTERVAL_MS);
+    public void testFloorIsTwoWideIntervals() {
+        assertEquals(8_000, Connection.SYN_PHASE_BUDGET_MIN_MS);
+        assertEquals(Connection.SYN_PHASE_BUDGET_MIN_MS,
+                     Connection.computeSynPhaseBudgetMs(MEASURED_WINDOW_MS, NO_RTT, 2_000));
+        assertTrue("the floor must outlast a healthy handshake",
+                   Connection.SYN_PHASE_BUDGET_MIN_MS > 1_704);
+    }
+
+    /** A narrow interval earns only its probes, so the floor governs the fast path. */
+    @Test
+    public void testMeasuredStallTakesTheFloor() {
+        long budget = Connection.computeSynPhaseBudgetMs(MEASURED_WINDOW_MS, NO_RTT,
+                                                         MEASURED_INTERVAL_MS);
         assertEquals(Connection.SYN_PHASE_BUDGET_MIN_MS, budget);
-        assertEquals(4_000, budget);
+        assertEquals(8_000, budget);
         assertTrue("must fire well before the measured 10,446ms stall", budget < 10_446);
     }
 
-    /** A wide interval earns its probes: 4 x 2,000 ms is above the floor. */
+    /** A wide interval earns its probes: 4 x 4,000 ms is above the floor. */
     @Test
     public void testWideIntervalEarnsProbes() {
-        assertEquals(8_000, Connection.computeSynPhaseBudgetMs(MEASURED_WINDOW_MS, -1, 2_000));
+        assertEquals(16_000, Connection.computeSynPhaseBudgetMs(MEASURED_WINDOW_MS, NO_RTT, 4_000));
     }
 
     /** A zero or negative interval cannot earn probes, so the floor is the budget. */
     @Test
     public void testZeroIntervalFallsToFloor() {
         assertEquals(Connection.SYN_PHASE_BUDGET_MIN_MS,
-                     Connection.computeSynPhaseBudgetMs(MEASURED_WINDOW_MS, -1, 0));
+                     Connection.computeSynPhaseBudgetMs(MEASURED_WINDOW_MS, NO_RTT, 0));
         assertEquals(Connection.SYN_PHASE_BUDGET_MIN_MS,
-                     Connection.computeSynPhaseBudgetMs(MEASURED_WINDOW_MS, -1, -500));
+                     Connection.computeSynPhaseBudgetMs(MEASURED_WINDOW_MS, NO_RTT, -500));
     }
 
-    // ---------- sized from the measured path once there is an RTT sample ----------
+    // ---------- sized from the peer's RTT evidence ----------
 
-    /** Ten round trips on a 458 ms path: 4,580 ms, above the floor. */
+    /**
+     * Ten round trips on a 2 s path: 20,000 ms. This is the case the shipped
+     * budget got backwards — a peer with a 2 s RTT sample was cut to the floor,
+     * because the RTT branch was gated on the connection's own ACK and a
+     * connection in the SYN phase has by definition never been acknowledged.
+     */
     @Test
-    public void testRttSizedBudget() {
-        assertEquals(4_580, Connection.computeSynPhaseBudgetMs(MEASURED_WINDOW_MS, 458, 916));
+    public void testPeerRttSizesTheBudget() {
+        assertEquals(20_000, Connection.computeSynPhaseBudgetMs(MEASURED_WINDOW_MS, 2_000, 4_000));
     }
 
-    /** A fast path keeps the floor, so it is not cut off before one healthy handshake. */
+    /** A fast peer keeps the floor, so it is not cut off before one healthy handshake. */
     @Test
-    public void testFastPathKeepsTheFloor() {
-        // 10 x 50 ms = 500 ms, far under the 4 s floor.
+    public void testFastPeerKeepsTheFloor() {
+        // 10 x 50 ms = 500 ms, far under the 8 s floor.
         assertEquals(Connection.SYN_PHASE_BUDGET_MIN_MS,
                      Connection.computeSynPhaseBudgetMs(MEASURED_WINDOW_MS, 50, 750));
     }
 
-    /** A slow path gets proportionally more time. */
+    /** A mid-range peer below the floor's reach still gets the floor. */
     @Test
-    public void testSlowPathScales() {
-        assertEquals(12_000, Connection.computeSynPhaseBudgetMs(MEASURED_WINDOW_MS, 1_200, 1_832));
+    public void testMidRttTakesTheFloor() {
+        assertEquals(8_000, Connection.computeSynPhaseBudgetMs(MEASURED_WINDOW_MS, 458, 916));
     }
 
     /** The budget never runs past the window it lives inside. */
@@ -107,12 +129,31 @@ public class ConnectionSynPhaseBudgetTest {
         assertEquals(1, Connection.computeSynPhaseBudgetMs(1, 1_200, 1_832));
     }
 
-    /** The floor is below the slowest healthy handshake measured on the same peer. */
+    // ---------- the clock is the SYN packet, not the connection ----------
+
+    /** The SYN packet's own age is what the budget is charged against. */
     @Test
-    public void testFloorExceedsSlowestHealthyHandshake() {
-        // Healthy handshakes to that peer: 647, 734, 834, 890, 1704 ms.
-        assertTrue("the floor must outlast a healthy handshake",
-                   Connection.SYN_PHASE_BUDGET_MIN_MS > 1_704);
+    public void testAgeFromSynPacket() {
+        assertEquals(5_000, Connection.synPhaseAgeMs(10_000, 5_000));
+        assertEquals(0, Connection.synPhaseAgeMs(5_000, 5_000));
+    }
+
+    /**
+     * No packet clock means no age, so the budget never fires. A connect that
+     * spent 30 s on route lookup and the delayed-SYN path must not be charged
+     * for it: that is what made 473 give-ups land on a connection that had sent
+     * exactly one SYN.
+     */
+    @Test
+    public void testNoPacketClockMeansNoAge() {
+        assertEquals(0, Connection.synPhaseAgeMs(10_000, 0));
+        assertEquals(0, Connection.synPhaseAgeMs(10_000, -1));
+    }
+
+    /** A clock in the future cannot produce a negative age. */
+    @Test
+    public void testAgeIsClampedAtZero() {
+        assertEquals(0, Connection.synPhaseAgeMs(1_000, 5_000));
     }
 
     // ---------- the give-up decision ----------
@@ -127,23 +168,23 @@ public class ConnectionSynPhaseBudgetTest {
     /** The boundary is inclusive: spending the whole budget is spending it. */
     @Test
     public void testBoundaryIsInclusive() {
-        assertFalse(Connection.synPhaseBudgetExceeded(3_999, 4_000));
-        assertTrue(Connection.synPhaseBudgetExceeded(4_000, 4_000));
-        assertTrue(Connection.synPhaseBudgetExceeded(4_001, 4_000));
+        assertFalse(Connection.synPhaseBudgetExceeded(7_999, 8_000));
+        assertTrue(Connection.synPhaseBudgetExceeded(8_000, 8_000));
+        assertTrue(Connection.synPhaseBudgetExceeded(8_001, 8_000));
     }
 
-    /** A fresh connection is never expired. */
+    /** A fresh connect is never expired. */
     @Test
     public void testFreshConnectionIsNotExpired() {
-        assertFalse(Connection.synPhaseBudgetExceeded(0, 4_000));
-        assertFalse(Connection.synPhaseBudgetExceeded(-1, 4_000));
+        assertFalse(Connection.synPhaseBudgetExceeded(0, 8_000));
+        assertFalse(Connection.synPhaseBudgetExceeded(-1, 8_000));
     }
 
-    /** The probe count is a real budget, not a token gesture toward the stall. */
+    /** The constants the budget arithmetic is read from. */
     @Test
-    public void testProbeCountIsFour() {
+    public void testConstants() {
         assertEquals(4, Connection.SYN_PHASE_BUDGET_MIN_PROBES);
-        assertEquals(4_000, Connection.SYN_PHASE_BUDGET_MIN_MS);
+        assertEquals(8_000, Connection.SYN_PHASE_BUDGET_MIN_MS);
         assertEquals(1_000, Connection.SYN_PHASE_BUDGET_RTT_PCT);
     }
 }
