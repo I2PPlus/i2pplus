@@ -35,7 +35,11 @@ import java.util.SortedSet;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
@@ -142,6 +146,21 @@ public class Storage implements Closeable {
      */
     private final Set<TorrentFile> _copying = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
+    /**
+     * Runs the staging copies, bounded, so a torrent with many files completing
+     * at once queues them instead of starting a thread per file. Null when the
+     * staging feature is disabled, which includes every torrent created for
+     * seeding, since those are written straight to the data directory. Shut down
+     * by {@link #close()}.
+     */
+    private final ExecutorService _copyExecutor;
+
+    /**
+     * Copy buffer, one per copy-pool thread, so a torrent with many files
+     * completing allocates a buffer per thread rather than per file.
+     */
+    private static final ThreadLocal<byte[]> _copyBuf = new ThreadLocal<>();
+
     /** BEP 47 directory holding synthetic padding files; skipped when walking a source dir. */
     static final String PAD_DIR = ".pad";
 
@@ -202,6 +221,14 @@ public class Storage implements Closeable {
     /** Number of attempts to copy a completed file out of the staging directory. */
     private static final int MAX_COPY_RETRIES = 5;
 
+    /**
+     * Ceiling on how many files one torrent copies out of the staging directory
+     * at once. A many-file torrent finishing used to start one thread per file,
+     * and they all competed for the same disk, so the torrent stalled at the
+     * point it should have been finishing fastest.
+     */
+    private static final int MAX_COPY_THREADS = 3;
+
     /** Delay in milliseconds between copy attempts. */
     private static final long COPY_RETRY_DELAY = 30 * 1000;
 
@@ -237,6 +264,7 @@ public class Storage implements Closeable {
         _torrentFiles = new ArrayList<>(sz);
         _preserveFileNames = preserveFileNames;
         _stagingBase = getStagingBase(_util.getTempDirProp(), getBaseName(), metainfo);
+        _copyExecutor = _stagingBase == null ? null : newCopyExecutor(copyThreads(sz));
     }
 
     /**
@@ -315,6 +343,7 @@ public class Storage implements Closeable {
         _preserveFileNames = true;
         // New torrents are created directly in the data directory, no staging.
         _stagingBase = null;
+        _copyExecutor = null;
         // Create names, rafs and lengths arrays.
         _torrentFiles = getFiles(baseFile, filters);
 
@@ -479,6 +508,11 @@ public class Storage implements Closeable {
      * with many files, and there is no periodic sweep running yet because the Storage has not
      * been handed to a PeerCheckerTask.
      *
+     * <p>Each piece is hashed in windows capped at {@link #VERIFY_BUFSIZE}, the
+     * same window the verify pass uses: a whole-piece buffer is up to
+     * {@link #MAX_PIECE_SIZE}, 64 MB, and allocating one here is an out-of-memory
+     * error on a small heap at the moment a torrent is added.
+     *
      * @return the concatenated 20-byte SHA-1 hash of every piece
      * @throws IOException if a file cannot be read while hashing
      */
@@ -488,12 +522,11 @@ public class Storage implements Closeable {
 
         byte[] piece_hashes = new byte[20 * pieces];
 
-        byte[] piece = new byte[piece_size];
+        byte[] buf = new byte[Math.min(piece_size, VERIFY_BUFSIZE)];
         try {
             for (int i = 0; i < pieces; i++) {
-                int length = getUncheckedPiece(i, piece, 0, getPieceLength(i), true);
-                digest.update(piece, 0, length);
-                digest.digest(piece_hashes, 20 * i, 20);
+                digestPiece(digest, this::readWindow, i, getPieceLength(i), buf, piece_hashes,
+                            20 * i);
                 bitfield.set(i);
             }
         } catch (DigestException de) {
@@ -504,6 +537,86 @@ public class Storage implements Closeable {
             closeAllRAFs();
         }
         return piece_hashes;
+    }
+
+    /**
+     * Reads one window of a piece for the creation-time hash pass, closing the
+     * file handle behind it so no handle outlives the window that read it.
+     *
+     * @param piece the piece to read from
+     * @param buf the destination buffer, filled from index 0
+     * @param begin the offset within the piece to start reading at
+     * @param length the number of bytes to read
+     * @return the number of bytes read
+     * @throws IOException if the window cannot be read
+     * @since 0.9.72+
+     */
+    private int readWindow(int piece, byte[] buf, int begin, int length) throws IOException {
+        return getUncheckedPiece(piece, buf, begin, length, true);
+    }
+
+    /**
+     * Supplies the bytes of one piece window, so {@link #digestPiece} can be
+     * tested against an in-memory source as well as against disk.
+     *
+     * @since 0.9.72+
+     */
+    interface PieceWindowReader {
+        /**
+         * Fill buf[0] through buf[length - 1] with the piece's bytes starting at
+         * begin.
+         *
+         * @param piece the piece to read from
+         * @param buf the destination buffer, filled from index 0
+         * @param begin the offset within the piece to start reading at
+         * @param length the number of bytes to read
+         * @return the number of bytes read
+         * @throws IOException if the window cannot be read
+         */
+        int read(int piece, byte[] buf, int begin, int length) throws IOException;
+    }
+
+    /**
+     * Hash one piece into the digest and write its 20-byte hash into hashes at
+     * offset, reading the piece in windows of at most buf.length bytes.
+     * <p>
+     * The windows must tile the piece exactly, in order, with a short final
+     * window: a window skipped, repeated, or read out of order hashes the wrong
+     * bytes, and every file of the torrent is then re-downloaded as the hash
+     * check rejects it.
+     *
+     * @param digest the digest fed with the piece's bytes; it is reset by the
+     *               write of the hash
+     * @param reader the source of the piece's bytes
+     * @param piece the piece to hash
+     * @param pieceLength the number of bytes in this piece
+     * @param buf the window buffer; its length is the window size
+     * @param hashes where to write the 20-byte hash
+     * @param offset the byte offset in hashes to write at
+     * @throws IOException if a window cannot be read, or is read short
+     * @throws DigestException if the digest cannot write its output
+     * @since 0.9.72+
+     */
+    static void digestPiece(MessageDigest digest, PieceWindowReader reader, int piece,
+                            int pieceLength, byte[] buf, byte[] hashes, int offset)
+                            throws IOException, DigestException {
+        for (int begin = 0; begin < pieceLength; begin += buf.length) {
+            int length = Math.min(buf.length, pieceLength - begin);
+            int read = reader.read(piece, buf, begin, length);
+            if (read != length) {
+                throw new IOException(
+                        "Short read hashing piece "
+                                + piece
+                                + ": "
+                                + read
+                                + " of "
+                                + length
+                                + " bytes at "
+                                + begin);
+            }
+            digest.update(buf, 0, length);
+        }
+        digest.digest(hashes, offset, 20);
     }
 
     /**
@@ -2440,10 +2553,18 @@ public class Storage implements Closeable {
 
     /**
      * Closes the Storage and makes sure that all RandomAccessFiles are closed. The Storage is
-     * unusable after this.
+     * unusable after this. Queued staging copies are dropped, and the copy pool
+     * is stopped, before the handles go away.
      */
     @Override
     public void close() throws IOException {
+        ExecutorService executor = _copyExecutor;
+        if (executor != null) {
+            // Stop the copies first: a copy reads the file's open RAF, so a
+            // queued copy starting after the handles are closed would fail, and
+            // shutdownNow() drops what is still queued.
+            executor.shutdownNow();
+        }
         for (TorrentFile tf : _torrentFiles) {
             try {
                 tf.closeRAF();
@@ -2751,9 +2872,9 @@ public class Storage implements Closeable {
     }
 
     /**
-     * Starts copying a completed file from the staging directory to the data
-     * directory on a background thread, unless a copy for the file is already
-     * running.
+     * Queues copying a completed file from the staging directory to the data
+     * directory on the bounded copy pool, unless a copy for the file is already
+     * running or queued.
      *
      * <p>The staging file is read with its open RAF handle; the handle is
      * closed before the file is renamed away, so a concurrent write to the
@@ -2769,29 +2890,140 @@ public class Storage implements Closeable {
                 return;
             }
         }
-        I2PAppThread t =
-                new I2PAppThread("SnarkStorageCopy-" + tf.name) {
-                    @Override
-                    public void run() {
-                        copyToFinal(tf);
-                    }
-                };
-        t.setDaemon(true);
-        t.start();
+        ExecutorService executor = _copyExecutor;
+        if (executor == null) {
+            // staging is disabled for this storage; checkFileCompletions()
+            // checks too, and the claim must not be left behind
+            _copying.remove(tf);
+            return;
+        }
+        try {
+            executor.execute(new CopyTask(tf));
+        } catch (RejectedExecutionException ree) {
+            // close() ran while this copy was queued. Release the claim so a
+            // later pass can try the file again, and keep the exception out of
+            // the piece-write path that called us.
+            _copying.remove(tf);
+            if (_log.shouldWarn()) {
+                _log.warn(
+                        "[Snark] Not copying "
+                                + tf.name
+                                + " to the data directory -> The torrent is closing");
+            }
+        }
+    }
+
+    /**
+     * How many staging-copy threads a torrent with fileCount files needs. One
+     * file needs one thread; past a handful of files the disk, not the thread
+     * count, is the limit, so the pool stays at {@link #MAX_COPY_THREADS}.
+     *
+     * @param fileCount the number of files in the torrent
+     * @return the pool size, at least 1, at most {@link #MAX_COPY_THREADS}
+     * @since 0.9.72+
+     */
+    static int copyThreads(int fileCount) {
+        return Math.max(1, Math.min(MAX_COPY_THREADS, fileCount));
+    }
+
+    /**
+     * The pool that runs the staging copies. The queue is unbounded, and that is
+     * safe here: {@link #_copying} admits one task per file, so the queue can
+     * never exceed the torrent's file count, and a queued copy is never dropped
+     * on its way to a completed file's destination.
+     *
+     * @param threads the pool size, from {@link #copyThreads(int)}
+     * @return a pool of daemon threads, to be shut down by {@link #close()}
+     * @since 0.9.72+
+     */
+    static ExecutorService newCopyExecutor(int threads) {
+        return Executors.newFixedThreadPool(threads, new CopyThreadFactory());
+    }
+
+    /**
+     * Take this thread's staging-copy buffer, allocating it on first use.
+     *
+     * @return a buffer of {@link #BUFSIZE} bytes, reused for every copy this
+     *         thread runs
+     * @since 0.9.72+
+     */
+    private static byte[] copyBuffer() {
+        byte[] buf = _copyBuf.get();
+        if (buf == null) {
+            buf = new byte[BUFSIZE];
+            _copyBuf.set(buf);
+        }
+        return buf;
+    }
+
+    /**
+     * Names and daemonizes the staging-copy threads, so a copy never keeps the
+     * JVM up on exit and the thread is identifiable in the logs.
+     *
+     * @since 0.9.72+
+     */
+    static class CopyThreadFactory implements ThreadFactory {
+        /**
+         * A factory whose thread names count up from 1.
+         */
+        CopyThreadFactory() {}
+
+        /** Sequence appended to the thread name, one per thread created. */
+        private final AtomicInteger _seq = new AtomicInteger();
+
+        /**
+         * Create the next copy thread.
+         *
+         * @param r the copy work to run
+         * @return a daemon {@link I2PAppThread} with a unique name
+         */
+        @Override
+        public Thread newThread(Runnable r) {
+            return new I2PAppThread(r, "SnarkStorageCopy-" + _seq.incrementAndGet(), true);
+        }
+    }
+
+    /**
+     * One staging copy, queued on {@link #_copyExecutor}.
+     *
+     * @since 0.9.72+
+     */
+    private class CopyTask implements Runnable {
+        /** The completed file to move out of the staging directory. */
+        private final TorrentFile _tf;
+
+        /**
+         * Name the file this task copies.
+         *
+         * @param tf the completed file to copy
+         */
+        CopyTask(TorrentFile tf) {
+            _tf = tf;
+        }
+
+        /**
+         * Copy the file with this thread's buffer, releasing the file's claim on
+         * the way out so a later pass can retry it.
+         */
+        @Override
+        public void run() {
+            copyToFinal(_tf, copyBuffer());
+        }
     }
 
     /**
      * Copies the file to the data directory with a bounded number of retries
      * in case the destination is temporarily unavailable. Always runs on a
-     * daemon thread.
+     * copy-pool thread.
      *
      * @param tf the completed file
+     * @param buf the calling thread's copy buffer
      * @since 0.9.71+
      */
-    private void copyToFinal(TorrentFile tf) {
+    private void copyToFinal(TorrentFile tf, byte[] buf) {
         try {
             for (int i = 0; i < MAX_COPY_RETRIES; i++) {
-                if (copyOnce(tf)) {
+                if (copyOnce(tf, buf)) {
                     return;
                 }
                 sleep();
@@ -2813,10 +3045,11 @@ public class Storage implements Closeable {
      * Copies the file from the staging directory to the data directory once.
      *
      * @param tf the completed file
+     * @param buf the copy buffer, from {@link #copyBuffer()}
      * @return true if the file was moved, false if it must be retried
      * @since 0.9.71+
      */
-    private boolean copyOnce(TorrentFile tf) {
+    private boolean copyOnce(TorrentFile tf, byte[] buf) {
         File finalFile = tf.finalFile;
         File workFile = tf.RAFfile;
         File tmp;
@@ -2837,7 +3070,7 @@ public class Storage implements Closeable {
             if (tmp.exists() && !tmp.delete()) {
                 throw new IOException("Could not delete stale temp file " + tmp);
             }
-            if (!copyFile(workFile, tmp)) {
+            if (!copyFile(workFile, tmp, buf)) {
                 return false;
             }
             if (!tmp.renameTo(finalFile)) {
@@ -2873,16 +3106,17 @@ public class Storage implements Closeable {
      *
      * @param src the file to read
      * @param dst the file overwritten with the copy
+     * @param buf the copy buffer, from {@link #copyBuffer()}, so a torrent with
+     *            many files completing allocates a buffer per thread, not per file
      * @return true on success, false on transient failure (e.g. disk full)
      * @since 0.9.71+
      */
-    private boolean copyFile(File src, File dst) {
+    private boolean copyFile(File src, File dst, byte[] buf) {
         InputStream in = null;
         OutputStream out = null;
         try {
             in = new FileInputStream(src);
             out = new FileOutputStream(dst);
-            byte[] buf = new byte[BUFSIZE];
             int read;
             while ((read = in.read(buf)) >= 0) {
                 out.write(buf, 0, read);
