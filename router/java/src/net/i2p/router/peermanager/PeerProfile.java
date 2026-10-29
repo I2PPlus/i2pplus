@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
+import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.router.CommSystemFacade;
 import net.i2p.router.RouterContext;
@@ -967,7 +968,7 @@ public class PeerProfile {
 
         if (_log.shouldInfo()) {
             _log.info("Timed tunnel test for [" + _peer.toBase64().substring(0,6) +
-                      "] updated to " + (_tunnelTestResponseTimeAvg / 1000) + "s");
+                      "] updated to " + DataHelper.formatDuration((long) _tunnelTestResponseTimeAvg));
         }
     }
 

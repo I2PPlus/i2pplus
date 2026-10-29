@@ -1770,14 +1770,14 @@ public class Router implements RouterClock.ClockShiftListener {
             task.run();
         } catch (Throwable t) {
             if (debug) {
-                _log.error("[" + name + "] ", t);
+                _log.error("Shutdown task " + name + " failed", t);
             } else if (advanced) {
                 String msg = t.getMessage();
                 if ("TunnelDispatcher".equals(name) && msg != null) {
                     msg = msg.replace("Cannot invoke \"net.i2p.router.tunnel.TunnelGateway$Receiver.getSendTo()\"",
                                       "Cannot send to TunnelGateway");
                 }
-                _log.error("[" + name + "] " + (msg != null ? msg : ""));
+                _log.error("Shutdown task " + name + " failed -> " + (msg != null ? msg : t.getClass().getName()));
             }
         }
     }
@@ -1998,8 +1998,8 @@ public class Router implements RouterClock.ClockShiftListener {
         _eventLog.addEvent(EventLog.CLOCK_SHIFT, Long.toString(delta) + "ms");
         // update the routing key modifier
         _context.routerKeyGenerator().generateDateBasedModData();
-        if (delta > 0) {_log.error("Restarting after large clock shift forward by " + DataHelper.formatDuration(delta) + "ms");}
-        else {_log.error("Restarting after large clock shift backward by " + DataHelper.formatDuration(0 - delta) + "ms");}
+        if (delta > 0) {_log.error("Restarting after a large clock shift forward by " + DataHelper.formatDuration(delta));}
+        else {_log.error("Restarting after a large clock shift backward by " + DataHelper.formatDuration(0 - delta));}
         restart();
     }
 

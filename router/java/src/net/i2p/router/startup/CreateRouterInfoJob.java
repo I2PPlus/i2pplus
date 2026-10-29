@@ -84,7 +84,7 @@ public class CreateRouterInfoJob extends JobImpl {
 
     @Override
     public void runJob() {
-        _log.debug("Creating the new router info");
+        _log.debug("Creating the new RouterInfo");
         // create a new router info and store it where LoadRouterInfoJob looks
         synchronized (getContext().router().routerInfoFileLock) {
             createRouterInfo();
@@ -188,16 +188,16 @@ public class CreateRouterInfoJob extends JobImpl {
             ctx.keyManager().setKeys(pubkey, privkey, signingPubKey, signingPrivKey);
 
             if (_log.shouldInfo())
-                _log.info("Router info created and stored at " + ifile.getAbsolutePath() + " with private keys stored at " + kfile.getAbsolutePath() + " [" + info + "]");
+                _log.info("RouterInfo created and stored at " + ifile.getAbsolutePath() + " with private keys stored at " + kfile.getAbsolutePath() + " [" + info + "]");
             ctx.router().eventLog().addEvent(EventLog.REKEYED, ident.calculateHash().toBase64());
         } catch (GeneralSecurityException gse) {
-            _log.log(Log.CRIT, "Error building the new router information", gse);
+            _log.log(Log.CRIT, "Error building the new RouterInfo", gse);
             info = null;
         } catch (DataFormatException dfe) {
-            _log.log(Log.CRIT, "Error building the new router information", dfe);
+            _log.log(Log.CRIT, "Error building the new RouterInfo", dfe);
             info = null;
         } catch (IOException ioe) {
-            _log.log(Log.CRIT, "Error writing out the new router information", ioe);
+            _log.log(Log.CRIT, "Error writing out the new RouterInfo", ioe);
             info = null;
         }
         return info;

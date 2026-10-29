@@ -73,10 +73,10 @@ public class XMLParser extends JaxpParser {
 
         if (_log.shouldDebug()) {
             String val = domNodeValue != null ?
-                         " = \"" + domNodeValue.replace("\n", "\\n").replace("\r", "\\r") + '"' :
+                         " text: \"" + domNodeValue.replace("\n", "\\n").replace("\r", "\\r") + '"' :
                          "";
-            _log.debug("[" + rank + "] ELEM : \"" + domNodeName + '"' + val +
-                       " type = " + domNodeType + " with " + arrrsLen + " attrs");
+            _log.debug("XML element at depth " + rank + " -> " + domNodeName + val +
+                       "\n* Type: " + domNodeType + " * Attributes: " + arrrsLen);
         }
 
         // I2P -

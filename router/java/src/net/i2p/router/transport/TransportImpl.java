@@ -523,9 +523,10 @@ public abstract class TransportImpl implements Transport {
         }
 
         if (msToSend > 1500 && debug) {
-            _log.debug("[" + style + "] afterSend slow: " + (sendSuccessful ? "Success! " : "FAIL! ") +
-                       String.format("\n* %d byte %s[MsgID %d] to [%s] took %s", msg.getMessageSize(),
-                                     msg.getMessageType(), msg.getMessageId(), peerHash, DataHelper.formatDuration(msToSend)));
+            _log.debug("[" + style + "] -> Slow send: " + (sendSuccessful ? "Succeeded" : "Failed")
+                       + "\n* " + msg.getMessageSize() + " byte " + msg.getMessageType()
+                       + " [MsgID " + msg.getMessageId() + "] to [" + peerHash
+                       + "] took " + DataHelper.formatDuration(msToSend));
         }
 
         long lifetime = msg.getLifetime();
@@ -860,7 +861,7 @@ public abstract class TransportImpl implements Transport {
             refreshCurrentIPv4();
         }
         if (_log.shouldInfo()) {
-             _log.info("[" + getStyle() + "] now has " + sz +
+             _log.info("[" + getStyle() + "] -> Now has " + sz +
                        (sz == 1 ? " address" : " addresses"));
         }
         if (_listener != null) {_listener.transportAddressChanged();}
@@ -886,10 +887,10 @@ public abstract class TransportImpl implements Transport {
         }
         if (changed) {
             if (_log.shouldInfo())
-                _log.info("[" + getStyle() + "] now has " + sz +
+                _log.info("[" + getStyle() + "] -> Now has " + sz +
                           (sz == 1 ? " address" : " addresses"));
             if (_listener != null) {_listener.transportAddressChanged();}
-        } else if (_log.shouldWarn()) {_log.warn("[" + getStyle() + "] No addresses removed");}
+        } else if (_log.shouldWarn()) {_log.warn("[" + getStyle() + "] -> No addresses removed");}
     }
 
     /**
@@ -917,10 +918,10 @@ public abstract class TransportImpl implements Transport {
         }
         if (changed) {
             if (_log.shouldInfo())
-                _log.info("[" + getStyle() + "] now has " + sz +
+                _log.info("[" + getStyle() + "] -> Now has " + sz +
                           (sz == 1 ? " address" : " addresses"));
             if (_listener != null) {_listener.transportAddressChanged();}
-        } else if (_log.shouldWarn()) {_log.warn("[" + getStyle() + "] No addresses removed");}
+        } else if (_log.shouldWarn()) {_log.warn("[" + getStyle() + "] -> No addresses removed");}
     }
 
     /**
@@ -1299,7 +1300,7 @@ public abstract class TransportImpl implements Transport {
             Long now = Long.valueOf(_context.clock().now());
             _wasUnreachableEntries.put(peer, now);
             if (_log.shouldDebug()) {
-                _log.debug("[" +  this.getStyle() + "] Adding [" + peer.toBase64().substring(0,6) +  "] to Unreachable list");
+                _log.debug("[" + this.getStyle() + "] -> Adding [" + peer.toBase64().substring(0,6) + "] to the unreachable list");
             }
         } else {_wasUnreachableEntries.remove(peer);}
     }

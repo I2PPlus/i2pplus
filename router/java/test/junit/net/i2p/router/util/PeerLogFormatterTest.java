@@ -226,7 +226,7 @@ public class PeerLogFormatterTest {
         Map<String, Integer> counts = new LinkedHashMap<>();
         counts.put("unreachable", 5);
         counts.put("no-routerinfo", 2);
-        assertEquals("\n* Excluded: 7\n* Unreachable: 5 * No router info: 2",
+        assertEquals("\n* Excluded: 7\n* Unreachable: 5 * No RouterInfo: 2",
                      PeerLogFormatter.reasonsTally(counts));
     }
 
@@ -258,7 +258,7 @@ public class PeerLogFormatterTest {
     @Test
     public void testReasonLabelFallback() {
         assertEquals("Unreachable", PeerLogFormatter.reasonLabel("unreachable"));
-        assertEquals("No router info", PeerLogFormatter.reasonLabel("no-routerinfo"));
+        assertEquals("No RouterInfo", PeerLogFormatter.reasonLabel("no-routerinfo"));
         assertEquals("some-new-reason", PeerLogFormatter.reasonLabel("some-new-reason"));
     }
 

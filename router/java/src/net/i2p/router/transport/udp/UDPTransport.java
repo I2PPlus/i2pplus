@@ -1563,14 +1563,14 @@ public class UDPTransport extends TransportImpl {
             // if the port is the only issue, don't call markUnreachable()
             if (ourPort < 1024 || ourPort > 65535 || !isValid(ourIP)) {
                 if (_log.shouldWarn()) {
-                    _log.warn("[" + from.toBase64().substring(0,6) + "] told us we have an invalid IP - "
-                               + Addresses.toString(ourIP, ourPort) + ". Let's throw tomatoes at them!");
+                    _log.warn("[" + from.toBase64().substring(0,6) + "] reported our address as invalid -> Marking it unreachable"
+                              + "\n* Address: " + Addresses.toString(ourIP, ourPort));
                 }
             markUnreachable(from);
             } else {
-                _log.logAlways(Log.WARN, "[" + from.toBase64().substring(0,6) + "] told us we have an invalid port "
+                _log.logAlways(Log.WARN, "[" + from.toBase64().substring(0,6) + "] reported our port as invalid: "
                                          + ourPort
-                                         + "\n* Check NAT/firewall configuration, the IANA recommended dynamic outside port range is 49152-65535");
+                                         + "\n* Check the NAT/firewall configuration, the IANA recommended dynamic outside port range is 49152-65535");
             }
             _context.banlist().banlistRouter(from, "Reported our IP/port as invalid", STYLE);
             _banLogger.logBan(from, _context, "Reported our IP/port as invalid", 4*60*60*1000L);

@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;
 import net.i2p.data.i2np.DatabaseStoreMessage;
@@ -208,13 +209,14 @@ public class PeerTestJob extends JobImpl {
         _manager = manager;
         _keepTesting = true;
         // Schedule initial test with adaptive delay
-        this.getTiming().setStartAfter(getContext().clock().now() + getPeerTestDelay());
+        long startDelay = getPeerTestDelay();
+        this.getTiming().setStartAfter(getContext().clock().now() + startDelay);
         getContext().jobQueue().addJob(this);
         long uptime = getContext().router().getUptime();
         if (uptime < 3*60*1000L) {
-            if (_log.shouldInfo()) {_log.info("Peer testing will commence in 3 minutes...");}
+            if (_log.shouldInfo()) {_log.info("Peer testing will commence in " + DataHelper.formatDuration(startDelay));}
         } else if (_log.shouldInfo()) {
-            _log.info("Initialising peer tests -> Timeout: " + getTestTimeout() + "ms per peer");
+            _log.info("Initialising peer tests -> Timeout: " + DataHelper.formatDuration(getTestTimeout()) + " per peer");
         }
     }
 
@@ -732,7 +734,7 @@ public class PeerTestJob extends JobImpl {
          */
         private void handleTimeout(PeerData data, long timeLeft) {
             if (_log.shouldInfo())
-                _log.info("[" + _shortHash + "] Test reply took too long: " + (0-timeLeft) + "ms too slow");
+                _log.info("[" + _shortHash + "] -> Test reply took too long: " + DataHelper.formatDuration(0 - timeLeft) + " over budget");
 
             getContext().statManager().addRateData("peer.testTooSlow", 0 - timeLeft);
 
@@ -866,10 +868,10 @@ public class PeerTestJob extends JobImpl {
             long responseTime = getContext().clock().now() - _testBegin;
             String shortHash = _peer.getIdentity().getHash().toBase64().substring(0, 6);
             if (_log.shouldDebug()) {
-                _log.debug("[" + shortHash + "] Test succeeded in " +
-                           responseTime + "ms\n* " + _sendTunnel + "\n* " + _replyTunnel);
+                _log.debug("[" + shortHash + "] -> Test succeeded in " +
+                           DataHelper.formatDuration(responseTime) + "\n* " + _sendTunnel + "\n* " + _replyTunnel);
             } else if (_log.shouldInfo()) {
-                _log.info("[" + shortHash + "] Test succeeded in " + responseTime + "ms");
+                _log.info("[" + shortHash + "] -> Test succeeded in " + DataHelper.formatDuration(responseTime));
             }
             getContext().profileManager().dbLookupSuccessful(_peer.getIdentity().getHash(), responseTime);
             // we know the tunnels are working

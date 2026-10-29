@@ -1100,7 +1100,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     @Override
     public void notifyAttemptFailed(UpdateTask task, String reason, Throwable t) {
         if (_log.shouldWarn()) {
-            _log.warn("[" + task.getType() + "] Update or check failed " + reason, t);
+            _log.warn("[" + task.getType() + "] -> Update or check failed\n* Reason: " + reason, t);
         }
     }
 

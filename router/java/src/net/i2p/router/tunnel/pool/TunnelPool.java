@@ -5006,7 +5006,7 @@ public class TunnelPool {
         }
         _context.simpleTimer2().addEvent(new DeferredRefreshEvent(), delay);
         if (_log.shouldDebug()) {
-            _log.debug(toString() + " -> Scheduled deferred LeaseSet refresh in " + (delay / 1000) + "s");
+            _log.debug(toString() + " -> Scheduled a deferred LeaseSet refresh in " + DataHelper.formatDuration(delay));
         }
     }
 

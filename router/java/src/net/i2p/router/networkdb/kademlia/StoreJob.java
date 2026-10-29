@@ -127,7 +127,7 @@ abstract class StoreJob extends JobImpl {
             else {_connectMask = ConnectChecker.ANY_V4;}
         }
         if (_log.shouldDebug()) {
-            _log.debug("[" + _facade + "] New store job for \n" + data, new Exception("I did it"));
+            _log.debug("[" + _facade + "] -> New store job\n* " + data, new Exception("Store job created"));
         }
     }
 
@@ -218,12 +218,12 @@ abstract class StoreJob extends JobImpl {
         if ((closestHashes == null) || (closestHashes.isEmpty())) {
             if (_state.getPendingCount() <= 0) {
                 if (_log.shouldInfo()) {
-                    _log.info("[" + _facade + "] No more peers left and none pending");
+                    _log.info("[" + _facade + "] -> No more peers left and none pending");
                 }
                 fail();
             } else {
                 if (_log.shouldInfo()) {
-                    _log.info("[" + _facade + "] No more peers left but some are pending, waiting...");
+                    _log.info("[" + _facade + "] -> No more peers left, but some are pending, waiting");
                 }
             }
         } else {
@@ -272,7 +272,7 @@ abstract class StoreJob extends JobImpl {
             }
             if (queued == 0 && _state.getPendingCount() <= 0) {
                 if (_log.shouldInfo()) {
-                    _log.info("[" + _facade + "] No more peers left after skipping " + skipped + " and none pending");
+                    _log.info("[" + _facade + "] -> No more peers left after skipping " + skipped + " and none pending");
                 }
                 getContext().jobQueue().addJob(new WaitJob(getContext())); // queue a job to go around again rather than recursing
             }
@@ -358,8 +358,8 @@ abstract class StoreJob extends JobImpl {
                 // and issue a warning.
                 sendStoreThroughExploratory(msg, peer, expiration);
                 if (_log.shouldWarn()) {
-                    _log.warn("[" + _facade + "] Sending RouterInfo store via Exploratory tunnels in client context to [" +
-                              peer.getIdentity().getHash().toBase64().substring(0,6) + "] with message " + msg);
+                    _log.warn("[" + _facade + "] -> Sending a RouterInfo store through exploratory tunnels in the client context"
+                              + "\n* To: [" + peer.getIdentity().getHash().toBase64().substring(0,6) + "] * Message: " + msg);
                 }
             }
             else if (ctx.commSystem().isEstablished(h) ||

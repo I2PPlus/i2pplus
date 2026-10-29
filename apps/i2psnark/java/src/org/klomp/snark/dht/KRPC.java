@@ -402,7 +402,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     private void explore(NID target, int maxNodes, long maxWait, int parallel) {
         List<NodeInfo> nodes = removeSelf(_knownNodes.findClosest(target, maxNodes), _myNodeInfo);
         if (nodes.isEmpty()) {
-            if (_log.shouldWarn()) _log.info("DHT is empty, cannot explore");
+            if (_log.shouldInfo()) _log.info("DHT is empty, cannot explore");
             return;
         }
         SortedSet<NodeInfo> toTry = new TreeSet<>(new NodeInfoComparator(target));

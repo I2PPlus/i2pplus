@@ -1246,7 +1246,7 @@ public class BuildHandler implements Runnable {
                 }
             } else if (ri == null) {
                 if (_log.shouldInfo()) {
-                    _log.info("Deferred lookup found no router info for [" +
+                    _log.info("Deferred lookup found no RouterInfo for [" +
                               _nextPeer.toBase64().substring(0, 6) + "] -> Request left pending");
                 }
                 if (_log.shouldDebug()) {
@@ -2343,7 +2343,7 @@ public class BuildHandler implements Runnable {
         long dropped = counts[2];
         long handled = replied + timedOut;
         int pct = handled > 0 ? (int) Math.round((double) timedOut * 100d / handled) : 0;
-        return "Next-hop contact: " + handled + " handled in " + (windowMs / 1000) + "s" +
+        return "Next-hop contact: " + handled + " handled in " + DataHelper.formatDuration(windowMs) +
                " * Replied: " + replied + " * Timed out: " + timedOut + " (" + pct + "%)" +
                " * Dropped: " + dropped +
                (pct >= 20 ? "\n* High unanswered rate -> Suspect unreachable/firewalled peers" : "");

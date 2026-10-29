@@ -752,9 +752,9 @@ public class SSLEepGet extends EepGet {
                     else ip = doh.lookup(host);
                     if (ip != null) {
                         // will be used below
-                        if (_log.shouldDebug()) _log.debug("DoH success: " + host + ' ' + ip);
+                        if (_log.shouldDebug()) _log.debug("DNS over HTTPS lookup succeeded for " + host + ' ' + ip);
                     } else {
-                        if (_log.shouldWarn()) _log.debug("DoH fail: " + host);
+                        if (_log.shouldWarn()) _log.warn("DNS over HTTPS lookup failed for " + host);
                     }
                 }
 

@@ -441,7 +441,9 @@ public class Blocklist {
         public void runJob() {
             clear();
             _lastExpired = System.currentTimeMillis();
-            if (_log.shouldDebug()) {_log.debug("Expiring blocklist entrys at" + _lastExpired);}
+            if (_log.shouldDebug()) {
+                _log.debug("Expired the blocklist entries -> Next pass in " + DataHelper.formatDuration(expireInterval()));
+            }
             super.requeue(expireInterval()); // schedule the next one
         }
     }

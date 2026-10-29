@@ -274,7 +274,7 @@ public class HostChecker {
         }
         _pingTaskFuture = _scheduler.scheduleAtFixedRate(new PingTask(), _pingInterval, _pingInterval, TimeUnit.MILLISECONDS);
         if (_log.shouldInfo()) {
-            _log.info("Rescheduled HostChecker cycle with a " + (_pingInterval / 60000) + " minute interval");
+            _log.info("Rescheduled the HostChecker cycle with a " + DataHelper.formatDuration(_pingInterval) + " interval");
         }
     }
 
@@ -665,7 +665,7 @@ public class HostChecker {
                 }
 
                 if (_log.shouldInfo()) {
-                    _log.info("HostChecker lset [SUCCESS] -> LeaseSet " + leaseSetTypes + " found for " + hostname +
+                    _log.info("HostChecker LeaseSet [SUCCESS] -> " + leaseSetTypes + " found for " + hostname +
                               (leaseSet.isCurrent(_context.clock().now()) ? "" : " (expired, but present)"));
                 }
 
@@ -689,7 +689,7 @@ public class HostChecker {
             }
 
             if (_log.shouldInfo()) {
-                _log.info("HostChecker lset [FAILURE] -> LeaseSet lookup error for " + hostname);
+                _log.info("HostChecker LeaseSet [FAILURE] -> Lookup error for " + hostname);
             }
 
             savePingResults();
@@ -726,7 +726,7 @@ public class HostChecker {
             }
 
             if (_log.shouldInfo()) {
-                _log.info("HostChecker lset [SUCCESS] -> LeaseSet " + leaseSetResult.leaseSetTypes + " found for " + hostname + ", continuing with ping...");
+                _log.info("HostChecker LeaseSet [SUCCESS] -> " + leaseSetResult.leaseSetTypes + " found for " + hostname + ", continuing with ping...");
             }
 
             PingResult pingResult = pingDestination(hostname, destination, leaseSetResult.leaseSetTypes, false);
@@ -862,7 +862,7 @@ public class HostChecker {
                 }
 
                 if (_log.shouldInfo()) {
-                    _log.info("HostChecker lset [FAILURE] -> No LeaseSet found for " + hostname);
+                    _log.info("HostChecker LeaseSet [FAILURE] -> Not found for " + hostname);
                 }
 
                 savePingResults();
@@ -910,8 +910,8 @@ public class HostChecker {
         PingResult existing = _pingResults.get(hostname);
         if (existing != null && existing.reachable && (now - existing.timestamp) < KEEP_UP_MS) {
             if (_log.shouldInfo()) {
-                _log.info("HostChecker lset [RETAINED] -> " + hostname + " still up (confirmed " +
-                          ((now - existing.timestamp) / 60000L) + "m ago)");
+                _log.info("HostChecker LeaseSet retained -> " + hostname + " is still up"
+                          + "\n* Confirmed " + DataHelper.formatDuration(now - existing.timestamp) + " ago");
             }
             return createPingResult(true, now, existing.responseTime, hostname, existing.leaseSetTypes);
         }

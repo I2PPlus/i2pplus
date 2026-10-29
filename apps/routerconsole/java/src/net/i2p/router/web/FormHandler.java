@@ -511,8 +511,8 @@ public abstract class FormHandler {
             (recent1 != null && recent1.equals(_nonce))) {return;}
 
         if (_log != null && _log.shouldDebug()) {
-            _log.debug("validate(): nonce FAIL nonce=" + _nonce + " session=" +
-                       (_session != null) + " method=" + _method);
+            _log.debug("Form nonce rejected -> Not in the session queue or the shared set"
+                       + "\n* Session present: " + (_session != null) + " * Method: " + _method);
         }
         addFormError(_t("Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit.") + ' ' +
                      _t("If the problem persists, verify that you have cookies enabled in your browser."), true);

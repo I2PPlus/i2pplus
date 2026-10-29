@@ -540,7 +540,8 @@ class ConnectionManager {
         }
         _refusalCounter.clear(h);
         if (_log.shouldInfo())
-            _log.info("Autobanning " + h.toBase32().substring(0, 6) + " for " + (ms / 60000L) + " minutes - " + why);
+            _log.info("Autobanning [" + h.toBase32().substring(0, 8) + "] for " + DataHelper.formatDuration(ms)
+                      + "\n* Reason: " + why);
         return true;
     }
 

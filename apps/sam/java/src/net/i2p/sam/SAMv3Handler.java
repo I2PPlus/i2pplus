@@ -184,14 +184,16 @@ class SAMv3Handler extends SAMv1Handler
      * @return true if the handler should continue processing commands
      */
     boolean processLine(String line) {
-        if (_log.shouldInfo())
-            _log.info("New message received: [" + line + ']');
+        if (_log.shouldInfo()) {
+            int spc = line.indexOf(' ');
+            _log.info("New SAMv3 command -> " + (spc > 0 ? line.substring(0, spc) : line));
+        }
         Properties props;
         try {
             props = SAMUtils.parseParams(line);
         } catch (SAMException e) {
             if (_log.shouldDebug())
-                _log.debug("Error parsing line: " + line, e);
+                _log.debug("Error parsing a SAMv3 command line -> " + line.length() + " bytes", e);
             writeString("SESSION STATUS RESULT=I2P_ERROR", "invalid command format");
             return true;
         }

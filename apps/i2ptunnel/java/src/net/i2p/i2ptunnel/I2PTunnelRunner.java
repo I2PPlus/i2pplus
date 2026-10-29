@@ -2590,7 +2590,7 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
             }
             removeRef();
             if (i2pReset) {
-                if (_log.shouldInfo()) {_log.warn("Received I2P reset, resetting socket...");}
+                if (_log.shouldWarn()) {_log.warn("Received an I2P reset -> Resetting the local socket");}
                 // Flush buffered data before RST to avoid truncated HTTP responses
                 if (out != null) {
                     try {out.flush();}
@@ -2605,7 +2605,7 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
                 _keepAliveI2P = false;
                 _keepAliveSocket = false;
             } else if (sockReset) {
-                if (_log.shouldInfo()) {_log.warn("Received socket reset, resetting I2P socket...");}
+                if (_log.shouldWarn()) {_log.warn("Received a socket reset -> Resetting the I2P socket");}
                 // Flush buffered data before closing to avoid truncated HTTP responses
                 if (out != null) {
                     try {out.flush();}

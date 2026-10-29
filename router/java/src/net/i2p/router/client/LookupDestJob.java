@@ -137,7 +137,7 @@ class LookupDestJob extends JobImpl {
                             }
                             name = null;
                         } catch (RuntimeException re) {
-                            if (_log.shouldWarn()) {_log.debug("Failed blinding conversion of " + name, re);}
+                            if (_log.shouldWarn()) {_log.warn("Failed the blinding conversion of " + name, re);}
                             name = null; // Do NOT lookup as a name, naming service will call us again and infinite loop
                             // h and name both null, runJob will fail immediately
                         }

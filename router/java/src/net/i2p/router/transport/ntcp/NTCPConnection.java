@@ -1510,7 +1510,7 @@ void noteEstablishmentRtt(int rttMs) {
     private void sendRouterInfo(RouterInfo ri, boolean shouldFlood) {
         // no synch needed, sendNTCP2() is synched
         if (_log.shouldDebug())
-            _log.debug("Sending router info for: " + ri.getHash() + " flood? " + shouldFlood);
+            _log.debug("Sending a RouterInfo for: " + ri.getHash() + " flood? " + shouldFlood);
         BlockPool pool = _blockPool.get();
         List<Block> blocks = pool.blocks;
         blocks.clear();

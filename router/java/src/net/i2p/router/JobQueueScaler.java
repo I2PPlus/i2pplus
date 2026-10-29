@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import net.i2p.data.DataHelper;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
@@ -1189,7 +1190,7 @@ class JobQueueScaler implements Runnable {
                 if (_log.shouldInfo()) {
                     _log.info("Circuit breaker open -> Scaling up disabled: " + _consecutiveFailedScaleUps
                               + " failed attempts * Jobs may be CPU-bound * Retry in "
-                              + (cooldown / 1000) + "s");
+                              + DataHelper.formatDuration(cooldown));
                 }
             }
         } else {

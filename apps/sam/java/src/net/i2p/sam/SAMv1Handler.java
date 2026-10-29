@@ -176,7 +176,8 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
                 msg = buf.toString();
 
                 if (_log.shouldInfo()) {
-                    _log.info("New message received: [" + msg + ']');
+                    int spc = msg.indexOf(' ');
+                    _log.info("New SAMv1 command -> " + (spc > 0 ? msg.substring(0, spc) : msg));
                 }
                 props = SAMUtils.parseParams(msg);
                 domain = (String) props.remove(SAMUtils.COMMAND);

@@ -284,8 +284,8 @@ class PeerState implements DataLoader {
                     _log.debug(
                             "["
                                     + peer
-                                    + "] got choked, returning partial pieces to the"
-                                    + " PeerCoordinator: "
+                                    + "] -> Got choked, returning the partial pieces to the PeerCoordinator"
+                                    + "\n* Pieces: "
                                     + pcs);
                 listener.savePartialPieces(this.peer, pcs);
             }
@@ -299,7 +299,7 @@ class PeerState implements DataLoader {
      */
     void interestedMessage(boolean interest) {
         if (_log.shouldDebug())
-            _log.debug("[" + peer + "] rcv " + (interest ? "" : "un") + "interested");
+            _log.debug("[" + peer + "] -> Received " + (interest ? "interested" : "uninterested"));
         interested = interest;
         listener.gotInterest(peer, interest);
     }
@@ -310,7 +310,7 @@ class PeerState implements DataLoader {
      * @param piece the zero-based index of the piece being acted on
      */
     void haveMessage(int piece) {
-        if (_log.shouldDebug()) _log.debug("[" + peer + "] rcv have(" + piece + ")");
+        if (_log.shouldDebug()) _log.debug("[" + peer + "] -> Received HAVE for piece " + piece);
         // Sanity check
         if (piece < 0) {
             if (_log.shouldWarn())
@@ -375,11 +375,11 @@ class PeerState implements DataLoader {
     private void bitfieldMessage(byte[] bitmap, boolean isAll) {
         if (_log.shouldDebug()) {
             if (bitmap != null) {
-                _log.debug("[" + peer + "] rcv bitfield bytes: " + bitmap.length);
+                _log.debug("[" + peer + "] -> Received a bitfield with " + bitmap.length + " bytes");
             } else if (isAll) {
-                _log.debug("[" + peer + "] rcv bitfield HAVE_ALL");
+                _log.debug("[" + peer + "] -> Received a bitfield claiming every piece");
             } else {
-                _log.debug("[" + peer + "] rcv bitfield HAVE_NONE");
+                _log.debug("[" + peer + "] -> Received a bitfield claiming no pieces");
             }
         }
 
@@ -1053,7 +1053,7 @@ class PeerState implements DataLoader {
      * @since 0.9.71+
      */
     void dontHaveMessage(int piece) {
-        if (_log.shouldDebug()) _log.debug("[" + peer + "] rcv dont_have(" + piece + ")");
+        if (_log.shouldDebug()) _log.debug("[" + peer + "] -> Received DONTHAVE for piece " + piece);
         synchronized (this) {
             if (metainfo == null) {
                 // Clear any deferred have state so the piece isn't re-marked later
@@ -1092,8 +1092,8 @@ class PeerState implements DataLoader {
                     _log.debug(
                             "["
                                     + peer
-                                    + "] got dont_have, returning partial pieces to the"
-                                    + " PeerCoordinator: "
+                                    + "] -> Got DONTHAVE, returning the partial pieces to the PeerCoordinator"
+                                    + "\n* Pieces: "
                                     + pcs);
                 listener.savePartialPieces(this.peer, pcs);
             }
@@ -1611,11 +1611,12 @@ class PeerState implements DataLoader {
                         if (listener.needPiece(this.peer, bitfield)) {
                             setInteresting(true);
                             if (_log.shouldDebug()) {
-                                _log.debug("[" + peer + "] needs something, set interesting, delay");
+                                _log.debug("[" + peer + "] -> Has something we need, marking it interesting"
+                                           + " and delaying the request until it unchokes");
                             }
                         } else {
                             if (_log.shouldDebug()) {
-                                _log.debug("[" + peer + "] addRequest() needs nothing");
+                                _log.debug("[" + peer + "] -> Has nothing we need, staying uninteresting");
                             }
                         }
                         return;
@@ -1624,7 +1625,8 @@ class PeerState implements DataLoader {
                         // If choked without allowed fast pieces, delay pulling
                         // a request from the PeerCoordinator until unchoked.
                         if (_log.shouldDebug()) {
-                            _log.debug("[" + peer + "] choked, delaying requestNextPiece()");
+                            _log.debug("[" + peer + "] -> Choked with no allowed fast pieces,"
+                                       + " delaying the request until it unchokes");
                         }
                         return;
                     }
@@ -1721,7 +1723,7 @@ class PeerState implements DataLoader {
             interesting = false;
             out.sendInterest(false);
             if (_log.shouldDebug()) {
-                _log.debug("[" + peer + "] nothing more to request, now uninteresting");
+                _log.debug("[" + peer + "] -> Nothing more to request, marking it uninteresting");
             }
         }
         return false;
@@ -1735,7 +1737,7 @@ class PeerState implements DataLoader {
     synchronized void setInteresting(boolean interest) {
         if (interest != interesting) {
             if (_log.shouldDebug()) {
-                _log.debug("[" + peer + "] setInteresting(" + interest + ")");
+                _log.debug("[" + peer + "] -> Setting interesting: " + interest);
             }
             interesting = interest;
             out.sendInterest(interest);
@@ -1761,7 +1763,7 @@ class PeerState implements DataLoader {
         // Only allow sending a choke message if 200ms has passed since last send
         if (choking != choke && (now - lastChokeSendTime >= 200)) {
             if (_log.shouldDebug()) {
-                _log.debug("[" + peer + "] setChoking(" + choke + ")");
+                _log.debug("[" + peer + "] -> Setting choking: " + choke);
             }
             choking = choke;
             out.sendChoke(choke);

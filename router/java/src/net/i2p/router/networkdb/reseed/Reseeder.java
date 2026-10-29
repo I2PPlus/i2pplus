@@ -241,8 +241,8 @@ public class Reseeder {
             if (fetched <= 0) {throw new IOException("No seeds extracted");}
             if (errors <= 0) {_checker.setStatus(_t("Imported {0} router infos.", fetched));}
             else {_checker.setStatus(_t("Imported {0} router infos ({1} errors).", fetched, errors));}
-            _log.warn("Reseed acquired " + fetched + " router infos from file with " + errors + " errors");
-            if (fetched > 0) {_context.router().eventLog().addEvent(EventLog.RESEED, "imported " + fetched + " router infos from file");}
+            _log.warn("Reseed acquired " + fetched + " RouterInfos from file with " + errors + " errors");
+            if (fetched > 0) {_context.router().eventLog().addEvent(EventLog.RESEED, "imported " + fetched + " RouterInfos from file");}
             return fetched;
         } finally {
             try {in.close();}
@@ -765,11 +765,11 @@ public class Reseeder {
             }
             if (errors <= 0) {
                 _checker.setStatus(_t("Acquired {0} router infos from reseed hosts", fetched));
-                _log.info("Acquired " + fetched + " router infos from " + trimmed);
+                _log.info("Acquired " + fetched + " RouterInfos from " + trimmed);
 
             } else {
                 _checker.setStatus(_t("Acquired {0} router infos from reseed hosts ({1} errors)", fetched, errors));
-                _log.warn("Acquired " + fetched + " router infos from " + trimmed + "-> " + errors + (errors > 1 ? " errors" : " error"));
+                _log.warn("Acquired " + fetched + " RouterInfos from " + trimmed + "-> " + errors + (errors > 1 ? " errors" : " error"));
             }
             return fetched;
         }

@@ -1481,7 +1481,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         String matchedCap = _context.banlist().shouldBanlistByCapability(caps);
         String reason = "Custom ban: " + matchedCap + " Router";
         if (_log.shouldWarn()) {
-            _log.warn("Banning by custom capability: " + caps + " [" + routerId + "] for " + (banDuration/60000) + " min");
+            _log.warn("Banning by custom capability: " + caps + " [" + routerId + "] for " + DataHelper.formatDuration(banDuration));
         }
         _context.banlist().banlistRouter(key, reason, null, null,
                                          _context.clock().now() + banDuration);

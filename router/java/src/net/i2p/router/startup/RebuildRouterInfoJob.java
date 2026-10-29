@@ -78,7 +78,7 @@ class RebuildRouterInfoJob extends JobImpl {
      * @param alreadyRunning carried along on the recursive retries but never read
      */
     void rebuildRouterInfo(boolean alreadyRunning) {
-        _log.debug("Rebuilding the new router info");
+        _log.debug("Rebuilding the new RouterInfo");
         RouterInfo info = null;
         File infoFile = new File(getContext().getRouterDir(), CreateRouterInfoJob.INFO_FILENAME);
         File keyFile = new File(getContext().getRouterDir(), CreateRouterInfoJob.KEYS_FILENAME);
@@ -119,7 +119,7 @@ class RebuildRouterInfoJob extends JobImpl {
 
                 info.sign(getContext().keyManager().getSigningPrivateKey());
             } catch (DataFormatException dfe) {
-                _log.log(Log.CRIT, "Error rebuilding the new router info", dfe);
+                _log.log(Log.CRIT, "Error rebuilding the new RouterInfo", dfe);
                 return;
             }
 
@@ -149,7 +149,7 @@ class RebuildRouterInfoJob extends JobImpl {
 
         //MessageHistory.initialize();
         getContext().router().setRouterInfo(info);
-        _log.info("Router info rebuilt and stored at " + infoFile + " [" + info + "]");
+        _log.info("RouterInfo rebuilt and stored at " + infoFile + " [" + info + "]");
     }
 
 }

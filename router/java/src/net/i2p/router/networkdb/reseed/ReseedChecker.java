@@ -108,7 +108,7 @@ public class ReseedChecker {
 
         // Logging reseed reason
         if (known <= 1) {
-            _log.logAlways(Log.INFO, "Downloading peer router information for a new I2P installation...");
+            _log.logAlways(Log.INFO, "Downloading peer RouterInfos for a new I2P installation...");
         } else if (uptime > tenMinutes) {
             if (downtime > RESEED_MIN_DOWNTIME) {
                 _log.logAlways(Log.WARN, "Router has been offline for a while - refreshing NetDb...");

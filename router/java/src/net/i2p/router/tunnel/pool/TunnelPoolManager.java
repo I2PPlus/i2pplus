@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.router.ClientTunnelSettings;
@@ -1165,7 +1166,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                 if (_mgr._log.shouldDebug()) {
                     _mgr._log.debug("Fast tier probe pass: " + probed + " of " + batch +
                                     " slots used, band: " + bandSize + ", next in " +
-                                    (interval / 1000) + "s");
+                                    DataHelper.formatDuration(interval));
                 }
             } catch (RuntimeException re) {
                 _mgr._log.error("Fast tier probe pass failed", re);
@@ -1442,18 +1443,19 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             if (readyCount > maxWaiting || maxLag >= 500 || avgLag >= 500) {
                 interval = 2 * 60 * 1000L; // 2m
                 if (_mgr._log.shouldWarn()) {
-                    _mgr._log.warn("Job queue overloaded (Ready jobs: " + readyCount +
-                                   ", Max lag: " + maxLag + "ms, Avg lag: " + avgLag +
-                                   "ms) -> Increasing interval to 2m");
+                    _mgr._log.warn("Job queue overloaded -> Increasing the interval to 2m"
+                                   + "\n* Ready jobs: " + readyCount + " * Max lag: " + DataHelper.formatDuration(maxLag)
+                                   + " * Average lag: " + DataHelper.formatDuration(avgLag));
                 }
             }
             if (_mgr._log.shouldInfo())
-                _mgr._log.info("Remove Slow Tunnels Job: Requeueing in " + (interval / 1000) + "s...");
+                _mgr._log.info("Remove Slow Tunnels Job -> Requeueing in " + DataHelper.formatDuration(interval));
             long start = _mgr._context.clock().now();
             requeue(interval);
             long after = _mgr._context.clock().now();
             if (_mgr._log.shouldInfo())
-                _mgr._log.info("RemoveSlowTunnelsJob requeue took " + (after - start) + "ms, next run at " + (after + interval));
+                _mgr._log.info("Remove Slow Tunnels Job -> Requeue took " + DataHelper.formatDuration(after - start)
+                               + " * Next run in " + DataHelper.formatDuration(interval));
         }
     }
 

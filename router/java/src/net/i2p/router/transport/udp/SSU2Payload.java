@@ -482,7 +482,7 @@ class SSU2Payload {
                 UDPAddress.overCapIntroducerKey(msg) && log.shouldWarn()) {
                 log.warn("Error reading RouterInfo -> >" + UDPAddress.MAX_INTRODUCERS +
                          " introducers * " + msg);
-            } else if (log.shouldDebug()) {log.warn("Error reading RouterInfo", dfe);}
+            } else if (log.shouldDebug()) {log.debug("Error reading RouterInfo", dfe);}
             else if (log.shouldWarn()) {log.warn("Error reading RouterInfo -> " + msg);}
             // partially filled-in RI, -1 is signal to IES2.gotRI()
             RouterInfo alice = new RouterInfo();

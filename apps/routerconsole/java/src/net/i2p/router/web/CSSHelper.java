@@ -230,8 +230,8 @@ public class CSSHelper extends HelperBase {
             return false;
         }
         if (_log.shouldDebug()) {
-            _log.debug("CSSHelper.validateNonce(): " + (rv ? "Accepted" : "Rejected") +
-                       ", nonce: " + nonce + " session: " + System.identityHashCode(session));
+            _log.debug("CSRF nonce check -> " + (rv ? "Accepted" : "Rejected") +
+                       " * Session: " + System.identityHashCode(session));
         }
         return rv;
     }

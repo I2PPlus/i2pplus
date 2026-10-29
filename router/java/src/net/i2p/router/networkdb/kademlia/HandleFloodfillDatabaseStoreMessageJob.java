@@ -118,7 +118,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
         if (DatabaseEntry.isLeaseSet(type)) {
             getContext().statManager().addRateData("netDb.storeLeaseSetHandled", 1);
             if (_log.shouldDebug()) {
-                _log.debug("[" + _facade + "] Handling NetDbStore of LeaseSet" + _message);
+                _log.debug("[" + _facade + "] -> Handling a NetDbStore of a LeaseSet\n* " + _message);
             }
 
             try {
@@ -213,7 +213,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 }
             }
             if (_log.shouldDebug()) {
-                _log.debug("[" + _facade + "] Starting handling of dbStore of RouterInfo " + _message);
+                _log.debug("[" + _facade + "] -> Starting the handling of a dbStore of a RouterInfo\n* " + _message);
             }
             String cap = ri.getCapabilities();
             boolean isFF = cap.contains("f");
@@ -230,15 +230,15 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
             if (_log.shouldInfo()) {
                 String req = ((_message.getReplyToken() > 0) ? " reply req." : "") +
                              ((_fromHash == null && ri.getReceivedAsPublished()) ? " unsolicited" : "");
+                String desc = "] -> Handling a NetDbStore of " + cap + (isFF ? " floodfill" : " router") +
+                              " [" + key.toBase64().substring(0,6) + "]\n* Published ";
                 if (_fromHash == null)
-                    _log.info("[" + _facade + "] Handling NetDbStore of " + cap + (isFF ? " Floodfill" : " Router") + " [" + key.toBase64().substring(0,6) +
-                              "] \n* Published " + DataHelper.formatTime(ri.getPublished()) + req);
+                    _log.info("[" + _facade + desc + DataHelper.formatTime(ri.getPublished()) + req);
                 else if (_fromHash.equals(key))
-                    _log.info("[" + _facade + "] Handling NetDbStore of " + cap + (isFF ? " Floodfill" : " Router") + " [" + key.toBase64().substring(0,6) +
-                              "] \n* Published " + DataHelper.formatTime(ri.getPublished()) + " from that router" + req);
+                    _log.info("[" + _facade + desc + DataHelper.formatTime(ri.getPublished()) + " from that router" + req);
                 else
-                    _log.info("[" + _facade + "] Handling NetDbStore of " + cap + (isFF ? " Floodfill" : " Router") + " [" + key.toBase64().substring(0,6) +
-                              "] \n* Published " + DataHelper.formatTime(ri.getPublished()) + " from: [" + _fromHash.toBase64().substring(0,6) + "] " + req);
+                    _log.info("[" + _facade + desc + DataHelper.formatTime(ri.getPublished()) +
+                              " from: [" + _fromHash.toBase64().substring(0,6) + "] " + req);
             }
             try {
                 /**
@@ -423,9 +423,8 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                     }
                                 }
                                 if (shouldStore && _log.shouldDebug()) {
-                                    _log.debug("[" + _facade + "] Allowing unsolicited store" +
-                                               " of new " + cap +
-                                               (isFF ? " Floodfill" : " Router") + " [" +
+                                    _log.debug("[" + _facade + "] -> Allowing an unsolicited store of a new " + cap +
+                                               (isFF ? " floodfill" : " router") + " [" +
                                                key.toBase64().substring(0,6) + "]" +
                                                " with distance " + distance);
                                 }
@@ -472,10 +471,10 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                     else {
                         if (_log.shouldInfo()) {
                             _log.info("[" + _facade + "]"
-                                      + " Newer RouterInfo [" + key.toBase64().substring(0,6) + "]"
-                                      + " encountered in DbStore Message"
-                                      + "\n* Published date: " + ri.getPublished() +
-                                      " is newer than local copy: " + prevNetDb.getPublished());
+                                      + " -> Found a newer RouterInfo [" + key.toBase64().substring(0,6) + "]"
+                                      + " in a DbStore message"
+                                      + "\n* Published: " + DataHelper.formatTime(ri.getPublished()) +
+                                      ", newer than the local copy: " + DataHelper.formatTime(prevNetDb.getPublished()));
                         }
                         if (!ri.getIdentity().getPublicKey().equals(prevNetDb.getIdentity().getPublicKey())) {
                             if (_log.shouldWarn()) {
@@ -502,8 +501,8 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 }
                 if (shouldStore) {
                     if (_facade.isClientDb() && _log.shouldWarn()) {
-                        _log.warn("[" + _facade + "] Storing RouterInfo [" + key.toBase64().substring(0,6) +
-                                  "] to client NetDb -> This is rare, should have been handled by IBMD");
+                        _log.warn("[" + _facade + "] -> Storing a RouterInfo [" + key.toBase64().substring(0,6) +
+                                  "] in the client NetDb, which is rare and should have been handled by the inbound message dispatcher");
                     }
                     prevNetDb = _facade.store(key, ri);
                     wasNew = ((null == prevNetDb) || (prevNetDb.getPublished() < ri.getPublished()));
@@ -518,7 +517,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                     }
                     if (prevNetDb == null) {
                         if (!forever && getContext().blocklist().isBlocklisted(ri)) {
-                            if (_log.shouldInfo()) {_log.warn("Blocklisting new peer [" + key.toBase64().substring(0,6) + "] \n" + ri);}
+                            if (_log.shouldDebug()) {_log.debug("Blocklisting new peer [" + key.toBase64().substring(0,6) + "]\n" + ri);}
                             else if (_log.shouldWarn()) {_log.warn("Blocklisting new peer [" + key.toBase64().substring(0,6) + "]");}
                             wasNew = false; // don't flood
                             shouldStore = false; // don't call heardAbout()
@@ -546,7 +545,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
             } catch (IllegalArgumentException iae) {invalidMessage = iae.getMessage();}
         } else {
             if (_log.shouldError()) {
-                _log.error("[" + _facade + "] Invalid DbStoreMessage data type - " + entry.getType() + ": " + _message);
+                _log.error("[" + _facade + "] -> Invalid DbStoreMessage data type: " + entry.getType() + "\n* " + _message);
             }
             return; // don't ack or flood
         }
@@ -673,7 +672,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
         }
         if (toUs) {
             if (_facade.isClientDb()) {
-                _log.error("[" + _facade + "] SendMessageDirectJob (toUs) attempted in client NetDb [MsgID " + msg.getUniqueId() + ']');
+                _log.error("[" + _facade + "] -> SendMessageDirectJob (toUs) attempted in the client NetDb [MsgID " + msg.getUniqueId() + ']');
                 return;
             }
             Job send = new SendMessageDirectJob(getContext(), msg, toPeer, REPLY_TIMEOUT, MESSAGE_PRIORITY, _msgIDBloomXor);

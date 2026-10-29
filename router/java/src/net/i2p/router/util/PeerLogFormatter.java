@@ -49,7 +49,7 @@ public class PeerLogFormatter {
         labels.put("too-many-tunnels", "Too many tunnels");
         labels.put("recently-rejected", "Recently rejected");
         labels.put("unreachable", "Unreachable");
-        labels.put("no-routerinfo", "No router info");
+        labels.put("no-routerinfo", "No RouterInfo");
         labels.put("floodfill", "Floodfill");
         labels.put("U-cap", "Unreachable cap");
         labels.put("moderate-congestion", "Moderate congestion");

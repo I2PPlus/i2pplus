@@ -776,7 +776,7 @@ public class RepublishLeaseSetJob extends JobImpl {
         LeaseSet fresh = getFreshPoolLeaseSet();
         long freshTimeUntilExpiry = fresh != null ? fresh.getEarliestLeaseDate() - now : 0;
         if (_log.shouldInfo()) {
-            _log.info("Re-minting lease set (refloatLeaseSet)" + name + " [" + shortHash() + "]" +
+            _log.info("Re-minting the LeaseSet" + name + " [" + shortHash() + "]" +
                       "\n* Stored expiry: " + DataHelper.formatDuration(timeUntilExpiry) +
                       " * Fresh expiry: " + DataHelper.formatDuration(freshTimeUntilExpiry) +
                       " * Extends expiry: " + (freshTimeUntilExpiry > timeUntilExpiry) +
@@ -825,8 +825,8 @@ public class RepublishLeaseSetJob extends JobImpl {
             pool.requestFreshTunnelBuild();
             if (_log.shouldInfo()) {
                 _log.info("Waiting on fresh tunnels" + name + " [" + shortHash() +
-                          "] — pool is not stocked for a mint in " +
-                          (timeUntilExpiry / 1000) + "s (attempt " + seen + "/" +
+                          "] -> The pool is not stocked for a mint in " +
+                          DataHelper.formatDuration(timeUntilExpiry) + " (attempt " + seen + "/" +
                           MAX_SUPPLY_DEFERRALS + ")");
             }
             scheduleRepublish(MISSING_LEASESET_RETRY);
@@ -843,10 +843,10 @@ public class RepublishLeaseSetJob extends JobImpl {
             // of spinning, while still asking the pool for replacements so the
             // re-mint becomes meaningful once capacity arrives.
             if (_log.shouldInfo()) {
-                _log.info("Holding off ineffective re-mint" + name + " [" + shortHash() +
-                          "] — same " + freshCount + " leases, expiry still " +
-                          (timeUntilExpiry / 1000) + "s\n* Next attempt in " +
-                          ((backoff - sinceLastIneffective) / 1000) + "s");
+                _log.info("Holding off an ineffective re-mint" + name + " [" + shortHash() +
+                          "] -> Same " + freshCount + " leases, expiry still " +
+                          DataHelper.formatDuration(timeUntilExpiry) + " away"
+                          + "\n* Next attempt in " + DataHelper.formatDuration(backoff - sinceLastIneffective));
             }
             if (pool != null) {pool.requestFreshTunnelBuild();}
             scheduleRepublish(computeNextRepublish(timeUntilExpiry));

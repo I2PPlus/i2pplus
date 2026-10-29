@@ -1033,9 +1033,9 @@ public class PeerState {
                 msg.timestamp("Expired in the active pool");
                 _transport.failed(state);
                 if (logInfo)
-                    _log.info("[" + _shortHash + "] Message expired [MsgID " + state.getMessageId() + ']');
+                    _log.info("[" + _shortHash + "] -> Message expired [MsgID " + state.getMessageId() + ']');
             } else if (logInfo) {
-                _log.warn("[" + _shortHash + "] Unable to send direct message [MsgID " + state.getMessageId() + ']');
+                _log.warn("[" + _shortHash + "] -> Unable to send a direct message [MsgID " + state.getMessageId() + ']');
             }
         }
 
@@ -1670,7 +1670,7 @@ public class PeerState {
         _rto = nextCongestionRTO(_rto, _rtt, _rttDeviation, MIN_RTO, MAX_RTO);
         _retransmitTimer.set(now + _rto);
         if (_log.shouldInfo()) {
-            _log.info("[" + _shortHash + "] Estimated bandwidth: " +
+            _log.info("[" + _shortHash + "] -> Estimated bandwidth: " +
                       DataHelper.formatSize2Decimal((long) (bwe * 1000), false) + "b/s" +
                       "\n* Congestion RTO: " + oldRto + "ms -> " + _rto + "ms" +
                       " * Timer: " + oldTimer + "ms -> " + _rto + "ms" +
@@ -1888,7 +1888,7 @@ public class PeerState {
             long oldTimer = _retransmitTimer.get() - now;
             _retransmitTimer.set(now + getRTO());
             if (_log.shouldDebug()) {
-                _log.debug("[" + _shortHash + "] ACK, timer: " + oldTimer + " -> " + (_retransmitTimer.get() - now));
+                _log.debug("[" + _shortHash + "] -> ACKed, retransmit timer " + oldTimer + "ms -> " + (_retransmitTimer.get() - now) + "ms");
             }
         }
         if (anyPending || anyQueued) {_transport.getOMF().nudge();}
@@ -1912,8 +1912,8 @@ public class PeerState {
             _bwEstimator.addSample(bytesACKed);
         }
         if (numSends >= 2 && _log.shouldDebug()) {
-            _log.debug("[" + _shortHash + "] ACKed after numSends=" + numSends +
-                       " with lifetime=" + lifetime + " and size=" + bytesACKed);
+            _log.debug("[" + _shortHash + "] -> ACKed after " + numSends + " sends"
+                       + "\n* Lifetime: " + DataHelper.formatDuration(lifetime) + " * Size: " + bytesACKed + " bytes");
         }
     }
 

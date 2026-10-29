@@ -2875,7 +2875,7 @@ class Connection {
         synchronized (_outboundPacketsLock) {
             if (_outboundPackets == null || _outboundPackets.isEmpty()) {
                 if (_log.shouldDebug()) {
-                    _log.debug("[" + this + "] Soft failure but no unacked packets, skipping retransmit");
+                    _log.debug(this + " -> Soft failure, but no unacked packets to retransmit");
                 }
                 return;
             }
@@ -2887,8 +2887,9 @@ class Connection {
             // phase) or the doubled RTO (established), so the deferred retry
             // happens automatically without an I2CP send burst.
             if (_log.shouldDebug()) {
-                _log.debug("[" + this + "] Soft failure, last retransmit " + minSpacing +
-                           "ms ago\n* Deferring to the retransmit timer");
+                _log.debug(this + " -> Soft failure, deferring to the retransmit timer"
+                           + "\n* Last retransmit: " + DataHelper.formatDuration(now - _lastSoftFailRetransmit)
+                           + " ago * Minimum spacing: " + DataHelper.formatDuration(minSpacing));
             }
             return;
         }
@@ -3240,12 +3241,12 @@ class Connection {
                 _retransmitEvent.pushBackRTOBounded(pushBackDelay);
             }
             if (_log.shouldDebug()) {
-                _log.debug("[" + Connection.this + "]\n* Not all packets ACKed, pushing timer out " + pushBackDelay + "ms");
+                _log.debug(Connection.this + " -> Not all packets ACKed, pushing timer out " + pushBackDelay + "ms");
             }
         } else if (doCancel) {
             _retransmitEvent.cancel();
             if (_log.shouldDebug()) {
-                _log.debug("[" + Connection.this + "]\n* All outstanding packets ACKed, cancelling timer...");
+                _log.debug(Connection.this + " -> All outstanding packets ACKed, cancelling timer...");
             }
         }
         return _ackedList;
@@ -5062,8 +5063,8 @@ class Connection {
                         if (ob.remove(Long.valueOf(staleSeq)) != null) {
                             _outboundPacketsLock.notifyAll();
                             if (_log.shouldWarn()) {
-                                _log.warn(Connection.this + "\n* Removed cancelled/stale packet " + packet +
-                                          " from outbound window");
+                                _log.warn(Connection.this + " -> Removed a stale packet from the outbound window"
+                                          + packet.formatAsString(false));
                             }
                         }
                     }
@@ -5089,8 +5090,8 @@ class Connection {
                                                                          _options.getMaxResends());
                 if (budgetExhaustionClosesConnection(budgetExhausted, forwardProgress)) {
                     if (_log.shouldDebug()) {
-                        _log.debug(Connection.this + " packet " + packet +
-                                   " resent too many times, closing");
+                        _log.debug(Connection.this + " -> Packet resent too many times, closing"
+                                   + packet.formatAsString(false));
                     }
                     packet.cancelled();
                     if (_connectionError == null) {setConnectionError(ERR_RETRANSMIT_LIMIT);}
@@ -5100,7 +5101,7 @@ class Connection {
                 if (budgetExhausted && !_establishedResumeWarned) {
                     _establishedResumeWarned = true;
                     if (_log.shouldWarn()) {
-                        _log.warn(Connection.this + " Resend budget exceeded -> " + packet.formatAsString(false)
+                        _log.warn(Connection.this + " -> Resend budget exceeded" + packet.formatAsString(false)
                                   + "\n* Connection established, keeping alive and retransmitting");
                     }
                 }
@@ -5156,20 +5157,23 @@ class Connection {
 
                     if (_isChoking) {
                         if (_log.shouldDebug()) {
-                            _log.debug(Connection.this + " packet is choking " + packet);
+                            _log.debug(Connection.this + " -> Choking the peer, requesting a pause"
+                                       + packet.formatAsString(false));
                         }
                         packet.setOptionalDelay(Packet.SEND_DELAY_CHOKE);
                         packet.setFlag(Packet.FLAG_DELAY_REQUESTED);
                     } else if (_unchokesToSend.get() > 0) {
                         if (_log.shouldDebug()) {
-                            _log.debug(Connection.this + " packet is unchoking " + packet);
+                            _log.debug(Connection.this + " -> Unchoke assertion, requesting no delay"
+                                       + packet.formatAsString(false));
                         }
                         // Don't worry about wrapping around
                         packet.setOptionalDelay(0);
                         packet.setFlag(Packet.FLAG_DELAY_REQUESTED);
                     } else {
                         if (_log.shouldDebug()) {
-                            _log.debug(Connection.this + " packet clearing flag " + packet);
+                            _log.debug(Connection.this + " -> Clearing the delay request on the resend"
+                                       + packet.formatAsString(false));
                         }
                         // clear flag
                         packet.setFlag(Packet.FLAG_DELAY_REQUESTED, false);
@@ -5215,12 +5219,14 @@ class Connection {
                             burstCount++;
                             if (softPass) {packet.incrementSoftResends();}
                             if (_log.shouldInfo()) {
-                                _log.info(Connection.this + " resending packet (count: " + packet.getNumSends() + ", seq " + packet.getSequenceNum() + ") " + packet.formatAsString(false));
+                                _log.info(Connection.this + " -> Resending packet * Sends so far: " + packet.getNumSends()
+                                          + " * Sequence: " + packet.getSequenceNum() + packet.formatAsString(false));
                             }
                             if (nResends == 1) {_activeResends.incrementAndGet();}
                             sentAny = true;
                         } else if (_log.shouldDebug()) {
-                            _log.debug(Connection.this + " could not resend packet " + packet);
+                            _log.debug(Connection.this + " -> Could not enqueue the packet for resend"
+                                       + packet.formatAsString(false));
                         }
                     } else {
                         long pacingDelay = calculatePacingDelay(packet.getPayloadSize());
@@ -5238,12 +5244,14 @@ class Connection {
                             if (_outboundQueue.enqueue(packet)) {
                                 if (softPass) {packet.incrementSoftResends();}
                                 if (_log.shouldInfo()) {
-                                    _log.info(Connection.this + " resending packet (count: " + packet.getNumSends() + ", seq " + packet.getSequenceNum() + ") " + packet.formatAsString(false));
+                                    _log.info(Connection.this + " -> Resending packet * Sends so far: " + packet.getNumSends()
+                                              + " * Sequence: " + packet.getSequenceNum() + packet.formatAsString(false));
                                 }
                                 if (nResends == 1) {_activeResends.incrementAndGet();}
                                 sentAny = true;
                             } else if (_log.shouldDebug()) {
-                                _log.debug(Connection.this + " could not resend packet " + packet);
+                                _log.debug(Connection.this + " -> Could not enqueue the packet for resend"
+                                           + packet.formatAsString(false));
                             }
                         }
                     }
@@ -5380,7 +5388,8 @@ synchronized boolean checkRetransmitStall() {
                 }
                 resetActivityTimer();
                 if (_retransmitEvent.scheduleIfNotRunning(packet.getTimeout()) && _log.shouldDebug()) {
-                    _log.debug("[" + Connection.this + "] Resend in " + packet.getTimeout() + "ms for paced " + packet);
+                    _log.debug(Connection.this + " -> Paced resend, arming the timer for " + packet.getTimeout() + "ms"
+                               + packet.formatAsString(false));
                 }
             }
             if (nextDelay >= 0) {
@@ -5417,7 +5426,7 @@ synchronized boolean checkRetransmitStall() {
             // a connection that is already gone.
             if (!_connected.get()) {
                 if (_log.shouldDebug()) {
-                    _log.debug("ACK DUP timer fired on " + Connection.this + " -> Already disconnected");
+                    _log.debug(Connection.this + " -> Duplicate ACK timer fired, already disconnected");
                 }
                 return;
             }
@@ -5425,19 +5434,21 @@ synchronized boolean checkRetransmitStall() {
             if (getLastSendTime() <= _created) {
                 if (getResetReceived() || getResetSent()) {
                     if (_log.shouldDebug()) {
-                        _log.debug("ACK DUP on " + Connection.this + ", but we have been reset");
+                        _log.debug(Connection.this + " -> Duplicate ACK timer fired, the connection was reset");
                     }
                     return;
                 }
 
                 if (_log.shouldDebug()) {
-                    _log.debug("Last sent was a while ago, and we want to ACK a DUP on " + Connection.this);
+                    _log.debug(Connection.this + " -> Nothing sent since the duplicate arrived, acking now");
                 }
                 ackImmediately();
                 sent = true;
             } else {
                 if (_log.shouldDebug()) {
-                    _log.debug("ACK DUP on " + Connection.this + ", but we have sent (" + (getLastSendTime()-_created) + ")");
+                    _log.debug(Connection.this + " -> Sent a packet "
+                               + DataHelper.formatDuration(getLastSendTime() - _created)
+                               + " after the duplicate, deferring the ACK");
                 }
             }
             _context.statManager().addRateData("stream.ack.dup.sent", sent ? 1 : 0);
@@ -5578,7 +5589,8 @@ synchronized boolean checkRetransmitStall() {
                     _outboundPacketsLock.notifyAll();
                 }
                 if (_log.shouldDebug()) {
-                    _log.debug(Connection.this + " cancelled " + _packet + " on reset, removed from outbound window");
+                    _log.debug(Connection.this + " -> Tearing down, cancelled and dropped the packet"
+                               + _packet.formatAsString(false));
                 }
                 return false;
             }
@@ -5642,9 +5654,9 @@ synchronized boolean checkRetransmitStall() {
                     }
 
                     if (_log.shouldInfo()) {
-                        _log.info("Network congestion: Resending packet [" + _packet.getSequenceNum() + "]"
-                                      + "\n* New Window Size: " + newWindowSize + "/" + _options.getWindowSize()
-                                      + " for " + Connection.this.toString());
+                        _log.info(Connection.this + " -> Network congestion, resending the packet"
+                                      + "\n* Window size: " + _options.getWindowSize() + " (was " + newWindowSize + ")"
+                                      + _packet.formatAsString(false));
                     }
                     windowAdjusted();
                 }
@@ -5661,7 +5673,9 @@ synchronized boolean checkRetransmitStall() {
                 windowSize = outboundSizeLocked();
             }
             if (numSends - 1 > _options.getMaxResends() && !_packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
-                if (_log.shouldDebug()) {_log.debug("Disconnecting, too many resends of " + _packet);}
+                if (_log.shouldDebug()) {
+                    _log.debug(Connection.this + " -> Too many resends, disconnecting" + _packet.formatAsString(false));
+                }
                 _packet.cancelled();
                 if (_connectionError == null) {setConnectionError(ERR_RETRANSMIT_LIMIT);}
                 disconnect(false);
@@ -5677,7 +5691,7 @@ synchronized boolean checkRetransmitStall() {
                  * shut down normally.
                  */
                 if (_log.shouldInfo()) {
-                    _log.info("Too many CLOSE resends, disconnecting: " + Connection.this.toString());
+                    _log.info(Connection.this + " -> Too many CLOSE resends, disconnecting");
                 }
                 _packet.cancelled();
                 disconnect(true);
@@ -5690,19 +5704,18 @@ synchronized boolean checkRetransmitStall() {
 
                 if (_outboundQueue.enqueue(_packet)) {
                     if (_retransmitEvent.scheduleIfNotRunning(timeout) && _log.shouldDebug()) {
-                        _log.debug("[" + Connection.this + "] Fast retransmit and schedule timer");
+                        _log.debug(Connection.this + " -> Fast resend enqueued, timer scheduled");
                     }
 
                     // first resend for this packet ?
                     if (numSends == 2) {_activeResends.incrementAndGet();}
                     if (_log.shouldInfo()) {
-                            _log.info("Resent packet " + _packet +
-                                  "(fast) " +
-                                  "\n* Next resend in " + (timeout / 1000) + "s" +
-                                  "\n* Active resends: " + _activeResends +
-                                  "; Window Size: "
-                                  + _options.getWindowSize() + "; Lifetime: "
-                                  + (_context.clock().now() - _packet.getCreatedOn()) + "ms");
+                        _log.info(Connection.this + " -> Fast resend enqueued"
+                                  + "\n* Next resend in " + DataHelper.formatDuration(timeout)
+                                  + " * Active resends: " + _activeResends
+                                  + " * Window size: " + _options.getWindowSize()
+                                  + " * Lifetime: " + DataHelper.formatDuration(_packet.getLifetime())
+                                  + _packet.formatAsString(false));
                     }
                     _unackedPacketsReceived.set(0);
                     _lastSendTime = _context.clock().now();

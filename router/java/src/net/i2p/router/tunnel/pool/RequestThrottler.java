@@ -5,6 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicIntegerArray;
 import java.util.concurrent.atomic.AtomicLong;
+import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.BanLogger;
@@ -517,8 +518,8 @@ public class RequestThrottler {
                 if (context.random().nextFloat() < prob || context.banlist().isBanlisted(h)) {
                     if (!context.banlist().isBanlisted(h)) {
                         if (_log.shouldWarn()) {
-                            _log.warn("Banning LU Router [" + routerId + "] for " +
-                                      (LU_BAN_MS / 60000) + "m under load");
+                            _log.warn("Banning an LU router [" + routerId + "] under load -> " +
+                                      DataHelper.formatDuration(LU_BAN_MS));
                         }
                         String ipPort = TransportImpl.getRouterIPPort(ri);
                         _banLogger.logBan(h, ipPort, "LU Router", LU_BAN_MS);
@@ -575,9 +576,9 @@ public class RequestThrottler {
                 int offenses = record.getConsecutiveOffenses();
                 long banTime = burstBanDurationMs(offenses);
                 if (_log.shouldWarn()) {
-                    _log.warn("Transit request burst from Router [" + routerId + "] -> " +
+                    _log.warn("Transit request burst from router [" + routerId + "] -> " +
                               "Offense " + offenses + (banTime > 0 ?
-                              (" -> Banning for " + (banTime / 60000) + "m") : " -> Throttling request"));
+                              (" -> Banning for " + DataHelper.formatDuration(banTime)) : " -> Throttling the request"));
                 }
                 if (banTime > 0) {
                     String ipPort = TransportImpl.getRouterIPPort(ri);
@@ -666,8 +667,9 @@ public class RequestThrottler {
                     context.banlist().banlistRouter(h, "" + banReason, null, null, context.clock().now() + bantime2);
                     new Disconnector(h, v).schedule(11*60*1000L);
                     if (_log.shouldWarn()) {
-                        _log.warn("Banning Router [" + routerId + "] for " + (bantime2/60000) + "m" +
-                                  " -> Excessive tunnel requests (Requested: " + count + " / Limit: " + limit + " ratio=" + ratio + ")");
+                        _log.warn("Banning a router [" + routerId + "] -> Excessive tunnel requests"
+                                  + "\n* Banning for: " + DataHelper.formatDuration(bantime2)
+                                  + " * Requested: " + count + " * Limit: " + limit + " * Ratio: " + ratio);
                     }
                 }
             } else {
