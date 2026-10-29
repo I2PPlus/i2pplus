@@ -1,3 +1,33 @@
+2026-10-28 dr|z3d
+  * Router: Stop failing a page's parallel requests for 30 seconds after one
+    LeaseSet lookup resolved, so a loading eepsite stops timing out on assets
+  * Tuner: Let two control loops settle - a 2000 to 3000 ms limit cycle in the
+    max message queue age, and the NTCP failsafe at 28 of its 30 second cap
+  * Streaming: Rotate a connect stuck on an outbound tunnel that drops the
+    SYN-ACK, and time the handshake from when the SYN leaves
+  * I2PTunnel: Take the first connect retry immediately and cap the connect
+    attempts one request spends, so a stalled tunnel costs seconds, not 25
+  * Logging: Demote per-message dispatch, RTT and per-request server lines to
+    debug, name the request host in full without dereferencing a null one, and
+    set the peer sub-lists, streaming, ratchet and tier lines in one shape
+  * Console: Give every nonce-guarded control its own nonce, good for 30
+    minutes, so Restart and Clear logs work on a page left open
+  * Console: Run the sidebar restart without reloading the page, refreshing
+    only the router-control block; a control that refuses to run stays silent
+  * Console: One session cookie name for every webapp, I2PSESSIONID, one a
+    browser keeps, so a foreign JSESSIONID on the host cannot take the
+    console's session and every control on the page with it; log in on I2PAUTH
+  * Console: Drop the sidebar's finished update notice, the plugin-updated
+    line among them, five minutes after it is set; a downloaded router update
+    keeps its message while it waits to be installed
+  * Console: Restyle the sidebar's restart section across the dark, light and
+    midnight themes, and update the I2PSnark themes
+  * Router: Stop a graceful restart from waiting for the delayed server
+    tunnels on the console's request thread, so Restart answers at once
+  * I2PSnark: Prefer udp trackers, probe for BEP 15 support, one pill per
+    host; stop disconnecting behaving peers; one copy pool per torrent
+  * Javadoc: Document every package in the tree, test roots included
+
 2026-10-27 2.14.1+ (API 0.9.71) released
 
 2026-10-27 dr|z3d
