@@ -332,7 +332,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
             // A failed reseed must not reach the caller: the PRNG keeps the
             // state it had, so the only signal is this warning.
             Log log = _context.logManager().getLog(FortunaRandomSource.class);
-            log.warn("feedEntropy()", e);
+            log.warn("Feeding reseed entropy failed -> Keeping the PRNG state it had", e);
         }
     }
 

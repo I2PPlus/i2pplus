@@ -257,7 +257,7 @@ public class Reader {
      */
     private void processRead(NTCPConnection con) {
         if (con == null) {
-            if (_log.shouldWarn()) _log.warn("processRead called with null connection");
+            if (_log.shouldWarn()) _log.warn("No connection to read from -> Skipping the read pass");
             return;
         }
         ByteBuffer buf = null;

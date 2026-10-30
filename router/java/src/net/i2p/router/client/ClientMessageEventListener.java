@@ -459,7 +459,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
             }
             return;
         }
-        if (_log.shouldDebug()) {_log.debug("handleSendMessage called");}
+        if (_log.shouldDebug()) {_log.debug("Handling a client send message request");}
         long beforeDistribute = _context.clock().now();
         MessageId id;
         try {

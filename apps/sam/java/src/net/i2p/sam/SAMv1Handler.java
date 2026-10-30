@@ -917,7 +917,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
      */
     public void stopRawReceiving() {
         if (_log.shouldDebug())
-            _log.debug("stopRawReceiving() invoked");
+            _log.debug("Stopping raw receiving for the SAM client");
 
         if (rawSession == null) {
             _log.error("BUG! Got raw receiving stop, but session is null!");
@@ -972,7 +972,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
      */
     public void stopDatagramReceiving() {
         if (_log.shouldDebug())
-            _log.debug("stopDatagramReceiving() invoked");
+            _log.debug("Stopping datagram receiving for the SAM client");
 
         if (datagramSession == null) {
             _log.error("BUG! Got datagram receiving stop, but session is null!");
@@ -1159,7 +1159,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
      */
     public void stopStreamReceiving() {
         if (_log.shouldDebug())
-            _log.debug("stopStreamReceiving() invoked", new Exception("stopped"));
+            _log.debug("Stopping stream receiving for the SAM client", new Exception("stopped"));
 
         if (streamSession == null) {
             _log.error("BUG! Got stream receiving stop, but session is null!");

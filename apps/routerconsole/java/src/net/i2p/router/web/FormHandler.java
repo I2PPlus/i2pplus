@@ -485,7 +485,7 @@ public abstract class FormHandler {
         if (_nonce == null) {
             _valid = false;
             if (_log != null && _log.shouldDebug()) {
-                _log.debug("validate(): _nonce is null");
+                _log.debug("Form nonce rejected -> No nonce in the request");
             }
             return;
         }
