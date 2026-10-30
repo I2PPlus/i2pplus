@@ -793,7 +793,7 @@ public class PeerTestJob extends JobImpl {
                 // or unreachable test are left in place.
                 if (_log.shouldInfo())
                     _log.info("Test round trip within tolerance for [" + _shortHash +
-                              "]; low latency judged from the direct link");
+                              "] * Low latency judged from the direct link");
                 _matchFound = true;
                 return true;
             }

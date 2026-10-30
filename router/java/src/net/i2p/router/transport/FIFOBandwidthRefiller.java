@@ -215,8 +215,8 @@ public class FIFOBandwidthRefiller implements Runnable {
         if (_log.shouldDebug())
             _log.debug("Updating bandwidth after " + numMs + "ms"
                        + "\n* Status: " + _limiter.getStatus().toString()
-                       + " Rate in: " + _inboundKBytesPerSecond + "KB/s;"
-                       + " Rate out: " + _outboundKBytesPerSecond + "KB/s");
+                       + " * Rate in: " + _inboundKBytesPerSecond + "KB/s"
+                       + " * Rate out: " + _outboundKBytesPerSecond + "KB/s");
         // clock skew
         if (numMs >= _replenishFrequency * 50 || numMs <= 0)
             numMs = _replenishFrequency;

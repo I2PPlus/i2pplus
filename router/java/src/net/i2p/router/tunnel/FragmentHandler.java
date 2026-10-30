@@ -207,7 +207,7 @@ class FragmentHandler {
                 if (off < 0) {
                     _context.statManager().addRateData("tunnel.corruptMessage", 1);
                     if (_log.shouldWarn())
-                        _log.warn("Corrupt fragment received; offset: " + off);
+                        _log.warn("Corrupt fragment received * Offset: " + off);
                     return false;
                 }
                 offset = off;
@@ -215,20 +215,20 @@ class FragmentHandler {
         } catch (ArrayIndexOutOfBoundsException aioobe) {
             _context.statManager().addRateData("tunnel.corruptMessage", 1);
             if (_log.shouldDebug())
-                _log.warn("Corrupt fragment received; offset: " + offset, aioobe);
+                _log.debug("Corrupt fragment received * Offset: " + offset, aioobe);
             else if (_log.shouldWarn())
-                _log.warn("Corrupt fragment received; offset: " + offset + "\n* Array Index Out of Bounds Exception: " + aioobe);
+                _log.warn("Corrupt fragment received * Offset: " + offset);
             return false;
         } catch (NullPointerException npe) {
             if (_log.shouldDebug())
-                _log.warn("Corrupt fragment received [Offset: " + offset + "]", npe);
+                _log.debug("Corrupt fragment received * Offset: " + offset, npe);
             else if (_log.shouldWarn())
-                _log.warn("Corrupt fragment received [Offset: " + offset + "] (Null Pointer Exception)");
+                _log.warn("Corrupt fragment received * Offset: " + offset + " (Null Pointer Exception)");
             _context.statManager().addRateData("tunnel.corruptMessage", 1);
             return false;
         } catch (RuntimeException e) {
             if (_log.shouldWarn())
-                _log.warn("Corrupt fragment received [Offset: " + offset + "]", e);
+                _log.warn("Corrupt fragment received * Offset: " + offset, e);
             _context.statManager().addRateData("tunnel.corruptMessage", 1);
             return false;
         } finally {
@@ -426,9 +426,9 @@ class FragmentHandler {
             messageId = DataHelper.fromLong(preprocessed, offset, 4);
             if (_log.shouldDebug())
                 _log.debug("Reading [MsgID " + messageId + "] at offset: " + offset
-                           + "; type = " + type + "; router = "
+                           + " * Type: " + type + " * Router: "
                            + (router != null ? router.toBase64().substring(0,6) : "n/a")
-                           + "; tunnelId = " + tunnelId);
+                           + " * TunnelId: " + tunnelId);
             offset += 4;
         }
         if (extended) {

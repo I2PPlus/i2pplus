@@ -162,7 +162,7 @@ public class Reader {
             }
         }
         if (_log.shouldDebug())
-            _log.debug("wantsRead: " + con + (already ? "; already live" : "; not live"));
+            _log.debug("Wants read * " + (already ? "Already live" : "Not live") + "\n* " + con);
     }
 
     /**

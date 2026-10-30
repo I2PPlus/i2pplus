@@ -94,7 +94,9 @@ class FragmentedMessage {
             return false;
         }
         if (_log.shouldDebug())
-            _log.debug("Received [MsgID " + _messageId + "] fragment " + fragmentNum + " with " + length + " bytes" + (isLast ? " (last)" : "") + "; offset: " + offset);
+            _log.debug("Received [MsgID " + _messageId + "] fragment " + fragmentNum +
+                       " with " + length + " bytes" + (isLast ? " (last)" : "") +
+                       " * Offset: " + offset);
         // we should just use payload[] and use an offset/length on it
         ByteArray ba = _cache.acquire(); //new ByteArray(payload, offset, length); //new byte[length]);
         System.arraycopy(payload, offset, ba.getData(), 0, length);

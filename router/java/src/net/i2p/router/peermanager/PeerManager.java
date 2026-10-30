@@ -366,8 +366,8 @@ class PeerManager {
             if (_organizer.noteMissingRouterInfo(peer)) {noted++;}
         }
         if (noted > 0 && _log.shouldInfo()) {
-            _log.info("Loaded " + noted + " profiles whose RouterInfo is missing; " +
-                      "requesting them in batches of " +
+            _log.info("Loaded " + noted + " profiles whose RouterInfo is missing -> " +
+                      "Requesting them in batches of " +
                       RouterInfoRefresher.MISSING_ROUTERINFO_BATCH);
         }
         if (noted > 0) {new MissingRouterInfoDrain().schedule(0);}

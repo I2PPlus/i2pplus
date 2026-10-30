@@ -1784,7 +1784,7 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
             if (fresh == null) {
                 if (_log.shouldWarn()) {
                     _log.warn("Body-resume reconnect declined at " + bp.bodyReceived + '/' +
-                              bp.contentLength + " bytes; leaving download truncated");
+                              bp.contentLength + " bytes -> Leaving the download truncated");
                 }
                 return;
             }
@@ -1828,8 +1828,8 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
                 nonRangeFallback = true;
                 budget.refundLast();
                 if (_log.shouldInfo()) {
-                    _log.info("Body-resume attempt hit a transient status; " +
-                              "falling back to a non-Range re-request");
+                    _log.info("Body-resume attempt hit a transient status -> " +
+                              "Falling back to a non-Range re-request");
                 }
             } else {
                 // Successful splice (or a genuine stall) restores Range mode:

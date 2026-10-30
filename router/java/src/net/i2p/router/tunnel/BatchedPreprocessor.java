@@ -533,7 +533,7 @@ class BatchedPreprocessor extends TrivialPreprocessor {
                 if (_log.shouldDebug())
                     _log.debug("[MsgID " + msg.getMessageId() + "] Writing fragment 0:"
                                + "\n* Ending at offset: " + offset + " (prev offset: " + prevOffset
-                               + "); Leaving " + (msg.getData().length - msg.getOffset()) + " bytes for later");
+                               + ") * Leaving " + (msg.getData().length - msg.getOffset()) + " bytes for later");
             } else {
                 offset = writeSubsequentFragment(msg, target, offset);
                 if (_log.shouldDebug()) {
@@ -544,7 +544,7 @@ class BatchedPreprocessor extends TrivialPreprocessor {
                     if (_log.shouldDebug())
                         _log.debug("[MsgID " + msg.getMessageId() + "] Writing fragment " + frag + ":"
                                + "\n* Ending at offset: " + offset + " (prev offset: " + prevOffset
-                               + "); Leaving " + later + " bytes for later");
+                               + ") * Leaving " + later + " bytes for later");
                 }
             }
         }

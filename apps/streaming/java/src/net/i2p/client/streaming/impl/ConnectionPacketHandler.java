@@ -232,7 +232,7 @@ class ConnectionPacketHandler {
             final int size = ConnectionOptions.DEFAULT_MAX_MESSAGE_SIZE;
             if (size < con.getOptions().getMaxMessageSize()) {
                 if (_log.shouldInfo())
-                    _log.info("Received SYN ACK without MTU; reducing MTU to " + size
+                    _log.info("Received SYN ACK without MTU -> Reducing MTU to " + size
                               + " bytes (Max: " + con.getOptions().getMaxMessageSize() + ")");
                 con.getOptions().setMaxMessageSize(size);
                 con.getOutputStream().setBufferSize(size);
@@ -373,7 +373,7 @@ class ConnectionPacketHandler {
                 final long lastSendTime = con.getLastSendTime();
 
                 if (_log.shouldInfo())
-                    _log.info(String.format("%s %n* Congestion: DUP packet %s ACKDelay %d; Last Send: %s ago",
+                    _log.info(String.format("%s %n* Congestion: DUP packet %s * ACK delay: %d * Last send: %s ago",
                                     con, packet, ackDelay, DataHelper.formatDuration(now - lastSendTime)));
 
                 // If this is longer than his RTO, he will always retransmit, and

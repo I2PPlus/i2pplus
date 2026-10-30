@@ -3154,7 +3154,9 @@ public class EstablishmentManager {
         _outboundStates.remove(outboundState.getRemoteHostId(), outboundState);
         if (outboundState.getState() != OB_STATE_CONFIRMED_COMPLETELY) {
             if (_log.shouldDebug())
-                _log.debug("Session with " + outboundState + " has expired; Lifetime: " + outboundState.getLifetime() + "ms ");
+                _log.debug("Session expired during establishment * Lifetime: " +
+                           DataHelper.formatDuration(outboundState.getLifetime()) +
+                           "\n* " + outboundState);
             OutNetMessage msg;
             while ((msg = outboundState.getNextQueuedMessage()) != null) {
                 _transport.failed(msg, "Expired during failed establishment attempt");

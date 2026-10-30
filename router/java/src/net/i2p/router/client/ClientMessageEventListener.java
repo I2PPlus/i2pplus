@@ -338,7 +338,6 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
         int status = _runner.sessionEstablished(cfg);
         if (status != SessionStatusMessage.STATUS_CREATED) {
             // For now, we do NOT send a SessionStatusMessage - see javadoc above
-            if (_log.shouldError()) {_log.error("Session establish failed; code: " + status);}
             String msg;
             if (status == SessionStatusMessage.STATUS_DUP_DEST) {msg = "Duplicate destination";}
             // not in spec, change to INVALID if we send it
@@ -346,6 +345,10 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
             else if (status == SessionStatusMessage.STATUS_INVALID) {msg = "Bad session configuration parameters";}
             else if (status == SessionStatusMessage.STATUS_REFUSED) {msg = "Session limit exceeded";}
             else {msg = "unknown error";}
+            // The code is an int a reader cannot decode at 3am, and the mapping is
+            // right here, so log the words it stands for and keep the number beside
+            // it for grepping.
+            if (_log.shouldError()) {_log.error("Session establish failed -> " + msg + " (Status: " + status + ")");}
             _runner.disconnectClient(msg);
             return;
         }
@@ -549,7 +552,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
      */
     private void handleReceiveBegin(ReceiveMessageBeginMessage message) {
         if (_runner.isDead()) {return;}
-        if (_log.shouldDebug()) {_log.debug("Handling receive begin; id: " + message.getMessageId());}
+        if (_log.shouldDebug()) {_log.debug("Handling receive begin * Id: " + message.getMessageId());}
         Payload payload = _runner.getPayload(new MessageId(message.getMessageId()));
         ReceiveRequest request = classifyReceiveBegin(_runner.getConfig(message.sessionId()), payload);
         if (request != ReceiveRequest.ALLOWED) {

@@ -828,7 +828,9 @@ class PacketBuilder2 {
             byte[] gzipped = DataHelper.compress(info, 0, info.length, DataHelper.MAX_COMPRESSION);
             if (gzipped.length < info.length) {
                 if (_log.shouldInfo())
-                    _log.info("[SSU] Gzipping RouterInfo -> Max is " + max + " bytes; Size was " + info.length + " bytes, size now is " + gzipped.length + " bytes");
+                    _log.info("[SSU] Gzipping RouterInfo -> Max is " + max + " bytes"
+                              + " * Size was " + info.length + " bytes"
+                              + " * Size now is " + gzipped.length + " bytes");
                 gzip = true;
                 info = gzipped;
                 numFragments = info.length / max;

@@ -59,7 +59,7 @@ class I2PSocketFull implements I2PSocket {
         Connection c = _connection;
         if (c == null) return;
         if (log.shouldInfo()) {
-            log.info("close() called while " + (c.getIsConnected() ? "connected" : "disconnected") + "; " + c);
+            log.info("Close called while " + (c.getIsConnected() ? "connected" : "disconnected") + "\n* " + c);
         }
         if (c.getIsConnected()) {
             MessageInputStream in = c.getInputStream();
@@ -90,7 +90,7 @@ class I2PSocketFull implements I2PSocket {
         Connection c = _connection;
         if (c == null) return;
         if (log.shouldInfo())
-            log.info("reset() called while " + (c.getIsConnected() ? "connected" : "disconnected") + "; " + c);
+            log.info("Reset called while " + (c.getIsConnected() ? "connected" : "disconnected") + "\n* " + c);
         if (c.getIsConnected()) {
             c.disconnect(false);
             // this will cause any thread waiting in Connection.packetSendChoke()

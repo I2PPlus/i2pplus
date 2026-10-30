@@ -170,8 +170,9 @@ public class Writer {
             }
         }
         if (_log.shouldDebug())
-            _log.debug("wantsWrite: " + con + (already ? "; already live" : "; not live") +
-                       (pending ? "; added to pending" : "; not added") + "; source: " + source);
+            _log.debug("Wants write * " + (already ? "Already live" : "Not live") +
+                       (pending ? " * Added to pending" : " * Not added") +
+                       " * Source: " + source + "\n* " + con);
     }
 
     /**
@@ -224,7 +225,7 @@ public class Writer {
                             con = null;
                             if (_pendingConnections.isEmpty()) {
                                 if (_log.shouldDebug())
-                                    _log.debug("Done writing, but nothing pending; waiting...");
+                                    _log.debug("Done writing, but nothing pending -> Waiting");
                                 _pendingConnections.wait();
                             } else {
                                 Iterator<NTCPConnection> iter = _pendingConnections.iterator();

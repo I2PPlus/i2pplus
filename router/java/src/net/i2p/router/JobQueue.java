@@ -819,7 +819,7 @@ public class JobQueue {
                 Thread.currentThread().interrupt();
             }
         }
-        if (_log.shouldWarn()) {_log.warn("Job no longer alive; returning null");}
+        if (_log.shouldWarn()) {_log.warn("Job no longer alive -> Returning null");}
         return null;
     }
 

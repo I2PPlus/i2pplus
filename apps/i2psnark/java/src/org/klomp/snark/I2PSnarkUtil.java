@@ -2046,7 +2046,7 @@ public class I2PSnarkUtil implements DisconnectListener {
         TorrentDest td = getTorrentDest(ih);
         if (td == null) {
             if (_log.shouldDebug()) {
-                _log.debug("No dedicated destination for this torrent; fetching ["
+                _log.debug("No dedicated destination for this torrent -> Fetching ["
                            + url + "] over the shared session");
             }
             return get(url, rewrite, retries, initialSize, maxSize);

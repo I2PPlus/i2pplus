@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
@@ -210,11 +211,11 @@ class RefreshRoutersJob extends JobImpl {
     private void logRefreshCompletion() {
         int netDbCount = getContext().netDb().getKnownRouters();
         if (netDbCount > 10000) {
-            _log.info(String.format("Finished refreshing NetDb; over 10000 known routers, job will rerun in %dm",
-                (_restartDelayMs / 1000 / 60)));
+            _log.info("Finished refreshing NetDb * Over 10000 known routers * Job will rerun in " +
+                      DataHelper.formatDuration(_restartDelayMs));
         } else {
-            _log.info(String.format("Finished refreshing NetDb routers; job will rerun in %ds",
-                (_restartDelayMs / 1000)));
+            _log.info("Finished refreshing NetDb routers * Job will rerun in " +
+                      DataHelper.formatDuration(_restartDelayMs));
         }
     }
 

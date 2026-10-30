@@ -2674,7 +2674,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             Log log = getContext().logManager().getLog(TunnelPeerSelector.class);
             if (log.shouldDebug()) {
                 log.debug("Pre-connect to [" + _peer.toBase64().substring(0,6) +
-                          "] failed after transport retries; recorded as a failed first hop");
+                          "] failed after transport retries -> Recorded as a failed first hop");
             }
         }
     }

@@ -634,7 +634,8 @@ class SAMv3Handler extends SAMv1Handler
         if (!mayUseSession(rec)) {
             if (_log.shouldWarn())
                 _log.warn("STREAM " + opcode + " denied for session " + nick +
-                          "; session belongs to another client; requester " + getRemoteAddrPort());
+                          " -> Session belongs to another client" +
+                          " * Requester: " + getRemoteAddrPort());
             try {
                 notifyStreamResult(true, "I2P_ERROR", "STREAM SESSION ID " + nick + " is not accessible from this connection");
             } catch (IOException e) { /* ignored */ }

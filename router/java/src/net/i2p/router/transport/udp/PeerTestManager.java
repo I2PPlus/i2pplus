@@ -1028,12 +1028,12 @@ class PeerTestManager {
         if (_log.shouldDebug())
             _log.debug("Received PeerTest message from [" + fromPeer + "] \n* " +
                        "Time: " + DataHelper.formatTime(time) +
-                       "; Message: " + msg +
-                       "; Status: " + status +
-                       "; Hash: " + (h != null ? h.toBase64() : "null") +
-                       "; Nonce: " + nonce +
-                       "; IP/Port: " + Addresses.toString(testIP, testPort) +
-                       "; State " + state);
+                       " * Message: " + msg +
+                       " * Status: " + status +
+                       "\n* Hash: " + (h != null ? h.toBase64() : "null") +
+                       " * Nonce: " + nonce +
+                       " * IP/Port: " + Addresses.toString(testIP, testPort) +
+                       " * State: " + state);
 
         byte[] fromIP = from.getIP();
         int fromPort = from.getPort();

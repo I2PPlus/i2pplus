@@ -376,8 +376,8 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
             if (elapsed <= SLOW_PASS_WARN_MS) return;
             Log log = I2PAppContext.getGlobalContext().logManager().getLog(QueuedI2CPMessageReader.class);
             if (log.shouldWarn()) {
-                log.warn("I2CP dispatch pass for " + reader.describe() + " took " + elapsed
-                         + "ms; a client message handler is blocking the I2CP pool");
+                log.warn("I2CP dispatch pass for " + reader.describe() + " took " + elapsed + "ms"
+                         + " -> A client handler is blocking the I2CP pool");
             }
         }
     }

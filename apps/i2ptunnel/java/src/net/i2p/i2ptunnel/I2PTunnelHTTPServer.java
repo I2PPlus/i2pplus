@@ -2398,8 +2398,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         if ((timeToHandle > 1500) && (_log.shouldDebug())) {
             _log.info("[HTTPServer] Took a while (" + timeToHandle + "ms) to handle the request for " + remoteHost + ':' + remotePort +
                       "\n* Client: " + peerB32 +
-                      "\n* Tasks: Read headers: " + (afterHeaders-afterAccept) + "ms; " +
-                      "Socket create: " + (afterSocket-afterHeaders) + "ms; " +
+                      "\n* Tasks: Read headers: " + (afterHeaders-afterAccept) + "ms * " +
+                      "Socket create: " + (afterSocket-afterHeaders) + "ms * " +
                       "Start runners: " + (afterHandle-afterSocket) + "ms");
          }
     }

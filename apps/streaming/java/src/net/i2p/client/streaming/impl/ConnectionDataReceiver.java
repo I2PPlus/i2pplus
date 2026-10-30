@@ -85,7 +85,7 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
         Connection con = _connection;
         if (con == null) {
             if (_log.shouldWarn()) {
-                _log.warn("Connection is null; dropping write of " + size + " bytes");
+                _log.warn("Connection is null -> Dropping the write of " + size + " bytes");
             }
             return _dummyStatus;
         }
@@ -109,10 +109,14 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
         }
 
         if (_log.shouldDebug()) {
-            _log.debug("writeData called; size: " + size + "; " + (doSend ? "sending" : "not sending") +
-                       "; output " + (con.getOutputStream().getClosed() ? "closed" : "open") +
-                       "; closeSentOn: " + con.getCloseSentOn() +
-                       "; unacked: " + con.getUnackedPacketsReceived());
+            long closeSentOn = con.getCloseSentOn();
+            _log.debug("Write data called * Size: " + size + " * " + (doSend ? "Sending" : "Not sending") +
+                       " * Output " + (con.getOutputStream().getClosed() ? "closed" : "open") +
+                       " * Close sent: " + (closeSentOn > 0
+                                            ? DataHelper.formatDuration(_context.clock().now() - closeSentOn)
+                                              + " ago"
+                                            : "Not sent") +
+                       " * Unacked: " + con.getUnackedPacketsReceived());
         }
 
         if (doSend) {

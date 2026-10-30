@@ -788,7 +788,7 @@ class MessageOutputStream extends OutputStream {
                 }
                 _enqueued = true;
             } else if (_log.shouldDebug()) {
-                _log.debug("Flusher already enqueued; skipping reschedule");
+                _log.debug("Flusher already enqueued -> Not rescheduling");
             }
         }
 

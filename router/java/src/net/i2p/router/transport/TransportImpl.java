@@ -722,7 +722,7 @@ public abstract class TransportImpl implements Transport {
 
         if (_listener != null) {_listener.messageReceived(inMsg, remoteIdent, remoteIdentHash);}
         else if (_log.shouldError()) {
-            _log.error("Null listener; this: " + toString(), new Exception("Null listener"));
+            _log.error("Null listener -> Message dropped * This: " + toString(), new Exception("Null listener"));
         }
     }
 

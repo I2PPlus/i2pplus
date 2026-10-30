@@ -2781,7 +2781,7 @@ public class ProfileOrganizer {
 
         // Attempt to acquire write lock
         if (!getWriteLock()) {
-            _log.warn("Write lock unavailable during reorganize; performing lightweight expiration...");
+            _log.warn("Write lock unavailable during reorganize -> Lightweight expiration only");
 
             getReadLock();
             try {

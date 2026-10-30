@@ -1150,9 +1150,9 @@ class ConnectionManager {
             return true;
         if (action == SynBurstAction.RECORD && _log.shouldWarn()) {
             _log.warn("SYN burst strike for " + h.toBase32().substring(0, 6)
-                      + " (>" + _synBurst + " SYNs/" + _synRateMs + "ms); "
-                      + needed + " burst windows within " + (STRIKE_WINDOW_MS / 1000)
-                      + "s autobans");
+                      + " (>" + _synBurst + " SYNs/" + _synRateMs + "ms)"
+                      + " * " + needed + " burst windows within "
+                      + DataHelper.formatDuration(STRIKE_WINDOW_MS) + " autobans");
         }
         return false;
     }

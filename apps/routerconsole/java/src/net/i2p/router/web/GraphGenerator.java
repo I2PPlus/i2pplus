@@ -254,8 +254,8 @@ public class GraphGenerator implements Runnable, ClientApp {
         });
         _context.clientAppManager().register(this);
         if (_log.shouldInfo()) {
-            _log.info("Graph generation registered; persistent=" + isPersistent
-                      + " listeners=" + _listeners.size());
+            _log.info("Graph generation registered * Persistent: [" + isPersistent
+                      + "] * Listeners: " + _listeners.size());
         }
         _scheduler = Executors.newSingleThreadScheduledExecutor(r -> {
             Thread t = new Thread(r, "StatWriter");

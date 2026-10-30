@@ -347,7 +347,7 @@ class RateSampleDelivery {
             } catch (Throwable t) {
                 Log log = _context != null ? _context.logManager().getLog(RateSampleDelivery.class) : null;
                 if (log != null && log.shouldWarn())
-                    log.warn("Rate summary listener threw; delivery continues: " + t, t);
+                    log.warn("Rate summary listener threw -> Delivery continues: " + t, t);
             }
         }
     }
@@ -375,7 +375,7 @@ class RateSampleDelivery {
                       + "\n* Oldest samples evicted: " + total
                       + " * Superseded: " + _superseded.get()
                       + " * Oldest pending age: " + getOldestPendingAgeMs() + "ms"
-                      + "\n* Graph history has gaps; the rate counters are updated"
+                      + "\n* Graph history has gaps * The rate counters are updated"
                       + " before delivery and are unaffected");
         }
     }

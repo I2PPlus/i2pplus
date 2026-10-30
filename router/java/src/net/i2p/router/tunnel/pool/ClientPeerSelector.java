@@ -694,7 +694,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         } else if (log.shouldWarn()) {
             log.warn("CPS no first hop for " + settings.getDestinationNickname() +
                      " (" + (params.isInbound ? "in" : "out") + ") " + length +
-                     "-hop; shortfall fallback will fill it");
+                     "-hop * Shortfall fallback will fill it");
         }
         return rv;
     }

@@ -1050,7 +1050,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             }
                             if (currentProxy == null) {
                                 if (_log.shouldWarn()) {
-                                    _log.warn("[HTTPClient] Cannot connect to site; no outproxy configured \n* Request: " + requestURI);
+                                    _log.warn("[HTTPClient] Cannot connect to site -> No outproxy configured \n* Request: " + requestURI);
                                 }
                                 writeErrorPage(out, reader, "noproxy", ERR_NO_OUTPROXY);
                                 return;
@@ -1698,7 +1698,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         if (isBrowserPeerClosed(s, reader, method)) {
                             if (_log.shouldInfo()) {
                                 _log.info(getPrefix(requestId) +
-                                          "Browser closed during I2P connect; aborting retries");
+                                          "Browser closed during I2P connect -> Aborting the retries");
                             }
                             if (heldPermitDest != null) {
                                 releaseConnPermit(heldPermitDest);
@@ -1722,7 +1722,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             deadlineExtended = true;
                             if (_log.shouldInfo()) {
                                 _log.info(getPrefix(requestId) +
-                                          "Extending connect deadline; outbound pool still building");
+                                          "Extending the connect deadline -> Outbound pool still building");
                             }
                         }
                         boolean deadlineExpired = isDeadlineExpired(connectDeadline, nowMs);
@@ -1736,9 +1736,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                 _log.warn(getPrefix(requestId) +
                                           (deadlineExpired
                                            ? "Connect deadline expired after " + connectAttempts +
-                                             " attempt(s); not retrying"
+                                             " attempt(s) -> Not retrying"
                                            : "Connect timed out after " + timeoutConnectAttempts +
-                                             " attempt(s); not retrying" +
+                                             " attempt(s) -> Not retrying" +
                                              (poolSnapshot == 0 ? " (pool still building)" : "")));
                             }
                             if (heldPermitDest != null) {
@@ -2308,7 +2308,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         // each warm open is a full createI2PSocket (failover × timeout).
         if (poolIsDefinitivelyDown()) {
             if (_log.shouldDebug()) {
-                _log.debug(getPrefix(requestId) + "Skipping speculative warm; pool down");
+                _log.debug(getPrefix(requestId) + "Skipping the speculative warm socket -> Pool down");
             }
             return;
         }
