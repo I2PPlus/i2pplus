@@ -145,8 +145,8 @@ class InboundMessageState implements CDQEntry {
                 }
                 if (_log.shouldDebug())
                     _log.debug("New fragment " + fragmentNum + " for message " + _messageId
-                               + ", size=" + len
-                               + ", isLast=" + isLast);
+                               + " * Size: " + len
+                               + " * Last: [" + isLast + "]");
             } else {
                 if (_log.shouldDebug())
                     _log.debug("Received fragment " + fragmentNum + " for message " + _messageId

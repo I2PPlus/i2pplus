@@ -242,10 +242,10 @@ public class GraphGenerator implements Runnable, ClientApp {
         // pool size into a static singleton at class-init, so this call only wins
         // if nothing touched rrd4j first. Worth seeing rather than assuming.
         if (_log.shouldInfo()) {
-            _log.info("RRD4J sync pool requested=" + syncThreads + " effective="
-                      + RrdNioBackendFactory.getSyncPoolSize() + " period="
-                      + RrdNioBackendFactory.getSyncPeriod() + "s backend="
-                      + RrdBackendFactory.getDefaultFactory().getClass().getSimpleName());
+            _log.info("RRD4J sync pool -> Requested " + syncThreads + " threads"
+                      + "\n* Effective: " + RrdNioBackendFactory.getSyncPoolSize()
+                      + " * Period: " + DataHelper.formatDuration(RrdNioBackendFactory.getSyncPeriod() * 1000L)
+                      + " * Backend: " + RrdBackendFactory.getDefaultFactory().getClass().getSimpleName());
         }
         RrdNioBackendFactory.setThreadFactory(r -> {
             Thread t = new Thread(r, "RRD4JSync");

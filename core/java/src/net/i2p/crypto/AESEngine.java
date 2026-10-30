@@ -135,7 +135,8 @@ public class AESEngine {
         boolean eq = DataHelper.eqCT(decr, 0, h, 0, Hash.HASH_LENGTH);
         SimpleByteCache.release(h);
         if (!eq) {
-            _log.error("Hash does not match [iv = " + DataHelper.toString(iv, iv.length) + "]", new Exception("Hash error"));
+            _log.error("Hash does not match -> Discarding the decrypted payload (IV: " +
+                       DataHelper.toString(iv, iv.length) + ")", new Exception("Hash error"));
             return null;
         }
         int cur = Hash.HASH_LENGTH;

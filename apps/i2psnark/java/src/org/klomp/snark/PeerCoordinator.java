@@ -1474,10 +1474,11 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 if (piece == null) {
                     if (_log.shouldInfo()) {
                         _log.info(
-                                "Nothing to even rerequest from ["
+                                "Nothing left to request from ["
                                         + peer
-                                        + "] - requested = "
-                                        + requested);
+                                        + "] -> Ending the piece exchange (requested: "
+                                        + requested
+                                        + ")");
                     }
                     return null; // If we still can't find a piece we want, so be it.
                 } else {

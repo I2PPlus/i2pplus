@@ -6,6 +6,7 @@ import java.util.Locale;
 import java.util.StringTokenizer;
 import java.util.concurrent.CopyOnWriteArrayList;
 import net.i2p.I2PAppContext;
+import net.i2p.data.DataHelper;
 import net.i2p.time.Timestamper;
 import net.i2p.util.Addresses;
 import net.i2p.util.I2PThread;
@@ -448,8 +449,12 @@ public class RouterTimestamper extends Timestamper {
         for (UpdateListener lsnr : _listeners) {
              lsnr.setNow(now, stratum);
         }
+        long delta = now - before;
         if (_log != null && _log.shouldDebug())
-            _log.debug("Stamped the time as " + now + " (delta=" + (now-before) + ")");
+            _log.debug("Stamped the router time -> Moved the clock " +
+                       (delta >= 0 ? "forward " : "back ") +
+                       DataHelper.formatDuration(Math.abs(delta)) +
+                       " (Stratum: " + stratum + ")");
     }
 
     /**

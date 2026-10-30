@@ -215,9 +215,9 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         int length = getLength(settings);
         if (length < 0 || ((length == 0) && (settings.getLength() + settings.getLengthVariance() > 0))) {
             if (log.shouldWarn()) {
-                log.warn("CPS selectPeers abort: getLength returned " + length +
-                         " for " + settings.getDestinationNickname() +
-                         " (" + (settings.isInbound() ? "in" : "out") + ")");
+                log.warn("Client pool selection aborted -> Requested tunnel length is " + length +
+                         " * Destination: " + settings.getDestinationNickname() +
+                         " * " + (settings.isInbound() ? "Inbound" : "Outbound"));
             }
             return Collections.emptyList();
         }
@@ -266,8 +266,8 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
             if (rv.isEmpty() && !preFinalize.isEmpty()) {
                 List<Hash> unusable = new ArrayList<>(preFinalize);
                 if (log.shouldDebug()) {
-                    log.debug("CPS finalize emptied an approved selection (" + unusable.size() +
-                              " unusable peers) -> Redrawing once with them excluded");
+                    log.debug("Client pool selection emptied at finalize -> Redrawing with the " +
+                              unusable.size() + " unusable peers excluded");
                 }
                 SelectionExclusions retry = buildExclusions(settings, isInbound,
                                                             params.buildSuccess, length);
@@ -305,16 +305,16 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         int approved = rv.size();
         if (shouldDiscardShortSelection(rv.size(), min)) {
             if (log.shouldWarn()) {
-                log.warn("CPS selection unusable for " + settings.getDestinationNickname() +
-                         " (" + (isInbound ? "in" : "out") + "): " + (rv.size() - 1) +
-                         "/" + min + " hops -> Discarding for redraw");
+                log.warn("Client pool selection for " + settings.getDestinationNickname() +
+                         " is unusable -> Discarding for a redraw (" + (isInbound ? "Inbound" : "Outbound") +
+                         ", " + (rv.size() - 1) + "/" + min + " hops)");
             }
             return Collections.emptyList();
         }
         if (log.shouldDebug() && rv.size() - 1 < min) {
-            log.debug("CPS accepting short selection for " + settings.getDestinationNickname() +
-                      " (" + (isInbound ? "in" : "out") + "): " + (rv.size() - 1) +
-                      "/" + min + " hops, " + approved + " approved");
+            log.debug("Client pool selection for " + settings.getDestinationNickname() +
+                      " accepted short -> " + (rv.size() - 1) + "/" + min + " hops, " +
+                      approved + " approved (" + (isInbound ? "Inbound" : "Outbound") + ")");
         }
         return rv;
     }
@@ -692,9 +692,9 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
             ex.firstHop = matches.get(0);
             rv.addAll(matches);
         } else if (log.shouldWarn()) {
-            log.warn("CPS no first hop for " + settings.getDestinationNickname() +
-                     " (" + (params.isInbound ? "in" : "out") + ") " + length +
-                     "-hop * Shortfall fallback will fill it");
+            log.warn("No first hop for the " + settings.getDestinationNickname() +
+                     " client pool -> The shortfall fallback fills it (" +
+                     (params.isInbound ? "Inbound" : "Outbound") + ", " + length + " hops)");
         }
         return rv;
     }
@@ -894,7 +894,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
             // still honoured, because they express a hard network policy
             // (no US peers, say) rather than a preference about this hop's role.
             if (log.shouldWarn()) {
-                log.warn("CPS no endpoint peer under role exclusions"
+                log.warn("No client pool endpoint peer under role exclusions"
                          + " -> Retrying against raw exclusions");
             }
             ctx.profileOrganizer().selectAllNotFailingPeers(1, rawExclude, matches, false,
@@ -902,7 +902,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         }
         if (matches.isEmpty()) {
             if (log.shouldWarn()) {
-                log.warn("CPS no endpoint peer found after all fallbacks -> Aborting selection");
+                log.warn("No client pool endpoint peer after all fallbacks -> Aborting the selection");
             }
             return false;
         }
@@ -1644,8 +1644,9 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
             return rv;
         if (rv.isEmpty()) {
             if (log.shouldWarn()) {
-                log.warn("CPS no peers at all for " + settings.getDestinationNickname() +
-                         " (" + (settings.isInbound() ? "in" : "out") + " " + length + "-hop)");
+                log.warn("No peers at all for the " + settings.getDestinationNickname() +
+                         " client pool (" + (settings.isInbound() ? "Inbound" : "Outbound") +
+                         ", " + length + " hops)");
             }
             return Collections.emptyList();
         }
@@ -1680,9 +1681,10 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
                 }
             } else {
                 if (log.shouldWarn()) {
-                     log.warn("CPS not enough peers for " + settings.getDestinationNickname() +
-                              " (" + (settings.isInbound() ? "in" : "out") + "): rv: " + rv.size() +
-                              " min: " + min + " length: " + length);
+                     log.warn("Not enough peers for the " + settings.getDestinationNickname() +
+                              " client pool -> Returning empty (" +
+                              (settings.isInbound() ? "Inbound" : "Outbound") + ", " + rv.size() +
+                              " of " + min + " selected, length " + length + ")");
                 }
                 return Collections.emptyList();
             }

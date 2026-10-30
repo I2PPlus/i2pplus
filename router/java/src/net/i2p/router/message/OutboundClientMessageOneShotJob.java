@@ -929,15 +929,12 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         }
 
         if (_log.shouldDebug()) {
-            _log.debug("Sending message out on [TunnelID " + _outTunnel.getSendTunnelId(0) + "]\n* Target: "
-                           + _toString + " at [TunnelID "
-                           + _lease.getTunnelId() + "] on Gateway ["
-                           + _lease.getGateway().toBase64().substring(0,6) + "]");
-        }
-        if (_log.shouldDebug()) {
-            _log.debug("Dispatching to " + _toString + " via OB tunnel " + _outTunnel.getSendTunnelId(0) +
-                       " -> Lease tunnel " + _lease.getTunnelId() + " @ GW [" +
-                       _lease.getGateway().toBase64().substring(0, 6) + "]");
+            // One line, not two: the send tunnel, the lease tunnel and the gateway
+            // are the same facts the pre-dispatch trace used to print twice.
+            _log.debug("Dispatching a client message to " + _toString +
+                       " -> Sent on tunnel " + _outTunnel.getSendTunnelId(0) +
+                       "\n* Lease tunnel: " + _lease.getTunnelId() +
+                       " * Gateway: [" + _lease.getGateway().toBase64().substring(0, 6) + "]");
         }
 
         DispatchJob dispatchJob = new DispatchJob(msg, selector, onReply, onFail);

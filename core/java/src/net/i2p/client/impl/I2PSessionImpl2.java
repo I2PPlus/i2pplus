@@ -521,7 +521,8 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     @Override
     public void receiveStatus(int msgId, long nonce, int status) {
         if (_log.shouldDebug()) {
-            _log.debug(getPrefix() + " -> Received status " + status + " for [MsgID " + msgId + " / " + nonce + "]");
+            _log.debug(getPrefix() + " -> Received a send status for [MsgID " + msgId + " / " + nonce +
+                       "] (Status: " + status + ")");
         }
 
         MessageState state = null;
@@ -550,8 +551,8 @@ class I2PSessionImpl2 extends I2PSessionImpl {
 
         } else {
             if (_log.shouldInfo()) {
-                _log.info(getPrefix() + " -> No matching state for [MsgID " + msgId + " / " + nonce
-                          + "] with status = " + status);
+                _log.info(getPrefix() + " -> No matching send state for [MsgID " + msgId + " / " + nonce
+                          + "] (Status: " + status + ")");
             }
         }
     }

@@ -33,6 +33,7 @@ import net.i2p.client.streaming.I2PSocket;
 import net.i2p.client.streaming.I2PSocketManager;
 import net.i2p.client.streaming.I2PSocketOptions;
 import net.i2p.data.DataFormatException;
+import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.I2PSSLSocketFactory;
@@ -277,8 +278,9 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
             SAMBridge bridge = handler.getBridge();
             String hashPrefix = dest.calculateHash().toBase64().substring(0,6);
             if (_log.shouldInfo())
-                _log.info("STREAM CONNECT: starting on " + Thread.currentThread().getName() +
-                          " to [" + hashPrefix + "], timeout=" + opts.getConnectTimeout() + "ms");
+                _log.info("STREAM CONNECT -> Starting on thread " + Thread.currentThread().getName() +
+                          " to [" + hashPrefix + "] (Timeout: " +
+                          DataHelper.formatDuration(opts.getConnectTimeout()) + ")");
 
             try {
                 // Wait up to the connect timeout for the I2P session to be alive

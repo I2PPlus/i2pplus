@@ -797,14 +797,14 @@ public final class ECIESAEADEngine {
         // fast MSB check for key < 2^255
         if ((data[KEYLEN - 1] & 0x80) != 0) {
             if (_log.shouldDebug())
-                _log.debug("Bad PK N");
+                _log.debug("Bad public key in the Noise N handshake");
             return null;
         }
         // Replay check before DH/AEAD work, see decryptNewSession() above.
         // Check only - added on success below.
         if (keyManager.isDuplicateRaw(data)) {
             if (_log.shouldWarn())
-                _log.warn("Dup raw ephemeral key in IB N: " + Base64.encode(data, 0, KEYLEN));
+                _log.warn("Duplicate raw ephemeral key in an inbound Noise N handshake: " + Base64.encode(data, 0, KEYLEN));
             return NO_CLOVES;
         }
 
@@ -828,7 +828,7 @@ public final class ECIESAEADEngine {
             // we'll get this a lot from very old routers
             // logged at INFO in caller
             if (_log.shouldDebug())
-                _log.debug("Decrypt fail N, state at failure: " + state, gse);
+                _log.debug("Decrypt failed in the Noise N handshake, state at failure: " + state, gse);
             state.destroy();
             return null;
         }
@@ -838,7 +838,7 @@ public final class ECIESAEADEngine {
         PublicKey pk = new PublicKey(EncType.ECIES_X25519, xx);
         if (keyManager.isDuplicate(pk)) {
             if (_log.shouldWarn())
-                _log.warn("Dup eph. key in IB N: " + pk);
+                _log.warn("Duplicate ephemeral key in an inbound Noise N handshake: " + pk);
             state.destroy();
             return NO_CLOVES;
         }
@@ -849,7 +849,7 @@ public final class ECIESAEADEngine {
         if (payloadlen == 0) {
             // disallowed, datetime block required
             if (_log.shouldWarn())
-                _log.warn("Zero length payload in N");
+                _log.warn("Zero length payload in a Noise N handshake");
             state.destroy();
             return NO_CLOVES;
         }
@@ -857,19 +857,19 @@ public final class ECIESAEADEngine {
         try {
             int blocks = RatchetPayload.processPayload(_context, pc, payload, 0, payload.length, true);
             if (_log.shouldDebug())
-                _log.debug("Processed " + blocks + " blocks in IB N");
+                _log.debug("Processed " + blocks + " blocks in an inbound Noise N handshake");
         } catch (DataFormatException e) {
             state.destroy();
             throw e;
         } catch (Exception e) {
             state.destroy();
-            throw new DataFormatException("N payload error", e);
+            throw new DataFormatException("Noise N payload error", e);
         }
 
         if (pc.datetime == 0) {
             // disallowed, datetime block required
             if (_log.shouldWarn())
-                _log.warn("No datetime block in IB N");
+                _log.warn("No datetime block in an inbound Noise N handshake");
             state.destroy();
             return NO_CLOVES;
         }
@@ -877,13 +877,13 @@ public final class ECIESAEADEngine {
         if (pc.cloveSet.isEmpty()) {
             // this is legal ?
             if (_log.shouldDebug())
-                _log.debug("No garlic block in N payload");
+                _log.debug("No garlic block in the Noise N payload");
             state.destroy();
             return NO_CLOVES;
         }
 
         if (_log.shouldDebug()) {
-            _log.debug("N decrypt success");
+            _log.debug("Noise N handshake decrypted successfully");
         }
         state.destroy();
 
@@ -1396,12 +1396,12 @@ public final class ECIESAEADEngine {
             state.writeMessage(enc, 0, payload, 0, payload.length);
         } catch (GeneralSecurityException gse) {
             if (_log.shouldWarn())
-                _log.warn("Encrypt fail N", gse);
+                _log.warn("Encrypt failed in the Noise N handshake", gse);
             state.destroy();
             return null;
         }
         if (_log.shouldDebug())
-            _log.debug("Encrypted N: " + enc.length + " bytes, state: " + state);
+            _log.debug("Encrypted the Noise N handshake: " + enc.length + " bytes, state: " + state);
 
         state.destroy();
         return enc;

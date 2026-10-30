@@ -119,7 +119,7 @@ import net.i2p.util.SystemVersion;
             // All candidates were excluded by selection cooldowns.
             // Retry once without cooldowns rather than starving the pool.
             if (log.shouldDebug())
-                log.debug("EPS all candidates on cooldown, retrying without cooldowns");
+                log.debug("Every exploratory candidate is on cooldown -> Retrying the selection without cooldowns");
             includeCooldownsPass = false;
             rv = selectPeersInternal(settings, length, includeCooldownsPass);
         }
@@ -131,8 +131,8 @@ import net.i2p.util.SystemVersion;
         _lastAllGhostSelection.remove();
         if (ghosted != null && rv != null && rv.isEmpty()) {
             if (log.shouldDebug()) {
-                log.debug("EPS every peer was a ghost (" + ghosted.size() +
-                          "), retrying without them");
+                log.debug("Every exploratory peer drawn was a ghost * Count: " + ghosted.size() +
+                          " -> Retrying without them");
             }
             rv = selectPeersInternal(settings, length, includeCooldownsPass, ghosted);
             if (rv == null) {
@@ -143,7 +143,7 @@ import net.i2p.util.SystemVersion;
             // checkTunnel() rejected the selection — honor the never-null
             // contract so callers can rely on isEmpty() without null checks.
             if (log.shouldDebug())
-                log.debug("EPS checkTunnel failed -> Empty selection");
+                log.debug("Exploratory tunnel check failed -> Returning an empty selection");
             return Collections.emptyList();
         }
         return rv;
@@ -200,10 +200,10 @@ import net.i2p.util.SystemVersion;
             int cooldownExcluded = addFreshCooldownExclusions(_exploratoryCooldowns, cooldownCutoff, exclude);
             cooldownExcluded += addFreshCooldownExclusions(_peerCooldowns, cooldownCutoff, exclude);
             if (log.shouldDebug())
-                log.debug("EPS cooldown: own: " + _exploratoryCooldowns.size() +
-                          " * shared: " + _peerCooldowns.size() +
-                          " * excluded: " + cooldownExcluded +
-                          " * from: " + Thread.currentThread().getName());
+                log.debug("Exploratory selection cooldowns * Ours: " + _exploratoryCooldowns.size() +
+                          " * Shared: " + _peerCooldowns.size() +
+                          " * Excluded: " + cooldownExcluded +
+                          " * Thread: " + Thread.currentThread().getName());
         }
 
         // Per-pool diversity: exclude peers already in an active tunnel of this pool.
@@ -213,8 +213,8 @@ import net.i2p.util.SystemVersion;
         Set<Hash> poolPeers = getPeersInPool(ctx, pool);
         exclude.addAll(poolPeers);
         if (log.shouldInfo() && !poolPeers.isEmpty())
-            log.info("EPS per-pool exclusion: " + poolPeers.size() +
-                     " peers in active tunnels * from: " + Thread.currentThread().getName());
+            log.info("Exploratory per-pool exclusion -> Excluding " + poolPeers.size() +
+                     " peers in active tunnels * Thread: " + Thread.currentThread().getName());
         // Cross-pool diversity: when the fast tier is large enough, exclude peers
         // in ANY active tunnel across ALL pools. Forces exploratory builds to use
         // different fast peers than client pools, driving variability and ensuring
@@ -232,12 +232,13 @@ import net.i2p.util.SystemVersion;
             if (allActive.size() < fastCount * ClientPeerSelector.CROSS_POOL_EXCLUSION_RATIO) {
                 exclude.addAll(allActive);
                 if (log.shouldInfo())
-                    log.info("EPS cross-pool exclusion: " + allActive.size() +
-                             " peers in ANY active tunnel" +
-                             " * from: " + Thread.currentThread().getName());
+                    log.info("Exploratory cross-pool exclusion -> Excluding " + allActive.size() +
+                             " peers in any active tunnel * Thread: " + Thread.currentThread().getName());
             } else if (log.shouldDebug()) {
-                log.debug("EPS cross-pool exclusion skipped: " + allActive.size() + " of " + fastCount +
-                          " fast peers in active tunnels (ratio exceeds " + ClientPeerSelector.CROSS_POOL_EXCLUSION_RATIO + ")");
+                log.debug("Exploratory cross-pool exclusion skipped -> Active tunnels cover most of the fast tier" +
+                          "\n* In active tunnels: " + allActive.size() +
+                          " * Fast peers: " + fastCount +
+                          " * Ratio limit: " + ClientPeerSelector.CROSS_POOL_EXCLUSION_RATIO);
             }
         }
 
@@ -279,7 +280,8 @@ import net.i2p.util.SystemVersion;
                 // If hidden and inbound, use connected peers to guarantee
                 // that the adjacent hop can connect to us.
                 if (log.shouldInfo()) {
-                    log.info("EPS SANFP closest " + (isInbound ? "IB" : "OB") +
+                    log.info("Exploratory closest hop " + (isInbound ? "inbound" : "outbound") +
+                             " -> Selecting an active not-failing peer" +
                              formatExcludedPeers(closestExclude));
                 }
                 ctx.profileOrganizer().selectActiveNotFailingPeers(1, closestExclude, closest, ipRestriction, ipSet);
@@ -296,12 +298,14 @@ import net.i2p.util.SystemVersion;
                 }
             } else if (exploreHighCap) {
                 if (log.shouldInfo())
-                    log.info("EPS SHCP closest " + (isInbound ? "IB" : "OB") +
+                    log.info("Exploratory closest hop " + (isInbound ? "inbound" : "outbound") +
+                             " -> Selecting a high-capacity peer" +
                              formatExcludedPeers(closestExclude));
                 ctx.profileOrganizer().selectHighCapacityPeers(1, closestExclude, closest, ipRestriction, ipSet);
             } else {
                 if (log.shouldInfo())
-                    log.info("EPS SNFP closest " + (isInbound ? "IB" : "OB") +
+                    log.info("Exploratory closest hop " + (isInbound ? "inbound" : "outbound") +
+                             " -> Selecting a not-failing peer" +
                              formatExcludedPeers(closestExclude));
                 ctx.profileOrganizer().selectNotFailingPeers(1, closestExclude, closest, false, ipRestriction, ipSet, true);
             }
@@ -310,7 +314,7 @@ import net.i2p.util.SystemVersion;
                 Hash peer = closest.iterator().next();
                 if (isFirstHopFailing(ctx, peer)) {
                     if (log.shouldInfo())
-                        log.info("EPS closest hop [" + peer.toBase64().substring(0,6) +
+                        log.info("Exploratory closest hop [" + peer.toBase64().substring(0,6) +
                                  "] previously failed as first hop -> Selecting a replacement");
                     closestExclude.add(peer);
                     closest.clear();
@@ -321,8 +325,8 @@ import net.i2p.util.SystemVersion;
                 } else if (!ctx.commSystem().isEstablished(peer)) {
                     if (ctx.commSystem().wasUnreachable(peer)) {
                         if (log.shouldInfo())
-                            log.info("EPS closest hop [" + peer.toBase64().substring(0,6) +
-                                     "] is unreachable -> Retrying selection");
+                            log.info("Exploratory closest hop [" + peer.toBase64().substring(0,6) +
+                                     "] is unreachable -> Retrying the selection");
                         closestExclude.add(peer);
                         closest.clear();
                         ctx.profileOrganizer().selectNotFailingPeers(1, closestExclude, closest, false, ipRestriction, ipSet, true);
@@ -331,8 +335,8 @@ import net.i2p.util.SystemVersion;
                         }
                     } else if (!ctx.commSystem().isConnecting(peer)) {
                         if (log.shouldInfo())
-                            log.info("EPS pre-connecting to closest hop [" +
-                                     peer.toBase64().substring(0,6) + "] for tunnel build");
+                            log.info("Pre-connecting to the exploratory closest hop [" +
+                                     peer.toBase64().substring(0,6) + "] -> For the next tunnel build");
                         preConnectTo(ctx, peer);
                     }
                 }
@@ -361,13 +365,13 @@ import net.i2p.util.SystemVersion;
             if (pickFurthest) {
                 ArraySet<Hash> furthest = new ArraySet<>(1);
                 if (log.shouldInfo())
-                    log.info("EPS the outbound endpoint needs the furthest hop" +
+                    log.info("Exploratory outbound endpoint needs a connected last hop -> Selecting the furthest hop" +
                              formatExcludedPeers(exclude));
                 ctx.profileOrganizer().selectActiveNotFailingPeers(1, exclude, furthest, ipRestriction, ipSet);
                 if (furthest.isEmpty()) {
                     // ANFP does not fall back to non-connected
                     if (log.shouldInfo())
-                        log.info("EPS no connected peer for the furthest hop -> Retrying with fast peers" +
+                        log.info("No connected peer for the exploratory furthest hop -> Retrying with fast peers" +
                                  formatExcludedPeers(exclude));
                     ctx.profileOrganizer().selectFastPeers(1, exclude, furthest, ipRestriction, ipSet);
                 }
@@ -376,7 +380,7 @@ import net.i2p.util.SystemVersion;
                     Hash peer = furthest.iterator().next();
                     if (isFirstHopFailing(ctx, peer)) {
                         if (log.shouldInfo())
-                            log.info("EPS furthest hop [" + peer.toBase64().substring(0,6) +
+                            log.info("Exploratory furthest hop [" + peer.toBase64().substring(0,6) +
                                      "] previously failed as first hop -> Selecting a replacement");
                         exclude.add(peer);
                         furthest.clear();
@@ -384,15 +388,15 @@ import net.i2p.util.SystemVersion;
                     } else if (!ctx.commSystem().isEstablished(peer)) {
                         if (ctx.commSystem().wasUnreachable(peer)) {
                             if (log.shouldInfo())
-                                log.info("EPS furthest hop [" + peer.toBase64().substring(0,6) +
-                                         "] is unreachable -> Retrying selection");
+                                log.info("Exploratory furthest hop [" + peer.toBase64().substring(0,6) +
+                                         "] is unreachable -> Retrying the selection");
                             exclude.add(peer);
                             furthest.clear();
                             ctx.profileOrganizer().selectFastPeers(1, exclude, furthest, ipRestriction, ipSet);
                         } else if (!ctx.commSystem().isConnecting(peer)) {
                             if (log.shouldInfo())
-                                log.info("EPS pre-connecting to furthest hop [" +
-                                         peer.toBase64().substring(0,6) + "] for tunnel build");
+                                log.info("Pre-connecting to the exploratory furthest hop [" +
+                                         peer.toBase64().substring(0,6) + "] -> For the next tunnel build");
                             preConnectTo(ctx, peer);
                         }
                     }
@@ -410,7 +414,8 @@ import net.i2p.util.SystemVersion;
             Set<Hash> matches = new ArraySet<>(length);
             if (exploreHighCap) {
                 if (log.shouldInfo())
-                    log.info("EPS SHCP " + length + (isInbound ? " IB" : " OB") + formatExcludedPeers(exclude));
+                    log.info("Exploratory peer selection " + length + " hops " + (isInbound ? "inbound" : "outbound") +
+                             " -> Drawing from the high-capacity tier" + formatExcludedPeers(exclude));
                 ctx.profileOrganizer().selectHighCapacityPeers(length, exclude, matches, ipRestriction, ipSet);
                 // Same widening rule as the client pools: when the network is struggling
                 // or the Fast tier is small, complete the draw from Fast rather than
@@ -430,7 +435,8 @@ import net.i2p.util.SystemVersion;
                     ctx.profileOrganizer().selectHighCapacityPeers(length - 2, exclude, matches);
                 // select will check both matches and exclude, no need to add matches to exclude here
                 if (log.shouldInfo())
-                    log.info("EPS SNFP " + length + (isInbound ? " IB" : " OB") + formatExcludedPeers(exclude));
+                    log.info("Exploratory peer selection " + length + " hops " + (isInbound ? "inbound" : "outbound") +
+                             " -> Drawing from the not-failing tier" + formatExcludedPeers(exclude));
                 ctx.profileOrganizer().selectNotFailingPeers(length, exclude, matches, false, ipRestriction, ipSet, true);
                 if (matches.isEmpty()) {
                     // Fallback: try fast peers if not-failing is empty
@@ -441,8 +447,8 @@ import net.i2p.util.SystemVersion;
             rv.addAll(matches);
         }
         if (log.shouldInfo())
-            log.info("EPS " + length + (isInbound ? " IB" : " OB") + " -> Final selection" +
-                     formatExcludedPeers(exclude));
+            log.info("Exploratory peer selection " + length + " hops " + (isInbound ? "inbound" : "outbound") +
+                     " -> Final selection" + formatExcludedPeers(exclude));
 
         if (closestHop != null) {
             if (isInbound)
@@ -481,7 +487,7 @@ import net.i2p.util.SystemVersion;
                 // Recorded rather than restored: selectPeers() retries from these.
                 _lastAllGhostSelection.set(new HashSet<>(before));
             } else if (rv.size() != before.size() && log.shouldDebug()) {
-                log.debug("EPS ghost-filtered " + (before.size() - rv.size()) + " peer(s)");
+                log.debug("Exploratory selection dropped " + (before.size() - rv.size()) + " ghost peers");
             }
         }
         // Banlist filter: drop banlisted peers so builds do not dispatch
@@ -506,15 +512,15 @@ import net.i2p.util.SystemVersion;
             rv.removeIf(peer -> peer != null && banlist.isBanlisted(peer));
             if (rv.isEmpty()) {
                 if (log.shouldWarn()) {
-                    log.warn("EPS all selected peers were banlisted"
-                             + " -> Discarding selection for redraw");
+                    log.warn("Every selected exploratory peer is banlisted"
+                             + " -> Discarding the selection for a redraw");
                 }
                 if (ctx != null && ctx.statManager() != null) {
                     noteAllBannedDiscard(ctx);
                 }
                 rv.clear();
             } else if (rv.size() != before.size() && log.shouldDebug()) {
-                log.debug("EPS ban-filtered " + (before.size() - rv.size()) + " peer(s)");
+                log.debug("Exploratory selection dropped " + (before.size() - rv.size()) + " banlisted peers");
             }
         }
         if (isInbound)
@@ -544,9 +550,9 @@ import net.i2p.util.SystemVersion;
                     }
                 }
                 if (log.shouldDebug())
-                    log.debug("EPS cooldown record: recorded: " + recorded +
-                              " * rvSize: " + rv.size() +
-                              " * from: " + Thread.currentThread().getName());
+                    log.debug("Exploratory selection cooldown recorded for " + recorded + " adjacent peer(s)" +
+                              " * Selection size: " + rv.size() +
+                              " * Thread: " + Thread.currentThread().getName());
                 // Bound the own map: entries expire on read, but sweep only
                 // when the map is large (mirrors prunePeerMaps()).
                 if (_exploratoryCooldowns.size() > FAILURE_MAP_MAX_SIZE) {

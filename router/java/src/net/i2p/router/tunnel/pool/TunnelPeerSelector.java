@@ -2016,8 +2016,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
                 if (!hf.equals(us))
                     ctx.profileManager().tunnelTimedOut(hf);
                 if (!ht.equals(us) && log.shouldDebug()) {
-                    log.debug("checkTunnel failed between [" + hf.toBase64().substring(0,6) +
-                              "] and [" + ht.toBase64().substring(0,6) + "] — ht not blamed");
+                    log.debug("Tunnel check failed between [" + hf.toBase64().substring(0,6) +
+                              "] and [" + ht.toBase64().substring(0,6) + "] -> Blaming only the source hop");
                 }
                 rv = false;
                 break;

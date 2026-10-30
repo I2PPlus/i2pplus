@@ -785,8 +785,8 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
         if (_lastRejectWarn.compareAndSet(last, now)) {
             int max = _maxConnections;
             _log.warn("Connection cap reached for " + remoteHost + ':' + remotePort +
-                      " (maxConnections=" + max + ", active=" + _activeConnections.get() +
-                      ") -> Rejecting new connection");
+                      " -> Rejecting the new connection" +
+                      " * Maximum: " + max + " * Active: " + _activeConnections.get());
         }
     }
 
@@ -807,10 +807,10 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
         if (!_lastRejectWarn.compareAndSet(last, now)) {return;}
         int cap = queueDepth + ex.getQueue().remainingCapacity();
         _log.warn("Handler queue full for " + remoteHost + ':' + remotePort +
-                  " (queue=" + queueDepth + '/' + cap +
-                  ", pool=" + active + '/' + threads +
-                  ", slots=" + _activeConnections.get() +
-                  ") -> Rejecting new connection");
+                  " -> Rejecting the new connection" +
+                  "\n* Queue: " + queueDepth + '/' + cap +
+                  " * Threads: " + active + '/' + threads +
+                  " * Connection slots: " + _activeConnections.get());
     }
 
     /**

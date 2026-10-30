@@ -3039,9 +3039,11 @@ public class EstablishmentManager {
                     long budget = MAX_OB_ESTABLISH_TIME.get()
                                   + (cur.hasRetried() ? OB_RETRY_EXTRA_MS : 0);
                     _log.warn("[SSU] Giving up on outbound establishment to "
-                              + cur.getRemoteAddress() + " after " + cur.getLifetime(now)
-                              + "ms in state " + cur.getState()
-                              + " (budget " + budget + "ms, retried=" + cur.hasRetried() + ")");
+                              + cur.getRemoteAddress() + " after "
+                              + DataHelper.formatDuration(cur.getLifetime(now))
+                              + " in state " + cur.getState()
+                              + " (budget " + DataHelper.formatDuration(budget)
+                              + " * retried: [" + cur.hasRetried() + "])");
                 }
                 iter.remove();
                 outboundState = cur;

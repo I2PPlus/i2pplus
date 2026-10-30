@@ -2711,7 +2711,8 @@ public class TunnelPool {
         int oppositeMin = oppositePool.getSettings().getQuantity();
         if (oppositeUsable >= oppositeMin) {return false;}
         if (_log.shouldDebug()) {
-            _log.debug(toString() + " -> Skipping cleanup - paired OB pool below target (" + oppositeUsable + "/" + oppositeMin + ")");
+            _log.debug(toString() + " -> Skipping tunnel cleanup" +
+                       " (paired outbound pool below target: " + oppositeUsable + "/" + oppositeMin + ")");
         }
         return true;
     }
@@ -4256,19 +4257,24 @@ public class TunnelPool {
         long now = _context.clock().now();
         if (_log.shouldInfo() && shouldLogSendFailure(now, _lastSendFailureLogTime)) {
             _lastSendFailureLogTime = now;
-            _log.info(toString() + " -> Data-phase failure (status: " + status +
+            // The pool names the destination, so the tunnel key and its hops go
+            // on the first line: a continuation line that repeats the
+            // destination the pool already printed is a wasted line.
+            _log.info(toString() + " " + tunnelLabel() +
+                      " -> Data-phase failure (status: " + status +
                       (soft ? ", soft" : "") +
                       "), failures now " + failures +
-                      "\n* " + tunnelLabel() + describeHops(cfg));
+                      describeHops(cfg));
         }
         boolean overBar = exceedsRemovalThreshold(failures, soft);
         if (overBar) {
             if (_log.shouldWarn() && shouldLogSendFailure(now, _lastCondemnWarnTime)) {
                 _lastCondemnWarnTime = now;
-                _log.warn(toString() + " -> Marking tunnel failing after " +
+                _log.warn(toString() + " " + tunnelLabel() +
+                          " -> Marking tunnel failing after " +
                           failures +
                           (soft ? " soft" : " cumulative") +
-                          " failures (data-phase + test)\n* " + tunnelLabel());
+                          " failures (data-phase + test)");
             }
             failWithCount(cfg, failures);
             tellProfileFailed(cfg);
@@ -4517,10 +4523,10 @@ public class TunnelPool {
         }
         if (_log.shouldWarn()) {
             _log.warn("Marking " + (cfg.isInbound() ? "inbound" : "outbound") +
-                      " tunnel " + (isDead ? "FAILED" : "FAILING") +
-                      " -> Retained until expiry (" + failures +
-                      " failures, remaining: " + size() + ")" +
-                      (isDead ? ", dead" : "") + "\n* " + tunnelLabel());
+                      " tunnel " + tunnelLabel() + " " + (isDead ? "FAILED" : "FAILING") +
+                      " -> Retained until expiry" +
+                      " (failures: " + failures + " * remaining: " + size() + ")" +
+                      (isDead ? " * dead" : ""));
         }
         // Retention is a liveness signal: capacity must recover immediately,
         // not on the throttled schedule removeTunnel() used to drive.
@@ -7926,15 +7932,15 @@ public class TunnelPool {
     }
 
     /**
-     * Fast-fail for outbound tunnels: skip this build cycle when the TBR
-     * target (cfg.getPeer(1)) is not connected and not connecting — the TBR
-     * is sent directly to this peer via transport.  Pre-connect so the
-     * transport has time to establish before the next attempt;
+     * Fast-fail for outbound tunnels: skip this build cycle when the build
+     * request target (cfg.getPeer(1)) is not connected and not connecting — the
+     * build request is sent directly to this peer via transport.  Pre-connect so
+     * the transport has time to establish before the next attempt;
      * handleOutboundBuild() gives connecting peers a 12s timeout, which
      * covers the typical ~8.5s SSU2 handshake.
      *
      * @param settings the pool's settings, an inbound pool returns false immediately
-     * @param cfg the outbound config about to be dispatched, peer 1 is the TBR target
+     * @param cfg the outbound config about to be dispatched, peer 1 is the build request target
      * @return true when the build should be skipped (pre-connect issued)
      */
     private boolean fastFailTbrTarget(TunnelPoolSettings settings, PooledTunnelCreatorConfig cfg) {
@@ -7944,9 +7950,9 @@ public class TunnelPool {
             _context.commSystem().isEstablished(tbrTarget) ||
             _context.commSystem().isConnecting(tbrTarget)) {return false;}
         if (_log.shouldInfo()) {
-            _log.info("TBR target [" + tbrTarget.toBase64().substring(0,6) +
-                      "] not connected, pre-connecting for next attempt" +
-                      "\n* " + tunnelLabel());
+            _log.info("Build request peer [" + tbrTarget.toBase64().substring(0,6) +
+                      "] of " + tunnelLabel() + " is not connected" +
+                      " -> Pre-connecting for the next attempt");
         }
         TunnelPeerSelector.preConnectTo(_context, tbrTarget);
         return true;

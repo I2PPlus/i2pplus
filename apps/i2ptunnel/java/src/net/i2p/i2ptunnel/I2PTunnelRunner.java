@@ -1631,7 +1631,7 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
                     outB.flush();
                 }
             } catch (IOException ioe) {
-                if (_log.shouldWarn()) {_log.warn("Empty-race: failed to prepare sockets", ioe);}
+                if (_log.shouldWarn()) {_log.warn("Failed to prepare the sockets for the first-byte race", ioe);}
                 return null;
             }
             final PushbackInputStream inA = pA;
@@ -1640,16 +1640,17 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
             startRaceLeg("B", sockB, inB, winner, failures, settled);
             try {
                 if (!settled.await(EMPTY_RACE_TIMEOUT_MS, TimeUnit.MILLISECONDS)) {
-                    if (_log.shouldWarn()) {_log.warn("Empty-race: no first byte within " + EMPTY_RACE_TIMEOUT_MS + "ms");}
+                    if (_log.shouldWarn()) {_log.warn("No first byte from either socket -> Trying again (Timeout: " +
+                                                      DataHelper.formatDuration(EMPTY_RACE_TIMEOUT_MS) + ")");}
                 }
             } catch (InterruptedException ie) {
                 Thread.currentThread().interrupt();
             }
             win = winner.get();
-            if (win != null && _log.shouldInfo()) {_log.info("Empty-race winner selected");}
+            if (win != null && _log.shouldInfo()) {_log.info("The first-byte race selected a winner");}
             if (win == null && _log.shouldInfo()) {
-                _log.info("Empty-race both legs failed (settled=" + settled.getCount() +
-                          ", failures=" + failures.get() + ')');
+                _log.info("Both legs of the first-byte race failed -> Burning this attempt" +
+                          " * Settled: " + settled.getCount() + " * Failures: " + failures.get());
             }
             return win;
         } finally {
@@ -1693,7 +1694,7 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
                         }
                     }
                 } catch (IOException ioe) {
-                    if (_log.shouldDebug()) {_log.debug("Empty-race leg " + label + " failed: " + ioe.getMessage());}
+                    if (_log.shouldDebug()) {_log.debug("First-byte race leg " + label + " failed -> " + ioe.getMessage());}
                 }
                 if (failures.incrementAndGet() >= 2) {
                     settled.countDown();

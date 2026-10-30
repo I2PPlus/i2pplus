@@ -287,12 +287,9 @@ abstract class ExtensionHandler {
                         return;
                     }
                     if (log.shouldInfo())
-                        log.info(
-                                "Initialized state, metadata size = "
-                                        + metaSize
-                                        + " from ["
-                                        + peer
-                                        + "]");
+                        log.info("Initialized the metadata state -> Ready to receive chunks"
+                                 + " * Size: " + metaSize
+                                 + " * From [" + peer + "]");
                     state.initialize(metaSize);
                 }
                 remaining = state.chunksRemaining();

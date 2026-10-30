@@ -846,11 +846,12 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
             }
             if (_log.shouldInfo()) {
                 _log.info(
-                        "Received connect response, id = "
+                        "Received a connect response from the tracker"
+                                + " * ID: "
                                 + cid
-                                + " lifetime = "
-                                + (lifetime / 1000)
-                                + " from "
+                                + " * Lifetime: "
+                                + DataHelper.formatDuration(lifetime)
+                                + " * Tracker: "
                                 + tr);
             }
             tr.setConnection(cid, lifetime);

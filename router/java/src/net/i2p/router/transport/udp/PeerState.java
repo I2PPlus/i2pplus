@@ -1855,7 +1855,8 @@ public class PeerState {
         _concurrentMessagesAllowed = nextConcurrentLimit(numSends, _rtt, _concurrentMessagesAllowed, queued, randomInt);
         if (numSends < 2 && _log.shouldDebug() && _concurrentMessagesAllowed != oldLimit) {
             _log.debug("Concurrent msg limit [" + _shortHash + "] " +
-                       oldLimit + " -> " + _concurrentMessagesAllowed + " (RTT=" + _rtt + "ms queued=" + queued + ")");
+                       oldLimit + " -> " + _concurrentMessagesAllowed +
+                       " (RTT: " + DataHelper.formatDuration(_rtt) + " * queued: " + queued + ")");
         }
         long now = _context.clock().now();
         int sendWindow = _sendWindowBytes.get();
@@ -2025,7 +2026,7 @@ public class PeerState {
                     _mtuIncreases = 0;
                     _context.statManager().addRateData("udp.mtuDecrease", _mtuDecreases);
                     if (_log.shouldDebug()) {
-                        _log.debug("Decreased MTU after " + maxPktSz + " byte packet retx on " + this);
+                        _log.debug("Decreased MTU after retransmitting a " + maxPktSz + " byte packet on " + this);
                     }
                 }
             }

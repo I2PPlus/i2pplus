@@ -512,10 +512,11 @@ class MessageInputStream extends InputStream {
             }
             noteBuffered();
             if (_log.shouldDebug()) {
-                _log.debug("Close received: ready blocks=" + _readyDataBlocks.size()
-                        + ", not ready blocks=" + _notYetReadyBlocks.size()
-                        + ", highest ready block=" + _highestReadyBlockId
-                        + ", promoted through block " + (cur - 1));
+                _log.debug("Close received -> Draining the buffered blocks"
+                        + " * Ready blocks: " + _readyDataBlocks.size()
+                        + " * Pending blocks: " + _notYetReadyBlocks.size()
+                        + " * Highest ready block: " + _highestReadyBlockId
+                        + " * Promoted through block " + (cur - 1));
             }
             _closeReceived = true;
             _dataLock.notifyAll();

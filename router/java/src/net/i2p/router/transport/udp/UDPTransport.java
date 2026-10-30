@@ -2233,8 +2233,8 @@ public class UDPTransport extends TransportImpl {
         if (_log.shouldWarn() && !_mismatchLogged && _peersByIdent.size() != _peersByRemoteHost.size()) {
             _mismatchLogged = true;
             _log.warn("Size Mismatch after add: " + peer.toShortString()
-                       + " * byIDsz = " + _peersByIdent.size()
-                       + " * byHostsz = " + _peersByRemoteHost.size());
+                       + " * By ident: " + _peersByIdent.size()
+                       + " * By remote host: " + _peersByRemoteHost.size());
         }
 
         markReachable(peer.getRemotePeer(), peer.isInbound());
