@@ -272,11 +272,31 @@ _context.statManager().createRequiredRateStat(STAT_STORED_PROFILES,
         }
         // capacityBonus is deliberately NOT persisted - see purgeCapacityBonus()
         if (profile.getIntegrationBonus() != 0) {add(buf, addComments, "integrationBonus", profile.getIntegrationBonus(), "Manual Integration Score adjustment:");}
-        if (profile.isLowLatency()) {
-            add(buf, addComments, "lowLatency", 1, "Low latency flag (measured direct link RTT is low):");
+        // Tri-state: 1 = measured low latency, 0 = measured and not, key absent =
+        // never measured. The old form wrote the key only when true, which made
+        // "not low" and "unmeasured" the same file, and the flag then froze at
+        // whichever answer the last live measurement gave.
+        Boolean lowLatency = profile.getLowLatency();
+        if (lowLatency != null) {
+            add(buf, addComments, "lowLatency", lowLatency.booleanValue() ? 1 : 0,
+                "Low latency flag (1 measured low, 0 measured not low, absent never measured):");
+        }
+        if (profile.getPeerTestTimeLastUpdate() != 0) {
+            // The peer-test average is written below; this is the date that makes
+            // it evidence about the peer rather than a permanent verdict.
+            addDate(buf, addComments, "peerTestTimeLastUpdate", profile.getPeerTestTimeLastUpdate(),
+                    "Last update time for the peer test average (ms):");
         }
         if (profile.getLossySince() != 0) {
             add(buf, addComments, "lossySince", profile.getLossySince(), "Time peer was demoted for packet loss (loss probation):");
+            // The probation flag and the transport report that answers it are one
+            // piece of evidence: readmitting requires a report fresher than the
+            // lossy window, so a flag that survives a restart without its report
+            // leaves the peer in probation with nothing left to judge.
+            add(buf, addComments, "lossRatioMilli", (long) (profile.getLossRatio() * 1000),
+                "Packet loss ratio reported by the transport, in thousandths:");
+            addDate(buf, addComments, "lossRatioLastUpdate", profile.getLossRatioLastUpdate(),
+                    "When the transport last reported a loss ratio:");
         }
         addDate(buf, addComments, "firstHeardAbout", profile.getFirstHeardAbout(), "First reference to peer received:");
         addDate(buf, addComments, "lastHeardAbout", profile.getLastHeardAbout(), "Last reference to peer received:");
@@ -310,6 +330,12 @@ _context.statManager().createRequiredRateStat(STAT_STORED_PROFILES,
             add(buf, addComments, "tunnelPeakTunnel1mThroughput", (long) profile.getPeakTunnel1mThroughputKBps(), "Tunnel Peak Tunnel throughput for 1 minute (KB/s): " +
                 profile.getPeakTunnel1mThroughputKBps());
             add(buf, addComments, "lastThroughputUpdate", profile.getLastThroughputUpdate(), "Last time throughput was recorded:");
+            // When the peak ring was last raised. The peak is never decayed, so
+            // without this date a peer that carried a full minute of traffic once
+            // is a proven peer forever, and the fast tier's quality mode keys on
+            // that credential.
+            add(buf, addComments, "tunnelPeakTunnel1mTime", profile.getPeakTunnel1mTime(),
+                "Last time the peak 1-minute tunnel throughput ring was raised:");
         }
         if (addComments) {buf.append(HR).append(NL).append(NL);}
         out.write(buf.toString().getBytes(StandardCharsets.UTF_8));
@@ -600,8 +626,22 @@ List<PeerProfile> profiles = new ArrayList<>(Math.min(LIMIT_PROFILES, freshFiles
             profile.setIntegrationBonus((int) getLong(props, "integrationBonus"));
             profile.setSpeedBonus((int) getLong(props, "speedBonus"));
             profile.setSpeedBonusLastUpdate(getLong(props, "speedBonusLastUpdate"));
-            profile.setLowLatency(getLong(props, "lowLatency") > 0);
+            // Tri-state restore: the key is written as 1 for measured-low and 0
+            // for measured-not-low, and is absent when the peer was never
+            // measured. An old profile file, which only ever wrote the key for
+            // true, restores to "never measured" — the honest reading of a file
+            // that recorded no negative answer.
+            String lowLatencyProp = props.getProperty("lowLatency");
+            if (lowLatencyProp != null) {
+                profile.setLowLatencyState(Boolean.valueOf(getLong(props, "lowLatency") > 0));
+            } else {
+                profile.setLowLatencyState(null);
+            }
             profile.setLossySince(getLong(props, "lossySince"));
+            // Restore the transport report alongside the probation flag. Written as
+            // thousandths so a ratio below 1% survives the integer property format.
+            float lossRatio = getLong(props, "lossRatioMilli") / 1000f;
+            if (lossRatio > 0) {profile.setLossRatio(lossRatio, getLong(props, "lossRatioLastUpdate"));}
 
             long fh = getLong(props, "firstHeardAbout");
             if (fh <= 0) {fh = file.lastModified();}
@@ -620,10 +660,16 @@ List<PeerProfile> profiles = new ArrayList<>(Math.min(LIMIT_PROFILES, freshFiles
             profile.setTunnelTestTimeAverage(getFloat(props, "tunnelTestTimeAverage"));
             profile.setTunnelTestTimeAvgLastUpdate(getLong(props, "tunnelTestTimeAvgLastUpdate"));
             profile.setPeerTestTimeAverage(getFloat(props, "peerTestTimeAverage"));
+            profile.setPeerTestTimeLastUpdate(getLong(props, "peerTestTimeLastUpdate"));
 
             profile.setPeakThroughputKBps(getFloat(props, "tunnelPeakThroughput"));
             profile.setPeakTunnelThroughputKBps(getFloat(props, "tunnelPeakTunnelThroughput"));
             profile.setPeakTunnel1mThroughputKBps(getFloat(props, "tunnelPeakTunnel1mThroughput"));
+            // The peak ring is never decayed, so this date is the only thing that
+            // keeps a proven-throughput credential from lasting forever. A file
+            // from before it was written restores to "no date", which
+            // hasProvenThroughput() reads as not proven.
+            profile.setPeakTunnel1mTime(getLong(props, "tunnelPeakTunnel1mTime"));
             profile.setLastThroughputUpdate(getLong(props, "lastThroughputUpdate"));
             profile.getTunnelHistory().load(props);
 

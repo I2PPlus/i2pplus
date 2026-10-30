@@ -52,6 +52,13 @@ public class PeerProfile {
     private long _tunnelTestTimeAvgLastUpdate;
     /** Average direct ping response time, in ms. */
     private float _peerTestResponseTimeAvg;
+    /**
+     * When the peer-test average was last updated. Persisted alongside it: the
+     * average is only evidence about the peer while it is fresh, and the flag
+     * that says "tested, and slow" gates fast-tier admission, so an average
+     * without its timestamp is a permanent verdict from an old measurement.
+     */
+    private volatile long _peerTestTimeLastUpdate;
     /** Rate stat for netdb response times. */
     private RateStat _dbResponseTime;
     /** Rate stat for tunnel build response times. */
@@ -95,13 +102,32 @@ public class PeerProfile {
     private boolean _expanded;
     /** Whether the netdb history is expanded. */
     private boolean _expandedDB;
-    /** Low latency flag, set when peer responds quickly to tunnel builds, persisted. */
-    private volatile boolean _lowLatency;
+    /**
+     * Low-latency flag, from the measured direct-link RTT, persisted.
+     * <p>Tri-state: {@code null} means the peer has no current first-hop
+     * measurement, which is not the same answer as "measured and not low".
+     * A boolean here froze at its last value the moment the RTT aged past its
+     * validity window, so a peer kept a stale-true flag and was admitted on a
+     * measurement it could no longer refresh, while a peer with a stale-false
+     * flag was never forgiven.
+     *
+     * @since 0.9.72+ (the tri-state form)
+     */
+    private volatile Boolean _lowLatency;
     /** Keyspace distance from us, for profile sorting. */
     private final int _distance;
-    /** Packet-loss (retransmit) ratio reported by the transport, 0.0 = unknown/healthy. Not persisted. */
+    /**
+     * Packet-loss (retransmit) ratio reported by the transport, 0.0 =
+     * unknown/healthy. Persisted as thousandths in
+     * {@link ProfilePersistenceHelper}, because a ratio below 1 truncates to zero
+     * in the integer property format the profile files use.
+     */
     private transient volatile float _lossRatio;
-    /** When _lossRatio was last reported by the transport. */
+    /**
+     * When _lossRatio was last reported by the transport. Persisted with it: the
+     * pair is the freshness test for loss readmission, and a probation flag that
+     * outlives its evidence keeps a peer out of the tiers for good.
+     */
     private transient volatile long _lossRatioLastUpdate;
     /** Decayed loss score (max of past score and reported ratio, 50% per 15 min time decay). Not persisted. */
     private transient volatile float _lossScore;
@@ -124,6 +150,15 @@ public class PeerProfile {
     private final float[] _peakTunnelThroughput = new float[THROUGHPUT_COUNT];
     /** Total number of bytes pushed through a single tunnel in a 1 minute period. */
     private final float[] _peakTunnel1mThroughput = new float[THROUGHPUT_COUNT];
+    /**
+     * When the 1-minute peak ring was last raised, in ms since the epoch.
+     * Persisted with the ring: the ring is never decayed, so without this date
+     * a peak earned once is a credential forever, and it is used as one by the
+     * fast tier's quality mode.
+     *
+     * @since 0.9.72+
+     */
+    private volatile long _peakTunnel1mTime;
     /**
      * Monitor guarding {@link #_peakTunnel1mThroughput}. Private and final so
      * it cannot be locked from outside, unlike the array itself.
@@ -213,20 +248,53 @@ public class PeerProfile {
     public boolean getIsExpandedDB() {return _expandedDB;}
 
     /**
-     * Low latency flag, set when this peer has been observed to respond quickly
-     * to tunnel build requests. Persisted in profiles and used to seed fast/high-cap
-     * tiers at startup from prior session data.
+     * Whether the peer is currently known to be low latency.
+     * <p>{@code false} covers both "measured and not low" and "not measured", so
+     * a caller that wants to give an unmeasured peer a chance must ask
+     * {@link #hasLatencyEvidence()} as well.
      *
-     * @return true if low latency
+     * @return true if the peer has a current first-hop measurement that is low
      */
-    public boolean isLowLatency() {return _lowLatency;}
+    public boolean isLowLatency() {return Boolean.TRUE.equals(_lowLatency);}
+
+    /**
+     * Whether the peer has a current first-hop RTT at all.
+     * <p>The fast tier admits on {@code isLowLatency() || !hasLatencyEvidence()}:
+     * a peer that has never been measured is not known to be slow. Without this
+     * the two states collapse, and a peer whose measurement aged out is held to a
+     * verdict it can no longer answer — the RTT is only refreshed by a pre-connect
+     * probe or a build, both of which need the peer to be selected.
+     *
+     * @return true if the low-latency flag rests on a current measurement
+     * @since 0.9.72+
+     */
+    public boolean hasLatencyEvidence() {return _lowLatency != null;}
+
+    /**
+     * The low latency flag, as a tri-state.
+     *
+     * @return {@link Boolean#TRUE} for low latency, {@link Boolean#FALSE} for
+     *         measured-and-not-low, {@code null} for unmeasured
+     * @since 0.9.72+ (the tri-state form)
+     */
+    public Boolean getLowLatency() {return _lowLatency;}
 
     /**
      * The low latency flag.
      *
      * @param low true for low latency
      */
-    public void setLowLatency(boolean low) {_lowLatency = low;}
+    public void setLowLatency(boolean low) {_lowLatency = Boolean.valueOf(low);}
+
+    /**
+     * The low latency flag, including the unknown state.
+     * <p>Only for the recalculation path and for restoration from a persisted
+     * profile, which has no way to express "unmeasured" and passes null for it.
+     *
+     * @param low {@link Boolean#TRUE}, {@link Boolean#FALSE}, or null for unknown
+     * @since 0.9.72+
+     */
+    void setLowLatencyState(Boolean low) {_lowLatency = low;}
 
     /**
      * Packet-loss (retransmit) ratio reported by the transport, 0.0 = unknown/healthy.
@@ -996,6 +1064,7 @@ public class PeerProfile {
      */
     void updatePeerTestTimeAverage(float ms) {
         _peerTestResponseTimeAvg = dampLatency(_peerTestResponseTimeAvg, ms);
+        _peerTestTimeLastUpdate = _context.clock().now();
         if (_log.shouldInfo()) {
             _log.info("Timed peer test average for [" + _peer.toBase64().substring(0,6) +
                       "] updated to " + (_peerTestResponseTimeAvg) + "ms");
@@ -1003,9 +1072,58 @@ public class PeerProfile {
     }
 
     /**
-     * Whether the peer has been tested (has a peer test response time average).
-     * Used by the bandwidth tier fast-track to distinguish "untested, give a
-     * chance" from "tested and known slow".
+     * How long a peer-test average stays a description of the peer.
+     * <p>A day, not the 4 hours used for a direct-link RTT: a peer test is a
+     * multi-hop round trip, only run for peers in the test pool, and at most every
+     * few minutes for those. The bar gates fast-tier admission, not a hot path, so
+     * it needs to outlast the sampling gap rather than track it.
+     *
+     * @see #hasBeenTested(long)
+     * @since 0.9.72+
+     */
+    static final long PEER_TEST_VALIDITY_MS = 24 * 60 * 60 * 1000L;
+
+    /**
+     * Whether the peer has been tested recently enough for the result to describe
+     * it.
+     * <p>"Tested" used to mean "at some point in the life of this profile file",
+     * and the fast tier's untested-peer path admits on {@code !hasBeenTested()}: a
+     * peer measured slow once, years ago, was excluded from that path permanently,
+     * with no way back except a new peer test it could only be given by being
+     * selected. The measurement is a round trip across a tunnel built at the time,
+     * so it describes that tunnel and that day.
+     *
+     * @param now current time in ms
+     * @return true if a peer test average exists and was updated inside
+     *         {@link #PEER_TEST_VALIDITY_MS}
+     * @since 0.9.72+ (the {@code now} parameter)
+     */
+    public boolean hasBeenTested(long now) {
+        return _peerTestResponseTimeAvg > 0
+               && _peerTestTimeLastUpdate > 0
+               && now - _peerTestTimeLastUpdate < PEER_TEST_VALIDITY_MS;
+    }
+
+    /**
+     * When the peer-test average was last updated.
+     *
+     * @return milliseconds since the epoch, 0 if never
+     * @since 0.9.72+
+     */
+    public long getPeerTestTimeLastUpdate() {return _peerTestTimeLastUpdate;}
+
+    /**
+     * Only for restoration from a persisted profile.
+     *
+     * @param ts when the peer-test average was last updated, in ms since the epoch
+     * @since 0.9.72+
+     */
+    void setPeerTestTimeLastUpdate(long ts) {_peerTestTimeLastUpdate = ts;}
+
+    /**
+     * Whether the peer has ever been tested.
+     * <p>Deprecated form: it never expires, so it reports "tested" for a
+     * measurement of any age. Prefer {@link #hasBeenTested(long)}.
      *
      * @return true if the peer has a measured peer test average
      * @since 0.9.71+
@@ -1075,11 +1193,20 @@ void recalculateLowLatency() {
     void recalculateLowLatency(Long calibratedFloorMs, Long cohortFloorMs) {
         Boolean low = getLowLatencyForFirstHopRtt(_context.clock().now(),
                                                   LOW_LATENCY_CEILING_MS);
-        if (low == null) {return;}
-        _lowLatency = low.booleanValue();
+        if (low == null) {
+            // No current measurement is "unknown", not "the last answer". The RTT
+            // is only refreshed by a pre-connect probe or a build, and both need
+            // the peer to be selected, so freezing the flag here made the last
+            // verdict permanent in both directions: a stale-true flag admitted a
+            // peer on a measurement it could never refresh, and a stale-false one
+            // condemned it for a latency it no longer has.
+            _lowLatency = null;
+            return;
+        }
+        _lowLatency = low;
         // The absolute ceiling above still rejects outright; a calibrated bound
         // only ever removes a peer the absolute rule had already accepted.
-        if (!_lowLatency) {return;}
+        if (!low.booleanValue()) {return;}
         if (calibratedFloorMs != null && calibratedFloorMs > 0 &&
             _firstHopRtt > calibratedFloorMs) {
             _lowLatency = Boolean.FALSE;
@@ -1175,6 +1302,13 @@ void recalculateLowLatency() {
         _lastThroughputUpdate = _context.clock().now();
         float lowPeak = _peakTunnel1mThroughput[THROUGHPUT_COUNT-1];
         if (size > lowPeak) {
+            // The peak ring is a capacity credential, and it is only earned by
+            // pushing data, so the moment it was earned is the moment the
+            // credential is dated. Stamping it here, on the branch that raises
+            // the ring, means the freshness test cannot be forgotten: a peer that
+            // stops carrying traffic stops being a proven peer a TTL later,
+            // instead of staying one for the life of the profile file.
+            _peakTunnel1mTime = _lastThroughputUpdate;
             // Monitor a dedicated, private object rather than the float array.
             // Synchronizing on the array both exposes a mutable object as a
             // lock (any other holder of that reference could lock it) and read
@@ -1234,6 +1368,59 @@ void recalculateLowLatency() {
             for (int i = 0; i < THROUGHPUT_COUNT; i++) {_peakTunnel1mThroughput[i] = speed;}
         }
     }
+
+    /**
+     * How long a proven-throughput peak counts as current evidence.
+     * <p>A week. The peak ring is deliberately never decayed — it is the
+     * peer's demonstrated capacity, and the only thing that raises it is a better
+     * measurement — so it is the right thing to sort peers by, and the wrong thing
+     * to admit peers on. Used as a credential it was a one-way door: the
+     * quality-peer count ratchets up as peers earn peaks over days, the fast tier
+     * flips into quality mode at 500 of them, and quality mode demands
+     * ten-minute-fresh activity from every candidate. The tier then settles at
+     * "peers with traffic in the last ten minutes", which the fill passes cannot
+     * repair.
+     *
+     * @see #hasProvenThroughput(long)
+     * @since 0.9.72+
+     */
+    static final long PROVEN_THROUGHPUT_TTL_MS = 7 * 24 * 60 * 60 * 1000L;
+
+    /**
+     * Whether the peer has proven it can carry a tunnel recently enough for that
+     * to be evidence about the peer.
+     * <p>The peak itself is kept forever and stays the capacity signal used for
+     * sorting; this is the admission test, and it is dated. A peer that has not
+     * carried a full minute of traffic in a week has not been observed to be
+     * capable recently, and a credential earned months ago cannot be re-earned by
+     * a peer the tier this credential excludes is no longer selecting.
+     *
+     * @param now current time in ms
+     * @return true if a peak exists and was earned inside {@link
+     *         #PROVEN_THROUGHPUT_TTL_MS}
+     * @since 0.9.72+
+     */
+    public boolean hasProvenThroughput(long now) {
+        return getPeakTunnel1mThroughputKBps() > 0
+               && _peakTunnel1mTime > 0
+               && now - _peakTunnel1mTime < PROVEN_THROUGHPUT_TTL_MS;
+    }
+
+    /**
+     * When the peak 1-minute throughput ring was last raised.
+     *
+     * @return milliseconds since the epoch, 0 if the peer has never proven throughput
+     * @since 0.9.72+
+     */
+    public long getPeakTunnel1mTime() {return _peakTunnel1mTime;}
+
+    /**
+     * Only for restoration from a persisted profile.
+     *
+     * @param ts when the peak ring was last raised, in ms since the epoch
+     * @since 0.9.72+
+     */
+    void setPeakTunnel1mTime(long ts) {_peakTunnel1mTime = ts;}
 
     /**
      * The timestamp of the last throughput update.
