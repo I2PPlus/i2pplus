@@ -6970,7 +6970,7 @@ public class TunnelPool {
             if (_log.shouldWarn()) {
                 _log.warn(toString() + " -> Starvation: pool empty but peer supply is ample" +
                           "\n* Fast peers: " + fastPeers + " * Threshold: " +
-                          TunnelPeerSelector.SCARCE_FAST_PEERS +
+                          TunnelPeerSelector.scarceFastPeers(_context) +
                           " -> Not widening the peer activity window");
             }
             return;

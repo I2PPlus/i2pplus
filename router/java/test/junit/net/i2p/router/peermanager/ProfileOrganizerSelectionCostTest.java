@@ -179,11 +179,37 @@ public class ProfileOrganizerSelectionCostTest {
 
     // ---- isExcessiveLifetimeFailure ----
 
+    /** One hour, in ms, for the evidence-age tests. */
+    private static final long HOUR = 60 * 60 * 1000L;
+    /** One day, in ms, for the evidence-age tests. */
+    private static final long DAY = 24 * HOUR;
+
+    /**
+     * A profile with the given lifetime counts, whose last build request went out
+     * at {@code NOW} so its evidence is fresh.
+     *
+     * @param failed lifetime failures
+     * @param agreed lifetime agreements
+     * @return a mock profile
+     */
     private PeerProfile profileWithHistory(long failed, long agreed) {
+        return profileWithHistory(failed, agreed, NOW);
+    }
+
+    /**
+     * A profile with the given lifetime counts and a given evidence age.
+     *
+     * @param failed lifetime failures
+     * @param agreed lifetime agreements
+     * @param lastBuildActivity when the peer last took part in a build decision
+     * @return a mock profile
+     */
+    private PeerProfile profileWithHistory(long failed, long agreed, long lastBuildActivity) {
         PeerProfile p = mock(PeerProfile.class);
         TunnelHistory th = mock(TunnelHistory.class);
         when(th.getLifetimeFailed()).thenReturn(failed);
         when(th.getLifetimeAgreedTo()).thenReturn(agreed);
+        when(th.getLastBuildActivity()).thenReturn(lastBuildActivity);
         when(p.getTunnelHistory()).thenReturn(th);
         return p;
     }
@@ -191,7 +217,7 @@ public class ProfileOrganizerSelectionCostTest {
     /** A null profile is not a failure — there is no evidence against the peer. */
     @Test
     public void nullProfileIsNotExcessive() {
-        assertFalse(ProfileOrganizer.isExcessiveLifetimeFailure(null));
+        assertFalse(ProfileOrganizer.isExcessiveLifetimeFailure(null, NOW));
     }
 
     /** A profile with no tunnel history at all cannot be excluded. */
@@ -199,20 +225,20 @@ public class ProfileOrganizerSelectionCostTest {
     public void profileWithoutHistoryIsNotExcessive() {
         PeerProfile p = mock(PeerProfile.class);
         when(p.getTunnelHistory()).thenReturn(null);
-        assertFalse(ProfileOrganizer.isExcessiveLifetimeFailure(p));
+        assertFalse(ProfileOrganizer.isExcessiveLifetimeFailure(p, NOW));
     }
 
     /** Below the hard cap with a healthy ratio, the peer stays eligible. */
     @Test
     public void healthyPeerIsNotExcessive() {
-        assertFalse(ProfileOrganizer.isExcessiveLifetimeFailure(profileWithHistory(1, 100)));
+        assertFalse(ProfileOrganizer.isExcessiveLifetimeFailure(profileWithHistory(1, 100), NOW));
     }
 
     /** The hard cap alone excludes, regardless of ratio. */
     @Test
     public void hardCapExcludes() {
         PeerProfile p = profileWithHistory(200, 100000);
-        assertTrue(ProfileOrganizer.isExcessiveLifetimeFailure(p));
+        assertTrue(ProfileOrganizer.isExcessiveLifetimeFailure(p, NOW));
     }
 
     /** The ratio gate excludes well before the absolute cap. */
@@ -221,7 +247,67 @@ public class ProfileOrganizerSelectionCostTest {
         // 60% failures, above MAX_LIFETIME_FAILURE_RATIO, and well under the
         // absolute cap, so only the ratio gate can be responsible
         PeerProfile p = profileWithHistory(30, 20);
-        assertTrue(ProfileOrganizer.isExcessiveLifetimeFailure(p));
+        assertTrue(ProfileOrganizer.isExcessiveLifetimeFailure(p, NOW));
+    }
+
+    /**
+     * A small sample is shrunk toward the population's own failure rate. On a
+     * network where roughly half of all build requests fail, "2 of the 3 I sent
+     * this peer failed" is not a finding about the peer, and the ratio arm used to
+     * act as if it were.
+     */
+    @Test
+    public void smallFailureSampleIsShrunkToThePopulation() {
+        assertFalse("2 failures out of 3 is inside the population's own failure rate",
+                    ProfileOrganizer.isExcessiveLifetimeFailure(profileWithHistory(2, 1), NOW));
+    }
+
+    /**
+     * A large sample is judged on its own: shrinkage must not become amnesty.
+     * 60 failures in 100 requests shrinks to 0.56, over the bar.
+     */
+    @Test
+    public void largeFailureSampleIsJudgedOnItsOwn() {
+        assertTrue(ProfileOrganizer.isExcessiveLifetimeFailure(profileWithHistory(60, 40), NOW));
+    }
+
+    /**
+     * The ratio arm is the arm that cannot heal: the 8-hour decay scales the
+     * numerator and the denominator together, so the ratio is invariant and only
+     * new agreements move it - and new agreements need the tier membership this
+     * gate withholds. Evidence older than the TTL is therefore un-judged, not
+     * excluded. The count arm keeps excluding: it does decay toward zero, so it
+     * does recover.
+     */
+    @Test
+    public void staleFailureRatioIsNotEvidence() {
+        PeerProfile stale = profileWithHistory(30, 20, NOW - 8 * DAY);
+        assertFalse("a ratio measured last week describes last week",
+                    ProfileOrganizer.isExcessiveLifetimeFailure(stale, NOW));
+        PeerProfile fresh = profileWithHistory(30, 20, NOW - 6 * DAY);
+        assertTrue("a ratio inside the TTL is judged",
+                   ProfileOrganizer.isExcessiveLifetimeFailure(fresh, NOW));
+    }
+
+    /**
+     * The hard count arm is not gated by the TTL: 200 lifetime failures is a
+     * record, and the count decays on its own, so a peer that stops failing
+     * recovers without needing the evidence to expire.
+     */
+    @Test
+    public void staleEvidenceDoesNotLiftTheHardCountCap() {
+        assertTrue(ProfileOrganizer.isExcessiveLifetimeFailure(profileWithHistory(200, 100000, NOW - 30 * DAY), NOW));
+    }
+
+    /**
+     * A peer that has never been asked has no evidence to be stale on; the
+     * zero-history path in the acceptance gate handles it, not this one.
+     */
+    @Test
+    public void neverAskedIsNotExcessive() {
+        PeerProfile p = profileWithHistory(30, 20, 0);
+        assertTrue("counts exist, so the record is judged",
+                   ProfileOrganizer.isExcessiveLifetimeFailure(p, NOW));
     }
 
     // ---- tier predicates ----

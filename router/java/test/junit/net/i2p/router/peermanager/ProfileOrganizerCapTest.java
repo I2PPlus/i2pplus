@@ -59,6 +59,86 @@ public class ProfileOrganizerCapTest {
                      ProfileOrganizer.clampMaxProfiles(ProfileOrganizer.ABSOLUTE_MAX_PROFILES));
     }
 
+    // ---- maxProfilesForHeap ----
+
+    /** A gigabyte of heap: 6% of it at 10 KB a profile, well inside the clamp. */
+    @Test
+    public void testCapForOneGigabyteHeap() {
+        assertEquals(6291, ProfileOrganizer.maxProfilesForHeap(1024L * 1024 * 1024));
+    }
+
+    /**
+     * A big heap is capped by the absolute ceiling, not by the heap: the ceiling
+     * is what stops the store growing past the point where the peer population
+     * stops being useful.
+     */
+    @Test
+    public void testCapForFourGigabyteHeapIsClamped() {
+        assertEquals(ProfileOrganizer.ABSOLUTE_MAX_PROFILES,
+                     ProfileOrganizer.maxProfilesForHeap(4096L * 1024 * 1024));
+    }
+
+    /**
+     * A small heap gets the 2000-profile floor, not the heap-derived number:
+     * below that the tier minimums cannot be filled from the store at all.
+     */
+    @Test
+    public void testCapForSmallHeapUsesTheFloor() {
+        assertEquals(2000, ProfileOrganizer.maxProfilesForHeap(256L * 1024 * 1024));
+    }
+
+    /** A missing or bogus heap size falls back to the minimum, never to zero. */
+    @Test
+    public void testCapForDegenerateHeapSize() {
+        assertEquals(ProfileOrganizer.MIN_MAX_PROFILES, ProfileOrganizer.maxProfilesForHeap(0));
+        assertEquals(ProfileOrganizer.MIN_MAX_PROFILES, ProfileOrganizer.maxProfilesForHeap(-1));
+    }
+
+    /**
+     * The cap must grow monotonically with the heap. A cap that shrank as the
+     * heap grew would starve a router that was given more memory.
+     */
+    @Test
+    public void testCapIsMonotonicInHeapSize() {
+        long[] heaps = {64L, 128L, 256L, 512L, 1024L, 2048L, 4096L, 8192L};
+        int prev = -1;
+        for (long mb : heaps) {
+            int cap = ProfileOrganizer.maxProfilesForHeap(mb * 1024 * 1024);
+            assertTrue("cap " + cap + " below the cap " + prev + " for a smaller heap",
+                       cap >= prev);
+            assertTrue("cap " + cap + " above the ceiling", cap <= ProfileOrganizer.ABSOLUTE_MAX_PROFILES);
+            prev = cap;
+        }
+    }
+
+    // ---- evictionDeficit ----
+
+    /** Under the cap, evict nothing, degraded or not. */
+    @Test
+    public void testEvictionDeficitUnderCap() {
+        assertEquals(0, ProfileOrganizer.evictionDeficit(1000, 1000, false));
+        assertEquals(0, ProfileOrganizer.evictionDeficit(900, 1000, false));
+        assertEquals(0, ProfileOrganizer.evictionDeficit(900, 1000, true));
+    }
+
+    /** Over the cap, evict the whole deficit when the network is healthy. */
+    @Test
+    public void testEvictionDeficitHealthy() {
+        assertEquals(500, ProfileOrganizer.evictionDeficit(1500, 1000, false));
+    }
+
+    /**
+     * Degraded evicts at half rate, and not zero: the wholesale skip this
+     * replaced left the store unpruned for as long as the condition held.
+     */
+    @Test
+    public void testEvictionDeficitDegradedIsHalfNotNone() {
+        assertEquals(250, ProfileOrganizer.evictionDeficit(1500, 1000, true));
+        assertTrue(ProfileOrganizer.evictionDeficit(1001, 1000, true) >= 0);
+        assertEquals(0, ProfileOrganizer.evictionDeficit(1001, 1000, true));
+        assertEquals(1, ProfileOrganizer.evictionDeficit(1003, 1000, true));
+    }
+
     // ---- isEvictable ----
 
     @Test

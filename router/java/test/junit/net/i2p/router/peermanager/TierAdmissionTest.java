@@ -15,77 +15,91 @@ import org.junit.Test;
  * silent in both directions: admission that is too strict empties the reservoir,
  * and eviction that is too lax fills the fast tier with peers that waste builds.
  *
- * <p>The size guard is scaled to the known population, so a fixed count that
- * silently disables eviction on a small network is excluded.
+ * <p>The size guard is the tier's own minimum. Soft eviction - acceptance,
+ * failures, loss probation - is withheld until the tier has the peers it asked
+ * for, because a tier that is starving cannot replace what it evicts. The
+ * previous bar was a tenth of the known profiles capped at 100, which put it
+ * below the starvation line on every real router and so pruned a starving tier
+ * at full strength.
  *
  * @since 0.9.71+
  */
 public class TierAdmissionTest {
 
-    // ---------------- soft-purge threshold scales with the population ----------------
+    // ---------------- the soft-eviction floor is the tier's own minimum ----------------
 
     /**
-     * The threshold tracks the population, so eviction cannot be switched off by
-     * a constant that outgrew the network.
+     * The floor is the tier minimum, unchanged: the number that already means
+     * "this tier is healthy" is the number that has to be reached before the
+     * tier is judged on how well its members perform.
      */
     @Test
-    public void testThresholdIsOneTenthOfKnownProfiles() {
-        assertEquals(50, ProfileOrganizer.softPurgeThreshold(500));
-        assertEquals(80, ProfileOrganizer.softPurgeThreshold(800));
+    public void testFloorIsTheTierMinimum() {
+        assertEquals(1000, ProfileOrganizer.softPurgeThreshold(1000));
+        assertEquals(500, ProfileOrganizer.softPurgeThreshold(500));
+        assertEquals(1, ProfileOrganizer.softPurgeThreshold(1));
     }
 
     /**
-     * Capped, so a large network does not raise the bar past what any tier
-     * reaches and leave eviction permanently inactive.
-     */
-    @Test
-    public void testThresholdIsCappedAtOneHundred() {
-        assertEquals(100, ProfileOrganizer.softPurgeThreshold(1000));
-        assertEquals(100, ProfileOrganizer.softPurgeThreshold(50000));
-        assertEquals(100, ProfileOrganizer.softPurgeThreshold(Integer.MAX_VALUE));
-    }
-
-    /**
-     * Below the cap the fraction governs, so a small router is not asked to
-     * muster a hundred peers it cannot have.
-     */
-    @Test
-    public void testSmallNetworkUsesTheFractionNotTheCap() {
-        assertEquals(10, ProfileOrganizer.softPurgeThreshold(100));
-        assertEquals(20, ProfileOrganizer.softPurgeThreshold(200));
-    }
-
-    /**
-     * An unknown population must not enable eviction: with nothing known there is
-     * no evidence a tier is well stocked, and evicting on that basis is the
+     * An unknown minimum must not enable eviction: with no target there is no
+     * evidence the tier is well stocked, and evicting on that basis is the
      * collapse this guard exists to prevent.
      */
     @Test
-    public void testUnknownPopulationDisablesSoftEviction() {
+    public void testUnknownMinimumDisablesSoftEviction() {
         assertEquals(Integer.MAX_VALUE, ProfileOrganizer.softPurgeThreshold(0));
         assertEquals(Integer.MAX_VALUE, ProfileOrganizer.softPurgeThreshold(-5));
     }
 
-    /** The current live shape: a 5,061-profile router with small tiers. */
+    /**
+     * The measured live shape, and the defect this change fixes. The router ran
+     * two days at 227 fast and 243 high-cap against a 1,000-peer minimum for
+     * each, and the old floor of 100 let the soft reasons prune both tiers at
+     * full strength the whole time.
+     */
     @Test
-    public void testCurrentRouterSizesQualify() {
-        int threshold = ProfileOrganizer.softPurgeThreshold(5061);
-        assertEquals(100, threshold);
-        assertTrue("fast tier of 441 should qualify", 441 >= threshold);
-        assertTrue("high-cap of 693 should qualify", 693 >= threshold);
+    public void testStarvingTierIsProtectedAtTheMeasuredSizes() {
+        int min = 1000;
+        int threshold = ProfileOrganizer.softPurgeThreshold(min);
+        assertTrue("a 227-peer fast tier is 23% of target and must not be turned over",
+                   227 < threshold);
+        assertTrue("a 243-peer high-cap tier likewise", 243 < threshold);
+    }
+
+    /**
+     * Reaching the minimum re-arms the soft reasons in full: the protection is a
+     * starvation guard, not a general amnesty for poor performers.
+     */
+    @Test
+    public void testSoftEvictionResumesAtTheMinimum() {
+        int threshold = ProfileOrganizer.softPurgeThreshold(1000);
+        assertTrue("at target the tier can afford the turnover", 1000 >= threshold);
+        assertTrue("and above it", 1001 >= threshold);
+    }
+
+    /**
+     * The floor stays reachable on a small router, which is what the old
+     * population fraction was written to protect. A tier minimum of 100 - what
+     * {@code profileOrganizer.minFastPeers} gives a small network - is a bar a
+     * 100-peer tier can meet, not a constant it can never reach.
+     */
+    @Test
+    public void testFloorIsReachableOnASmallNetwork() {
+        int threshold = ProfileOrganizer.softPurgeThreshold(100);
+        assertTrue("a full small tier qualifies", 100 >= threshold);
+        assertFalse("a 99-peer small tier does not", 99 >= threshold);
     }
 
     // ---------------- a starving tier is still protected ----------------
 
     /**
-     * The guard's whole purpose: a tier below the threshold keeps its soft
-     * failures rather than being emptied further.
+     * The guard's whole purpose: a tier below its floor keeps its soft failures
+     * rather than being emptied further.
      */
     @Test
     public void testStarvedTierStaysBelowThreshold() {
-        int threshold = ProfileOrganizer.softPurgeThreshold(5061);
-        assertFalse("a tier of 40 peers must not be turned over",
-                    40 >= threshold);
+        int threshold = ProfileOrganizer.softPurgeThreshold(1000);
+        assertFalse("a tier of 40 peers must not be turned over", 40 >= threshold);
     }
 
     // ---------------- admission and eviction are deliberately asymmetric ----------------

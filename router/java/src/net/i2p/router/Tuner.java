@@ -11039,8 +11039,28 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      */
     static int nextWindowMultiplier(int fastPeers, boolean startupGrace, int healthyCycles,
                                     int min, int max, int step) {
-        int target = TunnelPeerSelector.windowMultiplierFor(fastPeers, startupGrace, min, max);
-        boolean ample = fastPeers >= TunnelPeerSelector.SCARCE_FAST_PEERS && !startupGrace;
+        return nextWindowMultiplier(fastPeers, startupGrace, healthyCycles, min, max, step,
+                                    TunnelPeerSelector.SCARCE_FAST_PEERS);
+    }
+
+    /**
+     * As above, with the scarcity threshold derived from the router's fast-tier
+     * minimum.
+     *
+     * @param fastPeers    peers currently classified fast
+     * @param startupGrace true during the startup grace period
+     * @param healthyCycles consecutive cycles observed with ample peer supply
+     * @param min          floor, e.g. 1
+     * @param max          ceiling, e.g. 4
+     * @param step         retained for call-site symmetry; the gate is continuous
+     * @param scarceThreshold the fast-peer count at or above which supply is ample
+     * @return the multiplier to apply
+     * @since 0.9.72+
+     */
+    static int nextWindowMultiplier(int fastPeers, boolean startupGrace, int healthyCycles,
+                                    int min, int max, int step, int scarceThreshold) {
+        int target = TunnelPeerSelector.windowMultiplierFor(fastPeers, startupGrace, min, max, scarceThreshold);
+        boolean ample = fastPeers >= scarceThreshold && !startupGrace;
         if (ample && healthyCycles + 1 < HEALTHY_CYCLES_TO_TIGHTEN) {
             // Hold the previous value one more cycle to avoid flapping.
             return Math.max(target, min + step);
@@ -11130,10 +11150,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int fastPeers = _context.profileOrganizer().countFastPeers();
             boolean startupGrace = TunnelPeerSelector.isInStartupGracePeriod(_context);
-            boolean ample = fastPeers >= TunnelPeerSelector.SCARCE_FAST_PEERS && !startupGrace;
+            int scarceThreshold = TunnelPeerSelector.scarceFastPeers(_context);
+            boolean ample = fastPeers >= scarceThreshold && !startupGrace;
             _healthyCycles = ample ? _healthyCycles + 1 : 0;
             return nextWindowMultiplier(fastPeers, startupGrace, _healthyCycles,
-                                        _min, _max, _step);
+                                        _min, _max, _step, scarceThreshold);
         }
     }
 

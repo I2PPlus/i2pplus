@@ -133,16 +133,20 @@ public class ProfileRetentionDecisionTest {
     // ---- the constants themselves ------------------------------------------
 
     /**
-     * The floor and the memory ceiling are separate concerns. If this fails, a
-     * future edit has merged them and would silently shorten disk retention
-     * whenever the memory ceiling moves.
+     * The floor and the memory ceiling are separate concerns, and the floor is
+     * the larger of the two. If this fails, a future edit has merged them, which
+     * would silently shorten disk retention whenever the memory ceiling moves.
+     * <p>The floor sits above the ceiling on purpose: a profile evicted from the
+     * RAM store to stay under the memory ceiling keeps its file, so the tunnel
+     * history we accumulated on it survives the eviction and the peer is not
+     * rebuilt from zero when a fill pass wants it back.
      */
     @Test
     public void diskRetentionIsIndependentOfTheMemoryCeiling() {
-        assertEquals(10000, FLOOR);
-        assertEquals(10000, ProfileOrganizer.ABSOLUTE_MAX_PROFILES);
-        assertTrue("floor must not exceed the memory ceiling",
-                   FLOOR <= ProfileOrganizer.ABSOLUTE_MAX_PROFILES);
+        assertEquals(20000, FLOOR);
+        assertEquals(16000, ProfileOrganizer.ABSOLUTE_MAX_PROFILES);
+        assertTrue("disk floor must cover the memory ceiling, so a RAM eviction keeps the file",
+                   FLOOR >= ProfileOrganizer.ABSOLUTE_MAX_PROFILES);
     }
 
     /**

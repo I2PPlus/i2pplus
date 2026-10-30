@@ -50,6 +50,41 @@ public class TierAdmissionFloorTest {
     }
 
     /**
+     * The fast tier's floor is five samples, not one. One is what let a peer leave
+     * both tiers for a single refusal while high-capacity admission insisted on
+     * fifty: the asymmetry the code documented as "admission is permissive,
+     * eviction is strict" had become "admission needs fifty samples, eviction
+     * needs one", and on a router whose build success was 52% a refusal is the
+     * commonest outcome of asking anybody anything.
+     */
+    @Test
+    public void testFastTierFloorIsFiveSamples() {
+        assertEquals(5, ProfileOrganizer.FAST_ACCEPTANCE_SAMPLES);
+        assertTrue("a single refusal is not evidence about a peer",
+                   !ProfileOrganizer.excludedOnAcceptance(0, 1, ProfileOrganizer.FAST_ACCEPTANCE_SAMPLES, false));
+        assertTrue("four refusals are not either",
+                   !ProfileOrganizer.excludedOnAcceptance(0, 4, ProfileOrganizer.FAST_ACCEPTANCE_SAMPLES, false));
+        assertTrue("five refusals and no acceptance is a non-accepter",
+                   ProfileOrganizer.excludedOnAcceptance(0, 5, ProfileOrganizer.FAST_ACCEPTANCE_SAMPLES, false));
+        assertTrue("six requests with one accepted is under the 0.20 small-sample bar",
+                   ProfileOrganizer.excludedOnAcceptance(1, 5, ProfileOrganizer.FAST_ACCEPTANCE_SAMPLES, false));
+        assertFalse("five requests with two accepted is not",
+                    ProfileOrganizer.excludedOnAcceptance(2, 3, ProfileOrganizer.FAST_ACCEPTANCE_SAMPLES, false));
+    }
+
+    /**
+     * Eviction judges on the floor the tier's own admission uses, so a peer cannot
+     * be admitted under one bar and evicted under a looser one.
+     */
+    @Test
+    public void testEvictionFloorsMatchTheTiers() {
+        assertTrue("the fast floor stays below the high-capacity one, whose admission demands it",
+                   ProfileOrganizer.FAST_ACCEPTANCE_SAMPLES < ProfileOrganizer.MIN_TUNNEL_REQUESTS);
+        assertTrue("and the fast floor is reachable by a peer with a short history",
+                   ProfileOrganizer.FAST_ACCEPTANCE_SAMPLES * 2 < ProfileOrganizer.MIN_TUNNEL_REQUESTS);
+    }
+
+    /**
      * A peer one sample short of the floor is not judged however bad its ratio, and
      * the fast tier's floor of one means it always is. The pair is the whole point:
      * the same counts give opposite answers on the two tiers.

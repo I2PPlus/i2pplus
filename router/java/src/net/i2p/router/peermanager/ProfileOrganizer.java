@@ -275,8 +275,6 @@ public class ProfileOrganizer {
     private final List<Map<Hash, PeerProfile>> _allTiers;
     /** Cached keys of the not-failing peers map. */
     private final List<Hash> _notFailingPeersList;
-    /** Peers demoted via demoteIfUnreachable — excluded from promotion for TUNNEL_DEMOTION_COOLDOWN_MS. */
-    private final ConcurrentHashMap<Hash, Long> _demotedPeers = new ConcurrentHashMap<>(64);
     /**
      * Strike count per peer for demoteIfUnreachable — only demote after
      * DEMOTE_STRIKE_THRESHOLD strikes within the decay window.
@@ -288,8 +286,6 @@ public class ProfileOrganizer {
     public static final int DEMOTE_STRIKE_THRESHOLD = 3;
     /** A strike older than this no longer counts, so a peer that recovered is not demoted by one later failure. */
     public static final long DEMOTE_STRIKE_DECAY_MS = 10 * 60 * 1000L;
-    /** Demoted peers remembered across reorganizations. */
-    private static final int MAX_DEMOTED_PEERS = 1024;
 
     /** Hash of this router. */
     private Hash _us;
@@ -306,13 +302,52 @@ public class ProfileOrganizer {
     /** Round trip time peers are held to, in ms. */
     private double _thresholdRTT;
     /**
-     * First-measured fast-tier RTT boundary, captured during the initial
-     * reorganize pass.  Used by {@link #computeAdaptiveRttCeiling} to floor the
-     * adaptive ceiling at 2× the startup baseline when build success is
-     * degraded, preventing RTT ceiling amplification during cascade failure.
-     * @since 0.9.71+
+     * Fast-tier RTT boundary to floor the degraded-mode ceiling against, in ms.
+     * <p>Re-anchored every {@link #BASELINE_REANCHOR_MS} on the reorganize pass
+     * that measures a boundary, not captured once at startup. A single early
+     * capture made the network condition of the router's first minutes the
+     * permanent floor of the tightest ceiling a peer has to clear: the floor is
+     * 2x this value, so a boundary of 200 ms observed at startup floored every
+     * degraded ceiling at 400 ms for the life of the process.
+     *
+     * @see #BASELINE_REANCHOR_MS
+     * @since 0.9.72+ (re-anchored)
      */
     private volatile double _baselineRTT;
+    /**
+     * When {@link #_baselineRTT} was last anchored, in ms since the epoch.
+     *
+     * @since 0.9.72+
+     */
+    private volatile long _baselineRTTTime;
+
+    /**
+     * How often the RTT baseline is re-anchored, in ms.
+     * <p>A day. Long enough that the anti-amplification purpose survives — the
+     * ceiling still must not chase a network that has become uniformly slow,
+     * which is what the floor is for — and short enough that a condition
+     * observed during startup stops binding a year later. The
+     * {@link #AUTO_RTT_FLOOR_MS} and {@link #AUTO_RTT_CAP_MS} clamps stay in
+     * front of it either way.
+     *
+     * @see #shouldReanchorBaseline(long, long)
+     * @since 0.9.72+
+     */
+    static final long BASELINE_REANCHOR_MS = 24 * 60 * 60 * 1000L;
+
+    /**
+     * Whether the RTT baseline should be re-anchored now.
+     * <p>Pure decision — no context access, safe for unit tests.
+     *
+     * @param baselineRTTTime when the baseline was last anchored, 0 if never
+     * @param now current time in ms
+     * @return true when there is no baseline yet, or the last one is older than
+     *         {@link #BASELINE_REANCHOR_MS}
+     * @since 0.9.72+
+     */
+    static boolean shouldReanchorBaseline(long baselineRTTTime, long now) {
+        return baselineRTTTime <= 0 || now - baselineRTTTime > BASELINE_REANCHOR_MS;
+    }
       /**
        * Calibrated cohort latency floor across fast peers with data, computed
        * during each reorganize by {@link #computeAverageLowLatencyRTT()} and
@@ -413,7 +448,19 @@ public class ProfileOrganizer {
      * @since 0.9.72+
      */
     public static final long DEFAULT_ROUTERINFO_REFRESH_AGE_MS = 60 * 60 * 1000L;
-    /** Grace period after startup before peers are penalized. */
+    /**
+     * Property key naming how far ahead of the staleness bar a RouterInfo is
+     * refreshed over the network, in ms.
+     * <p>Set to 0 or less to disable the proactive refresh entirely. The deferral
+     * it feeds is controlled separately, by
+     * {@link #PROP_ROUTERINFO_REFRESH_AGE_MS}.
+     *
+     * @since 0.9.72+
+     */
+    public static final String PROP_ROUTERINFO_REFRESH_AHEAD_MS = "profileOrganizer.routerInfoRefreshAheadMs";
+    /**
+     * Grace period after startup before peers are penalized.
+     */
     private static final long STARTUP_GRACE_PERIOD_MS = 10 * 60 * 1000L;
     /** Window for trusting a stale router info as proof of life. */
     private static final long PROOF_OF_LIFE_WINDOW_MS = 60 * 60 * 1000L;
@@ -502,6 +549,67 @@ public class ProfileOrganizer {
      * @since 0.9.70+
      */
     static final int MIN_TUNNEL_REQUESTS = 50;
+
+    /**
+     * Lifetime requests a peer needs before its acceptance ratio may exclude it
+     * from the <em>fast</em> tier, in admission, eviction and restoration alike.
+     * <p>Five, not one. The fast tier used to pass one on all three paths, which
+     * made eviction judge on a single sample while high-capacity admission
+     * deliberately demanded fifty: one declined request and no accepted one is a
+     * ratio of 0.00, under the 0.20 small-sample bar, so a peer was removed from
+     * both tiers for one refusal - and on a router whose build success was 52%,
+     * refusals are the commonest outcome of asking anybody anything. Five is
+     * enough to tell a non-accepter from a peer we happened to ask once.
+     * <p>Below {@link #MIN_TUNNEL_REQUESTS} the bar stays the loose 0.20, so
+     * raising the floor does not tighten what a judged peer has to meet; it only
+     * stops the unjudged being judged.
+     *
+     * @since 0.9.72+
+     */
+    static final int FAST_ACCEPTANCE_SAMPLES = 5;
+
+    /**
+     * How long a peer's accept/reject record stays evidence about the peer.
+     * <p>The lifetime counts are decayed by a fixed fraction every 8 hours
+     * ({@link TunnelHistory#decayLifetimeCounters(long)}), which scales the
+     * numerator and the denominator of the acceptance ratio by the same factor:
+     * the ratio is invariant under its own decay. Truncation removes at most one
+     * from each side, proportionally more from the smaller side, so a ratio below
+     * the bar drifts <em>down</em> - 4 agreed / 6 rejected is 0.400, then 0.428,
+     * 0.333, 0.500, and ends at 0 agreed / 1 rejected = 0.0. The only thing that
+     * raises it is new agreements, and those require the peer to be selected,
+     * which requires tier membership. A peer once below the bar therefore stays
+     * below it for the rest of the router's life: the ratchet behind the tier
+     * decline.
+     * <p>A week, because that is the horizon over which a peer's own capacity and
+     * configuration plausibly change, and it is long enough that a peer we are
+     * actively building through - whose evidence is refreshed by definition - is
+     * judged at full strength.
+     *
+     * @see #acceptanceEvidenceExpired(long, long)
+     * @since 0.9.72+
+     */
+    static final long ACCEPTANCE_EVIDENCE_TTL_MS = 7 * 24 * 60 * 60 * 1000L;
+
+    /**
+     * Whether a peer's accept/reject record is too old to be evidence about the
+     * peer, judged from the last time it took part in a build decision.
+     * <p>A peer that has never been asked ({@code lastBuildActivity == 0}) is not
+     * expired: it has no record to be stale, and the zero-history path in
+     * {@link #isLowTunnelAcceptance} handles it.
+     * <p>Pure decision - no context access, safe for unit tests.
+     *
+     * @param lastBuildActivity when the peer last agreed, refused, timed out or
+     *                          had a joined tunnel fail, from
+     *                          {@link TunnelHistory#getLastBuildActivity()}; 0 if never
+     * @param now current time in ms
+     * @return true when the ratio built from the lifetime counts says nothing
+     *         about the peer today
+     * @since 0.9.72+
+     */
+    static boolean acceptanceEvidenceExpired(long lastBuildActivity, long now) {
+        return lastBuildActivity > 0 && now - lastBuildActivity > ACCEPTANCE_EVIDENCE_TTL_MS;
+    }
     /** Cooldown period (ms) after demotion before peer can be re-promoted. */
     private static final long TUNNEL_DEMOTION_COOLDOWN_MS = 10 * 60 * 1000L; // 10 minutes
     /**
@@ -533,6 +641,34 @@ public class ProfileOrganizer {
     private static final double MAX_LIFETIME_FAILURE_RATIO = 0.50;
 
     /**
+     * The population's own build-failure rate, used as the prior when shrinking a
+     * peer's lifetime failure ratio toward the network's behaviour.
+     * <p>0.45, from the same observation that set {@link #ATTACK_THRESHOLD} at
+     * 0.40 build success: a healthy router sees roughly half of its build requests
+     * fail, for reasons that have nothing to do with any particular peer - the
+     * other four hops, the clock, the transport. A peer's ratio is only
+     * informative to the extent it departs from that.
+     *
+     * @see #isExcessiveLifetimeFailure(PeerProfile, long)
+     * @since 0.9.72+
+     */
+    private static final double POPULATION_FAILURE_RATIO = 0.45;
+
+    /**
+     * Weight of the population prior above, in pseudo-counts, when shrinking a
+     * peer's failure ratio.
+     * <p>40 requests: a peer with 40 or more of its own samples is judged by its
+     * own record, a peer with 3 is judged almost entirely by the population. High
+     * enough that a genuine non-performer is still excluded - 60 failures out of
+     * 100 shrinks to 0.56, over the bar - and low enough that a peer with two
+     * failures out of three is not.
+     *
+     * @see #isExcessiveLifetimeFailure(PeerProfile, long)
+     * @since 0.9.72+
+     */
+    private static final double FAILURE_PRIOR_STRENGTH = 40.0;
+
+    /**
      * When high-cap tier has at least this many peers, require actual capacity
      * threshold — stop bucket-filling with marginal peers.
      * @since 0.9.70+
@@ -546,14 +682,6 @@ public class ProfileOrganizer {
      * @since 0.9.71+
      */
     private static final int MIN_FAST_QUALITY_COUNT = 500;
-    /**
-     * Upper bound on the soft-purge tier size, in peers.
-     * <p>Caps {@link #softPurgeThreshold(int)} so that on a large network the
-     * threshold stays reachable rather than scaling without limit.
-     *
-     * @since 0.9.71+
-     */
-    static final int MAX_SOFT_PURGE_FLOOR = 100;
 
     /**
      * Whether high-capacity <em>admission</em> requires acceptable tunnel
@@ -646,6 +774,41 @@ public class ProfileOrganizer {
      * @since 0.9.71+ (reduced from 30 min)
      */
     private static final long LOSS_READMIT_MIN_AGE = 10 * 60 * 1000L;
+
+    /**
+     * Longest a peer stays in loss probation when the transport has said nothing
+     * about it in the meantime.
+     * <p>Probation is cleared by a fresh transport report below the demotion
+     * threshold, and a peer outside the tiers is offered no traffic, so it
+     * generates no packets, so the transport reports nothing, so the probation
+     * never clears. The score that caused the demotion decays to effectively zero
+     * in four hours ({@link PeerProfile#LOSS_DECAY_HALF_LIFE_MS}, 16 half-lives),
+     * so the evidence that made the peer a probationer is gone long before the
+     * probation ends. Sixty minutes is six times
+     * {@link #LOSS_READMIT_MIN_AGE} and fifteen loss-score half-lives: a peer that
+     * is genuinely still lossy is re-demoted by the next report, immediately after
+     * readmission, so the bound costs nothing on a real offender and removes a
+     * permanent lock on everyone else.
+     *
+     * @see #lossProbationExpired(long, long)
+     * @since 0.9.72+
+     */
+    private static final long LOSS_PROBATION_MAX_MS = 60 * 60 * 1000L;
+
+    /**
+     * Whether a loss probation has run past {@link #LOSS_PROBATION_MAX_MS} with
+     * the transport reporting nothing.
+     * <p>Pure decision - no context access, safe for unit tests.
+     *
+     * @param lossySince when the peer was demoted for loss, 0 if never
+     * @param now current time in ms
+     * @return true when the probation has expired on the clock
+     * @since 0.9.72+
+     */
+    static boolean lossProbationExpired(long lossySince, long now) {
+        return lossySince > 0 && now - lossySince >= LOSS_PROBATION_MAX_MS;
+    }
+
     /**
      * Fast-track readmission: a fresh loss report below this ratio clears the
      * minimum age even when the tiers are full. Near-spotless evidence is
@@ -696,6 +859,99 @@ public class ProfileOrganizer {
 
     /** Config property for the maximum number of peer profiles. */
     public static final String PROP_MAX_PROFILES = "profileOrganizer.maxProfiles";
+
+    /**
+     * Config property: hours a profile whose peer has never accepted or rejected
+     * a build for us is retained. Zero or unset selects the store-size ladder in
+     * {@link #untrackedExpiryMs(int, long)}.
+     *
+     * @since 0.9.72+
+     */
+    public static final String PROP_EXPIRE_UNTRACKED_HOURS = "profileOrganizer.expireUntrackedHours";
+    /**
+     * Config property: hours a profile with no send and no contact is retained.
+     *
+     * @since 0.9.72+
+     */
+    public static final String PROP_EXPIRE_GOSSIP_HOURS = "profileOrganizer.expireGossipHours";
+    /**
+     * Config property: hours a profile we have heard from, or heard about, is
+     * retained.
+     *
+     * @since 0.9.72+
+     */
+    public static final String PROP_EXPIRE_PASSIVE_HOURS = "profileOrganizer.expirePassiveHours";
+    /**
+     * Config property: hours a profile we have successfully sent to is retained.
+     *
+     * @since 0.9.72+
+     */
+    public static final String PROP_EXPIRE_ACTIVE_HOURS = "profileOrganizer.expireActiveHours";
+
+    /** Default retention for a peer we have sent to, in hours. */
+    static final long DEFAULT_EXPIRE_ACTIVE_HOURS = 14;
+    /** Default retention for a peer we have heard from or heard about, in hours. */
+    static final long DEFAULT_EXPIRE_PASSIVE_HOURS = 7 * 24;
+    /** Default retention for a peer we have only ever heard about nothing of, in hours. */
+    static final long DEFAULT_EXPIRE_GOSSIP_HOURS = 72;
+    /**
+     * Default for the untracked window: unset, so the store-size ladder governs.
+     *
+     * @see #untrackedExpiryMs(int, long)
+     */
+    static final long DEFAULT_EXPIRE_UNTRACKED_HOURS = 0;
+
+    /** One hour, in milliseconds. */
+    private static final long ONE_HOUR_MS = 60 * 60 * 1000L;
+
+    /**
+     * Hours to milliseconds, saturating rather than overflowing.
+     * <p>An operator can write any long into a config property, and
+     * {@code hours * 3600000} overflows past 7.3e11 hours into negative
+     * territory, which would expire every profile on every pass.
+     *
+     * @param hours the configured window in hours
+     * @return the window in ms, {@link Long#MAX_VALUE} for a value that cannot be
+     *         represented, and zero for a non-positive one
+     * @since 0.9.72+
+     */
+    static long hoursToMs(long hours) {
+        if (hours <= 0) {return 0;}
+        if (hours > Long.MAX_VALUE / ONE_HOUR_MS) {return Long.MAX_VALUE;}
+        return hours * ONE_HOUR_MS;
+    }
+
+    /**
+     * How long a profile with no tunnel history is kept in memory.
+     * <p>A peer with no tunnel history is the <em>normal</em> state of every
+     * candidate the tier fill passes want to use, so this window sets how deep the
+     * reservoir of unjudged peers is. It used to shrink as the store grew - one
+     * hour once the store passed 4,000 profiles - which is backwards for the
+     * purpose: a large store is the situation in which retention should be
+     * <em>longer</em>, because it means we know more of the network and the peers
+     * in the tail are the fresh candidates a starved tier needs. Deleting them
+     * produced the churn this is measured on: a profile is dropped, recreated on
+     * demand with an empty history, and then judged as "no evidence".
+     * <p>Whether a peer is dead is answered honestly by the netdb - a peer absent
+     * from the network database for over an hour is evicted by
+     * {@link #isStaleAbsentPeer} - so the clock here only needs to bound memory,
+     * and the memory bound is the profile cap.
+     * <p>Pure decision - no context access, safe for unit tests.
+     *
+     * @param storedProfiles how many profiles the store holds
+     * @param configuredHours an operator override in hours; non-positive selects
+     *                        the ladder
+     * @return the window in ms
+     * @since 0.9.72+
+     */
+    static long untrackedExpiryMs(int storedProfiles, long configuredHours) {
+        if (configuredHours > 0) {return hoursToMs(configuredHours);}
+        // 24 hours once the store is large enough to be carrying the network's
+        // X/P/O population, 12 below that, where a stale peer is cheap to drop
+        // and cheap to relearn.
+        return (storedProfiles >= 4000 ? 24 : 12) * ONE_HOUR_MS;
+    }
+
     /** Runtime-adjustable default max profile count. */
     public static volatile int _defaultMaxProfiles = getDefaultMaxProfiles();
     /**
@@ -719,8 +975,13 @@ public class ProfileOrganizer {
      * separately by {@link #MAX_STORED_PROFILE_FILES}, so raising this to let the
      * router use more of its persisted knowledge does not shorten the retention of
      * that knowledge across a restart.
+     * <p>This is the hard upper bound of the clamp, not the operating value. The
+     * default is sized from the heap by {@link #maxProfilesForHeap(long)}, so a
+     * small-heap router never sees this number; it is reachable only on a router
+     * with several gigabytes of heap, and by an operator setting
+     * {@link #PROP_MAX_PROFILES}.
      */
-    public static final int ABSOLUTE_MAX_PROFILES = 10000;
+    public static final int ABSOLUTE_MAX_PROFILES = 16000;
     /**
      * Profile files retained on disk before surplus ones are trimmed.
      * <p>Deliberately a different number, and a different concern, from
@@ -731,10 +992,14 @@ public class ProfileOrganizer {
      * <p>Below this count no file is deleted unless the peer is genuinely stale,
      * so the floor costs nothing while the store is smaller than it and only
      * starts trimming once the store exceeds it.
+     * <p>Set above {@link #ABSOLUTE_MAX_PROFILES} on purpose: a profile evicted
+     * from the RAM store to stay under the memory ceiling keeps its file, so the
+     * history we accumulated on it survives and it is not rebuilt from zero when
+     * it is needed again.
      *
      * @since 0.9.71+
      */
-    public static final int MAX_STORED_PROFILE_FILES = 10000;
+    public static final int MAX_STORED_PROFILE_FILES = 20000;
     /**
      * Floor for the in-memory profile cap, in profiles.
      * <p>Low enough that a small-heap router still runs; {@link #getDefaultMaxProfiles}
@@ -743,13 +1008,67 @@ public class ProfileOrganizer {
     public static final int MIN_MAX_PROFILES = 800;
 
     /**
+     * Approximate heap cost of one stored profile, in bytes.
+     * <p>A profile is a few hundred bytes of fields, but the tunnel history it
+     * carries is ten-odd {@link net.i2p.stat.RateStat}s, each with a
+     * {@link net.i2p.stat.Rate} per period, and those dominate. Ten kilobytes is
+     * the measured order of magnitude of an expanded profile, and the sizing
+     * below is only meant to be within a factor of two of right.
+     *
+     * @see #maxProfilesForHeap(long)
+     * @since 0.9.72+
+     */
+    static final int PROFILE_HEAP_BYTES = 10 * 1024;
+
+    /**
+     * Share of the maximum heap the profile store may occupy, in percent.
+     * <p>Small, because the profile store competes with the lease sets, the
+     * netdb, the tunnel pools and the streaming buffers, and it is the least
+     * latency-sensitive of them.
+     *
+     * @see #maxProfilesForHeap(long)
+     * @since 0.9.72+
+     */
+    static final int PROFILE_HEAP_PERCENT = 6;
+
+    /**
+     * Sizes the in-memory profile cap from the heap rather than from a peer
+     * count.
+     * <p>A count-derived cap is a guess about memory: it is set for the router
+     * that was tested, and every other router pays — too low on a big heap, so
+     * the tiers are starved of the profiles they need to fill to their minimum,
+     * and too high on a small one, so the store pressures the GC. Free heap is
+     * the quantity the cap is actually protecting, so read it from there.
+     * <p>The result is clamped into {@link #MIN_MAX_PROFILES}-{@link
+     * #ABSOLUTE_MAX_PROFILES}, with {@link #MIN_MAX_PROFILES} as the floor even
+     * on a tiny heap: a store that small cannot fill a tier, and the router
+     * needs the floor to have any peer knowledge at all.
+     * <p>Pure decision — no context access, safe for unit tests.
+     *
+     * @param maxMemoryBytes the maximum heap in bytes, from
+     *                       {@link SystemVersion#getMaxMemory()}
+     * @return the profile count that fits the heap, never below
+     *         {@link #MIN_MAX_PROFILES} and never above
+     *         {@link #ABSOLUTE_MAX_PROFILES}
+     * @since 0.9.72+
+     */
+    static int maxProfilesForHeap(long maxMemoryBytes) {
+        if (maxMemoryBytes <= 0) {return MIN_MAX_PROFILES;}
+        long byHeap = maxMemoryBytes / PROFILE_HEAP_BYTES * PROFILE_HEAP_PERCENT / 100;
+        // 2000 is the practical floor for a router that is not classed as slow:
+        // below it the tier minimums cannot be met from the store at all.
+        long chosen = Math.max(2000, byHeap);
+        return (int) Math.max(MIN_MAX_PROFILES, Math.min(ABSOLUTE_MAX_PROFILES, chosen));
+    }
+
+    /**
      * Returns the default profile count from the config.
      *
      * @return the maximum number of profiles
      */
     private static int getDefaultMaxProfiles() {
         if (SystemVersion.isSlow()) return MIN_MAX_PROFILES;
-        return ABSOLUTE_MAX_PROFILES;
+        return maxProfilesForHeap(SystemVersion.getMaxMemory());
     }
 
     /** Rate stat periods for the profile statistics. */
@@ -821,12 +1140,12 @@ public class ProfileOrganizer {
         _context.statManager().createRequiredRateStat("peer.fastOrHighCapProfileCount",
                 "Number of fast or high-capacity peers", "Peers", RATES);
         _context.statManager().createRequiredRateStat("peer.qualityPeerCount", "Peers with good acceptance + recent activity", "Peers", RATES);
-        // Immediate tier evictions, counted where the eviction happens rather than
-        // where it is decided. Two callers reach demoteIfUnreachableNow(): the build
-        // timeout path in BuildExecutor and the pre-connect probe sweep in
-        // TunnelPeerSelector. Registering and emitting it at the decision site counted
-        // only one of them, so the stat read zero for an entire run while the
-        // evictions it names were still occurring.
+        // Immediate tier evictions with no strike accumulation. Retired: the two
+        // callers that reached demoteIfUnreachableNow() now go through the strike
+        // accounting (BuildExecutor) or record only a failed first hop (the
+        // pre-connect probe sweep), so nothing evicts on a single event. The stat
+        // is left registered so a reader of an old graph sees the name and the
+        // zero, and the zero is the honest reading.
         _context.statManager().createRequiredRateStat("tunnel.firstHopUnreachableDemoted",
                 "Peers evicted from the selection tiers as unreachable, with no strike accumulation",
                 "Tunnels [Participating]", RATES);
@@ -840,12 +1159,19 @@ public class ProfileOrganizer {
         // Promotion deferral on a stale RouterInfo. peer.routerInfoRefreshNeeded and
         // peer.promotedStaleRouterInfo are the hypothesis counters: together they
         // say how many promotions are being held, and how many are going ahead on a
-        // RouterInfo already known to be stale. Neither implies any network work —
-        // a held promotion is only a peer the tier does not have yet.
+        // RouterInfo already known to be stale. peer.routerInfoProactiveRefresh is
+        // the response: the lookups issued to keep a RouterInfo from reaching the
+        // bar at all, and peer.routerInfoRefreshDropped is the ones the queue cap
+        // refused. Read the three together — a needed population that falls as the
+        // refresh count rises is the mechanism working.
         _context.statManager().createRequiredRateStat("peer.routerInfoRefreshNeeded",
                 "Tier promotions held back for a stale RouterInfo (both tiers counted)", "Peers", RATES);
         _context.statManager().createRequiredRateStat("peer.promotedStaleRouterInfo",
                 "Tier promotions accepted on a stale RouterInfo by the starvation guard", "Peers", RATES);
+        _context.statManager().createRequiredRateStat("peer.routerInfoProactiveRefresh",
+                "RouterInfo refresh searches issued ahead of the staleness bar", "Peers", RATES);
+        _context.statManager().createRequiredRateStat("peer.routerInfoRefreshDropped",
+                "RouterInfo refreshes refused by the queue cap", "Peers", RATES);
     }
 
     /**
@@ -1623,7 +1949,7 @@ public class ProfileOrganizer {
                     if (matches.contains(cur) || (exclude != null && exclude.contains(cur))) continue;
                     if (onlyNotFailing && _highCapacityPeers.containsKey(cur)) continue;
                     PeerProfile profile = _notFailingPeers.get(cur);
-                    if (!passesBasicGates(cur) || isExcessiveLifetimeFailure(profile)) continue;
+                    if (!passesBasicGates(cur) || isExcessiveLifetimeFailure(profile, now)) continue;
                     RouterInfo info = lookupRouterInfoUnvalidated(cur);
                     if (info != null) {
                         if (isHighBandwidthTierName(DataHelper.stripHTML(info.getBandwidthTier()))) {
@@ -2414,29 +2740,26 @@ public class ProfileOrganizer {
         // already hold a measurement, and repeats on every reorganize.
         sampleFirstHopRtts();
 
-        // Tiered expiration windows based on interaction level.
-        // Active peers (Tier 1) retain long-term data for tunnel selection quality.
-        // Passive peers (Tier 2) kept for 3 days to capture intermittent interactions.
-        // Gossip-only peers (Tier 3) kept for 24h since floodfill stores are infrequent.
-        final long expireActive = 7 * 24 * 60 * 60 * 1000L;    // 7 days
-        final long expirePassive = 3 * 24 * 60 * 60 * 1000L;   // 3 days
-        final long expireGossip = 24 * 60 * 60 * 1000L;        // 24 hours
-        // Peers that never accepted or rejected a tunnel build for us aren't
-        // useful — drop them from memory eventually. They'll be recreated
-        // on demand if they ever respond to a build request.
-        // Scale the window with the number of profiles stored: the fewer
-        // profiles known, the longer we keep untracked peers around.
-        int storedProfiles = _strictCapacityOrder.size();
-        final long expireUntracked;
-        if (storedProfiles < 2000) {
-            expireUntracked = 4 * 60 * 60 * 1000L;         // 4 hours
-        } else if (storedProfiles < 3000) {
-            expireUntracked = 3 * 60 * 60 * 1000L;         // 3 hours
-        } else if (storedProfiles < 4000) {
-            expireUntracked = 2 * 60 * 60 * 1000L;         // 2 hours
-        } else {
-            expireUntracked = 60 * 60 * 1000L;             // 1 hour
-        }
+        // Tiered expiration windows, by how much we have actually interacted with
+        // the peer. Active peers keep long-term data for tunnel selection quality;
+        // passive peers keep it long enough to catch an intermittent interaction;
+        // gossip-only peers are kept because a floodfill store is the only thing we
+        // will ever learn about them. Each window is a property, because the right
+        // value depends on how much of the network a router is trying to hold, and
+        // the previous constants were a week and a day on a router whose tiers
+        // needed peers the sweep had already deleted.
+        final long expireActive = hoursToMs(_context.getProperty(PROP_EXPIRE_ACTIVE_HOURS,
+                                                                 DEFAULT_EXPIRE_ACTIVE_HOURS));
+        final long expirePassive = hoursToMs(_context.getProperty(PROP_EXPIRE_PASSIVE_HOURS,
+                                                                  DEFAULT_EXPIRE_PASSIVE_HOURS));
+        final long expireGossip = hoursToMs(_context.getProperty(PROP_EXPIRE_GOSSIP_HOURS,
+                                                                 DEFAULT_EXPIRE_GOSSIP_HOURS));
+        // A peer that has never accepted or rejected a build for us is the normal
+        // state of every candidate the tier fills want to use, so this window
+        // decides how deep the reservoir of unjudged peers is.
+        final long expireUntracked = untrackedExpiryMs(_strictCapacityOrder.size(),
+                                                       _context.getProperty(PROP_EXPIRE_UNTRACKED_HOURS,
+                                                                            DEFAULT_EXPIRE_UNTRACKED_HOURS));
 
         // Optional coalescing (read-only, safe to skip if lock fails)
         if (shouldCoalesce && _context.router() != null &&
@@ -2501,6 +2824,11 @@ public class ProfileOrganizer {
             double newSpeedThreshold = calculateSpeedThreshold(newStrictCapacityOrder, now, newCapacityThreshold);
             long tThreshold = System.currentTimeMillis();
 
+            // Fetch once for the whole cycle; tier sizing, the purge's starvation
+            // floors and the fill passes all read it, and each would otherwise
+            // re-walk the network database.
+            int knownRouters = _context.netDb().getKnownRouters();
+
             // Step 3: Snapshot the old tier memberships as the restore fallback, then
             // clear and rebuild. Keys only: a peer still in _notFailingPeers after
             // the rebuild is by construction the same PeerProfile instance the
@@ -2515,7 +2843,7 @@ public class ProfileOrganizer {
             _notFailingPeersList.clear();
 
             // Step 4: Reinsert all active profiles and assign tiers
-            lockedRebuildTiers(newStrictCapacityOrder, buildSuccess);
+            lockedRebuildTiers(newStrictCapacityOrder, buildSuccess, knownRouters);
             long tPlace = System.currentTimeMillis();
             _context.statManager().addRateData(
                     "peer.profileCoalesceTime", tCoalesce - start);
@@ -2542,16 +2870,16 @@ public class ProfileOrganizer {
             // by the fill may be the very peer this pass is about to reject.
             // Purging afterwards would empty the tier and leave it empty until
             // the next cycle, which is a net shrink rather than a turnover.
-            purgeUnusableFromTiers(now, buildSuccess, profileCount);
+            purgeUnusableFromTiers(now, buildSuccess, knownRouters);
 
             // Step 6: Fallback to ensure minimum fast peers
-            int added = fillFastTierFallbacks(now, newStrictCapacityOrder, buildSuccess);
+            int added = fillFastTierFallbacks(now, newStrictCapacityOrder, buildSuccess, knownRouters);
 
             // Step 6a: Fallback to ensure minimum high-capacity peers
-            int highCapAdded = fillHighCapFallback(now, newStrictCapacityOrder, buildSuccess);
+            int highCapAdded = fillHighCapFallback(now, newStrictCapacityOrder, buildSuccess, knownRouters);
 
             // Step 6c: Fallback to preserved pre-reorganize peers if rebuild shrunk tiers too much.
-            restorePreservedPeers(now, oldFastPeers, oldHighCapPeers, buildSuccess);
+            restorePreservedPeers(now, oldFastPeers, oldHighCapPeers, buildSuccess, knownRouters);
 
             // Step 6d: Count quality peers (fast/high-cap with good acceptance + recent activity)
             // Used by tuner to adjust tier limits based on viable tunnel candidates
@@ -2603,14 +2931,19 @@ public class ProfileOrganizer {
             _activeProfileCount = activeCount;
             // peer.expiredProfileCount is likewise never registered; see above.
 
-            // Step 10: Enforce memory cap
+            // Step 10: Queue the proactive RouterInfo refreshes for the peers this
+            // cycle kept in, or near, the tiers. Queued under the lock, issued by
+            // releaseWriteLockAndRefresh() once it is dropped.
+            scheduleRouterInfoRefreshes(now);
+
+            // Step 11: Enforce memory cap
             enforceProfileCap();
 
         } finally {
             releaseWriteLockAndRefresh();
         }
 
-        // Step 11: Clean up persisted profiles.
+        // Step 12: Clean up persisted profiles.
         //
         // Deliberately after the lock is released. The purge gunzips and
         // property-parses every stored profile file (up to MAX_STORED_PROFILE_FILES)
@@ -2755,12 +3088,13 @@ public class ProfileOrganizer {
      *
      * @param candidates the surviving profile set
      * @param buildSuccess cached tunnel build success ratio
+     * @param known the routers in the network database, fetched once for the cycle
      * @since 0.9.72+
      */
-    private void lockedRebuildTiers(Set<PeerProfile> candidates, double buildSuccess) {
-        // Fetched once for the whole rebuild; lockedPlaceProfile() would otherwise
-        // re-walk the network database for every candidate.
-        int known = _context.netDb().getKnownRouters();
+    private void lockedRebuildTiers(Set<PeerProfile> candidates, double buildSuccess, int known) {
+        // Fetched once by the caller for the whole cycle; lockedPlaceProfile() would
+        // otherwise re-walk the network database for every candidate, and the purge
+        // and fill passes that follow need the same number for their own sizing.
         int active = _context.commSystem().countActivePeers();
         int minHighCap = getMinimumHighCapacityPeers(known);
         int minFast = getMinimumFastPeers(known);
@@ -2826,8 +3160,11 @@ public class ProfileOrganizer {
         // The profile is already in hand, so the failure check takes it directly
         // rather than re-probing the map.
         if (!passesBasicGates(profile.getPeer())) {return false;}
-        if (isExcessiveLifetimeFailure(profile)) {return false;}
-        if (requireAcceptance && isLowTunnelAcceptance(profile, buildSuccess, now, 1)) {return false;}
+        if (isExcessiveLifetimeFailure(profile, now)) {return false;}
+        // The fast-tier sample floor, not one: this gate runs on the fill passes
+        // as well as the rebuild, so a floor of one rejected fill candidates on a
+        // single refusal, which is the asymmetry the high-capacity path documents.
+        if (requireAcceptance && isLowTunnelAcceptance(profile, buildSuccess, now, FAST_ACCEPTANCE_SAMPLES)) {return false;}
         if (hasRecentTunnelFailures(profile)) {return false;}
         return !inLossProbation(profile, now);
     }
@@ -2859,8 +3196,69 @@ public class ProfileOrganizer {
      * @since 0.9.71+
      */
     static boolean hasRecentTierActivity(PeerProfile profile, long activeCutoff) {
-        return profile.getLastHeardFrom() >= activeCutoff ||
-               profile.getLastSendSuccessful() >= activeCutoff;
+        return hasRecentTierActivity(profile, activeCutoff, false);
+    }
+
+    /**
+     * As above, with the transport's own answer included.
+     * <p>Recency of our own traffic is a proxy for liveness. A session the
+     * transport is holding right now is the thing itself: a peer we have not sent
+     * anything to in four hours, with a live session, is alive, and a fill pass
+     * that refuses it is refusing it for having been chosen last cycle.
+     *
+     * @param profile profile whose heard-from and last-successful-send timestamps are checked
+     * @param activeCutoff earliest allowed activity timestamp in ms
+     * @param reachableNow whether the transport currently holds a session with the peer
+     * @return whether the peer has recent activity
+     * @since 0.9.72+ (the {@code reachableNow} parameter)
+     */
+    static boolean hasRecentTierActivity(PeerProfile profile, long activeCutoff, boolean reachableNow) {
+        return reachableNow
+               || profile.getLastHeardFrom() >= activeCutoff
+               || profile.getLastSendSuccessful() >= activeCutoff;
+    }
+
+    /**
+     * The recency window a tier fill pass uses, widened by how far the tier is
+     * below its minimum.
+     * <p>The selection window is sized to pick the freshest peers; the refill
+     * window is sized to find enough peers to reach a tier minimum, and those are
+     * different jobs. At the base window of one hour, a tier at 227 of 1,000 was
+     * offered only peers it had heard from in the last hour - a set that is
+     * itself a function of the tier being full, so the fill could not repair the
+     * shortage it was called for.
+     * <p>Widening is proportional to the deficit and disappears at the tier
+     * minimum, so a full tier keeps the strict bar. Bounded by
+     * {@link TunnelPeerSelector#MAX_WINDOW_MS}, the same ceiling the selection
+     * window has.
+     * <p>Pure decision - no context access, safe for unit tests.
+     *
+     * @param baseWindowMs the selection window from
+     *                     {@link TunnelPeerSelector#getActivityWindow}
+     * @param tierSize this tier's current size
+     * @param tierMin this tier's minimum, the size the fill is aiming at
+     * @return the window in ms, at least {@code baseWindowMs}
+     * @since 0.9.72+
+     */
+    static long tierFillActivityWindow(long baseWindowMs, int tierSize, int tierMin) {
+        if (tierMin <= 0 || tierSize >= tierMin) {return baseWindowMs;}
+        double deficit = Math.min(1.0d, (double) (tierMin - tierSize) / tierMin);
+        // A tier at half its target gets three times the window; one at 23% of it
+        // gets five times. Multiplying the base keeps the widening proportionate
+        // on a small router whose base window is already long.
+        long widened = baseWindowMs * (2 + (long) (4 * deficit));
+        return Math.min(widened, TunnelPeerSelector.MAX_WINDOW_MS);
+    }
+
+    /**
+     * Whether the transport currently holds a session with the peer.
+     *
+     * @param peer the peer hash
+     * @return true if a session is established
+     * @since 0.9.72+
+     */
+    private boolean isReachableNow(Hash peer) {
+        return _context.commSystem() != null && _context.commSystem().isEstablished(peer);
     }
 
     /**
@@ -2966,8 +3364,9 @@ public class ProfileOrganizer {
                                           long activeCutoff, boolean requireAcceptance) {
         if (profile.getPeer().equals(_us)) return false;
         if (!passesTierGates(profile, buildSuccess, now, requireAcceptance)) return false;
-        // Require recent activity — don't fill fast tier with stale peers
-        return hasRecentTierActivity(profile, activeCutoff);
+        // Require recent activity — don't fill fast tier with stale peers. A live
+        // session counts: it is the liveness the timestamp is standing in for.
+        return hasRecentTierActivity(profile, activeCutoff, isReachableNow(profile.getPeer()));
     }
 
     /**
@@ -2977,25 +3376,33 @@ public class ProfileOrganizer {
      * @param now current time in ms, the reference for the tier gates and the
      *            activity cutoff of the last pass
      * @param activeProfiles profiles surviving this reorganize round; the candidate
-     *                       pool when the high-capacity tier is empty
+     *                       pool, alongside the high-capacity tier's members
      * @param buildSuccess the build success ratio in [0.0, 1.0], fetched once per cycle
+     * @param known the routers in the network database, which sets the tier minimum
      * @return how many profiles were added to the fast tier, 0 if it already met its
      *         minimum
+     * @since 0.9.72+ (the {@code known} parameter)
      */
-    private int fillFastTierFallbacks(long now, Set<PeerProfile> activeProfiles, double buildSuccess) {
-        int minFast = getMinimumFastPeers();
+    private int fillFastTierFallbacks(long now, Set<PeerProfile> activeProfiles, double buildSuccess, int known) {
+        int minFast = getMinimumFastPeers(known);
         int added = 0;
         int target = minFast;
 
         if (_fastPeers.size() < target) {
-            // First, try from high-capacity peers (already tier-gated)
-            List<PeerProfile> candidates = new ArrayList<>(_highCapacityPeers.values());
-            if (candidates.isEmpty()) {
-                // No high-cap peers — filter active profiles to fast-tier-capable only
-                candidates = new ArrayList<>(activeProfiles.size());
-                for (PeerProfile p : activeProfiles) {
-                    if (isFastTierCapable(p.getPeer())) candidates.add(p);
-                }
+            // The high-capacity tier is the priority ordering, not the universe.
+            // Its members are already tier-gated, so they are the first picks -
+            // but using it as the only source made the fast tier's ceiling the
+            // high-capacity tier's size. Measured: 227 fast peers with 243
+            // high-cap, both tiers starved, the fast fill scanning a list of 243
+            // and reporting itself done. The reservoir is meant to seed the fast
+            // tier, not to bound it.
+            List<PeerProfile> candidates = new ArrayList<>(activeProfiles.size() + _highCapacityPeers.size());
+            Set<Hash> listed = new HashSet<>(candidates.size());
+            for (PeerProfile p : _highCapacityPeers.values()) {
+                if (listed.add(p.getPeer())) {candidates.add(p);}
+            }
+            for (PeerProfile p : activeProfiles) {
+                if (listed.add(p.getPeer()) && isFastTierCapable(p.getPeer())) {candidates.add(p);}
             }
 
             // Sort by speed descending
@@ -3034,7 +3441,13 @@ public class ProfileOrganizer {
             if (_fastPeers.size() < target) {
                 boolean inStartup = _context.router() != null &&
                                     _context.router().getUptime() < 15 * 60 * 1000L;
-                long activeCutoff = inStartup ? now : now - TunnelPeerSelector.getActivityWindow(_context, buildSuccess);
+                // The refill window, widened by the deficit, not the selection
+                // window: this pass exists to reach a minimum the strict bar
+                // cannot supply.
+                long fillWindow = tierFillActivityWindow(
+                        TunnelPeerSelector.getActivityWindow(_context, buildSuccess),
+                        _fastPeers.size(), minFast);
+                long activeCutoff = inStartup ? now : now - fillWindow;
                 for (PeerProfile profile : activeProfiles) {
                     if (_fastPeers.size() >= target) break;
                     if (isFastTierCapable(profile.getPeer()) &&
@@ -3059,16 +3472,21 @@ public class ProfileOrganizer {
      *                       iteration order until the minimum is reached
      * @param buildSuccess the build success ratio in [0.0, 1.0], also used to size
      *                     the activity window during normal operation
+     * @param known the routers in the network database, which sets the tier minimum
      * @return how many profiles were added to the high-capacity tier, 0 if it already
      *         met its minimum
+     * @since 0.9.72+ (the {@code known} parameter)
      */
-    private int fillHighCapFallback(long now, Set<PeerProfile> activeProfiles, double buildSuccess) {
-        int minHighCap = getMinimumHighCapacityPeers();
+    private int fillHighCapFallback(long now, Set<PeerProfile> activeProfiles, double buildSuccess, int known) {
+        int minHighCap = getMinimumHighCapacityPeers(known);
         int highCapAdded = 0;
         if (_highCapacityPeers.size() < minHighCap) {
             boolean inStartup = _context.router() != null &&
                                 _context.router().getUptime() < 15 * 60 * 1000L;
-            long activeCutoff = inStartup ? now : now - TunnelPeerSelector.getActivityWindow(_context, buildSuccess);
+            long fillWindow = tierFillActivityWindow(
+                    TunnelPeerSelector.getActivityWindow(_context, buildSuccess),
+                    _highCapacityPeers.size(), minHighCap);
+            long activeCutoff = inStartup ? now : now - fillWindow;
             for (PeerProfile profile : activeProfiles) {
                 if (_highCapacityPeers.size() >= minHighCap) break;
                 if (isHighBandwidthCapable(profile.getPeer()) &&
@@ -3106,10 +3524,11 @@ public class ProfileOrganizer {
      *
      * @param now current time in ms
      * @param buildSuccess the build success ratio, which relaxes the acceptance threshold under stress
-     * @param profileCount this cycle's profile count, which sets the soft-purge threshold
+     * @param known the routers in the network database, which sets the tier minimums
+     *              that are the soft-purge thresholds
      * @since 0.9.71+
      */
-    private void purgeUnusableFromTiers(long now, double buildSuccess, int profileCount) {
+    private void purgeUnusableFromTiers(long now, double buildSuccess, int known) {
         // Catches peers admitted by lockedPromoteProfileToTiers() that developed
         // failures during this reorganize window; see the javadoc for why the
         // steady-state counts here are near zero.
@@ -3120,17 +3539,14 @@ public class ProfileOrganizer {
         // be small only leaves it selectable for another cycle. The soft reasons -
         // recent failures, loss probation, poor acceptance - are the ones that
         // genuinely risk emptying a starved tier, so those stay gated.
-        // This cycle's count, not the _profileCount field: that field is assigned
-        // near the end of the same cycle, so reading it here saw zero on the first
-        // reorganize after a restart - which closed the soft-purge guard entirely
-        // for that cycle and, more generally, lagged the count by one cycle.
-        int threshold = softPurgeThreshold(profileCount);
-        boolean fastSoft = _fastPeers.size() >= threshold;
-        boolean highCapSoft = _highCapacityPeers.size() >= threshold;
+        int fastMin = getMinimumFastPeers(known);
+        int highCapMin = getMinimumHighCapacityPeers(known);
+        boolean fastSoft = _fastPeers.size() >= softPurgeThreshold(fastMin);
+        boolean highCapSoft = _highCapacityPeers.size() >= softPurgeThreshold(highCapMin);
         Map<PurgeReason, Integer> reasons = new EnumMap<>(PurgeReason.class);
         purgeUnusableFromMap(_fastPeers, "fast", now, buildSuccess, fastSoft, reasons);
         purgeUnusableFromMap(_highCapacityPeers, "high-cap", now, buildSuccess, highCapSoft, reasons);
-        publishPurgeReasonStats(reasons, fastSoft, highCapSoft, threshold);
+        publishPurgeReasonStats(reasons, fastSoft, highCapSoft, fastMin, highCapMin);
     }
 
     /**
@@ -3181,13 +3597,15 @@ public class ProfileOrganizer {
      * stat that is not reporting.
      *
      * @param reasons     counts accumulated by both tier passes, keyed by reason
-     * @param fastSoft    whether the fast tier was above the soft-purge threshold
-     * @param highCapSoft whether the high-capacity tier was above it
-     * @param threshold   the threshold in force, so a sudden stop is explicable
+     * @param fastSoft    whether the fast tier was at or above its soft-eviction floor
+     * @param highCapSoft whether the high-capacity tier was at or above its floor
+     * @param fastMin     the fast tier's soft-eviction floor, so a sudden stop in
+     *                    the soft counts is explicable from the log alone
+     * @param highCapMin  the high-capacity tier's soft-eviction floor
      * @since 0.9.71+
      */
     private void publishPurgeReasonStats(Map<PurgeReason, Integer> reasons, boolean fastSoft,
-                                         boolean highCapSoft, int threshold) {
+                                         boolean highCapSoft, int fastMin, int highCapMin) {
         StatManager sm = _context.statManager();
         for (PurgeReason r : PurgeReason.values()) {
             sm.createRequiredRateStat("peer.tierEvicted." + r.getKey(),
@@ -3197,10 +3615,10 @@ public class ProfileOrganizer {
             sm.addRateData("peer.tierEvicted." + r.getKey(), n != null ? n.intValue() : 0,
                            60L * 1000);
         }
-        // A tier silently below the threshold evicts nothing for the soft reasons,
-        // which reads identically to "nothing was bad" unless it is published too.
+        // A tier below its floor evicts nothing for the soft reasons, which reads
+        // identically to "nothing was bad" unless it is published too.
         sm.createRequiredRateStat("peer.tierEvicted.softPurgeActive",
-                                  "1 when both tiers were above the soft-purge threshold",
+                                  "1 per tier that was at or above its soft-eviction floor",
                                   "Tiers", RATES);
         sm.addRateData("peer.tierEvicted.softPurgeActive",
                        (fastSoft ? 1 : 0) + (highCapSoft ? 1 : 0), 60L * 1000);
@@ -3210,7 +3628,8 @@ public class ProfileOrganizer {
                       " * Not-capable: " + count(reasons, PurgeReason.NOT_CAPABLE) +
                       " * Failures: " + count(reasons, PurgeReason.FAILURES) +
                       " * Acceptance: " + count(reasons, PurgeReason.ACCEPTANCE) +
-                      "\n* Soft purge threshold: " + threshold);
+                      "\n* Soft eviction withheld below -> Fast: " + fastMin +
+                      " * High-cap: " + highCapMin);
         }
     }
 
@@ -3229,26 +3648,31 @@ public class ProfileOrganizer {
 
     /**
      * The smallest tier size at which peers may be evicted for a soft reason.
-     * <p>Scaled to the number of known profiles rather than fixed, because a fixed
-     * count means different things at different network sizes: demanding 500
-     * peers of a 5,000-profile network is a real constraint, while demanding the
-     * same of an 800-profile network is simply unreachable, which silently
-     * disables the eviction entirely and lets the tier decay one-way.
-     * <p>One tenth of the known profiles, capped at {@link #MAX_SOFT_PURGE_FLOOR}:
-     * the fraction keeps the requirement proportionate on small networks, and the
-     * cap stops it becoming so large on a big one that no tier ever qualifies.
-     * Below roughly {@code MAX_SOFT_PURGE_FLOOR * 10} profiles the cap is not
-     * reached, so a small router is held to the proportionate bar.
-     * <p>Pure decision — no context access, safe for unit tests.
+     * <p>This is the tier's own minimum, because that number already means "this
+     * tier is healthy": it is the floor the fill passes drive the tier back up
+     * to, and the size below which the pools begin to starve. Judging how well a
+     * peer performs is a luxury of a tier that has the peers it asked for.
+     * <p>The bar used to be a tenth of the known profiles, capped at 100. The cap
+     * disabled the protection the guard was written to provide: on a 4,335-profile
+     * router it put the bar at 100, so a 227-peer fast tier - 23% of its
+     * 1,000-peer minimum, the state this router was measured in for two days -
+     * was pruned for acceptance and failures at full strength every cycle while
+     * it was starving.
+     * <p>This does not switch eviction off. The categorical reasons - banned,
+     * unreachable, no longer bandwidth-capable - apply at any tier size, and the
+     * soft reasons resume in full the moment the tier reaches its minimum.
+     * <p>Pure decision - no context access, safe for unit tests.
      *
-     * @param knownProfiles the number of profiles the router knows about
+     * @param tierMin the tier's own minimum size, from
+     *                {@link #getMinimumFastPeers(int)} or
+     *                {@link #getMinimumHighCapacityPeers(int)}
      * @return the minimum tier size at which soft eviction applies; no size
-     *         qualifies when the population is unknown
+     *         qualifies when the minimum is unknown
      * @since 0.9.71+
      */
-    static int softPurgeThreshold(int knownProfiles) {
-        if (knownProfiles <= 0) {return Integer.MAX_VALUE;}
-        return Math.min(knownProfiles / 10, MAX_SOFT_PURGE_FLOOR);
+    static int softPurgeThreshold(int tierMin) {
+        if (tierMin <= 0) {return Integer.MAX_VALUE;}
+        return tierMin;
     }
 
     /**
@@ -3260,7 +3684,7 @@ public class ProfileOrganizer {
      * it and the one an operator greps for.
      * <p>The three categorical reasons apply at any tier size. The two soft ones
      * require {@code softEvictionAllowed}, which the caller derives from the
-     * population-scaled threshold, so a starved tier keeps peers that are merely
+     * tier's own minimum, so a starved tier keeps peers that are merely
      * underperforming while still losing the ones that must not be there at all.
      * <p>Pure decision — no context access, safe for unit tests.
      *
@@ -3329,7 +3753,12 @@ public class ProfileOrganizer {
                     allowSoftEviction,
                     hasRecentTunnelFailures(profile),
                     inLossProbation(profile, now),
-                    isLowTunnelAcceptance(profile, buildSuccess, now, 1));
+                    // Eviction judges on the same sample floor the tier's
+                    // admission does: fifty for high capacity, whose admission
+                    // demands fifty, five for fast. Judging on one sample is how
+                    // a peer that declined a single request left both tiers.
+                    isLowTunnelAcceptance(profile, buildSuccess, now,
+                                          isFast ? FAST_ACCEPTANCE_SAMPLES : MIN_TUNNEL_REQUESTS));
             if (reason != null) {
                 if (_log.shouldDebug()) {
                     _log.debug("Purging peer [" + peer.toBase64().substring(0, 6) +
@@ -3357,7 +3786,39 @@ public class ProfileOrganizer {
      * @since 0.9.71+
      */
     static boolean needsTierRestore(int currentSize, int oldSize) {
-        return currentSize < oldSize / 2 && oldSize > 100;
+        return needsTierRestore(currentSize, oldSize, 0);
+    }
+
+    /**
+     * As above, with the tier's own minimum included as a second trigger.
+     * <p>The half-of-previous rule can only fire on a one-cycle collapse, and the
+     * lossage measured here was not a collapse: the fast tier fell from 1,104 to
+     * 192 over two days, one reorganize at a time, so every cycle's "previous
+     * size" was already small and the trigger never fired. Over 48 hours the
+     * router spent 47 of them below its 1,000-peer minimum with a restore
+     * mechanism that reported nothing to do.
+     * <p>So: restore whenever the tier is below the size it asked for and the
+     * pre-reorganize snapshot holds peers the rebuild did not keep. The restore
+     * path is not unconditional - each candidate still passes the basic gates,
+     * the capability gate and the recent-failure gate, and when the tier is
+     * starved the acceptance and loss-probation gates are relaxed (see
+     * {@link #isRestorableTierPeer}) - so this widens when we look, not what we
+     * accept.
+     *
+     * @param currentSize current tier size
+     * @param oldSize pre-reorganize tier size
+     * @param tierMin the tier's minimum, from
+     *                {@link #getMinimumFastPeers(int)} or
+     *                {@link #getMinimumHighCapacityPeers(int)}; non-positive
+     *                selects the collapse rule alone
+     * @return whether the tier should be restored
+     * @since 0.9.72+ (the {@code tierMin} parameter)
+     */
+    static boolean needsTierRestore(int currentSize, int oldSize, int tierMin) {
+        // The collapse rule, written out: calling the two-argument overload from
+        // here would recurse straight back into this method.
+        if (currentSize < oldSize / 2 && oldSize > 100) {return true;}
+        return tierMin > 0 && currentSize < tierMin && oldSize > currentSize;
     }
 
     /**
@@ -3366,6 +3827,15 @@ public class ProfileOrganizer {
      * not in loss probation (fast tier) or below the loss demotion
      * threshold (high-cap tier), and acceptable tunnel acceptance.
      * Evaluation order matches the original restore loops.
+     * <p>When the tier is {@code starved}, the acceptance and loss gates are
+     * skipped. Both are soft quality signals, and both are ratchets: acceptance
+     * is judged on counts that decay multiplicatively, so a peer below the bar
+     * cannot raise it without new agreements, and new agreements need the tier
+     * membership this gate is withholding. Refusing a peer for being short of a
+     * quality bar, in a tier that is short of peers, is the collapse this path
+     * exists to undo. The categorical gates - banlist, unreachable, no longer
+     * bandwidth-capable, excessive lifetime failures, failures in the last hour -
+     * apply at any tier size.
      *
      * @param peer the peer hash
      * @param profile the preserved profile
@@ -3374,23 +3844,28 @@ public class ProfileOrganizer {
      * @param now current time in ms
      * @param highCap whether restoring the high-cap tier (loss-demotion
      *                gate instead of loss probation)
+     * @param starved whether the tier is below its minimum, relaxing the soft gates
      * @return whether the peer may be restored
-     * @since 0.9.71+
+     * @since 0.9.72+ (the {@code starved} parameter)
      */
     private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, PeerProfile> tier,
-                                         double buildSuccess, long now, boolean highCap) {
+                                         double buildSuccess, long now, boolean highCap,
+                                         boolean starved) {
         if (tier.containsKey(peer)) return false;
         // Use basic gates instead of isSelectable to avoid stale RouterInfo
         // proof-of-life filtering peers that were already vetted at tier entry.
-        if (!passesBasicGates(peer) || isExcessiveLifetimeFailure(profile)) return false;
+        if (!passesBasicGates(peer) || isExcessiveLifetimeFailure(profile, now)) return false;
         if (hasRecentTunnelFailures(profile)) return false;
+        if (starved) return true;
         if (highCap ? hasHighLoss(profile, now) : inLossProbation(profile, now)) return false;
         // Acceptance is checked for both tiers here even though high-capacity
         // admission ignores it. Admission is deliberately permissive so the tier
         // is a deep reservoir; eviction is what keeps poor accepters out. A
         // restoration path that skipped the check would reinstate on the next
-        // cycle exactly the peers eviction just removed.
-        return !isLowTunnelAcceptance(profile, buildSuccess, now, 1);
+        // cycle exactly the peers eviction just removed. Same sample floor as
+        // eviction, so a peer cannot be evicted under one bar and restored under
+        // a looser one.
+        return !isLowTunnelAcceptance(profile, buildSuccess, now, FAST_ACCEPTANCE_SAMPLES);
     }
 
     /**
@@ -3403,9 +3878,11 @@ public class ProfileOrganizer {
      *                        rebuild
      * @param buildSuccess the build success ratio in [0.0, 1.0], used by the
      *                     selectability and acceptance gates
+     * @param known the routers in the network database, which sets the tier minimums
+     * @since 0.9.72+ (the {@code known} parameter)
      */
     private void restorePreservedPeers(long now, Set<Hash> oldFastPeers,
-                                       Set<Hash> oldHighCapPeers, double buildSuccess) {
+                                       Set<Hash> oldHighCapPeers, double buildSuccess, int known) {
         // Prevents starvation when thresholds shift unfavorably — old entries that remain
         // selectable (no recent failures, no ban, no stale RI) are re-added.
         //
@@ -3413,41 +3890,52 @@ public class ProfileOrganizer {
         // snapshot: a peer the rebuild dropped has nothing usable to restore, and
         // skipping it stops this fallback from resurrecting a profile that expired
         // or went unreachable in this very reorganize.
+        int minFast = getMinimumFastPeers(known);
         int oldFastSize = oldFastPeers.size();
-        if (needsTierRestore(_fastPeers.size(), oldFastSize)) {
+        boolean fastStarved = _fastPeers.size() < minFast;
+        if (needsTierRestore(_fastPeers.size(), oldFastSize, minFast)) {
+            // Aim at the tier minimum, not only at the old size: on a tier that
+            // has been short for days, the old size is short too, and stopping at
+            // it leaves the tier exactly as starved as it was.
+            int target = Math.max(oldFastSize, minFast);
             int restored = 0;
             for (Hash peer : oldFastPeers) {
-                if (_fastPeers.size() >= oldFastSize) break;
+                if (_fastPeers.size() >= target) break;
                 PeerProfile profile = lockedGetProfile(peer);
                 if (profile == null) continue;
                 if (isFastTierCapable(peer) &&
-                    isRestorableTierPeer(peer, profile, _fastPeers, buildSuccess, now, false)) {
+                    isRestorableTierPeer(peer, profile, _fastPeers, buildSuccess, now, false, fastStarved)) {
                     putFastPeer(peer, profile);
                     clearLossIfReadmitted(profile);
                     restored++;
                 }
             }
-            if (_log.shouldInfo()) {
+            if (_log.shouldInfo() && restored > 0) {
                 _log.info("Tier fallback -> Restored " + restored + " peers to fast tier (was " +
-                          (_fastPeers.size() - restored) + ", old " + oldFastSize + ")");
+                          (_fastPeers.size() - restored) + ", old " + oldFastSize +
+                          " * Target: " + target + ")");
             }
         }
+        int minHighCap = getMinimumHighCapacityPeers(known);
         int oldHighCapSize = oldHighCapPeers.size();
-        if (needsTierRestore(_highCapacityPeers.size(), oldHighCapSize)) {
+        boolean highCapStarved = _highCapacityPeers.size() < minHighCap;
+        if (needsTierRestore(_highCapacityPeers.size(), oldHighCapSize, minHighCap)) {
+            int target = Math.max(oldHighCapSize, minHighCap);
             int restored = 0;
             for (Hash peer : oldHighCapPeers) {
-                if (_highCapacityPeers.size() >= oldHighCapSize) break;
+                if (_highCapacityPeers.size() >= target) break;
                 PeerProfile profile = lockedGetProfile(peer);
                 if (profile == null) continue;
                 if (isHighBandwidthCapable(peer) &&
-                    isRestorableTierPeer(peer, profile, _highCapacityPeers, buildSuccess, now, true)) {
+                    isRestorableTierPeer(peer, profile, _highCapacityPeers, buildSuccess, now, true, highCapStarved)) {
                     _highCapacityPeers.put(peer, profile);
                     restored++;
                 }
             }
-            if (_log.shouldInfo()) {
+            if (_log.shouldInfo() && restored > 0) {
                 _log.info("Tier fallback -> Restored " + restored + " peers to high-cap tier (was " +
-                          (_highCapacityPeers.size() - restored) + ", old " + oldHighCapSize + ")");
+                          (_highCapacityPeers.size() - restored) + ", old " + oldHighCapSize +
+                          " * Target: " + target + ")");
             }
         }
     }
@@ -3609,21 +4097,18 @@ public class ProfileOrganizer {
         List<PeerProfile> candidates = new ArrayList<>();
         long now = _context.clock().now();
 
-        // Don't evict under network stress — profile churn makes recovery harder
-        if (isLowBuildSuccess()) {
-            if (_log.shouldWarn()) {
-                // Report the value, not just that it was low. This guard sits on a composite
-                // of six rate stats (expire/reject/success, client and exploratory), and counting
-                // build events straight from the log implied a ratio near 0.56 - comfortably above
-                // ATTACK_THRESHOLD - while this branch fired over two thousand times. Both cannot be
-                // true, and the warning offered no way to tell which number was wrong. Suppressing
-                // eviction is not cheap to be wrong about: the profile database stops being pruned
-                // for as long as the condition holds.
-                _log.warn("Low tunnel build success (" + getTunnelBuildSuccess()
-                          + " < " + ATTACK_THRESHOLD
-                          + ") -> Skipping profile eviction to preserve peer data");
-            }
-            return;
+        // Under network stress, halve the eviction rate rather than stopping it.
+        // Churn makes recovery harder, so a degraded network is a bad time to be
+        // dropping peer knowledge — and a wholesale skip is worse than the churn
+        // it avoids. This gate sits on a composite of six rate stats (expire /
+        // reject / success, client and exploratory); while it holds, the store
+        // stopped being pruned for as long as the condition lasted, which is
+        // unbounded. Half the eviction bounds the growth at half the churn.
+        boolean degraded = isLowBuildSuccess();
+        if (degraded && _log.shouldWarn()) {
+            _log.warn("Low tunnel build success (" + getTunnelBuildSuccess()
+                      + " < " + ATTACK_THRESHOLD
+                      + ") -> Halving profile eviction to preserve peer data");
         }
 
         long activeThreshold = now - (48 * 60 * 60 * 1000L); // 48 hours
@@ -3647,7 +4132,7 @@ public class ProfileOrganizer {
         // on a capacity margin.
         candidates.sort(STALENESS_THEN_CAPACITY);
 
-        int toEvict = _notFailingPeers.size() - maxProfiles;
+        int toEvict = evictionDeficit(_notFailingPeers.size(), maxProfiles, degraded);
         int evicted = 0;
         Iterator<PeerProfile> iter = candidates.iterator();
 
@@ -3679,6 +4164,27 @@ public class ProfileOrganizer {
         if (_log.shouldInfo()) {
             _log.info("Evicted " + evicted + " low-priority profiles to enforce cap (" + maxProfiles + ")");
         }
+    }
+
+    /**
+     * How many profiles to evict from a store that is over its cap.
+     * <p>Under network stress the deficit is halved, not skipped: the store keeps
+     * being pruned, at half the churn, so a long degraded period cannot grow it
+     * without bound. The halving floors, so an odd deficit of one evicts nothing
+     * while degraded — the conservative direction for a store we are protecting.
+     * <p>Pure decision — no context access, safe for unit tests.
+     *
+     * @param storedProfiles how many profiles are held in memory
+     * @param maxProfiles the cap in force, already clamped
+     * @param degraded whether the tunnel build success ratio is below
+     *                 {@link #ATTACK_THRESHOLD}
+     * @return how many profiles to evict; zero at or under the cap
+     * @since 0.9.72+
+     */
+    static int evictionDeficit(int storedProfiles, int maxProfiles, boolean degraded) {
+        int toEvict = storedProfiles - maxProfiles;
+        if (toEvict <= 0) {return 0;}
+        return degraded ? toEvict / 2 : toEvict;
     }
 
     /**
@@ -3832,8 +4338,13 @@ public class ProfileOrganizer {
         // to floor the adaptive ceiling when the network is degraded, preventing
         // RTT ceiling amplification where the ceiling rises with the network
         // and peers that would cause failures are allowed through.
-        if (_baselineRTT <= 0 && _thresholdRTT > 0) {
+        // Re-anchor the baseline on a rolling window, not once at startup. The
+        // degraded-mode ceiling is floored at 2x this value, so a boundary
+        // measured in the router's first minutes set the tightest ceiling a peer
+        // had to clear for the life of the process.
+        if (_thresholdRTT > 0 && shouldReanchorBaseline(_baselineRTTTime, now)) {
             _baselineRTT = _thresholdRTT;
+            _baselineRTTTime = now;
         }
         return boundary.getSpeedValue();
     }
@@ -4334,6 +4845,9 @@ public class ProfileOrganizer {
         int skipIp = 0;
         int skipRtt = 0;
 
+        // One clock read for the whole scan: the lifetime-failure gate judges the
+        // age of a peer's evidence, and this loop runs per candidate.
+        long now = _context.clock().now();
         Iterator<Map.Entry<Hash, PeerProfile>> it = peers.entrySet().iterator();
         for (int i = 0; i < start && it.hasNext(); i++)
             it.next();
@@ -4371,7 +4885,7 @@ public class ProfileOrganizer {
                 continue;
             }
             // entry.getValue() is the profile; the Hash form re-probes the map for it.
-            if (isExcessiveLifetimeFailure(entry.getValue())) {
+            if (isExcessiveLifetimeFailure(entry.getValue(), now)) {
                 if (toExclude != null) toExclude.add(peer);
                 skipGated++;
                 continue;
@@ -4756,7 +5270,7 @@ public class ProfileOrganizer {
         // and (for stale RouterInfo) the proof-of-life check below; fetching it
         // per-check took two read locks per candidate.
         PeerProfile prof = _context.profileOrganizer().getProfile(peer);
-        if (isExcessiveLifetimeFailure(prof)) return false;
+        if (isExcessiveLifetimeFailure(prof, _context.clock().now())) return false;
         // Unvalidated: every check a validating lookup would add on top of presence is
         // done below — banlist and XG/LU in passesBasicGates, and hidden flag,
         // age with proof-of-life fallback, transport establishment, usable
@@ -4866,21 +5380,31 @@ public class ProfileOrganizer {
      * unit tests.
      *
      * @param prof the profile, may be null
+     * @param now current time in ms, the reference for the evidence TTL
      * @return true when the peer should be excluded from selection
-     * @since 0.9.71+
+     * @since 0.9.72+ (the {@code now} parameter)
      */
-    static boolean isExcessiveLifetimeFailure(PeerProfile prof) {
+    static boolean isExcessiveLifetimeFailure(PeerProfile prof, long now) {
         if (prof == null) return false;
         TunnelHistory th = prof.getTunnelHistory();
         if (th == null) return false;
         long lifetimeFailed = th.getLifetimeFailed();
         if (lifetimeFailed > MAX_LIFETIME_TUNNEL_FAILURES) return true;
         long totalRequests = th.getLifetimeAgreedTo() + lifetimeFailed;
-        if (totalRequests > 0) {
-            double ratio = (double) lifetimeFailed / totalRequests;
-            if (ratio > MAX_LIFETIME_FAILURE_RATIO) return true;
-        }
-        return false;
+        if (totalRequests <= 0) return false;
+        // The ratio arm is the one that cannot heal: the 8-hour decay scales the
+        // numerator and the denominator of this ratio by the same factor, so it
+        // is invariant under its own decay and only new agreements move it.
+        // A peer we have not asked in a week has a record that describes last
+        // month, and it cannot improve on its own. Un-judged, not excluded.
+        if (acceptanceEvidenceExpired(th.getLastBuildActivity(), now)) return false;
+        // Beta-style shrinkage: judge a peer by its own record once it has one,
+        // and by how the network as a whole behaves when it does not. On a router
+        // whose build success is 52%, "2 of the 3 requests I sent this peer
+        // failed" is not a finding about the peer.
+        double effective = (lifetimeFailed + FAILURE_PRIOR_STRENGTH * POPULATION_FAILURE_RATIO)
+                           / (totalRequests + FAILURE_PRIOR_STRENGTH);
+        return effective > MAX_LIFETIME_FAILURE_RATIO;
     }
 
     /**
@@ -4932,12 +5456,20 @@ public class ProfileOrganizer {
             !hasRecentProofOfLife(prof, now)) {
             return false;
         }
-        // During normal operation, require established transport connection.
-        // During startup, allow non-established peers since we're still
-        // building connections, but the proof-of-life check above still
-        // prevents using peers with stale RouterInfo and no history.
+        // During normal operation, require an established transport connection
+        // or recent proof of life.
+        //
+        // The established-session arm alone was a one-way door for exactly the
+        // peers the tiers are short of: an idle peer holds no session, so it
+        // fails selection, so it earns no traffic, so nothing refreshes the
+        // evidence that would let it be selected. Proof of life — a send success,
+        // a message heard, or a reference heard about, inside an hour — is the
+        // same liveness claim the RouterInfo-age check above already accepts, so
+        // accepting it here is consistent with the rule this file already uses.
+        // A peer with no contact of any kind in an hour is still refused.
         if (_context.router() != null && _context.router().getUptime() > STARTUP_GRACE_PERIOD_MS &&
-            !_context.commSystem().isEstablished(peer)) {
+            !_context.commSystem().isEstablished(peer) &&
+            !hasRecentProofOfLife(prof, now)) {
             return false;
         }
         // Peers without a reachable NTCP2 or SSU2 address cannot be used
@@ -5212,14 +5744,22 @@ public class ProfileOrganizer {
         // 3. Filling mode: speed-based or low-latency bypass.
         // The fast tier keeps the strict acceptance floor high capacity dropped: it is
         // the tier build selection actually draws from, so a peer that has declined
-        // 80% of a handful of requests has no business being offered.
-        if (isLowTunnelAcceptance(profile, buildSuccess, now, 1)) {
+        // 80% of a handful of requests has no business being offered. "A handful" is
+        // five requests, not one: below five there is no evidence, and a peer with a
+        // single refusal in its lifetime has not been measured, only sampled.
+        if (isLowTunnelAcceptance(profile, buildSuccess, now, FAST_ACCEPTANCE_SAMPLES)) {
             recordPromotionSkip("lowTunnelAcceptance.fast");
             return false;
         }
         if (!_fastPeers.containsKey(peer) && _fastPeers.size() < maxFast &&
             isFastTierCapable(peer)) {
-            boolean hasProvenThroughput = profile.getPeakTunnel1mThroughputKBps() > 0;
+            // Proven throughput is a dated credential, not a permanent one. The
+            // peak ring is never decayed, so as an undated credential it pushed
+            // _fastQualityCount past MIN_FAST_QUALITY_COUNT over days, the tier
+            // flipped into quality mode, and quality mode demands 10-minute-fresh
+            // activity of every candidate — which is a set the fill passes cannot
+            // grow. The peak stays the capacity signal used for sorting.
+            boolean hasProvenThroughput = profile.hasProvenThroughput(now);
             boolean alreadyHighCap = _highCapacityPeers.containsKey(peer);
             boolean fastQuality = _fastQualityCount >= MIN_FAST_QUALITY_COUNT;
             // The three admission paths decide whether this peer is a fast-tier
@@ -5228,11 +5768,17 @@ public class ProfileOrganizer {
             // have dropped is not counted as a deferral.
             boolean fastCandidate;
             if (!recentFailures && alreadyHighCap &&
-                (profile.isLowLatency() || !profile.hasBeenTested())) {
+                (profile.isLowLatency() || !profile.hasLatencyEvidence() ||
+                 !profile.hasBeenTested(now))) {
                 // High-cap responsive: peer is in high-cap (X/P/O or
-                // capacity-qualified) and is low-latency or untested.
-                // Tested-but-slow peers are excluded — their bandwidth
-                // tier is real, but their responsiveness isn't.
+                // capacity-qualified) and is low-latency, unmeasured for latency,
+                // or untested for responsiveness.
+                // Tested-and-slow peers are excluded — their bandwidth tier is
+                // real, but their responsiveness is, today. "Today" is the point:
+                // both of these measurements were undated, so a peer measured
+                // slow once, years ago, was excluded from this path permanently,
+                // and the only thing that refreshes a measurement is being
+                // selected by a path this one gates.
                 fastCandidate = true;
             } else if (fastQuality) {
                 // Quality mode: all tests passing — peer test, active,
@@ -5240,11 +5786,14 @@ public class ProfileOrganizer {
                 fastCandidate = profile.isLowLatency() && profile.getIsActive() &&
                                 !recentFailures && (hasProvenThroughput || alreadyHighCap);
             } else {
-                // Filling mode: speed-based or low-latency bypass, but still reject recent failures
+                // Filling mode: speed-based or low-latency bypass, but still reject recent failures.
+                // An unmeasured peer takes the low-latency bypass: it has not been
+                // shown to be slow, and the RTT is only refreshed by a probe or a
+                // build, both of which need the peer to be selected.
                 fastCandidate = !recentFailures &&
                                 ((profile.getSpeedValue() >= effectiveSpeedThreshold &&
                                   (profile.getIsActive() || hasProvenThroughput)) ||
-                                 profile.isLowLatency());
+                                 profile.isLowLatency() || !profile.hasLatencyEvidence());
             }
             if (fastCandidate &&
                 !holdPromotionForRefresh(peer, staleRouterInfo, _fastPeers.size(),
@@ -5535,7 +6084,7 @@ public class ProfileOrganizer {
         // Basic gates rather than isSelectable, to avoid stale RouterInfo
         // proof-of-life filtering peers that were already vetted at tier entry.
         if (!passesBasicGates(peer)) {return "notPeerSelectable";}
-        if (isExcessiveLifetimeFailure(profile)) {return "excessiveFailures";}
+        if (isExcessiveLifetimeFailure(profile, now)) {return "excessiveFailures";}
         boolean isStrictCountry = _context.commSystem() != null &&
                                   _context.commSystem().isInStrictCountry(peer);
         if (isStrictCountry) {return "strictCountry";}
@@ -5975,34 +6524,6 @@ public class ProfileOrganizer {
     }
 
     /**
-     * Immediately demote a peer from fast/high-cap tiers on a single unreachable
-     * first hop, skipping the {@link #DEMOTE_STRIKE_THRESHOLD} strikes and the
-     * cooldown that {@link #demoteIfUnreachable} requires. Non-blocking — only
-     * acts if the peer is currently in those tiers.
-     *
-     * @param peer hash of the peer to demote
-     */
-    public void demoteIfUnreachableNow(Hash peer) {
-        if (!getWriteLock()) return;
-        try {
-            boolean inFast = _fastPeers.containsKey(peer);
-            boolean inHighCap = _highCapacityPeers.containsKey(peer);
-            if (inFast || inHighCap) {
-                if (_log.shouldInfo()) {
-                    _log.info("Demoting peer [" + peer.toBase64().substring(0, 6) +
-                              "] from fast/high-cap tiers: unreachable");
-                }
-                _context.statManager().addRateData("tunnel.firstHopUnreachableDemoted", 1);
-                if (inFast) removeFastPeer(peer);
-                if (inHighCap) _highCapacityPeers.remove(peer);
-                promoteToFillTiers();
-            }
-        } finally {
-            releaseWriteLockAndRefresh();
-        }
-    }
-
-    /**
      * Immediately demote a peer from fast/high-cap tiers. The caller must have
      * already judged the peer to have built no tunnel recently. This only
      * performs the tier removal.
@@ -6045,13 +6566,6 @@ public class ProfileOrganizer {
         if (!getWriteLock()) return;
         long now = _context.clock().now();
         try {
-            // Evict stale demotion cooldowns (entries >10 min old)
-            long cooldownCutoff = now - TUNNEL_DEMOTION_COOLDOWN_MS;
-            _demotedPeers.entrySet().removeIf(e -> e.getValue() < cooldownCutoff);
-            // Cap size to prevent unbounded growth under pathological conditions
-            if (_demotedPeers.size() > MAX_DEMOTED_PEERS) {
-                _demotedPeers.clear();
-            }
             // Prune expired strikes; drop strikes whose timestamp is gone after
             // a decay-window sweep so the two maps stay consistent. Only sweep
             // when large to keep this off the common path.
@@ -6086,7 +6600,6 @@ public class ProfileOrganizer {
                               "] from fast/high-cap tiers after " + DEMOTE_STRIKE_THRESHOLD +
                               " unreachable first-hop failures");
                 }
-                _demotedPeers.put(peer, now);
                 if (inFast) removeFastPeer(peer);
                 if (inHighCap) _highCapacityPeers.remove(peer);
                 promoteToFillTiers();
@@ -6097,18 +6610,21 @@ public class ProfileOrganizer {
     }
 
     /**
-     * Release the reorganize write lock, then refresh peers held out of the tiers.
+     * Release the reorganize write lock, then run the RouterInfo work it queued.
      * <p>The single exit point for every path that runs a tier refill under the lock. Doing
      * the refresh here rather than at each call site is deliberate: a call site that forgot
      * it would leave the queue to fill and never drain, and there were ten of them. It has to
      * be here, and not inside {@link #promoteToFillTiers}, because a refill runs with the
      * lock held and issuing a lookup is network work that must never run under it.
+     * <p>Both drains are here for the same reason: the peers whose address is
+     * missing, and the peers whose RouterInfo is about to go stale.
      *
-     * @since 0.9.71+
+     * @since 0.9.72+ (the proactive refresh drain)
      */
     private void releaseWriteLockAndRefresh() {
         releaseWriteLock();
         refreshHeldPeers();
+        refreshStaleRouterInfos();
     }
 
     /**
@@ -6138,6 +6654,136 @@ public class ProfileOrganizer {
 
     /** Timeout for a RouterInfo lookup issued on behalf of a held peer. */
     private static final long ADDRESS_REFRESH_TIMEOUT_MS = 30 * 1000L;
+
+    /**
+     * Timeout for a proactive RouterInfo refresh.
+     * <p>Shorter than {@link #ADDRESS_REFRESH_TIMEOUT_MS}: this is a renewal, not
+     * a recovery, and a search that has not answered in a quarter of the time has
+     * missed the window in which it keeps the peer promotable.
+     */
+    private static final long REFRESH_TIMEOUT_MS = 15 * 1000L;
+
+    /**
+     * How far back "a peer we have used" reaches for the refresh schedule, in ms.
+     * <p>A day, not the hour the activity gauge uses. A RouterInfo refresh is
+     * worth issuing for a peer selection may offer tomorrow, and the per-peer
+     * cooldown, not the width of the set, is what bounds the cost.
+     */
+    static final long REFRESH_ACTIVITY_WINDOW_MS = 24 * 60 * 60 * 1000L;
+
+    /**
+     * Property: how far ahead of the staleness bar a RouterInfo is refreshed, in
+     * ms. Zero or less disables the proactive refresh.
+     *
+     * @return the refresh-ahead window in ms
+     * @since 0.9.72+
+     */
+    private long getRouterInfoRefreshAheadMs() {
+        return _context.getProperty(PROP_ROUTERINFO_REFRESH_AHEAD_MS,
+                                    RouterInfoRefresher.DEFAULT_REFRESH_AHEAD_MS);
+    }
+
+    /**
+     * Queue a proactive RouterInfo refresh for the peers the tiers are made of.
+     * <p>Must be called with the write lock held; it does no network work. The
+     * lookups go out from {@link #refreshStaleRouterInfos()} after the lock is
+     * released.
+     * <p>The population is the tier members plus every profile with a successful
+     * send in the last day. Those are the peers a stale RouterInfo costs us: the
+     * deferral applies to tier members, and a peer outside the tiers is refreshed
+     * so that it can re-enter them. A peer with no RouterInfo at all is left to
+     * the missing-RouterInfo recovery drain, which already owns that case.
+     * <p>The reason to refresh ahead of the bar rather than react to it: routers
+     * republish hourly, so a RouterInfo reaches the bar on a schedule, and the
+     * only re-entry routes from a hold were that the peer happened to republish
+     * to us, or that we heard from it inside an hour. A peer that is idle, in a
+     * tier that is short, has neither, and the hold is a ceiling that engages as
+     * the tier approaches the size it is sized for.
+     *
+     * @param now current time in ms
+     * @since 0.9.72+
+     */
+    private void scheduleRouterInfoRefreshes(long now) {
+        long ahead = getRouterInfoRefreshAheadMs();
+        if (ahead <= 0) {return;}
+        int queued = 0;
+        for (Hash peer : _fastPeers.keySet()) {
+            if (scheduleRefresh(peer, now, ahead)) {queued++;}
+        }
+        for (Hash peer : _highCapacityPeers.keySet()) {
+            if (scheduleRefresh(peer, now, ahead)) {queued++;}
+        }
+        long activeCutoff = now - REFRESH_ACTIVITY_WINDOW_MS;
+        for (PeerProfile profile : _notFailingPeers.values()) {
+            if (profile.getLastSendSuccessful() < activeCutoff) {continue;}
+            if (scheduleRefresh(profile.getPeer(), now, ahead)) {queued++;}
+        }
+        if (_log.shouldDebug() && queued > 0) {
+            _log.debug("RouterInfo refresh -> Queued " + queued + " lookups" +
+                       " (Pending: " + _refresher.getRefreshPending() +
+                       " * Ahead: " + DataHelper.formatDuration(ahead) + ')');
+        }
+    }
+
+    /**
+     * Whether one peer's RouterInfo should be refreshed now, and queue it if so.
+     *
+     * @param peer the peer to consider
+     * @param now current time in ms
+     * @param aheadMs the refresh-ahead window in ms
+     * @return true if the peer was queued
+     */
+    private boolean scheduleRefresh(Hash peer, long now, long aheadMs) {
+        // Cooldown first: it is a map read, and in steady state it refuses almost
+        // every candidate, so the staleness test's database lookup is not paid
+        // for a peer that would be refused anyway.
+        if (_refresher.isRefreshCooling(peer, now)) {return false;}
+        DatabaseEntry de = _context.netDb().lookupLocallyWithoutValidation(peer);
+        if (!(de instanceof RouterInfo)) {return false;}
+        if (!RouterInfoRefresher.isRouterInfoDueForRefresh(((RouterInfo) de).getPublished(), now, aheadMs)) {
+            return false;
+        }
+        return _refresher.scheduleRefresh(peer, now);
+    }
+
+    /**
+     * Issue the queued RouterInfo refreshes.
+     * <p>Called after the reorganize write lock is released, next to
+     * {@link #refreshHeldPeers()}, and doubly bounded the same way - a per-drain
+     * batch and a minimum interval - so a tier of any size cannot turn this into
+     * a request flood.
+     *
+     * @since 0.9.72+
+     */
+    private void refreshStaleRouterInfos() {
+        long now = _context.clock().now();
+        if (!_refresher.mayDrainRefreshes(now)) {return;}
+        List<Hash> batch = _refresher.takeRefreshBatch(now);
+        if (batch.isEmpty()) {return;}
+        for (Hash peer : batch) {
+            try {
+                _context.netDb().refreshRouterInfo(peer, REFRESH_TIMEOUT_MS);
+            } catch (RuntimeException re) {
+                // A search that cannot be started is not worth aborting the batch over.
+                _log.log(Log.WARN, "Could not start RouterInfo refresh for peer [" +
+                          peer.toBase64().substring(0, 6) + "]", re);
+            }
+        }
+        _context.statManager().addRateData("peer.routerInfoProactiveRefresh", batch.size());
+        // The refresher counts drops cumulatively; a rate stat wants this drain's.
+        int dropped = _refresher.getRefreshDropped() - _refreshDroppedReported;
+        if (dropped > 0) {
+            _refreshDroppedReported += dropped;
+            _context.statManager().addRateData("peer.routerInfoRefreshDropped", dropped);
+            if (_log.shouldInfo()) {
+                _log.info("RouterInfo refresh -> Queue full, refused " + dropped +
+                          " refreshes (Pending: " + _refresher.getRefreshPending() + ')');
+            }
+        }
+    }
+
+    /** Refreshes dropped by the queue cap that have already been reported. */
+    private int _refreshDroppedReported;
 
     /**
      * Record that a stored profile was loaded for a peer the netdb cannot resolve.
@@ -6181,67 +6827,6 @@ public class ProfileOrganizer {
      * @since 0.9.72+
      */
     int getMissingRouterInfoDropped() { return _refresher.getMissingRouterInfoDropped(); }
-
-    /**
-     * Batch-demote peers from fast/high-cap tiers under a single write lock.
-     * Peers not currently in any tier are silently skipped.
-     * One {@link #promoteToFillTiers} call after all removals.
-     *
-     * @param peers peers to evict — may be empty (no-op, no lock)
-     * @since 0.9.71+
-     */
-    public void demoteBatch(Set<Hash> peers) {
-        if (peers.isEmpty()) return;
-        if (!getWriteLock()) return;
-        try {
-            int removed = 0;
-            for (Hash peer : peers) {
-                boolean inFast = _fastPeers.containsKey(peer);
-                boolean inHighCap = _highCapacityPeers.containsKey(peer);
-                if (inFast || inHighCap) {
-                    if (inFast) removeFastPeer(peer);
-                    if (inHighCap) _highCapacityPeers.remove(peer);
-                    removed++;
-                }
-            }
-            if (removed > 0) {
-                if (_log.shouldInfo()) {
-                    _log.info("Batch demoted " + removed + " of " + peers.size() + " peers from fast/high-cap tiers");
-                }
-                promoteToFillTiers();
-            }
-        } finally {
-            releaseWriteLockAndRefresh();
-        }
-    }
-
-    /**
-     * Batch-remove peers from fast tier only, keeping them in high-cap.
-     * Used to demote peers with test failures from fast to high cap.
-     * Does NOT call {@link #promoteToFillTiers()} — re-promotion would undo the
-     * demotion. The next full reorganize() fills any gaps.
-     *
-     * @param peers peers to remove from fast tier — may be empty (no-op, no lock)
-     * @since 0.9.71+
-     */
-    public void demoteFastOnlyBatch(Set<Hash> peers) {
-        if (peers.isEmpty()) return;
-        if (!getWriteLock()) return;
-        try {
-            int removed = 0;
-            for (Hash peer : peers) {
-                if (_fastPeers.containsKey(peer)) {
-                    removeFastPeer(peer);
-                    removed++;
-                }
-            }
-            if (removed > 0 && _log.shouldInfo()) {
-                _log.info("Batch demoted " + removed + " of " + peers.size() + " peers from fast tier (kept in high-cap)");
-            }
-        } finally {
-            releaseWriteLockAndRefresh();
-        }
-    }
 
     /**
      * Compute the next strike count after a failure, applying time-window
@@ -6396,8 +6981,18 @@ public class ProfileOrganizer {
             // No tunnel test history — allow alive peers into tiers so they
             // can accumulate tunnel data.  Stale peers (not heard from recently)
             // are excluded; under-performers are evicted by existing mechanisms.
-            return !hasRecentTierActivity(profile, now - NO_HISTORY_ACTIVITY_WINDOW_MS);
+            // A live session satisfies the bar: a peer with no history is the
+            // normal state of every fill candidate, and acquiring history
+            // requires being selected, which requires passing this gate.
+            return !hasRecentTierActivity(profile, now - NO_HISTORY_ACTIVITY_WINDOW_MS,
+                                          isReachableNow(profile.getPeer()));
         }
+
+        // A record that has not been refreshed in a week is not evidence: the
+        // counts decay multiplicatively, so the ratio they form is invariant
+        // under the decay and can only be raised by new agreements, which need
+        // the tier membership this very gate is withholding. Un-judged, not passed.
+        if (acceptanceEvidenceExpired(th.getLastBuildActivity(), now)) {return false;}
 
         double ratio = (double) agreed / totalRequests;
 
@@ -6590,6 +7185,11 @@ public class ProfileOrganizer {
     private boolean inLossProbation(PeerProfile profile, long now) {
         if (hasHighLoss(profile, now)) return true;
         if (!profile.isLossy()) return false;
+        // The clock bound is checked ahead of the readmission test, and this stays
+        // a predicate: the flag itself is cleared by clearLossIfReadmitted() on a
+        // path that holds the write lock, so a selection scan never mutates a
+        // profile.
+        if (lossProbationExpired(profile.getLossySince(), now)) return false;
         return !shouldReadmitLossy(profile, now);
     }
 
@@ -6624,17 +7224,19 @@ public class ProfileOrganizer {
 
     /**
      * Pure decision behind {@link #shouldReadmitLossy}, pinned by tests.
-     * A peer never demoted is always allowed. Otherwise the transport must
-     * have reported within the freshness window a ratio below the demotion
-     * threshold; that fresh-clean evidence admits immediately when the ratio
-     * is near-spotless ({@code fastTrackRatio}) or when the tiers are short
-     * ({@code tiersShort}) — a short tier cannot afford to hold a peer out
-     * for a clean-but-not-spotless measurement — and otherwise only after
-     * the minimum age has passed. A stale or absent report is never evidence
-     * of recovery.
+     * A peer never demoted is always allowed. A peer the transport has never
+     * reported on is allowed too: there is no evidence of loss for it to answer,
+     * and demanding a report from a peer we are sending no traffic to is a closed
+     * loop. Otherwise the transport must have reported within the freshness
+     * window a ratio below the demotion threshold; that fresh-clean evidence
+     * admits immediately when the ratio is near-spotless
+     * ({@code fastTrackRatio}) or when the tiers are short ({@code tiersShort}) —
+     * a short tier cannot afford to hold a peer out for a clean-but-not-spotless
+     * measurement — and otherwise only after the minimum age has passed. A stale
+     * report is not evidence of recovery.
      *
      * @param lossRatio last loss ratio reported by the transport, 0.0 = healthy
-     * @param ratioLastUpdate when that ratio was reported, in ms
+     * @param ratioLastUpdate when that ratio was reported, in ms; 0 if never
      * @param lossySince when the peer was demoted for loss, 0 if never
      * @param now current time in ms
      * @param freshWindowMs how old the last report may be and still count as fresh
@@ -6649,6 +7251,11 @@ public class ProfileOrganizer {
                                        long freshWindowMs, long minAgeMs, float threshold,
                                        float fastTrackRatio, boolean tiersShort) {
         if (lossySince <= 0) return true;
+        // Never reported is not "no clean evidence", it is "no evidence at all".
+        // The fields are not carried across a restart by the transport, so a peer
+        // that comes back from a persisted probation with no report on file was
+        // not observed to be lossy - it was only ever remembered as one.
+        if (ratioLastUpdate <= 0) return true;
         boolean freshClean = now - ratioLastUpdate < freshWindowMs && lossRatio < threshold;
         if (freshClean && (lossRatio < fastTrackRatio || tiersShort)) return true;
         if (now - lossySince < minAgeMs) return false;
@@ -6923,6 +7530,22 @@ public class ProfileOrganizer {
         if (_context.router() == null) return _defaultMinFastPeers;
         return _context.getProperty(PROP_MINIMUM_FAST_PEERS,
                                     defaultTierSize(known, _defaultMinFastPeers, 15));
+    }
+
+    /**
+     * The fast tier's minimum size, for callers outside this package.
+     * <p>This is the number that means "the fast tier is stocked". The peer-supply
+     * gate in {@link net.i2p.router.tunnel.pool.TunnelPeerSelector#scarceFastPeers(int)}
+     * is expressed against it, so a router is not told its supply is ample at 23%
+     * of the tier it asked for.
+     * <p>Reads the network database size, so it is a per-cycle call, not a
+     * per-candidate one.
+     *
+     * @return the configured fast tier minimum
+     * @since 0.9.72+
+     */
+    public int getMinimumFastPeersCount() {
+        return getMinimumFastPeers();
     }
 
     /**

@@ -65,12 +65,19 @@ public class FastTierProbeTest {
         when(_profile.getLastHeardFrom()).thenReturn(lastHeard);
     }
 
-    /** A probe we cannot deliver is reachability evidence: demote at once. */
+    /**
+     * A probe we cannot deliver is recorded as a failed first hop, and is not a
+     * tier eviction. The sweep probes 128 peers a pass — every peer in the tier
+     * over its sweep period — and it deliberately targets the idle ones, which
+     * are exactly the fill candidates a starved tier needs. Evicting on a probe
+     * made the measurement machinery empty the tier it was measuring.
+     */
     @Test
-    public void probeFailureDemotesFromFastTiers() {
+    public void probeFailureRecordsFirstHopNotTierEviction() {
         Hash peer = hash(1);
         TunnelPeerSelector.applyProbeFailure(_ctx, peer);
-        verify(_po).demoteIfUnreachableNow(peer);
+        verify(_po, never()).demoteIfUnreachable(any(Hash.class));
+        verify(_po, never()).demoteIfNoTunnel(any(Hash.class));
     }
 
     /** The failure is counted, so the rate is visible without log scraping. */

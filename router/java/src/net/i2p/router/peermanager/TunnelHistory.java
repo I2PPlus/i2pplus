@@ -153,6 +153,31 @@ public class TunnelHistory {
     public long getLastFailed() {return _lastFailed;}
 
     /**
+     * When the peer last took part in a build decision for us: agreed, refused at
+     * any severity, timed out, or had a tunnel it joined fail.
+     * <p>This is the freshness test for the lifetime accept/reject counts. Those
+     * counts are decayed multiplicatively - {@link #decayLifetimeCounters(long)}
+     * scales the numerator and the denominator by the same factor - so a ratio
+     * built from them does not move as it ages, and integer truncation removes
+     * proportionally more from the smaller side, which drifts a sub-threshold
+     * ratio <em>down</em>. A ratio that has not been refreshed is therefore not a
+     * measurement of the peer's present behaviour, and the timestamp is the only
+     * way to tell.
+     *
+     * @return milliseconds since the epoch, or 0 if the peer has never been asked
+     * @since 0.9.72+
+     */
+    public long getLastBuildActivity() {
+        long last = _lastAgreedTo;
+        last = Math.max(last, _lastRejectedCritical);
+        last = Math.max(last, _lastRejectedBandwidth);
+        last = Math.max(last, _lastRejectedTransient);
+        last = Math.max(last, _lastRejectedProbabalistic);
+        last = Math.max(last, _lastTimedOut);
+        return Math.max(last, _lastFailed);
+    }
+
+    /**
      * When the peer last passed a tunnel test.
      *
      * @return milliseconds since the epoch, or 0 if the peer has never passed

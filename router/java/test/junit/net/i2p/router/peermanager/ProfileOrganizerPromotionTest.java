@@ -241,7 +241,13 @@ public class ProfileOrganizerPromotionTest {
     @Test
     public void testLossyPeerSkipped() throws Exception {
         PeerProfile profile = seedProfile(5, "fO");
-        profile.setLossySince(_ctx.clock().now());
+        // Probation with the evidence that caused it still on file. A demotion
+        // with no transport report behind it is readmitted at once - demanding a
+        // report from a peer we send no traffic to is a closed loop - so the
+        // report is what makes this peer a probationer.
+        long now = _ctx.clock().now();
+        profile.setLossRatio(0.5f, now);
+        profile.setLossySince(now);
         assertTrue(skips(profile));
     }
 
@@ -287,9 +293,11 @@ public class ProfileOrganizerPromotionTest {
                      _org.promotionSkipReason(congested, congested.getPeer(), 0.5, now));
         assertTrue(skips(congested));
 
-        // Loss probation — same misattribution.
+        // Loss probation — same misattribution. The report is what keeps the peer
+        // in probation: a demotion with no report behind it is readmitted.
         PeerProfile lossy = seedProfile(5, "fO");
         acceptAll(lossy);
+        lossy.setLossRatio(0.5f, now);
         lossy.setLossySince(now);
         assertEquals("lossProbation",
                      _org.promotionSkipReason(lossy, lossy.getPeer(), 0.5, now));

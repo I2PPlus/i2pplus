@@ -2645,11 +2645,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * after the transport has exhausted its own retries for the probe. That
      * distinguishes it from a single dropped packet: by then the peer has
      * failed to answer across every transport we hold.
-     * <p>Uses {@link ProfileOrganizer#demoteIfUnreachableNow} rather than the
-     * three-strike path because send-failure strikes already exist for
-     * in-use tunnels and count a congested path as much as a dead peer. A
-     * peer that cannot be connected to at all is unambiguous, and leaving it
-     * in the fast tier is what starves the pools.
+     * <p>Records a failed first hop, which is the selection cooldown; it does
+     * not evict the peer from the tiers. See {@link #applyProbeFailure}.
      *
      * @since 0.9.71+
      */
@@ -2677,7 +2674,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             Log log = getContext().logManager().getLog(TunnelPeerSelector.class);
             if (log.shouldDebug()) {
                 log.debug("Pre-connect to [" + _peer.toBase64().substring(0,6) +
-                          "] failed after transport retries; demoted from fast tiers");
+                          "] failed after transport retries; recorded as a failed first hop");
             }
         }
     }
@@ -2685,13 +2682,22 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     /**
      * Act on a pre-connect probe that could not be delivered.
      * <p>Separated from the job so the decision is testable without a
-     * transport and a job queue: a probe that failed every transport retry
-     * means the peer is not reachable, so it leaves the fast tiers at once
-     * rather than after the three-strike send-failure path.
-     * <p>Demotion is immediate because unlike a send failure on a live tunnel,
-     * this has no ambiguity to accumulate against. There was no reply at all.
-     * Waiting for strikes leaves exactly the peers this sweep exists to find
-     * sitting in the tier where selection will pick them again.
+     * transport and a job queue.
+     * <p>A probe failure records the peer as a failed first hop — the
+     * selection cooldown that keeps it out of the next build — and does not
+     * evict it from the tiers. A probe is a measurement we initiated, not a
+     * build the peer was asked to join: the sweep touches 128 peers per pass,
+     * every peer in the tier over its sweep period, and a probe that fails to
+     * be delivered says the session could not be established right now, which
+     * is what a busy peer looks like from here. Evicting on it turned the
+     * sweep into a tier-emptying machine: the peers it probed are precisely
+     * the idle ones, the ones with no recent traffic of their own, and the
+     * ones a starved tier needs as fill candidates.
+     * <p>The cooldown is the right penalty because it is self-limiting: it
+     * expires, and the peer that answers the next probe is back. Tier
+     * eviction stays with the strike accounting in
+     * {@link ProfileOrganizer#demoteIfUnreachable}, which needs three
+     * first-hop non-replies inside ten minutes.
      *
      * @param ctx the router context
      * @param peer the peer that failed to answer the probe
@@ -2700,7 +2706,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     static void applyProbeFailure(RouterContext ctx, Hash peer) {
         ctx.statManager().addRateData("tunnel.preConnectFail", 1);
         recordFirstHopFail(ctx, peer);
-        ctx.profileOrganizer().demoteIfUnreachableNow(peer);
     }
 
     /**
@@ -2814,6 +2819,32 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      */
     public static final int SCARCE_FAST_PEERS = 200;
 
+    /**
+     * The fast-peer count at or above which the peer set counts as well supplied,
+     * for a router whose fast tier aims at {@code minFastPeers}.
+     * <p>The threshold used to be the fixed {@link #SCARCE_FAST_PEERS} = 200 for
+     * every router. The tier sizing asks for 1,000, so a router sitting at 227
+     * fast peers - 23% of its own target, with the pools starving - was declared
+     * well supplied, the activity window stayed at its base, and every fill and
+     * selection pass was restricted to peers seen in the last hour. The relief
+     * valve did not open because its constant had stopped meaning anything when
+     * the tier minimums moved.
+     * <p>Four fifths of the tier minimum: below that the tier is measurably short
+     * of what it asked for, and trading recency for thickness is the right trade.
+     * Floored at 50 so a small network with a small tier is not declared scarce
+     * for having 10 peers.
+     *
+     * @param minFastPeers the router's fast tier minimum, from
+     *                     {@link net.i2p.router.peermanager.ProfileOrganizer#getMinimumFastPeersCount()};
+     *                     non-positive selects the historical constant
+     * @return the scarcity threshold in peers
+     * @since 0.9.72+
+     */
+    public static int scarceFastPeers(int minFastPeers) {
+        if (minFastPeers <= 0) {return SCARCE_FAST_PEERS;}
+        return Math.max(50, minFastPeers * 4 / 5);
+    }
+
     /** Upper bound on the activity window, applied after the multiplier. @since 0.9.71+. */
     public static final long MAX_WINDOW_MS = 12 * 60 * 60 * 1000L;
 
@@ -2848,17 +2879,38 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * @since 0.9.71+
      */
     public static int windowMultiplierFor(int fastPeers, boolean startupGrace, int min, int max) {
+        return windowMultiplierFor(fastPeers, startupGrace, min, max, SCARCE_FAST_PEERS);
+    }
+
+    /**
+     * {@link #windowMultiplierFor(int, boolean, int, int)} with the scarcity
+     * threshold supplied by the caller, so it can be derived from the tier
+     * minimum rather than a constant.
+     *
+     * @param fastPeers peers currently classified fast
+     * @param startupGrace true while the router is within its startup grace period
+     * @param min the multiplier returned when fast peers are plentiful
+     * @param max the multiplier returned while the router is short of fast peers,
+     *            or during the startup grace period
+     * @param scarceThreshold the count at or above which supply counts as ample,
+     *                        from {@link #scarceFastPeers(int)}
+     * @return multiplier in [min, max]
+     * @since 0.9.72+
+     */
+    public static int windowMultiplierFor(int fastPeers, boolean startupGrace, int min, int max,
+                                          int scarceThreshold) {
         if (max <= min) {return min;}
         if (startupGrace) {return max;}
-        if (fastPeers >= SCARCE_FAST_PEERS) {return min;}
+        if (fastPeers >= scarceThreshold) {return min;}
         if (fastPeers <= 0) {return max;}
-        double deficit = (double) (SCARCE_FAST_PEERS - fastPeers) / SCARCE_FAST_PEERS;
+        double deficit = (double) (scarceThreshold - fastPeers) / scarceThreshold;
         return min + (int) Math.round(deficit * (max - min));
     }
 
     /**
      * {@link #windowMultiplierFor(int, boolean, int, int)} bound to the live
-     * router: reads the current fast-peer count and startup state.
+     * router: reads the current fast-peer count, the router's own fast-tier
+     * minimum, and the startup state.
      *
      * @param ctx the router context
      * @return multiplier in [MIN_WINDOW_MULTIPLIER, MAX_WINDOW_MULTIPLIER}
@@ -2867,7 +2919,20 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     public static int windowMultiplierFor(RouterContext ctx) {
         return windowMultiplierFor(ctx.profileOrganizer().countFastPeers(),
                                    isInStartupGracePeriod(ctx),
-                                   MIN_WINDOW_MULTIPLIER, MAX_WINDOW_MULTIPLIER);
+                                   MIN_WINDOW_MULTIPLIER, MAX_WINDOW_MULTIPLIER,
+                                   scarceFastPeers(ctx.profileOrganizer().getMinimumFastPeersCount()));
+    }
+
+    /**
+     * The live scarcity threshold: the fast-peer count at or above which this
+     * router's supply counts as ample.
+     *
+     * @param ctx the router context
+     * @return the threshold in peers
+     * @since 0.9.72+
+     */
+    public static int scarceFastPeers(RouterContext ctx) {
+        return scarceFastPeers(ctx.profileOrganizer().getMinimumFastPeersCount());
     }
 
     /**
