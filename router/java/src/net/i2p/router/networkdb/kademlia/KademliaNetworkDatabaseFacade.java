@@ -1303,6 +1303,30 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
+     * Start a network search for a RouterInfo we already hold.
+     * <p>Both lookup entry points short-circuit on a local hit —
+     * {@link #lookupRouterInfo} returns the entry after running the ban checks,
+     * {@link #lookupRouterInfoRemote} returns it immediately — so a router that
+     * holds a RouterInfo past the peer's hourly republish has no way to renew it:
+     * every lookup answers from the copy that is stale. This is that way. The
+     * search is the ordinary iterative one, and a newer RouterInfo arriving by
+     * reply, flood or publish is merged into the database by the existing path.
+     * <p>No jobs are attached: the caller wants the entry renewed in the database,
+     * not a callback, and the netdb negatively caches known-dead keys, so a peer
+     * that never comes back costs a short search per refresh.
+     *
+     * @param key the router hash to refresh, ignored if null
+     * @param timeoutMs how long the search may run, in ms, capped as the other
+     *                  remote lookups are
+     * @since 0.9.72+
+     */
+    @Override
+    public void refreshRouterInfo(Hash key, long timeoutMs) {
+        if (!_initialized || key == null) {return;}
+        search(key, null, null, Math.min(timeoutMs, 15L * 1000), false);
+    }
+
+    /**
      * Should we banlist this router based on country restrictions?
      * Checks if:
      * - we are in strict country mode and router is in same country

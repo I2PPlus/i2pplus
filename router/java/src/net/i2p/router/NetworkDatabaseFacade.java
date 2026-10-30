@@ -99,6 +99,26 @@ public abstract class NetworkDatabaseFacade implements Service {
      * @param timeoutMs timeout in milliseconds
      */
     public abstract void lookupRouterInfo(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs);
+
+    /**
+     * Request a fresh RouterInfo over the network, ignoring what is held locally.
+     * <p>{@link #lookupRouterInfo} and the remote-lookup variants return the local
+     * entry as soon as they find one, so a router holding a RouterInfo older than
+     * the peer's hourly republish cannot renew it through any of them: the stale
+     * entry is the answer, every time. This starts the search unconditionally.
+     * The reply path merges a newer RouterInfo into the network database as usual,
+     * and a peer that is gone is answered from the negative cache, so refreshing a
+     * dead peer repeatedly stays cheap.
+     * <p>The base implementation does nothing. Only a facade that can search the
+     * network can refresh, and a caller must treat a refresh as a request, not a
+     * promise.
+     *
+     * @param key the router hash to refresh, ignored if null
+     * @param timeoutMs how long the search may run, in ms
+     * @since 0.9.72+
+     */
+    public void refreshRouterInfo(Hash key, long timeoutMs) {}
+
     /**
      * Look up a RouterInfo in the local network database.
      *

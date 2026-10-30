@@ -1,22 +1,33 @@
 package net.i2p.router.peermanager;
 
 /**
- * Per-cycle state for the promotion deferral on a stale RouterInfo.
+ * Per-cycle state for the promotion deferral on a stale RouterInfo, and the
+ * schedule for refreshing RouterInfos before they go stale.
  * <p>Promotion into the fast or high-capacity tier reads whatever RouterInfo the
  * network database currently holds. A RouterInfo older than an hour is likely
  * superseded — routers republish hourly — so promoting on one buys a tier slot
  * that may not survive a build. {@link ProfileOrganizer} therefore holds such a
- * promotion back and simply leaves the peer out of the tier; nothing is fetched
- * and no network work is done on the peer's behalf.
- * <p>What a cycle needs to remember is therefore only its own bounds and its two
- * counters: the staleness threshold, the tier sizes the starvation guard compares
- * against, how many promotions were held, and how many went ahead on a RouterInfo
- * already known to be stale.
- * <p>Locking: confined to the reorganisation write lock, which is also the only
- * caller. Nothing here is written from a job or a selection thread.
+ * promotion back.
+ * <p>Holding the promotion back used to be the whole response: nothing was
+ * fetched and no network work was done on the peer's behalf, so the deferral was
+ * a ceiling that bit as the tiers approached the size they are sized for, with
+ * the only re-entry routes being that the peer republished to us or that we
+ * heard from it. The schedule below is the missing route: a RouterInfo is
+ * refreshed ahead of the bar, for the peers the tiers are made of, so a peer
+ * keeps its slot instead of waiting out a staleness it had no way to clear.
+ * <p>What a cycle needs to remember is the staleness threshold, the tier sizes
+ * the starvation guard compares against, how many promotions were held, how many
+ * went ahead on a RouterInfo already known to be stale, and the refresh queue
+ * with its per-peer cooldown.
+ * <p>Locking: the cycle counters are confined to the reorganisation write lock,
+ * which is also their only caller. The queues are synchronized on this object,
+ * filled under that lock and drained after it is released, and no network work
+ * happens inside either critical section.
  *
  * @see ProfileOrganizer#needsRouterInfoRefresh
  * @see ProfileOrganizer#shouldDeferPromotionOnStaleRouterInfo
+ * @see ProfileOrganizer#scheduleRouterInfoRefreshes
+ * @see ProfileOrganizer#refreshStaleRouterInfos
  * @since 0.9.72+
  */
 class RouterInfoRefresher {
@@ -333,4 +344,210 @@ class RouterInfoRefresher {
      * @return the count of peers still waiting for their RouterInfo to be requested
      */
     synchronized int getMissingRouterInfoPending() { return _missingRouterInfo.size(); }
+
+    // ---- proactive refresh of a RouterInfo that is about to go stale ----------
+
+    /**
+     * How far ahead of the staleness bar a RouterInfo is refreshed, in ms.
+     * <p>45 minutes, against the 60-minute bar promotion holds on. Routers
+     * republish hourly, so a RouterInfo reaches the bar on a schedule, and a
+     * refresh issued after it is reached is a lookup for a peer that has already
+     * been held out of a tier. Issued before, the reply usually lands in time to
+     * keep the peer promotable.
+     *
+     * @since 0.9.72+
+     */
+    static final long DEFAULT_REFRESH_AHEAD_MS = 45 * 60 * 1000L;
+
+    /**
+     * Per-peer cooldown between refreshes, in ms.
+     * <p>Longer than the refresh-ahead window, shorter than the staleness bar
+     * times two: a peer that never answers is asked again, but not every
+     * reorganize, and a peer that does answer is refreshed before it goes stale.
+     *
+     * @since 0.9.72+
+     */
+    static final long REFRESH_PEER_COOLDOWN_MS = 40 * 60 * 1000L;
+
+    /**
+     * Peers refreshed per drain.
+     *
+     * @see #REFRESH_MIN_INTERVAL_MS
+     * @since 0.9.72+
+     */
+    static final int REFRESH_BATCH = 32;
+
+    /**
+     * Minimum gap between proactive-refresh drains, in ms.
+     * <p>With {@link #REFRESH_BATCH} this is about 64 lookups a minute, the rate
+     * the missing-RouterInfo recovery drain already uses, so a steady-state tier
+     * of 1,000 peers at a 45-minute refresh interval (roughly 53 lookups a
+     * minute) fits inside the drain without displacing it.
+     *
+     * @since 0.9.72+
+     */
+    static final long REFRESH_MIN_INTERVAL_MS = 30 * 1000L;
+
+    /**
+     * Ceiling on queued proactive refreshes.
+     * <p>The queue is a schedule, not a backlog: a peer dropped here is refreshed
+     * on a later cycle, and a peer whose RouterInfo is genuinely gone is answered
+     * from the netdb's negative cache.
+     *
+     * @since 0.9.72+
+     */
+    static final int MAX_REFRESH_QUEUE = 2048;
+
+    /** Peers scheduled for a proactive refresh, oldest request first. */
+    private final java.util.Set<net.i2p.data.Hash> _refreshQueue = new java.util.LinkedHashSet<>();
+
+    /** When each peer was last issued a proactive refresh, in ms since the epoch. */
+    private final java.util.Map<net.i2p.data.Hash, Long> _refreshIssued = new java.util.HashMap<>(256);
+
+    /** Peers dropped because the refresh queue was at its cap. */
+    private int _refreshDropped;
+
+    /** When the refresh queue was last drained, to hold it to its interval. */
+    private long _lastRefreshDrain;
+
+    /**
+     * Whether a RouterInfo is old enough to be worth refreshing.
+     * <p>Pure decision, no context access, safe for unit tests.
+     *
+     * @param published when the RouterInfo was published, in ms since the epoch,
+     *                  0 if it has no publish date
+     * @param now current time in ms
+     * @param refreshAheadMs how far ahead of the staleness bar to refresh;
+     *                       &lt;= 0 disables the scheduler
+     * @return true when a refresh should be requested
+     * @since 0.9.72+
+     */
+    static boolean isRouterInfoDueForRefresh(long published, long now, long refreshAheadMs) {
+        if (refreshAheadMs <= 0) {return false;}
+        // No publish date is the stalest case there is, not the freshest: a
+        // RouterInfo that cannot say when it was published cannot claim to be new.
+        return published <= 0 || now - published >= refreshAheadMs;
+    }
+
+    /**
+     * Whether a peer may be scheduled again.
+     * <p>Pure decision, no context access, safe for unit tests.
+     *
+     * @param lastIssued when the peer was last issued a refresh, 0 if never
+     * @param now current time in ms
+     * @param cooldownMs the per-peer cooldown
+     * @return true when the cooldown has passed
+     * @since 0.9.72+
+     */
+    static boolean refreshCooldownElapsed(long lastIssued, long now, long cooldownMs) {
+        return lastIssued <= 0 || now - lastIssued >= cooldownMs;
+    }
+
+    /**
+     * Whether a peer is already queued for a refresh, or inside the cooldown from
+     * the refresh it was last given.
+     * <p>Check this before doing any work to decide whether a refresh is wanted:
+     * it is one map read, where the staleness test costs a network database
+     * lookup, and in steady state almost every peer is cooling.
+     *
+     * @param peer the peer to test
+     * @param now current time in ms
+     * @return true if a refresh request for this peer would be refused
+     * @since 0.9.72+
+     */
+    synchronized boolean isRefreshCooling(net.i2p.data.Hash peer, long now) {
+        if (_refreshQueue.contains(peer)) {return true;}
+        Long last = _refreshIssued.get(peer);
+        return !refreshCooldownElapsed(last == null ? 0L : last.longValue(), now, REFRESH_PEER_COOLDOWN_MS);
+    }
+
+    /**
+     * Schedule a proactive RouterInfo refresh for a peer.
+     * <p>Records the request only. The caller runs under the reorganize write
+     * lock, and a lookup is network work, so {@link #takeRefreshBatch(long)}
+     * issues it after that lock is released.
+     * <p>A peer already queued, or inside {@link #REFRESH_PEER_COOLDOWN_MS} of
+     * the refresh it was last given, is refused: the tier scan runs every
+     * reorganize, and without the cooldown a peer that never answers would be
+     * requested every 30-250 seconds for the rest of the router's life.
+     *
+     * @param peer the peer whose RouterInfo should be renewed
+     * @param now current time in ms
+     * @return true if the peer was queued
+     * @since 0.9.72+
+     */
+    synchronized boolean scheduleRefresh(net.i2p.data.Hash peer, long now) {
+        if (peer == null) {return false;}
+        Long last = _refreshIssued.get(peer);
+        if (!refreshCooldownElapsed(last == null ? 0L : last.longValue(), now, REFRESH_PEER_COOLDOWN_MS)) {
+            return false;
+        }
+        if (_refreshQueue.contains(peer)) {return false;}
+        if (_refreshQueue.size() >= MAX_REFRESH_QUEUE) {
+            _refreshDropped++;
+            return false;
+        }
+        _refreshQueue.add(peer);
+        return true;
+    }
+
+    /**
+     * Whether enough time has passed to drain the refresh queue.
+     *
+     * @param now current time in ms
+     * @return true if the drain interval has elapsed
+     * @since 0.9.72+
+     */
+    synchronized boolean mayDrainRefreshes(long now) {
+        // A zero sentinel means "never drained", so the first drain is not
+        // refused for the first interval after startup.
+        return _lastRefreshDrain == 0 || now - _lastRefreshDrain >= REFRESH_MIN_INTERVAL_MS;
+    }
+
+    /**
+     * Hand over up to one batch of peers to refresh, stamping each with the
+     * issue time that starts its cooldown.
+     *
+     * @param now current time in ms
+     * @return the peers to look up, possibly empty
+     * @since 0.9.72+
+     */
+    synchronized java.util.List<net.i2p.data.Hash> takeRefreshBatch(long now) {
+        java.util.List<net.i2p.data.Hash> batch = new java.util.ArrayList<>(REFRESH_BATCH);
+        java.util.Iterator<net.i2p.data.Hash> it = _refreshQueue.iterator();
+        while (it.hasNext() && batch.size() < REFRESH_BATCH) {
+            net.i2p.data.Hash peer = it.next();
+            it.remove();
+            // Stamped at issue, not at scheduling: the cooldown bounds the
+            // network work, and a peer queued for a minute before the drain ran
+            // has not been asked for anything yet.
+            _refreshIssued.put(peer, Long.valueOf(now == 0 ? 1L : now));
+            batch.add(peer);
+        }
+        _lastRefreshDrain = (now == 0) ? 1 : now;
+        // The map only grows: every tier peer is in it eventually. Prune the
+        // entries whose cooldown has expired, so it tracks the peers currently
+        // being rate-limited rather than every peer ever refreshed.
+        if (_refreshIssued.size() > MAX_REFRESH_QUEUE) {
+            long cutoff = now - 2L * REFRESH_PEER_COOLDOWN_MS;
+            _refreshIssued.values().removeIf(ts -> ts.longValue() < cutoff);
+        }
+        return batch;
+    }
+
+    /**
+     * Peers dropped because the refresh queue was at its cap.
+     *
+     * @return the count of peers dropped because the refresh queue was full
+     * @since 0.9.72+
+     */
+    synchronized int getRefreshDropped() { return _refreshDropped; }
+
+    /**
+     * Peers queued for a refresh that has not been issued yet.
+     *
+     * @return the count of peers queued for a refresh
+     * @since 0.9.72+
+     */
+    synchronized int getRefreshPending() { return _refreshQueue.size(); }
 }
