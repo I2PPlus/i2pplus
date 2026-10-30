@@ -1903,7 +1903,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         for (BEValue bev : peers) {
             byte[] b = bev.getBytes();
             if (b.length != Hash.HASH_LENGTH) {
-                if (_log.shouldWarn()) {
+                if (_log.shouldInfo()) {
                     _log.info("Bad peers entry from " + nInfo);
                 }
                 continue;
@@ -2079,7 +2079,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                 onTimeout.run();
             }
             timeout(sentTo);
-            if (_log.shouldInfo()) {
+            if (_log.shouldWarn()) {
                 _log.warn("Timeout waiting for reply from " + sentTo);
             }
             synchronized (this) {

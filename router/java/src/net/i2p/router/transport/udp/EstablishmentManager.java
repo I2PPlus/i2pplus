@@ -1637,7 +1637,7 @@ public class EstablishmentManager {
         long rcvConnID = DataHelper.fromLong8(data, off);
         long sendConnID = DataHelper.fromLong8(data, off + SRC_CONN_ID_OFFSET);
         if (rcvConnID == 0 || sendConnID == 0 || rcvConnID == sendConnID) {return;}
-        if (_log.shouldInfo()) {
+        if (_log.shouldWarn()) {
              String typeStr = UDPPacket.payloadTypeToString(type);
             _log.warn("[SSU] Sending termination packet for " + typeStr + " to: " + to + " -> " + parseReason(terminationCode));
         }

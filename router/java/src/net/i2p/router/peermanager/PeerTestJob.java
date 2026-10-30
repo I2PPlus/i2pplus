@@ -312,7 +312,7 @@ public class PeerTestJob extends JobImpl {
                 // Scale delay proportionally: 500ms lag → 2×, 1000ms lag → 3×
                 double multiplier = 1.0 + (lag / 500.0);
                 delay = Math.min((long)(baseDelay * multiplier), 5 * 60 * 1000L);
-                if (_log.shouldWarn()) {
+                if (_log.shouldInfo()) {
                     _log.info("High Job lag (" + lag + "ms) -> Scaling delay to " + delay + "ms (base: " + baseDelay + "ms)");
                 }
             } else {

@@ -2588,7 +2588,7 @@ public class TunnelPool {
         synchronized (_inProgress) {
             while (_inProgress.size() > maxAllowed && !_inProgress.isEmpty()) {
                 PooledTunnelCreatorConfig cfg = _inProgress.remove(_inProgress.size() - 1);
-                if (_log.shouldWarn()) {
+                if (_log.shouldInfo()) {
                     _log.info("Cancelling excess tunnel build: " + cfg.toShortString());
                 }
                 cancelled.add(cfg);

@@ -3630,8 +3630,12 @@ return false;
         }
 
         int oldCount = knownLeaseSetsCount.updateAndGet(v -> Math.max(0, v - 1));
-        if (oldCount == 0 && _log.shouldInfo()) {
-            _log.warn("LeaseSet count already at 0 before decrement");
+        if (oldCount == 0 && _log.shouldWarn()) {
+            // knownLeaseSetsCount is how many LeaseSets we store; reaching the
+            // drop of one with the counter already at zero means it under-counts
+            // the store, and the clamp leaves it at zero rather than going negative.
+            _log.warn("Dropping LeaseSet [" + dbEntry.toBase32().substring(0,8) +
+                      "] with the stored-LeaseSet count already at 0 -> Leaving it at zero");
         }
 
         if (!isClientDb()) {_ds.remove(dbEntry, false);}
@@ -3680,10 +3684,11 @@ return false;
         if (data == null) {
             int old = knownLeaseSetsCount.updateAndGet(v -> Math.max(0, v - 1));
             if (old == 0 && _log.shouldWarn()) {
-                _log.warn("Unpublishing UNKNOWN LOCAL LeaseSet [" + h.toBase32().substring(0,8) + "]");
-            }
-            if (_log.shouldInfo() && knownLeaseSetsCount.get() <= 0) {
-                _log.warn("Attempted to decrement LeaseSet count when already at " + knownLeaseSetsCount.get());
+                // The store never held this local LeaseSet, so there is nothing to
+                // decrement and the count stays at zero. One line, not two: the
+                // second warn here fired on the same condition as the first.
+                _log.warn("Unpublishing a local LeaseSet we never stored [" +
+                          h.toBase32().substring(0,8) + "] -> Keeping the LeaseSet count at zero");
             }
         } else {
             if (_log.shouldInfo()) {

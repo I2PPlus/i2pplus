@@ -790,7 +790,7 @@ public class PersistentDataStore extends TransientDataStore {
                 _initialized = true;
                 purgeSlowRouters();
                 int storedCount = countStoredRIs();
-                if (_log.shouldInfo()) {
+                if (_log.shouldDebug()) {
                     _log.debug("Initial RouterInfo load complete -> Ram / Disk: " + size() + " / " + storedCount);
                 }
                 if (_facade.reseedChecker().checkReseed(routerCount)) {

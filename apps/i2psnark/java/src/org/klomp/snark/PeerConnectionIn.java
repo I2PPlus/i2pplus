@@ -373,8 +373,8 @@ class PeerConnectionIn implements Runnable {
             }
         } catch (IOException ioe) {
             // Ignore, probably the other side closed connection.
-            if (_log.shouldInfo()) {
-                _log.warn(
+            if (_log.shouldDebug()) {
+                _log.debug(
                         "Error communicating with ["
                                 + peer
                                 + "]"

@@ -1053,7 +1053,7 @@ public class Rate {
                 _period = prefix.contains("tunnelCreateResponse") ? 60 * 60 * 1000 : 60 * 1000;
             }
             Log _log = I2PAppContext.getGlobalContext().logManager().getLog(Rate.class);
-            if (_log.shouldInfo()) {
+            if (_log.shouldWarn()) {
                 _log.warn("Period for " + prefix + " missing or invalid, using value: " + _period);
             }
         }

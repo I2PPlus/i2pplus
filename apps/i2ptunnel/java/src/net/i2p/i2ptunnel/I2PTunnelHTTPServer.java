@@ -2395,7 +2395,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             return;
         long timeToHandle = afterHandle - afterAccept;
         getTunnel().getContext().statManager().addRateData("i2ptunnel.httpserver.blockingHandleTime", timeToHandle);
-        if ((timeToHandle > 1500) && (_log.shouldDebug())) {
+        if ((timeToHandle > 1500) && (_log.shouldInfo())) {
             _log.info("[HTTPServer] Took a while (" + timeToHandle + "ms) to handle the request for " + remoteHost + ':' + remotePort +
                       "\n* Client: " + peerB32 +
                       "\n* Tasks: Read headers: " + (afterHeaders-afterAccept) + "ms * " +
@@ -3006,7 +3006,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 i2pReset = status == I2PSocketException.STATUS_CONNECTION_RESET;
                 if (i2pReset) {
                     if (_log.shouldDebug()) {
-                        _log.warn("[HTTPServer] Received I2P RESET -> Resetting socket..." +
+                        _log.debug("[HTTPServer] Received I2P RESET -> Resetting the local socket..." +
                                   urlSuffix(req));
                     }
                     try {_webserver.setSoLinger(true, 0);}
@@ -3018,7 +3018,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 boolean sockReset = msg != null && msg.contains("reset");
                 if (sockReset) {
                     if (_log.shouldDebug()) {
-                        _log.warn("[HTTPServer] Received socket RESET ->  Resetting I2P socket..." +
+                        _log.debug("[HTTPServer] Received socket RESET -> Resetting the I2P socket..." +
                                   urlSuffix(req));
                     }
                     try {_browser.reset();}

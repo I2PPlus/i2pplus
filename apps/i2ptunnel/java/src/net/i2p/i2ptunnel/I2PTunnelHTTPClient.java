@@ -1141,7 +1141,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         // But we don't create a Host: line if it wasn't sent to us
                         line = "Host: " + host;
                         if (_log.shouldDebug()) {
-                            _log.info(getPrefix(requestId) + "Setting Host: " + host);
+                            _log.debug(getPrefix(requestId) + "Setting Host: " + host);
                         }
                     } else if (lowercaseLine.startsWith("user-agent: ")) {
                         // save for deciding whether to offer address book form
