@@ -885,11 +885,10 @@ public class BuildExecutor implements Runnable {
             statMgr.createRequiredRateStat("tunnel.tierReject" + bwTier, "Rejected joins from bandwidth tier " + bwTier, "Tunnels [Participating]", RATES);
             statMgr.createRequiredRateStat("tunnel.tierExpire" + bwTier, "Expired joins from bandwidth tier " + bwTier, "Tunnels [Participating]", RATES);
         }
-        // tunnel.firstHopUnreachableDemoted moved to ProfileOrganizer: it counts
-        // every immediate tier eviction, and the pre-connect probe sweep in
-        // TunnelPeerSelector reaches the same eviction by a different route. Counting
-        // only this one left the stat reading zero while the evictions it names were
-        // still happening.
+        // tunnel.firstHopUnreachableDemoted is registered and emitted by
+        // ProfileOrganizer, where the eviction happens, and is now retired: the
+        // build-timeout path and the pre-connect probe sweep both used to reach an
+        // eviction on a single event, and neither does any more.
     }
 
     /**
@@ -2425,22 +2424,16 @@ public class BuildExecutor implements Runnable {
                 if (_ghostPeerManager != null && indicting) {
                     _ghostPeerManager.recordTimeout(peer);
                 }
-                // Immediate tier eviction for the same verified failures. The
-                // contacted hop is the gateway, so when the failure does indict it
-                // the peer leaves the fast/high-cap tiers now rather than after
-                // the strike threshold, and the ghost mark keeps it out of the
-                // tiers via the promotion gate in the meantime.
-                //
-                // demoteIfUnreachable below stays ungated and carries the cases
-                // this leaves: it needs DEMOTE_STRIKE_THRESHOLD (3) consecutive
-                // first-hop non-replies, so a peer that keeps failing the
-                // unverified way is still evicted a third of the time — slower
-                // than before, but not exempt.
-                if (indicting) {
-                    _context.profileOrganizer().demoteIfUnreachableNow(peer);
-                }
-                // Keep the strike counter running so the 3rd failure still
-                // installs the longer demoteIfUnreachable cooldown.
+                // Tier eviction goes through the strike accounting, not around it.
+                // The contacted hop is the gateway, so a verified failure does
+                // indict it — but a build timeout on a router whose build success
+                // is 52% is the commonest transient outcome of asking anybody
+                // anything, and one event used to empty both tiers at once. The
+                // ghost mark (above) already keeps the peer out of selection for
+                // its cooldown; eviction now needs
+                // {@code DEMOTE_STRIKE_THRESHOLD} first-hop non-replies inside
+                // {@code DEMOTE_STRIKE_DECAY_MS}, which is the same evidence the
+                // unverified path has always needed.
                 _context.profileOrganizer().demoteIfUnreachable(peer);
             }
         }

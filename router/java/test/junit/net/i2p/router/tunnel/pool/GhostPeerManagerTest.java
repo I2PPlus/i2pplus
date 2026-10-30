@@ -260,6 +260,43 @@ public class GhostPeerManagerTest {
     // --- threshold gating (i2p.tunnel.ghostPeer.timeoutThreshold > 1) ---
 
     /**
+     * The default is two consecutive timeouts, not one. A build timeout is the
+     * commonest transient outcome of asking a peer for a tunnel on a congested
+     * path — a router measured at 52% build success times out on roughly half of
+     * its requests — so one of them says more about the path than about the peer,
+     * and the mark it produced blocked tier promotion for 90 seconds.
+     *
+     * @see #stubThresholdAndCooldown(int, int)
+     */
+    @Test
+    public void testDefaultThresholdIsTwoTimeouts() {
+        // Every property unset: getProperty returns the default it was given,
+        // which is what a router with no i2p.tunnel.* overrides does.
+        when(_ctx.getProperty(anyString(), anyInt())).thenAnswer(inv -> inv.getArgument(1));
+        GhostPeerManager mgr = new GhostPeerManager(_ctx);
+        assertEquals("one timeout must not exclude a peer", 2, mgr.getThreshold());
+
+        Hash peer = hash(1);
+        mgr.recordTimeout(peer);
+        assertFalse("a single build timeout is not evidence about the peer",
+                    mgr.isGhost(peer));
+        mgr.recordTimeout(peer);
+        assertTrue("two inside the strike window is", mgr.isGhost(peer));
+    }
+
+    /**
+     * The property stays tunable, so an operator who wants the old one-strike
+     * behaviour can have it.
+     */
+    @Test
+    public void testThresholdOneIsStillHonoured() {
+        stubThresholdAndCooldown(1, 90_000);
+        assertEquals(1, _mgr.getThreshold());
+        _mgr.recordTimeout(hash(1));
+        assertTrue("one strike excludes at threshold 1", _mgr.isGhost(hash(1)));
+    }
+
+    /**
      * Rebuild the manager with a custom timeout threshold and cooldown,
      * keeping every other property at its real default.
      *

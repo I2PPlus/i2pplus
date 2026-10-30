@@ -72,12 +72,21 @@ static final int DEFAULT_COOLDOWN_MS = 90 * 1000;
 
 /**
  * Reads the timeout count that marks a peer.
+ * <p>Two consecutive timeouts, not one. A build timeout is the commonest
+ * transient outcome of asking a peer for a tunnel on a congested path — a
+ * router measured at 52% build success times out on roughly half of its
+ * requests — so a single one says more about the path than about the peer. The
+ * mark is a peer exclusion that also blocks tier promotion, so it needs the
+ * peer to have failed twice in the strike window before it costs anything.
+ * <p>Property-tunable, so an operator who wants the old one-strike behaviour
+ * can set {@code i2p.tunnel.ghostPeer.timeoutThreshold=1}.
  *
  * @param ctx the router context
  * @return the threshold, clamped to a sane range
+ * @since 0.9.72+ (the default is 2)
  */
 private static int getTimeoutThreshold(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.ghostPeer.timeoutThreshold", 1);
+        return ctx.getProperty("i2p.tunnel.ghostPeer.timeoutThreshold", 2);
     }
 
 /**

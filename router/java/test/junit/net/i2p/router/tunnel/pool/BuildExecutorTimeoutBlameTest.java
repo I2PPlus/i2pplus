@@ -95,20 +95,23 @@ public class BuildExecutorTimeoutBlameTest {
         verify(ghost, never()).recordTimeout(any(Hash.class));
     }
 
-    // --- immediate tier eviction follows the ghost-charge verdict ---
+    // --- the ghost charge and the strike path, not an immediate eviction ---
 
     /**
      * What one {@code penalizeTimeout} did to the contacted hop: whether it was
-     * charged a ghost mark, whether it was evicted from the tiers immediately,
-     * and whether the 3-strike path was still run.
+     * charged a ghost mark, and whether the strike-accounted tier demotion was
+     * run. There is no third verdict: the immediate eviction that used to sit
+     * here fired on a single build timeout, and on a router whose build success
+     * is 52% a timeout is the commonest outcome of asking anybody anything. It
+     * produced 19,124 of 19,241 tier demotions in a 5.5 h run. Eviction now
+     * needs {@code DEMOTE_STRIKE_THRESHOLD} first-hop non-replies inside
+     * {@code DEMOTE_STRIKE_DECAY_MS}, which is what {@code strikeRun} reports.
      */
     private static final class Verdict {
         final boolean charged;
-        final boolean evicted;
         final boolean strikeRun;
-        Verdict(boolean charged, boolean evicted, boolean strikeRun) {
+        Verdict(boolean charged, boolean strikeRun) {
             this.charged = charged;
-            this.evicted = evicted;
             this.strikeRun = strikeRun;
         }
     }
@@ -165,7 +168,6 @@ public class BuildExecutorTimeoutBlameTest {
             newExecutor(ghost).penalizeTimeout(buildConfig(true, ibgw, mid, end));
             return new Verdict(
                     called(() -> verify(ghost).recordTimeout(ibgw)),
-                    called(() -> verify(org).demoteIfUnreachableNow(ibgw)),
                     called(() -> verify(org).demoteIfUnreachable(ibgw)));
         } finally {
             setField("_commSystem", priorComm);
@@ -173,48 +175,13 @@ public class BuildExecutorTimeoutBlameTest {
         }
     }
 
+    /**
+     * No transport state evicts on one timeout. That is the change: every state
+     * now goes through the strike accounting, so a peer leaves the tiers on
+     * repeated non-replies, not on the first one.
+     */
     @Test
-    public void testUnreachableHopStillEvictedImmediately() {
-        Assume.assumeTrue("No RouterContext available", _ctx != null);
-        assertTrue("unreachable contacted hop is a real failure and is still evicted",
-                   penalizeWith(true, false, false).evicted);
-    }
-
-    @Test
-    public void testPlainReachableHopStillEvictedImmediately() {
-        Assume.assumeTrue("No RouterContext available", _ctx != null);
-        assertTrue("a reachable contacted hop remains the best explanation and is evicted",
-                   penalizeWith(false, false, false).evicted);
-    }
-
-    @Test
-    public void testEstablishedSilentHopNotEvictedImmediately() {
-        // The regression this pins: established-but-silent was exempt from the
-        // ghost charge, yet still evicted from the tiers. The heavier penalty was
-        // applied to exactly the bucket the lighter one had cleared, and that
-        // bucket was the common one (~27.7/min against ~4.3/min unreachable) —
-        // 19,124 of 19,241 demotions in a 5.5 h run.
-        Assume.assumeTrue("No RouterContext available", _ctx != null);
-        Verdict v = penalizeWith(false, true, false);
-        assertFalse("established-but-silent must not be evicted from the tiers", v.evicted);
-        assertFalse("established-but-silent must not be ghost-charged", v.charged);
-    }
-
-    @Test
-    public void testEstablishedSilentHopStillAccruesStrike() {
-        // Skipping the immediate eviction must not exempt the peer: the 3-strike
-        // path still runs, so a peer that keeps failing this way is evicted on
-        // its third failure rather than never.
-        Assume.assumeTrue("No RouterContext available", _ctx != null);
-        assertTrue("the 3-strike demotion path must still run",
-                   penalizeWith(false, true, false).strikeRun);
-    }
-
-    @Test
-    public void testEvictionVerdictMatchesGhostChargeVerdict() {
-        // The two penalties are the same accusation at two severities. If they
-        // can disagree, the router charges or evicts on evidence the other
-        // rejected. Asserted across every transport state the classifier knows.
+    public void testNoTransportStateEvictsOnASingleTimeout() {
         Assume.assumeTrue("No RouterContext available", _ctx != null);
         boolean[][] states = {
             {false, false, true},   // established but silent
@@ -225,12 +192,49 @@ public class BuildExecutorTimeoutBlameTest {
         };
         for (boolean[] s : states) {
             Verdict v = penalizeWith(s[0], s[1], s[2]);
-            assertEquals("ghost charge and tier eviction must agree for "
-                         + "unreachable=" + s[0] + " established=" + s[1]
-                         + " connecting=" + s[2],
-                         v.charged, v.evicted);
-            assertTrue("the strike path must run for every state",
+            assertTrue("the strike-accounted demotion must run for every state, "
+                       + "unreachable=" + s[0] + " established=" + s[1] + " connecting=" + s[2],
                        v.strikeRun);
         }
+    }
+
+    /**
+     * A verified-unreachable hop is still ghost-charged: the mark is the
+     * short, self-limiting penalty, and it is what keeps the peer out of the
+     * next build while the strikes accumulate.
+     */
+    @Test
+    public void testUnreachableHopIsGhostCharged() {
+        Assume.assumeTrue("No RouterContext available", _ctx != null);
+        assertTrue("unreachable contacted hop is a real failure and is marked",
+                   penalizeWith(true, false, false).charged);
+    }
+
+    /**
+     * The regression the earlier test pinned, kept: established-but-silent was
+     * exempt from the ghost charge, yet the heavier tier eviction was applied to
+     * exactly that bucket, and that bucket was the common one (~27.7/min against
+     * ~4.3/min unreachable). With the eviction moved behind the strikes the two
+     * penalties can no longer disagree, because there is only the one.
+     */
+    @Test
+    public void testEstablishedSilentHopNotGhostChargedAndNotEvicted() {
+        Assume.assumeTrue("No RouterContext available", _ctx != null);
+        Verdict v = penalizeWith(false, true, false);
+        assertFalse("established-but-silent must not be ghost-charged", v.charged);
+        assertTrue("and it goes through the same strike path as every other state",
+                   v.strikeRun);
+    }
+
+    /**
+     * Skipping the immediate eviction must not exempt the peer: the strike path
+     * runs for every state, so a peer that keeps failing is evicted on its third
+     * first-hop non-reply inside the decay window.
+     */
+    @Test
+    public void testEstablishedSilentHopStillAccruesStrike() {
+        Assume.assumeTrue("No RouterContext available", _ctx != null);
+        assertTrue("the 3-strike demotion path must still run",
+                   penalizeWith(false, true, false).strikeRun);
     }
 }

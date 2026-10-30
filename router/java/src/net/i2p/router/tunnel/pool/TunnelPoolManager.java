@@ -1042,7 +1042,9 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      * already in use, and a peer that never answers produces no reply to
      * blame. This job supplies that missing signal by pre-connecting to a
      * bounded slice and letting
-     * {@code TunnelPeerSelector.PreConnectFailJob} demote whatever fails.
+     * {@code TunnelPeerSelector.PreConnectFailJob} record whatever fails as a
+     * failed first hop. It does not evict: a probe is a measurement we asked
+     * for, not a build the peer was asked to join.
      * <p>Sweep, pause, sweep: each pass probes at most
      * {@link #PROBE_BATCH} peers and then waits {@link #PROBE_INTERVAL}, so the
      * whole tier is covered over several passes without a burst of outbound
