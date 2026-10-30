@@ -3411,7 +3411,8 @@ span#newtab{margin-top:4px}
 #sidebar button.download{margin-bottom:5px;line-height:1.4}
 #sidebar button.reload,#sidebar button.stop{margin:3px 0 2px;width:calc(50% - 5px)}
 #sidebar button.reload,#sidebar button.stop,#sidebar button.cancel{padding-top:10px;padding-bottom:10px}
-#sidebar #sb_routerControl .reload{margin-left:-6px}
+#sidebar #sb_routerControl .reload:not(.now){margin-left:-6px}
+#sidebar #sb_routerControl .reload.now{margin-bottom:-1px}
 #sidebar #sb_routerControl .stop{margin-right:-6px}
 #sidebar button.reload#sb_manualReseed{padding:8px 12px 8px 26px;font-weight:600!important;background-size:15px;background-position-x:8px}
 #sidebar h3::after{min-height:20px}
