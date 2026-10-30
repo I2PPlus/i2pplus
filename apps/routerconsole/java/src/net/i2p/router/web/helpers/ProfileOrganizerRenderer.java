@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -287,8 +286,6 @@ class ProfileOrganizerRenderer {
         Set<Hash> fastSet = sel.fastSet;
         Set<Hash> hcSet = sel.highCapSet;
         Set<Hash> intSet = sel.integratedSet;
-        Set<Hash> toDemote = new HashSet<>();
-        Set<Hash> toDemoteFastOnly = new HashSet<>();
         StringBuilder buf = new StringBuilder(32*1024);
 
         if (!_fragmentKeys) {
@@ -351,7 +348,13 @@ class ProfileOrganizerRenderer {
                 isIntegrated = true;
             }
 
-            // Pre-check demotion conditions before emitting any HTML for this row
+            // Display filter only. This block used to collect the peers it judged
+            // and demote them at the end of the render, so reading the page mutated
+            // tier state: one build failure in the last hour, and every auto-refresh
+            // removed a fast peer, with no refill on the fast-only path. Every
+            // predicate here is applied by the reorganize's purge pass
+            // (ProfileOrganizer.purgeReasonFor) on a machine cadence. Nothing in
+            // this method may write to a profile, a tier, or a bonus.
             boolean isBanned = _context.banlist().isBanlisted(peer);
             boolean isUnreachable = !isBanned && _context.commSystem().wasUnreachable(peer);
             RateAverages ra = RateAverages.getTemp();
@@ -359,10 +362,8 @@ class ProfileOrganizerRenderer {
             long fails = failed.computeAverages(ra, false).getTotalEventCount();
             RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
 
-            // Skip row entirely for peers being demoted this render
+            // Omit the row; the peer stays where the tiers put it.
             if (isBanned || isUnreachable) {
-                prof.setSpeedBonus(0);
-                toDemote.add(peer);
                 continue;
             } else if (info != null) {
                 String caps = info.getCapabilities();
@@ -373,25 +374,20 @@ class ProfileOrganizerRenderer {
                 boolean hasNoTunnels = caps.indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0;
                 boolean hasFirewalled = caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
                 boolean notHighCapable = nonHighBandwidth || hasCongestionD || hasCongestionE || hasNoTunnels;
-                // Non-X/P/O or D/E/G → evict from both tiers
+                // Non-X/P/O or D/E/G → not a tier member, so the page omits it
                 if (notHighCapable) {
-                    if (fastSet.contains(peer)) toDemoteFastOnly.add(peer);
-                    if (hcSet.contains(peer)) toDemote.add(peer);
                     continue;
                 }
-                // Firewalled (U) → evict from both tiers
+                // Firewalled (U) → likewise
                 if (hasFirewalled) {
-                    if (fastSet.contains(peer)) toDemote.add(peer);
-                    if (hcSet.contains(peer)) toDemote.add(peer);
                     continue;
                 }
-                // Failing peers in fast tier → demote to high cap
+                // Failing peers in the fast tier → omit; the status column already
+                // carries the "N/M Test Fails" badge for the peers that are shown
                 if (fails > 0 && fastSet.contains(peer)) {
-                    toDemoteFastOnly.add(peer);
                     continue;
                 }
             } else if (fails > 0 && fastSet.contains(peer)) {
-                toDemoteFastOnly.add(peer);
                 continue;
             }
 
@@ -606,9 +602,6 @@ class ProfileOrganizerRenderer {
                 rowsSinceFlush = 0;
             }
         }
-        // Single lock acquisition for all demotions collected during render
-        _organizer.demoteBatch(toDemote);
-        _organizer.demoteFastOnlyBatch(toDemoteFastOnly);
         buf.append("</tbody>\n");
         if (!_fragmentKeys) {buf.append("</table></div>\n");}
         out.append(buf);
