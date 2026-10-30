@@ -1384,7 +1384,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         public void runJob() {
             if (_mgr.isShutdown()) {
                 if (_mgr._log.shouldInfo())
-                    _mgr._log.info("Remove Slow Tunnels Job: Manager is shutdown, not rescheduling");
+                    _mgr._log.info("Remove Slow Tunnels Job: Manager is shutdown -> Job not rescheduled");
                 return;
             }
             if (_mgr._context.getBooleanProperty("router.tunnel.disableSlowTunnelRemoval")) {
@@ -1393,7 +1393,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                 return;
             }
             if (_mgr._log.shouldInfo())
-                _mgr._log.info("Running Remove Slow Tunnels Job...");
+                _mgr._log.info("Remove Slow Tunnels Job starting");
 
             long startTime = System.currentTimeMillis();
             boolean didRemove = false;
@@ -1419,7 +1419,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
             if (_mgr.isShutdown()) {
                 if (_mgr._log.shouldInfo())
-                    _mgr._log.info("Remove Slow Tunnels Job: Manager shutdown after run, not rescheduling");
+                    _mgr._log.info("Remove Slow Tunnels Job: Manager shutdown after run -> Job not rescheduled");
                 return;
             }
 

@@ -553,14 +553,14 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
         Payload payload = _runner.getPayload(new MessageId(message.getMessageId()));
         ReceiveRequest request = classifyReceiveBegin(_runner.getConfig(message.sessionId()), payload);
         if (request != ReceiveRequest.ALLOWED) {
-            if (_log.shouldWarn()) {
-                if (request == ReceiveRequest.UNKNOWN_SESSION) {
-                    if (_log.shouldDebug())
-                        _log.debug("ReceiveBegin for unknown session " + message.sessionId() +
-                                   " [MsgID " + message.getMessageId() + "] -> Ignoring");
-                } else {
-                    _log.warn("Payload for [MsgID " + message.getMessageId() + "] is null! -> Ignoring...");
-                }
+            // The unknown-session case is a debug line, so it must not sit behind
+            // the warn gate, where it would never print at debug level.
+            if (request == ReceiveRequest.UNKNOWN_SESSION) {
+                if (_log.shouldDebug())
+                    _log.debug("ReceiveBegin for unknown session " + message.sessionId() +
+                               " [MsgID " + message.getMessageId() + "] -> Message ignored");
+            } else if (_log.shouldWarn()) {
+                _log.warn("Payload for [MsgID " + message.getMessageId() + "] is null -> Message ignored");
             }
             return;
         }
@@ -590,7 +590,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
         if (request == ReceiveRequest.UNKNOWN_SESSION) {
             if (_log.shouldDebug()) {
                 _log.debug("ReceiveEnd for unknown session " + message.sessionId() +
-                           " [MsgID " + message.getMessageId() + "] -> Ignoring");
+                           " [MsgID " + message.getMessageId() + "] -> Payload not released");
             }
             return;
         }

@@ -624,9 +624,9 @@ class ConnectionHandler {
         // worker will ever see it and the payload is ours to return.
         if (!_active) {
             if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
-                if (_log.shouldWarn()) {_log.warn("Dropping new SYN request because we're not listening");}
+                if (_log.shouldWarn()) {_log.warn("New SYN request while the handler is not listening -> Reset sent");}
                 sendReset(packet);
-            } else if (_log.shouldWarn()) {_log.warn("Dropping non-SYN packet -> Not listening");}
+            } else if (_log.shouldWarn()) {_log.warn("Non-SYN packet while the handler is not listening -> Packet dropped");}
             packet.releasePayload();
             return;
         }
@@ -755,7 +755,7 @@ class ConnectionHandler {
      */
     private void reReceivePacket(Packet packet) {
         if (packet == null) {
-            if (_log.shouldWarn()) {_log.warn("Received null packet -> Ignoring");}
+            if (_log.shouldWarn()) {_log.warn("Received null packet -> Nothing to process");}
             return;
         }
         Connection con = _manager.getConnectionByOutboundId(packet.getReceiveStreamId());

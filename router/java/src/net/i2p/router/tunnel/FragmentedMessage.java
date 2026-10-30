@@ -346,30 +346,84 @@ class FragmentedMessage {
         }
     }
 
-    /** Debug description of the message ID and the received fragments. */
-    @Override
-    public String toString() {
+    /**
+     * The message ID, in the bracketed form the console log links.
+     * <p>A caller that has its own sentence to lead with puts this on its first
+     * line; the id is the handle every related log line is grepped by, so it
+     * belongs beside the event, not on a continuation line of its own.
+     *
+     * @return the id, as {@code [MsgID 1234]}
+     * @since 0.9.72+
+     */
+    String idString() {
+        return "[MsgID " + _messageId + ']';
+    }
+
+    /**
+     * Who the message was addressed to, for a caller that wants it on its first
+     * line: the target router, and the tunnel it arrived on.
+     * <p>One bracket pair per value, as the log linkifier requires.
+     *
+     * @return the target, e.g. {@code [Target: AbC123] [TunnelId 12345]}, or null
+     *         if no target was recorded
+     * @since 0.9.72+
+     */
+    String targetString() {
+        if (_toRouter == null) {return null;}
+        StringBuilder buf = new StringBuilder(40);
+        buf.append("[Target: ").append(_toRouter.toBase64().substring(0, 6)).append(']');
+        if (_toTunnel != null) {
+            buf.append(" [TunnelId ").append(_toTunnel.getTunnelId()).append(']');
+        }
+        return buf.toString();
+    }
+
+    /**
+     * The reassembly state: which fragments are held, how the message stands, and
+     * how long it has been open.
+     * <p>Read the fragment tally as the state at the moment of the call, not the
+     * state the message was received in: {@link #toByteArray()} releases the
+     * fragments it has assembled, so a caller that logs after consuming the
+     * payload sees the slots empty. That is why the sites that drop a completed
+     * message log this only at debug, and lead with the reason at warn.
+     *
+     * @return the state, as one {@code * }-separated line, with the target on a
+     *         continuation line
+     * @since 0.9.72+
+     */
+    String detailString() {
         StringBuilder buf = new StringBuilder(128);
-        buf.append("[MsgID ").append(_messageId).append("]\n* ");
         for (int i = 0; i <= _highFragmentNum; i++) {
             ByteArray ba = _fragments[i];
-            if (ba != null)
-                buf.append("Fragment [").append(i).append("] ").append(ba.getValid()).append(" bytes; ");
-            else
-                buf.append("Fragment [").append(i).append("] missing; ");
+            if (ba != null) {
+                buf.append("Fragment [").append(i).append("] ").append(ba.getValid()).append(" bytes * ");
+            } else {
+                buf.append("Fragment [").append(i).append("] missing * ");
+            }
         }
-        buf.append("Highest received: [").append(_highFragmentNum);
-        buf.append("]; Last received: ").append(_lastReceived);
-        buf.append("; Lifetime: ").append(DataHelper.formatDuration(_context.clock().now()-_createdOn));
-        if (_toRouter != null) {
-            buf.append("\n* Target: [").append(_toRouter.toBase64().substring(0,6)).append("]");
-            if (_toTunnel != null)
-                buf.append(" on tunnel [TunnelId ").append(_toTunnel.getTunnelId()).append("]");
+        buf.append("Highest received: ").append(_highFragmentNum);
+        buf.append(" * Last received: [").append(_lastReceived).append(']');
+        buf.append(" * Lifetime: ").append(DataHelper.formatDuration(_context.clock().now() - _createdOn));
+        String target = targetString();
+        if (target != null) {
+            buf.append("\n* Target: [").append(_toRouter.toBase64().substring(0, 6)).append(']');
+            if (_toTunnel != null) {
+                buf.append(" * TunnelId: ").append(_toTunnel.getTunnelId());
+            }
         }
-        if (_completed)
-            buf.append("; completed");
-        if (_releasedAfter > 0)
-            buf.append("; released after ").append(DataHelper.formatDuration(_releasedAfter));
+        if (_completed) {buf.append(" * Completed");}
+        if (_releasedAfter > 0) {
+            buf.append(" * Released after ").append(DataHelper.formatDuration(_releasedAfter));
+        }
         return buf.toString();
+    }
+
+    /**
+     * Debug description of the message ID and the received fragments, the ID on
+     * its own line, for a caller that has no sentence of its own.
+     */
+    @Override
+    public String toString() {
+        return idString() + "\n* " + detailString();
     }
 }

@@ -275,7 +275,7 @@ class ConnectionPacketHandler {
                 con.disconnect(false);
             } else {
                 if (_log.shouldWarn())
-                    _log.warn("Inbound buffer exceeded on " + con + " -> Choking and dropping");
+                    _log.warn("Inbound buffer exceeded on " + con + " -> Peer choked, packet dropped");
                 con.setChoking(true);
             }
             packet.releasePayload();

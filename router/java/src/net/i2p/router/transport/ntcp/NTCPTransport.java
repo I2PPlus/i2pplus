@@ -474,7 +474,7 @@ public class NTCPTransport extends TransportImpl {
         if (con == null) {
             if (_log.shouldDebug()) {
                 _log.debug("[NTCP] No valid NTCP address for [" +
-                           ih.toBase64().substring(0,6) + "], dropping");
+                           ih.toBase64().substring(0,6) + "] -> Send failed");
             }
             _context.statManager().addRateData("ntcp.noBidNoAddress", 1);
             markUnreachable(ih);

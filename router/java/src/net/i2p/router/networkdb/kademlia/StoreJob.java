@@ -223,7 +223,8 @@ abstract class StoreJob extends JobImpl {
                 fail();
             } else {
                 if (_log.shouldInfo()) {
-                    _log.info("[" + _facade + "] -> No more peers left, but some are pending, waiting");
+                    _log.info("[" + _facade + "] -> No more peers left, waiting on " +
+                              _state.getPendingCount() + " pending replies");
                 }
             }
         } else {
@@ -561,7 +562,7 @@ abstract class StoreJob extends JobImpl {
             ctx.messageRegistry().registerPending(selector, onReply, onFail);
             ctx.tunnelDispatcher().dispatchOutbound(sent, outTunnel.getSendTunnelId(0), null, to);
         } else {
-            if (_log.shouldWarn()) {_log.warn("No Outbound tunnels available for sending a DbStore - deferring");}
+            if (_log.shouldWarn()) {_log.warn("No outbound tunnels available to send a DbStore -> DbStore deferred");}
             // continueSending() above did an addPending() so remove it here.
             // This means we will skip the peer next time, can't be helped for now
             // without modding StoreState

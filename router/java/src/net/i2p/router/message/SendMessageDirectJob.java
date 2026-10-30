@@ -231,7 +231,7 @@ public class SendMessageDirectJob extends JobImpl {
     private void send() {
         if (_sent) {
             if (_log.shouldWarn())
-                _log.warn("Message already sent -> Not resending");
+                _log.warn("Message already sent -> Not resent");
             return;
         }
         _sent = true;

@@ -477,8 +477,8 @@ public class RepublishLeaseSetJob extends JobImpl {
         if (expiring) {
             if (_log.shouldInfo()) {
                 _log.info("Published LeaseSet" + name + " [" + shortHash() +
-                          "] expires in " + (timeUntilExpiry / 1000) +
-                          "s * Re-minting instead of re-flooding");
+                          "] expires in " + DataHelper.formatDuration(timeUntilExpiry) +
+                          " * Re-minting instead of re-flooding");
             }
             refloatLeaseSet(ls, name, now, timeUntilExpiry);
             return;

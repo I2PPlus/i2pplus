@@ -1144,7 +1144,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
                 if (isFirstHopFailing(ctx, firstHop)) {
                     if (log.shouldInfo()) {
                         log.info("First hop [" + firstHop.toBase64().substring(0,6) +
-                                 "] previously failed as first hop -> Retrying");
+                                 "] previously failed as first hop -> Selecting a replacement");
                     }
                     matches.remove(firstHop);
                     // Refill: re-select a replacement so the slot isn't wasted
@@ -1161,7 +1161,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
                 if (ex.firstHopCooldowns != null && ex.firstHopCooldowns.contains(firstHop)) {
                     if (log.shouldInfo()) {
                         log.info("First hop [" + firstHop.toBase64().substring(0,6) +
-                                 "] is on shared selection cooldown -> Retrying");
+                                 "] is on shared selection cooldown -> Selecting a replacement");
                     }
                     matches.remove(firstHop);
                     if (refills < 3 && matches.isEmpty()) {

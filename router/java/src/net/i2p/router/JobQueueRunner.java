@@ -150,7 +150,7 @@ class JobQueueRunner extends I2PThread {
                 job = _context.jobQueue().getNext();
                 if (job == null) {
                     if (_context.router().isAlive() && _log.shouldError()) {
-                        _log.error("Failed to pull next job from queue while router alive -> Retrying");
+                        _log.error("Failed to pull next job from queue while router alive -> Retrying the pull");
                     }
                     continue;
                 }

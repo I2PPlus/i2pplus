@@ -3616,7 +3616,7 @@ class Connection {
             super();
             if (_log.shouldInfo()) {
                 _log.info("TIME-WAIT started on " + getRemotePeerString() +
-                          " -> Dropping in " + getDisconnectTimeout() / 1000 + "s");
+                          " -> Dropping in " + DataHelper.formatDuration(getDisconnectTimeout()));
             }
         }
         /**
@@ -4392,7 +4392,7 @@ class Connection {
             if (!_connected.get()) {
                 if (_log.shouldDebug()) {
                     _log.debug("Inactivity timeout on " + getRemotePeerString() +
-                               " -> Already closed, ignoring");
+                               " -> Connection already closed, nothing to do");
                 }
                 return;
             }
@@ -5101,8 +5101,15 @@ class Connection {
                 if (budgetExhausted && !_establishedResumeWarned) {
                     _establishedResumeWarned = true;
                     if (_log.shouldWarn()) {
-                        _log.warn(Connection.this + " -> Resend budget exceeded" + packet.formatAsString(false)
-                                  + "\n* Connection established, keeping alive and retransmitting");
+                        // The budget is the connect-phase give-up rule. Once the
+                        // connection is established and has acknowledged data, the
+                        // exhaustion does not bind: the packet is a path hole, not a
+                        // dead path, and the terminal bound is the creation-anchored
+                        // stall backstop. Say that, or the line reads as resending
+                        // because it gave up.
+                        _log.warn(Connection.this + " -> Resend budget spent on a data packet"
+                                  + "\n* Established, so resends continue to the stall backstop"
+                                  + packet.formatAsString(false));
                     }
                 }
                 if (packet.getNumSends() >= 3 &&
@@ -5691,7 +5698,7 @@ synchronized boolean checkRetransmitStall() {
                  * shut down normally.
                  */
                 if (_log.shouldInfo()) {
-                    _log.info(Connection.this + " -> Too many CLOSE resends, disconnecting");
+                    _log.info(Connection.this + " -> Too many CLOSE resends -> Disconnecting");
                 }
                 _packet.cancelled();
                 disconnect(true);

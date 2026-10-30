@@ -311,7 +311,7 @@ import net.i2p.util.SystemVersion;
                 if (isFirstHopFailing(ctx, peer)) {
                     if (log.shouldInfo())
                         log.info("EPS closest hop [" + peer.toBase64().substring(0,6) +
-                                 "] previously failed as first hop -> Retrying");
+                                 "] previously failed as first hop -> Selecting a replacement");
                     closestExclude.add(peer);
                     closest.clear();
                     ctx.profileOrganizer().selectNotFailingPeers(1, closestExclude, closest, false, ipRestriction, ipSet, true);
@@ -377,7 +377,7 @@ import net.i2p.util.SystemVersion;
                     if (isFirstHopFailing(ctx, peer)) {
                         if (log.shouldInfo())
                             log.info("EPS furthest hop [" + peer.toBase64().substring(0,6) +
-                                     "] previously failed as first hop -> Retrying");
+                                     "] previously failed as first hop -> Selecting a replacement");
                         exclude.add(peer);
                         furthest.clear();
                         ctx.profileOrganizer().selectFastPeers(1, exclude, furthest, ipRestriction, ipSet);

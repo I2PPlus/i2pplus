@@ -96,7 +96,7 @@ class GetBidsJob {
                 context.statManager().addRateData("transport.bidFailNoTransports", msg.getLifetime());
                 if (log.shouldLog(Log.DEBUG))
                     log.debug("No transport bid for [" + to.toBase64().substring(0,6)
-                              + "]; no route on file -> Not banning");
+                              + "]; no route on file -> Peer not banned");
             } else if (failedCount >= tmgr.getTransportCount()) {
                 // Every transport was tried and every one failed. This branch does
                 // carry an attempt, which is why it is the one that would justify

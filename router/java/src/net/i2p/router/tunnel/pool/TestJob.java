@@ -1626,7 +1626,7 @@ public class TestJob extends JobImpl {
                     && !hasPoolTestHeadroom(state, ctx, pool, activeCount)) {
                 Log log = ctx.logManager().getLog(TestJob.class);
                 if (log.shouldDebug()) {
-                    log.debug("Pool " + getPoolId(pool) + " at per-pool test budget -> Deferring");
+                    log.debug("Pool " + getPoolId(pool) + " at per-pool test budget -> Test deferred");
                 }
                 return false;
             }

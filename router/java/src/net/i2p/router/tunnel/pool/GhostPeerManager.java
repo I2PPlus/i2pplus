@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.router.RouterContext;
 import net.i2p.router.peermanager.ProfileOrganizer;
@@ -356,7 +357,7 @@ static final long OFFENSE_DECAY_MS = 30 * 60 * 1000L;
                                      int offenses, long now) {
         if (_log.shouldDebug()) {
             _log.debug("Peer [" + peer.toBase64().substring(0, 6) + "] marked as ghost for " +
-                       cooldownMs / 1000 + "s" +
+                       DataHelper.formatDuration(cooldownMs) +
                        (offenses > 0 ? " (repeat offense " + offenses + ")" : "") +
                        (underAttack ? " (network under stress)" : ""));
         }

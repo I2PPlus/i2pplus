@@ -5342,7 +5342,7 @@ public class TunnelPool {
             long minExpiry = now + 3L * 60 * 1000;
             if (earliestExpiry <= 0 || earliestExpiry < minExpiry) {
                 if (_log.shouldInfo())
-                    _log.info(toString() + " -> Cached LeaseSet expiring soon — rebuilding");
+                    _log.info(toString() + " -> Cached LeaseSet expiring soon -> Rebuilding");
                 cacheValid = false;
             }
         }

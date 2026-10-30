@@ -300,7 +300,7 @@ class TransientDataStore implements DataStore {
                     }
                 } else {
                     if (_log.shouldDebug()) {
-                        _log.debug("Received duplicate LeaseSet [" + key.toBase32().substring(0,8) + "] -> Not updating");
+                        _log.debug("Received duplicate LeaseSet [" + key.toBase32().substring(0,8) + "] -> LeaseSet not updated");
                     }
                 }
             } else {

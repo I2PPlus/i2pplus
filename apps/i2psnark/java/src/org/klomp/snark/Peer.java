@@ -387,7 +387,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
             // bad idea?
             if (metainfo == null && (options & OPTION_EXTENSION) == 0) {
                 if (_log.shouldInfo())
-                    _log.info("Peer does not support extensions and we need metainfo, dropping");
+                    _log.info("Peer does not support extensions and we need metainfo -> Peer dropped");
                 throw new IOException(
                         "Peer does not support extensions and we need metainfo, dropping");
             }

@@ -621,9 +621,13 @@ class FragmentHandler {
             // toByteArray destroys the contents of the message completely
             data = msg.toByteArray();
             if (data == null) {
-                if (_log.shouldWarn())
-                    _log.warn("Reassembling the fragments produced no bytes" +
-                              " -> Dropping the message\n* " + msg);
+                if (_log.shouldDebug()) {
+                    _log.debug("Reassembling the fragments produced no bytes " + msg.idString() +
+                               " -> Message dropped\n* " + msg.detailString());
+                } else if (_log.shouldWarn()) {
+                    _log.warn("Reassembling the fragments produced no bytes " + msg.idString() +
+                              " -> Message dropped");
+                }
                 return;
             }
             if (_log.shouldDebug())
@@ -638,19 +642,36 @@ class FragmentHandler {
                 m.readBytes(data, utype, 1);
             }
             if (m == null) {
-                if (_log.shouldWarn())
-                    _log.warn("Reassembling the fragments produced no message" +
-                              " -> Dropping the bytes\n* " + msg);
+                if (_log.shouldDebug()) {
+                    _log.debug("Reassembling the fragments produced no message " + msg.idString() +
+                               " -> Bytes dropped\n* " + msg.detailString());
+                } else if (_log.shouldWarn()) {
+                    _log.warn("Reassembling the fragments produced no message " + msg.idString() +
+                              " -> Bytes dropped");
+                }
                 return;
             }
             _receiver.receiveComplete(m, msg.getTargetRouter(), msg.getTargetTunnel());
         } catch (I2NPMessageException ime) {
-            boolean infoLevel = _log.shouldInfo();
-            if (_log.shouldWarn()) {
-                _log.warn("Reassembled message is malformed -> Dropping it" +
-                          "\n* " + msg +
-                          "\n* Reason: " + ime.getMessage() +
-                          (infoLevel ? "\n* DUMP:\n* " + HexDump.dump(data, 0, Math.min(data.length, 64)) : ""));
+            // The reason is the finding here, so it is the arrow's target, and the
+            // warn line stays on one line. The fragment tally is not: toByteArray()
+            // above released the fragments, so it reports the slots empty, and the
+            // message is complete by construction at this call site, so it would
+            // also say "Completed" beside "Fragment [0] missing". It is debug
+            // material, beside the dump.
+            if (_log.shouldDebug()) {
+                // The warn line, with the reassembly state and the dump below it.
+                _log.debug("Malformed defragmented message " + msg.idString() +
+                           " -> Dropping (" + ime.getMessage() + ")" +
+                           "\n* " + msg.detailString() +
+                           "\n* DUMP:\n* " + HexDump.dump(data, 0, Math.min(data.length, 64)));
+            } else if (_log.shouldWarn()) {
+                // One line. The reason is an exception message of unknown length,
+                // and it may contain an arrow of its own, so it is parenthesised
+                // and last: the prefix that gets grepped stays short, and nothing
+                // is appended after a value we do not control.
+                _log.warn("Malformed defragmented message " + msg.idString() +
+                          " -> Dropping (" + ime.getMessage() + ")");
             }
         }
     }

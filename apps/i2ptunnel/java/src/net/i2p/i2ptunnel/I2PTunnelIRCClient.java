@@ -208,7 +208,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
                     port = addr.getPort();
                     if (_log.shouldInfo())
                         _log.info("[IRC Client] Connect attempt " + (failures + 1) + '/' + IRC_CONNECT_MAX_ATTEMPTS +
-                                  " failed (" + ioe.getMessage() + "), retrying");
+                                  " failed (" + ioe.getMessage() + ") -> Retrying the connect");
                 } catch (I2PException ie) {
                     failures++;
                     if (!shouldRetry(failures, ie))
@@ -221,7 +221,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
                     port = addr.getPort();
                     if (_log.shouldInfo())
                         _log.info("[IRC Client] Connect attempt " + (failures + 1) + '/' + IRC_CONNECT_MAX_ATTEMPTS +
-                                  " failed (" + ie.getMessage() + "), retrying");
+                                  " failed (" + ie.getMessage() + ") -> Retrying the connect");
                 }
             }
             i2ps.setReadTimeout(readTimeout);

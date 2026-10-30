@@ -114,7 +114,7 @@ class SearchReplyJob extends JobImpl {
                     }
                 } else {
                     if (_log.shouldInfo())
-                        _log.info("Peer [" + _peer.toBase64().substring(0,6) + "] sends us bad replies, so not verifying");
+                        _log.info("Peer [" + _peer.toBase64().substring(0,6) + "] sends us bad replies -> Reply verification skipped");
                     getContext().statManager().addRateData("netDb.searchReplyValidationSkipped", 1);
                 }
             }

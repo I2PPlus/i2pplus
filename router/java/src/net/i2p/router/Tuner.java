@@ -3393,7 +3393,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // static field would pull the log manager in at class-load time.
             String key = reflectorFailureKey(c, name);
             I2PAppContext.getGlobalContext().logManager().getLog(Tuner.class)
-                .warn("Auto-tuning call " + key + " failed -> Ignoring it now"
+                .warn("Auto-tuning call " + key + " failed -> Disabled for this param"
                       + "\n* Any param it backs cannot be auto-tuned", t);
         } catch (Throwable t2) {
             // Reporting must not cost the caller its fallback. An unreachable param
@@ -14041,13 +14041,13 @@ protected int computeTarget(double observed) {
                 int actual = mgr.getBuildHandlerThreadCount();
                 if (actual != stored) {
                     if (_log.shouldWarn())
-                        _log.warn("BuildHandler thread mismatch: stored: " + stored + " actual: " + actual + " — reconciling");
+                        _log.warn("BuildHandler thread mismatch: stored: " + stored + " * actual: " + actual + " -> Reconciled to " + actual);
                     TunnelPoolManager.setBuildHandlerThreads(actual);
                     stored = actual;
                 }
                 if (stored < 2) {
                     if (_log.shouldWarn())
-                        _log.warn("BuildHandler thread count " + stored + " below floor 2 — rescaling");
+                        _log.warn("BuildHandler thread count " + stored + " below floor 2 -> Rescaled to 2");
                     stored = 2;
                     TunnelPoolManager.setBuildHandlerThreads(2);
                     mgr.adjustBuildHandlerThreads(2);

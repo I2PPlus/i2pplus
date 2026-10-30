@@ -97,7 +97,7 @@ public class MTU {
                                  (!isIPv6 && mtu < PeerState.MIN_MTU))) {
                                 Log log = I2PAppContext.getGlobalContext().logManager().getLog(MTU.class);
                                 log.logAlways(Log.WARN, "Unusually low MTU " + mtu + " for interface " + ia +
-                                                        ", consider disabling");
+                                                        " -> Consider disabling the interface");
                             }
                             // fix for brokered tunnels with too big MTU
                             if (isIPv6 && mtu > 1420) {

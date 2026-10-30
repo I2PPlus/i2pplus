@@ -575,7 +575,7 @@ List<PeerProfile> profiles = new ArrayList<>(Math.min(LIMIT_PROFILES, freshFiles
         Hash peer = getHash(file.getName());
         try {
             if (peer == null) {
-                if (_log.shouldError()) {_log.error("Peer profile: " + file.getName() + " is not a valid hash -> Ignoring...");}
+                if (_log.shouldError()) {_log.error("Peer profile " + file.getName() + " is not a valid hash -> File deleted");}
                 file.delete();
                 return null;
             }
