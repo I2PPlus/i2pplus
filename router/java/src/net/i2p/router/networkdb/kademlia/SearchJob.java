@@ -478,7 +478,7 @@ public class SearchJob extends JobImpl {
             if (_log.shouldInfo()) {
                 _log.info("Search for [" + _state.getTarget().toBase64().substring(0,6) +
                           "] sent to [" + router.getIdentity().getHash().toBase64().substring(0,6) +
-                          "] - " + (getPerPeerTimeoutMs(router.getIdentity().calculateHash()) / 1000) + "s timeout");
+                          "] -> Per-peer timeout " + DataHelper.formatDuration(getPerPeerTimeoutMs(router.getIdentity().calculateHash())));
             }
         }
 

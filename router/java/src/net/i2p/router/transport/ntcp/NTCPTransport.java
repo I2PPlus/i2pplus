@@ -1898,7 +1898,7 @@ public int getEstimatedRTT(Hash peer) {
                 if (con.isClosed() || con.isEstablished()) {iter.remove();}
                 else if (con.getTimeSinceCreated(now) > ESTABLISH_TIMEOUT) {
                     iter.remove();
-                    con.closeOnTimeout("Timed out (" + (ESTABLISH_TIMEOUT/1000) + "s)", null);
+                    con.closeOnTimeout("Timed out (" + DataHelper.formatDuration(ESTABLISH_TIMEOUT) + ")", null);
                     expired++;
                 }
             }

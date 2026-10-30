@@ -503,7 +503,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                     String exmsg = ise.getMessage();
                     boolean fail = exmsg != null && exmsg.contains("session limit exceeded");
                     if (!fail && ++retries < MAX_RETRIES) {
-                        msg = msg + " -> Retrying in " + (RETRY_DELAY / 1000) + " seconds...";
+                        msg = msg + " -> Retrying in " + DataHelper.formatDuration(RETRY_DELAY);
                         this.l.log(msg);
                         _log.warn(msg);
                     } else {

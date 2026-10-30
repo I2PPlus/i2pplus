@@ -14,6 +14,7 @@ import java.util.concurrent.atomic.LongAdder;
 import net.i2p.I2PAppContext;
 import net.i2p.client.streaming.RouterRestartException;
 import net.i2p.data.ByteArray;
+import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.util.ByteCache;
 import net.i2p.util.Log;
@@ -646,7 +647,7 @@ class ConnectionHandler {
         }
         int timeoutMs = getEffectiveAcceptTimeout();
         if (_log.shouldDebug()) {
-            _log.debug("Received new SYN packet with " + (timeoutMs / 1000) + "s timeout: " + packet);
+            _log.debug("Received a new SYN packet with a " + DataHelper.formatDuration(timeoutMs) + " timeout: " + packet);
         }
         // Re-read the max queue size dynamically — Tuner override or config change
         // applies without a restart.

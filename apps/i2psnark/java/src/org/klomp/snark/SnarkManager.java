@@ -4786,7 +4786,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         if (stale.isEmpty()) return;
         if (_log.shouldInfo()) {
             _log.info("Cleaning up " + stale.size() + " stale lookup torrent(s) (> "
-                + (LOOKUP_STALE_MS / 60000) + " min)");
+                + DataHelper.formatDuration(LOOKUP_STALE_MS) + " old)");
         }
         for (Snark snark : stale) {
             byte[] ih = snark.getInfoHash();

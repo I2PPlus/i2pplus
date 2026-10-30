@@ -386,7 +386,8 @@ class RefreshRoutersJob extends JobImpl {
         if (netDbCount > 10000) {
             baseDelay *= 10;
             if (_log.shouldDebug()) {
-                _log.debug("Over 10000 known peers, queuing next RouterInfo check to run in " + baseDelay / 1000 + "s...");
+                _log.debug("Over 10000 known peers -> Queuing the next RouterInfo check in " +
+                           DataHelper.formatDuration(baseDelay));
             }
             requeue(baseDelay);
             return;

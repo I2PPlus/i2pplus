@@ -749,7 +749,7 @@ public class BuildHandler implements Runnable {
     static String banSeverity(long banAgeMs) {
         if (banAgeMs < 0) {return "ban age unknown";}
         if (banAgeMs < BAN_INFLIGHT_THRESHOLD_MS) {return "banned " + banAgeMs + "ms ago, in-flight";}
-        return "banned " + (banAgeMs / 1000) + "s ago, predates this build";
+        return "banned " + DataHelper.formatDuration(banAgeMs) + " ago, predates this build";
     }
 
     /**
@@ -1361,7 +1361,8 @@ public class BuildHandler implements Runnable {
                     long started = _state.getLookupStartTime();
                     long elapsed = started > 0 ? System.currentTimeMillis() - started : -1;
                     String how = elapsed >= 0 ? "after " + elapsed + "ms"
-                                              : getNextHopLookupTimeout(_context) / 1000 + "s budget";
+                                              : "within the " +
+                                                DataHelper.formatDuration(getNextHopLookupTimeout(_context)) + " budget";
                     _log.info("Lookup for next hop failed " + how + " " + _req +
                               "\n* From: [" + (from != null ? from.toBase64().substring(0,6) : "null") +
                               "] [MsgID " + _state.msg.getUniqueId() + "]");

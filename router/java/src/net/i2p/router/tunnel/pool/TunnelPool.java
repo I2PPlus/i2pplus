@@ -2978,7 +2978,7 @@ public class TunnelPool {
                     failedRemoved++;
                     if (_log.shouldDebug()) {
                         _log.debug(toString() + " -> Scheduling early expiry for failed tunnel: " +
-                                   cfg.getReceiveTunnelId(0) + " (stagger +" + (stagger / 1000) + "s, " +
+                                   cfg.getReceiveTunnelId(0) + " (stagger +" + DataHelper.formatDuration(stagger) + ", " +
                                    (maxFailedRemove - failedRemoved) + " remaining)");
                     }
                 }

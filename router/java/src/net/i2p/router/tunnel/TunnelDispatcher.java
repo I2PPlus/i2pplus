@@ -1111,7 +1111,7 @@ public class TunnelDispatcher implements Service {
             } else if (msg.getMessageExpiration() > now + MAX_FUTURE_EXPIRATION) {
                 if (_log.shouldWarn()) {
                     _log.warn("Dropping tunnel message that expires " + age + "ms in the future [!] (Cutoff: " +
-                               MAX_FUTURE_EXPIRATION / 1000 + "s)" + msg);
+                               DataHelper.formatDuration(MAX_FUTURE_EXPIRATION) + ")" + msg);
                 }
                 return false;
             }

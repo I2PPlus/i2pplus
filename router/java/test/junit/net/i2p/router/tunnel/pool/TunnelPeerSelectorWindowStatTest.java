@@ -129,7 +129,9 @@ public class TunnelPeerSelectorWindowStatTest {
     public void anOldBanIsReportedAsPredatingTheBuild() {
         String s = BuildHandler.banSeverity(600_000L);
         assertTrue(s.contains("predates this build"));
-        assertTrue("the age should be reported in seconds, got: " + s, s.contains("600s"));
+        // The age goes through DataHelper.formatDuration, which picks the unit, so
+        // ten minutes is rendered as 10m rather than the 600s a raw division gave.
+        assertTrue("the age should carry a unit, got: " + s, s.contains("10m"));
     }
 
     @Test

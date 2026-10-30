@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.router.RouterContext;
 import net.i2p.router.tunnel.HopConfig;
@@ -177,7 +178,8 @@ class IdleTunnelMonitor extends SimpleTimer2.TimedEvent {
 
                 if (_log.shouldDebug()) {
                     _log.debug("Detected idle tunnel from peer [" + peer.toBase64().substring(0, 6) +
-                              "] -> Age: " + (age/1000) + "s [" + messages + (messages > 1 ? " messages" : " message") + "]");
+                              "] -> Age: " + DataHelper.formatDuration(age) + " [" + messages +
+                              (messages > 1 ? " messages" : " message") + "]");
                 }
             }
         }

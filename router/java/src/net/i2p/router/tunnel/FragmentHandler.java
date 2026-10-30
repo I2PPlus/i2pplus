@@ -486,7 +486,9 @@ class FragmentHandler {
                             RemoveFailed evt = new RemoveFailed(msg);
                             msg.setExpireEvent(evt);
                             if (_log.shouldDebug())
-                                _log.debug("In " + (MAX_DEFRAGMENT_TIME / 1000) + "s, dropping [MsgID " + messageId + "]");
+                                _log.debug("The fragments will be dropped in " +
+                                           DataHelper.formatDuration(MAX_DEFRAGMENT_TIME) +
+                                           " [MsgID " + messageId + "]");
                             evt.schedule(MAX_DEFRAGMENT_TIME);
                         }
                     }
@@ -597,7 +599,9 @@ class FragmentHandler {
                     RemoveFailed evt = new RemoveFailed(msg);
                     msg.setExpireEvent(evt);
                     if (_log.shouldDebug())
-                        _log.debug("In " + (MAX_DEFRAGMENT_TIME / 1000) + "s, dropping [MsgID " + msg.getMessageId() + "/" + fragmentNum + "]");
+                        _log.debug("The fragments will be dropped in " +
+                                   DataHelper.formatDuration(MAX_DEFRAGMENT_TIME) +
+                                   " [MsgID " + msg.getMessageId() + "/" + fragmentNum + "]");
                     evt.schedule(MAX_DEFRAGMENT_TIME);
                 }
             }

@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.I2PAppContext;
+import net.i2p.data.DataHelper;
 
 /**
  * Scheduled event executor backed by {@link ScheduledThreadPoolExecutor}.
@@ -719,8 +720,8 @@ public class SimpleTimer2 {
                                                      WATCHDOG_SATURATION_SAMPLES, _saturationReported);
             if (rv == WatchdogDecision.OK) {
                 if (_saturationReported)
-                    log().info("Timer saturation over: " + _name + " recovered after " +
-                               (episodeForMs(_saturatedSamples) / 1000) + "s");
+                    log().info("Timer saturation over: " + _name + " -> Recovered after " +
+                               DataHelper.formatDuration(episodeForMs(_saturatedSamples)));
                 _saturatedSamples = 0;
                 _saturationReported = false;
                 return;
@@ -732,7 +733,7 @@ public class SimpleTimer2 {
                 return;
             _saturationReported = true;
             log().warn("Timer pool saturated for at least " +
-                       (episodeForMs(_saturatedSamples) / 1000) + "s: " + _name +
+                       DataHelper.formatDuration(episodeForMs(_saturatedSamples)) + ": " + _name +
                        "\n* Active: " + active + '/' + pool + " * Queued behind it: " + queued +
                        "\n* Completed during episode: " + (completed - _saturatedCompleted) +
                        " * Immediate reschedules: " + _immediateReschedules.getAndSet(0) +
@@ -794,8 +795,8 @@ public class SimpleTimer2 {
             // idleness stated outright, where a lifetime count alone hides it.
             long delta = completed - _stallStartCompleted;
             String trend = "completed " + delta + " of " + completed
-                         + " tasks during the episode (" + (episodeForMs(_stalledSamples) / 1000)
-                         + "s, longest previous gap " + _maxObservedGapMs / 1000 + "s)";
+                         + " tasks during the episode (" + DataHelper.formatDuration(episodeForMs(_stalledSamples))
+                         + ", longest previous gap " + DataHelper.formatDuration(_maxObservedGapMs) + ")";
             String cause = _workDueThisEpisode
                 ? "a task was due and nothing ran it - the scheduler is not running its queue"
                 : "no task was due for the whole episode, so there was nothing to run";
@@ -803,11 +804,11 @@ public class SimpleTimer2 {
             // saying so at WARN would train the reader to ignore the report that counts.
             if (_workDueThisEpisode) {
                 log().warn("No timer event completed for at least "
-                           + (episodeForMs(_stalledSamples) / 1000) + "s: " + _name
+                           + DataHelper.formatDuration(episodeForMs(_stalledSamples)) + ": " + _name
                            + " " + trend + " - " + cause);
             } else {
                 log().info("No timer event completed for at least "
-                           + (episodeForMs(_stalledSamples) / 1000) + "s: " + _name
+                           + DataHelper.formatDuration(episodeForMs(_stalledSamples)) + ": " + _name
                            + " " + trend + " - " + cause);
             }
         }

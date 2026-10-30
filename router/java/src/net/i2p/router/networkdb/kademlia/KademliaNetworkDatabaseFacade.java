@@ -4246,7 +4246,7 @@ return false;
                 _clientLeaseSetAccessTime.put(key, now);
                 lookupLeaseSetRemotely(key, _dbid);
                 if (_log.shouldInfo()) {
-                    _log.info("Proactive refresh for " + logName(ns, key) + " (expires in " + (timeToExpiry/1000) + "s)");
+                    _log.info("Proactive refresh for " + logName(ns, key) + " (expires in " + DataHelper.formatDuration(timeToExpiry) + ")");
                 }
                 return true;
             }

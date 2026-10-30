@@ -17,6 +17,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SigType;
+import net.i2p.data.DataHelper;
 import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Hash;
 import net.i2p.data.Lease;
@@ -164,7 +165,7 @@ abstract class StoreJob extends JobImpl {
         }
         if (isExpired()) {
             _state.complete(true);
-            if (_log.shouldInfo()) {_log.info("Send key expired (Timeout: " + (_timeoutMs / 1000) + "s)");}
+            if (_log.shouldInfo()) {_log.info("Send key expired (Timeout: " + DataHelper.formatDuration(_timeoutMs) + ")");}
             fail();
         } else if (_state.getAttemptedCount() > MAX_PEERS_SENT) {
             _state.complete(true);
@@ -962,7 +963,7 @@ abstract class StoreJob extends JobImpl {
     protected void fail() {
         if (_log.shouldInfo()) {
             _log.info("Failed test sending key [" + _state.getTarget().toBase64().substring(0,6) + "]" +
-            " (Timeout: " + (_timeoutMs / 1000) + "s)" + (_log.shouldDebug() ? "\n* State of failed send: " + _state : ""));
+            " (Timeout: " + DataHelper.formatDuration(_timeoutMs) + ")" + (_log.shouldDebug() ? "\n* State of failed send: " + _state : ""));
         }
         if (_onFailure != null) {getContext().jobQueue().addJob(_onFailure);}
         _state.complete(true);

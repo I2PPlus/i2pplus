@@ -2381,9 +2381,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         for (int attempt = 1; attempt <= emptyBudget; attempt++) {
             if (isDeadlineExpired(deadlineMs, System.currentTimeMillis())) {
                 if (!quiet && _log.shouldInfo()) {
-                    _log.info(getPrefix(requestId) + "Empty-reconnect wall-clock deadline of " +
-                              (EMPTY_RECONNECT_DEADLINE_MS / 1000) + "s reached at attempt " +
-                              attempt + '/' + emptyBudget);
+                    _log.info(getPrefix(requestId) + "Empty-reconnect wall-clock deadline reached -> Giving up at attempt " +
+                              attempt + '/' + emptyBudget + " (deadline: " +
+                              DataHelper.formatDuration(EMPTY_RECONNECT_DEADLINE_MS) + ")");
                 }
                 return null;
             }

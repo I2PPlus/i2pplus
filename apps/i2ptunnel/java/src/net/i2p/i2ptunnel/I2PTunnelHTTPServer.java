@@ -3732,7 +3732,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 return headers;
             } else {
                 if (ctx.clock().now() > expire) {
-                    throw new SocketTimeoutException("Timeout (" + ((initialTimeout + HEADER_FINISH_TIMEOUT) / 1000) + "s) receiving headers");
+                    throw new SocketTimeoutException("Timeout (" + DataHelper.formatDuration(initialTimeout + HEADER_FINISH_TIMEOUT) + ") receiving headers");
                 }
                 int split = buf.indexOf(":");
                 if (split <= 0)

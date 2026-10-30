@@ -10,6 +10,7 @@ package net.i2p.router.networkdb.kademlia;
 
 import java.util.Map;
 import java.util.Set;
+import net.i2p.data.DataHelper;
 import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterInfo;
@@ -70,9 +71,10 @@ class ExpireRoutersJob extends JobImpl {
                 else if (removed > 1)
                     _log.info("Deleted " + removed + " expired RouterInfo files from NetDb");
                 else if (_log.shouldDebug() && _facade.getKnownRouters() > 2000)
-                    _log.debug("No expired RouterInfo files found - next check in " + ((RERUN_DELAY_MS / 5) / 1000 / 60) + "m");
+                    _log.debug("No expired RouterInfo files found -> Next check in " +
+                               DataHelper.formatDuration(RERUN_DELAY_MS / 5));
                 else if (_log.shouldDebug())
-                    _log.debug("No expired RouterInfo files found - next check in " + (RERUN_DELAY_MS / 1000 / 60) + "m");
+                    _log.debug("No expired RouterInfo files found -> Next check in " + DataHelper.formatDuration(RERUN_DELAY_MS));
         }
         if (getContext().netDb().getKnownRouters() > 2000)
             requeue(RERUN_DELAY_MS / 5);

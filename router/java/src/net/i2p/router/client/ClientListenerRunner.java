@@ -13,6 +13,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import net.i2p.client.I2PClient;
+import net.i2p.data.DataHelper;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
@@ -162,7 +163,7 @@ class ClientListenerRunner implements Runnable {
             if (!isAlive()) break;
 
             if (curDelay < 60*1000)
-                _log.error("Error listening, waiting " + (curDelay/1000) + "s before we try again");
+                _log.error("Error listening -> Trying again in " + DataHelper.formatDuration(curDelay));
             else
                 _log.log(Log.CRIT, "I2CP error listening to port " + _port + " - is another I2P instance running? Resolve conflicts and restart");
             try { Thread.sleep(curDelay); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }

@@ -440,14 +440,15 @@ public class RepublishLeaseSetJob extends JobImpl {
         if (expiring) {
             if (_log.shouldInfo()) {
                 _log.info("LeaseSet expiring soon" + name + " [" + shortHash() +
-                          "] (expires in " + (timeUntilExpiry / 1000) + "s) * Requesting immediate renew");
+                          "] (expires in " + DataHelper.formatDuration(timeUntilExpiry) +
+                          ") * Requesting immediate renew");
             }
             lastPubLog = null;
         }
         if (recordPublishAttempt(_lastPublishLogTime, _dest, lastPubLog, now) &&
             _log.shouldInfo()) {
             _log.info("Publishing LeaseSet" + name + " [" + shortHash() +
-                       "] (expires in " + (timeUntilExpiry / 1000) + "s)...");
+                       "] (expires in " + DataHelper.formatDuration(timeUntilExpiry) + ")");
         }
 
         int leaseCount = ls.getLeaseCount();
@@ -525,7 +526,7 @@ public class RepublishLeaseSetJob extends JobImpl {
                 if (_log.shouldInfo()) {
                     _log.info("Deferring LeaseSet publish for [" + shortHash() +
                               "] — " + leaseCount + "/" + targetLeases + " tunnels " +
-                              "(elapsed " + (elapsed / 1000) + "s)");
+                              "(elapsed " + DataHelper.formatDuration(elapsed) + ")");
                 }
                 scheduleRepublish(MIN_RESCHEDULE);
                 return true;
@@ -864,12 +865,12 @@ public class RepublishLeaseSetJob extends JobImpl {
             // builds, and saying so 170 times a burst buries the real alarms.
             if (_log.shouldWarn() && emergency && !ineffective) {
                 _log.warn("Re-minting LeaseSet" + name + " [" + shortHash() +
-                          "] under emergency window\n* " + (timeUntilExpiry / 1000) +
-                          "s to expiry, " + freshCount + "/" + target + " viable leases");
+                          "] under emergency window\n* " + DataHelper.formatDuration(timeUntilExpiry) +
+                          " to expiry, " + freshCount + "/" + target + " viable leases");
             } else if (_log.shouldInfo()) {
                 _log.info("Requesting re-mint of LeaseSet" + name + " [" + shortHash() +
-                          "]\n* Extends expiry from " + (timeUntilExpiry / 1000) +
-                          "s to " + (freshTimeUntilExpiry / 1000) + "s, " +
+                          "]\n* Extends expiry from " + DataHelper.formatDuration(timeUntilExpiry) +
+                          " to " + DataHelper.formatDuration(freshTimeUntilExpiry) + ", " +
                           freshCount + "/" + target + " viable leases");
             }
             getContext().clientManager().requestLeaseSet(_dest, fresh);

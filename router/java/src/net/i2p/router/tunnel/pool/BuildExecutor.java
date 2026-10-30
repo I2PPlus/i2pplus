@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import net.i2p.data.DataHelper;
 import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Hash;
 import net.i2p.data.i2np.I2NPMessage;
@@ -3022,8 +3023,8 @@ public class BuildExecutor implements Runnable {
                 // Prune if we've used >threshold% of the timeout budget before dispatch
                 if (elapsed > (timeoutBudget * _staleBuildThresholdPct / 100)) {
                     if (_log.shouldDebug()) {
-                        _log.debug("Build gated (stale): elapsed " + (elapsed / 1000) + "s of " +
-                                  (timeoutBudget / 1000) + "s budget for " + cfg);
+                        _log.debug("Build gated (stale) -> Elapsed " + DataHelper.formatDuration(elapsed) + " of the " +
+                                  DataHelper.formatDuration(timeoutBudget) + " budget for " + cfg);
                     }
                     _context.statManager().addRateData("tunnel.buildStalePruned", 1);
                     cfg.getTunnelPool().removeInProgress(cfg);

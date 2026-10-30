@@ -2324,7 +2324,7 @@ class Connection {
                 markStalledForRotation();
                 if (_log.shouldWarn()) {
                     _log.warn("Stream stalled -> No bytes acknowledged for " +
-                              (STALL_GRACE_MS / 1000) + "s\n* " + this);
+                              DataHelper.formatDuration(STALL_GRACE_MS) + "\n* " + this);
                 }
                 break;
             case THROTTLED:

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Random;
 import java.util.Set;
+import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.router.RouterInfo;
@@ -268,7 +269,7 @@ class StartExplorersJob extends JobImpl {
             try {
                 long delay = Integer.parseInt(exploreDelayProp) * 1000L;
                 if (_log.shouldInfo()) {
-                    _log.info("Next Peer Exploration run in " + (delay / 1000) + " s");
+                    _log.info("Next Peer Exploration run in " + DataHelper.formatDuration(delay));
                 }
                 requeue(delay);
                 return;
@@ -280,12 +281,13 @@ class StartExplorersJob extends JobImpl {
 
         if ((lag > 500 || msgDelay > 750 || (highLoad && !needFloodfills))) {
             if (_log.shouldInfo()) {
-                _log.info("Next Peer Exploration run in " + (LAGGED_DELAY_MS / 1000) + " s (router is under load)");
+                _log.info("Next Peer Exploration run in " + DataHelper.formatDuration(LAGGED_DELAY_MS) +
+                          " (router is under load)");
             }
             requeue(LAGGED_DELAY_MS);
         } else {
             if (_log.shouldInfo()) {
-                _log.info("Next Peer Exploration run in " + (defaultDelay / 1000) + " s");
+                _log.info("Next Peer Exploration run in " + DataHelper.formatDuration(defaultDelay));
             }
             requeue(defaultDelay);
         }
