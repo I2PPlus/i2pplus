@@ -207,7 +207,7 @@ class FragmentHandler {
                 if (off < 0) {
                     _context.statManager().addRateData("tunnel.corruptMessage", 1);
                     if (_log.shouldWarn())
-                        _log.warn("Corrupt fragment received * Offset: " + off);
+                        _log.warn("Corrupt fragment received -> Offset: " + off);
                     return false;
                 }
                 offset = off;
@@ -215,20 +215,20 @@ class FragmentHandler {
         } catch (ArrayIndexOutOfBoundsException aioobe) {
             _context.statManager().addRateData("tunnel.corruptMessage", 1);
             if (_log.shouldDebug())
-                _log.debug("Corrupt fragment received * Offset: " + offset, aioobe);
+                _log.debug("Corrupt fragment received -> Offset: " + offset, aioobe);
             else if (_log.shouldWarn())
-                _log.warn("Corrupt fragment received * Offset: " + offset);
+                _log.warn("Corrupt fragment received -> Offset: " + offset);
             return false;
         } catch (NullPointerException npe) {
             if (_log.shouldDebug())
-                _log.debug("Corrupt fragment received * Offset: " + offset, npe);
+                _log.debug("Corrupt fragment received -> Offset: " + offset, npe);
             else if (_log.shouldWarn())
-                _log.warn("Corrupt fragment received * Offset: " + offset + " (Null Pointer Exception)");
+                _log.warn("Corrupt fragment received -> Offset: " + offset + " (Null Pointer Exception)");
             _context.statManager().addRateData("tunnel.corruptMessage", 1);
             return false;
         } catch (RuntimeException e) {
             if (_log.shouldWarn())
-                _log.warn("Corrupt fragment received * Offset: " + offset, e);
+                _log.warn("Corrupt fragment received -> Offset: " + offset, e);
             _context.statManager().addRateData("tunnel.corruptMessage", 1);
             return false;
         } finally {
@@ -300,7 +300,7 @@ class FragmentHandler {
             if (offset+paddingEnd >= length) {
                 if (_log.shouldWarn())
                     _log.warn("Cannot verify the message, the offset runs past the end"
-                              + " * Offset: " + offset
+                              + " -> Offset: " + offset
                               + " * Length: " + length
                               + " * Padding end: " + paddingEnd);
                 return false;
@@ -328,8 +328,8 @@ class FragmentHandler {
                 _log.warn("Corrupt tunnel message - verification fails: " + Base64.encode(preprocessed, offset+HopProcessor.IV_LENGTH, 4)
                            + " != " + Base64.encode(v, 0, 4));
                 _log.warn("No matching endpoint"
+                          + " -> Offset: " + offset
                           + " * Pad bytes: " + (paddingEnd-(HopProcessor.IV_LENGTH+4)-1)
-                          + " * Offset: " + offset
                           + " * Length: " + length
                           + " * Padding end: " + paddingEnd);
             }
@@ -456,7 +456,7 @@ class FragmentHandler {
             // i2pd 2.19 bug? see above
             if (_log.shouldWarn())
                 _log.warn("Dropping messages at Tunnel Endpoint with delivery instruction to tunnel 0" +
-                          "\n* Gateway: " + router +
+                          " -> Gateway: " + router +
                           "; Fragmented? " + fragmented +
                           "; ID: " + messageId +
                           "; Size: " + size +

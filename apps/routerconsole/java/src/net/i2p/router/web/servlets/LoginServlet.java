@@ -414,7 +414,7 @@ public class LoginServlet extends HttpServlet {
             req.getRequestDispatcher("/login.jsp").forward(req, resp);
         }
         } catch (Exception e) {
-            _log.error("LoginServlet doPost exception", e);
+            _log.error("Login page request failed", e);
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             resp.getWriter().write("Login failed. Please try again later.");
         }
@@ -546,10 +546,10 @@ public class LoginServlet extends HttpServlet {
         if (_log.shouldDebug()) {_log.debug("Router context obtained, config file: " + router.getConfigFilename());}
 
         ConsolePasswordManager mgr = new ConsolePasswordManager(ctx);
-        if (_log.shouldDebug()) {_log.debug("verifyPassword for user: " + username);}
+        if (_log.shouldDebug()) {_log.debug("Verifying password for user: " + username);}
 
         boolean result = mgr.checkMD5(RouterConsoleRunner.PROP_CONSOLE_PW, REALM, username, password);
-        if (_log.shouldDebug()) {_log.debug("checkMD5 result: " + result + " for user: " + username);}
+        if (_log.shouldDebug()) {_log.debug("MD5 check result: " + result + " for user: " + username);}
 
         if (result) {
             if (_log.shouldDebug()) {_log.debug("SUCCESS - user authenticated via MD5");}
@@ -586,7 +586,7 @@ public class LoginServlet extends HttpServlet {
 
         if (!result && DataHelper.eqCT("admin", username) && DataHelper.eqCT("password", password)) {
             boolean hasAnyPassword = hasAnyPassword(ctx);
-            if (_log.shouldDebug()) {_log.debug("admin/password failed but hasAnyPassword: " + hasAnyPassword);}
+            if (_log.shouldDebug()) {_log.debug("Default credentials rejected -> A password is configured: " + hasAnyPassword);}
             if (!hasAnyPassword) {
                 if (_log.shouldDebug()) {_log.debug("No passwords configured, allowing default");}
                 return true;

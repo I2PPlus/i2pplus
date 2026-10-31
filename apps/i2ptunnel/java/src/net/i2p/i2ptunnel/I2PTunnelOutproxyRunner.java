@@ -184,7 +184,7 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
 
             if (onTimeout != null) {
                 if (_log.shouldDebug()) {
-                    _log.debug("Runner has a timeout job * Total received: " + totalReceived.get()
+                    _log.debug("Runner has a timeout job -> Total received: " + totalReceived.get()
                             + " * Total sent: " + totalSent.get() + " * Job: " + onTimeout);
                 }
                 if (totalReceived.get() <= 0) {

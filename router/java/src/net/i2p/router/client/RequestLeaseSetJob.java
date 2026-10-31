@@ -340,7 +340,7 @@ class RequestLeaseSetJob extends JobImpl {
         public void runJob() {
             if (_runner.isDead()) {
                 if (_log.shouldDebug())
-                    _log.debug("Already dead, don't try to expire the leaseSet lookup");
+                    _log.debug("Client is already dead -> Skipping LeaseSet lookup expiry");
                 return;
             }
             if (!_requestState.claimCheckResolution()) {
@@ -356,7 +356,8 @@ class RequestLeaseSetJob extends JobImpl {
                 RequestLeaseSetJob.this.getContext().statManager().addRateData("client.requestLeaseSetTimeout", 1);
                 if (_log.shouldError()) {
                     long waited = RequestLeaseSetJob.this.getContext().clock().now() - _start;
-                    _log.error("Failed to receive a leaseSet in the time allotted (" + waited + "): " + _requestState);
+                    _log.error("No LeaseSet received within allotted time -> Failing request\n* Waited: " +
+                    DataHelper.formatDuration(waited) + "\n* " + _requestState);
                 }
                 if (_requestState.getOnFailed() != null)
                     RequestLeaseSetJob.this.getContext().jobQueue().addJob(_requestState.getOnFailed());

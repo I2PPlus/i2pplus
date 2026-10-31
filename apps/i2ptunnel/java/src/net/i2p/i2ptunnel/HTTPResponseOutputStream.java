@@ -134,7 +134,8 @@ class HTTPResponseOutputStream extends FilterOutputStream {
             _dataExpected = 0;
         }
         if (_log.shouldInfo())
-            _log.info("Before headers: keepaliveIn? " + allowKeepAliveIn + " keepaliveOut? " + allowKeepAliveOut);
+            _log.info("Deciding keep-alive before headers -> Keep-alive in: " + allowKeepAliveIn +
+                   " * Keep-alive out: " + allowKeepAliveOut);
     }
 
     /**

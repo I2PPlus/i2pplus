@@ -865,7 +865,8 @@ public class BuildHandler implements Runnable {
                 if (ri != null) {
                     bwTier = ri.getBandwidthTier();
                 } else if (_log.shouldLog(Log.WARN)) {
-                    _log.warn("Failed detecting bwTier, null routerInfo for: " + peer);
+                    _log.warn("No RouterInfo for a build reply -> Bandwidth tier unknown\n* Peer: [" +
+                    peer.toBase64().substring(0, 6) + "]");
                 }
                 if (howBad == 0) {
                     // Record that a peer of the given tier agreed or rejected

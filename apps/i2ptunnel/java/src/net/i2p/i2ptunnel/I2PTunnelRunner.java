@@ -1534,8 +1534,8 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
             pin = pickRedriveStream(i2pin, i2ps);
         } catch (IOException ioe) {
             if (_log.shouldDebug()) {
-                _log.debug("Re-acquiring the I2P socket stream failed -> " +
-                           "Falling back to the caller-provided stream", ioe);
+                _log.debug("Re-acquiring I2P socket stream failed -> " +
+                           "Falling back to caller-provided stream", ioe);
             }
         }
         fromI2P = new StreamForwarder(pin, out, false, _onSuccess);

@@ -88,7 +88,7 @@ public class NewsManager implements ClientApp {
             return rv;
         }
         // Load and translate initialnews - we don't save it to _currentNews, as lang may change
-        if (_log.shouldWarn()) {_log.warn("No news.xml, falling back to initialNews");}
+        if (_log.shouldWarn()) {_log.warn("No news.xml found -> Falling back to bundled news");}
         return parseInitialNews();
     }
 

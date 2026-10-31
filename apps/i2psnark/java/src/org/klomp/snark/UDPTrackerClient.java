@@ -742,12 +742,12 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
             boolean success =
                     DatagramSender.send(_session, opts, dest, payload, _rPort, toPort, repliable);
             if (!success && _log.shouldWarn()) {
-                _log.warn("Sending the tracker request failed");
+                _log.warn("Sending tracker request failed");
             }
             return success;
         } catch (I2PSessionException ise) {
             if (_log.shouldWarn()) {
-                _log.warn("Sending the tracker request failed -> " + ise.getMessage());
+                _log.warn("Sending tracker request failed -> " + ise.getMessage());
             }
             return false;
         }

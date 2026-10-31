@@ -282,7 +282,7 @@ class PeerTestManager {
 
         if (!(bob instanceof PeerState2)) {
             if (_log.shouldWarn())
-                _log.warn("Bob is not an instance of PeerState2, cannot proceed with the test.");
+                _log.warn("Bob is not an instance of PeerState2 -> Cannot run the test");
             return false;
         }
 

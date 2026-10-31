@@ -171,7 +171,7 @@ public class GarlicMessageParser {
                 if (debug) {_log.debug("Got cloves: " + rv.getCloveCount());}
                 return rv;
             } catch (DataFormatException dfe) {
-                if (warn) {_log.warn("Unable to read cloveSet -> " +  dfe.getMessage());}
+                if (warn) {_log.warn("Unable to read CloveSet -> " + dfe.getMessage());}
                 return null;
             }
         }

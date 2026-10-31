@@ -51,7 +51,7 @@ public class ConfigTunnelsHandler extends FormHandler {
         Map<String, String> changes = new HashMap<>();
 
         if (_log.shouldDebug())
-            _log.debug("Saving changes * Props: " + _settings);
+            _log.debug("Saving changes -> Props: " + _settings);
 
         int updated = 0;
         for (int index = 0;  ; index++) {

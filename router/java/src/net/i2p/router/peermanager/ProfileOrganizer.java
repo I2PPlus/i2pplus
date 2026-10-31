@@ -6201,7 +6201,7 @@ public class ProfileOrganizer {
         if (_fastPeers.size() < fastTarget || _highCapacityPeers.size() < highCapTarget) {
             _context.statManager().addRateData("peermanager.tiersUnderfilled", 1);
             if (_log.shouldInfo())
-                _log.info(describeTierFill("promoteToFillTiers",
+                _log.info(describeTierFill("the promotion scan",
                                            _fastPeers.size(), fastTarget,
                                            _highCapacityPeers.size(), highCapTarget,
                                            examined, alreadyTiered, heldNoAddress,
@@ -6288,7 +6288,7 @@ public class ProfileOrganizer {
                                    String skips) {
         StringBuilder sb = new StringBuilder(128);
         sb.append("Tiers underfilled in ").append(where)
-          .append("\n* Fast: ").append(fast).append('/').append(fastTarget)
+          .append(" -> Fast: ").append(fast).append('/').append(fastTarget)
           .append(" * High cap: ").append(highCap).append('/').append(highCapTarget)
           .append("\n* Examined: ").append(examined);
         if (alreadyTiered > 0) {sb.append(" * Already tiered: ").append(alreadyTiered);}

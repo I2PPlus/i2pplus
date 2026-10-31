@@ -364,7 +364,7 @@ public class SearchJob extends JobImpl {
                 } else {
                     // no more to try, but we might get data or close peers from some outstanding requests
                     if (_log.shouldInfo()) {
-                        _log.info("No peers left, but search queries still pending!\n* Pending: " +
+                        _log.info("No peers left, but search queries still pending! -> Pending: " +
                                   _state.getPendingSize() + "\n* Queried: " + _state.getAttemptedSize() +
                                   "\n* Failed: " + _state.getFailedSize());
                     }
@@ -571,7 +571,7 @@ public class SearchJob extends JobImpl {
         SearchMessageSelector sel = new SearchMessageSelector(getContext(), router, _expiration, _state);
         SearchUpdateReplyFoundJob reply = new SearchUpdateReplyFoundJob(getContext(), router, _state, _facade, this);
         if (_facade.isClientDb()) {
-            _log.error("Error! SendMessageDirectJob attempted in Client NetDb! \n* "
+            _log.error("Error! SendMessageDirectJob attempted in Client NetDb! -> "
                        + "Message: " + msg, new Exception ("backtrace..."));
             return;
         }
@@ -867,7 +867,8 @@ public class SearchJob extends JobImpl {
         if (!ok) {
             // race between adding deferred and search completing
             if (_log.shouldWarn()) {
-                _log.warn("Deferred race before searchCompleting * our onFind: " + _onSuccess + " * new one: " + onFind);
+                _log.warn("Deferred search raced with search completion -> Retrying the search" +
+                      "\n* Our callback: " + _onSuccess + " * New callback: " + onFind);
             }
             // the following /shouldn't/ be necessary, but it doesn't hurt
             _facade.searchComplete(_state.getTarget());

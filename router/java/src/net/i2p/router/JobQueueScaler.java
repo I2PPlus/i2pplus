@@ -756,9 +756,10 @@ class JobQueueScaler implements Runnable {
             if (_loadEpisodeStart == 0) {
                 _loadEpisodeStart = now;
                 if (_log.shouldDebug()) {
-                    _log.debug("Load episode started: maxLag: " + maxLag + "ms" +
-                               " (>" + maxLagThreshold + ") * messageDelay: " + messageDelay +
-                               "ms (>" + msgDelayThresholdRec + ")");
+                    _log.debug("Load episode started -> Max lag: " + DataHelper.formatDuration(maxLag) +
+                               " (limit: " + DataHelper.formatDuration(maxLagThreshold) + ")" +
+                               "\n* Message delay: " + DataHelper.formatDuration(messageDelay) +
+                               " (limit: " + DataHelper.formatDuration(msgDelayThresholdRec) + ")");
                 }
             }
         } else if (_loadEpisodeStart > 0) {
@@ -929,10 +930,10 @@ class JobQueueScaler implements Runnable {
                 // Suppressed by resource saturation — don't accumulate scale-up checks
                 _consecutiveScaleUpChecks = 0;
                 if (_log.shouldDebug()) {
-                    _log.debug("Scale-up suppressed: cpuLoad: " + cpuLoad +
-                               "% * gcPause: " + gcPause + "ms" +
-                               " * bwDelay: " + bwDelay + "ms" +
-                               " * networkCongested: " + networkCongested);
+                    _log.debug("Scale-up suppressed -> CPU load: " + cpuLoad + "%" +
+                               " * GC pause: " + DataHelper.formatDuration(gcPause) +
+                               "\n* Bandwidth delay: " + DataHelper.formatDuration(bwDelay) +
+                               " * Network congested: " + networkCongested);
                 }
             }
         }
@@ -1008,8 +1009,8 @@ class JobQueueScaler implements Runnable {
             && (double) testJobCount / activeRunners > 0.25;
         if (testJobsDominant) {
             if (_log.shouldDebug()) {
-                _log.debug("Scale-down blocked: testJobs: " + testJobCount +
-                          " * activeRunners: " + activeRunners);
+                _log.debug("Scale-down blocked -> Test jobs: " + testJobCount +
+                          " * Active runners: " + activeRunners);
             }
             return;
         }

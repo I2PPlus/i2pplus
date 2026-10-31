@@ -107,14 +107,14 @@ class BackgroundChecker {
             long last = System.currentTimeMillis() - mailbox.getLastChecked();
             if (idle >= MIN_IDLE && last >= MIN_SINCE) {
                 if (_log.shouldDebug()) {
-                    _log.debug("Checking for new mail\n* Idle: " + DataHelper.formatDuration(idle) +
+                    _log.debug("Checking for new mail -> Idle: " + DataHelper.formatDuration(idle) +
                                " * Since the last check: " + DataHelper.formatDuration(last));
                 }
                 Thread t = new Getter();
                 isChecking = true;
                 t.start();
             } else if (_log.shouldDebug()) {
-                _log.debug("Not checking for new mail yet\n* Idle: " + DataHelper.formatDuration(idle) +
+                _log.debug("Not checking for new mail yet -> Idle: " + DataHelper.formatDuration(idle) +
                            " * Since the last check: " + DataHelper.formatDuration(last));
             }
         } else if (_log.shouldDebug()) {_log.debug("Not checking for new mail -> The connection is still open");}

@@ -382,7 +382,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                 }
                 if (cursor.isEmpty()) {return;}
                 if (shouldLogDebug())
-                    _log.debug("[SSU] finishAndAllocate() over " + _sentMessages.size() + " pending ACKs");
+                    _log.debug("[SSU] Sweeping " + _sentMessages.size() + " pending ACKs to free their buffers");
             }
             Map.Entry<Long, List<PacketBuilder2.Fragment>> entry = cursor.pollFirst();
             Long key = entry.getKey();
@@ -396,7 +396,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             }
             _sentMessages.remove(key, frags);
             if (shouldLogDebug())
-                _log.debug("[SSU] Cleaned from sentMessages: " + frags);
+                _log.debug("[SSU] Removing a finished message from sent list -> Fragments: " + frags);
         }
     }
 
@@ -1378,8 +1378,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                         } else {
                             // Different IP - warn but allow (may be legitimate change)
                             if (_log.shouldWarn()) {
-                                _log.warn("[SSU] Path response from changed IP (verified), updating address... \n* Expected: " +
-                                         _pendingRemoteHostId + " -> Received from: " + from + ' ' + this);
+                                _log.warn("[SSU] Path response from a changed IP, updating the peer address -> Expected: " +
+                                         _pendingRemoteHostId + " * Received from: " + from + ' ' + this);
                             }
                             _transport.changePeerAddress(this, from);
                         }
@@ -1389,8 +1389,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                         messagePartiallyReceived();
                     } else {
                         if (_log.shouldWarn()) {
-                            _log.warn("[SSU] Path response from unexpected address... \n* Expected: " + _pendingRemoteHostId
-                                    + " -> Received from: " + from + ' ' + this);
+                            _log.warn("[SSU] Path response from an unexpected address -> Expected: " + _pendingRemoteHostId
+                                    + " * Received from: " + from + ' ' + this);
                         }
                         // Track port hopping attempts via the peer hash for full BanLogger context
                         if (!_context.blocklist().isBlocklisted(_remotePeer)) {

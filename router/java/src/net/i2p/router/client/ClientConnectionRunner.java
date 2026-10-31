@@ -781,7 +781,8 @@ class ClientConnectionRunner {
         }
 
         if (isPrimary && _floodfillNetworkDatabaseFacade == null) {
-            if (_log.shouldDebug()) {_log.debug("Initializing subDb for client" + destHash);}
+            if (_log.shouldDebug()) {_log.debug("Initializing floodfill NetDb for client " +
+                                                " -> Destination: [" + destHash.toBase32().substring(0,8) + "]");}
             _floodfillNetworkDatabaseFacade = new FloodfillNetworkDatabaseFacade(_context, destHash);
             _floodfillNetworkDatabaseFacade.startup();
         }
@@ -1009,7 +1010,7 @@ class ClientConnectionRunner {
         SessionParams sp = _sessions.get(toHash);
         if (sp == null) {
             if (_log.shouldWarn())
-                _log.warn("No session found for receiveMessage()");
+                _log.warn("No session for destination -> Dropping message");
             return false;
         }
         return receiveMessage(sp.dest, fromDest, payload);

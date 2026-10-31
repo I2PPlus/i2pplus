@@ -18,6 +18,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import net.i2p.data.DataHelper;
 import net.i2p.router.message.HandleGarlicMessageJob;
 import net.i2p.router.networkdb.kademlia.ExploreJob;
 import net.i2p.router.networkdb.kademlia.HandleFloodfillDatabaseLookupMessageJob;
@@ -350,8 +351,8 @@ public class JobQueue {
                 }
             } else if (shouldDrop(job, numReady)) {
                 if (_log.shouldWarn() && job.getName().contains("Remove Slow")) {
-                    _log.warn("Dropping RemoveSlowTunnelsJob: numReady: " + numReady
-                              + " * maxLag: " + getMaxLag());
+                    _log.warn("Dropping RemoveSlowTunnelsJob -> Ready jobs: " + numReady
+                              + " * Max lag: " + DataHelper.formatDuration(getMaxLag()));
                 }
                 job.dropped();
                 dropped = true;
@@ -941,8 +942,8 @@ public class JobQueue {
     synchronized void addRunners(int count) {
         if (!_allowParallelOperation || !_alive) {
             if (_log.shouldDebug())
-                _log.debug("Add runners blocked: allowParallel: " + _allowParallelOperation
-                           + " * alive: " + _alive);
+                _log.debug("Adding runners blocked -> Parallel operation: " + _allowParallelOperation
+                           + " * Alive: " + _alive);
             return;
         }
 
@@ -1199,12 +1200,12 @@ public class JobQueue {
         }
 
         if ((lag > _lagFatal) && (uptime > _warmupTime)) {
-            if (_log.shouldWarn()) {_log.log(Log.WARN, "Router is incredibly overloaded or there's an error.");}
+            if (_log.shouldWarn()) {_log.log(Log.WARN, "Router is incredibly overloaded or there is an error");}
             return;
         }
 
         if ((uptime > _warmupTime) && (duration > _runFatal) && _log.shouldWarn()) {
-            _log.log(Log.WARN, "Router is incredibly overloaded (slow cpu?) or there's an error.");
+            _log.log(Log.WARN, "Router is incredibly overloaded (slow CPU?) or there is an error");
         }
     }
 

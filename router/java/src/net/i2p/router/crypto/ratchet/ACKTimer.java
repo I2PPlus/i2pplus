@@ -66,7 +66,7 @@ class ACKTimer extends SimpleTimer2.TimedEvent {
         ClientMessage cmsg = new ClientMessage(_to, null, config, _from, msgID, 0, exp, LS_MASK);
         _context.clientMessagePool().add(cmsg, true);
         if (_log.shouldInfo())
-            _log.info("Sent ratchet ACK * From: [" + _from.toBase32().substring(0, 8) +
+            _log.info("Sent ratchet ACK -> From: [" + _from.toBase32().substring(0, 8) +
                       "] * Target: [" + _to.toBase32().substring(0, 8) + ']');
     }
 }

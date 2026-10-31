@@ -534,19 +534,20 @@ public abstract class TransportImpl implements Transport {
         if (lifetime > 3000) {
             if (_log.shouldLog(Log.DEBUG)) {
                 _log.log(Log.DEBUG,
-                         String.format("[%s] afterSend slow: %s(Lifetime: %s * Time taken: %s)" +
+                         String.format("[%s] Slow send -> %s" +
+                                       "\n* Lifetime: %s * Time taken: %s" +
                                        "\n* %d byte %s [MsgID %d] from [%s] to [%s]" +
                                        "\n* %s",
-                                       style, (sendSuccessful ? "Success! " : "FAIL! "),
+                                       style, (sendSuccessful ? "Succeeded" : "Failed"),
                                        DataHelper.formatDuration(lifetime), DataHelper.formatDuration(msToSend),
                                        msg.getMessageSize(), msg.getMessageType(), msg.getMessageId(),
                                        routerHash, peerHash, msg));
             }
         } else if (debug) {
-            _log.debug(String.format("[%s] afterSend: %s" +
+            _log.debug(String.format("[%s] Send completed -> %s" +
                                      "\n* %d byte %s [MsgID %d] from [%s] to [%s]" +
                                      "\n* %s",
-                      style, (sendSuccessful ? "Success! " : "FAIL! "), msg.getMessageSize(), msg.getMessageType(),
+                      style, (sendSuccessful ? "Succeeded" : "Failed"), msg.getMessageSize(), msg.getMessageType(),
                       msg.getMessageId(), routerHash, peerHash, msg));
         }
 
@@ -583,7 +584,7 @@ public abstract class TransportImpl implements Transport {
         long sendTime = now - msg.getSendBegin();
         long allTime = now - msg.getCreated();
         if (allTime > 5000 && debug) {
-            _log.debug(String.format("Took too long (%s) from preparation to afterSend -> Send OK: %b" +
+            _log.debug(String.format("Send took %s from preparation to completion -> Send OK: %b" +
                                      "\n* Sent: %s after failing on %s%s",
                       DataHelper.formatDuration(allTime), sendSuccessful, new Date(sendTime),
                       msg.getFailedTransports(),

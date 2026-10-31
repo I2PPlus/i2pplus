@@ -222,11 +222,11 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
             }
         } catch (IOException e) {
             if (_log.shouldDebug())
-                _log.debug("Caught IOException for message [" + msg + "]" + "\n* Error: " + e.getMessage());
+                _log.debug("Caught IOException for message [" + msg + "]" + " -> Error: " + e.getMessage());
         } catch (SAMException e) {
-            _log.error("Unexpected exception for message [" + msg + "]" + "\n* Error: " + e.getMessage());
+            _log.error("Unexpected exception for message [" + msg + "]" + " -> Error: " + e.getMessage());
         } catch (RuntimeException e) {
-            _log.error("Unexpected exception for message [" + msg + "]" + "\n* Error: " + e.getMessage());
+            _log.error("Unexpected exception for message [" + msg + "]" + " -> Error: " + e.getMessage());
         } finally {
             if (_log.shouldDebug())
                 _log.debug("Stopping SAMv1Handler");
@@ -234,7 +234,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
                 closeClientSocket();
             } catch (IOException e) {
                 if (_log.shouldWarn())
-                    _log.warn("Error closing socket" + "\n* Error: " + e.getMessage());
+                    _log.warn("Error closing socket" + " -> Error: " + e.getMessage());
             }
             if (rawSession != null) {
                 rawSession.close();
@@ -350,7 +350,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
                 return writeString(SESSION_ERROR, "Unrecognized opcode");
             }
         } catch (DataFormatException e) {
-            _log.error("Invalid SAM destination specified" + "\n* Error: " + e.getMessage());
+            _log.error("Invalid SAM destination specified" + " -> Error: " + e.getMessage());
             return writeString("SESSION STATUS RESULT=INVALID_KEY" + "\n* Error: " + e.getMessage());
         } catch (I2PSessionException e) {
             logSessionError("Failed to start SAM session", e);
@@ -618,8 +618,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
                 return true;
             } catch (EOFException e) {
                 if (_log.shouldWarn())
-                    _log.warn("Too few bytes with SEND message (expected: "
-                           + size + "\n* Error: " + e.getMessage());
+                    _log.warn("Too few bytes with SEND message" + " -> Expected size: " + size + "\n* Error: " + e.getMessage());
                 return false;
             } catch (IOException e) {
                 if (_log.shouldWarn())
@@ -632,7 +631,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
                            e);
                 return false;
             } catch (I2PSessionException e) {
-                _log.error("Session error with SEND message" + "\n* Error: " + e.getMessage());
+                _log.error("Session error with SEND message" + " -> Error: " + e.getMessage());
                 return false;
             }
         } else {
@@ -799,23 +798,23 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
                 notifyStreamOutgoingConnection ( id, "INVALID_KEY", null );
             } catch (SAMInvalidDirectionException e) {
                 if (_log.shouldDebug())
-                    _log.debug("STREAM CONNECT failed" + "\n* Error: " + e.getMessage());
+                    _log.debug("STREAM CONNECT failed" + " -> Error: " + e.getMessage());
                 notifyStreamOutgoingConnection ( id, "INVALID_DIRECTION", null );
             } catch (ConnectException e) {
                 if (_log.shouldDebug())
-                    _log.debug("STREAM CONNECT failed" + "\n* Error: " + e.getMessage());
+                    _log.debug("STREAM CONNECT failed" + " -> Error: " + e.getMessage());
                 notifyStreamOutgoingConnection ( id, "CONNECTION_REFUSED", null );
             } catch (NoRouteToHostException e) {
                 if (_log.shouldDebug())
-                    _log.debug("STREAM CONNECT failed" + "\n* Error: " + e.getMessage());
+                    _log.debug("STREAM CONNECT failed" + " -> Error: " + e.getMessage());
                 notifyStreamOutgoingConnection ( id, "CANT_REACH_PEER", null );
             } catch (InterruptedIOException e) {
                 if (_log.shouldDebug())
-                    _log.debug("STREAM CONNECT failed" + "\n* Error: " + e.getMessage());
+                    _log.debug("STREAM CONNECT failed" + " -> Error: " + e.getMessage());
                 notifyStreamOutgoingConnection ( id, "TIMEOUT", null );
             } catch (I2PException e) {
                 if (_log.shouldDebug())
-                    _log.debug("STREAM CONNECT failed" + "\n* Error: " + e.getMessage());
+                    _log.debug("STREAM CONNECT failed" + " -> Error: " + e.getMessage());
                 notifyStreamOutgoingConnection ( id, "I2P_ERROR", null );
             }
         } catch (IOException e) {
@@ -928,7 +927,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
             closeClientSocket();
         } catch (IOException e) {
             if (_log.shouldWarn())
-                _log.warn("Error closing socket" + "\n* Error: " + e.getMessage());
+                _log.warn("Error closing socket" + " -> Error: " + e.getMessage());
         }
     }
 
@@ -983,7 +982,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
             closeClientSocket();
         } catch (IOException e) {
             if (_log.shouldWarn())
-                _log.warn("Error closing socket" + "\n* Error: " + e.getMessage());
+                _log.warn("Error closing socket" + " -> Error: " + e.getMessage());
         }
     }
 
@@ -1170,7 +1169,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
             closeClientSocket();
         } catch (IOException e) {
             if (_log.shouldWarn())
-                _log.warn("Error closing socket" + "\n* Error: " + e.getMessage());
+                _log.warn("Error closing socket" + " -> Error: " + e.getMessage());
         }
     }
 }

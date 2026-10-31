@@ -1448,7 +1448,7 @@ class PacketBuilder2 {
                 state.mixHash(bob.getData(), 0, 32);
             state.mixHash(data, off, LONG_HEADER_SIZE);
             if (_log.shouldDebug())
-                _log.debug("[SSU] State after mixHash 1: " + state);
+                _log.debug("[SSU] Handshake hash after message 1: " + state);
             state.writeMessage(data, off + LONG_HEADER_SIZE, data, payloadOff, len);
             pkt.setLength(pkt.getLength() + KEY_LEN + pqlen + len + MAC_LEN);
         } catch (RuntimeException re) {
@@ -1528,7 +1528,7 @@ class PacketBuilder2 {
 
             state.mixHash(data, off, LONG_HEADER_SIZE);
             if (_log.shouldDebug())
-                _log.debug("[SSU] State after mixHash 2: " + state);
+                _log.debug("[SSU] Handshake hash after message 2: " + state);
             state.writeMessage(data, off + LONG_HEADER_SIZE, data, payloadOff, len);
             pkt.setLength(pkt.getLength() + KEY_LEN + pqlen + len + MAC_LEN);
         } catch (RuntimeException re) {
@@ -1730,7 +1730,7 @@ class PacketBuilder2 {
             SSU2Payload.writePayload(data, off + SHORT_HEADER_SIZE + KEY_LEN + MAC_LEN, blocks);
             state.mixHash(data, off, SHORT_HEADER_SIZE);
             if (_log.shouldDebug())
-                _log.debug("[SSU] State after mixHash 3: " + state);
+                _log.debug("[SSU] Handshake hash after message 3: " + state);
             state.writeMessage(data, off + SHORT_HEADER_SIZE, data, off + SHORT_HEADER_SIZE + KEY_LEN + MAC_LEN, len);
             pkt.setLength(pkt.getLength() + KEY_LEN + MAC_LEN + len + MAC_LEN);
             if (_log.shouldDebug())

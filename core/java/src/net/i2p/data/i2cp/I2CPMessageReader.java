@@ -182,7 +182,7 @@ public class I2CPMessageReader {
                 try {
                     in.close();
                 } catch (IOException ioe) {
-                    _log.error("Error closing the stream \n* IO Error: " + ioe.getMessage());
+                    _log.error("Error closing the stream -> IO Error: " + ioe.getMessage());
                 }
             }
         }
@@ -222,7 +222,7 @@ public class I2CPMessageReader {
                         cancelRunner();
                     } catch (IOException ioe) {
                         if (_stayAlive) {
-                            _log.warn("IO Error handling message \n* Error: " + ioe.getMessage());
+                            _log.warn("IO Error handling message -> Error: " + ioe.getMessage());
                             _listener.readError(I2CPMessageReader.this, ioe);
                         } // else triggered by cancelRunner(), ignore SocketException
                         _listener.disconnected(I2CPMessageReader.this);
@@ -247,7 +247,7 @@ public class I2CPMessageReader {
                     } catch (InterruptedException ie) {
                         Thread.currentThread().interrupt();
                         // we should break away here.
-                        _log.warn("Breaking away stream \n* Interrupted Exception: " + ie.getMessage());
+                        _log.warn("Breaking away stream -> Interrupted Exception: " + ie.getMessage());
                         _listener.disconnected(I2CPMessageReader.this);
                         cancelRunner();
                     }

@@ -1928,11 +1928,11 @@ public class BuildExecutor implements Runnable {
         int gatewayHop = gatewayHopIndex(cfg, length);
         String destination = cfg.getDestinationNickname();
         StringBuilder buf = new StringBuilder(96);
-        buf.append("Build expired unanswered: ");
-        buf.append(cfg.isInbound() ? "inbound" : "outbound");
-        buf.append(' ').append(destination != null ? destination : "exploratory");
-        buf.append(", ").append(length).append(length == 1 ? " hop" : " hops");
-        buf.append(", gateway: Hop").append(gatewayHop < 0 ? "?" : String.valueOf(gatewayHop));
+        buf.append(cfg.isInbound() ? "Inbound" : "Outbound")
+           .append(" build expired unanswered -> ")
+           .append(destination != null ? destination : "Exploratory")
+           .append(" * ").append(length).append(length == 1 ? " hop" : " hops")
+           .append(" * Gateway: Hop").append(gatewayHop < 0 ? "?" : String.valueOf(gatewayHop));
         appendRequestMsgId(buf, cfg);
         _log.warn(buf.toString());
     }
@@ -2640,7 +2640,7 @@ public class BuildExecutor implements Runnable {
                 if (noInboundOrOutbound) {
                     if (_log.shouldDebug()) {
                         _log.debug("No inbound or outbound tunnels" +
-                                  "\n* freeTunnels: " + freeTunnelCount +
+                                  " -> freeTunnels: " + freeTunnelCount +
                                   " * outboundTunnels: " + outboundTunnelCount +
                                   " * mgr: " + (mgr != null) +
                                   " * buildingMap: " + _currentlyBuildingMap.size() +
@@ -2740,9 +2740,9 @@ public class BuildExecutor implements Runnable {
                             if (lastCfg != null && nowCfg - lastCfg < CONFIGURE_THROTTLE_MS
                                 && pool.getInProgressCount() >= 2) {
                                 if (_log.shouldDebug()) {
-                                    _log.debug("Throttling configureNewTunnel for " + pool +
-                                               " (" + (nowCfg - lastCfg) + "ms since last, " +
-                                               pool.getInProgressCount() + " in progress)");
+                                    _log.debug("Deferring a new tunnel build for " + pool +
+                                               "\n* Last configure: " + DataHelper.formatDuration(nowCfg - lastCfg) +
+                                               " ago * Builds in progress: " + pool.getInProgressCount());
                                 }
                                 continue;
                             }
@@ -3058,7 +3058,7 @@ public class BuildExecutor implements Runnable {
             do {cfg.setReplyMessageId(_context.random().nextLong(I2NPMessage.MAX_ID_VALUE));} // should we allow an ID of 0?
             while (addToBuilding(cfg)); // if a dup, go araound again
             if (_log.shouldDebug()) {
-                _log.debug("Build dispatched -> Added to building map, replyId: " + cfg.getReplyMessageId() + " for " + cfg);
+                _log.debug("Build dispatched -> Added to building map\n* Reply ID: " + cfg.getReplyMessageId() + "\n* " + cfg);
             }
         }
         boolean ok = BuildRequestor.request(_context, cfg, this, _adaptiveFirstHopTimeout);

@@ -409,7 +409,8 @@ class OutboundEstablishState {
         _confirmedSentCount++;
         _nextSend = _lastSend + delay;
         if (_log.shouldDebug())
-            _log.debug("Send confirm packets, nextSend in " + delay + "ms on " + this);
+            _log.debug("Scheduling confirm packets -> Next send in " +
+                       DataHelper.formatDuration(delay) + "\n* " + this);
         if (_currentState == OutboundState.OB_STATE_UNKNOWN ||
             _currentState == OutboundState.OB_STATE_PENDING_INTRO ||
             _currentState == OutboundState.OB_STATE_INTRODUCED ||

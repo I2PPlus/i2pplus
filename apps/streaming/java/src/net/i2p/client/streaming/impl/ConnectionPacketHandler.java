@@ -691,7 +691,7 @@ class ConnectionPacketHandler {
                 }
             } else {
                 if (_log.shouldDebug()) {
-                    _log.debug("No window adjustment\n* Window: " + con.getOptions().getWindowSize() +
+                    _log.debug("No window adjustment -> Window: " + con.getOptions().getWindowSize() +
                                " * ACKed: " + acked + " * UnACKed sent: " + con.getUnackedPacketsSent() +
                                "\n* Highest ACKed through: " + lowest +
                                " * Congestion window end: " + con.getCongestionWindowEnd());

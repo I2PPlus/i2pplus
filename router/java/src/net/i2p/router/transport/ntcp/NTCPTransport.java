@@ -590,7 +590,7 @@ public class NTCPTransport extends TransportImpl {
                 if (est != null) {
                     if (isAlreadyInProgress(est)) {
                         if (_log.shouldDebug())
-                            _log.debug("Skipping prepareOutbound() for connection already in progress: " + con);
+                            _log.debug("Skipping outbound preparation -> Connection already in progress\n* " + con);
                     } else if (est instanceof OutboundNTCP2State) {
                         est.prepareOutbound();
                     } else {

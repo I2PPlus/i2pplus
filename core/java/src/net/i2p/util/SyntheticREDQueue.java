@@ -548,8 +548,10 @@ public class SyntheticREDQueue implements BandwidthEstimator {
         _lastQueueUpdateTime = time;
 
         if (_log.shouldDebug()) {
-            _log.debug("Queue update - deltaT: " + originalDeltaT + " newData: " + originalNewDataSize +
-                       " newQueueSize: " + newQueueSize + " queueSizeEstimate: " + _queueSizeEstimate + " " + this);
+            _log.debug("Queue update -> Queue size: " + newQueueSize + " bytes" +
+                       "\n* Elapsed: " + DataHelper.formatDuration(originalDeltaT) +
+                       " * New data: " + originalNewDataSize + " bytes" +
+                       " * Estimate: " + _queueSizeEstimate + " bytes " + this);
         }
     }
 

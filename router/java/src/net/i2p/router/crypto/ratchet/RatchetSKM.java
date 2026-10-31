@@ -415,9 +415,9 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
             boolean ok = addSession(sess, false);
             if (_log.shouldDebug()) {
                 if (ok)
-                    _log.debug("Alice session updated from NSR to ES * Peer: " + toString(target));
+                    _log.debug("Alice session updated from NSR to ES -> Peer: " + toString(target));
                 else
-                    _log.debug("Alice session already updated from NSR to ES * Peer: " + toString(target));
+                    _log.debug("Alice session already updated from NSR to ES -> Peer: " + toString(target));
             }
             if (!stale.isEmpty()) {
                 for (OutboundSession other : stale) {
@@ -1980,7 +1980,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                         _destination = d;
                     else if (_log.shouldWarn() && !_destination.equals(d))
                         _log.warn("The ratchet session destination changed" +
-                                  "\n* Was: [" + _destination.toBase32().substring(0, 8) + "]" +
+                                  " -> Was: [" + _destination.toBase32().substring(0, 8) + "]" +
                                   " * Now: [" + d.toBase32().substring(0, 8) + "]");
                 }
                 _ackTimer = timer;

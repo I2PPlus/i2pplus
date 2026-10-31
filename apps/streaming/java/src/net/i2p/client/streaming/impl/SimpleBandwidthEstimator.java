@@ -171,7 +171,8 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
             }
             deltaT -= (long) numrtts * rtt;
             if (_log.shouldDebug())
-                _log.debug("Decayed " + numrtts + " times, new _bK_ns_est: " + _bK_ns_est + ' ' + this);
+                _log.debug("Decayed bandwidth estimate " + numrtts +
+                           " times -> Filtered estimate: " + _bK_ns_est + " packets/ms " + this);
         }
         float bkdt;
         if (packets > 0) {
@@ -185,8 +186,9 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
         }
         _tAck = time;
         if (_log.shouldDebug())
-            _log.debug("computeBWE packets: " + packets + " deltaT: " + deltaT +
-                       " bk/deltaT: " + bkdt + " _bK_ns_est: " + _bK_ns_est + ' ' + this);
+            _log.debug("Bandwidth estimate update -> Filtered estimate: " + _bK_ns_est + " packets/ms" +
+                       "\n* Packets acknowledged: " + packets + " * Elapsed: " + deltaT +
+                       "ms * Sample rate: " + bkdt + " packets/ms " + this);
     }
 
     /**

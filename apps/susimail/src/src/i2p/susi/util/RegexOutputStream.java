@@ -119,7 +119,7 @@ public class RegexOutputStream extends FilterOutputStream {
             }
         }
         if (_log.shouldDebug()) {
-            _log.debug("Replaced the matched text\n* Pattern: " + logText(match) + " * Replacement: " + logText(repl) +
+            _log.debug("Replaced the matched text -> Pattern: " + logText(match) + " * Replacement: " + logText(repl) +
                        " * Buffer: " + logText(buf.toString()));
         }
         clearit();

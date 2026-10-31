@@ -760,7 +760,7 @@ class SAMStreamSession implements SAMMessageSess {
         @Override
         public void stopRunning() {
             if (_log.shouldDebug())
-                _log.debug("stopRunning() invoked on socket reader " + id);
+                _log.debug("Stopping SAM STREAM socket reader " + id);
             synchronized (runningLock) {
                 if (stillRunning) {
                     stillRunning = false;
@@ -953,7 +953,7 @@ class SAMStreamSession implements SAMMessageSess {
         @Override
         public void stopRunning() {
             if (_log.shouldDebug())
-                _log.debug("stopRunning() invoked on socket sender " + _id);
+                _log.debug("Stopping SAM STREAM socket sender " + _id);
             synchronized (runningLock) {
                 if (_stillRunning) {
                     _stillRunning = false;
@@ -978,7 +978,7 @@ class SAMStreamSession implements SAMMessageSess {
         @Override
         public void shutDownGracefully() {
             if (_log.shouldDebug())
-                _log.debug("shutDownGracefully() invoked on socket sender " + _id);
+                _log.debug("Shutting down SAM STREAM socket sender gracefully " + _id);
             _shuttingDownGracefully = true;
         }
 

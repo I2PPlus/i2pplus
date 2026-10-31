@@ -2276,7 +2276,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                 if (_log.shouldDebug())
                     _log.debug(
                             "KRPC cleaner done"
-                                    + " * Blacklist: " + _blacklist.size()
+                                    + " -> Blacklist: " + _blacklist.size()
                                     + " * Sent tokens: " + _outgoingTokens.size()
                                     + " * Received tokens: " + _incomingTokens.size()
                                     + "\n* Known peers: " + _knownNodes.size()

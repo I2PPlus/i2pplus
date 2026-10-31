@@ -3951,7 +3951,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     }
                     if (_log.shouldInfo()) {
                         _log.info(
-                                "New Snark loaded\n* Torrent: "
+                                "New Snark loaded -> Torrent: "
                                         + filename
                                         + "\n* Base: "
                                         + baseFile);
@@ -4306,7 +4306,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         File lookupDir = new File(tmpBase, "zzzot-lookup-" + _context.random().nextLong());
         // Ensure directory exists; SecureDirectory handles perms
         if (!lookupDir.mkdirs() && !lookupDir.isDirectory()) {
-            _log.warn("lookupTorrentName: could not create tmp dir " + lookupDir);
+            _log.warn("Lookup by name -> Cannot create temp directory\n* Directory: " + lookupDir);
             return null;
         }
         String hex = I2PSnarkUtil.toHex(infoHash);
@@ -4335,8 +4335,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             // again, so it cannot deadlock against the polling permit.
             if (!_lookupSemaphore.tryAcquire()) {
                 if (_log.shouldInfo()) {
-                    _log.info("lookupTorrentName: " + MAX_LOOKUP_CONCURRENCY
-                        + " concurrent lookups in progress, rejecting " + hex);
+                    _log.info("Lookup by name -> All " + MAX_LOOKUP_CONCURRENCY + " lookup slots busy, rejecting request" +
+                        "\n* Torrent: " + hex);
                 }
                 try { FileUtil.rmdir(lookupDir, false); } catch (Exception ignore) { /* best-effort temp dir cleanup; a leftover dir is swept by scheduleStaleLookupCleanup() */ }
                 return null;
@@ -4350,7 +4350,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     _util.setLookupPending(true);
                 }
             } catch (Exception e) {
-                _log.warn("lookupTorrentName addMagnet failed for " + hex, e);
+                _log.warn("Lookup by name -> Adding magnet failed\n* Torrent: " + hex, e);
                 FileUtil.rmdir(lookupDir, false);
                 return null;
             } finally {
@@ -4368,8 +4368,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         // Wait for metadata — bounded by semaphore to prevent thread explosion
         if (!_lookupSemaphore.tryAcquire()) {
             if (_log.shouldInfo()) {
-                _log.info("lookupTorrentName: " + MAX_LOOKUP_CONCURRENCY
-                    + " concurrent lookups in progress, rejecting " + hex);
+                _log.info("Lookup by name -> All " + MAX_LOOKUP_CONCURRENCY + " lookup slots busy, rejecting request" +
+                    "\n* Torrent: " + hex);
             }
             // Still clean up the magnet we just created
             Snark toReject = getTorrentByInfoHash(infoHash);
@@ -4440,7 +4440,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     try {
                         deleteMagnet(toDelete);
                     } catch (Exception e) {
-                        _log.warn("lookupTorrentName deleteMagnet failed for " + hex, e);
+                        _log.warn("Lookup by name -> Deleting magnet failed\n* Torrent: " + hex, e);
                     }
                     // Delete .torrent file if it was written to lookupDir (now possibly in default dir)
                     if (toDeleteName != null && toDeleteName.endsWith(".torrent")) {
@@ -4535,7 +4535,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         File tmpBase = _context.getTempDir();
         File lookupDir = new File(tmpBase, "zzzot-lookup-" + _context.random().nextLong());
         if (!lookupDir.mkdirs() && !lookupDir.isDirectory()) {
-            _log.warn("lookupTorrentInfo: could not create tmp dir " + lookupDir);
+            _log.warn("Lookup by info -> Cannot create temp directory\n* Directory: " + lookupDir);
             return null;
         }
         String hex = I2PSnarkUtil.toHex(infoHash);
@@ -4548,8 +4548,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             // Bound concurrent creations; released before the poll below re-acquires.
             if (!_lookupSemaphore.tryAcquire()) {
                 if (_log.shouldInfo()) {
-                    _log.info("lookupTorrentInfo: " + MAX_LOOKUP_CONCURRENCY
-                        + " concurrent lookups in progress, rejecting " + hex);
+                    _log.info("Lookup by info -> All " + MAX_LOOKUP_CONCURRENCY + " lookup slots busy, rejecting request" +
+                        "\n* Torrent: " + hex);
                 }
                 try { FileUtil.rmdir(lookupDir, false); } catch (Exception ignore) { /* best-effort temp dir cleanup; a leftover dir is swept by scheduleStaleLookupCleanup() */ }
                 return null;
@@ -4562,7 +4562,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     _util.setLookupPending(true);
                 }
             } catch (Exception e) {
-                _log.warn("lookupTorrentInfo addMagnet failed for " + hex, e);
+                _log.warn("Lookup by info -> Adding magnet failed\n* Torrent: " + hex, e);
                 FileUtil.rmdir(lookupDir, false);
                 return null;
             } finally {
@@ -4572,8 +4572,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         long end = System.currentTimeMillis() + timeoutMs;
         if (!_lookupSemaphore.tryAcquire()) {
             if (_log.shouldWarn()) {
-                _log.warn("lookupTorrentInfo: " + MAX_LOOKUP_CONCURRENCY
-                    + " concurrent lookups in progress, rejecting " + hex);
+                _log.warn("Lookup by info -> All " + MAX_LOOKUP_CONCURRENCY + " lookup slots busy, rejecting request" +
+                    "\n* Torrent: " + hex);
             }
             if (created) {
                 Snark toReject = getTorrentByInfoHash(infoHash);
@@ -4633,7 +4633,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 if (lookupDir.getPath().contains("zzzot-lookup"))
                     isLookup = isLookup || created;
                 if (isLookup) {
-                    try { deleteMagnet(toDelete); } catch (Exception e) { _log.warn("lookupTorrentInfo deleteMagnet failed for " + hex, e); }
+                    try { deleteMagnet(toDelete); } catch (Exception e) { _log.warn("Lookup by info -> Deleting magnet failed\n* Torrent: " + hex, e); }
                     if (toDeleteName != null && toDeleteName.endsWith(".torrent")) {
                         try {
                             File tf = new File(toDeleteName);
@@ -4797,7 +4797,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             try {
                 deleteMagnet(snark);
             } catch (Exception e) {
-                _log.warn("Stale lookup cleanup deleteMagnet failed for " + hex, e);
+                _log.warn("Stale lookup cleanup -> Deleting magnet failed\n* Torrent: " + hex, e);
             }
             // Clean up tmp dir
             try {
@@ -6049,7 +6049,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             String snarkName = snark.getName();
             if (snarkName != null && (snarkName.startsWith("Lookup [") || snarkName.contains("zzzot-lookup"))) {
                 if (_log.shouldInfo()) {
-                    _log.info("gotMetaInfo skipping persistence for lookup torrent: " + snarkName);
+                    _log.info("Skipping persistence for torrent lookup -> " +
+                              "Lookup torrent is transient, deleted after resolving\n* " + snarkName);
                 }
                 return null;
             }
@@ -6057,7 +6058,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 File base = storage.getBase();
                 if (base != null && base.getPath().contains("zzzot-lookup")) {
                     if (_log.shouldInfo()) {
-                        _log.info("gotMetaInfo skipping persistence for lookup torrent (storage in temp dir): " + snarkName);
+                        _log.info("Skipping persistence for torrent lookup -> " +
+                                  "Lookup storage is in a temp dir\n* " + snarkName);
                     }
                     return null;
                 }

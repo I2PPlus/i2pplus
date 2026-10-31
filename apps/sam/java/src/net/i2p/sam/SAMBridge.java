@@ -1194,11 +1194,11 @@ public class SAMBridge implements Runnable, ClientApp {
     public SAMSecureSessionInterface secureSession() {
         if (_secureSession == null) {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("SAMBridge.secureSession() called when secureSession is null, creating default I2CP auth");
+                _log.debug("No secure session configured for bridge -> Creating default I2CP auth");
             boolean attemptauth = Boolean.parseBoolean(i2cpProps.getProperty(SAMBridge.PROP_AUTH));
             if (attemptauth) {
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("SAMBridge.secureSession() called when authentication is enabled");
+                    _log.debug("Authentication enabled for bridge -> Creating secure session");
                 return new SAMSecureSession();
             }
         }

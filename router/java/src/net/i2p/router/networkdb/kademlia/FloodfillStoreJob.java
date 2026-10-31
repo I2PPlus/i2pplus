@@ -114,7 +114,7 @@ class FloodfillStoreJob extends StoreJob {
 
         if (sentTo == null || client == null) {
             if (shouldLog) {
-                _log.info("Skipping verify: missing sentTo or client hash for [" + keyB64 + "]");
+                _log.info("Skipping LeaseSet verify -> No successful router or client hash\n* Key: [" + keyB64 + "]");
             }
             return;
         }

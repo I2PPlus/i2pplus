@@ -166,7 +166,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
      */
     public void setSecret(String secret) {
         if (_signingKey != null && !DataHelper.eq(secret, _secret) && _log.shouldWarn()) {
-            _log.warn("SetSecret() after setSigningKey() -> Secret changed");
+            _log.warn("Setting LeaseSet secret after signing key -> Read key alpha will be wrong");
         }
         _secret = secret;
     }

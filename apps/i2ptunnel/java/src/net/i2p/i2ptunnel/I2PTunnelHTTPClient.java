@@ -1082,7 +1082,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                       usingInternalServer || isSupportedAddress(protocol);
                     if (!isValid) {
                         if (_log.shouldInfo()) {
-                            _log.info(getPrefix(requestId) + "notValid(" + host + ")");
+                            _log.info(getPrefix(requestId) + "Host is not a valid proxy target -> Dropping request\n* Host: " + host);
                         }
                         method = null;
                         destination = null;

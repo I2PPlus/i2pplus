@@ -871,7 +871,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         if ((_options != null) &&
              (I2PClient.PROP_RELIABILITY_GUARANTEED.equals(_options.getProperty(I2PClient.PROP_RELIABILITY, I2PClient.PROP_RELIABILITY_BEST_EFFORT)))) {
             if (_log.shouldWarn())
-                _log.warn("I2CP guaranteed delivery mode has been removed, using best effort.");
+                _log.warn("I2CP guaranteed delivery mode has been removed -> Using best effort");
         }
 
         boolean success = false;
@@ -928,10 +928,10 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
                     InputStream in = new BufferedInputStream(_socket.getInputStream(), BUF_SIZE);
                     _reader = new I2CPMessageReader(in, this);
                 }
-                if (_log.shouldDebug()) {_log.debug(getPrefix() + " -> Before startReading");}
+                if (_log.shouldDebug()) {_log.debug(getPrefix() + " -> Starting the reader");}
                 _reader.startReading();
             }
-            if (_log.shouldDebug()) {_log.debug(getPrefix() + " -> Before getDate");}
+            if (_log.shouldDebug()) {_log.debug(getPrefix() + " -> Requesting router date");}
             Properties auth = null;
             if ((!_context.isRouterContext()) && _options.containsKey(I2PClient.PROP_USER) && _options.containsKey(I2PClient.PROP_PW)) {
                 // Only supported by routers 0.9.11 or higher, but we don't know the version yet.
@@ -1018,7 +1018,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * @since 0.9.11 moved from {@link #connect()}
      */
     protected void waitForDate() throws InterruptedException, IOException {
-        if (_log.shouldDebug()) _log.debug(getPrefix() + "After getDate / begin waiting for a response");
+        if (_log.shouldDebug()) _log.debug(getPrefix() + " -> Waiting for SetDate response");
         int waitcount = 0;
         while (true) {
             if (waitcount++ > 30) {

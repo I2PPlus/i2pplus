@@ -428,7 +428,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     public void gotTermination(int reason, long count) {
         if (_log.shouldWarn())
             _log.warn("[SSU] Received TERMINATION block -> " + SSU2Util.terminationCodeToString(reason) +
-                      (count > 0 ? "; Count: " + count : "") + " * " + toShortString());
+                      (count > 0 ? " * Destroyed sessions: " + count : "") + "\n* " + toShortString());
         // this sets the state to FAILED
         fail();
         _transport.getEstablisher().receiveSessionDestroy(_remoteHostId, this);

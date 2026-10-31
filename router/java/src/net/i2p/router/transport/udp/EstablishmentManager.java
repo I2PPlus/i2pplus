@@ -1563,9 +1563,9 @@ public class EstablishmentManager {
                 boolean gseNotNull = hasUsefulMessage(gse);
                 if (state != null && !isPeerBanned(state)) {
                     if (_log.shouldDebug())
-                        _log.warn("[SSU] Received CORRUPT Session or Token Request after retry \n* Router: " + state, gse);
+                        _log.warn("[SSU] Received CORRUPT Session or Token Request after retry -> Router: " + state, gse);
                     else if (_log.shouldWarn())
-                        _log.warn("[SSU] Received CORRUPT Session or Token Request after retry \n* Router: " + state +
+                        _log.warn("[SSU] Received CORRUPT Session or Token Request after retry -> Router: " + state +
                         (gseNotNull ? "\n* General Security Exception: " + gse.getMessage() : ""));
                 }
                 // state called fail()
@@ -1576,9 +1576,9 @@ public class EstablishmentManager {
 
         if (_log.shouldDebug()) {
             if (isNew)
-                _log.debug("[SSU] Received NEW Session/Token Request \n* Router: " + state);
+                _log.debug("[SSU] Received NEW Session/Token Request -> Router: " + state);
             else
-                _log.debug("[SSU] Received DUPLICATE Session/Token Request \n* Router: " + state);
+                _log.debug("[SSU] Received DUPLICATE Session/Token Request -> Router: " + state);
         }
         notifyActivity();
     }
@@ -3156,7 +3156,7 @@ public class EstablishmentManager {
         _outboundStates.remove(outboundState.getRemoteHostId(), outboundState);
         if (outboundState.getState() != OB_STATE_CONFIRMED_COMPLETELY) {
             if (_log.shouldDebug())
-                _log.debug("Session expired during establishment * Lifetime: " +
+                _log.debug("Session expired during establishment -> Lifetime: " +
                            DataHelper.formatDuration(outboundState.getLifetime()) +
                            "\n* " + outboundState);
             OutNetMessage msg;

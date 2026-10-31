@@ -407,14 +407,14 @@ public class Reseeder {
                     if (_url == null || "https".equals(_url.getScheme())) {
                         if (_sproxyHost != null && _sproxyPort > 0)
                             _log.warn("Check the current proxy setting" +
-                                              " * Type: " + getDisplayString(_sproxyType) +
-                                              " * Host: " + _sproxyHost + " * Port: " + _sproxyPort);
+                                              " -> Type: " + getDisplayString(_sproxyType) +
+                                               " * Host: " + _sproxyHost + " * Port: " + _sproxyPort);
                         else
                             _log.warn("Consider enabling a proxy for https on the reseed configuration page");
                     } else {
                         if (_proxyHost != null && _proxyPort > 0)
                             _log.warn("Check the HTTP proxy setting" +
-                                              " * Host: " + _proxyHost + " * Port: " + _proxyPort);
+                                              " -> Host: " + _proxyHost + " * Port: " + _proxyPort);
                         else
                             _log.warn("Consider enabling an HTTP proxy on the reseed configuration page");
                     }

@@ -481,7 +481,7 @@ class SOCKS5Server extends SOCKSServer {
                 break;
 
             default:
-                _log.error("Unknown address type passed to sendReply() (" + Integer.toHexString(addressType) + ")!");
+                _log.error("Unknown SOCKS address type -> Not sending reply * Type: 0x" + Integer.toHexString(addressType));
             return;
         }
 

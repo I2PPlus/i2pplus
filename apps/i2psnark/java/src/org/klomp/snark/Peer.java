@@ -521,7 +521,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
             sock.setReadTimeout(timeout);
         }
         if (_log.shouldDebug())
-            _log.debug("Read the remote side's hash and peerID fully from " + toString());
+            _log.debug("Read remote peer hash and peer ID\n* " + this);
 
         if (DataHelper.eq(my_id, bs)) {
             throw new IOException("Connected to myself");

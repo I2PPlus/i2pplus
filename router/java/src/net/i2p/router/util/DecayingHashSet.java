@@ -356,7 +356,7 @@ public class DecayingHashSet extends DecayingBloomFilter {
             return;
         _lastOverCapWarnNanos = now;
         _log.warn("DecayingHashSet is over the soft cap"
-                  + " * Entries: " + getInsertedCount() + " * Soft cap: " + _maxEntries
+                  + " -> Entries: " + getInsertedCount() + " * Soft cap: " + _maxEntries
                   + "\n* Less than " + DataHelper.formatDuration(_durationMs) + " since the last decay, deferring"
                   + "\n* Memory now tracks traffic, not the cap");
     }

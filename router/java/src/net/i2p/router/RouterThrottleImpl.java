@@ -429,9 +429,9 @@ public class RouterThrottleImpl implements RouterThrottle {
                 probReject = 0; // probReject < ~5%
                 reject = false;
                 if (_log.shouldDebug()) {
-                    _log.debug("Accept avail / maxK / used " + availBps + " / " + maxKBps + " / "
-                               + used + "\n* pReject: 0 * numTunnels: " + numTunnels
-                               + " * est: " + bytesAllocated);
+                    _log.debug("Accepting a message -> Available: " + availBps + "B/s * Maximum: " + maxKBps + "KB/s" +
+                               " * In use: " + used + "B/s\n* Reject probability: 0" +
+                               " * Tunnels: " + numTunnels + " * Estimated: " + bytesAllocated + "B/s");
                 }
             } else {
                 // Configurable steepness of rejection curve (default: 10)
@@ -445,16 +445,16 @@ public class RouterThrottleImpl implements RouterThrottle {
                 reject = rand <= probReject;
                 if (reject) {
                     if (_log.shouldWarn()) {
-                        _log.warn("Reject avail / maxK / used " + availBps + " / " + maxKBps + " / " +
-                                  used + "\n* pReject: " + probReject + " * pFull: " + pctFull +
-                                  " * numTunnels: " + numTunnels +
-                                  " * rand: " + rand + " * est: " + bytesAllocated);
+                        _log.warn("Rejecting a message -> Available: " + availBps + "B/s * Maximum: " + maxKBps + "KB/s" +
+                                  " * In use: " + used + "B/s\n* Reject probability: " + probReject +
+                                  " * Capacity fraction: " + pctFull + " * Tunnels: " + numTunnels +
+                                  " * Random: " + rand + " * Estimated: " + bytesAllocated + "B/s");
                     }
                 } else if (_log.shouldDebug()) {
-                    _log.debug("Accept avail / maxK / used " + availBps + " / " + maxKBps + " / "
-                           + used + "\n* pReject: " + probReject + " * pFull: " + pctFull +
-                           " * numTunnels: " + numTunnels
-                           + " * rand: " + rand + " * est: " + bytesAllocated);
+                    _log.debug("Accepting a message -> Available: " + availBps + "B/s * Maximum: " + maxKBps + "KB/s" +
+                           " * In use: " + used + "B/s\n* Reject probability: " + probReject +
+                           " * Capacity fraction: " + pctFull + " * Tunnels: " + numTunnels +
+                           " * Random: " + rand + " * Estimated: " + bytesAllocated + "B/s");
                 }
             }
         }

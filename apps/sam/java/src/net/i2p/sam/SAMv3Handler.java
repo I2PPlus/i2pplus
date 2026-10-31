@@ -296,10 +296,10 @@ class SAMv3Handler extends SAMv1Handler
                 ((SAMv3StreamSession)streamSession).stopForwardingIncoming();
             } catch (SAMException e) {
                 if (_log.shouldWarn())
-                    _log.warn("Error while stopping forwarding connections" + "\n* Error: " + e.getMessage());
+                    _log.warn("Error while stopping forwarding connections" + " -> Error: " + e.getMessage());
             } catch (InterruptedIOException e) {
                 if (_log.shouldWarn())
-                    _log.warn("Interrupted while stopping forwarding connections" + "\n* Error: " + e.getMessage());
+                    _log.warn("Interrupted while stopping forwarding connections" + " -> Error: " + e.getMessage());
             }
         }
         die();
@@ -464,7 +464,7 @@ class SAMv3Handler extends SAMv1Handler
             ok = true;
             return writeString("SESSION STATUS RESULT=OK DESTINATION=" + dest + '\n');
         } catch (DataFormatException e) {
-            _log.error("Invalid SAM destination" + "\n* Error: " + e.getMessage());
+            _log.error("Invalid SAM destination" + " -> Error: " + e.getMessage());
             return writeString("SESSION STATUS RESULT=INVALID_KEY", e.getMessage());
         } catch (I2PSessionException e) {
             logSessionError("Failed to start SAM session", e);
@@ -745,7 +745,7 @@ class SAMv3Handler extends SAMv1Handler
                 return true;
             } catch (SAMException e) {
             if (_log.shouldDebug())
-                _log.debug("Forwarding STREAM connections failed" + "\n* Error: " + e.getMessage());
+                _log.debug("Forwarding STREAM connections failed" + " -> Error: " + e.getMessage());
             notifyStreamResult ( true, "I2P_ERROR", "Forwarding failed : " + e.getMessage() );
             }
         } catch (IOException e) { /* ignored */ }
@@ -768,13 +768,13 @@ class SAMv3Handler extends SAMv1Handler
             return true;
         } catch (InterruptedIOException e) {
             if (_log.shouldDebug())
-                _log.debug("STREAM ACCEPT failed" + "\n* Error: " + e.getMessage());
+                _log.debug("STREAM ACCEPT failed" + " -> Error: " + e.getMessage());
             try {
                 notifyStreamResult(verbose, "TIMEOUT", e.getMessage());
             } catch (IOException ioe) { /* client gone */ }
         } catch (SAMException e) {
             if (_log.shouldDebug())
-                _log.debug("STREAM ACCEPT failed" + "\n* Error: " + e.getMessage());
+                _log.debug("STREAM ACCEPT failed" + " -> Error: " + e.getMessage());
             try {
                 notifyStreamResult(verbose, "ALREADY_ACCEPTING", e.getMessage());
             } catch (IOException ioe) { /* client gone */ }

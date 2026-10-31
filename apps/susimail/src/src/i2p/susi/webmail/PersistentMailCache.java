@@ -560,7 +560,7 @@ class PersistentMailCache {
                         }
                     }
                 } catch (IOException ioe) {
-                    _log.error("Reading the message to import failed\n* File: " + f.getName(), ioe);
+                    _log.error("Reading the message to import failed -> File: " + f.getName(), ioe);
                     continue;
                 } finally {
                     if (in != null) {
@@ -588,7 +588,7 @@ class PersistentMailCache {
                     out = new FixCRLFOutputStream(gb.getOutputStream());
                     DataHelper.copy(in, out);
                 } catch (IOException ioe) {
-                    _log.error("Writing the imported message to the cache failed\n* File: " + f.getName(), ioe);
+                    _log.error("Writing the imported message to the cache failed -> File: " + f.getName(), ioe);
                     continue;
                 } finally {
                     if (in != null) {

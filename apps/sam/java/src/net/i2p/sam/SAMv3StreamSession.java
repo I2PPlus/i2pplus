@@ -803,7 +803,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
             }
             server = this.socketServer;
             this.socketServer = null;
-            if (_log.shouldDebug()) _log.debug("Nulling socketServer in stopForwardingIncoming -> Object " + this);
+            if (_log.shouldDebug()) _log.debug("Releasing socket server to stop incoming forwarding -> Object: " + this);
         }
         try {
             server.close();

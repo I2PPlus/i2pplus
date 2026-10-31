@@ -2201,7 +2201,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
           con.eventOccurred();
 
            if (_log.shouldDebug())
-               _log.debug("Connect() conDelay: " + opts.getConnectDelay());
+               _log.debug("Connecting with SYN send delayed -> Delay: " + opts.getConnectDelay() + "ms");
            if (opts.getConnectDelay() <= 0) {
                con.waitForConnect();
             } else {

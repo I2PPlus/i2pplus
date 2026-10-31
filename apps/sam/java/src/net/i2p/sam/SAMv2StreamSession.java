@@ -273,7 +273,7 @@ class SAMv2StreamSession extends SAMStreamSession {
          */
         @Override
         public void stopRunning() {
-            if (_log.shouldDebug()) _log.debug("stopRunning() invoked on socket sender " + _id);
+            if (_log.shouldDebug()) _log.debug("Stopping SAM STREAM socket sender " + _id);
 
             synchronized (runningLock) {
                 if (_stillRunning) {
@@ -299,7 +299,7 @@ class SAMv2StreamSession extends SAMStreamSession {
          */
         @Override
         public void shutDownGracefully() {
-            if (_log.shouldDebug()) _log.debug("shutDownGracefully() invoked on socket sender " + _id);
+            if (_log.shouldDebug()) _log.debug("Shutting down SAM STREAM socket sender gracefully " + _id);
             _shuttingDownGracefully = true;
         }
 

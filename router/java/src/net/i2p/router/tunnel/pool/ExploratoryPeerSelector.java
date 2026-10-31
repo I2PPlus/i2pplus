@@ -131,8 +131,8 @@ import net.i2p.util.SystemVersion;
         _lastAllGhostSelection.remove();
         if (ghosted != null && rv != null && rv.isEmpty()) {
             if (log.shouldDebug()) {
-                log.debug("Every exploratory peer drawn was a ghost * Count: " + ghosted.size() +
-                          " -> Retrying without them");
+                log.debug("Every exploratory peer drawn was a ghost -> Retrying without them" +
+                          "\n* Ghosts retried: " + ghosted.size());
             }
             rv = selectPeersInternal(settings, length, includeCooldownsPass, ghosted);
             if (rv == null) {
@@ -200,7 +200,7 @@ import net.i2p.util.SystemVersion;
             int cooldownExcluded = addFreshCooldownExclusions(_exploratoryCooldowns, cooldownCutoff, exclude);
             cooldownExcluded += addFreshCooldownExclusions(_peerCooldowns, cooldownCutoff, exclude);
             if (log.shouldDebug())
-                log.debug("Exploratory selection cooldowns * Ours: " + _exploratoryCooldowns.size() +
+                log.debug("Exploratory selection cooldowns -> Ours: " + _exploratoryCooldowns.size() +
                           " * Shared: " + _peerCooldowns.size() +
                           " * Excluded: " + cooldownExcluded +
                           " * Thread: " + Thread.currentThread().getName());

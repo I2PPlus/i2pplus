@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import net.i2p.data.DataHelper;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Addresses;
 import net.i2p.util.Log;
@@ -179,8 +180,9 @@ class UPnPManager {
                     else
                         _scannerCallback.afterScan();
                 }
-                if (_log.shouldDebug())
-                    _log.info("UPnP runPlugin took " + (_context.clock().now() - b));
+                if (_log.shouldInfo())
+                    _log.info("UPnP plug-in scan finished -> Took: " +
+                              DataHelper.formatDuration(_context.clock().now() - b));
             } catch (RuntimeException e) {
                 // NPE in UPnP (ticket #728), can't let it bring us down
                 if (!_errorLogged) {

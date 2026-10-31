@@ -315,31 +315,31 @@ class MailPart {
             // end of parts with this boundary
             c = in.read();
             if (c != '-' && _log.shouldDebug()) {
-                _log.debug("MIME boundary trailer unexpected character\n* Expected: a second dash * Read: " +
+                _log.debug("MIME boundary trailer unexpected character -> Expected: a second dash * Read: " +
                            charText(c));
             }
             if (c != '-') {return true;}
             c = in.read();
             if (c == -1) {return true;}
             if (c != '\r' && _log.shouldDebug()) {
-                _log.debug("MIME boundary trailer unexpected character\n* Expected: a carriage return * Read: " +
+                _log.debug("MIME boundary trailer unexpected character -> Expected: a carriage return * Read: " +
                            charText(c));
             }
             if (c != '\r') {return true;}
             c = in.read();
             if (c != '\n' && _log.shouldDebug()) {
-                _log.debug("MIME boundary trailer unexpected character\n* Expected: a line feed * Read: " +
+                _log.debug("MIME boundary trailer unexpected character -> Expected: a line feed * Read: " +
                            charText(c));
             }
             return true;
         } else if (c == '\r') {
             c = in.read();
             if (c != '\n' && _log.shouldDebug()) {
-                _log.debug("MIME boundary trailer unexpected character\n* Expected: a line feed * Read: " +
+                _log.debug("MIME boundary trailer unexpected character -> Expected: a line feed * Read: " +
                            charText(c));
             }
         } else if (_log.shouldDebug()) {
-            _log.debug("MIME boundary trailer unexpected character\n* Expected: a dash or a carriage return * Read: " +
+            _log.debug("MIME boundary trailer unexpected character -> Expected: a dash or a carriage return * Read: " +
                        charText(c));
         }
         return c == -1;
@@ -395,7 +395,7 @@ class MailPart {
                 if (cos != null) {
                     positions.append(" * Written up to: ").append(cos.getWritten());
                 }
-                _log.debug("Decoding the message part failed\n* Offset: " + offset + positions + " * Error: " + ioe);
+                _log.debug("Decoding the message part failed -> Offset: " + offset + positions + " * Error: " + ioe);
             }
             throw ioe;
         } finally {
@@ -425,7 +425,7 @@ class MailPart {
             DataHelper.copy(lin, out);
         } catch (IOException ioe) {
             if (_log.shouldDebug()) {
-                _log.debug("Copying the raw message part failed\n* Error: " + ioe);
+                _log.debug("Copying the raw message part failed -> Error: " + ioe);
             }
             throw ioe;
         } finally {

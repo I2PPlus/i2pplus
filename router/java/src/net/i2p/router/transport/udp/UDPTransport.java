@@ -1773,7 +1773,7 @@ public class UDPTransport extends TransportImpl {
                                                _context.getBooleanProperty(PROP_LAPTOP_MODE),
                                                lastChanged, now,
                                                _context.router().getUptime())) {
-                    _log.logAlways(Log.WARN, "IP changed; restarting with a new identity and port.");
+                    _log.logAlways(Log.WARN, "IP changed -> Restarting with a new identity and port");
                     // this removes the UDP port config
                     _context.router().killKeys();
                     // do we need WrapperManager.signalStopped() like in ConfigServiceHandler ???
@@ -2147,7 +2147,7 @@ public class UDPTransport extends TransportImpl {
      */
     boolean addRemotePeerState(PeerState peer) {
         if (_log.shouldDebug())
-            _log.debug("Adding remote peer state\n* Peer: " + peer);
+            _log.debug("Adding remote peer state -> Peer: " + peer);
         synchronized(_addDropLock) {
             return locked_addRemotePeerState(peer);
         }

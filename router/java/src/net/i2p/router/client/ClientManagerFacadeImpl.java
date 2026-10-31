@@ -240,7 +240,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     @Override
     public void requestLeaseSet(Destination dest, LeaseSet set, long timeout, Job onCreateJob, Job onFailedJob) {
         if (_manager != null) {_manager.requestLeaseSet(dest, set, timeout, onCreateJob, onFailedJob);}
-        else {_log.error("Null manager on requestLeaseSet!");}
+        else {_log.error("No client manager -> Cannot request a LeaseSet");}
     }
 
     /**
@@ -266,7 +266,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     @Override
     public void reportAbuse(Destination dest, String reason, int severity) {
         if (_manager != null) {_manager.reportAbuse(dest, reason, severity);}
-        else if (_log.shouldError()) {_log.error("Null manager on reportAbuse!");}
+        else if (_log.shouldError()) {_log.error("No client manager -> Cannot report abuse");}
     }
 
     /**
@@ -277,7 +277,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
      */
     public boolean isLocal(Destination dest) {
         if (_manager != null) {return _manager.isLocal(dest);}
-        else if (_log.shouldDebug()) {_log.debug("Null manager on isLocal(dest)!");}
+        else if (_log.shouldDebug()) {_log.debug("No client manager -> Destination is not local");}
         return false;
     }
 
@@ -290,7 +290,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     @Override
     public boolean isLocal(Hash destHash) {
         if (_manager != null) {return _manager.isLocal(destHash);}
-        else if (_log.shouldDebug()) {_log.debug("Null manager on isLocal(hash)!");}
+        else if (_log.shouldDebug()) {_log.debug("No client manager -> Destination is not local");}
         return false;
     }
 
@@ -314,11 +314,11 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     @Override
     public void messageDeliveryStatusUpdate(Destination fromDest, MessageId id, long messageNonce, int status) {
         if (_manager != null) {_manager.messageDeliveryStatusUpdate(fromDest, id, messageNonce, status);}
-        else if (_log.shouldError()) {_log.error("Null manager on messageDeliveryStatusUpdate!");}
+        else if (_log.shouldError()) {_log.error("No client manager -> Dropping delivery status update");}
     }
     public void messageReceived(ClientMessage msg) {
         if (_manager != null) {_manager.messageReceived(msg);}
-        else if (_log.shouldError()) {_log.error("Null manager on messageReceived!");}
+        else if (_log.shouldError()) {_log.error("No client manager -> Dropping client message");}
     }
 
     /**
@@ -328,7 +328,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
      */
     public SessionConfig getClientSessionConfig(Destination dest) {
         if (_manager != null) {return _manager.getClientSessionConfig(dest);}
-        else if (_log.shouldError()) {_log.error("Null manager on getClientSessionConfig!");}
+        else if (_log.shouldError()) {_log.error("No client manager -> Returning no session config");}
         return null;
     }
 
@@ -340,7 +340,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     @Override
     public SessionKeyManager getClientSessionKeyManager(Hash dest) {
         if (_manager != null) {return _manager.getClientSessionKeyManager(dest);}
-        else if (_log.shouldError()) {_log.error("Null manager on getClientSessionKeyManager!");}
+        else if (_log.shouldError()) {_log.error("No client manager -> Returning no session key manager");}
         return null;
     }
 

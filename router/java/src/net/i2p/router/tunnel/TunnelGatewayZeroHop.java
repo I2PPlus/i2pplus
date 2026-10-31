@@ -56,7 +56,7 @@ class TunnelGatewayZeroHop extends TunnelGateway {
                 if (_log.shouldDebug())
                     _log.debug("Unable to convert to standard message class at zero-hop inbound gateway", ime);
                 else if (_log.shouldInfo())
-                    _log.info("Unable to convert to standard message class at zero-hop inbound gateway \n* Reason: " + ime.getMessage());
+                    _log.info("Unable to convert to standard message class at zero-hop inbound gateway -> Reason: " + ime.getMessage());
                 return false;
             }
         }

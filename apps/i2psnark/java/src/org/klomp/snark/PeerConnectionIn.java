@@ -208,7 +208,8 @@ class PeerConnectionIn implements Runnable {
                     case Message.HAVE:
                         piece = din.readInt();
                         if (_log.shouldDebug()) {
-                            _log.debug("Received havePiece(" + piece + ") from [" + peer + "]");
+                            _log.debug("Received a Have message -> Piece: " + piece +
+                                       " * Peer: [" + peer + "]");
                         }
                         ps.haveMessage(piece);
                         break;

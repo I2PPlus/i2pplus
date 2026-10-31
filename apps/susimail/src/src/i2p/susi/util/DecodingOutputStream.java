@@ -103,7 +103,7 @@ public class DecodingOutputStream extends OutputStream {
         try {
             result = _dc.decode(_bb, _cb, endOfInput);
         } catch (IllegalStateException ise) {
-            _log.error("Decoding the message failed\n* End of input: " + (endOfInput ? "Yes" : "No"), ise);
+            _log.error("Decoding the message failed -> End of input: " + (endOfInput ? "Yes" : "No"), ise);
             result = null;
         }
         _bb.compact();

@@ -640,7 +640,7 @@ public class BanLogger {
             );
         } catch (ClassCastException e) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Cannot schedule ban log lookup: netDb is not a KademliaNetworkDatabaseFacade", e);
+                _log.warn("Cannot schedule ban log lookup -> NetDb is not a KademliaNetworkDatabaseFacade", e);
         }
     }
 

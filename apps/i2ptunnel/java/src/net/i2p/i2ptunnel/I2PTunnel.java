@@ -1563,7 +1563,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             if (args[argindex].equalsIgnoreCase("all")) {
                 boolean error = false;
                 if (tasks.isEmpty() && _log.shouldInfo())
-                    _log.info(getPrefix() + " runClose(all) no tasks");
+                    _log.info(getPrefix() + " -> Closing all tunnels, no tasks");
                 for (I2PTunnelTask t : tasks) {
                     if (!closetask(t, mode)) {
                         notifyEvent("closeResult", "error");

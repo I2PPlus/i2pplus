@@ -379,16 +379,16 @@ public class HeaderLine extends Encoding {
 							lastCharWasQuoted = true;
 							continue;
 						} catch (IOException e1) {
-							_log.error("Decoding the encoded-word failed\n* Encoding: " + enc + " * Error: " + e1.getMessage());
+							_log.error("Decoding the encoded-word failed -> Encoding: " + enc + " * Error: " + e1.getMessage());
 						} catch (RuntimeException e1) {
-							_log.error("Decoding the encoded-word failed\n* Encoding: " + enc, e1);
+							_log.error("Decoding the encoded-word failed -> Encoding: " + enc, e1);
 						}
 					} else {
 						// can't happen
-						if (_log.shouldDebug()) _log.debug("Encoded-word decoder not found\n* Encoding: " + enc);
+						if (_log.shouldDebug()) _log.debug("Encoded-word decoder not found -> Encoding: " + enc);
 					}  // e != null
 				} else {
-					if (_log.shouldDebug()) _log.debug("Encoded-word encoding unknown\n* Found: " + (char) encodedWord[f2+1]);
+					if (_log.shouldDebug()) _log.debug("Encoded-word encoding unknown -> Found: " + (char) encodedWord[f2+1]);
 				}  // enc != null
 			}  // c == '='
 			else if( c == '\r' ) {
@@ -399,7 +399,7 @@ public class HeaderLine extends Encoding {
 					linebreak = true;
 				} else {
 					// pushback?
-					if (_log.shouldDebug()) _log.debug("Header line fold is not a line feed\n* Found: " + (char) c);
+					if (_log.shouldDebug()) _log.debug("Header line fold is not a line feed -> Found: " + (char) c);
 				}
 			}
 			// swallow whitespace here if lastCharWasQuoted

@@ -812,7 +812,7 @@ class ClientManager {
     public FloodfillNetworkDatabaseFacade getClientFloodfillNetworkDatabaseFacade(Hash destHash) {
         if (destHash != null) {
             if (_log.shouldLog(Log.DEBUG)) {
-                _log.debug("Getting subDb for destination hash [" + destHash.toBase32().substring(0,8) + "]");
+                _log.debug("Looking up client floodfill NetDb -> Destination: [" + destHash.toBase32().substring(0,8) + "]");
             }
             ClientConnectionRunner runner = getRunner(destHash);
             if (runner == null) {

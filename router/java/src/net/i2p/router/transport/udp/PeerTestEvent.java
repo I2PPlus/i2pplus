@@ -88,7 +88,7 @@ import net.i2p.util.SimpleTimer2;
                 locked_runTest(false);
             } else {
                 if (_log.shouldDebug())
-                    _log.debug("PeerTestEvent timeReached(), no test run" +
+                    _log.debug("Peer test timer fired -> No test run" +
                               "\n* Last v4 test: " + new Date(_lastTested.get()) +
                               "\n* Last v6 test: " + new Date(_lastTestedV6.get()));
             }

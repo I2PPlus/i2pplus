@@ -337,7 +337,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
             I2PTunnel t = getTunnel();
             if (t == null) {
                 if (_log.shouldWarn()) {
-                    _log.warn("Tunnel is null in verifySocketManager");
+                    _log.warn("Tunnel is null -> Socket manager cannot be verified");
                 }
                 throw new IllegalStateException("I2PTunnelClientBase not properly initialized: tunnel is null");
             }
@@ -628,7 +628,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     protected final InetAddress getListenHost(Logging l) {
         I2PTunnel t = getTunnel();
         if (t == null) {
-            if (_log.shouldError()) _log.error("Tunnel is null in getListenHost");
+            if (_log.shouldError()) _log.error("Tunnel is null -> No listen host to return");
             l.log("✖ Internal error: tunnel not initialized");
             notifyEvent("openBaseClientResult", "error");
             return null;

@@ -2253,7 +2253,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         String leaseBase32 = leaseSet.getHash().toBase32();
         if (_log.shouldWarn()) {
             _log.warn("Invalid NetDbStore attempt! Key does not match LeaseSet destination!" +
-                      "\n* Key: [" + keyBase32.substring(0, 8) + "]" +
+                      " -> Key: [" + keyBase32.substring(0, 8) + "]" +
                       "\n* LeaseSet: [" + leaseBase32.substring(0, 8) + "]");
         }
         return "Key does not match LeaseSet destination - " + keyBase32;

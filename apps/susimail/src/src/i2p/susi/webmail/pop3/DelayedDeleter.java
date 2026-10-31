@@ -96,14 +96,14 @@ class DelayedDeleter {
                 long idle = System.currentTimeMillis() - mailbox.getLastActivity();
                 if (idle >= MIN_IDLE) {
                     if (_log.shouldDebug()) {
-                        _log.debug("Deleting the queued messages\n* Queued: " + toDelete.size() +
+                        _log.debug("Deleting the queued messages -> Queued: " + toDelete.size() +
                                    " * Idle: " + DataHelper.formatDuration(idle));
                     }
                     Thread t = new Deleter();
                     isDeleting = true;
                     t.start();
                 } else if (_log.shouldDebug()) {
-                    _log.debug("Not deleting the queued messages yet\n* Queued: " + toDelete.size() +
+                    _log.debug("Not deleting the queued messages yet -> Queued: " + toDelete.size() +
                                " * Idle: " + DataHelper.formatDuration(idle));
                 }
             } else if (_log.shouldDebug()) {_log.debug("Not deleting any messages -> None queued");}
@@ -122,7 +122,7 @@ class DelayedDeleter {
                 mailbox.deletePending(false);
                 int delSize = origSize - toDelete.size();
                 if (_log.shouldDebug()) {
-                    _log.debug("Deleted the queued messages\n* Deleted: " + delSize + " * Queued: " + origSize);
+                    _log.debug("Deleted the queued messages -> Deleted: " + delSize + " * Queued: " + origSize);
                 }
             } finally {
                 isDeleting = false;

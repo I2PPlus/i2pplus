@@ -96,7 +96,7 @@ class FloodfillMonitorJob extends JobImpl {
                     routerInfoFlood.getTiming().setStartAfter(getContext().clock().now() + 5*60*1000L);
                     getContext().jobQueue().addJob(routerInfoFlood);
                     if (_log.shouldDebug()) {
-                        _log.logAlways(Log.DEBUG, "Deferred our FloodfillRouterInfoFloodJob run because of low uptime.");
+                        _log.logAlways(Log.DEBUG, "Deferred the FloodfillRouterInfoFloodJob run -> Low uptime");
                     }
                 }
             } else {

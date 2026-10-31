@@ -869,7 +869,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             VersionAvailable newVA = new VersionAvailable(newVersion, minVersion, method, updateSources);
             Version old = _installed.get(ui);
             if (_log.shouldInfo()) {
-                _log.info("notifyVersionAvailable " + ui + ' ' + newVA + " old: " + old);
+                _log.info("New version available -> Item: " + ui + " * New: " + newVA + " * Installed: " + old);
             }
             if (old != null && old.compareTo(newVA) >= 0) {
                 if (_log.shouldWarn()) {_log.warn(ui.toString() + ' ' + old + " already installed");}
@@ -997,7 +997,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         UpdateItem ui = new UpdateItem(type, id);
         Version old = _installed.get(ui);
         VersionAvailable newVA = new VersionAvailable(newVersion, message);
-        if (_log.shouldInfo()) {_log.info("notifyVersionConstraint " + ui + ' ' + newVA + " old: " + old);}
+        if (_log.shouldInfo()) {_log.info("Version constraint announced -> Item: " + ui + " * New: " + newVA + " * Installed: " + old);}
         if (old != null && old.compareTo(newVA) >= 0) {
             if (_log.shouldWarn()) {_log.warn(ui.toString() + ' ' + old + " already installed");}
             return;

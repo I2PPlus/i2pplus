@@ -547,7 +547,7 @@ class MessageOutputStream extends OutputStream {
         ByteArray ba = null;
         long sendMs = -1;
         if (_log.shouldDebug() && _valid > 0) {
-            _log.debug("clearData() clearing " + _valid + " bytes");
+            _log.debug("Discarding " + _valid + " unsent bytes from message buffer");
         }
         synchronized (_dataLock) {
             // flush any data, but don't wait for it
@@ -618,7 +618,7 @@ class MessageOutputStream extends OutputStream {
         long sendMs = -1;
 
         if (_log.shouldDebug() && _valid > 0) {
-            _log.debug("flushAvailable() flushing " + _valid + " bytes");
+            _log.debug("Flushing " + _valid + " message bytes to peer");
         }
 
         synchronized (_dataLock) {

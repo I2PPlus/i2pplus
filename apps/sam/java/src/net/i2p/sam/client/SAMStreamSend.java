@@ -251,7 +251,7 @@ public class SAMStreamSend {
                 if (ok == null)
                     throw new IOException("2nd handshake failed");
                 if (_log.shouldDebug())
-                    _log.debug("Handshake2 complete.");
+                    _log.debug("Handshake2 complete");
             }
             if (mode == DG || mode == RAW)
                 out = null;

@@ -696,7 +696,8 @@ public final class ECIESAEADEngine {
                 } else {
                     failureType = "Unknown cryptographic error";
                 }
-                _log.debug("NewSession decryption failure -> " + failureType + " -> State at failure: " + state, gse);
+                _log.debug("NewSession decryption failure -> " + failureType +
+                           "\n* State at failure: " + state, gse);
             }
             // restore original data for subsequent ElG attempt
             System.arraycopy(xx, 0, data, 0, KEYLEN - 1);
@@ -1238,14 +1239,14 @@ public final class ECIESAEADEngine {
         }
         if (priv == null) {
             if (_log.shouldDebug())
-                _log.debug("Encrypting as Null \n* Target: " + target);
+                _log.debug("Encrypting as Null -> Target: " + target);
             // N-in-IK, used for anonymous garlic messages
             return encryptNewSession(cloves, target);
         }
         RatchetEntry re = keyManager.consumeNextAvailableTag(target);
         if (re == null) {
             if (_log.shouldDebug())
-                _log.debug("Encrypting as NewSession \n* Target: " + target);
+                _log.debug("Encrypting as NewSession -> Target: " + target);
             return encryptNewSession(cloves, target, to, priv, keyManager, callback);
         }
 
@@ -1259,17 +1260,17 @@ public final class ECIESAEADEngine {
                 return null;
             }
             if (_log.shouldDebug())
-                _log.debug("Encrypting as NewSession Reply \n* Target: " + target + "\n* Tag: " + re.tag.toBase64());
+                _log.debug("Encrypting as NewSession Reply -> Target: " + target + "\n* Tag: " + re.tag.toBase64());
             return encryptNewSessionReply(cloves, target, state, re.tag, keyManager, callback);
         }
         if (_log.shouldDebug())
-            _log.debug("Encrypting as ExistingSession \n* Target: " + target + "\n* Key: " + re.key + "\n* Tag: " + re.tag.toBase64());
+            _log.debug("Encrypting as ExistingSession -> Target: " + target + "\n* Key: " + re.key + "\n* Tag: " + re.tag.toBase64());
         byte[] rv = encryptExistingSession(cloves, target, re, callback, keyManager);
         if (rv == null) {
             if (_log.shouldWarn())
                 _log.warn("ECIES ExistingSession encryption failure");
         } else if (_log.shouldDebug())
-            _log.debug("Encrypting as ExistingSession\n* To: " + target + "\n* Key: " + re.key +
+            _log.debug("Encrypting as ExistingSession -> To: " + target + "\n* Key: " + re.key +
                        "\n* Tag: " + re.tag.toBase64() +
                        (re.nextForwardKey != null ? "\n* Forward key: " + re.nextForwardKey : "") +
                        (re.nextReverseKey != null ? "\n* Reverse key: " + re.nextReverseKey : "") +

@@ -201,7 +201,7 @@ class NTCPSendFinisher {
             executor = _executor;
         }
         if (executor == null || executor.isShutdown() || executor.isTerminated()) {
-            _log.warn("NTCP Send Finisher not running, invoking afterSend inline");
+            _log.warn("NTCP Send Finisher not running -> Running send completion inline");
             _transport.afterSend(msg, true, false, msg.getSendTime());
             return;
         }
@@ -210,7 +210,7 @@ class NTCPSendFinisher {
             _context.statManager().addRateData("ntcp.sendFinisher.queueSize", executor.getQueue().size());
         } catch (RejectedExecutionException ree) {
             // Pool saturated or shutdown, fallback to caller thread for backpressure
-            _log.warn("NTCP Send Finisher saturated, running afterSend inline");
+            _log.warn("NTCP Send Finisher saturated -> Running send completion inline");
             _transport.afterSend(msg, true, false, msg.getSendTime());
         }
     }

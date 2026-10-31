@@ -881,7 +881,8 @@ class EventPumper implements Runnable {
         Object att = key.attachment();
         if (!(att instanceof ServerSocketChannel)) {
             if (_log.shouldWarn()) {
-                _log.warn("Invalid attachment in processAccept: " + (att != null ? att.getClass().getSimpleName() : "null"));
+                _log.warn("Invalid attachment on accept key -> Cancelling key * Attachment: " +
+                          (att != null ? att.getClass().getSimpleName() : "null"));
             }
             key.cancel();
             return;
@@ -1174,7 +1175,8 @@ class EventPumper implements Runnable {
         Object att = key.attachment();
         if (!(att instanceof NTCPConnection)) {
             if (_log.shouldWarn()) {
-                _log.warn("Invalid attachment in processConnect: " + (att != null ? att.getClass().getSimpleName() : "null"));
+                _log.warn("Invalid attachment on connect key -> Cancelling key * Attachment: " +
+                          (att != null ? att.getClass().getSimpleName() : "null"));
             }
             key.cancel();
             return;
@@ -1291,7 +1293,8 @@ class EventPumper implements Runnable {
         Object att = key.attachment();
         if (!(att instanceof NTCPConnection)) {
             if (_log.shouldWarn()) {
-                _log.warn("Invalid attachment in processRead: " + (att != null ? att.getClass().getSimpleName() : "null"));
+                _log.warn("Invalid attachment on read key -> Cancelling key * Attachment: " +
+                          (att != null ? att.getClass().getSimpleName() : "null"));
             }
             key.cancel();
             return;
@@ -1439,12 +1442,13 @@ class EventPumper implements Runnable {
         // Close connection if multiple zero reads within a short window
         if (zeroReadCount >= 3 && now - con.getLastZeroReadTime() <= 1000) {
             _context.statManager().addRateData("ntcp.zeroReadDrop", 1);
-            if (shouldInfo) _log.info("Fail safe zero read close " + con);
+            if (shouldInfo) _log.info(con + " -> Closing after repeated zero reads");
             con.close();
         } else {
             _context.statManager().addRateData("ntcp.zeroRead", zeroReadCount);
             if (shouldDebug) {
-                _log.debug("Nothing to read for " + con + " -> Remaining interested (Count: " + zeroReadCount + ")");
+                _log.debug(con + " -> Nothing to read, keeping the connection interested" +
+                           " * Zero reads: " + zeroReadCount);
             }
         }
     }
@@ -1464,13 +1468,15 @@ class EventPumper implements Runnable {
         if (ipStr != null) {
             count = _blockedIPs.increment(ipStr);
             if (_log.shouldInfo()) {
-                _log.info(reason + " on Inbound connection before receiving any data, blocking IP: "
-                          + ipStr + (count > 1 ? " (Count: " + count + ")" : ""));
+                _log.info(reason + " on an Inbound connection before any data" +
+                          " -> Blocking the IP: " + ipStr +
+                          (count > 1 ? " * Prior blocks: " + count : ""));
             }
         } else {
             count = 1;
             if (_log.shouldInfo()) {
-                _log.info(reason + " on Inbound connection before receiving any data: " + con);
+                _log.info(reason + " on an Inbound connection before any data" +
+                          " -> Closing the connection\n* " + con);
             }
         }
         _context.statManager().addRateData("ntcp.dropInboundNoMessage", count);
@@ -1516,7 +1522,8 @@ class EventPumper implements Runnable {
         Object att = key.attachment();
         if (!(att instanceof NTCPConnection)) {
             if (_log.shouldWarn()) {
-                _log.warn("Invalid attachment in processWrite: " + (att != null ? att.getClass().getSimpleName() : "null"));
+                _log.warn("Invalid attachment on write key -> Cancelling key * Attachment: " +
+                          (att != null ? att.getClass().getSimpleName() : "null"));
             }
             key.cancel();
             return;

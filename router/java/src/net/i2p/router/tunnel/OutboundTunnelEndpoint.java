@@ -96,7 +96,8 @@ class OutboundTunnelEndpoint {
             Hash h = _config.getReceiveFrom();
             if (h != null) {
                 if (_log.shouldWarn())
-                    _log.warn("Tunnel from " + toString() + " failed -> Blaming [" + h.toBase64().substring(0,6) + "] -> 50%");
+                    _log.warn(toString() + " -> Blaming the previous hop for the failed tunnel" +
+                              " * Penalty: 50% * Peer: [" + h.toBase64().substring(0,6) + "]");
                 _context.profileManager().tunnelFailed(h, 50);
             }
         }

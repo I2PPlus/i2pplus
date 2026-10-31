@@ -126,11 +126,11 @@ public class GeoIPv6 {
             }
         } catch (IOException ioe) {
             if (log.shouldError())
-                log.error("Error reading the geoFile", ioe);
+                log.error("Error reading GeoIPv6 database file", ioe);
         }
 
         if (log.shouldInfo())
-            log.info("GeoIPv6 processing finished, time: " + (System.currentTimeMillis() - start));
+            log.info("GeoIPv6 processing finished -> Took: " + DataHelper.formatDuration(System.currentTimeMillis() - start));
         return rv;
     }
 

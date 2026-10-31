@@ -110,7 +110,7 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
 
         if (_log.shouldDebug()) {
             long closeSentOn = con.getCloseSentOn();
-            _log.debug("Write data called * Size: " + size + " * " + (doSend ? "Sending" : "Not sending") +
+            _log.debug("Write data called -> Size: " + size + " * " + (doSend ? "Sending" : "Not sending") +
                        " * Output " + (con.getOutputStream().getClosed() ? "closed" : "open") +
                        " * Close sent: " + (closeSentOn > 0
                                             ? DataHelper.formatDuration(_context.clock().now() - closeSentOn)

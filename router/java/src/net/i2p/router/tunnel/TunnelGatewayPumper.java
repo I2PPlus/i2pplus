@@ -333,7 +333,7 @@ class TunnelGatewayPumper implements Runnable {
                 _inQueue.remove(gw);
                 _context.statManager().addRateData("tunnel.pumperQueueFull", 1);
                 if (_log.shouldWarn())
-                    _log.warn("Pumper queue full after " + OFFER_TIMEOUT_MS + "ms, gateway dropped: " + gw);
+                    _log.warn(gw + " -> Pumper queue full after " + OFFER_TIMEOUT_MS + "ms, dropping");
             }
         } catch (InterruptedException ie) {
             _inQueue.remove(gw);
@@ -388,7 +388,7 @@ class TunnelGatewayPumper implements Runnable {
                 if (gw != null) {
                     _log.error("Error processing gateway: " + gw, e);
                 } else {
-                    _log.error("Error processing gateway, gateway is null", e);
+                    _log.error("Error processing gateway -> Gateway is null", e);
                 }
             }
         }

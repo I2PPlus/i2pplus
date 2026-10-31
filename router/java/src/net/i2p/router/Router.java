@@ -642,7 +642,7 @@ public class Router implements RouterClock.ClockShiftListener {
             _routerInfo = info;
         } finally {_routerInfoLock.writeLock().unlock();}
         log = _log;
-        if (log != null && log.shouldInfo()) {log.info("setRouterInfo() : " + info);}
+        if (log != null && log.shouldInfo()) {log.info("Storing our RouterInfo\n* " + info);}
         _context.jobQueue().addJob(new PersistRouterInfoJob(_context));
     }
 
@@ -693,11 +693,11 @@ public class Router implements RouterClock.ClockShiftListener {
         /**
          * Log that the SSDP scan is about to begin.
          */
-        public void beforeScan() {_log.info("SSDP beforeScan()");}
+        public void beforeScan() {_log.info("SSDP scan starting");}
         /**
          * Log that the SSDP scan has finished.
          */
-        public void afterScan() {_log.info("SSDP afterScan()");}
+        public void afterScan() {_log.info("SSDP scan finished");}
     }
 
     /**

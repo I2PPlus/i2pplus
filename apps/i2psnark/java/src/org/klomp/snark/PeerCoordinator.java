@@ -1412,11 +1412,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                     boolean hasPartial = partialIds.contains(Integer.valueOf(p.getId()));
                     if (hasPartial && _log.shouldDebug()) {
                         _log.debug(
-                                "wantPiece() skipping partial for ["
-                                        + peer
-                                        + "] [Piece "
-                                        + p.getId()
-                                        + "]");
+                                "Skipping a piece with an existing partial request" +
+                                        " -> Peer: [" + peer + "] * Piece: " + p.getId());
                     }
                     if (!hasPartial) {
                         piece = p;

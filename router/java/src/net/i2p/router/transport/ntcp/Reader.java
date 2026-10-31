@@ -311,12 +311,12 @@ public class Reader {
             try {
                 con.recvEncryptedI2NP(buf);
             } catch (NullPointerException npe) {
-                _log.error("NPE in recvEncryptedI2NP() for connection: " + con, npe);
+                _log.error("Null pointer decrypting an I2NP message -> Closing connection\n* " + con, npe);
                 con.close();
                 if (buf != null) EventPumper.releaseBuf(buf);
                 return;
             } catch (IllegalStateException ise) {
-                _log.warn("IllegalState in recvEncryptedI2NP() for connection: " + con, ise);
+                _log.warn("Illegal state decrypting an I2NP message -> Closing connection\n* " + con, ise);
                 con.close();
                 if (buf != null) EventPumper.releaseBuf(buf);
                 return;

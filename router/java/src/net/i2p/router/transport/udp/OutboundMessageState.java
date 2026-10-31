@@ -535,7 +535,7 @@ class OutboundMessageState implements CDPQEntry {
                 _log.debug("Pushed " + rv + " fragments for " + toString());
         } else {
             if (_log.shouldDebug())
-                _log.debug("Nothing pushed??? allowedSendBytes=" + _allowedSendBytes + " for " + toString());
+                _log.debug("No fragments pushed -> Window allowed " + _allowedSendBytes + " bytes\n* " + this);
         }
         _allowedSendBytes = 0;
         return rv;

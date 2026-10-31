@@ -139,7 +139,7 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
         // dedup
         if (lsnrs.size() > 1) lsnrs = new HashSet<>(lsnrs);
         for (I2PSessionMuxedListener l : lsnrs) {
-            if (_log.shouldInfo()) _log.info("Sending errorOccurred() \"" + message + "\" to " + l);
+            if (_log.shouldInfo()) _log.info("Sending session error \"" + message + "\" to " + l);
             l.errorOccurred(session, message, error);
         }
     }
@@ -155,7 +155,7 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
      */
     public void addListener(I2PSessionListener l, int proto, int port) {
         if (proto < 0 || proto > 254 || port < 0 || port > 65535) throw new IllegalArgumentException();
-        if (_log.shouldInfo()) _log.info("Old addListener() " + l + ' ' + proto + ' ' + port);
+        if (_log.shouldInfo()) _log.info("Adding a listener that does not see ports: " + l + ' ' + proto + ' ' + port);
         I2PSessionListener old = _listeners.put(key(proto, port), new NoPortsListener(l));
         if (old != null && _log.shouldWarn()) _log.warn("Listener " + l + " replaces " + old + " for proto: " + proto + " port: " + port);
     }
@@ -170,7 +170,7 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
      */
     public void addMuxedListener(I2PSessionMuxedListener l, int proto, int port) {
         if (proto < 0 || proto > 254 || port < 0 || port > 65535) throw new IllegalArgumentException();
-        if (_log.shouldInfo()) _log.info("addMuxedListener() " + l + ' ' + proto + ' ' + port);
+        if (_log.shouldInfo()) _log.info("Adding a listener: " + l + ' ' + proto + ' ' + port);
         I2PSessionListener old = _listeners.put(key(proto, port), l);
         if (old != null && _log.shouldWarn()) _log.warn("Listener " + l + " replaces " + old + " for proto: " + proto + " port: " + port);
     }
@@ -183,7 +183,7 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
      */
     public void removeListener(int proto, int port) {
         if (proto < 0 || proto > 254 || port < 0 || port > 65535) throw new IllegalArgumentException();
-        if (_log.shouldInfo()) _log.info("removeListener() " + proto + ' ' + port);
+        if (_log.shouldInfo()) _log.info("Removing listener for proto: " + proto + " port: " + port);
         _listeners.remove(key(proto, port));
     }
 

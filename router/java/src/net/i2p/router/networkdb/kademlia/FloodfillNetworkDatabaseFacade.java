@@ -933,12 +933,12 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                 long last = _lastClientSubDbWarn;
                 if (now - last > CLIENT_SUBDB_WARN_INTERVAL && _log.shouldDebug()) {
                     _lastClientSubDbWarn = now;
-                    _log.debug("Client subDb search delegated to main NetDb (no fromLocalDest) -> Rate-limited...");
+                    _log.debug("Delegating client sub-NetDb search to main NetDb -> No local destination");
                 }
                 return main.search(key, onFindJob, onFailedLookupJob, timeoutMs, isLease, null);
             }
             // Main facade unavailable (startup/shutdown race): fail closed.
-            if (_log.shouldWarn()) {_log.warn("Main NetDb unavailable for delegated search -> Failing callbacks...");}
+            if (_log.shouldWarn()) {_log.warn("Main NetDb unavailable for delegated search -> Failing search callbacks");}
             failSearchCallbacks(onFindJob, onFailedLookupJob);
             return null;
         } else if (fromLocalDest != null) {

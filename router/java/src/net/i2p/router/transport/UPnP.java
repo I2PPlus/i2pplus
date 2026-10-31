@@ -1443,7 +1443,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
         Service service;
         synchronized(lock) {
             if(!isNATPresent() || _router == null) {
-                _log.error("Can't addMapping: " + isNATPresent() + " " + _router);
+                _log.error("Cannot add port mapping -> No NAT device available * Present: " + isNATPresent() + " * Router: " + _router);
                 return false;
             }
             service = fp.isIP6 ? _service6 : _service;
@@ -1758,7 +1758,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
         synchronized(lock) {
             if(!isNATPresent()) {
                                 if (_log.shouldWarn()) {
-                    _log.warn("Can't removeMapping: " + isNATPresent() + " " + _router);
+                    _log.warn("Cannot remove port mapping -> No NAT device available * Present: " + isNATPresent() + " * Router: " + _router);
                 }
                 return false;
             }

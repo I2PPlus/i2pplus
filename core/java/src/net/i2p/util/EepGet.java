@@ -1466,7 +1466,7 @@ public class EepGet {
         }
 
         if (_log.shouldDebug())
-            _log.debug("[Eepget] Headers read completely\n* Request: " + redactedUrl(_url));
+            _log.debug("[Eepget] Headers read completely -> Request: " + redactedUrl(_url));
 
         boolean strictSize = (_bytesRemaining >= 0);
 
@@ -1486,7 +1486,7 @@ public class EepGet {
         boolean gunzipping = _isGzippedResponse && _out != null;
         if (gunzipping) {
             if (_log.shouldInfo())
-                _log.info("[Eepget] Gzipped response, starting decompressor\n* Request: " + redactedUrl(_url));
+                _log.info("[Eepget] Gzipped response, starting decompressor -> Request: " + redactedUrl(_url));
             if (_outputStream == null)
                 markGzipPartial(new File(_outputFile));
             PipedInputStream pi = new PipedInputStream(64*1024);
@@ -2435,7 +2435,7 @@ public class EepGet {
                 throw new IOException("Proxy requires authentication");
             if (as.authSent)
                 throw new IOException("Proxy authentication failed");  // ignore stale
-            if (_log.shouldInfo()) _log.info("[Eepget] Adding auth\n* Request: " + redactedUrl(_url));
+            if (_log.shouldInfo()) _log.info("[Eepget] Adding auth -> Request: " + redactedUrl(_url));
             // actually happens in getRequest()
         } else {
             _redirects.incrementAndGet();
@@ -3486,7 +3486,7 @@ public class EepGet {
                                "\n* Request: " + redactedUrl(_url), ioe);
             } catch (OutOfMemoryError oom) {
                 _decompressException = new IOException("OOM in HTTP Decompressor");
-                _log.error("[Eepget] OOM in HTTP Decompressor\n* Request: " + redactedUrl(_url), oom);
+                _log.error("[Eepget] OOM in HTTP Decompressor -> Request: " + redactedUrl(_url), oom);
             } finally {
                 if (_out != null) try {
                         _out.close();

@@ -685,7 +685,7 @@ public class POP3MailBox implements NewMailListener {
      * Caller must sync.
      */
     private void connect() {
-        if (_log.shouldDebug()) _log.debug("Connecting to the POP3 server\n* Server: " + host + ':' + port);
+        if (_log.shouldDebug()) _log.debug("Connecting to the POP3 server -> Server: " + host + ':' + port);
         clear();
         if (socket != null && socket.isConnected()) {close();}
 
@@ -813,15 +813,15 @@ public class POP3MailBox implements NewMailListener {
         boolean ok = sendCmds(cmds);
         if (stat.result) {updateMailCount(stat.response);}
         else if (_log.shouldWarn()) {
-            _log.warn("POP3 STAT command rejected\n* Response: " + stat.response);
+            _log.warn("POP3 STAT command rejected -> Response: " + stat.response);
         }
         if (uidl.result) {updateUIDLs(uidl.ls);}
         else if (_log.shouldWarn()) {
-            _log.warn("POP3 UIDL command rejected\n* Response: " + uidl.response);
+            _log.warn("POP3 UIDL command rejected -> Response: " + uidl.response);
         }
         if (list.result) {updateSizes(list.ls);}
         else if (_log.shouldWarn()) {
-            _log.warn("POP3 LIST command rejected\n* Response: " + list.response);
+            _log.warn("POP3 LIST command rejected -> Response: " + list.response);
         }
 
         // delete all pending deletions
@@ -931,7 +931,7 @@ public class POP3MailBox implements NewMailListener {
         boolean result = true;
         boolean pipe = supportsPipelining;
         if (pipe) {
-            if (_log.shouldDebug()) _log.debug("POP3 pipelining the commands\n* Commands: " + cmds.size());
+            if (_log.shouldDebug()) _log.debug("POP3 pipelining the commands -> Commands: " + cmds.size());
             for (SendRecv sr : cmds) {
                 String cmd = sr.send;
                 if (cmd != null) {sendCmd1aNoWait(cmd);}
@@ -975,7 +975,7 @@ public class POP3MailBox implements NewMailListener {
                         sr.result = true;
                     } catch (IOException ioe) {
                         if (_log.shouldDebug()) {
-                            _log.debug("Reading the message body failed\n* Error: " + ioe);
+                            _log.debug("Reading the message body failed -> Error: " + ioe);
                         }
                         result = false;
                         sr.result = false;
@@ -994,7 +994,7 @@ public class POP3MailBox implements NewMailListener {
                         sr.result = true;
                     } catch (IOException ioe) {
                         if (_log.shouldDebug()) {
-                            _log.debug("Reading the message list failed\n* Error: " + ioe);
+                            _log.debug("Reading the message list failed -> Error: " + ioe);
                         }
                         result = false;
                         sr.result = false;

@@ -269,7 +269,7 @@ public class MetaInfo {
      */
     public MetaInfo(Map<String, BEValue> m) throws InvalidBEncodingException {
         if (_log.shouldDebug()) {
-            _log.debug("Creating a metaInfo: " + m, new Exception("source"));
+            _log.debug("Parsing MetaInfo from a bencoded map: " + m, new Exception("source"));
         }
         BEValue val = m.get("announce");
         // Disabled check, we can get info from a magnet now

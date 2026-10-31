@@ -868,9 +868,10 @@ public class ParticipatingThrottler {
             context.banlist().banlistRouter(h, "" + banReason, null, null, context.clock().now() + bantime);
             context.simpleTimer2().addEvent(new Disconnector(h, banReason), 11 * 60 * 1000L);
             if (_log.shouldWarn()) {
-                _log.warn("Banning Router [" + h.toBase64().substring(0,6) + "] for " + (bantime / 60000) +
-                          "m -> Excessive tunnel requests -> Count / Limit: " +
-                          count + " / " + limit + " in 90s");
+                _log.warn("Banning Router [" + h.toBase64().substring(0,6) + "] for " +
+                          DataHelper.formatDuration(bantime) +
+                          " -> Excessive tunnel requests" +
+                          "\n* Requests: " + count + " / " + limit + " in 90s");
             }
         }
     }
