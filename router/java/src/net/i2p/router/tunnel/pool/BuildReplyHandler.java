@@ -192,7 +192,7 @@ class BuildReplyHandler {
             for (int j = start; j >= end; j--) {
                 byte[] replyKey = cfg.getChaChaReplyKey(j).getData();
                 if (log.shouldDebug())
-                    log.debug("Decrypting ChaCha record * Reply: " + reply.getUniqueId() +
+                    log.debug("Decrypting ChaCha record -> Reply: " + reply.getUniqueId() +
                               " * Tunnel: " + cfg + " * Record: " + recordNum + "/" + hop + "/" + j);
                 // slot number, little endian
                 iv[4] = (byte) recordNum;
@@ -203,7 +203,7 @@ class BuildReplyHandler {
                 SessionKey replyKey = cfg.getAESReplyKey(j);
                 byte replyIV[] = cfg.getAESReplyIV(j);
                 if (log.shouldDebug()) {
-                    log.debug("Decrypting AES record * Reply: " + reply.getUniqueId() +
+                    log.debug("Decrypting AES record -> Reply: " + reply.getUniqueId() +
                               " * Tunnel: " + cfg + " * Record: " + recordNum + "/" + hop + "/" + j);
                 }
                 ctx.aes().decrypt(data, 0, data, 0, replyKey, replyIV, 0, data.length);
@@ -218,7 +218,7 @@ class BuildReplyHandler {
             SessionKey replyKey = cfg.getChaChaReplyKey(hop);
             byte[] replyIV = cfg.getChaChaReplyAD(hop);
             if (log.shouldDebug())
-                log.debug("Decrypting ChaCha / Poly record * Reply: " + reply.getUniqueId() +
+                log.debug("Decrypting ChaCha / Poly record -> Reply: " + reply.getUniqueId() +
                           " * Tunnel: " + cfg + " * Record: " + recordNum + "/" + hop);
             boolean ok;
             if (isShort)
@@ -255,9 +255,11 @@ class BuildReplyHandler {
             boolean ok = DataHelper.eq(h, 0, data, 0, Hash.HASH_LENGTH);
             if (!ok) {
                 if (log.shouldWarn())
-                    log.warn(reply.getUniqueId() + ": sha256 reply verify fail on " + recordNum + "/" + hop + ": " + Base64.encode(h) + " calculated, " +
-                             Base64.encode(data, 0, Hash.HASH_LENGTH) + " expected\n" +
-                             "Record: " + Base64.encode(data, Hash.HASH_LENGTH, TunnelBuildMessageBase.RECORD_SIZE-Hash.HASH_LENGTH));
+                    log.warn("Tunnel build reply hash check failed -> Calculated hash does not match the record" +
+                             "\n* Record: " + recordNum + '/' + hop +
+                             "\n* MsgID: " + reply.getUniqueId() +
+                             "\n* Calculated: " + Base64.encode(h, 0, 6) +
+                             "\n* Expected: " + Base64.encode(data, 0, 6));
                 SimpleByteCache.release(h);
                 return RESULT_NG;
             }

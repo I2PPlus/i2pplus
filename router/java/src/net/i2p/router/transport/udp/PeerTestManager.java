@@ -29,7 +29,6 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.transport.TransportImpl;
 import net.i2p.router.transport.TransportUtil;
 import net.i2p.util.Addresses;
-import net.i2p.util.HexDump;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 
@@ -833,7 +832,7 @@ class PeerTestManager {
             SSU2Payload.processPayload(_context, cb, data, off + LONG_HEADER_SIZE, payloadLen, false, null);
         } catch (Exception e) {
             if (_log.shouldWarn())
-                _log.warn("Bad PeerTest packet:\n" + HexDump.dump(data, off, len), e);
+                _log.warn("Bad PeerTest packet -> Dropping it * Size: " + len + " bytes", e);
         } finally {
             // Wipe the intro-key schedule out of the reused per-thread cipher
             // when done; the next use re-initializes it anyway.

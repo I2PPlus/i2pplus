@@ -54,7 +54,6 @@ import net.i2p.stat.Rate;
 import net.i2p.stat.RateAverages;
 import net.i2p.stat.RateStat;
 import net.i2p.util.Addresses;
-import net.i2p.util.HexDump;
 import net.i2p.util.I2PThread;
 import net.i2p.util.LHMCache;
 import net.i2p.util.Log;
@@ -2581,7 +2580,7 @@ public class EstablishmentManager {
             // check signature below
         } catch (Exception e) {
             if (_log.shouldWarn() && !shouldSuppressException(e)) {
-                _log.warn("[SSU] BAD HolePunch packet:\n* " + HexDump.dump(data, off, len), e);
+                _log.warn("[SSU] BAD HolePunch packet -> Dropping it * Size: " + len + " bytes", e);
             }
             return;
         } finally {chacha.destroy();}

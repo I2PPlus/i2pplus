@@ -2,7 +2,6 @@ package net.i2p.router.transport.udp;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
-import net.i2p.data.Base64;
 import net.i2p.data.ByteArray;
 import net.i2p.data.i2np.DatabaseStoreMessage;
 import net.i2p.data.i2np.I2NPMessage;
@@ -13,7 +12,6 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.Tuner;
 import net.i2p.router.BanLogger;
 import net.i2p.router.util.CoDelBlockingQueue;
-import net.i2p.util.HexDump;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
@@ -302,8 +300,8 @@ class MessageReceiver {
                 }
                 if (off != sz) {
                     if (_log.shouldWarn()) {
-                        _log.warn("Fragment reassembly offset mismatch: assembled: " + off +
-                                  " * expected: " + sz);
+                        _log.warn("Fragment reassembly offset mismatch -> Assembled: " + off +
+                                  " bytes * Expected: " + sz + " bytes");
                     }
                     return null;
                 }
@@ -316,14 +314,9 @@ class MessageReceiver {
             return m;
         } catch (I2NPMessageException ime) {
             if (_log.shouldWarn()) {
-                ByteArray ba;
-                if (state.getFragmentCount() > 1) {ba = buf;}
-                else {ba = state.getFragments()[0];}
-                byte[] data = ba.getData();
-                _log.warn("Message invalid: " + state + " * PeerState: " +
-                          _transport.getPeerState(state.getFrom()) +
-                          "\n* DUMP:\n* " + HexDump.dump(data, 0, sz) +
-                          "* RAW:\n* " + Base64.encode(data, 0, sz), ime);
+                _log.warn("SSU message invalid -> Dropping it * Size: " + sz + " bytes" +
+                          " * PeerState: " + _transport.getPeerState(state.getFrom()) +
+                          "\n* State: " + state, ime);
             }
             if (state.getFragments()[0].getData()[0] == DatabaseStoreMessage.MESSAGE_TYPE) {
                 PeerState ps = _transport.getPeerState(state.getFrom());

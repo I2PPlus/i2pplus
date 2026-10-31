@@ -768,10 +768,10 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             if (ackImmediate) {_ackTimer.scheduleImmediate();}
         } catch (Exception e) {
             if (shouldLogDebug()) {
-                _log.warn("[SSU] Received BAD encrypted packet from: " + from + this +
-                          "\n* " + HexDump.dump(data, off, len), e);
+                _log.warn("[SSU] Received a BAD encrypted packet from " + from + " -> Dropping it" +
+                          " * Size: " + len + " bytes\n* " + this, e);
             } else if (_log.shouldWarn()) {
-                _log.warn("[SSU] Received BAD encrypted packet from: " + from);
+                _log.warn("[SSU] Received a BAD encrypted packet from " + from + " -> Dropping it");
             }
         }
     }

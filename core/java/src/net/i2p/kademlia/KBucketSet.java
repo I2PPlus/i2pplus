@@ -626,10 +626,11 @@ public class KBucketSet<T extends SimpleDataStructure> {
         if (rv >= 0) {
             return rv;
         }
-        _log.error("Key does not fit in any bucket\n* Key: " + DataHelper.toHexString(key.getData()) +
-                   "\n* Us: " + _us +
-                   "\n* Delta: " + DataHelper.toHexString(DataHelper.xor(_us.getData(), key.getData())));
-        _log.error(toString());
+        _log.error("Key does not fit in any bucket -> Dropping it" +
+                   "\n* Key: " + DataHelper.toHexString(key.getData()).substring(0, 16) +
+                   "\n* Us: " + DataHelper.toHexString(_us.getData()).substring(0, 16) +
+                   "\n* Delta: " + DataHelper.toHexString(DataHelper.xor(_us.getData(), key.getData())).substring(0, 16) +
+                   "\n* Buckets: " + _buckets.size() + " * Keys: " + size());
         throw new IllegalStateException("pickBucket returned " + rv);
     }
 
