@@ -479,15 +479,15 @@ class SymmetricState implements Destroyable, Cloneable {
     }
 
     /**
-     * I2P debug
+     * I2P debug. The chaining key is deliberately not rendered - it is secret
+     * material, from which the session keys are derived - while the transcript
+     * hash is public and is what correlates a handshake in the logs.
      */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
         buf.append("Symmetric State:" +
-                   "\n* Chaining Key: ");
-        buf.append(net.i2p.data.Base64.encode(ck));
-        buf.append("\n* Hash: ");
+                   "\n* Hash: ");
         buf.append(net.i2p.data.Base64.encode(h));
         buf.append('\n');
         buf.append(cipher.toString());

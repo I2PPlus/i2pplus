@@ -192,8 +192,8 @@ class BuildReplyHandler {
             for (int j = start; j >= end; j--) {
                 byte[] replyKey = cfg.getChaChaReplyKey(j).getData();
                 if (log.shouldDebug())
-                    log.debug(reply.getUniqueId() + ": Decrypting ChaCha record for: " + cfg + " [" + recordNum + "/" + hop + "/" + j +
-                              "]\n* Reply Key: " + Base64.encode(replyKey));
+                    log.debug("Decrypting ChaCha record * Reply: " + reply.getUniqueId() +
+                              " * Tunnel: " + cfg + " * Record: " + recordNum + "/" + hop + "/" + j);
                 // slot number, little endian
                 iv[4] = (byte) recordNum;
                 ChaCha20.encrypt(replyKey, iv, data, 0, data, 0, ShortEncryptedBuildRecord.LENGTH);
@@ -203,8 +203,8 @@ class BuildReplyHandler {
                 SessionKey replyKey = cfg.getAESReplyKey(j);
                 byte replyIV[] = cfg.getAESReplyIV(j);
                 if (log.shouldDebug()) {
-                    log.debug(reply.getUniqueId() + ": Decrypting AES record for " + cfg + " [" + recordNum + " / " + hop + " / " + j +
-                              "]\n* Reply Key: " + replyKey.toBase64() + "/" + Base64.encode(replyIV));
+                    log.debug("Decrypting AES record * Reply: " + reply.getUniqueId() +
+                              " * Tunnel: " + cfg + " * Record: " + recordNum + "/" + hop + "/" + j);
                 }
                 ctx.aes().decrypt(data, 0, data, 0, replyKey, replyIV, 0, data.length);
             }
@@ -218,8 +218,8 @@ class BuildReplyHandler {
             SessionKey replyKey = cfg.getChaChaReplyKey(hop);
             byte[] replyIV = cfg.getChaChaReplyAD(hop);
             if (log.shouldDebug())
-                log.debug(reply.getUniqueId() + ": Decrypting ChaCha / Poly record for: " + cfg + " [" + recordNum + "/" + hop +
-                          "]\n* Reply Key: " + replyKey.toBase64() + " / " + Base64.encode(replyIV));
+                log.debug("Decrypting ChaCha / Poly record * Reply: " + reply.getUniqueId() +
+                          " * Tunnel: " + cfg + " * Record: " + recordNum + "/" + hop);
             boolean ok;
             if (isShort)
                 ok = BuildResponseRecord.decrypt(rec, replyKey, replyIV, recordNum);

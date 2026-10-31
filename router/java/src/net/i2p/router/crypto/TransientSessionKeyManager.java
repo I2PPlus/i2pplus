@@ -747,12 +747,11 @@ public class TransientSessionKeyManager extends SessionKeyManager {
             // find SessionKeys with a large number of TagSets and trim them
             Map<SessionKey, Set<TagSet>> inboundSets = getInboundTagSetsBySessionKey();
             for (Map.Entry<SessionKey, Set<TagSet>> e : inboundSets.entrySet()) {
-                SessionKey skey = e.getKey();
                 Set<TagSet> sets = e.getValue();
                 int count = sets.size();
                 if (count >= 10) {
                     if (_log.shouldInfo())
-                        _log.info("Session key " + skey.toBase64() + " has " + count + " tag sets");
+                        _log.info("Trimming tag sets -> Session key with " + count + " tag sets");
                     // for any session key with at least 10 tagsets,
                     // remove all tagsets larger than 8 tags that haven't been used and
                     // are old. The more the tagsets, the more aggressively we expire.

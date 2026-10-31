@@ -5698,7 +5698,7 @@ synchronized boolean checkRetransmitStall() {
                  * shut down normally.
                  */
                 if (_log.shouldInfo()) {
-                    _log.info(shortLabel() + " -> Too many CLOSE resends -> Disconnecting");
+                    _log.info(shortLabel() + " -> Too many CLOSE resends, disconnecting");
                 }
                 _packet.cancelled();
                 disconnect(true);

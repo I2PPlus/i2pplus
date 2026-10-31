@@ -117,9 +117,8 @@ public final class ElGamalAESEngine {
         final boolean shouldDebug = _log.shouldDebug();
         if (key != null) {
             if (shouldDebug)
-                _log.debug("Decrypting existing session " + "(" + data.length + " bytes)" +
-                           "\n* Tag: " + st.toString() +
-                           "\n* Key: " + key.toBase64());
+                _log.debug("Decrypting existing session * Size: " + data.length + " bytes" +
+                           "\n* Tag: " + st);
 
             decrypted = decryptExistingSession(data, key, targetPrivateKey, foundTags, usedKey, foundKey);
             if (decrypted != null) {
@@ -209,7 +208,8 @@ public final class ElGamalAESEngine {
         Set<SessionTag> foundTags = new HashSet<>();
         final boolean shouldDebug = _log.shouldDebug();
         if (shouldDebug)
-            _log.debug("Decrypting existing session -> Tag: " + st.toString() + "\n* Key: " + key.toBase64() + " (" + data.length + " bytes)");
+            _log.debug("Decrypting existing session * Tag: " + st +
+                       " * Size: " + data.length + " bytes");
         byte[] decrypted = decryptExistingSession(data, key, targetPrivateKey, foundTags, usedKey, foundKey);
         if (decrypted != null) {
             if (!foundTags.isEmpty() && shouldDebug)
@@ -217,11 +217,13 @@ public final class ElGamalAESEngine {
             if (!foundTags.isEmpty()) {
                 if (foundKey.getData() != null) {
                     if (shouldDebug)
-                        _log.debug("Found key: " + foundKey.toBase64() + " in existing session");
+                        _log.debug("Existing session decrypt -> Found a session key * Key: " +
+                                   foundKey.getData().length + " bytes");
                     keyManager.tagsReceived(foundKey, foundTags);
                 } else if (usedKey.getData() != null) {
                     if (shouldDebug)
-                        _log.debug("Used key: " + usedKey.toBase64() + " in existing session");
+                        _log.debug("Existing session decrypt -> Used a session key * Key: " +
+                                   usedKey.getData().length + " bytes");
                     keyManager.tagsReceived(usedKey, foundTags);
                 }
             }
@@ -265,11 +267,13 @@ public final class ElGamalAESEngine {
                 _log.debug("ElG decrypt success: " + foundTags.size() + " found tags");
             if (foundKey.getData() != null) {
                 if (shouldDebug)
-                    _log.debug("Found key: " + foundKey.toBase64() + " in new session");
+                    _log.debug("New session decrypt -> Found a session key * Key: " +
+                               foundKey.getData().length + " bytes");
                 keyManager.tagsReceived(foundKey, foundTags);
             } else if (usedKey.getData() != null) {
                 if (shouldDebug)
-                    _log.debug("Used key: " + usedKey.toBase64() + " in new session");
+                    _log.debug("New session decrypt -> Used a session key * Key: " +
+                               usedKey.getData().length + " bytes");
                 keyManager.tagsReceived(usedKey, foundTags);
             }
         }
@@ -511,15 +515,14 @@ public final class ElGamalAESEngine {
         }
         if (currentTag == null) {
             if (_log.shouldDebug())
-                _log.debug("Current tag is null - encrypting as new session");
+                _log.debug("Current tag is null -> Encrypting as a new session");
             return encryptNewSession(data, target, key, tagsForDelivery, newKey, paddedSize);
         }
         // target unused, using key and tag only
         byte[] rv = encryptExistingSession(data, key, tagsForDelivery, currentTag, newKey, paddedSize);
         if (_log.shouldDebug())
-            _log.debug("Encrypting existing session " + "(" + rv.length + " bytes)" +
-                       "\n* Tag: " + currentTag.toString() +
-                       "\n* Key: " + key.toBase64() /* + ": " + Base64.encode(rv, 0, 64) */);
+            _log.debug("Existing session encrypt -> Encrypted * Size: " + rv.length +
+                       " bytes * Tag: " + currentTag);
         return rv;
     }
 

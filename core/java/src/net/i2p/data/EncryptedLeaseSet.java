@@ -560,10 +560,9 @@ public class EncryptedLeaseSet extends LeaseSet2 {
                     off += ID_LEN;
                     ChaCha20.encrypt(clientKey, clientIVandID, authcookie, 0, ciphertext, off, authcookie.length);
                     if (_log.shouldDebug()) {
-                        _log.debug("DH: Added client ID/enc.cookie:\n* " +
-                                   net.i2p.util.HexDump.dump(clientIVandID, IV_LEN, ID_LEN) +
-                                   "* " + net.i2p.util.HexDump.dump(ciphertext, off, COOKIE_LEN) +
-                                   "* for client key:\n* " + net.i2p.util.HexDump.dump(clientKey));
+                        _log.debug("DH: Derived client key -> Appended the client ID and encrypted cookie" +
+                                   "\n* Key: " + clientKey.length + " bytes * IV: " + IV_LEN +
+                                   " bytes * ID: " + ID_LEN + " bytes * Cookie: " + COOKIE_LEN + " bytes");
                     }
                     off += COOKIE_LEN;
                 }
@@ -590,14 +589,9 @@ public class EncryptedLeaseSet extends LeaseSet2 {
                     off += ID_LEN;
                     ChaCha20.encrypt(clientKey, clientIVandID, authcookie, 0, ciphertext, off, authcookie.length);
                     if (_log.shouldDebug()) {
-                        _log.debug("PSK: Added client key:\n* " +
-                                   net.i2p.util.HexDump.dump(clientKey) +
-                                   "* client IV:\n* " +
-                                   net.i2p.util.HexDump.dump(clientIVandID, 0, IV_LEN) +
-                                   "* client ID:\n* " +
-                                   net.i2p.util.HexDump.dump(clientIVandID, IV_LEN, ID_LEN) +
-                                   "* client cookie:\n* " +
-                                   net.i2p.util.HexDump.dump(ciphertext, off, COOKIE_LEN));
+                        _log.debug("PSK: Derived client key -> Appended the client ID and encrypted cookie" +
+                                   "\n* Key: " + clientKey.length + " bytes * IV: " + IV_LEN +
+                                   " bytes * ID: " + ID_LEN + " bytes * Cookie: " + COOKIE_LEN + " bytes");
                     }
                     off += COOKIE_LEN;
                 }
@@ -625,8 +619,8 @@ public class EncryptedLeaseSet extends LeaseSet2 {
         ciphertext = new byte[SALT_LEN + plaintext.length];
         System.arraycopy(salt, 0, ciphertext, 0, SALT_LEN);
         if (_log.shouldDebug()) {
-            _log.debug("Encrypt: ChaCha20 key:\n* " + net.i2p.util.HexDump.dump(key));
-            _log.debug("Encrypt: ChaCha20 IV:\n* " + net.i2p.util.HexDump.dump(iv));
+            _log.debug("Encrypt: Layer 1 -> ChaCha20 key derived * Key: " + key.length +
+                       " bytes * IV: " + IV_LEN + " bytes");
         }
         ChaCha20.encrypt(key, iv, plaintext, 0, ciphertext, SALT_LEN, plaintext.length);
         if (_log.shouldDebug()) _log.debug("Encrypt: outer ciphertext:\n* " +
@@ -676,14 +670,12 @@ public class EncryptedLeaseSet extends LeaseSet2 {
         // first 32 bytes of ciphertext are the salt
         hkdf.calculate(ciphertext, authInput, ELS2L1K, key, iv, 0);
         if (_log.shouldDebug()) {
-            _log.debug("Decrypt: ChaCha20 key:\n* " + net.i2p.util.HexDump.dump(key));
-            _log.debug("Decrypt: ChaCha20 IV:\n* " + net.i2p.util.HexDump.dump(iv));
+            _log.debug("Decrypt: Layer 1 -> ChaCha20 key derived * Key: " + key.length +
+                       " bytes * IV: " + IV_LEN + " bytes");
         }
         ChaCha20.decrypt(key, iv, ciphertext, SALT_LEN, plaintext, 0, plaintext.length);
-        if (_log.shouldDebug()) {
+        if (_log.shouldDebug())
             _log.debug("Decrypt: outer ciphertext:\n* " + net.i2p.util.HexDump.dump(ciphertext));
-            _log.debug("Decrypt: outer plaintext:\n* " + net.i2p.util.HexDump.dump(plaintext));
-        }
 
         int authType = plaintext[0] & 0x0f;
         _authType = authType; // debug
@@ -701,8 +693,8 @@ public class EncryptedLeaseSet extends LeaseSet2 {
             if (count == 0) throw new DataFormatException("No client entries");
             authLen = 1 + SALT_LEN + 2 + (count * CLIENT_LEN);
             if (_log.shouldDebug()) {
-                _log.debug("Auth type " + authType + ", found " + count +
-                           " client entries, authsalt is:\n* " + net.i2p.util.HexDump.dump(seed));
+                _log.debug("Auth type: " + authType + " -> Found " + count +
+                           " client entries * Salt: " + seed.length + " bytes");
             }
             byte[] clientKey = new byte[32];
             byte[] clientIVandID = new byte[32];
@@ -733,9 +725,8 @@ public class EncryptedLeaseSet extends LeaseSet2 {
                 hkdf.calculate(seed, clientAuthInput, ELS2_PSK, clientKey, clientIVandID, 0);
             }
             if (_log.shouldDebug()) {
-                _log.debug("Looking for client ID:\n* " +
-                           net.i2p.util.HexDump.dump(clientIVandID, IV_LEN, ID_LEN) +
-                           "* for client key:\n* " + net.i2p.util.HexDump.dump(clientKey));
+                _log.debug("Looking for a client ID * ID: " + ID_LEN +
+                           " bytes * Key: " + clientKey.length + " bytes");
             }
             int off = 35;
             byte[] clientCookie = null;
@@ -896,9 +887,9 @@ public class EncryptedLeaseSet extends LeaseSet2 {
         super.sign(key);
         if (_log.shouldDebug()) {
             _log.debug("Created inner: " + super.toString());
-            _log.debug("Sign inner with key: " + key.getType() + ' ' + key.toBase64());
+            _log.debug("Sign inner with key type: " + key.getType());
             _log.debug("Corresponding pubkey: " + key.toPublic());
-            _log.debug("Inner sig: " + _signature.getType() + ' ' + _signature.toBase64());
+            _log.debug("Inner sig: " + _signature);
         }
         encrypt(authType, clientKeys);
         _flags = saveFlags;
@@ -917,9 +908,9 @@ public class EncryptedLeaseSet extends LeaseSet2 {
         _signature = DSAEngine.getInstance().sign(data, bkey);
         if (_signature == null) throw new DataFormatException("Signature failed with " + key.getType() + " key");
         if (_log.shouldDebug()) {
-            _log.debug("Sign outer with key: " + bkey.getType() + ' ' + bkey.toBase64());
+            _log.debug("Sign outer with the blinded key type: " + bkey.getType());
             _log.debug("Corresponding pubkey: " + bkey.toPublic());
-            _log.debug("Outer sig: " + _signature.getType() + ' ' + _signature.toBase64());
+            _log.debug("Outer sig: " + _signature);
         }
     }
 
@@ -951,8 +942,8 @@ public class EncryptedLeaseSet extends LeaseSet2 {
             return _decryptedLS2.verifySignature();
         }
         if (_log.shouldDebug()) {
-            _log.debug("Signature verify outer with key: " + _signingKey.getType() + ' ' + _signingKey.toBase64());
-            _log.debug("Outer signature: " + _signature.getType() + ' ' + _signature.toBase64());
+            _log.debug("Signature verify outer with key type: " + _signingKey.getType());
+            _log.debug("Outer signature: " + _signature);
         }
         if (!super.verifySignature()) {
             _log.warn("Encrypted LeaseSet2 outer signature verification failed");
@@ -975,8 +966,9 @@ public class EncryptedLeaseSet extends LeaseSet2 {
         }
         if (_log.shouldDebug()) {
             _log.debug("Decrypted inner LS2:\n* " + _decryptedLS2);
-            _log.debug("Sig verify inner with key: " + _decryptedLS2.getDestination().getSigningPublicKey().getType() + ' ' + _decryptedLS2.getDestination().getSigningPublicKey().toBase64());
-            _log.debug("Inner sig: " + _decryptedLS2.getSignature().getType() + ' ' + _decryptedLS2.getSignature().toBase64());
+            _log.debug("Sig verify inner with key: " +
+                       _decryptedLS2.getDestination().getSigningPublicKey());
+            _log.debug("Inner sig: " + _decryptedLS2.getSignature());
         }
         boolean rv = _decryptedLS2.verifySignature();
         if (!rv) _log.warn("Encrypted LeaseSet2 inner signature verification failed");

@@ -981,8 +981,8 @@ public class IterativeSearchJob extends FloodSearchJob {
                 if (sess != null) {
                     if (sess.tag != null) {
                         if (_log.shouldDebug()) {
-                            _log.debug("Requesting AES reply from [" + peer.toBase64().substring(0,6) + "]"
-                            + "\n* Session key: [" + sess.key.toBase64().substring(0,6) + "] Tag: [" + sess.tag.toString() + "]");
+                            _log.debug("Requesting AES reply from [" + peer.toBase64().substring(0, 6) +
+                                       "] * Tag: " + sess.tag);
                         }
                         dlm.setReplySession(sess.key, sess.tag);
                     } else {

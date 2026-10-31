@@ -759,7 +759,7 @@ public final class ECIESAEADEngine {
         byte[] alicePK = new byte[KEYLEN];
         state.getRemotePublicKey().getPublicKey(alicePK, 0);
         if (_log.shouldDebug()) {
-            _log.debug("NewSession decryption success from PublicKey [" + Base64.encode(alicePK) + "]");
+            _log.debug("NewSession decryption success * Peer key: " + Base64.encode(alicePK, 0, 6));
             _log.debug("State after decrypting NewSession: " + state);
         }
         if (Arrays.equals(alicePK, NULLPK)) {
@@ -1030,7 +1030,7 @@ public final class ECIESAEADEngine {
         byte[] bobPK = new byte[KEYLEN];
         state.getRemotePublicKey().getPublicKey(bobPK, 0);
         if (_log.shouldDebug())
-            _log.debug("NewSessionReply decryption success from PK " + Base64.encode(bobPK));
+            _log.debug("NewSessionReply decryption success * Peer key: " + Base64.encode(bobPK, 0, 6));
         if (Arrays.equals(bobPK, NULLPK)) {
             // A reply that carries an all-zero static key cannot name a
             // session we hold: we never publish a zero static key, and

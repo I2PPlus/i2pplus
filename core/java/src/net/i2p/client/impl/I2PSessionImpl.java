@@ -1686,7 +1686,8 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
                 return true;
             } catch (I2PSessionException ise) {
                 if (_log.shouldError()) {
-                    _log.error(getPrefix() + " -> Error reconnecting on attempt " + (i+1) + " -> " + ise.getMessage());
+                    _log.error(getName() + " -> Reconnect failed on attempt " + (i+1) +
+                               " * Cause: " + ise.getMessage());
                 }
             }
         }

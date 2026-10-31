@@ -6989,8 +6989,8 @@ public class TunnelPool {
         TunnelPeerSelector.setWindowMultiplier(allowed);
         TunnelPeerSelector.publishWindowMultiplier(ctx);
         if (_log.shouldWarn()) {
-            _log.warn(toString() + " -> Starvation, raising the peer activity window multiplier " +
-                      before + " -> " + TunnelPeerSelector.getWindowMultiplier() +
+            _log.warn(toString() + " -> Starvation, raising the peer activity window multiplier" +
+                      "\n* Multiplier: " + before + " -> " + TunnelPeerSelector.getWindowMultiplier() +
                       "\n* Zero usable tunnels, peer supply scarce");
         }
     }
