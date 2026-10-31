@@ -716,13 +716,13 @@ class OutboundNTCP2State implements EstablishState {
             _handshakeState.writeMessage(tmp, 0, tmp, MSG3P1_SIZE, msg3p2len);
         } catch (GeneralSecurityException gse) {
             // buffer length error
-            if (!_log.shouldWarn())
-                _log.error("Bad message #3 out", gse);
+            if (_log.shouldError())
+                _log.error("Building message #3 failed", gse);
             fail("Bad message #3 out", gse);
             return;
         } catch (RuntimeException re) {
-            if (!_log.shouldWarn())
-                _log.error("Bad message #3 out", re);
+            if (_log.shouldError())
+                _log.error("Building message #3 failed", re);
             fail("Bad message #3 out", re);
             return;
         }

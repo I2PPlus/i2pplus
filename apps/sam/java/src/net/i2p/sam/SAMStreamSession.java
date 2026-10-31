@@ -635,11 +635,11 @@ class SAMStreamSession implements SAMMessageSess {
                     recv.notifyStreamIncomingConnection ( id, i2ps.getPeerDestination() );
                 } catch (I2PException e) {
                     if (_log.shouldDebug())
-                        _log.debug("Caught I2PException", e);
+                        _log.debug("SAM stream accept loop failed -> Session stops accepting", e);
                     break;
                 } catch (IOException e) {
                     if (_log.shouldDebug())
-                        _log.debug("Caught IOException", e);
+                        _log.debug("SAM stream accept loop failed -> Session stops accepting", e);
                     break;
                 }
             }
@@ -648,7 +648,7 @@ class SAMStreamSession implements SAMMessageSess {
                 serverSocket.close(); // In case it wasn't closed, yet
             } catch (I2PException e) {
                 if (_log.shouldDebug())
-                    _log.debug("Caught I2PException", e);
+                    _log.debug("Closing the SAM stream -> Server socket failed", e);
             }
 
             close();
@@ -799,14 +799,14 @@ class SAMStreamSession implements SAMMessageSess {
                 }
             } catch (IOException e) {
                 if (_log.shouldDebug())
-                    _log.debug("Caught IOException", e);
+                    _log.debug("Receiving SAM stream bytes failed", e);
             }
 
             try {
                 i2pSocket.close();
             } catch (IOException e) {
                 if (_log.shouldDebug())
-                    _log.debug("Caught IOException", e);
+                    _log.debug("Closing the SAM stream -> I2P socket failed", e);
             }
 
             if (stillRunning) {
@@ -961,7 +961,7 @@ class SAMStreamSession implements SAMMessageSess {
                         i2pSocket.close();
                     } catch (IOException e) {
                         if (_log.shouldDebug())
-                            _log.debug("Caught IOException", e);
+                            _log.debug("Closing the SAM stream -> I2P socket failed", e);
                     }
                     synchronized (_data) {
                         _data.clear();

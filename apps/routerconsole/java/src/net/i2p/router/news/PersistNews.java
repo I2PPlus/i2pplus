@@ -71,13 +71,13 @@ class PersistNews {
             Node nid = entry.getNode("id");
             if (nid == null) {
                 if (log.shouldWarn())
-                    log.warn("News entry without UUID");
+                    log.warn("News entry has no id node");
                 continue;
             }
             String id = nid.getValue();
             if (id == null) {
                 if (log.shouldWarn())
-                    log.warn("News entry without UUID");
+                    log.warn("News entry has an empty id value");
                 continue;
             }
             String name = idToName(ctx, id);

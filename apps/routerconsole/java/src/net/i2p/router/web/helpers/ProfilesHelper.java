@@ -103,7 +103,7 @@ public class ProfilesHelper extends HelperBase {
         try {
             BanlistRenderer rend = new BanlistRenderer(_context);
             rend.renderBanlistCompact(_out);
-        } catch (IOException ioe) {_log.error("Error rendering banlist", ioe);}
+        } catch (IOException ioe) {_log.error("Rendering the banlist failed", ioe);}
         return "";
     }
 
@@ -122,7 +122,7 @@ public class ProfilesHelper extends HelperBase {
                 try {
                     BanlistRenderer rend = new BanlistRenderer(_context);
                     rend.renderBanlistFragment(_out);
-                } catch (IOException ioe) {_log.error("Error rendering banlist", ioe);}
+                } catch (IOException ioe) {_log.error("Rendering the banlist fragment failed", ioe);}
             }
             return;
         }

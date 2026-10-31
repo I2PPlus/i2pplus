@@ -711,7 +711,7 @@ public class Blocklist {
                 } else {add(ip1, source);} // IPv6
             }
         } catch (IOException ioe) {
-            if (_log.shouldError()) {_log.error("Error reading the blocklist file", ioe);}
+            if (_log.shouldError()) {_log.error("Loading the blocklist file failed", ioe);}
             return count;
         } catch (OutOfMemoryError oom) {
             disable();
@@ -904,7 +904,7 @@ public class Blocklist {
                 if (!s.isEmpty() && !s.startsWith("#")) {lines++;}
             }
         } catch (IOException ioe) {
-            if (_log.shouldWarn()) {_log.warn("Error reading the blocklist file", ioe);}
+            if (_log.shouldWarn()) {_log.warn("Counting the blocklist file lines failed", ioe);}
             return 0;
         }
         return lines;
@@ -1565,7 +1565,7 @@ public class Blocklist {
                 }
             } catch (IOException ioe) {
                 if (_log.shouldWarn())
-                    _log.warn("Error reading the blocklist file", ioe);
+                    _log.warn("Scanning the blocklist file for the entry failed", ioe);
             }
         }
         // We already banlisted in banlist(peer), that's good enough

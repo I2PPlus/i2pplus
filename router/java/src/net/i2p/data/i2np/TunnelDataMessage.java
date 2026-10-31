@@ -118,7 +118,7 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
     public byte[] getData() {
         if (_hadCache && _dataBuf == null) {
             RuntimeException e = new RuntimeException("TDM data buf use after free");
-            _log.error("TDM boom", e);
+            _log.error("Reading the tunnel payload failed -> Buffer released", e);
             throw e;
         }
         return _data;
@@ -171,7 +171,7 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
         }
         if (_hadCache && _dataBuf == null) {
             I2NPMessageException e = new I2NPMessageException("TDM data buf use after free");
-            _log.error("TDM boom", e);
+            _log.error("Writing the tunnel message failed -> Buffer released", e);
             throw e;
         }
 

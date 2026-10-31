@@ -613,10 +613,10 @@ public class FamilyKeyCrypto {
                            "Copy the certificate to the directory $I2P/" + CERT_DIR + " for each of the other routers in the Family.\n" +
                            "Give this certificate to an I2P developer for inclusion in the next I2P release.");
             } else {
-                _log.error("Error saving Family key certificate");
+                _log.error("Saving the family key certificate failed");
             }
         } else {
-            _log.error("Error saving Family key certificate");
+            _log.error("Saving the family key certificate failed -> Directory not created");
         }
     }
 
@@ -639,10 +639,10 @@ public class FamilyKeyCrypto {
                            "Back up the keystore and CRL files and keep them secure.\n" +
                            "If your private key is ever compromised, give the CRL to an I2P developer for publication.");
             } else {
-                _log.error("Error saving family key CRL");
+                _log.error("Saving the family key CRL failed");
             }
         } else {
-            _log.error("Error saving family key CRL");
+            _log.error("Saving the family key CRL failed -> Directory not created");
         }
     }
 

@@ -155,10 +155,11 @@ public final class DSAEngine {
         if (_useJavaLibs) {
             try {
                 rv = altVerifySigSHA1(signature, signedData, offset, size, verifyingKey);
-                if (!rv && _log.shouldWarn()) _log.warn("Lib DSA Signature verification failure");
+                if (!rv && _log.shouldWarn()) _log.warn("Library DSA signature verification failed");
                 return rv;
             } catch (GeneralSecurityException gse) {
-                if (_log.shouldWarn()) _log.warn("Lib DSA Signature verification failure");
+                if (_log.shouldWarn())
+                    _log.warn("Library DSA signature verification threw -> Falling back to TheCrypto", gse);
                 // now try TheCrypto
             }
         }

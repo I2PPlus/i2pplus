@@ -307,9 +307,9 @@ public class GeoIP {
                                 } else {_notFound.add(ipl);}
                             }
                         } catch (IOException ioe) {
-                            _log.error("GeoIP failure", ioe);
+                            _log.error("Looking up GeoIPv4 countries failed", ioe);
                         } catch (InvalidDatabaseException ide) {
-                            _log.error("GeoIP failure", ide);
+                            _log.error("Looking up GeoIPv4 countries failed", ide);
                         } finally {
                             if (ls != null) {ls.close();}
                         }
@@ -343,7 +343,7 @@ public class GeoIP {
                                 }
                             }
                         } catch (IOException ioe) {
-                            _log.error("GeoIP2 failure", ioe);
+                            _log.error("Looking up GeoIP2 IPv4 countries failed", ioe);
                         }
                     } else {
                         // Tor-style database
@@ -403,9 +403,9 @@ public class GeoIP {
                                 }
                             }
                         } catch (IOException ioe) {
-                            _log.error("GeoIP failure", ioe);
+                            _log.error("Looking up GeoIPv6 countries failed", ioe);
                         } catch (InvalidDatabaseException ide) {
-                            _log.error("GeoIP failure", ide);
+                            _log.error("Looking up GeoIPv6 countries failed", ide);
                         } finally {
                             if (ls != null) ls.close();
                         }
@@ -432,7 +432,7 @@ public class GeoIP {
                                 }
                             }
                         } catch (IOException ioe) {
-                            _log.error("GeoIP2 failure", ioe);
+                            _log.error("Looking up GeoIP2 IPv6 countries failed", ioe);
                         }
                      } else {
                         // I2P format IPv6 database
@@ -503,9 +503,9 @@ public class GeoIP {
                         ctx.blocklist().addCountryFile();
                     }
                 } catch (IOException ioe) {
-                    _log.error("GeoIP failure", ioe);
+                    _log.error("Exporting the GeoIP country file failed", ioe);
                 } catch (InvalidDatabaseException ide) {
-                    _log.error("GeoIP failure", ide);
+                    _log.error("Exporting the GeoIP country file failed", ide);
                 } finally {
                     if (ls != null) ls.close();
                 }
@@ -525,7 +525,7 @@ public class GeoIP {
                         ctx.blocklist().addCountryFile();
                     }
                 } catch (IOException ioe) {
-                    _log.error("GeoIP2 failure", ioe);
+                    _log.error("Exporting the GeoIP2 country file failed", ioe);
                 }
             } else {
                 // Tor-style database, unsupported

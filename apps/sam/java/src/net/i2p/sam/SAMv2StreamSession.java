@@ -282,7 +282,7 @@ class SAMv2StreamSession extends SAMStreamSession {
                     try {
                         i2pSocket.close();
                     } catch (IOException e) {
-                        if (_log.shouldDebug()) _log.debug("Caught IOException", e);
+                        if (_log.shouldDebug()) _log.debug("Closing the SAM stream -> I2P socket failed", e);
                     }
 
                     synchronized (_data) {
@@ -474,13 +474,13 @@ class SAMv2StreamSession extends SAMStreamSession {
                     recv.receiveStreamBytes(id, data);
                 }
             } catch (IOException e) {
-                if (_log.shouldDebug()) _log.debug("Caught IOException", e);
+                if (_log.shouldDebug()) _log.debug("SAM stream reader loop failed -> The reader stops", e);
             }
 
             try {
                 i2pSocket.close();
             } catch (IOException e) {
-                if (_log.shouldDebug()) _log.debug("Caught IOException", e);
+                if (_log.shouldDebug()) _log.debug("Closing the SAM stream -> I2P socket failed", e);
             }
 
             if (stillRunning) {

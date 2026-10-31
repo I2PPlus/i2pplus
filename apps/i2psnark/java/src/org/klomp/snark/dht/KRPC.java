@@ -1303,13 +1303,14 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                 _txBytes.addAndGet(payload.length);
             } else {
                 if (_log.shouldWarn()) {
-                    _log.warn("SendMessage failure");
+                    _log.warn("Sending the KRPC message failed -> The session refused it"
+                              + " * To: [" + dest.calculateHash().toBase32().substring(0, 8) + ']');
                 }
             }
             return success;
         } catch (I2PSessionException ise) {
             if (_log.shouldWarn()) {
-                _log.warn("SendMessage failure", ise);
+                _log.warn("Sending the KRPC message failed", ise);
             }
             return false;
         }
@@ -2142,15 +2143,15 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             }
         } catch (DataFormatException e) {
             if (_log.shouldWarn()) {
-                _log.warn("Bad message");
+                _log.warn("Parsing a received KRPC datagram failed", e);
             }
         } catch (I2PInvalidDatagramException e) {
             if (_log.shouldWarn()) {
-                _log.warn("Bad message");
+                _log.warn("Parsing a received KRPC datagram failed", e);
             }
         } catch (I2PSessionException e) {
             if (_log.shouldWarn()) {
-                _log.warn("Bad message");
+                _log.warn("Reading a received KRPC message failed", e);
             }
         }
     }

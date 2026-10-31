@@ -2369,12 +2369,12 @@ public class EstablishmentManager {
             if (ourra == null) {ourra = _transport.getCurrentExternalAddress(false);}
         } else {ourra = _transport.getCurrentExternalAddress(false);}
         if (ourra == null) {
-            if (_log.shouldWarn()) {_log.warn("[SSU] No IP address to send in relay request");}
+            if (_log.shouldWarn()) {_log.warn("[SSU] Building the relay request failed -> No external address");}
             return false;
         }
         byte[] ourIP = ourra.getIP();
         if (ourIP == null) {
-            if (_log.shouldWarn()) {_log.warn("[SSU] No IP address to send in relay request");}
+            if (_log.shouldWarn()) {_log.warn("[SSU] Building the relay request failed -> No IP in the external address");}
             return false;
         }
         // Bob should already have our RI, especially if we just connected; we do not resend it here.

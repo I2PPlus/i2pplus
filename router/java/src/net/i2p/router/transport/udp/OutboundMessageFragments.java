@@ -566,7 +566,7 @@ private void waitForMessages() {
         } catch (InterruptedException ie) {
             Thread.currentThread().interrupt();
             if (_log.shouldDebug()) {
-                _log.debug("Woken up while waiting");
+                _log.debug("Interrupted while waiting for messages", ie);
             }
         }
     }
@@ -584,7 +584,7 @@ private void waitForMessages(int timeout) {
         } catch (InterruptedException ie) {
             Thread.currentThread().interrupt();
             if (_log.shouldDebug()) {
-                _log.debug("Woken up while waiting");
+                _log.debug("Interrupted while waiting for messages", ie);
             }
         }
     }

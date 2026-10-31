@@ -686,7 +686,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
             String strid = props.getProperty("ID");
             if (strid == null) {
                 if (_log.shouldDebug())
-                    _log.debug("ID not specified in STREAM SEND message");
+                    _log.debug("No ID in the STREAM SEND message");
                 return false;
             }
             try {
@@ -762,7 +762,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
             String strid = (String) props.remove("ID");
             if (strid == null) {
                 if (_log.shouldDebug())
-                    _log.debug("ID not specified in STREAM SEND message");
+                    _log.debug("No ID in the STREAM CONNECT message");
                 return false;
             }
             try {
@@ -1036,7 +1036,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
      */
     public void notifyStreamIncomingConnection(int id, Destination d) throws IOException {
         if (streamSession == null) {
-            _log.error("BUG! Received stream connection, but session is null!");
+            _log.error("Received an incoming stream connection -> Session is null");
             return;
         }
 
@@ -1054,7 +1054,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
      */
     public void notifyStreamOutgoingConnection ( int id, String result, String msg ) throws IOException {
         if ( streamSession == null ) {
-            _log.error ( "BUG! Received stream connection, but session is null!" );
+            _log.error("Received an outgoing stream connection result -> Session is null");
             return;
         }
 

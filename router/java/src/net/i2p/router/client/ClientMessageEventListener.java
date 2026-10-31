@@ -283,7 +283,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
             // all the primary options, then the overrides from the alias
             SessionConfig pcfg = _runner.getPrimaryConfig();
             if (pcfg != null) {props.putAll(pcfg.getOptions());}
-            else {_log.error("No primary config?");}
+            else {_log.error("Building the session config failed -> No primary config");}
         }
         props.putAll(inProps);
         String senc = props.getProperty("i2cp.leaseSetEncType");
@@ -369,7 +369,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
                 boolean ok = _context.tunnelManager().addAlias(dest, settings, pcfg.getDestination());
                 if (!ok) {_log.error("Add alias failed");} // FIXME cleanup
             } else {
-                _log.error("No primary config?");
+                _log.error("Adding the alias failed -> No primary config");
                 status = SessionStatusMessage.STATUS_INVALID;
                 sendStatusMessage(id, status);
             // FIXME cleanup
@@ -453,7 +453,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
                 try {_runner.doSend(status);}
                 catch (I2CPMessageException ime) {
                     if (_log.shouldWarn()) {
-                        _log.warn("Error writing out the message status message", ime);
+                        _log.warn("Sending the message status failed -> Reporting a bad session", ime);
                     }
                 }
             }
@@ -476,7 +476,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
             status.setStatus(MessageStatusMessage.STATUS_SEND_FAILURE_ROUTER);
             try {_runner.doSend(status);}
             catch (I2CPMessageException ime) {
-                if (_log.shouldWarn()) {_log.warn("Error writing out the message status message", ime);}
+                if (_log.shouldWarn()) {_log.warn("Sending the message status failed -> Reporting a router failure", ime);}
             }
             return;
         }
@@ -668,7 +668,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
             }
             try {ls.setDestination(dest);}
             catch (RuntimeException re) {
-                if (_log.shouldError()) {_log.error("Error decrypting LeaseSet from client", re);}
+                if (_log.shouldError()) {_log.error("Setting the LeaseSet destination failed", re);}
                 _runner.disconnectClient(re.toString());
                 return;
             }
@@ -683,7 +683,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
             }
             // we have to do this before checking encryption keys below
             if (!ls.verifySignature()) {
-                if (_log.shouldError()) {_log.error("Error decrypting LeaseSet from client");}
+                if (_log.shouldError()) {_log.error("Verifying the LeaseSet signature failed");}
                 _runner.disconnectClient("Error decrypting LeaseSet from client");
                 return;
             }
@@ -883,7 +883,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
         if (_log.shouldInfo()) {
             _log.info("Updating session options for [session " + message.getSessionId() + ']');
             if (_log.shouldDebug())
-                _log.debug("Old options: " + cfg + " * new options: " + message.getSessionConfig());
+                _log.debug("Session options -> Old: " + cfg + " * New: " + message.getSessionConfig());
         }
         if (!message.getSessionConfig().getDestination().equals(cfg.getDestination())) {
             _log.error("Destination mismatch");

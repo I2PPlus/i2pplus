@@ -2314,8 +2314,8 @@ public int getEstimatedRTT(Hash peer) {
         if (_log.shouldInfo())
             // the old port and the config value are both unset in the common
             // auto-port case, so a null there is the normal state, not a value
-            _log.info("NTCP port check" +
-                      (isBlank(oport) ? "" : " * Old port: " + oport) +
+            _log.info("NTCP port check ->" +
+                      (isBlank(oport) ? "" : " Old port: " + oport) +
                       (isBlank(cport) ? "" : " * Config port: " + cport) +
                       (isBlank(nport) ? "" : " * Auto port: " + nport));
 
@@ -2343,8 +2343,8 @@ public int getEstimatedRTT(Hash peer) {
         if (_log.shouldInfo())
             // an unset old host or hostname config is the normal auto state,
             // so those segments are left out rather than logged as null
-            _log.info("NTCP host check" +
-                      (isBlank(ohost) ? "" : " * Old host: " + ohost) +
+            _log.info("NTCP host check ->" +
+                      (isBlank(ohost) ? "" : " Old host: " + ohost) +
                       (isBlank(name) ? "" : " * Config host: " + name) +
                       " * Auto enabled: " + enabled + " * SSU OK: " + ssuOK);
         if (wantsAutoHost(enabled, ssuOK)) {
@@ -2411,11 +2411,11 @@ public int getEstimatedRTT(Hash peer) {
                         _log.warn("Changing NTCP cost from " + oldCost + " to " + newCost);
                     // fall thru and republish
                 } else {
-                    _log.info("No change to NTCP Address");
+                    _log.info("No change to the NTCP address -> Cost unchanged too");
                     return false;
                 }
             } else {
-                _log.info("No change to NTCP Address");
+                _log.info("No change to the NTCP address -> No previous address");
                 return false;
             }
         }

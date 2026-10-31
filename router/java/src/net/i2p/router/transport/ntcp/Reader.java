@@ -162,7 +162,7 @@ public class Reader {
             }
         }
         if (_log.shouldDebug())
-            _log.debug("Wants read * " + (already ? "Already live" : "Not live") + "\n* " + con);
+            _log.debug("Wants read -> " + (already ? "Already live" : "Not live") + "\n* " + con);
     }
 
     /**
@@ -228,7 +228,7 @@ public class Reader {
                         } catch (IllegalStateException ise) {
                             // FailedEstablishState.receive() (race - see below)
                             if (_log.shouldWarn())
-                                _log.warn("Error in the NTCP Reader", ise);
+                                _log.warn("Processing the NTCP read failed", ise);
                         } catch (IllegalArgumentException iae) {
                             // probably a race with a cancelled key
                             // java.lang.IllegalArgumentException
@@ -237,8 +237,8 @@ public class Reader {
                             // at net.i2p.router.transport.ntcp.NTCPConnection$NTCP2ReadState.receive(NTCPConnection.java:2054)
                             // at net.i2p.router.transport.ntcp.NTCPConnection.recvEncryptedI2NP(NTCPConnection.java:1383)
                             // at net.i2p.router.transport.ntcp.Reader.processRead(Reader.java:170)
-                            if (_log.shouldWarn()) {_log.warn("Error in the NTCP reader", iae);}
-                        } catch (RuntimeException re) {_log.error("Error in the NTCP Reader", re);}
+                            if (_log.shouldWarn()) {_log.warn("Processing the NTCP read failed", iae);}
+                        } catch (RuntimeException re) {_log.error("Processing the NTCP read failed", re);}
                     } finally {
                         _activeCount.decrementAndGet();
                     }
