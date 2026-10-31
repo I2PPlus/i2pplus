@@ -13,7 +13,10 @@ import net.i2p.I2PAppContext;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -43,6 +46,14 @@ class LogRecordFormatter {
     private static final Pattern LINK_OPEN = Pattern.compile("<a[^>]*>");
     /** Anchor close tag stripped from messages in the LogManager.MESSAGE format. */
     private static final Pattern LINK_CLOSE = Pattern.compile("</a>");
+
+    /**
+     * The padded priority labels, by language, so a log line does not do a
+     * bundle lookup per record. Published as one immutable map, so a reader
+     * never sees a half-filled set, and two contexts that disagree on the
+     * language cannot make each other rebuild it on every record.
+     */
+    private static volatile Map<String, Priorities> _priorities = Collections.emptyMap();
 
     /**
      * Format a log record per manager settings.
@@ -82,9 +93,13 @@ class LogRecordFormatter {
                     break;
                 case LogManager.MESSAGE: String msg = rec.getMessage();
                     if (msg != null) {
-                        // Strip <a>...</a> to just inner text for both raw and console logs
-                        msg = LINK_OPEN.matcher(msg).replaceAll("");
-                        msg = LINK_CLOSE.matcher(msg).replaceAll("");
+                        // Strip <a>...</a> to just inner text for both raw and console
+                        // logs. Both tags need a '<', so the guard skips the two
+                        // Matcher passes for the overwhelming majority of records.
+                        if (msg.indexOf('<') >= 0) {
+                            msg = LINK_OPEN.matcher(msg).replaceAll("");
+                            msg = LINK_CLOSE.matcher(msg).replaceAll("");
+                        }
                         buf.append(msg);
                     }
                     break;
@@ -149,13 +164,86 @@ class LogRecordFormatter {
      * @since 0.7.14
      */
     private static String getPriority(LogRecord rec, I2PAppContext ctx) {
-        int len;
-        if (Translate.getLanguage(ctx).equals("de")) {
-            len = 8; // KRITISCH
-        } else {
-            len = MAX_PRIORITY_LENGTH;
+        String lang = Translate.getLanguage(ctx);
+        Priorities p = _priorities.get(lang);
+        if (p == null)
+            p = resolvePriorities(lang, ctx);
+        return p._labels[labelIndex(rec.getPriority())];
+    }
+
+    /**
+     * Resolve the five priority labels for one language, once per language.
+     * Only the language can change, and only on a config change, so the bundle
+     * lookups and the padding are done there rather than on every record.
+     * Package-visible for the test of the cache against the direct lookup.
+     *
+     * @param lang the two-letter language from {@link Translate#getLanguage}
+     * @param ctx the context to resolve the bundle in
+     * @return the padded labels for that language
+     * @since 0.9.72+
+     */
+    static Priorities resolvePriorities(String lang, I2PAppContext ctx) {
+        int len = "de".equals(lang) ? 8 : MAX_PRIORITY_LENGTH; // KRITISCH
+        String[] labels = new String[5];
+        for (int i = 0; i < labels.length; i++)
+            labels[i] = padOrTruncate(Translate.getString(Log.toLevelString(Log.DEBUG + i * 10),
+                                                          ctx, BUNDLE_NAME), len);
+        Priorities rv = new Priorities(labels);
+        // publish a whole new map, so a reader never sees a partial one
+        Map<String, Priorities> next = new HashMap<>(_priorities);
+        next.put(lang, rv);
+        _priorities = Collections.unmodifiableMap(next);
+        return rv;
+    }
+
+    /**
+     * Index of the label for a log level in the five-entry array, mapped the
+     * same way as {@link Log#toLevelString}, including how that method treats a
+     * level between the defined ones: it is not rounded, it is the low end.
+     *
+     * @param level the log level, {@link Log#DEBUG} through {@link Log#CRIT}
+     * @return 0 for debug through 4 for critical
+     * @since 0.9.72+
+     */
+    static int labelIndex(int level) {
+        switch (level) {
+            case Log.DEBUG: return 0;
+            case Log.INFO: return 1;
+            case Log.WARN: return 2;
+            case Log.ERROR: return 3;
+            case Log.CRIT: return 4;
         }
-        return padOrTruncate(Translate.getString(Log.toLevelString(rec.getPriority()), ctx, BUNDLE_NAME), len);
+        return level > Log.CRIT ? 4 : 0;
+    }
+
+    /**
+     * The labels cached for one language, or null if none are cached for it.
+     * Package-visible so a test can show that resolving a second language does
+     * not evict the first, which is what keeps two contexts from rebuilding on
+     * every record.
+     *
+     * @param lang the two-letter language
+     * @return the cached labels, or null
+     * @since 0.9.72+
+     */
+    static Priorities cachedPriorities(String lang) {
+        return _priorities.get(lang);
+    }
+
+    /** The padded priority labels of one language, immutable once published. */
+    static class Priorities {
+        /** Padded labels, indexed by {@link LogRecordFormatter#labelIndex}. */
+        final String[] _labels;
+
+        /**
+         * Hold one language's labels.
+         *
+         * @param labels the padded labels, indexed by
+         *               {@link LogRecordFormatter#labelIndex}
+         */
+        Priorities(String[] labels) {
+            _labels = labels;
+        }
     }
 
     /**

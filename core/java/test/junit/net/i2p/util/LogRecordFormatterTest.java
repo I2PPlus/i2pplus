@@ -4,11 +4,14 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import net.i2p.I2PAppContext;
+
 /**
  * Pins the fixed-width thread/class/priority column formatting:
  * names shorter than {@code size} are right-padded, names longer
  * are truncated to the last {@code size - 3} chars with a "..." prefix,
  * so every rendered column is exactly {@code size} chars wide.
+ * Pins the cached priority labels against the per-record lookup they replace.
  */
 public class LogRecordFormatterTest {
 
@@ -67,5 +70,60 @@ public class LogRecordFormatterTest {
         String huge = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
         assertEquals(WIDTH, LogRecordFormatter.padOrTruncate(huge, WIDTH).length());
         assertTrue(LogRecordFormatter.padOrTruncate(huge, WIDTH).startsWith("..."));
+    }
+
+    @Test
+    public void testLabelIndexCoversTheLevels() {
+        assertEquals(0, LogRecordFormatter.labelIndex(Log.DEBUG));
+        assertEquals(1, LogRecordFormatter.labelIndex(Log.INFO));
+        assertEquals(2, LogRecordFormatter.labelIndex(Log.WARN));
+        assertEquals(3, LogRecordFormatter.labelIndex(Log.ERROR));
+        assertEquals(4, LogRecordFormatter.labelIndex(Log.CRIT));
+    }
+
+    /**
+     * The cache holds five labels, so an out-of-range level has to land on the
+     * end the way {@link Log#toLevelString} sends it, or the two disagree.
+     */
+    @Test
+    public void testLabelIndexClampsLikeToLevelString() {
+        String[] names = {"DEBUG", "INFO", "WARN", "ERROR", "CRIT"};
+        for (int level = -20; level <= 80; level++)
+            assertEquals(Log.toLevelString(level), names[LogRecordFormatter.labelIndex(level)]);
+    }
+
+    /**
+     * The cached label must be exactly what the per-record lookup produced,
+     * which is the whole point of caching it.
+     */
+    @Test
+    public void testCachedLabelsMatchTheDirectLookup() {
+        I2PAppContext ctx = I2PAppContext.getGlobalContext();
+        String lang = Translate.getLanguage(ctx);
+        int len = "de".equals(lang) ? 8 : 5;
+        LogRecordFormatter.Priorities p = LogRecordFormatter.resolvePriorities(lang, ctx);
+        for (int i = 0; i < 5; i++) {
+            String direct = LogRecordFormatter.padOrTruncate(
+                    Translate.getString(Log.toLevelString(Log.DEBUG + i * 10), ctx,
+                                        "net.i2p.util.messages"), len);
+            assertEquals(direct, p._labels[i]);
+        }
+    }
+
+    /**
+     * German gets the wider column for KRITISCH, and each language keeps its
+     * own labels: a probe of one must not evict the router's own, or two
+     * contexts would rebuild the set on every record.
+     */
+    @Test
+    public void testEachLanguageKeepsItsOwnLabels() {
+        I2PAppContext ctx = I2PAppContext.getGlobalContext();
+        String lang = Translate.getLanguage(ctx);
+        LogRecordFormatter.resolvePriorities(lang, ctx);
+        LogRecordFormatter.resolvePriorities("de", ctx);
+        LogRecordFormatter.resolvePriorities("en", ctx);
+        assertEquals(8, LogRecordFormatter.cachedPriorities("de")._labels[4].length());
+        assertEquals(5, LogRecordFormatter.cachedPriorities("en")._labels[4].length());
+        assertNotNull(LogRecordFormatter.cachedPriorities(lang));
     }
 }

@@ -3,6 +3,7 @@ package net.i2p.util;
 import static org.junit.Assert.*;
 
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import org.junit.Test;
 
 public class PasswordManagerTest {
@@ -91,5 +92,67 @@ public class PasswordManagerTest {
         String md5 = PasswordManager.md5Hex("test");
         String sha256 = PasswordManager.sha256Hex("test");
         assertNotEquals(md5, sha256);
+    }
+
+    /** The bytes of a string, as the sums take UTF-8. */
+    private static byte[] utf8(String s) {
+        return s.getBytes(StandardCharsets.UTF_8);
+    }
+
+    /** The reference digest, taken from a fresh provider instance. */
+    private static byte[] sum(String alg, byte[] data) throws Exception {
+        return MessageDigest.getInstance(alg).digest(data);
+    }
+
+    /** Copy a sum into the caller's array, for the other-thread test. */
+    private static void copy(byte[] from, byte[] to) {
+        System.arraycopy(from, 0, to, 0, from.length);
+    }
+
+    /**
+     * The per-thread digest has to produce what a fresh MessageDigest
+     * produces, which is the whole point of caching it.
+     */
+    @Test
+    public void testSumsMatchAFreshMessageDigest() throws Exception {
+        byte[][] inputs = {new byte[0], utf8("x"),
+                           utf8("the quick brown fox")};
+        for (byte[] data : inputs) {
+            assertArrayEquals(sum("SHA-256", data),
+                              PasswordManager.sha256Sum(data));
+            assertArrayEquals(sum("MD5", data),
+                              PasswordManager.md5Sum(data));
+        }
+    }
+
+    /**
+     * Both digests run on one thread, so a SHA-256 call must not leave
+     * update state for the MD5 call that follows it.
+     */
+    @Test
+    public void testInterleavedSumsDoNotShareState() throws Exception {
+        byte[] a = utf8("alpha");
+        byte[] b = utf8("bravo");
+        PasswordManager.sha256Sum(a);
+        assertArrayEquals(sum("MD5", b), PasswordManager.md5Sum(b));
+        assertArrayEquals(sum("SHA-256", a),
+                          PasswordManager.sha256Sum(a));
+    }
+
+    /**
+     * A MessageDigest is not thread-safe, so the cache is per-thread: a
+     * second thread must get its own instance and agree on the answer.
+     */
+    @Test
+    public void testSumsFromAnotherThread() throws Exception {
+        byte[] data = utf8("shared across threads");
+        byte[] expected = sum("SHA-256", data);
+        byte[] other = new byte[expected.length];
+        Runnable run = () -> copy(PasswordManager.sha256Sum(data),
+                                  other);
+        Thread t = new Thread(run);
+        t.start();
+        t.join();
+        assertArrayEquals(expected, other);
     }
 }

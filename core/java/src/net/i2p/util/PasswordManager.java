@@ -234,33 +234,73 @@ public class PasswordManager {
     }
 
     /**
+     * A per-thread digest of one algorithm, or null if the algorithm is absent.
+     * A MessageDigest is not thread-safe, so it cannot be shared, and it is
+     * cached per thread because getInstance() does a provider lookup that a
+     * digest-auth request would otherwise pay every request.
+     *
+     * @param algorithm the digest to build, e.g. "SHA-256"
+     * @return the local, or null if the algorithm is unavailable
+     * @since 0.9.72+
+     */
+    private static ThreadLocal<MessageDigest> digestLocal(String algorithm) {
+        try {
+            MessageDigest.getInstance(algorithm);
+        } catch (NoSuchAlgorithmException nsae) {
+            return null;
+        }
+        return ThreadLocal.withInitial(() -> {
+            try {
+                return MessageDigest.getInstance(algorithm);
+            } catch (NoSuchAlgorithmException nsae) {
+                return null;
+            }
+        });
+    }
+
+    /**
+     * Sum with a per-thread digest, resetting it first so a caller that threw
+     * mid-update cannot leave state for the next one.
+     *
+     * @param local the digest to use, or null for an unavailable algorithm
+     * @param data the bytes to sum
+     * @return the digest, or an empty array if the algorithm is unavailable
+     */
+    private static byte[] sum(ThreadLocal<MessageDigest> local, byte[] data) {
+        if (local == null)
+            return new byte[0];
+        MessageDigest md = local.get();
+        if (md == null)
+            return new byte[0];
+        md.reset();
+        md.update(data);
+        return md.digest();
+    }
+
+    /** Per-thread SHA-256, the digest used by the RFC 7616 digest-auth path. */
+    private static final ThreadLocal<MessageDigest> _sha256 = digestLocal("SHA-256");
+
+    /** Per-thread MD5, used for the Jetty-compatible stored password. */
+    private static final ThreadLocal<MessageDigest> _md5 = digestLocal("MD5");
+
+    /**
      * Standard SHA-256 checksum.
      *
      * @param data non-null
      * @return 32 bytes, or empty on error
      */
     public static byte[] sha256Sum(byte[] data) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            md.update(data);
-            return md.digest();
-        } catch (NoSuchAlgorithmException nsae) { /* ignored */ }
-        return new byte[0];
+        return sum(_sha256, data);
     }
 
     /**
      * Standard MD5 checksum.
      *
      * @param data non-null
-     * @return 16 bytes, or null on error
+     * @return 16 bytes, or empty on error
      */
     public static byte[] md5Sum(byte[] data) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            md.update(data);
-            return md.digest();
-        } catch (NoSuchAlgorithmException nsae) { /* ignored */ }
-        return new byte[0];
+        return sum(_md5, data);
     }
 
     /**
