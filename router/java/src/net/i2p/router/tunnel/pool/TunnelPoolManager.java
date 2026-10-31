@@ -638,7 +638,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     public void buildTunnels(Destination client, ClientTunnelSettings settings) {
         Hash dest = client.calculateHash();
         if (_log.shouldDebug()) {
-            _log.debug("Building tunnels for client " + client.toBase32() + ": " + settings);
+            _log.debug("Building tunnels for client [" + dest.toBase32().substring(0, 8) + "]: " + settings);
         }
         TunnelPool inbound = null;
         TunnelPool outbound = null;
@@ -693,7 +693,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             TunnelPool inbound = _clientInboundPools.get(h);
             TunnelPool outbound = _clientOutboundPools.get(h);
             if (inbound != null || outbound != null) {
-                if (_log.shouldWarn()) {_log.warn("Already have alias " + dest.toBase32());}
+                if (_log.shouldWarn()) {_log.warn("Already have alias [" + h.toBase32().substring(0, 8) + "]");}
                 return false;
             }
             TunnelPool eInbound = _clientInboundPools.get(e);
@@ -716,7 +716,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             outbound.startup();
         }
         if (_log.shouldInfo()) {
-            _log.info("Added " + dest.toBase32() + " as alias for " + existingClient.toBase32());
+            _log.info("Added [" + h.toBase32().substring(0, 8) + "] as alias for [" + e.toBase32().substring(0, 8) + "]");
         }
         return true;
     }

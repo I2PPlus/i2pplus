@@ -17,6 +17,7 @@ import net.i2p.I2PAppContext;
 import net.i2p.client.streaming.I2PSocket;
 import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
+import net.i2p.data.Hash;
 import net.i2p.util.Log;
 
 /**
@@ -90,19 +91,21 @@ class PeerAcceptor {
             in.reset();
         } else {
             // Single torrent - is this working right?
+            Hash peerHash = socket.getPeerDestination().calculateHash();
             try {
                 peerInfoHash = readHash(in);
                 if (_log.shouldInfo())
                     _log.info(
-                            "Infohash read from "
-                                    + socket.getPeerDestination().calculateHash().toBase64()
-                                    + ": "
+                            "Infohash read from ["
+                                    + peerHash.toBase32().substring(0, 8)
+                                    + "] * Info hash: "
                                     + Base64.encode(peerInfoHash));
             } catch (IOException ioe) {
                 if (_log.shouldInfo())
                     _log.info(
-                            "Unable to read the infohash from "
-                                    + socket.getPeerDestination().calculateHash().toBase64());
+                            "Unable to read the infohash from ["
+                                    + peerHash.toBase32().substring(0, 8)
+                                    + "]");
                 throw ioe;
             }
             in = new SequenceInputStream(new ByteArrayInputStream(peerInfoHash), in);

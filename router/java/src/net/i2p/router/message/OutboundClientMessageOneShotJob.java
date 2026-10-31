@@ -364,7 +364,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 }
                 if (shouldFetch) {
                     if (_log.shouldInfo()) {
-                        _log.info("Stale published LeaseSet, initiating search: " + _leaseSet.getHash().toBase32());
+                        _log.info("Stale published LeaseSet, initiating search: [" + _leaseSet.getHash().toBase32().substring(0, 8) + "]");
                     }
                     LookupLeaseSetFailedJob failed = new LookupLeaseSetFailedJob(getContext());
                     kndf.lookupLeaseSetRemotely(_leaseSet.getHash(), success, failed,
@@ -390,7 +390,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                     if (_log.shouldInfo()) {
                         long exp = now - _leaseSet.getLatestLeaseDate();
                         _log.info("LeaseSet expired " + DataHelper.formatDuration(exp) +
-                                  " ago, initiating remote search for: " + _leaseSet.getHash().toBase32());
+                                  " ago, initiating remote search for [" + _leaseSet.getHash().toBase32().substring(0, 8) + "]");
                     }
                     _leaseSetLookupBegin = getContext().clock().now();
                     LookupLeaseSetFailedJob failed = new LookupLeaseSetFailedJob(getContext());
@@ -480,7 +480,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             _leaseSetLookupBegin = getContext().clock().now();
             if (_log.shouldDebug()) {
                 _log.debug("Send Outbound client message - initiating LeaseSet Lookup job " +
-                           _toString + " from client " + _from.calculateHash().toBase32());
+                           _toString + " from client [" + _from.calculateHash().toBase32().substring(0, 8) + "]");
             }
             LookupLeaseSetFailedJob failed = new LookupLeaseSetFailedJob(getContext());
             Hash key = _to.calculateHash();

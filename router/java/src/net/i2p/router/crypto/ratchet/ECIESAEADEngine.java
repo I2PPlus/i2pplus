@@ -1931,7 +1931,7 @@ public final class ECIESAEADEngine {
             // OK, we have a valid place to send the reply
             Destination d = ls2.getDestination();
             if (_log.shouldInfo())
-                _log.info("Validated NewSession sender: " + d.toBase32());
+                _log.info("Validated NewSession sender: [" + d.calculateHash().toBase32().substring(0, 8) + "]");
             ACKTimer ack = new ACKTimer(_context, us, d);
             if (skm.registerTimer(from, d, ack)) {
                 ack.schedule(1000);

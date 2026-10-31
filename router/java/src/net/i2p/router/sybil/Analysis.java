@@ -611,7 +611,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
                 _banLogger.logBan(h, ipPort, reason, blockUntil, ri);
 
                 if (_log.shouldWarn()) {
-                    _log.warn("Banning " + h.toBase64() + "-> Sybil Scan (" + fmt.format(p).replace(".00", "") + " points)");
+                    _log.warn("Banning [" + h.toBase64().substring(0, 6) + "] -> Sybil Scan (" + fmt.format(p).replace(".00", "") + " points)");
                 }
             }
         }

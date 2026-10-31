@@ -1655,8 +1655,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                   destHash.toBase32().substring(0, 8) +
                                   "] (" + MAX_CONNS_PER_DEST + " concurrent)");
                     }
-                    throw new IOException("Too many concurrent connections to " +
-                                          destHash.toBase32().substring(0, 6));
+                    throw new IOException("Too many concurrent connections to [" +
+                                          destHash.toBase32().substring(0, 8) + "]");
                 }
                 heldPermitDest = destHash;
 
@@ -1895,8 +1895,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                 }
                                 racePermit.set(destHash);
                                 if (_log.shouldInfo()) {
-                                    _log.info(getPrefix(requestId) + "Empty-race opened dual sockets to " +
-                                              destHash.toBase32());
+                                    _log.info(getPrefix(requestId) + "Empty-race opened dual sockets to [" +
+                                              destHash.toBase32().substring(0, 8) + "]");
                                 }
                                 return new I2PSocket[]{first, second};
                             } catch (RuntimeException re) {
@@ -2340,7 +2340,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         s = null;
                         if (_log.shouldInfo()) {
                             _log.info(getPrefix(requestId) +
-                                      "Opened speculative warm socket to " + destHash.toBase32());
+                                      "Opened speculative warm socket to [" + destHash.toBase32().substring(0, 8) + "]");
                         }
                     }
                 } finally {
@@ -2396,7 +2396,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     // mid-body Range resume; the runner already logged which
                     // path is active at Info before invoking us.
                     _log.info(getPrefix(requestId) + "I2P reconnect attempt " + attempt + '/' + emptyBudget +
-                              " to " + dest.calculateHash().toBase32());
+                              " to [" + dest.calculateHash().toBase32().substring(0, 8) + "]");
                 }
                 return fresh;
             } catch (IOException ioe) {

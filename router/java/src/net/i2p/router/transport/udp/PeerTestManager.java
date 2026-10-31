@@ -1030,7 +1030,7 @@ class PeerTestManager {
                        "Time: " + DataHelper.formatTime(time) +
                        " * Message: " + msg +
                        " * Status: " + status +
-                       "\n* Hash: " + (h != null ? h.toBase64() : "null") +
+                       "\n* Hash: " + (h != null ? "[" + h.toBase64().substring(0, 6) + "]" : "None") +
                        " * Nonce: " + nonce +
                        " * IP/Port: " + Addresses.toString(testIP, testPort) +
                        " * State: " + state);

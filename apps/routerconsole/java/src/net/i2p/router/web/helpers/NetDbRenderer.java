@@ -2036,7 +2036,7 @@ class NetDbRenderer {
             }
         } catch (Throwable t) {
             if (_log.shouldWarn())
-                _log.warn("Error rendering RouterInfo [" + ri.getHash().toBase64() + ']', t);
+                _log.warn("Error rendering RouterInfo [" + ri.getHash().toBase64().substring(0, 6) + ']', t);
             sb.append("<!-- error rendering ").append(ri.getHash().toBase64()).append(" -->\n");
         }
     }

@@ -143,12 +143,12 @@ public final class DSAEngine {
                 rv = altVerifySig(signature, signedData, offset, size, verifyingKey);
                 if (!rv && _log.shouldWarn())
                     _log.warn(type + " sig verify failed " + size + "B key [" +
-                              verifyingKey.calculateHash().toBase32() + ']');
+                              verifyingKey.calculateHash().toBase32().substring(0, 8) + ']');
                 return rv;
             } catch (GeneralSecurityException gse) {
                 if (_log.shouldWarn())
                     _log.warn(type + " sig verify failed " + size + "B key [" +
-                              verifyingKey.calculateHash().toBase32() + ']', gse);
+                              verifyingKey.calculateHash().toBase32().substring(0, 8) + ']', gse);
                 return false;
             }
         }

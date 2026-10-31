@@ -1149,7 +1149,7 @@ class ConnectionManager {
         if (action == SynBurstAction.BAN)
             return true;
         if (action == SynBurstAction.RECORD && _log.shouldWarn()) {
-            _log.warn("SYN burst strike for " + h.toBase32().substring(0, 6)
+            _log.warn("SYN burst strike for [" + h.toBase32().substring(0, 8) + "]"
                       + " (>" + _synBurst + " SYNs/" + _synRateMs + "ms)"
                       + " * " + needed + " burst windows within "
                       + DataHelper.formatDuration(STRIKE_WINDOW_MS) + " autobans");
@@ -1587,27 +1587,28 @@ class ConnectionManager {
                             DataHelper.toLong(g, j << 2, 4, nacks[j]);
                         }
                         Hash ghash = new Hash(g);
-                        _log.warn("Signature passed but hash failed, sending reset, expected: " + localHash.toBase32() +
-                                  " received: " + ghash.toBase32() +
-                                  " from: " + fromHash.toBase32());
+                        _log.warn("Signature passed but the SYN hash check failed -> Sending reset" +
+                                  "\n* Expected: [" + localHash.toBase32().substring(0, 8) + "]" +
+                                  " * Received: [" + ghash.toBase32().substring(0, 8) + "]" +
+                                  " * From: [" + fromHash.toBase32().substring(0, 8) + "]");
                     }
                     _packetHandler.sendResetUnverified(synPacket);
                     return null;
                 }
                 if (sigOk && _log.shouldInfo())
-                    _log.info("Validated SYN NACKS from: " + from.toBase32());
+                    _log.info("Validated SYN NACKS from [" + from.toBase32().substring(0, 8) + "]");
             }
         }
         if (!sigOk) {
             if (_log.shouldWarn())
-                _log.warn("Received UNSIGNED / FORGED SYN packet apparently from " + from.toBase32() + ": " + synPacket);
+                _log.warn("Received UNSIGNED / FORGED SYN packet apparently from [" + from.toBase32().substring(0, 8) + "] * Packet: " + synPacket);
             return null;
         }
 
         boolean reject = false;
         int retryAfter = 0;
         String client = synPacket.getOptionalFrom() == null ? "unknown" :
-                        synPacket.getOptionalFrom().toBase32().substring(0, 6);
+                        "[" + synPacket.getOptionalFrom().toBase32().substring(0, 8) + "]";
 
         // Sub-second SYN burst gate: a dest that blasts > tempBanSynBurst SYNs
         // within tempBanSynRate-ms records a strike, and tempBanStrikes DISTINCT
@@ -1655,7 +1656,7 @@ class ConnectionManager {
                 // SYN-ACK, or refusal logging, so a banned dest can't keep hammering.
                 if (isTempBanned(fromHash, _context.clock().now())) {
                     if ((!_defaultOptions.getDisableRejectLogging()) && _log.shouldDebug())
-                        _log.debug("Dropping SYN from temp-banned " + from.toBase32().substring(0, 6));
+                        _log.debug("Dropping SYN from temp-banned [" + from.toBase32().substring(0, 8) + "]");
                     return null;
                 }
                 if ((!_defaultOptions.getDisableRejectLogging()) && _log.shouldWarn()) {
@@ -1787,7 +1788,7 @@ class ConnectionManager {
             // This is a tradeoff, because it will keep retransmitting the SYN for a while,
             // thus more inbound, but let's not spend several KB on the outbound.
             if (_log.shouldInfo())
-                _log.info("Dropping limit response to " + from.toBase32());
+                _log.info("Dropping limit response to [" + from.toBase32().substring(0, 8) + "]");
             return;
         }
         String sendResponse = limitResponse(resp, retryAfter, synPacket.getLocalPort() == 443);
@@ -1807,7 +1808,7 @@ class ConnectionManager {
         reply.setLocalPort(synPacket.getLocalPort());
         reply.setRemotePort(synPacket.getRemotePort());
         if (_log.shouldInfo())
-            _log.info("Over limit, sending " + reply + " to " + from.toBase32());
+            _log.info("Over limit, sending " + reply + " to [" + from.toBase32().substring(0, 8) + "]");
         // this just sends the packet - no retries or whatnot
         _outboundQueue.enqueue(reply);
     }
@@ -1882,7 +1883,7 @@ class ConnectionManager {
             Reason why = shouldRejectConnection(ping);
             if (why != null) {
                 if ((!_defaultOptions.getDisableRejectLogging()) || _log.shouldWarn())
-                    _log.logAlways(Log.WARN, "Dropping ping: " + why + "\n* From: " + dest.toBase32());
+                    _log.logAlways(Log.WARN, "Dropping ping: " + why + "\n* From: [" + dest.toBase32().substring(0, 8) + "]");
                 return false;
             }
         } else {
@@ -1890,8 +1891,8 @@ class ConnectionManager {
             // that connection's remote peer; treating it as an open relay would
             // let one peer probe a third party through our tunnels.
             if (!dest.equals(con.getRemotePeer())) {
-                _log.logAlways(Log.WARN, "Dropping ping to 3rd party from: " + con.getRemotePeer().toBase32() +
-                                         "\n* Target: " + dest.toBase32());
+                _log.logAlways(Log.WARN, "Dropping ping to 3rd party from: [" + con.getRemotePeer().toBase32().substring(0, 8) + "]" +
+                                         "\n* Target: [" + dest.toBase32().substring(0, 8) + "]");
                 return false;
             }
         }
@@ -1914,10 +1915,10 @@ class ConnectionManager {
         if (enableDelay) {
             try { Thread.sleep(randomDelay); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); /* ignored */ }
             if (_log.shouldInfo())
-                _log.info("Sending pong to: " + dest.toBase32() + " with random delay of " + randomDelay + "ms");
+                _log.info("Sending pong to: [" + dest.toBase32().substring(0, 8) + "] with random delay of " + randomDelay + "ms");
         } else {
             if (_log.shouldInfo())
-                _log.info("Sending pong to: " + dest.toBase32());
+                _log.info("Sending pong to: [" + dest.toBase32().substring(0, 8) + "]");
         }
         _outboundQueue.enqueue(pong);
         return true;

@@ -873,7 +873,7 @@ class ConnectionHandler {
         out.append(syn.getSequenceNum());
         Destination from = syn.getOptionalFrom();
         if (from != null) {
-            out.append(" from ").append(from.calculateHash().toBase32().substring(0, 6));
+            out.append(" from [").append(from.calculateHash().toBase32().substring(0, 8)).append(']');
         }
         out.append(" streamIDs [").append(Packet.toId(syn.getReceiveStreamId()))
            .append('/').append(Packet.toId(syn.getSendStreamId())).append(']');

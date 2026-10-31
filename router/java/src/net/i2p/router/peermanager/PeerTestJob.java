@@ -363,7 +363,7 @@ public class PeerTestJob extends JobImpl {
                 if (data.routerInfo != null) {
                     peers.add(data.routerInfo);
                     if (_log.shouldDebug()) {
-                        _log.debug("Testing priority peer: " + peer.toBase32().substring(0, 6));
+                        _log.debug("Testing priority peer: [" + peer.toBase64().substring(0, 6) + "]");
                     }
                 }
             }

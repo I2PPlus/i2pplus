@@ -289,13 +289,13 @@ public class GarlicMessageBuilder {
         LeaseSetKeys lsk = ctx.keyManager().getKeys(from);
         if (lsk == null) {
             if (log.shouldWarn())
-                log.warn("No LSK for " + from.toBase32());
+                log.warn("No LSK for [" + from.toBase32().substring(0, 8) + "]");
             return null;
         }
         PrivateKey priv = lsk.getDecryptionKey(type);
         if (priv == null) {
             if (log.shouldWarn())
-                log.warn("No key for " + from.toBase32());
+                log.warn("No key for [" + from.toBase32().substring(0, 8) + "]");
             return null;
         }
 
@@ -309,13 +309,13 @@ public class GarlicMessageBuilder {
             rskm = type.isPQ() ? mskm.getPQSKM() : mskm.getECSKM();
         } else {
             if (log.shouldWarn())
-                log.warn("No SKM for " + from.toBase32());
+                log.warn("No SKM for [" + from.toBase32().substring(0, 8) + "]");
             return null;
         }
         byte[] encData = ctx.eciesEngine().encrypt(cloveSet, key, to, priv, rskm, callback);
         if (encData == null) {
             if (log.shouldWarn())
-                log.warn("Encrypt fail for " + from.toBase32());
+                log.warn("Encrypt fail for [" + from.toBase32().substring(0, 8) + "]");
             return null;
         }
         msg.setData(encData);

@@ -506,7 +506,7 @@ public class LeaseSet extends DatabaseEntry {
     public String toString() {
         StringBuilder buf = new StringBuilder(128);
         if (_destination != null) {
-            buf.append("\n* Destination: ").append(_destination.toBase32());
+            buf.append("\n* Destination: [").append(_destination.calculateHash().toBase32().substring(0, 8)).append(']');
         }
         if (_encryptionKey != null) {
             buf.append("\n* EncryptionKey: ").append(_encryptionKey);
@@ -618,7 +618,7 @@ public class LeaseSet extends DatabaseEntry {
     private void decrypt(SessionKey key) throws DataFormatException, IOException {
         int size = _leases.size();
         if (size < 2) {
-            throw new DataFormatException("Bad number of leases (" + size + ") decrypting " + _destination.toBase32() + " -> Is this destination encrypted?");
+            throw new DataFormatException("Bad number of leases (" + size + ") decrypting [" + _destination.calculateHash().toBase32().substring(0, 8) + "] -> Is this destination encrypted?");
         }
         int datalen = DATA_LEN * size;
         ByteArrayStream baos = new ByteArrayStream(datalen);
@@ -671,10 +671,12 @@ public class LeaseSet extends DatabaseEntry {
                 _decrypted = true;
             } catch (DataFormatException dfe) {
                 Log log = I2PAppContext.getGlobalContext().logManager().getLog(LeaseSet.class);
-                log.error("Error decrypting " + _destination.toBase32() + " -> Is this destination encrypted?", dfe);
+                log.error("Error decrypting [" + _destination.calculateHash().toBase32().substring(0, 8) +
+                          "] -> Is this destination encrypted?", dfe);
             } catch (IOException ioe) {
                 Log log = I2PAppContext.getGlobalContext().logManager().getLog(LeaseSet.class);
-                log.error("Error decrypting " + _destination.toBase32() + " -> Is this destination encrypted?", ioe);
+                log.error("Error decrypting [" + _destination.calculateHash().toBase32().substring(0, 8) +
+                          "] -> Is this destination encrypted?", ioe);
             }
         }
         _checked = true;

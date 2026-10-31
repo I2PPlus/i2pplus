@@ -8,6 +8,7 @@ import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.I2PAppContext;
 import net.i2p.data.Destination;
+import net.i2p.data.Hash;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 
@@ -129,13 +130,12 @@ class TCBShare {
             wdw = e.getWindowSize();
         }
         if (_log.shouldDebug()) {
-            _log.debug("From cache: " +
-                       con.getSession().getMyDestination().calculateHash().toBase64().substring(0, 4) +
-                       '-' +
-                       dest.calculateHash().toBase64().substring(0, 4) +
-                       " RTT: " + rtt +
-                       " RTTDev: "+ rttDev +
-                       " wdw: " + wdw );
+            Hash local = con.getSession().getMyDestination().calculateHash();
+            Hash remote = dest.calculateHash();
+            _log.debug("Congestion cache hit for [" +
+                       remote.toBase32().substring(0, 8) + "]" +
+                       "\n* Local: [" + local.toBase32().substring(0, 8) + "]" +
+                       " * RTT: " + rtt + "ms * RTTDev: " + rttDev + "ms * Window: " + wdw + "B");
         }
         opts.loadFromCache(rtt,rttDev,wdw);
     }

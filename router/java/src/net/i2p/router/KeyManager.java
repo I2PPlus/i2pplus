@@ -166,7 +166,7 @@ public class KeyManager {
      */
     public LeaseSetKeys unregisterKeys(Destination dest) {
         if (_log.shouldInfo())
-            _log.info("Unregistering keys for destination " + dest.calculateHash().toBase64());
+            _log.info("Unregistering keys for destination [" + dest.calculateHash().toBase32().substring(0, 8) + "]");
         return _leaseSetKeys.remove(dest.calculateHash());
     }
 

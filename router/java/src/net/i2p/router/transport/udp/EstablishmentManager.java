@@ -2698,7 +2698,7 @@ public class EstablishmentManager {
                 if (SSU2Util.validateSig(_context, SSU2Util.RELAY_RESPONSE_PROLOGUE,
                                          h, null, data, spk)) {
                     if (_log.shouldInfo()) {
-                        _log.info("[SSU] GOOD signature with HolePunch, credit " + h.toBase64() + " on " + state);
+                        _log.info("[SSU] GOOD signature with HolePunch, credit [" + h.toBase64().substring(0, 6) + "] on " + state);
                     }
                     state2.setIntroState(h, INTRO_STATE_SUCCESS);
                     return data;

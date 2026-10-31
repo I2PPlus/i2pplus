@@ -164,7 +164,7 @@ class ConnThrottler {
                     _log.logAlways(Log.WARN, "Throttling " + _action + " until " + date +
                                              " after exceeding max of " + _max +
                                              " in " + DataHelper.formatDuration(_checkPeriod) +
-                                             "\n* Client: " + h.toBase64());
+                                             "\n* Client: [" + h.toBase32().substring(0, 8) + "]");
                     rec.ban(until);
                     return true;
                 }

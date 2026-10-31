@@ -425,7 +425,7 @@ public class FamilyKeyCrypto {
             if (r != null) {
                 if ((_failCount.incrementAndGet() & 0x3f) != 0) {
                     if (_log.shouldInfo())
-                        _log.info("Bad family (cached): " + r + ' ' + h.toBase64());
+                        _log.info("Bad family (cached) [" + h.toBase64().substring(0, 6) + "] -> " + r);
                     return r;
                 }
                 // every once in a while, recheck in case of transient error
