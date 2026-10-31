@@ -633,7 +633,7 @@ class ConnectionHandler {
         }
         if (_manager.wasRecentlyClosed(packet.getSendStreamId())) {
             if (_log.shouldWarn()) {_log.warn("Dropping packet for recently closed stream [" + Packet.toId(packet.getSendStreamId()) + "]");}
-            if (_log.shouldDebug()) {_log.debug("Packet for recently closed stream * " + packet);}
+            if (_log.shouldDebug()) {_log.debug("Packet for recently closed stream -> " + packet);}
             packet.releasePayload();
             return;
         }

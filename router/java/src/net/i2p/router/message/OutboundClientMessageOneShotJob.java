@@ -1023,17 +1023,16 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                               + "] Dispatch failed (gateway missing/expired), attempting failover for " + _toString);
                 }
                 if (_log.shouldDebug()) {
-                    _log.debug("[Job " + OutboundClientMessageOneShotJob.this.getJobId()
-                              + "] Dispatch details" +
-                              "\n* outTunnel: " + _outTunnel +
-                              " * sendTunnelId: " +
-                              (_outTunnel != null ? _outTunnel.getSendTunnelId(0) : "null") +
-                              "\n* lease: " + _lease +
-                              " * leaseTunnelId: " +
-                              (_lease != null ? _lease.getTunnelId() : "null") +
-                              " * msgSize: " + (_msg != null ? _msg.getMessageSize() : 0) +
-                              "\n* leaseGateway: " +
-                              (_lease != null ? _lease.getGateway() : "null"));
+                    _log.debug("Job " + OutboundClientMessageOneShotJob.this.getJobId() +
+                               " dispatch details -> Outbound tunnel: " + _outTunnel +
+                               " * Send tunnel ID: " +
+                               (_outTunnel != null ? _outTunnel.getSendTunnelId(0) : "null") +
+                               "\n* Lease tunnel ID: " +
+                               (_lease != null ? _lease.getTunnelId() : "null") +
+                               " * Message size: " + (_msg != null ? _msg.getMessageSize() : 0) + " bytes" +
+                               "\n* Lease gateway: " +
+                               (_lease != null ? "[" + _lease.getGateway().toBase64().substring(0, 6) + "]" : "null") +
+                               "\n* " + _lease);
                 }
                 TunnelInfo failover = selectOutboundTunnel(_to);
                 if (failover != null && !failover.equals(_outTunnel)) {

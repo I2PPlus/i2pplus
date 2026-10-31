@@ -98,7 +98,7 @@ class FloodOnlyLookupSelector implements MessageSelector {
                 } else if (_log.shouldInfo()) {
                     int remaining = _search.getLookupsRemaining();
                     _log.info("Search reply from [" + dsrm.getFromHash().toBase64().substring(0,6) + "] for ["
-                              + _search.getKey().toBase64().substring(0,6) + "] * " + remaining + " outstanding");
+                              + _search.getKey().toBase64().substring(0,6) + "] -> Outstanding: " + remaining);
                 }
 
                 // if no more left, time to fail

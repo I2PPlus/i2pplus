@@ -117,7 +117,7 @@ public final class ElGamalAESEngine {
         final boolean shouldDebug = _log.shouldDebug();
         if (key != null) {
             if (shouldDebug)
-                _log.debug("Decrypting existing session * Size: " + data.length + " bytes" +
+                _log.debug("Decrypting an existing session -> Size: " + data.length + " bytes" +
                            "\n* Tag: " + st);
 
             decrypted = decryptExistingSession(data, key, targetPrivateKey, foundTags, usedKey, foundKey);
@@ -208,7 +208,7 @@ public final class ElGamalAESEngine {
         Set<SessionTag> foundTags = new HashSet<>();
         final boolean shouldDebug = _log.shouldDebug();
         if (shouldDebug)
-            _log.debug("Decrypting existing session * Tag: " + st +
+            _log.debug("Decrypting an existing session -> Tag: " + st +
                        " * Size: " + data.length + " bytes");
         byte[] decrypted = decryptExistingSession(data, key, targetPrivateKey, foundTags, usedKey, foundKey);
         if (decrypted != null) {

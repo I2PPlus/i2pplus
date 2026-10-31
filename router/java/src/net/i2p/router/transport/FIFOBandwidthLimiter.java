@@ -797,17 +797,17 @@ public class FIFOBandwidthLimiter {
             satisfied.add(req);
             if (req.getPendingRequested() > 0) {
                 if (_log.shouldDebug())
-                     _log.debug("Allocating " + allocated + " bytes inbound as a partial grant"
-                                + "\n* " + req + " * Waited: " + DataHelper.formatDuration(waited)
-                                + "\n* Pending requests: " + _pendingInboundRequests.size()
-                                + " * Longest wait: " +
+                     _log.debug("Allocating " + allocated + " bytes inbound as a partial grant -> Request: " + req +
+                                "\n* Waited: " + DataHelper.formatDuration(waited) +
+                                "\n* Pending requests: " + _pendingInboundRequests.size() +
+                                " * Longest wait: " +
                                 DataHelper.formatDuration(locked_getLongestInboundWait()));
             } else {
                 if (_log.shouldDebug())
-                     _log.debug("Allocating " + allocated + " bytes inbound to finish a partial grant"
-                                + "\n* " + req + " * Waited: " + DataHelper.formatDuration(waited)
-                                + "\n* Pending requests: " + _pendingInboundRequests.size()
-                                + " * Longest wait: " +
+                     _log.debug("Allocating " + allocated + " bytes inbound to finish a partial grant -> Request: " + req +
+                                "\n* Waited: " + DataHelper.formatDuration(waited) +
+                                "\n* Pending requests: " + _pendingInboundRequests.size() +
+                                " * Longest wait: " +
                                 DataHelper.formatDuration(locked_getLongestInboundWait()));
                 _pendingInboundRequests.remove(i);
                 i--;
@@ -907,17 +907,17 @@ public class FIFOBandwidthLimiter {
             satisfied.add(req);
             if (req.getPendingRequested() > 0) {
                 if (_log.shouldDebug())
-                     _log.debug("Allocating " + allocated + " bytes outbound as a partial grant"
-                                + "\n* " + req + " * Waited: " + DataHelper.formatDuration(waited)
-                                + "\n* Pending requests: " + _pendingOutboundRequests.size()
-                                + " * Longest wait: " +
+                     _log.debug("Allocating " + allocated + " bytes outbound as a partial grant -> Request: " + req +
+                                "\n* Waited: " + DataHelper.formatDuration(waited) +
+                                "\n* Pending requests: " + _pendingOutboundRequests.size() +
+                                " * Longest wait: " +
                                 DataHelper.formatDuration(locked_getLongestOutboundWait()));
             } else {
                 if (_log.shouldDebug())
-                     _log.debug("Allocating " + allocated + " bytes outbound to finish a partial grant"
-                                + "\n* " + req + " * Waited: " + DataHelper.formatDuration(waited)
-                                + "\n* Pending requests: " + _pendingOutboundRequests.size()
-                                + " * Longest wait: " +
+                     _log.debug("Allocating " + allocated + " bytes outbound to finish a partial grant -> Request: " + req +
+                                "\n* Waited: " + DataHelper.formatDuration(waited) +
+                                "\n* Pending requests: " + _pendingOutboundRequests.size() +
+                                " * Longest wait: " +
                                 DataHelper.formatDuration(locked_getLongestOutboundWait()));
                 _pendingOutboundRequests.remove(i);
                 i--;

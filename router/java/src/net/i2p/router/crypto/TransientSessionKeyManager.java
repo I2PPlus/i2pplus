@@ -1080,9 +1080,8 @@ public class TransientSessionKeyManager extends SessionKeyManager {
                         _log.warn("Failed to deliver " + _consecutiveFailures
                                   + " consecutive session tag sets to ["
                                   + _currentKey.toBase64().substring(0,6) + "]"
-                                  + "\n* Reverting to full ElGamal and unacknowledged delivery"
-                                  + "\n* Unacknowledged tag sets: " + unacked
-                                  + " * Remaining acknowledged: " + acked);
+                                  + " -> Reverting to full ElGamal"
+                                  + "\n* Unacknowledged tag sets: " + unacked + " * Remaining acknowledged: " + acked);
                 }
             }
         }

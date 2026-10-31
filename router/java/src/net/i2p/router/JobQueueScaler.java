@@ -788,8 +788,7 @@ class JobQueueScaler implements Runnable {
 
         // Debug logging every 10 seconds to trace scaler decisions
         if (_log.shouldDebug() && (_periodicCheckCount % 10 == 0)) {
-            _log.debug("JobQueueScaler check"
-                       + "\n* Runners: " + activeRunners + " of " + maxRunners
+            _log.debug("JobQueueScaler check -> Runners: " + activeRunners + " of " + maxRunners
                        + " * Ready jobs: " + readyJobs
                        + "\n* Max lag: " + maxLag + "ms * Average lag: " + avgLag + "ms"
                        + " * Message delay: " + messageDelay + "ms"

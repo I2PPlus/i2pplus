@@ -296,7 +296,7 @@ public class InNetMessagePool implements Service {
                 if (job != null) {
                     if (_log.shouldLog(Log.DEBUG)) {
                         _log.debug("Setting ReplyJob (" + job + ") for original message: " + omsg +
-                            "\n* With reply message id: " + messageBody.getUniqueId() +
+                            " -> Reply MsgID: " + messageBody.getUniqueId() +
                             " * Class: " + messageBody.getClass().getSimpleName() +
                             "\n* Full message: " + messageBody);
                     } else if (_log.shouldLog(Log.INFO)) {

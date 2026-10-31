@@ -777,11 +777,11 @@ public class RepublishLeaseSetJob extends JobImpl {
         LeaseSet fresh = getFreshPoolLeaseSet();
         long freshTimeUntilExpiry = fresh != null ? fresh.getEarliestLeaseDate() - now : 0;
         if (_log.shouldInfo()) {
-            _log.info("Re-minting the LeaseSet" + name + " [" + shortHash() + "]" +
-                      "\n* Stored expiry: " + DataHelper.formatDuration(timeUntilExpiry) +
-                      " * Fresh expiry: " + DataHelper.formatDuration(freshTimeUntilExpiry) +
-                      " * Extends expiry: " + (freshTimeUntilExpiry > timeUntilExpiry) +
-                      " * Fresh leases: " + (fresh != null ? fresh.getLeaseCount() : 0));
+            _log.info("Re-minting the LeaseSet " + name + " [" + shortHash() + "] -> Stored expiry: " +
+                       DataHelper.formatDuration(timeUntilExpiry) +
+                       "\n* Fresh expiry: " + DataHelper.formatDuration(freshTimeUntilExpiry)
+                       + " * Extends expiry: " + (freshTimeUntilExpiry > timeUntilExpiry)
+                       + "\n* Fresh leases: " + (fresh != null ? fresh.getLeaseCount() : 0));
         }
         TunnelPool pool = getContext().tunnelManager().getInboundPool(_dest);
         int freshCount = countFreshLeases(fresh, now);

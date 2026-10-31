@@ -117,7 +117,7 @@ import net.i2p.util.SimpleTimer2;
     @Override
     public void reschedule(long delay) {
         if (_log.shouldDebug())
-            _log.debug("Peer test rescheduled * Forced: " + _forceRun +
+            _log.debug("Peer test rescheduled -> Forced: " + _forceRun +
                        " * Delay: " + net.i2p.data.DataHelper.formatDuration(delay));
         super.reschedule(delay);
     }

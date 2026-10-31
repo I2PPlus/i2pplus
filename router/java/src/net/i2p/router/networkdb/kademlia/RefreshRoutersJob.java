@@ -211,10 +211,10 @@ class RefreshRoutersJob extends JobImpl {
     private void logRefreshCompletion() {
         int netDbCount = getContext().netDb().getKnownRouters();
         if (netDbCount > 10000) {
-            _log.info("Finished refreshing NetDb * Over 10000 known routers * Job will rerun in " +
+            _log.info("Finished refreshing NetDb -> Over 10000 known routers * Job will rerun in " +
                       DataHelper.formatDuration(_restartDelayMs));
         } else {
-            _log.info("Finished refreshing NetDb routers * Job will rerun in " +
+            _log.info("Finished refreshing NetDb routers -> Job will rerun in " +
                       DataHelper.formatDuration(_restartDelayMs));
         }
     }

@@ -96,9 +96,9 @@ class PeerAcceptor {
                 peerInfoHash = readHash(in);
                 if (_log.shouldInfo())
                     _log.info(
-                            "Infohash read from ["
-                                    + peerHash.toBase32().substring(0, 8)
-                                    + "] * Info hash: "
+                            "Read an infohash from ["
+                                    + peerHash.toBase64().substring(0, 6)
+                                    + "] -> InfoHash: "
                                     + Base64.encode(peerInfoHash));
             } catch (IOException ioe) {
                 if (_log.shouldInfo())

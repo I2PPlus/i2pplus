@@ -551,8 +551,7 @@ import net.i2p.util.SystemVersion;
                 }
                 if (log.shouldDebug())
                     log.debug("Exploratory selection cooldown recorded for " + recorded + " adjacent peers"
-                              + "\n* Selection size: " + rv.size() +
-                              " * Thread: " + Thread.currentThread().getName());
+                              + " -> Selection size: " + rv.size() + "\n* Thread: " + Thread.currentThread().getName());
                 // Bound the own map: entries expire on read, but sweep only
                 // when the map is large (mirrors prunePeerMaps()).
                 if (_exploratoryCooldowns.size() > FAILURE_MAP_MAX_SIZE) {

@@ -1658,10 +1658,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     // otherwise impossible to attribute to a backend. Log the
                     // resolved target and both timeout budgets: the I2P-side
                     // per-read budget and the local socket's header-read budget.
-                    _log.debug("[HTTPServer] " + toString()
-                              + "\n* Read timeout: " + readTimeout
-                              + " * Header Read timeout: " + SERVER_READ_TIMEOUT_GET
-                              + "\n* Client: " + peerB32);
+                    _log.debug("[HTTPServer] " + toString() + " -> Read timeout: " + readTimeout + "ms"
+                               + " * Header read timeout: " + SERVER_READ_TIMEOUT_GET + "ms"
+                               + "\n* Client: " + peerB32);
                 }
 
                 // Instead of i2ptunnelrunner, use something that reads the HTTP
@@ -2396,9 +2395,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         long timeToHandle = afterHandle - afterAccept;
         getTunnel().getContext().statManager().addRateData("i2ptunnel.httpserver.blockingHandleTime", timeToHandle);
         if ((timeToHandle > 1500) && (_log.shouldInfo())) {
-            _log.info("[HTTPServer] Took a while (" + timeToHandle + "ms) to handle the request for " + remoteHost + ':' + remotePort +
+            _log.info("[HTTPServer] Took a while to handle the request for " + remoteHost + ':' + remotePort +
+                      " -> Total: " + timeToHandle + "ms" +
                       "\n* Client: " + peerB32 +
-                      "\n* Tasks: Read headers: " + (afterHeaders-afterAccept) + "ms * " +
+                      "\n* Read headers: " + (afterHeaders-afterAccept) + "ms * " +
                       "Socket create: " + (afterSocket-afterHeaders) + "ms * " +
                       "Start runners: " + (afterHandle-afterSocket) + "ms");
          }

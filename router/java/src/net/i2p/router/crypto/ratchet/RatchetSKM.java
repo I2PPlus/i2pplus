@@ -1624,7 +1624,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                                                          _context.clock().now(), newtsID, _myOBKeyID);
                     _tagSet = ts;
                     if (_log.shouldInfo())
-                        _log.info("Ratcheted the outbound tag set to ID " + newtsID +
+                        _log.info("Ratcheted the outbound tag set -> ID: " + newtsID +
                                   (_destination != null ? " * From [" + _destination.toBase32().substring(0, 8) + "]" : "") +
                                   "\n* Old outbound tag set: " + oldts +
                                   "\n* New outbound tag set: " + ts +
@@ -1946,7 +1946,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                             NextSessionKey fwd = _tagSet.getNextKey();
                             NextSessionKey rev = getReverseSendKey();
                             if ((fwd != null || rev != null) && _log.shouldInfo())
-                                _log.info("Sending keys for Set " +
+                                _log.info("Sending keys -> Set: " +
                                           setIdLabel(_tagSet.getID(), _tagSet.getDebugID()) +
                                           (fwd != null ? " * " + keyFingerprint(fwd, "Forward") : "") +
                                           (rev != null ? " * " + keyFingerprint(rev, "Reverse") : ""));

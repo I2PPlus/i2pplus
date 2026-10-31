@@ -107,6 +107,6 @@ public class ShortTunnelBuildMessage extends TunnelBuildMessage {
      */
     @Override
     public String toString() {
-        return " [MsgID: " + getUniqueId() + "] -> Records: " + getRecordCount();
+        return " [MsgID: " + getUniqueId() + "] with " + getRecordCount() + " records";
     }
 }

@@ -517,7 +517,8 @@ public class EncryptedLeaseSet extends LeaseSet2 {
             authInput = getHKDFInput(ctx, authcookie);
         }
         if (_log.shouldDebug()) {
-            _log.debug("Inner HKDF salt:\n* " + net.i2p.util.HexDump.dump(salt) +
+            _log.debug("Deriving the inner layer key -> Inner HKDF salt:\n* " +
+                       net.i2p.util.HexDump.dump(salt) +
                        "* Inner HKDF input:\n* " + net.i2p.util.HexDump.dump(authInput));
         }
         hkdf.calculate(salt, authInput, ELS2L2K, key, iv, 0);
@@ -725,7 +726,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
                 hkdf.calculate(seed, clientAuthInput, ELS2_PSK, clientKey, clientIVandID, 0);
             }
             if (_log.shouldDebug()) {
-                _log.debug("Looking for a client ID * ID: " + ID_LEN +
+                _log.debug("Looking for a client ID -> ID: " + ID_LEN +
                            " bytes * Key: " + clientKey.length + " bytes");
             }
             int off = 35;
@@ -762,7 +763,8 @@ public class EncryptedLeaseSet extends LeaseSet2 {
         byte[] salt = new byte[SALT_LEN];
         System.arraycopy(ciphertext, authLen, salt, 0, SALT_LEN);
         if (_log.shouldDebug()) {
-            _log.debug("Inner HKDF salt:\n* " + net.i2p.util.HexDump.dump(salt) +
+            _log.debug("Deriving the inner layer key -> Inner HKDF salt:\n* " +
+                       net.i2p.util.HexDump.dump(salt) +
                        "* Inner HKDF input:\n* " + net.i2p.util.HexDump.dump(authInput));
         }
         hkdf.calculate(salt, authInput, ELS2L2K, key, iv, 0);

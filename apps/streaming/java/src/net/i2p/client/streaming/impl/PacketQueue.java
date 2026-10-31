@@ -336,7 +336,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
             _log.info("SYN packet enqueue -> Sent: " + sent + " * Elapsed: " + enqueueElapsed + "ms * " + packet);
 
         if (!sent) {
-            if (_log.shouldWarn() && !isLogged) {_log.warn("Packet send failed * " + packet);}
+            if (_log.shouldWarn() && !isLogged) {_log.warn("Packet send failed -> " + packet);}
             if (con != null) {con.disconnect(false);} // handle race on b0rk
         } else {
             packet.incrementSends();

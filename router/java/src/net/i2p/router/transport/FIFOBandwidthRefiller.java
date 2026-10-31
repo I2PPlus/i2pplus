@@ -213,8 +213,8 @@ public class FIFOBandwidthRefiller implements Runnable {
     private boolean updateQueues(List<FIFOBandwidthLimiter.Request> buffer, long now) {
         long numMs = (now - _lastRefillTime);
         if (_log.shouldDebug())
-            _log.debug("Updating bandwidth after " + numMs + "ms"
-                       + "\n* Status: " + _limiter.getStatus().toString()
+            _log.debug("Updating bandwidth after " + numMs + "ms -> Status: " +
+                       _limiter.getStatus().toString()
                        + " * Rate in: " + _inboundKBytesPerSecond + "KB/s"
                        + " * Rate out: " + _outboundKBytesPerSecond + "KB/s");
         // clock skew

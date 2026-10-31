@@ -2509,10 +2509,10 @@ public class PeerState {
             }
         } else {
             if (_log.shouldDebug()) {
-                _log.debug("Received partial ACK of [MsgID " + state.getMessageId() + "] from ["
-                      + _shortHash + "] after " + DataHelper.formatDuration(lifetime) + " and "
-                      + numSends + " sends"
-                      + "\n* Newly acked: " + ackedSize + " bytes * Fragment: " + f.num
+                _log.debug("Received partial ACK of MsgID " + state.getMessageId() + " from ["
+                      + _shortHash + "] after " + DataHelper.formatDuration(lifetime) + " -> Newly acked: "
+                      + ackedSize + " bytes"
+                      + "\n* Sends: " + numSends + " * Fragment: " + f.num
                       + "\n* " + state);
             }
         }

@@ -561,8 +561,8 @@ class RatchetTagSet implements TagSetHandle {
         } else {
             // dup or some other error
             if (_log.shouldWarn())
-                _log.warn("No key found for tag " + tag.toBase64() + " at index " + idx +
-                          " * Tag number: " + tagnum + " * Last key: " + _lastKey);
+                _log.warn("No key found for a tag -> Index: " + idx
+                          + " * Tag number: " + tagnum + " * Last key: " + _lastKey);
             return null;
         }
     }

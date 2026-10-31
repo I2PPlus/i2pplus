@@ -85,6 +85,6 @@ public class VariableTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
      */
     @Override
     public String toString() {
-        return "VariableTunnelBuildReplyMessage [ID: " + getUniqueId() + "] -> records: " + getRecordCount();
+        return "VariableTunnelBuildReplyMessage [ID: " + getUniqueId() + "] with " + getRecordCount() + " records";
     }
 }

@@ -495,11 +495,10 @@ class BatchedPreprocessor extends TrivialPreprocessor {
             preprocess(preprocessed, offset);
         } catch (ArrayIndexOutOfBoundsException aioobe) {
             if (_log.shouldError())
-                _log.error("Preprocessing the messages failed"
-                           + "\n* Offset: " + offset + " bytes * Start: " + startAt + " bytes"
-                           + " * Through: " + sendThrough + " bytes"
-                           + "\n* Pending messages: " + pending.size()
-                           + " * Preprocessed: " + preprocessed.length + " bytes");
+                _log.error("Preprocessing the messages failed -> Offset: " + offset + " bytes"
+                           + " * Start: " + startAt + " bytes"
+                           + "\n* Through: " + sendThrough + " bytes * Pending messages: " + pending.size()
+                           + " * Preprocessed: " + preprocessed.length + " bytes", aioobe);
             return;
         }
 
@@ -533,9 +532,9 @@ class BatchedPreprocessor extends TrivialPreprocessor {
             if (msg.getOffset() == 0) {
                 offset = writeFirstFragment(msg, target, offset);
                 if (_log.shouldDebug())
-                    _log.debug("[MsgID " + msg.getMessageId() + "] Writing fragment 0:"
-                               + "\n* Ending at offset: " + offset + " (prev offset: " + prevOffset
-                               + ") * Leaving " + (msg.getData().length - msg.getOffset()) + " bytes for later");
+                    _log.debug("MsgID " + msg.getMessageId() + " writing fragment 0"
+                               + " -> Ending at offset: " + offset + " * Previous offset: " + prevOffset
+                               + "\n* Leaving " + (msg.getData().length - msg.getOffset()) + " bytes for later");
             } else {
                 offset = writeSubsequentFragment(msg, target, offset);
                 if (_log.shouldDebug()) {
@@ -544,9 +543,9 @@ class BatchedPreprocessor extends TrivialPreprocessor {
                     if (later > 0)
                         frag--;
                     if (_log.shouldDebug())
-                        _log.debug("[MsgID " + msg.getMessageId() + "] Writing fragment " + frag + ":"
-                               + "\n* Ending at offset: " + offset + " (prev offset: " + prevOffset
-                               + ") * Leaving " + later + " bytes for later");
+                        _log.debug("MsgID " + msg.getMessageId() + " writing fragment " + frag +
+                                   " -> Ending at offset: " + offset + " * Previous offset: " + prevOffset
+                                   + "\n* Leaving " + later + " bytes for later");
                 }
             }
         }

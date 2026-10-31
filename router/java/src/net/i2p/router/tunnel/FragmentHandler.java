@@ -454,9 +454,9 @@ class FragmentHandler {
             // do this after the above since we have to return offset
             // i2pd 2.19 bug? see above
             if (_log.shouldWarn())
-                _log.warn("Dropping messages at the tunnel endpoint with a delivery instruction to tunnel 0"
+                _log.warn("Dropping messages at the tunnel endpoint -> Delivery instruction to tunnel 0"
                           + "\n* Gateway: " + router + " * Fragmented: " + fragmented
-                          + " * ID: " + messageId + " * Size: " + size + " bytes"
+                          + "\n* MsgID: " + messageId + " * Size: " + size + " bytes"
                           + " * Type: " + (preprocessed[offset] & 0xff));
             _context.statManager().addRateData("tunnel.corruptMessage", 1);
         } else if (fragmented) {

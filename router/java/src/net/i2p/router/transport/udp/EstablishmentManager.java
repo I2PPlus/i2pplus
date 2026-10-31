@@ -2922,8 +2922,8 @@ public class EstablishmentManager {
                 if (_log.shouldWarn() && shouldLogInboundGiveup(_context.clock().now())) {
                     _log.warn("[SSU] Giving up on inbound establishment from "
                               + cur.getRemoteHostId() + " after " + cur.getLifetime(now)
-                              + "ms in state " + istate
-                              + "\n* Budget: " + budget + "ms * Retried: " + isRetrySent
+                              + "ms -> Budget: " + budget + "ms"
+                              + "\n* State: " + istate + " * Retried: " + isRetrySent
                               + " * Base: " + MAX_IB_ESTABLISH_TIME.get() + "ms"
                               + "\n* Retry budget: " + IB_RETRY_SENT_MAX_TIME + "ms"
                               + " * Suppressed: " + getInboundGiveupSuppressed() + " events");
@@ -3040,9 +3040,8 @@ public class EstablishmentManager {
                     _log.warn("[SSU] Giving up on outbound establishment to "
                               + cur.getRemoteAddress() + " after "
                               + DataHelper.formatDuration(cur.getLifetime(now))
-                              + " in state " + cur.getState()
-                              + "\n* Budget: " + DataHelper.formatDuration(budget)
-                              + " * Retried: " + cur.hasRetried());
+                              + " -> Budget: " + DataHelper.formatDuration(budget)
+                              + "\n* State: " + cur.getState() + " * Retried: " + cur.hasRetried());
                 }
                 iter.remove();
                 outboundState = cur;

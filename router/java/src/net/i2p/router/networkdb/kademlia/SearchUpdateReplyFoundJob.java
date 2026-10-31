@@ -157,11 +157,11 @@ class SearchUpdateReplyFoundJob extends JobImpl implements ReplyJob {
             } catch (IllegalArgumentException iae) {
                 if (_log.shouldDebug()) {
                     if (iae.getMessage().contains("published over")) {
-                        _log.debug("STALE RouterInfo from [" + _peer.toBase64().substring(0,6) +
-                                   "] * " + iae.getMessage());
+                        _log.debug("Stale RouterInfo from [" + _peer.toBase64().substring(0,6) +
+                                   "] -> " + iae.getMessage());
                     } else {
-                        _log.debug("INVALID data packet from [" + _peer.toBase64().substring(0,6) +
-                                   "] * " + iae.getMessage());
+                        _log.debug("Invalid data packet from [" + _peer.toBase64().substring(0,6) +
+                                   "] -> " + iae.getMessage());
                         // blame the peer
                         getContext().profileManager().dbLookupReply(_peer, 0, 0, 1, 0, timeToReply);
                     }

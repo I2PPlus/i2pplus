@@ -633,8 +633,8 @@ public class IterativeSearchJob extends FloodSearchJob {
         _out = getContext().messageRegistry().registerPending(replySelector, onReply, onTimeout);
         if (_log.shouldInfo())
             _log.info("New IterativeSearch for " + (_isLease ? "LeaseSet" : "Router") +
-                      " [" + _key.toBase64().substring(0,6) + "]" +
-                      "\n* Querying: " + DataHelper.toString(_toTry) +
+                      " [" + _key.toBase64().substring(0,6) + "] -> Querying: " +
+                      DataHelper.toString(_toTry) +
                       "\n* Routing key: [" + _rkey.toBase64().substring(0,6) + "]" +
                       " * Timeout: " + DataHelper.formatDuration(_timeoutMs) +
                       " * DbId: " + _facade);
@@ -933,9 +933,9 @@ public class IterativeSearchJob extends FloodSearchJob {
             synchronized(this) {tries = _unheardFrom.size() + _failedPeers.size();}
             if (_key != null && peer != null) {
                 _log.debug("IterativeSearch for " + (_isLease ? "LeaseSet " : "Router ") +
-                           " [" + _key.toBase64().substring(0,6) + "] (attempt " + tries + ")" +
+                           " [" + _key.toBase64().substring(0,6) + "] -> Attempt " + tries +
                            "\n* Querying: [" + peer.toBase64().substring(0,6) + "]" +
-                           " * Direct: [" + isDirect + "] * Reply via client tunnel: [" + isClientReplyTunnel + "]");
+                           " * Direct: " + isDirect + " * Reply via client tunnel: " + isClientReplyTunnel);
             }
         }
         if (peer != null) {_sentTime.put(peer, Long.valueOf(now));}
@@ -982,13 +982,14 @@ public class IterativeSearchJob extends FloodSearchJob {
                     if (sess.tag != null) {
                         if (_log.shouldDebug()) {
                             _log.debug("Requesting AES reply from [" + peer.toBase64().substring(0, 6) +
-                                       "] * Tag: " + sess.tag);
+                                       "] -> Tag: " + sess.tag);
                         }
                         dlm.setReplySession(sess.key, sess.tag);
                     } else {
                         if (_log.shouldDebug()) {
-                            _log.debug("Requesting AEAD reply from [" + peer.toBase64().substring(0,6) + "]"
-                            + "\n* Session key: [" + sess.key.toBase64().substring(0,6) + "] Tag: [" + sess.rtag.toString() + "]");
+                            _log.debug("Requesting AEAD reply from [" + peer.toBase64().substring(0,6) +
+                                       "] -> Session key: [" + sess.key.toBase64().substring(0,6) +
+                                       "]\n* Tag: " + sess.rtag);
                         }
                         dlm.setReplySession(sess.key, sess.rtag);
                     }

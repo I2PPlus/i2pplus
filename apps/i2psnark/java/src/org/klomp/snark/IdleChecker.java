@@ -381,8 +381,7 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
             return;
         }
         if (_log.shouldInfo()) {
-            _log.info("Tunnel settings updated"
-                      + "\n* Inbound: " + inQty + " * Outbound: " + outQty
+            _log.info("Tunnel settings updated -> Inbound: " + inQty + " * Outbound: " + outQty
                       + "\n* Inbound backup: " + inBackup + " * Outbound backup: " + outBackup);
         }
         Properties newProps = new Properties();

@@ -509,12 +509,11 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
                 int queued = _connection.getUnackedPacketsSent();
                 int window = _connection.getOptions().getWindowSize();
                 int afterQueued = _connection.getUnackedPacketsSent();
-                _log.debug("Took " + DataHelper.formatDuration(_acceptedOn - before) + " to get "
-                           + (accepted ? "ACCEPTED" : "REJECTED")
-                           + (isCancelled() ? " and CANCELLED" : "")
-                           + "\n* Queued behind: " + queued + " * Window size: " + window
-                           + " * Accepted with: " + afterQueued + " queued"
-                           + "\n* " + packetDesc);
+                _log.debug("Slow send slot -> Took " + DataHelper.formatDuration(_acceptedOn - before) +
+                           " * Queued behind: " + queued + " packets" +
+                           "\n* Window size: " + window + " * Accepted with: " + afterQueued + " queued" +
+                           (isCancelled() ? " * Cancelled after the slot" : "") +
+                           "\n* " + packetDesc);
             }
         }
     }

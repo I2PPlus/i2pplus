@@ -1048,11 +1048,9 @@ public class TunnelDispatcher implements Service {
         } else {
             _context.messageHistory().droppedTunnelGatewayMessageUnknown(msg.getUniqueId(), id.getTunnelId());
             if (_log.shouldInfo())
-                _log.info("No matching tunnel for [TunnelID " + id.getTunnelId() + ']'
-                          + "\n* Gateway message expires in " +
+                _log.info("No matching tunnel for TunnelID " + id.getTunnelId() + " -> Gateway message expires in " +
                           DataHelper.formatDuration(msg.getMessageExpiration() - before) +
-                          " * Message expires in " +
-                          DataHelper.formatDuration(submsg.getMessageExpiration() - before)
+                          "\n* Message expires in " + DataHelper.formatDuration(submsg.getMessageExpiration() - before)
                           + "\n* MsgID: " + id + " of " + msg.getMessage().getUniqueId()
                           + " * Type: " + submsg.getType()
                           + " * Inbound gateways: " + _inboundGateways.size());

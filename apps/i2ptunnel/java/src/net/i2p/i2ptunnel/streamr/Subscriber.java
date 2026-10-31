@@ -61,7 +61,7 @@ public class Subscriber implements Sink {
                 log.warn("Bad subscription from " +
                          (dest == null ? "no destination" :
                           "[" + dest.calculateHash().toBase32().substring(0, 8) + "]") +
-                         " * Port: " + fromPort);
+                         " -> Port: " + fromPort);
         } else {
             // swap fromPort and toPort for the replies
             MultiSource.MSink ms = new MultiSource.MSink(dest, toPort, fromPort);

@@ -749,7 +749,7 @@ public class Reseeder {
                     _bandwidths.add(Long.valueOf(bw));
                     if (_log.shouldDebug())
                         _log.debug("Received " + sz + " bytes in " + DataHelper.formatDuration(totalTime) +
-                                   " * Bandwidth: " + DataHelper.formatSize2Decimal(bw, false) + "B/s" +
+                                   " -> Bandwidth: " + DataHelper.formatSize2Decimal(bw, false) + "B/s" +
                                    " " + getDisplayString(seedURL));
                 }
                 int[] stats;

@@ -6907,9 +6907,9 @@ public class ProfileOrganizer {
             if (inFast || inHighCap) {
                 if (_log.shouldInfo()) {
                     _log.info("Demoting peer [" + peer.toBase64().substring(0, 6) +
-                              "] from the fast and high-capacity tiers"
-                              + "\n* First hop RTT: " + firstHopRttMs + "ms * Above threshold: " +
-                              (timeout * 2) + "ms");
+                              "] from the fast and high-capacity tiers -> First hop RTT: " +
+                              firstHopRttMs + "ms"
+                              + "\n* Above threshold: " + (timeout * 2) + "ms");
                 }
                 if (inFast) removeFastPeer(peer);
                 if (inHighCap) _highCapacityPeers.remove(peer);

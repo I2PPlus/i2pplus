@@ -217,7 +217,7 @@ public class HeaderLine extends Encoding {
 	 * @since 0.9.72+
 	 */
 	static String malformedText(String situation, String action) {
-		return "Encoded-word is malformed -> " + situation + " -> " + action;
+		return "Encoded-word is malformed -> " + situation + " * Action: " + action;
 	}
 
 	/**

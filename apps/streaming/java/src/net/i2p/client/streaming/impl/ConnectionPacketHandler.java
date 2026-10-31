@@ -373,8 +373,9 @@ class ConnectionPacketHandler {
                 final long lastSendTime = con.getLastSendTime();
 
                 if (_log.shouldInfo())
-                    _log.info(String.format("%s %n* Congestion: DUP packet %s * ACK delay: %d * Last send: %s ago",
-                                    con, packet, ackDelay, DataHelper.formatDuration(now - lastSendTime)));
+                    _log.info("Congestion -> Duplicate packet * ACK delay: " + ackDelay + "ms" +
+                              "\n* Last send: " + DataHelper.formatDuration(now - lastSendTime) + " ago" +
+                              "\n* " + packet + "\n* " + con);
 
                 // If this is longer than his RTO, he will always retransmit, and
                 // will be stuck at a window size of 1 forever. So we take the minimum
@@ -523,9 +524,9 @@ class ConnectionPacketHandler {
             // the RTT update and the window adjustment act on, and the per-packet
             // lines were the loudest output on a busy connection.
             if (_log.shouldDebug()) {
-                _log.debug("ACKed: " + acked.size() + " packets" +
-                           (highestRTT > 0 ? " * RTT: " + lowestRTT + " ms - " + highestRTT + " ms" : "") +
-                           "\n* Resends: " + numResends + "\n* " + con);
+                _log.debug("ACKed " + acked.size() + " packets -> Resends: " + numResends +
+                           (highestRTT > 0 ? " * RTT: " + lowestRTT + "ms - " + highestRTT + "ms" : "") +
+                           "\n* " + con);
             }
             if (highestRTT > 0) {
                 int oldrtt = con.getOptions().getRTT();

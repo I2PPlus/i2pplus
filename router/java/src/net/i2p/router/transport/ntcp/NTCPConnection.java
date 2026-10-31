@@ -1480,9 +1480,8 @@ void noteEstablishmentRtt(int rttMs) {
         if (range > 0)
             padlen += _context.random().nextInt(1 + range);
         if (_log.shouldDebug())
-            _log.debug("Padding params:" +
-                      "\n* Data size: " + dataSize + "b * Avail: " + availForPad + "b" +
-                      " * MinSend: " + minSend + " * MaxSend: " + maxSend +
+            _log.debug("Padding params -> Data size: " + dataSize + "B * Available: " + availForPad + "B" +
+                      " * Min send: " + minSend + " * Max send: " + maxSend +
                       "\n* Min: " + min + " * Max: " + max + " * Range: " + range +
                       " * Padlen: " + padlen + "b");
         return padlen;
@@ -2754,9 +2753,8 @@ void noteEstablishmentRtt(int rttMs) {
         public void gotPadding(int paddingLength, int frameLength) {
             if (_log.shouldDebug())
                 _log.debug("Received " + paddingLength +
-                          " bytes of padding in a " + frameLength + " byte frame"
-                          + "\n* Ratio: " + (int) (100f * paddingLength / frameLength) + "%"
-                          + " * Configured min: " + _paddingConfig.getRecvMin() + " bytes"
+                          " bytes of padding in a " + frameLength + " byte frame -> Ratio: " + (int) (100f * paddingLength / frameLength) + "%"
+                          + "\n* Configured min: " + _paddingConfig.getRecvMin() + " bytes"
                           + " * Configured max: " + _paddingConfig.getRecvMax() + " bytes");
         }
     }

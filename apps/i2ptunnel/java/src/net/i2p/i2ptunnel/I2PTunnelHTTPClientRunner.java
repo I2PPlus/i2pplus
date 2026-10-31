@@ -185,10 +185,8 @@ public class I2PTunnelHTTPClientRunner extends I2PTunnelRunner {
         final boolean threadI2PClose = keepaliveSocket && !keepaliveI2P && i2pout != null && !i2ps.isClosed();
 
         if (_log.shouldDebug()) {
-            _log.debug("Closing the HTTP client tunnel runner"
-                       + "\n* Keep the I2P session: " + keepaliveI2P
-                       + " * Keep the local socket: " + keepaliveSocket
-                       + " * Close in a thread: " + threadI2PClose);
+            _log.debug("Closing the HTTP client tunnel runner -> Keep the I2P session: " + keepaliveI2P
+                       + "\n* Keep the local socket: " + keepaliveSocket + " * Close in a thread: " + threadI2PClose);
         }
 
         // Close I2P resources in background if needed

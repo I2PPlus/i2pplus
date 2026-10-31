@@ -41,16 +41,17 @@ public class ThinPoolLogState {
     /**
      * Format the thin-pool warning body.
      * <p>Pure, so the wording is unit-testable and cannot drift from the counts the
-     * policy decides on.
+     * policy decides on. The counts lead, because the pool's own report is a
+     * multi-line dump and nothing is appended after it.
      *
      * @param poolName pool name as produced by {@code TunnelPool.toString()}
      * @param healthy current healthy tunnel count
      * @param target desired healthy tunnel count
-     * @return a single-line message suitable for WARN
+     * @return the message, counts first, the pool on a continuation line
      * @since 0.9.71+
      */
     public static String formatThinPool(String poolName, int healthy, int target) {
-        return poolName + " -> Thin pool (" + healthy + "/" + target
-               + " healthy) -> Fast-path pre-build";
+        return "Pool is thin -> Pre-building on the fast path * Tunnels: " +
+               healthy + '/' + target + " healthy\n* " + poolName;
     }
 }

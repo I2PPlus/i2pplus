@@ -116,9 +116,8 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                         // Todo: if peer was ff and RI is not ff, queue for exploration in netdb (but that isn't part of the facade now)
                         if (_log.shouldWarn()) {
                             _log.warn("Inbound DbStoreMessage received down a tunnel for " + _clientNickname +
-                                      " [" + _client.toBase32().substring(0,8) + "]"
-                                      + "\n* Key: [" + dsm.getKey().toBase64().substring(0,6) + "]"
-                                      + " * MsgID: " + msg.getUniqueId());
+                                      " [" + _client.toBase32().substring(0,8) + "] -> Key: [" +
+                                      dsm.getKey().toBase64().substring(0,6) + "]\n* MsgID: " + msg.getUniqueId());
                         }
                         // Handle safely by just updating the caps table, after doing basic validation
                         Hash key = dsm.getKey();
@@ -142,11 +141,10 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                         return;
                     } else if (dsm.getReplyToken() != 0) {
                         _context.statManager().addRateData("tunnel.dropDangerousClientTunnelMessage", 1, type);
-                        _log.error("Dropping DANGEROUS LeaseSet DbStoreMessage with a reply token"
-                                   + " sent down a client tunnel"
-                                   + "\n* Destination: [" + _client.toString().substring(0, 8) + "]"
-                                   + " * Key: [" + dsm.getKey().toBase64().substring(0, 6) + "]"
-                                   + " * MsgID: " + msg.getUniqueId());
+                        _log.error("Dropping DANGEROUS LeaseSet DbStoreMessage with a reply token -> Destination: ["
+                                   + _client.toString().substring(0, 8) + "]"
+                                   + "\n* Sent down a client tunnel * Key: ["
+                                   + dsm.getKey().toBase64().substring(0, 6) + "]\n* MsgID: " + msg.getUniqueId());
                         return;
                     } else {
                         // allow DSM of our own key (used by FloodfillVerifyStoreJob)
@@ -168,8 +166,8 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                     // drop it, since we should only get the above message types down
                     // client tunnels
                     _context.statManager().addRateData("tunnel.dropDangerousClientTunnelMessage", 1, type);
-                    _log.error("Dropping DANGEROUS message sent down a client tunnel"
-                               + "\n* Type: " + type + " * MsgID: " + msg.getUniqueId() +
+                    _log.error("Dropping DANGEROUS message sent down a client tunnel -> Type: " + type +
+                               "\n* MsgID: " + msg.getUniqueId() +
                                " * Destination: [" + _client.toString().substring(0, 8) + ']');
                     return;
 
@@ -181,10 +179,9 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                     DatabaseStoreMessage dsm = (DatabaseStoreMessage) msg;
                     if (dsm.getReplyToken() != 0) {
                         _context.statManager().addRateData("tunnel.dropDangerousExplTunnelMessage", 1, type);
-                        _log.error("Dropping DANGEROUS DbStoreMessage with a reply token"
-                                   + " sent down an Exploratory tunnel"
-                                   + "\n* Key: [" + dsm.getKey().toBase64().substring(0, 6) + "]"
-                                   + " * MsgID: " + msg.getUniqueId());
+                        _log.error("Dropping DANGEROUS DbStoreMessage with a reply token -> Key: ["
+                                   + dsm.getKey().toBase64().substring(0, 6) + "]"
+                                   + "\n* Sent down an Exploratory tunnel * MsgID: " + msg.getUniqueId());
                         return;
                     }
                     if (dsm.getEntry().isLeaseSet())
@@ -310,9 +307,8 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                                     _context.statManager().addRateData("tunnel.dropDangerousClientTunnelMessage", 1,
                                                                        DatabaseStoreMessage.MESSAGE_TYPE);
                                     _log.error("Dropping DANGEROUS message sent down a tunnel for "
-                                               + _clientNickname
-                                               + "\n* Key: [" + dsm.getKey().toBase64().substring(0, 6) + "]"
-                                               + " * MsgID: " + dsm.getUniqueId() +
+                                               + _clientNickname + " -> Key: [" +
+                                               dsm.getKey().toBase64().substring(0, 6) + "]\n* MsgID: " + dsm.getUniqueId() +
                                                " * Destination: [" + truncDest + ']');
                                     return;
                                 }
@@ -359,8 +355,8 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                             if (_client != null) {
                                 _context.statManager().addRateData("tunnel.dropDangerousClientTunnelMessage", 1, data.getType());
                                 _log.error("Dropping DANGEROUS message down a tunnel for client [" +
-                                           _client.toString().substring(0,8) + "]"
-                                           + "\n* Type: " + data.getType() + " * MsgID: " + data.getUniqueId());
+                                           _client.toString().substring(0,8) + "] -> Type: " + data.getType() +
+                                           "\n* MsgID: " + data.getUniqueId());
                             } else {
                                 _log.error("Dropping DANGEROUS message received down an Exploratory tunnel -> Type: "
                                            + data.getType() + " * MsgID: " + data.getUniqueId());

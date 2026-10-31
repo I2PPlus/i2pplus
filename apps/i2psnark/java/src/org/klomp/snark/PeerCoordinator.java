@@ -1148,7 +1148,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 } else {
                     name = metainfo.getName();
                 }
-                _log.debug("Adding a peer for " + name + " * Peer: " + peer.getPeerID());
+                _log.debug("Adding a peer for " + name + " -> Peer: " + peer.getPeerID());
             }
 
             // Run the peer with us as listener and the current bitfield.

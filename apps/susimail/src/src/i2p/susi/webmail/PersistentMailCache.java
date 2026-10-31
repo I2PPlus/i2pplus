@@ -175,8 +175,8 @@ class PersistentMailCache {
         }
         long end = _context.clock().now();
         if (_log.shouldDebug()) {
-            _log.debug("Loaded the folder from disk in " + DataHelper.formatDuration(end - begin) + ":\n* Folder: " +
-                       folder + " * Messages: " + sz + " * Threads: " + tcnt);
+            _log.debug("Loaded the folder from disk in " + DataHelper.formatDuration(end - begin) +
+                       " -> Folder: " + folder + " * Messages: " + sz + " * Threads: " + tcnt);
         }
         return rv;
     }

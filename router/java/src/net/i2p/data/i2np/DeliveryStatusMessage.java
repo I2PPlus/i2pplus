@@ -147,6 +147,7 @@ public class DeliveryStatusMessage extends FastI2NPMessageImpl {
      */
     @Override
     public String toString() {
-        return " [MsgID " + getMessageId() + "] -> Received " + (_context.clock().now() - _arrival) + "ms ago";
+        return " [MsgID " + getMessageId() + "] received " +
+               DataHelper.formatDuration(_context.clock().now() - _arrival) + " ago";
     }
 }

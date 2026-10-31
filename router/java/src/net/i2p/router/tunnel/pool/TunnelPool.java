@@ -5450,8 +5450,8 @@ public class TunnelPool {
         if (_log.shouldInfo()) {
             String boost = _consecutiveEmergencies > 0 ?
                 " * Dynamic target: " + Math.min(target + _consecutiveEmergencies, target + MAX_EMERGENCY_BOOST) : "";
-            _log.info("Pruning " + toRemove.size() + " non-GOOD tunnels from " + toString() +
-                      "\n* Good tunnels: " + goodCount + " * Remaining tunnels: " + (goodCount + reserve) + boost);
+            _log.info("Pruning " + toRemove.size() + " non-GOOD tunnels -> Good tunnels: " + goodCount
+                      + " * Remaining tunnels: " + (goodCount + reserve) + boost + "\n* " + toString());
         }
         removeTunnelsBatch(toRemove);
         // Refresh LeaseSet after batch removal (normally done per-tunnel in removeTunnel).

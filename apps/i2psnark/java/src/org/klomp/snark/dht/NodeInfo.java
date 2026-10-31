@@ -301,7 +301,7 @@ class NodeInfo extends SimpleDataStructure {
                 + nID.toBase64().substring(0, 8)
                 + "]:"
                 + port
-                + (dest != null ? " -> Known destination" : "");
+                + (dest != null ? " with a known destination" : "");
     }
 
     /**

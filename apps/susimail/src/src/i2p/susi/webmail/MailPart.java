@@ -268,7 +268,8 @@ class MailPart {
                     DataHelper.copy(eofin, DUMMY_OUTPUT);
                     if (_log.shouldDebug()) {
                         _log.debug("MIME part body for [" + LogHelper.head(uidl) +
-                                   "] not found before the end of the data\n* Part: " + i + " * Boundary: " + boundary);
+                                   "] not found before the end of the data -> Part: " + i
+                                      + "\n* Boundary: " + boundary);
                     }
                 }
                 if (readBoundaryTrailer(in)) {break;}

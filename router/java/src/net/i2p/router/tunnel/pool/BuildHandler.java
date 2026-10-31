@@ -1147,8 +1147,8 @@ public class BuildHandler implements Runnable {
                 String fromHash = from != null ? from.toString() : "Unknown";
                 if (handleTime > 0) {
                     _log.debug(String.format(
-                        "Build tunnel request [MsgID: %s] handled in %s %s" +
-                        "\n* Decrypted in: %s * Elapsed time since received: %s" +
+                        "Build tunnel request MsgID %s handled in %s %s -> Decrypted in: %s" +
+                        " * Elapsed since received: %s" +
                         (from != null ? "\n* From: %s" : "") +
                         "\n* %s",
                         msgId, DataHelper.formatDuration(handleTime), nextHop,

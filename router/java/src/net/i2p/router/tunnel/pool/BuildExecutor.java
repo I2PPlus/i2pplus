@@ -1348,9 +1348,9 @@ public class BuildExecutor implements Runnable {
         }
 
         if (_log.shouldDebug()) {
-            _log.debug("Adaptive timeout: " + DataHelper.formatDuration(_adaptiveTimeout)
-                       + "\n* Success: " + (int)(successRate * 100) + "% * Timeouts: " + timeouts +
-                       " builds of " + count
+            _log.debug("Adaptive build timeout -> " + DataHelper.formatDuration(_adaptiveTimeout)
+                       + " * Success: " + (int)(successRate * 100) + "%"
+                       + "\n* Timeouts: " + timeouts + " builds of " + count
                        + " * Concurrency: " + _adaptiveMaxConcurrentBuilds + " of " + baseMax + " builds");
         }
     }
@@ -2639,12 +2639,11 @@ public class BuildExecutor implements Runnable {
 
                 if (noInboundOrOutbound) {
                     if (_log.shouldDebug()) {
-                        _log.debug("No inbound or outbound tunnels"
-                                  + "\n* Free tunnels: " + freeTunnelCount +
-                                  " * Outbound tunnels: " + outboundTunnelCount +
-                                  "\n* Manager: " + (mgr != null) +
-                                  " * Building map: " + _currentlyBuildingMap.size() +
-                                  " * Allowed: " + allowed + " * Wanted: " + wanted.size());
+                        _log.debug("No inbound or outbound tunnels -> Free tunnels: " + freeTunnelCount
+                                  + " * Outbound tunnels: " + outboundTunnelCount
+                                  + "\n* Manager: " + (mgr != null ? "present" : "absent")
+                                  + " * Building map: " + _currentlyBuildingMap.size() + " entries"
+                                  + "\n* Allowed: " + allowed + " * Wanted: " + wanted.size());
                     }
                     // Kickstart inbound/outbound tunnels if missing to avoid stall
                     if (mgr != null) {
@@ -2740,9 +2739,10 @@ public class BuildExecutor implements Runnable {
                             if (lastCfg != null && nowCfg - lastCfg < CONFIGURE_THROTTLE_MS
                                 && pool.getInProgressCount() >= 2) {
                                 if (_log.shouldDebug()) {
-                                    _log.debug("Deferring a new tunnel build for " + pool +
-                                               "\n* Last configure: " + DataHelper.formatDuration(nowCfg - lastCfg) +
-                                               " ago * Builds in progress: " + pool.getInProgressCount());
+                                    _log.debug("Deferring a new tunnel build -> Last configure: " +
+                                               DataHelper.formatDuration(nowCfg - lastCfg) + " ago" +
+                                               " * Builds in progress: " + pool.getInProgressCount() +
+                                               "\n* " + pool);
                                 }
                                 continue;
                             }

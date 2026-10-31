@@ -742,7 +742,7 @@ public abstract class BuildRequestor {
                 props.setProperty(PROP_MIN_BW, Integer.toString(min / 1000));
                 props.setProperty(PROP_REQ_BW, Integer.toString(req / 1000));
                 if (log.shouldDebug()) {
-                    log.debug("BW props for hop " + hopIndex + ": min: " + min + " * req: " + req);
+                    log.debug("BW props for hop " + hopIndex + " -> Min: " + min + " * Requested: " + req);
                 }
             }
 
@@ -818,10 +818,9 @@ public abstract class BuildRequestor {
                     int estCount = ctx.commSystem().getEstablished() != null ?
                         ctx.commSystem().getEstablished().size() : 0;
                     log.info("First hop [" + hopPeer.toBase64().substring(0, 6) +
-                             "] connected but no reply" +
-                             "\n* estCount: " + estCount +
-                             " * fast: " + ctx.profileOrganizer().isFast(hopPeer) +
-                             " * hc: " + ctx.profileOrganizer().isHighCapacity(hopPeer));
+                             "] connected but no reply -> Attempts: " + estCount +
+                             " * Fast: " + ctx.profileOrganizer().isFast(hopPeer)
+                             + "\n* High capacity: " + ctx.profileOrganizer().isHighCapacity(hopPeer));
                 }
                 _exec.buildComplete(_cfg, OTHER_FAILURE, "No reply from first hop");
                 ctx.profileManager().tunnelTimedOut(hopPeer);

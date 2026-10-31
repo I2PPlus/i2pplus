@@ -435,10 +435,9 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                  if (_padlen1 > 0) {
                       // Delayed fail for probing resistance - need more bytes before failure
                      if (_log.shouldDebug()) {
-                         _log.debug("[NTCP] Bad establishment handshake message #1"
-                                   + "\n* X: " + Base64.encode(_X, 0, 8)
+                         _log.debug("[NTCP] Bad establishment handshake message #1 -> X: " + Base64.encode(_X, 0, 8)
                                    + " * Received: " + src.remaining() + " bytes"
-                                   + " * Waiting: " + _padlen1 + " bytes");
+                                   + "\n* Waiting: " + _padlen1 + " bytes");
                      } else if (_log.shouldWarn()) {
                      String ip;
                      try {

@@ -256,7 +256,8 @@ public class SyntheticREDQueue implements BandwidthEstimator {
         expungeStaleInstances();
         INSTANCES.add(new WeakReference<>(this));
         if (_log.shouldDebug()) {
-            _log.debug("Configured bandwidth: " + bwBps + "B/s * Min threshold: " + minThB + "B * Max threshold: " + maxThB + "B");
+            _log.debug("Configuring the queue -> Bandwidth: " + bwBps + "B/s"
+                       + " * Min threshold: " + minThB + "B * Max threshold: " + maxThB + "B");
         }
     }
 
@@ -392,8 +393,8 @@ public class SyntheticREDQueue implements BandwidthEstimator {
                 float rand = _random.nextFloat(); // Random float
                 if (rand < pa) {
                     if (_log.shouldWarn()) {
-                        _log.warn(String.format("Dropping bytes (probabilistic): %d * Factor: %.2f"
-                                                + " * Probability: %.4f * Queue age: %dms * %s",
+                        _log.warn(String.format("Dropping bytes probabilistically -> Bytes: %d * Factor: %.2f"
+                                                + " * Probability: %.4f * Queue age: %dms\n* %s",
                                                 bytes, factor, pa, deltaTQueue, this));
                     }
                     _dropCount = 0;

@@ -1025,7 +1025,7 @@ class PeerTestManager {
             state = _activeTests.get(lNonce);
 
         if (_log.shouldDebug())
-            _log.debug("Received PeerTest message from [" + fromPeer + "] \n* " +
+            _log.debug("Received PeerTest message from [" + fromPeer + "] -> " +
                        "Time: " + DataHelper.formatTime(time) +
                        " * Message: " + msg +
                        " * Status: " + status +

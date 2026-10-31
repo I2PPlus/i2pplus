@@ -560,7 +560,8 @@ public abstract class TransportImpl implements Transport {
             msg.discardData();
         } else {
             if (debug) {
-                _log.debug(String.format("[%s] Failed to send %s to [%s] * %s", style, msg.getMessageType(), peerHash, msg));
+                _log.debug(String.format("[%s] Failed to send %s to [%s] -> Queue time: %s\n* %s",
+                                     style, msg.getMessageType(), peerHash, DataHelper.formatDuration(queueTime), msg));
             }
             if (msg.getExpiration() < now) {
                 _context.statManager().addRateData("transport.expiredOnQueueLifetime", queueTime);
@@ -591,8 +592,8 @@ public abstract class TransportImpl implements Transport {
                       (sendSuccessful ? " and succeeding on " + style : "")));
         }
         if (allTime > 60000 && sendSuccessful && _log.shouldWarn()) {
-            _log.warn(String.format("Severe latency, sending took more than a minute (%s)" +
-                                    "\n* %s of [MsgID %d] * Send began: %s" +
+            _log.warn(String.format("Severe latency, sending took more than a minute -> Elapsed: %s" +
+                                    "\n* Type: %s * MsgID: %d * Send began: %s" +
                                     "\n* Message created: %s" +
                                     "\n* %s",
                     DataHelper.formatDuration(allTime), msg.getMessageType(), msg.getMessageId(),

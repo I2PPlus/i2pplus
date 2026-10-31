@@ -1241,9 +1241,8 @@ public class BlockfileNamingService extends DummyNamingService {
             } catch (NumberFormatException nfe) { /* ignored */ }
         }
         if (_log.shouldDebug())
-            _log.debug("Searching " + listname + " beginning with " + beginWith +
-                       " starting with " + startsWith + " for " + search
-                       + "\n* Max entries: " + limit + " * Skipped: " + skip);
+            _log.debug("Searching " + listname + " for " + search + " -> Beginning: " + beginWith +
+                       " * Starting: " + startsWith + "\n* Max entries: " + limit + " * Skipped: " + skip);
         synchronized(_bf) {
             if (_isClosed)
                 return Collections.emptyMap();

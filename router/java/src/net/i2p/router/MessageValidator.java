@@ -104,8 +104,9 @@ public class MessageValidator {
         val ^= (messageExpiration & TIME_MASK);
         boolean dup = _filter.add(val);
         if (dup && _log.shouldWarn()) {
-            _log.warn("Duplicate message [MsgID " + messageId + "] with " + _filter.getCurrentDuplicateCount()
-                      + " other duplicates\n* " + _filter.getInsertedCount() + " other entries"
+            _log.warn("Duplicate message -> MsgID: " + messageId + " * Other duplicates: " +
+                      _filter.getCurrentDuplicateCount()
+                         + "\n* Other entries: " + _filter.getInsertedCount()
                       + (fp > 0 ? " * False positive rate: " + fp : ""));
         }
         return dup;

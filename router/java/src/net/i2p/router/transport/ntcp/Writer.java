@@ -170,7 +170,7 @@ public class Writer {
             }
         }
         if (_log.shouldDebug())
-            _log.debug("Wants write * " + (already ? "Already live" : "Not live") +
+            _log.debug("Wants write -> " + (already ? "Already live" : "Not live") +
                        (pending ? " * Added to pending" : " * Not added") +
                        " * Source: " + source + "\n* " + con);
     }

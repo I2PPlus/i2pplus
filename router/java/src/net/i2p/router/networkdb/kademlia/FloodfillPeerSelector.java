@@ -580,9 +580,9 @@ public class FloodfillPeerSelector extends PeerSelector {
                                      "L tier Floodfill", 4*60*60*1000L, 4*60*60*1000L, now);
                     if (_log.shouldWarn()) {
                         _log.warn("Banning an L tier floodfill for " +
-                                  DataHelper.formatDuration(4*60*60*1000L) + " and disconnecting"
-                                  + "\n* Router: [" + entry.toBase64().substring(0,6) + "]"
-                                  + " * Version: " + info.getVersion() + " * Caps: " + caps);
+                                  DataHelper.formatDuration(4*60*60*1000L) + " and disconnecting -> Router: ["
+                                  + entry.toBase64().substring(0,6) + "]"
+                                  + "\n* Version: " + info.getVersion() + " * Caps: " + caps);
                     }
                 }
             }

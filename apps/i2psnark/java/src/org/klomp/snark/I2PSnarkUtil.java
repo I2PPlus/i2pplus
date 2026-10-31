@@ -1924,13 +1924,12 @@ public class I2PSnarkUtil implements DisconnectListener {
             _log.debug(
                     "Fetching ["
                             + url
-                            + "] * Proxy: "
+                            + "] -> Proxy: "
                             + _proxyHost
                             + ":"
                             + _proxyPort
-                            + " * Proxying: ["
-                            + _shouldProxy
-                            + "]");
+                            + " * Proxying: "
+                            + _shouldProxy);
         }
         File out = null;
         try {

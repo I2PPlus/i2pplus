@@ -338,7 +338,7 @@ class MessageOutputStream extends OutputStream {
         if (_log.shouldDebug()) {
             long elapsed = _context.clock().now() - traceStart;
             if (elapsed > 10_000) {
-                _log.debug("Slow write * Elapsed: " + DataHelper.formatDuration(elapsed));
+                _log.debug("Slow write -> Elapsed: " + DataHelper.formatDuration(elapsed));
             }
         }
         throwAnyError();
@@ -476,7 +476,7 @@ class MessageOutputStream extends OutputStream {
         if (_log.shouldDebug()) {
             long elapsed = _context.clock().now() - traceStart;
             if (elapsed > 10_000) {
-                _log.debug("Slow flush * Elapsed: " + DataHelper.formatDuration(elapsed));
+                _log.debug("Slow flush -> Elapsed: " + DataHelper.formatDuration(elapsed));
             }
         }
         throwAnyError();

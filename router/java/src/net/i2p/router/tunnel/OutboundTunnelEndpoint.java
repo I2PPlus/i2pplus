@@ -176,27 +176,24 @@ class OutboundTunnelEndpoint {
                         _ridsm++;
                         _context.statManager().addRateData("tunnel.outboundTunnelEndpointFwdRIDSM", 1);
                         if (_log.shouldLog(Log.INFO))
-                            _log.info("Outbound endpoint RouterInfo DbStoreMsg"
-                                      + "\n* Messages: " + _ridsm + " of " + _totalmsg
-                                      + " * From tunnel: " + _config.getReceiveTunnelId()
-                                      + " * To router: [" + toRouter.toBase64().substring(0,6) + "]"
+                            _log.info("Outbound endpoint RouterInfo DbStoreMsg -> Messages: " + _ridsm
+                                      + " of " + _totalmsg + " * To router: [" + toRouter.toBase64().substring(0,6) + "]"
+                                      + "\n* From tunnel: " + _config.getReceiveTunnelId()
                                       + "\n* " + dsm);
                     } else {
                         _lsdsm++;
                         if (_log.shouldLog(Log.INFO))
-                            _log.info("Outbound endpoint LeaseSet DbStoreMsg"
-                                      + "\n* Messages: " + _lsdsm + " of " + _totalmsg
-                                      + " * From tunnel: " + _config.getReceiveTunnelId()
-                                      + " * To router: [" + toRouter.toBase64().substring(0,6) + "]"
+                            _log.info("Outbound endpoint LeaseSet DbStoreMsg -> Messages: " + _lsdsm
+                                      + " of " + _totalmsg + " * To router: [" + toRouter.toBase64().substring(0,6) + "]"
+                                      + "\n* From tunnel: " + _config.getReceiveTunnelId()
                                       + "\n* " + dsm);
                     }
                 } else {
                     _i2npmsg++;
                     if (_log.shouldLog(Log.INFO))
-                        _log.info("Outbound endpoint I2NP message"
-                                  + "\n* Messages: " + _i2npmsg + " of " + _totalmsg
-                                  + " * From tunnel: " + _config.getReceiveTunnelId()
-                                  + " * To router: [" + toRouter.toBase64().substring(0, 6) + ']'
+                        _log.info("Outbound endpoint I2NP message -> Messages: " + _i2npmsg
+                                  + " of " + _totalmsg + " * To router: [" + toRouter.toBase64().substring(0, 6) + ']'
+                                  + "\n* From tunnel: " + _config.getReceiveTunnelId()
                                   + "\n* " + msg);
                 }
             }
