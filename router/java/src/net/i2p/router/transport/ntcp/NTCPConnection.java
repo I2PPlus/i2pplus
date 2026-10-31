@@ -2353,7 +2353,8 @@ void noteEstablishmentRtt(int rttMs) {
         if (toClose != null && toClose != this) {
             int drained = toClose.drainOutboundTo(_outbound);
             if (_log.shouldDebug())
-                _log.debug("Old connection closed: " + toClose + " replaced by " + this + "; drained " + drained);
+                _log.debug("Drained the old connection -> Moved " + drained +
+                           " packets to the replacement\n* Old: " + toClose + "\n* New: " + this);
             _context.statManager().addRateData("ntcp.inboundEstablishedDuplicate", toClose.getUptime());
             toClose.close();
         }
