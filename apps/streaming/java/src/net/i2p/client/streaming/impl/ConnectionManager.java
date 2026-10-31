@@ -1149,10 +1149,9 @@ class ConnectionManager {
         if (action == SynBurstAction.BAN)
             return true;
         if (action == SynBurstAction.RECORD && _log.shouldWarn()) {
-            _log.warn("SYN burst strike for [" + h.toBase32().substring(0, 8) + "]"
-                      + " (>" + _synBurst + " SYNs/" + _synRateMs + "ms)"
-                      + " * " + needed + " burst windows within "
-                      + DataHelper.formatDuration(STRIKE_WINDOW_MS) + " autobans");
+            _log.warn("SYN burst strike for [" + h.toBase32().substring(0, 8) + "] -> " +
+                      needed + " burst windows within " + DataHelper.formatDuration(STRIKE_WINDOW_MS) +
+                      " autobans\n* Threshold: >" + _synBurst + " SYNs per " + _synRateMs + "ms");
         }
         return false;
     }
@@ -1601,7 +1600,8 @@ class ConnectionManager {
         }
         if (!sigOk) {
             if (_log.shouldWarn())
-                _log.warn("Received UNSIGNED / FORGED SYN packet apparently from [" + from.toBase32().substring(0, 8) + "] * Packet: " + synPacket);
+                _log.warn("Received an unsigned / forged SYN packet apparently from [" +
+                          from.toBase32().substring(0, 8) + "] -> Packet: " + synPacket);
             return null;
         }
 
@@ -2778,8 +2778,9 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
 
         boolean removed = (o == con);
         if (_log.shouldDebug())
-            _log.debug("Connection removed? " + removed + " Remaining: "
-                       + _connectionByInboundId.size() + "\n " + con);
+            _log.debug("Removing a connection -> Removed: " + removed
+                       + " * Remaining connections: " + _connectionByInboundId.size()
+                       + "\n* " + con);
         if (!removed && _log.shouldDebug())
             _log.debug("Failed to remove " + con + "\n" + _connectionByInboundId.values());
     }

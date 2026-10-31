@@ -1711,7 +1711,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                 didRemove = true;
                 if (_log.shouldWarn())
                     _log.warn("Replacing slow tunnels -> Scheduled the early expiry of slow tunnels"
-                              + " * Count: " + toRemove.size() + " * Pool: " + pool);
+                              + " * Tunnels: " + toRemove.size() + " * Pool: " + pool);
             }
         }
         return didRemove;

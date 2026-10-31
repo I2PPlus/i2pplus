@@ -4524,8 +4524,8 @@ public class TunnelPool {
         if (_log.shouldWarn()) {
             _log.warn(tunnelLabel() + " -> Marked " +
                       (cfg.isInbound() ? "inbound " : "outbound ") +
-                      (isDead ? "FAILED" : "FAILING") + ", retained until expiry" +
-                      " * Failures: " + failures + " * Remaining: " + size());
+                      (isDead ? "FAILED" : "FAILING") + ", retained until expiry"
+                      + "\n* Failures: " + failures + " * Remaining tunnels: " + size());
         }
         // Retention is a liveness signal: capacity must recover immediately,
         // not on the throttled schedule removeTunnel() used to drive.
@@ -5451,7 +5451,7 @@ public class TunnelPool {
             String boost = _consecutiveEmergencies > 0 ?
                 " * Dynamic target: " + Math.min(target + _consecutiveEmergencies, target + MAX_EMERGENCY_BOOST) : "";
             _log.info("Pruning " + toRemove.size() + " non-GOOD tunnels from " + toString() +
-                      "\n* Good: " + goodCount + " * Remaining: " + (goodCount + reserve) + boost);
+                      "\n* Good tunnels: " + goodCount + " * Remaining tunnels: " + (goodCount + reserve) + boost);
         }
         removeTunnelsBatch(toRemove);
         // Refresh LeaseSet after batch removal (normally done per-tunnel in removeTunnel).
@@ -6976,7 +6976,7 @@ public class TunnelPool {
             if (_log.shouldWarn()) {
                 _log.warn(toString() + " -> Starvation: pool empty but peer supply is ample" +
                           "\n* Fast peers: " + fastPeers + " * Threshold: " +
-                          TunnelPeerSelector.scarceFastPeers(_context) +
+                          TunnelPeerSelector.scarceFastPeers(_context) + " peers" +
                           " -> Not widening the peer activity window");
             }
             return;

@@ -334,8 +334,8 @@ public class SearchJob extends JobImpl {
         if (toCheck <= 0) {
             // too many already pending
             if (_log.shouldInfo()) {
-                _log.info("Too many searches pending -> Throttling (Pending: " +
-                          _state.getPendingSize() + ", max: " + getBredth() + ")");
+                _log.info("Too many searches pending -> Throttling"
+                          + " * Pending searches: " + _state.getPendingSize() + " of " + getBredth());
             }
             requeuePending();
             return;
@@ -365,9 +365,10 @@ public class SearchJob extends JobImpl {
                 } else {
                     // no more to try, but we might get data or close peers from some outstanding requests
                     if (_log.shouldInfo()) {
-                        _log.info("No peers left, but search queries still pending! -> Pending: " +
-                                  _state.getPendingSize() + "\n* Queried: " + _state.getAttemptedSize() +
-                                  "\n* Failed: " + _state.getFailedSize());
+                        _log.info("No peers left, but search queries are pending -> Requeueing"
+                                  + "\n* Pending searches: " + _state.getPendingSize()
+                                  + " * Queried peers: " + _state.getAttemptedSize()
+                                  + " * Failed peers: " + _state.getFailedSize());
                     }
                     requeuePending();
                 }

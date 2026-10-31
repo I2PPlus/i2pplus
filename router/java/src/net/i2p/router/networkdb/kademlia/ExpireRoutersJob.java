@@ -110,7 +110,7 @@ class ExpireRoutersJob extends JobImpl {
         int pdrop = Math.max(10, Math.min(80, (128 * count / LIMIT_ROUTERS) - 128));
         int removed = 0;
         if (_log.shouldLog(Log.INFO))
-            _log.info("Expiring routers -> Count: " + count + " * Drop probability: " +
+            _log.info("Expiring routers -> Routers: " + count + " * Drop probability: " +
                       (count > LIMIT_ROUTERS ? pdrop * 100 / 128 : 0) + '%');
         for (Map.Entry<Hash, DatabaseEntry> entry : entries) {
             DatabaseEntry e = entry.getValue();

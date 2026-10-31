@@ -1519,9 +1519,10 @@ void noteEstablishmentRtt(int rttMs) {
         int size = block.getTotalLength();
         if (size + NTCP2Payload.BLOCK_HEADER_SIZE > BUFFER_SIZE) {
             if (_log.shouldWarn())
-                _log.warn("RouterInfo [" + ri.getHash().toBase64().substring(0,6) +
-                          "] too big for buffer (Size: " +
-                          (size + NTCP2Payload.BLOCK_HEADER_SIZE) + " / Max: " + BUFFER_SIZE + ")");
+                _log.warn("RouterInfo [" + ri.getHash().toBase64().substring(0, 6) +
+                          "] too big for the buffer -> Size: " +
+                          (size + NTCP2Payload.BLOCK_HEADER_SIZE) + " bytes"
+                          + " * Maximum: " + BUFFER_SIZE + " bytes");
             return;
         }
         blocks.add(block);
@@ -2753,9 +2754,9 @@ void noteEstablishmentRtt(int rttMs) {
             if (_log.shouldDebug())
                 _log.debug("Received " + paddingLength +
                           " bytes of padding in a " + frameLength + " byte frame"
-                          + "\n* Ratio: " + (((float) paddingLength) / ((float) frameLength))
-                          + " * Configured min: " + _paddingConfig.getRecvMin() +
-                          " * Configured max: " + _paddingConfig.getRecvMax());
+                          + "\n* Ratio: " + (int) (100f * paddingLength / frameLength) + "%"
+                          + " * Configured min: " + _paddingConfig.getRecvMin() + " bytes"
+                          + " * Configured max: " + _paddingConfig.getRecvMax() + " bytes");
         }
     }
 

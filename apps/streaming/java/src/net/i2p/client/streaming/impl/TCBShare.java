@@ -181,14 +181,14 @@ class TCBShare {
             String to = dest.calculateHash().toBase64().substring(0, 6);
             _log.debug("Sharing the congestion parameters"
                        + "\n* From: [" + from + "] * To: [" + to + ']'
-                       + "\n* Cached RTT: " + old + " * Connection RTT: " + opts.getRTT()
-                       + " * New RTT: " + rtt
-                       + "\n* Cached deviation: " + oldDev
-                       + " * Connection deviation: " + opts.getRTTDev()
-                       + " * New deviation: " + rttDev
-                       + "\n* Cached window: " + oldw
-                       + " * Connection window: " + opts.getWindowSize()
-                       + " * New window: " + wdw);
+                       + "\n* Cached RTT: " + old + "ms * Connection RTT: " + opts.getRTT() + "ms"
+                       + " * New RTT: " + rtt + "ms"
+                       + "\n* Cached deviation: " + oldDev + "ms"
+                       + " * Connection deviation: " + opts.getRTTDev() + "ms"
+                       + " * New deviation: " + rttDev + "ms"
+                       + "\n* Cached window: " + oldw + "B"
+                       + " * Connection window: " + opts.getWindowSize() + "B"
+                       + " * New window: " + wdw + "B");
         }
     }
 

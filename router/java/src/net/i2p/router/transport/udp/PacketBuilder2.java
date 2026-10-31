@@ -480,7 +480,8 @@ class PacketBuilder2 {
                     _log.debug("[SSU] Sending ACKs [" + block + "] " + peer);
             }
         } else if (_log.shouldDebug()) {
-            _log.debug("[SSU] No room for ACKs -> MTU: " + currentMTU + "; Data: " + dataSize + "; Available: " + availableForAcks);
+            _log.debug("[SSU] No room for ACKs -> MTU: " + currentMTU + "B"
+                       + " * Data: " + dataSize + "B * Available: " + availableForAcks + "B");
         }
 
         // now write each fragment

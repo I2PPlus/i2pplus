@@ -775,7 +775,7 @@ public class FIFOBandwidthLimiter {
                 if (_log.shouldDebug())
                      _log.debug("Aborting inbound request -> Dropping it"
                                 + "\n* " + req + " * Waited: " + DataHelper.formatDuration(waited)
-                                + " * Pending: " + _pendingInboundRequests.size());
+                                + " * Pending requests: " + _pendingInboundRequests.size());
                 _pendingInboundRequests.remove(i);
                 i--;
                 continue;
@@ -799,14 +799,14 @@ public class FIFOBandwidthLimiter {
                 if (_log.shouldDebug())
                      _log.debug("Allocating " + allocated + " bytes inbound as a partial grant"
                                 + "\n* " + req + " * Waited: " + DataHelper.formatDuration(waited)
-                                + "\n* Pending: " + _pendingInboundRequests.size()
+                                + "\n* Pending requests: " + _pendingInboundRequests.size()
                                 + " * Longest wait: " +
                                 DataHelper.formatDuration(locked_getLongestInboundWait()));
             } else {
                 if (_log.shouldDebug())
                      _log.debug("Allocating " + allocated + " bytes inbound to finish a partial grant"
                                 + "\n* " + req + " * Waited: " + DataHelper.formatDuration(waited)
-                                + "\n* Pending: " + _pendingInboundRequests.size()
+                                + "\n* Pending requests: " + _pendingInboundRequests.size()
                                 + " * Longest wait: " +
                                 DataHelper.formatDuration(locked_getLongestInboundWait()));
                 _pendingInboundRequests.remove(i);
@@ -885,7 +885,7 @@ public class FIFOBandwidthLimiter {
                 if (_log.shouldDebug())
                      _log.debug("Aborting outbound request -> Dropping it"
                                 + "\n* " + req + " * Waited: " + DataHelper.formatDuration(waited)
-                                + " * Pending: " + _pendingOutboundRequests.size());
+                                + " * Pending requests: " + _pendingOutboundRequests.size());
                 _pendingOutboundRequests.remove(i);
                 i--;
                 continue;
@@ -909,14 +909,14 @@ public class FIFOBandwidthLimiter {
                 if (_log.shouldDebug())
                      _log.debug("Allocating " + allocated + " bytes outbound as a partial grant"
                                 + "\n* " + req + " * Waited: " + DataHelper.formatDuration(waited)
-                                + "\n* Pending: " + _pendingOutboundRequests.size()
+                                + "\n* Pending requests: " + _pendingOutboundRequests.size()
                                 + " * Longest wait: " +
                                 DataHelper.formatDuration(locked_getLongestOutboundWait()));
             } else {
                 if (_log.shouldDebug())
                      _log.debug("Allocating " + allocated + " bytes outbound to finish a partial grant"
                                 + "\n* " + req + " * Waited: " + DataHelper.formatDuration(waited)
-                                + "\n* Pending: " + _pendingOutboundRequests.size()
+                                + "\n* Pending requests: " + _pendingOutboundRequests.size()
                                 + " * Longest wait: " +
                                 DataHelper.formatDuration(locked_getLongestOutboundWait()));
                 _pendingOutboundRequests.remove(i);

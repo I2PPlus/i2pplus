@@ -194,7 +194,7 @@ public class SMTPClient {
             }
         }
         if (_log.shouldDebug()) {
-            _log.debug("SMTP commands answered -> Accepted: " + rv + " * Total: " + cmds.size());
+            _log.debug("SMTP commands answered -> Accepted: " + rv + " * Total commands: " + cmds.size());
         }
         return rv;
     }

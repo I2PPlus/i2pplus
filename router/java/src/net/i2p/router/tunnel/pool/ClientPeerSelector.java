@@ -216,7 +216,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         if (length < 0 || ((length == 0) && (settings.getLength() + settings.getLengthVariance() > 0))) {
             if (log.shouldWarn()) {
                 log.warn("Client pool selection aborted -> Invalid tunnel length"
-                         + " * Length: " + length
+                         + " * Length: " + length + " hops"
                          + "\n* Destination: " + settings.getDestinationNickname()
                          + " * " + (settings.isInbound() ? "Inbound" : "Outbound"));
             }
@@ -1545,7 +1545,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
             boolean established = ctx.commSystem().isEstablished(firstHop);
             boolean connecting = ctx.commSystem().isConnecting(firstHop);
             log.info("First hop accepted -> Tier: " + tier + " * Attempts: " + attempt + " of " + attempts +
-                     " * Remaining: " + remaining
+                     " * Remaining attempts: " + remaining
                      + "\n* Logged since last: " + _tierLogCount.get(key) +
                      "\n* Established: " + established + " * Connecting: " + connecting +
                      " * Build success: " + String.format("%.2f", buildSuccess) +
@@ -1688,7 +1688,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
                               + "\n* Destination: " + settings.getDestinationNickname()
                               + " * " + (settings.isInbound() ? "Inbound" : "Outbound")
                               + "\n* Selected: " + rv.size() + " of " + min
-                              + " * Length: " + length);
+                              + " * Length: " + length + " hops");
                 }
                 return Collections.emptyList();
             }

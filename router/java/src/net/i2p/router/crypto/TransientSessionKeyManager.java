@@ -718,8 +718,8 @@ public class TransientSessionKeyManager extends SessionKeyManager {
             session = _outboundSessions.remove(target);
         }
         if ( (session != null) && (_log.shouldWarn()) )
-            _log.warn("Removing session tags * Available: " + session.availableTags() +
-                      " tags * Expires in: " +
+            _log.warn("Removing session tags -> Available tags: " + session.availableTags() +
+                      " * Expires in: " +
                       (session.getLastExpirationDate()-_context.clock().now()) + "ms");
     }
 

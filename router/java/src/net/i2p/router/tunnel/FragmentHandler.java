@@ -207,7 +207,7 @@ class FragmentHandler {
                 if (off < 0) {
                     _context.statManager().addRateData("tunnel.corruptMessage", 1);
                     if (_log.shouldWarn())
-                        _log.warn("Corrupt fragment received -> Offset: " + off);
+                        _log.warn("Corrupt fragment received -> Offset: " + off + " bytes");
                     return false;
                 }
                 offset = off;
@@ -215,20 +215,20 @@ class FragmentHandler {
         } catch (ArrayIndexOutOfBoundsException aioobe) {
             _context.statManager().addRateData("tunnel.corruptMessage", 1);
             if (_log.shouldDebug())
-                _log.debug("Corrupt fragment received -> Offset: " + offset, aioobe);
+                _log.debug("Corrupt fragment received -> Offset: " + offset + " bytes", aioobe);
             else if (_log.shouldWarn())
-                _log.warn("Corrupt fragment received -> Offset: " + offset);
+                _log.warn("Corrupt fragment received -> Offset: " + offset + " bytes");
             return false;
         } catch (NullPointerException npe) {
             if (_log.shouldDebug())
-                _log.debug("Corrupt fragment received -> Offset: " + offset, npe);
+                _log.debug("Corrupt fragment received -> Offset: " + offset + " bytes", npe);
             else if (_log.shouldWarn())
-                _log.warn("Corrupt fragment received -> Offset: " + offset + " (Null Pointer Exception)");
+                _log.warn("Corrupt fragment received -> Offset: " + offset + " bytes" + " (Null Pointer Exception)");
             _context.statManager().addRateData("tunnel.corruptMessage", 1);
             return false;
         } catch (RuntimeException e) {
             if (_log.shouldWarn())
-                _log.warn("Corrupt fragment received -> Offset: " + offset, e);
+                _log.warn("Corrupt fragment received -> Offset: " + offset + " bytes", e);
             _context.statManager().addRateData("tunnel.corruptMessage", 1);
             return false;
         } finally {
@@ -300,8 +300,8 @@ class FragmentHandler {
             if (offset+paddingEnd >= length) {
                 if (_log.shouldWarn())
                     _log.warn("Cannot verify the message -> The offset runs past the end"
-                              + "\n* Offset: " + offset + " * Length: " + length
-                              + " * Padding end: " + paddingEnd);
+                              + "\n* Offset: " + offset + " bytes * Length: " + length + " bytes"
+                              + " * Padding end: " + paddingEnd + " bytes");
                 return false;
             }
         }
@@ -326,11 +326,10 @@ class FragmentHandler {
             if (_log.shouldWarn()) {
                 _log.warn("Corrupt tunnel message - verification fails: " + Base64.encode(preprocessed, offset+HopProcessor.IV_LENGTH, 4)
                            + " != " + Base64.encode(v, 0, 4));
-                _log.warn("No matching endpoint"
-                          + " -> Offset: " + offset
-                          + " * Pad bytes: " + (paddingEnd-(HopProcessor.IV_LENGTH+4)-1)
-                          + " * Length: " + length
-                          + " * Padding end: " + paddingEnd);
+                _log.warn("No matching endpoint -> Offset: " + offset + " bytes"
+                          + "\n* Pad bytes: " + (paddingEnd-(HopProcessor.IV_LENGTH+4)-1)
+                          + " * Length: " + length + " bytes"
+                          + " * Padding end: " + paddingEnd + " bytes");
             }
         }
         SimpleByteCache.release(v);
@@ -424,7 +423,7 @@ class FragmentHandler {
                 return -1;
             messageId = DataHelper.fromLong(preprocessed, offset, 4);
             if (_log.shouldDebug())
-                _log.debug("Reading a tunnel message -> MsgID: " + messageId + " * Offset: " + offset
+                _log.debug("Reading a tunnel message -> MsgID: " + messageId + " * Offset: " + offset + " bytes"
                            + " * Type: " + type
                            + "\n* Router: "
                            + (router != null ? '[' + router.toBase64().substring(0, 6) + ']' : "n/a")
@@ -457,7 +456,7 @@ class FragmentHandler {
             if (_log.shouldWarn())
                 _log.warn("Dropping messages at the tunnel endpoint with a delivery instruction to tunnel 0"
                           + "\n* Gateway: " + router + " * Fragmented: " + fragmented
-                          + " * ID: " + messageId + " * Size: " + size
+                          + " * ID: " + messageId + " * Size: " + size + " bytes"
                           + " * Type: " + (preprocessed[offset] & 0xff));
             _context.statManager().addRateData("tunnel.corruptMessage", 1);
         } else if (fragmented) {

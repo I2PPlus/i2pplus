@@ -1680,12 +1680,11 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                 // than leaking the reservation.
                 I2PTunnelServer.releaseConnectionSlot(_activeConnections);
                 if (_log.shouldWarn()) {
-                    _log.warn("Client pool rejected connection (executor full) -> Shedding"
-                              + "\n* Max: " + tpe.getMaximumPoolSize() +
-                              " * Active: " + tpe.getActiveCount() +
-                              " * Queue: " + tpe.getQueue().size() +
-                              " * Cap: " + effectiveMax +
-                              " * Open: " + _activeConnections.get());
+                    _log.warn("Client pool rejected a connection -> Executor full, shedding"
+                              + "\n* Threads: " + tpe.getActiveCount() + " of " + tpe.getMaximumPoolSize()
+                              + " * Queued jobs: " + tpe.getQueue().size()
+                              + "\n* Connection cap: " + effectiveMax
+                              + " * Open: " + _activeConnections.get());
                 }
                 // Mirrors the cap-path shed stat: a rejection here would otherwise close
                 // the socket with zero bytes (empty proxy response). Count it so the
@@ -1768,7 +1767,8 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         }
 
         if (_log.shouldDebug()) {
-            _log.debug("Close called * " + (forced ? "Forced" : "Not forced") + " * " + (open ? "Open" : "Closed") + " * Socket manager: " + sockMgr);
+            _log.debug("Closing -> " + (forced ? "Forced" : "Not forced") + " * " + (open ? "Open" : "Closed") +
+                       " * Socket manager: " + sockMgr);
         }
         if (forced) {
             Thread tb = _tunnelBuilder;

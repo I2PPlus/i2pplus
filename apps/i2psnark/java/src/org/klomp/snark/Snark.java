@@ -1743,14 +1743,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         }
         int limit = Math.max(MIN_TOTAL_UPLOADERS, maxUploaders);
         if (_log.shouldDebug()) {
-            _log.debug(
-                    "Currently uploading to: "
-                            + totalUploaders
-                            + " peer"
-                            + (totalUploaders != 1 ? "s" : "")
-                            + " (Limit: "
-                            + limit
-                            + ")");
+            _log.debug("Currently uploading to " + totalUploaders + " peers -> Limit: " + limit + " peers");
         }
         return totalUploaders > limit;
     }

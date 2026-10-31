@@ -3287,7 +3287,7 @@ class Connection {
             _context.statManager().addRateData("streaming.duplicateCloseSent", 1);
             if (_log.shouldWarn() && shouldLogDuplicateClose(now)) {
                 long suppressed = _duplicateCloseSuppressed.getAndSet(0);
-                _log.warn("Duplicate CLOSE sent -> Total: " + duplicate
+                _log.warn("Duplicate CLOSE sent -> Total duplicates: " + duplicate
                           + (suppressed > 0 ? " * Suppressed since last report: " + suppressed : "")
                           + "\n* " + toString());
             }

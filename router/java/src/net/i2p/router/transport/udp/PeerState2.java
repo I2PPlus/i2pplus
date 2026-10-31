@@ -1268,7 +1268,10 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      */
     public void gotTermination(int reason, long count) {
         if (shouldLogDebug()) {
-            _log.debug("[SSU] Received TERMINATION block -> " + SSU2Util.terminationCodeToString(reason) + "; Count: " + count + " " + this);
+            _log.debug("[SSU] Received TERMINATION block -> " +
+                       SSU2Util.terminationCodeToString(reason)
+                       + " * Packets: " + count
+                       + "\n* " + this);
         }
         if (reason == SSU2Util.REASON_TERMINATION) { /* ignored */ } // this should only happen at shutdown, where we don't have a post-termination handler
         else if (!_dead) {

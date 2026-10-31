@@ -1261,7 +1261,7 @@ public class TunnelDispatcher implements Service {
                 // so the estimator goes unlabelled on its own line
                 _log.info("Dropping a participating message (per-tunnel limit)" +
                           (pct > 0 ? " -> Approx drop: " + pct + "%" : "") +
-                          "\n* Location: " + loc + " * Type: " + type + " * Length: " + length +
+                          "\n* Location: " + loc + " * Type: " + type + " * Length: " + length + " bytes" +
                           bwe);
             }
             return true;
@@ -1272,7 +1272,7 @@ public class TunnelDispatcher implements Service {
             if (_log.shouldInfo()) {
                 _log.info("Dropping a participating message (global bandwidth limit)" +
                           (pct > 0 ? " -> Approx drop: " + pct + "%" : "") +
-                          "\n* Location: " + loc + " * Type: " + type + " * Length: " + length);
+                          "\n* Location: " + loc + " * Type: " + type + " * Length: " + length + " bytes");
             }
             _context.statManager().addRateData("tunnel.participatingMessageDropped", 1);
         }
@@ -1304,7 +1304,7 @@ public class TunnelDispatcher implements Service {
                 // so the estimator goes unlabelled on its own line
                 _log.info("Dropping inbound participating message (per-tunnel limit)" +
                           (pct > 0 ? " -> Approx drop: " + pct + "%" : "") +
-                          "\n* Location: " + loc + " * Type: " + type + " * Length: " + length +
+                          "\n* Location: " + loc + " * Type: " + type + " * Length: " + length + " bytes" +
                           bwe);
             }
             return true;
@@ -1315,7 +1315,7 @@ public class TunnelDispatcher implements Service {
             if (_log.shouldInfo()) {
                 _log.info("Dropping inbound participating message (global bandwidth limit)" +
                           (pct > 0 ? " -> Approx drop: " + pct + "%" : "") +
-                          "\n* Location: " + loc + " * Type: " + type + " * Length: " + length);
+                          "\n* Location: " + loc + " * Type: " + type + " * Length: " + length + " bytes");
             }
             _context.statManager().addRateData("tunnel.participatingInboundMessageDropped", 1);
         }

@@ -305,7 +305,7 @@ public class JobQueue {
     public void addJob(Job job) {
         if (job == null || !_alive) {
             if (_log.shouldWarn() && job != null) {
-                _log.warn("Add job blocked: job: " + job + " * alive: " + _alive);
+                _log.warn("Adding the job blocked -> Job: " + job + " * Queue alive: " + _alive);
             }
             return;
         }
@@ -421,7 +421,7 @@ public class JobQueue {
     public void addJobToTop(Job job) {
         if (job == null || !_alive) {
             if (_log.shouldWarn() && job != null) {
-                _log.warn("Add job to top blocked: job: " + job + " * alive: " + _alive);
+                _log.warn("Adding the job to the top blocked -> Job: " + job + " * Queue alive: " + _alive);
             }
             return;
         }
@@ -962,13 +962,13 @@ public class JobQueue {
             _queueRunners.put(Integer.valueOf(key), runner);
             runner.setName("JobQueue." + _runnerId.incrementAndGet());
             if (_log.shouldDebug())
-                _log.debug("Starting runner: " + key + " * Total: " + _queueRunners.size());
+                _log.debug("Starting a runner -> Key: " + key + " * Total runners: " + _queueRunners.size());
             runner.start();
             countRunnerCreated();
         }
 
         if (_log.shouldInfo()) {
-            _log.info("Added " + count + " runners -> Total: " + _queueRunners.size());
+            _log.info("Added " + count + " runners -> Total runners: " + _queueRunners.size());
         }
     }
 
@@ -1008,7 +1008,7 @@ public class JobQueue {
             }
         }
         if (removed > 0 && _log.shouldInfo()) {
-            _log.info("Removed " + removed + " idle runners -> Total: " + _queueRunners.size());
+            _log.info("Removed " + removed + " idle runners -> Total runners: " + _queueRunners.size());
         }
         return removed;
     }

@@ -395,7 +395,9 @@ class MailPart {
                 if (cos != null) {
                     positions.append(" * Written up to: ").append(cos.getWritten());
                 }
-                _log.debug("Decoding the message part failed -> Offset: " + offset + positions + " * Error: " + ioe);
+                _log.debug("Decoding the message part failed -> Offset: " + offset + " bytes"
+                           + " * Error: " + ioe
+                           + positions);
             }
             throw ioe;
         } finally {

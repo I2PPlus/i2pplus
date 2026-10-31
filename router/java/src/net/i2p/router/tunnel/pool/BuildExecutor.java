@@ -1350,8 +1350,8 @@ public class BuildExecutor implements Runnable {
         if (_log.shouldDebug()) {
             _log.debug("Adaptive timeout: " + DataHelper.formatDuration(_adaptiveTimeout)
                        + "\n* Success: " + (int)(successRate * 100) + "% * Timeouts: " + timeouts +
-                       " of " + count
-                       + " * Concurrency: " + _adaptiveMaxConcurrentBuilds + " of " + baseMax);
+                       " builds of " + count
+                       + " * Concurrency: " + _adaptiveMaxConcurrentBuilds + " of " + baseMax + " builds");
         }
     }
 

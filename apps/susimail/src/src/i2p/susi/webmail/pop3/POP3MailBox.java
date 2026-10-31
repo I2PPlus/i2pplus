@@ -482,7 +482,7 @@ public class POP3MailBox implements NewMailListener {
             }
             if (bad > 0 && _log.shouldWarn()) {
                 _log.warn("UIDL list lines skipped -> Could not be parsed\n* Skipped: " + bad +
-                           " * Total: " + lines.size());
+                           " * Total lines: " + lines.size());
             }
             lastChecked.set(System.currentTimeMillis());
         } else if (_log.shouldWarn()) {_log.warn("Server returned no UIDL list");}
@@ -515,7 +515,7 @@ public class POP3MailBox implements NewMailListener {
             }
             if (bad > 0 && _log.shouldWarn()) {
                 _log.warn("Message size lines skipped -> Could not be parsed\n* Skipped: " + bad +
-                           " * Total: " + lines.size());
+                           " * Total lines: " + lines.size());
             }
         } else {
             if (_log.shouldWarn()) _log.warn("Server returned no message size list");

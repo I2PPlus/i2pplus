@@ -495,9 +495,11 @@ class BatchedPreprocessor extends TrivialPreprocessor {
             preprocess(preprocessed, offset);
         } catch (ArrayIndexOutOfBoundsException aioobe) {
             if (_log.shouldError())
-                _log.error("Error preprocessing the messages:"
-                           + "\n* Offset: " + offset + "; Start: " + startAt + "; Through: "
-                           + sendThrough + "; Pending: " + pending.size() + "; Preproc: " + preprocessed.length);
+                _log.error("Preprocessing the messages failed"
+                           + "\n* Offset: " + offset + " bytes * Start: " + startAt + " bytes"
+                           + " * Through: " + sendThrough + " bytes"
+                           + "\n* Pending messages: " + pending.size()
+                           + " * Preprocessed: " + preprocessed.length + " bytes");
             return;
         }
 

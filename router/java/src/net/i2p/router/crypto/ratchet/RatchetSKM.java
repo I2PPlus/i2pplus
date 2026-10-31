@@ -857,8 +857,8 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
             }
         }
         if ((removed > 0 || oremoved > 0 || premoved > 0 || cremoved > 0) && _log.shouldInfo())
-            _log.info("Expired Inbound: " + removed + ", Outbound: " + oremoved +
-                      ", Pending: " + premoved + ", Callbacks: " + cremoved);
+            _log.info("Expired sessions -> Inbound: " + removed + " * Outbound: " + oremoved
+                      + "\n* Pending sessions: " + premoved + " * Callbacks: " + cremoved);
 
         return removed + oremoved + premoved;
     }

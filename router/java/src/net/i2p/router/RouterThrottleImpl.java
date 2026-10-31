@@ -417,10 +417,10 @@ public class RouterThrottleImpl implements RouterThrottle {
             probReject = 1;
             reject = true;
             _log.warn("Rejecting participating tunnel -> Insufficient bandwidth available" +
-                      "\n* Available: " + availBps + " * Maximum allocated: " + maxKBps +
-                      " * In use: " + used +
+                      "\n* Available: " + availBps + "B/s * Maximum allocated: " + maxKBps + "KB/s" +
+                      " * In use: " + used + "B/s" +
                       "\n* Active tunnels: " + numTunnels +
-                      " * Estimated bandwidth required: " + bytesAllocated);
+                      " * Estimated bandwidth required: " + bytesAllocated + "B/s");
         } else {
             // limit at 90% - 4KBps (see above)
             float maxBps = (maxKBps * 1024f * 0.9f) - MIN_AVAILABLE_BPS;

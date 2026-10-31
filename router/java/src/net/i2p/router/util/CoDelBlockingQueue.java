@@ -476,7 +476,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
         if (_log.shouldWarn())
             _log.warn("CoDel queue dropped a backlogged item -> Delay " +
                       DataHelper.formatDuration(delay)
-                      + "\n* Queue: " + _name + " * ID: " + _id
+                      + "\n* Name: " + _name + " * ID: " + _id
                       + "\n* Since first above: " +
                       DataHelper.formatDuration(_context.clock().now() - _first_above_time) +
                       " * Since drop next: " +

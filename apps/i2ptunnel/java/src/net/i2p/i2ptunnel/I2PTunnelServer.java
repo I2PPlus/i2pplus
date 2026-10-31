@@ -807,10 +807,10 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
         if (!_lastRejectWarn.compareAndSet(last, now)) {return;}
         int cap = queueDepth + ex.getQueue().remainingCapacity();
         _log.warn("Handler queue full for " + remoteHost + ':' + remotePort +
-                  " -> Rejecting the new connection" +
-                  "\n* Queue: " + queueDepth + '/' + cap +
-                  " * Threads: " + active + '/' + threads +
-                  " * Connection slots: " + _activeConnections.get());
+                  " -> Rejecting the new connection"
+                  + "\n* Queued connections: " + queueDepth + " of " + cap
+                  + " * Threads: " + active + " of " + threads
+                  + " * Connection slots: " + _activeConnections.get());
     }
 
     /**

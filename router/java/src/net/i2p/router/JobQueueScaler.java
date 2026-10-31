@@ -1404,8 +1404,8 @@ class JobQueueScaler implements Runnable {
         }
         recalcExternalFloor();
         if (_log.shouldDebug()) {
-            _log.debug("Runner request set -> Reason: " + reason + " * Count: " + count
-                       + " * Floor: " + _externalFloor.get());
+            _log.debug("Runner request set -> Reason: " + reason + " * Requested runners: " + count
+                       + " * Floor: " + _externalFloor.get() + " runners");
         }
     }
 

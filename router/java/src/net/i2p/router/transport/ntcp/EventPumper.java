@@ -960,11 +960,11 @@ class EventPumper implements Runnable {
         if (_blockedIPs.count(ba) > 0) {
             int count = _blockedIPs.increment(ba);
             if (_log.shouldInfo()) {
-                _log.info("Blocking NTCP connection attempt from: " + ba + " (Count: " + count + ")");
+                _log.info("Blocking an incoming NTCP connection from " + ba + " -> Attempts: " + count);
             }
             if (count >= 30 && _log.shouldWarn()) {
-                _log.warn("WARNING! IP Address " + ba +
-                          " is making excessive inbound NTCP connection attempts (Count: " + count + ")");
+                _log.warn("Excessive inbound NTCP connection attempts from " + ba + " -> Blocking"
+                          + " * Attempts: " + count);
             }
             return AcceptVerdict.BLOCKED;
         }

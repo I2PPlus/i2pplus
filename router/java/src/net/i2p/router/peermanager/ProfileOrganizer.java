@@ -2905,11 +2905,11 @@ public class ProfileOrganizer {
                 // out of the line so the three tier counts fit one row.
                 String fastExtra = added > 0 ? " (fallback +" + added + ')' : "";
                 String capExtra = highCapAdded > 0 ? " (fallback +" + highCapAdded + ')' : "";
-                _log.info("Profiles reorganized: " + expiredCount + " expired, " +
-                          profileCount + " retained" +
-                          "\n* Thresholds -> Capacity: " + num(_thresholdCapacityValue) +
-                          " * Speed: " + num(_thresholdSpeedValue) +
-                          " * Integration: " + num(_thresholdIntegrationValue) +
+                _log.info("Profiles reorganized -> Expired " + expiredCount + " profiles" +
+                          " * Retained: " + profileCount +
+                          "\n* Thresholds -> Capacity score: " + num(_thresholdCapacityValue) +
+                          " * Speed score: " + num(_thresholdSpeedValue) +
+                          " * Integration score: " + num(_thresholdIntegrationValue) +
                           "\n* Fast peers: " + _fastPeers.size() + fastExtra +
                           " * HighCap peers: " + _highCapacityPeers.size() + capExtra +
                           " * Quality peers: " + qualityCount);
@@ -4947,9 +4947,9 @@ public class ProfileOrganizer {
         if (_log.shouldWarn()) {
             String tier = peers == _fastPeers ? "Fast"
                           : peers == _highCapacityPeers ? "High capacity" : "Standard";
-            _log.warn(tier + " tier selection returned no candidates after " + examined +
-                      " examined\n* Excluded: " + skipExcluded + " * Gated: " + skipGated +
-                      " * Sub-tier: " + skipSliced + " * IP: " + skipIp + " * RTT: " + skipRtt);
+            _log.warn(tier + " tier selection returned no candidates -> Examined " + examined + " peers"
+                      + "\n* Excluded: " + skipExcluded + " * Gated: " + skipGated +
+                      " * Sub-tier: " + skipSliced + " * IP gate: " + skipIp + " * RTT gate: " + skipRtt);
         }
     }
 
@@ -6720,8 +6720,8 @@ public class ProfileOrganizer {
         }
         if (_log.shouldDebug() && queued > 0) {
             _log.debug("RouterInfo refresh -> Queued " + queued + " lookups" +
-                       " (Pending: " + _refresher.getRefreshPending() +
-                       " * Ahead: " + DataHelper.formatDuration(ahead) + ')');
+                       " * Pending refreshes: " + _refresher.getRefreshPending() +
+                       " * Ahead: " + DataHelper.formatDuration(ahead));
         }
     }
 
@@ -6777,7 +6777,7 @@ public class ProfileOrganizer {
             _context.statManager().addRateData("peer.routerInfoRefreshDropped", dropped);
             if (_log.shouldInfo()) {
                 _log.info("RouterInfo refresh -> Queue full, refused " + dropped +
-                          " refreshes (Pending: " + _refresher.getRefreshPending() + ')');
+                          " refreshes * Pending refreshes: " + _refresher.getRefreshPending());
             }
         }
     }

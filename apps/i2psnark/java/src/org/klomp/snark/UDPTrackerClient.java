@@ -645,7 +645,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
 
                     case INIT:
                         if (_log.shouldInfo()) {
-                            _log.info("Timeout: " + w);
+                            _log.info("Timeout: " + w + "ms");
                         }
                         long toWait = untilTime - _context.clock().now();
                         if (toWait <= 1000) {
@@ -846,8 +846,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
             }
             if (_log.shouldInfo()) {
                 _log.info(
-                        "Received a connect response from the tracker"
-                                + " * ID: "
+                        "Received a connect response -> Connection ID: "
                                 + cid
                                 + " * Lifetime: "
                                 + DataHelper.formatDuration(lifetime)

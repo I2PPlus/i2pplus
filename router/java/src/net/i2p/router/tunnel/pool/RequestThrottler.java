@@ -638,7 +638,7 @@ public class RequestThrottler {
             if (underLoad) {
                 if (_log.shouldInfo()) {
                     _log.info("Dropping all connections from [" + routerId + "] -> Low share under sustained load"
-                              + "\n* Version: " + v + " * Load score: " + load);
+                              + "\n* Version: " + v + " * Load: " + (int) (load * 100) + "%");
                 }
                 new Disconnector(h, v).schedule(11*60*1000L);
                 return true;
@@ -657,7 +657,8 @@ public class RequestThrottler {
                     new Disconnector(h, v).schedule(11*60*1000L);
                     if (_log.shouldWarn())
                         _log.warn("Banning a router [" + routerId + "] for 30m -> Excessive tunnel requests"
-                                  + "\n* Requested: " + count + " * Limit: " + limit + " * Ratio: " + ratio);
+                                  + "\n* Requests: " + count + " of " + limit + " per 90s"
+                                  + " * Ratio: " + ratio + "x");
                 }
             } else if (ratio >= 1.5f) {
                 if (banEnabled) {
@@ -670,14 +671,15 @@ public class RequestThrottler {
                     if (_log.shouldWarn()) {
                         _log.warn("Banning a router [" + routerId + "] -> Excessive tunnel requests"
                                   + "\n* Banning for: " + DataHelper.formatDuration(bantime2)
-                                  + " * Requested: " + count + " * Limit: " + limit + " * Ratio: " + ratio);
+                                  + " * Requests: " + count + " of " + limit + " per 90s"
+                                  + " * Ratio: " + ratio + "x");
                     }
                 }
             } else {
                 if (_log.shouldInfo())
                     _log.info("Rejecting a transit request from [" + routerId + "] -> Drawn under the rejection probability"
-                              + "\n* Requested: " + count + " * Limit: " + limit
-                              + " * Ratio: " + ratio + " * Load score: " + load);
+                              + "\n* Requests: " + count + " of " + limit + " per 90s"
+                              + " * Ratio: " + ratio + "x * Load: " + (int) (load * 100) + "%");
                 context.commSystem().forceDisconnect(h, "Transit request throttle");
             }
         }

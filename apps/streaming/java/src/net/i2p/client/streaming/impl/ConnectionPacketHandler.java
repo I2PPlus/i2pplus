@@ -271,7 +271,7 @@ class ConnectionPacketHandler {
                 if (_log.shouldWarn())
                     _log.warn("More data received after local close on " + con + " -> Sending reset");
                 if (_log.shouldDebug())
-                    _log.debug("Dropped packet after local close * " + packet);
+                    _log.debug("Dropped a packet after local close -> " + packet);
                 con.disconnect(false);
             } else {
                 if (_log.shouldWarn())
@@ -538,10 +538,10 @@ class ConnectionPacketHandler {
                 // Worth a line only when the sample actually moved a timer, since
                 // this path runs for every ACK on every connection.
                 if (_log.shouldDebug() && (newrtt != oldrtt || newrto != oldrto || newdev != olddev)) {
-                    _log.debug("RTT updated * Highest RTT: " + highestRTT + " ms" +
-                              "\n* RTT: " + oldrtt + " ms -> " + newrtt + " ms * RTO: " + oldrto + " ms -> " + newrto + " ms" +
-                              " * Deviation: " + olddev + " ms -> " + newdev + " ms" +
-                              "\n* " + con);
+                    _log.debug("RTT updated -> Highest: " + highestRTT + "ms" +
+                               "\n* RTT: " + oldrtt + "ms to " + newrtt + "ms * RTO: " + oldrto + "ms to " + newrto + "ms" +
+                               " * Deviation: " + olddev + "ms to " + newdev + "ms" +
+                               "\n* " + con);
                 }
                 if (firstAck) {
                     if (con.isInbound())
@@ -683,15 +683,15 @@ class ConnectionPacketHandler {
                 // result line. Growth names the rule that ran; when none did,
                 // Congested says why on its own line.
                 if (_log.shouldDebug()) {
-                    _log.debug("Window: " + newWindowSize + " * Previous: " + oldWindow +
-                               " * Growth: " + (growth != null ? growth : "none") +
-                               " * ACKed: " + acked + " * Resends: " + numResends +
+                    _log.debug("Window adjusted -> Window: " + newWindowSize + "B * Previous: " + oldWindow + "B" +
+                               "\n* Growth: " + (growth != null ? growth : "none") +
+                               " * ACKed: " + acked + " packets * Resends: " + numResends +
                                (growth != null ? "" : "\n* Congested: " + congested) +
                                "\n* " + con);
                 }
             } else {
                 if (_log.shouldDebug()) {
-                    _log.debug("No window adjustment -> Window: " + con.getOptions().getWindowSize() +
+                    _log.debug("No window adjustment -> Window: " + con.getOptions().getWindowSize() + "B" +
                                " * ACKed: " + acked + " * UnACKed sent: " + con.getUnackedPacketsSent() +
                                "\n* Highest ACKed through: " + lowest +
                                " * Congestion window end: " + con.getCongestionWindowEnd());

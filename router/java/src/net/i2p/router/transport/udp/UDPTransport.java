@@ -2232,9 +2232,9 @@ public class UDPTransport extends TransportImpl {
 
         if (_log.shouldWarn() && !_mismatchLogged && _peersByIdent.size() != _peersByRemoteHost.size()) {
             _mismatchLogged = true;
-            _log.warn("Size Mismatch after add: " + peer.toShortString()
-                       + " * By ident: " + _peersByIdent.size()
-                       + " * By remote host: " + _peersByRemoteHost.size());
+            _log.warn("Peer map size mismatch after adding " + peer.toShortString() +
+                      " -> By ident: " + _peersByIdent.size()
+                      + " * By remote host: " + _peersByRemoteHost.size());
         }
 
         markReachable(peer.getRemotePeer(), peer.isInbound());
@@ -2265,7 +2265,9 @@ public class UDPTransport extends TransportImpl {
                             if (count == 0 || sinceSelected > 2*60*1000) {
                                 // Rate limit to prevent rapid churn after transition to firewalled or at startup
                                 if (_log.shouldWarn())
-                                    _log.warn("Rebuilding address -> New introducer (Total: " + count + ") " + peer.toShortString());
+                                    _log.warn("Rebuilding the external address -> Selecting new introducers"
+                                              + " * Introducers: " + count
+                                              + " * Peer: " + peer.toShortString());
                                 rebuildExternalAddress(ipv6);
                             }
                         }
@@ -3008,7 +3010,8 @@ public class UDPTransport extends TransportImpl {
             _fragments.add(state, peer);
         } catch (IllegalArgumentException iae) {
             if (_log.shouldWarn())
-                _log.warn("Failed to queue injected message " + peer.toShortString() + " * " + iae.getMessage());
+                _log.warn("Queueing the injected message failed for " + peer.toShortString() +
+                          "\n* Error: " + iae.getMessage());
         }
     }
 
@@ -3038,7 +3041,8 @@ public class UDPTransport extends TransportImpl {
             _fragments.add(states, peer);
         } catch (IllegalArgumentException iae) {
             if (_log.shouldWarn())
-                _log.warn("Failed to queue injected messages " + peer.toShortString() + " * " + iae.getMessage());
+                _log.warn("Queueing the injected messages failed for " + peer.toShortString() +
+                          "\n* Error: " + iae.getMessage());
         }
     }
 
@@ -3063,7 +3067,8 @@ public class UDPTransport extends TransportImpl {
             _fragments.add(states, peer);
         } catch (IllegalArgumentException iae) {
             if (_log.shouldWarn())
-                _log.warn("Failed to queue injected messages " + peer.toShortString() + " * " + iae.getMessage());
+                _log.warn("Queueing the injected messages failed for " + peer.toShortString() +
+                          "\n* Error: " + iae.getMessage());
         }
     }
 
@@ -3262,7 +3267,7 @@ public class UDPTransport extends TransportImpl {
      */
     private RouterAddress locked_rebuildExternalAddress(String host, int port, boolean allowRebuildRouterInfo) {
         if (_log.shouldDebug())
-            _log.debug("Rebuilding the external address * Address: " + host + ':' + port);
+            _log.debug("Rebuilding the external address -> " + host + ':' + port);
         boolean isIPv6 = host != null && host.contains(":");
         if (isIPv6 && host.equals(":"))
             host = null;
@@ -3334,7 +3339,7 @@ public class UDPTransport extends TransportImpl {
         RouterAddress addr = new RouterAddress(getPublishStyle(), options, SSU_OUTBOUND_COST);
         if (!addr.deepEquals(current)) {
             if (_log.shouldInfo())
-                _log.info("Address rebuilt * Address: " + addr);
+                _log.info("Address rebuilt -> " + addr);
             replaceAddress(addr);
             if (allowRebuildRouterInfo)
                 rebuildRouterInfo();

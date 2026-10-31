@@ -219,7 +219,7 @@ class PeerConnectionIn implements Runnable {
                         din.readFully(bitmap);
                         if (_log.shouldDebug()) {
                             _log.debug(
-                                    "Received bitmap from [" + peer + "] (Size: " + (i - 1) + ")");
+                                    "Received a bitmap from [" + peer + "] -> Size: " + (i - 1) + " bytes");
                         }
                         ps.bitfieldMessage(bitmap);
                         break;

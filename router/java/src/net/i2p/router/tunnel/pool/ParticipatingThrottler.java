@@ -886,9 +886,9 @@ public class ParticipatingThrottler {
      */
     private void _logHighRequestCount(Hash h, String caps, int count, int limit) {
         if (_log.shouldWarn()) {
-            _log.warn("Rejecting Tunnel Requests from " + (caps != null ? caps : "") +
-                      " Router [" + h.toBase64().substring(0,6) + "] -> Count / Limit: " +
-                      count + " / " + limit + " in 90s");
+            _log.warn("Rejecting tunnel requests from a " + (caps != null ? caps : "") +
+                      " router [" + h.toBase64().substring(0, 6) + "] -> Over the request limit"
+                      + "\n* Requests: " + count + " of " + limit + " in 90s");
         }
     }
 
@@ -900,8 +900,8 @@ public class ParticipatingThrottler {
      */
     private void _logAcceptRequest(String caps, int count) {
         if (_log.shouldDebug()) {
-            _log.debug("Accepting Tunnel Request from " + (!caps.isEmpty() ? caps : "") +
-                       " Router -> Count: " + count + " in 90s");
+            _log.debug("Accepting a tunnel request from a " + (!caps.isEmpty() ? caps : "") +
+                       " router -> Requests: " + count + " in 90s");
         }
     }
 
