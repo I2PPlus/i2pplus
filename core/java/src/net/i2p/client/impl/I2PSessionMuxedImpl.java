@@ -370,7 +370,7 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
         }
         int size = data.length;
         if (size < 10) {
-            _log.error(getPrefix() + "Length too short for gzip header: " + size);
+            _log.error(getPrefix() + "-> Gzip header is too short * Size: " + size + " bytes");
             return;
         }
         ((MuxedAvailabilityNotifier) _availabilityNotifier).available(id, size, getProto(msg), getFromPort(msg), getToPort(msg));
@@ -437,7 +437,7 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
             try {
                 _msgs.put(new MsgData((int) (msgId & 0xffffffff), size, proto, fromPort, toPort));
             } catch (InterruptedException ie) { /* ignored */ }
-            if (!_alive && _log.shouldWarn()) _log.warn(getPrefix() + "Message available but notifier not running");
+            if (!_alive && _log.shouldWarn()) _log.warn(getPrefix() + "-> Message available while the notifier is not running");
         }
 
         /**
@@ -446,7 +446,7 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
          */
         @Override
         public void run() {
-            if (_log.shouldDebug()) _log.debug(getPrefix() + "Starting muxed availability notifier");
+            if (_log.shouldDebug()) _log.debug(getPrefix() + "-> Starting the muxed availability notifier");
             _msgs.clear();
             _alive = true;
             while (_alive) {

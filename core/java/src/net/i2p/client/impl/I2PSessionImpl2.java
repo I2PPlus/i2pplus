@@ -472,13 +472,13 @@ class I2PSessionImpl2 extends I2PSessionImpl {
 
         if (found) {
             if (_log.shouldInfo()) {
-                _log.info(getPrefix() + " -> Message sent after " + state.getElapsed() + "ms with "
-                          + payload.length + " bytes");
+                _log.info(getPrefix() + "-> Message sent * Elapsed: " + state.getElapsed() + "ms"
+                          + " * Size: " + payload.length + " bytes");
             }
         } else {
             if (_log.shouldInfo()) {
-                _log.info(getPrefix() + " -> Message send failed after " + state.getElapsed() + "ms with "
-                          + payload.length + " bytes");
+                _log.info(getPrefix() + "-> Message send failed * Elapsed: " + state.getElapsed() + "ms"
+                          + " * Size: " + payload.length + " bytes");
             }
             return false;
         }
@@ -522,19 +522,19 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     @Override
     public void receiveStatus(int msgId, long nonce, int status) {
         if (_log.shouldDebug()) {
-            _log.debug(getPrefix() + " -> Received a send status for [MsgID " + msgId + " / " + nonce +
-                       "] (Status: " + status + ")");
+            _log.debug(getPrefix() + "-> Received a send status * MsgID: " + msgId + " * Nonce: " + nonce +
+                       " * Status: " + status);
         }
 
         MessageState state = null;
         if ((state = _sendingStates.get(Long.valueOf(nonce))) != null) {
-            if (_log.shouldDebug()) {_log.debug(getPrefix() + " -> Found a matching state");}
+            if (_log.shouldDebug()) {_log.debug(getPrefix() + "-> Found a matching state");}
         } else if (!_sendingStates.isEmpty()) {
             // O(n**2)
             // shouldn't happen, router sends good nonce for all statuses as of 0.9.14
             for (MessageState s : _sendingStates.values()) {
                 if (s.getMessageId() != null && s.getMessageId().getMessageId() == msgId) {
-                    if (_log.shouldDebug()) {_log.debug(getPrefix() + "-> Found a matching state by MsgID");}
+                    if (_log.shouldDebug()) {_log.debug(getPrefix() + "-> Found the send state by MsgID");}
                     state = s;
                     break;
                 }
@@ -552,8 +552,8 @@ class I2PSessionImpl2 extends I2PSessionImpl {
 
         } else {
             if (_log.shouldInfo()) {
-                _log.info(getPrefix() + " -> No matching send state for [MsgID " + msgId + " / " + nonce
-                          + "] (Status: " + status + ")");
+                _log.info(getPrefix() + "-> No matching send state * MsgID: " + msgId + " * Nonce: " + nonce
+                          + " * Status: " + status);
             }
         }
     }
@@ -578,10 +578,10 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     private void clearStates() {
         if (_sendingStates == null) {return;} // only null if overridden by I2PSimpleSession
         for (MessageState state : _sendingStates.values()) {state.cancel();}
-        if (_log.shouldInfo()) {
-            int states = _sendingStates.size();
-            String stateStr = states > 1 ? "states" : "state";
-            _log.info(getPrefix() + (states > 0 ? " -> Disconnecting " + _sendingStates.size() + ' ' + stateStr : ""));
+        int states = _sendingStates.size();
+        if (states > 0 && _log.shouldInfo()) {
+            _log.info(getPrefix() + "-> Disconnecting with " + states + ' ' +
+                      (states > 1 ? "states" : "state") + " unconfirmed");
         }
         _sendingStates.clear();
     }

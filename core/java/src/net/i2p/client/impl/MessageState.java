@@ -22,7 +22,8 @@ class MessageState {
     private final Log _log;
     /** The nonce of the message being tracked. */
     private final long _nonce;
-    /** Log prefix naming the session. */
+    /** Log prefix naming the session and the nonce, ending with a space and
+     *  carrying no arrow - each message supplies its own. */
     private final String _prefix;
     /** The id assigned by the connection, once sent. */
     private MessageId _id;
@@ -68,7 +69,7 @@ class MessageState {
         _context = ctx;
         _log = ctx.logManager().getLog(MessageState.class);
         _nonce = nonce;
-        _prefix = prefix + '[' + _nonce + "]: ";
+        _prefix = prefix + "Nonce " + _nonce + ' ';
         _created = ctx.clock().now();
         _expires = _created + 60 * 1000L;
         _listener = null;
@@ -92,7 +93,10 @@ class MessageState {
         _context = ctx;
         _log = ctx.logManager().getLog(MessageState.class);
         _nonce = nonce;
-        _prefix = session.toString() + " [" + _nonce + "]: ";
+        // I2PSession has no name accessor; the impl does, and it is what every
+        // caller passes, so the prefix names the session instead of an object hash
+        I2PSessionImpl impl = session instanceof I2PSessionImpl ? (I2PSessionImpl) session : null;
+        _prefix = (impl != null ? impl.getName() : session.toString()) + " Nonce " + _nonce + ' ';
         _created = ctx.clock().now();
         _expires = expires;
         _listener = listener;
@@ -165,12 +169,12 @@ class MessageState {
         while (true) {
             long timeToWait = expiration - _context.clock().now();
             if (timeToWait <= 0) {
-                if (_log.shouldWarn()) _log.warn(_prefix + "Expired waiting for the status");
+                if (_log.shouldWarn()) _log.warn(_prefix + "-> Expired waiting for the status");
                 return;
             }
             synchronized (this) {
                 if (_state != State.INIT) {
-                    if (_log.shouldDebug()) _log.debug(_prefix + "Received a confirm (one way or another)");
+                    if (_log.shouldDebug()) _log.debug(_prefix + "-> Received the status confirm");
                     return;
                 }
                 if (timeToWait > 5000) timeToWait = 5000;
