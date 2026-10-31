@@ -25,9 +25,11 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.Formatter;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.i2p.I2PAppContext;
@@ -241,6 +243,32 @@ public class EepGet {
      * @since 0.9.71+
      */
     static final String GZIP_PARTIAL_MARKER_SUFFIX = ".i2pgz";
+
+    /**
+     * Response and request headers whose value is a credential (a session
+     * cookie, a bearer token, a proxy challenge), so the debug log reports the
+     * length of the value, never the value. Lower-case, as the log decision is
+     * made on the lower-cased header name.
+     *
+     * @since 0.9.72+
+     */
+    private static final Set<String> SENSITIVE_HEADERS = new HashSet<>(8);
+    static {
+        SENSITIVE_HEADERS.add("cookie");
+        SENSITIVE_HEADERS.add("set-cookie");
+        SENSITIVE_HEADERS.add("authorization");
+        SENSITIVE_HEADERS.add("proxy-authorization");
+        SENSITIVE_HEADERS.add("www-authenticate");
+        SENSITIVE_HEADERS.add("proxy-authenticate");
+    }
+
+    /**
+     * A header value longer than this is reported by length only, to keep an
+     * emitted debug line inside the house width.
+     *
+     * @since 0.9.72+
+     */
+    private static final int MAX_LOG_HEADER_VALUE = 64;
 
     /**
      * Creates a new EepGet instance with proxy support, defaulting to allow caching.
@@ -2205,9 +2233,16 @@ public class EepGet {
         for (int i = 0; i < _listeners.size(); i++)
             _listeners.get(i).headerReceived(_url, _currentAttempt, key, val);
 
-        if (_log.shouldDebug())
-            _log.debug("Header line: [" + key + "] = [" + val + "]");
         key = key.toLowerCase(Locale.US);
+        if (_log.shouldDebug()) {
+            // A cookie or an authorization value is a credential, and a long
+            // value would run the line past the house width, so both are
+            // reported by length.
+            if (SENSITIVE_HEADERS.contains(key) || val.length() > MAX_LOG_HEADER_VALUE)
+                _log.debug("Header line -> " + key + ": " + val.length() + " characters");
+            else
+                _log.debug("Header line -> " + key + ": " + val);
+        }
         if (key.equals("content-length")) {
             try {
                 _bytesRemaining = Long.parseLong(val);

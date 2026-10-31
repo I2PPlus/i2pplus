@@ -413,6 +413,13 @@ public class TrackerClient implements Runnable {
     private MetaInfo meta;
     /** Hex info hash identifying the torrent. */
     private final String infoHash;
+    /**
+     * First six hex characters of the info hash, for the logs. The full hash
+     * names the torrent, so it stays out of the log file.
+     *
+     * @since 0.9.72+
+     */
+    private final String shortInfoHash;
     /** Random peer id sent to the trackers. */
     private final String peerID;
     /** Extra tracker from the user's config, may be null. */
@@ -497,6 +504,7 @@ public class TrackerClient implements Runnable {
 
         this.port = PORT; // (port == -1) ? 9 : port;
         this.infoHash = urlencode(hash);
+        this.shortInfoHash = I2PSnarkUtil.toHex(hash).substring(0, 6);
         this.peerID = urlencode(snark.getID());
         this.trackers = new ArrayList<>(2);
         this.backupTrackers = new ArrayList<>(2);
@@ -823,7 +831,7 @@ public class TrackerClient implements Runnable {
             if (isNewValidTracker(trackerHashes, primary)) {
                 trackers.add(new TCTracker(primary, true));
                 if (_log.shouldDebug())
-                    _log.debug("Announce: [" + primary + "] [InfoHash " + infoHash + "]");
+                    _log.debug("Announce -> Tracker: [" + primary + "] * InfoHash: " + shortInfoHash);
             } else {
                 if (_log.shouldWarn())
                     _log.warn(
@@ -857,7 +865,7 @@ public class TrackerClient implements Runnable {
                 trackers.add(new TCTracker(url, trackers.isEmpty()));
                 if (_log.shouldDebug()) {
                     _log.debug(
-                            "Additional announce: [" + url + "] for [InfoHash " + infoHash + "]");
+                            "Additional announce -> Tracker: [" + url + "] * InfoHash: " + shortInfoHash);
                 }
             }
         }
@@ -876,14 +884,14 @@ public class TrackerClient implements Runnable {
                 if (!isNewValidTracker(trackerHashes, url)) continue;
                 backupTrackers.add(new TCTracker(url, false));
                 if (_log.shouldDebug())
-                    _log.debug("Backup announce: [" + url + "] for [InfoHash " + infoHash + "]");
+                    _log.debug("Backup announce -> Tracker: [" + url + "] * InfoHash: " + shortInfoHash);
             }
             // Always reachable, whatever the open-tracker list holds. UDP needs no
             // per-torrent destination, so it still answers when the http trackers
             // cannot, which is precisely the case that left magnets with no source.
             if (_log.shouldDebug())
-                _log.debug("Default backup announce: [" + SnarkManager.DEFAULT_BACKUP_TRACKER
-                           + "] for [InfoHash " + infoHash + "]");
+                _log.debug("Default backup announce -> Tracker: [" + SnarkManager.DEFAULT_BACKUP_TRACKER
+                           + "] * InfoHash: " + shortInfoHash);
             backupTrackers.add(new TCTracker(SnarkManager.DEFAULT_BACKUP_TRACKER, false));
             if (backupTrackers.size() > 1) {
                 Collections.shuffle(backupTrackers, _util.getContext().random());
@@ -1625,7 +1633,7 @@ public class TrackerClient implements Runnable {
                 pids.clear();
             }
         } else if (_log.shouldInfo()) {
-            _log.info("Not requesting PEX peers for [" + infoHash + "]");
+            _log.info("Not requesting PEX peers -> InfoHash: " + shortInfoHash);
         }
         return rv;
     }
