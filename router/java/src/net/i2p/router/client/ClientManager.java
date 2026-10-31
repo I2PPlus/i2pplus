@@ -333,7 +333,7 @@ class ClientManager {
      * @since 0.9.39
      */
     public void unregisterEncryptedDestination(ClientConnectionRunner runner, Hash hash) {
-        if (_log.shouldWarn()) {_log.warn("Unregistering ENCRYPTED LeaseSet [" + hash.toBase32().substring(0,8) + "]");}
+        if (_log.shouldWarn()) {_log.warn("Unregistering ENCRYPTED LeaseSet [" + hash.toShortBase32() + "]");}
         synchronized (_runners) {_runnersByHash.remove(hash);}
     }
 
@@ -379,7 +379,7 @@ class ClientManager {
         }
         if (stale != null) {
             if (_log.shouldInfo()) {
-                _log.info("Replacing connection for destination [" + dest.calculateHash().toBase32().substring(0,8) + ']');
+                _log.info("Replacing connection for destination [" + dest.calculateHash().toShortBase32() + ']');
             }
             stale.disconnectClient("Replaced by a new connection for the same destination", Log.WARN);
         }
@@ -401,7 +401,7 @@ class ClientManager {
      * @since 0.9.39
      */
     public boolean registerEncryptedDestination(ClientConnectionRunner runner, Hash hash) {
-        if (_log.shouldDebug()) {_log.debug("New ENCRYPTED LeaseSet: [" + hash.toBase32().substring(0, 8) + "]");}
+        if (_log.shouldDebug()) {_log.debug("New ENCRYPTED LeaseSet: [" + hash.toShortBase32() + "]");}
 
         boolean rv;
         synchronized (_runners) {
@@ -410,7 +410,7 @@ class ClientManager {
         }
 
         if (!rv) {
-            _log.error("Encrypted destination collision for LeaseSet [" + hash.toBase32().substring(0,8) + "]");
+            _log.error("Encrypted destination collision for LeaseSet [" + hash.toShortBase32() + "]");
         }
         return rv;
     }
@@ -615,7 +615,7 @@ class ClientManager {
         if (runner != null)  {runner.requestLeaseSet(dest, ls, REQUEST_LEASESET_TIMEOUT, null, null);}
         else {
             if (_log.shouldWarn()) {
-                _log.warn("Cannot request LeaseSet -> No ClientRunner found for [" + (dest != null ? dest.toBase32().substring(0,8) : "null") +
+                _log.warn("Cannot request LeaseSet -> No ClientRunner found for [" + (dest != null ? dest.toShortBase32() : "null") +
                           "] - disconnected?");
             }
         }
@@ -656,7 +656,7 @@ class ClientManager {
         if (runner == null) {
             if (_log.shouldDebug()) {
                 _log.debug("Should Publish LeaseSet: No runner for [" +
-                           destHash.toBase32().substring(0,8) + "]");
+                           destHash.toShortBase32() + "]");
             }
             return true;
         }
@@ -664,13 +664,13 @@ class ClientManager {
         if (config == null) {
             if (_log.shouldDebug()) {
                 _log.debug("Should Publish LeaseSet: No config for [" +
-                           destHash.toBase32().substring(0,8) + "]");
+                           destHash.toShortBase32() + "]");
             }
             return true;
         }
         String prop = config.getOptions().getProperty(ClientManagerFacade.PROP_CLIENT_ONLY);
         if (_log.shouldDebug()) {
-            _log.debug("Should Publish LeaseSet: [" + destHash.toBase32().substring(0,8) +
+            _log.debug("Should Publish LeaseSet: [" + destHash.toShortBase32() +
                        "] dontPublishLeaseSet: " + prop);
         }
         return !Boolean.parseBoolean(prop);
@@ -812,17 +812,17 @@ class ClientManager {
     public FloodfillNetworkDatabaseFacade getClientFloodfillNetworkDatabaseFacade(Hash destHash) {
         if (destHash != null) {
             if (_log.shouldLog(Log.DEBUG)) {
-                _log.debug("Looking up client floodfill NetDb -> Destination: [" + destHash.toBase32().substring(0,8) + "]");
+                _log.debug("Looking up client floodfill NetDb -> Destination: [" + destHash.toShortBase32() + "]");
             }
             ClientConnectionRunner runner = getRunner(destHash);
             if (runner == null) {
                 if (_log.shouldLog(Log.INFO)) {
-                    _log.info("ClientManager received a NULL runner for [" + destHash.toBase32().substring(0,8) + "]");
+                    _log.info("ClientManager received a NULL runner for [" + destHash.toShortBase32() + "]");
                 }
                 return null;
             }
             if (_log.shouldLog(Log.DEBUG)) {
-                _log.debug("ClientManager received a runner for [" + destHash.toBase32().substring(0,8) + "]");
+                _log.debug("ClientManager received a runner for [" + destHash.toShortBase32() + "]");
             }
             return runner.getFloodfillNetworkDatabaseFacade();
         }
@@ -870,7 +870,7 @@ class ClientManager {
             } else if (_log.shouldInfo()) {
                 // no client connection... we should pool these somewhere...
                 _log.info("Message received but no current connection to [" + (dest != null ? dest.toBase32().substring(0,8) : "null") + " / " +
-                          _msg.getDestinationHash().toBase32().substring(0,8) + "] -> Dropped");
+                          _msg.getDestinationHash().toShortBase32() + "] -> Dropped");
             }
         }
     }

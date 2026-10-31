@@ -220,7 +220,7 @@ class TunnelParticipant {
                 send(_config, msg, ri);
                 if (_log.shouldDebug()) {
                     _log.debug("Dispatched " + msg + " directly to next hop [" +
-                               _config.getSendTo().toBase64().substring(0, 6) + "]");
+                               _config.getSendTo().toShortBase64() + "]");
                 }
             } else {
                 _context.netDb().lookupRouterInfo(
@@ -231,7 +231,7 @@ class TunnelParticipant {
                 );
                 if (_log.shouldInfo()) {
                     _log.info("Looking up next hop [" +
-                              _config.getSendTo().toBase64().substring(0, 6) + "] for " + msg);
+                              _config.getSendTo().toShortBase64() + "] for " + msg);
                 }
             }
         } else if (_inboundEndpointProcessor != null) {
@@ -272,7 +272,7 @@ class TunnelParticipant {
                 if (_log.shouldWarn()) {
                     _log.warn(toString() + " -> Blaming a hop for the failed tunnel" +
                               " * Penalty: " + pct + "% * Peer: [" +
-                              h.toBase64().substring(0, 6) + "]");
+                              h.toShortBase64() + "]");
                 }
                 _context.profileManager().tunnelFailed(h, pct);
             }
@@ -428,7 +428,7 @@ class TunnelParticipant {
                     stat = 1;
                 } else {
                     if (_log.shouldWarn()) {
-                        _log.warn("Lookup of next hop [" + _config.getSendTo().toBase64().substring(0, 6) +
+                        _log.warn("Lookup of next hop [" + _config.getSendTo().toShortBase64() +
                                   "] failed! Where do we go for " + _config + "? -> Message dropped: " + _msg);
                     }
                     stat = 0;
@@ -475,12 +475,12 @@ class TunnelParticipant {
             if (ri != null) {
                 _nextHopCache = ri;
                 if (_log.shouldWarn()) {
-                    _log.warn("Lookup of next hop [" + _config.getSendTo().toBase64().substring(0, 6) +
+                    _log.warn("Lookup of next hop [" + _config.getSendTo().toShortBase64() +
                               "] failed, but we found it!! -> " + _msg + " dropped");
                 }
             } else {
                 if (_log.shouldWarn()) {
-                    _log.warn("Lookup of next hop [" + _config.getSendTo().toBase64().substring(0, 6) +
+                    _log.warn("Lookup of next hop [" + _config.getSendTo().toShortBase64() +
                               "] failed! -> " + _msg + " dropped");
                 }
             }

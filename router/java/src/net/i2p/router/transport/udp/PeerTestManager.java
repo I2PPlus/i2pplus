@@ -888,7 +888,7 @@ class PeerTestManager {
         if (retryCount < 5 && lookupRIForTest(h) == null) {
             if (_log.shouldInfo()) {
                 _log.info("Delay after receiving message " + msg + " and " + retryCount +
-                          " retries, no RouterInfo for [" + h.toBase64().substring(0,6) + "]");
+                          " retries, no RouterInfo for [" + h.toShortBase64() + "]");
             }
             if (retryCount == 0)
                 new DelayTest(from, fromPeer, msg, h, data);
@@ -1029,7 +1029,7 @@ class PeerTestManager {
                        "Time: " + DataHelper.formatTime(time) +
                        " * Message: " + msg +
                        " * Status: " + status +
-                       "\n* Hash: " + (h != null ? "[" + h.toBase64().substring(0, 6) + "]" : "None") +
+                       "\n* Hash: " + (h != null ? "[" + h.toShortBase64() + "]" : "None") +
                        " * Nonce: " + nonce +
                        " * IP/Port: " + Addresses.toString(testIP, testPort) +
                        " * State: " + state);
@@ -1299,7 +1299,7 @@ class PeerTestManager {
                         }
                     } else {
                         if (_log.shouldWarn())
-                            _log.warn("Alice's RouterInfo [" + (h != null ? h.toBase64().substring(0,6) : "null") + "] not found for peer test " + fromPeer);
+                            _log.warn("Alice's RouterInfo [" + (h != null ? h.toShortBase64() : "null") + "] not found for peer test " + fromPeer);
                         rcode = SSU2Util.TEST_REJECT_CHARLIE_UNKNOWN_ALICE;
                     }
                 }
@@ -2193,7 +2193,7 @@ class PeerTestManager {
             if (ri.getPublished() < 0) {
                 if (_log.shouldWarn()) {
                     _log.warn("Invalid publication date in RouterInfo [" +
-                              ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] -> Banning...");
+                              ri.getIdentity().calculateHash().toShortBase64() + "] -> Banning...");
                 }
                 return;
             }

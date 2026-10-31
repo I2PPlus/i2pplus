@@ -380,10 +380,10 @@ public class FamilyKeyCrypto {
         boolean rv = verify(ri, name) == Result.STORED_KEY;
         if (rv) {
             _ourFamily.add(h);
-            _log.logAlways(Log.INFO, "Found and verified member of our Family (" + _fname + "): [" + h.toBase64().substring(0,6) + "]");
+            _log.logAlways(Log.INFO, "Found and verified member of our Family (" + _fname + "): [" + h.toShortBase64() + "]");
         } else {
             if (_log.shouldWarn())
-                _log.warn("Found spoofed member of our Family (" + _fname + "): [" + h.toBase64().substring(0,6) + "]");
+                _log.warn("Found spoofed member of our Family (" + _fname + "): [" + h.toShortBase64() + "]");
         }
         return rv;
     }
@@ -402,7 +402,7 @@ public class FamilyKeyCrypto {
         String ssig = ri.getOption(OPT_SIG);
         if (ssig == null) {
             if (_log.shouldInfo())
-                _log.info("No signature detected for [" + h.toBase64().substring(0,6) + "] (Family:" + name + ")");
+                _log.info("No signature detected for [" + h.toShortBase64() + "] (Family:" + name + ")");
             return Result.NO_SIG;
         }
         Verified v = _verified.get(h);
@@ -425,7 +425,7 @@ public class FamilyKeyCrypto {
             if (r != null) {
                 if ((_failCount.incrementAndGet() & 0x3f) != 0) {
                     if (_log.shouldInfo())
-                        _log.info("Bad family (cached) [" + h.toBase64().substring(0, 6) + "] -> " + r);
+                        _log.info("Bad family (cached) [" + h.toShortBase64() + "] -> " + r);
                     return r;
                 }
                 // every once in a while, recheck in case of transient error
@@ -453,17 +453,17 @@ public class FamilyKeyCrypto {
                             }
                         } catch (NumberFormatException e) {
                             if (_log.shouldInfo())
-                                _log.info("Invalid base64 family key in RouterInfo [" + ri.getHash().toBase64().substring(0,6) + ']', e);
+                                _log.info("Invalid base64 family key in RouterInfo [" + ri.getHash().toShortBase64() + ']', e);
                              _negativeCache.put(h, Result.BAD_KEY);
                              return Result.BAD_KEY;
                         } catch (IllegalArgumentException e) {
                             if (_log.shouldInfo())
-                                _log.info("Invalid base64 family key in RouterInfo [" + ri.getHash().toBase64().substring(0,6) + ']', e);
+                                _log.info("Invalid base64 family key in RouterInfo [" + ri.getHash().toShortBase64() + ']', e);
                              _negativeCache.put(h, Result.BAD_KEY);
                              return Result.BAD_KEY;
                         } catch (ArrayIndexOutOfBoundsException e) {
                             if (_log.shouldInfo())
-                                _log.info("Invalid base64 family key in RouterInfo [" + ri.getHash().toBase64().substring(0,6) + ']', e);
+                                _log.info("Invalid base64 family key in RouterInfo [" + ri.getHash().toShortBase64() + ']', e);
                              _negativeCache.put(h, Result.BAD_KEY);
                              return Result.BAD_KEY;
                         }
@@ -472,7 +472,7 @@ public class FamilyKeyCrypto {
                 if (spk == null) {
                     _negativeCache.put(h, Result.NO_KEY);
                     if (_log.shouldInfo())
-                        _log.info("No cert or valid key for [" + h.toBase64().substring(0,6) + "] Family: " + name);
+                        _log.info("No cert or valid key for [" + h.toShortBase64() + "] Family: " + name);
                     return Result.NO_KEY;
                 }
             }
@@ -480,14 +480,14 @@ public class FamilyKeyCrypto {
         if (!spk.getType().isAvailable()) {
             _negativeCache.put(h, Result.UNSUPPORTED_SIG);
             if (_log.shouldInfo())
-                _log.info("Unsupported crypto for signature for [" + h.toBase64().substring(0,6) + "]");
+                _log.info("Unsupported crypto for signature for [" + h.toShortBase64() + "]");
             return Result.UNSUPPORTED_SIG;
         }
         byte[] bsig = Base64.decode(ssig);
         if (bsig == null) {
             _negativeCache.put(h, Result.INVALID_SIG);
             if (_log.shouldInfo())
-                _log.info("Bad signature [" + ssig + "] detected for [" + h.toBase64().substring(0,6) + "] Family: " + name);
+                _log.info("Bad signature [" + ssig + "] detected for [" + h.toShortBase64() + "] Family: " + name);
             return Result.INVALID_SIG;
         }
         Signature sig;
@@ -497,7 +497,7 @@ public class FamilyKeyCrypto {
             // wrong size (type mismatch)
             _negativeCache.put(h, Result.INVALID_SIG);
             if (_log.shouldInfo())
-                _log.info("Bad signature detected for [" + h.toBase64().substring(0,6) + "]", iae);
+                _log.info("Bad signature detected for [" + h.toShortBase64() + "]", iae);
             return Result.INVALID_SIG;
         }
         byte[] nb = DataHelper.getUTF8(name);
@@ -513,7 +513,7 @@ public class FamilyKeyCrypto {
             rv = Result.BAD_SIG;
             _negativeCache.put(h, rv);
             if (_log.shouldInfo())
-                _log.info("Family: " + name + " belonging to [" + h.toBase64().substring(0,6) + "] -> Verified? " + rv +
+                _log.info("Family: " + name + " belonging to [" + h.toShortBase64() + "] -> Verified? " + rv +
                           "\n* Signature: " + ssig);
         }
         return rv;

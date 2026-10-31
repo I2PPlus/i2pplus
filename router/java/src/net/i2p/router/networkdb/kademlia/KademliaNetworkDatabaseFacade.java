@@ -234,7 +234,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @param key the key whose search is complete
      */
     void searchComplete(Hash key) {
-        if (_log.shouldDebug()) {_log.debug("Search for key [" + key.toBase64().substring(0,6) + "] finished");}
+        if (_log.shouldDebug()) {_log.debug("Search for key [" + key.toShortBase64() + "] finished");}
     }
 
     /**
@@ -940,13 +940,13 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             // main NetDb only, and a remote search would query floodfills
             // for a key we already hold (or are about to re-mint).
             if (_log.shouldInfo()) {
-                _log.info("Local destination [" + key.toBase32().substring(0,8) +
+                _log.info("Local destination [" + key.toShortBase32() +
                           "] not in local store -> Failing without remote search");
             }
             if (onFailedLookupJob != null) {_context.jobQueue().addJob(onFailedLookupJob);}
         } else if (isNegativeCached(key)) {
             if (_log.shouldInfo()) {
-                _log.info("LeaseSet [" + key.toBase32().substring(0,8) +
+                _log.info("LeaseSet [" + key.toShortBase32() +
                           "] is negatively cached -> Queueing search...");
             }
             if (onFailedLookupJob != null) {_context.jobQueue().addJob(onFailedLookupJob);}
@@ -1191,7 +1191,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (d != null) {_context.jobQueue().addJob(onFinishedJob);}
         else if (isNegativeCached(key)) {
             if (_log.shouldInfo()) {
-                _log.info("Destination [" + key.toBase32().substring(0,8) + "] is negatively cached -> Aborting lookup");
+                _log.info("Destination [" + key.toShortBase32() + "] is negatively cached -> Aborting lookup");
             }
             _context.jobQueue().addJob(onFinishedJob);
         } else {
@@ -1500,7 +1500,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @param onFailedLookupJob queued to fail the pending lookup, or null
      */
     private void handleCustomCapabilityBan(RouterInfo ri, Hash key, Job onFailedLookupJob) {        String caps = ri.getCapabilities();
-        String routerId = key.toBase64().substring(0,6);
+        String routerId = key.toShortBase64();
         long banDuration = 4*60*60*1000;
         String matchedCap = _context.banlist().shouldBanlistByCapability(caps);
         String reason = "Custom ban: " + matchedCap + " Router";
@@ -1530,7 +1530,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         long banDuration = 4*60*60*1000;
         String reason = "Too many introducers";
         if (_log.shouldWarn()) {
-            _log.warn("Banning for 4h and removing Router [" + key.toBase64().substring(0,6) +
+            _log.warn("Banning for 4h and removing Router [" + key.toShortBase64() +
                       "] -> More than " + MAX_INTRO_SLOTS + " introducers on one address");
         }
         _context.banlist().banlistRouter(key, reason, null, null,
@@ -1558,7 +1558,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private void handleInvalidRouterInfoBan(RouterInfo ri, Hash key, String reason, Job onFailedLookupJob) {
         long banDuration = 24*60*60*1000;
         if (_log.shouldWarn()) {
-            _log.warn("Banning for 24h and removing Router [" + key.toBase64().substring(0,6) + "] -> " + reason);
+            _log.warn("Banning for 24h and removing Router [" + key.toShortBase64() + "] -> " + reason);
         }
         _context.banlist().banlistRouter(key, reason, null, null,
                                          _context.clock().now() + banDuration);
@@ -1585,7 +1585,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             _ds.remove(key);
             if (_log.shouldDebug()) {
                 _log.debug("Removed RouterInfo from NetDb: [" +
-                           key.toBase64().substring(0, 6) + "]");
+                           key.toShortBase64() + "]");
             }
         }
     }
@@ -1602,7 +1602,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (data != null && data.isRouterInfo()) {
             _ds.remove(key);
             if (_log.shouldDebug()) {
-                _log.debug("Removed from NetDb: [" + key.toBase64().substring(0, 6) + "]");
+                _log.debug("Removed from NetDb: [" + key.toShortBase64() + "]");
             }
         }
     }
@@ -1703,7 +1703,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      */
     private void handleBanlistAndRemove(RouterInfo ri, Hash key, Job onFailedLookupJob) {
         String caps = ri.getCapabilities();
-        String routerId = key.toBase64().substring(0,6);
+        String routerId = key.toShortBase64();
         boolean isFF = ri.getCapabilities().contains("F");
 
         if (_log.shouldWarn()) {
@@ -1734,7 +1734,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      */
     private void handlePermanentBlocklist(RouterInfo _ri, Hash key, Job onFailedLookupJob) {
         if (_log.shouldInfo()) {
-            _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Permanently blocklisted");
+            _log.info("Dropping RouterInfo [" + key.toShortBase64() + "] -> Permanently blocklisted");
         }
         _ds.remove(key);
         _kb.remove(key);
@@ -1755,7 +1755,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      */
     private void handleHostileBlocklist(RouterInfo _ri, Hash key, Job onFailedLookupJob) {
         if (_log.shouldInfo()) {
-            _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Blocklisted (tagged as hostile)");
+            _log.info("Dropping RouterInfo [" + key.toShortBase64() + "] -> Blocklisted (tagged as hostile)");
         }
 
         // Remove from data store and KBucket
@@ -1966,7 +1966,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             RepublishLeaseSetJob job = new RepublishLeaseSetJob(_context, this, hash);
             if (!job.registerSelf()) {
                 if (_log.shouldDebug()) {
-                    _log.debug("Skipping immediate republish for [" + hash.toBase32().substring(0, 8) +
+                    _log.debug("Skipping immediate republish for [" + hash.toShortBase32() +
                                "] -> Registration failed (job already active)");
                 }
                 return;
@@ -2010,7 +2010,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             for (RepublishLeaseSetJob job : jobs) {
                 _context.jobQueue().removeJob(job);
                 if (_log.shouldDebug()) {
-                    _log.debug("Cancelled queued republish job for [" + hash.toBase32().substring(0, 8) +
+                    _log.debug("Cancelled queued republish job for [" + hash.toShortBase32() +
                                "] -> Will reschedule with latest LeaseSet");
                 }
             }
@@ -2054,7 +2054,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 if (count >= MAX_BATCH_SIZE) {
                     if (_log.shouldWarn()) {
                         _log.warn("Batch republish queue exceeded " + MAX_BATCH_SIZE +
-                                  " entries — dropping excess LeaseSet [" + hash.toBase32().substring(0, 8) + "]");
+                                  " entries — dropping excess LeaseSet [" + hash.toShortBase32() + "]");
                     }
                     continue;
                 }
@@ -2063,7 +2063,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                             KademliaNetworkDatabaseFacade.this, hash);
                     if (!job.registerSelf()) {
                         if (_log.shouldDebug()) {
-                            _log.debug("Skipping batch republish for [" + hash.toBase32().substring(0, 8) +
+                            _log.debug("Skipping batch republish for [" + hash.toShortBase32() +
                                        "] -> Registration failed (job already active)");
                         }
                         continue;
@@ -2122,7 +2122,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         synchronized (jobs) {
             if (!jobs.isEmpty()) {
                 if (_log.shouldDebug()) {
-                    _log.debug("Skipping duplicate republish job for [" + hash.toBase32().substring(0, 8) + "]");
+                    _log.debug("Skipping duplicate republish job for [" + hash.toShortBase32() + "]");
                 }
                 return false;
             }
@@ -2379,7 +2379,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             rv = (LeaseSet)_ds.get(key);
             if (rv != null && !force && !shouldAcceptLeaseSet(rv, leaseSet, _context.clock().now())) {
                 if (_log.shouldDebug()) {
-                    _log.debug("Not storing LeaseSet [" + key.toBase32().substring(0,8) + "] -> Local copy is newer");
+                    _log.debug("Not storing LeaseSet [" + key.toShortBase32() + "] -> Local copy is newer");
                 }
                 // Copy over relevant metadata flags without re-storing
                 copyStoreMetadata(rv, leaseSet);
@@ -2407,7 +2407,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             if (_log.shouldWarn()) {
                 long now = _context.clock().now();
                 StringBuilder sb = new StringBuilder("Store validation failed [" +
-                                                     key.toBase32().substring(0, 8) + "]");
+                                                     key.toShortBase32() + "]");
                 sb.append("\n* type: ").append(leaseSet.getType());
                 sb.append(" * leaseCount: ").append(leaseSet.getLeaseCount());
                 sb.append(" * earliest: ").append(leaseSet.getEarliestLeaseDate());
@@ -2591,9 +2591,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private String validate(Hash key, RouterInfo routerInfo) throws IllegalArgumentException {
         if (!key.equals(routerInfo.getIdentity().getHash())) {
             if (_log.shouldWarn()) {
-                _log.warn("Invalid NetDbStore attempt! Key [" + key.toBase64().substring(0,6) + "] " +
+                _log.warn("Invalid NetDbStore attempt! Key [" + key.toShortBase64() + "] " +
                           "does not match identity for RouterInfo [" +
-                          routerInfo.getIdentity().getHash().toBase64().substring(0,6) + "]");
+                          routerInfo.getIdentity().getHash().toShortBase64() + "]");
             }
             return "Key does not match routerInfo.identity";
         }
@@ -2601,7 +2601,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (!routerInfo.isValid()) {
             processStoreFailure(key, routerInfo); // throws UnsupportedCryptoException
             if (_log.shouldWarn()) {
-                _log.warn("Invalid RouterInfo signature detected for [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) + "]");
+                _log.warn("Invalid RouterInfo signature detected for [" + routerInfo.getIdentity().getHash().toShortBase64() + "]");
             }
             return "Invalid RouterInfo signature";
         }
@@ -2618,7 +2618,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 _context.banlist().banlistRouterForever(key, "" + "Not in our Network: " + id);
             }
             if (_log.shouldWarn()) {
-                _log.warn("BAD Network detected for [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) + "]");
+                _log.warn("BAD Network detected for [" + routerInfo.getIdentity().getHash().toShortBase64() + "]");
             }
             return "Not in our network";
         }
@@ -2720,7 +2720,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @return the first 6 characters of the base64-encoded router hash
      */
     private String getRouterId(RouterInfo routerInfo) {
-        return routerInfo.getIdentity().getHash().toBase64().substring(0,6);
+        return routerInfo.getIdentity().getHash().toShortBase64();
     }
 
     /**
@@ -3225,7 +3225,7 @@ return false;
             rv = (RouterInfo)_ds.get(key, persist);
             if (rv != null && rv.getPublished() >= routerInfo.getPublished()) {
                 if (_log.shouldDebug()) {
-                    _log.debug("Not storing RouterInfo [" + key.toBase64().substring(0,6) + "] -> Local copy is newer");
+                    _log.debug("Not storing RouterInfo [" + key.toShortBase64() + "] -> Local copy is newer");
                 }
                 return rv; // quick check without calling validate()
             }
@@ -3304,7 +3304,7 @@ return false;
         }
         if (!ipDiversityAllows(key, routerInfo)) {
             if (_log.shouldDebug()) {
-                _log.debug("Not adding Router [" + key.toBase64().substring(0, 6) +
+                _log.debug("Not adding Router [" + key.toShortBase64() +
                            "] to bucket -> IP group limit reached");
             }
             return;
@@ -3529,7 +3529,7 @@ return false;
             }
         }
         if (_log.shouldWarn()) {
-            _log.warn("RouterInfo verification failure (unknown cause) [" + h.toBase64().substring(0,6) + ']');
+            _log.warn("RouterInfo verification failure (unknown cause) [" + h.toShortBase64() + ']');
         }
     }
 
@@ -3584,7 +3584,7 @@ return false;
                     _context.banlist().banlistRouterForever(h, "" + "Unsupported Signature type " + stype);
                     if (_log.shouldWarn()) {
                         _log.warn("Unsupported Signature type " + stype + " for [" +
-                                  h.toBase64().substring(0,6) + "] - banned until restart");
+                                  h.toShortBase64() + "] - banned until restart");
                     }
                     throw new UnsupportedCryptoException("Sig type " + stype);
                 }
@@ -3626,7 +3626,7 @@ return false;
           * to see if there are any updates.
          */
         if (_log.shouldInfo()) {
-            _log.info("Dropping LeaseSet [" + dbEntry.toBase32().substring(0,8) + "] -> Lookup / tunnel failure");
+            _log.info("Dropping LeaseSet [" + dbEntry.toShortBase32() + "] -> Lookup / tunnel failure");
         }
 
         int oldCount = knownLeaseSetsCount.updateAndGet(v -> Math.max(0, v - 1));
@@ -3634,7 +3634,7 @@ return false;
             // knownLeaseSetsCount is how many LeaseSets we store; reaching the
             // drop of one with the counter already at zero means it under-counts
             // the store, and the clamp leaves it at zero rather than going negative.
-            _log.warn("Dropping LeaseSet [" + dbEntry.toBase32().substring(0,8) +
+            _log.warn("Dropping LeaseSet [" + dbEntry.toShortBase32() +
                       "] with the stored-LeaseSet count already at 0 -> Leaving it at zero");
         }
 
@@ -3668,7 +3668,7 @@ return false;
             _unverifiedPeers.remove(peer);
             _ds.remove(peer);
             if (_log.shouldInfo()) {
-                _log.info("Dropping RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Lookup failure");
+                _log.info("Dropping RouterInfo [" + peer.toShortBase64() + "] -> Lookup failure");
                 loggedFailure = true;
             }
         }
@@ -3688,11 +3688,11 @@ return false;
                 // decrement and the count stays at zero. One line, not two: the
                 // second warn here fired on the same condition as the first.
                 _log.warn("Unpublishing a local LeaseSet we never stored [" +
-                          h.toBase32().substring(0,8) + "] -> Keeping the LeaseSet count at zero");
+                          h.toShortBase32() + "] -> Keeping the LeaseSet count at zero");
             }
         } else {
             if (_log.shouldInfo()) {
-                _log.info("Unpublishing LOCAL LeaseSet [" + h.toBase32().substring(0,8) + "]");
+                _log.info("Unpublishing LOCAL LeaseSet [" + h.toShortBase32() + "]");
             }
         }
     }
@@ -4088,7 +4088,7 @@ return false;
     @Override
     public String toString() {
         if (!isClientDb()) {return "MainNetDb";}
-        return "ClientNetDb [" + _dbid.toBase32().substring(0,8) + "]";
+        return "ClientNetDb [" + _dbid.toShortBase32() + "]";
     }
 
     /**
@@ -4269,7 +4269,7 @@ return false;
             String hostname = ns.reverseLookup(key);
             if (hostname != null) {return hostname;}
         }
-        return "[" + key.toBase32().substring(0, 8) + "]";
+        return "[" + key.toShortBase32() + "]";
     }
 
     /** Job to refresh client LeaseSets periodically. Only for client NetDB - refreshes LeaseSets we're actively using. */

@@ -2012,7 +2012,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         }
         synchronized (_stateLock) {
             if (STATES_CLOSED_OR_OPENING.contains(_state)) { // not before GOTDATE
-                if (_log.shouldInfo()) {_log.info("Session closed -> Cannot lookup [" + h.toBase32().substring(0,8) + "]");}
+                if (_log.shouldInfo()) {_log.info("Session closed -> Cannot lookup [" + h.toShortBase32() + "]");}
                 return null;
             }
         }
@@ -2030,14 +2030,14 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         try {
             if (_routerSupportsHostLookup) {
                 if (_log.shouldInfo()) {
-                    _log.info("Sending HostLookup for [" + h.toBase32().substring(0,8) + "]");
+                    _log.info("Sending HostLookup for [" + h.toShortBase32() + "]");
                 }
                 SessionId id = _sessionId;
                 if (id == null)
                     id = DUMMY_SESSION;
                 sendMessage_unchecked(new HostLookupMessage(id, h, nonce, maxWait));
             } else {
-                if (_log.shouldInfo()) {_log.info("Sending DestLookup for [" + h.toBase32().substring(0,8) + "]");}
+                if (_log.shouldInfo()) {_log.info("Sending DestLookup for [" + h.toShortBase32() + "]");}
                 sendMessage_unchecked(new DestLookupMessage(h));
             }
             try {
@@ -2395,7 +2395,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         StringBuilder buf = new StringBuilder(64);
         if (_myDestination != null) {
             if (_shortHash == null)
-                _shortHash = _myDestination.calculateHash().toBase32().substring(0,8);
+                _shortHash = _myDestination.calculateHash().toShortBase32();
             buf.append("[").append(_shortHash).append("]");
         } else {buf.append("[null dest] ");}
         buf.append(getPrefix());

@@ -1100,7 +1100,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
                 }
                 if (!matches.isEmpty() && log.shouldInfo()) {
                     log.info("Soft fallback: found peer bypassing no-signal exclusion: [" +
-                             matches.get(0).toBase64().substring(0, 6) + "]");
+                             matches.get(0).toShortBase64() + "]");
                 }
             }
         }
@@ -1145,7 +1145,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
                 // peers with persistent problems.
                 if (isFirstHopFailing(ctx, firstHop)) {
                     if (log.shouldInfo()) {
-                        log.info("First hop [" + firstHop.toBase64().substring(0,6) +
+                        log.info("First hop [" + firstHop.toShortBase64() +
                                  "] previously failed as first hop -> Selecting a replacement");
                     }
                     matches.remove(firstHop);
@@ -1162,7 +1162,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
                 // first hop only, so middle/last hops can still be filled.
                 if (ex.firstHopCooldowns != null && ex.firstHopCooldowns.contains(firstHop)) {
                     if (log.shouldInfo()) {
-                        log.info("First hop [" + firstHop.toBase64().substring(0,6) +
+                        log.info("First hop [" + firstHop.toShortBase64() +
                                  "] is on shared selection cooldown -> Selecting a replacement");
                     }
                     matches.remove(firstHop);
@@ -1175,7 +1175,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
                 }
                 if (isStalePeer(ctx, firstHop, params.buildSuccess)) {
                     if (log.shouldInfo()) {
-                        log.info("First hop [" + firstHop.toBase64().substring(0,6) +
+                        log.info("First hop [" + firstHop.toShortBase64() +
                                  "] is stale (no contact >4hrs) -> Retrying selection");
                     }
                     matches.remove(firstHop);
@@ -1553,7 +1553,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
                      " * High capacity: " + po.getHighCapPeerCount() +
                      " * Sample: " + po.getEffectiveCandidateSample(ctx) +
                      (established || connecting ? "" : "  <-- NO transport session") +
-                     " [" + firstHop.toBase64().substring(0, 6) + "]");
+                     " [" + firstHop.toShortBase64() + "]");
         }
     }
 
@@ -2516,7 +2516,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         for (Hash peer : peers) {
             if (ghostManager.isGhost(peer)) {
                 if (log.shouldDebug()) {
-                    log.debug("Skipping ghost peer [" + peer.toBase64().substring(0, 6) +"]");
+                    log.debug("Skipping ghost peer [" + peer.toShortBase64() +"]");
                 }
             } else {
                 filtered.add(peer);
@@ -2554,7 +2554,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         for (Hash peer : peers) {
             if (peer != null && banlist.isBanlisted(peer)) {
                 if (log.shouldDebug()) {
-                    log.debug("Skipping banlisted peer [" + peer.toBase64().substring(0, 6) + "]");
+                    log.debug("Skipping banlisted peer [" + peer.toShortBase64() + "]");
                 }
             } else {
                 filtered.add(peer);
@@ -2616,7 +2616,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
                 s.add(h);
                 recordExclusion(h, "not-ibgw");
                 if (log.shouldDebug()) {
-                    log.debug("InboundGateway exclude [" + h.toBase64().substring(0,6) + "]");
+                    log.debug("InboundGateway exclude [" + h.toShortBase64() + "]");
                 }
             } else {
                 _allowed.add(h);
@@ -2668,7 +2668,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
                 s.add(h);
                 recordExclusion(h, "not-obep");
                 if (log.shouldDebug()) {
-                    log.debug("OutboundEndpoint exclude [" + h.toBase64().substring(0,6) + "]");
+                    log.debug("OutboundEndpoint exclude [" + h.toShortBase64() + "]");
                 }
             } else {
                 _allowed.add(h);

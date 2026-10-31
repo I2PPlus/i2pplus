@@ -174,7 +174,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                         getContext().statManager().addRateData("netDb.storeLocalLeaseSetToLocalClient", 1, 0);
                         dontBlamePeer = true;
                         throw new IllegalArgumentException("Peer attempted to store LOCAL LeaseSet [" +
-                                                           key.toBase32().substring(0,8) + "]" +
+                                                           key.toShortBase32() + "]" +
                                                            "(DbId: " + _facade + ")");
                     }
                 }
@@ -231,14 +231,14 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 String req = ((_message.getReplyToken() > 0) ? " reply req." : "") +
                              ((_fromHash == null && ri.getReceivedAsPublished()) ? " unsolicited" : "");
                 String desc = "] -> Handling a NetDbStore of " + cap + (isFF ? " floodfill" : " router") +
-                              " [" + key.toBase64().substring(0,6) + "]\n* Published ";
+                              " [" + key.toShortBase64() + "]\n* Published ";
                 if (_fromHash == null)
                     _log.info("[" + _facade + desc + DataHelper.formatTime(ri.getPublished()) + req);
                 else if (_fromHash.equals(key))
                     _log.info("[" + _facade + desc + DataHelper.formatTime(ri.getPublished()) + " from that router" + req);
                 else
                     _log.info("[" + _facade + desc + DataHelper.formatTime(ri.getPublished()) +
-                              " from: [" + _fromHash.toBase64().substring(0,6) + "] " + req);
+                              " from: [" + _fromHash.toShortBase64() + "] " + req);
             }
             try {
                 /**
@@ -253,14 +253,14 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                      * throw rather than return, so that we send the ack below (prevent easy attack).
                      */
                     dontBlamePeer = true;
-                    throw new IllegalArgumentException("Router [" + key.toBase64().substring(0, 6) + "] attempted to store our RouterInfo");
+                    throw new IllegalArgumentException("Router [" + key.toShortBase64() + "] attempted to store our RouterInfo");
                 }
                 /**
                  * If we're in the client netDb context, log a warning since this is not expected.
                  * This is probably impossible but log it if we ever see it so it can be investigated.
                  */
                 if (_facade.isClientDb() && _log.shouldWarn()) {
-                    _log.warn("Handling RouterInfo [" + key.toBase64().substring(0,6) + "] store request in client NetDb context of router");
+                    _log.warn("Handling RouterInfo [" + key.toShortBase64() + "] store request in client NetDb context of router");
                 }
                 boolean shouldStore = true;
                 if (ri.getReceivedAsPublished()) {
@@ -292,7 +292,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                             logged = true;
                             _log.debug("Dropping unsolicited store of banned " + cap +
                                       (isFF ? " Floodfill" : " Router") + " [" +
-                                      key.toBase64().substring(0,6) + "]");
+                                      key.toShortBase64() + "]");
                         }
                     } else if (isInvalidVersion) {
                         shouldStore = false;
@@ -308,13 +308,13 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                         if (ban && _log.shouldWarn()) {
                             logged = true;
                             _log.warn("Dropping unsolicited NetDbStore of " + cap + (isFF ? " Floodfill" : " Router") +
-                                      " [" + key.toBase64().substring(0,6) + "]" +
+                                      " [" + key.toShortBase64() + "]" +
                                       " and banning for 24h" +
                                       "\n* Invalid Router version: " + v);
                         } else if (!ban && _log.shouldInfo()) {
                             logged = true;
                             _log.info("Dropping unsolicited NetDbStore of " + cap + (isFF ? " Floodfill" : " Router") +
-                                      " [" + key.toBase64().substring(0,6) + "]" +
+                                      " [" + key.toShortBase64() + "]" +
                                       "\n* Invalid Router version: " + v);
                         }
                     } else if (isFast && !isOld && prevNetDb == null) {
@@ -328,7 +328,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                 logged = true;
                                 _log.debug("Dropping unsolicited store of new " + cap +
                                           (isFF ? " Floodfill" : " Router") + " [" +
-                                          key.toBase64().substring(0,6) +
+                                          key.toShortBase64() +
                                           "] -> " + v);
                             }
                         } else if (isUnreachable && isSlow) {
@@ -338,7 +338,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                 logged = true;
                                 _log.debug("Dropping unsolicited store of new " + cap +
                                           (isFF ? " Floodfill" : " Router") + " [" +
-                                          key.toBase64().substring(0,6) +
+                                          key.toShortBase64() +
                                           "] -> Unreachable and slow");
                             }
                         } else if (isUnreachable) {
@@ -348,7 +348,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                 logged = true;
                                 _log.debug("Dropping unsolicited store of new " + cap +
                                           (isFF ? " Floodfill" : " Router") + " [" +
-                                          key.toBase64().substring(0,6) + "] -> Unreachable");
+                                          key.toShortBase64() + "] -> Unreachable");
                             }
                         } else if (isOld && isSlow) {
                             shouldStore = false;
@@ -357,7 +357,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                 logged = true;
                                 _log.debug("Dropping unsolicited store of new " + cap +
                                           (isFF ? " Floodfill" : " Router") + " [" +
-                                          key.toBase64().substring(0,6) +
+                                          key.toShortBase64() +
                                           "] -> Slow (" + v + ")");
                             }
                         }
@@ -388,7 +388,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                                 _log.debug("Dropping unsolicited store of new " +
                                                           cap + (isFF ? " Floodfill" : " Router") +
                                                           " [" +
-                                                          key.toBase64().substring(0,6) + "]" +
+                                                          key.toShortBase64() + "]" +
                                                           " with distance " + distance +
                                                           "\n* Drop probability: " +
                                                           percentage + "%");
@@ -412,7 +412,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                                                "new " + cap +
                                                                (isFF ? " Floodfill" : " Router") +
                                                                " [" +
-                                                               key.toBase64().substring(0,6) +
+                                                               key.toShortBase64() +
                                                                "]" +
                                                                " with distance " + distance);
                                                 }
@@ -425,7 +425,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                 if (shouldStore && _log.shouldDebug()) {
                                     _log.debug("[" + _facade + "] -> Allowing an unsolicited store of a new " + cap +
                                                (isFF ? " floodfill" : " router") + " [" +
-                                               key.toBase64().substring(0,6) + "]" +
+                                               key.toShortBase64() + "]" +
                                                " with distance " + distance);
                                 }
                             } else {
@@ -434,7 +434,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                     if (_log.shouldDebug() && !logged) {
                                         logged = true;
                                         _log.debug("Dropping unsolicited store of new " + cap +
-                                                  " Floodfill [" + key.toBase64().substring(0,6) +
+                                                  " Floodfill [" + key.toShortBase64() +
                                                   "] -> Unreachable");
                                         }
                                 } else if (isUnreachable && isOld && !logged) {
@@ -443,7 +443,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                         logged = true;
                                         _log.debug("Dropping unsolicited store of new " + cap +
                                                   (isFF ? " Floodfill" : " Router") +
-                                                  " [" + key.toBase64().substring(0,6) + "] -> Unreachable (" + v + ")");
+                                                  " [" + key.toShortBase64() + "] -> Unreachable (" + v + ")");
                                     }
                                 }
                                 // non-ff - up to 100% drop rate
@@ -456,7 +456,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                         int percentage = Math.min(pdrop * 100 / 128, 100);
                                         _log.debug("Dropping unsolicited store of new " + cap +
                                                   (isFF ? " Floodfill" : " Router") +
-                                                  " [" + key.toBase64().substring(0,6) + "] -> Drop probability: " + percentage + "%");
+                                                  " [" + key.toShortBase64() + "] -> Drop probability: " + percentage + "%");
                                     }
                                     shouldStore = false;
                                     // don't bother checking ban/blocklists.
@@ -465,13 +465,13 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                         }
                         if (shouldStore && _log.shouldInfo()) {
                             _log.info("Handling unsolicited NetDbStore of new " + cap + (isFF ? " Floodfill" : " Router") +
-                                      " [" + key.toBase64().substring(0,6) + "]");
+                                      " [" + key.toShortBase64() + "]");
                         }
                     } else if (prevNetDb.getPublished() >= ri.getPublished()) {shouldStore = false;}
                     else {
                         if (_log.shouldInfo()) {
                             _log.info("[" + _facade + "]"
-                                      + " -> Found a newer RouterInfo [" + key.toBase64().substring(0,6) + "]"
+                                      + " -> Found a newer RouterInfo [" + key.toShortBase64() + "]"
                                       + " in a DbStore message"
                                       + "\n* Published: " + DataHelper.formatTime(ri.getPublished()) +
                                       ", newer than the local copy: " + DataHelper.formatTime(prevNetDb.getPublished()));
@@ -479,7 +479,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                         if (!ri.getIdentity().getPublicKey().equals(prevNetDb.getIdentity().getPublicKey())) {
                             if (_log.shouldWarn()) {
                                 _log.warn("Dropping unsolicited NetDbStore of " + cap + (isFF ? " Floodfill" : " Router") +
-                                          " [" + key.toBase64().substring(0,6) + "]" +
+                                          " [" + key.toShortBase64() + "]" +
                                           " and banning for 8h" +
                                           "\n* Inconsistent public keys");
                             }
@@ -489,7 +489,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                         } else if (!ri.getIdentity().getSigningPublicKey().equals(prevNetDb.getIdentity().getSigningPublicKey())) {
                             if (_log.shouldWarn()) {
                                 _log.warn("Dropping unsolicited NetDbStore of " + cap + (isFF ? " Floodfill" : " Router") +
-                                          " [" + key.toBase64().substring(0,6) + "]" +
+                                          " [" + key.toShortBase64() + "]" +
                                           " and banning for 8h" +
                                           "\n* Inconsistent signing keys");
                             }
@@ -502,7 +502,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 if (shouldStore) {
                     if (_facade.isClientDb() && _log.shouldWarn()) {
                         _log.warn("[" + _facade + "] -> Storing a RouterInfo in the client NetDb"
-                                  + "\n* Router: [" + key.toBase64().substring(0,6) + "]"
+                                  + "\n* Router: [" + key.toShortBase64() + "]"
                                   + "\n* Rare, and should have been handled by the inbound message dispatcher");
                     }
                     prevNetDb = _facade.store(key, ri);
@@ -518,8 +518,8 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                     }
                     if (prevNetDb == null) {
                         if (!forever && getContext().blocklist().isBlocklisted(ri)) {
-                            if (_log.shouldDebug()) {_log.debug("Blocklisting new peer [" + key.toBase64().substring(0,6) + "]\n" + ri);}
-                            else if (_log.shouldWarn()) {_log.warn("Blocklisting new peer [" + key.toBase64().substring(0,6) + "]");}
+                            if (_log.shouldDebug()) {_log.debug("Blocklisting new peer [" + key.toShortBase64() + "]\n" + ri);}
+                            else if (_log.shouldWarn()) {_log.warn("Blocklisting new peer [" + key.toShortBase64() + "]");}
                             wasNew = false; // don't flood
                             shouldStore = false; // don't call heardAbout()
                         }
@@ -528,9 +528,9 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                         Collection<RouterAddress> newAddr = ri.getAddresses();
                         if ((!newAddr.equals(oldAddr)) && getContext().blocklist().isBlocklisted(ri)) {
                             if (_log.shouldInfo()) {
-                                _log.warn("New address received, blocklisting old peer [" + key.toBase64().substring(0,6) + "] \n" + ri);
+                                _log.warn("New address received, blocklisting old peer [" + key.toShortBase64() + "] \n" + ri);
                             } else if (_log.shouldWarn()) {
-                                _log.warn("New address received, blocklisting old peer [" + key.toBase64().substring(0,6) + "]");
+                                _log.warn("New address received, blocklisting old peer [" + key.toShortBase64() + "]");
                             }
                             wasNew = false; // don't flood
                             shouldStore = false; // don't call heardAbout()
@@ -570,14 +570,14 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                     dontBlamePeer = true;
                     if (_log.shouldDebug()) {
                         _log.debug("Stale RouterInfo from [" +
-                                   _fromHash.toBase64().substring(0,6) + "] -> " +
+                                   _fromHash.toShortBase64() + "] -> " +
                                    KademliaNetworkDatabaseFacade
                                    .stripStoreWrapper(invalidMessage));
                     }
                 // Should we record in the profile?
                 } else if (_log.shouldDebug()) {
                     _log.debug("Invalid data packet from [" +
-                               _fromHash.toBase64().substring(0,6) + "] -> " +
+                               _fromHash.toShortBase64() + "] -> " +
                                KademliaNetworkDatabaseFacade
                                .stripStoreWrapper(invalidMessage) + _from);
                 }
@@ -648,7 +648,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
             msg2.setEntry(me);
             if (_fromHash != null && _from != null && _log.shouldWarn()) {
                 _log.warn("Received a DatabaseStoreMessage with a reply token -> We are not a floodfill"
-                          + "\n* From: " + _from + " [" + _fromHash.toBase64().substring(0,6) + ']');
+                          + "\n* From: " + _from + " [" + _fromHash.toShortBase64() + ']');
             }
         }
         Hash toPeer = _message.getReplyGateway();

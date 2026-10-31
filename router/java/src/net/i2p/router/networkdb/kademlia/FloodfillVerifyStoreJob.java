@@ -406,7 +406,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
                 if (supportsElGamal || supportsRatchet) {
                     sess = MessageWrapper.generateSession(ctx, _client, VERIFY_TIMEOUT, !supportsRatchet); // garlic encrypt
                     if (sess == null) {
-                        if (_log.shouldWarn()) {_log.warn("No SessionKeyManager for connection to [" + _target.toBase64().substring(0,6) + "]");}
+                        if (_log.shouldWarn()) {_log.warn("No SessionKeyManager for connection to [" + _target.toShortBase64() + "]");}
                         if (_phase == PHASE_STORE_CHECK) {
                             enterFloodCheck();
                         } else {
@@ -417,8 +417,8 @@ class FloodfillVerifyStoreJob extends JobImpl {
                 } else {
                     // We don't have a compatible way to get a reply, skip it for now.
                     if (_log.shouldWarn()) {
-                        _log.warn("Skipping NetDbStore verify to [" + _target.toBase64().substring(0,6) +
-                                   "] for ECIES or ElG-only client [" + _client.toBase32().substring(0,8) + "]");
+                        _log.warn("Skipping NetDbStore verify to [" + _target.toShortBase64() +
+                                   "] for ECIES or ElG-only client [" + _client.toShortBase32() + "]");
                     }
                     if (_phase == PHASE_STORE_CHECK) {
                         enterFloodCheck();
@@ -430,13 +430,13 @@ class FloodfillVerifyStoreJob extends JobImpl {
             }
             if (sess.tag != null) {
                 if (_log.shouldDebug()) {
-                _log.debug("Requesting AES reply from [" + _target.toBase64().substring(0,6) +
+                _log.debug("Requesting AES reply from [" + _target.toShortBase64() +
                            "]\n* Session key: " + sess.key + "\n* Tag: " + sess.tag);
                 }
                 lookup.setReplySession(sess.key, sess.tag);
             } else {
                 if (_log.shouldDebug()) {
-                _log.debug("Requesting AEAD reply from [" + _target.toBase64().substring(0,6) +
+                _log.debug("Requesting AEAD reply from [" + _target.toShortBase64() +
                            "]\n* Session key: " + sess.key + "\n* Tag: " + sess.rtag);
                 }
                 lookup.setReplySession(sess.key, sess.rtag);
@@ -477,9 +477,9 @@ class FloodfillVerifyStoreJob extends JobImpl {
             String tunnelName = ls != null ? _facade.getTunnelName(ls.getDestination()) : "";
             String name = !tunnelName.isEmpty() ? " of \'" + tunnelName + "\'" : " of key";
             String phase = _phase == PHASE_STORE_CHECK ? "Store check" : "Flood check";
-            _log.info(phase + " for Floodfill store" + name + " [" + _key.toBase32().substring(0,8) +
-                      "] sent to [" + (_sentTo != null ? _sentTo.toBase64().substring(0,6) : "?") +
-                      "] -> Querying: [" + _target.toBase64().substring(0,6) + "]");
+            _log.info(phase + " for Floodfill store" + name + " [" + _key.toShortBase32() +
+                      "] sent to [" + (_sentTo != null ? _sentTo.toShortBase64() : "?") +
+                      "] -> Querying: [" + _target.toShortBase64() + "]");
         }
         _sendTime = ctx.clock().now();
         _expiration = _sendTime + VERIFY_TIMEOUT;
@@ -527,8 +527,8 @@ class FloodfillVerifyStoreJob extends JobImpl {
         getContext().statManager().addRateData("netDb.floodfillVerifyRetry", 1);
         final long readyAt = getContext().clock().now() + _retryDelayMs;
         if (_log.shouldInfo()) {
-            _log.info("Flood check retry for [" + _key.toBase32().substring(0,8) +
-                      "] -> Requerying [" + (_target != null ? _target.toBase64().substring(0,6) : "?") +
+            _log.info("Flood check retry for [" + _key.toShortBase32() +
+                      "] -> Requerying [" + (_target != null ? _target.toShortBase64() : "?") +
                       "] in " + _retryDelayMs + "ms");
         }
         Job cont = new JobImpl(getContext()) {
@@ -570,12 +570,12 @@ class FloodfillVerifyStoreJob extends JobImpl {
                         return peer;
                     } else {
                         if (_log.shouldDebug()) {
-                            _log.debug("Skipping Floodfill Verify for Router [" + peer.toBase64().substring(0,6) + "] -> Too close to the store");
+                            _log.debug("Skipping Floodfill Verify for Router [" + peer.toShortBase64() + "] -> Too close to the store");
                         }
                     }
                 } else {
                     if (_log.shouldDebug()) {
-                        _log.debug("Skipping Floodfill Verify for Router [" + peer.toBase64().substring(0,6) + "] -> Router is too old");
+                        _log.debug("Skipping Floodfill Verify for Router [" + peer.toShortBase64() + "] -> Router is too old");
                     }
                 }
                 _ignore.add(peer);
@@ -642,7 +642,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
      */
     private void banBadEntry(long delayMs) {
         if (_log.shouldWarn()) {
-            _log.warn("Banning Router [" + _target.toBase64().substring(0,6) + "] for duration of session -> Sent us BAD data (spoofed?)");
+            _log.warn("Banning Router [" + _target.toShortBase64() + "] for duration of session -> Sent us BAD data (spoofed?)");
         }
         ProfileManager pm = getContext().profileManager();
         pm.dbLookupFailed(_target);
@@ -662,8 +662,8 @@ class FloodfillVerifyStoreJob extends JobImpl {
      */
     private void failStoreCheck(StoreCheckResult result, long delayMs) {
         if (_log.shouldInfo()) {
-            _log.info("Floodfill store check failed for [" + _key.toBase32().substring(0,8) +
-                      "] -> Store peer [" + _target.toBase64().substring(0,6) + "] " +
+            _log.info("Floodfill store check failed for [" + _key.toShortBase32() +
+                      "] -> Store peer [" + _target.toShortBase64() + "] " +
                       (result == StoreCheckResult.MISSING ? "doesn't have the key"
                                                           : "returned a stale entry"));
         }
@@ -688,7 +688,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
             LeaseSet ls = _facade.lookupLeaseSetLocally(_key);
             String tunnelName = ls != null ? _facade.getTunnelName(ls.getDestination()) : "";
             String name = !tunnelName.isEmpty() ? " for \'" + tunnelName + "\'" : " for key";
-            _log.info("Floodfill Verify succeeded" + name + " [" + _key.toBase32().substring(0,8) + "]");
+            _log.info("Floodfill Verify succeeded" + name + " [" + _key.toShortBase32() + "]");
         }
         if (_isRouterInfo) {_facade.routerInfoPublishSuccessful();}
         finishVerify();
@@ -706,13 +706,13 @@ class FloodfillVerifyStoreJob extends JobImpl {
         if (result == FloodCheckResult.MISSING) {
             getContext().statManager().addRateData("netDb.floodfillVerifyFailNoKey", delayMs);
             if (_log.shouldInfo()) {
-                _log.info("Floodfill verify failed for [" + _key.toBase32().substring(0,8) + "] -> Queried peer [" +
-                          _target.toBase64().substring(0,6) + "] does not have the key");
+                _log.info("Floodfill verify failed for [" + _key.toShortBase32() + "] -> Queried peer [" +
+                          _target.toShortBase64() + "] does not have the key");
             }
         } else {
             getContext().statManager().addRateData("netDb.floodfillVerifyFailStale", delayMs);
             if (_log.shouldInfo()) {
-                _log.info("Floodfill verify failed for [" + _key.toBase32().substring(0,8) +
+                _log.info("Floodfill verify failed for [" + _key.toShortBase32() +
                           "] -> Peer still has an older copy");
             }
         }
@@ -778,7 +778,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
             }
             getContext().statManager().addRateData("netDb.floodfillVerifyPhase1OK", delayMs);
             if (_log.shouldInfo()) {
-                _log.info("Floodfill store check OK for [" + _key.toBase32().substring(0,8) +
+                _log.info("Floodfill store check OK for [" + _key.toShortBase32() +
                           "] -> Store peer still holds the entry");
             }
             enterFloodCheck();
@@ -869,7 +869,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
             } else {newDate = ds.getDate();}
             if (newDate > _published) {
                 if (_log.shouldInfo()) {
-                    _log.info("Floodfill Verify failed" + name + " [" + _key.toBase32().substring(0,8) + "] but new NetDbStore already succeeded");
+                    _log.info("Floodfill Verify failed" + name + " [" + _key.toShortBase32() + "] but new NetDbStore already succeeded");
                 }
                 return;
             }
@@ -881,7 +881,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
             if (_ignore.size() < 50) {toSkip.addAll(_ignore);}
             if (_log.shouldInfo()) {
                 _log.info("Floodfill Verify failed" + name +
-                          " [" + _key.toBase32().substring(0,8) + "]" +
+                          " [" + _key.toShortBase32() + "]" +
                           " -> Starting new NetDbStore");
             }
             _facade.sendStore(_key, ds, null, null, FloodfillNetworkDatabaseFacade.PUBLISH_TIMEOUT, toSkip);
@@ -905,10 +905,10 @@ class FloodfillVerifyStoreJob extends JobImpl {
                 // store peer lost the entry — do not blame; still flood-check.
                 getContext().statManager().addRateData("netDb.floodfillVerifyPhase1Timeout", elapsed);
                 if (_log.shouldInfo()) {
-                    _log.info("Floodfill store check timed out for [" + _key.toBase32().substring(0,8) +
+                    _log.info("Floodfill store check timed out for [" + _key.toShortBase32() +
                               "] -> Proceeding to the flood check without blaming"
                               + "\n* Router: [" +
-                              (_target != null ? _target.toBase64().substring(0,6) : "?") + "]");
+                              (_target != null ? _target.toShortBase64() : "?") + "]");
                 }
                 enterFloodCheck();
                 return;
@@ -919,8 +919,8 @@ class FloodfillVerifyStoreJob extends JobImpl {
                 LeaseSet ls = _facade.lookupLeaseSetLocally(_key);
                 String tunnelName = ls != null ? _facade.getTunnelName(ls.getDestination()) : "";
                 String name = !tunnelName.isEmpty() ? " for \'" + tunnelName + "\'" : " for key";
-                _log.warn("Floodfill Verify timed out" + name + " [" + _key.toBase32().substring(0,8) + "] -> " +
-                          "Ignoring [" + _target.toBase64().substring(0,6) + "] and selecting a new peer...");
+                _log.warn("Floodfill Verify timed out" + name + " [" + _key.toShortBase32() + "] -> " +
+                          "Ignoring [" + _target.toShortBase64() + "] and selecting a new peer...");
             }
             if (_attempted < MAX_PEERS_TO_TRY) {
                 // Don't resend, simply rerun FVSJ.this inline and chose somebody besides _target for verification

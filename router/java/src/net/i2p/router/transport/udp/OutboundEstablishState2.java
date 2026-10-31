@@ -461,7 +461,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
                     _context.clock().setOffset(0 - skew, true);
                     if (skew != 0)
                         _log.logAlways(Log.WARN, "NTP failure, SSU2 adjusted clock by " + skewString +
-                                                 " -> Source Router [" + bob.toBase64().substring(0,6) + "]");
+                                                 " -> Source Router [" + bob.toShortBase64() + "]");
 
                     if (!_context.clock().getUpdatedSuccessfully()) {
                         // clock update was either rejected or is pending.
@@ -829,7 +829,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
                 String skewString = DataHelper.formatDuration(Math.abs(_skew));
                 Hash bob = _remotePeer.calculateHash();
                 _log.logAlways(Log.WARN, "NTP failure, SSU2 adjusted clock by " + skewString +
-                                         " source Router [" + bob.toBase64().substring(0,6) + "]");
+                                         " source Router [" + bob.toShortBase64() + "]");
             }
         }
         // Unlikely, we would have gotten a termination from him and failed already,
@@ -1026,7 +1026,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         IntroState old;
         synchronized(_introducers) {old = _introducers.put(h, state);}
         if (old != state && _log.shouldDebug()) {
-            _log.debug("Change state for Introducer [" + h.toBase64().substring(0,6) + "] from " + old + " to " + state + " on " + this);
+            _log.debug("Change state for Introducer [" + h.toShortBase64() + "] from " + old + " to " + state + " on " + this);
         }
     }
 
@@ -1049,13 +1049,13 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
      * @since 0.9.71+
      */
     String toShortString() {
-        return "[" + _remotePeer.getHash().toBase64().substring(0, 6) + "] " + _currentState;
+        return "[" + _remotePeer.getHash().toShortBase64() + "] " + _currentState;
     }
 
     @Override
     public String toString() {
         int count = _introducers != null ? _introducers.size() : 0;
-        return "OutboundEstablishState [" + _remotePeer.getHash().toBase64().substring(0, 6) + "] " +
+        return "OutboundEstablishState [" + _remotePeer.getHash().toShortBase64() + "] " +
                "\n* Lifetime: " + DataHelper.formatDuration(getLifetime()) +
                "; Receive ID: " + _rcvConnID + "; Send ID: " + _sendConnID +
                "; Token: " + _token + " -> " + _currentState +

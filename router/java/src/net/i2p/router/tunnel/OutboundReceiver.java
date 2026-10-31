@@ -71,7 +71,7 @@ class OutboundReceiver implements TunnelGateway.Receiver {
         } else {
             // It should be rare to forget the router info for a peer in our own tunnel.
             if (_log.shouldInfo())
-                _log.info("Lookup of [" + _config.getPeer(1).toBase64().substring(0,6) + "] required for " + msg);
+                _log.info("Lookup of [" + _config.getPeer(1).toShortBase64() + "] required for " + msg);
             _context.netDb().lookupRouterInfo(_config.getPeer(1), new SendJob(_context, msg),
                                               new LookupFailedJob(_context), MAX_LOOKUP_TIME);
             return -1;
@@ -133,7 +133,7 @@ class OutboundReceiver implements TunnelGateway.Receiver {
         public void runJob() {
             RouterInfo ri = _context.netDb().lookupRouterInfoLocally(_config.getPeer(1));
             if (_log.shouldDebug())
-                _log.debug("Lookup of [" + _config.getPeer(1).toBase64().substring(0,6) + "] successful? " + (ri != null));
+                _log.debug("Lookup of [" + _config.getPeer(1).toShortBase64() + "] successful? " + (ri != null));
             int stat;
             if (ri != null) {
                 _nextHopCache = ri;
@@ -173,7 +173,7 @@ class OutboundReceiver implements TunnelGateway.Receiver {
          */
         public void runJob() {
             if (_log.shouldInfo())
-                _log.info("Lookup of [" + _config.getPeer(1).toBase64().substring(0,6) + "] failed for " + _config.toShortString());
+                _log.info("Lookup of [" + _config.getPeer(1).toShortBase64() + "] failed for " + _config.toShortString());
             _context.statManager().addRateData("tunnel.outboundLookupSuccess", 0);
             _config.tunnelFailedFirstHop();
         }
@@ -218,7 +218,7 @@ class OutboundReceiver implements TunnelGateway.Receiver {
             _context.statManager().addRateData("tunnel.firstHopSendFailure", streak);
             _config.firstHopSendFailureStreak(streak);
             if (_log.shouldDebug()) {
-                _log.debug("Send to [" + _config.getPeer(1).toBase64().substring(0,6) +
+                _log.debug("Send to [" + _config.getPeer(1).toShortBase64() +
                            "] failed " + streak + "/" +
                            TunnelCreatorConfig.FIRST_HOP_FAILURE_THRESHOLD +
                            " times for " + _config.toShortString());

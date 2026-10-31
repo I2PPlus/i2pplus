@@ -682,7 +682,7 @@ class ClientConnectionRunner {
         Destination dest = config.getDestination();
         Hash destHash = dest.calculateHash();
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("SessionEstablished called for destination [" + destHash.toBase32().substring(0,8) + "]");
+            _log.debug("SessionEstablished called for destination [" + destHash.toShortBase32() + "]");
         if (_sessions.size() > MAX_SESSIONS)
             return SessionStatusMessage.STATUS_REFUSED;
         boolean isPrimary = _sessions.isEmpty();
@@ -690,7 +690,7 @@ class ClientConnectionRunner {
             // all encryption keys must be the same
             for (SessionParams sp : _sessions.values()) {
                 if (!dest.getPublicKey().equals(sp.dest.getPublicKey())) {
-                    _log.error("LeaseSet public key mismatch for key [" + destHash.toBase32().substring(0,8) + "]");
+                    _log.error("LeaseSet public key mismatch for key [" + destHash.toShortBase32() + "]");
                     return SessionStatusMessage.STATUS_INVALID;
                 }
             }
@@ -782,7 +782,7 @@ class ClientConnectionRunner {
 
         if (isPrimary && _floodfillNetworkDatabaseFacade == null) {
             if (_log.shouldDebug()) {_log.debug("Initializing floodfill NetDb for client " +
-                                                " -> Destination: [" + destHash.toBase32().substring(0,8) + "]");}
+                                                " -> Destination: [" + destHash.toShortBase32() + "]");}
             _floodfillNetworkDatabaseFacade = new FloodfillNetworkDatabaseFacade(_context, destHash);
             _floodfillNetworkDatabaseFacade.startup();
         }
@@ -1149,7 +1149,7 @@ class ClientConnectionRunner {
                         if (earliestExpiry > now && earliestExpiry < now + 3L * 60 * 1000) {
                             if (_log.shouldInfo())
                                 _log.info("Current LeaseSet expiring in " + ((earliestExpiry - now) / 1000) +
-                                          "s — forcing renew of [" + h.toBase32().substring(0,8) + "]");
+                                          "s — forcing renew of [" + h.toShortBase32() + "]");
                             break; // fall through to I2CP request
                         }
                         if (onCreateJob != null)
@@ -1197,7 +1197,7 @@ class ClientConnectionRunner {
                     sp.rerequestTimer = timer;
                     timer.schedule(1000);
                     if (_log.shouldDebug())
-                        _log.debug("No current LeaseSet and no Outbound tunnels -> Waiting 1 sec to request [" + h.toBase32().substring(0,8) + "]...");
+                        _log.debug("No current LeaseSet and no Outbound tunnels -> Waiting 1 sec to request [" + h.toShortBase32() + "]...");
                     return;
                 } else {
                     // so the timer won't fire off with an older LS request
@@ -1251,13 +1251,13 @@ class ClientConnectionRunner {
             SessionParams sp = _sessions.get(h);
             if (sp == null) {
                 if (_log.shouldWarn())
-                    _log.warn("Cancelled request for LeaseSet [" + h.toBase32().substring(0,8) +"] -> Session disappeared");
+                    _log.warn("Cancelled request for LeaseSet [" + h.toShortBase32() +"] -> Session disappeared");
                 return;
             }
             synchronized(ClientConnectionRunner.this) {
                 if (sp.rerequestTimer != Rerequest.this) {
                     if (_log.shouldInfo())
-                        _log.info("Cancelled request for LeaseSet [" + h.toBase32().substring(0,8) + "] -> Newer request received");
+                        _log.info("Cancelled request for LeaseSet [" + h.toShortBase32() + "] -> Newer request received");
                     return;
                 }
             }

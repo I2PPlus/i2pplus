@@ -109,7 +109,7 @@ class ExpireLeasesJob extends JobImpl {
             if (!ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {
                 long expiredAgo = now - ls.getLatestLeaseDate();
                 if (expiredAgo > STALE_EXPIRED_MS) {
-                    if (_log.shouldInfo()) {_log.info("Purging stale LeaseSet [" + h.toBase32().substring(0,8) + "] expired " + expiredAgo + "ms ago");}
+                    if (_log.shouldInfo()) {_log.info("Purging stale LeaseSet [" + h.toShortBase32() + "] expired " + expiredAgo + "ms ago");}
                     _facade.fail(h);
                 }
             }
@@ -134,7 +134,7 @@ class ExpireLeasesJob extends JobImpl {
             if (isLocal) {continue;}
             long expiry = ls.getLatestLeaseDate();
             if (expiry > now && expiry - now < REFRESH_THRESHOLD_MS) {
-                if (_log.shouldInfo()) {_log.info("Refreshing LeaseSet [" + h.toBase32().substring(0,8) + "] before expiry");}
+                if (_log.shouldInfo()) {_log.info("Refreshing LeaseSet [" + h.toShortBase32() + "] before expiry");}
                 if (_facade.isClientDb()) {
                     // Client sub-DB drops null-fromLocalDest searches; use main NetDb (exploratory)
                     getContext().netDb().lookupLeaseSetRemotely(h, null);
@@ -206,7 +206,7 @@ class ExpireLeasesJob extends JobImpl {
                 Collections.sort(current, new LeaseSetComparator());
                 for (LeaseSet ls : current) {
                     toExpire.add(ls.getHash());
-                    if (_log.shouldInfo()) {_log.info("Aggressively expiring LeaseSet [" + ls.getHash().toBase64().substring(0,6) + "] for " + _facade);}
+                    if (_log.shouldInfo()) {_log.info("Aggressively expiring LeaseSet [" + ls.getHash().toShortBase64() + "] for " + _facade);}
                     if (--sz <= limit) {break;}
                 }
             }

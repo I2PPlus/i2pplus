@@ -1478,7 +1478,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
             if (_destinationNickname != null) {
                 buf.append(_destinationNickname).append(" / ");
             }
-            buf.append(_destination.toBase32().substring(0, 8)).append("]");
+            buf.append(_destination.toShortBase32()).append("]");
         }
         int fails = _failures.get();
         if (fails > 1) {buf.append(" (").append(fails).append(" consecutive failures)");}

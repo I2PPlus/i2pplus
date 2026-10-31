@@ -2734,8 +2734,8 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
          */
         @Override
         public void run() {
-            String from = i2ps.getThisDestination().calculateHash().toBase64().substring(0,6);
-            String to = i2ps.getPeerDestination().calculateHash().toBase64().substring(0,6);
+            String from = i2ps.getThisDestination().calculateHash().toShortBase64();
+            String to = i2ps.getPeerDestination().calculateHash().toShortBase64();
 
             if (_log.shouldLog(Log.DEBUG)) {_log.debug(direction + " Forwarding between [" + from + "] and [" + to + "]");}
 

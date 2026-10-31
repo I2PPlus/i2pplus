@@ -3656,7 +3656,7 @@ class Connection {
      *         or "[Unknown]" while the peer is still unset
      */
     private synchronized String getRemotePeerString() {
-        if (_remotePeer != null) {return "[" + _remotePeer.calculateHash().toBase32().substring(0,8) + "]";}
+        if (_remotePeer != null) {return "[" + _remotePeer.calculateHash().toShortBase32() + "]";}
         else {return "[Unknown]";}
     }
 
@@ -4531,7 +4531,7 @@ class Connection {
      */
     private String localTag() {
         Destination local = _session.getMyDestination();
-        return local != null ? local.calculateHash().toBase32().substring(0, 8) : "unknown";
+        return local != null ? local.calculateHash().toShortBase32() : "unknown";
     }
 
     /**
@@ -4557,7 +4557,7 @@ class Connection {
         if (_isInbound) {buf.append(" from ");}
         else {buf.append(" to ");}
         Destination remotePeer = getRemotePeer();
-        if (remotePeer != null) {buf.append("[").append(remotePeer.calculateHash().toBase32().substring(0,8)).append("]");}
+        if (remotePeer != null) {buf.append("[").append(remotePeer.calculateHash().toShortBase32()).append("]");}
         else {buf.append("Unknown");}
         long now = _context.clock().now();
         // Gated on debug, not info. toString() is called by whatever log line or

@@ -191,12 +191,12 @@ public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
-        buf.append("from [").append(_from.toBase64().substring(0,6)).append("]");
-        buf.append(" for key [").append(_key.toBase64().substring(0,6)).append("]");
+        buf.append("from [").append(_from.toShortBase64()).append("]");
+        buf.append(" for key [").append(_key.toShortBase64()).append("]");
         if (getNumReplies() > 0) {
             buf.append("\n* Replies (").append(getNumReplies()).append("):");
             for (int i = 0; i < getNumReplies(); i++) {
-                buf.append(" [").append(getReply(i).toBase64().substring(0,6)).append("]");
+                buf.append(" [").append(getReply(i).toShortBase64()).append("]");
             }
         }
         return buf.toString();

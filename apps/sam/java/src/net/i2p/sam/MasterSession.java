@@ -515,7 +515,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
                         if (now - _lastOverflowLog > OVERFLOW_LOG_INTERVAL_MS) {
                             _lastOverflowLog = now;
                             String peer = "unknown";
-                            try { peer = i2ps.getPeerDestination().calculateHash().toBase32().substring(0, 8); } catch (Exception e) { /* ignore */ }
+                            try { peer = i2ps.getPeerDestination().calculateHash().toShortBase32(); } catch (Exception e) { /* ignore */ }
                             if (_log.shouldWarn()) {
                             _log.warn("Rejected incoming connection from " + peer +
                                       "\n* Accept queue overflow for STREAM session \"" + ssess.getNick() +

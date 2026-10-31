@@ -466,13 +466,13 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
                 buf.append("\n* From ");
                 Destination local = _session.getMyDestination();
                 if (local != null)
-                    buf.append("[").append(local.calculateHash().toBase32().substring(0,8)).append("]");
+                    buf.append("[").append(local.calculateHash().toShortBase32()).append("]");
                 else
                     buf.append("[unknown]");
                 buf.append(" to ");
                 Destination remote = con.getRemotePeer();
                 if (remote != null)
-                    buf.append("[").append(remote.calculateHash().toBase32().substring(0,8)).append("]");
+                    buf.append("[").append(remote.calculateHash().toShortBase32()).append("]");
                 else
                     buf.append("[unknown]");
 

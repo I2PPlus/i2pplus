@@ -539,7 +539,7 @@ public class PersistentDataStore extends TransientDataStore {
             boolean peerIsFirewalled = ri.isHidden() || f.unreachable;
             if (f.ip != null && f.ip.equals(f.ourIP) && !peerIsFirewalled) {
                 if (_log.shouldWarn()) {
-                    _log.warn("Banning and disconnecting from [" + key.toBase64().substring(0,6) + "] for 72h -> Router is spoofing our IP address!");
+                    _log.warn("Banning and disconnecting from [" + key.toShortBase64() + "] for 72h -> Router is spoofing our IP address!");
                 }
                 _banLogger.logBan(key, f.ip, "Spoofed IP address (ours)", 72L*60*60*1000, ri);
                 _context.banlist().banlistRouter(key, "Spoofed IP address (ours)", null, null, _context.clock().now() + 72L*60*60*1000);
@@ -550,10 +550,10 @@ public class PersistentDataStore extends TransientDataStore {
 
         if (f.isInvalidVersion) {
             if (_log.shouldDebug()) {
-                _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Invalid version in RouterInfo (" + f.version + ")");
+                _log.debug("Not writing RouterInfo [" + key.toShortBase64() + "] to disk -> Invalid version in RouterInfo (" + f.version + ")");
             }
             if (_log.shouldWarn()) {
-                _log.warn("Banning for 24h and disconnecting from Router [" + key.toBase64().substring(0,6) + "]" +
+                _log.warn("Banning for 24h and disconnecting from Router [" + key.toShortBase64() + "]" +
                           " -> Invalid version " + f.version + " / " + f.bw + (f.unreachable ? "U" : ""));
                 _banLogger.logBan(key, f.ip != null ? f.ip : "UNKNOWN", "Invalid Router version (" + f.version + " / " + f.bw + ")", 24L*60*60*1000, ri);
                 String flag = f.unreachable ? "U" : f.reachable ? "R" : "";
@@ -564,11 +564,11 @@ public class PersistentDataStore extends TransientDataStore {
             shouldDelete = true;
         } else if (f.isLTier && f.unreachable) {
             if (_log.shouldDebug()) {
-                _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> LU Router");
+                _log.debug("Not writing RouterInfo [" + key.toShortBase64() + "] to disk -> LU Router");
             }
             if (_context.banlist().isLuBanEnabled()) {
                 if (_log.shouldInfo()) {
-                    _log.info("Banning [" + key.toBase64().substring(0,6) + "] for 1h -> LU Router");
+                    _log.info("Banning [" + key.toShortBase64() + "] for 1h -> LU Router");
                     _banLogger.logBan(key, f.ip != null ? f.ip : "UNKNOWN", "LU Router", 60L*60*1000, ri);
                     _context.banlist().banlistRouter(key, "LU Router", null, null, _context.clock().now() + 60L*60*1000);
                 }
@@ -577,22 +577,22 @@ public class PersistentDataStore extends TransientDataStore {
             shouldDelete = true;
         } else if (f.unreachable) {
             if (_log.shouldDebug()) {
-                _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Unreachable");
+                _log.debug("Not writing RouterInfo [" + key.toShortBase64() + "] to disk -> Unreachable");
             }
             shouldDelete = true;
         } else if (f.isSlow) {
             if (_log.shouldDebug()) {
-                _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> K, L, M or N tier");
+                _log.debug("Not writing RouterInfo [" + key.toShortBase64() + "] to disk -> K, L, M or N tier");
             }
             shouldDelete = true;
         } else if (f.isOld) {
             if (_log.shouldDebug()) {
-                _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Older than " + MIN_VERSION);
+                _log.debug("Not writing RouterInfo [" + key.toShortBase64() + "] to disk -> Older than " + MIN_VERSION);
             }
             shouldDelete = true;
         } else {
             if (_log.shouldDebug()) {
-                _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Local copy is newer");
+                _log.debug("Not writing RouterInfo [" + key.toShortBase64() + "] to disk -> Local copy is newer");
             }
         }
         return shouldDelete;
@@ -618,11 +618,11 @@ public class PersistentDataStore extends TransientDataStore {
             data.writeBytes(fos);
             dbFile.setLastModified(dataPublishDate);
             if (_log.shouldDebug()) {
-                _log.debug("Writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk");
+                _log.debug("Writing RouterInfo [" + key.toShortBase64() + "] to disk");
             }
             return false;
         } catch (DataFormatException dfe) {
-            _log.error("Error writing out malformed object as [" + key.toBase64().substring(0,6) + "]: " + data, dfe);
+            _log.error("Error writing out malformed object as [" + key.toShortBase64() + "]: " + data, dfe);
             return true;
         }
     }
@@ -984,7 +984,7 @@ public class PersistentDataStore extends TransientDataStore {
                 return fileDate > _knownDate + (60*60*1000);
             } else {
                 // safety measure - prevent injection from reseeding
-                _log.error("Prevented LeaseSet overwrite by RouterInfo [" + _key.toBase64().substring(0,6) + "] from " + _routerFile);
+                _log.error("Prevented LeaseSet overwrite by RouterInfo [" + _key.toShortBase64() + "] from " + _routerFile);
                 return false;
             }
         }
@@ -1034,7 +1034,7 @@ public class PersistentDataStore extends TransientDataStore {
                     boolean hasIP = false;
                     String caps = "unknown";
                     if (ri != null) {
-                        truncHash = h.toBase64().substring(0,6);
+                        truncHash = h.toShortBase64();
                         caps = ri.getCapabilities();
                         ip = net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(ri));
                         if (caps.contains("f")) {
@@ -1055,7 +1055,7 @@ public class PersistentDataStore extends TransientDataStore {
                         // this is checked in KNDF.validate() but catch it sooner and log as error.
                         corrupt = true;
                         if (_log.shouldWarn())
-                            _log.warn("RouterInfo [" + truncHash + "] does not match [" + _key.toBase64().substring(0,6) + "] from " + _routerFile);
+                            _log.warn("RouterInfo [" + truncHash + "] does not match [" + _key.toShortBase64() + "] from " + _routerFile);
                         _log.warn("Banning: [" + truncHash + "] for 1h -> Corrupt RouterInfo");
                         _banLogger.logBan(_key, _context, "Corrupt RouterInfo", 60L*60*1000);
                         _context.banlist().banlistRouter(_key, "Corrupt RouterInfo", null, null, now + 60L*60*1000);
@@ -1184,13 +1184,13 @@ public class PersistentDataStore extends TransientDataStore {
 
                 if (isSlow) {
                     if (_log.shouldInfo()) {
-                        _log.info("Deleting slow (" + bw + ") RouterInfo: [" + key.toBase64().substring(0, 6) + "]");
+                        _log.info("Deleting slow (" + bw + ") RouterInfo: [" + key.toShortBase64() + "]");
                     }
                     file.delete();
                     deletedCount++;
                 } else if (isDegraded) {
                     if (_log.shouldInfo()) {
-                        _log.info("Deleting degraded (" + bw + ") RouterInfo: [" + key.toBase64().substring(0, 6) + "]");
+                        _log.info("Deleting degraded (" + bw + ") RouterInfo: [" + key.toShortBase64() + "]");
                     }
                     file.delete();
                     deletedCount++;

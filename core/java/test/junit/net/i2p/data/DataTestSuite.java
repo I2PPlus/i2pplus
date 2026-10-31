@@ -12,6 +12,7 @@ import org.junit.runners.Suite;
     DateTest.class,
     DestinationTest.class,
     HashTest.class,
+    HashShortFormTest.class,
     LeaseSetTest.class,
     LeaseSet2ExpiryTest.class,
     LeaseTest.class,

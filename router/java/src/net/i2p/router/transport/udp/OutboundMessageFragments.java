@@ -228,11 +228,11 @@ class OutboundMessageFragments {
         boolean added = _activePeers.addIfAbsent(peer);
         if (added) {
             if (_log.shouldDebug()) {
-                _log.debug("Adding a new message to new peer [" + peer.getRemotePeer().toBase64().substring(0,6) + "]");
+                _log.debug("Adding a new message to new peer [" + peer.getRemotePeer().toShortBase64() + "]");
             }
         } else {
             if (_log.shouldDebug()) {
-                _log.debug("Adding a new message to an existing peer [" + peer.getRemotePeer().toBase64().substring(0,6) + "]");
+                _log.debug("Adding a new message to an existing peer [" + peer.getRemotePeer().toShortBase64() + "]");
             }
         }
         // One size read for both stats; they always sample the same value.

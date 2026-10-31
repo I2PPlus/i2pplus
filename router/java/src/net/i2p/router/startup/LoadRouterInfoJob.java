@@ -190,7 +190,7 @@ class LoadRouterInfoJob extends JobImpl {
                 if (sigTypeChanged || encTypeChanged || shouldRebuild(privkey)) {
                     if (_us != null) {
                         Hash h = _us.getIdentity().getHash();
-                        _log.logAlways(Log.WARN, "Deleting old Router Identity [" + h.toBase64().substring(0,6) + "]");
+                        _log.logAlways(Log.WARN, "Deleting old Router Identity [" + h.toShortBase64() + "]");
                         // the netdb hasn't started yet, but we want to delete the RI
                         File f = PersistentDataStore.getRouterInfoFile(getContext(), h);
                         f.delete();

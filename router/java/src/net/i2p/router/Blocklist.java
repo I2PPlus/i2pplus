@@ -518,7 +518,7 @@ public class Blocklist {
             for (Hash peer : _peerBlocklist.keySet()) {
                 String reason;
                 String comment = _peerBlocklist.get(peer);
-                String peerhash = peer.toBase64().substring(0,6);
+                String peerhash = peer.toShortBase64();
                 if (comment != null) {reason = "" + _x("Hash") + ": " + peerhash;}
                 else {reason = "" + _x("Banned by Router Hash");}
                 banlistRouter(peer, reason, comment);
@@ -1537,7 +1537,7 @@ public class Blocklist {
         if ((!blFile.exists()) || blFile.length() <= 0) {
             // just ban it and be done
             if (_log.shouldWarn()) {
-                _log.warn("Banning [" + peer.toBase64().substring(0,6) + "] for duration of session -> Blocklist entry");
+                _log.warn("Banning [" + peer.toShortBase64() + "] for duration of session -> Blocklist entry");
             }
             banlistRouter(peer, "Banned", "Banned", expireInterval());
             return;
@@ -1557,7 +1557,7 @@ public class Blocklist {
                     if (match(ipint, toEntry(e.ip1, e.ip2))) {
                         String reason = "" + _x("Blocklist") + ": " + sip;
                         if (_log.shouldWarn()) {
-                            _log.warn("Banning [" + peer.toBase64().substring(0,6) + "] for duration of session -> Blocklist entry");
+                            _log.warn("Banning [" + peer.toShortBase64() + "] for duration of session -> Blocklist entry");
                         }
                         banlistRouter(peer, reason, buf, expireInterval());
                         return;

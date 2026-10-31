@@ -121,8 +121,8 @@ public class ConfigTunnelsHandler extends FormHandler {
                 mgr.setOutboundSettings(out);
             } else {
                 if (_log.shouldDebug()) {
-                    _log.debug("Inbound settings for [" + client.toBase32().substring(0, 8) + "]: " + in);
-                    _log.debug("Outbound settings for [" + client.toBase32().substring(0, 8) + "]: " + out);
+                    _log.debug("Inbound settings for [" + client.toShortBase32() + "]: " + in);
+                    _log.debug("Outbound settings for [" + client.toShortBase32() + "]: " + out);
                 }
                 mgr.setInboundSettings(client, in);
                 mgr.setOutboundSettings(client, out);

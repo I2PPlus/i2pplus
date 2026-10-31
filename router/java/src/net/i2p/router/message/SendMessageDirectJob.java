@@ -185,7 +185,7 @@ public class SendMessageDirectJob extends JobImpl {
         if (_expiration < now) {
             if (_log.shouldWarn()) {
                 _log.warn("Timed out sending " + messageTypeName() + " message to [" +
-                          _targetHash.toBase64().substring(0,6) + "], expired " + new Date(_expiration));
+                          _targetHash.toShortBase64() + "], expired " + new Date(_expiration));
                 if (_log.shouldDebug())
                     _log.debug("Message details:" + _message);
             }
@@ -214,7 +214,7 @@ public class SendMessageDirectJob extends JobImpl {
                     _alreadySearched = true;
                 } else {
                     if (_log.shouldInfo()) {
-                        _log.info("Unable to find router [" + _targetHash.toBase64().substring(0,6) +
+                        _log.info("Unable to find router [" + _targetHash.toShortBase64() +
                                   "] to send " + messageTypeName() + " message to after searching for " +
                                   (getContext().clock().now()-_searchOn) + "ms");
                         if (_log.shouldDebug())
@@ -266,7 +266,7 @@ public class SendMessageDirectJob extends JobImpl {
             getContext().outNetMessagePool().add(msg);
             if (_log.shouldDebug())
                 _log.debug("Adding " + _message.getClass().getName() + " to Outbound message pool targeting [" +
-                           _router.getIdentity().getHash().toBase64().substring(0,6) + "]");
+                           _router.getIdentity().getHash().toShortBase64() + "]");
         }
     }
 }

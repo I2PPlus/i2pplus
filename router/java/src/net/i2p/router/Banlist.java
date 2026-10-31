@@ -611,7 +611,7 @@ public class Banlist {
             for (Hash peer : toUnbanlist) {
                 _context.messageHistory().unbanlist(peer);
                 if (_log.shouldInfo()) {
-                    _log.info("Removing expired ban from [" + peer.toBase64().substring(0,6) + "]");
+                    _log.info("Removing expired ban from [" + peer.toShortBase64() + "]");
                 }
             }
 
@@ -1146,7 +1146,7 @@ public class Banlist {
         boolean wasAlready = false;
         String logReason = reason.replace("<b>➜</b>", "->");
         if (_log.shouldInfo()) {
-            _log.info("Banning [" + peer.toBase64().substring(0,6) + "] for " + banDuration + " minutes " +
+            _log.info("Banning [" + peer.toShortBase64() + "] for " + banDuration + " minutes " +
                ((transport != null) ? "on transport " + transport : "") + logReason);
         }
 
@@ -1227,7 +1227,7 @@ public class Banlist {
     private void unbanlistRouter(Hash peer, boolean realUnbanlist, String transport) {
         if (peer == null) return;
         if (_log.shouldInfo())
-            _log.info("Removing expired ban from [" + peer.toBase64().substring(0,6) + "]"
+            _log.info("Removing expired ban from [" + peer.toShortBase64() + "]"
                       + (transport != null ? "/" + transport : ""));
         boolean fully = false;
 
@@ -1246,7 +1246,7 @@ public class Banlist {
         if (fully) {
             _context.messageHistory().unbanlist(peer);
             if (_log.shouldInfo() && e != null)
-                _log.info("Removing expired ban from [" + peer.toBase64().substring(0,6) + "]"
+                _log.info("Removing expired ban from [" + peer.toShortBase64() + "]"
                           + (transport != null ? " / " + transport : ""));
         }
     }
@@ -1285,7 +1285,7 @@ public class Banlist {
         if (unbanlist) {
             _context.messageHistory().unbanlist(peer);
             if (_log.shouldInfo()) {
-                _log.info("Removing expired ban from [" + peer.toBase64().substring(0,6) + "]");
+                _log.info("Removing expired ban from [" + peer.toShortBase64() + "]");
             }
         }
 

@@ -97,7 +97,7 @@ class OutboundTunnelEndpoint {
             if (h != null) {
                 if (_log.shouldWarn())
                     _log.warn(toString() + " -> Blaming the previous hop for the failed tunnel" +
-                              " * Penalty: 50% * Peer: [" + h.toBase64().substring(0,6) + "]");
+                              " * Penalty: 50% * Peer: [" + h.toShortBase64() + "]");
                 _context.profileManager().tunnelFailed(h, 50);
             }
         }
@@ -147,15 +147,15 @@ class OutboundTunnelEndpoint {
                     if (date < now - 60*60*1000L) {
                         if (_log.shouldWarn()) {
                             _log.warn("Dropping " + (toTunnel == null ? "DIRECT" : "") +
-                                      " DbStoreMsg of stale RouterInfo [" + dsm.getKey().toBase64().substring(0,6) +
-                                      "] at Outbound Endpoint to Router [" + toRouter.toBase64().substring(0,6) + "]");
+                                      " DbStoreMsg of stale RouterInfo [" + dsm.getKey().toShortBase64() +
+                                      "] at Outbound Endpoint to Router [" + toRouter.toShortBase64() + "]");
                         }
                         return;
                     } else if (date > now + 2*60*1000L) {
                         if (_log.shouldWarn()) {
                             _log.warn("Dropping " + (toTunnel == null ? "DIRECT" : "") +
-                                      " DbStoreMsg of future RouterInfo [" + dsm.getKey().toBase64().substring(0,6) +
-                                      "] at Outbound Endpoint to Router [" + toRouter.toBase64().substring(0,6) + "]");
+                                      " DbStoreMsg of future RouterInfo [" + dsm.getKey().toShortBase64() +
+                                      "] at Outbound Endpoint to Router [" + toRouter.toShortBase64() + "]");
                         }
                         return;
                     }
@@ -164,7 +164,7 @@ class OutboundTunnelEndpoint {
 
             if (_log.shouldInfo()) {
                 _log.info("Full message received from outbound tunnel " + _config.toShortString() +
-                          " -> Forwarding to [" + toRouter.toBase64().substring(0,6) + "]" +
+                          " -> Forwarding to [" + toRouter.toShortBase64() + "]" +
                           (toTunnel != null ? ':' + toTunnel.getTunnelId() : "") +
                           "\n* Type: " + msg.getType() + " * MsgID: " + msg.getUniqueId());
             }
@@ -177,14 +177,14 @@ class OutboundTunnelEndpoint {
                         _context.statManager().addRateData("tunnel.outboundTunnelEndpointFwdRIDSM", 1);
                         if (_log.shouldLog(Log.INFO))
                             _log.info("Outbound endpoint RouterInfo DbStoreMsg -> Messages: " + _ridsm
-                                      + " of " + _totalmsg + " * To router: [" + toRouter.toBase64().substring(0,6) + "]"
+                                      + " of " + _totalmsg + " * To router: [" + toRouter.toShortBase64() + "]"
                                       + "\n* From tunnel: " + _config.getReceiveTunnelId()
                                       + "\n* " + dsm);
                     } else {
                         _lsdsm++;
                         if (_log.shouldLog(Log.INFO))
                             _log.info("Outbound endpoint LeaseSet DbStoreMsg -> Messages: " + _lsdsm
-                                      + " of " + _totalmsg + " * To router: [" + toRouter.toBase64().substring(0,6) + "]"
+                                      + " of " + _totalmsg + " * To router: [" + toRouter.toShortBase64() + "]"
                                       + "\n* From tunnel: " + _config.getReceiveTunnelId()
                                       + "\n* " + dsm);
                     }
@@ -192,7 +192,7 @@ class OutboundTunnelEndpoint {
                     _i2npmsg++;
                     if (_log.shouldLog(Log.INFO))
                         _log.info("Outbound endpoint I2NP message -> Messages: " + _i2npmsg
-                                  + " of " + _totalmsg + " * To router: [" + toRouter.toBase64().substring(0, 6) + ']'
+                                  + " of " + _totalmsg + " * To router: [" + toRouter.toShortBase64() + ']'
                                   + "\n* From tunnel: " + _config.getReceiveTunnelId()
                                   + "\n* " + msg);
                 }

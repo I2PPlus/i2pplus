@@ -657,9 +657,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             }
             if (ban && _log.shouldWarn() && !isBanned) {
                 _log.warn("Banning for 24h and disconnecting from Router [" +
-                          h.toBase64().substring(0,6) + "] -> Invalid publication date");
+                          h.toShortBase64() + "] -> Invalid publication date");
             } else if (!ban && _log.shouldInfo()) {
-                _log.info("Disconnecting from Router [" + h.toBase64().substring(0,6) +
+                _log.info("Disconnecting from Router [" + h.toShortBase64() +
                           "] -> Invalid publication date");
             }
             throw new RIException("Invalid publication date in RouterInfo", REASON_BANNED);
@@ -672,7 +672,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             _context.commSystem().forceDisconnect(h, "Invalid SSU address");
             if (_log.shouldWarn() && !isBanned) {
                 _log.warn("Banning for 4h and disconnecting from Router [" +
-                          h.toBase64().substring(0,6) + "] -> Invalid SSU address");
+                          h.toShortBase64() + "] -> Invalid SSU address");
             }
             if (ri.verifySignature()) {
                 _context.blocklist().add(_aliceIP);
@@ -697,10 +697,10 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             }
             if (ban && _log.shouldWarn() && !isBanned) {
                 _log.warn("Banning for 4h and disconnecting from Router [" +
-                          h.toBase64().substring(0, 6) + "] -> More than " +
+                          h.toShortBase64() + "] -> More than " +
                           UDPAddress.MAX_INTRODUCERS + " introducers");
             } else if (!ban && _log.shouldInfo()) {
-                _log.info("Disconnecting from Router [" + h.toBase64().substring(0, 6) +
+                _log.info("Disconnecting from Router [" + h.toShortBase64() +
                           "] -> More than " + UDPAddress.MAX_INTRODUCERS + " introducers");
             }
             _context.commSystem().forceDisconnect(h, "Too many introducers");
@@ -724,7 +724,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             }
             if (_log.shouldInfo() && !isBanned) {
                 _log.info("Banning for 1h and disconnecting from Router [" +
-                          h.toBase64().substring(0,6) + "] -> " + version + " / " + bw + "U");
+                          h.toShortBase64() + "] -> " + version + " / " + bw + "U");
             }
             _context.commSystem().forceDisconnect(h, "Old and slow (" + version + ")");
             throw new RIException("Old and slow: " + h, REASON_BANNED);

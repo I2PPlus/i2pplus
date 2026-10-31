@@ -97,14 +97,14 @@ class PeerAcceptor {
                 if (_log.shouldInfo())
                     _log.info(
                             "Read an infohash from ["
-                                    + peerHash.toBase64().substring(0, 6)
+                                    + peerHash.toShortBase64()
                                     + "] -> InfoHash: "
                                     + Base64.encode(peerInfoHash));
             } catch (IOException ioe) {
                 if (_log.shouldInfo())
                     _log.info(
                             "Unable to read the infohash from ["
-                                    + peerHash.toBase32().substring(0, 8)
+                                    + peerHash.toShortBase32()
                                     + "]");
                 throw ioe;
             }

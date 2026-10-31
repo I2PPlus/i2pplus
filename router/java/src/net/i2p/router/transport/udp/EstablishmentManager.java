@@ -1037,7 +1037,7 @@ public class EstablishmentManager {
         if (isBanned) {return;}
 
         long now = _context.clock().now();
-        String truncHash = toHash != null ? toHash.toBase64().substring(0,6) : "";
+        String truncHash = toHash != null ? toHash.toShortBase64() : "";
         UDPAddress addr = new UDPAddress(ra);
         String ipPort = "UNKNOWN";
         if (addr.getHostAddress() != null) {
@@ -1052,7 +1052,7 @@ public class EstablishmentManager {
                 _banLogger.logBanForever(toHash, ipPort, "Not in our network: " + id);
                 _context.banlist().banlistRouterForever(toHash, "Not in our network: " + id);
             }
-            if (_log.shouldInfo()) {_log.info("Not in our network: [" + toHash.toBase64().substring(0,6) + ']');}
+            if (_log.shouldInfo()) {_log.info("Not in our network: [" + toHash.toShortBase64() + ']');}
             _transport.markUnreachable(toHash);
             _transport.failed(msg, "Peer is on the wrong network, cannot establish connection");
             return;
@@ -1464,7 +1464,7 @@ public class EstablishmentManager {
         Hash fromHash = host.getPeerHash();
         boolean isBlocklisted = isBlocklisted(_context.blocklist(), fromIP);
         boolean isBanned = isBanlisted(_context.banlist(), fromHash);
-        String truncHash = fromHash != null ? fromHash.toBase64().substring(0,6) : "";
+        String truncHash = fromHash != null ? fromHash.toShortBase64() : "";
         if (!TransportUtil.isValidPort(from.getPort()) || !_transport.isValid(fromIP)) {
             if (_log.shouldWarn()) {
                 _log.warn("[SSU] Received Session Request from invalid address/port: " + from);
@@ -1842,7 +1842,7 @@ public class EstablishmentManager {
             Hash hash = hostId.getPeerHash();
             if (hash != null && _context.banlist().isBanlisted(hash)) {
                 if (_log.shouldInfo()) {
-                    _log.info("Ignoring " + context + " from banlisted peer [" + hash.toBase64().substring(0, 6) +"]");
+                    _log.info("Ignoring " + context + " from banlisted peer [" + hash.toShortBase64() +"]");
                 }
                 return true;
             }
@@ -1974,7 +1974,7 @@ public class EstablishmentManager {
         }
 
         if (_log.shouldDebug())
-            _log.debug("Inbound SSU handle successfully established to [" + peer.getRemotePeer().toBase64().substring(0,6) + "] \n* " + state);
+            _log.debug("Inbound SSU handle successfully established to [" + peer.getRemotePeer().toShortBase64() + "] \n* " + state);
 
         _transport.addRemotePeerState(peer);
         boolean isIPv6 = state.getSentIP().length == 16;
@@ -2050,7 +2050,7 @@ public class EstablishmentManager {
 
         if (_log.shouldDebug()) {
             _log.debug("Outbound SSU handle successfully established to [" +
-                       peer.getRemotePeer().toBase64().substring(0,6) + "] \n* " + state);
+                       peer.getRemotePeer().toShortBase64() + "] \n* " + state);
         }
 
         _transport.addRemotePeerState(peer);
@@ -2697,7 +2697,7 @@ public class EstablishmentManager {
                 if (SSU2Util.validateSig(_context, SSU2Util.RELAY_RESPONSE_PROLOGUE,
                                          h, null, data, spk)) {
                     if (_log.shouldInfo()) {
-                        _log.info("[SSU] GOOD signature with HolePunch, credit [" + h.toBase64().substring(0, 6) + "] on " + state);
+                        _log.info("[SSU] GOOD signature with HolePunch, credit [" + h.toShortBase64() + "] on " + state);
                     }
                     state2.setIntroState(h, INTRO_STATE_SUCCESS);
                     return data;

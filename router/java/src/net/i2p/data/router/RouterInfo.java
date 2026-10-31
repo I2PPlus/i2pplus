@@ -568,7 +568,7 @@ public class RouterInfo extends DatabaseEntry {
 
         if (!_isValid) {
             if (log.shouldWarn()) {
-                log.warn("RouterInfo [" + _identity.getHash().toBase64().substring(0, 6) + "] -> Signature verify failed");
+                log.warn("RouterInfo [" + _identity.getHash().toShortBase64() + "] -> Signature verify failed");
             }
         }
     }
@@ -640,7 +640,7 @@ public class RouterInfo extends DatabaseEntry {
                 if (_identity != null) {
                     Hash h = _identity.getHash();
                     if (log.shouldWarn()) {
-                        log.warn("Warning! [" + h.toBase64().substring(0,6) + "] has too many introducers (" + numPeers + ")");
+                        log.warn("Warning! [" + h.toShortBase64() + "] has too many introducers (" + numPeers + ")");
                     }
                 }
                 throw new DataFormatException("Too many introducers");

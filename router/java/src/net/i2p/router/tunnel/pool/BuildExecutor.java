@@ -2048,7 +2048,7 @@ public class BuildExecutor implements Runnable {
             }
             PeerProfile profile = _context.profileOrganizer().getProfileNonblocking(peer);
             long lastHeardFrom = (profile != null) ? profile.getLastHeardFrom() : 0;
-            buf.append('[').append(peer.toBase64().substring(0, 6)).append(']');
+            buf.append('[').append(peer.toShortBase64()).append(']');
             buf.append(", unreachable: ").append(commSystem.wasUnreachable(peer));
             buf.append(", established: ").append(commSystem.isEstablished(peer));
             buf.append(", connecting: ").append(commSystem.isConnecting(peer));
@@ -2972,7 +2972,7 @@ public class BuildExecutor implements Runnable {
             if (lastDispatch != null && now - lastDispatch < MIN_BUILD_SPACING_MS) {
                 if (_log.shouldDebug()) {
                     _log.debug("Staggering build for " + cfg + " — first hop [" +
-                               firstHop.toBase64().substring(0, 6) + "] dispatched " +
+                               firstHop.toShortBase64() + "] dispatched " +
                                (now - lastDispatch) + "ms ago");
                 }
                 cfg.getTunnelPool().removeInProgress(cfg);
@@ -3001,7 +3001,7 @@ public class BuildExecutor implements Runnable {
                 if (peer != null && banlist.isBanlisted(peer)) {
                     if (_log.shouldDebug()) {
                         _log.debug("Build gated (ban): hop " + hop +
-                                   " [" + peer.toBase64().substring(0, 6) +
+                                   " [" + peer.toShortBase64() +
                                    "] is banned for " + cfg);
                     }
                     _context.statManager().addRateData("tunnel.buildBanFiltered", 1);
@@ -3104,7 +3104,7 @@ public class BuildExecutor implements Runnable {
         if (hasRecentlyFailedAsFirstHop(firstHop)) {
             if (_log.shouldDebug()) {
                 _log.debug("Skipping build for " + cfg +
-                           " — first hop [" + firstHop.toBase64().substring(0, 6) +
+                           " — first hop [" + firstHop.toShortBase64() +
                            "] has " + getFirstHopFailureCount(firstHop) + " recent failures");
             }
             return true;
@@ -3419,7 +3419,7 @@ public class BuildExecutor implements Runnable {
      */
     private void didNotReply(long tunnel, Hash peer) {
         if (_log.shouldDebug()) {
-            _log.debug("No reply from [" + peer.toBase64().substring(0,6) + "] to join [Tunnel " + tunnel + "]");
+            _log.debug("No reply from [" + peer.toShortBase64() + "] to join [Tunnel " + tunnel + "]");
         }
     }
 

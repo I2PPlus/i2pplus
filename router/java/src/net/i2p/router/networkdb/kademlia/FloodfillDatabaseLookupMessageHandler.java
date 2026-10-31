@@ -116,7 +116,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
         final boolean shouldThrottle = !isSenderUs && _facade.shouldThrottleLookup(dlm.getFrom(), dlm.getReplyTunnel());
         final boolean shouldBan = !isBanned && _facade.shouldBanLookup(dlm.getFrom(), dlm.getReplyTunnel());
         if (shouldThrottle && _log.shouldDebug()) {
-            _log.debug("Throttling lookup from [" + dlm.getFrom().toBase64().substring(0, 6) + "]");
+            _log.debug("Throttling lookup from [" + dlm.getFrom().toShortBase64() + "]");
         }
         final boolean shouldAccept = shouldAcceptLookup(isSenderUs, shouldThrottle, shouldBan, ourRI, floodfillMode, isFF, type);
         final int maxLookups = isFF ? 60 : 30;
@@ -190,7 +190,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
             if (dlm.getFrom().equals(_context.routerHash())) {
                 if (fromHash != null) {
                     if (_log.shouldWarn()) {
-                        _log.warn("Fixing direct " + searchType + " lookup from us, actually from [" + fromHash.toBase64().substring(0,6) + "]");
+                        _log.warn("Fixing direct " + searchType + " lookup from us, actually from [" + fromHash.toShortBase64() + "]");
                     }
                     DatabaseLookupMessage newdlm = new DatabaseLookupMessage(_context);
                     newdlm.setFrom(fromHash);
@@ -214,7 +214,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
                 RouterInfo to = _facade.lookupRouterInfoLocally(dlm.getFrom());
                 if (to != null && to.getCapabilities().indexOf(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL) >= 0) {
                     if (_log.shouldWarn()) {
-                        _log.warn("Dropping direct " + searchType + " lookup from floodfill [" + dlm.getFrom().toBase64().substring(0,6) + "]");
+                        _log.warn("Dropping direct " + searchType + " lookup from floodfill [" + dlm.getFrom().toShortBase64() + "]");
                     }
                     _context.statManager().addRateData("netDb.lookupsDropped", 1);
                     return null;

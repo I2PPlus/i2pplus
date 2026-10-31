@@ -684,7 +684,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
          else
              opts = new ConnectionOptions(options);
          long connectStart = _context.clock().now();
-         String hashPrefix = peer.calculateHash().toBase64().substring(0,6);
+         String hashPrefix = peer.calculateHash().toShortBase64();
          if (_log.shouldInfo())
              _log.info("Connecting to [" + hashPrefix + "]\nOptions: " + opts);
          // pick the subsession here
@@ -708,7 +708,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
                     }
                 }
                 if (session == _session) {
-                    _log.warn("No DSA subsession found for peer [" + h.toBase64().substring(0,6) + "]"
+                    _log.warn("No DSA subsession found for peer [" + h.toShortBase64() + "]"
                               + " -> Falling back to the primary session");
                 }
             }

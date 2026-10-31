@@ -614,7 +614,7 @@ class OutboundEstablishState {
     /** String representation. */
     @Override
     public String toString() {
-        return "OutboundEstablishState [" + _remotePeer.getHash().toBase64().substring(0, 6) + "] " + _remoteHostId +
+        return "OutboundEstablishState [" + _remotePeer.getHash().toShortBase64() + "] " + _remoteHostId +
                "\n* Lifetime: " + DataHelper.formatDuration(getLifetime()) + ' ' + _currentState;
     }
 }

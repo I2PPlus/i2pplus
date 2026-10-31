@@ -316,7 +316,7 @@ public class InNetMessagePool implements Service {
         if (_log.shouldLog(Log.DEBUG)) {
             _log.debug("Finished processing DeliveryStatusMessage -> Not matching replies" +
                 " from router [" +
-                (fromRouterHash != null ? fromRouterHash.toBase64().substring(0, 6) : "null") + "]" +
+                (fromRouterHash != null ? fromRouterHash.toShortBase64() : "null") + "]" +
                 "\n* Original messages: " + sz + " * Message: " + messageBody);
         }
         return true; // jobFound

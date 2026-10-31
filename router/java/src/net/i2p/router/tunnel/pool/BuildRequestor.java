@@ -469,7 +469,7 @@ public abstract class BuildRequestor {
 
         if (log.shouldInfo()) {
             log.info("Sending build request [MsgID " + msg.getUniqueId() + "] for " + cfg.toShortString() +
-                     "\n* Via: " + pairedTunnel + " to [" + ibgw.toBase64().substring(0,6) +
+                     "\n* Via: " + pairedTunnel + " to [" + ibgw.toShortBase64() +
                       "] -> Awaiting reply [MsgID " + cfg.getReplyMessageId() + "]");
         }
         ctx.tunnelDispatcher().dispatchOutbound(msg, pairedTunnel.getSendTunnelId(0), ibgw);
@@ -558,7 +558,7 @@ public abstract class BuildRequestor {
                 cfg.setLastRequestMsgId(msg.getUniqueId());
                 if (log.shouldInfo()) {
                     log.info("Sending build request via exploratory tunnel to [" +
-                             nextHop.toBase64().substring(0,6) + "] for " + cfg +
+                             nextHop.toShortBase64() + "] for " + cfg +
                              "\n* Via: " + outTunnel +
                              "\n* Reply via: " + pairedTunnel + " [MsgID " + msg.getUniqueId() + "]");
                 }
@@ -581,7 +581,7 @@ public abstract class BuildRequestor {
 
         cfg.setLastRequestMsgId(msg.getUniqueId());
         if (log.shouldInfo()) {
-            log.info("Sending build request direct to [" + nextHop.toBase64().substring(0,6) + "] for " + cfg +
+            log.info("Sending build request direct to [" + nextHop.toShortBase64() + "] for " + cfg +
                      "\n* Reply via: " + pairedTunnel + " [MsgID " + msg.getUniqueId() + "]");
         }
 
@@ -727,7 +727,7 @@ public abstract class BuildRequestor {
             if (!BuildMessageGenerator.isBlank(cfg, hopIndex)) {
                 RouterInfo peerInfo = hopRIs[hopIndex];
                 if (peerInfo == null) {
-                    log.warn("Peer not found for hop " + hopIndex + ": [" + cfg.getPeer(hopIndex).toBase64().substring(0,6) + "] in " + cfg);
+                    log.warn("Peer not found for hop " + hopIndex + ": [" + cfg.getPeer(hopIndex).toShortBase64() + "] in " + cfg);
                     return null;
                 }
                 key = peerInfo.getIdentity().getPublicKey();
@@ -817,7 +817,7 @@ public abstract class BuildRequestor {
                 if (log.shouldInfo()) {
                     int estCount = ctx.commSystem().getEstablished() != null ?
                         ctx.commSystem().getEstablished().size() : 0;
-                    log.info("First hop [" + hopPeer.toBase64().substring(0, 6) +
+                    log.info("First hop [" + hopPeer.toShortBase64() +
                              "] connected but no reply -> Attempts: " + estCount +
                              " * Fast: " + ctx.profileOrganizer().isFast(hopPeer)
                              + "\n* High capacity: " + ctx.profileOrganizer().isHighCapacity(hopPeer));
@@ -849,7 +849,7 @@ public abstract class BuildRequestor {
                     StringBuilder sb = new StringBuilder(256);
                     sb.append("First hop ").append(backlogged ? "backlogged" : "unreachable")
                       .append(" for ").append(_cfg)
-                      .append("\n* Peer [").append(hopPeer.toBase64().substring(0, 6)).append("]")
+                      .append("\n* Peer [").append(hopPeer.toShortBase64()).append("]")
                       .append(" * inEst: ")
                       .append(ctx.commSystem().getEstablished().contains(hopPeer))
                       .append(" * estCount: ").append(estCount);
@@ -915,7 +915,7 @@ public abstract class BuildRequestor {
         }
         if (log.shouldInfo()) {
             log.info("Pre-connect fallback: retrying build to [" +
-                     peer.toBase64().substring(0, 6) + "] after pre-connect");
+                     peer.toShortBase64() + "] after pre-connect");
         }
         if (cfg == null || exec == null) {
             return true;
@@ -926,7 +926,7 @@ public abstract class BuildRequestor {
         } catch (Exception e) {
             if (log.shouldWarn()) {
                 log.warn("Pre-connect fallback retry failed for [" +
-                         peer.toBase64().substring(0, 6) + "]", e);
+                         peer.toShortBase64() + "]", e);
             }
             return false;
         }

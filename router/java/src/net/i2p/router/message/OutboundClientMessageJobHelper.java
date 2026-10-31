@@ -186,7 +186,7 @@ class OutboundClientMessageJobHelper {
 
         if (log.shouldInfo()) {
             log.info("Creating garlic config to be encrypted to " + recipientPK +
-                     "\n* Destination: [" + dest.calculateHash().toBase32().substring(0,8) + "]");
+                     "\n* Destination: [" + dest.calculateHash().toShortBase32() + "]");
         }
         return config;
     }
@@ -212,7 +212,7 @@ class OutboundClientMessageJobHelper {
 
         if (replyToTunnel == null) {
             if (log.shouldWarn()) {
-                log.warn("Unable to send client message from [" + from.toBase64().substring(0,6)
+                log.warn("Unable to send client message from [" + from.toShortBase64()
                          + "] -> No Inbound tunnels available");
             }
             return null;

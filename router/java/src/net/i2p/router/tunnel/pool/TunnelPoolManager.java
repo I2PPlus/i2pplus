@@ -638,7 +638,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     public void buildTunnels(Destination client, ClientTunnelSettings settings) {
         Hash dest = client.calculateHash();
         if (_log.shouldDebug()) {
-            _log.debug("Building tunnels for client [" + dest.toBase32().substring(0, 8) + "]: " + settings);
+            _log.debug("Building tunnels for client [" + dest.toShortBase32() + "]: " + settings);
         }
         TunnelPool inbound = null;
         TunnelPool outbound = null;
@@ -693,7 +693,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             TunnelPool inbound = _clientInboundPools.get(h);
             TunnelPool outbound = _clientOutboundPools.get(h);
             if (inbound != null || outbound != null) {
-                if (_log.shouldWarn()) {_log.warn("Already have alias [" + h.toBase32().substring(0, 8) + "]");}
+                if (_log.shouldWarn()) {_log.warn("Already have alias [" + h.toShortBase32() + "]");}
                 return false;
             }
             TunnelPool eInbound = _clientInboundPools.get(e);
@@ -716,7 +716,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             outbound.startup();
         }
         if (_log.shouldInfo()) {
-            _log.info("Added [" + h.toBase32().substring(0, 8) + "] as alias for [" + e.toBase32().substring(0, 8) + "]");
+            _log.info("Added [" + h.toShortBase32() + "] as alias for [" + e.toShortBase32() + "]");
         }
         return true;
     }
@@ -850,12 +850,12 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     public synchronized void removeTunnels(Hash destination) {
         if (destination == null) return;
         if (_log.shouldDebug()) {
-            _log.debug("Scheduling tunnel pool removal for client [" + destination.toBase32().substring(0,8) + "]");
+            _log.debug("Scheduling tunnel pool removal for client [" + destination.toShortBase32() + "]");
         }
         if (_context.clientManager().isLocal(destination)) {
             // race with buildTunnels() on restart of a client
             if (_log.shouldWarn()) {
-                _log.warn("Not removing tunnel pool for [" + destination.toBase32().substring(0,8) + "] -> Still registered with ClientManager");
+                _log.warn("Not removing tunnel pool for [" + destination.toShortBase32() + "] -> Still registered with ClientManager");
             }
             return;
         }
@@ -877,7 +877,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             int tunnelCount = 0;
             if (inbound != null) tunnelCount += inbound.size();
             if (outbound != null) tunnelCount += outbound.size();
-            _log.info("Delayed pool removal scheduled for [" + destination.toBase32().substring(0,8) +
+            _log.info("Delayed pool removal scheduled for [" + destination.toShortBase32() +
                       "] - " + tunnelCount + " tunnels will expire naturally");
         }
     }
@@ -902,7 +902,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      */
     private synchronized void doRemoveTunnels(Hash destination) {
         if (_log.shouldDebug()) {
-            _log.debug("Removing tunnel pool for client [" + destination.toBase32().substring(0,8) + "]");
+            _log.debug("Removing tunnel pool for client [" + destination.toShortBase32() + "]");
         }
         cancelPendingOutboundStartup(destination);
         TunnelPool inbound = _clientInboundPools.remove(destination);
@@ -916,7 +916,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             _executor.removePoolState(outbound);
         }
         if (_log.shouldInfo()) {
-            _log.info("Tunnel pools removed for [" + destination.toBase32().substring(0,8) + "]");
+            _log.info("Tunnel pools removed for [" + destination.toShortBase32() + "]");
         }
     }
 
@@ -956,7 +956,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                 if (_context.clientManager().isLocal(_destination)) {
                     if (_log.shouldInfo()) {
                         _log.info("Cancelling delayed pool removal - client re-registered: [" +
-                                  _destination.toBase32().substring(0,8) + "]");
+                                  _destination.toShortBase32() + "]");
                     }
                     return;
                 }
@@ -2242,7 +2242,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             if (!hasInbound || !hasOutbound) {
                 if (_log.shouldWarn()) {
                     _log.warn("Detected missing pool for registered client: [" +
-                              h.toBase32().substring(0,8) +
+                              h.toShortBase32() +
                               "] (inbound: " + hasInbound + ", outbound: " + hasOutbound + ")");
                 }
 
@@ -2252,7 +2252,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                     cleanup.cancelCleanup();
                     if (_log.shouldInfo()) {
                         _log.info("Cancelled delayed cleanup for re-registered client: [" +
-                                  h.toBase32().substring(0,8) + "]");
+                                  h.toShortBase32() + "]");
                     }
                 }
 
@@ -2263,12 +2263,12 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                     recovered++;
                     if (_log.shouldWarn()) {
                         _log.warn("Recovery: created new tunnel pools for client: [" +
-                                  h.toBase32().substring(0,8) + "]");
+                                  h.toShortBase32() + "]");
                     }
                 } catch (Exception e) {
                     if (_log.shouldError()) {
                         _log.error("Failed to recover pools for client: [" +
-                                   h.toBase32().substring(0,8) + "]", e);
+                                   h.toShortBase32() + "]", e);
                     }
                 }
             }
@@ -2349,7 +2349,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         }
         for (TunnelInfo tun : toFail) {
             if (_log.shouldWarn()) {
-                _log.warn("Removing " + tun + " -> First hop [" + peer.toBase64().substring(0,6) + "] is banlisted");
+                _log.warn("Removing " + tun + " -> First hop [" + peer.toShortBase64() + "] is banlisted");
             }
             pool.tunnelFailed(tun, peer);
         }
@@ -2372,7 +2372,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         }
         for (TunnelInfo tun : toFail) {
             if (_log.shouldWarn()) {
-                _log.warn("Removing " + tun + " -> Previous hop [" + peer.toBase64().substring(0,6) + "] is banlisted");
+                _log.warn("Removing " + tun + " -> Previous hop [" + peer.toShortBase64() + "] is banlisted");
             }
             pool.tunnelFailed(tun, peer);
         }
@@ -2389,7 +2389,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      */
     static String noPoolLine(boolean inbound, Hash destination) {
         return "No " + (inbound ? "inbound" : "outbound") + " client pool for [" +
-               destination.toBase32().substring(0, 8) + "] -> No tunnel selected";
+               destination.toShortBase32() + "] -> No tunnel selected";
     }
 
 }

@@ -298,7 +298,7 @@ class StoreState {
             synchronized (_attemptedPeers) {
                 buf.append(_attemptedPeers.size()).append(' ');
                 for (Hash peer : _attemptedPeers) {
-                    buf.append("[").append(peer.toBase64().substring(0,6)).append("] ");
+                    buf.append("[").append(peer.toShortBase64()).append("] ");
                 }
             }
         }
@@ -307,7 +307,7 @@ class StoreState {
             synchronized (_pendingPeers) {
                 buf.append(_pendingPeers.size()).append(' ');
                 for (Hash peer : _pendingPeers) {
-                    buf.append("[").append(peer.toBase64().substring(0,6)).append("] ");
+                    buf.append("[").append(peer.toShortBase64()).append("] ");
                 }
             }
         }

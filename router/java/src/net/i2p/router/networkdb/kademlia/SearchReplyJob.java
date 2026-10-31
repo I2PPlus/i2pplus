@@ -114,14 +114,14 @@ class SearchReplyJob extends JobImpl {
                     }
                 } else {
                     if (_log.shouldInfo())
-                        _log.info("Peer [" + _peer.toBase64().substring(0,6) + "] sends us bad replies -> Reply verification skipped");
+                        _log.info("Peer [" + _peer.toShortBase64() + "] sends us bad replies -> Reply verification skipped");
                     getContext().statManager().addRateData("netDb.searchReplyValidationSkipped", 1);
                 }
             }
 
             if (_searchJob.wasAttempted(peer)) {_duplicatePeers++;}
             if (_log.shouldDebug())
-                _log.debug("DbSearchReply received on search, referencing Router [" + peer.toBase64().substring(0,6) +
+                _log.debug("DbSearchReply received on search, referencing Router [" + peer.toShortBase64() +
                            "] - Already known? " + (info != null));
             if (shouldAdd) {
                 if (_searchJob.add(peer)) {_newPeers++;}

@@ -701,7 +701,7 @@ List<PeerProfile> profiles = new ArrayList<>(Math.min(LIMIT_PROFILES, freshFiles
             }
 
             if (_log.shouldDebug()) {
-                _log.debug("Loaded profile for [" + peer.toBase64().substring(0,6) + "] from " + file.getName());
+                _log.debug("Loaded profile for [" + peer.toShortBase64() + "] from " + file.getName());
             }
 
             fixupFirstHeardAbout(profile);
@@ -749,7 +749,7 @@ List<PeerProfile> profiles = new ArrayList<>(Math.min(LIMIT_PROFILES, freshFiles
         if (min > 0 && min < Long.MAX_VALUE && (fha <= 0 || min < fha)) {
             p.setFirstHeardAbout(min);
             if (_log.shouldDebug())
-                _log.debug("Fixed FirstHeardAbout time for [" + p.getPeer().toBase64().substring(0,6) + "] to " + (new Date(min)));
+                _log.debug("Fixed FirstHeardAbout time for [" + p.getPeer().toShortBase64() + "] to " + (new Date(min)));
         }
     }
 

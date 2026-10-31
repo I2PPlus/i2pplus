@@ -421,7 +421,7 @@ public class BuildHandler implements Runnable {
                     drainPendingLookups();
                     if (_log.shouldInfo()) {
                         _log.info("Lookup slot reclaimed at deadline for [" +
-                                  nextPeer.toBase64().substring(0,6) + "]");
+                                  nextPeer.toShortBase64() + "]");
                     }
                 }
             }
@@ -866,7 +866,7 @@ public class BuildHandler implements Runnable {
                     bwTier = ri.getBandwidthTier();
                 } else if (_log.shouldLog(Log.WARN)) {
                     _log.warn("No RouterInfo for a build reply -> Bandwidth tier unknown\n* Peer: [" +
-                    peer.toBase64().substring(0, 6) + "]");
+                    peer.toShortBase64() + "]");
                 }
                 if (howBad == 0) {
                     // Record that a peer of the given tier agreed or rejected
@@ -911,7 +911,7 @@ public class BuildHandler implements Runnable {
                     TunnelPeerSelector._peerCooldowns.put(peer, _context.clock().now());
                     _context.messageHistory().tunnelParticipantRejected(peer, "peer rejected after " + rtt + " with " + howBad + ": " + cfg.toString());
                     if (_log.shouldInfo()) {
-                        _log.info("Received reply from [" + peer.toBase64().substring(0,6) + "] for [MsgID " + msg.getUniqueId() +
+                        _log.info("Received reply from [" + peer.toShortBase64() + "] for [MsgID " + msg.getUniqueId() +
                                       "] -> Request rejected (Reason: " + reason + ")");
                     }
                 }
@@ -999,7 +999,7 @@ public class BuildHandler implements Runnable {
         if (from != null && _context.banlist().isBanlisted(from)) {
             // Usually won't have connected, but may have been banlisted after connect
             if (_log.shouldWarn()) {
-                _log.warn("Dropping Tunnel Request -> Previous peer [" + from.toBase64().substring(0,6) + "] is banned");
+                _log.warn("Dropping Tunnel Request -> Previous peer [" + from.toShortBase64() + "] is banned");
             }
             _context.commSystem().mayDisconnect(from);
             return -1;
@@ -1011,7 +1011,7 @@ public class BuildHandler implements Runnable {
             if (caps != null && caps.indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0) {
                     _context.statManager().addRateData("tunnel.dropTunnelFromCongestionCapability", 1);
                     if (_log.shouldWarn() && from != null) {
-                        _log.warn("Dropped request from [" + from.toBase64().substring(0,6) + "] -> Local congestion");
+                        _log.warn("Dropped request from [" + from.toShortBase64() + "] -> Local congestion");
                     }
                     // Presence-only check: this is a hot path, unvalidated lookup is sufficient
                     DatabaseEntry de = _context.netDb().lookupLocallyWithoutValidation(from);
@@ -1057,7 +1057,7 @@ public class BuildHandler implements Runnable {
                 // no records matched, or the decryption failed. bah
                 if (_log.shouldInfo()) {
                     _log.info("Request [MsgID " + (state.msg != null ? String.valueOf(state.msg.getUniqueId()) : "null") + "] could not be decrypted from [" +
-                              from.toBase64().substring(0,6) + "]");
+                              from.toShortBase64() + "]");
                 }
             }
             return -1;
@@ -1085,7 +1085,7 @@ public class BuildHandler implements Runnable {
                     _banDropsSinceWarn = 0;
                     String cause = _context.banlist().getBanCause(nextPeer);
                     _log.info("Dropping tunnel request -> Next peer ["
-                              + nextPeer.toBase64().substring(0,6) + "] is banned ("
+                              + nextPeer.toShortBase64() + "] is banned ("
                               + banSeverity(_context.banlist().getBanAge(nextPeer))
                               + (cause != null ? ", cause: " + cause : "")
                               + ")" + (suppressed > 1 ? " [" + suppressed + " rejections]" : ""));
@@ -1106,7 +1106,7 @@ public class BuildHandler implements Runnable {
             if (attachLookupKey(_lookupKeys, nextPeer, limit)) {
                 AtomicBoolean decremented = new AtomicBoolean(false);
                 if (_log.shouldInfo()) {
-                    _log.info("Looking up next hop [" + nextPeer.toBase64().substring(0,6) +
+                    _log.info("Looking up next hop [" + nextPeer.toShortBase64() +
                               "] -> Distinct lookups: " + _lookupKeys.size() + " / " + limit + req);
                 }
                 _context.netDb().lookupRouterInfo(nextPeer, new HandleReq(_context, state, req, nextPeer, decremented),
@@ -1120,7 +1120,7 @@ public class BuildHandler implements Runnable {
                     _pendingLookups.offer(new PendingLookup(state, req, nextPeer));
                     _context.statManager().addRateData("tunnel.pendingLookupQueue", _pendingLookups.size());
                     if (_log.shouldInfo()) {
-                        _log.info("Queuing pending lookup for [" + nextPeer.toBase64().substring(0,6) +
+                        _log.info("Queuing pending lookup for [" + nextPeer.toShortBase64() +
                                   "] -> Queue size: " + _pendingLookups.size() + " / Lookups: " + _lookupKeys.size() + " / " + limit + req);
                     }
                 } else {
@@ -1143,7 +1143,7 @@ public class BuildHandler implements Runnable {
             long msgId = 0;
             if (state.msg != null) {msgId = state.msg.getUniqueId();}
             if (_log.shouldDebug()) {
-                String nextHop = (nextPeer != null) ? "and next hop [" + nextPeer.toBase64().substring(0, 6) + "] is known" : "";
+                String nextHop = (nextPeer != null) ? "and next hop [" + nextPeer.toShortBase64() + "] is known" : "";
                 String fromHash = from != null ? from.toString() : "Unknown";
                 if (handleTime > 0) {
                     _log.debug(String.format(
@@ -1242,13 +1242,13 @@ public class BuildHandler implements Runnable {
                 }
                 if (_log.shouldInfo()) {
                     _log.info("Deferred lookup succeeded for [" +
-                              _nextPeer.toBase64().substring(0, 6) +
+                              _nextPeer.toShortBase64() +
                               "] -> Took: " + lookupTime + "ms");
                 }
             } else if (ri == null) {
                 if (_log.shouldInfo()) {
                     _log.info("Deferred lookup found no RouterInfo for [" +
-                              _nextPeer.toBase64().substring(0, 6) + "] -> Request left pending");
+                              _nextPeer.toShortBase64() + "] -> Request left pending");
                 }
                 if (_log.shouldDebug()) {
                     _log.debug("Request " + _state.msg.getUniqueId() +
@@ -1334,7 +1334,7 @@ public class BuildHandler implements Runnable {
                     }
                     handleReq(ri, _state, _req, _nextPeer);
                 } else if (_log.shouldInfo()) {
-                    _log.info("Lookup for [" + _nextPeer.toBase64().substring(0,6) + "] completed after timeout fired, ignoring [MsgID " +
+                    _log.info("Lookup for [" + _nextPeer.toShortBase64() + "] completed after timeout fired, ignoring [MsgID " +
                               _state.msg.getUniqueId() + "]");
                 }
             } else if (shouldRetryLookup(_retriesLeft, _state.getLookupStartTime(),
@@ -1343,7 +1343,7 @@ public class BuildHandler implements Runnable {
                                          BuildRequestor.getRequestTimeout(_context))) {
                 getContext().statManager().addRateData("tunnel.buildLookupRetry", 1);
                 if (_log.shouldInfo()) {
-                    _log.info("Retrying lookup for next hop [" + _nextPeer.toBase64().substring(0,6) +
+                    _log.info("Retrying lookup for next hop [" + _nextPeer.toShortBase64() +
                               "], " + (_retriesLeft - 1) + " left [MsgID " + _state.msg.getUniqueId() + "]");
                 }
                 // State stays unclaimed and the lookup key held — the shared
@@ -1365,12 +1365,12 @@ public class BuildHandler implements Runnable {
                                               : "within the " +
                                                 DataHelper.formatDuration(getNextHopLookupTimeout(_context)) + " budget";
                     _log.info("Lookup for next hop failed " + how + " " + _req +
-                              "\n* From: [" + (from != null ? from.toBase64().substring(0,6) : "null") +
+                              "\n* From: [" + (from != null ? from.toShortBase64() : "null") +
                               "] [MsgID " + _state.msg.getUniqueId() + "]");
                 }
                 _context.messageHistory().tunnelRejected(_state.fromHash, new TunnelId(_req.readReceiveTunnelId()), _nextPeer, "lookup fail");
             } else if (_log.shouldInfo()) {
-                _log.info("Lookup for [" + _nextPeer.toBase64().substring(0,6) + "] completed after timeout fired, ignoring [MsgID " +
+                _log.info("Lookup for [" + _nextPeer.toShortBase64() + "] completed after timeout fired, ignoring [MsgID " +
                           _state.msg.getUniqueId() + "]");
             }
 
@@ -1428,7 +1428,7 @@ public class BuildHandler implements Runnable {
             long age = System.currentTimeMillis() - pending.queuedTime;
             if (age > maxAge) {
                 if (_log.shouldInfo()) {
-                    _log.info("Discarding stale pending lookup for [" + pending.nextPeer.toBase64().substring(0,6) + "] after " + age + "ms");
+                    _log.info("Discarding stale pending lookup for [" + pending.nextPeer.toShortBase64() + "] after " + age + "ms");
                 }
                 _context.statManager().addRateData("tunnel.dropLookupStale", 1);
                 continue;
@@ -1448,7 +1448,7 @@ public class BuildHandler implements Runnable {
             }
             AtomicBoolean decremented = new AtomicBoolean(false);
             if (_log.shouldInfo()) {
-                _log.info("Draining pending lookup for [" + pending.nextPeer.toBase64().substring(0,6) +
+                _log.info("Draining pending lookup for [" + pending.nextPeer.toShortBase64() +
                           "] -> Distinct lookups: " + _lookupKeys.size() + " / " + limit);
             }
             _context.netDb().lookupRouterInfo(pending.nextPeer,
@@ -1535,8 +1535,8 @@ public class BuildHandler implements Runnable {
         if (from == null && state.from != null) {from = state.from.calculateHash();}
         final boolean shouldThrottle = _context.getBooleanPropertyDefaultTrue(PROP_SHOULD_THROTTLE);
         final boolean shouldLog = _log.shouldWarn();
-        String fromPeer = (shouldLog && from != null ? from.toBase64().substring(0,6) : "");
-        String nextHop = (shouldLog && nextPeer != null ? nextPeer.toBase64().substring(0,6) : "");
+        String fromPeer = (shouldLog && from != null ? from.toShortBase64() : "");
+        String nextHop = (shouldLog && nextPeer != null ? nextPeer.toShortBase64() : "");
         // Warning! from could be null, but should only happen if we will be IBGW and it came from us as OBEP
         if (isInGW && isOutEnd) {
             _context.statManager().addRateData("tunnel.rejectHostile", 1);
@@ -1961,7 +1961,7 @@ public class BuildHandler implements Runnable {
                         if (fh == null && from != null) {fh = from.calculateHash();}
                         if (fh != null && _requestThrottler.shouldThrottle(fh)) {
                             if (_log.shouldWarn()) {
-                                _log.warn("Dropping Tunnel Request [ID: " + reqId + "] -> Previous hop [" + fh.toBase64().substring(0,6) + "] is being throttled");
+                                _log.warn("Dropping Tunnel Request [ID: " + reqId + "] -> Previous hop [" + fh.toShortBase64() + "] is being throttled");
                             }
                             _context.statManager().addRateData("tunnel.dropReqThrottle", 1);
                             _context.throttle().setTunnelStatus("[rejecting/transit]" + _x("Transit request throttle"));

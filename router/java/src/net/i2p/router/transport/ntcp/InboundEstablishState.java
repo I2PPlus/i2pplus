@@ -291,7 +291,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             // Already banned - don't log warning (just drop connection silently)
             if (ip != null) {_context.blocklist().add(ip);}
             if (getVersion() < 2) {
-                fail("Banlisting incompatible Router [" + aliceHash.toBase64().substring(0,6) + "] -> No NTCP2 support");
+                fail("Banlisting incompatible Router [" + aliceHash.toShortBase64() + "] -> No NTCP2 support");
             }
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
             return false;
@@ -321,7 +321,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             _peerSkew = 0;
             if (diff != 0) {
                 _log.logAlways(Log.WARN, "NTP failure, NTCP adjusted clock by " + DataHelper.formatDuration(diff) +
-                                         " -> Source Router [" + aliceHash.toBase64().substring(0,6) + "]");
+                                         " -> Source Router [" + aliceHash.toShortBase64() + "]");
             }
         } else if (!skewOK) {
             // Only banlist if we know what time it is
@@ -332,12 +332,12 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                                              "" + _x("Excessive clock skew ({0})"));
             _transport.setLastBadSkew(_peerSkew);
             if (_log.shouldWarn()) {
-                _log.warn("Excessive clock skew (" + diff + "ms) from [" + aliceHash.toBase64().substring(0,6) + "]");
+                _log.warn("Excessive clock skew (" + diff + "ms) from [" + aliceHash.toShortBase64() + "]");
             }
             _msg3p2FailReason = NTCPConnection.REASON_SKEW;
             return false;
         } else if (_log.shouldDebug()) {
-            _log.debug(prefix() + "Clock skew (" + diff + "ms) from [" + aliceHash.toBase64().substring(0,6) + "]");
+            _log.debug(prefix() + "Clock skew (" + diff + "ms) from [" + aliceHash.toShortBase64() + "]");
         }
         return true;
     }
@@ -364,7 +364,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             Hash aliceHash = alice.getHash();
             if (_log.shouldInfo()) {
                 _log.info("[NTCP] Dropping inbound connection for network " + aliceID +
-                          " [" + aliceHash.toBase64().substring(0,6) + "] -> Wrong network identifier");
+                          " [" + aliceHash.toShortBase64() + "] -> Wrong network identifier");
             }
             // So next time we will not accept the con from this IP, rather than doing the whole handshake
             byte[] ip = _con.getRemoteIP();
@@ -867,7 +867,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                                              null, null, _context.clock().now() + 4*60*60*1000L);
             _context.commSystem().forceDisconnect(h, "Invalid NTCP address");
             if (_log.shouldWarn() && !isBanned) {
-                _log.warn("[NTCP] Banning for 4h and disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
+                _log.warn("[NTCP] Banning for 4h and disconnecting from Router [" + h.toShortBase64() + "]" +
                           " -> Invalid address");
             }
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
@@ -909,10 +909,10 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             }
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
             if (ban && _log.shouldWarn() && !isBanned) {
-                _log.warn("[NTCP] Banning for 24h and disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
+                _log.warn("[NTCP] Banning for 24h and disconnecting from Router [" + h.toShortBase64() + "]" +
                           " -> Invalid version " + version + " / " + bw + (unreachable ? "U" : ""));
             } else if (!ban && _log.shouldInfo()) {
-                _log.info("[NTCP] Disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
+                _log.info("[NTCP] Disconnecting from Router [" + h.toShortBase64() + "]" +
                           " -> Invalid version " + version + " / " + bw + (unreachable ? "U" : ""));
             }
             _context.commSystem().forceDisconnect(h, "Invalid version (" + version + ")");
@@ -925,7 +925,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             _context.banlist().banlistRouter(h, reason, null, null, now + 60*60*1000L);
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
             if (_log.shouldInfo() && !isBanned)
-                _log.info("[NTCP] Banning for 1h and disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
+                _log.info("[NTCP] Banning for 1h and disconnecting from Router [" + h.toShortBase64() + "]" +
                           " -> " + version + " / " + bw + (unreachable ? "U" : ""));
             _context.commSystem().forceDisconnect(h, "Old and slow (" + version + ")");
             throw new DataFormatException("Old and slow: " + h);
@@ -944,10 +944,10 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             }
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
             if (ban && _log.shouldWarn() && !isBanned) {
-                _log.warn("[NTCP] Banning for 24h and disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
+                _log.warn("[NTCP] Banning for 24h and disconnecting from Router [" + h.toShortBase64() + "]" +
                           " -> Publishing both R and U caps");
             } else if (!ban && _log.shouldInfo()) {
-                _log.info("[NTCP] Disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
+                _log.info("[NTCP] Disconnecting from Router [" + h.toShortBase64() + "]" +
                           " -> Publishing both R and U caps");
             }
             _context.commSystem().forceDisconnect(h, "Invalid published capabilities (RU)");
@@ -960,11 +960,11 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 FloodfillNetworkDatabaseFacade fndf = (FloodfillNetworkDatabaseFacade) _context.netDb();
                 if (fndf.floodConditional(ri)) {
                     if (_log.shouldDebug()) {
-                        _log.debug("Flooded RouterInfo [" + h.toBase64().substring(0,6) + "]");
+                        _log.debug("Flooded RouterInfo [" + h.toShortBase64() + "]");
                     }
                 } else {
                     if (_log.shouldInfo()) {
-                        _log.info("Flood request declined for RouterInfo [" + h.toBase64().substring(0,6) + "]");
+                        _log.info("Flood request declined for RouterInfo [" + h.toShortBase64() + "]");
                     }
                 }
             }
@@ -974,7 +974,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             // keep only the cause, the log line below names the router already
             reason = storeFailCause(iae);
             if (_log.shouldInfo()) {
-                _log.info("[NTCP] RouterInfo store failed for [" + h.toBase64().substring(0,6) + "]: " + reason);
+                _log.info("[NTCP] RouterInfo store failed for [" + h.toShortBase64() + "]: " + reason);
             }
             if (_msg3p2FailReason <= 0) {_msg3p2FailReason = NTCPConnection.REASON_MSG3;}
             throw new DataFormatException("RouterInfo rejected: " + reason, iae);

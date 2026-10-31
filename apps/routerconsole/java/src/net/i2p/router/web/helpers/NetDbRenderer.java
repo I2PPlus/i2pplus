@@ -1110,7 +1110,7 @@ class NetDbRenderer {
         } else if (out != null && out.getDestinationNickname() != null) {
             return out.getDestinationNickname();
         }
-        return key.toBase64().substring(0,6);
+        return key.toShortBase64();
     }
 
     /**
@@ -2036,7 +2036,7 @@ class NetDbRenderer {
             }
         } catch (Throwable t) {
             if (_log.shouldWarn())
-                _log.warn("Error rendering RouterInfo [" + ri.getHash().toBase64().substring(0, 6) + ']', t);
+                _log.warn("Error rendering RouterInfo [" + ri.getHash().toShortBase64() + ']', t);
             sb.append("<!-- error rendering ").append(ri.getHash().toBase64()).append(" -->\n");
         }
     }

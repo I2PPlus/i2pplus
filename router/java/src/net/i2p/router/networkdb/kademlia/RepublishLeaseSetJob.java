@@ -1091,7 +1091,7 @@ public class RepublishLeaseSetJob extends JobImpl {
      * @return the first eight base32 characters
      */
     private String shortHash() {
-        return _dest.toBase32().substring(0, 8);
+        return _dest.toShortBase32();
     }
 
     /** Cleanup stale entries. */
@@ -1228,7 +1228,7 @@ public class RepublishLeaseSetJob extends JobImpl {
                 Long lastNotRequeueLog = _lastNotRequeueLogTime.get(_ls.getHash());
                 if (_log.shouldInfo() && (lastNotRequeueLog == null || (now - lastNotRequeueLog > 10L * 1000))) {
                     _log.info("Not requeueing LeaseSet" + name + " [" +
-                              _ls.getHash().toBase32().substring(0, 8) +
+                              _ls.getHash().toShortBase32() +
                               "] -> Newer LeaseSet exists locally");
                     _lastNotRequeueLogTime.put(_ls.getHash(), now);
                 }
@@ -1249,7 +1249,7 @@ public class RepublishLeaseSetJob extends JobImpl {
                 if (globalCount / 3 > MAX_FLOODFILL_VERIFICATIONS) {
                     if (_log.shouldWarn()) {
                         _log.warn("Floodfill verification maxed out" + name + " [" +
-                                  _ls.getHash().toBase32().substring(0, 8) +
+                                  _ls.getHash().toShortBase32() +
                                   "] -> Falling back to retry directly");
                     }
                     _lookupInProgress.set(false);
@@ -1258,7 +1258,7 @@ public class RepublishLeaseSetJob extends JobImpl {
                 }
                 if (_log.shouldInfo() && (lastVerifyLog == null || (now - lastVerifyLog > 10L * 1000))) {
                     _log.info("Verifying LeaseSet publication" + name + " [" +
-                              _ls.getHash().toBase32().substring(0, 8) + "] via floodfill...");
+                              _ls.getHash().toShortBase32() + "] via floodfill...");
                     _lastVerifyLogTime.put(_ls.getHash(), now);
                 }
                 cleanupStaleEntries();
@@ -1353,6 +1353,6 @@ public class RepublishLeaseSetJob extends JobImpl {
             TunnelPoolSettings out = getContext().tunnelManager().getOutboundSettings(d.calculateHash());
             name = (out != null ? out.getDestinationNickname() : null);
         }
-        return name != null ? name : "[" + d.calculateHash().toBase32().substring(0,8) + "]";
+        return name != null ? name : "[" + d.calculateHash().toShortBase32() + "]";
     }
 }

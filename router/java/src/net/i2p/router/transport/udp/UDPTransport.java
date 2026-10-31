@@ -1548,7 +1548,7 @@ public class UDPTransport extends TransportImpl {
             inboundRecent = _lastInboundIPv6 + ALLOW_IP_CHANGE_INTERVAL > _context.clock().now();
         if (_log.shouldInfo())
             _log.info("External address received: " + Addresses.toString(ourIP, ourPort) + " from ["
-                      + from.toBase64().substring(0,6) + "]\n* Address: isValid? " + isValid + ", explicitSpecified? " + explicitSpecified
+                      + from.toShortBase64() + "]\n* Address: isValid? " + isValid + ", explicitSpecified? " + explicitSpecified
                       + ", receivedInboundRecent? " + inboundRecent + " Status: " + _reachabilityStatus);
 
         if (explicitSpecified)
@@ -1563,12 +1563,12 @@ public class UDPTransport extends TransportImpl {
             // if the port is the only issue, don't call markUnreachable()
             if (ourPort < 1024 || ourPort > 65535 || !isValid(ourIP)) {
                 if (_log.shouldWarn()) {
-                    _log.warn("[" + from.toBase64().substring(0,6) + "] reported our address as invalid -> Marking it unreachable"
+                    _log.warn("[" + from.toShortBase64() + "] reported our address as invalid -> Marking it unreachable"
                               + "\n* Address: " + Addresses.toString(ourIP, ourPort));
                 }
             markUnreachable(from);
             } else {
-                _log.logAlways(Log.WARN, "[" + from.toBase64().substring(0,6) + "] reported our port as invalid: "
+                _log.logAlways(Log.WARN, "[" + from.toShortBase64() + "] reported our port as invalid: "
                                          + ourPort
                                          + "\n* Check the NAT/firewall configuration, the IANA recommended dynamic outside port range is 49152-65535");
             }
@@ -1596,7 +1596,7 @@ public class UDPTransport extends TransportImpl {
                     return;
                 if (!eq(_lastOurIPv4, _lastOurPortv4, ourIP, ourPort)) {
                     if (_log.shouldInfo())
-                        _log.info("Router [" + from.toBase64().substring(0,6) + "] told us we have a new IP/port ("
+                        _log.info("Router [" + from.toShortBase64() + "] told us we have a new IP/port ("
                                   + Addresses.toString(ourIP, ourPort) + ") -> Waiting for a second opinion...");
                 } else {
                     if (!DataHelper.eq(_lastFromIPv4, 0, hisIP, 0, 2)) {
@@ -1613,7 +1613,7 @@ public class UDPTransport extends TransportImpl {
                     return;
                 if (!eq(_lastOurIPv6, _lastOurPortv6, ourIP, ourPort)) {
                     if (_log.shouldInfo())
-                        _log.info("Router [" + from.toBase64().substring(0,6) + "] told us we have a new IP/port ("
+                        _log.info("Router [" + from.toShortBase64() + "] told us we have a new IP/port ("
                                   + Addresses.toString(ourIP, ourPort) + ") -> Waiting for a second opinion...");
                 } else {
                     if (!DataHelper.eq(_lastFromIPv6, 0, hisIP, 0, 4)) {
@@ -1629,7 +1629,7 @@ public class UDPTransport extends TransportImpl {
         }
         if (changeIt) {
             if (_log.shouldInfo())
-                _log.info("Routers [" + from.toBase64().substring(0,6) + "] and [" + lastFrom.toBase64().substring(0,6) +
+                _log.info("Routers [" + from.toShortBase64() + "] and [" + lastFrom.toShortBase64() +
                           "] agree our address is " + Addresses.toString(ourIP, ourPort));
             if (_haveUPnP || isIPv6)
                 ourPort = 0;
@@ -2191,7 +2191,7 @@ public class UDPTransport extends TransportImpl {
                 // leak fix, remove old address
                 if (_log.shouldInfo())
                     _log.info("Changed address for [" +
-                              remotePeer.toBase64().substring(0,6) + "]" +
+                              remotePeer.toShortBase64() + "]" +
                               " from " + oldID + " to " + remoteId);
                 PeerState oldPeer2 = _peersByRemoteHost.remove(oldID);
                 // different ones in the two maps? shouldn't happen
@@ -2333,7 +2333,7 @@ public class UDPTransport extends TransportImpl {
                             sendDestroy(peer, SSU2Util.REASON_NETID);
                         dropPeer(peerHash, false, "Not in our network");
                         if (_log.shouldInfo())
-                            _log.info("Not in our network: [" + peerHash.toBase64().substring(0,6) + ']');
+                            _log.info("Not in our network: [" + peerHash.toShortBase64() + ']');
                         return;
                     } // else will be invalidated and handled by netdb
                 }
@@ -3981,7 +3981,7 @@ public class UDPTransport extends TransportImpl {
                 }
                 String msg = "[SSU2] Forcing immediate disconnection of " +
                              banStatus +
-                             "Router [" + peer.toBase64().substring(0,6) + "]" + reasonStr;
+                             "Router [" + peer.toShortBase64() + "]" + reasonStr;
                 // A ban or blocklist action is an event worth a warning;
                 // a plain forced disconnect is routine churn.
                 if (banStatus.isEmpty()) {

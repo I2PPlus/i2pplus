@@ -132,13 +132,13 @@ class ContactDrivenRefreshJob extends JobImpl {
                 // We have a (stale) RouterInfo — use DirectLookupJob to ask the peer directly
                 _facade.probeStalePeer(peer, ri);
                 if (_log.shouldInfo()) {
-                    _log.info("Contact-driven refresh: [" + peer.toBase64().substring(0, 6)
+                    _log.info("Contact-driven refresh: [" + peer.toShortBase64()
                               + "] stale RouterInfo, published " + new java.util.Date(ri.getPublished()));
                 }
             } else {
                 // No RI at all — full Kademlia search
                 if (_log.shouldInfo()) {
-                    _log.info("Contact-driven refresh: [" + peer.toBase64().substring(0, 6)
+                    _log.info("Contact-driven refresh: [" + peer.toShortBase64()
                               + "] no RouterInfo -> Starting search");
                 }
                 _facade.search(peer, null, null,

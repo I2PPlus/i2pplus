@@ -378,7 +378,7 @@ class SearchState {
             if (_firstLeaseSetTime == 0) {
                 _firstLeaseSetTime = leaseDate;
                 if (_log.shouldInfo()) {
-                    _log.info("First LeaseSet response from [" + peer.toBase64().substring(0,6)
+                    _log.info("First LeaseSet response from [" + peer.toShortBase64()
                               + "] with latest lease date: " + leaseDate);
                 }
             }
@@ -427,7 +427,7 @@ class SearchState {
             }
             _initialResponseCount.incrementAndGet();
             if (_log.shouldInfo()) {
-                _log.info("Initial LeaseSet response " + _initialResponseCount + " from [" + peer.toBase64().substring(0,6)
+                _log.info("Initial LeaseSet response " + _initialResponseCount + " from [" + peer.toShortBase64()
                           + "] with latest lease date: " + ls.getLatestLeaseDate());
             }
             _leaseSetResponses.put(peer, ls);
@@ -521,7 +521,7 @@ class SearchState {
     public String toString() {
         boolean debug = _log.shouldDebug();
         StringBuilder buf = new StringBuilder(256);
-        buf.append(" Search for [").append(_searchKey.toBase64().substring(0,6)).append("]");
+        buf.append(" Search for [").append(_searchKey.toShortBase64()).append("]");
         if (_successfulPeers.size() <= 0) {buf.append(" in progress...");}
         else {buf.append(" completed");}
         if (_aborted) {buf.append(" aborted");}
@@ -532,7 +532,7 @@ class SearchState {
                 synchronized (_attemptedPeers) {
                     buf.append(_attemptedPeers.size()).append(' ');
                     for (Hash peer : _attemptedPeers) {
-                        buf.append("[").append(peer.toBase64().substring(0,6)).append("] ");
+                        buf.append("[").append(peer.toShortBase64()).append("] ");
                     }
                 }
             }
@@ -541,7 +541,7 @@ class SearchState {
                 synchronized (_pendingPeers) {
                     buf.append(_pendingPeers.size()).append(' ');
                     for (Hash peer : _pendingPeers) {
-                        buf.append("[").append(peer.toBase64().substring(0,6)).append("] ");
+                        buf.append("[").append(peer.toShortBase64()).append("] ");
                     }
                 }
             }
@@ -550,7 +550,7 @@ class SearchState {
                 synchronized (_failedPeers) {
                     buf.append(_failedPeers.size()).append(' ');
                     for (Hash peer : _failedPeers) {
-                        buf.append("[").append(peer.toBase64().substring(0,6)).append("] ");
+                        buf.append("[").append(peer.toShortBase64()).append("] ");
                     }
                 }
             }
@@ -559,7 +559,7 @@ class SearchState {
                 synchronized (_successfulPeers) {
                     buf.append(_successfulPeers.size()).append(' ');
                     for (Hash peer : _successfulPeers) {
-                        buf.append("[").append(peer.toBase64().substring(0,6)).append("] ");
+                        buf.append("[").append(peer.toShortBase64()).append("] ");
                     }
                 }
             }

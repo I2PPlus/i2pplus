@@ -981,7 +981,7 @@ public class TunnelDispatcher implements Service {
         TunnelParticipant participant = _participants.get(msg.getTunnelIdObj());
         if (participant != null) {
             if (_log.shouldDebug())
-                _log.debug("Dispatching [MsgID " + msg.getUniqueId() + "] to " + participant + " from [" + recvFrom.toBase64().substring(0, 6) + "]");
+                _log.debug("Dispatching [MsgID " + msg.getUniqueId() + "] to " + participant + " from [" + recvFrom.toShortBase64() + "]");
             _context.messageHistory().tunnelDispatched(msg.getUniqueId(), msg.getTunnelId(), "participant");
             participant.dispatch(msg, recvFrom);
             _dispatchParticipantStat.addData(1);
@@ -989,7 +989,7 @@ public class TunnelDispatcher implements Service {
             OutboundTunnelEndpoint endpoint = _outboundEndpoints.get(msg.getTunnelIdObj());
             if (endpoint != null) {
                 if (_log.shouldDebug())
-                    _log.debug("Dispatch where we are the Outbound Endpoint:\n* " + endpoint + msg + " from [" + recvFrom.toBase64().substring(0, 6) + "]");
+                    _log.debug("Dispatch where we are the Outbound Endpoint:\n* " + endpoint + msg + " from [" + recvFrom.toShortBase64() + "]");
                 _context.messageHistory().tunnelDispatched(msg.getUniqueId(), msg.getTunnelId(), "outbound endpoint");
                 endpoint.dispatch(msg, recvFrom);
                 _dispatchEndpointStat.addData(1);

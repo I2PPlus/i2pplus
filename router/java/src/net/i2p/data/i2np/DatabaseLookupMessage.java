@@ -678,8 +678,8 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
      * @return the bracketed truncation, never null
      */
     static String shortKey(Type type, Hash key) {
-        return type == Type.LS ? '[' + key.toBase32().substring(0, 8) + ']'
-                               : '[' + key.toBase64().substring(0, 6) + ']';
+        return type == Type.LS ? '[' + key.toShortBase32() + ']'
+                               : '[' + key.toShortBase64() + ']';
     }
 
     /**

@@ -499,7 +499,7 @@ public class RequestThrottler {
      * @return true if the request should be throttled (denied), false otherwise
      */
     boolean shouldThrottle(Hash h) {
-        String routerId = h.toBase64().substring(0, 6);
+        String routerId = h.toShortBase64();
         // Presence-only lookup: this runs on the hottest path in the router,
         // and a background revalidation must neither fire lookups nor skip
         // the capability checks below.

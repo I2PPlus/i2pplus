@@ -66,7 +66,7 @@ class IterativeLookupSelector implements MessageSelector {
             if (_search.getKey().equals(dsm.getKey())) {
                 _matchFound = true;
                 if (_log.shouldDebug())
-                    _log.debug("DbStoreMsg match for [" + _search.getKey().toBase64().substring(0, 6) + "] -> " + this);
+                    _log.debug("DbStoreMsg match for [" + _search.getKey().toShortBase64() + "] -> " + this);
                 return true;
             }
         } else if (type == DatabaseSearchReplyMessage.MESSAGE_TYPE) {
@@ -75,8 +75,8 @@ class IterativeLookupSelector implements MessageSelector {
                 // Got a netDb reply pointing us at other floodfills...
                 if (_log.shouldInfo()) {
                     Hash from = dsrm.getFromHash();
-                    _log.info("Processing search reply from [" + from.toBase64().substring(0,6) + "] via IterativeLookup for [" +
-                              _search.getKey().toBase64().substring(0,6) + "]");
+                    _log.info("Processing search reply from [" + from.toShortBase64() + "] via IterativeLookup for [" +
+                              _search.getKey().toShortBase64() + "]");
                     if (_log.shouldDebug()) _log.debug("Search reply: " + this);
                 }
 

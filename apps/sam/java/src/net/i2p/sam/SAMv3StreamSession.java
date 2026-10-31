@@ -276,7 +276,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
          */
         public void run() {
             SAMBridge bridge = handler.getBridge();
-            String hashPrefix = dest.calculateHash().toBase64().substring(0,6);
+            String hashPrefix = dest.calculateHash().toShortBase64();
             if (_log.shouldInfo())
                 _log.info("STREAM CONNECT -> Starting on thread " + Thread.currentThread().getName() +
                           " to [" + hashPrefix + "] (Timeout: " +

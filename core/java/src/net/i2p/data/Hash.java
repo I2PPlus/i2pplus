@@ -47,7 +47,8 @@ import java.io.InputStream;
  * <ul>
  * <li>The data cannot be reassigned once set, so a Hash that is safely
  * published (constructed and then handed to other threads) can be shared
- * freely; the derived {@code _base64ed}, {@code _base32ed} and
+ * freely; the derived {@code _base64ed}, {@code _base32ed},
+ * {@code _shortBase64ed}, {@code _shortBase32ed} and
  * {@code _cachedHashCode} fields are volatile. {@link #_data} itself is
  * neither final nor volatile, so a
  * Hash built by a constructor and published through an unsynchronized
@@ -64,6 +65,10 @@ public class Hash extends SimpleDataStructure {
     private volatile String _base64ed;
     /** Cache of the Base32 form. */
     private volatile String _base32ed;
+    /** Cache of the 6-character Base64 prefix that names a router. @since 0.9.72+ */
+    private volatile String _shortBase64ed;
+    /** Cache of the 8-character Base32 prefix that names a destination. @since 0.9.72+ */
+    private volatile String _shortBase32ed;
     /** Cache of the computed hash code. */
     private volatile int _cachedHashCode;
 
@@ -153,6 +158,8 @@ public class Hash extends SimpleDataStructure {
         super.setData(data);
         _base64ed = null;
         _base32ed = null;
+        _shortBase64ed = null;
+        _shortBase32ed = null;
         _cachedHashCode = super.hashCode();
     }
 
@@ -162,6 +169,8 @@ public class Hash extends SimpleDataStructure {
         super.readBytes(in);
         _base64ed = null;
         _base32ed = null;
+        _shortBase64ed = null;
+        _shortBase32ed = null;
         _cachedHashCode = super.hashCode();
     }
 
@@ -196,6 +205,48 @@ public class Hash extends SimpleDataStructure {
         if (rv == null) {
             rv = Base32.encode(_data) + ".b32.i2p";
             _base32ed = rv;
+        }
+        return rv;
+    }
+
+    /**
+     * The first six characters of the Base64 form, the house form for naming a
+     * router in a log line. Cached alongside {@link #toBase64()}, so a hot path
+     * pays nothing after the first call, where
+     * {@code toBase64().substring(0, 6)} allocates on every call.
+     *
+     * @return the 6-character prefix, or null if the data is not set
+     * @since 0.9.72+
+     */
+    public String toShortBase64() {
+        String rv = _shortBase64ed;
+        if (rv == null) {
+            String s = toBase64();
+            if (s == null) return null;
+            rv = s.substring(0, 6);
+            _shortBase64ed = rv;
+        }
+        return rv;
+    }
+
+    /**
+     * The first eight characters of the Base32 form, the house form for naming
+     * a destination in a log line, and the prefix of its {@code .b32.i2p}
+     * address. Cached like {@link #toBase32()}, so a hot path pays nothing
+     * after the first call, where {@code toBase32().substring(0, 8)} allocates
+     * on every call.
+     *
+     * @return the 8-character prefix, without the {@code .b32.i2p} suffix, or
+     *         null if the data is not set
+     * @since 0.9.72+
+     */
+    public String toShortBase32() {
+        String rv = _shortBase32ed;
+        if (rv == null) {
+            String s = toBase32();
+            if (s == null) return null;
+            rv = s.substring(0, 8);
+            _shortBase32ed = rv;
         }
         return rv;
     }

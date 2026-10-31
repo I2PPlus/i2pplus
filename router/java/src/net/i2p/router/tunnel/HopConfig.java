@@ -270,13 +270,13 @@ public class HopConfig {
      * @since 0.9.71+
      */
     public String toShortString() {
-        return _sendTo != null ? "to [" + _sendTo.toBase64().substring(0,6) + ']' : "local hop";
+        return _sendTo != null ? "to [" + _sendTo.toShortBase64() + ']' : "local hop";
     }
 
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(256);
-        buf.append(_sendTo != null ? " to: [" + _sendTo.toBase64().substring(0,6) + "]" : "");
+        buf.append(_sendTo != null ? " to: [" + _sendTo.toShortBase64() + "]" : "");
         int messagesProcessed = getProcessedMessagesCount();
         if (messagesProcessed > 0) {
             if (messagesProcessed > 1) {buf.append(" (").append(messagesProcessed).append(" messages processed)");}

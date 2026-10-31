@@ -492,7 +492,7 @@ class PeerManager {
      */
     public void setCapabilities(Hash peer, String caps) {
         if (_log.shouldDebug()) {
-            _log.debug("Capabilities for [" + peer.toBase64().substring(0,6) + "] set to " + caps.replace("XO", "X").replace("PO", "P"));
+            _log.debug("Capabilities for [" + peer.toShortBase64() + "] set to " + caps.replace("XO", "X").replace("PO", "P"));
         }
 
         caps = caps.toLowerCase(Locale.US);
@@ -532,7 +532,7 @@ class PeerManager {
      * @param peer the router to drop from every capability bucket
      */
     public void removeCapabilities(Hash peer) {
-        if (_log.shouldDebug()) {_log.debug("Removing capabilities from [" + peer.toBase64().substring(0,6) + "]");}
+        if (_log.shouldDebug()) {_log.debug("Removing capabilities from [" + peer.toShortBase64() + "]");}
         String oldCaps = _capabilitiesByPeer.remove(peer);
         if (oldCaps != null) {
             for (int i = 0; i < oldCaps.length(); i++) {

@@ -190,7 +190,7 @@ class RequestLeaseSetJob extends JobImpl {
         if (requested.getLeaseCount() <= 0) {
             if (_log.shouldError()) {
                 _log.error("Requested LeaseSet has no leases for [" +
-                           dest.calculateHash().toBase32().substring(0, 8) +
+                           dest.calculateHash().toShortBase32() +
                            "] — failing request without contacting the client");
             }
             failEarlyRequest("Requested LeaseSet has no leases");
@@ -200,7 +200,7 @@ class RequestLeaseSetJob extends JobImpl {
         if (id == null) {
             if (_log.shouldWarn())
                 _log.warn("No SessionId for destination [" +
-                          dest.calculateHash().toBase32().substring(0,8) +
+                          dest.calculateHash().toShortBase32() +
                           "] in RequestLeaseSetJob");
             failEarlyRequest("No SessionId for destination");
             return;

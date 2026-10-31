@@ -275,7 +275,7 @@ public class CountryLookup {
         if (ip == null && ri != null) {ip = getIP(ri);}
         if (ip == null && ri != null) {
             if (_log.shouldDebug()) {
-                _log.debug("Cannot identify country for Router [" + peer.toBase64().substring(0, 6) + "] -> IP address not found");
+                _log.debug("Cannot identify country for Router [" + peer.toShortBase64() + "] -> IP address not found");
             }
             return "xx";
         }

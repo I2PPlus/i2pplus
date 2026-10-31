@@ -3712,7 +3712,7 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
                 if (peer != null) {
                     ctx.profileOrganizer().demoteIfHighLatency(peer);
                     if (_log.shouldInfo()) {
-                        _log.info("Demoting [" + peer.toBase64().substring(0,6) +
+                        _log.info("Demoting [" + peer.toShortBase64() +
                                   "] due to high latency (" + ms + "ms) on " + _cfg);
                     }
                 }
@@ -4130,7 +4130,7 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
         getContext().statManager().addRateData("tunnel.testFailedLocalHopUnreachable", 1);
         if (_log.shouldDebug())
             _log.debug("Tunnel test failed with no session to local hop [" +
-                       localHop.toBase64().substring(0,6) + "] -> " + _cfg);
+                       localHop.toShortBase64() + "] -> " + _cfg);
     }
 
     /**
@@ -4169,7 +4169,7 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
                 if (_log.shouldInfo()) {
                     _log.info("Tunnel test failed -> Partner not usable"
                               + (_partnerFallback ? " * Exploratory fallback" : "")
-                              + "\n* Partner: [" + partner.getGateway().toBase64().substring(0, 6) + ']'
+                              + "\n* Partner: [" + partner.getGateway().toShortBase64() + ']'
                               + " * Deferring the test of " + _cfg
                               + "\n* Deferrals: " + _partnerDeferrals + " of " + MAX_PARTNER_DEFERRALS);
                 }

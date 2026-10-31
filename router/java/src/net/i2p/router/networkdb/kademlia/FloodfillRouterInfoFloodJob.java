@@ -69,7 +69,7 @@ class FloodfillRouterInfoFloodJob extends JobImpl {
             outMsg = new OutNetMessage(getContext(), dsm, getContext().clock().now()+10*1000, OutNetMessage.PRIORITY_MY_NETDB_STORE, nextPeerInfo);
             getContext().outNetMessagePool().add(outMsg); // Whoosh!
             if (_log.shouldDebug()) {
-                _log.logAlways(Log.DEBUG, "Sending our RouterInfo to [" + nextPeerInfo.getHash().toBase64().substring(0,6) + "]");
+                _log.logAlways(Log.DEBUG, "Sending our RouterInfo to [" + nextPeerInfo.getHash().toShortBase64() + "]");
             }
         }
     }

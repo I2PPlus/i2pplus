@@ -507,8 +507,8 @@ public abstract class TransportImpl implements Transport {
         if (msg.getTarget() == null) return; // early exit if no target
 
         final boolean debug = _log.shouldDebug();
-        String peerHash = debug ? msg.getTarget().getIdentity().calculateHash().toBase64().substring(0,6) : null;
-        String routerHash = debug ? _context.routerHash().toBase64().substring(0,6) : null;
+        String peerHash = debug ? msg.getTarget().getIdentity().calculateHash().toShortBase64() : null;
+        String routerHash = debug ? _context.routerHash().toShortBase64() : null;
         String style = getStyle();
         long now = _context.clock().now();
 
@@ -710,8 +710,8 @@ public abstract class TransportImpl implements Transport {
             buf.append("Received ").append(inMsg.getClass().getSimpleName()).append(" [MsgID ").append(inMsg.getUniqueId()).append("]")
                .append(" (").append(bytesReceived).append(" bytes)").append(" in ").append(msToReceive).append("ms")
                .append(" from [");
-            if (remoteIdentHash != null) {buf.append(remoteIdentHash.toBase64().substring(0,6)).append("]");}
-            else if (remoteIdent != null) {buf.append(remoteIdent.getHash().toBase64().substring(0,6)).append("]");}
+            if (remoteIdentHash != null) {buf.append(remoteIdentHash.toShortBase64()).append("]");}
+            else if (remoteIdent != null) {buf.append(remoteIdent.getHash().toShortBase64()).append("]");}
             else {buf.append("unknown]");}
             _log.log(level, buf.toString());
         }
@@ -1219,7 +1219,7 @@ public abstract class TransportImpl implements Transport {
          */
         if (_context.banlist().isBanlistedForever(peer)) {
             if (_log.shouldWarn()) {
-                _log.warn("Unbanning [" + peer.toBase64().substring(0,6) + "] -> Peer is now reachable");
+                _log.warn("Unbanning [" + peer.toShortBase64() + "] -> Peer is now reachable");
             }
             _context.banlist().unbanlistRouter(peer);
         }
@@ -1302,7 +1302,7 @@ public abstract class TransportImpl implements Transport {
             Long now = Long.valueOf(_context.clock().now());
             _wasUnreachableEntries.put(peer, now);
             if (_log.shouldDebug()) {
-                _log.debug("[" + this.getStyle() + "] -> Adding [" + peer.toBase64().substring(0,6) + "] to the unreachable list");
+                _log.debug("[" + this.getStyle() + "] -> Adding [" + peer.toShortBase64() + "] to the unreachable list");
             }
         } else {_wasUnreachableEntries.remove(peer);}
     }

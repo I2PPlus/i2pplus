@@ -363,7 +363,7 @@ public class PeerTestJob extends JobImpl {
                 if (data.routerInfo != null) {
                     peers.add(data.routerInfo);
                     if (_log.shouldDebug()) {
-                        _log.debug("Testing priority peer: [" + peer.toBase64().substring(0, 6) + "]");
+                        _log.debug("Testing priority peer: [" + peer.toShortBase64() + "]");
                     }
                 }
             }
@@ -464,7 +464,7 @@ public class PeerTestJob extends JobImpl {
 
         TunnelId outTunnelId = outTunnel.getSendTunnelId(0);
 
-        String shortHash = peer.getIdentity().getHash().toBase64().substring(0, 6);
+        String shortHash = peer.getIdentity().getHash().toShortBase64();
         PeerProfile prof = getContext().profileOrganizer().getProfile(peer.getIdentity().getHash());
         if (prof != null) {
             prof.setLastTestStarted(getContext().clock().now());
@@ -586,7 +586,7 @@ public class PeerTestJob extends JobImpl {
          */
         PeerData(RouterContext ctx, Hash peerHash) {
             // Generate short hash once for all logging operations
-            this.shortHash = peerHash.toBase64().substring(0, 6);
+            this.shortHash = peerHash.toShortBase64();
 
             // Single database lookup to avoid repeated calls
             this.routerInfo = ctx.netDb().lookupRouterInfoLocally(peerHash);
@@ -652,7 +652,7 @@ public class PeerTestJob extends JobImpl {
             _nonce = nonce;
             _expiration = expiration;
             _peer = peer;
-            _shortHash = peer.toBase64().substring(0, 6);
+            _shortHash = peer.toShortBase64();
             _matchFound = false;
         }
         /**
@@ -866,7 +866,7 @@ public class PeerTestJob extends JobImpl {
          */
         public void runJob() {
             long responseTime = getContext().clock().now() - _testBegin;
-            String shortHash = _peer.getIdentity().getHash().toBase64().substring(0, 6);
+            String shortHash = _peer.getIdentity().getHash().toShortBase64();
             if (_log.shouldDebug()) {
                 _log.debug("[" + shortHash + "] -> Test succeeded in " +
                            DataHelper.formatDuration(responseTime) + "\n* " + _sendTunnel + "\n* " + _replyTunnel);
@@ -980,7 +980,7 @@ public class PeerTestJob extends JobImpl {
             if (_selector.matchFound())
                 return;
 
-            String shortHash = _peer.getIdentity().getHash().toBase64().substring(0, 6);
+            String shortHash = _peer.getIdentity().getHash().toShortBase64();
             if (getShouldFailPeer()) {getContext().profileManager().dbLookupFailed(_peer.getIdentity().getHash());} // NOSONAR S2589 always true
 
             if (_log.shouldDebug()) {

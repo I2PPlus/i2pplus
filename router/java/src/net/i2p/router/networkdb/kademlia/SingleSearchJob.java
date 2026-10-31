@@ -66,7 +66,7 @@ class SingleSearchJob extends FloodOnlySearchJob {
         dlm.setSearchType(DatabaseLookupMessage.Type.RI);
 
         if (_log.shouldInfo())
-            _log.info("SingleSearch for [" + _key.toBase64().substring(0,6) + "] sent to [" + _to.toBase64().substring(0,6) + "]");
+            _log.info("SingleSearch for [" + _key.toShortBase64() + "] sent to [" + _to.toShortBase64() + "]");
         getContext().tunnelDispatcher().dispatchOutbound(dlm, outTunnel.getSendTunnelId(0), _to);
         _lookupsRemaining.set(1);
     }

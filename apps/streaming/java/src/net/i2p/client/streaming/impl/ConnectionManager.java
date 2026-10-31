@@ -540,7 +540,7 @@ class ConnectionManager {
         }
         _refusalCounter.clear(h);
         if (_log.shouldInfo())
-            _log.info("Autobanning [" + h.toBase32().substring(0, 8) + "] for " + DataHelper.formatDuration(ms)
+            _log.info("Autobanning [" + h.toShortBase32() + "] for " + DataHelper.formatDuration(ms)
                       + "\n* Reason: " + why);
         return true;
     }
@@ -1149,7 +1149,7 @@ class ConnectionManager {
         if (action == SynBurstAction.BAN)
             return true;
         if (action == SynBurstAction.RECORD && _log.shouldWarn()) {
-            _log.warn("SYN burst strike for [" + h.toBase32().substring(0, 8) + "] -> " +
+            _log.warn("SYN burst strike for [" + h.toShortBase32() + "] -> " +
                       needed + " burst windows within " + DataHelper.formatDuration(STRIKE_WINDOW_MS) +
                       " autobans\n* Threshold: >" + _synBurst + " SYNs per " + _synRateMs + "ms");
         }
@@ -1587,9 +1587,9 @@ class ConnectionManager {
                         }
                         Hash ghash = new Hash(g);
                         _log.warn("Signature passed but the SYN hash check failed -> Sending reset" +
-                                  "\n* Expected: [" + localHash.toBase32().substring(0, 8) + "]" +
-                                  " * Received: [" + ghash.toBase32().substring(0, 8) + "]" +
-                                  " * From: [" + fromHash.toBase32().substring(0, 8) + "]");
+                                  "\n* Expected: [" + localHash.toShortBase32() + "]" +
+                                  " * Received: [" + ghash.toShortBase32() + "]" +
+                                  " * From: [" + fromHash.toShortBase32() + "]");
                     }
                     _packetHandler.sendResetUnverified(synPacket);
                     return null;
@@ -2072,7 +2072,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
                   }
                   if (admitted) {
                       if (_log.shouldDebug()) {
-                          _log.debug("Reusing pooled connection to [" + destHash.toBase64().substring(0,6) + "]");
+                          _log.debug("Reusing pooled connection to [" + destHash.toShortBase64() + "]");
                       }
                       // Skip to post-creation setup (fromPool=true — skip cooldown)
                       return finalizeConnection(pooled, peer, opts, connectStart, true);
@@ -2190,7 +2190,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
                           _cooldownWarned.put(destHash, Long.valueOf(now));
                           if (_log.shouldDebug())
                               _log.debug("Delaying connect to [" +
-                                         destHash.toBase64().substring(0,6) +
+                                         destHash.toShortBase64() +
                                          "] " + delay + "ms (cooldown)");
                       }
                       awaitCooldown(_cooldownLock, delay, _context.clock());
@@ -2221,10 +2221,10 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
           if (_log.shouldInfo()) {
               String err = con.getConnectionError();
               if (err != null) {
-                  _log.info("ConnectionManager.connect() to [" + destHash.toBase64().substring(0,6) +
+                  _log.info("ConnectionManager.connect() to [" + destHash.toShortBase64() +
                             "] failed in " + connectElapsed + "ms: " + err);
               } else {
-                  _log.info("ConnectionManager.connect() to [" + destHash.toBase64().substring(0,6) +
+                  _log.info("ConnectionManager.connect() to [" + destHash.toShortBase64() +
                             "] succeeded in " + connectElapsed + "ms");
               }
           }
@@ -2627,7 +2627,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
             // Evict stale entries
             if (pc.isStale(maxIdle, now)) {
                 if (_log.shouldDebug()) {
-                    _log.debug("Evicting stale pooled connection to [" + destHash.toBase64().substring(0, 6) + "]");
+                    _log.debug("Evicting stale pooled connection to [" + destHash.toShortBase64() + "]");
                 }
                 pc.connection.disconnect(false, false);
                 continue;
@@ -2636,7 +2636,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
             if (pc.connection.getIsConnected() && pc.connection.getConnectionError() == null) {
                 pc.touch(now);
                 if (_log.shouldDebug()) {
-                    _log.debug("Reusing pooled connection to [" + destHash.toBase64().substring(0, 6) + "]" +
+                    _log.debug("Reusing pooled connection to [" + destHash.toShortBase64() + "]" +
                                " (idle " + (now - pc.pooledAt) + "ms)");
                 }
                 return pc.connection;
@@ -2689,7 +2689,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
         pool.addLast(pc);
 
         if (_log.shouldDebug()) {
-            _log.debug("Pooled connection to [" + destHash.toBase64().substring(0, 6) + "]" +
+            _log.debug("Pooled connection to [" + destHash.toShortBase64() + "]" +
                        " (pool size: " + pool.size() + ")");
         }
     }

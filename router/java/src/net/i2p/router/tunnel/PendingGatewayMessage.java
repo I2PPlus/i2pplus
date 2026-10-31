@@ -172,7 +172,7 @@ class PendingGatewayMessage implements CDQEntry {
         //buf.append(TunnelGateway.this.toString());
         if (_toRouter != null) {
             buf.append(" targeting [");
-            buf.append(_toRouter.toBase64().substring(0,6) + "] ");
+            buf.append(_toRouter.toShortBase64() + "] ");
             if (_toTunnel != null)
                 buf.append("\n* [TunnelID ").append(_toTunnel.getTunnelId() + "]: ");
         }

@@ -133,8 +133,8 @@ class TCBShare {
             Hash local = con.getSession().getMyDestination().calculateHash();
             Hash remote = dest.calculateHash();
             _log.debug("Congestion cache hit for [" +
-                       remote.toBase64().substring(0, 6) + "] -> Local: [" +
-                       local.toBase64().substring(0, 6) + "] * RTT: " + rtt + "ms"
+                       remote.toShortBase64() + "] -> Local: [" +
+                       local.toShortBase64() + "] * RTT: " + rtt + "ms"
                        + "\n* RTT deviation: " + rttDev + "ms * Window: " + wdw + "B");
         }
         opts.loadFromCache(rtt,rttDev,wdw);
@@ -178,7 +178,7 @@ class TCBShare {
             }
             String from = con.getSession().getMyDestination().calculateHash()
                                         .toBase64().substring(0, 6);
-            String to = dest.calculateHash().toBase64().substring(0, 6);
+            String to = dest.calculateHash().toShortBase64();
             _log.debug("Sharing the congestion parameters -> From: [" + from
                        + "] * To: [" + to + ']'
                        + "\n* Cached RTT: " + old + "ms * Connection RTT: " + opts.getRTT() + "ms"

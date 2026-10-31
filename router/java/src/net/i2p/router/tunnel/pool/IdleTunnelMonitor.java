@@ -177,7 +177,7 @@ class IdleTunnelMonitor extends SimpleTimer2.TimedEvent {
                 idleTunnelsByPeer.computeIfAbsent(peer, k -> new ArrayList<>()).add(tunnel);
 
                 if (_log.shouldDebug()) {
-                    _log.debug("Detected idle tunnel from peer [" + peer.toBase64().substring(0, 6) +
+                    _log.debug("Detected idle tunnel from peer [" + peer.toShortBase64() +
                               "] -> Age: " + DataHelper.formatDuration(age) + " [" + messages +
                               (messages > 1 ? " messages" : " message") + "]");
                 }
@@ -197,7 +197,7 @@ class IdleTunnelMonitor extends SimpleTimer2.TimedEvent {
             }
 
             if (_log.shouldInfo()) {
-                _log.info("Dropped " + tunnelCount + " idle tunnels from peer [" + peer.toBase64().substring(0, 6) + "]");
+                _log.info("Dropped " + tunnelCount + " idle tunnels from peer [" + peer.toShortBase64() + "]");
             }
         }
 

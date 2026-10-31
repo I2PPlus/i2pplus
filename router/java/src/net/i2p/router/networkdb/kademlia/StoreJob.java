@@ -244,19 +244,19 @@ abstract class StoreJob extends JobImpl {
                 if ((ds == null) || !(ds.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)) {
                     if (_log.shouldInfo()) {
                         _log.info("Error selecting closest hash that wasn't a Router! [" +
-                                  peer.toBase64().substring(0,6) + "]: " + ds);
+                                  peer.toShortBase64() + "]: " + ds);
                     }
                     _state.addSkipped(peer);
                     skipped++;
                 } else if (!shouldStoreTo((RouterInfo)ds)) {
                     if (_log.shouldInfo()) {
-                        _log.info("Skipping old Router [" + peer.toBase64().substring(0,6) + "]");
+                        _log.info("Skipping old Router [" + peer.toShortBase64() + "]");
                     }
                     _state.addSkipped(peer);
                     skipped++;
                 } else if ((type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2 || lsSigType == SigType.RedDSA_SHA512_Ed25519) && !shouldStoreEncLS2To((RouterInfo)ds)) {
                     if (_log.shouldInfo()) {
-                        _log.info("Skipping Router [" + peer.toBase64().substring(0,6) + "] -> No support for encrypted LS2/RedDSA");
+                        _log.info("Skipping Router [" + peer.toShortBase64() + "] -> No support for encrypted LS2/RedDSA");
                     }
                     _state.addSkipped(peer);
                     skipped++;
@@ -264,7 +264,7 @@ abstract class StoreJob extends JobImpl {
                     int peerTimeout = _facade.getPeerTimeout(peer);
                     if (_log.shouldInfo()) {
                         int attempts = _state.getAttemptedCount() + 1;
-                        _log.info("Sending key [" + _state.getTarget().toBase32().substring(0,8) + "] " +
+                        _log.info("Sending key [" + _state.getTarget().toShortBase32() + "] " +
                                    (attempts > 1 ? "(Attempt: " + attempts + ")" : "") + "\n* To: " + closestHashes);
                     }
                     _state.addPending(peer);
@@ -361,7 +361,7 @@ abstract class StoreJob extends JobImpl {
                 sendStoreThroughExploratory(msg, peer, expiration);
                 if (_log.shouldWarn()) {
                     _log.warn("[" + _facade + "] -> Sending a RouterInfo store through exploratory tunnels in the client context"
-                              + "\n* To: [" + peer.getIdentity().getHash().toBase64().substring(0,6) + "] * Message: " + msg);
+                              + "\n* To: [" + peer.getIdentity().getHash().toShortBase64() + "] * Message: " + msg);
                 }
             }
             else if (ctx.commSystem().isEstablished(h) ||
@@ -395,7 +395,7 @@ abstract class StoreJob extends JobImpl {
 
         // ToDo: Craft a nasty error message here if the _facade is not the floodfill facade.
         if (_log.shouldDebug()) {
-            _log.debug("Sending store directly to [" + to.toBase64().substring(0,6) + "]");
+            _log.debug("Sending store directly to [" + to.toShortBase64() + "]");
         }
         OutNetMessage m = new OutNetMessage(getContext(), msg, expiration, STORE_PRIORITY, peer);
         m.setOnFailedReplyJob(onFail);
@@ -447,7 +447,7 @@ abstract class StoreJob extends JobImpl {
             StoreMessageSelector selector = new StoreMessageSelector(getContext(), getJobId(), peer, msg.getReplyToken(), expiration);
 
             if (_log.shouldDebug()) {
-                _log.debug("Sending store to [" + to.toBase64().substring(0,6) + "] via " + outTunnel + ": " + msg);
+                _log.debug("Sending store to [" + to.toShortBase64() + "] via " + outTunnel + ": " + msg);
             }
             getContext().messageRegistry().registerPending(selector, onReply, onFail);
             getContext().tunnelDispatcher().dispatchOutbound(msg, outTunnel.getSendTunnelId(0), null, to);
@@ -527,7 +527,7 @@ abstract class StoreJob extends JobImpl {
                 MessageWrapper.WrappedMessage wm = MessageWrapper.wrap(ctx, msg, client, peer);
                 if (wm == null) {
                     if (_log.shouldWarn()) {
-                        _log.warn("Failed garlic encrypting from client: [" + client.toBase64().substring(0,6) + "]");
+                        _log.warn("Failed garlic encrypting from client: [" + client.toShortBase64() + "]");
                     }
                     fail();
                     return;
@@ -538,7 +538,7 @@ abstract class StoreJob extends JobImpl {
                 sent = MessageWrapper.wrap(ctx, msg, peer); // force full ElG for ECIES-only
                 if (sent == null) {
                     if (_log.shouldWarn()) {
-                        _log.warn("Failed garlic encrypting from client: [" + client.toBase64().substring(0,6) + "]");
+                        _log.warn("Failed garlic encrypting from client: [" + client.toShortBase64() + "]");
                     }
                     fail();
                     return;
@@ -555,8 +555,8 @@ abstract class StoreJob extends JobImpl {
             StoreMessageSelector selector = new StoreMessageSelector(ctx, getJobId(), peer, msg.getReplyToken(), expiration);
 
             if (_log.shouldDebug()) {
-                    _log.debug("Sending encrypted store [" + sent + "] to [" + to.toBase64().substring(0,6) +
-                               "]\n Via: " + outTunnel + " with reply to " + replyGW.toBase64().substring(0,6) +
+                    _log.debug("Sending encrypted store [" + sent + "] to [" + to.toShortBase64() +
+                               "]\n Via: " + outTunnel + " with reply to " + replyGW.toShortBase64() +
                                "] -> [TunnelId: " + replyTunnelId + "]");
 
             }
@@ -697,7 +697,7 @@ abstract class StoreJob extends JobImpl {
             StoreMessageSelector selector = new StoreMessageSelector(ctx, getJobId(), peer, msg.getReplyToken(), expiration);
 
             if (_log.shouldDebug()) {
-                _log.debug("Sending encrypted store [" + sent + "] to [" + to.toBase64().substring(0,6) + "]\n* Via: " + outTunnel);
+                _log.debug("Sending encrypted store [" + sent + "] to [" + to.toShortBase64() + "]\n* Via: " + outTunnel);
             }
             ctx.messageRegistry().registerPending(selector, onReply, onFail);
             ctx.tunnelDispatcher().dispatchOutbound(sent, outTunnel.getSendTunnelId(0), null, to);
@@ -855,8 +855,8 @@ abstract class StoreJob extends JobImpl {
             long howLong = _state.confirmed(hash);
 
             if (_log.shouldInfo()) {
-                _log.info("Store of key [" + _state.getTarget().toBase32().substring(0,8) + "] to [" +
-                          hash.toBase64().substring(0,6) + "] succeeded -> Took " + howLong + "ms");
+                _log.info("Store of key [" + _state.getTarget().toShortBase32() + "] to [" +
+                          hash.toShortBase64() + "] succeeded -> Took " + howLong + "ms");
             }
             getContext().profileManager().dbStoreSent(hash, howLong);
             getContext().statManager().addRateData("netDb.ackTime", howLong, howLong);
@@ -922,8 +922,8 @@ abstract class StoreJob extends JobImpl {
             if (!_wasRun.compareAndSet(false, true)) {return;}
             Hash hash = _peer.getIdentity().getHash();
             if (_log.shouldInfo()) {
-                _log.info("Peer test of [" + hash.toBase64().substring(0,6) + "] timed out sending key [" +
-                          _state.getTarget().toBase64().substring(0,6) + "]");
+                _log.info("Peer test of [" + hash.toShortBase64() + "] timed out sending key [" +
+                          _state.getTarget().toShortBase64() + "]");
             }
 
             MessageWrapper.WrappedMessage wm = _state.getPendingMessage(hash);
@@ -962,7 +962,7 @@ abstract class StoreJob extends JobImpl {
      */
     protected void fail() {
         if (_log.shouldInfo()) {
-            _log.info("Failed test sending key [" + _state.getTarget().toBase64().substring(0,6) + "]" +
+            _log.info("Failed test sending key [" + _state.getTarget().toShortBase64() + "]" +
             " (Timeout: " + DataHelper.formatDuration(_timeoutMs) + ")" + (_log.shouldDebug() ? "\n* State of failed send: " + _state : ""));
         }
         if (_onFailure != null) {getContext().jobQueue().addJob(_onFailure);}

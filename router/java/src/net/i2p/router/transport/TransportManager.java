@@ -1290,7 +1290,7 @@ public class TransportManager implements TransportEventListener {
                         if (_log.shouldWarn())
                             _log.warn("Unreachable on any transport -> Not banned" +
                                       " (no ghost manager yet) [" +
-                                                          peer.toBase64().substring(0,6) + "]");
+                                                          peer.toShortBase64() + "]");
                     }
                 }
             }
@@ -1591,7 +1591,7 @@ public class TransportManager implements TransportEventListener {
                 return;
             } catch (Exception e) {
                 if (_log.shouldWarn())
-                    _log.warn("SSU establish failed for [" + peer.toBase64().substring(0,6) + "]", e);
+                    _log.warn("SSU establish failed for [" + peer.toShortBase64() + "]", e);
             }
         }
         Transport ntcp = _transports.get(Transport.STYLE_NTCP);
@@ -1600,7 +1600,7 @@ public class TransportManager implements TransportEventListener {
                 ntcp.send(onm);
             } catch (Exception e) {
                 if (_log.shouldWarn())
-                    _log.warn("NTCP establish failed for [" + peer.toBase64().substring(0,6) + "]", e);
+                    _log.warn("NTCP establish failed for [" + peer.toShortBase64() + "]", e);
             }
         }
     }

@@ -65,8 +65,8 @@ class SearchMessageSelector implements MessageSelector {
      */
     @Override
     public String toString() {
-        return "Search selector \n* Looking for reply from [" + _peer.toBase64().substring(0,6) +
-                 "] for key [" + _state.getTarget().toBase32().substring(0,8) + "]";
+        return "Search selector \n* Looking for reply from [" + _peer.toShortBase64() +
+                 "] for key [" + _state.getTarget().toShortBase32() + "]";
     }
 
     /**
@@ -84,7 +84,7 @@ class SearchMessageSelector implements MessageSelector {
         if (_found) {
             if (_log.shouldDebug())
                 _log.debug("[ID " + _id + "] Don't continue matching! Looking for reply from [" +
-                           _peer.toBase64().substring(0,6) + "] for key [" + _state.getTarget().toBase32().substring(0,8) + "]");
+                           _peer.toShortBase64() + "] for key [" + _state.getTarget().toShortBase32() + "]");
             return false;
         } else {
             return true;

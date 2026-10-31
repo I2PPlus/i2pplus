@@ -160,7 +160,7 @@ public class ExploreJob extends SearchJob {
             buf.append("Excluding ").append(dontIncludePeers.size() - 1)
                .append(" closest peers from exploration\n* Excluded: ");
             for (Hash h : dontIncludePeers) {
-                buf.append("[").append(h.toBase64().substring(0, 6)).append("] ");
+                buf.append("[").append(h.toShortBase64()).append("] ");
             }
             _log.debug(buf.toString());
         }
@@ -172,7 +172,7 @@ public class ExploreJob extends SearchJob {
         final I2NPMessage outMsg;
 
         // Cache hash snippet for logging only when logging is enabled to save computation cost.
-        final String hash = (_log.shouldInfo() || _log.shouldDebug()) ? ident.calculateHash().toBase64().substring(0, 6) : "";
+        final String hash = (_log.shouldInfo() || _log.shouldDebug()) ? ident.calculateHash().toShortBase64() : "";
 
         if (replyTunnelId != null &&
             ((encryptElG && type == EncType.ELGAMAL_2048) || (type == EncType.ECIES_X25519 && DatabaseLookupMessage.USE_ECIES_FF))) {
@@ -199,19 +199,19 @@ public class ExploreJob extends SearchJob {
                         msg.setReplySession(sess.key, sess.rtag);
                     }
                 } else {
-                    if (_log.shouldDebug()) {_log.debug("Failed to encrypt for [" + peer.getHash().toBase64().substring(0,6) + "] -> Sending anyway");}
+                    if (_log.shouldDebug()) {_log.debug("Failed to encrypt for [" + peer.getHash().toShortBase64() + "] -> Sending anyway");}
                     // Client may have become unreachable, send anyway
                 }
             }
             outMsg = MessageWrapper.wrap(ctx, msg, peer);
 
             if (_log.shouldDebug()) {
-                _log.debug("Encrypted Exploratory DbLookupMessage for [" + getState().getTarget().toBase64().substring(0, 6) +
+                _log.debug("Encrypted Exploratory DbLookupMessage for [" + getState().getTarget().toShortBase64() +
                            "] sent to [" + hash + "]");
             }
         } else {
             if (_log.shouldDebug()) {
-                _log.debug("Direct exploratory DbLookupMessage to [" + ident.calculateHash().toBase64().substring(0, 6) + "]\n*" + msg);
+                _log.debug("Direct exploratory DbLookupMessage to [" + ident.calculateHash().toShortBase64() + "]\n*" + msg);
             }
             outMsg = msg;
         }

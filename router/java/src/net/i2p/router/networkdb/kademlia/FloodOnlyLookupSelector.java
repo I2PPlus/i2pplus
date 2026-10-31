@@ -91,14 +91,14 @@ class FloodOnlyLookupSelector implements MessageSelector {
                 // Only process if we don't know enough floodfills or are starting up
                 if (_search.shouldProcessDSRM()) {
                     if (_log.shouldInfo())
-                        _log.info("Processing search reply from [" + dsrm.getFromHash().toBase64().substring(0,6) +
-                                  "] via SingleLookupJob for [" + _search.getKey().toBase64().substring(0,6) + "]");
+                        _log.info("Processing search reply from [" + dsrm.getFromHash().toShortBase64() +
+                                  "] via SingleLookupJob for [" + _search.getKey().toShortBase64() + "]");
                     // Chase the hashes from the reply
                     _context.jobQueue().addJob(new SingleLookupJob(_context, dsrm));
                 } else if (_log.shouldInfo()) {
                     int remaining = _search.getLookupsRemaining();
-                    _log.info("Search reply from [" + dsrm.getFromHash().toBase64().substring(0,6) + "] for ["
-                              + _search.getKey().toBase64().substring(0,6) + "] -> Outstanding: " + remaining);
+                    _log.info("Search reply from [" + dsrm.getFromHash().toShortBase64() + "] for ["
+                              + _search.getKey().toShortBase64() + "] -> Outstanding: " + remaining);
                 }
 
                 // if no more left, time to fail

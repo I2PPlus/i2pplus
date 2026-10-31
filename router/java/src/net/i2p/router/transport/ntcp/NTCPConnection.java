@@ -1518,7 +1518,7 @@ void noteEstablishmentRtt(int rttMs) {
         int size = block.getTotalLength();
         if (size + NTCP2Payload.BLOCK_HEADER_SIZE > BUFFER_SIZE) {
             if (_log.shouldWarn())
-                _log.warn("RouterInfo [" + ri.getHash().toBase64().substring(0, 6) +
+                _log.warn("RouterInfo [" + ri.getHash().toShortBase64() +
                           "] too big for the buffer -> Size: " +
                           (size + NTCP2Payload.BLOCK_HEADER_SIZE) + " bytes"
                           + " * Maximum: " + BUFFER_SIZE + " bytes");
@@ -2278,7 +2278,7 @@ void noteEstablishmentRtt(int rttMs) {
 
         if (_context.banlist().isBanlisted(peerHash)) {
             if (_log.shouldInfo()) {
-                _log.info("Router [" + peerHash.toBase64().substring(0,6) + "] is banned -> Closing connection...");
+                _log.info("Router [" + peerHash.toShortBase64() + "] is banned -> Closing connection...");
             }
             _banned = true;
             close();
@@ -2686,7 +2686,7 @@ void noteEstablishmentRtt(int rttMs) {
                 }
             } catch (IllegalArgumentException iae) {
                 if (_log.shouldInfo())
-                    _log.info("RouterInfo store fail [" + ri.getHash().toBase64().substring(0,6) + "] -> " + EstablishBase.storeFailCause(iae));
+                    _log.info("RouterInfo store fail [" + ri.getHash().toShortBase64() + "] -> " + EstablishBase.storeFailCause(iae));
             }
         }
 
@@ -2983,7 +2983,7 @@ void noteEstablishmentRtt(int rttMs) {
             addr = _remAddr.getHost() + ':' + _remAddr.getPort();
         }
         return (_isInbound ? "inbound " : "outbound ") + addr + " [conn " + _connID + ' ' +
-               (_remotePeer == null ? "Unknown" : _remotePeer.calculateHash().toBase64().substring(0,6)) + ']';
+               (_remotePeer == null ? "Unknown" : _remotePeer.calculateHash().toShortBase64()) + ']';
     }
 
     @Override
@@ -3004,7 +3004,7 @@ void noteEstablishmentRtt(int rttMs) {
         }
         return (_isInbound ? ("Inbound: " + fromIP + ':' + port + ' ')
                            : ("Outbound: " + _remAddr.getHost() + ':' + _remAddr.getPort() + ' ')) +
-               (_remotePeer != null ? "[" + _remotePeer.calculateHash().toBase64().substring(0,6) + "]" : "") +
+               (_remotePeer != null ? "[" + _remotePeer.calculateHash().toShortBase64() + "]" : "") +
                (_log.shouldDebug() ? "\n* Connection [ID " + _connID + "]" +
                "\n* Created: " + DataHelper.formatDuration(getTimeSinceCreated()) + " ago;" +
                " Last message sent: " + DataHelper.formatDuration(getTimeSinceSend()) + " ago;" +

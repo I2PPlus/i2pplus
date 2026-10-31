@@ -101,7 +101,7 @@ class OutboundMessageDistributor {
             if (_log.shouldInfo()) {
                  _log.info("Dropping an I2NP message at the outbound endpoint -> New connection throttle"
                            + "\n* Type: " + msg.getType()
-                           + " * Target: [" + target.toBase64().substring(0,6) + "]"
+                           + " * Target: [" + target.toShortBase64() + "]"
                            + "\n* Tunnel: " +
                            (tunnel != null ? tunnel.getTunnelId() : "null"));
             }
@@ -114,14 +114,14 @@ class OutboundMessageDistributor {
                 // credit our lookup message as part. traffic
                 if (_context.tunnelDispatcher().shouldDropParticipatingMessage(TunnelDispatcher.Location.OBEP, DatabaseLookupMessage.MESSAGE_TYPE, 1024, _partBWE)) {
                     if (_log.shouldInfo()) {
-                        _log.info("Dropping I2NPMessage [type " + msg.getType() + "] to [" + target.toBase64().substring(0,6) + "] " +
+                        _log.info("Dropping I2NPMessage [type " + msg.getType() + "] to [" + target.toShortBase64() + "] " +
                                   "at Outbound Endpoint -> Lookup bandwidth throttle");
                     }
                     return;
                 }
             }
             if (_log.shouldInfo())
-                _log.info("Outbound distributor to [" + target.toBase64().substring(0,6)
+                _log.info("Outbound distributor to [" + target.toShortBase64()
                            + "]" + (tunnel != null ? "." + tunnel.getTunnelId() + "" : "")
                            + " -> No local info, searching...");
             // TODO - should we set the search timeout based on the message timeout,
@@ -199,7 +199,7 @@ class OutboundMessageDistributor {
             OutNetMessage out = new OutNetMessage(_context, msg, _context.clock().now() + MAX_DISTRIBUTE_TIME, _priority, target);
 
             if (_log.shouldDebug())
-                _log.debug("Queueing Outbound message to: [" + target.getIdentity().calculateHash().toBase64().substring(0,6) + "]");
+                _log.debug("Queueing Outbound message to: [" + target.getIdentity().calculateHash().toShortBase64() + "]");
             _context.outNetMessagePool().add(out);
         }
     }
@@ -235,13 +235,13 @@ class OutboundMessageDistributor {
             int stat;
             if (info != null) {
                 if (_log.shouldDebug())
-                    _log.debug("Lookup succeeded for Outbound distributor to [" + _target.toBase64().substring(0,6) + "]" +
+                    _log.debug("Lookup succeeded for Outbound distributor to [" + _target.toShortBase64() + "]" +
                                (_tunnel != null ? " for [TunnelID " + _tunnel.getTunnelId() + "]" : ""));
                 distribute(_message, info, _tunnel);
                 stat = 1;
             } else {
                 if (_log.shouldWarn())
-                    _log.warn("Lookup failed for Outbound distributor to [" + _target.toBase64().substring(0,6) + "]" +
+                    _log.warn("Lookup failed for Outbound distributor to [" + _target.toShortBase64() + "]" +
                               (_tunnel != null ? " for [TunnelID " + _tunnel.getTunnelId() + "]" : ""));
                 stat = 0;
             }

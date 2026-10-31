@@ -263,7 +263,7 @@ class PumpedTunnelGateway extends TunnelGateway {
         boolean backlogged = _context.commSystem().isBacklogged(_nextHop);
 
         if (backlogged && _log.shouldInfo()) {
-            _log.info("PumpedTunnelGateway backlogged, queued to [" + _nextHop.toBase64().substring(0,6) + "] : "
+            _log.info("PumpedTunnelGateway backlogged, queued to [" + _nextHop.toShortBase64() + "] : "
                       + _prequeue.size() + " inbound? " + _isInbound);
         }
 
@@ -327,7 +327,7 @@ class PumpedTunnelGateway extends TunnelGateway {
         }
 
         if (moreMessagesExist && _log.shouldInfo()) {
-            _log.info("PumpedTunnelGateway remaining to [" + _nextHop.toBase64().substring(0, 6) + "] -> Pre-queue: "
+            _log.info("PumpedTunnelGateway remaining to [" + _nextHop.toShortBase64() + "] -> Pre-queue: "
                       + _prequeue.size() + " inbound? " + _isInbound + " backlogged? " + backlogged);
         }
 

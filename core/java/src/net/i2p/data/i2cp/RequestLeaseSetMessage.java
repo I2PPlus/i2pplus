@@ -119,7 +119,7 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
             throw new IllegalArgumentException("Null Router -> [TunnelId " + tunnel + "]");
         }
         if (tunnel == null) {
-            throw new IllegalArgumentException("Null Tunnel -> Router [" + router.toBase64().substring(0, 6) + "]");
+            throw new IllegalArgumentException("Null Tunnel -> Router [" + router.toShortBase64() + "]");
         }
         _endpoints.add(new TunnelEndpoint(router, tunnel));
     }

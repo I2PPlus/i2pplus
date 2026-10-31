@@ -1304,7 +1304,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             } else {
                 if (_log.shouldWarn()) {
                     _log.warn("Sending the KRPC message failed -> The session refused it"
-                              + " * To: [" + dest.calculateHash().toBase32().substring(0, 8) + ']');
+                              + " * To: [" + dest.calculateHash().toShortBase32() + ']');
                 }
             }
             return success;

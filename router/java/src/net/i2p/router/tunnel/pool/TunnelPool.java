@@ -887,7 +887,7 @@ public class TunnelPool {
             if (name != null) {name = DataHelper.stripHTML(name);}
             else {
                 Hash d = _settings.getDestination();
-                name = d != null ? "[" + d.toBase32().substring(0,8) + "]" : "[null]";
+                name = d != null ? "[" + d.toShortBase32() + "]" : "[null]";
             }
         }
         _rateName = "[" + name + "] " + (_settings.isInbound() ? "InBps" : "OutBps");
@@ -3984,7 +3984,7 @@ public class TunnelPool {
         if (_log.shouldInfo()) {
             long delta = earliest - _context.clock().now();
             _log.info(toString() + " -> Rotated out oldest lease ([" +
-                      rotated.getGateway().toBase64().substring(0, 6) + "]/" +
+                      rotated.getGateway().toShortBase64() + "]/" +
                       rotated.getTunnelId() + ") for floodfill propagation" +
                       "\n* Earliest lease " + (delta >= 0 ? "ends in " : "ended ") +
                       DataHelper.formatDuration(Math.abs(delta)) + (delta >= 0 ? "" : " ago"));
@@ -4314,7 +4314,7 @@ public class TunnelPool {
             if (peer == null) {continue;}
             if (rv.length() == 0) {rv.append(" * Hops: ");}
             else {rv.append(" -> ");}
-            rv.append('[').append(peer.toBase64().substring(0, 6)).append(']');
+            rv.append('[').append(peer.toShortBase64()).append(']');
         }
         return rv.toString();
     }
@@ -4330,7 +4330,7 @@ public class TunnelPool {
      */
     private String tunnelLabel() {
         Hash dest = _settings.getDestination();
-        return dest != null ? "Tunnel [" + dest.toBase32().substring(0, 8) + "]" : "Tunnel";
+        return dest != null ? "Tunnel [" + dest.toShortBase32() + "]" : "Tunnel";
     }
 
     /**
@@ -4657,7 +4657,7 @@ public class TunnelPool {
         if (peer != null && uptime > startupTime && _log.shouldWarn() && consecutiveFailures > 5) {
             _log.warn(toString() + " -> Blaming the gateway for the failed tunnel"
                       + "\n* Penalty: " + pct + "% * Consecutive failures: " + consecutiveFailures
-                      + " * Peer: [" + peer.toBase64().substring(0, 6) + "]");
+                      + " * Peer: [" + peer.toShortBase64() + "]");
         }
     }
 
@@ -7831,7 +7831,7 @@ public class TunnelPool {
             if (nick != null) {
                 destName = nick;
             } else if (dest != null) {
-                destName = '[' + dest.toBase32().substring(0, 8) + ']';
+                destName = '[' + dest.toShortBase32() + ']';
             } else {
                 destName = "an unnamed client pool";
             }
@@ -7952,7 +7952,7 @@ public class TunnelPool {
             _context.commSystem().isEstablished(tbrTarget) ||
             _context.commSystem().isConnecting(tbrTarget)) {return false;}
         if (_log.shouldInfo()) {
-            _log.info("Build request peer [" + tbrTarget.toBase64().substring(0,6) +
+            _log.info("Build request peer [" + tbrTarget.toShortBase64() +
                       "] of " + tunnelLabel() + " is not connected" +
                       " -> Pre-connecting for the next attempt");
         }
@@ -7972,7 +7972,7 @@ public class TunnelPool {
             if (peers != null) {
                 sb.append("\n* Peers: ");
                 for (int i = 0; i < peers.size(); i++) {
-                    if (i > 0) sb.append("[").append(peers.get(i).toBase64().substring(0,6)).append("] ");
+                    if (i > 0) sb.append("[").append(peers.get(i).toShortBase64()).append("] ");
                 }
             }
             _log.debug(sb.toString());
@@ -8331,7 +8331,7 @@ public class TunnelPool {
                 rv.append("[").append(_settings.getDestinationNickname()).append("]");
             } else {
                 Hash d = _settings.getDestination();
-                rv.append("[").append(d != null ? d.toBase32().substring(0,8) : "null").append("]");
+                rv.append("[").append(d != null ? d.toShortBase32() : "null").append("]");
             }
             return rv.toString();
         }
@@ -8350,9 +8350,9 @@ public class TunnelPool {
         String nickname = settings.getDestinationNickname();
         Hash dest = settings.getDestination();
         if (nickname != null) {
-            return nickname + " / " + dest.toBase32().substring(0, 8);
+            return nickname + " / " + dest.toShortBase32();
         }
-        return dest.toBase32().substring(0, 8);
+        return dest.toShortBase32();
     }
 
 }

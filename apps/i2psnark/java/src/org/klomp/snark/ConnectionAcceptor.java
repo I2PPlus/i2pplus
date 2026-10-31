@@ -414,7 +414,7 @@ class ConnectionAcceptor implements Runnable {
             if (_log.shouldWarn()) {
                 _log.warn(
                         "[Snark] Dropping incoming HTTP connection from client ["
-                                + h.toBase32().substring(0, 8)
+                                + h.toShortBase32()
                                 + "]");
             }
             try {
@@ -431,7 +431,7 @@ class ConnectionAcceptor implements Runnable {
             _log.warnThrottled(
                     "snark-reject-client",
                     "[Snark] Rejecting incoming connection from client ["
-                            + h.toBase32().substring(0, 8)
+                            + h.toShortBase32()
                             + "] after "
                             + bad
                             + "/" + MAX_BAD + " failures -> "
@@ -451,7 +451,7 @@ class ConnectionAcceptor implements Runnable {
                             "[Snark] Too many incoming connections in handshake ("
                                     + cur
                                     + "), dropping connection from ["
-                                    + h.toBase32().substring(0, 8)
+                                    + h.toShortBase32()
                                     + "]");
                 }
                 try {

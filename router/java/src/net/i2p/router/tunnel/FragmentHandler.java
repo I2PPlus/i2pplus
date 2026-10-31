@@ -426,7 +426,7 @@ class FragmentHandler {
                 _log.debug("Reading a tunnel message -> MsgID: " + messageId + " * Offset: " + offset + " bytes"
                            + " * Type: " + type
                            + "\n* Router: "
-                           + (router != null ? '[' + router.toBase64().substring(0, 6) + ']' : "n/a")
+                           + (router != null ? '[' + router.toShortBase64() + ']' : "n/a")
                            + " * Tunnel ID: " + tunnelId);
             offset += 4;
         }
@@ -690,7 +690,7 @@ class FragmentHandler {
         if (data == null || offset < 0 || len <= 0 || offset + len > data.length) {
             if (_log.shouldWarn())
                 _log.warn("Receiving an unfragmented message" + (router != null ? " from [" +
-                          router.toBase64().substring(0,6) + "]" : "") +
+                          router.toShortBase64() + "]" : "") +
                           " -> Bad data bounds, dropping it");
             _context.statManager().addRateData("tunnel.corruptMessage", 1);
             return;
@@ -699,7 +699,7 @@ class FragmentHandler {
         try {
             if (_log.shouldDebug()) {
                 _log.debug("Received unfragmented message (" + len + " bytes) " +
-                           (router != null ? "from [" + router.toBase64().substring(0,6) + "]" : ""));
+                           (router != null ? "from [" + router.toShortBase64() + "]" : ""));
             }
 
             I2NPMessage m;
@@ -715,7 +715,7 @@ class FragmentHandler {
             if (m == null) {
                 if (_log.shouldWarn())
                     _log.warn("Receiving an unfragmented message" + (router != null ? " from [" +
-                              router.toBase64().substring(0,6) + "]" : "") +
+                              router.toShortBase64() + "]" : "") +
                               " -> The handler read no message, dropping the bytes");
                 _context.statManager().addRateData("tunnel.corruptMessage", 1);
                 return;
@@ -724,7 +724,7 @@ class FragmentHandler {
         } catch (I2NPMessageException ime) {
             if (_log.shouldWarn()) {
                 _log.warn("Receiving an unfragmented message" + (router != null ? " from [" +
-                          router.toBase64().substring(0,6) + "]" : "") +
+                          router.toShortBase64() + "]" : "") +
                           " -> Malformed, dropping it", ime);
             }
         }

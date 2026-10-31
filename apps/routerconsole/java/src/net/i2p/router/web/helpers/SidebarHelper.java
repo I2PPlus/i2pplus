@@ -982,7 +982,7 @@ public class SidebarHelper extends HelperBase {
                 buf.append("</td><td><b><a href=\"/tunnels#").append(h.toBase64().substring(0,4));
                 buf.append("\" target=_top title=\"").append(_t("Show tunnels"));
                 if (isAdvanced()) {
-                    buf.append(" [").append(h.toBase32().substring(0,8)).append("&hellip;b32.i2p]");
+                    buf.append(" [").append(h.toShortBase32()).append("&hellip;b32.i2p]");
                 }
                 buf.append("\">");
                 // Increase permitted max length of tunnel name & handle overflow with css

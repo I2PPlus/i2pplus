@@ -167,7 +167,7 @@ public class SearchJob extends JobImpl {
     public void runJob() {
         if (_startedOn <= 0) {_startedOn = getContext().clock().now();}
         if (_log.shouldDebug()) {
-            _log.debug("Searching for [" + _state.getTarget().toBase64().substring(0,6) + "]");
+            _log.debug("Searching for [" + _state.getTarget().toShortBase64() + "]");
         }
         searchNext();
     }
@@ -277,7 +277,7 @@ public class SearchJob extends JobImpl {
             _state.complete();
             succeed();
         } else if (isExpired()) {
-            if (_log.shouldDebug()) {_log.debug("Search for [" + _state.getTarget().toBase64().substring(0,6) + "] expired");}
+            if (_log.shouldDebug()) {_log.debug("Search for [" + _state.getTarget().toShortBase64() + "] expired");}
             _state.complete();
             fail();
         } else if (_state.getAttemptedSize() > MAX_PEERS_QUERIED) {
@@ -379,7 +379,7 @@ public class SearchJob extends JobImpl {
                     DatabaseEntry ds = _facade.getDataStore().get(peer);
                     if (ds == null) {
                         if (_log.shouldInfo()) {
-                            _log.info("Next closest peer [" + peer.toBase64().substring(0,6) +
+                            _log.info("Next closest peer [" + peer.toShortBase64() +
                                       "] was only recently referred to us, sending a search for them");
                         }
                         getContext().netDb().lookupRouterInfo(peer, null, null, _timeoutMs);
@@ -458,8 +458,8 @@ public class SearchJob extends JobImpl {
     private List<Hash> getClosestRouters(Hash key, int numClosest, Set<Hash> alreadyChecked) {
         Hash rkey = getContext().routingKeyGenerator().getRoutingKey(key);
         if (_log.shouldDebug()) {
-            _log.debug("Checked current routing key [" + rkey.toBase64().substring(0,6) +
-                       "] for [" + key.toBase64().substring(0,6) + "]");
+            _log.debug("Checked current routing key [" + rkey.toShortBase64() +
+                       "] for [" + key.toShortBase64() + "]");
         }
         return _peerSelector.selectNearestExplicit(rkey, numClosest, alreadyChecked, _facade.getKBuckets());
     }
@@ -478,8 +478,8 @@ public class SearchJob extends JobImpl {
             return;
         } else {
             if (_log.shouldInfo()) {
-                _log.info("Search for [" + _state.getTarget().toBase64().substring(0,6) +
-                          "] sent to [" + router.getIdentity().getHash().toBase64().substring(0,6) +
+                _log.info("Search for [" + _state.getTarget().toShortBase64() +
+                          "] sent to [" + router.getIdentity().getHash().toShortBase64() +
                           "] -> Per-peer timeout " + DataHelper.formatDuration(getPerPeerTimeoutMs(router.getIdentity().calculateHash())));
             }
         }
@@ -532,9 +532,9 @@ public class SearchJob extends JobImpl {
         TunnelId outTunnelId = outTunnel.getSendTunnelId(0);
 
         if (_log.shouldDebug()) {
-            _log.debug("Sending search to [" + to.toBase64().substring(0,6) + "] for [" +
-                       getState().getTarget().toBase32().substring(0,8) + "]\n* Replies: through [" +
-                       inTunnel.getPeer(0).toBase64().substring(0,6) + "] via [Tunnel " + inTunnelId + "]");
+            _log.debug("Sending search to [" + to.toShortBase64() + "] for [" +
+                       getState().getTarget().toShortBase32() + "]\n* Replies: through [" +
+                       inTunnel.getPeer(0).toShortBase64() + "] via [Tunnel " + inTunnelId + "]");
         }
 
         SearchMessageSelector sel = new SearchMessageSelector(getContext(), router, _expiration, _state);
@@ -561,14 +561,14 @@ public class SearchJob extends JobImpl {
         // Use the 4-arg one so we pick up the override in ExploreJob
         I2NPMessage msg = buildMessage(null, getContext().routerHash(), expiration, router);
         if (msg == null) {
-            if (_log.shouldWarn()) {_log.warn("Failed to create DatabaseLookupMessage to [" + router.getHash().toBase64().substring(0,6) + ']');}
+            if (_log.shouldWarn()) {_log.warn("Failed to create DatabaseLookupMessage to [" + router.getHash().toShortBase64() + ']');}
             getContext().jobQueue().addJob(new FailedJob(getContext(), router));
             return;
         }
 
         if (_log.shouldDebug()) {
-            _log.debug("Sending router search directly to [" + to.toBase64().substring(0,6) +
-                       "] for [" + _state.getTarget().toBase64().substring(0,6) + "]");
+            _log.debug("Sending router search directly to [" + to.toShortBase64() +
+                       "] for [" + _state.getTarget().toShortBase64() + "]");
         }
         SearchMessageSelector sel = new SearchMessageSelector(getContext(), router, _expiration, _state);
         SearchUpdateReplyFoundJob reply = new SearchUpdateReplyFoundJob(getContext(), router, _state, _facade, this);
@@ -610,8 +610,8 @@ public class SearchJob extends JobImpl {
         long duration = _state.replyFound(peer);
         // this processing can take a while, so split 'er up
         if (_log.shouldDebug())
-            _log.debug("Starting a Search ReplyJob -> Peer: [" + peer.toBase64().substring(0, 6) + ']'
-                       + " * Search key: [" + message.getSearchKey().toBase64().substring(0, 6) + ']'
+            _log.debug("Starting a Search ReplyJob -> Peer: [" + peer.toShortBase64() + ']'
+                       + " * Search key: [" + message.getSearchKey().toShortBase64() + ']'
                        + " * Facade: " + _facade);
         getContext().jobQueue().addJob(new SearchReplyJob(getContext(), this, message, peer, duration));
     }
@@ -672,13 +672,13 @@ public class SearchJob extends JobImpl {
             _state.replyTimeout(_peer);
             if (_penalizePeer) {
                 if (_log.shouldInfo()) {
-                    _log.info("Penalizing [" +  _peer.toBase64().substring(0,6) + "] for search timeout after " +
+                    _log.info("Penalizing [" +  _peer.toShortBase64() + "] for search timeout after " +
                               (getContext().clock().now() - _sentOn) + "ms");
                 }
                 getContext().profileManager().dbLookupFailed(_peer);
             } else {
                 if (_log.shouldInfo()) {
-                    _log.info("NOT penalizing [" + _peer.toBase64().substring(0,6) + "] for search timeout");
+                    _log.info("NOT penalizing [" + _peer.toShortBase64() + "] for search timeout");
                 }
             }
             getContext().statManager().addRateData("netDb.failedPeers", 1);
@@ -692,7 +692,7 @@ public class SearchJob extends JobImpl {
      */
     private void succeed() {
         if (_log.shouldInfo()) {
-            _log.info("Successful search for [" + _state.getTarget().toBase64().substring(0,6) +
+            _log.info("Successful search for [" + _state.getTarget().toShortBase64() +
                       "] after " + _state.getAttemptedSize() + " peers queried");
         }
         if (_log.shouldDebug()) {_log.debug("" + _state);}
@@ -711,7 +711,7 @@ public class SearchJob extends JobImpl {
                     _state.setStoredLeaseDate(newest.getLatestLeaseDate());
                     _facade.store(key, newest);
                     if (_log.shouldInfo()) {
-                        _log.info("Updated LeaseSet for [" + key.toBase64().substring(0,6)
+                        _log.info("Updated LeaseSet for [" + key.toShortBase64()
                                   + "] latest lease: " + newest.getLatestLeaseDate());
                     }
                 }
@@ -803,7 +803,7 @@ public class SearchJob extends JobImpl {
 
         if (outTunnel != null) {
             if (_log.shouldInfo()) {
-                _log.info("Resending LeaseSet to [" + to.toBase64().substring(0,6) + "] via " + outTunnel);
+                _log.info("Resending LeaseSet to [" + to.toShortBase64() + "] via " + outTunnel);
             }
             // TODO pass a priority to the dispatcher
             getContext().tunnelDispatcher().dispatchOutbound(msg, outTunnel.getSendTunnelId(0), null, to);
@@ -821,14 +821,14 @@ public class SearchJob extends JobImpl {
         if (isLocal()) {
             if (_log.shouldError()) {
                 _log.error("Search failed even though the target is local [" +
-                           _state.getTarget().toBase64().substring(0,6) + ']');
+                           _state.getTarget().toShortBase64() + ']');
             }
             succeed();
             return;
         }
 
         if (_log.shouldInfo()) {
-            _log.info("Search for [" + _state.getTarget().toBase64().substring(0,6) + "] failed");
+            _log.info("Search for [" + _state.getTarget().toShortBase64() + "] failed");
         }
 
         long time = getContext().clock().now() - _state.getWhenStarted();
@@ -992,7 +992,7 @@ public class SearchJob extends JobImpl {
         boolean rv = _facade.addContact(peer);
         if (rv) {
             if (_log.shouldDebug())
-                _log.debug("Queueing up search for next time: [" + peer.toBase64().substring(0,6) + "]");
+                _log.debug("Queueing up search for next time: [" + peer.toShortBase64() + "]");
             Set<Hash> s = Collections.singleton(peer);
             _facade.queueForExploration(s);
         }

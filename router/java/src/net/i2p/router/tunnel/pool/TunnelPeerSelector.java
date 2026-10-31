@@ -959,7 +959,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             if (nickname != null) {
                 who = nickname;
             } else if (settings.getDestination() != null) {
-                who = '[' + settings.getDestination().toBase64().substring(0, 6) + ']';
+                who = '[' + settings.getDestination().toShortBase64() + ']';
             } else {
                 who = "Exploratory";
             }
@@ -1965,7 +1965,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             Hash h = tunnel.get(tunnel.size() - 1);
             if (!allowAsIBGW(h)) {
                 if (log.shouldWarn()) {
-                    log.warn("Selected IPv6-only or unreachable peer for Inbound Gateway [" + h.toBase64().substring(0,6) + "]");
+                    log.warn("Selected IPv6-only or unreachable peer for Inbound Gateway [" + h.toShortBase64() + "]");
                 }
                 // treat as a timeout in the profile
                 // tunnelRejected() would set the last heard from time
@@ -1976,7 +1976,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             Hash h = tunnel.get(0);
             if (!allowAsOBEP(h)) {
                 if (log.shouldWarn()) {
-                    log.warn("Selected IPv6-only peer for Outbound Endpoint [" + h.toBase64().substring(0,6) + "]");
+                    log.warn("Selected IPv6-only peer for Outbound Endpoint [" + h.toShortBase64() + "]");
                 }
                 // treat as a timeout in the profile
                 // tunnelRejected() would set the last heard from time
@@ -2016,8 +2016,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
                 if (!hf.equals(us))
                     ctx.profileManager().tunnelTimedOut(hf);
                 if (!ht.equals(us) && log.shouldDebug()) {
-                    log.debug("Tunnel check failed between [" + hf.toBase64().substring(0,6) +
-                              "] and [" + ht.toBase64().substring(0,6) + "] -> Blaming only the source hop");
+                    log.debug("Tunnel check failed between [" + hf.toShortBase64() +
+                              "] and [" + ht.toShortBase64() + "] -> Blaming only the source hop");
                 }
                 rv = false;
                 break;
@@ -2582,7 +2582,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             recordFirstHopFail(ctx, peer);
             Log log = ctx.logManager().getLog(TunnelPeerSelector.class);
             if (log.shouldInfo())
-                log.info("Skipping pre-connect to [" + peer.toBase64().substring(0,6) + "]" +
+                log.info("Skipping pre-connect to [" + peer.toShortBase64() + "]" +
                          " — no valid SSU or NTCP address");
             return PreConnectOutcome.NO_USABLE_ADDRESS;
         }
@@ -2673,7 +2673,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             applyProbeFailure(getContext(), _peer);
             Log log = getContext().logManager().getLog(TunnelPeerSelector.class);
             if (log.shouldDebug()) {
-                log.debug("Pre-connect to [" + _peer.toBase64().substring(0,6) +
+                log.debug("Pre-connect to [" + _peer.toShortBase64() +
                           "] failed after transport retries -> Recorded as a failed first hop");
             }
         }

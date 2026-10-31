@@ -314,7 +314,7 @@ import net.i2p.util.SystemVersion;
                 Hash peer = closest.iterator().next();
                 if (isFirstHopFailing(ctx, peer)) {
                     if (log.shouldInfo())
-                        log.info("Exploratory closest hop [" + peer.toBase64().substring(0,6) +
+                        log.info("Exploratory closest hop [" + peer.toShortBase64() +
                                  "] previously failed as first hop -> Selecting a replacement");
                     closestExclude.add(peer);
                     closest.clear();
@@ -325,7 +325,7 @@ import net.i2p.util.SystemVersion;
                 } else if (!ctx.commSystem().isEstablished(peer)) {
                     if (ctx.commSystem().wasUnreachable(peer)) {
                         if (log.shouldInfo())
-                            log.info("Exploratory closest hop [" + peer.toBase64().substring(0,6) +
+                            log.info("Exploratory closest hop [" + peer.toShortBase64() +
                                      "] is unreachable -> Retrying the selection");
                         closestExclude.add(peer);
                         closest.clear();
@@ -336,7 +336,7 @@ import net.i2p.util.SystemVersion;
                     } else if (!ctx.commSystem().isConnecting(peer)) {
                         if (log.shouldInfo())
                             log.info("Pre-connecting to the exploratory closest hop [" +
-                                     peer.toBase64().substring(0,6) + "] -> For the next tunnel build");
+                                     peer.toShortBase64() + "] -> For the next tunnel build");
                         preConnectTo(ctx, peer);
                     }
                 }
@@ -380,7 +380,7 @@ import net.i2p.util.SystemVersion;
                     Hash peer = furthest.iterator().next();
                     if (isFirstHopFailing(ctx, peer)) {
                         if (log.shouldInfo())
-                            log.info("Exploratory furthest hop [" + peer.toBase64().substring(0,6) +
+                            log.info("Exploratory furthest hop [" + peer.toShortBase64() +
                                      "] previously failed as first hop -> Selecting a replacement");
                         exclude.add(peer);
                         furthest.clear();
@@ -388,7 +388,7 @@ import net.i2p.util.SystemVersion;
                     } else if (!ctx.commSystem().isEstablished(peer)) {
                         if (ctx.commSystem().wasUnreachable(peer)) {
                             if (log.shouldInfo())
-                                log.info("Exploratory furthest hop [" + peer.toBase64().substring(0,6) +
+                                log.info("Exploratory furthest hop [" + peer.toShortBase64() +
                                          "] is unreachable -> Retrying the selection");
                             exclude.add(peer);
                             furthest.clear();
@@ -396,7 +396,7 @@ import net.i2p.util.SystemVersion;
                         } else if (!ctx.commSystem().isConnecting(peer)) {
                             if (log.shouldInfo())
                                 log.info("Pre-connecting to the exploratory furthest hop [" +
-                                         peer.toBase64().substring(0,6) + "] -> For the next tunnel build");
+                                         peer.toShortBase64() + "] -> For the next tunnel build");
                             preConnectTo(ctx, peer);
                         }
                     }

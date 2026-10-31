@@ -312,7 +312,7 @@ static final long OFFENSE_DECAY_MS = 30 * 60 * 1000L;
             }
         }
         if (!isActive && _log.shouldDebug()) {
-            _log.debug("Peer [" + peer.toBase64().substring(0, 6) + "] strike " +
+            _log.debug("Peer [" + peer.toShortBase64() + "] strike " +
                        (mark != null ? mark.offenses + 1 : 1) + "/" + threshold +
                        (underAttack ? " (network under stress)" : "") +
                        " - not yet excluded");
@@ -356,7 +356,7 @@ static final long OFFENSE_DECAY_MS = 30 * 60 * 1000L;
     private void logGhostMarkLocked(Hash peer, boolean underAttack, long cooldownMs,
                                      int offenses, long now) {
         if (_log.shouldDebug()) {
-            _log.debug("Peer [" + peer.toBase64().substring(0, 6) + "] marked as ghost for " +
+            _log.debug("Peer [" + peer.toShortBase64() + "] marked as ghost for " +
                        DataHelper.formatDuration(cooldownMs) +
                        (offenses > 0 ? " (repeat offense " + offenses + ")" : "") +
                        (underAttack ? " (network under stress)" : ""));

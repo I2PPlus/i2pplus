@@ -181,7 +181,7 @@ class ProbeStalePeerJob extends JobImpl {
             RouterInfo ri = _facade.lookupRIUnvalidated(peer);
             if (ri != null && _log.shouldInfo()) {
                 _log.info("Pinging " + (isStartupBurst ? "startup" : "stale") +
-                          " peer [" + peer.toBase64().substring(0, 6) + "]" +
+                          " peer [" + peer.toShortBase64() + "]" +
                           " pub=" + new Date(ri.getPublished()));
             }
 

@@ -135,7 +135,7 @@ class FragmentedMessage {
         }
         if (_log.shouldDebug())
             _log.debug("Receiving " + (isLast ? "last ": "") + length + " bytes message [MsgID " + _messageId + "]" +
-                       (toRouter != null ? "\n* Target Router: [" + toRouter.toBase64().substring(0,6) + "]" : "") +
+                       (toRouter != null ? "\n* Target Router: [" + toRouter.toShortBase64() + "]" : "") +
                        " on tunnel: " + toTunnel + " with " + offset + " bytes offset");
         ByteArray ba = _cache.acquire(); // new ByteArray(payload, offset, length); // new byte[length]);
         System.arraycopy(payload, offset, ba.getData(), 0, length);
@@ -373,7 +373,7 @@ class FragmentedMessage {
     String targetString() {
         if (_toRouter == null) {return null;}
         StringBuilder buf = new StringBuilder(40);
-        buf.append("[Target: ").append(_toRouter.toBase64().substring(0, 6)).append(']');
+        buf.append("[Target: ").append(_toRouter.toShortBase64()).append(']');
         if (_toTunnel != null) {
             buf.append(" [TunnelId ").append(_toTunnel.getTunnelId()).append(']');
         }
@@ -408,7 +408,7 @@ class FragmentedMessage {
         buf.append(" * Lifetime: ").append(DataHelper.formatDuration(_context.clock().now() - _createdOn));
         String target = targetString();
         if (target != null) {
-            buf.append("\n* Target: [").append(_toRouter.toBase64().substring(0, 6)).append(']');
+            buf.append("\n* Target: [").append(_toRouter.toShortBase64()).append(']');
             if (_toTunnel != null) {
                 buf.append(" * TunnelId: ").append(_toTunnel.getTunnelId());
             }

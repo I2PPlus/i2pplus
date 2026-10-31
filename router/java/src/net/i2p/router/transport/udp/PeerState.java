@@ -1117,7 +1117,7 @@ public class PeerState {
         _outboundMessages = new CachedIteratorCollection<>();
         _outboundQueue = new PriBlockingQueue<>(ctx, "UDP-PeerState", outboundQueueSize);
         _remotePeer = remotePeer;
-        _shortHash = remotePeer != null ? remotePeer.toBase64().substring(0, 6) : "null";
+        _shortHash = remotePeer != null ? remotePeer.toShortBase64() : "null";
         _isInbound = isInbound;
         _remoteHostId = new RemoteHostId(_remoteIP, _remotePort);
         _bwEstimator = new SimpleBandwidthEstimator(ctx, this);

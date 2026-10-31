@@ -474,7 +474,7 @@ public class NTCPTransport extends TransportImpl {
         if (con == null) {
             if (_log.shouldDebug()) {
                 _log.debug("[NTCP] No valid NTCP address for [" +
-                           ih.toBase64().substring(0,6) + "] -> Send failed");
+                           ih.toShortBase64() + "] -> Send failed");
             }
             _context.statManager().addRateData("ntcp.noBidNoAddress", 1);
             markUnreachable(ih);
@@ -1145,7 +1145,7 @@ public class NTCPTransport extends TransportImpl {
                 String banStatus = isBlocklisted ? "blocklisted " : "";
                 String msg = "[NTCP] Forcing immediate disconnection of " +
                              banStatus +
-                             "Router [" + peer.toBase64().substring(0,6) + "]" + reasonStr;
+                             "Router [" + peer.toShortBase64() + "]" + reasonStr;
                 // A blocklist action is an event worth a warning;
                 // a plain forced disconnect is routine churn.
                 if (banStatus.isEmpty()) {

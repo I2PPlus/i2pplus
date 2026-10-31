@@ -252,7 +252,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         _to = msg.getDestination();
         Hash toHash = _to.calculateHash();
         _hashPair = new OutboundCache.HashPair(_from.calculateHash(), toHash);
-        _toString = "[" + toHash.toBase32().substring(0,8) + "]";
+        _toString = "[" + toHash.toShortBase32() + "]";
         // we look up here rather than runJob() so we may adjust the timeout
         _leaseSet = ctx.clientNetDb(_from.calculateHash()).lookupLeaseSetLocally(toHash);
         if (_leaseSet != null) {
@@ -364,7 +364,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 }
                 if (shouldFetch) {
                     if (_log.shouldInfo()) {
-                        _log.info("Stale published LeaseSet, initiating search: [" + _leaseSet.getHash().toBase32().substring(0, 8) + "]");
+                        _log.info("Stale published LeaseSet, initiating search: [" + _leaseSet.getHash().toShortBase32() + "]");
                     }
                     LookupLeaseSetFailedJob failed = new LookupLeaseSetFailedJob(getContext());
                     kndf.lookupLeaseSetRemotely(_leaseSet.getHash(), success, failed,
@@ -390,7 +390,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                     if (_log.shouldInfo()) {
                         long exp = now - _leaseSet.getLatestLeaseDate();
                         _log.info("LeaseSet expired " + DataHelper.formatDuration(exp) +
-                                  " ago, initiating remote search for [" + _leaseSet.getHash().toBase32().substring(0, 8) + "]");
+                                  " ago, initiating remote search for [" + _leaseSet.getHash().toShortBase32() + "]");
                     }
                     _leaseSetLookupBegin = getContext().clock().now();
                     LookupLeaseSetFailedJob failed = new LookupLeaseSetFailedJob(getContext());
@@ -480,7 +480,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             _leaseSetLookupBegin = getContext().clock().now();
             if (_log.shouldDebug()) {
                 _log.debug("Send Outbound client message - initiating LeaseSet Lookup job " +
-                           _toString + " from client [" + _from.calculateHash().toBase32().substring(0, 8) + "]");
+                           _toString + " from client [" + _from.calculateHash().toShortBase32() + "]");
             }
             LookupLeaseSetFailedJob failed = new LookupLeaseSetFailedJob(getContext());
             Hash key = _to.calculateHash();
@@ -711,7 +711,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             }
             if (_log.shouldWarn()) {
                 _log.warn("Skipping UNREACHABLE gateway [" +
-                          l.getGateway().toBase64().substring(0,6) + "] for " + _toString);
+                          l.getGateway().toShortBase64() + "] for " + _toString);
             }
         }
         if (_lease == null) {
@@ -934,7 +934,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             _log.debug("Dispatching a client message to " + _toString +
                        " -> Sent on tunnel " + _outTunnel.getSendTunnelId(0) +
                        "\n* Lease tunnel: " + _lease.getTunnelId() +
-                       " * Gateway: [" + _lease.getGateway().toBase64().substring(0, 6) + "]");
+                       " * Gateway: [" + _lease.getGateway().toShortBase64() + "]");
         }
 
         DispatchJob dispatchJob = new DispatchJob(msg, selector, onReply, onFail);
@@ -1031,7 +1031,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                                (_lease != null ? _lease.getTunnelId() : "null") +
                                " * Message size: " + (_msg != null ? _msg.getMessageSize() : 0) + " bytes" +
                                "\n* Lease gateway: " +
-                               (_lease != null ? "[" + _lease.getGateway().toBase64().substring(0, 6) + "]" : "null") +
+                               (_lease != null ? "[" + _lease.getGateway().toShortBase64() + "]" : "null") +
                                "\n* " + _lease);
                 }
                 TunnelInfo failover = selectOutboundTunnel(_to);
@@ -1298,7 +1298,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         }
         if (_log.shouldDebug()) {
             String lsInfo = _leaseSet != null ?
-                ("LS [" + _leaseSet.getHash().toBase32().substring(0, 8) + "]" +
+                ("LS [" + _leaseSet.getHash().toShortBase32() + "]" +
                  " leases=" + _leaseSet.getLeaseCount() +
                  " current=" + _leaseSet.isCurrent(Router.CLOCK_FUDGE_FACTOR)) :
                 null;

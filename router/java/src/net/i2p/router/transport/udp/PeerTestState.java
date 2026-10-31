@@ -421,7 +421,7 @@ class PeerTestState {
                 buf.append(" LOCAL: ");
             buf.append(_aliceIP).append(':').append(_alicePort).append("]");
             if (_aliceHash != null)
-                buf.append(' ').append('[').append(_aliceHash.toBase64().substring(0, 6)).append(']');
+                buf.append(' ').append('[').append(_aliceHash.toShortBase64()).append(']');
         }
         if (_aliceIPFromCharlie != null)
             buf.append(" [from Charlie: ").append(_aliceIPFromCharlie).append(':').append(_alicePortFromCharlie).append("]");
@@ -436,7 +436,7 @@ class PeerTestState {
             else
                 buf.append(_charlieIP).append(':').append(_charliePort).append("]");
             if (_charlieHash != null)
-                buf.append(' ').append('[').append(_charlieHash.toBase64().substring(0, 6)).append(']');
+                buf.append(' ').append('[').append(_charlieHash.toShortBase64()).append(']');
             if (_previousCharlies != null && !_previousCharlies.isEmpty())
                 buf.append(" previous: ").append(_previousCharlies);
         }

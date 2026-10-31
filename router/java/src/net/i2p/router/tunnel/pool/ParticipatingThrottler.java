@@ -544,7 +544,7 @@ public class ParticipatingThrottler {
             off[1] = now;
         }
         if (_log.shouldWarn()) {
-            _log.warn("Join from Router [" + h.toBase64().substring(0,6) + "] with no version" +
+            _log.warn("Join from Router [" + h.toShortBase64() + "] with no version" +
                       " -> Rejecting transient (offense " + off[0] + ')');
         }
         if (!isBanned && off[0] >= NO_VERSION_BAN_THRESHOLD &&
@@ -558,7 +558,7 @@ public class ParticipatingThrottler {
             _banLogger.logBan(h, ipPort, banReason, escalatedBanTime, ri);
             context.banlist().banlistRouter(h, "" + banReason, null, null, context.clock().now() + escalatedBanTime);
             if (_log.shouldWarn()) {
-                _log.warn("Banning Router [" + h.toBase64().substring(0,6) + "] for " + (escalatedBanTime / 60000) +
+                _log.warn("Banning Router [" + h.toShortBase64() + "] for " + (escalatedBanTime / 60000) +
                           "m after " + off[0] + " no-version joins");
             }
         }
@@ -606,7 +606,7 @@ public class ParticipatingThrottler {
         if (VersionComparator.comp(version, "0.9.57") < 0 && isCompressible) {
             if (shouldDisconnect) {context.simpleTimer2().addEvent(new Disconnector(h, version), 11*60*1000L);}
             if (!isBanned && _log.shouldWarn()) {
-                _log.warn("Banning Router [" + h.toBase64().substring(0,6) + "] for 24h -> Compressible RouterInfo / " + version);
+                _log.warn("Banning Router [" + h.toShortBase64() + "] for 24h -> Compressible RouterInfo / " + version);
             }
             String ipPort = TransportImpl.getRouterIPPort(ri);
             String banReason = "Compressible RouterInfo & older than 0.9.57";
@@ -638,7 +638,7 @@ public class ParticipatingThrottler {
                 context.commSystem().forceDisconnect(h, "Old version " + version);
             }
             if (!isBanned && _log.shouldWarn()) {
-                _log.warn("Banning Router [" + h.toBase64().substring(0,6) + "] for " + (bantime / 60000) +
+                _log.warn("Banning Router [" + h.toShortBase64() + "] for " + (bantime / 60000) +
                           "m -> " + version + (caps.isEmpty() ? "" : " / " + caps));
             }
             if (context.banlist().isLuBanEnabled()) {
@@ -670,7 +670,7 @@ public class ParticipatingThrottler {
         if (VersionComparator.comp(version, MIN_VERSION) < 0 && isUnreachable && shouldBlockOldRouters && !isFast) {
             if (shouldDisconnect) {context.simpleTimer2().addEvent(new Disconnector(h, version), 11*60*1000L);}
             if (_log.shouldWarn()) {
-                _log.warn("Ignoring Tunnel Request from Router [" + h.toBase64().substring(0,6) + "] -> " + version + (caps.isEmpty() ? "" : " / " + caps));
+                _log.warn("Ignoring Tunnel Request from Router [" + h.toShortBase64() + "] -> " + version + (caps.isEmpty() ? "" : " / " + caps));
             }
             return true;
         }
@@ -868,7 +868,7 @@ public class ParticipatingThrottler {
             context.banlist().banlistRouter(h, "" + banReason, null, null, context.clock().now() + bantime);
             context.simpleTimer2().addEvent(new Disconnector(h, banReason), 11 * 60 * 1000L);
             if (_log.shouldWarn()) {
-                _log.warn("Banning Router [" + h.toBase64().substring(0,6) + "] for " +
+                _log.warn("Banning Router [" + h.toShortBase64() + "] for " +
                           DataHelper.formatDuration(bantime) +
                           " -> Excessive tunnel requests" +
                           "\n* Requests: " + count + " / " + limit + " in 90s");
@@ -887,7 +887,7 @@ public class ParticipatingThrottler {
     private void _logHighRequestCount(Hash h, String caps, int count, int limit) {
         if (_log.shouldWarn()) {
             _log.warn("Rejecting tunnel requests from a " + (caps != null ? caps : "") +
-                      " router [" + h.toBase64().substring(0, 6) + "] -> Over the request limit"
+                      " router [" + h.toShortBase64() + "] -> Over the request limit"
                       + "\n* Requests: " + count + " of " + limit + " in 90s");
         }
     }

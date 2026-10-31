@@ -60,7 +60,7 @@ public class Subscriber implements Sink {
             if (log.shouldWarn())
                 log.warn("Bad subscription from " +
                          (dest == null ? "no destination" :
-                          "[" + dest.calculateHash().toBase32().substring(0, 8) + "]") +
+                          "[" + dest.calculateHash().toShortBase32() + "]") +
                          " -> Port: " + fromPort);
         } else {
             // swap fromPort and toPort for the replies

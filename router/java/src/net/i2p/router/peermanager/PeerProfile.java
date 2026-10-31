@@ -746,7 +746,7 @@ public class PeerProfile {
      */
     public synchronized TunnelHistory getTunnelHistory() {
         if (_tunnelHistory == null) {
-            String group = (null == _peer ? "profileUnknown" : _peer.toBase64().substring(0,6));
+            String group = (null == _peer ? "profileUnknown" : _peer.toShortBase64());
             _tunnelHistory = new TunnelHistory(_context, group);
         }
         return _tunnelHistory;
@@ -1035,7 +1035,7 @@ public class PeerProfile {
         _tunnelTestTimeAvgLastUpdate = _context.clock().now();
 
         if (_log.shouldInfo()) {
-            _log.info("Timed tunnel test for [" + _peer.toBase64().substring(0,6) +
+            _log.info("Timed tunnel test for [" + _peer.toShortBase64() +
                       "] updated to " + DataHelper.formatDuration((long) _tunnelTestResponseTimeAvg));
         }
     }
@@ -1066,7 +1066,7 @@ public class PeerProfile {
         _peerTestResponseTimeAvg = dampLatency(_peerTestResponseTimeAvg, ms);
         _peerTestTimeLastUpdate = _context.clock().now();
         if (_log.shouldInfo()) {
-            _log.info("Timed peer test average for [" + _peer.toBase64().substring(0,6) +
+            _log.info("Timed peer test average for [" + _peer.toShortBase64() +
                       "] updated to " + (_peerTestResponseTimeAvg) + "ms");
         }
     }
@@ -1327,7 +1327,7 @@ void recalculateLowLatency() {
                 if (_log.shouldDebug() ) {
                     StringBuilder buf = new StringBuilder(128);
                     buf.append("1 minute throughput for [");
-                    buf.append(_peer.toBase64().substring(0,6));
+                    buf.append(_peer.toShortBase64());
                     buf.append("] updated after ").append(size).append(" bytes sent \n* Measured: ");
                     for (int i = 0; i < THROUGHPUT_COUNT; i++) {
                         buf.append(_peakTunnel1mThroughput[i]).append(" ");
@@ -1460,7 +1460,7 @@ void recalculateLowLatency() {
         // Don't expand profiles that have never accepted or rejected one of our
         // tunnel builds; they'll be dropped from memory instead.
         if (!hasTunnelHistory()) {return;}
-        String group = (null == _peer ? "profileUnknown" : _peer.toBase64().substring(0,6));
+        String group = (null == _peer ? "profileUnknown" : _peer.toShortBase64());
 
         if (_tunnelCreateResponseTime == null) {
             _tunnelCreateResponseTime = new RateStat("tunnelCreateResponseTime", "Time for tunnel create response from peer (ms)", group, TUNNEL_CREATE_RESPONSE_RATES);
@@ -1473,7 +1473,7 @@ void recalculateLowLatency() {
      * For floodfills.
      */
     public synchronized void expandDBProfile() {
-        String group = (null == _peer ? "profileUnknown" : _peer.toBase64().substring(0,6));
+        String group = (null == _peer ? "profileUnknown" : _peer.toShortBase64());
         if (_dbResponseTime == null) {
             _dbResponseTime = new RateStat("dbResponseTime", "Time for NetDb response from peer (ms)", group, DB_RESPONSE_RATES);
         }

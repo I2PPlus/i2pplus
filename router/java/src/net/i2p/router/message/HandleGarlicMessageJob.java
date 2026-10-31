@@ -138,7 +138,7 @@ public class HandleGarlicMessageJob extends JobImpl implements GarlicMessageRece
                     }
                     if (_log.shouldDebug()) {
                         _log.debug("Router delivery instructions targeting ["
-                                + routerHash.toBase64().substring(0, 6) + "] for " + data);
+                                + routerHash.toShortBase64() + "] for " + data);
                     }
                     // Forward message directly to target router with a 10 second timeout and low priority
                     SendMessageDirectJob job = new SendMessageDirectJob(getContext(), data,
@@ -161,7 +161,7 @@ public class HandleGarlicMessageJob extends JobImpl implements GarlicMessageRece
                 }
                 if (_log.shouldDebug()) {
                     _log.debug("Tunnel delivery instructions targeting ["
-                            + tunnelRouterHash.toBase64().substring(0, 6) + "] for " + data);
+                            + tunnelRouterHash.toShortBase64() + "] for " + data);
                 }
                 // Forward message wrapped in tunnel gateway message to target router with a 10 second timeout and low priority
                 SendMessageDirectJob tunnelJob = new SendMessageDirectJob(getContext(), gwMessage,

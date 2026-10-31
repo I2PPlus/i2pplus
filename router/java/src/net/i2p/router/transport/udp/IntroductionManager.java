@@ -242,7 +242,7 @@ class IntroductionManager {
             List<RouterAddress> ras = _transport.getTargetAddresses(ri);
             if (ras.isEmpty()) {
                 if (_log.shouldInfo())
-                    _log.info("Selected peer has no SSU address [" + ri.getHash().toBase64().substring(0,6) + ']');
+                    _log.info("Selected peer has no SSU address [" + ri.getHash().toShortBase64() + ']');
                 continue;
             }
             if ( /* _context.profileOrganizer().isFailing(cur.getRemotePeer()) || */
@@ -527,7 +527,7 @@ class IntroductionManager {
                 } else {
                     if (_log.shouldWarn())
                         _log.warn("Signature validation failed for relay request from Alice [" +
-                                  aliceRI.getHash().toBase64().substring(0,6) + ']');
+                                  aliceRI.getHash().toShortBase64() + ']');
                     rcode = SSU2Util.RELAY_REJECT_BOB_SIGFAIL;
                 }
             } else {
@@ -714,7 +714,7 @@ class IntroductionManager {
             if (aliceRI == null) {
                 if (_log.shouldInfo()) {
                     _log.info("Delaying after " + retryCount + " retries -> No RouterInfo for [" +
-                              alice.toBase64().substring(0,6) + "]");
+                              alice.toShortBase64() + "]");
                 }
                 if (retryCount == 0) {new DelayIntro(bob, alice, data);}
                 return false;
@@ -854,7 +854,7 @@ class IntroductionManager {
                 } else {
                     if (_log.shouldWarn()) {
                         _log.warn("Signature validation failed for relay introduction from Alice [" +
-                                  aliceRI.getHash().toBase64().substring(0,6) + ']');
+                                  aliceRI.getHash().toShortBase64() + ']');
                     }
                     rcode = SSU2Util.RELAY_REJECT_CHARLIE_SIGFAIL;
                 }
@@ -965,7 +965,7 @@ class IntroductionManager {
                                          _context.routerHash(), null, signedData, spk)) { /* ignored */ } else {
                     if (_log.shouldWarn())
                         _log.warn("Signature validation failed for relay response as Bob from Charlie [" +
-                                  charlie.getHash().toBase64().substring(0,6) + ']');
+                                  charlie.getHash().toShortBase64() + ']');
                 }
             } else {
                 if (_log.shouldWarn())

@@ -987,12 +987,12 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         }
         if (ri.getPublished() < 0) {
             throw new DataFormatException("Invalid RouterInfo publication date [" +
-                                           ri.getIdentity().calculateHash().toBase64().substring(0,6) + "]");
+                                           ri.getIdentity().calculateHash().toShortBase64() + "]");
         }
         try {
             Hash h = ri.getHash();
             if (h.equals(_context.routerHash())) {return;}
-            String hash = h.toBase64().substring(0,6);
+            String hash = h.toShortBase64();
             RouterInfo old = _context.netDb().store(h, ri);
             if (flood && !ri.equals(old)) {
                 FloodfillNetworkDatabaseFacade fndf = (FloodfillNetworkDatabaseFacade) _context.netDb();
@@ -1010,7 +1010,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         } catch (IllegalArgumentException iae) {
             if (shouldLogDebug()) {_log.debug("RouterInfo store failure: " + ri, iae);}
             else if (_log.shouldWarn()) {
-                _log.warn("Failed NetDBStore of RouterInfo [" + ri.getHash().toBase64().substring(0,6) + "] \n* " + iae.getMessage());
+                _log.warn("Failed NetDBStore of RouterInfo [" + ri.getHash().toShortBase64() + "] \n* " + iae.getMessage());
             }
         }
     }

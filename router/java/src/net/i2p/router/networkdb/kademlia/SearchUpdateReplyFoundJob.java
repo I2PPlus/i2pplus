@@ -104,7 +104,7 @@ class SearchUpdateReplyFoundJob extends JobImpl implements ReplyJob {
 
         I2NPMessage message = _message;
         if (_log.shouldInfo())
-            _log.info("Reply from [" + _peer.toBase64().substring(0,6)
+            _log.info("Reply from [" + _peer.toShortBase64()
                       + "] with " + message.getClass().getSimpleName().replace("Database", "Db").replace("Message", "Msg"));
 
         long howLong = System.currentTimeMillis() - _sentOn;
@@ -137,7 +137,7 @@ class SearchUpdateReplyFoundJob extends JobImpl implements ReplyJob {
                             _state.setStoredLeaseDate(best.getLatestLeaseDate());
                             _facade.store(ls.getHash(), best);
                             if (_log.shouldInfo()) {
-                                _log.info("Stored best initial LeaseSet from [" + _peer.toBase64().substring(0,6)
+                                _log.info("Stored best initial LeaseSet from [" + _peer.toShortBase64()
                                           + "] latest lease: " + best.getLatestLeaseDate());
                             }
                         }
@@ -157,10 +157,10 @@ class SearchUpdateReplyFoundJob extends JobImpl implements ReplyJob {
             } catch (IllegalArgumentException iae) {
                 if (_log.shouldDebug()) {
                     if (iae.getMessage().contains("published over")) {
-                        _log.debug("Stale RouterInfo from [" + _peer.toBase64().substring(0,6) +
+                        _log.debug("Stale RouterInfo from [" + _peer.toShortBase64() +
                                    "] -> " + iae.getMessage());
                     } else {
-                        _log.debug("Invalid data packet from [" + _peer.toBase64().substring(0,6) +
+                        _log.debug("Invalid data packet from [" + _peer.toShortBase64() +
                                    "] -> " + iae.getMessage());
                         // blame the peer
                         getContext().profileManager().dbLookupReply(_peer, 0, 0, 1, 0, timeToReply);

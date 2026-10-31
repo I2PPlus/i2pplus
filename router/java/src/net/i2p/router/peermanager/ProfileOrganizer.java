@@ -1345,7 +1345,7 @@ public class ProfileOrganizer {
         if (isExcludedFromProfiling(peer)) return null;
 
         if (_log.shouldInfo()) {
-            _log.info("New profile created for [" + peer.toBase64().substring(0,6) + "]");
+            _log.info("New profile created for [" + peer.toShortBase64() + "]");
         }
 
         PeerProfile old = getProfile(peer);
@@ -3761,7 +3761,7 @@ public class ProfileOrganizer {
                                           isFast ? FAST_ACCEPTANCE_SAMPLES : MIN_TUNNEL_REQUESTS));
             if (reason != null) {
                 if (_log.shouldDebug()) {
-                    _log.debug("Purging peer [" + peer.toBase64().substring(0, 6) +
+                    _log.debug("Purging peer [" + peer.toShortBase64() +
                                "] from " + tierName + " tier: " + reason.getKey());
                 }
                 it.remove();
@@ -5665,7 +5665,7 @@ public class ProfileOrganizer {
             if (ghostMgr != null && ghostMgr.isGhost(peer)) {
                 if (_log.shouldDebug()) {
                     _log.debug("Skipping ghost peer from promotion [" +
-                               peer.toBase64().substring(0, 6) + "]");
+                               peer.toShortBase64() + "]");
                 }
                 return false;
             }
@@ -5678,7 +5678,7 @@ public class ProfileOrganizer {
             recordPromotionSkip(skipReason);
             if (_log.shouldDebug()) {
                 _log.debug("Skipping a peer from promotion -> " + skipReason
-                           + "\n* Peer: [" + peer.toBase64().substring(0, 6) + ']'
+                           + "\n* Peer: [" + peer.toShortBase64() + ']'
                            + " * Stale profile: " + (profile != notFailingProfile));
             }
             return false;
@@ -5701,7 +5701,7 @@ public class ProfileOrganizer {
             _context.statManager().addRateData("tunnel.promotionHeldNoAddress", 1);
             _refresher.requestAddressRefresh(peer);
             if (_log.shouldDebug())
-                _log.debug("Holding promotion for [" + peer.toBase64().substring(0, 6) +
+                _log.debug("Holding promotion for [" + peer.toShortBase64() +
                            "]: RouterInfo has no usable transport address");
             return true;
         }
@@ -5903,7 +5903,7 @@ public class ProfileOrganizer {
             return true;
         }
         if (_log.shouldDebug()) {
-            _log.debug("Promoting peer [" + peer.toBase64().substring(0, 6) +
+            _log.debug("Promoting peer [" + peer.toShortBase64() +
                        "] on a stale RouterInfo: tier at " + tierSize + " below floor " + safeFloor);
         }
         _refresher.noteStalePromotion();
@@ -6189,7 +6189,7 @@ public class ProfileOrganizer {
                     String evidence = promotionEvidence(promoted.getCapacityBonus(),
                                                         promoted.getCapacityBonusRaw(),
                                                         promoted == liveProfile);
-                    _log.info("Promoted peer [" + peer.toBase64().substring(0, 6) + "] " + transition +
+                    _log.info("Promoted peer [" + peer.toShortBase64() + "] " + transition +
                               (evidence != null ? evidence : ""));
                 }
             }
@@ -6312,7 +6312,7 @@ public class ProfileOrganizer {
                 boolean inHighCap = _highCapacityPeers.containsKey(peer);
                 if (inFast || inHighCap) {
                     if (_log.shouldInfo()) {
-                        _log.info("Demoting peer [" + peer.toBase64().substring(0, 6) +
+                        _log.info("Demoting peer [" + peer.toShortBase64() +
                                   "] from fast/high-cap tiers — stale RouterInfo, no proof of life");
                     }
                     if (inFast) removeFastPeer(peer);
@@ -6339,7 +6339,7 @@ public class ProfileOrganizer {
             boolean inHighCap = _highCapacityPeers.containsKey(peer);
             if (inFast || inHighCap) {
                 if (_log.shouldInfo()) {
-                    _log.info("Demoting peer [" + peer.toBase64().substring(0, 6) +
+                    _log.info("Demoting peer [" + peer.toShortBase64() +
                               "] from fast/high-cap tiers due to high latency");
                 }
                 if (inFast) removeFastPeer(peer);
@@ -6366,7 +6366,7 @@ public class ProfileOrganizer {
             boolean inHighCap = _highCapacityPeers.containsKey(peer);
             if (inFast || inHighCap) {
                 if (_log.shouldInfo()) {
-                    _log.info("Demoting peer [" + peer.toBase64().substring(0, 6) +
+                    _log.info("Demoting peer [" + peer.toShortBase64() +
                               "] from fast/high-cap tiers due to congestion cap (D/E)");
                 }
                 if (inFast) removeFastPeer(peer);
@@ -6395,7 +6395,7 @@ public class ProfileOrganizer {
           try {
               if (demotesFastTier(_fastPeers.containsKey(peer), isLowLatency(peer))) {
                   if (_log.shouldInfo()) {
-                      _log.info("Demoting peer [" + peer.toBase64().substring(0, 6) +
+                      _log.info("Demoting peer [" + peer.toShortBase64() +
                                 "] from the fast tier: no longer low-latency");
                   }
                   removeFastPeer(peer);
@@ -6452,7 +6452,7 @@ public class ProfileOrganizer {
             boolean inHighCap = _highCapacityPeers.containsKey(peer);
             if (inFast || inHighCap) {
                 if (_log.shouldInfo()) {
-                    _log.info("Demoting peer [" + peer.toBase64().substring(0, 6) +
+                    _log.info("Demoting peer [" + peer.toShortBase64() +
                               "] from fast/high-cap tiers: banned");
                 }
                 if (inFast) removeFastPeer(peer);
@@ -6538,7 +6538,7 @@ public class ProfileOrganizer {
             boolean inHighCap = _highCapacityPeers.containsKey(peer);
             if (inFast || inHighCap) {
                 if (_log.shouldInfo()) {
-                    _log.info("Demoting peer [" + peer.toBase64().substring(0, 6) +
+                    _log.info("Demoting peer [" + peer.toShortBase64() +
                               "] from fast/high-cap tiers due to no tunnel built recently");
                 }
                 if (inFast) removeFastPeer(peer);
@@ -6596,7 +6596,7 @@ public class ProfileOrganizer {
             boolean inHighCap = _highCapacityPeers.containsKey(peer);
             if (inFast || inHighCap) {
                 if (_log.shouldInfo()) {
-                    _log.info("Demoting peer [" + peer.toBase64().substring(0, 6) +
+                    _log.info("Demoting peer [" + peer.toShortBase64() +
                               "] from fast/high-cap tiers after " + DEMOTE_STRIKE_THRESHOLD +
                               " unreachable first-hop failures");
                 }
@@ -6646,7 +6646,7 @@ public class ProfileOrganizer {
             } catch (RuntimeException re) {
                 // a lookup that cannot be started is not worth aborting the batch over
                 _log.log(Log.WARN, "Could not refresh held peer [" +
-                          peer.toBase64().substring(0, 6) + "]", re);
+                          peer.toShortBase64() + "]", re);
             }
         }
         _context.statManager().addRateData("tunnel.promotionRefreshIssued", batch.size());
@@ -6766,7 +6766,7 @@ public class ProfileOrganizer {
             } catch (RuntimeException re) {
                 // A search that cannot be started is not worth aborting the batch over.
                 _log.log(Log.WARN, "Could not start RouterInfo refresh for peer [" +
-                          peer.toBase64().substring(0, 6) + "]", re);
+                          peer.toShortBase64() + "]", re);
             }
         }
         _context.statManager().addRateData("peer.routerInfoProactiveRefresh", batch.size());
@@ -6906,7 +6906,7 @@ public class ProfileOrganizer {
             boolean inHighCap = _highCapacityPeers.containsKey(peer);
             if (inFast || inHighCap) {
                 if (_log.shouldInfo()) {
-                    _log.info("Demoting peer [" + peer.toBase64().substring(0, 6) +
+                    _log.info("Demoting peer [" + peer.toShortBase64() +
                               "] from the fast and high-capacity tiers -> First hop RTT: " +
                               firstHopRttMs + "ms"
                               + "\n* Above threshold: " + (timeout * 2) + "ms");
@@ -7029,7 +7029,7 @@ public class ProfileOrganizer {
         if (ratio >= threshold) return false;
         if (_log.shouldDebug()) {
             _log.debug("Demoting peer from fast tier (startup): [" +
-                       profile.getPeer().toBase64().substring(0, 6) +
+                       profile.getPeer().toShortBase64() +
                        "]\n* ratio: " + String.format("%.2f", ratio * 100) + "% below " +
                        String.format("%.0f", threshold * 100) + "% threshold");
         }
@@ -7063,7 +7063,7 @@ public class ProfileOrganizer {
             if (_log.shouldDebug()) {
                 long remaining = (TUNNEL_DEMOTION_COOLDOWN_MS - (now - lastBwReject)) / 60000;
                  _log.debug("Demoting peer from high-cap tier (bandwidth cooldown active): [" +
-                            profile.getPeer().toBase64().substring(0, 6) +
+                            profile.getPeer().toShortBase64() +
                             "]\n* ratio: " + String.format("%.2f", ratio * 100) + "%" +
                             " (" + agreed + " accept / " + rejected + " reject / " +
                             timedOut + " timeout)" +
@@ -7074,7 +7074,7 @@ public class ProfileOrganizer {
 
         if (_log.shouldDebug()) {
              _log.debug("Demoting peer from high-cap tier due to low tunnel acceptance: [" +
-                        profile.getPeer().toBase64().substring(0, 6) +
+                        profile.getPeer().toShortBase64() +
                         "]\n* ratio: " + String.format("%.2f", ratio * 100) + "%" +
                         " (" + agreed + " accept / " + rejected + " reject / " +
                         timedOut + " timeout)");
@@ -7275,7 +7275,7 @@ public class ProfileOrganizer {
         if (profile.isLossy()) {
             profile.clearLossy();
             if (_log.shouldDebug()) {
-                _log.debug("Peer [" + profile.getPeer().toBase64().substring(0, 6) +
+                _log.debug("Peer [" + profile.getPeer().toShortBase64() +
                            "] re-admitted after loss probation: loss score " +
                            profile.getLossScore(_context.clock().now()));
             }
@@ -7305,7 +7305,7 @@ public class ProfileOrganizer {
                 // readmission conditions are met.
                 profile.setLossySince(_context.clock().now());
                 if ((wasFast || wasHighCap) && _log.shouldDebug()) {
-                    _log.debug("Demoting peer [" + peer.toBase64().substring(0, 6) +
+                    _log.debug("Demoting peer [" + peer.toShortBase64() +
                                "] from fast/high-cap tiers: loss " + profile.getLossScore(_context.clock().now()));
                 }
             }

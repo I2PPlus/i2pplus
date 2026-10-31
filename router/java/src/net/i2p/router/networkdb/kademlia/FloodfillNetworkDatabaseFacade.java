@@ -536,11 +536,11 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                 String name;
                 if (ds instanceof LeaseSet) {
                     String tunnelName = getTunnelName(((LeaseSet) ds).getDestination());
-                    name = tunnelName != null ? "LeaseSet for '" + tunnelName + "'" : "key for [" + key.toBase32().substring(0,8) + "]";
+                    name = tunnelName != null ? "LeaseSet for '" + tunnelName + "'" : "key for [" + key.toShortBase32() + "]";
                 } else {
-                    name = "key for [" + key.toBase32().substring(0,8) + "]";
+                    name = "key for [" + key.toShortBase32() + "]";
                 }
-                _log.info("Flood of " + name + " to [" + peer.toBase64().substring(0,6) + "] failed -> " +
+                _log.info("Flood of " + name + " to [" + peer.toShortBase64() + "] failed -> " +
                           "Resending to " + (concurrentForLog > 1 ? concurrentForLog + " new floodfills" : "a different floodfill") + "...");
             }
             idx++;
@@ -710,7 +710,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                 if (i >= MAX_TO_FLOOD) {break;}
             }
             if (i > 0 && _log.shouldDebug()) {
-                _log.debug("Flooding the entry for [" + key.toBase32().substring(0,8) + "] to " + i + " more, just before midnight");
+                _log.debug("Flooding the entry for [" + key.toShortBase32() + "] to " + i + " more, just before midnight");
             }
         }
         int flooded = 0;
@@ -724,7 +724,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             RouterInfo target = lookupRIUnvalidated(peer);
             if (!shouldFloodTo(key, type, lsSigType, peer, target)) {
                 if (_log.shouldDebug()) {
-                    _log.debug("Not flooding [" + key.toBase32().substring(0,8) + "] to [" + peer.toBase64().substring(0,6) + "] -> Too old");
+                    _log.debug("Not flooding [" + key.toShortBase32() + "] to [" + peer.toShortBase64() + "] -> Too old");
                 }
                 continue;
             }
@@ -740,13 +740,13 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             _context.commSystem().processMessage(m);
             flooded++;
             if (_log.shouldDebug()) {
-                _log.debug("Flooding the entry for [" + key.toBase32().substring(0,8) + "] to [" + peer.toBase64().substring(0,6) + "]...");
+                _log.debug("Flooding the entry for [" + key.toShortBase32() + "] to [" + peer.toShortBase64() + "]...");
             }
             if (flooded >= MAX_TO_FLOOD) {break;}
         }
 
         if (_log.shouldInfo()) {
-            _log.info("Flooded the entry for [" + key.toBase32().substring(0,8) + "] to " + flooded + " of " + peers.size() + " peers");
+            _log.info("Flooded the entry for [" + key.toShortBase32() + "] to " + flooded + " of " + peers.size() + " peers");
         }
     }
 
@@ -950,7 +950,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             // independently; complete() is a safe no-op if the key is not
             // in the map or if it removes the floodfill search's entry.
             if (_log.shouldDebug()) {
-                _log.debug("Client IterativeSearch for key [" + key.toBase32().substring(0,8) + "] -> " + this);
+                _log.debug("Client IterativeSearch for key [" + key.toShortBase32() + "] -> " + this);
             }
             IterativeSearchJob job = new IterativeSearchJob(_context, this, key, onFindJob, onFailedLookupJob,
                                                             (int)timeoutMs, isLease, fromLocalDest);
@@ -973,12 +973,12 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             if (isNew) {
                 if (_log.shouldDebug()) {
                     _log.debug("New IterativeSearch via Exploratory tunnels" +
-                               " for key [" + key.toBase32().substring(0,8) + "] -> " + this);
+                               " for key [" + key.toShortBase32() + "] -> " + this);
                 }
                 _context.jobQueue().addJob(searchJob);
             } else {
                 if (_log.shouldDebug()) {
-                    _log.debug("Deferred IterativeSearch for [" + key.toBase32().substring(0,8) + "] with " +
+                    _log.debug("Deferred IterativeSearch for [" + key.toShortBase32() + "] with " +
                                _activeFloodQueries.size() + " in progress...");
                 }
                 searchJob.addDeferred(onFindJob, onFailedLookupJob, timeoutMs, isLease);
@@ -1054,7 +1054,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             FloodSearchJob existing = _activeFloodQueries.putIfAbsent(peer, searchJob);
             if (existing != null) return;
             if (_log.shouldInfo()) {
-                _log.info("Probing stale peer [" + peer.toBase64().substring(0,6) + "]");
+                _log.info("Probing stale peer [" + peer.toShortBase64() + "]");
             }
             _context.jobQueue().addJob(searchJob);
         }
@@ -1141,12 +1141,12 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             }
             if (isNew) {
                 if (_log.shouldDebug()) {
-                    _log.debug("Direct RouterInfo lookup for [" + peer.toBase64().substring(0,6) + "]");
+                    _log.debug("Direct RouterInfo lookup for [" + peer.toShortBase64() + "]");
                 }
                 _context.jobQueue().addJob(searchJob);
             } else {
                 if (_log.shouldDebug()) {
-                    _log.debug("Pending Direct RouterInfo lookup for [" + peer.toBase64().substring(0,6) + "]");
+                    _log.debug("Pending Direct RouterInfo lookup for [" + peer.toShortBase64() + "]");
                 }
                 searchJob.addDeferred(onFindJob, onFailedLookupJob, 10*1000L, false);
             }
@@ -1165,9 +1165,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             _context.commSystem().countActivePeers() <= MIN_ACTIVE_PEERS) || _context.commSystem().getStatus() == Status.DISCONNECTED) {
             if (_log.shouldInfo()) {
                 if (uptime < DONT_FAIL_PERIOD && knownRouters < 2000) {
-                    _log.info("Lookup of [" + peer.toBase64().substring(0,6) + "] failed -> Not dropping (startup grace period)");
+                    _log.info("Lookup of [" + peer.toShortBase64() + "] failed -> Not dropping (startup grace period)");
                 } else {
-                    _log.info("Lookup of [" + peer.toBase64().substring(0,6) + "] failed -> Not dropping (Our Router has issues)");
+                    _log.info("Lookup of [" + peer.toShortBase64() + "] failed -> Not dropping (Our Router has issues)");
                 }
             }
             return;
@@ -1205,13 +1205,13 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                     ffEnabled = _floodfillEnabled;
                 }
                 if (ffEnabled && !forceExplore) {
-                    _log.info("Skipping lookup of RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Floodfill mode active");
+                    _log.info("Skipping lookup of RouterInfo [" + peer.toShortBase64() + "] -> Floodfill mode active");
                 } else if (_context.banlist().isBanlistedForever(peer)) {
-                    _log.info("Skipping lookup of RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Banlisted");
+                    _log.info("Skipping lookup of RouterInfo [" + peer.toShortBase64() + "] -> Banlisted");
                 } else if (uninteresting) {
-                    _log.info("Skipping lookup of RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Uninteresting");
+                    _log.info("Skipping lookup of RouterInfo [" + peer.toShortBase64() + "] -> Uninteresting");
                 } else if (_context.jobQueue().getMaxLag() > MAX_LAG_BEFORE_SKIP_SEARCH) {
-                    _log.info("Skipping lookup of RouterInfo [" + peer.toBase64().substring(0,6) + "] -> High Job Lag");
+                    _log.info("Skipping lookup of RouterInfo [" + peer.toShortBase64() + "] -> High Job Lag");
                 }
                 super.lookupBeforeDropping(peer, info);
                 return;
@@ -1284,7 +1284,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         }
 
         if (_log.shouldDebug()) {
-            _log.debug("Initiating Floodfill Lookup of [" + peer.toBase64().substring(0,6) + "] before dropping..." +
+            _log.debug("Initiating Floodfill Lookup of [" + peer.toShortBase64() + "] before dropping..." +
                        "\n* Published: " + new Date(info.getPublished()));
         }
         search(peer, new DropLookupFoundJob(_context, peer, info), new DropLookupFailedJob(_context, peer, info), 8*1000L, false);

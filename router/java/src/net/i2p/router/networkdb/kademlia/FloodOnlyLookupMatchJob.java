@@ -43,14 +43,14 @@ class FloodOnlyLookupMatchJob extends JobImpl implements ReplyJob {
     public void runJob() {
         if (_success) {
             if (_log.shouldInfo()) {
-                _log.info("Search for key [" + _search.getKey().toBase32().substring(0,8) + "] found locally");
+                _log.info("Search for key [" + _search.getKey().toShortBase32() + "] found locally");
             }
             _search.success();
         } else {
             // In practice, we always have zero remaining when this is called,
             // because the selector only returns true when there is zero remaining
             if (_log.shouldLog(Log.INFO)) {
-                _log.info("Search failed for key [" + _search.getKey().toBase32().substring(0,8) + "]");
+                _log.info("Search failed for key [" + _search.getKey().toShortBase32() + "]");
             }
             _search.failed();
         }
@@ -73,7 +73,7 @@ class FloodOnlyLookupMatchJob extends JobImpl implements ReplyJob {
 
         DatabaseStoreMessage dsm = (DatabaseStoreMessage)message;
         if (_log.shouldDebug()) {
-            _log.debug("Received a DbStoreMsg for key [" + dsm.getKey().toBase32().substring(0,8) + "]");
+            _log.debug("Received a DbStoreMsg for key [" + dsm.getKey().toShortBase32() + "]");
         }
         // This store will handled by HFDSMJ.
         // Just note success here.

@@ -1773,7 +1773,7 @@ public class I2PSnarkUtil implements DisconnectListener {
         if (_banlist.contains(dest)) {
             throw new IOException(
                     "Not trying to contact banlisted peer ["
-                            + dest.toBase64().substring(0, 6)
+                            + dest.toShortBase64()
                             + "]");
         }
         try {

@@ -62,7 +62,7 @@ class GetBidsJob {
 
         if (context.banlist().isBanlisted(to)) {
             if (log.shouldInfo())
-                log.info("Attempted to send message to banlisted peer [" + to.toBase64().substring(0,6) + "]");
+                log.info("Attempted to send message to banlisted peer [" + to.toShortBase64() + "]");
             context.statManager().addRateData("transport.bidFailBanlisted", msg.getLifetime());
             fail(context, msg);
             return;
@@ -95,7 +95,7 @@ class GetBidsJob {
                 // decision once a transport has actually been tried and failed.
                 context.statManager().addRateData("transport.bidFailNoTransports", msg.getLifetime());
                 if (log.shouldLog(Log.DEBUG))
-                    log.debug("No transport bid for [" + to.toBase64().substring(0,6)
+                    log.debug("No transport bid for [" + to.toShortBase64()
                               + "] * No route on file -> Peer not banned");
             } else if (failedCount >= tmgr.getTransportCount()) {
                 // Every transport was tried and every one failed. This branch does

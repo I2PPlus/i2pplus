@@ -125,7 +125,7 @@ public class GarlicMessageReceiver {
                 } else if (out != null) {
                     name = out.getDestinationNickname();
                 }
-                nick = (name.isEmpty()) ? "[" + _clientDestination.toBase32().substring(0, 8) + "]" : name;
+                nick = (name.isEmpty()) ? "[" + _clientDestination.toShortBase32() + "]" : name;
             }
         }
 

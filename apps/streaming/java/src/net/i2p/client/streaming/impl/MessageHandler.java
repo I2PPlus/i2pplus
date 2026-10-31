@@ -126,7 +126,7 @@ class MessageHandler implements I2PSessionMuxedListener {
     public void disconnected(I2PSession session) {
         if (_log.shouldInfo()) {
             String destInfo = session.getMyDestination() != null ?
-                              session.getMyDestination().calculateHash().toBase32().substring(0,8) :
+                              session.getMyDestination().calculateHash().toShortBase32() :
                               "unknown";
             _log.info("I2PSession disconnected for destination [" + destInfo + "]");
         }
