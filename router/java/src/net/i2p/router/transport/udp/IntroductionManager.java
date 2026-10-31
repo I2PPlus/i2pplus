@@ -277,7 +277,8 @@ class IntroductionManager {
                 if (((!ipv6 && ip.length == 16) || (ipv6 && ip.length == 4)) &&
                     VersionComparator.comp(ri.getVersion(), MIN_IPV6_INTRODUCER_VERSION) < 0) {
                     if (_log.shouldInfo())
-                        _log.info("Would have picked IPv6 introducer for IPv4 or IPv4 introducer for IPv6 but they don't support it: " + cur);
+                        _log.info("Skipping a cross-family introducer -> The peer does not support it"
+                                  + "\n* Peer: " + cur);
                     continue;
                 }
                 cur.setIntroducerTime();
@@ -503,11 +504,9 @@ class IntroductionManager {
             if (isDup) {
                 // fairly common from i2pd
                 if (_log.shouldInfo())
-                    _log.info("Dropping dup relay request from " + alice
-                          + " for tag " + tag
-                          + " nonce " + nonce
-                          + " time " + time
-                          + " and relaying with " + charlie);
+                    _log.info("Dropping a duplicate relay request -> Relaying with " + charlie
+                          + "\n* From: " + alice + " * Tag: " + tag
+                          + " * Nonce: " + nonce + " * Time: " + time);
                 return;
             }
             aliceRI = _context.netDb().lookupRouterInfoLocally(alice.getRemotePeer());

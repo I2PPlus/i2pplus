@@ -1001,9 +1001,8 @@ void noteEstablishmentRtt(int rttMs) {
             try {
                 String writeStatus = _conKey != null ? String.valueOf((_conKey.interestOps() & SelectionKey.OP_WRITE) != 0) : "null_key";
                 _log.info("Outbound connection too backlogged -> Throttling the send"
-                          + " * Size: " + size
-                          + " * Wants write: " + writeStatus
-                          + " * Outbound set: [" + currentOutboundSet + "]"
+                          + " * Size: " + size + " * Wants write: " + writeStatus
+                          + "\n* Outbound set: " + currentOutboundSet
                           + " * Write buffers: " + writeBufs
                           + "\n* " + this);
             } catch (RuntimeException ignored) { /* ignored */ }
@@ -2753,10 +2752,10 @@ void noteEstablishmentRtt(int rttMs) {
         public void gotPadding(int paddingLength, int frameLength) {
             if (_log.shouldDebug())
                 _log.debug("Received " + paddingLength +
-                          " bytes padding in " + frameLength +
-                          " byte frame: Ratio: " + (((float) paddingLength) / ((float) frameLength)) +
-                          "; Configured min: " + _paddingConfig.getRecvMin() +
-                          "; Configured max: " + _paddingConfig.getRecvMax());
+                          " bytes of padding in a " + frameLength + " byte frame"
+                          + "\n* Ratio: " + (((float) paddingLength) / ((float) frameLength))
+                          + " * Configured min: " + _paddingConfig.getRecvMin() +
+                          " * Configured max: " + _paddingConfig.getRecvMax());
         }
     }
 

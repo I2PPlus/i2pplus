@@ -263,9 +263,9 @@ class ExpireJob extends JobImpl {
             if (now - te.createdAt > MAX_ENTRY_LIFETIME) {
                 if (log.shouldWarn()) {
                     log.warn("Evicting an orphaned ExpireJob entry " + te.tunnelKey +
-                             " -> Past its maximum lifetime" +
-                             " (age: " + DataHelper.formatDuration(now - te.createdAt) +
-                             ", phase 1 complete: [" + te.phase1Complete + "])");
+                             " -> Past its maximum lifetime"
+                             + "\n* Age: " + DataHelper.formatDuration(now - te.createdAt)
+                             + " * Phase 1 complete: " + te.phase1Complete);
                 }
                 it.remove();
                 continue;

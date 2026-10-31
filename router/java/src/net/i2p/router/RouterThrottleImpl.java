@@ -446,15 +446,17 @@ public class RouterThrottleImpl implements RouterThrottle {
                 if (reject) {
                     if (_log.shouldWarn()) {
                         _log.warn("Rejecting a message -> Available: " + availBps + "B/s * Maximum: " + maxKBps + "KB/s" +
-                                  " * In use: " + used + "B/s\n* Reject probability: " + probReject +
-                                  " * Capacity fraction: " + pctFull + " * Tunnels: " + numTunnels +
-                                  " * Random: " + rand + " * Estimated: " + bytesAllocated + "B/s");
+                                  " * In use: " + used + "B/s" +
+                                  "\n* Reject probability: " + probReject + " * Capacity fraction: " + pctFull +
+                                  "\n* Tunnels: " + numTunnels + " * Random: " + rand +
+                                  " * Estimated: " + bytesAllocated + "B/s");
                     }
                 } else if (_log.shouldDebug()) {
                     _log.debug("Accepting a message -> Available: " + availBps + "B/s * Maximum: " + maxKBps + "KB/s" +
-                           " * In use: " + used + "B/s\n* Reject probability: " + probReject +
-                           " * Capacity fraction: " + pctFull + " * Tunnels: " + numTunnels +
-                           " * Random: " + rand + " * Estimated: " + bytesAllocated + "B/s");
+                           " * In use: " + used + "B/s" +
+                           "\n* Reject probability: " + probReject + " * Capacity fraction: " + pctFull +
+                           "\n* Tunnels: " + numTunnels + " * Random: " + rand +
+                           " * Estimated: " + bytesAllocated + "B/s");
                 }
             }
         }

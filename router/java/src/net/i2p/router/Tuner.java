@@ -3294,9 +3294,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 _lastAppliedTarget = target;
                 if (!_noEffectReported) {
                     _noEffectReported = true;
-                    _log.warn("Target " + target + " for " + _name +
-                              " did not take effect -> Runtime still reports " + current +
-                              "; repeat attempts will not be logged");
+                    _log.warn("Target " + target + " for " + _name + " did not take effect"
+                              + " -> Runtime still reports " + current
+                              + "\n* Repeat attempts will not be logged");
                 }
             } else {
                 _lastAppliedTarget = 0;

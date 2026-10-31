@@ -1348,10 +1348,10 @@ public class BuildExecutor implements Runnable {
         }
 
         if (_log.shouldDebug()) {
-            _log.debug("Adaptive timeout: " + (_adaptiveTimeout / 1000) +
-                       "s (success: " + (int)(successRate * 100) +
-                       "%, timeouts: " + timeouts +
-                       "/" + count + ", concurrency: " + _adaptiveMaxConcurrentBuilds + "/" + baseMax + ")");
+            _log.debug("Adaptive timeout: " + DataHelper.formatDuration(_adaptiveTimeout)
+                       + "\n* Success: " + (int)(successRate * 100) + "% * Timeouts: " + timeouts +
+                       " of " + count
+                       + " * Concurrency: " + _adaptiveMaxConcurrentBuilds + " of " + baseMax);
         }
     }
 
@@ -2280,7 +2280,7 @@ public class BuildExecutor implements Runnable {
                 oldestDeadline = calculateAdaptiveTimeout(oldest, cpuLoad, rttFloor);
                 overdue = oldestDeadline > 0 && oldestAge >= oldestDeadline;
             }
-            _log.info("Building map: " + concurrent + " * Expired: " + expiredCount +
+            _log.info("Building map -> Active: " + concurrent + " * Expired: " + expiredCount +
                       "\n* Oldest age: " + oldestAge + "ms * Oldest deadline: " + oldestDeadline + "ms" +
                       " * Overdue: " + overdue + " * Base timeout: " + _adaptiveTimeout + "ms");
         }
@@ -2639,12 +2639,12 @@ public class BuildExecutor implements Runnable {
 
                 if (noInboundOrOutbound) {
                     if (_log.shouldDebug()) {
-                        _log.debug("No inbound or outbound tunnels" +
-                                  " -> freeTunnels: " + freeTunnelCount +
-                                  " * outboundTunnels: " + outboundTunnelCount +
-                                  " * mgr: " + (mgr != null) +
-                                  " * buildingMap: " + _currentlyBuildingMap.size() +
-                                  " * allowed: " + allowed + " * wanted: " + wanted.size());
+                        _log.debug("No inbound or outbound tunnels"
+                                  + "\n* Free tunnels: " + freeTunnelCount +
+                                  " * Outbound tunnels: " + outboundTunnelCount +
+                                  "\n* Manager: " + (mgr != null) +
+                                  " * Building map: " + _currentlyBuildingMap.size() +
+                                  " * Allowed: " + allowed + " * Wanted: " + wanted.size());
                     }
                     // Kickstart inbound/outbound tunnels if missing to avoid stall
                     if (mgr != null) {

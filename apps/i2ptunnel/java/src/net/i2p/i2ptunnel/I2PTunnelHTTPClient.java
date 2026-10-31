@@ -896,8 +896,10 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                                 // Conflict: handle when URL reconstruction done
                                                 ahelperConflict = true;
                                                 if (_log.shouldWarn()) {
-                                                    _log.warn(getPrefix(requestId) + "Addresshelper key conflict for site [" + destination +
-                                                            "] -> Trusted key [" + destB64 + "] - Specified key [" + ahelperKey + "]");
+                                                    _log.warn(getPrefix(requestId) +
+                                                            "Addresshelper key conflict for site [" + destination + "]"
+                                                            + "\n* Trusted key: " + destB64
+                                                            + "\n* Specified key: " + ahelperKey);
                                                 }
 
                                             }
@@ -2381,9 +2383,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         for (int attempt = 1; attempt <= emptyBudget; attempt++) {
             if (isDeadlineExpired(deadlineMs, System.currentTimeMillis())) {
                 if (!quiet && _log.shouldInfo()) {
-                    _log.info(getPrefix(requestId) + "Empty-reconnect wall-clock deadline reached -> Giving up at attempt " +
-                              attempt + '/' + emptyBudget + " (deadline: " +
-                              DataHelper.formatDuration(EMPTY_RECONNECT_DEADLINE_MS) + ")");
+                    _log.info(getPrefix(requestId) + "Empty-reconnect deadline reached -> Giving up"
+                              + "\n* Attempt: " + attempt + " of " + emptyBudget
+                              + " * Deadline: " + DataHelper.formatDuration(EMPTY_RECONNECT_DEADLINE_MS));
                 }
                 return null;
             }

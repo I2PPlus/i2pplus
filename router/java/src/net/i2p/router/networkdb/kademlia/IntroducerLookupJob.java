@@ -175,10 +175,9 @@ class IntroducerLookupJob extends JobImpl {
             // eligible and are picked up first next cycle.
         }
         if (_log.shouldDebug() && issued > 0) {
-            _log.debug("IntroducerLookupJob: issued " + issued + " of " +
-                       pending.size() + " missing introducer RouterInfo lookups" +
-                       " (" + _inFlight.get() + " in flight, " +
-                       _attempts.size() + " tracked)");
+            _log.debug("Issued " + issued + " of " +
+                       pending.size() + " missing introducer RouterInfo lookups"
+                       + "\n* In flight: " + _inFlight.get() + " * Tracked: " + _attempts.size());
         }
         requeue(nextInterval(ctx));
     }

@@ -513,9 +513,9 @@ class MessageInputStream extends InputStream {
             noteBuffered();
             if (_log.shouldDebug()) {
                 _log.debug("Close received -> Draining the buffered blocks"
-                        + " * Ready blocks: " + _readyDataBlocks.size()
+                        + "\n* Ready blocks: " + _readyDataBlocks.size()
                         + " * Pending blocks: " + _notYetReadyBlocks.size()
-                        + " * Highest ready block: " + _highestReadyBlockId
+                        + "\n* Highest ready block: " + _highestReadyBlockId
                         + " * Promoted through block " + (cur - 1));
             }
             _closeReceived = true;

@@ -1436,10 +1436,10 @@ public class EstablishmentManager {
             int percent = probAccept > 128 ? 100 : (probAccept / 128) * 100;
             if (probAccept >= 128 || _context.random().nextInt(128) < probAccept) {
                 if (_log.shouldInfo()) {
-                    _log.info("[SSU] Dropping incoming connection (" +
-                              (percent >= 1 ? Math.max(percent,100) : "1") + "% chance)" +
-                              " * previous/current connections per minute: " + last + " / " +
-                              (int) (currentRate * 60*1000));
+                    _log.info("[SSU] Dropping incoming connection -> Accept chance: " +
+                              (percent >= 1 ? Math.max(percent,100) : "1") + "%"
+                              + "\n* Connections per minute: " + last + " previous, " +
+                              (int) (currentRate * 60*1000) + " current");
                  }
                  return false;
             }
@@ -2926,7 +2926,7 @@ public class EstablishmentManager {
                               + "ms in state " + istate
                               + "\n* Budget: " + budget + "ms * Retried: " + isRetrySent
                               + " * Base: " + MAX_IB_ESTABLISH_TIME.get() + "ms"
-                              + " * Retry budget: " + IB_RETRY_SENT_MAX_TIME + "ms"
+                              + "\n* Retry budget: " + IB_RETRY_SENT_MAX_TIME + "ms"
                               + " * Suppressed: " + getInboundGiveupSuppressed() + " events");
                 }
                 iter.remove(); // took too long
@@ -3042,8 +3042,8 @@ public class EstablishmentManager {
                               + cur.getRemoteAddress() + " after "
                               + DataHelper.formatDuration(cur.getLifetime(now))
                               + " in state " + cur.getState()
-                              + " (budget " + DataHelper.formatDuration(budget)
-                              + " * retried: [" + cur.hasRetried() + "])");
+                              + "\n* Budget: " + DataHelper.formatDuration(budget)
+                              + " * Retried: " + cur.hasRetried());
                 }
                 iter.remove();
                 outboundState = cur;
@@ -3854,9 +3854,10 @@ public class EstablishmentManager {
                     int live = _liveIntroductions.size();
                     int claimed = _outboundByClaimedAddress.size();
                     int hash = _outboundByHash.size();
-                    _log.debug("Inbound states [" + iactive + "] * Outbound states [" + oactive + "] -> " +
-                               "Queued: " + queued + " * Introductions: " + live +
-                               " * Claimed: " + claimed + " * Hash: " + hash);
+                    _log.debug("Establishment states -> Inbound: " + iactive + " * Outbound: " + oactive +
+                               " * Queued: " + queued
+                               + "\n* Introductions: " + live + " * Claimed: " + claimed +
+                               " * Tracked by hash: " + hash);
                 }
             }
             _activity = 0;

@@ -439,9 +439,9 @@ public class RepublishLeaseSetJob extends JobImpl {
         boolean expiring = timeUntilExpiry <= EXPIRY_WINDOW;
         if (expiring) {
             if (_log.shouldInfo()) {
-                _log.info("LeaseSet expiring soon" + name + " [" + shortHash() +
-                          "] (expires in " + DataHelper.formatDuration(timeUntilExpiry) +
-                          ") * Requesting immediate renew");
+                _log.info("LeaseSet expiring soon -> Requesting an immediate renew" + name
+                          + "\n* LeaseSet: [" + shortHash() + "]"
+                          + " * Expires in " + DataHelper.formatDuration(timeUntilExpiry));
             }
             lastPubLog = null;
         }
@@ -477,9 +477,9 @@ public class RepublishLeaseSetJob extends JobImpl {
         // always re-mints immediately — never waits behind the gate.
         if (expiring) {
             if (_log.shouldInfo()) {
-                _log.info("Published LeaseSet" + name + " [" + shortHash() +
-                          "] expires in " + DataHelper.formatDuration(timeUntilExpiry) +
-                          " * Re-minting instead of re-flooding");
+                _log.info("Published LeaseSet expiring -> Re-minting instead of re-flooding" + name
+                          + "\n* LeaseSet: [" + shortHash() + "]"
+                          + " * Expires in " + DataHelper.formatDuration(timeUntilExpiry));
             }
             refloatLeaseSet(ls, name, now, timeUntilExpiry);
             return;
@@ -826,9 +826,9 @@ public class RepublishLeaseSetJob extends JobImpl {
             pool.requestFreshTunnelBuild();
             if (_log.shouldInfo()) {
                 _log.info("Waiting on fresh tunnels" + name + " [" + shortHash() +
-                          "] -> The pool is not stocked for a mint in " +
-                          DataHelper.formatDuration(timeUntilExpiry) + " (attempt " + seen + "/" +
-                          MAX_SUPPLY_DEFERRALS + ")");
+                          "] -> The pool is not stocked for a mint"
+                          + "\n* Time until expiry: " + DataHelper.formatDuration(timeUntilExpiry)
+                          + " * Attempt: " + seen + " of " + MAX_SUPPLY_DEFERRALS);
             }
             scheduleRepublish(MISSING_LEASESET_RETRY);
             return;

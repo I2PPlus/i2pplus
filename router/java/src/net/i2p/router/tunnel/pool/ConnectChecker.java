@@ -150,10 +150,10 @@ import net.i2p.util.Log;
                 if (ctx.commSystem().wasUnreachable(from) ||
                     ctx.commSystem().wasUnreachable(to)) {
                     if (log.shouldWarn()) {
-                        log.warn("Cannot connect: non-self pair rejected - [" +
-                                 from.toString().substring(0,6) + "] unreachable: " +
-                                 ctx.commSystem().wasUnreachable(from) + " * [" +
-                                 to.toString().substring(0,6) + "] unreachable: " +
+                        log.warn("Cannot connect -> Non-self pair rejected"
+                                 + "\n* From [" + from.toString().substring(0,6) + "] unreachable: " +
+                                 ctx.commSystem().wasUnreachable(from)
+                                 + "\n* To [" + to.toString().substring(0,6) + "] unreachable: " +
                                  ctx.commSystem().wasUnreachable(to));
                     }
                     return false;

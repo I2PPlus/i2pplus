@@ -346,8 +346,8 @@ public class TunnelDispatcher implements Service {
         long expires = _expiresSinceLast.getAndSet(0);
         int count = getParticipatingCount();
         if (_log.shouldInfo()) {
-            _log.info("[transit] pool=" + count + " joins=" + joins + " expires=" + expires +
-                      (joins < expires ? " * DECLINING *" : ""));
+            _log.info("[transit] Pool summary -> " + (joins < expires ? "Declining" : "Growing")
+                      + "\n* Tunnels: " + count + " * Joins: " + joins + " * Expires: " + expires);
         }
     }
 
@@ -1048,13 +1048,14 @@ public class TunnelDispatcher implements Service {
         } else {
             _context.messageHistory().droppedTunnelGatewayMessageUnknown(msg.getUniqueId(), id.getTunnelId());
             if (_log.shouldInfo())
-                _log.info("No matching tunnel for [TunnelID " + id.getTunnelId() +
-                          "]\n* Gateway message expires: " +
-                          DataHelper.formatDuration(msg.getMessageExpiration() - before) + "/" +
-                          DataHelper.formatDuration(submsg.getMessageExpiration() - before) +
-                          " [MsgID " + id + "/" + msg.getMessage().getUniqueId() +
-                          "] Type: " + submsg.getType() +
-                          "; Current Inbound gateways: " + _inboundGateways.size());
+                _log.info("No matching tunnel for [TunnelID " + id.getTunnelId() + ']'
+                          + "\n* Gateway message expires in " +
+                          DataHelper.formatDuration(msg.getMessageExpiration() - before) +
+                          " * Message expires in " +
+                          DataHelper.formatDuration(submsg.getMessageExpiration() - before)
+                          + "\n* MsgID: " + id + " of " + msg.getMessage().getUniqueId()
+                          + " * Type: " + submsg.getType()
+                          + " * Inbound gateways: " + _inboundGateways.size());
         }
     }
 

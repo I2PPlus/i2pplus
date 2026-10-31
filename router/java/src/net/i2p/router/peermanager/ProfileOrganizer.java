@@ -3626,7 +3626,7 @@ public class ProfileOrganizer {
             _log.info("Tier eviction -> Banned: " + count(reasons, PurgeReason.BANNED) +
                       " * Unreachable: " + count(reasons, PurgeReason.UNREACHABLE) +
                       " * Not-capable: " + count(reasons, PurgeReason.NOT_CAPABLE) +
-                      " * Failures: " + count(reasons, PurgeReason.FAILURES) +
+                      "\n* Failures: " + count(reasons, PurgeReason.FAILURES) +
                       " * Acceptance: " + count(reasons, PurgeReason.ACCEPTANCE) +
                       "\n* Soft eviction withheld below -> Fast: " + fastMin +
                       " * High-cap: " + highCapMin);
@@ -5677,9 +5677,9 @@ public class ProfileOrganizer {
         if (skipReason != null) {
             recordPromotionSkip(skipReason);
             if (_log.shouldDebug()) {
-                _log.debug("Skipping peer [" + peer.toBase64().substring(0, 6) +
-                           "] from promotion: " + skipReason +
-                           " * staleProfile: " + (profile != notFailingProfile));
+                _log.debug("Skipping a peer from promotion -> " + skipReason
+                           + "\n* Peer: [" + peer.toBase64().substring(0, 6) + ']'
+                           + " * Stale profile: " + (profile != notFailingProfile));
             }
             return false;
         }
@@ -6136,8 +6136,8 @@ public class ProfileOrganizer {
             return;
 
         if (_log.shouldDebug()) {
-            _log.debug("Promoting peers to fill tiers: fast: " + fastBefore + "/" + fastTarget +
-                       " * highCap: " + highCapBefore + "/" + highCapTarget);
+            _log.debug("Promoting peers to fill tiers -> Fast: " + fastBefore + " of " + fastTarget +
+                       " * High capacity: " + highCapBefore + " of " + highCapTarget);
         }
 
         // Fetch once for the whole scan; promotion checks per profile would
@@ -6907,8 +6907,9 @@ public class ProfileOrganizer {
             if (inFast || inHighCap) {
                 if (_log.shouldInfo()) {
                     _log.info("Demoting peer [" + peer.toBase64().substring(0, 6) +
-                              "] from fast/high-cap tiers — first hop RTT " +
-                              firstHopRttMs + "ms above threshold " + (timeout * 2) + "ms");
+                              "] from the fast and high-capacity tiers"
+                              + "\n* First hop RTT: " + firstHopRttMs + "ms * Above threshold: " +
+                              (timeout * 2) + "ms");
                 }
                 if (inFast) removeFastPeer(peer);
                 if (inHighCap) _highCapacityPeers.remove(peer);

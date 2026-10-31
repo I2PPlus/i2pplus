@@ -404,10 +404,10 @@ class JobQueueScaler implements Runnable {
         finalMax = Math.max(getMinRunnersDynamic(), finalMax);
 
         if (_log.shouldInfo()) {
-            _log.info("Max runners calculation: configured: " + configuredMax +
-                     " * target: " + targetMax + " * ramBased: " + ramBasedMax +
-                     "\n* freeMemBased: " + freeMemoryBasedMax + " * final: " + finalMax +
-                     " * maxMemory: " + (maxMemory/MB) + "MB * used: " + (usedMemory/MB) + "MB");
+            _log.info("Max runners calculation -> Configured: " + configuredMax +
+                      " * Target: " + targetMax + " * RAM based: " + ramBasedMax +
+                      "\n* Free memory based: " + freeMemoryBasedMax + " * Final: " + finalMax +
+                      " * Max memory: " + (maxMemory/MB) + "MB * Used: " + (usedMemory/MB) + "MB");
         }
 
         return finalMax;
@@ -788,22 +788,22 @@ class JobQueueScaler implements Runnable {
 
         // Debug logging every 10 seconds to trace scaler decisions
         if (_log.shouldDebug() && (_periodicCheckCount % 10 == 0)) {
-            _log.debug("JobQueueScaler check: runners: " + activeRunners + "/" + maxRunners +
-                      " * readyJobs: " + readyJobs + " * maxLag: " + maxLag + "ms" +
-                      " * avgLag: " + avgLag + "ms" +
-                      "\n* messageDelay: " + messageDelay + "ms" +
-                      " * baselineDelay: " + baselineMsgDelay + "ms" +
-                      " * cpuLoad: " + cpuLoad + "% * gcPause: " + gcPause + "ms" +
-                      " * bwDelay: " + bwDelay + "ms" +
-                      "\n* queueGrowth: " + queueGrowth + " * delayDelta: " + delayDelta +
-                      " * activeJobMaxDuration: " + activeJobMaxDuration + "ms" +
-                      " * avgJobDuration: " + avgJobDuration + "ms" +
-                      "\n* inCooldown: " + inCooldown +
-                      " * timeSinceLastScale: " + timeSinceLastScale + "ms" +
-                      "\n* scalingDisabled: " + _scalingUpDisabled +
-                      " * extendedCooldown: " + _isInExtendedCooldown +
-                      " * preScaleSnapshot: " + (_preScaleSnapshot != null) +
-                      " * droppedJobs: " + jobsBeingDropped);
+            _log.debug("JobQueueScaler check"
+                       + "\n* Runners: " + activeRunners + " of " + maxRunners
+                       + " * Ready jobs: " + readyJobs
+                       + "\n* Max lag: " + maxLag + "ms * Average lag: " + avgLag + "ms"
+                       + " * Message delay: " + messageDelay + "ms"
+                       + "\n* Baseline delay: " + baselineMsgDelay + "ms * CPU load: " + cpuLoad + "%"
+                       + " * GC pause: " + gcPause + "ms * Bandwidth delay: " + bwDelay + "ms"
+                       + "\n* Queue growth: " + queueGrowth + " * Delay change: " + delayDelta
+                       + " * Longest active job: " + activeJobMaxDuration + "ms"
+                       + "\n* Average job duration: " + avgJobDuration + "ms"
+                       + " * In cooldown: " + inCooldown
+                       + " * Since last scale: " + timeSinceLastScale + "ms"
+                       + "\n* Scaling disabled: " + _scalingUpDisabled
+                       + " * Extended cooldown: " + _isInExtendedCooldown
+                       + "\n* Snapshot pending: " + (_preScaleSnapshot != null)
+                       + " * Dropped jobs: " + jobsBeingDropped);
         }
 
         // Check if we need to evaluate feedback from last scale-up
@@ -1189,8 +1189,9 @@ class JobQueueScaler implements Runnable {
             if (_consecutiveFailedScaleUps >= MAX_CONSECUTIVE_FAILED_SCALES) {
                 _scalingUpDisabled = true;
                 if (_log.shouldInfo()) {
-                    _log.info("Circuit breaker open -> Scaling up disabled: " + _consecutiveFailedScaleUps
-                              + " failed attempts * Jobs may be CPU-bound * Retry in "
+                    _log.info("Circuit breaker open -> Scaling up disabled"
+                              + "\n* Failed attempts: " + _consecutiveFailedScaleUps
+                              + " * Jobs may be CPU-bound * Retry in "
                               + DataHelper.formatDuration(cooldown));
                 }
             }

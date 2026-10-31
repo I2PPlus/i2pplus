@@ -129,7 +129,9 @@ public class XI2PLocationFilter extends HandlerWrapper {
                                         return rv.toBase32();
                                 } catch (I2PException e) {
                                     if (_log.shouldWarn())
-                                        _log.warn("Unable to set X-I2P-Location -> Keys not ready (probably safe to ignore, should resolve after first run)\n* Error: " + e.getMessage());
+                                        _log.warn("Unable to set X-I2P-Location -> Keys not ready"
+                                                  + " (safe to ignore, resolves after the first run)"
+                                                  + "\n* Error: " + e.getMessage());
                                     return null;
                                 } catch (IOException e) {
                                     if (_log.shouldWarn())
@@ -139,7 +141,7 @@ public class XI2PLocationFilter extends HandlerWrapper {
                             }
                         }
                         if (_log.shouldWarn())
-                            _log.warn("Unable to set X-I2P-Location -> Location target not found in any I2PTunnel config (shouldn't happen!)");
+                            _log.warn("Unable to set X-I2P-Location -> Location target not found in any I2PTunnel config");
                         return null;
                     }
                 } catch (IOException ioe) {

@@ -389,7 +389,7 @@ public class GraphListener implements RateSummaryListener {
         }
         if (errors % MAX_CONSECUTIVE_ERRORS == 0) {
             _log.error("RRD write failed " + errors + " times for " + rateName()
-                       + ", keeping the listener open for the heal ladder (history preserved)", t);
+                       + " -> Keeping the listener open for the heal ladder", t);
         }
     }
 

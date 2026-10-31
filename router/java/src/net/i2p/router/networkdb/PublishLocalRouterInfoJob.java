@@ -127,9 +127,10 @@ public class PublishLocalRouterInfoJob extends JobImpl {
                     }
                 }
                 if (_log.shouldInfo())
-                    _log.info("Republishing early because addresses or costs or caps have changed -" +
-                              " Old Caps: " + oldRI.getCapabilities() + "; New Caps: " + newcaps +
-                              "\nOLD:\n" +
+                    _log.info("Republishing early -> Addresses, costs or caps have changed"
+                              + "\n* Old caps: " + oldRI.getCapabilities()
+                              + " * New caps: " + newcaps
+                              + "\nOLD:\n" +
                               oldAddrs + "\nNEW:\n" + newAddrs);
             }
             ri.setPublished(getContext().clock().now());

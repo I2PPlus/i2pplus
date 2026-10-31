@@ -148,7 +148,10 @@ public class Clock implements Timestamper.UpdateListener {
             if (_alreadyChanged && (System.currentTimeMillis() - _startedOn > 10 * 60 * 1000) &&
                 ((delta > MAX_LIVE_OFFSET) || (delta < 0 - MAX_LIVE_OFFSET))) {
                 Log log = getLog();
-                if (log.shouldWarn()) log.warn("The clock has already been updated, but you want to change it by " + delta + " to " + offsetMs + "?  Did something break?");
+                if (log.shouldWarn()) {
+                    log.warn("Clock already updated -> Ignoring the change * By: " + delta +
+                             "ms * To: " + offsetMs + "ms");
+                }
                 return;
             }
 

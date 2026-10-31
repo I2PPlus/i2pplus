@@ -245,7 +245,8 @@ public class ShellService implements ClientApp {
         if (start) {
             _p = _pb.start();
             if (!_p.isAlive() && _log.shouldError())
-                _log.error("ShellService: Error getting Process of application from recently instantiated shellservice " + _pb.command()+" "+_p.exitValue());
+                _log.error("ShellService process died -> Command: " + _pb.command()
+                           + " * Exit value: " + _p.exitValue());
             if (_log.shouldDebug())
                 _log.debug("ShellService: Started " + getName() + "process");
         }

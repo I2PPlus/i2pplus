@@ -501,8 +501,9 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 }
                 if (shouldStore) {
                     if (_facade.isClientDb() && _log.shouldWarn()) {
-                        _log.warn("[" + _facade + "] -> Storing a RouterInfo [" + key.toBase64().substring(0,6) +
-                                  "] in the client NetDb, which is rare and should have been handled by the inbound message dispatcher");
+                        _log.warn("[" + _facade + "] -> Storing a RouterInfo in the client NetDb"
+                                  + "\n* Router: [" + key.toBase64().substring(0,6) + "]"
+                                  + "\n* Rare, and should have been handled by the inbound message dispatcher");
                     }
                     prevNetDb = _facade.store(key, ri);
                     wasNew = ((null == prevNetDb) || (prevNetDb.getPublished() < ri.getPublished()));
@@ -568,15 +569,15 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 if (invalidMessage.contains("published over")) {
                     dontBlamePeer = true;
                     if (_log.shouldDebug()) {
-                        _log.debug("STALE RouterInfo from [" +
-                                   _fromHash.toBase64().substring(0,6) + "] * " +
+                        _log.debug("Stale RouterInfo from [" +
+                                   _fromHash.toBase64().substring(0,6) + "] -> " +
                                    KademliaNetworkDatabaseFacade
                                    .stripStoreWrapper(invalidMessage));
                     }
                 // Should we record in the profile?
                 } else if (_log.shouldDebug()) {
-                    _log.debug("INVALID data packet from [" +
-                               _fromHash.toBase64().substring(0,6) + "] * " +
+                    _log.debug("Invalid data packet from [" +
+                               _fromHash.toBase64().substring(0,6) + "] -> " +
                                KademliaNetworkDatabaseFacade
                                .stripStoreWrapper(invalidMessage) + _from);
                 }
@@ -584,11 +585,11 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
         } else if (invalidMessage != null && !dontBlamePeer) {
             if (_log.shouldDebug()) {
                 if (invalidMessage.contains("published over")) {
-                    _log.debug("STALE RouterInfo from [unknown] * " +
+                    _log.debug("Stale RouterInfo from [unknown] -> " +
                               KademliaNetworkDatabaseFacade
                               .stripStoreWrapper(invalidMessage));
                 } else {
-                    _log.debug("INVALID data packet from [unknown] * " +
+                    _log.debug("Invalid data packet from [unknown] -> " +
                               KademliaNetworkDatabaseFacade
                               .stripStoreWrapper(invalidMessage));
                 }
@@ -646,8 +647,8 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
             RouterInfo me = getContext().router().getRouterInfo();
             msg2.setEntry(me);
             if (_fromHash != null && _from != null && _log.shouldWarn()) {
-                _log.warn("Received a DatabaseStoreMessage with a reply token but we are not a floodfill" +
-                          " * from " + _from + " [" + _fromHash.toBase64().substring(0,6) + ']');
+                _log.warn("Received a DatabaseStoreMessage with a reply token -> We are not a floodfill"
+                          + "\n* From: " + _from + " [" + _fromHash.toBase64().substring(0,6) + ']');
             }
         }
         Hash toPeer = _message.getReplyGateway();

@@ -299,9 +299,8 @@ class FragmentHandler {
             paddingEnd++;
             if (offset+paddingEnd >= length) {
                 if (_log.shouldWarn())
-                    _log.warn("Cannot verify the message, the offset runs past the end"
-                              + " -> Offset: " + offset
-                              + " * Length: " + length
+                    _log.warn("Cannot verify the message -> The offset runs past the end"
+                              + "\n* Offset: " + offset + " * Length: " + length
                               + " * Padding end: " + paddingEnd);
                 return false;
             }
@@ -425,10 +424,11 @@ class FragmentHandler {
                 return -1;
             messageId = DataHelper.fromLong(preprocessed, offset, 4);
             if (_log.shouldDebug())
-                _log.debug("Reading [MsgID " + messageId + "] at offset: " + offset
-                           + " * Type: " + type + " * Router: "
-                           + (router != null ? router.toBase64().substring(0,6) : "n/a")
-                           + " * TunnelId: " + tunnelId);
+                _log.debug("Reading a tunnel message -> MsgID: " + messageId + " * Offset: " + offset
+                           + " * Type: " + type
+                           + "\n* Router: "
+                           + (router != null ? '[' + router.toBase64().substring(0, 6) + ']' : "n/a")
+                           + " * Tunnel ID: " + tunnelId);
             offset += 4;
         }
         if (extended) {
@@ -455,12 +455,10 @@ class FragmentHandler {
             // do this after the above since we have to return offset
             // i2pd 2.19 bug? see above
             if (_log.shouldWarn())
-                _log.warn("Dropping messages at Tunnel Endpoint with delivery instruction to tunnel 0" +
-                          " -> Gateway: " + router +
-                          "; Fragmented? " + fragmented +
-                          "; ID: " + messageId +
-                          "; Size: " + size +
-                          "; Type: " + (preprocessed[offset] & 0xff));
+                _log.warn("Dropping messages at the tunnel endpoint with a delivery instruction to tunnel 0"
+                          + "\n* Gateway: " + router + " * Fragmented: " + fragmented
+                          + " * ID: " + messageId + " * Size: " + size
+                          + " * Type: " + (preprocessed[offset] & 0xff));
             _context.statManager().addRateData("tunnel.corruptMessage", 1);
         } else if (fragmented) {
             final long fMessageId = messageId;

@@ -176,13 +176,19 @@ class TCBShare {
                 rttDev = e.getRTTDev();
                 wdw = e.getWindowSize();
             }
-            _log.debug("To cache: " +
-                       con.getSession().getMyDestination().calculateHash().toBase64().substring(0, 6) +
-                       '-' +
-                       dest.calculateHash().toBase64().substring(0, 6) +
-                       "\n* old: " + old + " con: " + opts.getRTT() + " new: " + rtt +
-                       " oldDev: " + oldDev + " conDev: " + opts.getRTTDev() + " newDev: " + rttDev +
-                       " oldw: " + oldw + " conw: " + opts.getWindowSize() + " neww: " + wdw);
+            String from = con.getSession().getMyDestination().calculateHash()
+                                        .toBase64().substring(0, 6);
+            String to = dest.calculateHash().toBase64().substring(0, 6);
+            _log.debug("Sharing the congestion parameters"
+                       + "\n* From: [" + from + "] * To: [" + to + ']'
+                       + "\n* Cached RTT: " + old + " * Connection RTT: " + opts.getRTT()
+                       + " * New RTT: " + rtt
+                       + "\n* Cached deviation: " + oldDev
+                       + " * Connection deviation: " + opts.getRTTDev()
+                       + " * New deviation: " + rttDev
+                       + "\n* Cached window: " + oldw
+                       + " * Connection window: " + opts.getWindowSize()
+                       + " * New window: " + wdw);
         }
     }
 

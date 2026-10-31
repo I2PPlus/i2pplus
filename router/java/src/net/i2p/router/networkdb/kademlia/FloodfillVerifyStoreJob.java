@@ -906,7 +906,8 @@ class FloodfillVerifyStoreJob extends JobImpl {
                 getContext().statManager().addRateData("netDb.floodfillVerifyPhase1Timeout", elapsed);
                 if (_log.shouldInfo()) {
                     _log.info("Floodfill store check timed out for [" + _key.toBase32().substring(0,8) +
-                              "] -> Proceeding to flood check without blaming [" +
+                              "] -> Proceeding to the flood check without blaming"
+                              + "\n* Router: [" +
                               (_target != null ? _target.toBase64().substring(0,6) : "?") + "]");
                 }
                 enterFloodCheck();

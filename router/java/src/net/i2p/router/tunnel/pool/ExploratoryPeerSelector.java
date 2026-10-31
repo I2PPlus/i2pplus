@@ -201,8 +201,8 @@ import net.i2p.util.SystemVersion;
             cooldownExcluded += addFreshCooldownExclusions(_peerCooldowns, cooldownCutoff, exclude);
             if (log.shouldDebug())
                 log.debug("Exploratory selection cooldowns -> Ours: " + _exploratoryCooldowns.size() +
-                          " * Shared: " + _peerCooldowns.size() +
-                          " * Excluded: " + cooldownExcluded +
+                          " * Shared: " + _peerCooldowns.size()
+                          + "\n* Excluded: " + cooldownExcluded +
                           " * Thread: " + Thread.currentThread().getName());
         }
 
@@ -550,8 +550,8 @@ import net.i2p.util.SystemVersion;
                     }
                 }
                 if (log.shouldDebug())
-                    log.debug("Exploratory selection cooldown recorded for " + recorded + " adjacent peer(s)" +
-                              " * Selection size: " + rv.size() +
+                    log.debug("Exploratory selection cooldown recorded for " + recorded + " adjacent peers"
+                              + "\n* Selection size: " + rv.size() +
                               " * Thread: " + Thread.currentThread().getName());
                 // Bound the own map: entries expire on read, but sweep only
                 // when the map is large (mirrors prunePeerMaps()).

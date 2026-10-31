@@ -346,8 +346,9 @@ public class SearchJob extends JobImpl {
             boolean onlyFloodfill = true;
             if (_floodfillPeersExhausted && onlyFloodfill && _state.getPending().isEmpty()) {
                 if (_log.shouldWarn()) {
-                    _log.warn("No non-Floodfill peers left, and no more search queries pending -> Searched: " +
-                              _state.getAttemptedSize() + " (Failed: " + _state.getFailedSize() + ")");
+                    _log.warn("No non-Floodfill peers left and no search queries pending -> Failing the search"
+                              + "\n* Searched: " + _state.getAttemptedSize()
+                              + " * Failed: " + _state.getFailedSize());
                 }
                 fail();
                 return;
@@ -608,8 +609,9 @@ public class SearchJob extends JobImpl {
         long duration = _state.replyFound(peer);
         // this processing can take a while, so split 'er up
         if (_log.shouldDebug())
-            _log.debug("Starting Search ReplyJob to [" + peer.toBase64().substring(0, 6) + "] for ["
-                       + message.getSearchKey().toBase64().substring(0, 6) + "] * " + _facade);
+            _log.debug("Starting a Search ReplyJob -> Peer: [" + peer.toBase64().substring(0, 6) + ']'
+                       + " * Search key: [" + message.getSearchKey().toBase64().substring(0, 6) + ']'
+                       + " * Facade: " + _facade);
         getContext().jobQueue().addJob(new SearchReplyJob(getContext(), this, message, peer, duration));
     }
 

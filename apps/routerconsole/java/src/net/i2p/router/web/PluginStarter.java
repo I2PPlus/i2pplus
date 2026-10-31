@@ -1194,7 +1194,9 @@ public class PluginStarter implements Runnable {
 
         boolean isClientThreadRunning = isClientThreadRunning(pluginName, ctx);
         if (log.shouldDebug())
-            log.debug("[" + pluginName + "] - Threads running? " + isClientThreadRunning + "; WebApp running? " + isWarRunning + "; Jobs running? " + isJobRunning + "; process running? " + isProcessRunning);
+            log.debug("Plugin " + pluginName + " -> Threads running: " + isClientThreadRunning
+                      + " * WebApp running: " + isWarRunning
+                      + "\n* Jobs running: " + isJobRunning + " * Process running: " + isProcessRunning);
         return isClientThreadRunning || isWarRunning || isJobRunning || isProcessRunning;
         //
         //

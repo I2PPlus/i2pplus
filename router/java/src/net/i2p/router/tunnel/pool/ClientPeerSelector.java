@@ -215,9 +215,10 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         int length = getLength(settings);
         if (length < 0 || ((length == 0) && (settings.getLength() + settings.getLengthVariance() > 0))) {
             if (log.shouldWarn()) {
-                log.warn("Client pool selection aborted -> Requested tunnel length is " + length +
-                         " * Destination: " + settings.getDestinationNickname() +
-                         " * " + (settings.isInbound() ? "Inbound" : "Outbound"));
+                log.warn("Client pool selection aborted -> Invalid tunnel length"
+                         + " * Length: " + length
+                         + "\n* Destination: " + settings.getDestinationNickname()
+                         + " * " + (settings.isInbound() ? "Inbound" : "Outbound"));
             }
             return Collections.emptyList();
         }
@@ -306,8 +307,9 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         if (shouldDiscardShortSelection(rv.size(), min)) {
             if (log.shouldWarn()) {
                 log.warn("Client pool selection for " + settings.getDestinationNickname() +
-                         " is unusable -> Discarding for a redraw (" + (isInbound ? "Inbound" : "Outbound") +
-                         ", " + (rv.size() - 1) + "/" + min + " hops)");
+                         " is unusable -> Discarding for a redraw"
+                         + "\n* " + (isInbound ? "Inbound" : "Outbound")
+                         + " * Hops: " + (rv.size() - 1) + " of " + min);
             }
             return Collections.emptyList();
         }
@@ -1542,13 +1544,14 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
             ProfileOrganizer po = ctx.profileOrganizer();
             boolean established = ctx.commSystem().isEstablished(firstHop);
             boolean connecting = ctx.commSystem().isConnecting(firstHop);
-            log.info("First hop accepted at tier " + tier + " after " + attempt + "/" + attempts +
-                     " attempts (" + remaining + " left, " + _tierLogCount.get(key) + " since last log)" +
-                     "\n* established: " + established + " * connecting: " + connecting +
-                     " * buildSuccess: " + String.format("%.2f", buildSuccess) +
-                     "\n* fastTier: " + po.getFastPeerCount() +
-                     " * highCap: " + po.getHighCapPeerCount() +
-                     " * sample: " + po.getEffectiveCandidateSample(ctx) +
+            log.info("First hop accepted -> Tier: " + tier + " * Attempts: " + attempt + " of " + attempts +
+                     " * Remaining: " + remaining
+                     + "\n* Logged since last: " + _tierLogCount.get(key) +
+                     "\n* Established: " + established + " * Connecting: " + connecting +
+                     " * Build success: " + String.format("%.2f", buildSuccess) +
+                     "\n* Fast tier: " + po.getFastPeerCount() +
+                     " * High capacity: " + po.getHighCapPeerCount() +
+                     " * Sample: " + po.getEffectiveCandidateSample(ctx) +
                      (established || connecting ? "" : "  <-- NO transport session") +
                      " [" + firstHop.toBase64().substring(0, 6) + "]");
         }
@@ -1681,10 +1684,11 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
                 }
             } else {
                 if (log.shouldWarn()) {
-                     log.warn("Not enough peers for the " + settings.getDestinationNickname() +
-                              " client pool -> Returning empty (" +
-                              (settings.isInbound() ? "Inbound" : "Outbound") + ", " + rv.size() +
-                              " of " + min + " selected, length " + length + ")");
+                     log.warn("Not enough peers for the client pool -> Returning empty"
+                              + "\n* Destination: " + settings.getDestinationNickname()
+                              + " * " + (settings.isInbound() ? "Inbound" : "Outbound")
+                              + "\n* Selected: " + rv.size() + " of " + min
+                              + " * Length: " + length);
                 }
                 return Collections.emptyList();
             }

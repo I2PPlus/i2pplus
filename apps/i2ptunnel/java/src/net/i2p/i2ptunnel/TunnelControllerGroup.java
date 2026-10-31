@@ -2424,9 +2424,9 @@ public class TunnelControllerGroup implements ClientApp {
             I2PAppContext ctx = _context;
             Log log = ctx != null ? ctx.logManager().getLog(TunnelControllerGroup.class) : null;
             if (log != null && log.shouldWarn() && shouldLogElevation(key, ctx.clock().now())) {
-                log.warn("Runner pool elevated above its ceiling -> Threads " + current
-                         + " to " + want + " (ceiling " + ceiling + ", queued "
-                         + queueDepth + ", active " + active + ")");
+                log.warn("Runner pool elevated above its ceiling -> Threads " + current + " to " + want
+                         + "\n* Ceiling: " + ceiling + " * Queued: " + queueDepth
+                         + " * Active: " + active);
             }
         }
         return ex.getMaximumPoolSize();

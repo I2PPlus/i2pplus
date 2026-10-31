@@ -472,8 +472,8 @@ List<PeerProfile> profiles = new ArrayList<>(Math.min(LIMIT_PROFILES, freshFiles
           sm.addRateData(STAT_LOADED_RTT_EXPIRED, rttExpired, 60L * 1000);
           sm.addRateData(STAT_LOADED_LOW_LATENCY, lowLatency, 60L * 1000);
           if (_log.shouldInfo() && (withRtt + rttExpired) > 0) {
-              _log.info("Loaded latency: " + withRtt + " profiles with a current first-hop RTT, " +
-                        rttExpired + " expired, " + lowLatency + " flagged low latency");
+              _log.info("Loaded latency: " + withRtt + " profiles with a current first-hop RTT"
+                        + "\n* Expired: " + rttExpired + " * Low-latency flagged: " + lowLatency);
           }
 
         long duration = System.currentTimeMillis() - start;

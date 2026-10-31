@@ -2237,9 +2237,9 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
                 return;
             }
             if (_log.shouldWarn()) {
-                _log.warn("Browser stopped accepting data for " + ((now - started) / 1000) +
-                          "s of a blocked write (runner " + _runnerId +
-                          ") -> Closing local socket");
+                _log.warn("Browser stopped accepting data -> Closing the local socket"
+                          + " * Blocked write: " + DataHelper.formatDuration(now - started)
+                          + " * Runner: " + _runnerId);
             }
             try {s.close();}
             catch (IOException ioe) { /* ignored */ }

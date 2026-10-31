@@ -1242,8 +1242,8 @@ public class BlockfileNamingService extends DummyNamingService {
         }
         if (_log.shouldDebug())
             _log.debug("Searching " + listname + " beginning with " + beginWith +
-                       " starting with " + startsWith + " search string " + search +
-                       " limit=" + limit + " skip=" + skip);
+                       " starting with " + startsWith + " for " + search
+                       + "\n* Limit: " + limit + " * Skip: " + skip);
         synchronized(_bf) {
             if (_isClosed)
                 return Collections.emptyMap();

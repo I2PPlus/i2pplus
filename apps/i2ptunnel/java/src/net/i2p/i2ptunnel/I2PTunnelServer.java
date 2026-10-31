@@ -785,8 +785,8 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
         if (_lastRejectWarn.compareAndSet(last, now)) {
             int max = _maxConnections;
             _log.warn("Connection cap reached for " + remoteHost + ':' + remotePort +
-                      " -> Rejecting the new connection" +
-                      " * Maximum: " + max + " * Active: " + _activeConnections.get());
+                      " -> Rejecting the new connection"
+                      + "\n* Maximum: " + max + " * Active: " + _activeConnections.get());
         }
     }
 

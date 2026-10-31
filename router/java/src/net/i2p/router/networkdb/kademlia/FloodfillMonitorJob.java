@@ -348,7 +348,8 @@ class FloodfillMonitorJob extends JobImpl {
         }
 
         if (_log.shouldInfo()) {
-            _log.info("We have " + good + " good floodfill peers, not changing our floodfill status -> Enabled? " + wasFF + "; reachable? " + happy);
+            _log.info("We have " + good + " good floodfill peers -> Keeping our floodfill status"
+                      + "\n* Enabled: " + wasFF + " * Reachable: " + happy);
         }
         return wasFF;
     }

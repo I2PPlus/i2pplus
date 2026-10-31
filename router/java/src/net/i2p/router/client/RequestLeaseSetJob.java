@@ -279,9 +279,10 @@ class RequestLeaseSetJob extends JobImpl {
                 // drain rather than a fixed second repeatedly failing.
                 long nextWait = waitMs * attempt * 2;
                 if (_log.shouldInfo())
-                    _log.info("I2CP queue full sending the LeaseSet request (attempt " +
-                              attempt + " of " + attempts + ") -> Retrying in " + nextWait +
-                              "ms [" + ime.getMessage() + ']');
+                    _log.info("I2CP queue full sending the LeaseSet request -> Retrying"
+                              + "\n* Attempt: " + attempt + " of " + attempts
+                              + " * Wait: " + DataHelper.formatDuration(nextWait)
+                              + "\n* Error: " + ime.getMessage());
                 try {
                     Thread.sleep(nextWait);
                 } catch (InterruptedException ie) {
@@ -292,8 +293,8 @@ class RequestLeaseSetJob extends JobImpl {
         }
         getContext().statManager().addRateData("client.requestLeaseSetDropped", 1);
         _log.warn("Giving up on the LeaseSet request after " + attempts +
-                  " attempts -> The client is not draining its I2CP queue" +
-                  (lastFailure != null ? " [" + lastFailure.getMessage() + "]" : "") +
+                  " attempts -> The client is not draining its I2CP queue"
+                  + (lastFailure != null ? "\n* Error: " + lastFailure.getMessage() : "") +
                   "\n* " + _requestState);
         failEarlyRequest("Error sending I2CP message");
     }

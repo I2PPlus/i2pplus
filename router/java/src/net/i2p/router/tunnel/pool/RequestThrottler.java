@@ -638,7 +638,7 @@ public class RequestThrottler {
             if (underLoad) {
                 if (_log.shouldInfo()) {
                     _log.info("Dropping all connections from [" + routerId + "] -> Low share under sustained load"
-                              + " * Version: " + v + " * Load score: " + load);
+                              + "\n* Version: " + v + " * Load score: " + load);
                 }
                 new Disconnector(h, v).schedule(11*60*1000L);
                 return true;
@@ -656,9 +656,8 @@ public class RequestThrottler {
                     context.banlist().banlistRouter(h, banReason, null, null, context.clock().now() + 30*60*1000L);
                     new Disconnector(h, v).schedule(11*60*1000L);
                     if (_log.shouldWarn())
-                        _log.warn("Banning a router [" + routerId + "] for 30m -> " +
-                                  "Excessive tunnel requests" +
-                                  " * Requested: " + count + " * Limit: " + limit + " * Ratio: " + ratio);
+                        _log.warn("Banning a router [" + routerId + "] for 30m -> Excessive tunnel requests"
+                                  + "\n* Requested: " + count + " * Limit: " + limit + " * Ratio: " + ratio);
                 }
             } else if (ratio >= 1.5f) {
                 if (banEnabled) {

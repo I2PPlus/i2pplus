@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import net.i2p.data.DataHelper;
 import net.i2p.router.RouterContext;
 import net.i2p.router.util.PQEntry;
 import net.i2p.stat.RateConstants;
@@ -772,11 +773,9 @@ public class FIFOBandwidthLimiter {
             if (req.getAborted()) {
                 // connection decided they don't want the data anymore
                 if (_log.shouldDebug())
-                     _log.debug("Aborting inbound request to "
-                                + req
-                                + " waited "
-                                + waited
-                                + "ms) pending " + _pendingInboundRequests.size());
+                     _log.debug("Aborting inbound request -> Dropping it"
+                                + "\n* " + req + " * Waited: " + DataHelper.formatDuration(waited)
+                                + " * Pending: " + _pendingInboundRequests.size());
                 _pendingInboundRequests.remove(i);
                 i--;
                 continue;
@@ -798,20 +797,18 @@ public class FIFOBandwidthLimiter {
             satisfied.add(req);
             if (req.getPendingRequested() > 0) {
                 if (_log.shouldDebug())
-                     _log.debug("Allocating " + allocated + " bytes inbound as a partial grant to "
-                                + req
-                                + " waited "
-                                + waited
-                                + "ms) pending " + _pendingInboundRequests.size()
-                                + ", longest waited " + locked_getLongestInboundWait() + " in");
+                     _log.debug("Allocating " + allocated + " bytes inbound as a partial grant"
+                                + "\n* " + req + " * Waited: " + DataHelper.formatDuration(waited)
+                                + "\n* Pending: " + _pendingInboundRequests.size()
+                                + " * Longest wait: " +
+                                DataHelper.formatDuration(locked_getLongestInboundWait()));
             } else {
                 if (_log.shouldDebug())
-                     _log.debug("Allocating " + allocated + " bytes inbound to finish the partial grant to "
-                                + req
-                                + " waited "
-                                + waited
-                                + "ms) pending " + _pendingInboundRequests.size()
-                                + ", longest waited " + locked_getLongestInboundWait() + " out");
+                     _log.debug("Allocating " + allocated + " bytes inbound to finish a partial grant"
+                                + "\n* " + req + " * Waited: " + DataHelper.formatDuration(waited)
+                                + "\n* Pending: " + _pendingInboundRequests.size()
+                                + " * Longest wait: " +
+                                DataHelper.formatDuration(locked_getLongestInboundWait()));
                 _pendingInboundRequests.remove(i);
                 i--;
                 if (waited > 10)
@@ -886,11 +883,9 @@ public class FIFOBandwidthLimiter {
             if (req.getAborted()) {
                 // connection decided they don't want the data anymore
                 if (_log.shouldDebug())
-                     _log.debug("Aborting outbound request to "
-                                + req
-                                + " waited "
-                                + waited
-                                + "ms) pending " + _pendingOutboundRequests.size());
+                     _log.debug("Aborting outbound request -> Dropping it"
+                                + "\n* " + req + " * Waited: " + DataHelper.formatDuration(waited)
+                                + " * Pending: " + _pendingOutboundRequests.size());
                 _pendingOutboundRequests.remove(i);
                 i--;
                 continue;
@@ -912,20 +907,18 @@ public class FIFOBandwidthLimiter {
             satisfied.add(req);
             if (req.getPendingRequested() > 0) {
                 if (_log.shouldDebug())
-                     _log.debug("Allocating " + allocated + " bytes outbound as a partial grant to "
-                                + req
-                                + " waited "
-                                + waited
-                                + "ms) pending " + _pendingOutboundRequests.size()
-                                + ", longest waited " + locked_getLongestOutboundWait() + " out");
+                     _log.debug("Allocating " + allocated + " bytes outbound as a partial grant"
+                                + "\n* " + req + " * Waited: " + DataHelper.formatDuration(waited)
+                                + "\n* Pending: " + _pendingOutboundRequests.size()
+                                + " * Longest wait: " +
+                                DataHelper.formatDuration(locked_getLongestOutboundWait()));
             } else {
                 if (_log.shouldDebug())
-                     _log.debug("Allocating " + allocated + " bytes outbound to finish the partial grant to "
-                                + req
-                                + " waited "
-                                + waited
-                                + "ms) pending " + _pendingOutboundRequests.size()
-                                + ", longest waited " + locked_getLongestOutboundWait() + " out)");
+                     _log.debug("Allocating " + allocated + " bytes outbound to finish a partial grant"
+                                + "\n* " + req + " * Waited: " + DataHelper.formatDuration(waited)
+                                + "\n* Pending: " + _pendingOutboundRequests.size()
+                                + " * Longest wait: " +
+                                DataHelper.formatDuration(locked_getLongestOutboundWait()));
                 _pendingOutboundRequests.remove(i);
                 i--;
                 if (waited > 10)

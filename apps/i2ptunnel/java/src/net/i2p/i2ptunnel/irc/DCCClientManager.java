@@ -240,10 +240,9 @@ public class DCCClientManager extends EventReceiver {
         if (c != null) {
             _active.put(lport, client);
             if (_log.shouldWarn())
-                _log.warn("Added client tunnel for port " + lport +
-                          " pending count now: " + _incoming.size() +
-                          " active count now: " + _active.size() +
-                          " complete count now: " + _complete.size());
+                _log.warn("Added client tunnel for port " + lport
+                          + "\n* Pending: " + _incoming.size() + " * Active: " + _active.size()
+                          + " * Complete: " + _complete.size());
         }
     }
 
@@ -262,10 +261,9 @@ public class DCCClientManager extends EventReceiver {
         if (tun != null)
             _complete.put(lport, tun);
         if (_log.shouldWarn())
-            _log.warn("Removed client tunnel for port " + lport +
-                      " pending count now: " + _incoming.size() +
-                      " active count now: " + _active.size() +
-                      " complete count now: " + _complete.size());
+            _log.warn("Removed client tunnel for port " + lport
+                      + "\n* Pending: " + _incoming.size() + " * Active: " + _active.size()
+                      + " * Complete: " + _complete.size());
     }
 
     /**

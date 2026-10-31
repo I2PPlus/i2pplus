@@ -2424,9 +2424,10 @@ public class PeerState {
             _context.statManager().addRateData("udp.sendRejected", state.getPushCount());
             if (_log.shouldDebug() && now - _lastRejectionLogTime > REJECTION_LOG_INTERVAL) {
                 _lastRejectionLogTime = now;
-                _log.debug("Allocation for [" + _shortHash + "] rejected (Window size: " + getSendWindowBytes()
-                          + " / available: " + getSendWindowBytesRemaining()
-                          + " bytes) for [MsgID" + state.getMessageId() + "]" + state);
+                _log.debug("Allocation for [" + _shortHash + "] rejected -> Window too small"
+                          + "\n* Window: " + getSendWindowBytes() + " bytes"
+                          + " * Available: " + getSendWindowBytesRemaining() + " bytes"
+                          + "\n* Message [MsgID " + state.getMessageId() + ']' + state);
             }
             return false;
         }
@@ -2498,8 +2499,8 @@ public class PeerState {
             if (_log.shouldDebug()) {
                 if (state.getFragmentCount() > 1) {
                     _log.debug("Received partial ACK of [MsgID " + state.getMessageId() + "] from [" +
-                               _shortHash + "] -> Newly-acked: " +
-                               ackedSize + " bytes, now complete for: " + state);
+                               _shortHash + "] -> Newly acked " + ackedSize + " bytes, now complete"
+                               + "\n* " + state);
                 } else {
                     _log.debug("Received ACK of [MsgID " + state.getMessageId() + "] from [" +
                                _shortHash + "] after " + lifetime +
@@ -2509,10 +2510,10 @@ public class PeerState {
         } else {
             if (_log.shouldDebug()) {
                 _log.debug("Received partial ACK of [MsgID " + state.getMessageId() + "] from ["
-                      + _shortHash + "] after " + lifetime + " and "
-                      + numSends + " sends -> Complete: false"
-                      + "\n* Newly-acked: " + ackedSize + " bytes * Fragment: " + f.num
-                      + " for: " + state);
+                      + _shortHash + "] after " + DataHelper.formatDuration(lifetime) + " and "
+                      + numSends + " sends"
+                      + "\n* Newly acked: " + ackedSize + " bytes * Fragment: " + f.num
+                      + "\n* " + state);
             }
         }
         state.clearNACKs();

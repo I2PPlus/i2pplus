@@ -708,8 +708,8 @@ public class I2PSocketManagerFull implements I2PSocketManager {
                     }
                 }
                 if (session == _session) {
-                    _log.warn("No DSA subsession found for peer [" + h.toBase64().substring(0,6) + "]" +
-                              " -> Falling back to primary session which may not be compatible");
+                    _log.warn("No DSA subsession found for peer [" + h.toBase64().substring(0,6) + "]"
+                              + " -> Falling back to the primary session");
                 }
             }
          }

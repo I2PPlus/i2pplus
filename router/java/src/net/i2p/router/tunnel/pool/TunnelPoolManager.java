@@ -1561,7 +1561,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         double avg = latencyCount > 0 ? (double) totalLatency / latencyCount : -1;
         if (avg <= 0) {
             if (_log.shouldWarn())
-                _log.warn("Replace slow tunnels: No latency data available (avg <= 0)");
+                _log.warn("Replacing slow tunnels -> No latency data available");
             return false;
         }
 
@@ -1570,9 +1570,9 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
         int configuredThreshold = _context.getProperty(PROP_SLOW_TUNNEL_THRESHOLD, DEFAULT_SLOW_THRESHOLD_MS);
         if (_log.shouldInfo()) {
-            _log.info("Replace slow tunnels: Average latency: " + String.format("%.0f", avg) +
-                      "ms * Min latency: " + minLatency + "ms * Configured threshold: " +
-                      configuredThreshold + "ms");
+            _log.info("Replacing slow tunnels -> Average latency: " + String.format("%.0f", avg) + "ms"
+                      + " * Minimum latency: " + minLatency + "ms"
+                      + "\n* Configured threshold: " + configuredThreshold + "ms");
         }
         double threshold;
         if (configuredThreshold > 0) {
@@ -1582,7 +1582,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             threshold = Math.max(avg, DEFAULT_MIN_SLOW_THRESHOLD);
         }
         if (_log.shouldDebug()) {
-            _log.debug("Using threshold: " + String.format("%.0f", threshold) + "ms");
+            _log.debug("Replacing slow tunnels -> Using threshold: " + String.format("%.0f", threshold) + "ms");
         }
 
         // Second pass: identify and remove slow tunnels
@@ -1611,7 +1611,9 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                 if (currentCount <= minToKeep) continue;
 
                 if (_log.shouldDebug()) {
-                    _log.debug("Pool " + pool + " has " + currentCount + " tunnels (min: " + minToKeep + "), checking for slow tunnels...");
+                    _log.debug("Replacing slow tunnels -> Checking a pool for slow tunnels"
+                               + "\n* Pool: " + pool + " * Tunnels: " + currentCount
+                               + " * Keeping at least: " + minToKeep);
                 }
 
                 // Create snapshot WHILE HOLDING THE LOCK
@@ -1690,7 +1692,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                         schedulePeerTests(tunnelPeers);
                     }
                     if (_log.shouldDebug()) {
-                        _log.debug("Scheduling early expiry for slow tunnel: " + cfg.getReceiveTunnelId(0));
+                        _log.debug("Replacing slow tunnels -> Scheduling the early expiry of a slow tunnel"
+                                   + "\n* Pool: " + pool + " * Tunnel ID: " + cfg.getReceiveTunnelId(0));
                     }
                 } else if (info instanceof TunnelCreatorConfig) {
                     // ExpireJob.scheduleExpiration requires PooledTunnelCreatorConfig,
@@ -1699,7 +1702,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                         pool.removeTunnel(info);
                     } catch (Exception e) {
                         if (_log.shouldWarn())
-                            _log.warn("Exception removing slow tunnel " + info, e);
+                            _log.warn("Replacing slow tunnels -> Removing the tunnel failed * Tunnel: " + info, e);
                     }
                 }
             }
@@ -1707,7 +1710,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             if (!toRemove.isEmpty()) {
                 didRemove = true;
                 if (_log.shouldWarn())
-                    _log.warn("Scheduled early expiry for " + toRemove.size() + " slow tunnels from " + pool);
+                    _log.warn("Replacing slow tunnels -> Scheduled the early expiry of slow tunnels"
+                              + " * Count: " + toRemove.size() + " * Pool: " + pool);
             }
         }
         return didRemove;
@@ -1727,7 +1731,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             try {
                 int pruned = pool.pruneExcessTunnels();
                 if (pruned > 0 && _log.shouldInfo()) {
-                    _log.info("Pruned " + pruned + " excess tunnels from " + pool);
+                    _log.info("Pruning excess tunnels -> Removed " + pruned + " from " + pool);
                 }
                 // Clear FAILING/FAILED flags on tunnels provably carrying
                 // real traffic — the traffic is end-to-end proof the tunnel
@@ -1735,7 +1739,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                 pool.clearFailingOnTraffic();
             } catch (Exception e) {
                 if (_log.shouldWarn())
-                    _log.warn("Error pruning tunnels from pool", e);
+                    _log.warn("Pruning excess tunnels failed for " + pool, e);
             }
         }
     }
@@ -2298,13 +2302,14 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
         if (inboundPools != registeredClients || outboundPools != registeredClients) {
             if (_log.shouldWarn())
-                _log.warn("Pool mismatch detected: " + registeredClients + " clients, " +
-                          inboundPools + " inbound pools, " + outboundPools + " outbound pools, " +
-                          pendingCleanups + " pending cleanups");
+                _log.warn("Pool count mismatch -> The pool counts do not match the client count"
+                          + "\n* Clients: " + registeredClients + " * Inbound pools: " + inboundPools
+                          + "\n* Outbound pools: " + outboundPools
+                          + " * Pending cleanups: " + pendingCleanups);
         } else if (_log.shouldInfo()) {
-            _log.info("Pool health: " + registeredClients + " clients, " +
-                      inboundPools + " inbound pools, " + outboundPools + " outbound pools, " +
-                      pendingCleanups + " pending cleanups");
+            _log.info("Pool health -> Clients: " + registeredClients + " * Inbound pools: " + inboundPools
+                      + "\n* Outbound pools: " + outboundPools
+                      + " * Pending cleanups: " + pendingCleanups);
         }
     }
 

@@ -1430,8 +1430,10 @@ class ClientConnectionRunner {
             if (!alreadyAccepted(_messageId)) {
                 if (_requeueCount++ > MAX_REQUEUE) {
                     // bug requeueing forever? failsafe
-                    _log.error("Abandoning " + MessageStatusMessage.getStatusString(msg.getStatus()) +
-                                " update for " + _messageId + " after " + _requeueCount + " attempts * " + _sessId);
+                    _log.error("Abandoning a " + MessageStatusMessage.getStatusString(msg.getStatus()) +
+                               " update -> Requeue limit reached"
+                               + "\n* Message: " + _messageId + " * Attempts: " + _requeueCount
+                               + " * Session: " + _sessId);
                 } else {
                     long delay = REQUEUE_DELAY;
                     if (_requeueCount < 10) {delay = REQUEUE_DELAY / 5;}
@@ -1468,17 +1470,17 @@ class ClientConnectionRunner {
             if (alreadyProcessed) return;
 
             if (_lastTried > 0) {
-                if (_log.shouldDebug())
-                    _log.info("Updating message status for message " + _messageId + " to "
-                              + MessageStatusMessage.getStatusString(msg.getStatus())
-                              + " for " + _sessId
-                              + " (with nonce: 2), retrying after "
-                              + (_context.clock().now() - _lastTried));
+                if (_log.shouldInfo())
+                    _log.info("Updating message status -> Message: " + _messageId
+                              + " * Status: " + MessageStatusMessage.getStatusString(msg.getStatus())
+                              + " * Session: " + _sessId
+                              + "\n* Retrying after " +
+                              DataHelper.formatDuration(_context.clock().now() - _lastTried));
             } else {
                 if (_log.shouldDebug())
-                    _log.debug("Updating message status for message " + _messageId + " to "
-                               + MessageStatusMessage.getStatusString(msg.getStatus())
-                               + " for " + _sessId + " (with nonce: 2)");
+                    _log.debug("Updating message status -> Message: " + _messageId
+                               + " * Status: " + MessageStatusMessage.getStatusString(msg.getStatus())
+                               + " * Session: " + _sessId + " * Nonce version: 2");
             }
 
             try {

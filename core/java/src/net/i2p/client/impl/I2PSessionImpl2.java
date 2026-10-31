@@ -389,7 +389,8 @@ class I2PSessionImpl2 extends I2PSessionImpl {
         int compressed = payload.length;
         if (_log.shouldInfo()) {
             String d = dest.calculateHash().toBase32().substring(0,8);
-            _log.info("Sending message to: [" + d + "] -> Compressed? [" + sc + "] * Size in: " + size + " bytes * Size out: " + compressed + " bytes");
+            _log.info("Sending message to [" + d + "] -> Compressed: " + sc
+                      + " * Size in: " + size + " bytes * Size out: " + compressed + " bytes");
         }
         if (_noEffort) {return sendNoEffort(dest, payload, expires, 0);}
         else {return sendBestEffort(dest, payload, keyUsed, tagsSent, expires);}

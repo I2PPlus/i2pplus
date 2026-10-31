@@ -1838,8 +1838,8 @@ public class GeoIP {
             boolean isStrict = ctx.commSystem().isInStrictCountry();
             String isStrictCountry = isStrict ? "strict" : "non-strict";
             if (_log.shouldInfo() && isStrict != wasStrict) {
-                _log.info("Our router's previously identified country (" + oldCountry + ") was " + wasStrictCountry +
-                          " -> New country (" + country + ") is designated as " + isStrictCountry);
+                _log.info("Our country changed from " + oldCountry + " to " + country +
+                          " -> Designation changed from " + wasStrictCountry + " to " + isStrictCountry);
             }
             if (isStrict || isHidden || blockMyCountry) {
                 countryToIP(country); // generate country blocklist

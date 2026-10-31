@@ -977,18 +977,11 @@ class PeerState implements DataLoader {
                 listener.getUtil().banPeer(dest.calculateHash(), period);
             }
             if (_log.shouldWarn()) {
-                _log.warn(
-                        "Banning ["
-                                + peer
-                                + "] for "
-                                + (period / 60000)
-                                + " minutes for excessive discard ratio "
-                                + (cancelled * 100 / (cancelled + uploaded))
-                                + "% ("
-                                + cancelled
-                                + " cancelled, "
-                                + uploaded
-                                + " uploaded)");
+                _log.warn("Banning a peer -> Excessive discard ratio"
+                          + "\n* Peer: " + peer
+                          + "\n* Duration: " + DataHelper.formatDuration(period)
+                          + " * Ratio: " + (cancelled * 100 / (cancelled + uploaded)) + "%"
+                          + " * Cancelled: " + cancelled + " * Uploaded: " + uploaded);
             }
             peer.disconnect();
         }

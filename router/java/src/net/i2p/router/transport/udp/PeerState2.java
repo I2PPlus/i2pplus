@@ -1378,8 +1378,9 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                         } else {
                             // Different IP - warn but allow (may be legitimate change)
                             if (_log.shouldWarn()) {
-                                _log.warn("[SSU] Path response from a changed IP, updating the peer address -> Expected: " +
-                                         _pendingRemoteHostId + " * Received from: " + from + ' ' + this);
+                                _log.warn("[SSU] Path response from a changed IP -> Updating the peer address"
+                                          + "\n* Expected: " + _pendingRemoteHostId
+                                          + " * Received from: " + from + ' ' + this);
                             }
                             _transport.changePeerAddress(this, from);
                         }
@@ -1389,7 +1390,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                         messagePartiallyReceived();
                     } else {
                         if (_log.shouldWarn()) {
-                            _log.warn("[SSU] Path response from an unexpected address -> Expected: " + _pendingRemoteHostId
+                            _log.warn("[SSU] Path response from unexpected address -> Keeping the peer address"
+                                    + "\n* Expected: " + _pendingRemoteHostId
                                     + " * Received from: " + from + ' ' + this);
                         }
                         // Track port hopping attempts via the peer hash for full BanLogger context
@@ -1444,8 +1446,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
              }
              if (off != sz) {
                  if (_log.shouldWarn()) {
-                     _log.warn("[SSU] Fragment reassembly offset mismatch: assembled: " + off +
-                               " * Expected: " + sz + " bytes");
+                     _log.warn("[SSU] Fragment reassembly offset mismatch -> Assembled " + off +
+                               " of " + sz + " bytes");
                  }
                  return;
              }

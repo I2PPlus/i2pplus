@@ -1017,8 +1017,10 @@ class EventPumper implements Runnable {
                                                             _transport.getMaxConnections(), _transport.countPeers(),
                                                             _context.random());
         if (verdict.isDrop() && _log.shouldInfo()) {
-            _log.info("Dropping incoming TCP connection (" + (verdict.getPercent() >= 1 ? Math.min(verdict.getPercent(), 100) + "%" : "1%") + " chance)" +
-                      " -> Previous/current connections per minute: " + verdict.getLastConnections() + " / " + verdict.getCurrentConnectionsPerMinute());
+            _log.info("[NTCP] Dropping incoming TCP connection -> Accept chance: " +
+                      (verdict.getPercent() >= 1 ? Math.min(verdict.getPercent(), 100) + "%" : "1%")
+                      + "\n* Connections per minute: " + verdict.getLastConnections() + " previous, " +
+                      verdict.getCurrentConnectionsPerMinute() + " current");
         }
         return !verdict.isDrop();
     }

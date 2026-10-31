@@ -652,10 +652,9 @@ public class DecayingBloomFilter {
             _lastWindowCount = currentCount;
         } finally { releaseWriteLock(); }
         if (_log.shouldDebug())
-            _log.debug("Decayed the " + _name + " filter -> Rotated to a fresh window" +
-                       " * Inserted: " + currentCount +
-                       " * Duplicates: " + dups +
-                       " * False positive rate: " + fpr);
+            _log.debug("Decayed the " + _name + " filter -> Rotated to a fresh window"
+                       + "\n* Inserted: " + currentCount + " * Duplicates: " + dups
+                       + " * False positive rate: " + fpr);
     }
 
     /** Rotates the filter to a fresh hour on a schedule. */

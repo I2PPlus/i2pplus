@@ -856,8 +856,8 @@ public class SSLEepGet extends EepGet {
             // this maybe would be better done in the catch in super.fetch(), but
             // then we'd have to copy it all over here.
             _log.error(
-                    "SSL negotiation error with " + host + ':' + port
-                            + " - self-signed certificate or untrusted certificate authority?",
+                    "SSL negotiation failed with " + host + ':' + port
+                            + " -> Self-signed certificate or an untrusted authority",
                     sslhe);
             if (_saveCerts > 0 && _stm != null) saveCerts(host, _stm);
             else if (_commandLine) {

@@ -161,15 +161,9 @@ public class BandwidthManager implements BandwidthListener {
         boolean b = _down.offer(0, 1.0f);
         boolean rv = a && b;
         if (!rv && _log.shouldWarn())
-            _log.warn(
-                    "Not requesting "
-                            + size
-                            + " bytes (bandwidth limit exceeded) -> Download / Request rate: "
-                            + DataHelper.formatSize(getDownloadRate())
-                            + "B/s"
-                            + " / "
-                            + DataHelper.formatSize(getRequestRate())
-                            + "B/s");
+            _log.warn("Not requesting " + size + " bytes -> Bandwidth limit exceeded"
+                      + "\n* Download rate: " + DataHelper.formatSize(getDownloadRate()) + "B/s"
+                      + " * Request rate: " + DataHelper.formatSize(getRequestRate()) + "B/s");
         return rv;
     }
 

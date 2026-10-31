@@ -4167,11 +4167,11 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
                 _partnerDeferrals = 0;
             } else {
                 if (_log.shouldInfo()) {
-                    _log.info("Tunnel Test failed -> Partner not usable" +
-                              (_partnerFallback ? " (exploratory fallback)" : "") +
-                              " partner [" + partner.getGateway().toBase64().substring(0, 6) +
-                              "] deferring test of " + _cfg +
-                              " (" + _partnerDeferrals + '/' + MAX_PARTNER_DEFERRALS + ')');
+                    _log.info("Tunnel test failed -> Partner not usable"
+                              + (_partnerFallback ? " * Exploratory fallback" : "")
+                              + "\n* Partner: [" + partner.getGateway().toBase64().substring(0, 6) + ']'
+                              + " * Deferring the test of " + _cfg
+                              + "\n* Deferrals: " + _partnerDeferrals + " of " + MAX_PARTNER_DEFERRALS);
                 }
                 deferForMissingPartner(_pool.getPairedPool(),
                                        _cfg.isInbound() ? "Outbound" : "Inbound");
