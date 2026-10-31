@@ -399,7 +399,7 @@ public class LeaseSet2 extends LeaseSet {
     public void setSigningKey(SigningPublicKey key) {
         Log log = I2PAppContext.getGlobalContext().logManager().getLog(LeaseSet2.class);
         if (log.shouldWarn()) {
-            log.warn("Don't set revocation key in LS2", new Exception("I did it"));
+            log.warn("LeaseSet2 has no revocation key -> Ignoring the signing key");
         }
     }
 

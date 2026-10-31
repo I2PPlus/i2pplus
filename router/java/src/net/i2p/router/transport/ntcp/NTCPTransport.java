@@ -2264,8 +2264,7 @@ public int getEstimatedRTT(Hash peer) {
         Status status = getReachabilityStatus();
         if (status != old) {
             if (_log.shouldWarn()) {
-                _log.warn("[NTCP] Old status: " + old + " New status: " + status +
-                          " from: ", new Exception("traceback"));
+                _log.warn("[NTCP] Reachability status changed " + old + " -> " + status);
             }
             if (old != Status.UNKNOWN && _context.router().getUptime() > 5*60*1000L) {
                 _context.router().eventLog().addEvent(EventLog.REACHABILITY,

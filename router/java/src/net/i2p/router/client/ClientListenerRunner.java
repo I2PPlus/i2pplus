@@ -171,7 +171,7 @@ class ClientListenerRunner implements Runnable {
         }
 
         if (isAlive())
-            _log.error("CANCELING I2CP LISTEN", new Exception("I2CP Listen cancelled!!!"));
+            _log.error("I2CP listen loop ended -> Cancelling the listener for port " + _port);
         _running = false;
     }
 

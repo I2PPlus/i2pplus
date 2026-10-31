@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import net.i2p.I2PAppContext;
 import net.i2p.data.ByteArray;
+import net.i2p.data.DataHelper;
 import net.i2p.util.ByteCache;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
@@ -337,7 +338,7 @@ class MessageOutputStream extends OutputStream {
         if (_log.shouldDebug()) {
             long elapsed = _context.clock().now() - traceStart;
             if (elapsed > 10_000) {
-                _log.debug("write() took " + elapsed + "ms", new Exception("SlowWrite"));
+                _log.debug("Slow write * Elapsed: " + DataHelper.formatDuration(elapsed));
             }
         }
         throwAnyError();
@@ -475,7 +476,7 @@ class MessageOutputStream extends OutputStream {
         if (_log.shouldDebug()) {
             long elapsed = _context.clock().now() - traceStart;
             if (elapsed > 10_000) {
-                _log.debug("flush() took " + elapsed + "ms", new Exception("SlowFlush"));
+                _log.debug("Slow flush * Elapsed: " + DataHelper.formatDuration(elapsed));
             }
         }
         throwAnyError();

@@ -177,8 +177,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
         this.peerID = new PeerID(id, sock.getPeerDestination());
         _id = __id.incrementAndGet();
         if (_log.shouldDebug())
-            _log.debug(
-                    "Creating a new peer " + peerID.toString(), new Exception("creating " + _id));
+            _log.debug("Incoming peer connection -> Handshake complete * Peer: " + peerID);
         _isIncoming = true;
     }
 
@@ -344,7 +343,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
         if (state != null) throw new IllegalStateException("Peer already started");
 
         if (_log.shouldDebug())
-            _log.debug("Running connection to " + peerID.toString(), new Exception("connecting"));
+            _log.debug("Starting the connection to " + peerID);
         Hash h = null;
         try {
             // Do we need to handshake?

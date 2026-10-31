@@ -822,7 +822,7 @@ public class Router implements RouterClock.ClockShiftListener {
         Log log = null;
         if (ctx != null) {
             log = ctx.logManager().getLog(Router.class);
-            if (log.shouldDebug()) {log.debug("Config file: " + filename, new Exception("location"));}
+            if (log.shouldDebug()) {log.debug("Config file: " + filename);}
         }
         Properties props = new Properties();
         try {

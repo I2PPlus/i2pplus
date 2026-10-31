@@ -337,7 +337,7 @@ class PacketHandler {
                 for (Connection c : manager.listConnections()) {
                     buf.append('\n').append(c);
                 }
-                log.warn(buf.toString(), new Exception("Wrong stream"));
+                log.warn(buf.toString());
             }
             packet.releasePayload();
         }

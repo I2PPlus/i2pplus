@@ -1100,8 +1100,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         byte[] data = msg.getPayload().getUnencryptedData();
         if ((data == null) || (data.length <= 0)) {
             if (_log.shouldLog(Log.CRIT))
-                _log.log(Log.CRIT, getPrefix() + "addNewMessage of a message with no unencrypted data",
-                           new Exception("Empty message"));
+                _log.log(Log.CRIT, getName() + " -> Message with no unencrypted data * ID: " + id);
         } else {
             int size = data.length;
             _availabilityNotifier.available(id, size);
@@ -1635,7 +1634,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
             oldState = _state;
             changeState(State.CLOSING);
         }
-        if (_log.shouldWarn()) {_log.warn(getPrefix() + "Disconnected", new Exception("Disconnected"));}
+        if (_log.shouldWarn()) {_log.warn(getName() + " -> Disconnected");}
         clearPendingLookups();
         if (_sessionListener != null) _sessionListener.disconnected(this);
         if (oldState != State.OPENING && shouldReconnect()) { // don't try to reconnect if it failed before GETTDATE

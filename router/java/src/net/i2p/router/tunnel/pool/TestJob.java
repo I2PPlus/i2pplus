@@ -3209,7 +3209,7 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
         BatchState state = batchState(ctx);
         if (_pool == null) {
             if (_log.shouldError()) {
-                _log.error("Invalid Tunnel Test configuration → No pool for " + cfg, new Exception("origin"));
+                _log.error("Tunnel test configuration invalid -> No pool for the tunnel * Config: " + cfg);
             }
             // No pool means no pool-slot claim was made, but the total slot
             // was — release it or the instance cap leaks one slot every time

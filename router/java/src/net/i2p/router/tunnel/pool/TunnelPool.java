@@ -906,7 +906,7 @@ public class TunnelPool {
     synchronized void startup() {
         synchronized (_inProgress) {_inProgress.clear();}
         if (_log.shouldDebug()) {
-            _log.debug(toString() + ": Startup() called, was already alive? " + _alive, new Exception());
+            _log.debug(toString() + " -> Starting the pool * Was alive: " + _alive);
         }
         _alive = true;
         _started = System.currentTimeMillis();

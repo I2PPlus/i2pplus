@@ -128,7 +128,7 @@ abstract class StoreJob extends JobImpl {
             else {_connectMask = ConnectChecker.ANY_V4;}
         }
         if (_log.shouldDebug()) {
-            _log.debug("[" + _facade + "] -> New store job\n* " + data, new Exception("Store job created"));
+            _log.debug(_facade + " -> New store job\n* " + data);
         }
     }
 

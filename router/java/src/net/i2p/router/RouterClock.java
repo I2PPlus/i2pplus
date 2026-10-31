@@ -150,8 +150,8 @@ public class RouterClock extends Clock {
                 ( (delta > MAX_LIVE_OFFSET) || (delta < 0 - MAX_LIVE_OFFSET) ) ) {
                 Log log = getLog();
                 if (log.shouldWarn())
-                    log.warn("The clock has already been updated, ignoring request to change it by "
-                                       + delta + " to " + offsetMs, new Exception());
+                    log.warn("Clock already updated -> Ignoring the change * By: " + delta +
+                             "ms * To: " + offsetMs + "ms");
                 return;
             }
 
@@ -240,7 +240,7 @@ public class RouterClock extends Clock {
                 _alreadyChanged = true;
                _lastProposedOffset = 0;
                 if (_context.getBooleanProperty(PROP_DISABLE_ADJUSTMENT)) {
-                    log.error("Clock adjustment disabled", new Exception());
+                    log.error("Clock adjustment disabled -> Keeping the offset at zero");
                 } else {
                     _offset = offsetMs;
                     _desiredOffset = offsetMs;
@@ -275,7 +275,7 @@ public class RouterClock extends Clock {
             Log log = getLog();
             String msg = "Invalid time received: " + new Date(realTime);
             if (log.shouldWarn())
-                log.warn(msg, new Exception());
+                log.warn(msg);
             else
                 log.logAlways(Log.WARN, msg);
             return;

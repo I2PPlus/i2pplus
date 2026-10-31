@@ -251,7 +251,7 @@ class UPnPManager {
             if (_scannerCallback != null)
                 _scannerCallback.beforeScan();
             if (_log.shouldDebug())
-                _log.debug("UPnP Rescan", new Exception());
+                _log.debug("UPnP rescan starting");
             // See also:
             // Adaptive Jitter Control for UPnP M-Search
             // Kevin Mills and Christopher Dabrowski

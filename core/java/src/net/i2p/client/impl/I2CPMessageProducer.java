@@ -272,8 +272,7 @@ class I2CPMessageProducer {
         SendMessageMessage msg;
         SessionId sid = session.getSessionId();
         if (sid == null) {
-            _log.error("Cannot send message, session closed: " + session.toString(),
-                       new Exception());
+            _log.error("Cannot send a message -> Session closed * Session: " + session);
             return;
         }
         Payload data = createPayload(payload);
@@ -309,8 +308,7 @@ class I2CPMessageProducer {
             return;
         SessionId sid = session.getSessionId();
         if (sid == null) {
-            _log.error("Cannot send message, session closed: " + session.toString(),
-                       new Exception());
+            _log.error("Cannot send a message -> Session closed * Session: " + session);
             return;
         }
         Payload data = createPayload(payload);
@@ -486,8 +484,7 @@ class I2CPMessageProducer {
         msg.setLeaseSet(leaseSet);
         SessionId sid = session.getSessionId();
         if (sid == null) {
-            _log.error("Cannot create LeaseSet, session closed: " + session.toString(),
-                       new Exception());
+            _log.error("Cannot create a LeaseSet -> Session closed * Session: " + session);
             throw new I2PSessionException("Session closed");
         }
         msg.setSessionId(sid);
@@ -521,8 +518,7 @@ class I2CPMessageProducer {
         msg.setSessionConfig(cfg);
         SessionId sid = session.getSessionId();
         if (sid == null) {
-            _log.error("Cannot update config, session closed: " + session.toString(),
-                       new Exception());
+            _log.error("Cannot update the config -> Session closed * Session: " + session);
             return;
         }
         msg.setSessionId(sid);

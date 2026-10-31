@@ -368,7 +368,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                 synchronized(_activeCheckers) {
                     t = r.checker.check(type, r.method, id, current, maxWait);
                     if (t != null) {
-                         if (_log.shouldInfo()) {_log.info("Starting " + r, new Exception());}
+                         if (_log.shouldInfo()) {_log.info("Starting " + r);}
                         _activeCheckers.add(t);
                         t.start();
                     }
@@ -409,7 +409,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                 synchronized(_activeCheckers) {
                     UpdateTask t = r.checker.check(type, r.method, id, current, DEFAULT_CHECK_TIME);
                     if (t != null) {
-                         if (_log.shouldInfo()) {_log.info("Starting " + r, new Exception());}
+                         if (_log.shouldInfo()) {_log.info("Starting " + r);}
                         _activeCheckers.add(t);
                         t.start();
                         break;
@@ -727,7 +727,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                     if (t != null) {
                         // race window here
                         //  store the remaining ones for retrying
-                        if (_log.shouldInfo()) {_log.info("Starting " + r, new Exception());}
+                        if (_log.shouldInfo()) {_log.info("Starting " + r);}
                         _downloaders.put(t, toTry);
                         t.start();
                         return t;

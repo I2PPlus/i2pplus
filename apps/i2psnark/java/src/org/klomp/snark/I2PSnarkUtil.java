@@ -859,9 +859,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     public synchronized boolean connect() {
         if (_manager == null) {
             _connecting = true;
-            // try to find why reconnecting after stop
             if (_log.shouldDebug()) {
-                _log.debug("Connecting to I2P...", new Exception("I did it"));
+                _log.debug("Connecting to the I2P router");
             }
             Properties opts = buildOpts(null, true);
             _manager = I2PSocketManagerFactory.createManager(_i2cpHost, _i2cpPort, opts);
@@ -1694,7 +1693,7 @@ public class I2PSnarkUtil implements DisconnectListener {
         _banlist.clear();
         if (mgr != null) {
             if (_log.shouldDebug()) {
-                _log.debug("Disconnecting from I2P...", new Exception("I did it"));
+                _log.debug("Disconnecting from the I2P router");
             }
             mgr.destroySocketManager();
         }

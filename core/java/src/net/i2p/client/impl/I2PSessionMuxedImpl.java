@@ -364,7 +364,8 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
         long id = msg.getMessageId();
         byte[] data = msg.getPayload().getUnencryptedData();
         if ((data == null) || (data.length <= 0)) {
-            if (_log.shouldLog(Log.CRIT)) _log.log(Log.CRIT, getPrefix() + "addNewMessage of a message with no unencrypted data", new Exception("Empty message"));
+            if (_log.shouldLog(Log.CRIT))
+                _log.log(Log.CRIT, getName() + " -> Message with no unencrypted data * ID: " + id);
             return;
         }
         int size = data.length;

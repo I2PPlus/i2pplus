@@ -204,7 +204,7 @@ public class Clock implements Timestamper.UpdateListener {
         if (realTime < BuildTime.getEarliestTime() || realTime > BuildTime.getLatestTime()) {
             Log log = getLog();
             String msg = "Invalid time received: " + Instant.ofEpochMilli(realTime);
-            if (log.shouldWarn()) log.warn(msg, new Exception());
+            if (log.shouldWarn()) log.warn(msg);
             else log.logAlways(Log.WARN, msg);
             return;
         }

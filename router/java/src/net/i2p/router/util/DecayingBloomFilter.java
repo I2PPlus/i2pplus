@@ -758,7 +758,8 @@ public class DecayingBloomFilter {
         try {
             boolean rv = _reorganizeLock.writeLock().tryLock(5000, TimeUnit.MILLISECONDS);
             if (!rv)
-                _log.error("No lock, size is: " + _reorganizeLock.getQueueLength(), new Exception("rats"));
+                _log.error("Write lock timed out -> Lock not acquired * Waiters: " +
+                           _reorganizeLock.getQueueLength());
             return rv;
         } catch (InterruptedException ie) {
             Thread.currentThread().interrupt();

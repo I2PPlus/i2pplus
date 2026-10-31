@@ -622,7 +622,8 @@ public class SingleFileNamingService extends NamingService {
         try {
             boolean rv = _fileLock.writeLock().tryLock(10000, TimeUnit.MILLISECONDS);
             if ((!rv) && _log.shouldWarn())
-                _log.warn("No lock, size is: " + _fileLock.getQueueLength(), new Exception("rats"));
+                _log.warn("Write lock timed out -> Lock not acquired * Waiters: " +
+                          _fileLock.getQueueLength());
             return rv;
         } catch (InterruptedException ie) { /* ignored */ }
         return false;

@@ -250,8 +250,8 @@ class ClientConnectionRunner {
         if (_dead) return;
         // router may be null in unit tests
         if ((_context.router() == null || _context.router().isAlive()) &&
-            _log.shouldDebug())
-            _log.warn("Stopping the I2CP connection!", new Exception("Stop client connection"));
+            _log.shouldWarn())
+            _log.warn("Stopping the I2CP connection");
         _dead = true;
         // we need these keys to unpublish the leaseSet
         if (_reader != null) _reader.stopReading();
@@ -1267,8 +1267,8 @@ class ClientConnectionRunner {
 
     /** The client was disconnected. */
     void disconnected() {
-        if (_log.shouldDebug())
-            _log.warn("Disconnected", new Exception("Disconnected?"));
+        if (_log.shouldWarn())
+            _log.warn("Client disconnected -> Stopping the connection runner");
         stopRunning();
     }
 

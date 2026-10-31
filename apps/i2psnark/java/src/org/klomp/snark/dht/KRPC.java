@@ -791,7 +791,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      */
     public synchronized void start() {
         if (_isRunning) return;
-        if (_log.shouldInfo()) _log.info("KRPC start", new Exception());
+        if (_log.shouldInfo()) _log.info("KRPC starting");
         _session.addMuxedSessionListener(this, I2PSession.PROTO_DATAGRAM_RAW, _rPort);
         _session.addMuxedSessionListener(this, I2PSession.PROTO_DATAGRAM, _qPort);
         _knownNodes.start();
@@ -813,7 +813,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     public synchronized void stop() {
         if (!_isRunning) return;
         _isRunning = false;
-        if (_log.shouldInfo()) _log.info("KRPC stop", new Exception());
+        if (_log.shouldInfo()) _log.info("KRPC stopping");
         _cleaner.cancel();
         _explorer.cancel();
         // unregister port listeners

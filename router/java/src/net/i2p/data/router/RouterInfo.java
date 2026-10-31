@@ -567,10 +567,8 @@ public class RouterInfo extends DatabaseEntry {
         _validated = true;
 
         if (!_isValid) {
-            if (log.shouldInfo()) {
-                log.warn("Signature verify fail: " + toString(), new Exception("from"));
-            } else if (log.shouldWarn()) {
-                log.warn("RouterInfo [" + _identity.getHash().toBase64().substring(0,6) + "] has INVALID signature");
+            if (log.shouldWarn()) {
+                log.warn("RouterInfo [" + _identity.getHash().toBase64().substring(0, 6) + "] -> Signature verify failed");
             }
         }
     }

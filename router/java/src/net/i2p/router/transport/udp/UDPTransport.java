@@ -3262,7 +3262,7 @@ public class UDPTransport extends TransportImpl {
      */
     private RouterAddress locked_rebuildExternalAddress(String host, int port, boolean allowRebuildRouterInfo) {
         if (_log.shouldDebug())
-            _log.debug("REA4 " + host + ' ' + port, new Exception());
+            _log.debug("Rebuilding the external address * Address: " + host + ':' + port);
         boolean isIPv6 = host != null && host.contains(":");
         if (isIPv6 && host.equals(":"))
             host = null;
@@ -3334,7 +3334,7 @@ public class UDPTransport extends TransportImpl {
         RouterAddress addr = new RouterAddress(getPublishStyle(), options, SSU_OUTBOUND_COST);
         if (!addr.deepEquals(current)) {
             if (_log.shouldInfo())
-                _log.info("Address rebuilt: " + addr, new Exception());
+                _log.info("Address rebuilt * Address: " + addr);
             replaceAddress(addr);
             if (allowRebuildRouterInfo)
                 rebuildRouterInfo();

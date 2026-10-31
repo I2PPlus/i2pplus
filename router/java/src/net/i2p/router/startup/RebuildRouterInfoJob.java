@@ -124,7 +124,7 @@ class RebuildRouterInfoJob extends JobImpl {
             }
 
             if (!info.isValid()) {
-                _log.log(Log.CRIT, "RouterInfo we just built is INVALID: " + info, new Exception());
+                _log.log(Log.CRIT, "RouterInfo we just built is INVALID\n* " + info);
                 return;
             }
 

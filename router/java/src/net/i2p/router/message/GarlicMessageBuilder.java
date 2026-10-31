@@ -226,7 +226,7 @@ public class GarlicMessageBuilder {
         long timeFromNow = config.getExpiration() - ctx.clock().now();
         if (timeFromNow < 1*1000) {
             if (log.shouldDebug())
-                log.debug("Building a message expiring in " + timeFromNow + "ms: " + config, new Exception("created by"));
+                log.debug("Message expires in " + timeFromNow + "ms -> Dropping it * Config: " + config);
             return null;
         }
         if (log.shouldDebug())
@@ -323,7 +323,7 @@ public class GarlicMessageBuilder {
         long timeFromNow = config.getExpiration() - ctx.clock().now();
         if (timeFromNow < 1*1000) {
             if (log.shouldDebug())
-                log.debug("Building a message expiring in " + timeFromNow + "ms: " + config, new Exception("created by"));
+                log.debug("Message expires in " + timeFromNow + "ms -> Dropping it * Config: " + config);
             return null;
         }
         if (log.shouldDebug())
@@ -360,7 +360,7 @@ public class GarlicMessageBuilder {
         long timeFromNow = config.getExpiration() - ctx.clock().now();
         if (timeFromNow < 1*1000) {
             if (log.shouldDebug())
-                log.debug("Building a message expiring in " + timeFromNow + "ms: " + config, new Exception("created by"));
+                log.debug("Message expires in " + timeFromNow + "ms -> Dropping it * Config: " + config);
             return null;
         }
         if (log.shouldDebug())

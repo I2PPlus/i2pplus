@@ -327,7 +327,7 @@ public class SearchJob extends JobImpl {
      */
     protected void continueSearch() {
         if (_state.completed()) {
-            if (_log.shouldDebug()) {_log.debug("Search already completed", new Exception("already completed"));}
+            if (_log.shouldDebug()) {_log.debug("Search already completed -> Nothing to continue");}
             return;
         }
         int toCheck = getBredth() - _state.getPendingSize();
@@ -571,8 +571,7 @@ public class SearchJob extends JobImpl {
         SearchMessageSelector sel = new SearchMessageSelector(getContext(), router, _expiration, _state);
         SearchUpdateReplyFoundJob reply = new SearchUpdateReplyFoundJob(getContext(), router, _state, _facade, this);
         if (_facade.isClientDb()) {
-            _log.error("Error! SendMessageDirectJob attempted in Client NetDb! -> "
-                       + "Message: " + msg, new Exception ("backtrace..."));
+            _log.error("SendMessageDirectJob in the client NetDb -> Dropping it * Message: " + msg);
             return;
         }
         SendMessageDirectJob j = new SendMessageDirectJob(getContext(), msg, to,

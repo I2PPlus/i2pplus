@@ -269,7 +269,7 @@ public class MetaInfo {
      */
     public MetaInfo(Map<String, BEValue> m) throws InvalidBEncodingException {
         if (_log.shouldDebug()) {
-            _log.debug("Parsing MetaInfo from a bencoded map: " + m, new Exception("source"));
+            _log.debug("Parsing MetaInfo from a bencoded map: " + m);
         }
         BEValue val = m.get("announce");
         // Disabled check, we can get info from a magnet now
@@ -1000,7 +1000,7 @@ public class MetaInfo {
         // we should only get here if serving a magnet on a torrent we created
         // or on edit torrent save
         if (_log.shouldDebug()) {
-            _log.debug("Creating new infomap", new Exception());
+            _log.debug("Creating a new infomap");
         }
         // otherwise we must create it
         Map<String, BEValue> info = new HashMap<>();

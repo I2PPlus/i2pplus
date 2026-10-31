@@ -243,10 +243,9 @@ public final class ByteCache extends TryCache<ByteArray> {
         }
         if (entry.getData().length != _entrySize) {
             Log log = I2PAppContext.getGlobalContext().logManager().getLog(ByteCache.class);
-            if (log.shouldDebug()) {
-                log.debug("Size of ByteCache entry is incorrect", new Exception("Stacktrace:"));
-            } else if (log.shouldWarn()) {
-                log.warn("Size of ByteCache entry is incorrect");
+            if (log.shouldWarn()) {
+                log.warn("ByteCache entry size is incorrect -> Not pooling it * Size: " +
+                         entry.getData().length + " bytes * Expected: " + _entrySize + " bytes");
             }
             return;
         }

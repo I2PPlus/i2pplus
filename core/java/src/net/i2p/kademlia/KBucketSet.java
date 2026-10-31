@@ -144,7 +144,8 @@ public class KBucketSet<T extends SimpleDataStructure> {
         try {
             boolean rv = _bucketsLock.writeLock().tryLock(3000, TimeUnit.MILLISECONDS);
             if ((!rv) && _log.shouldWarn()) {
-                _log.warn("No lock, size is: " + _bucketsLock.getQueueLength(), new Exception("rats!"));
+                _log.warn("Bucket lock timed out -> Lock not acquired * Waiters: " +
+                          _bucketsLock.getQueueLength());
             }
             return rv;
         } catch (InterruptedException ie) {
@@ -625,7 +626,9 @@ public class KBucketSet<T extends SimpleDataStructure> {
         if (rv >= 0) {
             return rv;
         }
-        _log.error("Key does not fit in any bucket?!\n* Key  : [" + DataHelper.toHexString(key.getData()) + "]" + "\n* Us   : " + _us + "\n* Delta: [" + DataHelper.toHexString(DataHelper.xor(_us.getData(), key.getData())) + "]", new Exception("???"));
+        _log.error("Key does not fit in any bucket\n* Key: " + DataHelper.toHexString(key.getData()) +
+                   "\n* Us: " + _us +
+                   "\n* Delta: " + DataHelper.toHexString(DataHelper.xor(_us.getData(), key.getData())));
         _log.error(toString());
         throw new IllegalStateException("pickBucket returned " + rv);
     }

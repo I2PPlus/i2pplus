@@ -1158,7 +1158,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
      */
     public void stopStreamReceiving() {
         if (_log.shouldDebug())
-            _log.debug("Stopping stream receiving for the SAM client", new Exception("stopped"));
+            _log.debug("Stopping stream receiving for the SAM client");
 
         if (streamSession == null) {
             _log.error("BUG! Got stream receiving stop, but session is null!");

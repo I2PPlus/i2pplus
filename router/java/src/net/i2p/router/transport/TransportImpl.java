@@ -650,7 +650,7 @@ public abstract class TransportImpl implements Transport {
     public void send(OutNetMessage msg) {
         if (msg.getTarget() == null) {
             if (_log.shouldError()) {
-                _log.error("BAD message enqueued (Target is null): " + msg, new Exception("Added by"));
+                _log.error("Message enqueued with no target -> Dropping it * Message: " + msg);
             }
             return;
         }
@@ -723,7 +723,7 @@ public abstract class TransportImpl implements Transport {
 
         if (_listener != null) {_listener.messageReceived(inMsg, remoteIdent, remoteIdentHash);}
         else if (_log.shouldError()) {
-            _log.error("Null listener -> Message dropped * This: " + toString(), new Exception("Null listener"));
+            _log.error("Null listener -> Message dropped * This: " + toString());
         }
     }
 

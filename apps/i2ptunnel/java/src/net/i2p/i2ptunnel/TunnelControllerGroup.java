@@ -577,9 +577,7 @@ public class TunnelControllerGroup implements ClientApp {
             if (instance == null) {
                 instance = this;
             } else {
-                _log.logAlways(Log.WARN, "New TunnelControllerGroup, now you have two");
-                if (_log.shouldWarn())
-                    _log.warn("I did it", new Exception());
+                _log.logAlways(Log.WARN, "Second TunnelControllerGroup created -> Two instances now exist");
             }
         }
         _state = INITIALIZED;
