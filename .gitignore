@@ -163,6 +163,7 @@ tools/test/js/node_modules/
 !tools/sonarqube/README.md
 !tools/gradle/
 !tools/README.md
+!tools/EXCLUSIONS.md
 !tools/pmd/*.py
 !tools/pmd/*.css
 !tools/pmd/*.sh

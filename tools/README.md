@@ -23,6 +23,12 @@ Development tools, scripts, and static analysis utilities for I2P+.
 | [`template/`](template/)       | Shared templates for HTML reports                               |
 | [`test/`](test/)               | Test dependencies (JUnit, Mockito, etc.)                        |
 
+## Reference
+
+| Document                         | What it covers                                                                             |
+| -------------------------------- | ------------------------------------------------------------------------------------------ |
+| [`EXCLUSIONS.md`](EXCLUSIONS.md) | What PMD, CodeQL and SpotBugs are told not to report, and where each exclusion is enforced |
+
 ## Quick Start
 
 ```bash

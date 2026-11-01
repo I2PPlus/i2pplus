@@ -103,25 +103,36 @@ EXCLUDE_PATTERNS = [
 ]
 EXCLUDE_RE = [re.compile(p) for p in EXCLUDE_PATTERNS]
 
-# Exclusions loaded from config/exclusions.txt
+# Exclusions loaded from tools/EXCLUSIONS.md
 _OVERRIDE_EXCLUSIONS = None
 
 def _load_override_exclusions():
-    """Load file-level exclusions for missing-override-annotation from config/exclusions.txt."""
+    """Load file-level exclusions for missing-override-annotation from tools/EXCLUSIONS.md.
+
+    The page is prose that documents every scanner exclusion, so only a line of
+    the form note:java/missing-override-annotation:path is a directive, and the
+    path is the third field. A comment line and a line inside a fenced block
+    are skipped, which is what lets the page show that form as an example
+    without the example taking effect for the paths it names.
+    """
     global _OVERRIDE_EXCLUSIONS
     if _OVERRIDE_EXCLUSIONS is not None:
         return _OVERRIDE_EXCLUSIONS
     _OVERRIDE_EXCLUSIONS = set()
-    config_path = os.path.join(os.path.dirname(SCRIPT_DIR), "config", "exclusions.txt")
+    config_path = os.path.join(SCRIPT_DIR, "EXCLUSIONS.md")
     if not os.path.exists(config_path):
-        # Try relative to script dir
-        config_path = os.path.join(SCRIPT_DIR, "..", "config", "exclusions.txt")
+        # Try relative to the repo root, when SCRIPT_DIR is a relative path
+        config_path = os.path.join(os.path.dirname(SCRIPT_DIR), "tools", "EXCLUSIONS.md")
     if not os.path.exists(config_path):
         return _OVERRIDE_EXCLUSIONS
+    in_fence = False
     with open(config_path) as f:
         for line in f:
             line = line.strip()
-            if line.startswith("#") or not line:
+            if line.startswith("```"):
+                in_fence = not in_fence
+                continue
+            if in_fence or line.startswith("#") or not line:
                 continue
             parts = line.split(":")
             if len(parts) >= 3 and parts[1] == "java/missing-override-annotation":
@@ -663,7 +674,7 @@ def fix_override(filepath, sarif_path=None, dry_run=False):
     if is_excluded(filepath):
         return 0
 
-    # Check config/exclusions.txt for file-level exclusions
+    # Check tools/EXCLUSIONS.md for file-level exclusions
     exclusions = _load_override_exclusions()
     if rel in exclusions:
         return 0
