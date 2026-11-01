@@ -25,6 +25,7 @@ public class LogsHelperRewritesTest {
         "| INFO   | accept=true reject=false allowed=true",
         "| ERROR  | java.lang.IllegalStateException: bad state\n\tat net.i2p.A.b(A.java:1)\n\tat java.base/C.d(C.java:2)\n* and more",
         "| INFO   | [DBWriter   ] flushed | [UDPSender] x | [BWRefiller] y",
+        "| INFO   | [NTCPRead.2 ] ...e.Connection: truncated class",
         "| INFO   | […ueue Pumper] and …obQueue and [NTCP Pumper ok",
         "| INFO   | [Addressbook] [Thread-3] [Timestamper] [DHT Explore] [HostChecker]",
         "| INFO   | IRC Client] Inbound message & IRC Client] Outbound message",
@@ -121,6 +122,7 @@ public class LogsHelperRewritesTest {
         msg = msg.replace("&lt;b&gt;", "");
         msg = msg.replace("&lt;/b&gt;", "");
         msg = msg.replace("...", "&hellip;");
+        msg = msg.replace("] &hellip;", "] &hellip;&nbsp;&nbsp;");
         msg = msg.replace("]]", "]");
         return msg;
     }
@@ -297,5 +299,81 @@ public class LogsHelperRewritesTest {
         }
         assertEquals("[[&#10004;]]", "[&#10004;]",
                      bracketCleanup.matcher("[[&#10004;]]").replaceAll("[$1]"));
+    }
+
+    /**
+     * The thread column as the page renders it: the rewrite chain that
+     * {@code formatMessages} applies, then the padding pass, with every entity
+     * counted as the single character the browser draws for it.
+     *
+     * @param line one raw log line, as the formatter wrote it
+     * @return the text between the thread column's brackets, as rendered
+     */
+    private static String threadColumn(String line) {
+        String msg = LogsHelper.padThreadColumn(messageRewrites(line));
+        int lb = msg.indexOf(" [");
+        int rb = lb >= 0 ? msg.indexOf("] ", lb + 2) : -1;
+        org.junit.Assert.assertTrue("no thread column in " + msg, lb >= 0 && rb > lb);
+        return msg.substring(lb + 2, rb).replace("&hellip;", "\u2026").replace("&nbsp;", " ");
+    }
+
+    /**
+     * Every form of the thread column renders at the 12 characters the formatter
+     * wrote: padded, truncated to the tail, and the forms the rewrite tables
+     * lengthen by a space or by widening the name. HTML collapses a plain space,
+     * so a column padded with spaces is two characters short on the page, and a
+     * column shortened with "..." is two more, since the three dots render as one.
+     */
+    @Test
+    public void testThreadColumnRendersAtItsWrittenWidth() {
+        String[] columns = {
+            "| INFO   | [NTCPRead.2  ] x",   // padded by the formatter
+            "| INFO   | [...:Dj66-0.2] x",   // truncated by the formatter
+            "| INFO   | [SAM-PWkr.2  ] x",   // padded by the formatter
+            "| INFO   | [Addressbook] x",    // padded by a rewrite
+            "| INFO   | [Timestamper] x",    // padded by a rewrite
+            "| INFO   | [UDPSender  ] x",    // widened by a rewrite
+            "| INFO   | [BWRefiller ] x",    // widened by a rewrite
+            "| INFO   | [NTCP Pumper] x",    // widened by a rewrite
+            "| INFO   | [Thread-3   ] x",    // widened by a rewrite
+            "| INFO   | [DBWriter   ] x"     // replaced wholesale by a rewrite
+        };
+        for (String line : columns) {
+            assertEquals(line, 12, threadColumn(line).length());
+        }
+    }
+
+    /**
+     * A truncated column keeps its tail and gains the two characters its three
+     * dots stand for, so the reader can still tell which thread logged the line.
+     */
+    @Test
+    public void testTruncatedThreadColumnKeepsTheTail() {
+        assertEquals("…  :Dj66-0.2", threadColumn("| INFO   | [...:Dj66-0.2] x"));
+    }
+
+    /**
+     * A truncated class column keeps its tail and gains the two characters its
+     * three dots stand for, so the column stays 16 wide on the page.
+     */
+    @Test
+    public void testClassColumnRendersAtItsWrittenWidth() {
+        String rendered = messageRewrites("| INFO   | [NTCPRead.2 ] ...e.Connection: x");
+        int from = rendered.indexOf("] ") + 2;
+        int to = rendered.indexOf(": ", from);
+        String column = rendered.substring(from, to)
+                              .replace("&hellip;", "\u2026").replace("&nbsp;", " ");
+        assertEquals("…  e.Connection", column);
+    }
+
+    /**
+     * A line whose only bracket sits in the message body is unchanged where it
+     * matters: the pass writes &nbsp; for a space in it, and that renders as the
+     * space that was there.
+     */
+    @Test
+    public void testPadThreadColumnRendersTheSameWithoutAColumn() {
+        String line = "no column here, just [a bracket] of text";
+        assertEquals(line, LogsHelper.padThreadColumn(line).replace("&nbsp;", " "));
     }
 }
