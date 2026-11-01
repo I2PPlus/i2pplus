@@ -48,8 +48,14 @@ class SingleTagSet extends RatchetTagSet {
         return new SessionKeyAndNonce(_key.getData(), 0);
     }
 
+    /**
+     * The tag set as a debug string. Reports the key's size, never its bytes,
+     * so the string can be logged on a path a peer triggers.
+     *
+     * @return the debug string
+     */
     @Override
     public String toString() {
-        return "[SingleTagSet: 0 " + _tag.toBase64() + ' ' + _key.toBase64() + ']';
+        return "[SingleTagSet: 0 " + _tag.toBase64() + " Size: " + _key.length() + " bytes]";
     }
 }

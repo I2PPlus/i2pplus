@@ -101,12 +101,18 @@ class SessionKeyAndNonce extends SessionKey {
         return _state;
     }
 
+    /**
+     * The session as a debug string. Reports the AEAD key's size, never its
+     * bytes, so the string can be logged on a path a peer triggers.
+     *
+     * @return the debug string
+     */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(64);
-        buf.append("[SessionKeyAndNonce: ");
+        buf.append("[SessionKeyAndNonce ");
         if (_data != null)
-            buf.append(toBase64());
+            buf.append("Size: ").append(length()).append(" bytes");
         buf.append(_state != null ? " NSR" : " ES");
         buf.append(" nonce: ").append(_nonce);
         buf.append(']');

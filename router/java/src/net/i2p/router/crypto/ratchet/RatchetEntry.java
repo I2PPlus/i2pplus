@@ -61,9 +61,10 @@ class RatchetEntry {
     }
 
     /**
-     * Debug string with tag and key.
+     * Debug string with the tag and the session key's size, never the key
+     * bytes.
      *
-     * @return debug string with tag and key
+     * @return debug string with tag and key size
      */
     @Override
     public String toString() {

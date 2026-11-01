@@ -1528,12 +1528,12 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                     // and is an ack of new key sent
                     if (isRequest) {
                         if (_log.shouldWarn())
-                            _log.warn("Next-session-key message is both a request and a reverse ACK -> Ignoring it * Message: " + key);
+                            _log.warn("Next-session-key message is both a request and a reverse ACK -> Ignoring it" + key);
                         return;
                     }
                     if (key.equals(_hisIBKey)) {
                         if (_log.shouldDebug())
-                            _log.debug("Received a duplicate next-session-key ACK for my outbound tag set: " + key);
+                            _log.debug("Duplicate outbound next-session-key ACK" + key);
                         return;
                     }
                     int hisLastIBKeyID;
@@ -1547,13 +1547,13 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                         // got a new key, use it
                         if (hisLastIBKeyID != id - 1) {
                             if (_log.shouldInfo())
-                                _log.info("Next-session-key ACK for my outbound tag set"
+                                _log.info("Outbound next-session-key ACK"
                                           + " -> Skipping it, expected key ID " + (hisLastIBKeyID + 1) + key);
                             return;
                         }
                         if (!hasKey) {
                             if (_log.shouldWarn())
-                                _log.warn("Next-session-key ACK for my outbound tag set"
+                                _log.warn("Outbound next-session-key ACK"
                                           + " -> Skipping it, no key data and none stored" + key);
                             return;
                         }
@@ -1563,17 +1563,15 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                         if (hasKey) {
                             // got a old key id but new data?
                             if (_hisIBKeyWithData != null && _log.shouldWarn())
-                                _log.warn("Next-session-key ACK for my outbound tag set"
-                                          + " -> Skipping it, the stored key data differs"
-                                          + key
-                                          + "\n* Stored: " + _hisIBKey
-                                          + "\n* Stored with data: " + _hisIBKeyWithData);
+                                _log.warn("Outbound next-session-key ACK"
+                                          + " -> Skipping it, the key data differs from the stored key"
+                                          + NextSessionKey.keyComparison(key, _hisIBKey, _hisIBKeyWithData));
                             return;
                         } else {
                             if (_hisIBKeyWithData == null ||
                                 _hisIBKeyWithData.getID() != key.getID()) {
                                 if (_log.shouldWarn())
-                                    _log.warn("Next-session-key ACK for my outbound tag set"
+                                    _log.warn("Outbound next-session-key ACK"
                                           + " -> Skipping it, no key data and none stored" + key);
                                 return;
                             }
@@ -1592,7 +1590,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                         oldts = _tagSet;
                     if (oldts == null) {
                         if (_log.shouldWarn())
-                            _log.warn("Next-session-key ACK for my outbound tag set"
+                            _log.warn("Outbound next-session-key ACK"
                                       + " -> Skipping it, no tag set " + oldtsID + " to replace" + key);
                         return;
                     }
@@ -1600,7 +1598,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                     if (nextKeys == null) {
                         if (oldtsID == 0 || (oldtsID & 0x01) != 0 || _myOBKeys == null) {
                             if (_log.shouldWarn())
-                                _log.warn("Next-session-key ACK for my outbound tag set"
+                                _log.warn("Outbound next-session-key ACK"
                                           + " -> Skipping it, no keys sent for tag set " + oldtsID + key);
                             return;
                         }
@@ -1633,7 +1631,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                     // this is about my inbound tag set
                     if (key.equals(_hisOBKey)) {
                         if (_log.shouldDebug())
-                            _log.debug("Received a duplicate next-session-key ACK for my inbound tag set: " + key);
+                            _log.debug("Duplicate inbound next-session-key ACK" + key);
                         return;
                     }
                     int hisLastOBKeyID;
@@ -1647,13 +1645,13 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                         // got a new key, use it
                         if (hisLastOBKeyID != id - 1) {
                             if (_log.shouldWarn())
-                                _log.warn("Next-session-key ACK for my inbound tag set"
+                                _log.warn("Inbound next-session-key ACK"
                                           + " -> Skipping it, expected key ID " + (hisLastOBKeyID + 1) + key);
                             return;
                         }
                         if (!hasKey) {
                             if (_log.shouldWarn())
-                                _log.warn("Next-session-key ACK for my inbound tag set"
+                                _log.warn("Inbound next-session-key ACK"
                                           + " -> Skipping it, no key data and none stored" + key);
                             return;
                         }
@@ -1663,17 +1661,15 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                         if (hasKey) {
                             // got a old key id but new data?
                             if (_hisOBKeyWithData != null && _log.shouldWarn())
-                                _log.warn("Next-session-key ACK for my inbound tag set"
-                                          + " -> Skipping it, the stored key data differs"
-                                          + key
-                                          + "\n* Stored: " + _hisOBKey
-                                          + "\n* Stored with data: " + _hisOBKeyWithData);
+                                _log.warn("Inbound next-session-key ACK"
+                                          + " -> Skipping it, the key data differs from the stored key"
+                                          + NextSessionKey.keyComparison(key, _hisOBKey, _hisOBKeyWithData));
                             return;
                         } else {
                             if (_hisOBKeyWithData == null ||
                                 _hisOBKeyWithData.getID() != key.getID()) {
                                 if (_log.shouldWarn())
-                                    _log.warn("Next-session-key ACK for my inbound tag set"
+                                    _log.warn("Inbound next-session-key ACK"
                                           + " -> Skipping it, no key data and none stored" + key);
                                 return;
                             }
@@ -1684,7 +1680,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                     if (_nextIBRootKey == null) {
                         // first IB ES tagset never used?
                         if (_log.shouldWarn())
-                            _log.warn("Next-session-key ACK for my inbound tag set"
+                            _log.warn("Inbound next-session-key ACK"
                                       + " -> Skipping it, we have no next root key" + key);
                         return;
                     }
@@ -1713,13 +1709,13 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                         // reuse keys for 1,3,5...
                         if (_myIBKeys == null) {
                             if (_log.shouldWarn())
-                                _log.warn("Next-session-key ACK for my inbound tag set"
+                                _log.warn("Inbound next-session-key ACK"
                                           + " -> Skipping it, we have no previous key pair" + key);
                             return;
                         }
                         if (isRequest && _log.shouldWarn())
                             _log.warn("Received a reverse next-session-key message that is also a request"
-                                      + " -> Reusing the old key: " + key);
+                                      + " -> Reusing the old key" + key);
                         _myIBKey = new NextSessionKey(_myIBKeyID, true, false);
                     }
                     _hisOBKey = receivedKey;

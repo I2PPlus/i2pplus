@@ -355,7 +355,8 @@ public final class ECIESAEADEngine {
         HandshakeState state = key.getHandshakeState();
         if (state == null) {
             if (shouldDebug) {
-                _log.debug("Decrypting ExistingSession with tag: " + st.toBase64() + "\n* Key: " + key + " (" + data.length + " bytes)");
+                _log.debug("Decrypting ExistingSession -> Tag: " + st.toBase64() +
+                           " * Key: " + key + "\n* Size: " + data.length + " bytes");
             }
             decrypted = decryptExistingSession(tag, data, key, targetPrivateKey, keyManager);
         } else {
@@ -366,7 +367,8 @@ public final class ECIESAEADEngine {
             int min = getMinNSRSize(type);
             if (data.length >= min) {
                 if (shouldDebug) {
-                    _log.debug("Decrypting NewSessionReply with tag: " + st.toBase64() + "\n* Key: " + key + "(" + data.length + " bytes)");
+                    _log.debug("Decrypting NewSessionReply -> Tag: " + st.toBase64() +
+                               " * Key: " + key + "\n* Size: " + data.length + " bytes");
                 }
                 decrypted = decryptNewSessionReply(tag, data, state, keyManager);
             } else {
@@ -380,8 +382,8 @@ public final class ECIESAEADEngine {
             if (decrypted == null) {
                 _context.statManager().updateFrequency("crypto.eciesAEAD.decryptFailed");
                 if (_log.shouldWarn()) {
-                    _log.warn("ECIES decryption failure -> Known tag [" + st + "] but failed decrypt with key \n* Key: " + key +
-                             "\n* Failure type: Cryptographic verification failed (MAC or decryption error)");
+                    _log.warn("ECIES decryption failed -> Tag is known, the MAC check failed\n* Tag: " + st.toBase64() +
+                              " * Key: " + key);
                 }
             }
         }
@@ -1256,11 +1258,11 @@ public final class ECIESAEADEngine {
                 state = state.clone();
             } catch (CloneNotSupportedException e) {
                 if (_log.shouldWarn())
-                    _log.warn("ECIES encryption failure: clone()", e);
+                    _log.warn("ECIES encryption failed -> Cloning the handshake state failed", e);
                 return null;
             }
             if (_log.shouldDebug())
-                _log.debug("Encrypting as NewSession Reply -> Target: " + target + "\n* Tag: " + re.tag.toBase64());
+                _log.debug("Encrypting as NewSessionReply -> Target: " + target + "\n* Tag: " + re.tag.toBase64());
             return encryptNewSessionReply(cloves, target, state, re.tag, keyManager, callback);
         }
         if (_log.shouldDebug())
@@ -1272,8 +1274,8 @@ public final class ECIESAEADEngine {
         } else if (_log.shouldDebug())
             _log.debug("Encrypting as ExistingSession -> To: " + target + "\n* Key: " + re.key +
                        "\n* Tag: " + re.tag.toBase64() +
-                       (re.nextForwardKey != null ? "\n* Forward key: " + re.nextForwardKey : "") +
-                       (re.nextReverseKey != null ? "\n* Reverse key: " + re.nextReverseKey : "") +
+                       (re.nextForwardKey != null ? re.nextForwardKey.toString("Forward key") : "") +
+                       (re.nextReverseKey != null ? re.nextReverseKey.toString("Reverse key") : "") +
                        "\n* Result: " + rv.length + " bytes");
         return rv;
     }
@@ -1696,7 +1698,7 @@ public final class ECIESAEADEngine {
 
         public void gotNextKey(NextSessionKey next) {
             if (_log.shouldDebug())
-                _log.debug("Received NEXTKEY block: " + next);
+                _log.debug("Received NEXTKEY block" + next);
             // could have both a forward and reverse.
             // shouldn't have two forwards or two reverses
             if (nextKeys == null)

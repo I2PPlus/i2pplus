@@ -13,7 +13,6 @@ import java.io.Serializable;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -256,11 +255,11 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         long now = _context.clock().now();
         if (sess.getLastUsedDate() < now - SESSION_LIFETIME_MAX_MS) {
             if (_log.shouldInfo())
-                _log.info("Expiring old session key established on "
-                          + new Date(sess.getEstablishedDate())
-                          + " but not used for "
-                          + (now-sess.getLastUsedDate())
-                          + "ms with target " + toString(target));
+                _log.info("Expiring old session key -> Established "
+                          + DataHelper.formatTime(sess.getEstablishedDate())
+                          + ", unused for "
+                          + DataHelper.formatDuration(now - sess.getLastUsedDate())
+                          + " * Peer: " + toString(target));
             return null;
         }
         return sess.getCurrentKey();
@@ -474,7 +473,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         }
         if(!key.equals(sess.getCurrentKey())) {
             if (_log.shouldWarn())
-                _log.warn("Wrong session key (wanted " + sess.getCurrentKey() + ") for failed TagSet: " + ts);
+                _log.warn("Wrong session key for failed TagSet -> Does not match the session's current key: " + ts);
             return;
         }
         if (_log.shouldWarn())
@@ -496,7 +495,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         }
         if(!key.equals(sess.getCurrentKey())) {
             if (_log.shouldWarn())
-                _log.warn("Wrong session key (wanted " + sess.getCurrentKey() + ") for ACKed TagSet: " + ts);
+                _log.warn("Wrong session key for ACKed TagSet -> Does not match the session's current key: " + ts);
             return;
         }
         if (_log.shouldDebug())
@@ -1377,7 +1376,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         public int getID() {return _id;}
 
         /**
-         * Debug string with ID, size, ack status, and key.
+         * Debug string with ID, size, ack status, creation time, and key size.
          *
          * @return the formatted text
          */
@@ -1386,7 +1385,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
             return "TagSet [" + _id + "]" +
                    " Size: " + _sessionTags.size() + '/' + _origSize +
                    " ACKed? " + _acked +
-                   "\n* Created: " + new Date(_date) +
+                   "\n* Created: " + DataHelper.formatTime(_date) +
                    "\n* Session key: " + _key;
         }
     }

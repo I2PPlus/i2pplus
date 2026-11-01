@@ -11,7 +11,6 @@ import net.i2p.crypto.EncType;
 import net.i2p.crypto.HKDF;
 import net.i2p.crypto.KeyPair;
 import net.i2p.crypto.TagSetHandle;
-import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 import net.i2p.data.PublicKey;
 import net.i2p.data.SessionKey;
@@ -731,7 +730,9 @@ class RatchetTagSet implements TagSetHandle {
     }
 
     /**
-     * Debug string for this tag set.
+     * Debug string for this tag set. Reports the root and session key sizes,
+     * never their bytes, so the dump can be logged on a path a peer triggers;
+     * the tags, the public key and the counters are what correlate a session.
      */
     @Override
     public synchronized String toString() {
@@ -751,7 +752,7 @@ class RatchetTagSet implements TagSetHandle {
         PublicKey pk = getRemoteKey();
         if (pk != null && !pk.toString().trim().isEmpty())
             buf.append("\n* Remote Public Key: ").append(pk.toBase64());
-        buf.append("\n* Root Key: ").append(_key.toBase64());
+        buf.append("\n* Root Key: ").append(_key.length()).append(" bytes");
         if (_nextKey != null && !_nextKey.toString().trim().isEmpty())
             buf.append(_nextKey);
         int sz = size();
@@ -770,7 +771,7 @@ class RatchetTagSet implements TagSetHandle {
                 if (_sessionKeys != null) {
                     byte[] key = _sessionKeys.get(n);
                     if (key != null) {
-                        buf.append("\n* Session Key: ").append(Base64.encode(key));
+                        buf.append("\n* Session Key: ").append(key.length).append(" bytes");
                     } else {
                         buf.append("\n* Session Key: TBD");
                         // set DEBUG if you want to see them all
