@@ -130,4 +130,59 @@ public class TrackerInfoTest {
     public void testMissingIntervalRejected() throws Throwable {
         parse("d5:peers0:e");
     }
+
+    /**
+     * A failure reply quotes the tracker's own words on one continuation line. The
+     * reply reached us, so the line says the announce was refused, not that the
+     * request failed, and it carries no shouty label and no nested key.
+     *
+     * @throws Throwable on tracker response parse failure
+     */
+    @Test
+    public void testFailureFormQuotesTheTrackersReason() throws Throwable {
+        TrackerInfo info = parse("d14:failure reason7:go awaye");
+        assertEquals("\n* Announce refused by the tracker: go away", info.toString());
+    }
+
+    /**
+     * The re-announce interval is a duration from the house formatter, so a short
+     * tracker interval is printed as 30s, not as the 0 that whole-minute
+     * arithmetic gives.
+     *
+     * @throws Throwable on tracker response parse failure
+     */
+    @Test
+    public void testSuccessFormCarriesADuration() throws Throwable {
+        TrackerInfo info = parse("d8:intervali30e5:peers0:e");
+        assertEquals("\n* Announce accepted * Interval: 30s", info.toString());
+    }
+
+    /**
+     * The swarm counts are labelled as counts of objects and joined with the
+     * house separator, and an empty peer list adds no line of its own.
+     *
+     * @throws Throwable on tracker response parse failure
+     */
+    @Test
+    public void testSuccessFormLabelsTheCounts() throws Throwable {
+        TrackerInfo info =
+                parse("d8:intervali1800e8:completei5e10:incompletei2e5:peers0:e");
+        assertEquals(
+                "\n* Announce accepted * Interval: 30m * Seeds: 5 * Leeches: 2", info.toString());
+    }
+
+    /**
+     * A peer list is a continuation line of its own, so the interval and the
+     * counts stay on the first line.
+     *
+     * @throws Throwable on tracker response parse failure
+     */
+    @Test
+    public void testPeersGetTheirOwnLine() throws Throwable {
+        TrackerInfo info = parse("d8:intervali1800e5:peers32:" + compactPeer('a') + "e");
+        String s = info.toString();
+        assertTrue(s.startsWith("\n* Announce accepted * Interval: 30m\n* Peers: ["));
+        // Two continuation separators, so the peers do not join the interval line.
+        assertEquals(2, s.chars().filter(c -> c == '\n').count());
+    }
 }

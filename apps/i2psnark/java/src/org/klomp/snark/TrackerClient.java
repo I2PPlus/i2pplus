@@ -2029,7 +2029,9 @@ public class TrackerClient implements Runnable {
     private TrackerInfo doScrapeHTTP(TCTracker tr, String infoHash) throws IOException {
         String url = scrapeURL(tr.announce) + "?info_hash=" + infoHash;
         if (_log.shouldDebug()) {
-            _log.debug("Sending TrackerClient scrape\n* URL: " + url);
+            // The URL carries the full info hash, so log the tracker and the
+            // six-character hash, not the request line.
+            _log.debug("Scrape starting -> Tracker: " + tr.host + " * InfoHash: " + shortInfoHash);
         }
         // Single-torrent scrapes are ~60 bytes, but trackers may return the full files dict
         // (about 40 bytes per torrent), so allow up to 128K; only very large trackers exceed it
@@ -2081,16 +2083,11 @@ public class TrackerClient implements Runnable {
             }
             break;
         }
-        if (_log.shouldLog(Log.INFO)) {
-            _log.info(
-                    "Scrape response from "
-                            + tr.host
-                            + ": seeds "
-                            + complete
-                            + " leeches "
-                            + incomplete
-                            + " partials "
-                            + Math.max(0, incomplete - downloaders));
+        if (_log.shouldInfo()) {
+            _log.info("Scrape response from " + tr.host + " -> Swarm reported"
+                    + "\n* Seeds: " + complete
+                    + " * Leeches: " + incomplete
+                    + " * Partial seeds: " + Math.max(0, incomplete - downloaders));
         }
         return new TrackerInfo(
                 Collections.emptySet(),
@@ -2218,7 +2215,9 @@ public class TrackerClient implements Runnable {
         }
         String s = buf.toString();
         if (_log.shouldDebug()) {
-            _log.debug("Sending TrackerClient request\n* URL: " + s);
+            // The URL carries the full info hash and our peer id, so log the
+            // tracker and the six-character hash, not the request line.
+            _log.debug("Announce starting -> Tracker: " + tr.host + " * InfoHash: " + shortInfoHash);
         }
 
         tr.lastRequestTime = System.currentTimeMillis();
@@ -2251,7 +2250,7 @@ public class TrackerClient implements Runnable {
         TrackerInfo info =
                 new TrackerInfo(in, snark.getID(), snark.getInfoHash(), snark.getMetaInfo(), _util);
         if (_log.shouldInfo()) {
-            _log.info("TrackerClient " + tr.host + " response: " + info);
+            _log.info("Announce to " + tr.host + " -> Response received" + info);
         }
 
         String failure = info.getFailureReason();
@@ -2279,10 +2278,10 @@ public class TrackerClient implements Runnable {
             throws IOException {
         UDPTrackerClient udptc = _util.getUDPTrackerClient(snark.getInfoHash());
         if (udptc == null) {
-            throw new IOException("no UDPTC");
+            throw new IOException("No UDP tracker client available");
         }
-        if (_log.shouldLog(Log.INFO)) {
-            _log.info("Sending UDPTrackerClient request");
+        if (_log.shouldInfo()) {
+            _log.info("Sending UDP tracker announce");
         }
         // BEP 15 has no paused event; partial seeds announce normally over UDP
         if (event == UDPTrackerClient.EVENT_PAUSED) {
@@ -2326,8 +2325,9 @@ public class TrackerClient implements Runnable {
                         snark.getInfoHash(),
                         snark.getMetaInfo(),
                         _util);
-        if (_log.shouldLog(Log.INFO)) {
-            _log.info("TrackerClient response: " + info);
+        if (_log.shouldInfo()) {
+            _log.info("UDP announce to " + tr.host + ':' + tr.port
+                    + " -> Response received" + info);
         }
         String failure = info.getFailureReason();
         if (failure != null) {

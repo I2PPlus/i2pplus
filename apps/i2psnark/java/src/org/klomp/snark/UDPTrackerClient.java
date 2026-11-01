@@ -1003,7 +1003,9 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
      */
     @Override
     public void disconnected(I2PSession session) {
-        if (_log.shouldWarn()) _log.warn("UDPTC disconnected");
+        if (_log.shouldWarn()) {
+            _log.warn("UDP tracker session disconnected -> Failing the waiting queries");
+        }
         // mirror KRPC.stop() so waiters fail fast instead of hanging to their timers
         _isRunning = false;
         _session.removeListener(I2PSession.PROTO_DATAGRAM_RAW, _rPort);
@@ -1023,7 +1025,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
      */
     @Override
     public void errorOccurred(I2PSession session, String message, Throwable error) {
-        if (_log.shouldWarn()) _log.warn("UDPTC got error msg: ", error);
+        if (_log.shouldWarn()) _log.warn("UDP tracker session failed -> " + message, error);
     }
 
     /**

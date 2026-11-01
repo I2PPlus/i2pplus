@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import org.klomp.snark.bencode.BDecoder;
 import org.klomp.snark.bencode.BEValue;
@@ -384,26 +385,23 @@ class TrackerInfo {
     }
 
     /**
-     * String form of the tracker info.
+     * The tracker's reply as log continuation lines, to be appended to a caller
+     * that has named the announce and pointed an arrow at its outcome. Every
+     * branch opens with the continuation separator, so the shape is the same
+     * whether the tracker answered our announce or refused it; the arrow stays
+     * at the call site, where the subject is.
      */
     @Override
     public String toString() {
+        // The reason is the tracker's own words from a reply that reached us,
+        // so the announce failed at the tracker, not on the wire.
         if (failure_reason != null) {
-            return "TrackerInfo [FAILED: " + failure_reason + "]";
-        } else if (getPeers().size() > 0) {
-            return "\n* TrackerInfo: Interval: "
-                    + interval / 60
-                    + " min"
-                    + (complete > 0 ? (", Seeding: " + complete) : "")
-                    + (incomplete > 0 ? (", Downloading: " + incomplete) : "")
-                    + "\n* Peers: "
-                    + peers;
-        } else {
-            return "\n* TrackerInfo: Interval: "
-                    + interval / 60
-                    + " min"
-                    + (complete > 0 ? (", Seeding: " + complete) : "")
-                    + (incomplete > 0 ? (", Downloading: " + incomplete) : "");
+            return "\n* Announce refused by the tracker: " + failure_reason;
         }
+        String rv = "\n* Announce accepted * Interval: "
+                + DataHelper.formatDuration(interval * 1000L)
+                + (complete > 0 ? " * Seeds: " + complete : "")
+                + (incomplete > 0 ? " * Leeches: " + incomplete : "");
+        return peers.isEmpty() ? rv : rv + "\n* Peers: " + peers;
     }
 }
