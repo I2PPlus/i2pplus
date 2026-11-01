@@ -98,6 +98,26 @@ public class SessionKey extends SimpleDataStructure {
     }
 
     /**
+     * The size, never the data, so the secret is not printed.
+     * Prints "null" for the data of a destroyed key.
+     *
+     * @return a string representation
+     * @since 0.9.73+
+     */
+    @Override
+    public String toString() {
+        StringBuilder buf = new StringBuilder(48);
+        buf.append("[SessionKey ");
+        if (_data == null) {
+            buf.append("null");
+        } else {
+            buf.append("Size: ").append(length()).append(" bytes");
+        }
+        buf.append(']');
+        return buf.toString();
+    }
+
+    /**
      * Session key data.
      *
      * @param data 32 bytes, or null

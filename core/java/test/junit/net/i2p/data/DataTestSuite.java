@@ -13,6 +13,7 @@ import org.junit.runners.Suite;
     DestinationTest.class,
     HashTest.class,
     HashShortFormTest.class,
+    KeyToStringSizeTest.class,
     LeaseSetTest.class,
     LeaseSet2ExpiryTest.class,
     LeaseTest.class,

@@ -210,7 +210,7 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
         if (_data == null) {
             buf.append("null");
         } else {
-            buf.append("Size: ").append(length());
+            buf.append("Size: ").append(length()).append(" bytes");
         }
         buf.append(']');
         return buf.toString();
