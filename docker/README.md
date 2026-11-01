@@ -10,7 +10,7 @@ docker pull ghcr.io/i2pplus/i2pplus:latest
 docker run -d -p 7657:7657 -p 7667:7667 -p 4444:4444 ghcr.io/i2pplus/i2pplus:latest
 ```
 
-Then open http://127.0.0.1:7657 in your browser. The web console binds to `0.0.0.0` (all interfaces) inside the container, so you can also access it at your Docker host's IP address. The I2NP external port is assigned randomly - check your router console (Network section) or router.config for the assigned port. For full network participation, you'll need to map this port externally.
+Then open http://127.0.0.1:7657 in your browser. The web console binds to `0.0.0.0` (all interfaces) inside the container, so you can also access it at your Docker host's IP address. The I2NP external port is assigned randomly - check your router console (Network section) or `/i2p/.i2p/router.config` for the assigned port. For full network participation, you'll need to map this port externally.
 
 ### Or build locally
 
@@ -90,12 +90,12 @@ There are several ports which are exposed by the image. You can choose which one
 ### Networking
 At the minimum, you'll want the Router Console (7657) and the HTTP Proxy (4444) available on localhost or your LAN network. Most services bind to `127.0.0.1` and will only be available inside the container. The web console binds to `0.0.0.0` so it's accessible from your Docker host by default — both the non-SSL (7657) and SSL (7667) ports are bound. Services should not be exposed to the public internet. They can be disabled in the I2P+ web console if not required.
 
-> **Security note:** Binding the web console to `0.0.0.0` makes it accessible on all network interfaces. If your Docker host is exposed to the internet, restrict access by setting `IP_ADDR` to your LAN IP (e.g., `192.168.1.10`) or use Docker's `-p 127.0.0.1:7657:7657` to limit exposure to localhost only. Without these precautions, the console may be reachable from the public internet if firewall rules permit.
+> **Security note:** Binding the web console to `0.0.0.0` makes it accessible on all network interfaces. If your Docker host is exposed to the internet, restrict access by setting `IP_ADDR` to your LAN IP (e.g., `192.168.1.10`) on every start - it is applied each time, to the configuration in the volume as well as to the template - or use Docker's `-p 127.0.0.1:7657:7657` to limit exposure to localhost only. Without these precautions, the console may be reachable from the public internet if firewall rules permit.
 
 To receive inbound connections from peers, you must expose the external I2NP port (TCP+UDP). Without it, the router will show as firewalled and rely on hole punching, which is less reliable. See [External Network Port](#external-network-port) below for how to set a fixed port for port forwarding.
 
 #### External Network Port
-By default, I2P+ uses a random port for the I2NP Protocol (TCP+UDP). This is recommended for security - avoid using a fixed port as it's fingerprintable. The port is assigned at first start and remains consistent for that container (stored in router.config).
+By default, I2P+ uses a random port for the I2NP Protocol (TCP+UDP). This is recommended for security - avoid using a fixed port as it's fingerprintable. The port is assigned at first start and remains consistent for that container (stored in `/i2p/.i2p/router.config`, the configuration the router reads; `/i2p/router.config` is the packaged template it is copied from).
 
 **Set at build time:**
 ```bash
@@ -106,6 +106,14 @@ docker build --build-arg EXTERNAL_PORT=12345 -t i2pplus .
 ```bash
 docker run -e EXTERNAL_PORT=12345 i2pplus:latest
 ```
+
+The runtime setting is applied on every start, to the configuration in the volume
+as well as to the template, so changing the port on an existing container takes
+effect on the next start. Setting a port also sets `i2np.udp.fixedPort=true`,
+which stops the router advertising a different port than the one you forwarded;
+drop that key afterwards if you want the advertised port to follow peer feedback.
+A value that is not a number, or is outside 1-65535, is reported and ignored, and
+the router keeps its existing port.
 
 Your allocated port will be listed in your Router Web Console at http://127.0.0.1:7657/info. Note: This is the *only* port that you need to expose to the public internet, access to other ports should only be permitted from localhost or your LAN.
 
@@ -129,7 +137,7 @@ docker load -i /tmp/i2pplus.tar
 docker run -d -p 7657:7657 -p 7667:7667 -p 4444:4444 --name i2pplus i2pplus:latest
 
 # With persistent config (survives container restart)
-# Note: The external I2NP port is random - see your router console or router.config for the assigned port
+# Note: The external I2NP port is random - see your router console or /i2p/.i2p/router.config for the assigned port
 docker run -d -v /path/to/i2p-data:/i2p/.i2p \
            -v /path/to/snark:/i2psnark \
            -p 7657:7657 -p 7667:7667 -p 4444:4444 \
@@ -187,8 +195,8 @@ docker ps -a
 # Check resource usage
 docker stats i2pplus
 
-# Check configuration
-docker exec i2pplus cat /i2p/router.config
+# Check configuration - the active config is in the volume, /i2p/router.config is the template
+docker exec i2pplus cat /i2p/.i2p/router.config
 
 # Shell script syntax check
 bash -n docker/rootfs/startapp.sh && echo "OK"

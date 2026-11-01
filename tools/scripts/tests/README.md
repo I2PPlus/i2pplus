@@ -34,6 +34,10 @@ An HTML report is generated at `dist/test-report.html` after each run. Report in
 
 - **`checkxml.sh`** — Validate XML and HTML files using `xmllint`. Note: HTML mode does not return error codes; review output for errors.
 
+## Container checks
+
+- **`checkdockerconfig.sh`** — Exercise the config-override helpers in `docker/rootfs/startapp.sh` against a fake install in a temp directory. Pins that `EXTERNAL_PORT` and `IP_ADDR` reach the config directory the router reads, not only the base-directory template the router copies on the first start of an empty volume, that a key the file lacks is appended, that a missing file is reported and not created, and that the script stays Bourne-compatible for busybox ash.
+
 ## Performance
 
 - **`benchmark.sh`** — Run JMH benchmarks on I2P+. Optionally loads the jbigi native library. Pass `-h` to see JMH options.

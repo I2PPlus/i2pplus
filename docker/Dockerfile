@@ -41,13 +41,21 @@ RUN addgroup -g "${GID}" i2p && \
 # Set ownership for i2p user
 RUN chown -R i2p:i2p ${APP_HOME}
 
-# Configure I2P+ to use random port (0=random) - override with --build-arg or -e at runtime
+# Seed the packaged template with a fixed port when one is given at build time
+# (0 = random). The router copies this template into the config directory on
+# the first start of an empty volume, and startapp.sh keeps the port current in
+# the active config on every start after that, so the same value survives a
+# container rebuild and a volume that outlives it.
 # ensure this port is port-forwarded and unfirewalled as required,
 # otherwise your router will run in firewalled mode
 ARG EXTERNAL_PORT=0
 ENV EXTERNAL_PORT=${EXTERNAL_PORT}
-RUN echo "i2np.udp.internalPort=17616=$EXTERNAL_PORT" >> ${APP_HOME}/router.config
-RUN echo "i2np.udp.port=$EXTERNAL_PORT" >> ${APP_HOME}/router.config
+RUN if [ -n "$EXTERNAL_PORT" ] && [ "$EXTERNAL_PORT" != "0" ]; then \
+      for key in i2np.udp.internalPort i2np.udp.port i2np.ntcp.port; do \
+        sed -i "s|^${key}=.*|${key}=${EXTERNAL_PORT}|" ${APP_HOME}/router.config; \
+      done; \
+      grep -q '^i2np.udp.fixedPort=' ${APP_HOME}/router.config || echo "i2np.udp.fixedPort=true" >> ${APP_HOME}/router.config; \
+    fi
 
 # Mount home and snark
 VOLUME ["${APP_HOME}/.i2p"]

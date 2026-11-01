@@ -4373,6 +4373,7 @@
       <exec executable="tools/scripts/tests/checkutf8.sh" failonerror="false"/>
       <exec executable="tools/scripts/tests/checkxml.sh" failonerror="false"/>
       <exec executable="tools/scripts/tests/checkscripts.sh" failonerror="false"/>
+      <exec executable="tools/scripts/tests/checkdockerconfig.sh" failonerror="false"/>
     </parallel>
     <echo message="--------------------------------------------------------------------------------"/>
     <echo message="Test scripts execution completed, review the output above for possible issues..."/>

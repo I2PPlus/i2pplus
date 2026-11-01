@@ -26,6 +26,7 @@ SCRIPTFILES="
   ./distro/Slackware/i2p/i2p.SlackBuild \
   ./distro/Slackware/i2p/doinst.sh \
   ./distro/Slackware/i2p/rc.i2p \
+  ./docker/rootfs/startapp.sh \
   ./installer/resources/platform-specific/unix/eepget \
   ./installer/resources/platform-specific/unix/eephead \
   ./installer/resources/platform-specific/unix/graceful_update \

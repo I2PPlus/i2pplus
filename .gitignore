@@ -164,6 +164,16 @@ tools/test/js/node_modules/
 !tools/gradle/
 !tools/README.md
 !tools/EXCLUSIONS.md
+# tools/* excludes every child of tools/, so a checker script added under
+# tools/scripts/tests is invisible to git until the directory and that script
+# are re-included here. The checkers already in the tree predate this rule and
+# stayed tracked; a new one needs a line. Keep it per-file, so untracked
+# scratch files in that directory stay out of the way.
+!tools/scripts/
+tools/scripts/*
+!tools/scripts/tests/
+tools/scripts/tests/*
+!tools/scripts/tests/checkdockerconfig.sh
 !tools/pmd/*.py
 !tools/pmd/*.css
 !tools/pmd/*.sh
