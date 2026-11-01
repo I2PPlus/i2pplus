@@ -42,8 +42,15 @@ verify_tar()
   fi
   if [ -f "${GMP_TAR}.sig" ]; then
     echo "Verifying GMP tarball signature..."
-    # Import GNU keyring if not already done
-    gpg --keyserver keyserver.ubuntu.com --recv-keys 0x<KEY> 2>/dev/null || true
+    # Import the GNU release-signing key if not already done. Receive it by
+    # full fingerprint, not the short key id, which a key server cannot be
+    # trusted to disambiguate. The fingerprint is the one gmplib.org publishes
+    # for the releases since gmp-5.1.0a - keep it in this form, a secret
+    # scrubber that replaces it with a placeholder makes the line a shell
+    # syntax error, because the angle brackets are redirections.
+    #   Key ID: 0x28C67298
+    #   Fingerprint: 343C 2FF0 FBEE 5EC2 EDBE F399 F359 9FF8 28C6 7298
+    gpg --keyserver keyserver.ubuntu.com --recv-keys '<KEY>' 2>/dev/null || true
     if gpg --verify "${GMP_TAR}.sig" "${GMP_TAR}" 2>/dev/null; then
       echo "GMP tarball signature verified successfully"
       return 0
