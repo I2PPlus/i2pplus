@@ -203,6 +203,12 @@ export function installBrowserShim() {
     window,
     document: window.document,
     Node: window.Node,
+    // linkedom ships no NodeFilter global; these constants are fixed by the DOM spec,
+    // and its createTreeWalker honours the numeric whatToShow and filter returns.
+    NodeFilter: Object.freeze({
+      SHOW_ALL: 1, SHOW_TEXT: 4, SHOW_ELEMENT: 1,
+      FILTER_ACCEPT: 1, FILTER_REJECT: 2, FILTER_SKIP: 3
+    }),
     Element: window.Element,
     HTMLElement: window.HTMLElement,
     DocumentFragment: window.DocumentFragment,
