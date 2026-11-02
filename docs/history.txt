@@ -1,3 +1,159 @@
+2026-11-01 dr|z3d
+  * Logging:
+    - Stop the ratchet and the session-key manager writing keys into the logs -
+      the tag-set dump printed the ratchet root key and every consumed session
+      key in full base64 on an INFO line any peer can trigger, and a
+      SessionKey's base form printed any 32-byte structure as base64, exactly
+      an AES key's size; report the size, never the bytes
+    - Condense the ratchet's key comparison - it printed three keys with their
+      type, base64, id and flags; name the type and the id once, and show the
+      stored pair as eight-character prefixes
+    - Standardize the tracker's request and response lines - they name the
+      tracker and the six-character hash, not the whole request URL with its
+      info hash and our peer id; the replies point an arrow at the outcome, and
+      a re-announce interval is a duration
+  * Console:
+    - Keep a bracketed tag out of the log linkifier - it links six bracketed
+      characters as a router and eight as a lease set, the shape of a truncated
+      hash, so [Eepget] became a router link and [DEFERRED] a lease set link
+      resolving to nothing
+    - Keep the log columns the width the formatter wrote - 12 characters for
+      the thread and 16 for the class, padded with spaces HTML collapses, so
+      write each padding space as a non-breaking one
+    - Read every graph legend the same way - Min, Max, Avg, Now, where the
+      block a combined graph prints for its second series led with Max
+  * Docker: Make the container overrides reach the router - the external port
+    and the console bind address went to the packaged template, which the router
+    copies into the config directory only on the first start of an empty volume,
+    so both applied once and then stopped; write the active config as well, pin
+    the advertised port with i2np.udp.fixedPort=true, report a port outside
+    1-65535 and keep the existing one, and drop the malformed internalPort line
+
+2026-10-31 dr|z3d
+  * Logging: Drop the marker exceptions - the `new Exception("rats")`,
+    `("I did it")`, `("Stacktrace:")` and `("???")` attached to log calls that
+    have no throwable, which printed a stack trace with no words to say what
+    happened. Where the trace carried real information, put the information in
+    the message: the sizes a pooled buffer was rejected for, the waiters behind
+    a write-lock timeout, the old and new reachability status, the session a
+    message was refused for
+  * Logging: Stop writing key material into the logs - the ELS2 client key, IV
+    and auth salt, the ElGamal session keys, the tunnel build reply keys and
+    IVs, an inbound session key at INFO, a Kademlia search session key, and the
+    Noise chaining key that the handshake-state dump emitted at every NTCP2 and
+    SSU2 debug site; report the algorithm, the size, or a public-key prefix
+    instead, and keep the transcript hash that correlates a handshake
+  * Logging: Name the event in prose, not the method that saw it, and not a
+    config key, a bare counter, or a status code; point the arrow at the
+    outcome, never at the values, the subject, or a second arrow on the same
+    line; name the subject on the first line, so a connection reports its
+    label and not its whole multi-line dump; carry units on every measured
+    value, and drop the period from the end of a message
+  * Logging: Render hashes in the house form - a router info as six characters
+    of base64 in brackets, a destination or LeaseSet as eight characters of
+    base32 in brackets - so the log viewer links the router or the lease set
+    instead of printing dead text, and stop rendering a router as base32, a
+    destination as base64, a full 59-character address, or a four-character
+    prefix
+  * Logging: Keep an emitted log line inside the house width - condense the
+    prose onto one line where it fits, and split the values onto continuation
+    lines where it does not; put the arrow after the leading subject instead of
+    running a ` * ` list with no arrow at all (`Replacing slow tunnels ->
+    Average latency: 500ms`); write tally keys as prose (`* Tunnels: 5`, never
+    `pool=5`), retire the `[type 4; MsgID 12]` bracket groups that squat on the
+    form reserved for hashes, and drop the "see the exception" clause from a
+    call that passes the throwable
+  * Logging: Put the unit on every measured value - `Size: 1234 bytes`,
+    `Window: 512B`, `RTT: 120ms`, `Ratio: 1.5x`, `Requests: 12 of 40 per 90s` -
+    name the object a count is counting (`Remaining tunnels: 3`, not
+    `Remaining: 3`), and stop printing a bare `Count:`, `Total:`, `Pending:` or
+    `Limit:`; a value that is a text slice (a header value, an address) is not a
+    measurement and takes no unit
+  * Logging: Make every log line attributable to the site that wrote it - the
+    same message logged from two branches that do different things was split
+    into two messages (the GeoIP v4, v6 and export phases, the KRPC send and
+    parse paths, the SAM accept and reader loops and the two sockets they
+    close, the three blocklist read paths, the family-key save and the
+    directory that would not build, the library DSA verify that returned false
+    and the one that threw, the two SAM commands that shared one "no ID" line);
+    name the action a `catch` was standing in for, in place of `Caught
+    IOException`, `Bad message`, `TDM boom` and `No primary config?`, and pass
+    the exception at the sites that were dropping it
+  * Logging: Stop appending text to a multi-line report - the NTCP duplicate
+    connection line ran `old dump + " replaced by " + new dump + "; drained N"`,
+    so the drain count landed on the last line of the second report; lead with
+    the event and put each report on its own continuation line
+  * Logging: Stop the I2CP session prefix from owning the arrow - `getPrefix()`
+    returned `" name state -> "`, so the 18 messages that supplied their own
+    arrow emitted two and the 14 that did not had no event at all; the prefix is
+    now a plain subject, every message says what happened, and the send-status
+    and nonce values it printed in `[ ]` are `key: value` segments
+  * Logging: Stop dumping peer payload into the logs - the SSU receiver printed
+    every invalid fragment twice, as a hex dump and as base64, and the bad
+    packet, bad hole-punch, bad peer-test and bad HTTP response lines dumped
+    their bytes at WARN, on paths any peer can trigger; say what was dropped
+    and give the size, and truncate the kademlia key and routing delta to a
+    prefix instead of 64 characters of hex
+  * Logging: Give every line its arrow at the call site - the spine is
+    `Event -> Result`, so move the first value after the arrow rather than
+    running a ` * ` list behind a bare subject, and stop a `toString()` or a
+    prefix getter from owning the arrow, so no site inherits a spine it cannot
+    see; keep an arrow between two values as data (an address range, a hop
+    diagram), not a spine; put the counts ahead of a multi-line pool dump;
+    drop the shouty `ACCEPTED` and `STALE` words a gate made unreachable;
+    retire the `[MsgID 12]` and `[Job 3]` bracket groups; name a tally key in
+    prose, not `estCount` or `leaseGateway`; and stop logging a ratchet tag
+  * Logging: Give the short hash forms a helper - `Hash.toShortBase64()` and
+    `Hash.toShortBase32()` return the 6-character router form and the
+    8-character destination form from the cache the full string uses, so a hot
+    log path stops allocating a substring per call; 711 sites in 139 files
+    stopped spelling the truncation out by hand, and the 53 whose receiver is
+    a `Destination`, a `Tag` or a session key keep the explicit form
+  * Logging: Stop echoing response headers and full info hashes - EepGet logged
+    every header as `[key] = [value]`, which echoed every `Set-Cookie`,
+    `Authorization` and proxy challenge the server sent; a sensitive header, and
+    any value over 64 characters, is now reported by length. I2PSnark's
+    announce, backup-announce and PEX lines printed the whole 40-character info
+    hash, which names the torrent in a file that outlives the download; they
+    print six characters, as the thread name already did
+  * Performance: Stop the log formatter paying for every record - the two
+    `Matcher.replaceAll` calls that strip anchors out of a message now run only
+    when the message holds a `<`, and the localized priority label is resolved
+    once per language instead of once per line, with the cache pinned against
+    the per-record lookup it replaces
+  * Performance: Stop asking the provider for a `MessageDigest` per digest-auth
+    request - `PasswordManager` keeps the SHA-256 and MD5 digests per thread,
+    resets one before each use, and the sums are pinned to what a fresh
+    instance produces, on the calling thread and on another
+
+2026-10-30 dr|z3d
+  * Peermanager: Stop the fast and high-capacity tiers from declining over the
+    router's lifetime - judge the acceptance, lifetime-failure and loss ratios
+    on evidence that can heal, evict on repeated first-hop non-replies instead
+    of one build timeout, and size the fills, floors and restores from the
+    tier's own minimum, so a tier at 23% of its target refills instead of
+    reporting nothing to do
+  * Peermanager: Date the peer-test, peak-throughput and low-latency flags that
+    gate the fast tier, so a peer measured slow once is not shut out for the
+    life of its profile file; low latency is now a three-state flag, and a
+    profile file written before the dates were stored restores as unmeasured
+  * Peermanager: Raise the stored-profile store to 20,000 files and size the
+    in-memory cap from free heap, 16,000 peers at 4 GB; halve the eviction
+    while the tunnel build success is low instead of skipping it; and widen
+    the profile expiry windows, tunable as profileOrganizer.expireActiveHours
+  * NetDb: Refresh a peer's RouterInfo over the network 45 minutes before it
+    goes stale, for the tier members and the peers used in the last day, so a
+    peer is no longer held out of the tiers by an entry it had no way to renew
+  * Console: Stop the Peers page from demoting the peers it renders
+  * Logging: Say what happened to the thing, not that we are doing something -
+    name the object that was dropped, deferred, retried or banned; separate
+    the values with a bullet and put the arrow after the issue, with the
+    measurements behind it; expand the internal shorthand (build request,
+    exploratory and client pool selection, inbound and outbound, false
+    positive rate, the Noise N handshake) into prose; print durations through
+    the house formatter instead of dividing by 1000; and never print an epoch
+    timestamp, a bare status int, or a credential
+
 2026-10-28 dr|z3d
   * Router: Stop failing a page's parallel requests for 30 seconds after one
     LeaseSet lookup resolved, so a loading eepsite stops timing out on assets
