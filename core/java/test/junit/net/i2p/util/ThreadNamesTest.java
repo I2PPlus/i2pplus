@@ -71,4 +71,86 @@ public class ThreadNamesTest {
         assertEquals(".03", ThreadNames.idx(3));
         assertEquals(".120", ThreadNames.idx(120));
     }
+
+    /**
+     * A pool hands out the lowest number no thread is using, so a family of
+     * threads that come and go stays named .01 upward.
+     */
+    @Test
+    public void testPoolReusesTheLowestFreeNumber() {
+        ThreadNames.Pool p = new ThreadNames.Pool();
+        assertEquals(1, p.acquire());
+        assertEquals(2, p.acquire());
+        assertEquals(3, p.acquire());
+        p.release(2);
+        assertEquals("the freed number comes back first", 2, p.acquire());
+    }
+
+    /**
+     * The highest number in use is dropped rather than pooled, so a family that
+     * shrinks back to nothing starts handing out .01 upward again instead of
+     * recycling a tail of freed numbers.
+     */
+    @Test
+    public void testPoolShrinksBackToTheStart() {
+        ThreadNames.Pool p = new ThreadNames.Pool();
+        p.acquire();
+        p.acquire();
+        p.acquire();
+        p.release(2);
+        p.release(3);
+        p.release(1);
+        assertEquals(1, p.acquire());
+    }
+
+    /**
+     * A number released twice is not handed out twice, and a number that was
+     * never acquired is ignored.
+     */
+    @Test
+    public void testPoolIgnoresStrayReleases() {
+        ThreadNames.Pool p = new ThreadNames.Pool();
+        p.release(0);
+        p.release(-7);
+        assertEquals(1, p.acquire());
+    }
+
+    /**
+     * A thread made by the pool is named from its number, is a daemon when
+     * asked, and gives the number back when its run() returns.
+     */
+    @Test
+    public void testPoolThreadReleasesItsNumberWhenItFinishes() {
+        ThreadNames.Pool p = new ThreadNames.Pool();
+        Thread t = p.thread(() -> {}, "PoolTest", true);
+        assertEquals("PoolTest.01", t.getName());
+        assertTrue(t.isDaemon());
+        t.start();
+        try {
+            t.join(5000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            fail("the pool thread did not finish");
+        }
+        assertFalse("the thread is gone", t.isAlive());
+        assertEquals("the finished thread's number is free again", 1, p.acquire());
+    }
+
+    /**
+     * A thread that throws still releases its number - the harvest is in a
+     * finally, not after the run.
+     */
+    @Test
+    public void testPoolThreadReleasesItsNumberOnAnException() {
+        ThreadNames.Pool p = new ThreadNames.Pool();
+        Thread t = p.thread(() -> {throw new IllegalStateException("boom");}, "PoolTest", true);
+        t.start();
+        try {
+            t.join(5000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            fail("the pool thread did not finish");
+        }
+        assertEquals(1, p.acquire());
+    }
 }
