@@ -1041,25 +1041,59 @@ class GraphRenderer {
     }
 
     /**
-     * Adds the legend lines to the graph.
+     * One value of the summary block the legend prints for a series.
+     */
+    static final class SummaryField {
+        /** Datasource id, also the prefix of the id used for an extra series. */
+        final String key;
+        /** Translatable label, kept as the msgid so the order can be checked untranslated. */
+        final String label;
+
+        /**
+         * Names one printed summary value.
+         *
+         * @param key the datasource id suffix, e.g. {@code min}
+         * @param label the translatable label msgid, e.g. {@code Min}
+         */
+        SummaryField(String key, String label) {
+            this.key = key;
+            this.label = label;
+        }
+    }
+
+    /**
+     * The summary block's fields, in the one order every legend uses: min, max, average,
+     * now. The combined-graph block once led with the maximum, so the same page read two
+     * ways, and the order is a house convention rather than anything rrd4j asks for, so
+     * both call sites take it from here and {@code GraphRendererLegendOrderTest} pins it.
+     *
+     * @since 0.9.72+
+     */
+    static final SummaryField[] SUMMARY_FIELDS = {
+        new SummaryField("min", "Min"),
+        new SummaryField("max", "Max"),
+        new SummaryField("avg", "Avg"),
+        new SummaryField("last", "Now"),
+    };
+
+    /** rrd4j's line terminator, ending the legend line the summary block is drawn on. */
+    private static final String LINE_END = "\\l";
+
+    /**
+     * Adds the summary block to the legend, one line per {@link #SUMMARY_FIELDS} entry.
      *
      * @param def the graph definition
      * @param cfg the render configuration
      */
     private void configureLegend(RrdGraphDef def, GraphRenderConfig cfg) {
         if (!cfg.hideLegend) {
-            Variable var = new Variable.MIN();
-            def.datasource("min", cfg.plotName, var);
-            def.gprint("min", " " + _t("Min") + ": " + cfg.numberFormat);
-            var = new Variable.MAX();
-            def.datasource("max", cfg.plotName, var);
-            def.gprint("max", " " + _t("Max") + ": " + cfg.numberFormat);
-            var = new Variable.AVERAGE();
-            def.datasource("avg", cfg.plotName, var);
-            def.gprint("avg", " " + _t("Avg") + ": " + cfg.numberFormat);
-            var = new Variable.LAST();
-            def.datasource("last", cfg.plotName, var);
-            def.gprint("last", " " + _t("Now") + ": " + cfg.numberFormat + "\\l");
+            for (int i = 0; i < SUMMARY_FIELDS.length; i++) {
+                SummaryField field = SUMMARY_FIELDS[i];
+                def.datasource(field.key, cfg.plotName, summaryVariable(field.key));
+                // One field per line, so only the last one ends the line.
+                String tail = i == SUMMARY_FIELDS.length - 1 ? LINE_END : "";
+                def.gprint(field.key, " " + _t(field.label) + ": " + cfg.numberFormat + tail);
+            }
         }
     }
 
@@ -1103,7 +1137,7 @@ class GraphRenderer {
      * with a per-series colour and its description in the legend. Areas are
      * reserved for the primary series: filling several overlaid series hides
      * whichever one is behind.
-     * <p>The max/min/avg/now summary block is emitted for the first extra
+     * <p>The min/max/avg/now summary block is emitted for the first extra
      * series only when there is exactly one, matching the long-standing
      * combined-bandwidth graph. With more, four legend lines per series would
      * bury the plot.
@@ -1152,7 +1186,8 @@ class GraphRenderer {
     }
 
     /**
-     * Emit the max/min/avg/now legend block for one series.
+     * Emit the summary block for one extra series, keeping the field order of
+     * {@link #SUMMARY_FIELDS}.
      *
      * @param def the graph definition being built
      * @param plotName the series' datasource name to summarize
@@ -1161,18 +1196,37 @@ class GraphRenderer {
      * @param numberFormat the rrd format string for each printed value
      */
     private void addSummaryPrints(RrdGraphDef def, String plotName, String suffix, String numberFormat) {
-        Variable var = new Variable.MAX();
-        def.datasource("max" + suffix, plotName, var);
-        def.gprint("max" + suffix, " " + _t("Max") + ": " + numberFormat + " ");
-        var = new Variable.MIN();
-        def.datasource("min" + suffix, plotName, var);
-        def.gprint("min" + suffix, " " + _t("Min") + ": " + numberFormat + " ");
-        var = new Variable.AVERAGE();
-        def.datasource("avg" + suffix, plotName, var);
-        def.gprint("avg" + suffix, " " + _t("Avg") + ": " + numberFormat + " ");
-        var = new Variable.LAST();
-        def.datasource("last" + suffix, plotName, var);
-        def.gprint("last" + suffix, " " + _t("Now") + ": " + numberFormat + "\\l");
+        for (int i = 0; i < SUMMARY_FIELDS.length; i++) {
+            SummaryField field = SUMMARY_FIELDS[i];
+            String id = field.key + suffix;
+            def.datasource(id, plotName, summaryVariable(field.key));
+            // The block shares a line with the series' own legend text, so the fields
+            // are separated by spaces and only the last one ends the line.
+            String tail = i == SUMMARY_FIELDS.length - 1 ? LINE_END : " ";
+            def.gprint(id, " " + _t(field.label) + ": " + numberFormat + tail);
+        }
+    }
+
+    /**
+     * The rrd4j variable that reads one summary field off a series.
+     *
+     * @param key one of the {@link #SUMMARY_FIELDS} ids
+     * @return the variable computing that value
+     * @throws IllegalArgumentException on an id that is not a summary field
+     */
+    static Variable summaryVariable(String key) {
+        switch (key) {
+            case "min":
+                return new Variable.MIN();
+            case "max":
+                return new Variable.MAX();
+            case "avg":
+                return new Variable.AVERAGE();
+            case "last":
+                return new Variable.LAST();
+            default:
+                throw new IllegalArgumentException("not a summary field: " + key);
+        }
     }
 
     /**
