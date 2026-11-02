@@ -25,7 +25,7 @@ public class LogsHelperRewritesTest {
         "| INFO   | accept=true reject=false allowed=true",
         "| ERROR  | java.lang.IllegalStateException: bad state\n\tat net.i2p.A.b(A.java:1)\n\tat java.base/C.d(C.java:2)\n* and more",
         "| INFO   | [DBWriter   ] flushed | [UDPSender] x | [BWRefiller] y",
-        "| INFO   | [NTCPRead.2 ] ...e.Connection: truncated class",
+        "| INFO   | [NTCPRead.2 ] …st.Net.Connection: truncated class",
         "| INFO   | […ueue Pumper] and …obQueue and [NTCP Pumper ok",
         "| INFO   | [Addressbook] [Thread-3] [Timestamper] [DHT Explore] [HostChecker]",
         "| INFO   | IRC Client] Inbound message & IRC Client] Outbound message",
@@ -122,7 +122,6 @@ public class LogsHelperRewritesTest {
         msg = msg.replace("&lt;b&gt;", "");
         msg = msg.replace("&lt;/b&gt;", "");
         msg = msg.replace("...", "&hellip;");
-        msg = msg.replace("] &hellip;", "] &hellip;&nbsp;&nbsp;");
         msg = msg.replace("]]", "]");
         return msg;
     }
@@ -321,14 +320,15 @@ public class LogsHelperRewritesTest {
      * Every form of the thread column renders at the 12 characters the formatter
      * wrote: padded, truncated to the tail, and the forms the rewrite tables
      * lengthen by a space or by widening the name. HTML collapses a plain space,
-     * so a column padded with spaces is two characters short on the page, and a
-     * column shortened with "..." is two more, since the three dots render as one.
+     * so a column padded with spaces is short on the page until the padding pass
+     * writes it as &nbsp;; a column shortened with the one-character ellipsis
+     * renders at its full width on its own.
      */
     @Test
     public void testThreadColumnRendersAtItsWrittenWidth() {
         String[] columns = {
             "| INFO   | [NTCPRead.2  ] x",   // padded by the formatter
-            "| INFO   | [...:Dj66-0.2] x",   // truncated by the formatter
+            "| INFO   | […j:er:Dj66.2] x",   // truncated by the formatter
             "| INFO   | [SAM-PWkr.2  ] x",   // padded by the formatter
             "| INFO   | [Addressbook] x",    // padded by a rewrite
             "| INFO   | [Timestamper] x",    // padded by a rewrite
@@ -344,26 +344,27 @@ public class LogsHelperRewritesTest {
     }
 
     /**
-     * A truncated column keeps its tail and gains the two characters its three
-     * dots stand for, so the reader can still tell which thread logged the line.
+     * A truncated column keeps the last 11 characters of the name behind the
+     * one-character ellipsis, so the reader can still tell which thread logged
+     * the line and the column needs no padding.
      */
     @Test
     public void testTruncatedThreadColumnKeepsTheTail() {
-        assertEquals("…  :Dj66-0.2", threadColumn("| INFO   | [...:Dj66-0.2] x"));
+        assertEquals("…j:er:Dj66.2", threadColumn("| INFO   | […j:er:Dj66.2] x"));
     }
 
     /**
-     * A truncated class column keeps its tail and gains the two characters its
-     * three dots stand for, so the column stays 16 wide on the page.
+     * A truncated class column keeps the last 15 characters of the name behind
+     * the one-character ellipsis, so the column stays 16 wide on the page.
      */
     @Test
     public void testClassColumnRendersAtItsWrittenWidth() {
-        String rendered = messageRewrites("| INFO   | [NTCPRead.2 ] ...e.Connection: x");
+        String rendered = messageRewrites("| INFO   | [NTCPRead.2 ] …st.Net.Connection: x");
         int from = rendered.indexOf("] ") + 2;
         int to = rendered.indexOf(": ", from);
         String column = rendered.substring(from, to)
                               .replace("&hellip;", "\u2026").replace("&nbsp;", " ");
-        assertEquals("…  e.Connection", column);
+        assertEquals("…st.Net.Connection", column);
     }
 
     /**

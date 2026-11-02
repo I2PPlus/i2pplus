@@ -9,8 +9,9 @@ import net.i2p.I2PAppContext;
 /**
  * Pins the fixed-width thread/class/priority column formatting:
  * names shorter than {@code size} are right-padded, names longer
- * are truncated to the last {@code size - 3} chars with a "..." prefix,
- * so every rendered column is exactly {@code size} chars wide.
+ * are truncated to the last {@code size - 1} chars with the one-character
+ * ellipsis prefixed, so every rendered column is exactly {@code size}
+ * chars wide and needs no padding compensation on the page.
  * Pins the cached priority labels against the per-record lookup they replace.
  */
 public class LogRecordFormatterTest {
@@ -31,10 +32,10 @@ public class LogRecordFormatterTest {
 
     @Test
     public void testEllipsizesPreservingSuffix() {
-        // "Server.<remoteHost>.<remotePort>" accept thread (21 chars) -> last 9 chars
-        assertEquals("....0.1.7662", LogRecordFormatter.padOrTruncate("Server.127.0.0.1.7662", WIDTH));
-        // streaming per-connection thread (20 chars) -> last 9 chars
-        assertEquals("...er:Dj66.2", LogRecordFormatter.padOrTruncate("SomeApp-Web:Aj:er:Dj66.2", WIDTH));
+        // "Server.<remoteHost>.<remotePort>" accept thread (21 chars) -> last 11 chars
+        assertEquals("….0.0.1.7662", LogRecordFormatter.padOrTruncate("Server.127.0.0.1.7662", WIDTH));
+        // streaming per-connection thread (24 chars) -> last 11 chars
+        assertEquals("…j:er:Dj66.2", LogRecordFormatter.padOrTruncate("SomeApp-Web:Aj:er:Dj66.2", WIDTH));
     }
 
     @Test
@@ -58,9 +59,9 @@ public class LogRecordFormatterTest {
 
     @Test
     public void testEllipsisAtBoundary() {
-        // exactly size+1 chars -> last (size-3) kept with prefix, still exactly size wide
+        // exactly size+1 chars -> last (size-1) kept with prefix, still exactly size wide
         String thirteen = "1234567890123";
-        assertEquals("...567890123", LogRecordFormatter.padOrTruncate(thirteen, WIDTH));
+        assertEquals("…34567890123", LogRecordFormatter.padOrTruncate(thirteen, WIDTH));
         // one char short of ellipsizing stays unchanged, padded
         assertEquals("12345678901 ", LogRecordFormatter.padOrTruncate("12345678901", WIDTH));
     }
@@ -69,7 +70,7 @@ public class LogRecordFormatterTest {
     public void testVeryLongNameStaysBoundsChecked() {
         String huge = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
         assertEquals(WIDTH, LogRecordFormatter.padOrTruncate(huge, WIDTH).length());
-        assertTrue(LogRecordFormatter.padOrTruncate(huge, WIDTH).startsWith("..."));
+        assertTrue(LogRecordFormatter.padOrTruncate(huge, WIDTH).startsWith("…"));
     }
 
     @Test

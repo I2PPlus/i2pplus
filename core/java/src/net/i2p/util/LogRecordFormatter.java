@@ -40,8 +40,12 @@ class LogRecordFormatter {
     private static final int MAX_PRIORITY_LENGTH = 5;
     /** Joins the fields of a log line. */
     private static final String SEPARATOR = "| ";
-    /** Marks text shortened to fit the column. */
-    private static final String ELLIPSIS = "...";
+    /**
+     * Marks text shortened to fit the column. One character, one monospace
+     * cell, so a truncated column is the ellipsis plus {@code size - 1}
+     * characters of the tail and needs no padding compensation anywhere.
+     */
+    private static final String ELLIPSIS = "…";
     /** Anchor open tag stripped from messages in the LogManager.MESSAGE format. */
     private static final Pattern LINK_OPEN = Pattern.compile("<a[^>]*>");
     /** Anchor close tag stripped from messages in the LogManager.MESSAGE format. */
@@ -260,16 +264,18 @@ class LogRecordFormatter {
 
     /**
      * Truncate or pad to exactly {@code size} chars; if truncated,
-     * keeps the suffix and prefixes with "..." so column width stays constant.
+     * keeps the suffix and prefixes it with the one-character ellipsis,
+     * so column width stays constant with no padding compensation.
      * <p>
      * Used for the thread, source, and priority columns so every log line has
      * fixed-width output regardless of the underlying name length.
      *
      * @param str the raw name, or null (treated as empty)
-     * @param size the exact output width, must be &gt; 3
+     * @param size the exact output width, must be &gt; 1
      * @return a string of exactly {@code size} chars: right-padded with spaces
-     *         when short, or the last {@code size - 3} chars prefixed with the
-     *         three dots of {@link #ELLIPSIS} when longer than {@code size}
+     *         when short, or the last {@code size - 1} chars prefixed with the
+     *         one-character ellipsis of {@link #ELLIPSIS} when longer than
+     *         {@code size}
      * @since 0.9.71+
      */
     static String padOrTruncate(String str, int size) {

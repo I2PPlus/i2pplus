@@ -147,10 +147,6 @@ public class LogsHelper extends HelperBase {
         {"&lt;b&gt;", ""},
         {"&lt;/b&gt;", ""},
         {"...", "&hellip;"},
-        // The class column is 16 wide and the three dots render as one character,
-        // so a shortened class name is two short; the column is the text between
-        // the thread column's "] " and the ": " that follows it.
-        {"] &hellip;", "] &hellip;&nbsp;&nbsp;"},
         {"]]", "]"}
     };
 
@@ -540,44 +536,30 @@ public class LogsHelper extends HelperBase {
         return msg;
     }
 
-/**
- * Keep the thread column the width the log formatter gave it.
- * <p>
- * The formatter writes the column at a fixed 12 characters - right-padded with
- * spaces, and for a name that does not fit, three dots over the tail of it.
- * HTML collapses a space, so every space in the column has to be written as
- * &nbsp; for the column to stay 12 wide on the page, and the rewrite tables
- * have already turned those three dots into &hellip;, which renders as one
- * character, so the two characters they stand for have to be added back. The
- * tables also lengthen short names ("[Addressbook]" to "[Addressbook ]",
- * "[UDPSender" to "[UDP Sender"), so this runs after them, and the column is
- * the first bracketed field on the line, which is where the format puts it.
- *
- * @param msg the log line, escaped and rewritten, whose thread column is padded
- * @return the line with every space in its thread column written as &nbsp;
- * @since 0.9.73+
- */
+    /**
+     * Keep the thread column the width the log formatter gave it.
+     * <p>
+     * The formatter writes the column at a fixed 12 characters, right-padded
+     * with spaces, and shortens a name that does not fit to the one-character
+     * ellipsis plus the last 11, which renders at the full width on its own.
+     * HTML collapses a space, so every space in the column has to be written
+     * as &nbsp; for the column to stay 12 wide on the page. The rewrite tables
+     * also lengthen short names ("[Addressbook]" to "[Addressbook ]",
+     * "[UDPSender" to "[UDP Sender"), so this runs after them, and the column
+     * is the first bracketed field on the line, which is where the format
+     * puts it.
+     *
+     * @param msg the log line, escaped and rewritten, whose thread column is padded
+     * @return the line with every space in its thread column written as &nbsp;
+     * @since 0.9.73+
+     */
     static String padThreadColumn(String msg) {
         int lb = msg.indexOf(" [");
         int rb = lb >= 0 ? msg.indexOf("] ", lb + 2) : -1;
         if (lb < 0 || rb <= lb) {return msg;}
         String inside = msg.substring(lb + 2, rb);
-        boolean truncated = inside.startsWith("&hellip;");
-        if (!truncated && inside.indexOf(' ') < 0) {return msg;}
-        StringBuilder buf = new StringBuilder(inside.length() + 16);
-        int from = 0;
-        if (truncated) {
-            // the three dots the formatter wrote own the first three columns of
-            // the field and render as one character, so pad where they stood
-            buf.append("&hellip;&nbsp;&nbsp;");
-            from = "&hellip;".length();
-        }
-        for (int i = from; i < inside.length(); i++) {
-            char c = inside.charAt(i);
-            if (c == ' ') {buf.append("&nbsp;");}
-            else {buf.append(c);}
-        }
-        return msg.substring(0, lb + 2) + buf.toString() + msg.substring(rb);
+        if (inside.indexOf(' ') < 0) {return msg;}
+        return msg.substring(0, lb + 2) + inside.replace(" ", "&nbsp;") + msg.substring(rb);
     }
 
     /**
