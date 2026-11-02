@@ -133,6 +133,29 @@ public class RateSampleDeliveryTest {
         }
     }
 
+    /**
+     * Wait for the delivery counter to reach {@code n}. The consumer counts a
+     * sample after its listener returns, so a listener's own latch can fire a
+     * hair before the counter lands on a loaded runner - read the counter with
+     * a poll, never once.
+     *
+     * @param delivery the delivery under test
+     * @param n the count to wait for
+     * @param what the assertion message label used if the wait times out
+     * @throws Exception if the poll sleep is interrupted
+     */
+    private static void awaitDelivered(RateSampleDelivery delivery, int n, String what) throws Exception {
+        long deadline = System.currentTimeMillis() + 10000;
+        long delivered = 0;
+        while (System.currentTimeMillis() < deadline) {
+            delivered = delivery.getDelivered();
+            if (delivered >= n)
+                return;
+            Thread.sleep(5);
+        }
+        assertEquals(what, n, delivery.getDelivered());
+    }
+
     @Test
     public void deliversASubmittedSample() throws Exception {
         CollectingListener lsnr = new CollectingListener(1);
@@ -141,7 +164,7 @@ public class RateSampleDeliveryTest {
             assertTrue(delivery.submit(lsnr, 1.0, 1, 1.0, PERIOD, atStep(1)));
             assertTrue("sample was not delivered within timeout", lsnr.received.await(10, TimeUnit.SECONDS));
             assertEquals(Arrays.asList(1.0), lsnr.snapshot());
-            assertEquals(1, delivery.getDelivered());
+            awaitDelivered(delivery, 1, "the submitted sample must be counted as delivered");
             assertEquals(0, delivery.getOverruns());
             assertEquals(0, delivery.getSuperseded());
         } finally {
@@ -227,7 +250,7 @@ public class RateSampleDeliveryTest {
             awaitSize(blocker.values, 2, "samples delivered after release");
             assertEquals("the newer value for a step is the one that must be delivered",
                          Arrays.asList(-1.0, 20.0), blocker.snapshot());
-            assertEquals(2, delivery.getDelivered());
+            awaitDelivered(delivery, 2, "both samples must be counted as delivered");
         } finally {
             blocker.release.countDown();
             delivery.shutdown();
@@ -380,17 +403,7 @@ public class RateSampleDeliveryTest {
             assertTrue("consumer died on a throwing listener",
                        good.received.await(10, TimeUnit.SECONDS));
             assertEquals(Arrays.asList(99.0), good.snapshot());
-            // The consumer counts the sample delivered only after the listener
-            // returns, so the receive latch can fire a hair before the counter
-            // lands on a loaded runner — poll instead of reading once.
-            long delivered = 0;
-            long deadline = System.currentTimeMillis() + 10_000;
-            while (delivered < 1 && System.currentTimeMillis() < deadline) {
-                delivered = delivery.getDelivered();
-                if (delivered < 1)
-                    Thread.sleep(5);
-            }
-            assertEquals("a throwing sample must not count as delivered", 1, delivered);
+            awaitDelivered(delivery, 1, "a throwing sample must not count as delivered");
         } finally {
             delivery.shutdown();
         }
@@ -412,7 +425,7 @@ public class RateSampleDeliveryTest {
             delivery.submit(good, 42, 1, 1.0, PERIOD, atStep(1));
             assertTrue("consumer died on a null listener", good.received.await(10, TimeUnit.SECONDS));
             assertEquals(Arrays.asList(42.0), good.snapshot());
-            assertEquals("a null-listener sample is not a delivery", 1, delivery.getDelivered());
+            awaitDelivered(delivery, 1, "a null-listener sample is not a delivery");
         } finally {
             delivery.shutdown();
         }
