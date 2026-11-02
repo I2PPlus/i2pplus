@@ -10,13 +10,11 @@ package net.i2p.data.i2cp;
  */
 
 import net.i2p.I2PAppContext;
-import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.ThreadNames;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * The I2CPMessageReader reads an InputStream (using
@@ -46,7 +44,8 @@ public class I2CPMessageReader {
     /**
      * Source of the unique suffix each reader thread name carries.
      */
-    protected static final AtomicLong __readerId = new AtomicLong();
+    /** The reader thread numbers, harvested back when a reader thread finishes. */
+    protected static final ThreadNames.Pool _readerNames = new ThreadNames.Pool();
 
     /**
      * I2CPMessageReader.
@@ -58,9 +57,7 @@ public class I2CPMessageReader {
         _stream = stream;
         setListener(lsnr);
         _reader = new I2CPMessageReaderRunner();
-        _readerThread = new I2PThread(_reader);
-        _readerThread.setDaemon(true);
-        _readerThread.setName("I2CPRead" + ThreadNames.seq(__readerId.incrementAndGet()));
+        _readerThread = _readerNames.i2pThread(_reader, "I2CPRX");
     }
 
     /**

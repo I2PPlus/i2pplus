@@ -22,11 +22,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.util.Addresses;
-import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.Translate;
 import net.i2p.util.ThreadNames;
@@ -1998,7 +1996,8 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
     }
 
     /** Counter naming the UPnP jobs. */
-    private static final AtomicInteger __id = new AtomicInteger();
+    /** The UPnP operation thread numbers, harvested back when an operation finishes. */
+    private static final ThreadNames.Pool _threadNames = new ThreadNames.Pool();
 
     /**
      * Runs port registration in a background thread; postControlAction() can take many seconds,
@@ -2031,10 +2030,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
             else
                 _log.info("Starting thread to renew subscriptions");
         }
-        Thread t = new I2PThread(new RegisterPortsThread(portsToForwardNow));
-        t.setName("UPnPOpnr" + ThreadNames.seq(__id.incrementAndGet()));
-        t.setDaemon(true);
-        t.start();
+        _threadNames.i2pThread(new RegisterPortsThread(portsToForwardNow), "UPnPOpnr").start();
     }
 
     /**
@@ -2099,10 +2095,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
     private void unregisterPorts(Set<ForwardPort> portsToForwardNow) {
         if (_log.shouldInfo())
             _log.info("Starting thread to un-forward " + portsToForwardNow.size() + " ports");
-            Thread t = new I2PThread(new UnregisterPortsThread(portsToForwardNow));
-        t.setName("UPnPClsr" + ThreadNames.seq(__id.incrementAndGet()));
-        t.setDaemon(true);
-        t.start();
+        _threadNames.i2pThread(new UnregisterPortsThread(portsToForwardNow), "UPnPClsr").start();
     }
 
     /** Removes our port mappings on a thread. */

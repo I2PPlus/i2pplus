@@ -17,6 +17,7 @@ import net.i2p.util.Clock;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.InternalSocket;
 import net.i2p.util.Log;
+import net.i2p.util.ThreadNames;
 
 /**
  * I2PTunnelOutproxyRunner forwards data bidirectionally between two connected sockets:
@@ -39,10 +40,10 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
     /** Class log, also used as the prefix for each runner's per-connection log. */
     protected final Log _log;
 
-    /** Sequence number of the created runners. */
-    private static final AtomicLong __runnerId = new AtomicLong();
-    /** This runner's position in that sequence. */
-    private final long _runnerId;
+    /** The runner thread numbers, harvested back when a runner's run() ends. */
+    private static final ThreadNames.Pool _runnerNames = new ThreadNames.Pool();
+    /** This runner's number, in use while it is alive. */
+    private final int _runnerId;
 
     /** Max bytes streamed in a packet - smaller packets might be filled up to this size. */
     private static final int MAX_PACKET_SIZE = 4 * 1024;
@@ -107,8 +108,8 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
         if (_log.shouldInfo()) {
             _log.info("OutproxyRunner started");
         }
-        _runnerId = __runnerId.incrementAndGet();
-        setName("Outproxy." + _runnerId);
+        _runnerId = _runnerNames.acquire();
+        setName("Outproxy" + _runnerNames.suffix(_runnerId));
     }
 
     /**
@@ -207,6 +208,9 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
         } catch (RuntimeException e) {
             if (_log.shouldError())
                 _log.error("Internal error", e);
+        } finally {
+            // The runner is the thread, so this is where its name's number comes back.
+            _runnerNames.release(_runnerId);
         }
     }
 
@@ -247,7 +251,7 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
             this._toI2P = toI2P;
             this.direction = toI2P ? "[To outproxy]" : "[From outproxy]";
             this._cache = ByteCache.getInstance(32, NETWORK_BUFFER_SIZE);
-            setName((_toI2P ? "OutFwdTo." : "OutFwdFr.") + _runnerId);
+            setName((_toI2P ? "OutpTX" : "OutpRX") + _runnerNames.suffix(_runnerId));
         }
 
         /**

@@ -7,7 +7,6 @@ import net.i2p.router.Banlist;
 import net.i2p.router.RouterContext;
 import net.i2p.router.Tuner;
 import net.i2p.router.util.CoDelBlockingQueue;
-import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.ThreadNames;
@@ -57,8 +56,8 @@ class PacketHandler {
     private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 64 : 512;
     /** Most handler threads allowed. */
     private static volatile int _maxHandlers = Math.max(SystemVersion.getCores() / 2, 4);
-    /** Sequence number of the handler threads. */
-    private static final AtomicInteger _threadNum = new AtomicInteger();
+    /** Numbers for the handler threads, harvested back when a handler stops. */
+    private static final ThreadNames.Pool _threadNames = new ThreadNames.Pool();
     /** Oldest SSU version accepted. */
     private static final int MIN_VERSION = 2;
     /** Newest SSU version accepted. */
@@ -169,8 +168,7 @@ class PacketHandler {
             if (_activeHandlers.compareAndSet(current, current + 1)) {
                 Handler h = new Handler();
                 _handlers.add(h);
-                I2PThread t = new I2PThread(h, "UDPPktH" + ThreadNames.idx(_threadNum.incrementAndGet()), true);
-                t.start();
+                _threadNames.i2pThread(h, "UDPPktH").start();
                 current = _activeHandlers.get();
             } else {
                 current = _activeHandlers.get();

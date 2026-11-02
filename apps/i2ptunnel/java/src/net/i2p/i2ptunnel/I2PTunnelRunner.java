@@ -16,7 +16,6 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import javax.net.ssl.SSLException;
 import net.i2p.I2PAppContext;
@@ -69,9 +68,10 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
     /** The runner's logger, from the global context's log manager. */
     protected final Log _log;
     /** Counter numbering the tunnel runners. */
-    private static final AtomicLong __runnerId = new AtomicLong();
+    /** The runner thread numbers, harvested back when a runner's run() ends. */
+    private static final ThreadNames.Pool _runnerNames = new ThreadNames.Pool();
     /** This runner's id, for the logs. */
-    private final long _runnerId;
+    private final int _runnerId;
     /**
      * Max bytes streamed in a packet - smaller ones might be filled up to this size.
      * Larger ones are not split (at least not on Sun's impl of BufferedOutputStream),
@@ -1033,9 +1033,9 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
         _keepAliveI2P = keepAliveI2P;
         _keepAliveSocket = keepAliveSocket;
         if (_log.shouldLog(Log.INFO)) {_log.info("I2PTunnelRunner started");}
-        _runnerId = __runnerId.incrementAndGet();
+        _runnerId = _runnerNames.acquire();
         if (shouldStart) {
-            setName("TunRunner." + _runnerId);
+            setName("TunRun" + _runnerNames.suffix(_runnerId));
             start();
         }
     }
@@ -2365,7 +2365,7 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
                         return;
                     }
                 } else {
-                    Thread t = new Thread(toI2P, "TunFwdI2P" + ThreadNames.idx(_runnerId));
+                    Thread t = new Thread(toI2P, "TunFwd" + _runnerNames.suffix(_runnerId));
                     t.setDaemon(true);
                     t.start();
                 }
@@ -2585,6 +2585,8 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
             _keepAliveSocket = false;
             onNoDataFailure(e);
         } finally {
+            // The runner is the thread, so this is where its name's number comes back.
+            _runnerNames.release(_runnerId);
             cancelInitialResponseWatchdog();
             cancelBrowserWriteWatchdog();
             // An early-race winner run() never adopted (the attempt resolved

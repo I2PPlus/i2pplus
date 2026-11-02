@@ -9,7 +9,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.router.RouterContext;
 import net.i2p.router.Tuner;
-import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.ThreadNames;
@@ -43,8 +42,8 @@ public class Reader {
     private static final int MIN_THREADS = 2;
     /** Most reader threads allowed. */
     private static final int MAX_THREADS = 16;
-    /** Sequence number of the reader threads. */
-    private static final AtomicInteger _threadNum = new AtomicInteger();
+    /** Numbers for the reader threads, harvested back when a runner stops. */
+    private static final ThreadNames.Pool _threadNames = new ThreadNames.Pool();
     /** Tracks how many runner threads are actively processing (not parked). */
     private final AtomicInteger _activeCount = new AtomicInteger();
 
@@ -103,8 +102,7 @@ public class Reader {
     private void startRunner() {
         Runner r = new Runner();
         _runners.add(r);
-        I2PThread t = new I2PThread(r, "NTCPRead" + ThreadNames.idx(_threadNum.incrementAndGet()), true);
-        t.start();
+        _threadNames.i2pThread(r, "NTCPRX").start();
     }
 
     /**

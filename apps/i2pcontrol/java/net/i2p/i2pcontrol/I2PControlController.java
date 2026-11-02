@@ -32,6 +32,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.app.RouterApp;
 import net.i2p.util.I2PSSLSocketFactory;
 import net.i2p.util.Log;
+import net.i2p.util.ThreadNames;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.HttpConfiguration;
 import org.eclipse.jetty.server.HttpConnectionFactory;
@@ -289,7 +290,7 @@ public class I2PControlController implements RouterApp {
         // all with same name will use the same thread pool
         ssl.setName("I2PControl");
 
-        ssl.setName("SSLListnr." + ++listeners);
+        ssl.setName("SSLListnr" + ThreadNames.seq(++listeners));
 
         return ssl;
     }

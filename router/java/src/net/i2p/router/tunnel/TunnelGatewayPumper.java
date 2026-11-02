@@ -11,7 +11,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.data.Hash;
 import net.i2p.router.RouterContext;
-import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.SimpleTimer2;
@@ -64,8 +63,8 @@ class TunnelGatewayPumper implements Runnable {
     /** Most pump threads allowed. */
     private static volatile int _maxPumpers;
 
-    /** Sequence number of the pump threads. */
-    private static final AtomicInteger _threadNum = new AtomicInteger();
+    /** Numbers for the pump threads, harvested back when a pump stops. */
+    private static final ThreadNames.Pool _threadNames = new ThreadNames.Pool();
 
     /** Running instance for dynamic resize from Tuner. */
     private static volatile TunnelGatewayPumper _instance;
@@ -229,7 +228,7 @@ class TunnelGatewayPumper implements Runnable {
         _instance = this;
 
         for (int i = 0; i < _pumpers; i++) {
-            Thread t = new I2PThread(this, "TunGWPmp" + ThreadNames.idx(_threadNum.incrementAndGet()), true);
+            Thread t = _threadNames.i2pThread(this, "TunGWPmp");
             t.setPriority(Thread.MAX_PRIORITY);
             _threads.add(t);
             t.start();
@@ -262,7 +261,7 @@ class TunnelGatewayPumper implements Runnable {
         if (newCount == current) return;
 
         while (_threads.size() < newCount) {
-            Thread t = new I2PThread(this, "TunGWPmp" + ThreadNames.idx(_threadNum.incrementAndGet()), true);
+            Thread t = _threadNames.i2pThread(this, "TunGWPmp");
             t.setPriority(Thread.MAX_PRIORITY);
             _threads.add(t);
             t.start();

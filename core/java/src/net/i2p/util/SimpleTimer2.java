@@ -282,7 +282,7 @@ public class SimpleTimer2 {
      * @param context the I2P application context
      */
     public SimpleTimer2(I2PAppContext context) {
-        this(context, "SimpleTimer");
+        this(context, "SimTimer");
     }
 
     /**
@@ -378,7 +378,7 @@ public class SimpleTimer2 {
         @Override
         public Thread newThread(Runnable r) {
             Thread rv = Executors.defaultThreadFactory().newThread(r);
-            rv.setName(_name + '.' + _count.incrementAndGet());
+            rv.setName(_name + ThreadNames.seq(_count.incrementAndGet()));
             rv.setDaemon(true);
             rv.setPriority(Thread.MAX_PRIORITY - 1);
             return rv;

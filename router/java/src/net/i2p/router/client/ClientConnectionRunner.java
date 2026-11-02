@@ -54,7 +54,6 @@ import net.i2p.router.crypto.ratchet.MuxedSKM;
 import net.i2p.router.crypto.ratchet.RatchetSKM;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.util.ConcurrentHashSet;
-import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 import net.i2p.util.ThreadNames;
@@ -210,7 +209,8 @@ class ClientConnectionRunner {
     }
 
     /** Counter naming the client connections. */
-    private static final AtomicInteger __id = new AtomicInteger();
+    /** The writer thread numbers, harvested back when a writer thread finishes. */
+    private static final ThreadNames.Pool _writerNames = new ThreadNames.Pool();
 
     /**
      * Actually run the connection - listen for I2CP messages and respond.  This
@@ -225,10 +225,7 @@ class ClientConnectionRunner {
             _reader = new I2CPMessageReader(new BufferedInputStream(_socket.getInputStream(), BUF_SIZE),
                                             createListener());
             _writer = new ClientWriterRunner(_context, this);
-            I2PThread t = new I2PThread(_writer);
-            t.setName("I2CPWr" + ThreadNames.seq(__id.incrementAndGet()));
-            t.setDaemon(true);
-            t.start();
+            _writerNames.i2pThread(_writer, "I2CPWr").start();
             _out = new BufferedOutputStream(_socket.getOutputStream());
             _reader.startReading();
     // TODO need a cleaner for unclaimed items in _messages, but we have no timestamps...

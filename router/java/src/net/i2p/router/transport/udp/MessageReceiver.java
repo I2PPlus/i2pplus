@@ -12,7 +12,6 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.Tuner;
 import net.i2p.router.BanLogger;
 import net.i2p.router.util.CoDelBlockingQueue;
-import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.ThreadNames;
@@ -51,8 +50,8 @@ class MessageReceiver {
     private static final int MIN_THREADS = 2;
     /** Most receiver threads allowed. */
     private static final int MAX_THREADS = 16;
-    /** Sequence number of the receiver threads. */
-    private static final AtomicInteger _threadNum = new AtomicInteger();
+    /** Numbers for the receiver threads, harvested back when a runner stops. */
+    private static final ThreadNames.Pool _threadNames = new ThreadNames.Pool();
 
     /**
      * Creates the completed-message queue, sized from available memory, and registers its rate stats.
@@ -141,8 +140,7 @@ class MessageReceiver {
     private void startRunner() {
         Runner r = new Runner();
         _activeRunners.incrementAndGet();
-        I2PThread t = new I2PThread(r, "UDPMsgRX" + ThreadNames.idx(_threadNum.incrementAndGet()), true);
-        t.start();
+        _threadNames.i2pThread(r, "UDPMsgRX").start();
     }
 
     /** Thread taking messages off the queue. */
@@ -192,8 +190,7 @@ class MessageReceiver {
         while (current < target) {
             if (_activeRunners.compareAndSet(current, current + 1)) {
                 Runner r = new Runner();
-                I2PThread t = new I2PThread(r, "UDPMsgRX" + ThreadNames.idx(_threadNum.incrementAndGet()), true);
-                t.start();
+                _threadNames.i2pThread(r, "UDPMsgRX").start();
                 _log.info("Added MessageReceiver thread, now " + (current + 1) + "/" + target);
                 current = _activeRunners.get();
             } else {

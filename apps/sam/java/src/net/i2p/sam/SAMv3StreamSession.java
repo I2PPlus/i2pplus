@@ -644,8 +644,8 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
                     WritableByteChannel toClient = clientServerSock;
                     // NOSONAR channel ownership transferred to the Pipe thread, which closes it in its finally block
                     WritableByteChannel toI2P = Channels.newChannel(i2ps.getOutputStream());
-                    (new I2PAppThread(new Pipe(fromClient, toI2P, null, nick), "SAMPFwdC2I")).start();
-                    (new I2PAppThread(new Pipe(fromI2P, toClient, null, nick), "SAMPFwdI2C")).start();
+                    (new I2PAppThread(new Pipe(fromClient, toI2P, null, nick), "SAMFwdC2I")).start();
+                    (new I2PAppThread(new Pipe(fromI2P, toClient, null, nick), "SAMFwdI2C")).start();
 
                 } catch (IOException e) {
                     try {

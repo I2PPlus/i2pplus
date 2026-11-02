@@ -479,13 +479,11 @@ public class HostChecker {
 
         // Initialize scheduler and semaphore AFTER loading config to use configured values
         ThreadFactory threadFactory = new ThreadFactory() {
-            private final AtomicInteger _count = new AtomicInteger();
+            /** The check thread numbers, harvested back when a check thread finishes. */
+            private final ThreadNames.Pool _names = new ThreadNames.Pool();
             @Override
             public Thread newThread(Runnable r) {
-                Thread thread = new Thread(r);
-                thread.setName("HostChk" + ThreadNames.seq(_count.incrementAndGet()));
-                thread.setDaemon(true);
-                return thread;
+                return _names.thread(r, "HostChk", true);
             }
         };
         _scheduler = Executors.newScheduledThreadPool(_maxConcurrent + 2, threadFactory);

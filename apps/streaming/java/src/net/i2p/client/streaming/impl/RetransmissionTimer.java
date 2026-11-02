@@ -33,7 +33,7 @@ public class RetransmissionTimer {
     RetransmissionTimer(I2PAppContext ctx, String name) {
         _shards = new SimpleTimer2[SHARDS];
         for (int i = 0; i < SHARDS; i++)
-            _shards[i] = new SimpleTimer2(ctx, name + '-' + i);
+            _shards[i] = new SimpleTimer2(ctx, name + i);
     }
 
     /**

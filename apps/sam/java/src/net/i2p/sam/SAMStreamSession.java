@@ -467,9 +467,9 @@ class SAMStreamSession implements SAMMessageSess {
             sendersMap.put(Integer.valueOf(id), sender);
         }
 
-        I2PAppThread t = new I2PAppThread(reader, "SAMSRX" + ThreadNames.seq(id));
+        I2PAppThread t = new I2PAppThread(reader, "SAMStrmRX" + ThreadNames.seq(id));
         t.start();
-        t = new I2PAppThread(sender, "SAMSSnd" + ThreadNames.seq(id));
+        t = new I2PAppThread(sender, "SAMStrmTX" + ThreadNames.seq(id));
         t.start();
 
         return id;

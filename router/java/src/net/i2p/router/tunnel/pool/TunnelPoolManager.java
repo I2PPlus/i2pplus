@@ -62,8 +62,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     private volatile boolean _isShutdown;
     /** Threads running the build handler. */
     private static volatile int _numHandlerThreads = 4;
-    /** Counter naming the handler threads. */
-    private static final AtomicInteger _handlerThreadId = new AtomicInteger(1);
+    /** Numbers for the handler threads, harvested back when a handler is retired. */
+    private static final ThreadNames.Pool _handlerThreadNames = new ThreadNames.Pool();
     /** The running handler threads. */
     private final CopyOnWriteArrayList<I2PThread> _handlerThreads;
     /** Steady-state share of tunnels allowed to clients. */
@@ -1003,7 +1003,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             t.start();
             _handler.init();
             for (int i = 1; i <= _numHandlerThreads; i++) {
-                I2PThread hThread = new I2PThread(_handler, "BldHdlr" + ThreadNames.idx(_handlerThreadId.getAndIncrement()), true);
+                I2PThread hThread = _handlerThreadNames.i2pThread(_handler, "BldHdlr");
                 hThread.start();
                 _handlerThreads.add(hThread);
             }
@@ -1273,8 +1273,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         int current = _handlerThreads.size();
         if (target > current) {
             for (int i = current; i < target; i++) {
-                I2PThread hThread = new I2PThread(_handler,
-                    "BldHdlr" + ThreadNames.idx(_handlerThreadId.getAndIncrement()), true);
+                I2PThread hThread = _handlerThreadNames.i2pThread(_handler, "BldHdlr");
                 hThread.start();
                 _handlerThreads.add(hThread);
             }

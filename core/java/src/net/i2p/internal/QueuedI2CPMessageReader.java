@@ -10,7 +10,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import net.i2p.I2PAppContext;
 import net.i2p.data.i2cp.I2CPMessage;
 import net.i2p.data.i2cp.I2CPMessageReader;
-import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.ThreadNames;
 
@@ -194,8 +193,8 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
         private int liveThreads;
         /** When the last retirement happened, to shed one worker per idle tick. */
         private long lastRetireMs;
-        /** Thread name counter; prefix plus digits stays within the 12-char convention. */
-        private int threadCount;
+        /** The worker thread numbers, harvested back when a worker retires. */
+        private final ThreadNames.Pool _workerNames = new ThreadNames.Pool();
 
         /**
          * Idle poll interval, which is also the latency floor for a queued message, and the
@@ -244,7 +243,9 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
         /** Start one worker. Caller must hold the monitor. */
         private void startWorker() {
             liveThreads++;
-            new I2PThread(this, "I2CPDisp" + ThreadNames.idx(threadCount++), true).start();
+            // A worker that retires on idle hands its number back, so a pool that
+            // grows and sheds all day stays named .01 upward.
+            _workerNames.i2pThread(this, "I2CPDisp").start();
         }
 
         /**

@@ -13,6 +13,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.RouterVersion;
 import net.i2p.router.util.EventLog;
 import net.i2p.util.Log;
+import net.i2p.util.ThreadNames;
 
 /**
  * Emergency shutdown hook for JVM termination.
@@ -70,7 +71,7 @@ public class ShutdownHook extends Thread {
      */
     @Override
     public void run() {
-        setName("Shutdown." + _id);
+        setName("Shutdown" + ThreadNames.seq(_id));
         Log l = _context.logManager().getLog(Router.class);
         l.log(Log.CRIT, "Shutting down the router...");
         // Needed to make the wrapper happy, otherwise it gets confused
