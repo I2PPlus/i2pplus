@@ -12,7 +12,7 @@ import org.junit.Test;
  * SessionKey and PrivateKey now override it; these tests pin the override so
  * a future refactor back onto the base form fails loudly.
  *
- * @since 0.9.73+
+ * @since 0.9.72+
  */
 public class KeyToStringSizeTest {
 
@@ -23,7 +23,7 @@ public class KeyToStringSizeTest {
      * A fresh test instance per method, as JUnit builds one per test; the
      * class carries only the fixed key bytes.
      *
-     * @since 0.9.73+
+     * @since 0.9.72+
      */
     public KeyToStringSizeTest() {}
 

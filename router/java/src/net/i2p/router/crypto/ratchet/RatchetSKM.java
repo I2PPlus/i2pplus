@@ -102,7 +102,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
      * message until our NEXTKEY block adopts it, which it never will, so an
      * unthrottled warning floods the log at message rate.
      *
-     * @since 0.9.73+
+     * @since 0.9.72+
      */
     static final long KEY_MISMATCH_WARN_MS = 10 * 60 * 1000L;
 
@@ -113,7 +113,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
      * @param now current time in ms
      * @param lastWarned when the warning last fired, 0 for never
      * @return true to warn
-     * @since 0.9.73+
+     * @since 0.9.72+
      */
     static boolean shouldWarnKeyMismatch(long now, long lastWarned) {
         return lastWarned == 0 || now - lastWarned > KEY_MISMATCH_WARN_MS;

@@ -102,7 +102,7 @@ public class SessionKey extends SimpleDataStructure {
      * Prints "null" for the data of a destroyed key.
      *
      * @return a string representation
-     * @since 0.9.73+
+     * @since 0.9.72+
      */
     @Override
     public String toString() {

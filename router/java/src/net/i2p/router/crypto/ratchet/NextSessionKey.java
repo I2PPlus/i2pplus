@@ -135,7 +135,7 @@ class NextSessionKey extends PublicKey {
      * @param label what the key is to the caller, e.g. "Stored"; null for the
      *              default label
      * @return the key as a ` * ` continuation line
-     * @since 0.9.73+
+     * @since 0.9.72+
      */
     String toString(String label) {
         return "\n* " + (label != null ? label : "NextSessionKey") + ": "
@@ -149,7 +149,7 @@ class NextSessionKey extends PublicKey {
      * characters as a lease set, and this is a key, not a hash.
      *
      * @return the key prefix, or "no key data" for a request or ack with no key
-     * @since 0.9.73+
+     * @since 0.9.72+
      */
     String shortKey() {
         if (getData() == null) {
@@ -172,7 +172,7 @@ class NextSessionKey extends PublicKey {
      * @param stored the key stored for this ID, non-null
      * @param storedWithData the stored key that carries data, non-null
      * @return the comparison as one ` * ` continuation line
-     * @since 0.9.73+
+     * @since 0.9.72+
      */
     static String keyComparison(NextSessionKey received, NextSessionKey stored,
                                 NextSessionKey storedWithData) {

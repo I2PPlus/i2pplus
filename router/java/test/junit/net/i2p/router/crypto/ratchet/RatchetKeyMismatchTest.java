@@ -11,7 +11,7 @@ import org.junit.Test;
  * stored key with data are usually the same key, so printing both twice reads
  * as two facts when there is one.
  *
- * @since 0.9.73+
+ * @since 0.9.72+
  */
 public class RatchetKeyMismatchTest {
 
@@ -25,7 +25,7 @@ public class RatchetKeyMismatchTest {
      * A fresh test instance per method, as JUnit builds one per test; the
      * class carries only the fixed key bytes.
      *
-     * @since 0.9.73+
+     * @since 0.9.72+
      */
     public RatchetKeyMismatchTest() {}
 

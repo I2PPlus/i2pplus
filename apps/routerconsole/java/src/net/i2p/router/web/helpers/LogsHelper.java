@@ -551,7 +551,7 @@ public class LogsHelper extends HelperBase {
      *
      * @param msg the log line, escaped and rewritten, whose thread column is padded
      * @return the line with every space in its thread column written as &nbsp;
-     * @since 0.9.73+
+     * @since 0.9.72+
      */
     static String padThreadColumn(String msg) {
         int lb = msg.indexOf(" [");

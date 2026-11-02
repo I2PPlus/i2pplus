@@ -17,7 +17,7 @@ import org.junit.Test;
  * {@link RatchetEntry} sat on the same path. The tags, the public key and
  * the counters stay: they are what correlates a session.
  *
- * @since 0.9.73+
+ * @since 0.9.72+
  */
 public class RatchetKeySizeToStringTest {
 
@@ -31,7 +31,7 @@ public class RatchetKeySizeToStringTest {
      * A fresh test instance per method, as JUnit builds one per test; the
      * class carries only the fixed key bytes.
      *
-     * @since 0.9.73+
+     * @since 0.9.72+
      */
     public RatchetKeySizeToStringTest() {}
 
