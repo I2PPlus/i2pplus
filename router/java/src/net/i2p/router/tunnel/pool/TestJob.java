@@ -4280,7 +4280,7 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
                 if (recentExemptions < 1) {
                     _cfg.incrementRecentTestExemptions();
                     if (_log.shouldInfo()) {
-                        _log.info("Tunnel Test failed -> keeping data-carrying" +
+                        _log.info("Tunnel Test failed -> Keeping data-carrying" +
                                   " tunnel (exemption " + (recentExemptions + 1) + "/1)" +
                                   "\n* " + _cfg + " * Verified bytes: " +
                                   _cfg.getVerifiedBytesTransferred() +
@@ -4294,7 +4294,8 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
                 }
                 // Exceeded recent-traffic exemption limit — count as failure
                 if (_log.shouldWarn()) {
-                    _log.warn("Tunnel Test failed -> Recent traffic exemption exhausted \n* " + _cfg +
+                    _log.warn("Tunnel test failed -> Recent traffic exemption exhausted" +
+                              "\n* " + _cfg.toShortString() +
                               " -> Verified: " + _cfg.getVerifiedBytesTransferred() +
                               " bytes, last transfer " + staleMs + "ms ago — counting failure");
                 }
@@ -4307,8 +4308,9 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
             int maxFailures = removalThreshold(baseRemovalThreshold(isDegraded()), _pool.size());
             if (currentFailures > maxFailures) {
                 if (_log.shouldWarn()) {
-                    _log.warn("Tunnel Test failed -> Marking data-carrying tunnel FAILED after " +
-                              currentFailures + " consecutive failures \n* " + _cfg +
+                    _log.warn("Tunnel test failed -> Marking data-carrying tunnel failed after " +
+                              currentFailures + " consecutive failures" +
+                              "\n* " + _cfg.toShortString() +
                               " -> Verified: " + _cfg.getVerifiedBytesTransferred() +
                               " bytes, last transfer " + staleMs + "ms ago");
                 }
@@ -4322,7 +4324,7 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
                 return;
             }
             if (_log.shouldInfo()) {
-                _log.info(keepDataCarryingLine(_cfg.toString(), _cfg.getVerifiedBytesTransferred(),
+                _log.info(keepDataCarryingLine(_cfg.toShortString(), _cfg.getVerifiedBytesTransferred(),
                                                currentFailures, maxFailures, staleMs));
             }
             // Normal delay — don't monopolize the test slot with ASAP retries
@@ -4369,8 +4371,9 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
                 // republish cycle.  Peer lREgvu had 210 failures in 10
                 // seconds and was never excluded from selection.
                 if (_log.shouldWarn()) {
-                    _log.warn("Tunnel Test failed -> Marking server pool tunnel FAILED after " +
-                              failures + " consecutive failures \n* " + _cfg);
+                    _log.warn("Tunnel test failed -> Marking server pool tunnel failed after " +
+                              failures + " consecutive failures" +
+                              "\n* " + _cfg.toShortString());
                 }
                 _cfg.tunnelFailedCompletely();
                 _pool.tunnelFailed(_cfg);
@@ -4387,8 +4390,9 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
                 _pool.tunnelFailed(_cfg);
             }
             if (_log.shouldWarn()) {
-                _log.warn("Tunnel Test failed (consecutive " + failures +
-                          ") -> Kept for LeaseSet cycle\n* " + _cfg);
+                _log.warn("Tunnel test failed (consecutive " + failures +
+                          ") -> Kept for the LeaseSet cycle" +
+                          "\n* " + _cfg.toShortString());
             }
         } else {
             // Client/exploratory: count failures with adaptive thresholds.
@@ -4403,8 +4407,9 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
             if (currentFailures > maxFailures) {
                 getContext().statManager().addRateData(directionStat(_cfg.isInbound(), "Condemned"), 1);
                 if (_log.shouldInfo()) {
-                    _log.info("Tunnel Test failed -> Marking FAILED " + (maxFailures > 3 ?
-                              " (degraded mode)" : "") + "\n* " + _cfg);
+                    _log.info("Tunnel test failed -> Marking failed" + (maxFailures > 3 ?
+                              " (degraded mode)" : "") +
+                              "\n* " + _cfg.toShortString());
                 }
                 getContext().statManager().addRateData(
                     isExploratory ? "tunnel.testExploratoryFailedCompletelyTime" : "tunnel.testFailedCompletelyTime",
@@ -4594,8 +4599,8 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
             ctx.statManager().addRateData("tunnel.testDeferred", _cfg.getLength());
             if (_log.shouldInfo()) {
                 _log.info("No " + direction + " tunnel to test " + _cfg +
-                          " - deferring (" + _deferredCount + '/' + MAX_DEFERRED +
-                          " -> pool may be recovering)");
+                          " -> Deferring (" + _deferredCount + '/' + MAX_DEFERRED +
+                          ", pool may be recovering)");
             }
         }
         if (!scheduleRetest(false)) {

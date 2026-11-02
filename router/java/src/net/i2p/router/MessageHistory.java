@@ -321,7 +321,7 @@ public class MessageHistory {
      */
     public void droppedTunnelMessage(TunnelId id, long msgId, Date expiration, Hash from) {
         if (!_doLog) return;
-        addEntry(getPrefix() + "dropped message " + msgId + " for UNKNOWN tunnel [" + id.getTunnelId() + "] from [" + getName(from) + "]" + " expiring on " + getTime(expiration.getTime()));
+        addEntry(getPrefix() + "dropped message " + msgId + " for unknown tunnel [" + id.getTunnelId() + "] from [" + getName(from) + "] expires " + getTime(expiration.getTime()));
     }
 
     /**

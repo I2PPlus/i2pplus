@@ -855,7 +855,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         if (_context.clientManager().isLocal(destination)) {
             // race with buildTunnels() on restart of a client
             if (_log.shouldWarn()) {
-                _log.warn("Not removing tunnel pool for [" + destination.toShortBase32() + "] -> Still registered with ClientManager");
+                _log.warn("Not removing the pool for [" + destination.toShortBase32() + "] -> Client still registered");
             }
             return;
         }
@@ -877,8 +877,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             int tunnelCount = 0;
             if (inbound != null) tunnelCount += inbound.size();
             if (outbound != null) tunnelCount += outbound.size();
-            _log.info("Delayed pool removal scheduled for [" + destination.toShortBase32() +
-                      "] - " + tunnelCount + " tunnels will expire naturally");
+            _log.info("Delayed pool removal for [" + destination.toShortBase32() +
+                      "] -> " + tunnelCount + " tunnels expire naturally");
         }
     }
 
@@ -955,7 +955,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                 // Check if client re-registered during delay
                 if (_context.clientManager().isLocal(_destination)) {
                     if (_log.shouldInfo()) {
-                        _log.info("Cancelling delayed pool removal - client re-registered: [" +
+                        _log.info("Cancelling delayed pool removal -> Client re-registered [" +
                                   _destination.toShortBase32() + "]");
                     }
                     return;

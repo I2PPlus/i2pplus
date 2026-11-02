@@ -264,7 +264,8 @@ class IdleTunnelMonitor extends SimpleTimer2.TimedEvent {
             _context.statManager().addRateData("tunnel.idleTunnelDropped", 1);
         } catch (Exception e) {
             if (_log.shouldWarn()) {
-                _log.warn("Failed to idle drop tunnel [" + tunnel + "] -> " + e.getMessage());
+                _log.warn("Failed to idle drop transit tunnel [" + tunnel.getReceiveTunnelId() +
+                          "] -> " + e.getMessage());
             }
         }
     }

@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.HashSet;
@@ -4257,11 +4258,12 @@ public class TunnelPool {
         long now = _context.clock().now();
         if (_log.shouldInfo() && shouldLogSendFailure(now, _lastSendFailureLogTime)) {
             _lastSendFailureLogTime = now;
-            // The pool names the destination, so the tunnel key and its hops go
-            // on the first line: a continuation line that repeats the
-            // destination the pool already printed is a wasted line.
-            _log.info(toString() + " " + tunnelLabel() +
-                      " -> Data-phase failure (status: " + status +
+            // The pool prefix is the destination, so the subject of the verb
+            // after the arrow is the tunnel: naming the destination a second
+            // time in the prefix is a wasted line, and for an unnamed
+            // destination it is the same string twice.
+            _log.info(toString() + " -> Data-phase failure on the " +
+                      tunnelDirection() + "tunnel (status: " + status +
                       (soft ? ", soft" : "") +
                       "), failures now " + failures +
                       describeHops(cfg));
@@ -4270,11 +4272,10 @@ public class TunnelPool {
         if (overBar) {
             if (_log.shouldWarn() && shouldLogSendFailure(now, _lastCondemnWarnTime)) {
                 _lastCondemnWarnTime = now;
-                _log.warn(toString() + " " + tunnelLabel() +
-                          " -> Marking tunnel failing after " +
+                _log.warn(toString() + " -> Marked " + tunnelDirection() + "tunnel failing after " +
                           failures +
-                          (soft ? " soft" : " cumulative") +
-                          " failures (data-phase + test)");
+                          (soft ? " soft failures"
+                                : " cumulative failures (data-phase + test)"));
             }
             failWithCount(cfg, failures);
             tellProfileFailed(cfg);
@@ -4320,10 +4321,11 @@ public class TunnelPool {
     }
 
     /**
-     * Identify a tunnel by its owning destination's base32 prefix. The pool
-     * prefix of the calling messages already carries the nickname, and the
-     * full config toString would repeat it and restate a failure count the
-     * message has just incremented.
+     * Identify a tunnel by its owning destination's base32 prefix, for the
+     * messages that have no pool prefix to carry the identity. Where a message
+     * starts with {@link #toString()} the pool prefix is the destination, and
+     * the subject after the arrow names the tunnel - the label there would
+     * repeat it, and for an unnamed destination repeat it verbatim.
      *
      * @return "Tunnel [base32-8]" for client pools, "Tunnel" for exploratory
      * @since 0.9.71+
@@ -4522,9 +4524,8 @@ public class TunnelPool {
             cfg.setTestFailing();
         }
         if (_log.shouldWarn()) {
-            _log.warn(tunnelLabel() + " -> Marked " +
-                      (cfg.isInbound() ? "inbound " : "outbound ") +
-                      (isDead ? "FAILED" : "FAILING") + ", retained until expiry"
+            _log.warn(toString() + " -> Marked " + tunnelDirection() + "tunnel " +
+                      (isDead ? "failed" : "failing") + ", retained until expiry"
                       + "\n* Failures: " + failures + " * Remaining tunnels: " + size());
         }
         // Retention is a liveness signal: capacity must recover immediately,
@@ -6412,9 +6413,9 @@ public class TunnelPool {
                 long age = now - lastTraffic;
                 cfg.clearTestFailures();
                 if (_log.shouldWarn()) {
-                    _log.warn(toString() + " -> Marked tunnel GOOD on traffic" +
-                              "\n* " + cfg + " -> " + ts + " promoted, marked GOOD" +
-                              "\n* Verified bytes: " + cfg.getVerifiedBytesTransferred() +
+                    _log.warn(toString() + " -> Marked " + tunnelDirection() + "tunnel good on traffic" +
+                              "\n* Promoted from " + ts.name().toLowerCase(Locale.ROOT) +
+                              " * Verified bytes: " + cfg.getVerifiedBytesTransferred() +
                               " * last real traffic: " + age + "ms ago");
                 }
             }
@@ -8317,16 +8318,22 @@ public class TunnelPool {
 
     /**
      * Description of the pool and its settings.
+     * <p>
+     * A client pool is named by its type and its destination: the direction of
+     * a client pool is the direction of its tunnels, so the messages that act
+     * on a tunnel say it there ({@link #tunnelDirection()}) and the prefix does not
+     * repeat it. An exploratory pool has no destination to name, so its
+     * direction is the only thing that tells its two pools apart, and it stays
+     * in the prefix.
      */
     @Override
     public String toString() {
         if (_settings.isExploratory()) {
-            if (_settings.isInbound()) {return "Inbound Exploratory Pool";}
-            else {return "Outbound Exploratory Pool";}
+            if (_settings.isInbound()) {return "Inbound exploratory pool";}
+            else {return "Outbound exploratory pool";}
         } else {
             StringBuilder rv = new StringBuilder(32);
-            if (_settings.isInbound()) {rv.append("Inbound Client Pool ");}
-            else {rv.append("Outbound Client Pool ");}
+            rv.append("Client pool ");
             if (_settings.getDestinationNickname() != null) {
                 rv.append("[").append(_settings.getDestinationNickname()).append("]");
             } else {
@@ -8335,6 +8342,18 @@ public class TunnelPool {
             }
             return rv.toString();
         }
+    }
+
+    /**
+     * The direction of this pool's tunnels, lower case, for the verb phrase of
+     * a message whose prefix is {@link #toString()}. Empty for an exploratory
+     * pool, whose prefix already carries it.
+     *
+     * @return "inbound " or "outbound ", or "" for an exploratory pool
+     * @since 0.9.72+
+     */
+    String tunnelDirection() {
+        return _settings.isExploratory() ? "" : (_settings.isInbound() ? "inbound " : "outbound ");
     }
 
     /**
