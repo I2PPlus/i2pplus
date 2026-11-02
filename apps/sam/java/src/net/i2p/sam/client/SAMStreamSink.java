@@ -306,7 +306,7 @@ public class SAMStreamSink {
          * @param mode the receive mode, DG or RAWHDR
          */
         public DGRcvr(int mode) {
-            super("SAM-DGRX");
+            super("SAMDRX");
             _mode = mode;
         }
 
@@ -375,7 +375,7 @@ public class SAMStreamSink {
          * @param opts SSL connection options, used only when isSSL is true
          */
         public FwdRcvr(boolean isSSL, Properties opts) {
-            super("SAM-FwdRX");
+            super("SAMFwdRX");
             _isSSL = isSSL;
             _opts = opts;
         }
@@ -454,7 +454,7 @@ public class SAMStreamSink {
          * @param out the bridge output stream to write PING commands to
          */
         public Pinger(OutputStream out) {
-            super("SAM-SinkPing");
+            super("SAMSnkPing");
             setDaemon(true);
             _out = out;
         }

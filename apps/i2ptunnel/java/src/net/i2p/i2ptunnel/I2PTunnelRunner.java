@@ -31,6 +31,7 @@ import net.i2p.util.I2PAppThread;
 import net.i2p.util.InternalSocket;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
+import net.i2p.util.ThreadNames;
 
 /**
  * Thread that forwards traffic between an I2PSocket and a TCP Socket.
@@ -1704,7 +1705,8 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
                 }
             }
         };
-        Thread t = new Thread(leg, "EmptyRace-" + label);
+        // threadnames: suffix=2 - the labels are A, B, E0, E1
+        Thread t = new Thread(leg, "EmptyRace" + label);
         t.setDaemon(true);
         t.start();
     }
@@ -2363,7 +2365,7 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
                         return;
                     }
                 } else {
-                    Thread t = new Thread(toI2P, "TunFwdI2P." + _runnerId);
+                    Thread t = new Thread(toI2P, "TunFwdI2P" + ThreadNames.idx(_runnerId));
                     t.setDaemon(true);
                     t.start();
                 }

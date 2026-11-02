@@ -31,6 +31,7 @@ import net.i2p.util.Log;
 import net.i2p.util.ObjectCounterUnsafe;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.SimpleTimer2;
+import net.i2p.util.ThreadNames;
 
 /**
  * Manage all the exploratory and client tunnel pools.
@@ -1002,7 +1003,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             t.start();
             _handler.init();
             for (int i = 1; i <= _numHandlerThreads; i++) {
-                I2PThread hThread = new I2PThread(_handler, "BldHdlr." + _handlerThreadId.getAndIncrement(), true);
+                I2PThread hThread = new I2PThread(_handler, "BldHdlr" + ThreadNames.idx(_handlerThreadId.getAndIncrement()), true);
                 hThread.start();
                 _handlerThreads.add(hThread);
             }
@@ -1273,7 +1274,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         if (target > current) {
             for (int i = current; i < target; i++) {
                 I2PThread hThread = new I2PThread(_handler,
-                    "BldHdlr." + _handlerThreadId.getAndIncrement(), true);
+                    "BldHdlr" + ThreadNames.idx(_handlerThreadId.getAndIncrement()), true);
                 hThread.start();
                 _handlerThreads.add(hThread);
             }

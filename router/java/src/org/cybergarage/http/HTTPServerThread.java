@@ -28,7 +28,7 @@ public class HTTPServerThread extends Thread {
      * @param sock the client socket
      */
     public HTTPServerThread(HTTPServer httpServer, Socket sock) {
-        super("Cyber.HTTPServerThread");
+        super("CyberHTTP");
         this.httpServer = httpServer;
         this.sock = sock;
     }

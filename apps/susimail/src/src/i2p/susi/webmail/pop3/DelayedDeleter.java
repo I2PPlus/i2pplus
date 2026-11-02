@@ -114,7 +114,7 @@ class DelayedDeleter {
     /** Deletes the waiting messages. */
     private class Deleter extends I2PAppThread {
         /** Thread that performs the deletion. */
-        public Deleter() {super("Susimail-Delete");}
+        public Deleter() {super("MailDelete");}
             @Override
             public void run() {
             try {

@@ -41,7 +41,7 @@ class InternalSocketRunner extends I2PAppThread {
      * @param label service name shown for this port on the debug page
      */
     InternalSocketRunner(I2PTunnelClientBase client, String label) {
-        super("Internal:" + client.getLocalPort());
+        super("IntSkt" + client.getLocalPort());
         setDaemon(true);
         this.client = client;
         this.port = client.getLocalPort();

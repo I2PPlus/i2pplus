@@ -180,11 +180,12 @@ public class RrdSyncThreadPool {
     /** Shutdown hook thread */
     private class ShutdownThread extends Thread {
         /**
-         * Create the shutdown hook, naming it after the pool it tears down.
+         * Create the shutdown hook, named for the pool it tears down.
          */
         public ShutdownThread() {
-            // include the RrdSyncThreadPool's toString in the thread name
-            super("RRD4J Sync-ThreadPool-Shutdown for " + RrdSyncThreadPool.this);
+            // the pool's toString is a 60-character object name, and a thread
+            // name that long is cut off in every tool that shows it
+            super("RRD4JShutdn");
         }
 
         /**

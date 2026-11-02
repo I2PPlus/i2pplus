@@ -462,7 +462,7 @@ public class SAMStreamSend {
         Sender sender = new Sender(samOut, eventHandler, mode);
         boolean ok = sender.openConnection();
         if (ok) {
-            I2PAppThread t = new I2PAppThread(sender, "SAM-Send");
+            I2PAppThread t = new I2PAppThread(sender, "SAMSend");
             t.start();
         } else {
             throw new IOException("Sender failed to connect");

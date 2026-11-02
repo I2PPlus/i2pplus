@@ -169,7 +169,7 @@ public class CountryLookup {
          * Creates a daemon thread named GeoIP Lookup.
          */
         public LookupThread() {
-            super("GeoIP Lookup");
+            super("GeoIPLookup");
             setDaemon(true);
         }
 

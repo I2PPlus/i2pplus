@@ -11,6 +11,7 @@ import net.i2p.client.I2PSession;
 import net.i2p.data.DataHelper;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
+import net.i2p.util.ThreadNames;
 
 /**
  * Read from a socket, producing events for any SAM message read.
@@ -50,7 +51,7 @@ public class SAMReader {
         if (_live)
             throw new IllegalStateException();
         _live = true;
-        I2PAppThread t = new I2PAppThread(new Runner(), "SAM-RX." + _count.incrementAndGet());
+        I2PAppThread t = new I2PAppThread(new Runner(), "SAMRX" + ThreadNames.seq(_count.incrementAndGet()));
         t.start();
         _thread = t;
     }

@@ -125,7 +125,7 @@ class BackgroundChecker {
     /** Thread fetching the new messages of a check. */
     private class Getter extends I2PAppThread {
         /** Thread that runs the mail check. */
-        public Getter() {super("Susimail-Getter");}
+        public Getter() {super("MailGetter");}
             @Override
             public void run() {
             try {

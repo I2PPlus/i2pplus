@@ -104,7 +104,7 @@ public class RouterManagerHandler implements RequestHandler {
 
         if (inParams.containsKey("Shutdown")) {
             outParams.put("Shutdown", null);
-            (new Thread() {
+            (new Thread("I2PCtrlShut") {
                 // so the response is sent before the router goes down
                 @Override
                 public void run() {
@@ -120,7 +120,7 @@ public class RouterManagerHandler implements RequestHandler {
 
         if (inParams.containsKey("Restart")) {
             outParams.put("Restart", null);
-            (new Thread() {
+            (new Thread("I2PCtrlRstr") {
                 // so the response is sent before the router goes down
                 @Override
                 public void run() {
@@ -136,7 +136,7 @@ public class RouterManagerHandler implements RequestHandler {
 
         if (inParams.containsKey("ShutdownGraceful")) {
             outParams.put("ShutdownGraceful", null);
-            (new Thread() {
+            (new Thread("I2PCtrlGrace") {
                 // so the response is sent before the router goes down
                 @Override
                 public void run() {
@@ -152,7 +152,7 @@ public class RouterManagerHandler implements RequestHandler {
 
         if (inParams.containsKey("RestartGraceful")) {
             outParams.put("RestartGraceful", null);
-            (new Thread() {
+            (new Thread("I2PCtrlGRst") {
                 // so the response is sent before the router goes down
                 @Override
                 public void run() {
@@ -168,7 +168,7 @@ public class RouterManagerHandler implements RequestHandler {
 
         if (inParams.containsKey("Reseed")) {
             outParams.put("Reseed", null);
-            (new Thread() {
+            (new Thread("I2PCtrlResd") {
                 // started, not joined, so the reply is not delayed by the reseed
                 @Override
                 public void run() {
@@ -180,7 +180,7 @@ public class RouterManagerHandler implements RequestHandler {
         }
 
         if (inParams.containsKey("FindUpdates")) {
-            Thread t = new Thread() {
+            Thread t = new Thread("I2PCtrlFind") {
                 // joined below, so the result is in outParams before we reply
                 @Override
                 public void run() {
@@ -206,7 +206,7 @@ public class RouterManagerHandler implements RequestHandler {
         }
 
         if (inParams.containsKey("Update")) {
-            Thread t = new Thread() {
+            Thread t = new Thread("I2PCtrlUpd") {
                 // joined below, so the result is in outParams before we reply
                 @Override
                 public void run() {

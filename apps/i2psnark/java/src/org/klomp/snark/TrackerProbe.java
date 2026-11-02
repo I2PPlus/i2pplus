@@ -122,6 +122,13 @@ class TrackerProbe {
         _inFlight = ConcurrentHashMap.newKeySet();
         _probes = new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS,
                                          new LinkedBlockingQueue<Runnable>(MAX_IN_FLIGHT),
+                                         r -> {
+                                             // named and daemon, so the thread reads as a
+                                             // tracker probe in the log and cannot delay exit
+                                             Thread t = new Thread(r, "SnarkProbe");
+                                             t.setDaemon(true);
+                                             return t;
+                                         },
                                          new ThreadPoolExecutor.DiscardPolicy());
         load(config);
     }

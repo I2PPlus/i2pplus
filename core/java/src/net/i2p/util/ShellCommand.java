@@ -65,7 +65,7 @@ public class ShellCommand {
          * @param res holder for the exit status, written when the thread runs
          */
         CommandThread(Object shellCommand, String[] envp, Result res) {
-            super("ShellCommand Executor");
+            super("ShellExec");
             this.shellCommand = shellCommand;
             this.envp = envp;
             this.result = res;
@@ -96,7 +96,7 @@ public class ShellCommand {
          * @param inputStream the stream to consume
          */
         public StreamConsumer(InputStream inputStream) {
-            super("ShellCommand Consumer");
+            super("ShellConsm");
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
             this.bufferedReader = new BufferedReader(inputStreamReader);
         }

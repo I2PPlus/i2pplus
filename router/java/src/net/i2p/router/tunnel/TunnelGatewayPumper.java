@@ -15,6 +15,7 @@ import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.SimpleTimer2;
+import net.i2p.util.ThreadNames;
 
 /**
  * TunnelGatewayPumper runs a pool of threads that process PumpedTunnelGateway instances which need
@@ -228,7 +229,7 @@ class TunnelGatewayPumper implements Runnable {
         _instance = this;
 
         for (int i = 0; i < _pumpers; i++) {
-            Thread t = new I2PThread(this, "TunGWPump." + _threadNum.incrementAndGet(), true);
+            Thread t = new I2PThread(this, "TunGWPmp" + ThreadNames.idx(_threadNum.incrementAndGet()), true);
             t.setPriority(Thread.MAX_PRIORITY);
             _threads.add(t);
             t.start();
@@ -261,7 +262,7 @@ class TunnelGatewayPumper implements Runnable {
         if (newCount == current) return;
 
         while (_threads.size() < newCount) {
-            Thread t = new I2PThread(this, "TunGWPump." + _threadNum.incrementAndGet(), true);
+            Thread t = new I2PThread(this, "TunGWPmp" + ThreadNames.idx(_threadNum.incrementAndGet()), true);
             t.setPriority(Thread.MAX_PRIORITY);
             _threads.add(t);
             t.start();

@@ -24,6 +24,7 @@ import net.i2p.I2PAppContext;
 import net.i2p.data.ByteArray;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
+import net.i2p.util.ThreadNames;
 
 /**
  * Manages outgoing BitTorrent protocol messages to a peer.<br>
@@ -83,7 +84,7 @@ class PeerConnectionOut implements Runnable {
                     r -> {
                         Thread t =
                                 new I2PAppThread(
-                                        r, "SnarkPrefetch." + _prefetchThreadId.incrementAndGet());
+                                        r, "SnarkPrf" + ThreadNames.seq(_prefetchThreadId.incrementAndGet()));
                         t.setDaemon(true);
                         return t;
                     },
@@ -156,7 +157,7 @@ class PeerConnectionOut implements Runnable {
      * Start the sender thread.
      */
     public void startup() {
-        thread = new I2PAppThread(this, "SnarkSend." + _id);
+        thread = new I2PAppThread(this, "SnarkSnd" + ThreadNames.seq(_id));
         thread.start();
     }
 

@@ -31,6 +31,7 @@ import net.i2p.data.Base64;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
+import net.i2p.util.ThreadNames;
 
 /**
  * Class able to handle a SAM version 1 client connections.
@@ -141,7 +142,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
         Properties props;
         final StringBuilder buf = new StringBuilder(128);
 
-        this.thread.setName("SAM-v1." + _id);
+        this.thread.setName("SAMv1" + ThreadNames.seq(_id));
         if (_log.shouldDebug())
             _log.debug("SAMv1Handler started");
 

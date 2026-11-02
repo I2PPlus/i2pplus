@@ -121,7 +121,7 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
      */
     public UpdateRunner(RouterContext ctx, ConsoleUpdateManager mgr, UpdateType type,
                         UpdateMethod method, List<URI> uris, String currentVersion) {
-        super("Update Runner");
+        super("UpdateRunner");
         setDaemon(true);
         _context = ctx;
         _log = ctx.logManager().getLog(getClass());

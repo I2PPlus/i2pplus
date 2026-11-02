@@ -26,6 +26,7 @@ import net.i2p.util.PasswordManager;
 import net.i2p.util.SecureDirectory;
 import net.i2p.util.SecureFile;
 import net.i2p.util.SystemVersion;
+import net.i2p.util.ThreadNames;
 
 /**
  * Manages persistent on-disk email cache with custom compressed format.
@@ -165,7 +166,7 @@ class PersistentMailCache {
         int tcnt = Math.max(1, Math.min(sz / 4, Math.min(SystemVersion.getCores(), 16)));
         List<Thread> threads = new ArrayList<>(tcnt);
         for (int i = 0; i < tcnt; i++) {
-            Thread t = new I2PAppThread(new Loader(fq, rv, _isDrafts), "MailLoad." + i);
+            Thread t = new I2PAppThread(new Loader(fq, rv, _isDrafts), "MailLd" + ThreadNames.idx(i));
             t.start();
             threads.add(t);
         }

@@ -106,8 +106,8 @@ public class ServerExecutorOverflowTest {
             done.await();
             Thread t = (Thread) holder[0];
             assertTrue("server handler threads must be daemon", t.isDaemon());
-            assertTrue("server handler thread should be named TunnelSrv.*: " + t.getName(),
-                       t.getName().startsWith("TunnelSrv."));
+            assertTrue("server handler thread should be named TunSvEx.*: " + t.getName(),
+                       t.getName().startsWith("TunSvEx"));
         } finally {
             exec.shutdownNow();
         }
@@ -117,7 +117,7 @@ public class ServerExecutorOverflowTest {
      * Idle core threads must expire after the keepalive period, not live
      * forever.  Without {@code allowCoreThreadTimeOut(true)}, the
      * core==max pool with LinkedBlockingQueue never reclaims threads,
-     * causing unbounded growth (1200+ TunnelSrv threads under load).
+     * causing unbounded growth (1200+ TunSvEx threads under load).
      *
      * @throws InterruptedException if the poll for reclaimed threads is interrupted
      */

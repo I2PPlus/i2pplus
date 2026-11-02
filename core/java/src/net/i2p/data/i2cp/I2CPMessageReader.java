@@ -12,6 +12,7 @@ package net.i2p.data.i2cp;
 import net.i2p.I2PAppContext;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
+import net.i2p.util.ThreadNames;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -59,7 +60,7 @@ public class I2CPMessageReader {
         _reader = new I2CPMessageReaderRunner();
         _readerThread = new I2PThread(_reader);
         _readerThread.setDaemon(true);
-        _readerThread.setName("I2CPRead." + __readerId.incrementAndGet());
+        _readerThread.setName("I2CPRead" + ThreadNames.seq(__readerId.incrementAndGet()));
     }
 
     /**

@@ -6,6 +6,7 @@ import net.i2p.data.i2cp.I2CPMessageException;
 import net.i2p.internal.PoisonI2CPMessage;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.SystemVersion;
+import net.i2p.util.ThreadNames;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -55,7 +56,7 @@ class ClientWriterRunner implements Runnable {
      * @since 0.9.11
      */
     public void startWriting() {
-        Thread t = new I2PAppThread(this, "I2CPWrtr." + __Id.incrementAndGet(), true);
+        Thread t = new I2PAppThread(this, "I2CPWr" + ThreadNames.seq(__Id.incrementAndGet()), true);
         t.start();
     }
 

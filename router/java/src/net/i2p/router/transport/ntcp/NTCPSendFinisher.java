@@ -12,6 +12,7 @@ import net.i2p.router.OutNetMessage;
 import net.i2p.router.Tuner;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
+import net.i2p.util.ThreadNames;
 
 /**
  * Handles asynchronous post-send processing of OutNetMessage using a
@@ -236,7 +237,7 @@ class NTCPSendFinisher {
         private CustomThreadFactory() {}
         public Thread newThread(Runnable r) {
             Thread rv = Executors.defaultThreadFactory().newThread(r);
-            rv.setName("NTCPFinis." + _count.incrementAndGet());
+            rv.setName("NTCPFin" + ThreadNames.seq(_count.incrementAndGet()));
             rv.setDaemon(true);
             return rv;
         }

@@ -35,7 +35,7 @@ public class UDPSource implements Source, Runnable {
             throw new RuntimeException("failed to listen...", e);
         }
         this.port = port;
-        this.thread = new I2PAppThread(this);
+        this.thread = new I2PAppThread(this, "UDPSource");
     }
 
     /**
@@ -46,7 +46,7 @@ public class UDPSource implements Source, Runnable {
     public UDPSource(DatagramSocket sock) {
         this.sock = sock;
         port = sock.getLocalPort();
-        this.thread = new I2PAppThread(this);
+        this.thread = new I2PAppThread(this, "UDPSource");
     }
 
     /**

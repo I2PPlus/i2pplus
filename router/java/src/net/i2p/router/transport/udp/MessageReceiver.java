@@ -15,6 +15,7 @@ import net.i2p.router.util.CoDelBlockingQueue;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
+import net.i2p.util.ThreadNames;
 import net.i2p.router.util.CoDelPriorityBlockingQueue;
 
 /**
@@ -140,7 +141,7 @@ class MessageReceiver {
     private void startRunner() {
         Runner r = new Runner();
         _activeRunners.incrementAndGet();
-        I2PThread t = new I2PThread(r, "UDPMsgRX." + _threadNum.incrementAndGet(), true);
+        I2PThread t = new I2PThread(r, "UDPMsgRX" + ThreadNames.idx(_threadNum.incrementAndGet()), true);
         t.start();
     }
 
@@ -191,7 +192,7 @@ class MessageReceiver {
         while (current < target) {
             if (_activeRunners.compareAndSet(current, current + 1)) {
                 Runner r = new Runner();
-                I2PThread t = new I2PThread(r, "UDPMsgRX." + _threadNum.incrementAndGet(), true);
+                I2PThread t = new I2PThread(r, "UDPMsgRX" + ThreadNames.idx(_threadNum.incrementAndGet()), true);
                 t.start();
                 _log.info("Added MessageReceiver thread, now " + (current + 1) + "/" + target);
                 current = _activeRunners.get();

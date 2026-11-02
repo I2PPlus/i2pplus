@@ -29,6 +29,7 @@ import net.i2p.util.Addresses;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.Translate;
+import net.i2p.util.ThreadNames;
 import org.cybergarage.http.HTTPServer;
 import org.cybergarage.http.HTTPServerList;
 import org.cybergarage.upnp.Action;
@@ -2031,7 +2032,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
                 _log.info("Starting thread to renew subscriptions");
         }
         Thread t = new I2PThread(new RegisterPortsThread(portsToForwardNow));
-        t.setName("UPnPOpnr." + __id.incrementAndGet());
+        t.setName("UPnPOpnr" + ThreadNames.seq(__id.incrementAndGet()));
         t.setDaemon(true);
         t.start();
     }
@@ -2099,7 +2100,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
         if (_log.shouldInfo())
             _log.info("Starting thread to un-forward " + portsToForwardNow.size() + " ports");
             Thread t = new I2PThread(new UnregisterPortsThread(portsToForwardNow));
-        t.setName("UPnPClsr." + __id.incrementAndGet());
+        t.setName("UPnPClsr" + ThreadNames.seq(__id.incrementAndGet()));
         t.setDaemon(true);
         t.start();
     }

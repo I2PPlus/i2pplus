@@ -36,6 +36,7 @@ import net.i2p.util.OrderedProperties;
 import net.i2p.util.RandomSource;
 import net.i2p.util.SecureDirectory;
 import net.i2p.util.SystemVersion;
+import net.i2p.util.ThreadNames;
 
 /**
  * Coordinates tunnel groups within the JVM, managing configuration persistence.
@@ -2502,7 +2503,7 @@ public class TunnelControllerGroup implements ClientApp {
             new LinkedBlockingQueue<>(RUNNER_BURST_QUEUE),
             r -> {
                 Thread t = Executors.defaultThreadFactory().newThread(r);
-                t.setName("TunnelCln." + index.incrementAndGet());
+                t.setName("TunClEx" + ThreadNames.seq(index.incrementAndGet()));
                 t.setDaemon(true);
                 return t;
             },
@@ -2851,7 +2852,7 @@ public class TunnelControllerGroup implements ClientApp {
             new LinkedBlockingQueue<>(serverBacklogQueueCapacity),
             r -> {
                 Thread t = new Thread(r);
-                t.setName("TunnelSrv." + index.incrementAndGet());
+                t.setName("TunSvEx" + ThreadNames.seq(index.incrementAndGet()));
                 t.setDaemon(true);
                 return t;
             },
@@ -2982,7 +2983,7 @@ public class TunnelControllerGroup implements ClientApp {
         @Override
         public Thread newThread(Runnable r) {
             Thread rv = Executors.defaultThreadFactory().newThread(r);
-            rv.setName("TunnelCln." + _executorThreadCount.incrementAndGet());
+            rv.setName("TunClEx" + ThreadNames.seq(_executorThreadCount.incrementAndGet()));
             rv.setDaemon(true);
             return rv;
         }

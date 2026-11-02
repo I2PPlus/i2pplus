@@ -30,6 +30,7 @@ import net.i2p.data.Destination;
 import net.i2p.util.ByteCache;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
+import net.i2p.util.ThreadNames;
 
 /**
  * SAMv2 STREAM session class.
@@ -106,7 +107,7 @@ class SAMv2StreamSession extends SAMStreamSession {
 
         // non-blocking connection (SAMv2)
         StreamConnector connector = new StreamConnector(id, d, opts);
-        I2PAppThread connectThread = new I2PAppThread(connector, "SAMStrmC." + id);
+        I2PAppThread connectThread = new I2PAppThread(connector, "SAMStrm" + ThreadNames.seq(id));
         connectThread.start();
         return true;
     }

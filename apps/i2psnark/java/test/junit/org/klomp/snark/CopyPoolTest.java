@@ -155,8 +155,8 @@ public class CopyPoolTest {
         Storage.CopyThreadFactory factory = new Storage.CopyThreadFactory();
         Thread first = factory.newThread(NOOP);
         Thread second = factory.newThread(NOOP);
-        assertEquals("SnarkStorageCopy-1", first.getName());
-        assertEquals("SnarkStorageCopy-2", second.getName());
+        assertEquals("SnarkCopy.01", first.getName());
+        assertEquals("SnarkCopy.02", second.getName());
         assertTrue(first.isDaemon());
         assertTrue(second.isDaemon());
     }
@@ -179,7 +179,7 @@ public class CopyPoolTest {
         });
         f.get(20, TimeUnit.SECONDS);
         assertEquals(1, ran.get());
-        assertEquals("SnarkStorageCopy-1", names.get(0));
+        assertEquals("SnarkCopy.01", names.get(0));
         pool.shutdownNow();
     }
 }

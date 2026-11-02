@@ -31,6 +31,7 @@ import net.i2p.util.Clock;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
+import net.i2p.util.ThreadNames;
 
 /**
  * Prioritizes and executes router jobs with preference for earlier scheduled tasks.
@@ -840,7 +841,7 @@ public class JobQueue {
             for (int i = _queueRunners.size(); i < numThreads; i++) {
                 JobQueueRunner runner = new JobQueueRunner(_context, i);
                 _queueRunners.put(Integer.valueOf(i), runner);
-                runner.setName("JobQueue." + _runnerId.incrementAndGet());
+                runner.setName("JobQueue" + ThreadNames.seq(_runnerId.incrementAndGet()));
                 runner.setPriority(Thread.MAX_PRIORITY);
                 runner.start();
                 countRunnerCreated();
@@ -960,7 +961,7 @@ public class JobQueue {
             int key = startKey + i;
             JobQueueRunner runner = new JobQueueRunner(_context, key);
             _queueRunners.put(Integer.valueOf(key), runner);
-            runner.setName("JobQueue." + _runnerId.incrementAndGet());
+            runner.setName("JobQueue" + ThreadNames.seq(_runnerId.incrementAndGet()));
             if (_log.shouldDebug())
                 _log.debug("Starting a runner -> Key: " + key + " * Total runners: " + _queueRunners.size());
             runner.start();

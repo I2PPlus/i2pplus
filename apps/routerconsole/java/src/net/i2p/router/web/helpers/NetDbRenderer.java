@@ -31,14 +31,16 @@ import java.util.function.Function;
 import java.util.regex.Pattern;
 import net.i2p.util.LHMCache;
 import net.i2p.util.Log;
+import net.i2p.util.ThreadNames;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -142,8 +144,27 @@ class NetDbRenderer {
     private final ProfileOrganizer _organizer;
     /** Router lookups run per batch. */
     private final int BATCH_SIZE = SystemVersion.isSlow() ? 8 : Math.max(SystemVersion.getCores() - 2, 16);
-    /** Bound on a single parallel render task so a stalled common pool cannot hang the netdb page. */
+    /** Bound on a single parallel render task so a stalled render thread cannot hang the netdb page. */
     private static final long RENDER_TASK_TIMEOUT = 30 * 1000L;
+    /** Sequence for the render pool thread names. */
+    private static final AtomicInteger _renderSeq = new AtomicInteger();
+    /**
+     * The threads a parallel netdb render runs on. Its own pool, not
+     * ForkJoinPool.commonPool(): the common pool is shared with every other
+     * parallel task in the JVM, its threads render as
+     * ForkJoinPool.commonPool-worker-N in the log, and a page render that
+     * fills it stalls unrelated work. Bounded at four so a 32-core box does
+     * not pay 32 thread stacks to render one page, with CallerRunsPolicy so a
+     * saturated pool runs the task on the requesting thread instead of queueing it.
+     */
+    private static final ThreadPoolExecutor RENDER_POOL = new ThreadPoolExecutor(
+        0, 4, 60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(),
+        r -> {
+            Thread t = new Thread(r, "NetDbRdr" + ThreadNames.seq(_renderSeq.incrementAndGet()));
+            t.setDaemon(true);
+            return t;
+        },
+        new ThreadPoolExecutor.CallerRunsPolicy());
     /** Memo for the "{0} ago" renders of {@link #renderRouterInfo}, one per renderer. */
     private final AgoMemo _agoMemo = new AgoMemo();
     /** Expensive translator behind {@link #agoMemo(String)}, bound once so the memo never sees a fresh lambda. */
@@ -2064,7 +2085,7 @@ class NetDbRenderer {
             return sb.toString();
         }
 
-        ExecutorService executor = ForkJoinPool.commonPool();
+        ExecutorService executor = RENDER_POOL;
         int chunkSize = BATCH_SIZE;
         List<RouterInfo> list = new ArrayList<>(routerInfos);
         StringBuilder fullHtml = new StringBuilder();

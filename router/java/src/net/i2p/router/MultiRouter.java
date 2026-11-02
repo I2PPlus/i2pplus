@@ -95,7 +95,7 @@ public class MultiRouter {
 
         out.println("RouterConsole for Router 0 is listening on: 127.0.0.1:" + (BASE_PORT-1));
 
-        Runtime.getRuntime().addShutdownHook(new Thread() {
+        Runtime.getRuntime().addShutdownHook(new Thread("MRShutdown") {
             @Override
             public void run() {
                 out.println("Shutting down in a few moments..");
@@ -123,7 +123,7 @@ public class MultiRouter {
             r.getContext().clock().setOffset(offset, true);
 
             /* Start the routers in separate threads since it takes some time. */
-            (new Thread() {
+            (new Thread("Router" + i) {
                   @Override
                   public void run() {
                       r.runRouter();

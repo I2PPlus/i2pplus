@@ -537,7 +537,7 @@ public class RateSampleDeliveryTest {
 
         assertTrue(shutdownReturned.get());
         assertFalse("delivery thread must be gone once shutdown returns",
-                    isThreadAlive("StatSampleDelivery"));
+                    isThreadAlive("StatSample"));
     }
 
     private static boolean isThreadAlive(String name) {
@@ -610,7 +610,7 @@ public void burstOfNullSubmissionsDoesNotKillTheConsumer() throws Exception {
         try {
             Thread found = null;
             for (Thread t : Thread.getAllStackTraces().keySet()) {
-                if ("StatSampleDelivery".equals(t.getName()) && t.isAlive()) {
+                if ("StatSample".equals(t.getName()) && t.isAlive()) {
                     found = t;
                     break;
                 }

@@ -53,6 +53,7 @@ import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 import net.i2p.util.SecureFile;
 import net.i2p.util.SystemVersion;
+import net.i2p.util.ThreadNames;
 
 /**
  * Storage manages torrent data files on disk for I2PSnark.
@@ -2328,7 +2329,7 @@ public class Storage implements Closeable {
                                         }
                                     }
                                 },
-                                "SnarkVerify-" + _base.getName(),
+                                "SnarkVerify",
                                 true);
                 workers[t].start();
             }
@@ -2979,7 +2980,7 @@ public class Storage implements Closeable {
          */
         @Override
         public Thread newThread(Runnable r) {
-            return new I2PAppThread(r, "SnarkStorageCopy-" + _seq.incrementAndGet(), true);
+            return new I2PAppThread(r, "SnarkCopy" + ThreadNames.seq(_seq.incrementAndGet()), true);
         }
     }
 

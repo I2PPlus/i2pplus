@@ -42,6 +42,7 @@ import net.i2p.data.Destination;
 import net.i2p.util.ByteCache;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
+import net.i2p.util.ThreadNames;
 
 /**
  * SAM STREAM session — BOTH/CREATE/RECEIVE modes over an I2PSocketManager.
@@ -169,7 +170,7 @@ class SAMStreamSession implements SAMMessageSess {
             allprops.setProperty("i2cp.dontPublishLeaseSet", "true");
         String name = allprops.getProperty("inbound.nickname");
         if (name == null || name.trim().isEmpty()) {
-            name = this instanceof MasterSession ? "SAM-MuxClient" : "SAM-TCPClient";
+            name = this instanceof MasterSession ? "SAMMuxClnt" : "SAMTCPClnt";
             allprops.setProperty("inbound.nickname", name);
         }
         String name2 = allprops.getProperty("outbound.nickname");
@@ -237,7 +238,7 @@ class SAMStreamSession implements SAMMessageSess {
      */
     public void start() {
         if (server != null) {
-            Thread t = new I2PAppThread(server, "SAM-StrmSrv");
+            Thread t = new I2PAppThread(server, "SAMStrmSrv");
             t.start();
         }
     }
@@ -466,9 +467,9 @@ class SAMStreamSession implements SAMMessageSess {
             sendersMap.put(Integer.valueOf(id), sender);
         }
 
-        I2PAppThread t = new I2PAppThread(reader, "SAM-SRX." + id);
+        I2PAppThread t = new I2PAppThread(reader, "SAMSRX" + ThreadNames.seq(id));
         t.start();
-        t = new I2PAppThread(sender, "SAM-SSnd." + id);
+        t = new I2PAppThread(sender, "SAMSSnd" + ThreadNames.seq(id));
         t.start();
 
         return id;

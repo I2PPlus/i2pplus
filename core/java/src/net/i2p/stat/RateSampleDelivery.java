@@ -133,7 +133,7 @@ class RateSampleDelivery {
         _context = context;
         _capacity = Math.max(1, capacity);
         _queue = new LinkedBlockingDeque<>(_capacity);
-        _thread = new Thread(this::run, "StatSampleDelivery");
+        _thread = new Thread(this::run, "StatSample");
         _thread.setDaemon(true);
         _thread.start();
         if (context != null)

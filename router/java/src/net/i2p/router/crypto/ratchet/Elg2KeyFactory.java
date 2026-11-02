@@ -69,7 +69,7 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
      */
 
     public Elg2KeyFactory(RouterContext ctx) {
-        super("EDH Precalc");
+        super("EDHPrecalc");
         _context = ctx;
         _log = ctx.logManager().getLog(Elg2KeyFactory.class);
         _elg2 = new Elligator2(ctx);

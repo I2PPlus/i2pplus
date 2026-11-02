@@ -970,7 +970,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
                 long connected = _context.clock().now();
                 _log.info(getPrefix() + "-> LeaseSet created with Inbound tunnels after " + (connected - startConnect) + "ms");
             }
-            Thread notifier = new I2PAppThread(_availabilityNotifier, "ClntNtfy." + getName(), true);
+            Thread notifier = new I2PAppThread(_availabilityNotifier, "ClntNtfy", true);
             notifier.start();
             startIdleMonitor();
             startVerifyUsage();

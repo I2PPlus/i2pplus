@@ -11,6 +11,7 @@ import net.i2p.router.Tuner;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
+import net.i2p.util.ThreadNames;
 
 /**
  * Pool of running threads which will transform the next I2NP message into
@@ -106,7 +107,7 @@ public class Writer {
     private void startRunner() {
         Runner r = new Runner();
         _runners.add(r);
-        I2PThread t = new I2PThread(r, "NTCPWrite." + _threadNum.incrementAndGet(), true);
+        I2PThread t = new I2PThread(r, "NTCPWrit" + ThreadNames.idx(_threadNum.incrementAndGet()), true);
         t.start();
     }
 

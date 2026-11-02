@@ -145,10 +145,10 @@ class NewsTimerTask extends SimpleTimer2.TimedEvent {
      */
     private class Fetcher extends I2PAppThread {
         /**
-         * Creates a daemon thread named News Fetcher.
+         * Creates a daemon thread named NewsFetcher.
          */
         public Fetcher() {
-            super("News Fetcher");
+            super("NewsFetcher");
             setDaemon(true);
         }
 

@@ -608,7 +608,7 @@ public class ReverseDnsLookup {
         if (_rdnsTimer != null) {
             _rdnsTimer.cancel();
         }
-        _rdnsTimer = new Timer(true);
+        _rdnsTimer = new Timer("RDNSTmr", true);
         long delay = RDNS_WRITE_INTERVAL;
         _rdnsTimer.schedule(new RDNSCacheFileWriter(), delay, delay);
     }

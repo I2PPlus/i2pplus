@@ -116,7 +116,7 @@ public class SAMHandlerPoolTeardownTest {
             assertNotEquals("the thread that noticed the disconnect must not run it",
                             caller, where[0]);
             assertTrue("teardown ran on the wrong pool: " + where[0].getName(),
-                       where[0].getName().startsWith("SAM-Teardown"));
+                       where[0].getName().startsWith("SAMTear"));
         } finally {
             pool.stop();
         }

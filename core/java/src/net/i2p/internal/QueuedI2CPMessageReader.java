@@ -12,6 +12,7 @@ import net.i2p.data.i2cp.I2CPMessage;
 import net.i2p.data.i2cp.I2CPMessageReader;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
+import net.i2p.util.ThreadNames;
 
 /**
  * Fetches messages off an In-JVM queue, zero-copy.
@@ -243,7 +244,7 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
         /** Start one worker. Caller must hold the monitor. */
         private void startWorker() {
             liveThreads++;
-            new I2PThread(this, "I2CPDisp." + threadCount++, true).start();
+            new I2PThread(this, "I2CPDisp" + ThreadNames.idx(threadCount++), true).start();
         }
 
         /**

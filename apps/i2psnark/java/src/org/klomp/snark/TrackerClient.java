@@ -40,6 +40,7 @@ import net.i2p.data.Hash;
 import net.i2p.util.ConvertToHash;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
+import net.i2p.util.ThreadNames;
 import org.klomp.snark.bencode.BDecoder;
 import org.klomp.snark.bencode.BEValue;
 import org.klomp.snark.bencode.InvalidBEncodingException;
@@ -138,7 +139,7 @@ public class TrackerClient implements Runnable {
                         private final AtomicInteger _n = new AtomicInteger();
 
                         public Thread newThread(Runnable r) {
-                            Thread t = new Thread(r, "SnarkUnann" + _n.incrementAndGet());
+                            Thread t = new Thread(r, "SnarkUnn" + ThreadNames.seq(_n.incrementAndGet()));
                             t.setDaemon(true);
                             return t;
                         }
@@ -187,7 +188,7 @@ public class TrackerClient implements Runnable {
                          * @return the unstarted thread
                          */
                         public Thread newThread(Runnable r) {
-                            Thread t = new Thread(r, "SnarkAnn" + _n.incrementAndGet());
+                            Thread t = new Thread(r, "SnarkAnn" + ThreadNames.seq(_n.incrementAndGet()));
                             t.setDaemon(true);
                             return t;
                         }

@@ -165,7 +165,7 @@ class PeerManager {
          * @param event the timer event used to schedule the next reorganization
          */
         public ReorgThread(SimpleTimer2.TimedEvent event) {
-            super("PeerManager Reorg");
+            super("PeerMgrReorg");
             setDaemon(true);
             _event = event;
         }

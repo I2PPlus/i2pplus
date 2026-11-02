@@ -832,7 +832,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     public SnarkManager(I2PAppContext ctx, String ctxPath, String ctxName) {
         ThreadFactory tf = r -> {
-            Thread t = new Thread(r, "SnarkScheduler");
+            Thread t = new Thread(r, "SnarkSched");
             t.setDaemon(true);
             return t;
         };
@@ -5694,7 +5694,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                                         _util.connect();
                                     }
                                 },
-                                "SnarkPreConnect",
+                                "SnarkPreCon",
                                 true))
                         .start();
                 // Make torrents visible in the UI immediately; only their

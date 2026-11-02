@@ -24,6 +24,7 @@ import net.i2p.i2ptunnel.irc.IrcOutboundFilter;
 import net.i2p.util.EventDispatcher;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.PortMapper;
+import net.i2p.util.ThreadNames;
 
 // TODO: Consider extending I2PTunnelClient to reduce code duplication.
 /**
@@ -227,7 +228,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
             i2ps.setReadTimeout(readTimeout);
             StringBuffer expectedPong = new StringBuffer();
             DCCHelper dcc = _dccEnabled ? new DCC(s.getLocalAddress().getAddress()) : null;
-            Thread in = new I2PAppThread(new IrcInboundFilter(s,i2ps, expectedPong, _log, dcc), "IRCCln." + _clientId, true);
+            Thread in = new I2PAppThread(new IrcInboundFilter(s,i2ps, expectedPong, _log, dcc), "IRCCln" + ThreadNames.seq(_clientId), true);
             in.start();
             Runnable out = new IrcOutboundFilter(s,i2ps, expectedPong, _log, dcc);
             // we are called from an unlimited thread pool, so run inline

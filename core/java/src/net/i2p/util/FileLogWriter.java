@@ -345,7 +345,7 @@ class FileLogWriter extends LogWriter {
          * @param groupReadable apply 660 perms to the compressed file
          */
         public Gzipper(File f, boolean groupReadable) {
-            super("Log file compressor");
+            super("LogGzipper");
             _f = f;
             _groupReadable = groupReadable;
         }

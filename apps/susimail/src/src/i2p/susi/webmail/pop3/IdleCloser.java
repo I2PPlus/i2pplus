@@ -102,7 +102,7 @@ class IdleCloser {
     /** Closes the idle mailbox connection. */
     private class Closer extends I2PAppThread {
         /** Thread that closes the connection. */
-        public Closer() {super("Susimail-Closer");}
+        public Closer() {super("MailCloser");}
 
         @Override
         public void run() {

@@ -1185,7 +1185,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                     };
 
             String threadName =
-                    "SnarkPeer-" + Base32.encode(peer.getPeerID().getDestHash()).substring(0, 6);
+                    // 4 characters of the destination hash, so the name stays in the log column
+                    "SnarkPr" + Base32.encode(peer.getPeerID().getDestHash()).substring(0, 4);
             new I2PAppThread(r, threadName, true).start();
             return true;
         }

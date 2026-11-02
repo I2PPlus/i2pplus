@@ -29,6 +29,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.I2PAppContext;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
+import net.i2p.util.ThreadNames;
 
 /**
  * Shared NIO selector-based handler pool for SAM v3 control connections.
@@ -79,7 +80,7 @@ class SAMHandlerPool {
          * Starts a named daemon thread for the password-authentication worker.
          */
         public Thread newThread(Runnable r) {
-            Thread t = new Thread(r, "SAM-PWkr." + _count.incrementAndGet());
+            Thread t = new Thread(r, "SAMPWkr" + ThreadNames.seq(_count.incrementAndGet()));
             t.setDaemon(true);
             return t;
         }
@@ -156,7 +157,7 @@ class SAMHandlerPool {
                  * Starts a named daemon thread for a client connection.
                  */
                 public Thread newThread(Runnable r) {
-                    Thread t = new Thread(r, "SAM-Conn." + _count.incrementAndGet());
+                    Thread t = new Thread(r, "SAMConn" + ThreadNames.seq(_count.incrementAndGet()));
                     t.setDaemon(true);
                     return t;
                 }
@@ -179,7 +180,7 @@ class SAMHandlerPool {
                  * Starts a named daemon thread for a handler teardown.
                  */
                 public Thread newThread(Runnable r) {
-                    Thread t = new Thread(r, "SAM-Teardown." + _count.incrementAndGet());
+                    Thread t = new Thread(r, "SAMTear" + ThreadNames.seq(_count.incrementAndGet()));
                     t.setDaemon(true);
                     return t;
                 }
@@ -278,7 +279,7 @@ class SAMHandlerPool {
      */
     void start() {
         _running = true;
-        _selectThread = new I2PAppThread(new SelectorRunnable(), "SAM-PoolSel");
+        _selectThread = new I2PAppThread(new SelectorRunnable(), "SAMPoolSel");
         _selectThread.start();
     }
 

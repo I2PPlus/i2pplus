@@ -57,6 +57,7 @@ import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
+import net.i2p.util.ThreadNames;
 
 /**
  * Bridge the router and the client - managing state for a client.
@@ -225,7 +226,7 @@ class ClientConnectionRunner {
                                             createListener());
             _writer = new ClientWriterRunner(_context, this);
             I2PThread t = new I2PThread(_writer);
-            t.setName("I2CPWrite." + __id.incrementAndGet());
+            t.setName("I2CPWr" + ThreadNames.seq(__id.incrementAndGet()));
             t.setDaemon(true);
             t.start();
             _out = new BufferedOutputStream(_socket.getOutputStream());

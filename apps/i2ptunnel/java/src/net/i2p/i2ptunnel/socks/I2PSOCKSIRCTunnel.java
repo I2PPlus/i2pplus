@@ -13,6 +13,7 @@ import net.i2p.i2ptunnel.irc.IrcOutboundFilter;
 import net.i2p.socks.SOCKSException;
 import net.i2p.util.EventDispatcher;
 import net.i2p.util.I2PAppThread;
+import net.i2p.util.ThreadNames;
 
 /**
  * SOCKS tunnel specialized for IRC traffic with I2P filtering and security.
@@ -69,7 +70,7 @@ public class I2PSOCKSIRCTunnel extends I2PSOCKSTunnel {
             StringBuffer expectedPong = new StringBuffer();
             int id = __clientId.incrementAndGet();
             Thread in = new I2PAppThread(new IrcInboundFilter(clientSock, destSock, expectedPong, _log),
-                                         "SOCKSIRCClient." + id + ".in", true);
+                                         "SocksIRCI" + ThreadNames.seq(id), true);
             in.start();
             Runnable out = new IrcOutboundFilter(clientSock, destSock, expectedPong, _log);
             out.run();

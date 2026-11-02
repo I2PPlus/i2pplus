@@ -30,7 +30,7 @@ public class Pinger implements Source, Runnable {
      * @since 0.9.53 added ctx and fromPort params
      */
     public Pinger(I2PAppContext ctx, int fromPort) {
-        this.thread = new I2PAppThread(this);
+        this.thread = new I2PAppThread(this, "TunPinger");
         log = ctx.logManager().getLog(getClass());
         this.fromPort = fromPort;
     }

@@ -8,6 +8,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import net.i2p.I2PAppContext;
 import net.i2p.stat.RateConstants;
 import net.i2p.util.Log;
+import net.i2p.util.ThreadNames;
 
 /**
  * Dispatch inbound stream packets to a small pool of single-threaded shard
@@ -332,7 +333,7 @@ class PacketDispatcher {
          * @param context for the backlog and queue-depth rates, null in tests
          */
         Worker(int shard, int queueCapacity, PacketProcessor processor, I2PAppContext context) {
-            super("StreamRxPkt-" + shard);
+            super("StrmPkt" + ThreadNames.idx(shard));
             setDaemon(true);
             _queue = new LinkedBlockingQueue<Entry>(queueCapacity);
             _processor = processor;

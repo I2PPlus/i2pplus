@@ -196,7 +196,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      */
     private static final ExecutorService _dnsResolver = new ThreadPoolExecutor(2, 4, 30, TimeUnit.SECONDS,
         new ArrayBlockingQueue<>(64), r -> {
-            Thread t = new Thread(r, "DNS-Resolver");
+            Thread t = new Thread(r, "DNSResolve");
             t.setDaemon(true);
             return t;
         });
@@ -425,7 +425,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             30L, TimeUnit.SECONDS,
             new LinkedBlockingQueue<Runnable>(ioQueueCap(n)),
             r -> {
-                Thread t = new Thread(r, "I2P-IO-Transfer");
+                Thread t = new Thread(r, "IOTransfer");
                 t.setDaemon(true);
                 t.setPriority(Thread.NORM_PRIORITY - 1);
                 return t;

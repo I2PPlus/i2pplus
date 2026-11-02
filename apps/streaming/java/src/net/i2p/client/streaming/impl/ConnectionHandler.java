@@ -20,6 +20,7 @@ import net.i2p.util.ByteCache;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
+import net.i2p.util.ThreadNames;
 
 /**
  * Receive new connection attempts
@@ -498,7 +499,7 @@ class ConnectionHandler {
      * deactivates the handler.
      */
     private synchronized void startAcceptWorker() {
-        Thread t = new Thread(new AcceptWorker(), "StreamingAcceptWorker-" + _workerId.incrementAndGet());
+        Thread t = new Thread(new AcceptWorker(), "StrmAcc" + ThreadNames.seq(_workerId.incrementAndGet()));
         t.setDaemon(true);
         _acceptWorkers.add(t);
         t.start();

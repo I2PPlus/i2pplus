@@ -10,6 +10,7 @@ import net.i2p.router.util.CoDelBlockingQueue;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
+import net.i2p.util.ThreadNames;
 
 /**
  * Pull inbound packets from the inbound receiver's queue, figure out what
@@ -168,7 +169,7 @@ class PacketHandler {
             if (_activeHandlers.compareAndSet(current, current + 1)) {
                 Handler h = new Handler();
                 _handlers.add(h);
-                I2PThread t = new I2PThread(h, "UDPHandle." + _threadNum.incrementAndGet(), true);
+                I2PThread t = new I2PThread(h, "UDPPktH" + ThreadNames.idx(_threadNum.incrementAndGet()), true);
                 t.start();
                 current = _activeHandlers.get();
             } else {

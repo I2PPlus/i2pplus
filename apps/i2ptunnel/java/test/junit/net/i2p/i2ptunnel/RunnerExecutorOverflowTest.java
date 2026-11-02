@@ -119,7 +119,7 @@ public class RunnerExecutorOverflowTest {
     }
 
     /**
-     * Worker threads are daemon and named TunnelCln.*.
+     * Worker threads are daemon and named TunClEx.*.
      *
      * @throws InterruptedException if the await for the worker thread is interrupted
      */
@@ -133,8 +133,8 @@ public class RunnerExecutorOverflowTest {
             assertTrue(done.await(5, TimeUnit.SECONDS));
             Thread t = (Thread) holder[0];
             assertTrue("runner threads must be daemon", t.isDaemon());
-            assertTrue("runner thread should be named TunnelCln.*: " + t.getName(),
-                       t.getName().startsWith("TunnelCln."));
+            assertTrue("runner thread should be named TunClEx.*: " + t.getName(),
+                       t.getName().startsWith("TunClEx"));
         } finally {
             exec.shutdownNow();
         }

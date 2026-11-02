@@ -55,7 +55,7 @@ class AccessFilter implements StatefulConnectionFilter {
     });
 
     static {
-        Runtime.getRuntime().addShutdownHook(new Thread() {
+        Runtime.getRuntime().addShutdownHook(new Thread("AccLogShut") {
             @Override
             public void run() {
                 shutdownDiskWriter();

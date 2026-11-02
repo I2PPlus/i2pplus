@@ -66,6 +66,7 @@ import net.i2p.util.EepGet;
 import net.i2p.util.EepHead;
 import net.i2p.util.Log;
 import net.i2p.util.PortMapper;
+import net.i2p.util.ThreadNames;
 
 /**
  * Ping tester for address book entries.
@@ -482,7 +483,7 @@ public class HostChecker {
             @Override
             public Thread newThread(Runnable r) {
                 Thread thread = new Thread(r);
-                thread.setName("HostCheck." + _count.incrementAndGet());
+                thread.setName("HostChk" + ThreadNames.seq(_count.incrementAndGet()));
                 thread.setDaemon(true);
                 return thread;
             }
