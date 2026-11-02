@@ -96,6 +96,29 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     /** Age after which a session created earlier is replaced when a new NS arrives. */
     private static final long SESSION_REPLACE_AGE = 2*60*1000L;
 
+    /**
+     * Silence after warning that a peer's next-session-key reuses a stored
+     * key ID with different data. The peer retransmits the key on every
+     * message until our NEXTKEY block adopts it, which it never will, so an
+     * unthrottled warning floods the log at message rate.
+     *
+     * @since 0.9.73+
+     */
+    static final long KEY_MISMATCH_WARN_MS = 10 * 60 * 1000L;
+
+    /**
+     * Whether to warn (vs debug) that a next-session-key reuses a stored key
+     * ID with different data. Pure, so the pacing is testable.
+     *
+     * @param now current time in ms
+     * @param lastWarned when the warning last fired, 0 for never
+     * @return true to warn
+     * @since 0.9.73+
+     */
+    static boolean shouldWarnKeyMismatch(long now, long lastWarned) {
+        return lastWarned == 0 || now - lastWarned > KEY_MISMATCH_WARN_MS;
+    }
+
     /** Shared empty array for zero-length values. */
     private static final byte[] ZEROLEN = new byte[0];
 
@@ -1366,6 +1389,8 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         private NextSessionKey _hisIBKeyWithData;
         /** Their latest outbound key that carried data. */
         private NextSessionKey _hisOBKeyWithData;
+        /** When the key-ID-collision warning last fired for this peer, 0 for never. */
+        private long _lastKeyMismatchWarn;
         /** Root key for the next inbound receive chain. */
         private SessionKey _nextIBRootKey;
 
@@ -1561,11 +1586,23 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                         _hisIBKeyWithData = key;
                     } else {
                         if (hasKey) {
-                            // got a old key id but new data?
-                            if (_hisIBKeyWithData != null && _log.shouldWarn())
-                                _log.warn("Outbound next-session-key ACK"
-                                          + " -> Skipping it, the key data differs from the stored key"
-                                          + NextSessionKey.keyComparison(key, _hisIBKey, _hisIBKeyWithData));
+                            if (_hisIBKeyWithData != null) {
+                                if (key.equals(_hisIBKeyWithData)) {
+                                    // the peer retransmits an unadopted key on every
+                                    // message; that is the protocol, not a fault
+                                    if (_log.shouldDebug())
+                                        _log.debug("Outbound next-session-key ACK -> Skipping it, retransmit of the stored key" + key);
+                                } else if (_log.shouldWarn()) {
+                                    long now = _context.clock().now();
+                                    if (shouldWarnKeyMismatch(now, _lastKeyMismatchWarn)) {
+                                        _lastKeyMismatchWarn = now;
+                                        _log.warn("Outbound next-session-key ACK -> Skipping it, same key ID, different data"
+                                                  + NextSessionKey.keyComparison(key, _hisIBKey, _hisIBKeyWithData));
+                                    } else if (_log.shouldDebug()) {
+                                        _log.debug("Outbound next-session-key ACK -> Skipping it, same key ID, different data" + key);
+                                    }
+                                }
+                            }
                             return;
                         } else {
                             if (_hisIBKeyWithData == null ||
@@ -1659,11 +1696,23 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                         _hisOBKeyWithData = key;
                     } else {
                         if (hasKey) {
-                            // got a old key id but new data?
-                            if (_hisOBKeyWithData != null && _log.shouldWarn())
-                                _log.warn("Inbound next-session-key ACK"
-                                          + " -> Skipping it, the key data differs from the stored key"
-                                          + NextSessionKey.keyComparison(key, _hisOBKey, _hisOBKeyWithData));
+                            if (_hisOBKeyWithData != null) {
+                                if (key.equals(_hisOBKeyWithData)) {
+                                    // the peer retransmits an unadopted key on every
+                                    // message; that is the protocol, not a fault
+                                    if (_log.shouldDebug())
+                                        _log.debug("Inbound next-session-key ACK -> Skipping it, retransmit of the stored key" + key);
+                                } else if (_log.shouldWarn()) {
+                                    long now = _context.clock().now();
+                                    if (shouldWarnKeyMismatch(now, _lastKeyMismatchWarn)) {
+                                        _lastKeyMismatchWarn = now;
+                                        _log.warn("Inbound next-session-key ACK -> Skipping it, same key ID, different data"
+                                                  + NextSessionKey.keyComparison(key, _hisOBKey, _hisOBKeyWithData));
+                                    } else if (_log.shouldDebug()) {
+                                        _log.debug("Inbound next-session-key ACK -> Skipping it, same key ID, different data" + key);
+                                    }
+                                }
+                            }
                             return;
                         } else {
                             if (_hisOBKeyWithData == null ||

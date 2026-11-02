@@ -160,12 +160,13 @@ class NextSessionKey extends PublicKey {
     }
 
     /**
-     * The received key beside the two stored ones, as one continuation line, for
+     * The received key beside the stored ones, as one continuation line, for
      * the warning that fires when an ack repeats a key ID with different data.
      * The caller's branch already fixes the direction (Reverse) and the ID of
      * the stored keys, so this names the type and ID once, on the received key,
      * and the stored keys as prefixes - three full key dumps would run to three
-     * lines of 44-character base64 to say that two prefixes differ.
+     * lines of 44-character base64 to say that two prefixes differ. When the
+     * two stored keys are the same key, one Stored segment says it.
      *
      * @param received the key that arrived, non-null
      * @param stored the key stored for this ID, non-null
@@ -175,9 +176,12 @@ class NextSessionKey extends PublicKey {
      */
     static String keyComparison(NextSessionKey received, NextSessionKey stored,
                                 NextSessionKey storedWithData) {
-        return "\n* Received: " + received.getType() + ' ' + received.shortKey()
-               + " ID: " + received.getID()
-               + " * Stored: " + stored.shortKey()
-               + " * Stored with data: " + storedWithData.shortKey();
+        String rv = "\n* Received: " + received.getType() + ' ' + received.shortKey()
+                    + " ID: " + received.getID()
+                    + " * Stored: " + stored.shortKey();
+        if (!stored.equals(storedWithData)) {
+            rv += " * Stored with data: " + storedWithData.shortKey();
+        }
+        return rv;
     }
 }
