@@ -60,6 +60,9 @@ installer/resources/macosx/target
 # Build property overrides
 #/override.properties
 
+# repo-index per-checkout config (machine-local: what this checkout indexes)
+.repo-index.json
+
 # Reporting
 *.fba
 sloccount.sc
