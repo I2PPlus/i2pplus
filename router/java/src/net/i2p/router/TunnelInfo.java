@@ -15,6 +15,17 @@ import net.i2p.data.TunnelId;
  */
 public interface TunnelInfo {
     /**
+     * The tunnel's own name for log output - the nickname and short destination
+     * in brackets, with no role or class prefix, for a sentence that already
+     * says what kind of tunnel it is.
+     *
+     * @return " [nick / hash]" or " [hash]", or "" for an exploratory tunnel,
+     *         which has no destination to name
+     * @since 0.9.72+
+     */
+    public String toShortName();
+
+    /**
      * How many peers are there in the tunnel (including the creator)?
      *
      * @return the number of hops, counting ourselves if we are the gateway

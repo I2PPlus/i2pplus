@@ -1227,7 +1227,11 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
              // The eviction is the response, and it stays the response until the
              // pool rebuilds, so a client reconnecting in a loop warns on every
              // fresh connection - eight in one millisecond was measured. Warn
-             // once per interval per pair, debug in between.
+             // once per interval per pair, debug in between. One line: name the
+             // tunnel where it is described, and use the name without the role
+             // prefix, which the sentence already states. The nickname in the
+             // brackets is always a local one, so it cannot be mistaken for the
+             // peer hash at the front of the line.
              long now = getContext().clock().now();
              Long lastWarn = _cache.rotationWarnTime.get(_hashPair);
              boolean warn = lastWarn == null || now - lastWarn.longValue() > ROTATION_WARN_MS;
@@ -1235,10 +1239,12 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 _cache.rotationWarnTime.put(_hashPair, Long.valueOf(now));
              if (warn && _log.shouldWarn()) {
                 _log.warn("Rotation saturated for " + _toString
-                          + " -> Evicted the cached outbound tunnel so the retry re-selects: " + cached);
+                          + " -> Evicted the cached outbound tunnel" + cached.toShortName()
+                          + " so the retry re-selects");
              } else if (_log.shouldDebug()) {
                 _log.debug("Rotation saturated for " + _toString
-                           + " -> Evicted the cached outbound tunnel so the retry re-selects: " + cached);
+                           + " -> Evicted the cached outbound tunnel" + cached.toShortName()
+                           + " so the retry re-selects");
              }
              return null;
          }

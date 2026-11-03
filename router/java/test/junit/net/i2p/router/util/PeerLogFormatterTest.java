@@ -202,12 +202,35 @@ public class PeerLogFormatterTest {
         assertEquals("\n* Excluding (1):\n     [" + shortHash(1) + ']', PeerLogFormatter.excluding(hashes(1), 1));
     }
 
-    /** The ordered variant joins entries with an arrow, for a gateway-to-endpoint list. */
+    /**
+     * The ordered variant joins entries with an arrow, for a gateway-to-endpoint
+     * list, and a tunnel-sized list sits on the label's own line: three hops
+     * over two lines do not read as a path.
+     */
     @Test
     public void testOrderedJoinsWithArrow() {
         String s = PeerLogFormatter.peerListOrdered(hashes(3), "Tunnel", 3);
-        String want = "\n* Tunnel (3):\n     [" + shortHash(1) + "] -> [" + shortHash(2) + "] -> [" + shortHash(3) + ']';
+        String want = "\n* Tunnel (3): [" + shortHash(1) + "] -> [" + shortHash(2) + "] -> [" + shortHash(3) + ']';
         assertEquals(want, s);
+    }
+
+    /**
+     * The inline shape runs to {@link PeerLogFormatter#INLINE_LIMIT} entries, and
+     * one past it switches to the indented sub-list.
+     */
+    @Test
+    public void testOrderedSwitchesShapeAtTheLimit() {
+        String inline = PeerLogFormatter.peerListOrdered(hashes(PeerLogFormatter.INLINE_LIMIT), "Tunnel",
+                                                        PeerLogFormatter.INLINE_LIMIT);
+        assertEquals(1, splitLines(inline).length);
+        assertTrue(inline.startsWith("\n* Tunnel (" + PeerLogFormatter.INLINE_LIMIT + "): ["));
+        String indented = PeerLogFormatter.peerListOrdered(hashes(PeerLogFormatter.INLINE_LIMIT + 1), "Tunnel",
+                                                          PeerLogFormatter.INLINE_LIMIT + 1);
+        // Label line, then the hashes indented under it - 11 of them, so one
+        // indented line, the wrap at sixteen being the other formatter's job.
+        assertEquals(2, splitLines(indented).length);
+        assertTrue(indented.startsWith("\n* Tunnel (" + (PeerLogFormatter.INLINE_LIMIT + 1) + "):\n"));
+        assertTrue(splitLines(indented)[1].startsWith("     ["));
     }
 
     /** The ordered variant wraps at sixteen, and the arrow does not start a line. */

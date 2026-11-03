@@ -2697,7 +2697,11 @@ public class EstablishmentManager {
         Hash charlieHash = state.getRemoteIdentity().getHash();
         RouterInfo charlieRI = _context.netDb().lookupRouterInfoLocally(charlieHash);
         if (charlieRI == null) {
-            if (_log.shouldWarn()) {_log.warn("[SSU] Charlie's RouterInfo not found " + state);}
+            // Debug: it may show up later, and the caller retries. The state's
+            // toString carries two 19-digit signed IDs that name nothing a human
+            // can use, so name the peer by its hash.
+            if (_log.shouldDebug())
+                _log.debug("[SSU] Charlie's RouterInfo not found [" + charlieHash.toShortBase64() + ']');
             return null;
         }
         // validate signed data, but we don't necessarily know which Bob

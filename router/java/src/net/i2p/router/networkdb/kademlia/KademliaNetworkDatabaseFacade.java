@@ -2403,17 +2403,27 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (err != null) {
             if (_log.shouldWarn()) {
                 long now = _context.clock().now();
-                StringBuilder sb = new StringBuilder("Store validation failed [" +
-                                                     key.toShortBase32() + "]");
-                sb.append("\n* type: ").append(leaseSet.getType());
-                sb.append(" * leaseCount: ").append(leaseSet.getLeaseCount());
-                sb.append(" * earliest: ").append(leaseSet.getEarliestLeaseDate());
-                sb.append(" * latest: ").append(leaseSet.getLatestLeaseDate());
-                sb.append(" * now: ").append(now);
+                // The reason is the fact, and it was only in the exception. The
+                // dates are relative to now, because the log line's own timestamp
+                // is the reference and a 13-digit epoch value makes the reader do
+                // arithmetic. Two lines: the second carries the shape and the
+                // dates, which belong together. The lease-date range is only
+                // worth naming when the leases have dates - with none, both
+                // bounds are unset and saying so twice says nothing.
+                StringBuilder sb = new StringBuilder(128);
+                sb.append("Store validation failed [").append(key.toShortBase32()).append("] -> ").append(err);
+                sb.append("\n* ").append(leaseSetName(leaseSet.getType()))
+                  .append(", ").append(leaseSet.getLeaseCount()).append(" leases");
+                long earliest = leaseSet.getEarliestLeaseDate();
+                long latest = leaseSet.getLatestLeaseDate();
+                if (earliest > 0 && latest > 0) {
+                    sb.append(" from ").append(leaseDate(earliest, now))
+                      .append(" to ").append(leaseDate(latest, now));
+                }
                 if (leaseSet instanceof LeaseSet2) {
                     LeaseSet2 ls2 = (LeaseSet2) leaseSet;
-                    sb.append("\n* published: ").append(ls2.getPublished());
-                    sb.append(" * expires: ").append(ls2.getExpires());
+                    sb.append(", published ").append(leaseDate(ls2.getPublished(), now))
+                      .append(", expires ").append(leaseDate(ls2.getExpires(), now));
                 }
                 _log.warn(sb.toString());
             }
@@ -2932,6 +2942,41 @@ return false;
 
         return !isUs && caps.indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0 &&
                caps.indexOf(Router.CAPABILITY_BW_UNLIMITED) >= 0;
+    }
+
+    /**
+     * A lease-set key type named in words, for a log line. The type is one of
+     * the {@link DatabaseEntry} KEY_TYPE_ constants, and a bare number makes the
+     * reader look it up.
+     *
+     * @param type the lease-set key type
+     * @return the name, or "Type N" for a type this version does not know
+     * @since 0.9.72+
+     */
+    private static String leaseSetName(int type) {
+        switch (type) {
+            case DatabaseEntry.KEY_TYPE_LEASESET: return "LeaseSet";
+            case DatabaseEntry.KEY_TYPE_LS2: return "LeaseSet 2";
+            case DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2: return "Encrypted LeaseSet 2";
+            case DatabaseEntry.KEY_TYPE_META_LS2: return "Meta LeaseSet 2";
+            default: return "Type " + type;
+        }
+    }
+
+    /**
+     * A lease-set date relative to now, for a log line. The log line's own
+     * timestamp is the reference, so an absolute epoch-millisecond value makes
+     * the reader do arithmetic on a 13-digit number; the offset is the fact.
+     *
+     * @param date the epoch-millisecond date, zero or negative when unset
+     * @param now current timestamp in milliseconds
+     * @return "N ago", "in N", or "unset"
+     * @since 0.9.72+
+     */
+    private static String leaseDate(long date, long now) {
+        if (date <= 0) {return "unset";}
+        long d = date - now;
+        return d >= 0 ? "in " + DataHelper.formatDuration(d) : DataHelper.formatDuration(-d) + " ago";
     }
 
     /**

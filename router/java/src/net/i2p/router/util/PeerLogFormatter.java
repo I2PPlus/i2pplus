@@ -11,7 +11,10 @@ import net.i2p.data.Hash;
  * label line ending in a colon, then the peers as an indented sub-list of at
  * most sixteen bracketed 6-character base64 hashes per line. The sub-list lines
  * carry no bullet of their own, so each group reads as one block under its
- * label, and every hash in the block lines up in the same column. A label with
+ * label, and every hash in the block lines up in the same column. An ordered
+ * list of up to {@link #INLINE_LIMIT} entries goes on the label's own line
+ * instead, which is the shape for a tunnel - three hops on one line read as a
+ * path, three hops over two lines do not. A label with
  * no peers to name is rendered as a sentence stating the count, never as a
  * colon with nothing after it.
  * <p>
@@ -28,6 +31,14 @@ public class PeerLogFormatter {
 
     /** Spaces before the first hash on a sub-list line, lining the hashes up in one column. */
     static final int INDENT = 5;
+
+    /**
+     * Ordered entries small enough to read on the label's own line. A tunnel is
+     * three hops, so the common case is a short list, and a three-hop path split
+     * over two lines is harder to read than one long line; past this the list is
+     * long enough that the indented sub-list is the easier shape.
+     */
+    static final int INLINE_LIMIT = 10;
 
     /** Label used for the exclusion list, the one case every selector spells the same way. */
     private static final String EXCLUDING = "Excluding";
@@ -121,23 +132,34 @@ public class PeerLogFormatter {
     /**
      * A labelled peer sub-list whose entries are joined by " -&gt; ", for a list
      * whose order is the point - a tunnel's gateway-to-endpoint sequence, for
-     * example. Sixteen entries per line, same indent as {@link #peerList}.
+     * example. Up to {@link #INLINE_LIMIT} entries go on the label's own line; a
+     * longer list uses the indented sub-list, sixteen entries per line, same
+     * indent as {@link #peerList}.
      *
      * @param peers the peers to show, in the order to print them; null is shown
      *              as no peers
      * @param label the label to show, e.g. "Tunnel"
      * @param count the number of peers the label reports, shown in parentheses
-     * @return the label line and the indented hash lines, or the sentence form
-     *         when there is nothing to name
+     * @return the label line and the hash lines, or the sentence form when there
+     *         is nothing to name
      */
     public static String peerListOrdered(Iterable<Hash> peers, String label, int count) {
         if (peers == null) {return noPeers(label, count);}
         StringBuilder sb = new StringBuilder(64);
+        // The label's count decides the shape, as it decides the parentheses, so
+        // a capped list renders in the shape its size implies.
+        boolean inline = count <= INLINE_LIMIT;
         boolean first = true;
         int shown = 0;
         for (Hash h : peers) {
             if (h == null) {continue;}
-            if (shown % ENTRIES_PER_LINE == 0) {
+            if (inline) {
+                if (shown == 0) {
+                    sb.append("\n* ").append(label).append(" (").append(count).append("): ");
+                } else {
+                    sb.append(" -> ");
+                }
+            } else if (shown % ENTRIES_PER_LINE == 0) {
                 if (shown > 0) {sb.append('\n');}
                 if (first) {
                     sb.append("\n* ").append(label).append(" (").append(count).append("):\n");

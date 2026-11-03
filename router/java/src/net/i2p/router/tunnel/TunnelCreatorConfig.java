@@ -1468,17 +1468,40 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      * @return the role, class, nickname and short destination, on one line
      * @since 0.9.71+
      */
+    /**
+     * The tunnel's own name for log output - the nickname and short destination
+     * in brackets, with no role or class prefix, for a sentence that already
+     * says what kind of tunnel it is. {@link #toShortString()} is this with the
+     * prefix added, so the two cannot drift apart.
+     *
+     * @return " [nick / hash]" or " [hash]", or "" for an exploratory tunnel,
+     *         which has no destination to name
+     * @since 0.9.72+
+     */
+    public String toShortName() {
+        if (_destination == null) {return "";}
+        StringBuilder buf = new StringBuilder(32);
+        buf.append(" [");
+        if (_destinationNickname != null) {buf.append(_destinationNickname).append(" / ");}
+        buf.append(_destination.toShortBase32()).append(']');
+        return buf.toString();
+    }
+
+    /**
+     * Compact one-line tunnel identifier for log output: role, client or
+     * exploratory, nickname and short destination. No hop list, no newlines.
+     *
+     * @return the role, class, nickname and short destination, on one line
+     * @since 0.9.71+
+     */
     public String toShortString() {
         StringBuilder buf = new StringBuilder(64);
         if (_isInbound) {buf.append("Inbound");}
         else {buf.append("Outbound");}
         if (_destination == null) {buf.append(" Exploratory tunnel");}
         else {
-            buf.append(" Client tunnel [");
-            if (_destinationNickname != null) {
-                buf.append(_destinationNickname).append(" / ");
-            }
-            buf.append(_destination.toShortBase32()).append("]");
+            buf.append(" Client tunnel");
+            buf.append(toShortName());
         }
         int fails = _failures.get();
         if (fails > 1) {buf.append(" (").append(fails).append(" consecutive failures)");}
