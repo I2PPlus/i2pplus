@@ -110,4 +110,90 @@ public class TrackerClientProblemTest {
         assertTrue(timeout.toString().contains("Read timed out"));
         assertTrue(timeout.toString().contains("IOException"));
     }
+
+    // ---- trackerHost ----
+
+    /**
+     * The announce path is the same on every HTTP announce and the thread name
+     * says this is an announce, so the host alone is the fact.
+     */
+    @Test
+    public void announcePathIsCut() {
+        assertEquals("sigmatracker.i2p", TrackerClient.trackerHost("http://sigmatracker.i2p/a"));
+        assertEquals("tracker.example.i2p", TrackerClient.trackerHost("http://tracker.example.i2p/announce"));
+    }
+
+    /** A UDP endpoint is identified by its port, so the port stays. */
+    @Test
+    public void udpEndpointKeepsItsPort() {
+        assertEquals("tracker.insulaocculta.i2p:6969",
+                     TrackerClient.trackerHost("udp://tracker.insulaocculta.i2p:6969/"));
+    }
+
+    /** A known base32 tracker still renders as its symbolic name. */
+    @Test
+    public void knownBase32TrackerBecomesItsName() {
+        assertEquals("opentracker.dg2.i2p",
+                     TrackerClient.trackerHost("http://w7tpbzncbcocrqtwwm3nezhnnsw4ozadvi2hmvzdhrqzfxfum7wa.b32.i2p/a"));
+    }
+
+    /** No URL, no host - and no exception out of the log line. */
+    @Test
+    public void nullAnnounceGivesEmptyHost() {
+        assertEquals("", TrackerClient.trackerHost(null));
+    }
+
+    // ---- trackerFailure ----
+
+    /**
+     * The defect: the line named the tracker, and the cause named it again, so
+     * one tracker's failure read as two.
+     */
+    @Test
+    public void hostCutFromTheEndOfTheReason() {
+        assertEquals("No response",
+                     TrackerClient.trackerFailure("sigmatracker.i2p",
+                                                  new IOException("No response from sigmatracker.i2p")));
+        assertEquals("UDP announce error",
+                     TrackerClient.trackerFailure("tracker.insulaocculta.i2p",
+                                                  new IOException("UDP announce error to: tracker.insulaocculta.i2p")));
+    }
+
+    /**
+     * The UDP client names the host without the port the announce URL carries,
+     * so the host is tried both with and without its port.
+     */
+    @Test
+    public void hostIsCutWithAndWithoutThePort() {
+        assertEquals("UDP announce error",
+                     TrackerClient.trackerFailure("tracker.insulaocculta.i2p:6969",
+                                                  new IOException("UDP announce error to: tracker.insulaocculta.i2p")));
+    }
+
+    /**
+     * An IPv6 literal has colons with no port after them, so nothing is split off
+     * it - a message naming the bracketed host without the port is passed through
+     * rather than cut at a colon that is not a port separator.
+     */
+    @Test
+    public void ipv6HostIsNotSplitAtAColon() {
+        String msg = "No response from [::1]";
+        assertEquals(msg, TrackerClient.trackerFailure("[::1]:6969", new IOException(msg)));
+    }
+
+    /** A reason that does not end with the host is passed through untouched. */
+    @Test
+    public void reasonWithoutTheHostIsUnchanged() {        assertEquals("Connection refused", TrackerClient.trackerFailure("sigmatracker.i2p",
+                                                                       new IOException("Connection refused")));
+        // Only a trailing clause is cut - the host mid-sentence is part of the fact.
+        assertEquals("No response from sigmatracker.i2p and others",
+                     TrackerClient.trackerFailure("sigmatracker.i2p",
+                                                  new IOException("No response from sigmatracker.i2p and others")));
+    }
+
+    /** A message-less failure still says what failed. */
+    @Test
+    public void messagelessFailureNamesTheClass() {
+        assertEquals("IOException", TrackerClient.trackerFailure("sigmatracker.i2p", new IOException()));
+    }
 }

@@ -1163,6 +1163,62 @@ public class TrackerClient implements Runnable {
     }
 
     /**
+     * The tracker host for a log line: {@link I2PSnarkUtil#trackerB32ToHostname}
+     * with the scheme and the announce path cut. The path is the same on every
+     * HTTP announce, and the thread name already says this is an announce, so it
+     * is boilerplate; a UDP endpoint keeps its port, which is the part that
+     * identifies it.
+     *
+     * @param announce the tracker's announce URL, may be null
+     * @return the host, with a port when the URL carries one, empty if there is
+     *         no URL
+     * @since 0.9.72+
+     */
+    static String trackerHost(String announce) {
+        String s = I2PSnarkUtil.trackerB32ToHostname(announce);
+        if (s == null) {return "";}
+        int scheme = s.indexOf("://");
+        if (scheme >= 0) { s = s.substring(scheme + 3); }
+        int slash = s.indexOf('/');
+        return slash >= 0 ? s.substring(0, slash) : s;
+    }
+
+    /**
+     * The failure reason for a tracker line, with the tracker's own name cut
+     * from the end. Both the HTTP and the UDP client end their messages with the
+     * host they failed on - "No response from sigmatracker.i2p" - and the line
+     * has already named that host, so printing it twice reads as two trackers.
+     * Only a trailing clause is cut, and only when it names the host in full.
+     *
+     * @param host the host already in the line, from {@link #trackerHost}
+     * @param t the failure, non-null
+     * @return the reason, without the duplicated host
+     * @since 0.9.72+
+     */
+    static String trackerFailure(String host, Throwable t) {
+        String msg = DataHelper.messageOf(t);
+        if (host.isEmpty()) {return msg;}
+        // The UDP client names the host without the port the announce URL carries,
+        // so try the host both ways. A port is only split off a host:port form -
+        // an IPv6 literal has colons with no port after them.
+        String noPort = host;
+        int colon = host.indexOf(':');
+        if (colon > 0 && host.indexOf(':', colon + 1) < 0 && colon + 1 < host.length()
+            && Character.isDigit(host.charAt(colon + 1))) {
+            noPort = host.substring(0, colon);
+        }
+        String[] forms = noPort.equals(host) ? new String[] {host} : new String[] {host, noPort};
+        for (String h : forms) {
+            for (String p : new String[] {" from: ", " from ", " to: ", " to "}) {
+                if (msg.endsWith(p + h)) {
+                    return msg.substring(0, msg.length() - p.length() - h.length());
+                }
+            }
+        }
+        return msg;
+    }
+
+    /**
      * Whether a tracker problem means this tracker will never accept the torrent,
      * as opposed to a transient failure worth retrying.
      *
@@ -1477,8 +1533,14 @@ public class TrackerClient implements Runnable {
                     // "Error communicating with tracker", which is no help at all
                     // when the failure is that every tracker is failing at once.
                     if (_log.shouldWarn()) {
-                        _log.warn("Error communicating with tracker [" +
-                                  I2PSnarkUtil.trackerB32ToHostname(tr.announce) + "]\n* " + ioe);
+                        // One line. The cause is the fact - a read timeout, a
+                        // refused connection and "no tunnel available" all read
+                        // the same without it - and the tracker's own name is cut
+                        // from the cause, which already names it. Throttled as a
+                        // backstop; a tracker outage is per-announce.
+                        String host = trackerHost(tr.announce);
+                        _log.warnThrottled("tracker-communicate",
+                                           "Error communicating with " + host + " -> " + trackerFailure(host, ioe));
                     }
                     tr.trackerProblems = ioe.getMessage();
                     String tplc = normalizeTrackerProblem(tr.trackerProblems);
