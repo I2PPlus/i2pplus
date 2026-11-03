@@ -213,7 +213,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
      * @return array of length 1 containing an IPv4 address, or null
      */
     public DetectedIP[] getAddress() {
-        _log.info("UPnP.getAddress() is called \\o/");
+        _log.info("Asking UPnP for the external address");
         Service service;
         synchronized(lock) {
             if (!isNATPresent()) {

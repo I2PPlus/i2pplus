@@ -1051,8 +1051,8 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
             // a message was in flight, or a double read. At ERROR it produced 350 of
             // the 354 error lines in a 75-minute window, which buried the four real
             // faults behind it. The router did nothing wrong, and this says so.
-            if (_log.shouldWarn())
-                _log.warn(getPrefix() + "-> Requested message is no longer buffered * MsgID: " + msgId);
+            _log.warnThrottled("session-message-not-buffered",
+                               getPrefix() + "-> Requested message is no longer buffered * MsgID: " + msgId);
             return null;
         }
         updateActivity();
@@ -1212,13 +1212,15 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
                             _sessionListener.messageAvailable(I2PSessionImpl.this, msgId.intValue(), size.intValue());
                             long duration = System.currentTimeMillis() - before;
                             if ((duration > 100) && _log.shouldInfo())
-                                _log.info("Message availability notification for " + msgId.intValue() + " took "
-                                           + duration + " to " + _sessionListener);
+                                _log.info("Message availability notification for " + msgId.intValue() +
+                                          " took " + duration + "ms -> Notified " +
+                                          _sessionListener.getClass().getName());
                         } catch (RuntimeException e) {
                             _log.log(Log.CRIT, "Error notifying app of message availability", e);
                         }
                     } else {
-                        _log.log(Log.CRIT, "Unable to notify an app that " + msgId + " of size " + size + " is available!");
+                        _log.log(Log.CRIT, "Unable to notify an app that " + msgId + " of size " + size +
+                                           " bytes is available -> Dropped");
                     }
                 }
             }

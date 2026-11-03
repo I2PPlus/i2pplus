@@ -1253,12 +1253,13 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             }
             ackbf.forEachAndNot(_ackedMessages, this);
         } catch (Exception e) {
-            if (_log.shouldWarn()) {
-                _log.warn("[SSU] Received Bad ACK block\n* " +
-                          SSU2Bitfield.toString(ackThru, acks, ranges, (ranges != null ? ranges.length / 2 : 0)) +
-                          "\n* ACK through " + ackThru + " acks " + acks +
-                          (ranges != null ? " Ranges:\n* " + HexDump.dump(ranges) : "") + this, e);
-            }
+            // Throttled: a confused or spoofed peer repeats this per ACK block, and the
+            // bitfield plus the hex dump of the ranges is a dozen lines per occurrence.
+            _log.warnThrottled("ssu2-bad-ack-block",
+                               "[SSU] Received Bad ACK block -> Dropping it * Peer: " + toShortString() +
+                               "\n* Through: " + ackThru + " packets * Acks: " + acks +
+                               (ranges != null ? " * Ranges: " + (ranges.length / 2) : "") +
+                               " * Reason: " + e);
         }
     }
 
@@ -1270,8 +1271,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         if (shouldLogDebug()) {
             _log.debug("[SSU] Received TERMINATION block -> " +
                        SSU2Util.terminationCodeToString(reason)
-                       + " * Packets: " + count
-                       + "\n* " + this);
+                       + "\n* " + this + " * Packets: " + count);
         }
         if (reason == SSU2Util.REASON_TERMINATION) { /* ignored */ } // this should only happen at shutdown, where we don't have a post-termination handler
         else if (!_dead) {
@@ -1374,16 +1374,19 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                         if (Arrays.equals(newIP, expectedIP)) {
                             // Same IP, different port - update address
                             if (_log.shouldInfo()) {
-                                _log.info("[SSU] Path response verified, updating port from " +
-                                         _pendingRemoteHostId.getPort() + " to " + from.getPort() + ' ' + this);
+                                _log.info("[SSU] Path response verified -> Updating the peer port"
+                                          + "\n* Peer: " + toShortString()
+                                          + " * From: " + _pendingRemoteHostId.getPort()
+                                          + " * To: " + from.getPort());
                             }
                             _transport.changePeerAddress(this, from);
                         } else {
                             // Different IP - warn but allow (may be legitimate change)
                             if (_log.shouldWarn()) {
                                 _log.warn("[SSU] Path response from a changed IP -> Updating the peer address"
-                                          + "\n* Expected: " + _pendingRemoteHostId
-                                          + " * Received from: " + from + ' ' + this);
+                                          + "\n* Peer: " + toShortString()
+                                          + " * Expected: [" + _pendingRemoteHostId + "]"
+                                          + " * Received from: [" + from + "]");
                             }
                             _transport.changePeerAddress(this, from);
                         }
@@ -1393,9 +1396,10 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                         messagePartiallyReceived();
                     } else {
                         if (_log.shouldWarn()) {
-                            _log.warn("[SSU] Path response from unexpected address -> Keeping the peer address"
-                                    + "\n* Expected: " + _pendingRemoteHostId
-                                    + " * Received from: " + from + ' ' + this);
+                            _log.warn("[SSU] Path response from an unexpected address -> Keeping the peer address"
+                                    + "\n* Peer: " + toShortString()
+                                    + " * Expected: [" + _pendingRemoteHostId + "]"
+                                    + " * Received from: [" + from + "]");
                         }
                         // Track port hopping attempts via the peer hash for full BanLogger context
                         if (!_context.blocklist().isBlocklisted(_remotePeer)) {

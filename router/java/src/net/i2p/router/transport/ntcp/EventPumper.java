@@ -440,10 +440,9 @@ class EventPumper implements Runnable {
                 } catch (ClosedSelectorException cse) {
                     continue;
                 } catch (IOException | CancelledKeyException e) {
-                    if (shouldDebug)
-                        _log.warn("Error selecting", e);
-                    else if (shouldWarn)
-                        _log.warn("Error selecting -> " + e.getMessage());
+                    // Throttled: a broken selector spins through this on every iteration.
+                    _log.warnThrottled("ntcp-select-error",
+                                       "Selecting on the selector failed -> Retrying the loop * Reason: " + e);
                     continue;
                 }
 
@@ -881,8 +880,8 @@ class EventPumper implements Runnable {
         Object att = key.attachment();
         if (!(att instanceof ServerSocketChannel)) {
             if (_log.shouldWarn()) {
-                _log.warn("Invalid attachment on accept key -> Cancelling key * Attachment: " +
-                          (att != null ? att.getClass().getSimpleName() : "null"));
+                _log.warn("Invalid attachment on accept key -> Cancelling key" +
+                          (att != null ? " * Attachment: " + att.getClass().getSimpleName() : ""));
             }
             key.cancel();
             return;
@@ -959,12 +958,13 @@ class EventPumper implements Runnable {
         }
         if (_blockedIPs.count(ba) > 0) {
             int count = _blockedIPs.increment(ba);
-            if (_log.shouldInfo()) {
-                _log.info("Blocking an incoming NTCP connection from " + ba + " -> Attempts: " + count);
-            }
-            if (count >= 30 && _log.shouldWarn()) {
-                _log.warn("Excessive inbound NTCP connection attempts from " + ba + " -> Blocking"
-                          + " * Attempts: " + count);
+            // Throttled: one per connection attempt from a source we already blocked.
+            _log.infoThrottled("ntcp-inbound-blocked-attempt",
+                               "Blocking an incoming NTCP connection from [" + ba + "] -> Attempts: " + count);
+            if (count >= 30) {
+                _log.warnThrottled("ntcp-inbound-excessive-attempts",
+                                   "Excessive inbound NTCP connection attempts from [" + ba + "] -> Blocking" +
+                                   " * Attempts: " + count);
             }
             return AcceptVerdict.BLOCKED;
         }
@@ -988,12 +988,15 @@ class EventPumper implements Runnable {
         switch (verdict) {
             case BANNED:
                 if (shouldInfo) {
-                    _log.info("Refusing Session Request from blocklisted IP address " + ba);
+                    // Throttled: one per refused connection from this address.
+                    _log.infoThrottled("ntcp-refuse-banned",
+                                       "Refusing a Session Request from a blocklisted IP address [" + ba + ']');
                 }
                 break;
             case LIMIT:
                 if (shouldWarn) {
-                    _log.warn("Refusing Session Request from: " + ba + " -> NTCP connection limit reached");
+                    _log.warnThrottled("ntcp-refuse-limit",
+                                       "Refusing a Session Request from [" + ba + "] -> NTCP connection limit reached");
                 }
                 break;
             default:
@@ -1016,11 +1019,13 @@ class EventPumper implements Runnable {
                                                             _transport.haveCapacity(95),
                                                             _transport.getMaxConnections(), _transport.countPeers(),
                                                             _context.random());
-        if (verdict.isDrop() && _log.shouldInfo()) {
-            _log.info("[NTCP] Dropping incoming TCP connection -> Accept chance: " +
-                      (verdict.getPercent() >= 1 ? Math.min(verdict.getPercent(), 100) + "%" : "1%")
-                      + "\n* Connections per minute: " + verdict.getLastConnections() + " previous, " +
-                      verdict.getCurrentConnectionsPerMinute() + " current");
+        if (verdict.isDrop()) {
+            // Throttled: one per dropped inbound connection attempt.
+            _log.infoThrottled("ntcp-inbound-flood-drop",
+                               "[NTCP] Dropping an incoming TCP connection -> Accept chance: " +
+                               (verdict.getPercent() >= 1 ? Math.min(verdict.getPercent(), 100) + "%" : "1%") +
+                               " * Connections per minute: " + verdict.getLastConnections() + " previous, " +
+                               verdict.getCurrentConnectionsPerMinute() + " current");
         }
         return !verdict.isDrop();
     }
@@ -1177,8 +1182,8 @@ class EventPumper implements Runnable {
         Object att = key.attachment();
         if (!(att instanceof NTCPConnection)) {
             if (_log.shouldWarn()) {
-                _log.warn("Invalid attachment on connect key -> Cancelling key * Attachment: " +
-                          (att != null ? att.getClass().getSimpleName() : "null"));
+                _log.warn("Invalid attachment on connect key -> Cancelling key" +
+                          (att != null ? " * Attachment: " + att.getClass().getSimpleName() : ""));
             }
             key.cancel();
             return;
@@ -1295,8 +1300,8 @@ class EventPumper implements Runnable {
         Object att = key.attachment();
         if (!(att instanceof NTCPConnection)) {
             if (_log.shouldWarn()) {
-                _log.warn("Invalid attachment on read key -> Cancelling key * Attachment: " +
-                          (att != null ? att.getClass().getSimpleName() : "null"));
+                _log.warn("Invalid attachment on read key -> Cancelling key" +
+                          (att != null ? " * Attachment: " + att.getClass().getSimpleName() : ""));
             }
             key.cancel();
             return;
@@ -1469,17 +1474,16 @@ class EventPumper implements Runnable {
         int count;
         if (ipStr != null) {
             count = _blockedIPs.increment(ipStr);
-            if (_log.shouldInfo()) {
-                _log.info(reason + " on an Inbound connection before any data" +
-                          " -> Blocking the IP: " + ipStr +
-                          (count > 1 ? " * Prior blocks: " + count : ""));
-            }
+            // Throttled: one per inbound connection that dies before its first message.
+            _log.infoThrottled("ntcp-inbound-nodata-blocked",
+                               reason + " on an inbound connection before any data" +
+                               " -> Blocking the IP [" + ipStr + "]" +
+                               (count > 1 ? " * Prior blocks: " + count : ""));
         } else {
             count = 1;
-            if (_log.shouldInfo()) {
-                _log.info(reason + " on an Inbound connection before any data" +
-                          " -> Closing the connection\n* " + con);
-            }
+            _log.infoThrottled("ntcp-inbound-nodata-closed",
+                               reason + " on an inbound connection before any data" +
+                               " -> Closing the connection * " + con);
         }
         _context.statManager().addRateData("ntcp.dropInboundNoMessage", count);
     }
@@ -1499,7 +1503,7 @@ class EventPumper implements Runnable {
         if (con.isInbound() && con.getMessagesReceived() <= 0) {
             byte[] ip = con.getRemoteIP();
             countInboundNoMessage(ip != null ? Addresses.toString(ip).replace("/", "") : null,
-                                  con, "IO Error: " + ioe.getMessage());
+                                  con, "IO failure " + ioe);
         } else if (shouldInfo) {
             _log.info("Error reading: " + con + " (" + ioe.getMessage() + ")");
         }
@@ -1524,8 +1528,8 @@ class EventPumper implements Runnable {
         Object att = key.attachment();
         if (!(att instanceof NTCPConnection)) {
             if (_log.shouldWarn()) {
-                _log.warn("Invalid attachment on write key -> Cancelling key * Attachment: " +
-                          (att != null ? att.getClass().getSimpleName() : "null"));
+                _log.warn("Invalid attachment on write key -> Cancelling key" +
+                          (att != null ? " * Attachment: " + att.getClass().getSimpleName() : ""));
             }
             key.cancel();
             return;

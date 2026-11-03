@@ -139,7 +139,9 @@ public class DeadlockDetector extends SimpleTimer2.TimedEvent {
         } catch (Throwable t) {
             // class not found, unsupportedoperation, ...
             Log log = ctx.logManager().getLog(DeadlockDetector.class);
-            log.warn("Fail", t);
+            log.warnThrottled("deadlockdetector-notify-failed",
+                              "Cannot notify the desktop GUI of the deadlock -> The notification is lost" +
+                              "\n* Reason: " + t.getMessage());
             return false;
         }
         return true;

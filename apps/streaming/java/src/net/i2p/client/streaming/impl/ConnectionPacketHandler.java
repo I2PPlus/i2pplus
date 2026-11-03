@@ -161,8 +161,10 @@ class ConnectionPacketHandler {
         if (!ok) {
             boolean isTooFast = con.getSendStreamId() <= 0;
             // Apparently an i2pd bug... see verifyPacket()
-            if ((!packet.isFlagSet(Packet.FLAG_RESET)) && (!isTooFast) && (_log.shouldWarn()))
-                _log.warn("Received packet that does NOT verify: " + packet + " on " + con);
+            if ((!packet.isFlagSet(Packet.FLAG_RESET)) && (!isTooFast))
+                _log.warnThrottled("streaming-packet-verify-fail",
+                                   "Received packet that failed verification on " + con.shortLabel() +
+                                   " -> Dropped" + packet.formatAsString(false));
             packet.releasePayload();
             return;
         }
@@ -193,8 +195,10 @@ class ConnectionPacketHandler {
         }
 
         if ((con.getCloseSentOn() > 0) && (con.getUnackedPacketsSent() <= 0) &&
-             (seqNum > 0) && (packet.getPayloadSize() > 0) && _log.shouldInfo()) {
-            _log.info("Received new data when we've sent them data and all of our data is ACKed on " + con);
+             (seqNum > 0) && (packet.getPayloadSize() > 0)) {
+            _log.infoThrottled("streaming-data-after-half-close",
+                               "Received new data after all of our data was ACKed on " + con.shortLabel() +
+                               " -> Half-close, accepted");
             // this is fine, half-close
             // Major bug before 0.9.9, packets were dropped here and a reset sent
             // If we are fully closed, will handle that in the canAccept test below
@@ -247,8 +251,8 @@ class ConnectionPacketHandler {
             if (packet.getOptionalDelay() >= Packet.MIN_DELAY_CHOKE) {
                 // requested choke
                 choke = true;
-                if (_log.shouldInfo())
-                    _log.info("Received a choke on " + con);
+                _log.infoThrottled("streaming-choke-received",
+                                   "Received a choke from " + con.shortLabel() + " -> Slowing the send rate");
             }
             // Only call this if the flag is set
             con.setChoked(choke);
@@ -259,23 +263,26 @@ class ConnectionPacketHandler {
             int current = os.getPassiveFlushDelay();
             int reduced = Math.max(10, current / 2);
             if (reduced < current) {
-                if (_log.shouldInfo())
-                    _log.info("Reducing passive flush delay from " + current + " to " + reduced
-                              + " due to interactive profile on " + con);
+                _log.infoThrottled("streaming-flush-delay-reduce",
+                                   "Reduced the passive flush delay from " + current +
+                                   "ms to " + reduced + "ms on " + con.shortLabel() +
+                                   " -> Interactive profile");
                 os.setPassiveFlushDelay(reduced);
             }
         }
 
         if (!con.getInputStream().ensureCanAccept(msgNum, packet.getPayloadSize())) {
             if (con.getInputStream().isLocallyClosed()) {
-                if (_log.shouldWarn())
-                    _log.warn("More data received after local close on " + con + " -> Sending reset");
+                _log.warnThrottled("streaming-data-after-local-close",
+                                   "More data received after local close on " + con.shortLabel() +
+                                   " -> Sending reset");
                 if (_log.shouldDebug())
                     _log.debug("Dropped a packet after local close -> " + packet);
                 con.disconnect(false);
             } else {
-                if (_log.shouldWarn())
-                    _log.warn("Inbound buffer exceeded on " + con + " -> Peer choked, packet dropped");
+                _log.warnThrottled("streaming-inbound-buffer-exceeded",
+                                   "Inbound buffer exceeded on " + con.shortLabel() +
+                                   " -> Peer choked, packet dropped");
                 con.setChoking(true);
             }
             packet.releasePayload();
@@ -372,10 +379,13 @@ class ConnectionPacketHandler {
                 final int ackDelay = con.getOptions().getSendAckDelay();
                 final long lastSendTime = con.getLastSendTime();
 
-                if (_log.shouldInfo())
-                    _log.info("Congestion -> Duplicate packet * ACK delay: " + ackDelay + "ms" +
-                              "\n* Last send: " + DataHelper.formatDuration(now - lastSendTime) + " ago" +
-                              "\n* " + packet + "\n* " + con);
+                // formatAsString() emits its own "\n* " bullet, so the values go on
+                // the first line to keep this at two. The ACK delay is the stream's
+                // configured constant, not a fact about this packet, so it is not shown.
+                _log.infoThrottled("streaming-duplicate-packet",
+                                   "Duplicate packet on " + con.shortLabel() + " -> Congestion, last send " +
+                                   DataHelper.formatDuration(now - lastSendTime) + " ago" +
+                                   packet.formatAsString(false));
 
                 // If this is longer than his RTO, he will always retransmit, and
                 // will be stuck at a window size of 1 forever. So we take the minimum
@@ -383,15 +393,16 @@ class ConnectionPacketHandler {
                 // Next send time.
                 final long nextSendTime = lastSendTime + Math.min(ackDelay, con.getOptions().getRTT() / 2);
                 if (nextSendTime <= now) {
-                    if (_log.shouldInfo())
-                        _log.info("Immediate ACK");
+                    _log.infoThrottled("streaming-dup-ack-immediate",
+                                       "Duplicate packet on " + con.shortLabel() + " -> Immediate ACK");
                     con.ackImmediately();
                     _context.statManager().updateFrequency("stream.ack.dup.immediate");
                 } else {
                     // Calculated delay for ACK scheduling.
                     final long delay = nextSendTime - now;
-                    if (_log.shouldInfo())
-                        _log.info("Scheduling ACK in " + delay);
+                    _log.infoThrottled("streaming-dup-ack-scheduled",
+                                       "Duplicate packet on " + con.shortLabel() +
+                                       " -> ACK scheduled in " + delay + "ms");
                     Connection.AckDupEvent ackDup = con.getAckDupEvent();
                     ackDup.mark();
                     ackDup.forceReschedule(delay);
@@ -775,7 +786,9 @@ class ConnectionPacketHandler {
                     con.setSendStreamId(packet.getReceiveStreamId());
                     Destination dest = packet.getOptionalFrom();
                     if (dest == null) {
-                        if (_log.shouldWarn()) {_log.warn("Received SYN Packet without FROM");}
+                        _log.warnThrottled("streaming-syn-without-from",
+                                           "Received SYN packet without FROM on " + con.shortLabel() +
+                                           " -> Dropped");
                         packet.releasePayload();
                         return false;
                     }
@@ -794,7 +807,9 @@ class ConnectionPacketHandler {
                         packet.releasePayload();
                         return true;
                     } else {
-                        if (_log.shouldWarn()) {_log.warn("Received packet with unknown StreamID, no RESET or SYN\n* " + packet);}
+                        _log.warnThrottled("streaming-unknown-streamid",
+                                           "Received packet with an unknown StreamID, no RESET or SYN on " +
+                                           con.shortLabel() + " -> Dropped" + packet.formatAsString(false));
                         packet.releasePayload();
                         return false;
                     }
@@ -802,7 +817,9 @@ class ConnectionPacketHandler {
             } else {
                 // Apparently an i2pd bug...
                 if (con.getSendStreamId() != packet.getReceiveStreamId()) {
-                    if (_log.shouldWarn()) {_log.warn("Wrong reply StreamID on " + con + "\n* " + packet);}
+                    _log.warnThrottled("streaming-wrong-reply-streamid",
+                                       "Reply StreamID does not match " + con.shortLabel() +
+                                       " -> Dropped" + packet.formatAsString(false));
                     packet.releasePayload();
                     return false;
                 } else {
@@ -828,7 +845,9 @@ class ConnectionPacketHandler {
             Destination d1 = con.getRemotePeer();
             Destination d2 = packet.getOptionalFrom();
             if (d1 != null && d2 != null && !d1.equals(d2)) {
-                if (_log.shouldWarn()) {_log.warn("Received RESET packet from WRONG destination -> " + con);}
+                _log.warnThrottled("streaming-reset-wrong-destination",
+                                   "Received RESET packet from a destination that does not match " +
+                                   con.shortLabel() + " -> Ignored");
                 packet.releasePayload();
                 return;
             }
@@ -837,11 +856,14 @@ class ConnectionPacketHandler {
             boolean ok = packet.verifySignature(_context, spk, ba.getData());
             _cache.release(ba);
             if (!ok) {
-                if (_log.shouldWarn()) {_log.warn("Received UNSIGNED or FORGED RESET packet -> " + con);}
+                _log.warnThrottled("streaming-reset-signature-failed",
+                                   "Received RESET packet with a failed signature for " + con.shortLabel() +
+                                   " -> Ignored");
                 packet.releasePayload();
                 return;
             } else {
-                if (_log.shouldInfo()) {_log.info("Received RESET packet -> " + con);}
+                _log.infoThrottled("streaming-reset-received",
+                                   "Received RESET packet for " + con.shortLabel() + " -> Connection reset");
                 // ok, valid RST
                 con.resetReceived();
                 con.eventOccurred();
@@ -851,7 +873,9 @@ class ConnectionPacketHandler {
                 return;
             }
         } else {
-            if (_log.shouldWarn()) {_log.warn("Received RESET packet for the WRONG connection -> " + con);}
+            _log.warnThrottled("streaming-reset-wrong-connection",
+                               "Received RESET packet for another connection " + con.shortLabel() +
+                               " -> Ignored");
             packet.releasePayload();
             return;
         }

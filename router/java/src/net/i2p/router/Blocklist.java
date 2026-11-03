@@ -730,11 +730,10 @@ public class Blocklist {
         // save to tell the update manager
         if (read > 0) {blf.version = blFile.lastModified();}
         if (_log.shouldWarn()) {
-            _log.warn("Stats for " + blFile + ":" +
-                      "\n* Removed " + badcount + " bad entries and comment lines" +
-                      "\n* Read " + read + " valid entries from the blocklist " + blFile +
-                      "\n* Blocking " + ipcount + " IPs and " + peercount + " hashes (" + (ipcount + peercount) + " total)" +
-                      "\n* Blocklist processing finished, took: " + (_context.clock().now() - start) + "ms");
+            _log.warn("Read " + read + " valid entries from " + blFile + " -> Blocking " +
+                      ipcount + " IPs and " + peercount + " router hashes" +
+                      "\n* Removed: " + badcount + " bad entries and comment lines" +
+                      " * Elapsed: " + (_context.clock().now() - start) + "ms");
         }
         return count;
     }
@@ -768,11 +767,9 @@ public class Blocklist {
         }
         int blocklistSize = count - removed;
         if (_log.shouldInfo()) {
-            _log.info("Merged Stats:" +
-                      "\n* Read " + count + " total entries from the blocklists" +
-                      "\n* Merged " + removed + " overlapping entries" +
-                      "\n* Result is " + blocklistSize + " entries" +
-                      "\n* Blocklist processing finished in " + (_context.clock().now() - start) + "ms");
+            _log.info("Merged the blocklists -> " + blocklistSize + " entries from " + count + " read" +
+                      "\n* Overlapping entries removed: " + removed +
+                      " * Elapsed: " + (_context.clock().now() - start) + "ms");
         }
         return blocklistSize;
     }

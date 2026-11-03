@@ -455,13 +455,10 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
         int priority = Math.floorDiv(entry.getPriority(), 100) * 100;
         _context.statManager().addRateData(STAT_DROP + priority, delay);
         if (_log.shouldWarn())
-            _log.warn("CDPQ " + _id + " dropped an item -> Name: " + _name + " * Delay: " + delay + "ms"
-                      + "\n* Priority: " + entry.getPriority() + " * Sequence: " + entry.getSeqNum()
-                      + "\n* Time since first drop: " +
-                      DataHelper.formatDuration(_now - _first_above_time) +
-                      " * Time since next drop: " + DataHelper.formatDuration(_now - _drop_next) +
-                      "\n* Messages dropped: " + (_count+1) + " (" + size() + " remaining in queue)" +
-                      "\n* Item: " + entry);
+            _log.warnThrottled("codel-drop",
+                               "CoDel queue " + _id + " dropped a backlogged item -> Delay " + delay + "ms" +
+                               " * Priority: " + entry.getPriority() +
+                               " * Above the target for: " + DataHelper.formatDuration(_now - _first_above_time));
         entry.drop();
     }
 

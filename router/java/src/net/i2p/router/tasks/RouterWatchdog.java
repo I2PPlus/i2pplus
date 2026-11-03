@@ -160,15 +160,15 @@ public class RouterWatchdog implements Runnable {
             double bps = (r != null ? r.getAverageValue() : 0);
             long max = Runtime.getRuntime().maxMemory();
             long used = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-            _log.error("Watchdog status:" +
+            _log.error("Watchdog found a job queue lag of " +
+                       DataHelper.formatDuration(_context.jobQueue().getMaxLag()) +
+                       " -> " + _context.jobQueue().getReadyCount() + " ready jobs waiting" +
                        "\n* Comm system: " + _context.commSystem().getStatus() +
-                       "\n* Peers: " + _context.commSystem().countActivePeers() +
-                       "\n* Ready and waiting jobs: " + _context.jobQueue().getReadyCount() +
-                       "\n* Lag: " + DataHelper.formatDuration(_context.jobQueue().getMaxLag()) +
-                       "\n* Part. tunnels: " + _context.tunnelManager().getParticipatingCount() +
-                       "\n* Send processing time: " + DataHelper.formatDuration((long)processTime) +
-                       "\n* Send rate: " + DataHelper.formatSize((long)bps) + "Bps" +
-                       "\n* Memory: " + DataHelper.formatSize(used) + "B / " + DataHelper.formatSize(max) + 'B');
+                       " * Peers: " + _context.commSystem().countActivePeers() +
+                       " * Part. tunnels: " + _context.tunnelManager().getParticipatingCount() +
+                       " * Send processing time: " + DataHelper.formatDuration((long)processTime) +
+                       " * Send rate: " + DataHelper.formatSize((long)bps) + "B/s" +
+                       " * Memory: " + DataHelper.formatSize(used) + " of " + DataHelper.formatSize(max) + " bytes");
 
             if (_consecutiveErrors == 1) {
                 _log.log(Log.CRIT, "Router appears hung, or there is severe network congestion. Watchdog starts barking!");

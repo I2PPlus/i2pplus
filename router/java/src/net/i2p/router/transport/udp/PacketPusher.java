@@ -110,7 +110,9 @@ class PacketPusher implements Runnable {
                     }
                 }
             } catch (RuntimeException e) {
-                _log.error("SSU Output Queue Error", e);
+                // Throttled: this is the run loop, and a persistent failure spins here.
+                _log.errorThrottled("ssu-pusher-loop",
+                                    "SSU output queue error -> Continuing the loop * Reason: " + e);
             }
         }
     }
@@ -140,7 +142,10 @@ class PacketPusher implements Runnable {
                     ep.getSender().add(packet);
                     return;
                 } catch (Exception e) {
-                    _log.error("Error sending packet through endpoint: " + ep, e);
+                    // Throttled: one per packet per endpoint in this loop.
+                    _log.errorThrottled("ssu-pusher-endpoint",
+                                        "Sending a packet through an endpoint failed -> Trying the next one" +
+                                        "\n* Endpoint: " + ep + " * Reason: " + e);
                     // Continue trying other endpoints if available
                 }
             }

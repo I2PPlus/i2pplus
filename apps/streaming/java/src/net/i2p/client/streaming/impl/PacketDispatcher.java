@@ -423,8 +423,11 @@ class PacketDispatcher {
                     // worker died the producer would spin forever on this
                     // full shard queue and stall every connection on the
                     // destination. Release the payload and move on.
-                    if (_log != null && _log.shouldWarn())
-                        _log.warn("Error processing receive packet, packet dropped", re);
+                    if (_log != null)
+                        _log.warnThrottled("dispatcher-packet-processing-failed",
+                                           "Failed processing a received packet on " +
+                                           (e.con != null ? e.con.shortLabel() : "an unknown connection") +
+                                           " -> Dropped: " + re);
                     e.packet.releasePayload();
                 } catch (Throwable t) {
                     // An Error (OOM, StackOverflow) also must not strand the

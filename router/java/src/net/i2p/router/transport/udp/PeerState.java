@@ -1033,16 +1033,16 @@ public class PeerState {
                 msg.timestamp("Expired in the active pool");
                 _transport.failed(state);
                 if (logInfo)
-                    _log.info("[" + _shortHash + "] -> Message expired [MsgID " + state.getMessageId() + ']');
-            } else if (logInfo) {
-                _log.warn("[" + _shortHash + "] -> Unable to send a direct message [MsgID " + state.getMessageId() + ']');
+                    _log.info("[" + _shortHash + "] Message expired [MsgID " + state.getMessageId() + "] -> Failing it");
+            } else if (logWarn) {
+                _log.warn("[" + _shortHash + "] Unable to send a direct message [MsgID " + state.getMessageId() + "] -> Dropping it");
             }
         }
 
         if (failedSize > 0) {
             if (totalFail) {
                 if (logWarn)
-                    _log.info("[SSU] First outbound message failed (timeout after 60s) -> " +
+                    _log.warn("[SSU] First outbound message timed out -> Dropping the peer " +
                               toShortString());
                 _transport.sendDestroy(this, SSU2Util.REASON_FRAME_TIMEOUT);
                 _transport.dropPeer(this, true, "OB First Message Fail");
@@ -1666,18 +1666,16 @@ public class PeerState {
         }
 
         int oldRto = _rto;
-        long oldTimer = _retransmitTimer.get() - now;
         _rto = nextCongestionRTO(_rto, _rtt, _rttDeviation, MIN_RTO, MAX_RTO);
         _retransmitTimer.set(now + _rto);
         if (_log.shouldInfo()) {
-            _log.info("[" + _shortHash + "] -> Estimated bandwidth: " +
-                      DataHelper.formatSize2Decimal((long) (bwe * 1000), false) + "b/s" +
-                      "\n* Congestion RTO: " + oldRto + "ms -> " + _rto + "ms" +
-                      " * Timer: " + oldTimer + "ms -> " + _rto + "ms" +
-                      "\n* Window: " + congestionAt + " bytes -> " +
-                      _sendWindowBytes.get() + " bytes" +
-                      " * SST: " + oldsst + " -> " + _slowStartThreshold +
-                      " * FastRetransmit: " + _fastRetransmit);
+            _log.info("[" + _shortHash + "] Congestion occurred -> Collapsing the send window" +
+                      (_fastRetransmit.get() ? " * Fast retransmit" :
+                       " * Bandwidth estimate: " +
+                       DataHelper.formatSize2Decimal((long) (bwe * 1000), false) + "b/s") +
+                      "\n* RTO: " + oldRto + "ms to " + _rto + "ms" +
+                      " * Window: " + congestionAt + " bytes to " + _sendWindowBytes.get() + " bytes" +
+                      " * SST: " + oldsst + " bytes to " + _slowStartThreshold + " bytes");
         }
     }
 

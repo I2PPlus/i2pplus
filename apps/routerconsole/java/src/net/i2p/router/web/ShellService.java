@@ -110,12 +110,14 @@ public class ShellService implements ClientApp {
         File exe = new File(_commandPath);
         if (!exe.exists()) {
             if (_log.shouldError())
-                _log.error("ShellService: Command does not exist: " + _commandPath);
+                _log.error("Command does not exist -> Not started" +
+                           "\n* Command: " + _commandPath);
             throw new RuntimeException("Command does not exist: " + _commandPath);
         }
         if (!exe.canExecute()) {
             if (_log.shouldWarn())
-                _log.warn("ShellService: Command is not executable: " + _commandPath + " marking it executable");
+                _log.warn("Command is not executable -> Marking it executable" +
+                          "\n* Command: " + _commandPath);
             exe.setExecutable(true);
         }
 
@@ -227,17 +229,19 @@ public class ShellService implements ClientApp {
         File exe = new File(_commandPath);
         if (!exe.exists()) {
             if (_log.shouldError())
-                _log.error("ShellService: Command does not exist: " + _commandPath);
+                _log.error("Command does not exist -> Not started" +
+                           "\n* Command: " + _commandPath);
             throw new RuntimeException("Command does not exist: " + _commandPath);
         }
         if (!exe.canExecute()) {
             if (_log.shouldWarn())
-                _log.warn("ShellService: Command is not executable: " + _commandPath + " marking it executable");
+                _log.warn("Command is not executable -> Marking it executable" +
+                          "\n* Command: " + _commandPath);
             exe.setExecutable(true);
         }
         if (getName().equals("unnamedClient")) {
             if (_log.shouldWarn())
-                _log.warn("ShellService: ShellService has no name, not starting");
+                _log.warn("Service has no name -> Not started");
             return;
         }
         changeState(ClientAppState.STARTING, "ShellService: " + getName() + " starting");
@@ -258,7 +262,8 @@ public class ShellService implements ClientApp {
                 _log.debug("ShellService: " + getName() + " registered with the router");
         } else {
             if (_log.shouldWarn())
-                _log.warn("ShellService: " + getName() + " failed to register with the router");
+                _log.warn("Cannot register with the router -> Not started" +
+                          "\n* Service: " + getName());
             _cmgr.unregister(this);
             _cmgr.register(this);
         }
@@ -300,7 +305,7 @@ public class ShellService implements ClientApp {
     public synchronized void shutdown(String[] args) throws Throwable {
         if (getName().equals("unnamedClient")) {
             if (_log.shouldWarn())
-                _log.warn("ShellService: ShellService has no name, not shutting down");
+                _log.warn("Service has no name -> Not shutting down");
             return;
         }
         changeState(ClientAppState.STOPPING, "ShellService: " + getName() + " stopping");

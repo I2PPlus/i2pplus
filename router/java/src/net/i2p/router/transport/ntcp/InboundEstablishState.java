@@ -508,7 +508,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 _context.statManager().addRateData("ntcp.invalidInboundSkew", diff);
                 _transport.setLastBadSkew(_peerSkew);
                 if (_log.shouldWarn())
-                    _log.warn("Clock skew (" + _peerSkew + "s) on " + this);
+                    _log.warn("Excessive clock skew (" + diff + "ms) on " + this);
                 /*
                  * Do them a favor, keep going with msg 2 so they get our timestamp.
                  * They should disconnect after that.

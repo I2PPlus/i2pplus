@@ -215,12 +215,15 @@ public class I2CPMessageReader {
                             _listener.messageReceived(I2CPMessageReader.this, msg);
                         }
                     } catch (I2CPMessageException ime) {
-                        _log.warn("Error handling message", ime);
+                        _log.warnThrottled("i2cp-message-read-failed",
+                                           "Handling an I2CP message failed -> Closing the reader: " + ime);
                         _listener.readError(I2CPMessageReader.this, ime);
                         cancelRunner();
                     } catch (IOException ioe) {
                         if (_stayAlive) {
-                            _log.warn("IO Error handling message -> Error: " + ioe.getMessage());
+                            _log.warnThrottled("i2cp-io-read-failed",
+                                               "Reading the I2CP stream failed -> Closing the reader: " +
+                                               ioe.getMessage());
                             _listener.readError(I2CPMessageReader.this, ioe);
                         } // else triggered by cancelRunner(), ignore SocketException
                         _listener.disconnected(I2CPMessageReader.this);
@@ -231,7 +234,8 @@ public class I2CPMessageReader {
                         // ooms seen here... maybe log and keep going?
                         throw oom;
                     } catch (RuntimeException e) {
-                        _log.log(Log.CRIT, "Unhandled error reading I2CP stream \n* Error: " + e.getMessage());
+                        _log.log(Log.CRIT, "Unhandled error reading the I2CP stream -> Closing the reader: " +
+                                          e.getMessage());
                         _listener.readError(I2CPMessageReader.this, e);
                         _listener.disconnected(I2CPMessageReader.this);
                         cancelRunner();
@@ -245,7 +249,8 @@ public class I2CPMessageReader {
                     } catch (InterruptedException ie) {
                         Thread.currentThread().interrupt();
                         // we should break away here.
-                        _log.warn("Breaking away stream -> Interrupted Exception: " + ie.getMessage());
+                        if (_log.shouldWarn())
+                            _log.warn("Left the paused I2CP stream -> Interrupted: " + ie.getMessage());
                         _listener.disconnected(I2CPMessageReader.this);
                         cancelRunner();
                     }

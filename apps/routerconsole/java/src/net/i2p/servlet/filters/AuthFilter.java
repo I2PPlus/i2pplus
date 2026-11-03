@@ -247,7 +247,9 @@ if ("/prefs".equals(path)) {
                 return createSessionAndSetCookie(req, resp, username);
             }
         } catch (Exception e) {
-            _log.warn("Basic auth error", e);
+            _log.warnThrottled("authfilter-basic-auth-failed",
+                               "Cannot read the basic authorization header -> Redirecting to the login page" +
+                               "\n* Reason: " + e.getMessage());
         }
         return null;
     }

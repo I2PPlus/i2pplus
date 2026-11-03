@@ -1093,7 +1093,9 @@ public class SimpleTimer2 {
                 }
                 if (scheduled && ((now + timeoutMs) < _nextRun || !useEarliestTime)) {
                     if (_log.shouldInfo())
-                        _log.info("Reschedule " + this + ": " + timeoutMs + "ms (was " + oldTimeout + "ms)");
+                        _log.infoThrottled("st2-reschedule",
+                                           "Rescheduling " + this + " to " + timeoutMs + "ms, was " +
+                                           oldTimeout + "ms");
                     cancel();
                 }
                 schedule(timeoutMs);
@@ -1180,14 +1182,15 @@ public class SimpleTimer2 {
                 if (_future != null) {
                     long delay = _future.getDelay(TimeUnit.MILLISECONDS);
                     if (delay > 100)
-                        _log.warn("Early exec " + this + " (" + delay + "ms)");
+                        _log.warnThrottled("st2-early-exec",
+                                           "Running " + this + " " + delay + "ms early");
                     else if (delay < -1000) {
                         // Recorded whether or not anything is logged: the backlog
                         // reading drives the worker count, so it must not depend on a
                         // log level being enabled.
                         _pool.recordDelay(-delay);
-                        _log.warn("Late exec " + this + " (" + (0 - delay) + "ms)" +
-                                  (delay < -5000 ? _pool.debug() : ""));
+                        _log.warnThrottled("st2-late-exec",
+                                           "Running " + this + " " + (0 - delay) + "ms late");
                     }
                 } else {
                     _log.warn("No future: " + this);

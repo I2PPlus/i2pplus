@@ -469,8 +469,8 @@ public abstract class BuildRequestor {
 
         if (log.shouldInfo()) {
             log.info("Sending build request [MsgID " + msg.getUniqueId() + "] for " + cfg.toShortString() +
-                     "\n* Via: " + pairedTunnel + " to [" + ibgw.toShortBase64() +
-                      "] -> Awaiting reply [MsgID " + cfg.getReplyMessageId() + "]");
+                     " via [" + ibgw.toShortBase32() + "] -> Awaiting reply [MsgID " +
+                     cfg.getReplyMessageId() + "]");
         }
         ctx.tunnelDispatcher().dispatchOutbound(msg, pairedTunnel.getSendTunnelId(0), ibgw);
         return true;
@@ -557,10 +557,11 @@ public abstract class BuildRequestor {
                 // Recorded before dispatch so an expiry can be joined back to this send.
                 cfg.setLastRequestMsgId(msg.getUniqueId());
                 if (log.shouldInfo()) {
-                    log.info("Sending build request via exploratory tunnel to [" +
-                             nextHop.toShortBase64() + "] for " + cfg +
-                             "\n* Via: " + outTunnel +
-                             "\n* Reply via: " + pairedTunnel + " [MsgID " + msg.getUniqueId() + "]");
+                    log.info("Sending build request via an exploratory tunnel to [" +
+                             nextHop.toShortBase32() + "] for " + cfg.toShortString() +
+                             " [MsgID " + msg.getUniqueId() + "]" +
+                             "\n* Reply via: " +
+                             (pairedTunnel != null ? pairedTunnel.getLength() + " hops" : "none"));
                 }
                 ctx.tunnelDispatcher().dispatchOutbound(msg, outTunnel.getSendTunnelId(0), nextHop);
                 return;
@@ -581,8 +582,9 @@ public abstract class BuildRequestor {
 
         cfg.setLastRequestMsgId(msg.getUniqueId());
         if (log.shouldInfo()) {
-            log.info("Sending build request direct to [" + nextHop.toShortBase64() + "] for " + cfg +
-                     "\n* Reply via: " + pairedTunnel + " [MsgID " + msg.getUniqueId() + "]");
+            log.info("Sending build request direct to [" + nextHop.toShortBase32() + "] for " + cfg.toShortString() +
+                     " [MsgID " + msg.getUniqueId() + "] -> Reply via " +
+                     (pairedTunnel != null ? pairedTunnel.getLength() + " hops" : "none"));
         }
 
         OutNetMessage outMsg = new OutNetMessage(ctx, msg, ctx.clock().now() + effectiveTimeout, PRIORITY, peer);

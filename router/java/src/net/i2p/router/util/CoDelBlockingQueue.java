@@ -474,16 +474,11 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     private void drop(E entry) {
         long delay = _context.clock().now() - entry.getEnqueueTime();
         if (_log.shouldWarn())
-            _log.warn("CoDel queue dropped a backlogged item -> Delay " +
-                      DataHelper.formatDuration(delay)
-                      + "\n* Name: " + _name + " * ID: " + _id
-                      + "\n* Since first above: " +
-                      DataHelper.formatDuration(_context.clock().now() - _first_above_time) +
-                      " * Since drop next: " +
-                      DataHelper.formatDuration(_context.clock().now() - _drop_next)
-                      + "\n* Dropped in this phase: " + (_count + 1) +
-                      " * Remaining in queue: " + size()
-                      + "\n* " + entry);
+            _log.warnThrottled("codel-drop",
+                               "CoDel queue " + _id + " dropped a backlogged item -> Delay " +
+                               DataHelper.formatDuration(delay) +
+                               " * Above the target for: " +
+                               DataHelper.formatDuration(_context.clock().now() - _first_above_time));
         entry.drop();
     }
 

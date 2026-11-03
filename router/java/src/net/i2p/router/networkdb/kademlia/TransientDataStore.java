@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 
 import java.util.concurrent.ConcurrentHashMap;
+import net.i2p.data.DataHelper;
 import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Hash;
 import net.i2p.data.LeaseSet;
@@ -240,8 +241,12 @@ class TransientDataStore implements DataStore {
                 RouterInfo ori = (RouterInfo) old;
                 if (ri.getPublished() > ori.getPublished()) {
                     if (_log.shouldInfo())
-                        _log.info("Received updated RouterInfo [" + key.toShortBase64() + "] -> " + v + " / " + caps +
-                                  "\n* Old: " + new Date(ori.getPublished()) + "\n* New: " + new Date(ri.getPublished()));
+                        _log.infoThrottled("tds-updated-routerinfo",
+                                           "Received an updated RouterInfo [" + key.toShortBase32() + "] -> " + v + " / " + caps +
+                                           "\n* Published " +
+                                           DataHelper.formatDuration(_context.clock().now() - ri.getPublished()) +
+                                           " ago, replacing one published " +
+                                           DataHelper.formatDuration(_context.clock().now() - ori.getPublished()) + " ago");
                     _data.put(key, data);
                     rv = true;
                 }
@@ -286,9 +291,12 @@ class TransientDataStore implements DataStore {
 
                 if (KademliaNetworkDatabaseFacade.shouldAcceptLeaseSet(ols, ls, _context.clock().now())) {
                     if (_log.shouldInfo()) {
-                        _log.info("Received updated LeaseSet [" + key.toShortBase32() + "]" + receivedAs +
-                                   "\n* Old: " + new Date(oldDate) +
-                                   "\n* New: " + new Date(newDate));
+                        _log.infoThrottled("tds-updated-leaseset",
+                                           "Received an updated LeaseSet [" + key.toShortBase32() + "]" + receivedAs +
+                                           "\n* Published " +
+                                           DataHelper.formatDuration(_context.clock().now() - newDate) +
+                                           " ago, replacing one published " +
+                                           DataHelper.formatDuration(_context.clock().now() - oldDate) + " ago");
                     }
                     _data.put(key, data);
                     rv = true;

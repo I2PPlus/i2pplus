@@ -537,7 +537,7 @@ public class HostChecker {
                     // Wait up to 5 minutes for category download to complete
                     for (int i = 0; i < 300; i++) {
                         if (_categoriesDownloaded.get()) {
-                            _log.info("Categories downloaded successfully from notbob.i2p -> Starting ping cycle...");
+                            _log.info("Downloaded the host categories -> Starting the ping cycle");
                             _pingTaskFuture = _scheduler.scheduleAtFixedRate(new PingTask(), STARTUP_DELAY_MS, _pingInterval, TimeUnit.MILLISECONDS);
                             return;
                         }
@@ -545,7 +545,7 @@ public class HostChecker {
                     }
 
                     // Timeout reached - start ping cycle anyway
-                    _log.warn("Categories failed to download from notbob.i2p (timeout) -> Starting ping cycle...");
+                    _log.warn("Categories were not downloaded within the wait -> Starting the ping cycle anyway");
                     _pingTaskFuture = _scheduler.scheduleAtFixedRate(new PingTask(), STARTUP_DELAY_MS, _pingInterval, TimeUnit.MILLISECONDS);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
@@ -1426,11 +1426,13 @@ public class HostChecker {
 
         } catch (IOException e) {
             if (_log.shouldError()) {
-                _log.error("IOException saving HostChecker results: " + e.getMessage() +
-                           "\n* File path: " + _hostsCheckFile.getAbsolutePath());
+                _log.error("Cannot save the HostChecker results -> The file is not written" +
+                           "\n* Reason: " + e.getMessage() + " * File: " + _hostsCheckFile.getAbsolutePath());
             }
         } catch (Exception e) {
-            _log.error("Unexpected error saving HostChecker results: " + e.getMessage(), e);
+            if (_log.shouldError())
+                _log.error("Cannot save the HostChecker results -> The file is not written" +
+                           "\n* Reason: " + e.getMessage(), e);
         }
     }
 

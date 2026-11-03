@@ -1408,14 +1408,14 @@ public class UDPTransport extends TransportImpl {
     @Override
     public void externalAddressReceived(Transport.AddressSource source, byte[] ip, int port) {
         if (_log.shouldWarn())
-            _log.warn("Received address: " + Addresses.toString(ip, port) + " from: " + source);
+            _log.warn("Received address [" + Addresses.toString(ip, port) + "] from " + source);
         if (ip == null)
             return;
         // this is essentially isValid(ip), but we can't use that because
         // _haveIPv6Address is not set yet
         if (!(isPubliclyRoutable(ip) || allowLocal())) {
             if (_log.shouldWarn())
-                _log.warn("Invalid address: " + Addresses.toString(ip, port) + " from: " + source);
+                _log.warn("Invalid address [" + Addresses.toString(ip, port) + "] from " + source);
             return;
         }
         if (source == SOURCE_INTERFACE && ip.length == 16) {
@@ -2470,13 +2470,12 @@ public class UDPTransport extends TransportImpl {
         RemoteHostId remoteId = peer.getRemoteHostId();
         PeerState altByHost = _peersByRemoteHost.remove(remoteId);
 
-        if (altByIdent != altByHost && _log.shouldInfo())
-            _log.warn("[SSU] Mismatch on remove -> " +
-                      (remoteId != null ? "RemoteHostId: " + remoteId : "") +
-                      (altByIdent != null ? " byID: " + altByIdent : "") +
-                      (altByHost != null ? " byHost: " + altByHost : "") +
-                      " byIdentSize: " + _peersByIdent.size() +
-                      " byHostSize: " + _peersByRemoteHost.size());
+        if (altByIdent != altByHost && _log.shouldWarn())
+            _log.warn("[SSU] Mismatch on removing a peer -> Dropping the alternates" +
+                      "\n* Peer: " + peer.toShortString() +
+                      (remoteId != null ? " * RemoteHostId: [" + remoteId + "]" : "") +
+                      (altByIdent != null ? " * byID: " + altByIdent.toShortString() : "") +
+                      (altByHost != null ? " * byHost: " + altByHost.toShortString() : ""));
 
         // deal with races to make sure we drop the peers fully
         if ( (altByIdent != null) && (peer != altByIdent) ) locked_dropPeer(altByIdent, shouldBanlist, "recurse");
@@ -4000,12 +3999,15 @@ public class UDPTransport extends TransportImpl {
      */
     public boolean allowConnection() {
         int maxConn = getMaxConnections();
-        boolean weAreFirewalled = _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.REJECT_UNSOLICITED ||
-                                  _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_OK ||
-                                  _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_UNKNOWN ||
-                                  _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_OK_IPV6_FIREWALLED ||
-                                  _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_UNKNOWN_IPV6_FIREWALLED ||
-                                  _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_DISABLED_IPV6_FIREWALLED;
+        // getStatus() walks every transport and reads properties; it was called six
+        // times in this one expression, on a path a spoofed session request reaches
+        Status status = _context.commSystem().getStatus();
+        boolean weAreFirewalled = status == Status.REJECT_UNSOLICITED ||
+                                  status == Status.IPV4_FIREWALLED_IPV6_OK ||
+                                  status == Status.IPV4_FIREWALLED_IPV6_UNKNOWN ||
+                                  status == Status.IPV4_OK_IPV6_FIREWALLED ||
+                                  status == Status.IPV4_UNKNOWN_IPV6_FIREWALLED ||
+                                  status == Status.IPV4_DISABLED_IPV6_FIREWALLED;
         if (weAreFirewalled) {maxConn = (int) (maxConn * 2.5);} // Increase from 1.5x to 2.5x for firewalled routers
         return _peersByIdent.size() < maxConn;
     }
@@ -4534,7 +4536,8 @@ if (_alive)
                 if (requiresConfirmation(old, status, isIPv6)) {
                     if (status != _reachabilityStatusPending) {
                         if (_log.shouldWarn())
-                            _log.warn("Old status: " + old + "\n* Status (pending confirmation): " + status +
+                            _log.warn("Reachability status changed from " + old + " to " + status +
+                                      " -> Awaiting a second reading" +
                                       "\n* Caused by update: " + newStatus);
                         _reachabilityStatusPending = status;
                         _testEvent.forceRunSoon(isIPv6);
@@ -4550,7 +4553,8 @@ if (_alive)
         }
         if (status != old) {
             if (_log.shouldWarn())
-                _log.warn("Old status: " + old + " New status: " + status +
+                _log.warn("Reachability status changed from " + old + " to " + status +
+                          " -> Rebuilding the address" +
                           "\n* Caused by update: " + newStatus);
             if (old != Status.UNKNOWN && _context.router().getUptime() > 5*60*1000) {
                 _context.router().eventLog().addEvent(EventLog.REACHABILITY,
@@ -4588,7 +4592,8 @@ if (_alive)
             if (newStatus == Status.UNKNOWN && status != _reachabilityStatusPending) {
                 // still have something pending, try again
                 if (_log.shouldWarn())
-                    _log.warn("Old status: " + status + "\n* Status (pending confirmation): " + _reachabilityStatusPending +
+                    _log.warn("Reachability status " + status + " with " + _reachabilityStatusPending +
+                              " pending -> Testing again soon" +
                               "\n* Caused by update: " + newStatus);
                 _testEvent.forceRunSoon(isIPv6);
             }

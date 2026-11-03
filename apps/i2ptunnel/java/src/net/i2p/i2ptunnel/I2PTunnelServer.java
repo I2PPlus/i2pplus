@@ -1154,20 +1154,25 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                         }
                     }
                 } catch (RejectedExecutionException ree) {
-                    _log.warn("Server handler pool saturated on " +
-                               remoteHost.toString().replace("/", "") + ':' + remotePort + " -> Closing connection...");
+                    _log.warnThrottled("server-pool-saturated",
+                                       "Server handler pool saturated for [" +
+                                       remoteHost.toString().replace("/", "") + ':' + remotePort +
+                                       "] -> Closing the connection");
                     closeSilently(socketToHandle);
                     releaseConnection();
                 }
 
             } catch (RouterRestartException rre) {
-                _log.warn("Waiting for router restart...");
+                _log.warnThrottled("server-wait-router-restart",
+                                   "Router is restarting -> Accept loop parked");
                 closeSilently(i2ps);
-                _log.warn("Reconnecting to router after restart");
+                _log.warnThrottled("server-reconnect-after-restart",
+                                   "Router is back -> Reconnecting the server socket");
                 reconnectServerSocket();
             } catch (I2PException ipe) {
-                _log.warn("Error accepting server socket connection -> Attempting to recover... (" +
-                          ipe.getMessage() + ")");
+                _log.warnThrottled("server-accept-recover",
+                                   "Cannot accept on the server socket -> Attempting to recover" +
+                                   "\n* Reason: " + ipe.getMessage());
                 closeSilently(i2ps);
                 if (!recoverServerSocket()) {
                     break;
@@ -1177,9 +1182,9 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                 if (!open) {
                     break;
                 }
-                if (_log.shouldError()) {
-                    _log.error("Error accepting server socket connection \n* " + ce.getMessage());
-                }
+                _log.warnThrottled("server-accept-reconnect",
+                                   "Cannot accept on the server socket -> Reconnecting" +
+                                   "\n* Reason: " + ce.getMessage());
                 reconnectServerSocket();
             } catch (SocketTimeoutException ste) {
                 closeSilently(i2ps);

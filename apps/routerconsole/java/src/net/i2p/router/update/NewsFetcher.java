@@ -720,9 +720,10 @@ class NewsFetcher extends UpdateRunner {
     private void processBlocklistEntries(BlocklistEntries ble) {
         long oldTime = _context.getProperty(PROP_BLOCKLIST_TIME, 0L);
         if (ble.updated <= oldTime) {
-            if (_log.shouldWarn())
-                _log.warn("Not updating blocklist " + new Date(ble.updated) +
-                          "; already have " + new Date(oldTime));
+            _log.warnThrottled("newsfetcher-blocklist-not-newer",
+                               "Blocklist feed is not newer than the stored list -> Keeping the current list" +
+                               "\n* Feed updated: " + new Date(ble.updated) +
+                               " * Stored: " + new Date(oldTime));
             return;
         }
         Blocklist bl = _context.blocklist();
@@ -807,9 +808,9 @@ class NewsFetcher extends UpdateRunner {
             _context.router().saveConfig(PROP_BLOCKLIST_TIME, upd);
             _mgr.notifyInstalled(BLOCKLIST, Blocklist.ID_FEED, upd);
         }
-        if (_log.shouldWarn()) {
-            _log.warn("Processed " + ble.entries.size() + " blocks and " + ble.removes.size() + " unblocks from news feed");
-        }
+        _log.infoThrottled("newsfetcher-blocklist-applied",
+                           "Applied the blocklist feed -> Updated the router blocklist" +
+                           "\n* Blocks: " + ble.entries.size() + " * Unblocks: " + ble.removes.size());
     }
 
     /**

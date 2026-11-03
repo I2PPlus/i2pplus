@@ -602,7 +602,8 @@ class IntroductionManager {
                 return;
             }
             if (_log.shouldInfo()) {
-                _log.info("Send RelayReponse rejection as Bob (Reason: " + rcode + ") to Alice " + alice);
+                _log.info("Send Relay Response rejection as Bob -> Reason: " + rcode +
+                          " * Alice: " + alice.toShortString());
             }
             UDPPacket packet = _builder2.buildRelayResponse(data, alice);
             alice.setLastSendTime(now);
@@ -683,7 +684,8 @@ class IntroductionManager {
         try {
             UDPPacket packet = _builder2.buildRelayResponse(rdata, bob);
             if (_log.shouldInfo())
-                _log.info("Send relay limit response " + rcode + " as charlie nonce " + nonce + " to bob " + bob);
+                _log.info("Send relay limit response as Charlie -> Reason: " + rcode +
+                          " * Bob: " + bob.toShortString() + " * Nonce: " + nonce);
             _transport.send(packet);
             bob.setLastSendTime(_context.clock().now());
         } catch (IOException ioe) { /* ignored */ }
@@ -870,11 +872,11 @@ class IntroductionManager {
         if (ourra != null) {
             ourIP = ourra.getIP();
             if (ourIP == null) {
-                if (_log.shouldWarn()) {_log.warn("No IP address to send in RelayReponse");}
+                if (_log.shouldWarn()) {_log.warn("No IP address to send in the Relay Response -> Rejecting the introduction");}
                 rcode = SSU2Util.RELAY_REJECT_CHARLIE_ADDRESS;
             }
         } else {
-            if (_log.shouldWarn()) {_log.warn("No address to send in RelayReponse");}
+            if (_log.shouldWarn()) {_log.warn("No external address to send in the Relay Response -> Rejecting the introduction");}
             rcode = SSU2Util.RELAY_REJECT_CHARLIE_ADDRESS;
         }
         int ourPort = _transport.getRequestedPort();
@@ -897,8 +899,10 @@ class IntroductionManager {
         try {
             UDPPacket packet = _builder2.buildRelayResponse(data, bob);
             if (_log.shouldInfo()) {
-                _log.info("Send RelayResponse " + rcode + " as Charlie " + " nonce " + nonce + " to Bob " + bob +
-                          " with token " + token + " for Alice \n* Address: " + Addresses.toString(testIP, testPort) + "\n* " + aliceRI);
+                _log.info("Send Relay Response as Charlie -> Reason: " + rcode +
+                          " * Bob: " + bob.toShortString() + " * Nonce: " + nonce + " * Token: " + token +
+                          "\n* Alice: [" + alice.toShortBase64() + "]" +
+                          " * Address: [" + Addresses.toString(testIP, testPort) + "]");
             }
             _transport.send(packet);
             bob.setLastSendTime(now);
@@ -977,7 +981,7 @@ class IntroductionManager {
             try {
                 UDPPacket packet = _builder2.buildRelayResponse(idata, alice);
                 if (_log.shouldDebug())
-                    _log.debug("Received RelayReponse " + status + " as Bob, forwarding " + " nonce " + nonce + " to Alice " + alice);
+                    _log.debug("Received Relay Response " + status + " as Bob, forwarding " + " nonce " + nonce + " to Alice " + alice);
                 _transport.send(packet);
                 alice.setLastSendTime(now);
             } catch (IOException ioe) { /* ignored */ }
@@ -989,13 +993,13 @@ class IntroductionManager {
             if (isDup) {
                 // very rare
                 if (_log.shouldInfo())
-                    _log.info("Dropping dup relay response as bob from charlie " + peer.getRemotePeer()
-                          + " for nonce " + nonce);
+                    _log.info("Dropping a duplicate relay response as Bob -> The introduction was already handled"
+                          + " * Charlie: " + peer.toShortString() + " * Nonce: " + nonce);
                 return;
             }
             // We are Alice, give to EstablishmentManager to check sig and process
             if (_log.shouldDebug())
-                _log.debug("Received RelayReponse " + status + " as Alice " + " nonce " + nonce + " from " + peer);
+                _log.debug("Received Relay Response " + status + " as Alice " + " nonce " + nonce + " from " + peer);
             _transport.getEstablisher().receiveRelayResponse(peer, nonce, status, data);
         }
     }

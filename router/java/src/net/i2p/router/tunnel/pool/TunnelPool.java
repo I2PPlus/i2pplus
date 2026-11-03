@@ -1899,11 +1899,9 @@ public class TunnelPool {
         long now = _context.clock().now();
         if (!_log.shouldInfo() || now < _nextZombieLog) {return;}
         _nextZombieLog = now + ZOMBIE_LOG_INTERVAL_MS;
-        _log.info("Pool health excludes " + excluded + " of " + (kept + excluded)
-                  + " tunnels with no transport session to their local hop"
-                  + "\n* Kept: " + kept
-                  + "\n* Transport: " + sample
-                  + " [" + toString() + "]");
+        _log.info(toString() + " -> Health excludes " + excluded + " of " + (kept + excluded) +
+                  " tunnels with no transport session to their local hop" +
+                  "\n* Kept: " + kept + " * Transport: " + sample);
     }
 
     /**
@@ -3337,10 +3335,9 @@ public class TunnelPool {
         if (replacee == null) {return false;}
         swapInReplacement(replacee, info, gatewayId, now);
         if (_log.shouldWarn()) {
-            _log.warn(toString() + " -> Replaced non-GOOD tunnel at cap (" +
-                      usable + " >= max " + maxUsable + ", target: " + target +
-                      ")\n* Removed: " + replacee.getTestStatus() +
-                      "\n* Added: " + info);
+            _log.warn(toString() + " -> Replaced a non-GOOD tunnel at the cap" +
+                      " (usable " + usable + ", maximum " + maxUsable + ", target " + target + ")" +
+                      "\n* Removed: " + replacee.getTestStatus() + " * Added: " + info.getTestStatus());
         }
         return true;
     }
@@ -5451,8 +5448,8 @@ public class TunnelPool {
         if (_log.shouldInfo()) {
             String boost = _consecutiveEmergencies > 0 ?
                 " * Dynamic target: " + Math.min(target + _consecutiveEmergencies, target + MAX_EMERGENCY_BOOST) : "";
-            _log.info("Pruning " + toRemove.size() + " non-GOOD tunnels -> Good tunnels: " + goodCount
-                      + " * Remaining tunnels: " + (goodCount + reserve) + boost + "\n* " + toString());
+            _log.info(toString() + " -> Pruning " + toRemove.size() + " non-GOOD tunnels" +
+                      "\n* Good: " + goodCount + " * Remaining: " + (goodCount + reserve) + boost);
         }
         removeTunnelsBatch(toRemove);
         // Refresh LeaseSet after batch removal (normally done per-tunnel in removeTunnel).
@@ -6623,13 +6620,12 @@ public class TunnelPool {
             }
             if (_log.shouldInfo()) {
                 String boost = _consecutiveEmergencies > 0 ?
-                    " [boosted +" + _consecutiveEmergencies + "]" : "";
+                    " * Boosted by " + _consecutiveEmergencies : "";
                 _log.info(toString() + " -> Proactive: building " + needed +
                           " replacements" + boost +
-                          "\n* Safe: " + stats.safeActive +
-                          " (" + countHealthySafe(stats) + " healthy)" +
-                          "\n* Expiring: " + stats.nearExpiry + " * Failing: " + stats.failingCount +
-                          "\n* Deficit: " + deficit + " * In progress: " + currentInProgress);
+                          "\n* Safe: " + stats.safeActive + " (" + countHealthySafe(stats) + " healthy)" +
+                          " * Expiring: " + stats.nearExpiry + " * Failing: " + stats.failingCount +
+                          " * Deficit: " + deficit + " * In progress: " + currentInProgress);
             }
             _lastDeficitBuildTime = now;
             // Collapsed pools (zero safe, tunnels expiring) are effectively
@@ -6990,9 +6986,8 @@ public class TunnelPool {
         TunnelPeerSelector.setWindowMultiplier(allowed);
         TunnelPeerSelector.publishWindowMultiplier(ctx);
         if (_log.shouldWarn()) {
-            _log.warn(toString() + " -> Starvation, raising the peer activity window multiplier" +
-                      "\n* Multiplier: " + before + " -> " + TunnelPeerSelector.getWindowMultiplier() +
-                      "\n* Zero usable tunnels, peer supply scarce");
+            _log.warn(toString() + " -> Zero usable tunnels, raising the peer activity window multiplier to " +
+                      TunnelPeerSelector.getWindowMultiplier() + " from " + before);
         }
     }
 
@@ -7371,9 +7366,9 @@ public class TunnelPool {
             int needed = Math.min(deficit, room);
             if (needed <= 0) {
                 if (_log.shouldInfo()) {
-                    _log.info(toString() + " -> Skipping fresh build\n* Builds in progress: " + inProgress +
-                              " * Build cap: " + cap + "\n* Tunnel target: " + target +
-                              " * Fresh tunnels: " + fresh);
+                    _log.info(toString() + " -> Skipping a fresh build, builds in progress reach the cap" +
+                              "\n* In progress: " + inProgress + " * Cap: " + cap +
+                              " * Target: " + target + " * Fresh: " + fresh);
                 }
                 return;
             }

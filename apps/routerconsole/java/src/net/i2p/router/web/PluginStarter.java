@@ -1255,15 +1255,19 @@ public class PluginStarter implements Runnable {
             String elem = tok.nextToken().trim();
             File f = new File(elem);
             if (!f.isAbsolute()) {
-                log.error("Plugin client " + clientName + " classpath element is not absolute: " + f);
+                if (log.shouldError())
+                    log.error("Plugin client " + clientName + " classpath element is not absolute -> Skipped" +
+                              "\n* Path: " + f);
                 continue;
             }
             try {
                 urls.add(f.toURI().toURL());
-                if (log.shouldWarn())
-                    log.warn("INFO: Adding plugin to classpath: " + f);
+                if (log.shouldDebug())
+                    log.debug("Added a plugin jar to the classpath -> " + f);
             } catch (IOException e) {
-                log.error("Plugin client " + clientName + " bad classpath element: " + f, e);
+                if (log.shouldError())
+                    log.error("Plugin client " + clientName + " has a bad classpath element -> Skipped" +
+                              "\n* Path: " + f, e);
             }
         }
         if (urls.isEmpty())

@@ -299,18 +299,18 @@ public class GraphListener implements RateSummaryListener {
             } catch (IllegalArgumentException iae) {
                 String msg = iae.getMessage();
                 if (msg != null && msg.startsWith("Bad sample time:")) {
-                    if (_log.shouldWarn()) {
-                        _log.warn("RRD time skew", iae);
-                    }
+                    _log.warnThrottled("graphlistener-time-skew",
+                                       "Sample time is skewed for " + rateName() + " -> Skipped this step" +
+                                       "\n* Reason: " + msg);
                 } else {
                     noteWriteFailure(iae);
                 }
             } catch (RrdException re) {
                 // this can happen after the time slews backwards, so don't make it an error
                 // org.jrobin.core.RrdException: Bad sample timestamp 1264343107. Last update time was 1264343172, at least one second step is required
-                if (_log.shouldWarn()) {
-                    _log.warn("Error adding", re);
-                }
+                _log.warnThrottled("graphlistener-sample-step",
+                                   "Cannot record the sample for " + rateName() + " -> Skipped this step" +
+                                   "\n* Reason: " + re.getMessage());
             } catch (RuntimeException rte) {
                 // Broad guard: any unchecked throwable from the RRD library must be counted the
                 // same way as IOException, or it escapes the periodic rate tick, kills that rate
@@ -382,8 +382,12 @@ public class GraphListener implements RateSummaryListener {
         int errors = ++_consecutiveErrors;
         if (errors < MAX_CONSECUTIVE_ERRORS) {
             if (_log.shouldWarn()) {
-                _log.warn("RRD write error (" + errors + "/" + MAX_CONSECUTIVE_ERRORS + ") for "
-                          + rateName(), t);
+                // Trace on the first failure only; the same cause repeats every rate tick.
+                if (errors == 1)
+                    _log.warn("RRD write failed for " + rateName() + " -> Counting it toward the retire limit", t);
+                else
+                    _log.warn("RRD write failed for " + rateName() + " -> Counting it toward the retire limit" +
+                              "\n* Consecutive failures: " + errors);
             }
             return;
         }
@@ -764,25 +768,29 @@ public class GraphListener implements RateSummaryListener {
             }
         } catch (IOException ioe) {
             closeQuietly(db, baseName);
-            _log.error("Error starting RRD for stat " + baseName, ioe);
+            if (_log.shouldError())
+                _log.error("Cannot open the RRD for " + baseName + " -> No graph for this rate", ioe);
         } catch (IllegalArgumentException iae) {
             closeQuietly(db, baseName);
             // No backend from RrdBackendFactory
-            _log.error("Error starting RRD for stat " + baseName, iae);
-            _log.log(Log.WARN, "RRD4J backend error for " + baseName + " (not disabling all graphs)");
+            if (_log.shouldError())
+                _log.error("Cannot open the RRD for " + baseName + " -> No graph for this rate", iae);
+            _log.warnThrottled("graphlistener-rrd4j-backend",
+                               "RRD4J backend is missing for " + baseName + " -> Other graphs keep working");
         } catch (NoSuchMethodError nsme) {
             closeQuietly(db, baseName);
             // Covariant fail Java 8/9/10
             // see e.g. https://jira.mongodb.org/browse/JAVA-2559
-            _log.error("Error starting RRD for stat " + baseName, nsme);
-            String s = "Error:" +
-                       "\nCompiler JDK mismatch with JRE version " + System.getProperty("java.version") +
-                       " and no bootclasspath specified when building." +
-                       "\nContact packager.";
-            _log.warn(s);
+            if (_log.shouldError())
+                _log.error("Cannot open the RRD for " + baseName + " -> No graph for this rate", nsme);
+            if (_log.shouldWarn())
+                _log.warn("The JDK compiler and JRE do not match -> Rebuild without a bootclasspath" +
+                          "\n* Java version: " + System.getProperty("java.version") +
+                          " * Report it to the packager");
         } catch (Throwable t) {
             closeQuietly(db, baseName);
-            _log.error("Error starting RRD for stat " + baseName, t);
+            if (_log.shouldError())
+                _log.error("Cannot open the RRD for " + baseName + " -> No graph for this rate", t);
         }
         return false;
     }

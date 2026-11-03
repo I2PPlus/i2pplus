@@ -2308,7 +2308,8 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
                 // the IOException path. Nothing can be forwarded; the finally closes
                 // what is left.
                 if (_log.shouldInfo())
-                    _log.info(direction + " Nothing to forward -> Local or I2P socket already closed");
+                    _log.infoThrottled("runner-nothing-to-forward",
+                                       direction + " Nothing to forward -> Local or I2P socket already closed");
                 return;
             }
 
@@ -2358,7 +2359,8 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
                         // Continuing would leave only the I2P-to-client forwarder
                         // running, so the client would hang instead of failing.
                         if (_log.shouldWarn())
-                            _log.warn(direction + " Connection dropped: client pool saturated");
+                            _log.warnThrottled("runner-pool-saturated",
+                                               direction + " Dropping the connection -> Runner pool saturated");
                         onNoDataFailure(ree);
                         try {i2ps.close();} catch (IOException ioe) { /* ignore */ }
                         try {s.close();} catch (IOException ioe) { /* ignore */ }
@@ -2383,7 +2385,7 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
                     if (remaining <= 0) {
                         // Timeout reached
                         if (_log.shouldLog(Log.WARN)) {
-                            _log.warn(direction + " Timeout waiting for completion - forcing cleanup");
+                            _log.warn(direction + " Timed out waiting for completion -> Forcing cleanup");
                         }
                         finished = true;
                         finishLock.notifyAll();
@@ -2857,7 +2859,7 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
                         if (keepAliveTo || resumePending) {out.flush();}
                         else {out.close();}
                     } else {
-                        if (_log.shouldInfo()) {_log.info(direction + " Not closing stream so we can write the error message...");}
+                        if (_log.shouldInfo()) {_log.info(direction + " Keeping the stream open -> Writing the error message first");}
                         if (keepAliveTo || resumePending) {out.flush();}
                     }
                 } catch (IOException ioe) {

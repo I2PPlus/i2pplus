@@ -1007,8 +1007,8 @@ class ClientConnectionRunner {
     boolean receiveMessage(Hash toHash, Destination fromDest, Payload payload) {
         SessionParams sp = _sessions.get(toHash);
         if (sp == null) {
-            if (_log.shouldWarn())
-                _log.warn("No session for destination -> Dropping message");
+            _log.warnThrottled("client-no-session-for-dest",
+                               "No session for destination [" + toHash.toShortBase32() + "] -> Dropped the message");
             return false;
         }
         return receiveMessage(sp.dest, fromDest, payload);
@@ -1084,8 +1084,9 @@ class ClientConnectionRunner {
         }
         SessionParams sp = _sessions.get(h);
         if (sp == null) {
-            if (_log.shouldWarn())
-                _log.warn("Requesting LeaseSet for an unknown sesssion");
+            _log.warnThrottled("client-unknown-session-lsreq",
+                               "Requesting a LeaseSet for an unknown session [" + h.toShortBase32() +
+                               "] -> Dropped");
             return;
         }
         // If set is null, use the current LeaseSet as the basis for renewal
@@ -1095,7 +1096,8 @@ class ClientConnectionRunner {
             }
             if (set == null) {
                 if (_log.shouldWarn())
-                    _log.warn("Requesting LeaseSet with null LeaseSet and no current LeaseSet for hash: " + h);
+                    _log.warn("Requesting a LeaseSet with no current LeaseSet for [" + h.toShortBase32() +
+                              "] -> Queued the failure job");
                 if (onFailedJob != null)
                     _context.jobQueue().addJob(onFailedJob);
                 return;
@@ -1249,7 +1251,7 @@ class ClientConnectionRunner {
             SessionParams sp = _sessions.get(h);
             if (sp == null) {
                 if (_log.shouldWarn())
-                    _log.warn("Cancelled request for LeaseSet [" + h.toShortBase32() +"] -> Session disappeared");
+                    _log.warn("Cancelled the LeaseSet request for [" + h.toShortBase32() + "] -> Session disappeared");
                 return;
             }
             synchronized(ClientConnectionRunner.this) {
@@ -1289,16 +1291,16 @@ class ClientConnectionRunner {
             msg.writeMessage(_out);
             _out.flush();
         } catch (I2CPMessageException ime) {
-            _log.error("Error sending I2CP message to client (" + ime.getMessage() + ")");
+            _log.error("Cannot send an I2CP message to the client -> Closing the connection: " + ime.getMessage());
             stopRunning();
         } catch (EOFException eofe) {
             // only warn if client went away
             if (_log.shouldWarn())
-                _log.warn("Error sending I2CP message -> Client disappeared (" + eofe.getMessage() + ")");
+                _log.warn("Cannot send an I2CP message to the client -> The client disappeared: " + eofe.getMessage());
             stopRunning();
         } catch (IOException ioe) {
             if (_log.shouldWarn())
-                _log.warn("Error sending I2CP message to client -> " + ioe.getMessage());
+                _log.warn("Cannot send an I2CP message to the client -> Closing the connection: " + ioe.getMessage());
             stopRunning();
         } catch (Exception t) {
             _log.log(Log.CRIT, "Unhandled exception sending I2CP message to client", t);
@@ -1436,9 +1438,10 @@ class ClientConnectionRunner {
                     long delay = REQUEUE_DELAY;
                     if (_requeueCount < 10) {delay = REQUEUE_DELAY / 5;}
                     else if (_requeueCount < 20) {delay = REQUEUE_DELAY / 2;}
-                    if (_log.shouldWarn())
-                        _log.warn("Client has not accepted " + _messageId + " yet -> Delaying " +
-                                  MessageStatusMessage.getStatusString(msg.getStatus()) + " update " + delay + "ms * " + _sessId);
+                    _log.warnThrottled("client-status-requeued",
+                                       "Client has not accepted " + _messageId + " -> Delayed the " +
+                                       MessageStatusMessage.getStatusString(msg.getStatus()) +
+                                       " update by " + delay + "ms * " + _sessId);
                     _lastTried = _context.clock().now();
                 }
                 return;
@@ -1461,8 +1464,9 @@ class ClientConnectionRunner {
             long afterLock = _context.clock().now();
 
             if (afterLock - beforeLock > 50) {
-                _log.warn("MessageDeliveryStatusUpdate.locking took too long: " + (afterLock-beforeLock)
-                          + " overall, synchronized took " + (inLock - beforeLock));
+                if (_log.shouldWarn())
+                    _log.warn("Locking the message delivery status took " + (afterLock - beforeLock) +
+                              "ms -> Synchronized block took " + (inLock - beforeLock) + "ms");
             }
 
             if (alreadyProcessed) return;

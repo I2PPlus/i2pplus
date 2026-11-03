@@ -1151,7 +1151,7 @@ class ConnectionManager {
         if (action == SynBurstAction.RECORD && _log.shouldWarn()) {
             _log.warn("SYN burst strike for [" + h.toShortBase32() + "] -> " +
                       needed + " burst windows within " + DataHelper.formatDuration(STRIKE_WINDOW_MS) +
-                      " autobans\n* Threshold: >" + _synBurst + " SYNs per " + _synRateMs + "ms");
+                      " autobans");
         }
         return false;
     }
@@ -1562,8 +1562,9 @@ class ConnectionManager {
     private Connection acceptSyn(Packet synPacket) {
         Destination from = synPacket.getOptionalFrom();
         if (from == null) {
-            if (_log.shouldWarn())
-                _log.warn("Received a SYN packet without FROM: " + synPacket);
+            _log.warnThrottled("streaming-syn-accept-no-from",
+                               "Received a SYN packet without FROM -> Dropped" +
+                               synPacket.formatAsString(false));
             return null;
         }
         // SHA-256 of the peer dest; used by every gate below (flood, refusal,
@@ -1599,16 +1600,20 @@ class ConnectionManager {
             }
         }
         if (!sigOk) {
-            if (_log.shouldWarn())
-                _log.warn("Received an unsigned / forged SYN packet apparently from [" +
-                          from.toBase32().substring(0, 8) + "] -> Packet: " + synPacket);
+            _log.warnThrottled("streaming-syn-unsigned",
+                               "Received an unsigned or forged SYN packet apparently from [" +
+                               from.getHash().toShortBase32() + "] -> Dropped" + synPacket.formatAsString(false));
             return null;
         }
 
         boolean reject = false;
         int retryAfter = 0;
+        // getHash() is cached on the Destination and toShortBase32() on the Hash;
+        // toBase32().substring() allocated a 59-char string plus a copy on every
+        // inbound SYN. Unbracketed here - the call sites add the brackets, and
+        // were doubling them.
         String client = synPacket.getOptionalFrom() == null ? "unknown" :
-                        "[" + synPacket.getOptionalFrom().toBase32().substring(0, 8) + "]";
+                        synPacket.getOptionalFrom().getHash().toShortBase32();
 
         // Sub-second SYN burst gate: a dest that blasts > tempBanSynBurst SYNs
         // within tempBanSynRate-ms records a strike, and tempBanStrikes DISTINCT
@@ -1780,9 +1785,12 @@ class ConnectionManager {
             // always drop these regardless of setting
             return;
         }
-        if ((_minuteThrottler != null && _minuteThrottler.isOverBy(fromHash, getDropOverLimit())) ||
-            (_hourThrottler != null && _hourThrottler.isOverBy(fromHash, getDropOverLimit())) ||
-            (_dayThrottler != null && _dayThrottler.isOverBy(fromHash, getDropOverLimit()))) {
+        // getDropOverLimit() reads a synchronized property and parses it; it was
+        // evaluated three times in this one condition
+        int over = getDropOverLimit();
+        if ((_minuteThrottler != null && _minuteThrottler.isOverBy(fromHash, over)) ||
+            (_hourThrottler != null && _hourThrottler.isOverBy(fromHash, over)) ||
+            (_dayThrottler != null && _dayThrottler.isOverBy(fromHash, over))) {
             // A signed RST/close packet + ElGamal + session tags is fairly expensive, so
             // once a limit is significantly exceeded for a particular peer, don't even send it.
             // This is a tradeoff, because it will keep retransmitting the SYN for a while,
@@ -1912,13 +1920,15 @@ class ConnectionManager {
         int pongDelay = _context.getProperty(PROP_MAX_PONG_DELAY, MAX_PONG_DELAY);
         int randomDelay = _context.random().nextInt(pongDelay);
         boolean enableDelay = _context.getProperty(PROP_ENABLE_PONG_DELAY, DEFAULT_ENABLE_PONG_DELAY);
+        // getHash() is cached on the Destination, toShortBase32() on the Hash
+        String b32 = dest.getHash().toShortBase32();
         if (enableDelay) {
             try { Thread.sleep(randomDelay); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); /* ignored */ }
             if (_log.shouldInfo())
-                _log.info("Sending pong to: [" + dest.toBase32().substring(0, 8) + "] with random delay of " + randomDelay + "ms");
+                _log.info("Pong queued for [" + b32 + "] -> Delayed " + randomDelay + "ms");
         } else {
             if (_log.shouldInfo())
-                _log.info("Sending pong to: [" + dest.toBase32().substring(0, 8) + "]");
+                _log.info("Pong queued for [" + b32 + "]");
         }
         _outboundQueue.enqueue(pong);
         return true;
@@ -3155,8 +3165,8 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
             if (pr != null) {
                 if (_notifier != null)
                     _notifier.pingComplete(false);
-                if (_log.shouldInfo())
-                    _log.info("Ping failed");
+                _log.infoThrottled("streaming-ping-failed",
+                                   "Ping for [MsgID " + _id + "] timed out -> No pong");
             }
         }
     }

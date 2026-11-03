@@ -75,9 +75,13 @@ class MessageHandler implements I2PSessionMuxedListener {
             return;
         }
         if (data == null) {
-            if (_log.shouldWarn())
-                _log.warn("Received null data on " + session + "\n* Protocol: " + proto +
-                          " fromPort: " + fromPort + " toPort: " + toPort);
+            _log.warnThrottled("streaming-null-data",
+                               "Received null data for [" +
+                               (session.getMyDestination() != null ?
+                                session.getMyDestination().calculateHash().toShortBase32() : "unknown") +
+                               "] -> Dropped" +
+                               "\n* Protocol: " + proto + " * From port: " + fromPort +
+                               " * To port: " + toPort);
             return;
         }
         if (_log.shouldDebug())

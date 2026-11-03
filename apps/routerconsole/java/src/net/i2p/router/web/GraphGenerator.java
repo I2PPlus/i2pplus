@@ -814,16 +814,16 @@ public class GraphGenerator implements Runnable, ClientApp {
           }
         if (_stallThrottle.allow(now, stalled, REPORT_REPEAT_MS)) {
             _stallReported = true;
-            _log.error(msg);
+            if (_log.shouldError())
+                _log.error(msg);
             // Named separately, and first, because it is the only cause whose remedy is
             // not in this subsystem. An operator reading the tally line sees counts and
             // has to infer the mechanism; this line states it and points at the timer.
             if (coalesceStalled.count() > 0) {
-                _log.error("Stat coalesce sweep has not completed for "
-                           + coalesceSweepAbsence(now)
-                           + "\n* No rate is being coalesced and every graph listener starves"
-                           + " regardless of its own state \n* Check the router coalesce timer"
-                           + " (SimpleTimer2) rather than any listener");
+                if (_log.shouldError())
+                    _log.error("Stat coalesce sweep has not completed for " + coalesceSweepAbsence(now) +
+                               " -> No rate is coalesced and every listener starves" +
+                               "\n* Check the router coalesce timer (SimpleTimer2), not a listener");
             }
         }
     }
@@ -1299,11 +1299,13 @@ public class GraphGenerator implements Runnable, ClientApp {
             // An ERROR that says "everything was fixed" teaches operators to ignore
             // ERROR, which is how the real stall report above stops being read.
             // Still visible because this class is explicitly configured at DEBUG.
-            _log.warn(formatLedgerDrift(_listeners.size(), drifters, maxDrift, permanentSteps,
-                                        healedSteps, rebuilt, reopened, coalesced, mechanism,
-                                        sm.getSampleOverruns(), sm.getSampleSuperseded(),
-                                        sm.getSamplePending(), sm.getSampleOldestPendingAgeMs(),
-                                        sm.getCoalesceBacklogCollapses(), sm.getCoalesceSkips()));
+            if (_log.shouldWarn())
+                _log.warn(formatLedgerDrift(_listeners.size(), drifters, maxDrift, permanentSteps,
+                                            healedSteps, rebuilt, reopened, coalesced, mechanism,
+                                            sm.getSampleOverruns(), sm.getSampleSuperseded(),
+                                            sm.getSamplePending(), sm.getSampleOldestPendingAgeMs(),
+                                            sm.getCoalesceBacklogCollapses(), sm.getCoalesceSkips()) +
+                          " -> Graphs show the gap until the ladder heals it");
         }
     }
 

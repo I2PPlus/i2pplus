@@ -2129,11 +2129,11 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         long last = _lastShareLimitLog;
         if (now - last < SHARE_LIMIT_LOG_INTERVAL_MS) {return;}
         _lastShareLimitLog = now;
-        _log.info("Participation share limit " + basePct + "% -> " + max + "%"
-                  + "\n* buildSuccess: " + Math.round(buildSuccess * 100) + "%"
-                  + " * firewalled: " + firewalled
-                  + " * incompleteLeaseSet: " + incompleteLeaseSet
-                  + " * excluded: " + excluded + " peers");
+        _log.info("Participation share limit raised from " + basePct + "% to " + max + "%"
+                  + "\n* Build success: " + Math.round(buildSuccess * 100) + "%"
+                  + " * Firewalled: " + firewalled
+                  + " * Incomplete LeaseSet: " + incompleteLeaseSet
+                  + " * Excluded peers: " + excluded);
     }
 
     /**
@@ -2302,10 +2302,9 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
         if (inboundPools != registeredClients || outboundPools != registeredClients) {
             if (_log.shouldWarn())
-                _log.warn("Pool count mismatch -> The pool counts do not match the client count"
-                          + "\n* Clients: " + registeredClients + " * Inbound pools: " + inboundPools
-                          + "\n* Outbound pools: " + outboundPools
-                          + " * Pending cleanups: " + pendingCleanups);
+                _log.warn("Pool count mismatch -> " + registeredClients + " clients, " +
+                          inboundPools + " inbound pools, " + outboundPools + " outbound pools"
+                          + "\n* Pending cleanups: " + pendingCleanups);
         } else if (_log.shouldInfo()) {
             _log.info("Pool health -> Clients: " + registeredClients + " * Inbound pools: " + inboundPools
                       + "\n* Outbound pools: " + outboundPools

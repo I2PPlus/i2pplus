@@ -1034,16 +1034,16 @@ public class RouterConsoleRunner implements RouterApp {
             }
         }
         if (success) {
-            _log.warn("Created self-signed certificate for " + cname + " in keystore: " + ks.getAbsolutePath() + "\n* " +
-                               "The certificate was generated randomly" + "\n* " +
-                               "Unless you have changed the default settings, the certificate is not" +
-                               "\n* associated with your IP address, host name, router identity," +
-                               " or destination keys");
+            if (_log.shouldWarn())
+                _log.warn("Created a self-signed certificate for localhost -> Expect browser trust warnings" +
+                          "\n* Keystore: " + ks.getAbsolutePath() +
+                          " * The key is generated randomly, not tied to the router identity");
         } else {
-            _log.error("Failed to create the console SSL keystore" + "\n* " +
-                               "This is for the Sun/Oracle keytool, others may be incompatible" + "\n* " +
-                               "If you create the keystore manually, you must add " + PROP_KEYSTORE_PASSWORD + " and " + PROP_KEY_PASSWORD +
-                               "\n* in " + (new File(_context.getConfigDir(), "router.config")).getAbsolutePath());
+            if (_log.shouldError())
+                _log.error("Cannot create the console SSL keystore -> HTTPS console may not start" +
+                           "\n* Create it with the Sun/Oracle keytool, then set " + PROP_KEYSTORE_PASSWORD +
+                           " and " + PROP_KEY_PASSWORD + " in " +
+                           (new File(_context.getConfigDir(), "router.config")).getAbsolutePath());
         }
         return success;
     }

@@ -255,11 +255,11 @@ class BuildReplyHandler {
             boolean ok = DataHelper.eq(h, 0, data, 0, Hash.HASH_LENGTH);
             if (!ok) {
                 if (log.shouldWarn())
-                    log.warn("Tunnel build reply hash check failed -> Calculated hash does not match the record" +
-                             "\n* Record: " + recordNum + '/' + hop +
-                             "\n* MsgID: " + reply.getUniqueId() +
-                             "\n* Calculated: " + Base64.encode(h, 0, 6) +
-                             "\n* Expected: " + Base64.encode(data, 0, 6));
+                    log.warnThrottled("build-reply-hash-mismatch",
+                                      "Tunnel build reply hash check failed -> Calculated hash does not match the record" +
+                                      "\n* Record: " + recordNum + '/' + hop + " [MsgID " + reply.getUniqueId() + "]" +
+                                      " * Calculated: " + Base64.encode(h, 0, 6) +
+                                      " * Expected: " + Base64.encode(data, 0, 6));
                 SimpleByteCache.release(h);
                 return RESULT_NG;
             }

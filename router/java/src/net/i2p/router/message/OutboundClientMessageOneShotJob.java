@@ -227,6 +227,16 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      */
     private static final int MAX_ROTATION_CANDIDATES = 6;
 
+    /**
+     * How often one source-destination pair may warn about a saturated tunnel
+     * rotation. Evicting the cached tunnel is the response, and it stands until
+     * the pool rebuilds, so a client reconnecting in a loop warns on every fresh
+     * connection - eight in one millisecond was measured.
+     *
+     * @since 0.9.72+
+     */
+    private static final long ROTATION_WARN_MS = 10 * 60 * 1000L;
+
     /** Rate stat period for the send statistics. */
     private static final long[] RATES = new long[] { 60*1000L };
 
@@ -1209,10 +1219,21 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
              // next retry after a rebuild picks the freshly built tunnel.
              _cache.tunnelCache.remove(_hashPair);
              _cache.tunnelStartTime.remove(_hashPair);
-             if (_log.shouldWarn()) {
+             // The eviction is the response, and it stays the response until the
+             // pool rebuilds, so a client reconnecting in a loop warns on every
+             // fresh connection - eight in one millisecond was measured. Warn
+             // once per interval per pair, debug in between.
+             long now = getContext().clock().now();
+             Long lastWarn = _cache.rotationWarnTime.get(_hashPair);
+             boolean warn = lastWarn == null || now - lastWarn.longValue() > ROTATION_WARN_MS;
+             if (warn)
+                _cache.rotationWarnTime.put(_hashPair, Long.valueOf(now));
+             if (warn && _log.shouldWarn()) {
                 _log.warn("Rotation saturated for " + _toString
-                          + " -> Evicting the outbound tunnel so the retry re-selects"
-                          + "\n* Evicted: " + cached);
+                          + " -> Evicted the cached outbound tunnel so the retry re-selects: " + cached);
+             } else if (_log.shouldDebug()) {
+                _log.debug("Rotation saturated for " + _toString
+                           + " -> Evicted the cached outbound tunnel so the retry re-selects: " + cached);
              }
              return null;
          }

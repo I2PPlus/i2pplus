@@ -192,12 +192,15 @@ public class UDPSender {
 
         // Check size against max MTU minus headers (assumed IPv4)
         if (psz > PeerState2.MAX_MTU - 28) {
-            _log.info("Dropping large UDP packet " + psz + " bytes from " + packet);
+            // Throttled: this is the per-packet send path.
+            _log.infoThrottled("udp-send-drop-large",
+                               "UDP packet exceeds the maximum MTU -> Dropping it * Size: " + psz + " bytes");
             return;
         }
 
-        if (psz > 0 && psz < SSU2Util.MIN_DATA_LEN && _log.shouldInfo())
-            _log.info("Small UDP packet " + psz + " bytes from " + packet);
+        if (psz > 0 && psz < SSU2Util.MIN_DATA_LEN)
+            _log.infoThrottled("udp-send-small",
+                               "Small UDP packet -> Sending it anyway * Size: " + psz + " bytes");
 
         if (_dummy) {
             // Testing mode: immediately release the packet back to cache
@@ -286,9 +289,10 @@ public class UDPSender {
                         _context.statManager().addRateData("udp.sendQueueSize", _outboundQueue.size());
                     } catch (IOException ioe) {
                         String ipaddress = packet.getPacket().getAddress().toString().replace("/", "");
-                        if (_log.shouldWarn()) {
-                            _log.warn("Error sending to " + ipaddress + "\n* Error: " + ioe.getMessage());
-                        }
+                        // Throttled: one per failed packet on a send path that can spin.
+                        _log.warnThrottled("udp-send-failed",
+                                           "Sending a UDP packet failed -> Dropping it" +
+                                           "\n* To: [" + ipaddress + "] * Reason: " + ioe);
                         _context.statManager().addRateData("udp.sendException", 1);
                         if (_socket.isClosed() && _keepRunning) {
                                 _keepRunning = false;

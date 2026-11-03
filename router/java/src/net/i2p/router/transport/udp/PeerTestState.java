@@ -406,6 +406,17 @@ class PeerTestState {
     public int incrementPacketsRelayed() { return _packetsRelayed.incrementAndGet(); }
 
     /**
+     * Compact one-line test identifier for log output: the nonce, the family
+     * and our role. No nested peer states, no newlines, no stats.
+     *
+     * @return the nonce, family and role, on one line
+     * @since 0.9.72+
+     */
+    String toShortString() {
+        return "PeerTest " + _testNonce + (_isIPv6 ? " [IPv6]" : " [IPv4]") + " as " + _ourRole;
+    }
+
+    /**
      * String representation of this test state.
      */
     @Override

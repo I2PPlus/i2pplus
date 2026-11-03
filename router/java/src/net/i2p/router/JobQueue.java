@@ -1079,7 +1079,9 @@ public class JobQueue {
                             timeToWait = 500;
                         }
                         if (movedJobs > 0 && _log.shouldInfo()) {
-                            _log.info("Pumper moved " + movedJobs + " jobs to timed ready queue, next wait: " + timeToWait + "ms, _timedJobs size: " + _timedJobs.size());
+                            _log.infoThrottled("jq-timed-jobs-moved",
+                                               "Pumper moved " + movedJobs + " jobs to the timed ready queue" +
+                                               " * Next wait: " + timeToWait + "ms");
                         }
                         // O(1) counter now, so this 100 Hz pass is cheap enough to sample
                         // a stat that only feeds a graph.

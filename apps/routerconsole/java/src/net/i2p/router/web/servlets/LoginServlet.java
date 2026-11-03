@@ -49,7 +49,7 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        _log.info("=== LoginServlet.init() CALLED ===");
+        if (_log.shouldDebug()) {_log.debug("Initialized the login servlet -> Loaded the persisted sessions");}
         loadPersistedSessions();
     }
 
@@ -274,7 +274,9 @@ public class LoginServlet extends HttpServlet {
         HttpSession session = req.getSession(true);
         String sessionCSRF = (String) session.getAttribute("loginCSRF");
         if (sessionCSRF == null || csrfToken == null || !csrfToken.equals(sessionCSRF)) {
-            _log.warn("CSRF validation failed or session expired — re-displaying form");
+            _log.warnThrottled("loginservlet-csrf-failed",
+                               "CSRF token does not match the session -> Re-displaying the login form" +
+                               "\n* Client: [" + req.getRemoteAddr() + ':' + req.getRemotePort() + ']');
             String newCsrfToken = Long.toString(System.currentTimeMillis()) + "-" + UUID.randomUUID().toString();
             session.setAttribute("loginCSRF", newCsrfToken);
             req.setAttribute("I2P+CSRFTOKEN", newCsrfToken);
@@ -360,7 +362,9 @@ public class LoginServlet extends HttpServlet {
         SessionManager sm = SessionManager.getInstance();
 
         if (sm.isBlocked(clientIp)) {
-            _log.warn("Login blocked due to too many failed attempts from: " + clientIp);
+            _log.warnThrottled("loginservlet-ip-blocked",
+                               "Too many failed logins -> Blocked the client" +
+                               "\n* Client: [" + clientIp + ':' + req.getRemotePort() + ']');
             req.setAttribute("error", "Too many failed attempts. Please try again later.");
             req.setAttribute("theme", getLoginTheme());
             req.getRequestDispatcher("/login.jsp").forward(req, resp);

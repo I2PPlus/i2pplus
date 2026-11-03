@@ -1817,7 +1817,7 @@ class Connection {
                             if (shouldLogPersistWarn(_lastPersistWarnTime, now, persistDelay)) {
                                 _lastPersistWarnTime = now;
                                 if (_log.shouldWarn()) {
-                                    _log.warn("Persist timer expired, auto-unchoking on " + this);
+                                    _log.warn("Persist timer expired, auto-unchoking on " + shortLabel());
                                 }
                             }
                             persistBackoff = Math.min(persistBackoff + 1, 5);
@@ -1827,11 +1827,11 @@ class Connection {
                     }
                     if (timeoutMs > 0) {
                         if (timeLeft <= 0) {
-                            if (_log.shouldInfo()) {
-                                _log.info("Outbound window full -> " + (_isChoked ? "choked" : "not choked")
-                                          + " * Unacked: " + unacked + " * Active resends: " + _activeResends
-                                          + " * Waited: " + (timeoutMs - timeLeft) + "ms\n* " + toString());
-                            }
+                            _log.infoThrottled("streaming-window-full",
+                                "Outbound window full on " + shortLabel() + " -> " +
+                                (_isChoked ? "Choked" : "Not choked") +
+                                "\n* Unacked: " + unacked + " * Active resends: " + _activeResends +
+                                " * Waited: " + (timeoutMs - timeLeft) + "ms");
                             return false;
                         }
                         _outboundPacketsLock.wait(Math.min(timeLeft, 50));
@@ -2324,13 +2324,13 @@ class Connection {
                 markStalledForRotation();
                 if (_log.shouldWarn()) {
                     _log.warn("Stream stalled -> No bytes acknowledged for " +
-                              DataHelper.formatDuration(STALL_GRACE_MS) + "\n* " + this);
+                              DataHelper.formatDuration(STALL_GRACE_MS) + " on " + shortLabel());
                 }
                 break;
             case THROTTLED:
                 _context.statManager().addRateData("stream.con.throttleDetected", 1);
                 if (_log.shouldWarn()) {
-                    _log.warn("Stream throttled -> Goodput far below the baseline\n* " + this);
+                    _log.warn("Stream throttled -> Goodput far below the baseline on " + shortLabel());
                 }
                 break;
             default:
@@ -2359,7 +2359,7 @@ class Connection {
         } catch (RuntimeException re) {
             // Never let a telemetry path break a live stream.
             if (_log.shouldWarn()) {
-                _log.warn("Could not publish stall signal for rotation: " + re);
+                _log.warn("Could not publish the stall signal for rotation -> Telemetry only: " + re);
             }
         }
     }
@@ -3263,7 +3263,8 @@ class Connection {
         long elapsed = System.currentTimeMillis() - before;
         // 250 and warn for debugging
         if ((elapsed > 250) && (_log.shouldWarn())) {
-            _log.warn("Took " + elapsed + "ms to pump through " + sched + " on " + toString());
+            _log.warn("Scheduler pass took " + elapsed + "ms on " + shortLabel() +
+                      " -> Pumped through " + sched);
         }
     }
 
@@ -3287,9 +3288,8 @@ class Connection {
             _context.statManager().addRateData("streaming.duplicateCloseSent", 1);
             if (_log.shouldWarn() && shouldLogDuplicateClose(now)) {
                 long suppressed = _duplicateCloseSuppressed.getAndSet(0);
-                _log.warn("Duplicate CLOSE sent -> Total duplicates: " + duplicate
-                          + (suppressed > 0 ? " * Suppressed since last report: " + suppressed : "")
-                          + "\n* " + toString());
+                _log.warn("Duplicate CLOSE sent on " + shortLabel() + " -> Total duplicates: " + duplicate
+                          + (suppressed > 0 ? " * Suppressed since last report: " + suppressed : ""));
             }
         }
         // that's it, wait for notifyLastPacketAcked() or closeReceived()
@@ -3529,8 +3529,8 @@ class Connection {
                 // timeout slot.
                 if (cro > 0 && cro < cso && getUnackedPacketsSent() <= 0) {
                     if (_log.shouldInfo()) {
-                        _log.info("Received close, we sent close, all ACKed -> Skipping TIME-WAIT\n* " +
-                                  toString());
+                        _log.info("Received close, we sent close, all ACKed on " + shortLabel() +
+                                  " -> Skipping TIME-WAIT");
                     }
                     // They sent the first CLOSE.
                     // We do not need to enter TIME-WAIT, we are done.
@@ -3564,8 +3564,8 @@ class Connection {
         _inputStream.streamErrorOccurred(new IOException("Socket closed"));
 
         if (_log.shouldInfo()) {
-            _log.info("Disconnect complete -> Disconnected from " + getRemotePeerString() +
-                      " on stream: " + streamIds());
+            _log.info("Disconnected from " + getRemotePeerString() +
+                      " -> Closed stream " + streamIds());
         }
         // Counted before the publisher so a failure below still records that
         // this teardown ran; compared with stream.connectionCreated it separates
@@ -3976,7 +3976,7 @@ class Connection {
     public void setChoking(boolean on) {
         if (on != _isChoking) {
             _isChoking = on;
-            if (_log.shouldWarn()) {_log.warn("Choking changed to " + on + " on " + this);}
+            if (_log.shouldWarn()) {_log.warn("Choking changed to " + on + " on " + shortLabel());}
             if (!on) {_unchokesToSend.set(UNCHOKES_TO_SEND);}
             _lastChokeAckTime = _context.clock().now();
             ackImmediately();
@@ -4001,7 +4001,7 @@ class Connection {
     public void setChoked(boolean on) {
         if (on != _isChoked) {
            _isChoked = on;
-           if (_log.shouldWarn()) {_log.warn("Choked state " + (on ? "enabled" : "disabled") + " on " + this);}
+           if (_log.shouldWarn()) {_log.warn("Choked state " + (on ? "enabled" : "disabled") + " on " + shortLabel());}
            if (!on) {
                 // Episode boundary for the persist WARN gate: once the remote
                 // unchokes us, a fresh persist episode in a later window may log.
@@ -4029,9 +4029,8 @@ class Connection {
                     // restore path did not, leaving it describing the old window.
                     updatePacingRate();
                     if (_log.shouldInfo()) {
-                        _log.info(shortLabel() + " -> Restoring the window on unchoke to " + restored +
-                                  "\n* Pre-Choke: " + saved + " * Ceiling: " + ceiling +
-                                  " * SSThresh: " + _ssthresh + "\n* " + this);
+                        _log.info(shortLabel() + " -> Restored the window on unchoke to " + restored + "B" +
+                                  "\n* Pre-Choke: " + saved + "B * Ceiling: " + ceiling + "B * SSThresh: " + _ssthresh + "B");
                     }
                 }
                 windowAdjusted();
@@ -4543,7 +4542,7 @@ class Connection {
      * @return a single-line label, e.g. {@code [462diuko] 73SKgw/AAAAAA [4bpcp4fm]}
      * @since 0.9.72+
      */
-    private String shortLabel() {
+    String shortLabel() {
         return '[' + localTag() + "] " + streamIds() + ' ' + getRemotePeerString();
     }
 
@@ -5106,9 +5105,9 @@ class Connection {
                         // exhaustion does not bind: the packet is a path hole, not a
                         // dead path, and the terminal bound is the creation-anchored
                         // stall backstop. Say that, or the line reads as resending
-                        // because it gave up.
-                        _log.warn(shortLabel() + " -> Resend budget spent on a data packet"
-                                  + "\n* Established, so resends continue to the stall backstop"
+                        // because it gave up. formatAsString() emits its own "\n* "
+                        // bullet, so the fact goes on the first line to keep this at two.
+                        _log.warn(shortLabel() + " -> Established, resends continue, resend budget spent"
                                   + packet.formatAsString(false));
                     }
                 }
@@ -5661,9 +5660,11 @@ synchronized boolean checkRetransmitStall() {
                     }
 
                     if (_log.shouldInfo()) {
-                        _log.info(shortLabel() + " -> Network congestion, resending the packet"
-                                      + "\n* Window size: " + _options.getWindowSize() + " (was " + newWindowSize + ")"
-                                      + _packet.formatAsString(false));
+                        // formatAsString() emits its own "\n* " bullet, so the window
+                        // change goes on the first line to keep this at two.
+                        _log.info(shortLabel() + " -> Network congestion, resending the packet, window " +
+                                  newWindowSize + " to " + _options.getWindowSize() + " packets"
+                                  + _packet.formatAsString(false));
                     }
                     windowAdjusted();
                 }
@@ -5717,11 +5718,12 @@ synchronized boolean checkRetransmitStall() {
                     // first resend for this packet ?
                     if (numSends == 2) {_activeResends.incrementAndGet();}
                     if (_log.shouldInfo()) {
-                        _log.info(shortLabel() + " -> Fast resend enqueued"
-                                  + "\n* Next resend in " + DataHelper.formatDuration(timeout)
-                                  + " * Active resends: " + _activeResends
-                                  + " * Window size: " + _options.getWindowSize()
-                                  + " * Lifetime: " + DataHelper.formatDuration(_packet.getLifetime())
+                        // formatAsString() emits its own "\n* " bullet, so the timing
+                        // goes on the first line to keep this at two. The window size
+                        // is on the congestion line, the lifetime is a configured
+                        // constant, so neither is shown here.
+                        _log.info(shortLabel() + " -> Fast resend enqueued, next in " +
+                                  DataHelper.formatDuration(timeout) + ", " + _activeResends + " active resends"
                                   + _packet.formatAsString(false));
                     }
                     _unackedPacketsReceived.set(0);

@@ -593,8 +593,8 @@ class ClientManager {
         ClientConnectionRunner runner = getRunner(dest);
         if (runner == null) {
             if (_log.shouldWarn()) {
-                _log.warn("Cannot request LeaseSet -> No client runner found for [" + dest.toBase32().substring(0,8) +
-                          "] - disconnected?");
+                _log.warn("Cannot request a LeaseSet for [" + dest.calculateHash().toShortBase32() +
+                          "] -> No client runner, queued the failure job");
             }
             _ctx.jobQueue().addJob(onFailedJob);
         } else {runner.requestLeaseSet(dest.calculateHash(), set, timeout, onCreateJob, onFailedJob);}
@@ -615,8 +615,9 @@ class ClientManager {
         if (runner != null)  {runner.requestLeaseSet(dest, ls, REQUEST_LEASESET_TIMEOUT, null, null);}
         else {
             if (_log.shouldWarn()) {
-                _log.warn("Cannot request LeaseSet -> No ClientRunner found for [" + (dest != null ? dest.toShortBase32() : "null") +
-                          "] - disconnected?");
+                _log.warn("Cannot request a LeaseSet for [" +
+                          (dest != null ? dest.toShortBase32() : "null") +
+                          "] -> No client runner");
             }
         }
     }

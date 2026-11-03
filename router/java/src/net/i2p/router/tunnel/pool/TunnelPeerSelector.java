@@ -963,9 +963,12 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             } else {
                 who = "Exploratory";
             }
-            log.info("Selected peers for " + who + (settings.isInbound() ? " Inbound" : " Outbound") +
-                     PeerLogFormatter.peerList(rv, "Selected", rv.size()) +
-                     "\n* Candidates: " + sz + " (not including us)");
+            // peerList() emits its own label line, so the candidate count goes on
+            // the first line to keep this at two.
+            log.info("Selected " + rv.size() + " peers for " + who +
+                     (settings.isInbound() ? " Inbound" : " Outbound") +
+                     " -> " + sz + " candidates considered" +
+                     PeerLogFormatter.peerList(rv, "Selected", rv.size()));
         }
 
         if (settings.isInbound())

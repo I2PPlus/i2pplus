@@ -1680,10 +1680,9 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                 // than leaking the reservation.
                 I2PTunnelServer.releaseConnectionSlot(_activeConnections);
                 if (_log.shouldWarn()) {
-                    _log.warn("Client pool rejected a connection -> Executor full, shedding"
+                    _log.warn("Client pool saturated after rebalance -> Shedding the connection"
                               + "\n* Threads: " + tpe.getActiveCount() + " of " + tpe.getMaximumPoolSize()
                               + " * Queued jobs: " + tpe.getQueue().size()
-                              + "\n* Connection cap: " + effectiveMax
                               + " * Open: " + _activeConnections.get());
                 }
                 // Mirrors the cap-path shed stat: a rejection here would otherwise close

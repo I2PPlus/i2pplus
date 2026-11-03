@@ -281,7 +281,9 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
             end = _context.clock().now();
 
             if ((end-begin > 1000) && (_log.shouldWarn()))
-                _log.warn("Slow message delivery: " + (end-begin) + "ms -> " + packet);
+                _log.warn("Slow message delivery in " + (end - begin) + "ms -> Sent to [" +
+                          packet.getTo().calculateHash().toShortBase32() + ']' +
+                          packet.formatAsString(false));
 
             // Sampled every TELEMETRY_SAMPLE_PERIOD sends to keep the hot path
             // cheap, and recorded unscaled. A uniform sample has the same average
@@ -324,7 +326,9 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
             }
         } catch (I2PSessionException ise) {
             if (_log.shouldWarn()) {
-                _log.warn("Unable to send packet " + packet + " -> " + ise.getMessage());
+                _log.warn("Unable to send a packet to [" +
+                          packet.getTo().calculateHash().toShortBase32() +
+                          "] -> Dropped: " + ise.getMessage() + packet.formatAsString(false));
                 isLogged = true;
             }
         } finally {
@@ -332,11 +336,13 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
         }
 
         long enqueueElapsed = _context.clock().now() - enqueueStart;
-        if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE) && _log.shouldInfo())
-            _log.info("SYN packet enqueue -> Sent: " + sent + " * Elapsed: " + enqueueElapsed + "ms * " + packet);
+        if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE))
+            _log.infoThrottled("streaming-syn-enqueue",
+                               "SYN packet enqueue -> Sent: " + sent + " * Elapsed: " + enqueueElapsed + "ms" +
+                               packet.formatAsString(false));
 
         if (!sent) {
-            if (_log.shouldWarn() && !isLogged) {_log.warn("Packet send failed -> " + packet);}
+            if (_log.shouldWarn() && !isLogged) {_log.warn("Packet send failed -> Not sent" + packet.formatAsString(false));}
             if (con != null) {con.disconnect(false);} // handle race on b0rk
         } else {
             packet.incrementSends();
@@ -384,14 +390,14 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
              // prior terminal status) or never tracked locally. Benign under load — the
              // router may return a second status for a message we already resolved — so
              // INFO rather than WARN to avoid flooding the log with late duplicates.
-             if (_log.shouldInfo()) {
-                 _log.info("Received status [" + status + "] for [MsgID " + msgId + "] on UNKNOWN connection");
-             }
+             _log.infoThrottled("statusNoConnection",
+                 "Received status [" + status + "] for [MsgID " + msgId + "] on an unknown connection");
              return;
          }
 
-         if (_log.shouldInfo())
-             _log.info("MessageStatus [" + status + "] for [MsgID " + msgId + "] " + con);
+         _log.infoThrottled("statusReceived",
+                            "Received message status [" + status + "] for [MsgID " + msgId +
+                            "] on " + con.shortLabel());
 
           switch (status) {
              case MessageStatusMessage.STATUS_SEND_BEST_EFFORT_FAILURE:
@@ -399,14 +405,13 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
                  // Throttled: peers send these often enough to bury the log.
                  _log.warnThrottled("statusBestEffortFail",
                                     "Received Best Effort Failure status [" + status +
-                                    "] for [MsgID " + msgId + "]\n* " + con);
+                                    "] for [MsgID " + msgId + "] on " + con.shortLabel());
                  _messageStatusMap.remove(id);
                  break;
              case MessageStatusMessage.STATUS_SEND_GUARANTEED_FAILURE:
                  // Guaranteed delivery failed — message definitely not sent, trigger retransmit
-                 if (_log.shouldWarn()) {
-                     _log.warn("Received Guaranteed Failure status [" + status + "] for [MsgID " + msgId + "]\n* " + con);
-                 }
+                 _log.warnThrottled("statusGuaranteedFail",
+                                    "Received Guaranteed Failure status [" + status + "] for [MsgID " + msgId + "] on " + con.shortLabel());
                  _messageStatusMap.remove(id);
                  con.scheduleSoftFailureRetransmit();
                  break;
@@ -416,9 +421,8 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
             case MessageStatusMessage.STATUS_SEND_FAILURE_EXPIRED:
             // overflow in router-side I2CP queue, sent as of 0.9.29, trigger immediate retransmit
             case MessageStatusMessage.STATUS_SEND_FAILURE_LOCAL:
-                if (_log.shouldWarn()) {
-                    _log.warn("Received Soft Failure status [" + status + "] for [MsgID " + msgId + "]\n* " + con);
-                }
+                _log.warnThrottled("statusSoftFail",
+                    "Received Soft Failure status [" + status + "] for [MsgID " + msgId + "] on " + con.shortLabel());
                 _messageStatusMap.remove(id);
                 con.scheduleSoftFailureRetransmit();
                 break;
@@ -432,7 +436,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
                 // fetched, so INFO (not WARN) keeps observability without
                 // treating expected network provisioning as an error.
                 if (_log.shouldInfo()) {
-                    _log.info("LeaseSet lookup: soft failure (retransmit after fetch) for [MsgID " + msgId + "]\n* " + con);
+                    _log.info("LeaseSet lookup: soft failure (retransmit after fetch) for [MsgID " + msgId + "] on " + con.shortLabel());
                 }
                 _messageStatusMap.remove(id);
                 con.scheduleSoftFailureRetransmit();
@@ -455,14 +459,14 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
                     // a retxed SYN succeeded before the first SYN failed
                     _log.warnThrottled("statusHardFailConnected",
                                        "Received Hard Failure but Already Connected status [" +
-                                       status + "] for [MsgID " + msgId + "]\n* " + con);
+                                       status + "] for [MsgID " + msgId + "] on " + con.shortLabel());
                 } else if (!con.getIsConnected() || con.getHighestAckedThrough() < 0) {
                     _log.warnThrottled("statusHardFailClosed",
                                        "Received Hard Failure but Already Closed status [" +
-                                       status + "] for [MsgID " + msgId + "]\n* " + con);
+                                       status + "] for [MsgID " + msgId + "] on " + con.shortLabel());
                 } else {
-                    if (_log.shouldWarn())
-                        _log.warn("Received Hard Failure status [" + status + "] for [MsgID " + msgId + "]\n* " + con);
+                    _log.warnThrottled("statusHardFail",
+                        "Received Hard Failure status [" + status + "] for [MsgID " + msgId + "] on " + con.shortLabel());
                     _messageStatusMap.remove(id);
                     IOException ioe = new I2PSocketException(status);
                     con.getOutputStream().streamErrorOccurred(ioe);
@@ -485,19 +489,19 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
             case MessageStatusMessage.STATUS_SEND_BEST_EFFORT_SUCCESS:
             case MessageStatusMessage.STATUS_SEND_GUARANTEED_SUCCESS:
             case MessageStatusMessage.STATUS_SEND_SUCCESS_LOCAL:
-                if (_log.shouldInfo())
-                    _log.info("Received Success status [" + status + "] for [MsgID " + msgId + "]\n* " + con);
+                _log.infoThrottled("statusSuccess",
+                    "Received Success status [" + status + "] for [MsgID " + msgId + "] on " + con.shortLabel());
                 _messageStatusMap.remove(id);
                 break;
 
             case MessageStatusMessage.STATUS_SEND_ACCEPTED:
-                if (_log.shouldInfo())
-                    _log.info("Received Accept status [" + status + "] for [MsgID " + msgId + "]\n* " + con);
+                _log.infoThrottled("statusAccepted",
+                    "Received Accept status [" + status + "] for [MsgID " + msgId + "] on " + con.shortLabel());
                 break;
 
             default:
-                if (_log.shouldWarn())
-                    _log.warn("Received UNKNOWN status [" + status + "] for [MsgID " + msgId + "]\n* " + con);
+                _log.warnThrottled("statusUnknown",
+                    "Received UNKNOWN status [" + status + "] for [MsgID " + msgId + "] on " + con.shortLabel());
                 _messageStatusMap.remove(id);
                 break;
         }

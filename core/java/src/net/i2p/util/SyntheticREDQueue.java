@@ -366,7 +366,9 @@ public class SyntheticREDQueue implements BandwidthEstimator {
             // Immediately drop all bytes if queue size exceeds the configured max threshold
             if (_avgQueueSize > _maxThresholdBytes) {
                 if (_log.shouldWarn()) {
-                    _log.warn("Dropping bytes (queue size exceeded max): " + bytes + " " + this);
+                    _log.warnThrottled("sredq-drop-over-max",
+                                       "Dropping bytes at the SyntheticRED queue -> The average queue size exceeded the maximum"
+                                       + " * Bytes: " + bytes);
                 }
                 _dropCount = 0; // Reset consecutive drop counter
                 return false; // Drop this sample (bytes rejected)
@@ -393,9 +395,11 @@ public class SyntheticREDQueue implements BandwidthEstimator {
                 float rand = _random.nextFloat(); // Random float
                 if (rand < pa) {
                     if (_log.shouldWarn()) {
-                        _log.warn(String.format("Dropping bytes probabilistically -> Bytes: %d * Factor: %.2f"
-                                                + " * Probability: %.4f * Queue age: %dms\n* %s",
-                                                bytes, factor, pa, deltaTQueue, this));
+                        _log.warnThrottled("sredq-drop-probabilistic",
+                                           "Dropping bytes at the SyntheticRED queue -> Probability " +
+                                           String.format("%.4f", pa) +
+                                           "\n* Bytes: " + bytes + " * Factor: " + String.format("%.2f", factor) +
+                                           " * Queue age: " + deltaTQueue + "ms");
                     }
                     _dropCount = 0;
                     return false;

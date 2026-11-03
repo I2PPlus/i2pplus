@@ -385,8 +385,9 @@ class HTTPResponseOutputStream extends FilterOutputStream {
         finishHeaders();
 
         boolean shouldCompress = shouldCompress();
-        if (_log.shouldInfo())
-            _log.info("After headers: GZIP? " + _gzip + " Compressed? " + shouldCompress + " KeepAliveIn? " + _keepAliveIn + " KeepAliveOut? " + _keepAliveOut);
+        if (_log.shouldDebug())
+            _log.debug("Wrote the headers -> GZIP: " + _gzip + " Compressed: " + shouldCompress +
+                       " Keep-alive in: " + _keepAliveIn + " out: " + _keepAliveOut);
 
         if (_headerBuffer.getData().length == CACHE_SIZE)
             _cache.release(_headerBuffer);
@@ -442,10 +443,11 @@ class HTTPResponseOutputStream extends FilterOutputStream {
         } else {
             throw new IOException("Cannot Range-resume: unexpected HTTP status " + _statusCode);
         }
-        if (_log.shouldInfo()) {
-            _log.info("Body resume headers: status=" + _statusCode +
-                      " skip=" + _resumeSkipBytes + " bodySoFar=" + _bodyReceived +
-                      " contentLength=" + _dataExpected);
+        if (_log.shouldDebug()) {
+            _log.debug("Body resume headers -> Status: " + _statusCode +
+                       " * Skip: " + _resumeSkipBytes + " bytes" +
+                       " * Body so far: " + _bodyReceived + " bytes" +
+                       " * Content length: " + _dataExpected + " bytes");
         }
     }
 
@@ -492,8 +494,8 @@ class HTTPResponseOutputStream extends FilterOutputStream {
             throw new IOException("Bad HTTP Response: " + responseLine);
         }
         responseLine = responseLine.trim();
-        if (_log.shouldInfo())
-            _log.info("Response: " + responseLine);
+        if (_log.shouldDebug())
+            _log.debug("Response line -> " + responseLine);
         responseLine = responseLine + "\r\n";
         // Persistent conn requires HTTP/1.1
         if (!responseLine.startsWith("HTTP/1.1 ")) {
@@ -556,8 +558,8 @@ class HTTPResponseOutputStream extends FilterOutputStream {
                     val = DataHelper.getUTF8(data, vstart, end - vstart).trim();
                 }
 
-                if (_log.shouldInfo()) {
-                    _log.info("Response header: [" + key + ": " + val + "]");
+                if (_log.shouldDebug()) {
+                    _log.debug("Response header -> [" + key + ": " + val + ']');
                 }
 
                 String lcKey = key.toLowerCase(Locale.US);
@@ -617,7 +619,7 @@ class HTTPResponseOutputStream extends FilterOutputStream {
                             // Strip privacy-damaging "supercookies" for i2p and b32.i2p
                             // See RFC 6265 and http://publicsuffix.org/
                             if (_log.shouldInfo())
-                                _log.info("Stripping \"" + key + ": " + val + "\" from response ");
+                                _log.info("Stripped a supercookie header -> " + key + ": " + val);
                             break;
                         }
                     }
@@ -702,9 +704,9 @@ class HTTPResponseOutputStream extends FilterOutputStream {
      */
     @Override
     public void close() throws IOException {
-        if (_log.shouldInfo())
-            _log.info("Closing " + out + " -> Compressed? " + shouldCompress() +
-                      " KeepAliveIn? " + _keepAliveIn + " KeepAliveOut? " + _keepAliveOut);
+        if (_log.shouldDebug())
+            _log.debug("Closed the response stream -> Compressed: " + shouldCompress() +
+                       " Keep-alive in: " + _keepAliveIn + " out: " + _keepAliveOut);
         synchronized(this) {
             // synch with changing out field below
             // release the header buffer if writeHeader() threw before releasing it

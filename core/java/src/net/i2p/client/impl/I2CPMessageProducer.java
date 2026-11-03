@@ -359,7 +359,8 @@ class I2CPMessageProducer {
                 if (waitCount > 0 && expires > 0 && expires < now) {
                     // just say no to bufferbloat... drop the message right here
                     _context.statManager().addRateData("client.sendDropped", len, 0);
-                    if (_log.shouldWarn()) _log.warn("Dropping " + len + " byte message - expired in queue");
+                    _log.warnThrottled("producer-expired-in-queue",
+                                       "Dropped a " + len + " byte message -> Expired in the queue");
                     return false;
                 }
 
@@ -396,8 +397,9 @@ class I2CPMessageProducer {
                 if (waitCount >= 2) {
                     // just say no to bufferbloat... drop the message right here
                     _context.statManager().addRateData("client.sendDropped", len, 0);
-                    if (_log.shouldWarn())
-                        _log.warn("Dropping " + len + " byte message after waiting " + waitCount + " times");
+                        _log.warnThrottled("producer-rate-limit-drop",
+                                           "Dropped a " + len + " byte message -> The rate limit held it for " +
+                                           waitCount + " periods");
                     return false;
                 }
 

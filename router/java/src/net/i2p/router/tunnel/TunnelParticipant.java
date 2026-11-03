@@ -253,8 +253,9 @@ class TunnelParticipant {
      */
     private void logDispatchFailure(TunnelDataMessage msg) {
         if (_log.shouldWarn()) {
-            _log.warn("Failed to dispatch " + msg + " via " +
-                      (_processor != null ? _processor : "NULL tunnel"));
+            _log.warnThrottled("tp-dispatch-failure",
+                               "Failed to dispatch a tunnel data message [MsgID " + msg.getUniqueId() + "]" +
+                               " -> " + (_processor != null ? "The endpoint rejected it" : "No tunnel"));
         }
     }
 
@@ -270,9 +271,10 @@ class TunnelParticipant {
             for (int i = 0; i < lenm1; i++) {
                 Hash h = cfg.getPeer(i);
                 if (_log.shouldWarn()) {
-                    _log.warn(toString() + " -> Blaming a hop for the failed tunnel" +
-                              " * Penalty: " + pct + "% * Peer: [" +
-                              h.toShortBase64() + "]");
+                    _log.warnThrottled("tp-blame-hop",
+                                       "Blamed a hop for the failed tunnel -> Penalty " + pct + "%" +
+                                       " * Peer: [" + h.toShortBase32() + "]" +
+                                       " * Tunnel length: " + cfg.getLength() + " hops");
                 }
                 _context.profileManager().tunnelFailed(h, pct);
             }

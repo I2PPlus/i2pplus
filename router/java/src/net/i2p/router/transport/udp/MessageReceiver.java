@@ -311,11 +311,15 @@ class MessageReceiver {
             m.setUniqueId(state.getMessageId());
             return m;
         } catch (I2NPMessageException ime) {
-            if (_log.shouldWarn()) {
-                _log.warn("SSU message invalid -> Dropping it * Size: " + sz + " bytes" +
-                          " * PeerState: " + _transport.getPeerState(state.getFrom()) +
-                          "\n* State: " + state, ime);
-            }
+            // Throttled: a peer can send corrupt reassembled messages at will.
+            // The PeerState and InboundMessageState toStrings were a dozen lines.
+            _log.warnThrottled("ssu-message-invalid",
+                               "SSU message invalid -> Dropping it" +
+                               "\n* Peer: [" + state.getFrom().toShortBase64() + "]" +
+                               " * MsgID: " + state.getMessageId() +
+                               " * Size: " + sz + " bytes" +
+                               " * Fragments: " + state.getFragmentCount() +
+                               " * Reason: " + ime);
             if (state.getFragments()[0].getData()[0] == DatabaseStoreMessage.MESSAGE_TYPE) {
                 PeerState ps = _transport.getPeerState(state.getFrom());
                 if (ps != null && ps.getRemotePort() == 65520) {

@@ -189,12 +189,14 @@ public class ExploreJob extends SearchJob {
                 if (sess != null) {
                     if (sess.tag != null) {
                         if (_log.shouldInfo()) {
-                            _log.info("Requesting AES reply from [" + hash + "] \n* Session Key: " + sess.key + "\n* " + sess.tag);
+                            _log.info("Requesting AES reply from [" + hash + "]"
+                                      + "\n* Session Key: " + sess.key + " * Tag: " + sess.tag);
                         }
                         msg.setReplySession(sess.key, sess.tag);
                     } else {
                         if (_log.shouldInfo()) {
-                            _log.info("Requesting AEAD reply from [" + hash + "] \n* Session Key: " + sess.key + "\n* " + sess.rtag);
+                            _log.info("Requesting AEAD reply from [" + hash + "]"
+                                      + "\n* Session Key: " + sess.key + " * Reply Tag: " + sess.rtag);
                         }
                         msg.setReplySession(sess.key, sess.rtag);
                     }

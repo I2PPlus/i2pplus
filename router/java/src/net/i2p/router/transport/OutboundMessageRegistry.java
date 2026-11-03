@@ -228,7 +228,8 @@ public class OutboundMessageRegistry {
                     _selectorToMessage.put(sel, multi);
                 }
                 if (_log.shouldWarn())
-                    _log.warn("A single message selector [" + sel + "] with multiple messages (" + multi + ")");
+                    _log.warn("A single message selector [" + sel + "] carries multiple messages -> Keeping them all" +
+                              "\n* Messages: " + (multi != null ? multi.size() : 0));
             }
         }
         synchronized (_selectors) { _selectors.add(sel); }

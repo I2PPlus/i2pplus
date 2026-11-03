@@ -162,7 +162,11 @@ class JobQueueRunner extends I2PThread {
                 if (job instanceof JobImpl) {
                     long when = ((JobImpl)job).getMadeReadyOn();
                     if (when <= 0) {
-                        _log.error("Job was never made ready: " + job);
+                        if (_log.shouldError()) {
+                            _log.errorThrottled("jqr-never-made-ready",
+                                                "Job was never made ready -> " + job.getName() +
+                                                " has no ready timestamp");
+                        }
                     } else {enqueuedTime = now - when;}
                 }
 
@@ -215,7 +219,9 @@ class JobQueueRunner extends I2PThread {
                 // immediately before the slow-job branch; the warning threshold
                 // is 1s, far beyond the microseconds that separates them.
                 if (lastActive - beforeUpdate > 1000 && _log.shouldWarn()) {
-                    _log.warn("Updating stats for '" + job.getName() + "' took too long (" + (lastActive - beforeUpdate) + "ms)");
+                    _log.warnThrottled("jqr-stats-update-slow",
+                                       "Updating stats for " + job.getName() + " took " +
+                                       (lastActive - beforeUpdate) + "ms -> Longer than a second");
                 }
                 _lastJob = _currentJob;
                 _currentJob = null;

@@ -544,8 +544,9 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
                     // unit-testable without a live Connection (isAckStarvation).
                     if (isAckStarvation(writeSuccessful(), _connection.getHighestAckedThrough(), ackProgressAtStart)) {
                         if (_log.shouldWarn()) {
-                            _log.warn("No forward ACK progress on connection for " + maxWaitMs
-                                      + "ms -> Packet never ACKed — treating send as failed \n* " + this);
+                            _log.warn("No forward ACK progress on " + _connection.shortLabel() +
+                                      " -> Send failed, the packet was never ACKed" +
+                                      formatAsString(false));
                         }
                         throw new IOException("disconnected (no forward ACK progress for " + maxWaitMs + "ms)");
                     }
@@ -672,7 +673,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
             try {
                 I2PSocketManagerFull.pcapWriter.write(this);
             } catch (IOException ioe) {
-               _log.warn("PCAP write ioe: " + ioe);
+               if (_log.shouldWarn()) {_log.warn("Pcap write failed -> The packet was not recorded: " + ioe);}
             }
     }
 

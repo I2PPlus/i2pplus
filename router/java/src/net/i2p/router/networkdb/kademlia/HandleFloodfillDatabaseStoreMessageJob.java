@@ -501,9 +501,9 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 }
                 if (shouldStore) {
                     if (_facade.isClientDb() && _log.shouldWarn()) {
-                        _log.warn("[" + _facade + "] -> Storing a RouterInfo in the client NetDb"
-                                  + "\n* Router: [" + key.toShortBase64() + "]"
-                                  + "\n* Rare, and should have been handled by the inbound message dispatcher");
+                        _log.warn("Storing a RouterInfo in the client NetDb -> Router: [" +
+                                  key.toShortBase32() + "]" +
+                                  "\n* Rare, and should have been handled by the inbound message dispatcher");
                     }
                     prevNetDb = _facade.store(key, ri);
                     wasNew = ((null == prevNetDb) || (prevNetDb.getPublished() < ri.getPublished()));
@@ -528,9 +528,10 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                         Collection<RouterAddress> newAddr = ri.getAddresses();
                         if ((!newAddr.equals(oldAddr)) && getContext().blocklist().isBlocklisted(ri)) {
                             if (_log.shouldInfo()) {
-                                _log.warn("New address received, blocklisting old peer [" + key.toShortBase64() + "] \n" + ri);
+                                _log.info("New address received, blocklisting the old peer [" + key.toShortBase32() + "]" +
+                                          "\n* Addresses: " + newAddr.size() + " new, " + oldAddr.size() + " old");
                             } else if (_log.shouldWarn()) {
-                                _log.warn("New address received, blocklisting old peer [" + key.toShortBase64() + "]");
+                                _log.warn("New address received, blocklisting the old peer [" + key.toShortBase32() + "]");
                             }
                             wasNew = false; // don't flood
                             shouldStore = false; // don't call heardAbout()

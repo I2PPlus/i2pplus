@@ -98,6 +98,13 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     static final String PROP_PRECONNECT_OPTIMIZE = "i2p.tunnel.preConnect.optimize";
     /** Default: true. */
     private static final boolean PROP_PRECONNECT_OPTIMIZE_DEFAULT = true;
+    /**
+     * The default above as a String, so the per-candidate property read allocates
+     * nothing when the property is unset (the common case).
+     *
+     * @since 0.9.72+
+     */
+    private static final String PROP_PRECONNECT_OPTIMIZE_DEFAULT_S = Boolean.toString(PROP_PRECONNECT_OPTIMIZE_DEFAULT);
     /** Cross-pool diversity: when fast tier exceeds this count, exclude peers in ANY
      * active tunnel across ALL pools to force each pool to use different fast peers. */
     static final int CROSS_POOL_DIVERSITY_THRESHOLD = 300;
@@ -1412,8 +1419,10 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
      * @since 0.9.71+
      */
     static boolean shouldPreConnect(RouterContext ctx, Hash peer) {
-        // Approach 3: property toggle
-        if (!Boolean.parseBoolean(ctx.getProperty(PROP_PRECONNECT_OPTIMIZE, Boolean.toString(PROP_PRECONNECT_OPTIMIZE_DEFAULT)))) return false;
+        // Approach 3: property toggle. Reading the raw string avoids allocating
+        // Boolean.toString(default) and re-parsing it on every first-hop candidate.
+        String prec = ctx.getProperty(PROP_PRECONNECT_OPTIMIZE, PROP_PRECONNECT_OPTIMIZE_DEFAULT_S);
+        if (!Boolean.parseBoolean(prec)) return false;
         // Approach 4: recently connected peers don't need pre-connect
         if (wasRecentlyConnected(ctx, peer)) return false;
         // The condition that actually matters: do we have a session with this
@@ -1544,16 +1553,11 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
             ProfileOrganizer po = ctx.profileOrganizer();
             boolean established = ctx.commSystem().isEstablished(firstHop);
             boolean connecting = ctx.commSystem().isConnecting(firstHop);
-            log.info("First hop accepted -> Tier: " + tier + " * Attempts: " + attempt + " of " + attempts +
-                     " * Remaining attempts: " + remaining
-                     + "\n* Logged since last: " + _tierLogCount.get(key) +
-                     "\n* Established: " + established + " * Connecting: " + connecting +
-                     " * Build success: " + String.format("%.2f", buildSuccess) +
-                     "\n* Fast tier: " + po.getFastPeerCount() +
-                     " * High capacity: " + po.getHighCapPeerCount() +
-                     " * Sample: " + po.getEffectiveCandidateSample(ctx) +
-                     (established || connecting ? "" : "  <-- NO transport session") +
-                     " [" + firstHop.toShortBase64() + "]");
+            log.info("First hop accepted at tier " + tier + " -> Gateway [" + firstHop.toShortBase32() + "]" +
+                     (established || connecting ? " has a transport session" : " has no transport session") +
+                     "\n* Attempts: " + attempt + " of " + attempts +
+                     " * Remaining candidates: " + remaining +
+                     " * Build success ratio: " + String.format("%.2f", buildSuccess));
         }
     }
 
@@ -1684,11 +1688,13 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
                 }
             } else {
                 if (log.shouldWarn()) {
-                     log.warn("Not enough peers for the client pool -> Returning empty"
-                              + "\n* Destination: " + settings.getDestinationNickname()
-                              + " * " + (settings.isInbound() ? "Inbound" : "Outbound")
-                              + "\n* Selected: " + rv.size() + " of " + min
-                              + " * Length: " + length + " hops");
+                    String dest = settings.getDestinationNickname() != null
+                                  ? settings.getDestinationNickname()
+                                  : settings.getDestination().toShortBase32();
+                    log.warn("Not enough peers for the " + (settings.isInbound() ? "inbound" : "outbound") +
+                             " client pool -> Returning empty"
+                             + "\n* Destination: [" + dest + "]"
+                             + " * Selected: " + rv.size() + " of " + min + " hops");
                 }
                 return Collections.emptyList();
             }

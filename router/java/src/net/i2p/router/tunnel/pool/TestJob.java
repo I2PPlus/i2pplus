@@ -4167,11 +4167,10 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
                 _partnerDeferrals = 0;
             } else {
                 if (_log.shouldInfo()) {
+                    String partnerId = partner != null ? "[" + partner.getGateway().toShortBase32() + "]" : "none";
                     _log.info("Tunnel test failed -> Partner not usable"
                               + (_partnerFallback ? " * Exploratory fallback" : "")
-                              + "\n* Partner: [" + partner.getGateway().toShortBase64() + ']'
-                              + " * Deferring the test of " + _cfg
-                              + "\n* Deferrals: " + _partnerDeferrals + " of " + MAX_PARTNER_DEFERRALS);
+                              + "\n* Partner gateway: " + partnerId + " * Deferrals: " + _partnerDeferrals);
                 }
                 deferForMissingPartner(_pool.getPairedPool(),
                                        _cfg.isInbound() ? "Outbound" : "Inbound");
@@ -4570,7 +4569,9 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
                     ctx.statManager().addRateData("tunnel.postKickDeferralExhausted", _cfg.getLength());
                     if (_log.shouldWarn()) {
                         _log.warn("Test deadlock after " + _deferredCount + " deferrals, no " +
-                                  direction + " partner \n* Paired-pool kick budget + post-kick deferral budget spent, failing tunnel... \n*" + _cfg);
+                                  direction + " partner -> Kick and post-kick budgets spent, failing the tunnel" +
+                                  "\n* Length: " + _cfg.getLength() + " hops" +
+                                  " * Gateway: [" + _cfg.getGateway().toShortBase32() + "]");
                     }
                     _cfg.incrementTestFailures();
                     _cfg.setTestFailed();
@@ -4580,13 +4581,17 @@ static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
                 }
                 if (_deferredCount == MAX_DEFERRED && _log.shouldWarn()) {
                     _log.warn("Test deadlock after " + _deferredCount + " deferrals, no " + direction +
-                              " partner \n* Paired-pool kick budget spent, deferring... \n* " + _cfg);
+                              " partner -> Paired-pool kick budget spent, deferring" +
+                              "\n* Length: " + _cfg.getLength() + " hops" +
+                              " * Gateway: [" + _cfg.getGateway().toShortBase32() + "]");
                 }
             } else {
                 _pairedPoolKicks++;
                 if (_log.shouldWarn()) {
-                    _log.warn("Test deadlock after " + _deferredCount + " deferrals -> No " +
-                              direction + " partner \n* Rebuilding paired pool and retrying \n* " + _cfg);
+                    _log.warn("Test deadlock after " + _deferredCount + " deferrals, no " + direction +
+                              " partner -> Rebuilding the paired pool and retrying" +
+                              "\n* Length: " + _cfg.getLength() + " hops" +
+                              " * Gateway: [" + _cfg.getGateway().toShortBase32() + "]");
 
                }
                 if (paired != null) {paired.ensureSufficientTunnels();}

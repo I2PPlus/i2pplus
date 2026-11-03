@@ -1130,8 +1130,8 @@ public class EstablishmentManager {
                     if (queued.offer(msg)) {
                         queueCount = queued.size(); // O(1), safe
                         if (_log.shouldInfo()) {
-                            _log.info("[SSU] Queueing OutboundEstablish to " + to +
-                                      ", increase " + PROP_MAX_CONCURRENT_ESTABLISH);
+                            _log.info("[SSU] Queueing an outbound establishment -> Waiting for a free slot" +
+                                      "\n* Peer: [" + to + "] * Queued: " + queueCount);
                         }
                     } else {
                         rejected = true;
@@ -1156,7 +1156,7 @@ public class EstablishmentManager {
         }
         if (rejected) {
             if (_log.shouldWarn())
-                _log.warn("[SSU] Too many pending connections, rejecting OutboundEstablish to " + to);
+                _log.warn("[SSU] Too many pending outbound establishments -> Failing the message * Peer: [" + to + ']');
             _transport.failed(msg, "Too many pending outbound connections");
             _context.statManager().addRateData("udp.establishRejected", deferred);
             return;
@@ -1434,12 +1434,12 @@ public class EstablishmentManager {
                 ((int) (baseProb * 128 * currentRate / minThresh)) - (isFastRouter ? 256 : 512));
             int percent = probAccept > 128 ? 100 : (probAccept / 128) * 100;
             if (probAccept >= 128 || _context.random().nextInt(128) < probAccept) {
-                if (_log.shouldInfo()) {
-                    _log.info("[SSU] Dropping incoming connection -> Accept chance: " +
-                              (percent >= 1 ? Math.max(percent,100) : "1") + "%"
-                              + "\n* Connections per minute: " + last + " previous, " +
-                              (int) (currentRate * 60*1000) + " current");
-                 }
+                // Throttled: one per dropped Session Request.
+                _log.infoThrottled("ssu-inbound-flood-drop",
+                                   "[SSU] Dropping an incoming connection -> Accept chance: " +
+                                   (percent >= 1 ? Math.min(percent, 100) : "1") + "%" +
+                                   " * Connections per minute: " + last + " previous, " +
+                                   (int) (currentRate * 60*1000) + " current");
                  return false;
             }
         }
@@ -1466,18 +1466,20 @@ public class EstablishmentManager {
         boolean isBanned = isBanlisted(_context.banlist(), fromHash);
         String truncHash = fromHash != null ? fromHash.toShortBase64() : "";
         if (!TransportUtil.isValidPort(from.getPort()) || !_transport.isValid(fromIP)) {
-            if (_log.shouldWarn()) {
-                _log.warn("[SSU] Received Session Request from invalid address/port: " + from);
-            }
+            // Throttled: one per Session Request from a source that will keep sending.
+            _log.warnThrottled("ssu-sessionreq-invalid-address",
+                               "[SSU] Session Request from an invalid address/port -> Dropping it" +
+                               " * From: [" + from + "]");
             if (fromHash != null) {
                 if (!isBanned) {
                    _banLogger.logBan(fromHash, from.toString(), "Invalid address/port in Session Request", 15*60*1000L);
                    _context.banlist().banlistRouter(fromHash, "Invalid address/port in Session Request", null, null, now + 15*60*1000L);
                    if (_log.shouldWarn()) {
-                      _log.warn("[SSU] Banning [" + truncHash + "] for 15m -> Invalid address/port in Session Request" + " (" + from + ")");
+                      _log.warn("[SSU] Banning [" + truncHash + "] for 15m -> Invalid address/port in Session Request");
                    }
                 } else if (isBanned && _log.shouldInfo()) {
-                        _log.info("[SSU] Not banning [" + truncHash + "] -> Already in blocklist (" + from + ")");
+                        _log.infoThrottled("ssu-sessionreq-already-banned",
+                                           "[SSU] Not banning [" + truncHash + "] -> Already in the blocklist");
                 }
             }
             return;
@@ -1486,9 +1488,13 @@ public class EstablishmentManager {
         if (state == null) {
             if (isBlocklisted) {
                 if (_log.shouldInfo()) {
-                    _log.info("[SSU] Received Session Request from blocklisted IP address " + from);
+                    _log.infoThrottled("ssu-sessionreq-blocklisted",
+                                       "[SSU] Session Request from a blocklisted IP address -> Dropping it" +
+                                       " * From: [" + from + "]");
                 } else if (isBanned && _log.shouldInfo()) {
-                        _log.info("[SSU] Received Session Request from banned Router [" + truncHash + "}");
+                        _log.infoThrottled("ssu-sessionreq-banned",
+                                           "[SSU] Session Request from a banned Router -> Dropping it" +
+                                           " * Peer: [" + truncHash + "]");
                 }
                 _context.statManager().addRateData("udp.establishBadIP", 1);
                 if (!_context.commSystem().isInStrictCountry())
@@ -1506,8 +1512,9 @@ public class EstablishmentManager {
                 // address cannot be trusted. Closing this properly needs
                 // per-source rate accounting that survives address rotation.
                 if (!shouldAllowInboundEstablishment()) {
-                    if (_log.shouldInfo())
-                        _log.info("[SSU] Dropping InboundEstablish from " + Addresses.toString(fromIP));
+                    _log.infoThrottled("ssu-sessionreq-flood-drop",
+                                       "[SSU] Dropping an inbound establishment from [" + Addresses.toString(fromIP) + "]" +
+                                       " -> Over the inbound connection limit");
                     _context.statManager().addRateData("udp.establishDropped", 1);
                     sendTerminationPacket(from, packet, REASON_LIMITS);
                     return;
@@ -1517,8 +1524,9 @@ public class EstablishmentManager {
                     if (exp != null) {
                         if (exp.longValue() >= _context.clock().now()) {
                             // this is common, finally get a packet after the IES2 timeout
-                            if (_log.shouldInfo())
-                                _log.info("[SSU] Received Session Request from temporarily banned peer " + from);
+                            _log.infoThrottled("ssu-sessionreq-tempbanned",
+                                               "[SSU] Session Request from a temporarily banned peer -> Dropping it" +
+                                               " * From: [" + from + "]");
                              _context.statManager().addRateData("udp.establishBadIP", 1);
                              // use this code for a temp ban
                              sendTerminationPacket(from, packet, REASON_MSG1);
@@ -2920,12 +2928,10 @@ public class EstablishmentManager {
                 long budget = inboundEstablishBudget(isRetrySent, MAX_IB_ESTABLISH_TIME.get(),
                                                      IB_RETRY_SENT_MAX_TIME);
                 if (_log.shouldWarn() && shouldLogInboundGiveup(_context.clock().now())) {
-                    _log.warn("[SSU] Giving up on inbound establishment from "
-                              + cur.getRemoteHostId() + " after " + cur.getLifetime(now)
-                              + "ms -> Budget: " + budget + "ms"
-                              + "\n* State: " + istate + " * Retried: " + isRetrySent
-                              + " * Base: " + MAX_IB_ESTABLISH_TIME.get() + "ms"
-                              + "\n* Retry budget: " + IB_RETRY_SENT_MAX_TIME + "ms"
+                    _log.warn("[SSU] Giving up on inbound establishment from ["
+                              + cur.getRemoteHostId() + "] after " + cur.getLifetime(now) + "ms"
+                              + "\n* Budget: " + budget + "ms * State: " + istate
+                              + " * Retried: " + isRetrySent
                               + " * Suppressed: " + getInboundGiveupSuppressed() + " events");
                 }
                 iter.remove(); // took too long
@@ -3790,9 +3796,10 @@ public class EstablishmentManager {
          * @param msg the message to log
          */
         private void warn(String msg) {
-            if (_log != null && _log.shouldWarn()) {
-                _log.warn("[SSU] " + msg + " from " + _from);
-            }
+            // Throttled: six callers, all on a packet path a peer controls at will.
+            if (_log != null)
+                _log.warnThrottled("ssu2-holepunch-unexpected",
+                                   "[SSU] " + msg + " -> Ignoring it * From: [" + _from + "]");
         }
     }
 

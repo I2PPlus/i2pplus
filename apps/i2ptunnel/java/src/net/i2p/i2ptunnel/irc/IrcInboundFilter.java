@@ -89,13 +89,12 @@ public class IrcInboundFilter implements Runnable {
                     if(outmsg != null)
                     {
                         if(!inmsg.equals(outmsg)) {
-                            if (_log.shouldWarn()) {
-                                _log.warn("[IRC Client] Inbound message FILTERED [" + outmsg + "]");
-                                _log.warn("[IRC Client] Inbound message [" + inmsg + "]");
-                            }
+                            _log.warnThrottled("irc-inbound-rewritten",
+                                               "[IRC Client] Inbound message rewritten -> Forwarded the new line" +
+                                               "\n* In: " + inmsg + " * Out: " + outmsg);
                         } else {
-                            if (_log.shouldInfo())
-                                _log.info("[IRC Client] Inbound message [" + outmsg + "]");
+                            if (_log.shouldDebug())
+                                _log.debug("[IRC Client] Inbound message [" + outmsg + "]");
                         }
                         outmsg = outmsg + "\r\n";   // rfc1459 sec. 2.3
                         output.write(outmsg.getBytes(StandardCharsets.ISO_8859_1));
@@ -103,8 +102,9 @@ public class IrcInboundFilter implements Runnable {
                         if (!in.ready())
                             output.flush();
                     } else {
-                        if (_log.shouldWarn())
-                            _log.warn("[IRC Client] Inbound message BLOCKED [" + inmsg + "]");
+                        _log.warnThrottled("irc-inbound-blocked",
+                                           "[IRC Client] Inbound message blocked -> Not forwarded" +
+                                           "\n* In: " + inmsg);
                     }
                 } catch (IOException e1) {
                     if (_log.shouldInfo())

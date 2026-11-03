@@ -555,11 +555,10 @@ class PacketBuilder2 {
             off += MAC_LEN;
             if (_log.shouldDebug()) {
                 if (off + ipHeaderSize > currentMTU) {
-                    _log.info("[SSU] Packet + header is larger than peer's current MTU (" +
-                              currentMTU + " bytes) -> Packet: " + off + " bytes" +
-                              "\n* Header: " + ipHeaderSize + " bytes * Data: " + dataSize + " bytes" +
-                              "\n* Fragments: " + DataHelper.toString(fragments) +
-                              "\n* " + packet);
+                    _log.debug("[SSU] Packet + header is larger than the peer's current MTU -> Sending it anyway" +
+                               "\n* MTU: " + currentMTU + " bytes * Packet: " + off + " bytes" +
+                               " * Header: " + ipHeaderSize + " bytes * Data: " + dataSize + " bytes" +
+                               " * Fragments: " + fragments.size());
                 }
             } else if (_log.shouldInfo()) {
                 _log.info("[SSU] Packet + header is larger than peer's current MTU (" + currentMTU + " bytes)");

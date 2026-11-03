@@ -62,6 +62,19 @@ public class OutboundCache {
     final ConcurrentHashMap<HashPair, Long> tunnelStartTime = new ConcurrentHashMap<>(128, 0.9f, 16);
 
     /**
+     * When a saturated tunnel rotation was last warned about, per
+     * source-destination pair. Evicting the cached tunnel is the response to a
+     * saturated rotation, and it stays the response until the pool rebuilds, so
+     * a client reconnecting in a loop warns on every fresh connection - eight in
+     * one millisecond was measured. One warning per interval per pair, a debug
+     * in between. Pruned by age, not by the tunnel caches: a saturated pair is
+     * precisely a pair with no cached tunnel.
+     *
+     * @since 0.9.72+
+     */
+    final ConcurrentHashMap<HashPair, Long> rotationWarnTime = new ConcurrentHashMap<>(16, 0.9f, 4);
+
+    /**
      * LeaseSet cache keyed by source-destination pairs.
      * Controls when to bundle our own LeaseSet to reduce overhead on repeated communications.
      */
@@ -165,6 +178,14 @@ public class OutboundCache {
 
     /** How often expired tags are dropped - every 2 minutes. */
     private static final int CLEAN_INTERVAL = 2 * 60 * 1000; // 2 minutes cleaning interval
+    /**
+     * How long a saturated-rotation warn throttle is kept. An hour: a pair that
+     * stops being saturated is forgotten, and one that stays saturated is not
+     * forgotten between the two-minute cleanups.
+     *
+     * @since 0.9.72+
+     */
+    private static final long ROTATION_WARN_KEEP_MS = 60 * 60 * 1000L;
 
     /**
      * Creates an OutboundCache instance and schedules periodic cache cleanup.
@@ -507,6 +528,9 @@ public class OutboundCache {
             cleanTunnelCache(_context, stalledTunnelCache);
             // Remove stale tunnel start times for tunnels no longer cached
             tunnelStartTime.keySet().removeIf(k -> !tunnelCache.containsKey(k));
+            // Drop warn throttles for pairs that have not been saturated for a while
+            long warnCutoff = _context.clock().now() - ROTATION_WARN_KEEP_MS;
+            rotationWarnTime.entrySet().removeIf(e -> e.getValue() < warnCutoff);
             cleanReplyCache(_context, lastReplyRequestCache);
             cleanMultihomedCache(_context, multihomedCache);
             cleanLsFailCooldown(_context, lsFailCooldown);

@@ -129,7 +129,8 @@ class ClientListenerRunner implements Runnable {
                             runConnection(socket);
                         } else {
                             if (_log.shouldWarn())
-                                _log.warn("Refused connection from " + socket.getInetAddress());
+                                _log.warn("Refused connection from [" + socket.getInetAddress().getHostAddress() +
+                                          ":" + socket.getPort() + ']');
                             try {
                                 socket.close();
                             } catch (IOException ioe) { /* ignored */ }

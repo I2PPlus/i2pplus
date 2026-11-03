@@ -707,7 +707,7 @@ public class Banlist {
             }
 
             if (_log.shouldWarn()) {
-                _log.warn("Bad packet limit exceeded for " + ip + " -> Banning for " + DataHelper.formatDuration(_badPacketDuration));
+                _log.warn("Banning [" + ip + "] -> " + reason);
             }
 
             BanLogger banLogger = new BanLogger();
@@ -767,7 +767,7 @@ public class Banlist {
             }
 
             if (_log.shouldWarn()) {
-                _log.warn("Bad packet limit exceeded for " + ip + " -> Banning for " + DataHelper.formatDuration(_badPacketDuration));
+                _log.warn("Banning [" + ip + "] -> " + reason);
             }
 
             BanLogger banLogger = new BanLogger();
@@ -813,7 +813,7 @@ public class Banlist {
             }
 
             if (_log.shouldWarn()) {
-                _log.warn("Corrupt connection limit exceeded for " + ip + " -> Banning for " + DataHelper.formatDuration(_badPacketDuration));
+                _log.warn("Banning [" + ip + "] -> " + reason);
             }
 
             BanLogger banLogger = new BanLogger();
@@ -872,7 +872,7 @@ public class Banlist {
             }
 
             if (_log.shouldWarn()) {
-                _log.warn("Corrupt connection limit exceeded for " + ip + " -> Banning for " + DataHelper.formatDuration(_badPacketDuration));
+                _log.warn("Banning [" + ip + "] -> " + reason);
             }
 
             BanLogger banLogger = new BanLogger();
@@ -914,7 +914,7 @@ public class Banlist {
             String reason = "Port hopping";
 
             if (_log.shouldWarn()) {
-                _log.warn("Port hopping limit exceeded for " + ip + " -> Banning for " + DataHelper.formatDuration(_badPacketDuration));
+                _log.warn("Banning [" + ip + "] -> " + reason);
             }
 
             BanLogger banLogger = new BanLogger();
@@ -968,7 +968,7 @@ public class Banlist {
             String reason = "Port hopping";
 
             if (_log.shouldWarn()) {
-                _log.warn("Port hopping limit exceeded for " + ip + " -> Banning for " + DataHelper.formatDuration(_badPacketDuration));
+                _log.warn("Banning [" + ip + "] -> " + reason);
             }
 
             BanLogger banLogger = new BanLogger();

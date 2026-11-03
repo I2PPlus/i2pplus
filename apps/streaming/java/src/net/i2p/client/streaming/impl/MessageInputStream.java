@@ -393,9 +393,9 @@ class MessageInputStream extends InputStream {
      * @param available bytes still available in the buffer
      */
     private void logBufferFull(long messageId, int available) {
-        if (_log.shouldWarn()) {
-            _log.warn("Dropping message " + messageId + ", buffer size exceeded: available=" + available);
-        }
+        _log.warnThrottled("streaming-buffer-size-exceeded",
+                           "Dropping message " + messageId + " -> Buffer size exceeded" +
+                           "\n* Available: " + available + " bytes");
         synchronized (_dataLock) {
             _dataLock.notifyAll();
         }
@@ -407,9 +407,8 @@ class MessageInputStream extends InputStream {
      * @param messageId the message that was too far ahead
      */
     private void logBufferBlockWindowExceeded(long messageId) {
-        if (_log.shouldWarn()) {
-            _log.warn("Dropping message " + messageId + ", exceeds allowed buffer blocks window");
-        }
+        _log.warnThrottled("streaming-message-block-window",
+                           "Dropping message " + messageId + " -> Beyond the buffer block window");
         synchronized (_dataLock) {
             _dataLock.notifyAll();
         }
@@ -421,9 +420,8 @@ class MessageInputStream extends InputStream {
      * @param messageId the message that was held back
      */
     private void logTooManyReadyBlocks(long messageId) {
-        if (_log.shouldWarn()) {
-            _log.warn("Dropping message " + messageId + ", too many ready blocks");
-        }
+        _log.warnThrottled("streaming-too-many-ready-blocks",
+                           "Dropping message " + messageId + " -> Too many ready blocks");
         synchronized (_dataLock) {
             _dataLock.notifyAll();
         }
@@ -541,9 +539,8 @@ class MessageInputStream extends InputStream {
 
         synchronized (_dataLock) {
             if (messageId <= _highestReadyBlockId) {
-                if (_log.shouldInfo()) {
-                    _log.info("Ignoring duplicate message ID " + messageId);
-                }
+                _log.infoThrottled("streaming-duplicate-message-id",
+                                   "Ignored duplicate message ID " + messageId + " -> Already ready");
                 return false;
             }
 
@@ -575,14 +572,13 @@ class MessageInputStream extends InputStream {
                 _dataLock.notifyAll();
             } else {
                 if (_locallyClosed.get()) {
-                    if (_log.shouldInfo()) {
-                        _log.info("Received out-of-order message ID " + messageId + " on closed stream");
-                    }
+                    _log.infoThrottled("streaming-out-of-order-closed",
+                                       "Received out-of-order message ID " + messageId +
+                                       " on a closed stream -> Payload discarded");
                     _notYetReadyBlocks.put(messageId, DUMMY_BA);
                 } else {
-                    if (_log.shouldInfo()) {
-                        _log.info("Received out-of-order message ID " + messageId);
-                    }
+                    _log.infoThrottled("streaming-out-of-order",
+                                       "Received out-of-order message ID " + messageId + " -> Buffered");
                     _notYetReadyBlocks.put(messageId, payload);
                 }
             }
@@ -650,11 +646,8 @@ class MessageInputStream extends InputStream {
                     throw new IOException("Input stream closed");
                 }
                 if (_closeReceived && _notYetReadyBlocks.isEmpty()) {
-                    if (_log.shouldInfo()) {
-                        _log.info("Close received, EOF at " + _readTotal + " bytes, "
-                                + _readyDataBlocks.size() + " ready, "
-                                + _notYetReadyBlocks.size() + " pending");
-                    }
+                    _log.infoThrottled("streaming-eof-close-received",
+                        "Close received, EOF at " + _readTotal + " bytes read");
                     return -1;
                 }
                 try {
@@ -670,9 +663,9 @@ class MessageInputStream extends InputStream {
                         if (_readyDataBlocks.isEmpty()) {
                             long remaining = expiration - System.currentTimeMillis();
                             if (remaining <= 0) {
-                                if (_log.shouldInfo()) {
-                                    _log.info("Read timed out after " + readTimeout + "ms");
-                                }
+                                _log.infoThrottled("streaming-read-timed-out",
+                                    "Read timed out after " + readTimeout +
+                                    "ms with " + _readTotal + " bytes read");
                                 throw new SocketTimeoutException("Read timed out");
                             }
                             readTimeout = (int) remaining;

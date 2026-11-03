@@ -375,7 +375,8 @@ class OutboundMessageState implements CDPQEntry {
                     rv = tot;
                 } else {
                     if (_log.shouldInfo())
-                        _log.info("Send window limited to " + (max - rv) + " -> Not sending fragment " + i + toString());
+                        _log.info("Send window limited to " + (max - rv) + " bytes -> Skipping fragment " + i +
+                                  " [MsgID " + getMessageId() + ']');
                 }
             }
         }
@@ -597,7 +598,10 @@ class OutboundMessageState implements CDPQEntry {
             return toSend;
         } else {
             if (_log.shouldWarn())
-                _log.warn("Error: " + start + '/' + end + '/' + outOffset + '/' + out.length);
+                _log.warn("Fragment " + fragmentNum + " does not fit the output buffer -> Writing nothing" +
+                          "\n* MsgID: " + getMessageId() + " * Fragment end: " + end + " bytes" +
+                          " * Message size: " + _messageBuf.length + " bytes" +
+                          " * Buffer offset: " + outOffset + " * Buffer size: " + out.length + " bytes");
         }
         return -1;
     }

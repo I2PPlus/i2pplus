@@ -346,8 +346,9 @@ public class I2PSocketManagerFull implements I2PSocketManager {
         ConnectionOptions defaultOptions = new ConnectionOptions(opts);
         int protocol = I2PSession.PROTO_STREAMING;
         rv.addMuxedSessionListener(_connectionManager.getMessageHandler(), protocol, defaultOptions.getLocalPort());
-        if (_log.shouldWarn())
-            _log.warn("Added subsession: " + rv);
+        if (_log.shouldDebug())
+            _log.debug("Added subsession [" + subsessionTag(rv) + "] -> Listening for streaming on port " +
+                       defaultOptions.getLocalPort());
         return rv;
     }
 
@@ -384,12 +385,24 @@ public class I2PSocketManagerFull implements I2PSocketManager {
         boolean removed = _subsessions.remove(session);
         _subsessionsOptions.remove(session);
         if (removed) {
-            if (_log.shouldWarn())
-                _log.warn("Removed subsession " + session);
+            if (_log.shouldDebug())
+                _log.debug("Removed subsession [" + subsessionTag(session) + "]");
         } else {
-            if (_log.shouldWarn())
-                _log.warn("Subsession not found to remove " + session);
+            if (_log.shouldDebug())
+                _log.debug("Subsession not found to remove [" + subsessionTag(session) + "] -> Already gone");
         }
+    }
+
+    /**
+     * Short base32 tag of a subsession's local destination, for log lines that
+     * must stay on one line. {@link I2PSession#toString()} is a multi-line dump.
+     *
+     * @param session the session to name, non-null
+     * @return 8 characters, or "unknown" before the session has a local destination
+     */
+    private static String subsessionTag(I2PSession session) {
+        return session.getMyDestination() != null ?
+               session.getMyDestination().calculateHash().toShortBase32() : "unknown";
     }
 
     /**
@@ -569,7 +582,9 @@ public class I2PSocketManagerFull implements I2PSocketManager {
          if (!(options instanceof ConnectionOptions))
              throw new IllegalArgumentException();
          if (_log.shouldWarn())
-             _log.warn("Changing options from:\n " + _defaultOptions + "\nto:\n " + options);
+             _log.warn("Default options changed -> Applied to live connections" +
+                       "\n* From:" + _defaultOptions.toString().replace("\n*", " *") +
+                       " * To:" + options.toString().replace("\n*", " *"));
          _defaultOptions.updateAll((ConnectionOptions) options);
          _connectionManager.updateOptions();
      }
@@ -588,7 +603,9 @@ public class I2PSocketManagerFull implements I2PSocketManager {
          if (!(options instanceof ConnectionOptions))
              throw new IllegalArgumentException();
          if (_log.shouldWarn())
-             _log.warn("Updating options for subsession " + session + " to:\n " + options);
+             _log.warn("Updated the options for subsession [" + subsessionTag(session) +
+                       "] -> Applied to live connections" +
+                       "\n* To:" + options.toString().replace("\n*", " *"));
          _subsessionsOptions.put(session, (ConnectionOptions) options);
          _connectionManager.updateOptions();
      }

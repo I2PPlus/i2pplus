@@ -251,13 +251,20 @@ public class InNetMessagePool implements Service {
      * @param msgIDBloomXor the XOR applied to the message id for the history entry
      */
     private void handleInvalidMessage(I2NPMessage messageBody, String invalidReason, RouterIdentity fromRouter, Hash fromRouterHash, boolean doHistory, long msgIDBloomXor) {
+        String reason = invalidReason.substring(0, 1).toUpperCase() + invalidReason.substring(1);
+        long msgID = messageBody.getUniqueId(msgIDBloomXor);
         if (_log.shouldInfo()) {
-            _log.warn("Dropping DbLookupMessage [XOR MsgID " + messageBody.getUniqueId(msgIDBloomXor) + "] -> " +
-                invalidReason.substring(0, 1).toUpperCase() + invalidReason.substring(1) +
-                messageBody + "\n* Expires: " + new Date(messageBody.getMessageExpiration()));
+            _log.info("Dropping DbLookupMessage [XOR MsgID " + msgID + "] -> " + reason
+                      + "\n* " + messageBody.getClass().getSimpleName()
+                      + " * Expires: " + new Date(messageBody.getMessageExpiration()));
         } else if (_log.shouldWarn()) {
-            _log.warn("Dropping DbLookupMessage for " + messageBody + " -> " +
-                      invalidReason.substring(0, 1).toUpperCase() + invalidReason.substring(1));
+            // Name the message by its class, not its toString(): a
+            // TunnelGatewayMessage's toString is multi-line and carries the wrapped
+            // message's own expiry note, so the reason was printed twice and the
+            // line ran to three.
+            _log.warn("Dropping DbLookupMessage for " + messageBody.getClass().getSimpleName()
+                      + " -> " + reason
+                      + "\n* MsgID: " + msgID + " * Expires: " + new Date(messageBody.getMessageExpiration()));
         }
         _context.statManager().addRateData("inNetPool.dropped", 1);
         _context.statManager().addRateData("inNetPool.droppedDbLookupResponseMessage", 1);

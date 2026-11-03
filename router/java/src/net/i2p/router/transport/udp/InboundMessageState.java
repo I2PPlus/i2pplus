@@ -117,8 +117,11 @@ class InboundMessageState implements CDQEntry {
             // Grow array if needed, but cap at MAX_FRAGMENTS
             if (fragmentNum >= _fragments.length) {
                 if (fragmentNum >= MAX_FRAGMENTS) {
-                    if (_log.shouldWarn())
-                        _log.warn("Invalid fragment " + fragmentNum + '/' + MAX_FRAGMENTS);
+                    // Throttled: the fragment number is attacker-supplied. MAX_FRAGMENTS
+                    // is a constant, so it adds nothing to a per-fragment line.
+                    _log.warnThrottled("ssu-inbound-frag-num",
+                                       "Invalid fragment number " + fragmentNum + " -> Dropping it" +
+                                       "\n* Peer: [" + _from.toShortBase64() + "] * MsgID: " + _messageId);
                     return false;
                 }
                 // Grow the array to accommodate the fragment
@@ -133,14 +136,18 @@ class InboundMessageState implements CDQEntry {
                 _receivedCount++;
                 if (isLast) {
                     if (_lastFragment >= 0) {
-                        if (_log.shouldWarn())
-                            _log.warn("Multiple last fragments for message " + _messageId + " from " + _from);
+                        _log.warnThrottled("ssu-inbound-frag-multi-last",
+                                           "Multiple last fragments -> Dropping the message" +
+                                           "\n* Peer: [" + _from.toShortBase64() + "] * MsgID: " + _messageId +
+                                           " * Fragment: " + fragmentNum);
                         return false;
                     }
                     _lastFragment = fragmentNum;
                 } else if (_lastFragment >= 0 && fragmentNum >= _lastFragment) {
-                    if (_log.shouldWarn())
-                        _log.warn("Non-last fragment " + fragmentNum + " when last is " + _lastFragment + " for message " + _messageId + " from " + _from);
+                    _log.warnThrottled("ssu-inbound-frag-after-last",
+                                       "Fragment after the last one -> Dropping the message" +
+                                       "\n* Peer: [" + _from.toShortBase64() + "] * MsgID: " + _messageId +
+                                       " * Fragment: " + fragmentNum + " * Last: " + _lastFragment);
                     return false;
                 }
                 if (_log.shouldDebug())

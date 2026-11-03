@@ -867,8 +867,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
      */
     public void gotTermination(int reason, long count) {
         if (_log.shouldInfo()) {
-            _log.info("[SSU] Received TERMINATION block -> " + SSU2Util.terminationCodeToString(reason) +
-                      (count > 0 ? " * Destroyed sessions: " + count : "") + "\n* " + toShortString());
+            _log.info("[SSU] Received TERMINATION block -> " + SSU2Util.terminationCodeToString(reason)
+                      + " * " + toShortString()
+                      + (count > 0 ? " * Destroyed sessions: " + count : ""));
         }
         // this sets the state to FAILED
         fail();
@@ -1541,7 +1542,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
      * @since 0.9.71+
      */
     String toShortString() {
-        return Addresses.toString(_aliceIP, _alicePort) + ' ' + _currentState;
+        return "[" + Addresses.toString(_aliceIP, _alicePort) + "] " + _currentState;
     }
 
     /**

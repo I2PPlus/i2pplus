@@ -300,8 +300,10 @@ class PeerTestManager {
                 int testPort = ra.getPort();
                 if (ourPort != testPort || !DataHelper.eq(ourIP, testIP)) {
                     if (_log.shouldWarn())
-                        _log.warn("Test IP mismatch: " + Addresses.toString(testIP, testPort) +
-                                  ", ours with Bob: " + Addresses.toString(ourIP, ourPort) + " on " + test);
+                        _log.warn("Peer test IP mismatch -> Using the transport address" +
+                                  "\n* Test: " + Addresses.toString(testIP, testPort) +
+                                  " * Ours with Bob: " + Addresses.toString(ourIP, ourPort) +
+                                  " * " + test.toShortString());
                     ourIP = testIP;
                     ourPort = testPort;
                     // this should still work
@@ -383,7 +385,7 @@ class PeerTestManager {
                         int sent = state.incrementPacketsRelayed();
                         if (sent > MAX_RELAYED_PER_TEST_ALICE) {
                             if (_log.shouldWarn())
-                                _log.warn("Sent too many packets " + state);
+                                _log.warn("Peer test sent too many packets -> Abandoning the test * " + state.toShortString());
                             complete = !_currentTestComplete;
                             action = ACTION_NONE;
                         } else {
@@ -393,7 +395,7 @@ class PeerTestManager {
                                                      state.getCharlieIntroKey() != null, now);
                             if (action == ACTION_SEND_CHARLIE) {
                                 if (_log.shouldWarn())
-                                    _log.warn("Continuing test w/o msg 5: " + state);
+                                    _log.warn("Continuing the peer test without message 5 -> Retransmitting * " + state.toShortString());
                             }
                             if (bobTime > 0 && charlieTime <= 0 &&
                                 state.getBeginTime() + MAX_CHARLIE_LIFETIME < now) {
@@ -709,7 +711,8 @@ class PeerTestManager {
                     // SSU2 ENABLE_SSU2_SYMNAT_TEST only, msg 5 not received, msg 7 received
                     status = isIPv6 ? Status.IPV4_UNKNOWN_IPV6_FIREWALLED : Status.IPV4_FIREWALLED_IPV6_UNKNOWN;
                     if (_log.shouldWarn())
-                        _log.warn("Test complete w/o msg 5, " + status + " on " + test);
+                        _log.warn("Peer test complete without message 5 -> Status: " + status +
+                                  " * " + test.toShortString());
                 } else {
                     // Got msgs 5 and 7, everything good
                 status = isIPv6 ? Status.IPV4_UNKNOWN_IPV6_OK : Status.IPV4_OK_IPV6_UNKNOWN;
@@ -773,7 +776,7 @@ class PeerTestManager {
         }
 
         if (_log.shouldInfo())
-            _log.info("Test complete: " + test);
+            _log.info("Peer test complete -> Status: " + status + " * " + test.toShortString());
 
         honorStatus(status, isIPv6);
         _currentTest = null;
@@ -992,16 +995,19 @@ class PeerTestManager {
     private void receiveTest(RemoteHostId from, PeerState2 fromPeer, int msg, int status, Hash h, byte[] data,
                              byte[] addrBlockIP, int addrBlockPort) {
         if (data[0] != 2) {
-            if (_log.shouldWarn())
-                _log.warn("Bad version " + (data[0] & 0xff) + from + ' ' + fromPeer);
+            // Throttled: an out-of-session peer test packet is attacker-controllable.
+            _log.warnThrottled("ssu2-peertest-bad-version",
+                               "Peer test message with a bad version " + (data[0] & 0xff) + " -> Dropping it" +
+                               " * From: [" + from + ']');
             return;
         }
         long nonce = DataHelper.fromLong(data, 1, 4);
         long time = DataHelper.fromLong(data, 5, 4) * 1000;
         int iplen = data[9] & 0xff;
         if (iplen != 0 && iplen != 6 && iplen != 18) {
-            if (_log.shouldWarn())
-                _log.warn("Bad IP address length " + iplen);
+            _log.warnThrottled("ssu2-peertest-bad-iplen",
+                               "Peer test message with a bad IP address length " + iplen + " -> Dropping it" +
+                               " * From: [" + from + ']');
             return;
         }
         boolean isIPv6 = iplen == 18;
@@ -1053,15 +1059,17 @@ class PeerTestManager {
         long now = _context.clock().now();
         if (msg >= 1 && msg <= 4) {
             if (fromPeer == null) {
-                if (_log.shouldWarn())
-                    _log.warn("BAD message " + msg + " out-of-session from " + from);
+                // Throttled: an out-of-session peer test packet is attacker-controllable.
+                _log.warnThrottled("ssu2-peertest-out-of-session",
+                                   "Peer test message " + msg + " out of session -> Dropping it" +
+                                   " * From: [" + from + ']');
                 return;
             }
             fromPeer.setLastReceiveTime(now);
         } else {
             if (fromPeer != null) {
-                if (_log.shouldWarn())
-                    _log.warn("BAD message " + msg + " in-session from " + fromPeer);
+                _log.warnThrottled("ssu2-peertest-in-session",
+                                   "Peer test message " + msg + " in session -> Dropping it * " + fromPeer.toShortString());
                 return;
             }
         }
@@ -1135,15 +1143,17 @@ class PeerTestManager {
             }
         } else {
             if (state == null) {
-                if (_log.shouldWarn())
-                    _log.warn("No state found for message " + msg + fromPeer);
+                _log.warnThrottled("ssu2-peertest-no-state",
+                                   "No peer test state for message " + msg + " -> Dropping it" +
+                                   " * From: [" + from + ']');
                 return;
             }
         }
         long skew = time - now;
         if (skew > MAX_SKEW || skew < 0 - MAX_SKEW) {
-            if (_log.shouldWarn())
-                _log.warn("Too skewed for message " + msg + fromPeer);
+            _log.warnThrottled("ssu2-peertest-skew",
+                               "Peer test message " + msg + " is too skewed -> Dropping it" +
+                               " * From: [" + from + "] * Skew: " + skew + "ms");
             return;
         }
 
@@ -1173,8 +1183,9 @@ class PeerTestManager {
                     return;
                 }
                 if (_throttle.shouldThrottle(fromIP)) {
-                    if (_log.shouldWarn())
-                        _log.warn("PeerTest throttle from " + Addresses.toString(fromIP, fromPort));
+                    _log.warnThrottled("ssu2-peertest-throttle",
+                                       "Peer test throttled -> Dropping it * From: [" +
+                                       Addresses.toString(fromIP, fromPort) + ']');
                     sendRejectToAlice(SSU2Util.TEST_REJECT_BOB_LIMIT, data, fromPeer);
                     fromPeer.setLastSendTime(now);
                     return;
@@ -1195,7 +1206,8 @@ class PeerTestManager {
                 if (!SSU2Util.validateSig(_context, SSU2Util.PEER_TEST_PROLOGUE,
                                           _context.routerHash(), null, data, spk)) {
                     if (_log.shouldWarn())
-                        _log.warn("Signature failed in message #1\n" + aliceRI);
+                        _log.warn("Signature failed in peer test message #1 -> Dropping it * Alice: [" +
+                                  aliceRI.getHash().toShortBase64() + ']');
                     // send reject
                     sendRejectToAlice(SSU2Util.TEST_REJECT_BOB_SIGFAIL, data, fromPeer);
                     fromPeer.setLastSendTime(now);
@@ -1294,7 +1306,8 @@ class PeerTestManager {
                                 rcode = SSU2Util.TEST_REJECT_CHARLIE_ADDRESS;
                         } else {
                             if (_log.shouldWarn())
-                                _log.warn("Signature failed on message #2\n" + aliceRI);
+                                _log.warn("Signature failed on peer test message #2 -> Rejecting it * Alice: [" +
+                                          aliceRI.getHash().toShortBase64() + ']');
                             rcode = SSU2Util.TEST_REJECT_CHARLIE_SIGFAIL;
                         }
                     } else {
@@ -1373,7 +1386,8 @@ class PeerTestManager {
                                     state.setLastSendTime(now);
                                     sendRIandPT(aliceRI, -1, alice, state.getTestData(), (PeerState2) charlie, now);
                                     if (_log.shouldInfo())
-                                        _log.info("Charlie response " + status + " picked a new one " + charlie + " on " + state);
+                                        _log.info("Charlie response " + status + " -> Picked a new Charlie [" +
+                                                  charlie.toShortString() + "] * " + state.toShortString());
                                     break;
                                 } catch (IOException ioe) {
                                     // give up
@@ -1383,7 +1397,7 @@ class PeerTestManager {
                     }
                 }
                 if (status != SSU2Util.TEST_ACCEPT && _log.shouldWarn())
-                    _log.warn("Charlie response " + status + " no more to choose from on " + state);
+                    _log.warn("Charlie response " + status + " -> No more Charlie to choose from * " + state.toShortString());
                 state.setLastSendTime(now);
                 PeerState2 alice = state.getAlice();
                 if (fromPeer == null) return;
@@ -1396,7 +1410,8 @@ class PeerTestManager {
                     if (!SSU2Util.validateSig(_context, SSU2Util.PEER_TEST_PROLOGUE,
                                               _context.routerHash(), alice.getRemotePeer(), data, spk) &&
                         _log.shouldWarn())
-                        _log.warn("Signature failed on message #3\n" + charlieRI);
+                        _log.warn("Signature failed on peer test message #3 -> Rejecting it * Charlie: [" +
+                                  charlieRI.getHash().toShortBase64() + ']');
                 } else  {
                     // oh well, maybe alice has it
                     if (status == SSU2Util.TEST_ACCEPT && _log.shouldWarn())
@@ -1467,7 +1482,8 @@ class PeerTestManager {
                             if (ra != null) {
                                 charlieIntroKey = getIntroKey(ra);
                                 if (charlieIntroKey == null && _log.shouldWarn())
-                                    _log.warn("Charlie's IntroKey not found: " + test + '\n' + charlieRI);
+                                    _log.warn("Charlie's IntroKey not found -> Failing the test * " + test.toShortString() +
+                                              " * Charlie: [" + charlieRI.getHash().toShortBase64() + ']');
                                 byte[] ip = ra.getIP();
                                 if (ip != null) {
                                     if (!_transport.isValid(ip) ||
@@ -1481,12 +1497,14 @@ class PeerTestManager {
                                             charliePort = ra.getPort();
                                             if (!TransportUtil.isValidPort(charliePort)) {
                                                 if (_log.shouldWarn())
-                                                    _log.warn("BAD port (" + charliePort + ") detected for Charlie: " + test + '\n' + ra);
+                                                    _log.warn("Charlie's port " + charliePort + " is not valid -> Ignoring the port * " +
+                                                              test.toShortString() + " * Address: " + ra);
                                                 charliePort = 0;
                                             }
                                         } catch (UnknownHostException uhe) {
                                            if (_log.shouldWarn())
-                                                _log.warn("Charlie's IP address not found: " + test + '\n' + ra, uhe);
+                                                _log.warn("Charlie's IP address not found -> Failing the test * " +
+                                                          test.toShortString() + " * Address: " + ra, uhe);
                                         }
                                     }
                                 } else {
@@ -1496,22 +1514,26 @@ class PeerTestManager {
                                     String caps = ra.getOption(UDPAddress.PROP_CAPACITY);
                                     if (caps != null && caps.indexOf(UDPAddress.CAPACITY_TESTING) >= 0) {
                                     if (_log.shouldWarn())
-                                        _log.warn("Charlie's IP address not found: " + test + '\n' + ra);
+                                        _log.warn("Charlie's IP address not found -> Allowing it as a firewalled Charlie * " +
+                                                  test.toShortString() + " * Address: " + ra);
                                     charlieIP = PENDING_IP;
                                     charliePort = PENDING_PORT;
                                     } else {
                                         // fail
                                         if (_log.shouldWarn())
-                                            _log.warn("Bob picked Charlie without B cap: " + test + '\n' + ra);
+                                            _log.warn("Bob picked a Charlie without the B capacity -> Failing the test * " +
+                                                      test.toShortString() + " * Address: " + ra);
                                     }
                                 }
                             } else {
                                 if (_log.shouldWarn())
-                                    _log.warn("Charlie's address not found" + test + '\n' + charlieRI);
+                                    _log.warn("Charlie's address not found -> Failing the test * " + test.toShortString() +
+                                              " * Charlie: [" + charlieRI.getHash().toShortBase64() + ']');
                             }
                         } else {
                             if (_log.shouldWarn())
-                                _log.warn("Signature failed on message #4 " + test + '\n' + charlieRI);
+                                _log.warn("Signature failed on peer test message #4 -> Failing the test * " + test.toShortString() +
+                                          " * Charlie: [" + charlieRI.getHash().toShortBase64() + ']');
                         }
                     } else {
                         // Without the RI we can't send msg 6, so we have to stop the test,

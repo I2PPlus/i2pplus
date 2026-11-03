@@ -1044,13 +1044,15 @@ class Packet {
         catch (IllegalArgumentException iae) {
             // sigtype mismatch
             Log l = ctx.logManager().getLog(Packet.class);
-            if (l.shouldWarn()) {l.warn("Signature failed on " + toString() + " -> " + iae.getMessage());}
+            l.warnThrottled("packet-signature-illegal-type",
+                            "Signature failed -> " + iae.getMessage() + toString());
             ok = false;
         }
         if (ok) {_sigVerified = true;}
         else {
             Log l = ctx.logManager().getLog(Packet.class);
-            if (l.shouldWarn()) {l.warn("Signature failed on " + toString() + " using SigningPublicKey " + spk);}
+            l.warnThrottled("packet-signature-failed",
+                            "Signature failed using SigningPublicKey " + spk + toString());
         }
         return ok;
     }
@@ -1063,7 +1065,9 @@ class Packet {
      */
     private void logNoKeyType(I2PAppContext ctx, SigningPublicKey spk) {
         Log l = ctx.logManager().getLog(Packet.class);
-        if (l.shouldWarn()) {l.warn("Unknown Signature Type in " + spk + " cannot verify " + toString());}
+        l.warnThrottled("packet-unknown-key-type",
+                        "Signature key type " + spk.getType() +
+                        " is not available -> Cannot verify the packet" + toString());
     }
 
     /**

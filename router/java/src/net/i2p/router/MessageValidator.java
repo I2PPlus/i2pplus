@@ -104,9 +104,13 @@ public class MessageValidator {
         val ^= (messageExpiration & TIME_MASK);
         boolean dup = _filter.add(val);
         if (dup && _log.shouldWarn()) {
-            _log.warn("Duplicate message -> MsgID: " + messageId + " * Other duplicates: " +
-                      _filter.getCurrentDuplicateCount()
-                         + "\n* Other entries: " + _filter.getInsertedCount()
+            // The filter's occupancy is not a fact about this duplicate - it is the
+            // same number on every duplicate line, and the filter reports its own
+            // shape at startup. What matters is the id, how many duplicates we have
+            // seen, and the false-positive rate: a full filter calls a message a
+            // duplicate without having seen it, so that rate qualifies the claim.
+            _log.warn("Duplicate message -> MsgID: " + messageId
+                      + " * Duplicates: " + _filter.getCurrentDuplicateCount()
                       + (fp > 0 ? " * False positive rate: " + fp : ""));
         }
         return dup;

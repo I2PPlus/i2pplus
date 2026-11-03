@@ -107,7 +107,8 @@ class GetBidsJob {
             fail(context, msg);
         } else {
             if (log.shouldInfo())
-                log.info("Attempting to send on transport [" + bid.getTransport().getStyle() + "]: " + bid);
+                log.info("[" + bid.getTransport().getStyle() + "] Bid accepted -> Sending the message" +
+                         " * Cost: " + bid.getLatencyMs() + "ms");
             bid.getTransport().send(msg);
         }
     }

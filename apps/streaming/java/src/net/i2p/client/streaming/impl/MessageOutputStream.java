@@ -325,9 +325,8 @@ class MessageOutputStream extends OutputStream {
                         throw new IOException("Write not accepted into the queue" + reason);
                     }
                 }
-                if (_log.shouldInfo()) {
-                    _log.info("Write accepted after wait");
-                }
+                _log.infoThrottled("streaming-write-accepted-after-wait",
+                                   "Write accepted after waiting -> The send queue was full");
             } else {
                 if (_log.shouldDebug()) {
                     _log.debug("Buffered " + len + " bytes without flush");
@@ -443,9 +442,8 @@ class MessageOutputStream extends OutputStream {
                 // queued, so there is nothing to wait on — surface it and move
                 // on rather than throwing, since writeData's contract provides
                 // exactly one status per call.
-                if (_log.shouldWarn()) {
-                    _log.warn("WriteStatus is null during flush");
-                }
+                _log.warnThrottled("streaming-null-write-status",
+                                   "WriteStatus was null during flush -> Nothing to wait for");
                 return;
             } else if (_closed.get() && (_writeTimeout > Connection.getDisconnectTimeout() || _writeTimeout <= 0)) {
                 ws.waitForCompletion(Connection.getDisconnectTimeout());
@@ -851,16 +849,18 @@ class MessageOutputStream extends OutputStream {
                             sent = true;
                         }
                     }
-                } else if (_log.shouldInfo() && _valid > 0) {
-                    _log.info("Passive flush skipped -> Valid bytes: " + _valid);
+                } else if (_valid > 0) {
+                    _log.infoThrottled("streaming-passive-flush-skipped",
+                                       "Passive flush skipped -> " + _valid + " bytes stayed buffered");
                 }
             }
             if (sendMs >= 0) {recordSendUnderLock(sendMs);}
 
             if (sent && _log.shouldDebug()) {
                 _log.debug("Passive flush executed: " + ws);
-            } else if (ws != null && ws.writeFailed() && _log.shouldWarn()) {
-                _log.warn("Passive flush failed, will retry on close: " + ws);
+            } else if (ws != null && ws.writeFailed()) {
+                _log.warnThrottled("streaming-passive-flush-failed",
+                                   "Passive flush failed -> Retrying on close: " + ws);
             }
         }
     }

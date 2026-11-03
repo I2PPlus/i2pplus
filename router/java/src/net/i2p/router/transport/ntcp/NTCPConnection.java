@@ -1001,10 +1001,10 @@ void noteEstablishmentRtt(int rttMs) {
             try {
                 String writeStatus = _conKey != null ? String.valueOf((_conKey.interestOps() & SelectionKey.OP_WRITE) != 0) : "null_key";
                 _log.info("Outbound connection too backlogged -> Throttling the send"
-                          + " * Size: " + size + " * Wants write: " + writeStatus
+                          + " * Queued: " + size + " * Wants write: " + writeStatus
+                          + " * Peer: " + toShortString()
                           + "\n* Outbound set: " + currentOutboundSet
-                          + " * Write buffers: " + writeBufs
-                          + "\n* " + this);
+                          + " * Write buffers: " + writeBufs);
             } catch (RuntimeException ignored) { /* ignored */ }
         }
 
@@ -1357,9 +1357,6 @@ void noteEstablishmentRtt(int rttMs) {
         long now = _context.clock().now();
         assert Thread.holdsLock(_writeLock);
         if (!_currentOutbound.isEmpty()) {
-            if (_log.shouldInfo())
-                _log.info("Attempting to send multiple outbound messages with " + _currentOutbound.size() +
-                          " already waiting and " + _outbound.size() + " queued");
             return;
         }
         OutNetMessage msg;
@@ -1369,9 +1366,10 @@ void noteEstablishmentRtt(int rttMs) {
                 return;
             if (msg.getExpiration() >= now)
                 break;
-            if (_log.shouldInfo())
-                _log.info("Dropping expired message in send queue [MsgID " + msg.getMessageId() +
-                          ' ' + msg.getMessageType() + "] on " + toShortString());
+            // Throttled: once per write cycle while the queue is backed up.
+            _log.infoThrottled("ntcp2-ob-first-expired",
+                               "Expired message in the send queue [MsgID " + msg.getMessageId() +
+                               ' ' + msg.getMessageType() + "] -> Dropping it * " + toShortString());
             _transport.afterSend(msg, false, false, msg.getLifetime());
         }
         _currentOutbound.add(msg);
@@ -1404,9 +1402,10 @@ void noteEstablishmentRtt(int rttMs) {
                     blocks.add(block);
                     size += NTCP2Payload.BLOCK_HEADER_SIZE + msz;
                 } else {
-                    if (_log.shouldInfo())
-                        _log.info("Dropping expired message in send queue [MsgID " + msg.getMessageId() +
-                                  ' ' + msg.getMessageType() + "] on " + toShortString());
+                    // Throttled: once per write cycle while the queue is backed up.
+                    _log.infoThrottled("ntcp2-ob-packed-expired",
+                                       "Expired message in the send queue [MsgID " + msg.getMessageId() +
+                                       ' ' + msg.getMessageType() + "] -> Dropping it * " + toShortString());
                     _transport.afterSend(msg, false, false, msg.getLifetime());
                 }
             }
@@ -1820,7 +1819,8 @@ void noteEstablishmentRtt(int rttMs) {
         FIFOBandwidthLimiter.Request req = _context.bandwidthLimiter().requestOutbound(len, 0, "NTCP write");
         if (req.getPendingRequested() > 0) {
             if (_log.shouldInfo())
-                _log.info("Queued write on " + toString() + " for " + len);
+                _log.info("Queued write -> Waiting for bandwidth * " + toShortString() +
+                          " * Size: " + len + " bytes");
             _context.statManager().addRateData("ntcp.wantsQueuedWrite", 1);
             queuedWrite(buf, req);
         } else {
@@ -1941,7 +1941,9 @@ void noteEstablishmentRtt(int rttMs) {
      */
     private void write(ByteBuffer buf) {
         if (_writeBufs.size() >= MAX_WRITE_BUFS) {
-            _log.info("Write queue full (" + _writeBufs.size() + ") on " + toShortString() + " -> Dropping buffer");
+            // Throttled: this is the per-frame write path.
+            _log.infoThrottled("ntcp-write-queue-full",
+                               "Write queue full -> Dropping the buffer * " + toShortString());
             _transport.getContext().statManager().addRateData("ntcp.writeBufs.size", _writeBufs.size(), MAX_WRITE_BUFS);
             _transport.getContext().statManager().addRateData("ntcp.writeQueueFull", 1);
             return;
@@ -2621,14 +2623,18 @@ void noteEstablishmentRtt(int rttMs) {
                 if (_log.shouldDebug())
                     _log.debug("Processed " + blocks + " blocks in frame");
             } catch (IOException ioe) {
-                if (_log.shouldWarn())
-                    _log.warn("Payload delivery failure -> " + ioe.getMessage());
+                // Throttled: payload errors are per block and never fatal.
+                _log.warnThrottled("ntcp2-payload-io",
+                                   "Payload delivery failure -> Dropping the frame * " + toShortString() +
+                                   " * Reason: " + ioe);
             } catch (DataFormatException dfe) {
-                if (_log.shouldWarn())
-                    _log.warn("Payload delivery failure -> " + dfe.getMessage());
+                _log.warnThrottled("ntcp2-payload-format",
+                                   "Payload delivery failure -> Dropping the frame * " + toShortString() +
+                                   " * Reason: " + dfe);
             } catch (I2NPMessageException ime) {
-                if (_log.shouldWarn())
-                    _log.warn("Error parsing I2NP message -> " + ime.getMessage());
+                _log.warnThrottled("ntcp2-payload-i2np",
+                                   "Parsing an I2NP message failed -> Dropping the frame * " + toShortString() +
+                                   " * Reason: " + ime);
                 _context.statManager().addRateData("ntcp.corruptI2NPIME", 1);
             }
         }
@@ -2728,8 +2734,8 @@ void noteEstablishmentRtt(int rttMs) {
         @Override
         public void gotTermination(int reason, long lastReceived) {
             if (_log.shouldInfo())
-                _log.info("Received Termination: " + reason +
-                          "\n* Total received: " + lastReceived + " on " + NTCPConnection.this);
+                _log.info("Received TERMINATION block -> Reason: " + reason +
+                          " * " + toShortString() + " * Total received: " + lastReceived + " frames");
             // close() calls destroy() sets _terminated
             close();
             if (reason == REASON_BANNED && _remotePeer != null) {
@@ -2745,8 +2751,10 @@ void noteEstablishmentRtt(int rttMs) {
 
         @Override
         public void gotUnknown(int type, int len) {
-            if (_log.shouldWarn())
-                _log.warn("Received unknown block type " + type + " length " + len + " on " + NTCPConnection.this);
+            // Throttled: one per unknown block, and a peer can send them at will.
+            _log.warnThrottled("ntcp2-unknown-block",
+                               "Received an unknown block type " + type + " -> Skipping it" +
+                               " * " + toShortString() + " * Length: " + len + " bytes");
         }
 
         @Override

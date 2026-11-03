@@ -2907,11 +2907,11 @@ public class ProfileOrganizer {
                 String capExtra = highCapAdded > 0 ? " (fallback +" + highCapAdded + ')' : "";
                 _log.info("Profiles reorganized -> Expired " + expiredCount + " profiles" +
                           " * Retained: " + profileCount +
-                          "\n* Thresholds -> Capacity score: " + num(_thresholdCapacityValue) +
-                          " * Speed score: " + num(_thresholdSpeedValue) +
-                          " * Integration score: " + num(_thresholdIntegrationValue) +
-                          "\n* Fast peers: " + _fastPeers.size() + fastExtra +
-                          " * HighCap peers: " + _highCapacityPeers.size() + capExtra +
+                          "\n* Capacity threshold score: " + num(_thresholdCapacityValue) +
+                          " * Speed threshold score: " + num(_thresholdSpeedValue) +
+                          " * Integration threshold score: " + num(_thresholdIntegrationValue) +
+                          " * Fast peers: " + _fastPeers.size() + fastExtra +
+                          " * High-capacity peers: " + _highCapacityPeers.size() + capExtra +
                           " * Quality peers: " + qualityCount);
             }
 
@@ -3626,10 +3626,10 @@ public class ProfileOrganizer {
             _log.info("Tier eviction -> Banned: " + count(reasons, PurgeReason.BANNED) +
                       " * Unreachable: " + count(reasons, PurgeReason.UNREACHABLE) +
                       " * Not-capable: " + count(reasons, PurgeReason.NOT_CAPABLE) +
-                      "\n* Failures: " + count(reasons, PurgeReason.FAILURES) +
+                      " * Failures: " + count(reasons, PurgeReason.FAILURES) +
                       " * Acceptance: " + count(reasons, PurgeReason.ACCEPTANCE) +
-                      "\n* Soft eviction withheld below -> Fast: " + fastMin +
-                      " * High-cap: " + highCapMin);
+                      "\n* Soft eviction withheld below the floor: Fast " + fastMin +
+                      ", high-capacity " + highCapMin);
         }
     }
 

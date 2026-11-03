@@ -404,10 +404,9 @@ class JobQueueScaler implements Runnable {
         finalMax = Math.max(getMinRunnersDynamic(), finalMax);
 
         if (_log.shouldInfo()) {
-            _log.info("Max runners calculation -> Configured: " + configuredMax +
-                      " * Target: " + targetMax + " * RAM based: " + ramBasedMax +
-                      "\n* Free memory based: " + freeMemoryBasedMax + " * Final: " + finalMax +
-                      " * Max memory: " + (maxMemory/MB) + "MB * Used: " + (usedMemory/MB) + "MB");
+            _log.info("Max runners is " + finalMax + " -> Configured " + configuredMax +
+                      ", RAM based " + ramBasedMax + ", free memory based " + freeMemoryBasedMax +
+                      "\n* Memory: " + (usedMemory/MB) + "MB of " + (maxMemory/MB) + "MB");
         }
 
         return finalMax;
@@ -897,29 +896,29 @@ class JobQueueScaler implements Runnable {
                     if (_consecutiveScaleUpChecks >= effectiveSustainedRequired || criticalLag || criticalSlowJobs) {
                         shouldScaleUp = true;
                         if (_log.shouldInfo()) {
+                            // Conditional signals, joined with the house separator;
+                            // the leading separator goes when the first signals are off.
                             StringBuilder info = new StringBuilder(128);
                             if (criticalLag)
-                                info.append("Critical delay: ").append(effectiveDelay);
+                                info.append(" * Critical delay: ").append(effectiveDelay).append("ms");
                             if (criticalSlowJobs)
-                                info.append(" Active job duration: ").append(activeJobMaxDuration)
-                                    .append("ms");
+                                info.append(" * Active job duration: ").append(activeJobMaxDuration).append("ms");
                             if (hasTrendSignal)
-                                info.append("Trend signal: queueGrowth: ").append(queueGrowth)
-                                    .append(" * delayDelta: ").append(delayDelta);
+                                info.append(" * Queue growth: ").append(queueGrowth)
+                                    .append(" * Delay delta: ").append(delayDelta);
                             if (jobsBeingDropped)
-                                info.append(" Jobs being dropped");
+                                info.append(" * Jobs being dropped");
                             if (testJobsDominant)
-                                info.append(" TestJobs: ").append(testJobCount)
+                                info.append(" * Test jobs: ").append(testJobCount)
                                     .append(" (").append(testJobCount * 100 / Math.max(activeRunners, 1))
                                     .append("% of runners)");
                             if (suppressNormal && emergencySignal)
-                                info.append(" Emergency override (cpu: ").append(cpuLoad)
-                                    .append("% * gc: ").append(gcPause).append("ms)");
-                            info.append(" > threshold: ").append(lagThreshold)
-                                .append("ms. Scaling immediately. Runners: ")
-                                .append(activeRunners).append("/").append(maxRunners)
-                                .append(", Ready jobs: ").append(readyJobs);
-                            _log.info(info.toString());
+                                info.append(" * Emergency override, CPU ").append(cpuLoad)
+                                    .append("% * GC pause ").append(gcPause).append("ms");
+                            _log.info("Scaling up immediately -> Lag threshold " + lagThreshold +
+                                      "ms exceeded, runners " + activeRunners + '/' + maxRunners +
+                                      ", ready jobs " + readyJobs +
+                                      (info.length() > 0 ? "\n*" + info.substring(3) : ""));
                         }
                     }
                 } else {
@@ -1157,14 +1156,13 @@ class JobQueueScaler implements Runnable {
             _consecutiveFailedScaleUps++;
 
             if (_log.shouldInfo()) {
-                _log.info("Scale-up failed -> Rolling back: " + snapshot.runnersAdded
-                          + " runners * Failures: " + _consecutiveFailedScaleUps
-                          + " of " + MAX_CONSECUTIVE_FAILED_SCALES
-                          + "\n* Avg lag: " + snapshot.avgLag + "ms -> " + currentAvgLag + "ms"
-                          + " * Max lag: " + snapshot.smoothMaxLag + "ms -> " + smoothMaxLag + "ms"
-                          + "\n* Ready jobs: " + snapshot.smoothReadyJobs + " -> " + smoothReadyJobs
-                          + " * Send delay: " + snapshot.messageDelay + "ms -> "
-                          + currentMessageDelay + "ms");
+                _log.info("Scale-up failed -> Rolling back " + snapshot.runnersAdded +
+                          " runners, " + _consecutiveFailedScaleUps + " consecutive failures"
+                          + "\n* Average lag " + snapshot.avgLag + "ms to " + currentAvgLag + "ms"
+                          + " * Maximum lag " + snapshot.smoothMaxLag + "ms to " + smoothMaxLag + "ms"
+                          + " * Ready jobs " + snapshot.smoothReadyJobs + " to " + smoothReadyJobs
+                          + " * Send delay " + snapshot.messageDelay + "ms to " +
+                          currentMessageDelay + "ms");
             }
 
             // Rollback: remove the runners we just added

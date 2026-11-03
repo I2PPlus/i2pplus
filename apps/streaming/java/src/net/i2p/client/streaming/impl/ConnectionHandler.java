@@ -600,9 +600,8 @@ class ConnectionHandler {
                             _resultQueue.put(con);
                         }
                     } catch (Exception e) {
-                        if (_log.shouldWarn()) {
-                            _log.warn("Accept worker error processing SYN", e);
-                        }
+                        _log.warnThrottled("streaming-accept-worker-syn-error",
+                                           "Accept worker failed processing a SYN -> Dropped: " + e);
                     }
                 }
             } finally {
@@ -626,14 +625,20 @@ class ConnectionHandler {
         // worker will ever see it and the payload is ours to return.
         if (!_active) {
             if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
-                if (_log.shouldWarn()) {_log.warn("New SYN request while the handler is not listening -> Reset sent");}
+                _log.warnThrottled("streaming-syn-not-listening",
+                                   "New SYN request while the handler is not listening -> Reset sent");
                 sendReset(packet);
-            } else if (_log.shouldWarn()) {_log.warn("Non-SYN packet while the handler is not listening -> Packet dropped");}
+            } else {
+                _log.warnThrottled("streaming-nonsyn-not-listening",
+                                   "Non-SYN packet while the handler is not listening -> Packet dropped");
+            }
             packet.releasePayload();
             return;
         }
         if (_manager.wasRecentlyClosed(packet.getSendStreamId())) {
-            if (_log.shouldWarn()) {_log.warn("Dropping packet for recently closed stream [" + Packet.toId(packet.getSendStreamId()) + "]");}
+            _log.warnThrottled("streaming-recently-closed",
+                               "Dropped packet for a recently closed stream [" +
+                               Packet.toId(packet.getSendStreamId()) + ']');
             if (_log.shouldDebug()) {_log.debug("Packet for recently closed stream -> " + packet);}
             packet.releasePayload();
             return;
@@ -662,9 +667,8 @@ class ConnectionHandler {
             // waiting for the full RTO (~3s) before the SYN retransmits.
             // The client's connect timeout (default 60s) gives plenty of
             // time for the server to drain its accept queue.
-            if (_log.shouldWarn()) {
-                _log.warn("SYN queue full, sending RESET to client");
-            }
+            _log.warnThrottled("streaming-syn-queue-full",
+                               "SYN queue full -> Reset sent to the client");
             sendReset(packet);
             // Ours to release - the offer failed, so no accept worker will
             // ever pick this packet up.
@@ -763,9 +767,9 @@ class ConnectionHandler {
         Connection con = _manager.getConnectionByOutboundId(packet.getReceiveStreamId());
         if (con != null) {
             // Send it through the packet handler again
-            if (_log.shouldWarn()) {
-                _log.warn("Connection found for queued non-SYN packet -> Reprocessing\n* " + packet);
-            }
+            _log.warnThrottled("streaming-queued-packet-refound",
+                               "Connection found for a queued non-SYN packet -> Reprocessing" +
+                               packet.formatAsString(false));
             // false -> don't requeue, fixes a race where a SYN gets dropped
             // between here and PacketHandler, causing the packet to loop forever....
             _manager.getPacketHandler().receivePacketDirect(packet, false);
@@ -775,9 +779,9 @@ class ConnectionHandler {
                 packet.logTCPDump(null);
             }
             // goodbye
-            if (_log.shouldWarn()) {
-                _log.warn("Connection not found for queued non-SYN packet -> Dropping\n* " + packet);
-            }
+            _log.warnThrottled("streaming-queued-packet-no-connection",
+                               "Connection not found for a queued non-SYN packet -> Dropped" +
+                               packet.formatAsString(false));
             packet.releasePayload();
         }
     }
@@ -797,7 +801,9 @@ class ConnectionHandler {
         boolean ok = packet.verifySignature(_context, ba.getData());
         _cache.release(ba);
         if (!ok) {
-            if (_log.shouldWarn()) {_log.warn("Cannot send RESET for unverifiable packet\n* " + packet);}
+            _log.warnThrottled("streaming-reset-unverifiable",
+                               "Cannot send RESET for an unverifiable packet -> Ignored" +
+                               packet.formatAsString(false));
             return;
         }
         PacketLocal reply = new PacketLocal(_context, packet.getOptionalFrom(), packet.getSession());

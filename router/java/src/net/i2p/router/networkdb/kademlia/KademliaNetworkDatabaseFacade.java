@@ -1815,7 +1815,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     public void publish(LeaseSet localLeaseSet) throws IllegalArgumentException {
         if (!_initialized) {
             if (_log.shouldWarn()) {
-                _log.warn("Attempted to publish LOCAL LeaseSet before router fully initialized: " + localLeaseSet);
+                _log.warn("Attempted to publish the LOCAL LeaseSet -> Dropping it, the router is not fully initialized");
             }
             return;
         }
@@ -2296,10 +2296,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (!isEarliestStale && !isLatestStale) {return null;}
         long age = now - earliest;
         if (_log.shouldWarn()) {
-            _log.warn("Old LeaseSet [" + idShort + "] -> Rejecting store" +
-                      "\n* First expired: " + new Date(earliest) +
-                      "\n* Last expired: " + new Date(latest) +
-                      "\n* " + leaseSet);
+            _log.warn("Old LeaseSet [" + idShort + "] -> Rejecting the store" +
+                      "\n* First lease expired: " + DataHelper.formatDuration(age) + " ago" +
+                      " * Last lease expired: " + DataHelper.formatDuration(now - latest) + " ago" +
+                      " * Leases: " + leaseSet.getLeaseCount());
         }
         // If there are no leases, aggressively mark lookups as failed to reduce retries
         if (leaseSet.getLeaseCount() == 0) {
@@ -2333,14 +2333,11 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         long age = latest - now;
         if (_log.shouldWarn()) {
             long earliest = leaseSet.getEarliestLeaseDate();
-            _log.warn("Rejecting LeaseSet with future expiration [" + idShort + "]" +
-                      "\n* Type: " + type +
-                      "\n* Now: " + now +
-                      "\n* Latest: " + latest + " (age: " + DataHelper.formatDuration(age) + ")" +
-                      "\n* Earliest: " + earliest +
-                      " (Age: " + DataHelper.formatDuration(earliest - now) + ")" +
-                      "\n* LeaseCount: " + leaseSet.getLeaseCount() +
-                      "\n* FutureLimit: " + futureLimit);
+            _log.warn("Rejecting a LeaseSet expiring " + DataHelper.formatDuration(age) +
+                      " in the future [" + idShort + "] -> Beyond the " +
+                      DataHelper.formatDuration(futureLimit) + " clock-skew limit" +
+                      "\n* Type: " + type + " * Leases: " + leaseSet.getLeaseCount() +
+                      " * Earliest lease: " + DataHelper.formatDuration(earliest - now) + " from now");
         }
         return "Future LeaseSet for [" + idShort + "] expiring in " + DataHelper.formatDuration(age);
     }
@@ -2490,7 +2487,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         } else {
             // if we created it, there's no blind data, but it's still decrypted
             if (encls.getDecryptedLeaseSet() == null && _log.shouldInfo()) {
-                _log.info("No blind data found for " + leaseSet);
+                Destination lsDest = leaseSet.getDestination();
+                _log.info("No blind data found for the LeaseSet" +
+                          (lsDest != null ? " [" + lsDest.calculateHash().toShortBase32() + "]" : ""));
             }
         }
     }

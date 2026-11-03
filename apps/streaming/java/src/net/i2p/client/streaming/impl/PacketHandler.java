@@ -241,8 +241,9 @@ class PacketHandler {
             try {
                 con.getPacketHandler().receivePacket(packet, con);
             } catch (I2PException ie) {
-                if (log.shouldWarn())
-                    log.warn("Received forged packet for " + con, ie);
+                log.warnThrottled("streaming-forged-packet",
+                                  "Received forged packet for " + con.shortLabel() +
+                                  " -> Dropped: " + ie.getMessage());
             }
             return;
         }
@@ -251,8 +252,9 @@ class PacketHandler {
             try {
                 con.getPacketHandler().receivePacket(packet, con);
             } catch (I2PException ie) {
-                if (log.shouldWarn())
-                    log.warn("Received forged reset for " + con, ie);
+                log.warnThrottled("streaming-forged-reset",
+                                  "Received forged reset for " + con.shortLabel() +
+                                  " -> Ignored: " + ie.getMessage());
             }
             return;
         }
@@ -270,12 +272,16 @@ class PacketHandler {
         if (packet == null || con == null) {return;}
         if (packet.getSendStreamId() > 0) {
             if (con.getOptions().getAnswerPings()) {receivePing(con, packet);}
-            else if (log.shouldWarn()) {
-                log.warn("Dropping ECHO packet for [" + con + "] -> " + packet);
+            else {
+                log.warnThrottled("streaming-echo-drop-ping",
+                                  "Dropped ECHO packet for " + con.shortLabel() +
+                                  " -> Pings are not answered" + packet.formatAsString(false));
             }
         } else if (packet.getReceiveStreamId() > 0) {receivePong(packet);}
-        else if (log.shouldWarn()) {
-            log.warn("Received ECHO packet " + " with no StreamIDs for [" + con + "] -> " + packet);
+        else {
+            log.warnThrottled("streaming-echo-no-streamids",
+                              "Received ECHO packet with no StreamIDs for " + con.shortLabel() +
+                              " -> Dropped" + packet.formatAsString(false));
         }
         packet.releasePayload();
     }
@@ -306,8 +312,9 @@ class PacketHandler {
                     if (spk != null)
                         con.setRemoteTransientSPK(spk);
                 } else if (oldId != packet.getReceiveStreamId()) {
-                    if (log.shouldWarn())
-                        log.warn("Received SYN packet with wrong IDs for [" + con + "]");
+                    log.warnThrottled("streaming-syn-wrong-ids",
+                                      "Received SYN packet with wrong IDs for " + con.shortLabel() +
+                                      " -> Sending RESET");
                     sendReset(packet);
                     packet.releasePayload();
                     return;
@@ -317,27 +324,24 @@ class PacketHandler {
             try {
                 con.getPacketHandler().receivePacket(packet, con);
             } catch (I2PException ie) {
-                if (log.shouldWarn()) {
-                    log.warn("Signature verification failed for " + con + " / " + oldId + " -> " + packet, ie);
-                }
+                log.warnThrottled("streaming-misrouted-signature-failed",
+                                  "Signature verification failed for " + con.shortLabel() +
+                                  " -> Dropped: " + ie.getMessage() + packet.formatAsString(false));
                 if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
                     sendResetUnverified(packet);
                 }
             }
         } else if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
-            if (log.shouldWarn())
-                log.warn("Received SYN packet with wrong IDs -> Sending RESET");
+            log.warnThrottled("streaming-syn-wrong-ids-reset",
+                              "Received SYN packet with wrong IDs for " + con.shortLabel() +
+                              " -> Sending RESET");
             sendReset(packet);
             packet.releasePayload();
         } else {
-            if (!con.getResetSent() && log.shouldWarn()) {
-                StringBuilder buf = new StringBuilder(512);
-                buf.append("Received packet on the wrong stream: ").append(packet).append("\nConnection:\n").append(con)
-                   .append("\nAll connections:");
-                for (Connection c : manager.listConnections()) {
-                    buf.append('\n').append(c);
-                }
-                log.warn(buf.toString());
+            if (!con.getResetSent()) {
+                log.warnThrottled("streaming-wrong-stream",
+                                  "Received packet on the wrong stream for " + con.shortLabel() +
+                                  " -> Dropped, no RESET sent" + packet.formatAsString(false));
             }
             packet.releasePayload();
         }
@@ -417,10 +421,15 @@ class PacketHandler {
             Connection con = manager.getConnectionByOutboundId(packet.getReceiveStreamId());
             if (con != null) {
                 if ((con.getHighestAckedThrough() <= 5) && (packet.getSequenceNum() <= 5)) {
-                    if (log.shouldInfo())
-                        log.info("Received additional packet without SendStreamID after the SYN -> " + packet + "\n* " + con);
-                } else if (log.shouldWarn()) {
-                    log.warn("Received while ACK of SYN was in flight\n* " + con + ": " + packet + " ACKed: " + con.getAckedPackets());
+                    log.infoThrottled("streaming-post-syn-no-sendid",
+                                      "Received an additional packet without SendStreamID after the SYN for " +
+                                      con.shortLabel() + " -> Routed to the connection" +
+                                      packet.formatAsString(false));
+                } else {
+                    log.warnThrottled("streaming-syn-ack-in-flight",
+                                      "Received a packet while the ACK of the SYN was in flight for " +
+                                      con.shortLabel() + " -> Routed to the connection" +
+                                      packet.formatAsString(false) + " * ACKed: " + con.getAckedPackets());
                 }
                 // Route through the shard worker owning this connection.  The
                 // outbound match finds the connection but the packet carries no
@@ -448,8 +457,9 @@ class PacketHandler {
             manager.getConnectionHandler().receiveNewSyn(packet);
         } else if (queueIfNoConn) {
             // route orphan (non-SYN) packets through the handler's queue too
-            if (log.shouldWarn())
-                log.warn("Packet " + packet + " belongs to no connections, putting on SYN queue");
+            log.warnThrottled("streaming-orphan-syn-queue",
+                              "Packet belongs to no connections -> Queued on the SYN queue" +
+                              packet.formatAsString(false));
             if (log.shouldDebug()) {
                 StringBuilder buf = new StringBuilder(128);
                 for (Connection c : manager.listConnections()) {
@@ -488,13 +498,17 @@ class PacketHandler {
         if (packet.getSendStreamId() > 0) {
             if (manager.answerPings()) {
                 receivePing(null, packet);
-            } else if (log.shouldWarn()) {
-                log.warn("Dropping ECHO packet on unknown connection -> " + packet);
+            } else {
+                log.warnThrottled("streaming-echo-drop-unknown-ping",
+                                  "Dropped ECHO packet on an unknown connection -> Pings are not answered" +
+                                  packet.formatAsString(false));
             }
         } else if (packet.getReceiveStreamId() > 0) {
             receivePong(packet);
-        } else if (log.shouldWarn()) {
-            log.warn("Received ECHO packet " + packet + " without StreamIDs");
+        } else {
+            log.warnThrottled("streaming-echo-no-streamids-unknown",
+                              "Received ECHO packet without StreamIDs -> Dropped" +
+                              packet.formatAsString(false));
         }
         packet.releasePayload();
     }
@@ -512,8 +526,9 @@ class PacketHandler {
         cache.release(ba);
 
         if (!verified) {
-            if (log.shouldWarn())
-                log.warn("BAD ping: Signature verification failed -> Dropping " + packet);
+            log.warnThrottled("streaming-ping-signature-failed",
+                              "Signature verification failed on a ping -> Dropped" +
+                              packet.formatAsString(false));
             return;
         }
 

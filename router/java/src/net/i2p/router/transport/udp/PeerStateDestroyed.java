@@ -502,8 +502,9 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
      */
     public void gotTermination(int reason, long count) {
         if (_log.shouldInfo()) {
-            _log.info("Received TERMINATION block -> " + SSU2Util.terminationCodeToString(reason) +
-                      " (Our reason: " + SSU2Util.terminationCodeToString(_destroyReason) + ") from " + this);
+            _log.info("Received TERMINATION block -> " + SSU2Util.terminationCodeToString(reason)
+                      + " * " + this
+                      + " * Our reason: " + SSU2Util.terminationCodeToString(_destroyReason));
         }
         if (reason == SSU2Util.REASON_TERMINATION) {
             // prevent any additional tranmissions if other packets come in

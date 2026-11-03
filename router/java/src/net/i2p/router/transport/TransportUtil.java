@@ -497,12 +497,8 @@ public abstract class TransportUtil {
      * @since 0.9.39 pulled out of UDPEndpoint
      */
     public static void logInvalidPort(Log log, String transportStyle, int port) {
-        log.error("Specified " + transportStyle + " port " + port + " is not valid, selecting a new port");
-        log.error("Invalid ports are: 0-1023, 1719, 1720, 1900, 2049, 2827, 3659, 4045," +
-                  " 4444, 4445," +
-                  "\n* 5060, 5061, 6000, 6665-6669, 6697, 7650-7668, 7070, 8080, 9001, 9030," +
-                  " 9050," +
-                  "\n* 9100, 9150, 31000, 32000, 65536+");
+        // The blocklist is a constant, so it is not a fact about this event.
+        log.error("Specified " + transportStyle + " port " + port + " is not valid -> Selecting a new port");
     }
 
     /**

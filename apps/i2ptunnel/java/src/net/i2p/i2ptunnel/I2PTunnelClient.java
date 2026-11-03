@@ -205,14 +205,21 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
             // Execute task (inline when there is no runner pool)
             handedOff = executeTask(t);
         } catch (IOException ex) {
-            if (_log.shouldWarn()) {_log.warn("Error connecting: " + ex.getMessage());}
+            if (_log.shouldWarn()) {
+                _log.warn("Cannot reach the target -> Dropping the client connection" +
+                          "\n* Port: " + getLocalPort() + " * Reason: " + ex.getMessage());
+            }
         } catch (I2PException ex) {
-            if (_log.shouldWarn()) {_log.warn("Error connecting: " + ex.getMessage());}
+            if (_log.shouldWarn()) {
+                _log.warn("Cannot reach the target -> Dropping the client connection" +
+                          "\n* Port: " + getLocalPort() + " * Reason: " + ex.getMessage());
+            }
         } catch (RejectedExecutionException ree) {
             // The pool was saturated after the tunnel admitted this connection, so
             // no runner will ever see these sockets -> the finally below closes them.
             if (_log.shouldWarn())
-                _log.warn("Dropping client connection -> runner pool saturated * Port: " + getLocalPort());
+                _log.warn("Dropping the client connection -> Runner pool saturated" +
+                          "\n* Port: " + getLocalPort());
         } finally {
             // The runner closes both sockets when it ends, so ownership of them
             // travels with the task. Closing here after an async hand-off tore the

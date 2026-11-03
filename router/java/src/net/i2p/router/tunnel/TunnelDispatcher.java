@@ -1035,10 +1035,12 @@ public class TunnelDispatcher implements Service {
 
             if (exp < minTime || subexp < minTime || exp > maxTime || subexp > maxTime) {
                 if (_log.shouldInfo())
-                    _log.info("Not dispatching GatewayMessage for [TunnelID " + id.getTunnelId() +
-                               "]\n* Wrapper's expiration -> " + DataHelper.formatDuration(exp - before) +
-                               " and/or content expiration -> " + DataHelper.formatDuration(subexp - before) +
-                               "\n* Type: " + submsg.getType() + " [MsgID " + id + "/" + submsg.getUniqueId() + "]");
+                    _log.infoThrottled("td-gw-expiration-out-of-range",
+                                       "Not dispatching a GatewayMessage [TunnelID " + id.getTunnelId() +
+                                       "] -> Expiration out of range" +
+                                       "\n* Wrapper expires " + DataHelper.formatDuration(exp - before) +
+                                       ", content " + DataHelper.formatDuration(subexp - before) +
+                                       " * Type: " + submsg.getType() + " [MsgID " + submsg.getUniqueId() + "]");
                 return;
             }
 
@@ -1048,12 +1050,13 @@ public class TunnelDispatcher implements Service {
         } else {
             _context.messageHistory().droppedTunnelGatewayMessageUnknown(msg.getUniqueId(), id.getTunnelId());
             if (_log.shouldInfo())
-                _log.info("No matching tunnel for TunnelID " + id.getTunnelId() + " -> Gateway message expires in " +
-                          DataHelper.formatDuration(msg.getMessageExpiration() - before) +
-                          "\n* Message expires in " + DataHelper.formatDuration(submsg.getMessageExpiration() - before)
-                          + "\n* MsgID: " + id + " of " + msg.getMessage().getUniqueId()
-                          + " * Type: " + submsg.getType()
-                          + " * Inbound gateways: " + _inboundGateways.size());
+                _log.infoThrottled("td-gw-no-matching-tunnel",
+                                   "No matching tunnel for TunnelID " + id.getTunnelId() +
+                                   " -> The gateway message expires in " +
+                                   DataHelper.formatDuration(msg.getMessageExpiration() - before) +
+                                   "\n* Content expires in " +
+                                   DataHelper.formatDuration(submsg.getMessageExpiration() - before) +
+                                   " * Type: " + submsg.getType() + " [MsgID " + submsg.getUniqueId() + "]");
         }
     }
 
@@ -1504,7 +1507,9 @@ public class TunnelDispatcher implements Service {
                 _configs.remove(cur);
                 expired++;
                 if (_log.shouldInfo())
-                    _log.info("Expiring Participating tunnel... " + cur);
+                    _log.infoThrottled("td-expiring-participating",
+                                       "Expiring a participating tunnel " + cur +
+                                       " -> Removed from the dispatcher");
                 TunnelDispatcher.this.remove(cur);
             }
             // Wake up again when the earliest survivor expires.

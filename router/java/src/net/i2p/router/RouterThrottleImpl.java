@@ -183,13 +183,12 @@ public class RouterThrottleImpl implements RouterThrottle {
                 if (_msgDelayOverSince < 0) {
                     _msgDelayOverSince = System.currentTimeMillis();
                 } else if (System.currentTimeMillis() - _msgDelayOverSince >= MSG_DELAY_SUSTAIN_MS) {
-                    if (_log.shouldInfo()) {
-                        _log.warn("Refusing Tunnel Request -> Message processing congestion" +
-                                  "\n* Average: " + ((int)ra.getAverage()) + "ms" +
-                                  "\n* Max time to process: " + maxProcessingTime + "ms" +
-                                  "\n* Sustained for: " + (System.currentTimeMillis() - _msgDelayOverSince) + "ms");
-                    } else if (_log.shouldWarn()) {
-                        _log.warn("Refusing Tunnel Request -> Message processing congestion");
+                    if (_log.shouldWarn()) {
+                        _log.warnThrottled("throttle-message-delay",
+                                           "Refusing a tunnel request -> Message processing congestion" +
+                                           "\n* Average: " + ((int)ra.getAverage()) + "ms" +
+                                           " * Maximum: " + maxProcessingTime + "ms" +
+                                           " * Sustained for: " + (System.currentTimeMillis() - _msgDelayOverSince) + "ms");
                     }
                     setTunnelStatus("[rejecting/overload]" + _x("Declining Tunnel Requests" + ":<br>" + _x("High message delay")));
                     // Use TRANSIENT_OVERLOAD (not BANDWIDTH) so peers retry shortly rather
@@ -396,8 +395,9 @@ public class RouterThrottleImpl implements RouterThrottle {
         int availBps = Math.min((int)(maxKBpsIn*1024L*9/10) - usedIn, (int)(maxKBpsOut*1024L*9/10) - usedOut);
         if (availBps < MIN_AVAILABLE_BPS) {
             if (_log.shouldWarn()) {
-            _log.warn("Rejecting participating tunnel requests \n* Available bandwidth (" + availBps +
-                      "B/s) is less than minimum required (" + MIN_AVAILABLE_BPS + "B/s)");
+            _log.warnThrottled("throttle-below-minimum-bandwidth",
+                               "Rejecting participating tunnel requests -> Available bandwidth is below the minimum" +
+                               "\n* Available: " + availBps + "B/s");
             }
             setTunnelStatus("[rejecting/max]" + LIMIT_STR);
             return false;
@@ -416,11 +416,13 @@ public class RouterThrottleImpl implements RouterThrottle {
         if (availBps <= 0) {
             probReject = 1;
             reject = true;
-            _log.warn("Rejecting participating tunnel -> Insufficient bandwidth available" +
-                      "\n* Available: " + availBps + "B/s * Maximum allocated: " + maxKBps + "KB/s" +
-                      " * In use: " + used + "B/s" +
-                      "\n* Active tunnels: " + numTunnels +
-                      " * Estimated bandwidth required: " + bytesAllocated + "B/s");
+            if (_log.shouldWarn()) {
+                _log.warnThrottled("throttle-insufficient-bandwidth",
+                                   "Rejecting a participating tunnel -> Insufficient bandwidth available" +
+                                   "\n* Available: " + availBps + "B/s * In use: " + used + "B/s" +
+                                   " * Tunnels: " + numTunnels +
+                                   " * Estimated requirement: " + bytesAllocated + "B/s");
+            }
         } else {
             // limit at 90% - 4KBps (see above)
             float maxBps = (maxKBps * 1024f * 0.9f) - MIN_AVAILABLE_BPS;
@@ -445,11 +447,13 @@ public class RouterThrottleImpl implements RouterThrottle {
                 reject = rand <= probReject;
                 if (reject) {
                     if (_log.shouldWarn()) {
-                        _log.warn("Rejecting a message -> Available: " + availBps + "B/s * Maximum: " + maxKBps + "KB/s" +
-                                  " * In use: " + used + "B/s" +
-                                  "\n* Reject probability: " + probReject + " * Capacity fraction: " + pctFull +
-                                  "\n* Tunnels: " + numTunnels + " * Random: " + rand +
-                                  " * Estimated: " + bytesAllocated + "B/s");
+                        _log.warnThrottled("throttle-probabilistic-reject",
+                                           "Rejecting a message -> The bandwidth limit is " +
+                                           (int) (pctFull * 100) + "% used" +
+                                           "\n* Available: " + availBps + "B/s * In use: " + used + "B/s" +
+                                           " * Reject probability: " + String.format("%.2f", probReject) +
+                                           " * Tunnels: " + numTunnels +
+                                           " * Estimated requirement: " + bytesAllocated + "B/s");
                     }
                 } else if (_log.shouldDebug()) {
                     _log.debug("Accepting a message -> Available: " + availBps + "B/s * Maximum: " + maxKBps + "KB/s" +

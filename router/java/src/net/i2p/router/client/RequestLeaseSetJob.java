@@ -108,7 +108,7 @@ class RequestLeaseSetJob extends JobImpl {
     public void runJob() {
         if (_runner.isDead()) {
             if (_log.shouldWarn())
-                _log.warn("Runner is dead, cannot request LeaseSet: " + _requestState);
+                _log.warn("Runner is dead -> Cannot request the LeaseSet");
             return;
         }
 
@@ -125,7 +125,7 @@ class RequestLeaseSetJob extends JobImpl {
         LeaseSet requested = _requestState.getRequested();
         if (requested == null) {
             if (_log.shouldWarn()) {
-                _log.warn("Requested LeaseSet is null, cannot send request to client");
+                _log.warn("Requested LeaseSet is null -> Cannot send the request to the client");
             }
             failEarlyRequest("Requested LeaseSet is null");
             return;
@@ -162,7 +162,7 @@ class RequestLeaseSetJob extends JobImpl {
         long maxAllowedTime = now + MAX_LEASE_FUTURE + CLOCK_FUDGE_FACTOR;
         if (endTime > maxAllowedTime) {
             if (_log.shouldInfo()) {
-                _log.info("LeaseSet expiration would exceed limit -> Capping to ~10 minutes...");
+                _log.info("LeaseSet expiration would exceed the limit -> Capped to about 10 minutes");
             }
             endTime = maxAllowedTime;
         }
@@ -170,7 +170,7 @@ class RequestLeaseSetJob extends JobImpl {
         Destination dest = requested.getDestination();
         if (dest == null) {
             if (_log.shouldWarn()) {
-                _log.warn("Requested LeaseSet has null destination");
+                _log.warn("Requested LeaseSet has a null destination -> Failing the request");
             }
             failEarlyRequest("Requested LeaseSet has null destination");
             return;
@@ -191,7 +191,7 @@ class RequestLeaseSetJob extends JobImpl {
             if (_log.shouldError()) {
                 _log.error("Requested LeaseSet has no leases for [" +
                            dest.calculateHash().toShortBase32() +
-                           "] — failing request without contacting the client");
+                           "] -> Failing the request without contacting the client");
             }
             failEarlyRequest("Requested LeaseSet has no leases");
             return;
@@ -212,20 +212,21 @@ class RequestLeaseSetJob extends JobImpl {
             RequestVariableLeaseSetMessage rmsg = new RequestVariableLeaseSetMessage();
             rmsg.setSessionId(id);
             if (_log.shouldInfo()) {
-                StringBuilder sb = new StringBuilder("RVLS outbound [");
-                sb.append(requested.getLeaseCount()).append(" leases]");
-                sb.append(" computedEndTime=").append(DataHelper.formatDuration(endTime - now));
-                sb.append(" (raw=").append(endTime).append("ms)");
+                StringBuilder sb = new StringBuilder("RVLS outbound with ");
+                sb.append(requested.getLeaseCount()).append(" leases");
+                sb.append(" -> End time in ").append(DataHelper.formatDuration(endTime - now));
+                sb.append("\n*");
                 for (int i = 0; i < requested.getLeaseCount(); i++) {
                     Lease lease = requested.getLease(i);
                     long rawEnd = lease.getEndTime();
+                    if (i > 0) {sb.append(" *");}
                     if (rawEnd < endTime) {
-                        sb.append(" | lease[").append(i).append("] CAPPED ");
-                        sb.append(DataHelper.formatDuration(rawEnd - now)).append("->");
-                        sb.append(DataHelper.formatDuration(endTime - now));
+                        sb.append(" Lease ").append(i).append(" extended from ")
+                          .append(DataHelper.formatDuration(rawEnd - now))
+                          .append(" to ").append(DataHelper.formatDuration(endTime - now));
                     } else {
-                        sb.append(" | lease[").append(i).append("] raw=");
-                        sb.append(DataHelper.formatDuration(rawEnd - now));
+                        sb.append(" Lease ").append(i).append(" ends in ")
+                          .append(DataHelper.formatDuration(rawEnd - now));
                     }
                 }
                 _log.info(sb.toString());
@@ -268,7 +269,8 @@ class RequestLeaseSetJob extends JobImpl {
             try {
                 _runner.doSendWait(msg, waitMs);
                 if (_log.shouldInfo())
-                    _log.info("LeaseSet request sent to client, scheduling timeout check for " + _requestState);
+                    _log.info("LeaseSet request sent to client [Session " + id.getSessionId() +
+                              "] -> Scheduling the timeout check");
                 getContext().jobQueue().addJob(new CheckLeaseRequestStatus());
                 return;
             } catch (I2CPMessageException ime) {
@@ -279,10 +281,11 @@ class RequestLeaseSetJob extends JobImpl {
                 // drain rather than a fixed second repeatedly failing.
                 long nextWait = waitMs * attempt * 2;
                 if (_log.shouldInfo())
-                    _log.info("I2CP queue full sending the LeaseSet request -> Retrying"
+                    _log.info("I2CP queue full sending the LeaseSet request for [Session " + id.getSessionId() +
+                              "] -> Retrying"
                               + "\n* Attempt: " + attempt + " of " + attempts
                               + " * Wait: " + DataHelper.formatDuration(nextWait)
-                              + "\n* Error: " + ime.getMessage());
+                              + " * Error: " + ime.getMessage());
                 try {
                     Thread.sleep(nextWait);
                 } catch (InterruptedException ie) {
@@ -292,10 +295,11 @@ class RequestLeaseSetJob extends JobImpl {
             }
         }
         getContext().statManager().addRateData("client.requestLeaseSetDropped", 1);
-        _log.warn("Giving up on the LeaseSet request after " + attempts +
-                  " attempts -> The client is not draining its I2CP queue"
-                  + (lastFailure != null ? "\n* Error: " + lastFailure.getMessage() : "") +
-                  "\n* " + _requestState);
+        if (_log.shouldWarn())
+            _log.warn("Giving up on the LeaseSet request for [Session " + id.getSessionId() +
+                      "] after " + attempts +
+                      " attempts -> The client is not draining its I2CP queue"
+                      + (lastFailure != null ? " * Error: " + lastFailure.getMessage() : ""));
         failEarlyRequest("Error sending I2CP message");
     }
 
@@ -357,8 +361,8 @@ class RequestLeaseSetJob extends JobImpl {
                 RequestLeaseSetJob.this.getContext().statManager().addRateData("client.requestLeaseSetTimeout", 1);
                 if (_log.shouldError()) {
                     long waited = RequestLeaseSetJob.this.getContext().clock().now() - _start;
-                    _log.error("No LeaseSet received within allotted time -> Failing request\n* Waited: " +
-                    DataHelper.formatDuration(waited) + "\n* " + _requestState);
+                    _log.error("No LeaseSet received within the allotted time -> Failing the request" +
+                               "\n* Waited: " + DataHelper.formatDuration(waited));
                 }
                 if (_requestState.getOnFailed() != null)
                     RequestLeaseSetJob.this.getContext().jobQueue().addJob(_requestState.getOnFailed());

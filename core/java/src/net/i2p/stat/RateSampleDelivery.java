@@ -371,11 +371,9 @@ class RateSampleDelivery {
         Log log = _context != null ? _context.logManager().getLog(RateSampleDelivery.class) : null;
         if (log != null && log.shouldError()) {
             log.error("Rate sample delivery queue exceeded " + _capacity + " pending samples"
-                      + " -> Evicted: " + total + " samples"
+                      + " -> Evicted " + total + " samples"
                       + "\n* Superseded: " + _superseded.get()
-                         + " * Oldest pending age: " + getOldestPendingAgeMs() + "ms"
-                      + "\n* Graph history has gaps * The rate counters are updated"
-                      + " before delivery and are unaffected");
+                         + " * Oldest pending age: " + getOldestPendingAgeMs() + "ms");
         }
     }
 

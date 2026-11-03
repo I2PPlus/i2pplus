@@ -1084,6 +1084,23 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      */
     private volatile boolean _keepAlive = DEFAULT_KEEPALIVE;
     /**
+     * Nickname field of the tunnel log label, formatted by
+     * {@link #parseLogNickname}; refreshed by optionsUpdated so an inbound
+     * connection does not re-read and re-format the tunnel nickname.
+     * @since 0.9.72+
+     */
+    private volatile String _logNickname = "?";
+    /**
+     * Cached "[nickname / b32prefix]" label, rebuilt when the nickname (via
+     * optionsUpdated) or the local destination changes.
+     * @since 0.9.72+
+     */
+    private volatile String _tunnelLogId;
+    /** The destination {@link #_tunnelLogId} was built for. @since 0.9.72+ */
+    private volatile Destination _tunnelLogIdDest;
+    /** Whether targetForPort.443 is set; refreshed by optionsUpdated. @since 0.9.72+ */
+    private volatile boolean _has443Target;
+    /**
      * Grace period for remaining header lines after the first line, on top of
      * the initial header timeout (slowloris bound).
      */
@@ -1312,12 +1329,16 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
     /**
      * Common initialization for all constructors.
-     * Sets the spoofed host, creates stats, and initializes the blocklist manager.
+     * Sets the spoofed host, caches the nickname and port-443 target used by the
+     * per-connection log label, creates stats, and initializes the blocklist manager.
      *
      * @param spoofHost the hostname to spoof in the Host header, or null for no spoofing
      */
     private void setupI2PTunnelHTTPServer(String spoofHost) {
         _spoofHost = (spoofHost != null && !spoofHost.trim().isEmpty()) ? spoofHost.trim() : null;
+        Properties opts = getTunnel().getClientOptions();
+        _logNickname = parseLogNickname(opts.getProperty("inbound.nickname"));
+        _has443Target = opts.getProperty("targetForPort.443") != null;
         getTunnel().getContext().statManager().createRateStat("i2ptunnel.httpserver.blockingHandleTime",
                                                               "How long the blocking handle takes to complete",
                                                               "Tunnels [HTTPServer]", IO_TRANSFER_RATES);
@@ -1512,7 +1533,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
     /**
      * Called when tunnel options are updated.
-     * Re-initializes the POST throttler and updates the spoofed host.
+     * Re-initializes the POST throttler and updates the spoofed host, the
+     * keepalive settings, and the cached tunnel log label.
      *
      * @param tunnel tunnel that was updated; ignored unless it is the tunnel we serve
      * @since 0.9.9
@@ -1528,6 +1550,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         _keepAlive = parseKeepAlive(props);
         _keepAliveTimeoutMs = parseKeepAliveTimeout(props);
         _headerTimeoutMs = parseHeaderTimeout(props);
+        _logNickname = parseLogNickname(props.getProperty("inbound.nickname"));
+        _tunnelLogId = null;
+        _has443Target = props.getProperty("targetForPort.443") != null;
         super.optionsUpdated(tunnel);
     }
 
@@ -1537,22 +1562,55 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      * "[nickname / b32prefix]" so related warnings can be correlated across
      * the router and the i2ptunnel logs.  A trailing ".i2p" on the configured
      * nickname is stripped to match that format.
+     * <p>
+     * The label is constant for the tunnel's lifetime, so it is cached: the
+     * nickname is refreshed by optionsUpdated, and the label is rebuilt when
+     * that nickname or the local destination changes.
      *
      * @param localDest this tunnel's own destination, may be null
      * @return the "[nickname / prefix]" label, never null
      */
     private String getTunnelLogId(Destination localDest) {
-        String nickname = getTunnel().getClientOptions().getProperty("inbound.nickname");
-        if (nickname != null) {
-            String lower = nickname.toLowerCase(Locale.US);
-            if (lower.endsWith(".i2p")) {nickname = nickname.substring(0, nickname.length() - 4);}
+        String id = _tunnelLogId;
+        Destination cached = _tunnelLogIdDest;
+        if (id != null && (localDest == cached || (localDest != null && localDest.equals(cached)))) {
+            return id;
         }
-        String prefix = "";
-        if (localDest != null) {
-            String b32 = localDest.toBase32();
-            prefix = b32.substring(0, Math.min(8, b32.length()));
+        id = "[" + _logNickname + " / " + destPrefix(localDest) + "]";
+        _tunnelLogIdDest = localDest;
+        _tunnelLogId = id;
+        return id;
+    }
+
+    /**
+     * Format the configured tunnel nickname for the log label: strip a
+     * trailing ".i2p", matched case-insensitively but cut from the original
+     * case, and use "?" when the nickname is unset.
+     *
+     * @param nickname the inbound.nickname option, may be null
+     * @return the nickname field of the label, never null
+     * @since 0.9.72+
+     */
+    static String parseLogNickname(String nickname) {
+        if (nickname == null) {return "?";}
+        if (nickname.toLowerCase(Locale.US).endsWith(".i2p")) {
+            nickname = nickname.substring(0, nickname.length() - 4);
         }
-        return "[" + (nickname != null ? nickname : "?") + " / " + prefix + "]";
+        return nickname;
+    }
+
+    /**
+     * First 8 characters of the destination's Base 32, the second field of the
+     * tunnel log label.
+     *
+     * @param localDest this tunnel's own destination, may be null
+     * @return the prefix, empty string if the destination is null
+     * @since 0.9.72+
+     */
+    private static String destPrefix(Destination localDest) {
+        if (localDest == null) {return "";}
+        String b32 = localDest.toBase32();
+        return b32.substring(0, Math.min(8, b32.length()));
     }
 
     /**
@@ -1967,7 +2025,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     private boolean handlePort443(I2PSocket socket) throws IOException {
         if (socket.getLocalPort() != 443)
             return false;
-        if (getTunnel().getClientOptions().getProperty("targetForPort.443") == null) {
+        if (!_has443Target) {
             // can't write non-ssl error message
             // client side already sent 200 to browser
             try {socket.reset();}
@@ -1983,8 +2041,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 // SSL passthrough: no HTTP error page possible (browser already
                 // sent ClientHello).  Reset the socket so the browser gets a
                 // clean failure instead of a silent hang.
-                if (_log.shouldWarn()) {
-                    _log.warn("[HTTPServer] 443 connection failed" + (e != null ? ": " + e : ""));
+                if (_log != null) {
+                    _log.warnThrottled("httpserver-443-failed",
+                                       "[HTTPServer] 443 passthrough failed -> Reset the socket" +
+                                       (e != null ? "\n* Reason: " + DataHelper.messageOf(e) : ""));
                 }
                 try { socket.reset(); }
                 catch (IOException ioe) { /* ignored */ }
@@ -2067,13 +2127,17 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         boolean isValidRequest = true;
         boolean isPossibleExploit = false;
         List<String> host = headers.get("Host");
+        // One entry per rejected request: the branches below record why, and the
+        // blocklist branch emits it, so a single exploit attempt is not logged twice.
+        String denyReason = null;
 
         if (peerB32.length() != 60) {
             // The Host header has not been read at this point, so this line
             // names the tunnel and the client, never a host.
-            _log.warn("[HTTPServer] Invalid B32 (expected 60 characters, got " + peerB32.length() + ")" +
-                      " -> Denying the request" +
-                      "\n* Tunnel: " + tunnelId + "\n* Client: " + peerB32);
+            _log.warnThrottled("httpserver-invalid-b32",
+                               "[HTTPServer] Invalid client B32, expected 60 characters" +
+                               " -> Denying the request" +
+                               "\n* Tunnel: " + tunnelId + " * Client: [" + peerB32 + ']');
             try {socket.close();}
             catch (IOException ioe) { /* ignored */ }
             return false;
@@ -2088,7 +2152,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         // loggableHost() prints it whole, unbracketed and length-bounded.
         if (_log.shouldDebug()) {
             _log.debug("[HTTPServer] Incoming request for: " + loggableHost(hostname) +
-                       "\n* Tunnel: " + tunnelId + "\n* Client: " + peerB32);
+                       "\n* Tunnel: " + tunnelId + " * Client: [" + peerB32 + ']');
         }
         if (hostname != null && !hostname.endsWith(".i2p") && !hostname.endsWith(".onion")) {
             InetAddress address;
@@ -2098,11 +2162,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 future = _dnsResolver.submit(() -> InetAddress.getByName(lookupHost));
                 address = future.get(DNS_TIMEOUT_MS, TimeUnit.MILLISECONDS);
             } catch (TimeoutException e) {
-                if (_log.shouldWarn()) {
-                    _log.warn("[HTTPServer] DNS lookup timed out -> Denying the request" +
-                              "\n* Host: " + loggableHost(hostname) + " * Timeout: " + DNS_TIMEOUT_MS + "ms" +
-                              " * Tunnel: " + tunnelId + "\n* Client: " + peerB32);
-                }
+                _log.warnThrottled("httpserver-dns-timeout",
+                                   "[HTTPServer] DNS lookup timed out -> Denying the request" +
+                                   "\n* Host: " + loggableHost(hostname) + " * Tunnel: " + tunnelId +
+                                   " * Client: [" + peerB32 + ']');
                 // Cancel so the resolver thread is not left parked in a JVM-level
                 // resolution (which can run far longer than our timeout) holding a
                 // pool slot; a queued task is dropped outright.
@@ -2117,11 +2180,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 catch (IOException ioe) { /* ignored */ }
                 return false;
             } catch (ExecutionException e) {
-                if (_log.shouldWarn()) {
-                    _log.warn("[HTTPServer] DNS lookup failed -> Denying the request" +
-                              "\n* Host: " + loggableHost(hostname) + " * Tunnel: " + tunnelId +
-                              "\n* Client: " + peerB32);
-                }
+                _log.warnThrottled("httpserver-dns-failed",
+                                   "[HTTPServer] DNS lookup failed -> Denying the request" +
+                                   "\n* Host: " + loggableHost(hostname) + " * Tunnel: " + tunnelId +
+                                   " * Client: [" + peerB32 + ']');
                 try {socket.close();}
                 catch (IOException ioe) { /* ignored */ }
                 return false;
@@ -2129,32 +2191,25 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 // Executor saturated — do NOT block on synchronous DNS, which
                 // would stall the request handler thread under load.  Close the
                 // socket so the client gets a clean failure instead of a hang.
-                if (_log.shouldWarn()) {
-                    _log.warn("[HTTPServer] DNS executor saturated, cannot resolve the host" +
-                              " -> Denying the request" +
-                              "\n* Host: " + loggableHost(hostname) + " * Tunnel: " + tunnelId +
-                              "\n* Client: " + peerB32);
-                }
+                _log.warnThrottled("httpserver-dns-executor-saturated",
+                                   "[HTTPServer] DNS executor saturated -> Denying the request" +
+                                   "\n* Host: " + loggableHost(hostname) + " * Tunnel: " + tunnelId +
+                                   " * Client: [" + peerB32 + ']');
                 try {socket.close();}
                 catch (IOException ioe) { /* ignored */ }
                 return false;
             }
             if (address.isLinkLocalAddress() || address.isLoopbackAddress() || address.isSiteLocalAddress()) {
-                if (_log.shouldWarn()) {
-                    _log.warn("[HTTPServer] Localhost or loopback address requested -> Blocking the client" +
-                              "\n* Host: " + loggableHost(hostname) + " * Tunnel: " + tunnelId +
-                              "\n* Client: " + peerB32 + " * Blocklist: added");
-                }
+                denyReason = "Localhost or loopback address requested -> Blocked the client";
                 _blocklistManager.logBlockedDestination(peerB32);
                 isValidRequest = false;
                 isPossibleExploit = true;
             } else if (address.isAnyLocalAddress()) { // check for 0.0.0.0 response (DNS blocking)
                 if (!hostname.equals("::") && !hostname.equals("0.0.0.0")) {
-                    if (_log.shouldWarn()) {
-                        _log.warn("[HTTPServer] DNS server appears to be blocking requests -> Sending Error 403" +
-                                  "\n* Host: " + loggableHost(hostname) + " * Tunnel: " + tunnelId +
-                                  "\n* Client: " + peerB32);
-                    }
+                    _log.warnThrottled("httpserver-dns-blocked",
+                                       "[HTTPServer] DNS server is blocking this host -> Sending Error 403" +
+                                       "\n* Host: " + loggableHost(hostname) + " * Tunnel: " + tunnelId +
+                                       " * Client: [" + peerB32 + ']');
                     try {sendError(socket, ERR_FORBIDDEN);}
                     catch (IOException ioe) { /* ignored */ }
                     isValidRequest = false;
@@ -2174,11 +2229,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             }
             if (isPossibleExploit) {
                 _blocklistManager.logBlockedDestination(peerB32);
-                if (_log.shouldWarn()) {
-                    _log.warn("[HTTPServer] Private or wildcard address requested -> Sending Error 403" +
-                              "\n* Host: " + loggableHost(hostname) + " * Tunnel: " + tunnelId +
-                              "\n* Client: " + peerB32 + " * Blocklist: added");
-                }
+                _log.warnThrottled("httpserver-private-address",
+                                   "[HTTPServer] " +
+                                   (denyReason != null ? denyReason
+                                    : "Private or wildcard address requested -> Blocked the client") +
+                                   "\n* Host: " + loggableHost(hostname) + " * Tunnel: " + tunnelId +
+                                   " * Client: [" + peerB32 + ']');
             }
             if (!isValidRequest) {
                 try {socket.close();}
@@ -2275,9 +2331,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         String referer = h.get(0);
         if (referer.startsWith("http://") || referer.startsWith("https://")) {
             if (_log.shouldInfo()) {
-                _log.info("[HTTPServer] " + getTunnelLogId(socket.getThisDestination()) +
-                          " Refusing access (Bad referer) \n* Client: " + peerB32 +
-                          "\n* Referer: " + referer);
+                _log.info("[HTTPServer] Bad referer -> Sending Error 403" +
+                          "\n* Referer: " + referer + " * Tunnel: " +
+                          getTunnelLogId(socket.getThisDestination()) +
+                          " * Client: [" + peerB32 + ']');
             }
             try {sendError(socket, ERR_FORBIDDEN);}
             catch (IOException ioe) { /* ignored */ }
@@ -2313,9 +2370,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 if (ag.equals("none")) {continue;}
                 if (!ag.isEmpty() && ua.contains(ag)) {
                     if (_log.shouldInfo()) {
-                        _log.info("[HTTPServer] " + getTunnelLogId(socket.getThisDestination()) +
-                                  " Refusing access: Blacklisted User Agent (" + ua + ")" +
-                                  " \n* Client: " + peerB32);
+                        _log.info("[HTTPServer] Blacklisted User Agent -> Sending Error 403" +
+                                  "\n* User agent: " + ua + " * Tunnel: " +
+                                  getTunnelLogId(socket.getThisDestination()) +
+                                  " * Client: [" + peerB32 + ']');
                     }
                     try {sendError(socket, ERR_FORBIDDEN);}
                     catch (IOException ioe) { /* ignored */ }
@@ -2330,9 +2388,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 String ag = agents[i].trim();
                 if (ag.equals("none")) {
                     if (_log.shouldInfo()) {
-                        _log.info("[HTTPServer] " + getTunnelLogId(socket.getThisDestination()) +
-                                  " Refusing access: User Agent header is blank" +
-                                  " \n* Client: " + peerB32);
+                        _log.info("[HTTPServer] Blank User Agent header -> Sending Error 403" +
+                                  "\n* Tunnel: " + getTunnelLogId(socket.getThisDestination()) +
+                                  " * Client: [" + peerB32 + ']');
                     }
                     try {sendError(socket, ERR_FORBIDDEN);}
                     catch (IOException ioe) { /* ignored */ }
@@ -2367,7 +2425,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             return false;
         if (postThrottler.shouldThrottle(peerHash)) {
             if (_log.shouldWarn()) {
-                _log.warn("[HTTPServer] " + getTunnelLogId(socket.getThisDestination()) + " Refusing POST/PUT since peer is throttled \n* Client: " + peerB32);
+                _log.warn("[HTTPServer] Peer is throttled -> Refusing the POST/PUT" +
+                          "\n* Tunnel: " + getTunnelLogId(socket.getThisDestination()) +
+                          " * Client: [" + peerB32 + ']');
             }
             try {sendError(socket, ERR_DENIED);}
             catch (IOException ioe) { /* ignored */ }
@@ -2395,12 +2455,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         long timeToHandle = afterHandle - afterAccept;
         getTunnel().getContext().statManager().addRateData("i2ptunnel.httpserver.blockingHandleTime", timeToHandle);
         if ((timeToHandle > 1500) && (_log.shouldInfo())) {
-            _log.info("[HTTPServer] Took a while to handle the request for " + remoteHost + ':' + remotePort +
-                      " -> Total: " + timeToHandle + "ms" +
-                      "\n* Client: " + peerB32 +
-                      "\n* Read headers: " + (afterHeaders-afterAccept) + "ms * " +
-                      "Socket create: " + (afterSocket-afterHeaders) + "ms * " +
-                      "Start runners: " + (afterHandle-afterSocket) + "ms");
+            _log.info("[HTTPServer] Slow first request -> Total: " + timeToHandle + "ms" +
+                      "\n* Client: [" + peerB32 + "] * Read headers: " + (afterHeaders-afterAccept) +
+                      "ms * Socket create: " + (afterSocket-afterHeaders) +
+                      "ms * Start runners: " + (afterHandle-afterSocket) + "ms");
          }
     }
 
@@ -3114,8 +3172,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 _log.warn("[HTTPServer] Async body stalled on the " + side + " -> Closing" +
                           "\n* Read idle: " + readAgeMs + "ms * Write idle: " + writeAgeMs +
                           "ms * Transferred: " + _body.getBytesTransferred() + " bytes" +
-                          " * Window: " + stallMs + "ms" +
-                          "\n* Body: " + _body.getName());
+                          " * Body: " + _body.getName());
             }
             closeQuietly(_browserin);
             closeQuietly(_serverin);
@@ -3373,10 +3430,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     // only fires when successive reads themselves were far apart.
                     if (stallNs > computeStallWindowMs(ioStallTimeoutMs, _bytesTransferred) * 1_000_000L) {
                         _stallEventCount.incrementAndGet();
-                        if (_log != null && _log.shouldWarn()) {
-                            _log.warn("[HTTPServer] Stall detected in " + _name +
-                                      " — no data for " + (stallNs / 1_000_000L) + "ms, " +
-                                      _bytesTransferred + " bytes transferred");
+                        if (_log != null) {
+                            _log.warnThrottled("httpserver-sender-stall",
+                                               "[HTTPServer] No data from " + _name +
+                                               " for " + (stallNs / 1_000_000L) + "ms -> Stopped the transfer" +
+                                               "\n* Transferred: " + _bytesTransferred + " bytes");
                         }
                         // Record the truncation as a failure: without it finishTransfer
                         // sees a clean completion, keeps the connection alive, and the
@@ -3410,7 +3468,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     // client closed connection early, or thread interrupted for cancellation
                     if (_log != null && _log.shouldDebug()) {_log.debug("[HTTPServer] Error sending " + _name + " -> " + sendErr);}
                 } else {
-                    if (_log != null && _log.shouldWarn()) {_log.warn("[HTTPServer] Error sending " + _name + " -> " + sendErr);}
+                    if (_log != null) {
+                        _log.warnThrottled("httpserver-send-failed",
+                                           "[HTTPServer] Failed to send " + _name + " -> Aborting the transfer" +
+                                           "\n* Reason: " + sendErr);
+                    }
                 }
                 synchronized(this) {_failure = ioe;}
             }
@@ -3438,7 +3500,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          * The label this transfer is logged and reported under.
          *
          * @return the transfer description ("Server -&gt; Client ..."); never null
-         * @since 0.9.71+
+         * @since 0.9.72+
          */
         public String getName() { return _name; }
 
@@ -3447,7 +3509,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          * without interrupting the Sender thread.
          *
          * @return {@link java.lang.System#nanoTime} of the last successful read
-         * @since 0.9.71+
+         * @since 0.9.72+
          */
         public long getLastReadNanos() { return _lastReadNanos; }
 
@@ -3457,7 +3519,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          * congested I2P destination.
          *
          * @return {@link java.lang.System#nanoTime} of the last completed write
-         * @since 0.9.71+
+         * @since 0.9.72+
          */
         public long getLastWriteNanos() { return _lastWriteNanos; }
 
@@ -3472,7 +3534,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          * indefinitely.
          *
          * @param cause recorded as the transfer failure, propagated to the caller
-         * @since 0.9.71+
+         * @since 0.9.72+
          */
         public void abort(IOException cause) {
             synchronized (this) {

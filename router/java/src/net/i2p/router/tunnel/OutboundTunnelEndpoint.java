@@ -176,25 +176,28 @@ class OutboundTunnelEndpoint {
                         _ridsm++;
                         _context.statManager().addRateData("tunnel.outboundTunnelEndpointFwdRIDSM", 1);
                         if (_log.shouldLog(Log.INFO))
-                            _log.info("Outbound endpoint RouterInfo DbStoreMsg -> Messages: " + _ridsm
-                                      + " of " + _totalmsg + " * To router: [" + toRouter.toShortBase64() + "]"
-                                      + "\n* From tunnel: " + _config.getReceiveTunnelId()
-                                      + "\n* " + dsm);
+                            _log.infoThrottled("obep-forward-ridsm",
+                                               "Outbound endpoint forwarding a RouterInfo DatabaseStore message to [" +
+                                               toRouter.toShortBase32() + "]" +
+                                               "\n* From tunnel: " + _config.getReceiveTunnelId() +
+                                               " [MsgID " + msg.getUniqueId() + "]");
                     } else {
                         _lsdsm++;
                         if (_log.shouldLog(Log.INFO))
-                            _log.info("Outbound endpoint LeaseSet DbStoreMsg -> Messages: " + _lsdsm
-                                      + " of " + _totalmsg + " * To router: [" + toRouter.toShortBase64() + "]"
-                                      + "\n* From tunnel: " + _config.getReceiveTunnelId()
-                                      + "\n* " + dsm);
+                            _log.infoThrottled("obep-forward-lsdsm",
+                                               "Outbound endpoint forwarding a LeaseSet DatabaseStore message to [" +
+                                               toRouter.toShortBase32() + "]" +
+                                               "\n* From tunnel: " + _config.getReceiveTunnelId() +
+                                               " [MsgID " + msg.getUniqueId() + "]");
                     }
                 } else {
                     _i2npmsg++;
                     if (_log.shouldLog(Log.INFO))
-                        _log.info("Outbound endpoint I2NP message -> Messages: " + _i2npmsg
-                                  + " of " + _totalmsg + " * To router: [" + toRouter.toShortBase64() + ']'
-                                  + "\n* From tunnel: " + _config.getReceiveTunnelId()
-                                  + "\n* " + msg);
+                        _log.infoThrottled("obep-forward-i2np",
+                                           "Outbound endpoint forwarding an I2NP message to [" +
+                                           toRouter.toShortBase32() + "]" +
+                                           "\n* Type: " + msg.getType() + " * From tunnel: " +
+                                           _config.getReceiveTunnelId() + " [MsgID " + msg.getUniqueId() + "]");
                 }
             }
             int size = msg.getMessageSize();
