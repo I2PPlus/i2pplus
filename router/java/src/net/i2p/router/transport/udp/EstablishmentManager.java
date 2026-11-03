@@ -1544,13 +1544,14 @@ public class EstablishmentManager {
             try {
                 state = new InboundEstablishState2(_context, _transport, packet);
             } catch (GeneralSecurityException gse) {
-                boolean gseNotNull = hasUsefulMessage(gse);
                 if (from != null && !isPeerBanned(from)) {
+                    // Debug, not warn: a peer sending an unparseable Session
+                    // Request is remote junk, and udp.establishDropped trends it.
+                    // The guard said shouldDebug() and called _log.warn(), so
+                    // enabling debug attached a stack trace to every junk packet.
                     if (_log.shouldDebug())
-                        _log.warn("[SSU] Received CORRUPT Session or Token Request from " + from, gse);
-                    else if (_log.shouldWarn())
-                        _log.warn("[SSU] Received CORRUPT Session or Token Request from " + from +
-                        (gseNotNull ? "\n* General Security Exception: " + gse.getMessage() : ""));
+                        _log.debug("[SSU] Corrupt Session or Token Request from [" + from + "] -> " +
+                                   DataHelper.messageOf(gse), gse);
                 }
                 _context.statManager().addRateData("udp.establishDropped", 1);
                 return;
@@ -1567,13 +1568,11 @@ public class EstablishmentManager {
             try {
                 state.receiveSessionOrTokenRequestAfterRetry(packet);
             } catch (GeneralSecurityException gse) {
-                boolean gseNotNull = hasUsefulMessage(gse);
                 if (state != null && !isPeerBanned(state)) {
+                    // Debug, not warn - see the first-request site above.
                     if (_log.shouldDebug())
-                        _log.warn("[SSU] Received CORRUPT Session or Token Request after retry -> Router: " + state, gse);
-                    else if (_log.shouldWarn())
-                        _log.warn("[SSU] Received CORRUPT Session or Token Request after retry -> Router: " + state +
-                        (gseNotNull ? "\n* General Security Exception: " + gse.getMessage() : ""));
+                        _log.debug("[SSU] Corrupt Session or Token Request after retry from " + state +
+                                   " -> " + DataHelper.messageOf(gse), gse);
                 }
                 // state called fail()
                 _inboundStates.remove(state.getRemoteHostId());
@@ -1712,10 +1711,11 @@ public class EstablishmentManager {
 
         try {state.receiveSessionCreated(packet);}
         catch (GeneralSecurityException gse) {
+            // Debug, not warn: remote junk on a path a peer can trigger per
+            // packet. The guard said shouldDebug() and called _log.warn().
             if (_log.shouldDebug() && !shouldSuppressException(gse)) {
-                _log.warn("[SSU] Received CORRUPT SessionCreated -> Router: " + state, gse);
-            } else if (_log.shouldWarn() && !shouldSuppressException(gse)) {
-                _log.warn("[SSU] Received CORRUPT SessionCreated -> Router: " + state + "\n* " + gse.getMessage());
+                _log.debug("[SSU] Corrupt SessionCreated from " + state + " -> " +
+                           DataHelper.messageOf(gse), gse);
             }
             _outboundStates.remove(state.getRemoteHostId());
             RouterIdentity rid = state.getRemoteIdentity();
@@ -1748,7 +1748,7 @@ public class EstablishmentManager {
         try {state.receiveRetry(packet);}
         catch (GeneralSecurityException gse) {
             if (_log.shouldDebug() && !shouldSuppressException(gse)) {
-                _log.debug("[SSU] CORRUPT Retry -> Router: " + state, gse);
+                _log.debug("[SSU] Corrupt Retry from " + state + " -> " + DataHelper.messageOf(gse), gse);
             }
             _outboundStates.remove(state.getRemoteHostId());
             RouterIdentity rid = state.getRemoteIdentity();
@@ -2477,7 +2477,9 @@ public class EstablishmentManager {
                                       DataHelper.eq(ip, bob.getRemoteIP()),
                                       _context.blocklist().isBlocklisted(ip))) {
                 if (_log.shouldWarn()) {
-                    _log.warn("[SSU] BAD RelayResponse from " + charlie + " for " + Addresses.toString(ip, port));
+                    // A ban follows, so the warning is the operator's signal.
+                    _log.warn("[SSU] Banning [" + charlie + "] for 1h -> Bad Introduction data in a RelayResponse for " +
+                              Addresses.toString(ip, port));
                 }
                 istate = INTRO_STATE_FAILED;
                 charlie2.setIntroState(bobHash, istate);
@@ -2491,7 +2493,8 @@ public class EstablishmentManager {
                 _log.debug("Received RelayResponse from " + charlie + " - they are on " + Addresses.toString(ip, port));
             }
             if (charlieRI == null) {
-                if (_log.shouldWarn()) {_log.warn("[SSU] Charlie's RouterInfo not found " + charlie);}
+                // Debug: it may show up later, and the caller retries.
+                if (_log.shouldDebug()) {_log.debug("[SSU] Charlie's RouterInfo not found [" + charlie + ']');}
                 charlie2.setIntroState(bobHash, istate);
                 // maybe it will show up later
                 return;
@@ -2587,8 +2590,12 @@ public class EstablishmentManager {
             nonce = DataHelper.fromLong(cb._respData, 0, 4);
             // check signature below
         } catch (Exception e) {
-            if (_log.shouldWarn() && !shouldSuppressException(e)) {
-                _log.warn("[SSU] BAD HolePunch packet -> Dropping it * Size: " + len + " bytes", e);
+            if (_log.shouldDebug() && !shouldSuppressException(e)) {
+                // Debug, not warn: an unparseable HolePunch response is remote
+                // junk, triggerable per packet, and the frames are our own
+                // receive path.
+                _log.debug("[SSU] Unparseable HolePunch packet from [" + id + "] -> Dropping it, " + len +
+                           " bytes, " + DataHelper.messageOf(e), e);
             }
             return;
         } finally {chacha.destroy();}
@@ -2766,10 +2773,12 @@ public class EstablishmentManager {
         if (port != fromPort) {
             // if port mismatch only, use the source port as charlie doesn't know
             // his port or is behind a symmetric NAT
-            if (_log.shouldWarn()) {
-                _log.warnThrottled("ssu-holepunch-port-mismatch",
-                                   "[SSU] HolePunch source port mismatch from [" + id + "] -> Using the source port"
-                                   + "\n* Published: " + port);
+            // Debug, not warn: a peer behind a symmetric NAT publishes a port it
+            // is not using, and we use the source port. Expected, self-correcting,
+            // and nothing for the operator to do.
+            if (_log.shouldDebug()) {
+                _log.debug("[SSU] HolePunch from [" + id + "] published port " + port +
+                           " does not match the source -> Using the source port");
             }
             if (!TransportUtil.isValidPort(fromPort)) {
                 banAndFailState(state, "Bad Introduction data", 6*60*60*1000L);

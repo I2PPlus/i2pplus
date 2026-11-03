@@ -369,8 +369,10 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
                 _log.debug("New " + len + " byte packet [#" + n + "] received from " + this);
             SSU2Payload.processPayload(_context, this, data, off + SHORT_HEADER_SIZE, payloadLen, false, from);
         } catch (Exception e) {
-            if (_log.shouldWarn())
-                _log.warn("BAD encrypted packet from " + this + (e.getMessage() != null ? " -> " + e.getMessage() : ""));
+            // Debug, not warn: an unparseable packet from a peer we have already
+            // destroyed the state for is remote junk, triggerable per packet.
+            if (_log.shouldDebug())
+                _log.debug("Unparseable packet from " + this + " -> Dropping it, " + DataHelper.messageOf(e));
         }
     }
 

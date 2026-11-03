@@ -230,11 +230,22 @@ public final class ECIESAEADEngine {
         try {
             return x_decrypt(data, targetPrivateKey, keyManager);
         } catch (DataFormatException dfe) {
-            if (_log.shouldWarn())
-                _log.warn("ECIES decryption error -> " + dfe.getMessage());
+            // One short line at WARN. The stack is debug-only: this is a remote
+            // peer's payload, so the frames are our own receive path, and a peer
+            // can trigger it per packet - one malformed NewSession was 100 log
+            // lines, stack and hex dump of the frame included.
+            if (_log.shouldDebug())
+                _log.debug("ECIES decryption error -> " + DataHelper.messageOf(dfe), dfe);
+            else if (_log.shouldWarn())
+                _log.warn("ECIES decryption error -> " + DataHelper.messageOf(dfe));
             return NO_CLOVES;
         } catch (Exception e) {
-            _log.warn("ECIES decryption error", e);
+            // Plain line at WARN; the stack is debug-only, so an unexpected
+            // fault repeating per message cannot fill the log with frames.
+            if (_log.shouldDebug())
+                _log.debug("ECIES decryption error -> " + DataHelper.messageOf(e), e);
+            else if (_log.shouldWarn())
+                _log.warn("ECIES decryption error -> " + DataHelper.messageOf(e));
             return NO_CLOVES;
         }
     }
@@ -297,7 +308,12 @@ public final class ECIESAEADEngine {
                 _log.warn("ECIES decryption error -> " +  dfe.getMessage());
             return NO_CLOVES;
         } catch (Exception e) {
-            _log.warn("ECIES decryption error", e);
+            // Plain line at WARN; the stack is debug-only, so an unexpected
+            // fault repeating per message cannot fill the log with frames.
+            if (_log.shouldDebug())
+                _log.debug("ECIES decryption error -> " + DataHelper.messageOf(e), e);
+            else if (_log.shouldWarn())
+                _log.warn("ECIES decryption error -> " + DataHelper.messageOf(e));
             return NO_CLOVES;
         }
     }
@@ -409,7 +425,12 @@ public final class ECIESAEADEngine {
                 _log.warn("ECIES decryption error", dfe);
             return NO_CLOVES;
         } catch (Exception e) {
-            _log.warn("ECIES decryption error", e);
+            // Plain line at WARN; the stack is debug-only, so an unexpected
+            // fault repeating per message cannot fill the log with frames.
+            if (_log.shouldDebug())
+                _log.debug("ECIES decryption error -> " + DataHelper.messageOf(e), e);
+            else if (_log.shouldWarn())
+                _log.warn("ECIES decryption error -> " + DataHelper.messageOf(e));
             return NO_CLOVES;
         }
     }

@@ -478,12 +478,17 @@ class SSU2Payload {
         if (DSAEngine.getInstance().verifySignature(sig, data, pub)) {
             Log log = ctx.logManager().getLog(SSU2Payload.class);
             String msg = dfe.getMessage();
-            if (msg != null && msg.contains("out of order") &&
-                UDPAddress.overCapIntroducerKey(msg) && log.shouldWarn()) {
-                log.warn("Error reading RouterInfo -> >" + UDPAddress.MAX_INTRODUCERS +
-                         " introducers * " + msg);
-            } else if (log.shouldDebug()) {log.debug("Error reading RouterInfo", dfe);}
-            else if (log.shouldWarn()) {log.warn("Error reading RouterInfo -> " + msg);}
+            // Debug, not warn: an unparseable RouterInfo comes from a peer, and
+            // the ban it leads to is logged by the caller. The ">5 introducers"
+            // form read as a stray greater-than.
+            if (msg != null && msg.contains("out of order") && UDPAddress.overCapIntroducerKey(msg))
+                log.debugThrottled("ssu2-ri-introducers",
+                                   "Unparseable RouterInfo -> more than " + UDPAddress.MAX_INTRODUCERS +
+                                   " introducers, " + msg);
+            else if (log.shouldDebug())
+                log.debug("Unparseable RouterInfo -> " + DataHelper.messageOf(dfe), dfe);
+            else
+                log.debugThrottled("ssu2-ri-read", "Unparseable RouterInfo -> " + DataHelper.messageOf(dfe));
             // partially filled-in RI, -1 is signal to IES2.gotRI()
             RouterInfo alice = new RouterInfo();
             alice.setIdentity(ident);

@@ -767,11 +767,12 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
 
             if (ackImmediate) {_ackTimer.scheduleImmediate();}
         } catch (Exception e) {
+            // Debug, not warn: an unparseable packet is remote junk, triggerable
+            // per packet, and the frames are our own receive path. The debug
+            // branch called _log.warn(), so enabling debug attached a stack trace.
             if (shouldLogDebug()) {
-                _log.warn("[SSU] Received a BAD encrypted packet from " + from + " -> Dropping it" +
-                          " * Size: " + len + " bytes\n* " + this, e);
-            } else if (_log.shouldWarn()) {
-                _log.warn("[SSU] Received a BAD encrypted packet from " + from + " -> Dropping it");
+                _log.debug("[SSU] Unparseable packet from [" + from + "] -> Dropping it, " + len +
+                           " bytes, " + DataHelper.messageOf(e));
             }
         }
     }
@@ -860,7 +861,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                 // time or retransmission budget exceeded
                 _migrationState = MigrationState.MIGRATION_STATE_NONE;
                 pathVerified();
-                if (shouldLog) {_log.warn("[SSU] Connection migration failed... " + toShortString());}
+                if (shouldLog) {_log.debug("[SSU] Connection migration expired " + toShortString());}
                 break;
             case RETRANSMIT:
                 if (shouldLogDebug()) {
@@ -1461,17 +1462,23 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
              I2NPMessage msg = I2NPMessageImpl.fromRawByteArrayNTCP2(_context, buf, 0, sz, null);
              _transport.messageReceived(msg, null, _remotePeer, state.getLifetime(), sz);
         } catch (I2NPMessageException ime) {
+            // Debug, not warn: a peer sending an unparseable I2NP message is
+            // remote junk, triggerable per packet. The debug branch called
+            // _log.warn(), so enabling debug attached a stack trace to it.
             if (shouldLogDebug()) {
-                _log.warn("[SSU] Received invalid message... " + state + "\n* PeerState: " + this + ime);
-            } else if (_log.shouldWarn()) {
-                _log.warn("[SSU] Received invalid message [MsgID " + state.getMessageId() + "] from " + toShortString() +
-                          "\n* Error: " + ime.getMessage());
+                _log.debug("[SSU] Invalid message [MsgID " + state.getMessageId() + "] from " + toShortString() +
+                           " -> " + DataHelper.messageOf(ime), ime);
             }
         } catch (RuntimeException e) {
-            // e.g. AIOOBE
-            if (shouldLogDebug()) {_log.warn("[SSU] Error handling a message: " + state, e);}
-            else if (_log.shouldWarn()) {_log.warn("[SSU] Error handling a message [MsgID " + state.getMessageId() + "] from " + toShortString() +
-                                                   "\n* Error: " + e.getMessage());}
+            // e.g. AIOOBE - ours, not the peer's, so the frames are the point.
+            if (shouldLogDebug()) {
+                _log.debug("[SSU] Error handling a message [MsgID " + state.getMessageId() + "] from " +
+                           toShortString() + " -> " + DataHelper.messageOf(e), e);
+            } else if (_log.shouldWarn()) {
+                _log.warnThrottled("ssu-message-handler",
+                                   "[SSU] Error handling a message [MsgID " + state.getMessageId() + "] from " +
+                                   toShortString() + " -> " + DataHelper.messageOf(e));
+            }
         } finally {state.releaseResources();}
     }
 

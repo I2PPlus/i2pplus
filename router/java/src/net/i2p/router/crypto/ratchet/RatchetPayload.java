@@ -7,6 +7,7 @@ import net.i2p.I2PAppContext;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.i2np.GarlicClove;
+import net.i2p.util.Log;
 
 /**
  *
@@ -18,6 +19,8 @@ class RatchetPayload {
 
     /** Utility class with static methods only, not instantiable. */
     private RatchetPayload() {}
+
+    private static final Log _log = new Log(RatchetPayload.class);
 
     /** Block header size in bytes. */
     public static final int BLOCK_HEADER_SIZE = 3;
@@ -155,9 +158,16 @@ class RatchetPayload {
             int len = (int) DataHelper.fromLong(payload, i, 2);
             i += 2;
             if (i + len > end) {
+                // The offsets describe the defect completely. The frame bytes are
+                // for chasing a serialization bug, so they are debug-only, and
+                // never in the exception message - callers print the message
+                // with the stack, which made one malformed packet 100 log lines.
+                if (_log.shouldDebug())
+                    _log.debug("Ratchet payload block " + blocks + " type " + type + " length " + len +
+                               " at offset " + (i - 3 - off) + " runs over frame of size " + length +
+                               '\n' + net.i2p.util.HexDump.dump(payload, off, length));
                 throw new IOException("Block " + blocks + " type " + type + " length " + len +
-                                      " at offset " + (i - 3 - off) + " runs over frame of size " + length +
-                                      '\n' + net.i2p.util.HexDump.dump(payload, off, length));
+                                      " at offset " + (i - 3 - off) + " runs over frame of size " + length);
             }
             switch (type) {
                 // don't modify i inside switch
