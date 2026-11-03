@@ -22,6 +22,7 @@ import net.i2p.router.TunnelPoolSettings;
 import net.i2p.util.Log;
 
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Handles the reception and decryption of GarlicMessages. Decrypts the garlic message using
@@ -45,15 +46,22 @@ public class GarlicMessageReceiver {
     private final Hash _clientDestination;
 
     /**
-     * Rate-limited decrypt failure counter.  Individual failures are logged
-     * at DEBUG; a summary WARN is emitted every {@code FAIL_WARN_INTERVAL}
-     * failures to keep the log usable during normal LeaseSet rotation.
+     * Decrypt failures since the last summary, reset when the summary is logged,
+     * so the summary counts one window instead of a total that is only
+     * meaningful next to the previous summary. Individual failures are logged
+     * at DEBUG.
      *
      * @since 0.9.71+
      */
     private static final AtomicInteger _decryptFailCount = new AtomicInteger();
-    /** Failures between warnings in the log. */
-    private static final int FAIL_WARN_INTERVAL = 50;
+    /** Start of the current summary window, set when the first receiver is built. */
+    private static final AtomicLong _decryptWindowStart = new AtomicLong();
+    /**
+     * Milliseconds between summary warnings. Time-based, not count-based: the
+     * failure rate on a loaded router runs at tens per second, so a count-based
+     * throttle emits a line every few seconds no matter how it is tuned.
+     */
+    private static final long FAIL_WARN_MS = 10 * 60 * 1000L;
 
     /**
      * Interface for handling decrypted garlic cloves. Implementations should process or dispatch
@@ -91,6 +99,9 @@ public class GarlicMessageReceiver {
         _log = context.logManager().getLog(GarlicMessageReceiver.class);
         _clientDestination = clientDestination;
         _receiver = receiver;
+        // Start the first summary window when the first receiver is built, so the
+        // first summary reports a real window length instead of the epoch.
+        _decryptWindowStart.compareAndSet(0L, context.clock().now());
     }
 
     /**
@@ -189,16 +200,37 @@ public class GarlicMessageReceiver {
                 final String keysUsed = (decryptionKey2 != null) ? "both ElGamal and ECIES keys" : decryptionKey.getType().toString();
                 _log.debug("Failed to decrypt " + message + " with " + keysUsed + " -> Target: " + d);
             }
-            // Rate-limited WARN: most failures are expected during LeaseSet rotation;
-            // emit a summary every FAIL_WARN_INTERVAL instead of one per failure.
-            int failures = _decryptFailCount.incrementAndGet();
-            if (failures % FAIL_WARN_INTERVAL == 1) {
-                _log.warn("Failed to decrypt " + failures +
-                          " GarlicMessages total (most are expected during LeaseSet rotation)");
-            }
+            // One summary per window, counting that window only. The parenthetical
+            // that used to sit here, blaming LeaseSet rotation, was contradicted by
+            // the log itself: 266,301 failures over 4.75 hours with not one quiet
+            // minute in 290, which is not the shape of a rotation that happens once
+            // an hour per destination. The per-message detail is already in the
+            // message history, recorded below for every failure.
+            String summary = decryptFailure(_context.clock().now());
+            if (summary != null && _log.shouldWarn()) {_log.warn(summary);}
             _context.messageHistory().messageProcessingError(message.getUniqueId(), message.getClass().getName(),
                     "Garlic could not be decrypted");
         }
+    }
+
+    /**
+     * Records one decrypt failure and returns the window summary once the window
+     * has run out, resetting the count so each summary counts its own window.
+     * Shared across receivers, since the counter is.
+     *
+     * @param now current timestamp in milliseconds
+     * @return the summary line, or null for nothing to report
+     * @since 0.9.72+
+     */
+    static String decryptFailure(long now) {
+        _decryptFailCount.incrementAndGet();
+        long start = _decryptWindowStart.get();
+        if (now - start >= FAIL_WARN_MS && _decryptWindowStart.compareAndSet(start, now)) {
+            int since = _decryptFailCount.getAndSet(0);
+            return "Failed to decrypt " + since + " GarlicMessage" + (since == 1 ? "" : "s") +
+                   " in " + DataHelper.formatDuration(now - start);
+        }
+        return null;
     }
 
     /**

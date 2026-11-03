@@ -1627,7 +1627,10 @@ public class EstablishmentManager {
                 } catch (UnknownHostException uhe) { /* ignored */ }
             }
             if (_log.shouldWarn()) {
-                _log.warn("[SSU] Rate limit of " + MAX_TERMINATIONS + " in 3m exceeded (Count: " + count + ") \n* No more termination packets to: " + to);
+                // One line: the count and the peer are both facts about this
+                // peer, and the second line carried only the peer.
+                _log.warn("[SSU] " + count + " termination packets in 3m to " + to +
+                          ", limit " + MAX_TERMINATIONS + " -> Not sending any more");
             }
         }
         // very basic validation that this is probably in response to a good packet.
