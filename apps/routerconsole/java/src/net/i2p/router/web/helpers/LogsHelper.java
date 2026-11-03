@@ -75,6 +75,11 @@ public class LogsHelper extends HelperBase {
     private static final Pattern ANCHOR = Pattern.compile("<a[^>]*>");
     /** Matches a closing anchor tag. */
     private static final Pattern ANCHOR_CLOSE = Pattern.compile("</a>");
+    /**
+     * Matches one line of a hex dump: the 8-hex-digit offset, the padded hex
+     * columns, then the ASCII column between pipes.
+     */
+    private static final Pattern HEX_DUMP = Pattern.compile("(?m)^[0-9a-f]{8} +[0-9a-f ]+\\|.*\\|$");
 
 /**
  * Ordered literal rewrites applied to an escaped log message, up to the
@@ -563,6 +568,37 @@ public class LogsHelper extends HelperBase {
     }
 
     /**
+     * Keep a hex dump's columns aligned on the page.
+     * <p>
+     * {@link net.i2p.util.HexDump} writes every line at a fixed width, padding
+     * the hex and ASCII columns with spaces, and HTML collapses a run of spaces,
+     * so on the page the ASCII column lands immediately after the last hex byte
+     * and the dump reads ragged. Every space in a hex line is layout - HexDump
+     * renders an unprintable byte, including a space, as a dot, so the ASCII
+     * column never holds a real space - which is what makes rewriting the whole
+     * line safe. Same treatment, and the same paste trade-off, as
+     * {@link #padThreadColumn}: the file log keeps plain spaces, so it stays
+     * greppable, and a paste out of the console carries non-breaking spaces.
+     *
+     * @param msg the log message, escaped and rewritten, lines separated by \n
+     * @return the message with each hex-dump line's spaces written as &nbsp;
+     * @since 0.9.72+
+     */
+    static String padHexDump(String msg) {
+        Matcher m = HEX_DUMP.matcher(msg);
+        if (!m.find()) {return msg;}
+        StringBuilder buf = new StringBuilder(msg.length() + 64);
+        int last = 0;
+        do {
+            buf.append(msg, last, m.start());
+            buf.append(m.group().replace(" ", "&nbsp;"));
+            last = m.end();
+        } while (m.find());
+        buf.append(msg, last, msg.length());
+        return buf.toString();
+    }
+
+    /**
      * Formats in forward order.
      *
      * @param msgs the captured log messages, rendered newest first
@@ -613,6 +649,10 @@ public class LogsHelper extends HelperBase {
             if (msg.contains("| &uarr;&uarr;&uarr; ")) {msg = msg.replace("| &uarr;&uarr;&uarr; ", " <span class=log_omitted>&uarr;&uarr;&uarr;</span> ");}
             // remove  last \n that LogRecordFormatter added
             if (msg.endsWith(NL)) {msg = msg.substring(0, msg.length() - NL.length());}
+            // Hex lines are padded before the \n rewrite, which is what splits
+            // them into <br>-separated lines and would leave the padding to
+            // apply across a <br>.
+            msg = padHexDump(msg);
             // replace \n so that exception stack traces will format correctly and will paste nicely into pastebin
             msg = msg.replace("\n", "<br>&nbsp;&nbsp;\n");
             if (msg.contains("Sending client")) {msg = msg.replace("<br>&nbsp;&nbsp;\n", "");} // SAM client

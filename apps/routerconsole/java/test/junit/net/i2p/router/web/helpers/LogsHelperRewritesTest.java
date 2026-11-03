@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
 import java.util.regex.Pattern;
+import net.i2p.util.HexDump;
 import org.junit.Test;
 
 /**
@@ -376,5 +377,59 @@ public class LogsHelperRewritesTest {
     public void testPadThreadColumnRendersTheSameWithoutAColumn() {
         String line = "no column here, just [a bracket] of text";
         assertEquals(line, LogsHelper.padThreadColumn(line).replace("&nbsp;", " "));
+    }
+
+    /**
+     * A hex dump's lines are padded, and round-trip back to exactly what
+     * {@link HexDump} wrote once &nbsp; is read back as a space. The padding is
+     * what keeps the ASCII column in one column on the page; HTML collapses a
+     * run of plain spaces, and the dump reads ragged.
+     */
+    @Test
+    public void testHexDumpLinesArePadded() {
+        byte[] data = new byte[40];
+        for (int i = 0; i < data.length; i++) {data[i] = (byte) (i * 7);}
+        String dump = HexDump.dump(data, 0, data.length);
+        String padded = LogsHelper.padHexDump(dump);
+        org.junit.Assert.assertTrue("no padding applied", padded.contains("&nbsp;"));
+        assertEquals(dump, padded.replace("&nbsp;", " "));
+    }
+
+    /**
+     * The last line of a dump is short and padded out to the full width, which
+     * is the line that reads ragged: "58" followed by the ASCII column, with
+     * nothing between them once the spaces collapse.
+     */
+    @Test
+    public void testShortLastDumpLineIsPadded() {
+        String last = "00000410  58                                                |X               |\n";
+        String padded = LogsHelper.padHexDump(last);
+        org.junit.Assert.assertTrue("short dump line not padded", padded.contains("&nbsp;"));
+        assertEquals(last, padded.replace("&nbsp;", " "));
+    }
+
+    /**
+     * Only dump lines are touched. A message with ordinary spacing, and a line
+     * that starts with eight hex digits without being a dump, come back
+     * unchanged - the pass must not reflow the log it is handed.
+     */
+    @Test
+    public void testOrdinaryMessagesAreNotPadded() {
+        String plain = "| WARN   | pool.TunnelPool: Client pool [I2PSnark] -> Pool empty";
+        assertSame(plain, LogsHelper.padHexDump(plain));
+        String near = "deadbeef  not a dump line\n";
+        assertSame(near, LogsHelper.padHexDump(near));
+    }
+
+    /**
+     * An ASCII column holding a pipe - a 0x7c byte renders as "|D.|" - is still
+     * one line, so the pattern has to end at the last pipe, not the first.
+     */
+    @Test
+    public void testDumpLineWithAPipeInItsAsciiColumnIsPadded() {
+        String line = "000002f0  a2 10 9c 5c f1 78 29 db  8b 43 5e a1 11 7c 44 fa  |...\\.x)..C^..|D.|\n";
+        String padded = LogsHelper.padHexDump(line);
+        org.junit.Assert.assertTrue("pipe-bearing dump line not padded", padded.contains("&nbsp;"));
+        assertEquals(line, padded.replace("&nbsp;", " "));
     }
 }
