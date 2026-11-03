@@ -1184,14 +1184,22 @@ public class TransientSessionKeyManager extends SessionKeyManager {
                         SessionTag tag = set.consumeNext();
                         if (tag != null) {
                             if (_log.shouldDebug())
-                                _log.debug("Outbound Tag [" + tag.toString().substring(0,6) + "] processed " + " from " + set);
+                                _log.debug("Outbound Tag " + tag.toString().substring(0, 6) + " consumed from set " + set.getID());
                             return tag;
                         } else if (_log.shouldInfo()) {
-                            _log.info("Removing empty " + set);
+                            // Throttled: one per exhausted tag set on the send path.
+                            // Never append the set - its toString takes three lines.
+                            _log.infoThrottled("tsk-tag-set-empty",
+                                               "Removing an empty tag set -> All tags consumed" +
+                                               " * Set ID: " + set.getID() + " * Tags minted: " + set.getOriginalSize());
                         }
                     } else {
                         if (_log.shouldInfo())
-                            _log.info("Session Tag expired " + set);
+                            // Throttled: one per expired tag set on the send path.
+                            // Never append the set - its toString prints the session key.
+                            _log.infoThrottled("tsk-tag-set-expired",
+                                               "Removing an expired tag set -> Past the tag set lifetime" +
+                                               " * Set ID: " + set.getID() + " * Tags minted: " + set.getOriginalSize());
                     }
                     _tagSets.remove(0);
                 }

@@ -1658,12 +1658,13 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                     RatchetTagSet ts = new RatchetTagSet(_hkdf, oldts.getNextRootKey(), ssk,
                                                          _context.clock().now(), newtsID, _myOBKeyID);
                     _tagSet = ts;
+                    // Never append the tag sets - their toString emits the remote
+                    // public key, root key and session tags, and takes five lines.
                     if (_log.shouldInfo())
-                        _log.info("Ratcheted the outbound tag set -> ID: " + newtsID +
+                        _log.info("Ratcheted the outbound tag set to ID " + newtsID +
+                                  " -> Replacing tag set " + oldtsID +
                                   (_destination != null ? " * From [" + _destination.toBase32().substring(0, 8) + "]" : "") +
-                                  "\n* Old outbound tag set: " + oldts +
-                                  "\n* New outbound tag set: " + ts +
-                                  key);
+                                  "\n* Tags: " + ts.size() + key);
                 } else {
                     // this is about my inbound tag set
                     if (key.equals(_hisOBKey)) {
@@ -1781,13 +1782,13 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                                                          _context.clock().now(), newtsID, _myIBKeyID,
                                                          MAX_RCV_WINDOW_ES, MAX_RCV_WINDOW_ES);
                     _nextIBRootKey = ts.getNextRootKey();
+                    // Never append the tag set - its toString emits the remote
+                    // public key, root key and session tags, and takes five lines.
                     if (_log.shouldInfo())
                         _log.info("Ratcheted the inbound tag set to ID " + newtsID +
-                                  " -> From [" +
-                                  (_destination != null ? _destination.toBase32().substring(0, 8) : "unknown") + ']' +
-                                  "\n* Old inbound tag set: " + oldtsID +
-                                  "\n* New inbound tag set: " + ts +
-                                  key);
+                                  " -> Replacing tag set " + oldtsID +
+                                  (_destination != null ? " * From [" + _destination.toBase32().substring(0, 8) + "]" : "") +
+                                  "\n* Tags: " + ts.size() + key);
                 }
             }
         }

@@ -963,7 +963,8 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
         BlindData obd = _context.netDb().getBlindData(spk);
         if (obd == null) {
             _context.netDb().setBlindData(bd);
-            if (_log.shouldWarn()) {_log.warn("New: " + bd);}
+            _log.info("Stored new blinding data for [" + bd.getBlindedHash().toShortBase32() +
+                      "] -> Kept in the netDB");
         } else {
             // update if changed
             PrivateKey okey = obd.getAuthPrivKey();
@@ -975,12 +976,15 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
                 if (obd.getDestination() != null && bd.getDestination() == null) {
                     try {bd.setDestination(obd.getDestination());}
                     catch (IllegalArgumentException iae) {
-                        if (_log.shouldWarn()) {_log.warn("Dest mismatch: " + obd + bd, iae);}
+                        _log.warn("Blinding destination mismatch for [" +
+                                  obd.getBlindedHash().toShortBase32() +
+                                  "] -> Kept the stored entry: " + iae.getMessage());
                         return;
                     }
                 }
                 _context.netDb().setBlindData(obd);
-                if (_log.shouldWarn()) {_log.warn("Updated: " + bd);}
+                _log.info("Updated blinding data for [" + bd.getBlindedHash().toShortBase32() +
+                          "] -> Replaced in the netDB");
             } else {
                 long oexp = obd.getExpiration();
                 long nexp = bd.getExpiration();
@@ -988,8 +992,13 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
                     obd.setExpiration(nexp);
                     // to force save at shutdown
                     _context.netDb().setBlindData(bd);
-                    if (_log.shouldWarn()) {_log.warn("Updated expiration: " + obd);}
-                } else if (_log.shouldWarn()) {_log.warn("No change: " + obd);}
+                    _log.info("Extended the blinding expiration for [" +
+                              obd.getBlindedHash().toShortBase32() + "] -> By " +
+                              DataHelper.formatDuration(nexp - oexp));
+                } else if (_log.shouldDebug()) {
+                    _log.debug("Blinding data unchanged for [" +
+                               obd.getBlindedHash().toShortBase32() + "]");
+                }
             }
         }
     }

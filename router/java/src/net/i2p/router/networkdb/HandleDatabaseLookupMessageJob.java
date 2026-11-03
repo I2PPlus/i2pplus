@@ -331,16 +331,19 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
                     // encrypt the reply
                     SessionTag tag = _message.getReplyTag();
                     if (tag != null) {
+                        // Never log the reply session key - it is key material, and
+                        // anyone reading the log could decrypt the reply.
                         if (_log.shouldInfo()) {
-                            _log.info("Sending AES reply to [" + toPeer.toShortBase64() + "] \n* Key: " +
-                                      replyKey + " \n* Session Tag: " + tag);
+                            _log.info("Sending AES reply to [" + toPeer.toShortBase64() + "]"
+                                      + "\n* MsgID: " + message.getUniqueId() + " * Session Tag: " + tag);
                         }
                         message = MessageWrapper.wrap(getContext(), message, replyKey, tag);
                     } else {
                         RatchetSessionTag rtag = _message.getRatchetReplyTag();
+                        // Never log the reply session key - it is key material.
                         if (_log.shouldInfo()) {
-                            _log.info("Sending AEAD reply to [" + toPeer.toShortBase64() + "] \n* Key: " +
-                                      replyKey + " \n* Session Tag (ratchet): " + rtag);
+                            _log.info("Sending AEAD reply to [" + toPeer.toShortBase64() + "]"
+                                      + "\n* MsgID: " + message.getUniqueId() + " * Ratchet Tag: " + rtag);
                         }
                         message = MessageWrapper.wrap(getContext(), message, replyKey, rtag);
                     }
