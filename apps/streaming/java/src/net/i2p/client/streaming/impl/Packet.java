@@ -1158,12 +1158,17 @@ class Packet {
             // A SYN with ackThrough 0 has no ACK context yet - "ACK 0" is noise
             buf.append(" ACK ").append(getAckThrough());
         }
-        if (isFlagSet(FLAG_FROM_INCLUDED)) {buf.append(" * FROM: ").append(_optionFrom != null ? _optionFrom.size() : 0).append(" bytes");}
+        if (isFlagSet(FLAG_FROM_INCLUDED) && _optionFrom != null && _optionFrom.size() > 0)
+            buf.append(" * FROM: ").append(_optionFrom.size()).append(" bytes");
         if (_nacks != null && debug) {
             buf.append(" NACK");
             for (int i = 0; i < _nacks.length; i++) {buf.append(' ').append(_nacks[i]);}
         }
-        if (isFlagSet(FLAG_DELAY_REQUESTED)) buf.append(" * DELAY ").append(_optionDelay).append("ms");
+        // A requested delay of zero is no delay at all, so printing it states an
+        // absence as if it were a value; every SYN in a live log carried
+        // "DELAY 0ms" for exactly that reason.
+        if (isFlagSet(FLAG_DELAY_REQUESTED) && _optionDelay > 0)
+            buf.append(" * DELAY ").append(DataHelper.formatDuration(_optionDelay));
         if (isFlagSet(FLAG_MAX_PACKET_SIZE_INCLUDED)) buf.append(" * MAXSIZE ").append(_optionMaxSize).append(" bytes");
         if (isFlagSet(FLAG_PROFILE_INTERACTIVE)) buf.append(" * INTERACTIVE");
         if (isFlagSet(FLAG_SIGNATURE_REQUESTED)) buf.append(" * SIGREQ");

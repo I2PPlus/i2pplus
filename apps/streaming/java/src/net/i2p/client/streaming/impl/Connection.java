@@ -4543,7 +4543,10 @@ class Connection {
      * @since 0.9.72+
      */
     String shortLabel() {
-        return '[' + localTag() + "] " + streamIds() + ' ' + getRemotePeerString();
+        // The stream-ID pair stays out of the label: it is raw base64 sitting
+        // between the two bracketed hashes that already name the connection, and
+        // toString() carries it for the times the IDs themselves matter.
+        return '[' + localTag() + "] " + getRemotePeerString();
     }
 
     /**
@@ -4899,10 +4902,10 @@ class Connection {
                 if (shouldLogStallEdge(true, _retransmitStallLogged)) {
                     _retransmitStallLogged = true;
                     if (_log.shouldWarn()) {
-                        _log.warn(shortLabel() + " -> No forward ACK progress for "
-                                  + (getRetransmitStallAgeMs(_context.clock().now()) / 1000L)
-                                  + "s across " + _retransmitCount
-                                  + " retransmit firings");
+                        _log.warnThrottled("streaming-no-ack-progress",
+                                           shortLabel() + " -> No forward ACK progress for "
+                                           + (getRetransmitStallAgeMs(_context.clock().now()) / 1000L)
+                                           + "s across " + _retransmitCount + " retransmit firings");
                     }
                 }
             } else if (_retransmitStallLogged) {
@@ -5099,17 +5102,14 @@ class Connection {
                 }
                 if (budgetExhausted && !_establishedResumeWarned) {
                     _establishedResumeWarned = true;
-                    if (_log.shouldWarn()) {
-                        // The budget is the connect-phase give-up rule. Once the
-                        // connection is established and has acknowledged data, the
-                        // exhaustion does not bind: the packet is a path hole, not a
-                        // dead path, and the terminal bound is the creation-anchored
-                        // stall backstop. Say that, or the line reads as resending
-                        // because it gave up. formatAsString() emits its own "\n* "
-                        // bullet, so the fact goes on the first line to keep this at two.
-                        _log.warn(shortLabel() + " -> Established, resends continue, resend budget spent"
-                                  + packet.formatAsString(false));
-                    }
+                    // Debug, not warn. The budget is the connect-phase give-up
+                    // rule; once the connection is established and has
+                    // acknowledged data the exhaustion does not bind - the packet
+                    // is a path hole, not a dead path, and the terminal bound is
+                    // the creation-anchored stall backstop below. Nothing for the
+                    // operator to do, and 359 of these fired in four minutes.
+                    if (_log.shouldDebug())
+                        _log.debug(shortLabel() + " -> Established, resends continue after the connect-phase budget");
                 }
                 if (packet.getNumSends() >= 3 &&
                            packet.isFlagSet(Packet.FLAG_CLOSE) &&

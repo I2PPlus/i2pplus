@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.InterruptedIOException;
 import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
@@ -16,6 +17,7 @@ import java.net.ConnectException;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -269,6 +271,16 @@ public class EepGet {
      * @since 0.9.72+
      */
     private static final int MAX_LOG_HEADER_VALUE = 64;
+
+    /**
+     * A failure reason longer than this is cut. The reason is the payload of a
+     * fetch-failed line, and a runaway redirect chain puts its whole URL chain
+     * in the exception message, which would make one log line 300 characters of
+     * URLs nobody followed.
+     *
+     * @since 0.9.72+
+     */
+    private static final int MAX_REASON_LEN = 120;
 
     /**
      * Creates a new EepGet instance with proxy support, defaulting to allow caching.
@@ -1247,9 +1259,8 @@ public class EepGet {
                 // loop follows it up. The final "All retrieval attempts failed"
                 // stays a WARN, so nothing is lost at WARN level.
                 if (_log.shouldInfo())
-                    _log.info("[Eepget] Transfer failed -> " +
-                              failureReason(ioe, inactivityBudget()) +
-                              "\n* Request: " + redactedUrl(_url));
+                    _log.info("[Eepget] Attempt " + _currentAttempt + '/' + _numRetries + " for " +
+                              urlLabel(_url) + " failed -> " + failureReason(ioe, inactivityBudget()));
                 if (ioe instanceof MalformedURLException ||
                     ioe instanceof UnknownHostException ||
                     ioe instanceof ConnectException) // proxy or nonproxied host Connection Refused
@@ -1298,8 +1309,8 @@ public class EepGet {
                 usedStallImmediateRetry = true;
                 delay = 0;
                 if (_log.shouldDebug())
-                    _log.debug("[Eepget] Stalled after " + _alreadyTransferred + " bytes -> Retrying (" +
-                               _currentAttempt + "/" + _numRetries + " attempts)\n* Request: " + redactedUrl(_url));
+                    _log.debug("[Eepget] Stalled after " + _alreadyTransferred + " bytes on " + urlLabel(_url) +
+                               " -> Retrying (attempt " + _currentAttempt + '/' + _numRetries + ')');
             }
             if (_fetchDeadlineMs > 0 && System.currentTimeMillis() + delay >= _fetchDeadlineMs)
                 break;
@@ -1313,10 +1324,14 @@ public class EepGet {
 
         for (int i = 0; i < _listeners.size(); i++)
             _listeners.get(i).transferFailed(_url, _bytesTransferred, _bytesRemaining, _currentAttempt);
+        // One line. The URL is the fact an operator acts on (which host is
+        // unreachable) and the reason is a single scalar, so line 1 holds both.
+        // "Fetch" is this class's own term; the attempt count is a fact, where
+        // "all" only restates that the loop ended.
         if (_log.shouldWarn())
-            _log.warn("[Eepget] All retrieval attempts failed" +
-                      (lastFailure != null ? " -> " + failureReason(lastFailure, inactivityBudget()) : "") +
-                      "\n* Request: " + redactedUrl(_url));
+            _log.warn("[Eepget] Fetch failed for " + urlLabel(_url) + " after " + _currentAttempt +
+                      " attempts -> " +
+                      (lastFailure != null ? failureReason(lastFailure, inactivityBudget()) : "Unknown reason"));
         return false;
     }
 
@@ -1346,12 +1361,29 @@ public class EepGet {
      */
     static String failureReason(Throwable t, long inactivityMs) {
         String msg = t.getMessage();
-        if (msg != null && !msg.isEmpty()) {return msg;}
-        if (t instanceof SocketTimeoutException) {
-            return t.getClass().getSimpleName() + ": no data for " + seconds(inactivityMs);
-        }
+        if (msg != null && !msg.isEmpty()) {return cut(msg);}
+        // Message-less is the normal shape of the JDK's socket exceptions, so
+        // the type carries the meaning - named in words, because a class name
+        // in a log line is a fact the reader has to look up.
+        if (t instanceof SocketTimeoutException) {return "Timed out with no data for " + seconds(inactivityMs);}
+        if (t instanceof InterruptedIOException) {return "Interrupted";}
+        if (t instanceof UnknownHostException) {return "Host not found";}
+        if (t instanceof ConnectException) {return "Connect failed";}
+        if (t instanceof SocketException) {return "Socket error";}
         String name = t.getClass().getSimpleName();
-        return !name.isEmpty() ? name : t.getClass().getName();
+        return cut(!name.isEmpty() ? name : t.getClass().getName());
+    }
+
+    /**
+     * Cut a reason to {@link #MAX_REASON_LEN}. A runaway redirect chain puts its
+     * whole URL chain in the exception message, and one log line should not be
+     * 300 characters of it.
+     *
+     * @param s the text to cut
+     * @return the text, with a marker appended when it was longer than the limit
+     */
+    private static String cut(String s) {
+        return s.length() <= MAX_REASON_LEN ? s : s.substring(0, MAX_REASON_LEN) + "...";
     }
 
     /**
@@ -1382,6 +1414,22 @@ public class EepGet {
         int amp = url.indexOf("&");
         if (amp >= 0 && amp < cut) { cut = amp; }
         return url.substring(0, cut).replace("http://", "") + "...";
+    }
+
+    /**
+     * The request URL as a log-line label: {@link #redactedUrl}, bracketed, and
+     * without the scheme. EepGet is HTTP-only, so the scheme is on every entry
+     * and identifies nothing.
+     *
+     * @param url the request URL, not null
+     * @return the URL in [host/path] form for a log line
+     * @since 0.9.72+
+     */
+    static String urlLabel(String url) {
+        String s = redactedUrl(url);
+        int scheme = s.indexOf("://");
+        if (scheme >= 0) { s = s.substring(scheme + 3); }
+        return '[' + s + ']';
     }
 
     /**

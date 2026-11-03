@@ -1562,9 +1562,12 @@ class ConnectionManager {
     private Connection acceptSyn(Packet synPacket) {
         Destination from = synPacket.getOptionalFrom();
         if (from == null) {
-            _log.warnThrottled("streaming-syn-accept-no-from",
-                               "Received a SYN packet without FROM -> Dropped" +
-                               synPacket.formatAsString(false));
+            // Debug: a SYN with no FROM is junk a peer can send per packet, and
+            // the drop is counted. The payload size is the only packet fact
+            // worth the line, so it rides in line 1, not as a bullet.
+            _log.debugThrottled("streaming-syn-accept-no-from",
+                                "Received a SYN packet (" + synPacket.getPayloadSize() +
+                                " bytes) without FROM -> Dropped it");
             return null;
         }
         // SHA-256 of the peer dest; used by every gate below (flood, refusal,

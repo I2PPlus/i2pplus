@@ -457,9 +457,11 @@ class PacketHandler {
             manager.getConnectionHandler().receiveNewSyn(packet);
         } else if (queueIfNoConn) {
             // route orphan (non-SYN) packets through the handler's queue too
-            log.warnThrottled("streaming-orphan-syn-queue",
-                              "Packet belongs to no connections -> Queued on the SYN queue" +
-                              packet.formatAsString(false));
+            // Info, not warn: an orphan packet is normal while a connection is
+            // being set up, and queueing it is the recovery, not a fault. The
+            // packet bullet restated the flags and a zero delay.
+            log.infoThrottled("streaming-orphan-syn-queue",
+                              "Packet for an unknown connection -> Queued on the SYN queue");
             if (log.shouldDebug()) {
                 StringBuilder buf = new StringBuilder(128);
                 for (Connection c : manager.listConnections()) {
