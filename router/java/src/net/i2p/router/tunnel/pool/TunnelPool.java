@@ -1124,7 +1124,11 @@ public class TunnelPool {
      */
     private TunnelInfo handleBacklogged(ScanResult pass) {
         if (pass.backlogged != null) {
-            if (_log.shouldWarn()) {_log.warn(toString() + " -> All tunnels are backlogged");}
+            // Per pass on the dispatch path, so it fires in bursts (1913 lines in
+            // one minute). Naming the gateway we fell back to is the actionable part.
+            _log.warnThrottled("pool-all-backlogged",
+                               toString() + " -> Using a backlogged tunnel"
+                               + "\n* Gateway: [" + pass.backlogged.getPeer(0).toShortBase64() + ']');
             recordPooledActivity(pass.backlogged);
             return pass.backlogged;
         }
@@ -4653,9 +4657,13 @@ public class TunnelPool {
      */
     private void logPeerBlame(Hash peer, int pct, long uptime, long startupTime, int consecutiveFailures) {
         if (peer != null && uptime > startupTime && _log.shouldWarn() && consecutiveFailures > 5) {
-            _log.warn(toString() + " -> Blaming the gateway for the failed tunnel"
-                      + "\n* Penalty: " + pct + "% * Consecutive failures: " + consecutiveFailures
-                      + " * Peer: [" + peer.toShortBase64() + "]");
+            // One entry per blamed peer, and this runs over every hop of the
+            // tunnel, so a single failed build emits a line per hop. Throttled:
+            // 954 lines in 22 minutes, 785 of them inside one minute.
+            _log.warnThrottled("pool-peer-blame",
+                               toString() + " -> Blaming the gateway for the failed tunnel"
+                               + "\n* Penalty: " + pct + "% * Consecutive failures: " + consecutiveFailures
+                               + " * Peer: [" + peer.toShortBase64() + "]");
         }
     }
 

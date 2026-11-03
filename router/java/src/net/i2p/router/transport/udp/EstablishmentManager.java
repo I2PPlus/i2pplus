@@ -2767,7 +2767,9 @@ public class EstablishmentManager {
             // if port mismatch only, use the source port as charlie doesn't know
             // his port or is behind a symmetric NAT
             if (_log.shouldWarn()) {
-                _log.warn("[SSU] HolePunch source mismatch (wrong port) from " + id + " -> Published port: " + port);
+                _log.warnThrottled("ssu-holepunch-port-mismatch",
+                                   "[SSU] HolePunch source port mismatch from [" + id + "] -> Using the source port"
+                                   + "\n* Published: " + port);
             }
             if (!TransportUtil.isValidPort(fromPort)) {
                 banAndFailState(state, "Bad Introduction data", 6*60*60*1000L);

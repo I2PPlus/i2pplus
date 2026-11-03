@@ -2680,7 +2680,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          * @return the path after the method, empty if malformed
          */
         private static String urlSuffix(String req) {
-            return req != null && !req.isEmpty() && !req.equals("Unknown request") ? "\n* URL: " + req : "";
+            // A same-bullet suffix, not a "\n* " bullet: the result is appended to
+            // labels that are interpolated mid-message, where a bullet would put
+            // the consequence arrow after the URL.
+            return req != null && !req.isEmpty() && !req.equals("Unknown request") ? " * URL: " + req : "";
         }
 
         /**
@@ -2809,7 +2812,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                                             SERVER_READ_TIMEOUT_MEDIUM :   // medium
                                             SERVER_READ_TIMEOUT_POST);     // long
                     _keepalive = false;
-                    sender = new Sender(serverout, browserin, "from Client -> Server", _tunnelId, _log);
+                    sender = new Sender(serverout, browserin, "from Client to Server", _tunnelId, _log);
                     // The request line is only known now, so label the request
                     // direction after the fact; the response direction already
                     // carries the URL in its name.
@@ -2848,13 +2851,13 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     // Push headers before the body handoff so TTFB does not
                     // wait on MessageOutputStream's passive flush interval.
                     compressedout.flush();
-                      s = new Sender(compressedout, serverin, "Server -> Client (Gzip) " +
+                      s = new Sender(compressedout, serverin, "Server to Client (Gzip) " +
                                      urlSuffix(req), _tunnelId, _log);
                     browserout = compressedout;
                 } else {
                     browserout.write(DataHelper.getUTF8(modifiedHeaders));
                     browserout.flush();
-                      s = new Sender(browserout, serverin, "Server -> Client " +
+                      s = new Sender(browserout, serverin, "Server to Client " +
                                      urlSuffix(req), _tunnelId, _log);
                 }
                 // Keep the local backend's read timeout in lockstep with the
@@ -2884,7 +2887,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                             fServerOut, fBrowserOut, fCompressedOut,
                             fBrowserIn, fServerIn, fReq);
                     bodySubmitted = handOffBody(_ioPool != null ? _ioPool.get() : null,
-                            body, "Server -> Client" + urlSuffix(fReq), finish);
+                            body, "Server to Client" + urlSuffix(fReq), finish);
                     if (bodySubmitted) {
                         // Non-keepalive is already decided; publish waiter before
                         // the pool worker's finishTransfer so the caller does
@@ -2900,7 +2903,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     // Inline fallback: handOffBody already ran body + finish
                     return;
                 }
-                runOnIO(s, "Server -> Client" + urlSuffix(req));
+                runOnIO(s, "Server to Client" + urlSuffix(req));
             } catch (SSLException she) {
                 if (_log.shouldError()) {_log.error("[HTTPServer] SSL error", she);}
                 try {
@@ -3432,9 +3435,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         _stallEventCount.incrementAndGet();
                         if (_log != null) {
                             _log.warnThrottled("httpserver-sender-stall",
-                                               "[HTTPServer] No data from " + _name +
-                                               " for " + (stallNs / 1_000_000L) + "ms -> Stopped the transfer" +
-                                               "\n* Transferred: " + _bytesTransferred + " bytes");
+                                               "[HTTPServer] No data from the sender -> Stopped the transfer" +
+                                               "\n* Direction: " + _name +
+                                               " * After: " + (stallNs / 1_000_000L) +
+                                               "ms * Transferred: " + _bytesTransferred + " bytes");
                         }
                         // Record the truncation as a failure: without it finishTransfer
                         // sees a clean completion, keeps the connection alive, and the
@@ -3449,11 +3453,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 String target = describeTarget(_targetLabel, _requestLabel);
                 if (_log != null && _log.shouldInfo() && elapsed > 5_000_000_000L) {
                     double secs = elapsed / 1_000_000_000.0;
-                    _log.info("[HTTPServer] Done sending " + _name + target + ": " +
-                              _bytesTransferred + " bytes in " + String.format("%.1f", secs) + "s " +
-                              formatTransferRate(_bytesTransferred, secs));
+                    // _name carries the URL suffix, so it goes last
+                    _log.info("[HTTPServer] Done sending " + _bytesTransferred + " bytes in " +
+                              String.format("%.1f", secs) + "s " + formatTransferRate(_bytesTransferred, secs) +
+                              " * " + _name + target);
                 } else if (_log != null && _log.shouldDebug()) {
-                    _log.debug("[HTTPServer] Done sending " + _name + target);
+                    _log.debug("[HTTPServer] Done sending -> " + _bytesTransferred + " bytes * " + _name + target);
                 }
             } catch (IOException ioe) {
                 // The outer null test is gone because DataHelper.messageOf never
@@ -3466,12 +3471,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     sendErr.indexOf("Socket closed") >= 0 ||
                     sendErr.indexOf("Interrupted") >= 0) {
                     // client closed connection early, or thread interrupted for cancellation
-                    if (_log != null && _log.shouldDebug()) {_log.debug("[HTTPServer] Error sending " + _name + " -> " + sendErr);}
+                    if (_log != null && _log.shouldDebug()) {_log.debug("[HTTPServer] Send error -> " + sendErr + " * " + _name);}
                 } else {
                     if (_log != null) {
                         _log.warnThrottled("httpserver-send-failed",
-                                           "[HTTPServer] Failed to send " + _name + " -> Aborting the transfer" +
-                                           "\n* Reason: " + sendErr);
+                                           "[HTTPServer] Send failed -> Aborting the transfer" +
+                                           "\n* Reason: " + sendErr + " * Direction: " + _name);
                     }
                 }
                 synchronized(this) {_failure = ioe;}

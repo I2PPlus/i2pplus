@@ -1311,8 +1311,16 @@ class PeerTestManager {
                             rcode = SSU2Util.TEST_REJECT_CHARLIE_SIGFAIL;
                         }
                     } else {
+                        // fromPeer.toString() is a multi-line peer-state dump, which
+                        // made this a 6-line entry; name the two identities instead.
+                        // Reachable from any peer's test message #2, so throttle it.
                         if (_log.shouldWarn())
-                            _log.warn("Alice's RouterInfo [" + (h != null ? h.toShortBase64() : "null") + "] not found for peer test " + fromPeer);
+                            _log.warnThrottled("peertest-no-alice-ri",
+                                               "Alice's RouterInfo [" + (h != null ? h.toShortBase64() : "null") +
+                                               "] not found for peer test -> Rejecting it"
+                                               + "\n* Charlie: [" +
+                                               (fromPeer != null ? fromPeer.getRemotePeer().toShortBase64() : "null") +
+                                               "] * From: [" + from + ']');
                         rcode = SSU2Util.TEST_REJECT_CHARLIE_UNKNOWN_ALICE;
                     }
                 }

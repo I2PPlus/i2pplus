@@ -1688,9 +1688,20 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                             return;
                         }
                         if (!hasKey) {
-                            if (_log.shouldWarn())
-                                _log.warn("Inbound next-session-key ACK"
-                                          + " -> Skipping it, no key data and none stored" + key);
+                            // Same pacing as the key-ID collision below: the peer
+                            // retransmits an unadopted key on every message, so an
+                            // unthrottled warning floods the log at message rate.
+                            if (_log.shouldWarn()) {
+                                long now = _context.clock().now();
+                                if (shouldWarnKeyMismatch(now, _lastKeyMismatchWarn)) {
+                                    _lastKeyMismatchWarn = now;
+                                    _log.warn("Inbound next-session-key ACK"
+                                              + " -> Skipping it, no key data and none stored" + key);
+                                } else if (_log.shouldDebug()) {
+                                    _log.debug("Inbound next-session-key ACK"
+                                              + " -> Skipping it, no key data and none stored" + key);
+                                }
+                            }
                             return;
                         }
                         // save the new key with data
@@ -1729,9 +1740,20 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                     }
                     if (_nextIBRootKey == null) {
                         // first IB ES tagset never used?
-                        if (_log.shouldWarn())
-                            _log.warn("Inbound next-session-key ACK"
-                                      + " -> Skipping it, we have no next root key" + key);
+                        // Paced with the key-ID collision: the peer retransmits an
+                        // unadopted key on every message, and this fired 4106 times
+                        // in two minutes for one peer.
+                        if (_log.shouldWarn()) {
+                            long now = _context.clock().now();
+                            if (shouldWarnKeyMismatch(now, _lastKeyMismatchWarn)) {
+                                _lastKeyMismatchWarn = now;
+                                _log.warn("Inbound next-session-key ACK"
+                                          + " -> Skipping it, we have no next root key" + key);
+                            } else if (_log.shouldDebug()) {
+                                _log.debug("Inbound next-session-key ACK"
+                                          + " -> Skipping it, we have no next root key" + key);
+                            }
+                        }
                         return;
                     }
                     // The previous inbound tagset is not looked up here. The

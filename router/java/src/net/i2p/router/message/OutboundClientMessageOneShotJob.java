@@ -720,8 +720,9 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 break;
             }
             if (_log.shouldWarn()) {
-                _log.warn("Skipping UNREACHABLE gateway [" +
-                          l.getGateway().toShortBase64() + "] for " + _toString);
+                _log.warnThrottled("clientjob-skip-unreachable-gateway",
+                                   "Skipping an unreachable gateway [" +
+                                   l.getGateway().toShortBase64() + "] for " + _toString);
             }
         }
         if (_lease == null) {
