@@ -15,6 +15,7 @@ import javax.servlet.UnavailableException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import net.i2p.data.DataHelper;
+import net.i2p.util.Log;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ErrorPageErrorHandler;
@@ -36,6 +37,9 @@ public class I2PDefaultServlet extends DefaultServlet {
      * context handler and resource base, so a bare instance is the starting state.
      */
     public I2PDefaultServlet() {}
+
+    /** Our own logger; the Jetty superclass exposes none we can reach. */
+    private static final Log _log = new Log(I2PDefaultServlet.class);
 
     /**
      * The context handler, a shadow of a private field in the superclass.
@@ -393,13 +397,20 @@ public class I2PDefaultServlet extends DefaultServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // A query string with a bad percent-encoding makes Jetty's welcome-file
-        // forward throw BadMessageException, and Jetty's Server logger prints the
-        // whole 25-frame stack for it - 190 of those, 12% of a 22-minute log.
-        // Answer the request here instead. setStatus, not sendError: sendError
-        // runs the same error-page forward that throws.
-        String query = request.getQueryString();
-        if (query != null && !isPercentEncoded(query)) {
+        // Jetty's welcome-file forward merges the query parameters, and a query it
+        // cannot decode throws BadMessageException from inside that forward, which
+        // Jetty's Server logger then prints with a 25-frame stack - 3,119 stack
+        // lines, 45% of a 4-minute log. Parse the query here, where the failure is
+        // ours to answer. Jetty memoizes the parse, so this does not duplicate the
+        // work the forward would have done, and the rule stays Jetty's own: a
+        // hand-rolled check of %xx escapes misses the raw spaces, angle brackets,
+        // braces and non-ASCII bytes that Jetty also rejects.
+        try {
+            request.getParameterMap();
+        } catch (RuntimeException re) {
+            // setStatus, not sendError: sendError runs the same forward that throws
+            if (_log.shouldDebug())
+                _log.debug("Rejecting a request with an undecodable query -> " + DataHelper.messageOf(re));
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.setContentType("text/plain");
             response.setCharacterEncoding("UTF-8");
