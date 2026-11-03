@@ -4535,10 +4535,12 @@ if (_alive)
                 // to prevent thrashing
                 if (requiresConfirmation(old, status, isIPv6)) {
                     if (status != _reachabilityStatusPending) {
-                        if (_log.shouldWarn())
-                            _log.warn("Reachability status changed from " + old + " to " + status +
-                                      " -> Awaiting a second reading" +
-                                      "\n* Caused by update: " + newStatus);
+                        // Info, not warn: a reachability change is a network
+                        // event, not a fault. The "Caused by update" bullet
+                        // restated line 1 in a different notation, so it is gone.
+                        if (_log.shouldInfo())
+                            _log.info("Reachability status changed from " + old + " to " + status +
+                                      " -> Awaiting a second reading");
                         _reachabilityStatusPending = status;
                         _testEvent.forceRunSoon(isIPv6);
                         return;
@@ -4552,10 +4554,9 @@ if (_alive)
             _reachabilityStatusPending = status;
         }
         if (status != old) {
-            if (_log.shouldWarn())
-                _log.warn("Reachability status changed from " + old + " to " + status +
-                          " -> Rebuilding the address" +
-                          "\n* Caused by update: " + newStatus);
+            if (_log.shouldInfo())
+                _log.info("Reachability status changed from " + old + " to " + status +
+                          " -> Rebuilding the address");
             if (old != Status.UNKNOWN && _context.router().getUptime() > 5*60*1000) {
                 _context.router().eventLog().addEvent(EventLog.REACHABILITY,
                 _t(old.toStatusString()) + " ➜ " +  _t(status.toStatusString()));

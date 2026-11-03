@@ -3957,8 +3957,9 @@ public class TunnelPool {
                 Lease lease = buildLeaseFromTunnel(fallback);
                 leases.add(lease);
                 if (_log.shouldWarn()) {
-                    _log.warn(toString() + "\n* Emergency fallback lease from degraded tunnel (" +
-                              fallback.getConsecutiveFailures() + " failures)");
+                    _log.warnThrottled("pool-degraded-lease",
+                                       toString() + " -> Publishing a degraded tunnel as the emergency fallback, " +
+                                       fallback.getConsecutiveFailures() + " failures");
                 }
             }
         }
@@ -6979,10 +6980,14 @@ public class TunnelPool {
             int fastPeers = ctx.profileOrganizer().countFastPeers();
             _context.statManager().addRateData("tunnel.poolStarvationDeclined", fastPeers);
             if (_log.shouldWarn()) {
-                _log.warn(toString() + " -> Starvation: pool empty but peer supply is ample" +
-                          "\n* Fast peers: " + fastPeers + " * Threshold: " +
-                          TunnelPeerSelector.scarceFastPeers(_context) + " peers" +
-                          " -> Not widening the peer activity window");
+                // One line, throttled. The threshold is a configured constant,
+                // the same on every entry, so it is not a fact about this event;
+                // the fast-peer count is. Throttle is a backstop - the suppressor
+                // collapses only past 1000 events a minute, so this family
+                // (573 in half an hour) passes through today.
+                _log.warnThrottled("pool-starvation-declined",
+                                   toString() + " -> Pool empty with " + fastPeers +
+                                   " fast peers available, not widening the peer activity window");
             }
             return;
         }
@@ -7039,8 +7044,11 @@ public class TunnelPool {
         if (_log.shouldWarn()) {
             String boost = _consecutiveEmergencies > 0 ?
                 " (dynamic target " + effectiveTarget + ", collapse #" + _consecutiveEmergencies + ")" : "";
-            _log.warn(toString() + " -> EMERGENCY: Zero usable tunnels\n* " +
-                      "Forcing " + needed + " replacement builds" + boost);
+            // Two lines kept: the second carries three values that belong
+            // together. No shout-case - the arrow carries the urgency.
+            _log.warnThrottled("pool-emergency",
+                               toString() + " -> Zero usable tunnels\n* Forcing " + needed +
+                               " replacement builds" + boost);
         }
         buildReplacementTunnels(needed, true);
     }

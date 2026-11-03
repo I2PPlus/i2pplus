@@ -1503,8 +1503,10 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
                 sentTo.replyTimeout();
             }
             setState(WaitState.TIMEOUT);
-            if (_log.shouldWarn()) {
-                _log.warn("Timeout waiting for reply from " + sentTo);
+            // Debug: a tracker query timing out is normal network behaviour, and
+            // the state above has already recorded it.
+            if (_log.shouldDebug()) {
+                _log.debug("Timeout waiting for reply from " + sentTo);
             }
         }
 

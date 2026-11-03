@@ -2080,8 +2080,10 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                 onTimeout.run();
             }
             timeout(sentTo);
-            if (_log.shouldWarn()) {
-                _log.warn("Timeout waiting for reply from " + sentTo);
+            // Debug: a DHT query timing out is normal network behaviour, and
+            // timeout() above has already recorded it.
+            if (_log.shouldDebug()) {
+                _log.debug("Timeout waiting for reply from " + sentTo);
             }
             synchronized (this) {
                 this.notifyAll();

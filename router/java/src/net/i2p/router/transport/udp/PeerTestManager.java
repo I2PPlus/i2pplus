@@ -1193,8 +1193,10 @@ class PeerTestManager {
                 Hash alice = fromPeer.getRemotePeer();
                 RouterInfo aliceRI = _context.netDb().lookupRouterInfoLocally(alice);
                 if (aliceRI == null) {
-                    if (_log.shouldWarn())
-                        _log.warn("No RouterInfo for Alice");
+                    // Debug: the RouterInfo may not be in our NetDb yet, and the
+                    // reject below is the normal answer.
+                    if (_log.shouldDebug())
+                        _log.debug("No RouterInfo for Alice [" + alice.toShortBase64() + "] -> Rejecting the test");
                     // send reject
                     sendRejectToAlice(SSU2Util.TEST_REJECT_BOB_UNSPEC, data, fromPeer);
                     fromPeer.setLastSendTime(now);
@@ -1418,12 +1420,12 @@ class PeerTestManager {
                     if (!SSU2Util.validateSig(_context, SSU2Util.PEER_TEST_PROLOGUE,
                                               _context.routerHash(), alice.getRemotePeer(), data, spk) &&
                         _log.shouldWarn())
-                        _log.warn("Signature failed on peer test message #3 -> Rejecting it * Charlie: [" +
+                        _log.warn("Signature failed on peer test message #3 -> Rejecting it, Charlie [" +
                                   charlieRI.getHash().toShortBase64() + ']');
                 } else  {
                     // oh well, maybe alice has it
-                    if (status == SSU2Util.TEST_ACCEPT && _log.shouldWarn())
-                        _log.warn("No RouterInfo for Charlie");
+                    if (status == SSU2Util.TEST_ACCEPT && _log.shouldDebug())
+                        _log.debug("No RouterInfo for Charlie [" + charlie.toShortBase64() + "] -> Alice may have it");
                 }
                 // forward to alice, don't bother to validate signed data.
                 // Tracked limitation: the RouterInfo is bundled in the same

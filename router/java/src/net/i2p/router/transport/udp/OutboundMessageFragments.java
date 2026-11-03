@@ -491,7 +491,12 @@ class OutboundMessageFragments {
                     _context.statManager().addRateData("udp.sendFragmentsPerPacket", sendNext.size());
                 } else {
                     if (_log.shouldWarn()) {
-                        _log.warn("Failed to build UDP packet for " + DataHelper.toString(sendNext) + " to " + peer.toShortString());
+                        // DataHelper.toString() of the fragment list renders one
+                        // line per fragment and leaves a bracket open; the counts
+                        // are the fact, and the volley is retried below.
+                        _log.warn("Failed to build a UDP packet to " + peer.toShortString() +
+                                  " -> Dropping the volley, " + sendNext.size() + " fragments, " +
+                                  curTotalDataSize + " bytes");
                     }
                     // Don't retry in this volley — peer session is dead/invalid.
                     // Fragments remain in OutboundMessageState and will be

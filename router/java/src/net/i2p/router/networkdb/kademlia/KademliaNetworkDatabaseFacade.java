@@ -2949,7 +2949,11 @@ return false;
         if (routerInfo.getPublished() > now + 2*Router.CLOCK_FUDGE_FACTOR && !isUs) {
             long age = routerInfo.getPublished() - now;
             if (!_context.banlist().isBanlisted(h) && _log.shouldWarn()) {
-                _log.warn("Banning [" + routerId + "] for 4h -> RouterInfo from the future!\n* Published: " + new Date(routerInfo.getPublished()));
+                // The log line's own timestamp is the reference, so an absolute
+                // Published date makes the reader subtract; the offset is the fact
+                // that triggered the ban. Same form as the return below.
+                _log.warn("Banning [" + routerId + "] for 4h -> RouterInfo published " +
+                          DataHelper.formatDuration(age) + " in the future");
                 String ipPort = TransportImpl.getRouterIPPort(routerInfo);
                 _banLogger.logBan(h, ipPort, "RouterInfo from the future (" + new Date(routerInfo.getPublished()) + ")", 4*60*60*1000L, routerInfo);
                 _context.banlist().banlistRouter(h, "RouterInfo from the future (" + new Date(routerInfo.getPublished()) + ")", null, null, 4L*60*60*1000);

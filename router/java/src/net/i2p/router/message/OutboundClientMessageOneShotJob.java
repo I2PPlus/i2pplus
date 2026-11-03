@@ -817,9 +817,13 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
 
         _outTunnel = selectOutboundTunnel(_to);
         if (_outTunnel == null) {
-            // A real health condition, but one line per client message is 45k lines
-            // per outage - the pool transition is logged elsewhere, so throttle.
-            _log.warnThrottled("no-out-tunnels", "No outbound tunnels to send payload through; this might take a while...");
+            // A real health condition, but one line per client message is 45k
+            // lines per outage - the pool transition is logged elsewhere, so
+            // throttle. Not "this might take a while": dieFatal() below fails the
+            // message, it does not queue it. The delay is trended by the rate
+            // stat added next.
+            _log.warnThrottled("no-out-tunnels",
+                               "No outbound tunnels to send payload through -> Failing the message");
             getContext().statManager().addRateData("client.dispatchNoTunnels", now - _start);
             dieFatal(MessageStatusMessage.STATUS_SEND_FAILURE_NO_TUNNELS);
             return;
