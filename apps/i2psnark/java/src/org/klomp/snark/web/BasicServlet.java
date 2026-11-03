@@ -331,10 +331,15 @@ class BasicServlet extends HttpServlet {
                 }
             }
         } catch (IllegalArgumentException iae) {
+            // A malformed date header is the client's, and the 400 is the whole
+            // answer. Sending the 400 and then rethrowing put the request on
+            // Jetty's error path twice: sendError() forwards to the error page,
+            // and the rethrow propagates the IAE, which Jetty's Server logger
+            // prints with a 25-frame stack - 190 of those, 12% of a 22-minute log.
             if (!response.isCommitted()) {
                 response.sendError(400);
             }
-            throw iae;
+            return false;
         }
         return true;
     }

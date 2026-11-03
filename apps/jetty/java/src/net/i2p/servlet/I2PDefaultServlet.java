@@ -360,10 +360,52 @@ public class I2PDefaultServlet extends DefaultServlet {
     private static String deTag(String raw) {return StringUtil.sanitizeXmlString(raw);}
 
     /**
+     * Whether every percent sign in a raw query string is followed by two hex
+     * digits, which is the encoding Jetty's parameter parser requires. It throws
+     * BadMessageException on anything else, from inside the welcome-file forward,
+     * and logs the stack. Package-visible so the rule is testable without a request.
+     *
+     * @param raw the raw, undecoded query string
+     * @return true if Jetty can decode it
+     * @since 0.9.72+
+     */
+    static boolean isPercentEncoded(String raw) {
+        for (int i = 0; i < raw.length(); i++) {
+            if (raw.charAt(i) != '%')
+                continue;
+            if (i + 2 >= raw.length() || !isHex(raw.charAt(i + 1)) || !isHex(raw.charAt(i + 2)))
+                return false;
+            i += 2;
+        }
+        return true;
+    }
+
+    /**
+     * @param c the character to test
+     * @return true for 0-9, a-f and A-F
+     */
+    private static boolean isHex(char c) {
+        return c >= '0' && c <= '9' || c >= 'a' && c <= 'f' || c >= 'A' && c <= 'F';
+    }
+
+    /**
      * Handle GET request, set Last-Modified header, delegate to super.
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // A query string with a bad percent-encoding makes Jetty's welcome-file
+        // forward throw BadMessageException, and Jetty's Server logger prints the
+        // whole 25-frame stack for it - 190 of those, 12% of a 22-minute log.
+        // Answer the request here instead. setStatus, not sendError: sendError
+        // runs the same error-page forward that throws.
+        String query = request.getQueryString();
+        if (query != null && !isPercentEncoded(query)) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.setContentType("text/plain");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write("Bad query encoding");
+            return;
+        }
         String resourcePath = request.getRequestURI().substring(request.getContextPath().length()); // Get the resource path from the request URI
         Resource resource = getResource(resourcePath); // Call the super implementation to handle the request and obtain the resource
         if(resource == null) {
