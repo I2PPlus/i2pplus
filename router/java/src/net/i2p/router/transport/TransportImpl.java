@@ -522,40 +522,37 @@ public abstract class TransportImpl implements Transport {
             if (prev > 0) allowRequeue = false;
         }
 
-        if (msToSend > 1500 && debug) {
-            _log.debug("[" + style + "] -> Slow send: " + (sendSuccessful ? "Succeeded" : "Failed")
+        long lifetime = msg.getLifetime();
+        long queueTime = msg.getTransportQueued() > 0 ? now - msg.getTransportQueued() : lifetime;
+        // The >1500ms block above and the >3000ms block below both fired for the
+        // same send, printing the size, type, MsgID and peer twice. The lifetime
+        // block wins, so the first one is skipped when it is about to run.
+        if (msToSend > 1500 && debug && lifetime <= 3000) {
+            _log.debug("[" + style + "] Slow send -> " + (sendSuccessful ? "Succeeded" : "Failed")
                        + "\n* " + msg.getMessageSize() + " byte " + msg.getMessageType()
                        + " [MsgID " + msg.getMessageId() + "] to [" + peerHash
                        + "] took " + DataHelper.formatDuration(msToSend));
         }
 
-        long lifetime = msg.getLifetime();
-        long queueTime = msg.getTransportQueued() > 0 ? now - msg.getTransportQueued() : lifetime;
         if (lifetime > 3000) {
             if (_log.shouldLog(Log.DEBUG)) {
-                _log.log(Log.DEBUG,
-                         String.format("[%s] Slow send -> %s" +
-                                       "\n* Lifetime: %s * Time taken: %s" +
-                                       "\n* %d byte %s [MsgID %d] from [%s] to [%s]" +
-                                       "\n* %s",
-                                       style, (sendSuccessful ? "Succeeded" : "Failed"),
-                                       DataHelper.formatDuration(lifetime), DataHelper.formatDuration(msToSend),
-                                       msg.getMessageSize(), msg.getMessageType(), msg.getMessageId(),
-                                       routerHash, peerHash, msg));
+                // String.format is ~10x a concatenation, and msg.toString() is a
+                // multi-line dump repeating the size, type and MsgID printed here
+                _log.debug("[" + style + "] Slow send -> " + (sendSuccessful ? "Succeeded" : "Failed")
+                           + "\n* Lifetime: " + DataHelper.formatDuration(lifetime)
+                           + " * Time taken: " + DataHelper.formatDuration(msToSend)
+                           + " * Queued: " + DataHelper.formatDuration(queueTime)
+                           + " * " + msg.getMessageSize() + " byte " + msg.getMessageType()
+                           + " [MsgID " + msg.getMessageId() + "] from [" + routerHash + "] to [" + peerHash + "]");
             }
         } else if (debug) {
-            _log.debug(String.format("[%s] Send completed -> %s" +
-                                     "\n* %d byte %s [MsgID %d] from [%s] to [%s]" +
-                                     "\n* %s",
-                      style, (sendSuccessful ? "Succeeded" : "Failed"), msg.getMessageSize(), msg.getMessageType(),
-                      msg.getMessageId(), routerHash, peerHash, msg));
+            _log.debug("[" + style + "] Send completed -> " + (sendSuccessful ? "Succeeded" : "Failed")
+                       + "\n* " + msg.getMessageSize() + " byte " + msg.getMessageType()
+                       + " [MsgID " + msg.getMessageId() + "] from [" + routerHash + "] to [" + peerHash + "]");
         }
 
         if (sendSuccessful) {
             _context.statManager().addRateData("transport.messagesDelivered", 1);
-            if (debug) {
-                _log.debug(String.format("[%s] Sent %s successfully to [%s]", style, msg.getMessageType(), peerHash));
-            }
             addJobIfPresent(msg.getOnSendJob());
             msg.discardData();
         } else {
@@ -572,9 +569,13 @@ public abstract class TransportImpl implements Transport {
                 _context.outNetMessagePool().add(msg);
             } else {
                 if (debug) {
-                    _log.debug(String.format("[%s] Failed to send the %s (out of time)" +
-                                             "\n* Expired: %s",
-                              style, msg.getMessageType(), new Date(msg.getExpiration())));
+                    // Expiration 0 means "never expires", where an absolute date
+                    // (the old new Date(...)) printed 1970 and an age would be absurd
+                    long exp = msg.getExpiration();
+                    _log.debug("[" + style + "] Failed to send the " + msg.getMessageType()
+                               + " [MsgID " + msg.getMessageId() + "] to [" + peerHash + "] -> Out of time"
+                               + "\n* " + (exp > 0 ? "Expired " + DataHelper.formatDuration(now - exp) + " ago"
+                                                   : "No expiration, requeue not allowed"));
                 }
                 addJobIfPresent(msg.getOnFailedSendJob());
                 unregisterAndDiscard(msg);
@@ -585,19 +586,18 @@ public abstract class TransportImpl implements Transport {
         long sendTime = now - msg.getSendBegin();
         long allTime = now - msg.getCreated();
         if (allTime > 5000 && debug) {
-            _log.debug(String.format("Send took %s from preparation to completion -> Send OK: %b" +
-                                     "\n* Sent: %s after failing on %s%s",
-                      DataHelper.formatDuration(allTime), sendSuccessful, new Date(sendTime),
-                      msg.getFailedTransports(),
-                      (sendSuccessful ? " and succeeding on " + style : "")));
+            // new Date(sendTime) was a duration formatted as a calendar date
+            _log.debug("[" + style + "] Slow send completed -> " + (sendSuccessful ? "Succeeded" : "Failed")
+                       + "\n* From preparation to completion: " + DataHelper.formatDuration(allTime)
+                       + " * Send: " + DataHelper.formatDuration(sendTime)
+                       + " * Failed transports: " + msg.getFailedTransports()
+                       + (sendSuccessful ? " * Succeeded on: " + style : ""));
         }
         if (allTime > 60000 && sendSuccessful && _log.shouldWarn()) {
-            _log.warn(String.format("Severe latency, sending took more than a minute -> Elapsed: %s" +
-                                    "\n* Type: %s * MsgID: %d * Send began: %s" +
-                                    "\n* Message created: %s" +
-                                    "\n* %s",
-                    DataHelper.formatDuration(allTime), msg.getMessageType(), msg.getMessageId(),
-                    new Date(msg.getSendBegin()), new Date(msg.getCreated()), msg));
+            _log.warn("Severe send latency -> " + DataHelper.formatDuration(allTime) + " from creation to completion"
+                      + "\n* Type: " + msg.getMessageType() + " * MsgID: " + msg.getMessageId()
+                      + " * Send: " + DataHelper.formatDuration(sendTime)
+                      + " * Queued: " + DataHelper.formatDuration(queueTime));
             _context.messageHistory().messageProcessingError(msg.getMessageId(), msg.getMessageType(),
                                                              "Took too long to send [" + allTime + "ms]");
         }
@@ -724,7 +724,7 @@ public abstract class TransportImpl implements Transport {
 
         if (_listener != null) {_listener.messageReceived(inMsg, remoteIdent, remoteIdentHash);}
         else if (_log.shouldError()) {
-            _log.error("Null listener -> Message dropped * This: " + toString());
+            _log.error("[" + getStyle() + "] Null listener -> Message dropped");
         }
     }
 
@@ -879,7 +879,7 @@ public abstract class TransportImpl implements Transport {
      * @since 0.9.20
      */
     protected void removeAddress(RouterAddress address) {
-        if (_log.shouldWarn()) {_log.warn("Removing exisiting address\n* " + address);}
+        if (_log.shouldWarn()) {_log.warn("[" + getStyle() + "] Removing an address -> " + address);}
         boolean changed;
         int sz;
         synchronized(_currentAddresses) {

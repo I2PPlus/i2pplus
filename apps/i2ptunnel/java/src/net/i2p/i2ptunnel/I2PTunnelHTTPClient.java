@@ -370,6 +370,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      */
     public I2PTunnelHTTPClient(int localPort, Logging l, I2PSocketManager sockMgr, I2PTunnel tunnel, EventDispatcher notifyThis, long clientId) {
         super(localPort, l, sockMgr, tunnel, notifyThis, clientId);
+        updateCachedOptions();
         _pageNonce = Long.toString(_context.random().nextLong());
         setName("HTTPProxy");
         notifyEvent("openHTTPClientResult", "ok");
@@ -395,6 +396,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                String wwwProxy, EventDispatcher notifyThis,
                                I2PTunnel tunnel) throws IllegalArgumentException {
         super(localPort, ownDest, l, notifyThis, "HTTP Proxy on " + tunnel.listenHost + ':' + localPort, tunnel);
+        updateCachedOptions();
         _pageNonce = Long.toString(_context.random().nextLong());
 
         if (wwwProxy != null) {
@@ -553,6 +555,94 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     public static final String PROP_SSL_SET = "sslManuallySet";
 
     /**
+     * Per-tunnel options resolved into fields so a proxied request does not
+     * take the synchronized client-options Properties ~20 times. Refreshed in
+     * {@link #updateCachedOptions()}, called from the constructors and from
+     * {@link #optionsUpdated(I2PTunnel)} on every tunnel option change.
+     * Parse semantics and defaults are those of the original lookups.
+     *
+     * @since 0.9.72+
+     */
+    private volatile boolean _sendReferer;
+    /** Cached i2ptunnel.httpclient.sendUserAgent. @since 0.9.72+ */
+    private volatile boolean _sendUserAgent;
+    /** Cached i2ptunnel.httpclient.sendAccept. @since 0.9.72+ */
+    private volatile boolean _sendAccept;
+    /** Cached i2ptunnel.httpclient.sendVia. @since 0.9.72+ */
+    private volatile boolean _sendVia;
+    /** Cached i2ptunnel.httpclient.disableAddressHelper. @since 0.9.72+ */
+    private volatile boolean _disableAddressHelper;
+    /** Cached i2ptunnel.gzip, true when unset. @since 0.9.72+ */
+    private volatile boolean _gzip = DEFAULT_GZIP;
+    /** Cached i2ptunnel.useLocalOutproxy, true when unset. @since 0.9.72+ */
+    private volatile boolean _useLocalOutproxy = true;
+    /** Cached i2ptunnel.httpclient.allowInternalSSL, true when unset. @since 0.9.72+ */
+    private volatile boolean _allowInternalSSL = true;
+    /** Cached presence of sslManuallySet. @since 0.9.72+ */
+    private volatile boolean _sslManuallySet;
+    /** Cached outproxyAuth. @since 0.9.72+ */
+    private volatile boolean _outproxyAuth;
+    /** Cached outproxyUsername, the default outproxy user. @since 0.9.72+ */
+    private volatile String _outproxyUser;
+    /** Cached outproxyPassword, the default outproxy password. @since 0.9.72+ */
+    private volatile String _outproxyPw;
+    /** Cached httpclient.userAgent.outproxy, null for the built-in string. @since 0.9.72+ */
+    private volatile String _uaClearnet;
+    /** Cached httpclient.userAgent.i2p, null for the built-in string. @since 0.9.72+ */
+    private volatile String _uaI2P;
+    /** Cached i2ptunnel.httpclient.jumpServers, null for the defaults. @since 0.9.72+ */
+    private volatile String _jumpServers;
+    /** Cached keepalive.browser, true when unset. @since 0.9.72+ */
+    private volatile boolean _keepAliveBrowser = DEFAULT_KEEPALIVE_BROWSER;
+    /** Cached keepalive.i2p, true when unset. @since 0.9.72+ */
+    private volatile boolean _keepAliveI2P = DEFAULT_KEEPALIVE_I2P;
+    /** Cached i2p.emptyResponseRetries. @since 0.9.72+ */
+    private volatile int _emptyRetries = DEFAULT_EMPTY_RETRIES;
+
+    /**
+     * Resolve the per-tunnel options read on the request path into fields.
+     * Called from the constructors and from {@link #optionsUpdated(I2PTunnel)},
+     * never from the request path.
+     *
+     * @since 0.9.72+
+     */
+    private void updateCachedOptions() {
+        Properties opts = getTunnel().getClientOptions();
+        _sendReferer = Boolean.parseBoolean(opts.getProperty(PROP_REFERER));
+        _sendUserAgent = Boolean.parseBoolean(opts.getProperty(PROP_USER_AGENT));
+        _sendAccept = Boolean.parseBoolean(opts.getProperty(PROP_ACCEPT));
+        _sendVia = Boolean.parseBoolean(opts.getProperty(PROP_VIA));
+        _disableAddressHelper = Boolean.parseBoolean(opts.getProperty(PROP_DISABLE_HELPER));
+        String gzip = opts.getProperty("i2ptunnel.gzip");
+        _gzip = gzip == null ? DEFAULT_GZIP : Boolean.parseBoolean(gzip);
+        _useLocalOutproxy = Boolean.parseBoolean(opts.getProperty(PROP_USE_OUTPROXY_PLUGIN, "true"));
+        _allowInternalSSL = Boolean.parseBoolean(opts.getProperty(PROP_INTERNAL_SSL, "true"));
+        _sslManuallySet = opts.getProperty(PROP_SSL_SET) != null;
+        _outproxyAuth = Boolean.parseBoolean(opts.getProperty(PROP_OUTPROXY_AUTH));
+        _outproxyUser = opts.getProperty(PROP_OUTPROXY_USER);
+        _outproxyPw = opts.getProperty(PROP_OUTPROXY_PW);
+        _uaClearnet = opts.getProperty(PROP_UA_CLEARNET);
+        _uaI2P = opts.getProperty(PROP_UA_I2P);
+        _jumpServers = opts.getProperty(PROP_JUMP_SERVERS);
+        _keepAliveBrowser = getBooleanOption(OPT_KEEPALIVE_BROWSER, DEFAULT_KEEPALIVE_BROWSER);
+        _keepAliveI2P = getBooleanOption(OPT_KEEPALIVE_I2P, DEFAULT_KEEPALIVE_I2P);
+        _emptyRetries = parseEmptyRetries(opts.getProperty(OPT_EMPTY_RETRIES, "" + DEFAULT_EMPTY_RETRIES));
+    }
+
+    /**
+     * Re-resolve the cached per-tunnel options, then call super.
+     *
+     * @param tunnel tunnel that was updated; ignored unless it is the tunnel we serve
+     * @since 0.9.72+
+     */
+    @Override
+    public void optionsUpdated(I2PTunnel tunnel) {
+        if (getTunnel() != tunnel) {return;}
+        updateCachedOptions();
+        super.optionsUpdated(tunnel);
+    }
+
+    /**
      * Write an error page and drain any remaining request data.
      *
      * @param out the output stream
@@ -613,7 +703,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             // Connection: close, InternalSocket,
             // or after analysis of the response headers in HTTPResponseOutputStream,
             // or on errors in I2PTunnelRunner.
-            boolean keepalive = getBooleanOption(OPT_KEEPALIVE_BROWSER, DEFAULT_KEEPALIVE_BROWSER) &&
+            boolean keepalive = _keepAliveBrowser &&
                                 !(s instanceof InternalSocket);
 
           do {   // while (keepalive)
@@ -820,8 +910,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
 
                             // Try to find an address helper in the query
                             String[] helperStrings = removeHelper(query);
-                            if (helperStrings != null &&
-                                    !Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_DISABLE_HELPER))) {
+                            if (helperStrings != null && !_disableAddressHelper) {
                                 query = helperStrings[0];
                                 if (query.isEmpty()) {
                                     query = null;
@@ -882,8 +971,11 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                             // Conflict: handle when URL reconstruction done
                                             ahelperConflict = true;
                                             if (_log.shouldWarn()) {
-                                                _log.warn(getPrefix(requestId) + "Addresshelper key conflict for site [" + destination +
-                                                        "], trusted key [" + old + "], specified key [" + ahelperKey + "].");
+                                                _log.warn(getPrefix(requestId) +
+                                                        "Addresshelper key conflict for [" + destination +
+                                                        "] -> Using the addressbook destination" +
+                                                        "\n* Trusted key: " + old.length() +
+                                                        " bytes * Specified key: " + ahelperKey.length() + " bytes");
                                             }
                                         }
                                     } else {
@@ -897,9 +989,10 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                                 ahelperConflict = true;
                                                 if (_log.shouldWarn()) {
                                                     _log.warn(getPrefix(requestId) +
-                                                            "Addresshelper key conflict for site [" + destination + "]"
-                                                            + "\n* Trusted key: " + destB64
-                                                            + "\n* Specified key: " + ahelperKey);
+                                                            "Addresshelper key conflict for [" + destination +
+                                                            "] -> Using the addressbook destination" +
+                                                            "\n* Trusted key: " + destB64.length() +
+                                                            " bytes * Specified key: " + ahelperKey.length() + " bytes");
                                                 }
 
                                             }
@@ -1001,7 +1094,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         writeErrorPage(out, reader, "localhost", ERR_LOCALHOST);
                         return;
                     } else if (host.contains(".") || host.startsWith("[")) {
-                        if (Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_USE_OUTPROXY_PLUGIN, "true"))) {
+                        if (_useLocalOutproxy) {
                             ClientAppManager mgr = _context.clientAppManager();
                             if (mgr != null) {
                                 ClientApp op = mgr.getRegisteredApp(Outproxy.NAME);
@@ -1148,12 +1241,12 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     } else if (lowercaseLine.startsWith("user-agent: ")) {
                         // save for deciding whether to offer address book form
                         userAgent = lowercaseLine.substring(12);
-                        if (!Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_USER_AGENT))) {
+                        if (!_sendUserAgent) {
                             line = null;
                             continue;
                         }
                     } else if (lowercaseLine.startsWith("accept: ")) {
-                        if (!Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_ACCEPT))) {
+                        if (!_sendAccept) {
                             // Replace with a standard one if possible
                             boolean html = lowercaseLine.indexOf("text/html") > 0;
                             boolean css = lowercaseLine.indexOf("text/css") > 0;
@@ -1175,14 +1268,14 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         // But allow Accept-Encoding: gzip, deflate
                         if (lowercaseLine.startsWith("accept-encoding: ")) {
                             allowGzip = lowercaseLine.contains("gzip");
-                        } else if (!Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_ACCEPT))) {
+                        } else if (!_sendAccept) {
                             line = null;
                             continue;
                         }
                     } else if (lowercaseLine.startsWith("referer: ")) {
                         // save for address helper form below
                         referer = line.substring(9);
-                        if (!Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_REFERER))) {
+                        if (!_sendReferer) {
                             try {
                                 // Either strip or rewrite the referer line
                                 URI refererURI = new URI(referer);
@@ -1211,8 +1304,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                 continue; // completely strip the line
                             }
                         } // else allow
-                    } else if (lowercaseLine.startsWith("via: ") &&
-                            !Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_VIA))) {
+                    } else if (lowercaseLine.startsWith("via: ") && !_sendVia) {
                         line = null;
                         continue; // completely strip the line
                     } else if (lowercaseLine.startsWith("from: ")) {
@@ -1242,29 +1334,24 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
 
                 if (line.isEmpty()) {
                     // No more headers, add our own and break out of the loop
-                    String ok = getTunnel().getClientOptions().getProperty("i2ptunnel.gzip");
-                    boolean gzip = DEFAULT_GZIP;
-                    if (ok != null) {
-                        gzip = Boolean.parseBoolean(ok);
-                    }
-                    if (gzip && !usingInternalServer && !isConnect && !usingInternalOutproxy) {
+                    if (_gzip && !usingInternalServer && !isConnect && !usingInternalOutproxy) {
                         // according to rfc2616 s14.3, this *should* force identity, even if
                         // an explicit q=0 for gzip doesn't.  tested against orion.i2p, and it
                         // seems to work.
                         newRequest.append("X-Accept-Encoding: x-i2p-gzip;q=1.0, identity;q=0.5, deflate;q=0, gzip;q=0, *;q=0\r\n");
                     }
-                    if (!shout && !isConnect && !Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_USER_AGENT))) {
+                    if (!shout && !isConnect && !_sendUserAgent) {
                             // let's not advertise to external sites that we are from I2P
                             String ua;
                             if (usingWWWProxy || usingInternalOutproxy) {
-                                ua = getTunnel().getClientOptions().getProperty(PROP_UA_CLEARNET);
+                                ua = _uaClearnet;
                                 if (ua != null) {
                                     ua = "User-Agent: " + ua + "\r\n";
                                 } else {
                                     ua = UA_CLEARNET;
                                 }
                             } else {
-                                ua = getTunnel().getClientOptions().getProperty(PROP_UA_I2P);
+                                ua = _uaI2P;
                                 if (plus) {
                                     ua = "User-Agent: I2P+\r\n";
                                 } else if (ua != null) {
@@ -1276,14 +1363,14 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             newRequest.append(ua);
                         }
                     // Add Proxy-Authentication header for next hop (outproxy)
-                    if (usingWWWProxy && Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_OUTPROXY_AUTH))) {
+                    if (usingWWWProxy && _outproxyAuth) {
                         // specific for this proxy
                         String user = getTunnel().getClientOptions().getProperty(PROP_OUTPROXY_USER_PREFIX + currentProxy);
                         String pw = getTunnel().getClientOptions().getProperty(PROP_OUTPROXY_PW_PREFIX + currentProxy);
                         if (user == null || pw == null) {
                             // if not, look at default user and pw
-                            user = getTunnel().getClientOptions().getProperty(PROP_OUTPROXY_USER);
-                            pw = getTunnel().getClientOptions().getProperty(PROP_OUTPROXY_PW);
+                            user = _outproxyUser;
+                            pw = _outproxyPw;
                         }
                         if (user != null && pw != null) {
                             newRequest.append("Proxy-Authorization: Basic ")
@@ -1354,8 +1441,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             if (usingInternalServer) {
                 try {
                     // disable the add form if address helper is disabled
-                    if (internalPath.equals("/add") &&
-                            Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_DISABLE_HELPER))) {
+                    if (internalPath.equals("/add") && _disableAddressHelper) {
                         out.write(ERR_HELPER_DISABLED.getBytes(StandardCharsets.UTF_8));
                     } else {
                         LocalHTTPServer.serveLocalFile(_context, sockMgr, out, method, internalPath, internalRawQuery, _pageNonce, allowGzip);
@@ -1549,7 +1635,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     extraMessage = _t("Destination LeaseSet not found");
                 } else {
                     header = getErrorPage("dnfh", ERR_DESTINATION_UNKNOWN);
-                    jumpServers = getTunnel().getClientOptions().getProperty(PROP_JUMP_SERVERS);
+                    jumpServers = _jumpServers;
                     if (jumpServers == null) {jumpServers = DEFAULT_JUMP_SERVERS;}
                     int jumpDelay = 400 + _context.random().nextInt(256);
                     try {Thread.sleep(jumpDelay);}
@@ -1561,9 +1647,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             }
 
             // as of 0.9.35, allowInternalSSL defaults to true, and overridden to true unless PROP_SSL_SET is set
-            if (isConnect && !usingWWWProxy &&
-                getTunnel().getClientOptions().getProperty(PROP_SSL_SET) != null &&
-                !Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_INTERNAL_SSL, "true"))) {
+            if (isConnect && !usingWWWProxy && _sslManuallySet && !_allowInternalSSL) {
                 try {writeErrorMessage(ERR_INTERNAL_SSL, out, targetRequest, false, destination);}
                 catch (IOException ioe) { /* ignored */ }  // ignore
                 if (_log.shouldWarn()) {_log.warn("SSL to I2P destinations denied by configuration: " + targetRequest);}
@@ -1575,7 +1659,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             // Don't do this for eepget, which uses a user-agent of "Wget"
             if (ahelperNew && "GET".equals(method) &&
                     (userAgent == null || !userAgent.startsWith("Wget")) &&
-                    !Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_DISABLE_HELPER))) {
+                    !_disableAddressHelper) {
                 try {writeHelperSaveForm(out, destination, ahelperKey, targetRequest, referer);}
                 catch (IOException ioe) { /* ignored */ } // ignore
                 return;
@@ -1799,7 +1883,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 byte[] data = newRequest.toString().getBytes(StandardCharsets.ISO_8859_1);
                 OnTimeout onTimeout = new OnTimeout(s, s.getOutputStream(), targetRequest, usingWWWProxy,
                                                     currentProxy, requestId, hostLowerCase, isConnect);
-                boolean keepaliveI2P = keepalive && getBooleanOption(OPT_KEEPALIVE_I2P, DEFAULT_KEEPALIVE_I2P);
+                boolean keepaliveI2P = keepalive && _keepAliveI2P;
                 hrunner = new I2PTunnelHTTPClientRunner(s, i2ps, sockLock, data, mySockets, onTimeout,
                                                         keepaliveI2P, keepalive, isHead);
                 // Transparent reconnect for request-body-free (GET/HEAD) requests on a
@@ -1812,7 +1896,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 // Wired only for GET/HEAD because we hold the full request (line +
                 // headers) and resending is idempotent; the runner further guards
                 // empty retry to transfers with no request-body forwarder.
-                final int emptyBudget = parseEmptyRetries(getTunnel().getClientOptions().getProperty(OPT_EMPTY_RETRIES, "" + DEFAULT_EMPTY_RETRIES));
+                final int emptyBudget = _emptyRetries;
                 if (("GET".equals(method) || "HEAD".equals(method)) && emptyBudget > 0) {
                     final WarmSlot slot = new WarmSlot(I2PTunnelHTTPClient::releaseConnPermit);
                     warmSlot = slot;
@@ -2502,7 +2586,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      * @param attempt the 1-based connect failure count (how many failures so far)
      * @return the delay in ms: 0 for attempt &lt;= 0, else 1000 &lt;&lt; (attempt-1)
      * bounded to 8000
-     * @since 0.9.71+
+     * @since 0.9.72+
      */
     static long getConnectRetryDelayMs(int attempt) {
         if (attempt <= 0) {return 0;}
@@ -2546,7 +2630,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      *
      * @param poolState the {@link #poolState} value from the last failed attempt
      * @return true to stop retrying (fail to the normal empty-response error path)
-     * @since 0.9.71+
+     * @since 0.9.72+
      */
     static boolean shouldStopEmptyReconnect(int poolState) {
         return poolState == -1;
@@ -2728,7 +2812,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
          *
          * @param sock the peer-facing socket (used only for SO_TIMEOUT)
          * @return true if the peer has closed (or the stream is unusable)
-         * @since 0.9.71+
+         * @since 0.9.72+
          */
         boolean peerClosed(Socket sock) {
             if (sock == null) {return false;}
@@ -3008,7 +3092,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 }
                 if (!done[0]) {
                     if (_log.shouldWarn()) {
-                        _log.warn("[HTTPClient] Naming lookup timed out for " + hostname + " after " + timeoutMs + "ms");
+                        _log.warn("[HTTPClient] Naming lookup timed out after " + timeoutMs +
+                                  "ms -> No destination" +
+                                  "\n* Host: " + hostname);
                     }
                     lookupThread.interrupt();
                     // Brief join to let the interrupted lookup terminate cleanly

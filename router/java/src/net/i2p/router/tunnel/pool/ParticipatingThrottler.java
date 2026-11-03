@@ -53,6 +53,20 @@ public class ParticipatingThrottler {
     private static final String PROP_BLOCK_OLD_ROUTERS = "router.blockOldRouters";
 
     /**
+     * The three config keys above, resolved on a TTL. shouldThrottle() is called
+     * twice per inbound build request and each read is a synchronized property
+     * lookup. Same interval and pattern as {@link RequestThrottler}, which reads
+     * the first two keys as well.
+     *
+     * @since 0.9.72+
+     */
+    private static final long PROPERTY_CHECK_INTERVAL = 30 * 1000L;
+    private volatile long _lastPropertyCheckTime;
+    private volatile boolean _cachedShouldThrottle = RequestThrottler.DEFAULT_SHOULD_THROTTLE;
+    private volatile boolean _cachedShouldDisconnect = RequestThrottler.DEFAULT_SHOULD_DISCONNECT;
+    private volatile boolean _cachedShouldBlockOldRouters = DEFAULT_BLOCK_OLD_ROUTERS;
+
+    /**
      * Min tunnels per peer before throttling.
      * @since 0.9.70+
      */
@@ -282,7 +296,26 @@ public class ParticipatingThrottler {
      * @param countRequest true to increment the peer's counter
      * @return the throttling Result (ACCEPT, REJECT, or DROP)
      */
+    /**
+     * Re-read the throttle config at most once per PROPERTY_CHECK_INTERVAL.
+     * Benign race: duplicate refreshes are idempotent writes.
+     *
+     * @since 0.9.72+
+     */
+    private void updateCachedProperties() {
+        long now = context.clock().now();
+        if (now - _lastPropertyCheckTime > PROPERTY_CHECK_INTERVAL) {
+            _cachedShouldThrottle = context.getProperty(RequestThrottler.PROP_SHOULD_THROTTLE,
+                                                        RequestThrottler.DEFAULT_SHOULD_THROTTLE);
+            _cachedShouldDisconnect = context.getProperty(RequestThrottler.PROP_SHOULD_DISCONNECT,
+                                                          RequestThrottler.DEFAULT_SHOULD_DISCONNECT);
+            _cachedShouldBlockOldRouters = context.getProperty(PROP_BLOCK_OLD_ROUTERS, DEFAULT_BLOCK_OLD_ROUTERS);
+            _lastPropertyCheckTime = now;
+        }
+    }
+
     Result shouldThrottle(Hash h, boolean countRequest) {
+        updateCachedProperties();
         RouterInfo ri = (RouterInfo) context.netDb().lookupLocallyWithoutValidation(h);
         Hash us = context.routerHash();
         String caps = ri != null ? ri.getCapabilities() : "";
@@ -306,9 +339,9 @@ public class ParticipatingThrottler {
         int count = countRequest ? counter.increment(h) : counter.count(h);
         Result rv;
         int bantime = isLU || isLowShare || isUnreachable ? 60*60*1000 : 4*60*60*1000;
-        boolean shouldThrottle = context.getProperty(RequestThrottler.PROP_SHOULD_THROTTLE, RequestThrottler.DEFAULT_SHOULD_THROTTLE);
-        boolean shouldDisconnect = context.getProperty(RequestThrottler.PROP_SHOULD_DISCONNECT, RequestThrottler.DEFAULT_SHOULD_DISCONNECT);
-        boolean shouldBlockOldRouters = context.getProperty(PROP_BLOCK_OLD_ROUTERS, DEFAULT_BLOCK_OLD_ROUTERS);
+        boolean shouldThrottle = _cachedShouldThrottle;
+        boolean shouldDisconnect = _cachedShouldDisconnect;
+        boolean shouldBlockOldRouters = _cachedShouldBlockOldRouters;
         boolean isBanned = context.banlist().isBanlisted(h) ||
                            context.banlist().isBanlistedHostile(h) ||
                            context.banlist().isBanlistedForever(h);

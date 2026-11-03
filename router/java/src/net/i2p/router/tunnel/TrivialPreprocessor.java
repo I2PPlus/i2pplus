@@ -138,19 +138,37 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
     private void fillRandomNonZero(byte[] b, int off, int len) {
         // get about as much as we think we will need, overestimate some
         final int est = len + (len / 128) + 3;
-        final byte[] tmp = new byte[est];
-        _context.random().nextBytes(tmp);
-        int extra = len;
-        for (int i = 0; i < len; i++) {
-            while (tmp[i] == 0) {
-                if (extra < est)
-                    tmp[i] = tmp[extra++];  // use from the extra we have at the end
-                else
-                    tmp[i] = (byte)(_context.random().nextInt() & 0xFF);  // waste 3/4 of the entropy
+        // One call per outbound tunnel message, for up to ~1000 bytes. The buffer
+        // is method-local and never escapes, so take it from the pool - from ONE
+        // pool: SimpleByteCache keys its pools on the exact size, and len varies
+        // continuously, so acquiring `est` would build ~1000 pools.
+        final boolean pooled = est <= PAD_POOL_SIZE;
+        final byte[] tmp = pooled ? SimpleByteCache.acquire(PAD_POOL_SIZE) : new byte[est];
+        try {
+            _context.random().nextBytes(tmp);
+            int extra = len;
+            for (int i = 0; i < len; i++) {
+                while (tmp[i] == 0) {
+                    if (extra < est)
+                        tmp[i] = tmp[extra++];  // use from the extra we have at the end
+                    else
+                        tmp[i] = (byte)(_context.random().nextInt() & 0xFF);  // waste 3/4 of the entropy
+                }
             }
+            System.arraycopy(tmp, 0, b, off, len);
+        } finally {
+            if (pooled)
+                SimpleByteCache.release(tmp);
         }
-        System.arraycopy(tmp, 0, b, off, len);
     }
+
+    /**
+     * The single buffer size used for the padding pool above: the largest
+     * overestimate fillRandomNonZero() asks for, given a full-size fragment.
+     *
+     * @since 0.9.72+
+     */
+    private static final int PAD_POOL_SIZE = (PREPROCESSED_SIZE - IV_SIZE - 5) + ((PREPROCESSED_SIZE - IV_SIZE - 5) / 128) + 3;
 
     /** Is this a follow-up byte? */
     private static final byte MASK_IS_SUBSEQUENT = FragmentHandler.MASK_IS_SUBSEQUENT;

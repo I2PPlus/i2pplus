@@ -52,6 +52,13 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     private final static long SEND_TIMEOUT = (long) 60 * 1000; // 60 seconds to send
     /** Should we gzip each payload prior to sending it? */
     private final static boolean SHOULD_COMPRESS = true;
+    /**
+     * i2cp.gzip resolved from the session options, on first use. The options do
+     * not change after construction, and this is read per outbound message.
+     *
+     * @since 0.9.72+
+     */
+    private volatile Boolean _gzip;
     /** Whether the router may send compressed lease sets. */
     private final static boolean SHOULD_DECOMPRESS = true;
     /**
@@ -197,9 +204,15 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      */
     protected boolean shouldCompress(int size) {
         if (size <= DONT_COMPRESS_SIZE) {return false;}
-        String p = getOptions().getProperty(I2PClient.PROP_GZIP);
-        if (p != null) {return Boolean.parseBoolean(p);}
-        return SHOULD_COMPRESS;
+        // The options are fixed at construction, so resolve the property once
+        // instead of a synchronized Properties lookup on every outbound message
+        Boolean gzip = _gzip;
+        if (gzip == null) {
+            String p = getOptions().getProperty(I2PClient.PROP_GZIP);
+            gzip = p != null ? Boolean.valueOf(Boolean.parseBoolean(p)) : Boolean.valueOf(SHOULD_COMPRESS);
+            _gzip = gzip;
+        }
+        return gzip.booleanValue();
     }
 
     /**
@@ -407,13 +420,15 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     public byte[] receiveMessage(int msgId) throws I2PSessionException {
         byte[] compressed = super.receiveMessage(msgId);
         if (compressed == null) {
-            if (_log.shouldWarn()) {_log.warn("Error: [MsgID " + msgId + "] already received!");}
+            _log.warnThrottled("session-message-already-received",
+                               "[MsgID " + msgId + "] already received -> Nothing to return");
             return null;
         }
         if (SHOULD_DECOMPRESS) { // future - check magic number to see whether to decompress
             try {return DataHelper.decompress(compressed);}
             catch (IOException ioe) {
-                if (_log.shouldWarn()) {_log.warn("Error decompressing message \n* " + ioe.getMessage());}
+                _log.warnThrottled("session-decompress-failed",
+                                   "Decompressing the message failed -> Dropped: " + ioe.getMessage());
                 return null;
             }
         }

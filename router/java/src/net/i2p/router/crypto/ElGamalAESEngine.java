@@ -122,13 +122,9 @@ public final class ElGamalAESEngine {
 
             decrypted = decryptExistingSession(data, key, targetPrivateKey, foundTags, usedKey, foundKey);
             if (decrypted != null) {
-                StringBuilder buf = new StringBuilder();
                 if (!foundTags.isEmpty()) {
-                    for (SessionTag t : foundTags) {
-                        buf.append("[").append(t.toString().substring(0,6)).append("]"); buf.append(" ");
-                    }
-                    if (!foundTags.isEmpty() && shouldDebug)
-                        _log.debug("ElGamal/AES decrypt success with [" + st.toString().substring(0,6) + "]\n* Found " + foundTags.size() + " Tags: " + buf.toString());
+                    if (shouldDebug)
+                        _log.debug("ElGamal/AES decrypt success with [" + st.toString().substring(0,6) + "]\n* Found " + foundTags.size() + " Tags: " + tagsToString(foundTags));
                     wasExisting = true;
                 }
             } else {
@@ -140,14 +136,8 @@ public final class ElGamalAESEngine {
         } else if (data.length >= ELG_ENCRYPTED_LENGTH) {
             decrypted = decryptNewSession(data, targetPrivateKey, foundTags, usedKey, foundKey);
             if (decrypted != null) {
-                if (!foundTags.isEmpty()) {
-                    StringBuilder buf = new StringBuilder();
-                    for (SessionTag t : foundTags) {
-                        buf.append("[").append(t.toString().substring(0,6)).append("]"); buf.append(" ");
-                    }
-                    if (!foundTags.isEmpty() && shouldDebug)
-                        _log.debug("ElGamal decrypt success!\n* Found " + foundTags.size() + " Tags: " + buf.toString());
-                }
+                if (!foundTags.isEmpty() && shouldDebug)
+                    _log.debug("ElGamal decrypt success!\n* Found " + foundTags.size() + " Tags: " + tagsToString(foundTags));
             } else {
                 _context.statManager().updateFrequency("crypto.elGamalAES.decryptFailed");
                 if (_log.shouldWarn())
@@ -159,26 +149,32 @@ public final class ElGamalAESEngine {
 
         if (!foundTags.isEmpty()) {
             if (foundKey.getData() != null) {
-                StringBuilder buf = new StringBuilder();
-                for (SessionTag t : foundTags) {
-                    buf.append("[").append(t.toString().substring(0,6)).append("]"); buf.append(" ");
-                }
                 if (shouldDebug)
                     _log.debug((wasExisting ? "Found existing key [" : "Found new key [") + foundKey.toBase64().substring(0,6) +
-                               "]\n* Tags: " + buf.toString());
-                    keyManager.tagsReceived(foundKey, foundTags);
+                               "]\n* Tags: " + tagsToString(foundTags));
+                keyManager.tagsReceived(foundKey, foundTags);
             } else if (usedKey.getData() != null) {
-                    StringBuilder buf = new StringBuilder();
-                    for (SessionTag t : foundTags) {
-                        buf.append("[").append(t.toString().substring(0,6)).append("]"); buf.append(" ");
-                    }
-                    if (shouldDebug)
-                        _log.debug("Used key [" + usedKey.toBase64().substring(0,6) + "] wasExisting? " + wasExisting +
-                                   "\n* Tags: " + buf.toString());
-                    keyManager.tagsReceived(usedKey, foundTags);
+                if (shouldDebug)
+                    _log.debug("Used key [" + usedKey.toBase64().substring(0,6) + "] wasExisting? " + wasExisting +
+                               "\n* Tags: " + tagsToString(foundTags));
+                keyManager.tagsReceived(usedKey, foundTags);
             }
         }
         return decrypted;
+    }
+
+    /**
+     * The found tags, formatted for a debug line. SessionTag.toString() base64s 32
+     * bytes, so this is built only when the debug line will actually be written -
+     * it used to run on every successful decrypt, four times over, with debug off.
+     *
+     * @since 0.9.72+
+     */
+    private static String tagsToString(Set<SessionTag> tags) {
+        StringBuilder buf = new StringBuilder(tags.size() * 10);
+        for (SessionTag t : tags)
+            buf.append('[').append(t.toString().substring(0, 6)).append(']');
+        return buf.toString();
     }
 
     /**

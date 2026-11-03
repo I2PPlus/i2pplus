@@ -76,6 +76,41 @@ class PumpedTunnelGateway extends TunnelGateway {
     /** Property key for max inbound queue size. */
     public static final String PROP_MAX_IB_QUEUE = "router.pumpMaxInboundQueue";
 
+    /**
+     * The two per-pump caps above, read from the config on a TTL. pump() runs on
+     * the gateway pumper loop, one of the busiest in the router, and a property
+     * lookup is synchronized. Only the raw override is cached - the effective
+     * value is resolved against _maxOb/IBMsgsPerPump at read time, so a Tuner
+     * write takes effect immediately and is never clobbered by the refresh.
+     *
+     * @since 0.9.72+
+     */
+    private static final long PUMP_CONFIG_REFRESH_MS = 30 * 1000L;
+    private static volatile long _pumpCfgRefreshed;
+    private static volatile Integer _cachedObMsgsProp;
+    private static volatile Integer _cachedIbMsgsProp;
+
+    private static void refreshPumpConfig(RouterContext ctx) {
+        long now = ctx.clock().now();
+        if (now - _pumpCfgRefreshed < PUMP_CONFIG_REFRESH_MS)
+            return;
+        String ob = ctx.getProperty(PROP_MAX_OB_MSGS_PER_PUMP, null);
+        String ib = ctx.getProperty(PROP_MAX_IB_MSGS_PER_PUMP, null);
+        // A malformed value falls back to the computed default, as getProperty(int)
+        // does, rather than poisoning the cache with a parse failure
+        try {
+            _cachedObMsgsProp = ob != null ? Integer.valueOf(ob.trim()) : null;
+        } catch (NumberFormatException nfe) {
+            _cachedObMsgsProp = null;
+        }
+        try {
+            _cachedIbMsgsProp = ib != null ? Integer.valueOf(ib.trim()) : null;
+        } catch (NumberFormatException nfe) {
+            _cachedIbMsgsProp = null;
+        }
+        _pumpCfgRefreshed = now;
+    }
+
     static {
         int cores = SystemVersion.getCores();
         long maxMem = SystemVersion.getMaxMemory();
@@ -272,9 +307,12 @@ class PumpedTunnelGateway extends TunnelGateway {
             int pending = _prequeue.size();
             max = _isInbound ? Math.max(1, pending / 20) : Math.max(2, pending / 10);
         } else {
+            refreshPumpConfig(_context);
+            Integer ob = _cachedObMsgsProp;
+            Integer ib = _cachedIbMsgsProp;
             max = _isInbound
-                    ? _context.getProperty(PROP_MAX_IB_MSGS_PER_PUMP, _maxIbMsgsPerPump)
-                    : _context.getProperty(PROP_MAX_OB_MSGS_PER_PUMP, _maxObMsgsPerPump);
+                    ? (ib != null ? ib.intValue() : _maxIbMsgsPerPump)
+                    : (ob != null ? ob.intValue() : _maxObMsgsPerPump);
         }
 
         _prequeue.drainTo(queueBuf, max);

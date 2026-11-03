@@ -184,6 +184,13 @@ public class BuildHandler implements Runnable {
     private static volatile long _cachedJobLagLimitTunnel;
     /** Cached cap on tunnels offered for transit. */
     private static volatile int _cachedMaxParticipatingTunnels;
+    /**
+     * Cached router.enableTransitThrottle. Read on every inbound build request,
+     * and a property lookup is synchronized.
+     *
+     * @since 0.9.72+
+     */
+    private static volatile boolean _cachedShouldThrottle = true;
     /** Age past which the cached config is re-read. */
     private static final long CONFIG_REFRESH_MS = 30 * 1000L;
 
@@ -274,6 +281,7 @@ public class BuildHandler implements Runnable {
         _cachedMaxRequestAgeEcies = ctx.getProperty("i2p.tunnel.build.maxRequestAgeEcies", 8*60*1000L);
         _cachedJobLagLimitTunnel = ctx.getProperty("i2p.tunnel.build.jobLagLimitTunnel", SystemVersion.isSlow() ? 800 : 500);
         _cachedMaxParticipatingTunnels = ctx.getProperty("router.maxParticipatingTunnels", IS_SLOW ? 4000 : 10000);
+        _cachedShouldThrottle = ctx.getBooleanPropertyDefaultTrue(PROP_SHOULD_THROTTLE);
         _cfgCtx = ctx;
         _cfgRefreshed = now;
     }
@@ -528,6 +536,20 @@ public class BuildHandler implements Runnable {
         refreshBuildConfig(ctx);
         return _cachedMaxParticipatingTunnels;
     }
+
+    /**
+     * {@code router.enableTransitThrottle}, from the shared 30s config cache.
+     * Both BuildHandler.handleReq() and ParticipatingThrottler.shouldThrottle()
+     * read it, the latter twice per inbound build request.
+     *
+     * @param ctx the router context whose properties are cached
+     * @return whether transit throttling is enabled
+     * @since 0.9.72+
+     */
+    static boolean getShouldThrottle(RouterContext ctx) {
+        refreshBuildConfig(ctx);
+        return _cachedShouldThrottle;
+    }
     /** Rate periods shown in the throttle stats. */
     private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
 
@@ -630,7 +652,7 @@ public class BuildHandler implements Runnable {
         createRejectStats(ctx.statManager(), RATES);
         _processor = new BuildMessageProcessor(ctx);
         boolean testMode = ctx.getBooleanProperty("i2np.allowLocal"); // previous hop, all requests
-        boolean shouldThrottle = _context.getBooleanPropertyDefaultTrue(PROP_SHOULD_THROTTLE);
+        boolean shouldThrottle = getShouldThrottle(_context);
         _requestThrottler = testMode || !shouldThrottle ? null : new RequestThrottler(ctx);
         _throttler = testMode || !shouldThrottle ? null : new ParticipatingThrottler(ctx); // previous and next hops, successful builds only
         // Start idle tunnel monitor to detect and drop abusive idle tunnels
@@ -1533,7 +1555,7 @@ public class BuildHandler implements Runnable {
         int period = bantime / 60 / 1000;
         Hash from = state.fromHash;
         if (from == null && state.from != null) {from = state.from.calculateHash();}
-        final boolean shouldThrottle = _context.getBooleanPropertyDefaultTrue(PROP_SHOULD_THROTTLE);
+        final boolean shouldThrottle = getShouldThrottle(_context);
         final boolean shouldLog = _log.shouldWarn();
         String fromPeer = (shouldLog && from != null ? from.toShortBase64() : "");
         String nextHop = (shouldLog && nextPeer != null ? nextPeer.toShortBase64() : "");
@@ -1926,7 +1948,7 @@ public class BuildHandler implements Runnable {
             // endpoint, receiving the request at the last hop)
             long reqId = receivedMessage.getUniqueId();
             PooledTunnelCreatorConfig cfg = _exec.removeFromBuilding(reqId);
-            boolean shouldThrottle = _context.getBooleanPropertyDefaultTrue(PROP_SHOULD_THROTTLE);
+            boolean shouldThrottle = getShouldThrottle(_context);
             if (cfg != null) {
                 if (!cfg.isInbound()) { // shouldnt happen - should we put it back?
                     _log.error("Received TunnelBuildMessage for an outbound tunnel configuration: " + cfg.toShortString());

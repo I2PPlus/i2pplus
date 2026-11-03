@@ -5,10 +5,13 @@ import java.util.HashMap;
 import java.util.regex.Pattern;
 import java.util.Locale;
 import java.util.Map;
+import java.util.WeakHashMap;
 
 import javax.servlet.http.HttpSession;
 
 import net.i2p.I2PAppContext;
+import net.i2p.router.Router;
+import net.i2p.router.RouterContext;
 import net.i2p.servlet.util.ServletUtil;
 import net.i2p.util.LHMCache;
 import net.i2p.util.Log;
@@ -137,6 +140,157 @@ public class CSSHelper extends HelperBase {
      * @since 0.9.70+ */
     public static final String PROP_SIDEBAR_GRAPH_CONTINUOUS = "routerconsole.sidebarGraphContinuous";
 
+    /**
+     * How long a console property that is absent from {@code router.config}
+     * keeps its cached value before the synchronized app-context fallback is
+     * read again. Such a value comes from the JVM environment, which does not
+     * change while the router runs; anything the console saves lands in
+     * {@code router.config}, where the change is seen on the next read.
+     *
+     * @since 0.9.72+
+     */
+    private static final long FALLBACK_TTL_MS = 5 * 1000L;
+
+    /**
+     * Cached console property values, keyed by router context (helpers are
+     * built per request, so instance fields would not outlive the render).
+     * <p>
+     * A page render reads a dozen of these, and each read is a synchronized
+     * {@code Properties.getProperty} ending in a {@code System.getProperty}
+     * lock. {@code router.config} is a concurrent map, so reading the raw
+     * string out of it is lock-free: we re-read only when it changed, which is
+     * what a console save does, so the console sees a saved change on the next
+     * render. This codebase has no property-change listener, so the cache
+     * refreshes itself on read.
+     *
+     * @since 0.9.72+
+     */
+    private static final Map<RouterContext, ConsoleProps> _props =
+            Collections.synchronizedMap(new WeakHashMap<RouterContext, ConsoleProps>());
+
+    /**
+     * Cached raw strings of the console properties read by the getters.
+     * Static and package-visible so the cache logic is reachable without a request.
+     *
+     * @since 0.9.72+
+     */
+    static final class ConsoleProps {
+
+        /** One cached property. */
+        private static final class Cached {
+            /** Raw value last read from {@code router.config}, null when absent. */
+            volatile String fromConfig;
+            /** Effective raw value, including the app-context fallback. */
+            volatile String value;
+            /** When the app-context fallback was last read. */
+            volatile long checkedAt;
+        }
+
+        /** The context whose config and properties we read. */
+        private final RouterContext _ctx;
+        /** Cached entries, keyed by property name. */
+        private final Map<String, Cached> _cache = new HashMap<>(24);
+
+        /**
+         * @param ctx the router context to read
+         */
+        ConsoleProps(RouterContext ctx) {_ctx = ctx;}
+
+        /**
+         * Resolve one property, taking the synchronized app-context lookup only
+         * when the cached value may have gone stale.
+         *
+         * @param key the property name
+         * @param dflt the value to return when the property is unset
+         * @return the raw property string, never null
+         */
+        String get(String key, String dflt) {
+            Cached c;
+            synchronized (_cache) {
+                c = _cache.get(key);
+                if (c == null) {
+                    c = new Cached();
+                    _cache.put(key, c);
+                }
+            }
+            Router router = _ctx.router();
+            // A console save lands here, and this read takes no lock
+            String cur = router != null ? router.getConfigSetting(key) : null;
+            if (cur != null) {
+                if (!cur.equals(c.fromConfig)) {
+                    c.fromConfig = cur;
+                    c.value = cur;
+                }
+                return cur;
+            }
+            long now = System.currentTimeMillis();
+            if (c.fromConfig != null || c.value == null || now - c.checkedAt >= FALLBACK_TTL_MS) {
+                c.value = _ctx.getProperty(key);
+                c.fromConfig = null;
+                c.checkedAt = now;
+            }
+            return c.value != null ? c.value : dflt;
+        }
+
+        /**
+         * Cached boolean read, parsed as {@code Boolean.parseBoolean} parses it.
+         *
+         * @param key the property name
+         * @param dflt the raw string used when the property is unset
+         * @return the parsed boolean
+         */
+        boolean getBoolean(String key, String dflt) {
+            return Boolean.parseBoolean(get(key, dflt));
+        }
+    }
+
+    /**
+     * The cached properties of this helper's router context.
+     *
+     * @return the cache, creating it on first use
+     */
+    private ConsoleProps props() {
+        RouterContext ctx = _context;
+        ConsoleProps cp = _props.get(ctx);
+        if (cp == null) {
+            cp = new ConsoleProps(ctx);
+            _props.put(ctx, cp);
+        }
+        return cp;
+    }
+
+    /**
+     * Cached read of one console property.
+     *
+     * @param key the property name
+     * @param dflt the value to return when the property is unset
+     * @return the raw property string, never null
+     */
+    private String prop(String key, String dflt) {
+        return props().get(key, dflt);
+    }
+
+    /**
+     * Cached read of one console boolean property, parsed the same way
+     * {@code I2PAppContext.getBooleanProperty} parses it.
+     *
+     * @param key the property name
+     * @return true only when the property is set to "true", ignoring case
+     */
+    private boolean propBoolean(String key) {
+        return props().getBoolean(key, "false");
+    }
+
+    /**
+     * Cached read of one console boolean property that defaults to true.
+     *
+     * @param key the property name
+     * @return false only when the property is explicitly set to "false"
+     */
+    private boolean propBooleanDefaultTrue(String key) {
+        return props().getBoolean(key, "true");
+    }
+
     /** Session-bound nonce for CSRF protection, replaces static nonces @since 0.9.69. */
     private static final String SESSION_CONSOLE_NONCE = "__router.console.nonce.queue__";
 
@@ -173,9 +327,9 @@ public class CSSHelper extends HelperBase {
             // Session was invalidated/expired mid-render; Jetty throws ISE from
             // getAttribute/setAttribute. Degrade to the static nonce so the page
             // still renders and FormHandler's static fallback validates on submit.
-            if (_log.shouldWarn()) {
-                _log.warn("CSSHelper.getNonce(): session invalid, using static nonce", ise);
-            }
+            _log.warnThrottled("csshelper-nonce-session-gone",
+                               "Session expired mid-render -> Using the static nonce" +
+                               "\n* Reason: " + ise.getMessage());
             return getNonce();
         }
         return rv;
@@ -284,7 +438,7 @@ public class CSSHelper extends HelperBase {
             if (_context == null) {
                 throw new IllegalStateException("No contexts. This is usually because the router is either starting up or shutting down.");
             }
-            String theme = _context.getProperty(PROP_THEME_NAME, DEFAULT_THEME);
+            String theme = prop(PROP_THEME_NAME, DEFAULT_THEME);
             url += theme + "/";
         }
         return url;
@@ -295,14 +449,14 @@ public class CSSHelper extends HelperBase {
      * @return true to open apps in a console IFrame, false to replace the console
      * @since 0.9.32
      */
-    public boolean embedApps() {return _context.getBooleanProperty(PROP_EMBED_APPS);}
+    public boolean embedApps() {return propBoolean(PROP_EMBED_APPS);}
 
     /**
      * Whether the Sora display font is enabled.
      * @return true to use Sora, false for Open Sans
      * @since 0.9.59+
      */
-    public boolean useSoraDisplayFont() {return _context.getBooleanProperty(PROP_ENABLE_SORA_FONT);}
+    public boolean useSoraDisplayFont() {return propBoolean(PROP_ENABLE_SORA_FONT);}
 
     /**
      * Save the configuration to enable the Sora display font, if the
@@ -320,21 +474,21 @@ public class CSSHelper extends HelperBase {
      * @return true if explicitly enabled, false otherwise
      * @since 0.9.67+
      */
-    public boolean useUnifiedSidebar() {return _context.getBooleanProperty(PROP_UNIFIED_SIDEBAR);}
+    public boolean useUnifiedSidebar() {return propBoolean(PROP_UNIFIED_SIDEBAR);}
 
     /**
      * Whether the unified sidebar is in use, defaulting to true.
      * @return true unless the user has explicitly turned the unified sidebar off
      * @since 0.9.67+
      */
-    public boolean enableUnifiedSidebar() {return _context.getBooleanPropertyDefaultTrue(PROP_UNIFIED_SIDEBAR);}
+    public boolean enableUnifiedSidebar() {return propBooleanDefaultTrue(PROP_UNIFIED_SIDEBAR);}
 
     /**
      * Returns whether we should use a sticky sidebar when the sidebar height is less than the height of the viewport.
      * @return true if explicitly enabled, false otherwise
      * @since 0.9.68+
      */
-    public boolean useStickySidebar() {return _context.getBooleanProperty(PROP_STICKY_SIDEBAR);}
+    public boolean useStickySidebar() {return propBoolean(PROP_STICKY_SIDEBAR);}
 
     /**
      * Returns whether to use the legacy RRD4J minigraph renderer.
@@ -343,7 +497,7 @@ public class CSSHelper extends HelperBase {
      * @return true for RRD4J, false for the canvas renderer
      * @since 0.9.70+
      */
-    public boolean useLegacySidebarGraph() {return _context.getBooleanProperty(PROP_SIDEBAR_GRAPH_LEGACY);}
+    public boolean useLegacySidebarGraph() {return propBoolean(PROP_SIDEBAR_GRAPH_LEGACY);}
 
     /**
      * Returns the sidebar graph time period in minutes (2–30).
@@ -351,7 +505,9 @@ public class CSSHelper extends HelperBase {
      * @since 0.9.70+
      */
     public int getSidebarGraphMinutes() {
-        int val = _context.getProperty(PROP_SIDEBAR_GRAPH_MINUTES, 20);
+        int val = 20;
+        try {val = Integer.parseInt(prop(PROP_SIDEBAR_GRAPH_MINUTES, null));}
+        catch (NumberFormatException nfe) { /* ignored */ }
         return Math.max(2, Math.min(30, val));
     }
 
@@ -361,7 +517,7 @@ public class CSSHelper extends HelperBase {
      * @return true unless the user has explicitly turned split mode off
      * @since 0.9.70+
      */
-    public boolean useSidebarGraphSplit() {return _context.getBooleanPropertyDefaultTrue(PROP_SIDEBAR_GRAPH_SPLIT);}
+    public boolean useSidebarGraphSplit() {return propBooleanDefaultTrue(PROP_SIDEBAR_GRAPH_SPLIT);}
 
     /**
      * Returns whether the sidebar graph uses continuous scroll mode.
@@ -369,7 +525,7 @@ public class CSSHelper extends HelperBase {
      * @return true for continuous scrolling, false to redraw the whole buffer
      * @since 0.9.70+
      */
-    public boolean useSidebarGraphContinuous() {return _context.getBooleanProperty(PROP_SIDEBAR_GRAPH_CONTINUOUS);}
+    public boolean useSidebarGraphContinuous() {return propBoolean(PROP_SIDEBAR_GRAPH_CONTINUOUS);}
 
     /**
      * Returns the sidebar graph render direction ("ltr" or "rtl").
@@ -377,7 +533,7 @@ public class CSSHelper extends HelperBase {
      * @since 0.9.70+
      */
     public String getSidebarGraphDirection() {
-        String val = _context.getProperty(PROP_SIDEBAR_GRAPH_DIRECTION, "rtl");
+        String val = prop(PROP_SIDEBAR_GRAPH_DIRECTION, "rtl");
         return "ltr".equals(val) ? "ltr" : "rtl";
     }
 
@@ -386,7 +542,7 @@ public class CSSHelper extends HelperBase {
      * @return true unless the user has explicitly turned the sticky sidebar off
      * @since 0.9.68+
      */
-    public boolean enableStickySidebar() {return _context.getBooleanPropertyDefaultTrue(PROP_STICKY_SIDEBAR);}
+    public boolean enableStickySidebar() {return propBooleanDefaultTrue(PROP_STICKY_SIDEBAR);}
 
     /**
      * Change default language for the router AND save it.
@@ -432,7 +588,7 @@ public class CSSHelper extends HelperBase {
      * @return whether send x frame
      * @since 0.9.1
      */
-    public boolean shouldSendXFrame() {return !_context.getBooleanProperty(PROP_XFRAME);}
+    public boolean shouldSendXFrame() {return !propBoolean(PROP_XFRAME);}
 
     /**
      * Change refresh and save it, "0" also disables the refresh entirely.
@@ -451,7 +607,7 @@ public class CSSHelper extends HelperBase {
      * @return refresh time in seconds, as a string, or "3600" when refresh is disabled
      */
     public String getRefresh() {
-        String r = _context.getProperty(PROP_REFRESH, DEFAULT_REFRESH);
+        String r = prop(PROP_REFRESH, DEFAULT_REFRESH);
         if (r.equals("0")) {r = "3600";}
         try { if (Integer.parseInt(r) < MIN_REFRESH) {r = Integer.toString(MIN_REFRESH);} }
         catch (RuntimeException e) {r = Integer.toString(MIN_REFRESH);}
@@ -475,7 +631,7 @@ public class CSSHelper extends HelperBase {
      * @return true if refresh is disabled
      * @since 0.9.1
      */
-    public boolean getDisableRefresh() {return _context.getBooleanProperty(PROP_DISABLE_REFRESH);}
+    public boolean getDisableRefresh() {return propBoolean(PROP_DISABLE_REFRESH);}
 
     /**
      * Translate the title and display consistently.
@@ -484,8 +640,8 @@ public class CSSHelper extends HelperBase {
      */
     public String title(String s) {
         StringBuilder buf = new StringBuilder(128);
-        String lang = _context.getProperty("routerconsole.lang");
-        String pageTitlePrefix = _context.getProperty("routerconsole.pageTitlePrefix");
+        String lang = prop("routerconsole.lang", null);
+        String pageTitlePrefix = prop("routerconsole.pageTitlePrefix", null);
         if ((lang == null || lang.equals("en")) && s.startsWith("config ")) {
              s = s.replace(_t("config"), _t("Configure"));
         }
@@ -507,7 +663,7 @@ public class CSSHelper extends HelperBase {
      * @since 0.8.5
      */
     public boolean allowIFrame(String ua) {
-        boolean forceMobileConsole = _context.getBooleanProperty(PROP_FORCE_MOBILE_CONSOLE);
+        boolean forceMobileConsole = propBoolean(PROP_FORCE_MOBILE_CONSOLE);
         if (forceMobileConsole) {return false;}
         if (ua == null) {return true;}
         return cachedAllowIFrame(ua);
@@ -520,7 +676,7 @@ public class CSSHelper extends HelperBase {
      *
      * @param ua the request User-Agent header, non-null
      * @return whether an IFrame is allowed for this UA
-     * @since 0.9.71+
+     * @since 0.9.72+
      */
     static boolean cachedAllowIFrame(String ua) {
         Boolean brv = _UACache.get(ua);
@@ -534,7 +690,7 @@ public class CSSHelper extends HelperBase {
      * Number of User-Agent strings currently memoised in {@link #_UACache}.
      *
      * @return the cache size, for tests and diagnostics
-     * @since 0.9.71+
+     * @since 0.9.72+
      */
     static int uaCacheSize() {
         return _UACache.size();
@@ -555,7 +711,7 @@ public class CSSHelper extends HelperBase {
      * @return whether advanced mode
      */
     public boolean isAdvancedMode() {
-        return _context.getBooleanProperty("routerconsole.advanced");
+        return propBoolean("routerconsole.advanced");
     }
 
     /** Capitalize first letter of each word of string */

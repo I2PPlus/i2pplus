@@ -15,6 +15,8 @@ import net.i2p.data.i2np.I2NPMessageException;
 import net.i2p.data.i2np.I2NPMessageHandler;
 import net.i2p.data.i2np.UnknownI2NPMessage;
 import net.i2p.router.RouterContext;
+import net.i2p.stat.RateConstants;
+import net.i2p.stat.RateStat;
 import net.i2p.util.ByteCache;
 import net.i2p.util.HexDump;
 import net.i2p.util.Log;
@@ -110,6 +112,17 @@ class FragmentHandler {
     /** True for the inbound handler. */
     private final boolean _isInbound;
     /**
+     * Fragment shape stats, resolved once. These are per verified fragment, and
+     * addRateData(String) does a map lookup plus a synchronized Rate walk per call.
+     * Declared by {@link TunnelDispatcher#registerFragmentStats} before any tunnel
+     * is built, so the periods below are only a fallback.
+     *
+     * @since 0.9.72+
+     */
+    private static final long[] RATES = { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR };
+    private final RateStat _smallFragmentsStat;
+    private final RateStat _fullFragmentsStat;
+    /**
      * Per-thread I2NP message reader, used for inbound data only.
      * <p>
      * I2NPMessageHandler is NOT threadsafe because it caches the message it last
@@ -162,6 +175,12 @@ class FragmentHandler {
         _isInbound = isInbound;
         _inboundHandler = ThreadLocal.withInitial(() -> new I2NPMessageHandler(_context));
         // all createRateStat in TunnelDispatcher
+        _smallFragmentsStat = context.statManager().getOrCreateRateStat("tunnel.smallFragments",
+                                                                        "Excess padding bytes seen in small fragments", "Tunnels",
+                                                                        RATES);
+        _fullFragmentsStat = context.statManager().getOrCreateRateStat("tunnel.fullFragments",
+                                                                       "Maximum-size fragments received", "Tunnels",
+                                                                       RATES);
     }
 
     /**
@@ -179,8 +198,11 @@ class FragmentHandler {
         boolean ok = verifyPreprocessed(preprocessed, offset, length);
         if (!ok) {
             if (_log.shouldWarn())
-                _log.warn("Unable to verify preprocessed data (pre.length="
-                          + preprocessed.length + " off=" + offset + " len=" + length);
+                _log.warnThrottled("fh-verify-preprocessed",
+                                   "Unable to verify preprocessed tunnel data -> Dropping the message" +
+                                   " * Buffer: " + preprocessed.length + " bytes" +
+                                   " * Offset: " + offset + " bytes" +
+                                   " * Length: " + length + " bytes");
             _cache.release(new ByteArray(preprocessed));
             _context.statManager().addRateData("tunnel.corruptMessage", 1);
             return false;
@@ -207,7 +229,9 @@ class FragmentHandler {
                 if (off < 0) {
                     _context.statManager().addRateData("tunnel.corruptMessage", 1);
                     if (_log.shouldWarn())
-                        _log.warn("Corrupt fragment received -> Offset: " + off + " bytes");
+                        _log.warnThrottled("fh-corrupt-fragment",
+                                           "Corrupt fragment received -> Fragment marker " + off +
+                                           " * " + (_isInbound ? "Inbound" : "Outbound") + " tunnel endpoint");
                     return false;
                 }
                 offset = off;
@@ -217,18 +241,23 @@ class FragmentHandler {
             if (_log.shouldDebug())
                 _log.debug("Corrupt fragment received -> Offset: " + offset + " bytes", aioobe);
             else if (_log.shouldWarn())
-                _log.warn("Corrupt fragment received -> Offset: " + offset + " bytes");
+                _log.warnThrottled("fh-corrupt-fragment-bounds",
+                                   "Corrupt fragment received -> Stopped at offset " + offset + " bytes" +
+                                   " * " + (_isInbound ? "Inbound" : "Outbound") + " tunnel endpoint");
             return false;
         } catch (NullPointerException npe) {
             if (_log.shouldDebug())
                 _log.debug("Corrupt fragment received -> Offset: " + offset + " bytes", npe);
             else if (_log.shouldWarn())
-                _log.warn("Corrupt fragment received -> Offset: " + offset + " bytes" + " (Null Pointer Exception)");
+                _log.warnThrottled("fh-corrupt-fragment-null",
+                                   "Corrupt fragment received -> Null pointer at offset " + offset + " bytes" +
+                                   " * " + (_isInbound ? "Inbound" : "Outbound") + " tunnel endpoint");
             _context.statManager().addRateData("tunnel.corruptMessage", 1);
             return false;
         } catch (RuntimeException e) {
             if (_log.shouldWarn())
-                _log.warn("Corrupt fragment received -> Offset: " + offset + " bytes", e);
+                _log.warn("Corrupt fragment received -> Runtime error at offset " + offset + " bytes" +
+                          " * " + (_isInbound ? "Inbound" : "Outbound") + " tunnel endpoint", e);
             _context.statManager().addRateData("tunnel.corruptMessage", 1);
             return false;
         } finally {
@@ -308,12 +337,16 @@ class FragmentHandler {
         paddingEnd++; // skip the last
 
         int validLength = length - offset - paddingEnd + HopProcessor.IV_LENGTH;
-        int[] ranges = hashRanges(offset, validLength, paddingEnd);
+        // The four digest ranges, inlined from hashRanges() - that helper allocates
+        // an int[4] per tunnel message, and it stays for the unit test that pins
+        // the ordering
+        int payloadOff = offset + paddingEnd;
+        int payloadLen = validLength - HopProcessor.IV_LENGTH;
         byte[] v = SimpleByteCache.acquire(Hash.HASH_LENGTH);
         MessageDigest digest = _context.sha().acquire();
         try {
-            digest.update(preprocessed, ranges[0], ranges[1]);
-            digest.update(preprocessed, ranges[2], ranges[3]);
+            digest.update(preprocessed, payloadOff, payloadLen);
+            digest.update(preprocessed, 0, HopProcessor.IV_LENGTH);
             digest.digest(v, 0, Hash.HASH_LENGTH);
         } catch (DigestException de) {
             throw new RuntimeException(de);
@@ -324,22 +357,27 @@ class FragmentHandler {
         boolean eq = DataHelper.eq(v, 0, preprocessed, offset + HopProcessor.IV_LENGTH, 4);
         if (!eq) {
             if (_log.shouldWarn()) {
-                _log.warn("Corrupt tunnel message - verification fails: " + Base64.encode(preprocessed, offset+HopProcessor.IV_LENGTH, 4)
-                           + " != " + Base64.encode(v, 0, 4));
-                _log.warn("No matching endpoint -> Offset: " + offset + " bytes"
-                          + "\n* Pad bytes: " + (paddingEnd-(HopProcessor.IV_LENGTH+4)-1)
-                          + " * Length: " + length + " bytes"
-                          + " * Padding end: " + paddingEnd + " bytes");
+                // One entry, not two: the two lines named the same event, and the
+                // second claimed "no matching endpoint", which is a different
+                // message from the dispatcher
+                _log.warn("Corrupt tunnel message -> Verification fails"
+                          + "\n* Checksum: " + Base64.encode(preprocessed, offset+HopProcessor.IV_LENGTH, 4)
+                          + " != " + Base64.encode(v, 0, 4)
+                          + " * Offset: " + offset + " bytes * Pad bytes: " + (paddingEnd-(HopProcessor.IV_LENGTH+4)-1)
+                          + " * Length: " + length + " bytes");
             }
         }
         SimpleByteCache.release(v);
 
         if (eq) {
             int excessPadding = paddingEnd - (HopProcessor.IV_LENGTH + 4 + 1);
-            if (excessPadding > 0) // suboptimal fragmentation
-                _context.statManager().addRateData("tunnel.smallFragments", excessPadding);
-            else
-                _context.statManager().addRateData("tunnel.fullFragments", 1);
+            if (excessPadding > 0) { // suboptimal fragmentation
+                if (_smallFragmentsStat != null)
+                    _smallFragmentsStat.addData(excessPadding);
+            } else {
+                if (_fullFragmentsStat != null)
+                    _fullFragmentsStat.addData(1);
+            }
         }
 
         return eq;
@@ -447,17 +485,19 @@ class FragmentHandler {
             // OutboundTunnelEndpoint doesn't check for null Hash, passes it
             // to OutboundMessageDistributor.distribute() which will NPE
             if (_log.shouldWarn())
-                _log.warn("Dropping message at Tunnel Endpoint with unsupported delivery instruction type " +
-                          type + " rcvr: " + _receiver);
+                _log.warnThrottled("fh-unsupported-delivery-type",
+                                   "Dropping a message at the tunnel endpoint -> Unsupported delivery instruction type " +
+                                   type + " * " + (_isInbound ? "Inbound" : "Outbound") + " tunnel endpoint");
             _context.statManager().addRateData("tunnel.corruptMessage", 1);
         } else if (type == TYPE_TUNNEL && tunnelId == null) {
             // do this after the above since we have to return offset
             // i2pd 2.19 bug? see above
             if (_log.shouldWarn())
-                _log.warn("Dropping messages at the tunnel endpoint -> Delivery instruction to tunnel 0"
-                          + "\n* Gateway: " + router + " * Fragmented: " + fragmented
-                          + "\n* MsgID: " + messageId + " * Size: " + size + " bytes"
-                          + " * Type: " + (preprocessed[offset] & 0xff));
+                _log.warnThrottled("fh-delivery-to-tunnel-0",
+                                   "Dropping messages at the tunnel endpoint -> Delivery instruction to tunnel 0" +
+                                   "\n* Gateway: [" + router.toShortBase32() + "] * Fragmented: " + fragmented +
+                                   " [MsgID " + messageId + "] * Size: " + size + " bytes" +
+                                   " * Type: " + (preprocessed[offset] & 0xff));
             _context.statManager().addRateData("tunnel.corruptMessage", 1);
         } else if (fragmented) {
             final long fMessageId = messageId;
