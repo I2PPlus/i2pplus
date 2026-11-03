@@ -9,6 +9,8 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Simple rate calculator for periodically sampled data points - determining an
@@ -92,6 +94,16 @@ public class Rate {
      * would only hold references longer without ever being read.
      */
     private static final int RECENT_SAMPLE_RING = 8;
+
+    /**
+     * Rate names whose missing-period fallback has been reported at warn. The
+     * fallback is a one-time on-disk migration, so it is a fact about a rate
+     * name, not about a load, and repeats go to debug. Bounded by the number of
+     * rate names, which is fixed at compile time.
+     *
+     * @since 0.9.72+
+     */
+    private static final Set<String> _periodFallbackReported = ConcurrentHashMap.newKeySet(8);
 
     /**
      * Value accumulated in the current period. The per-event fields are
@@ -1052,9 +1064,17 @@ public class Rate {
             } else {
                 _period = prefix.contains("tunnelCreateResponse") ? 60 * 60 * 1000 : 60 * 1000;
             }
+            // Report the migration once per rate name. load() runs once per peer
+            // profile, so a pre-0.9.71 profile tree emitted one pair of these per
+            // peer - 14,496 lines, 44% of a 22-minute log, all of it the same
+            // three rate names.
             Log _log = I2PAppContext.getGlobalContext().logManager().getLog(Rate.class);
-            if (_log.shouldWarn()) {
-                _log.warn("Period for " + prefix + " missing or invalid, using value: " + _period);
+            if (_periodFallbackReported.add(prefix)) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Period for " + prefix + " missing or invalid, using value: " + _period);
+                }
+            } else if (_log.shouldDebug()) {
+                _log.debug("Period for " + prefix + " missing or invalid, using value: " + _period);
             }
         }
         coalesce();
