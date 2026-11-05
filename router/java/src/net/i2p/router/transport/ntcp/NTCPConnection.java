@@ -2624,17 +2624,20 @@ void noteEstablishmentRtt(int rttMs) {
                     _log.debug("Processed " + blocks + " blocks in frame");
             } catch (IOException ioe) {
                 // Throttled: payload errors are per block and never fatal.
+                // One line, and the message rather than the exception: the class
+                // name carried nothing the message did not, and the peer is what
+                // makes the line actionable.
                 _log.warnThrottled("ntcp2-payload-io",
-                                   "Payload delivery failure -> Dropping the frame * " + toShortString() +
-                                   " * Reason: " + ioe);
+                                   "Payload delivery failed to " + peerAddress() +
+                                   ": " + DataHelper.messageOf(ioe));
             } catch (DataFormatException dfe) {
                 _log.warnThrottled("ntcp2-payload-format",
-                                   "Payload delivery failure -> Dropping the frame * " + toShortString() +
-                                   " * Reason: " + dfe);
+                                   "Payload delivery failed to " + peerAddress() +
+                                   ": " + DataHelper.messageOf(dfe));
             } catch (I2NPMessageException ime) {
                 _log.warnThrottled("ntcp2-payload-i2np",
-                                   "Parsing an I2NP message failed -> Dropping the frame * " + toShortString() +
-                                   " * Reason: " + ime);
+                                   "Failed to parse an I2NP message from " + peerAddress() +
+                                   ": " + DataHelper.messageOf(ime));
                 _context.statManager().addRateData("ntcp.corruptI2NPIME", 1);
             }
         }
@@ -2978,20 +2981,25 @@ void noteEstablishmentRtt(int rttMs) {
      * @since 0.9.71+
      */
     private String toShortString() {
-        String addr;
+        return (_isInbound ? "inbound " : "outbound ") + peerAddress() + " [conn " + _connID + ' ' +
+               (_remotePeer == null ? "Unknown" : _remotePeer.calculateHash().toShortBase64()) + ']';
+    }
+
+    /**
+     * The peer's address alone, for a line that is already about one frame on one
+     * connection and does not need the connection id or the peer hash to name it.
+     *
+     * @return "ip:port", or "null_channel" when the channel is already gone
+     * @since 0.9.72+
+     */
+    private String peerAddress() {
         if (_isInbound) {
             SocketChannel ch = _chan;
-            if (ch != null) {
-                InetAddress ia = ch.socket().getInetAddress();
-                addr = (ia != null ? ia.getHostAddress() : "Unknown") + ':' + ch.socket().getPort();
-            } else {
-                addr = "null_channel";
-            }
-        } else {
-            addr = _remAddr.getHost() + ':' + _remAddr.getPort();
+            if (ch == null) {return "null_channel";}
+            InetAddress ia = ch.socket().getInetAddress();
+            return (ia != null ? ia.getHostAddress() : "Unknown") + ':' + ch.socket().getPort();
         }
-        return (_isInbound ? "inbound " : "outbound ") + addr + " [conn " + _connID + ' ' +
-               (_remotePeer == null ? "Unknown" : _remotePeer.calculateHash().toShortBase64()) + ']';
+        return _remAddr.getHost() + ':' + _remAddr.getPort();
     }
 
     @Override
