@@ -4235,7 +4235,13 @@
   <!-- JS harness: pure + DOM contract + whole-corpus smoke gate over every webapp's
        scripts (tools/test/js). Requires node; fails the build on test failure.
        setup.mjs installs/refreshes node_modules when missing or stale.
-       Set -Dno.js.tests=true to bypass. -->
+       Set -Dno.js.tests=true to bypass.
+       The harness prints one line per test file and a single totals line, and that
+       totals line is the measurement - ant's -q suppresses <exec> output whole, so
+       `ant test-js -q` prints nothing and still reports success whether the harness
+       ran 261 tests or none. Run it without -q, or through
+       tools/scripts/run-tests.sh js, which echoes the totals itself. CI runs it as
+       part of run-tests.sh all. -->
   <target name="test-js" description="Run the i2p+ JS test harness (node)" unless="no.js.tests">
     <exec executable="node" failonerror="true" dir="tools/test/js">
       <arg value="./helpers/setup.mjs"/>

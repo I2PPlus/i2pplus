@@ -11,6 +11,7 @@
 import "./pure/uiLogic.test.js";
 import "./pure/routerControlState.test.js";
 import "./pure/logTags.test.js";
+import "./pure/suiteCoverage.test.js";
 import "./dom/refreshPayload.test.js";
 import "./dom/refreshElementsPositionKey.test.js";
 import "./dom/esmScriptTags.test.js";

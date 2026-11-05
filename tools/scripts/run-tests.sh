@@ -7,6 +7,8 @@
 #   tools/scripts/run-tests.sh                  Run all tests (via ant test)
 #   tools/scripts/run-tests.sh core             Run core tests only
 #   tools/scripts/run-tests.sh router           Run router tests only
+#   tools/scripts/run-tests.sh js               Run the console/webapp JS harness
+#                                               only (needs node; no Java build)
 #   tools/scripts/run-tests.sh --logs all       Keep ant's console output and
 #                                               leave every per-module logfile
 #                                               behind (what CI should use)
@@ -348,6 +350,50 @@ run_test() {
   echo ""
 }
 
+# The JS harness needs no Java build - it is node over the webapps' own scripts -
+# so it runs here rather than through a module's junit target. It prints one line
+# per test file and a single totals line, and exits 1 when anything failed. That
+# totals line is the measurement, so it is echoed rather than recounted: a run
+# that produced no totals line at all measured nothing, and is an error, not a
+# pass. The harness's own suiteCoverage.test.js is what catches a test file that
+# is never imported, which is the way a JS suite goes silently unmeasured.
+run_js_test() {
+  echo -e "${BOLD}JS${RESET}"
+  if ! command -v node >/dev/null 2>&1; then
+    echo -e "  ${RED}node is not installed${RESET} -> the JS harness cannot run at all" >&2
+    return 1
+  fi
+  local log="${LOG_DIR}/js-test.log"
+  mkdir -p "$(dirname "$log")"
+  local rc=0
+  # setup.mjs refreshes node_modules from the lockfile and exits 0 when it cannot
+  # (no npm, no network); the suites that need linkedom then skip themselves.
+  if [ "$LOGS" = true ] && [ "${ANT_STREAM:-true}" = true ]; then
+    (cd "${REPO_ROOT}/tools/test/js" && { node ./helpers/setup.mjs && node ./helpers/run.mjs; } 2>&1 | tee "$log") || rc=$?
+  else
+    (cd "${REPO_ROOT}/tools/test/js" && { node ./helpers/setup.mjs && node ./helpers/run.mjs; } > "$log" 2>&1) || rc=$?
+  fi
+  local tally=""
+  tally=$(grep -oE '[0-9]+ passed(, [0-9]+ failed)?(, [0-9]+ skipped)?(, [0-9]+ todo)?' "$log" 2>/dev/null | tail -1) || true
+  if [ -z "$tally" ]; then
+    echo -e "  ${RED}JS harness printed no totals line${RESET} -> nothing was measured" >&2
+    if [ -s "$log" ]; then
+      echo "  Last lines of ${log}:" >&2
+      tail -n 20 "$log" | sed 's/^/  | /' >&2
+    fi
+    echo "  Full log: ${log}" >&2
+    return 1
+  fi
+  if [ "$rc" -ne 0 ]; then
+    echo -e "  Results: ${RED}${tally}${RESET}"
+  else
+    echo "  Results: ${tally}"
+  fi
+  if [ "$LOGS" = false ]; then rm -f "$log"; fi
+  echo ""
+  return $rc
+}
+
 print_summary() {
   local total_tests=$1 total_failures=$2 total_errors=$3
   echo "------------------------"
@@ -397,6 +443,10 @@ check_no_runtime_artifacts() {
 }
 
 # --- Main ---
+
+# Whether the JS harness failed. Kept separate from the JUnit tallies because the
+# harness's exit code is the only signal it has - see the check after the case.
+js_rc=0
 
 # Ant writes JUnit XML directly to RESULTS_DIR via junit.reports.dir property.
 rm -rf "${RESULTS_DIR}"
@@ -489,6 +539,9 @@ case "$SUITE" in
     run_build apps/pack200/java
     run_test apps/pack200/java "Pack200"
     ;;
+  js)
+    run_js_test || js_rc=1
+    ;;
   all|*)
     # Build all modules first (jar dependencies prevent parallelism)
     run_build core/java
@@ -555,9 +608,21 @@ case "$SUITE" in
         echo -e "  ${BOLD}${label}${RESET}: (no tests)"
       fi
     done
+    # After the parallel suites, not among them: the harness prints a line per
+    # test file, and the parallel block keeps the console to one line per suite.
+    run_js_test || js_rc=1
+
     print_summary "$total_t" "$total_f" "$total_e"
     ;;
 esac
+
+# A JS failure fails the run. A JUnit failure does not - its tallies reach CI
+# through the HTML report and the summary step that greps it - so the harness's
+# exit code is the only place a JS regression can be reported at all.
+if [ "$js_rc" -ne 0 ]; then
+  echo "ERROR: the JS harness failed" >&2
+  exit 1
+fi
 
 # Nothing a test writes may stay in the source tree - check before the report
 # step, so a red suite still reports where it leaked.
