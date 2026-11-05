@@ -6280,8 +6280,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * staggers pools with long sleeps.
      *
      * @param dir the directory scanned for .torrent files
-     * @return the newly added torrents; empty if none were added, or null
-     *         if a fatal error aborted the pass
+     * @return the newly added torrents, empty if none were added or a fatal error
+     *         aborted the pass - never null, so a caller cannot trip over it
      */
     private List<Snark> monitorTorrents(File dir) {
         File[] files = dir.listFiles(new FileSuffixFilter(".torrent"));
@@ -6319,9 +6319,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     addMessage(
                             _t("Error: Could not add torrent: {0}", name) + ": " + e.getMessage());
                     _log.error("Unable to add torrent: " + name + "\n* Reason: " + e.getMessage());
-                    // fatal: abort the pass; null tells the caller to skip
-                    // both cleanup and autostart for this cycle
-                    return null;
+                    // fatal: abort the pass. Returning here skips the cleanup of
+                    // torrents whose files are gone, and an empty list tells the
+                    // caller to skip autostart for this cycle.
+                    return Collections.emptyList();
                 } catch (RuntimeException e) {
                     addMessage(
                             _t("Error: Could not add torrent: {0}", name) + ": " + e.getMessage());
