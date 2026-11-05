@@ -175,6 +175,54 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     }
 
     /**
+     * The second name of a pair with the package prefix the two share removed, so
+     * the line states the shared prefix once. The cut is made at a dot, never
+     * mid-word, and a pair that shares no prefix is printed in full both times.
+     * <p>Pure helper so the layout is unit-testable.
+     *
+     * @param name the name to shorten
+     * @param sibling the other member of the pair, whose shared prefix is implied
+     * @return the shortened name, or {@code name} when there is no shared prefix
+     * @since 0.9.72+
+     */
+    static String pairName(String name, String sibling) {
+        int i = 0;
+        while (i < name.length() && i < sibling.length() && name.charAt(i) == sibling.charAt(i))
+            i++;
+        int dot = name.lastIndexOf('.', i);
+        return dot > 0 ? name.substring(dot + 1) : name;
+    }
+
+    /**
+     * Hold a target at or below a paired parameter's current value. A value of zero
+     * or less means the partner has nothing readable to be a ceiling — the streaming
+     * reflector returns 0 when the class is not loaded — so the target is left alone
+     * rather than pinned at zero.
+     * <p>Pure helper so the ordering is unit-testable without a router.
+     *
+     * @param target the proposed target
+     * @param ceiling the paired parameter's current value
+     * @return the target, lowered to the ceiling if it was above it
+     * @since 0.9.72+
+     */
+    static int clampCeiling(int target, int ceiling) {
+        return ceiling > 0 && target > ceiling ? ceiling : target;
+    }
+
+    /**
+     * Hold a target at or above a paired parameter's current value. See
+     * {@link #clampCeiling} for the unreadable-partner case.
+     *
+     * @param target the proposed target
+     * @param floor the paired parameter's current value
+     * @return the target, raised to the floor if it was below it
+     * @since 0.9.72+
+     */
+    static int clampFloor(int target, int floor) {
+        return floor > 0 && target < floor ? floor : target;
+    }
+
+    /**
      * Scale an observed round-trip time into a tuning floor for a timeout that
      * must stay above it.
      * <p>Pure helper so the no-data handling is unit-testable. A missing stat
@@ -1325,6 +1373,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         // Index the params by name for the cross-parameter invariant checks
         for (TunableParam param : _params)
             _paramsByName.put(param.getName(), (BaseParam) param);
+        linkOrderInvariants();
 
         // Purge stale tuner.* keys from router.config (one-time cleanup)
         purgeOldTunerProps(ctx);
@@ -1474,6 +1523,32 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     }
 
     /**
+     * Give every parameter named in {@link #ORDER_INVARIANTS} the paired members
+     * it must stay ordered against, so {@code clampTarget()} cannot propose a
+     * value that inverts the pair in the first place.
+     * <p>Without this the two members are hill-climbed independently and the
+     * only thing that notices is {@link #enforceInvariants()} on the next slow
+     * cycle, which resets both to their factory defaults and throws away the
+     * tuning of the member that was correct. On the live router that cost was
+     * paid twice over: the ceiling walked down to its RTT floor while the floor
+     * walked up 50 ms a cycle toward its own ceiling, and the ranges allow the
+     * crossing because the floor's ceiling (3000) is three times the ceiling's
+     * floor (1000).
+     *
+     * @since 0.9.72+
+     */
+    private void linkOrderInvariants() {
+        for (String[] pair : ORDER_INVARIANTS) {
+            BaseParam lower = _paramsByName.get(pair[0]);
+            BaseParam upper = _paramsByName.get(pair[1]);
+            if (lower == null || upper == null)
+                continue;
+            lower.addCeiling(upper);
+            upper.addFloor(lower);
+        }
+    }
+
+    /**
      * Reset the members of any ordering invariant the tuning has inverted.
      * <p>Each parameter hill-climbs independently against its own stat, so a
      * pair like {@code minResendDelay} / {@code maxResendDelay} can end up with
@@ -1505,8 +1580,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             Integer lower = values.get(pair[0]);
             Integer upper = values.get(pair[1]);
             if (_log.shouldWarn())
-                _log.warn("Auto-Tuner parameters inverted -> Floor above ceiling" +
-                          "\n* " + pair[0] + ": " + lower + " * " + pair[1] + ": " + upper);
+                _log.warn("Auto-Tuner inverted " + pair[0] + ' ' + lower + " above " +
+                          pairName(pair[1], pair[0]) + ' ' + upper + " -> Reset both to defaults");
             for (String name : pair) {
                 BaseParam bp = _paramsByName.get(name);
                 if (bp == null || !bp._autoTuning)
@@ -3192,7 +3267,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * Hard clamp the target to [min, max] before comparison.
          *
          * @param target the proposed target, possibly outside the param's range
-         * @return the target limited to [_min, _max], raised to {@link #rttFloor}
+         * @return the target limited to [_min, _max], raised to {@link #rttFloor},
+         *         then held inside any pair this param is registered in
          */
         private int clampTarget(int target) {
             // Hard clamp to [min, max] BEFORE comparison — prevents stale persisted values
@@ -3229,7 +3305,63 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                                " for " + _name);
                 target = floor;
             }
-            return target;
+            // The pair ordering is the last word, so a target can never be the one
+            // that inverts a pair.
+            return clampPairs(target);
+        }
+
+        /** Params this one may not exceed, from {@link #ORDER_INVARIANTS}. */
+        private List<BaseParam> _ceilings;
+
+        /** Params this one may not fall below, from {@link #ORDER_INVARIANTS}. */
+        private List<BaseParam> _floors;
+
+        /**
+         * Pair this param against a member it must stay at or below.
+         *
+         * @param upper the paired param, whose runtime value is the ceiling
+         * @since 0.9.72+
+         */
+        void addCeiling(BaseParam upper) {
+            if (_ceilings == null)
+                _ceilings = new ArrayList<BaseParam>(2);
+            _ceilings.add(upper);
+        }
+
+        /**
+         * Pair this param against a member it must stay at or above.
+         *
+         * @param lower the paired param, whose runtime value is the floor
+         * @since 0.9.72+
+         */
+        void addFloor(BaseParam lower) {
+            if (_floors == null)
+                _floors = new ArrayList<BaseParam>(2);
+            _floors.add(lower);
+        }
+
+        /**
+         * Keep a target on the correct side of every paired param.
+         * <p>The partner's runtime value is already range-clamped and RTT-floored
+         * by its own cycle, so ordering against it cannot push this param below
+         * the RTT it guards — in the streaming trio the ceiling's RTT floor is
+         * 1.5 x RTT and the floor's is 1.0 x RTT, so the ceiling can never be
+         * driven under the floor's own floor.
+         *
+         * @param target the target after the range and RTT clamps
+         * @return the target, held inside its pair
+         */
+        private int clampPairs(int target) {
+            int rv = target;
+            if (_ceilings != null)
+                for (BaseParam upper : _ceilings)
+                    rv = clampCeiling(rv, upper.getRuntimeValue());
+            if (_floors != null)
+                for (BaseParam lower : _floors)
+                    rv = clampFloor(rv, lower.getRuntimeValue());
+            if (rv != target && _log.shouldDebug())
+                _log.debug("Held target " + target + " to " + rv + " for " + _name);
+            return rv;
         }
 
         /**
@@ -3294,9 +3426,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 _lastAppliedTarget = target;
                 if (!_noEffectReported) {
                     _noEffectReported = true;
+                    // One line. The third line used to promise that repeats would
+                    // not be logged, which is a fact about the logging, not about
+                    // the failure.
                     _log.warn("Target " + target + " for " + _name + " did not take effect"
-                              + " -> Runtime still reports " + current
-                              + "\n* Repeat attempts will not be logged");
+                              + " -> Runtime still reports " + current);
                 }
             } else {
                 _lastAppliedTarget = 0;
@@ -12545,7 +12679,13 @@ SendPoolCapacityParam() {
             // Also scale with memory: 1 slot per 2MB heap
             int byCores = Math.max(cores * 512, cores * 256 * Math.max(1, cores / 4));
             int byMem = Math.max(2048, (int) (memMB / 2));
-            return Math.max(byCores, byMem);
+            // Cap at what the setter accepts. refreshRanges() takes this method as
+            // the ceiling and overwrites the constructor's, which is already capped
+            // by sendPoolCapacityMax(); uncapped, this scales to 36864 on 24 cores
+            // while the setter rewrites anything above 12288, so the tuner proposes
+            // a value that never lands and every cycle reads back as "did not take
+            // effect" - the live router proposed 12352 against a ceiling of 12288.
+            return Math.min(TransportImpl.sendPoolCapacityMax(), Math.max(byCores, byMem));
         }
 
         protected void applyValue(int value) {

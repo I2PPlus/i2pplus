@@ -149,4 +149,79 @@ public class TunerInvariantTest {
     public void floorStaysInRangeForAnAbsurdRtt() {
         assertEquals(Integer.MAX_VALUE, Tuner.rttFloorMs(1e12, 1.5));
     }
+
+    // ----- clampCeiling / clampFloor -----
+
+    /**
+     * The prevention that replaces the reset: a member of a pair cannot be tuned
+     * past the other member. Without this the ceiling walked down to its RTT floor
+     * while the floor walked up 50 ms a cycle, and the only thing that noticed was
+     * the invariant check resetting both to their factory defaults.
+     */
+    @Test
+    public void aPairMemberCannotBeTunedPastTheOther() {
+        assertEquals(1985, Tuner.clampCeiling(2850, 1985));
+        assertEquals(2850, Tuner.clampFloor(1985, 2850));
+    }
+
+    /** A target already inside the pair is left alone. */
+    @Test
+    public void anOrderedTargetIsUntouched() {
+        assertEquals(1500, Tuner.clampCeiling(1500, 1985));
+        assertEquals(1500, Tuner.clampFloor(1500, 1000));
+        assertEquals(1985, Tuner.clampCeiling(1985, 1985));
+    }
+
+    /**
+     * A partner with nothing readable to report is not a constraint. Streaming's
+     * reflector returns 0 when the class is not loaded, and treating that as a
+     * ceiling of zero would pin every member of the pair at zero.
+     */
+    @Test
+    public void anUnreadablePartnerDoesNotConstrain() {
+        assertEquals(2850, Tuner.clampCeiling(2850, 0));
+        assertEquals(2850, Tuner.clampCeiling(2850, -1));
+        assertEquals(2850, Tuner.clampFloor(2850, 0));
+        assertEquals(2850, Tuner.clampFloor(2850, -1));
+    }
+
+    // ----- pairName -----
+
+    /** The live inversion this formats: the shared package stated once. */
+    @Test
+    public void sharedPackageIsStatedOnce() {
+        assertEquals("maxResendDelay",
+                     Tuner.pairName("i2p.streaming.maxResendDelay", "i2p.streaming.initialResendDelay"));
+        assertEquals("initRTO", Tuner.pairName("udp.peer.initRTO", "udp.peer.minRTO"));
+    }
+
+    /** The cut is at a dot, never mid-word, even when the two names share a word. */
+    @Test
+    public void cutIsAlwaysAtADot() {
+        assertEquals("maxResendDelay",
+                     Tuner.pairName("i2p.streaming.maxResendDelay", "i2p.streaming.maxRTO"));
+        assertEquals("maxRTO",
+                     Tuner.pairName("i2p.streaming.maxRTO", "i2p.streaming.maxResendDelay"));
+    }
+
+    /** A pair with no shared prefix is printed in full, so the name stays findable. */
+    @Test
+    public void noSharedPrefixMeansTheFullName() {
+        assertEquals("a.b.thing", Tuner.pairName("a.b.thing", "c.d.other"));
+    }
+
+    /**
+     * Every pair in the table shortens to the bare parameter name. The first name
+     * of a pair is always printed in full, which is what keeps this safe: maxRTO
+     * exists under both i2p.streaming. and udp.peer., so a shortened first name
+     * would be ambiguous.
+     */
+    @Test
+    public void tablePairsShortenToTheBareName() {
+        for (String[] pair : Tuner.ORDER_INVARIANTS) {
+            String short2 = Tuner.pairName(pair[1], pair[0]);
+            assertTrue(pair[1] + " -> " + short2, pair[1].endsWith(short2));
+            assertFalse(short2, short2.contains("."));
+        }
+    }
 }
