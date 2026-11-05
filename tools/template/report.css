@@ -207,6 +207,23 @@ th {
   border-top: 1px solid #2a2a30;
 }
 
+/* A note attached to its table: a caption sits inside the table's own border,
+   so the tally and the table read as one element rather than two. A caption box
+   paints no box-shadow, and its own side borders lose the collapsed-border
+   conflict and are never drawn, so the frame's sides are painted into its
+   background — 1px of the table's border colour at each edge. */
+caption {
+  caption-side: top;
+  text-align: left;
+  padding: 6px 12px;
+  background: linear-gradient(to right, #2a2a30 0 1px, #1a1a20 1px calc(100% - 1px),
+              #2a2a30 calc(100% - 1px) 100%);
+  border-bottom: 1px solid #2a2a30;
+  color: #999;
+  font-size: 8pt;
+  font-weight: 600;
+}
+
 .line {
   min-width: 80px;
 }
