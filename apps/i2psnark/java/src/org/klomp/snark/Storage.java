@@ -1355,7 +1355,12 @@ public class Storage implements Closeable {
                 // full length is already in the data directory stays there.
                 workFile = new File(_stagingBase, _base.getName());
                 if (_base.exists() && _base.length() == metainfo.getTotalLength()) {
-                    if (!workFile.delete()) {
+                    // Only warn when the delete genuinely failed. File.delete()
+                    // returns false for a path that is not there, and the staging
+                    // copy is normally removed when it is moved to the data dir, so
+                    // the common case here is "already gone" - one startup logged 17
+                    // of these for files that did not exist.
+                    if (workFile.exists() && !workFile.delete() && _log.shouldWarn()) {
                         _log.warn("[Snark] Unable to delete stale file: " + workFile);
                     }
                     // already in the data dir; the movedToDataDir flag must reflect that
@@ -1442,7 +1447,10 @@ public class Storage implements Closeable {
                     // data found in the data directory.
                     File stagingFile = buildFilePath(_stagingBase, path);
                     if (finalFile.exists() && finalFile.length() == len) {
-                        if (!stagingFile.delete()) {
+                        // As above: a false return usually means the staging copy is
+                        // already gone, and this loop runs once per file in the
+                        // torrent, so one absent torrent produced most of the 17.
+                        if (stagingFile.exists() && !stagingFile.delete() && _log.shouldWarn()) {
                             _log.warn("[Snark] Unable to delete stale file: " + stagingFile);
                         }
                     } else {
