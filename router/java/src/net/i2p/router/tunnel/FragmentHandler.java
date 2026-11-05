@@ -120,7 +120,12 @@ class FragmentHandler {
      * @since 0.9.72+
      */
     private static final long[] RATES = { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR };
+    /**
+     * {@code tunnel.smallFragments}: the excess padding bytes in verified fragments
+     * that did not fill their block, the sign of suboptimal fragmentation.
+     */
     private final RateStat _smallFragmentsStat;
+    /** {@code tunnel.fullFragments}: verified fragments that filled their block. */
     private final RateStat _fullFragmentsStat;
     /**
      * Per-thread I2NP message reader, used for inbound data only.

@@ -571,13 +571,14 @@ public class LogsHelper extends HelperBase {
 
     /**
      * The two column widths the formatter pads to. They are private to
-     * {@link net.i2p.util.LogRecordFormatter}; the page renders that formatter's
+     * {@code net.i2p.util.LogRecordFormatter}; the page renders that formatter's
      * ".." truncation marker as an ellipsis in refreshLogs.js, which has to know
      * the widths to tell a framed column from a ".." a message happened to
      * contain. Keep these in step with its MAX_THREAD_LENGTH and
      * MAX_WHERE_LENGTH.
      */
     static final int MAX_THREAD_LENGTH = 12;
+    /** The other width, the source class name column the same formatter pads. */
     static final int MAX_WHERE_LENGTH = 16;
 
     /**

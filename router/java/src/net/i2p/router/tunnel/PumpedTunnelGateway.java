@@ -86,10 +86,20 @@ class PumpedTunnelGateway extends TunnelGateway {
      * @since 0.9.72+
      */
     private static final long PUMP_CONFIG_REFRESH_MS = 30 * 1000L;
+    /** When the two overrides below were last read from the config. */
     private static volatile long _pumpCfgRefreshed;
+    /** Cached override of the max outbound messages per pump, null for no override. */
     private static volatile Integer _cachedObMsgsProp;
+    /** Cached override of the max inbound messages per pump, null for no override. */
     private static volatile Integer _cachedIbMsgsProp;
 
+    /**
+     * Re-read the two raw per-pump overrides at most once per
+     * PUMP_CONFIG_REFRESH_MS. A value that does not parse is cached as no override,
+     * leaving the computed default in force rather than poisoning the cache.
+     *
+     * @param ctx the context to read the two properties from
+     */
     private static void refreshPumpConfig(RouterContext ctx) {
         long now = ctx.clock().now();
         if (now - _pumpCfgRefreshed < PUMP_CONFIG_REFRESH_MS)

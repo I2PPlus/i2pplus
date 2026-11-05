@@ -395,7 +395,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
 
     /**
      * Short base32 tag of a subsession's local destination, for log lines that
-     * must stay on one line. {@link I2PSession#toString()} is a multi-line dump.
+     * must stay on one line. {@code I2PSession.toString()} is a multi-line dump.
      *
      * @param session the session to name, non-null
      * @return 8 characters, or "unknown" before the session has a local destination

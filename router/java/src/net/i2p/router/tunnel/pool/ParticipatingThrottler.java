@@ -61,9 +61,13 @@ public class ParticipatingThrottler {
      * @since 0.9.72+
      */
     private static final long PROPERTY_CHECK_INTERVAL = 30 * 1000L;
+    /** When the three settings below were last read from the config. */
     private volatile long _lastPropertyCheckTime;
+    /** Cached {@code router.enableTransitThrottle}, false skips the count-based check. */
     private volatile boolean _cachedShouldThrottle = RequestThrottler.DEFAULT_SHOULD_THROTTLE;
+    /** Cached {@code router.enableImmediateDisconnect}, true force-disconnects the peer. */
     private volatile boolean _cachedShouldDisconnect = RequestThrottler.DEFAULT_SHOULD_DISCONNECT;
+    /** Cached {@code router.blockOldRouters}, true bans a peer on an old version. */
     private volatile boolean _cachedShouldBlockOldRouters = DEFAULT_BLOCK_OLD_ROUTERS;
 
     /**
@@ -285,18 +289,6 @@ public class ParticipatingThrottler {
     }
 
     /**
-     * Determines whether to throttle tunnel participation for the given router.
-     * When {@code countRequest} is set the request increments the peer's counter;
-     * consult-only checks read the current count without advancing it, and never
-     * DROP or ban on it: a count this request did not contribute to must not
-     * silently kill it, and mid-chain hops would otherwise accumulate roughly
-     * twice per tunnel via both their prev-hop and next-hop roles.
-     *
-     * @param h the hash of the router to check
-     * @param countRequest true to increment the peer's counter
-     * @return the throttling Result (ACCEPT, REJECT, or DROP)
-     */
-    /**
      * Re-read the throttle config at most once per PROPERTY_CHECK_INTERVAL.
      * Benign race: duplicate refreshes are idempotent writes.
      *
@@ -314,6 +306,18 @@ public class ParticipatingThrottler {
         }
     }
 
+    /**
+     * Determines whether to throttle tunnel participation for the given router.
+     * When {@code countRequest} is set the request increments the peer's counter;
+     * consult-only checks read the current count without advancing it, and never
+     * DROP or ban on it: a count this request did not contribute to must not
+     * silently kill it, and mid-chain hops would otherwise accumulate roughly
+     * twice per tunnel via both their prev-hop and next-hop roles.
+     *
+     * @param h the hash of the router to check
+     * @param countRequest true to increment the peer's counter
+     * @return the throttling Result (ACCEPT, REJECT, or DROP)
+     */
     Result shouldThrottle(Hash h, boolean countRequest) {
         updateCachedProperties();
         RouterInfo ri = (RouterInfo) context.netDb().lookupLocallyWithoutValidation(h);

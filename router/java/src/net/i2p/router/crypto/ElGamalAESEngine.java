@@ -168,6 +168,8 @@ public final class ElGamalAESEngine {
      * bytes, so this is built only when the debug line will actually be written -
      * it used to run on every successful decrypt, four times over, with debug off.
      *
+     * @param tags the tags found in the decrypted block, in the set's iteration order
+     * @return each tag as a bracketed 6-character prefix, empty for no tags
      * @since 0.9.72+
      */
     private static String tagsToString(Set<SessionTag> tags) {

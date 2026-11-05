@@ -311,7 +311,7 @@ public class I2PDefaultServlet extends DefaultServlet {
      * The above example would parse incorrectly on various browsers as the "&lt;" or '"' characters
      * would end the href attribute value string prematurely.
      *
-     * @param raw the raw data
+     * @param raw the text to be placed inside the href, not yet encoded
      * @return the defanged text.
      */
     private static String hrefEncodeURI(String raw) {
@@ -385,6 +385,8 @@ public class I2PDefaultServlet extends DefaultServlet {
     }
 
     /**
+     * Whether a character is a hexadecimal digit, upper or lower case.
+     *
      * @param c the character to test
      * @return true for 0-9, a-f and A-F
      */

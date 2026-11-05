@@ -20,6 +20,7 @@ class RatchetPayload {
     /** Utility class with static methods only, not instantiable. */
     private RatchetPayload() {}
 
+    /** Log, used only for the block-parsing debug line below. */
     private static final Log _log = new Log(RatchetPayload.class);
 
     /** Block header size in bytes. */

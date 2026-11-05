@@ -178,6 +178,10 @@ public class CSSHelper extends HelperBase {
 
         /** One cached property. */
         private static final class Cached {
+
+            /** One entry per property name, created on the first read of that name. */
+            private Cached() {}
+
             /** Raw value last read from {@code router.config}, null when absent. */
             volatile String fromConfig;
             /** Effective raw value, including the app-context fallback. */
@@ -192,6 +196,8 @@ public class CSSHelper extends HelperBase {
         private final Map<String, Cached> _cache = new HashMap<>(24);
 
         /**
+         * Cache the console properties read through the given context.
+         *
          * @param ctx the router context to read
          */
         ConsoleProps(RouterContext ctx) {_ctx = ctx;}
