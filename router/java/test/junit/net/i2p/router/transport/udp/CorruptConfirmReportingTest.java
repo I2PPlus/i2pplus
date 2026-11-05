@@ -23,14 +23,17 @@ public class CorruptConfirmReportingTest {
 
     // ---- the reason string ----
 
+    /**
+     * The message, not the class. The reason is what is read; the exception type is
+     * whichever check happened to throw, and the same rejection reaches the catch as
+     * IllegalArgumentException from one path and IllegalStateException from another.
+     */
     @Test
-    public void reasonCarriesTypeAndMessage() {
-        assertEquals("IllegalStateException: bad state",
-                     EstablishmentManager.corruptConfirmReason(
-                         new IllegalStateException("bad state")));
-        assertEquals("IllegalArgumentException: low order key",
-                     EstablishmentManager.corruptConfirmReason(
-                         new IllegalArgumentException("low order key")));
+    public void reasonCarriesTheMessageNotTheClass() {
+        assertEquals("bad state",
+                     EstablishmentManager.corruptConfirmReason(new IllegalStateException("bad state")));
+        assertEquals("low order key",
+                     EstablishmentManager.corruptConfirmReason(new IllegalArgumentException("low order key")));
     }
 
     @Test

@@ -413,7 +413,12 @@ public class EstablishmentManager {
         // the handshake state carries long chains; keep it to one readable line
         msg = msg.replace('\n', ' ').replace('\r', ' ').trim();
         if (msg.length() > 120) {msg = msg.substring(0, 120) + "...";}
-        return e.getClass().getSimpleName() + ": " + msg;
+        // The message, not "ClassName: message". The reason is what the operator
+        // reads, and the class of a handshake failure is an implementation detail
+        // of whichever check happened to throw - the same rejection reaches this
+        // catch as IllegalArgumentException from one path and IllegalStateException
+        // from another.
+        return msg;
     }
 
     /**
