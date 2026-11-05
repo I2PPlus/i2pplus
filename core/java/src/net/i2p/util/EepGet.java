@@ -1417,9 +1417,10 @@ public class EepGet {
     }
 
     /**
-     * The request URL as a log-line label: {@link #redactedUrl}, bracketed, and
-     * without the scheme. EepGet is HTTP-only, so the scheme is on every entry
-     * and identifies nothing.
+     * The request URL as a log-line label: {@link #redactedUrl}, bracketed,
+     * without the scheme, and with the middle of a base32 host's hash left out.
+     * EepGet is HTTP-only, so the scheme is on every entry and identifies
+     * nothing.
      *
      * @param url the request URL, not null
      * @return the URL in [host/path] form for a log line
@@ -1429,8 +1430,35 @@ public class EepGet {
         String s = redactedUrl(url);
         int scheme = s.indexOf("://");
         if (scheme >= 0) { s = s.substring(scheme + 3); }
-        return '[' + s + ']';
+        return '[' + shortenB32(s) + ']';
     }
+
+    /**
+     * Shorten a base32 host in a URL that has already lost its scheme. Fifty-two
+     * characters of hash are most of a long label and none of it readable, and a
+     * fetch that failed is then a line of noise around a destination nobody can
+     * check. The end of the hash is what matches a destination in the console and
+     * the path is what says what was being fetched, so both are kept whole and
+     * the middle of the hash goes.
+     *
+     * @param s the scheme-free URL, not null
+     * @return the URL, with the middle of a base32 host's hash shown as "..."
+     */
+    static String shortenB32(String s) {
+        int b32 = s.indexOf(B32_SUFFIX);
+        int path = s.indexOf('/');
+        // A real destination's hash is 52 characters, so a short match before the
+        // path is something else, and a match past it is in the path.
+        if (b32 < HASH_HEAD + HASH_TAIL || (path >= 0 && b32 > path)) { return s; }
+        return s.substring(0, HASH_HEAD) + "..." + s.substring(b32 - HASH_TAIL);
+    }
+
+    /** What a base32 destination's name ends with. */
+    private static final String B32_SUFFIX = ".b32.i2p";
+    /** How much of a base32 hash a label keeps at the front. */
+    private static final int HASH_HEAD = 8;
+    /** How much of a base32 hash a label keeps at the back. */
+    private static final int HASH_TAIL = 12;
 
     /**
      * Whether a failed attempt was a data-phase stall on an otherwise working

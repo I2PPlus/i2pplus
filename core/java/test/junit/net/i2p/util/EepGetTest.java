@@ -1562,6 +1562,31 @@ public class EepGetTest extends TestCase {
         assertEquals("x.example/?...", EepGet.redactedUrl("http://x.example/?info_hash=A&a=1"));
     }
 
+    /**
+     * A base32 destination in a log label: the middle of a 52-character hash is
+     * dropped, its head and tail and the path are kept, and nothing else is
+     * touched - not a short name that happens to end in .b32.i2p, not the same
+     * string in a path, not any other host.
+     */
+    public void testUrlLabel() {
+        String b32 = "tc73n4kivdroccekirco7rhgxdg5f3cjvbaapabupeyzrqwv5guq.b32.i2p";
+        assertEquals("[tc73n4ki...peyzrqwv5guq.b32.i2p/news.su3]",
+                     EepGet.urlLabel("http://" + b32 + "/news.su3"));
+        // no path at all
+        assertEquals("[tc73n4ki...peyzrqwv5guq.b32.i2p]", EepGet.urlLabel("http://" + b32));
+        // a schemeless URL is shortened the same way
+        assertEquals("[tc73n4ki...peyzrqwv5guq.b32.i2p/news.su3]",
+                     EepGet.urlLabel(b32 + "/news.su3"));
+        // too short to be a destination hash, and the same string in the path
+        assertEquals("[x.b32.i2p/]", EepGet.urlLabel("http://x.b32.i2p/"));
+        assertEquals("[foo.i2p/abcdefghijklmnopqrst.b32.i2p]",
+                     EepGet.urlLabel("http://foo.i2p/abcdefghijklmnopqrst.b32.i2p"));
+        // every other host, and a redacted magnet, pass through
+        assertEquals("[notbob.i2p/graphs/cats.txt]", EepGet.urlLabel("http://notbob.i2p/graphs/cats.txt"));
+        assertEquals("[proxy.example/?action=download...]",
+                     EepGet.urlLabel("http://proxy.example/?action=download&info_hash=%7B%AB"));
+    }
+
     private static class TestPartialEepGet extends PartialEepGet {
         TestPartialEepGet(I2PAppContext ctx, String proxyHost, int proxyPort, ByteArrayOutputStream out, String url, long size) {
             super(ctx, proxyHost, proxyPort, out, url, size);
