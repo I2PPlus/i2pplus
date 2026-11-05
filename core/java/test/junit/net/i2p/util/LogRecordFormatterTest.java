@@ -32,10 +32,10 @@ public class LogRecordFormatterTest {
 
     @Test
     public void testEllipsizesPreservingSuffix() {
-        // "Server.<remoteHost>.<remotePort>" accept thread (21 chars) -> last 11 chars
-        assertEquals("….0.0.1.7662", LogRecordFormatter.padOrTruncate("Server.127.0.0.1.7662", WIDTH));
-        // streaming per-connection thread (24 chars) -> last 11 chars
-        assertEquals("…j:er:Dj66.2", LogRecordFormatter.padOrTruncate("SomeApp-Web:Aj:er:Dj66.2", WIDTH));
+        // "Server.<remoteHost>.<remotePort>" accept thread (21 chars) -> last 10 chars
+        assertEquals("..0.0.1.7662", LogRecordFormatter.padOrTruncate("Server.127.0.0.1.7662", WIDTH));
+        // streaming per-connection thread (24 chars) -> last 10 chars
+        assertEquals("..:er:Dj66.2", LogRecordFormatter.padOrTruncate("SomeApp-Web:Aj:er:Dj66.2", WIDTH));
     }
 
     @Test
@@ -59,9 +59,9 @@ public class LogRecordFormatterTest {
 
     @Test
     public void testEllipsisAtBoundary() {
-        // exactly size+1 chars -> last (size-1) kept with prefix, still exactly size wide
+        // exactly size+1 chars -> last (size-2) kept with the marker, still exactly size wide
         String thirteen = "1234567890123";
-        assertEquals("…34567890123", LogRecordFormatter.padOrTruncate(thirteen, WIDTH));
+        assertEquals("..4567890123", LogRecordFormatter.padOrTruncate(thirteen, WIDTH));
         // one char short of ellipsizing stays unchanged, padded
         assertEquals("12345678901 ", LogRecordFormatter.padOrTruncate("12345678901", WIDTH));
     }
@@ -70,7 +70,26 @@ public class LogRecordFormatterTest {
     public void testVeryLongNameStaysBoundsChecked() {
         String huge = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
         assertEquals(WIDTH, LogRecordFormatter.padOrTruncate(huge, WIDTH).length());
-        assertTrue(LogRecordFormatter.padOrTruncate(huge, WIDTH).startsWith("…"));
+        assertTrue(LogRecordFormatter.padOrTruncate(huge, WIDTH).startsWith(".."));
+    }
+
+    /**
+     * The truncation marker is plain ASCII. It is part of the fixed-width framing
+     * of every log line, so a viewer that decodes the file as something other than
+     * UTF-8 - a terminal with LANG=C or POSIX, an editor defaulting to CP1252 -
+     * renders a non-ASCII marker as three cells and pushes the rest of the line
+     * right, which makes the columns look broken in a file that is correct UTF-8.
+     */
+    @Test
+    public void testFramingIsAscii() {
+        String[] names = {"net.i2p.router.Tuner", "Server.127.0.0.1.7662", "SomeApp-Web:Aj:er:Dj66.2"};
+        for (String name : names) {
+            String out = LogRecordFormatter.padOrTruncate(name, WIDTH);
+            assertEquals(WIDTH, out.length());
+            for (int i = 0; i < out.length(); i++) {
+                assertTrue(name + " -> " + out, out.charAt(i) < 128);
+            }
+        }
     }
 
     @Test

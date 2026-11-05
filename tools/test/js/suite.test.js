@@ -18,6 +18,7 @@ import "./dom/graphTooltip.test.js";
 import "./dom/toggleDebug.test.js";
 import "./dom/routerControl.test.js";
 import "./dom/refreshLogsLinkify.test.js";
+import "./dom/refreshLogsFraming.test.js";
 import "./dom/vdomParser.test.js";
 
 await import("./dom/importAll.test.js");

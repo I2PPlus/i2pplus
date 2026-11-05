@@ -26,8 +26,9 @@ public class LogsHelperRewritesTest {
         "| INFO   | accept=true reject=false allowed=true",
         "| ERROR  | java.lang.IllegalStateException: bad state\n\tat net.i2p.A.b(A.java:1)\n\tat java.base/C.d(C.java:2)\n* and more",
         "| INFO   | [DBWriter   ] flushed | [UDPSender] x | [BWRefiller] y",
-        "| INFO   | [NTCPRead.2 ] …st.Net.Connection: truncated class",
+        "| INFO   | [NTCPRead.2 ] ..st.Net.Connectio: truncated class",
         "| INFO   | […ueue Pumper] and …obQueue and [NTCP Pumper ok",
+        "| INFO   | [..ueue Pumper] and ..obQueue and [NTCP Pumper ok",
         "| INFO   | [Addressbook] [Thread-3] [Timestamper] [DHT Explore] [HostChecker]",
         "| INFO   | IRC Client] Inbound message & IRC Client] Outbound message",
         "a:  b:  c:  d  e",
@@ -75,9 +76,11 @@ public class LogsHelperRewritesTest {
         msg = msg.replace("  &#10140;  ", " &#10140; ");
         msg = msg.replace("&amp;hellip;", "...");
         msg = msg.replace("…obQueue", "JobQueue");
+        msg = msg.replace("..obQueue", "JobQueue");
         msg = msg.replace("[DBWriter   ]", "[NetDB Writer]");
         msg = msg.replace("[NTCP Pumper", "[ NTCP Pumper");
         msg = msg.replace("[…ueue Pumper", "[Queue Pumper");
+        msg = msg.replace("[..ueue Pumper", "[Queue Pumper");
         msg = msg.replace("[UDPSender", "[UDP Sender");
         msg = msg.replace("[BWRefiller", "[BW Refiller");
         msg = msg.replace("[Addressbook]", "[Addressbook ]");
@@ -322,14 +325,14 @@ public class LogsHelperRewritesTest {
      * wrote: padded, truncated to the tail, and the forms the rewrite tables
      * lengthen by a space or by widening the name. HTML collapses a plain space,
      * so a column padded with spaces is short on the page until the padding pass
-     * writes it as &nbsp;; a column shortened with the one-character ellipsis
-     * renders at its full width on its own.
+     * writes it as &nbsp;. A truncated column is the one form the server leaves
+     * short: the tail rewrite folds the two-character marker and a leading dot of
+     * the tail into a one-cell ellipsis, and refreshLogs.js puts the cell back.
      */
     @Test
     public void testThreadColumnRendersAtItsWrittenWidth() {
         String[] columns = {
             "| INFO   | [NTCPRead.2  ] x",   // padded by the formatter
-            "| INFO   | […j:er:Dj66.2] x",   // truncated by the formatter
             "| INFO   | [SAM-PWkr.2  ] x",   // padded by the formatter
             "| INFO   | [Addressbook] x",    // padded by a rewrite
             "| INFO   | [Timestamper] x",    // padded by a rewrite
@@ -337,7 +340,8 @@ public class LogsHelperRewritesTest {
             "| INFO   | [BWRefiller ] x",    // widened by a rewrite
             "| INFO   | [NTCP Pumper] x",    // widened by a rewrite
             "| INFO   | [Thread-3   ] x",    // widened by a rewrite
-            "| INFO   | [DBWriter   ] x"     // replaced wholesale by a rewrite
+            "| INFO   | [DBWriter   ] x",    // replaced wholesale by a rewrite
+            "| INFO   | [..ueue Pumper] x"   // truncated, then widened by a rewrite
         };
         for (String line : columns) {
             assertEquals(line, 12, threadColumn(line).length());
@@ -345,27 +349,74 @@ public class LogsHelperRewritesTest {
     }
 
     /**
-     * A truncated column keeps the last 11 characters of the name behind the
-     * one-character ellipsis, so the reader can still tell which thread logged
-     * the line and the column needs no padding.
+     * A truncated thread column is the one column the server hands to the page a
+     * cell short: the formatter writes a two-character marker plus a 10-character
+     * tail, and the tail rewrite folds the marker and the tail's leading dot into
+     * a single ellipsis. The page pass in refreshLogs.js restores the cell; this
+     * pins what the server is responsible for.
      */
     @Test
-    public void testTruncatedThreadColumnKeepsTheTail() {
-        assertEquals("…j:er:Dj66.2", threadColumn("| INFO   | […j:er:Dj66.2] x"));
+    public void testTruncatedThreadColumnIsOneCellShortForThePageToFill() {
+        String rendered = messageRewrites("| INFO   | [...j:er:Dj66.] x");
+        int lb = rendered.indexOf(" [");
+        int rb = rendered.indexOf("] ", lb + 2);
+        String column = rendered.substring(lb + 2, rb)
+                              .replace("&hellip;", "\u2026").replace("&nbsp;", " ");
+        assertEquals("\u2026j:er:Dj66.", column);
+        assertEquals(11, column.length());
     }
 
     /**
-     * A truncated class column keeps the last 15 characters of the name behind
-     * the one-character ellipsis, so the column stays 16 wide on the page.
+     * The widths the console assumes for the two framed columns have to be the
+     * widths the formatter actually writes, or the page pass that renders the
+     * truncation marker looks at the wrong offsets.
+     */
+    @Test
+    public void testColumnWidthsMatchTheFormatter() throws Exception {
+        Class<?> fmt = Class.forName("net.i2p.util.LogRecordFormatter");
+        assertEquals(LogsHelper.MAX_THREAD_LENGTH, intField(fmt, "MAX_THREAD_LENGTH"));
+        assertEquals(LogsHelper.MAX_WHERE_LENGTH, intField(fmt, "MAX_WHERE_LENGTH"));
+    }
+
+    /**
+     * Reads a private int constant reflectively so the check above cannot drift.
+     *
+     * @param cls the class holding the constant
+     * @param name the field's name
+     * @return the constant's value
+     */
+    private static int intField(Class<?> cls, String name) throws Exception {
+        java.lang.reflect.Field f = cls.getDeclaredField(name);
+        f.setAccessible(true);
+        return f.getInt(null);
+    }
+
+    /**
+     * A truncated class column keeps the last 14 characters of the name behind
+     * the two-character marker, so the column stays 16 wide on the page.
      */
     @Test
     public void testClassColumnRendersAtItsWrittenWidth() {
-        String rendered = messageRewrites("| INFO   | [NTCPRead.2 ] …st.Net.Connection: x");
+        String rendered = messageRewrites("| INFO   | [NTCPRead.2 ] ..st.Net.Connect: x");
         int from = rendered.indexOf("] ") + 2;
-        int to = rendered.indexOf(": ", from);
+        int to = rendered.indexOf(":", from);
         String column = rendered.substring(from, to)
                               .replace("&hellip;", "\u2026").replace("&nbsp;", " ");
-        assertEquals("…st.Net.Connection", column);
+        assertEquals("..st.Net.Connect", column);
+        assertEquals(16, column.length());
+    }
+
+    /**
+     * Nothing in the server's chain touches a ".." in the message body - a path,
+     * an elided quote - because the only ellipsis rewrite there needs three
+     * consecutive dots. Rendering the formatter's marker as an ellipsis is the
+     * page pass in refreshLogs.js, which locates it by the column framing.
+     */
+    @Test
+    public void testDotsInAMessageBodyAreLeftAlone() {
+        String line = "| INFO   | [NTCPRead.2 ] net.i2p.Foo : opened /home/../../etc/passwd x";
+        String rendered = messageRewrites(line);
+        assertEquals(line, rendered.replace("&hellip;", "\u2026").replace("&nbsp;", " "));
     }
 
     /**

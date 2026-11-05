@@ -99,10 +99,12 @@ public class LogsHelper extends HelperBase {
         {"-&gt;", " &#10140; "},
         {"  &#10140;  ", " &#10140; "},
         {"&amp;hellip;", "..."}, // "..." is rewritten again below
-        {"\u2026obQueue", "JobQueue"},
+        {"\u2026obQueue", "JobQueue"}, // a legacy wrapper log's one-character marker
+        {"..obQueue", "JobQueue"}, // the file log's two-character marker
         {"[DBWriter   ]", "[NetDB Writer]"},
         {"[NTCP Pumper", "[ NTCP Pumper"},
-        {"[\u2026ueue Pumper", "[Queue Pumper"},
+        {"[\u2026ueue Pumper", "[Queue Pumper"}, // legacy marker, 12 cells
+        {"[..ueue Pumper", "[Queue Pumper"}, // current marker, 13 cells until widened
         {"[UDPSender", "[UDP Sender"},
         {"[BWRefiller", "[BW Refiller"},
         {"[Addressbook]", "[Addressbook ]"},
@@ -566,6 +568,17 @@ public class LogsHelper extends HelperBase {
         if (inside.indexOf(' ') < 0) {return msg;}
         return msg.substring(0, lb + 2) + inside.replace(" ", "&nbsp;") + msg.substring(rb);
     }
+
+    /**
+     * The two column widths the formatter pads to. They are private to
+     * {@link net.i2p.util.LogRecordFormatter}; the page renders that formatter's
+     * ".." truncation marker as an ellipsis in refreshLogs.js, which has to know
+     * the widths to tell a framed column from a ".." a message happened to
+     * contain. Keep these in step with its MAX_THREAD_LENGTH and
+     * MAX_WHERE_LENGTH.
+     */
+    static final int MAX_THREAD_LENGTH = 12;
+    static final int MAX_WHERE_LENGTH = 16;
 
     /**
      * Keep a hex dump's columns aligned on the page.

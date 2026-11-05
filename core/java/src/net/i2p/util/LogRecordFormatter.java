@@ -41,11 +41,19 @@ class LogRecordFormatter {
     /** Joins the fields of a log line. */
     private static final String SEPARATOR = "| ";
     /**
-     * Marks text shortened to fit the column. One character, one monospace
-     * cell, so a truncated column is the ellipsis plus {@code size - 1}
-     * characters of the tail and needs no padding compensation anywhere.
+     * Marks text shortened to fit the column. Kept to plain ASCII on purpose: this
+     * marker is part of the fixed-width framing of every log line, so a viewer
+     * that decodes the file as something other than UTF-8 - a terminal with
+     * LANG=C or POSIX, or an editor defaulting to CP1252 - renders it as three
+     * cells and pushes the rest of the line right by two. The column alignment
+     * then looks broken even though the file is correct UTF-8. A non-ASCII marker
+     * also cannot be fixed with a byte-order mark, which a non-UTF-8 terminal
+     * renders as three more stray cells.
+     * <p>
+     * Two characters, both monospace, and {@link #padOrTruncate} subtracts the
+     * marker's own length, so the output width is unchanged.
      */
-    private static final String ELLIPSIS = "…";
+    private static final String ELLIPSIS = "..";
     /** Anchor open tag stripped from messages in the LogManager.MESSAGE format. */
     private static final Pattern LINK_OPEN = Pattern.compile("<a[^>]*>");
     /** Anchor close tag stripped from messages in the LogManager.MESSAGE format. */
@@ -263,26 +271,31 @@ class LogRecordFormatter {
     }
 
     /**
-     * Truncate or pad to exactly {@code size} chars; if truncated,
-     * keeps the suffix and prefixes it with the one-character ellipsis,
-     * so column width stays constant with no padding compensation.
+     * Truncate or pad to exactly {@code size} chars; if truncated, keeps the
+     * suffix and prefixes it with the {@link #ELLIPSIS} marker, whose own length
+     * is subtracted from what is kept, so column width stays constant with no
+     * padding compensation.
      * <p>
      * Used for the thread, source, and priority columns so every log line has
      * fixed-width output regardless of the underlying name length.
      *
      * @param str the raw name, or null (treated as empty)
-     * @param size the exact output width, must be &gt; 1
+     * @param size the exact output width, must be &gt; 0
      * @return a string of exactly {@code size} chars: right-padded with spaces
-     *         when short, or the last {@code size - 1} chars prefixed with the
-     *         one-character ellipsis of {@link #ELLIPSIS} when longer than
-     *         {@code size}
+     *         when short, or the tail of {@code str} prefixed with
+     *         {@link #ELLIPSIS} when longer than {@code size}. The tail is
+     *         whatever fits after the marker, which may be nothing at all when
+     *         the marker is as wide as the column.
      * @since 0.9.71+
      */
     static String padOrTruncate(String str, int size) {
         StringBuilder buf = new StringBuilder(size);
         if (str == null) str = "";
         if (str.length() > size) {
-            str = str.substring(str.length() - size + ELLIPSIS.length());
+            // Derived from the marker's own length, and floored, so a column
+            // narrower than the marker cannot run the index off the string.
+            int keep = Math.max(0, size - ELLIPSIS.length());
+            str = str.substring(str.length() - keep);
             buf.append(ELLIPSIS);
         }
         buf.append(str);
