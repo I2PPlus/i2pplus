@@ -16,6 +16,12 @@ import net.i2p.router.RouterContext;
 class QueuedClientConnectionRunner extends ClientConnectionRunner {
     /** The queue shared with the client. */
     private final I2CPMessageQueue queue;
+    /**
+     * Fraction of the client's queue at which a backlog sample is worth taking.
+     *
+     * @see #recordBacklog()
+     */
+    private static final int BACKLOG_SAMPLE_FRACTION = 4;
 
     /**
      * Create a new runner with the given queues.
@@ -63,7 +69,9 @@ class QueuedClientConnectionRunner extends ClientConnectionRunner {
      */
     @Override
     void doSend(I2CPMessage msg) throws I2CPMessageException {
-        if (!queue.offer(msg)) {throw queueFull();}
+        boolean ok = queue.offer(msg);
+        recordBacklog();
+        if (!ok) {throw queueFull();}
     }
 
     /**
@@ -87,22 +95,47 @@ class QueuedClientConnectionRunner extends ClientConnectionRunner {
             Thread.currentThread().interrupt();
             throw new I2CPMessageException("Interrupted waiting for I2CP queue space");
         }
+        recordBacklog();
         if (!success) {throw queueFull();}
     }
 
     /**
-     * The error for a client that is not draining its I2CP queue.
-     * <p>Names the client's side of the queue rather than saying only that a write
-     * failed, because that is the fact the operator needs: the router's own writer is
-     * healthy and the client is the side that has stopped reading.
+     * The error for a client that is not taking messages off its queue.
+     * <p>Reports the backlog on the side the failed write went to, because that is what tells
+     * the two ways an offer fails apart: a queue sitting at its capacity may drain again,
+     * while a queue whose reader has gone away never will. The read side of the same pair of
+     * queues says nothing about either - the router drains that one itself.
      *
-     * @return a fresh exception carrying the pending and free-slot counts of the queue
+     * @return a fresh exception naming the condition and the depth of the client's queue
      */
     private I2CPMessageException queueFull() {
         _context.statManager().addRateData("client.internalQueueFull", 1);
+        int backlog = queue.writeBacklog();
+        int free = queue.remainingCapacity();
+        if (queue.isClosed()) {
+            return new I2CPMessageException("The client's I2CP queue is closed ("
+                                            + backlog + " messages unread)");
+        }
+        if (free == Integer.MAX_VALUE) {
+            return new I2CPMessageException("Client is not draining its I2CP queue ("
+                                            + backlog + " messages queued)");
+        }
         return new I2CPMessageException("Client is not draining its I2CP queue ("
-                                        + queue.pending() + " pending, "
-                                        + queue.remainingCapacity() + " slots free)");
+                                        + backlog + " of " + (backlog + free) + " messages)");
+    }
+
+    /**
+     * Record how deep the client's queue is, so a backlog that persists is visible as a
+     * sustained graph line and not only as the warning from the moment it overflowed.
+     * <p>Sampled only above a quarter of the capacity: the healthy state is an empty queue,
+     * and a sample for every message would bury the signal in the idle path. An unbounded
+     * queue has no overflow point for a depth to be measured against, so it is not sampled.
+     */
+    private void recordBacklog() {
+        int backlog = queue.writeBacklog();
+        int free = queue.remainingCapacity();
+        if (free == Integer.MAX_VALUE || backlog * BACKLOG_SAMPLE_FRACTION < backlog + free) {return;}
+        _context.statManager().addRateData("i2cp.internalQueueBacklog", backlog);
     }
 
     /**

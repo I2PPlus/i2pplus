@@ -1428,21 +1428,18 @@ class ClientConnectionRunner {
             msg.setStatus(_status);
 
             if (!alreadyAccepted(_messageId)) {
-                if (_requeueCount++ > MAX_REQUEUE) {
+                String statusString = MessageStatusMessage.getStatusString(msg.getStatus());
+                long delay = retryLater();
+                if (delay < 0) {
                     // bug requeueing forever? failsafe
-                    _log.error("Abandoning a " + MessageStatusMessage.getStatusString(msg.getStatus()) +
+                    _log.error("Abandoning a " + statusString +
                                " update -> Requeue limit reached"
                                + "\n* Message: " + _messageId + " * Attempts: " + _requeueCount
                                + " * Session: " + _sessId);
                 } else {
-                    long delay = REQUEUE_DELAY;
-                    if (_requeueCount < 10) {delay = REQUEUE_DELAY / 5;}
-                    else if (_requeueCount < 20) {delay = REQUEUE_DELAY / 2;}
                     _log.warnThrottled("client-status-requeued",
                                        "Client has not accepted " + _messageId + " -> Delayed the " +
-                                       MessageStatusMessage.getStatusString(msg.getStatus()) +
-                                       " update by " + delay + "ms * " + _sessId);
-                    _lastTried = _context.clock().now();
+                                       statusString + " update by " + delay + "ms * " + _sessId);
                 }
                 return;
             }
@@ -1453,7 +1450,7 @@ class ClientConnectionRunner {
             synchronized (_alreadyProcessed) {
                 inLock = _context.clock().now();
                 if (_alreadyProcessed.contains(_messageId)) {
-                    _log.info("Status already updated");
+                    _log.info("Skipping the status update -> Already delivered * Message: " + _messageId);
                     alreadyProcessed = true;
                 } else {
                     _alreadyProcessed.add(_messageId);
@@ -1488,9 +1485,43 @@ class ClientConnectionRunner {
             try {
                 doSend(msg);
             } catch (I2CPMessageException ime) {
-                if (_log.shouldWarn())
-                    _log.warn("Error updating the status for message ID " + _messageId + " -> " + ime.getMessage());
+                // The id was claimed above to dedupe concurrent updates for this message, so
+                // release it here - otherwise the retry below finds it claimed and does nothing,
+                // and a client whose queue was full for one pass never gets the update at all.
+                synchronized (_alreadyProcessed) {_alreadyProcessed.remove(_messageId);}
+                // A full client queue clears by itself, so the update goes back on the same
+                // ladder instead of being lost with the attempt that failed.
+                long delay = retryLater();
+                if (delay < 0) {
+                    _log.error("Abandoning the delivery status update -> " + ime.getMessage()
+                               + "\n* Message: " + _messageId + " * Attempts: " + _requeueCount
+                               + " * Session: " + _sessId);
+                } else {
+                    _log.warnThrottled("client-status-queue-full",
+                                       "Sending the delivery status update failed -> " + ime.getMessage()
+                                       + "\n* Message: " + _messageId + " * Retrying in " + delay + "ms");
+                }
             }
+        }
+
+        /**
+         * Delay this update and put it back on the job queue, or give up on it.
+         * <p>Both reasons for failing are temporary - the client has not been told the message
+         * id yet, or its queue is full - so the update is worth another pass. The delay grows
+         * with the attempt count so that a message which will never be accepted cannot spin
+         * the job queue, and {@link #MAX_REQUEUE} bounds the attempts.
+         *
+         * @return the delay before the next attempt (ms), or -1 when the attempt limit is
+         *         reached and the caller must report the update as abandoned
+         */
+        private long retryLater() {
+            if (++_requeueCount > MAX_REQUEUE) {return -1;}
+            long delay = REQUEUE_DELAY;
+            if (_requeueCount < 10) {delay = REQUEUE_DELAY / 5;}
+            else if (_requeueCount < 20) {delay = REQUEUE_DELAY / 2;}
+            _lastTried = _context.clock().now();
+            requeue(delay);
+            return delay;
         }
     }
 }

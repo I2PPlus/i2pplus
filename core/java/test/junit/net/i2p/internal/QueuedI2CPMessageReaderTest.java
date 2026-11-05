@@ -1,6 +1,7 @@
 package net.i2p.internal;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -269,6 +270,86 @@ public class QueuedI2CPMessageReaderTest {
         }
     }
 
+    /**
+     * A reader must register the way to be woken while it is reading, and drop it when it stops.
+     *
+     * <p>This registration is the only thing that lets a write at the other end of the queue
+     * schedule the reader. A reader that drained its queue is left out of the dispatcher's ready
+     * list on purpose, so without a wake path its messages wait for the idle sweep - and that
+     * sweep only runs when the ready list happens to be empty, which a backlogged client
+     * prevents.
+     */
+    @Test
+    public void testReaderRegistersAWakeHookWhileReading() {
+        StubQueue queue = new StubQueue();
+        QueuedI2CPMessageReader reader = new QueuedI2CPMessageReader(queue, new CountingListener());
+        assertNull("a reader that has not started is registered", queue.wakeHook());
+        reader.startReading();
+        assertNotNull("a reading reader registered no way to be woken", queue.wakeHook());
+        reader.stopReading();
+        assertNull("a stopped reader kept its wake hook", queue.wakeHook());
+    }
+
+    /**
+     * A message written by the peer must reach a reader that had drained empty, even while
+     * another client is backlogged.
+     *
+     * <p>The starvation this pins: the dispatcher re-offers a reader whose pass filled its
+     * budget, so while one client has a backlog the ready list is never empty and the idle sweep
+     * that would otherwise find a drained reader never runs. Before the wake path, this message
+     * waited for a sweep that the backlogged client kept postponing - which is how a client's
+     * queue filled and stayed full.
+     */
+    @Test
+    public void testWrittenMessageReachesADrainedReaderWhileAnotherClientIsBacklogged() {
+        StubQueue backloggedQueue = new StubQueue();
+        backloggedQueue.fill(50000, 0);
+        QueuedI2CPMessageReader backloggedReader =
+            new QueuedI2CPMessageReader(backloggedQueue, new CountingListener());
+
+        StubQueue quietQueue = new StubQueue();
+        CountingListener quiet = new CountingListener();
+        QueuedI2CPMessageReader quietReader = new QueuedI2CPMessageReader(quietQueue, quiet);
+
+        backloggedReader.startReading();
+        quietReader.startReading();
+        try {
+            // Long enough for the quiet reader to drain empty and leave the ready list.
+            sleep(200);
+            assertEquals("the quiet reader should have drained nothing", 0, quiet.received.get());
+            quietQueue.offer(new SeqMessage(0));
+            assertTrue("a message written for a drained reader was never delivered",
+                       quiet.await(1, 500));
+        } finally {
+            backloggedReader.stopReading();
+            quietReader.stopReading();
+        }
+    }
+
+    /**
+     * One wake callback per message must not lose or reorder any of them.
+     *
+     * <p>The callback collapses repeats to a single ready-list entry, so a flood costs one
+     * wake-up and the worker that takes it drains the rest in passes. Every message still has to
+     * arrive, in order, with no worker serving the reader twice at once.
+     */
+    @Test
+    public void testEveryMessageArrivesWithOneWakePerMessage() {
+        StubQueue queue = new StubQueue();
+        OrderingListener lsnr = new OrderingListener();
+        QueuedI2CPMessageReader reader = new QueuedI2CPMessageReader(queue, lsnr);
+        reader.startReading();
+        try {
+            for (int i = 0; i < 500; i++) {
+                queue.offer(new SeqMessage(i));
+            }
+            assertTrue("not every message written was delivered", lsnr.await(500, TIMEOUT));
+            assertNull("messages delivered out of order: " + lsnr.error(), lsnr.error());
+        } finally {
+            reader.stopReading();
+        }
+    }
+
     private static void sleep(long ms) {
         try {
             Thread.sleep(ms);
@@ -280,9 +361,17 @@ public class QueuedI2CPMessageReaderTest {
     /** Stands in for the router-to-client side of one in-JVM session. */
     private static class StubQueue extends I2CPMessageQueue {
         private final LinkedBlockingQueue<I2CPMessage> _out = new LinkedBlockingQueue<>();
+        /**
+         * The callback the reader registers while it is reading. {@link #offer} runs it, the
+         * way the production queue wakes the reader at the other end of the pair.
+         */
+        private volatile Runnable _wakeHook;
 
         /**
-         * Queue the given number of messages.
+         * Queue the given number messages without waking anything.
+         *
+         * <p>Deliberately not via {@link #offer}: tests that want the dispatcher's idle sweep to
+         * be the thing that finds the reader use this.
          *
          * @param count messages to add @param firstSeq sequence number of the first
          */
@@ -290,17 +379,36 @@ public class QueuedI2CPMessageReaderTest {
             for (int i = 0; i < count; i++) {_out.offer(new SeqMessage(firstSeq + i));}
         }
 
-        @Override
-        public boolean offer(I2CPMessage msg) {return _out.offer(msg);}
+        /** The wake callback currently registered, for tests that assert on the registration. */
+        Runnable wakeHook() {return _wakeHook;}
 
         @Override
-        public boolean offer(I2CPMessage msg, long timeout) {return _out.offer(msg);}
+        public boolean offer(I2CPMessage msg) {
+            boolean ok = _out.offer(msg);
+            if (ok) {wake();}
+            return ok;
+        }
+
+        /** Run the registered wake callback, if a reader is registered. */
+        private void wake() {
+            Runnable hook = _wakeHook;
+            if (hook != null) {hook.run();}
+        }
+
+        @Override
+        public boolean offer(I2CPMessage msg, long timeout) {return offer(msg);}
+
+        @Override
+        public void setWakeHook(Runnable hook) {_wakeHook = hook;}
 
         @Override
         public I2CPMessage poll() {return _out.poll();}
 
         @Override
         public int pending() {return _out.size();}
+
+        @Override
+        public int writeBacklog() {return _out.size();}
 
         @Override
         public int remainingCapacity() {return Integer.MAX_VALUE - _out.size();}

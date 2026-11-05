@@ -130,6 +130,7 @@ class ClientManager {
         _ctx.statManager().createRequiredRateStat("client.requestLeaseSetDropped", "Requests for new LeaseSet dropped by the client", "ClientMessages", new long[] { RateConstants.ONE_MINUTE });
         _ctx.statManager().createRequiredRateStat("client.internalQueueFull", "I2CP in-JVM queue overflow drops", "ClientMessages", new long[] { RateConstants.ONE_MINUTE });
         _ctx.statManager().createRequiredRateStat("i2cp.internalQueueSize", "I2CP internal queue capacity", "ClientMessages", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+        _ctx.statManager().createRequiredRateStat("i2cp.internalQueueBacklog", "Messages queued to an in-JVM client that it has not read yet", "ClientMessages", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
     }
 
     /**
@@ -244,8 +245,12 @@ class ClientManager {
         LinkedBlockingQueue<I2CPMessage> in = new LinkedBlockingQueue<>(net.i2p.router.Tuner.getInternalQueueSize());
         LinkedBlockingQueue<I2CPMessage> out = new LinkedBlockingQueue<>(net.i2p.router.Tuner.getInternalQueueSize());
         _ctx.statManager().addRateData("i2cp.internalQueueSize", net.i2p.router.Tuner.getInternalQueueSize(), in.size());
-        I2CPMessageQueue myQueue = new I2CPMessageQueueImpl(in, out);
-        I2CPMessageQueue hisQueue = new I2CPMessageQueueImpl(out, in);
+        I2CPMessageQueueImpl myQueue = new I2CPMessageQueueImpl(in, out);
+        I2CPMessageQueueImpl hisQueue = new I2CPMessageQueueImpl(out, in);
+        // Each end gets its own wrapper over the shared pair, with the queues swapped, so a
+        // close at one end and a reader at the other are invisible to each other until this
+        // joins them.
+        myQueue.link(hisQueue);
         ClientConnectionRunner runner = new QueuedClientConnectionRunner(_ctx, this, myQueue);
         registerConnection(runner);
         return hisQueue;

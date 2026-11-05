@@ -55,12 +55,13 @@ public abstract class I2CPMessageQueue implements Closeable {
     public abstract I2CPMessage poll();
 
     /**
-     * How many messages are waiting to be received, for diagnostics.
-     * <p>A queue that stays non-empty means the client is not draining it, which is the
-     * reason {@link #offer(I2CPMessage)} fails and the only explanation for a client that
-     * has stopped answering.
+     * How many messages are waiting for this end to read, for diagnostics.
+     * <p>This is the read side, not the side {@link #offer(I2CPMessage)} writes to. An
+     * implementation with a reader of its own keeps this near zero however badly its peer
+     * is falling behind, so it never explains an offer failure - {@link #writeBacklog()}
+     * does.
      *
-     * @return messages waiting to be received
+     * @return messages waiting to be received by this end
      * @since 0.9.71+
      */
     public abstract int pending();
@@ -68,10 +69,47 @@ public abstract class I2CPMessageQueue implements Closeable {
     /**
      * How many more messages this queue will accept, for diagnostics.
      *
-     * @return remaining capacity; {@link Integer#MAX_VALUE} when unbounded
+     * @return remaining capacity on the side {@link #offer(I2CPMessage)} writes to;
+     *         {@link Integer#MAX_VALUE} when unbounded
      * @since 0.9.71+
      */
     public abstract int remainingCapacity();
+
+    /**
+     * How many messages this end has queued for the peer to read, for diagnostics.
+     * <p>Unlike {@link #pending()}, which counts what this end has not read yet, this counts
+     * what this end has written and the peer has not taken. It is therefore the number that
+     * explains an {@link #offer(I2CPMessage)} failure: a value at the capacity says the peer
+     * has stopped draining, and a value that stays there says it never started again.
+     *
+     * @return messages queued for the peer to read
+     * @since 0.9.73+
+     */
+    public abstract int writeBacklog();
+
+    /**
+     * Whether this queue is closed, so no reader will ever take another message from it.
+     * <p>A closed queue and a full one look identical to a writer - {@link #offer(I2CPMessage)}
+     * returns false either way - and the difference matters: one is temporary backpressure and
+     * the other is permanent. The default is false, for implementations with no close state of
+     * their own.
+     *
+     * @return true once {@link #close()} has run for either end of this queue
+     * @since 0.9.73+
+     */
+    public boolean isClosed() {return false;}
+
+    /**
+     * Register the callback a writer runs after it queues a message for this end to read.
+     * <p>The reader registers itself here so the dispatcher is handed the reader as soon as
+     * work arrives, rather than rediscovering it on a later sweep. The callback runs on the
+     * writer's thread, so it must not block and must not throw.
+     *
+     * @param hook the callback to run after a message is queued for this end, or null to
+     *             unregister
+     * @since 0.9.73+
+     */
+    public void setWakeHook(Runnable hook) {}
 
     /**
      * Send a message, blocking until space is available.

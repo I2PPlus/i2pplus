@@ -82,13 +82,15 @@ class MessageReceivedJob extends JobImpl {
             }
             return true;
         } catch (I2CPMessageException ime) {
-            String msg = "Error sending data to client " + _runner.getDestHash().toBase32();
-            if (_log.shouldWarn())
-                _log.warn(msg, ime);
-            else
-                _log.logAlways(Log.WARN, msg);
             if (id != null)
                 _runner.removePayload(id);
+            // Throttled per destination: a client that has stopped reading fails every
+            // delivery until its queue drains, and the reason is the same each time.
+            _log.warnThrottled("client-deliver-failed-" + _runner.getDestHash(),
+                               "Sending data to the client failed -> " + ime.getMessage()
+                               + "\n* Destination: [" + _runner.getDestHash().toShortBase32() + "]");
+            if (_log.shouldDebug())
+                _log.debug("Sending data to the client failed", ime);
             return false;
         }
     }

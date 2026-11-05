@@ -26,7 +26,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -50,6 +52,8 @@ import net.i2p.data.SigningPublicKey;
 import net.i2p.data.TunnelId;
 import net.i2p.data.i2cp.CreateLeaseSet2Message;
 import net.i2p.data.i2cp.I2CPMessage;
+import net.i2p.data.i2cp.MessageId;
+import net.i2p.data.i2cp.MessageStatusMessage;
 import net.i2p.data.i2cp.RequestVariableLeaseSetMessage;
 import net.i2p.data.i2cp.SessionConfig;
 import net.i2p.data.i2cp.SessionId;
@@ -97,6 +101,12 @@ public class LeaseRequestFailureTest {
         when(_ctx.getConfigDir()).thenReturn(_tmpDir);
         when(_ctx.getProperty(anyString(), anyString()))
                 .thenReturn(new File(_tmpDir, "logger.config").getAbsolutePath());
+        // Some of these tests log at ERROR, and LogManager's default log file name is
+        // relative to the working directory, which leaves a logs/ directory behind in the
+        // source tree. Send it to this test's own directory instead, before the manager
+        // parses its (absent) config file.
+        when(_ctx.getProperty(LogManager.FILENAME_OVERRIDE_PROP))
+                .thenReturn(new File(_tmpDir, "log-@.txt").getAbsolutePath());
         LogManager lm = new LogManager(_ctx);
         when(_ctx.logManager()).thenReturn(lm);
 
@@ -280,6 +290,111 @@ public class LeaseRequestFailureTest {
         assertNull(queued.getLeaseRequest(dest.calculateHash()));
         assertTrue("blocking on a wedged client must stay far below the request timeout, took "
                    + elapsed + "ms", elapsed < RequestLeaseSetJob.DEFAULT_SEND_WAIT * 10);
+    }
+
+    /**
+     * A full client queue must delay the delivery status update, not lose it.
+     *
+     * <p>The job has a bounded requeue ladder for the case where the client has not been told
+     * the message id yet, but the queue-full path fell straight out of the catch at the end of
+     * runJob() - so the update was dropped on the first failed attempt, and the ladder's delay
+     * was never applied. A client's queue clears in milliseconds, and the client is the only
+     * party that can do anything with the outcome of its own message.
+     *
+     * @throws Exception on crypto setup failure generating the test destination's keys
+     */
+    @Test
+    public void fullClientQueueRequeuesTheDeliveryStatusUpdate() throws Exception {
+        Destination dest = createDestination();
+        StubI2CPMessageQueue queue = new StubI2CPMessageQueue(1);
+        QueuedClientConnectionRunner queued =
+                new QueuedClientConnectionRunner(_ctx, _cm, queue);
+        assertEquals(SessionStatusMessage.STATUS_CREATED,
+                queued.sessionEstablished(new SessionConfig(dest)));
+        queued.setSessionId(dest.calculateHash(), new SessionId(9));
+        // the client is not reading, so the update cannot be handed over
+        queue.blockingOffer();
+
+        queued.updateMessageDeliveryStatus(dest, acceptedMessageId(queued, 4242L), 77L,
+                                           MessageStatusMessage.STATUS_SEND_BEST_EFFORT_SUCCESS);
+        Job update = lastStatusUpdateJob();
+        assertEquals("the update was not queued once to begin with", 1, countOf(update));
+
+        long startAfter = update.getTiming().getStartAfter();
+        update.runJob();
+
+        assertEquals("a delivery status update lost to a full client queue was not requeued",
+                     2, countOf(update));
+        assertTrue("the requeue did not delay the update for another attempt",
+                   update.getTiming().getStartAfter() > startAfter);
+    }
+
+    /**
+     * The requeue ladder must stop, so a message whose status can never be delivered does not
+     * spin the job queue forever.
+     *
+     * <p>One initial queueing plus {@code MAX_REQUEUE} retries, counted from what the job queue
+     * was handed. The limit is private to the runner, so the expected total is spelled out here
+     * and a change to it shows up as a failure rather than as more churn in the log.
+     *
+     * @throws Exception on crypto setup failure generating the test destination's keys
+     */
+    @Test
+    public void deliveryStatusUpdateStopsRequeueingAtTheAttemptLimit() throws Exception {
+        Destination dest = createDestination();
+        StubI2CPMessageQueue queue = new StubI2CPMessageQueue(1);
+        QueuedClientConnectionRunner queued =
+                new QueuedClientConnectionRunner(_ctx, _cm, queue);
+        assertEquals(SessionStatusMessage.STATUS_CREATED,
+                queued.sessionEstablished(new SessionConfig(dest)));
+        queued.setSessionId(dest.calculateHash(), new SessionId(9));
+        queue.blockingOffer();
+
+        queued.updateMessageDeliveryStatus(dest, acceptedMessageId(queued, 4243L), 77L,
+                                           MessageStatusMessage.STATUS_SEND_BEST_EFFORT_SUCCESS);
+        Job update = lastStatusUpdateJob();
+        for (int attempt = 0; attempt < 200; attempt++) {
+            update.runJob();
+        }
+        assertEquals("the update outlived its attempt limit", 1 + MAX_UPDATE_ATTEMPTS, countOf(update));
+    }
+
+    /** Retries a delivery status update is allowed before it is abandoned. */
+    private static final int MAX_UPDATE_ATTEMPTS = 60;
+
+    /**
+     * A message id the runner has recorded as accepted, which is the state a real update
+     * runs against: the router records it in {@code distributeMessage()} before it sends the
+     * message, and until the client has been told the id the update is refused for a
+     * different reason and never reaches the send at all.
+     *
+     * @param runner the runner whose accepted-id set is being seeded
+     * @param idValue id to record
+     * @return the id, for the caller to address the update to
+     * @throws Exception if the runner's accepted-id set is not where this test expects it
+     */
+    private static MessageId acceptedMessageId(ClientConnectionRunner runner, long idValue)
+            throws Exception {
+        MessageId id = new MessageId();
+        id.setMessageId(idValue);
+        Field pending = ClientConnectionRunner.class.getDeclaredField("_acceptedPending");
+        pending.setAccessible(true);
+        @SuppressWarnings("unchecked")
+        Set<MessageId> accepted = (Set<MessageId>) pending.get(runner);
+        accepted.add(id);
+        return id;
+    }
+
+    /** The delivery status update job the runner queued, by its job name. */
+    private Job lastStatusUpdateJob() {
+        Job found = null;
+        for (Job job : addedJobs()) {
+            if ("Update Message Delivery Status".equals(job.getName())) {
+                found = job;
+            }
+        }
+        assertNotNull("expected a queued delivery status update", found);
+        return found;
     }
 
     /**
@@ -552,6 +667,9 @@ public class LeaseRequestFailureTest {
 
         @Override
         public int pending() {return _out.size();}
+
+        @Override
+        public int writeBacklog() {return _out.size();}
 
         @Override
         public int remainingCapacity() {return _out.remainingCapacity();}

@@ -33,6 +33,14 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
      */
     private final AtomicBoolean _claimed = new AtomicBoolean();
 
+    /**
+     * True while this reader sits in the dispatcher's ready queue.
+     * <p>A wake-up arrives on the writer's thread, once per message, so without this the ready
+     * queue would fill with duplicates of one reader. The worker that takes a reader out of the
+     * queue clears the flag, so a wake-up landing during a pass simply queues the reader again.
+     */
+    private final AtomicBoolean _queued = new AtomicBoolean();
+
     /** The shared dispatcher feeding all the readers. */
     private static final InternalI2CPDispatcher DISPATCHER = new InternalI2CPDispatcher();
 
@@ -60,6 +68,10 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
     public void startReading() {
         if (!registered) {
             registered = true;
+            // Give the writer at the other end of the queue the means to put this reader in
+            // front of a worker. A message arriving is the event that should schedule it; the
+            // dispatcher's idle sweep is the fallback, not the path.
+            in.setWakeHook(this::wake);
             DISPATCHER.register(this);
         }
     }
@@ -71,8 +83,22 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
     public void stopReading() {
         if (registered) {
             registered = false;
+            in.setWakeHook(null);
             DISPATCHER.unregister(this);
         }
+    }
+
+    /**
+     * Put this reader in front of a worker because a message has just been queued for it.
+     * <p>This runs on the writer's thread - a transport or job-queue thread - so it only
+     * offers a queue entry. Repeats are collapsed to one by the dispatcher, so a flood of
+     * messages for one reader costs a single wake-up, and the worker that serves it drains up
+     * to {@link #MAX_DRAIN_PER_PASS} of them.
+     *
+     * @since 0.9.73+
+     */
+    private void wake() {
+        if (registered) {DISPATCHER.enqueue(this);}
     }
 
     /**
@@ -165,9 +191,13 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
 
     /**
      * Shared dispatcher pool that multiplexes all internal I2CP message readers.
-     * <p>The ready queue holds readers that have work: one arrives at registration, is handed
-     * back after a pass that filled its budget, and is picked up again by the idle tick if a
-     * message turns up for it later. A reader that drained is left out, so on an idle system the
+     * <p>The ready queue holds readers that have work. A reader arrives at registration, again
+     * after a pass that filled its budget, and again the moment the writer at the other end of
+     * its queue queues a message for it - see {@link QueuedI2CPMessageReader#wake()}, which is
+     * what makes leaving a drained reader out safe rather than a way to strand it. The idle tick
+     * re-offers any registered reader that has messages waiting and is not already queued, so it
+     * is the safety net for a wake-up that was lost, not the way a reader is normally served.
+     * Because a drained reader stays out of the queue, on an idle system the
      * queue empties, {@link #IDLE_POLL_MS} actually parks a worker instead of timing out against
      * a queue the workers keep refilling themselves, and surplus workers can retire. The idle cost
      * is therefore a single worker however many clients are connected.
@@ -218,8 +248,20 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
          */
         synchronized void register(QueuedI2CPMessageReader reader) {
             readers.add(reader);
-            ready.offer(reader);
+            enqueue(reader);
             if (liveThreads < 1) {startWorker();}
+        }
+
+        /**
+         * Offer a reader that has work, unless a worker is already waiting for it.
+         * <p>This is called from the writer's thread, once per message queued, so the duplicate
+         * check is what keeps a flood for one client from filling the ready queue with the same
+         * reader over and over.
+         *
+         * @param reader the reader to put in front of a worker
+         */
+        void enqueue(QueuedI2CPMessageReader reader) {
+            if (reader._queued.compareAndSet(false, true)) {ready.offer(reader);}
         }
 
         /**
@@ -295,7 +337,7 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
          */
         private void offerPendingReaders() {
             for (QueuedI2CPMessageReader reader : readers) {
-                if (reader.needsService()) {ready.offer(reader);}
+                if (reader.needsService()) {enqueue(reader);}
             }
         }
 
@@ -325,9 +367,9 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
                 while (hasReaders()) {
                     QueuedI2CPMessageReader reader = ready.poll(IDLE_POLL_MS, TimeUnit.MILLISECONDS);
                     if (reader == null) {
-                        // Nothing queued. Because the ready queue holds only readers that have
-                        // work, this is the tick on which a reader that drained earlier is
-                        // picked up again if something has arrived for it since.
+                        // Nothing queued. This is the safety net, not the usual path: a
+                        // registered reader holding messages that no wake-up reached is
+                        // picked up here.
                         offerPendingReaders();
                         if (mayRetire()) {
                             retired = true;
@@ -335,6 +377,9 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
                         }
                         continue;
                     }
+                    // It is out of the queue now, so a message arriving from here on can put it
+                    // back, even while this pass is still running.
+                    reader._queued.set(false);
                     if (!reader.claim()) continue;
                     int handled = 0;
                     long started = System.currentTimeMillis();
@@ -350,9 +395,10 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
                             // nothing to give, and reoffering it here is what kept the ready
                             // queue permanently non-empty, so poll never parked, no worker
                             // ever saw a surplus pool, and every idle worker spun on
-                            // poll/drain/offer instead. The idle tick above covers the case
-                            // this gives up, which is a message arriving after the drain.
-                            ready.offer(reader);
+                            // poll/drain/offer instead. What puts a drained reader back is the
+                            // wake-up the peer's offer runs, with the idle tick above as the
+                            // net for a wake-up that never arrived.
+                            enqueue(reader);
                             grow();
                         }
                     }
