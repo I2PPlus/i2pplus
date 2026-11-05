@@ -183,8 +183,14 @@ public class PacketSignatureLayoutTest {
             assertTrue("a packet is identified even with INFO off: " + desc,
                        desc.contains("Stream "));
             assertTrue("the flags are reported: " + desc, desc.contains("CLOSE"));
-            assertTrue("the signature type is reported: " + desc,
-                       desc.contains(KEY_TYPE.toString()));
+            // The algorithm is a property of the connection, not of this packet,
+            // and every signed packet on it prints the same string, so it is only
+            // worth the second line when something is odd.
+            assertFalse("the signature type waits for debug: " + desc,
+                        desc.contains(KEY_TYPE.toString()));
+            log.setMinimumPriority(Log.DEBUG);
+            assertTrue("the signature type is reported at debug: " + p,
+                       p.toString().contains(KEY_TYPE.toString()));
         } finally {
             log.setMinimumPriority(saved);
         }

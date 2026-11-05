@@ -1183,10 +1183,16 @@ class Packet {
         }
         if (isFlagSet(FLAG_SIGNATURE_INCLUDED)) {
             if (_optionSignature != null) {
-                buf.append(" * Signature: ").append(_optionSignature.getType());
+                // The algorithm is a property of the connection, not of this packet
+                // or of the event being logged - every signed packet on a connection
+                // prints the same string, so it made the second line of an otherwise
+                // one-line warning. What is worth the space is the mismatch below.
                 if (_optionSigLen > 0 && _optionSigLen != _optionSignature.length()) {
                     // the type guessed in readPacket() did not cover every option byte
-                    buf.append(" in ").append(_optionSigLen).append(" option bytes");
+                    buf.append(" * Signature ").append(_optionSignature.getType())
+                       .append(" in ").append(_optionSigLen).append(" option bytes");
+                } else if (debug) {
+                    buf.append(" * Signature: ").append(_optionSignature.getType());
                 }
             }
             else {buf.append(" (to be signed)");}
