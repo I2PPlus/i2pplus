@@ -122,7 +122,13 @@
   <target name="junit.test" depends="compileTest">
     <property name="junit.reports.dir" value="${java.io.tmpdir}/build-i2p/reports"/>
     <mkdir dir="${junit.reports.dir}/jrobin/junit"/>
-    <mkdir dir="${java.io.tmpdir}/build-i2p/junit-tmp"/>
+    <!-- One scratch directory per module, under the shared build root: the forked
+         test JVM reads the properties file ant wrote for it here and writes its
+         vmwatcher file here, and one directory shared by the parallel suites has
+         lost those files mid-run - the suite then reports a few hundred tests
+         where it has a few thousand, with no failure line anywhere. -->
+    <property name="junit.tmp.dir" value="${java.io.tmpdir}/build-i2p/junit-tmp/jrobin"/>
+    <mkdir dir="${junit.tmp.dir}"/>
     <!-- Scratch I2P base for the forked test JVM. I2PAppContext defaults
          i2p.dir.base to user.dir (this module dir), so a test that builds a
          context writes its runtime state into the workspace. Fresh for every
@@ -130,7 +136,7 @@
     <property name="junit.test.base" value="${build.root}jrobin-junit-base"/>
     <delete dir="${junit.test.base}"/>
     <mkdir dir="${junit.test.base}"/>
-    <junit fork="yes" maxmemory="384M" tempdir="${java.io.tmpdir}/build-i2p/junit-tmp" timeout="15000">
+    <junit fork="yes" maxmemory="384M" tempdir="${junit.tmp.dir}" timeout="15000">
       <sysproperty key="i2p.dir.base" value="${junit.test.base}"/>
       <classpath>
         <pathelement location="${build.dir}/obj"/>

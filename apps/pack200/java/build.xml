@@ -102,9 +102,15 @@
     </delete>
     <property name="junit.home" value="${basedir}/../../../tools/test/junit"/>
     <property name="hamcrest.home" value="${basedir}/../../../tools/test/hamcrest"/>
-    <mkdir dir="${java.io.tmpdir}/build-i2p/junit-tmp"/>
+    <!-- One scratch directory per module, under the shared build root: the forked
+         test JVM reads the properties file ant wrote for it here and writes its
+         vmwatcher file here, and one directory shared by the parallel suites has
+         lost those files mid-run - the suite then reports a few hundred tests
+         where it has a few thousand, with no failure line anywhere. -->
+    <property name="junit.tmp.dir" value="${java.io.tmpdir}/build-i2p/junit-tmp/pack200"/>
+    <mkdir dir="${junit.tmp.dir}"/>
     <junit printsummary="withOutAndErr" fork="yes" showoutput="yes"
-      tempdir="${java.io.tmpdir}/build-i2p/junit-tmp" timeout="15000">
+      tempdir="${junit.tmp.dir}" timeout="15000">
       <classpath>
         <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
         <pathelement location="${junit.home}/junit4.jar"/>
