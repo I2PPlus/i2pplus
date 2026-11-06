@@ -416,7 +416,7 @@ class OutboundNTCP2State implements EstablishState {
     @Override
     public synchronized void receive(ByteBuffer src) {
         if (_state == State.VERIFIED || _state == State.CORRUPT)
-            throw new IllegalStateException(this + " received unexpected data on " + _con);
+            throw new IllegalStateException("Stray data after handshake");
         if (_log.shouldDebug())
             _log.debug(this + "\n* Receiving: " + src.remaining() + " Received: " + _received);
         if (!src.hasRemaining())
@@ -711,7 +711,7 @@ class OutboundNTCP2State implements EstablishState {
         int newoff = NTCP2Payload.writePayload(tmp, MSG3P1_SIZE, blocks);
         int expect = MSG3P1_SIZE + msg3p2len;
         if (newoff != expect)
-            throw new IllegalStateException("Message #3 size mismatch -> Expected " + expect + " bytes, got " + newoff);
+            throw new IllegalStateException("Message #3 built " + newoff + " bytes, expected " + expect);
         try {
             _handshakeState.writeMessage(tmp, 0, tmp, MSG3P1_SIZE, msg3p2len);
         } catch (GeneralSecurityException gse) {

@@ -414,7 +414,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 }
                 _handshakeState = new HandshakeState(pattern, HandshakeState.RESPONDER, _transport.getXDHFactory());
             } catch (GeneralSecurityException gse) {
-                throw new IllegalStateException("bad proto", gse);
+                throw new IllegalStateException("Handshake setup failed", gse);
             }
             // use _X for the buffer
             int toGet = Math.min(src.remaining(), msg1Size(_version) - _received);

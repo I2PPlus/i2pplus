@@ -292,7 +292,19 @@ public class Reader {
                 con.close();
                 return;
             } catch (IllegalStateException ise) {
-                if (_log.shouldWarn()) {_log.warn("IllegalState in EstablishState.receive() for connection: " + con, ise);}
+                // Every establish state throws with the words for what went wrong, and
+                // the frames below here are all reader harness, so log the words and
+                // the state, not the trace. A wrapped cause's words go on their own
+                // line, since nothing else prints them.
+                if (_log.shouldWarn()) {
+                    String reason = ise.getMessage();
+                    if (reason == null)
+                        reason = "Illegal state during handshake";
+                    Throwable cause = ise.getCause();
+                    String why = cause != null ? cause.getMessage() : null;
+                    _log.warn(reason + " -> Closing connection * " + est +
+                              (why != null ? "\n* Error: " + why : ""));
+                }
                 con.close();
                 return;
             }

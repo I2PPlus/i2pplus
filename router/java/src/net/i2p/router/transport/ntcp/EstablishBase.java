@@ -241,7 +241,7 @@ protected void changeState(State state) {
     public synchronized void receive(ByteBuffer src) {
         synchronized(_stateLock) {
             if (STATES_DONE.contains(_state))
-                throw new IllegalStateException(prefix() + " received unexpected data on " + _con);
+                throw new IllegalStateException("Stray data after handshake");
         }
         if (_log.shouldDebug())
             _log.debug(prefix() + "\n* Receiving: " + src.remaining() + " Received: " + _received);
@@ -394,7 +394,7 @@ protected void changeState(State state) {
          */
         @Override
         public void receive(ByteBuffer src) {
-            throw new IllegalStateException("receive() " + src.remaining() + " on verified state, doing nothing!");
+            throw new IllegalStateException("Stray data on an already verified connection");
         }
 
         /**
@@ -408,10 +408,11 @@ protected void changeState(State state) {
         }
 
         /**
-         * String representation of the verified state.
+         * String representation of the verified state. No connection is attached
+         * to this placeholder, so the form names the state alone.
          */
         @Override
-        public String toString() { return "VerifiedEstablishState: ";}
+        public String toString() { return "VerifiedEstablishState";}
     }
 
     /**
@@ -442,7 +443,7 @@ protected void changeState(State state) {
          */
         @Override
         public void receive(ByteBuffer src) {
-            throw new IllegalStateException("receive() " + src.remaining() + " on failed state, doing nothing!");
+            throw new IllegalStateException("Stray data on an already failed connection");
         }
 
         /**
@@ -456,10 +457,11 @@ protected void changeState(State state) {
         }
 
         /**
-         * String representation of the failed state.
+         * String representation of the failed state. No connection is attached
+         * to this placeholder, so the form names the state alone.
          */
         @Override
-        public String toString() { return "FailedEstablishState: ";}
+        public String toString() { return "FailedEstablishState";}
     }
 
     /**
