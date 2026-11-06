@@ -3175,7 +3175,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 _log.warn("[HTTPServer] Async body stalled on the " + side + " -> Closing" +
                           "\n* Read idle: " + readAgeMs + "ms * Write idle: " + writeAgeMs +
                           "ms * Transferred: " + _body.getBytesTransferred() + " bytes" +
-                          " * Body: " + _body.getName());
+                          "\n* Body: " + _body.getName());
             }
             closeQuietly(_browserin);
             closeQuietly(_serverin);

@@ -2256,7 +2256,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                       " -> Key: [" + keyBase32.substring(0, 8) + "]" +
                       "\n* LeaseSet: [" + leaseBase32.substring(0, 8) + "]");
         }
-        return "Key does not match LeaseSet destination - " + keyBase32;
+        return "Key does not match LeaseSet destination!";
     }
 
     /**

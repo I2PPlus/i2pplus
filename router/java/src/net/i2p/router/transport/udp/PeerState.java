@@ -2594,7 +2594,7 @@ public class PeerState {
                         _sendWindowBytes.addAndGet(_mtu);
                         _sendWindowBytesRemaining += _mtu;
                     }
-                    if (_log.shouldDebug()) {_log.debug("Continue FAST RTX, inflated window: " + this);}
+                    if (_log.shouldDebug()) {_log.debug("Continue fast restransmit, inflated window: " + this);}
                 } else if (startFast) {
                    // RFC 5681 sec. 3.2 #2 set SST (equation 4)
                    // But use W+ BWE instead
@@ -2605,7 +2605,7 @@ public class PeerState {
                         _sendWindowBytes.set(_slowStartThreshold + (3 * _mtu));
                         _sendWindowBytesRemaining = _sendWindowBytes.get();
                     }
-                    if (_log.shouldDebug()) {_log.debug("Start of FAST RTX, inflated window: " + this);}
+                    if (_log.shouldDebug()) {_log.debug("Start of fast restransmit, inflated window: " + this);}
                 }
             } else {exitFastRetransmit();}
         }
@@ -2629,7 +2629,7 @@ public class PeerState {
                 _sendWindowBytesRemaining = _sendWindowBytes.get();
             }
             if (_log.shouldDebug()) {
-                _log.debug("End of FAST RTX, deflated window: " + this);
+                _log.debug("End of fast restransmit, deflated window: " + this);
             }
         }
     }
@@ -2713,27 +2713,27 @@ public class PeerState {
         long now = _context.clock().now();
         buf.append("\n* Received: ").append(now-_lastReceiveTime).append("ms ago");
         if (_lastSendFullyTime != 0) {buf.append("\n* Last successful send: ").append(now - _lastSendFullyTime).append("ms ago");}
-        if (_lastSendTime != 0) {buf.append("\n* Last attempted send: ").append(now - _lastSendTime).append("ms ago");}
-        if (_lastACKSend != 0) {buf.append("\n* Last ACK sent: ").append(now - _lastACKSend).append("ms ago");}
+        if (_lastSendTime != 0) {buf.append(" * Last attempted send: ").append(now - _lastSendTime).append("ms ago");}
+        if (_lastACKSend != 0) {buf.append(" * Last ACK sent: ").append(now - _lastACKSend).append("ms ago");}
         if (_log.shouldInfo()) {
             int txQueue = _outboundQueue.size();
             boolean isQueued = _inboundMessages.size() > 0 || !_outboundMessages.isEmpty();
             buf.append("\n* Lifetime: ").append(now-_keyEstablishedTime).append("ms")
-               .append("; RTT: ").append(_rtt).append("ms")
-               .append("; RTTdev: ").append(_rttDeviation).append("ms")
-               .append("; RTO: ").append(_rto).append("ms")
-               .append("; MTU: ").append(_mtu).append(" bytes")
-               .append("; Large MTU: ").append(_largeMTU).append(" bytes")
+               .append(" * RTT: ").append(_rtt).append("ms")
+               .append(" * RTTdev: ").append(_rttDeviation).append("ms")
+               .append(" * RTO: ").append(_rto).append("ms")
+               .append(" * MTU: ").append(_mtu).append(" bytes")
+               .append(" * Large MTU: ").append(_largeMTU).append(" bytes")
                .append("\n* Congestion window: ").append(_sendWindowBytes.get()).append(" bytes")
-               .append("; Active window: ").append(_sendWindowBytesRemaining).append(" bytes")
-               .append("; SST: ").append(_slowStartThreshold).append(" bytes")
-               .append("; FastRetransmit? ").append(_fastRetransmit)
-               .append("\n*").append(_consecutiveFailedSends > 0 ? " Consecutive fails: " + _consecutiveFailedSends + ";" : "")
+               .append(" * Active window: ").append(_sendWindowBytesRemaining).append(" bytes")
+               .append(" * SST: ").append(_slowStartThreshold).append(" bytes")
+               .append(" * FastRetransmit? ").append(_fastRetransmit)
+               .append("\n*").append(_consecutiveFailedSends > 0 ? " Consecutive fails: " + _consecutiveFailedSends + " *" : "")
                .append(" Messages (received / sent): ").append(_messagesReceived).append(" / ").append(_messagesSent)
-               .append(isQueued ? "; Messages (in / out): " + _inboundMessages.size() + " / " + _outboundMessages.size() : "")
-               .append(txQueue > 0 ? "; Outbound queue: " + txQueue : "")
+               .append(isQueued ? " * Messages (in / out): " + _inboundMessages.size() + " / " + _outboundMessages.size() : "")
+               .append(txQueue > 0 ? " * Outbound queue: " + txQueue : "")
                .append("\n* Packets received (OK / Duplicate): ").append(_packetsReceived).append(" / ").append(_packetsReceivedDuplicate)
-               .append("\n* Packets sent (OK / Duplicate): ").append(_packetsTransmitted).append(" / ").append(_packetsRetransmitted);
+               .append(" * Packets sent (OK / Duplicate): ").append(_packetsTransmitted).append(" / ").append(_packetsRetransmitted);
         }
         return buf.toString();
     }

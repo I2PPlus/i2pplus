@@ -6422,7 +6422,7 @@ public class TunnelPool {
                     _log.warn(toString() + " -> Marked " + tunnelDirection() + "tunnel good on traffic" +
                               "\n* Promoted from " + ts.name().toLowerCase(Locale.ROOT) +
                               " * Verified bytes: " + cfg.getVerifiedBytesTransferred() +
-                              " * last real traffic: " + age + "ms ago");
+                              " * Last real traffic: " + age + "ms ago");
                 }
             }
         } finally {_tunnelsLock.unlock();}
