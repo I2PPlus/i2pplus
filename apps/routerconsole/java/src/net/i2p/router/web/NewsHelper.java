@@ -462,11 +462,15 @@ public class NewsHelper extends ContentHelper {
      * @since 0.9.4
      */
     public static long lastUpdated(RouterContext ctx) {
-        long rv = ctx.getProperty(PROP_LAST_UPDATED, 0L);
-        if (rv > 0)
-            return rv;
+        // A stored "0" means the file was absent when last checked; only an
+        // absent property means the stamp was never stored. Treating 0 as
+        // unknown re-stats and rewrites router.config on every render while
+        // the news file is missing.
+        if (ctx.getProperty(PROP_LAST_UPDATED) != null) {
+            return ctx.getProperty(PROP_LAST_UPDATED, 0L);
+        }
         File newsFile = new File(ctx.getRouterDir(), NEWS_FILE);
-        rv = newsFile.lastModified();
+        long rv = newsFile.lastModified();
         ctx.router().saveConfig(PROP_LAST_UPDATED, Long.toString(rv));
         return rv;
     }
@@ -479,10 +483,12 @@ public class NewsHelper extends ContentHelper {
      * @since 0.9.55
      */
     private static long lastNewEntry(RouterContext ctx) {
-        long rv = ctx.getProperty(PROP_LAST_NEW_ENTRY, 0L);
-        if (rv > 0)
-            return rv;
-        rv = lastUpdated(ctx);
+        // As in lastUpdated(): a stored "0" is a known stamp, not a missing
+        // one, so it must not re-derive and re-save on every render.
+        if (ctx.getProperty(PROP_LAST_NEW_ENTRY) != null) {
+            return ctx.getProperty(PROP_LAST_NEW_ENTRY, 0L);
+        }
+        long rv = lastUpdated(ctx);
         ctx.router().saveConfig(PROP_LAST_NEW_ENTRY, Long.toString(rv));
         return rv;
     }
