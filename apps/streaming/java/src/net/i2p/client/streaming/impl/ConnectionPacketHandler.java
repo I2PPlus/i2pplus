@@ -854,7 +854,9 @@ class ConnectionPacketHandler {
             SigningPublicKey spk = con.getRemoteSPK();
             ByteArray ba = _cache.acquire();
             boolean ok = packet.verifySignature(_context, spk, ba.getData());
-            _cache.release(ba);
+            // verifySignature() hashes the received buffer in place, or rebuilds
+            // the packet into this one, so no stale bytes are read - skip the memset
+            _cache.release(ba, false);
             if (!ok) {
                 _log.warnThrottled("streaming-reset-signature-failed",
                                    "Received RESET packet with a failed signature for " + con.shortLabel() +
@@ -905,7 +907,9 @@ class ConnectionPacketHandler {
             // inbound SYNs are now verifed in ConnectionManager; Packet caches the result
             ByteArray ba = _cache.acquire();
             boolean sigOk = packet.verifySignature(_context, spk, ba.getData());
-            _cache.release(ba);
+            // verifySignature() hashes the received buffer in place, or rebuilds
+            // the packet into this one, so no stale bytes are read - skip the memset
+            _cache.release(ba, false);
             if (!sigOk) {
                 throw new I2PException("Received unsigned / forged packet: " + packet);
             }

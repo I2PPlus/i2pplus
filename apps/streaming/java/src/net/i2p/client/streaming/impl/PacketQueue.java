@@ -332,7 +332,8 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
                 isLogged = true;
             }
         } finally {
-            _cache.release(ba);
+            // writePacket() overwrites every byte sendMessage() reads, so skip the memset
+            _cache.release(ba, false);
         }
 
         long enqueueElapsed = _context.clock().now() - enqueueStart;

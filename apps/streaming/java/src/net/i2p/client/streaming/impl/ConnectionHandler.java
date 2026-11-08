@@ -799,7 +799,9 @@ class ConnectionHandler {
         }
         ByteArray ba = _cache.acquire();
         boolean ok = packet.verifySignature(_context, ba.getData());
-        _cache.release(ba);
+        // verifySignature() hashes the received buffer in place, or rebuilds
+        // the packet into this one, so no stale bytes are read - skip the memset
+        _cache.release(ba, false);
         if (!ok) {
             _log.warnThrottled("streaming-reset-unverifiable",
                                "Cannot send RESET for an unverifiable packet -> Ignored" +

@@ -1576,7 +1576,9 @@ class ConnectionManager {
         Hash fromHash = from.calculateHash();
         ByteArray ba = _cache.acquire();
         boolean sigOk = synPacket.verifySignature(_context, ba.getData());
-        _cache.release(ba);
+        // verifySignature() hashes the received buffer in place, or rebuilds
+        // the packet into this one, so no stale bytes are read - skip the memset
+        _cache.release(ba, false);
         if (sigOk) {
             long[] nacks = synPacket.getNacks();
             if (nacks != null && nacks.length == 8) {

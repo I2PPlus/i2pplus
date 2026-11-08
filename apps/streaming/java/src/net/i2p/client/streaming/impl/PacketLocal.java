@@ -178,7 +178,10 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
         ByteArray payload = getPayload();
         if (payload != null && payload.getData().length == Packet.MAX_PAYLOAD_SIZE) {
             setPayload(null);
-            getPayloadCache().release(payload);
+            // The next owner overwrites exactly the bytes it reads (buildPacket's
+            // arraycopy covers its valid size, writePacket reads only that range),
+            // so skip the 32KiB memset on return to the pool
+            getPayloadCache().release(payload, false);
         }
     }
 

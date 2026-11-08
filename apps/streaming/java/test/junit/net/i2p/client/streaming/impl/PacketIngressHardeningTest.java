@@ -2,6 +2,8 @@ package net.i2p.client.streaming.impl;
 
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
+
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.KeyGenerator;
 import net.i2p.crypto.SigType;
@@ -22,8 +24,8 @@ import org.junit.Test;
  * to {@link Packet#MAX_NACKS}. Option fields demanded by the flags must fit
  * in the declared option region — a hostile packet with e.g. the signature
  * flag and a zero option size used to read payload bytes as option bytes or
- * run off the packet end. The FROM option stream must also honour the read
- * offset.
+ * run off the packet end. The FROM option stream and the payload end must also
+ * honour the read offset.
  *
  * @since 0.9.72+
  */
@@ -134,5 +136,33 @@ public class PacketIngressHardeningTest {
         assertEquals(7, p2.getSequenceNum());
         assertNotNull(p2.getOptionalFrom());
         assertArrayEquals(dest.toByteArray(), p2.getOptionalFrom().toByteArray());
+    }
+
+    /**
+     * The payload runs to the end of the packet measured from the read offset,
+     * so a packet read out of a larger buffer keeps every payload byte instead of
+     * losing the offset's worth off the tail.
+     */
+    @Test
+    public void testPayloadIntactAtNonZeroOffset() {
+        byte[] payload = new byte[64];
+        for (int i = 0; i < payload.length; i++)
+            payload[i] = (byte) i;
+        Packet p = new Packet(null);
+        p.setSendStreamId(1);
+        p.setReceiveStreamId(2);
+        p.setSequenceNum(3);
+        p.setAckThrough(4);
+        p.setPayload(new ByteArray(payload));
+        int size = p.writtenSize(null);
+        byte[] buf = new byte[size + 10];
+        int written = p.writePacket(buf, 10);
+        assertEquals(size, written);
+        Packet p2 = new Packet(null);
+        p2.readPacket(buf, 10, written);
+        ByteArray pay = p2.getPayload();
+        assertEquals(payload.length, pay.getValid());
+        assertArrayEquals(payload, Arrays.copyOfRange(pay.getData(), pay.getOffset(),
+                                                      pay.getOffset() + pay.getValid()));
     }
 }

@@ -25,8 +25,16 @@ class PacketHandler {
     private final I2PAppContext context;
     /** Logger for this class. */
     private final Log log;
-    /** Pooled buffers for incoming packets. */
-    private final ByteCache cache = ByteCache.getInstance(128, 32 * 1024);
+    /**
+     * Pooled buffers for signature-verify scratch. 4 KiB is enough for the SYN
+     * and PING rebuilds done here, which carry no payload, and
+     * {@link Packet#verifyWithKey} allocates its own array when a rebuild is
+     * larger, so nothing is lost by sizing the pool to the common case.
+     * {@link ByteCache} keys its caches by entry size, so this one is shared
+     * with the connection-level verify caches; the 32 KiB pool this replaces
+     * could hold up to 4 MB of idle buffers on its own.
+     */
+    private final ByteCache cache = ByteCache.getInstance(128, 4 * 1024);
 
     /**
      * Property limiting the number of inbound packet receive workers per
@@ -359,7 +367,9 @@ class PacketHandler {
 
         ByteArray ba = cache.acquire();
         boolean verified = packet.verifySignature(context, ba.getData());
-        cache.release(ba);
+        // verifySignature() hashes the received buffer in place, or rebuilds
+        // the packet into this one, so no stale bytes are read - skip the memset
+        cache.release(ba, false);
 
         if (!verified) {
             if (log.shouldWarn())
@@ -525,7 +535,9 @@ class PacketHandler {
         SigningPublicKey spk = (con != null) ? con.getRemoteSPK() : null;
         ByteArray ba = cache.acquire();
         boolean verified = packet.verifySignature(context, spk, ba.getData());
-        cache.release(ba);
+        // verifySignature() hashes the received buffer in place, or rebuilds
+        // the packet into this one, so no stale bytes are read - skip the memset
+        cache.release(ba, false);
 
         if (!verified) {
             log.warnThrottled("streaming-ping-signature-failed",
