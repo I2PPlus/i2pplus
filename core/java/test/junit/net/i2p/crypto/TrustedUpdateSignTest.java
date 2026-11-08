@@ -28,11 +28,15 @@ import net.i2p.data.SigningPublicKey;
  */
 public class TrustedUpdateSignTest {
 
+    /** Scratch directory for the output path the missing-input case names. */
+    private static final String TMP_DIR = "/tmp/test-i2p";
+
     private static I2PAppContext ctx;
 
     @BeforeClass
     public static void setUpClass() {
         ctx = I2PAppContext.getGlobalContext();
+        new File(TMP_DIR).mkdirs();
     }
 
     /**
