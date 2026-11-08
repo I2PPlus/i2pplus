@@ -6,6 +6,8 @@ import java.text.Collator;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
@@ -359,11 +361,10 @@ public class StatsGenerator {
      * @return the text to show
      */
     private static final String num(double num) {
-        try {
-            return _fmt.get().format(num);
-        } finally {
-            _fmt.remove();
-        }
+        // The formatter is ThreadLocal for exactly this reason: the instance
+        // is shared by formats on this request thread and no other, so it is
+        // kept and reused instead of constructed per number.
+        return _fmt.get().format(num);
     }
 
     /** Formatter for percentages. */
@@ -375,12 +376,17 @@ public class StatsGenerator {
      * @return the text to show
      */
     private static final String pct(double num) {
-        try {
-            return _pct.get().format(num);
-        } finally {
-            _pct.remove();
-        }
+        // ThreadLocal formatter, shared by this thread only: keep it, as for
+        // num().
+        return _pct.get().format(num);
     }
+
+    /**
+     * The collator for group-name ordering. A Collator is not thread-safe, so
+     * it is kept per thread; building one per comparison (the old code)
+     * constructed a RuleBasedCollator on every TreeMap comparison.
+     */
+    private static final ThreadLocal<Collator> _collator = ThreadLocal.withInitial(() -> Collator.getInstance(Locale.getDefault(Locale.Category.FORMAT)));
 
     /**
      * Translated sort
@@ -390,6 +396,8 @@ public class StatsGenerator {
     private class AlphaComparator implements Comparator<String> {
         /** Orders stat names alphabetically. */
         private AlphaComparator() {}
+        /** Translated names, one per compared group name. */
+        private final Map<String, String> _translated = new HashMap<>();
 
         /**
          * Order the router sections first, then the translated section names.
@@ -406,9 +414,23 @@ public class StatsGenerator {
             if (lrouter && !rrouter) {return -1;}
             if (rrouter && !lrouter) {return 1;}
 
-            String lname = _t(lhs);
-            String rname = _t(rhs);
-            return Collator.getInstance().compare(lname, rname);
+            return _collator.get().compare(translated(lhs), translated(rhs));
+        }
+
+        /**
+         * The translated name for a group, cached so the sort translates
+         * each name once instead of on every comparison.
+         *
+         * @param name the raw group name
+         * @return the translated group name
+         */
+        private String translated(String name) {
+            String rv = _translated.get(name);
+            if (rv == null) {
+                rv = _t(name);
+                _translated.put(name, rv);
+            }
+            return rv;
         }
     }
 
