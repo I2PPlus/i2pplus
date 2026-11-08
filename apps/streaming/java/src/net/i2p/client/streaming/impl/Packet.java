@@ -88,8 +88,26 @@ class Packet {
     /** True once the signature was verified. */
     private boolean _sigVerified;
     /**
-     * Time to wait before resending, in ms, one of the four fields
-     * set only when the flags say so.
+     * Where the signature option's bytes sit inside the packet as it was signed,
+     * always {@code _signedOffset} plus the fixed header and the option bytes that
+     * precede the signature. Zero when the packet was not read from a buffer.
+     */
+    private int _sigRegionOffset;
+    /**
+     * Buffer the packet was read from, the bytes we verify the signature against.
+     * Null until {@link #readPacket} records it.
+     */
+    private byte[] _signedBuffer;
+    /**
+     * Start of the packet inside {@link #_signedBuffer}.
+     */
+    private int _signedOffset;
+    /**
+     * Byte count of the packet inside {@link #_signedBuffer}, from
+     * {@link #_signedOffset}.
+     */
+    private int _signedLength;
+    /**
      * Destination's signature on the packet, when that option is included.
      */
     protected Signature _optionSignature;
@@ -769,6 +787,11 @@ class Packet {
             throw new IllegalArgumentException("len=" + buffer.length + " off=" + offset + " length=" + length);
         if (length < 22) // min header size
             throw new IllegalArgumentException("Too small: len=" + buffer.length);
+        // Remember where the packet came from, so verifySignature() can hash these
+        // same bytes instead of rebuilding the packet in a scratch buffer.
+        _signedBuffer = buffer;
+        _signedOffset = offset;
+        _signedLength = length;
         int cur = offset;
         setSendStreamId(DataHelper.fromLong(buffer, cur, 4));
         cur += 4;
@@ -804,7 +827,11 @@ class Packet {
         }
 
         int payloadBegin = cur + optionSize;
-        int payloadSize = length - payloadBegin;
+        // payloadBegin is an absolute index into buffer while length is the packet
+        // length from offset, so the end of the packet is offset + length. Using
+        // length alone truncates the payload by offset bytes for any read that
+        // does not start at 0.
+        int payloadSize = offset + length - payloadBegin;
         if ((payloadSize < 0) || (payloadSize > MAX_PAYLOAD_SIZE)) {
             throw new IllegalArgumentException("length: " + length + " offset: " + offset + " begin: " + payloadBegin);
         }
@@ -875,6 +902,9 @@ class Packet {
         if (isFlagSet(FLAG_SIGNATURE_INCLUDED)) {
             Signature optionSignature;
             int siglen;
+            // Where the signature option's bytes sit inside the buffer being read -
+            // the region verifySignature() zeroes before hashing.
+            _sigRegionOffset = cur;
             if (_optionFrom != null) {
                 SigType type;
                 if (isFlagSet(FLAG_SIGNATURE_OFFLINE)) {type = _transientSigningPublicKey.getType();}
@@ -993,13 +1023,37 @@ class Packet {
     }
 
     /**
+     * Can the signature be checked against the bytes we received, without
+     * rebuilding the packet first?
+     * <p>Only for a packet read off the wire, one that is actually signed, and
+     * whose length matches what {@link #writtenSize} says we would write for it.
+     * That last test is the same one the rebuild path applies when it compares
+     * what it wrote with the size it counted, so a packet we cannot reproduce,
+     * with more NACKs than {@link #MAX_NACKS} or an option block holding bytes we
+     * do not parse, stays on the old path and is refused exactly as it was.
+     *
+     * @param size the byte count to hash, from {@link #writtenSize}
+     * @param sigSpace the option bytes the signature occupies, from
+     *                 {@link #signatureSpaceLen}
+     * @return true to zero the received signature region and hash it where it lies
+     */
+    boolean canHashInPlace(int size, int sigSpace) {
+        return _signedBuffer != null &&
+               sigSpace > 0 &&
+               size == _signedLength &&
+               _sigRegionOffset >= _signedOffset &&
+               _sigRegionOffset + sigSpace <= _signedOffset + _signedLength;
+    }
+
+    /**
      * Rebuild the packet as it was signed and check the signature against it.
      * Split out of {@link #verifySignature} so that one is only about picking
      * the key to verify with.
      *
      * @param ctx the context supplying the DSA engine and logger
      * @param spk the key that signed the packet, non-null
-     * @param buffer scratch space to rebuild in, may be null
+     * @param buffer scratch space for the rebuild path, may be null; not used at
+     *               all when the received bytes can be hashed where they lie
      * @return true if the signature is valid
      */
     private boolean verifyWithKey(I2PAppContext ctx, SigningPublicKey spk, byte[] buffer) {
@@ -1019,34 +1073,68 @@ class Packet {
         }
 
         int size = writtenSize(type);
-        if (buffer == null || size > buffer.length) {buffer = new byte[size];}
-        // Rebuild the packet with zeroes where the signature goes, which is what
-        // the sender signed over. signatureSpaceLen() keeps this the same length
-        // writtenSize() counted, including any option bytes the signature type
-        // guess did not cover.
         int sigSpace = signatureSpaceLen(type);
-        int written = writePacket(buffer, 0, sigSpace);
-        if (written != size) {
-            // Neither our bug nor the sender's: we cannot reproduce the option
-            // block, so the range to hash is unknown. Refuse to verify rather than
-            // hash the wrong bytes, and let the caller report the dropped packet.
-            // A WARN, not an ERROR, because the input is untrusted and this
-            // repeats for every packet from the same peer.
-            Log l = ctx.logManager().getLog(Packet.class);
-            if (l.shouldWarn()) {l.warn("Wrote " + written + " of " + size + " bytes for " + type
-                                       + " signature of " + sigSpace + " option bytes, cannot verify "
-                                       + toString());}
-            return false;
+        byte[] buf;
+        int off;
+        byte[] saved = null;
+        if (canHashInPlace(size, sigSpace)) {
+            // Zero the region and hash the packet where it lies instead of writing
+            // out a second copy of it: the bytes hashed are then exactly the ones
+            // the peer signed, and up to MAX_PAYLOAD_SIZE bytes of copy and a
+            // scratch buffer are saved on every verified data packet. The region
+            // goes back before we return, so the packet is unchanged for whoever
+            // reads its payload next.
+            buf = _signedBuffer;
+            off = _signedOffset;
+            // The reader already copied these exact option bytes into the signature
+            // it parsed, so that copy is the restore source and no scratch array is
+            // needed. It only covers the whole region when the option length and the
+            // signature length agree; any padding the type guess did not account for
+            // is kept in a copy instead.
+            byte[] sigBytes = _optionSignature.getData();
+            if (sigBytes.length == sigSpace) {
+                saved = sigBytes;
+            } else {
+                saved = new byte[sigSpace];
+                System.arraycopy(buf, _sigRegionOffset, saved, 0, sigSpace);
+            }
+            Arrays.fill(buf, _sigRegionOffset, _sigRegionOffset + sigSpace, (byte) 0x0);
+        } else {
+            buf = buffer;
+            if (buf == null || size > buf.length) {buf = new byte[size];}
+            // Rebuild the packet with zeroes where the signature goes, which is what
+            // the sender signed over. signatureSpaceLen() keeps this the same length
+            // writtenSize() counted, including any option bytes the signature type
+            // guess did not cover.
+            int written = writePacket(buf, 0, sigSpace);
+            if (written != size) {
+                // Neither our bug nor the sender's: we cannot reproduce the option
+                // block, so the range to hash is unknown. Refuse to verify rather than
+                // hash the wrong bytes, and let the caller report the dropped packet.
+                // A WARN, not an ERROR, because the input is untrusted and this
+                // repeats for every packet from the same peer.
+                Log l = ctx.logManager().getLog(Packet.class);
+                if (l.shouldWarn()) {l.warn("Wrote " + written + " of " + size + " bytes for " + type
+                                           + " signature of " + sigSpace + " option bytes, cannot verify "
+                                           + toString());}
+                return false;
+            }
+            off = 0;
         }
 
         boolean ok;
-        try {ok = ctx.dsa().verifySignature(_optionSignature, buffer, 0, size, spk);}
-        catch (IllegalArgumentException iae) {
+        try {
+            ok = ctx.dsa().verifySignature(_optionSignature, buf, off, size, spk);
+        } catch (IllegalArgumentException iae) {
             // sigtype mismatch
             Log l = ctx.logManager().getLog(Packet.class);
             l.warnThrottled("packet-signature-illegal-type",
                             "Signature failed -> " + iae.getMessage() + toString());
             ok = false;
+        } finally {
+            if (saved != null) {
+                System.arraycopy(saved, 0, buf, _sigRegionOffset, sigSpace);
+            }
         }
         if (ok) {_sigVerified = true;}
         else {
