@@ -169,7 +169,22 @@
     for (String[] filter : filters) {
         String filterValue = filter[0];
         String displayText = filter[1];
-        boolean notActive = query != null && !query.matches(".*[?&]filter=" + filterValue + "(&|$).*");
+        // "Is this filter active?" by a plain scan: the old String.matches()
+        // compiled a Pattern per link. Same boundaries as the regex - the
+        // "filter=" must follow '?' or '&' and end at '&' or the string end.
+        boolean notActive = false;
+        if (query != null) {
+            String needle = "filter=" + filterValue;
+            boolean active = false;
+            int idx = -1;
+            while (!active && (idx = query.indexOf(needle, idx + 1)) >= 0) {
+                boolean beforeOk = idx > 0 && (query.charAt(idx - 1) == '?' || query.charAt(idx - 1) == '&');
+                int after = idx + needle.length();
+                boolean afterOk = after == query.length() || query.charAt(after) == '&';
+                if (beforeOk && afterOk) {active = true;}
+            }
+            notActive = !active;
+        }
         if (notActive) {
 %>
 <a href="/susidns/addressbook?book=${book.book}&amp;filter=<%=filterValue %>&amp;begin=0&amp;end=99"><%=displayText%></a>
@@ -207,7 +222,21 @@
             }
         }
         catch (Exception e) {categoryTooltip = cat;}
-        boolean notActive = query != null && !query.matches(".*[?&]filter=" + cat + "(&|$).*");
+        // Same plain scan as the filter loop above, so no Pattern is
+        // compiled per category link.
+        boolean notActive = false;
+        if (query != null) {
+            String needle = "filter=" + cat;
+            boolean active = false;
+            int idx = -1;
+            while (!active && (idx = query.indexOf(needle, idx + 1)) >= 0) {
+                boolean beforeOk = idx > 0 && (query.charAt(idx - 1) == '?' || query.charAt(idx - 1) == '&');
+                int after = idx + needle.length();
+                boolean afterOk = after == query.length() || query.charAt(after) == '&';
+                if (beforeOk && afterOk) {active = true;}
+            }
+            notActive = !active;
+        }
         if (notActive) {
 %>
 <a href="/susidns/addressbook?book=${book.book}&amp;filter=<%=catEncoded%>"><span class="<%=cat%>" title="<%=categoryTooltip%>"><%=categoryTooltip%></span></a>
