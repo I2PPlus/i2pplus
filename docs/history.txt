@@ -1,3 +1,98 @@
+2026-11-08 dr|z3d
+  * SusiDNS: Index the subscription blacklists once per page load - each
+    subscription scanned every entry of every list for itself, so N
+    subscriptions re-read the same lists N times
+  * SusiDNS: Build one blacklist bean per list rather than one per form, and
+    validate the blacklist fields against the destination being edited
+  * SusiDNS: Keep the last 600 log lines in a ring buffer - the log page
+    re-read and re-split the whole file once per subscription, and counted
+    today's lines in a second pass over the same read
+  * Console: Cache what the pages recompute per row - the peer filter
+    re-parsed the RouterInfo on every refresh, the stats page built a new
+    formatter per destination, the news feed was re-parsed per subscriber,
+    and the log view sorted oldest-first only to reverse the list
+  * Stats: Report the job queue's add-job rate and current job count, so a
+    queue that is growing is visible before it is full
+  * SSU2: Stop paying per packet - build the short header in place instead of
+    copying it, walk the received bitfield in words, hash a packet without a
+    second copy of it, keep pool membership in a set instead of scanning the
+    list, and sweep expired peers in one pass
+  * Streaming: Fill a pooled buffer in place instead of allocating a zero
+    array per write, and read an ACK's payload out of the wrapper instead of
+    copying it
+  * Tunnel: Stop sweeping the shared peer set once per pool on every pass
+  * Router: Cache the transit tunnel-usage size instead of counting the map
+    per access, keep the recently-relayed introducers in a bounded set
+    instead of rebuilding the list per lookup, drop the oldest line when the
+    log buffer is full instead of discarding the new one, and stop the key
+    ring probing its key size in the log on every rotation
+  * Installer: Stop writing a logger.config that turns the router's logging
+    off - the packaged file set the root level to SEVERE, so a fresh install
+    logged nothing
+
+2026-11-06 dr|z3d
+  * NTCP2: Name the stray-data failures in the message - the two
+    IllegalStateExceptions printed a state prefix and a buffer position where
+    the words belong, and the verified placeholder's toString ended in a
+    dangling arrow
+
+2026-11-05 dr|z3d
+  * I2CP: Fix what the "client is not draining its I2CP queue" warning reports - it
+    printed the depth of the router's own read side, which is near zero whenever the
+    router is healthy, instead of the write side whose overflow made the send fail, so
+    the one number that explains the failure was never printed; it now prints the
+    client's backlog against the queue capacity, and says the queue is closed when the
+    client has gone away instead of reporting a full queue that will never drain. The
+    stack trace that came with it is our own control flow, so it moved to a debug, and
+    the warning is throttled once per destination
+  * I2CP: Hand a client's reader to a dispatcher worker the moment a message is queued
+    for it - a reader that had drained empty was only rediscovered by the idle sweep,
+    which runs when the ready queue is empty, and a backlogged client keeps that queue
+    non-empty, so an idle client could go unserved for as long as another one had a
+    backlog; the sweep is now the safety net for a lost wake-up, not the way readers
+    are scheduled
+  * I2CP: Retry a delivery status update whose send hit a full client queue - the job
+    logged that it had delayed the update by 500ms without ever requeueing it, and it
+    marked the message as delivered before sending it, so the retry it did have would
+    have found the message already handled and done nothing; both are repaired, so the
+    bounded retry ladder now applies
+  * Stats: Add `i2cp.internalQueueBacklog`, the depth of an in-JVM client's queue,
+    sampled only above a quarter of its capacity, so a backlog that persists is a
+    sustained graph line and not only the warning from the moment it overflowed
+  * I2PSnark: Stop warning about a staging or work file that is already gone -
+    File.delete() returns false for an absent path, which is the normal case once the
+    file has been moved to the data directory, and one startup logged 17 of these
+  * I2PSnark: Cache the set of wanted pieces per torrent instead of rebuilding it
+    for every piece request
+  * Logging: Finish the house rules across the tree - print the value the branch
+    holds rather than its threshold, name the actor that acts, put the units on
+    every measured value and the truncated hash in brackets, expand the acronyms a
+    reader at 3am cannot parse, and keep the arrow after the event; the checker now
+    reports no findings for all 14 rules
+
+2026-11-02 dr|z3d
+  * Console: Keep the log columns at their written width without padding
+    compensation - the formatter shortens a thread or class name that does not
+    fit to the one-character ellipsis plus the last width-minus-one characters,
+    so the column renders at its full width on the page and shows two more
+    characters of the name; the page stopped adding two spaces behind the dots,
+    which is what made a truncated column read as `…  e.Connection`
+  * Logging: Stop the next-session-key warning flooding at message rate - the
+    branch that warns when a peer's key reuses a stored key ID never compared
+    the data, so a peer retransmitting the stored key on every message (the
+    protocol, until our NEXTKEY block adopts it) warned every time; a
+    retransmit is now a debug, a genuine collision warns once per ten minutes
+    per peer, the message is condensed to `same key ID, different data`, and
+    the comparison prints the stored key once when both stored fields are the
+    same key
+  * Logging: Name every thread so it fits the 12-character log column - 77
+    names were shortened, dehyphenated, or given a fixed-width `.NN` suffix
+    (`I2P-IO-Transfer` became `IOTransfer`, `StreamingAcceptWorker-1` became
+    `StrmAcc.01`, the `SAM-*` family lost its hyphens), 16 threads that had
+    no name were named, and the netdb page renders on its own named pool
+    instead of the shared common pool, whose threads showed as
+    `ForkJoinPool.commonPool-worker-9`
+
 2026-11-01 dr|z3d
   * Logging:
     - Stop the ratchet and the session-key manager writing keys into the logs -
