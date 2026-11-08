@@ -774,9 +774,13 @@ public class LogsHelper extends HelperBase {
      * @since 0.9.70+
      */
     private static int compareLogLines(String a, String b) {
-        String[] aParts = SPACE_SPLIT.split(a);
-        String[] bParts = SPACE_SPLIT.split(b);
-        int result = aParts[0].compareTo(bParts[0]); // Sort by timestamp
+        // Only the first space-delimited token matters, so stop at the first
+        // space instead of regex-splitting both whole lines per comparison.
+        int aSpace = a.indexOf(' ');
+        int bSpace = b.indexOf(' ');
+        String aTime = aSpace >= 0 ? a.substring(0, aSpace) : a;
+        String bTime = bSpace >= 0 ? b.substring(0, bSpace) : b;
+        int result = aTime.compareTo(bTime); // Sort by timestamp
         if (result == 0) {result = a.compareTo(b);} // If timestamps are equal, sort by content
         return result;
     }
