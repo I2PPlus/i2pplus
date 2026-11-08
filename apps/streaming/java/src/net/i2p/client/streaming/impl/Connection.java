@@ -3099,7 +3099,7 @@ class Connection {
                 for (Iterator<Map.Entry<Long, PacketLocal>> iter = ob.entrySet().iterator(); iter.hasNext(); ) {
                     Map.Entry<Long, PacketLocal> e = iter.next();
                     long id = e.getKey().longValue();
-                    if (id <= ackThrough) {
+                    if (id <= unwrappedAck) {
                         boolean nacked = false;
                         if (nacks != null && nacks.length > 0) {
                             // linear search since its probably really tiny
@@ -3131,7 +3131,7 @@ class Connection {
             // unacked packet. Only fires when peer sends data (ACKs piggybacked).
             if (ob != null && !ob.isEmpty()) {
                 if (nacks == null || nacks.length == 0) {
-                    if (ackThrough > oldHighest) {
+                    if (unwrappedAck > oldHighest) {
                         _dupAckCount = 0;
                         // Reset the last dup-ACK marker on forward progress so a stale
                         // value can't spuriously match and trigger fast retransmit on
@@ -3147,7 +3147,7 @@ class Connection {
                             doReArmTLP = true;
                         }
                     } else {
-                        if (ackThrough == _lastDupAck) {
+                        if (unwrappedAck == _lastDupAck) {
                             _dupAckCount++;
                             if (_dupAckCount >= FAST_RETRANSMIT_THRESHOLD) {
                                 Map.Entry<Long, PacketLocal> first = ob.firstEntry();
@@ -3157,7 +3157,7 @@ class Connection {
                                 _dupAckCount = 0;
                             }
                         } else {
-                            _lastDupAck = ackThrough;
+                            _lastDupAck = unwrappedAck;
                             _dupAckCount = 1;
                         }
                     }
@@ -3194,7 +3194,7 @@ class Connection {
             anyLeft = ob != null && !ob.isEmpty();
             _outboundPacketsLock.notifyAll();
 
-            if (lossEpisodeRecovered(_lastCongestionHighestUnacked >= 0, ackThrough, _lastCongestionHighestUnacked, _activeResends.get())) {
+            if (lossEpisodeRecovered(_lastCongestionHighestUnacked >= 0, unwrappedAck, _lastCongestionHighestUnacked, _activeResends.get())) {
                 _lossStrikes = 0;
             }
 
@@ -3257,14 +3257,17 @@ class Connection {
      */
     void eventOccurred() {
         TaskScheduler sched = _chooser.getScheduler(this);
-        long before = System.currentTimeMillis();
+        // The clock is read only for the >250ms WARN; a cached context read
+        // keeps the unconditional per-event cost to a single cheap read.
+        long before = _context.clock().now();
 
         sched.eventOccurred(this);
-        long elapsed = System.currentTimeMillis() - before;
-        // 250 and warn for debugging
-        if ((elapsed > 250) && (_log.shouldWarn())) {
-            _log.warn("Scheduler pass took " + elapsed + "ms on " + shortLabel() +
-                      " -> Pumped through " + sched);
+        if (_log.shouldWarn()) {
+            long elapsed = _context.clock().now() - before;
+            if (elapsed > 250) {
+                _log.warn("Scheduler pass took " + elapsed + "ms on " + shortLabel() +
+                          " -> Pumped through " + sched);
+            }
         }
     }
 
