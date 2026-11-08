@@ -677,12 +677,25 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * Used for cross-pool diversity: when the fast tier is large enough, each fast peer
      * serves at most one pool, forcing the selector to use unused peers and accumulate
      * tunnel history for proper retention/demotion decisions.
+     * <p>
+     * Cached for {@link #ALL_POOLS_TTL_MS}, so the peers of a tunnel built
+     * inside that window may still be missing from the answer. The caller gets
+     * its own mutable set.
      *
      * @param ctx the router context
      * @return set of peer hashes in any active tunnel
      * @since 0.9.70
      */
     protected static Set<Hash> getPeersInAllPools(RouterContext ctx) {
+        long now = ctx.clock().now();
+        AllPoolsCache cached = _allPoolsCache;
+        if (cached != null && cached.isValid(ctx, now)) {
+            // Every pool in a build pass asks for the same set; reuse it
+            // inside the TTL instead of re-walking every pool's tunnels and
+            // hops per selection attempt. A fresh set is handed out so a
+            // caller that mutates the result cannot corrupt the snapshot.
+            return new HashSet<>(cached._peers);
+        }
         Set<Hash> rv = new HashSet<>();
         TunnelManagerFacade tmf = ctx.tunnelManager();
         List<TunnelPool> pools = new ArrayList<>(4);
@@ -699,7 +712,73 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
                 }
             }
         }
-        return rv;
+        _allPoolsCache = new AllPoolsCache(rv, ctx, now + ALL_POOLS_TTL_MS);
+        // Same copy on the miss path: the snapshot is shared with the next
+        // caller, so nobody may hold a reference into it either.
+        return new HashSet<>(rv);
+    }
+
+    /**
+     * How long a {@link #getPeersInAllPools(RouterContext)} snapshot is reused, in ms.
+     * <p>A TTL rather than an add/remove hook: tunnels are also dropped by the
+     * batch paths in {@code TunnelPool} that bypass {@code removeTunnel()}, so
+     * an event-based invalidation would have a silent miss built in. A tunnel
+     * set only changes on the build timescale, so a short TTL is both safe and
+     * long enough to cover a whole build pass, which is the duplication this
+     * removes.
+     */
+    static final long ALL_POOLS_TTL_MS = 10 * 1000L;
+
+    /** The last {@link #getPeersInAllPools(RouterContext)} snapshot, or null if none yet. */
+    private static volatile AllPoolsCache _allPoolsCache;
+
+    /**
+     * One {@link #getPeersInAllPools(RouterContext)} result, with the context it describes
+     * and the time it goes stale. Bundled as a single object so a reader sees a
+     * consistent peers / context / expiry triple through one volatile read -
+     * three separate fields can be caught mid-update, handing out a snapshot
+     * judged fresh by another snapshot's expiry.
+     *
+     * @since 0.9.72+
+     */
+    static class AllPoolsCache {
+
+        /** The peers found. Not copied or mutated after construction. */
+        final Set<Hash> _peers;
+
+        /** The context whose pools {@link #_peers} was built from. */
+        final RouterContext _ctx;
+
+        /** Wall-clock ms after which {@link #_peers} is too stale to reuse. */
+        final long _expiry;
+
+        /**
+         * Build one snapshot of an already-final peer set.
+         *
+         * @param peers the peers found, not copied - the caller must stop
+         *              mutating it
+         * @param ctx the context whose pools were walked
+         * @param expiry wall-clock ms after which the snapshot is stale
+         */
+        AllPoolsCache(Set<Hash> peers, RouterContext ctx, long expiry) {
+            _peers = peers;
+            _ctx = ctx;
+            _expiry = expiry;
+        }
+
+        /**
+         * Is this snapshot still the right answer, i.e. is it unexpired and
+         * built from the pools of the asking context?
+         *
+         * @param ctx the context asking, compared by identity so a second
+         *            router, or a test mock, never inherits another context's
+         *            tunnels
+         * @param now the current wall-clock time in ms
+         * @return true if the snapshot may be handed out
+         */
+        boolean isValid(RouterContext ctx, long now) {
+            return ctx == _ctx && now < _expiry;
+        }
     }
 
     /**
@@ -2726,7 +2805,31 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * @return true if the peer has not been heard from or about within the activity window
      */
     static boolean isStalePeer(RouterContext ctx, Hash peer) {
-        return isStalePeer(ctx, peer, getBuildSuccess(ctx));
+        return isStalePeer(ctx, peer, getActivityWindow(ctx));
+    }
+
+    /**
+     * Check whether a peer is stale against a caller-computed activity
+     * window. Callers iterating over many peers, such as the keepalive cycle
+     * and the first-hop quality loop, must compute the window once and not
+     * per peer: {@link #getActivityWindow} walks every transport's connection
+     * counts to size it.
+     *
+     * @param ctx the router context
+     * @param peer hash of the peer to check
+     * @param activityWindow the activity window in milliseconds, from
+     *                       {@link #getActivityWindow}
+     * @return true if the peer has a profile and has not been heard from or
+     *         about within the activity window
+     * @since 0.9.72+
+     */
+    static boolean isStalePeer(RouterContext ctx, Hash peer, long activityWindow) {
+        PeerProfile profile = ctx.profileOrganizer().getProfileNonblocking(peer);
+        if (profile == null)
+            return false;
+        long now = ctx.clock().now();
+        long cutoff = now - activityWindow;
+        return profile.getLastHeardFrom() < cutoff && profile.getLastHeardAbout() < cutoff;
     }
 
     /**
@@ -2750,12 +2853,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * about within the activity window
      */
     static boolean isStalePeer(RouterContext ctx, Hash peer, double buildSuccess) {
-        PeerProfile profile = ctx.profileOrganizer().getProfileNonblocking(peer);
-        if (profile == null)
-            return false;
-        long now = ctx.clock().now();
-        long cutoff = now - getActivityWindow(ctx);
-        return profile.getLastHeardFrom() < cutoff && profile.getLastHeardAbout() < cutoff;
+        return isStalePeer(ctx, peer, getActivityWindow(ctx));
     }
 
     /**
@@ -3053,9 +3151,10 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         long now = ctx.clock().now();
         Log log = ctx.logManager().getLog(TunnelPeerSelector.class);
         RouterContext rctx = ctx;
-        // Fetch once for the whole keepalive cycle; isStalePeer() per peer
-        // would otherwise re-read router statistics up to 400 times.
-        double buildSuccess = getBuildSuccess(ctx);
+        // Computed once for the whole keepalive cycle; isStalePeer() per peer
+        // would otherwise re-scan every transport's connection map up to 400
+        // times to work out the same window.
+        long activityWindow = getActivityWindow(ctx);
 
         // Collect top Fast + HighCap peers that aren't in first-hop fail cooldown.
         // Budget 200 (reduced from 400) — ~800 hash lookups + 200× isStalePeer
@@ -3103,7 +3202,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             }
 
             // Skip stale peers — no activity in the last activity window
-            if (isStalePeer(rctx, peer, buildSuccess)) {
+            if (isStalePeer(rctx, peer, activityWindow)) {
                 tally.skipStale++;
                 continue;
             }

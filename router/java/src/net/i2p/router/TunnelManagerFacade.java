@@ -200,6 +200,8 @@ public interface TunnelManagerFacade extends Service {
 
     /**
      * Peers that should not be allowed to be in another tunnel.
+     * Implementations may answer from a snapshot a few seconds old, since the
+     * answer only changes as tunnels are built and expire.
      *
      * @return Set of peers that should not be allowed to be in another tunnel
      */

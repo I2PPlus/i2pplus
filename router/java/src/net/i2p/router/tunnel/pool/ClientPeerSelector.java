@@ -1134,6 +1134,10 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
             // single bad candidate otherwise costs the whole slot.
             int refills = 0;
             boolean inStartup = isStartupGracePeriod(ctx);
+            // Computed once for the whole quality loop; isStalePeer() per
+            // attempt would otherwise re-size the window by walking the
+            // transports' connection counts again.
+            long activityWindow = getActivityWindow(ctx);
             // When very few candidates remain, start at tier 1 (accept
             // connecting) rather than tier 0 (accept any) to still
             // prefer peers with an active transport session.
@@ -1180,7 +1184,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
                     }
                     continue;
                 }
-                if (isStalePeer(ctx, firstHop, params.buildSuccess)) {
+                if (isStalePeer(ctx, firstHop, activityWindow)) {
                     if (log.shouldInfo()) {
                         log.info("First hop [" + firstHop.toShortBase64() +
                                  "] is stale (no contact >4hrs) -> Retrying selection");

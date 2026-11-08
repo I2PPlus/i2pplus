@@ -109,6 +109,71 @@ public class TunnelPeerSelectorStalePeerTest {
         assertTrue(TunnelPeerSelector.isStalePeer(_ctx, hash(1), 0.5));
     }
 
+    /**
+     * A zero-length window makes even a freshly-heard peer stale, whatever the
+     * active-peer count the recomputing form would have derived. The keepalive
+     * and first-hop loops hand one computed window to the per-peer check.
+     */
+    @Test
+    public void testWindowOverloadUsesCallerWindowNotRecomputed() {
+        PeerProfile p = freshProfile();
+        when(_organizer.getProfileNonblocking(any(Hash.class))).thenReturn(p);
+        assertTrue(TunnelPeerSelector.isStalePeer(_ctx, hash(1), 0L));
+    }
+
+    /**
+     * The same profile that is stale under the 8h ladder window is fresh under
+     * a year-long one: the window handed in decides, not the ladder.
+     */
+    @Test
+    public void testWindowOverloadLargeWindowNotStale() {
+        PeerProfile p = oldProfile();
+        when(_organizer.getProfileNonblocking(any(Hash.class))).thenReturn(p);
+        long yearMs = 365L * 24 * 60 * 60 * 1000L;
+        assertFalse(TunnelPeerSelector.isStalePeer(_ctx, hash(1), yearMs));
+        assertTrue(TunnelPeerSelector.isStalePeer(_ctx, hash(1), ONE_HOUR));
+    }
+
+    /**
+     * A peer with no profile is never stale, whatever the window: excluding
+     * newcomers would starve the pool during recovery.
+     */
+    @Test
+    public void testWindowOverloadUnprofiledNotStale() {
+        when(_organizer.getProfileNonblocking(any(Hash.class))).thenReturn(null);
+        assertFalse(TunnelPeerSelector.isStalePeer(_ctx, hash(1), 0L));
+    }
+
+    /**
+     * The cutoff is now minus the window and the comparison is &lt;, so a peer
+     * heard from exactly on the boundary is still fresh and one ms older is
+     * stale.
+     */
+    @Test
+    public void testWindowBoundaryOnlyStrictlyOlderIsStale() {
+        PeerProfile p = mock(PeerProfile.class);
+        when(_organizer.getProfileNonblocking(any(Hash.class))).thenReturn(p);
+        when(p.getLastHeardFrom()).thenReturn(NOW - ONE_HOUR);
+        when(p.getLastHeardAbout()).thenReturn(NOW - ONE_HOUR);
+        assertFalse(TunnelPeerSelector.isStalePeer(_ctx, hash(1), ONE_HOUR));
+        when(p.getLastHeardFrom()).thenReturn(NOW - ONE_HOUR - 1);
+        when(p.getLastHeardAbout()).thenReturn(NOW - ONE_HOUR - 1);
+        assertTrue(TunnelPeerSelector.isStalePeer(_ctx, hash(1), ONE_HOUR));
+    }
+
+    /**
+     * Staleness needs both contacts to have aged out — a peer we keep hearing
+     * about from other routers is still a usable first hop.
+     */
+    @Test
+    public void testRecentHeardAboutRescuesAgedHeardFrom() {
+        PeerProfile p = mock(PeerProfile.class);
+        when(p.getLastHeardFrom()).thenReturn(0L);
+        when(p.getLastHeardAbout()).thenReturn(NOW - 1000L);
+        when(_organizer.getProfileNonblocking(any(Hash.class))).thenReturn(p);
+        assertFalse(TunnelPeerSelector.isStalePeer(_ctx, hash(1), ONE_HOUR));
+    }
+
     @Test
     public void testStartupGraceDoesNotSuppressStaleProfiled() {
         // 10 minutes uptime: inside the 15-minute startup grace
@@ -118,5 +183,31 @@ public class TunnelPeerSelectorStalePeerTest {
         PeerProfile p = oldProfile();
         when(_organizer.getProfileNonblocking(any(Hash.class))).thenReturn(p);
         assertTrue(TunnelPeerSelector.isStalePeer(_ctx, hash(1), 0.5));
+    }
+
+    /**
+     * The no-window overload is a convenience wrapper: it fetches the ladder
+     * window once and hands it to the three-argument form. Pinning that both
+     * forms agree, and that a peer heard from a second ago is fresh through
+     * the wrapper, keeps the wrapper from quietly checking against some other
+     * window - the per-peer recomputation this overload used to do is what
+     * made one keepalive pass walk the peer tiers per peer.
+     */
+    @Test
+    public void testNoWindowOverloadUsesTheComputedWindow() {
+        long window = TunnelPeerSelector.getActivityWindow(_ctx);
+        assertTrue("the stubbed context reports no active peers, so the ladder " +
+                   "gives the widest window, was " + window + "ms",
+                   window > ONE_HOUR);
+        PeerProfile fresh = freshProfile();
+        when(_organizer.getProfileNonblocking(any(Hash.class))).thenReturn(fresh);
+        assertFalse("a peer heard from a second ago is fresh through the wrapper",
+                    TunnelPeerSelector.isStalePeer(_ctx, hash(1)));
+        assertFalse(TunnelPeerSelector.isStalePeer(_ctx, hash(1), window));
+        PeerProfile aged = oldProfile();
+        when(_organizer.getProfileNonblocking(any(Hash.class))).thenReturn(aged);
+        assertTrue("an aged profile is stale through the wrapper too",
+                   TunnelPeerSelector.isStalePeer(_ctx, hash(1)));
+        assertTrue(TunnelPeerSelector.isStalePeer(_ctx, hash(1), window));
     }
 }

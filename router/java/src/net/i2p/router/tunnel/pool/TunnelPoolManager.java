@@ -78,6 +78,23 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     private volatile long _lastIncompleteLeaseSet;
     /** Wall-clock ms of the last participation-share log, for rate limiting. */
     private volatile long _lastShareLimitLog;
+    /**
+     * How long a {@link #selectPeersInTooManyTunnels()} snapshot is reused, in
+     * ms.
+     * <p>A TTL rather than an add/remove hook: tunnels also go away through the
+     * batch paths in {@code TunnelPool} that bypass {@code removeTunnel()}, so
+     * event invalidation would ship a silent miss. The inputs - which tunnels
+     * exist, build success, the uptime band - all move on a seconds-to-minutes
+     * scale, so one snapshot covers every selector construction in a build
+     * pass, which is the duplication this removes.
+     */
+    static final long TOO_MANY_TUNNELS_TTL_MS = 10 * 1000L;
+    /**
+     * The last {@link #selectPeersInTooManyTunnels()} snapshot, or null if none
+     * yet. Package-visible, not private, so the caching wiring - what gets
+     * served, and with which expiry - is testable without a controllable clock.
+     */
+    volatile TooManyTunnelsCache _tooManyTunnelsCache;
     /** Build success at or above which no build-success relief is applied. */
     static final double SHARE_RELIEF_TOP = 0.60;
     /** Build success at or below which relief reaches its full factor of 2. */
@@ -1915,12 +1932,16 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
     /**
      * Count tunnels and peers separately for exploratory or client pools.
+     * <p>
+     * Package-visible so a test can count how often the sweep behind
+     * {@link #selectPeersInTooManyTunnels()} actually runs.
+     *
      * @param lc object counter to store peer counts
      * @param exploratory if true, count exploratory tunnels; if false, count client tunnels
      * @return total number of tunnels counted
      * @since 0.9.69+
      */
-    private int countTunnelsPerPeer(ObjectCounterUnsafe<Hash> lc, boolean exploratory) {
+    int countTunnelsPerPeer(ObjectCounterUnsafe<Hash> lc, boolean exploratory) {
         List<TunnelPool> pools = new ArrayList<>();
         if (exploratory) {
             pools.add(_inboundExploratory);
@@ -1959,15 +1980,27 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      * <p>
      * Possible improvement - restrict based on count per IP, or IP block,
      * to slightly increase costs of collusion.
+     * <p>
+     * Cached for {@link #TOO_MANY_TUNNELS_TTL_MS}, so a peer that crossed the
+     * share limit, or fell back below it, inside that window keeps the verdict
+     * of the last sweep. The caller gets its own mutable set.
      *
      * @return Set of peers that should not be allowed in another tunnel
      */
     public Set<Hash> selectPeersInTooManyTunnels() {
+        long now = _context.clock().now();
+        TooManyTunnelsCache cached = _tooManyTunnelsCache;
+        if (cached != null && cached.isValid(now)) {
+            // The sweep below walks every tunnel of every pool twice; reuse
+            // the last snapshot inside the TTL instead of repeating it per
+            // selector construction. A fresh set is handed out so a caller
+            // that mutates the result cannot corrupt the snapshot.
+            return new HashSet<>(cached._peers);
+        }
         Set<Hash> rv = new HashSet<>();
         long uptime = _context.router().getUptime();
         int basePct = uptime > 30*60*1000L ? _defaultMaxPctTunnels : _startupMaxPctTunnels;
 
-        long now = _context.clock().now();
         double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
         boolean firewalled = isFirewalled();
         boolean incompleteLeaseSet = hasRecentIncompleteLeaseSet(now);
@@ -2004,7 +2037,50 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         }
 
         logShareLimit(now, basePct, max, buildSuccess, firewalled, incompleteLeaseSet, rv.size());
-        return rv;
+        _tooManyTunnelsCache = new TooManyTunnelsCache(rv, now + TOO_MANY_TUNNELS_TTL_MS);
+        // Copied for the same reason as the hit path: the snapshot outlives
+        // this call, so the caller may not hold a view into it.
+        return new HashSet<>(rv);
+    }
+
+    /**
+     * One {@link #selectPeersInTooManyTunnels()} result and the time it goes
+     * stale. Held in one object and published through one volatile field, so a
+     * reader can never pair the set of one sweep with the expiry of another.
+     * <p>
+     * Package-visible so the freshness rule can be tested without a router.
+     *
+     * @since 0.9.72+
+     */
+    static class TooManyTunnelsCache {
+
+        /** The excluded peers found. Not copied or mutated after construction. */
+        final Set<Hash> _peers;
+
+        /** Wall-clock ms after which {@link #_peers} is too stale to reuse. */
+        final long _expiry;
+
+        /**
+         * Build one snapshot of an already-final peer set.
+         *
+         * @param peers the excluded peers found, not copied - the caller must
+         *              stop mutating it
+         * @param expiry wall-clock ms after which the snapshot is stale
+         */
+        TooManyTunnelsCache(Set<Hash> peers, long expiry) {
+            _peers = peers;
+            _expiry = expiry;
+        }
+
+        /**
+         * Is this snapshot still fresh enough to hand out?
+         *
+         * @param now the current wall-clock time in ms
+         * @return true if the snapshot has not reached its expiry
+         */
+        boolean isValid(long now) {
+            return now < _expiry;
+        }
     }
 
     /**
