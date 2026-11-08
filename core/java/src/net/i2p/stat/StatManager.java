@@ -35,6 +35,21 @@ public class StatManager {
     private final ConcurrentHashMap<String, RateStat> _rateStats;
 
     /**
+     * Memoized {@link #getStatsByGroup()} result, dropped whenever a stat is
+     * created or removed. Stats are registered at startup, so the walks here
+     * are paid once rather than once per render. The memoized map and its
+     * sets are never mutated after build; callers copy them as before.
+     */
+    private volatile Map<String, SortedSet<String>> _statsByGroupCache;
+
+    /**
+     * Drop the memoized group map: a stat was just created or removed.
+     */
+    private void invalidateStatsByGroup() {
+        _statsByGroupCache = null;
+    }
+
+    /**
      * Off-timer queue for summary listener delivery, shared by every rate this
      * manager creates. One thread serves the whole table; a per-rate queue would
      * mean a thread per rate.
@@ -109,6 +124,7 @@ public class StatManager {
         _delivery.shutdown();
         _frequencyStats.clear();
         _rateStats.clear();
+        invalidateStatsByGroup();
     }
 
     /**
@@ -138,6 +154,7 @@ public class StatManager {
     public void createRequiredFrequencyStat(String name, String description, String group, long[] periods) {
         _frequencyStats.computeIfAbsent(name,
             n -> new FrequencyStat(n, description, group, periods));
+        invalidateStatsByGroup();
     }
 
     /**
@@ -179,6 +196,7 @@ public class StatManager {
      */
     public void removeFrequencyStat(String name) {
         _frequencyStats.remove(name);
+        invalidateStatsByGroup();
     }
 
     /**
@@ -211,6 +229,7 @@ public class StatManager {
             rs.setSampleDelivery(_delivery);
             return rs;
         });
+        invalidateStatsByGroup();
     }
 
     /**
@@ -347,6 +366,7 @@ public class StatManager {
      */
     public void removeRateStat(String name) {
         _rateStats.remove(name);
+        invalidateStatsByGroup();
     }
 
     /**
@@ -566,7 +586,11 @@ public class StatManager {
      * @return the stats by group
      */
     public Map<String, SortedSet<String>> getStatsByGroup() {
-        Map<String, SortedSet<String>> groups = new HashMap<>(32);
+        Map<String, SortedSet<String>> groups = _statsByGroupCache;
+        if (groups != null) {
+            return groups;
+        }
+        groups = new HashMap<>(32);
         for (FrequencyStat stat : _frequencyStats.values()) {
             String gname = stat.getGroupName();
             SortedSet<String> names = groups.get(gname);
@@ -585,6 +609,7 @@ public class StatManager {
             }
             names.add(stat.getName());
         }
+        _statsByGroupCache = groups;
         return groups;
     }
 
