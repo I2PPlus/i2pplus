@@ -286,8 +286,13 @@ public class LogManager implements Flushable {
 
     /** Size of the in memory log buffer. */
     private int _logBufferSize = MAX_BUFFER;
-    /** True to drop records when the buffer is full. */
-    private volatile boolean _dropOnOverflow;
+    /**
+     * True to drop records when the buffer is full. Default true, so a caller
+     * thread never stalls behind the writer's file or console I/O once the
+     * buffer is full; set logger.dropOnOverflow=false to block the caller and
+     * never lose a message.
+     */
+    private volatile boolean _dropOnOverflow = true;
     /** True to drop repeated records. */
     private boolean _dropDuplicates;
     /** Records dropped since startup. */
@@ -673,8 +678,11 @@ public class LogManager implements Flushable {
             // invalid console buffer size, use default
         }
 
-        _dropOnOverflow = Boolean.parseBoolean(config.getProperty(PROP_DROP));
-        String str = config.getProperty(PROP_DUP);
+        String str = config.getProperty(PROP_DROP);
+        // Only override the field default when the key is present, so an
+        // absent key cannot turn the non-blocking default back into a blocking one.
+        if (str != null) _dropOnOverflow = Boolean.parseBoolean(str);
+        str = config.getProperty(PROP_DUP);
         _dropDuplicates = str == null || Boolean.parseBoolean(str);
 
         str = config.getProperty(PROP_GZIP);
