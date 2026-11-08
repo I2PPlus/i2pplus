@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import net.i2p.data.DataHelper;
 import net.i2p.data.router.RouterInfo;
@@ -34,14 +36,14 @@ class OutboundMessageFragments {
     private final UDPTransport _transport;
 
     /**
-     * List of peers currently sending outbound messages.
-     * Thread-safe for iteration and modification with reduced array copying.
+     * The peers wanting to transmit, and the batch of drained peers
+     * queued for removal. This replaces a pair of CopyOnWriteArrayLists,
+     * which together scanned and re-copied their whole backing arrays
+     * once per outbound message. See {@link PeerPool} for the contract.
      */
-    private final CopyOnWriteArrayList<PeerState> _activePeers = new CopyOnWriteArrayList<>();
+    private final PeerPool<PeerState> _pool = new PeerPool<>();
     /** The index of the next peer to serve. */
     private int _peerIndex = 0;
-    /** The peers to remove from the pool. */
-    private final CopyOnWriteArrayList<PeerState> _peersToRemove = new CopyOnWriteArrayList<>();
     /** The lock held while waiting for messages. */
     private final Object _waitLock = new Object();
     /** True while the job runs. */
@@ -137,7 +139,7 @@ class OutboundMessageFragments {
      */
     public synchronized void shutdown() {
         _alive = false;
-        _activePeers.clear();
+        _pool.clear();
         nudge();
     }
 
@@ -149,7 +151,7 @@ class OutboundMessageFragments {
     void dropPeer(PeerState peer) {
         if (_log.shouldDebug()) {_log.debug("Dropping peer " + peer.getRemotePeer());}
         peer.dropOutbound();
-        _activePeers.remove(peer);
+        _pool.remove(peer);
     }
 
     /**
@@ -223,9 +225,11 @@ class OutboundMessageFragments {
     public void add(PeerState peer, int size) {
         // Remove from pending-removal list first, in case a new message
         // arrives while finishMessages() queued this peer for removal.
-        // Without this, removeAll() could remove a peer that just got a new message.
-        _peersToRemove.remove(peer);
-        boolean added = _activePeers.addIfAbsent(peer);
+        // Without this, removeAll() could remove a peer that just got a new
+        // message. {@link PeerPool#add} does the un-queue and the membership
+        // test in one step, copying the ordered array only for a genuinely
+        // new peer.
+        boolean added = _pool.add(peer);
         if (added) {
             if (_log.shouldDebug()) {
                 _log.debug("Adding a new message to new peer [" + peer.getRemotePeer().toShortBase64() + "]");
@@ -238,7 +242,7 @@ class OutboundMessageFragments {
         // One size read for both stats; they always sample the same value.
         // The memory stat is a slow-moving gauge rather than an event counter, so
         // emit it on a lower cadence to halve the CHM lookups per outbound message.
-        int activePeers = _activePeers.size();
+        int activePeers = _pool.size();
         _context.statManager().addRateData("udp.outboundActivePeers", activePeers);
         if (shouldEmitMemoryStat()) {
             _context.statManager().addRateData("udp.memory.activePeers", activePeers);
@@ -260,6 +264,247 @@ class OutboundMessageFragments {
  */
     private boolean shouldEmitMemoryStat() {
         return (++_memoryStatCounter % MEMORY_STAT_INTERVAL) == 0;
+    }
+
+    /**
+     * Bookkeeping for which peers are in the outbound pool, in the order
+     * the packet pusher serves them, and which drained peers are queued to
+     * leave it. This replaces two CopyOnWriteArrayLists: between them, one
+     * outbound message cost an {@code addIfAbsent()} membership scan and an
+     * {@code remove()} un-queue, each scanning every peer with
+     * {@code equals()} and then allocating and copying a fresh array of
+     * every reference. Here the per-message path is two concurrent set
+     * operations and no array copy; the ordered array is touched only when
+     * a peer genuinely joins or leaves, where the copy preserves the
+     * pusher's round-robin order of the survivors.
+     * <p>
+     * Concurrency contract. {@link #add} decides membership with a single
+     * set operation, and only on the rare genuine join does it append -
+     * under the pool monitor and with {@code addIfAbsent()}, so two racing
+     * joins cannot double the ordered view. Every structural change
+     * (join, batch removal, drop, clear) updates both views while holding
+     * the monitor, so membership and the ordered view cannot diverge past
+     * the window between a join's set operation and its append, and a
+     * caller that is told "already present" is never handed a peer the
+     * pusher cannot see. The monitor is held only across the collection
+     * operations themselves: no method here calls into the pooled object,
+     * and no method takes the wait lock, so no caller can deadlock a peer
+     * send path against a notify.
+     * <p>
+     * Iteration contract. The ordered view is read through {@link #get}
+     * and {@link #size} exactly as the old list was, on an immutable
+     * snapshot, so a pusher round never meets a
+     * {@code ConcurrentModificationException}, and {@link #get} keeps
+     * throwing {@code IndexOutOfBoundsException} when a concurrent drop
+     * shrinks the pool under the caller's index.
+     *
+     * @param <T> the pooled peers, used only for their identity
+     * @since 0.9.72+
+     */
+    static final class PeerPool<T> {
+
+        /**
+         * The ordered pool, the structure the pusher walks round-robin.
+         * Array copies are confined to structural changes: a join, a
+         * batched flush, a drop, a clear.
+         */
+        private final CopyOnWriteArrayList<T> _peers = new CopyOnWriteArrayList<>();
+
+        /**
+         * The same peers as a concurrent set, so {@link #add} can answer
+         * "already in the pool?" in constant time on the per-message path
+         * without scanning or copying the ordered array. Kept in lockstep
+         * with it under the monitor, so a false from {@code add()} means
+         * the peer is already in the ordered view.
+         */
+        private final Set<T> _members = ConcurrentHashMap.newKeySet();
+
+        /**
+         * The drained peers {@link #queueForRemoval} has marked for the
+         * next {@link #flushRemovals()}, which drops them from both views.
+         * Also a set, so {@link #add}'s un-queue of a reactivated peer is
+         * O(1) too. Unlike the ordered view its iteration order is never
+         * observed, and a peer is in it at most once.
+         */
+        private final Set<T> _toRemove = ConcurrentHashMap.newKeySet();
+
+        /**
+         * The pool is a set of peers plus an ordered view of them, empty and
+         * ready to serve as soon as it is built.
+         */
+        PeerPool() {
+        }
+
+        /**
+         * Add a peer to the pool, un-queuing any removal the pusher queued
+         * for it first, in that order: a peer reactivated between the
+         * pusher's round and the batched flush must not be flushed away.
+         * The join itself is done under the monitor, together with the
+         * membership test, so a flush running on another thread can never
+         * drop the peer between the answer "already in the pool" and the
+         * append it is relying on - and the append needs no scan of the
+         * ordered view, because the monitor keeps that view and the set in
+         * lockstep, so being in the set means being in the view.
+         *
+         * @param peer a peer that now has something to send
+         * @return true if the peer was not in the pool and has just joined
+         *         it; callers treat that as "wake the pusher
+         *         unconditionally". A racing shutdown can make this return
+         *         true and then re-add the peer behind the clear, exactly
+         *         as {@code addIfAbsent()} did before.
+         */
+        boolean add(T peer) {
+            _toRemove.remove(peer);
+            synchronized (this) {
+                if (!_members.add(peer)) {
+                    return false;
+                }
+                _peers.add(peer);
+                return true;
+            }
+        }
+
+        /**
+         * The peer at a position in the ordered pool.
+         *
+         * @param index the position the pusher's round-robin reached
+         * @return the peer there
+         * @throws IndexOutOfBoundsException if a concurrent drop shrank the
+         *                                   pool under the index, which the pusher catches and
+         *                                   restarts its index at zero
+         */
+        T get(int index) {
+            return _peers.get(index);
+        }
+
+        /**
+         * How many peers are in the pool, an array length read, not a scan.
+         *
+         * @return the number of peers in the ordered view
+         */
+        int size() {
+            return _peers.size();
+        }
+
+        /**
+         * Whether the pool is empty, the predicate the pusher sleeps on.
+         *
+         * @return true if no peer has anything queued to send
+         */
+        boolean isEmpty() {
+            return _peers.isEmpty();
+        }
+
+        /**
+         * The ordered pool for the read-only aggregate stats walk.
+         *
+         * @return the live ordered view, never null; peers may join or
+         *         leave while it is iterated
+         */
+        CopyOnWriteArrayList<T> peers() {
+            return _peers;
+        }
+
+        /**
+         * Mark a drained peer for the next batched removal. The ordered
+         * pool is not touched yet, so the peer keeps its round-robin slot
+         * until the flush, and a peer that gets new work un-queues itself
+         * through {@link #add} before then.
+         *
+         * @param peer a peer the pusher found with nothing left to send
+         */
+        void queueForRemoval(T peer) {
+            _toRemove.add(peer);
+        }
+
+        /**
+         * How many removals are waiting, which the pusher uses to batch
+         * its flushes.
+         *
+         * @return the number of peers queued for removal
+         */
+        int pendingRemovals() {
+            return _toRemove.size();
+        }
+
+        /**
+         * Apply every queued removal to both views and empty the queue; a
+         * no-op when nothing is queued, so callers may call it on every
+         * drain path without checking first. The ordered array is copied
+         * once per batch, not once per message. A peer that joins while a
+         * flush is in progress can still be dropped by it even though it
+         * has fresh work - the same small race the array pair had - and
+         * the next add() puts it back.
+         */
+        void flushRemovals() {
+            if (_toRemove.isEmpty()) {
+                return;
+            }
+            synchronized (this) {
+                _peers.removeAll(_toRemove);
+                _members.removeAll(_toRemove);
+                _toRemove.clear();
+            }
+        }
+
+        /**
+         * Forget a dropped peer from both views at once, bypassing the
+         * removal queue. A queued removal for the same peer is left in
+         * place and is a no-op at the next flush, as before.
+         *
+         * @param peer the peer being dropped; it is not an error for it to
+         *             be absent
+         */
+        void remove(T peer) {
+            synchronized (this) {
+                _peers.remove(peer);
+                _members.remove(peer);
+            }
+        }
+
+        /**
+         * Forget everything - the ordered pool, the membership set, and
+         * the queued removals - so no peer reference survives the shutdown
+         * path. A concurrent add() may append its peer to the ordered
+         * view behind this clear; that view then holds at most one peer
+         * the set no longer counts, the next add() of that peer rejoins
+         * the views, and the next clear() here drops it again, so nothing
+         * can leak past a startup.
+         */
+        void clear() {
+            synchronized (this) {
+                _peers.clear();
+                _members.clear();
+                _toRemove.clear();
+            }
+        }
+
+        /**
+         * Is the peer in the pool? Test-visible membership, for the
+         * leak and consistency checks in the tests. Reads the membership
+         * set, which is only ever changed together with the ordered view
+         * and only under the monitor, so a true answer here means the
+         * pusher's walk can reach this peer unless a flush drops it in the
+         * meantime - the same small race the array pair had.
+         *
+         * @param peer the peer to test
+         * @return true if the peer is currently a member
+         */
+        boolean contains(T peer) {
+            return _members.contains(peer);
+        }
+
+        /**
+         * Does the peer have a removal waiting for the next flush, for the
+         * race and leak checks in the tests?
+         *
+         * @param peer the peer to test
+         * @return true if a flush will remove this peer unless it re-adds
+         *         itself first
+         */
+        boolean isQueuedForRemoval(T peer) {
+            return _toRemove.contains(peer);
+        }
     }
 
     /**
@@ -286,9 +531,9 @@ class OutboundMessageFragments {
 
         while (_alive && (states == null)) {
             // Reset peer index if we've gone through all peers
-            if (_peerIndex >= _activePeers.size()) {
+            if (_peerIndex >= _pool.size()) {
                 _peerIndex = 0;
-                if (_activePeers.isEmpty()) {
+                if (_pool.isEmpty()) {
                     // Wait for new messages
                     waitForMessages();
                     continue;
@@ -298,7 +543,7 @@ class OutboundMessageFragments {
             // Get the next peer in the round-robin list
             PeerState p;
             try {
-                p = _activePeers.get(_peerIndex++);
+                p = _pool.get(_peerIndex++);
             } catch (IndexOutOfBoundsException e) {
                 // Concurrent dropPeer() shrank the list
                 _peerIndex = 0;
@@ -309,15 +554,14 @@ class OutboundMessageFragments {
             // Clean up completed messages and allocate sends in one pass
             states = p.finishAndAllocate(now);
             if (!p.hasOutbound()) {
-                if (!_peersToRemove.contains(p))
-                    _peersToRemove.add(p);
+                // The queue dedupes, and add() un-queues a peer that got a
+                // new message, so a reactivated peer is never removed.
+                _pool.queueForRemoval(p);
                 // Eager cleanup to prevent accumulation of dead PeerState references.
                 // CopyOnWriteArrayList.removeAll() copies the backing array, so batch
                 // at a reasonable threshold to balance copy cost vs memory pressure.
-                if (_peersToRemove.size() >= 32) {
-                    _activePeers.removeAll(_peersToRemove);
-                    _peersToRemove.clear();
-                }
+                if (_pool.pendingRemovals() >= 32)
+                    _pool.flushRemovals();
                 continue;
             }
             if (states != null) {
@@ -329,12 +573,9 @@ class OutboundMessageFragments {
             nextSendDelay = foldSendDelay(nextSendDelay, p.getNextDelay(now));
 
             // If we've gone through all peers, wait or retry
-            if (peersProcessed >= _activePeers.size()) {
+            if (peersProcessed >= _pool.size()) {
                 // Batch remove peers to reduce CopyOnWriteArrayList copying
-                if (!_peersToRemove.isEmpty()) {
-                    _activePeers.removeAll(_peersToRemove);
-                    _peersToRemove.clear();
-                }
+                _pool.flushRemovals();
 
                 if (nextSendDelay > 0) {
                     int toWait = roundWaitMs(nextSendDelay);
@@ -355,7 +596,7 @@ class OutboundMessageFragments {
                 // Emit aggregate transport stats every full round-robin cycle
                 if (++_statEmitCounter >= 10) {
                     _statEmitCounter = 0;
-                    long[] agg = PeerState.getAggregateStats(_activePeers);
+                    long[] agg = PeerState.getAggregateStats(_pool.peers());
                     if (agg != null) {
                         _context.statManager().addRateData("udp.avgSendWindow", agg[0]);
                         _context.statManager().addRateData("udp.avgRTO", agg[1]);
@@ -369,11 +610,8 @@ class OutboundMessageFragments {
         }
 
         if (peer == null || states == null) {
-            // Cleanup _peersToRemove list before returning to prevent memory leak
-            if (!_peersToRemove.isEmpty()) {
-                _activePeers.removeAll(_peersToRemove);
-                _peersToRemove.clear();
-            }
+            // Flush queued removals before returning to prevent memory leak
+            _pool.flushRemovals();
             return null;
         }
 
