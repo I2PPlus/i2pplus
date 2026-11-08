@@ -383,41 +383,127 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * Rebuild the wanted pieces list from storage. Sets wantedBytes too.
      * Only called externally from Storage after the double-check fails.
+     *
+     * <p>The scan across every piece of the torrent, the piece allocations and
+     * the shuffle are done outside the {@link #wantedPieces} monitor, which the
+     * request path of every peer of this torrent takes, see
+     * {@link #planWantedPieces}. A rebuild is the rare path and a piece request
+     * is the hot one, so the scan is kept off that monitor and only the swap of
+     * the rebuilt set and index is done under it.
      */
     public void setWantedPieces() {
-        if (metainfo == null || storage == null) {
+        // read once, so a setStorage() part-way through cannot mix two
+        // torrents into one scan
+        MetaInfo mi = metainfo;
+        Storage stg = storage;
+        if (mi == null || stg == null) {
             wantedBytes = -1;
             return;
         }
 
-        // Make a list of pieces
+        // Make a list of pieces, off the monitor, then swap it in
+        WantedPiecesPlan plan = planWantedPieces(stg.getBitField(),
+                                                 stg.getPiecePriorities(), mi, _random);
         synchronized (wantedPieces) {
-            wantedPieces.clear();
-            BitField bitfield = storage.getBitField();
-            int[] pri = storage.getPiecePriorities();
-            long count = 0;
-            for (int i = 0; i < metainfo.getPieces(); i++) {
-                // only add if we don't have and the priority is >= 0
-                if ((!bitfield.get(i)) && (pri == null || pri[i] >= 0)) {
-                    // BEP 47: padding-only pieces hash as zeros and are always trusted,
-                    // so never request them
-                    if (metainfo.isRangePadding(
-                            (long) i * metainfo.getPieceLength(0), metainfo.getPieceLength(i))) {
-                        continue;
-                    }
-                    Piece p = new Piece(i);
-                    if (pri != null) p.setPriority(pri[i]);
-                    wantedPieces.add(p);
-                    count += metainfo.getPieceLength(i);
-                }
-            }
-            wantedBytes = count;
-            reshuffleWanted(wantedPieces, _random);
-            wantedMap.clear();
-            for (Piece p : wantedPieces) {
-                wantedMap.put(Integer.valueOf(p.getId()), p);
-            }
+            applyWantedPlan(wantedPieces, wantedMap, plan);
+            wantedBytes = plan.bytes;
             wantedDirty = true;
+        }
+    }
+
+    /**
+     * The rebuilt wanted set and the bytes it occupies, as chosen by
+     * {@link #planWantedPieces} and before {@link #applyWantedPlan} swaps it
+     * into the live structures.
+     *
+     * @since 0.9.72+
+     */
+    static final class WantedPiecesPlan {
+        /** The pieces to request from peers, in the order the request path should walk them. */
+        final List<Piece> pieces;
+        /** The total bytes of {@link #pieces}, so wantedBytes can be set in one write. */
+        final long bytes;
+
+        /**
+         * Hold a rebuilt wanted set for the swap into the live structures.
+         *
+         * @param pieces the pieces to request, already shuffled
+         * @param bytes the total bytes of those pieces
+         */
+        WantedPiecesPlan(List<Piece> pieces, long bytes) {
+            this.pieces = pieces;
+            this.bytes = bytes;
+        }
+    }
+
+    /**
+     * Choose which pieces to request from peers, and total their bytes: the
+     * missing pieces at a non-negative priority, minus the BEP 47 padding-only
+     * pieces, shuffled so peers do not all start from the same piece.
+     *
+     * <p>Pure - it reads its arguments and allocates, and takes no lock and
+     * changes no coordinator state. That is what lets the scan run outside the
+     * {@link #wantedPieces} monitor: a 4 GB torrent at 256 KB pieces is 16k
+     * pieces, and every peer of the torrent waits on that monitor to pick its
+     * next request, so scanning it there stalls the whole swarm's requests for
+     * the length of a rebuild.
+     *
+     * @param have which pieces we already have, non-null
+     * @param pri per-piece priorities as returned by
+     *            {@link Storage#getPiecePriorities()}, or null to want every
+     *            missing piece at the default priority
+     * @param metainfo the torrent to read the piece geometry from, non-null
+     * @param random the random to shuffle the result with, or null to leave it
+     *               in id order
+     * @return the pieces to want and their total bytes, never null
+     * @since 0.9.72+
+     */
+    static WantedPiecesPlan planWantedPieces(BitField have, int[] pri, MetaInfo metainfo, Random random) {
+        int pieces = metainfo.getPieces();
+        // getPieceLength(0) throws on a torrent with no pieces, which the loop
+        // below never visits, so keep returning an empty plan in that case
+        int firstLength = pieces > 0 ? metainfo.getPieceLength(0) : 0;
+        List<Piece> wanted = new ArrayList<>();
+        long count = 0;
+        for (int i = 0; i < pieces; i++) {
+            // only add if we don't have and the priority is >= 0
+            if ((!have.get(i)) && (pri == null || pri[i] >= 0)) {
+                int length = metainfo.getPieceLength(i);
+                // BEP 47: padding-only pieces hash as zeros and are always trusted,
+                // so never request them
+                if (metainfo.isRangePadding((long) i * firstLength, length)) {
+                    continue;
+                }
+                Piece p = new Piece(i);
+                if (pri != null) p.setPriority(pri[i]);
+                wanted.add(p);
+                count += length;
+            }
+        }
+        if (random != null) {
+            Collections.shuffle(wanted, random);
+        }
+        return new WantedPiecesPlan(wanted, count);
+    }
+
+    /**
+     * Replace the contents of the live wanted set and its id index with a
+     * rebuilt plan, so a piece that stopped being wanted - completed, or given a
+     * negative priority - is gone from both, not only from one of them. The
+     * caller holds the {@link #wantedPieces} monitor; the plan itself was built
+     * without it.
+     *
+     * @param wanted the live wanted-piece set to replace the contents of
+     * @param byId the live piece-id index to replace the contents of
+     * @param plan the pieces to install, as built by {@link #planWantedPieces}
+     * @since 0.9.72+
+     */
+    static void applyWantedPlan(Set<Piece> wanted, Map<Integer, Piece> byId, WantedPiecesPlan plan) {
+        wanted.clear();
+        wanted.addAll(plan.pieces);
+        byId.clear();
+        for (Piece p : plan.pieces) {
+            byId.put(Integer.valueOf(p.getId()), p);
         }
     }
 
