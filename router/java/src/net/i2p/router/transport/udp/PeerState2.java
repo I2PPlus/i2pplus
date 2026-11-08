@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -29,6 +28,7 @@ import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.router.transport.TransportUtil;
 import net.i2p.router.transport.udp.PacketBuilder2.Fragment;
 import net.i2p.util.HexDump;
+import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 
 /**
@@ -79,12 +79,6 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
 
     /** When sent messages were last expired. */
     private long _sentMessagesLastExpired;
-    /**
-     * Incremental expiry cursor over a snapshot of _sentMessages, so a tick
-     * examines a bounded number of entries instead of the whole map.  Only
-     * touched from the PacketPusher thread via finishAndAllocate().
-     */
-    private final ArrayDeque<Map.Entry<Long, List<PacketBuilder2.Fragment>>> _sentMessagesExpiryCursor = new ArrayDeque<>();
     /** Our IP as the peer sees it. */
     private volatile byte[] _ourIP;
     /** Our port as the peer sees it. */
@@ -349,55 +343,59 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     * Expire complete or timed-out entries from _sentMessages, walking an
-     * incremental cursor instead of rescanning the whole map and every fragment
-     * list on every tick.
-     * <p>The cursor holds a snapshot of the map taken when it runs dry;
-     * entries acked in the meantime are skipped by the identity check, and
-     * newly added entries are picked up on the next refill.  An entry is
-     * removed only when every fragment's message is complete or expired, so it
-     * never expires early.  One pass covers the whole cursor, so retention
-     * matches the old full scan's single tick.
+     * Expire complete or timed-out entries from _sentMessages.
+     * <p>An entry is removed only when every fragment's message is complete or
+     * expired, so it never expires early.  The whole map is covered in one pass,
+     * as it was before the incremental cursor of f0471ca7dd: that cursor never
+     * terminated early on a live peer (an in-flight message is neither complete
+     * nor expired, so the scan ran to the end of the snapshot on every tick) and
+     * only added a copy of the map's entries per tick.
      * <p>Only called from {@link #finishAndAllocate} on the PacketPusher
-     * thread, so the cursor needs no synchronization.  Failure detection is
-     * unaffected: that is the "ahead &gt; BITFIELD_SIZE" check in
-     * {@link #finishAndAllocate}, which runs on its own schedule.
+     * thread.  Failure detection is unaffected: that is the "ahead &gt;
+     * BITFIELD_SIZE" check in {@link #finishAndAllocate}, which runs on its own
+     * schedule.
      *
      * @param now current time, for the expiry test
      * @since 0.9.71+
      */
     private void expireSentMessages(long now) {
-        ArrayDeque<Map.Entry<Long, List<PacketBuilder2.Fragment>>> cursor = _sentMessagesExpiryCursor;
+        if (shouldLogDebug())
+            _log.debug("[SSU] Sweeping " + _sentMessages.size() + " pending ACKs to free their buffers");
+        expireSentMessages(_sentMessages, now, _log);
+    }
+
+    /**
+     * One full sweep of a sent-but-unacked message map, removing every entry
+     * whose fragments are all complete or expired.  Package-visible, and free
+     * of peer state, so the extent of a single sweep is testable on its own.
+     *
+     * @param sentMessages packet number to the fragments sent with it, mutated
+     *                     in place; a concurrent map in normal use
+     * @param now current time, for the expiry test
+     * @param log where to log what was removed, null to log nothing
+     * @return the number of entries examined, which is the map's size when the
+     *         sweep started - every removable entry is removed by this one call
+     * @since 0.9.72+
+     */
+    static int expireSentMessages(Map<Long, List<PacketBuilder2.Fragment>> sentMessages, long now, Log log) {
         int examined = 0;
-        // Work is bounded per fragment, but the sweep itself runs to completion
-        // in one call. Capping it per tick pushed fragment-buffer release out to
-        // ceil(size / 32) ticks - around 8 minutes at a
-        // thousand in-flight entries - where the old full scan released
-        // everything in one.
-        int budget = Integer.MAX_VALUE;
-        while (examined++ < budget) {
-            if (cursor.isEmpty()) {
-                for (Map.Entry<Long, List<PacketBuilder2.Fragment>> entry : _sentMessages.entrySet()) {
-                    cursor.addLast(entry);
-                }
-                if (cursor.isEmpty()) {return;}
-                if (shouldLogDebug())
-                    _log.debug("[SSU] Sweeping " + _sentMessages.size() + " pending ACKs to free their buffers");
-            }
-            Map.Entry<Long, List<PacketBuilder2.Fragment>> entry = cursor.pollFirst();
+        entry:
+        for (Map.Entry<Long, List<PacketBuilder2.Fragment>> entry : sentMessages.entrySet()) {
+            examined++;
             Long key = entry.getKey();
             List<PacketBuilder2.Fragment> frags = entry.getValue();
-            // acked and removed since the snapshot, or superseded
-            if (_sentMessages.get(key) != frags) {continue;}
-            loop:
             for (PacketBuilder2.Fragment f : frags) {
                 OutboundMessageState state = f.state;
-                if (!state.isComplete() && !state.isExpired(now)) {continue loop;}
+                // We only remove if ALL are complete or expired
+                if (!state.isComplete() && !state.isExpired(now)) {continue entry;}
             }
-            _sentMessages.remove(key, frags);
-            if (shouldLogDebug())
-                _log.debug("[SSU] Removing a finished message from sent list -> Fragments: " + frags);
+            // The two-arg remove is a no-op if the ack path replaced the list
+            // under us, so the entry is never dropped out from under a sender.
+            if (sentMessages.remove(key, frags) && log != null && log.shouldDebug())
+                log.debug("[SSU] Removed a finished message from the sent list -> Packet: " + key +
+                          " * Fragments: " + frags.size());
         }
+        return examined;
     }
 
     /**
@@ -1011,7 +1009,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         } catch (IllegalArgumentException iae) {
             if (shouldLogDebug()) {_log.debug("RouterInfo store failure: " + ri, iae);}
             else if (_log.shouldWarn()) {
-                _log.warn("Failed NetDBStore of RouterInfo [" + ri.getHash().toShortBase64() + "] \n* " + iae.getMessage());
+                _log.warn("Failed NetDBStore of RouterInfo [" + ri.getHash().toShortBase64() + "] -> " + iae.getMessage());
             }
         }
     }
@@ -1252,7 +1250,11 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                 _log.debug("[SSU] Received new ACK block from [" + _shortHash + "] " +
                            SSU2Bitfield.toString(ackThru, acks, ranges, rangeCount));
             }
-            ackbf.forEachAndNot(_ackedMessages, this);
+            try {
+                ackbf.forEachAndNot(_ackedMessages, this);
+            } finally {
+                flushDeferredSeqAcked();
+            }
         } catch (Exception e) {
             // Throttled: a confused or spoofed peer repeats this per ACK block, and the
             // bitfield plus the hex dump of the ranges is a dozen lines per occurrence.
@@ -1534,6 +1536,26 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             long sn = state.getSeqNum();
             if (sn > highest) {highest = sn;}
         }
+        if (highest > _deferredHighestSeqAcked) {_deferredHighestSeqAcked = highest;}
+    }
+
+    /**
+     * Highest sequence number acked by the ACK block being processed, for
+     * the single batched outbound-queue walk in {@link #flushDeferredSeqAcked}
+     * instead of one walk per acked packet number. Calling
+     * {@link #highestSeqNumAcked} per callback re-walked the whole send
+     * window per bit and counted the same NACKs repeatedly.
+     */
+    private long _deferredHighestSeqAcked = -1;
+
+    /**
+     * Report the ACK block's highest acked sequence number to the outbound
+     * queue, once for the block. Call after {@link SSU2Bitfield#forEachAndNot}
+     * for each received ACK block.
+     */
+    private void flushDeferredSeqAcked() {
+        long highest = _deferredHighestSeqAcked;
+        _deferredHighestSeqAcked = -1;
         if (highest >= 0) {highestSeqNumAcked(highest);}
     }
 
@@ -1612,7 +1634,6 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     void dropOutbound() {
         super.dropOutbound();
         _sentMessages.clear();
-        _sentMessagesExpiryCursor.clear();
         _ackTimer.cancel();
     }
 
