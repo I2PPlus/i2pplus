@@ -14,6 +14,8 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLongArray;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.SessionKey;
@@ -26,7 +28,6 @@ import net.i2p.data.router.RouterInfo;
 import net.i2p.router.RouterContext;
 import net.i2p.router.transport.TransportUtil;
 import net.i2p.util.Addresses;
-import net.i2p.util.LHMCache;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 import net.i2p.util.VersionComparator;
@@ -55,10 +56,12 @@ class IntroductionManager {
     private final Set<Long> _recentHolePunches;
     /** When the hole punch set was last cleaned. */
     private long _lastHolePunchClean;
-    /** Relay requests recently handled as Bob. */
-    private final Map<Long, Object> _recentRelaysAsBob;
-    /** Placeholder value for the relay map. */
-    private static final Object DUMMY = new Object();
+    /**
+     * Relay nonces recently handled, for dropping a retransmitted relay request
+     * or response. Lock-free, so an introduction does not serialise behind every
+     * other one on a shared map monitor.
+     */
+    private final RecentRelays _recentRelaysAsBob;
 
     /**
      * Limit since we ping to keep the conn open.
@@ -98,7 +101,7 @@ class IntroductionManager {
         _inbound = new ConcurrentHashMap<>(MAX_INBOUND);
         _recentHolePunches = new HashSet<>(16);
         _nonceToAlice = new ConcurrentHashMap<>(MAX_INBOUND);
-        _recentRelaysAsBob = new LHMCache<>(64);
+        _recentRelaysAsBob = new RecentRelays();
         ctx.statManager().createRateStat("udp.relayBadIP", "Received IP or port was bad", "Transport [UDP]", UDPTransport.RATES);
     }
 
@@ -496,12 +499,7 @@ class IntroductionManager {
             // add a code for this?
             rcode = SSU2Util.RELAY_REJECT_BOB_NO_TAG;
         } else {
-            Long lnonce = Long.valueOf(nonce);
-            boolean isDup;
-            synchronized(_recentRelaysAsBob) {
-                isDup = _recentRelaysAsBob.put(lnonce, DUMMY) != null;
-            }
-            if (isDup) {
+            if (_recentRelaysAsBob.testAndSet(nonce)) {
                 // fairly common from i2pd
                 if (_log.shouldInfo())
                     _log.info("Dropping a duplicate relay request -> Relaying with " + charlie
@@ -516,6 +514,7 @@ class IntroductionManager {
                 if (SSU2Util.validateSig(_context, SSU2Util.RELAY_REQUEST_PROLOGUE,
                                          _context.routerHash(), charlie.getRemotePeer(), data, spk)) {
                     // save tag-to-alice mapping so we can forward the reply from charlie
+                    Long lnonce = Long.valueOf(nonce);
                     PeerState2 old = _nonceToAlice.putIfAbsent(lnonce, alice);
                     if (old != null && !old.equals(alice)) {
                         // dup tag
@@ -986,11 +985,7 @@ class IntroductionManager {
                 alice.setLastSendTime(now);
             } catch (IOException ioe) { /* ignored */ }
         } else {
-            boolean isDup;
-            synchronized(_recentRelaysAsBob) {
-                isDup = _recentRelaysAsBob.get(lnonce) != null;
-            }
-            if (isDup) {
+            if (_recentRelaysAsBob.contains(nonce)) {
                 // very rare
                 if (_log.shouldInfo())
                     _log.info("Dropping a duplicate relay response as Bob -> The introduction was already handled"
@@ -1067,4 +1062,96 @@ class IntroductionManager {
         }
     }
 
+    /**
+     * The relay nonces handled recently, for dropping a retransmitted relay
+     * request or response. This is anti-replay bookkeeping - the only questions
+     * asked of it are "have we introduced this nonce already" and "remember
+     * it" - not a cache whose values anyone reads back.
+     * <p>
+     * A fixed ring of the last {@value #CAPACITY} nonces, written by an
+     * exclusive index and read by a scan, so deciding whether a request is a
+     * duplicate allocates nothing and takes no lock. That is the whole reason
+     * for the class: an introducer does that test on every relay request it
+     * handles, and the {@code LHMCache} it replaces cost a monitor plus a boxed
+     * {@code Long} each time, serialising all introductions behind one lock on
+     * top of the signature verification the same request needs.
+     * <p>
+     * {@link #testAndSet(long)} is not atomic as a pair, so two threads that
+     * test the same unseen nonce at the same instant can both be told it is new,
+     * and the worst case is one request forwarded twice - what a duplicate does
+     * today once it has aged out of the window. It never claims a nonce it has
+     * not recorded, so a fresh request is never rejected because of this
+     * structure. The window is a count, not a time, as the LRU's was; an old
+     * replay is caught by the clock-skew test on the request itself.
+     *
+     * @since 0.9.72+
+     */
+    static final class RecentRelays {
+        /** Slots in the ring, a power of two so the write index is masked, not divided. */
+        private static final int CAPACITY = 64;
+        /** Mask for the write index, one less than {@link #CAPACITY}. */
+        private static final int MASK = CAPACITY - 1;
+        /**
+         * Contents of a slot no nonce has ever occupied. A relay nonce is read
+         * out of a 4 byte unsigned field, so it is never negative and this can
+         * not collide with one.
+         */
+        private static final long EMPTY = -1L;
+        /** The nonces, in the order they were recorded, oldest slot overwritten next. */
+        private final AtomicLongArray _slots;
+        /** How many nonces have been recorded, masked by {@link #MASK} to index {@link #_slots}. */
+        private final AtomicInteger _next;
+
+        /**
+         * Create the ring with every slot empty.
+         */
+        RecentRelays() {
+            _slots = new AtomicLongArray(CAPACITY);
+            _next = new AtomicInteger();
+            for (int i = 0; i < CAPACITY; i++) {
+                _slots.set(i, EMPTY);
+            }
+        }
+
+        /**
+         * Has this nonce been recorded already? A read only, so asking does not
+         * extend how long the nonce is remembered and a duplicate test is not
+         * influenced by an earlier question about the same nonce.
+         *
+         * @param nonce the relay nonce to look for, a non-negative value as read
+         *              from a 4 byte field
+         * @return true if it is still inside the window of recent nonces
+         * @since 0.9.72+
+         */
+        boolean contains(long nonce) {
+            for (int i = 0; i < CAPACITY; i++) {
+                if (_slots.get(i) == nonce) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /**
+         * Report whether this nonce was a repeat, and remember it when it was
+         * not, overwriting the oldest nonce recorded. Two callers that ask about
+         * the same unseen nonce at the same instant may both be told it is new;
+         * see the class documentation for why that is the safe way to race.
+         *
+         * @param nonce the relay nonce to test and record, a non-negative value
+         *              as read from a 4 byte field
+         * @return true if the nonce was already recorded, so the caller drops the
+         *         message as a duplicate
+         * @since 0.9.72+
+         */
+        boolean testAndSet(long nonce) {
+            if (contains(nonce)) {
+                return true;
+            }
+            // every writer gets its own slot index, so no compare-and-set needed
+            int slot = _next.getAndIncrement() & MASK;
+            _slots.set(slot, nonce);
+            return false;
+        }
+    }
 }
