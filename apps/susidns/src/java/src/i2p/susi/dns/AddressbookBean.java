@@ -280,6 +280,8 @@ public class AddressbookBean extends BaseBean {
         try {
             fis = new FileInputStream(getFileName());
             addressbook.load(fis);
+            // Reused for every host in the list; the bean caches the file content itself
+            BlacklistBean blacklist = new BlacklistBean();
             LinkedList<AddressBean> list = new LinkedList<>();
             for (Map.Entry<Object, Object> entry : addressbook.entrySet()) {
                 String name = (String) entry.getKey();
@@ -361,9 +363,10 @@ public class AddressbookBean extends BaseBean {
                 }
 
                 // Check if host is blacklisted
-                BlacklistBean blacklist = new BlacklistBean();
                 boolean isBlacklisted = blacklist.isBlacklisted(name);
-                _log.debug("Addressbook checking host " + name + " - blacklisted: " + isBlacklisted);
+                if (_log.shouldDebug()) {
+                    _log.debug("Addressbook checking host " + name + " - blacklisted: " + isBlacklisted);
+                }
                 if (isBlacklisted) {
                     _log.warn("Addressbook filtering out blacklisted host: " + name);
                     continue;
