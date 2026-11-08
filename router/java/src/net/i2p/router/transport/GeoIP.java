@@ -637,7 +637,7 @@ public class GeoIP {
             }
         } catch (Exception e) {
             if (_log.shouldWarn())
-                _log.warn("ASN lookup failed for " + ipAddress, e);
+                _log.warn("ASN lookup failed for " + ipAddress + " -> " + e.getMessage());
         }
         return null;
     }
