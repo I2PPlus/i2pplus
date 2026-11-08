@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -751,6 +752,18 @@ public class PersistentDataStore extends TransientDataStore {
         private static final long MIN_RESEED_INTERVAL = 90*60*1000L;
         /** Whether the initial scan has completed at least once. */
         private volatile boolean hasRun = false;
+        /**
+         * RouterInfo file counts from the last pass that listed each base-64
+         * sub-directory, in {@code B64} order, valid only while the modified time
+         * in {@link #_dirCountMods} still matches.
+         */
+        private final int[] _dirCounts = new int[B64.length()];
+        /**
+         * The sub-directory modified time each count in {@link #_dirCounts} was
+         * taken at, in {@code B64} order; 0 means that directory has never been
+         * counted.
+         */
+        private final long[] _dirCountMods = new long[B64.length()];
 
         /** Job reading the stored entries at startup. */
         public ReadJob() {super(PersistentDataStore.this._context);}
@@ -761,18 +774,30 @@ public class PersistentDataStore extends TransientDataStore {
         /**
          * Check if the netdb directory or any subdirectory has been modified
          * since the last scan, or if we need to check for reseed.
+         * <p>
+         * Collects the sub-directory modified times on the way, so {@link
+         * #readFiles(long[])} does not stat the same 64 directories a second time
+         * - they are what tells it which directories are worth listing.
+         *
+         * @param dirModifieds non-null, set to each sub-directory's modified time,
+         *                     in {@code B64} order, 0 if that directory does not
+         *                     exist; ignored in flat mode
          * @return true if the netdb directory or a subdirectory has changed, the
          *         stored routers are too few, or a reseed is due
          */
-        private boolean shouldScan() {
+        private boolean shouldScan(long[] dirModifieds) {
+            if (!_flat) {
+                for (int j = 0; j < B64.length(); j++) {
+                    dirModifieds[j] = new File(_dbDir, DIR_PREFIX + B64.charAt(j)).lastModified();
+                }
+            }
             long lastMod = _dbDir.lastModified();
             if (lastMod > _lastModified || size() < MIN_ROUTERS + 10) {
                 return true;
             }
             if (!_flat) {
                 for (int j = 0; j < B64.length(); j++) {
-                    File subdir = new File(_dbDir, DIR_PREFIX + B64.charAt(j));
-                    if (subdir.lastModified() > _lastModified) {
+                    if (dirModifieds[j] > _lastModified) {
                         return true;
                     }
                 }
@@ -827,10 +852,11 @@ public class PersistentDataStore extends TransientDataStore {
             if (getContext().router().gracefulShutdownInProgress()) {
                 return;
             }
-            if (shouldScan()) {
+            long[] dirModifieds = new long[B64.length()];
+            if (shouldScan(dirModifieds)) {
                 if (_log.shouldDebug())
                     _log.debug("Scanning for new RouterInfo files in: " + _dbDir);
-                synchronized (_dbDir) {readFiles();}
+                synchronized (_dbDir) {readFiles(dirModifieds);}
                 _lastModified = System.currentTimeMillis();
             }
             if (!hasRun) {
@@ -855,15 +881,18 @@ public class PersistentDataStore extends TransientDataStore {
          * Read all RouterInfo files from disk into memory.
          * Handles both flat and hierarchical directory layouts.
          * Must be called under synchronized(_dbDir).
+         *
+         * @param dirModifieds the sub-directory modified times {@link
+         *                     #shouldScan(long[])} collected, in {@code B64} order
          */
-        private void readFiles() {
+        private void readFiles(long[] dirModifieds) {
             int routerCount = 0;
             File[] routerInfoFiles = _dbDir.listFiles(RI_FILTER);
 
             if (_flat) {
                 routerCount = readFlatFiles(routerInfoFiles);
             } else {
-                routerCount = readHierarchicalFiles(routerInfoFiles);
+                routerCount = readHierarchicalFiles(routerInfoFiles, dirModifieds);
             }
 
             checkReseed(routerCount);
@@ -893,32 +922,55 @@ public class PersistentDataStore extends TransientDataStore {
 
         /**
          * Read RouterInfo files from the hierarchical (subdirectory) layout.
-         * Migrates root-level files, shuffles to avoid load bias, and triggers
-         * intermediate netdbReady events on slow systems.
+         * Migrates root-level files, reads the most recently modified ones first,
+         * and triggers intermediate netdbReady events on slow systems.
+         * <p>
+         * A sub-directory whose modified time has not advanced since the previous
+         * scan holds the same files it held then, so it is neither listed nor
+         * read: its file count is taken from the cache keyed on that time. That
+         * is what keeps a rescan from walking every RouterInfo file in the
+         * database every five minutes.
          *
          * @param routerInfoFiles root-level RouterInfo files to migrate into the
          *                        subdirectories, may be null
+         * @param dirModifieds the sub-directory modified times {@link
+         *                     #shouldScan(long[])} collected, in {@code B64} order
          * @return total router count
          */
-        private int readHierarchicalFiles(File[] routerInfoFiles) {
+        private int readHierarchicalFiles(File[] routerInfoFiles, long[] dirModifieds) {
             int routerCount = 0;
             if (routerInfoFiles != null) {migrate(_dbDir, routerInfoFiles);}
 
             List<File> toRead = new ArrayList<>(2048);
             for (int j = 0; j < B64.length(); j++) {
                 File subdir = new File(_dbDir, DIR_PREFIX + B64.charAt(j));
+                long lastMod = dirModifieds[j];
+                if (!shouldListSubDir(lastMod, _lastModified, routerCount, MIN_ROUTERS)) {continue;}
+                if (!shouldReadSubDir(lastMod, _lastModified)) {
+                    int counted = cachedSubDirCount(lastMod, _dirCountMods[j], _dirCounts[j]);
+                    if (counted >= 0) {
+                        // Same modified time means the same entries, so report the
+                        // count without allocating one File per entry to re-derive it.
+                        routerCount += counted;
+                        continue;
+                    }
+                }
                 File[] files = subdir.listFiles(RI_FILTER);
-                if (files == null) {continue;}
-                long lastMod = subdir.lastModified();
-                if (routerCount >= MIN_ROUTERS && lastMod <= _lastModified) {continue;}
+                if (files == null) {
+                    _dirCountMods[j] = lastMod;
+                    _dirCounts[j] = 0;
+                    continue;
+                }
+                _dirCountMods[j] = lastMod;
+                _dirCounts[j] = files.length;
                 routerCount += files.length;
-                if (lastMod <= _lastModified) {continue;}
+                if (!shouldReadSubDir(lastMod, _lastModified)) {continue;}
                 for (int i = 0; i < files.length; i++) {
                     toRead.add(files[i]);
                     routerCount = Math.max(_context.netDb().getKnownRouters() - 1, i);
                 }
             }
-            Collections.shuffle(toRead, _context.random());
+            sortForRead(toRead);
 
             int i = 0;
             for (File file : toRead) {
@@ -941,6 +993,129 @@ public class PersistentDataStore extends TransientDataStore {
                 }
             }
             return routerCount;
+        }
+    }
+
+    /**
+     * Whether a sub-directory holds RouterInfo files this scan has not read yet.
+     *
+     * @param dirModified the sub-directory's modified time, 0 if it does not exist
+     * @param lastModified when the previous scan finished, 0 before the first one
+     * @return true if files were added to or removed from the directory since the previous scan
+     * @since 0.9.72+
+     */
+    static boolean shouldReadSubDir(long dirModified, long lastModified) {
+        return dirModified > lastModified;
+    }
+
+    /**
+     * Whether a sub-directory has to be listed at all during this scan.
+     * <p>
+     * The listing serves two purposes only: reading the new files, and topping
+     * up the RouterInfo count handed to the reseed check until that count reaches
+     * {@code minRouters}. Past that point an unchanged directory contributes
+     * nothing, so listing it allocates one {@code File} per router for nothing.
+     *
+     * @param dirModified the sub-directory's modified time, 0 if it does not exist
+     * @param lastModified when the previous scan finished, 0 before the first one
+     * @param routerCount the RouterInfo files counted so far during this scan
+     * @param minRouters the count the reseed check is satisfied with
+     * @return true if the directory must be listed this scan
+     * @since 0.9.72+
+     */
+    static boolean shouldListSubDir(long dirModified, long lastModified, int routerCount, int minRouters) {
+        return dirModified > lastModified || routerCount < minRouters;
+    }
+
+    /**
+     * The RouterInfo file count of a sub-directory that has not changed since it
+     * was last counted.
+     * <p>
+     * Creating, renaming or deleting an entry is what changes a directory's
+     * modified time, so a matching time proves the entry list, and with it the
+     * count, is still what was counted then.
+     *
+     * @param dirModified the sub-directory's modified time now, 0 if it does not exist
+     * @param cachedModified the time the cached count was taken at, 0 if there is none
+     * @param cachedCount the count taken at {@code cachedModified}
+     * @return the count still valid for {@code dirModified}, or -1 if it has to be re-derived
+     * @since 0.9.72+
+     */
+    static int cachedSubDirCount(long dirModified, long cachedModified, int cachedCount) {
+        return dirModified > 0 && cachedModified == dirModified ? cachedCount : -1;
+    }
+
+    /**
+     * Order the candidate RouterInfo files by modified time, newest first, so the
+     * {@code MAX_ROUTERS_INIT} files a capped startup read reaches are the routers
+     * most recently seen up and running, and the first tunnels are built out of
+     * recently active peers instead of whichever entries happen to sort first.
+     * <p>
+     * A RouterInfo file is rewritten whenever the router is re-stored, which the
+     * router does when a transport is established with a peer, so the modified
+     * time tracks recent reachability rather than the date the entry was first
+     * published. It is also uncorrelated with the hash prefix the file is filed
+     * under, so this removes the load bias the base-64 directory order gave a
+     * capped read. Files past the cap, the ones deleted as excess, are now the
+     * stalest entries in the database rather than an arbitrary tail.
+     * <p>
+     * Each file is stat'ed once and the time carried through the sort, so the
+     * comparator does not re-read it once per comparison. Ties keep the listing
+     * order, as the sort is stable.
+     *
+     * @param toRead the candidate files, reordered in place, newest first
+     * @since 0.9.72+
+     */
+    static void sortForRead(List<File> toRead) {
+        int n = toRead.size();
+        if (n < 2) {return;}
+        ModifiedFile[] sorted = new ModifiedFile[n];
+        int i = 0;
+        for (File file : toRead) {
+            sorted[i++] = new ModifiedFile(file);
+        }
+        Arrays.sort(sorted);
+        toRead.clear();
+        for (ModifiedFile mf : sorted) {
+            toRead.add(mf._file);
+        }
+    }
+
+    /**
+     * A candidate RouterInfo file paired with the modified time read for it, so a
+     * sort of the candidates stats each file once instead of once per comparison.
+     *
+     * @since 0.9.72+
+     */
+    private static class ModifiedFile implements Comparable<ModifiedFile> {
+        /** The candidate RouterInfo file. */
+        final File _file;
+
+        /** When the file was last written, 0 if it is gone or unreadable. */
+        final long _modified;
+
+        /**
+         * Stats the file once, at construction.
+         *
+         * @param file the candidate RouterInfo file
+         */
+        ModifiedFile(File file) {
+            _file = file;
+            long modified = file.lastModified();
+            // A vanished or unreadable file reports 0; keep it at the end of the
+            // list instead of letting a negative time sort it as the newest.
+            _modified = modified > 0 ? modified : 0;
+        }
+
+        /**
+         * Orders newest modified time first.
+         *
+         * @param other the candidate to compare against
+         * @return a negative value if this file was written after the other
+         */
+        @Override
+        public int compareTo(ModifiedFile other) {
+            return Long.compare(other._modified, _modified);
         }
     }
 
@@ -1161,40 +1336,29 @@ public class PersistentDataStore extends TransientDataStore {
                     continue;
                 }
 
-                RouterInfo ri;
-                try (InputStream fis = new BufferedInputStream(new FileInputStream(file))) {
-                    ri = new RouterInfo();
-                    ri.readBytes(fis, true); // verify sig
-                }
+                // readFiles() parsed and signature-verified these files seconds
+                // ago, so the tier and the capabilities of every RouterInfo it
+                // kept are already in memory; only a file it did not keep has to
+                // be parsed again to be judged.
+                RouterInfo ri = resolveRouterInfo(routerInfoInMemory(key), file);
 
                 // Determine if this is a slow router
                 String bw = ri.getBandwidthTier();
                 String caps = ri.getCapabilities();
-                boolean isSlow;
-                if (totalStored < 1000) {
-                    isSlow = "K".equals(bw) || "L".equals(bw) || "M".equals(bw);
-                } else if (totalStored < 2000) {
-                    isSlow = "K".equals(bw) || "L".equals(bw) || "M".equals(bw) || "N".equals(bw);
-                } else {
-                    isSlow = "K".equals(bw) || "L".equals(bw) || "M".equals(bw) || "N".equals(bw) || "O".equals(bw);
+                if (!shouldPurgeRouter(bw, caps, totalStored)) {
+                    continue;
                 }
-                boolean isDegraded = caps.indexOf(Router.CAPABILITY_CONGESTION_MODERATE) >= 0 ||
-                                     caps.indexOf(Router.CAPABILITY_CONGESTION_SEVERE) >= 0 ||
-                                     caps.indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0;
-
-                if (isSlow) {
+                if (isSlowTier(bw, totalStored)) {
                     if (_log.shouldInfo()) {
                         _log.info("Deleting slow (" + bw + ") RouterInfo: [" + key.toShortBase64() + "]");
                     }
-                    file.delete();
-                    deletedCount++;
-                } else if (isDegraded) {
+                } else {
                     if (_log.shouldInfo()) {
                         _log.info("Deleting degraded (" + bw + ") RouterInfo: [" + key.toShortBase64() + "]");
                     }
-                    file.delete();
-                    deletedCount++;
                 }
+                file.delete();
+                deletedCount++;
 
             } catch (Exception e) {
                 if (_log.shouldWarn()) {
@@ -1206,6 +1370,98 @@ public class PersistentDataStore extends TransientDataStore {
         if (_log.shouldInfo()) {
             _log.info("Deleted " + deletedCount + " slow/degraded RouterInfo files");
         }
+    }
+
+    /**
+     * The RouterInfo this store holds in memory for a key, without touching disk.
+     *
+     * @param key the router hash to look up
+     * @return the RouterInfo held in memory, or null if this store holds no
+     *         RouterInfo for that key
+     */
+    private RouterInfo routerInfoInMemory(Hash key) {
+        // super.get(), not get(key, false): the persistent store's lookups never
+        // reach disk anyway, and this states the intent without the flag.
+        DatabaseEntry data = super.get(key);
+        return data instanceof RouterInfo ? (RouterInfo)data : null;
+    }
+
+    /**
+     * The RouterInfo to judge for a stored file: the one held in memory when
+     * there is one, otherwise the file read back from disk.
+     * <p>
+     * Reading a file costs a stream, a SHA-256 over the payload and a signature
+     * verify. {@link ReadJob} has just paid all three for every file it loaded,
+     * so re-reading them here to recover two strings doubles the cost of the
+     * startup netdb pass for nothing.
+     *
+     * @param inMemory the RouterInfo held in memory for the file's key, or null if there is none
+     * @param file the RouterInfo file on disk, read only if {@code inMemory} is null
+     * @return {@code inMemory} if it is non-null, otherwise the RouterInfo decoded from {@code file}
+     * @throws DataFormatException if the file had to be read and does not hold a valid RouterInfo
+     * @throws IOException if the file had to be read and could not be opened
+     * @since 0.9.72+
+     */
+    static RouterInfo resolveRouterInfo(RouterInfo inMemory, File file) throws IOException, DataFormatException {
+        if (inMemory != null) {return inMemory;}
+        RouterInfo ri = new RouterInfo();
+        try (InputStream fis = new BufferedInputStream(new FileInputStream(file))) {
+            ri.readBytes(fis, true); // verify sig
+        }
+        return ri;
+    }
+
+    /**
+     * Whether a bandwidth tier is too slow to keep in the netdb at the current
+     * size of the database.
+     * <p>
+     * The cut-off moves with how many routers are stored: a full netdb can afford
+     * to drop the slowest tiers, a nearly empty one has to keep what it can get.
+     *
+     * @param bwTier the tier as {@link RouterInfo#getBandwidthTier()} returns it, a single
+     *               letter or "Unknown", null tolerated
+     * @param totalStored the number of RouterInfo files on disk
+     * @return true for K, L or M at any size, for N from 1000 stored, and for O from 2000
+     *         stored; any other tier, including "Unknown", is kept
+     * @since 0.9.72+
+     */
+    static boolean isSlowTier(String bwTier, int totalStored) {
+        if (bwTier == null || bwTier.length() != 1) {return false;}
+        char tier = bwTier.charAt(0);
+        if (tier == Router.CAPABILITY_BW12 || tier == Router.CAPABILITY_BW32 || tier == Router.CAPABILITY_BW64) {
+            return true;
+        }
+        if (tier == Router.CAPABILITY_BW128) {return totalStored >= 1000;}
+        return tier == Router.CAPABILITY_BW256 && totalStored >= 2000;
+    }
+
+    /**
+     * Whether a router's capabilities say it is too congested to route tunnels
+     * for anyone else, whatever its bandwidth tier.
+     *
+     * @param capabilities the capability string as {@link RouterInfo#getCapabilities()} returns
+     *                     it, an empty string if none, null tolerated
+     * @return true if it reports moderate or severe congestion, or that it cannot build tunnels
+     * @since 0.9.72+
+     */
+    static boolean isDegradedCapabilities(String capabilities) {
+        if (capabilities == null) {return false;}
+        return capabilities.indexOf(Router.CAPABILITY_CONGESTION_MODERATE) >= 0 ||
+               capabilities.indexOf(Router.CAPABILITY_CONGESTION_SEVERE) >= 0 ||
+               capabilities.indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0;
+    }
+
+    /**
+     * Whether a stored RouterInfo should be deleted from the netdb.
+     *
+     * @param bwTier the router's bandwidth tier, as {@link #isSlowTier(String, int)} takes it
+     * @param capabilities the router's capabilities, as {@link #isDegradedCapabilities(String)} takes them
+     * @param totalStored the number of RouterInfo files on disk, which sets the tier cut-off
+     * @return true if the router is slow for this netdb size or reports itself degraded
+     * @since 0.9.72+
+     */
+    static boolean shouldPurgeRouter(String bwTier, String capabilities, int totalStored) {
+        return isSlowTier(bwTier, totalStored) || isDegradedCapabilities(capabilities);
     }
 
     /**
