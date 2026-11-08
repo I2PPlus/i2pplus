@@ -43,7 +43,6 @@ import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SigType;
 import net.i2p.data.Base64;
@@ -165,6 +164,8 @@ class NetDbRenderer {
             return t;
         },
         new ThreadPoolExecutor.CallerRunsPolicy());
+    /** Filtered router lists of the /netdb search pages, shared by every request. @since 0.9.72+ */
+    private static final FilterMemo _filterMemo = new FilterMemo();
     /** Memo for the "{0} ago" renders of {@link #renderRouterInfo}, one per renderer. */
     private final AgoMemo _agoMemo = new AgoMemo();
     /** Expensive translator behind {@link #agoMemo(String)}, bound once so the memo never sees a fresh lambda. */
@@ -226,6 +227,82 @@ class NetDbRenderer {
         }
     }
 
+/**
+ * Memo of the router lists the /netdb search pages filter out of the cached
+ * snapshot, keyed by the filter settings and stamped with the snapshot they were
+ * built from.
+ * <p>A filtered list is only usable while it was filtered out of the very list
+ * the caller holds: {@link NetDbRouterCache} replaces its snapshot wholesale when
+ * it re-reads the database, so a different instance means every filtered list
+ * built from the previous one is out of date and goes. The age limit is the
+ * backstop for the routers inside one snapshot, which the netdb updates in place,
+ * and it matches that snapshot's own age limit.
+ * <p>Each entry is a copy of the matching routers, handed out unmodifiable, so a
+ * caller taking a page slice out of it cannot write through to the cache. The
+ * table is a bounded LRU, one entry per set of filter settings.
+ * <p>All of the state is read and written under the table's monitor, which a
+ * least-recently-used map needs for its re-ordering anyway; a console request
+ * thread is the only caller.
+ *
+ * @since 0.9.72+
+ */
+    static final class FilterMemo {
+        /** How long a filtered list is reused - the /netdb auto-refresh period. */
+        static final long MEMO_PERIOD = 10 * 1000L;
+        /** Sets of filter settings retained at once; each entry is one page's worth of routers. */
+        static final int MEMO_MAX = 8;
+        /** Filtered routers by filter settings, guarded by itself. */
+        private final Map<String, List<RouterInfo>> _byFilter = new LHMCache<>(MEMO_MAX);
+        /** The sorted list every entry here was filtered out of, null once the entries are stale. */
+        private List<RouterInfo> _source;
+        /** When the entries here stop being usable. */
+        private long _until;
+
+        /**
+         * Look up the routers one set of settings kept from the current snapshot.
+         *
+         * @param sorted the snapshot the caller would filter
+         * @param key the settings' key from {@link #filterKey}
+         * @param now the current time, in ms
+         * @return the memoized routers, or null to filter them again
+         */
+        List<RouterInfo> lookup(List<RouterInfo> sorted, String key, long now) {
+            synchronized (_byFilter) {
+                if (_source != sorted || now >= _until) {
+                    if (!_byFilter.isEmpty()) {
+                        _byFilter.clear();
+                        _source = null;
+                    }
+                    return null;
+                }
+                return _byFilter.get(key);
+            }
+        }
+
+        /**
+         * Keep the routers a set of settings matched, for as long as the snapshot
+         * they came out of stays current.
+         *
+         * @param sorted the snapshot the routers were filtered out of
+         * @param key the settings' key from {@link #filterKey}
+         * @param filtered the routers that matched, in the snapshot's order
+         * @param now the current time, in ms
+         * @return the routers to render, an unmodifiable copy the caller may not change
+         */
+        List<RouterInfo> store(List<RouterInfo> sorted, String key, List<RouterInfo> filtered, long now) {
+            List<RouterInfo> saved = Collections.unmodifiableList(new ArrayList<>(filtered));
+            synchronized (_byFilter) {
+                if (_source != sorted || now >= _until) {
+                    _byFilter.clear();
+                    _source = sorted;
+                    _until = now + MEMO_PERIOD;
+                }
+                _byFilter.put(key, saved);
+            }
+            return saved;
+        }
+    }
+
     /**
      * Whether the router matches all capability characters in the filter.
      *
@@ -233,7 +310,7 @@ class NetDbRenderer {
      * @param capabilities capability characters that must all be present (e.g. "fK")
      * @return whether the router's capability string contains every character
      */
-    private boolean matchesCapabilities(RouterInfo ri, String capabilities) {
+    private static boolean matchesCapabilities(RouterInfo ri, String capabilities) {
         String caps = ri.getCapabilities();
         for (int i = 0; i < capabilities.length(); i++) {
             if (caps.indexOf(capabilities.charAt(i)) < 0) {
@@ -309,79 +386,22 @@ class NetDbRenderer {
         if (cost != 0) urlParameters.append("&amp;cost=").append(cost);
         appendUrlParam(urlParameters, "sybil", sybil);
 
-        // Streaming setup
-        Stream<RouterInfo> routerStream = networkDatabase.getRouters().stream();
-
-        // Apply filters
-        if (routerPrefix != null) {
-            final byte[] prefixBytes = Base64.decode(routerPrefix);
-            routerStream = routerStream.filter(ri -> prefixBytes != null && prefixBytes.length > 0 &&
-                                                startsWith(ri.getIdentity().getHash().getData(), prefixBytes));
+        // The unfiltered page's cached snapshot is the same netdb read, already
+        // sorted by the comparator this page sorts by, and a filter cannot reorder
+        // it. So a filtered request costs no netdb copy and no sort of its own, and
+        // its filtered list is memoized against the snapshot it was built from.
+        List<RouterInfo> sortedRouters = _routerCache.getSortedRouters();
+        long memoNow = _context.clock().now();
+        String key = filterKey(routerPrefix, version, country, capabilities, signatureType,
+                              encryptionType, transport, family, ipAddress, port, highPort);
+        List<RouterInfo> allRouters = _filterMemo.lookup(sortedRouters, key, memoNow);
+        if (allRouters == null) {
+            allRouters = filterRouters(sortedRouters, routerPrefix, version, country, capabilities,
+                                       signatureType, encryptionType, transport, family, ipAddress,
+                                       port, highPort,
+                                       ri -> _context.commSystem().getCountry(ri.getIdentity().getHash()));
+            allRouters = _filterMemo.store(sortedRouters, key, allRouters, memoNow);
         }
-        if (version != null) {
-            routerStream = routerStream.filter(ri -> version.equals(ri.getVersion()));
-        }
-        if (country != null) {
-            Set<String> countryCodes = Arrays.stream(COMMA_SPACE_SPLIT.split(country)).map(String::trim).collect(Collectors.toSet());
-            routerStream = routerStream.filter(ri -> {
-                String routerCountry = _context.commSystem().getCountry(ri.getIdentity().getHash());
-                return routerCountry != null && countryCodes.contains(routerCountry.toLowerCase(Locale.US));
-            });
-        }
-        if (capabilities != null && !capabilities.isEmpty()) {
-            routerStream = routerStream.filter(ri -> matchesCapabilities(ri, capabilities));
-        }
-        if (signatureType != null) {
-            routerStream = routerStream.filter(ri -> ri.getIdentity().getSigType() == signatureType);
-        }
-        if (encryptionType != null) {
-            routerStream = routerStream.filter(ri -> ri.getIdentity().getEncType() == encryptionType);
-        }
-        if (transport != null) {
-            routerStream = routerStream.filter(ri -> {
-                RouterAddress ra = ri.getTargetAddress(transport);
-                return ra != null;
-            });
-        }
-        if (family != null) {
-            routerStream = routerStream.filter(ri -> {
-                String fam = ri.getOption("family");
-                return fam != null && fam.toLowerCase(Locale.US).contains(family.toLowerCase(Locale.US));
-            });
-        }
-
-        // Handle IP filtering
-        if (ipAddress != null) {
-            routerStream = routerStream.filter(ri -> {
-                return ri.getAddresses().stream().anyMatch(addr -> addr.getHost() != null && addr.getHost().startsWith(ipAddress));
-            });
-        }
-
-        if (port != 0) {
-            final int low = port;
-            final int high = highPort > 0 ? highPort : port;
-
-            if (transport != null && !transport.isEmpty()) {
-                // Filter by port AND transport
-                routerStream = routerStream.filter(ri -> {
-                    return ri.getAddresses().stream().anyMatch(addr -> {
-                        return addr.getTransportStyle().equals(transport) &&
-                               addr.getPort() >= low && addr.getPort() <= high;
-                    });
-                });
-            } else {
-                // Filter by port only (any transport)
-                routerStream = routerStream.filter(ri -> {
-                    return ri.getAddresses().stream().anyMatch(addr -> {
-                        int p = addr.getPort();
-                        return p >= low && p <= high;
-                    });
-                });
-            }
-        }
-
-        // Count total before applying page
-        List<RouterInfo> allRouters = routerStream.collect(Collectors.toList());
         int totalSize = allRouters.size();
 
         if (totalSize == 0) {
@@ -390,9 +410,6 @@ class NetDbRenderer {
             out.append(buf);
             return;
         }
-
-        // Sort if needed
-        Collections.sort(allRouters, RouterInfoComparator.getInstance());
 
         // Pagination
         int fromIndex = page * pageSize;
@@ -437,6 +454,185 @@ class NetDbRenderer {
         if (value != null) {
             sb.append("&amp;").append(key).append("=").append(value);
         }
+    }
+
+    /**
+     * Key for {@link FilterMemo}: the settings that decide which routers a request
+     * keeps, and nothing that only labels the page.
+     * <p>MTU, IPv6 prefix, SSU capabilities, cost and the Sybil flag arrive here as
+     * display text that {@link #renderRouterInfoHTML} filters on none of, so they
+     * stay out of the key and two requests differing only in those reuse one
+     * filtered list. Each setting is stored with its own length, so "a" next to
+     * "bc" cannot collide with "ab" next to "c".
+     *
+     * @param routerPrefix optional hash prefix filter, null when unset
+     * @param version optional version filter
+     * @param country optional country code filter
+     * @param capabilities optional capability filter
+     * @param signatureType optional signature type filter, null when unset
+     * @param encryptionType optional encryption type filter, null when unset
+     * @param transport optional transport filter
+     * @param family optional family filter
+     * @param ipAddress optional IPv4 or IPv6 host filter
+     * @param port low end of the port range, 0 when unset
+     * @param highPort high end of the port range, 0 when unset
+     * @return the memo key for exactly these settings, never null
+     * @since 0.9.72+
+     */
+    static String filterKey(String routerPrefix, String version, String country, String capabilities,
+                           SigType signatureType, EncType encryptionType, String transport, String family,
+                           String ipAddress, int port, int highPort) {
+        StringBuilder buf = new StringBuilder(96);
+        appendKeyPart(buf, routerPrefix);
+        appendKeyPart(buf, version);
+        appendKeyPart(buf, country);
+        appendKeyPart(buf, capabilities);
+        appendKeyPart(buf, signatureType != null ? signatureType.name() : null);
+        appendKeyPart(buf, encryptionType != null ? encryptionType.name() : null);
+        appendKeyPart(buf, transport);
+        appendKeyPart(buf, family);
+        appendKeyPart(buf, ipAddress);
+        buf.append(port).append(',').append(highPort);
+        return buf.toString();
+    }
+
+    /**
+     * Append one filter setting to a memo key, framed by its length so settings
+     * cannot run into each other's value.
+     *
+     * @param buf the key being built
+     * @param value the setting, or null for unset
+     */
+    private static void appendKeyPart(StringBuilder buf, String value) {
+        if (value == null) {
+            buf.append("-;");
+        } else {
+            buf.append(value.length()).append(':').append(value).append(';');
+        }
+    }
+
+    /**
+     * Keep the routers every filter matches, in the order they were given.
+     * <p>Keeping the order is the point: the caller hands over the sorted snapshot
+     * of {@link NetDbRouterCache}, and dropping routers cannot reorder what stays,
+     * so the filtered page is already in display order and needs no sort.
+     * <p>What each test costs is hoisted out of the loop - the hash prefix decoded
+     * once, the country list built once, the family lower-cased once - instead of
+     * once per known router.
+     *
+     * @param routers the routers to choose from, in display order
+     * @param routerPrefix optional base64 hash prefix; nothing matches if it does not decode
+     * @param version optional version that must match exactly
+     * @param country optional comma or space separated country codes
+     * @param capabilities optional capability characters that must all be present
+     * @param signatureType optional signature type the identity must use
+     * @param encryptionType optional encryption type the identity must use
+     * @param transport optional transport style the router must have an address for
+     * @param family optional family name, matched case-insensitively
+     * @param ipAddress optional host prefix to match
+     * @param port low end of the port range, 0 for no port filter
+     * @param highPort high end of the port range, 0 to use port alone
+     * @param countryOf the country code of a router, or null when it is unknown
+     * @return the routers matching every filter, in the order they were given
+     * @since 0.9.72+
+     */
+    static List<RouterInfo> filterRouters(List<RouterInfo> routers, String routerPrefix, String version,
+                                         String country, String capabilities, SigType signatureType,
+                                         EncType encryptionType, String transport, String family,
+                                         String ipAddress, int port, int highPort,
+                                         Function<RouterInfo, String> countryOf) {
+        boolean prefixWanted = routerPrefix != null;
+        byte[] prefixBytes = prefixWanted ? Base64.decode(routerPrefix) : null;
+        Set<String> countryCodes = country != null ?
+                                   Arrays.stream(COMMA_SPACE_SPLIT.split(country)).map(String::trim).
+                                           collect(Collectors.toSet()) :
+                                   null;
+        String familyLower = family != null ? family.toLowerCase(Locale.US) : null;
+        boolean anyTransport = transport == null || transport.isEmpty();
+        int low = port;
+        int high = highPort > 0 ? highPort : port;
+        List<RouterInfo> rv = new ArrayList<>(Math.min(routers.size(), 64));
+        for (RouterInfo ri : routers) {
+            if (prefixWanted && (prefixBytes == null || prefixBytes.length == 0 ||
+                                 !startsWith(ri.getIdentity().getHash().getData(), prefixBytes))) {
+                continue;
+            }
+            if (version != null && !version.equals(ri.getVersion())) {
+                continue;
+            }
+            if (countryCodes != null) {
+                String routerCountry = countryOf.apply(ri);
+                if (routerCountry == null || !countryCodes.contains(routerCountry.toLowerCase(Locale.US))) {
+                    continue;
+                }
+            }
+            if (capabilities != null && !capabilities.isEmpty() && !matchesCapabilities(ri, capabilities)) {
+                continue;
+            }
+            if (signatureType != null && ri.getIdentity().getSigType() != signatureType) {
+                continue;
+            }
+            if (encryptionType != null && ri.getIdentity().getEncType() != encryptionType) {
+                continue;
+            }
+            if (transport != null && ri.getTargetAddress(transport) == null) {
+                continue;
+            }
+            if (familyLower != null) {
+                String fam = ri.getOption("family");
+                if (fam == null || !fam.toLowerCase(Locale.US).contains(familyLower)) {
+                    continue;
+                }
+            }
+            if (ipAddress != null && !matchesHost(ri, ipAddress)) {
+                continue;
+            }
+            if (port != 0 && !matchesPort(ri, transport, anyTransport, low, high)) {
+                continue;
+            }
+            rv.add(ri);
+        }
+        return rv;
+    }
+
+    /**
+     * Whether one of the router's addresses is on the given host.
+     *
+     * @param ri the router to check
+     * @param ipAddress the host prefix to match
+     * @return true if an address has a host starting with the prefix
+     */
+    private static boolean matchesHost(RouterInfo ri, String ipAddress) {
+        for (RouterAddress addr : ri.getAddresses()) {
+            String host = addr.getHost();
+            if (host != null && host.startsWith(ipAddress)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Whether one of the router's addresses falls in the port range.
+     *
+     * @param ri the router to check
+     * @param transport the transport style to insist on, or null to allow any
+     * @param anyTransport true when the transport does not matter, as decided once per request
+     * @param low the lowest port of the range
+     * @param high the highest port of the range
+     * @return true if an address is in range, and of the transport when one is set
+     */
+    private static boolean matchesPort(RouterInfo ri, String transport, boolean anyTransport, int low, int high) {
+        for (RouterAddress addr : ri.getAddresses()) {
+            int p = addr.getPort();
+            if (p < low || p > high) {
+                continue;
+            }
+            if (anyTransport || addr.getTransportStyle().equals(transport)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -1677,8 +1873,11 @@ class NetDbRenderer {
         Hash routerHash = routerInfo.getHash();
         String routerHashBase64 = routerHash.toBase64();
         String family = routerInfo.getOption("family");
-        String profileTier = getPeerProfileTier(routerHash, true);
-        String profileTierClass = getPeerProfileTier(routerHash, false);
+        // one tier walk per row, not one per attribute — each walk takes the
+        // ProfileOrganizer read lock three times
+        int tierIndex = profileTierIndex(routerHash, _context.routerHash(), _organizer);
+        String profileTier = peerProfileTier(tierIndex, true);
+        String profileTierClass = peerProfileTier(tierIndex, false);
         String caps = DataHelper.stripHTML(routerInfo.getCapabilities());
         boolean hasD = false;
         boolean hasE = false;
@@ -1709,13 +1908,16 @@ class NetDbRenderer {
         }
         boolean isJavaI2PVariant = false;
         boolean isI2PdVariant = false;
+        // one capability read per row, not one per address — getCapabilities()
+        // rebuilds the capability string from the RouterInfo properties each call
+        boolean reachable = !isUnreachable(routerInfo);
         for (RouterAddress address : routerInfo.getAddresses()) {
             String transportStyle = address.getTransportStyle();
             int cost = address.getCost();
-            if ((transportStyle.startsWith("SSU") && cost == 5) || (transportStyle.startsWith("NTCP") && cost == 14) && !isUnreachable(routerInfo)) {
+            if ((transportStyle.startsWith("SSU") && cost == 5) || (transportStyle.startsWith("NTCP") && cost == 14) && reachable) {
                 isJavaI2PVariant = true;
                 break;
-            } else if ((transportStyle.startsWith("SSU") && cost == 3) || (transportStyle.startsWith("NTCP") && cost == 8) && !isUnreachable(routerInfo)) {
+            } else if ((transportStyle.startsWith("SSU") && cost == 3) || (transportStyle.startsWith("NTCP") && cost == 8) && reachable) {
                 isI2PdVariant = true;
             }
         }
@@ -1736,14 +1938,17 @@ class NetDbRenderer {
         }
         processedCapsStr = processedCapsStr.replace("\"><span", capTooltip());
         buf.append(processedCapsStr);
+
         String version = DataHelper.stripHTML(routerInfo.getVersion());
+        // resolved once per row and reused below — the accessor takes a router-wide lock
+        FamilyKeyCrypto familyKeyCrypto = family != null ? _context.router().getFamilyKeyCrypto() : null;
+
         buf.append("&nbsp;<a href=\"/netdb?v=").append(version).append("\">")
            .append("<span class=version title=\"").append(_t("Show all routers with this version in the NetDb"))
            .append("\">").append(version).append("</span></a>");
         if (!isLocalRouter) {
             buf.append("<span class=netdb_header>");
             if (family != null) {
-                FamilyKeyCrypto familyKeyCrypto = _context.router().getFamilyKeyCrypto();
                 buf.append("<a class=\"familysearch");
                 if (familyKeyCrypto != null) {
                     buf.append(" verified");
@@ -1766,9 +1971,11 @@ class NetDbRenderer {
             buf.append("&nbsp;<span id=netdb_ram><b>").append(_t("Memory usage")).append(":</b> ").append(memoryUsedMegabytes).append("M</span>");
         }
         buf.append("</th></tr></thead>\n<tbody>\n<tr>");
+
         now = _context.clock().now();
         long published = routerInfo.getPublished();
         long age = now - published;
+
         if (isLocalRouter && _context.router().isHidden()) {
             buf.append("<td><b>").append(_t("Hidden")).append(", ").append(_t("Updated")).append(":</b></td>")
                .append("<td><span class=netdb_info>")
@@ -1778,9 +1985,11 @@ class NetDbRenderer {
             buf.append("<td><b>").append(_t("Published")).append(":</b></td><td><span class=netdb_info>")
                .append(agoMemo(DataHelper.formatDuration2(age)))
                .append("</span>&nbsp;&nbsp;");
+
             String primaryAddress = Addresses.toString(CommSystemFacadeImpl.getValidIP(routerInfo));
             String capsStr = processedCapsStr;
             boolean isUnreachableFlag = capsStr.contains("U") || capsStr.contains("H");
+
             if (_context.router().getUptime() > 30 * 1000 && !isUnreachableFlag && primaryAddress != null) {
                 String canonicalHostname = null;
                 if (rdnsLookups != null) {
@@ -1820,7 +2029,6 @@ class NetDbRenderer {
                .append(DataHelper.formatDuration2(0 - age)).append("<span class=netdb_info>???</span>&nbsp;&nbsp;");
         }
         if (family != null) {
-            FamilyKeyCrypto familyKeyCrypto = _context.router().getFamilyKeyCrypto();
             buf.append("<span class=\"netdb_family\"><b>").append(_t("Family"))
                .append(":</b> <span class=familyname>").append(DataHelper.stripHTML(family));
             if (familyKeyCrypto != null) {
@@ -1831,12 +2039,12 @@ class NetDbRenderer {
             buf.append("</span></span>");
         }
         buf.append("</td><td class=keys>");
-        // unknown key types report as null from getType(); RIs with exotic
-        // crypto must render, not throw
+        // unknown key types report as null from getType(); RIs with exotic crypto must render, not throw
         net.i2p.crypto.SigType sigType = identity.getSigningPublicKey().getType();
         String sigTypeName = sigType != null ? sigType.toString() : _t("Unknown");
         net.i2p.crypto.EncType encType = identity.getPublicKey().getType();
         String encTypeName = encType != null ? encType.toString() : _t("Unknown");
+
         buf.append("<span class=signingkey title=\"")
            .append(_t("Show all routers with this signature type in the NetDb"))
            .append("\"><a class=keysearch href=\"/netdb?type=")
@@ -2037,16 +2245,16 @@ class NetDbRenderer {
         buf.append("</tbody>\n</table>\n");
     }
 
-/**
- * Renders a single RouterInfo, isolating any failure to this one entry.
- * <p>The netdb listing streams progressively, so an exception escaping a
- * single render would truncate the rest of the page with no way to re-render.
- *
- * @param sb buffer the router HTML is appended to
- * @param ri the router to render
- * @param isLocalRouter true if this is the local router
- * @param rdnsLookups map of IP to hostname for reverse DNS, may be null
- */
+    /**
+     * Renders a single RouterInfo, isolating any failure to this one entry.
+     * <p>The netdb listing streams progressively, so an exception escaping a
+     * single render would truncate the rest of the page with no way to re-render.
+     *
+     * @param sb buffer the router HTML is appended to
+     * @param ri the router to render
+     * @param isLocalRouter true if this is the local router
+     * @param rdnsLookups map of IP to hostname for reverse DNS, may be null
+     */
     private void renderRouterInfoSafe(StringBuilder sb, RouterInfo ri, boolean isLocalRouter,
                                       Map<String, String> rdnsLookups) {
         try {
@@ -2183,19 +2391,57 @@ class NetDbRenderer {
         return rv;
     }
 
+    /** Tier index for the local router, the first tier checked. @since 0.9.72+ */
+    static final int TIER_LOCAL = 0;
+
+    /** Tier index for a peer in the fast tier. @since 0.9.72+ */
+    static final int TIER_FAST = 1;
+
+    /** Tier index for a peer in the high capacity tier. @since 0.9.72+ */
+    static final int TIER_HIGH_CAP = 2;
+
+    /** Tier index for a peer in the well integrated tier. @since 0.9.72+ */
+    static final int TIER_INTEGRATED = 3;
+
+    /** Tier index for a peer in no tier at all, the fallback. @since 0.9.72+ */
+    static final int TIER_STANDARD = 4;
+
     /**
-     * Peer profile tier name or CSS class.
+     * Peer profile tier index, in the order the tiers are checked. Resolving it
+     * once per rendered row, instead of once per attribute of the row, is what
+     * keeps a netdb page from taking the ProfileOrganizer read lock three times
+     * per router.
      *
-     * @param peer the router hash whose tier is reported; null yields the local tier
+     * @param peer the router hash whose tier is sought, null yields the local tier
+     * @param localHash our own router hash, compared against peer
+     * @param organizer the profile organizer holding the tier membership sets
+     * @return one of the {@code TIER_*} constants above
+     * @since 0.9.72+
+     */
+    static int profileTierIndex(Hash peer, Hash localHash, ProfileOrganizer organizer) {
+        if (peer == null || peer.equals(localHash)) {return TIER_LOCAL;}
+        if (organizer.isFast(peer)) {return TIER_FAST;}
+        if (organizer.isHighCapacity(peer)) {return TIER_HIGH_CAP;}
+        if (organizer.isWellIntegrated(peer)) {return TIER_INTEGRATED;}
+        return TIER_STANDARD;
+    }
+
+    /**
+     * Peer profile tier name or CSS class for a tier index.
+     *
+     * @param tierIndex the tier from {@link #profileTierIndex}
      * @param fullname if true, return full name; else CSS class
      * @return the tier name or class
+     * @since 0.9.72+
      */
-    public String getPeerProfileTier(Hash peer, boolean fullname) {
-        if (peer == null || _context.routerHash().equals(peer)) return (fullname ? _t("Local") : "isLocal");
-        if (_organizer.isFast(peer)) return (fullname ? _t("Fast Tier") : "isFast");
-        if (_organizer.isHighCapacity(peer)) return (fullname ? _t("High Capacity Tier") : "isHighCap");
-        if (_organizer.isWellIntegrated(peer)) return (fullname ? _t("Integrated Tier") : "isIntegrated");
-        return (fullname ? _t("Standard Tier") : "isStandard");
+    private String peerProfileTier(int tierIndex, boolean fullname) {
+        switch (tierIndex) {
+            case TIER_LOCAL:      return fullname ? _t("Local") : "isLocal";
+            case TIER_FAST:       return fullname ? _t("Fast Tier") : "isFast";
+            case TIER_HIGH_CAP:   return fullname ? _t("High Capacity Tier") : "isHighCap";
+            case TIER_INTEGRATED: return fullname ? _t("Integrated Tier") : "isIntegrated";
+            default:              return fullname ? _t("Standard Tier") : "isStandard";
+        }
     }
 
     /**
@@ -2233,15 +2479,15 @@ class NetDbRenderer {
         return _agoMemo.ago(duration, Translate.getLanguage(_context), _agoFormat);
     }
 
-/**
- * Resident memory in whole megabytes, for the local row's "Memory usage" cell.
- * <p>Memoized because {@code renderRoutersToWriter} hands every row in a list
- * the same isLocal flag, so this would otherwise run once per row rather than
- * once per page. The rate itself averages over a minute, longer than any
- * render.
- *
- * @return megabytes of memory in use, 0 if the stat is not registered yet
- */
+  /**
+   * Resident memory in whole megabytes, for the local row's "Memory usage" cell.
+   * <p>Memoized because {@code renderRoutersToWriter} hands every row in a list
+   * the same isLocal flag, so this would otherwise run once per row rather than
+   * once per page. The rate itself averages over a minute, longer than any
+   * render.
+   *
+   * @return megabytes of memory in use, 0 if the stat is not registered yet
+   */
     private long memoryUsedMB() {
         RateStat stat = _context.statManager().getRate("router.memoryUsed");
         Rate rate = (stat != null) ? stat.getRate(RateConstants.ONE_MINUTE) : null;
@@ -2255,13 +2501,13 @@ class NetDbRenderer {
         return cached;
     }
 
-/**
- * The capability link tooltip, resolved once per render pass. The value
- * depends only on the UI language and a renderer is created per request, so
- * the memo cannot go stale within a pass.
- *
- * @return the tooltip suffix inserted before each capability link's span
- */
+  /**
+   * The capability link tooltip, resolved once per render pass. The value
+   * depends only on the UI language and a renderer is created per request, so
+   * the memo cannot go stale within a pass.
+   *
+   * @return the tooltip suffix inserted before each capability link's span
+   */
     private String capTooltip() {
         String cached = _capTooltip;
         if (cached == null) {

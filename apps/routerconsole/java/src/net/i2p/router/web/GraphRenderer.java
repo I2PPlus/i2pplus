@@ -13,9 +13,11 @@ import java.awt.Stroke;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -30,6 +32,7 @@ import net.i2p.stat.RateConstants;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 import org.rrd4j.core.FetchData;
+import org.rrd4j.core.FetchRequest;
 import org.rrd4j.core.RrdDb;
 import org.rrd4j.core.RrdException;
 import org.rrd4j.data.Variable;
@@ -750,6 +753,11 @@ class GraphRenderer {
  * rrd4j computes them internally, while rendering. So this reads the same window
  * from the listener's already-open RRD - the read {@link RrdGraph} performs a
  * moment later anyway - and reduces it in one pass.
+ * <p>One read hands back every datasource it is asked for, so the series of a
+ * graph are first grouped by the archive they live in: each archive is opened
+ * once per graph and only the datasources whose range matters are read out of
+ * it. Before that, a combined graph read every archive once per plotted series,
+ * and every read pulled the archive's event count column too.
  * <p>Skipped entirely when a floor could not take effect anyway: {@code forceZero}
  * asks for the historical axis, and {@link #usesMrtgScaling} means rrd4j rebuilds
  * the range itself.
@@ -768,44 +776,160 @@ class GraphRenderer {
         // Events graphs plot the event count rather than the stat itself, matching the
         // datasource configureDataSources() picks for cfg.plotName.
         GraphListener lsnr = cfg.listener;
-        accumulateRange(cfg, fetchWindow(lsnr, cfg.showEvents ? lsnr.getEventName() : lsnr.getName(),
-                start, end));
+        Map<RrdDb, List<String>> plan = new LinkedHashMap<>();
+        if (lsnr != null) {
+            addToReadPlan(plan, lsnr.getData(), cfg.showEvents ? lsnr.getEventName() : lsnr.getName());
+        }
         if (cfg.extras != null) {
             for (GraphListener extra : cfg.extras) {
-                accumulateRange(cfg, fetchWindow(extra, extra.getName(), start, end));
+                addToReadPlan(plan, extra.getData(), extra.getName());
+            }
+        }
+        accumulateReads(cfg, plan, (db, names) -> fetchWindow(db, names, start, end));
+    }
+
+    /**
+     * Files one series under the archive it has to be read from.
+     * <p>{@link FetchRequest#fetchData()} reads a whole archive window at once, so
+     * the right unit of work is the archive, not the series: two series of one
+     * archive are measured by one read. A name already planned for that archive
+     * adds nothing.
+     *
+     * @param plan the plan built so far, archive to the datasources to read
+     * @param db the archive holding the series, ignored when null
+     * @param dsName the datasource to read, ignored when null
+     * @param <K> what the plan is filed by
+     * @return the same plan, so calls chain
+     * @since 0.9.72+
+     */
+    static <K> Map<K, List<String>> addToReadPlan(Map<K, List<String>> plan, K db, String dsName) {
+        if (db == null || dsName == null) {
+            return plan;
+        }
+        List<String> names = plan.computeIfAbsent(db, k -> new ArrayList<>(2));
+        if (!names.contains(dsName)) {
+            names.add(dsName);
+        }
+        return plan;
+    }
+
+    /**
+     * Reads the datasources of one archive over the render window.
+     *
+     * @param <K> what the read plan is filed by
+     * @since 0.9.72+
+     */
+    interface WindowReader<K> {
+        /**
+         * Read the named series out of one archive.
+         *
+         * @param db the archive to read
+         * @param dsNames the datasources to read, in plot order
+         * @return the values by datasource name, or null if the archive could not be read
+         */
+        Map<String, double[]> read(K db, List<String> dsNames);
+    }
+
+    /**
+     * Read every archive in the plan once and fold every series it holds into the
+     * axis range the graph is scaled against.
+     * <p>An archive that cannot be read is skipped rather than failing the graph:
+     * the axis then falls back to the zero floor {@link #axisFloor} describes.
+     *
+     * @param cfg the render configuration, updated in place
+     * @param plan the archives to read and the datasources each one owes
+     * @param reader the read itself, so the grouping can be measured without an RRD
+     * @param <K> what the plan is filed by
+     * @since 0.9.72+
+     */
+    static <K> void accumulateReads(GraphRenderConfig cfg, Map<K, List<String>> plan, WindowReader<K> reader) {
+        for (Map.Entry<K, List<String>> entry : plan.entrySet()) {
+            Map<String, double[]> series = reader.read(entry.getKey(), entry.getValue());
+            if (series == null) {
+                continue;
+            }
+            for (String name : entry.getValue()) {
+                accumulateRange(cfg, series.get(name));
             }
         }
     }
 
     /**
-     * Read one datasource over the render window.
+     * Read one set of datasources over the render window.
+     * <p>The archive is asked for those columns only. Every stat archive also holds
+     * an event count, and the axis needs neither the count nor the columns of the
+     * series it is not scaling, so the filter halves what the read brings in.
      *
-     * @param lsnr the listener holding the RRD, or null
-     * @param dsName datasource to read
+     * @param db the database holding the series, or null
+     * @param dsNames the datasources to read, in plot order
      * @param startSec window start, in seconds
      * @param endSec window end, in seconds
-     * @return the archived values, or null if they could not be read
+     * @return the values by datasource name, or null if none could be read
      * @since 0.9.71+
      */
-    private double[] fetchWindow(GraphListener lsnr, String dsName, long startSec, long endSec) {
-        if (lsnr == null || dsName == null) {
-            return null;
-        }
-        RrdDb db = lsnr.getData();
-        if (db == null || db.isClosed()) {
+    private Map<String, double[]> fetchWindow(RrdDb db, List<String> dsNames, long startSec, long endSec) {
+        if (db == null || db.isClosed() || dsNames == null || dsNames.isEmpty()) {
             return null;
         }
         try {
-            FetchData data = db.createFetchRequest(GraphListener.CF, startSec, endSec).fetchData();
-            return data.getValues(dsName);
+            return valuesOf(fetchArchive(db, dsNames.toArray(new String[dsNames.size()]), startSec, endSec), dsNames);
         } catch (IOException | RuntimeException e) {
-            // Benign, and worth no more than a debug line: without a range the axis
-            // simply falls back to the zero floor this whole change replaces.
-            if (_log.shouldDebug()) {
-                _log.debug("Error reading the window range of " + dsName, e);
+            // A datasource the archive has never heard of fails the filtered read whole,
+            // so fall back to reading every column and let that one name come back
+            // missing on its own, exactly as it did before the filter.
+            try {
+                return valuesOf(fetchArchive(db, null, startSec, endSec), dsNames);
+            } catch (IOException | RuntimeException e2) {
+                // Benign, and worth no more than a debug line: without a range the axis
+                // simply falls back to the zero floor this whole change replaces.
+                if (_log.shouldDebug()) {
+                    _log.debug("Error reading the window range -> Axis floor stays at zero * Datasources: " +
+                               String.join(", ", dsNames), e2);
+                }
+                return null;
             }
-            return null;
         }
+    }
+
+    /**
+     * Open one read of the archive window.
+     *
+     * @param db the archive to read
+     * @param filter the datasources to bring back, or null for every column
+     * @param startSec window start, in seconds
+     * @param endSec window end, in seconds
+     * @return what was read, never null
+     * @throws IOException if the archive could not be read
+     */
+    private static FetchData fetchArchive(RrdDb db, String[] filter, long startSec, long endSec) throws IOException {
+        FetchRequest req = db.createFetchRequest(GraphListener.CF, startSec, endSec);
+        if (filter != null) {
+            req.setFilter(filter);
+        }
+        return req.fetchData();
+    }
+
+    /**
+     * Pick the planned series out of what was read, in plan order.
+     * <p>A name the archive does not hold maps to null: that series has no range
+     * to contribute, and the others still get theirs.
+     *
+     * @param data what was read from the archive
+     * @param dsNames the datasources the plan asked for
+     * @return the values by datasource name, never null
+     */
+    private static Map<String, double[]> valuesOf(FetchData data, List<String> dsNames) {
+        Map<String, double[]> rv = new LinkedHashMap<>(dsNames.size() * 2);
+        for (String name : dsNames) {
+            double[] values;
+            try {
+                values = data.getValues(name);
+            } catch (IllegalArgumentException iae) {
+                values = null;
+            }
+            rv.put(name, values);
+        }
+        return rv;
     }
 
     /**
