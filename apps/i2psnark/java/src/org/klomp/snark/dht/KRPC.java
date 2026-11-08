@@ -1357,13 +1357,13 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                         receiveError(waiter, error);
                     }
                 } else {
-                    if (_log.shouldWarn()) {
-                        _log.warn("Received message with no one waiting \n* " + bev.toString());
+                    if (_log.shouldInfo()) {
+                        _log.info("Received message with no one waiting\n* " + bev.toString());
                     }
                 }
             } else {
                 if (_log.shouldWarn()) {
-                    _log.warn("Received unknown message type \n* " + bev.toString());
+                    _log.warn("Received unknown message type\n* " + bev.toString());
                 }
                 throw new InvalidBEncodingException("Unknown type: " + type);
             }
