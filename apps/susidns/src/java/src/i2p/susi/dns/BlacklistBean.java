@@ -17,7 +17,10 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 import java.util.regex.Pattern;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
@@ -42,8 +45,14 @@ public class BlacklistBean extends BaseBean {
     /** Modification time of the file the cache was read at. */
     private static long lastModified = 0;
 
-    /** Trimmed lines of the current content, rebuilt when content changes. */
-    private List<String> _lines;
+    /**
+     * The blacklist lines of {@link #cachedLinesContent} as a set, for O(1)
+     * exact-match lookups. Shared across bean instances, so a new bean does
+     * not re-split the content per request; rebuilt when the content changes.
+     */
+    private static Set<String> cachedLines = null;
+    /** The content {@link #cachedLines} was built from. */
+    private static String cachedLinesContent = null;
     /** Name of the blacklist file in the router directory. */
     private static final String BLACKLIST_FILE = "blacklist.txt";
     /** Logger for this class. */
@@ -96,7 +105,6 @@ public class BlacklistBean extends BaseBean {
             if (cachedContent != null && currentModified == lastModified) {
                 if (content != cachedContent) {
                     content = cachedContent;
-                    _lines = null;
                 }
                 return;
             }
@@ -113,7 +121,6 @@ public class BlacklistBean extends BaseBean {
                 content = buf.toString();
                 cachedContent = content;
                 lastModified = currentModified;
-                _lines = null;
 
                 // Count valid entries (non-empty, non-comment lines)
                 int validEntries = 0;
@@ -130,7 +137,6 @@ public class BlacklistBean extends BaseBean {
                 warn(e);
                 content = "";
                 cachedContent = content;
-                _lines = null;
             }
             finally {
                 if (br != null) {
@@ -141,7 +147,6 @@ public class BlacklistBean extends BaseBean {
         } else {
             content = "";
             cachedContent = content;
-            _lines = null;
             debug("Blacklist file does not exist: " + file.getAbsolutePath());
         }
     }
@@ -194,6 +199,34 @@ public class BlacklistBean extends BaseBean {
     }
 
     /**
+     * The blacklist lines of {@code content} as a lowercased set, for exact-match
+     * lookups. Rebuilt only when the content string changes, and shared across
+     * bean instances so a fresh bean does not re-split the whole blacklist.
+     * The set holds every trimmed line, including blanks and comments, so its
+     * membership matches the old linear scan exactly.
+     *
+     * @param content the newline-separated blacklist text to index
+     * @return the immutable lowercased set of trimmed lines
+     * @since 0.9.72+
+     */
+    static Set<String> linesFor(String content) {
+        synchronized (BlacklistBean.class) {
+            if (cachedLines == null || content != cachedLinesContent) {
+                Set<String> lines = new HashSet<>();
+                if (content != null) {
+                    String[] parts = content.split("\\n");
+                    for (String part : parts) {
+                        lines.add(part.trim().toLowerCase(Locale.ROOT));
+                    }
+                }
+                cachedLines = Collections.unmodifiableSet(lines);
+                cachedLinesContent = content;
+            }
+            return cachedLines;
+        }
+    }
+
+    /**
      * Check if an address is blacklisted.
      * @param address the b32 address to look up, compared case-insensitively
      * @return true if the address is in the blacklist, false otherwise
@@ -209,18 +242,38 @@ public class BlacklistBean extends BaseBean {
         if (content == null) {
             return false;
         }
-        if (_lines == null) {
-            _lines = new ArrayList<>();
-            String[] parts = content.split("\\n");
-            for (String part : parts) {
-                _lines.add(part.trim());
-            }
+        return linesFor(content).contains(address.trim().toLowerCase(Locale.ROOT));
+    }
+
+    /**
+     * Check if an address is blacklisted, also considering the address-book
+     * destination already known for it. This is the bulk-list check: the
+     * alternate forms (b64 and b32) come from the caller's destination, so no
+     * naming-service lookups are needed. A null destination falls back to
+     * {@link #isBlacklistedByAnyForm}. Unlike {@link #isBlacklistedByAnyForm},
+     * sibling hostnames for the same destination are not consulted; only the
+     * given name and the known destination's own forms are.
+     *
+     * @param address the hostname, b32 or b64 address being checked
+     * @param knownDestination the destination from the address book for the
+     *                         address, or null if not known
+     * @return true if the address or a known form of its destination is
+     *         blacklisted
+     * @since 0.9.72+
+     */
+    public boolean isBlacklisted(String address, Destination knownDestination) {
+        if (isBlacklisted(address)) {
+            return true;
         }
-        address = address.trim().toLowerCase();
-        for (String line : _lines) {
-            if (line.equalsIgnoreCase(address)) {
-                return true;
-            }
+        if (knownDestination == null) {
+            return isBlacklistedByAnyForm(address);
+        }
+        if (isBlacklisted(knownDestination.toBase64())) {
+            return true;
+        }
+        Hash hash = knownDestination.calculateHash();
+        if (isBlacklisted(hash.toBase32() + ".b32.i2p")) {
+            return true;
         }
         return false;
     }
@@ -405,12 +458,13 @@ public class BlacklistBean extends BaseBean {
         }
         // Load current content from file (not cache) to avoid static field issues
         String currentContent = loadContentFromFile();
+        Set<String> currentLines = linesFor(currentContent);
         int added = 0;
         List<String> newEntries = new ArrayList<>();
         for (String entry : entries) {
             if (entry != null && !entry.trim().isEmpty()) {
                 String trimmedEntry = entry.trim();
-                if (isValidI2PAddress(trimmedEntry) && !isEntryInContent(trimmedEntry, currentContent)) {
+                if (isValidI2PAddress(trimmedEntry) && !currentLines.contains(trimmedEntry.toLowerCase(Locale.ROOT))) {
                     newEntries.add(trimmedEntry);
                     added++;
                     debug("Added to blacklist: " + trimmedEntry);
@@ -452,25 +506,6 @@ public class BlacklistBean extends BaseBean {
             return buf.toString();
         }
         return "";
-    }
-
-    /**
-     * Check if an entry exists in the given content string.
-     * @param entry the entry to search for
-     * @param content the newline-separated blacklist text to scan
-     * @return true if the entry is found, false otherwise
-     */
-    private boolean isEntryInContent(String entry, String content) {
-        if (content == null || content.isEmpty()) {
-            return false;
-        }
-        String[] lines = content.split("\\n");
-        for (String line : lines) {
-            if (line.trim().equalsIgnoreCase(entry)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**
