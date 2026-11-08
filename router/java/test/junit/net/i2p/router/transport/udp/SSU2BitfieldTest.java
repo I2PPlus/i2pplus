@@ -171,4 +171,182 @@ public class SSU2BitfieldTest {
         assertTrue(rv.get(thru));
         assertTrue(rv.get(thru - 205));
     }
+
+    /**
+     * toAckBlock() must render exactly the runs the bitfield holds, and a
+     * decode of the block must restore them — including across word
+     * boundaries and the 255-bit caps. This pins the word-walking rewrite
+     * against the per-bit walk it replaced.
+     */
+    @Test
+    public void testAckBlockRoundTripsAcrossWords() {
+        SSU2Bitfield bf = new SSU2Bitfield(1024, 1000);
+        // contiguous top run 2000..2024 (crosses word and 255-bit edges below)
+        for (long b = 1900; b <= 2024; b++) {
+            if (b % 3 != 0) {bf.set(b);}
+        }
+        for (long b = 2000; b <= 2024; b++) {bf.set(b);}
+        SSU2Payload.AckBlock block = bf.toAckBlock(512);
+        byte[] serialized = new byte[block.getDataLength()];
+        assertEquals(serialized.length, block.writeData(serialized, 0));
+        long thru = net.i2p.data.DataHelper.fromLong(serialized, 0, 4);
+        assertEquals(2024, thru);
+        int acnt = serialized[4] & 0xff;
+        int rangeCount = (serialized.length - 5) / 2;
+        byte[] ranges = Arrays.copyOfRange(serialized, 5, serialized.length);
+        SSU2Bitfield back = SSU2Bitfield.fromACKBlock(thru, acnt, ranges, rangeCount);
+        for (long b = 1000; b <= 2024; b++) {
+            assertEquals("bit " + b, bf.get(b), back.get(b));
+        }
+    }
+
+    /**
+     * A single top bit with a zero top run: acnt must be 0 and the ranges must
+     * start with the nack gap below thru.
+     */
+    @Test
+    public void testSingleBitRenders() {
+        SSU2Bitfield bf = new SSU2Bitfield(256, 50);
+        bf.set(100);
+        SSU2Payload.AckBlock block = bf.toAckBlock(4);
+        byte[] serialized = new byte[block.getDataLength()];
+        block.writeData(serialized, 0);
+        long thru = net.i2p.data.DataHelper.fromLong(serialized, 0, 4);
+        assertEquals(100, thru);
+        assertEquals(0, serialized[4] & 0xff);
+        assertEquals(1, (serialized.length - 5) / 2);
+    }
+
+    /**
+     * toAckBlock() hands AckBlock an array of exactly two bytes per range it
+     * produced, not the maxRanges-sized worst case. Only rangeCount * 2 bytes
+     * reach the wire, so the slack was invisible in the packet and visible
+     * only as a retained allocation - up to 1024 bytes per ACK block.
+     *
+     * @throws Exception if the ranges field is not where {@link SSU2Payload.AckBlock}
+     *                   keeps it
+     */
+    @Test
+    public void testAckBlockRangeArrayIsExactlySized() throws Exception {
+        SSU2Bitfield bf = new SSU2Bitfield(1024, 1000);
+        for (long b = 1500; b <= 1600; b += 5) {bf.set(b);}
+        // maxRanges is the absolute cap of 512 pairs, the case that used to
+        // allocate 1024 bytes regardless of how few ranges exist
+        SSU2Payload.AckBlock block = bf.toAckBlock(512);
+        java.lang.reflect.Field rangesField = SSU2Payload.AckBlock.class.getDeclaredField("r");
+        rangesField.setAccessible(true);
+        byte[] ranges = (byte[]) rangesField.get(block);
+        assertEquals(block.getDataLength() - 5, ranges.length);
+        assertTrue("range array is " + ranges.length + " bytes, too big to be exact",
+                   ranges.length < 64);
+    }
+
+    /**
+     * Seeded random patterns - long runs past the 255-bit caps, gaps past
+     * word boundaries, alternation - must round-trip through the ACK block.
+     * This is the property the per-bit walk had, and the word walk must keep.
+     */
+    @Test
+    public void testAckBlockRoundTripsRandomPatterns() {
+        java.util.Random rnd = new java.util.Random(42);
+        for (int trial = 0; trial < 20; trial++) {
+            long base = 5000 + trial * 4000L;
+            SSU2Bitfield bf = new SSU2Bitfield(4096, base);
+            long bit = base;
+            while (bit < base + 3000) {
+                // a run of set bits, sometimes longer than the 255 cap
+                int run = 1 + rnd.nextInt(300);
+                for (int k = 0; k < run && bit < base + 3000; k++) {
+                    bf.set(bit++);
+                }
+                // then a gap, sometimes longer than a word
+                bit += 1 + rnd.nextInt(200);
+            }
+            SSU2Payload.AckBlock block = bf.toAckBlock(512);
+            if (block == null) {continue;}
+            byte[] serialized = new byte[block.getDataLength()];
+            block.writeData(serialized, 0);
+            long thru = net.i2p.data.DataHelper.fromLong(serialized, 0, 4);
+            int acnt = serialized[4] & 0xff;
+            int rangeCount = (serialized.length - 5) / 2;
+            byte[] ranges = Arrays.copyOfRange(serialized, 5, serialized.length);
+            SSU2Bitfield back = SSU2Bitfield.fromACKBlock(thru, acnt, ranges, rangeCount);
+            for (long b = base; b < base + 3000; b++) {
+                if (bf.get(b) != back.get(b)) {
+                    fail("trial " + trial + " bit " + b + " differs: " + bf.get(b) + " vs " + back.get(b));
+                }
+            }
+        }
+    }
+
+    /**
+     * forEachAndNot must call back exactly the newly acked bits, in ascending
+     * order, which value-to-callback the word-walking diff preserves.
+     */
+    @Test
+    public void testForEachAndNotCallsBackOnlyNewlySet() {
+        SSU2Bitfield bf = new SSU2Bitfield(256, 0);
+        bf.set(1);
+        bf.set(3);
+        bf.set(5);
+        SSU2Bitfield prev = new SSU2Bitfield(256, 0);
+        prev.set(1);
+        prev.set(2);
+        java.util.List<Long> called = new java.util.ArrayList<>();
+        bf.forEachAndNot(prev, called::add);
+        assertEquals(java.util.Arrays.asList(3L, 5L), called);
+        assertTrue(prev.get(3));
+        assertTrue(prev.get(5));
+    }
+
+    /**
+     * forEachAndNot over seeded, word-crossing patterns: the callback list is
+     * exactly the bits this bitfield holds and bf2 lacked, in ascending order,
+     * and bf2 ends up holding the union. The expected set is computed bit by
+     * bit, so it pins the word-walking diff to the per-bit version it
+     * replaced.
+     */
+    @Test
+    public void testForEachAndNotDiffsRandomPatterns() {
+        java.util.Random rnd = new java.util.Random(7);
+        int span = 900;
+        for (int trial = 0; trial < 20; trial++) {
+            long base = 10_000L + trial * 5000L;
+            SSU2Bitfield bf = new SSU2Bitfield(1024, base);
+            SSU2Bitfield prev = new SSU2Bitfield(1024, base);
+            fillRuns(rnd, bf, base, span);
+            fillRuns(rnd, prev, base, span);
+            boolean[] had = new boolean[span];
+            java.util.List<Long> expected = new java.util.ArrayList<>();
+            for (int i = 0; i < span; i++) {
+                had[i] = prev.get(base + i);
+                if (bf.get(base + i) && !had[i]) {expected.add(base + i);}
+            }
+            java.util.List<Long> called = new java.util.ArrayList<>();
+            bf.forEachAndNot(prev, called::add);
+            assertEquals("trial " + trial, expected, called);
+            for (int i = 0; i < span; i++) {
+                assertEquals("trial " + trial + " bit " + (base + i),
+                             had[i] || bf.get(base + i), prev.get(base + i));
+            }
+        }
+    }
+
+    /**
+     * Fill a bitfield with random runs and gaps inside [base, base + span),
+     * so the patterns cross 64-bit word edges and the 255-bit range caps.
+     *
+     * @param rnd the source of run and gap lengths
+     * @param bf the bitfield to fill
+     * @param base the lowest message number of the window
+     * @param span the number of message numbers to fill
+     */
+    private static void fillRuns(java.util.Random rnd, SSU2Bitfield bf, long base, int span) {
+        long bit = base + rnd.nextInt(8);
+        while (bit < base + span) {
+            int run = 1 + rnd.nextInt(300);
+            for (int k = 0; k < run && bit < base + span; k++) {bf.set(bit++);}
+            bit += 1 + rnd.nextInt(200);
+        }
+    }
 }

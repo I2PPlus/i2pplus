@@ -86,40 +86,9 @@ class SSU2Bitfield {
      */
     public boolean set(long bit) throws IndexOutOfBoundsException {
         if (bit < 0) {throw new IndexOutOfBoundsException(Long.toString(bit));}
-        boolean rv;
         synchronized(this) {
-            bit -= offset;
-            if (bit < 0) {return true;} // too old?
-            if (bit >= size) {
-                long shift = bit + 1 - size;
-                if (shift > max_shift) {throw new IndexOutOfBoundsException("Shift too big: " + shift);}
-                if (shift < min_shift) {shift = min_shift;}
-                if ((shift & 0x3f) != 0) {shift = 64 + (shift & 0x7fffffc0);} // round up
-                if (shift < size) {
-                    // shift down
-                    int bshift = (int) (shift / 64);
-                    System.arraycopy(bitfield, bshift, bitfield, 0, bitfield.length - bshift);
-                    // 2nd idx is exclusive
-                    Arrays.fill(bitfield, bitfield.length - bshift, bitfield.length, 0L);
-                    if (highestSet >= 0)
-                        highestSet -= shift;
-                } else {
-                    // start over
-                    Arrays.fill(bitfield, 0L);
-                    highestSet = -1;
-                }
-                offset += shift;
-                bit -= shift;
-            }
-            int index = (int) (bit >> 6);
-            long mask = 1L << (((int) bit) & 0x3F);
-            rv = (bitfield[index] & mask) != 0;
-            if (!rv) {
-                bitfield[index] |= mask;
-                if (bit > highestSet) {highestSet = (int) bit;}
-            }
+            return setNoSync(bit);
         }
-        return rv;
     }
 
     /**
@@ -148,6 +117,100 @@ class SSU2Bitfield {
     }
 
     /**
+     * Count consecutive set bits starting at relative bit {@code rel} going
+     * down, capped at {@code cap} and stopping at the offset. The walk runs
+     * over whole words, not one synchronized {@link #get} per bit: the caller
+     * holds the lock, so the words are read directly.
+     *
+     * @param rel the relative bit to start from, inclusive; negative means none
+     * @param cap the maximum count, 255 for ACK counts
+     * @return the number of consecutive set bits from {@code rel} downward
+     * @since 0.9.72+
+     */
+    private int countSetDown(long rel, int cap) {
+        return countRunDown(rel, cap, true);
+    }
+
+    /**
+     * Count consecutive unset bits starting at relative bit {@code rel} going
+     * down, capped at {@code cap} and stopping at the offset. The word-walking
+     * twin of {@link #countSetDown}, with the set and unset roles swapped.
+     *
+     * @param rel the relative bit to start from, inclusive; negative means none
+     * @param cap the maximum count, 255 for ACK counts
+     * @return the number of consecutive unset bits from {@code rel} downward
+     * @since 0.9.72+
+     */
+    private int countUnsetDown(long rel, int cap) {
+        return countRunDown(rel, cap, false);
+    }
+
+    /**
+     * Shared word walk behind {@link #countSetDown} and
+     * {@link #countUnsetDown}. {@code want} is the bits counted, set or unset:
+     * each word contributes its run of {@code want} bits ending at the current
+     * position, found by locating the highest opposite bit below it.
+     *
+     * @param rel the relative bit to start from, inclusive; negative means none
+     * @param cap the maximum count, 255 for ACK counts
+     * @param want true to count set bits, false to count unset bits
+     * @return the number of consecutive {@code want} bits from {@code rel}
+     *         downward
+     * @since 0.9.72+
+     */
+    private int countRunDown(long rel, int cap, boolean want) {
+        int count = 0;
+        while (count < cap && rel >= 0) {
+            long word = bitfield[(int) (rel >> 6)];
+            int inWord = (int) (rel & 63);
+            long mask = (inWord == 63) ? -1L : ((1L << (inWord + 1)) - 1);
+            // The bits counted, as ones at or below the current position,
+            // and the opposite bits that end the run.
+            long bits = want ? (word & mask) : (~word & mask);
+            long zeros = ~bits & mask;
+            int run;
+            if (zeros == 0) {
+                run = inWord + 1;
+            } else {
+                run = inWord - (63 - Long.numberOfLeadingZeros(zeros));
+            }
+            if (run <= 0) {break;}
+            if (count + run > cap) {run = cap - count;}
+            count += run;
+            rel -= run;
+        }
+        return count;
+    }
+
+    /**
+     * Walk the (nack, ack) ranges below the top run, top-down.
+     *
+     * @param curRel the relative bit to start from, inclusive; negative means
+     *               no range below the top run
+     * @param maxRanges the maximum number of ranges to emit
+     * @param sink where to store the pairs, {@code maxRanges * 2} bytes, or
+     *             null to count only
+     * @return the number of ranges the walk produces
+     * @since 0.9.72+
+     */
+    private int walkRanges(long curRel, int maxRanges, byte[] sink) {
+        int rangeCount = 0;
+        for (int r = 0; r < maxRanges && curRel >= 0; r++) {
+            int ncnt = countUnsetDown(curRel, 255);
+            curRel -= ncnt;
+            int aacnt = countSetDown(curRel, 255);
+            curRel -= aacnt;
+            if (ncnt == 0 && aacnt == 0) {break;}
+            if (sink != null) {
+                sink[rangeCount * 2] = (byte) ncnt;
+                sink[(rangeCount * 2) + 1] = (byte) aacnt;
+            }
+            rangeCount++;
+        }
+        return rangeCount;
+    }
+
+    /**
      * Render the set bits as an ACK block, collapsing the top acnt bits into
      * the ACK count and the rest into at most maxRanges ranges.
      *
@@ -157,36 +220,16 @@ class SSU2Bitfield {
     public synchronized AckBlock toAckBlock(int maxRanges) {
         long highest = getHighestSet();
         if (highest < 0) {return null;} // nothing to ack
-        byte[] ranges = new byte[maxRanges * 2];
-        int acnt = 0;
-        int rangeCount = 0; // get acnt
-
-        for (long i = highest - 1; i >= offset && acnt < 255; i--) {
-            if (!get(i)) {break;}
-            acnt++;
-        }
-        // now get ranges
-        if (acnt < highest - offset) {
-            // cur + 1 is set, cur is unset, start at cur
-            long cur = highest - (acnt + 1);
-            for (int r = 0; r < maxRanges; r++) {
-                int ncnt = 0;
-                for ( ; cur >= offset && ncnt < 255; cur--) {
-                    if (get(cur)) {break;}
-                    ncnt++;
-                }
-                int aacnt = 0;
-                for ( ; cur >= offset && aacnt < 255; cur--) {
-                    if (!get(cur)) {break;}
-                    aacnt++;
-                }
-                if (ncnt == 0 && aacnt == 0) {break;}
-                ranges[rangeCount * 2] = (byte) ncnt;
-                ranges[(rangeCount * 2) + 1] = (byte) aacnt;
-                rangeCount++;
-                if (cur < offset) {break;}
-            }
-        }
+        long hb = highest - offset;
+        int acnt = countSetDown(hb - 1, 255);
+        // top run is acnt bits; the range walk starts just below it
+        long curRel = hb - (acnt + 1);
+        // Count first, then allocate exactly rangeCount * 2 bytes: the old code
+        // allocated maxRanges * 2 (up to 1024 bytes) and AckBlock kept the whole
+        // array alive even though typical range counts are 0-20 bytes.
+        int rangeCount = walkRanges(curRel, maxRanges, null);
+        byte[] ranges = new byte[rangeCount * 2];
+        walkRanges(curRel, maxRanges, ranges);
         return new AckBlock(highest, acnt, ranges, rangeCount);
     }
 
@@ -216,6 +259,56 @@ class SSU2Bitfield {
     }
 
     /**
+     * Mark the given bit as set without entering the monitor - this is the
+     * body {@link #set} runs inside its lock. For use on a bitfield that is
+     * not published yet ({@link #fromACKBlock}), where there is nobody to
+     * exclude. The shift path is kept because {@link #set} reaches it too,
+     * even though the window {@link #fromACKBlock} builds always covers the
+     * whole ACK block.
+     *
+     * @param bit the absolute message number to set, non-negative
+     * @return previous value, true if previously set or unknown
+     * @throws IndexOutOfBoundsException if bit is smaller then zero
+     *                                   OR if the shift is too big
+     * @since 0.9.72+
+     */
+    private boolean setNoSync(long bit) throws IndexOutOfBoundsException {
+        if (bit < 0) {throw new IndexOutOfBoundsException(Long.toString(bit));}
+        boolean rv;
+        bit -= offset;
+        if (bit < 0) {return true;} // too old?
+        if (bit >= size) {
+            long shift = bit + 1 - size;
+            if (shift > max_shift) {throw new IndexOutOfBoundsException("Shift too big: " + shift);}
+            if (shift < min_shift) {shift = min_shift;}
+            if ((shift & 0x3f) != 0) {shift = 64 + (shift & 0x7fffffc0);} // round up
+            if (shift < size) {
+                // shift down
+                int bshift = (int) (shift / 64);
+                System.arraycopy(bitfield, bshift, bitfield, 0, bitfield.length - bshift);
+                // 2nd idx is exclusive
+                Arrays.fill(bitfield, bitfield.length - bshift, bitfield.length, 0L);
+                if (highestSet >= 0)
+                    highestSet -= shift;
+            } else {
+                // start over
+                Arrays.fill(bitfield, 0L);
+                highestSet = -1;
+            }
+            offset += shift;
+            bit -= shift;
+        }
+        int index = (int) (bit >> 6);
+        long mask = 1L << (((int) bit) & 0x3F);
+        rv = (bitfield[index] & mask) != 0;
+        if (!rv) {
+            bitfield[index] |= mask;
+            if (bit > highestSet) {highestSet = (int) bit;}
+        }
+        return rv;
+    }
+
+    /**
      * Rebuild a bitfield from a received ACK block, rejecting a block whose
      * implied span would push the offset below zero or exceed
      * {@link #MAX_ACK_SPAN}.
@@ -233,7 +326,7 @@ class SSU2Bitfield {
         if (ranges == null || rangeCount == 0) {
             // easy case, no ranges
             SSU2Bitfield rv = new SSU2Bitfield(acnt + 1, thru - acnt);
-            for (int i = t; i >= t - acnt; i--) {rv.set(i);}
+            for (int i = t; i >= t - acnt; i--) {rv.setNoSync(i);}
             return rv;
         }
         // Bound the span before allocating: it is derived from unvalidated
@@ -245,7 +338,7 @@ class SSU2Bitfield {
         long min = (long) t + 1 - span;
 
         SSU2Bitfield rv = new SSU2Bitfield((int) span, min);
-        for (int i = t; i >= t - acnt; i--) {rv.set(i);}
+        for (int i = t; i >= t - acnt; i--) {rv.setNoSync(i);}
 
         long j = t - (acnt + 1);
         for (int i = 0; i < rangeCount * 2; i += 2) {
@@ -253,7 +346,7 @@ class SSU2Bitfield {
             int toAck = ranges[i + 1] & 0xff; // ack count
             // stop at the bottom of the bitfield, so a range claiming more acked
             // bits than the span covers cannot write below the offset
-            for (int k = 0; k < toAck && j >= min; k++) {rv.set(j--);}
+            for (int k = 0; k < toAck && j >= min; k++) {rv.setNoSync(j--);}
         }
         return rv;
     }
@@ -296,11 +389,33 @@ class SSU2Bitfield {
             // overlap portion
             long start = Math.max(offset, bf2.offset);
             long bf2Highest = bf2.getHighestSet();
-            for (long bit = start; bit < bf2Highest && bit <= highest; bit++) {
-                 if (get(bit) && !bf2.set(bit)) {cb.bitSet(bit);}
+            // Overlap [start, min(highest, bf2Highest)): walked word-wise over
+            // this bitfield's grid, with each candidate's bf2 membership read
+            // through bf2's own offset. Only bits bf2 lacks pay a bf2.set(), so
+            // the cost follows the diff, not the span. bf2Highest itself is
+            // excluded: that bit is set in bf2 by definition.
+            long overlapEnd = Math.min(highest, bf2Highest - 1);
+            if (start <= overlapEnd) {
+                long chunkStart = offset + ((start - offset) & ~63L);
+                for (long base = chunkStart; base <= overlapEnd; base += 64) {
+                    long word = bitfield[(int) ((base - offset) >> 6)];
+                    if (base < start) {
+                        word &= ~((1L << (start - base)) - 1);
+                    }
+                    long chunkEnd = Math.min(63, overlapEnd - base);
+                    word &= (chunkEnd == 63) ? -1L : ((1L << (chunkEnd + 1)) - 1);
+                    while (word != 0) {
+                        long bit = base + Long.numberOfTrailingZeros(word);
+                        long rel = bit - bf2.offset;
+                        boolean inBf2 = rel >= 0 && rel < bf2.size
+                                && ((bf2.bitfield[(int) (rel >> 6)] >>> (rel & 63)) & 1L) != 0;
+                        if (!inBf2 && !bf2.set(bit)) {cb.bitSet(bit);}
+                        word &= word - 1;
+                    }
+                }
             }
             // portion that is strictly newer
-            for (long bit = bf2Highest + 1; bit <= highest; bit++) {
+            for (long bit = Math.max(bf2Highest + 1, offset); bit <= highest; bit++) {
                 if (get(bit)) {
                     bf2.set(bit);
                     cb.bitSet(bit);
