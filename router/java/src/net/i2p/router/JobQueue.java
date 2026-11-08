@@ -27,6 +27,7 @@ import net.i2p.router.networkdb.kademlia.RepublishLeaseSetJob;
 import net.i2p.router.peermanager.PeerTestJob;
 import net.i2p.router.tunnel.pool.TestJob;
 import net.i2p.stat.RateConstants;
+import net.i2p.stat.RateStat;
 import net.i2p.util.Clock;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
@@ -189,6 +190,22 @@ public class JobQueue {
     /** Rate stat periods for the job statistics. */
     private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
 
+    /**
+     * Handle for the {@code jobQueue.readyJobs} stat, resolved once from the stat
+     * created in the constructor.
+     * <p>{@link #addJob(Job)} runs on every job enqueue, and looking the stat up
+     * by name there costs a string-keyed {@code ConcurrentHashMap} read per
+     * sample - the same cost {@link JobQueueRunner} removed from the completion
+     * path in its {@code resolveStats()}.
+     */
+    private final RateStat _readyJobsStat;
+    /**
+     * Handle for the {@code jobQueue.queuedJobs} stat, resolved once from the
+     * stat created in the constructor, for the same reason as
+     * {@link #_readyJobsStat}.
+     */
+    private final RateStat _queuedJobsStat;
+
     /** Track dropped jobs for UI display. */
     private final AtomicInteger _droppedJobsCount = new AtomicInteger();
 
@@ -231,6 +248,11 @@ public class JobQueue {
         _jobStats = new ConcurrentHashMap<>();
         _pumper = new QueuePumper();
         _scaler = new JobQueueScaler(context, this);
+        // Both stats above are required stats, so they always exist here; the
+        // null guards in addJob() are only for a stat removed later by
+        // StatManager, which addRateData() also tolerates by doing nothing.
+        _readyJobsStat = _context.statManager().getRate("jobQueue.readyJobs");
+        _queuedJobsStat = _context.statManager().getRate("jobQueue.queuedJobs");
     }
 
     /**
@@ -389,8 +411,10 @@ public class JobQueue {
             }
         }
 
-        _context.statManager().addRateData("jobQueue.readyJobs", numReady);
-        _context.statManager().addRateData("jobQueue.queuedJobs", _timedJobs.size());
+        RateStat readyStat = _readyJobsStat;
+        if (readyStat != null) {readyStat.addData(numReady);}
+        RateStat queuedStat = _queuedJobsStat;
+        if (queuedStat != null) {queuedStat.addData(_timedJobs.size());}
 
         if (dropped) {
             _context.statManager().addRateData("jobQueue.droppedJobs", 1);
