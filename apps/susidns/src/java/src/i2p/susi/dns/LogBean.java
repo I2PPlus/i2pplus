@@ -12,8 +12,6 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
 import net.i2p.data.DataHelper;
@@ -37,6 +35,8 @@ public class LogBean extends BaseBean
     private String logName;
     /** Contents of that log. */
     private String logged;
+    /** Entries dated today, counted in the same pass that reads the file. */
+    private int todayEntryCount;
     /** Name of the addressbook's own log file. */
     private static final String LOG_FILE = "log.txt";
     /** Splits a log line at its separator. */
@@ -73,21 +73,36 @@ public class LogBean extends BaseBean
     private void locked_reloadLog() {
         File log = logFile();
         int maxLines = 600;
+        todayEntryCount = 0;
         if (log.isFile()) {
             BufferedReader br = null;
             try {
                 br = new BufferedReader(new InputStreamReader(new FileInputStream(log), StandardCharsets.UTF_8));
-                List<String> lines = new ArrayList<>(maxLines);
+                // Ring of the newest maxLines: ArrayList.remove(0) shifted the
+                // whole window per line, and the whole file is read either way.
+                String[] ring = new String[maxLines];
+                int ringSize = 0;
+                int ringNext = 0;
                 String line;
                 while ((line = br.readLine()) != null) {
-                    lines.add(line);
-                    if (lines.size() >= maxLines) {lines.remove(0);}
+                    ring[ringNext] = line;
+                    ringNext = (ringNext + 1) % maxLines;
+                    if (ringSize < maxLines) {ringSize++;}
+                    // Today's count needs the whole file, so tally it in this
+                    // pass instead of reading the file a second time.
+                    if (!line.contains("Bad hostname")) {
+                        String[] parts = DASH_SPLIT.split(line);
+                        if (parts.length >= 2 && isToday(parts[0].replace("GMT", "UTC"))) {
+                            todayEntryCount++;
+                        }
+                    }
                 }
                 StringBuilder buf = new StringBuilder(maxLines * 80);
 
-                for (int i = lines.size() - 1; i >= 0; i--) { // Reverse order, most recent first
-                    if (!lines.get(i).contains("Bad hostname")) {
-                        String[] parts = DASH_SPLIT.split(lines.get(i));
+                for (int i = 0; i < ringSize; i++) { // Reverse order, most recent first
+                    String entry = ring[(ringNext - 1 - i + maxLines) % maxLines];
+                    if (!entry.contains("Bad hostname")) {
+                        String[] parts = DASH_SPLIT.split(entry);
                         if (parts.length < 2) {continue;}
                         String date = formatDate(parts[0]);
                         String message = parts[1];
@@ -144,46 +159,12 @@ public class LogBean extends BaseBean
     }
 
     /**
-     * Get the count of log entries from today.
+     * Get the count of log entries from today. Uses the tally the reload
+     * already took, so the file is read once per request, not twice.
      * @return the number of entries logged today
      */
     public int getTodayEntryCount() {
         reloadLog();
-        return countTodayEntries();
-    }
-
-    /**
-     * Count the number of log entries from today.
-     *
-     * @return the number of entries logged today
-     */
-    private int countTodayEntries() {
-        File log = logFile();
-        int todayEntryCount = 0;
-
-        if (log.isFile()) {
-            BufferedReader br = null;
-            try {
-                br = new BufferedReader(new InputStreamReader(new FileInputStream(log), StandardCharsets.UTF_8));
-                String line;
-                while ((line = br.readLine()) != null) {
-                    if (!line.contains("Bad hostname")) {
-                        String[] parts = DASH_SPLIT.split(line);
-                        if (parts.length < 2) {continue;}
-                        String date = parts[0].replace("GMT", "UTC");
-                        if (isToday(date)) {
-                            todayEntryCount++;
-                        }
-                    }
-                }
-            } catch (IOException e) {warn(e);}
-            finally {
-                if (br != null) {
-                    try {br.close();}
-                    catch (IOException ioe) { /* ignored */ }
-                }
-            }
-        }
         return todayEntryCount;
     }
 
