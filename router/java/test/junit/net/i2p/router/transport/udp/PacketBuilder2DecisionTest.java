@@ -1,5 +1,6 @@
 package net.i2p.router.transport.udp;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -11,6 +12,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import net.i2p.data.DataHelper;
 import net.i2p.router.transport.udp.SSU2Payload.Block;
 import org.junit.Test;
 
@@ -113,5 +115,73 @@ public class PacketBuilder2DecisionTest {
         assertTrue(PacketBuilder2.fitsDateTimeBlock(ip, sizeWritten, mtu));
         assertFalse(PacketBuilder2.fitsDateTimeBlock(ip, sizeWritten, mtu - 1));
         assertTrue(PacketBuilder2.fitsDateTimeBlock(ip, sizeWritten, mtu + 1));
+    }
+
+    /**
+     * The short header's 3-byte flags field (offsets 13-15) must be zero when
+     * the packet carries no flags byte, even in a recycled buffer. An
+     * ack-only data packet writes no flags byte at all, so stale bytes there
+     * would be transmitted as flags.
+     */
+    @Test
+    public void testWriteShortHeaderZeroesFlagsField() {
+        byte[] data = new byte[SSU2Util.SHORT_HEADER_SIZE + 64];
+        Arrays.fill(data, (byte) 0xFF);
+        PacketBuilder2.writeShortHeader(data, 0x1122334455667788L, 0xAB, (byte) 0x03);
+        assertEquals(0x1122334455667788L, DataHelper.fromLong8(data, SSU2Util.DEST_CONN_ID_OFFSET));
+        assertEquals(0xAB, DataHelper.fromLong(data, SSU2Util.PKT_NUM_OFFSET, SSU2Util.PKT_NUM_LEN));
+        assertEquals(0x03, data[SSU2Util.TYPE_OFFSET] & 0xff);
+        assertEquals(0, data[SSU2Util.SHORT_HEADER_FLAGS_OFFSET] & 0xff);
+        assertEquals(0, data[SSU2Util.NETID_OFFSET] & 0xff);
+        assertEquals(0, data[SSU2Util.LONG_HEADER_FLAGS_OFFSET] & 0xff);
+    }
+
+    /**
+     * Bytes past the short header are left untouched: every payload producer
+     * writes its own range and the {@code DatagramPacket} length limits its
+     * transmission, so clearing the range is pure cost. This pins that the
+     * helper does not spend a buffer-wide fill in the packet-builder hot
+     * path.
+     */
+    @Test
+    public void testWriteShortHeaderLeavesPayloadAreaUntouched() {
+        byte[] data = new byte[SSU2Util.SHORT_HEADER_SIZE + 64];
+        Arrays.fill(data, (byte) 0xFF);
+        PacketBuilder2.writeShortHeader(data, 1L, 2L, (byte) 0x01);
+        for (int i = SSU2Util.SHORT_HEADER_SIZE; i < data.length; i++) {
+            assertEquals("byte " + i + " is past the header and must keep the recycled contents",
+                         0xFF, data[i] & 0xff);
+        }
+    }
+
+    /**
+     * A long header built on a short header must be byte-identical whether the
+     * buffer was zeroed first or recycled with stale bytes. The four
+     * {@code writeLongHeader} writes cover offsets 13-14 and 16-31 exactly,
+     * and offset 15 is the zeroed flags byte, which the handshake mixes into
+     * the Noise hash and payload MAC.
+     */
+    @Test
+    public void testShortThenLongHeaderMatchesZeroedBuild() {
+        byte[] fresh = new byte[SSU2Util.LONG_HEADER_SIZE];
+        byte[] recycled = new byte[SSU2Util.LONG_HEADER_SIZE];
+        Arrays.fill(recycled, (byte) 0xFF);
+        long dest = 0x1122334455667788L;
+        long pktNum = 0x12345678L;
+        byte type = (byte) 0x21;
+        long src = 0x99AABBCCDDEEFF00L;
+        long token = 0x0102030405060708L;
+
+        PacketBuilder2.writeShortHeader(fresh, dest, pktNum, type);
+        PacketBuilder2.writeLongHeader(fresh, src, token, 2, 11);
+        PacketBuilder2.writeShortHeader(recycled, dest, pktNum, type);
+        PacketBuilder2.writeLongHeader(recycled, src, token, 2, 11);
+
+        assertArrayEquals("the long header must not depend on stale buffer bytes", fresh, recycled);
+        assertEquals(2, recycled[SSU2Util.VERSION_OFFSET] & 0xff);
+        assertEquals(11, recycled[SSU2Util.NETID_OFFSET] & 0xff);
+        assertEquals(0, recycled[SSU2Util.LONG_HEADER_FLAGS_OFFSET] & 0xff);
+        assertEquals(src, DataHelper.fromLong8(recycled, SSU2Util.SRC_CONN_ID_OFFSET));
+        assertEquals(token, DataHelper.fromLong8(recycled, SSU2Util.TOKEN_OFFSET));
     }
 }

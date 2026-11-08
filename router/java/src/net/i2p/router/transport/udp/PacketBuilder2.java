@@ -11,7 +11,6 @@ import java.net.InetAddress;
 import java.net.SocketAddress;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import net.i2p.data.DataHelper;
@@ -1251,12 +1250,36 @@ class PacketBuilder2 {
      */
     private UDPPacket buildLongPacketHeader(long destID, long pktNum, byte type, long srcID, long token, int version) {
         UDPPacket packet = buildShortPacketHeader(destID, pktNum, type);
-        byte[] data = packet.getPacket().getData();
-        data[13] = (byte) version;
-        data[14] = (byte) _context.router().getNetworkID();
-        DataHelper.toLong8(data, 16, srcID);
-        DataHelper.toLong8(data, 24, token);
+        writeLongHeader(packet.getPacket().getData(), srcID, token, version,
+                        _context.router().getNetworkID());
         return packet;
+    }
+
+    /**
+     * Fills in the second half of a long SSU2 header, the half
+     * {@link #buildShortPacketHeader} leaves out. Nothing needs to be zeroed
+     * here: bytes 16-23 are the source connection ID and bytes 24-31 the token,
+     * so the four writes below cover the range exactly, and the reserved long
+     * header flags byte at offset 15 was zeroed with the short header. That
+     * byte matters, because every long header is transmitted in full and a
+     * handshake mixes it into the Noise hash and uses it as the additional data
+     * of the payload MAC, so it has to be a fixed zero and not whatever the
+     * previous packet left in the recycled {@link UDPPacket} buffer.
+     *
+     * @param data the packet buffer, at least {@link SSU2Util#LONG_HEADER_SIZE}
+     *             bytes long, with the short header already written
+     * @param srcID our connection ID, for the peer to address its reply to
+     * @param token token echoed back to the peer, or 0 for none
+     * @param version SSU2 protocol version of the peer, written to header
+     *                offset 13
+     * @param netID our network ID, written to header offset 14
+     * @since 0.9.72+
+     */
+    static void writeLongHeader(byte[] data, long srcID, long token, int version, int netID) {
+        data[VERSION_OFFSET] = (byte) version;
+        data[NETID_OFFSET] = (byte) netID;
+        DataHelper.toLong8(data, SRC_CONN_ID_OFFSET, srcID);
+        DataHelper.toLong8(data, TOKEN_OFFSET, token);
     }
 
     /**
@@ -1270,12 +1293,42 @@ class PacketBuilder2 {
      */
     private UDPPacket buildShortPacketHeader(long destID, long pktNum, byte type) {
         UDPPacket packet = UDPPacket.acquire(_context, false);
-        byte[] data = packet.getPacket().getData();
-        Arrays.fill(data, 0, data.length, (byte) 0);
-        DataHelper.toLong8(data, 0, destID);
-        DataHelper.toLong(data, 8, 4, pktNum);
-        data[12] = type;
+        writeShortHeader(packet.getPacket().getData(), destID, pktNum, type);
         return packet;
+    }
+
+    /**
+     * Write the 16-byte short header at the start of a packet buffer, zeroing
+     * only the 3-byte flags field at 13-15, not the whole header and not the
+     * whole {@link UDPPacket#MAX_PACKET_SIZE} buffer. The other 13 header bytes
+     * are written here, and every byte from the end of the header to the
+     * datagram length is written by its producer before the length is extended
+     * over it, so nothing else in a recycled buffer is ever transmitted.
+     * <p>
+     * The flags field does have to be zeroed, because a producer may skip it: an
+     * ack-only data packet writes no flags byte at all, as
+     * {@link PeerState2#getFlags()} is only applied when there are fragments,
+     * and a peer reads all 3 bytes ({@link SSU2Util#SHORT_HEADER_FLAGS_LEN}):
+     * byte 13's low bit as the ack-immediate request, byte 13's nibbles as the
+     * fragment number and total for a fragmented SessionConfirmed, and 14-15 as
+     * reserved. Stale bytes there would go out as flags.
+     *
+     * @param data the packet buffer, at least {@link SSU2Util#SHORT_HEADER_SIZE}
+     *             bytes long
+     * @param destID peer's connection ID we are addressing, or 0 when not yet
+     *               known
+     * @param pktNum 0 - 0xFFFFFFFF
+     * @param type packet type flag byte, written to header offset 12
+     * @since 0.9.72+
+     */
+    static void writeShortHeader(byte[] data, long destID, long pktNum, byte type) {
+        // the 3-byte flags field, the only header bytes no caller writes
+        data[SHORT_HEADER_FLAGS_OFFSET] = 0;
+        data[SHORT_HEADER_FLAGS_OFFSET + 1] = 0;
+        data[SHORT_HEADER_FLAGS_OFFSET + 2] = 0;
+        DataHelper.toLong8(data, DEST_CONN_ID_OFFSET, destID);
+        DataHelper.toLong(data, PKT_NUM_OFFSET, PKT_NUM_LEN, pktNum);
+        data[TYPE_OFFSET] = type;
     }
 
     /**
