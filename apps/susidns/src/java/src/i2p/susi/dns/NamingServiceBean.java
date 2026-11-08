@@ -406,8 +406,9 @@ public class NamingServiceBean extends AddressbookBean {
                     continue;
                 }
 
-                // Check if host is blacklisted
-                boolean isBlacklisted = blacklist.isBlacklistedByAnyForm(name);
+                // Check if host is blacklisted; the destination is already known,
+                // so no naming-service lookups are needed for the alternate forms
+                boolean isBlacklisted = blacklist.isBlacklisted(name, entry.getValue());
                 if (isBlacklisted) {
                     blacklistedHosts++;
                     continue;
@@ -818,8 +819,9 @@ public class NamingServiceBean extends AddressbookBean {
                 String name = entry.getKey();
                 Destination dest = entry.getValue();
 
-                // Skip blacklisted entries
-                if (blacklist.isBlacklistedByAnyForm(name)) {
+                // Skip blacklisted entries; the destination is already known,
+                // so no naming-service lookups are needed for the alternate forms
+                if (blacklist.isBlacklisted(name, dest)) {
                     continue;
                 }
 
