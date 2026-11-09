@@ -745,6 +745,61 @@ public class ProfileOrganizer {
         }
         return DEFAULT_LOSSY_THRESHOLD;
     }
+
+    /**
+     * Tier size at or below which the tolerated loss ratio sits at its loosest.
+     * Below this the tiers are short, and a short tier that expels its lossy
+     * members has nothing to replace them with, so it holds peers it would
+     * otherwise reject.
+     * @since 0.9.72+
+     */
+    static final int LOSS_RAMP_LOOSE_PEERS = 300;
+
+    /**
+     * Tier size at or above which the configured threshold applies unchanged and
+     * holds for any deeper tier. Past this many members there is always somebody
+     * to promote in their place, so the bar stops loosening.
+     * @since 0.9.72+
+     */
+    static final int LOSS_RAMP_TIGHT_PEERS = 600;
+
+    /**
+     * How far above the configured threshold the tolerated ratio goes while the
+     * tier is at or below {@link #LOSS_RAMP_LOOSE_PEERS}, and the value it ramps
+     * linearly down from across {@link #LOSS_RAMP_LOOSE_PEERS} to
+     * {@link #LOSS_RAMP_TIGHT_PEERS}. With the 0.20 default this is 0.40 at 300
+     * members, 0.30 at 450, and 0.20 from 600 up.
+     * @since 0.9.72+
+     */
+    private static final float LOSS_RAMP_LOOSE_MULTIPLIER = 2.0f;
+
+    /**
+     * The loss ratio a tier of the given size tolerates: the configured threshold
+     * once the tier is deep enough to replace what it expels, ramping up to
+     * {@link #LOSS_RAMP_LOOSE_MULTIPLIER} times it as the tier thins out.
+     * <p>
+     * Pure decision - the tier size and the configured threshold are passed in, so
+     * a caller that judges both tiers resolves the base once, and the ramp is
+     * pinned by unit tests without a router context.
+     *
+     * @param tierSize members currently in the tier being judged
+     * @param configured the configured or tuned threshold, the value a deep tier uses
+     * @return the ratio at or above which a member of that tier is lossy
+     * @since 0.9.72+
+     */
+    static float lossyThresholdFor(int tierSize, float configured) {
+        if (configured <= 0.0f)
+            return configured;
+        if (tierSize <= LOSS_RAMP_LOOSE_PEERS)
+            return Math.min(1.0f, configured * LOSS_RAMP_LOOSE_MULTIPLIER);
+        if (tierSize >= LOSS_RAMP_TIGHT_PEERS)
+            return configured;
+        double across = (tierSize - LOSS_RAMP_LOOSE_PEERS) /
+                        (double) (LOSS_RAMP_TIGHT_PEERS - LOSS_RAMP_LOOSE_PEERS);
+        return (float) (configured * (LOSS_RAMP_LOOSE_MULTIPLIER -
+                                      (LOSS_RAMP_LOOSE_MULTIPLIER - 1.0d) * across));
+    }
+
     /** Config property for how long a reported loss ratio stays fresh. */
     public static final String PROP_LOSSY_WINDOW = "profileOrganizer.lossyWindow";
     /** Default freshness window in ms (10 minutes). */
@@ -836,17 +891,23 @@ public class ProfileOrganizer {
     private static final float DEFAULT_PRIORITY_LATENCY_MS = 5000f;
 
     /**
-     * Adaptive absolute-RTT ceiling for fast-tier selection. The fast tier is a
-     * relative ranking (top N% by speed), so on a degraded network its members
-     * can still sit at high absolute latency and intermittently drop build
-     * messages. The existing {@link #demoteIfHighRTT} uses a fixed bar and only
-     * fires on individual peer-test events. These constants define a selection-time
-     * ceiling derived from the measured fast-tier RTT boundary ({@link #_thresholdRTT}):
-     * the ceiling is the boundary times AUTO_RTT_MULTIPLIER, clamped to at least
-     * AUTO_RTT_FLOOR_MS and at most AUTO_RTT_CAP_MS. Peers whose measured tunnel-test
-     * RTT exceeds the ceiling are excluded from fast-tier picks (soft signal, not a
-     * tier eviction — consistent with the lossiness-is-one-signal philosophy).
-     * @since 0.9.71+
+     * Adaptive RTT ceiling, applied in two places: as the gate on fast-tier
+     * selection, and as the bar a peer must stay under to remain in the fast or
+     * high-capacity tiers at all. The fast tier is a relative ranking (top N% by
+     * speed), so on a degraded network its members can still sit at high absolute
+     * latency and intermittently drop build messages; {@link #demoteIfHighRTT} uses
+     * a fixed bar and only fires on individual peer-test events. This ceiling is
+     * derived from the measured fast-tier RTT boundary ({@link #_thresholdRTT}):
+     * the boundary times AUTO_RTT_MULTIPLIER, clamped to at least
+     * AUTO_RTT_FLOOR_MS and at most AUTO_RTT_CAP_MS.
+     * <p>
+     * Applying it to membership as well as to selection is the point. While the
+     * two differed, a tier of 999 members held an 8s boundary while every pick
+     * above 3s was refused: the tier reported itself full, the pools found nothing
+     * to build with, and a peer at 20s of measured latency sat in the tier our own
+     * client tunnels are drawn from. A peer the gate would exclude is a peer that
+     * does not belong in the tier, so it is expelled and the slot refilled.
+     * @since 0.9.72+ (also the tier-membership bar)
      */
     private static final double AUTO_RTT_MULTIPLIER = 3.0d;
     /** Floor: never exclude peers below this RTT, matching the demoteIfHighRTT bar. */
@@ -1249,6 +1310,17 @@ public class ProfileOrganizer {
      * @since 0.9.71+
      */
     public double getFastRTTThreshold() {return _thresholdRTT;}
+
+    /**
+     * The RTT ceiling in force: the number fast-tier selection gates its picks
+     * with, and the number at or above which a tier member is expelled and another
+     * promoted. Unlike {@link #getFastRTTThreshold()} this is the bar actually
+     * enforced, not the speed-ranking boundary of whoever is currently listed.
+     *
+     * @return the ceiling in ms
+     * @since 0.9.72+
+     */
+    public long getRttCeilingMs() {return computeFastRttCeiling(_thresholdRTT);}
 
     /**
      * Current minimum capacity value for the high-capacity peer tier.
@@ -2872,11 +2944,14 @@ public class ProfileOrganizer {
             // the next cycle, which is a net shrink rather than a turnover.
             purgeUnusableFromTiers(now, buildSuccess, knownRouters);
 
-            // Step 6: Fallback to ensure minimum fast peers
-            int added = fillFastTierFallbacks(now, newStrictCapacityOrder, buildSuccess, knownRouters);
-
-            // Step 6a: Fallback to ensure minimum high-capacity peers
+            // Step 6: Fallback to ensure minimum high-capacity peers. This runs
+            // before the fast-tier fill, not after: the reservoir is what the fast
+            // tier is refilled from, so filling the tier first and the supply second
+            // is what let a live router sit at 999 fast against 479 high-capacity.
             int highCapAdded = fillHighCapFallback(now, newStrictCapacityOrder, buildSuccess, knownRouters);
+
+            // Step 6a: Fallback to ensure minimum fast peers
+            int added = fillFastTierFallbacks(now, newStrictCapacityOrder, buildSuccess, knownRouters);
 
             // Step 6c: Fallback to preserved pre-reorganize peers if rebuild shrunk tiers too much.
             restorePreservedPeers(now, oldFastPeers, oldHighCapPeers, buildSuccess, knownRouters);
@@ -3219,6 +3294,38 @@ public class ProfileOrganizer {
     }
 
     /**
+     * How deep the fast tier may be: never at or above the reservoir that seeds it.
+     * <p>High capacity is the supply the fast tier is refilled from, so a fast tier
+     * that has grown past it has no depth behind it - the first demotion has nobody
+     * to promote, and the tier stays short until the next reorganise rebuilds it.
+     * That is how a live router ended up with 999 fast peers against 479 high-capacity
+     * ones and a selection pass that found no candidate in 1,000.
+     * <p>Pure decision - no context access, safe for unit tests.
+     *
+     * @param fastTarget the size the fast tier would otherwise fill to
+     * @param highCapSize members currently in the high-capacity tier
+     * @return the fast tier's fill target, at most one below the reservoir's size
+     * @since 0.9.72+
+     */
+    static int fastFillTargetFor(int fastTarget, int highCapSize) {
+        return Math.min(fastTarget, Math.max(0, highCapSize - 1));
+    }
+
+    /**
+     * How deep the high-capacity reservoir must be: always deeper than the tier it
+     * seeds, even past the size this tier would otherwise fill to.
+     * <p>Pure decision - no context access, safe for unit tests.
+     *
+     * @param highCapTarget the size the reservoir would otherwise fill to
+     * @param fastSize members currently in the fast tier
+     * @return the reservoir's fill target, at least one above the fast tier's size
+     * @since 0.9.72+
+     */
+    static int highCapFillTargetFor(int highCapTarget, int fastSize) {
+        return Math.max(highCapTarget, fastSize + 1);
+    }
+
+    /**
      * The recency window a tier fill pass uses, widened by how far the tier is
      * below its minimum.
      * <p>The selection window is sized to pick the freshest peers; the refill
@@ -3262,22 +3369,28 @@ public class ProfileOrganizer {
     }
 
     /**
-     * Compute the adaptive absolute-RTT ceiling for fast-tier selection.
+     * Compute the absolute-RTT ceiling used in two places: fast-tier selection,
+     * and tier membership itself (see {@link #purgeUnusableFromTiers}).
      * <p>
      * The ceiling is the measured fast-tier RTT boundary times a multiplier,
      * clamped to at least {@link #AUTO_RTT_FLOOR_MS} and at most
      * {@link #AUTO_RTT_CAP_MS}. Flooring keeps the bar at least as tight as the
      * existing fixed high-RTT demotion; capping prevents a uniformly-slow pool
      * from raising the ceiling without bound, so clearly-slow outliers are still
-     * excluded. Pure decision — no context access, safe for unit tests.
+     * excluded. The cap is only honest if membership enforces it too: a tier that
+     * keeps an 8s boundary while selection refuses 3s has a full tier its pools
+     * cannot pick from, which is what the starvation warning reported. One number,
+     * enforced where peers are listed, is what makes the selection gate a
+     * within-window check rather than the only line of defence.
+     * <p>Pure decision — no context access, safe for unit tests.
      *
      * @param boundaryRttMs the fast-tier RTT boundary from the last reorganize
      *                      ({@link #_thresholdRTT}); its own scaling amplifies the
      *                      typical pool latency so the ceiling tracks the network
-     * @return the selection ceiling in ms; never below {@link #AUTO_RTT_FLOOR_MS}
+     * @return the ceiling in ms; never below {@link #AUTO_RTT_FLOOR_MS}
      *         and never above {@link #AUTO_RTT_CAP_MS}. A boundary at or below 0
      *         (no measurement yet) returns the floor so nothing is over-trimmed.
-     * @since 0.9.71+
+     * @since 0.9.72+ (also the tier-membership bar)
      */
     static long computeFastRttCeiling(double boundaryRttMs) {
         if (boundaryRttMs <= 0) return AUTO_RTT_FLOOR_MS;
@@ -3315,15 +3428,17 @@ public class ProfileOrganizer {
     }
 
     /**
-     * True if the peer's measured tunnel-test RTT exceeds the adaptive selection
-     * ceiling, indicating it should be excluded from this fast-tier pick while
-     * still remaining in the tier (soft signal. The ceiling applies at selection
-     * time, not tier membership). A zero/unknown RTT never trips the ceiling.
+     * True if the peer's measured tunnel-test RTT reaches the ceiling — which is
+     * both the selection gate and the tier-membership bar. The two used to differ:
+     * selection refused 3s while the tier kept an 8s boundary, so the tier was
+     * full of peers no pool could pick. A zero/unknown RTT never trips the ceiling:
+     * absence of evidence is not evidence of slowness, and evicting an unmeasured
+     * peer would stop it ever being profiled.
      *
      * @param profile the candidate profile
-     * @param rttCeilingMs the adaptive ceiling from {@link #computeFastRttCeiling}
-     * @return whether the peer is above the ceiling
-     * @since 0.9.71+
+     * @param rttCeilingMs the ceiling from {@link #computeFastRttCeiling}
+     * @return whether the peer is at or above the ceiling
+     * @since 0.9.72+ (also enforced at tier membership)
      */
     static boolean aboveRttCeiling(PeerProfile profile, long rttCeilingMs) {
         float rtt = profile.getTunnelTestTimeAverage();
@@ -3463,9 +3578,11 @@ public class ProfileOrganizer {
     }
 
     /**
-     * Fills the high-capacity tier to the minimum with recently-active
-     * selectable peers.  Must be called with the write lock held.  Returns
-     * the number added.
+     * Fills the high-capacity reservoir to its fill target with recently-active
+     * selectable peers: at least the tier minimum, and always deeper than the fast
+     * tier it seeds (see {@link #highCapFillTargetFor(int, int)}), bounded by the
+     * reservoir's configured maximum.  Must be called with the write lock held.
+     * Returns the number added.
      *
      * @param now current time in ms, the reference for the activity cutoff
      * @param activeProfiles profiles surviving this reorganize round, scanned in
@@ -3479,16 +3596,23 @@ public class ProfileOrganizer {
      */
     private int fillHighCapFallback(long now, Set<PeerProfile> activeProfiles, double buildSuccess, int known) {
         int minHighCap = getMinimumHighCapacityPeers(known);
+        // The reservoir aims at least one deeper than the tier it seeds, so the fast
+        // tier always has somebody behind it to promote when a member is expelled.
+        // Its own configured maximum stays the outer bound: the reservoir is limited
+        // by how many peers are of the high-bandwidth class at all, and aiming past
+        // that reports a shortfall that cannot be closed.
+        int target = Math.min(getMaximumHighCapPeers(known, _context.commSystem().countActivePeers()),
+                              highCapFillTargetFor(minHighCap, _fastPeers.size()));
         int highCapAdded = 0;
-        if (_highCapacityPeers.size() < minHighCap) {
+        if (_highCapacityPeers.size() < target) {
             boolean inStartup = _context.router() != null &&
                                 _context.router().getUptime() < 15 * 60 * 1000L;
             long fillWindow = tierFillActivityWindow(
                     TunnelPeerSelector.getActivityWindow(_context, buildSuccess),
-                    _highCapacityPeers.size(), minHighCap);
+                    _highCapacityPeers.size(), target);
             long activeCutoff = inStartup ? now : now - fillWindow;
             for (PeerProfile profile : activeProfiles) {
-                if (_highCapacityPeers.size() >= minHighCap) break;
+                if (_highCapacityPeers.size() >= target) break;
                 if (isHighBandwidthCapable(profile.getPeer()) &&
                     isEligibleForTierFill(profile, buildSuccess, now, activeCutoff, HIGH_CAP_ADMISSION_REQUIRES_ACCEPTANCE)) {
                     _highCapacityPeers.put(profile.getPeer(), profile);
@@ -3509,17 +3633,25 @@ public class ProfileOrganizer {
      * that is already disqualified therefore never survives the rebuild, and the
      * only thing left for this pass to remove is a peer that qualified at rebuild
      * time and stopped qualifying during the reorg window that followed.
-     * <p>The consequence for anyone reading the stats: with the rebuild doing the
-     * filtering, every reason counts near zero in steady state, and that is the
+     * <p>The consequence for anyone reading the stats: for the reasons the rebuild
+     * also applies, the count is near zero in steady state, and that is the
      * expected reading rather than evidence that a gate is inert. An all-zero
-     * {@code peer.tierEvicted.*} series over many cycles means "nothing degraded
-     * mid-window", not "eviction is disabled". The gates this pass duplicates are
-     * still load-bearing, but they live in the promotion path.
+     * {@code peer.tierEvicted.acceptance} or {@code .failures} series over many
+     * cycles means "nothing degraded mid-window", not "eviction is disabled". The
+     * gates this pass duplicates are still load-bearing, but they live in the
+     * promotion path.
      * <p>Two reasons have no promotion-path counterpart and so are this pass's
      * own: {@link PurgeReason#UNREACHABLE}, which tests a momentary transport flag
      * that promotion never reads, and {@link PurgeReason#BANNED}, which promotion
      * covers only through {@link #passesBasicGates}. Those two are the ones to
      * watch when diagnosing.
+     * <p>{@link PurgeReason#RTT} and {@link PurgeReason#LOSS} are this pass's own
+     * as well, and they are the turnover mechanism: admission ranks the tiers by
+     * speed and capacity and says nothing about latency or retransmission, so a
+     * tier can be full of peers its own pools refuse to pick. Evicting on the same
+     * ceiling selection applies, and on a loss bar scaled to the tier's own depth,
+     * is what replaces those peers instead of leaving them listed. Expect these two
+     * counters to be non-zero on a router whose tiers are turning over.
      * <p>Must be called with the write lock held.
      *
      * @param now current time in ms
@@ -3530,8 +3662,9 @@ public class ProfileOrganizer {
      */
     private void purgeUnusableFromTiers(long now, double buildSuccess, int known) {
         // Catches peers admitted by lockedPromoteProfileToTiers() that developed
-        // failures during this reorganize window; see the javadoc for why the
-        // steady-state counts here are near zero.
+        // failures during this reorganize window, and the peers admission never
+        // judged at all - latency and loss; see the javadoc for which counts are
+        // expected to be near zero and which are the turnover signal.
         //
         // The size guard applies only to the soft reasons. A peer that is banned,
         // unreachable, or no longer bandwidth-capable is never a valid member at
@@ -3543,10 +3676,35 @@ public class ProfileOrganizer {
         int highCapMin = getMinimumHighCapacityPeers(known);
         boolean fastSoft = _fastPeers.size() >= softPurgeThreshold(fastMin);
         boolean highCapSoft = _highCapacityPeers.size() >= softPurgeThreshold(highCapMin);
+        // One latency ceiling for both jobs: the number selection refuses to pick
+        // at, and the number that decides whether a peer belongs in the tier at
+        // all. They were separate, and that is what starved the pools - the tier
+        // kept an 8s boundary while every pick above 3s was refused, so a tier of
+        // 999 members reported itself full while every client pool said "not
+        // enough leases". A peer the RTT gate would exclude is a peer that should
+        // not be listed here, so it is expelled and the slot is refilled.
+        long rttBar = computeAdaptiveRttCeiling(_thresholdRTT, buildSuccess);
+        float baseLoss = getLossyThreshold(_context);
+        // The loss bar is per tier, unlike the latency ceiling: how much loss a
+        // tier can afford is a function of how deep that tier is.
+        float fastLossBar = lossyThresholdFor(_fastPeers.size(), baseLoss);
+        float highCapLossBar = lossyThresholdFor(_highCapacityPeers.size(), baseLoss);
         Map<PurgeReason, Integer> reasons = new EnumMap<>(PurgeReason.class);
-        purgeUnusableFromMap(_fastPeers, "fast", now, buildSuccess, fastSoft, reasons);
-        purgeUnusableFromMap(_highCapacityPeers, "high-cap", now, buildSuccess, highCapSoft, reasons);
+        purgeUnusableFromMap(_fastPeers, "fast", now, buildSuccess, fastSoft, reasons,
+                             rttBar, fastLossBar);
+        purgeUnusableFromMap(_highCapacityPeers, "high-cap", now, buildSuccess, highCapSoft, reasons,
+                             rttBar, highCapLossBar);
         publishPurgeReasonStats(reasons, fastSoft, highCapSoft, fastMin, highCapMin);
+        // The bars themselves, printed whenever they cost anyone a tier slot. A
+        // count without the threshold it was judged against cannot be diagnosed:
+        // "RTT: 40" is a symptom, "expelled above 2400ms" is a finding.
+        if (_log.shouldInfo() && (count(reasons, PurgeReason.RTT) > 0 || count(reasons, PurgeReason.LOSS) > 0)) {
+            _log.info("Expelled tier members past the membership bars -> RTT: " +
+                      count(reasons, PurgeReason.RTT) + " * Loss: " + count(reasons, PurgeReason.LOSS) +
+                      "\n* RTT ceiling: " + rttBar + "ms" +
+                      " * Loss bar: Fast " + Math.round(fastLossBar * 100) +
+                      "%, high-capacity " + Math.round(highCapLossBar * 100) + '%');
+        }
     }
 
     /**
@@ -3564,6 +3722,10 @@ public class ProfileOrganizer {
         UNREACHABLE("unreachable"),
         /** No longer qualifies for this tier's bandwidth class. Applies at any tier size. */
         NOT_CAPABLE("notCapable"),
+        /** Measured latency at or above the RTT ceiling selection also applies. Applies at any tier size. */
+        RTT("rtt"),
+        /** Decayed loss score at or above the threshold this tier's size tolerates. Applies at any tier size. */
+        LOSS("loss"),
         /** Sustained recent build or test failures, or inside loss probation. Soft. */
         FAILURES("failures"),
         /** Declines too many of our tunnel requests. Soft. */
@@ -3626,6 +3788,8 @@ public class ProfileOrganizer {
             _log.info("Tier eviction -> Banned: " + count(reasons, PurgeReason.BANNED) +
                       " * Unreachable: " + count(reasons, PurgeReason.UNREACHABLE) +
                       " * Not-capable: " + count(reasons, PurgeReason.NOT_CAPABLE) +
+                      " * RTT: " + count(reasons, PurgeReason.RTT) +
+                      " * Loss: " + count(reasons, PurgeReason.LOSS) +
                       " * Failures: " + count(reasons, PurgeReason.FAILURES) +
                       " * Acceptance: " + count(reasons, PurgeReason.ACCEPTANCE) +
                       "\n* Soft eviction withheld below the floor: Fast " + fastMin +
@@ -3701,9 +3865,34 @@ public class ProfileOrganizer {
     static PurgeReason purgeReasonFor(boolean banned, boolean unreachable, boolean tierCapable,
                                       boolean softEvictionAllowed, boolean hasRecentFailures,
                                       boolean inLossProbation, boolean lowAcceptance) {
+        return purgeReasonFor(banned, unreachable, tierCapable, softEvictionAllowed,
+                              hasRecentFailures, inLossProbation, lowAcceptance, false, false);
+    }
+
+    /**
+     * Same, with the two bars that are enforced at membership rather than only at
+     * selection.
+     * <p>Latency and loss are not withheld from a short tier the way the soft
+     * reasons are. The latency bar is the same ceiling selection gates its picks
+     * with, so a peer past it is one the pools would refuse anyway - a tier that
+     * keeps such a peer is full in the counter and empty in use. The loss bar
+     * loosens as the tier thins and tightens to the configured value once the tier
+     * is deep enough to replace what it expels, so it already accounts for depth.
+     *
+     * @param aboveRttBar  the peer's measured latency is at or above the RTT ceiling
+     * @param aboveLossBar the peer's decayed loss score is at or above this tier's threshold
+     * @return the reason to evict for, or null to leave the peer in place
+     * @since 0.9.72+
+     */
+    static PurgeReason purgeReasonFor(boolean banned, boolean unreachable, boolean tierCapable,
+                                      boolean softEvictionAllowed, boolean hasRecentFailures,
+                                      boolean inLossProbation, boolean lowAcceptance,
+                                      boolean aboveRttBar, boolean aboveLossBar) {
         if (banned) {return PurgeReason.BANNED;}
         if (unreachable) {return PurgeReason.UNREACHABLE;}
         if (!tierCapable) {return PurgeReason.NOT_CAPABLE;}
+        if (aboveRttBar) {return PurgeReason.RTT;}
+        if (aboveLossBar) {return PurgeReason.LOSS;}
         if (softEvictionAllowed && (hasRecentFailures || inLossProbation)) {
             return PurgeReason.FAILURES;
         }
@@ -3723,7 +3912,7 @@ public class ProfileOrganizer {
      * stops the permissiveness from accumulating poor accepters.
      * <p>Only {@code PurgeReason.BANNED} and {@code PurgeReason.UNREACHABLE} can
      * be first to fire here for a peer the rebuild had already admitted; the
-     * other three are re-checks of gates the rebuild applied. See
+     * others are re-checks of gates the rebuild applied. See
      * {@link #purgeUnusableFromTiers} for why that makes the steady-state counts
      * near zero.
      *
@@ -3736,11 +3925,16 @@ public class ProfileOrganizer {
      * @param allowSoftEviction whether this tier is above
      *                          {@link #softPurgeThreshold(int)}, gating the soft reasons
      * @param reasons tally shared with the other tier's pass, accumulated in place
-     * @since 0.9.71+
+     * @param rttBar the RTT ceiling, from {@link #computeAdaptiveRttCeiling},
+     *               the same number selection gates picks with; resolved once for both tiers
+     * @param lossBar the loss ratio this tier's size tolerates, from
+     *                {@link #lossyThresholdFor(int, float)}
+     * @since 0.9.72+ (the {@code rttBar} and {@code lossBar} parameters)
      */
     private void purgeUnusableFromMap(Map<Hash, PeerProfile> tier, String tierName, long now,
                                       double buildSuccess, boolean allowSoftEviction,
-                                      Map<PurgeReason, Integer> reasons) {
+                                      Map<PurgeReason, Integer> reasons,
+                                      long rttBar, float lossBar) {
         boolean isFast = (tier == _fastPeers);
         Iterator<Map.Entry<Hash, PeerProfile>> it = tier.entrySet().iterator();
         while (it.hasNext()) {
@@ -3752,13 +3946,20 @@ public class ProfileOrganizer {
                     isFast ? isFastTierCapable(peer) : isHighBandwidthCapable(peer),
                     allowSoftEviction,
                     hasRecentTunnelFailures(profile),
-                    inLossProbation(profile, now),
+                    inLossProbation(profile, now, lossBar),
                     // Eviction judges on the same sample floor the tier's
                     // admission does: fifty for high capacity, whose admission
                     // demands fifty, five for fast. Judging on one sample is how
                     // a peer that declined a single request left both tiers.
                     isLowTunnelAcceptance(profile, buildSuccess, now,
-                                          isFast ? FAST_ACCEPTANCE_SAMPLES : MIN_TUNNEL_REQUESTS));
+                                          isFast ? FAST_ACCEPTANCE_SAMPLES : MIN_TUNNEL_REQUESTS),
+                    // Membership and selection share one ceiling: a peer the RTT
+                    // gate would refuse to pick is a peer that has no business
+                    // being listed here, and leaving it listed is what made a full
+                    // tier report itself healthy while every client pool said
+                    // "not enough leases".
+                    aboveRttCeiling(profile, rttBar),
+                    hasHighLoss(profile, now, lossBar));
             if (reason != null) {
                 if (_log.shouldDebug()) {
                     _log.debug("Purging peer [" + peer.toShortBase64() +
@@ -6122,11 +6323,17 @@ public class ProfileOrganizer {
         _lastTierFillScan = now;
         int known = _context.netDb().getKnownRouters();
         int active = _context.commSystem().countActivePeers();
-        int fastTarget = getMaximumFastPeers(known, active);
-        int highCapTarget = getMaximumHighCapPeers(known, active);
         int minHighCap = getMinimumHighCapacityPeers(known);
         int fastBefore = _fastPeers.size();
         int highCapBefore = _highCapacityPeers.size();
+        // The reservoir is filled to its configured maximum, and the tier it seeds
+        // is held one below the reservoir's actual depth. A fast tier deeper than the
+        // supply behind it cannot be refilled when a member is expelled, which is how
+        // a live router came to sit at 999 fast against 479 high-capacity while every
+        // selection pass found no candidate: the tier was full of peers the pools
+        // would not pick, and there was nothing behind it to promote.
+        int fastTarget = fastFillTargetFor(getMaximumFastPeers(known, active), highCapBefore);
+        int highCapTarget = getMaximumHighCapPeers(known, active);
 
         // Publish the shortfall before the early return so a full tier
         // clears the flag too; the readmit fast-track reads it lock-free.
@@ -7165,9 +7372,25 @@ public class ProfileOrganizer {
      * @since 0.9.71+
      */
     private boolean hasHighLoss(PeerProfile profile, long now) {
+        return hasHighLoss(profile, now, getLossyThreshold(_context));
+    }
+
+    /**
+     * Same, judged against a threshold the caller resolved for the tier it is
+     * guarding. A tier that is deep enough to replace what it expels tolerates
+     * less loss, so the same peer is high-loss in a 900-member tier and merely
+     * tolerable in a 250-member one (see {@link #lossyThresholdFor(int, float)}).
+     *
+     * @param profile profile carrying the decayed loss score to test
+     * @param now current time in ms
+     * @param threshold the loss ratio to judge the score against
+     * @return true if the decayed score is above zero and at or above the threshold
+     * @since 0.9.72+ (the {@code threshold} parameter)
+     */
+    private boolean hasHighLoss(PeerProfile profile, long now, float threshold) {
         float score = profile.getLossScore(now);
         if (score <= 0.0f) return false;
-        return score >= getLossyThreshold(_context);
+        return score >= threshold;
     }
 
     /**
@@ -7184,14 +7407,29 @@ public class ProfileOrganizer {
      * @since 0.9.71+
      */
     private boolean inLossProbation(PeerProfile profile, long now) {
-        if (hasHighLoss(profile, now)) return true;
+        return inLossProbation(profile, now, getLossyThreshold(_context));
+    }
+
+    /**
+     * Same, judged against a threshold resolved for the tier being guarded, so the
+     * probation check and the tier's loss bar agree with each other.
+     *
+     * @param profile profile whose loss demotion flag and loss score are checked
+     * @param now current time in ms
+     * @param threshold the loss ratio to judge the score and the recovery report against
+     * @return true if the loss score is at the threshold, or the peer is
+     *         flagged lossy and has not yet shown fresh clean recovery
+     * @since 0.9.72+ (the {@code threshold} parameter)
+     */
+    private boolean inLossProbation(PeerProfile profile, long now, float threshold) {
+        if (hasHighLoss(profile, now, threshold)) return true;
         if (!profile.isLossy()) return false;
         // The clock bound is checked ahead of the readmission test, and this stays
         // a predicate: the flag itself is cleared by clearLossIfReadmitted() on a
         // path that holds the write lock, so a selection scan never mutates a
         // profile.
         if (lossProbationExpired(profile.getLossySince(), now)) return false;
-        return !shouldReadmitLossy(profile, now);
+        return !shouldReadmitLossy(profile, now, threshold);
     }
 
     /**
@@ -7216,10 +7454,25 @@ public class ProfileOrganizer {
      * @since 0.9.71+
      */
     private boolean shouldReadmitLossy(PeerProfile profile, long now) {
+        return shouldReadmitLossy(profile, now, getLossyThreshold(_context));
+    }
+
+    /**
+     * Same, with the loss ratio a recovery report must fall below supplied by the
+     * caller, so a tier that tolerates more loss also reads peers back in at that
+     * same bar instead of the global one.
+     *
+     * @param profile profile holding the demotion timestamp and the last reported loss ratio
+     * @param now current time in ms
+     * @param threshold the loss ratio a fresh report must be below to count as recovery
+     * @return true if the peer may be re-admitted
+     * @since 0.9.72+ (the {@code threshold} parameter)
+     */
+    private boolean shouldReadmitLossy(PeerProfile profile, long now, float threshold) {
         return lossyReadmitAllowed(profile.getLossRatio(), profile.getLossRatioLastUpdate(),
                                    profile.getLossySince(), now,
                                    _context.getProperty(PROP_LOSSY_WINDOW, DEFAULT_LOSSY_WINDOW),
-                                   LOSS_READMIT_MIN_AGE, getLossyThreshold(_context),
+                                   LOSS_READMIT_MIN_AGE, threshold,
                                    LOSS_FAST_TRACK_RATIO, _tiersShort);
     }
 
@@ -7296,20 +7549,47 @@ public class ProfileOrganizer {
     public void demoteIfLossy(Hash peer) {
         if (!tryWriteLock()) return;
         try {
+            long now = _context.clock().now();
             PeerProfile profile = lockedGetProfile(peer);
-            if (profile != null && hasHighLoss(profile, _context.clock().now())) {
+            // Judged against the bar of the tier the peer is actually listed in, so
+            // a 250-member tier does not expel on the bar a 900-member tier enforces.
+            if (profile != null && hasHighLoss(profile, now, lossBarFor(peer))) {
                 boolean wasFast = removeFastPeer(peer) != null;
                 boolean wasHighCap = _highCapacityPeers.remove(peer) != null;
                 // Start probation even if the peer was already out of the tiers,
                 // so it cannot be re-promoted on stale values before the
                 // readmission conditions are met.
-                profile.setLossySince(_context.clock().now());
-                if ((wasFast || wasHighCap) && _log.shouldDebug()) {
-                    _log.debug("Demoting peer [" + peer.toShortBase64() +
-                               "] from fast/high-cap tiers: loss " + profile.getLossScore(_context.clock().now()));
+                profile.setLossySince(now);
+                if (wasFast || wasHighCap) {
+                    if (_log.shouldDebug()) {
+                        _log.debug("Demoting peer [" + peer.toShortBase64() +
+                                   "] from fast/high-cap tiers: loss " + profile.getLossScore(now));
+                    }
+                    // One out, one in. The slot this peer vacated is what the
+                    // reservoir exists to supply, and without the refill the
+                    // demotion is a net shrink until the next reorganise.
+                    promoteToFillTiers();
                 }
             }
         } finally {releaseWriteLock();}
+    }
+
+    /**
+     * The loss ratio to judge one peer against right now: the bar of the tier it is
+     * listed in, or the configured threshold when it is in neither.
+     * <p>Must be called with the write lock held - it reads both tier sizes.
+     *
+     * @param peer the peer being judged
+     * @return the loss ratio at or above which the peer is lossy for its tier
+     * @since 0.9.72+
+     */
+    private float lossBarFor(Hash peer) {
+        float base = getLossyThreshold(_context);
+        if (_fastPeers.containsKey(peer))
+            return lossyThresholdFor(_fastPeers.size(), base);
+        if (_highCapacityPeers.containsKey(peer))
+            return lossyThresholdFor(_highCapacityPeers.size(), base);
+        return base;
     }
 
     /**
