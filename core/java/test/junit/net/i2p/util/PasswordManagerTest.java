@@ -94,17 +94,34 @@ public class PasswordManagerTest {
         assertNotEquals(md5, sha256);
     }
 
-    /** The bytes of a string, as the sums take UTF-8. */
+    /**
+     * The bytes of a string, as the sums take UTF-8.
+     *
+     * @param s the string to encode
+     * @return its UTF-8 bytes
+     */
     private static byte[] utf8(String s) {
         return s.getBytes(StandardCharsets.UTF_8);
     }
 
-    /** The reference digest, taken from a fresh provider instance. */
+    /**
+     * The reference digest, taken from a fresh provider instance.
+     *
+     * @param alg the digest name to ask the provider for
+     * @param data the bytes to digest
+     * @return the digest of {@code data} under {@code alg}
+     * @throws Exception if the provider has no such digest
+     */
     private static byte[] sum(String alg, byte[] data) throws Exception {
         return MessageDigest.getInstance(alg).digest(data);
     }
 
-    /** Copy a sum into the caller's array, for the other-thread test. */
+    /**
+     * Copy a sum into the caller's array, for the other-thread test.
+     *
+     * @param from the sum computed on the other thread
+     * @param to the array the test compares, filled from {@code from}
+     */
     private static void copy(byte[] from, byte[] to) {
         System.arraycopy(from, 0, to, 0, from.length);
     }
@@ -112,6 +129,8 @@ public class PasswordManagerTest {
     /**
      * The per-thread digest has to produce what a fresh MessageDigest
      * produces, which is the whole point of caching it.
+     *
+     * @throws Exception if the provider has no SHA-256 or MD5
      */
     @Test
     public void testSumsMatchAFreshMessageDigest() throws Exception {
@@ -128,6 +147,8 @@ public class PasswordManagerTest {
     /**
      * Both digests run on one thread, so a SHA-256 call must not leave
      * update state for the MD5 call that follows it.
+     *
+     * @throws Exception if the provider has no SHA-256 or MD5
      */
     @Test
     public void testInterleavedSumsDoNotShareState() throws Exception {
@@ -142,6 +163,9 @@ public class PasswordManagerTest {
     /**
      * A MessageDigest is not thread-safe, so the cache is per-thread: a
      * second thread must get its own instance and agree on the answer.
+     *
+     * @throws Exception if the other thread is interrupted while it is joined, or
+     *                   the provider has no SHA-256
      */
     @Test
     public void testSumsFromAnotherThread() throws Exception {

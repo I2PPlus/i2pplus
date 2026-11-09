@@ -42,6 +42,8 @@ public class SSU2PQMsgStagingTest {
     /**
      * The blocks must arrive at Bob unchanged when staged at the offset the
      * send path uses, for every version.
+     *
+     * @throws Exception if the keys cannot be built or the handshake read fails
      */
     @Test
     public void testBlocksSurviveAtComputedOffset() throws Exception {
@@ -55,6 +57,8 @@ public class SSU2PQMsgStagingTest {
     /**
      * The non-PQ staging position is only correct without a PQ frame - that is
      * the regression this pins.
+     *
+     * @throws Exception if the keys cannot be built or the handshake read fails
      */
     @Test
     public void testStagingInsideTheFrameCorruptsTheBlocks() throws Exception {
@@ -70,6 +74,8 @@ public class SSU2PQMsgStagingTest {
     /**
      * Alice has to hash the peer's router hash, as Bob hashes his own, or the
      * handshake hashes diverge and Bob's AEAD check fails.
+     *
+     * @throws Exception if the keys cannot be built or the handshake read fails
      */
     @Test
     public void testRouterHashIsPartOfThePqHandshake() throws Exception {
@@ -86,6 +92,14 @@ public class SSU2PQMsgStagingTest {
      * Writes the session request as Alice with the blocks staged at payloadOff,
      * measured from the start of the long header exactly as the send path
      * measures it, then reads it back as Bob and returns what he recovered.
+     *
+     * @param version the SSU2 handshake version to run, 2-4
+     * @param payloadOff where to stage the blocks, measured from the start of the
+     *                   long header
+     * @param aliceMixHashesRouterHash whether Alice mixes the peer's router hash
+     *                                 into the handshake, as Bob hashes his own
+     * @return the bytes Bob recovered from the staged message
+     * @throws Exception if the keys cannot be built or the handshake read fails
      */
     private static byte[] roundTrip(int version, int payloadOff, boolean aliceMixHashesRouterHash) throws Exception {
         KeyFactory xdh = new X25519KeyFactory(I2PAppContext.getGlobalContext());

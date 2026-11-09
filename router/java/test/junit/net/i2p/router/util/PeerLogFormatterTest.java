@@ -31,21 +31,36 @@ public class PeerLogFormatterTest {
      */
     public PeerLogFormatterTest() {}
 
-    /** A 32-byte hash filled with the byte {@code n}, so a test can name the peer it expects. */
+    /**
+     * A 32-byte hash filled with the byte {@code n}, so a test can name the peer it expects.
+     *
+     * @param n the byte to fill every position of the hash with
+     * @return a hash of {@code Hash.HASH_LENGTH} bytes, each one {@code n}
+     */
     private static Hash hash(int n) {
         byte[] data = new byte[Hash.HASH_LENGTH];
         Arrays.fill(data, (byte) n);
         return new Hash(data);
     }
 
-    /** n distinct hashes, filled 1 through n, in order. */
+    /**
+     * Builds {@code n} distinct hashes, filled 1 through {@code n}, in order.
+     *
+     * @param n how many hashes to build
+     * @return {@code n} hashes filled 1 through {@code n}, in that order
+     */
     private static List<Hash> hashes(int n) {
         List<Hash> rv = new ArrayList<>(n);
         for (int i = 0; i < n; i++) {rv.add(hash(i + 1));}
         return rv;
     }
 
-    /** The 6-character base64 form of {@code hash(n)}, the form the formatter prints. */
+    /**
+     * The 6-character base64 form of {@code hash(n)}, the form the formatter prints.
+     *
+     * @param n the byte {@code hash(n)} is filled with
+     * @return the first 6 characters of that hash's base64 form
+     */
     private static String shortHash(int n) {
         return hash(n).toBase64().substring(0, 6);
     }
@@ -322,14 +337,24 @@ public class PeerLogFormatterTest {
         }
     }
 
-    /** Count the bracketed hashes in a rendered block. */
+    /**
+     * Count the bracketed hashes in a rendered block.
+     *
+     * @param s the rendered block to scan
+     * @return how many open brackets it holds, one per bracketed hash
+     */
     private static int countHashes(String s) {
         int n = 0;
         for (int i = s.indexOf('['); i >= 0; i = s.indexOf('[', i + 1)) {n++;}
         return n;
     }
 
-    /** Count the entry separators in one rendered line. */
+    /**
+     * Count the entry separators in one rendered line.
+     *
+     * @param s the rendered line to scan
+     * @return how many arrow separators it holds
+     */
     private static int countArrows(String s) {
         int n = 0;
         for (int i = s.indexOf(" -> "); i >= 0; i = s.indexOf(" -> ", i + 1)) {n++;}

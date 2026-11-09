@@ -385,7 +385,12 @@ public class LeaseRequestFailureTest {
         return id;
     }
 
-    /** The delivery status update job the runner queued, by its job name. */
+    /**
+     * The delivery status update job the runner queued, by its job name.
+     * Fails the test if the runner queued none.
+     *
+     * @return the last job named "Update Message Delivery Status" that the runner added
+     */
     private Job lastStatusUpdateJob() {
         Job found = null;
         for (Job job : addedJobs()) {

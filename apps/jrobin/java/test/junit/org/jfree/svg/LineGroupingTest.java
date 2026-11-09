@@ -62,6 +62,10 @@ public class LineGroupingTest {
      * Walks the markup in document order and reports the class each line actually renders with:
      * its own class if it still has one, otherwise the class of the group that encloses it.
      * A line that renders under a class it was not drawn with is exactly the defect.
+     *
+     * @param svg the generated SVG markup to walk
+     * @return the class each {@code <line>} element renders with, in document
+     *         order; null for a line with no class of its own and no group around it
      */
     private static String[] effectiveClasses(String svg) {
         List<String> classes = new ArrayList<String>();

@@ -370,6 +370,8 @@ public class LogsHelperRewritesTest {
      * The widths the console assumes for the two framed columns have to be the
      * widths the formatter actually writes, or the page pass that renders the
      * truncation marker looks at the wrong offsets.
+     *
+     * @throws Exception if the formatter class or one of its constants cannot be read
      */
     @Test
     public void testColumnWidthsMatchTheFormatter() throws Exception {
@@ -384,6 +386,7 @@ public class LogsHelperRewritesTest {
      * @param cls the class holding the constant
      * @param name the field's name
      * @return the constant's value
+     * @throws Exception if the class declares no such field or it cannot be read
      */
     private static int intField(Class<?> cls, String name) throws Exception {
         java.lang.reflect.Field f = cls.getDeclaredField(name);

@@ -20,7 +20,11 @@ import org.junit.Test;
  */
 public class JobQueueScalerFeedbackTest {
 
-    /** A quiet queue: 10 ms avg lag, 100 ms send delay, 20 ready, 50 ms worst. */
+    /**
+     * A quiet queue: 10 ms avg lag, 100 ms send delay, 20 ready, 50 ms worst.
+     *
+     * @return a pre-scale snapshot carrying those values
+     */
     private static JobQueueScaler.PreScaleSnapshot quiet() {
         return new JobQueueScaler.PreScaleSnapshot(10L, 2, 100L, 20L, 50L);
     }

@@ -156,6 +156,8 @@ public class RecentRelaysTest {
      * requests at once. Nothing may be lost or invented, and the window may not
      * grow: after 8 threads record 1000 distinct nonces each, at most
      * {@code CAPACITY} of them are still remembered.
+     *
+     * @throws Exception if a worker thread is interrupted while it is joined
      */
     @Test
     public void testConcurrentWritersKeepTheWindowBounded() throws Exception {

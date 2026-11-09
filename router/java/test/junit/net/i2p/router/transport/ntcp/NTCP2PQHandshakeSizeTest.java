@@ -24,7 +24,7 @@ import org.junit.Test;
  * maxPaddingLength, so the bound below is exclusive.
  *
  * <p>i2pd only uses long padding once the peer advertises PQ support (its pq
- * address option, parsed into addr->v), which is exactly when we negotiate
+ * address option, parsed into addr-&gt;v), which is exactly when we negotiate
  * versions 3-5, so a peer predating the 2026 padding increase - Java _X = 256,
  * i2pd m_Buffer = 287 - never sees more than 222 bytes of msg 1 padding from
  * us. We still ACCEPT the long bound on a version 2 session, because i2pd's

@@ -99,6 +99,8 @@ public class PersistentDataStoreRescanDecisionTest {
      * The sort keeps every candidate file - dropping one would silently leave
      * that router out of the netdb - and orders them strictly newest modified
      * time first.
+     *
+     * @throws Exception if a placeholder file cannot be created or stamped
      */
     @Test
     public void testSortOrdersNewestFirstAndKeepsEveryFile() throws Exception {
@@ -119,6 +121,8 @@ public class PersistentDataStoreRescanDecisionTest {
     /**
      * A file that vanished after being listed reports modified time 0 and must
      * sort last, never first as a negative or unset time would.
+     *
+     * @throws Exception if a placeholder file cannot be created or stamped
      */
     @Test
     public void testSortPutsMissingFilesLast() throws Exception {
@@ -153,6 +157,8 @@ public class PersistentDataStoreRescanDecisionTest {
      * A large candidate set comes through complete and in non-increasing
      * modified-time order - the sort must not lose or duplicate entries when
      * the capped startup read walks the result.
+     *
+     * @throws Exception if a placeholder file cannot be created or stamped
      */
     @Test
     public void testSortKeepsLargeSetCompleteAndOrdered() throws Exception {
@@ -179,6 +185,7 @@ public class PersistentDataStoreRescanDecisionTest {
      * @param name the file's base-64 prefix character run
      * @param mtime the modified time to set, in ms since the epoch
      * @return the file, created on disk with that modified time
+     * @throws Exception if the file cannot be created, or its modified time cannot be set
      */
     private static File timedFile(String name, long mtime) throws Exception {
         File f = new File(TMP_DIR + "/routerInfo-" + name + ".dat");

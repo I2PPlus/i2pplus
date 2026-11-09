@@ -83,6 +83,8 @@ public class JobQueueLeaseTest {
      * A claim from a caller that stopped calling decays on its own. Nothing
      * releases it, and no timer event is involved: the floor is the sum of the
      * live leases.
+     *
+     * @throws Exception if the sleep that waits out the lease is interrupted
      */
     @Test
     public void expiredLeaseLeavesTheFloor() throws Exception {
@@ -92,7 +94,11 @@ public class JobQueueLeaseTest {
         assertEquals(0, _scaler.getExternalFloor());
     }
 
-    /** A lease refreshed before it expires stays. */
+    /**
+     * A lease refreshed before it expires stays.
+     *
+     * @throws Exception if one of the sleeps between refresh passes is interrupted
+     */
     @Test
     public void refreshedLeaseStays() throws Exception {
         _scaler.setRunners("ls-lookup", 4, 120L);

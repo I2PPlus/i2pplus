@@ -60,14 +60,29 @@ public class TunerMaxDispatchAgeTargetTest {
      */
     public TunerMaxDispatchAgeTargetTest() {}
 
-    /** The target call, with the param's range fixed to the production one. */
+    /**
+     * The target call, with the param's range fixed to the production one.
+     *
+     * @param current the value in effect, in ms
+     * @param capDrops messages per minute dropped by the cap, NaN when none
+     * @param queueDepth messages queued across all peers, NaN when unknown
+     * @param jobLag job lag in ms, NaN when unknown
+     * @param delivered messages delivered per minute, NaN when unknown
+     * @param expiredQ messages expired while queued, per minute, NaN when unknown
+     * @return the target in ms, before the caller clamps it to the param's range
+     */
     private static int target(int current, double capDrops, double queueDepth, double jobLag,
                               double delivered, double expiredQ) {
         return Tuner.maxDispatchAgeTarget(current, capDrops, queueDepth, jobLag,
                                           delivered, expiredQ, MIN, STEP);
     }
 
-    /** The live router's signals: no cap drops, no queue reading, CPU free, healthy delivery. */
+    /**
+     * The live router's signals: no cap drops, no queue reading, CPU free, healthy delivery.
+     *
+     * @param current the value in effect, in ms
+     * @return the target those readings produce, in ms
+     */
     private static int liveTarget(int current) {
         return target(current, Double.NaN, Double.NaN, LIVE_LAG, LIVE_DELIVERED, LIVE_EXPIRED);
     }

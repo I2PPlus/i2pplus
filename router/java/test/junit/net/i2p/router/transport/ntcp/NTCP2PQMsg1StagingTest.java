@@ -40,6 +40,8 @@ public class NTCP2PQMsg1StagingTest {
     /**
      * The options must arrive at Bob unchanged when staged at the offset our
      * code uses, for every PQ size.
+     *
+     * @throws Exception if the keys cannot be built or the handshake read fails
      */
     @Test
     public void testOptionsSurviveAtComputedOffset() throws Exception {
@@ -53,6 +55,8 @@ public class NTCP2PQMsg1StagingTest {
     /**
      * The old staging position is only correct without a PQ frame - that is the
      * regression this pins.
+     *
+     * @throws Exception if the keys cannot be built or the handshake read fails
      */
     @Test
     public void testKeySizeOffsetOnlyWorksWithoutPq() throws Exception {
@@ -67,6 +71,11 @@ public class NTCP2PQMsg1StagingTest {
     /**
      * Writes message 1 as Alice with the options staged at stageOff, then reads
      * it back as Bob and returns what he recovered.
+     *
+     * @param version the NTCP2 handshake version to run, 2-5
+     * @param stageOff where to stage the options, as an offset into the message 1 buffer
+     * @return the bytes Bob recovered from the staged message
+     * @throws Exception if the keys cannot be built or the handshake read fails
      */
     private static byte[] roundTrip(int version, int stageOff) throws Exception {
         KeyFactory xdh = new X25519KeyFactory(I2PAppContext.getGlobalContext());

@@ -86,6 +86,9 @@ public class OutNetMessageFailedTransportsTest {
     /**
      * The shape of the crash, with the threads: transports failing at once while
      * the message is formatted over and over.
+     *
+     * @throws InterruptedException if a failing-transport thread is interrupted
+     *                              while it is joined
      */
     @Test
     public void testConcurrentFailuresWhileFormatting() throws InterruptedException {

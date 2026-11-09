@@ -125,6 +125,8 @@ public class JobQueueInFlightTest {
     /**
      * A job parked in runJob() is in flight: it is named, and timed from the
      * instant its own run began.
+     *
+     * @throws Exception if the sleep polling for the in-flight record is interrupted
      */
     @Test
     public void parkedJobIsInFlight() throws Exception {
@@ -150,6 +152,8 @@ public class JobQueueInFlightTest {
      * Once a job is done its record is retired. Left in place it read as a job
      * that had been running ever since it started, which is the false positive
      * that made the watchdog bark at an idle router.
+     *
+     * @throws Exception if the wait for the job to finish is interrupted
      */
     @Test
     public void finishedJobLeavesNothingInFlight() throws Exception {
@@ -168,6 +172,8 @@ public class JobQueueInFlightTest {
      * A reader must never see a job paired with the start time of a different
      * run. Each job records its own start when the runner takes it, so every
      * snapshot taken while it runs has to agree with that record.
+     *
+     * @throws Exception if one of the sampling sleeps is interrupted
      */
     @Test
     public void snapshotNeverPairsAJobWithAnotherRunsStart() throws Exception {

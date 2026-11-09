@@ -55,12 +55,25 @@ public class TunerFailsafeFreqTargetTest {
      */
     public TunerFailsafeFreqTargetTest() {}
 
-    /** The target call, with the param's range fixed to the production one. */
+    /**
+     * The target call, with the param's range fixed to the production one.
+     *
+     * @param current the value in effect, in ms
+     * @param observed mean failsafe iteration time in ms, NaN when no pass in the window ran
+     * @param connections connection count, NaN when unknown
+     * @param jobLag job lag in ms, NaN when unknown
+     * @return the target in ms, inside the production range
+     */
     private static int target(int current, double observed, double connections, double jobLag) {
         return Tuner.failsafeFreqTarget(current, observed, connections, jobLag, MIN, MAX, STEP);
     }
 
-    /** The live router's signals: a free sweep, 1,288 connections, CPU idle. */
+    /**
+     * The live router's signals: a free sweep, 1,288 connections, CPU idle.
+     *
+     * @param current the value in effect, in ms
+     * @return the target those readings produce, in ms
+     */
     private static int liveTarget(int current) {
         return target(current, LIVE_ITERATION_MS, LIVE_CONNECTIONS, LIVE_LAG);
     }

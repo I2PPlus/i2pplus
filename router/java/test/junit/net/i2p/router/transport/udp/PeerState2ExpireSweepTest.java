@@ -35,21 +35,34 @@ import org.junit.Test;
  */
 public class PeerState2ExpireSweepTest {
 
-    /** A fragment whose message is done (complete) and no longer needs the map. */
+    /**
+     * A fragment whose message is done (complete) and no longer needs the map.
+     *
+     * @return a fragment whose message state reports itself complete
+     */
     private static Fragment complete() {
         OutboundMessageState state = mock(OutboundMessageState.class);
         when(state.isComplete()).thenReturn(true);
         return new Fragment(state, 0);
     }
 
-    /** A fragment whose message timed out and is being dropped. */
+    /**
+     * A fragment whose message timed out and is being dropped.
+     *
+     * @param now the instant the sweep runs, the time the state is asked about
+     * @return a fragment whose message state reports itself expired at {@code now}
+     */
     private static Fragment expired(long now) {
         OutboundMessageState state = mock(OutboundMessageState.class);
         when(state.isExpired(now)).thenReturn(true);
         return new Fragment(state, 0);
     }
 
-    /** A fragment still waiting for its ACK, so its entry has to stay. */
+    /**
+     * A fragment still waiting for its ACK, so its entry has to stay.
+     *
+     * @return a fragment whose message state is neither complete nor expired
+     */
     private static Fragment live() {
         OutboundMessageState state = mock(OutboundMessageState.class);
         return new Fragment(state, 0);
