@@ -1,11 +1,10 @@
-// Gradle mirrors of the user-facing Ant targets in build.xml.
-// Packaging, housekeeping, release, and QA tooling. Kept separate from
-// update.gradle (which only covers the update zip variants) and from
-// installer.gradle (which covers the IzPack installer family).
+// Gradle mirrors of the user-facing Ant targets in build.xml. Packaging,
+// housekeeping, release, and QA tooling. Kept separate from update.gradle
+// (the update zip variants, including updaterCompact and updater200Compact)
+// and from installer.gradle (the IzPack installer family).
 //
 // NOT ported (Ant-only today): jbigi native builds (buildJbigi*), the zip /
 // 7z platform packages, AppImage, pkg200, updater200, and build-buildtools.
-// updater200Compact is ported below (daily dev builds, no locale translations).
 // Pass -PnoBundle to also skip the per-module translation bundling (matches
 // ant's compact targets, which set no.bundle for the whole compact chain).
 //
@@ -22,7 +21,8 @@ def pkgTmpDirAbs = "${pkgTempDir}"
 def buildExtraSuffix = "${ext.buildExtra}"
 
 // File sets for distclean, captured at configuration time so the task body
-// stays configuration-cache compatible.
+// stays configuration-cache compatible. dist is emptied, not removed: the
+// directory and its README.md stay (ant: fileset dir=./dist excludes=README.md).
 def distFiles = fileTree('dist') { exclude 'README.md' }
 def blocklistBaks = fileTree('installer/resources/blocklist') { include '*.bak' }
 def soFiles = fileTree(rootDir) { include '*.so'; include '*.so.*' }
@@ -58,102 +58,10 @@ task distclean(type: Delete) {
     // Redirected build output (build.root): wipes /tmp/build-i2p like ant
     delete file(buildDir.parentFile)
     doLast {
-        // Ensure dist directory exists after cleanup
-        ant.mkdir(dir: workspaceDist)
-    }
-}
-
-// ---------------------------------------------------------------------------
-// updaterCompact — the daily-verification update zip (mirrors ant updaterCompact)
-// ---------------------------------------------------------------------------
-
-task prepUpdateCompact(type: Copy) {
-    group = 'package'
-    description = 'Assemble the compact update payload (mirrors ant prepupdatecompact).'
-    dependsOn prepUpdateSmall
-    into pkgTmpDirAbs
-    into('certificates') { from 'installer/resources/certificates' }
-    into('docs/proxy') { from('installer/resources/console/proxy') { include '*.ht' } }
-    from('docs/history.txt') {
-        filter(org.apache.tools.ant.filters.HeadFilter, lines: 1500)
-    }
-    doLast {
-        String more = '\n\n----------------\n\nEARLIER HISTORY IS AVAILABLE IN THE SOURCE PACKAGE'
-        ant.concat(more, append: 'true', destfile: pkgTmpDirAbs + '/history.txt')
-    }
-}
-
-task updaterCompact(type: Zip) {
-    group = 'package'
-    description = 'Build the compact update zip dist/i2pupdate.zip (mirrors ant updaterCompact; add -PnoBundle to skip translation bundling).'
-    dependsOn prepUpdateCompact
-    archiveFileName.set('i2pupdate.zip')
-    destinationDirectory.set(distDir)
-    from pkgTmpDirAbs
-}
-
-// Pack200-compress lib jars and webapps in pkg-temp before zipping (mirrors ant pack200).
-// Uses the in-tree io.pack200 fork rather than the JDK's pack200 tool, which was removed
-// in Java 14, so this works on any modern JDK. The same jar ships as lib/pack200.jar so
-// routers can unpack what we pack here. GNU parallel is used when installed but is no
-// longer required: tools/scripts/pack200.sh falls back to a serial loop.
-def rootDirAbs = rootDir.absolutePath
-def pack200MarkerAbs = "${System.getProperty('java.io.tmpdir')}/build-i2p/.pack200-before"
-// The pack200 jar's path, captured once every project has been evaluated:
-// :apps:pack200's jar task does not exist while this script is applied, and reading
-// project(...) from doFirst is rejected by the configuration cache. A captured Provider
-// is a config-cache value, so pack200Updater can read it at execution time - the file
-// itself is produced by its dependsOn, not by the lookup.
-def p200JarFile
-gradle.projectsEvaluated {
-    p200JarFile = project(':apps:pack200').jar.archiveFile
-}
-
-task pack200Updater(type: Exec) {
-    group = 'package'
-    description = 'Pack200-compress pkg-temp lib jars and webapps (mirrors ant pack200).'
-    dependsOn prepUpdateCompact
-    dependsOn ':apps:pack200:jar'
-    workingDir rootDirAbs
-    commandLine 'sh', 'tools/scripts/pack200.sh'
-    environment 'MODE', 'compress'
-    environment 'JAVA', "${System.getProperty('java.home')}/bin/java"
-    environment 'PKGDIR', pkgTmpDirAbs
-    environment 'MARKER', pack200MarkerAbs
-    // Read the captured Provider here, not at configuration time: projectsEvaluated has
-    // not fired yet when this task block is configured. Resolving a Provider at execution
-    // time is allowed; reaching back into project(...) is not.
-    doFirst {
-        environment 'P200JAR', p200JarFile.get().asFile.absolutePath
-    }
-}
-
-// Helpers for task bodies, on a plain class because a bare script method does not
-// resolve inside a task closure (delegate-first dispatch).
-class PkgUtil {
-    // Run a shell snippet. ProcessBuilder rather than ant.exec: `ant` is the project's
-    // AntIntegration, so reaching it from doLast is Task.project at execution time and
-    // the configuration cache rejects it. Plain String arguments, so nothing here
-    // closes over the Project.
-    void runShell(String dir, String script) {
-        new ProcessBuilder(['sh', '-c', script]).directory(new File(dir)).inheritIO().start().waitFor()
-    }
-}
-
-task updater200Compact(type: Zip) {
-    group = 'package'
-    description = 'Build the pack200 compact update zip dist/i2pupdate200.zip (mirrors ant updater200Compact; add -PnoBundle to skip translation bundling).'
-    dependsOn pack200Updater
-    archiveFileName.set('i2pupdate200.zip')
-    destinationDirectory.set(distDir)
-    from pkgTmpDirAbs
-    doLast {
-        def util = new PkgUtil()
-        // Pack200 savings vs. the raw payload and the SHA-256 (mirrors ant zipit200)
-        if (new File(pack200MarkerAbs).exists()) {
-            util.runShell(rootDirAbs, '''if [ -f __MARKER__ ]; then before=$(cat __MARKER__); zipsize=$(wc -c < dist/i2pupdate200.zip); saved=$((before - zipsize)); b_mb=$(printf "%d.%02d" $((before/1000000)) $(((before%1000000)/10000))); z_mb=$(printf "%d.%02d" $((zipsize/1000000)) $(((zipsize%1000000)/10000))); s_mb=$(printf "%d.%02d" $((saved/1000000)) $(((saved%1000000)/10000))); echo "Pack200: jars (${b_mb}MB) -> zip (${z_mb}MB) (saved ${s_mb}MB)"; rm -f __MARKER__; fi'''.replace('__MARKER__', pack200MarkerAbs))
-        }
-        util.runShell(rootDirAbs, 'h=$(sha256sum "dist/i2pupdate200.zip"); echo "$(basename "dist/i2pupdate200.zip"): ${h%% *}"')
+        // ant: the dist directory itself survives, with its README.md; only the
+        // artifacts inside go. Delete leaves the empty dir in place, so this only
+        // has to create it when the tree was not there at all.
+        new File(workspaceDist).mkdirs()
     }
 }
 

@@ -137,6 +137,12 @@ subprojects {
         setIncludes(['**/*Test.class'])
         exclude '**/*$*'
 
+        // ant's <junit fork="yes"> starts a fresh 384m JVM per test class; gradle
+        // runs a module's whole suite in one worker, so the default 512m is not
+        // enough - :router:test died with an OutOfMemoryError in the router's own
+        // LogWriter/BWRefiller threads and wrote no results at all.
+        maxHeapSize = '1g'
+
         // Write JUnit XML into the same layout as the ant suite (run-tests.sh):
         // /tmp/test-i2p/<module>/junit, outside the workspace. The aggregate
         // testReport task below renders dist/test-report.html from these.
@@ -237,6 +243,18 @@ if (gradle.startParameter.projectProperties.containsKey('coverage')) {
 }
 
 ext.pkgTempDir = "${System.getProperty('java.io.tmpdir')}/build-i2p/pkg-temp"
+// One staging directory per updater variant. ant runs one target per invocation
+// and reuses a single pkg-temp serially; gradle schedules tasks in parallel, so
+// variants that share one dir race, and each silently reads the other's files -
+// the compact chain truncates history.txt, the full chain adds the webapps. The
+// full payload keeps ant's name; the others are suffixed.
+ext.pkgTempRouterDir = "${pkgTempDir}-router"
+ext.pkgTempSmallDir = "${pkgTempDir}-small"
+ext.pkgTempCompactDir = "${pkgTempDir}-compact"
+// The pack200 variant stages a copy of the compact payload: pack200Updater
+// rewrites every jar in place, so it cannot share a directory with the
+// uncompressed compact zip
+ext.pkgTempCompact200Dir = "${pkgTempDir}-compact-200"
 
 // Final artifacts (i2pupdate.zip, i2p.tar.bz2, *.deb) land in dist/, as in ant
 ext.distDir = file('dist')

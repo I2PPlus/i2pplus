@@ -1,10 +1,20 @@
 def pkgTmpDir = pkgTempDir
+def routerStageDir = pkgTempRouterDir
+def smallStageDir = pkgTempSmallDir
+def compactStageDir = pkgTempCompactDir
+def compact200StageDir = pkgTempCompact200Dir
 def distAbsDir = distDir.absolutePath
 def localeBuildDir = "${System.getProperty('java.io.tmpdir')}/build-i2p/locale-build"
 
 // Release number from CoreVersion.VERSION, parsed like ant's getReleaseNumber;
 // computed at configuration time so the doLast closures stay config-cache safe
 def releaseNum = (file('core/java/src/net/i2p/CoreVersion.java').getText() =~ /public static final String VERSION\s*=\s*"([^"]+)"/)[0][1]
+
+// docs/history.txt truncated to the first 1500 lines (ant's headfilter) with the
+// pointer to the source package appended, as ant's zipit-time concat does. Read
+// at configuration time, like the release number above.
+def historyHead = file('docs/history.txt').readLines().take(1500).join('\n') + '\n' +
+                  '\n\n----------------\n\nEARLIER HISTORY IS AVAILABLE IN THE SOURCE PACKAGE'
 
 task prepUpdateRouter(type: Copy) {
     group = 'package'
@@ -14,14 +24,14 @@ task prepUpdateRouter(type: Copy) {
     // Fresh staging dir; the zip task zips everything found, so stale
     // leftovers from earlier runs (renamed jars, deleted dirs) must not persist
     doFirst {
-        new File(pkgTmpDir).deleteDir()
+        new File(routerStageDir).deleteDir()
     }
     // Pass in paths as a closure, so they are not executed during configuration
     from {[
         project(':core').jar.archiveFile,
         project(':router').jar.archiveFile
     ]}
-    into pkgTempDir + '/lib'
+    into routerStageDir + '/lib'
 }
 
 task prepUpdateSmall(type: Copy) {
@@ -35,8 +45,10 @@ task prepUpdateSmall(type: Copy) {
     dependsOn ':apps:jetty:jar'
     dependsOn ':apps:addressbook:jar', ':apps:addressbook:war'
     dependsOn ':apps:pack200:jar'
-    // Base dir
-    into pkgTempDir
+    // The router payload staged by prepUpdateRouter, then this variant's own
+    // files on top - ant builds one payload cumulatively in the shared pkg-temp
+    from routerStageDir
+    into smallStageDir
     into('lib') {
         from {[
             project(':apps:ministreaming').jar.archiveFile,
@@ -97,7 +109,9 @@ task prepUpdate(type: Copy) {
     mustRunAfter ':apps:i2psnark:war'
     mustRunAfter ':apps:i2pcontrol:war'
     mustRunAfter ':apps:imagegen:war'
-    // Base dir
+    // The base payload staged by prepUpdateSmall, then everything the full
+    // updater adds on top
+    from smallStageDir
     into pkgTmpDir
     into('lib') {
         from {[
@@ -141,30 +155,119 @@ task prepUpdate(type: Copy) {
         from 'docs/LICENSES.md'
         rename 'LICENSES.md', 'LICENSE.md'
     }
-    from('docs/history.txt') {
-        filter(org.apache.tools.ant.filters.HeadFilter, lines:1500)
-    }
-    doLast {
-        String more = '\n\n----------------\n\nEARLIER HISTORY IS AVAILABLE IN THE SOURCE PACKAGE'
-        ant.concat(more, append: 'true', destfile: pkgTmpDir + '/history.txt')
-    }
     into('certificates') { from 'installer/resources/certificates' }
     into('locale') { from "$localeBuildDir/mo" }
+    // ant copies docs/history.txt through a headfilter of 1500 lines and then
+    // concats the pointer; one write, so the payload never holds a history.txt
+    // without the note
+    doLast {
+        new File(pkgTmpDir + '/history.txt').text = historyHead
+    }
 }
 
-// The ant ZipTask is used here (not Gradle's) because it is the only way to
-// match ant's zipit output exactly: deflate level 9 and the zip comment
+// ant's zipit, written with java.util.zip because Gradle 10 removes the Ant
+// integration this used to reach ZipTask through. What the payload contract
+// actually pins (tools/scripts/compare-updaters.sh) is entry paths, per-entry
+// sizes and the archive comment, plus what the router reads: since 0.8.8 the
+// router enforces a zip comment equal to the version in the sud/su2 header,
+// because the header itself is not covered by the signature. So: the release
+// number as the comment, README.md left out, an empty payload an error rather
+// than an empty zip, and ant's entry order - a sorted depth-first walk that
+// stores each directory before its contents.
+class UpdateZip {
+    // Level 6, not 9, as ant's zipit documents: the heavy variants carry jbigi
+    // and the decompressed geoip mmdb, which are already compressed, so 6 and 9
+    // give the same archive while 9 costs about 4x the CPU.
+    static String zipIt(File baseDir, File out, String comment, List<String> excludes) {
+        if (!baseDir.isDirectory())
+            throw new GradleException("No update payload in ${baseDir} - the prep task did not run")
+        out.parentFile.mkdirs()
+        // One tmp per payload variant: updaterRouter, updaterSmall and updater all
+        // write dist/i2pupdate.zip and may run in the same invocation, so a shared
+        // tmp name would be renamed out from under a task still writing it.
+        File tmp = new File(out.absolutePath + '-' + baseDir.name + '.tmp')
+        int count = 0
+        def zos = new java.util.zip.ZipOutputStream(new BufferedOutputStream(new FileOutputStream(tmp)))
+        try {
+            zos.setLevel(6)
+            zos.setComment(comment)
+            count = addTree(zos, baseDir, baseDir, excludes)
+        } finally {
+            zos.close()
+        }
+        if (count == 0)
+            throw new GradleException("Update payload ${baseDir} holds no files - refusing to write ${out}")
+        // Replace atomically so a failed zip never leaves a half-written dist zip
+        java.nio.file.Files.move(tmp.toPath(), out.toPath(),
+                                 java.nio.file.StandardCopyOption.REPLACE_EXISTING)
+        return sha256(out)
+    }
+
+    // ant's ZipTask scan: each directory as its own entry, then its children by
+    // name. Returns the number of file entries written.
+    private static int addTree(java.util.zip.ZipOutputStream zos, File base, File dir, List<String> excludes) {
+        int count = 0
+        for (File f in dir.listFiles().sort { it.name }) {
+            String name = f.absolutePath.substring(base.absolutePath.length() + 1).replace('\\', '/')
+            if (excludes.contains(name))
+                continue
+            boolean isDir = f.isDirectory()
+            def entry = new java.util.zip.ZipEntry(isDir ? name + '/' : name)
+            entry.setLastModifiedTime(java.nio.file.Files.getLastModifiedTime(f.toPath()))
+            zos.putNextEntry(entry)
+            if (isDir) {
+                zos.closeEntry()
+                count += addTree(zos, base, f, excludes)
+            } else {
+                f.withInputStream { it.transferTo(zos) }
+                zos.closeEntry()
+                count++
+            }
+        }
+        return count
+    }
+
+    // git rev-parse --short HEAD, for the revision ant's updater echoes
+    static String gitRev(String dir) {
+        try {
+            def proc = new ProcessBuilder(['git', 'rev-parse', '--short', 'HEAD'])
+                .directory(new File(dir)).start()
+            String rev = proc.inputStream.text.trim()
+            proc.waitFor()
+            return rev ?: 'unknown'
+        } catch (Exception e) {
+            return 'unknown'
+        }
+    }
+
+    // Run a shell snippet. ProcessBuilder rather than ant.exec: `ant` is the
+    // project's AntIntegration, so reaching it from doLast is Task.project at
+    // execution time and the configuration cache rejects it. Plain String
+    // arguments, so nothing here closes over the Project.
+    static void runShell(String dir, String script) {
+        new ProcessBuilder(['sh', '-c', script]).directory(new File(dir)).inheritIO().start().waitFor()
+    }
+
+    // ant's sha256sum target: "<basename>: <hash>"
+    static String sha256(File f) {
+        def digest = java.security.MessageDigest.getInstance('SHA-256')
+        byte[] buf = new byte[8192]
+        f.withInputStream { is ->
+            int n
+            while ((n = is.read(buf)) > 0)
+                digest.update(buf, 0, n)
+        }
+        return digest.digest().collect { String.format('%02x', it) }.join()
+    }
+}
+
 task updaterRouter {
     group = 'package'
     description = 'Build the router-only update zip dist/i2pupdate.zip (mirrors ant updater-router).'
     dependsOn prepUpdateRouter
     doLast {
-        File out = new File(distAbsDir, 'i2pupdate.zip')
-        File tmp = new File(out.absolutePath + '.tmp')
-        ant.delete(file: tmp.absolutePath)
-        ant.zip(destfile: tmp.absolutePath, level: '9', basedir: pkgTmpDir, excludes: 'README.md', comment: releaseNum, whenempty: 'fail')
-        // Replace atomically so a failed zip never leaves a half-written dist zip
-        ant.move(file: tmp.absolutePath, tofile: out.absolutePath, overwrite: 'true')
+        def out = new File(distAbsDir, 'i2pupdate.zip')
+        logger.lifecycle("i2pupdate.zip: ${UpdateZip.zipIt(new File(routerStageDir), out, releaseNum, ['README.md'])}")
     }
 }
 
@@ -173,12 +276,8 @@ task updaterSmall {
     description = 'Build the compact update zip dist/i2pupdate.zip to verify all module compiles (mirrors ant updaterSmall).'
     dependsOn prepUpdateSmall
     doLast {
-        File out = new File(distAbsDir, 'i2pupdate.zip')
-        File tmp = new File(out.absolutePath + '.tmp')
-        ant.delete(file: tmp.absolutePath)
-        ant.zip(destfile: tmp.absolutePath, level: '9', basedir: pkgTmpDir, excludes: 'README.md', comment: releaseNum, whenempty: 'fail')
-        // Replace atomically so a failed zip never leaves a half-written dist zip
-        ant.move(file: tmp.absolutePath, tofile: out.absolutePath, overwrite: 'true')
+        def out = new File(distAbsDir, 'i2pupdate.zip')
+        logger.lifecycle("i2pupdate.zip: ${UpdateZip.zipIt(new File(smallStageDir), out, releaseNum, ['README.md'])}")
     }
 }
 
@@ -189,19 +288,114 @@ task updater {
     description = 'Build the full update zip dist/i2pupdate.zip for existing installs (mirrors ant updater).'
     dependsOn prepUpdate, prepUpdateSmall, prepUpdateRouter
     doLast {
-        File out = new File(distAbsDir, 'i2pupdate.zip')
-        File tmp = new File(out.absolutePath + '.tmp')
-        ant.delete(file: tmp.absolutePath)
-        ant.zip(destfile: tmp.absolutePath, level: '9', basedir: pkgTmpDir, excludes: 'README.md', comment: releaseNum, whenempty: 'fail')
-        // Replace atomically so a failed zip never leaves a half-written dist zip
-        ant.move(file: tmp.absolutePath, tofile: out.absolutePath, overwrite: 'true')
-        ant.exec(executable: 'git', outputproperty: 'git.revision', dir: rootDirAbs) {
-            arg(value: 'rev-parse')
-            arg(value: '--short')
-            arg(value: 'HEAD')
+        def out = new File(distAbsDir, 'i2pupdate.zip')
+        def sha = UpdateZip.zipIt(new File(pkgTmpDir), out, releaseNum, ['README.md'])
+        logger.lifecycle("Created I2P+ update (rev. ${UpdateZip.gitRev(rootDirAbs)}): ${distAbsDir}/i2pupdate.zip")
+        logger.lifecycle("i2pupdate.zip: ${sha}")
+    }
+}
+
+// ---------------------------------------------------------------------------
+// updaterCompact / updater200Compact — the compact update zips (mirrors ant
+// updaterCompact): the same payload without the locale translations and the
+// other files that rarely change, so the package is much smaller. Kept in this
+// script: a class declared in one applied script is not resolvable by name from
+// another, so the zip helper above and the tasks that call it have to be
+// compiled together.
+// ---------------------------------------------------------------------------
+
+task prepUpdateCompact(type: Copy) {
+    group = 'package'
+    description = 'Assemble the compact update payload (mirrors ant prepupdatecompact).'
+    dependsOn prepUpdateSmall
+    // The base payload from prepUpdateSmall, in its own staging dir so the
+    // compact and full chains never read or write the same files
+    from smallStageDir
+    into compactStageDir
+    into('certificates') { from 'installer/resources/certificates' }
+    into('docs/proxy') { from('installer/resources/console/proxy') { include '*.ht' } }
+    doFirst {
+        new File(compactStageDir).deleteDir()
+    }
+    // ant copies docs/history.txt through a headfilter of 1500 lines, then
+    // concats the pointer; one write, so the payload never holds a history.txt
+    // without the note
+    doLast {
+        new File(compactStageDir + '/history.txt').text = historyHead
+    }
+}
+
+// Not a Gradle Zip task: the payload needs the release number as the archive
+// comment, which the router enforces, and Gradle's Zip cannot write one.
+task updaterCompact {
+    group = 'package'
+    description = 'Build the compact update zip dist/i2pupdate.zip (mirrors ant updaterCompact; add -PnoBundle to skip translation bundling).'
+    dependsOn prepUpdateCompact
+    doLast {
+        def out = new File(distAbsDir, 'i2pupdate.zip')
+        logger.lifecycle("i2pupdate.zip: ${UpdateZip.zipIt(new File(compactStageDir), out, releaseNum, ['README.md'])}")
+    }
+}
+
+// Pack200-compress lib jars and webapps in the payload before zipping (mirrors ant pack200).
+// Uses the in-tree io.pack200 fork rather than the JDK's pack200 tool, which was removed
+// in Java 14, so this works on any modern JDK. The same jar ships as lib/pack200.jar so
+// routers can unpack what we pack here. GNU parallel is used when installed but is no
+// longer required: tools/scripts/pack200.sh falls back to a serial loop.
+def pack200MarkerAbs = "${System.getProperty('java.io.tmpdir')}/build-i2p/.pack200-before"
+// The pack200 jar's path, captured once every project has been evaluated:
+// :apps:pack200's jar task does not exist while this script is applied, and reading
+// project(...) from doFirst is rejected by the configuration cache. A captured Provider
+// is a config-cache value, so pack200Updater can read it at execution time - the file
+// itself is produced by its dependsOn, not by the lookup.
+def p200JarFile
+gradle.projectsEvaluated {
+    p200JarFile = project(':apps:pack200').jar.archiveFile
+}
+
+task prepUpdateCompact200(type: Copy) {
+    group = 'package'
+    description = 'Copy the compact payload aside for pack200 compression (ant compresses its one shared pkg-temp in place; gradle keeps the two zips apart).'
+    dependsOn prepUpdateCompact
+    includeEmptyDirs = false
+    from compactStageDir
+    into compact200StageDir
+    doFirst {
+        new File(compact200StageDir).deleteDir()
+    }
+}
+
+task pack200Updater(type: Exec) {
+    group = 'package'
+    description = 'Pack200-compress the payload lib jars and webapps (mirrors ant pack200).'
+    dependsOn prepUpdateCompact200
+    dependsOn ':apps:pack200:jar'
+    workingDir rootDirAbs
+    commandLine 'sh', 'tools/scripts/pack200.sh'
+    environment 'MODE', 'compress'
+    environment 'JAVA', "${System.getProperty('java.home')}/bin/java"
+    environment 'PKGDIR', compact200StageDir
+    environment 'MARKER', pack200MarkerAbs
+    // Read the captured Provider here, not at configuration time: projectsEvaluated has
+    // not fired yet when this task block is configured. Resolving a Provider at execution
+    // time is allowed; reaching back into project(...) is not.
+    doFirst {
+        environment 'P200JAR', p200JarFile.get().asFile.absolutePath
+    }
+}
+
+// Not a Gradle Zip task: see updaterCompact.
+task updater200Compact {
+    group = 'package'
+    description = 'Build the pack200 compact update zip dist/i2pupdate200.zip (mirrors ant updater200Compact; add -PnoBundle to skip translation bundling).'
+    dependsOn pack200Updater
+    doLast {
+        def out = new File(distAbsDir, 'i2pupdate200.zip')
+        logger.lifecycle("i2pupdate200.zip: ${UpdateZip.zipIt(new File(compact200StageDir), out, releaseNum, ['README.md'])}")
+        // Pack200 savings vs. the raw payload (mirrors ant zipit200)
+        if (new File(pack200MarkerAbs).exists()) {
+            UpdateZip.runShell(rootDirAbs, '''if [ -f __MARKER__ ]; then before=$(cat __MARKER__); zipsize=$(wc -c < dist/i2pupdate200.zip); saved=$((before - zipsize)); b_mb=$(printf "%d.%02d" $((before/1000000)) $(((before%1000000)/10000))); z_mb=$(printf "%d.%02d" $((zipsize/1000000)) $(((zipsize%1000000)/10000))); s_mb=$(printf "%d.%02d" $((saved/1000000)) $(((saved%1000000)/10000))); echo "Pack200: jars (${b_mb}MB) -> zip (${z_mb}MB) (saved ${s_mb}MB)"; rm -f __MARKER__; fi'''.replace('__MARKER__', pack200MarkerAbs))
         }
-        def rev = ant.project.properties['git.revision'] ?: 'unknown'
-        logger.lifecycle("Created I2P+ update (rev. ${rev}): ${distAbsDir}/i2pupdate.zip")
     }
 }
 

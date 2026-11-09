@@ -32,7 +32,19 @@ final def izpackWork = file("${buildDir}/izpack")
 final def launcherWork = file("${buildDir}/launch4j")
 final def izPack4Compiler = "${workspaceRootAbs}/installer/lib/izpack/4/standalone-compiler.jar"
 final def izPackPatchesJar = "${workspaceRootAbs}/installer/lib/izpack/patches.jar"
+// The IzPack 4 compiler must run with -cp, not -jar. It resolves every langpack and
+// flag as a classpath resource (./bin/langpacks/installer/<iso3>.xml,
+// ./bin/langpacks/flags/<iso3>.gif), and our custom ones live in patches.jar; -jar
+// ignores -cp and puts only the compiler jar on the classpath, so the build dies on
+// the first langpack 4.3.5 does not ship (zho, fas, ind - it spells them chn, fa, idn).
+// ant gets this for free: its <taskdef> puts patches.jar on the in-process classpath.
+final def izPack4CompilerCp = "${izPack4Compiler}:${izPackPatchesJar}"
+final def izPack4CompilerMain = 'com.izforge.izpack.compiler.Compiler'
 final def launch4jJar = "${workspaceRootAbs}/installer/lib/launch4j/launch4j.jar"
+// launch4j's bundled xstream calls sun.misc.Unsafe::objectFieldOffset, which
+// JDK 24+ reports as terminally deprecated. Left alone: the notice is upstream
+// (xstream 1.4.15, still unfixed in 1.4.21+) and the wrapped exe is unaffected -
+// the only bytes that move between runs are the PE TimeDateStamp launch4j embeds.
 final def payloadSeed = "${pkgTempDir}"
 final def distAbs = file('dist').absolutePath
 final def fullVersion = "${ext.fullVersion}"
@@ -83,7 +95,8 @@ final def installerUtil = new InstallerUtil()
 final def stageCfg = [seed: payloadSeed, launcherWork: "${launcherWork}",
            fullVersion: fullVersion, wsAbs: workspaceRootAbs, util: installerUtil]
 final def izpack4Cfg = [seed: payloadSeed, izWork: "${izpackWork}", dAbs: "${distAbs}",
-            wsAbs: workspaceRootAbs, compiler: izPack4Compiler, util: installerUtil]
+            wsAbs: workspaceRootAbs, compiler: izPack4Compiler, compilerCp: izPack4CompilerCp,
+            compilerMain: izPack4CompilerMain, util: installerUtil]
 final def izpack5Cfg = [seed: payloadSeed, izWork: "${izpackWork}", dAbs: "${distAbs}",
             wsAbs: workspaceRootAbs, iz5home: iz5home, compilerCp: iz5CompilerCp,
             util: installerUtil]
@@ -558,13 +571,22 @@ task izpackFlagGifs(type: Exec) {
   onlyIf { flagsScript.canExecute() }
 }
 
-// IzPack 4 patches jar, built from the bundled patch classes (ant izpack-patches)
+// IzPack 4 patches jar, built from the bundled patch classes (ant izpack-patches).
+// The langpack XMLs and the flag GIFs both have to be inside it: the compiler looks
+// both up as classpath resources, and a langpack whose flag the distribution does not
+// ship is a hard "ISO3 flag image not found". The flags live once in
+// installer/lib/izpack/resources/flags, shared with the IzPack 5 build, and are folded
+// in here at the path IzPack 4 hardcodes - the same zipfileset ant uses.
 task izpackPatches(type: Jar) {
   group = 'package'
   description = 'Build the IzPack 4 patches jar installer/lib/izpack/patches.jar (mirrors ant izpack-patches).'
   archiveFileName.set('patches.jar')
   destinationDirectory.set(file('installer/lib/izpack'))
   from 'installer/lib/izpack/4/patches'
+  from('installer/lib/izpack/resources/flags') {
+    into 'bin/langpacks/flags'
+    include '*.gif'
+  }
   dependsOn izpackFlagGifs
 }
 
@@ -668,7 +690,7 @@ def makeIzpack4Task(String taskName, String stageTask, String jbigiTask, String 
     description = taskDesc
     dependsOn stageTask, jbigiTask, izpackPatches, prepCfg
     // CLI is positional: the xml file comes first, '-b' is the base path and '-k' the kind
-    commandLine 'java', '-jar', cfg.compiler, descriptor,
+    commandLine 'java', '-cp', cfg.compilerCp, cfg.compilerMain, descriptor,
         '-b', cfg.wsAbs, '-k', 'standard', '-o', "${cfg.dAbs}/${outJarName}"
     inputs.files(fileTree(stageDir), file(descriptor), izpackPatches)
     outputs.file("${cfg.dAbs}/${outJarName}")
@@ -701,7 +723,7 @@ task installerW4Jar(type: Exec) {
   group = 'package'
   description = 'Build the windows-only installer jar (mirrors ant installer-windows).'
   dependsOn 'preppkg-windows-only', 'jbigi-windows', izpackPatches, prepIzpackConfigsWindows
-  commandLine 'java', '-jar', izPack4Compiler, "${izpackWork}/windows/4/install.xml",
+  commandLine 'java', '-cp', izPack4CompilerCp, izPack4CompilerMain, "${izpackWork}/windows/4/install.xml",
       '-b', workspaceRootAbs, '-k', 'standard', '-o', "${distAbs}/install-windows.jar"
   inputs.files(fileTree("${stageRoot}/windows"), file("${izpackWork}/windows/4/install.xml"), izpackPatches)
   outputs.file("${distAbs}/install-windows.jar")
