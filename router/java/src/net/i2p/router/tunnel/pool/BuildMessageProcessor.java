@@ -175,8 +175,8 @@ class BuildMessageProcessor {
                     // For ECIES routers, this is relatively common due to old routers that don't
                     // check enc type sending us ElG requests
                     if (log.shouldWarn())
-                        log.warn("[MsgID " + msg.getUniqueId() + "] Matching " + privKey.getType() + " record decryption failure \n* " +
-                                 dfe.getMessage());
+                        log.warn("[MsgID " + msg.getUniqueId() + "] Matching " + privKey.getType() +
+                                 " record decryption failure\n* Error: " + dfe.getMessage());
                     // on the microscopic chance that there's another router
                     // out there with the same first 16 bytes, go around again
                 }

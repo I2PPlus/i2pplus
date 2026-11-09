@@ -6987,7 +6987,7 @@ public class TunnelPool {
                 // (573 in half an hour) passes through today.
                 _log.warnThrottled("pool-starvation-declined",
                                    toString() + " -> Pool empty with " + fastPeers +
-                                   " fast peers available, not widening the peer activity window");
+                                   " fast peers available\n* Not widening the peer activity window");
             }
             return;
         }
