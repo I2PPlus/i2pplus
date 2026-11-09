@@ -460,17 +460,42 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
                          !ctx.commSystem().haveInboundCapacity(95);
         boolean hiddenInbound = hidden && isInbound;
         boolean hiddenOutbound = hidden && !isInbound;
-        int ipRestriction = settings.getIPRestriction();
-        // Reduce IP restriction under low tunnel build success to improve diversity
-        if (ipRestriction > 0 && length > 1) {
-            if (buildSuccess < ATTACK_THRESHOLD) {
-                ipRestriction = Math.max(0, ipRestriction - 1);
-            }
-        }
-        if (ctx.getBooleanProperty("i2np.allowLocal") || length <= 1) {ipRestriction = 0;}
-        MaskedIPSet ipSet = ipRestriction > 0 ? new MaskedIPSet(ipRestriction) : null;
+        int ipRestriction = ipRestrictionFor(settings, length, buildSuccess,
+                                             ctx.getBooleanProperty("i2np.allowLocal"));
+        MaskedIPSet ipSet = ipRestriction > 0 ? new MaskedIPSet(16) : null;
         return new SelectionParams(isInbound, buildSuccess, useHighCapPrimary, checkClosestHop,
                                    hidden, hiddenInbound, hiddenOutbound, ipRestriction, ipSet);
+    }
+
+    /**
+     * The subnet-diversity mask in force for one tunnel build: the number of
+     * leading address bytes compared when rejecting a peer that shares a subnet,
+     * port or family with a hop already chosen. 0 disables the gate.
+     * <p>
+     * While build success is in attack territory the gate is loosened by matching
+     * a <em>finer</em> prefix, not a coarser one: 2 rejects a peer sharing a /16
+     * with a hop, 3 only one sharing a /24. Subtracting instead — which this used
+     * to do, on a comment about improving diversity — compared /8s and rejected
+     * strictly more peers, the opposite of what a collapsing pool needs. Capped at
+     * 4, an exact-address match.
+     * <p>Pure decision — no context access, safe for unit tests.
+     *
+     * @param settings the pool's settings, source of the configured restriction
+     * @param length tunnel length being built; a single hop has no second peer to
+     *               be diverse from, so the gate is off
+     * @param buildSuccess the tunnel build success ratio, fetched once per selection
+     * @param allowLocal the {@code i2np.allowLocal} property, which turns the gate
+     *                   off entirely so local peers may share an address
+     * @return the mask to use, 0-4; 0 means no restriction
+     * @since 0.9.74+
+     */
+    static int ipRestrictionFor(TunnelPoolSettings settings, int length, double buildSuccess, boolean allowLocal) {
+        if (allowLocal || length <= 1)
+            return 0;
+        int ipRestriction = settings.getIPRestriction();
+        if (ipRestriction > 0 && buildSuccess < ATTACK_THRESHOLD)
+            ipRestriction = Math.min(4, ipRestriction + 1);
+        return ipRestriction;
     }
 
     /**

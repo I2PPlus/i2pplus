@@ -258,7 +258,7 @@ import net.i2p.util.SystemVersion;
         boolean hiddenOutbound = hidden && !isInbound;
         boolean lowOutbound = nonzero && !isInbound && !ctx.commSystem().haveHighOutboundCapacity();
         int ipRestriction =  (ctx.getBooleanProperty("i2np.allowLocal") || length <= 1) ? 0 : settings.getIPRestriction();
-        MaskedIPSet ipSet = ipRestriction > 0 ? new MaskedIPSet(ipRestriction) : null;
+        MaskedIPSet ipSet = ipRestriction > 0 ? new MaskedIPSet(16) : null;
 
         ArrayList<Hash> rv = new ArrayList<>(length + 3);
 
