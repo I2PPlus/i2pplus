@@ -1,4 +1,4 @@
-<%@ page import="net.i2p.I2PAppContext, net.i2p.router.web.GraphGenerator, net.i2p.router.web.GraphGroups, net.i2p.stat.Rate, net.i2p.stat.RateStat, net.i2p.data.DataHelper, java.util.Set, java.util.HashSet, java.util.Collections, java.util.LinkedHashSet, net.i2p.router.web.GraphListener" buffer="64kb" trimDirectiveWhitespaces="true" %>
+<%@ page import="net.i2p.I2PAppContext, net.i2p.router.web.GraphGenerator, net.i2p.router.web.GraphGroups, net.i2p.stat.Rate, net.i2p.stat.RateStat, net.i2p.data.DataHelper, java.util.Set, java.util.HashSet, java.util.Collections, java.util.LinkedHashSet, net.i2p.router.web.GraphListener" buffer="64kb" trimDirectiveWhitespaces="true" pageEncoding="UTF-8" %>
 <%
     /*
     * USE CAUTION WHEN EDITING

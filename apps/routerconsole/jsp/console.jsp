@@ -1,4 +1,4 @@
-<%
+<%@page pageEncoding="UTF-8" %><%
     response.setStatus(301);
     response.setHeader("Cache-Control","immutable");
     response.setHeader("Location","/help/newusers");

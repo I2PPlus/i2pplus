@@ -1,4 +1,4 @@
-<%
+<%@page pageEncoding="UTF-8" %><%
 /*
  * USE CAUTION WHEN EDITING
  * Trailing whitespace OR NEWLINE on the last line will cause

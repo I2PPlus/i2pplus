@@ -1,4 +1,4 @@
-<%@page contentType="text/plain"%>
+<%@page contentType="text/plain" pageEncoding="UTF-8"%>
 <jsp:useBean id="helper" class="net.i2p.router.web.helpers.StatHelper"/>
 <%
    String i2pcontextId = null;

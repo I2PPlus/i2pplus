@@ -1,4 +1,4 @@
-<%
+<%@page pageEncoding="UTF-8" %><%
    String i2pcontextId = null;
    try {
        i2pcontextId = (String) session.getAttribute("i2p.contextId");

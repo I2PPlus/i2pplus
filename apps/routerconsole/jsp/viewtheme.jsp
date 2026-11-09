@@ -1,4 +1,4 @@
-<%@ page import="javax.servlet.http.HttpServletResponse" trimDirectiveWhitespaces="true"%>
+<%@ page import="javax.servlet.http.HttpServletResponse" trimDirectiveWhitespaces="true" pageEncoding="UTF-8" %>
 <%
     /*
      * USE CAUTION WHEN EDITING
