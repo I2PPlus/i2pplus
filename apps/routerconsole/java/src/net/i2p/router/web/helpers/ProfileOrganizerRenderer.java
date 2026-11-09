@@ -549,14 +549,14 @@ class ProfileOrganizerRenderer {
             // ratio for the life of the profile, while the bar it was measured
             // against has decayed to nothing; show the number actually in force.
             float lossRatio = prof.getLossScore(_context.clock().now());
-            if (lossRatio > 0.0f) {
+            if (lossRatio >= 1.0f) {
                 int lossPct = Math.round(lossRatio * 100);
                 buf.append("</td><td data-sort=").append(lossPct)
                    .append("><span class=\"percentBarOuter\"><span class=percentBarInner style=\"width:")
                    .append(lossPct).append("%\"><span class=percentBarText>")
                    .append(lossPct).append("%</span></span></span>");
             } else {
-                buf.append("</td><td data-sort=0><span hidden>0</span><span>&ensp;</span>");
+                buf.append("</td><td>");
             }
             int agreed = Math.round(prof.getTunnelHistory().getLifetimeAgreedTo());
             int rejected = Math.round(prof.getTunnelHistory().getLifetimeRejected());
@@ -571,12 +571,15 @@ class ProfileOrganizerRenderer {
                .append("</td><td data-sort=")
                .append(prof.getFirstHeardAbout())
                .append(">");
-             long now = _context.clock().now();
+            long now = _context.clock().now();
             if (prof.getFirstHeardAbout() > 0) {
                buf.append(formatInterval(now, prof.getFirstHeardAbout()));
             }
-            buf.append("</td><td data-sort=").append(prof.getLastHeardFrom() - now).append(">")
-               .append(formatInterval(now, prof.getLastHeardFrom())).append("</td><td nowrap class=viewedit>");
+            buf.append("</td><td data-sort=")
+               .append(prof.getLastHeardFrom() - now)
+               .append(">")
+               .append(formatInterval(now, prof.getLastHeardFrom()))
+               .append("</td><td nowrap class=viewedit>");
              String viewProfile = _t("View profile");
              String configurePeer = _t("Configure Peer");
              if (prof != null) {
@@ -597,8 +600,8 @@ class ProfileOrganizerRenderer {
                .append("\" alt=\"[")
                .append(configurePeer)
                .append("]\">")
-                .append(_t("Edit"))
-                .append("</a></td></tr>\n");
+               .append(_t("Edit"))
+               .append("</a></td></tr>\n");
             if (stream && ++rowsSinceFlush >= STREAM_BATCH) {
                 out.append(buf);
                 out.flush();
