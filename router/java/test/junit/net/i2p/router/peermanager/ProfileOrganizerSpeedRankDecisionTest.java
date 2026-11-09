@@ -4,13 +4,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+
+import net.i2p.data.Hash;
+import net.i2p.router.RouterContext;
+import net.i2p.router.RouterTestHelper;
 
 import org.junit.Test;
 
@@ -31,10 +33,23 @@ import org.junit.Test;
  */
 public class ProfileOrganizerSpeedRankDecisionTest {
 
+    /**
+     * One instance per test method, as JUnit builds a fresh test object for each
+     * one; the class carries no per-test state, only the pinned clock the
+     * decisions are called with.
+     *
+     * @since 0.9.74+
+     */
+    public ProfileOrganizerSpeedRankDecisionTest() {}
+
     private static final long NOW = 2_000_000_000L;
     /** Capacity of every qualifying profile; decoys sit below it. */
     private static final float CAPACITY = 10.0f;
     private static final double CAPACITY_THRESHOLD = 10.0;
+    /** Shared context — PeerProfile's constructor wants a log manager and a clock. */
+    private static final RouterContext CTX = RouterTestHelper.getContext();
+    /** One identity for every profile here; the tests compare profiles, not peers. */
+    private static final Hash PEER = Hash.create(new byte[Hash.HASH_LENGTH]);
 
     // ---- speedThresholdCutoff ----
 
@@ -249,11 +264,28 @@ public class ProfileOrganizerSpeedRankDecisionTest {
         return all;
     }
 
+    /**
+     * A profile with pinned capacity, activity and speed.
+     * <p>Hand-written rather than a Mockito mock: the randomized sweep below
+     * builds some 90 000 of these, and three stubbings each put this class past
+     * ant's 15s per-class fork timeout, which surfaces as a timeout error with
+     * no failure line and no indication of which method was at fault.
+     *
+     * @param capacity the value {@link PeerProfile#getCapacityValue()} reports
+     * @param active the value {@link PeerProfile#getIsActive(long)} reports
+     * @param speed the value {@link PeerProfile#getSpeedValue()} reports
+     * @return a profile carrying those three values and nothing else
+     */
     private static PeerProfile profile(float capacity, boolean active, float speed) {
-        PeerProfile profile = mock(PeerProfile.class);
-        when(profile.getCapacityValue()).thenReturn(capacity);
-        when(profile.getIsActive(NOW)).thenReturn(active);
-        when(profile.getSpeedValue()).thenReturn(speed);
-        return profile;
+        return new PeerProfile(CTX, PEER) {
+            @Override
+            public float getCapacityValue() {return capacity;}
+
+            @Override
+            public boolean getIsActive(long now) {return active;}
+
+            @Override
+            public float getSpeedValue() {return speed;}
+        };
     }
 }
