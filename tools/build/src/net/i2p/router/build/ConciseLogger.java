@@ -124,7 +124,9 @@ public class ConciseLogger extends DefaultLogger {
                 String prefix = "      ";
                 String outMsg = msg;
                 if (msg.startsWith("*")) {
-                    if (msg.contains("Translation coverage")) {
+                    // "* text" is a checker's own info line, keep the bullet;
+                    // "*   text" is a continuation of one, indent it instead
+                    if (msg.startsWith("* ") && !msg.startsWith("*  ")) {
                         outMsg = msg;
                     } else {
                         outMsg = " " + msg.substring(1);
