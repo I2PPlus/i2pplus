@@ -5,7 +5,32 @@
 </head>
 <body>
 <p>
-    Servlet filters for I2P webapps: XSS protection and X-Forwarded header handling.
+    The servlet filters the I2P webapps run in front of their pages. The package
+    is held by two modules, so it has one package comment, this one, in the Jetty
+    layer where the generic filters live.
+    {@link net.i2p.servlet.filters.XSSFilter} guards against cross-site scripting
+    by wrapping each request in
+    {@link net.i2p.servlet.filters.XSSRequestWrapper}, which answers parameter and
+    header reads from a whitelist of allowed characters.
+    {@link net.i2p.servlet.filters.XI2PLocationFilter} adds an
+    {@code X-I2P-Location} header naming the I2P-equivalent URL to a request that
+    arrived on a non-I2P hostname, so a client can offer the reader the I2P site
+    instead; it is enabled by {@code i2p.tunnel.webserverLocationHeader}.
+</p>
+<p>
+    The console-only filters are in the router console module under this same
+    package name: {@link net.i2p.servlet.filters.AuthFilter} checks every request
+    for a valid console session and sends the reader to the login page when there
+    is none, {@link net.i2p.servlet.filters.SameSiteCookieFilter} adds
+    {@code SameSite=Lax} to the cookies on the way out, as defense in depth behind
+    the setting in web.xml, and
+    {@link net.i2p.servlet.filters.SessionManager} is the in-memory session store
+    with expiries that the auth filter reads. Nothing about how a console page is
+    rendered is in this package.
+</p>
+<p>
+    Installed through a webapp's web.xml or by the Jetty starter, not called
+    directly by application code.
 </p>
 </body>
 </html>
