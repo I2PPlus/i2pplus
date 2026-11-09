@@ -7,7 +7,11 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.AbstractMap;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
@@ -39,6 +43,15 @@ import org.junit.Test;
  * keys claimed by other peers, so if the two sides ever build keys differently
  * they never match and the gate silently stops rejecting anything.
  *
+ * <p>And it pins who may claim. Only a peer that passes claims its fingerprints,
+ * as mainline does. The 0.9.71+ rewrite also claimed a rejected peer's keys, to
+ * make the outcome order-independent, but the accumulator is shared across a
+ * whole tunnel build, so that claim outlives the candidate that made it: each
+ * pass claimed every candidate it sampled — 256 per hop — and the last hop of a
+ * build found zero selectable peers while the tier reported itself full. What
+ * reaches that accumulator is pinned too: only the peers the cascade actually
+ * selected, never a candidate that merely lost the priority pick.
+ *
  * <p>The direction-pinning pair matters on its own: a peer on a fresh subnet
  * must pass and a peer sharing a fingerprint with an accepted peer must fail.
  * Asserting only the second would also pass under the inverted polarity.
@@ -47,6 +60,15 @@ import org.junit.Test;
  * @since 0.9.71+
  */
 public class ProfileOrganizerSubnetDiversityTest {
+
+    /**
+     * One instance per test method, as JUnit builds a fresh test object for each
+     * one; the class carries no per-test state, only the fixtures the gate is
+     * called with.
+     *
+     * @since 0.9.74+
+     */
+    public ProfileOrganizerSubnetDiversityTest() {}
 
     private static final int MASK = 2;
 
@@ -169,11 +191,18 @@ public class ProfileOrganizerSubnetDiversityTest {
         assertFalse(ProfileOrganizer.notRestricted(ctx(noIp, new byte[] {1, 2, 99, 4}), hash(2), ipSet, MASK));
     }
 
-    // ---- order independence ----
+    // ---- who gets to claim a fingerprint ----
 
-    /** A rejected peer claims its keys too, so evaluation order cannot change the outcome. */
+    /**
+     * A rejected peer claims nothing. The accumulator is shared across a whole
+     * tunnel build — one {@link MaskedIPSet} handed to every hop and every
+     * fallback tier — so a key claimed by a peer that was never used stays
+     * excluded for the rest of the build. Claiming on rejection is what starved
+     * the live router: each pass claimed every candidate it sampled, 256 per hop,
+     * and the last hop of the build found "IP gate: 764" with zero candidates.
+     */
     @Test
-    public void rejectedPeerStillClaimsItsKeys() {
+    public void rejectedPeerDoesNotClaimItsKeys() {
         Set<String> claimed = new HashSet<>();
         Set<String> first = new HashSet<>();
         first.add(".aa");
@@ -183,27 +212,45 @@ public class ProfileOrganizerSubnetDiversityTest {
         second.add(".bb");
         assertTrue(ProfileOrganizer.tryClaimKeys(claimed, first));
         assertFalse(ProfileOrganizer.tryClaimKeys(claimed, second));
-        assertEquals(3, claimed.size());
-        assertTrue(claimed.contains(".bb"));
+        assertEquals(2, claimed.size());
+        assertFalse(claimed.contains(".bb"));
     }
 
     /**
-     * The same three peers evaluated the other way round reject the other peer,
-     * never both of them — exactly the property the unconditional claim buys.
+     * The first peer of a subnet claims it, and a peer rejected against that
+     * claim leaves everything else it owns free for the next hop or the next
+     * pass. Order therefore matters, and that is acceptable: the scan starts at
+     * a random offset each pass, so which peer claims a subnet varies by build.
      */
     @Test
-    public void gateOutcomeDependsOnlyOnTheSharedKey() {
+    public void firstClaimerWinsAndRejectionsLeaveTheRestFree() {
         Set<String> claimed = new HashSet<>();
-        Set<String> a = new HashSet<>();
-        a.add(".aa");
         Set<String> b = new HashSet<>();
         b.add(".aa");
         b.add(".bb");
+        Set<String> a = new HashSet<>();
+        a.add(".aa");
         Set<String> c = new HashSet<>();
         c.add(".cc");
         assertTrue(ProfileOrganizer.tryClaimKeys(claimed, b));
         assertFalse(ProfileOrganizer.tryClaimKeys(claimed, a));
         assertTrue(ProfileOrganizer.tryClaimKeys(claimed, c));
+        assertEquals(3, claimed.size());
+    }
+
+    /**
+     * The live failure, end to end: hop 1 takes a peer, hop 2's candidate is
+     * rejected for sharing that peer's port, and hop 3 still finds a peer in the
+     * subnet hop 2's rejected candidate sat in. Under the claim-on-rejection rule
+     * hop 3 was excluded by a peer no tunnel ever used.
+     */
+    @Test
+    public void rejectedCandidateLeavesItsSubnetUsableForLaterHops() {
+        MaskedIPSet ipSet = new MaskedIPSet();
+        assertTrue(ProfileOrganizer.notRestricted(ctx(ri(1024, null, "1.2.3.4"), null), hash(1), ipSet, MASK));
+        // Rejected on the shared port, not on its address
+        assertFalse(ProfileOrganizer.notRestricted(ctx(ri(1024, null, "9.9.9.9"), null), hash(2), ipSet, MASK));
+        assertTrue(ProfileOrganizer.notRestricted(ctx(ri(2048, null, "9.9.5.5"), null), hash(3), ipSet, MASK));
     }
 
     /** Nothing known about the peer means nothing to collide with. */
@@ -211,6 +258,80 @@ public class ProfileOrganizerSubnetDiversityTest {
     public void noFingerprintsPasses() {
         assertTrue(ProfileOrganizer.tryClaimKeys(new HashSet<>(), new HashSet<>()));
         assertTrue(ProfileOrganizer.notRestricted(ctx(new RouterInfo(), null), hash(1), new MaskedIPSet(), MASK));
+    }
+
+    // ---- what reaches the build's accumulator ----
+
+    /**
+     * A candidate that passed the gate but lost the priority pick leaves no mark
+     * on the accumulator, so the next hop of the same build may still use its
+     * subnet. Only the peers the cascade actually selected are merged back.
+     */
+    @Test
+    public void onlySelectedCandidatesReachTheAccumulator() {
+        Set<String> ipSet = new HashSet<>();
+        List<Set<String>> candidateKeys = Arrays.asList(keys(".aa", "p1"), keys(".bb", "p2"), keys(".cc"));
+        List<Map.Entry<Hash, PeerProfile>> candidates = Arrays.asList(entry(1), entry(2), entry(3));
+        Set<Hash> selected = new HashSet<>();
+        selected.add(hash(1));
+        ProfileOrganizer.mergeSelectedFingerprints(ipSet, candidateKeys, candidates, selected);
+        assertEquals(2, ipSet.size());
+        assertTrue(ipSet.contains(".aa"));
+        assertTrue(ipSet.contains("p1"));
+        assertFalse(ipSet.contains(".bb"));
+        assertFalse(ipSet.contains(".cc"));
+    }
+
+    /**
+     * The merge adds to what the earlier hops of this build already claimed — it
+     * never replaces the accumulator, which would let a later hop reuse a subnet
+     * an earlier hop is already tunnelling through.
+     */
+    @Test
+    public void mergeAddsToWhatEarlierHopsClaimed() {
+        Set<String> ipSet = keys(".pre", "p0");
+        List<Set<String>> candidateKeys = Arrays.asList(keys(".aa"));
+        List<Map.Entry<Hash, PeerProfile>> candidates = Arrays.asList(entry(1));
+        Set<Hash> selected = new HashSet<>();
+        selected.add(hash(1));
+        ProfileOrganizer.mergeSelectedFingerprints(ipSet, candidateKeys, candidates, selected);
+        assertEquals(3, ipSet.size());
+        assertTrue(ipSet.contains(".pre"));
+        assertTrue(ipSet.contains(".aa"));
+    }
+
+    /** A candidate with nothing to fingerprint holds a null entry, not an NPE. */
+    @Test
+    public void nullFingerprintsAreSkipped() {
+        Set<String> ipSet = new HashSet<>();
+        List<Set<String>> candidateKeys = Arrays.asList((Set<String>) null, keys(".dd"));
+        List<Map.Entry<Hash, PeerProfile>> candidates = Arrays.asList(entry(1), entry(2));
+        Set<Hash> selected = new HashSet<>();
+        selected.add(hash(1));
+        selected.add(hash(2));
+        ProfileOrganizer.mergeSelectedFingerprints(ipSet, candidateKeys, candidates, selected);
+        assertEquals(1, ipSet.size());
+        assertTrue(ipSet.contains(".dd"));
+    }
+
+    /**
+     * One candidate's fingerprints, as the scan would have claimed them.
+     *
+     * @param fingerprints the fingerprints to hold, in no particular order
+     * @return a mutable set containing each of them
+     */
+    private static Set<String> keys(String... fingerprints) {
+        return new HashSet<>(Arrays.asList(fingerprints));
+    }
+
+    /**
+     * A candidate entry; the merge reads only the peer hash, never the profile.
+     *
+     * @param b selects the peer's hash, see {@link #hash(int)}
+     * @return an entry carrying that peer and a null profile
+     */
+    private static Map.Entry<Hash, PeerProfile> entry(int b) {
+        return new AbstractMap.SimpleEntry<Hash, PeerProfile>(hash(b), null);
     }
 
     // ---- key format ----

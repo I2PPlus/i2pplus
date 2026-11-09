@@ -3879,8 +3879,16 @@ public class ProfileOrganizer {
      * loosens as the tier thins and tightens to the configured value once the tier
      * is deep enough to replace what it expels, so it already accounts for depth.
      *
-     * @param aboveRttBar  the peer's measured latency is at or above the RTT ceiling
-     * @param aboveLossBar the peer's decayed loss score is at or above this tier's threshold
+     * @param banned               the peer is banlisted
+     * @param unreachable          the transport reports the peer unreachable
+     * @param tierCapable          the peer still meets its tier's bandwidth class
+     * @param softEvictionAllowed  whether the tier is above the soft-purge threshold
+     * @param hasRecentFailures    the peer has sustained recent build/test failures
+     * @param inLossProbation      the peer is inside its loss-probation window
+     * @param lowAcceptance        the peer's tunnel acceptance is below the bar
+     * @param aboveRttBar          the peer's measured latency is at or above the RTT ceiling
+     * @param aboveLossBar         the peer's decayed loss score is at or above this
+     *                             tier's threshold
      * @return the reason to evict for, or null to leave the peer in place
      * @since 0.9.72+
      */
@@ -5038,6 +5046,16 @@ public class ProfileOrganizer {
         int start = peerCount > maxCandidates ? ThreadLocalRandom.current().nextInt(peerCount) : 0;
         List<Map.Entry<Hash, PeerProfile>> candidates =
                 new ArrayList<Map.Entry<Hash, PeerProfile>>(Math.min(maxCandidates, peerCount));
+        // Fingerprints are claimed against a scratch copy of the build's accumulator,
+        // and only the peers this pass actually picks are merged back. Claiming
+        // during the scan writes straight through to ipSet, which is shared by every
+        // hop and every fallback tier of the build, so a candidate that merely lost
+        // the priority pick kept its subnet out of the next hop's reach. With the
+        // sample at 256 that is 256 subnets burned per hop — the live router's
+        // "IP gate: 764" against a 971-peer tier, with zero candidates left.
+        Set<String> claimed = mask > 0 ? new HashSet<String>(ipSet) : null;
+        List<Set<String>> candidateKeys =
+                mask > 0 ? new ArrayList<Set<String>>(Math.min(maxCandidates, peerCount)) : null;
         int examined = 0;
         int skipExcluded = 0;
         int skipPicked = 0;
@@ -5098,14 +5116,22 @@ public class ProfileOrganizer {
                 skipRtt++;
                 continue;
             }
-            // Subnet diversity runs last: notRestricted() marks this peer's subnet
-            // (the mask's prefix length, e.g. /16) as used in ipSet, so running it
-            // before the RTT gate would consume that subnet for a peer then rejected.
-            if (mask > 0 && !notRestricted(peer, ipSet, mask)) {
-                skipIp++;
-                continue;
+            // Subnet diversity runs last: the claim below marks this peer's subnet
+            // (the mask's prefix length, e.g. /16) as used, so running it before
+            // the RTT gate would consume that subnet for a peer then rejected.
+            Set<String> keys = null;
+            if (mask > 0) {
+                keys = fingerprints(_context, peer, mask);
+                if (!tryClaimKeys(claimed, keys)) {
+                    skipIp++;
+                    continue;
+                }
             }
             candidates.add(entry);
+            // Kept index-aligned with candidates so the merge below can tell a
+            // picked candidate from one the priority pick did not take.
+            if (claimed != null)
+                candidateKeys.add(keys);
         }
 
         // Every reason the logger reports must be able to trigger it. Omitting one
@@ -5122,6 +5148,44 @@ public class ProfileOrganizer {
         // Moderately-lossy peers get their range widened so they are picked only
         // when the clean candidates run out — lossiness as one signal, not a gate.
         lockedPickLowestPriority(candidates, howMany, matches);
+
+        // Merge back only the fingerprints of the peers this build actually used.
+        // A candidate the pick did not take leaves no mark on the accumulator, so
+        // the next hop is still free to use its subnet, port and family.
+        if (claimed != null)
+            mergeSelectedFingerprints(ipSet, candidateKeys, candidates, matches);
+    }
+
+    /**
+     * Copy into the build's subnet accumulator the fingerprints of the candidates
+     * this pass actually selected, and of those only.
+     * <p>
+     * The scan claims against a scratch copy of the accumulator, so a candidate
+     * rejected by the subnet gate, and one that merely lost the priority pick,
+     * both leave no mark. That matters because {@code ClientPeerSelector} hands
+     * one accumulator to every hop and every fallback tier of a tunnel build: a
+     * claim made by a peer no hop ever used stays excluded for the rest of the
+     * build, which is how a 256-peer sample came to burn 764 fingerprints and
+     * leave the last hop with nothing selectable.
+     * <p>Pure decision — no context access, safe for unit tests.
+     *
+     * @param ipSet the build's subnet accumulator, mutated in place
+     * @param candidateKeys one entry per candidate, index-aligned with
+     *                      {@code candidates}, holding null when the peer had no
+     *                      fingerprints
+     * @param candidates the candidates this pass collected, in scan order
+     * @param selected the peers selected across the whole cascade, including
+     *                 those picked by an earlier tier
+     * @since 0.9.74+
+     */
+    static void mergeSelectedFingerprints(Set<String> ipSet, List<Set<String>> candidateKeys,
+                                          List<Map.Entry<Hash, PeerProfile>> candidates, Set<Hash> selected) {
+        int sz = candidates.size();
+        for (int i = 0; i < sz; i++) {
+            Set<String> keys = candidateKeys.get(i);
+            if (keys != null && selected.contains(candidates.get(i).getKey()))
+                ipSet.addAll(keys);
+        }
     }
 
     /**
@@ -5325,7 +5389,7 @@ public class ProfileOrganizer {
      * Subnet-diversity gate for the running router.
      *
      * @param peer the peer whose addresses, ports and family are fingerprinted
-     * @param ipSet the fingerprints claimed by the peers evaluated so far
+     * @param ipSet the fingerprints claimed by the peers selected so far
      * @param mask leading address bytes to match, as taken by
      *             {@link MaskedIPSet#maskedIPKey(byte[], int)}
      * @return true if the peer passed the gate and may be selected
@@ -5346,10 +5410,14 @@ public class ProfileOrganizer {
      * then added the keys. Inlining the build folded the collision test into the
      * adds, which inverted the result and let a peer collide with itself; both
      * are corrected here while keeping the single pass over the RouterInfo.
+     * <p>
+     * Only a peer that passes claims its fingerprints — see
+     * {@link #tryClaimKeys(Set, Set)} for why claiming a rejected peer's keys
+     * starves the rest of the build.
      *
      * @param ctx supplies the comm system IP and the NetDb lookup
      * @param peer the peer whose addresses, ports and family are fingerprinted
-     * @param ipSet the fingerprints claimed by the peers evaluated so far
+     * @param ipSet the fingerprints claimed by the peers selected so far
      * @param mask leading address bytes to match, as taken by
      *             {@link MaskedIPSet#maskedIPKey(byte[], int)}
      * @return true if the peer passed the gate and may be selected
@@ -5402,28 +5470,37 @@ public class ProfileOrganizer {
 
     /**
      * The diversity gate itself: report whether any of this peer's fingerprints
-     * is already claimed, and claim them all either way.  A peer passes only when
+     * is already claimed, and claim them only if none was.  A peer passes when
      * none of its keys was claimed, so one peer per masked subnet, per port and
      * per family gets through.
      * <p>
-     * Claiming a rejected peer's keys is load-bearing: it keeps the outcome the
-     * same whichever order the candidates are evaluated in, so a peer cannot
-     * pass the gate merely because selection happened to look at it first.
+     * A rejected peer must NOT claim its keys. The accumulator is not per pass:
+     * {@code ClientPeerSelector} builds one {@link MaskedIPSet} per tunnel build
+     * and hands it to every hop and every fallback tier, so a key claimed by a
+     * peer that was never used stays excluded for the rest of the build. Claiming
+     * them anyway — which the 0.9.71+ refactor did to make the outcome
+     * order-independent — let each pass claim every candidate it sampled. The
+     * sample is 256 peers and a build runs the scan once per hop, so the
+     * accumulator held some 770 fingerprints before the last hop even started:
+     * "Examined 971 peers * IP gate: 764 * RTT gate: 7" with zero candidates,
+     * while the tier reported itself full. Order-independence is not worth that;
+     * the scan starts at a random offset each pass, so which peer claims a subnet
+     * first already varies from build to build. This matches mainline.
      *
-     * @param claimed the fingerprints claimed by the peers evaluated so far
+     * @param claimed the fingerprints claimed by the peers selected so far
      * @param candidateKeys one peer's fingerprints, already deduplicated
      * @return true if none of the candidate keys was claimed yet, i.e. the peer
-     *         passed; an empty candidate list passes vacuously
+     *         passed and its keys are now claimed; an empty candidate list passes
+     *         vacuously and claims nothing
      * @since 0.9.71+
      */
     static boolean tryClaimKeys(Set<String> claimed, Set<String> candidateKeys) {
-        boolean collision = false;
         for (String key : candidateKeys) {
             if (claimed.contains(key))
-                collision = true;
+                return false;
         }
         claimed.addAll(candidateKeys);
-        return !collision;
+        return true;
     }
 
     /**
