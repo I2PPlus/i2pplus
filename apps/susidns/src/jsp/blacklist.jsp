@@ -34,7 +34,7 @@
                     originHost = colon > 0 ? rest.substring(0, colon) : rest;
                     originPort = colon > 0 ? Integer.parseInt(rest.substring(colon + 1)) : 443;
                 } else {
-                    allowed = true; originHost = null; originPort = 0;
+                    allowed = false; originHost = null; originPort = 0;
                 }
                 if (allowed && host != null) {
                     int colon = host.indexOf(':');
@@ -42,7 +42,7 @@
                     int reqPort = colon > 0 ? Integer.parseInt(host.substring(colon + 1)) : (request.isSecure() ? 443 : 80);
                     allowed = originHost != null && originHost.equals(reqHost) && originPort == reqPort;
                 }
-            } catch (Exception e) { allowed = true; }
+            } catch (Exception e) { allowed = false; }
         }
         if (!allowed) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "Invalid Origin header for POST request");

@@ -14,7 +14,7 @@
 <jsp:useBean id="intl" class="i2p.susi.dns.Messages" scope="application"/>
 <jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application"/>
 <jsp:setProperty name="book" property="*"/>
-<% 
+<%
     book.storeMethod(request.getMethod());
     // CSRF: Validate Origin header for POST requests
     if ("POST".equals(request.getMethod())) {
@@ -36,7 +36,7 @@
                     originHost = colon > 0 ? rest.substring(0, colon) : rest;
                     originPort = colon > 0 ? Integer.parseInt(rest.substring(colon + 1)) : 443;
                 } else {
-                    allowed = true;
+                    allowed = false;
                     originHost = null; originPort = 0;
                 }
                 if (allowed && host != null) {
@@ -47,7 +47,7 @@
                     allowed = originHost != null && originHost.equals(reqHost) && originPort == reqPort;
                 }
             } catch (Exception e) {
-                allowed = true;
+                allowed = false;
             }
         }
         if (!allowed) {

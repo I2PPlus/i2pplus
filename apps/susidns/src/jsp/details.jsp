@@ -35,7 +35,7 @@
                     originHost = colon > 0 ? rest.substring(0, colon) : rest;
                     originPort = colon > 0 ? Integer.parseInt(rest.substring(colon + 1)) : 443;
                 } else {
-                    allowed = true; originHost = null; originPort = 0;
+                    allowed = false; originHost = null; originPort = 0;
                 }
                 if (allowed && host != null) {
                     int colon = host.indexOf(':');
@@ -43,7 +43,7 @@
                     int reqPort = colon > 0 ? Integer.parseInt(host.substring(colon + 1)) : (request.isSecure() ? 443 : 80);
                     allowed = originHost != null && originHost.equals(reqHost) && originPort == reqPort;
                 }
-            } catch (Exception e) { allowed = true; }
+            } catch (Exception e) { allowed = false; }
         }
         if (!allowed) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "Invalid Origin header for POST request");
@@ -98,7 +98,6 @@
             boolean showNotes = !book.getBook().equals("published");
             for (i2p.susi.dns.AddressBean addr : addrs) {
                 String b32 = addr.getB32(); %>
-<jsp:setProperty name="book" property="trClass"	value="0"/>
 <div class=headline>
 <h3><%=intl._t("Details")%>: <%=addr.getName()%></h3>
 </div>
@@ -153,7 +152,7 @@
 <td class=destinations><div class=destaddress tabindex=0><%=addr.getDestination()%></div></td>
 </tr>
 <%              if (showNotes) { %>
-<tr class="list${book.trClass}" id=hostNotes>
+<tr id=hostNotes>
 <td><%=intl._t("Notes")%></td>
 <td><textarea id=addNotes name="nofilter_notes" rows=3 style=height:6em cols=70 placeholder="<%=intl._t("Add notes about domain")%>"><%=addr.getNotes()%></textarea>
 <input class=accept type=submit name=action value="<%=intl._t("Save Notes")%>"></td>
