@@ -33,7 +33,7 @@
 <head>
 <meta charset=utf-8>
 <title><%=intl._t("Tunnel Manager")%></title>
-<link href="<%=activeTheme%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet> 
+<link href="<%=activeTheme%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
 <link href="<%=activeTheme%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
 <link href="<%=activeTheme%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
 <link href="<%=activeTheme%>../images/i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
@@ -323,9 +323,9 @@ SSL
             boolean has7 = editBean.hasEncType(curServer, 7);
 %>
 <%          if (has0 && has4) { %><span class=encType title="<%=intl._t("Supported encryption")%>: ECIES-X25519 & ElGamal-2048">ECIES & ElGamal</span><% } %>
-<%          else if (has4 && has5) { %><span class=encType title="<%=intl._t("Supported encryption")%>: MLKEM512-X25519 & ECIES-X25519">MLKEM512 & ECIES</span><% } %> 
+<%          else if (has4 && has5) { %><span class=encType title="<%=intl._t("Supported encryption")%>: MLKEM512-X25519 & ECIES-X25519">MLKEM512 & ECIES</span><% } %>
 <%          else if (has4 && has6) { %><span class=encType title="<%=intl._t("Supported encryption")%>: MLKEM768-X25519 & ECIES-X25519">MLKEM768 & ECIES</span><% } %>
-<%          else if (has4 && has7) { %><span class=encType title="<%=intl._t("Supported encryption")%>: MLKEM1024-X25519 & ECIES-X25519">MLKEM1024 & ECIES</span><% } %> 
+<%          else if (has4 && has7) { %><span class=encType title="<%=intl._t("Supported encryption")%>: MLKEM1024-X25519 & ECIES-X25519">MLKEM1024 & ECIES</span><% } %>
 <%          else if (has0) { %><span class=encType title="<%=intl._t("Supported encryption")%>: ElGamal-2048">ElGamal</span><% } %>
 <%          else if (has4) { %><span class=encType title="<%=intl._t("Supported encryption")%>: ECIES-X25519 (Ratchet)">ECIES</span><% } %>
 <%          else if (has5) { %><span class=encType title="<%=intl._t("Supported encryption")%>: MLKEM512-X25519">MLKEM512</span><% } %>
@@ -529,9 +529,9 @@ SSL
             boolean has7 = editBean.hasEncType(curClient, 7);
 %>
 <%          if (has0 && has4) { %><span class=encType title="<%=intl._t("Supported encryption")%>: ECIES-X25519 & ElGamal-2048">ECIES & ElGamal</span><% } %>
-<%          else if (has4 && has5) { %><span class=encType title="<%=intl._t("Supported encryption")%>: MLKEM512-X25519 & ECIES-X25519">MLKEM512 & ECIES</span><% } %> 
+<%          else if (has4 && has5) { %><span class=encType title="<%=intl._t("Supported encryption")%>: MLKEM512-X25519 & ECIES-X25519">MLKEM512 & ECIES</span><% } %>
 <%          else if (has4 && has6) { %><span class=encType title="<%=intl._t("Supported encryption")%>: MLKEM768-X25519 & ECIES-X25519">MLKEM768 & ECIES</span><% } %>
-<%          else if (has4 && has7) { %><span class=encType title="<%=intl._t("Supported encryption")%>: MLKEM1024-X25519 & ECIES-X25519">MLKEM1024 & ECIES</span><% } %> 
+<%          else if (has4 && has7) { %><span class=encType title="<%=intl._t("Supported encryption")%>: MLKEM1024-X25519 & ECIES-X25519">MLKEM1024 & ECIES</span><% } %>
 <%          else if (has0) { %><span class=encType title="<%=intl._t("Supported encryption")%>: ElGamal-2048">ElGamal</span><% } %>
 <%          else if (has4) { %><span class=encType title="<%=intl._t("Supported encryption")%>: ECIES-X25519 (Ratchet)">ECIES</span><% } %>
 <%          else if (has5) { %><span class=encType title="<%=intl._t("Supported encryption")%>: MLKEM512-X25519">MLKEM512</span><% } %>
