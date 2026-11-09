@@ -36,17 +36,14 @@ textarea{resize:vertical}
 #deadHosts:hover{background-size:18px!important}
 #deadHosts:active{background-size:16px!important}
 #showing:empty{display:none}
-@keyframes slideDown{from{transform:translateY(-800px)}to{transform:translateY(0)}}
-@keyframes slideUp{from{transform:translateY(0)}to{transform:translateY(-800px)}}
-@media (max-width:1199px){
-  #host_list th{font-size:80%!important}
-  #host_list .added,#host_list .b32link,#host_list .helper,#host_list .source{padding-left:4px;padding-right:4px;min-width:0!important}
-}
-
 .info{width:1%;text-align:center}
 td.type,#categoryFilter a,#categoryFilter #activefilter{font-size:0}
 td.type span,td.type span.unknown,#categoryFilter span,#categoryFilter #activefilter{padding:0;width:20px;height:20px;display:inline-block;border:0;background:url(/themes/console/images/planet.svg) no-repeat center center/20px}
 #categoryFilter #activefilter{padding:4px}
+#visualid td{padding:12px 16px;width:50%}
+#visualid td img{width:256px}
+#visualid td:first-child{text-align:right}
+#visualid td:last-child{text-align:left}
 td.type span.cryptocoin,#categoryFilter span.cryptocoin{background-image:url(/themes/console/images/eepsites/cryptocoin.svg)}
 td.type span.drugs,#categoryFilter span.drugs{background-image:url(/themes/console/images/eepsites/cannabis.svg)}
 td.type span.ebook,#categoryFilter span.ebook{background-image:url(/themes/console/images/eepsites/books.svg)}
@@ -76,3 +73,10 @@ td.type span.wip,#categoryFilter span.wip{background-image:url(/themes/console/i
 
 /* TODO: classic theme */
 .classic #categoryFilter{display:none!important}
+
+@keyframes slideDown{from{transform:translateY(-800px)}to{transform:translateY(0)}}
+@keyframes slideUp{from{transform:translateY(0)}to{transform:translateY(-800px)}}
+@media (max-width:1199px){
+  #host_list th{font-size:80%!important}
+  #host_list .added,#host_list .b32link,#host_list .helper,#host_list .source{padding-left:4px;padding-right:4px;min-width:0!important}
+}

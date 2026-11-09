@@ -256,8 +256,7 @@ td>img[width="320"],td>img[src^="/imagegen"],#visualid .identicon{margin:10px 3p
 #visualid td[colspan="2"]{padding:15px 3px;border-top:var(--border)}
 #visualid tr:last-child{background:#000}
 #visualid tr td,#visualid tr:hover td{border-left:0;border-right:0;border-bottom:var(--border);box-shadow:none;background:#010;background:repeating-linear-gradient(180deg,#000c,rgba(0,16,0,.5) 1px,rgba(0,16,0,.5) 2px),url(/themes/console/dark/images/camotile2.png)}
-#visualid tr:first-child td{padding:15px 5px}
-#visualid tr:last-child td{padding:18px 6px;border:0}
+#visualid tr:last-child td{border:0}
 
 /* help */
 .help h3:first-child{margin-top:-21px}
