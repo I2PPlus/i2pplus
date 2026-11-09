@@ -110,6 +110,6 @@ public class ConnectionStallGiveupBudgetTest {
     @Test
     public void toStringMentionsTheBudget() {
         assertTrue("the budget should be visible in the option dump",
-                   new ConnectionOptions().toString().contains("stallGiveupMs="));
+                   new ConnectionOptions().toString().contains("Stall give-up: 90000ms"));
     }
 }

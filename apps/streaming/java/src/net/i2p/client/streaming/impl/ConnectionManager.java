@@ -1379,6 +1379,10 @@ class ConnectionManager {
         // on that stream, and nothing measured either the park or the hold.
         _context.statManager().createRequiredRateStat("stream.con.sendMessageTime", "Time to hand a message to the session (ms)", "Stream", EVENT_RATES);
         _context.statManager().createRequiredRateStat("stream.con.sendUnderLock", "Time a send takes while the stream data lock is held (ms)", "Stream", EVENT_RATES);
+        // A message that never reached the session at all. Until now the only
+        // record of one was a WARN, and a burst of them against a closed session
+        // is exactly what the log throttle suppresses.
+        _context.statManager().createRequiredRateStat("stream.con.sendDropped", "Messages dropped while being sent", "Stream", EVENT_RATES);
         // Always schedule the sweeper: it bounds the per-dest burst/strike/ban
         // maps and refreshes the cached autoban config, even when autoban
         // enforcement (i2p.streaming.autoban=0) is off.
@@ -1406,6 +1410,18 @@ class ConnectionManager {
      */
     Connection getConnectionByOutboundId(long id) {
         return _connectionByOutboundId.get(id);
+    }
+
+    /**
+     * How many connections are open through this manager right now, inbound and
+     * outbound alike. Every connection has a receive stream ID, so the inbound
+     * map holds all of them.
+     *
+     * @return the live connection count, 0 or more
+     * @since 0.9.72+
+     */
+    int getConnectionCount() {
+        return _connectionByInboundId.size();
     }
 
     /**

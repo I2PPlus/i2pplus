@@ -1,7 +1,10 @@
 package net.i2p.client.streaming.impl;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -1608,37 +1611,224 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     }
 
     /**
-     * Human-readable summary of the options.
+     * Human-readable summary of the options, as {@code * key: value} continuation
+     * lines with a unit on every measured value.
      */
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder(256);
-        buf.append("\n*");
-        if (_connectDelay > 0) {buf.append(" conDelay=").append(_connectDelay);}
-        buf.append(" maxSize=").append(_maxMessageSize);
-        buf.append(" rtt=").append(_smoothedRtt);
-        buf.append(" resendDelay=").append(_retransmitDelay);
-        buf.append(" ackDelay=").append(_ackDelay);
-        buf.append(" cwin=").append(_windowSize);
-        buf.append(" maxResends=").append(_maxResends);
-        buf.append(" stallGiveupMs=").append(_stallGiveupMs);
-        buf.append("\n* writeTimeout=").append(getWriteTimeout());
-        buf.append(" readTimeout=").append(getReadTimeout());
-        if (_inactivityTimeout > 0) {buf.append(" inactivityTimeout=").append(_inactivityTimeout);}
-        buf.append(" inboundBuffer=").append(_inboundBufferSize);
-        buf.append(" maxWindowSize=").append(_maxWindowSize);
-        if (_maxConnsPerMinute > 0 || _maxConnsPerHour > 0 || _maxConnsPerDay > 0) {
-            buf.append(" maxConns=").append(_maxConnsPerMinute).append('/')
-                                    .append(_maxConnsPerHour).append('/')
-                                    .append(_maxConnsPerDay);
+        List<Option> opts = options();
+        List<String> segs = new ArrayList<>(opts.size());
+        for (Option o : opts) {segs.add(o._label + ": " + o._display);}
+        return joinLogSegments(segs);
+    }
+
+    /**
+     * One option for the log formatters: the label a reader sees, the configured
+     * value used to decide whether it changed, and the string to print. The
+     * configured value is kept beside the display form because the display is
+     * lossy - a scaled size renders 1730 and 1740 identically - so comparing
+     * displays would drop a real change.
+     */
+    private static final class Option {
+        /** Prose label a reader sees. */
+        private final String _label;
+        /** Configured value, in a form that compares exactly. */
+        private final Object _raw;
+        /** Value with its unit, or the prose for a sentinel. */
+        private final String _display;
+
+        /**
+         * @param label the prose label a reader sees
+         * @param raw the configured value, compared for equality
+         * @param display the value with its unit, or the prose for a sentinel
+         */
+        Option(String label, Object raw, String display) {
+            _label = label;
+            _raw = raw;
+            _display = display;
         }
-        if (_maxTotalConnsPerMinute > 0 || _maxTotalConnsPerHour > 0 || _maxTotalConnsPerDay > 0) {
-            buf.append(" maxTotalConns=").append(_maxTotalConnsPerMinute).append('/')
-                                         .append(_maxTotalConnsPerHour).append('/')
-                                         .append(_maxTotalConnsPerDay);
+    }
+
+    /**
+     * Every option this object holds, in a fixed order, with a unit on every
+     * measured value and prose in place of the numeric sentinels (-1, 0) a reader
+     * would otherwise have to look up. Shared by {@link #toString()} and
+     * {@link #describeChanges} so the full dump and the diff cannot disagree about
+     * what a value means.
+     *
+     * @return all of the options, in display order, non-null
+     * @since 0.9.72+
+     */
+    private List<Option> options() {
+        List<Option> opts = new ArrayList<>(16);
+        opts.add(new Option("Connect delay", Integer.valueOf(_connectDelay),
+                            _connectDelay > 0 ? formatDuration(_connectDelay) : "none"));
+        opts.add(new Option("Max message size", Integer.valueOf(_maxMessageSize), formatBytes(_maxMessageSize)));
+        opts.add(new Option("Max initial size", Integer.valueOf(_maxInitialMessageSize),
+                            formatBytes(_maxInitialMessageSize)));
+        opts.add(new Option("RTT", Integer.valueOf(getRTT()), formatDuration(getRTT())));
+        opts.add(new Option("Resend delay", Integer.valueOf(_retransmitDelay), formatDuration(_retransmitDelay)));
+        opts.add(new Option("Ack delay", Integer.valueOf(_ackDelay), formatDuration(_ackDelay)));
+        opts.add(new Option("Window size", Integer.valueOf(_windowSize), formatBytes(_windowSize)));
+        opts.add(new Option("Max resends", Integer.valueOf(_maxResends), String.valueOf(_maxResends)));
+        opts.add(new Option("Stall give-up", Long.valueOf(_stallGiveupMs), formatDuration(_stallGiveupMs)));
+        opts.add(new Option("Write timeout", Long.valueOf(getWriteTimeout()), formatTimeout(getWriteTimeout())));
+        opts.add(new Option("Read timeout", Long.valueOf(getReadTimeout()), formatTimeout(getReadTimeout())));
+        opts.add(new Option("Inactivity timeout", Integer.valueOf(_inactivityTimeout),
+                            _inactivityTimeout > 0 ? formatDuration(_inactivityTimeout) : "disabled"));
+        opts.add(new Option("Inbound buffer", Integer.valueOf(_inboundBufferSize), formatBytes(_inboundBufferSize)));
+        // 0 is not a zero-size cap: setMaxWindowSize() normalises it to the
+        // Tuner-managed global, so say whose value is in force.
+        opts.add(new Option("Max window size", Integer.valueOf(_maxWindowSize),
+                            _maxWindowSize > 0 ? formatBytes(_maxWindowSize) : "Tuner default"));
+        opts.add(new Option("Max connections", connLimitsRaw(_maxConnsPerMinute, _maxConnsPerHour, _maxConnsPerDay),
+                            formatConnLimits(_maxConnsPerMinute, _maxConnsPerHour, _maxConnsPerDay)));
+        opts.add(new Option("Max total connections",
+                            connLimitsRaw(_maxTotalConnsPerMinute, _maxTotalConnsPerHour, _maxTotalConnsPerDay),
+                            formatConnLimits(_maxTotalConnsPerMinute, _maxTotalConnsPerHour, _maxTotalConnsPerDay)));
+        return opts;
+    }
+
+    /**
+     * Describes only the options that differ from this object's, so a log line
+     * about a change does not repeat the whole set. The configured values are
+     * compared, not the display forms, so a change too small to show up once
+     * rounded is still reported.
+     *
+     * @param next the options being applied, non-null
+     * @return {@code * label: old -> new} continuation lines for the changed
+     *         options, empty if nothing differs, non-null
+     * @since 0.9.72+
+     */
+    String describeChanges(ConnectionOptions next) {
+        List<Option> before = options();
+        List<Option> after = next.options();
+        List<String> segs = new ArrayList<>(after.size());
+        // Both lists come from options(), so they are the same length and carry the
+        // same labels in the same order - pairing them by index is safe.
+        for (int i = 0; i < after.size(); i++) {
+            Option now = after.get(i);
+            Option old = before.get(i);
+            if (!Objects.equals(old._raw, now._raw))
+                {segs.add(now._label + ": " + old._display + " -> " + now._display);}
         }
+        return joinLogSegments(segs);
+    }
+
+    /**
+     * Joins {@code key: value} pairs onto {@code \n* } continuation lines,
+     * breaking before a line would run past {@link #LOG_LINE_BUDGET} characters
+     * or carry more than {@link #LOG_SEGS_PER_LINE} pairs, so a wide option set
+     * cannot overflow the log's line-length budget.
+     *
+     * @param segs the pairs to render, in display order, non-null
+     * @return the continuation lines, empty if there are no pairs, non-null
+     * @since 0.9.72+
+     */
+    static String joinLogSegments(List<String> segs) {
+        StringBuilder buf = new StringBuilder(segs.size() * 24);
+        StringBuilder line = new StringBuilder(LOG_LINE_BUDGET + 8);
+        int onLine = 0;
+        for (String seg : segs) {
+            if (onLine > 0 &&
+                (onLine >= LOG_SEGS_PER_LINE || line.length() + seg.length() + 3 > LOG_LINE_BUDGET)) {
+                buf.append("\n* ").append(line);
+                line.setLength(0);
+                onLine = 0;
+            }
+            if (onLine > 0) {line.append(" * ");}
+            line.append(seg);
+            onLine++;
+        }
+        if (onLine > 0) {buf.append("\n* ").append(line);}
         return buf.toString();
     }
+
+    /**
+     * Formats a byte count with its unit. Exact rather than scaled: a diff reading
+     * "1.7KiB -&gt; 1.7KiB" would hide a real change, and every size here is small
+     * enough to read as a byte count.
+     *
+     * @param bytes the count to format
+     * @return the value with its unit, e.g. "1730B"
+     */
+    private static String formatBytes(long bytes) {
+        return bytes + "B";
+    }
+
+    /**
+     * Formats a duration in ms. {@link net.i2p.data.DataHelper#formatDuration}
+     * rounds to the largest whole unit, so it would hide a change like 2000ms
+     * becoming 2001ms, and it states 90s as "1m". These values are all set in
+     * milliseconds, so they are printed the way they are set.
+     *
+     * @param ms the duration in milliseconds
+     * @return the duration with its unit, exact
+     */
+    private static String formatDuration(long ms) {
+        return ms + "ms";
+    }
+
+    /**
+     * Formats a socket timeout, naming the two sentinel values instead of
+     * printing them as numbers: -1 never gives up, 0 never blocks.
+     *
+     * @param ms the timeout in milliseconds
+     * @return the duration with its unit, or the prose for a sentinel
+     */
+    private static String formatTimeout(long ms) {
+        if (ms < 0) {return "never";}
+        if (ms == 0) {return "immediately";}
+        return formatDuration(ms);
+    }
+
+    /**
+     * The three connection-rate limits as one comparable value, so a change to any
+     * period shows up in the diff even when the display form names only the capped
+     * ones.
+     *
+     * @param perMin connections allowed per minute, 0 for no limit
+     * @param perHour connections allowed per hour, 0 for no limit
+     * @param perDay connections allowed per day, 0 for no limit
+     * @return the three counts, non-null
+     */
+    private static String connLimitsRaw(int perMin, int perHour, int perDay) {
+        return perMin + "/" + perHour + "/" + perDay;
+    }
+
+    /**
+     * Formats one of the connection-rate limits, naming only the periods that
+     * are actually capped.
+     *
+     * @param perMin connections allowed per minute, 0 for no limit
+     * @param perHour connections allowed per hour, 0 for no limit
+     * @param perDay connections allowed per day, 0 for no limit
+     * @return e.g. "300/min", or "unlimited" when no period is capped
+     */
+    private static String formatConnLimits(int perMin, int perHour, int perDay) {
+        StringBuilder buf = new StringBuilder(32);
+        if (perMin > 0) {buf.append(perMin).append("/min");}
+        if (perHour > 0) {
+            if (buf.length() > 0) {buf.append(", ");}
+            buf.append(perHour).append("/hour");
+        }
+        if (perDay > 0) {
+            if (buf.length() > 0) {buf.append(", ");}
+            buf.append(perDay).append("/day");
+        }
+        return buf.length() > 0 ? buf.toString() : "unlimited";
+    }
+
+    /**
+     * Maximum key: value pairs on one log continuation line, however short they are.
+     */
+    private static final int LOG_SEGS_PER_LINE = 8;
+
+    /**
+     * Maximum characters of key: value pairs on one log continuation line,
+     * leaving room for the leading "* " and the message that introduced them.
+     */
+    private static final int LOG_LINE_BUDGET = 88;
 
     /**
      * Maximum inbound buffer cap, tunable via Tuner.

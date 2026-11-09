@@ -325,12 +325,16 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
                 }
             }
         } catch (I2PSessionException ise) {
-            if (_log.shouldWarn()) {
-                _log.warn("Unable to send a packet to [" +
-                          packet.getTo().calculateHash().toShortBase32() +
-                          "] -> Dropped: " + ise.getMessage() + packet.formatAsString(false));
-                isLogged = true;
-            }
+            // Counted on every drop, logged once per burst: a session that closed
+            // while packets were queued drops its whole backlog through here, and
+            // the throttle collapses the repeats into one line naming how many it
+            // swallowed.
+            _context.statManager().addRateData("stream.con.sendDropped", 1);
+            _log.warnThrottled("streaming-send-dropped",
+                               "Unable to send a packet to [" +
+                               packet.getTo().calculateHash().toShortBase32() +
+                               "] -> Dropped: " + ise.getMessage() + packet.formatInline());
+            isLogged = true;
         } finally {
             // writePacket() overwrites every byte sendMessage() reads, so skip the memset
             _cache.release(ba, false);

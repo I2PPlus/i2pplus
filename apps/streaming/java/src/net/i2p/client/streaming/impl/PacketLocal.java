@@ -437,6 +437,38 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
     /**
      * {@inheritDoc}
      * <p>
+     * Adds what this packet keeps score of since it was sent.
+     *
+     * @since 0.9.72+
+     */
+    @Override
+    protected StringBuilder formatInline() {
+        StringBuilder buf = super.formatInline();
+        appendDelivery(buf);
+        return buf;
+    }
+
+    /**
+     * Appends the delivery score of this packet: how often it was NACKed and how
+     * long the acknowledgement took to arrive. Shared by the two formatters so a
+     * one-line description and a multi-line one cannot disagree.
+     *
+     * @param buf the buffer to append to
+     */
+    private void appendDelivery(StringBuilder buf) {
+        final int nackCount = _nackCount.get();
+        if (nackCount > 0)
+            {buf.append(" * NACKed ").append(nackCount).append(" times");}
+
+        synchronized(this) {
+            if (_ackOn > 0)
+                {buf.append(" * ACK after ").append(getAckTime()).append("ms");}
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
      * With {@code withContext} false this drops the send count and the
      * connection pair - the caller's connection prefix already names both
      * endpoints, and the count rides in its message.
@@ -447,14 +479,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
     public StringBuilder formatAsString(boolean withContext) {
         StringBuilder buf = super.formatAsString(withContext);
 
-        final int nackCount = _nackCount.get();
-        if (nackCount > 0)
-            buf.append(" * NACKed ").append(nackCount).append(" times");
-
-        synchronized(this) {
-            if (_ackOn > 0)
-                buf.append(" * ACK after ").append(getAckTime()).append("ms");
-        }
+        appendDelivery(buf);
 
         int numSends = _numSends.get();
         if (numSends > 1 && withContext)

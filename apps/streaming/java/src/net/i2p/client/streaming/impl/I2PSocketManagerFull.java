@@ -247,8 +247,8 @@ public class I2PSocketManagerFull implements I2PSocketManager {
 
         if (_log.shouldInfo()) {
             StringBuilder buf = new StringBuilder(256);
-            buf.append("Socket manager created.\n* Default Options:")
-               .append(_defaultOptions.toString().replace(" ", "\n\t").replace("=", " = "))
+            buf.append("Socket manager created -> Default options")
+               .append(_defaultOptions)
                .append("\n* Original Properties:");
             if (opts != null) {
                 buf.append('\n');
@@ -347,7 +347,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
         int protocol = I2PSession.PROTO_STREAMING;
         rv.addMuxedSessionListener(_connectionManager.getMessageHandler(), protocol, defaultOptions.getLocalPort());
         if (_log.shouldDebug())
-            _log.debug("Added subsession [" + subsessionTag(rv) + "] -> Listening for streaming on port " +
+            _log.debug("Added subsession [" + destTag(rv) + "] -> Listening for streaming on port " +
                        defaultOptions.getLocalPort());
         return rv;
     }
@@ -386,21 +386,22 @@ public class I2PSocketManagerFull implements I2PSocketManager {
         _subsessionsOptions.remove(session);
         if (removed) {
             if (_log.shouldDebug())
-                _log.debug("Removed subsession [" + subsessionTag(session) + "]");
+                _log.debug("Removed subsession [" + destTag(session) + "]");
         } else {
             if (_log.shouldDebug())
-                _log.debug("Subsession not found to remove [" + subsessionTag(session) + "] -> Already gone");
+                _log.debug("Subsession not found to remove [" + destTag(session) + "] -> Already gone");
         }
     }
 
     /**
-     * Short base32 tag of a subsession's local destination, for log lines that
-     * must stay on one line. {@code I2PSession.toString()} is a multi-line dump.
+     * Short base32 tag of a session's local destination, for log lines that have
+     * to say which manager or subsession they are about and stay on one line.
+     * {@code I2PSession.toString()} is a multi-line dump.
      *
      * @param session the session to name, non-null
      * @return 8 characters, or "unknown" before the session has a local destination
      */
-    private static String subsessionTag(I2PSession session) {
+    private static String destTag(I2PSession session) {
         return session.getMyDestination() != null ?
                session.getMyDestination().calculateHash().toShortBase32() : "unknown";
     }
@@ -575,25 +576,39 @@ public class I2PSocketManagerFull implements I2PSocketManager {
       * Parameters in the I2PSocketOptions interface may be changed directly
       * with the setters; no need to use this method for those.
       * This does NOT update the underlying I2CP or tunnel options; use {@link #getSession()}.updateOptions() for that.
+      * It does not change the options of a connection that is already open, either:
+      * each connection keeps the set it was created with, so the new values apply
+      * to connections built from here on, and to the connection-rate limits at once.
       *
       * @param options as created from a call to buildOptions(properties), non-null
       */
      public void setDefaultOptions(I2PSocketOptions options) {
          if (!(options instanceof ConnectionOptions))
              throw new IllegalArgumentException();
-         if (_log.shouldWarn())
-             _log.warn("Default options changed -> Applied to live connections" +
-                       "\n* From:" + _defaultOptions.toString().replace("\n*", " *") +
-                       " * To:" + options.toString().replace("\n*", " *"));
-         _defaultOptions.updateAll((ConnectionOptions) options);
+         ConnectionOptions next = (ConnectionOptions) options;
+         String changes = _defaultOptions.describeChanges(next);
+         _defaultOptions.updateAll(next);
          _connectionManager.updateOptions();
+         String tag = "Manager [" + destTag(_session) + "]";
+         if (changes.isEmpty()) {
+             if (_log.shouldInfo())
+                 {_log.info(tag + " -> Default options saved, nothing changed");}
+         } else if (_log.shouldInfo()) {
+             _log.info(tag + " -> Default options changed, applied to new connections" +
+                       changes +
+                       "\n* Live connections: " + _connectionManager.getConnectionCount());
+         }
+         if (_log.shouldDebug())
+             {_log.debug(tag + " -> Full default options" + _defaultOptions);}
      }
 
      /**
       * Update the options on a running subsession.
       * Parameters in the I2PSocketOptions interface may be changed directly
       * with the setters; no need to use this method for those.
-      * This does NOT update the underlying I2CP or tunnel options.
+      * This does NOT update the underlying I2CP or tunnel options, and it does not
+      * change the options of a connection that is already open - each connection
+      * keeps the set it was created with.
       *
       * @param session the subsession to update
       * @param options as created from a call to buildOptions(properties), non-null
@@ -602,12 +617,23 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      public void setDefaultOptions(I2PSession session, I2PSocketOptions options) {
          if (!(options instanceof ConnectionOptions))
              throw new IllegalArgumentException();
-         if (_log.shouldWarn())
-             _log.warn("Updated the options for subsession [" + subsessionTag(session) +
-                       "] -> Applied to live connections" +
-                       "\n* To:" + options.toString().replace("\n*", " *"));
-         _subsessionsOptions.put(session, (ConnectionOptions) options);
+         ConnectionOptions next = (ConnectionOptions) options;
+         // Until this call the subsession had no options of its own and used the
+         // manager defaults, so that is the baseline the diff is against.
+         ConnectionOptions prev = _subsessionsOptions.get(session);
+         String changes = (prev != null ? prev : _defaultOptions).describeChanges(next);
+         _subsessionsOptions.put(session, next);
          _connectionManager.updateOptions();
+         String tag = "Subsession [" + destTag(session) + "]";
+         if (session != _session && !_subsessions.contains(session)) {
+             if (_log.shouldWarn())
+                 {_log.warn(tag + " -> Options saved for a session that is not a subsession of this manager");}
+         } else if (changes.isEmpty()) {
+             if (_log.shouldInfo())
+                 {_log.info(tag + " -> Options saved, nothing changed");}
+         } else if (_log.shouldInfo()) {
+             _log.info(tag + " -> Options changed, recorded for the subsession" + changes);
+         }
      }
 
      /**

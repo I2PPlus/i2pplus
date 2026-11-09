@@ -1215,6 +1215,28 @@ class Packet {
     }
 
     /**
+     * Format as a string builder for logging, on the caller's own line: the flags,
+     * the options and the payload size, joined to whatever precedes them with
+     * {@code " * "} instead of opening a continuation line, and without the stream
+     * context the caller already names. Use this for a message that has to stay on
+     * one line; {@link #formatAsString(boolean)} opens its own continuation line
+     * and is for a message that can afford one.
+     *
+     * @return a buffer holding the human readable form of this packet, ready to
+     *         be appended to a log message, non-null
+     * @since 0.9.72+
+     */
+    protected StringBuilder formatInline() {
+        StringBuilder buf = new StringBuilder(48);
+        toFlagString(buf, false);
+        ByteArray payload = _payload;
+        if (payload != null && payload.getValid() > 0) {
+            buf.append(" * Data: ").append(payload.getValid()).append(" bytes");
+        }
+        return buf;
+    }
+
+    /**
      * Format a stream ID for display.
      * @param id the stream ID to format
      * @return base64-encoded stream ID without trailing '='
@@ -1224,11 +1246,22 @@ class Packet {
     }
 
     /**
-     * Appends the flag names to the buffer.
+     * Appends the flag names to the buffer, opening a continuation line first.
      *
      * @param buf the buffer to append to
      */
     private final void toFlagString(StringBuilder buf) {
+        toFlagString(buf, true);
+    }
+
+    /**
+     * Appends the flag names to the buffer.
+     *
+     * @param buf the buffer to append to
+     * @param openLine start a {@code \n* } continuation line for the description,
+     *                 or join it to the caller's own line with {@code " * "}
+     */
+    private final void toFlagString(StringBuilder buf, boolean openLine) {
         I2PAppContext ctx = I2PAppContext.getCurrentContext();
         boolean debug = ctx != null && ctx.logManager().getLog(Packet.class).shouldDebug();
         // Always describe the packet. This used to be gated on shouldInfo(),
@@ -1236,14 +1269,19 @@ class Packet {
         // message logged an empty description - see formatAsString(). The NACK
         // list and the offline key material stay behind shouldDebug() because
         // they run to hundreds of bytes.
-        buf.append("\n*");
+        // The continuation marker is inserted afterwards, and only if this packet
+        // has something to say: a flagless packet used to leave a bare "\n*"
+        // behind, which renders as an empty bullet in the log viewer.
+        int mark = buf.length();
         if (isFlagSet(FLAG_SYNCHRONIZE)) {buf.append(" SYN");}
         if (isFlagSet(FLAG_CLOSE)) {buf.append(" CLOSE");}
         if (isFlagSet(FLAG_RESET)) {buf.append(" RESET");}
         if (isFlagSet(FLAG_ECHO)) {buf.append(" ECHO");}
         if (isFlagSet(FLAG_NO_ACK)) {buf.append(" NACK");}
-        else if (getAckThrough() > 0 || !isFlagSet(FLAG_SYNCHRONIZE)) {
-            // A SYN with ackThrough 0 has no ACK context yet - "ACK 0" is noise
+        else if (getAckThrough() > 0) {
+            // An ACK of 0 acknowledges nothing, so printing it states an absence as
+            // if it were a value - every RESET against a closed session carried
+            // "ACK 0" for exactly that reason.
             buf.append(" ACK ").append(getAckThrough());
         }
         if (isFlagSet(FLAG_FROM_INCLUDED) && _optionFrom != null && _optionFrom.size() > 0)
@@ -1284,6 +1322,13 @@ class Packet {
                 }
             }
             else {buf.append(" (to be signed)");}
+        }
+        if (buf.length() > mark) {
+            if (openLine) {buf.insert(mark, "\n*");}
+            // The inline form runs on to the caller's sentence, so it is joined to
+            // it with the house separator rather than a bare space: "Dropped:
+            // Already closed * RESET", not "Already closed RESET".
+            else {buf.insert(mark, " *");}
         }
     }
 
