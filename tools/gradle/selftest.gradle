@@ -20,7 +20,7 @@ def documentedTasks = [
     'jbigi', 'jbigi-linux', 'jbigi-osx', 'jbigi-windows', 'jbigi-freebsd',
     'jbigi-nowindows',
     'buildexe', 'buildDeb', 'poStatus',
-    'testCore', 'testRouter', 'testApps',
+    'testCore', 'testRouter', 'testApps', 'checkJsps',
     'preppkg', 'preppkg-nowindows', 'preppkg-linux-only',
     'preppkg-freebsd-only', 'preppkg-osx-only', 'preppkg-windows-only',
     'izpackPanelJar', 'izpackPanelTest', 'izpackBrandingCheck',

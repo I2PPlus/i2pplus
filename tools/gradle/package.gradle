@@ -55,6 +55,9 @@ task distclean(type: Delete) {
     delete file('com')
     // Gradle caches inside the tree
     delete file('.gradle'), file('tools/gradle/wrapper/.gradle')
+    // Gradle hardcodes the configuration-cache report to <rootDir>/build/reports,
+    // regardless of the redirected buildDir, and writes it whenever a build fails
+    delete file('build')
     // Redirected build output (build.root): wipes /tmp/build-i2p like ant
     delete file(buildDir.parentFile)
     doLast {
@@ -220,4 +223,14 @@ task testApps {
     group = 'verification'
     description = 'Run the application module tests (mirrors ant testApps).'
     dependsOn subprojects.findAll { it.path.startsWith(':apps') && it.plugins.hasPlugin('java') }.collect { it.tasks.named('test') }
+}
+
+// Static check of the pages, all three webapps at once (mirrors ant's root
+// checkjsps target). Each module also runs its own check before its war build,
+// so this aggregate is for CI, where the root build asks those modules for their
+// jar only. A module with no python3 on PATH, or no script, skips itself.
+task checkJsps {
+    group = 'verification'
+    description = 'Statically check the webapp JSPs (mirrors ant checkjsps).'
+    dependsOn ':apps:i2ptunnel:checkJsps', ':apps:routerconsole:checkJsps', ':apps:susidns:checkJsps'
 }

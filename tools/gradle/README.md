@@ -4,8 +4,14 @@ The Gradle build provides an alternative to Ant for compiling Java modules and b
 
 ## Prerequisites
 
-- JDK 17+ to run Gradle 9.x (JDK 21 recommended). Modules still compile with
-  `options.release = 8`, so the output is Java 8 bytecode
+- JDK 17+ to run Gradle 9.x (JDK 21 recommended). The output is Java 8 bytecode:
+  `tools/gradle/javac.gradle` uses a JDK 8's javac when one is installed (byte-identical
+  to Ant, synthetic switch-map classes included) and otherwise falls back to a later
+  javac with `--release 8`, so a machine that has never seen Java 8 still builds. It
+  prints one line when it falls back, because those jars are not byte-identical to Ant's
+  - `-Pjavac.version=1.7|1.8|11` sets the level — the same knob as Ant's `javac.version`
+  - `-PjdkHome=<path>` picks one compiler; `-PjdkRoots=<path>:<path>` replaces the install
+    roots that get scanned (`/usr/lib/jvm`, the macOS and Windows locations, sdkman, jabba)
 - The Gradle wrapper at `gradlew` bootstraps itself — no pre-installed Gradle required
 
 ## Build output
@@ -143,6 +149,7 @@ Prerequisite: `jbigi` (jars the vendored natives from `installer/lib/jbigi`).
 | `./gradlew buildDeb`              | Debian package                                                                                                                                |
 | `./gradlew tarball`               | Source-less tarball                                                                                                                           |
 | `./gradlew distclean`             | Wipe all build state                                                                                                                          |
+| `./gradlew checkJsps`             | Statically check the webapp JSPs, all three at once (Ant `checkjsps`)                                                                         |
 | `./gradlew sonarqube-report-full` | Full analysis with local rule docs (mirrors `ant sonarqube-report-full`)                                                                      |
 | `./gradlew sonarqube-report-zip`  | Zip the report + rules into `dist/sonarqube-report.zip` (mirrors `ant sonarqube-report-zip`)                                                  |
 | `./gradlew selftest`              | Verify the documented task inventory, then run `updaterCompact` (compiles and packages every module); all other targets are name-checked only |
@@ -209,3 +216,4 @@ Configuration cache is enabled in `gradle.properties`. If you see "configuration
 - The canonical test runner is `ant test` or `tools/scripts/run-tests.sh`
 - Build output destination is controlled by `buildDir` in `build.gradle` (default: `/tmp/build-i2p/gradle/`)
 - Per-platform installer staging lives under `/tmp/build-i2p/pkg-installer/`; IzPack work files under `/tmp/build-i2p/gradle/izpack/`; launch4j work under `/tmp/build-i2p/gradle/launch4j/`
+- Gradle hardcodes its own reports to `<rootDir>/build/reports` no matter what the root project's `buildDir` is. The HTML problems report is switched off in `gradle.properties` (`org.gradle.problems.report=false`) — warnings are on the console with `--warning-mode all` — and the configuration-cache report, written only when a build fails, is removed by `./gradlew distclean`
