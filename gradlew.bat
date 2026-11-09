@@ -99,6 +99,9 @@ goto exitWithErrorLevel
 :execute
 @rem Setup the command line
 
+
+
+@rem Execute gradlew
 @rem endlocal doesn't take effect until after the line is parsed and variables are expanded
 @rem which allows us to clear the local environment before executing the java command
 @rem Keep Gradle's project cache (task history, configuration cache, file hashes) out
