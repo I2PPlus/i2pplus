@@ -768,6 +768,16 @@
     <jar destfile="${user.home}/.ant/lib/concise-logger.jar" basedir="${build.root}build-tools/obj"/>
   </target>
 
+  <!-- The three webapps with JSPs each run their own checkjsps target before
+       their war build, but the root build only asks those modules for their jar,
+       so this target runs all three checks on their own for CI.  A module whose
+       python3 or script is missing skips itself. -->
+  <target name="checkjsps" description="Statically check the webapp JSPs">
+    <ant dir="apps/susidns/src" target="checkjsps"/>
+    <ant dir="apps/routerconsole/java/" target="checkjsps"/>
+    <ant dir="apps/i2ptunnel/java/" target="checkjsps"/>
+  </target>
+
   <target name="buildRouter" depends="build-buildtools, buildrouter"/>
   <target name="buildrouter" depends="buildCore, buildI2PTunnel">
     <ant dir="router/java/" target="jar">

@@ -4,7 +4,7 @@ ENV APP_HOME="/i2p"
 
 WORKDIR /tmp/build
 
-RUN apk add --no-cache gettext tar bzip2 apache-ant openjdk21 git uglify-js
+RUN apk add --no-cache gettext tar bzip2 apache-ant openjdk21 git uglify-js python3
 
 COPY . .
 
@@ -15,7 +15,7 @@ RUN ant build-buildtools install-buildtools
 
 RUN --mount=type=tmpfs,target=/tmp/build-i2p \
     ANT_ARGS="-logger net.i2p.router.build.ConciseLogger" \
-    ant preppkg-linux-only && \
+    ant checkjsps preppkg-linux-only && \
     rm -rf /tmp/build-i2p/pkg-temp/osid /tmp/build-i2p/pkg-temp/lib/wrapper /tmp/build-i2p/pkg-temp/lib/wrapper.* && \
     cp -a /tmp/build-i2p/pkg-temp /tmp/pkg-temp-output
 

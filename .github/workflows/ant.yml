@@ -22,7 +22,7 @@ jobs:
     steps:
       - name: PackageInstall
         run: |
-          sudo apt install -y gettext ant ant-optional junit4 ant-contrib parallel uglifyjs
+          sudo apt install -y gettext ant ant-optional junit4 ant-contrib parallel uglifyjs python3
           sudo npm install -g minify
 
       - uses: actions/checkout@v7
@@ -43,6 +43,11 @@ jobs:
 
       - name: Enable quiet logger for subsequent builds
         run: cp tools/ant/.antrc ~/.antrc
+
+      # Static check of the JSPs for what JspC does not see: bean properties are
+      # accessed reflectively, so a removed getter compiles clean and 500s at runtime.
+      - name: Check the JSPs
+        run: ant checkjsps
 
       - name: Install python deps for test reporting
         run: pip install --quiet --break-system-packages markdown-it-py
