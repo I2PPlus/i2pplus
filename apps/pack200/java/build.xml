@@ -109,6 +109,7 @@
          where it has a few thousand, with no failure line anywhere. -->
     <property name="junit.tmp.dir" value="${java.io.tmpdir}/build-i2p/junit-tmp/pack200"/>
     <mkdir dir="${junit.tmp.dir}"/>
+    <property name="junit.test.filter" value="**/*Test.java"/>
     <junit printsummary="withOutAndErr" fork="yes" showoutput="yes"
       tempdir="${junit.tmp.dir}" timeout="15000">
       <classpath>
@@ -119,9 +120,7 @@
         <pathelement path="${src}"/>
       </classpath>
       <batchtest todir="${junit.reports.dir}/pack200/junit/">
-        <fileset dir="./test/junit">
-          <include name="**/*Test.java"/>
-        </fileset>
+        <fileset dir="./test/junit" includes="${junit.test.filter}"/>
       </batchtest>
       <formatter type="xml"/>
     </junit>

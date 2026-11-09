@@ -604,6 +604,7 @@
          where it has a few thousand, with no failure line anywhere. -->
     <property name="junit.tmp.dir" value="${java.io.tmpdir}/build-i2p/junit-tmp/i2psnark"/>
     <mkdir dir="${junit.tmp.dir}"/>
+    <property name="junit.test.filter" value="**/*Test.java"/>
     <junit printsummary="withOutAndErr" fork="yes" showoutput="yes" tempdir="${junit.tmp.dir}" timeout="15000">
       <sysproperty key="i2p.dir.base" value="${i2psnark.test.base}"/>
       <classpath>
@@ -624,7 +625,7 @@
         <pathelement location="${mockito.home}/objenesis.jar"/>
       </classpath>
       <batchtest todir="${junit.reports.dir}/i2psnark/junit">
-        <fileset dir="./test/junit" includes="**/*Test.java"/>
+        <fileset dir="./test/junit" includes="${junit.test.filter}"/>
       </batchtest>
       <formatter type="xml"/>
     </junit>

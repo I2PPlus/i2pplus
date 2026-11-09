@@ -341,6 +341,7 @@
     <property name="junit.test.base" value="${build.root}ministreaming-junit-base"/>
     <delete dir="${junit.test.base}"/>
     <mkdir dir="${junit.test.base}"/>
+    <property name="junit.test.filter" value="**/*Test.java"/>
     <junit printsummary="withOutAndErr" fork="yes" showoutput="yes" tempdir="${junit.tmp.dir}" timeout="15000">
       <sysproperty key="net.sourceforge.cobertura.datafile" file="./cobertura.ser"/>
       <sysproperty key="i2p.dir.base" value="${junit.test.base}"/>
@@ -362,9 +363,7 @@
         <pathelement location="${with.cobertura}"/>
       </classpath>
       <batchtest todir="${junit.reports.dir}/ministreaming/junit/">
-        <fileset dir="./test/junit">
-          <include name="**/*Test.java"/>
-        </fileset>
+        <fileset dir="./test/junit" includes="${junit.test.filter}"/>
       </batchtest>
       <formatter type="xml"/>
     </junit>

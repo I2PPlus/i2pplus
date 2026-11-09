@@ -473,6 +473,7 @@
          where it has a few thousand, with no failure line anywhere. -->
     <property name="junit.tmp.dir" value="${java.io.tmpdir}/build-i2p/junit-tmp/router"/>
     <mkdir dir="${junit.tmp.dir}"/>
+    <property name="junit.test.filter" value="**/*Test.java"/>
     <junit printsummary="withOutAndErr" fork="yes" showoutput="yes" tempdir="${junit.tmp.dir}" timeout="15000">
       <sysproperty key="net.sourceforge.cobertura.datafile" file="./cobertura.ser"/>
       <sysproperty key="i2p.build.root" value="${build.root}"/>
@@ -507,8 +508,7 @@
         <pathelement location="${with.cobertura}"/>
       </classpath>
       <batchtest todir="${junit.reports.dir}/router/junit/">
-        <fileset dir="./test/junit">
-          <include name="**/*Test.java"/>
+        <fileset dir="./test/junit" includes="${junit.test.filter}">
           <include name="**/*IT.java" if="runIntegrationTests"/>
         </fileset>
       </batchtest>

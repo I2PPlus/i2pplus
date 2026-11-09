@@ -674,6 +674,7 @@
     <property name="junit.test.base" value="${build.root}i2ptunnel-junit-base"/>
     <delete dir="${junit.test.base}"/>
     <mkdir dir="${junit.test.base}"/>
+    <property name="junit.test.filter" value="**/*Test.java"/>
     <junit printsummary="withOutAndErr" fork="yes" showoutput="yes" tempdir="${junit.tmp.dir}" timeout="15000">
       <sysproperty key="i2p.dir.base" value="${junit.test.base}"/>
       <classpath>
@@ -693,9 +694,7 @@
         <pathelement location="${mockito.home}/objenesis.jar"/>
       </classpath>
       <batchtest todir="${junit.reports.dir}/i2ptunnel/junit/">
-        <fileset dir="./test/junit/">
-          <include name="**/*Test.java"/>
-        </fileset>
+        <fileset dir="./test/junit/" includes="${junit.test.filter}"/>
       </batchtest>
       <formatter type="xml"/>
     </junit>

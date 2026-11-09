@@ -14,6 +14,14 @@
 #                                               behind (what CI should use)
 #   tools/scripts/run-tests.sh --logs-dir DIR   Where those logfiles go
 #                                               (default: /tmp/test-i2p/logs)
+#   tools/scripts/run-tests.sh --test PATTERN   Run only the test classes whose
+#                                               source path matches PATTERN, e.g.
+#                                               --test '**/ProfileOrganizerSpeedRankDecisionTest.java'
+#                                               Several patterns may be given as a
+#                                               comma-separated list. Applies to
+#                                               the selected suite; combine with a
+#                                               suite name. A pattern matching no
+#                                               test is an error, not a pass.
 #
 # A flag may appear anywhere; the first non-flag argument selects the suite.
 
@@ -67,14 +75,26 @@ ANT_PROPS="-Dhamcrest.home=${HAMCREST} -Djunit.home=${JUNIT} -Dmockito.home=${MO
 LOGS=false
 LOG_DIR="${RESULTS_DIR}/logs"
 SUITE="all"
+TEST_FILTER=""
 while [ $# -gt 0 ]; do
   case "$1" in
     -l|--logs) LOGS=true; shift ;;
     --logs-dir) LOGS=true; LOG_DIR="${2:?--logs-dir needs a directory}"; shift 2 ;;
+    -t|--test) TEST_FILTER="${2:?--test needs a source-path pattern, e.g. '**/FooTest.java'}"; shift 2 ;;
     -h|--help) sed -n '2,/^$/s/^# \?//p' "$0"; exit 0 ;;
     *) SUITE="$1"; shift ;;
   esac
 done
+# Every junit.test target declares `junit.test.filter` with the suite-wide default
+# **/*Test.java, so passing it here only narrows the run; forgetting to declare it
+# in a build file would expand to the literal '${junit.test.filter}', match no
+# source, and report a module with zero tests as a pass. The pattern goes into the
+# fileset's `includes` attribute, not a nested <include name=>: ant splits the
+# attribute on commas and treats a nested name as one literal pattern, so a
+# comma-separated list would silently match nothing in those modules.
+if [ -n "$TEST_FILTER" ]; then
+  ANT_PROPS="$ANT_PROPS -Djunit.test.filter=$TEST_FILTER"
+fi
 # Resolve to an absolute path: each ant call runs with the module directory as its
 # working directory, and ant resolves -logfile against that, so a relative
 # --logs-dir would be written beside the module instead of where it was asked for.
@@ -119,6 +139,10 @@ ant_run() {
 total_tests=0
 total_failures=0
 total_errors=0
+# Tests measured across the whole run, whatever path measured them. Only the
+# --test guard below reads it: a narrowed run that matches no test source runs
+# zero tests and still exits 0, the same shape as a module with no tests at all.
+TOTAL_RUN=0
 
 get_report_name() {
   case "$1" in
@@ -332,6 +356,7 @@ run_test() {
   total_tests=$((total_tests + tests))
   total_failures=$((total_failures + failures))
   total_errors=$((total_errors + errors))
+  TOTAL_RUN=$((TOTAL_RUN + tests))
 
   local passed=$((tests - failures - errors))
   if [ "$failures" -gt 0 ] || [ "$errors" -gt 0 ]; then
@@ -613,6 +638,7 @@ case "$SUITE" in
     run_js_test || js_rc=1
 
     print_summary "$total_t" "$total_f" "$total_e"
+    TOTAL_RUN=$total_t
     ;;
 esac
 
@@ -621,6 +647,16 @@ esac
 # exit code is the only place a JS regression can be reported at all.
 if [ "$js_rc" -ne 0 ]; then
   echo "ERROR: the JS harness failed" >&2
+  exit 1
+fi
+
+# A narrowed run that matched no test source measured nothing, and ant reports
+# that exactly like a module with no tests: zero tests and exit 0. Say so, so a
+# mistyped or misplaced pattern cannot be read as a green run.
+if [ -n "$TEST_FILTER" ] && [ "$TOTAL_RUN" -eq 0 ]; then
+  echo "ERROR: --test '$TEST_FILTER' matched no test source in the selected suite(s)" >&2
+  echo "Patterns are relative to each module's own test directory, e.g." >&2
+  echo "  '**/ProfileOrganizerSubnetDiversityTest.java' or 'net/i2p/router/tunnel/pool/*Test.java'" >&2
   exit 1
 fi
 

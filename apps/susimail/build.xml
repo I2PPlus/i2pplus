@@ -360,6 +360,7 @@
          where it has a few thousand, with no failure line anywhere. -->
     <property name="junit.tmp.dir" value="${java.io.tmpdir}/build-i2p/junit-tmp/susimail"/>
     <mkdir dir="${junit.tmp.dir}"/>
+    <property name="junit.test.filter" value="**/*Test.java"/>
     <junit printsummary="withOutAndErr" fork="yes" showoutput="yes" tempdir="${junit.tmp.dir}" timeout="15000">
       <classpath>
         <pathelement location="${core.java.build.dir}/i2p.jar"/>
@@ -372,9 +373,7 @@
         <pathelement location="${classes.dir}"/>
       </classpath>
       <batchtest todir="${junit.reports.dir}/susimail/junit/">
-        <fileset dir="./src/test/junit">
-          <include name="**/*Test.java"/>
-        </fileset>
+        <fileset dir="./src/test/junit" includes="${junit.test.filter}"/>
       </batchtest>
       <formatter type="xml"/>
     </junit>

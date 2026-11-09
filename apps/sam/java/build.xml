@@ -160,6 +160,7 @@
     <property name="junit.test.base" value="${build.root}sam-junit-base"/>
     <delete dir="${junit.test.base}"/>
     <mkdir dir="${junit.test.base}"/>
+    <property name="junit.test.filter" value="**/*Test.java"/>
     <junit printsummary="withOutAndErr" fork="yes" showoutput="yes" tempdir="${junit.tmp.dir}" timeout="15000">
       <sysproperty key="i2p.dir.base" value="${junit.test.base}"/>
       <classpath>
@@ -174,9 +175,7 @@
         <pathelement location="${build.dir}/testobj"/>
       </classpath>
       <batchtest todir="${junit.reports.dir}/sam/junit/">
-        <fileset dir="./test">
-          <include name="**/*Test.java"/>
-        </fileset>
+        <fileset dir="./test" includes="${junit.test.filter}"/>
       </batchtest>
       <formatter type="xml"/>
     </junit>

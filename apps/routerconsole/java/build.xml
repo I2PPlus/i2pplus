@@ -1008,6 +1008,7 @@
     <property name="junit.test.base" value="${build.root}routerconsole-junit-base"/>
     <delete dir="${junit.test.base}"/>
     <mkdir dir="${junit.test.base}"/>
+    <property name="junit.test.filter" value="**/*Test.java"/>
     <junit fork="yes" maxmemory="384M" tempdir="${junit.tmp.dir}" timeout="15000">
       <sysproperty key="i2p.dir.base" value="${junit.test.base}"/>
       <classpath>
@@ -1037,7 +1038,7 @@
       </classpath>
       <formatter type="xml"/>
       <batchtest todir="${junit.reports.dir}/routerconsole/junit">
-        <fileset dir="./test/junit" includes="**/*Test.java"/>
+        <fileset dir="./test/junit" includes="${junit.test.filter}"/>
       </batchtest>
     </junit>
     <delete dir="${junit.test.base}"/>
