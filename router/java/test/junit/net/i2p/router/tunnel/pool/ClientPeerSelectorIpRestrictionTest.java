@@ -18,7 +18,7 @@ import org.junit.Test;
  * moment the pool was collapsing — the opposite of its own comment. These tests
  * pin the direction, because the name and the comment both read the other way.
  *
- * @since 0.9.74+
+ * @since 0.9.72+
  */
 public class ClientPeerSelectorIpRestrictionTest {
 
@@ -27,7 +27,7 @@ public class ClientPeerSelectorIpRestrictionTest {
      * one; the class carries no per-test state, only the mask the decision is
      * called with.
      *
-     * @since 0.9.74+
+     * @since 0.9.72+
      */
     public ClientPeerSelectorIpRestrictionTest() {}
 

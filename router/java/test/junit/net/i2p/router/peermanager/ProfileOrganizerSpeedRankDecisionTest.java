@@ -38,7 +38,7 @@ public class ProfileOrganizerSpeedRankDecisionTest {
      * one; the class carries no per-test state, only the pinned clock the
      * decisions are called with.
      *
-     * @since 0.9.74+
+     * @since 0.9.72+
      */
     public ProfileOrganizerSpeedRankDecisionTest() {}
 

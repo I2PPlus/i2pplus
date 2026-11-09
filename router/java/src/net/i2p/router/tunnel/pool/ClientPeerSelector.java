@@ -487,7 +487,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
      * @param allowLocal the {@code i2np.allowLocal} property, which turns the gate
      *                   off entirely so local peers may share an address
      * @return the mask to use, 0-4; 0 means no restriction
-     * @since 0.9.74+
+     * @since 0.9.72+
      */
     static int ipRestrictionFor(TunnelPoolSettings settings, int length, double buildSuccess, boolean allowLocal) {
         if (allowLocal || length <= 1)

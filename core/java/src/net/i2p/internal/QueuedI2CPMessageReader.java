@@ -95,7 +95,7 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
      * messages for one reader costs a single wake-up, and the worker that serves it drains up
      * to {@link #MAX_DRAIN_PER_PASS} of them.
      *
-     * @since 0.9.73+
+     * @since 0.9.72+
      */
     private void wake() {
         if (registered) {DISPATCHER.enqueue(this);}

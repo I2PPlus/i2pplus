@@ -5176,7 +5176,7 @@ public class ProfileOrganizer {
      * @param candidates the candidates this pass collected, in scan order
      * @param selected the peers selected across the whole cascade, including
      *                 those picked by an earlier tier
-     * @since 0.9.74+
+     * @since 0.9.72+
      */
     static void mergeSelectedFingerprints(Set<String> ipSet, List<Set<String>> candidateKeys,
                                           List<Map.Entry<Hash, PeerProfile>> candidates, Set<Hash> selected) {

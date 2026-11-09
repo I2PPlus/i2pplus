@@ -66,7 +66,7 @@ public class ProfileOrganizerSubnetDiversityTest {
      * one; the class carries no per-test state, only the fixtures the gate is
      * called with.
      *
-     * @since 0.9.74+
+     * @since 0.9.72+
      */
     public ProfileOrganizerSubnetDiversityTest() {}
 

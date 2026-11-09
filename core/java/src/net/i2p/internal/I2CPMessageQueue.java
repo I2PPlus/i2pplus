@@ -83,7 +83,7 @@ public abstract class I2CPMessageQueue implements Closeable {
      * has stopped draining, and a value that stays there says it never started again.
      *
      * @return messages queued for the peer to read
-     * @since 0.9.73+
+     * @since 0.9.72+
      */
     public abstract int writeBacklog();
 
@@ -95,7 +95,7 @@ public abstract class I2CPMessageQueue implements Closeable {
      * their own.
      *
      * @return true once {@link #close()} has run for either end of this queue
-     * @since 0.9.73+
+     * @since 0.9.72+
      */
     public boolean isClosed() {return false;}
 
@@ -107,7 +107,7 @@ public abstract class I2CPMessageQueue implements Closeable {
      *
      * @param hook the callback to run after a message is queued for this end, or null to
      *             unregister
-     * @since 0.9.73+
+     * @since 0.9.72+
      */
     public void setWakeHook(Runnable hook) {}
 

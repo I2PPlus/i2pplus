@@ -52,7 +52,7 @@ class I2CPMessageQueueImpl extends I2CPMessageQueue {
      * reader at the other are otherwise invisible to each other. Call after constructing both.
      *
      * @param other the wrapper the peer end uses; ignored if null or this queue
-     * @since 0.9.73+
+     * @since 0.9.72+
      */
     void link(I2CPMessageQueueImpl other) {
         if (other == null || other == this) {return;}
@@ -120,7 +120,7 @@ class I2CPMessageQueueImpl extends I2CPMessageQueue {
      * measures, so a value equal to the capacity is exactly why an offer failed.
      *
      * @return messages waiting for the peer to read
-     * @since 0.9.73+
+     * @since 0.9.72+
      */
     @Override
     public int writeBacklog() {return _out.size();}
@@ -130,7 +130,7 @@ class I2CPMessageQueueImpl extends I2CPMessageQueue {
      *
      * @return true once {@link #close()} has run at either end, so a failed offer is
      *         permanent rather than momentary backpressure
-     * @since 0.9.73+
+     * @since 0.9.72+
      */
     @Override
     public boolean isClosed() {return _closed;}
@@ -140,7 +140,7 @@ class I2CPMessageQueueImpl extends I2CPMessageQueue {
      * this end to read.
      *
      * @param hook the callback, or null to unregister it
-     * @since 0.9.73+
+     * @since 0.9.72+
      */
     @Override
     public void setWakeHook(Runnable hook) {_wakeHook = hook;}
