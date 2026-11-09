@@ -52,6 +52,11 @@ task copyJsps(type: Copy) {
     }
 }
 
+// JspC classpath, and the same files the generated servlets compile against.
+// Resolved at execution, after :apps:jetty is configured (config cache)
+def jspcJarFile = project.provider { project(':apps:jetty').jspcJar.archiveFile.get().asFile }
+def jspClasspath = java.sourceSets.main.runtimeClasspath + fileTree("src/lib") + files(jspcJarFile)
+
 task precompileJsp(type: JavaExec) {
     doFirst {
         new File("${buildDirPath}/tmp_jsp").mkdirs()
@@ -61,16 +66,19 @@ task precompileJsp(type: JavaExec) {
               ':apps:jetty:jar', ':apps:jetty:jspcJar', ':apps:ministreaming:jar',
               ':core:jar', ':router:jar', ':apps:addressbook:jar'
 
-    // Resolved at execution, after :apps:jetty is configured (config cache)
-    def jspcJarFile = project.provider { project(':apps:jetty').jspcJar.archiveFile.get().asFile }
-    classpath = java.sourceSets.main.runtimeClasspath + fileTree("src/lib") + files(jspcJarFile)
-    def jspClasspathStr = (java.sourceSets.main.runtimeClasspath + fileTree("src/lib") + files(jspcJarFile)).asPath
-    def sourceCompat = java.sourceCompatibility
-    def targetCompat = java.targetCompatibility
+    classpath = jspClasspath
     def projectDirPath = projectDir
     mainClass.set('net.i2p.servlet.util.JspC')
 
-    jvmArgs "-Dtomcat.util.scan.StandardJarScanFilter.jarsToSkip=commons-collections.jar,junit.jar,junit4.jar"
+    // Two pages declare the JSTL taglib (addressbook.jsp, log.jsp) and it resolves
+    // from src/lib/standard.jar, so that jar alone is scanned. Everything else is
+    // skipped: the scan is the one input to the generated servlets that is not a
+    // source file - Jasper registers every .tld it finds in any scanned jar by URI,
+    // first writer wins (a duplicate URI is only a warning), so an unrelated jar on
+    // the build classpath could otherwise supply the binding. The filter consults
+    // the skip list first, then the scan list, so this is an allow-list.
+    jvmArgs "-Dtomcat.util.scan.StandardJarScanFilter.jarsToSkip=*"
+    jvmArgs "-Dtomcat.util.scan.StandardJarScanFilter.jarsToScan=standard.jar"
     jvmArgs "-Dbuild.reproducible=true"
 
     args "-d"
@@ -83,29 +91,19 @@ task precompileJsp(type: JavaExec) {
     args "-webapp"
     args "${buildDirPath}/jsp_copy"
     doLast {
-        // normalize the order of the _jspx_dependents
-        ant.replaceregexp(file : "${buildDirPath}/tmp_jsp/i2p/susi/dns/jsp/addressbook_jsp.java",
-                            match : "_jspx_dependants.put\\(.*\\);",
-                            replace : "//_jspx_dependants.put(@@@);",
-                            flags : "g")
-        ant.replaceregexp(file : "${buildDirPath}/tmp_jsp/i2p/susi/dns/jsp/addressbook_jsp.java",
-                            match : "//_jspx_dependants.put(@@@);",
-                            replace : "_jspx_dependants.put(&quot;jar:file:lib/standard.jar!/META-INF/c.tld&quot;, Long.valueOf(1200000000000L));")
-        ant.replaceregexp(file : "${buildDirPath}/tmp_jsp/i2p/susi/dns/jsp/addressbook_jsp.java",
-                            match : "//_jspx_dependants.put(@@@);",
-                            replace : "_jspx_dependants.put(&quot;file:lib/standard.jar&quot;, Long.valueOf(1200000000000L));")
-
-        def output = new File("${buildDirPath}/compiledJsps")
-        output.mkdirs()
-
-        ant.javac(srcDir: "${buildDirPath}/tmp_jsp",
-                    classpath: jspClasspathStr,
-                    debug : true,
-                    includeAntRuntime : false,
-                    deprecation : "on",
-                    source: sourceCompat,
-                    target: targetCompat,
-                    destDir:new File("${buildDirPath}/compiledJsps"))
+        // Normalize the order of the _jspx_dependants entries Jasper emits for the
+        // JSTL taglib so the generated servlet is byte-stable run to run (mirrors
+        // ant's three replaceregexp passes: blank every put, then fill the first
+        // with the jar:file form and the next with the file: form).
+        def addressbook = new File("${buildDirPath}/tmp_jsp/i2p/susi/dns/jsp/addressbook_jsp.java")
+        def generated = addressbook.text
+        generated = generated.replaceAll(/_jspx_dependants\.put\(.*\);/, '//_jspx_dependants.put(@@@);')
+        ['jar:file:lib/standard.jar!/META-INF/c.tld', 'file:lib/standard.jar'].each { dep ->
+            generated = generated.replaceFirst(/\/\/_jspx_dependants\.put\(@@@\);/,
+                java.util.regex.Matcher.quoteReplacement(
+                    '_jspx_dependants.put("' + dep + '", Long.valueOf(1200000000000L));'))
+        }
+        addressbook.text = generated
 
         def fragment = new File("${buildDirPath}/web-fragment.xml").text
         def templateXML = new File(projectDirPath, "src/WEB-INF/web-template.xml").text
@@ -132,16 +130,37 @@ task precompileJsp(type: JavaExec) {
     }
 }
 
+// Compile the servlets JspC generated. A JavaCompile task, so it inherits the
+// project-wide javac pin (forked JDK 8, -source/-target 1.8, UTF-8) every other
+// compile here uses, which is also the bytecode level of ant's jsp target. The
+// ant call this replaces took source/target from the java extension, unset in
+// this module, so the generated servlets came out at whatever JDK ran the build
+// and the war shipped classes a Java 8 router cannot load.
+task compileJsps(type: JavaCompile) {
+    dependsOn precompileJsp
+    source = fileTree("${buildDirPath}/tmp_jsp")
+    classpath = jspClasspath
+    destinationDirectory.set(file("${buildDirPath}/compiledJsps"))
+    // ant's javac sets deprecation="on"
+    options.deprecation = true
+}
+
 // Static check of the pages.  Optional, like uglifyjs in the ant build: it runs
 // only when python3 and the script are both there.  Any finding from the
 // correctness or security audit fails the build.
 task checkJsps(type: Exec) {
     def script = new File(rootDir, 'tools/scripts/checkjsps.py')
-    onlyIf { new File('/usr/bin/python3').canExecute() && script.isFile() }
-    commandLine 'python3', script.absolutePath, '--app', 'susidns'
+    // resolved through PATH, not /usr/bin, so Windows and non-FHS installs work
+    def python = ['python3', 'python', 'python3.exe', 'python.exe'].find { name ->
+        (System.getenv('PATH') ?: '').split(File.pathSeparator).any { dir -> new File(dir, name).canExecute() }
+    }
+    def runnable = python != null && script.isFile()
+    onlyIf { runnable }
+    if (runnable)
+        commandLine python, script.absolutePath, '--app', 'susidns'
 }
 
-war.dependsOn bundle,precompileJsp,checkJsps
+war.dependsOn bundle,precompileJsp,compileJsps,checkJsps
 
 war {
     rootSpec.exclude("**/*.jar")

@@ -171,20 +171,28 @@ task copyJsps(type: Copy) {
     }
 }
 
+// JspC classpath, and the same files the generated servlets compile against.
+// Resolved at execution, after :apps:jetty is configured (config cache)
+def jspcJarFile = project.provider { project(':apps:jetty').jspcJar.archiveFile.get().asFile }
+def jspClasspath = java.sourceSets.main.runtimeClasspath + files(jspcJarFile)
+
 task precompileJsp(type: JavaExec) {
     dependsOn copyJsps, ':apps:i2ptunnel:i2ptunnelJar', ':apps:jetty:jspcJar'
-    // Resolved at execution, after :apps:jetty is configured (config cache)
-    def jspcJarFile = project.provider { project(':apps:jetty').jspcJar.archiveFile.get().asFile }
-    classpath = java.sourceSets.main.runtimeClasspath + files(jspcJarFile)
-    def classpathStr = java.sourceSets.main.runtimeClasspath.asPath
+    classpath = jspClasspath
     def projectDirPath = projectDir
-    def jdk8Javac = "${rootProject.ext.jdk8Home}/bin/javac"
     mainClass.set('net.i2p.servlet.util.JspC')
     doFirst {
         new File("${buildDirPath}/jsp_classes").mkdirs()
     }
 
-    jvmArgs "-Dtomcat.util.scan.StandardJarScanFilter.jarsToSkip=commons-collections.jar,junit.jar,junit4.jar"
+    // Not required, and it is the one input to the generated servlets that is not a
+    // source file: Jasper registers every .tld found in any scanned jar by URI, first
+    // writer wins (a duplicate URI is only a warning), so a jar added to or reordered
+    // on the build classpath can change what a taglib URI resolves to. No page here
+    // declares a taglib, so the scan can only ever add bindings the pages never use.
+    // Skipping it makes the compile a function of the pages alone. The filter
+    // consults the skip list first; with no jarsToScan list nothing is scanned back in.
+    jvmArgs "-Dtomcat.util.scan.StandardJarScanFilter.jarsToSkip=*"
     jvmArgs "-Dbuild.reproducible=true"
     
     args "-d"
@@ -197,21 +205,6 @@ task precompileJsp(type: JavaExec) {
     args "-webapp"
     args "${buildDirPath}/jsp_copy"
     doLast {
-        def output = new File("${buildDirPath}/compiledJsps")
-        output.mkdirs()
-        // fork JDK 8 javac, matching the ant build's jsp compilation
-        ant.javac(srcDir: "${buildDirPath}/jsp_classes",
-                    classpath: classpathStr,
-                    debug : true,
-                    includeAntRuntime : false,
-                    deprecation : "on",
-                    encoding : 'UTF-8',
-                    fork: 'true',
-                    executable: jdk8Javac,
-                    source: '1.8',
-                    target: '1.8',
-                    destDir:new File("${buildDirPath}/compiledJsps"))
-        
         def fragment = new File("${buildDirPath}/web-fragment.xml").text
         def templateXML = new File(projectDirPath, "jsp/web.xml").text
         def webXML = templateXML.replace("<!-- precompiled servlets -->", fragment)
@@ -236,13 +229,53 @@ task precompileJsp(type: JavaExec) {
 
         new File("${buildDirPath}/web.xml").text = webXML
     }
-        
+
+}
+
+// Compile the servlets JspC generated. A JavaCompile task, so it inherits the
+// project-wide javac pin (forked JDK 8, -source/-target 1.8, UTF-8) every other
+// compile here uses, which is also the bytecode level of ant's jsp target.
+task compileJsps(type: JavaCompile) {
+    dependsOn precompileJsp
+    source = fileTree("${buildDirPath}/jsp_classes")
+    classpath = jspClasspath
+    destinationDirectory.set(file("${buildDirPath}/compiledJsps"))
+    // ant's javac sets deprecation="on"
+    options.deprecation = true
 }
 
 // Mirrors ant bundleTranslationReport: run net.i2p.util.TranslationStatus -h
-// (tools.jar + i2p.jar) and bundle the report plus its md5 into the war
+// (tools.jar + i2p.jar) and bundle the report plus its md5 into the war.
+//
+// The report reads the compiled message bundles out of the built jars and wars.
+// ant runs the tool in the shared build directory, so the tool's default file list
+// resolves there; gradle keeps one output directory per module, so name the
+// artifacts instead and nothing goes missing. Same order as the tool's own JARS
+// list, so the report is the one ant writes. A null project means this one.
+//
+// evaluationDependsOn: under configure-on-demand the other projects would still be
+// unconfigured when this script reads their archive paths, and their war tasks in
+// particular would not exist yet.
+def txReportArtifacts = [
+    [':apps:desktopgui', 'jar'],        [':core', 'jar'],
+    [':apps:i2psnark', 'war'],          [':apps:i2ptunnel', 'i2ptunnelJar'],
+    [':apps:i2ptunnel', 'war'],         [':apps:ministreaming', 'jar'],
+    [':router', 'jar'],                 [null, 'consoleJar'],
+    [':apps:susidns', 'war'],           [':apps:susimail', 'war'],
+]
+([':installer'] + txReportArtifacts.collect { it[0] }.findAll { it != null }).each {
+    evaluationDependsOn(it)
+}
+// Resolves an artifact's archive task. A script-level closure, not one written
+// inside the task below: a task configuration closure dispatches to the task
+// first, where bare `project` is not the project.
+def txTaskProvider = { path, name ->
+    (path == null ? project : project(path)).tasks.named(name)
+}
+
 task generateTxStatus(type: JavaExec) {
     dependsOn ':installer:toolsJar', ':core:jar'
+    dependsOn txReportArtifacts.collect { path, name -> txTaskProvider(path, name) }
     mainClass.set('net.i2p.util.TranslationStatus')
     classpath = files(
         project(':installer').tasks.named('toolsJar').flatMap { it.archiveFile },
@@ -250,6 +283,12 @@ task generateTxStatus(type: JavaExec) {
     )
     systemProperty 'i2p.src.dir', rootDir
     args '-h'
+    txReportArtifacts.each { path, name ->
+        // archiveFile is a computed output location, so this is the path of the
+        // artifact without running the task that builds it
+        def artifact = txTaskProvider(path, name).get().archiveFile.get().asFile.absolutePath
+        args(artifact)
+    }
     doFirst {
         def outFile = new File("${buildDirPath}/txstatus/WEB-INF/classes/net/i2p/router/web/resources/translationstatus.html")
         outFile.parentFile.mkdirs()
@@ -274,11 +313,17 @@ consoleJar.dependsOn bundleJar
 // correctness or security audit fails the build.
 task checkJsps(type: Exec) {
     def script = new File(rootDir, 'tools/scripts/checkjsps.py')
-    onlyIf { new File('/usr/bin/python3').canExecute() && script.isFile() }
-    commandLine 'python3', script.absolutePath, '--app', 'routerconsole'
+    // resolved through PATH, not /usr/bin, so Windows and non-FHS installs work
+    def python = ['python3', 'python', 'python3.exe', 'python.exe'].find { name ->
+        (System.getenv('PATH') ?: '').split(File.pathSeparator).any { dir -> new File(dir, name).canExecute() }
+    }
+    def runnable = python != null && script.isFile()
+    onlyIf { runnable }
+    if (runnable)
+        commandLine python, script.absolutePath, '--app', 'routerconsole'
 }
 
-war.dependsOn(bundle,precompileJsp,checkJsps,generateTxStatus)
+war.dependsOn(bundle,precompileJsp,compileJsps,checkJsps,generateTxStatus)
 
 war {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
