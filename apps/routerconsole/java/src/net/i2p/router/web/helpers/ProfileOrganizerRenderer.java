@@ -544,7 +544,11 @@ class ProfileOrganizerRenderer {
             buf.append("</td><td").append(firstHopRtt < 0 ? "" : " data-sort=" + firstHopRtt).append(">");
             if (firstHopRtt > 0) {buf.append(firstHopRtt).append("ms");}
             else {buf.append("<span>&ensp;</span>");}
-            float lossRatio = prof.getLossRatio();
+            // What enforcement judges is the decayed score, not the raw last
+            // report. A 69% episode two hours old still reads as 69% in the raw
+            // ratio for the life of the profile, while the bar it was measured
+            // against has decayed to nothing; show the number actually in force.
+            float lossRatio = prof.getLossScore(_context.clock().now());
             if (lossRatio > 0.0f) {
                 int lossPct = Math.round(lossRatio * 100);
                 buf.append("</td><td data-sort=").append(lossPct)
@@ -696,12 +700,15 @@ class ProfileOrganizerRenderer {
 
         // Tier pages: fast-tier latency boundary and tier health instead of Total
         if (mode != 0) {
-            // The membership threshold rises when network latency rises, so a
-            // growing threshold means a degrading network - score the headroom
-            double fastRTT = _organizer.getFastRTTThreshold();
-            double rttScore = fastRTT > 0 ? Math.max(0.0, 1.0 - fastRTT / 2000.0) : -1;
+            // The ceiling is the bar actually enforced: a peer at or above it is
+            // expelled from the tier and another promoted, and selection refuses
+            // the same number. The speed-ranking boundary is not what decides
+            // membership, so showing it here reported an 8s "max" while nothing
+            // above 3s was ever picked or evicted.
+            long rttCeiling = _organizer.getRttCeilingMs();
+            double rttScore = rttCeiling > 0 ? Math.max(0.0, 1.0 - rttCeiling / 2000.0) : -1;
             buf.append(RingRenderer.renderRingCell(rttScore, _t("Fast RTT"),
-                      fastRTT > 0 ? Math.round(fastRTT) + "ms" : "\u2014",
+                      rttCeiling > 0 ? rttCeiling + "ms" : "\u2014",
                       new String[]{_t("Max RTT for fast-tier membership"),
                                    _t("Rises with network latency")},
                       RingRenderer.MODE_HEALTH, null));
