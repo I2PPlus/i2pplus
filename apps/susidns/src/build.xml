@@ -74,10 +74,20 @@
 
   <!-- Is the JSP static check runnable?  Optional like uglifyjs: both the
        interpreter and the script must be there.  See checkjsps target below. -->
+  <property environment="env"/>
   <property name="jspcheck.script" location="../../../tools/scripts/checkjsps.py"/>
+  <!-- Resolved through PATH by bare name, as the root build.xml does for its own
+       python3 scripts, so Windows and pyenv/Homebrew/conda installs work too.
+       Properties are immutable, so the first interpreter found wins. -->
+  <condition property="jspcheck.python" value="python3">
+    <available file="python3" filepath="${env.PATH}"/>
+  </condition>
+  <condition property="jspcheck.python" value="python">
+    <available file="python" filepath="${env.PATH}"/>
+  </condition>
   <condition property="jspcheck.present">
     <and>
-      <available file="/usr/bin/python3"/>
+      <isset property="jspcheck.python"/>
       <available file="${jspcheck.script}"/>
     </and>
   </condition>
@@ -109,6 +119,17 @@
     <mkdir dir="${tmp}"/>
     <!-- See apps/routerconsole/java/build.xml for important JspC build documentation -->
     <java classname="net.i2p.servlet.util.JspC" fork="true" classpathref="cp" failonerror="true">
+      <!-- Only the JSTL taglib is declared (addressbook.jsp, log.jsp) and it resolves
+           from lib/standard.jar, so that jar alone is scanned. Everything else is
+           skipped: the scan is the one input to the generated servlets that is not a
+           source file - Jasper registers every .tld it finds in any scanned jar by URI,
+           first writer wins (a duplicate URI is only a warning), so an unrelated jar on
+           the build classpath could otherwise supply the binding. The filter consults
+           the skip list first, then the scan list, so this is an allow-list. -->
+      <jvmarg
+        value="-Dtomcat.util.scan.StandardJarScanFilter.jarsToSkip=*"/>
+      <jvmarg
+        value="-Dtomcat.util.scan.StandardJarScanFilter.jarsToScan=standard.jar"/>
       <!-- these are to detect tomcat version and reproducible build setting -->
       <jvmarg value="-Dbuild.reproducible=${build.reproducible}"/>
       <jvmarg value="-Dwith-libtomcat8-java=${with-libtomcat8-java}"/>
@@ -204,7 +225,7 @@
        jspcheck.present above.  It runs the correctness and security audits, and
        any finding either one reports fails the build. -->
   <target name="checkjsps" if="jspcheck.present">
-    <exec executable="/usr/bin/python3" failonerror="true">
+    <exec executable="${jspcheck.python}" failonerror="true">
       <arg value="${jspcheck.script}"/>
       <arg value="--app"/>
       <arg value="susidns"/>

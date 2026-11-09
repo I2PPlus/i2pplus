@@ -40,10 +40,20 @@
 
   <!-- Is the JSP static check runnable?  Optional like uglifyjs: both the
        interpreter and the script must be there.  See checkjsps target below. -->
+  <property environment="env"/>
   <property name="jspcheck.script" location="../../../tools/scripts/checkjsps.py"/>
+  <!-- Resolved through PATH by bare name, as the root build.xml does for its own
+       python3 scripts, so Windows and pyenv/Homebrew/conda installs work too.
+       Properties are immutable, so the first interpreter found wins. -->
+  <condition property="jspcheck.python" value="python3">
+    <available file="python3" filepath="${env.PATH}"/>
+  </condition>
+  <condition property="jspcheck.python" value="python">
+    <available file="python" filepath="${env.PATH}"/>
+  </condition>
   <condition property="jspcheck.present">
     <and>
-      <available file="/usr/bin/python3"/>
+      <isset property="jspcheck.python"/>
       <available file="${jspcheck.script}"/>
     </and>
   </condition>
@@ -392,7 +402,7 @@
        jspcheck.present above.  It runs the correctness and security audits, and
        any finding either one reports fails the build. -->
   <target name="checkjsps" if="jspcheck.present">
-    <exec executable="/usr/bin/python3" failonerror="true">
+    <exec executable="${jspcheck.python}" failonerror="true">
       <arg value="${jspcheck.script}"/>
       <arg value="--app"/>
       <arg value="i2ptunnel"/>
@@ -496,6 +506,15 @@
     <mkdir dir="${jsp.build.dir}/WEB-INF/classes"/>
     <!-- See apps/routerconsole/java/build.xml for important JspC build documentation -->
     <java classname="net.i2p.servlet.util.JspC" fork="true" failonerror="true">
+      <!-- No page here declares a taglib, so no jar needs a TLD scan. The scan is
+           the one input to the generated servlets that is not a source file: Jasper
+           registers every .tld it finds in any scanned jar by URI, first writer wins
+           (a duplicate URI is only a warning), so a jar added to or reordered on the
+           build classpath can change what a taglib URI resolves to. Skipping it makes
+           the compile a function of the pages alone; with no jarsToScan list nothing
+           is scanned back in. -->
+      <jvmarg
+        value="-Dtomcat.util.scan.StandardJarScanFilter.jarsToSkip=*"/>
       <!-- these are to detect tomcat version and reproducible build setting -->
       <jvmarg value="-Dbuild.reproducible=${build.reproducible}"/>
       <jvmarg value="-Dwith-libtomcat8-java=${with-libtomcat8-java}"/>
