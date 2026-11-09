@@ -177,6 +177,11 @@ tools/scripts/*
 !tools/scripts/tests/
 tools/scripts/tests/*
 !tools/scripts/tests/checkdockerconfig.sh
+# The JSP static checks run from the ant and gradle war targets, so they must be
+# tracked along with the build files that call them.
+!tools/scripts/checkjsps.py
+!tools/scripts/jsp-audit.py
+!tools/scripts/jsp-security-audit.py
 !tools/pmd/*.py
 !tools/pmd/*.css
 !tools/pmd/*.sh

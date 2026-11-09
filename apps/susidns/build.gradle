@@ -132,7 +132,16 @@ task precompileJsp(type: JavaExec) {
     }
 }
 
-war.dependsOn bundle,precompileJsp
+// Static check of the pages.  Optional, like uglifyjs in the ant build: it runs
+// only when python3 and the script are both there.  Any finding from the
+// correctness or security audit fails the build.
+task checkJsps(type: Exec) {
+    def script = new File(rootDir, 'tools/scripts/checkjsps.py')
+    onlyIf { new File('/usr/bin/python3').canExecute() && script.isFile() }
+    commandLine 'python3', script.absolutePath, '--app', 'susidns'
+}
+
+war.dependsOn bundle,precompileJsp,checkJsps
 
 war {
     rootSpec.exclude("**/*.jar")

@@ -38,6 +38,16 @@
   <!-- Is uglifyjs installed? -->
   <available file="/usr/bin/uglifyjs" property="uglifyjs.present"/>
 
+  <!-- Is the JSP static check runnable?  Optional like uglifyjs: both the
+       interpreter and the script must be there.  See checkjsps target below. -->
+  <property name="jspcheck.script" location="../../../tools/scripts/checkjsps.py"/>
+  <condition property="jspcheck.present">
+    <and>
+      <available file="/usr/bin/python3"/>
+      <available file="${jspcheck.script}"/>
+    </and>
+  </condition>
+
   <target name="depend" if="depend.available">
     <depend
       cache="${build.dir}/depend-cache"
@@ -378,7 +388,18 @@
   </target>
 
   <!-- The web classes are now in the war not the jar - they are not part of the API -->
-  <target name="war" depends="compileWeb, precompilejsp, bundleTranslations, warUpToDate, listChangedFiles2"
+  <!-- Static check of the pages, run before the war is built.  Optional, see
+       jspcheck.present above.  It runs the correctness and security audits, and
+       any finding either one reports fails the build. -->
+  <target name="checkjsps" if="jspcheck.present">
+    <exec executable="/usr/bin/python3" failonerror="true">
+      <arg value="${jspcheck.script}"/>
+      <arg value="--app"/>
+      <arg value="i2ptunnel"/>
+    </exec>
+  </target>
+
+  <target name="war" depends="compileWeb, precompilejsp, checkjsps, bundleTranslations, warUpToDate, listChangedFiles2"
     unless="war.uptodate">
     <!-- set if unset -->
     <property name="workspace.changes.w.tr" value=""/>

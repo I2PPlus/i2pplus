@@ -62,6 +62,16 @@
   <!-- Is uglifyjs installed? -->
   <available file="/usr/bin/uglifyjs" property="uglifyjs.present"/>
 
+  <!-- Is the JSP static check runnable?  Optional like uglifyjs: both the
+       interpreter and the script must be there.  See checkjsps target below. -->
+  <property name="jspcheck.script" location="../../../tools/scripts/checkjsps.py"/>
+  <condition property="jspcheck.present">
+    <and>
+      <available file="/usr/bin/python3"/>
+      <available file="${jspcheck.script}"/>
+    </and>
+  </condition>
+
   <target name="depend" if="depend.available" unless="compile.uptodate">
     <depend
       cache="${build.dir}/depend-cache"
@@ -510,7 +520,18 @@
   </target>
 
   <!-- Does NOT update the message classes, as those go in the jar -->
-  <target name="war" depends="precompilejsp, warUpToDate, listChangedFiles2" unless="war.uptodate">
+  <!-- Static check of the pages, run before the war is built.  Optional, see
+       jspcheck.present above.  It runs the correctness and security audits, and
+       any finding either one reports fails the build. -->
+  <target name="checkjsps" if="jspcheck.present">
+    <exec executable="/usr/bin/python3" failonerror="true">
+      <arg value="${jspcheck.script}"/>
+      <arg value="--app"/>
+      <arg value="routerconsole"/>
+    </exec>
+  </target>
+
+  <target name="war" depends="precompilejsp, checkjsps, warUpToDate, listChangedFiles2" unless="war.uptodate">
     <!-- Set if unset -->
     <property name="workspace.changes.w.tr" value=""/>
     <!-- Don't include the css in the war, the main build.xml will copy it to docs/themes/console/ -->
