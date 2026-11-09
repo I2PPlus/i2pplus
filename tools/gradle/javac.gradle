@@ -1,0 +1,192 @@
+// ---------------------------------------------------------------------------
+// Which javac compiles this build, and at what level
+// ---------------------------------------------------------------------------
+// Ant compiles with -source/-target ${javac.version} (default 1.8) on whatever
+// JDK runs ant, and byte-identical jars need JDK 8's javac: newer javac does not
+// emit the synthetic switch-map classes (EepGet$2 etc.). So we use a JDK 8 when
+// one is installed and a later one when it is not - a machine that has never
+// seen Java 8 still has to build. The level is the user's call, not ours:
+// -Pjavac.version=1.7 is ant's android level, -Pjavac.version=11 works too.
+//
+// Resolution order (nothing here is fatal unless there is no javac at all):
+//   1. -PjdkHome (or the older -Pjdk8Home), when it holds a javac
+//   2. an installed JDK whose major version is the requested level - byte parity
+//      with ant, compiled with -source/-target the way ant does
+//   3. the JDK running gradle, when its javac can still target the level
+//   4. any other installed JDK that can target it, newest first
+//   5. the newest javac found, compiling at its own level
+//
+// -PjdkRoots (path-separator separated) replaces the install roots that get
+// scanned, for a JDK kept somewhere the defaults do not cover.
+//
+// Nothing below starts a process: the configuration cache rejects an external
+// process at configuration time, so versions come from files and the one flag
+// that cannot be read from a file is checked lazily, at execution time.
+
+def javacExe = { File home ->
+    def name = System.getProperty('os.name').toLowerCase().contains('windows') ? 'javac.exe' : 'javac'
+    def f = new File(home, 'bin' + File.separator + name)
+    f.canExecute() ? f : null
+}
+
+// The major version, read rather than asked: JAVA_VERSION="1.8.0_452" in the
+// install's own release file on 9 and later, and the install directory name
+// (java-1.8.0-openjdk-amd64, openjdk-17, jdk-11.0.2, zulu-8) where there is no
+// release file, as on a JDK 8 jre layout. -1 when neither says.
+def jdkMajor = { File home ->
+    def rel = new File(home, 'release')
+    if (rel.isFile()) {
+        def m = rel.text =~ /JAVA_VERSION="(?:1\.)?(\d+)/
+        if (m.find())
+            return m.group(1) as int
+    }
+    // the name of what the symlink points at, so default-java reads as 25. The
+    // 1.x spelling (java-1.8.0-openjdk) means 8, and the boundary keeps the
+    // arch suffix out of it (java-8-openjdk-amd64 is 8, not 64).
+    def m = home.canonicalFile.name =~ /(?:^|[^0-9.])(?:1\.)?(\d+)(?:[^0-9]|$)/
+    m.find() ? (m.group(1) as int) : -1
+}
+
+// Installed JDKs, deduplicated by canonical path. Covers the FHS layout, the mac
+// .app layout, the Windows program files, sdkman and jabba, JAVA_HOME, and the
+// JDK gradle itself runs on (a jre/ child of a full JDK included).
+def jdkCandidates = {
+    def found = []
+    def seen = new TreeSet<String>()
+    def add = { File h ->
+        if (h == null)
+            return
+        def mac = new File(h, 'Contents' + File.separator + 'Home')
+        if (javacExe(h) == null && mac.isDirectory())
+            h = mac
+        if (javacExe(h) == null)
+            return
+        if (seen.add(h.canonicalFile.absolutePath))
+            found << h
+    }
+    def defaults = ['/usr/lib/jvm', '/usr/lib64/jvm', '/usr/java', '/usr/local/java', '/opt/java',
+                    '/opt/jdk', '/Library/Java/JavaVirtualMachines', 'C:/Program Files/Java',
+                    'C:/Program Files/Eclipse Adoptium', 'C:/Program Files/Microsoft',
+                    System.properties['user.home'] + '/.sdkman/candidates/java',
+                    System.properties['user.home'] + '/.jabba/jdk'].join(File.pathSeparator)
+    providers.gradleProperty('jdkRoots').getOrElse(defaults).split(File.pathSeparator)
+            .findAll { it.trim() }.each { r ->
+        def d = new File(r)
+        if (!d.isDirectory())
+            return
+        add(d)
+        d.eachDir { c -> add(c) }
+    }
+    def running = new File(System.getProperty('java.home'))
+    add(running)
+    add(running.parentFile)
+    if (System.getenv('JAVA_HOME'))
+        add(new File(System.getenv('JAVA_HOME')))
+    found
+}
+
+// javac's --release floor: 7 through JDK 20, 8 from JDK 21 on. Read from the
+// documented support windows rather than probed, because a probe here would be a
+// process at configuration time; the lazy check on releaseArgs below is what
+// actually protects the build if a future javac drops 8.
+def releaseFloor = { int major -> major >= 21 ? 8 : 7 }
+def canTarget = { int major, int lvl -> major >= lvl && lvl >= releaseFloor(major) }
+
+// ant spells the level 1.8 and 1.7; a bare 8 or 11 is accepted as well.
+def parseLevel = { String s ->
+    def m = (s ?: '').trim() =~ /^(?:1\.)?(\d+)$/
+    m.find() ? (m.group(1) as int) : 8
+}
+
+def requested = parseLevel(providers.gradleProperty('javac.version').getOrElse('1.8'))
+def candidates = jdkCandidates()
+def byNewest = candidates.sort { a, b -> jdkMajor(b) <=> jdkMajor(a) }
+
+File home = null
+['jdkHome', 'jdk8Home'].each { name ->
+    if (home)
+        return
+    def p = providers.gradleProperty(name).getOrNull()
+    if (p && javacExe(new File(p)))
+        home = new File(p)
+}
+if (!home)
+    home = candidates.find { jdkMajor(it) == requested }
+if (!home) {
+    // a later javac that can still target the level, starting with the JDK gradle
+    // is already running on so the build stays on the user's own toolchain
+    def running = new File(System.getProperty('java.home')).canonicalFile
+    def ordered = byNewest.findAll { it.canonicalFile != running }
+    def mine = byNewest.find { it.canonicalFile == running }
+    if (mine)
+        ordered.add(0, mine)
+    home = ordered.find { canTarget(jdkMajor(it), requested) }
+}
+if (!home)
+    home = byNewest.find { javacExe(it) }
+
+if (!home) {
+    throw new GradleException("No javac found for the requested Java ${requested} - gradle runs on " +
+            "${System.getProperty('java.home')}, which has no compiler. Install a JDK, or point " +
+            '-PjdkHome at one and -PjdkRoots at the directory that holds it.')
+}
+
+def javac = javacExe(home)
+def major = jdkMajor(home)
+// A javac older than the level cannot target it, so it compiles at its own level.
+def level = canTarget(major, requested) ? requested : major
+// JDK 8's javac has no --release at all; 9 and later prefer it, because
+// -source/-target without a bootclasspath makes javac warn.
+def usesRelease = major > 8
+
+// The one thing a file cannot tell us: whether this javac still accepts
+// --release <level>. Checked lazily at execution time by providers.exec, whose
+// result is memoized, so the tiny compile runs once per build and the notice
+// below prints once. If it is refused, the flag is dropped and the module
+// compiles at the compiler's own level rather than failing the build.
+def probeDir = new File(System.getProperty('java.io.tmpdir'), 'i2p-javac-probe')
+def releaseArgs = providers.provider { [] as List<String> }
+if (usesRelease) {
+    probeDir.mkdirs()
+    def probeSrc = new File(probeDir, 'I2PReleaseProbe.java')
+    probeSrc.text = 'public class I2PReleaseProbe {}\n'
+    def probeOut = new File(probeDir, "out-${level}")
+    probeOut.mkdirs()
+    releaseArgs = providers.exec { spec ->
+        spec.commandLine(javac.absolutePath, '--release', "${level}".toString(),
+                        '-d', probeOut.absolutePath, probeSrc.absolutePath)
+    }.result.map { r ->
+        if (r.exitValue == 0)
+            return ['--release', "${level}".toString()]
+        logger.lifecycle("javac: Java ${major} at ${home} will not target Java ${level} - " +
+                'compiling at its own level instead')
+        return []
+    }
+}
+
+ext.javacLevel = level
+ext.javacHome = home
+ext.javacUsesReleaseFlag = usesRelease
+
+// One place sets the flags, so the root-level JavaCompile tasks (the IzPack panel
+// patches) cannot drift from the module compilations.
+ext.i2pJavacOptions = { opts ->
+    opts.encoding = 'UTF-8'
+    opts.fork = true
+    opts.forkOptions.javaHome = home
+    if (usesRelease) {
+        opts.compilerArgumentProviders.add(
+                { releaseArgs.get() } as org.gradle.process.CommandLineArgumentProvider)
+    } else {
+        def flag = "1.${level}".toString()
+        opts.compilerArgs += ['-source', flag, '-target', flag]
+    }
+}
+
+// Only say something when the jars are not what ant would produce: that is the
+// one difference a packager has to know about.
+if (major != requested || (requested == 8 && usesRelease)) {
+    def how = usesRelease ? "--release ${level}" : "-source/-target 1.${level}"
+    logger.lifecycle("javac: Java ${major} at ${home} (${how}), requested Java ${requested} - " +
+            "ant compiles with Java 8 javac, so these jars are not byte-identical to ant's")
+}

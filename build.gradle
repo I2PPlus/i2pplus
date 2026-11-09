@@ -3,6 +3,10 @@ apply plugin: 'java-library'
 
 buildDir = file("/tmp/build-i2p/gradle")
 
+// Resolves the javac every JavaCompile task below uses; must run first because
+// the subprojects block reads what it publishes.
+apply from: file('tools/gradle/javac.gradle')
+
 String getReleaseVersion() {
     def releaseVersion
     file("core/java/src/net/i2p/CoreVersion.java").readLines().findAll({ line ->
@@ -73,9 +77,6 @@ ext.buildTimestamp = providers.provider {
     }
 }
 
-// JDK 8 javac used for all compilation, matching the ant build
-ext.jdk8Home = providers.gradleProperty('jdk8Home').orElse('/usr/lib/jvm/java-8-openjdk-amd64').get()
-
 def releaseVersion = getReleaseVersion()
 def buildVersion = getBuildVersion()
 def buildExtra = getBuildExtra()
@@ -104,15 +105,12 @@ subprojects {
         apply plugin: 'jacoco'
     }
 
-    // Match the ant build (JDK 8 javac, -source/-target 1.8, debug on) so
-    // both produce identical bytecode and synthetic classes; newer javac
-    // versions don't emit the synthetic switch-map classes (EepGet$2 etc.),
-    // so bytecode wouldn't match ant's jars
+    // The compiler and the level come from tools/gradle/javac.gradle: JDK 8's
+    // javac with -source/-target 1.8 when one is installed (byte-identical to
+    // ant, synthetic switch-map classes included), a later javac with --release
+    // when it is not.
     tasks.withType(JavaCompile).configureEach {
-        options.encoding = 'UTF-8'
-        options.fork = true
-        options.forkOptions.javaHome = file(rootProject.ext.jdk8Home)
-        options.compilerArgs += ['-source', '1.8', '-target', '1.8']
+        rootProject.ext.i2pJavacOptions(options)
     }
 
     repositories {

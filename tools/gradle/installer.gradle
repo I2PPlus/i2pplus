@@ -820,8 +820,7 @@ task izpackPanelClasses(type: JavaCompile) {
   destinationDirectory = panelClassesDir
   // Resolved lazily, so the distribution may be downloaded during this same run
   classpath = files(fileTree(file("${iz5home}/lib")) { include '*.jar' })
-  options.encoding = 'UTF-8'
-  options.release = 8            // ant compiles these at source/target 8
+  rootProject.ext.i2pJavacOptions(options)   // the same compiler and level as the modules
   options.compilerArgs << '-Xlint:-options'
   options.compilerArgs << '-XDignore.symbol.file'
   doFirst {
