@@ -223,13 +223,31 @@
 
   <!-- Static check of the pages, run before the war is built.  Optional, see
        jspcheck.present above.  It runs the correctness and security audits, and
-       any finding either one reports fails the build. -->
+       any finding either one reports fails the build.  The exit code is captured
+       rather than thrown, so the build stops on the report the audits printed, with
+       the counts in the message, instead of blaming the ant line for "exec returned:
+       1".  The audits print the same report to the console either way. -->
   <target name="checkjsps" if="jspcheck.present">
-    <exec executable="${jspcheck.python}" failonerror="true">
+    <tempfile property="jspcheck.report" destDir="${java.io.tmpdir}" createFile="false"/>
+    <touch file="${jspcheck.report}"/>
+    <exec executable="${jspcheck.python}" failonerror="false" resultproperty="jspcheck.rc">
       <arg value="${jspcheck.script}"/>
       <arg value="--app"/>
       <arg value="susidns"/>
+      <arg value="--ant-report"/>
+      <arg value="${jspcheck.report}"/>
     </exec>
+    <loadproperties srcFile="${jspcheck.report}"/>
+    <property name="jspcheck.validation.count" value="0"/>
+    <property name="jspcheck.validation.rules" value="none reported"/>
+    <property name="jspcheck.security.count" value="0"/>
+    <property name="jspcheck.security.rules" value="none reported"/>
+    <condition property="jspcheck.failed">
+      <not>
+        <equals arg1="${jspcheck.rc}" arg2="0"/>
+      </not>
+    </condition>
+    <fail if="jspcheck.failed" message="JSP check failed for susidns: validation ${jspcheck.validation.count} issue(s) (${jspcheck.validation.rules}), security ${jspcheck.security.count} issue(s) (${jspcheck.security.rules}). The report is in the lines above; tools/scripts/jsp-audit.py --app susidns --verbose lists every finding."/>
   </target>
 
   <target name="war" depends="compile, precompilejsp, checkjsps, bundleTranslations, warUpToDate" unless="war.uptodate">

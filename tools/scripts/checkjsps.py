@@ -193,7 +193,10 @@ def audit_phase(args):
             sys.stderr.write('missing %s\n' % script)
             rc = 1
             continue
-        r = run([sys.executable, path, '--app', args.app])
+        cmd = [sys.executable, path, '--app', args.app]
+        if args.ant_report:
+            cmd += ['--ant-report', args.ant_report]
+        r = run(cmd)
         # each audit already says what it found, in the house '* ' form
         rc |= r.returncode
     return rc
@@ -211,6 +214,10 @@ def main():
     ap.add_argument('--compile', action='store_true',
                     help='also run JspC and javac (the builds already do this themselves)')
     ap.add_argument('--skip-audit', action='store_true', help='compile phase only')
+    ap.add_argument('--ant-report', metavar='FILE',
+                    help='pass through to the audits: they append their counts to '
+                         'FILE as ant properties, so the build can fail with the '
+                         'report as its message instead of "exec returned: 1"')
     args = ap.parse_args()
 
     if not args.webapp:

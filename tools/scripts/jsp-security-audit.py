@@ -218,6 +218,8 @@ def main():
     ap.add_argument('--json', action='store_true', help='machine-readable findings')
     ap.add_argument('--rule', action='append', help='only these rules')
     ap.add_argument('--app', action='append', help='only these apps')
+    ap.add_argument('--ant-report', metavar='FILE',
+                    help='append the finding counts to FILE as ant properties')
     args = ap.parse_args()
 
     wanted_apps = set(args.app) if args.app else set(a['name'] for a in APPS)
@@ -263,24 +265,39 @@ def main():
                           'blind': sorted(blind)}, indent=1))
     else:
         # house style for a build-time checker (see bundle-messages.sh): one
-        # '* ' summary line per app, and a second line pointing at the command
-        # that shows the detail. Everything else is for a direct --verbose run.
+        # '* ' summary line per app, then the tally of what fired with the pages it
+        # fired on, then the command that shows the detail. The findings themselves,
+        # with the rule id and the prose, are for a --verbose run.
+        jspdirs = {a['name']: a['jsp'] for a in ja.APPS}
         for name in sorted(pages):
             mine = [i for i in findings.items if i.get('app') == name]
             print(ja.summary_line('JSP security check', name, len(mine)))
-            if mine:
+            if not mine:
+                continue
+            if args.verbose:
+                for i in sorted(mine, key=lambda x: (x['file'], x['line'])):
+                    for ln in ja.finding_lines(i):
+                        print(ln)
+            else:
+                for rule, cnt in sorted(ja._rule_counts(mine).items(),
+                                        key=lambda kv: (-kv[1], ja.rule_label(kv[0]))):
+                    print('  - %s: %d' % (ja.rule_label(rule), cnt))
+                    for ln in ja._tally_sites(mine, rule, jspdirs.get(name, '')):
+                        print(ln)
+                print('  - Total: %d' % len(mine))
+            if not args.verbose:
                 print(ja.report_cmd('tools/scripts/jsp-security-audit.py', name))
-                if args.verbose:
-                    for i in sorted(mine, key=lambda x: (x['file'], x['line'])):
-                        print('*   %s:%d %s %s'
-                              % (i['file'], i['line'], i['rule'], i['key'][:90]))
-                    for rule, n in sorted(findings.by_rule().items()):
-                        print('*   %s: %d' % (rule, n))
         if blind and args.verbose:
             print('* JSP security unchecked expressions: %d (source not visible '
                   'from the page)' % len(blind))
             for b in sorted(blind):
-                print('*   ' + b)
+                for ln in ja.item_lines(b):
+                    print(ln)
+
+    if args.ant_report:
+        for name in sorted(pages):
+            ja.ant_report(args.ant_report, 'security',
+                          [i for i in findings.items if i.get('app') == name])
 
     # a fresh pass every run: no baseline, so any finding at all is a failure
     return 1 if findings.items else 0
