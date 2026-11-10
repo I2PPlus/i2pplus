@@ -56,8 +56,8 @@ of the JDK they were built in and so never map inside the image. That is 108 MB 
 the 262 MB a full OpenJDK 17 adds. Everything a running JVM reads - `lib/modules`,
 `lib/server/libjvm.so`, the other native libraries, `conf`, `legal` - stays.
 
-The copy also dereferences symlinks (`cp -aL`) and fills in what a Debian/Ubuntu
-JDK keeps outside its own tree. Those distributions reach `java.security`, the
+The copy also dereferences symlinks and fills in what a Debian/Ubuntu JDK keeps
+outside its own tree. Those distributions reach `java.security`, the
 jurisdiction policy files and the `cacerts` trust store through absolute links
 into `/etc/java-<feature>-openjdk` and `/etc/ssl/certs/java`; a link copied into
 the image is resolved on the machine that runs it, which may have no such
@@ -65,6 +65,13 @@ directory. The build copies those files in and stops if it cannot find them,
 because a JVM without `java.security` throws `InternalError` at the first crypto
 call and a JVM without a trust store fails every HTTPS handshake - eepget, the
 plugin updates, console HTTPS.
+
+The dereferencing is a `tar -h` pipe rather than `cp -aL`, because `cp -L` fails
+the build on a dangling symlink and a Debian headless JDK ships one:
+`openjdk-17-jdk-headless` carries `lib/src.zip` as a link to
+`/usr/lib/jvm/openjdk-17/src.zip`, a file only the non-headless `openjdk-17-jdk`
+installs. The script lists the broken links with `find -xtype l` and excludes
+them from the copy; they are all build-time files pruned anyway.
 
 ## AppStream metadata
 

@@ -79,15 +79,29 @@ if [ ! -x "${JAVA_DIR}/bin/java" ]; then
     echo "No Java runtime at ${JAVA_DIR} -> pass the JDK to bundle as the fifth argument, or -Dappimage.jdk=" >&2
     exit 1
 fi
-# -L copies what the JDK's symlinks point at rather than the links. Debian and
-# Ubuntu keep conf/security/java.security, the jurisdiction policy files and the
-# cacerts trust store outside the JDK tree, under /etc/java-<feature>-openjdk and
-# /etc/ssl/certs/java, and reach them through absolute symlinks. A link copied
-# into the image is resolved on the machine that runs it, which may have no such
-# directory, and the JVM then stops with "Error loading java.security file"
-# before the router has started.
-cp -aL "$JAVA_DIR" "$APPDIR/usr/lib/jvm/"
+# The copy dereferences what the JDK's symlinks point at rather than copying the
+# links. Debian and Ubuntu keep conf/security/java.security, the jurisdiction
+# policy files and the cacerts trust store outside the JDK tree, under
+# /etc/java-<feature>-openjdk and /etc/ssl/certs/java, and reach them through
+# absolute symlinks. A link copied into the image is resolved on the machine that
+# runs it, which may have no such directory, and the JVM then stops with "Error
+# loading java.security file" before the router has started.
+#
+# tar does the dereferencing, not cp, because cp -L dies on a dangling symlink
+# and a Debian headless JDK ships at least one: openjdk-17-jdk-headless carries
+# lib/src.zip as a link to /usr/lib/jvm/openjdk-17/src.zip, a file only the
+# non-headless openjdk-17-jdk installs, so on a headless install the link goes
+# nowhere and the copy fails the build. tar -h dereferences the same way and
+# takes an explicit exclude list, so the broken links are skipped. Every dangling
+# link in a Debian JDK tree is a build-time file pruned just below, so nothing a
+# running JVM reads is lost.
 JVM_DIR="$APPDIR/usr/lib/jvm/$(basename "$JAVA_DIR")"
+mkdir -p "$JVM_DIR"
+BROKEN_LINKS=()
+while IFS= read -r -d '' link; do
+    BROKEN_LINKS+=(--exclude="${link#./}")
+done < <(cd "$JAVA_DIR" && find . -xtype l -print0)
+(cd "$JAVA_DIR" && tar "${BROKEN_LINKS[@]}" -chf - .) | (cd "$JVM_DIR" && tar -xpf -)
 
 # Strip what a runtime never reads: jmods (jlink inputs), the JNI headers and man
 # pages (build-time), ct.sym (javac's cross-compilation symbol table), src.zip
