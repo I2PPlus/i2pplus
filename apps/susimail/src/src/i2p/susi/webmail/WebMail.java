@@ -2894,7 +2894,7 @@ public class WebMail extends HttpServlet {
             }
             if (showRefresh) {
                 info.append("<noscript>").append(_t("Refresh the page for updates"))
-                    .append("</br></noscript>");
+                    .append("<br></noscript>");
             }
             if (currentInfo != null && !currentInfo.isEmpty()) {
                 info.append(quoteHTML(currentInfo).replace("\n", "<br>"));
