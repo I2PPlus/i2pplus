@@ -20,13 +20,20 @@ def pkgTempArg = "${pkgTempDir}"
 def pkgTmpDirAbs = "${pkgTempDir}"
 def buildExtraSuffix = "${ext.buildExtra}"
 
+// The AppImage AppDir staging tree (ant: appimage.dir). gradle has no AppImage
+// task, so the path is spelled out here to keep distclean in step with ant.
+def appImageDir = file("${System.getProperty('java.io.tmpdir')}/build-i2p/appimage")
+
 // File sets for distclean, captured at configuration time so the task body
 // stays configuration-cache compatible. dist is emptied, not removed: the
 // directory and its README.md stay (ant: fileset dir=./dist excludes=README.md).
 def distFiles = fileTree('dist') { exclude 'README.md' }
 def blocklistBaks = fileTree('installer/resources/blocklist') { include '*.bak' }
 def soFiles = fileTree(rootDir) { include '*.so'; include '*.so.*' }
-def appImages = fileTree(rootDir) { include 'AppImage/'; include '*.appimage'; include '*.AppImage' }
+// AppDir and packed AppImages in the workspace: AppImage/ from builds from before
+// the AppDir moved under the build root, appimage/ from the script's fallback
+// when the payload directory it is handed is itself in the workspace.
+def appImages = fileTree(rootDir) { include 'AppImage/'; include 'appimage/'; include '*.appimage'; include '*.AppImage' }
 def moduleBuildDirs = fileTree(rootDir) { include 'apps/*/build/**'; include 'core/build/**'; include 'router/build/**'; include 'installer/**/build/**' }
 def runtimeArtifacts = fileTree(rootDir) { include 'sessionbans/'; include 'peerProfiles/'; include 'autotune.config'; include 'logger.config'; include 'messages.mo' }
 def wrapperObjs = fileTree('installer/lib/wrapper/win64') { include '*.o'; include '*.rc'; include 'console.ico' }
@@ -58,6 +65,9 @@ task distclean(type: Delete) {
     // Gradle hardcodes the configuration-cache report to <rootDir>/build/reports,
     // regardless of the redirected buildDir, and writes it whenever a build fails
     delete file('build')
+    // The AppImage AppDir (ant: delete dir of appimage.dir), named here even
+    // though the build-root wipe below already covers it.
+    delete appImageDir
     // Redirected build output (build.root): wipes /tmp/build-i2p like ant
     delete file(buildDir.parentFile)
     doLast {

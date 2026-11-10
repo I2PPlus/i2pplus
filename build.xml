@@ -4,6 +4,25 @@
     <property name="build.root" value="${java.io.tmpdir}/build-i2p/"/>
     <property name="build.dir" value="${build.root}build"/>
     <property name="pkg.temp.dir" value="${build.root}pkg-temp"/>
+    <!-- The AppImage AppDir: the tree build-appimage.sh fills with a Java runtime,
+         the payload and the desktop entries before appimagetool packs it. Staged
+         under build.root with every other staging directory, so a build cannot
+         leave it in the workspace, and both builds wipe it along with the build
+         root. The script derives the same path itself when it is run by hand. -->
+    <property name="appimage.dir" value="${build.root}appimage"/>
+    <!-- The Java runtime packed into the AppImage. The router jars are Java 8
+         bytecode, so any runtime from 8 up runs them; 17 is what we ship because
+         the console's Jetty 9 is only exercised up to there. This is the
+         Debian/Ubuntu OpenJDK path, which CI installs alongside the Temurin JDK 8
+         the build itself runs on - that one sits under /opt/hostedtoolcache and
+         is a build toolchain, not a runtime to ship. -->
+    <property name="appimage.jdk" value="/usr/lib/jvm/java-17-openjdk-amd64"/>
+    <!-- What appimage-setup hands to tools/appimage/download-appimagetool.sh:
+         empty uses the latest release, a tag pins one, "never" keeps what is
+         installed. Defined here rather than in buildProperties because
+         appimage-setup runs before that target, and an unset property would
+         reach the script as a literal "${appimagetool.update}". -->
+    <property name="appimagetool.update" value=""/>
     <!-- IzPack 5 panel patch classes and jar. Under build.root rather than beside the
          source: nothing reads them except the compiler classpath below, and module
          builds stay out of the workspace. Mirrors tools/gradle/installer.gradle. -->
@@ -836,7 +855,6 @@
     <!-- default if not set by disableManifestClasspath -->
     <property name="manifest.classpath.name" value="Class-Path"/>
     <property name="full.version" value="${release.number}-${i2p.build.number}${build.extra}"/>
-  <property name="appimagetool.update" value=""/>
     <echo message="Ant: ${ant.version}"/>
     <echo message="Ant-Contrib: ${basedir}/tools/ant-contrib.jar"/>
     <echo message="JDK: ${java.vendor} ${java.version} (${java.runtime.name} ${java.runtime.version})"/>
@@ -2249,13 +2267,22 @@
           <include name="squashfs-root/"/>
         </fileset>
       </delete>
+      <!-- AppDir and packed file left in the workspace: AppImage/ by builds from
+           before the AppDir moved under build.root, appimage/ by the script's
+           fallback when the payload directory it was handed is itself in the
+           workspace. -->
       <delete includeemptydirs="true" quiet="true">
         <fileset dir=".">
           <include name="AppImage/"/>
+          <include name="appimage/"/>
           <include name="*.appimage"/>
           <include name="*.AppImage"/>
         </fileset>
       </delete>
+      <!-- The AppDir staging tree under build.root, named so the location is
+           visible here and the AppDir goes even if the build-root wipe below is
+           pointed elsewhere (ant -Dbuild.root= at a shared location). -->
+      <delete dir="${appimage.dir}" quiet="true" failonerror="false"/>
       <!-- Remove redirected build output -->
       <delete dir="${build.root}" quiet="true" failonerror="false"/>
       <!-- Ensure dist directory exists after cleanup -->
@@ -2726,13 +2753,26 @@
     <echo message="pkgTempDir=${pkg.temp.dir}"/>
   </target>
 
-  <target name="buildAppImage" depends="preppkg-linux" description="Build AppImage for Linux">
+  <!-- appimagetool is not in the repository (tools/ is gitignored), so the
+       target that packs the AppImage cannot assume the tool is there. Mirrors
+       checkstyle-setup and codeql-setup: the script reports what it found and
+       what it installed, and ant shows that output. -->
+  <target name="appimage-setup">
+    <exec executable="bash" dir="${basedir}" failonerror="true">
+      <arg value="tools/appimage/download-appimagetool.sh"/>
+      <arg value="${appimagetool.update}"/>
+    </exec>
+  </target>
+
+  <target name="buildAppImage" depends="appimage-setup, preppkg-linux" description="Build AppImage for Linux">
     <echo message="Building I2P+ AppImage..."/>
     <exec executable="bash" dir="${basedir}" failonerror="true">
       <arg value="tools/appimage/build-appimage.sh"/>
       <arg value="${full.version}"/>
       <arg value="${appimagetool.update}"/>
       <arg value="${pkg.temp.dir}"/>
+      <arg value="${appimage.dir}"/>
+      <arg value="${appimage.jdk}"/>
     </exec>
     <antcall target="sha256sum">
       <param name="sha256.file" value="dist/I2P+_${full.version}.appimage"/>
