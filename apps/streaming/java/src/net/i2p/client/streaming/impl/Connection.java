@@ -1817,7 +1817,7 @@ class Connection {
                             if (shouldLogPersistWarn(_lastPersistWarnTime, now, persistDelay)) {
                                 _lastPersistWarnTime = now;
                                 if (_log.shouldWarn()) {
-                                    _log.warn("Persist timer expired, auto-unchoking on " + shortLabel());
+                                    _log.warn(shortLabel() + " -> Persist timer expired, auto-unchoking");
                                 }
                             }
                             persistBackoff = Math.min(persistBackoff + 1, 5);
@@ -1828,8 +1828,7 @@ class Connection {
                     if (timeoutMs > 0) {
                         if (timeLeft <= 0) {
                             _log.infoThrottled("streaming-window-full",
-                                "Outbound window full on " + shortLabel() + " -> " +
-                                (_isChoked ? "Choked" : "Not choked") +
+                                shortLabel() + " -> Outbound window full * Choked: " + (_isChoked ? "yes" : "no") +
                                 "\n* Unacked: " + unacked + " * Active resends: " + _activeResends +
                                 " * Waited: " + (timeoutMs - timeLeft) + "ms");
                             return false;
@@ -2323,14 +2322,14 @@ class Connection {
                 _context.statManager().addRateData("stream.con.stallDetected", 1);
                 markStalledForRotation();
                 if (_log.shouldWarn()) {
-                    _log.warn("Stream stalled -> No bytes acknowledged for " +
-                              DataHelper.formatDuration(STALL_GRACE_MS) + " on " + shortLabel());
+                    _log.warn(shortLabel() + " -> Stream stalled, no bytes acknowledged for " +
+                              DataHelper.formatDuration(STALL_GRACE_MS));
                 }
                 break;
             case THROTTLED:
                 _context.statManager().addRateData("stream.con.throttleDetected", 1);
                 if (_log.shouldWarn()) {
-                    _log.warn("Stream throttled -> Goodput far below the baseline on " + shortLabel());
+                    _log.warn(shortLabel() + " -> Stream throttled, goodput far below the baseline");
                 }
                 break;
             default:
@@ -3265,8 +3264,8 @@ class Connection {
         if (_log.shouldWarn()) {
             long elapsed = _context.clock().now() - before;
             if (elapsed > 250) {
-                _log.warn("Scheduler pass took " + elapsed + "ms on " + shortLabel() +
-                          " -> Pumped through " + sched);
+                _log.warn(shortLabel() + " -> Scheduler pass took " + elapsed + "ms" +
+                          " * Pumped through " + sched);
             }
         }
     }
@@ -3532,8 +3531,8 @@ class Connection {
                 // timeout slot.
                 if (cro > 0 && cro < cso && getUnackedPacketsSent() <= 0) {
                     if (_log.shouldInfo()) {
-                        _log.info("Received close, we sent close, all ACKed on " + shortLabel() +
-                                  " -> Skipping TIME-WAIT");
+                        _log.info(shortLabel() + " -> Received close, we sent close, all ACKed," +
+                                  " skipping TIME-WAIT");
                     }
                     // They sent the first CLOSE.
                     // We do not need to enter TIME-WAIT, we are done.
@@ -3979,7 +3978,7 @@ class Connection {
     public void setChoking(boolean on) {
         if (on != _isChoking) {
             _isChoking = on;
-            if (_log.shouldWarn()) {_log.warn("Choking changed to " + on + " on " + shortLabel());}
+            if (_log.shouldWarn()) {_log.warn(shortLabel() + " -> Choking changed to " + (on ? "on" : "off"));}
             if (!on) {_unchokesToSend.set(UNCHOKES_TO_SEND);}
             _lastChokeAckTime = _context.clock().now();
             ackImmediately();
@@ -4004,7 +4003,7 @@ class Connection {
     public void setChoked(boolean on) {
         if (on != _isChoked) {
            _isChoked = on;
-           if (_log.shouldWarn()) {_log.warn("Choked state " + (on ? "enabled" : "disabled") + " on " + shortLabel());}
+           if (_log.shouldWarn()) {_log.warn(shortLabel() + " -> Choked state " + (on ? "enabled" : "disabled"));}
            if (!on) {
                 // Episode boundary for the persist WARN gate: once the remote
                 // unchokes us, a fresh persist episode in a later window may log.
@@ -4537,19 +4536,20 @@ class Connection {
     }
 
     /**
-     * One-line identity for log lines that have to stay short: the local service
-     * tag, the stream ids, and the peer. {@link #toString()} is a multi-line
-     * diagnostic dump, and a per-event line built from it buries the log — the
-     * tail loss probe alone emitted 17,700 dumps in one log rotation.
+     * One-line identity for log lines that have to stay short: which of this
+     * router's services owns the stream, and the peer at the other end.
+     * {@link #toString()} is a multi-line diagnostic dump, and a per-event line
+     * built from it buries the log — the tail loss probe alone emitted 17,700
+     * dumps in one log rotation.
      *
-     * @return a single-line label, e.g. {@code [462diuko] 73SKgw/AAAAAA [4bpcp4fm]}
+     * @return a single-line label, e.g. {@code From: [462diuko] * To: [4bpcp4fm]}
      * @since 0.9.72+
      */
     String shortLabel() {
         // The stream-ID pair stays out of the label: it is raw base64 sitting
         // between the two bracketed hashes that already name the connection, and
         // toString() carries it for the times the IDs themselves matter.
-        return '[' + localTag() + "] " + getRemotePeerString();
+        return "From: [" + localTag() + "] * To: " + getRemotePeerString();
     }
 
     /**
@@ -4701,7 +4701,8 @@ class Connection {
             // it (see synHardSends()).
             oldest.incrementTlpProbes();
             if (_log.shouldDebug()) {
-                _log.debug("TLP sent for seq " + oldest.getSequenceNum() + " on " + shortLabel());
+                _log.debug(shortLabel() + " -> Re-enqueued the oldest unacked packet as a tail loss probe"
+                        + "\n* Seq: " + oldest.getSequenceNum());
             }
         }
     }
