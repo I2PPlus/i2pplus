@@ -1,19 +1,64 @@
 #!/bin/bash
-# AppRun script for I2P+ AppImage
-# This script is the entry point for the AppImage
+# AppRun is the entry point of the AppImage: it starts the router in the
+# foreground, which is how a program launched from a desktop entry has to run.
+#
+# The payload's own launcher, i2p/i2prouter, is the Tanuki wrapper script and it
+# does not fit here. It wants a writable install directory (wrapper.log goes in
+# it) and the AppImage is mounted read-only, at a path that changes on every run.
+# So this script starts the JVM the way wrapper.config does - same main class,
+# same memory, same options - and keeps the one thing the wrapper is there for,
+# restarting the JVM when the router asks for it.
 
 APP="$(dirname "$(readlink -f "${0}")")"
-export I2P="$APP/i2p"
-export JAVA_HOME="${APP}/usr/lib/jvm/java-17-openjdk-amd64"
+I2P="$APP/i2p"
 
-# Set up environment
-export PATH="$JAVA_HOME/bin:$PATH"
+# The runtime directory carries the name of whatever the build copied in, so look
+# it up instead of naming a version. With no runtime bundled, JAVA_HOME is left
+# alone and the router uses the JVM the user already has.
+for jvm in "$APP"/usr/lib/jvm/*; do
+    if [ -x "$jvm/bin/java" ]; then
+        export JAVA_HOME="$jvm"
+        break
+    fi
+done
+if [ -x "${JAVA_HOME:-}/bin/java" ]; then
+    JAVA="$JAVA_HOME/bin/java"
+else
+    JAVA="$(command -v java || true)"
+fi
+if [ -z "$JAVA" ]; then
+    echo "No Java runtime in the image and none on PATH -> rebuild with -Dappimage.jdk= pointing at one" >&2
+    exit 1
+fi
+
 export HOME="${HOME:-/tmp}"
-export I2P_CONFIG_DIR="${HOME}/.i2p"
-export I2P_LOG_DIR="${HOME}/.i2p/logs"
+export I2P_CONFIG_DIR="${I2P_CONFIG_DIR:-${HOME}/.i2p}"
+export I2P_LOG_DIR="${I2P_LOG_DIR:-${I2P_CONFIG_DIR}/logs}"
+export PATH="$JAVA_HOME/bin:$PATH"
 
-# Create config dir if it doesn't exist
+# The config directory is the writable half of the install; everything the router
+# writes - config, logs, netDb, rrd - goes there, never to the read-only mount.
 mkdir -p "$I2P_CONFIG_DIR"
 
-# Run I2P+
-exec "$I2P/i2prouter" "$@"
+# 4, 5 and 10 are the exit codes the router returns when it wants a new JVM: the
+# console's restart, an update, a setting that cannot be applied in place. The
+# wrapper restarts on those, so this does too; anything else is the end.
+while : ; do
+    "$JAVA" -Xms128m -Xmx512m \
+        -Djava.net.preferIPv4Stack=false \
+        -Djava.library.path="$I2P:$I2P/lib" \
+        -Di2p.dir.base="$I2P" \
+        -Di2p.dir.config="$I2P_CONFIG_DIR" \
+        -DloggerFilenameOverride='logs/log-router-@.txt' \
+        -XX:+PerfDisableSharedMem -XX:-OmitStackTraceInFastThrow \
+        -cp "$I2P/lib/*" net.i2p.router.Router "$@"
+    case $? in
+        4|5|10)
+            echo "Router asked for a restart -> starting a new JVM" >&2
+            continue
+            ;;
+        *)
+            break
+            ;;
+    esac
+done

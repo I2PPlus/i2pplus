@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  AppStream metadata for the I2P+ AppImage.
+
+  tools/appimage/build-appimage.sh copies this into the AppDir under
+  usr/share/metainfo, keeping this file's name, and stamps the release version and
+  date into the two placeholders below. The name is not free: appimagetool looks
+  for the metadata as <desktop file name>.appdata.xml and then runs
+  "appstreamcli validate-tree" over the AppDir, which wants this file named after
+  the component id, the id in reverse-DNS form, and the <launchable> below naming
+  a desktop file that is really in the AppDir. The desktop entry build-appimage.sh
+  writes is named io.github.i2pplus.i2pplus.desktop for exactly that reason, so
+  the software centres that read this metadata see one application, not two.
+-->
+<component type="desktop-application">
+  <id>io.github.i2pplus.i2pplus</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>AGPL-3.0-or-later</project_license>
+  <name>I2P+</name>
+  <summary>Router for the I2P anonymous network</summary>
+  <description>
+    <p>
+      I2P+ is a router: a program that runs on your computer and becomes a
+      participant in the I2P network. It is not a browser, and it does not run
+      inside one. Traffic to and from your machine is encrypted in layers and
+      relayed through other participants' routers, so a destination is
+      addressed inside the network and is never exposed to whoever is on the
+      other end of a connection.
+    </p>
+    <p>
+      Applications reach the network through the router's proxies. The router
+      console - the tunnel manager, the address book, the plugin manager and
+      the I2P web applications - is served by the router itself as a local web
+      page, which you open in an ordinary browser.
+    </p>
+    <p>
+      This build carries the router, a Java runtime and everything the console
+      needs, so it runs without installing anything and keeps its configuration
+      in ~/.i2p.
+    </p>
+  </description>
+  <categories>
+    <category>Network</category>
+  </categories>
+  <keywords>
+    <keyword>I2P</keyword>
+    <keyword>anonymity</keyword>
+    <keyword>privacy</keyword>
+    <keyword>overlay network</keyword>
+    <keyword>onion routing</keyword>
+    <keyword>tunnels</keyword>
+  </keywords>
+  <url type="homepage">https://i2pplus.github.io/</url>
+  <url type="bugtracker">https://github.com/I2PPlus/i2pplus/issues</url>
+  <url type="help">https://geti2p.net/how</url>
+  <developer id="io.github.i2pplus">
+    <name>The I2P+ Project</name>
+  </developer>
+  <icon type="stock">i2p</icon>
+  <launchable type="desktop-id">io.github.i2pplus.i2pplus.desktop</launchable>
+  <releases>
+    <release version="@VERSION@" date="@DATE@"/>
+  </releases>
+  <content_rating type="oars-1.1"/>
+</component>

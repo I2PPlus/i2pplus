@@ -246,11 +246,21 @@ tools/codeql/codeql-*/
 tools/codeql/version.txt
 tools/checkstyle/version.txt
 tools/pmd/version.txt
+!tools/appimage/
+tools/appimage/*
 !tools/appimage/plus.png
 !tools/appimage/build-appimage.sh
 !tools/appimage/download-appimagetool.sh
 !tools/appimage/AppRun
 !tools/appimage/README.md
+# The AppStream metadata build-appimage.sh copies into the AppDir as
+# usr/share/metainfo/io.github.i2pplus.i2pplus.appdata.xml: appimagetool warns
+# about an image without it, and the software centres that catalogue
+# applications show nothing about this one without it, so the text lives next to
+# the script that installs it. tools/* excludes every child of tools/, hence the
+# directory re-inclusion above; the downloaded packer and its version stamp stay
+# out.
+!tools/appimage/io.github.i2pplus.i2pplus.appdata.xml
 tools/appimage/appimagetool
 tools/appimage/squashfs-root/
 tools/appimage/version.txt
