@@ -43,10 +43,10 @@ language links in the translated READMEs under `docs/`.
 ## Usage in README.md
 
 ```markdown
-[![Installer](tools/badges/installer-badge.svg)](https://i2pplus.github.io/installers/i2pinstall.exe)
+[![Installer](tools/badges/installer-badge.svg)](https://github.com/I2PPlus/i2pplus/releases/download/continuous/i2pinstall.exe)
 [![Docker](tools/badges/docker-badge.svg)](docker/README.md)
-[![I2PSnark](tools/badges/i2psnark-badge.svg)](https://i2pplus.github.io/installers/i2psnark-standalone.zip)
-[![Javadocs](tools/badges/javadocs-badge.svg)](https://i2pplus.github.io/javadoc.zip)
-[![Update](tools/badges/update-badge.svg)](https://i2pplus.github.io/i2pupdate.zip)
+[![I2PSnark](tools/badges/i2psnark-badge.svg)](https://github.com/I2PPlus/i2pplus/releases/download/continuous/i2psnark-standalone.zip)
+[![Javadocs](tools/badges/javadocs-badge.svg)](https://github.com/I2PPlus/i2pplus/releases/download/continuous/javadoc.zip)
+[![Update](tools/badges/update-badge.svg)](https://github.com/I2PPlus/i2pplus/releases/download/continuous/i2pupdate.zip)
 [![AppImage](tools/badges/appimage-badge.svg)](tools/appimage/README.md)
 ```
