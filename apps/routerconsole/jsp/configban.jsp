@@ -47,7 +47,7 @@
 <tr><td><b class=suboption><%=intl._t("Bans by Capability")%></b><br>
 <div class=optionlist>
 <label title="<%=intl._t("Ban XG tier routers - unlimited bandwidth but not hosting transit tunnels (probably botnet participant)")%>"><input type=checkbox class="optbox slider" name=enableXgBan value=true <jsp:getProperty name="banhelper" property="xgBanChecked"/>><%=intl._t("Ban XG routers")%></label><br>
-<label title="<%=intl._t("Ban LU tier routers - low bandwidth and unreachable/firewalled")%>"><input type=checkbox class="optbox slider" name=enableLuBan value=true <jsp:getProperty name="banhelper" property="luBanChecked"/>><%=intl._t("Ban LU routers")%></label></br>
+<label title="<%=intl._t("Ban LU tier routers - low bandwidth and unreachable/firewalled")%>"><input type=checkbox class="optbox slider" name=enableLuBan value=true <jsp:getProperty name="banhelper" property="luBanChecked"/>><%=intl._t("Ban LU routers")%></label><br>
 <label><span class=nowrap><%=intl._t("Additional Router Caps")%>:</span> <input title="<%=intl._t("Add caps groups, separated by spaces or commas e.g. LUf,PUG. Use ! to exclude: G!f bans G routers unless floodfill")%>" name=customCapabilityBans type=text size=30 value="<jsp:getProperty name="banhelper" property="customCapabilityBans"/>"></label>
 </div>
 </td></tr>

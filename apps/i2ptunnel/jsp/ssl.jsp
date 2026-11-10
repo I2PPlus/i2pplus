@@ -776,7 +776,9 @@ if (name == null || name.equals(""))
             // now start the output for this client
 
 %>
-<tr><td><%=DataHelper.escapeHTML(clName)%></td><td colspan=2>
+<tr>
+<td><%=DataHelper.escapeHTML(clName)%></td>
+<td colspan=2>
 <%
             for (String arg : argList) {
 %>
@@ -784,23 +786,21 @@ if (name == null || name.equals(""))
 <%
             }
 %>
-</td><td>
 </td>
-<!--</td><td><%=start%></td><td><%=ssl%></td></tr>-->
+<td>
+</td>
+</tr>
 <%
             if (!jettySSLFileExists) {
 %>
-</td><td></td></tr>
 <tr class=configerror><td colspan=4>Cannot configure, Jetty SSL configuration file does not exist: <code><%=jettySSLFile.toString()%></code></td></tr>
 <%
             } else if (!jettySSLFileValid) {
 %>
-</td><td></td></tr>
 <tr class=configerror><td colspan=4>Cannot configure, Jetty SSL configuration file is too old or invalid: <code><%=jettySSLFile.toString()%></code></td></tr>
 <%
                 if (error.length() > 0) {
 %>
-</td></tr>
 <tr class=configerror><td colspan=4><%=error%></td></tr>
 <%
                 }
@@ -876,9 +876,13 @@ if (name == null || name.equals(""))
 </table>
 <%
     }  // !valid
+    // the panel div is opened only for an existing tunnel, so close it under the
+    // same test - for a new tunnel there is nothing to close
+    if (!"new".equals(tunnelType)) {
 %>
 </div>
 <%
+    }
   } else {
 %>
 <div id=notReady><%=intl._t("Initializing Tunnel Manager{0}", "&hellip;")%><noscript><%=intl._t("Tunnels not initialized yet; please retry in a few moments.").replace("yet;", "yet&hellip;<br>")%></noscript></div>

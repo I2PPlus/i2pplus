@@ -26,6 +26,9 @@
 <a href="configwebapps" title="<%=intl._t("WebApp Configuration")%>">WebApps</a>
 </span>
 </h3>
+<%
+       if (clientshelper.isPluginInstallEnabled()) {
+%>
 <div id=pluginstall>
 <form action="configplugins" method=POST>
 <table id=plugininstall class=configtable>
@@ -38,9 +41,6 @@
 <td colspan=2>
 <b class=suboption><%=intl._t("Enter xpi2p or su3 plugin URL")%></b><br>
 <div class=optionsingle id=installPluginUrl>
-<%
-       if (clientshelper.isPluginInstallEnabled()) {
-%>
 <table>
 <tr id=url>
 <td>
@@ -122,9 +122,11 @@
 </div>
 <%
        } // pluginUpdateEnabled
-   } // showPlugins
 %>
 </div>
+<%
+   } // showPlugins
+%>
 </div>
 <script src=/js/configplugins.js></script>
 <script src=/js/toggleElements.js></script>

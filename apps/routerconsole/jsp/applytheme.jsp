@@ -10,6 +10,7 @@
 <form method=POST>
 <input type=hidden name=consoleNonce value="<%=net.i2p.router.web.CSSHelper.getNonce()%>">
 <input type=hidden name=nonce value="<%=pageNonce%>">
-<input type=hidden name=action value=blah >
+<input type=hidden name=action value=blah>
+</form>
 </body>
 </html>

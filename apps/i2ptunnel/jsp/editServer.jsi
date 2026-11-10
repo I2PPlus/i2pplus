@@ -122,14 +122,11 @@
 </td>
 </tr>
 <tr>
-<th>
 <%  if ("streamrserver".equals(tunnelType)) { %>
-<%=intl._t("Access Point")%>
-</th>
+<th><%=intl._t("Access Point")%></th>
 <th></th>
 <%  } else { %>
-<%=intl._t("Target")%>
-</th>
+<th><%=intl._t("Target")%></th>
 <th><%=intl._t("Use SSL")%></th>
 <%  } /* is streamrserver */ %>
 </tr>
@@ -353,6 +350,7 @@
 </tr>
 <%  } /* !streamrserver */ %>
 <tr><th colspan=2><%=intl._t("Encryption types")%></th></tr>
+<tr><td><b><%=intl._t("Legacy options")%></b></td><td><b><%=intl._t("Post Quantum")%></b></td></tr>
 <%
     if (!editBean.canChangeEncType(curTunnel)) {
 %>
@@ -360,7 +358,6 @@
 <%  } else { %>
 <tr>
 <%  } %>
-<tr><td><b><%=intl._t("Legacy options")%></b></td><td><b><%=intl._t("Post Quantum")%></b></td></tr>
 <td>
 <span class=multiOption>
 <label id=ElGamal-2048 title="<%=intl._t("Legacy option (deprecated), provided for backward compatibility")%>"><input value="0" type=radio name=encType <%=((has0 && !has4) ? checked : edisabled)%> class=optbox>&nbsp;ElGamal-2048</label>

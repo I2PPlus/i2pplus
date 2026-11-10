@@ -78,7 +78,7 @@ if (curTunnel >= 0) {
 %>
 <table id=regDisabled><tr><td class=infohelp>
 <%=intl._t("This service uses encrypted leasesets. Registration is not recommended. Registration authentication is disabled.")%>
-</td></tr>
+</td></tr></table>
 <%
     } else if (!"new".equals(tunnelType)) {
 %>
@@ -316,8 +316,14 @@ if (curTunnel >= 0) {
 </tr>
 <%
      } // valid
+     // the table is opened only for an existing tunnel, so close it under the same
+     // test - for a new tunnel there is nothing to close
+     if (!"new".equals(tunnelType)) {
 %>
 </table>
+<%
+     }
+%>
 </div>
 </form>
 <%

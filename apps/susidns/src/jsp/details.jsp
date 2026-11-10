@@ -190,10 +190,10 @@
 </div><%-- visualid --%>
 <%              }  // haveImagegen %>
 <hr>
+</div><%-- book --%>
 <%          }  // foreach addr
         }  // addrs == null
     }  // detail == null %>
-</div><%-- book --%>
 </div><%-- page --%>
 <span data-iframe-height></span>
 <style>body{display:block!important;pointer-events:auto!important}</style>
@@ -201,6 +201,7 @@
 <script src="/js/iframeResizer/updatedEvent.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script src=/js/autologout.js></script>
 <script src=/js/textareaResize.js></script>
+<script src=/js/jdenticon.js></script>
 <script nonce="<%=cspNonce%>">
   window.jdenticon_config = { padding: 0, saturation: {color: 1, grayscale: 0} };
   document.addEventListener("DOMContentLoaded", function() {
@@ -208,6 +209,5 @@
     addResizeListener(addNotes);
   });
 </script>
-<script src=/js/jdenticon.js></script>
 </body>
 </html>

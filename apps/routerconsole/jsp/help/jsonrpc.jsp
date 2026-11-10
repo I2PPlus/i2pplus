@@ -195,10 +195,6 @@
 <li><b><%=intl._t("Returns:")%></b> <%=intl._t("Result (number - average value for specified period)")%></li>
 <li><b><%=intl._t("Authentication:")%></b> <%=intl._t("Required")%></li>
 </ul>
-</li>
-<li><b>Returns:</b> Result (number - average value for the specified period)</li>
-<li><b>Authentication:</b> Required</li>
-</ul>
 
 <h3><%=intl._t("Network Status Codes")%></h3>
 

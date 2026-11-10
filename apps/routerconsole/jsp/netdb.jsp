@@ -157,12 +157,17 @@ const translate_requestedLS = "<%=intl._t("Requested client leaseset")%>";
 <h1 class=netwrk><%=heading%></h1>
 <div class=main id=netdb>
 <%@include file="formhandler.jsi"%>
+<%
+    // one test for the container's open and its close: the two must be the same
+    // test or the div is left open on the queries that open it but not close it
+    boolean showLeaseSets = ls != null || l != null;
+%>
 <% if (delayLoad) {%><div id=netdbwrap style=height:5px;opacity:0><% } %>
-<% if ((r == null && ls != null) || l != null || ls != null) {%><div class=leasesets_container><% } %>
+<% if (showLeaseSets) {%><div class=leasesets_container><% } %>
 <%= formhandler.getNavBarHtml() %>
 <% out.flush(); %>
 <jsp:getProperty name="formhandler" property="floodfillNetDbSummary"/>
-<% if ((r == null && ls != null) || l != null) {%></div><% } %>
+<% if (showLeaseSets) {%></div><% } %>
 </div>
 <% if (delayLoad) {%></div>
 <style>#netdbwrap{height:unset!important;opacity:1!important}#netdb::before{display:none}</style>

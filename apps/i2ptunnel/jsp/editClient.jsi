@@ -328,12 +328,12 @@
               String edisabled = canChangeEncType ? "" : isDisabled;
 %>
 <tr><th colspan=2><%=intl._t("Encryption types")%></th></tr>
+<tr><td><b><%=intl._t("Legacy options")%></b></td><td><b><%=intl._t("Post Quantum")%></b></td></tr>
 <%            if (!canChangeEncType) { %>
 <tr class="optionsDisabled" <%=ehdisabled%>>
 <%            } else { %>
 <tr>
 <%        } %>
-<tr><td><b><%=intl._t("Legacy options")%></b></td><td><b><%=intl._t("Post Quantum")%></b></td></tr>
 <td>
 <span class=multiOption>
 <label><input value="0" type=radio name=encType <%=((has0 && !has4) ? checked : edisabled)%> class=optbox>&nbsp;ElGamal-2048</label>

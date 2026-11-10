@@ -210,7 +210,7 @@ SSL
                 }
                 case IndexBean.RUNNING:
 %>
-<div class="statusRunning svr"><span class=tooltip hidden><b><%=intl._t("Running")%></b><hr><%=intl._t("Hops")%>: <%=editBean.getTunnelDepth(curServer, 3)%>&nbsp;<%=intl._t("in")%>, <%=editBean.getTunnelDepthOut(curServer, 3)%>&nbsp;<%=intl._t("out")%><br><%=intl._t("Count")%>: <%=editBean.getTunnelQuantity(curServer,2)%>&nbsp;<%=intl._t("in")%>, <%=editBean.getTunnelQuantityOut(curServer,2)%>&nbsp;<%=intl._t("out")%><br><%=intl._t("Variance")%>: <%=editBean.getTunnelVariance(curServer,0)%>&nbsp;<%=intl._t("in")%>,&nbsp;<%=editBean.getTunnelVarianceOut(curServer,0)%>&nbsp;<%=intl._t("out")%></span><%=intl._t("Running")%></div>
+<div class="statusRunning svr"><div class=tooltip hidden><b><%=intl._t("Running")%></b><hr><%=intl._t("Hops")%>: <%=editBean.getTunnelDepth(curServer, 3)%>&nbsp;<%=intl._t("in")%>, <%=editBean.getTunnelDepthOut(curServer, 3)%>&nbsp;<%=intl._t("out")%><br><%=intl._t("Count")%>: <%=editBean.getTunnelQuantity(curServer,2)%>&nbsp;<%=intl._t("in")%>, <%=editBean.getTunnelQuantityOut(curServer,2)%>&nbsp;<%=intl._t("out")%><br><%=intl._t("Variance")%>: <%=editBean.getTunnelVariance(curServer,0)%>&nbsp;<%=intl._t("in")%>,&nbsp;<%=editBean.getTunnelVarianceOut(curServer,0)%>&nbsp;<%=intl._t("out")%></div><%=intl._t("Running")%></div>
 <%              break;
                 case IndexBean.NOT_RUNNING:
 %><div class="statusNotRunning svr"><span class=tooltip hidden><b><%=intl._t("Stopped")%></b></span><%=intl._t("Stopped")%></div>
@@ -437,7 +437,7 @@ SSL
 <button class="control restart iconize" form="formC<%=curClient%>" name=action value="restart" type=submit title="Restart this Tunnel"><%=intl._t("Restart")%></button>
 <%              break;
                 case IndexBean.RUNNING:
-%><div class="statusRunning cli"><span class=tooltip hidden><b><%=intl._t("Running")%></b><hr><%=intl._t("Hops")%>: <%=editBean.getTunnelDepth(curClient, 3)%><br><%=intl._t("Count")%>: <%=editBean.getTunnelQuantity(curClient,2)%><br><%=intl._t("Variance")%>: <%=editBean.getTunnelVariance(curClient,0)%></span><%=intl._t("Running")%></div>
+%><div class="statusRunning cli"><div class=tooltip hidden><b><%=intl._t("Running")%></b><hr><%=intl._t("Hops")%>: <%=editBean.getTunnelDepth(curClient, 3)%><br><%=intl._t("Count")%>: <%=editBean.getTunnelQuantity(curClient,2)%><br><%=intl._t("Variance")%>: <%=editBean.getTunnelVariance(curClient,0)%></div><%=intl._t("Running")%></div>
 </td>
 
 <td class="tunnelControl volatile">
@@ -489,9 +489,9 @@ SSL
             int currentSigType = editBean.getSigType(curClient, tunnelType);
 %>
 <%          if (currentSigType == 7) { %><span class=sigType title="<%=intl._t("Signature type")%>: Ed25519-SHA-512">Ed25519</span><% } %>
-<%          else if (currentSigType == 3) { %><span class=sigType title="<%=intl._t("Signature type")%>">ECDSA-P521<% } %>
-<%          else if (currentSigType == 2) { %><span class=sigType title="<%=intl._t("Signature type")%>">ECDSA-P384<% } %>
-<%          else if (currentSigType == 1) { %><span class=sigType title="<%=intl._t("Signature type")%>">ECDSA-P256<% } %>
+<%          else if (currentSigType == 3) { %><span class=sigType title="<%=intl._t("Signature type")%>">ECDSA-P521</span><% } %>
+<%          else if (currentSigType == 2) { %><span class=sigType title="<%=intl._t("Signature type")%>">ECDSA-P384</span><% } %>
+<%          else if (currentSigType == 1) { %><span class=sigType title="<%=intl._t("Signature type")%>">ECDSA-P256</span><% } %>
 <%          else if (currentSigType == 0) { %><span class=sigType style=font-weight:600;color:red>DSA-SHA1</span><% } %>
 </td>
 

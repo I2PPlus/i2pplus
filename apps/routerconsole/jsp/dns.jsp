@@ -54,7 +54,7 @@
 <div class=main id=dns>
 <noscript><p class=infohelp id=jsRequired style=margin:10px>Javascript is required to view <a href="<%=safeRequestURL%>" target=_blank rel=noreferrer>the Addressbook</a> in embedded mode.</p></noscript>
 <iframe id=susidnsframe class=embed src="<%=safeRequestURL%>" title="I2P+ <%=intl._t("addressbook")%>" width=100% border=0 name="susidnsframe">
-<%=intl._t("Your browser does not support iFrames.")%>&nbsp;<a href="src="<%=safeRequestURL%>"><%=intl._t("Click here to continue.")%></a>
+<%=intl._t("Your browser does not support iFrames.")%>&nbsp;<a href="<%=safeRequestURL%>"><%=intl._t("Click here to continue.")%></a>
 </iframe>
 </div>
 <script src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
