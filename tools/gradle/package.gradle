@@ -72,6 +72,19 @@ task distclean(type: Delete) {
 // pkg / buildDeb / tarball — distribution set (mirrors ant pkg, plus deb)
 // ---------------------------------------------------------------------------
 
+// The payload staging directory, for the package scripts (tools/scripts/build-deb.sh,
+// tools/appimage/build-appimage.sh) when they are run by hand. ant and gradle pass
+// the path to them as an argument; standalone, the scripts ask this task or ant's
+// pkgTempDir target instead of guessing a location, so a relocated staging directory
+// (ant -Dbuild.root=, or ext.pkgTempDir in build.gradle) is honoured. Both print it
+// as pkgTempDir=<path>, so one parse serves either build. The value is captured at
+// configuration time, as everywhere in this file.
+task pkgTempDir {
+    group = 'package'
+    description = 'Print the directory package payloads are staged in (mirrors ant pkgTempDir).'
+    doLast { println "pkgTempDir=${pkgTempArg}" }
+}
+
 task buildDeb(type: Exec) {
     group = 'package'
     description = 'Build the self-contained Debian package (mirrors ant buildDeb).'
@@ -150,6 +163,7 @@ task bump {
 task bumpMajorVersion {
     group = 'release'
     description = 'Increment the release minor version, PUBLISHED_VERSION sub-version, and reset BUILD to 0 (mirrors ant bumpMajorVersion).'
+    finalizedBy 'generateBadges'
     doLast {
         def coreTxt = coreVersionFile.text
         def ver = coreTxt =~ /public\s+static\s+final\s+String\s+VERSION\s+=\s+"([0-9]+)\.([0-9]+)\.[0-9]+";/
@@ -174,6 +188,35 @@ task bumpMajorVersion {
         routerVersionFile.text = routerVersionFile.text.replaceFirst(~/(public\s+static\s+final\s+long\s+BUILD\s+=\s+)[0-9]+;/) { it.group(1) + '0;' }
         logger.lifecycle('BUILD reset to 0.')
         logger.lifecycle('Major version bump complete. Run ./gradlew distclean updaterCompact to verify.')
+    }
+}
+
+// Two of the badge SVGs in tools/badges/ show the release version, so a major bump
+// refreshes them. The script fetches only the badges that are out of date, and it
+// needs bash, curl and a connection to img.shields.io, so it is skipped on Windows
+// and where the script is missing, and a failure there is reported rather than
+// failed — the version files are already rewritten by then. Mirrors ant's noBadges
+// condition and generateBadges target.
+final def badgesSupported = !System.getProperty('os.name').toLowerCase().contains('windows') &&
+    file('tools/badges/generate-badges.sh').isFile()
+
+task generateBadges(type: Exec) {
+    group = 'release'
+    description = 'Regenerate the tools/badges/ SVGs that are out of date (mirrors ant generateBadges).'
+    onlyIf { badgesSupported }
+    commandLine 'bash', 'tools/badges/generate-badges.sh'
+    ignoreExitValue = true
+    doLast {
+        // Gradle 9 exposes the exit code as a Property; getOrNull() keeps a run in
+        // which the process never started from reading as a success.
+        def rc = executionResult.getOrNull()?.exitValue
+        if (rc == null) {
+            logger.lifecycle('Badges not checked -> generate-badges.sh did not run')
+        } else if (rc != 0) {
+            logger.lifecycle('Badges not updated -> generate-badges.sh failed (curl or network unavailable), run tools/badges/generate-badges.sh by hand')
+        } else {
+            logger.lifecycle('Badges in tools/badges/ checked against the new version')
+        }
     }
 }
 

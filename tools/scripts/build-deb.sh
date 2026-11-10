@@ -18,7 +18,19 @@ fi
 cd "$BASEDIR"
 
 VERSION="${1:-}"
-PKG_TEMP_DIR="${2:-pkg-temp}"
+PKG_TEMP_DIR="${2:-}"
+
+# The payload is staged under the build root, which both builds keep out of the
+# tree and both can be told to move (ant -Dbuild.root=, gradle ext.pkgTempDir).
+# ant and gradle pass the path as an argument when they run this script; run by
+# hand, ask either build what it is instead of guessing a location. Both answer
+# with a pkgTempDir=<path> line, which is what the sed picks out of the log.
+if [ -z "$PKG_TEMP_DIR" ] && command -v ant >/dev/null 2>&1; then
+    PKG_TEMP_DIR=$(ant -q pkgTempDir 2>/dev/null | sed -n 's/.*pkgTempDir=\([^[:space:]]*\).*/\1/p' | tail -n 1)
+fi
+if [ -z "$PKG_TEMP_DIR" ] && [ -x "${BASEDIR}/gradlew" ]; then
+    PKG_TEMP_DIR=$("${BASEDIR}/gradlew" -q pkgTempDir 2>/dev/null | sed -n 's/.*pkgTempDir=\([^[:space:]]*\).*/\1/p' | tail -n 1)
+fi
 
 if [ -z "$VERSION" ]; then
     if [ -f "${BASEDIR}/core/java/src/net/i2p/CoreVersion.java" ]; then
@@ -37,9 +49,13 @@ echo "Building I2P+ Debian package v${VERSION}..."
 mkdir -p "$DISTDIR"
 
 echo "Step 1: Checking build artifacts..."
-if [ ! -d "$PKG_TEMP_DIR" ] || [ ! -f "build.xml" ]; then
-    echo "Error: Must be run from project root directory."
-    echo "  Expected: $PKG_TEMP_DIR/ and build.xml present"
+if [ ! -f "build.xml" ]; then
+    echo "Error: Must be run from the project root directory (no build.xml here)."
+    exit 1
+fi
+if [ ! -d "$PKG_TEMP_DIR" ]; then
+    echo "Error: No payload at $PKG_TEMP_DIR/"
+    echo "  Run 'ant preppkg-linux' first, or pass the payload directory as the second argument."
     exit 1
 fi
 

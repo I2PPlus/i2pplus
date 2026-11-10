@@ -10,7 +10,24 @@ cd "$BASEDIR"
 
 VERSION="${1:-}"
 APPIMAGETOOL_UPDATE="${2:-never}"
-PKG_TEMP_DIR="${3:-pkg-temp}"
+PKG_TEMP_DIR="${3:-}"
+
+# The payload is staged under the build root, which both builds keep out of the
+# tree and both can be told to move (ant -Dbuild.root=, gradle ext.pkgTempDir).
+# ant and gradle pass the path as an argument when they run this script; run by
+# hand, ask either build what it is instead of guessing a location. Both answer
+# with a pkgTempDir=<path> line, which is what the sed picks out of the log.
+if [ -z "$PKG_TEMP_DIR" ] && command -v ant >/dev/null 2>&1; then
+    PKG_TEMP_DIR=$(ant -q pkgTempDir 2>/dev/null | sed -n 's/.*pkgTempDir=\([^[:space:]]*\).*/\1/p' | tail -n 1)
+fi
+if [ -z "$PKG_TEMP_DIR" ] && [ -x "${BASEDIR}/gradlew" ]; then
+    PKG_TEMP_DIR=$("${BASEDIR}/gradlew" -q pkgTempDir 2>/dev/null | sed -n 's/.*pkgTempDir=\([^[:space:]]*\).*/\1/p' | tail -n 1)
+fi
+
+if [ ! -d "${PKG_TEMP_DIR:-}" ]; then
+    echo "No payload at ${PKG_TEMP_DIR:-the package staging directory} -> run 'ant preppkg-linux' first, or pass the payload directory as the third argument" >&2
+    exit 1
+fi
 
 # Get version from CoreVersion.java if not provided
 if [ -z "$VERSION" ]; then

@@ -202,8 +202,10 @@
     <echo message="  debian-clean                                 Rollback Debian specific patches then run &apos;distclean&apos;"/>
     <echo message="  debian                                       Generate Debian packages in ../ then run &apos;debian-clean&apos;"/>
     <echo message="  debianhowto                                  Instructions on building Debian packages"/>
+    <echo message="  generateBadges                               Regenerate the tools/badges/ SVGs that are out of date"/>
     <echo message="  git-tag                                      Create annotated Git tag for release (e.g. 0.9.70+)"/>
     <echo message="  pkg                                          Run &apos;distclean&apos; then package everything up (updater, installer)"/>
+    <echo message="  pkgTempDir                                   Print the directory package payloads are staged in (pkg.temp.dir)"/>
     <echo message="  revisions                                    Count commits per author since the last release tag"/>
     <echo message="  slackpkg                                     Build Slackware package in ./distro/Slackware/i2p"/>
     <echo message="  tarball                                      Create tar archive for clean install &#10140; ./dist/i2p.tar.bz2"/>
@@ -1194,7 +1196,46 @@
       match='(^\s+public\s+static\s+final\s+long\s+BUILD\s+=\s+)[0-9]+;'
       replace='\10;'/>
     <echo message="BUILD reset to 0."/>
+    <antcall target="generateBadges"/>
     <echo message="Major version bump complete. Run 'ant distclean &amp;&amp; ant updaterCompact' to verify."/>
+  </target>
+
+  <!-- Two of the badge SVGs in tools/badges/ show the release version, so a major
+       bump refreshes them. The script contacts img.shields.io only for the badges
+       that are out of date, and it needs bash, curl and a connection, so it is
+       skipped on Windows and where the script is missing; a failure there is
+       reported but does not undo the version bump that already happened. -->
+  <condition property="noBadges">
+    <or>
+      <os family="windows"/>
+      <not>
+        <available file="tools/badges/generate-badges.sh" type="file"/>
+      </not>
+    </or>
+  </condition>
+
+  <target name="generateBadges" unless="noBadges" description="Regenerate the tools/badges/ SVGs that are out of date">
+    <exec executable="bash" dir="${basedir}" failifexecutionfails="false" resultproperty="badges.result">
+      <arg value="tools/badges/generate-badges.sh"/>
+    </exec>
+    <condition property="badges.failed">
+      <not>
+        <equals arg1="${badges.result}" arg2="0"/>
+      </not>
+    </condition>
+    <condition property="badges.ok">
+      <equals arg1="${badges.result}" arg2="0"/>
+    </condition>
+    <antcall target="echo.badgesok"/>
+    <antcall target="echo.badgesfailed"/>
+  </target>
+
+  <target name="echo.badgesok" if="badges.ok">
+    <echo message="Badges in tools/badges/ checked against the new version"/>
+  </target>
+
+  <target name="echo.badgesfailed" if="badges.failed">
+    <echo message="Badges not updated -&gt; generate-badges.sh failed (curl or network unavailable), run tools/badges/generate-badges.sh by hand"/>
   </target>
 
   <target name="checkoutFromVCS" depends="failIfNoVCS, checkoutFromGit"/>
@@ -2671,6 +2712,18 @@
     <antcall target="sha256sum">
       <param name="sha256.file" value="dist/i2p-linux.7z"/>
     </antcall>
+  </target>
+
+  <!-- The payload staging directory, for the package scripts when they are run by
+       hand (tools/appimage/build-appimage.sh, tools/scripts/build-deb.sh). ant
+       passes ${pkg.temp.dir} to them as an argument; standalone they ask here
+       rather than hard-coding a build root, so -Dbuild.root=... and
+       -Djava.io.tmpdir=... are both honoured. The value is echoed as
+       pkgTempDir=&lt;path&gt; so the callers can pick the line out of the build log
+       (the ConciseLogger in ~/.ant/lib prefixes every echo line).
+       Gradle mirror: pkgTempDir in tools/gradle/package.gradle. -->
+  <target name="pkgTempDir" description="Print the directory package payloads are staged in">
+    <echo message="pkgTempDir=${pkg.temp.dir}"/>
   </target>
 
   <target name="buildAppImage" depends="preppkg-linux" description="Build AppImage for Linux">
