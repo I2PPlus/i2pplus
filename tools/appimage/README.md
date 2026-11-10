@@ -143,10 +143,14 @@ ant buildAppImage -Dappimagetool.update=never   # keep what is installed
 the build script calls it with. The rolling `continuous` build is not used: it
 has no version number to compare against.
 
-appimagetool is itself an AppImage and needs FUSE 2 to mount itself, so the build
-box wants `sudo apt install libfuse2` (on 24.04 apt resolves that to
-`libfuse2t64`). Without the package, `APPIMAGE_EXTRACT_AND_RUN=1` makes it unpack
-and run instead.
+The release asset is a static binary, so the packer needs no FUSE and no
+`mksquashfs` from the host: it bundles its squashfs tools and runs those. A stub
+`mksquashfs` placed first on `PATH` is never called, and a pack succeeds on a box
+with no squashfs-tools installed at all. `libfuse2` is for the image it produces,
+which mounts through FUSE 2 when run (on 24.04 apt resolves that package to
+`libfuse2t64`). On a box with AppImageLauncher installed, its binfmt handler
+intercepts the packer's ELF magic before it starts - set
+`APPIMAGELAUNCHER_DISABLE=1` to run it directly.
 
 ## Output
 

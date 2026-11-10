@@ -22,13 +22,18 @@ jobs:
     steps:
       - name: PackageInstall
         run: |
-          # libfuse2: appimagetool is a type 2 AppImage, and its runtime mounts
-          # the image through FUSE 2. ubuntu-latest (24.04) ships fuse3 only;
-          # apt resolves libfuse2 to libfuse2t64 there.
-          # squashfs-tools: mksquashfs, which appimagetool uses to build the
-          # image's filesystem. The packer carries its own copy but prefers the
-          # one on PATH, and build-appimage.sh passes zstd options (-b 1M,
-          # -Xcompression-level 19) that need squashfs-tools 4.5 or newer.
+          # libfuse2: FUSE 2. The packer needs no FUSE to build - the release
+          # asset is a static binary that writes the squashfs without mounting
+          # anything - but the image it produces mounts through libfuse2 when it
+          # is run, and ubuntu-latest (24.04) ships fuse3 only (apt resolves
+          # libfuse2 to libfuse2t64 there). Installed so the artifact this job
+          # uploads can be started on the runner.
+          # squashfs-tools: mksquashfs and unsquashfs, for inspecting the packed
+          # image by hand. The packer does not use them: appimagetool bundles its
+          # own mksquashfs and runs that, not the one on PATH. Verified with a
+          # stub mksquashfs first on PATH, which is never called, and a pack that
+          # succeeds on a host with no squashfs-tools installed at all - including
+          # the -b 1M and -Xcompression-level 19 options build-appimage.sh passes.
           # appstream: appstreamcli, which appimagetool runs as
           # "appstreamcli validate-tree <AppDir>" before it packs. Without the
           # tool the packer only warns that it cannot check the metadata, so a
@@ -82,6 +87,10 @@ jobs:
       # build runs on: the jars are Java 8 bytecode compiled on Temurin 8, and
       # buildAppImage copies the openjdk-17 installed above into the AppDir as
       # the shipped runtime (ant appimage.jdk).
+      # appimage-setup asks api.github.com which appimagetool release is newest.
+      # ant passes this job's GITHUB_TOKEN through the environment, so that query
+      # is authenticated rather than one of the 60 anonymous requests an hour the
+      # runner's shared egress IP is allowed.
       - name: Build AppImage
         run: ant buildAppImage
 

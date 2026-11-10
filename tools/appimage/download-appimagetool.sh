@@ -27,14 +27,50 @@ REQUEST="${1:-}"
 # older is not a tool we know how to drive.
 MIN_VERSION="1.9.0"
 
+# Authenticate the release query when the environment offers a token. GitHub
+# Actions exports GITHUB_TOKEN into every job: a per-job credential scoped to
+# this repository, which expires when the job ends. Without it the query is
+# anonymous, and api.github.com allows 60 anonymous requests an hour per IP -
+# one runner's egress IP serves many concurrent jobs, so a 403 that leaves this
+# script with no tags is a real way for a fresh checkout to fail. With the token
+# the limit is 5000 an hour.
+# Read from the environment rather than taken as an argument, so the value never
+# reaches the process command line (visible in ps) or ant's exec output, and curl
+# is pointed at api.github.com only: it drops the Authorization header on a
+# redirect to a different host. With the variable unset nothing is sent, so a
+# local build behaves exactly as it did before.
+API_AUTH=()
+if [ -n "${GITHUB_TOKEN:-}" ]; then
+    API_AUTH=(-H "Authorization: Bearer ${GITHUB_TOKEN}")
+fi
+
 # The newest release, as its tag. The rolling "continuous" build is skipped: it
 # is not marked as a pre-release, so the API's own "latest" resolves to it, and
 # it carries no version number to compare against. Only numeric tags are
 # releases, and the highest of those is the newest.
-get_latest_version() {
-    curl -sL --max-time 30 "$API_URL" |
+fetch_tags() {
+    curl -sL --max-time 30 "$@" "$API_URL" |
         grep -o '"tag_name": *"[^"]*"' | sed 's/.*"\([^"]*\)"$/\1/' |
         grep -E '^[0-9]+(\.[0-9]+)*$' | sort -V | tail -1
+}
+
+get_latest_version() {
+    local tags
+    tags=$(fetch_tags "${API_AUTH[@]}")
+    # A token GitHub rejects (revoked, or from a workflow whose permissions
+    # block the call) answers 401 with no tags at all, which would read as
+    # "this repository has no releases". Fall back to the anonymous query: a
+    # token problem should not cost the build a tool it could still fetch.
+    if [ -z "$tags" ] && [ ${#API_AUTH[@]} -gt 0 ]; then
+        tags=$(fetch_tags)
+    fi
+    echo "$tags"
+}
+
+# Why a release query can come back with no tags at all, said once.
+no_tags_reason() {
+    echo "  The release query returned no tags. An anonymous api.github.com request"
+    echo "  is limited to 60 an hour per IP: set GITHUB_TOKEN, or pin a tag as an argument."
 }
 
 # The version we installed, as recorded in version.txt at install time. The
@@ -87,6 +123,7 @@ if [ "$REQUEST" = "never" ]; then
     LATEST=$(get_latest_version)
     if [ -z "$LATEST" ]; then
         echo "ERROR: Could not determine latest appimagetool version and nothing is installed."
+        no_tags_reason
         exit 1
     fi
     install_version "$LATEST"
@@ -105,6 +142,7 @@ if [ -z "$LATEST" ]; then
         exit 0
     fi
     echo "ERROR: Could not determine latest appimagetool version."
+    no_tags_reason
     exit 1
 fi
 
