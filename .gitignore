@@ -256,6 +256,9 @@ tools/appimage/squashfs-root/
 tools/appimage/version.txt
 tools/appimage/*.appimage
 tools/appimage/*.AppImage
+# The staging tree build-appimage.sh assembles at the repo root (APPDIR="AppImage"),
+# deleted again by ant distclean and gradlew distclean.
+AppImage/
 TODO.md
 google-java-format/
 !tools/java-format/google-java-format/build.sh
