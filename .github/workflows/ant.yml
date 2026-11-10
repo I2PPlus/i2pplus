@@ -22,7 +22,26 @@ jobs:
     steps:
       - name: PackageInstall
         run: |
-          sudo apt install -y gettext ant ant-optional junit4 ant-contrib parallel uglifyjs python3
+          # libfuse2: appimagetool is a type 2 AppImage, and its runtime mounts
+          # the image through FUSE 2. ubuntu-latest (24.04) ships fuse3 only;
+          # apt resolves libfuse2 to libfuse2t64 there.
+          # squashfs-tools: mksquashfs, which appimagetool uses to build the
+          # image's filesystem. The packer carries its own copy but prefers the
+          # one on PATH, and build-appimage.sh passes zstd options (-b 1M,
+          # -Xcompression-level 19) that need squashfs-tools 4.5 or newer.
+          # appstream: appstreamcli, which appimagetool runs as
+          # "appstreamcli validate-tree <AppDir>" before it packs. Without the
+          # tool the packer only warns that it cannot check the metadata, so a
+          # broken AppStream file ships instead of failing the build.
+          # openjdk-17: the runtime the AppImage ships. Everything else here
+          # builds on the Temurin JDK 8 set up below; buildAppImage copies this
+          # Debian-path JVM into the AppDir (ant appimage.jdk).
+          # ca-certificates-java: the trust store the Debian JDK points at
+          # (/etc/ssl/certs/java/cacerts). It is a dependency of the JRE, so apt
+          # pulls it in anyway, but build-appimage.sh reads that path directly to
+          # put a real cacerts file in the image - the JDK's own link into /etc
+          # does not survive the move into an AppImage.
+          sudo apt install -y gettext ant ant-optional junit4 ant-contrib parallel uglifyjs python3 libfuse2 squashfs-tools appstream openjdk-17-jdk-headless ca-certificates-java
           sudo npm install -g minify
 
       - uses: actions/checkout@v7
@@ -35,8 +54,12 @@ jobs:
 
       - name: Create tmpfs for build output
         run: |
+          # 2.5G: the build root holds the compiled classes (~170MB measured) and
+          # the package payload, and buildAppImage stages the AppDir beside them -
+          # the bundled JDK 17 (~260MB) plus a second copy of the payload. The cap
+          # is lazy, so the extra half gig costs nothing until it is used.
           sudo mkdir -p /tmp/build-i2p
-          sudo mount -t tmpfs -o size=2G tmpfs /tmp/build-i2p
+          sudo mount -t tmpfs -o size=2560M tmpfs /tmp/build-i2p
 
       - name: Install quiet logger (buildtools + jar to ~/.ant/lib)
         run: ant install-buildtools
@@ -54,6 +77,13 @@ jobs:
 
       - name: Build all artifacts
         run: ant updaterWithGeoIP installer i2psnark buildDeb
+
+      # The AppImage is the one target that needs a JVM other than the one the
+      # build runs on: the jars are Java 8 bytecode compiled on Temurin 8, and
+      # buildAppImage copies the openjdk-17 installed above into the AppDir as
+      # the shipped runtime (ant appimage.jdk).
+      - name: Build AppImage
+        run: ant buildAppImage
 
       # Documentation is a bonus artifact, not a gate. javadoc-java8 post-processes
       # the javadoc for the JDK this job runs on, so it precedes javadoc-zip, and
@@ -129,6 +159,7 @@ jobs:
             dist/i2p-src-*.zip
             dist/test-report.html
             dist/*.deb
+            dist/*.appimage
           retention-days: 7
 
       - name: Create GitHub Release
@@ -146,6 +177,7 @@ jobs:
             dist/i2p-src-*.zip
             dist/test-report.html
             dist/*.deb
+            dist/*.appimage
           generate_release_notes: true
 
   continuous:
