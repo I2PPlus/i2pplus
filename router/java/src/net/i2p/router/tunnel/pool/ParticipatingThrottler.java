@@ -220,7 +220,7 @@ public class ParticipatingThrottler {
     /** Time windows of the bandwidth rate stats. */
     private static final long[] RATES = { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR };
     /** Oldest router version allowed to participate. */
-    private static final String MIN_VERSION = "0.9.66";
+    private static final String MIN_VERSION = "0.9.69";
 
     /**
      * Result of throttling decision for tunnel participation requests.
