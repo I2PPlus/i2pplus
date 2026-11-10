@@ -7410,8 +7410,8 @@ msgstr "Denne indstilling, når den er indstillet på sand, viser en gennemsnitl
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "Denne indstilling, når den er indstillet på sand, viser linkene <i>Sider af Interesse</i> på <a href=/sitemap>sitekortet</a>. [Standard er falsk]"
 
-msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr "Denne indstilling, når den er sat til sand, vil præsentere standard sidebjælken på startsiden, hvilket muliggør konfiguration via <a href=/configsidebar>. [Standard er falsk]"
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>the sidebar configuration page</a>. [Default is false]"
+msgstr "Denne indstilling, når den er sat til sand, vil præsentere standard sidebjælken på startsiden, hvilket muliggør konfiguration via <a href=/configsidebar>konfigurationssiden for sidebjælken</a>. [Standard er falsk]"
 
 msgid "When set to true, the router console will require login authentication. If no password is set, you will be required to set one on the login page. When set to false, the console is accessible without login if no passwords are configured. [Default is false, will be enabled by default in a future release for CSRF defense]"
 msgstr "Når sat til sand, vil router-konsollen kræve login-godkendelse. Hvis ingen adgangskode er angivet, bliver du bedt om at angive en på login-siden. Når sat til falsk, er konsollen tilgængelig uden login hvis ingen adgangskoder er konfigureret. [Standard er falsk, vil blive aktiveret som standard i en fremtidig udgivelse til CSRF-forsvar]"

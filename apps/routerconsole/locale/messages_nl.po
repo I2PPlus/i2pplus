@@ -7341,8 +7341,8 @@ msgstr "Deze instelling, wanneer ingesteld op true, toont een gemiddelde meetwaa
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "Deze instelling, wanneer ingesteld op true, toont de links <i>Interessante sites</i> op <a href=/sitemap>de sitemap-pagina</a>. [Standaard is false]"
 
-msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr "Deze instelling, wanneer ingesteld op true, zal de standaard zijbalk op de startpagina presenteren, configuratie via <a href=/configsidebar> inschakelen. [Standaard is false]"
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>the sidebar configuration page</a>. [Default is false]"
+msgstr "Deze instelling, wanneer ingesteld op true, zal de standaard zijbalk op de startpagina tonen en configuratie via <a href=/configsidebar>de zijbalk-configuratiepagina</a> inschakelen. [Standaard is false]"
 
 msgid "When set to true, the router console will require login authentication. If no password is set, you will be required to set one on the login page. When set to false, the console is accessible without login if no passwords are configured. [Default is false, will be enabled by default in a future release for CSRF defense]"
 msgstr "Wanneer ingesteld op true, vereist de routerconsole login-authenticatie. Als geen wachtwoord is ingesteld, wordt u gevraagd er een in te stellen op de loginpagina. Wanneer ingesteld op false, is de console toegankelijk zonder login als geen wachtwoorden zijn geconfigureerd. [Standaard false, wordt standaard ingeschakeld in een toekomstige release voor CSRF-verdediging]"

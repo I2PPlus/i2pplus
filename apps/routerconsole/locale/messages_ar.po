@@ -7379,8 +7379,8 @@ msgstr "هذا الإعداد، عند تهيئته على صحيح، سيعرض
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "هذا الإعداد عند تهيئته على صحيح، سيعرض روابط <i>المواقع ذات الاهتمام</i> على <a href=/sitemap>خريطة الموقع</a>. [الافتراضي هو خطأ]"
 
-msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr "هذا الإعداد، عند التعيين على true، سيقدم الشريط الجانبي القياسي على الصفحة الرئيسية، مما يتيح التكوين عبر <a href=/configsidebar>. [الافتراضي هو false]</a>"
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>the sidebar configuration page</a>. [Default is false]"
+msgstr "هذا الإعداد، عند التعيين على true، سيقدم الشريط الجانبي القياسي على الصفحة الرئيسية، مما يتيح التكوين عبر <a href=/configsidebar>صفحة تكوين الشريط الجانبي</a>. [الافتراضي هو false]"
 
 msgid "When set to true, the router console will require login authentication. If no password is set, you will be required to set one on the login page. When set to false, the console is accessible without login if no passwords are configured. [Default is false, will be enabled by default in a future release for CSRF defense]"
 msgstr "عند التعيين على صحيح، ستطلب وحدة تحكم الموجه مصادقة تسجيل الدخول. إذا لم يتم تعيين كلمة مرور، سيُطلب منك تعيين واحدة في صفحة تسجيل الدخول. عند التعيين على خطأ، يمكن الوصول إلى وحدة التحكم بدون تسجيل دخول إذا لم يتم تكوين كلمات مرور. [الافتراضي خطأ، سيتم تمكينه افتراضيًا في إصدار مستقبلي للدفاع ضد CSRF]"

@@ -7344,8 +7344,8 @@ msgstr "Aquesta opció, quan està a cert, mostra una lectura de Peer Test Avera
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "Aquesta opció, quan està a cert, mostrarà els enllaços <i>Sites of Interest</i> a <a href=/sitemap>el mapa del lloc</a>. [Per defecte és fals]"
 
-msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr "Aquesta opció, quan està a cert, mostrarà la barra lateral estàndard a la pàgina d’inici, permetent la configuració mitjançant <a href=/configsidebar>. [Per defecte és fals]"
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>the sidebar configuration page</a>. [Default is false]"
+msgstr "Aquesta opció, quan està a cert, mostrarà la barra lateral estàndard a la pàgina d’inici, permetent la configuració mitjançant <a href=/configsidebar>la pàgina de configuració de la barra lateral</a>. [Per defecte és fals]"
 
 msgid "When set to true, the router console will require login authentication. If no password is set, you will be required to set one on the login page. When set to false, the console is accessible without login if no passwords are configured. [Default is false, will be enabled by default in a future release for CSRF defense]"
 msgstr "Quan es posa a cert, la consola del router requerirà autenticació per iniciar sessió. Si no hi ha cap contrasenya configurada, se t’obligarà a establir-ne una a la pàgina d’inici de sessió. Quan és fals, la consola és accessible sense iniciar sessió si no hi ha contrasenyes configurades. [Per defecte és fals; s’activarà per defecte en una versió futura com a defensa contra CSRF]"

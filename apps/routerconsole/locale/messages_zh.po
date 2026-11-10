@@ -7323,8 +7323,8 @@ msgstr "此设置设置为 true 时，将为图形页面上的图形启用 hiDPI
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "此设置设置为 true 时，将在边栏的“拥塞”部分显示“对等测试平均值”读数，该读数的计算方法是将成功的对等测试平均值和失败的测试所花费的平均超额时间相加。平均值可以用作确定最佳<code>路由器.peerTestTimeout</code> 值的指南。[默认值为假]"
 
-msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr "此设置为true时，将在主页上显示标准侧边栏，可通过<a href=/configsidebar>进行配置。[默认为false]"
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>the sidebar configuration page</a>. [Default is false]"
+msgstr "此设置为true时，将在主页上显示标准侧边栏，可通过<a href=/configsidebar>侧边栏配置页面</a>进行配置。[默认为false]"
 
 msgid "When set to true, the router console will require login authentication. If no password is set, you will be required to set one on the login page. When set to false, the console is accessible without login if no passwords are configured. [Default is false, will be enabled by default in a future release for CSRF defense]"
 msgstr "当设置为true时，路由器控制台将要求登录验证。如果未设置密码，您将需要在登录页面上设置一个。当设置为false时，如果未配置密码，控制台无需登录即可访问。[默认为false，将在未来版本中默认启用以防止CSRF攻击]"

@@ -7342,8 +7342,8 @@ msgstr "Selle seadistuse märkimisel tõeks kuvatakse kongestiooniosa kõrvalrib
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "Selle seadistuse märkimisel tõeks kuvatakse <i>Huvipakkuva saidi</i> lingid <a href=/sitemap>saidikaardil</a>. [Vaikimisi on väär]"
 
-msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr "See seade, kui see on tõene, esitab avalehel standardse külgriba, võimaldades konfiguratsiooni <a href=/configsidebar> kaudu. [Vaikimisi on see väär]"
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>the sidebar configuration page</a>. [Default is false]"
+msgstr "See seade, kui see on tõene, esitab avalehel standardse külgriba, võimaldades konfiguratsiooni teha <a href=/configsidebar>külgriba konfiguratsiooni lehel</a>. [Vaikimisi on see väär]"
 
 msgid "When set to true, the router console will require login authentication. If no password is set, you will be required to set one on the login page. When set to false, the console is accessible without login if no passwords are configured. [Default is false, will be enabled by default in a future release for CSRF defense]"
 msgstr "Kui seatud tõeseks, nõuab ruuteri konsool sisselogimise autentimist. Kui parooli pole määratud, palutakse teil seada see sisselogimislehel. Kui väär, on konsool juurdepääsetav ilma sisselogimiseta. [Vaikeväärtus väär, lubatakse vaikimisi tulevases väljalaskes CSRF-kaitseks]"

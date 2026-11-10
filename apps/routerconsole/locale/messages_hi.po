@@ -7344,8 +7344,8 @@ msgstr "जब यह सेटिंग सत्य कर दी जाती
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "जब यह सेटिंग सत्य की जाती है, तो इंटरेस्टिंग साइट्स के लिंक साइटमैप पर प्रदर्शित किए जाएंगे। [डिफ़ॉल्ट तर्क है false]"
 
-msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr "यह सेटिंग, जब true पर सेट की जाती है, होमपेज पर मानक साइडबार प्रस्तुत करेगी, <a href=/configsidebar> के माध्यम से कॉन्फ़िगरेशन सक्षम करेगी। [डिफ़ॉल्ट गलत है]"
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>the sidebar configuration page</a>. [Default is false]"
+msgstr "यह सेटिंग, जब true पर सेट की जाती है, होमपेज पर मानक साइडबार प्रस्तुत करेगी, <a href=/configsidebar>साइडबार कॉन्फ़िगरेशन पृष्ठ</a> के माध्यम से कॉन्फ़िगरेशन सक्षम करेगी। [डिफ़ॉल्ट गलत है]"
 
 msgid "When set to true, the router console will require login authentication. If no password is set, you will be required to set one on the login page. When set to false, the console is accessible without login if no passwords are configured. [Default is false, will be enabled by default in a future release for CSRF defense]"
 msgstr "true पर सेट होने पर, राउटर कंसोल को लॉगिन प्रमाणीकरण की आवश्यकता होगी। यदि कोई पासवर्ड सेट नहीं है, तो आपको लॉगिन पेज पर एक सेट करना होगा। false पर सेट होने पर, यदि कोई पासवर्ड कॉन्फ़िगर नहीं है तो कंसोल बिना लॉगिन के सुलभ है। [डिफ़ॉल्ट false, CSRF सुरक्षा के लिए भविष्य के रिलीज़ में डिफ़ॉल्ट रूप से सक्षम होगा]"

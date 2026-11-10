@@ -7344,8 +7344,8 @@ msgstr "Tämän asetuksen asettaminen todeksi näyttää vertaisen testituloituk
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "Tämän asetuksen asettaminen todeksi näyttää <i>Kiinnostuksen kohteet</i> -linkit <a href=/sitemap>sivukartassa</a>. [Oletuksena false"
 
-msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr "Tämä asetus, kun on asetettu tosioksi, näyttää oletussivupalkin etusivulla ja mahdollistaa asetuksen <a href=/configsidebar> kautta. [Oletusarvo on false"
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>the sidebar configuration page</a>. [Default is false]"
+msgstr "Tämä asetus, kun on asetettu tosioksi, näyttää oletussivupalkin etusivulla ja mahdollistaa asetuksen tekemisen <a href=/configsidebar>sivupalkin asetussivulla</a>. [Oletusarvo on false]"
 
 msgid "When set to true, the router console will require login authentication. If no password is set, you will be required to set one on the login page. When set to false, the console is accessible without login if no passwords are configured. [Default is false, will be enabled by default in a future release for CSRF defense]"
 msgstr "Kun asetettu todeksi, reitittimen konsoli vaatii kirjautumistunnistuksen. Jos salasanaa ei ole asetettu, sinun on asetettava se kirjautumissivulla. Kun asetettu epätodeksi, konsoli on käytettävissä ilman kirjautumista jos salasanoja ei ole määritetty. [Oletus on epätosi, otetaan oletuksena käyttöön tulevassa julkaisussa CSRF-puolustusta varten"

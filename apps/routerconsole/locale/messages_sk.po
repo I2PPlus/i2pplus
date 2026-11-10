@@ -7348,8 +7348,8 @@ msgstr "Ez a beállítás, ha igazra van állítva, megjelenít egy Peer Test á
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "Ez a beállítás, amikor igazra van állítva, megjeleníti az érdekes oldalak linkeit a <a href=/sitemap>webhelytérképen</a>. [Az alapértelmezett érték hamis]"
 
-msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr "Ez a beállítás, ha igazra van állítva, a standard oldalsáv jelenik meg a főoldalon, lehetővé téve a konfigurációt a <a href=/configsidebar> linken keresztül. [Alapértelmezett false]"
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>the sidebar configuration page</a>. [Default is false]"
+msgstr "Toto nastavenie, keď je nastavené na true, zobrazí na domovskej stránke štandardný bočný panel a umožní konfiguráciu cez <a href=/configsidebar>stránku konfigurácie bočného panela</a>. [Predvolené je false]"
 
 msgid "When set to true, the router console will require login authentication. If no password is set, you will be required to set one on the login page. When set to false, the console is accessible without login if no passwords are configured. [Default is false, will be enabled by default in a future release for CSRF defense]"
 msgstr "Ha igaz, az útválasztó konzol bejelentkezési hitelesítést igényel. Ha nincs jelszó beállítva, meg kell adnia egyet a bejelentkezési oldalon. Ha hamis, a konzol bejelentkezés nélkül elérhető, ha nincsenek jelszavak beállítva. [Alapértelmezés hamis, egy jövőbeli kiadásban alapértelmezetten engedélyezve lesz CSRF védelemhez]"

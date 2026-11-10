@@ -7413,8 +7413,8 @@ msgstr "Esta configuração, quando definida como verdadeira, exibirá uma leitu
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "Esta configuração, quando definida como verdadeira, exibirá os links <i>Sites de Interesse</i> no <a href=/sitemap>mapa do site</a>. [O padrão é falso]"
 
-msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr "Esta configuração, quando definida como true, apresentará a barra lateral padrão na página inicial, permitindo configuração via <a href=/configsidebar>. [Padrão é false]"
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>the sidebar configuration page</a>. [Default is false]"
+msgstr "Esta configuração, quando definida como true, apresentará a barra lateral padrão na página inicial, permitindo configuração via <a href=/configsidebar>a página de configuração da barra lateral</a>. [Padrão é false]"
 
 msgid "When set to true, the router console will require login authentication. If no password is set, you will be required to set one on the login page. When set to false, the console is accessible without login if no passwords are configured. [Default is false, will be enabled by default in a future release for CSRF defense]"
 msgstr "Quando definido como true, o console do roteador exigirá autenticação de login. Se nenhuma senha for definida, você será obrigado a definir uma na página de login. Quando definido como false, o console é acessível sem login se nenhuma senha estiver configurada. [Padrão é false, será ativado por padrão em uma versão futura para defesa contra CSRF]"

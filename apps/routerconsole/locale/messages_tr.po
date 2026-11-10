@@ -7343,8 +7343,8 @@ msgstr "Bu ayar, true olarak ayarlandığında, başarılı akran testi ortalama
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "Bu ayar, true olarak ayarlandığında, <a href=/sitemap>site haritasında</a> <i>İlgili Siteler</i> bağlantılarını gösterecektir. [Varsayılan değer false]"
 
-msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr "Bu ayar true olarak ayarlandığında, ana sayfada standart kenar çubuğunu sunacak ve <a href=/configsidebar> üzerinden yapılandırmayı etkinleştirecektir. [Varsayılan false]"
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>the sidebar configuration page</a>. [Default is false]"
+msgstr "Bu ayar true olarak ayarlandığında, ana sayfada standart kenar çubuğunu sunacak ve <a href=/configsidebar>kenar çubuğu yapılandırma sayfası</a> üzerinden yapılandırmayı etkinleştirecektir. [Varsayılan false]"
 
 msgid "When set to true, the router console will require login authentication. If no password is set, you will be required to set one on the login page. When set to false, the console is accessible without login if no passwords are configured. [Default is false, will be enabled by default in a future release for CSRF defense]"
 msgstr "true olarak ayarlandığında, yönlendirici konsolu giriş kimlik doğrulaması gerektirecektir. Şifre ayarlanmamışsa, giriş sayfasında bir tane ayarlamanız istenecektir. false olarak ayarlandığında, hiçbir şifre yapılandırılmamışsa konsola giriş yapmadan erişilebilir. [Varsayılan false, gelecekteki bir sürümde CSRF savunması için varsayılan olarak etkinleştirilecek]"

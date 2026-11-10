@@ -7344,8 +7344,8 @@ msgstr "הגדרה זו, כאשר מוגדרת ל-true, תציג קריאת ממ
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "הגדרה זו, כאשר מוגדרת ל-true, תציג את הקישורים של <i>Sites of Interest</i> ב<a href=/sitemap>מפת האתר</a>. [ברירת המחדל היא false]"
 
-msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr "הגדרה זו, כאשר מוגדרת ל-true, תציג את סרגל הצד הרגיל בדף הבית, ותאפשר הגדרה דרך <a href=/configsidebar>. [ברירת המחדל היא false]"
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>the sidebar configuration page</a>. [Default is false]"
+msgstr "הגדרה זו, כאשר מוגדרת ל-true, תציג את סרגל הצד הרגיל בדף הבית, ותאפשר הגדרה דרך <a href=/configsidebar>דף הגדרות סרגל הצד</a>. [ברירת המחדל היא false]"
 
 msgid "When set to true, the router console will require login authentication. If no password is set, you will be required to set one on the login page. When set to false, the console is accessible without login if no passwords are configured. [Default is false, will be enabled by default in a future release for CSRF defense]"
 msgstr "כאשר מוגדר ל-true, מסוף הנתב ידרוש אימות התחברות. אם לא הוגדרה סיסמה, תידרש להגדיר סיסמה בדף ההתחברות. כאשר מוגדר ל-false, המסוף נגיש ללא התחברות אם לא הוגדרו סיסמאות. [ברירת המחדל היא false, יופעל בברירת מחדל בגרסה עתידית לצורך הגנת CSRF]"

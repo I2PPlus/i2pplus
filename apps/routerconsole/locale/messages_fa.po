@@ -7336,8 +7336,8 @@ msgstr "این تنظیم، هنگامی که روی true تنظیم شود، ی
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "این تنظیم، وقتی روی true تنظیم شود، پیوندهای <i>سایت های مورد علاقه</i> را در <a href=/sitemap>نقشه سایت</a> نمایش می دهد. "
 
-msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr "این تنظیم، وقتی روی true تنظیم شود، نوار کناری استاندارد را در صفحه اصلی نمایش می‌دهد و امکان پیکربندی از طریق <a href=/configsidebar> را فراهم می‌کند. [پیش‌فرض false است]"
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>the sidebar configuration page</a>. [Default is false]"
+msgstr "این تنظیم، وقتی روی true تنظیم شود، نوار کناری استاندارد را در صفحه اصلی نمایش می‌دهد و امکان پیکربندی از طریق <a href=/configsidebar>صفحه پیکربندی نوار کناری</a> را فراهم می‌کند. [پیش‌فرض false است]"
 
 msgid "When set to true, the router console will require login authentication. If no password is set, you will be required to set one on the login page. When set to false, the console is accessible without login if no passwords are configured. [Default is false, will be enabled by default in a future release for CSRF defense]"
 msgstr "وقتی به true تنظیم شود، کنسول مسیریاب به احراز هویت ورود نیاز خواهد داشت. اگر رمز عبوری تنظیم نشده باشد، از شما خواسته خواهد شد یکی را در صفحه ورود تنظیم کنید. وقتی false است، کنسول بدون ورود قابل دسترس است. [پیش‌فرض false، در نسخه آینده برای دفاع CSRF فعال خواهد شد]"

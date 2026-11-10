@@ -7321,8 +7321,8 @@ msgstr "此設定設為true時，會在側邊欄的擁塞區段顯示對等點�
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "此設定設為true時，會在<a href=/sitemap>網站地圖</a>上顯示<i>Sites of Interest</i>連結。[Default為false]"
 
-msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr "此設定設為true時，會在首頁顯示標準側邊欄，可透過<a href=/configsidebar>進行設定。[Default為false]"
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>the sidebar configuration page</a>. [Default is false]"
+msgstr "此設定設為true時，會在首頁顯示標準側邊欄，可透過<a href=/configsidebar>側邊欄設定頁面</a>進行設定。[預設為false]"
 
 msgid "When set to true, the router console will require login authentication. If no password is set, you will be required to set one on the login page. When set to false, the console is accessible without login if no passwords are configured. [Default is false, will be enabled by default in a future release for CSRF defense]"
 msgstr "設為true時，路由器主控台會要求登入驗證。如果未設定密碼，您必須在登入頁面設定一組密碼。設為false時，若未設定密碼，則不需登入即可存取主控台。[Default為false，未來的發行版本將預設啟用以防範CSRF]"

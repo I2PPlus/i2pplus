@@ -7339,8 +7339,8 @@ msgstr "Denna inställning, när den är satt till true, visar en Peer Test Aver
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "Denna inställning, när den är inställd på true, visar länkar för <i>Sidor av intresse</i> på <a href=/sitemap>kartsidan</a>. [Standardvärdet är false"
 
-msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr "Denna inställning, när satt till true, kommer att presentera standard sidopanelen på startsidan, vilket möjliggör konfiguration via <a href=/configsidebar>. [Standard är false"
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>the sidebar configuration page</a>. [Default is false]"
+msgstr "Denna inställning, när satt till true, kommer att presentera standard sidopanelen på startsidan, vilket möjliggör konfiguration via <a href=/configsidebar>konfigurationssidan för sidopanelen</a>. [Standard är false]"
 
 msgid "When set to true, the router console will require login authentication. If no password is set, you will be required to set one on the login page. When set to false, the console is accessible without login if no passwords are configured. [Default is false, will be enabled by default in a future release for CSRF defense]"
 msgstr "När satt till true kommer routerkonsolen att kräva inloggningsautentisering. Om inget lösenord är inställt måste du ange ett på inloggningssidan. När satt till false är konsolen tillgänglig utan inloggning om inga lösenord är konfigurerade. [Standard är false, kommer att aktiveras som standard i en framtida utgåva för CSRF-skydd"

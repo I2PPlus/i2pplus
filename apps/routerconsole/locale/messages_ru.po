@@ -7351,8 +7351,8 @@ msgstr "Этот параметр, при установке в значение
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "Этот параметр, при установке в значение true, будет отображать ссылки на <i>Интересные сайты</i> на карте сайта. [По умолчанию значение false]"
 
-msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr "Эта настройка, если установлена в true, будет отображать стандартную боковую панель на главной странице, включая конфигурацию через <a href=/configsidebar>. [По умолчанию false]"
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>the sidebar configuration page</a>. [Default is false]"
+msgstr "Эта настройка, если установлена в true, будет отображать стандартную боковую панель на главной странице, а конфигурация доступна на <a href=/configsidebar>странице конфигурации боковой панели</a>. [По умолчанию false]"
 
 msgid "When set to true, the router console will require login authentication. If no password is set, you will be required to set one on the login page. When set to false, the console is accessible without login if no passwords are configured. [Default is false, will be enabled by default in a future release for CSRF defense]"
 msgstr "При значении true консоль маршрутизатора будет требовать аутентификацию для входа. Если пароль не установлен, вам будет предложено установить его на странице входа. При значении false консоль доступна без входа, если пароли не настроены. [По умолчанию false, будет включено по умолчанию в будущем релизе для защиты от CSRF]"

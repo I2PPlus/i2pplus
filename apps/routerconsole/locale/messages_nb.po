@@ -7414,8 +7414,8 @@ msgstr "Denne innstillingen, når den er satt til true, viser en gjennomsnittlig
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "Denne innstillingen, når den er satt til true, viser koblinger til <i>Interessante nettsteder</i> på <a href=/sitemap>nettstedskart</a>. [Standard er false"
 
-msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr "Denne innstillingen, når satt til sann, vil vise standard sidefeltet på startsiden, noe som muliggjør konfigurasjon via <a href=/configsidebar>. [Standard er usann"
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>the sidebar configuration page</a>. [Default is false]"
+msgstr "Denne innstillingen, når satt til sann, vil vise standard sidefeltet på startsiden, noe som muliggjør konfigurasjon via <a href=/configsidebar>konfigurasjonssiden for sidefeltet</a>. [Standard er usann]"
 
 msgid "When set to true, the router console will require login authentication. If no password is set, you will be required to set one on the login page. When set to false, the console is accessible without login if no passwords are configured. [Default is false, will be enabled by default in a future release for CSRF defense]"
 msgstr "Når satt til true, vil routerkonsollen kreve påloggingsautentisering. Hvis ikke passord er satt, må du sette et på påloggingssiden. Når satt til false, er konsollen tilgjengelig uten pålogging hvis ingen passord er konfigurert. [Standard false, vil bli aktivert som standard i en fremtidig utgivelse for CSRF-forsvar"

@@ -7323,8 +7323,8 @@ msgstr "이 설정을 true로 설정할 경우, 사이드바의 혼잡 섹션에
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "이 설정을 true로 설정할 경우, <a href=/sitemap>사이트맵</a>에 <i>관심 있는 사이트</i> 링크를 표시합니다. [기본값은 false]"
 
-msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr "이 설정을 true로 설정하면, 홈페이지에 표준 사이드바를 표시하고 <a href=/configsidebar>을 통한 구성을 활성화합니다. [기본값은 false]"
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>the sidebar configuration page</a>. [Default is false]"
+msgstr "이 설정을 true로 설정하면, 홈페이지에 표준 사이드바를 표시하고 <a href=/configsidebar>사이드바 구성 페이지</a>를 통해 구성할 수 있습니다. [기본값은 false]"
 
 msgid "When set to true, the router console will require login authentication. If no password is set, you will be required to set one on the login page. When set to false, the console is accessible without login if no passwords are configured. [Default is false, will be enabled by default in a future release for CSRF defense]"
 msgstr "true로 설정하면 라우터 콘솔에 로그인 인증이 필요합니다. 비밀번호가 설정되지 않은 경우 로그인 페이지에서 설정해야 합니다. false로 설정하면 비밀번호가 구성되지 않은 경우 콘솔에 로그인 없이 액세스할 수 있습니다. [기본값 false, CSRF 방어를 위해 향후 릴리스에서 기본적으로 활성화됨]"

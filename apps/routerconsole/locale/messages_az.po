@@ -7352,8 +7352,8 @@ msgstr "Bu parametr doğru olaraq təyin edildikdə, yan panelin Konqress bölm�
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "Bu parametr doğrulandıqda, <i>faiz linkləri sayt</i> xəritəsində <a href=/sitemap>göstəriləcək</a>. [Standart yanlışdır]"
 
-msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr "Bu parametr doğru olaraq təyin edildikdə, ana səhifədə standart yan panel göstəriləcək və <a href=/configsidebar> vasitəsilə konfiqurasiya imkanı verəcək. [Standart yanlışdır]"
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>the sidebar configuration page</a>. [Default is false]"
+msgstr "Bu parametr doğru olaraq təyin edildikdə, ana səhifədə standart yan panel göstəriləcək və <a href=/configsidebar>yan panel konfiqurasiya səhifəsi</a> vasitəsilə konfiqurasiya imkanı verəcək. [Standart yanlışdır]"
 
 msgid "When set to true, the router console will require login authentication. If no password is set, you will be required to set one on the login page. When set to false, the console is accessible without login if no passwords are configured. [Default is false, will be enabled by default in a future release for CSRF defense]"
 msgstr "Doğru olaraq təyin edildikdə, router konsolu giriş autentifikasiyası tələb edəcək. Şifrə təyin edilməyibsə, giriş səhifəsində birini təyin etməyiniz tələb olunacaq. Yanlış olaraq təyin edildikdə, şifrələr konfiqurasiya edilməyibsə konsola giriş olmadan daxil olmaq mümkündür. [Standart yanlışdır, gələcək buraxılışda CSRF müdafiəsi üçün standart olaraq aktivləşdiriləcək]"

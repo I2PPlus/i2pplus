@@ -7362,8 +7362,8 @@ msgstr "Kapag nakatakda sa true, ipinapakita ng setting na ito ang isang Peer Te
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "Kapag nakatakda sa true, ipinapakita ng setting na ito ang mga link na <i>Sites of Interest</i> sa <a href=/sitemap>the sitemap</a>. [Default ay false]"
 
-msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr "Kapag nakatakda sa true, ipinapakita ng setting na ito ang karaniwang sidebar sa homepage, na nagbibigay-daan ng pag-configure sa pamamagitan ng <a href=/configsidebar>. [Default ay false]"
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>the sidebar configuration page</a>. [Default is false]"
+msgstr "Kapag nakatakda sa true, ipinapakita ng setting na ito ang karaniwang sidebar sa homepage, na nagbibigay-daan ng pag-configure sa pamamagitan ng <a href=/configsidebar>pahina ng configuration ng sidebar</a>. [Default ay false]"
 
 msgid "When set to true, the router console will require login authentication. If no password is set, you will be required to set one on the login page. When set to false, the console is accessible without login if no passwords are configured. [Default is false, will be enabled by default in a future release for CSRF defense]"
 msgstr "Kapag nakatakda sa true, magiging kailangan ng router console ang authentication sa login. Kung walang nakatakdang password, kailangan mong magtakda ng isa sa login page. Kapag nakatakda sa false, maaaring ma-access ang console nang walang login kung walang naka-configure na password. [Default ay false, ie-e-enable sa default sa hinaharap na release para sa proteksyon sa CSRF]"

@@ -7345,8 +7345,8 @@ msgstr "Esta configuración, cuando se establece en true, mostrará una lectura 
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "Esta configuración, cuando se establece en true, mostrará los enlaces de <i>Sitios de interés</i> en <a href=/sitemap>el mapa del sitio</a>. [Predeterminado es false]"
 
-msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr "Esta configuración, cuando se establece en true, presentará la barra lateral estándar en la página de inicio, habilitando configuración vía <a href=/configsidebar>. [Predeterminado es false]"
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>the sidebar configuration page</a>. [Default is false]"
+msgstr "Esta configuración, cuando se establece en true, presentará la barra lateral estándar en la página de inicio, habilitando configuración vía <a href=/configsidebar>la página de configuración de la barra lateral</a>. [Predeterminado es false]"
 
 msgid "When set to true, the router console will require login authentication. If no password is set, you will be required to set one on the login page. When set to false, the console is accessible without login if no passwords are configured. [Default is false, will be enabled by default in a future release for CSRF defense]"
 msgstr "Cuando se activa, la consola del router requerira autenticacion de inicio de sesion. Si no se establece contrasena, se te pedira que establezcas una en la pagina de inicio de sesion. Cuando se desactiva, la consola es accesible sin inicio de sesion si no hay contrasenas configuradas. [Por defecto es false, se habilitara por defecto en una version futura para defensa CSRF]"

@@ -7350,8 +7350,8 @@ msgstr "To ustawienie, kiedy jest ustawione na true, wyświetli punkt pomiaru ś
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "To ustawienie, kiedy jest ustawione na true, wyświetla linki <i>Sites of Interest</i> na <a href=/sitemap>mapie witryny</a>. [Domyślnie false]"
 
-msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr "To ustawienie, gdy ustawione na true, przedstawi standardowy pasek boczny na stronie głównej, umożliwiając konfigurację przez <a href=/configsidebar>. [Domyślnie jest false]"
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>the sidebar configuration page</a>. [Default is false]"
+msgstr "To ustawienie, gdy ustawione na true, przedstawi standardowy pasek boczny na stronie głównej, umożliwiając konfigurację przez <a href=/configsidebar>stronę konfiguracji paska bocznego</a>. [Domyślnie jest false]"
 
 msgid "When set to true, the router console will require login authentication. If no password is set, you will be required to set one on the login page. When set to false, the console is accessible without login if no passwords are configured. [Default is false, will be enabled by default in a future release for CSRF defense]"
 msgstr "Gdy ustawione na true, konsola routera będzie wymagać uwierzytelnienia logowania. Jeśli nie ustawiono hasła, zostaniesz poproszony o jego ustawienie na stronie logowania. Gdy ustawione na false, konsola jest dostępna bez logowania, jeśli nie skonfigurowano haseł. [Domyślnie false, zostanie włączone domyślnie w przyszłej wersji dla ochrony przed CSRF]"

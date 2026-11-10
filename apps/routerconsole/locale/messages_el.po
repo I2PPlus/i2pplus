@@ -7344,8 +7344,8 @@ msgstr "Αυτή η ρύθμιση, όταν είναι ενεργοποιημέ
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "Αυτή η ρύθμιση, όταν είναι ενεργοποιημένη, θα εμφανίσει τους συνδέσμους <i>Τοποθεσίες ενδιαφέροντος</i> στην <a href=/sitemap>σελίδα χάρτης του δικτύου</a>. [Η προεπιλογή είναι ψευδής]"
 
-msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr "Αυτή η ρύθμιση, όταν είναι ενεργοποιημένη, θα εμφανίσει την τυπική πλαϊνή γραμμή στην αρχική σελίδα, επιτρέποντας τη διαμόρφωση μέσω <a href=/configsidebar>. [Η προεπιλογή είναι ψευδής]"
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>the sidebar configuration page</a>. [Default is false]"
+msgstr "Αυτή η ρύθμιση, όταν είναι ενεργοποιημένη, θα εμφανίσει την τυπική πλαϊνή γραμμή στην αρχική σελίδα, επιτρέποντας τη διαμόρφωση μέσω <a href=/configsidebar>της σελίδας διαμόρφωσης της πλαϊνής γραμμής</a>. [Η προεπιλογή είναι ψευδής]"
 
 msgid "When set to true, the router console will require login authentication. If no password is set, you will be required to set one on the login page. When set to false, the console is accessible without login if no passwords are configured. [Default is false, will be enabled by default in a future release for CSRF defense]"
 msgstr "Όταν είναι true, η κονσόλα του δρομολογητή θα απαιτεί πιστοποίηση σύνδεσης. Εάν δεν οριστεί κωδικός πρόσβασης, θα σας ζητηθεί να ορίσετε έναν στη σελίδα σύνδεσης. Όταν είναι false, η κονσόλα είναι προσβάσιμη χωρίς σύνδεση εάν δεν έχουν ρυθμιστεί κωδικοί πρόσβασης. [Προεπιλογή false, θα ενεργοποιηθεί από προεπιλογή σε μελλοντική έκδοση για άμυνα CSRF]"

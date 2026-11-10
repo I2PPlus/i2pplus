@@ -7354,8 +7354,8 @@ msgstr "Această setare, când este setată la adevărat, va afișa un rezumat a
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "Această setare, când este setată la adevărat, va afișa linkurile <i>Sites of Interest</i> în <a href=/sitemap>harta site-ului</a>. [Implicit este fals]"
 
-msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr "Această setare, când este setată la true, va prezenta bara laterală standard pe pagina de pornire, permițând configurarea prin <a href=/configsidebar>. [Implicit este false]"
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>the sidebar configuration page</a>. [Default is false]"
+msgstr "Această setare, când este setată la true, va prezenta bara laterală standard pe pagina de pornire, permițând configurarea prin <a href=/configsidebar>pagina de configurare a barei laterale</a>. [Implicit este false]"
 
 msgid "When set to true, the router console will require login authentication. If no password is set, you will be required to set one on the login page. When set to false, the console is accessible without login if no passwords are configured. [Default is false, will be enabled by default in a future release for CSRF defense]"
 msgstr "Când este setat pe true, consola routerului va necesita autentificare la login. Dacă nu este setată nicio parolă, veți fi obligat să setați una pe pagina de login. Când este setat pe false, consola este accesibilă fără login dacă nu sunt configurate parole. [Implicit este false, va fi activat implicit într-o versiune viitoare pentru apărare CSRF]"

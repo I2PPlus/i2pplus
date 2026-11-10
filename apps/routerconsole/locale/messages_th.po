@@ -7343,8 +7343,8 @@ msgstr "เมื่อตั้งการตั้งค่านี้เป
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "เมื่อตั้งการตั้งค่านี้เป็นจริงจะแสดงลิงก์<i>เว็บไซต์ที่สนใจ</i>บน<a href=/sitemap>แผนผังเว็บไซต์</a>[ค่าเริ่มต้นคือเท็จ]"
 
-msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr "เมื่อตั้งการตั้งค่านี้เป็นจริงจะแสดงแถบด้านข้างมาตรฐานบนหน้าแรกเพื่อเปิดใช้งานการกำหนดค่าผ่าน<a href=/configsidebar>[ค่าเริ่มต้นคือเท็จ]"
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>the sidebar configuration page</a>. [Default is false]"
+msgstr "เมื่อตั้งการตั้งค่านี้เป็นจริง จะแสดงแถบด้านข้างมาตรฐานบนหน้าแรก เพื่อเปิดใช้งานการกำหนดค่าผ่าน <a href=/configsidebar>หน้ากำหนดค่าแถบด้านข้าง</a> [ค่าเริ่มต้นคือเท็จ]"
 
 msgid "When set to true, the router console will require login authentication. If no password is set, you will be required to set one on the login page. When set to false, the console is accessible without login if no passwords are configured. [Default is false, will be enabled by default in a future release for CSRF defense]"
 msgstr "เมื่อตั้งเป็นจริงคอนโซลเราเตอร์จะต้องการการยืนยันตัวตนผ่านการเข้าสู่ระบบหากไม่ได้ตั้งรหัสผ่านคุณจะต้องตั้งรหัสผ่านบนหน้าเข้าสู่ระบบเมื่อตั้งเป็นเท็จคอนโซลจะเข้าถึงได้โดยไม่ต้องเข้าสู่ระบบหากไม่ได้กำหนดค่ารหัสผ่านไว้[ค่าเริ่มต้นคือเท็จจะเปิดใช้งานโดยค่าเริ่มต้นในรุ่นในอนาคตเพื่อป้องกันCSRF]"

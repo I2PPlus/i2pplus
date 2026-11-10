@@ -7326,8 +7326,8 @@ msgstr "Cài đặt này, khi được đặt thành True, sẽ hiển thị đ�
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "Cài đặt này, khi được đặt thành True, sẽ hiển thị các liên kết <i>Các trang quan tâm</i> trên <a href=/sitemap>bản đồ trang</a>. [Mặc định là sai]"
 
-msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr "Cài đặt này, khi được đặt thành true, sẽ hiển thị thanh bên tiêu chuẩn trên trang chủ, cho phép cấu hình qua <a href=/configsidebar>. [Mặc định là false]"
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>the sidebar configuration page</a>. [Default is false]"
+msgstr "Cài đặt này, khi được đặt thành true, sẽ hiển thị thanh bên tiêu chuẩn trên trang chủ, cho phép cấu hình qua <a href=/configsidebar>trang cấu hình thanh bên</a>. [Mặc định là false]"
 
 msgid "When set to true, the router console will require login authentication. If no password is set, you will be required to set one on the login page. When set to false, the console is accessible without login if no passwords are configured. [Default is false, will be enabled by default in a future release for CSRF defense]"
 msgstr "Khi được đặt thành true, bảng điều khiển bộ định tuyến sẽ yêu cầu xác thực đăng nhập. Nếu không có mật khẩu nào được đặt, bạn sẽ được yêu cầu đặt mật khẩu trên trang đăng nhập. Khi được đặt thành false, bảng điều khiển có thể truy cập mà không cần đăng nhập nếu không có mật khẩu nào được cấu hình. [Mặc định false, sẽ được bật theo mặc định trong bản phát hành tương lai để bảo vệ CSRF]"

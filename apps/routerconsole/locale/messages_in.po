@@ -7340,8 +7340,8 @@ msgstr "Pengaturan ini, ketika diatur menjadi true, akan menampilkan pembacaan R
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "Pengaturan ini, ketika diatur menjadi true, akan menampilkan tautan <i>Situs Penting</i> pada <a href=/sitemap>peta situs</a>. [Default adalah false"
 
-msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr "Pengaturan ini, jika disetel ke true, akan menampilkan sidebar standar di halaman beranda, memungkinkan konfigurasi melalui <a href=/configsidebar>. [Default adalah false"
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>the sidebar configuration page</a>. [Default is false]"
+msgstr "Pengaturan ini, jika disetel ke true, akan menampilkan sidebar standar di halaman beranda, memungkinkan konfigurasi melalui <a href=/configsidebar>halaman konfigurasi sidebar</a>. [Default adalah false]"
 
 msgid "When set to true, the router console will require login authentication. If no password is set, you will be required to set one on the login page. When set to false, the console is accessible without login if no passwords are configured. [Default is false, will be enabled by default in a future release for CSRF defense]"
 msgstr "Saat diatur ke true, konsol router akan memerlukan autentikasi login. Jika tidak ada kata sandi yang diatur, Anda akan diminta mengaturnya di halaman login. Saat diatur ke false, konsol dapat diakses tanpa login jika tidak ada kata sandi yang dikonfigurasi. [Default false, akan diaktifkan secara default di rilis mendatang untuk pertahanan CSRF"
