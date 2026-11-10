@@ -1083,8 +1083,46 @@ def _token_line(tok):
     return tok[1][:tok[4]].count('\n') + 1 if tok[4] > 0 else 1
 
 
-def _find_open(stack, name):
-    """Index of the innermost open element called name, or None if none is open."""
+def _cond_key(key):
+    """
+    The branch key in the form conditions are compared in.
+
+    `} else if (x) {` and `<% if (x) { %>` are the same test written two ways, and a
+    page that opens a tag in the first and closes it in the second is balanced - so
+    the arm is compared by its condition, not by the word in front of it. A bare
+    `else` has no condition and stays as it is.
+    """
+    return re.sub(r'^else\s+if\b', 'if', key)
+
+
+def _find_open(stack, name, chain=None):
+    """
+    Index of the open element an end tag belongs to, or None if none is open.
+
+    The innermost element of the name is the usual answer, with one refinement: prefer
+    the element whose start sits under exactly the conditions the end tag does. An
+    element open only under a condition is not the one an end tag outside that
+    condition closes, and an end tag inside a condition is not the one an element
+    opened outside it waits for:
+
+    netdb.jsp closes its page <div> between two guarded ones, and that close belongs
+    to the unconditional element, not to whichever guard happened to be innermost.
+
+    configplugins.jsp closes its pluginstall <div> inside the install branch, so the
+    close after that branch belongs to the configure <div>, which is still open.
+
+    A branch that ends puts back on the stack the elements it found open and closed,
+    because a sibling arm may have been the one that really closed them, so an element
+    already closed under one arm is the right match for the close under another:
+    addressbook.jsp closes its headline <h3> and <div> in the notEmpty arm and again in
+    the isEmpty arm, and the second close is not a stray one.
+    """
+    if chain is not None:
+        for closed in (False, True):
+            for i in range(len(stack) - 1, -1, -1):
+                e = stack[i]
+                if e[0] == name and e[3] == chain and bool(e[5]) is closed:
+                    return i
     for i in range(len(stack) - 1, -1, -1):
         if stack[i][0] == name:
             return i
@@ -1132,8 +1170,18 @@ def _branch_survivors(stack, entry, cid):
     return keep
 
 
+KEEP_OPEN = 'keep open'      # _crossed_finding: the element stays open past this close
+ABSORBED = 'absorbed'        # _crossed_finding: this close is the element's own
+
+
+def _extends(chain, base):
+    """True if chain is base with one or more conditions added inside it."""
+    return len(chain) > len(base) and chain[:len(base)] == base
+
+
 def _crossed_finding(nm, name, idx, ends, allowed, closed_in_branch, start_line,
-                     end_line):
+                     end_line, chain_at, start_chain, now, matched_chain,
+                     matched_closes):
     """
     What an element still open when an outer element closes has done, or None.
 
@@ -1142,9 +1190,34 @@ def _crossed_finding(nm, name, idx, ends, allowed, closed_in_branch, start_line,
     later in the file the two elements cross over; if it never comes, it is unclosed.
     The key names both places, because identity is rule + file + key and two elements
     of the same kind left open at two different lines are two defects, not one.
+
+    An end tag further along that sits under exactly the conditions this element's
+    start does is its own, not this one's, so this element stays open past the close
+    it is being blamed by: netdb.jsp closes its guarded <div>s under the same tests
+    that opened them, and the unconditional close between them belongs to the page's
+    outer <div>. This is only ever true of an element a branch opened - for an
+    unconditional element the later end tag is the one that closes it, and this close
+    crossing it is the defect.
     """
     if nm in allowed or closed_in_branch:
         return None
+    if (start_chain and start_chain != now and
+            any(p > idx and chain_at.get(p) == start_chain for p in ends.get(nm, ()))):
+        return KEEP_OPEN
+    # One end tag can serve two elements of the same kind that are open on different
+    # paths. register.jsp opens its first <table> at the outer level and closes it
+    # deep inside the nested arms, opens a second one in those same arms, and closes
+    # that at the outer level: where the nested arms run, the first close is the first
+    # table's and this one is the second table's; where they do not, this close ends
+    # the first table and the second was never opened. Nothing is left open on any
+    # path, so neither element is a defect - which needs the close to sit under
+    # exactly the conditions the matched element's start does, the matched element to
+    # have had its own close inside this element's conditions, and this element to
+    # have no end tag of its own anywhere later in the file.
+    if (matched_chain == now and _extends(start_chain, now) and
+            any(_extends(ch, now) for ch in matched_closes) and
+            not any(p > idx for p in ends.get(nm, ()))):
+        return ABSORBED
     if any(p > idx for p in ends.get(nm, ())):
         return ('html-tag-mismatch',
                 '</%s> at line %d closes <%s> early' % (name, end_line, nm))
@@ -1181,11 +1254,11 @@ def _open_element(tok, idx, stack, guards, open_branch):
         return
     if selfclosed or name in HTML_VOID:
         return
-    stack.append([name, idx, None, tuple(g['key'] for g in guards), False, [], None])
+    stack.append([name, idx, None, tuple(g['cond'] for g in guards), False, [], None])
 
 
 def _close_element(tok, idx, toks, stack, guards, ends, note, close_branch,
-                   cond_note, annotate):
+                   cond_note, annotate, chain_at):
     """
     Handle an end tag: close the element it matches, and report what that close says
     about the elements that were still open above it.
@@ -1212,18 +1285,34 @@ def _close_element(tok, idx, toks, stack, guards, ends, note, close_branch,
         while len(guards) > at_g:
             close_branch()
         return
-    at = _find_open(stack, name)
+    now = tuple(g['cond'] for g in guards)
+    at = _find_open(stack, name, now)
     if at is None:
         note('html-tag-stray-end', spath, stext, off, site, shown, name=name)
         return
+    entry, chain = stack[at], stack[at][3]
     # What is still open above the match is forgiven only where HTML closes
     # that kind of element by itself - a </table> with a <td> open is normal.
     allowed = HTML_IMPLICIT_CLOSE.get(name, set()) | HTML_OMITTABLE
+    keep = []
     for inner in range(len(stack) - 1, at, -1):
         nm, ioff = stack[inner][0], stack[inner][1]
         found = _crossed_finding(nm, name, idx, ends, allowed, bool(stack[inner][5]),
-                                 _token_line(toks[ioff]), _token_line(tok))
+                                 _token_line(toks[ioff]), _token_line(tok),
+                                 chain_at, stack[inner][3], now, chain, entry[5])
         if found is None:
+            continue
+        if found is KEEP_OPEN:
+            # this element's own end tag is still to come, under the same conditions
+            # its start sits under, so it stays open past this close
+            keep.append(stack[inner])
+            continue
+        if found is ABSORBED:
+            # this close is this element's on every path where the element was opened
+            # at all, so record it as closed: the branch that ends below puts the
+            # element back on the stack, and without this it would look like it was
+            # never closed
+            stack[inner][5].append(now)
             continue
         rule, key = found
         if stack[inner][6] is not None:
@@ -1239,8 +1328,6 @@ def _close_element(tok, idx, toks, stack, guards, ends, note, close_branch,
         else:
             note(rule, spath, stext, off, key, name=nm)
         break
-    entry = stack[at]
-    chain, now = entry[3], tuple(g['key'] for g in guards)
     # The start is inside a condition the end is not under, so the element
     # is in the output only when that branch runs and the end tag is then
     # stray. Comparing the guard text, not just which branch it was, keeps
@@ -1266,6 +1353,7 @@ def _close_element(tok, idx, toks, stack, guards, ends, note, close_branch,
     # that really closed it
     entry[5].append(now)
     del stack[at:]
+    stack.extend(keep)
 
 
 def check_html(app, path, text, findings):
@@ -1301,6 +1389,26 @@ def check_html(app, path, text, findings):
     for idx, t in enumerate(toks):
         if t[2] == 'end':
             ends.setdefault(t[3], []).append(idx)
+    # The branch chain every token sits under, worked out ahead of the walk so a
+    # close can tell whether the end tag that belongs to an element is still to
+    # come. The walk pushes and pops a guard for every push/pop token in order, so
+    # replaying that here gives the same chain at every index.
+    chain_at = {}
+    chain = []
+    for idx, t in enumerate(toks):
+        kind, name = t[2], t[3]
+        if kind == 'push':
+            chain.append(_cond_key(name))
+        elif kind == 'pop' and chain:
+            chain.pop()
+        elif kind == 'start' and name in HTML_GUARD_TAGS and not t[5]:
+            chain.append('tag:' + name)
+        elif kind == 'end' and name in HTML_GUARD_TAGS:
+            while chain and chain[-1] != 'tag:' + name:
+                chain.pop()
+            if chain:
+                chain.pop()
+        chain_at[idx] = tuple(chain)
     # open elements: [name, token index, id of the branch its start sits in,
     #                guard chain at its start, already reported as conditional,
     #                ids of the branches that closed it, the finding that already
@@ -1310,7 +1418,7 @@ def check_html(app, path, text, findings):
     guards = []
     seen = set()
     truncated = [False]        # the file stopped in the middle of a tag
-    state = {'next_cid': 0, 'last_cid': None}
+    state = {'next_cid': 0, 'last_cid': None, 'pending': {}}
     # (file, element, line opened) -> (rule, key) of the conditional finding made
     # for it, so a second arm and the ancestors it left short join that one report
     cond_roots = {}
@@ -1330,7 +1438,8 @@ def check_html(app, path, text, findings):
         """Start a branch, or an alternative arm of the construct 'inherit' names."""
         cid = state['next_cid'] if inherit is None else inherit
         state['next_cid'] += 1
-        guards.append({'key': key, 'cid': cid, 'entry': stack[:]})
+        guards.append({'key': key, 'cond': _cond_key(key), 'cid': cid,
+                       'entry': stack[:]})
         state['last_cid'] = None
 
     def close_branch():
@@ -1395,7 +1504,7 @@ def check_html(app, path, text, findings):
             _open_element(tok, idx, stack, guards, open_branch)
         elif kind == 'end':
             _close_element(tok, idx, toks, stack, guards, ends, note, close_branch,
-                           cond_note, annotate)
+                           cond_note, annotate, chain_at)
     if path.endswith('.jsi') or truncated[0]:
         # a fragment is only ever rendered inside a page, and the page is where an
         # element it leaves open gets closed - or fails to be, which is reported
@@ -1659,23 +1768,23 @@ HTML_FIXTURES = [
      '<div class=leasesets_container><% } %>\n'
      '<% if ((r == null && ls != null) || l != null) { %></div><% } %>',
      {'html-conditional-tag'}),
-    # One element mis-bracketed against a condition is one defect, so the second
-    # close and the outer element whose end tag that close displaced are named inside
-    # the report that explains them. Three lines here would read as three problems.
+    # One element mis-bracketed against two conditions is one defect: the page's own
+    # <div> is closed by the end tag that sits under the second test, and the outer
+    # element keeps the close that follows, so nothing else is reported.
     ('one element closed under two conditions is one report (netdb.jsp)', 'p.jsp',
      '<div class=main id=netdb>\n'
      '<% if ((r == null && ls != null) || l != null || ls != null) { %>'
      '<div class=leasesets_container><% } %>\ncontent\n'
      '<% if ((r == null && ls != null) || l != null) { %></div><% } %>\n</div>\n'
      '</body>\n</html>\n',
-     {'html-conditional-tag': 1},
-     ('</div> at line 5 closes the same start tag again',
-      '<div> at line 1 is unbalanced by the same mismatch')),
+     {'html-conditional-tag': 1}),
+    # The same mis-bracketing with no second close: the end tag sits outside the
+    # branch, so it belongs to the unconditional element it sits under, and the
+    # element the branch opened is what is left without a close.
     ('a close outside the branch that opened the element (configplugins.jsp)', 'p.jsp',
      '<div class=main id=plugins>\n<% if (clientshelper.showPlugins()) { %>\n'
      '<div class=plugins>\n<% } %>\ncontent\n</div>\n</body>\n</html>\n',
-     {'html-conditional-tag': 1},
-     ('<div> at line 1 is unbalanced by the same mismatch',)),
+     {'html-tag-unclosed': 1}),
     # an independent element left open on its own must still be its own report
     ('an independent element left open is still its own report', 'p.jsp',
      '<div class=main>\n<div class=box>\n<% if (a) { %><p>x<% } %>\n</div>\n'
