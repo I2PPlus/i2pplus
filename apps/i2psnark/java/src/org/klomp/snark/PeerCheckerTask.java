@@ -103,7 +103,8 @@ class PeerCheckerTask implements Runnable {
             // so this probably won't happen here.
             if (inactiveTime > peer.getMaxInactiveTime()) {
                 if (_log.shouldInfo())
-                    _log.info("Disconnecting an idle peer -> Inactive too long * Peer: " + peer
+                    _log.info("Disconnecting an idle peer -> Inactive too long * Peer: "
+                              + SnarkLogFormatter.peer(peer)
                               + " * Idle: " + DataHelper.formatDuration(peer.getInactiveTime()));
                 peer.disconnect();
                 continue;
@@ -120,7 +121,8 @@ class PeerCheckerTask implements Runnable {
             peer.setRateHistory();
 
             if (_log.shouldDebug()) {
-                _log.debug("[" + peer + "]" + " ul: " + upload * 1024 / KILOPERSECOND + " dl: "
+                _log.debug(SnarkLogFormatter.peer(peer) + " ul: "
+                           + upload * 1024 / KILOPERSECOND + " dl: "
                            + download * 1024 / KILOPERSECOND + " i: " + peer.isInterested()
                            + " I: " + peer.isInteresting() + " c: " + peer.isChoking() + " C: "
                            + peer.isChoked());
@@ -147,7 +149,8 @@ class PeerCheckerTask implements Runnable {
                 if (!peer.isInterested()) {
                     // Note that we only choke if we are over our limits,
                     // so a peer may remain unchoked even if uninterested.
-                    if (_log.shouldDebug()) _log.debug("Choking uninterested peer [" + peer + "]");
+                    if (_log.shouldDebug()) _log.debug("Choking uninterested peer "
+                                                       + SnarkLogFormatter.peer(peer));
                     peer.setChoking(true);
                     uploaders--;
                     coordinator.decrementUploaders(false);
@@ -156,7 +159,8 @@ class PeerCheckerTask implements Runnable {
                     removed.add(peer);
                 } else if (overBWLimitChoke) {
                     if (_log.shouldDebug())
-                        _log.debug("Bandwidth limit reached, choking peer [" + peer + "] ("
+                        _log.debug("Bandwidth limit reached, choking peer "
+                                   + SnarkLogFormatter.peer(peer) + " ("
                                    + upload + "/" + uploaded + ")");
                     peer.setChoking(true);
                     uploaders--;
@@ -170,7 +174,7 @@ class PeerCheckerTask implements Runnable {
                 } else if (peer.isInteresting() && peer.isChoked()) {
                     // If they are choking us make someone else a downloader
                     if (_log.shouldDebug())
-                        _log.debug("Choking peer that's choking us [" + peer + "]");
+                        _log.debug("Choking peer that's choking us " + SnarkLogFormatter.peer(peer));
                     peer.setChoking(true);
                     uploaders--;
                     interestedUploaders--;
@@ -185,7 +189,8 @@ class PeerCheckerTask implements Runnable {
                         // give new peers a better chance to get their first two pieces
                         (peer.completed() >= 2 || random.nextInt(4) == 0)) {
                     // If they aren't interesting make someone else a downloader
-                    if (_log.shouldDebug()) _log.debug("Choking uninteresting peer [" + peer + "]");
+                    if (_log.shouldDebug()) _log.debug("Choking uninteresting peer "
+                                                       + SnarkLogFormatter.peer(peer));
                     peer.setChoking(true);
                     uploaders--;
                     interestedUploaders--;
@@ -196,7 +201,8 @@ class PeerCheckerTask implements Runnable {
                     removed.add(peer);
                 } else if (peer.isInterested() && peer.isSnubbing()) {
                     // Peer wants our pieces but never requests any; free the upload slot
-                    if (_log.shouldDebug()) _log.debug("Choking snubbing peer [" + peer + "]");
+                    if (_log.shouldDebug()) _log.debug("Choking snubbing peer "
+                                                       + SnarkLogFormatter.peer(peer));
                     peer.setChoking(true);
                     uploaders--;
                     interestedUploaders--;
@@ -208,7 +214,8 @@ class PeerCheckerTask implements Runnable {
                 } else if (peer.isInteresting() && !peer.isChoked() && download == 0) {
                     // We are downloading but didn't receive anything...
                     if (_log.shouldDebug())
-                        _log.debug("Choking uploader that doesn't deliver [" + peer + "]");
+                        _log.debug("Choking uploader that doesn't deliver "
+                                   + SnarkLogFormatter.peer(peer));
                     peer.setChoking(true);
                     uploaders--;
                     interestedUploaders--;

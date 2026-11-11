@@ -7,11 +7,16 @@ import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+import net.i2p.data.Base32;
 import net.i2p.data.Base64;
+import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 
 import org.klomp.snark.I2PSnarkUtil;
+import org.klomp.snark.Peer;
+import org.klomp.snark.PeerID;
 import org.klomp.snark.SnarkLogFormatter;
+import org.klomp.snark.bencode.InvalidBEncodingException;
 
 /**
  * Pins the identity shapes and the sub-list layout of the snark log formatter:
@@ -144,6 +149,45 @@ public class SnarkLogFormatterTest {
         String s = SnarkLogFormatter.nodeList(Collections.singletonList(h), "Tried", 1);
         assertTrue(s.contains('[' + h.toBase64().substring(0, 8) + ']'));
         assertFalse(s.contains('[' + h.toShortBase32() + ']'));
+    }
+
+    @Test
+    public void testPeerIsItsDestHashShortFormInBrackets() throws InvalidBEncodingException {
+        PeerID pid = peerId(11);
+        String s = SnarkLogFormatter.peer(pid);
+        // the same ten characters dest() gives, so a peer and a destination are
+        // named identically and the linkifier parses both
+        assertEquals(SnarkLogFormatter.dest(new Hash(pid.getDestHash())), s);
+        assertTrue(s, s.matches("\\[[a-zA-Z0-9~\\-]{8}\\]"));
+    }
+
+    @Test
+    public void testWebSeedPeerIsNamedInProse() throws InvalidBEncodingException {
+        // a BEP 19 webseed's dest hash is a hash of its URL, not an I2P
+        // destination, so brackets would render a link to a lease set that does
+        // not exist
+        PeerID pid = peerId(12);
+        // the BEP 19 marker WebPeer.IDBytes carries, spelled out here
+        // because WebPeer is package-private
+        pid.setID(DataHelper.getASCII("WebSeedBEP19"));
+        String s = SnarkLogFormatter.peer(pid);
+        assertEquals("webseed " + Base32.encode(pid.getDestHash()).substring(0, 8), s);
+        assertFalse(s, s.contains("["));
+    }
+
+    @Test
+    public void testNullPeerIsNamedNone() {
+        assertEquals("none", SnarkLogFormatter.peer((PeerID) null));
+        assertEquals("none", SnarkLogFormatter.peer((Peer) null));
+    }
+
+    /** A PeerID with a dest hash that varies with the seed, and no peer id. */
+    private static PeerID peerId(int seed) throws InvalidBEncodingException {
+        byte[] buf = new byte[32];
+        for (int i = 0; i < buf.length; i++) {
+            buf[i] = (byte) ((seed * 31 + i * 7 + 1) & 0xff);
+        }
+        return new PeerID(buf, (I2PSnarkUtil) null);
     }
 
     /** Entries on one sub-list line, each a bracketed identity. */

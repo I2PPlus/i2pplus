@@ -144,11 +144,24 @@ public class PeerID implements Comparable<PeerID> {
     /**
      * The dest hash.
      *
-     * @return the 20-byte I2P destination hash, or null
+     * @return the 32-byte I2P destination hash, or null
      * @since 0.8.1
      */
     public byte[] getDestHash() {
         return destHash;
+    }
+
+    /**
+     * True if this is a BEP 19 webseed's synthetic id rather than a peer with a
+     * BitTorrent peer id. A webseed has no I2P destination - its dest hash is a
+     * hash of the URL - so a caller that names the peer in a log message must not
+     * render that hash as a destination link.
+     *
+     * @return true for a webseed's id
+     * @since 0.9.73+
+     */
+    boolean isWebSeed() {
+        return id != null && DataHelper.eq(id, 0, WebPeer.IDBytes, 0, WebPeer.IDBytes.length);
     }
 
     /**
@@ -194,7 +207,7 @@ public class PeerID implements Comparable<PeerID> {
     @Override
     public String toString() {
         if (_toStringCache != null) return _toStringCache;
-        if (id != null && DataHelper.eq(id, 0, WebPeer.IDBytes, 0, WebPeer.IDBytes.length)) {
+        if (isWebSeed()) {
             _toStringCache = "WebSeed@" + Base32.encode(destHash) + ".b32.i2p";
             return _toStringCache;
         }

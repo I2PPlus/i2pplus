@@ -1788,7 +1788,8 @@ public class I2PSnarkUtil implements DisconnectListener {
         } catch (I2PException ie) {
             _banlist.add(dest);
             new Unbanlist(dest).schedule(15 * (long) 60 * 1000);
-            IOException ioe = new IOException("Unable to reach peer [" + peer + "]");
+            IOException ioe = new IOException("Unable to reach peer "
+                                              + SnarkLogFormatter.peer(peer));
             ioe.initCause(ie);
             throw ioe;
         }

@@ -1133,7 +1133,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 // idle for 8 minutes, kill the old con (32KB/8min = 68B/sec minimum for one block)
                 if (_log.shouldInfo())
                     _log.info("Removing an idle peer connection -> Inactive too long"
-                              + " * Dropping: " + old + " * Keeping: " + peer + " * Idle: "
+                              + " * Dropping: " + old + " * Keeping: "
+                                + SnarkLogFormatter.peer(peer) + " * Idle: "
                               + DataHelper.formatDuration(old.getInactiveTime()));
                 peers.remove(old);
                 toDisconnect = old;
@@ -1158,7 +1159,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 if (dropNew) {
                     if (_log.shouldInfo())
                         _log.info("Duplicate peer connection -> Keeping the existing one"
-                                  + " * Dropping: " + peer + " * Kept: " + old + " * Idle: "
+                                  + " * Dropping: " + SnarkLogFormatter.peer(peer) + " * Kept: "
+                                    + old + " * Idle: "
                                   + DataHelper.formatDuration(old.getInactiveTime()));
                     // toDisconnect = peer to get out of synchronized(peers)
                     peer.disconnect(false); // Don't deregister this connection/peer.
@@ -1166,7 +1168,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 } else {
                     if (_log.shouldInfo())
                         _log.info("Canonical peer priority -> Replacing the duplicate connection"
-                                  + " * Keeping: " + peer + " * Dropping: " + old);
+                                  + " * Keeping: " + SnarkLogFormatter.peer(peer) + " * Dropping: "
+                                    + old);
                     peers.remove(old);
                     toDisconnect = old;
                     old = null;
@@ -1174,7 +1177,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             }
             if (old == null && peers.size() >= getMaxConnections()) {
                 if (_log.shouldWarn()) {
-                    _log.warn("Already at MAX_CONNECTIONS in connected() with peer [" + peer + "]");
+                    _log.warn("Already at MAX_CONNECTIONS in connected() with peer "
+                              + SnarkLogFormatter.peer(peer));
                 }
                 // toDisconnect = peer to get out of synchronized(peers)
                 peer.disconnect(false);
@@ -1187,7 +1191,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                     } else {
                         name = metainfo.getName();
                     }
-                    _log.info("New connection to [" + peer + "] for " + name);
+                    _log.info("New connection to " + SnarkLogFormatter.peer(peer) + " for " + name);
                 }
 
                 // We may have gotten the metainfo after the peer was created.
@@ -1303,9 +1307,10 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
 
         if (_log.shouldDebug()) {
             if (peer.isConnected()) {
-                _log.debug("Add peer already connected [" + peer + "]");
+                _log.debug("Add peer already connected " + SnarkLogFormatter.peer(peer));
             } else {
-                _log.debug("Not accepting extra peer [" + peer + "] (" + "Connections: "
+                _log.debug("Not accepting extra peer " + SnarkLogFormatter.peer(peer) + " ("
+                           + "Connections: "
                            + peersize + "/" + getMaxConnections() + ")");
             }
         }
@@ -1344,7 +1349,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         while (up < maxUploaders && !interested.isEmpty()) {
             Peer peer = interested.remove(0);
             if (_log.shouldDebug()) {
-                _log.debug("Unchoking [" + peer + "]");
+                _log.debug("Unchoking " + SnarkLogFormatter.peer(peer));
             }
             peer.setChoking(false);
             up = uploaders.incrementAndGet();
@@ -1483,7 +1488,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             Peer peer, BitField havePieces, boolean record, Set<Integer> allowed) {
         if (halted) {
             if (_log.shouldInfo()) {
-                _log.info("We don't want anything from [" + peer + "] as we are halted!");
+                _log.info("We don't want anything from " + SnarkLogFormatter.peer(peer)
+                          + " as we are halted!");
             }
             return null;
         }
@@ -1515,7 +1521,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                     boolean hasPartial = partialIds.contains(key) || _livePartials.containsKey(key);
                     if (hasPartial && _log.shouldDebug()) {
                         _log.debug("Skipping a piece with an existing partial request"
-                                   + " -> Peer: [" + peer + "] * Piece: " + p.getId());
+                                   + " -> Peer: " + SnarkLogFormatter.peer(peer) + " * Piece: "
+                                     + p.getId());
                     }
                     if (!hasPartial) {
                         piece = p;
@@ -1568,7 +1575,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
 
                 if (piece == null) {
                     if (_log.shouldInfo()) {
-                        _log.info("Nothing left to request from [" + peer
+                        _log.info("Nothing left to request from [" + SnarkLogFormatter.peer(peer)
                                   + "] -> Ending the piece exchange (requested: " + requested
                                   + ")");
                     }
@@ -1579,7 +1586,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                     // This is where the flaws of the snark data model are really exposed.
                     // Could also randomize within the duplicate set rather than strict rarest-first
                     if (_log.shouldInfo()) {
-                        _log.info("Parallel request (end game?) for [" + peer + "] [Piece "
+                        _log.info("Parallel request (end game?) for "
+                                  + SnarkLogFormatter.peer(peer) + " [Piece "
                                   + piece + "]");
                     }
                 }
@@ -1588,10 +1596,12 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             if (record) {
                 if (_log.shouldInfo()) {
                     if (piece.getPriority() > 0) {
-                        _log.info("Requesting piece [" + piece + "] from [" + peer
+                        _log.info("Requesting piece [" + piece + "] from ["
+                                  + SnarkLogFormatter.peer(peer)
                                   + "] (Priority: " + piece.getPriority() + ")");
                     } else {
-                        _log.info("Requesting piece [" + piece + "] from [" + peer + "]");
+                        _log.info("Requesting piece [" + piece + "] from "
+                                  + SnarkLogFormatter.peer(peer));
                     }
                 }
                 piece.setRequested(peer, true);
@@ -1939,7 +1949,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             if (wantedPiece == null) {
                 if (_log.shouldDebug()) {
                     _log.debug("Received unwanted piece [" + piece + "/" + metainfo.getPieces()
-                               + "] from [" + peer + "] for " + metainfo.getName());
+                               + "] from " + SnarkLogFormatter.peer(peer) + " for "
+                                 + metainfo.getName());
                 }
 
                 // No need to announce have piece to peers.
@@ -1963,7 +1974,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         }
 
         if (_log.shouldDebug()) {
-            _log.debug("Queued piece [" + piece + "/" + metainfo.getPieces() + "] from [" + peer
+            _log.debug("Queued piece [" + piece + "/" + metainfo.getPieces() + "] from ["
+                       + SnarkLogFormatter.peer(peer)
                        + "] for " + metainfo.getName() + " for verify and write");
         }
         if (!queuePieceWrite(peer, pp, wantedPiece)) {
@@ -1993,7 +2005,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             if (storage.putPiece(pp)) {
                 if (_log.shouldDebug()) {
                     _log.debug("Received valid piece [" + piece + "/" + metainfo.getPieces()
-                               + "] from [" + peer + "] for " + metainfo.getName());
+                               + "] from " + SnarkLogFormatter.peer(peer) + " for "
+                                 + metainfo.getName());
                 }
             } else {
                 // so we will try again
@@ -2017,7 +2030,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 }
                 if (_log.shouldDebug()) {
                     _log.debug("Received BAD piece [" + piece + "/" + metainfo.getPieces()
-                               + "] from [" + peer + "] for " + metainfo.getName());
+                               + "] from " + SnarkLogFormatter.peer(peer) + " for "
+                                 + metainfo.getName());
                 }
                 // The copy this peer sent us is corrupt; stop asking it for this
                 // piece. Done here rather than in PeerState.pieceMessage because the
@@ -2148,7 +2162,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     @Override
     public void gotChoke(Peer peer, boolean choke) {
         if (_log.shouldInfo()) {
-            _log.info("Received choke(" + choke + ") from [" + peer + "]");
+            _log.info("Received choke(" + choke + ") from " + SnarkLogFormatter.peer(peer));
         }
     }
 
@@ -2169,7 +2183,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 interestedUploaders.incrementAndGet();
                 peer.setChoking(false);
                 if (_log.shouldInfo()) {
-                    _log.info("Unchoking [" + peer + "]");
+                    _log.info("Unchoking " + SnarkLogFormatter.peer(peer));
                 }
             }
         }
@@ -2183,7 +2197,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     @Override
     public void disconnected(Peer peer) {
         if (_log.shouldInfo()) {
-            _log.info("Disconnected peer [" + peer + "]");
+            _log.info("Disconnected peer " + SnarkLogFormatter.peer(peer));
         }
 
         synchronized (peers) {
@@ -2226,7 +2240,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     @Override
     public void savePartialPieces(Peer peer, List<Request> partials) {
         if (_log.shouldInfo()) {
-            _log.info("Partials received from [" + peer + "] - " + partials);
+            _log.info("Partials received from " + SnarkLogFormatter.peer(peer) + " - " + partials);
         }
         if (halted || completed()) {
             for (Request req : partials) {
@@ -2433,7 +2447,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 }
             }
             if (_log.shouldDebug() && !partialPieces.isEmpty())
-                _log.debug("Peer [" + peer + "] has none of our partials " + partialPieces);
+                _log.debug("Peer " + SnarkLogFormatter.peer(peer) + " has none of our partials "
+                           + partialPieces);
         }
         // ...and this section turns this into the general move-requests-around code!
         // Temporary? So PeerState never calls wantPiece() directly for now...
@@ -2453,12 +2468,13 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                         piece.setRequested(peer, false);
                         if (_log.shouldDebug()) {
                             _log.debug("Nothing left to share of partial piece " + live
-                                       + " with [" + peer + ']');
+                                       + " with [" + SnarkLogFormatter.peer(peer) + ']');
                         }
                         return null;
                     }
                     if (_log.shouldInfo()) {
-                        _log.info("Sharing partial piece " + live + " with [" + peer + ']');
+                        _log.info("Sharing partial piece " + live + " with ["
+                                  + SnarkLogFormatter.peer(peer) + ']');
                     }
                     return live;
                 }
@@ -2513,7 +2529,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             }
             p.setRequested(peer, true);
             if (_log.shouldInfo()) {
-                _log.info("Suggest: requesting piece [" + p + "] from [" + peer + "]");
+                _log.info("Suggest: requesting piece [" + p + "] from "
+                          + SnarkLogFormatter.peer(peer));
             }
             return live != null
                     ? live
@@ -2760,7 +2777,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             savePartialPieces(peer, pcs);
             if (_log.shouldWarn()) {
                 _log.warn("Piece " + p.getId() + " stalled (no data for "
-                          + PIECE_STALL_TIMEOUT / 60000 + " min), re-queued from [" + peer + "]");
+                          + PIECE_STALL_TIMEOUT / 60000 + " min), re-queued from "
+                                                          + SnarkLogFormatter.peer(peer));
             }
         }
     }
@@ -2792,7 +2810,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     @Override
     public void gotExtension(Peer peer, int id, byte[] bs) {
         if (_log.shouldDebug()) {
-            _log.debug("Received extension message " + id + " from [" + peer + "]");
+            _log.debug("Received extension message " + id + " from " + SnarkLogFormatter.peer(peer));
         }
 
         // Basic handling done in PeerState... here we just check if we are done

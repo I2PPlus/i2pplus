@@ -18,6 +18,7 @@ package org.klomp.snark;
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import net.i2p.data.Base32;
 import net.i2p.data.Base64;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
@@ -130,6 +131,46 @@ public class SnarkLogFormatter {
         byte[] decoded = Base64.decode(key);
         if (decoded == null || decoded.length < 4) {return NONE;}
         return I2PSnarkUtil.toHex(decoded).substring(0, SHORT_CHARS);
+    }
+
+    /**
+     * The bracketed short form of a peer's I2P destination, the shape the console
+     * log viewer links. {@link PeerID#toString()} is a four-character peer id and
+     * a four-character public-key prefix, and {@link Peer#toString()} appends the
+     * id again, so the {@code [" + peer + "]} form the call sites used matches
+     * neither of the two bracketed shapes the viewer parses, and every one of them
+     * rendered as dead text.
+     *
+     * @param peer the peer to name, null when it is not known
+     * @return {@code [xxxxxxxx]}, or {@code none} when there is no destination
+     *         hash to name
+     * @since 0.9.73+
+     */
+    public static String peer(Peer peer) {
+        return peer(peer != null ? peer.getPeerID() : null);
+    }
+
+    /**
+     * The short form of a peer as described by {@link #peer(Peer)}. A BEP 19
+     * webseed has no I2P destination - its {@link PeerID} carries a hash of the
+     * URL - so it is named in prose with that hash's prefix instead of in
+     * brackets, which would render a link to a lease set that does not exist.
+     *
+     * @param peerID the peer's id, null when it is not known
+     * @return {@code [xxxxxxxx]} for an I2P peer, {@code webseed xxxxxxxx} for a
+     *         webseed, or {@code none} when there is no id to name
+     * @since 0.9.73+
+     */
+    public static String peer(PeerID peerID) {
+        if (peerID == null) {return NONE;}
+        byte[] destHash = peerID.getDestHash();
+        if (destHash == null || destHash.length != Hash.HASH_LENGTH) {return NONE;}
+        if (peerID.isWebSeed()) {
+            String b32 = Base32.encode(destHash);
+            return b32.length() >= SHORT_CHARS ? "webseed " + b32.substring(0, SHORT_CHARS)
+                                               : "webseed";
+        }
+        return dest(new Hash(destHash));
     }
 
     /**
