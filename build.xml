@@ -216,7 +216,7 @@
     <echo message="  buildDeb                                     Build self-contained Debian package &#10140; ./dist/i2p*.deb"/>
     <echo message="  bump                                         Increment build (minor version) by 1"/>
     <echo message="  bumpBuildTime                                Update core/java/src/net/i2p/time/BuildTime.java with today's date"/>
-    <echo message="  bumpMajorVersion                             Increment release major version, reset patch and BUILD to 0"/>
+    <echo message="  bumpMajorVersion                             Increment release major version and PUBLISHED_VERSION, reset patch and BUILD to 0"/>
     <echo message="  createThemesZip                              Create zip with all console and webapp themes and resources &#10140; ./dist/themes.zip"/>
     <echo message="  debian-clean                                 Rollback Debian specific patches then run &apos;distclean&apos;"/>
     <echo message="  debian                                       Generate Debian packages in ../ then run &apos;debian-clean&apos;"/>
@@ -1108,7 +1108,7 @@
 
   <target name="checkIfBumped" depends="failIfNoVCS, checkIfBumpedGit"/>
 
-  <target name="bump" depends="bumpBuild"/>
+  <target name="bump" depends="bumpBuild, bumpBuildPending"/>
 
   <target name="bumpBuild" depends="checkIfBumped, getBuildNumber" unless="version.bump.pending">
     <exec executable="dc" outputproperty="new.i2p.build.number" errorproperty="dc.error" failifexecutionfails="true">
@@ -1118,6 +1118,20 @@
     <echo message="Build number is now: ${new.i2p.build.number}${build.extra}"/>
     <replaceregexp byline="true" file="router/java/src/net/i2p/router/RouterVersion.java"
       match='(^\s+public\s+static\s+final\s+long\s+BUILD\s+=\s+)[0-9]+;' replace='\1${new.i2p.build.number};'/>
+  </target>
+
+  <!-- bumpBuild is skipped whenever RouterVersion.java differs from HEAD, staged or not, so a
+       bump that is not committed yet blocks every later one. Report the block rather than
+       exiting with no output at all. -->
+  <target name="bumpBuildPending" depends="checkIfBumped, getBuildNumber" if="version.bump.pending">
+    <echo message="Build number stays at ${i2p.build.number}${build.extra} -> RouterVersion.java already differs from HEAD"/>
+    <exec executable="git" outputproperty="version.bump.pending.diff" errorproperty="version.bump.pending.error" failifexecutionfails="false">
+      <arg value="diff"/>
+      <arg value="HEAD"/>
+      <arg value="--"/>
+      <arg value="router/java/src/net/i2p/router/RouterVersion.java"/>
+    </exec>
+    <echo message="Commit or discard this change, then run bump again:${line.separator}${version.bump.pending.diff}"/>
   </target>
 
   <target name="bumpBuildTime">
