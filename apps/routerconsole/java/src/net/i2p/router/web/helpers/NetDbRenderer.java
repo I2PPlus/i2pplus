@@ -259,6 +259,13 @@ class NetDbRenderer {
         private long _until;
 
         /**
+         * A memo with nothing kept yet: no snapshot is recorded, so the first
+         * lookup against any list reports a miss and the caller filters it.
+         */
+        FilterMemo() {
+        }
+
+        /**
          * Look up the routers one set of settings kept from the current snapshot.
          *
          * @param sorted the snapshot the caller would filter

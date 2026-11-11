@@ -1638,6 +1638,9 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         private final String _display;
 
         /**
+         * Binds the three forms of one setting together for the life of the entry,
+         * so the full dump and the change diff read the same row.
+         *
          * @param label the prose label a reader sees
          * @param raw the configured value, compared for equality
          * @param display the value with its unit, or the prose for a sentinel
