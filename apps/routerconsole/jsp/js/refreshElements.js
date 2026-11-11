@@ -154,7 +154,7 @@ function realizeVdom(vnode) {
   const el = document.createElement(vnode.tagName);
   const attrs = vnode.attributes;
   if (attrs) {
-    for (const name in attrs) { el.setAttribute(name, attrs[name]); }
+    for (const name of Object.keys(attrs)) { el.setAttribute(name, attrs[name]); }
   }
   const kids = vnode.children;
   if (Array.isArray(kids)) {
@@ -211,8 +211,16 @@ function positionKey(el) {
  * @param {boolean} [silent=false] - Skip the progress bar on each refresh
  * @param {string|string[]} [fragmentIds=null] - Element ids the server should render (contentonly fragment mode)
  * @param {string} [diffRows=null] - Id of a tbody whose rows are diffed in a worker; only changed rows are patched
- * @param {number} [minInterval=0] - Minimum period between refreshes in ms. A refresh request (interval tick or visibility regain) is skipped when the last refresh started less than this long ago; zero disables the check
- * @param {boolean} [includeContainer=false] - Expose the realized fragment container on the elementsRefreshed event detail as "fragment", so a page can run a structural comparison against the same contentonly response instead of a second full-page fetch
+ * @param {number} [minInterval=0] - Minimum period between refreshes in ms. A refresh
+ *                                   request (interval tick or visibility regain) is
+ *                                   skipped when the last refresh started less than
+ *                                   this long ago; zero disables the check
+ * @param {boolean} [includeContainer=false] - Expose the realized fragment container
+ *                                             on the elementsRefreshed event detail as
+ *                                             "fragment", so a page can run a
+ *                                             structural comparison against the same
+ *                                             contentonly response instead of a second
+ *                                             full-page fetch
  * @returns {Function} The stop function that halts the refresh loop
  * @example refreshElements("#sidebar", "/sidebar", 10000)
  * @example refreshElements(["#peers", "#status"], "/peers", 5000)

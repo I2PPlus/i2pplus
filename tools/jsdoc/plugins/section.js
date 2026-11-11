@@ -1,6 +1,16 @@
+/**
+ * @module section
+ * @file section.js - jsdoc plugin tagging each doclet with its subsystem.
+ * @description Maps a source path to the subsystem section it belongs to and
+ * stamps that on the file doclet, then inherits it to the members documented in
+ * the file, so the generated API pages group by application instead of listing
+ * every class in one flat index.
+ * @author dr|z3d
+ * @license AGPL3 or later
+ */
 'use strict';
 
-var pathToSection = {
+const pathToSection = {
     'apps/routerconsole/jsp/js': {name: 'Console', folder: 'console'},
     'apps/i2psnark/res/js': {name: 'I2PSnark', folder: 'i2psnark'},
     'apps/i2ptunnel/jsp/js': {name: 'I2PTunnel', folder: 'i2ptunnel'},
@@ -11,7 +21,7 @@ var pathToSection = {
 
 function getSectionInfo(filePath) {
     if (!filePath) return null;
-    for (var prefix in pathToSection) {
+    for (const prefix of Object.keys(pathToSection)) {
         if (filePath.indexOf(prefix) !== -1) {
             return pathToSection[prefix];
         }
@@ -19,15 +29,15 @@ function getSectionInfo(filePath) {
     return null;
 }
 
-var fileSections = {};
+const fileSections = {};
 
 exports.handlers = {
     newDoclet: function(e) {
-        var doclet = e.doclet;
+        const doclet = e.doclet;
 
         if (doclet.kind === 'file') {
-            var filePath = doclet.name || (doclet.meta && doclet.meta.filename);
-            var info = getSectionInfo(filePath);
+            const filePath = doclet.name || (doclet.meta && doclet.meta.filename);
+            const info = getSectionInfo(filePath);
             if (info) {
                 doclet.section = info.name;
                 fileSections[doclet.longname] = info.name;
@@ -39,8 +49,8 @@ exports.handlers = {
         }
 
         if (!doclet.section && doclet.meta) {
-            var path = doclet.meta.path || doclet.meta.filename || doclet.name;
-            var info = getSectionInfo(path);
+            const path = doclet.meta.path || doclet.meta.filename || doclet.name;
+            const info = getSectionInfo(path);
             if (info) {
                 doclet.section = info.name;
             }

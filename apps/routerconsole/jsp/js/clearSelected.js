@@ -18,8 +18,8 @@ function init() {
      * @returns {void}
      */
     function clearSelected() {
-        var elements = document.getElementsByClassName("togglestat");
-        for (var i = 0; i < elements.length; i++) {
+        const elements = document.getElementsByClassName("togglestat");
+        for (let i = 0; i < elements.length; i++) {
             elements[i].classList.remove("tab2");
         }
     }

@@ -465,7 +465,8 @@
   }
 
   function getRouterTotalByClass(routerClass) {
-    return routerCounts.totals?.[routerClass] || 0;
+    const total = Number(routerCounts.totals?.[routerClass]);
+    return Number.isFinite(total) ? total : 0;
   }
 
   /**
@@ -563,7 +564,12 @@
     const total = getRouterTotalByClass(currentRouterClass);
 
     requestAnimationFrame(() => {
-      infobox.innerHTML = `<b>Known ${label}:</b> ${total}`;
+      // Built as DOM: the count comes from the router's geo data, and textContent
+      // keeps it out of the markup instead of trusting it to be a number.
+      const heading = document.createElement("b");
+      heading.textContent = `Known ${label}:`;
+      infobox.textContent = "";
+      infobox.append(heading, ` ${total}`);
     });
   }
 

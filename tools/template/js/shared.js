@@ -1,10 +1,18 @@
-/* I2P+ Analysis Reports - Shared JavaScript */
+/**
+ * @module shared
+ * @file shared.js - Shared click handling for the analysis report pages.
+ * @description One delegated listener for every report: opening a details block
+ * closes the others so a long report stays readable, and a row marked
+ * data-detail shows or hides the detail row it names.
+ * @author dr|z3d
+ * @license AGPL3 or later
+ */
 
 // Close other open details when one is opened
 document.addEventListener("click", function(e) {
-  var s = e.target.closest("summary");
+  const s = e.target.closest("summary");
   if (s) {
-    var d = s.parentElement;
+    const d = s.parentElement;
     if (d && d.tagName === "DETAILS" && !d.hasAttribute("open")) {
       document.querySelectorAll("details[open]").forEach(function(o) {
         if (o !== d) o.removeAttribute("open");
@@ -13,11 +21,11 @@ document.addEventListener("click", function(e) {
     return;
   }
   // Expand/collapse detail rows
-  var tr = e.target.closest("tr[data-detail]");
+  const tr = e.target.closest("tr[data-detail]");
   if (tr) {
-    var el = document.getElementById(tr.dataset.detail);
+    const el = document.getElementById(tr.dataset.detail);
     if (el) {
-      var showing = el.style.display === "none";
+      const showing = el.style.display === "none";
       el.style.display = showing ? "block" : "none";
       el.closest("tr").classList.toggle("hidden", !showing);
     }

@@ -1,15 +1,24 @@
-/* I2P+ Rule Detail View - PMD, SpotBugs, Checkstyle */
-/* Expects: RULE_DATA (JSON), LOCAL_MODE (bool) to be set before this loads */
+/**
+ * @module rule-detail
+ * @file rule-detail.js - Rule detail view for the analysis reports.
+ * @description Renders one rule's findings into the detail panel when a rule
+ * name is clicked, and clears it when a subsystem link is followed. Expects
+ * RULE_DATA (the findings as JSON) and LOCAL_MODE (a boolean) to be set before
+ * this loads; in local mode the file paths become file:// links, which only a
+ * page opened from disk can follow.
+ * @author dr|z3d
+ * @license AGPL3 or later
+ */
 
-var activeRule = null;
+let activeRule = null;
 
 document.addEventListener("click", function(e) {
   // Click on sub-system link in navbar — close rule view first
-  var a = e.target.closest("a[data-sub]");
+  const a = e.target.closest("a[data-sub]");
   if (a) {
     e.preventDefault();
     hideRule();
-    var tgt = document.getElementById(a.dataset.sub);
+    const tgt = document.getElementById(a.dataset.sub);
     if (tgt) {
       document.querySelectorAll("details[open]").forEach(function(o) { o.removeAttribute("open"); });
       tgt.setAttribute("open", "");
@@ -18,7 +27,7 @@ document.addEventListener("click", function(e) {
     return;
   }
   // Click on rule name in summary table — show rule detail view
-  var rl = e.target.closest("[data-rule]");
+  const rl = e.target.closest("[data-rule]");
   if (rl) {
     e.preventDefault();
     showRule(rl.dataset.rule);
@@ -31,37 +40,37 @@ function esc(s) {
 }
 
 function showRule(rule) {
-  var d = RULE_DATA[rule];
+  const d = RULE_DATA[rule];
   if (!d) return;
   activeRule = rule;
-  var c = document.getElementById("rule-filter");
-  var v = document.getElementById("violations");
+  const c = document.getElementById("rule-filter");
+  const v = document.getElementById("violations");
   v.style.display = "none";
   c.style.display = "block";
-  var h = '<div class="tabletitle">' + esc(rule) + ' <span class="badge">' + d.length + '</span></div>';
-  var curFile = "";
+  let h = '<div class="tabletitle">' + esc(rule) + ' <span class="badge">' + d.length + '</span></div>';
+  let curFile = "";
 
   // Column header varies by report type
-  var isBug = document.body.id === "spotbugs";
-  var colLabel = isBug ? "Bug Type" : "Rule";
+  const isBug = document.body.id === "spotbugs";
+  const colLabel = isBug ? "Bug Type" : "Rule";
 
-  for (var i = 0; i < d.length; i++) {
-    var f = d[i][0], x = d[i][1];
+  for (let i = 0; i < d.length; i++) {
+    const f = d[i][0], x = d[i][1];
     if (f !== curFile) {
       curFile = f;
-      var pathHtml = '<span class="path">' + esc(f) + '</span>';
+      let pathHtml = '<span class="path">' + esc(f) + '</span>';
       if (LOCAL_MODE) pathHtml = '<a href="file://' + f + '" class="file-link">' + pathHtml + '</a>';
       h += '<h3>' + pathHtml + '</h3>';
       h += '<table class="warningtable"><tr><th class="line">Line</th><th>Message</th><th class="rule-category">Category</th><th class="rule-doc">Doc</th></tr>';
     }
-    var rng = x.begin === x.end ? x.begin : x.begin + '-' + x.end;
-    var dl = '';
-    if (x.url) dl = '<a href="' + esc(x.url) + '" target="_blank" class="rule-doc-link"><span class="rule-doc-icon" title="Rule documentation"></span></a>';
-    var details = [];
+    const rng = x.begin === x.end ? x.begin : x.begin + '-' + x.end;
+    let dl = '';
+    if (x.url) dl = '<a href="' + esc(x.url) + '" target="_blank" rel="noopener" class="rule-doc-link"><span class="rule-doc-icon" title="Rule documentation"></span></a>';
+    const details = [];
     if (x.class) details.push('<b>Class:</b> ' + esc(x.class));
     if (x.method) details.push('<b>Method:</b> ' + esc(x.method));
-    var hasDetail = details.length > 0 || (x.snippet && x.snippet.length > 0);
-    var vid = 'rv' + Math.abs(hashCode(f + x.begin + rule));
+    const hasDetail = details.length > 0 || (x.snippet && x.snippet.length > 0);
+    const vid = 'rv' + Math.abs(hashCode(f + x.begin + rule));
     if (hasDetail) h += '<tr class="tablerow' + (i % 2) + '" data-detail="' + vid + '">';
     else h += '<tr class="tablerow' + (i % 2) + '">';
     h += '<td class="line priority-cell p' + x.priority + '">' + esc(rng) + '</td>';
@@ -82,8 +91,8 @@ function showRule(rule) {
 }
 
 function hashCode(s) {
-  var h = 0;
-  for (var i = 0; i < s.length; i++) {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) {
     h = ((h << 5) - h) + s.charCodeAt(i);
     h |= 0;
   }

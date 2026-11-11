@@ -75,7 +75,7 @@ const _ESCAPE_CHARS = "\\`*{}[]()>#+.!-_|";
  * Trailing double-space for hard line break.
  * @type {RegExp}
  */
-const _BR_REGEX = /  $/;
+const _BR_REGEX = / {2}$/;
 /**
  * Placeholder for <br> to avoid early escaping.
  * @type {string}

@@ -211,12 +211,22 @@ import { refreshElements } from "./refreshElements.js";
     });
 
     let summaryDiv = document.getElementById("banSummary");
-    let html = `<h2>Total Session Bans: ${total}</h2>\n<ul class="ban-reasons">`;
+
+    // Built as DOM: the reason text is read back out of the ban table, which the
+    // router fills from network-supplied ban reasons, so it is shown as text.
+    const heading = document.createElement("h2");
+    heading.textContent = `Total Session Bans: ${total}`;
+    const list = document.createElement("ul");
+    list.className = "ban-reasons";
     sorted.forEach(([reason, count]) => {
-      const cls = disabledReasons.has(reason) ? "" : " active";
-      html += `<li class="${cls}"><span class=badge>${count}</span> ${reason}</li>\n`;
+      const li = document.createElement("li");
+      li.className = disabledReasons.has(reason) ? "" : "active";
+      const badge = document.createElement("span");
+      badge.className = "badge";
+      badge.textContent = count;
+      li.append(badge, ` ${reason}`);
+      list.append(li);
     });
-    html += "</ul>";
 
     if (!summaryDiv) {
       summaryDiv = document.createElement("div");
@@ -225,7 +235,8 @@ import { refreshElements } from "./refreshElements.js";
         sessionBans.parentNode.insertBefore(summaryDiv, sessionBans);
       }
     }
-    summaryDiv.innerHTML = html;
+    summaryDiv.textContent = "";
+    summaryDiv.append(heading, list);
     filterBanTable();
     const footer = document.getElementById("sessionBanlistFooter");
     if (footer) {footer.remove();}

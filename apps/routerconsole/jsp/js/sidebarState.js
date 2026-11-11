@@ -40,7 +40,7 @@
     if (!cell || !table) { return; }
 
     const newCounts = {};
-    for (const key in iconTypes) {
+    for (const key of Object.keys(iconTypes)) {
       newCounts[key] = table.querySelectorAll(`img[src='${iconTypes[key]}']`).length;
     }
 

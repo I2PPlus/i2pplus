@@ -88,7 +88,7 @@
    * Sidebar refresh interval in ms.
    * @type {number}
    */
-  const POLL_INTERVAL = refresh != null ? Math.max(refresh * 1000, 1000) : 3000;
+  const POLL_INTERVAL = Math.max((refresh ?? 3) * 1000, 1000);
   /** @type {?HTMLCanvasElement} */
   let graphCanvas = null;
   /** @type {?CanvasRenderingContext2D} */
@@ -340,7 +340,7 @@
    */
   function drawHalf(ctx, values, maxVal, lineColor, fillColor, yMapper, fillDown, rtl, glowWidth, glowAlpha, glowBlur, lineWidth, tension, baselineY, blendMode, pass) {
       if (values.length < 2) {return;}
-      if (baselineY == null) {baselineY = CENTER_Y;}
+      if (baselineY === null || baselineY === undefined) {baselineY = CENTER_Y;}
 
       const stepX = DRAW_W / (values.length - 1);
       const n = values.length;

@@ -54,10 +54,10 @@
             if (!Number.isNaN(speed)) {
               if (speed >= 1024) {
                 convertedSpeed = (speed / 1024).toFixed(2); // Convert to MB/s
-                tableHTML += "<tr class=stat><td>" + cleanedKey + "</td><td>" + convertedSpeed + " MB/s</td></tr>";
+                tableHTML += "<tr class=stat><td>" + esc(cleanedKey) + "</td><td>" + esc(convertedSpeed) + " MB/s</td></tr>";
               } else {
                 convertedSpeed = speed.toFixed(0);
-                tableHTML += "<tr class=stat><td>" + cleanedKey + "</td><td>" + convertedSpeed + " B/s</td></tr>";
+                tableHTML += "<tr class=stat><td>" + esc(cleanedKey) + "</td><td>" + esc(convertedSpeed) + " B/s</td></tr>";
               }
             }
           }
@@ -66,9 +66,9 @@
             cleanedKey === "Time of last failed store to peer" ||
             cleanedKey === "Time of last successful store to peer") {
           const convertedDate = convertEpochToReadableDate(cleanedValue);
-          tableHTML += "<tr class=stat><td>" + cleanedKey + "</td><td>" + convertedDate + "</td></tr>";
+          tableHTML += "<tr class=stat><td>" + esc(cleanedKey) + "</td><td>" + esc(convertedDate) + "</td></tr>";
         } else if (cleanedKey === "Period") {
-          const concatenatedValue = cleanedKey + ": " + cleanedValue;
+          const concatenatedValue = esc(cleanedKey) + ": " + esc(cleanedValue);
           tableHTML += "<tr class='subheading period'><th colspan=2>" + concatenatedValue + "</th></tr>";
         } else if (cleanedKey === "Average peer response time") {
           const responseTime = parseFloat(cleanedValue);
@@ -80,21 +80,21 @@
               formattedResponseTime = responseTime.toFixed(0) + " milliseconds";
             }
           }
-          tableHTML += "<tr class=stat><td>" + cleanedKey + "</td><td>" + formattedResponseTime + "</td></tr>";
+          tableHTML += "<tr class=stat><td>" + esc(cleanedKey) + "</td><td>" + esc(formattedResponseTime) + "</td></tr>";
         } else {
-          tableHTML += "<tr class=stat><td>" + cleanedKey + "</td><td>" + cleanedValue + "</td></tr>";
+          tableHTML += "<tr class=stat><td>" + esc(cleanedKey) + "</td><td>" + esc(cleanedValue) + "</td></tr>";
         }
       } else if (line.startsWith("# ") && !line.includes(":")) {
         const sectionTitle = line.slice(2).trim();
         const [text, title] = extractTooltip(sectionTitle);
         if (text === "Router Information") {
-          tableHTML += "<tr class='section heading ri expanded'><th colspan='2' title='" + title + "'>" + text + "</th></tr>";
+          tableHTML += "<tr class='section heading ri expanded'><th colspan='2' title='" + esc(title) + "'>" + esc(text) + "</th></tr>";
         } else if (text === "NetDb History") {
-          tableHTML += "<tr class='section heading db expanded'><th colspan='2' title='" + title + "'>" + text + "</th></tr>";
+          tableHTML += "<tr class='section heading db expanded'><th colspan='2' title='" + esc(title) + "'>" + esc(text) + "</th></tr>";
         } else if (text === "Tunnel History") {
-          tableHTML += "<tr class='section heading tnl expanded'><th colspan='2' title='" + title + "'>" + text + "</th></tr>";
+          tableHTML += "<tr class='section heading tnl expanded'><th colspan='2' title='" + esc(title) + "'>" + esc(text) + "</th></tr>";
         } else {
-          tableHTML += "<tr class=section><th colspan='2' title='" + title + "'>" + text + "</th></tr>";
+          tableHTML += "<tr class=section><th colspan='2' title='" + esc(title) + "'>" + esc(text) + "</th></tr>";
         }
       }
     });
@@ -104,6 +104,28 @@
     viewprofile.classList.add("tabulated");
     setTimeout(addToggles, 50);
   });
+
+  /**
+   * Escapes text for the profile table markup built in the second pass above.
+   * The profile text this file reads is data the router dumped, not markup: an
+   * angle bracket in a value would restructure the table and a quote would close
+   * the tooltip attribute early. Both quote styles are escaped because the
+   * section headings write `title='…'` with single quotes while the rest of the
+   * table uses double quotes or none at all.
+   * @function esc
+   * @param {string} value - Text to show in the table
+   * @returns {string} The same text with &amp;, &lt;, &gt;, a double quote and an
+   *                   apostrophe replaced by their entities, so it is safe as
+   *                   element text and inside a single- or double-quoted attribute
+   */
+  function esc(value) {
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
 
   /**
    * Extracts tooltip content from bracketed text in a title string.

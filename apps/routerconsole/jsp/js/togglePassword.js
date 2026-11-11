@@ -11,10 +11,10 @@
  * @returns {void}
  */
 toggle.onclick = function() {
-    var x = document.getElementById("password");
-    var toggle = document.getElementById("toggle");
-    var hide = "Hide password";
-    var show = "Show password";
+    const x = document.getElementById("password");
+    const toggle = document.getElementById("toggle");
+    const hide = "Hide password";
+    const show = "Show password";
     if (toggle.innerHTML === show) {
         toggle.innerHTML = hide;
         x.type="text";

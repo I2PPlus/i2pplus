@@ -175,13 +175,13 @@ function initCss() {
  */
 function injectCss() {
   if (!graphImage) {return;}
-  var graphWidth = graphImage.naturalWidth;
-  var graphHeight = graphImage.naturalHeight;
-  var graphcss = document.getElementById("graphcss");
+  const graphWidth = graphImage.naturalWidth;
+  const graphHeight = graphImage.naturalHeight;
+  const graphcss = document.getElementById("graphcss");
   if (graphcss) {graphcss.remove();}
-  var s = document.createElement("style");
+  const s = document.createElement("style");
   s.setAttribute("id", "graphcss");
-  var w = graphWidth !== 0 ? graphWidth + 4 : graphImage.width + 4;
+  const w = graphWidth !== 0 ? graphWidth + 4 : graphImage.width + 4;
   s.innerHTML = ".graphContainer{width:" + w + "px}";
   document.head.appendChild(s);
 }
@@ -193,15 +193,15 @@ function injectCss() {
  */
 function refreshGraph() {
   if (graphRefreshInterval > 0) {
-    var graph = document.getElementById("single");
+    const graph = document.getElementById("single");
     graphImage = document.getElementById("graphSingle");
     // No image means no graph to refresh. The interval below dereferences
     // graphImage on every tick, so bail out here rather than at the first tick.
     if (!graphImage) {return;}
 
     function updateGraphURL() {
-      var currentImgSrc = graphImage.src;
-      var graphURL = currentImgSrc.replace(/time=\d+/, "time=" + Date.now());
+      const currentImgSrc = graphImage.src;
+      let graphURL = currentImgSrc.replace(/time=\d+/, "time=" + Date.now());
       // Preserve hideLegend in refresh
       const storedHideLegend = getLocalStorageHideLegend();
       graphURL = updateHideLegendInURL(graphURL, storedHideLegend);
@@ -210,7 +210,7 @@ function refreshGraph() {
     }
     updateGraphURL();
 
-    if (graph && document.visibilityState == "visible") {
+    if (graph && document.visibilityState === "visible") {
       setInterval(function() {
         progressx.show(window.theme);
         updateGraphURL();

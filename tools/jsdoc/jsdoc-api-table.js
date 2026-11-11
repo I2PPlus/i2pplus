@@ -1,4 +1,13 @@
 #!/usr/bin/env node
+/**
+ * @module jsdoc-api-table
+ * @file jsdoc-api-table.js - API summary table for the jsdoc build.
+ * @description Reads the `jsdoc -X` JSON on stdin and writes api-table.html to
+ * dist/jsdoc/, grouping every documented member under the subsystem its source
+ * path falls in, so the generated API pages have one index to enter from.
+ * @author dr|z3d
+ * @license AGPL3 or later
+ */
 'use strict';
 
 /**
@@ -17,7 +26,7 @@ const pathToSection = {
 
 function getSection(filePath) {
   if (!filePath) return null;
-  for (const prefix in pathToSection) {
+  for (const prefix of Object.keys(pathToSection)) {
     if (filePath.indexOf(prefix) !== -1) {
       return pathToSection[prefix].name;
     }
@@ -26,7 +35,7 @@ function getSection(filePath) {
 }
 
 function getSectionFolder(sectionName) {
-  for (const prefix in pathToSection) {
+  for (const prefix of Object.keys(pathToSection)) {
     if (pathToSection[prefix].name === sectionName) {
       return pathToSection[prefix].folder;
     }
@@ -161,7 +170,7 @@ function generateHtml(functions) {
     sections[f.section].push(f);
   }
 
-  for (const sec in sections) {
+  for (const sec of Object.keys(sections)) {
     sections[sec].sort((a, b) => a.name.localeCompare(b.name));
   }
 

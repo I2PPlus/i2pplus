@@ -27,9 +27,9 @@
  * @returns {string|null} CSRF token string or null if not found
  */
 function getCsrfTokenFromMeta() {
-  var meta = document.querySelector('meta[name="csrf-token"]');
+  const meta = document.querySelector('meta[name="csrf-token"]');
   if (meta) return meta.getAttribute('content');
-  var input = document.querySelector('input[name="nonce"]');
+  let input = document.querySelector('input[name="nonce"]');
   if (input) return input.value;
   input = document.querySelector('input[name="consoleNonce"]');
   if (input) return input.value;
@@ -42,9 +42,9 @@ function getCsrfTokenFromMeta() {
  * @returns {string|null} CSRF token from cookie or null if not found
  */
 function getCsrfTokenFromCookie() {
-  var cookies = document.cookie.split(';');
-  for (var i = 0; i < cookies.length; i++) {
-    var cookie = cookies[i].trim();
+  const cookies = document.cookie.split(';');
+  for (let i = 0; i < cookies.length; i++) {
+    const cookie = cookies[i].trim();
     if (cookie.indexOf('csrfToken=') === 0) {
       return cookie.substring('csrfToken='.length);
     }
@@ -96,11 +96,10 @@ function csrfFetch(url, options) {
  * xhr.send('data=1');
  */
 function csrfXHR() {
-  var xhr = new XMLHttpRequest();
-  var originalOpen = xhr.open;
+  const xhr = new XMLHttpRequest();
+  const originalOpen = xhr.open;
   xhr.open = function(method, url, async, user, password) {
-    arguments[1] = url;
-    var result = originalOpen.apply(this, arguments);
+    const result = originalOpen.call(this, method, url, async, user, password);
     if (csrfMetaToken) {
       this.setRequestHeader('X-CSRF-Token', csrfMetaToken);
     }
@@ -113,8 +112,8 @@ function csrfXHR() {
 }
 
 // Initialize tokens at module load time
-var csrfMetaToken = getCsrfTokenFromMeta();
-var csrfCookieToken = getCsrfTokenFromCookie();
+const csrfMetaToken = getCsrfTokenFromMeta();
+const csrfCookieToken = getCsrfTokenFromCookie();
 
 // Expose functions to global scope
 window.csrfFetch = csrfFetch;

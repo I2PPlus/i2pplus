@@ -33,7 +33,7 @@
     const modal = document.getElementById("nukemail");
     const parentDoc = window.parent.document;
     const iframe = parentDoc.getElementById("susimailframe");
-    let iframed = document.documentElement.classList.contains("iframed") || window.top != window.parent.top;
+    let iframed = document.documentElement.classList.contains("iframed") || window.top !== window.parent.top;
     let modalRect;
     let modalheight;
     let viewportHeight;

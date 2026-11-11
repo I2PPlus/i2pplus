@@ -17,7 +17,7 @@
     if (!content) {return;}
     const blocks = content.textContent.trim().split("\n\n");
     const wrappedBlocks = blocks.map(function(block) {
-      let transformedBlock = block.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/ \* /g, "<b class=star>*</b> ").replace(/   - /g, "<b class=bullet>-</b> ");
+      let transformedBlock = block.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/ \* /g, "<b class=star>*</b> ").replace(/ {3}- /g, "<b class=bullet>-</b> ");
       return "<span>" + transformedBlock + "</span>";
     });
     const wrappedContent = wrappedBlocks.join("\n\n");

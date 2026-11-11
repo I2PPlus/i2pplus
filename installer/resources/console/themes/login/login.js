@@ -14,7 +14,7 @@
    * @param {string} value - Preference value
    */
   function setPref(key, value) {
-    var xhr = new XMLHttpRequest();
+    const xhr = new XMLHttpRequest();
     xhr.open('POST', '/login?' + key + '=' + value, true);
     xhr.onload = function() {
       if (xhr.status === 200) {
@@ -34,8 +34,8 @@
     document.querySelectorAll('.dropdown').forEach(function(dropdown) {
       dropdown.addEventListener('click', function(e) {
         e.stopPropagation();
-        var content = dropdown.querySelector('.dropdown-content');
-        var isOpen = content && content.style.display === 'block';
+        const content = dropdown.querySelector('.dropdown-content');
+        const isOpen = content && content.style.display === 'block';
         document.querySelectorAll('.dropdown-content').forEach(function(c) {
           c.style.display = 'none';
         });
@@ -48,8 +48,8 @@
     document.querySelectorAll('.dropdown-content a').forEach(function(link) {
       link.addEventListener('click', function(e) {
         e.preventDefault();
-        var param = link.getAttribute('data-param');
-        var value = link.getAttribute('data-value');
+        const param = link.getAttribute('data-param');
+        const value = link.getAttribute('data-value');
         if (param && value) {
           setPref(param, value);
         }

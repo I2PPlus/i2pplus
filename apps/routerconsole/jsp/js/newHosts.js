@@ -17,6 +17,22 @@ let tooltipBadge = null;
 let tooltipServices = null;
 
 /**
+ * Escapes text for the tooltip's markup.
+ * The hostnames this file lists come from the DNS log, not from us, and they are
+ * shown as text: a stray angle bracket must not restructure the tooltip.
+ * @function esc
+ * @param {string} value - Text to show in the tooltip
+ * @returns {string} The same text, safe inside markup or inside an attribute
+ */
+function esc(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+/**
  * Shows the new hosts tooltip; looks elements up at event time so the
  * handlers stay valid across sidebar full refreshes.
  * @function tooltipShow
@@ -216,7 +232,8 @@ export function newHosts() {
 
     const newHostsList = hostnames.map(hostname => {
       const shortName = hostname.replace(".i2p", "");
-      return `<a href="http://${hostname}" target="_blank">${shortName}</a>`;
+      // A host we do not serve, so the new tab gets no handle back on the console.
+      return `<a href="http://${esc(hostname)}" target="_blank" rel="noopener noreferrer">${esc(shortName)}</a>`;
     }).join("<br>");
 
     if (newHostsTd && newHostsTd.innerHTML !== newHostsList) { newHostsTd.innerHTML = newHostsList; }

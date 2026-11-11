@@ -26,7 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
         headerLink.click();
       }
       if (!toggle || headerLink) {return;}
-      console.log("closest clickTarget is: ", clickTarget);
       const tIn = toggle.querySelector(".th_title.left .tIn");
       const tOut = toggle.querySelector(".th_title.left .tOut");
 

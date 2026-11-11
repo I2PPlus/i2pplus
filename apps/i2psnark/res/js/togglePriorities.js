@@ -35,7 +35,11 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 
   const style = document.createElement("style");
-  style.textContent = '#togglePriorities label{height:24px;width:50%;display:inline-block;vertical-align:middle;background:url(/i2psnark/.res/icons/clock_red.png) no-repeat 30% center/18px;cursor:pointer;mix-blend-mode:luminosity}#togglePriorities label[for="toggle-priskip"]{background:url(/i2psnark/.res/icons/block.png) no-repeat 60% center/18px}#togglePriorities label:hover{background-size:22px;mix-blend-mode:normal}';
+  style.textContent = '#togglePriorities label{height:24px;width:50%;display:inline-block;' +
+    'vertical-align:middle;background:url(/i2psnark/.res/icons/clock_red.png) no-repeat 30% center/18px;' +
+    'cursor:pointer;mix-blend-mode:luminosity}' +
+    '#togglePriorities label[for="toggle-priskip"]{background:url(/i2psnark/.res/icons/block.png) no-repeat 60% center/18px}' +
+    '#togglePriorities label:hover{background-size:22px;mix-blend-mode:normal}';
   document.head.appendChild(style);
   toggleRow.appendChild(thToggle);
   toggleRow.insertBefore(thSpacer, thToggle);
@@ -45,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function() {
       const target = event.target;
       if (target.matches("input[type='checkbox'][id^='toggle-']")) {
         const toggleId = target.id;
-        const column = toggleId.substr(7);
+        const column = toggleId.slice(7);
         const radios = document.querySelectorAll(`#dirInfo .${column}`);
         const normalPriority = document.querySelectorAll("#dirInfo .prinorm");
         let allChecked = true;

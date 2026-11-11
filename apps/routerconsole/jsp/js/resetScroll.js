@@ -21,8 +21,8 @@ function resetScrollLeft(element) {
  * @returns {void}
  */
 function initResetScroll() {
-  var buttons = document.getElementsByClassName("resetScrollLeft");
-  for (var i = 0; i < buttons.length; i++) {
+  const buttons = document.getElementsByClassName("resetScrollLeft");
+  for (let i = 0; i < buttons.length; i++) {
     buttons[i].addEventListener("blur", function() {
       resetScrollLeft(this);
     });

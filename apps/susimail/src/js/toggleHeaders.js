@@ -28,11 +28,9 @@ function initToggleHeaders() {
    * @returns {void}
    */
   function toggleHeaders() {
-    collapse.style.display == 'none';
-    expand.style.display == 'inline-block';
-    for (var i = 0; i < headers.length; i++) {
-      headers[i].style.display = headers[i].style.display == 'table-row' ? 'none' : 'table-row';
-      if (headers[i].style.display == 'table-row') {
+    for (let i = 0; i < headers.length; i++) {
+      headers[i].style.display = headers[i].style.display === 'table-row' ? 'none' : 'table-row';
+      if (headers[i].style.display === 'table-row') {
         collapse.style.display = 'inline-block';
         expand.style.display = 'none';
       } else {

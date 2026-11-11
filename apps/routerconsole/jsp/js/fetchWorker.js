@@ -39,7 +39,7 @@ let debounceTimeouts = new Map();
  */
 self.onconnect = function(e) {
   const port = e.ports[0];
-  const clientData = { port, clientId: Math.random().toString(36).substr(2, 9), visible: true };
+  const clientData = { port, clientId: Math.random().toString(36).slice(2, 11), visible: true };
   port.onmessage = function(event) {handleClientMessage(event, clientData);};
   port.onclose = () => {cleanupClient(clientData);};
 };

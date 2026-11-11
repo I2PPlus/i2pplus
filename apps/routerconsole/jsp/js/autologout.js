@@ -10,12 +10,12 @@
  */
 
 (function() {
-  var CHECK_INTERVAL = 10000;
-  var CHECK_URL = '/session/check';
-  var MAX_FAILURES = 2;
-  var failures = 0;
+  const CHECK_INTERVAL = 10000;
+  const CHECK_URL = '/session/check';
+  const MAX_FAILURES = 2;
+  let failures = 0;
 
-  var fetchWorker = new SharedWorker("/js/fetchWorker.js");
+  const fetchWorker = new SharedWorker("/js/fetchWorker.js");
   fetchWorker.port.start();
   fetchWorker.port.onmessage = function(e) {
     if (e.data.status === 401) {

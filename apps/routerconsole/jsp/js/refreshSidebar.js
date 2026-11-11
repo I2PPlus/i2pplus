@@ -59,11 +59,7 @@ function updateCachedElements() {
  * @returns {number} The refresh interval in milliseconds
  */
 function getRefreshInterval() {
-  if (refresh != null) {
-    return refresh * 1000;
-  } else {
-    return 3*1000;
-  }
+  return (refresh ?? 3) * 1000;
 }
 
 worker.port.start();

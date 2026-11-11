@@ -52,7 +52,9 @@ const TOOLTIP_SELECTOR = ".tx[title], .barComplete[title]";
     '.barTooltip{position:relative}' +
     '.barTooltip:hover,#snarkTbody:hover .barTooltip{overflow:visible}' +
     '.barTooltip::before,.barTooltip::after{position:absolute;left:50%;opacity:0;box-shadow:2px 2px 2px #0004;pointer-events:none;transition:ease .2s opacity .2s}' +
-    '.barTooltip::before{padding:5px 10px;position:absolute;bottom:120%;z-index:999;line-height:1.3;white-space:pre;font-size:90%;font-weight:500;color:var(--ink);border-radius:4px;background:var(--tooltip);transform:translateX(-50%);content:attr(data-tooltip)}' +
+    '.barTooltip::before{padding:5px 10px;position:absolute;bottom:120%;z-index:999;' +
+    'line-height:1.3;white-space:pre;font-size:90%;font-weight:500;color:var(--ink);' +
+    'border-radius:4px;background:var(--tooltip);transform:translateX(-50%);content:attr(data-tooltip)}' +
     '.barTooltip::after{bottom:calc(120% - 6px);z-index:999;border:6px solid var(--tooltip);content:"";transform:translateX(-50%) rotate(45deg)}'+
     '.txd .barTooltip::before{bottom:calc(128%)}' +
     '.txd .barTooltip::after{bottom:calc(128% - 6px)}' +

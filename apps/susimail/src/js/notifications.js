@@ -20,7 +20,6 @@
       if (notice.innerHTML === "") {notice.remove();}
       notice.addEventListener("click", () => {
         notice.remove();
-        console.log("Notification nuked!");
       });
     }
   });

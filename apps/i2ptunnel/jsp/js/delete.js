@@ -12,9 +12,9 @@
  * @returns {void}
  */
 function init() {
-  var buttons = document.getElementsByClassName("delete");
-  for (index = 0; index < buttons.length; index++) {
-    var button = buttons[index];
+  const buttons = document.getElementsByClassName("delete");
+  for (let index = 0; index < buttons.length; index++) {
+    const button = buttons[index];
     addClickHandler(button);
   }
 }

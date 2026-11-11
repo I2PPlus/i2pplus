@@ -70,7 +70,7 @@ export function formBody(fields) {
   for (const field of fields) {
     const name = field[0];
     if (!name) {continue;}
-    parts.push(encodeURIComponent(name) + "=" + encodeURIComponent(field[1] == null ? "" : field[1]));
+    parts.push(encodeURIComponent(name) + "=" + encodeURIComponent(field[1] ?? ""));
   }
   return parts.join("&");
 }

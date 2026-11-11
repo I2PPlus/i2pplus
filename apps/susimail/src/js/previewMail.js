@@ -19,6 +19,9 @@ function previewMail() {
   const PREVIEW_HIDE_DELAY_MS = 250;
   const FETCH_TIMEOUT_MS = 3000;
   const MAX_PREVIEW_SIZE = 300000;
+  // The whitespace the boilerplate patterns have to match: a plain \s misses the
+  // non-breaking and ideographic spaces a fetched mail body carries.
+  const SPACES = '[\\s\\u00A0\\u2000-\\u200B\\u3000]+';
   const previewCache = new Map();
   let hoverTimer = null;
   let hideTimer = null;
@@ -166,7 +169,9 @@ function previewMail() {
    */
   function cleanText(raw) {
     if (!raw) return "";
-    raw = raw.replaceAll(/Having[\s\u00A0\u2000-\u200B\u3000]+problems[\s\u00A0\u2000-\u200B\u3000]+viewing[\s\u00A0\u2000-\u200B\u3000]+this[\s\u00A0\u2000-\u200B\u3000]+email\?View[\s\u00A0\u2000-\u200B\u3000]+email[\s\u00A0\u2000-\u200B\u3000]+online/gi, "");
+    raw = raw.replaceAll(new RegExp('Having' + SPACES + 'problems' + SPACES + 'viewing' + SPACES +
+                                   'this' + SPACES + 'email\\?View' + SPACES + 'email' + SPACES + 'online',
+                                   'gi'), "");
     raw = raw.replaceAll(/[\s\u00A0\u2000-\u200B\u3000]+/g, " ");
     raw = raw.replaceAll(/,(?=\S)/g, ", ");
     raw = raw.replaceAll(/<([a-zA-Z][\w-]*)[^>]*>(.*?)<\/\1>/gi, "$2");

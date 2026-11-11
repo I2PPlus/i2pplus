@@ -144,14 +144,14 @@
   });
 
   function notify(result) {
-    var ok = !!(result && result.ok);
+    const ok = !!(result && result.ok);
     if (ok && !settings.notifySuccess) {return;}
     if (!ok && !settings.notifyFailure) {return;}
-    var title = ok ? "Added to I2PSnark" : "I2PSnark add failed";
-    var message = "";
+    const title = ok ? "Added to I2PSnark" : "I2PSnark add failed";
+    let message = "";
     if (result) {
       if (ok) {
-        var rest = result.message.substring(3).trim();
+        const rest = result.message.substring(3).trim();
         message = rest || "Magnet added";
       } else {
         message = result.message;

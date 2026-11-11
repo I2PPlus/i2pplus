@@ -15,7 +15,7 @@
  * @type {boolean}
  * @description Whether the page is running inside an iframe.
  */
-const isIframed = document.documentElement.classList.contains("iframed") || window.self != window.top;
+const isIframed = document.documentElement.classList.contains("iframed") || window.self !== window.top;
 
 /**
  * @type {?Object}

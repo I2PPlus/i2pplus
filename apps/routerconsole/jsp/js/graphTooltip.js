@@ -631,7 +631,7 @@ function requestMeta(url) {
 async function parseMeta(payload) {
   if (!payload || payload.isDown) { return null; }
   let text = payload.responseText;
-  if (text == null && payload.responseBlob && typeof payload.responseBlob.text === "function") {
+  if ((text === null || text === undefined) && payload.responseBlob && typeof payload.responseBlob.text === "function") {
     text = await payload.responseBlob.text();
   }
   if (typeof text !== "string") { return null; }

@@ -79,37 +79,62 @@ document.addEventListener("DOMContentLoaded", () => {
     const row = document.createElement("tr");
     row.id = "sigEncCount";
 
-    const sigCell = document.createElement("td");
-    sigCell.innerHTML = `<b>${translate_sigTypes}</b>`;
-
-    const sigText = Object.entries(signatureCounts)
-      .sort()
-      .map(([type, count]) => `<span class=counterLS><span class="lsLabel sigType" title="${translate_sigType}">${type} <span class=lsCounter>${count}</span></span></span>`)
-      .join(" &nbsp;");
-    const sigValueCell = document.createElement("td");
-    sigValueCell.innerHTML = sigText;
-
-    const encCell = document.createElement("td");
-    encCell.innerHTML = `<b>${translate_encTypes}</b>`;
-
-    const encText = Object.entries(encryptionCounts)
-      .sort()
-      .map(([type, count]) => `<span class=counterLS><span class="lsLabel encType"  title="${translate_encType}">${type} <span class=lsCounter>${count}</span></span></span>`)
-      .join(" &nbsp;");
-    const encValueCell = document.createElement("td");
-    encValueCell.innerHTML = encText;
+    /**
+     * Builds the signature or encryption type counters as DOM nodes.
+     * The type names were read out of the table's own text and the counts are
+     * tallies of it, so both are shown as text: nothing here is markup, and
+     * nothing here can break out of the counter's structure.
+     * @function counterSpans
+     * @param {Object<string, number>} counts - Tally of type name to occurrences
+     * @param {string} kind - Class name for the label, "sigType" or "encType"
+     * @param {string} title - Tooltip text for each counter's label
+     * @returns {DocumentFragment} The counters, separated by a non-breaking space
+     */
+    function counterSpans(counts, kind, title) {
+      const counters = document.createDocumentFragment();
+      Object.entries(counts)
+        .sort()
+        .forEach(([type, count], i) => {
+          if (i > 0) { counters.append(" \u00a0"); }
+          const outer = document.createElement("span");
+          outer.className = "counterLS";
+          const label = document.createElement("span");
+          label.className = `lsLabel ${kind}`;
+          label.title = title;
+          const value = document.createElement("span");
+          value.className = "lsCounter";
+          value.textContent = count;
+          label.append(`${type} `, value);
+          outer.append(label);
+          counters.append(outer);
+        });
+      return counters;
+    }
 
     if (!debug) {
       const mergedCell = document.createElement("td");
       mergedCell.colSpan = 4;
       mergedCell.style.textAlign = "center";
-      mergedCell.innerHTML = `
-        ${sigValueCell.innerHTML}
-        <span class=vsep></span>
-        &nbsp;${encValueCell.innerHTML}
-      `;
+      const separator = document.createElement("span");
+      separator.className = "vsep";
+      mergedCell.append(counterSpans(signatureCounts, "sigType", translate_sigType), " ", separator,
+                        " \u00a0", counterSpans(encryptionCounts, "encType", translate_encType));
       row.appendChild(mergedCell);
     } else {
+      const sigCell = document.createElement("td");
+      const sigHeading = document.createElement("b");
+      sigHeading.textContent = translate_sigTypes;
+      sigCell.append(sigHeading);
+      const sigValueCell = document.createElement("td");
+      sigValueCell.append(counterSpans(signatureCounts, "sigType", translate_sigType));
+
+      const encCell = document.createElement("td");
+      const encHeading = document.createElement("b");
+      encHeading.textContent = translate_encTypes;
+      encCell.append(encHeading);
+      const encValueCell = document.createElement("td");
+      encValueCell.append(counterSpans(encryptionCounts, "encType", translate_encType));
+
       row.appendChild(sigCell);
       row.appendChild(sigValueCell);
       row.appendChild(encCell);

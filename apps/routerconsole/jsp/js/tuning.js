@@ -9,7 +9,7 @@
 import {refreshElements} from "/js/refreshElements.js";
 
 /** @constant {string} STORAGE_KEY localStorage key for expanded section state */
-var STORAGE_KEY = "i2p+tuning-sections";
+const STORAGE_KEY = "i2p+tuning-sections";
 
 /**
  * Auto-tuning checkbox toggle: when unchecked, replace Min/Max/Step
@@ -19,13 +19,13 @@ var STORAGE_KEY = "i2p+tuning-sections";
  * @returns {void}
  */
 function initTuningToggles() {
-  var rows = document.querySelectorAll('#tuningtable tr[data-prefix]');
+  const rows = document.querySelectorAll('#tuningtable tr[data-prefix]');
   rows.forEach(function(row) {
-    var cb = row.querySelector('.tuning-toggle');
+    const cb = row.querySelector('.tuning-toggle');
     if (!cb) return;
-    var minCell = row.querySelector('td.min');
-    var maxCell = row.querySelector('td.max');
-    var stepCell = row.querySelector('td.step');
+    const minCell = row.querySelector('td.min');
+    const maxCell = row.querySelector('td.max');
+    const stepCell = row.querySelector('td.step');
     if (!minCell || !maxCell || !stepCell) return;
 
     row.dataset.minHtml = minCell.innerHTML;
@@ -55,7 +55,7 @@ function initTuningToggles() {
  * @returns {void}
  */
 function saveTuningState() {
-  var expanded = [];
+  const expanded = [];
   document.querySelectorAll("thead.section").forEach(function(h) {
     if (h.classList.contains("expanded"))
       expanded.push(h.textContent.trim());
@@ -72,11 +72,11 @@ function saveTuningState() {
  */
 function restoreTuningState() {
   try {
-    var saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
     if (!saved || !saved.length) return;
     document.querySelectorAll("thead.section").forEach(function(h) {
       if (saved.indexOf(h.textContent.trim()) < 0) return;
-      var el = h.nextElementSibling;
+      const el = h.nextElementSibling;
       if (el && el.tagName === "TBODY") {
         el.style.display = "table-row-group";
         h.classList.add("expanded");

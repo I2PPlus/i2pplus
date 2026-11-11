@@ -16,7 +16,7 @@
   const kick = {stop: null};
   window.__i2pSidebarKick = kick;
   const url = "/xhr1.jsp?requestURI=" + encodeURIComponent(location.pathname);
-  const delay = refresh != null ? Math.max(refresh * 1000, 1000) : 3000;
+  const delay = Math.max((refresh ?? 3) * 1000, 1000);
   import("/js/refreshElements.js").then((m) => {
     // The module already consumed the kick and took over; don't start
     if (window.__i2pSidebarKick !== kick) {return;}

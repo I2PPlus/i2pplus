@@ -11,9 +11,9 @@
  * @returns {void}
  */
 function initSelectAll() {
-  var inputs = document.getElementsByClassName("readonly");
-  for (index = 0; index < inputs.length; index++) {
-    var input = inputs[index];
+  const inputs = document.getElementsByClassName("readonly");
+  for (let index = 0; index < inputs.length; index++) {
+    const input = inputs[index];
     addSelectAllHander(input);
   }
 }

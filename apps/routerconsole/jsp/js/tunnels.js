@@ -175,12 +175,12 @@ document.addEventListener("DOMContentLoaded", function() {
     // restore the MB/KB unit into the span.left sibling (server markup holds
     // the number in span.right and "&#8239;MB"/"&#8239;KB" in span.left).
     container.querySelectorAll("td.data").forEach(function(td) {
-      var right = td.querySelector("span.right");
+      const right = td.querySelector("span.right");
       if (right && !right.textContent) {
-        var sortVal = parseInt(td.getAttribute("data-sort"), 10);
+        const sortVal = parseInt(td.getAttribute("data-sort"), 10);
         if (sortVal > 0) {
-          var sizeInKB = sortVal * 1024.0 / 1000.0;
-          var left = td.querySelector("span.left");
+          const sizeInKB = sortVal * 1024.0 / 1000.0;
+          const left = td.querySelector("span.left");
           if (sizeInKB >= 1024) {
             right.textContent = (sizeInKB / 1024.0).toFixed(2);
             if (left) {left.textContent = "\u202FMB";}

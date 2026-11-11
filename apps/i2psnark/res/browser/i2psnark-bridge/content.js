@@ -18,7 +18,7 @@
   const MAGNET_RESULT_EVENT = "i2psnark:magnet-result";
 
   window.addEventListener(MAGNET_RESULT_EVENT, function (ev) {
-    var result = ev.detail;
+    const result = ev.detail;
     if (!result) {
       return;
     }

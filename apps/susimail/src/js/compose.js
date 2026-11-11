@@ -18,12 +18,12 @@ window.addEventListener('beforeunload', (e)=>{if (beforePopup) { e.returnValue=t
  * @returns {void}
  */
 function initPopup() {
-	var buttons = document.getElementsByClassName("beforePopup");
-	for(index = 0; index < buttons.length; index++)
-	{
-		var button = buttons[index];
-		addClickHandler5(button);
-	}
+    const buttons = document.getElementsByClassName("beforePopup");
+    for(let index = 0; index < buttons.length; index++)
+    {
+        const button = buttons[index];
+        addClickHandler5(button);
+    }
 }
 
 /**
@@ -35,9 +35,9 @@ function initPopup() {
  */
 function addClickHandler5(elem)
 {
-	elem.addEventListener("click", function() {
-		beforePopup = false;
-	});
+    elem.addEventListener("click", function() {
+        beforePopup = false;
+    });
 }
 
 document.addEventListener("DOMContentLoaded", function() {

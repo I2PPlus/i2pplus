@@ -27,9 +27,9 @@ function setupIframe() {
  * @returns {void}
  */
 function endOfPage() {
-  var endOfPage = document.getElementById("endOfPage");
+  const endOfPage = document.getElementById("endOfPage");
   if (!endOfPage) {
-    var end = document.createElement("span");
+    const end = document.createElement("span");
     end.setAttribute("id", "endOfPage");
     end.setAttribute("data-iframe-height", "");
     document.body.appendChild(end);

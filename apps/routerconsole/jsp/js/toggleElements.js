@@ -32,7 +32,7 @@ function setupToggles(toggleSelector, hiddenSelector, displayStyle, collapseByDe
   });
 
   toggleElements.forEach(function(toggleElement) {
-    var hiddenElement = toggleElement.nextElementSibling;
+    let hiddenElement = toggleElement.nextElementSibling;
 
     while (hiddenElement && hiddenElement.nodeType !== Node.ELEMENT_NODE) {
       hiddenElement = hiddenElement.nextElementSibling;

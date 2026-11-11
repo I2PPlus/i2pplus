@@ -89,6 +89,23 @@ function updateElementContent(element, responseElement) {
 }
 
 /**
+ * Replaces the messages cell with a single error line.
+ * The line is built as DOM, not as markup text: the status text and the exception
+ * message come from outside this file, and textContent keeps them out of the markup.
+ * @function showError
+ * @param {string} text - Message to show, shown literally
+ * @returns {void}
+ */
+function showError(text) {
+  if (!messages) {return;}
+  const li = document.createElement("li");
+  li.className = "error";
+  li.textContent = text;
+  messages.textContent = "";
+  messages.append(li);
+}
+
+/**
  * Fetches the current page and updates tunnel status information.
  * On success, clears down state, parses response HTML, and updates volatile content.
  * On failure, schedules down state handler after 5 second delay.
@@ -414,7 +431,7 @@ function initTunnelControl() {
       const form = document.getElementById(formId);
       if (!form) {
         console.warn(`[refreshIndex] Form not found: ${formId}`);
-        if (messages) messages.innerHTML = `<li class="error">Error: Form "${formId}" not found</li>`;
+        showError(`Error: Form "${formId}" not found`);
         return;
       }
       await tunnelControl(form, target.value);
@@ -448,9 +465,7 @@ async function tunnelControl(form, action) {
     if (!response.ok) {
       const errorText = await response.text().catch(() => '');
       console.error(`[refreshIndex] Action failed: ${response.status} ${response.statusText}`, errorText);
-      if (messages) {
-        messages.innerHTML = `<li class="error">Server error ${response.status}: ${response.statusText}</li>`;
-      }
+      showError(`Server error ${response.status}: ${response.statusText}`);
       return;
     }
 
@@ -481,9 +496,7 @@ async function tunnelControl(form, action) {
       });
 
       if (!retryResponse.ok) {
-        if (messages) {
-          messages.innerHTML = `<li class="error">Retry failed: ${retryResponse.status}</li>`;
-        }
+        showError(`Retry failed: ${retryResponse.status}`);
         return;
       }
 
@@ -500,9 +513,7 @@ async function tunnelControl(form, action) {
 
   } catch (e) {
     console.error(e);
-    if (messages) {
-      messages.innerHTML = `<li class="error">Action failed: ${e.message || e}</li>`;
-    }
+    showError(`Action failed: ${e.message || e}`);
   }
 }
 

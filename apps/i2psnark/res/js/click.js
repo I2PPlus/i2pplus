@@ -29,6 +29,27 @@ const configPage = document.getElementById("mainconfig");
  */
 const snarkInfo = document.getElementById("snarkInfo");
 
+/**
+ * Escapes text for the confirmation dialog's markup.
+ * The torrent name comes from a data-name attribute on the page and is shown as
+ * text, so an angle bracket or an ampersand in a name must not restructure the
+ * dialog. Three more page-supplied values reach the same markup unescaped -
+ * removeMsg, removeMsg2 and deleteMsg - because the servlet writes them from its
+ * own translations, so they are markup we composed rather than payload.
+ * @function esc
+ * @param {string} value - Text to show in the dialog
+ * @returns {string} The same text with an ampersand, both kinds of angle bracket
+ *                   and a double quote replaced by their entities, safe as
+ *                   element text in the dialog
+ */
+function esc(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   if (eventListenerActive || configPage !== null || snarkInfo !== null) {return;}
 
@@ -135,14 +156,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (clickTarget.classList.contains("doDelete") || clickTarget.classList.contains("doRemove")) {
       event.preventDefault();
-      let torrent = clickTarget.getAttribute("data-name");
-      if (torrent.length > 50) {torrent = torrent.substring(0, 48) + "&hellip;";}
+      const torrentName = clickTarget.getAttribute("data-name") || "";
+      const torrent = torrentName.length > 50
+        ? `${esc(torrentName.substring(0, 48))}&hellip;`
+        : esc(torrentName);
       const msg = clickTarget.classList.contains("doRemove") ? `<p id=msg>${removeMsg}<span class=hr></span>${removeMsg2}</p>` : `<p id=msg>${deleteMsg}</p>`;
       const name = clickTarget.name;
       const value = clickTarget.value;
       const action = clickTarget.dataset.action;
 
-      const confirmed = await showConfirmationDialog(clickTarget, msg.replace("{0}", `<b>${torrent}</b>`), name, value, action);
+      // A replacer function, not a replacement string: a torrent name carrying
+      // `$&`, `$'` or a backtick would otherwise be substituted by
+      // String.prototype.replace instead of being inserted literally.
+      const confirmed = await showConfirmationDialog(clickTarget,
+          msg.replace("{0}", () => `<b>${torrent}</b>`), name, value, action);
       if (form && confirmed) {
         form.requestSubmit(clickTarget);
       }
@@ -178,7 +205,15 @@ document.addEventListener("DOMContentLoaded", () => {
       htmlTag.classList.add("modal");
       const dialog = document.createElement("div");
       const overlay = document.createElement("div");
-      dialog.innerHTML = `${message}<p id=confirmButtons><button id=confirmNo data-action=no>Cancel</button><button id=confirmYes data-action=yes>Delete</button></p>`;
+      // message is markup this file composed in the click handler: the torrent
+      // name interpolated into it is escaped, and the three message strings
+      // interpolated beside it are the servlet's own translations. The buttons
+      // are ours too, so they are built apart from the message.
+      dialog.innerHTML = message;
+      const buttons = document.createElement("p");
+      buttons.id = "confirmButtons";
+      buttons.innerHTML = `<button id=confirmNo data-action=no>Cancel</button><button id=confirmYes data-action=yes>Delete</button>`;
+      dialog.append(buttons);
       dialog.id = "confirmDialog";
       overlay.id = "confirmOverlay";
       document.body.appendChild(overlay);
