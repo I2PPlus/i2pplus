@@ -33,7 +33,7 @@ public class KRPCFilterTest {
     private static final I2PAppContext CTX = I2PAppContext.getGlobalContext();
 
     /** A fake I2PSession that records listener registrations. */
-    private static final class FakeSession {
+    static final class FakeSession {
         final Destination dest;
         final List<String> calls = new ArrayList<>();
         final I2PSession session;
@@ -74,7 +74,7 @@ public class KRPCFilterTest {
         }
     }
 
-    private static Object getField(Object obj, String name) throws Exception {
+    static Object getField(Object obj, String name) throws Exception {
         Class<?> cls = obj.getClass();
         while (cls != null) {
             try {
@@ -124,7 +124,7 @@ public class KRPCFilterTest {
      * @param port the peer's UDP port, also folded into the NID bytes
      * @return a NodeInfo whose NID passes {@link org.klomp.snark.dht.NodeInfo#verify}
      */
-    private static NodeInfo validNode(byte hashStart, int port) {
+    static NodeInfo validNode(byte hashStart, int port) {
         byte[] hb = hash(hashStart);
         byte[] nb = new byte[NID.HASH_LENGTH];
         System.arraycopy(hb, 0, nb, 0, 4);

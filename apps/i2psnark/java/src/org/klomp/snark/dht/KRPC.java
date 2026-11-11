@@ -408,6 +408,9 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         SortedSet<NodeInfo> toTry = new TreeSet<>(new NodeInfoComparator(target));
         toTry.addAll(nodes);
         Set<NodeInfo> tried = new HashSet<>();
+        // how many recently-failed nodes we have stepped over without charging them
+        // an attempt
+        int skips = 0;
 
         if (_log.shouldInfo()) _log.info("Starting explore of [" + target + "]");
         for (int i = 0; i < maxNodes; i++) {
@@ -419,6 +422,13 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                 break;
             }
             toTry.remove(nInfo);
+            // see the same skip in getPeersAndAnnounce(): a deaf node costs a query and
+            // the whole wait for its timeout, and here it delays filling a stale bucket
+            if (recentlyFailed(nInfo) && skips++ < maxNodes) {
+                if (_log.shouldDebug()) _log.debug("Skipping recently failed " + nInfo);
+                i--;
+                continue;
+            }
             tried.add(nInfo);
 
             ReplyWaiter waiter = sendFindNode(nInfo, target);
@@ -516,6 +526,9 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         SortedSet<NodeInfo> heardFrom = new TreeSet<>(comp);
         toTry.addAll(nodes);
         SortedSet<NodeInfo> tried = new TreeSet<>(comp);
+        // how many recently-failed nodes we have stepped over without charging them
+        // an attempt
+        int skips = 0;
 
         if (_log.shouldInfo())
             _log.info(
@@ -537,6 +550,16 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                 break;
             }
             toTry.remove(nInfo);
+            // A node that failed to answer a query recently is unlikely to answer this
+            // one, and trying it spends one of the limited attempts plus up to 45 s of
+            // the lookup's clock. Skip it without counting the attempt, but keep a bound
+            // on how many we step over so a routing table full of deaf nodes cannot turn
+            // this into an unbounded walk.
+            if (recentlyFailed(nInfo) && skips++ < maxNodes) {
+                if (_log.shouldDebug()) _log.debug("Skipping recently failed " + nInfo);
+                i--;
+                continue;
+            }
             tried.add(nInfo);
             if (_log.shouldDebug()) _log.debug("Try " + i + ": " + nInfo);
 
@@ -1569,6 +1592,21 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                 }
             }
         }
+    }
+
+    /**
+     * True if this node has failed to answer so many queries in a row that it is on the
+     * blacklist, which it leaves again as soon as it answers anything. The iterative
+     * lookups step over these nodes instead of spending one of their limited attempts,
+     * and the seconds of clock each attempt waits for a reply, on a node that has
+     * already proved deaf. Package-private for the tests.
+     *
+     * @param nInfo the node to check
+     * @return true if the node has been failing repeatedly
+     * @since 0.9.72+
+     */
+    boolean recentlyFailed(NodeInfo nInfo) {
+        return _blacklist.contains(nInfo.getNID());
     }
 
     /**
