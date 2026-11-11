@@ -481,13 +481,10 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             }
 
             int replyType = waiter.getReplyCode();
-            if (replyType == REPLY_NONE) {
-                if (_log.shouldDebug()) _log.debug("No reply from " + nInfo);
-            } else if (replyType == REPLY_NODES) {
+            // REPLY_NONE means the query timed out, and timeReached() logged it
+            if (replyType == REPLY_NODES) {
                 List<NodeInfo> reply = (List<NodeInfo>) waiter.getReplyObject();
                 // It seems like we are just going to get back ourselves all the time
-                if (_log.shouldDebug())
-                    _log.debug("Received " + reply.size() + " nodes from " + nInfo);
                 for (NodeInfo ni : reply) {
                     if (!(ni.equals(_myNodeInfo) || tried.contains(ni) || toTry.contains(ni)))
                         toTry.add(ni);
@@ -610,13 +607,12 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             }
 
             int replyType = waiter.getReplyCode();
-            if (replyType == REPLY_NONE) {
-                if (_log.shouldDebug()) _log.debug("No reply from " + nInfo);
-            } else if (replyType == REPLY_PONG) {
+            // REPLY_NONE means the query timed out, and timeReached() logged it
+            if (replyType == REPLY_PONG) {
                 if (_log.shouldDebug()) _log.debug("Received pong from " + nInfo);
             } else if (replyType == REPLY_PEERS) {
                 heardFrom.add(waiter.getSentTo());
-                if (_log.shouldDebug()) _log.debug("Received peers from " + nInfo);
+                // receivePeers() logs the reply itself, with the node named
                 List<Hash> reply = (List<Hash>) waiter.getReplyObject();
                 // shouldn't send us an empty peers list but through
                 // 0.9.8.1 it will; keep walking when empty so a node with no
@@ -636,8 +632,6 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             } else if (replyType == REPLY_NODES) {
                 heardFrom.add(waiter.getSentTo());
                 List<NodeInfo> reply = (List<NodeInfo>) waiter.getReplyObject();
-                if (_log.shouldDebug())
-                    _log.debug("Received " + reply.size() + " nodes from " + nInfo);
                 for (NodeInfo ni : reply) {
                     if (!(ni.equals(_myNodeInfo) || tried.contains(ni) || toTry.contains(ni)))
                         toTry.add(ni);
@@ -815,8 +809,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             maxWait -= _context.clock().now() - start;
             if (maxWait < 1000) {
                 if (_log.shouldInfo())
-                    _log.info("Ran out of time after get_peers in announce() succeeded to "
-                              + nInfo);
+                    _log.info("Announce aborted -> Out of time after get_peers from " + nInfo);
                 return false;
             }
         }
@@ -1158,9 +1151,6 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                 _log.info("Dropping query to ourselves " + nInfo);
             return null;
         }
-        if (_log.shouldDebug()) {
-            _log.debug("Sending query to " + nInfo);
-        }
         if (nInfo.getDestination() == null) {
             NodeInfo newInfo = _knownNodes.get(nInfo.getNID());
             if (newInfo != null && newInfo.getDestination() != null) {
@@ -1249,8 +1239,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      * @return true if a destination was resolved and cached on the node
      */
     private boolean lookupDest(NodeInfo nInfo) {
-        if (_log.shouldInfo()) {
-            _log.info("Looking up destination for " + nInfo);
+        if (_log.shouldDebug()) {
+            _log.debug("Looking up destination for " + nInfo);
         }
         try {
             Destination dest =
@@ -1271,8 +1261,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                            + " -> Error: " + ise.getMessage());
             }
         }
-        if (_log.shouldInfo()) {
-            _log.info("Lookup failed for " + nInfo);
+        if (_log.shouldDebug()) {
+            _log.debug("Lookup failed for " + nInfo);
         }
         return false;
     }
@@ -2102,8 +2092,9 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                 onTimeout.run();
             }
             timeout(sentTo);
-            // Debug: a DHT query timing out is normal network behaviour, and
-            // timeout() above has already recorded it.
+            // A DHT query timing out is normal network behaviour, so this stays at
+            // DEBUG - and it is the only record of the event unless the node fails
+            // often enough for timeout() above to evict or blacklist it.
             if (_log.shouldDebug()) {
                 _log.debug("Timeout waiting for reply from " + sentTo);
             }

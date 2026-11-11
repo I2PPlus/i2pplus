@@ -5421,8 +5421,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             }
             saveMetadata();
             _configCache.remove(hash);
-            if (_log.shouldInfo()) {
-                _log.info("Purged metadata for " + snark.getName());
+            if (_log.shouldDebug()) {
+                _log.debug("Purged metadata for " + snark.getName());
             }
         }
     }
