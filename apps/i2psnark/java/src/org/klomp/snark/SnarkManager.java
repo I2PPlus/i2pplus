@@ -259,6 +259,21 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     public static final String PROP_MAX_PARTSIZE = "i2psnark.pipeline.maxPartsize";
 
+    /**
+     * Max uncompleted piece prefetches per uploading peer. Bounds pinned buffers
+     * to this many times the request part size on each connection.
+     *
+     * @since 0.9.72+
+     */
+    public static final String PROP_PREFETCH_INFLIGHT = "i2psnark.prefetch.inflight";
+    /**
+     * Ceiling on the shared piece-prefetch thread pool, i.e. how many piece
+     * blocks may be read from disk at once across all torrents.
+     *
+     * @since 0.9.72+
+     */
+    public static final String PROP_PREFETCH_THREADS = "i2psnark.prefetch.threads";
+
     /** Directory the downloaded torrent data is stored in. */
     public static final String PROP_DIR = "i2psnark.dir";
 
@@ -2157,6 +2172,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         int chunkSize = getInt(PROP_PARTSIZE, PeerState.PARTSIZE);
         int maxChunk = getInt(PROP_MAX_PARTSIZE, PeerState.MAX_PARTSIZE);
         PeerState.setPipelineParams(minPipe, maxPipe, chunkSize, maxChunk);
+        // Upload-side prefetch depth. Applied here for the same reason: before any
+        // peer connection has queued a piece.
+        PeerConnectionOut.setPrefetchParams(
+                getInt(PROP_PREFETCH_INFLIGHT, PeerConnectionOut.MAX_PREFETCH_INFLIGHT),
+                getInt(PROP_PREFETCH_THREADS, PeerConnectionOut.MAX_PREFETCH_THREADS));
         updateConfig();
         // Initialize bandwidth from config (not from I2CP detection)
         int maxdown = getInt(PROP_DOWNBW_MAX, DEFAULT_MAX_DOWN_BW);
@@ -2452,6 +2472,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     getInt(PROP_MAX_PIPELINE, PeerState.MAX_PIPELINE),
                     getInt(PROP_PARTSIZE, PeerState.PARTSIZE),
                     getInt(PROP_MAX_PARTSIZE, PeerState.MAX_PARTSIZE));
+            PeerConnectionOut.setPrefetchParams(
+                    getInt(PROP_PREFETCH_INFLIGHT, PeerConnectionOut.MAX_PREFETCH_INFLIGHT),
+                    getInt(PROP_PREFETCH_THREADS, PeerConnectionOut.MAX_PREFETCH_THREADS));
         }
     }
 

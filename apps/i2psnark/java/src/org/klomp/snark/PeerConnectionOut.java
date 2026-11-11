@@ -55,20 +55,39 @@ class PeerConnectionOut implements Runnable {
     private final BlockingQueue<Message> sendQueue = new LinkedBlockingQueue<>(MAX_QUEUE_SIZE);
 
     /**
-     * Pool running the piece prefetches, one thread per concurrent burst
-     * up to the thread limit, with idle threads dying so the cost at rest
-     * is zero. When all threads are busy or the per connection depth cap
-     * is hit, new pieces stay lazy and fall back to the inline load.
+     * Default global prefetch pool ceiling. Raised from 4 to 6 together with the
+     * per-connection depth below, so a peer with six requests in flight can have
+     * all six loads running at once instead of four prefetched and two loaded
+     * inline on the sender thread.
      */
-    private static final int MAX_PREFETCH_THREADS = 4;
+    private static final int DEFAULT_MAX_PREFETCH_THREADS = 6;
+
+    /**
+     * Default max uncompleted prefetches per connection. Raised from 2 to 6 to
+     * match the six concurrent blocks i2pd keeps in its per-peer send buffer
+     * (its MAX_NUM_PIECES); at the default 16 KiB part size that is 96 KiB of
+     * pinned buffers per uploading peer.
+     */
+    private static final int DEFAULT_MAX_PREFETCH_INFLIGHT = 6;
+
+    /** Ceiling on the per-connection depth, so a bad config cannot pin unbounded buffers. */
+    private static final int MAX_PREFETCH_INFLIGHT_CAP = 32;
+
+    /** Ceiling on the global pool, so a bad config cannot spawn unbounded concurrent disk reads. */
+    private static final int MAX_PREFETCH_THREADS_CAP = 16;
+
     /** Idle prefetch threads exit after this long. */
     private static final long PREFETCH_THREAD_IDLE_MS = 60 * 1000;
+
     /**
      * Max uncompleted prefetches per connection; bounds pinned buffers to
      * depth x the request part size (PeerState.PARTSIZE, 16KB by default,
      * up to MAX_PARTSIZE 128KB when configured larger).
      */
-    static volatile int MAX_PREFETCH_INFLIGHT = 2;
+    static volatile int MAX_PREFETCH_INFLIGHT = DEFAULT_MAX_PREFETCH_INFLIGHT;
+
+    /** Current global prefetch pool ceiling, changed only through {@link #setPrefetchParams}. */
+    static volatile int MAX_PREFETCH_THREADS = DEFAULT_MAX_PREFETCH_THREADS;
     /** Loads slower than this are logged; sustained counts confirm cold-read stalls. */
     private static final long SLOW_LOAD_WARN_MS = 1000;
     /** Sequence number of the prefetch threads. */
@@ -92,6 +111,38 @@ class PeerConnectionOut implements Runnable {
 
     static {
         _prefetchExec.allowCoreThreadTimeOut(true);
+    }
+
+    /**
+     * Apply the configurable prefetch depth and pool ceiling, clamped to safe bounds.
+     * Call once at startup, before any connection has queued a piece. The pool keeps
+     * a core size of zero and idle threads time out, so lowering the ceiling only
+     * stops new bursts from spawning threads; raising it takes effect immediately.
+     *
+     * <p>The two bounds are independent on purpose: the depth caps pinned buffers per
+     * peer, the ceiling caps concurrent disk reads across the whole router. A depth
+     * above the ceiling is not wasted - the excess loads fall back to the inline path
+     * on the sender thread - but it does not help either, so keep them together.
+     *
+     * @param inflight max uncompleted prefetches per connection, clamped to [1, 32]
+     * @param threads global prefetch pool ceiling, clamped to [1, 16]
+     * @since 0.9.72+
+     */
+    static void setPrefetchParams(int inflight, int threads) {
+        MAX_PREFETCH_INFLIGHT = Math.max(1, Math.min(inflight, MAX_PREFETCH_INFLIGHT_CAP));
+        int pool = Math.max(1, Math.min(threads, MAX_PREFETCH_THREADS_CAP));
+        MAX_PREFETCH_THREADS = pool;
+        _prefetchExec.setMaximumPoolSize(pool);
+    }
+
+    /**
+     * Current ceiling of the shared prefetch pool, for tests and the status page.
+     *
+     * @return the pool's maximum thread count
+     * @since 0.9.72+
+     */
+    static int prefetchPoolSize() {
+        return _prefetchExec.getMaximumPoolSize();
     }
 
     /** Prefetches measured, cheap instrumentation for the cold read stall share. */
