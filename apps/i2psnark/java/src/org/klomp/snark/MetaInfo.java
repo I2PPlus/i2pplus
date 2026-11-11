@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.SHA1;
 import net.i2p.data.DataHelper;
@@ -269,7 +271,17 @@ public class MetaInfo {
      */
     public MetaInfo(Map<String, BEValue> m) throws InvalidBEncodingException {
         if (_log.shouldDebug()) {
-            _log.debug("Parsing MetaInfo from a bencoded map: " + m);
+            // The map's own toString() is an unbounded wall of "BEValue [N bytes]"
+            // and "key=value"; the key names are what show which writer produced the
+            // file (BEP 12 announce-list, BEP 19 url-list, nodes, utf-8 variants)
+            BEValue infoBev = m.get("info");
+            Object infoVal = infoBev != null ? infoBev.getValue() : null;
+            StringBuilder buf = new StringBuilder(160);
+            buf.append("Parsing a bencoded torrent -> Keys: ").append(keyNames(m));
+            if (infoVal instanceof Map) {
+                buf.append("\n* Info keys: ").append(keyNames((Map<?, ?>) infoVal));
+            }
+            _log.debug(buf.toString());
         }
         BEValue val = m.get("announce");
         // Disabled check, we can get info from a magnet now
@@ -494,6 +506,34 @@ public class MetaInfo {
         }
 
         info_hash = calculateInfoHash();
+    }
+
+    /**
+     * Sorted, comma-separated key names of a bencoded dictionary, for the parse
+     * log line. A dictionary's own toString() dumps every payload as
+     * "BEValue [N bytes]", which is unbounded and unreadable; the key names are
+     * what identify the writer that produced the torrent file.
+     *
+     * @param map the dictionary, may be null or empty
+     * @return the key names separated by ", ", an empty string if there are none
+     * @since 0.9.73+
+     */
+    static String keyNames(Map<?, ?> map) {
+        if (map == null || map.isEmpty()) {
+            return "";
+        }
+        Set<String> names = new TreeSet<>();
+        for (Object key : map.keySet()) {
+            names.add(String.valueOf(key));
+        }
+        StringBuilder buf = new StringBuilder(64);
+        for (String key : names) {
+            if (buf.length() > 0) {
+                buf.append(", ");
+            }
+            buf.append(key);
+        }
+        return buf.toString();
     }
 
     /**
