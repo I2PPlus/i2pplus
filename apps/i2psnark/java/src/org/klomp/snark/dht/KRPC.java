@@ -215,6 +215,24 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     }
 
     /**
+     * The node ids of a collection of nodes, for the sub-list form of
+     * {@link SnarkLogFormatter#nodeList}. A list line names a node by its id
+     * only, so the port and the known-destination marker in
+     * {@code NodeInfo.toString()} do not eat the node's share of the line.
+     *
+     * @param nodes the nodes to name, in the order to print them, null allowed
+     * @return the node ids in the same order, never null
+     * @since 0.9.73+
+     */
+    static List<NID> nids(Collection<NodeInfo> nodes) {
+        List<NID> ids = new ArrayList<>(nodes.size());
+        for (NodeInfo ni : nodes) {
+            if (ni != null) {ids.add(ni.getNID());}
+        }
+        return ids;
+    }
+
+    /**
      * When true, generated NIDs must satisfy a cryptographic puzzle.
      */
     public static final boolean SECURE_NID = true;
@@ -554,7 +572,10 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                       + " * To try: " + nodes.size());
         for (int i = 0; i < maxNodes; i++) {
             if (!_isRunning || Thread.currentThread().isInterrupted()) break;
-            if (_log.shouldDebug()) _log.debug("Now to try: " + toTry);
+            if (_log.shouldDebug()) {
+                _log.debug("Trying the closest nodes next"
+                           + SnarkLogFormatter.nodeList(nids(toTry), "Now to try", toTry.size()));
+            }
             NodeInfo nInfo;
             try {
                 nInfo = toTry.first();
@@ -669,10 +690,11 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             announce(ih, annMax, annMaxWait, isSeed);
         }
         if (_log.shouldDebug()) {
-            _log.debug("Finished get_peers -> Returning " + rv.size() + " peers");
-            _log.debug("Tried: " + tried);
-            _log.debug("Heard from: " + heardFrom);
-            _log.debug("Not tried: " + toTry);
+            _log.debug("Finished get_peers -> Returning " + rv.size() + " peers"
+                       + SnarkLogFormatter.nodeList(nids(tried), "Tried", tried.size())
+                       + SnarkLogFormatter.nodeList(nids(heardFrom), "Heard from",
+                                                    heardFrom.size())
+                       + SnarkLogFormatter.nodeList(nids(toTry), "Not tried", toTry.size()));
         }
         return rv;
     }
@@ -1889,7 +1911,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             rv.add(nInf);
         }
         if (_log.shouldDebug()) {
-            _log.debug("Received nodes from " + nInfo + ": " + DataHelper.toString(rv));
+            _log.debug("Received nodes from " + nInfo
+                       + SnarkLogFormatter.nodeList(nids(rv), "Nodes", rv.size()));
         }
         return removeSelf(rv, _myNodeInfo);
     }
@@ -1924,8 +1947,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             }
         }
         if (_log.shouldInfo()) {
-            _log.info("Received " + peers.size() + " peers from " + nInfo + ": "
-                      + DataHelper.toString(rv));
+            _log.info("Received " + peers.size() + " peers from " + nInfo
+                      + SnarkLogFormatter.destList(rv, "Peers", rv.size()));
         }
         return rv;
     }

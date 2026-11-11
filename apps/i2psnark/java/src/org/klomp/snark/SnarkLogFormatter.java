@@ -41,6 +41,11 @@ import net.i2p.data.SimpleDataStructure;
  * deliberately not applied to {@link PeerID#toString()} or
  * {@code dht.NodeInfo#toString()}, whose forms the peer table's client
  * fingerprinting and column slicing already depend on.
+ * <p>
+ * A label that names many identities puts them in a sub-list of its own -
+ * {@link #destList} and {@link #nodeList} - eight to a line, the same shape the
+ * router's peer lists use, so no list bounded only by the network can emit one
+ * line a reader has to scroll sideways through.
  *
  * @since 0.9.73+
  */
@@ -125,5 +130,115 @@ public class SnarkLogFormatter {
         byte[] decoded = Base64.decode(key);
         if (decoded == null || decoded.length < 4) {return NONE;}
         return I2PSnarkUtil.toHex(decoded).substring(0, SHORT_CHARS);
+    }
+
+    /**
+     * Identities shown on one sub-list line before wrapping. Eight short
+     * identities plus the five-column indent stays inside the logging guide's
+     * 80-90 column line.
+     */
+    static final int ENTRIES_PER_LINE = 8;
+
+    /** Spaces before the first identity on a sub-list line, lining them up in one column. */
+    static final int INDENT = 5;
+
+    /**
+     * A labelled sub-list of I2P destinations, led by its own {@code "\n* "}
+     * label line and eight identities to a line, so a list bounded only by the
+     * tracker or the routing table cannot emit one line of unbounded length.
+     * The shape mirrors {@code router.util.PeerLogFormatter.peerList}, which the
+     * console log reader already knows.
+     *
+     * @param dests the destinations to name, in the order to print them; null or
+     *              empty is shown as the sentence form
+     * @param label the label to show, e.g. "Peers"
+     * @param count the number the label reports, shown in parentheses and used
+     *              for the {@code "(+N more)"} tail
+     * @return the label line and the indented destination lines, or the sentence
+     *         form when there is nothing to name
+     * @since 0.9.73+
+     */
+    public static String destList(Iterable<? extends Hash> dests, String label, int count) {
+        return entries(dests, label, count, "destinations", true);
+    }
+
+    /**
+     * A labelled sub-list of DHT node ids in the shape described by
+     * {@link #destList}, each named by {@link #node(SimpleDataStructure)}.
+     *
+     * @param nodes the nodes to name, in the order to print them; null or empty
+     *              is shown as the sentence form
+     * @param label the label to show, e.g. "Now to try"
+     * @param count the number the label reports, shown in parentheses and used
+     *              for the {@code "(+N more)"} tail
+     * @return the label line and the indented node lines, or the sentence form
+     *         when there is nothing to name
+     * @since 0.9.73+
+     */
+    public static String nodeList(Iterable<? extends SimpleDataStructure> nodes, String label,
+                                   int count) {
+        return entries(nodes, label, count, "nodes", false);
+    }
+
+    /**
+     * The shared sub-list layout: a label line naming how many entries follow,
+     * then the identities eight to a line at a five-column indent, then a tail
+     * counting what is not shown.
+     *
+     * @param items the identities to name, in the order to print them; null or
+     *              empty is shown as the sentence form
+     * @param label the label to show
+     * @param count the number the label reports
+     * @param noun what is being counted, used for the sentence form so an empty
+     *             list still says something
+     * @param shortBase32 true to name each entry as a destination, false to name
+     *                    it as a node id
+     * @return the label line and the indented identity lines, or the sentence
+     *         form when there is nothing to name
+     */
+    private static String entries(Iterable<? extends SimpleDataStructure> items, String label,
+                                  int count, String noun, boolean shortBase32) {
+        StringBuilder sb = new StringBuilder(64);
+        int shown = 0;
+        if (items != null) {
+            for (SimpleDataStructure item : items) {
+                if (item == null) {continue;}
+                if (shown == 0) {
+                    sb.append("\n* ").append(label).append(" (").append(count).append("):\n");
+                }
+                if (shown % ENTRIES_PER_LINE == 0) {
+                    if (shown > 0) {sb.append('\n');}
+                    for (int i = 0; i < INDENT; i++) {
+                        sb.append(' ');
+                    }
+                } else {
+                    sb.append(' ');
+                }
+                sb.append(shortBase32 ? dest(item) : node(item));
+                shown++;
+            }
+        }
+        // a label line with a colon and nothing under it says nothing
+        if (shown == 0) {return "\n* " + label + ' ' + count + ' ' + noun;}
+        int more = count - shown;
+        if (more > 0) {
+            sb.append('\n');
+            for (int i = 0; i < INDENT; i++) {
+                sb.append(' ');
+            }
+            sb.append("(+").append(more).append(" more)");
+        }
+        return sb.toString();
+    }
+
+    /**
+     * The short form of any identity, used by {@link #destList} - a {@link Hash}
+     * is a destination, anything else is named by its base64 prefix.
+     *
+     * @param item the identity to name, not null
+     * @return the bracketed eight-character form
+     */
+    private static String dest(SimpleDataStructure item) {
+        return item instanceof Hash ? dest((Hash) item) : node(item);
     }
 }

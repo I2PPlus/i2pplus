@@ -1787,7 +1787,9 @@ public class TrackerClient implements Runnable {
             }
             if (_log.shouldInfo()) {
                 _log.info("Received " + hashes.size() + " peer hashes from DHT"
-                          + (_log.shouldDebug() ? "\n* DHT Peers: " + hashes : ""));
+                          + (_log.shouldDebug()
+                             ? SnarkLogFormatter.destList(hashes, "DHT peers", hashes.size())
+                             : ""));
             }
 
             // Now try these peers
