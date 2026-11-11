@@ -316,8 +316,9 @@ class WebPeer extends Peer implements EepGet.StatusListener {
                     get.addStatusListener(this);
                     int osz = out.size();
                     if (_log.shouldDebug())
-                        _log.debug("Fetching piece: " + piece + " offset: " + off
-                                   + " file offset: " + foff + " len: " + flen + " from " + url);
+                        _log.debug("Fetching piece " + piece + " from a webseed"
+                                   + " -> Offset: " + off + " bytes * Length: " + flen
+                                   + " bytes * File offset: " + foff + " bytes * URL: " + url);
                     if (get.fetch(HEADER_TIMEOUT, TOTAL_TIMEOUT, INACTIVITY_TIMEOUT)) {
                         int resp = get.getStatusCode();
                         if (resp != 200 && resp != 206) {
@@ -327,8 +328,9 @@ class WebPeer extends Peer implements EepGet.StatusListener {
                         int sz = out.size() - osz;
                         if (sz != flen) {
                             if (_log.shouldWarn())
-                                _log.warn("Fetch of " + url + " received: " + sz + " expected: "
-                                          + flen);
+                                _log.warn("Webseed fetch returned the wrong size"
+                                          + " -> Received: " + sz + " bytes * Expected: " + flen
+                                          + " bytes * URL: " + url);
                             return;
                         }
                     } else {

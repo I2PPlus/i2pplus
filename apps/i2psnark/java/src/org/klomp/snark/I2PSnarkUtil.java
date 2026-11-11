@@ -1893,12 +1893,12 @@ public class I2PSnarkUtil implements DisconnectListener {
         if (get.fetch(timeout)) {
             if (_log.shouldDebug())
                 _log.debug("Request successful -> Size: " + size + " bytes * URL: "
-                           + convertedurl.substring(0, truncate) + "...");
+                           + convertedurl.substring(0, truncate));
             return true;
         } else {
             if (_log.shouldInfo())
-                _log.info("Timeout (" + timeout / 1000 + "s) requesting ["
-                          + convertedurl.substring(0, truncate) + "...]");
+                _log.info("Request timed out -> Timeout: " + DataHelper.formatDuration(timeout)
+                          + " * URL: " + convertedurl.substring(0, truncate));
             return false;
         }
     }
@@ -1974,7 +1974,7 @@ public class I2PSnarkUtil implements DisconnectListener {
      */
     public byte[] get(String url, boolean rewrite, int retries, int initialSize, int maxSize) {
         if (_log.shouldDebug()) {
-            _log.debug("Fetching to memory " + url);
+            _log.debug("Fetching to memory -> URL: " + url);
         }
         String fetchURL = url;
         if (rewrite) {
@@ -2038,7 +2038,7 @@ public class I2PSnarkUtil implements DisconnectListener {
         }
         I2PSocketManager mgr = td.getSocketManager();
         if (_log.shouldDebug()) {
-            _log.debug("Fetching to memory " + url);
+            _log.debug("Fetching to memory -> URL: " + url);
         }
         String fetchURL = url;
         if (rewrite) {
