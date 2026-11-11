@@ -1521,7 +1521,7 @@ public class Storage implements Closeable {
             // the following sets the needed variable
             changed = true;
             if (_log.shouldInfo()) {
-                _log.info("[Snark] Forcing integrity check...");
+                _log.info("[Snark] Forcing an integrity check");
             }
             checkCreateFiles(false);
         }
@@ -2668,7 +2668,7 @@ public class Storage implements Closeable {
                          */
                         if (tf.priority >= 0) {
                             if (_log.shouldInfo()) {
-                                String msg = "Pre-allocating file: " + tf + "...";
+                                String msg = "Pre-allocating file: " + tf;
                                 _log.info("[Snark] " + msg);
                                 if (!ctx.isRouterContext()) {
                                     System.out.println(" • " + msg);
@@ -2678,16 +2678,15 @@ public class Storage implements Closeable {
                         } else {
                             tf.isSparse = false;
                         }
-                    } else {
-                        if (_log.shouldInfo()) {
-                            String msg =
-                                    "Not pre-allocating file: "
-                                            + tf
-                                            + " -> Disabled by configuration";
-                            _log.info("[Snark] " + msg);
-                            if (!ctx.isRouterContext()) {
-                                System.out.println(" • " + msg);
-                            }
+                    } else if (_log.shouldInfo() && !tf._preallocNoticeLogged) {
+                        // once per file, not once per piece written through it
+                        tf._preallocNoticeLogged = true;
+                        String msg = "Not pre-allocating file: " + tf
+                                     + (shouldPreallocate ? " -> File is not sparse"
+                                                          : " -> Disabled by configuration");
+                        _log.info("[Snark] " + msg);
+                        if (!ctx.isRouterContext()) {
+                            System.out.println(" • " + msg);
                         }
                     }
                     raf.seek(fc.getOffset());
@@ -3374,6 +3373,14 @@ public class Storage implements Closeable {
         private final String _pathKey;
 
         /**
+         * Whether the "not pre-allocating this file" notice has been logged.
+         * {@code writePiece()} runs once per piece written and one file spans
+         * many pieces, so without this the same notice is emitted once per
+         * piece. Locking: this.
+         */
+        private boolean _preallocNoticeLogged;
+
+        /**
          * The staging-dir location while the file is incomplete, null once the
          * file lives in the data directory (or when staging is disabled).
          * Locking: none.
@@ -3615,13 +3622,13 @@ public class Storage implements Closeable {
              */
             if (wasEmpty && !_isWindows && !_isARM && shouldPreallocate) {
                 isSparse = true;
-            } else if (_log.shouldWarn()) {
+            } else if (_log.shouldInfo()) {
                 if (!shouldPreallocate) {
-                    _log.warn("[Snark] Not pre-allocating files -> Disabled by configuration");
+                    _log.info("[Snark] Not pre-allocating files -> Disabled by configuration");
                 } else if (_isWindows) {
-                    _log.warn("[Snark] Not pre-allocating files -> Windows OS detected");
+                    _log.info("[Snark] Not pre-allocating files -> Windows OS detected");
                 } else if (_isARM) {
-                    _log.warn("[Snark] Not pre-allocating files -> ARM processor detected,"
+                    _log.info("[Snark] Not pre-allocating files -> ARM processor detected,"
                               + " assuming solid state storage");
                 }
             }

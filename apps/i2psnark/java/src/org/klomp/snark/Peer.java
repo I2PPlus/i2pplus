@@ -427,7 +427,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
             connected = util.getContext().clock().now();
             listener.connected(this);
 
-            if (_log.shouldDebug()) _log.debug("Start running the reader with " + toString());
+            if (_log.shouldDebug()) _log.debug("Starting the peer reader for " + this);
             // Use this thread for running the incoming connection.
             // The outgoing connection creates its own Thread.
             out.startup();
@@ -435,19 +435,19 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
             s.in.run();
         } catch (PeerAcceptor.ProtocolException pe) {
             if (_log.shouldWarn())
-                _log.warn(this.toString(), pe);
+                _log.warn("Peer handshake failed for " + this, pe);
             if (h != null)
                 listener.ban(h);
             try { sock.reset(); } catch (IOException ioe) { /* ignored */ }
         } catch (IOException eofe) {
             // Ignore, probably just the other side closing the connection.
             // Or refusing the connection, timing out, etc.
-            if (_log.shouldDebug()) _log.debug(this.toString(), eofe);
+            if (_log.shouldDebug()) _log.debug("Peer connection ended for " + this, eofe);
         } catch (OutOfMemoryError oome) {
-            _log.error(this + ": " + oome.getMessage(), oome);
+            _log.error("Peer connection ran out of memory for " + this, oome);
             throw oome;
         } catch (Throwable t) {
-            _log.error(this + ": " + t.getMessage(), t);
+            _log.error("Peer connection failed for " + this, t);
         } finally {
             if (deregister) listener.disconnected(this);
             disconnect();

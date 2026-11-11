@@ -536,10 +536,9 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
             else {
                 Destination d = serversocket.getManager().getSession().getMyDestination();
                 if (_log.shouldInfo())
-                    _log.info("Listening on I2P destination " + SnarkLogFormatter.dest(d));
+                    _log.info("Torrent " + getBaseName() + " started -> Listening on "
+                              + SnarkLogFormatter.dest(d) + " * Peers and tracker starting");
             }
-            if (_log.shouldInfo())
-                _log.info("Starting PeerCoordinator, ConnectionAcceptor, and TrackerClient");
             coordinator =
                     new PeerCoordinator(
                             _util,

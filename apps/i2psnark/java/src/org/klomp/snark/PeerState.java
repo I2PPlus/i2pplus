@@ -444,9 +444,8 @@ class PeerState implements DataLoader {
                     }
                 }
             }
-            if (_log.shouldWarn()) {
-                _log.warn("Disconnecting seed that connects to seeds: [" + peer + "]");
-            }
+            if (_log.shouldInfo())
+                _log.info("Seed connects to other seeds -> Disconnecting it * Peer: " + peer);
             peer.disconnect(true);
         } else {
             setInteresting(interest);
@@ -501,8 +500,9 @@ class PeerState implements DataLoader {
             hasit = bitfield != null && bitfield.get(piece);
         }
         if (hasit) {
-            if (_log.shouldWarn())
-                _log.warn("Dropping request for piece " + piece + " already in peer's bitfield [" + peer + "]");
+            if (_log.shouldDebug())
+                _log.debug("Dropping request for piece " + piece
+                           + " already in the peer's bitfield " + peer);
             if (peer.supportsFast()) out.sendReject(piece, begin, length);
             return;
         }
@@ -635,8 +635,9 @@ class PeerState implements DataLoader {
                     if (outstandingRequests.isEmpty()) {
                         // we MUST return the partial piece to PeerCoordinator,
                         // or else we will lose it and leak the data
-                        if (_log.shouldWarn())
-                            _log.warn("Throttled, returned to coord. w/ data " + req);
+                        if (_log.shouldDebug())
+                            _log.debug("Throttled -> Returning the request to the coordinator"
+                                       + " * Request: " + req);
                         List<Request> pcs = Collections.singletonList(req);
                         listener.savePartialPieces(this.peer, pcs);
                         lastRequest = null;

@@ -334,15 +334,13 @@ class PeerConnectionOut implements Runnable {
                                     nm = null;
                                 } else if (shouldThrottleRequests) {
                                     // previous request in queue throttled, skip this one too
-                                    if (_log.shouldWarn()) {
-                                        _log.warn("Additional throttle: " + nm + " to " + peer);
-                                    }
+                                    if (_log.shouldDebug())
+                                        _log.debug("Additional throttle: " + nm + " to " + peer);
                                     nm = null;
                                 } else if (!peer.shouldRequest(nm.length)) {
                                     // request throttle, skip this and all others in this loop
-                                    if (_log.shouldWarn()) {
-                                        _log.warn("Throttle: " + nm + " to " + peer);
-                                    }
+                                    if (_log.shouldDebug())
+                                        _log.debug("Throttle: " + nm + " to " + peer);
                                     shouldThrottleRequests = true;
                                     nm = null;
                                 }
@@ -360,9 +358,8 @@ class PeerConnectionOut implements Runnable {
                                 // Pieces are the last thing in the queue to be sent so we can
                                 // simply wait right here and then loop
                                 if (!peer.shouldSend(Math.min(m.length, PeerState.PARTSIZE))) {
-                                    if (_log.shouldWarn()) {
-                                        _log.warn("Throttle: " + m + " to " + peer);
-                                    }
+                                    if (_log.shouldDebug())
+                                        _log.debug("Throttle: " + m + " to " + peer);
                                     try {
                                         sendQueue.wait(5000);
                                     } catch (InterruptedException ie) { /* ignored */ }

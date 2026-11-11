@@ -1051,12 +1051,10 @@ public class MetaInfo {
         Map<String, BEValue> info = createInfoMap();
         if (_log.shouldDebug()) {
             StringBuilder buf = new StringBuilder(128);
-            buf.append("info: ");
+            buf.append("Torrent info dictionary built");
             for (Map.Entry<String, BEValue> entry : info.entrySet()) {
-                String key = entry.getKey();
-                Object val = entry.getValue();
-                buf.append(key).append('=');
-                buf.append(val.toString());
+                buf.append("\n* ").append(entry.getKey()).append(": ")
+                   .append(entry.getValue());
             }
             _log.debug(buf.toString());
         }

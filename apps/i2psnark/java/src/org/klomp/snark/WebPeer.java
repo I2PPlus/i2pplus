@@ -400,9 +400,9 @@ class WebPeer extends Peer implements EepGet.StatusListener {
             if (!pcs.isEmpty()) listener.savePartialPieces(this, pcs);
             listener.disconnected(this);
             disconnect();
-            if (_log.shouldWarn())
-                _log.warn("Completed, successful fetches: " + successes + " downloaded: " + dl
-                          + " for " + this);
+            if (_log.shouldInfo())
+                _log.info("Webseed finished -> Successful fetches: " + successes
+                          + " * Downloaded: " + dl + " bytes * Peer: " + this);
         }
     }
 
@@ -665,7 +665,8 @@ class WebPeer extends Peer implements EepGet.StatusListener {
                 if (shouldRequest(r.len)) this.notifyAll();
                 return true;
             } else {
-                if (_log.shouldWarn()) _log.warn("Got dup from coord: " + pp);
+                if (_log.shouldDebug())
+                    _log.debug("Duplicate partial piece from the coordinator: " + pp);
                 pp.release();
             }
         }

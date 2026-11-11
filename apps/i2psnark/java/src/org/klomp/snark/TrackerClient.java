@@ -1844,8 +1844,8 @@ public class TrackerClient implements Runnable {
                     continue;
                 }
                 if (coordinator.isWebPeerBanned(host)) {
-                    if (_log.shouldWarn()) {
-                        _log.warn("Skipping banned webseed " + url + "...");
+                    if (_log.shouldInfo()) {
+                        _log.info("Skipping a webseed -> Already banned * URL: " + url);
                     }
                     continue;
                 }

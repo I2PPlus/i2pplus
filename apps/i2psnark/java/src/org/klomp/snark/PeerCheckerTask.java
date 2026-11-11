@@ -102,9 +102,9 @@ class PeerCheckerTask implements Runnable {
             // note that streaming is configured to disconnect at 4 minutes
             // so this probably won't happen here.
             if (inactiveTime > peer.getMaxInactiveTime()) {
-                if (_log.shouldWarn())
-                    _log.warn("Disconnecting peer [" + peer + "]: idle "
-                              + DataHelper.formatDuration(peer.getInactiveTime()));
+                if (_log.shouldInfo())
+                    _log.info("Disconnecting an idle peer -> Inactive too long * Peer: " + peer
+                              + " * Idle: " + DataHelper.formatDuration(peer.getInactiveTime()));
                 peer.disconnect();
                 continue;
             }

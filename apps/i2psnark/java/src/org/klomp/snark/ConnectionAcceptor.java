@@ -317,9 +317,9 @@ class ConnectionAcceptor implements Runnable {
                 handleSocket(socket, getMyDestination(), peeracceptor);
             } catch (RouterRestartException rre) {
                 I2PAppContext ctx = I2PAppContext.getGlobalContext();
-                String msg = "Waiting for I2P router restart...";
+                String msg = "[Snark] Accept loop stopped -> Waiting for the I2P router to restart";
                 if (_log.shouldWarn()) {
-                    _log.warn("[Snark] " + msg, rre);
+                    _log.warn(msg, rre);
                 }
                 if (!ctx.isRouterContext()) {
                     System.out.println(" • " + msg);
@@ -386,9 +386,8 @@ class ConnectionAcceptor implements Runnable {
             }
             // catch oom?
         }
-        if (_log.shouldWarn()) {
-            _log.warn("[Snark] ConnectionAcceptor closed");
-        }
+        if (_log.shouldInfo())
+            _log.info("[Snark] ConnectionAcceptor closed");
     }
 
     /**

@@ -41,6 +41,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Pattern;
 import net.i2p.I2PAppContext;
 import net.i2p.app.ClientApp;
@@ -188,6 +189,12 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private final Semaphore _lookupSemaphore = new Semaphore(MAX_LOOKUP_CONCURRENCY, true);
     /** Infohash to time (ms) when the lookup was created, for stale cleanup. */
     private final Map<SHA1Hash, Long> _lookupCreationTimes = new ConcurrentHashMap<>(16);
+    /** How often one torrent may be told every lookup slot is taken, in ms. */
+    private static final long LOOKUP_BUSY_LOG_MS = 5 * 60 * 1000L;
+    /** When a busy-slot rejection was last named for each torrent. */
+    private final Map<SHA1Hash, Long> _lookupBusyLogged = new ConcurrentHashMap<>(16);
+    /** Busy-slot rejections folded into the next named line instead of logged. */
+    private final AtomicLong _lookupBusySuppressed = new AtomicLong();
     /** True while stale lookups are being cleaned up. */
     private volatile boolean _staleLookupCleanupRunning;
     /**
@@ -1671,9 +1678,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             return dir;
         }
         oldFile.delete();
-        if (_log.shouldWarn()) {
-            _log.warn("Legacy I2PSnark configuration file migrated from " + oldFile + " to " + dir);
-        }
+        if (_log.shouldInfo())
+            _log.info("Legacy I2PSnark configuration file migrated from " + oldFile + " to " + dir);
         return dir;
     }
 
@@ -1865,7 +1871,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             synchronized (_configLock) {
                 saveMetadata();
             }
-            _log.warn("Migrated " + migrated + " torrent config files to metadata");
+            _log.info("Migrated " + migrated + " torrent config files to metadata");
         }
     }
 
@@ -2327,9 +2333,15 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             }
         }
         _util.setI2CPConfig(i2cpHost, i2cpPort, i2cpOpts);
-        String msg = _t("Configuring I2PSnark with I2CP options") + ": " + i2cpOpts;
         if (_log.shouldInfo()) {
-            _log.info(msg);
+            // the map's own toString is {key=value}; the house form is key: value
+            StringBuilder buf =
+                    new StringBuilder(_t("Configuring I2PSnark with I2CP options"));
+            buf.append(" -> Host: ").append(i2cpHost).append(':').append(i2cpPort);
+            for (Map.Entry<String, String> entry : i2cpOpts.entrySet()) {
+                buf.append(" * ").append(entry.getKey()).append(": ").append(entry.getValue());
+            }
+            _log.info(buf.toString());
         }
 
         _util.setMaxUploaders(getInt(PROP_UPLOADERS_TOTAL, Snark.MAX_TOTAL_UPLOADERS));
@@ -2416,12 +2428,12 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
         if (dd.isDirectory()) {
             if (!dd.canWrite()) {
-                msg = _t("No write permissions for data directory") + ": " + dd;
+                String msg = _t("No write permissions for data directory") + ": " + dd;
                 addMessageAndPrint(msg);
             }
         } else {
             if (!dd.mkdirs()) {
-                msg = _t("Data directory cannot be created") + ": " + dd;
+                String msg = _t("Data directory cannot be created") + ": " + dd;
                 addMessageAndPrint(msg);
             }
         }
@@ -4258,6 +4270,38 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     * Reports that a metadata lookup was rejected because every lookup slot is
+     * taken. A herd of console requests for one torrent all hit the same full
+     * pool, and each used to log its own pair of lines - 36,000 in a day, 5,197
+     * of them byte-identical on adjacent lines - so one torrent is named at most
+     * once per {@link #LOOKUP_BUSY_LOG_MS} and the rest are counted and reported
+     * on the next line that is allowed through.
+     *
+     * @param how the lookup path, "name" or "info"
+     * @param infoHash the torrent the rejected request was for
+     * @since 0.9.73+
+     */
+    private void logLookupBusy(String how, byte[] infoHash) {
+        if (!_log.shouldInfo()) {return;}
+        long now = _context.clock().now();
+        SHA1Hash key = new SHA1Hash(infoHash);
+        Long last = _lookupBusyLogged.get(key);
+        if (last != null && now - last < LOOKUP_BUSY_LOG_MS) {
+            _lookupBusySuppressed.incrementAndGet();
+            return;
+        }
+        _lookupBusyLogged.put(key, now);
+        // keep the map bounded when many distinct torrents are being rejected
+        if (_lookupBusyLogged.size() > 200) {
+            _lookupBusyLogged.values().removeIf(t -> now - t >= LOOKUP_BUSY_LOG_MS);
+        }
+        long suppressed = _lookupBusySuppressed.getAndSet(0);
+        _log.info("Lookup by " + how + " -> All " + MAX_LOOKUP_CONCURRENCY
+                  + " lookup slots busy * Torrent: " + SnarkLogFormatter.infoHash(infoHash)
+                  + (suppressed > 0 ? " * Repeats suppressed: " + suppressed : ""));
+    }
+
+    /**
      * Self-contained DHT lookup for torrent name without persisting torrent data.
      * Creates a temporary magnet in a temp directory under the I2P temp dir,
      * waits for metadata via DHT, extracts the torrent name, then deletes the
@@ -4346,10 +4390,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             // held only across the create and released before the poll below acquires it
             // again, so it cannot deadlock against the polling permit.
             if (!_lookupSemaphore.tryAcquire()) {
-                if (_log.shouldInfo()) {
-                    _log.info("Lookup by name -> All " + MAX_LOOKUP_CONCURRENCY + " lookup slots busy, rejecting request" +
-                        "\n* Torrent: " + hex);
-                }
+                logLookupBusy("name", infoHash);
                 try { FileUtil.rmdir(lookupDir, false); } catch (Exception ignore) { /* best-effort temp dir cleanup; a leftover dir is swept by scheduleStaleLookupCleanup() */ }
                 return null;
             }
@@ -4380,10 +4421,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
         // Wait for metadata — bounded by semaphore to prevent thread explosion
         if (!_lookupSemaphore.tryAcquire()) {
-            if (_log.shouldInfo()) {
-                _log.info("Lookup by name -> All " + MAX_LOOKUP_CONCURRENCY + " lookup slots busy, rejecting request" +
-                    "\n* Torrent: " + hex);
-            }
+            logLookupBusy("name", infoHash);
             // Still clean up the magnet we just created
             Snark toReject = getTorrentByInfoHash(infoHash);
             if (toReject != null && created) {
@@ -4561,10 +4599,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         if (getTorrentByInfoHash(infoHash) == null) {
             // Bound concurrent creations; released before the poll below re-acquires.
             if (!_lookupSemaphore.tryAcquire()) {
-                if (_log.shouldInfo()) {
-                    _log.info("Lookup by info -> All " + MAX_LOOKUP_CONCURRENCY + " lookup slots busy, rejecting request" +
-                        "\n* Torrent: " + hex);
-                }
+                logLookupBusy("info", infoHash);
                 try { FileUtil.rmdir(lookupDir, false); } catch (Exception ignore) { /* best-effort temp dir cleanup; a leftover dir is swept by scheduleStaleLookupCleanup() */ }
                 return null;
             }
@@ -4586,10 +4621,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
         long end = System.currentTimeMillis() + timeoutMs;
         if (!_lookupSemaphore.tryAcquire()) {
-            if (_log.shouldWarn()) {
-                _log.warn("Lookup by info -> All " + MAX_LOOKUP_CONCURRENCY + " lookup slots busy, rejecting request" +
-                    "\n* Torrent: " + hex);
-            }
+            logLookupBusy("info", infoHash);
             if (created) {
                 Snark toReject = getTorrentByInfoHash(infoHash);
                 if (toReject != null) try { deleteMagnet(toReject); } catch (Exception ignore) { /* best-effort cleanup of the magnet we just added; the lookup is rejected either way */ }
@@ -7101,9 +7133,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     public void stopAllTorrents(boolean finalShutdown) {
         _stopping = true;
-        if (finalShutdown && _log.shouldWarn()) {
-            _log.warn("SnarkManager final shutdown");
-        }
+        if (finalShutdown && _log.shouldInfo())
+            _log.info("SnarkManager final shutdown");
         int count = 0;
         List<Snark> stopped = new ArrayList<Snark>();
         Collection<Snark> snarks = _snarks.values();
@@ -7353,8 +7384,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
         public void run() {
             try {
-                if (_log.shouldWarn()) {
-                    _log.warn("Starting recheck of " + snark.getBaseName() + "...");
+                if (_log.shouldInfo()) {
+                    _log.info("Starting a recheck of " + snark.getBaseName());
                 }
                 if (!_context.isRouterContext()) {
                     System.out.println(" • "
@@ -7365,8 +7396,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 if (changed) {
                     updateStatus(snark);
                 }
-                if (_log.shouldWarn()) {
-                    _log.warn("Finished recheck of " + snark.getBaseName() + " -> "
+                if (_log.shouldInfo()) {
+                    _log.info("Finished recheck of " + snark.getBaseName() + " -> "
                               + (changed ? "File changes detected" : "Unchanged"));
                 }
                 String link = linkify(snark);

@@ -385,9 +385,9 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 return;
             }
             if (bwListener.shouldRequest(null, 0)) {
-                if (_log.shouldWarn()) {
-                    _log.warn("Now unthrottled -> Rerequesting timer, poking all peers...");
-                }
+                if (_log.shouldInfo())
+                    _log.info("Now unthrottled -> Rescheduling the rerequest timer"
+                              + " and poking all peers");
                 // so shouldRequest() won't fire us up again
                 synchronized (rerequestLock) {
                     wasRequestAllowed = true;
@@ -401,9 +401,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                     isRerequestScheduled = false;
                 }
             } else {
-                if (_log.shouldWarn()) {
-                    _log.warn("Still throttled -> Rerequesting timer reschedule...");
-                }
+                if (_log.shouldInfo())
+                    _log.info("Still throttled -> Rescheduling the rerequest timer");
                 synchronized (rerequestLock) {
                     wasRequestAllowed = false;
                 }
@@ -795,9 +794,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 } else {
                     // Schedule the timer
                     // we still have to throw it to the timer so we don't loop
-                    if (_log.shouldWarn()) {
-                        _log.warn("Now unthrottled, scheduling rerequest timer...");
-                    }
+                    if (_log.shouldInfo())
+                        _log.info("Now unthrottled -> Scheduling the rerequest timer");
                     isRerequestScheduled = true;
                     // no rush, wait at little while
                     rerequestTimer.reschedule(1000);
@@ -807,9 +805,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 // we were allowed and now we aren't
                 if (!isRerequestScheduled) {
                     // schedule the timer
-                    if (_log.shouldWarn()) {
-                        _log.warn("Now throttled, scheduling rerequest timer...");
-                    }
+                    if (_log.shouldInfo())
+                        _log.info("Now throttled -> Scheduling the rerequest timer");
                     isRerequestScheduled = true;
                     rerequestTimer.schedule((long) 3 * 1000);
                 }
@@ -1134,10 +1131,10 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             Peer old = peerIDInList(peer.getPeerID(), peers);
             if (old != null && old.getInactiveTime() > old.getMaxInactiveTime()) {
                 // idle for 8 minutes, kill the old con (32KB/8min = 68B/sec minimum for one block)
-                if (_log.shouldWarn()) {
-                    _log.warn("Removing old peer [" + peer + "] - [" + old + "] inactive for "
-                              + old.getInactiveTime() + "ms");
-                }
+                if (_log.shouldInfo())
+                    _log.info("Removing an idle peer connection -> Inactive too long"
+                              + " * Dropping: " + old + " * Keeping: " + peer + " * Idle: "
+                              + DataHelper.formatDuration(old.getInactiveTime()));
                 peers.remove(old);
                 toDisconnect = old;
                 old = null;
@@ -1159,18 +1156,17 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                     }
                 }
                 if (dropNew) {
-                    if (_log.shouldWarn()) {
-                        _log.warn("Already connected to [" + peer + "] - [" + old
-                                  + "] inactive for " + old.getInactiveTime() + "ms");
-                    }
+                    if (_log.shouldInfo())
+                        _log.info("Duplicate peer connection -> Keeping the existing one"
+                                  + " * Dropping: " + peer + " * Kept: " + old + " * Idle: "
+                                  + DataHelper.formatDuration(old.getInactiveTime()));
                     // toDisconnect = peer to get out of synchronized(peers)
                     peer.disconnect(false); // Don't deregister this connection/peer.
                     // Already checked in addPeer() but we could have gone over the limit since then
                 } else {
-                    if (_log.shouldWarn()) {
-                        _log.warn("Canonical peer priority: replacing duplicate connection to ["
-                                  + peer + "] - [" + old + "]");
-                    }
+                    if (_log.shouldInfo())
+                        _log.info("Canonical peer priority -> Replacing the duplicate connection"
+                                  + " * Keeping: " + peer + " * Dropping: " + old);
                     peers.remove(old);
                     toDisconnect = old;
                     old = null;

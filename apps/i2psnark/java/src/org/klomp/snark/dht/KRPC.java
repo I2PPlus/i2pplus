@@ -1132,9 +1132,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         // Peers may echo our own node entry back to us; drop rather than throw,
         // which used to kill the DHTFetcher thread and disable DHT lookups.
         if (nInfo.equals(_myNodeInfo)) {
-            if (_log.shouldWarn()) {
-                _log.warn("Dropping query to ourselves " + nInfo);
-            }
+            if (_log.shouldInfo())
+                _log.info("Dropping query to ourselves " + nInfo);
             return null;
         }
         if (_log.shouldDebug()) {
@@ -1145,9 +1144,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             if (newInfo != null && newInfo.getDestination() != null) {
                 nInfo = newInfo;
             } else if (!repliable) { // Don't lookup for announce query, we should already have it
-                if (_log.shouldWarn()) {
-                    _log.warn("Dropping non-repliable query -> No destination for " + nInfo);
-                }
+                if (_log.shouldInfo())
+                    _log.info("Dropping non-repliable query -> No destination for " + nInfo);
                 return null;
             } else {
                 // Lookup the dest for the hash
@@ -1195,9 +1193,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     private boolean sendResponse(NodeInfo nInfo, MsgID msgID, Map<String, Object> map) {
         // drop rather than throw, see sendQuery()
         if (nInfo.equals(_myNodeInfo)) {
-            if (_log.shouldWarn()) {
-                _log.warn("Dropping response to ourselves " + nInfo);
-            }
+            if (_log.shouldInfo())
+                _log.info("Dropping response to ourselves " + nInfo);
             return false;
         }
         if (_log.shouldDebug()) {
@@ -1208,9 +1205,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             if (newInfo != null && newInfo.getDestination() != null) {
                 nInfo = newInfo;
             } else { // TODO: lookup b32?
-                if (_log.shouldWarn()) {
-                    _log.warn("Dropping response -> No destination for " + nInfo);
-                }
+                if (_log.shouldInfo())
+                    _log.info("Dropping response -> No destination for " + nInfo);
                 return false;
             }
         }
@@ -1282,19 +1278,11 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         // drop rather than throw, see sendQuery(); also covers stale self
         // entries from a previous run persisted in the DHT file
         if (destHash.equals(_myNodeInfo.getHash())) {
-            if (_log.shouldWarn()) {
-                _log.warn("Dropping message to ourselves " + SnarkLogFormatter.dest(destHash));
-            }
+            if (_log.shouldInfo())
+                _log.info("Dropping message to ourselves " + SnarkLogFormatter.dest(destHash));
             return false;
         }
         byte[] payload = BEncoder.bencode(map);
-        if (_log.shouldDebug()) {
-            ByteArrayInputStream bais = new ByteArrayInputStream(payload);
-            try {
-                _log.debug("Sending to " + SnarkLogFormatter.dest(destHash) + "\n* "
-                           + BDecoder.bdecode(bais).toString());
-            } catch (Throwable t) { /* ignored */ }
-        }
 
         // Always send query port, peer will increment for unsigned replies
         int fromPort = _qPort;
@@ -1353,9 +1341,6 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             BDecoder dec = new BDecoder(is);
             BEValue bev = dec.bdecodeMap();
             Map<String, BEValue> map = bev.getMap();
-            if (_log.shouldDebug()) {
-                _log.debug("Received KRPC message\n* " + bev.toString());
-            }
 
             // Lazy here, just let missing Map entries throw NPEs, caught below
 
@@ -1700,9 +1685,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         if (_outgoingTokens.size() >= MAX_OUTBOUND_TOKENS) {
             pruneOutgoingTokens();
             if (_outgoingTokens.size() >= MAX_OUTBOUND_TOKENS) {
-                if (_log.shouldWarn()) {
-                    _log.warn("Too many outbound tokens -> Dropping a get_peers token");
-                }
+                if (_log.shouldInfo())
+                    _log.info("Too many outbound tokens -> Dropping a get_peers token");
             } else {
                 _outgoingTokens.put(token, nInfo);
             }

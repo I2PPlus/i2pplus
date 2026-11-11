@@ -1892,8 +1892,8 @@ public class I2PSnarkUtil implements DisconnectListener {
         if (truncate < 0 || truncate > convertedurl.length()) {truncate = convertedurl.length();}
         if (get.fetch(timeout)) {
             if (_log.shouldDebug())
-                _log.debug("Request successful [" + convertedurl.substring(0, truncate)
-                           + "...] (Size: " + size + " bytes)");
+                _log.debug("Request successful -> Size: " + size + " bytes * URL: "
+                           + convertedurl.substring(0, truncate) + "...");
             return true;
         } else {
             if (_log.shouldInfo())
@@ -1914,7 +1914,7 @@ public class I2PSnarkUtil implements DisconnectListener {
      */
     private File get(String url, boolean rewrite, int retries, I2PSocketManager mgr) {
         if (_log.shouldDebug()) {
-            _log.debug("Fetching [" + url + "] -> Proxy: " + _proxyHost + ":" + _proxyPort
+            _log.debug("Fetching " + url + " -> Proxy: " + _proxyHost + ":" + _proxyPort
                        + " * Proxying: " + _shouldProxy);
         }
         File out = null;
@@ -1974,7 +1974,7 @@ public class I2PSnarkUtil implements DisconnectListener {
      */
     public byte[] get(String url, boolean rewrite, int retries, int initialSize, int maxSize) {
         if (_log.shouldDebug()) {
-            _log.debug("Fetching [" + url + "] to memory");
+            _log.debug("Fetching to memory " + url);
         }
         String fetchURL = url;
         if (rewrite) {
@@ -2031,14 +2031,14 @@ public class I2PSnarkUtil implements DisconnectListener {
         TorrentDest td = getTorrentDest(ih);
         if (td == null) {
             if (_log.shouldDebug()) {
-                _log.debug("No dedicated destination for this torrent -> Fetching ["
-                           + url + "] over the shared session");
+                _log.debug("No dedicated destination for this torrent -> Fetching over the shared"
+                           + " session * URL: " + url);
             }
             return get(url, rewrite, retries, initialSize, maxSize);
         }
         I2PSocketManager mgr = td.getSocketManager();
         if (_log.shouldDebug()) {
-            _log.debug("Fetching [" + url + "] to memory");
+            _log.debug("Fetching to memory " + url);
         }
         String fetchURL = url;
         if (rewrite) {
