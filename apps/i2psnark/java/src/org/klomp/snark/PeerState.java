@@ -646,9 +646,10 @@ class PeerState implements DataLoader {
     /**
      * Called when a full chunk (i.e. a piece message) has been received by {@link PeerConnectionIn}.
      *
-     * <p>This may block quite a while if it is the last chunk for a piece, as it calls the
-     * listener, who stores the piece and then calls havePiece for every peer on the torrent
-     * (including us).
+     * <p>If this chunk completes a piece, the hash check, the write and the have
+     * announcement for it are handed to the torrent's piece-writer thread, so this
+     * connection keeps reading. It only blocks here when that torrent's write queue is
+     * full, which is the backpressure that keeps a few pieces of data in memory at most.
      *
      * @param req the request satisfied by the block that just arrived
      */
@@ -670,18 +671,12 @@ class PeerState implements DataLoader {
         PartialPiece pp = req.getPartialPiece();
         boolean complete = pp.isComplete();
         if (complete) {
-            // warning - may block here for a while
-            if (listener.gotPiece(peer, pp)) {
-                if (_log.shouldDebug())
-                    _log.debug("Received piece [" + req.getPiece() + "] from [" + peer + "]");
-            } else {
-                if (_log.shouldInfo())
-                    _log.info("Received BAD piece [" + req.getPiece() + "] from [" + peer + "]");
-                synchronized (this) {
-                    // so we don't ask again
-                    if (bitfield != null) bitfield.clear(req.getPiece());
-                }
-            }
+            // Hands the hash verify and the disk write to the torrent's writer
+            // thread, so this connection keeps reading; it only blocks here when
+            // that queue is full, which is the intended backpressure.
+            listener.gotPiece(peer, pp);
+            if (_log.shouldDebug())
+                _log.debug("Completed piece [" + req.getPiece() + "] from [" + peer + "]");
         }
 
         synchronized (this) {
@@ -703,6 +698,24 @@ class PeerState implements DataLoader {
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * Drop the claim that this peer holds a piece, because the copy it sent us failed
+     * the hash check or could not be written. Called from the torrent's piece-writer
+     * thread, which is where the hash check now runs, so it takes this state's
+     * monitor rather than relying on being on the connection thread.
+     *
+     * <p>Clearing the bit makes the piece un-interesting from this peer, so we stop
+     * asking it for the same corrupt piece again.
+     *
+     * @param piece the zero-based index of the piece to forget
+     * @since 0.9.72+
+     */
+    void clearHave(int piece) {
+        synchronized (this) {
+            if (bitfield != null) bitfield.clear(piece);
         }
     }
 
@@ -883,6 +896,8 @@ class PeerState implements DataLoader {
             Request req = getLowestOutstandingRequest(p.intValue());
             if (req != null) rv.add(req);
         }
+        // whatever is dropped below, and whatever is handed back, stops being claimed
+        clearClaims(outstandingRequests);
         outstandingRequests.clear();
         pendingRequest = null;
         lastRequest = null;
@@ -899,16 +914,41 @@ class PeerState implements DataLoader {
      */
     synchronized List<Request> returnPartialPieces(int piece) {
         List<Request> rv = new ArrayList<>(1);
+        List<Request> dropped = null;
         for (Iterator<Request> iter = outstandingRequests.iterator(); iter.hasNext(); ) {
             Request req = iter.next();
             if (req.getPiece() == piece) {
-                if (rv.isEmpty()) rv.add(req);
+                if (rv.isEmpty()) {
+                    rv.add(req);
+                } else {
+                    if (dropped == null) dropped = new ArrayList<>(2);
+                    dropped.add(req);
+                }
                 iter.remove();
             }
+        }
+        // every block these were claiming goes back into the pool for the piece, the
+        // one handed back by savePartialPieces() and the rest right here
+        clearClaims(rv);
+        if (dropped != null) {
+            clearClaims(dropped);
         }
         if (pendingRequest != null && pendingRequest.getPiece() == piece) pendingRequest = null;
         if (lastRequest != null && lastRequest.getPiece() == piece) lastRequest = null;
         return rv;
+    }
+
+    /**
+     * Gives back the blocks these requests were claiming on their pieces, so another
+     * peer can be asked for them. A piece several peers are filling tracks which blocks
+     * are already spoken for, and a block nobody is pulling any more has to be put back.
+     *
+     * @param reqs the requests being dropped or handed back
+     */
+    static void clearClaims(List<Request> reqs) {
+        for (Request req : reqs) {
+            req.getPartialPiece().clearRequested(req.off, req.len);
+        }
     }
 
     /**
@@ -1482,6 +1522,7 @@ class PeerState implements DataLoader {
     synchronized void cancelPiece(int piece) {
         if (lastRequest != null && lastRequest.getPiece() == piece) lastRequest = null;
 
+        PartialPiece released = null;
         Iterator<Request> it = outstandingRequests.iterator();
         while (it.hasNext()) {
             Request req = it.next();
@@ -1490,9 +1531,17 @@ class PeerState implements DataLoader {
                 // Send cancel even when we are choked to make sure that it is
                 // really never ever send.
                 out.sendCancel(req);
-                req.getPartialPiece().release();
+                PartialPiece pp = req.getPartialPiece();
+                // hand the blocks back so another peer can be asked for them
+                pp.clearRequested(req.off, req.len);
+                if (released != pp) {
+                    // one release per piece, however many blocks of it we drop
+                    if (released != null) released.release();
+                    released = pp;
+                }
             }
         }
+        if (released != null) released.release();
     }
 
     /**

@@ -729,6 +729,8 @@ class WebPeer extends Peer implements EepGet.StatusListener {
             Request req = getLowestOutstandingRequest(p.intValue());
             if (req != null) rv.add(req);
         }
+        // the blocks of the requests dropped here go back into the pool for their piece
+        PeerState.clearClaims(outstandingRequests);
         outstandingRequests.clear();
         return rv;
     }

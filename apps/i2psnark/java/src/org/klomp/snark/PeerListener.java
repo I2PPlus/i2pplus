@@ -69,8 +69,12 @@ interface PeerListener {
 
     /**
      * Called when a piece is received from the peer. The piece must be requested by {@code Peer.request()}
-     * first. If this method returns false that means the Peer provided a corrupted piece and the
-     * connection will be closed.
+     * first. Returning false means the peer provided a corrupted piece, so the caller clears its
+     * claim to that piece and stops requesting it from that peer; the connection is kept.
+     *
+     * <p>The implementation may verify and store the piece on another thread, in which case it
+     * returns true here and clears the peer's claim through {@link PeerState#clearHave(int)} when
+     * the hash check later fails.
      *
      * @param peer the Peer that got the piece.
      * @param piece the piece received.

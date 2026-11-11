@@ -22,9 +22,16 @@ import net.i2p.util.SecureFile;
  * <p>Handles out-of-order chunk reception and manages a BitField tracking received chunks.
  * Implements Comparable for prioritization by piece number and completeness.
  *
- * <p>Usage Notes: - Not thread-safe except for synchronized public methods. - Objects for the same
- * piece should not be shared between peers. - Used extensively by {@link PeerCoordinator} and PeerState for
- * request management.
+ * <p>Usage Notes: - Not thread-safe except for synchronized public methods. - Used extensively by
+ * {@link PeerCoordinator} and PeerState for request management.
+ *
+ * <p>A piece may be fetched by several peers at once, in which case they share one PartialPiece and
+ * each is handed a different run of sub-blocks: {@link #getRequest} skips, and then marks, the
+ * sub-blocks already claimed by another peer, so the peers fill complementary parts of the piece
+ * instead of each pulling a duplicate copy of the whole thing. A shared piece is registered in
+ * {@link PeerCoordinator}, which owns it; the peers holding requests for it hold non-owning
+ * references, so {@link #release()} does nothing while it is shared and only the coordinator can
+ * free it. See {@link PartialPiece#setShared}.
  *
  * @since 0.8.2
  */
@@ -50,6 +57,21 @@ class PartialPiece implements Comparable<PartialPiece> {
 
     /** Which chunks have arrived so far. */
     private final BitField bitfield;
+
+    /**
+     * Which chunks some peer has asked for and has not delivered yet. Kept alongside
+     * bitfield so a second peer working on the same piece is handed a different run of
+     * sub-blocks than the first is already pulling. Cleared when the bytes arrive, and
+     * when a request is dropped without being satisfied.
+     */
+    private final BitField _requested;
+
+    /**
+     * True while this piece is registered as being downloaded, which makes it shared:
+     * the peers pulling blocks of it hold non-owning references and cannot free it.
+     * Only the coordinator, which owns the registration, frees a shared piece.
+     */
+    private volatile boolean _shared;
 
     /** Offset of the next expected chunk start. */
     private int off; // offset of next expected chunk start
@@ -109,6 +131,7 @@ class PartialPiece implements Comparable<PartialPiece> {
         this.tempDir = tempDir;
         this._meta = meta;
         this.bitfield = new BitField((len + SUB_PARTSIZE - 1) / SUB_PARTSIZE);
+        this._requested = new BitField(this.bitfield.size());
 
         byte[] tempBs = null;
         try {
@@ -159,22 +182,24 @@ class PartialPiece implements Comparable<PartialPiece> {
     }
 
     /**
-     * Creates a Request object for the next missing chunk at or after the given offset. Chunks
-     * lying entirely within BEP 47 padding files are marked as received (their data is all zeros)
-     * and never requested. A request is a run of consecutive real sub-blocks capped at PARTSIZE,
-     * so a chunk straddling a padding file is fetched at sub-block granularity, wasting at most
-     * SUB_PARTSIZE bytes of padding.
+     * Creates a Request object for the next missing chunk at or after the given offset,
+     * skipping the chunks another peer has already been asked for, and marks the chunks it
+     * hands out as requested so no second peer is given the same bytes. Chunks lying
+     * entirely within BEP 47 padding files are marked as received (their data is all zeros)
+     * and never requested. A request is a run of consecutive real sub-blocks capped at
+     * PARTSIZE, so a chunk straddling a padding file is fetched at sub-block granularity,
+     * wasting at most SUB_PARTSIZE bytes of padding.
      *
      * @param minOffset byte offset to start scanning at, rounded up to a sub-block boundary; the
      *                  caller advances it past the last request (callers pass 0 or off + len, both already
      *                  sub-block aligned) so in-flight chunks are not re-requested
-     * @return the next Request for downloading or null if complete
+     * @return the next Request for downloading or null if every chunk is present or claimed
      */
     public synchronized Request getRequest(int minOffset) {
         int sz = bitfield.size();
         int s = (minOffset + SUB_PARTSIZE - 1) / SUB_PARTSIZE;
         for (; s < sz; s++) {
-            if (bitfield.get(s)) {
+            if (bitfield.get(s) || _requested.get(s)) {
                 continue;
             }
             if (isPaddingSubBlock(s)) {
@@ -188,14 +213,64 @@ class PartialPiece implements Comparable<PartialPiece> {
             while (len < PeerState.PARTSIZE
                     && s2 < sz
                     && !bitfield.get(s2)
+                    && !_requested.get(s2)
                     && !isPaddingSubBlock(s2)) {
                 len += SUB_PARTSIZE;
                 s2++;
+            }
+            for (int i = s; i < s2; i++) {
+                _requested.set(i);
             }
             return new Request(this, offset, Math.min(len, pclen - offset));
         }
         return null;
     }
+
+    /**
+     * Stops claiming the chunks of the given range, so they can be requested again by
+     * this or another peer. Called when a request is dropped without being satisfied:
+     * cancelled, or left behind by a peer that went away.
+     *
+     * @param offset byte offset of the range, rounded down to a sub-block boundary
+     * @param len length of the range in bytes
+     * @since 0.9.72+
+     */
+    public synchronized void clearRequested(int offset, int len) {
+        int s = offset / SUB_PARTSIZE;
+        int end = Math.min(_requested.size(), (offset + len + SUB_PARTSIZE - 1) / SUB_PARTSIZE);
+        for (int i = s; i < end; i++) {
+            _requested.clear(i);
+        }
+    }
+
+    /**
+     * Stops claiming every chunk of this piece, used when the piece changes hands and the
+     * new holder starts its scan from the beginning.
+     *
+     * @since 0.9.72+
+     */
+    public synchronized void clearAllRequested() {
+        for (int i = 0, sz = _requested.size(); i < sz; i++) {
+            _requested.clear(i);
+        }
+    }
+
+    /**
+     * True if no peer holds a claim on any chunk of this piece, that is, every chunk
+     * still missing is unclaimed and can be fetched by whoever asks.
+     *
+     * @return true if nothing is outstanding
+     * @since 0.9.72+
+     */
+    public synchronized boolean isFullyClaimed() {
+        for (int i = 0, sz = _requested.size(); i < sz; i++) {
+            if (!bitfield.get(i) && !_requested.get(i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     /**
      * Marks a sub-block as received without any data, for BEP 47 padding-only sub-blocks whose
@@ -211,6 +286,7 @@ class PartialPiece implements Comparable<PartialPiece> {
         if (!bitfield.get(subBlock)) {
             bitfield.set(subBlock);
         }
+        _requested.clear(subBlock);
     }
 
     /**
@@ -428,6 +504,8 @@ class PartialPiece implements Comparable<PartialPiece> {
             } else {
                 bitfield.set(i);
             }
+            // the claim on these bytes is paid for, whoever made it
+            _requested.clear(i);
         }
         if (this.off == offset) {
             this.off += len;
@@ -484,11 +562,14 @@ class PartialPiece implements Comparable<PartialPiece> {
 
     /**
      * Releases temporary file and resources associated with this piece. Safe to call multiple
-     * times.
+     * times. Does nothing while the piece is shared, see {@link #setShared(boolean)}.
      *
      * @since 0.9.1
      */
     public void release() {
+        if (_shared) {
+            return;
+        }
         if (bs == null) {
             synchronized (this) {
                 if (raf != null) {
@@ -500,6 +581,31 @@ class PartialPiece implements Comparable<PartialPiece> {
                 }
             }
         }
+    }
+
+    /**
+     * Marks this piece as registered in {@link PeerCoordinator} as being downloaded, which
+     * makes it shared: the peers pulling its blocks hold non-owning references to it and
+     * their {@link #release()} is a no-op. Set before the piece is handed to a second peer
+     * and cleared by the coordinator just before it frees the piece or hands sole ownership
+     * back to a single holder, so the piece is never freed while another peer is still
+     * reading or writing it.
+     *
+     * @param shared true to make the coordinator the sole owner
+     * @since 0.9.72+
+     */
+    void setShared(boolean shared) {
+        _shared = shared;
+    }
+
+    /**
+     * True while the coordinator owns this piece and release() is a no-op.
+     *
+     * @return true if shared
+     * @since 0.9.72+
+     */
+    boolean isShared() {
+        return _shared;
     }
 
     /**

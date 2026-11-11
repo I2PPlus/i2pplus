@@ -7,6 +7,7 @@
 package org.klomp.snark;
 
 import java.io.IOException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -22,6 +23,10 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.I2PAppContext;
@@ -35,6 +40,7 @@ import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 import net.i2p.util.RandomSource;
 import net.i2p.util.SimpleTimer2;
+import net.i2p.util.ThreadNames;
 import org.klomp.snark.bencode.BEValue;
 import org.klomp.snark.bencode.InvalidBEncodingException;
 import org.klomp.snark.comments.Comment;
@@ -204,6 +210,19 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     private final Set<Integer> partialIds = new HashSet<>(8);
 
     /**
+     * Pieces being downloaded right now, by piece id. Unlike partialPieces, which holds
+     * the orphans no peer is pulling any more, an entry here is live: it is registered
+     * with every peer that is fetching a block of it, and it is the coordinator, not the
+     * peers, that owns the data. That is what lets two peers fill complementary blocks of
+     * one piece instead of each pulling a duplicate copy of the whole thing.
+     *
+     * <p>Sync on wantedPieces.
+     *
+     * @since 0.9.72+
+     */
+    private final Map<Integer, PartialPiece> _livePartials = new HashMap<>(8);
+
+    /**
      * Index of wantedPieces by piece id, for O(1) lookups. Sync on wantedPieces.
      *
      * @since 0.9.68+
@@ -327,8 +346,21 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
          */
         public void timeReached() {
             _task.run();
-            schedule(CHECK_PERIOD);
+            schedule(checkPeriod(RandomSource.getInstance()));
         }
+    }
+
+    /**
+     * The next checker delay: CHECK_PERIOD spread by up to a second either way, so two
+     * torrents started together do not keep running their checks, file cleanups and
+     * local DHT announces in lockstep. The average stays at CHECK_PERIOD.
+     *
+     * @param r the random to spread with
+     * @return the delay in ms
+     * @since 0.9.72+
+     */
+    static long checkPeriod(RandomSource r) {
+        return CHECK_PERIOD - 1000 + r.nextLong(2000);
     }
 
     /**
@@ -802,6 +834,13 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * Push a value onto a RATE_DEPTH deep stack.
      *
+     * <p>The shift and the insert are separate on purpose. Inserting inside the
+     * shift loop, as this method used to, overwrote slot 0 on every iteration and
+     * then shifted that same value down, so the ring held {newest, newest,
+     * previous} instead of {newest, previous, previous-before-that}: the weighted
+     * average in {@link #getRate(long[])} collapsed onto the newest sample and the
+     * oldest slot was never filled.
+     *
      * @param val the value to push
      * @param array the rate array to update
      */
@@ -809,8 +848,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         synchronized (array) {
             for (int i = RATE_DEPTH - 1; i > 0; i--) {
                 array[i] = array[i - 1];
-                array[0] = val;
             }
+            array[0] = val;
         }
     }
 
@@ -1047,6 +1086,16 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             }
             partialPieces.clear();
             partialIds.clear();
+            clearLivePartials();
+        }
+        // Release any piece still waiting for the writer thread. A writer task that
+        // is mid-write finishes that piece and then drops the rest: drainWriteQueue()
+        // re-checks halted on every pass.
+        synchronized (_writeQueue) {
+            for (PendingWrite pw : _writeQueue) {
+                pw._pp.release();
+            }
+            _writeQueue.clear();
         }
     }
 
@@ -1494,7 +1543,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 if (havePieces.get(p.getId()) && !p.isRequested()) {
                     // never ever choose one that's in partialPieces, or we
                     // will create a second one and leak
-                    boolean hasPartial = partialIds.contains(Integer.valueOf(p.getId()));
+                    Integer key = Integer.valueOf(p.getId());
+                    boolean hasPartial = partialIds.contains(key) || _livePartials.containsKey(key);
                     if (hasPartial && _log.shouldDebug()) {
                         _log.debug(
                                 "Skipping a piece with an existing partial request" +
@@ -1674,6 +1724,12 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                     peer.cancel(p.getId());
                 }
             }
+            // and let go of the partial data of pieces we no longer want. A shared
+            // piece has no single peer left to free it once its requests are cancelled,
+            // so it would otherwise stay registered until the torrent stopped.
+            for (Piece p : toCancel) {
+                removePartialPiece(p.getId());
+            }
         }
 
         // ditto, avoid deadlocks
@@ -1742,10 +1798,182 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
-     * Returns false if the piece is no good (according to the hash). In that case the peer that
-     * supplied the piece should probably be blacklisted.
+     * Max completed pieces one torrent may have waiting for the writer thread.
+     * Past this the peer connection thread verifies and writes the piece inline,
+     * exactly as it always did, so a burst of completions applies backpressure
+     * instead of pinning an unbounded amount of piece data in memory.
+     * Package-private for the tests.
+     */
+    static final int MAX_QUEUED_WRITES = 4;
+
+    /**
+     * Writer threads available to all torrents. More than one lets different
+     * torrents overlap their disk I/O; a single torrent is still drained by one
+     * task at a time so its file writes stay serialized. Package-private for the tests.
+     */
+    static final int MAX_WRITER_THREADS = 2;
+
+    /** Idle writer threads exit after this long, so an idle router pays nothing. */
+    private static final long WRITER_THREAD_IDLE_MS = 60 * 1000;
+
+    /** Sequence number of the piece-writer threads. */
+    private static final AtomicInteger _writerThreadId = new AtomicInteger();
+
+    /**
+     * Pool running piece verify and write, shared by every torrent. Piece verify is a
+     * full SHA-1 over the piece (and, for a piece too big to keep in memory, a second
+     * pass over its temp file) and the write is a third pass plus the torrent file
+     * write; all of that used to run on the peer's connection thread, where it closed
+     * that peer's receive window and throttled its download for the duration.
+     */
+    private static final ThreadPoolExecutor _writerExec =
+            new ThreadPoolExecutor(
+                    0,
+                    MAX_WRITER_THREADS,
+                    WRITER_THREAD_IDLE_MS,
+                    TimeUnit.MILLISECONDS,
+                    new SynchronousQueue<>(),
+                    r -> {
+                        Thread t =
+                                new I2PAppThread(
+                                        r, "SnarkWr" + ThreadNames.seq(_writerThreadId.incrementAndGet()), true);
+                        t.setDaemon(true);
+                        return t;
+                    },
+                    new ThreadPoolExecutor.AbortPolicy());
+
+    static {
+        _writerExec.allowCoreThreadTimeOut(true);
+    }
+
+    /**
+     * A completed piece plus the peer that finished it, waiting for the writer thread.
+     */
+    private static final class PendingWrite {
+        /** The peer that delivered the last block of the piece. */
+        final Peer _peer;
+        /** The completed piece data, owned by the queue until it is written. */
+        final PartialPiece _pp;
+        /** The wanted-piece record claimed for this write, or null if unclaimed. */
+        final Piece _wanted;
+
+        /**
+         * Holds one queued write.
+         *
+         * @param peer the peer that delivered the last block
+         * @param pp the completed piece data
+         * @param wanted the claimed wanted-piece record, or null
+         */
+        PendingWrite(Peer peer, PartialPiece pp, Piece wanted) {
+            _peer = peer;
+            _pp = pp;
+            _wanted = wanted;
+        }
+    }
+
+    /**
+     * Completed pieces waiting to be verified and written, FIFO. Sync on this.
+     */
+    private final Deque<PendingWrite> _writeQueue = new ArrayDeque<>(MAX_QUEUED_WRITES);
+
+    /**
+     * True while a pool task is draining this torrent's write queue. One task per
+     * torrent at a time keeps that torrent's file writes in order and off each other.
+     * Sync on _writeQueue.
+     */
+    private boolean _draining;
+
+    /**
+     * Pieces waiting for the writer thread. Package-private for the tests.
      *
-     * @throws RuntimeException on a genuine storage error saving the piece
+     * @return the queue depth, 0 if nothing is pending
+     */
+    int queuedWrites() {
+        synchronized (_writeQueue) {
+            return _writeQueue.size();
+        }
+    }
+
+    /**
+     * Queue a completed piece for the writer thread. Package-private so the tests can
+     * drive the queue without a Storage.
+     *
+     * @param peer the peer that delivered the last block of the piece
+     * @param pp the completed piece data, taken over by the queue
+     * @param wanted the claimed wanted-piece record, or null if the piece was unclaimed
+     * @return false if the queue was full or the pool saturated, in which case nothing
+     *         was queued and the caller must write the piece itself
+     */
+    boolean queuePieceWrite(Peer peer, PartialPiece pp, Piece wanted) {
+        boolean start;
+        synchronized (_writeQueue) {
+            if (_writeQueue.size() >= MAX_QUEUED_WRITES) return false;
+            _writeQueue.add(new PendingWrite(peer, pp, wanted));
+            start = !_draining;
+            if (start) _draining = true;
+        }
+        if (start) {
+            try {
+                _writerExec.execute(this::drainWriteQueue);
+            } catch (RejectedExecutionException ree) {
+                // Pool saturated and the queue is not empty; drain it on this thread
+                // rather than losing the queued pieces.
+                drainWriteQueue();
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Drain this torrent's write queue, verifying and writing each piece in turn.
+     * Runs on a pool thread, or on the submitting thread when the pool is saturated.
+     * Stops early once the torrent is halted, releasing whatever is still queued.
+     */
+    private void drainWriteQueue() {
+        try {
+            for (;;) {
+                PendingWrite pw;
+                synchronized (_writeQueue) {
+                    pw = _writeQueue.poll();
+                    if (pw == null) {
+                        _draining = false;
+                        return;
+                    }
+                }
+                if (halted) {
+                    pw._pp.release();
+                    continue;
+                }
+                writePieceNow(pw._peer, pw._pp, pw._wanted);
+            }
+        } catch (Throwable t) {
+            // A fatal storage error stops the torrent and rethrows from writePieceNow;
+            // on a pool thread there is nobody to propagate it to, so drop the queue
+            // and log rather than killing the writer for every other torrent.
+            _log.error("Piece writer stopped for " + metainfo.getName(), t);
+            synchronized (_writeQueue) {
+                _draining = false;
+                for (PendingWrite pw : _writeQueue) {
+                    pw._pp.release();
+                }
+                _writeQueue.clear();
+            }
+        }
+    }
+
+    /**
+     * A peer has finished sending us every block of a piece. Claim the piece so no
+     * other peer writes the same one, then hand the verify and the write to the
+     * writer thread; the SHA-1 and the disk I/O must not run on this peer's
+     * connection thread, where they would stall its inbound stream.
+     *
+     * <p>Returns true unless the piece is dropped outright. A hash failure is not
+     * known yet when this returns; the writer thread tells the peer's state about it
+     * through {@link PeerState#clearHave(int)}.
+     *
+     * @param peer the peer that delivered the last block of the piece
+     * @param pp the completed piece data
+     * @return true if the piece was taken, false if it was dropped outright
      */
     @Override
     public boolean gotPiece(Peer peer, PartialPiece pp) {
@@ -1754,41 +1982,77 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             return true;
         }
         int piece = pp.getPiece();
-        // hoisted so the catch below can re-queue the piece
-        Piece wantedPiece = null;
+        Piece wantedPiece;
 
+        synchronized (wantedPieces) {
+            wantedPiece = wantedMap.get(Integer.valueOf(piece));
+            if (wantedPiece == null) {
+                if (_log.shouldDebug()) {
+                    _log.debug(
+                            "Received unwanted piece ["
+                                    + piece
+                                    + "/"
+                                    + metainfo.getPieces()
+                                    + "] from ["
+                                    + peer
+                                    + "] for "
+                                    + metainfo.getName());
+                }
+
+                // No need to announce have piece to peers.
+                // Assume we got a good piece, we don't really care anymore.
+                // Well, this could be caused by a change in priorities, so
+                // only drop it here if we already have it, otherwise keep it.
+                if (storage.getBitField().get(piece)) {
+                    pp.release();
+                    return true;
+                }
+            } else {
+                // claim the piece so no other peer writes it while we do the disk I/O
+                wantedMap.remove(Integer.valueOf(piece));
+                wantedPieces.remove(wantedPiece);
+            }
+        }
+
+        if (halted) {
+            pp.release();
+            return true;
+        }
+
+        if (_log.shouldDebug()) {
+            _log.debug(
+                    "Queued piece ["
+                            + piece
+                            + "/"
+                            + metainfo.getPieces()
+                            + "] from ["
+                            + peer
+                            + "] for "
+                            + metainfo.getName()
+                            + " for verify and write");
+        }
+        if (!queuePieceWrite(peer, pp, wantedPiece)) {
+            // Writer backed up for this torrent: apply backpressure by doing the
+            // work on this thread rather than queueing more piece data.
+            writePieceNow(peer, pp, wantedPiece);
+        }
+        return true;
+    }
+
+    /**
+     * Verify and write one completed piece, then update the wanted set and announce
+     * the have. Runs on the writer thread, or inline on a peer thread when the queue
+     * is full. Never throws to a peer thread: a fatal storage error stops the torrent
+     * and a transient one re-queues the piece.
+     *
+     * @param peer the peer that delivered the last block of the piece
+     * @param pp the completed piece data, released here
+     * @param wantedPiece the claimed wanted-piece record, or null if unclaimed
+     */
+    void writePieceNow(Peer peer, PartialPiece pp, Piece wantedPiece) {
+        int piece = pp.getPiece();
         // try/catch outside the sync to avoid deadlock in the catch
         try {
-            synchronized (wantedPieces) {
-                wantedPiece = wantedMap.get(Integer.valueOf(piece));
-                if (wantedPiece == null) {
-                    if (_log.shouldDebug()) {
-                        _log.debug(
-                                "Received unwanted piece ["
-                                        + piece
-                                        + "/"
-                                        + metainfo.getPieces()
-                                        + "] from ["
-                                        + peer
-                                        + "] for "
-                                        + metainfo.getName());
-                    }
-
-                    // No need to announce have piece to peers.
-                    // Assume we got a good piece, we don't really care anymore.
-                    // Well, this could be caused by a change in priorities, so
-                    // only return true if we already have it, otherwise might as well keep it.
-                    if (storage.getBitField().get(piece)) {
-                        pp.release();
-                        return true;
-                    }
-                } else {
-                    // claim the piece so no other peer writes it while we do the disk I/O
-                    wantedMap.remove(Integer.valueOf(piece));
-                    wantedPieces.remove(wantedPiece);
-                }
-            }
-
             // try/catch moved outside of sync
             // this takes forever if complete, as it rechecks
             if (storage.putPiece(pp)) {
@@ -1834,7 +2098,12 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                                     + "] for "
                                     + metainfo.getName());
                 }
-                return false; // No need to announce BAD piece to peers.
+                // The copy this peer sent us is corrupt; stop asking it for this
+                // piece. Done here rather than in PeerState.pieceMessage because the
+                // hash check no longer runs on the peer's own thread.
+                PeerState st = peer.state;
+                if (st != null) st.clearHave(piece);
+                return; // No need to announce BAD piece to peers.
             }
             if (wantedPiece != null) {
                 synchronized (wantedPieces) {
@@ -1906,7 +2175,11 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                     wantedDirty = true;
                 }
             }
-            return false; // No need to announce BAD piece to peers.
+            // Same reaction as the bad-hash path above: the piece is back in the
+            // wanted set, so stop assuming this peer has it until it proves again.
+            PeerState st = peer.state;
+            if (st != null) st.clearHave(piece);
+            return; // No need to announce BAD piece to peers.
         }
         // just in case
         removePartialPiece(piece);
@@ -1940,9 +2213,9 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 }
                 partialPieces.clear();
                 partialIds.clear();
+                clearLivePartials();
             }
         }
-        return true;
     }
 
     /**
@@ -2043,9 +2316,55 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         }
 
         synchronized (wantedPieces) {
+            // One piece can be represented by several requests, one per block of it in
+            // flight. Settle each piece once, so that a second request for it cannot
+            // release the copy that was just kept.
+            Map<Integer, PartialPiece> settled = null;
             for (Request req : partials) {
                 PartialPiece pp = req.getPartialPiece();
+                Integer key = Integer.valueOf(pp.getPiece());
+                if (settled == null) settled = new HashMap<>(4);
+                PartialPiece prev = settled.get(key);
+                if (prev != null && prev != pp) {
+                    // a second, different partial for a piece already dealt with
+                    pp.release();
+                    if (_log.shouldInfo()) {
+                        _log.info("Discarding second partial piece for the same piece " + pp);
+                    }
+                    continue;
+                }
+                if (_livePartials.get(key) == pp) {
+                    // Shared: several peers are pulling blocks of this piece, so this one
+                    // going away only frees the blocks it was claiming. Park the piece as
+                    // an orphan once nobody is fetching it, so the bytes already
+                    // downloaded are not lost, and hand sole ownership to the list.
+                    pp.clearRequested(req.off, req.len);
+                    if (prev != null) {
+                        continue;
+                    }
+                    settled.put(key, pp);
+                    // syncs on wantedPieces...
+                    markUnrequested(peer, pp.getPiece());
+                    if (!someoneFetching(pp.getPiece())) {
+                        _livePartials.remove(key);
+                        pp.clearAllRequested();
+                        pp.setShared(false);
+                        partialPieces.add(pp);
+                        partialIds.add(key);
+                        if (_log.shouldInfo()) {
+                            _log.info("Parked shared partial piece " + pp);
+                        }
+                    }
+                    continue;
+                }
+                if (prev != null) {
+                    continue;
+                }
+                settled.put(key, pp);
                 if (pp.hasData()) {
+                    // a partial coming to rest in the orphan list is scanned from the
+                    // beginning by whoever picks it up, so nothing may stay claimed
+                    pp.clearAllRequested();
                     // PartialPiece.equals() only compares piece number, which is what we want
                     int idx = partialPieces.indexOf(pp);
                     if (idx < 0) {
@@ -2172,6 +2491,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                                 }
                             }
                             iter.remove();
+                            registerLive(pp);
                             piece.setRequested(peer, true);
                             if (_log.shouldInfo()) {
                                 _log.info(
@@ -2204,8 +2524,38 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         // Temporary? So PeerState never calls wantPiece() directly for now...
         Piece piece = wantPiece(peer, havePieces, true, allowed);
         if (piece != null) {
-            return new PartialPiece(
-                    piece, metainfo.getPieceLength(piece.getId()), _util.getTempDir(), metainfo);
+            int pieceNum = piece.getId();
+            synchronized (wantedPieces) {
+                // If the piece is already being pulled, hand out the same one so this
+                // peer fills the blocks the others have not claimed yet, rather than a
+                // duplicate copy of the whole piece.
+                PartialPiece live = _livePartials.get(Integer.valueOf(pieceNum));
+                if (live != null) {
+                    if (live.isFullyClaimed()) {
+                        // Every block is already here or in flight with another peer, so
+                        // there is nothing for this one to fetch. Undo the bookkeeping
+                        // wantPiece() did so the piece is not counted against this peer.
+                        piece.setRequested(peer, false);
+                        if (_log.shouldDebug()) {
+                            _log.debug(
+                                    "Nothing left to share of partial piece " + live + " with ["
+                                            + peer + ']');
+                        }
+                        return null;
+                    }
+                    if (_log.shouldInfo()) {
+                        _log.info(
+                                "Sharing partial piece " + live + " with [" + peer + ']');
+                    }
+                    return live;
+                }
+                return registerLive(
+                        new PartialPiece(
+                                piece,
+                                metainfo.getPieceLength(pieceNum),
+                                _util.getTempDir(),
+                                metainfo));
+            }
         }
         if (_log.shouldDebug()) {
             _log.debug("We have no partial piece to return");
@@ -2229,15 +2579,20 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             return null;
         }
         synchronized (wantedPieces) {
+            Integer key = Integer.valueOf(piece);
             // never create a second partial for a piece already being downloaded
-            if (partialIds.contains(Integer.valueOf(piece))) {
+            PartialPiece live = _livePartials.get(key);
+            if (live == null && partialIds.contains(key)) {
                 return null;
             }
-            Piece p = wantedMap.get(Integer.valueOf(piece));
+            Piece p = wantedMap.get(key);
             if (p == null || p.isDisabled() || p.isRequestedBy(peer)) {
                 return null;
             }
-            if (p.isRequested() && wantedPieces.size() > END_GAME_THRESHOLD) {
+            if (live != null && live.isFullyClaimed()) {
+                return null; // every block is here or in flight with someone else
+            }
+            if (p.isRequested() && live == null && wantedPieces.size() > END_GAME_THRESHOLD) {
                 return null; // not in end game, already requested from another peer
             }
             if (p.getRequestCount() >= MAX_PARALLEL_REQUESTS) {
@@ -2247,7 +2602,11 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             if (_log.shouldInfo()) {
                 _log.info("Suggest: requesting piece [" + p + "] from [" + peer + "]");
             }
-            return new PartialPiece(p, metainfo.getPieceLength(piece), _util.getTempDir(), metainfo);
+            return live != null
+                    ? live
+                    : registerLive(
+                            new PartialPiece(
+                                    p, metainfo.getPieceLength(piece), _util.getTempDir(), metainfo));
         }
     }
 
@@ -2288,6 +2647,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * @param piece the piece number whose saved partial data is dropped
      */
     private void removePartialPiece(int piece) {
+        PartialPiece live;
         synchronized (wantedPieces) {
             for (Iterator<PartialPiece> iter = partialPieces.iterator(); iter.hasNext(); ) {
                 PartialPiece pp = iter.next();
@@ -2298,6 +2658,109 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 }
             }
             partialIds.remove(Integer.valueOf(piece));
+            live = _livePartials.remove(Integer.valueOf(piece));
+        }
+        if (live != null) {
+            // Peers are still pulling blocks of this piece. Tell them to stop before the
+            // data goes away: cancelPiece() drops their requests and their claims.
+            // Not under the wantedPieces monitor - PeerState takes it the other way round.
+            live.clearAllRequested();
+            cancelPieceRequests(piece);
+            live.setShared(false);
+            live.release();
+        }
+    }
+
+    /**
+     * Tells every peer with an outstanding request for this piece that it no longer has to
+     * send it. Used when the piece is finished or thrown away while other peers were still
+     * pulling blocks of it; without this those requests sit until the peer is judged
+     * stalled. Sends a cancel to each, which is what every other client does here.
+     *
+     * @param piece the piece no longer being fetched
+     */
+    private void cancelPieceRequests(int piece) {
+        for (Peer p : peers) {
+            PeerState ps = p.state;
+            if (ps != null) {
+                ps.cancelPiece(piece);
+            }
+        }
+        // cancelPiece() drops the requests; this drops the bookkeeping that says the
+        // peer still has blocks of the piece in flight, so the piece is not counted as
+        // being fetched by anyone
+        synchronized (wantedPieces) {
+            Piece pc = wantedMap.get(Integer.valueOf(piece));
+            if (pc != null) {
+                for (Peer p : peers) {
+                    pc.setRequested(p, false);
+                }
+            }
+        }
+    }
+
+    /**
+     * Registers a partial piece as the one being downloaded for its piece id and makes the
+     * coordinator the owner of its data. The caller holds the wantedPieces monitor.
+     *
+     * @param pp the piece to register
+     * @return the same piece, for use in a return statement
+     */
+    private PartialPiece registerLive(PartialPiece pp) {
+        // an orphan being put back to work is scanned from the beginning again, and a
+        // fresh piece has nothing claimed yet
+        pp.clearAllRequested();
+        pp.setShared(true);
+        _livePartials.put(Integer.valueOf(pp.getPiece()), pp);
+        return pp;
+    }
+
+    /**
+     * Frees every registered live partial piece, for when the torrent is done or stopped.
+     * The caller holds the wantedPieces monitor.
+     */
+    private void clearLivePartials() {
+        for (PartialPiece pp : _livePartials.values()) {
+            pp.setShared(false);
+            pp.release();
+        }
+        _livePartials.clear();
+    }
+
+    /**
+     * True if some peer other than nobody is still fetching blocks of this piece.
+     * The caller holds the wantedPieces monitor.
+     *
+     * @param piece the piece to check
+     * @return true if at least one peer has requested it
+     */
+    private boolean someoneFetching(int piece) {
+        Piece p = wantedMap.get(Integer.valueOf(piece));
+        return p != null && p.getRequestCount() > 0;
+    }
+
+    /**
+     * How many pieces are registered as being downloaded right now, and how many are
+     * parked as orphans. For the tests.
+     *
+     * @return the count of live partial pieces
+     * @since 0.9.72+
+     */
+    int livePartialCount() {
+        synchronized (wantedPieces) {
+            return _livePartials.size();
+        }
+    }
+
+    /**
+     * How many partial pieces are parked with no peer fetching them. For the tests.
+     *
+     * @return the count of orphaned partial pieces
+     * @since 0.9.72+
+     */
+    int orphanPartialCount() {
+        synchronized (wantedPieces) {
+            return partialPieces.size();
         }
     }
 
