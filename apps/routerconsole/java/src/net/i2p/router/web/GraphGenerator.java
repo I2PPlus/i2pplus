@@ -54,6 +54,18 @@ public class GraphGenerator implements Runnable, ClientApp {
     private final List<GraphListener> _listeners;
     /** Index of listener by rate for O(1) lookup during rendering. */
     private final Map<Rate, GraphListener> _listenerByRate = new ConcurrentHashMap<>();
+    /**
+     * Rates whose listener failed to start, and when to try again.
+     * <p>A rate that fails to open its RRD lands in neither {@link #_listeners} nor
+     * {@link #_listenerByRate}, so neither the heal ladder nor the detached-listener
+     * revive can see it, and the spec string already names it, so the sync task never
+     * adds it either. Without this record one transient I/O fault retires that graph
+     * for the life of the JVM.
+     *
+     * @see #retryFailedRates(long)
+     * @since 0.9.72+
+     */
+    private final Map<Rate, Retry> _retryByRate = new ConcurrentHashMap<>();
     /** Graph renders allowed at once. */
     private static final int MAX_CONCURRENT_RENDER = SystemVersion.isARM() ? Math.max(2, SystemVersion.getCores() / 2) :
                                                   SystemVersion.getMaxMemory() < 256*1024*1024 ? Math.max(8, SystemVersion.getCores() / 2) :
@@ -125,6 +137,27 @@ public class GraphGenerator implements Runnable, ClientApp {
      * @since 0.9.71+
      */
     private static final long REPORT_REPEAT_MS = 120_000L;
+    /**
+     * Period of the spec-sync task, in ms.
+     *
+     * <p>Also the first delay before a rate whose listener failed to start is tried
+     * again, so a failed add is picked up by the task already running rather than by
+     * one added for it.
+     *
+     * @see #retryDelayMs(int)
+     * @since 0.9.72+
+     */
+    static final long SYNC_INTERVAL_MS = 90_000L;
+    /**
+     * Ceiling on the delay between retries of a rate whose listener will not start.
+     *
+     * <p>Long enough that a rate broken for good does not fill the log, short enough
+     * that a fault which clears by itself - a path held by another user, a filesystem
+     * briefly full - is recovered from inside one working session.
+     *
+     * @since 0.9.72+
+     */
+    static final long MAX_RETRY_MS = 30 * 60_000L;
     /** Wall-clock time when graph generation started; lets the never-yet-written staleness
      * test distinguish an empty startup window from a genuinely stalled writer. */
     private final long _startedMs = System.currentTimeMillis();
@@ -237,10 +270,9 @@ public class GraphGenerator implements Runnable, ClientApp {
         // Configuring the shared singleton is what makes this instance responsible for
         // it at shutdown; see _ownsBackendFactory.
         _ownsBackendFactory = true;
-        // Reported because the RRD backends share one scratch buffer file, which
-        // is only safe while flushes are serialised - and rrd4j snapshots the
-        // pool size into a static singleton at class-init, so this call only wins
-        // if nothing touched rrd4j first. Worth seeing rather than assuming.
+        // Reported because rrd4j snapshots the pool size into a static singleton at
+        // class-init, so this call only wins if nothing touched rrd4j first. Worth
+        // seeing rather than assuming.
         if (_log.shouldInfo()) {
             _log.info("RRD4J sync pool -> Requested " + syncThreads + " threads"
                       + "\n* Effective: " + RrdNioBackendFactory.getSyncPoolSize()
@@ -266,7 +298,8 @@ public class GraphGenerator implements Runnable, ClientApp {
 
         final String[] specsHolder = {""};
         try {
-            _scheduler.scheduleAtFixedRate(() -> syncSpecsHolder(specsHolder), 0, 90, TimeUnit.SECONDS);
+            _scheduler.scheduleAtFixedRate(() -> syncSpecsHolder(specsHolder), 0,
+                                           SYNC_INTERVAL_MS / 1000, TimeUnit.SECONDS);
         } catch (Exception e) {
             _log.error("Failed to sync RRD4J stats to disk", e);
         }
@@ -343,6 +376,7 @@ public class GraphGenerator implements Runnable, ClientApp {
             }
             specsHolder[0] = adjustDatabases(specsHolder[0]);
             reviveDetachedListeners();
+            retryFailedRates(System.currentTimeMillis());
             if (_log.shouldDebug() && (++_ticks % HEARTBEAT_TICKS) == 0) {
                 int detached = 0;
                 for (GraphListener lsnr : _listeners) {
@@ -1551,6 +1585,7 @@ public class GraphGenerator implements Runnable, ClientApp {
      * @param r the rate to remove
      */
     private void removeDb(Rate r) {
+        _retryByRate.remove(r);
         GraphListener lsnr = _listenerByRate.remove(r);
         if (lsnr != null) {
             _listeners.remove(lsnr); // no iter.remove() in COWAL
@@ -1566,6 +1601,10 @@ public class GraphGenerator implements Runnable, ClientApp {
      * rebuild would register a second listener on the rate, orphan the first into the
      * listener list, and leave an attached-but-never-called listener accumulating one
      * per tick - which is precisely the fault the ladder exists to remove.
+     * <p>A failure is recorded for {@link #retryFailedRates(long)} to try again later.
+     * That record is the only path back for such a rate: it is in neither the listener
+     * list nor the rate map, so the ladder and the revive pass both walk past it, and
+     * the spec string already names it, so the sync task would not add it either.
      *
      * @param r the rate to track
      * @return true if a new listener was created and is recording
@@ -1584,8 +1623,101 @@ public class GraphGenerator implements Runnable, ClientApp {
         if (success) {
             _listeners.add(lsnr);
             _listenerByRate.put(r, lsnr);
-        } else {_log.error("Failed to add RRD for rate " + r.getRateStat().getName() + '.' + r.getPeriod());}
+            if (_retryByRate.remove(r) != null && _log.shouldInfo()) {
+                _log.info("Tracking resumed for rate " + rateName(r) +
+                          " -> The RRD opened on a later attempt");
+            }
+        } else {
+            Retry retry = scheduleRetry(r);
+            if (retry.attempts == 1) {
+                _log.error("Failed to add RRD for rate " + rateName(r) + " -> Retrying on the sync schedule");
+            } else if (_log.shouldDebug()) {
+                _log.debug("Still not tracking rate " + rateName(r) + " -> Attempt " + retry.attempts +
+                           ", next try in " + DataHelper.formatDuration(retry.nextMs - System.currentTimeMillis()));
+            }
+        }
         return success;
+    }
+
+    /**
+     * Records a rate whose listener failed, and when it is due to be tried again.
+     *
+     * <p>The update is done inside {@code compute} because the sync task and the watchdog can
+     * both fail the same rate within one interval, and two lost increments would each shorten the
+     * delay by one step.
+     *
+     * @param r the rate that could not be tracked
+     * @return the retry record, carrying the attempt count and the next attempt time
+     */
+    private Retry scheduleRetry(Rate r) {
+        long now = System.currentTimeMillis();
+        Retry[] record = new Retry[1];
+        _retryByRate.compute(r, (k, existing) -> {
+            Retry retry = existing != null ? existing : new Retry();
+            retry.attempts++;
+            retry.nextMs = now + retryDelayMs(retry.attempts);
+            record[0] = retry;
+            return retry;
+        });
+        return record[0];
+    }
+
+    /**
+     * How long to wait before re-attempting a rate whose listener failed to start.
+     *
+     * <p>Geometric with a ceiling: the first retry comes round quickly enough to ride out
+     * a fault that clears by itself, while a rate that is broken for good is asked again
+     * rarely enough that its error line stays readable.
+     *
+     * @param attempts failures so far counting this one, so 1 for the first failure
+     * @return the delay in ms before the next attempt, never below one sync period
+     * @since 0.9.72+
+     */
+    static long retryDelayMs(int attempts) {
+        if (attempts <= 1) {
+            return SYNC_INTERVAL_MS;
+        }
+        long delay = SYNC_INTERVAL_MS << Math.min(attempts - 1, 5);
+        return Math.min(delay, MAX_RETRY_MS);
+    }
+
+    /**
+     * Try again the rates whose listener failed to start, once their delay has passed.
+     *
+     * <p>Runs on the sync tick rather than the watchdog: the heal ladder walks live
+     * listeners, and a rate that never got one is invisible to it. {@link #addDb(Rate)}
+     * clears the record on success and pushes the delay out on another failure.
+     *
+     * @param now the current wall-clock ms
+     */
+    private void retryFailedRates(long now) {
+        for (Map.Entry<Rate, Retry> entry : _retryByRate.entrySet()) {
+            Retry retry = entry.getValue();
+            if (retry == null || retry.nextMs > now) {
+                continue;
+            }
+            addDb(entry.getKey());
+        }
+    }
+
+    /**
+     * One rate waiting to be tracked again.
+     *
+     * <p>Written by whichever thread found the failure and read by the sync task, so both
+     * fields are published rather than left to the map's own visibility guarantees.
+     */
+    private static class Retry {
+        /** Failures so far, which sets the delay before the next attempt. */
+        volatile int attempts;
+        /** Wall-clock ms when the next attempt is due. */
+        volatile long nextMs;
+
+        /**
+         * A rate whose first failure has just been seen: no attempts counted yet
+         * and due at once, so the delay is set by the caller that creates it.
+         */
+        Retry() {
+        }
     }
 
     /**
@@ -2181,6 +2313,7 @@ GraphListener lsnr = _listenerByRate.get(rate);
             // backends behind. A mapping that outlived the shutdown also serves a detached
             // listener to getXML(), which dereferences its closed database.
             _listenerByRate.clear();
+            _retryByRate.clear();
             stop();
             closeBackendFactory();
         }
