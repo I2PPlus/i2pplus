@@ -4362,7 +4362,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     _util.setLookupPending(true);
                 }
             } catch (Exception e) {
-                _log.warn("Lookup by name -> Adding magnet failed\n* Torrent: " + hex, e);
+                _log.warn("Lookup by name -> Adding magnet failed * Torrent: "
+                          + SnarkLogFormatter.infoHash(infoHash), e);
                 FileUtil.rmdir(lookupDir, false);
                 return null;
             } finally {
@@ -4452,7 +4453,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     try {
                         deleteMagnet(toDelete);
                     } catch (Exception e) {
-                        _log.warn("Lookup by name -> Deleting magnet failed\n* Torrent: " + hex, e);
+                        _log.warn("Lookup by name -> Deleting magnet failed * Torrent: "
+                                  + SnarkLogFormatter.infoHash(infoHash), e);
                     }
                     // Delete .torrent file if it was written to lookupDir (now possibly in default dir)
                     if (toDeleteName != null && toDeleteName.endsWith(".torrent")) {
@@ -4574,7 +4576,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     _util.setLookupPending(true);
                 }
             } catch (Exception e) {
-                _log.warn("Lookup by info -> Adding magnet failed\n* Torrent: " + hex, e);
+                _log.warn("Lookup by info -> Adding magnet failed * Torrent: "
+                          + SnarkLogFormatter.infoHash(infoHash), e);
                 FileUtil.rmdir(lookupDir, false);
                 return null;
             } finally {
@@ -4645,7 +4648,12 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 if (lookupDir.getPath().contains("zzzot-lookup"))
                     isLookup = isLookup || created;
                 if (isLookup) {
-                    try { deleteMagnet(toDelete); } catch (Exception e) { _log.warn("Lookup by info -> Deleting magnet failed\n* Torrent: " + hex, e); }
+                    try {
+                        deleteMagnet(toDelete);
+                    } catch (Exception e) {
+                        _log.warn("Lookup by info -> Deleting magnet failed * Torrent: "
+                                  + SnarkLogFormatter.infoHash(infoHash), e);
+                    }
                     if (toDeleteName != null && toDeleteName.endsWith(".torrent")) {
                         try {
                             File tf = new File(toDeleteName);
@@ -4797,19 +4805,20 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
         if (stale.isEmpty()) return;
         if (_log.shouldInfo()) {
-            _log.info("Cleaning up " + stale.size() + " stale lookup torrent(s) (> "
-                + DataHelper.formatDuration(LOOKUP_STALE_MS) + " old)");
+            _log.info("Cleaning up stale lookups -> Older than "
+                      + DataHelper.formatDuration(LOOKUP_STALE_MS)
+                      + " * Torrents: " + stale.size());
         }
         for (Snark snark : stale) {
             byte[] ih = snark.getInfoHash();
             SHA1Hash ihHash = new SHA1Hash(ih);
-            String hex = I2PSnarkUtil.toHex(ih);
             _lookupCreationTimes.remove(ihHash);
             _util.setLookupPending(!_lookupCreationTimes.isEmpty());
             try {
                 deleteMagnet(snark);
             } catch (Exception e) {
-                _log.warn("Stale lookup cleanup -> Deleting magnet failed\n* Torrent: " + hex, e);
+                _log.warn("Stale lookup cleanup -> Deleting magnet failed * Torrent: "
+                          + SnarkLogFormatter.infoHash(ih), e);
             }
             // Clean up tmp dir
             try {

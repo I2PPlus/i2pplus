@@ -21,6 +21,7 @@ package org.klomp.snark;
 import net.i2p.data.Base64;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
+import net.i2p.data.SimpleDataStructure;
 
 /**
  * Renders the identities the snark logs name, in one shape everywhere, so a
@@ -94,6 +95,21 @@ public class SnarkLogFormatter {
     public static String infoHash(byte[] infoHash) {
         if (infoHash == null || infoHash.length < 4) {return NONE;}
         return I2PSnarkUtil.toHex(infoHash).substring(0, SHORT_CHARS);
+    }
+
+    /**
+     * The bracketed short form of a DHT node id - the same eight base64
+     * characters {@code dht.NodeInfo} prints, so a node reads the same inline,
+     * in a list and in a tally.
+     *
+     * @param nid the node id, null when it is not known
+     * @return {@code [xxxxxxxx]}, or {@code none} when there is no node to name
+     */
+    public static String node(SimpleDataStructure nid) {
+        if (nid == null) {return NONE;}
+        String b64 = nid.toBase64();
+        if (b64 == null || b64.length() < SHORT_CHARS) {return NONE;}
+        return '[' + b64.substring(0, SHORT_CHARS) + ']';
     }
 
     /**
