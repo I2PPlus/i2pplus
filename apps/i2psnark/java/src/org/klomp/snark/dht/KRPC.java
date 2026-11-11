@@ -41,6 +41,7 @@ import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 import org.klomp.snark.BandwidthGraph;
 import org.klomp.snark.I2PSnarkUtil;
+import org.klomp.snark.SnarkLogFormatter;
 import org.klomp.snark.SnarkManager;
 import org.klomp.snark.TrackerClient;
 import org.klomp.snark.bencode.BDecoder;
@@ -1255,7 +1256,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         // entries from a previous run persisted in the DHT file
         if (destHash.equals(_myNodeInfo.getHash())) {
             if (_log.shouldWarn()) {
-                _log.warn("Dropping message to ourselves: " + destHash);
+                _log.warn("Dropping message to ourselves " + SnarkLogFormatter.dest(destHash));
             }
             return false;
         }
@@ -1263,7 +1264,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         if (_log.shouldDebug()) {
             ByteArrayInputStream bais = new ByteArrayInputStream(payload);
             try {
-                _log.debug("Sending to [" + destHash + "]\n* "
+                _log.debug("Sending to " + SnarkLogFormatter.dest(destHash) + "\n* "
                            + BDecoder.bdecode(bais).toString());
             } catch (Throwable t) { /* ignored */ }
         }

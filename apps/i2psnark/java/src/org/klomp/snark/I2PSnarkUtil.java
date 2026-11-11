@@ -1376,7 +1376,8 @@ public class I2PSnarkUtil implements DisconnectListener {
             TorrentDest td = _torrentDests.remove(key);
             if (td != null && td.unassign(key)) {
                 if (_log.shouldInfo()) {
-                    _log.info("Removing torrent dest " + key.substring(0, 6));
+                    _log.info("Unassigned torrent destination -> Destroying it * Torrent: "
+                              + SnarkLogFormatter.infoHashKey(key));
                 }
                 td.destroy();
             }

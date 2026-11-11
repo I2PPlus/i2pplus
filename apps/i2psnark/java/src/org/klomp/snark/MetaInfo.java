@@ -1064,7 +1064,7 @@ public class MetaInfo {
         MessageDigest digest = SHA1.getInstance();
         byte[] hash = digest.digest(infoBytes);
         if (_log.shouldDebug()) {
-            _log.debug("[InfoHash " + I2PSnarkUtil.toHex(hash) + "]");
+            _log.debug("Torrent info hash computed -> Torrent: " + SnarkLogFormatter.infoHash(hash));
         }
         return hash;
     }
