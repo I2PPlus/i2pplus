@@ -273,15 +273,10 @@ public class MetaInfo {
         if (_log.shouldDebug()) {
             // The map's own toString() is an unbounded wall of "BEValue [N bytes]"
             // and "key=value"; the key names are what show which writer produced the
-            // file (BEP 12 announce-list, BEP 19 url-list, nodes, utf-8 variants)
-            BEValue infoBev = m.get("info");
-            Object infoVal = infoBev != null ? infoBev.getValue() : null;
-            StringBuilder buf = new StringBuilder(160);
-            buf.append("Parsing a bencoded torrent -> Keys: ").append(keyNames(m));
-            if (infoVal instanceof Map) {
-                buf.append("\n* Info keys: ").append(keyNames((Map<?, ?>) infoVal));
-            }
-            _log.debug(buf.toString());
+            // file (BEP 12 announce-list, BEP 19 url-list, nodes, utf-8 variants).
+            // The info dictionary's own keys are not repeated here - the summary
+            // logged a moment later names what is in it.
+            _log.debug("Parsing a bencoded torrent -> Keys: " + keyNames(m));
         }
         BEValue val = m.get("announce");
         // Disabled check, we can get info from a magnet now
@@ -534,6 +529,94 @@ public class MetaInfo {
             buf.append(key);
         }
         return buf.toString();
+    }
+
+    /**
+     * The info dictionary rendered for the log as the values a reader acts on,
+     * not the BEValue wrappers around them: the piece size, how many pieces the
+     * "pieces" blob describes, the file count and the total size. Every measured
+     * value carries its unit, nothing is bracketed (the console log viewer reads a
+     * bracketed token as a destination), and a key that says nothing is left out -
+     * a public torrent has no "private" worth printing, and the name is not
+     * repeated here because the message that calls this already leads with it.
+     *
+     * @param info the info dictionary, may be null or empty
+     * @return the measurements as one {@code " * "}-separated run, or the bare key
+     *         names if none of the known keys is set
+     * @since 0.9.73+
+     */
+    static String infoSummary(Map<String, BEValue> info) {
+        if (info == null || info.isEmpty()) {
+            return SnarkLogFormatter.NONE;
+        }
+        List<String> pairs = new ArrayList<>(5);
+        long pieceLength = number(value(info, "piece length"));
+        if (pieceLength > 0) {
+            pairs.add("Piece Length: " + pieceLength + " bytes");
+        }
+        Object hashes = value(info, "pieces");
+        if (hashes instanceof byte[]) {
+            // the blob is 20 bytes per piece, and the piece count is the number a
+            // reader wants - the blob's own size follows from it
+            pairs.add("Pieces: " + ((byte[]) hashes).length / 20);
+        }
+        Object files = value(info, "files");
+        if (files instanceof List) {
+            pairs.add("Files: " + ((List<?>) files).size());
+        }
+        long length = number(value(info, "length"));
+        if (length > 0) {
+            pairs.add("Length: " + length + " bytes");
+        }
+        if (number(value(info, "private")) == 1) {
+            pairs.add("Private: true");
+        }
+        if (pairs.isEmpty()) {
+            return keyNames(info);
+        }
+        StringBuilder buf = new StringBuilder(160);
+        for (String pair : pairs) {
+            if (buf.length() > 0) {
+                buf.append(" * ");
+            }
+            buf.append(pair);
+        }
+        return buf.toString();
+    }
+
+    /**
+     * The name an info dictionary gives its torrent, for the log message that
+     * leads with it.
+     *
+     * @param info the info dictionary, may be null
+     * @return the name, or {@code none} if the dictionary does not carry one
+     * @since 0.9.73+
+     */
+    static String dictName(Map<String, BEValue> info) {
+        Object name = info != null ? value(info, "name") : null;
+        return name instanceof byte[] ? DataHelper.getUTF8((byte[]) name) : SnarkLogFormatter.NONE;
+    }
+
+    /**
+     * The untyped value of one key of a bencoded dictionary.
+     *
+     * @param info the dictionary, not null
+     * @param key the key to read
+     * @return the value, or null if the key is absent
+     */
+    private static Object value(Map<String, BEValue> info, String key) {
+        BEValue val = info.get(key);
+        return val != null ? val.getValue() : null;
+    }
+
+    /**
+     * The value of one key as a number, for the sizes the summary prints.
+     *
+     * @param val the value to read, may be null or of any bencode type
+     * @return the number, or 0 if the value is not a number
+     */
+    private static long number(Object val) {
+        return val instanceof Number ? ((Number) val).longValue() : 0;
     }
 
     /**
@@ -1090,13 +1173,8 @@ public class MetaInfo {
     private byte[] calculateInfoHash() {
         Map<String, BEValue> info = createInfoMap();
         if (_log.shouldDebug()) {
-            StringBuilder buf = new StringBuilder(128);
-            buf.append("Torrent info dictionary built");
-            for (Map.Entry<String, BEValue> entry : info.entrySet()) {
-                buf.append("\n* ").append(entry.getKey()).append(": ")
-                   .append(entry.getValue());
-            }
-            _log.debug(buf.toString());
+            _log.debug("Torrent info dictionary built for: " + dictName(info)
+                       + "\n* " + infoSummary(info));
         }
         byte[] infoBytes = BEncoder.bencode(info);
         MessageDigest digest = SHA1.getInstance();
