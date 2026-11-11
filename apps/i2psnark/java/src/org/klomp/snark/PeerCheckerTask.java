@@ -31,6 +31,15 @@ class PeerCheckerTask implements Runnable {
     private final Random random;
     /** How many times the task has run. */
     private int _runCount;
+    /**
+     * Random phase for the work that runs every Nth pass - closing files, announcing to
+     * the local DHT - so two torrents started at the same time do not do it in lockstep.
+     * Combined with the jittered checker cadence, this spreads the periodic work of a
+     * set of torrents over time instead of bunching it.
+     *
+     * @since 0.9.72+
+     */
+    private final int _phase;
 
     /**
      * Creates a new checker task for the given coordinator.
@@ -42,6 +51,7 @@ class PeerCheckerTask implements Runnable {
         _util = util;
         _log = util.getContext().logManager().getLog(PeerCheckerTask.class);
         random = util.getContext().random();
+        _phase = random.nextInt(480);
         this.coordinator = coordinator;
     }
 
@@ -261,7 +271,7 @@ class PeerCheckerTask implements Runnable {
                 (coordinator.getNeededLength() > 0 || !peer.isCompleted()))
                 peer.keepAlive();
             // announce them to local tracker (TrackerClient does this too)
-            if (dht != null && (_runCount % 5) == 0) {
+            if (dht != null && ((_runCount + _phase) % 5) == 0) {
                 dht.announce(
                         coordinator.getInfoHash(),
                         peer.getPeerID().getDestHash(),
@@ -327,11 +337,11 @@ class PeerCheckerTask implements Runnable {
             else if (files <= 50) skip = 2;
             else skip = 1;
 
-            if ((_runCount % skip) == 0) storage.cleanRAFs();
+            if (((_runCount + _phase) % skip) == 0) storage.cleanRAFs();
         }
 
         // announce ourselves to local tracker (TrackerClient does this too)
-        if (dht != null && (_runCount % 16) == 0) {
+        if (dht != null && ((_runCount + _phase) % 16) == 0) {
             dht.announce(coordinator.getInfoHash(), coordinator.completed());
         }
     }

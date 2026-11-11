@@ -10,6 +10,7 @@ import net.i2p.client.I2PSession;
 import net.i2p.client.streaming.I2PSocketManager;
 import net.i2p.data.Base64;
 import net.i2p.util.Log;
+import net.i2p.util.RandomSource;
 import net.i2p.util.SimpleTimer2;
 
 /**
@@ -141,7 +142,22 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
             _noRunningConsec = 0;
             _sharedQuantity = MIN_TUNNEL_QTY;
         }
-        schedule(CHECK_TIME);
+        // Jitter the period by up to 5 s either way. This is one global timer shared by
+        // every torrent, and it shares the timer executor with the per-torrent checkers;
+        // a fixed period keeps them landing together.
+        schedule(checkTime(RandomSource.getInstance()));
+    }
+
+    /**
+     * The next idle-check delay: CHECK_TIME spread by up to 5 s either way. The average
+     * stays at CHECK_TIME.
+     *
+     * @param r the random to spread with
+     * @return the delay in ms
+     * @since 0.9.72+
+     */
+    static long checkTime(RandomSource r) {
+        return CHECK_TIME - 5000 + r.nextLong(10000);
     }
 
     /**
