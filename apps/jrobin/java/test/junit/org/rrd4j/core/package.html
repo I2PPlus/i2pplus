@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>RRD4J storage tests</title>
+</head>
+<body>
+<p>
+    The backends that put RRD data on disk, checked against the file they wrote
+    rather than against the objects that wrote it. The NIO backend's staging area
+    is covered for the arithmetic that sizes it from the free heap, for the
+    boundary between batching a write and publishing it on its own, and for the
+    two properties the area has to keep: a published block reaches the file at the
+    offset it was given, and the heap it held leaves the accounting so a budget is
+    not spent twice. A block that falls outside its mapping is dropped and reported
+    instead of thrown, because the scheduled flush runs this and a throw ends every
+    later one.
+</p>
+
+<p>
+    Run by <code>ant test</code> in <code>apps/jrobin/java</code>. The graph
+    rendering side of the library is in <code>org.rrd4j.graph</code>.
+</p>
+</body>
+</html>

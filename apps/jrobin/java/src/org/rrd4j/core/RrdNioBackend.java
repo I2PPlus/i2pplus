@@ -7,8 +7,6 @@ import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
@@ -22,8 +20,13 @@ import java.util.concurrent.TimeUnit;
  * Backend which is used to store RRD data to ordinary disk files using java.nio.* package. This is
  * the default backend engine.
  *
- * <p>This version buffers all stat files in a single temporary buffer file sequentially, keeping
- * track of each file's offset and length, then flushes all to the mapped file in batch.
+ * <p>Writes land directly in the mapped file buffer. A caller that wants a group of writes to
+ * become visible together can stage them with {@link #bufferStatFile} and publish them as one batch
+ * with {@link #flushBufferedStatFiles()}. Staging is heap-only and bounded by a budget taken from
+ * the free heap: what is staged is the delta being written, not the file, so a batch costs the size
+ * of the rows it touches, and the budget is what keeps a flush that never runs from growing into an
+ * allocation failure. When the budget cannot hold the next block, this backend publishes what it
+ * already holds and, if that is still not enough, publishes the block on its own.
  */
 public class RrdNioBackend extends ByteBufferBackend implements RrdFileBackend {
 
@@ -114,54 +117,75 @@ public class RrdNioBackend extends ByteBufferBackend implements RrdFileBackend {
     /** The running periodic sync task, if any. */
     private ScheduledFuture<?> syncRunnableHandle = null;
 
-    /** Path to the single temporary file used to buffer all stat files data sequentially. */
-    private Path tempBufferFilePath;
-
     /**
-     * Serializes flushes across every backend instance.
+     * Serializes the JVM-wide staging accounting.
      *
-     * <p>All backends stage their pending segments in one shared scratch file, so
-     * two concurrent flushes corrupt each other: one truncates the file while the
-     * other is still mapping its segments out of it. The usual protection is a
-     * single-threaded sync pool, but rrd4j snapshots the pool size into a static
-     * singleton when the pool class initializes, so the setting only takes effect
-     * if it happens before anything else touches rrd4j - otherwise the pool keeps
-     * its default size and the invariant breaks with no error. Taking the lock
-     * here makes the invariant hold by construction rather than by ordering.
+     * <p>Staged blocks are heap copies, so the only state shared between backends is the byte
+     * counter the staging budget is checked against. The lock covers that arithmetic and nothing
+     * else; no I/O happens under it.
      */
-    private static final Object FLUSH_LOCK = new Object();
-
-    /** FileChannel to write and read stats data from the single temp buffer file. */
-    private FileChannel tempBufferFileChannel;
+    private static final Object STAGING_LOCK = new Object();
 
     /**
-     * Data structure to track each buffered stat file's offset and length within the single temp
-     * buffer file.
+     * Bytes staged on the heap across every backend in this JVM.
+     *
+     * <p>Guarded by {@link #STAGING_LOCK}.
      */
-    private final List<StatFileSegment> bufferedStatSegments = new ArrayList<>();
+    private static long _stagedBytes;
 
     /**
-     * Helper class representing a buffered stat file segment's location in the temp buffer file.
+     * Staging budget set by the embedder, or 0 to size it from the free heap on every check.
+     *
+     * <p>Guarded by {@link #STAGING_LOCK}.
+     */
+    private static long _budgetOverrideBytes;
+
+    /** Ceiling on heap staging however much heap is free, in bytes. */
+    static final int MAX_STAGING_BYTES = 8 * 1024 * 1024;
+
+    /** The free heap is divided by this to size the staging budget. */
+    static final int STAGING_HEAP_DIVISOR = 16;
+
+    /**
+     * Free heap under this many bytes means no staging at all: each write is published straight to
+     * the mapping instead of being held for a batch.
+     */
+    static final int MIN_FREE_HEAP_BYTES = 64 * 1024;
+
+    /**
+     * This backend's staged blocks, in the order they were staged.
+     *
+     * <p>Touched only from the synchronized methods of this instance; the byte accounting that
+     * spans instances goes through {@link #STAGING_LOCK}.
+     */
+    private final List<StatFileSegment> stagedBlocks = new ArrayList<>(4);
+
+    /**
+     * One block of stat data held on the heap for a later batch publish.
      */
     private static class StatFileSegment {
-        /** Where the segment's data sits in the temp file. */
-        final long offset; // offset within temp buffer file where this stat file data begins
-        /** Size of the segment's data, in bytes. */
-        final int length; // length of this stat file data in bytes
-        /** Where the segment's data belongs in the rrd file. */
-        final long targetFileOffset; // offset within the mapped (RRD) file where this stat belongs
+        /** The staged bytes, released once the block has been published. */
+        byte[] data;
+        /** Size of the block in bytes; stays readable after the data is released. */
+        final int length;
+        /** Where the block belongs in the mapped (RRD) file. */
+        final long targetFileOffset;
 
         /**
-         * Records one segment of the deferred write.
+         * Records one block of the deferred write.
          *
-         * @param offset where the data sits in the temp file
-         * @param length the size of the data, in bytes
+         * @param data the bytes to publish later
          * @param targetFileOffset where the data belongs in the rrd file
          */
-        StatFileSegment(long offset, int length, long targetFileOffset) {
-            this.offset = offset;
-            this.length = length;
+        StatFileSegment(byte[] data, long targetFileOffset) {
+            this.data = data;
+            this.length = data.length;
             this.targetFileOffset = targetFileOffset;
+        }
+
+        /** Hands back the heap the block was using, keeping its length for the accounting. */
+        void release() {
+            data = null;
         }
     }
 
@@ -195,28 +219,17 @@ public class RrdNioBackend extends ByteBufferBackend implements RrdFileBackend {
             throw ex;
         }
 
-        if (!readOnly) {
-            tempBufferFilePath = Paths.get(System.getProperty("java.io.tmpdir"), "rrd_stats_buffer.tmp");
-            tempBufferFileChannel =
-                    FileChannel.open(
-                            tempBufferFilePath,
-                            StandardOpenOption.READ,
-                            StandardOpenOption.WRITE,
-                            StandardOpenOption.CREATE,
-                            StandardOpenOption.TRUNCATE_EXISTING);
-        }
-
         try {
             if (!readOnly && threadPool != null) {
                 // The task must not let anything escape. scheduleWithFixedDelay
-                // cancels every future execution as soon as the task throws, and
-                // flushBufferedStatFiles() rethrows IOException as an unchecked
-                // RuntimeException, so a single failed flush would silently and
-                // permanently end all later ones: the main file would keep its
-                // last pre-flush contents and every reader would serve stale
-                // data with no error anywhere. Swallowing here keeps the schedule
-                // alive across transient I/O trouble; the data is not lost
-                // because the next flush re-copies the temp buffer.
+                // cancels every future execution as soon as the task throws, so a
+                // single failure would silently and permanently end all later
+                // ones: the main file would keep its last pre-flush contents and
+                // every reader would serve stale data with no error anywhere.
+                // flushBufferedStatFiles() publishes staged blocks into the mapping
+                // and forces it, and it reports its own trouble rather than
+                // throwing, so the only thing that can reach here is a bug; the
+                // guard keeps the schedule alive for it either way.
                 final String rrdPath = getPath();
                 final long[] flushes = { 0 };
                 Runnable syncRunnable =
@@ -242,7 +255,7 @@ public class RrdNioBackend extends ByteBufferBackend implements RrdFileBackend {
                                 syncRunnable, syncPeriod, syncPeriod, TimeUnit.SECONDS);
             }
         } catch (RuntimeException rte) {
-            closeTempResources();
+            releaseStaged();
             unmapFile();
             file.close();
             super.close();
@@ -313,8 +326,7 @@ public class RrdNioBackend extends ByteBufferBackend implements RrdFileBackend {
     }
 
     /**
-     * Closes the underlying RRD file. Also closes and deletes the temporary buffer file used for
-     * buffering.
+     * Closes the underlying RRD file, publishing anything still staged first.
      *
      * @throws IOException On I/O error
      */
@@ -324,103 +336,235 @@ public class RrdNioBackend extends ByteBufferBackend implements RrdFileBackend {
             if (!readOnly && syncRunnableHandle != null) {
                 syncRunnableHandle.cancel(false);
                 syncRunnableHandle = null;
-                flushBufferedStatFiles();
             }
-            closeTempResources();
-            unmapFile();
+            flushBufferedStatFiles();
         } finally {
+            releaseStaged();
+            unmapFile();
             file.close();
             super.close();
         }
     }
 
-    /** Closes and deletes the temp buffer file. */
-    private void closeTempResources() {
-        try {
-            if (tempBufferFileChannel != null) {
-                tempBufferFileChannel.close();
-                tempBufferFileChannel = null;
-            }
-            if (tempBufferFilePath != null) {
-                Files.deleteIfExists(tempBufferFilePath);
-                tempBufferFilePath = null;
-            }
-        } catch (IOException ignored) {
-            // Ignore exceptions on temp file/resource cleanup
+    /**
+     * Bytes staged on the heap across every backend in this JVM.
+     *
+     * @return the total size of the blocks waiting to be published, in bytes
+     */
+    static long stagedBytes() {
+        synchronized (STAGING_LOCK) {
+            return _stagedBytes;
         }
     }
 
     /**
-     * Buffers one stat file's data into the single temp buffer file sequentially. This method
-     * appends the data to the temp file and records the offset and length, including the target
-     * offset in the mapped file where this stat file belongs.
+     * Set an explicit heap staging budget, overriding the free-heap calculation.
      *
-     * @param data ByteBuffer containing the stat file's bytes to buffer
-     * @param targetFileOffset Position in the mapped RRD file to write this stat file to on flush
-     * @throws IOException If writing to temp file fails
+     * <p>An embedder that knows how much of its heap is its own to spend can pin the budget here
+     * instead of leaving it re-read from the runtime on every stage.
+     *
+     * @param bytes the budget in bytes; 0 or less goes back to sizing it from the free heap
+     */
+    public static void setStagingBudgetBytes(long bytes) {
+        synchronized (STAGING_LOCK) {
+            _budgetOverrideBytes = bytes > 0 ? bytes : 0;
+        }
+    }
+
+    /**
+     * The staging budget in force right now.
+     *
+     * @return the budget in bytes; 0 means staging is off and each write is published at once
+     */
+    private static long budgetBytes() {
+        long override;
+        synchronized (STAGING_LOCK) {
+            override = _budgetOverrideBytes;
+        }
+        return override > 0 ? override : stagingBudgetBytes(freeHeapBytes());
+    }
+
+    /**
+     * Size the heap staging budget from the free heap.
+     *
+     * <p>Sized from what the JVM can still take rather than from how many databases are open: a
+     * budget fixed by count is an allocation failure waiting on a small heap and most of the room
+     * left unused on a large one. The ceiling holds a stalled flush to single-digit megabytes even
+     * on a server heap, because what is staged is the delta being written, not the file.
+     *
+     * @param freeHeapBytes bytes the JVM can still allocate, or a negative value to disable staging
+     * @return the staging budget in bytes; 0 means publish every write straight to the mapping
+     */
+    static long stagingBudgetBytes(long freeHeapBytes) {
+        if (freeHeapBytes < MIN_FREE_HEAP_BYTES) {
+            return 0;
+        }
+        return Math.min(MAX_STAGING_BYTES, freeHeapBytes / STAGING_HEAP_DIVISOR);
+    }
+
+    /**
+     * Decide whether the staging budget can take another block as things stand.
+     *
+     * @param stagedBytes bytes staged across the JVM right now
+     * @param incomingBytes the size of the block about to be staged
+     * @param budgetBytes the staging budget, 0 to stage nothing
+     * @return true if publishing has to happen before this block can be staged
+     */
+    static boolean mustPublishBeforeStaging(long stagedBytes, long incomingBytes, long budgetBytes) {
+        return stagedBytes + incomingBytes > budgetBytes;
+    }
+
+    /**
+     * Bytes the JVM can still allocate.
+     *
+     * @return free heap, including the room to grow to the maximum
+     */
+    private static long freeHeapBytes() {
+        Runtime runtime = Runtime.getRuntime();
+        return runtime.maxMemory() - runtime.totalMemory() + runtime.freeMemory();
+    }
+
+    /**
+     * Stages one block of stat data on the heap for a later batch publish.
+     *
+     * <p>If the budget cannot hold the block, this backend publishes what it has already staged to
+     * make room; if the block still does not fit, it is published on its own rather than pushing
+     * the staging area past its budget. The caller does not have to know which of the two happened.
+     *
+     * @param data ByteBuffer containing the bytes to stage
+     * @param targetFileOffset Position in the mapped RRD file the bytes belong to on publish
+     * @throws IOException If the backend is read-only or has no mapping to publish into
      */
     public synchronized void bufferStatFile(ByteBuffer data, long targetFileOffset)
             throws IOException {
         if (readOnly) {
             throw new IOException("Backend opened in read-only mode; cannot buffer stats.");
         }
-        if (tempBufferFileChannel == null) {
-            throw new IOException("Temporary buffer file channel is not open.");
-        }
         data.rewind();
-        long offsetBefore = tempBufferFileChannel.size();
-        tempBufferFileChannel.position(offsetBefore);
-
-        int length = 0;
-        while (data.hasRemaining()) {
-            length += tempBufferFileChannel.write(data);
+        int length = data.remaining();
+        long budget = budgetBytes();
+        long outstanding = stagedBytes();
+        if (mustPublishBeforeStaging(outstanding, length, budget)) {
+            // publish this backend's own batch first: it is the cheapest way to make room,
+            // and the bytes it frees are already destined for the mapping anyway
+            flushBufferedStatFiles();
+            outstanding = stagedBytes();
         }
-        tempBufferFileChannel.force(false);
-
-        bufferedStatSegments.add(new StatFileSegment(offsetBefore, length, targetFileOffset));
+        if (mustPublishBeforeStaging(outstanding, length, budget)) {
+            publish(data, targetFileOffset);
+            return;
+        }
+        byte[] copy = new byte[length];
+        data.get(copy);
+        synchronized (STAGING_LOCK) {
+            stagedBlocks.add(new StatFileSegment(copy, targetFileOffset));
+            _stagedBytes += length;
+        }
     }
 
     /**
-     * Flushes all buffered stat files sequentially from the temp buffer file into their designated
-     * positions in the mapped RRD file in one batch operation. After flushing, the temp buffer file
-     * and index are cleared for the next batch.
+     * Publishes everything this backend has staged, then pushes the mapping to disk.
+     *
+     * <p>A block's heap is released as soon as it is copied, so the memory a batch was using is
+     * reclaimable when the batch is, not at the next collection. A block that no longer fits its
+     * mapping is reported and dropped rather than thrown: the rest of the batch still lands, and
+     * the scheduled flush that runs this keeps its place in the schedule.
      */
     public synchronized void flushBufferedStatFiles() {
-        if (readOnly
-                || byteBuffer == null
-                || tempBufferFileChannel == null
-                || tempBufferFilePath == null) {
+        if (readOnly || byteBuffer == null) {
             return;
         }
-        // Hold the cross-instance lock for the whole read-then-truncate sequence.
-        synchronized (FLUSH_LOCK) {
-            try {
-                for (StatFileSegment segment : bufferedStatSegments) {
-                    try (FileChannel readChannel =
-                            FileChannel.open(tempBufferFilePath, StandardOpenOption.READ)) {
-                        MappedByteBuffer mappedSegment =
-                                readChannel.map(
-                                        FileChannel.MapMode.READ_ONLY, segment.offset, segment.length);
-                        byteBuffer.position((int) segment.targetFileOffset);
-                        byteBuffer.put(mappedSegment);
-                    }
-                }
-                byteBuffer.force();
+        int published = 0;
+        long released = 0;
+        for (StatFileSegment segment : stagedBlocks) {
+            if (segment.data == null) {
+                continue;
+            }
+            if (segment.targetFileOffset < 0 ||
+                    segment.targetFileOffset + segment.length > byteBuffer.limit()) {
+                RrdLog.error("Staged block rejected for " + getPath() + " -> Falls outside the mapping"
+                             + " * Offset: " + segment.targetFileOffset + " bytes"
+                             + " * Length: " + segment.length + " bytes"
+                             + " * Mapping: " + byteBuffer.limit() + " bytes", null);
+            } else {
+                byteBuffer.position((int) segment.targetFileOffset);
+                byteBuffer.put(segment.data);
+                published++;
+            }
+            released += segment.length;
+            segment.release();
+        }
+        stagedBlocks.clear();
+        if (released > 0) {
+            adjustStagedBytes(-released);
+        }
+        if (published > 0 || isDirty()) {
+            byteBuffer.force();
+        }
+    }
 
-                // Clear temp buffer file and reset state
-                tempBufferFileChannel.truncate(0);
-                tempBufferFileChannel.force(false);
-                bufferedStatSegments.clear();
+    /**
+     * Copies one block into the mapping and pushes the mapping to disk.
+     *
+     * @param data the bytes to publish, read from the buffer's current position
+     * @param targetFileOffset where the bytes belong in the mapped file
+     * @throws IOException if there is no mapping, or the block falls outside it
+     */
+    private void publish(ByteBuffer data, long targetFileOffset) throws IOException {
+        if (byteBuffer == null) {
+            throw new IOException("Backend has no mapping to publish to.");
+        }
+        int length = data.remaining();
+        if (targetFileOffset < 0 || targetFileOffset + length > byteBuffer.limit()) {
+            throw new IOException("Cannot publish block for " + getPath() + " -> Falls outside the mapping"
+                                  + " * Offset: " + targetFileOffset + " bytes"
+                                  + " * Length: " + length + " bytes"
+                                  + " * Mapping: " + byteBuffer.limit() + " bytes");
+        }
+        byteBuffer.position((int) targetFileOffset);
+        byteBuffer.put(data);
+        byteBuffer.force();
+    }
 
-            } catch (IOException e) {
-                throw new RuntimeException("Failed to flush buffered stat files", e);
+    /** Drops this backend's staged blocks and takes their size out of the JVM-wide accounting. */
+    private void releaseStaged() {
+        long released = 0;
+        for (StatFileSegment segment : stagedBlocks) {
+            released += segment.length;
+            segment.release();
+        }
+        stagedBlocks.clear();
+        if (released > 0) {
+            adjustStagedBytes(-released);
+        }
+    }
+
+    /**
+     * Moves the JVM-wide staged-byte counter.
+     *
+     * @param delta the change in bytes, negative as blocks are published or dropped
+     */
+    private static void adjustStagedBytes(long delta) {
+        synchronized (STAGING_LOCK) {
+            _stagedBytes += delta;
+            if (_stagedBytes < 0) {
+                // Never let a double release drive the counter negative: the budget check
+                // would then admit more than the budget allows until it drifts back up.
+                _stagedBytes = 0;
             }
         }
     }
 
-    /** Override sync to disable unbuffered flush. */
+    /**
+     * Makes the mapping durable.
+     *
+     * <p>Writes land in the mapping as they happen, so a sync has no buffer to move: it only has to
+     * push the mapping's dirty pages out, and only when there are any.
+     */
     protected synchronized void sync() {
-        // Intentionally empty: use buffered write + flush instead
+        if (!readOnly && byteBuffer != null && isDirty()) {
+            byteBuffer.force();
+        }
     }
 
     @Override
