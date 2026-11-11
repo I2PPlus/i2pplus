@@ -50,11 +50,8 @@ public class SnarkCommandLine extends CommandLine {
      * @param classes the command classes to list
      */
     private static void usage(List<String> classes) {
-        System.err.println(
-                "I2PSnark version "
-                        + CoreVersion.VERSION
-                        + '\n'
-                        + "USAGE: java -jar /path/to/i2psnark.jar command [args]");
+        System.err.println("I2PSnark version " + CoreVersion.VERSION + '\n'
+                           + "USAGE: java -jar /path/to/i2psnark.jar command [args]");
         printCommands(classes);
     }
 }

@@ -1497,20 +1497,16 @@ public class Storage implements Closeable {
                 needed = metainfo.getPieces() - bitfield.count();
                 _probablyComplete = complete();
                 if (_log.shouldInfo())
-                    _log.info(
-                            "[Snark] Found saved state and files unchanged, skipping integrity"
-                                + " check");
+                    _log.info("[Snark] Found saved state and files unchanged, skipping integrity"
+                              + " check");
             } else {
                 // Some files changed since the save: re-verify only the pieces overlapping those
                 // files, keeping the saved bits for pieces that lie entirely within unchanged files
                 changed = true;
                 if (_log.shouldInfo()) {
-                    _log.info(
-                            "[Snark] Found saved state, rechecking "
-                                + (trusted.size() - Collections.frequency(trusted, Boolean.TRUE))
-                                + " of "
-                                + trusted.size()
-                                + " files");
+                    _log.info("[Snark] Found saved state, rechecking "
+                              + (trusted.size() - Collections.frequency(trusted, Boolean.TRUE))
+                              + " of " + trusted.size() + " files");
                 }
                 boolean[] pieceTrusted = computeTrustedPieces(trusted);
                 bitfield = new BitField(savedBitField.getFieldBytes(), metainfo.getPieces());
@@ -1539,12 +1535,8 @@ public class Storage implements Closeable {
         } else {
             // fixme saved priorities
             if (_log.shouldInfo()) {
-                _log.info(
-                        "[Snark] Still need "
-                                + needed
-                                + " out of "
-                                + metainfo.getPieces()
-                                + " pieces");
+                _log.info("[Snark] Still need " + needed + " out of " + metainfo.getPieces()
+                          + " pieces");
             }
         }
     }
@@ -2247,13 +2239,8 @@ public class Storage implements Closeable {
                         repairedBytes += Math.abs(tf.length - length);
                     }
                     if (_log.shouldDebug()) {
-                        _log.debug(
-                                "Resizing file "
-                                        + tf.name
-                                        + " -> expected: "
-                                        + tf.length
-                                        + " found: "
-                                        + length);
+                        _log.debug("Resizing file " + tf.name + " -> expected: " + tf.length
+                                   + " found: " + length);
                     }
                 }
                 changed = true;
@@ -2757,13 +2744,8 @@ public class Storage implements Closeable {
                 // writable, and retry the whole write once with a forced RW
                 // reopen.
                 if (_log.shouldWarn()) {
-                    _log.warn(
-                            "[Snark] Write failed on piece "
-                                    + piece
-                                    + " for "
-                                    + metainfo.getName()
-                                    + " - retrying with forced RW reopen: "
-                                    + ioe);
+                    _log.warn("[Snark] Write failed on piece " + piece + " for "
+                              + metainfo.getName() + " - retrying with forced RW reopen: " + ioe);
                 }
                 writePiece(pp, piece, shouldPreallocate, true);
             }
@@ -2914,10 +2896,8 @@ public class Storage implements Closeable {
             // the piece-write path that called us.
             _copying.remove(tf);
             if (_log.shouldWarn()) {
-                _log.warn(
-                        "[Snark] Not copying "
-                                + tf.name
-                                + " to the data directory -> The torrent is closing");
+                _log.warn("[Snark] Not copying " + tf.name
+                          + " to the data directory -> The torrent is closing");
             }
         }
     }
@@ -3038,12 +3018,8 @@ public class Storage implements Closeable {
                 sleep();
             }
             if (_log.shouldWarn()) {
-                _log.warn(
-                        "[Snark] Giving up copying "
-                                + tf.name
-                                + " to the data directory after "
-                                + MAX_COPY_RETRIES
-                                + " attempts");
+                _log.warn("[Snark] Giving up copying " + tf.name
+                          + " to the data directory after " + MAX_COPY_RETRIES + " attempts");
             }
         } finally {
             _copying.remove(tf);
@@ -3099,11 +3075,7 @@ public class Storage implements Closeable {
             return true;
         } catch (IOException ioe) {
             if (_log.shouldWarn()) {
-                _log.warn(
-                        "[Snark] Error copying "
-                                + tf.name
-                                + " to the data directory: "
-                                + ioe);
+                _log.warn("[Snark] Error copying " + tf.name + " to the data directory: " + ioe);
             }
             return false;
         }
@@ -3649,9 +3621,8 @@ public class Storage implements Closeable {
                 } else if (_isWindows) {
                     _log.warn("[Snark] Not pre-allocating files -> Windows OS detected");
                 } else if (_isARM) {
-                    _log.warn(
-                            "[Snark] Not pre-allocating files -> ARM processor detected,"
-                                + " assuming solid state storage");
+                    _log.warn("[Snark] Not pre-allocating files -> ARM processor detected,"
+                              + " assuming solid state storage");
                 }
             }
         }
@@ -3770,9 +3741,8 @@ public class Storage implements Closeable {
             error = true;
         }
         if (error || args.length - g.getOptind() != 1) {
-            System.err.println(
-                    "Usage: Storage [-a announceURL] [-c created-by] [-m comment] [-w webseed-url]*"
-                        + " file-or-dir");
+            System.err.println("Usage: Storage [-a announceURL] [-c created-by] [-m comment] [-w webseed-url]*"
+                               + " file-or-dir");
             System.exit(1);
         }
         File base = new File(args[g.getOptind()]);

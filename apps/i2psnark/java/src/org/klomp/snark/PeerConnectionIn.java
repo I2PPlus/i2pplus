@@ -218,8 +218,8 @@ class PeerConnectionIn implements Runnable {
                         byte[] bitmap = new byte[i - 1];
                         din.readFully(bitmap);
                         if (_log.shouldDebug()) {
-                            _log.debug(
-                                    "Received a bitmap from [" + peer + "] -> Size: " + (i - 1) + " bytes");
+                            _log.debug("Received a bitmap from [" + peer + "] -> Size: "
+                                       + (i - 1) + " bytes");
                         }
                         ps.bitfieldMessage(bitmap);
                         break;
@@ -229,14 +229,8 @@ class PeerConnectionIn implements Runnable {
                         begin = din.readInt();
                         len = din.readInt();
                         if (_log.shouldDebug()) {
-                            _log.debug(
-                                    "Received request from ["
-                                            + peer
-                                            + "] for [Piece "
-                                            + piece
-                                            + "] (Start: "
-                                            + begin
-                                            + ")");
+                            _log.debug("Received request from [" + peer + "] for [Piece "
+                                       + piece + "] (Start: " + begin + ")");
                         }
                         ps.requestMessage(piece, begin, len);
                         break;
@@ -249,14 +243,8 @@ class PeerConnectionIn implements Runnable {
                         if (req != null) {
                             req.read(din, peer);
                             if (_log.shouldDebug()) {
-                                _log.debug(
-                                        "Received data("
-                                                + piece
-                                                + ","
-                                                + begin
-                                                + ") from ["
-                                                + peer
-                                                + "]");
+                                _log.debug("Received data(" + piece + "," + begin + ") from ["
+                                           + peer + "]");
                             }
                             ps.pieceMessage(req);
                         } else {
@@ -266,14 +254,9 @@ class PeerConnectionIn implements Runnable {
                                 throw new IOException("EOF reading unwanted data");
                             }
                             if (_log.shouldDebug()) {
-                                _log.debug(
-                                        "Received UNWANTED data from ["
-                                                + peer
-                                                + "] for [Piece "
-                                                + piece
-                                                + "] (Start: "
-                                                + begin
-                                                + ")");
+                                _log.debug("Received UNWANTED data from [" + peer
+                                           + "] for [Piece " + piece + "] (Start: " + begin
+                                           + ")");
                             }
                         }
                         break;
@@ -283,14 +266,8 @@ class PeerConnectionIn implements Runnable {
                         begin = din.readInt();
                         len = din.readInt();
                         if (_log.shouldDebug()) {
-                            _log.debug(
-                                    "Received cancel from ["
-                                            + peer
-                                            + "] for [Piece "
-                                            + piece
-                                            + "] (Start: "
-                                            + begin
-                                            + ")");
+                            _log.debug("Received cancel from [" + peer + "] for [Piece " + piece
+                                       + "] (Start: " + begin + ")");
                         }
                         ps.cancelMessage(piece, begin, len);
                         break;
@@ -342,16 +319,8 @@ class PeerConnectionIn implements Runnable {
                         len = din.readInt();
                         ps.rejectMessage(piece, begin, len);
                         if (_log.shouldDebug()) {
-                            _log.debug(
-                                    "Received reject from ["
-                                            + peer
-                                            + "] for [Piece "
-                                            + piece
-                                            + "] (Start: "
-                                            + begin
-                                            + " Length: "
-                                            + len
-                                            + " bytes)");
+                            _log.debug("Received reject from [" + peer + "] for [Piece " + piece
+                                       + "] (Start: " + begin + " Length: " + len + " bytes)");
                         }
                         break;
 
@@ -375,11 +344,8 @@ class PeerConnectionIn implements Runnable {
         } catch (IOException ioe) {
             // Ignore, probably the other side closed connection.
             if (_log.shouldDebug()) {
-                _log.debug(
-                        "Error communicating with ["
-                                + peer
-                                + "]"
-                                + (ioe.getMessage() != null ? " -> " + ioe.getMessage() : ""));
+                _log.debug("Error communicating with [" + peer + "]"
+                           + (ioe.getMessage() != null ? " -> " + ioe.getMessage() : ""));
             }
         } catch (RuntimeException t) {
             if (!isStandalone && _log.shouldWarn()) {

@@ -812,8 +812,8 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
 
             default:
                 if (_log.shouldInfo()) {
-                    _log.info(
-                            "Received message with unknown action: " + action + " for: " + waiter);
+                    _log.info("Received message with unknown action: " + action + " for: "
+                              + waiter);
                 }
                 waiter.gotReply(false);
                 Tracker tr = waiter.getSentTo();
@@ -845,13 +845,9 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
                 lifetime = CONN_EXPIRATION;
             }
             if (_log.shouldInfo()) {
-                _log.info(
-                        "Received a connect response -> Connection ID: "
-                                + cid
-                                + " * Lifetime: "
-                                + DataHelper.formatDuration(lifetime)
-                                + " * Tracker: "
-                                + tr);
+                _log.info("Received a connect response -> Connection ID: " + cid
+                          + " * Lifetime: " + DataHelper.formatDuration(lifetime)
+                          + " * Tracker: " + tr);
             }
             tr.setConnection(cid, lifetime);
             waiter.gotReply(true);
@@ -911,13 +907,8 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
             int seeds = (int) DataHelper.fromLong(payload, 8, 4);
             int leeches = (int) DataHelper.fromLong(payload, 16, 4);
             if (_log.shouldInfo()) {
-                _log.info(
-                        "Received scrape from "
-                                + tr
-                                + " seeds: "
-                                + seeds
-                                + " leeches: "
-                                + leeches);
+                _log.info("Received scrape from " + tr + " seeds: " + seeds + " leeches: "
+                          + leeches);
             }
             TrackerResponse resp = new TrackerResponse(0, seeds, leeches, Collections.emptySet());
             waiter.gotResponse(resp);

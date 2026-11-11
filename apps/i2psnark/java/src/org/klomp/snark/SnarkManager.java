@@ -3130,16 +3130,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 }
             }
             if (_log.shouldDebug()) {
-                _log.debug(
-                        "I2CP host ["
-                                + i2cpHost
-                                + "] I2CP port "
-                                + port
-                                + " opts ["
-                                + opts
-                                + "] oldOpts ["
-                                + oldOpts
-                                + "]");
+                _log.debug("I2CP host [" + i2cpHost + "] I2CP port " + port + " opts [" + opts
+                           + "] oldOpts [" + oldOpts + "]");
             }
             if (snarksActive) {
                 Properties p = new Properties();
@@ -3973,11 +3965,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                         baseFile = getSavedBaseFile(info.getInfoHash());
                     }
                     if (_log.shouldInfo()) {
-                        _log.info(
-                                "New Snark loaded -> Torrent: "
-                                        + filename
-                                        + "\n* Base: "
-                                        + baseFile);
+                        _log.info("New Snark loaded -> Torrent: " + filename + "\n* Base: "
+                                  + baseFile);
                     }
                     torrent =
                             new Snark(
@@ -5786,9 +5775,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                                         "Connecting to I2CP port on I2P instance at {0}",
                                         _util.getI2CPHost() + ':' + _util.getI2CPPort() + "...");
                 if (_log.shouldDebug()) {
-                    _log.debug(
-                            "DirectoryMonitor scanning I2PSnark torrent dir: "
-                                    + torrentDir.getAbsolutePath());
+                    _log.debug("DirectoryMonitor scanning I2PSnark torrent dir: "
+                               + torrentDir.getAbsolutePath());
                 }
                 if (routerOK) {
                     if (_context.isRouterContext() || _util.connected() || _util.isConnecting()) {
@@ -5924,10 +5912,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                                 + " partition",
                             freeSpaceMB);
             if (_log.shouldWarn()) {
-                _log.warn(
-                        "[Snark] Partition containing data directory only has "
-                                + freeSpaceMB
-                                + "MB free");
+                _log.warn("[Snark] Partition containing data directory only has " + freeSpaceMB
+                          + "MB free");
             }
         }
 
@@ -5976,10 +5962,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                                 + " partition",
                             freeSpaceMB);
             if (_log.shouldWarn()) {
-                _log.warn(
-                        "[Snark] Partition containing temp directory only has "
-                                + freeSpaceMB
-                                + "MB free");
+                _log.warn("[Snark] Partition containing temp directory only has " + freeSpaceMB
+                          + "MB free");
             }
         }
 
@@ -7364,19 +7348,17 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     _log.warn("Starting recheck of " + snark.getBaseName() + "...");
                 }
                 if (!_context.isRouterContext()) {
-                    System.out.println(
-                            " • " + (_t("Starting recheck of {}", getSnarkName(snark))) + "...");
+                    System.out.println(" • "
+                                       + (_t("Starting recheck of {}", getSnarkName(snark)))
+                                       + "...");
                 }
                 boolean changed = snark.getStorage().recheck();
                 if (changed) {
                     updateStatus(snark);
                 }
                 if (_log.shouldWarn()) {
-                    _log.warn(
-                            "Finished recheck of "
-                                    + snark.getBaseName()
-                                    + " -> "
-                                    + (changed ? "File changes detected" : "Unchanged"));
+                    _log.warn("Finished recheck of " + snark.getBaseName() + " -> "
+                              + (changed ? "File changes detected" : "Unchanged"));
                 }
                 String link = linkify(snark);
                 if (changed) {

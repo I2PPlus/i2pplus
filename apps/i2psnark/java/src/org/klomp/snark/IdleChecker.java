@@ -359,20 +359,12 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
      */
     private void logGrowth(int target) {
         if (_log.shouldInfo()) {
-            _log.info(
-                    "Peer activity detected -> Increasing tunnel count to "
-                            + target
-                            + " inbound / "
-                            + target
-                            + " outbound");
+            _log.info("Peer activity detected -> Increasing tunnel count to " + target
+                      + " inbound / " + target + " outbound");
         }
         if (!_util.getContext().isRouterContext()) {
-            System.out.println(
-                    " • Peer activity detected -> Increasing tunnel count to "
-                            + target
-                            + " inbound / "
-                            + target
-                            + " outbound");
+            System.out.println(" • Peer activity detected -> Increasing tunnel count to "
+                               + target + " inbound / " + target + " outbound");
         }
     }
 

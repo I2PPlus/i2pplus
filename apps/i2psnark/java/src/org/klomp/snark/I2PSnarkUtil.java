@@ -1891,21 +1891,13 @@ public class I2PSnarkUtil implements DisconnectListener {
         if (truncate < 0 || truncate > convertedurl.length()) {truncate = convertedurl.length();}
         if (get.fetch(timeout)) {
             if (_log.shouldDebug())
-                _log.debug(
-                        "Request successful ["
-                                + convertedurl.substring(0, truncate)
-                                + "...] (Size: "
-                                + size
-                                + " bytes)");
+                _log.debug("Request successful [" + convertedurl.substring(0, truncate)
+                           + "...] (Size: " + size + " bytes)");
             return true;
         } else {
             if (_log.shouldInfo())
-                _log.info(
-                        "Timeout ("
-                                + timeout / 1000
-                                + "s) requesting ["
-                                + convertedurl.substring(0, truncate)
-                                + "...]");
+                _log.info("Timeout (" + timeout / 1000 + "s) requesting ["
+                          + convertedurl.substring(0, truncate) + "...]");
             return false;
         }
     }
@@ -1921,15 +1913,8 @@ public class I2PSnarkUtil implements DisconnectListener {
      */
     private File get(String url, boolean rewrite, int retries, I2PSocketManager mgr) {
         if (_log.shouldDebug()) {
-            _log.debug(
-                    "Fetching ["
-                            + url
-                            + "] -> Proxy: "
-                            + _proxyHost
-                            + ":"
-                            + _proxyPort
-                            + " * Proxying: "
-                            + _shouldProxy);
+            _log.debug("Fetching [" + url + "] -> Proxy: " + _proxyHost + ":" + _proxyPort
+                       + " * Proxying: " + _shouldProxy);
         }
         File out = null;
         try {

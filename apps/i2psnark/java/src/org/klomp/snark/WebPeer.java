@@ -316,17 +316,8 @@ class WebPeer extends Peer implements EepGet.StatusListener {
                     get.addStatusListener(this);
                     int osz = out.size();
                     if (_log.shouldDebug())
-                        _log.debug(
-                                "Fetching piece: "
-                                        + piece
-                                        + " offset: "
-                                        + off
-                                        + " file offset: "
-                                        + foff
-                                        + " len: "
-                                        + flen
-                                        + " from "
-                                        + url);
+                        _log.debug("Fetching piece: " + piece + " offset: " + off
+                                   + " file offset: " + foff + " len: " + flen + " from " + url);
                     if (get.fetch(HEADER_TIMEOUT, TOTAL_TIMEOUT, INACTIVITY_TIMEOUT)) {
                         int resp = get.getStatusCode();
                         if (resp != 200 && resp != 206) {
@@ -336,13 +327,8 @@ class WebPeer extends Peer implements EepGet.StatusListener {
                         int sz = out.size() - osz;
                         if (sz != flen) {
                             if (_log.shouldWarn())
-                                _log.warn(
-                                        "Fetch of "
-                                                + url
-                                                + " received: "
-                                                + sz
-                                                + " expected: "
-                                                + flen);
+                                _log.warn("Fetch of " + url + " received: " + sz + " expected: "
+                                          + flen);
                             return;
                         }
                     } else {
@@ -373,18 +359,9 @@ class WebPeer extends Peer implements EepGet.StatusListener {
 
                 // all data received successfully, now process it
                 if (_log.shouldDebug())
-                    _log.debug(
-                            "Fetch of piece: "
-                                    + piece
-                                    + " chunks: "
-                                    + requests.size()
-                                    + " offset: "
-                                    + off
-                                    + " torrent offset: "
-                                    + toff
-                                    + " len: "
-                                    + tlen
-                                    + " successful");
+                    _log.debug("Fetch of piece: " + piece + " chunks: " + requests.size()
+                               + " offset: " + off + " torrent offset: " + toff + " len: "
+                               + tlen + " successful");
                 DataInputStream dis =
                         new DataInputStream(new ByteArrayInputStream(out.toByteArray()));
                 for (Request req : requests) {
@@ -424,13 +401,8 @@ class WebPeer extends Peer implements EepGet.StatusListener {
             listener.disconnected(this);
             disconnect();
             if (_log.shouldWarn())
-                _log.warn(
-                        "Completed, successful fetches: "
-                                + successes
-                                + " downloaded: "
-                                + dl
-                                + " for "
-                                + this);
+                _log.warn("Completed, successful fetches: " + successes + " downloaded: " + dl
+                          + " for " + this);
         }
     }
 

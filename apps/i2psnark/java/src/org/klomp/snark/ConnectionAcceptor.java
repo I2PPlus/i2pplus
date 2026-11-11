@@ -104,9 +104,8 @@ class ConnectionAcceptor implements Runnable {
     public synchronized void startAccepting() {
         stop = false;
         if (_log.shouldDebug()) {
-            _log.debug(
-                    "[Snark] ConnectionAcceptor: Start accepting new thread? "
-                            + (thread == null));
+            _log.debug("[Snark] ConnectionAcceptor: Start accepting new thread? "
+                       + (thread == null));
         }
         if (thread == null) {
             thread = new I2PAppThread(this, "SnarkAccp");
@@ -412,10 +411,8 @@ class ConnectionAcceptor implements Runnable {
             _badCounter.increment(h);
             _badReasons.put(h, "incoming HTTP connection");
             if (_log.shouldWarn()) {
-                _log.warn(
-                        "[Snark] Dropping incoming HTTP connection from client ["
-                                + h.toShortBase32()
-                                + "]");
+                _log.warn("[Snark] Dropping incoming HTTP connection from client ["
+                          + h.toShortBase32() + "]");
             }
             try {
                 socket.reset();
@@ -447,12 +444,8 @@ class ConnectionAcceptor implements Runnable {
             int cur = activeHandlers.get();
             if (cur >= MAX_HANDLERS) {
                 if (_log.shouldWarn()) {
-                    _log.warn(
-                            "[Snark] Too many incoming connections in handshake ("
-                                    + cur
-                                    + "), dropping connection from ["
-                                    + h.toShortBase32()
-                                    + "]");
+                    _log.warn("[Snark] Too many incoming connections in handshake (" + cur
+                              + "), dropping connection from [" + h.toShortBase32() + "]");
                 }
                 try {
                     socket.close();
@@ -658,10 +651,8 @@ class ConnectionAcceptor implements Runnable {
                 // this is for the readahead in PeerAcceptor.connection()
                 in = new BufferedInputStream(in);
                 if (_log.shouldDebug()) {
-                    _log.debug(
-                            "[Snark] Handling socket from ["
-                                    + _socket.getPeerDestination().calculateHash()
-                                    + "]");
+                    _log.debug("[Snark] Handling socket from ["
+                               + _socket.getPeerDestination().calculateHash() + "]");
                 }
                 _pa.connection(_socket, in, out);
                 // A successful handshake shows the client is healthy; drop
@@ -673,22 +664,16 @@ class ConnectionAcceptor implements Runnable {
                 _badCounter.increment(h);
                 _badReasons.put(h, "protocol error: " + ihe.getMessage());
                 if (_log.shouldInfo()) {
-                    _log.info(
-                            "[Snark] Protocol error from ["
-                                    + _socket.getPeerDestination().calculateHash()
-                                    + "]",
-                            ihe);
+                    _log.info("[Snark] Protocol error from ["
+                              + _socket.getPeerDestination().calculateHash() + "]", ihe);
                 }
                 try {
                     _socket.reset();
                 } catch (IOException ignored) { /* ignored */ }
             } catch (IOException ioe) {
                 if (_log.shouldDebug()) {
-                    _log.debug(
-                            "[Snark] Error handling connection from ["
-                                    + _socket.getPeerDestination().calculateHash()
-                                    + "]",
-                            ioe);
+                    _log.debug("[Snark] Error handling connection from ["
+                               + _socket.getPeerDestination().calculateHash() + "]", ioe);
                 }
                 try {
                     _socket.reset();

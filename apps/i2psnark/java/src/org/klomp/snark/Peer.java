@@ -527,8 +527,8 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
         }
 
         if (options != 0 && _log.shouldDebug())
-            _log.debug(
-                    "Peer supports options 0x" + Long.toHexString(options) + ": " + toString());
+            _log.debug("Peer supports options 0x" + Long.toHexString(options) + ": "
+                       + toString());
 
 
         return bs;

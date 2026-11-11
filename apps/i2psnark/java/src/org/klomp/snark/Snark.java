@@ -376,12 +376,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
             try {
                 byte[] rv = profile.buildPeerId(_util.getContext().random());
                 if (_log.shouldInfo()) {
-                    _log.info(
-                            "Our PeerID for this session is: "
-                                    + PeerID.idencode(rv)
-                                    + " ["
-                                    + profile.getName()
-                                    + ']');
+                    _log.info("Our PeerID for this session is: " + PeerID.idencode(rv) + " ["
+                              + profile.getName() + ']');
                 }
                 return rv;
             } catch (IllegalStateException ise) {
@@ -526,12 +522,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
                 long delay = _retryDelay;
                 _retryDelay = Math.min(_retryDelay * 2, RETRY_MAX_MS);
                 if (_log.shouldWarn()) {
-                    _log.warn(
-                            "Unable to listen for I2P connections for "
-                                    + getBaseName()
-                                    + ", retrying in "
-                                    + (delay / 60000)
-                                    + " minutes");
+                    _log.warn("Unable to listen for I2P connections for " + getBaseName()
+                              + ", retrying in " + (delay / 60000) + " minutes");
                 }
                 scheduleRetry(delay);
                 return;
@@ -544,8 +536,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
             else {
                 Destination d = serversocket.getManager().getSession().getMyDestination();
                 if (_log.shouldInfo())
-                    _log.info(
-                            "Listening on I2P destination [" + d.toBase64().substring(0, 6) + "]");
+                    _log.info("Listening on I2P destination [" + d.toBase64().substring(0, 6)
+                              + "]");
             }
             if (_log.shouldInfo())
                 _log.info("Starting PeerCoordinator, ConnectionAcceptor, and TrackerClient");

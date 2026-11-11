@@ -95,17 +95,12 @@ class PeerAcceptor {
             try {
                 peerInfoHash = readHash(in);
                 if (_log.shouldInfo())
-                    _log.info(
-                            "Read an infohash from ["
-                                    + peerHash.toShortBase64()
-                                    + "] -> InfoHash: "
-                                    + Base64.encode(peerInfoHash));
+                    _log.info("Read an infohash from [" + peerHash.toShortBase64()
+                              + "] -> InfoHash: " + Base64.encode(peerInfoHash));
             } catch (IOException ioe) {
                 if (_log.shouldInfo())
-                    _log.info(
-                            "Unable to read the infohash from ["
-                                    + peerHash.toShortBase32()
-                                    + "]");
+                    _log.info("Unable to read the infohash from [" + peerHash.toShortBase32()
+                              + "]");
                 throw ioe;
             }
             in = new SequenceInputStream(new ByteArrayInputStream(peerInfoHash), in);

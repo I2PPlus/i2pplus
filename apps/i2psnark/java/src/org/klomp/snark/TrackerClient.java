@@ -735,12 +735,8 @@ public class TrackerClient implements Runnable {
             _thread = null;
             _roundQueued.set(false);
             if (_log.shouldDebug())
-                _log.debug(
-                        "Finish "
-                                + _threadName
-                                + " after "
-                                + DataHelper.formatDuration(
-                                        _util.getContext().clock().now() - begin));
+                _log.debug("Finish " + _threadName + " after "
+                           + DataHelper.formatDuration( _util.getContext().clock().now() - begin));
         }
     }
 
@@ -835,11 +831,8 @@ public class TrackerClient implements Runnable {
                     _log.debug("Announce -> Tracker: [" + primary + "] * InfoHash: " + shortInfoHash);
             } else {
                 if (_log.shouldWarn())
-                    _log.warn(
-                            "Skipping invalid or non-i2p announce: "
-                                    + primary
-                                    + "\n* + Torrent: "
-                                    + snark.getBaseName());
+                    _log.warn("Skipping invalid or non-i2p announce: " + primary
+                              + "\n* + Torrent: " + snark.getBaseName());
             }
         } else {
             if (_log.shouldDebug())
@@ -865,8 +858,8 @@ public class TrackerClient implements Runnable {
                 // first one is primary if we don't have a primary
                 trackers.add(new TCTracker(url, trackers.isEmpty()));
                 if (_log.shouldDebug()) {
-                    _log.debug(
-                            "Additional announce -> Tracker: [" + url + "] * InfoHash: " + shortInfoHash);
+                    _log.debug("Additional announce -> Tracker: [" + url + "] * InfoHash: "
+                               + shortInfoHash);
                 }
             }
         }
@@ -1002,20 +995,14 @@ public class TrackerClient implements Runnable {
         }
         if (existing.size() >= MAX_TRACKERS) {
             if (_log.shouldInfo())
-                _log.info(
-                        "Not using announce URL, we have enough: ["
-                                + ann
-                                + "] \n* Torrent: "
-                                + snark.getBaseName());
+                _log.info("Not using announce URL, we have enough: [" + ann + "] \n* Torrent: "
+                          + snark.getBaseName());
             return false;
         }
         boolean rv = existing.add(h);
         if (!rv && _log.shouldInfo())
-            _log.info(
-                    "Duplicate announce URL: ["
-                            + ann
-                            + "] \n* Torrent: "
-                            + snark.getBaseName());
+            _log.info("Duplicate announce URL: [" + ann + "] \n* Torrent: "
+                      + snark.getBaseName());
 
         return rv;
     }
@@ -1120,11 +1107,8 @@ public class TrackerClient implements Runnable {
                     if (delay > 20 * 1000) {
                         // put ourselves on SimpleTimer2
                         if (_log.shouldDebug())
-                            _log.debug(
-                                    "Requeueing in "
-                                            + DataHelper.formatDuration(delay)
-                                            + ": "
-                                            + Thread.currentThread().getName());
+                            _log.debug("Requeueing in " + DataHelper.formatDuration(delay)
+                                       + ": " + Thread.currentThread().getName());
                         queueLoop(delay);
                         return;
                     } else if (delay > 0) {
@@ -1480,11 +1464,8 @@ public class TrackerClient implements Runnable {
                         } catch (IOException ioe) {
                             scheduleNextScrape(tr, false);
                             if (_log.shouldDebug()) {
-                                _log.debug(
-                                        "Scrape failed for "
-                                                + tr.host
-                                                + ": "
-                                                + ioe.getMessage());
+                                _log.debug("Scrape failed for " + tr.host + ": "
+                                           + ioe.getMessage());
                             }
                         }
                     }
@@ -1551,14 +1532,9 @@ public class TrackerClient implements Runnable {
                                 || tplc.startsWith(ERROR_GOT_HTML) /* fake msg from doRequest() */
                                 || (!tr.isPrimary && tr.registerFails > MAX_REGISTER_FAILS / 2)) {
                             if (_log.shouldWarn()) {
-                                _log.warn(
-                                        "No longer announcing to "
-                                                + tr.announce
-                                                + " : "
-                                                + tr.trackerProblems
-                                                + " after "
-                                                + tr.registerFails
-                                                + " failures");
+                                _log.warn("No longer announcing to " + tr.announce + " : "
+                                          + tr.trackerProblems + " after " + tr.registerFails
+                                          + " failures");
                             }
                             tr.stop = true;
                         }
@@ -1571,14 +1547,9 @@ public class TrackerClient implements Runnable {
                 }
             } else {
                 if (_log.shouldInfo()) {
-                    _log.info(
-                            "Not announcing to "
-                             + tr.announce
-                                     + "\n* Last reply: "
-                                     + DataHelper.formatTime(tr.lastResponseTime)
-                                     + " (interval: "
-                                    + DataHelper.formatDuration(tr.interval)
-                                    + ")");
+                    _log.info("Not announcing to " + tr.announce + "\n* Last reply: "
+                              + DataHelper.formatTime(tr.lastResponseTime) + " (interval: "
+                              + DataHelper.formatDuration(tr.interval) + ")");
                 }
                 // Refresh swarm composition periodically even between announces (BEP 15/48)
                 long now = System.currentTimeMillis();
@@ -1591,11 +1562,8 @@ public class TrackerClient implements Runnable {
                     } catch (IOException ioe) {
                         scheduleNextScrape(tr, false);
                         if (_log.shouldDebug()) {
-                            _log.debug(
-                                    "Periodic scrape failed for "
-                                            + tr.host
-                                            + ": "
-                                            + ioe.getMessage());
+                            _log.debug("Periodic scrape failed for " + tr.host + ": "
+                                       + ioe.getMessage());
                         }
                     }
                 }
@@ -1818,11 +1786,8 @@ public class TrackerClient implements Runnable {
                 _dhtPeersSeen = 0;
             }
             if (_log.shouldInfo()) {
-                _log.info(
-                        "Received "
-                                + hashes.size()
-                                + " peer hashes from DHT"
-                                + (_log.shouldDebug() ? "\n* DHT Peers: " + hashes : ""));
+                _log.info("Received " + hashes.size() + " peer hashes from DHT"
+                          + (_log.shouldDebug() ? "\n* DHT Peers: " + hashes : ""));
             }
 
             // Now try these peers

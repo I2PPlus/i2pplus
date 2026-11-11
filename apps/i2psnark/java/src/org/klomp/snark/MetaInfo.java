@@ -1116,26 +1116,19 @@ public class MetaInfo {
             error = true;
         }
         if (error || args.length - g.getOptind() <= 0) {
-            System.err.println(
-                    "Usage: MetaInfo [-a announceURL] [-c created-by] [-m comment] [-w"
-                        + " webseed-url]* file.torrent [file2.torrent...]");
+            System.err.println("Usage: MetaInfo [-a announceURL] [-c created-by] [-m comment] [-w"
+                               + " webseed-url]* file.torrent [file2.torrent...]");
             System.exit(1);
         }
         for (int i = g.getOptind(); i < args.length; i++) {
             try (InputStream in = new FileInputStream(args[i])) {
                 MetaInfo meta = new MetaInfo(in);
-                System.out.println(
-                        args[i]
-                                + "\nInfoHash:     "
-                                + I2PSnarkUtil.toHex(meta.getInfoHash())
-                                + "\nAnnounce:     "
-                                + meta.getAnnounce()
-                                + "\nWebSeed URLs: "
-                                + meta.getWebSeedURLs()
-                                + "\nCreated By:   "
-                                + meta.getCreatedBy()
-                                + "\nComment:      "
-                                + meta.getComment());
+                System.out.println(args[i] + "\nInfoHash:     "
+                                   + I2PSnarkUtil.toHex(meta.getInfoHash()) + "\nAnnounce:     "
+                                   + meta.getAnnounce() + "\nWebSeed URLs: "
+                                   + meta.getWebSeedURLs() + "\nCreated By:   "
+                                   + meta.getCreatedBy() + "\nComment:      "
+                                   + meta.getComment());
 
                 if (createdBy != null || announce != null || urlList != null || comment != null) {
                     String cb = createdBy != null ? createdBy : meta.getCreatedBy();
@@ -1150,18 +1143,12 @@ public class MetaInfo {
                             out.write(meta2.getTorrentData());
                         }
                         System.out.println("Modified " + from + " and backed up old file to " + to);
-                        System.out.println(
-                                args[i]
-                                        + "\nInfoHash:     "
-                                        + I2PSnarkUtil.toHex(meta2.getInfoHash())
-                                        + "\nAnnounce:     "
-                                        + meta2.getAnnounce()
-                                        + "\nWebSeed URLs: "
-                                        + meta2.getWebSeedURLs()
-                                        + "\nCreated By:   "
-                                        + meta2.getCreatedBy()
-                                        + "\nComment:      "
-                                        + meta2.getComment());
+                        System.out.println(args[i] + "\nInfoHash:     "
+                                           + I2PSnarkUtil.toHex(meta2.getInfoHash())
+                                           + "\nAnnounce:     " + meta2.getAnnounce()
+                                           + "\nWebSeed URLs: " + meta2.getWebSeedURLs()
+                                           + "\nCreated By:   " + meta2.getCreatedBy()
+                                           + "\nComment:      " + meta2.getComment());
                     } else {
                         System.err.println("Failed backup of " + from + " to " + to);
                     }

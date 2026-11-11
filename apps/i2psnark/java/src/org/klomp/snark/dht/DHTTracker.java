@@ -396,14 +396,9 @@ class DHTTracker {
                 else _expireTime = Math.min(_expireTime + DELTA_EXPIRE_TIME, getMaxExpireTime(peerCount));
 
                 if (_log.shouldDebug())
-                    _log.debug(
-                            "DHT tracker cleaner done, now with "
-                                    + torrentCount
-                                    + " torrents, "
-                                    + peerCount
-                                    + " peers, "
-                                    + DataHelper.formatDuration(_expireTime)
-                                    + " expiration");
+                    _log.debug("DHT tracker cleaner done, now with " + torrentCount
+                               + " torrents, " + peerCount + " peers, "
+                               + DataHelper.formatDuration(_expireTime) + " expiration");
                 _peerCount = peerCount;
                 _torrentCount = torrentCount;
                 schedule(tooMany ? CLEAN_TIME / 3 : CLEAN_TIME);

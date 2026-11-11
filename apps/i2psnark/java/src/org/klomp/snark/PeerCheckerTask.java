@@ -83,17 +83,10 @@ class PeerCheckerTask implements Runnable {
         int uploadLimit = coordinator.allowedUploaders();
         boolean overBWLimit = coordinator.overUpBWLimit();
         if (_log.shouldDebug())
-            _log.debug(
-                    "START peers: "
-                            + peerList.size()
-                            + " uploaders: "
-                            + coordinator.getUploaders()
-                            + " interested: "
-                            + coordinator.getInterestedUploaders()
-                            + " limit: "
-                            + uploadLimit
-                            + " overBW? "
-                            + overBWLimit);
+            _log.debug("START peers: " + peerList.size() + " uploaders: "
+                       + coordinator.getUploaders() + " interested: "
+                       + coordinator.getInterestedUploaders() + " limit: " + uploadLimit
+                       + " overBW? " + overBWLimit);
         DHT dht = _util.getDHTForTorrent(coordinator.getInfoHash());
         boolean fetchComments = _util.utCommentsEnabled();
         int i = 0;
@@ -110,11 +103,8 @@ class PeerCheckerTask implements Runnable {
             // so this probably won't happen here.
             if (inactiveTime > peer.getMaxInactiveTime()) {
                 if (_log.shouldWarn())
-                    _log.warn(
-                            "Disconnecting peer ["
-                                    + peer
-                                    + "]: idle "
-                                    + DataHelper.formatDuration(peer.getInactiveTime()));
+                    _log.warn("Disconnecting peer [" + peer + "]: idle "
+                              + DataHelper.formatDuration(peer.getInactiveTime()));
                 peer.disconnect();
                 continue;
             }
@@ -130,22 +120,10 @@ class PeerCheckerTask implements Runnable {
             peer.setRateHistory();
 
             if (_log.shouldDebug()) {
-                _log.debug(
-                        "["
-                                + peer
-                                + "]"
-                                + " ul: "
-                                + upload * 1024 / KILOPERSECOND
-                                + " dl: "
-                                + download * 1024 / KILOPERSECOND
-                                + " i: "
-                                + peer.isInterested()
-                                + " I: "
-                                + peer.isInteresting()
-                                + " c: "
-                                + peer.isChoking()
-                                + " C: "
-                                + peer.isChoked());
+                _log.debug("[" + peer + "]" + " ul: " + upload * 1024 / KILOPERSECOND + " dl: "
+                           + download * 1024 / KILOPERSECOND + " i: " + peer.isInterested()
+                           + " I: " + peer.isInteresting() + " c: " + peer.isChoking() + " C: "
+                           + peer.isChoked());
             }
 
             // Choke a percentage of them rather than all so it isn't so drastic...
@@ -178,14 +156,8 @@ class PeerCheckerTask implements Runnable {
                     removed.add(peer);
                 } else if (overBWLimitChoke) {
                     if (_log.shouldDebug())
-                        _log.debug(
-                                "Bandwidth limit reached, choking peer ["
-                                        + peer
-                                        + "] ("
-                                        + upload
-                                        + "/"
-                                        + uploaded
-                                        + ")");
+                        _log.debug("Bandwidth limit reached, choking peer [" + peer + "] ("
+                                   + upload + "/" + uploaded + ")");
                     peer.setChoking(true);
                     uploaders--;
                     interestedUploaders--;
@@ -316,13 +288,8 @@ class PeerCheckerTask implements Runnable {
         // store the rates
         coordinator.setRateHistory(uploaded, downloaded);
         if (_log.shouldDebug())
-            _log.debug(
-                    "END peers: "
-                            + peerList.size()
-                            + " uploaders: "
-                            + uploaders
-                            + " interested: "
-                            + interestedUploaders);
+            _log.debug("END peers: " + peerList.size() + " uploaders: " + uploaders
+                       + " interested: " + interestedUploaders);
 
         // close out unused files, but we don't need to do it every time
         Storage storage = coordinator.getStorage();
