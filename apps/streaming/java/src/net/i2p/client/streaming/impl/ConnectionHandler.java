@@ -114,6 +114,15 @@ class ConnectionHandler {
     private static final int DEFAULT_ACCEPT_WORKERS = 4;
     /** Ceiling for scale-up under SYN queue pressure, see {@link SynReaper}. */
     private static final int MAX_ACCEPT_WORKERS = 16;
+    /**
+     * How long a blocked {@link #accept} waits for one result before it re-checks
+     * whether the handler is still active (ms). Nothing is offered to the result
+     * queue when the handler stops, so an untimed wait would sleep straight
+     * through the shutdown and the caller would never learn the socket closed.
+     * One wakeup a second per waiting thread is nothing next to an accept
+     * timeout measured in tens of seconds.
+     */
+    private static final long ACCEPT_POLL_INTERVAL = 1000;
 
     /**
      * This is both SYNs and subsequent packets, and with an initial window size of 12,
@@ -438,8 +447,9 @@ class ConnectionHandler {
 
     /**
      * Whether this handler is actively accepting new connections.
-     * When set to false, a poison packet is offered to wake any
-     * threads blocked in accept().
+     * Setting it to false offers a poison packet to each accept worker so they
+     * leave their SYN-queue waits; a caller blocked in {@link #accept} is woken
+     * by that method's own bounded poll, within {@link #ACCEPT_POLL_INTERVAL}.
      *
      * @param active true to accept connections, false to stop
      */
@@ -691,23 +701,8 @@ class ConnectionHandler {
     public Connection accept(long timeoutMs) throws RouterRestartException, ConnectException, SocketTimeoutException {
         if (_log.shouldDebug()) {_log.debug("Accept with timeout of " + timeoutMs + "ms called");}
 
-        if (!_active) {
-            // Drain any remaining results
-            Connection con = _resultQueue.poll();
-            if (con != null) return con;
-            while(true) {
-                Packet packet = _synQueue.poll();
-                if (packet == null || packet.getOptionalDelay() == PoisonPacket.POISON_MAX_DELAY_REQUEST) break;
-                _synEnqueueTimes.remove(packet);
-                sendReset(packet);
-                // Polled, so no accept worker will see it - ours to return.
-                packet.releasePayload();
-            }
-            boolean restartPending;
-            synchronized(this) { restartPending = _restartPending; }
-            if (restartPending) throw new RouterRestartException();
-            throw new ConnectException("ServerSocket closed");
-        }
+        if (!_active)
+            return handlerInactive();
 
         if (_restartPending) throw new RouterRestartException();
 
@@ -718,13 +713,12 @@ class ConnectionHandler {
             }
             Connection con = null;
             try {
-                if (timeoutMs <= 0) {
-                    con = _resultQueue.take();
-                } else {
-                    long remaining = expiration - _context.clock().now();
-                    if (remaining < 1) break;
-                    con = _resultQueue.poll(remaining, TimeUnit.MILLISECONDS);
-                }
+                // Never an untimed take(): stopping the handler offers nothing to
+                // this queue, so an untimed wait would sleep through the shutdown
+                // and the caller would never learn the socket closed.
+                long remaining = timeoutMs > 0 ? expiration - _context.clock().now() : ACCEPT_POLL_INTERVAL;
+                if (remaining < 1) break;
+                con = _resultQueue.poll(Math.min(remaining, ACCEPT_POLL_INTERVAL), TimeUnit.MILLISECONDS);
             } catch (InterruptedException ie) {
                 Thread.currentThread().interrupt();
                 ConnectException ce = new ConnectException("Interrupted accept()");
@@ -732,25 +726,40 @@ class ConnectionHandler {
                 throw ce;
             }
             if (con != null) return con;
-            // Timeout or null result — check state and retry
-            if (!_active) {
-                // Drain any remaining results
-                con = _resultQueue.poll();
-                if (con != null) return con;
-                while(true) {
-                    Packet packet = _synQueue.poll();
-                    if (packet == null || packet.getOptionalDelay() == PoisonPacket.POISON_MAX_DELAY_REQUEST) break;
-                    _synEnqueueTimes.remove(packet);
-                    sendReset(packet);
-                }
-                boolean restartPending;
-                synchronized(this) { restartPending = _restartPending; }
-                if (restartPending) throw new RouterRestartException();
-                throw new ConnectException("ServerSocket closed");
-            }
+            // Poll timed out — check state and retry
+            if (!_active)
+                return handlerInactive();
             if (_restartPending) throw new RouterRestartException();
         }
         throw new SocketTimeoutException("accept() timed out");
+    }
+
+    /**
+     * The handler stopped accepting. Hand back a connection a worker already
+     * produced if there is one, reset the SYNs still waiting, and report why the
+     * accept cannot go on. Called only when the handler is inactive, so it never
+     * returns a connection for a handler that is still running.
+     *
+     * @return a connection a worker queued before the shutdown, if any
+     * @throws RouterRestartException if the router told us it is restarting
+     * @throws ConnectException if the server socket is simply closed
+     */
+    private Connection handlerInactive() throws RouterRestartException, ConnectException {
+        // Drain any remaining results
+        Connection con = _resultQueue.poll();
+        if (con != null) return con;
+        while(true) {
+            Packet packet = _synQueue.poll();
+            if (packet == null || packet.getOptionalDelay() == PoisonPacket.POISON_MAX_DELAY_REQUEST) break;
+            _synEnqueueTimes.remove(packet);
+            sendReset(packet);
+            // Polled, so no accept worker will see it - ours to return.
+            packet.releasePayload();
+        }
+        boolean restartPending;
+        synchronized(this) { restartPending = _restartPending; }
+        if (restartPending) throw new RouterRestartException();
+        throw new ConnectException("ServerSocket closed");
     }
 
     /**
