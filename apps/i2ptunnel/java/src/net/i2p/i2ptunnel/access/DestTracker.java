@@ -25,7 +25,7 @@ class DestTracker {
     DestTracker(Hash hash, Threshold threshold) {
         this.hash = hash;
         this.threshold = threshold;
-        this.counter = new AccessCounter();
+        this.counter = new AccessCounter(threshold);
     }
 
     /**
