@@ -396,9 +396,9 @@
   </target>
 
   <target name="scalatest.test" depends="clean, scalatest.compileTest">
-    <mkdir dir="${java.io.tmpdir}/build-i2p/reports/router/scalatest/"/>
+    <mkdir dir="${build.root}reports/router/scalatest/"/>
     <delete>
-      <fileset dir="${java.io.tmpdir}/build-i2p/reports/router/scalatest">
+      <fileset dir="${build.root}reports/router/scalatest">
         <include name="TEST-*.xml"/>
       </fileset>
     </delete>
@@ -418,7 +418,7 @@
         SlowTests
       </tagsToExclude>
       <reporter type="stdout"/>
-      <reporter type="junitxml" directory="${java.io.tmpdir}/build-i2p/reports/router/scalatest/"/>
+      <reporter type="junitxml" directory="${build.root}reports/router/scalatest/"/>
     </scalatest>
     <!-- set if unset -->
     <property name="host.fakename" value="i2ptester"/>
@@ -426,11 +426,11 @@
     <replaceregexp byline="true"
       match="(hostname=)&quot;[^&quot;]+&quot;"
       replace="\1&quot;${host.fakename}&quot;">
-      <fileset dir="${java.io.tmpdir}/build-i2p/reports/router/scalatest/"/>
+      <fileset dir="${build.root}reports/router/scalatest/"/>
     </replaceregexp>
   </target>
   <target name="junit.test" depends="junit.compileTest">
-    <property name="junit.reports.dir" value="${java.io.tmpdir}/build-i2p/reports"/>
+    <property name="junit.reports.dir" value="${build.root}reports"/>
     <mkdir dir="${junit.reports.dir}/router/junit/"/>
     <delete>
       <fileset dir="${junit.reports.dir}/router/junit">
@@ -500,19 +500,19 @@
 
   <!-- test reports -->
   <target name="scalatest.report">
-    <junitreport todir="${java.io.tmpdir}/build-i2p/reports/router/scalatest">
-      <fileset dir="${java.io.tmpdir}/build-i2p/reports/router/scalatest">
+    <junitreport todir="${build.root}reports/router/scalatest">
+      <fileset dir="${build.root}reports/router/scalatest">
         <include name="TEST-*.xml"/>
       </fileset>
-      <report format="frames" todir="${java.io.tmpdir}/build-i2p/reports/router/html/scalatest"/>
+      <report format="frames" todir="${build.root}reports/router/html/scalatest"/>
     </junitreport>
   </target>
   <target name="junit.report">
-    <junitreport todir="${java.io.tmpdir}/build-i2p/reports/router/junit">
-      <fileset dir="${java.io.tmpdir}/build-i2p/reports/router/junit">
+    <junitreport todir="${build.root}reports/router/junit">
+      <fileset dir="${build.root}reports/router/junit">
         <include name="TEST-*.xml"/>
       </fileset>
-      <report format="frames" todir="${java.io.tmpdir}/build-i2p/reports/router/html/junit"/>
+      <report format="frames" todir="${build.root}reports/router/html/junit"/>
     </junitreport>
   </target>
   <target name="test.report" depends="junit.report"/>

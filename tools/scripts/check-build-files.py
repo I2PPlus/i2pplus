@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """check-build-files.py - check the ant and Gradle build files for defects.
 
-The build files are 41 ant build.xml and Gradle scripts that grew by accretion:
+The build files are 26 ant build.xml and 26 Gradle scripts that grew by accretion:
 a target renamed in one file and left in another, a property set twice so the
 second setting is dead, a jar copied from a directory that no longer exists, an
 <ant> call into a target the other file does not define. Ant reports none of it -
@@ -15,15 +15,21 @@ What the rules check:
   * A target or property defined twice in one file, a property set to itself, a
     target with no body, and a target nothing invokes, depends on, or prints in
     the help menu.
-  * A depends, antcall or ant-contrib loop naming a target this file lacks, and
-    an <ant dir=...> naming one the other file lacks.
+  * A depends, antcall or ant-contrib loop naming a target this file lacks, an
+    <ant dir=...> naming one the other file lacks, and a project default naming one
+    this file lacks, which is the first bare `ant` in that directory to fail.
   * A ${property} no build file, property file, Debian rule or -D switch defines.
   * A path the build reads that is not in the tree, not build output, not created
     by an <mkdir>, and not declared optional by the element that names it.
+  * The build root, which is one directory: ${build.root} in ant and
+    ${java.io.tmpdir}/build-i2p in Gradle. A file that reads it without setting
+    it, a second root, a path spelled out of the tmpdir or hardcoded to /tmp, and
+    a relative build path writing output into the workspace. dist/ is exempt -
+    the final HTML reports belong there.
   * The same jar twice on one classpath, the same pattern twice in one fileset,
     the same javadoc <link> twice, and build XML left inside a comment.
   * Gradle: a dependency declared twice, the same include or exclude twice in one
-    copy block, a task registered twice.
+    copy block, a task registered twice, and a build path hardcoded to /tmp.
 
 Every rule runs a self-probe before the tree is scanned: it must flag its planted
 defect and pass its clean fixture, and a rule that matches nothing exits 3 rather
@@ -376,9 +382,6 @@ class Finding:
         self.line = line
         self.detail = detail
 
-    def key(self):
-        return f'{self.rule}|{self.path}|{self.detail}'
-
     def __str__(self):
         return f'{self.path}:{self.line}: [{self.rule}] {self.detail}'
 
@@ -656,6 +659,27 @@ def collect_outside_props(root, texts):
                 if m:
                     names.add(m.group(1))
     return names
+
+
+def rule_missing_default(doc, corpus):
+    """<project default=...> naming a target this file does not define.
+
+    Running ant in that directory with no target resolves the default and fails
+    with 'Target "all" does not exist' before anything runs, so the module cannot
+    be built standalone even though the top-level build, which always names a
+    target, never notices.
+    """
+    project = doc.project()
+    if project is None:
+        return
+    name = project.attrs.get('default')
+    if not name:
+        return
+    if any(t.attrs.get('name') == name for t in project.findall('target')):
+        return
+    yield Finding('missing-default', doc.path, project.line,
+                  'default="%s" but this file has no such target - ant with no '
+                  'target fails before it runs anything' % name)
 
 
 def rule_undefined_property(doc, corpus):
@@ -966,6 +990,130 @@ def corpus_root():
 
 
 #---------------------------------------------------------------------------
+# rules - the build root
+#---------------------------------------------------------------------------
+
+# The one place the tree says where build output goes. Ant files set it as
+# ${build.root}, Gradle scripts reach the same directory through
+# System.getProperty('java.io.tmpdir'), and the final HTML reports are the only
+# output that lands in the workspace, under dist/.
+BUILD_ROOT_VALUE = '${java.io.tmpdir}/build-i2p/'
+BUILD_ROOT_DEF = '<property name="build.root" value="%s"/>' % BUILD_ROOT_VALUE
+
+# Attributes that name a directory or file the build writes or reads. 'target'
+# and 'name' are deliberately absent - a value of 'build' there is a target name
+# or a property name, not a path.
+BUILD_PATH_ATTRS = ('dir', 'srcdir', 'todir', 'destdir', 'file', 'destfile',
+                    'tofile', 'tempfile', 'classesdir', 'src')
+
+
+def build_root_defs(doc):
+    """Every <property name="build.root"> in this file."""
+    return [n for n in doc.root.descendants('property')
+            if n.attrs.get('name') == 'build.root']
+
+
+def rule_build_root(doc, corpus):
+    """The build root is one property, and the file that reads it sets it.
+
+    Each ant file is its own project: an <ant dir=...> call hands its properties
+    down to the subbuild, but a build started directly in that directory does
+    not, so a file that reads ${build.root} has to define it.
+    """
+    defs = build_root_defs(doc)
+    if defs:
+        return
+    for node in doc.root.iter():
+        if any('${build.root}' in v for v in node.attrs.values()):
+            yield Finding('build-root', doc.path, node.line,
+                          '${build.root} is used but this file never sets it - add %s'
+                          % BUILD_ROOT_DEF)
+            return
+
+
+def rule_build_root_value(doc, corpus):
+    """A file that sets the build root somewhere else gives the tree two roots.
+
+    Output then lands outside the directory the test, report and clean targets
+    work from, and the workspace is written into again.
+    """
+    for node in build_root_defs(doc):
+        value = node.attrs.get('value')
+        if 'location' in node.attrs or value != BUILD_ROOT_VALUE:
+            yield Finding('build-root-value', doc.path, node.line,
+                          'build.root is set to "%s", not the one build root "%s"'
+                          % (node.attrs.get('location', value), BUILD_ROOT_VALUE))
+
+
+def rule_build_root_location(doc, corpus):
+    """build.root set with location= instead of value=.
+
+    location= is resolved to an absolute path with no trailing slash, and every
+    use in the tree joins onto the slash - ${build.root}reports - so the two run
+    together into build-i2preports.
+    """
+    for node in build_root_defs(doc):
+        if 'location' in node.attrs:
+            yield Finding('build-root-location', doc.path, node.line,
+                          'build.root is set with location=, which drops the trailing '
+                          'slash every use joins onto - set it with value=')
+
+
+def rule_tmpdir_literal(doc, corpus):
+    """A build path spelled out of ${java.io.tmpdir} instead of ${build.root}.
+
+    Only the build.root definition itself may name the tmpdir, so the place the
+    root is chosen stays one line per file.
+    """
+    for node in doc.root.iter():
+        for attr, value in node.attrs.items():
+            if '${java.io.tmpdir}/build-i2p' not in value:
+                continue
+            if node.tag == 'property' and node.attrs.get('name') == 'build.root':
+                continue
+            yield Finding('tmpdir-literal', doc.path, node.line,
+                          '<%s %s="%s"> spells out the build root - use "${build.root}"'
+                          % (node.tag, attr, value))
+
+
+def rule_abs_build_path(doc, corpus):
+    """A build path hardcoded to /tmp, which is not where the root is.
+
+    java.io.tmpdir is /tmp on Linux and somewhere else everywhere else, so a
+    literal /tmp/build-i2p writes the report where nothing looks for it.
+    """
+    for node in doc.root.iter():
+        for attr, value in node.attrs.items():
+            if '/tmp/build-i2p' not in value:
+                continue
+            yield Finding('abs-build-path', doc.path, node.line,
+                          '<%s %s="%s"> hardcodes /tmp/build-i2p - use "${build.root}"'
+                          % (node.tag, attr, value))
+
+
+def rule_relative_build_path(doc, corpus):
+    """Build output written into the source tree as a relative 'build' path.
+
+    Every file that sets build.root puts its output there, so a bare dir="build"
+    is a path the build no longer writes to - a clean target deleting a directory
+    that only exists if a stale run left it, or worse, deleting a real one.
+    dist/ is exempt: the final HTML reports belong in it by design.
+    """
+    if not build_root_defs(doc):
+        return
+    for node in doc.root.iter():
+        for attr in BUILD_PATH_ATTRS:
+            value = node.attrs.get(attr)
+            if not value or value.startswith(('/', '${', '@{')):
+                continue
+            if value.split('/')[0] != 'build':
+                continue
+            yield Finding('relative-build-path', doc.path, node.line,
+                          '<%s %s="%s"> is a build path in the source tree - the build '
+                          'writes under ${build.root}' % (node.tag, attr, value))
+
+
+#---------------------------------------------------------------------------
 # rules - Gradle build files
 #---------------------------------------------------------------------------
 
@@ -1120,6 +1268,25 @@ def rule_gradle_dup_copy_pattern(doc, corpus):
                 scopes.pop()
 
 
+def rule_gradle_abs_build_path(doc, corpus):
+    """A Gradle script that hardcodes /tmp instead of the JVM's tmpdir.
+
+    settings.gradle puts every project's output at
+    ${java.io.tmpdir}/build-i2p/gradle/<project>, mirroring the ant ${build.root}.
+    A script that writes the literal /tmp/build-i2p instead follows a different
+    root on every platform that is not Linux.
+    """
+    for idx, line in enumerate(doc.text.split('\n'), 1):
+        stripped = line.strip()
+        if '/tmp/build-i2p' not in line:
+            continue
+        if stripped.startswith(('//', '*', '/*')):
+            continue
+        yield Finding('gradle-abs-build-path', doc.path, idx,
+                      'hardcodes /tmp/build-i2p - use '
+                      '"${System.getProperty(\'java.io.tmpdir\')}/build-i2p"')
+
+
 def rule_gradle_dup_task(doc, corpus):
     if not doc.path.endswith('.gradle'):
         return
@@ -1174,6 +1341,14 @@ def rules():
               'sub/build.xml': xml_project('<target name="b"><echo/></target>\n')},
              {'build.xml': xml_project('<target name="a"><ant dir="sub" target="b"/></target>\n'),
               'sub/build.xml': xml_project('<target name="b"><echo/></target>\n')}),
+        Rule('missing-default', 'the project default names a target this file lacks',
+             rule_missing_default,
+             {'build.xml': xml_project('<target name="jar"><echo/></target>\n', default='all')},
+             {'build.xml': xml_project('<target name="all" depends="clean, jar"><echo/></target>\n'
+                                       '<target name="clean"><echo/></target>\n'
+                                       '<target name="jar"><echo/></target>\n', default='all'),
+              # no default at all is fine - ant just lists the targets
+              'apps/x/build.xml': xml_project('<target name="b"><echo/></target>\n')}),
         Rule('undefined-property', '${name} is defined nowhere', rule_undefined_property,
              {'build.xml': xml_project('<target name="a"><echo file="${nowhere.f}"/></target>\n')},
              {'build.xml': xml_project('<target name="a"><exec executable="sh" outputproperty="git.out"/>\n'
@@ -1249,6 +1424,63 @@ def rules():
                                        '<copy todir="x"><fileset dir="gone-src" erroronmissingdir="false"/></copy>\n'
                                        '<zip destfile="gone.zip"><fileset dir="made-by-mkdir"/></zip>\n'
                                        '<mkdir dir="made-by-mkdir"/></target>\n')}),
+        Rule('build-root', 'the build root read without being set, or set to something else',
+             rule_build_root,
+             {'build.xml': xml_project('<target name="a"><mkdir dir="${build.root}reports"/>\n'
+                                       '<delete dir="${build.root}core"/></target>\n')},
+             {'build.xml': xml_project('<target name="a"><mkdir dir="${build.root}reports"/>\n'
+                                       '<delete dir="${build.root}core"/></target>\n',
+                                       BUILD_ROOT_DEF + '\n'),
+              # a subbuild inherits the caller's properties, so a file that never
+              # reads the root needs no definition of its own
+              'apps/x/build.xml': xml_project('<target name="keep"><echo/></target>\n')}),
+        Rule('build-root-value', 'the build root set to a second location',
+             rule_build_root_value,
+             {'build.xml': xml_project('<target name="a"><mkdir dir="${build.root}x"/></target>\n',
+                                       '  <property name="build.root" value="/var/tmp/build-i2p/"/>\n')},
+             {'build.xml': xml_project('<target name="a"><mkdir dir="${build.root}x"/></target>\n',
+                                       BUILD_ROOT_DEF + '\n')}),
+        Rule('build-root-location', 'the build root set with location=, which drops the slash',
+             rule_build_root_location,
+             {'build.xml': xml_project('<target name="a"><mkdir dir="${build.root}x"/></target>\n',
+                                       '  <property name="build.root" location="/tmp/build-i2p"/>\n')},
+             {'build.xml': xml_project('<target name="a"><mkdir dir="${build.root}x"/></target>\n',
+                                       BUILD_ROOT_DEF + '\n')}),
+        Rule('tmpdir-literal', 'a build path spelled out instead of ${build.root}',
+             rule_tmpdir_literal,
+             {'build.xml': xml_project('<target name="a"><mkdir dir="${java.io.tmpdir}/build-i2p/reports"/>'
+                                       '</target>\n', BUILD_ROOT_DEF + '\n')},
+             {'build.xml': xml_project('<target name="a"><mkdir dir="${build.root}reports"/></target>\n',
+                                       BUILD_ROOT_DEF + '\n'),
+              # the definition is the one line allowed to name the tmpdir
+              'apps/x/build.xml': xml_project('', BUILD_ROOT_DEF + '\n')}),
+        Rule('abs-build-path', 'a build path hardcoded to /tmp', rule_abs_build_path,
+             {'build.xml': xml_project('<target name="a"><mkdir dir="/tmp/build-i2p/reports"/>\n'
+                                       '<arg value="/tmp/build-i2p/reports/pmd-java.xml"/></target>\n',
+                                       BUILD_ROOT_DEF + '\n')},
+             {'build.xml': xml_project('<target name="a"><mkdir dir="${build.root}reports"/>\n'
+                                       '<arg value="${build.root}reports/pmd-java.xml"/></target>\n',
+                                       BUILD_ROOT_DEF + '\n')}),
+        Rule('relative-build-path', 'a build path written into the source tree',
+             rule_relative_build_path,
+             {'build.xml': xml_project('<target name="clean"><delete dir="mo"/>\n'
+                                       '<delete dir="build"/></target>\n',
+                                       BUILD_ROOT_DEF +
+                                       '  <property name="build.dir" value="${build.root}x/build"/>\n')},
+             {'build.xml': xml_project('<target name="clean"><delete dir="${build.dir}"/></target>\n'
+                                       # dist/ is where the final HTML reports belong
+                                       '<target name="report"><mkdir dir="dist"/>\n'
+                                       '<arg value="dist/checkstyle.html"/></target>\n',
+                                       BUILD_ROOT_DEF +
+                                       '  <property name="build.dir" value="${build.root}x/build"/>\n'),
+              # a file with no build.root is the build-root rule's business, and its
+              # relative paths are its own
+              'apps/x/build.xml': xml_project('<target name="a"><mkdir dir="build"/></target>\n')}),
+        Rule('gradle-abs-build-path', 'a Gradle script hardcoded to /tmp/build-i2p',
+             rule_gradle_abs_build_path,
+             {'a.gradle': 'buildDir = file("/tmp/build-i2p/gradle")\n'},
+             {'a.gradle': 'buildDir = file("${System.getProperty(\'java.io.tmpdir\')}/build-i2p/gradle")\n'
+                          '// a comment may still say /tmp/build-i2p\n'}),
         Rule('gradle-balance', 'unbalanced braces in a Gradle file', rule_gradle_balance,
              {'a.gradle': 'tasks.register("a") {\n  doLast {\n    println "x"\n}\n'},
              {'a.gradle': 'tasks.register("a") {\n'
@@ -1266,37 +1498,6 @@ def rules():
              {'a.gradle': 'tasks.register("a") {}\ntasks.register("a") {}\n'},
              {'a.gradle': 'tasks.register("a") {}\ntasks.register("b") {}\n'}),
     ]
-
-
-#---------------------------------------------------------------------------
-# baseline
-#---------------------------------------------------------------------------
-
-def read_baseline():
-    if not os.path.exists(BASELINE):
-        return set()
-    with open(BASELINE, encoding='utf-8') as fh:
-        return {line.strip() for line in fh
-                if line.strip() and not line.startswith('#')}
-
-
-def cmd_baseline(argv):
-    parser = argparse.ArgumentParser(prog='check-build-files.py baseline')
-    parser.add_argument('--write', action='store_true', help='record current findings')
-    args = parser.parse_args(argv)
-    found = scan(rules())
-    keys = sorted({f.key() for f in found})
-    if not args.write:
-        for key in keys:
-            print(key)
-        return CLEAN
-    with open(BASELINE, 'w', encoding='utf-8') as fh:
-        fh.write('# Accepted build-file findings, one rule|file|detail per line.\n')
-        fh.write('# Written by: check-build-files.py baseline --write\n')
-        for key in keys:
-            fh.write(key + '\n')
-    print(f'baseline: {len(keys)} findings recorded in {os.path.basename(BASELINE)}')
-    return CLEAN
 
 
 #---------------------------------------------------------------------------
@@ -1424,6 +1625,7 @@ RULE_LABELS = {
     'self-property': 'property set to itself',
     'missing-target': 'depends or antcall names a target this file lacks',
     'missing-ant-target': 'ant call names a target the other build file lacks',
+    'missing-default': 'project default names a target this file lacks',
     'undefined-property': 'property used but never defined',
     'dup-pathelement': 'same entry twice on one classpath',
     'dup-fileset-pattern': 'same include or exclude twice in one fileset',
@@ -1432,6 +1634,13 @@ RULE_LABELS = {
     'empty-target': 'target with no body and no depends',
     'unused-target': 'target nothing invokes or documents',
     'missing-path': 'path the build reads does not exist',
+    'build-root': 'build root used but never set in that file',
+    'build-root-value': 'build root set to a second location',
+    'build-root-location': 'build root set with location=, losing the trailing slash',
+    'tmpdir-literal': 'build path spelled out instead of using the build root',
+    'abs-build-path': 'build path hardcoded to /tmp',
+    'relative-build-path': 'build output written into the source tree',
+    'gradle-abs-build-path': 'Gradle build path hardcoded to /tmp',
     'gradle-balance': 'Gradle block left open or closed twice',
     'gradle-dup-dependency': 'dependency declared twice',
     'gradle-dup-copy-pattern': 'same include or exclude twice in one copy block',

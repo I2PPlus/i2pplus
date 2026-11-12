@@ -2,7 +2,7 @@
 <project basedir="." default="all" name="i2p_sdk">
   <available file="git" property="git.available"/>
   <property name="build.root" value="${java.io.tmpdir}/build-i2p/"/>
-  <property name="build.dir" value="${java.io.tmpdir}/build-i2p/core/java/build"/>
+  <property name="build.dir" value="${build.root}core/java/build"/>
   <target name="all" depends="clean, build"/>
   <target name="build" depends="builddep, jar"/>
   <target name="builddep">
@@ -417,9 +417,9 @@
     </jar>
   </target>
   <target name="scalatest.test" depends="clean, scalatest.compileTest">
-    <mkdir dir="${java.io.tmpdir}/build-i2p/reports/core/scalatest/"/>
+    <mkdir dir="${build.root}reports/core/scalatest/"/>
     <delete>
-      <fileset dir="${java.io.tmpdir}/build-i2p/reports/core/scalatest">
+      <fileset dir="${build.root}reports/core/scalatest">
         <include name="TEST-*.xml"/>
       </fileset>
     </delete>
@@ -439,7 +439,7 @@
         SlowTests
       </tagsToExclude>
       <reporter type="stdout"/>
-      <reporter type="junitxml" directory="${java.io.tmpdir}/build-i2p/reports/core/scalatest/"/>
+      <reporter type="junitxml" directory="${build.root}reports/core/scalatest/"/>
     </scalatest>
     <!-- set if unset -->
     <property name="host.fakename" value="i2ptester"/>
@@ -447,14 +447,14 @@
     <replaceregexp byline="true"
       match="(hostname=)&quot;[^&quot;]+&quot;"
       replace="\1&quot;${host.fakename}&quot;">
-      <fileset dir="${java.io.tmpdir}/build-i2p/reports/core/scalatest/"/>
+      <fileset dir="${build.root}reports/core/scalatest/"/>
     </replaceregexp>
   </target>
   <target name="junit.test" depends="junit.compileTest">
     <property name="hamcrest.home" value="../../tools/test/hamcrest"/>
     <property name="junit.home" value="../../tools/test/junit"/>
     <property name="mockito.home" value="../../tools/test/mockito"/>
-    <property name="junit.reports.dir" value="${java.io.tmpdir}/build-i2p/reports"/>
+    <property name="junit.reports.dir" value="${build.root}reports"/>
     <mkdir dir="${junit.reports.dir}/core/junit/"/>
     <delete>
       <fileset dir="${junit.reports.dir}/core/junit">
@@ -520,19 +520,19 @@
   <target name="test" depends="junit.test, scalatest.test"/>
   <!-- test reports -->
   <target name="scalatest.report">
-    <junitreport todir="${java.io.tmpdir}/build-i2p/reports/core/scalatest">
-      <fileset dir="${java.io.tmpdir}/build-i2p/reports/core/scalatest">
+    <junitreport todir="${build.root}reports/core/scalatest">
+      <fileset dir="${build.root}reports/core/scalatest">
         <include name="TEST-*.xml"/>
       </fileset>
-      <report format="frames" todir="${java.io.tmpdir}/build-i2p/reports/core/html/scalatest"/>
+      <report format="frames" todir="${build.root}reports/core/html/scalatest"/>
     </junitreport>
   </target>
   <target name="junit.report">
-    <junitreport todir="${java.io.tmpdir}/build-i2p/reports/core/junit">
-      <fileset dir="${java.io.tmpdir}/build-i2p/reports/core/junit">
+    <junitreport todir="${build.root}reports/core/junit">
+      <fileset dir="${build.root}reports/core/junit">
         <include name="TEST-*.xml"/>
       </fileset>
-      <report format="frames" todir="${java.io.tmpdir}/build-i2p/reports/core/html/junit"/>
+      <report format="frames" todir="${build.root}reports/core/html/junit"/>
     </junitreport>
   </target>
   <target name="test.report" depends="junit.report, scalatest.report"/>

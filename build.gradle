@@ -1,8 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'java-library'
 
-buildDir = file("/tmp/build-i2p/gradle")
-
 // Resolves the javac every JavaCompile task below uses; must run first because
 // the subprojects block reads what it publishes.
 apply from: file('tools/gradle/javac.gradle')
@@ -93,7 +91,8 @@ subprojects {
         return
     }
 
-    buildDir = file("/tmp/build-i2p/gradle/${project.path.replace(':', '/').replaceFirst('/', '')}")
+    // buildDir comes from the settings.gradle hook, which puts every project's
+    // output at ${java.io.tmpdir}/build-i2p/gradle/<project>
 
     apply plugin: 'java'
     apply plugin: 'java-library'

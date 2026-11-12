@@ -16,7 +16,7 @@ The Gradle build provides an alternative to Ant for compiling Java modules and b
 
 ## Build output
 
-All build artifacts go under `/tmp/build-i2p/gradle/`. No `.class` files or jars are written to the workspace.
+All build artifacts go under `${java.io.tmpdir}/build-i2p/gradle/<project>/`, the same root the ant build calls `${build.root}`. No `.class` files or jars are written to the workspace; the only output that lands there is the final HTML reports, under `dist/`.
 
 ## Available tasks
 
@@ -214,6 +214,6 @@ Configuration cache is enabled in `gradle.properties`. If you see "configuration
 
 - Tests are not wired into the task graph for update builds (they must be run explicitly with `./gradlew test`)
 - The canonical test runner is `ant test` or `tools/scripts/run-tests.sh`
-- Build output destination is controlled by `buildDir` in `build.gradle` (default: `/tmp/build-i2p/gradle/`)
-- Per-platform installer staging lives under `/tmp/build-i2p/pkg-installer/`; IzPack work files under `/tmp/build-i2p/gradle/izpack/`; launch4j work under `/tmp/build-i2p/gradle/launch4j/`
+- Build output destination is set once, by the `gradle.beforeProject` hook in `settings.gradle`, to `${java.io.tmpdir}/build-i2p/gradle/<project>` — the ant build's `${build.root}`. Keep it there: a `buildDir` in a build script wins over the hook for that project, and the two path schemes drifting apart is how the root project used to land at `gradle/` while every module landed at `gradle/<module>`.
+- Per-platform installer staging lives under `${java.io.tmpdir}/build-i2p/pkg-installer/`; IzPack work files under `${java.io.tmpdir}/build-i2p/gradle/izpack/`; launch4j work under `${java.io.tmpdir}/build-i2p/gradle/launch4j/`
 - Gradle hardcodes its own reports to `<rootDir>/build/reports` no matter what the root project's `buildDir` is. The HTML problems report is switched off in `gradle.properties` (`org.gradle.problems.report=false`) — warnings are on the console with `--warning-mode all` — and the configuration-cache report, written only when a build fails, is removed by `./gradlew distclean`

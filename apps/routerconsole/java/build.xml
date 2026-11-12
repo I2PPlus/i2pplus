@@ -897,9 +897,9 @@
   </target>
 
   <target name="scalatest.test" depends="clean, scalatest.compileTest">
-    <mkdir dir="${java.io.tmpdir}/build-i2p/reports/apps/routerconsole/scalatest/"/>
+    <mkdir dir="${build.root}reports/apps/routerconsole/scalatest/"/>
     <delete>
-      <fileset dir="${java.io.tmpdir}/build-i2p/reports/apps/routerconsole/scalatest">
+      <fileset dir="${build.root}reports/apps/routerconsole/scalatest">
         <include name="TEST-*.xml"/>
       </fileset>
     </delete>
@@ -917,14 +917,14 @@
         SlowTests
       </tagsToExclude>
       <reporter type="stdout"/>
-      <reporter type="junitxml" directory="${java.io.tmpdir}/build-i2p/reports/apps/routerconsole/scalatest/"/>
+      <reporter type="junitxml" directory="${build.root}reports/apps/routerconsole/scalatest/"/>
     </scalatest>
     <!-- Fetch the real hostname of this machine -->
     <exec executable="hostname" outputproperty="host.name"/>
     <!-- Set if unset -->
     <property name="host.fakename" value="i2ptester"/>
     <!-- Replace hostname that junit inserts into reports with fake one -->
-    <replace dir="${java.io.tmpdir}/build-i2p/reports/apps/routerconsole/scalatest/" token="${host.name}" value="${host.fakename}"/>
+    <replace dir="${build.root}reports/apps/routerconsole/scalatest/" token="${host.name}" value="${host.fakename}"/>
   </target>
 
   <target name="compileTest" depends="compile">
@@ -970,7 +970,7 @@
   </target>
 
   <target name="junit.test" depends="compileTest">
-    <property name="junit.reports.dir" value="${java.io.tmpdir}/build-i2p/reports"/>
+    <property name="junit.reports.dir" value="${build.root}reports"/>
     <property name="junit.home" value="../../../tools/test/junit"/>
     <property name="hamcrest.home" value="../../../tools/test/hamcrest"/>
     <property name="mockito.home" value="../../../tools/test/mockito"/>
@@ -1061,11 +1061,11 @@
 
   <!-- Test reports -->
   <target name="scalatest.report">
-    <junitreport todir="${java.io.tmpdir}/build-i2p/reports/apps/routerconsole/scalatest">
-      <fileset dir="${java.io.tmpdir}/build-i2p/reports/apps/routerconsole/scalatest">
+    <junitreport todir="${build.root}reports/apps/routerconsole/scalatest">
+      <fileset dir="${build.root}reports/apps/routerconsole/scalatest">
         <include name="TEST-*.xml"/>
       </fileset>
-      <report format="frames" todir="${java.io.tmpdir}/build-i2p/reports/apps/routerconsole/html/scalatest"/>
+      <report format="frames" todir="${build.root}reports/apps/routerconsole/html/scalatest"/>
     </junitreport>
   </target>
 

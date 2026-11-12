@@ -11,7 +11,7 @@
 
   <property name="src" value="java/src"/>
   <property name="build" value="${build.dir}"/>
-  <property name="dist.dir" value="${java.io.tmpdir}/build-i2p/apps/addressbook/dist"/>
+  <property name="dist.dir" value="${build.root}apps/addressbook/dist"/>
   <property name="dist" location="${dist.dir}"/>
   <property name="jar" value="addressbook.jar"/>
   <property name="war" value="addressbook.war"/>
@@ -179,7 +179,7 @@
   </target>
 
   <target name="junit.test" depends="compileTest">
-    <property name="junit.reports.dir" value="${java.io.tmpdir}/build-i2p/reports"/>
+    <property name="junit.reports.dir" value="${build.root}reports"/>
     <!-- Repo's own test libs; see compileTest for why not ${ant.home}/lib. -->
     <property name="junit.home" value="../../tools/test/junit"/>
     <property name="hamcrest.home" value="../../tools/test/hamcrest"/>

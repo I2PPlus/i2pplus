@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="i2prouter" default="bundleTranslations" basedir=".">
-  <property name="build.dir" value="${java.io.tmpdir}/build-i2p/installer/resources/locale/build"/>
+  <property name="build.root" value="${java.io.tmpdir}/build-i2p/"/>
+  <property name="build.dir" value="${build.root}installer/resources/locale/build"/>
 
   <target name="bundleTranslations">
     <exec executable="sh" osfamily="unix" failifexecutionfails="true" failonerror="${require.gettext}">
@@ -60,8 +61,9 @@
   </target>
 
   <target name="clean">
-    <delete dir="mo"/>
-    <delete dir="build"/>
+    <!-- bundle-messages.sh writes the .mo tree and the class output under
+         ${build.dir}, never in the source tree -->
+    <delete dir="${build.dir}"/>
   </target>
 
   <target name="distclean" depends="clean"/>

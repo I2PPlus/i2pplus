@@ -665,7 +665,7 @@
   </target>
 
   <target name="test" depends="compileTest">
-    <property name="junit.reports.dir" value="${java.io.tmpdir}/build-i2p/reports"/>
+    <property name="junit.reports.dir" value="${build.root}reports"/>
     <mkdir dir="${junit.reports.dir}/i2ptunnel/junit/"/>
     <delete>
       <fileset dir="${junit.reports.dir}/i2ptunnel/junit">

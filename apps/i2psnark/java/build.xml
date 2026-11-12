@@ -10,11 +10,6 @@
   <property name="streaming.java.build.dir" value="${build.root}apps/streaming/java/build"/>
   <property name="systray.java.build.dir" value="${build.root}apps/systray/java/build"/>
 
-  <property name="...build.dir" value="${...build.dir}"/>
-  <property name="core.java.build.dir" value="${core.java.build.dir}"/>
-  <property name="ministreaming.java.build.dir" value="${ministreaming.java.build.dir}"/>
-  <property name="streaming.java.build.dir" value="${streaming.java.build.dir}"/>
-  <property name="systray.java.build.dir" value="${systray.java.build.dir}"/>
   <property name="jetty.pkg.dir" value="${build.root}apps/jetty/build"/>
 
   <condition property="standalone.dir" value="${build.root}apps/i2psnark/java/standalone" else="i2psnark">
@@ -92,7 +87,6 @@
         <!-- jsp-api.jar only present for debian builds -->
         <pathelement location="../../jetty/jettylib/jsp-api.jar"/>
         <!-- Following jars only for standalone builds -->
-        <pathelement location="${jetty.pkg.dir}/jetty-i2p.jar"/>
         <pathelement location="${systray.java.build.dir}/systray.jar"/>
         <pathelement location="../../jetty/jettylib/org.mortbay.jetty.jar"/>
         <pathelement location="${jetty.pkg.dir}/jetty-util.jar"/>
@@ -152,7 +146,6 @@
   <!-- Ideally we would include only include the servlet, everything else is in the jar.
        However, the wrapper.config classpath in existing installs does not include i2psnark.jar.
        So we must continue to duplicate everything in the war.
-       <classes dir="${build.dir}/obj" includes="**/I2PSnarkServlet*.class"/>
      -->
   <target name="war" depends="jar, bundleTranslations, warUpToDate, listChangedFiles" unless="war.uptodate">
     <!-- Set if unset -->
@@ -343,16 +336,6 @@
       <arg value="${standalone.dir.name}"/>
     </exec>
   </target>
-
-  <!-- use ant's resident zip -->
-  <!--
-  <target name="standalone" depends="standalone_prep">
-    <delete file="../../../dist/i2psnark-standalone.zip"/>
-    <zip destfile="i2psnark-standalone.zip" basedir="i2psnark" level="9" duplicate="preserve" encoding="UTF-8">
-      <zipfileset dir="i2psnark" includes="**/*"/>
-    </zip>
-  </target>
-  -->
 
   <target name="standalone7zip" depends="standalone_prep">
     <basename property="standalone.dir.name" file="${standalone.dir}"/>
@@ -580,33 +563,37 @@
   </target>
 
   <target name="junit.test" depends="compileTest">
-    <property name="junit.reports.dir" value="${java.io.tmpdir}/build-i2p/reports"/>
+    <property name="junit.reports.dir" value="${build.root}reports"/>
     <property name="junit.home" value="../../../tools/test/junit"/>
     <property name="hamcrest.home" value="../../../tools/test/hamcrest"/>
     <property name="mockito.home" value="../../../tools/test/mockito"/>
+    <!-- Scratch root for the test harness, the same one the gradle test task uses,
+         and the one place to override: -Dtest.base.root=/some/dir. Nothing a test
+         writes belongs in the workspace. -->
+    <property name="test.base.root" value="${java.io.tmpdir}/test-i2p/"/>
     <!-- Scratch I2P base: I2PAppContext defaults i2p.dir.base to user.dir (the
          module dir), so SnarkManager/I2PSnarkUtil in tests would write *.config.d/,
          dht.dat, torrent dirs etc. into the workspace. Redirect to a temp dir that
          is cleaned up after the run, like the gradle test task. -->
-    <property name="i2psnark.test.base" value="${java.io.tmpdir}/build-i2p/i2psnark-junit-base"/>
-    <delete dir="${i2psnark.test.base}"/>
-    <mkdir dir="${i2psnark.test.base}"/>
+    <property name="junit.test.base" value="${test.base.root}i2psnark/base"/>
+    <delete dir="${junit.test.base}"/>
+    <mkdir dir="${junit.test.base}"/>
     <mkdir dir="${junit.reports.dir}/i2psnark/junit"/>
     <delete>
       <fileset dir="${junit.reports.dir}/i2psnark/junit">
         <include name="TEST-*.xml"/>
       </fileset>
     </delete>
-    <!-- One scratch directory per module, under the shared build root: the forked
+    <!-- One scratch directory per module, under the shared test root: the forked
          test JVM reads the properties file ant wrote for it here and writes its
          vmwatcher file here, and one directory shared by the parallel suites has
          lost those files mid-run - the suite then reports a few hundred tests
          where it has a few thousand, with no failure line anywhere. -->
-    <property name="junit.tmp.dir" value="${java.io.tmpdir}/build-i2p/junit-tmp/i2psnark"/>
+    <property name="junit.tmp.dir" value="${test.base.root}i2psnark/tmp"/>
     <mkdir dir="${junit.tmp.dir}"/>
     <property name="junit.test.filter" value="**/*Test.java"/>
     <junit printsummary="withOutAndErr" fork="yes" showoutput="yes" tempdir="${junit.tmp.dir}" timeout="15000">
-      <sysproperty key="i2p.dir.base" value="${i2psnark.test.base}"/>
+      <sysproperty key="i2p.dir.base" value="${junit.test.base}"/>
       <classpath>
         <pathelement location="${build.dir}/obj_test"/>
         <pathelement location="${build.dir}/obj"/>
@@ -629,7 +616,7 @@
       </batchtest>
       <formatter type="xml"/>
     </junit>
-    <delete dir="${i2psnark.test.base}"/>
+    <delete dir="${junit.test.base}"/>
     <echo message="I2PSnark JUnit tests completed"/>
   </target>
 

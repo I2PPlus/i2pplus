@@ -75,7 +75,7 @@ Utility scripts for I2P+ development and administration.
 - **`align-md-tables.py`** — Align markdown table columns and trim trailing whitespace. Supports CJK double-width characters, recursive directory scanning, and CI check mode.
   `align-md-tables.py [-r] [--dry-run] [--check] PATH [PATH ...]`
 
-- **`check-build-files.py`** — Validate the ant and Gradle build files: 18 rules covering malformed XML, duplicate or self-referential properties, `depends`/`<ant>` calls naming a target that does not exist, unused targets, build XML left in a comment, duplicate classpath and fileset patterns, and Gradle brace balance, duplicate dependencies and duplicate tasks. Any finding is a failure — there is no baseline. Exits 0 clean, 1 findings, 3 tool failure.
+- **`check-build-files.py`** — Validate the ant and Gradle build files: 26 rules covering malformed XML, duplicate or self-referential properties, `depends`/`<ant>` calls naming a target that does not exist, a project `default=` naming a target the file lacks, unused targets, build XML left in a comment, duplicate classpath and fileset patterns, the build root (`${build.root}` read without being set, a second root, a path spelled out of the tmpdir or hardcoded to `/tmp`, a relative build path writing output into the workspace), and Gradle brace balance, duplicate dependencies, duplicate tasks and a hardcoded `/tmp` build path. Any finding is a failure — there is no baseline. Exits 0 clean, 1 findings, 3 tool failure.
   `check-build-files.py [--verbose] [--json] [--rule RULE] [--list] [--selftest] [--ant-report FILE] [FILE ...]`
 
   ```

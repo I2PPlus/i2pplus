@@ -119,7 +119,7 @@
   </target>
 
   <target name="junit.test" depends="compileTest">
-    <property name="junit.reports.dir" value="${java.io.tmpdir}/build-i2p/reports"/>
+    <property name="junit.reports.dir" value="${build.root}reports"/>
     <mkdir dir="${junit.reports.dir}/jrobin/junit"/>
     <!-- One scratch directory per module, under the shared test root: the forked
          test JVM reads the properties file ant wrote for it here and writes its
@@ -157,11 +157,11 @@
   </target>
 
   <target name="junit.report">
-    <junitreport todir="${java.io.tmpdir}/build-i2p/reports/apps/jrobin/html/junit">
-      <fileset dir="${java.io.tmpdir}/build-i2p/reports/jrobin/junit">
+    <junitreport todir="${build.root}reports/apps/jrobin/html/junit">
+      <fileset dir="${build.root}reports/jrobin/junit">
         <include name="TEST-*.xml"/>
       </fileset>
-      <report format="frames" todir="${java.io.tmpdir}/build-i2p/reports/apps/jrobin/html/junit"/>
+      <report format="frames" todir="${build.root}reports/apps/jrobin/html/junit"/>
     </junitreport>
   </target>
 

@@ -287,7 +287,7 @@
   </target>
 
   <target name="junit.test" depends="junit.compileTest">
-    <property name="junit.reports.dir" value="${java.io.tmpdir}/build-i2p/reports"/>
+    <property name="junit.reports.dir" value="${build.root}reports"/>
     <mkdir dir="${junit.reports.dir}/ministreaming/junit/"/>
     <delete>
       <fileset dir="${junit.reports.dir}/ministreaming/junit">
@@ -352,11 +352,11 @@
   <target name="test" depends="junit.test"/>
   <!-- test reports -->
   <target name="junit.report">
-    <junitreport todir="${java.io.tmpdir}/build-i2p/reports/ministreaming/junit">
-      <fileset dir="${java.io.tmpdir}/build-i2p/reports/ministreaming/junit">
+    <junitreport todir="${build.root}reports/ministreaming/junit">
+      <fileset dir="${build.root}reports/ministreaming/junit">
         <include name="TEST-*.xml"/>
       </fileset>
-      <report format="frames" todir="${java.io.tmpdir}/build-i2p/reports/ministreaming/html/junit"/>
+      <report format="frames" todir="${build.root}reports/ministreaming/html/junit"/>
     </junitreport>
   </target>
   <target name="test.report" depends="junit.report"/>
