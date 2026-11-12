@@ -6,16 +6,39 @@ import java.io.OutputStream;
 
 /**
  * Simple stream for checking and optionally removing RFC2616 chunked encoding to the output.
+ * <p>
+ * Malformed framing is rejected rather than skipped: a byte that cannot appear
+ * where the parser stands ends the stream with an IOException, so a desynchronised
+ * parser cannot forward the rest of the body as chunk data.
  *
  * @since 0.9.62
  */
 public class DechunkedOutputStream extends LimitOutputStream {
+
+    /**
+     * Largest chunk size the parser accepts, so a hostile 8-digit hex length
+     * cannot ask for a 2 GB body. The pre-shift guard in
+     * {@link #nextChunkSize(int, int)} keeps the accumulated value inside this
+     * bound and keeps the shift from overflowing.
+     */
+    private static final int MAX_CHUNK_SIZE = 0x8000000;
+
+    /** Most trailer header lines accepted before the terminating blank line. */
+    private static final int MAX_TRAILER_LINES = 128;
+
+    /** Most bytes in one trailer header line. */
+    private static final int MAX_TRAILER_LINE_LENGTH = 8192;
+
     /** True to strip the chunk headers and footers. */
     private final boolean _strip;
     /** The current state of the chunk parser. */
     private State _state = State.LEN;
-    /** Bytes left in the current chunk, or the trailer header size. */
+    /** Bytes left in the current chunk, or the current trailer line size. */
     private int _remaining;
+    /** Whether the chunk size being read has any hex digit yet. */
+    private boolean _sawSizeDigit;
+    /** Trailer header lines read since the last chunk. */
+    private int _trailerLines;
 
     /**
      * The states of the chunk parser.
@@ -63,29 +86,23 @@ public class DechunkedOutputStream extends LimitOutputStream {
                 case LEN: {
                     int c = buf[off + i] & 0xff;
                     if (c >= '0' && c <= '9') {
-                        if (_remaining >= 0x8000000)
-                            throw new IOException("Chunk length too big");
-                        _remaining <<= 4;
-                        _remaining |= c - '0';
+                        _sawSizeDigit = true;
+                        _remaining = nextChunkSize(_remaining, c - '0');
                     } else if (c >= 'a' && c <= 'f') {
-                        if (_remaining >= 0x800000)
-                            throw new IOException("Chunk length too big");
-                        _remaining <<= 4;
-                        _remaining |= 10 + c - 'a';
+                        _sawSizeDigit = true;
+                        _remaining = nextChunkSize(_remaining, 10 + c - 'a');
                     } else if (c >= 'A' && c <= 'F') {
-                        if (_remaining >= 0x800000)
-                            throw new IOException("Chunk length too big");
-                        _remaining <<= 4;
-                        _remaining |= 10 + c - 'A';
+                        _sawSizeDigit = true;
+                        _remaining = nextChunkSize(_remaining, 10 + c - 'A');
                     } else if (c == ';') {
+                        requireSizeDigit();
                         _state = State.CR;
                     } else if (c == '\r') {
+                        requireSizeDigit();
                         _state = State.LF;
                     } else if (c == '\n') {
-                        if (_remaining > 0)
-                            _state = State.DATA;
-                        else
-                            _state = State.TRAILER;
+                        requireSizeDigit();
+                        startChunk();
                     } else {
                         throw new IOException("Unexpected length char 0x" + Integer.toHexString(c));
                     }
@@ -100,10 +117,7 @@ public class DechunkedOutputStream extends LimitOutputStream {
                     if (c == '\r') {
                         _state = State.LF;
                     } else if (c == '\n') {
-                        if (_remaining > 0)
-                            _state = State.DATA;
-                        else
-                            _state = State.TRAILER;
+                        startChunk();
                     } else {
                         // chunk extension between the ';' and the CR
                     }
@@ -116,10 +130,7 @@ public class DechunkedOutputStream extends LimitOutputStream {
                 case LF: {
                     int c = buf[off + i] & 0xff;
                     if (c == '\n') {
-                        if (_remaining > 0)
-                            _state = State.DATA;
-                        else
-                            _state = State.TRAILER;
+                        startChunk();
                     } else {
                         throw new IOException("no LF after CR");
                     }
@@ -147,7 +158,8 @@ public class DechunkedOutputStream extends LimitOutputStream {
                         _state = State.DATALF;
                     else if (c == '\n')
                         _state = State.LEN;
-                    // else no CRLF?
+                    else
+                        throw new IOException("Chunk terminator is not CRLF");
                     if (!_strip)
                         out.write(buf, off + i, 1);
                     break;
@@ -158,7 +170,8 @@ public class DechunkedOutputStream extends LimitOutputStream {
                     int c = buf[off + i] & 0xff;
                     if (c == '\n')
                         _state = State.LEN;
-                    // else no CRLF?
+                    else
+                        throw new IOException("Chunk terminator is not CRLF");
                     if (!_strip)
                         out.write(buf, off + i, 1);
                     break;
@@ -180,10 +193,13 @@ public class DechunkedOutputStream extends LimitOutputStream {
                             return;
                         } else {
                             // stay here
+                            if (++_trailerLines > MAX_TRAILER_LINES)
+                                throw new IOException("Too many trailer headers");
                             _remaining = 0;
                         }
                     } else {
-                        _remaining++;
+                        if (++_remaining > MAX_TRAILER_LINE_LENGTH)
+                            throw new IOException("Trailer header too long");
                     }
                     if (!_strip)
                         out.write(buf, off + i, 1);
@@ -195,6 +211,47 @@ public class DechunkedOutputStream extends LimitOutputStream {
                 }
             }
         }
+    }
+
+    /**
+     * Moves to the state that follows a completed chunk-size line.
+     */
+    private void startChunk() {
+        if (_remaining > 0) {
+            _state = State.DATA;
+        } else {
+            _state = State.TRAILER;
+            _trailerLines = 0;
+        }
+        _sawSizeDigit = false;
+    }
+
+    /**
+     * Rejects a chunk-size line with no hex digits, which the parser used to read
+     * as the terminating zero-length chunk and therefore ended the body early.
+     *
+     * @throws IOException if no digit has been read for this chunk size
+     */
+    private void requireSizeDigit() throws IOException {
+        if (!_sawSizeDigit)
+            throw new IOException("Empty chunk size line");
+    }
+
+    /**
+     * Adds one hex digit to the chunk size being read.
+     *
+     * @param current the digits read so far, never negative
+     * @param digit the value of the next hex digit, 0-15
+     * @return the new chunk size, at most {@link #MAX_CHUNK_SIZE}
+     * @throws IOException if the size would exceed {@link #MAX_CHUNK_SIZE}
+     * @since 0.9.72+
+     */
+    private static int nextChunkSize(int current, int digit) throws IOException {
+        // Checked before the shift, so the shift itself cannot overflow and turn
+        // an oversized length into a small one.
+        if (current > (MAX_CHUNK_SIZE - 0xf) / 16)
+            throw new IOException("Chunk length too big");
+        return (current << 4) | digit;
     }
 
 }
