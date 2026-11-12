@@ -9,11 +9,6 @@
   <property name="router.java.build.dir" value="${build.root}router/java/build"/>
   <property name="streaming.java.build.dir" value="${build.root}apps/streaming/java/build"/>
 
-  <property name="core.java.build.dir" value="${core.java.build.dir}"/>
-  <property name="ministreaming.java.build.dir" value="${ministreaming.java.build.dir}"/>
-  <property name="router.java.build.dir" value="${router.java.build.dir}"/>
-  <property name="streaming.java.build.dir" value="${streaming.java.build.dir}"/>
-
   <property name="src" value="java/src"/>
   <property name="build" value="${build.dir}"/>
   <property name="dist.dir" value="${java.io.tmpdir}/build-i2p/apps/addressbook/dist"/>
@@ -104,10 +99,10 @@
         <attribute name="Main-Class" value="net.i2p.addressbook.CommandLine"/>
         <attribute name="Specification-Title" value="I2P Address Book"/>
         <attribute name="Specification-Version" value="${api.version}"/>
-        <attribute name="Specification-Vendor" value="The I2P Project https://geti2p.net/"/>
+        <attribute name="Specification-Vendor" value="The I2P+ Project https://i2pplus.github.io/"/>
         <attribute name="Implementation-Title" value="I2P Java Address Book"/>
         <attribute name="Implementation-Version" value="${full.version}"/>
-        <attribute name="Implementation-Vendor" value="The I2P Project https://geti2p.net/"/>
+        <attribute name="Implementation-Vendor" value="The I2P+ Project https://i2pplus.github.io/"/>
         <attribute name="Built-By" value="${build.built-by}"/>
         <attribute name="Build-Date" value="${build.timestamp}"/>
         <attribute name="Base-Revision" value="${workspace.version}"/>
@@ -194,12 +189,16 @@
         <include name="TEST-*.xml"/>
       </fileset>
     </delete>
-    <!-- One scratch directory per module, under the shared build root: the forked
+    <!-- One scratch directory per module, under the shared test root: the forked
          test JVM reads the properties file ant wrote for it here and writes its
          vmwatcher file here, and one directory shared by the parallel suites has
          lost those files mid-run - the suite then reports a few hundred tests
          where it has a few thousand, with no failure line anywhere. -->
-    <property name="junit.tmp.dir" value="${java.io.tmpdir}/build-i2p/junit-tmp/addressbook"/>
+    <!-- Scratch root for the test harness, the same one the gradle test task uses,
+         and the one place to override: -Dtest.base.root=/some/dir. Nothing a test
+         writes belongs in the workspace. -->
+    <property name="test.base.root" value="${java.io.tmpdir}/test-i2p/"/>
+    <property name="junit.tmp.dir" value="${test.base.root}addressbook/tmp"/>
     <mkdir dir="${junit.tmp.dir}"/>
     <property name="junit.test.filter" value="**/*Test.java"/>
     <junit printsummary="withOutAndErr" fork="yes" showoutput="yes" tempdir="${junit.tmp.dir}" timeout="15000">
