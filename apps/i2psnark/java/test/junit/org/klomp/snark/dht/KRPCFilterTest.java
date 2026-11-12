@@ -19,25 +19,40 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Peers may echo our own node entry back to us (we include our NID in every
- * query), and a remote may even persist our entry and re-advertise it. These
- * tests verify that an entry equal to ourselves is never stored in the routing
- * table, never returned by findClosest, and is filtered from candidate lists,
- * so that we can never query, respond to, or announce to ourselves. Near-misses
- * (same hash with a different NID or port) are distinct nodes and are kept.
+ * Peers may echo our own node entry back to us, since we include our NID in every
+ * query, and a remote may even persist our entry and re-advertise it. These tests
+ * verify that an entry equal to ourselves is never stored in the routing table,
+ * never returned by findClosest, and is filtered from candidate lists, so that we
+ * can never query, respond to, or announce to ourselves. Near-misses - the same
+ * hash with a different NID or port - are distinct nodes and are kept.
  *
  * @since 0.9.71+
  */
 public class KRPCFilterTest {
 
+    /** The app context, whose config dir holds the router's persisted DHT cache. */
     private static final I2PAppContext CTX = I2PAppContext.getGlobalContext();
+
+    /**
+     * Test instance; each test builds its own KRPC and node fixtures, so the instance
+     * carries no state between them.
+     */
+    public KRPCFilterTest() {
+    }
 
     /** A fake I2PSession that records listener registrations. */
     static final class FakeSession {
+        /** Our own destination, generated fresh so the node id differs per run. */
         final Destination dest;
+        /** Names of the session methods that were called, for the assertions on them. */
         final List<String> calls = new ArrayList<>();
+        /** The session under test, a proxy answering only what KRPC asks. */
         final I2PSession session;
 
+        /**
+         * Generates a fresh destination and wraps it in a session proxy that reports
+         * itself closed, so the KRPC built on it never sends anything.
+         */
         FakeSession() {
             try {
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -74,6 +89,16 @@ public class KRPCFilterTest {
         }
     }
 
+    /**
+     * Reads a field from the object or the first of its superclasses that declares it,
+     * for reaching the routing table and node ids KRPC keeps to itself.
+     *
+     * @param obj the object to read from
+     * @param name the field's name
+     * @return the field's current value
+     * @throws NoSuchFieldException if no class in the chain declares that field
+     * @throws IllegalAccessException if the field cannot be made readable
+     */
     static Object getField(Object obj, String name) throws Exception {
         Class<?> cls = obj.getClass();
         while (cls != null) {
@@ -88,6 +113,14 @@ public class KRPCFilterTest {
         throw new NoSuchFieldException(name);
     }
 
+    /**
+     * A byte array counting up from the given value, the fixture's stand-in for a real
+     * node id or destination hash.
+     *
+     * @param start the first byte of the ramp
+     * @param len how many bytes to fill
+     * @return the ramp, {@code len} bytes long
+     */
     private static byte[] fill(byte start, int len) {
         byte[] b = new byte[len];
         for (int i = 0; i < b.length; i++) {
@@ -96,10 +129,22 @@ public class KRPCFilterTest {
         return b;
     }
 
+    /**
+     * A node id ramp of the length the DHT uses.
+     *
+     * @param start the first byte of the ramp
+     * @return {@link NID#HASH_LENGTH} bytes counting up from start
+     */
     private static byte[] nid(byte start) {
         return fill(start, NID.HASH_LENGTH);
     }
 
+    /**
+     * A destination hash ramp.
+     *
+     * @param start the first byte of the ramp
+     * @return 32 bytes counting up from start
+     */
     private static byte[] hash(byte start) {
         return fill(start, 32);
     }
@@ -159,7 +204,9 @@ public class KRPCFilterTest {
 
     /**
      * HeardAbout and heardFrom return our own node info for a self echo without
-     * storing it, and findClosest never returns an entry equal to ourselves.
+     * storing it, and findClosest never returns an entry equal to ourselves. The
+     * assertions are about membership, not size: the constructor loads the router's
+     * persisted DHT cache and its cleaner runs, so the table's size is not ours to pin.
      *
      * @throws Exception if reflection on the KRPC private node fields fails
      */
@@ -173,26 +220,27 @@ public class KRPCFilterTest {
                             getField(krpc, "_myNodeInfo");
             assertNotNull(self);
             Object nodes = getField(krpc, "_knownNodes");
-            Object map = getField(nodes, "_nodeMap");
+            java.util.Map<?, ?> map = (java.util.Map<?, ?>) getField(nodes, "_nodeMap");
 
             // heardAbout of a self echo returns our own node info, stores nothing
             NodeInfo heard = krpc.heardAbout(copy(self));
             assertEquals(self, heard);
-            assertEquals(0, ((java.util.Map<?, ?>) map).size());
+            assertFalse("a self echo was stored", map.containsKey(self.getNID()));
 
             // heardFrom likewise
             java.lang.reflect.Method m = krpc.getClass().getDeclaredMethod("heardFrom", NodeInfo.class);
             m.setAccessible(true);
             NodeInfo heardF = (NodeInfo) m.invoke(krpc, copy(self));
             assertEquals(self, heardF);
-            assertEquals(0, ((java.util.Map<?, ?>) map).size());
+            assertFalse("a self echo was stored", map.containsKey(self.getNID()));
 
-// real nodes are stored
+            // real nodes are stored
             NodeInfo a = validNode((byte) 42, 7000);
             NodeInfo b = validNode((byte) 52, 7001);
             krpc.heardAbout(a);
             krpc.heardAbout(b);
-            assertEquals(2, ((java.util.Map<?, ?>) map).size());
+            assertTrue(map.containsKey(a.getNID()));
+            assertTrue(map.containsKey(b.getNID()));
 
             // findClosest never returns self, even for a target near ourselves
             List<NodeInfo> closest = krpc.findClosest(nid((byte) 1), 30);
