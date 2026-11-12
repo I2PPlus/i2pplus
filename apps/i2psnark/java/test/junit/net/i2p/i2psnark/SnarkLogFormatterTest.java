@@ -1,6 +1,7 @@
 package net.i2p.i2psnark;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,7 +25,7 @@ import org.klomp.snark.bencode.InvalidBEncodingException;
  * entries per sub-list line, the "(+N more)" tail, and the sentence form an
  * empty list has to fall back to.
  *
- * @since 0.9.73+
+ * @since 0.9.72+
  */
 public class SnarkLogFormatterTest {
 
@@ -103,44 +104,106 @@ public class SnarkLogFormatterTest {
     }
 
     @Test
-    public void testDestListLabelsThenIndentsTheEntries() {
+    public void testAShortListStaysOnTheLabelLine() {
         List<Hash> l = hashes(3);
-        StringBuilder expected = new StringBuilder("\n* Peers (3):\n     ");
-        for (int i = 0; i < l.size(); i++) {
-            if (i > 0) {expected.append(' ');}
-            expected.append(SnarkLogFormatter.dest(l.get(i)));
-        }
-        assertEquals(expected.toString(), SnarkLogFormatter.destList(l, "Peers", 3));
+        String s = SnarkLogFormatter.destList(l, "Peers", 3);
+        // one line, no indented continuation - a list that fits does not earn a
+        // line of its own
+        assertEquals(" * Peers (3): " + SnarkLogFormatter.dest(l.get(0)) + ' '
+                     + SnarkLogFormatter.dest(l.get(1)) + ' ' + SnarkLogFormatter.dest(l.get(2)),
+                     s);
+        assertFalse(s, s.contains("\n"));
     }
 
     @Test
-    public void testDestListPutsEightEntriesOnALine() {
+    public void testFourDestinationsStillFitOnTheLabelLine() {
+        // the budget is set so a tracker's usual four-peer list costs one line,
+        // not two - the space-efficiency rule
+        String s = SnarkLogFormatter.destList(hashes(4), "Peers", 4);
+        assertFalse(s, s.contains("\n"));
+        assertEquals(4, countEntries(s));
+    }
+
+    @Test
+    public void testAListThatWouldOverflowTheLineWraps() {
+        // five ten-character identities plus the label is already 65 characters,
+        // past the budget, so it goes onto indented lines instead
+        String s = SnarkLogFormatter.destList(hashes(5), "Peers", 5);
+        String[] lines = wrappedLines(s);
+        assertEquals(Arrays.toString(lines), 2, lines.length);
+        assertEquals("* Peers (5):", lines[0]);
+        assertEquals(5, countEntries(lines[1]));
+        assertTrue(lines[1], lines[1].startsWith("     "));
+    }
+
+    @Test
+    public void testALongListWrapsEightToALineUnderItsLabel() {
+        String s = SnarkLogFormatter.destList(hashes(12), "Peers", 12);
+        String[] lines = wrappedLines(s);
+        // label, then 8 + 4 entries
+        assertEquals(3, lines.length);
+        assertEquals("* Peers (12):", lines[0]);
+        assertEquals(8, countEntries(lines[1]));
+        assertEquals(4, countEntries(lines[2]));
+        assertTrue(lines[1], lines[1].startsWith("     "));
+    }
+
+    @Test
+    public void testAListStopsAtSixteenEntriesAndCountsTheRest() {
         String s = SnarkLogFormatter.destList(hashes(20), "Peers", 20);
-        String[] lines = s.split("\n");
-        // label line, then 8 + 8 + 4 entries
-        assertEquals(5, lines.length);
-        assertEquals("* Peers (20):", lines[1]);
-        assertEquals(8, countEntries(lines[2]));
-        assertEquals(8, countEntries(lines[3]));
-        assertEquals(4, countEntries(lines[4]));
-        assertTrue(lines[2].startsWith("     "));
+        String[] lines = wrappedLines(s);
+        // label, 8 + 8, then the tail naming what is not shown
+        assertEquals(4, lines.length);
+        assertEquals(16, countEntries(lines[1]) + countEntries(lines[2]));
+        assertEquals("     (+4 more)", lines[3]);
+        // the label still reports the whole list, not what is printed
+        assertEquals("* Peers (20):", lines[0]);
     }
 
     @Test
     public void testDestListCountsWhatItDoesNotShow() {
+        // the label reports the caller's count and the iterable may hold a
+        // different number - the tail has to account for whichever is larger
         String s = SnarkLogFormatter.destList(hashes(20), "Peers", 30);
         String[] lines = s.split("\n");
-        assertEquals("     (+10 more)", lines[lines.length - 1]);
+        assertEquals("     (+14 more)", lines[lines.length - 1]);
+    }
+
+    @Test
+    public void testNoListLineRunsPastTheWidthLimit() {
+        for (int n : new int[] {1, 2, 3, 4, 8, 9, 16, 17, 40}) {
+            String s = SnarkLogFormatter.destList(hashes(n), "Peers", n);
+            for (String line : s.split("\n")) {
+                assertTrue(n + " entries: " + line.length() + ' ' + line,
+                           line.length() <= 92);
+            }
+        }
+    }
+
+    @Test
+    public void testAfterArrowLeavesOneSpaceBehindTheArrow() {
+        List<Hash> l = hashes(2);
+        String inline = SnarkLogFormatter.destList(l, "Peers", 2);
+        // the caller ends its lead-in at "->", so the space the segment returns is
+        // what puts one space between the arrow and the first word
+        assertEquals(" Peers (2): " + SnarkLogFormatter.dest(l.get(0)) + ' '
+                     + SnarkLogFormatter.dest(l.get(1)), SnarkLogFormatter.afterArrow(inline));
+        // the wrapped form is led by a newline instead, and it comes off too
+        String wrapped = SnarkLogFormatter.destList(hashes(12), "Peers", 12);
+        String after = SnarkLogFormatter.afterArrow(wrapped);
+        assertEquals(" " + wrapped.substring(3), after);
+        assertFalse(after, after.startsWith("*"));
+        assertFalse(after, after.startsWith("\n"));
     }
 
     @Test
     public void testEmptyListIsASentenceNotAnEmptyLabel() {
-        assertEquals("\n* Peers 0 destinations",
+        assertEquals(" * Peers 0 destinations",
                      SnarkLogFormatter.destList(Collections.<Hash> emptyList(), "Peers", 0));
-        assertEquals("\n* Now to try 0 nodes",
+        assertEquals(" * Now to try 0 nodes",
                      SnarkLogFormatter.nodeList(Collections.<Hash> emptyList(), "Now to try", 0));
         // a null list is the same case, and must not emit a label with nothing under it
-        assertEquals("\n* Peers 0 destinations", SnarkLogFormatter.destList(null, "Peers", 0));
+        assertEquals(" * Peers 0 destinations", SnarkLogFormatter.destList(null, "Peers", 0));
     }
 
     @Test
@@ -188,6 +251,15 @@ public class SnarkLogFormatterTest {
             buf[i] = (byte) ((seed * 31 + i * 7 + 1) & 0xff);
         }
         return new PeerID(buf, (I2PSnarkUtil) null);
+    }
+
+    /**
+     * Lines of a wrapped sub-list, with the leading " * " segment separator the
+     * formatter puts on the front of it removed so the label is the first line.
+     */
+    private static String[] wrappedLines(String s) {
+        assertTrue(s, s.startsWith("\n* "));
+        return s.substring(1).split("\n");
     }
 
     /** Entries on one sub-list line, each a bracketed identity. */

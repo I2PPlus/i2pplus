@@ -18,6 +18,9 @@ package org.klomp.snark;
  *  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.i2p.data.Base32;
 import net.i2p.data.Base64;
 import net.i2p.data.Destination;
@@ -48,7 +51,7 @@ import net.i2p.data.SimpleDataStructure;
  * router's peer lists use, so no list bounded only by the network can emit one
  * line a reader has to scroll sideways through.
  *
- * @since 0.9.73+
+ * @since 0.9.72+
  */
 public class SnarkLogFormatter {
 
@@ -61,7 +64,7 @@ public class SnarkLogFormatter {
     /**
      * Not instantiated; every method is a pure formatting function.
      *
-     * @since 0.9.73+
+     * @since 0.9.72+
      */
     private SnarkLogFormatter() {}
 
@@ -144,7 +147,7 @@ public class SnarkLogFormatter {
      * @param peer the peer to name, null when it is not known
      * @return {@code [xxxxxxxx]}, or {@code none} when there is no destination
      *         hash to name
-     * @since 0.9.73+
+     * @since 0.9.72+
      */
     public static String peer(Peer peer) {
         return peer(peer != null ? peer.getPeerID() : null);
@@ -159,7 +162,7 @@ public class SnarkLogFormatter {
      * @param peerID the peer's id, null when it is not known
      * @return {@code [xxxxxxxx]} for an I2P peer, {@code webseed xxxxxxxx} for a
      *         webseed, or {@code none} when there is no id to name
-     * @since 0.9.73+
+     * @since 0.9.72+
      */
     public static String peer(PeerID peerID) {
         if (peerID == null) {return NONE;}
@@ -174,6 +177,30 @@ public class SnarkLogFormatter {
     }
 
     /**
+     * The torrent a log line names, by the name the user knows it by. A magnet
+     * lookup's name is {@code "Lookup [hex]"}, and the console log viewer parses
+     * any bracketed eight-character token as a lease set, so every line about a
+     * lookup linked to a destination that does not exist - the brackets come off
+     * and the info hash prefix stays in the unbracketed form the rest of the logs
+     * use for it. Any other name is shown as written.
+     *
+     * @param snark the torrent to name, null when it is not known
+     * @return the name, or {@code none} when there is no torrent to name
+     * @since 0.9.72+
+     */
+    public static String torrent(Snark snark) {
+        if (snark == null) {return NONE;}
+        String name = snark.getBaseName();
+        if (name.startsWith(LOOKUP_PREFIX) && name.endsWith("]")) {
+            return "Lookup " + name.substring(LOOKUP_PREFIX.length(), name.length() - 1);
+        }
+        return name;
+    }
+
+    /** The first half of a magnet lookup's synthetic torrent name. */
+    private static final String LOOKUP_PREFIX = "Lookup [";
+
+    /**
      * Identities shown on one sub-list line before wrapping. Eight short
      * identities plus the five-column indent stays inside the logging guide's
      * 80-90 column line.
@@ -184,11 +211,22 @@ public class SnarkLogFormatter {
     static final int INDENT = 5;
 
     /**
+     * Identities a sub-list shows before it stops and counts the rest. A DHT
+     * announce walks its closest-node set every pass and prints the same nodes
+     * each time, so a list bounded only by the routing table costs several lines
+     * per pass for identities the reader cannot act on. Sixteen is two lines,
+     * enough to see which part of the key space the pass is working through, and
+     * the label line and the {@code "(+N more)"} tail still carry the true total.
+     */
+    static final int MAX_ENTRIES = 16;
+
+    /**
      * A labelled sub-list of I2P destinations, led by its own {@code "\n* "}
      * label line and eight identities to a line, so a list bounded only by the
-     * tracker or the routing table cannot emit one line of unbounded length.
-     * The shape mirrors {@code router.util.PeerLogFormatter.peerList}, which the
-     * console log reader already knows.
+     * tracker or the routing table cannot emit one line of unbounded length. At
+     * most {@link #MAX_ENTRIES} are named and the rest are counted. The shape
+     * mirrors {@code router.util.PeerLogFormatter.peerList}, which the console log
+     * reader already knows.
      *
      * @param dests the destinations to name, in the order to print them; null or
      *              empty is shown as the sentence form
@@ -197,7 +235,7 @@ public class SnarkLogFormatter {
      *              for the {@code "(+N more)"} tail
      * @return the label line and the indented destination lines, or the sentence
      *         form when there is nothing to name
-     * @since 0.9.73+
+     * @since 0.9.72+
      */
     public static String destList(Iterable<? extends Hash> dests, String label, int count) {
         return entries(dests, label, count, "destinations", true);
@@ -205,7 +243,8 @@ public class SnarkLogFormatter {
 
     /**
      * A labelled sub-list of DHT node ids in the shape described by
-     * {@link #destList}, each named by {@link #node(SimpleDataStructure)}.
+     * {@link #destList}, each named by {@link #node(SimpleDataStructure)}, capped
+     * at {@link #MAX_ENTRIES} entries.
      *
      * @param nodes the nodes to name, in the order to print them; null or empty
      *              is shown as the sentence form
@@ -214,7 +253,7 @@ public class SnarkLogFormatter {
      *              for the {@code "(+N more)"} tail
      * @return the label line and the indented node lines, or the sentence form
      *         when there is nothing to name
-     * @since 0.9.73+
+     * @since 0.9.72+
      */
     public static String nodeList(Iterable<? extends SimpleDataStructure> nodes, String label,
                                    int count) {
@@ -222,9 +261,24 @@ public class SnarkLogFormatter {
     }
 
     /**
-     * The shared sub-list layout: a label line naming how many entries follow,
-     * then the identities eight to a line at a five-column indent, then a tail
-     * counting what is not shown.
+     * Characters a list segment may use on the line it starts on before it wraps
+     * onto indented lines of its own. Counted from the segment's own label, so a
+     * caller with a long lead-in gets a list that wraps a little early rather than
+     * one that runs past the logging guide's line limit. A destination identity is
+     * 11 characters with its space, so this keeps four of them on the label line -
+     * what a tracker's peer list usually holds - and a caller's typical 30-character
+     * lead-in then leaves the whole line inside the guide's 90 columns.
+     */
+    private static final int INLINE_BUDGET = 60;
+
+    /**
+     * The shared sub-list layout. A list short enough to stay inside
+     * {@link #INLINE_BUDGET} characters sits on the line it starts on,
+     * {@code "Peers (3): [a] [b] [c]"}; a longer one puts its label on its own
+     * line and the identities eight to a line at a five-column indent, showing at
+     * most {@link #MAX_ENTRIES} and counting the rest. Both forms are led by the
+     * {@code " * "} segment separator the house style uses between key-value
+     * pairs.
      *
      * @param items the identities to name, in the order to print them; null or
      *              empty is shown as the sentence form
@@ -234,42 +288,79 @@ public class SnarkLogFormatter {
      *             list still says something
      * @param shortBase32 true to name each entry as a destination, false to name
      *                    it as a node id
-     * @return the label line and the indented identity lines, or the sentence
-     *         form when there is nothing to name
+     * @return the labelled list as one segment, or the sentence form when there is
+     *         nothing to name
      */
     private static String entries(Iterable<? extends SimpleDataStructure> items, String label,
                                   int count, String noun, boolean shortBase32) {
-        StringBuilder sb = new StringBuilder(64);
-        int shown = 0;
+        List<String> ids = new ArrayList<>(MAX_ENTRIES);
+        int total = 0;
         if (items != null) {
             for (SimpleDataStructure item : items) {
                 if (item == null) {continue;}
-                if (shown == 0) {
-                    sb.append("\n* ").append(label).append(" (").append(count).append("):\n");
+                total++;
+                if (ids.size() < MAX_ENTRIES) {
+                    ids.add(shortBase32 ? dest(item) : node(item));
                 }
-                if (shown % ENTRIES_PER_LINE == 0) {
-                    if (shown > 0) {sb.append('\n');}
-                    for (int i = 0; i < INDENT; i++) {
-                        sb.append(' ');
-                    }
-                } else {
-                    sb.append(' ');
-                }
-                sb.append(shortBase32 ? dest(item) : node(item));
-                shown++;
             }
         }
         // a label line with a colon and nothing under it says nothing
-        if (shown == 0) {return "\n* " + label + ' ' + count + ' ' + noun;}
-        int more = count - shown;
+        if (ids.isEmpty()) {return " * " + label + ' ' + count + ' ' + noun;}
+        String head = label + " (" + count + "):";
+        if (ids.size() <= ENTRIES_PER_LINE) {
+            StringBuilder oneLine = new StringBuilder(11 * ids.size());
+            for (String id : ids) {
+                oneLine.append(' ').append(id);
+            }
+            // short enough that a separate indented line costs more than it tells
+            if (head.length() + oneLine.length() <= INLINE_BUDGET) {
+                return " * " + head + oneLine;
+            }
+        }
+        StringBuilder sb = new StringBuilder(24 + 11 * ids.size()).append(head);
+        for (int i = 0; i < ids.size(); i++) {
+            if (i % ENTRIES_PER_LINE == 0) {
+                sb.append('\n');
+                for (int j = 0; j < INDENT; j++) {
+                    sb.append(' ');
+                }
+            } else {
+                sb.append(' ');
+            }
+            sb.append(ids.get(i));
+        }
+        // the caller's count is what the label reports; the iterable is what is
+        // really there, and the tail has to account for every entry either of
+        // them says is present
+        int more = Math.max(total, count) - ids.size();
         if (more > 0) {
             sb.append('\n');
-            for (int i = 0; i < INDENT; i++) {
+            for (int j = 0; j < INDENT; j++) {
                 sb.append(' ');
             }
             sb.append("(+").append(more).append(" more)");
         }
-        return sb.toString();
+        return "\n* " + sb;
+    }
+
+    /**
+     * A list placed immediately after an arrow, where the house form puts the
+     * first segment behind the arrow instead of behind a separator:
+     * {@code "Finished get_peers -> Tried (1): [xxxxxxxx]"}, not
+     * {@code "-> * Tried (1):"}. The separator becomes the one space the arrow
+     * needs before its first word, so the caller ends its lead-in at
+     * {@code "->"} and cannot double the space or drop it.
+     *
+     * @param segment the segment as {@link #destList} or {@link #nodeList} returns
+     *                it, not null
+     * @return the segment with its leading separator replaced by a space
+     * @since 0.9.72+
+     */
+    public static String afterArrow(String segment) {
+        if (segment.startsWith(" * ") || segment.startsWith("\n* ")) {
+            return ' ' + segment.substring(3);
+        }
+        return segment;
     }
 
     /**
