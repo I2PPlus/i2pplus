@@ -26,6 +26,7 @@ import "./dom/morphdom.test.js";
 import "./dom/jdenticon.test.js";
 import "./dom/docdashNav.test.js";
 import "./dom/progressx.test.js";
+import "./dom/testReport.test.js";
 import "./dom/iframeResizer.test.js";
 
 await import("./dom/importAll.test.js");
