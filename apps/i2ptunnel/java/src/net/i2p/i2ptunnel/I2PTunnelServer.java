@@ -133,6 +133,16 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     public static final String PROP_ALT_PKF = "altPrivKeyFile";
 
     /**
+     * Router context property to start a server tunnel with no filtering when the
+     * access-filter file it was configured with cannot be read. Default false, so
+     * a bad definition file does not quietly open a tunnel the operator meant to
+     * restrict.
+     *
+     * @since 0.9.72+
+     */
+    static final String PROP_FILTER_ALLOW_ON_ERROR = "i2ptunnel.filter.allowOnError";
+
+    /**
      * Config key to cap concurrent inbound connections; 0 (default) = unlimited.
      * When the cap is reached, new connections are rejected promptly (HTTP: 503) instead of
      * being queued behind a saturated pool. This is the last-resort governor under duress;
@@ -383,21 +393,13 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
             }
         }
 
-        if (getTunnel().filterDefinition != null) {
-            File filterDefinition = new File(getTunnel().filterDefinition);
-            I2PAppContext context = getTunnel().getContext();
-            try {_filter = FilterFactory.createFilter(context, filterDefinition);}
-            catch (IOException | InvalidDefinitionException bad) {
-                String msg = "Bad filter definition file: " + filterDefinition + " - filtering disabled: " + bad.getMessage();
-                _log.error(msg, bad);
-                l.log("▲ WARNING: " + msg);
-                _filter = null;
-            }
-        }
-
-        IncomingConnectionFilter filter = _filter == null ? IncomingConnectionFilter.ALLOW : _filter;
-
         try {
+            IncomingConnectionFilter filter = createAccessFilter(_log, getTunnel().getContext(),
+                                                                 getTunnel().filterDefinition, l);
+            if (filter instanceof StatefulConnectionFilter) {
+                _filter = (StatefulConnectionFilter) filter;
+            }
+
             I2PSocketManager rv = I2PSocketManagerFactory.createDisconnectedManager(privData, getTunnel().host,
                                                                                     portNum, props, filter);
             rv.setName("I2PTunSrv");
@@ -407,9 +409,54 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
             return rv;
         } catch (I2PSessionException ise) {
             throw new IllegalArgumentException("Can't create socket manager", ise);
+        } catch (IllegalArgumentException bad) {
+            // The access filter did not load, so the tunnel never opened - say so
+            // on the tunnel page as well as in the log.
+            notifyEvent("openServerResult", "error");
+            throw bad;
         } finally {
             try {privData.close();}
             catch (IOException ioe) { /* ignored */ }
+        }
+    }
+
+    /**
+     * Build the access filter a server tunnel was configured with.
+     * <p>
+     * A filter the operator named but that cannot be read is a policy that failed
+     * to load, not an absence of policy. Continuing with
+     * {@link IncomingConnectionFilter#ALLOW} started a restricted tunnel wide open
+     * on a typo in the definition file, so startup is aborted unless the
+     * escape-hatch property {@value #PROP_FILTER_ALLOW_ON_ERROR} is set.
+     *
+     * @param log the router log for this server
+     * @param context the router context, for the escape-hatch property
+     * @param filterDefinition the configured definition file name, or null for no filtering
+     * @param logging the tunnel's console log, or null when there is none
+     * @return the filter to apply, {@link IncomingConnectionFilter#ALLOW} when no
+     *         definition is configured or the failure is tolerated
+     * @throws IllegalArgumentException if the configured definition cannot be read
+     *                                  and the failure is not tolerated
+     * @since 0.9.72+
+     */
+    static IncomingConnectionFilter createAccessFilter(Log log, I2PAppContext context,
+                                                       String filterDefinition, Logging logging) {
+        if (filterDefinition == null)
+            return IncomingConnectionFilter.ALLOW;
+        File file = new File(filterDefinition);
+        try {
+            return FilterFactory.createFilter(context, file);
+        } catch (IOException | InvalidDefinitionException bad) {
+            String msg = "Cannot start server tunnel with access filter " + file + ": " + bad.getMessage();
+            if (context.getProperty(PROP_FILTER_ALLOW_ON_ERROR, false)) {
+                log.warn("Access filter could not be read -> Starting unfiltered (" +
+                         PROP_FILTER_ALLOW_ON_ERROR + ": true) * File: " + file, bad);
+                if (logging != null) {logging.log("▲ WARNING: " + msg);}
+                return IncomingConnectionFilter.ALLOW;
+            }
+            log.error("Access filter could not be read -> Refusing to start the server tunnel * File: " + file, bad);
+            if (logging != null) {logging.log("▲ ERROR: " + msg);}
+            throw new IllegalArgumentException(msg, bad);
         }
     }
 
