@@ -298,7 +298,7 @@ class NodeInfo extends SimpleDataStructure {
     @Override
     public String toString() {
         return "[" + nID.toBase64().substring(0, 8) + "]:" +
-                port + (dest != null ? " (known)" : "");
+                port + (dest != null ? "" : " (unknown dest)");
     }
 
     /**
