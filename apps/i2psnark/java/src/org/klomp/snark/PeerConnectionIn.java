@@ -246,8 +246,9 @@ class PeerConnectionIn implements Runnable {
                         if (req != null) {
                             req.read(din, peer);
                             if (_log.shouldDebug()) {
-                                _log.debug("Received data(" + piece + "," + begin + ") from ["
-                                           + peer + "]");
+                                _log.debug("Received piece data -> Piece: " + piece
+                                           + " * Offset: " + begin + " bytes * Peer: "
+                                           + SnarkLogFormatter.peer(peer));
                             }
                             ps.pieceMessage(req);
                         } else {

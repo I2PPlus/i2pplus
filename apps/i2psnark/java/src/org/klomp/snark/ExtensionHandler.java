@@ -183,8 +183,8 @@ abstract class ExtensionHandler {
         Log log = I2PAppContext.getGlobalContext().logManager().getLog(ExtensionHandler.class);
         // one of these per PEX/metadata message - INFO is a flood
         if (log.shouldDebug())
-            log.debug("Received extension message " + id + " (" + bs.length + " bytes) from ["
-                      + peer + "]");
+            log.debug("Received extension message -> ID: " + id + " * Peer: "
+                      + SnarkLogFormatter.peer(peer) + " * Size: " + bs.length + " bytes");
         if (id == ID_HANDSHAKE) handleHandshake(peer, listener, bs, log);
         else if (id == ID_METADATA) handleMetadata(peer, listener, bs, log);
         else if (id == ID_PEX) handlePEX(peer, listener, bs, log);

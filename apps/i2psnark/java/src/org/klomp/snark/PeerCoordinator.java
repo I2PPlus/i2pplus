@@ -1278,8 +1278,9 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 bitfield = null;
             }
             if (!peer.isIncoming() && wantedBytes == 0 && _log.shouldInfo()) {
-                _log.info("Checking for new comments for: " + snark.getBaseName() + " from ["
-                          + peer + "]");
+                _log.info("Checking for new comments -> Torrent: "
+                          + SnarkLogFormatter.torrent(snark) + " * Peer: "
+                          + SnarkLogFormatter.peer(peer));
             }
 
             // if we aren't a seed but we don't want any more
@@ -2473,8 +2474,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                         return null;
                     }
                     if (_log.shouldInfo()) {
-                        _log.info("Sharing partial piece " + live + " with ["
-                                  + SnarkLogFormatter.peer(peer) + ']');
+                        _log.info("Sharing partial piece " + live + " -> Peer: "
+                                  + SnarkLogFormatter.peer(peer));
                     }
                     return live;
                 }
