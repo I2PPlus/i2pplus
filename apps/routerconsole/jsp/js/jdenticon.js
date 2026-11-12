@@ -28,11 +28,11 @@
 
   function parseColor(color) {
     if (/^#[0-9a-f]{3,8}$/i.test(color)) {
-      var result;
-      var colorLength = color.length;
+      let result;
+      const colorLength = color.length;
 
       if (colorLength < 6) {
-        var r = color[1],
+        const r = color[1],
           g = color[2],
           b = color[3],
           a = color[4] || "";
@@ -46,13 +46,13 @@
   }
 
   function toCss3Color(hexColor) {
-    var a = parseHex(hexColor, 7, 2);
-    var result;
+    const a = parseHex(hexColor, 7, 2);
+    let result;
 
     if (isNaN(a)) {
       result = hexColor;
     } else {
-      var r = parseHex(hexColor, 1, 2),
+      const r = parseHex(hexColor, 1, 2),
         g = parseHex(hexColor, 3, 2),
         b = parseHex(hexColor, 5, 2);
       result = "rgba(" + r + "," + g + "," + b + "," + (a / 255).toFixed(2) + ")";
@@ -62,13 +62,13 @@
   }
 
   function hsl(hue, saturation, lightness) {
-    var result;
+    let result;
 
     if (saturation === 0) {
-      var partialHex = decToHex(lightness * 255);
+      const partialHex = decToHex(lightness * 255);
       result = partialHex + partialHex + partialHex;
     } else {
-      var m2 = lightness <= 0.5 ? lightness * (saturation + 1) : lightness + saturation - lightness * saturation,
+      const m2 = lightness <= 0.5 ? lightness * (saturation + 1) : lightness + saturation - lightness * saturation,
         m1 = lightness * 2 - m2;
       result = hueToRgb(m1, m2, hue * 6 + 2) + hueToRgb(m1, m2, hue * 6) + hueToRgb(m1, m2, hue * 6 - 2);
     }
@@ -77,18 +77,18 @@
   }
 
   function correctedHsl(hue, saturation, lightness) {
-    var correctors = [0.55, 0.5, 0.5, 0.46, 0.6, 0.55, 0.55],
+    const correctors = [0.55, 0.5, 0.5, 0.46, 0.6, 0.55, 0.55],
       corrector = correctors[(hue * 6 + 0.5) | 0];
     lightness = lightness < 0.5 ? lightness * corrector * 2 : corrector + (lightness - 0.5) * (1 - corrector) * 2;
     return hsl(hue, saturation, lightness);
   }
 
-  var CONFIG_PROPERTIES = {
+  const CONFIG_PROPERTIES = {
     G /*GLOBAL*/: "jdenticon_config",
     n /*MODULE*/: "config",
   };
 
-  var rootConfigurationHolder = {};
+  let rootConfigurationHolder = {};
 
   function defineConfigProperty(rootObject) {
     rootConfigurationHolder = rootObject;
@@ -102,7 +102,13 @@
   }
 
   function getConfiguration(paddingOrLocalConfig, defaultPadding) {
-    var configObject = (typeof paddingOrLocalConfig == "object" && paddingOrLocalConfig) || rootConfigurationHolder[CONFIG_PROPERTIES.n /*MODULE*/] || {},
+    // Precedence: a config passed to the API call wins outright, then the one
+    // set through jdenticon.configure(), then the page's window.jdenticon_config
+    // (what addressbook.jsp and details.jsp set).
+    const configObject = (typeof paddingOrLocalConfig == "object" && paddingOrLocalConfig) ||
+      rootConfigurationHolder[CONFIG_PROPERTIES.n /*MODULE*/] ||
+      global[CONFIG_PROPERTIES.G /*GLOBAL*/] ||
+      {},
       lightnessConfig = configObject["lightness"] || {},
       saturation = configObject["saturation"] || {},
       colorSaturation = "color" in saturation ? saturation["color"] : saturation,
@@ -111,7 +117,7 @@
       padding = configObject["padding"];
 
     function lightness(configName, defaultRange) {
-      var range = lightnessConfig[configName];
+      let range = lightnessConfig[configName];
       if (!(range && range.length > 1)) {
         range = defaultRange;
       }
@@ -123,8 +129,8 @@
     }
 
     function hueFunction(originalHue) {
-      var hueConfig = configObject["hues"];
-      var hue;
+      const hueConfig = configObject["hues"];
+      let hue;
       if (hueConfig && hueConfig.length > 0) {
         hue = hueConfig[0 | (0.999 * originalHue * hueConfig.length)];
       }
@@ -145,18 +151,18 @@
     };
   }
 
-  var ICON_TYPE_SVG = 1;
-  var ICON_TYPE_CANVAS = 2;
-  var ATTRIBUTES = {
+  const ICON_TYPE_SVG = 1;
+  const ICON_TYPE_CANVAS = 2;
+  const ATTRIBUTES = {
     t /*HASH*/: "data-jdenticon-hash",
     o /*VALUE*/: "data-jdenticon-value",
   };
-  var IS_RENDERED_PROPERTY = "jdenticonRendered";
-  var ICON_SELECTOR = "[" + ATTRIBUTES.t /*HASH*/ + "],[" + ATTRIBUTES.o /*VALUE*/ + "]";
+  const IS_RENDERED_PROPERTY = "jdenticonRendered";
+  const ICON_SELECTOR = "[" + ATTRIBUTES.t /*HASH*/ + "],[" + ATTRIBUTES.o /*VALUE*/ + "]";
 
   function getIdenticonType(el) {
     if (el) {
-      var tagName = el["tagName"];
+      const tagName = el["tagName"];
 
       if (/^svg$/i.test(tagName)) {
         return ICON_TYPE_SVG;
@@ -181,18 +187,18 @@
 
   function observer(updateCallback) {
     if (typeof MutationObserver != "undefined") {
-      var mutationObserver = new MutationObserver(function onMutation(mutations) {
-        for (var mutationIndex = 0; mutationIndex < mutations.length; mutationIndex++) {
-          var mutation = mutations[mutationIndex];
-          var addedNodes = mutation.addedNodes;
-          for (var addedNodeIndex = 0; addedNodes && addedNodeIndex < addedNodes.length; addedNodeIndex++) {
-            var addedNode = addedNodes[addedNodeIndex];
+      const mutationObserver = new MutationObserver(function onMutation(mutations) {
+        for (let mutationIndex = 0; mutationIndex < mutations.length; mutationIndex++) {
+          const mutation = mutations[mutationIndex];
+          const addedNodes = mutation.addedNodes;
+          for (let addedNodeIndex = 0; addedNodes && addedNodeIndex < addedNodes.length; addedNodeIndex++) {
+            const addedNode = addedNodes[addedNodeIndex];
             if (addedNode.nodeType === 1) {
               if (getIdenticonType(addedNode)) {
                 updateCallback(addedNode);
               } else {
-                var icons = addedNode.querySelectorAll(ICON_SELECTOR);
-                for (var iconIndex = 0; iconIndex < icons.length; iconIndex++) {
+                const icons = addedNode.querySelectorAll(ICON_SELECTOR);
+                for (let iconIndex = 0; iconIndex < icons.length; iconIndex++) {
                   updateCallback(icons[iconIndex]);
                 }
               }
@@ -226,13 +232,13 @@
   }
 
   Transform.prototype.L /*transformIconPoint*/ = function (x, y, w, h) {
-    var right = this.u /*_x*/ + this.K /*_size*/,
+    const right = this.u /*_x*/ + this.K /*_size*/,
       bottom = this.v /*_y*/ + this.K /*_size*/,
       rotation = this.Z /*_rotation*/;
     return rotation === 1 ? new Point(right - y - (h || 0), this.v /*_y*/ + x) : rotation === 2 ? new Point(right - x - (w || 0), bottom - y - (h || 0)) : rotation === 3 ? new Point(this.u /*_x*/ + y, bottom - x - (w || 0)) : new Point(this.u /*_x*/ + x, this.v /*_y*/ + y);
   };
 
-  var NO_TRANSFORM = new Transform(0, 0, 0, 0);
+  const NO_TRANSFORM = new Transform(0, 0, 0, 0);
 
   function Graphics(renderer) {
     this.M /*_renderer*/ = renderer;
@@ -240,16 +246,16 @@
   }
 
   Graphics.prototype.g /*addPolygon*/ = function (points, invert) {
-    var di = invert ? -2 : 2,
+    const di = invert ? -2 : 2,
       transformedPoints = [];
-    for (var i = invert ? points.length - 2 : 0; i < points.length && i >= 0; i += di) {
+    for (let i = invert ? points.length - 2 : 0; i < points.length && i >= 0; i += di) {
       transformedPoints.push(this.A /*currentTransform*/.L(/*transformIconPoint*/ points[i], points[i + 1]));
     }
     this.M /*_renderer*/.g(/*addPolygon*/ transformedPoints);
   };
 
   Graphics.prototype.h /*addCircle*/ = function (x, y, size, invert) {
-    var p = this.A /*currentTransform*/.L(/*transformIconPoint*/ x, y, size, size);
+    const p = this.A /*currentTransform*/.L(/*transformIconPoint*/ x, y, size, size);
     this.M /*_renderer*/.h(/*addCircle*/ p, size, invert);
   };
 
@@ -258,7 +264,7 @@
   };
 
   Graphics.prototype.j /*addTriangle*/ = function (x, y, w, h, r, invert) {
-    var points = [x + w, y, x + w, y + h, x, y + h, x, y];
+    const points = [x + w, y, x + w, y + h, x, y + h, x, y];
     points.splice(((r || 0) % 4) * 2, 2);
     this.g(/*addPolygon*/ points, invert);
   };
@@ -270,7 +276,7 @@
   function centerShape(index, g, cell, positionIndex) {
     index = index % 14;
 
-    var k, m, w, h, inner, outer;
+    let k, m, w, h, inner, outer;
 
     if (!index) {
       k = cell * 0.42;
@@ -331,7 +337,7 @@
 
   function outerShape(index, g, cell) {
     index = index % 4;
-    var m;
+    let m;
 
     if (!index) {
       g.j(/*addTriangle*/ 0, 0, cell, cell, 0);
@@ -357,31 +363,32 @@
   }
 
   function iconGenerator(renderer, hash, config) {
-    var parsedConfig = getConfiguration(config, 0.08);
-    var size = renderer.k /*iconSize*/;
-    var padding = (0.5 + size * parsedConfig.Y /*iconPadding*/) | 0;
+    const parsedConfig = getConfiguration(config, 0.08);
+    let size = renderer.k /*iconSize*/;
+    const padding = (0.5 + size * parsedConfig.Y /*iconPadding*/) | 0;
     size -= padding * 2;
-    var graphics = new Graphics(renderer);
-    var cell = 0 | (size / 4);
-    var x = 0 | (padding + size / 2 - cell * 2);
-    var y = 0 | (padding + size / 2 - cell * 2);
+    const graphics = new Graphics(renderer);
+    const cell = 0 | (size / 4);
+    const x = 0 | (padding + size / 2 - cell * 2);
+    const y = 0 | (padding + size / 2 - cell * 2);
 
     function renderShape(colorIndex, shapes, index, rotationIndex, positions) {
-      var shapeIndex = parseHex(hash, index, 1);
-      var r = rotationIndex ? parseHex(hash, rotationIndex, 1) : 0;
+      const shapeIndex = parseHex(hash, index, 1);
+      let r = rotationIndex ? parseHex(hash, rotationIndex, 1) : 0;
       renderer.O(/*beginShape*/ availableColors[selectedColorIndexes[colorIndex]]);
-      for (var i = 0; i < positions.length; i++) {
+      for (let i = 0; i < positions.length; i++) {
         graphics.A /*currentTransform*/ = new Transform(x + positions[i][0] * cell, y + positions[i][1] * cell, cell, r++ % 4);
         shapes(shapeIndex, graphics, cell, i);
       }
       renderer.P /*endShape*/();
     }
 
-    var hue = parseHex(hash, -7) / 0xfffffff;
-    var availableColors = colorTheme(hue, parsedConfig);
-    var selectedColorIndexes = [];
+    const hue = parseHex(hash, -7) / 0xfffffff;
+    const availableColors = colorTheme(hue, parsedConfig);
+    const selectedColorIndexes = [];
+    let index;
 
-    for (var i = 0; i < 3; i++) {
+    for (let i = 0; i < 3; i++) {
       index = parseHex(hash, 8 + i, 1) % availableColors.length;
       if (
         isDuplicate([0, 4]) || // Disallow dark gray and dark color combo
@@ -392,11 +399,9 @@
       selectedColorIndexes.push(index);
     }
 
-    var index;
-
     function isDuplicate(values) {
       if (values.indexOf(index) >= 0) {
-        for (var i = 0; i < values.length; i++) {
+        for (let i = 0; i < values.length; i++) {
           if (selectedColorIndexes.indexOf(values[i]) >= 0) {
             return true;
           }
@@ -430,10 +435,10 @@
   }
 
   function sha1(message) {
-    var HASH_SIZE_HALF_BYTES = 40;
-    var BLOCK_SIZE_WORDS = 16;
+    const HASH_SIZE_HALF_BYTES = 40;
+    const BLOCK_SIZE_WORDS = 16;
 
-    var i = 0,
+    let i = 0,
       f = 0,
       data = [],
       dataSize,
@@ -514,9 +519,9 @@
   }
 
   function CanvasRenderer(ctx, iconSize) {
-    var canvas = ctx.canvas;
-    var width = canvas.width;
-    var height = canvas.height;
+    const canvas = ctx.canvas;
+    const width = canvas.width;
+    const height = canvas.height;
     ctx.save();
     if (!iconSize) {
       iconSize = Math.min(width, height);
@@ -529,15 +534,15 @@
   }
 
   CanvasRenderer.prototype.m /*setBackground*/ = function (fillColor) {
-    var ctx = this.l /*_ctx*/;
-    var iconSize = this.k /*iconSize*/;
+    const ctx = this.l /*_ctx*/;
+    const iconSize = this.k /*iconSize*/;
 
     ctx.fillStyle = toCss3Color(fillColor);
     ctx.fillRect(0, 0, iconSize, iconSize);
   };
 
   CanvasRenderer.prototype.O /*beginShape*/ = function (fillColor) {
-    var ctx = this.l /*_ctx*/;
+    const ctx = this.l /*_ctx*/;
     ctx.fillStyle = toCss3Color(fillColor);
     ctx.beginPath();
   };
@@ -548,16 +553,16 @@
   };
 
   CanvasRenderer.prototype.g /*addPolygon*/ = function (points) {
-    var ctx = this.l /*_ctx*/;
+    const ctx = this.l /*_ctx*/;
     ctx.moveTo(points[0].x, points[0].y);
-    for (var i = 1; i < points.length; i++) {
+    for (let i = 1; i < points.length; i++) {
       ctx.lineTo(points[i].x, points[i].y);
     }
     ctx.closePath();
   };
 
   CanvasRenderer.prototype.h /*addCircle*/ = function (point, diameter, counterClockwise) {
-    var ctx = this.l /*_ctx*/,
+    const ctx = this.l /*_ctx*/,
       radius = diameter / 2;
     ctx.moveTo(point.x + radius, point.y + radius);
     ctx.arc(point.x + radius, point.y + radius, radius, 0, Math.PI * 2, counterClockwise);
@@ -575,7 +580,7 @@
     }
     iconGenerator(new CanvasRenderer(ctx, size), isValidHash(hashOrValue) || computeHash(hashOrValue), config);
 
-    var canvas = ctx.canvas;
+    const canvas = ctx.canvas;
     if (canvas) {
       canvas[IS_RENDERED_PROPERTY] = true;
     }
@@ -590,15 +595,15 @@
   }
 
   SvgPath.prototype.g /*addPolygon*/ = function (points) {
-    var dataString = "";
-    for (var i = 0; i < points.length; i++) {
+    let dataString = "";
+    for (let i = 0; i < points.length; i++) {
       dataString += (i ? "L" : "M") + svgValue(points[i].x) + " " + svgValue(points[i].y);
     }
     this.B /*dataString*/ += dataString + "Z";
   };
 
   SvgPath.prototype.h /*addCircle*/ = function (point, diameter, counterClockwise) {
-    var sweepFlag = counterClockwise ? 0 : 1,
+    const sweepFlag = counterClockwise ? 0 : 1,
       svgRadius = svgValue(diameter / 2),
       svgDiameter = svgValue(diameter),
       svgArc = "a" + svgRadius + "," + svgRadius + " 0 1," + sweepFlag + " ";
@@ -613,7 +618,7 @@
   }
 
   SvgRenderer.prototype.m /*setBackground*/ = function (fillColor) {
-    var match = /^(#......)(..)?/.exec(fillColor),
+    const match = /^(#......)(..)?/.exec(fillColor),
       opacity = match[2] ? parseHex(match[2], 0) / 255 : 1;
     this.R /*_target*/.m(/*setBackground*/ match[1], opacity);
   };
@@ -633,16 +638,16 @@
   };
 
   SvgRenderer.prototype.finish = function () {
-    var this$1 = this;
-    var pathsByColor = this.D /*_pathsByColor*/;
-    for (var color in pathsByColor) {
+    const this$1 = this;
+    const pathsByColor = this.D /*_pathsByColor*/;
+    for (const color in pathsByColor) {
       if (pathsByColor.hasOwnProperty(color)) {
         this$1.R /*_target*/.S(/*appendPath*/ color, pathsByColor[color].B /*dataString*/);
       }
     }
   };
 
-  var SVG_CONSTANTS = {
+  const SVG_CONSTANTS = {
     T /*XMLNS*/: "http://www.w3.org/2000/svg",
     U /*WIDTH*/: "width",
     V /*HEIGHT*/: "height",
@@ -668,18 +673,18 @@
   };
 
   function toSvg(hashOrValue, size, config) {
-    var writer = new SvgWriter(size);
+    const writer = new SvgWriter(size);
     iconGenerator(new SvgRenderer(writer), isValidHash(hashOrValue) || computeHash(hashOrValue), config);
     return writer.toString();
   }
 
   function SvgElement_append(parentNode, name) {
-    var keyValuePairs = [],
+    let keyValuePairs = [],
       len = arguments.length - 2;
     while (len-- > 0) { keyValuePairs[len] = arguments[len + 2]; }
 
-    var el = document.createElementNS(SVG_CONSTANTS.T /*XMLNS*/, name);
-    for (var i = 0; i + 1 < keyValuePairs.length; i += 2) {
+    const el = document.createElementNS(SVG_CONSTANTS.T /*XMLNS*/, name);
+    for (let i = 0; i + 1 < keyValuePairs.length; i += 2) {
       el.setAttribute(keyValuePairs[i], keyValuePairs[i + 1]);
     }
 
@@ -687,7 +692,7 @@
   }
 
   function SvgElement(element) {
-    var iconSize = (this.k /*iconSize*/ = Math.min(Number(element.getAttribute(SVG_CONSTANTS.U /*WIDTH*/)) || 100, Number(element.getAttribute(SVG_CONSTANTS.V /*HEIGHT*/)) || 100));
+    const iconSize = (this.k /*iconSize*/ = Math.min(Number(element.getAttribute(SVG_CONSTANTS.U /*WIDTH*/)) || 100, Number(element.getAttribute(SVG_CONSTANTS.V /*HEIGHT*/)) || 100));
     this.W /*_el*/ = element;
     while (element.firstChild) {
       element.removeChild(element.firstChild);
@@ -707,15 +712,13 @@
   };
 
   function updateAll() {
-    if (document.querySelectorAll) {
-      update(ICON_SELECTOR);
-    }
+    update(ICON_SELECTOR);
   }
 
   function updateAllConditional() {
-    var elements = document.querySelectorAll(ICON_SELECTOR);
-    for (var i = 0; i < elements.length; i++) {
-      var el = elements[i];
+    const elements = document.querySelectorAll(ICON_SELECTOR);
+    for (let i = 0; i < elements.length; i++) {
+      const el = elements[i];
       if (!el[IS_RENDERED_PROPERTY]) {
         update(el);
       }
@@ -732,25 +735,25 @@
 
   function renderDomElement(el, hashOrValue, config, rendererFactory) {
     if (typeof el === "string") {
-      var elements = document.querySelectorAll(el);
-      for (var i = 0; i < elements.length; i++) {
+      const elements = document.querySelectorAll(el);
+      for (let i = 0; i < elements.length; i++) {
         renderDomElement(elements[i], hashOrValue, config, rendererFactory);
       }
       return;
     }
 
-    var hash = isValidHash(hashOrValue) || (hashOrValue != null && computeHash(hashOrValue)) || isValidHash(el.getAttribute(ATTRIBUTES.t /*HASH*/)) || (el.hasAttribute(ATTRIBUTES.o /*VALUE*/) && computeHash(el.getAttribute(ATTRIBUTES.o /*VALUE*/)));
+    const hash = isValidHash(hashOrValue) || (hashOrValue != null && computeHash(hashOrValue)) || isValidHash(el.getAttribute(ATTRIBUTES.t /*HASH*/)) || (el.hasAttribute(ATTRIBUTES.o /*VALUE*/) && computeHash(el.getAttribute(ATTRIBUTES.o /*VALUE*/)));
     if (!hash) {
       return;
     }
-    var renderer = rendererFactory(el, getIdenticonType(el));
+    const renderer = rendererFactory(el, getIdenticonType(el));
     if (renderer) {
       iconGenerator(renderer, hash, config);
       el[IS_RENDERED_PROPERTY] = true;
     }
   }
 
-  var jdenticon = updateAll;
+  const jdenticon = updateAll;
 
   defineConfigProperty(jdenticon);
 
@@ -765,7 +768,7 @@
   jdenticon.bundle = "browser-umd";
 
   function jdenticonStartup() {
-    var replaceMode = (jdenticon[CONFIG_PROPERTIES.n /*MODULE*/] || global[CONFIG_PROPERTIES.G /*GLOBAL*/] || {})["replaceMode"];
+    const replaceMode = (jdenticon[CONFIG_PROPERTIES.n /*MODULE*/] || global[CONFIG_PROPERTIES.G /*GLOBAL*/] || {})["replaceMode"];
     if (replaceMode != "never") {
       updateAllConditional();
       if (replaceMode == "observe") {

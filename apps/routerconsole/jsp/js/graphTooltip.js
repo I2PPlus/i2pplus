@@ -196,11 +196,14 @@ function claimCursor(parts, img) {
  * makes the theme's own rule apply again: a stylesheet the script never read is
  * the one that decides, so a theme change needs no cooperation from here.
  *
- * @param {Object} parts - the overlay parts
+ * Guarded per object as well as per member, for the same reason {@link setVisible} is: this
+ * runs on the hide path, and a throw here leaves the crosshair stuck on the image.
+ *
+ * @param {Object} parts - the overlay parts, or nothing when there is no overlay to clear
  * @returns {void}
  */
 function releaseCursor(parts) {
-  const img = parts.img;
+  const img = parts && parts.img;
   if (!img) { return; }
   img.style.cursor = "";
   parts.img = null;
@@ -210,13 +213,16 @@ function releaseCursor(parts) {
  * Hides an overlay, by default the one on screen.
  *
  * Taking the parts explicitly matters for scroll and resize, where every overlay has to be
- * hidden rather than only the one the pointer happened to be over.
+ * hidden rather than only the one the pointer happened to be over. With no argument and no
+ * overlay on screen there is nothing to hide, and that is a normal state, not an error: a
+ * pointer move whose metadata request failed calls this before any overlay was built.
  *
- * @param {Object} parts - the overlay parts to hide, or omitted for the active one
+ * @param {Object} [parts] - the overlay parts to hide, or omitted for the active one
  * @returns {void}
  */
 export function hideOverlay(parts) {
   const target = parts || activeOverlay;
+  if (!target) { return; }
   setVisible(target, false);
   // The cursor follows the readout: leaving the graph, scrolling, and a resize
   // all end the interaction, and each has to give the magnifier back.
@@ -757,7 +763,10 @@ export function initGraphTooltip() {
   document.documentElement.classList.add("graphTooltipListener");
   document.addEventListener("pointermove", onPointerMove, {passive: true});
   document.addEventListener("pointerover", onPointerOver, {passive: true});
-  document.addEventListener("pointerleave", hideOverlay, true);
+  // Wrapped rather than passed straight: a listener is handed the event, and hideOverlay's one
+  // parameter is the overlay to hide, so the event would arrive as the parts and the hide would
+  // do nothing at all.
+  document.addEventListener("pointerleave", () => hideOverlay(), true);
   // A WeakMap cannot be cleared, so a scroll bumps the epoch instead and every cached rect
   // older than it is ignored.
   document.addEventListener("scroll", invalidate, {passive: true, capture: true});

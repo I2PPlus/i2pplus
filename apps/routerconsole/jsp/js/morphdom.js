@@ -11,13 +11,13 @@
  */
 'use strict';
 
-var doc = document;
-var DOCUMENT_FRAGMENT_NODE = 11;
-var ELEMENT_NODE = 1;
-var TEXT_NODE = 3;
-var COMMENT_NODE = 8;
+const doc = document;
+const DOCUMENT_FRAGMENT_NODE = 11;
+const ELEMENT_NODE = 1;
+const TEXT_NODE = 3;
+const COMMENT_NODE = 8;
 
-var NS_XHTML = 'http://www.w3.org/1999/xhtml';
+const NS_XHTML = 'http://www.w3.org/1999/xhtml';
 
 /**
  * True when a string is whitespace-only (empty, spaces, newlines, nbsp).
@@ -38,7 +38,7 @@ function isWsOnlyText(value) {
  */
 function inPreContext(el) {
   while (el) {
-    var tag = el.tagName;
+    const tag = el.tagName;
     if (tag === 'PRE' || tag === 'TEXTAREA' || tag === 'SCRIPT' || tag === 'STYLE') {
       return true;
     }
@@ -64,13 +64,13 @@ function defaultGetNodeKey(node) {
  * @returns {boolean} True if node names match (case-insensitive for HTML).
  */
 function compareNodeNames(fromEl, toEl) {
-  var fromNodeName = fromEl.nodeName;
-  var toNodeName = toEl.nodeName;
+  const fromNodeName = fromEl.nodeName;
+  const toNodeName = toEl.nodeName;
 
   if (fromNodeName === toNodeName) { return true; }
 
-  var fromCodeStart = fromNodeName.charCodeAt(0);
-  var toCodeStart = toNodeName.charCodeAt(0);
+  const fromCodeStart = fromNodeName.charCodeAt(0);
+  const toCodeStart = toNodeName.charCodeAt(0);
 
   if (fromCodeStart <= 90 && toCodeStart >= 97) {
     return fromNodeName === toNodeName.toUpperCase();
@@ -88,7 +88,7 @@ function compareNodeNames(fromEl, toEl) {
  */
 function isTableSection(node) {
   if (!node || node.nodeType !== ELEMENT_NODE) { return false; }
-  var name = node.nodeName;
+  const name = node.nodeName;
   return name === "THEAD" || name === "TBODY" || name === "TFOOT";
 }
 
@@ -99,7 +99,7 @@ function isTableSection(node) {
  * @returns {Element|null} The matching element, or null.
  */
 function findTableSection(fromEl, tagName) {
-  var child = fromEl.firstChild;
+  let child = fromEl.firstChild;
   while (child) {
     if (child.nodeType === ELEMENT_NODE && child.nodeName === tagName) { return child; }
     child = child.nextSibling;
@@ -149,7 +149,7 @@ function syncBooleanAttrProp(fromEl, toEl, name) {
  * Special element handlers for textarea, select, and input elements.
  * @type {Object.<string, function(Element, Element)>}
  */
-var specialElHandlers = {
+const specialElHandlers = {
   /**
    * Handle textarea element synchronization.
    * @param {Element} fromEl - The source textarea element.
@@ -159,7 +159,7 @@ var specialElHandlers = {
     if (fromEl.value !== toEl.value) {
       fromEl.value = toEl.value;
     }
-    var firstChild = fromEl.firstChild;
+    const firstChild = fromEl.firstChild;
     if (firstChild && firstChild.nodeValue !== toEl.value) {
       firstChild.nodeValue = toEl.value;
     }
@@ -171,9 +171,9 @@ var specialElHandlers = {
    */
   SELECT: function(fromEl, toEl) {
     if (!toEl.hasAttribute('multiple')) {
-      var curChild = fromEl.firstChild;
-      var i = 0;
-      var selected = -1;
+      let curChild = fromEl.firstChild;
+      let i = 0;
+      let selected = -1;
       while (curChild) {
         if (curChild.nodeName === 'OPTION' && curChild.hasAttribute('selected')) {
           selected = i;
@@ -210,10 +210,10 @@ var specialElHandlers = {
  * @param {Element} toNode - The target element.
  */
 function morphAttrs(fromNode, toNode) {
-  var toNodeAttrs = toNode.attributes;
-  var attr, attrName, attrNamespaceURI, attrValue;
+  const toNodeAttrs = toNode.attributes;
+  let attr, attrName, attrNamespaceURI, attrValue;
 
-  for (var i = toNodeAttrs.length - 1; i >= 0; i--) {
+  for (let i = toNodeAttrs.length - 1; i >= 0; i--) {
     attr = toNodeAttrs[i];
     attrName = attr.name;
     attrNamespaceURI = attr.namespaceURI;
@@ -227,8 +227,8 @@ function morphAttrs(fromNode, toNode) {
     }
   }
 
-  var fromNodeAttrs = fromNode.attributes;
-  for (var d = fromNodeAttrs.length - 1; d >= 0; d--) {
+  const fromNodeAttrs = fromNode.attributes;
+  for (let d = fromNodeAttrs.length - 1; d >= 0; d--) {
     attr = fromNodeAttrs[d];
     attrName = attr.name;
     attrNamespaceURI = attr.namespaceURI;
@@ -273,7 +273,7 @@ function morphdomFactory(morphAttrs) {
   return function morphdom(fromNode, toNode, options) {
     if (!options) { options = {}; }
     if (typeof toNode === 'string') {
-      var toNodeHtml = toNode;
+      const toNodeHtml = toNode;
       toNode = doc.createElement('html');
       toNode.innerHTML = toNodeHtml;
       toNode = toNode.firstChild;
@@ -281,22 +281,22 @@ function morphdomFactory(morphAttrs) {
       toNode = toNode.firstElementChild;
     }
 
-    var getNodeKey = options.getNodeKey || defaultGetNodeKey;
-    var onBeforeNodeAdded = options.onBeforeNodeAdded || function() {};
-    var onNodeAdded = options.onNodeAdded || function() {};
-    var onBeforeElUpdated = options.onBeforeElUpdated || function() {};
-    var onElUpdated = options.onElUpdated || function() {};
-    var onBeforeNodeDiscarded = options.onBeforeNodeDiscarded || function() {};
-    var onNodeDiscarded = options.onNodeDiscarded || function() {};
-    var onBeforeElChildrenUpdated = options.onBeforeElChildrenUpdated || function() {};
-    var skipFromChildren = options.skipFromChildren || function() {};
-    var addChild = options.addChild || function(parent, child) {
+    const getNodeKey = options.getNodeKey || defaultGetNodeKey;
+    const onBeforeNodeAdded = options.onBeforeNodeAdded || function() {};
+    const onNodeAdded = options.onNodeAdded || function() {};
+    const onBeforeElUpdated = options.onBeforeElUpdated || function() {};
+    const onElUpdated = options.onElUpdated || function() {};
+    const onBeforeNodeDiscarded = options.onBeforeNodeDiscarded || function() {};
+    const onNodeDiscarded = options.onNodeDiscarded || function() {};
+    const onBeforeElChildrenUpdated = options.onBeforeElChildrenUpdated || function() {};
+    const skipFromChildren = options.skipFromChildren || function() {};
+    const addChild = options.addChild || function(parent, child) {
       return parent.appendChild(child);
     };
-    var childrenOnly = options.childrenOnly === true;
+    const childrenOnly = options.childrenOnly === true;
 
-    var fromNodesLookup = Object.create(null);
-    var keyedRemovalList = [];
+    const fromNodesLookup = Object.create(null);
+    const keyedRemovalList = [];
 
     function addKeyedRemoval(key) {
       keyedRemovalList.push(key);
@@ -304,9 +304,9 @@ function morphdomFactory(morphAttrs) {
 
     function walkDiscardedChildNodes(node, skipKeyedNodes) {
       if (node.nodeType === ELEMENT_NODE) {
-        var curChild = node.firstChild;
+        let curChild = node.firstChild;
         while (curChild) {
-          var key = getNodeKey(curChild);
+          const key = getNodeKey(curChild);
           if (skipKeyedNodes && key) {
             addKeyedRemoval(key);
           } else {
@@ -329,9 +329,9 @@ function morphdomFactory(morphAttrs) {
 
     function indexTree(node) {
       if (node.nodeType === ELEMENT_NODE || node.nodeType === DOCUMENT_FRAGMENT_NODE) {
-        var curChild = node.firstChild;
+        let curChild = node.firstChild;
         while (curChild) {
-          var key = getNodeKey(curChild);
+          const key = getNodeKey(curChild);
           if (key) { fromNodesLookup[key] = curChild; }
           indexTree(curChild);
           curChild = curChild.nextSibling;
@@ -343,11 +343,11 @@ function morphdomFactory(morphAttrs) {
 
     function handleNodeAdded(el) {
       onNodeAdded(el);
-      var curChild = el.firstChild;
+      let curChild = el.firstChild;
       while (curChild) {
-        var key = getNodeKey(curChild);
+        const key = getNodeKey(curChild);
         if (key) {
-          var unmatchedFromEl = fromNodesLookup[key];
+          const unmatchedFromEl = fromNodesLookup[key];
           if (unmatchedFromEl && compareNodeNames(curChild, unmatchedFromEl)) {
             curChild.parentNode.replaceChild(unmatchedFromEl, curChild);
             morphEl(unmatchedFromEl, curChild);
@@ -363,8 +363,8 @@ function morphdomFactory(morphAttrs) {
 
     function cleanupFromEl(fromEl, curFromNodeChild) {
       while (curFromNodeChild) {
-        var fromNextSibling = curFromNodeChild.nextSibling;
-        var curFromNodeKey = getNodeKey(curFromNodeChild);
+        const fromNextSibling = curFromNodeChild.nextSibling;
+        const curFromNodeKey = getNodeKey(curFromNodeChild);
 
         if (curFromNodeKey) {
           addKeyedRemoval(curFromNodeKey);
@@ -377,11 +377,11 @@ function morphdomFactory(morphAttrs) {
     }
 
     function morphEl(fromEl, toEl, childrenOnly) {
-      var toElKey = getNodeKey(toEl);
+      const toElKey = getNodeKey(toEl);
       if (toElKey) { delete fromNodesLookup[toElKey]; }
 
       if (!childrenOnly) {
-        var beforeUpdateResult = onBeforeElUpdated(fromEl, toEl);
+        const beforeUpdateResult = onBeforeElUpdated(fromEl, toEl);
         if (beforeUpdateResult === false) { return; }
         if (beforeUpdateResult instanceof HTMLElement) {
           fromEl = beforeUpdateResult;
@@ -402,21 +402,22 @@ function morphdomFactory(morphAttrs) {
     }
 
     function morphChildren(fromEl, toEl) {
-      var skipFrom = skipFromChildren(fromEl, toEl);
-      var curToNodeChild = toEl.firstChild;
-      var curFromNodeChild = fromEl.firstChild;
-      var lastSectionNode = null;
+      const skipFrom = skipFromChildren(fromEl, toEl);
+      let curToNodeChild = toEl.firstChild;
+      let curFromNodeChild = fromEl.firstChild;
+      let lastSectionNode = null;
 
       outer: while (curToNodeChild) {
-        var toNextSibling = curToNodeChild.nextSibling;
-        var curToNodeKey = getNodeKey(curToNodeChild);
+        const toNextSibling = curToNodeChild.nextSibling;
+        let fromNextSibling;
+        const curToNodeKey = getNodeKey(curToNodeChild);
 
         // Table sections (thead/tbody/tfoot) must be matched by tag name and
         // updated in place.  Moving them via insertBefore/appendChild triggers
         // the browser HTML parser to restructure the table, detaching the
         // section and breaking colspan/layout (e.g. tfoot bandwidth footer).
         if (fromEl.nodeName === "TABLE" && isTableSection(curToNodeChild)) {
-          var existing = findTableSection(fromEl, curToNodeChild.nodeName);
+          const existing = findTableSection(fromEl, curToNodeChild.nodeName);
           if (existing) {
             morphEl(existing, curToNodeChild);
             lastSectionNode = existing;
@@ -458,9 +459,9 @@ function morphdomFactory(morphAttrs) {
 
         if (!skipFrom) {
           while (curFromNodeChild) {
-            var fromNextSibling = curFromNodeChild.nextSibling;
-            var curFromNodeKey = getNodeKey(curFromNodeChild);
-            var curFromNodeType = curFromNodeChild.nodeType;
+            fromNextSibling = curFromNodeChild.nextSibling;
+            let curFromNodeKey = getNodeKey(curFromNodeChild);
+            const curFromNodeType = curFromNodeChild.nodeType;
 
             // Skip table sections in the source — they're matched by tag name
             // above and must not be removed as "incompatible" children.
@@ -469,14 +470,19 @@ function morphdomFactory(morphAttrs) {
               continue;
             }
 
-            var isCompatible = undefined;
+            let isCompatible = undefined;
 
             if (curFromNodeType === curToNodeChild.nodeType) {
               if (curFromNodeType === ELEMENT_NODE) {
                 if (curToNodeKey) {
                   if (curToNodeKey !== curFromNodeKey) {
-                    var matchingFromEl = fromNodesLookup[curToNodeKey];
-                    if (matchingFromEl && compareNodeNames(curFromNodeChild, matchingFromEl)) {
+                    const matchingFromEl = fromNodesLookup[curToNodeKey];
+                    if (matchingFromEl && fromNextSibling === matchingFromEl) {
+                      // The keyed match is the very next from-node, so it will be
+                      // paired on the next pass. Moving it now would re-order the
+                      // pair and the next pass would move it back.
+                      isCompatible = false;
+                    } else if (matchingFromEl && compareNodeNames(curFromNodeChild, matchingFromEl)) {
                       fromEl.insertBefore(matchingFromEl, curFromNodeChild);
                       if (curFromNodeKey) {
                         addKeyedRemoval(curFromNodeKey);
@@ -498,6 +504,9 @@ function morphdomFactory(morphAttrs) {
                   morphEl(curFromNodeChild, curToNodeChild);
                 }
               } else if (curFromNodeType === TEXT_NODE || curFromNodeType === COMMENT_NODE) {
+                // Same node type: the value is written where the node stands, and
+                // the match counts so neither node is discarded.
+                isCompatible = true;
                 if (curFromNodeChild.nodeValue !== curToNodeChild.nodeValue &&
                     !(curFromNodeType === TEXT_NODE && !inPreContext(fromEl) &&
                       isWsOnlyText(curFromNodeChild.nodeValue) && isWsOnlyText(curToNodeChild.nodeValue))) {
@@ -523,11 +532,11 @@ function morphdomFactory(morphAttrs) {
         }
 
         if (curToNodeKey && fromNodesLookup[curToNodeKey] && compareNodeNames(fromNodesLookup[curToNodeKey], curToNodeChild)) {
-          var matchingFromEl = fromNodesLookup[curToNodeKey];
+          const matchingFromEl = fromNodesLookup[curToNodeKey];
           if (!skipFrom) { addChild(fromEl, matchingFromEl); }
           morphEl(matchingFromEl, curToNodeChild);
         } else {
-          var onBeforeNodeAddedResult = onBeforeNodeAdded(curToNodeChild);
+          const onBeforeNodeAddedResult = onBeforeNodeAdded(curToNodeChild);
           if (onBeforeNodeAddedResult !== false) {
             if (onBeforeNodeAddedResult) { curToNodeChild = onBeforeNodeAddedResult; }
             if (curToNodeChild.actualize) {
@@ -545,9 +554,9 @@ function morphdomFactory(morphAttrs) {
       cleanupFromEl(fromEl, curFromNodeChild);
     }
 
-    var morphedNode = fromNode;
-    var morphedNodeType = morphedNode.nodeType;
-    var toNodeType = toNode.nodeType;
+    let morphedNode = fromNode;
+    const morphedNodeType = morphedNode.nodeType;
+    const toNodeType = toNode.nodeType;
 
     if (!childrenOnly) {
       if (morphedNodeType === ELEMENT_NODE) {
@@ -574,8 +583,8 @@ function morphdomFactory(morphAttrs) {
       morphEl(morphedNode, toNode, childrenOnly);
 
       if (keyedRemovalList.length) {
-        for (var i = 0, len = keyedRemovalList.length; i < len; i++) {
-          var elToRemove = fromNodesLookup[keyedRemovalList[i]];
+        for (let i = 0, len = keyedRemovalList.length; i < len; i++) {
+          const elToRemove = fromNodesLookup[keyedRemovalList[i]];
           if (elToRemove) {
             removeNode(elToRemove, elToRemove.parentNode, false);
           }
