@@ -335,33 +335,45 @@ LOCKDIR="/var/lock/subsys"
 LOCKFILE="$LOCKDIR/$APP_NAME"
 pid=""
 
-# Resolve the location of the 'ps' command
-PSEXE="/usr/ucb/ps"
-    if [ ! -x "$PSEXE" ]
-    then
-        PSEXE="/usr/bin/ps"
-        if [ ! -x "$PSEXE" ]
+# Resolve the location of a command: the usual absolute paths first, then PATH.
+# The absolute paths alone fail on a distro that does not lay them out - a merged
+# /usr, an unusual prefix - and the router then refuses to start even though the
+# command is sitting in PATH. $1 is the command name, the rest are the absolute
+# paths to try in order. Prints the path found, or nothing if there is none.
+find_command()
+{
+    _fc_name="$1"
+    shift
+    _fc_found=""
+    for _fc_try
+    do
+        if [ -x "$_fc_try" ]
         then
-            PSEXE="/bin/ps"
-            if [ ! -x "$PSEXE" ]
-            then
-                echo 'Unable to locate "ps".'
-                echo 'Please report this message along with the location of the command on your system.'
-                exit 1
-            fi
+            _fc_found="$_fc_try"
+            break
         fi
-    fi
-
-TREXE="/usr/bin/tr"
-if [ ! -x "$TREXE" ]
-then
-    TREXE="/bin/tr"
-    if [ ! -x "$TREXE" ]
+    done
+    if [ -z "$_fc_found" ]
     then
-        echo 'Unable to locate "tr".'
-        echo 'Please report this message along with the location of the command on your system.'
-        exit 1
+        _fc_found=`command -v "$_fc_name" 2>/dev/null`
     fi
+    echo "$_fc_found"
+}
+
+PSEXE=`find_command ps /usr/ucb/ps /usr/bin/ps /bin/ps`
+if [ -z "$PSEXE" ]
+then
+    echo 'Unable to locate "ps".'
+    echo 'Please report this message along with the location of the command on your system.'
+    exit 1
+fi
+
+TREXE=`find_command tr /usr/bin/tr /bin/tr`
+if [ -z "$TREXE" ]
+then
+    echo 'Unable to locate "tr".'
+    echo 'Please report this message along with the location of the command on your system.'
+    exit 1
 fi
 
 # Resolve the os
@@ -763,16 +775,12 @@ checkUser() {
     then
 
         # Resolve the location of the 'id' command
-        IDEXE="/usr/xpg4/bin/id"
-        if [ ! -x "$IDEXE" ]
+        IDEXE=`find_command id /usr/xpg4/bin/id /usr/bin/id`
+        if [ -z "$IDEXE" ]
         then
-            IDEXE="/usr/bin/id"
-            if [ ! -x "$IDEXE" ]
-            then
-                echo 'Unable to locate "id".'
-                echo 'Please report this message along with the location of the command on your system.'
-                exit 1
-            fi
+            echo 'Unable to locate "id".'
+            echo 'Please report this message along with the location of the command on your system.'
+            exit 1
         fi
         if [ "`$IDEXE -u -n "$RUN_AS_USER" 2>/dev/null`" != "$RUN_AS_USER" ]
         then

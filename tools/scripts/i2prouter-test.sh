@@ -120,6 +120,7 @@ echo "-- helper functions --"
 #---------------------------------------------------------------------------
 # Source only the helper block so the daemon paths are not executed.
 load_helpers() {
+    sed -n '/^find_command()/,/^}/p'                        "$TARGET"
     sed -n '/^format_uptime()/,/^}/p'                       "$TARGET"
     sed -n '/^format_memory()/,/^}/p'                      "$TARGET"
     sed -n '/^parse_max_heap()/,/^}/p'                     "$TARGET"
@@ -159,6 +160,51 @@ parse_max_heap 'java -Dx=1' >/dev/null 2>&1 && fail "parse_max_heap returns 1 wh
 parse_max_heap 'java -XmxZZ'  >/dev/null 2>&1 && fail "parse_max_heap returns 1 on garbage" || pass "parse_max_heap returns 1 on garbage"
 # A bare -Xmxs (sizing flag) must not be mistaken for the maximum.
 parse_max_heap 'java -Xmxs512m' >/dev/null 2>&1 && fail "parse_max_heap ignores -Xmxs" || pass "parse_max_heap ignores -Xmxs"
+
+#---------------------------------------------------------------------------
+echo "-- find_command resolves the tools the script needs --"
+#---------------------------------------------------------------------------
+# The script used to try only /usr/ucb/ps, /usr/bin/ps and /bin/ps (and the same
+# for tr and id) and exited 1 when none of them existed, so on a distro that does
+# not lay those paths out the router simply would not start.
+
+# an executable at a path the script does not hardcode
+newtmp
+cat > "$TMPROOT/ps" <<EOF
+#!/bin/sh
+echo stub-ps
+EOF
+chmod +x "$TMPROOT/ps"
+
+# a non-executable file must not be picked up
+cat > "$TMPROOT/notexec" <<EOF
+#!/bin/sh
+echo not-executable
+EOF
+chmod 644 "$TMPROOT/notexec"
+
+out=`PATH="$TMPROOT:$PATH"; find_command ps /usr/ucb/nope /usr/bin/nope`
+assert_eq "$TMPROOT/ps" "$out" "find_command falls back to PATH when no absolute path exists"
+
+out=`PATH="$TMPROOT:/bin:$PATH"; find_command ps "$TMPROOT/ps" /bin/ps`
+assert_eq "$TMPROOT/ps" "$out" "find_command prefers a listed absolute path over PATH"
+
+out=`find_command tr /nope/tr1 /nope/tr2`
+assert_eq "tr" "`basename "$out"`" "find_command finds tr through PATH"
+
+out=`find_command tr "$TMPROOT/notexec" /bin/tr`
+assert_eq "/bin/tr" "$out" "find_command skips a non-executable candidate"
+
+out=`find_command no_such_command_xyz123 /nope/x /nope/y`
+assert_eq "" "$out" "find_command prints nothing when the command is nowhere"
+
+# the resolution the script itself performs, with the real tools present
+out=`find_command ps /usr/ucb/ps /usr/bin/ps /bin/ps`
+assert_eq "ps" "`basename "$out"`" "the script's ps resolution finds a ps"
+out=`find_command tr /usr/bin/tr /bin/tr`
+assert_eq "tr" "`basename "$out"`" "the script's tr resolution finds a tr"
+out=`find_command id /usr/xpg4/bin/id /usr/bin/id`
+assert_eq "id" "`basename "$out"`" "the script's id resolution finds an id"
 
 #---------------------------------------------------------------------------
 echo "-- read_status_file distinguishes its three outcomes --"
@@ -456,9 +502,10 @@ mkdir -p "$e2e_dir/cfg"
 # executable", so use a real dynamically linked binary.
 cp /bin/true "$e2e_dir/i2psvc"
 chmod +x "$e2e_dir/i2psvc"
-# PSEXE is a hardcoded absolute path, so PATH redirection cannot fake ps. Point
-# it at a stub instead: getpid validates the pid file by matching WRAPPER_CMD in
-# the process args, and deletes the pid file as stale when it does not match.
+# find_command prefers its listed absolute paths over PATH, so PATH redirection
+# cannot fake ps. Point the candidate list at a stub instead: getpid validates the
+# pid file by matching WRAPPER_CMD in the process args, and deletes the pid file as
+# stale when it does not match.
 cat > "$e2e_dir/ps" <<PSSTUB
 #!/bin/sh
 for _a in "\$@"; do
@@ -499,6 +546,7 @@ sed -e "s#/sbin/runuser#$e2e_dir/runuser#" \
     -e "s#%USER_HOME#$e2e_dir#g" \
     -e "s#%SYSTEM_java_io_tmpdir#$e2e_dir#g" \
     -e "s#PSEXE=\"[^\"]*\"#PSEXE=\"$e2e_dir/ps\"#g" \
+    -e 's#find_command ps [^`]*#find_command ps '"$e2e_dir"'/ps#' \
     -e "s#^[[:space:]]*I2P_CONFIG_DIR=.*#I2P_CONFIG_DIR=\"$e2e_dir/cfg\"#" \
     -e "s#^[[:space:]]*I2P=.*#I2P=\"$e2e_dir\"#" \
     -e "s#^[[:space:]]*I2PTEMP=.*#I2PTEMP=\"$e2e_dir\"#" \
