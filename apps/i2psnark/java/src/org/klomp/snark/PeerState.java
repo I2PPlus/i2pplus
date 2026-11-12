@@ -15,6 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import net.i2p.I2PAppContext;
 import net.i2p.client.streaming.I2PSocket;
 import net.i2p.crypto.SHA1;
@@ -73,10 +74,10 @@ class PeerState implements DataLoader {
 
     /**
      * BEP 6: pieces a conforming sender may advertise to us. The union of two
-     * derivations: our own destination-hash-based set (I2PSnark peers) and the
-     * libtorrent-style set derived from a zeroed IPv4 address (qBittorrent and
-     * other libtorrent clients over I2P, whose "remote address" is 0.0.0.0 for
-     * every I2P connection). Null until computed, or when nothing can be derived.
+     * derivations: our own destination-hash-based set, for I2PSnark peers, and the
+     * libtorrent-style set derived from a zeroed IPv4 address, for qBittorrent and
+     * other libtorrent clients over I2P whose "remote address" is 0.0.0.0 for every
+     * I2P connection. Null until computed, or when nothing can be derived.
      */
     Set<Integer> _expectedAllowedFast;
 
@@ -97,9 +98,11 @@ class PeerState implements DataLoader {
     /** Piece requests sent but not yet answered. */
     private final List<Request> outstandingRequests = new LinkedList<>();
 
-    /** Bytes of piece data the peer cancelled after requesting, within the
+    /**
+     * Bytes of piece data the peer cancelled after requesting, within the
      * current CHECK_PERIOD window; reset in step with Peer's rolling
-     * uploaded counter so the discard ratio compares like windows. */
+     * uploaded counter so the discard ratio compares like windows.
+     */
     private long _cancelledBytes;
     /** Start of the current _cancelledBytes window, in millis. */
     private long _cancelledWindowStart;
@@ -283,9 +286,9 @@ class PeerState implements DataLoader {
             List<Request> pcs = returnPartialPieces();
             if (!pcs.isEmpty()) {
                 if (_log.shouldDebug())
-                    _log.debug("[" + SnarkLogFormatter.peer(peer)
-                               + "] -> Got choked, returning the partial pieces to the PeerCoordinator"
-                               + "\n* Pieces: " + pcs);
+                    _log.debug(SnarkLogFormatter.peer(peer)
+                               + " -> Got choked, returning partial pieces to the"
+                               + " PeerCoordinator * Pieces: " + pcs);
                 listener.savePartialPieces(this.peer, pcs);
             }
         }
@@ -889,6 +892,42 @@ class PeerState implements DataLoader {
     }
 
     /**
+     * How many requests for one piece are still in flight with this peer. For the tests.
+     *
+     * @param piece the piece to count the requests for
+     * @return the number of outstanding requests for that piece
+     * @since 0.9.72+
+     */
+    int outstandingFor(int piece) {
+        int n = 0;
+        for (Request req : outstandingRequests) {
+            if (req.getPiece() == piece) {
+                n++;
+            }
+        }
+        return n;
+    }
+
+    /**
+     * Whether to stop asking a peer for pieces and tell it we are uninterested.
+     *
+     * <p>A peer with requests still in flight stops sending as soon as we say we are
+     * uninterested, so giving up while it still owes us blocks strands them: the blocks
+     * stay claimed on the shared copy of the piece, no other peer is allowed to take
+     * them over, and the piece never finishes.
+     *
+     * @param interesting true if we are currently interested in this peer
+     * @param lastRequest the piece we are working through with it, null if none
+     * @param hasOutstanding true if requests are still in flight with it
+     * @return true to mark the peer uninteresting and stop requesting from it
+     * @since 0.9.72+
+     */
+    static boolean shouldGiveUpOnPeer(boolean interesting, Request lastRequest,
+                                      boolean hasOutstanding) {
+        return interesting && lastRequest == null && !hasOutstanding;
+    }
+
+    /**
      * All pieces we are currently requesting, or an empty set.
      *
      * @return all pieces we are currently requesting, or empty Set
@@ -1053,9 +1092,9 @@ class PeerState implements DataLoader {
             List<Request> pcs = returnPartialPieces(piece);
             if (!pcs.isEmpty()) {
                 if (_log.shouldDebug())
-                    _log.debug("[" + SnarkLogFormatter.peer(peer)
-                               + "] -> Got DONTHAVE, returning the partial pieces to the PeerCoordinator"
-                               + "\n* Pieces: " + pcs);
+                    _log.debug(SnarkLogFormatter.peer(peer)
+                               + " -> Got DONTHAVE, returning partial pieces to the"
+                               + " PeerCoordinator * Pieces: " + pcs);
                 listener.savePartialPieces(this.peer, pcs);
             }
         }
@@ -1202,14 +1241,21 @@ class PeerState implements DataLoader {
                     }
                 }
             }
-            if (deletedRequest != null && !haveMoreRequests) {
-                List<Request> pcs = Collections.singletonList(deletedRequest);
-                listener.savePartialPieces(this.peer, pcs);
+            if (deletedRequest != null) {
+                // The rejected blocks belong to nobody now, so put them back in the pool
+                // for the piece. This has to happen whether or not the peer still holds
+                // other blocks of it: if it does, savePartialPieces() is not called and
+                // the piece would stay claimed by a peer that has just told us it will
+                // not send them.
+                clearClaims(Collections.singletonList(deletedRequest));
                 if (_log.shouldDebug())
-                    _log.debug("Returned to coord. with data "
-                               + deletedRequest.getPartialPiece().getDownloaded()
-                               + " due to reject(" + piece + ',' + begin + ',' + length
-                               + ") from " + SnarkLogFormatter.peer(peer));
+                    _log.debug("Rejected a block -> Released the claim * Piece: " + piece
+                               + " * Offset: " + begin + " bytes * Peer: "
+                               + SnarkLogFormatter.peer(peer));
+                if (!haveMoreRequests) {
+                    List<Request> pcs = Collections.singletonList(deletedRequest);
+                    listener.savePartialPieces(this.peer, pcs);
+                }
             }
             if (lastRequest != null
                     && lastRequest.getPiece() == piece
@@ -1433,8 +1479,8 @@ class PeerState implements DataLoader {
     }
 
     /**
-     * Tell the other side that we are no longer interested in any of the outstanding requests (if
-     * any) for this piece.
+     * Tell the other side that we are no longer interested in any of its
+     * outstanding requests for this piece.
      *
      * @param piece the zero-based index of the piece whose requests are dropped
      * @since 0.8.1
@@ -1619,13 +1665,21 @@ class PeerState implements DataLoader {
         // failsafe
         // However this is bad as it thrashes the peer when we change our mind
         // Ticket 691 cause here?
-        if (interesting && lastRequest == null && outstandingRequests.isEmpty()) {
+        if (shouldGiveUpOnPeer(interesting, lastRequest, !outstandingRequests.isEmpty())) {
             setInteresting(false);
         }
 
-        if (_log.shouldDebug()) {
-            _log.debug("Requesting from " + SnarkLogFormatter.peer(peer) + "\n* Pieces: "
-                       + outstandingRequests);
+        if (_log.shouldDebug() && !outstandingRequests.isEmpty()) {
+            // a per-piece tally, not the request list - the list named every block
+            // offset and ran to 596 characters for one peer
+            Map<Integer, Integer> tally = new TreeMap<>();
+            for (Request req : outstandingRequests) {
+                Integer key = Integer.valueOf(req.getPiece());
+                Integer prior = tally.get(key);
+                tally.put(key, Integer.valueOf(prior == null ? 1 : prior.intValue() + 1));
+            }
+            _log.debug("Requesting from " + SnarkLogFormatter.peer(peer) + " ->"
+                       + SnarkLogFormatter.requestTally(tally));
         }
     }
 
@@ -1675,10 +1729,13 @@ class PeerState implements DataLoader {
             lastRequest = null;
         }
 
-        // If we are not in the end game, we may run out of things to request
-        // because we are asking other peers. Set not-interesting now rather than
-        // wait for those other requests to be satisfied via havePiece()
-        if (interesting && lastRequest == null) {
+        // We may run out of things to ask for because other peers are filling the same
+        // pieces, so say so now rather than wait for those other requests to come back
+        // through havePiece(). Only once nothing of ours is in flight with this peer and
+        // it has no current piece: a peer stops sending as soon as we say uninterested,
+        // and the blocks it owes us would then sit claimed on the shared copy of the
+        // piece until the checker re-queues it.
+        if (shouldGiveUpOnPeer(interesting, lastRequest, !outstandingRequests.isEmpty())) {
             interesting = false;
             out.sendInterest(false);
             if (_log.shouldDebug()) {

@@ -17,8 +17,8 @@ import java.util.Set;
  *   <li>Priority level for piece selection
  * </ul>
  *
- * <p>Pieces are sorted by priority (highest first) and then by rarity (fewest peers having it
- * first) to optimize download performance.
+ * <p>Pieces are sorted by priority, highest first, and then by rarity, fewest
+ * peers having it first, to optimize download performance.
  *
  * <p><strong>Thread Safety:</strong> This class is not thread-safe. Callers must synchronize on
  * access to most methods.
@@ -155,8 +155,14 @@ class Piece implements Comparable<Piece> {
     }
 
     /**
-     * Marks a peer as requesting or no longer requesting this piece, stamping the last-activity
-     * time when a request is made. Used to avoid deadlocks when querying each peer.
+     * Marks a peer as requesting or no longer requesting this piece, and starts the
+     * last-activity clock when the piece goes from not-requested to requested. Used to
+     * avoid deadlocks when querying each peer.
+     *
+     * <p>The clock is deliberately not stamped on every mark. The end game marks a piece
+     * requested for each peer it tries before backing out because the piece's blocks are
+     * all claimed already, and stamping there keeps a piece that is fetching nothing
+     * forever fresh, so {@link PeerCoordinator#checkStalledPieces} never re-queues it.
      * Caller must synchronize.
      *
      * @param pid the peer ID
@@ -166,8 +172,11 @@ class Piece implements Comparable<Piece> {
     void setRequested(PeerID pid, boolean requested) {
         if (requested) {
             if (this.requests == null) this.requests = new HashSet<>(2);
+            // only the first requester of a piece starts its stall clock
+            if (this.requests.isEmpty()) {
+                _lastActive = System.currentTimeMillis();
+            }
             this.requests.add(pid);
-            _lastActive = System.currentTimeMillis();
         } else {
             if (this.requests != null) this.requests.remove(pid);
         }

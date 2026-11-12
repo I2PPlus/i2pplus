@@ -329,6 +329,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     private static class CheckEvent extends SimpleTimer2.TimedEvent {
         /** The checker task being scheduled. */
         private final PeerCheckerTask _task;
+        /** Where a pass that threw is reported, on the coordinator's logger. */
+        private final Log _log;
 
         /**
          * Wrapper to reschedule the checker task on each fire.
@@ -339,14 +341,24 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         public CheckEvent(I2PAppContext ctx, PeerCheckerTask task) {
             super(ctx.simpleTimer2());
             _task = task;
+            _log = ctx.logManager().getLog(PeerCoordinator.class);
         }
 
         /**
-         * Fire the checker task and reschedule for the next period.
+         * Fire the checker task and reschedule for the next period. The reschedule is in a
+         * finally because one pass throwing must not end every later one: the stall
+         * re-queue, the choke cascade and the partial-piece parking all run on this job, so
+         * a torrent whose pass died would stop re-queueing stalled pieces for good.
          */
         public void timeReached() {
-            _task.run();
-            schedule(checkPeriod(RandomSource.getInstance()));
+            try {
+                _task.run();
+            } catch (RuntimeException re) {
+                if (_log.shouldLog(Log.WARN))
+                    _log.warn("Checker pass failed -> Rescheduling anyway", re);
+            } finally {
+                schedule(checkPeriod(RandomSource.getInstance()));
+            }
         }
     }
 
@@ -1132,8 +1144,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             if (old != null && old.getInactiveTime() > old.getMaxInactiveTime()) {
                 // idle for 8 minutes, kill the old con (32KB/8min = 68B/sec minimum for one block)
                 if (_log.shouldInfo())
-                    _log.info("Removing an idle peer connection -> Inactive too long"
-                              + " * Dropping: " + old + " * Keeping: "
+                    _log.info("Removing an idle peer connection -> Idle too long"
+                              + "\n* Dropping: " + old + " * Keeping: "
                                 + SnarkLogFormatter.peer(peer) + " * Idle: "
                               + DataHelper.formatDuration(old.getInactiveTime()));
                 peers.remove(old);
@@ -1159,7 +1171,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 if (dropNew) {
                     if (_log.shouldInfo())
                         _log.info("Duplicate peer connection -> Keeping the existing one"
-                                  + " * Dropping: " + SnarkLogFormatter.peer(peer) + " * Kept: "
+                                  + "\n* Dropping: " + SnarkLogFormatter.peer(peer) + " * Kept: "
                                     + old + " * Idle: "
                                   + DataHelper.formatDuration(old.getInactiveTime()));
                     // toDisconnect = peer to get out of synchronized(peers)
@@ -1405,17 +1417,54 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * This should be somewhat less than the max conns per torrent, but not too much less, so a
      * torrent doesn't get stuck near the end.
      * https://en.wikipedia.org/wiki/Glossary_of_BitTorrent_terms#Endgame_/_Endgame_mode
+     * Package-visible so the end-game boundary can be pinned by the tests.
      *
      * @since 0.7.14
      */
-    private static final int END_GAME_THRESHOLD = 32;
+    static final int END_GAME_THRESHOLD = 32;
 
     /**
-     * Max number of peers to get a piece from when in end game.
+     * Minimum number of peers to get a piece from when in end game - the floor of the
+     * per-piece cap from {@link #parallelRequestCap(int, int)}. Package-visible so the
+     * tests can name the floor rather than repeat it.
      *
      * @since 0.8.1
      */
-    private static final int MAX_PARALLEL_REQUESTS = 8;
+    static final int MAX_PARALLEL_REQUESTS = 8;
+
+    /**
+     * Ceiling on the per-piece parallel request cap, so a torrent with huge pieces cannot
+     * end up with a hundred peers each claiming a couple of blocks of one piece.
+     *
+     * @since 0.9.72+
+     */
+    static final int MAX_PARALLEL_REQUESTS_CAP = 16;
+
+    /**
+     * How many peers may pull blocks of one piece at the same time.
+     *
+     * <p>The cap used to be the fixed {@link #MAX_PARALLEL_REQUESTS}. That only binds when
+     * the piece has more blocks than it, so a torrent with 16 KiB pieces - one block each -
+     * was already pulling a piece from more peers than the number allowed, while a torrent
+     * with 512 KiB pieces (32 blocks at the default part size) stopped at 8 peers and left
+     * 24 blocks' worth of willing peers unused. Scaling the cap to the piece's block count
+     * uses that demand where it exists and keeps the bookkeeping bounded where it does not.
+     *
+     * @param pieceLength the piece's length in bytes, from
+     *                    {@link MetaInfo#getPieceLength(int)}; anything that is not
+     *                    positive falls back to the floor
+     * @param partSize the block size we request, {@link PeerState#PARTSIZE}
+     * @return the cap, from {@value #MAX_PARALLEL_REQUESTS} to
+     *         {@value #MAX_PARALLEL_REQUESTS_CAP} peers
+     * @since 0.9.72+
+     */
+    static int parallelRequestCap(int pieceLength, int partSize) {
+        if (pieceLength <= 0 || partSize <= 0) {
+            return MAX_PARALLEL_REQUESTS;
+        }
+        int blocks = 1 + (pieceLength - 1) / partSize;
+        return Math.max(MAX_PARALLEL_REQUESTS, Math.min(MAX_PARALLEL_REQUESTS_CAP, blocks));
+    }
 
     /**
      * Returns one of pieces in the given BitField that is still wanted or null if none of the given
@@ -1565,9 +1614,13 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                         continue; // BEP 54: peer said it no longer has this piece
                     }
                     if (havePieces.get(p.getId())) {
-                        // limit number of parallel requests
+                        // limit number of parallel requests, scaled to how many blocks
+                        // this piece is actually made of
                         int requestedCount = p.getRequestCount();
-                        if (requestedCount < MAX_PARALLEL_REQUESTS && !p.isRequestedBy(peer)) {
+                        int cap = parallelRequestCap(
+                                metainfo != null ? metainfo.getPieceLength(p.getId()) : 0,
+                                PeerState.PARTSIZE);
+                        if (requestedCount < cap && !p.isRequestedBy(peer)) {
                             piece = p;
                             break;
                         }
@@ -1782,8 +1835,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
 
     /**
      * Pool running piece verify and write, shared by every torrent. Piece verify is a
-     * full SHA-1 over the piece (and, for a piece too big to keep in memory, a second
-     * pass over its temp file) and the write is a third pass plus the torrent file
+     * full SHA-1 over the piece, plus a second pass over its temp file for a piece too
+     * big to keep in memory, and the write is a third pass plus the torrent file
      * write; all of that used to run on the peer's connection thread, where it closed
      * that peer's receive window and throttled its download for the duration.
      */
@@ -2011,8 +2064,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 }
             } else {
                 // so we will try again
-                markUnrequested(peer, piece);
                 removePartialPiece(piece); // just in case
+                markUnrequested(peer, piece);
                 // Mark this peer as not having the piece. PeerState will update its bitfield.
                 synchronized (wantedPieces) {
                     if (wantedPiece != null) {
@@ -2094,8 +2147,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             if (!I2PAppContext.getGlobalContext().isRouterContext()) {
                 System.out.println(" • " + msg);
             }
-            markUnrequested(peer, piece);
             removePartialPiece(piece); // just in case
+            markUnrequested(peer, piece);
             synchronized (wantedPieces) {
                 if (wantedPiece != null) {
                     Piece dup = wantedMap.remove(Integer.valueOf(piece));
@@ -2217,11 +2270,24 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      *
      * @param peer the peer being removed from all piece records
      */
-    private void removePeerFromPieces(Peer peer) {
+    /**
+     * Drops the peer from every wanted piece's availability and requester sets. A live
+     * partial left with no requester by that unmarking is re-queued here, so a peer that
+     * goes away without handing its blocks back does not strand the piece until the
+     * checker's stall backstop runs. Package-visible for the tests.
+     *
+     * @param peer the peer that went away
+     */
+    void removePeerFromPieces(Peer peer) {
         synchronized (wantedPieces) {
+            long now = System.currentTimeMillis();
             for (Piece piece : wantedPieces) {
                 piece.removePeer(peer);
                 piece.setRequested(peer, false);
+                // A live partial whose last requester just went away is re-queued on the
+                // spot instead of waiting for the checker's five-minute backstop. The map
+                // lookup inside keeps this off every piece but the few in flight.
+                parkIfOrphaned(piece.getId(), peer, now);
             }
             wantedDirty = true;
         }
@@ -2279,18 +2345,10 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                         continue;
                     }
                     settled.put(key, pp);
-                    // syncs on wantedPieces...
+                    // syncs on wantedPieces, and parks the live copy as an orphan if this
+                    // was the piece's last registered requester, so the bytes already
+                    // downloaded are not lost and sole ownership goes to the list
                     markUnrequested(peer, pp.getPiece());
-                    if (!someoneFetching(pp.getPiece())) {
-                        _livePartials.remove(key);
-                        pp.clearAllRequested();
-                        pp.setShared(false);
-                        partialPieces.add(pp);
-                        partialIds.add(key);
-                        if (_log.shouldInfo()) {
-                            _log.info("Parked shared partial piece " + pp);
-                        }
-                    }
                     continue;
                 }
                 if (prev != null) {
@@ -2301,38 +2359,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                     // a partial coming to rest in the orphan list is scanned from the
                     // beginning by whoever picks it up, so nothing may stay claimed
                     pp.clearAllRequested();
-                    // PartialPiece.equals() only compares piece number, which is what we want
-                    int idx = partialPieces.indexOf(pp);
-                    if (idx < 0) {
-                        partialPieces.add(pp);
-                        partialIds.add(Integer.valueOf(pp.getPiece()));
-                        if (_log.shouldInfo()) {
-                            _log.info("Saving orphaned partial piece (new) " + pp);
-                        }
-                    } else if (pp.getDownloaded() > partialPieces.get(idx).getDownloaded()) {
-                        // replace what's there now
-                        partialPieces.get(idx).release();
-                        partialPieces.set(idx, pp);
-                        if (_log.shouldInfo()) {
-                            _log.info("Saving orphaned partial piece (bigger) " + pp);
-                        }
-                    } else {
-                        pp.release();
-                        if (_log.shouldInfo()) {
-                            _log.info("Discarding partial piece (not bigger)" + pp);
-                        }
-                    }
-                    int max = getMaxConnections();
-                    if (partialPieces.size() > max) {
-                        // sorts by preference, highest first
-                        Collections.sort(partialPieces);
-                        PartialPiece gone = partialPieces.remove(partialPieces.size() - 1);
-                        partialIds.remove(Integer.valueOf(gone.getPiece()));
-                        gone.release();
-                        if (_log.shouldInfo()) {
-                            _log.info("Discarding orphaned partial piece (list full) " + gone);
-                        }
-                    }
+                    parkOrphanLocked(pp);
                 } else {
                     pp.release();
                 } // drop the empty partial piece
@@ -2525,7 +2552,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             if (p.isRequested() && live == null && wantedPieces.size() > END_GAME_THRESHOLD) {
                 return null; // not in end game, already requested from another peer
             }
-            if (p.getRequestCount() >= MAX_PARALLEL_REQUESTS) {
+            if (p.getRequestCount()
+                    >= parallelRequestCap(metainfo.getPieceLength(piece), PeerState.PARTSIZE)) {
                 return null;
             }
             p.setRequested(peer, true);
@@ -2572,12 +2600,14 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
-     * Remove saved state for this piece. Unless we are in the end game there shouldnt be anything
-     * in there. Do not call with wantedPieces lock held (deadlock).
+     * Remove saved state for this piece - the orphan copy, the live copy, and the requests
+     * the peers still hold for it. Unless we are in the end game there shouldn't be anything
+     * in there. Do not call with wantedPieces lock held (deadlock). Package-visible so the
+     * tests can pin that the cancel runs while the live copy is still registered.
      *
      * @param piece the piece number whose saved partial data is dropped
      */
-    private void removePartialPiece(int piece) {
+    void removePartialPiece(int piece) {
         PartialPiece live;
         synchronized (wantedPieces) {
             for (Iterator<PartialPiece> iter = partialPieces.iterator(); iter.hasNext(); ) {
@@ -2671,6 +2701,177 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
+     * Puts a partial piece that has come to rest into the orphan list: added if the list
+     * holds no copy of the piece, replacing the copy there if this one holds more data,
+     * discarded if it holds no more. The list is then trimmed to the torrent's connection
+     * count, dropping the least preferred copy. The caller holds the wantedPieces monitor
+     * and has already cleared the piece's claims and un-shared it.
+     *
+     * @param pp the partial piece to park, not null
+     * @since 0.9.72+
+     */
+    private void parkOrphanLocked(PartialPiece pp) {
+        // PartialPiece.equals() only compares piece number, which is what we want
+        int idx = partialPieces.indexOf(pp);
+        boolean kept;
+        if (idx < 0) {
+            partialPieces.add(pp);
+            partialIds.add(Integer.valueOf(pp.getPiece()));
+            kept = true;
+        } else if (pp.getDownloaded() > partialPieces.get(idx).getDownloaded()) {
+            // replace what's there now
+            partialPieces.get(idx).release();
+            partialPieces.set(idx, pp);
+            kept = true;
+        } else {
+            pp.release();
+            kept = false;
+        }
+        if (_log.shouldInfo()) {
+            if (kept) {
+                _log.info("Parked an orphaned partial piece -> Piece: " + pp.getPiece()
+                          + " * Downloaded: " + pp.getDownloaded() + " bytes * Orphans: "
+                          + partialPieces.size());
+            } else {
+                _log.info("Discarded an orphaned partial piece -> A parked copy holds more"
+                          + "\n* Piece: " + pp.getPiece() + " * Downloaded: "
+                          + pp.getDownloaded() + " bytes");
+            }
+        }
+        int max = getMaxConnections();
+        if (partialPieces.size() > max) {
+            // sorts by preference, highest first
+            Collections.sort(partialPieces);
+            PartialPiece gone = partialPieces.remove(partialPieces.size() - 1);
+            partialIds.remove(Integer.valueOf(gone.getPiece()));
+            gone.release();
+            if (_log.shouldInfo()) {
+                _log.info("Discarded an orphaned partial piece -> Orphan list full"
+                          + " * Piece: " + gone.getPiece() + " * Orphans: "
+                          + partialPieces.size());
+            }
+        }
+    }
+
+    /**
+     * Re-queues the live partial of a piece that no registered requester is fetching, so
+     * its blocks go back in the pool and the bytes already downloaded stay where the
+     * orphan-adoption path can hand them out again. Does nothing while some peer is still
+     * registered for the piece, or when the piece has no live partial.
+     *
+     * <p>No cancel is sent to the peers that were pulling blocks of it. Every path that
+     * clears a piece's requester set - markUnrequested(), removePeerFromPieces() and
+     * getPartialPiece() turning a peer away - hands back or drops that peer's requests on
+     * the way, so no peer is left holding a reference to the parked copy. Issuing a cancel
+     * here is not an option either: PeerState takes the wantedPieces monitor the other way
+     * round, and the callers of removePartialPiece() step outside the monitor to cancel.
+     *
+     * @param piece the piece to re-queue
+     * @param peer the peer whose unmarking left the piece alone, null when the checker
+     *             sweep found it idle instead
+     * @param now the current time in milliseconds, for the log's idle time
+     * @return true if a live partial was re-queued
+     * @since 0.9.72+
+     */
+    private boolean parkIfOrphaned(int piece, Peer peer, long now) {
+        PartialPiece pp = _livePartials.get(Integer.valueOf(piece));
+        if (pp == null || someoneFetching(piece)) {
+            return false;
+        }
+        _livePartials.remove(Integer.valueOf(piece));
+        pp.clearAllRequested();
+        pp.setShared(false);
+        parkOrphanLocked(pp);
+        if (_log.shouldWarn()) {
+            Piece p = wantedMap.get(Integer.valueOf(piece));
+            String reason;
+            if (peer != null) {
+                reason = "Last peer left * Peer: " + SnarkLogFormatter.peer(peer);
+            } else {
+                long idle = p != null ? now - p.getLastActive() : 0;
+                reason = "No requester for " + DataHelper.formatDuration(idle);
+            }
+            _log.warn("Re-queued a partial piece -> " + reason + " * Piece: " + piece
+                      + " * Downloaded: " + pp.getDownloaded() + " bytes");
+        }
+        return true;
+    }
+
+    /**
+     * How many bytes the parked copy of a piece holds, or -1 if the piece is not parked.
+     * For the tests.
+     *
+     * @param piece the piece to look for in the orphan list
+     * @return the bytes downloaded in the parked copy, -1 if there is none
+     * @since 0.9.72+
+     */
+    int orphanBytes(int piece) {
+        synchronized (wantedPieces) {
+            for (PartialPiece pp : partialPieces) {
+                if (pp.getPiece() == piece) {
+                    return pp.getDownloaded();
+                }
+            }
+            return -1;
+        }
+    }
+
+    /**
+     * Whether the last few pieces are in flight - the point at which the peers that hold
+     * them are the only sources left, and choking one of them costs more than the upload
+     * slot it frees. See {@link #END_GAME_THRESHOLD}.
+     *
+     * <p>The count is of the pieces still on the wanted list, so a piece the user disabled
+     * counts too: a torrent with 33 wanted pieces of which 32 are disabled is not in the
+     * end game by this test, even though only one piece is really left to fetch.
+     *
+     * @return true while pieces are still wanted and no more than the end-game threshold
+     *         of them is left
+     * @since 0.9.72+
+     */
+    boolean inEndGame() {
+        synchronized (wantedPieces) {
+            int left = wantedPieces.size();
+            return left > 0 && left <= END_GAME_THRESHOLD;
+        }
+    }
+
+    /**
+     * Whether this peer holds a piece we still want, with no side effects and no logging,
+     * so the choke policy can ask it about every peer on every pass. The scan stops at the
+     * first disabled piece, since wantedPieces is sorted by priority, but it is still a
+     * scan of every wanted piece - ask only when {@link #inEndGame()} says the last few
+     * pieces are in flight.
+     *
+     * @param peer the peer to ask about, not null
+     * @return true if the peer's bitfield covers a wanted piece, false if we have no
+     *         bitfield for it or it holds nothing we want
+     * @since 0.9.72+
+     */
+    boolean hasSomethingWeNeed(Peer peer) {
+        PeerState st = peer.state;
+        if (st == null) {
+            return false;
+        }
+        BitField bf = st.bitfield;
+        if (bf == null) {
+            return false;
+        }
+        synchronized (wantedPieces) {
+            for (Piece p : wantedPieces) {
+                // sorted by priority, so when we hit a disabled piece we are done
+                if (p.isDisabled()) {
+                    break;
+                }
+                if (bf.get(p.getId())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
      * How many pieces are registered as being downloaded right now, and how many are
      * parked as orphans. For the tests.
      *
@@ -2696,6 +2897,20 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
+     * The wanted piece record for a piece number, or null if we are not missing it. For
+     * the tests.
+     *
+     * @param piece the piece number to look up
+     * @return the piece record, null if the piece is not wanted
+     * @since 0.9.72+
+     */
+    Piece wantedPiece(int piece) {
+        synchronized (wantedPieces) {
+            return wantedMap.get(Integer.valueOf(piece));
+        }
+    }
+
+    /**
      * Clear the requested flag for a piece.
      *
      * @param peer the peer the piece was requested from
@@ -2706,6 +2921,10 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             Piece pc = wantedMap.get(Integer.valueOf(piece));
             if (pc != null) {
                 pc.setRequested(peer, false);
+                // The piece is nobody's business again as soon as its last requester is
+                // gone, so re-queue its live copy here rather than waiting out the
+                // checker's five-minute stall backstop.
+                parkIfOrphaned(piece, peer, System.currentTimeMillis());
             }
         }
     }
@@ -2744,10 +2963,32 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                     stalled.add(new StalledPiece(p, p.getRequesters()));
                 }
             }
+            // A live partial that no registered requester is fetching is invisible to
+            // every other path: wantPiece() skips a piece that already has a partial of
+            // its own, and getPartialPiece() refuses to share one whose blocks are all
+            // claimed. Nothing else reaps it, so it is parked here. The idle pieces are
+            // collected first - parking removes from the map being walked.
+            List<Integer> idle = null;
+            for (Map.Entry<Integer, PartialPiece> entry : _livePartials.entrySet()) {
+                Piece p = wantedMap.get(entry.getKey());
+                // a piece we no longer want is dealt with when it is finished
+                if (p == null || now - p.getLastActive() <= PIECE_STALL_TIMEOUT) {
+                    continue;
+                }
+                if (idle == null) {
+                    idle = new ArrayList<>(2);
+                }
+                idle.add(entry.getKey());
+            }
+            if (idle != null) {
+                for (Integer key : idle) {
+                    parkIfOrphaned(key.intValue(), null, now);
+                }
+            }
         }
         if (stalled != null) {
             for (StalledPiece sp : stalled) {
-                expireStalledPiece(sp.piece, sp.requesters);
+                expireStalledPiece(sp.piece, sp.requesters, now);
             }
         }
     }
@@ -2758,9 +2999,10 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      *
      * @param p the stalled piece
      * @param requesters snapshot of the peers requesting it, taken under the wantedPieces lock
+     * @param now the current time in milliseconds, for the log's idle time
      * @since 0.9.71+
      */
-    private void expireStalledPiece(Piece p, Set<PeerID> requesters) {
+    private void expireStalledPiece(Piece p, Set<PeerID> requesters, long now) {
         for (Peer peer : peerList()) {
             if (!requesters.contains(peer.getPeerID())) {
                 continue;
@@ -2777,9 +3019,9 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             }
             savePartialPieces(peer, pcs);
             if (_log.shouldWarn()) {
-                _log.warn("Piece " + p.getId() + " stalled (no data for "
-                          + PIECE_STALL_TIMEOUT / 60000 + " min), re-queued from "
-                                                          + SnarkLogFormatter.peer(peer));
+                _log.warn("Re-queued a stalled piece -> No data received * Piece: " + p.getId()
+                          + " * Peer: " + SnarkLogFormatter.peer(peer)
+                          + " * Idle: " + DataHelper.formatDuration(now - p.getLastActive()));
             }
         }
     }

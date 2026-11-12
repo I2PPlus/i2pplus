@@ -82,6 +82,8 @@ class PeerCheckerTask implements Runnable {
         List<Peer> removed = new ArrayList<>();
         int uploadLimit = coordinator.allowedUploaders();
         boolean overBWLimit = coordinator.overUpBWLimit();
+        // end game is per-torrent state, so decide it once for the whole pass
+        boolean endGame = coordinator.inEndGame();
         if (_log.shouldDebug())
             _log.debug("START peers: " + peerList.size() + " uploaders: "
                        + coordinator.getUploaders() + " interested: "
@@ -121,11 +123,15 @@ class PeerCheckerTask implements Runnable {
             peer.setRateHistory();
 
             if (_log.shouldDebug()) {
-                _log.debug(SnarkLogFormatter.peer(peer) + " ul: "
-                           + upload * 1024 / KILOPERSECOND + " dl: "
-                           + download * 1024 / KILOPERSECOND + " i: " + peer.isInterested()
-                           + " I: " + peer.isInteresting() + " c: " + peer.isChoking() + " C: "
-                           + peer.isChoked());
+                // A per-peer tally, so the rates go on their own line - the value is
+                // bytes per second, KILOPERSECOND being the rate one check per period makes
+                _log.debug("Peer check -> " + SnarkLogFormatter.peer(peer)
+                           + " * We want: " + peer.isInteresting()
+                           + " * We choke: " + peer.isChoking()
+                           + "\n* Peer wants: " + peer.isInterested()
+                           + " * Peer chokes: " + peer.isChoked()
+                           + " * Up: " + upload * 1024 / KILOPERSECOND + " B/s"
+                           + " * Down: " + download * 1024 / KILOPERSECOND + " B/s");
             }
 
             // Choke a percentage of them rather than all so it isn't so drastic...
@@ -137,6 +143,14 @@ class PeerCheckerTask implements Runnable {
                                                     > (coordinator.completed() ? 4 : 5)))
                                     || (coordinator.overUpBWLimit(uploaded)));
 
+            // A peer that still holds a piece we want is a source for the last pieces,
+            // not just a sink, so the choke cascade below leaves it alone unless we are
+            // over our upload bandwidth limit. The scan of the wanted pieces is only
+            // worth making while the end game is on.
+            boolean peerHasNeededPiece = endGame && coordinator.hasSomethingWeNeed(peer);
+            boolean spareSource =
+                    spareEndgameSource(endGame, peerHasNeededPiece, overBWLimitChoke);
+
             // If we are at our max uploaders and we have lots of other
             // interested peers try to make some room.
             // (Note use of coordinator.uploaders)
@@ -144,7 +158,8 @@ class PeerCheckerTask implements Runnable {
             if (((cup == uploadLimit && coordinator.getInterestedAndChoking() > 0)
                             || cup > uploadLimit
                             || overBWLimitChoke)
-                    && !peer.isChoking()) {
+                    && !peer.isChoking()
+                    && !spareSource) {
                 // Check if it still wants pieces from us.
                 if (!peer.isInterested()) {
                     // Note that we only choke if we are over our limits,
@@ -211,10 +226,11 @@ class PeerCheckerTask implements Runnable {
 
                     // Put it at the back of the list
                     removed.add(peer);
-                } else if (peer.isInteresting() && !peer.isChoked() && download == 0) {
+                } else if (peer.isInteresting() && !peer.isChoked()
+                        && uploaderNotDelivering(download, peer.getDownloadRate())) {
                     // We are downloading but didn't receive anything...
                     if (_log.shouldDebug())
-                        _log.debug("Choking uploader that doesn't deliver "
+                        _log.debug("Choking an uploader that has sent us nothing -> Peer: "
                                    + SnarkLogFormatter.peer(peer));
                     peer.setChoking(true);
                     uploaders--;
@@ -318,5 +334,42 @@ class PeerCheckerTask implements Runnable {
         if (dht != null && ((_runCount + _phase) % 16) == 0) {
             dht.announce(coordinator.getInfoHash(), coordinator.completed());
         }
+    }
+
+    /**
+     * Whether the choke cascade must leave this peer alone because it is a source for the
+     * last pieces. In the end game the peers holding the fewest pieces left are the only
+     * sources there are, and a choked peer has no reason to keep sending them, so the
+     * cost of choking one is a stalled download while the benefit is a single upload slot
+     * we are barely using. Only the upload bandwidth limit outranks that - it is a hard
+     * cap on what the router can send, not a preference.
+     *
+     * @param inEndGame true while pieces are still wanted and only a few are left
+     * @param peerHasNeededPiece true if this peer's bitfield covers a piece we still want
+     * @param overBWLimitChoke true if this peer would be choked to stay inside the
+     *                         router's upload bandwidth limit
+     * @return true to skip this peer when choosing whom to choke
+     * @since 0.9.72+
+     */
+    static boolean spareEndgameSource(boolean inEndGame, boolean peerHasNeededPiece,
+                                      boolean overBWLimitChoke) {
+        return inEndGame && peerHasNeededPiece && !overBWLimitChoke;
+    }
+
+    /**
+     * Whether a peer we are downloading from has failed to deliver often enough to be
+     * worth choking. One empty check period is not a verdict: a peer serving several
+     * torrents at once, or filling one block of a piece shared with other peers, can go
+     * several passes without sending us anything, and choking it then is how a nearly
+     * complete download stalls.
+     *
+     * @param downloadThisPass bytes received from the peer since the last check
+     * @param downloadRate the peer's average download rate over the rate window, in bytes
+     *                     per second
+     * @return true if the whole rate window is empty
+     * @since 0.9.72+
+     */
+    static boolean uploaderNotDelivering(long downloadThisPass, long downloadRate) {
+        return downloadThisPass == 0 && downloadRate == 0;
     }
 }
