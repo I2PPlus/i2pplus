@@ -65,27 +65,9 @@ def standaloneResourcesDir = file("$buildDir/standalone-resources")
 def standaloneDir = file("$buildDir/standalone")
 def distDir = rootProject.ext.distDir
 
-// Upstream jetty-util minus the stock JavaVersion.class, plus the vendored
-// patch class - mirrors the ant jetty-util.jar (apps/jetty/build.xml)
+// Upstream jetty-util, taken as is - the JavaVersion patch we carried for
+// 9.3.x is in 9.3.30.v20211001 itself (ant apps/jetty/build.xml does the same)
 def upstreamJettyUtil = configurations.detachedConfiguration(dependencies.create("org.eclipse.jetty:jetty-util:${jettyVersion}"))
-
-task compileJettyUtilPatch(type: JavaCompile) {
-    description = 'Compile the vendored JavaVersion patch class for jetty-util.'
-    source = fileTree("${rootDir}/apps/jetty/patches/jetty-util/src/main/java")
-    classpath = upstreamJettyUtil
-    destinationDirectory = file("$buildDir/jetty-util-patch")
-}
-
-task jettyUtilJar(type: Jar) {
-    description = 'Build the patched jetty-util.jar for the standalone fat jar (ant jetty-util.jar).'
-    dependsOn compileJettyUtilPatch
-    archiveFileName = 'jetty-util.jar'
-    destinationDirectory = buildDir
-    from({ zipTree(upstreamJettyUtil.singleFile) }) {
-        exclude 'org/eclipse/jetty/util/JavaVersion.class'
-    }
-    from compileJettyUtilPatch.destinationDirectory
-}
 
 // The jetty server manifest section (Gradle 9 removed Manifest.section());
 // produced by a task so the fat jar can snapshot it as a normal input
@@ -108,7 +90,7 @@ Implementation-Version: ${jettyVersion}
 task standaloneJar(type: Jar) {
     description = 'Build the standalone fat jar i2psnark-standalone.jar (ant standalone_jar).'
     dependsOn i2psnarkJar, ':core:jar', ':apps:ministreaming:jar', ':apps:streaming:jar',
-            ':apps:systray:jar', jettyUtilJar, rootProject.tasks.named('jbigi'),
+            ':apps:systray:jar', rootProject.tasks.named('jbigi'),
             standaloneManifestSection
     archiveFileName = 'i2psnark-standalone.jar'
     destinationDirectory = buildDir
@@ -126,7 +108,7 @@ task standaloneJar(type: Jar) {
     from { zipTree(file("$jettylibDir/jetty-io.jar")) }
     from { zipTree(file("$jettylibDir/jetty-security.jar")) }
     from { zipTree(file("$jettylibDir/jetty-servlet.jar")) }
-    from { zipTree(jettyUtilJar.archiveFile) }
+    from { zipTree(upstreamJettyUtil.singleFile) }
     from { zipTree(file("$jettylibDir/jetty-webapp.jar")) }
     from { zipTree(file("$jettylibDir/jetty-xml.jar")) }
     from { zipTree(file("$jettylibDir/org.mortbay.jetty.jar")) }
