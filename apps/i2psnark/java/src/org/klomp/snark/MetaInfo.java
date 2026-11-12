@@ -511,7 +511,7 @@ public class MetaInfo {
      *
      * @param map the dictionary, may be null or empty
      * @return the key names separated by ", ", an empty string if there are none
-     * @since 0.9.73+
+     * @since 0.9.72+
      */
     static String keyNames(Map<?, ?> map) {
         if (map == null || map.isEmpty()) {
@@ -543,7 +543,7 @@ public class MetaInfo {
      * @param info the info dictionary, may be null or empty
      * @return the measurements as one {@code " * "}-separated run, or the bare key
      *         names if none of the known keys is set
-     * @since 0.9.73+
+     * @since 0.9.72+
      */
     static String infoSummary(Map<String, BEValue> info) {
         if (info == null || info.isEmpty()) {
@@ -590,7 +590,7 @@ public class MetaInfo {
      *
      * @param info the info dictionary, may be null
      * @return the name, or {@code none} if the dictionary does not carry one
-     * @since 0.9.73+
+     * @since 0.9.72+
      */
     static String dictName(Map<String, BEValue> info) {
         Object name = info != null ? value(info, "name") : null;
@@ -1010,22 +1010,12 @@ public class MetaInfo {
     public String toString() {
         return "MetaInfo for: "
                 + name
-                + "\n* InfoHash: "
-                + I2PSnarkUtil.toHex(info_hash)
-                + "\n* Announce: "
-                + announce
-                + "\n* Size: "
-                + length
-                + " bytes, "
-                + "Files: "
-                + files
-                + ", "
-                + "Pieces: "
-                + piece_hashes.length / 20
-                + ", "
-                + "Piece Length: "
-                + piece_length
-                + " bytes";
+                + "\n* InfoHash: " + I2PSnarkUtil.toHex(info_hash)
+                + "\n* Announce: " + announce
+                + "\n* Size: " + length + " bytes"
+                + " * Files: " + files
+                + " * Pieces: " + piece_hashes.length / 20
+                + " * Piece Length: " + piece_length + " bytes";
     }
 
     /**

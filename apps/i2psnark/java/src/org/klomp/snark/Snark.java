@@ -17,6 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.I2PAppContext;
 import net.i2p.client.streaming.I2PServerSocket;
 import net.i2p.data.Base64;
+import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.util.Log;
@@ -468,8 +469,9 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         }
         if (_storageCreationFailed) {
             if (_log.shouldWarn()) {
-                _log.warn("Not restarting " + getBaseName() + " -> Cannot create the data location"
-                        + "\n* Remove the leftover files and add the torrent again");
+                _log.warn("Not restarting " + SnarkLogFormatter.torrent(this)
+                          + " -> Cannot create the data location"
+                          + "\n* Remove the leftover files and add the torrent again");
             }
             return;
         }
@@ -522,8 +524,9 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
                 long delay = _retryDelay;
                 _retryDelay = Math.min(_retryDelay * 2, RETRY_MAX_MS);
                 if (_log.shouldWarn()) {
-                    _log.warn("Unable to listen for I2P connections for " + getBaseName()
-                              + ", retrying in " + (delay / 60000) + " minutes");
+                    _log.warn("Unable to listen for I2P connections for "
+                              + SnarkLogFormatter.torrent(this)
+                              + " -> Retrying in: " + DataHelper.formatDuration(delay));
                 }
                 scheduleRetry(delay);
                 return;
@@ -536,8 +539,9 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
             else {
                 Destination d = serversocket.getManager().getSession().getMyDestination();
                 if (_log.shouldInfo())
-                    _log.info("Torrent " + getBaseName() + " started -> Listening on "
-                              + SnarkLogFormatter.dest(d) + " * Peers and tracker starting");
+                    _log.info("Torrent " + SnarkLogFormatter.torrent(this)
+                              + " started -> Listening on: " + SnarkLogFormatter.dest(d)
+                              + " * Peers and tracker starting");
             }
             coordinator =
                     new PeerCoordinator(

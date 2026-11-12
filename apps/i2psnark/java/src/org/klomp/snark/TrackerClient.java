@@ -723,7 +723,7 @@ public class TrackerClient implements Runnable {
                         _util.getString(
                                 "No valid trackers for {0} - enable opentrackers or DHT?",
                                 this.snark.getBaseName()));
-                _log.error("No valid trackers for " + this.snark.getBaseName());
+                _log.error("No valid trackers for " + SnarkLogFormatter.torrent(this.snark));
                 this.snark.stopTorrent();
                 return;
             }
@@ -836,7 +836,7 @@ public class TrackerClient implements Runnable {
             }
         } else {
             if (_log.shouldDebug())
-                _log.debug("No primary announce for " + snark.getBaseName());
+                _log.debug("No primary announce for " + SnarkLogFormatter.torrent(snark));
         }
 
         // announce list
@@ -990,19 +990,20 @@ public class TrackerClient implements Runnable {
         Hash h = getHostHash(ann);
         if (h == null) {
             if (_log.shouldWarn())
-                _log.warn("Bad announce URL: [" + ann + "] \n* Torrent:" + snark.getBaseName());
+                _log.warn("Bad announce URL -> Tracker: " + ann + " * Torrent: "
+                          + SnarkLogFormatter.torrent(snark));
             return false;
         }
         if (existing.size() >= MAX_TRACKERS) {
             if (_log.shouldInfo())
-                _log.info("Not using announce URL, we have enough: [" + ann + "] \n* Torrent: "
-                          + snark.getBaseName());
+                _log.info("Not using announce URL -> Tracker limit reached * Tracker: " + ann
+                          + " * Torrent: " + SnarkLogFormatter.torrent(snark));
             return false;
         }
         boolean rv = existing.add(h);
         if (!rv && _log.shouldInfo())
-            _log.info("Duplicate announce URL: [" + ann + "] \n* Torrent: "
-                      + snark.getBaseName());
+            _log.info("Duplicate announce URL -> Tracker: " + ann + " * Torrent: "
+                      + SnarkLogFormatter.torrent(snark));
 
         return rv;
     }
@@ -1483,7 +1484,7 @@ public class TrackerClient implements Runnable {
                             && uploaded >= snark.getTotalLength() / 2) {
 
                         if (_log.shouldInfo()) {
-                            _log.info("Auto stopping " + snark.getBaseName());
+                            _log.info("Auto stopping " + SnarkLogFormatter.torrent(snark));
                         }
                         snark.setAutoStoppable(false);
                         snark.stopTorrent();
@@ -1786,10 +1787,13 @@ public class TrackerClient implements Runnable {
                 _dhtPeersSeen = 0;
             }
             if (_log.shouldInfo()) {
-                _log.info("Received " + hashes.size() + " peer hashes from DHT"
+                // the count at INFO, the addresses themselves only at DEBUG
+                _log.info("Received a peer list from DHT ->"
                           + (_log.shouldDebug()
-                             ? SnarkLogFormatter.destList(hashes, "DHT peers", hashes.size())
-                             : ""));
+                             ? SnarkLogFormatter.afterArrow(
+                                      SnarkLogFormatter.destList(hashes, "Peers",
+                                                                 hashes.size()))
+                             : " Peers: " + hashes.size()));
             }
 
             // Now try these peers

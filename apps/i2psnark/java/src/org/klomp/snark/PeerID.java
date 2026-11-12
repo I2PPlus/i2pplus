@@ -158,7 +158,7 @@ public class PeerID implements Comparable<PeerID> {
      * render that hash as a destination link.
      *
      * @return true for a webseed's id
-     * @since 0.9.73+
+     * @since 0.9.72+
      */
     boolean isWebSeed() {
         return id != null && DataHelper.eq(id, 0, WebPeer.IDBytes, 0, WebPeer.IDBytes.length);

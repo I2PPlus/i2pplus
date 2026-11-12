@@ -13,7 +13,7 @@ import org.junit.Test;
  * dictionary dump in the torrent parse log: sorted key names, comma separated,
  * and an empty string rather than "null" or "[]" when there is nothing to show.
  *
- * @since 0.9.73+
+ * @since 0.9.72+
  */
 public class MetaInfoKeyNamesTest {
 

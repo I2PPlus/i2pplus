@@ -1277,6 +1277,24 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     * Queue an unescaped message for the messages page, and print it standalone,
+     * without the INFO mirror the addMessage methods write. Use for an action
+     * that already logs its own line, so the log does not carry the same event
+     * twice - the messages page and the standalone output still get it.
+     *
+     * @param message HTML to queue for the messages page, unescaped
+     * @param print the text to print, or null for no output
+     * @since 0.9.72+
+     */
+    private void queueAndPrint(String message, String print) {
+        long currentTime = System.currentTimeMillis() / 1000;
+        if (shouldQueueMessage(currentTime, message)) {
+            _messages.addMessageNoEscape(getTime() + "&nbsp; " + message);
+        }
+        printToConsole(print);
+    }
+
+    /**
      * Print a message to stdout when running standalone, replacing any HTML
      * nbsp entities so the console output is readable.
      *
@@ -4279,7 +4297,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      *
      * @param how the lookup path, "name" or "info"
      * @param infoHash the torrent the rejected request was for
-     * @since 0.9.73+
+     * @since 0.9.72+
      */
     private void logLookupBusy(String how, byte[] infoHash) {
         if (!_log.shouldInfo()) {return;}
@@ -5422,7 +5440,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             saveMetadata();
             _configCache.remove(hash);
             if (_log.shouldDebug()) {
-                _log.debug("Purged metadata for " + snark.getName());
+                _log.debug("Purged metadata for " + SnarkLogFormatter.torrent(snark));
             }
         }
     }
@@ -6756,13 +6774,15 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         boolean isLookup = _magnets.contains(snark.getName())
                 || snark.getName().startsWith("Lookup [");
         if (isLookup) {
-            addMessageNoEscapeAndPrint(
-                    _t("Resolving torrent lookup: {0}", linkify(snark)).replace("Magnet ", ""),
-                    _t("Resolving torrent lookup: {0}", getSnarkName(snark)).replace("Magnet ", ""));
+            // Snark.startTorrent() logs the start with the destination it is
+            // listening on, so the log does not need this line as well
+            queueAndPrint(_t("Resolving torrent lookup: {0}", linkify(snark)).replace("Magnet ",
+                                                                                      ""),
+                          _t("Resolving torrent lookup: {0}", getSnarkName(snark))
+                            .replace("Magnet ", ""));
         } else {
-            addMessageNoEscapeAndPrint(
-                    _t("Starting torrent: {0}", linkify(snark)).replace("Magnet ", ""),
-                    _t("Starting torrent: {0}", getSnarkName(snark)).replace("Magnet ", ""));
+            queueAndPrint(_t("Starting torrent: {0}", linkify(snark)).replace("Magnet ", ""),
+                          _t("Starting torrent: {0}", getSnarkName(snark)).replace("Magnet ", ""));
         }
         if (connected) {
             try {
@@ -7385,7 +7405,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         public void run() {
             try {
                 if (_log.shouldInfo()) {
-                    _log.info("Starting a recheck of " + snark.getBaseName());
+                    _log.info("Starting a recheck of " + SnarkLogFormatter.torrent(snark));
                 }
                 if (!_context.isRouterContext()) {
                     System.out.println(" • "
@@ -7397,7 +7417,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     updateStatus(snark);
                 }
                 if (_log.shouldInfo()) {
-                    _log.info("Finished recheck of " + snark.getBaseName() + " -> "
+                    _log.info("Finished recheck of " + SnarkLogFormatter.torrent(snark) + " -> "
                               + (changed ? "File changes detected" : "Unchanged"));
                 }
                 String link = linkify(snark);
@@ -7420,7 +7440,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                                     getSnarkName(snark)));
                 }
             } catch (IOException e) {
-                _log.error("Error rechecking " + snark.getBaseName(), e);
+                _log.error("Error rechecking " + SnarkLogFormatter.torrent(snark), e);
                 String msg =
                         _t("Error checking torrent {0}", snark.getBaseName())
                                 + " -> "

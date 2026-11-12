@@ -17,7 +17,7 @@ import org.klomp.snark.bencode.BEValue;
  * every value carries its unit, nothing is bracketed, and a key that says nothing
  * (a public torrent's "private") is left out.
  *
- * @since 0.9.73+
+ * @since 0.9.72+
  */
 public class MetaInfoSummaryTest {
 
