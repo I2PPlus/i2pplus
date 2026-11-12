@@ -5,8 +5,11 @@
 #
 # Usage:
 #   tools/scripts/run-tests.sh                  Run all tests (via ant test)
-#   tools/scripts/run-tests.sh core             Run core tests only
-#   tools/scripts/run-tests.sh router           Run router tests only
+#   tools/scripts/run-tests.sh SUITE            Run one suite only: core,
+#                                               ministreaming, streaming, router,
+#                                               i2ptunnel, addressbook,
+#                                               routerconsole, i2psnark, susimail,
+#                                               sam, pack200, jrobin, js
 #   tools/scripts/run-tests.sh js               Run the console/webapp JS harness
 #                                               only (needs node; no Java build)
 #   tools/scripts/run-tests.sh --logs all       Keep ant's console output and
@@ -564,10 +567,16 @@ case "$SUITE" in
     run_build apps/pack200/java
     run_test apps/pack200/java "Pack200"
     ;;
+  jrobin)
+    # jrobin is self-contained (rrd4j plus the vendored jfree svg sources), so its
+    # junit.test classpath names only this module - no core build needed.
+    run_build apps/jrobin/java
+    run_test apps/jrobin/java "JRobin"
+    ;;
   js)
     run_js_test || js_rc=1
     ;;
-  all|*)
+  all)
     # Build all modules first (jar dependencies prevent parallelism)
     run_build core/java
     run_build core/java jarTest
@@ -639,6 +648,13 @@ case "$SUITE" in
 
     print_summary "$total_t" "$total_f" "$total_e"
     TOTAL_RUN=$total_t
+    ;;
+  *)
+    # An unknown name used to fall through to the `all` branch, so a typo ran the
+    # whole suite and still looked like a pass. Name what is available instead.
+    echo "Unknown suite: $SUITE" >&2
+    echo "Suites: core ministreaming streaming router i2ptunnel addressbook routerconsole i2psnark susimail sam pack200 jrobin js, or 'all'" >&2
+    exit 1
     ;;
 esac
 
