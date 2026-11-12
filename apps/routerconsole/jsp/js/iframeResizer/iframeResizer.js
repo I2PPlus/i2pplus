@@ -12,7 +12,7 @@
 ;(function (undefined) {
   if (typeof window === 'undefined') return // don't run for server side render
 
-  var count = 0,
+  let count = 0,
     logEnabled = false,
     hiddenCheckEnabled = false,
     msgHeader = 'message',
@@ -69,10 +69,6 @@
     }
 
 
-  function getMutationObserver() {
-    return window.MutationObserver;
-  }
-
   function addEventListener(el, evt, func) {
     el.addEventListener(evt, func, false)
   }
@@ -93,7 +89,7 @@
   }
 
   function getMyID(iframeId) {
-    var retStr = 'Host page: ' + iframeId
+    let retStr = 'Host page: ' + iframeId
 
     if (window.top !== window.self) {
       retStr =
@@ -147,10 +143,10 @@
     }
 
     function processMsg() {
-      var data = msg.substr(msgIdLen).split(':')
-      var height = data[1] ? parseInt(data[1], 10) : 0
-      var iframe = settings[data[0]] && settings[data[0]].iframe
-      var compStyle = getComputedStyle(iframe)
+      const data = msg.substr(msgIdLen).split(':')
+      const height = data[1] ? parseInt(data[1], 10) : 0
+      const iframe = settings[data[0]] && settings[data[0]].iframe
+      const compStyle = getComputedStyle(iframe)
 
       return {
         iframe: iframe,
@@ -165,8 +161,8 @@
       if (compStyle.boxSizing !== 'border-box') {
         return 0
       }
-      var top = compStyle.paddingTop ? parseInt(compStyle.paddingTop, 10) : 0
-      var bot = compStyle.paddingBottom
+      const top = compStyle.paddingTop ? parseInt(compStyle.paddingTop, 10) : 0
+      const bot = compStyle.paddingBottom
         ? parseInt(compStyle.paddingBottom, 10)
         : 0
       return top + bot
@@ -176,17 +172,17 @@
       if (compStyle.boxSizing !== 'border-box') {
         return 0
       }
-      var top = compStyle.borderTopWidth
+      const top = compStyle.borderTopWidth
         ? parseInt(compStyle.borderTopWidth, 10)
         : 0
-      var bot = compStyle.borderBottomWidth
+      const bot = compStyle.borderBottomWidth
         ? parseInt(compStyle.borderBottomWidth, 10)
         : 0
       return top + bot
     }
 
     function ensureInRange(Dimension) {
-      var max = Number(settings[iframeId]['max' + Dimension]),
+      let max = Number(settings[iframeId]['max' + Dimension]),
         min = Number(settings[iframeId]['min' + Dimension]),
         dimension = Dimension.toLowerCase(),
         size = Number(messageData[dimension])
@@ -209,7 +205,7 @@
     function isMessageFromIFrame() {
       function checkAllowedOrigin() {
         function checkList() {
-          var i = 0,
+          let i = 0,
             retCode = false
 
           log(
@@ -228,7 +224,7 @@
         }
 
         function checkSingle() {
-          var remoteHost = settings[iframeId] && settings[iframeId].remoteHost
+          const remoteHost = settings[iframeId] && settings[iframeId].remoteHost
           log(iframeId, 'Checking connection is from: ' + remoteHost)
           return origin === remoteHost
         }
@@ -236,7 +232,7 @@
         return checkOrigin.constructor === Array ? checkList() : checkSingle()
       }
 
-      var origin = event.origin,
+      const origin = event.origin,
         checkOrigin = settings[iframeId] && settings[iframeId].checkOrigin
 
       if (checkOrigin && '' + origin !== 'null' && !checkAllowedOrigin()) {
@@ -256,7 +252,7 @@
     function isMessageFromMetaParent() {
       // Test if this message is from a parent above us. This is an ugly test, however, updating
       // the message format would break backwards compatibity.
-      var retCode = messageData.type in { true: 1, false: 1, undefined: 1 }
+      const retCode = messageData.type in { true: 1, false: 1, undefined: 1 }
 
       if (retCode) {
         log(iframeId, 'Ignoring init message from meta parent page')
@@ -278,7 +274,7 @@
     }
 
     function getPageInfo() {
-      var bodyPosition = document.body.getBoundingClientRect(),
+      const bodyPosition = document.body.getBoundingClientRect(),
         iFramePosition = messageData.iframe.getBoundingClientRect()
 
       return JSON.stringify({
@@ -321,7 +317,7 @@
 
       function start() {setListener('Add ', addEventListener)}
 
-      var id = iframeId // Create locally scoped copy of iFrame ID
+      const id = iframeId // Create locally scoped copy of iFrame ID
 
       start()
 
@@ -336,7 +332,7 @@
     }
 
     function checkIFrameExists() {
-      var retBool = true
+      let retBool = true
 
       if (null === messageData.iframe) {
         warn(iframeId, 'IFrame (' + messageData.id + ') not found')
@@ -346,7 +342,7 @@
     }
 
     function getElementPosition(target) {
-      var iFramePosition = target.getBoundingClientRect()
+      const iFramePosition = target.getBoundingClientRect()
 
       getPagePosition(iframeId)
 
@@ -382,7 +378,7 @@
         }
       }
 
-      var offset = addOffset ? getElementPosition(messageData.iframe) : { x: 0, y: 0 }, newPosition = calcOffset()
+      const offset = addOffset ? getElementPosition(messageData.iframe) : { x: 0, y: 0 }, newPosition = calcOffset()
 
       log(iframeId, 'Reposition requested from iFrame (offset x:' + offset.x + ' y:' + offset.y + ')')
 
@@ -397,7 +393,7 @@
 
     function findTarget(location) {
       function jumpToTarget() {
-        var jumpPosition = getElementPosition(target)
+        const jumpPosition = getElementPosition(target)
 
         log(iframeId, 'Moving to in page link (#' + hash + ') at x: ' + jumpPosition.x + ' y: ' + jumpPosition.y)
         pagePosition = {x: jumpPosition.x, y: jumpPosition.y}
@@ -411,7 +407,7 @@
         else {log(iframeId, 'In page link #' + hash + ' not found and window.parentIFrame not found')}
       }
 
-      var hash = location.split('#')[1] || '',
+      const hash = location.split('#')[1] || '',
         hashData = decodeURIComponent(hash),
         target = document.getElementById(hashData) || document.getElementsByName(hashData)[0]
 
@@ -421,10 +417,10 @@
     }
 
     function onMouse(event) {
-      var mousePos = {}
+      let mousePos = {}
 
       if (Number(messageData.width) === 0 && Number(messageData.height) === 0) {
-        var data = getMsgBody(9).split(':')
+        const data = getMsgBody(9).split(':')
         mousePos = {x: data[1], y: data[0]}
       } else {mousePos = {x: messageData.width, y: messageData.height}}
 
@@ -508,7 +504,7 @@
     }
 
     function hasSettings(iframeId) {
-      var retBool = true
+      let retBool = true
 
       if (!settings[iframeId]) {
         retBool = false
@@ -526,7 +522,7 @@
 
     function iFrameReadyMsgReceived() {
       // eslint-disable-next-line no-restricted-syntax, guard-for-in
-      for (var iframeId in settings) {
+      for (const iframeId in settings) {
         trigger(
           'iFrame requested init',
           createOutgoingMsg(iframeId),
@@ -542,7 +538,7 @@
       }
     }
 
-    var msg = event.data,
+    let msg = event.data,
       messageData = {},
       iframeId = null
 
@@ -562,7 +558,7 @@
   }
 
   function chkEvent(iframeId, funcName, val) {
-    var func = null,
+    let func = null,
       retVal = null
 
     if (settings[iframeId]) {
@@ -576,12 +572,12 @@
   }
 
   function removeIframeListeners(iframe) {
-    var iframeId = iframe.id
+    const iframeId = iframe.id
     delete settings[iframeId]
   }
 
   function closeIFrame(iframe) {
-    var iframeId = iframe.id
+    const iframeId = iframe.id
     if (chkEvent(iframeId, 'onClose', iframeId) === false) {
       log(iframeId, 'Close iframe cancelled by onClose event')
       return
@@ -665,7 +661,7 @@
       chkZero(dimension)
     }
 
-    var iframeId = messageData.iframe.id
+    const iframeId = messageData.iframe.id
 
     if (settings[iframeId]) {
       if (settings[iframeId].sizeHeight) {processDimension('height')}
@@ -683,7 +679,7 @@
 
   function trigger(calleeMsg, msg, iframe, id, noResponseWarning) {
     function postMessageToIFrame() {
-      var target = settings[id] && settings[id].targetOrigin
+      const target = settings[id] && settings[id].targetOrigin
       log(id, '[' + calleeMsg + '] Sending msg to iframe[' + id + '] (' + msg + ') targetOrigin: ' + target)
       iframe.contentWindow.postMessage(msgId + msg, target)
     }
@@ -716,7 +712,7 @@
       }
     }
 
-    var errorShown = false
+    let errorShown = false
 
     id = id || iframe.id
 
@@ -767,7 +763,7 @@
   function setupIFrame(iframe, options) {
     function setLimits() {
       function addStyle(style) {
-        var styleValue = settings[iframeId][style]
+        const styleValue = settings[iframeId][style]
         if (Infinity !== styleValue && 0 !== styleValue) {
           iframe.style[style] = isNumber(styleValue)
             ? styleValue + 'px'
@@ -792,7 +788,7 @@
     }
 
     function newId() {
-      var id = (options && options.id) || defaults.id + count++
+      let id = (options && options.id) || defaults.id + count++
       if (null !== document.getElementById(id)) {id += count++}
       return id
     }
@@ -850,7 +846,7 @@
       // Reduce scope of firstRun to function, because IE8's JS execution
       // context stack is borked and this value gets externally
       // changed midway through running this function!!!
-      var firstRun = settings[iframeId] && settings[iframeId].firstRun,
+      const firstRun = settings[iframeId] && settings[iframeId].firstRun,
         resetRequertMethod =
           settings[iframeId] &&
           settings[iframeId].heightCalculationMethod in resetRequiredMethods
@@ -910,9 +906,9 @@
           return
         }
 
-        var destroyObserver = new MutationObserver(function (mutations) {
+        const destroyObserver = new MutationObserver(function (mutations) {
           mutations.forEach(function (mutation) {
-            var removedNodes = Array.prototype.slice.call(mutation.removedNodes) // Transform NodeList into an Array
+            const removedNodes = Array.prototype.slice.call(mutation.removedNodes) // Transform NodeList into an Array
             removedNodes.forEach(function (removedNode) {
               if (removedNode === iframe) {
                 closeIFrame(iframe)
@@ -923,10 +919,7 @@
         destroyObserver.observe(iframe.parentNode, {childList: true})
       }
 
-      var MutationObserver = getMutationObserver()
-      if (MutationObserver) {
-        createDestroyObserver(MutationObserver)
-      }
+      createDestroyObserver(MutationObserver)
 
       addEventListener(iframe, 'load', iFrameLoaded)
       trigger('init', msg, iframe, undefined, true)
@@ -940,7 +933,7 @@
 
     function copyOptions(options) {
       // eslint-disable-next-line no-restricted-syntax
-      for (var option in defaults) {
+      for (const option in defaults) {
         if (Object.prototype.hasOwnProperty.call(defaults, option)) {
           settings[iframeId][option] = Object.prototype.hasOwnProperty.call(options, option)
             ? options[option]
@@ -957,10 +950,10 @@
     }
 
     function depricate(key) {
-      var splitName = key.split('Callback')
+      const splitName = key.split('Callback')
 
       if (splitName.length === 2) {
-        var name =
+        const name =
           'on' + splitName[0].charAt(0).toUpperCase() + splitName[0].slice(1)
         this[name] = this[key]
         delete this[key]
@@ -997,7 +990,7 @@
 
     function beenHere() {return iframeId in settings && 'iFrameResizer' in iframe}
 
-    var iframeId = ensureHasId(iframe.id)
+    const iframeId = ensureHasId(iframe.id)
 
     if (!beenHere()) {
       processOptions(options)
@@ -1018,7 +1011,7 @@
     }
   }
 
-  var frameTimer = {}
+  const frameTimer = {}
   function debounceFrameEvents(fn, time, frameId) {
     if (!frameTimer[frameId]) {
       frameTimer[frameId] = setTimeout(function () {
@@ -1064,7 +1057,7 @@
     }
 
     function createMutationObserver() {
-      var target = document.querySelector('body'),
+      const target = document.querySelector('body'),
         config = {
           attributes: true,
           attributeOldValue: false,
@@ -1078,8 +1071,7 @@
       observer.observe(target, config)
     }
 
-    var MutationObserver = getMutationObserver()
-    if (MutationObserver) {createMutationObserver()}
+    createMutationObserver()
   }
 
   function resizeIFrames(event) {
@@ -1147,7 +1139,7 @@
       }
     }
 
-    var iFrames
+    let iFrames
 
     setupRequestAnimationFrame()
     setupEventListeners()

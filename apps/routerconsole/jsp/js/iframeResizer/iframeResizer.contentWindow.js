@@ -12,7 +12,7 @@
 ;(function (undefined) {
   if (typeof window === 'undefined') return // don't run for server side render
 
-  var autoResize = true,
+  let autoResize = true,
     base = 10,
     bodyBackground = '',
     bodyMargin = 0,
@@ -75,7 +75,7 @@
   function noop() {}
 
   try {
-    var options = Object.create(
+    const options = Object.create(
       {},
       {
         passive: {
@@ -87,7 +87,9 @@
     )
     window.addEventListener('test', noop, options)
     window.removeEventListener('test', noop, options)
-  } catch (error) {}
+  } catch (error) {
+    // The browser rejects an options object here, so listeners get a plain flag
+  }
 
   function addEventListener(el, evt, func, options) {
     el.addEventListener(evt, func, passiveSupported ? options || {} : false)
@@ -103,7 +105,7 @@
 
   // Based on underscore.js
   function throttle(func) {
-    var context,
+    let context,
       args,
       result,
       timeout = null,
@@ -119,11 +121,11 @@
       }
 
     return function () {
-      var now = Date.now()
+      const now = Date.now()
 
       if (!previous) {previous = now}
 
-      var remaining = throttledTimer - (now - previous)
+      const remaining = throttledTimer - (now - previous)
 
       context = this
       args = arguments
@@ -176,7 +178,7 @@
   function readDataFromParent() {
     function strBool(str) {return 'true' === str}
 
-    var data = initMsg.substr(msgIdLen).split(':')
+    const data = initMsg.substr(msgIdLen).split(':')
 
     myID = data[0]
     bodyMargin = undefined !== data[1] ? Number(data[1]) : bodyMargin // For V1 compatibility
@@ -196,10 +198,10 @@
   }
 
   function depricate(key) {
-    var splitName = key.split('Callback')
+    const splitName = key.split('Callback')
 
     if (splitName.length === 2) {
-      var name = 'on' + splitName[0].charAt(0).toUpperCase() + splitName[0].slice(1)
+      const name = 'on' + splitName[0].charAt(0).toUpperCase() + splitName[0].slice(1)
       this[name] = this[key]
       delete this[key]
       warn("Deprecated: '" + key + "' has been renamed '" + name +
@@ -209,7 +211,7 @@
 
   function readDataFromPage() {
     function readData() {
-      var data = window.iFrameResizer
+      const data = window.iFrameResizer
 
       log('Reading data from page: ' + JSON.stringify(data))
       Object.keys(data).forEach(depricate, data)
@@ -273,7 +275,7 @@
   }
 
   function manageTriggerEvent(options) {
-    var listener = {
+    const listener = {
       add: function (eventName) {
         function handleEvent() {sendSize(options.eventName, options.eventType)}
 
@@ -282,14 +284,14 @@
         addEventListener(window, eventName, handleEvent, { passive: true })
       },
       remove: function (eventName) {
-        var handleEvent = eventHandlersByName[eventName]
+        const handleEvent = eventHandlersByName[eventName]
         delete eventHandlersByName[eventName]
 
         removeEventListener(window, eventName, handleEvent)
       }
     }
 
-    if (options.eventNames && Array.prototype.map) {
+    if (options.eventNames) {
       options.eventName = options.eventNames[0]
       options.eventNames.map(listener[options.method])
     } else {
@@ -426,7 +428,7 @@
   }
 
   function injectClearFixIntoBodyElement() {
-    var clearFix = document.createElement('div')
+    const clearFix = document.createElement('div')
     clearFix.style.clear = 'both'
     // Guard against the following having been globally redefined in CSS.
     clearFix.style.display = 'block'
@@ -449,7 +451,7 @@
     }
 
     function getElementPosition(el) {
-      var elPosition = el.getBoundingClientRect(),
+      const elPosition = el.getBoundingClientRect(),
         pagePosition = getPagePosition()
 
       return {
@@ -460,13 +462,13 @@
 
     function findTarget(location) {
       function jumpToTarget(target) {
-        var jumpPosition = getElementPosition(target)
+        const jumpPosition = getElementPosition(target)
 
         log('Moving to in page link (#' + hash + ') at x: ' + jumpPosition.x + ' y: ' + jumpPosition.y)
         sendMsg(jumpPosition.y, jumpPosition.x, 'scrollToOffset') // X&Y reversed at sendMsg uses height/width
       }
 
-      var hash = location.split('#')[1] || location, // Remove # if present
+      const hash = location.split('#')[1] || location, // Remove # if present
         hashData = decodeURIComponent(hash),
         target = document.getElementById(hashData) || document.getElementsByName(hashData)[0]
 
@@ -478,8 +480,8 @@
     }
 
     function checkLocationHash() {
-      var hash = window.location.hash
-      var href = window.location.href
+      const hash = window.location.hash
+      const href = window.location.href
 
       if ('' !== hash && '#' !== hash) {findTarget(href)}
     }
@@ -514,13 +516,10 @@
     }
 
     function enableInPageLinks() {
-      /* istanbul ignore else */ // Not testable in phantonJS
-      if (Array.prototype.forEach && document.querySelectorAll) {
-        log('Setting up location.hash handlers')
-        bindAnchors()
-        bindLocationHash()
-        initCheck()
-      }
+      log('Setting up location.hash handlers')
+      bindAnchors()
+      bindLocationHash()
+      initCheck()
     }
 
     if (inPageLinks.enable) {enableInPageLinks()}
@@ -620,7 +619,7 @@
       },
 
       size: function sizeF(customHeight, customWidth) {
-        var valString =
+        const valString =
           '' + (customHeight || '') + (customWidth ? ',' + customWidth : '')
         sendSize(
           'size',
@@ -699,7 +698,7 @@
     }
 
     function createMutationObserver() {
-      var target = document.querySelector('body'),
+      const target = document.querySelector('body'),
         config = {
           attributes: true,
           attributeOldValue: false,
@@ -717,8 +716,14 @@
       return observer
     }
 
-    var elements = [],
-      MutationObserver = window.MutationObserver, observer = createMutationObserver()
+    // createMutationObserver() assigns observer itself (upstream relies on the
+    // var hoist), so the binding has to exist before that call
+    let observer
+
+    const elements = [],
+      MutationObserver = window.MutationObserver
+
+    observer = createMutationObserver()
 
     return {
       disconnect: function () {
@@ -732,22 +737,16 @@
   }
 
   function setupMutationObserver() {
-    var forceIntervalTimer = 0 > interval
+    const forceIntervalTimer = 0 > interval
 
-    // Not testable in PhantomJS
-    if (window.MutationObserver) { /* istanbul ignore if */
-      if (forceIntervalTimer) {initInterval()}
-      else {bodyObserver = setupBodyMutationObserver()}
-    } else {
-      log('MutationObserver not supported in this browser!')
-      initInterval()
-    }
+    if (forceIntervalTimer) {initInterval()}
+    else {bodyObserver = setupBodyMutationObserver()}
   }
 
   // document.documentElement.offsetHeight is not reliable, so
   // we have to jump through hoops to get a better value.
   function getComputedStyle(prop, el) {
-    var retVal = 0
+    let retVal = 0
     el = el || document.body // Not testable in phantonJS
 
     retVal = document.defaultView.getComputedStyle(el, null)
@@ -765,13 +764,13 @@
 
   // Idea from https://github.com/guardian/iframe-messenger
   function getMaxElement(side, elements) {
-    var elementsLength = elements.length,
+    let elementsLength = elements.length,
       elVal = 0,
       maxVal = 0,
       Side = capitalizeFirstLetter(side),
       timer = Date.now()
 
-    for (var i = 0; i < elementsLength; i++) {
+    for (let i = 0; i < elementsLength; i++) {
       elVal = elements[i].getBoundingClientRect()[side] +
               getComputedStyle('margin' + Side, elements[i])
       if (elVal > maxVal) {maxVal = elVal}
@@ -802,7 +801,7 @@
       return document.querySelectorAll('body *')
     }
 
-    var elements = document.querySelectorAll('[' + tag + ']')
+    const elements = document.querySelectorAll('[' + tag + ']')
 
     if (elements.length === 0) noTaggedElementsFound()
 
@@ -813,7 +812,7 @@
     return document.querySelectorAll('body *')
   }
 
-  var getHeight = {
+  const getHeight = {
       bodyOffset: function getBodyOffsetHeight() {
         return (
           document.body.offsetHeight +
@@ -922,7 +921,7 @@
 
     function isSizeChangeDetected() {
       function checkTolarance(a, b) {
-        var retVal = Math.abs(a - b) <= tolerance
+        const retVal = Math.abs(a - b) <= tolerance
         return !retVal
       }
 
@@ -953,7 +952,7 @@
       }
     }
 
-    var currentHeight, currentWidth
+    let currentHeight, currentWidth
 
     if (isSizeChangeDetected() || 'init' === triggerEvent) {
       lockTrigger()
@@ -963,7 +962,7 @@
     }
   }
 
-  var sizeIFrameThrottled = throttle(sizeIFrame)
+  const sizeIFrameThrottled = throttle(sizeIFrame)
 
   function sendSize(triggerEvent, triggerEventDesc, customHeight, customWidth) {
     function recordTrigger() {
@@ -1014,7 +1013,7 @@
   }
 
   function resetIFrame(triggerEventDesc) {
-    var hcm = heightCalcMode
+    const hcm = heightCalcMode
     heightCalcMode = heightCalcModeDefault
 
     log('Reset trigger event: ' + triggerEventDesc)
@@ -1034,7 +1033,7 @@
     }
 
     function sendToParent() {
-      var size = height + ':' + width,
+      const size = height + ':' + width,
         message =
           myID +
           ':' +
@@ -1054,7 +1053,7 @@
   }
 
   function receiver(event) {
-    var processRequestFromParent = {
+    const processRequestFromParent = {
       init: function initFromParent() {
         initMsg = event.data
         target = event.source
@@ -1085,14 +1084,14 @@
       }, // Backward compatability
 
       pageInfo: function pageInfoFromParent() {
-        var msgBody = getData()
+        const msgBody = getData()
         log('PageInfoFromParent called from parent: ' + msgBody)
         onPageInfo(JSON.parse(msgBody))
         log(' --')
       },
 
       message: function messageFromParent() {
-        var msgBody = getData()
+        const msgBody = getData()
 
         log('onMessage called from parent: ' + msgBody)
         // eslint-disable-next-line sonarjs/no-extra-arguments
@@ -1124,7 +1123,7 @@
     }
 
     function callFromParent() {
-      var messageType = getMessageType()
+      const messageType = getMessageType()
 
       if (messageType in processRequestFromParent) {
         processRequestFromParent[messageType]()
@@ -1150,10 +1149,12 @@
   // If this script is async-loaded, then tell parent page to retry init.
   function chkLateLoaded() {
     if ('loading' !== document.readyState) {
-      var parentOrigin = '*'
+      let parentOrigin = '*'
       try {
         parentOrigin = window.parent.location.origin
-      } catch (e) {}
+      } catch (e) {
+        // A cross-origin parent gives up its origin, so post to any origin
+      }
       window.parent.postMessage('[iFrameResizerChild]Ready', parentOrigin)
     }
   }
