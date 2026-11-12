@@ -222,7 +222,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      *
      * @param nodes the nodes to name, in the order to print them, null allowed
      * @return the node ids in the same order, never null
-     * @since 0.9.73+
+     * @since 0.9.72+
      */
     static List<NID> nids(Collection<NodeInfo> nodes) {
         List<NID> ids = new ArrayList<>(nodes.size());
@@ -570,8 +570,10 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         for (int i = 0; i < maxNodes; i++) {
             if (!_isRunning || Thread.currentThread().isInterrupted()) break;
             if (_log.shouldDebug()) {
-                _log.debug("Trying the closest nodes next"
-                           + SnarkLogFormatter.nodeList(nids(toTry), "Now to try", toTry.size()));
+                _log.debug("Trying the closest nodes next ->"
+                           + SnarkLogFormatter.afterArrow(
+                                    SnarkLogFormatter.nodeList(nids(toTry), "Now to try",
+                                                               toTry.size())));
             }
             NodeInfo nInfo;
             try {
@@ -984,9 +986,11 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      * @return null on error
      */
     private ReplyWaiter sendGetPeers(NodeInfo nInfo, InfoHash ih, boolean noSeeds) {
-        if (_log.shouldInfo()) {
-            _log.info("Sending get_peers to " + nInfo + " -> Torrent: "
-                      + SnarkLogFormatter.infoHash(ih.getData()) + " * No seeds: " + noSeeds);
+        // Per-query flow control - the announce loop writes hundreds of these a
+        // minute and the reply path already reports what came of each one.
+        if (_log.shouldDebug()) {
+            _log.debug("Sending get_peers to " + nInfo + " -> Torrent: "
+                       + SnarkLogFormatter.infoHash(ih.getData()) + " * No seeds: " + noSeeds);
         }
         Map<String, Object> map = new HashMap<>();
         map.put("q", "get_peers");
@@ -1156,15 +1160,18 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             if (newInfo != null && newInfo.getDestination() != null) {
                 nInfo = newInfo;
             } else if (!repliable) { // Don't lookup for announce query, we should already have it
-                if (_log.shouldInfo())
-                    _log.info("Dropping non-repliable query -> No destination for " + nInfo);
+                if (_log.shouldDebug())
+                    _log.debug("Dropping non-repliable query -> No destination for " + nInfo);
                 return null;
             } else {
                 // Lookup the dest for the hash
                 // TODO spin off into thread or queue? We really don't want to block here
                 if (!lookupDest(nInfo)) {
-                    if (_log.shouldInfo()) {
-                        _log.info("Dropping repliable query -> No destination for " + nInfo);
+                    // A node with no reachable destination is the normal state of a
+                    // DHT walk, not an anomaly, and timeout() below records the node
+                    // if it fails often enough to be worth evicting.
+                    if (_log.shouldDebug()) {
+                        _log.debug("Dropping repliable query -> No destination for " + nInfo);
                     }
                     timeout(nInfo);
                     return null;
@@ -1902,8 +1909,9 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             rv.add(nInf);
         }
         if (_log.shouldDebug()) {
-            _log.debug("Received nodes from " + nInfo
-                       + SnarkLogFormatter.nodeList(nids(rv), "Nodes", rv.size()));
+            _log.debug("Received a node list from " + nInfo + " ->"
+                       + SnarkLogFormatter.afterArrow(
+                                SnarkLogFormatter.nodeList(nids(rv), "Nodes", rv.size())));
         }
         return removeSelf(rv, _myNodeInfo);
     }
@@ -1938,8 +1946,9 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             }
         }
         if (_log.shouldInfo()) {
-            _log.info("Received " + peers.size() + " peers from " + nInfo
-                      + SnarkLogFormatter.destList(rv, "Peers", rv.size()));
+            _log.info("Received a peer list from " + nInfo + " ->"
+                      + SnarkLogFormatter.afterArrow(
+                               SnarkLogFormatter.destList(rv, "Peers", rv.size())));
         }
         return rv;
     }
@@ -2250,10 +2259,11 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                     return;
                 }
                 long now = _context.clock().now();
-                if (_log.shouldDebug())
-                    _log.debug("KRPC cleaner starting -> Blacklist: " + _blacklist.size()
-                               + " * Sent tokens: " + _outgoingTokens.size()
-                               + " * Received tokens: " + _incomingTokens.size());
+                // snapshot the sizes the pass changes, so the one log line it
+                // writes can say what it pruned, not only what is left
+                int blacklistsBefore = _blacklist.size();
+                int sentTokensBefore = _outgoingTokens.size();
+                int receivedTokensBefore = _incomingTokens.size();
                 pruneOutgoingTokens();
                 long expire = now - MAX_INBOUND_TOKEN_AGE;
                 for (Iterator<Token> iter = _incomingTokens.values().iterator(); iter.hasNext(); ) {
@@ -2285,10 +2295,16 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                 }
                 // TODO sent queries?
                 if (_log.shouldDebug())
-                    _log.debug("KRPC cleaner done" + " -> Blacklist: " + _blacklist.size()
+                    _log.debug("KRPC cleaner pass done -> Pruned blacklist: "
+                               + (blacklistsBefore - _blacklist.size())
+                               + " * Pruned sent tokens: "
+                               + (sentTokensBefore - _outgoingTokens.size())
+                               + " * Pruned received tokens: "
+                               + (receivedTokensBefore - _incomingTokens.size())
+                               + "\n* Blacklist: " + _blacklist.size()
                                + " * Sent tokens: " + _outgoingTokens.size()
                                + " * Received tokens: " + _incomingTokens.size()
-                               + "\n* Known peers: " + _knownNodes.size()
+                               + " * Known nodes: " + _knownNodes.size()
                                + " * Queries awaiting response: " + _sentQueries.size());
             } catch (Throwable t) {
                 _log.error("KRPC cleaner cycle failed", t);
