@@ -3,7 +3,9 @@ package org.klomp.snark;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.concurrent.atomic.AtomicLong;
 
 import net.i2p.I2PAppContext;
@@ -20,7 +22,9 @@ import net.i2p.util.SimpleTimer2;
  * browser being open, so the graph stays continuous.
  *
  * Flushes to the tmp dir every FLUSH_INTERVAL_MS so history survives webapp or
- * router restarts; entries older than WINDOW_MS are dropped on load.
+ * router restarts; entries older than WINDOW_MS are dropped on load. Each router
+ * takes the first file name in that dir it may write, so a router running as a
+ * different user cannot block the others.
  *
  * @since 0.9.71+
  */
@@ -35,8 +39,17 @@ public class BandwidthGraph extends SimpleTimer2.TimedEvent {
     /** Flush to disk every five minutes. */
     private static final long FLUSH_INTERVAL_MS = 5 * 60 * 1000;
 
-    /** File holding the saved samples. */
-    private static final String FILE_NAME = "i2p-snark-bandwidth.dat";
+    /** Stem of the file holding the saved samples. */
+    private static final String FILE_STEM = "i2p-snark-bandwidth";
+    /** Extension of the file holding the saved samples. */
+    private static final String FILE_EXT = ".dat";
+    /**
+     * How many file names to try before giving up. A router running as a
+     * different user on the same machine claims the shared name first, and the
+     * sticky bit on a world-writable tmp dir lets us read its file but never
+     * replace it, so each router needs its own.
+     */
+    static final int MAX_FILE_ATTEMPTS = 8;
 
 
     /** Bytes sent over the datagram sockets. */
@@ -143,6 +156,10 @@ public class BandwidthGraph extends SimpleTimer2.TimedEvent {
     private long _version;
     /** When the samples were last saved to disk. */
     private long _lastFlush;
+    /** The file the samples are saved to, resolved once at startup. */
+    private final File _file;
+    /** Whether a flush failure has already been logged at WARN. */
+    private boolean _flushWarned;
 
     /** Counter snapshots taken at the previous tick, for delta computation. */
     private long _lastDatagramTx, _lastDatagramRx, _lastHttpTx, _lastHttpRx;
@@ -158,6 +175,7 @@ public class BandwidthGraph extends SimpleTimer2.TimedEvent {
         super(I2PAppContext.getGlobalContext().simpleTimer2());
         _manager = manager;
         _log = I2PAppContext.getGlobalContext().logManager().getLog(BandwidthGraph.class);
+        _file = resolveFile(new File(System.getProperty("java.io.tmpdir", "/tmp")));
         load();
         _lastSampleTime = System.currentTimeMillis();
         _lastFlush = _lastSampleTime;
@@ -259,30 +277,59 @@ public class BandwidthGraph extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     * Write the serialized ring to the tmp-dir file atomically-ish (write temp,
-     * rename), ignoring all errors — persistence is best-effort by design.
+     * Write the serialized ring to the persistence file: a uniquely named temp
+     * file in the same directory, then a rename over the target. Persistence is
+     * best-effort by design, so a failure is logged and the graph keeps
+     * sampling in memory.
      */
     private synchronized void flush() {
         try {
-            File file = file();
-            File tmp = new File(file.getAbsolutePath() + ".tmp");
-            Files.write(tmp.toPath(), serialize().getBytes(StandardCharsets.UTF_8));
-            Files.move(tmp.toPath(), file.toPath(),
-                       java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            writeAtomically(_file, serialize());
         } catch (IOException ioe) {
-            if (_log.shouldWarn()) {_log.warn("Bandwidth graph flush failed", ioe);}
+            // A file we cannot write stays unwriteable, so warn once, then debug.
+            if (!_flushWarned) {
+                _flushWarned = true;
+                if (_log.shouldWarn()) {_log.warn(failMessage(_file, ioe));}
+            } else if (_log.shouldDebug()) {
+                _log.debug(failMessage(_file, ioe));
+            }
+        }
+    }
+
+    /**
+     * Replace the target file's contents with the data by writing a uniquely
+     * named temp file in the same directory, then renaming over the target. The
+     * unique name is what keeps a stale .tmp left behind by another router's
+     * interrupted flush from blocking ours — under the sticky bit on a
+     * world-writable tmp dir we could not replace it.
+     *
+     * @param target the file to replace
+     * @param data the contents to write, UTF-8
+     * @throws IOException if the temp file could not be created, written, or
+     *                     renamed over the target
+     * @since 0.9.72+
+     */
+    static void writeAtomically(File target, String data) throws IOException {
+        File tmp = File.createTempFile(target.getName() + '-', ".tmp", target.getParentFile());
+        try {
+            Files.write(tmp.toPath(), data.getBytes(StandardCharsets.UTF_8));
+            Files.move(tmp.toPath(), target.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            tmp = null;
+        } finally {
+            // No-op once the rename has consumed it.
+            if (tmp != null) {tmp.delete();}
         }
     }
 
     /**
      * Load persisted samples younger than the window, seeding the ring so a fresh
-     * webapp start still shows recent history.
+     * webapp start still shows recent history. Reads only the file this router
+     * resolved to write, so another user's router history never mixes in.
      */
     private void load() {
-        File file = file();
-        if (!file.exists()) {return;}
+        if (!_file.exists()) {return;}
         try {
-            String csv = new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8);
+            String csv = new String(Files.readAllBytes(_file.toPath()), StandardCharsets.UTF_8);
             // Old persisted files store bytes; new ones store KB. Detect and discard old to avoid double-scaling.
             if (csv.contains(",") && csv.length() > 0) {
                 boolean looksLikeBytes = false;
@@ -296,7 +343,7 @@ public class BandwidthGraph extends SimpleTimer2.TimedEvent {
                         } catch (NumberFormatException nfe) { /* non-numeric field; this row is not in the legacy byte format */ }
                     }
                 }
-                if (looksLikeBytes) { Files.deleteIfExists(file.toPath()); return; }
+                if (looksLikeBytes) { Files.deleteIfExists(_file.toPath()); return; }
             }
             long cutoff = (System.currentTimeMillis() - WINDOW_MS) / 1000;
             for (String entry : csv.split(";")) {
@@ -322,13 +369,61 @@ public class BandwidthGraph extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     * Persistence location: the JVM tmp dir (defaulting to /tmp), matching the
-     * BandwidthHistory pattern.
+     * Pick which file to persist to: the shared name if we may write it,
+     * otherwise an incremented variant of it. A router running as a different
+     * user claims the shared name first, and the sticky bit on a world-writable
+     * tmp dir lets us read its file but never replace it, so each router needs
+     * its own: i2p-snark-bandwidth-1.dat, -2.dat and so on.
      *
-     * @return the file i2p-snark-bandwidth.dat in the JVM tmp dir
+     * @param dir the tmp dir to persist in
+     * @return the first name we may write, or the shared name when none is
+     *         writable, so the flush reports one clear failure against it
+     * @since 0.9.72+
      */
-    private static File file() {
-        String dir = System.getProperty("java.io.tmpdir", "/tmp");
-        return new File(dir, FILE_NAME);
+    static File resolveFile(File dir) {
+        boolean dirWritable = dir.canWrite();
+        for (int i = 0; i < MAX_FILE_ATTEMPTS; i++) {
+            File f = new File(dir, fileName(i));
+            if (f.exists()) {
+                // Ours to rewrite, or somebody else's we can only read.
+                if (f.canWrite()) {return f;}
+            } else if (dirWritable) {
+                return f;
+            }
+        }
+        return new File(dir, fileName(0));
+    }
+
+    /**
+     * Name of the nth persistence file.
+     *
+     * @param n 0 for the shared name, higher for the per-router variants used
+     *          when a lower-numbered name is already claimed
+     * @return the file name, i2p-snark-bandwidth.dat or i2p-snark-bandwidth-N.dat
+     * @since 0.9.72+
+     */
+    static String fileName(int n) {
+        return FILE_STEM + (n <= 0 ? "" : "-" + n) + FILE_EXT;
+    }
+
+    /**
+     * One log line describing a persistence failure. No stack trace: an
+     * access-denied write says nothing beyond the path, which is printed too.
+     *
+     * @param file the file the flush tried to write
+     * @param ioe the failure to describe
+     * @return the message, naming the reason and then the file
+     * @since 0.9.72+
+     */
+    static String failMessage(File file, IOException ioe) {
+        String reason;
+        if (ioe instanceof AccessDeniedException) {
+            reason = "Access denied";
+        } else if (ioe.getMessage() != null && !ioe.getMessage().isEmpty()) {
+            reason = ioe.getMessage();
+        } else {
+            reason = ioe.getClass().getSimpleName();
+        }
+        return "Bandwidth graph flush failed -> " + reason + " * File: " + file.getAbsolutePath();
     }
 }
