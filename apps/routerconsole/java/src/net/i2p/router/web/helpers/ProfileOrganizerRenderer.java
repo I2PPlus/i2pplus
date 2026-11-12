@@ -549,11 +549,11 @@ class ProfileOrganizerRenderer {
             // ratio for the life of the profile, while the bar it was measured
             // against has decayed to nothing; show the number actually in force.
             float lossRatio = prof.getLossScore(_context.clock().now());
-            if (lossRatio >= 1.0f) {
+            if (lossRatio >= 0.01f) {
                 int lossPct = Math.round(lossRatio * 100);
                 buf.append("</td><td data-sort=").append(lossPct)
-                   .append("><span class=\"percentBarOuter\"><span class=percentBarInner style=\"width:")
-                   .append(lossPct).append("%\"><span class=percentBarText>")
+                   .append("><span class=percentBarOuter><span class=percentBarInner style=width:")
+                   .append(lossPct).append("%><span class=percentBarText>")
                    .append(lossPct).append("%</span></span></span>");
             } else {
                 buf.append("</td><td>");
@@ -1107,7 +1107,7 @@ class ProfileOrganizerRenderer {
            .append("<colgroup class=bad></colgroup><colgroup class=bad></colgroup><colgroup class=bad></colgroup><colgroup class=bad></colgroup>")
            .append("<thead class=smallhead><tr>")
            .append("<th data-sort-direction=ascending>").append(_t("Peer")).append("</th>")
-            .append("<th data-sort-direction=descending data-sort-method=number>").append(_t("Status")).append("</th>")
+           .append("<th data-sort-direction=descending data-sort-method=number>").append(_t("Status")).append("</th>")
            .append("<th data-sort-direction=ascending data-sort-method=number>").append(_t("1h Fail Rate").replace("Rate","")).append("</th>")
            .append("<th data-sort-method=number>").append(_t("1h Resp. Time")).append("</th>")
            .append("<th data-sort-method=number>").append(_t("First Heard About")).append("</th>")
@@ -1165,9 +1165,9 @@ class ProfileOrganizerRenderer {
                    .append(row.hourFailPct)
                    .append("><span class=\"percentBarOuter");
                 if (row.hourFailPct == 0) {buf.append(" nofail");}
-                buf.append("\"><span class=percentBarInner style=\"width:")
+                buf.append("\"><span class=percentBarInner style=width:")
                    .append(hourfail)
-                   .append("\"><span class=percentBarText>")
+                   .append("><span class=percentBarText>")
                    .append(hourfail)
                    .append("</span></span></span></td>");
                 if (respTime >= 0) {
