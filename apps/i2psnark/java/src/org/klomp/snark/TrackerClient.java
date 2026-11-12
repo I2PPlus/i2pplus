@@ -823,16 +823,22 @@ public class TrackerClient implements Runnable {
             primary = preferUDP(primary, urls);
         }
 
+        // announce URLs that name a host the set already holds, or that are not
+        // usable at all - counted and reported once, because a magnet lookup
+        // rebuilds this list on every pass and the same list comes out each time
+        int unused = 0;
+
         // primary tracker
         if (primary != null) {
             if (isNewValidTracker(trackerHashes, primary)) {
                 trackers.add(new TCTracker(primary, true));
                 if (_log.shouldDebug())
-                    _log.debug("Announce -> Tracker: [" + primary + "] * InfoHash: " + shortInfoHash);
+                    _log.debug("Primary announce -> Tracker: " + primary + " * InfoHash: "
+                               + shortInfoHash);
             } else {
                 if (_log.shouldWarn())
-                    _log.warn("Skipping invalid or non-i2p announce: " + primary
-                              + "\n* + Torrent: " + snark.getBaseName());
+                    _log.warn("Primary announce not used -> Not a valid i2p host * Tracker: "
+                              + primary + " * Torrent: " + SnarkLogFormatter.torrent(snark));
             }
         } else {
             if (_log.shouldDebug())
@@ -853,14 +859,11 @@ public class TrackerClient implements Runnable {
 
             for (String url : urls) {
                 if (!isNewValidTracker(trackerHashes, url)) {
+                    unused++;
                     continue;
                 }
                 // first one is primary if we don't have a primary
                 trackers.add(new TCTracker(url, trackers.isEmpty()));
-                if (_log.shouldDebug()) {
-                    _log.debug("Additional announce -> Tracker: [" + url + "] * InfoHash: "
-                               + shortInfoHash);
-                }
             }
         }
 
@@ -875,21 +878,25 @@ public class TrackerClient implements Runnable {
             List<String> tlist = _util.getBackupTrackers();
             for (int i = 0; i < tlist.size(); i++) {
                 String url = tlist.get(i);
-                if (!isNewValidTracker(trackerHashes, url)) continue;
+                if (!isNewValidTracker(trackerHashes, url)) {
+                    unused++;
+                    continue;
+                }
                 backupTrackers.add(new TCTracker(url, false));
-                if (_log.shouldDebug())
-                    _log.debug("Backup announce -> Tracker: [" + url + "] * InfoHash: " + shortInfoHash);
             }
             // Always reachable, whatever the open-tracker list holds. UDP needs no
             // per-torrent destination, so it still answers when the http trackers
             // cannot, which is precisely the case that left magnets with no source.
-            if (_log.shouldDebug())
-                _log.debug("Default backup announce -> Tracker: [" + SnarkManager.DEFAULT_BACKUP_TRACKER
-                           + "] * InfoHash: " + shortInfoHash);
             backupTrackers.add(new TCTracker(SnarkManager.DEFAULT_BACKUP_TRACKER, false));
             if (backupTrackers.size() > 1) {
                 Collections.shuffle(backupTrackers, _util.getContext().random());
             }
+        }
+        if (_log.shouldDebug()) {
+            _log.debug("Announce set built -> Torrent: " + SnarkLogFormatter.torrent(snark)
+                       + "\n* Trackers: " + trackers.size() + " * Backups: "
+                       + backupTrackers.size() + " * URLs not used: " + unused
+                       + " * InfoHash: " + shortInfoHash);
         }
         // Ask the http trackers in this announce set whether they answer BEP 15,
         // so a later start can announce to them over udp. Off this thread, and
@@ -979,7 +986,9 @@ public class TrackerClient implements Runnable {
     }
 
     /**
-     * Whether the announce URL already exists in the list.
+     * Whether the announce URL already exists in the list. A duplicate host says
+     * nothing an operator can act on, so it is counted by {@link #setup()}'s
+     * summary rather than logged here.
      *
      * @param existing the ones we already know about
      * @param ann an announce URL non-null
@@ -1001,10 +1010,9 @@ public class TrackerClient implements Runnable {
             return false;
         }
         boolean rv = existing.add(h);
-        if (!rv && _log.shouldInfo())
-            _log.info("Duplicate announce URL -> Tracker: " + ann + " * Torrent: "
-                      + SnarkLogFormatter.torrent(snark));
-
+        // a URL whose host is already in the set is a property of the torrent's
+        // announce list and the configured open trackers, not an event, so the
+        // caller counts it and reports it once instead of once per URL per pass
         return rv;
     }
 

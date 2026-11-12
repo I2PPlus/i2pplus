@@ -20,6 +20,7 @@ package org.klomp.snark;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import net.i2p.data.Base32;
 import net.i2p.data.Base64;
@@ -46,10 +47,10 @@ import net.i2p.data.SimpleDataStructure;
  * {@code dht.NodeInfo#toString()}, whose forms the peer table's client
  * fingerprinting and column slicing already depend on.
  * <p>
- * A label that names many identities puts them in a sub-list of its own -
- * {@link #destList} and {@link #nodeList} - eight to a line, the same shape the
- * router's peer lists use, so no list bounded only by the network can emit one
- * line a reader has to scroll sideways through.
+ * A label that names many identities puts them in a list of its own -
+ * {@link #destList} and {@link #nodeList} - one line, at most ten of them named and
+ * the rest counted, so no list bounded only by the network can emit one line a
+ * reader has to scroll sideways through.
  *
  * @since 0.9.72+
  */
@@ -201,40 +202,28 @@ public class SnarkLogFormatter {
     private static final String LOOKUP_PREFIX = "Lookup [";
 
     /**
-     * Identities shown on one sub-list line before wrapping. Eight short
-     * identities plus the five-column indent stays inside the logging guide's
-     * 80-90 column line.
+     * Identities a list shows before it stops and counts the rest. A DHT announce
+     * walks its closest-node set every pass and prints the same nodes each time, so
+     * a list bounded only by the routing table costs an unbounded line per pass for
+     * identities the reader cannot act on. Ten is enough to see which part of the
+     * key space the pass is working through, and the label and the
+     * {@code "(+N more)"} tail still carry the true total.
      */
-    static final int ENTRIES_PER_LINE = 8;
-
-    /** Spaces before the first identity on a sub-list line, lining them up in one column. */
-    static final int INDENT = 5;
+    static final int MAX_ENTRIES = 10;
 
     /**
-     * Identities a sub-list shows before it stops and counts the rest. A DHT
-     * announce walks its closest-node set every pass and prints the same nodes
-     * each time, so a list bounded only by the routing table costs several lines
-     * per pass for identities the reader cannot act on. Sixteen is two lines,
-     * enough to see which part of the key space the pass is working through, and
-     * the label line and the {@code "(+N more)"} tail still carry the true total.
-     */
-    static final int MAX_ENTRIES = 16;
-
-    /**
-     * A labelled sub-list of I2P destinations, led by its own {@code "\n* "}
-     * label line and eight identities to a line, so a list bounded only by the
-     * tracker or the routing table cannot emit one line of unbounded length. At
-     * most {@link #MAX_ENTRIES} are named and the rest are counted. The shape
-     * mirrors {@code router.util.PeerLogFormatter.peerList}, which the console log
-     * reader already knows.
+     * A labelled list of I2P destinations on one line,
+     * {@code "Peers (14): [a] [b] … (+4 more)"}, with at most
+     * {@link #MAX_ENTRIES} named and the rest counted, so a list bounded only by
+     * the tracker or the routing table cannot emit a line of unbounded length.
      *
      * @param dests the destinations to name, in the order to print them; null or
      *              empty is shown as the sentence form
      * @param label the label to show, e.g. "Peers"
      * @param count the number the label reports, shown in parentheses and used
      *              for the {@code "(+N more)"} tail
-     * @return the label line and the indented destination lines, or the sentence
-     *         form when there is nothing to name
+     * @return the labelled list as one segment, or the sentence form when there is
+     *         nothing to name
      * @since 0.9.72+
      */
     public static String destList(Iterable<? extends Hash> dests, String label, int count) {
@@ -242,7 +231,7 @@ public class SnarkLogFormatter {
     }
 
     /**
-     * A labelled sub-list of DHT node ids in the shape described by
+     * A labelled list of DHT node ids in the shape described by
      * {@link #destList}, each named by {@link #node(SimpleDataStructure)}, capped
      * at {@link #MAX_ENTRIES} entries.
      *
@@ -251,8 +240,8 @@ public class SnarkLogFormatter {
      * @param label the label to show, e.g. "Now to try"
      * @param count the number the label reports, shown in parentheses and used
      *              for the {@code "(+N more)"} tail
-     * @return the label line and the indented node lines, or the sentence form
-     *         when there is nothing to name
+     * @return the labelled list as one segment, or the sentence form when there is
+     *         nothing to name
      * @since 0.9.72+
      */
     public static String nodeList(Iterable<? extends SimpleDataStructure> nodes, String label,
@@ -261,23 +250,12 @@ public class SnarkLogFormatter {
     }
 
     /**
-     * Characters a list segment may use on the line it starts on before it wraps
-     * onto indented lines of its own. Counted from the segment's own label, so a
-     * caller with a long lead-in gets a list that wraps a little early rather than
-     * one that runs past the logging guide's line limit. A destination identity is
-     * 11 characters with its space, so this keeps four of them on the label line -
-     * what a tracker's peer list usually holds - and a caller's typical 30-character
-     * lead-in then leaves the whole line inside the guide's 90 columns.
-     */
-    private static final int INLINE_BUDGET = 60;
-
-    /**
-     * The shared sub-list layout. A list short enough to stay inside
-     * {@link #INLINE_BUDGET} characters sits on the line it starts on,
-     * {@code "Peers (3): [a] [b] [c]"}; a longer one puts its label on its own
-     * line and the identities eight to a line at a five-column indent, showing at
-     * most {@link #MAX_ENTRIES} and counting the rest. Both forms are led by the
-     * {@code " * "} segment separator the house style uses between key-value
+     * The shared list layout: the label, up to {@link #MAX_ENTRIES} identities on
+     * the same line, then the count of what is not shown,
+     * {@code " * Tried (21): [a] [b] … (+11 more)"}. One line per list, because a
+     * list that is capped does not need an indent to be readable, and the reader
+     * scanning for a node finds it in the same place every time. The segment is
+     * led by the {@code " * "} separator the house style uses between key-value
      * pairs.
      *
      * @param items the identities to name, in the order to print them; null or
@@ -304,43 +282,21 @@ public class SnarkLogFormatter {
                 }
             }
         }
-        // a label line with a colon and nothing under it says nothing
+        // a label with a colon and nothing after it says nothing
         if (ids.isEmpty()) {return " * " + label + ' ' + count + ' ' + noun;}
-        String head = label + " (" + count + "):";
-        if (ids.size() <= ENTRIES_PER_LINE) {
-            StringBuilder oneLine = new StringBuilder(11 * ids.size());
-            for (String id : ids) {
-                oneLine.append(' ').append(id);
-            }
-            // short enough that a separate indented line costs more than it tells
-            if (head.length() + oneLine.length() <= INLINE_BUDGET) {
-                return " * " + head + oneLine;
-            }
-        }
-        StringBuilder sb = new StringBuilder(24 + 11 * ids.size()).append(head);
-        for (int i = 0; i < ids.size(); i++) {
-            if (i % ENTRIES_PER_LINE == 0) {
-                sb.append('\n');
-                for (int j = 0; j < INDENT; j++) {
-                    sb.append(' ');
-                }
-            } else {
-                sb.append(' ');
-            }
-            sb.append(ids.get(i));
+        StringBuilder sb = new StringBuilder(24 + 11 * ids.size());
+        sb.append(" * ").append(label).append(" (").append(count).append("):");
+        for (String id : ids) {
+            sb.append(' ').append(id);
         }
         // the caller's count is what the label reports; the iterable is what is
         // really there, and the tail has to account for every entry either of
         // them says is present
         int more = Math.max(total, count) - ids.size();
         if (more > 0) {
-            sb.append('\n');
-            for (int j = 0; j < INDENT; j++) {
-                sb.append(' ');
-            }
-            sb.append("(+").append(more).append(" more)");
+            sb.append(" (+").append(more).append(" more)");
         }
-        return "\n* " + sb;
+        return sb.toString();
     }
 
     /**
@@ -357,10 +313,83 @@ public class SnarkLogFormatter {
      * @since 0.9.72+
      */
     public static String afterArrow(String segment) {
-        if (segment.startsWith(" * ") || segment.startsWith("\n* ")) {
+        if (segment.startsWith(" * ")) {
             return ' ' + segment.substring(3);
         }
         return segment;
+    }
+
+    /**
+     * Pieces a request tally names before it stops and counts the rest. A peer's
+     * request pipeline is normally a run of blocks of two or three pieces, so eight
+     * names is already more than the state being reported usually holds, and the
+     * {@code "(+N more)"} tail keeps the true total.
+     */
+    private static final int MAX_PIECES = 8;
+
+    /**
+     * Characters one line of a tally may use before it wraps onto a continuation
+     * line, inside the logging guide's 100-column limit and leaving room for the
+     * caller's lead-in.
+     */
+    private static final int LINE_LIMIT = 90;
+
+    /**
+     * What one peer is being asked for right now, as a total and then a per-piece
+     * tally: {@code " 25 blocks across 3 pieces * Piece 27: 16 blocks * Piece 40: 9
+     * blocks"}. The request list it replaces named every block offset, which ran to
+     * 596 characters for a single peer and never named a piece a reader could act
+     * on. Pieces come out in the order the map does, at most {@link #MAX_PIECES} of
+     * them, and the tally wraps onto {@code "\n* "} continuation lines once a line
+     * would pass {@link #LINE_LIMIT}.
+     *
+     * @param blocksByPiece blocks in flight per piece number, in the order to show
+     *                      them, not null; an empty map reports no blocks
+     * @return the tally with one space before its first word, for a caller whose
+     *         lead-in ends at {@code "->"}
+     * @since 0.9.72+
+     */
+    public static String requestTally(Map<Integer, Integer> blocksByPiece) {
+        int pieces = blocksByPiece.size();
+        int blocks = 0;
+        for (Integer n : blocksByPiece.values()) {
+            blocks += n.intValue();
+        }
+        StringBuilder sb = new StringBuilder(24 + 24 * Math.min(pieces, MAX_PIECES));
+        sb.append(' ').append(blocks).append(' ').append(plural(blocks, "block"))
+          .append(" across ").append(pieces).append(' ').append(plural(pieces, "piece"));
+        int line = sb.length();
+        int shown = 0;
+        for (Map.Entry<Integer, Integer> e : blocksByPiece.entrySet()) {
+            if (shown++ == MAX_PIECES) {
+                sb.append("\n* (+").append(pieces - MAX_PIECES).append(" more)");
+                break;
+            }
+            int n = e.getValue().intValue();
+            int key = e.getKey().intValue();
+            String seg = "Piece " + key + ": " + n + ' ' + plural(n, "block");
+            if (line + 3 + seg.length() > LINE_LIMIT) {
+                sb.append("\n* ");
+                line = 2;
+            } else {
+                sb.append(" * ");
+                line += 3;
+            }
+            sb.append(seg);
+            line += seg.length();
+        }
+        return sb.toString();
+    }
+
+    /**
+     * The countable word for a tally, pluralised.
+     *
+     * @param n the count that precedes the word
+     * @param word the singular word
+     * @return the word, with an {@code s} unless the count is one
+     */
+    private static String plural(int n, String word) {
+        return n == 1 ? word : word + 's';
     }
 
     /**

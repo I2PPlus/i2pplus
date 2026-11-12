@@ -260,11 +260,11 @@ public class MetaInfo {
     }
 
     /**
-     * Creates a new MetaInfo from a Map of BEValues and the SHA1 over the original bencoded info
-     * dictionary (this is a hack, we could reconstruct the bencoded stream and recalculate the
-     * hash). Will NOT throw a InvalidBEncodingException if the given map does not contain a valid
-     * announce string. WILL throw a InvalidBEncodingException if the given map does not contain a
-     * valid info dictionary.
+     * Creates a new MetaInfo from a Map of BEValues and the SHA1 over the original bencoded
+     * info dictionary. This is a hack, we could reconstruct the bencoded stream and
+     * recalculate the hash. Will NOT throw a InvalidBEncodingException if the given map does
+     * not contain a valid announce string. WILL throw a InvalidBEncodingException if the given
+     * map does not contain a valid info dictionary.
      *
      * @param m the parsed bencoded dictionary as a map of keys to BEValues
      * @throws InvalidBEncodingException if the info dictionary is missing or malformed
@@ -535,10 +535,10 @@ public class MetaInfo {
      * The info dictionary rendered for the log as the values a reader acts on,
      * not the BEValue wrappers around them: the piece size, how many pieces the
      * "pieces" blob describes, the file count and the total size. Every measured
-     * value carries its unit, nothing is bracketed (the console log viewer reads a
-     * bracketed token as a destination), and a key that says nothing is left out -
-     * a public torrent has no "private" worth printing, and the name is not
-     * repeated here because the message that calls this already leads with it.
+     * value carries its unit, and nothing is bracketed, because the console log
+     * viewer reads a bracketed token as a destination. A key that says nothing is
+     * left out - a public torrent has no "private" worth printing, and the name is
+     * not repeated here because the message that calls this already leads with it.
      *
      * @param info the info dictionary, may be null or empty
      * @return the measurements as one {@code " * "}-separated run, or the bare key
@@ -886,8 +886,8 @@ public class MetaInfo {
     }
 
     /**
-     * Return the length of a piece. All pieces are of equal length except for the last one (<code>
-     * {@link #getPieces()}-1</code>).
+     * Return the length of a piece. All pieces are of equal length except for the
+     * last one, number {@link #getPieces()} - 1.
      *
      * @param piece zero-based piece index, from 0 to {@link #getPieces} - 1
      * @return the piece length
@@ -1002,18 +1002,20 @@ public class MetaInfo {
     }
 
     /**
-     * Returns a human-readable summary of this torrent's metadata.
+     * Returns a human-readable summary of this torrent's metadata. The file names
+     * are deliberately left out: a multi-file torrent can hold thousands of them,
+     * and the count is what a reader of the log acts on. A single-file torrent
+     * carries no file list, so it reports one file.
      *
-     * @return string containing name, infohash, announce URL, size, file count, and piece count
+     * @return string containing name, short infohash, announce host, size, file count, and piece count
      */
     @Override
     public String toString() {
-        return "MetaInfo for: "
-                + name
-                + "\n* InfoHash: " + I2PSnarkUtil.toHex(info_hash)
-                + "\n* Announce: " + announce
+        return "MetaInfo for: " + name
+                + "\n* InfoHash: " + SnarkLogFormatter.infoHash(info_hash)
+                + " * Announce: " + I2PSnarkUtil.trackerHost(announce)
                 + "\n* Size: " + length + " bytes"
-                + " * Files: " + files
+                + " * Files: " + (files != null ? files.size() : 1)
                 + " * Pieces: " + piece_hashes.length / 20
                 + " * Piece Length: " + piece_length + " bytes";
     }

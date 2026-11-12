@@ -686,10 +686,12 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             announce(ih, annMax, annMaxWait, isSeed);
         }
         if (_log.shouldDebug()) {
+            // the nodes that answered first - they are the ones the announce used,
+            // and the ones worth retrying; the rest is background
             _log.debug("Finished get_peers -> Returning " + rv.size() + " peers"
-                       + SnarkLogFormatter.nodeList(nids(tried), "Tried", tried.size())
                        + SnarkLogFormatter.nodeList(nids(heardFrom), "Heard from",
                                                     heardFrom.size())
+                       + SnarkLogFormatter.nodeList(nids(tried), "Tried", tried.size())
                        + SnarkLogFormatter.nodeList(nids(toTry), "Not tried", toTry.size()));
         }
         return rv;

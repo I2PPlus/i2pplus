@@ -3995,8 +3995,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                         baseFile = getSavedBaseFile(info.getInfoHash());
                     }
                     if (_log.shouldInfo()) {
-                        _log.info("New Snark loaded -> Torrent: " + filename + "\n* Base: "
-                                  + baseFile);
+                        // the torrent directory is fixed configuration and Storage
+                        // logs the data location, so the file name is the only part
+                        // of either path that varies
+                        _log.info("New torrent loaded -> " + new File(filename).getName());
                     }
                     torrent =
                             new Snark(
