@@ -555,3 +555,83 @@ test("hiding the overlay hides the levels too", async () => {
   assert.ok(parts.marks.every(x => x.hidden));
   assert.ok(parts.crosshair.hidden);
 });
+
+// ─── the hide path ──────────────────────────────────────────────────────
+// Hiding runs on pointer-leave, on scroll and resize, and on a pointer move whose metadata
+// request came back unusable. In that last case no overlay exists yet, and the hide still has
+// to be safe: it is the release of the crosshair cursor that runs there, and a throw there
+// leaves the readout stuck on screen.
+
+test("hiding with no overlay on screen is a no-op, not a throw", async () => {
+  const mod = await load();
+  // The state the live failure came from: hideOverlay() with no argument before any
+  // overlay was built, so the cursor release runs on nothing.
+  mod.hideOverlay();
+  mod.hideOverlay();
+
+  // and the module is still usable afterwards
+  const {container, img} = graphFixture({left: 0, top: 0, width: 400, height: 200},
+                                        {left: 0, top: 0, width: 400, height: 200});
+  const m = meta();
+  const parts = mod.ensureOverlay(container);
+  mod.placeOverlay(parts, img, m, mod.invert(m, 300, 150));
+  mod.hideOverlay(parts);
+  assert.ok(parts.crosshair.hidden, "the overlay built after the empty hides still hides");
+});
+
+test("hiding the overlay hands the cursor back to the theme", async () => {
+  const {container, img} = graphFixture({left: 0, top: 0, width: 400, height: 200},
+                                        {left: 0, top: 0, width: 400, height: 200});
+  const mod = await load();
+  const m = meta();
+  const parts = mod.ensureOverlay(container);
+  mod.placeOverlay(parts, img, m, mod.invert(m, 300, 150));
+  assert.equal(img.style.cursor, "crosshair", "a readout on screen claims the crosshair");
+
+  mod.hideOverlay(parts);
+  assert.ok(parts.crosshair.hidden, "the readout goes with the cursor");
+  assert.equal(img.style.cursor, "", "the inline cursor goes, so the theme's rule applies again");
+});
+
+/** Lets the metadata promise chain drain: worker reply, Blob text, parse, then the callback. */
+async function settle(turns = 6) {
+  for (let i = 0; i < turns; i++) {await new Promise(resolve => setImmediate(resolve));}
+}
+
+test("a pointer move puts the readout on screen, and leaving the page takes it off", async () => {
+  const {container, img} = graphFixture({left: 0, top: 0, width: 400, height: 200},
+                                        {left: 0, top: 0, width: 400, height: 200});
+  img.setAttribute("src", "/viewstat.jsp?graph=bytes");
+  const mod = await load();
+  const stub = stubSharedWorker();
+  // A move is buffered to one pass per frame, so running the frame callback inline keeps the
+  // readout in step with the dispatch instead of waiting on a timer the shim never fires.
+  const raf = global.requestAnimationFrame;
+  global.requestAnimationFrame = cb => {cb(); return 1;};
+  try {
+    mod.initGraphTooltip();
+    // linkedom's own Event: Node's global Event has a getter-only eventPhase, which its
+    // event target tries to write when the event bubbles.
+    const move = new window.Event("pointermove", {bubbles: true});
+    Object.assign(move, {offsetX: 300, offsetY: 150});
+    img.dispatchEvent(move);
+    stub.reply({url: "/viewstat.jsp?graph=bytes&format=meta", isDown: false, status: 200,
+                responseBlob: new Blob([JSON.stringify(meta())])});
+    await settle();
+
+    // the same parts the move built: ensureOverlay caches per container
+    const parts = mod.ensureOverlay(container);
+    assert.ok(!parts.crosshair.hidden, "the move put the readout on screen");
+    assert.equal(img.style.cursor, "crosshair", "and a readout on screen claims the crosshair");
+
+    // The listener is handed the event, and the overlay to hide is not the event: passing
+    // hideOverlay straight through makes the leave a no-op and the readout stays on screen.
+    document.dispatchEvent(new window.Event("pointerleave"));
+    assert.ok(parts.crosshair.hidden, "leaving the page hides the readout");
+    assert.ok(parts.marks.every(x => x.hidden), "and every mark with it");
+    assert.equal(img.style.cursor, "", "and the cursor goes back to the theme");
+  } finally {
+    global.requestAnimationFrame = raf;
+    stub.restore();
+  }
+});

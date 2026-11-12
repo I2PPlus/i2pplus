@@ -235,6 +235,9 @@ export function installBrowserShim() {
     Audio: class {constructor() {}},
     scrollTo() {},
     scrollBy() {},
+    // linkedom ships no postMessage; the iframe sizing scripts call it on
+    // window.parent at import time, and the shim makes parent the same window.
+    postMessage: () => {},
     alert() {},
     confirm() {return false;},
     prompt() {return null;},
@@ -283,7 +286,7 @@ export function installBrowserShim() {
   }
   // Mirror onto the shimmed window so `window.x` and bare `x` agree. MutationObserver
   // too: modules reaching it via window.MutationObserver must get the inert stub.
-  for (const key of ["location", "localStorage", "sessionStorage", "navigator", "history", "fetch"]) {
+  for (const key of ["location", "localStorage", "sessionStorage", "navigator", "history", "fetch", "postMessage"]) {
     try {window[key] = globals[key];} catch {}
   }
   try {window.MutationObserver = ObserverStub;} catch {}

@@ -15,6 +15,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
+import vm from "node:vm";
 
 const parserSrc = readFileSync(
   fileURLToPath(new URL("../../../../apps/routerconsole/jsp/js/vdomParser.js", import.meta.url)),
@@ -29,8 +30,9 @@ const parserSrc = readFileSync(
  */
 function loadParser() {
   const sandbox = { self: {} };
-  // eslint-disable-next-line no-new-func
-  Function("sandbox", `with (sandbox) { ${parserSrc}\n }`)(sandbox);
+  // a fresh vm context whose globals are the sandbox: the parser registers itself
+  // as self.VdomParser exactly as the SharedWorker sees it
+  vm.runInNewContext(parserSrc, sandbox);
   return sandbox.self.VdomParser;
 }
 

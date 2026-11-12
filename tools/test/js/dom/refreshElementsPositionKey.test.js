@@ -21,6 +21,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
+import vm from "node:vm";
 import { parseHTML } from "linkedom";
 import { installBrowserShim } from "../helpers/browserShim.js";
 
@@ -41,12 +42,11 @@ function loadPositionKey() {
     .replace(/^import .*$/gm, "")
     .replace(/^export /gm, "");
   const sandbox = { morphdom: null };
-  // eslint-disable-next-line no-new-func
-  Function(
-    "sandbox",
-    `with (sandbox) { ${withoutModuleSyntax}\n; sandbox.__positionKey = positionKey; }`
-  )(sandbox);
-  return sandbox.__positionKey;
+  // a fresh vm context whose global object is the sandbox: the module body runs
+  // the way the page runs it, and its top-level function declarations land on
+  // the sandbox as globals
+  vm.runInNewContext(withoutModuleSyntax, sandbox);
+  return sandbox.positionKey;
 }
 
 const positionKey = loadPositionKey();

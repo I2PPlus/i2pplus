@@ -48,10 +48,6 @@ const CONCURRENCY = 8;
  */
 const EXCLUSIONS = [
   {
-    path: "routerconsole/jsp/js/iframeResizer/",
-    reason: "vendored third-party iframe sizing library (not our code)"
-  },
-  {
     path: "routerconsole/jsp/js/geomap.js",
     reason: "SVG world map: linkedom cannot execute its image/observer DOM internals"
   }

@@ -22,5 +22,10 @@ import "./dom/routerControl.test.js";
 import "./dom/refreshLogsLinkify.test.js";
 import "./dom/refreshLogsFraming.test.js";
 import "./dom/vdomParser.test.js";
+import "./dom/morphdom.test.js";
+import "./dom/jdenticon.test.js";
+import "./dom/docdashNav.test.js";
+import "./dom/progressx.test.js";
+import "./dom/iframeResizer.test.js";
 
 await import("./dom/importAll.test.js");
