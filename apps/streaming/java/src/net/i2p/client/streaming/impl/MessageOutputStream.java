@@ -256,7 +256,8 @@ class MessageOutputStream extends OutputStream {
     public void write(byte[] b, int off, int len) throws IOException {
         if (_closed.get()) throw new IOException("Output stream closed");
         if (b == null) throw new NullPointerException("Buffer is null");
-        if (off < 0 || len < 0 || off + len > b.length) throw new IndexOutOfBoundsException();
+        // off + len overflows for a huge len, wrapping the range check into a pass
+        if (off < 0 || len < 0 || off > b.length - len) throw new IndexOutOfBoundsException();
 
         int cur = off;
         int remaining = len;

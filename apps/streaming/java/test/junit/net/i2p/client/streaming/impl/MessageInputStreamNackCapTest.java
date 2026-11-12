@@ -78,4 +78,35 @@ public class MessageInputStreamNackCapTest {
         assertEquals(2, nacks[0]);
         assertEquals(510, nacks[nacks.length - 1]);
     }
+
+    /**
+     * A peer that jumps the sequence number must not turn every ACK into a
+     * full-window scan under the data lock. The scan stops at the most blocks the
+     * receive buffer could hold at all, so it reports the gaps in that range and
+     * no more.
+     */
+    @Test
+    public void testScanBoundedByTheReceiveBuffer() {
+        I2PAppContext ctx = I2PAppContext.getGlobalContext();
+        // a buffer that holds 16 blocks
+        MessageInputStream in = new MessageInputStream(ctx, 1730, 2048, 1730 * 16, 2048);
+        in.messageReceived(0, null);
+        in.messageReceived(100000, null);      // a wild jump
+        long[] nacks = in.getNacksLocked();
+        assertEquals(17, nacks.length);
+        assertEquals(1, nacks[0]);
+        assertEquals(17, nacks[nacks.length - 1]);
+    }
+
+    /**
+     * The same bound is applied on the way in, so a wild sequence number is
+     * refused with one comparison instead of being queued and then scanned for.
+     */
+    @Test
+    public void testWildSequenceNumberRefused() {
+        // this stream's buffer holds 2048 blocks
+        assertTrue(_in.canAccept(100, 100));
+        assertFalse(_in.canAccept(1000000, 100));
+        assertTrue(_in.canAccept(2048, 100));
+    }
 }

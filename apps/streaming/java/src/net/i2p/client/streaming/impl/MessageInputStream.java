@@ -7,9 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InterruptedIOException;
 import java.net.SocketTimeoutException;
-import java.util.ArrayList;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import net.i2p.I2PAppContext;
@@ -63,8 +63,12 @@ class MessageInputStream extends InputStream {
 
     /** Logger for the message input stream. */
     private final Log _log;
-    /** Ordered list of fully received data blocks ready for reading. */
-    private final List<ByteArray> _readyDataBlocks;
+    /**
+     * Fully received data blocks ready for reading, oldest first. A deque, because
+     * the read path consumes from the head on every block, which an ArrayList did
+     * by shifting every remaining element.
+     */
+    private final Deque<ByteArray> _readyDataBlocks;
     /** Current read position within the active ready block. */
     private int _readyDataBlockIndex;
     /** ID of the highest block fully received in order. */
@@ -161,7 +165,7 @@ class MessageInputStream extends InputStream {
      */
     public MessageInputStream(I2PAppContext ctx, int maxMessageSize, int maxWindowSize, int maxBufferSize, int maxPacketCount) {
         _log = ctx.logManager().getLog(MessageInputStream.class);
-        _readyDataBlocks = new ArrayList<>(INITIAL_CAPACITY);
+        _readyDataBlocks = new ArrayDeque<>(INITIAL_CAPACITY);
         _notYetReadyBlocks = new HashMap<>(INITIAL_CAPACITY);
         _highestReadyBlockId = -1;
         _highestBlockId = -1;
@@ -239,6 +243,14 @@ class MessageInputStream extends InputStream {
 
             if (_locallyClosed.get()) {
                 return _notYetReadyBlocks.containsKey(messageId);
+            }
+
+            // A block ID further ahead than the buffer could ever hold blocks is
+            // not a block we are waiting for, whatever the byte accounting below
+            // concludes. Checked first because it is one comparison.
+            if (messageId > _highestBlockId + maxBlocksAhead()) {
+                logSequenceGap(messageId);
+                return false;
             }
 
             if (messageId < MIN_READY_BUFFERS && _readyDataSize < _maxBufferSize / 2) {
@@ -415,6 +427,31 @@ class MessageInputStream extends InputStream {
     }
 
     /**
+     * Most block IDs ahead of the highest received block that the receive buffer
+     * could hold at all. {@link #canAccept(long, int)} and the NACK scan use this
+     * one bound so they cannot disagree about what counts as a gap.
+     *
+     * @return the block count, at least 1
+     * @since 0.9.72+
+     */
+    private int maxBlocksAhead() {
+        return _maxBufferSize / _maxMessageSize + 1;
+    }
+
+    /**
+     * Logs a packet whose sequence number is further ahead than the receive buffer
+     * could hold blocks, which is what a peer that jumps the sequence number sends.
+     * Called with {@link #_dataLock} held.
+     *
+     * @param messageId the message that was refused
+     */
+    private void logSequenceGap(long messageId) {
+        _log.warnThrottled("streaming-seq-gap-refused",
+                           "Message sequence number jumped -> Refusing it * Message: " + messageId +
+                           " * Highest received: " + _highestBlockId);
+    }
+
+    /**
      * Logs a block held back by too many ready blocks.
      *
      * @param messageId the message that was held back
@@ -441,14 +478,26 @@ class MessageInputStream extends InputStream {
 
     /**
      * Returns missing block IDs. Must be called while holding {@link #_dataLock}.
+     * <p>
+     * The scan is bounded twice: it stops once the wire's NACK count is full, and
+     * it never looks further ahead than the receive buffer could hold blocks.
+     * {@link #canAccept(long, int)} admits a block at most that many IDs past the
+     * highest one ready, so a gap beyond that cannot be a block we are waiting
+     * for, and a peer that jumps the sequence number cannot turn every ACK into a
+     * full-window scan under the data lock.
      *
      * @return array of missing block IDs, empty if none
      * @since 0.9.71+
      */
     long[] getNacksLocked() {
-        // First pass: count missing blocks.
+        long start = _highestReadyBlockId + 1;
+        // Most blocks the buffer can hold at all, so the most gaps that can exist.
+        long end = Math.min(_highestBlockId, start + maxBlocksAhead());
+        if (start >= end)
+            return new long[0];
+        // First pass: count missing blocks, stopping at the wire's limit.
         int count = 0;
-        for (long i = _highestReadyBlockId + 1; i < _highestBlockId; i++) {
+        for (long i = start; i < end && count < Packet.MAX_NACKS; i++) {
             if (!_notYetReadyBlocks.containsKey(i))
                 count++;
         }
@@ -458,16 +507,11 @@ class MessageInputStream extends InputStream {
         // lowest gaps — they are the head-of-line ones the sender's recovery
         // acts on first — and drop the rest rather than corrupting the
         // packet with a wrapped count.
-        if (count > Packet.MAX_NACKS)
-            count = Packet.MAX_NACKS;
         long[] array = new long[count];
         int idx = 0;
-        for (long i = _highestReadyBlockId + 1; i < _highestBlockId; i++) {
-            if (!_notYetReadyBlocks.containsKey(i)) {
+        for (long i = start; i < end && idx < count; i++) {
+            if (!_notYetReadyBlocks.containsKey(i))
                 array[idx++] = i;
-                if (idx >= count)
-                    break;
-            }
         }
         return array;
     }
@@ -502,7 +546,7 @@ class MessageInputStream extends InputStream {
             while (_notYetReadyBlocks.containsKey(cur)) {
                 ByteArray ba = _notYetReadyBlocks.remove(cur);
                 if (ba.getData() != null && ba.getValid() > 0) {
-                    _readyDataBlocks.add(ba);
+                    _readyDataBlocks.addLast(ba);
                     _readyDataSize += ba.getValid();
                 }
                 _highestReadyBlockId = cur;
@@ -550,7 +594,7 @@ class MessageInputStream extends InputStream {
 
             if (messageId == _highestReadyBlockId + 1) {
                 if (!_locallyClosed.get() && payload != null && payload.getValid() > 0) {
-                    _readyDataBlocks.add(payload);
+                    _readyDataBlocks.addLast(payload);
                     _readyDataSize += payload.getValid();
                 }
                 _highestReadyBlockId = messageId;
@@ -559,7 +603,7 @@ class MessageInputStream extends InputStream {
                 ByteArray ba;
                 while ((ba = _notYetReadyBlocks.remove(cur)) != null) {
                     if (ba.getData() != null && ba.getValid() > 0) {
-                        _readyDataBlocks.add(ba);
+                        _readyDataBlocks.addLast(ba);
                         _readyDataSize += ba.getValid();
                     }
                     if (_log.shouldDebug()) {
@@ -571,6 +615,13 @@ class MessageInputStream extends InputStream {
                 noteBuffered();
                 _dataLock.notifyAll();
             } else {
+                // A retransmit of a block we are already holding must not replace
+                // the payload on the map, and must not be counted as new traffic.
+                if (_notYetReadyBlocks.containsKey(messageId)) {
+                    _log.infoThrottled("streaming-duplicate-message-id",
+                                       "Ignored duplicate message ID " + messageId + " -> Already buffered");
+                    return false;
+                }
                 if (_locallyClosed.get()) {
                     _log.infoThrottled("streaming-out-of-order-closed",
                                        "Received out-of-order message ID " + messageId +
@@ -627,9 +678,23 @@ class MessageInputStream extends InputStream {
      * @param length number of bytes to read
      * @return number of bytes read, or -1 on EOF
      * @throws IOException if stream is closed or read fails
+     * @throws NullPointerException if target is null
+     * @throws IndexOutOfBoundsException if offset or length are negative or the
+     *                                   range does not fit in target
      */
     @Override
     public int read(byte[] target, int offset, int length) throws IOException {
+        // Checked before anything blocks: a bad range must fail at once rather
+        // than after waiting out the read timeout. offset > target.length - length
+        // rather than offset + length > target.length, which overflows for a huge
+        // length.
+        if (target == null)
+            throw new NullPointerException("Buffer is null");
+        if (offset < 0 || length < 0 || offset > target.length - length)
+            throw new IndexOutOfBoundsException();
+        if (length == 0)
+            return 0;
+
         int readTimeout = _readTimeout;
         long expiration = readTimeout > 0 ? System.currentTimeMillis() + readTimeout : -1;
         boolean shouldDebug = _log.shouldDebug();
@@ -694,7 +759,7 @@ class MessageInputStream extends InputStream {
                 if (_readyDataBlocks.isEmpty()) {
                     return totalRead;
                 }
-                cur = _readyDataBlocks.get(0);
+                cur = _readyDataBlocks.peekFirst();
                 int available = cur.getValid() - _readyDataBlockIndex;
                 toRead = Math.min(available, length - totalRead);
                 data = cur.getData();
@@ -707,7 +772,7 @@ class MessageInputStream extends InputStream {
                 if (blockConsumed) {
                     _readyDataSize -= blockSize;
                     _readyDataBlockIndex = 0;
-                    _readyDataBlocks.remove(0);
+                    _readyDataBlocks.pollFirst();
                     if (_readyDataBlocks.isEmpty()) {
                         decayBuffer();
                     }
