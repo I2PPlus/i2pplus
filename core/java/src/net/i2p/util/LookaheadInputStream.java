@@ -17,6 +17,8 @@ public class LookaheadInputStream extends FilterInputStream {
     private boolean _eofReached;
         /** The footer bytes to watch for. */
     private final byte[] _footerLookahead;
+    /** Scratch space for moving the trailing bytes during an in-place bulk read. */
+    private final byte[] _readAhead;
     /** Length of the footer to look ahead for. */
     private final int size;
     /** Next footer byte to read. */
@@ -36,6 +38,7 @@ public class LookaheadInputStream extends FilterInputStream {
     public LookaheadInputStream(int lookaheadSize) {
         super(_fakeInputStream);
         _footerLookahead = new byte[lookaheadSize];
+        _readAhead = new byte[lookaheadSize];
         size = lookaheadSize;
     }
 
@@ -70,6 +73,8 @@ public class LookaheadInputStream extends FilterInputStream {
             _eofReached = true;
             return -1;
         }
+        if (size == 0)
+            return c;
         int rv = _footerLookahead[index] & 0xff;
         _footerLookahead[index] = (byte) c;
         index++;
@@ -77,19 +82,63 @@ public class LookaheadInputStream extends FilterInputStream {
         return rv;
     }
 
+    /**
+     * Reads into the caller's array in one pass instead of one byte at a time,
+     * then rotates the footer out of the way in place. The count returned is what
+     * the underlying stream returned, which may be fewer than {@code len} - legal
+     * for an InputStream, and the only caller, the gzip stream in this package,
+     * loops on it.
+     *
+     * @param buf the array to read into
+     * @param off where in the array to start
+     * @param len how many bytes to ask for
+     * @return the number of bytes read, or -1 at EOF
+     * @throws IOException if the underlying stream fails
+     * @throws NullPointerException if buf is null
+     * @throws IndexOutOfBoundsException if the range does not fit in buf
+     * @since 0.9.72+ bulk reads
+     */
     @Override
     public int read(byte[] buf, int off, int len) throws IOException {
+        if (buf == null)
+            throw new NullPointerException();
+        // offset > buf.length - len rather than off + len > buf.length, which
+        // overflows for a huge len
+        if (off < 0 || len < 0 || off > buf.length - len)
+            throw new IndexOutOfBoundsException();
+        if (len == 0)
+            return 0;
         if (_eofReached) return -1;
-        for (int i = 0; i < len; i++) {
-            int c = read();
-            if (c == -1) {
-                if (i == 0) return -1;
-                else return i;
-            } else {
-                buf[off + i] = (byte) c;
-            }
+        int count = in.read(buf, off, len);
+        if (count < 0) {
+            _eofReached = true;
+            return -1;
         }
-        return len;
+        if (count == 0 || size == 0)
+            return count;
+
+        if (count >= size) {
+            // Save the new footer before shifting the newly read data right.
+            System.arraycopy(buf, off + count - size, _readAhead, 0, size);
+            System.arraycopy(buf, off, buf, off + size, count - size);
+            int first = size - index;
+            System.arraycopy(_footerLookahead, index, buf, off, first);
+            System.arraycopy(_footerLookahead, 0, buf, off + first, index);
+            System.arraycopy(_readAhead, 0, _footerLookahead, 0, size);
+            index = 0;
+        } else {
+            // A short read replaces only part of the circular footer buffer.
+            System.arraycopy(buf, off, _readAhead, 0, count);
+            int first = Math.min(count, size - index);
+            System.arraycopy(_footerLookahead, index, buf, off, first);
+            System.arraycopy(_footerLookahead, 0, buf, off + first, count - first);
+            System.arraycopy(_readAhead, 0, _footerLookahead, index, first);
+            System.arraycopy(_readAhead, first, _footerLookahead, 0, count - first);
+            index += count;
+            if (index >= size)
+                index -= size;
+        }
+        return count;
     }
 
     /**
