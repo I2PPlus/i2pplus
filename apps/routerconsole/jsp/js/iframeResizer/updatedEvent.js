@@ -4,6 +4,6 @@
 /* License: AGPL3 or later */
 
 document.addEventListener("DOMContentLoaded", function() {
-  var newPage = new Event("updated");
+  const newPage = new Event("updated");
   window.parent.document.dispatchEvent(newPage);
 });
