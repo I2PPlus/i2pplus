@@ -2304,7 +2304,7 @@ public class DataHelper {
      * done once and I2PAppContext is still not initialized until the first call.
      * The entry size is invariant, so the cache never needs resizing.
      *
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     private static final class DecompressCacheHolder {
         /** Not a DataHelper static field - see the class comment. */
@@ -2559,7 +2559,7 @@ public class DataHelper {
      * The shared buffer for {@link #copy(InputStream, OutputStream)}, resolved once for the same reason and in the
      * same way as {@link DecompressCacheHolder}.
      *
-     * @since 0.9.72
+     * @since 0.9.72+
      */
     private static final class CopyCacheHolder {
         /** Not a DataHelper static field - see DecompressCacheHolder. */
