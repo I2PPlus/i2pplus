@@ -15,7 +15,6 @@ import java.io.SequenceInputStream;
 import java.net.SocketTimeoutException;
 import net.i2p.I2PAppContext;
 import net.i2p.client.streaming.I2PSocket;
-import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.util.Log;
@@ -95,12 +94,13 @@ class PeerAcceptor {
             try {
                 peerInfoHash = readHash(in);
                 if (_log.shouldInfo())
-                    _log.info("Read an infohash from [" + peerHash.toShortBase64()
-                              + "] -> InfoHash: " + Base64.encode(peerInfoHash));
+                    _log.info("Read an infohash from a peer -> Peer: "
+                              + SnarkLogFormatter.dest(peerHash)
+                              + " * Torrent: " + SnarkLogFormatter.infoHash(peerInfoHash));
             } catch (IOException ioe) {
                 if (_log.shouldInfo())
-                    _log.info("Unable to read the infohash from [" + peerHash.toShortBase32()
-                              + "]");
+                    _log.info("Unable to read the infohash -> Peer: "
+                              + SnarkLogFormatter.dest(peerHash));
                 throw ioe;
             }
             in = new SequenceInputStream(new ByteArrayInputStream(peerInfoHash), in);
@@ -124,13 +124,11 @@ class PeerAcceptor {
                     }
                 } else socket.close();
             } else {
-                // it's for another infohash, but we are only single torrent capable.  b0rk.
-                throw new IOException(
-                        "Peer wants another torrent ("
-                                + Base64.encode(peerInfoHash)
-                                + ") but we only support ["
-                                + Base64.encode(coordinator.getInfoHash())
-                                + "]");
+                // it's for another infohash, but we are only single torrent capable.
+                // the message goes straight into the acceptor's log line, so it
+                // stays short enough for that line to fit on one row
+                throw new IOException("Torrent we do not support: "
+                                      + SnarkLogFormatter.infoHash(peerInfoHash));
             }
         } else {
             // multitorrent capable, so let's see what we can handle
@@ -153,16 +151,16 @@ class PeerAcceptor {
                         return;
                     } else {
                         if (_log.shouldDebug())
-                            _log.debug("Rejecting new peer for " + cur.getName());
+                            _log.debug("Rejecting a new peer -> Torrent: "
+                                       + SnarkLogFormatter.infoHash(cur.getInfoHash())
+                                       + " * Reason: No peer slots needed");
                         socket.close();
                         return;
                     }
             }
             // this is only reached if none of the coordinators match the infohash
-            throw new IOException(
-                    "Peer wants another torrent ["
-                            + Base64.encode(peerInfoHash)
-                            + "] but we don't support that hash");
+            throw new IOException("Torrent we do not support: "
+                                  + SnarkLogFormatter.infoHash(peerInfoHash));
         }
     }
 

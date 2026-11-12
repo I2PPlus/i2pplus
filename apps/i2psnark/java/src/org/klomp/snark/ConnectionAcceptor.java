@@ -649,30 +649,42 @@ class ConnectionAcceptor implements Runnable {
                 OutputStream out = _socket.getOutputStream();
                 // this is for the readahead in PeerAcceptor.connection()
                 in = new BufferedInputStream(in);
+                Hash h = _socket.getPeerDestination().calculateHash();
                 if (_log.shouldDebug()) {
-                    _log.debug("[Snark] Handling socket from ["
-                               + _socket.getPeerDestination().calculateHash() + "]");
+                    _log.debug("Handling an incoming connection -> Peer: "
+                               + SnarkLogFormatter.dest(h));
                 }
                 _pa.connection(_socket, in, out);
                 // A successful handshake shows the client is healthy; drop
                 // any protocol-error count so only serial failures blacklist
-                _badCounter.clear(_socket.getPeerDestination().calculateHash());
-                _badReasons.remove(_socket.getPeerDestination().calculateHash());
+                _badCounter.clear(h);
+                _badReasons.remove(h);
             } catch (PeerAcceptor.ProtocolException ihe) {
                 Hash h = _socket.getPeerDestination().calculateHash();
                 _badCounter.increment(h);
                 _badReasons.put(h, "protocol error: " + ihe.getMessage());
                 if (_log.shouldInfo()) {
-                    _log.info("[Snark] Protocol error from ["
-                              + _socket.getPeerDestination().calculateHash() + "]", ihe);
+                    // the message names the fault; the trace is the same three
+                    // frames for every bad handshake
+                    _log.info("Protocol error from a peer -> Peer: " + SnarkLogFormatter.dest(h)
+                              + " * Reason: " + ihe.getMessage());
                 }
                 try {
                     _socket.reset();
                 } catch (IOException ignored) { /* ignored */ }
             } catch (IOException ioe) {
+                Hash h = _socket.getPeerDestination().calculateHash();
                 if (_log.shouldDebug()) {
-                    _log.debug("[Snark] Error handling connection from ["
-                               + _socket.getPeerDestination().calculateHash() + "]", ioe);
+                    String why = ioe.getMessage();
+                    // a peer that hangs up mid-handshake is routine; keep the
+                    // trace only for the faults whose exception says nothing
+                    if (why != null) {
+                        _log.debug("Closing an incoming connection -> Peer: "
+                                   + SnarkLogFormatter.dest(h) + " * Reason: " + why);
+                    } else {
+                        _log.debug("Closing an incoming connection -> Peer: "
+                                   + SnarkLogFormatter.dest(h), ioe);
+                    }
                 }
                 try {
                     _socket.reset();
