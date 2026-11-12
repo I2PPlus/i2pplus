@@ -390,6 +390,11 @@ class TrackerInfo {
      * branch opens with the continuation separator, so the shape is the same
      * whether the tracker answered our announce or refused it; the arrow stays
      * at the call site, where the subject is.
+     *
+     * <p>A successful reply reports how many peers came back, not who they are -
+     * a tracker hands back tens of destinations and the reader of an announce
+     * line wants the size of the swarm, which the address list gave no way to
+     * see. The addresses are still available at DEBUG from the peer fetch.
      */
     @Override
     public String toString() {
@@ -402,6 +407,7 @@ class TrackerInfo {
                 + DataHelper.formatDuration(interval * 1000L)
                 + (complete > 0 ? " * Seeds: " + complete : "")
                 + (incomplete > 0 ? " * Leeches: " + incomplete : "");
-        return peers.isEmpty() ? rv : rv + "\n* Peers: " + peers;
+        // no segment at all when the tracker handed us nobody
+        return rv + (peers.isEmpty() ? "" : " * Peers: " + peers.size());
     }
 }

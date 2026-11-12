@@ -1812,7 +1812,7 @@ public class TrackerClient implements Runnable {
                 // maxSeenPeers and the UI forever shows the old DHT peers
                 _dhtPeersSeen = 0;
             }
-            if (_log.shouldInfo()) {
+            if (_log.shouldInfo() && hashes.size() > 0) {
                 // the count at INFO, the addresses themselves only at DEBUG
                 _log.info("Received a peer list from DHT ->"
                           + (_log.shouldDebug()

@@ -23,6 +23,13 @@ import org.junit.Test;
  */
 public class TrackerInfoTest {
 
+    /**
+     * Test instance; every test parses one tracker response and reads back the
+     * peer set and the log form it produces.
+     */
+    public TrackerInfoTest() {
+    }
+
     private static final byte[] MY_ID = new byte[20];
     private static final byte[] INFOHASH = new byte[20];
 
@@ -172,17 +179,21 @@ public class TrackerInfoTest {
     }
 
     /**
-     * A peer list is a continuation line of its own, so the interval and the
-     * counts stay on the first line.
+     * A peer list is counted, not listed. The destinations a tracker hands back
+     * are not what an announce line is read for - the size of the swarm is - and
+     * the list of them ran the line past the width limit. One line, one count,
+     * no addresses.
      *
      * @throws Throwable on tracker response parse failure
      */
     @Test
-    public void testPeersGetTheirOwnLine() throws Throwable {
-        TrackerInfo info = parse("d8:intervali1800e5:peers32:" + compactPeer('a') + "e");
+    public void testPeersAreCountedNotListed() throws Throwable {
+        TrackerInfo info = parse(
+                "d8:intervali1800e5:peers64:" + compactPeer('a') + compactPeer('b') + "e");
         String s = info.toString();
-        assertTrue(s.startsWith("\n* Announce accepted * Interval: 30m\n* Peers: ["));
-        // Two continuation separators, so the peers do not join the interval line.
-        assertEquals(2, s.chars().filter(c -> c == '\n').count());
+        assertEquals("\n* Announce accepted * Interval: 30m * Peers: 2", s);
+        // one continuation separator only - the count joins the interval line
+        assertEquals(1, s.chars().filter(c -> c == '\n').count());
+        assertFalse(s, s.contains("["));
     }
 }
