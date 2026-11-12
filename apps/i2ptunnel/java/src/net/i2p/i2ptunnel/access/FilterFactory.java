@@ -41,12 +41,9 @@ public class FilterFactory {
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(definition), StandardCharsets.UTF_8))) {
             String line;
+            // Kept verbatim, blank and comment lines included, so the line number
+            // the parser reports for a bad rule is the one in this file.
             while((line = reader.readLine()) != null) {
-                line = line.trim();
-                if (line.isEmpty())
-                    continue;
-                if (line.startsWith("#"))
-                    continue;
                 linesList.add(line);
             }
         }

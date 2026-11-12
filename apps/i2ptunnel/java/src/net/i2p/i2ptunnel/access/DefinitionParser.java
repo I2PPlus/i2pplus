@@ -3,6 +3,7 @@ package net.i2p.i2ptunnel.access;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import net.i2p.data.DataHelper;
 
 /**
@@ -147,39 +148,63 @@ class DefinitionParser {
 
         DefinitionBuilder builder = new DefinitionBuilder();
 
-        for (String line : definition) {
-            String [] split = DataHelper.split(line,"[ \t]");
-            if (split.length < 2)
-                throw new InvalidDefinitionException("invalid definition " + line);
-            split[0] = split[0].toLowerCase();
-            // The rule word is case-insensitive too — "15/5 Deny default" must
-            // parse like "15/5 deny default", not fail on the capital D.
-            split[1] = split[1].toLowerCase();
-
-            Threshold threshold = parseThreshold(split[0]);
-            Rule rule = parseRule(split[1]);
-
-            File file;
-            switch(rule) {
-            case DEFAULT:
-                builder.setDefaultThreshold(threshold);
-                break;
-            case EXPLICIT:
-                if (split.length < 3)
-                    throw new InvalidDefinitionException("invalid definition " + line);
-                builder.addElement(new ExplicitFilterDefinitionElement(split[2], threshold));
-                break;
-            case FILE:
-                file = parseFileName(line, split);
-                builder.addElement(new FileFilterDefinitionElement(file, threshold));
-                break;
-            case RECORDER:
-                file = parseFileName(line, split);
-                builder.addRecorder(new Recorder(file, threshold));
+        // Counted from 1 so a complaint about a bad rule names the line the
+        // operator has to go look at, blank and comment lines included.
+        for (int lineNo = 1; lineNo <= definition.length; lineNo++) {
+            String line = definition[lineNo - 1].trim();
+            if (line.isEmpty() || line.startsWith("#"))
+                continue;
+            try {
+                parseLine(line, builder);
+            } catch (InvalidDefinitionException bad) {
+                throw new InvalidDefinitionException("Line " + lineNo + ": " + bad.getMessage(), bad);
             }
         }
 
         return builder.build();
+    }
+
+    /**
+     * Parses one non-blank, non-comment definition line and adds what it declares
+     * to the definition being built. The threshold and rule keywords are
+     * case-insensitive, folded with {@link Locale#US} so a Turkish-locale JVM does
+     * not turn a dotted I into a dotless one and stop recognising FILE or RECORD.
+     *
+     * @param line the line to parse, already trimmed and non-empty
+     * @param builder the definition being accumulated
+     * @throws InvalidDefinitionException if the line is not a rule this parser knows
+     * @since 0.9.72+
+     */
+    private static void parseLine(String line, DefinitionBuilder builder) throws InvalidDefinitionException {
+
+        // A run of spaces or a tab is one separator: splitting on a single
+        // whitespace character turned "15/5  default" into an empty field where
+        // the rule word belongs. The keywords are folded for the lookups only,
+        // so the line keeps the case it was written with.
+        String [] split = DataHelper.split(line,"[ \t]+");
+        if (split.length < 2)
+            throw new InvalidDefinitionException("invalid definition " + line);
+        Threshold threshold = parseThreshold(split[0].toLowerCase(Locale.US));
+        Rule rule = parseRule(split[1].toLowerCase(Locale.US));
+
+        File file;
+        switch(rule) {
+        case DEFAULT:
+            builder.setDefaultThreshold(threshold);
+            break;
+        case EXPLICIT:
+            if (split.length < 3)
+                throw new InvalidDefinitionException("invalid definition " + line);
+            builder.addElement(new ExplicitFilterDefinitionElement(split[2], threshold));
+            break;
+        case FILE:
+            file = parseFileName(line);
+            builder.addElement(new FileFilterDefinitionElement(file, threshold));
+            break;
+        case RECORDER:
+            file = parseFileName(line);
+            builder.addRecorder(new Recorder(file, threshold));
+        }
     }
 
     /**
@@ -233,20 +258,48 @@ class DefinitionParser {
     }
 
     /**
-     * Parses the file name of a definition line.
+     * Parses the file name of a definition line, which is everything after the
+     * threshold and rule words and is taken verbatim so a path may contain spaces.
+     * <p>
+     * The two leading words are skipped by position rather than searched for in
+     * the line: searching for the rule word broke as soon as the line was written
+     * with the rule word in another case, since the keyword is folded for the
+     * lookup and the line is not.
      *
-     * @param s the name to parse
-     * @param split the fields of the line
+     * @param line the definition line, already trimmed and non-empty
      * @return the file named
-     * @throws InvalidDefinitionException if the name is missing or invalid
+     * @throws InvalidDefinitionException if the line names no file
+     * @since 0.9.72+
      */
-    private static File parseFileName(String s, String[] split) throws InvalidDefinitionException {
-        if (split.length < 3)
-            throw new InvalidDefinitionException("invalid definition "+s);
-        int beginIndex = s.indexOf(split[1]);
-        if (beginIndex < 0)
-            throw new IllegalStateException("shouldn't have gotten here "+s);
-        return new File(s.substring(beginIndex + split[1].length()).trim());
+    private static File parseFileName(String line) throws InvalidDefinitionException {
+        int i = 0;
+        int len = line.length();
+        // Step over the threshold word and the rule word, then the path is the
+        // rest of the line.
+        for (int field = 0; field < 2; field++) {
+            while (i < len && isSeparator(line.charAt(i)))
+                i++;
+            if (i == len)
+                throw new InvalidDefinitionException("invalid definition " + line);
+            while (i < len && !isSeparator(line.charAt(i)))
+                i++;
+        }
+        while (i < len && isSeparator(line.charAt(i)))
+            i++;
+        if (i == len)
+            throw new InvalidDefinitionException("invalid definition " + line);
+        return new File(line.substring(i).trim());
+    }
+
+    /**
+     * Whether a character separates the fields of a definition line, matching the
+     * pattern the line is split on.
+     *
+     * @param c the character to test
+     * @return true if the character is a space or a tab
+     */
+    private static boolean isSeparator(char c) {
+        return c == ' ' || c == '\t';
     }
 
 
