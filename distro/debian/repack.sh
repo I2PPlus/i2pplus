@@ -26,13 +26,16 @@ trap '[ ! -d "$tdir" ] || rm -r "$tdir"' EXIT
 
 cp -f ${tarball} "$tarball.bkp"
 echo "Filtering tarball contents..."
+# The jetty and tomcat patterns are wildcarded on purpose: both trees are checked
+# in under a directory that carries the version (apache-tomcat-9.0.107,
+# jetty-distribution-9.3.30...), so an unversioned pattern silently stops matching
+# after a bump and the vendored jars end up back in the orig tarball.
 bzcat "$tarball" | tar --wildcards --delete '*/installer/lib/*' \
                         --delete '*/Slackware/*' \
                         --delete '*/debian-alt/*' \
                         --delete '*/installer/resources/geoip.txt' \
                         --delete '*/installer/resources/geoipv6.dat.gz' \
-                        --delete '*/apps/jetty/apache-tomcat/*' \
-                        --delete '*/apps/jetty/apache-tomcat-deployer/*' \
+                        --delete '*/apps/jetty/apache-tomcat*/*' \
                         --delete '*/apps/jetty/jetty-distribution-*/*' \
                         --delete '*/apps/susidns/src/WEB-INF/lib/jstl.jar' \
                         --delete '*/apps/susidns/src/WEB-INF/lib/standard.jar' \

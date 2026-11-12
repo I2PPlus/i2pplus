@@ -320,7 +320,7 @@ def makeStageTask(String taskName, String stageDir, String variant, String taskD
       from('docs/LICENSES.md') {
         rename { 'LICENSE.md' }
       }
-      from('apps/jetty/apache-tomcat-9.0.107/NOTICE') {
+      from("apps/jetty/apache-tomcat-${tomcatVersion}/NOTICE") {
         rename { 'NOTICE-Tomcat.txt' }
       }
     }
