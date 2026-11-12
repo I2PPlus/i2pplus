@@ -1100,7 +1100,7 @@ class IntroductionManager {
      */
     static final class RecentRelays {
         /** Slots in the ring, a power of two so the write index is masked, not divided. */
-        private static final int CAPACITY = 64;
+        static final int CAPACITY = 64;
         /** Mask for the write index, one less than {@link #CAPACITY}. */
         private static final int MASK = CAPACITY - 1;
         /**

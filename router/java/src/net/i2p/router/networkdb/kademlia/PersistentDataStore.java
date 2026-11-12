@@ -1391,7 +1391,7 @@ public class PersistentDataStore extends TransientDataStore {
      * there is one, otherwise the file read back from disk.
      * <p>
      * Reading a file costs a stream, a SHA-256 over the payload and a signature
-     * verify. {@link ReadJob} has just paid all three for every file it loaded,
+     * verify. {@code ReadJob} has just paid all three for every file it loaded,
      * so re-reading them here to recover two strings doubles the cost of the
      * startup netdb pass for nothing.
      *

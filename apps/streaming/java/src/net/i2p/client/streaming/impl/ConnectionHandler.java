@@ -112,7 +112,7 @@ class ConnectionHandler {
      * every SYN behind it waits the full accept timeout.
      */
     private static final int DEFAULT_ACCEPT_WORKERS = 4;
-    /** Ceiling for scale-up under SYN queue pressure, see {@link SynReaper}. */
+    /** Ceiling for scale-up under SYN queue pressure, see {@code SynReaper}. */
     private static final int MAX_ACCEPT_WORKERS = 16;
     /**
      * How long a blocked {@link #accept} waits for one result before it re-checks
@@ -505,7 +505,7 @@ class ConnectionHandler {
 
     /**
      * Start one accept worker, named uniquely. Synchronized because the
-     * {@link SynReaper} may scale the pool up while the app activates or
+     * {@code SynReaper} may scale the pool up while the app activates or
      * deactivates the handler.
      */
     private synchronized void startAcceptWorker() {
@@ -900,7 +900,7 @@ class ConnectionHandler {
     /**
      * Full single-line DEBUG detail for a timed-out SYN, folding in both the
      * packet detail and the queue/timeout pressure that caused the expiry.
-     * The WARN-level report is one aggregate per sweep in {@link SynReaper}.
+     * The WARN-level report is one aggregate per sweep in {@code SynReaper}.
      *
      * @param syn the expired SYN, described as "null SYN" when null
      * @param queueDepth the accept queue depth at expiry, as the count of unaccepted SYNs
