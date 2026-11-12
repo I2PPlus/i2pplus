@@ -116,10 +116,15 @@ abstract class IRCFilter {
         if("PRIVMSG".equals(command) || "NOTICE".equals(command)) {
             if (idx >= field.length)
                 return null;  // bare PRIVMSG/NOTICE, nothing to filter
-            String msg;
-            msg = field[idx++];
-            if (idx < field.length)
-                msg += ' ' + field[idx];
+            // The first field of the message body. A message tag or a server
+            // prefix shifts the body one field to the right, and the split limit
+            // then leaves the tail of the body in the last field, so collect every
+            // field from here on rather than the one the code used to add.
+            int body = idx;
+            StringBuilder msgBuf = new StringBuilder(field[body]);
+            for (int i = body + 1; i < field.length; i++)
+                msgBuf.append(' ').append(field[i]);
+            String msg = msgBuf.toString();
 
             if(msg.indexOf(0x01) >= 0) // CTCP marker ^A can be anywhere, not just immediately after the ':'
             {
@@ -141,7 +146,7 @@ abstract class IRCFilter {
                 }
                 if (msg.startsWith("DCC ")) {
                     StringBuilder buf = new StringBuilder(128);
-                    for (int i = 0; i <= idx - 2; i++) {
+                    for (int i = 0; i < body; i++) {
                         buf.append(field[i]).append(' ');
                     }
                     buf.append(":\001DCC ");
@@ -306,6 +311,11 @@ abstract class IRCFilter {
         // https://ircv3.net/specs/extensions/message-tags.html
         if (field[0].charAt(0) == '@')
             idx++;
+        // A line that is only a tag has no command to filter, and reading past the
+        // end of the line used to throw an AIOOBE that IrcOutboundFilter turned
+        // into a dropped tunnel.
+        if (idx >= field.length)
+            return null;
         String command = field[idx++].toUpperCase(Locale.US);
 
         if ("PING".equals(command))
@@ -389,16 +399,20 @@ abstract class IRCFilter {
      *
      * @param s the original line
      * @param field the split line
-     * @param idx index of the command in field
+     * @param idx index of the message target, the field after the command
      * @param helper may be null
      * @return the original or rewritten line, or null if it should be dropped
      */
     private static String filterPrivmsgOrNotice(String s, String[] field, int idx, DCCHelper helper) {
         if (field.length < idx + 2)
             return s;  // invalid, allow server response
-        String msg = field[idx + 1];
-        if (idx + 2 < field.length)
-            msg += ' ' + field[idx + 2];
+        // Collect the whole message body. A message tag shifts the fields, and the
+        // split limit folds the tail of the body into the last field, so one extra
+        // field is not enough to rebuild it.
+        StringBuilder msgBuf = new StringBuilder(field[idx + 1]);
+        for (int i = idx + 2; i < field.length; i++)
+            msgBuf.append(' ').append(field[i]);
+        String msg = msgBuf.toString();
 
         if (msg.indexOf(0x01) >= 0) { // CTCP marker ^A can be anywhere, not just immediately after the ':'
             // CTCP
