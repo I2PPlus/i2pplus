@@ -2393,7 +2393,9 @@ public class EstablishmentManager {
             return false;
         }
         // Bob should already have our RI, especially if we just connected; we do not resend it here.
-        int ourPort = _transport.getRequestedPort();
+        // Charlie has to reach us on the port we are seen from, not the local
+        // socket port, and it can differ per family - see advertisedPort().
+        int ourPort = _transport.advertisedPort(ourra, ourIP.length == 16);
         byte[] data = SSU2Util.createRelayRequestData(_context, bob.getRemotePeer(), charlie.getRemoteIdentity().getHash(),
                                                       charlie.getIntroNonce(), tag, ourIP, ourPort,
                                                       _context.keyManager().getSigningPrivateKey());
@@ -3207,20 +3209,42 @@ public class EstablishmentManager {
     /**
      * Caller should probably synch on inboundState.
      *
-     * @param inboundState the inbound attempt that timed out; its address is
-     *                     added to the inbound ban map and its queued
-     *                     messages are failed
+     * @param inboundState the inbound attempt that timed out; its queued
+     *                     messages are failed, and its address is added to the
+     *                     inbound ban map unless the attempt never got past the
+     *                     token exchange
      * @since 0.9.2
      */
     private void processExpired(InboundEstablishState inboundState) {
         RemoteHostId id = inboundState.getRemoteHostId();
         byte[] fromIP = id.getIP();
-        if (_log.shouldInfo() && fromIP != null && !_context.blocklist().isBlocklisted(fromIP)) {
-            _log.info("Expired inbound establish from " + Addresses.toString(fromIP));
+        // only if value == state - a newer attempt from this endpoint may have
+        // replaced the one we are expiring while it sat around
+        _inboundStates.remove(id, inboundState);
+        // A peer that never reached a cryptographically verified step - a lost
+        // token request, a stale token after its NAT mapping changed, or a lost
+        // retry - has spent nothing worth defending, and banning the endpoint for
+        // IB_BAN_TIME keeps it from reconnecting at all. Anything past that has
+        // done the DH work, and the ban is what keeps that work off the CPU.
+        boolean verified;
+        switch (inboundState.getState()) {
+            case IB_STATE_TOKEN_REQUEST_RECEIVED:
+            case IB_STATE_REQUEST_BAD_TOKEN_RECEIVED:
+            case IB_STATE_RETRY_SENT:
+                verified = false;
+                break;
+            default:
+                verified = true;
+                break;
         }
-        _inboundStates.remove(id);
-        Long exp = Long.valueOf(_context.clock().now() + IB_BAN_TIME);
-        synchronized (_inboundBans) {_inboundBans.put(id, exp);}
+        if (_log.shouldInfo() && fromIP != null && !_context.blocklist().isBlocklisted(fromIP)) {
+            _log.info("Expired inbound establish from " + Addresses.toString(fromIP) +
+                      (verified ? " -> Endpoint banned" : " -> No ban, no verified handshake"));
+        }
+        if (verified) {
+            Long exp = Long.valueOf(_context.clock().now() + IB_BAN_TIME);
+            synchronized (_inboundBans) {_inboundBans.put(id, exp);}
+        }
         OutNetMessage msg;
         while ((msg = inboundState.getNextQueuedMessage()) != null) {
             _transport.failed(msg, "Expired during failed establish");
