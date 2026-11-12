@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Noise crypto primitive tests</title>
+</head>
+<body>
+<p>
+    The primitives of the noise-java copy this tree carries under
+    <code>com.southernstorm.noise</code>: {@code Poly1305CloneTest}, which pins
+    that a {@code Poly1305} clone takes its own copies of the key, nonce, block
+    and accumulator arrays. A clone that shared them would let destroying or
+    re-keying either side silently corrupt the other, so the tests branch a
+    partially-absorbed message in two and finish each side alone, against the
+    RFC 8439 known-answer tag so a broken copy cannot pass by changing the
+    output as well.
+</p>
+
+<p>
+    Kept in the same package as the class under test. It exercises only the
+    public surface - {@code clone()}, {@code update()}, {@code doFinal()} and
+    {@code destroy()} - and pins the isolation through the tags the two branches
+    produce. Run by <code>ant test</code> in <code>router/java</code>.
+</p>
+</body>
+</html>

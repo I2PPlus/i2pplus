@@ -38,6 +38,25 @@ public final class Poly1305 implements Destroyable, Cloneable {
     }
 
     /**
+     * Copy constructor used by {@link #clone()}. Every array field is copied, not
+     * shared: {@code super.clone()} would leave the two authenticators writing
+     * into the same key, nonce and accumulator, so destroying or re-keying one
+     * would silently corrupt the other.
+     *
+     * @param other the authenticator to copy, including any partially absorbed
+     *              message
+     */
+    private Poly1305(Poly1305 other) {
+        nonce = other.nonce.clone();
+        block = other.block.clone();
+        h = other.h.clone();
+        r = other.r.clone();
+        c = other.c.clone();
+        t = other.t.clone();
+        posn = other.posn;
+    }
+
+    /**
      * Resets the message authenticator with a new key.
      *
      * @param key The buffer containing the 32 byte key.
@@ -309,11 +328,14 @@ public final class Poly1305 implements Destroyable, Cloneable {
     }
 
     /**
-     *  I2P
-     *  @since 0.9.44
+     * A deep copy, safe to use and destroy on its own. The class is final, so the
+     * copy constructor cannot be skipped by a subclass.
+     * <p>
+     * I2P
+     * @since 0.9.44
      */
     @Override
     public Poly1305 clone() throws CloneNotSupportedException {
-        return (Poly1305) super.clone();
+        return new Poly1305(this);
     }
 }

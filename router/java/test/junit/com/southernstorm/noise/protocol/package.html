@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Noise cipher state tests</title>
+</head>
+<body>
+<p>
+    The cipher states of the noise-java copy this tree carries under
+    <code>com.southernstorm.noise</code>:
+    {@code ChaChaPolyCloneIsolationTest}, which pins that cloning a
+    {@code ChaChaPolyCipherState} copies its key, its {@code Poly1305} and its
+    nonce counter instead of sharing them. Destroying the clone must leave the
+    original holding a key and encrypting correctly - the state re-keys its
+    authenticator per message, so a shared key would be zeroed under the
+    original's feet - and both sides start at the same nonce but advance alone.
+</p>
+
+<p>
+    Only the public cipher-state API is used: {@code initializeKey()},
+    {@code setNonce()}, {@code encryptWithAd()}, {@code clone()} and
+    {@code destroy()}. The expected tags come from the JDK's own
+    ChaCha20-Poly1305, with the nonce in the last eight bytes of the IV,
+    little-endian, as Noise defines it, so a regression cannot be confirmed by a
+    second wrong implementation. Run by <code>ant test</code> in
+    <code>router/java</code>.
+</p>
+</body>
+</html>
