@@ -30,7 +30,7 @@ public class SSU2BitfieldTest {
         byte[] ranges = new byte[MAX_RANGES_IN_MTU * 2];
         Arrays.fill(ranges, (byte) 0xff);
         int rangeCount = ranges.length / 2;
-        int thru = 100000;
+        long thru = 100000;
         int acnt = 255;
         long span = SSU2Bitfield.calculateAckSpan(thru, acnt, ranges, rangeCount);
         // the whole point: the unchecked span is enormous
@@ -44,15 +44,16 @@ public class SSU2BitfieldTest {
     }
 
     /**
-     * Same hostile block, but with an ACK ID that reads back as a negative int.
-     * The span math must not wrap, or the size check would be bypassed.
+     * Same hostile block, but with a negative thru - what a signed-int misread
+     * of the wire produces. The span math must not wrap, or the size check would
+     * be bypassed.
      */
     @Test
     public void testHostileNegativeAckIDRejected() {
         byte[] ranges = new byte[MAX_RANGES_IN_MTU * 2];
         Arrays.fill(ranges, (byte) 0xff);
         int rangeCount = ranges.length / 2;
-        int thru = Integer.MIN_VALUE;
+        long thru = Integer.MIN_VALUE;
         int acnt = 255;
         long span = SSU2Bitfield.calculateAckSpan(thru, acnt, ranges, rangeCount);
         assertTrue("span should exceed the cap, was " + span, span > SSU2Bitfield.MAX_ACK_SPAN);
@@ -70,7 +71,7 @@ public class SSU2BitfieldTest {
      */
     @Test
     public void testSpanBoundary() {
-        int thru = 100000;
+        long thru = 100000;
         int acnt = 255;
         // span = acnt + 1 + 256 per (255 nack, 1 ack) range
         int rangesAtCap = (SSU2Bitfield.MAX_ACK_SPAN / 256) - 1;
@@ -78,7 +79,7 @@ public class SSU2BitfieldTest {
         SSU2Bitfield rv = SSU2Bitfield.fromACKBlock(thru, acnt, ranges(thru, acnt, rangesAtCap), rangesAtCap);
         assertEquals(SSU2Bitfield.MAX_ACK_SPAN, rv.size());
         assertEquals(thru, rv.getHighestSet());
-        assertEquals((long) thru + 1 - SSU2Bitfield.MAX_ACK_SPAN, rv.getOffset());
+        assertEquals(thru + 1 - SSU2Bitfield.MAX_ACK_SPAN, rv.getOffset());
 
         byte[] overCap = ranges(thru, acnt, rangesAtCap + 1);
         int rcOverCap = rangesAtCap + 1;
@@ -101,7 +102,7 @@ public class SSU2BitfieldTest {
      * @return a two-byte-per-pair ACK block body, each pair being 255 nacked
      *         followed by 1 acked
      */
-    private static byte[] ranges(int thru, int acnt, int rangeCount) {
+    private static byte[] ranges(long thru, int acnt, int rangeCount) {
         byte[] rv = new byte[rangeCount * 2];
         for (int i = 0; i < rv.length; i += 2) {
             rv[i] = (byte) 0xff;
@@ -110,7 +111,7 @@ public class SSU2BitfieldTest {
         return rv;
     }
 
-    private static long spanOf(int thru, int acnt, int rangeCount) {
+    private static long spanOf(long thru, int acnt, int rangeCount) {
         return SSU2Bitfield.calculateAckSpan(thru, acnt, ranges(thru, acnt, rangeCount), rangeCount);
     }
 

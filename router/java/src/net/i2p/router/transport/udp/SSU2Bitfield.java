@@ -239,7 +239,8 @@ class SSU2Bitfield {
      * <p>
      * Pure and package-visible so the hostile-input case can be tested directly.
      *
-     * @param thru the highest acked message number
+     * @param thru the highest acked message number, an unsigned 32-bit value
+     *             held in a long
      * @param acnt number of contiguous acks below thru, 0-255
      * @param ranges non-null, at least rangeCount * 2 bytes
      * @param rangeCount number of (nack, ack) range pairs, must be non-zero
@@ -247,15 +248,16 @@ class SSU2Bitfield {
      * @throws IndexOutOfBoundsException if ranges is too short for rangeCount
      * @since 0.9.71+
      */
-    static long calculateAckSpan(int thru, int acnt, byte[] ranges, int rangeCount) {
-        // long math: a hostile block can push the implied low message number
-        // below Integer.MIN_VALUE, which would wrap and defeat the size check
-        long min = (long) thru - acnt;
+    static long calculateAckSpan(long thru, int acnt, byte[] ranges, int rangeCount) {
+        // long math throughout: packet numbers are unsigned 32-bit, and a hostile
+        // block can push the implied low message number below zero, which would
+        // wrap in an int and defeat the size check
+        long min = thru - acnt;
         for (int i = 0; i < rangeCount * 2; i++) {min -= ranges[i] & 0xff;}
         // fixup if the last ack count was zero
         // this doesn't handle multiple ranges with a zero ack count
         if (ranges[(rangeCount * 2) - 1] == 0) {min += ranges[(rangeCount * 2) - 2] & 0xff;}
-        return 1L + (long) thru - min;
+        return 1L + thru - min;
     }
 
     /**
@@ -313,7 +315,8 @@ class SSU2Bitfield {
      * implied span would push the offset below zero or exceed
      * {@link #MAX_ACK_SPAN}.
      *
-     * @param thru the highest acked message number
+     * @param thru the highest acked message number, an unsigned 32-bit value
+     *             held in a long
      * @param acnt number of contiguous acks below thru, 0-255
      * @param ranges may be null
      * @param rangeCount number of (nack, ack) range pairs
@@ -322,25 +325,27 @@ class SSU2Bitfield {
      *                                  {@link #MAX_ACK_SPAN}
      */
     public static SSU2Bitfield fromACKBlock(long thru, int acnt, byte[] ranges, int rangeCount) {
-        int t = (int) thru;
+        // Packet numbers are unsigned 32-bit, so they only stay ordered as longs -
+        // an int counter goes negative above 0x7fffffff and stops matching the
+        // peer's numbering. Only the bitfield size, bounded by MAX_ACK_SPAN, is an int.
         if (ranges == null || rangeCount == 0) {
             // easy case, no ranges
             SSU2Bitfield rv = new SSU2Bitfield(acnt + 1, thru - acnt);
-            for (int i = t; i >= t - acnt; i--) {rv.setNoSync(i);}
+            for (long i = thru; i >= thru - acnt; i--) {rv.setNoSync(i);}
             return rv;
         }
         // Bound the span before allocating: it is derived from unvalidated
         // attacker-controlled bytes, and the bitfield is size/8 bytes.
-        long span = calculateAckSpan(t, acnt, ranges, rangeCount);
+        long span = calculateAckSpan(thru, acnt, ranges, rangeCount);
         if (span > MAX_ACK_SPAN)
             throw new IllegalArgumentException("ACK block span too large: " + span);
         // get the minimum acked value
-        long min = (long) t + 1 - span;
+        long min = thru + 1 - span;
 
         SSU2Bitfield rv = new SSU2Bitfield((int) span, min);
-        for (int i = t; i >= t - acnt; i--) {rv.setNoSync(i);}
+        for (long i = thru; i >= thru - acnt; i--) {rv.setNoSync(i);}
 
-        long j = t - (acnt + 1);
+        long j = thru - (acnt + 1);
         for (int i = 0; i < rangeCount * 2; i += 2) {
             j -= ranges[i] & 0xff; // nack count
             int toAck = ranges[i + 1] & 0xff; // ack count
@@ -436,7 +441,8 @@ class SSU2Bitfield {
     public static String toString(long thru, int acnt, byte[] ranges, int rangeCount) {
         StringBuilder sb = new StringBuilder();
         sb.append("ACK ").append(thru);
-        int cur = (int) thru;
+        // unsigned 32-bit packet numbers stay ordered only as longs
+        long cur = thru;
         if (acnt > 0) {
             sb.append('-').append(thru - acnt);
             cur -= acnt;
