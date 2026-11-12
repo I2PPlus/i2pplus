@@ -36,7 +36,7 @@ const getBaseAttributes = (token) => {
     if (parts.length < 1) return attrs;
     const attrStr = token.slice(tagName.length);
     let match;
-    while (match = ATTR_REGEX.exec(attrStr)) {
+    while ((match = ATTR_REGEX.exec(attrStr)) !== null) {
         const [, name, d, s, u] = match;
         name !== "/" && (attrs[name] = d ?? s ?? u ?? "");
     }
