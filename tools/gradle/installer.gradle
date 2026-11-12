@@ -385,14 +385,6 @@ def makeStageTask(String taskName, String stageDir, String variant, String taskD
       from 'installer/resources/platform-specific/macos/install_i2p_service_osx.command'
       from 'installer/resources/platform-specific/macos/uninstall_i2p_service_osx.command'
     }
-    if (variant == 'nowindows' && new File('installer/lib/wrapper/solaris').isDirectory()) {
-      into('lib/wrapper/solaris') {
-        from('installer/lib/wrapper/solaris') {
-          exclude '*.txt'
-          exclude 'README.md'
-        }
-      }
-    }
     if (variant == 'all' || variant == 'windows') {
       ['eepget.bat', 'eephead.bat', 'i2prouter.bat', 'service.ps1'].each { b ->
         from "installer/resources/platform-specific/windows/${b}"

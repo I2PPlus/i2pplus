@@ -9,11 +9,6 @@
   <property name="addressbook.dist.dir" value="${build.root}apps/addressbook/dist"/>
   <property name="core.java.build.dir" value="${build.root}core/java/build"/>
 
-  <property name="...build.dir" value="${...build.dir}"/>
-  <property name="addressbook.build.dir" value="${addressbook.build.dir}"/>
-  <property name="addressbook.dist.dir" value="${addressbook.dist.dir}"/>
-  <property name="core.java.build.dir" value="${core.java.build.dir}"/>
-
   <property name="jetty" value="../../jetty/"/>
   <property name="jetty.pkg.dir" value="${jetty}/jettylib"/>
   <property name="project" value="susidns"/>
@@ -24,7 +19,6 @@
   <property name="tmp" value="${jsp.build.dir}/tmp"/>
   <property name="jsp" value="./jsp"/>
   <path id="cp">
-    <pathelement path="${classpath}"/>
     <pathelement location="${bin}"/>
     <!-- commons-el MUST be first to ensure we get the right (2.2) version otherwise:
          Exception in thread "main" java.lang.NoSuchMethodError:
@@ -51,7 +45,6 @@
              top-level build, so reference them by their absolute build-root path -->
         <pathelement location="${build.root}apps/jetty/build/jetty-i2p.jar"/>
         <pathelement location="${jetty.pkg.dir}/jspc.jar"/>
-        <pathelement location="${build.root}apps/jetty/build/jspc.jar"/>
         <!-- jspc.jar is built into the build root (not jettylib) under the
              top-level build, so reference it by its absolute build-root path -->
         <pathelement location="${build.root}apps/jetty/build/jspc.jar"/>

@@ -6,7 +6,6 @@
 
   <property name="...build.dir" value="${build.root}build"/>
 
-  <property name="...build.dir" value="${...build.dir}"/>
   <property name="project" value="imagegen"/>
   <property name="jetty" value="../../jetty/"/>
   <property name="lib" value="${jetty}/jettylib"/>

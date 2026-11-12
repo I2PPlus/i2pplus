@@ -13,7 +13,6 @@
 
   <property name="core.java.build.dir" value="${build.root}core/java/build"/>
 
-  <property name="core.java.build.dir" value="${core.java.build.dir}"/>
   <property name="jetty.pkg.dir" value="../jetty/jettylib"/>
 
   <target name="all" depends="clean, build"/>
@@ -353,12 +352,16 @@
         <include name="TEST-*.xml"/>
       </fileset>
     </delete>
-    <!-- One scratch directory per module, under the shared build root: the forked
+    <!-- One scratch directory per module, under the shared test root: the forked
          test JVM reads the properties file ant wrote for it here and writes its
          vmwatcher file here, and one directory shared by the parallel suites has
          lost those files mid-run - the suite then reports a few hundred tests
          where it has a few thousand, with no failure line anywhere. -->
-    <property name="junit.tmp.dir" value="${java.io.tmpdir}/build-i2p/junit-tmp/susimail"/>
+    <!-- Scratch root for the test harness, the same one the gradle test task uses,
+         and the one place to override: -Dtest.base.root=/some/dir. Nothing a test
+         writes belongs in the workspace. -->
+    <property name="test.base.root" value="${java.io.tmpdir}/test-i2p/"/>
+    <property name="junit.tmp.dir" value="${test.base.root}susimail/tmp"/>
     <mkdir dir="${junit.tmp.dir}"/>
     <property name="junit.test.filter" value="**/*Test.java"/>
     <junit printsummary="withOutAndErr" fork="yes" showoutput="yes" tempdir="${junit.tmp.dir}" timeout="15000">

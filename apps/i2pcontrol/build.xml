@@ -5,7 +5,6 @@
 
   <property name="core.java.build.dir" value="${build.root}core/java/build"/>
 
-  <property name="core.java.build.dir" value="${core.java.build.dir}"/>
   <property name="i2pbase" value="../.."/>
   <property name="i2plib" value="${i2pbase}/build"/>
   <property name="jettylib" value="${i2pbase}/apps/jetty/jettylib"/>
@@ -52,8 +51,8 @@
     <depend
       cache="${build.dir}/depend-cache"
       srcdir="./java"
-      classpath="${cp}"
       destdir="${build.dir}/obj">
+      <classpath refid="cp"/>
     </depend>
   </target>
 
@@ -70,8 +69,7 @@
       release="${javac.release}"
       includeAntRuntime="false"
       encoding="UTF-8"
-      destdir="${build.dir}/obj"
-      classpath="${cp}">
+      destdir="${build.dir}/obj">
       <compilerarg line="${javac.compilerargs}"/>
       <classpath refid="cp"/>
     </javac>
@@ -93,8 +91,7 @@
       release="${javac.release}"
       includeAntRuntime="false"
       encoding="UTF-8"
-      destdir="${build.dir}/obj-socket"
-      classpath="${cpSocket}">
+      destdir="${build.dir}/obj-socket">
       <compilerarg line="${javac.compilerargs}"/>
       <classpath refid="cpSocket"/>
       <exclude name="**/I2PControlController.java"/>

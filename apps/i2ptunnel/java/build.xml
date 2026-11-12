@@ -10,10 +10,6 @@
   <property name="streaming.java.build.dir" value="${build.root}apps/streaming/java/build"/>
   <property name="jsp.build.dir" value="${build.root}apps/i2ptunnel/jsp"/>
 
-  <property name="...build.dir" value="${...build.dir}"/>
-  <property name="core.java.build.dir" value="${core.java.build.dir}"/>
-  <property name="ministreaming.java.build.dir" value="${ministreaming.java.build.dir}"/>
-  <property name="streaming.java.build.dir" value="${streaming.java.build.dir}"/>
   <property name="jetty.pkg.dir" value="../../jetty/jettylib"/>
 
   <target name="all" depends="clean, build"/>
@@ -678,25 +674,28 @@
     </delete>
     <property name="hamcrest.home" value="${basedir}/../../../tools/test/hamcrest"/>
     <property name="mockito.home" value="${basedir}/../../../tools/test/mockito"/>
-    <!-- One scratch directory per module, under the shared build root: the forked
+    <!-- One scratch directory per module, under the shared test root: the forked
          test JVM reads the properties file ant wrote for it here and writes its
          vmwatcher file here, and one directory shared by the parallel suites has
          lost those files mid-run - the suite then reports a few hundred tests
          where it has a few thousand, with no failure line anywhere. -->
-    <property name="junit.tmp.dir" value="${java.io.tmpdir}/build-i2p/junit-tmp/i2ptunnel"/>
+    <!-- Scratch root for the test harness, the same one the gradle test task uses,
+         and the one place to override: -Dtest.base.root=/some/dir. Nothing a test
+         writes belongs in the workspace. -->
+    <property name="test.base.root" value="${java.io.tmpdir}/test-i2p/"/>
+    <property name="junit.tmp.dir" value="${test.base.root}i2ptunnel/tmp"/>
     <mkdir dir="${junit.tmp.dir}"/>
     <!-- Scratch I2P base for the forked test JVM. I2PAppContext defaults
          i2p.dir.base to user.dir (this module dir), so a test that builds a
          context writes its runtime state into the workspace. Fresh for every
          run and removed afterwards, as in the i2psnark target. -->
-    <property name="junit.test.base" value="${build.root}i2ptunnel-junit-base"/>
+    <property name="junit.test.base" value="${test.base.root}i2ptunnel/base"/>
     <delete dir="${junit.test.base}"/>
     <mkdir dir="${junit.test.base}"/>
     <property name="junit.test.filter" value="**/*Test.java"/>
     <junit printsummary="withOutAndErr" fork="yes" showoutput="yes" tempdir="${junit.tmp.dir}" timeout="15000">
       <sysproperty key="i2p.dir.base" value="${junit.test.base}"/>
       <classpath>
-        <pathelement path="${classpath}"/>
         <pathelement location="${build.dir}/obj"/>
         <pathelement location="${build.dir}/testobj"/>
         <pathelement location="${core.java.build.dir}/i2p.jar"/>

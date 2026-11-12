@@ -15,16 +15,6 @@
     <ant dir="imagegen" target="compile"/>
   </target>
 
-  <target name="compileTest">
-    <ant dir="identicon" target="compileTest"/>
-    <ant dir="zxing" target="compileTest"/>
-  </target>
-
-  <target name="jarTest">
-    <ant dir="identicon" target="jarTest"/>
-    <ant dir="zxing" target="jarTest"/>
-  </target>
-
   <!-- not used, war bundles the classes -->
   <target name="jar">
     <ant dir="identicon" target="jar"/>
@@ -33,12 +23,6 @@
 
   <target name="war" depends="compile">
     <ant dir="imagegen" target="war"/>
-  </target>
-
-  <target name="javadoc">
-    <ant dir="identicon" target="javadoc"/>
-    <ant dir="zxing" target="javadoc"/>
-    <ant dir="imagegen" target="javadoc"/>
   </target>
 
   <target name="clean">

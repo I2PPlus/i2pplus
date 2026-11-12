@@ -8,10 +8,6 @@
   <property name="router.java.build.dir" value="${build.root}router/java/build"/>
   <property name="systray.java.build.dir" value="${build.root}apps/systray/java/build"/>
 
-  <property name="core.java.build.dir" value="${core.java.build.dir}"/>
-  <property name="router.java.build.dir" value="${router.java.build.dir}"/>
-  <property name="systray.java.build.dir" value="${systray.java.build.dir}"/>
-
   <property name="src" value="src"/>
   <property name="build" value="${build.dir}"/>
   <property name="dist.dir" value="${build.root}apps/desktopgui/dist"/>

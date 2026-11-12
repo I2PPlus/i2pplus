@@ -8,8 +8,6 @@
 
   <property name="...build.dir" value="${build.root}build"/>
 
-  <property name="core.java.build.dir" value="${core.java.build.dir}"/>
-  <property name="...build.dir" value="${...build.dir}"/>
   <target name="all" depends="clean, build"/>
   <target name="build" depends="builddep, jar"/>
   <target name="builddep">
