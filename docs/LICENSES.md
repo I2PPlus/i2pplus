@@ -126,7 +126,7 @@ Jetty is derived from code by Mort Bay Consulting Pty. Ltd. Copyright (c) 1995-2
 
 ## APACHE TOMCAT
 
-Apache Tomcat. Copyright 1999-2025 The Apache Software Foundation.
+Apache Tomcat. Copyright 1999-2026 The Apache Software Foundation.
 
 This product includes software developed at The Apache Software Foundation (https://www.apache.org/). This software contains code derived from netty-native developed by the Netty project (https://netty.io/) and from finagle-native developed at Twitter (https://github.com/twitter/finagle).
 

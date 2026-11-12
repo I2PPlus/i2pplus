@@ -13,9 +13,18 @@
 # the checked-in NOTICE is byte-identical to the NOTICE at the matching Tomcat Git
 # tag, so both are fetched and verified rather than copied out of a tarball.
 #
+# One version directory is checked in at a time: apps/jetty/apache-tomcat-<ver>.
+# apply installs the new one, deletes the old one from the worktree and stages
+# both halves of the change, because an unstaged deletion leaves the previous
+# version's jars tracked and the next checkout ships two versions. check and
+# verify report that state as DRIFT rather than calling the tree clean.
+#
 # Usage:
 #   tools/scripts/update-tomcat.sh              # check: report the pin and what is available
 #   tools/scripts/update-tomcat.sh check        # same; exit 3 when an update is available
+#                                               # or a stale version directory is tracked
+#   tools/scripts/update-tomcat.sh check-version # one line for a build log; exit 3 when behind,
+#                                               # 4 when it cannot tell, never fatal
 #   tools/scripts/update-tomcat.sh verify       # verify the checked-in jars against Maven
 #   tools/scripts/update-tomcat.sh advisories   # advisories between the pin and the candidate
 #   tools/scripts/update-tomcat.sh apply [VER]  # update in place (default: latest compatible)
@@ -25,6 +34,7 @@
 # Options:
 #   --dry-run     print what apply would do without writing anything
 #   --json        machine-readable output for check
+#   --offline     do not reach for the network; report what the tree says
 #
 # Nothing here is committed, and nothing is copied to a running router: the
 # deliverable is the changed source tree plus the list of artifacts to rebuild.
@@ -114,6 +124,44 @@ read_dir_version() {
         [ -d "$d" ] || continue
         basename "$d" | sed 's/^apache-tomcat-//'
     done
+}
+
+# The version names carried by apps/jetty/apache-tomcat-<ver>/... paths read from
+# stdin. The whole path is consumed by the match, so a jar two levels down names
+# its version directory and not the file at the end of it.
+dir_versions_from_paths() {
+    sed -n 's|^apps/jetty/apache-tomcat-\([^/]*\)/.*$|\1|p' | sort -u
+}
+
+# The versions the git index still holds, whether or not they are on disk. After
+# an apply removes the previous directory, an unstaged deletion leaves the old
+# jars tracked, so a checkout of the tree still ships two versions.
+tracked_dir_versions() {
+    git -C "$REPO_ROOT" ls-files -- apps/jetty 2>/dev/null | dir_versions_from_paths
+}
+
+# Versions tracked in the index but no longer on disk, as a newline list. Both
+# arguments are newline lists: the versions on disk first, the tracked ones second.
+stale_versions() {
+    printf '%s\n' "$2" | while read -r _v
+    do
+        [ -n "$_v" ] || continue
+        printf '%s\n' "$1" | grep -qx -- "$_v" || printf '%s\n' "$_v"
+    done
+}
+
+# How many files the index still holds for one version directory.
+tracked_file_count() {
+    git -C "$REPO_ROOT" ls-files -- "apps/jetty/apache-tomcat-$1" 2>/dev/null | wc -l |
+        tr -d ' '
+}
+
+# The complete checked-in set for one version: every jar on the allowlist plus
+# NOTICE. The repo's blanket '*.[rwjt]ar' and '**/bin/' rules hide exactly this
+# kind of path, so a version directory can be on disk, staged, and still be
+# missing its jars in the index.
+expected_tracked_count() {
+    echo $(( $(jar_allowlist | wc -l | tr -d ' ') + 1 ))
 }
 
 #---------------------------------------------------------------------------
@@ -241,6 +289,9 @@ cmd_check() {
     _gpin=$(read_gradle_pin "$GRADLE_PROPS")
     _dir=$(read_dir_version "$JETTY_DIR" | head -1)
     [ -n "$_dir" ] || die "no apps/jetty/apache-tomcat-* directory found"
+    _drift=0
+    _incomplete=0
+    _stale=$(stale_versions "$(read_dir_version "$JETTY_DIR")" "$(tracked_dir_versions)")
 
     _latest=''
     if [ "$OFFLINE" = 1 ]
@@ -256,8 +307,9 @@ cmd_check() {
 
     if [ "$JSON" = 1 ]
     then
-        printf '{"ant":"%s","gradle":"%s","directory":"%s","latest":"%s","behind":%s}\n' \
+        printf '{"ant":"%s","gradle":"%s","directory":"%s","latest":"%s","stale":"%s","behind":%s}\n' \
             "$_pin" "$_gpin" "$_dir" "$_latest" \
+            "$(printf '%s' "$_stale" | tr '\n' ' ' | sed 's/ $//')" \
             "$([ -n "$_latest" ] && [ "$(version_cmp "$_latest" "$_pin")" = 1 ] && echo true || echo false)"
     else
         echo "Ant pin (build.xml):        $_pin"
@@ -272,20 +324,42 @@ cmd_check() {
             echo "DRIFT: gradle.properties pins $_gpin, build.xml pins $_pin"
             _drift=1
         fi
-        [ "$_drift" = 0 ] && echo "pins agree"
-        if [ -n "$_latest" ] && [ "$(version_cmp "$_latest" "$_pin")" = 1 ]
+        if [ "$(read_dir_version "$JETTY_DIR" | grep -c .)" -gt 1 ]
         then
-            echo "UPDATE AVAILABLE: $(version_gap "$_pin" "$_latest") patch releases newer"
-            echo "  run: tools/scripts/update-tomcat.sh apply $_latest"
-        else
-            echo "up to date"
+            echo "DRIFT: two version directories on disk: $(read_dir_version "$JETTY_DIR" | tr '\n' ' ')"
+            _drift=1
         fi
+        for _v in $_stale
+        do
+            echo "DRIFT: apache-tomcat-$_v is off disk but still tracked ($(tracked_file_count "$_v") files)"
+            echo "  run: git add -A -- apps/jetty/apache-tomcat-$_v"
+            _drift=1
+        done
+        _want=$(expected_tracked_count)
+        _have=$(tracked_file_count "$_dir")
+        if [ "$_have" != "$_want" ]
+        then
+            echo "DRIFT: apache-tomcat-$_dir has only $_have of $_want files tracked"
+            echo "  run: git add -f -- apps/jetty/apache-tomcat-$_dir"
+            _drift=1
+            _incomplete=1
+        fi
+        [ "$_drift" = 0 ] && echo "pins agree"
+        _status=$(check_status_line "$_pin" "$_latest")
+        echo "$_status"
+        case "$_status" in
+            "UPDATE AVAILABLE:"*)
+                echo "  run: tools/scripts/update-tomcat.sh apply $_latest"
+                ;;
+        esac
     fi
 
     if [ -n "$_latest" ] && [ "$(version_cmp "$_latest" "$_pin")" = 1 ]
     then
         return 3
     fi
+    [ -n "$_stale" ] && return 3
+    [ "$_incomplete" = 1 ] && return 3
     return 0
 }
 
@@ -296,12 +370,103 @@ version_gap() {
     echo $((_to - _from))
 }
 
+# The last line of the human-readable check report. Kept apart from the fetch so
+# selftest can drive every branch without a network: an offline check has never
+# seen a release list, so it must not report "up to date".
+check_status_line() {
+    # $1 the checked-in pin, $2 the newest release on our line, empty if unknown
+    _pin=$1
+    _latest=$2
+    if [ -z "$_latest" ]
+    then
+        echo "not checked - run without --offline to consult Maven Central"
+        return 0
+    fi
+    if [ "$(version_cmp "$_latest" "$_pin")" = 1 ]
+    then
+        echo "UPDATE AVAILABLE: $(version_gap "$_pin" "$_latest") patch releases newer"
+        return 0
+    fi
+    echo "up to date"
+}
+
+# The one line a build prints, and the exit code it branches on: 0 current, 3 a
+# newer release is on our line, 4 we could not tell. Kept apart from the fetch so
+# selftest can drive every branch without a network.
+check_version_line() {
+    # $1 the checked-in pin, $2 the newest release on our line, empty if unknown
+    _pin=$1
+    _latest=$2
+    if [ -z "$_latest" ]
+    then
+        echo "Jasper/Tomcat: $_pin (not checked)"
+        return 4
+    fi
+    case "$(version_cmp "$_latest" "$_pin")" in
+        1)
+            echo "Jasper/Tomcat: $_pin is $(version_gap "$_pin" "$_latest") patch releases behind, $_latest available - run tools/scripts/update-tomcat.sh apply $_latest"
+            return 3
+            ;;
+        0)
+            echo "Jasper/Tomcat: $_pin (up to date)"
+            return 0
+            ;;
+        *)
+            echo "Jasper/Tomcat: $_pin is newer than the newest release Apache lists ($_latest)"
+            return 0
+            ;;
+    esac
+}
+
+# What the build calls: one line, writes nothing, and never fails a build - a
+# host with no curl or no network gets a "(not checked, ...)" line and exit 4.
+cmd_check_version() {
+    _pin=$(read_pin "$BUILD_XML")
+    if [ -z "$_pin" ]
+    then
+        echo "Jasper/Tomcat: no tomcat.ver in build.xml"
+        return 4
+    fi
+    if [ "$OFFLINE" = 1 ]
+    then
+        check_version_line "$_pin" ''
+        return 4
+    fi
+    if ! command -v "$CURL" >/dev/null 2>&1
+    then
+        echo "Jasper/Tomcat: $_pin (not checked, no curl)"
+        return 4
+    fi
+    newtmp
+    if ! fetch "$MAVEN_BASE/$METADATA_ARTIFACT/maven-metadata.xml" "$TMPROOT/metadata.xml"
+    then
+        echo "Jasper/Tomcat: $_pin (not checked, cannot reach Maven Central)"
+        return 4
+    fi
+    _latest=$(versions_from_metadata "$TMPROOT/metadata.xml" | latest_compatible "$(cat)")
+    check_version_line "$_pin" "$_latest"
+}
+
 # Verifies the checked-in jars and NOTICE against what Apache publishes, without
 # writing anything. Exits non-zero when a file does not match, which is how a
 # tampered or truncated checked-in jar gets caught.
 cmd_verify() {
     _dir=$(read_dir_version "$JETTY_DIR" | head -1)
     [ -n "$_dir" ] || die "no apps/jetty/apache-tomcat-* directory found"
+    _stale=$(stale_versions "$(read_dir_version "$JETTY_DIR")" "$(tracked_dir_versions)")
+    _stale_n=$(printf '%s\n' "$_stale" | grep -c . || true)
+    _incomplete=0
+    for _v in $_stale
+    do
+        echo "  stale    apache-tomcat-$_v is off disk but still tracked ($(tracked_file_count "$_v") files)"
+    done
+    _want=$(expected_tracked_count)
+    _have=$(tracked_file_count "$_dir")
+    if [ "$_have" != "$_want" ]
+    then
+        echo "  untracked  apache-tomcat-$_dir has only $_have of $_want files in the git index"
+        _incomplete=1
+    fi
     need_curl
     newtmp
     : > "$TMPROOT/results"
@@ -334,12 +499,17 @@ cmd_verify() {
     done
     _total=$(wc -l < "$TMPROOT/results" | tr -d ' ')
     _bad=$(grep -c '^bad$' "$TMPROOT/results" || true)
-    if [ "${_bad:-0}" = 0 ]
+    if [ "${_bad:-0}" = 0 ] && [ "${_stale_n:-0}" = 0 ] && [ "${_incomplete:-0}" = 0 ]
     then
         echo "$_total checked-in jars match the Maven Central artifacts"
         return 0
     fi
-    echo "$_bad of $_total checked-in jars do not match Maven Central"
+    if [ "${_bad:-0}" != 0 ]
+    then
+        echo "$_bad of $_total checked-in jars do not match Maven Central"
+    fi
+    [ "${_stale_n:-0}" != 0 ] && echo "$_stale_n stale version directory(s) still tracked in git"
+    [ "${_incomplete:-0}" = 1 ] && echo "the version directory on disk is not fully tracked"
     return 1
 }
 
@@ -492,6 +662,30 @@ cmd_apply() {
         echo "  removed apps/jetty/apache-tomcat-$_dir"
     fi
 
+    # The old jars are only gone once git stops tracking them: an unstaged
+    # deletion leaves the previous version in the tree, and the next checkout of
+    # it ships both. Stage the new files and every stale removal together.
+    _specs="apps/jetty/apache-tomcat-$_to"
+    for _v in $(stale_versions "$(read_dir_version "$JETTY_DIR")" "$(tracked_dir_versions)")
+    do
+        _specs="$_specs apps/jetty/apache-tomcat-$_v"
+    done
+    if git -C "$REPO_ROOT" rev-parse --git-dir >/dev/null 2>&1
+    then
+        # -f because the repo's blanket '*.[rwjt]ar' and '**/bin/' rules hide these
+        # paths: a plain add stages the NOTICE and silently skips every jar.
+        # shellcheck disable=SC2086
+        git -C "$REPO_ROOT" add -A -f -- $_specs ||
+            echo "  git add failed - stage $_specs by hand" >&2
+        echo "  staged: $_specs"
+        _want=$(expected_tracked_count)
+        _have=$(tracked_file_count "$_to")
+        [ "$_have" = "$_want" ] ||
+            echo "  WARNING: only $_have of $_want files are tracked for $_to" >&2
+    else
+        echo "  not a git checkout - remove apps/jetty/apache-tomcat-$_dir by hand"
+    fi
+
     rewrite_pin "$BUILD_XML" "$_to"
     rewrite_gradle_pin "$GRADLE_PROPS" "$_to"
     [ -n "$_year" ] && sync_licenses_year "$LICENSES_MD" "$_year"
@@ -507,11 +701,15 @@ cmd_apply() {
 
     echo ""
     echo "Next: rebuild the JSPs, since Jasper is what changed."
-    echo "  ant -q jspc                     # or the module precompileJsp tasks"
+    echo "  ant -f apps/routerconsole/java/build.xml precompilejsp"
+    echo "  ant -f apps/susidns/src/build.xml precompilejsp"
+    echo "  ant -q buildI2PTunnel       # i2ptunnel's build.xml needs ant-contrib from here"
+    echo "  ant -q checkjsps"
     echo "  tools/scripts/checkjsps.py"
     echo "  tools/scripts/run-tests.sh i2ptunnel && tools/scripts/run-tests.sh router"
-    echo "Then commit apps/jetty/apache-tomcat-$_to, build.xml, gradle.properties"
-    echo "and docs/LICENSES.md. Nothing has been committed or deployed."
+    echo "Then commit the staged apps/jetty/apache-tomcat-$_to together with the"
+    echo "removal of apache-tomcat-$_dir, build.xml, gradle.properties and"
+    echo "docs/LICENSES.md. Nothing has been committed or deployed."
 }
 
 # Rewrites the Ant pin in place, keeping the surrounding formatting. The
@@ -601,6 +799,24 @@ cmd_selftest() {
     assert_eq 9.0.123 "$(latest_compatible "$_mixed")" "the newest 9.0.x wins over 9.0.9 and over 10/11"
     assert_eq "" "$(latest_compatible '11.0.27
 10.1.34')" "no compatible version in a jakarta-only list"
+
+    echo "-- stale version directories --"
+    assert_eq 9.0.107 "$(printf '%s\n' apps/jetty/apache-tomcat-9.0.107/lib/el-api.jar \
+        apps/jetty/apache-tomcat-9.0.107/NOTICE apps/jetty/build.xml |
+        dir_versions_from_paths)" "a jar two levels down names its version, not its file name"
+    assert_eq '' "$(printf '%s\n' apps/jetty/build.xml apps/jetty/jettylib/jetty-util.jar |
+        dir_versions_from_paths)" "paths outside a version directory name no version"
+    assert_eq 9.0.107 "$(stale_versions '9.0.123' '9.0.107
+9.0.123')" "a version off disk but still tracked is stale"
+    assert_eq '' "$(stale_versions '9.0.123' '9.0.123')" "the version on disk and tracked is not stale"
+    assert_eq '' "$(stale_versions '9.0.123' '')" "nothing tracked is nothing stale"
+    assert_eq '' "$(stale_versions '9.0.107
+9.0.123' '9.0.107
+9.0.123')" "two versions on disk and tracked are both current"
+    assert_eq '9.0.107
+9.0.98' "$(stale_versions '9.0.123' '9.0.107
+9.0.123
+9.0.98')" "every tracked version off disk is reported, in the order tracked"
 
     echo "-- metadata parsing --"
     cat > "$TMPROOT/metadata.xml" <<'EOF'
@@ -724,6 +940,42 @@ EOF
     echo "-- gap counting --"
     assert_eq 16 "$(version_gap 9.0.107 9.0.123)" "107 to 123 is 16 patch releases"
 
+    echo "-- check status line --"
+    assert_eq "up to date" "$(check_status_line 9.0.123 9.0.123)" "a current pin reports up to date"
+    assert_eq "up to date" "$(check_status_line 9.0.123 9.0.107)" "a pin ahead of the published list is not behind"
+    assert_eq "UPDATE AVAILABLE: 16 patch releases newer" "$(check_status_line 9.0.107 9.0.123)" "a pin behind the newest release reports the gap"
+    assert_eq "not checked - run without --offline to consult Maven Central" "$(check_status_line 9.0.123 '')" "a check that never saw a release list does not claim up to date"
+
+    echo "-- check-version line --"
+    _line=$(check_version_line 9.0.107 9.0.123)
+    _rc=$?
+    assert_eq 3 "$_rc" "a pin behind the newest release exits 3"
+    case $_line in
+        *"9.0.123 available"*) pass "the line names the release to apply" ;;
+        *) fail "the line names the release to apply" "got [$_line]" ;;
+    esac
+    case $_line in
+        *"16 patch releases behind"*) pass "the line says how far behind we are" ;;
+        *) fail "the line says how far behind we are" "got [$_line]" ;;
+    esac
+    _line=$(check_version_line 9.0.107 9.0.107)
+    _rc=$?
+    assert_eq 0 "$_rc" "a current pin exits 0"
+    case $_line in
+        *"up to date"*) pass "a current pin says up to date" ;;
+        *) fail "a current pin says up to date" "got [$_line]" ;;
+    esac
+    _line=$(check_version_line 9.0.123 9.0.107)
+    _rc=$?
+    assert_eq 0 "$_rc" "a pin ahead of the published list is not an error"
+    _line=$(check_version_line 9.0.107 '')
+    _rc=$?
+    assert_eq 4 "$_rc" "an unknown newest release exits 4, not a clean 0"
+    case $_line in
+        *"not checked"*) pass "an unknown newest release says not checked" ;;
+        *) fail "an unknown newest release says not checked" "got [$_line]" ;;
+    esac
+
     echo "-- allowlist --"
     assert_eq 9 "$(jar_allowlist | wc -l | tr -d ' ')" "the allowlist names the nine checked-in jars"
     assert_eq 0 "$(jar_allowlist | grep -c catalina)" "catalina.jar is not shipped, so its advisories are not ours"
@@ -757,6 +1009,7 @@ do
         --offline) OFFLINE=1; shift ;;
         -h|--help) usage; exit 0 ;;
         check|verify|advisories|apply|list|selftest) COMMAND=$1; shift ;;
+        check-version|--check-version) COMMAND=check-version; shift ;;
         -*) die "unknown option $1 (try --help)" ;;
         *) TARGET=$1; shift ;;
     esac
@@ -764,6 +1017,7 @@ done
 
 case "$COMMAND" in
     check) cmd_check ;;
+    check-version) cmd_check_version ;;
     verify) cmd_verify ;;
     advisories) cmd_advisories "$TARGET" ;;
     apply) cmd_apply "$TARGET" ;;

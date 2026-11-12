@@ -140,6 +140,14 @@ gradle/wrapper/.gradle/
 # jars installer/lib/izpack/4/patches into patches.jar, and the **/bin/ rule above
 # hides the langpacks and flags under it from git entirely.
 !installer/lib/izpack/4/patches/bin/
+# ...and the checked-in Jasper/Tomcat jars are vendored artifacts the build reads
+# from apps/jetty/apache-tomcat-<ver>/, not build output: the blanket '*.[rwjt]ar'
+# rule at the top and the '**/bin/' rule above hide every one of them, so a plain
+# 'git add' after tools/scripts/update-tomcat.sh apply stages the NOTICE and
+# silently skips all nine jars.
+!apps/jetty/apache-tomcat-*/bin/
+!apps/jetty/apache-tomcat-*/bin/*.jar
+!apps/jetty/apache-tomcat-*/lib/*.jar
 
 # JBIGI build artifacts
 core/c/jbigi/bin/
@@ -185,6 +193,9 @@ tools/scripts/tests/*
 # The Jasper/Tomcat updater is the only place the checked-in jar set is named, so
 # it has to be tracked along with the pins it rewrites.
 !tools/scripts/update-tomcat.sh
+# The build-file validator gates every ant and Gradle file in the tree, so it has
+# to be tracked along with the build files it checks.
+!tools/scripts/check-build-files.py
 !tools/pmd/*.py
 !tools/pmd/*.css
 !tools/pmd/*.sh
