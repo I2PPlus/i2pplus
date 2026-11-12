@@ -55,20 +55,24 @@ class PeerConnectionOut implements Runnable {
     private final BlockingQueue<Message> sendQueue = new LinkedBlockingQueue<>(MAX_QUEUE_SIZE);
 
     /**
-     * Default global prefetch pool ceiling. Raised from 4 to 6 together with the
-     * per-connection depth below, so a peer with six requests in flight can have
-     * all six loads running at once instead of four prefetched and two loaded
-     * inline on the sender thread.
+     * Global ceiling on the piece-prefetch thread pool, shared by every torrent and every
+     * uploading peer. It is the number of piece loads that can run off the sender threads at
+     * once; a load that cannot get a thread falls back to running inline on the sender
+     * thread, which is what the pool exists to avoid, so this is the aggregate upload limit
+     * when several peers are being served at once. Raised from 4 to 6 and then to 12 so a
+     * router seeding to a dozen peers keeps all of them reading instead of queueing.
      */
-    private static final int DEFAULT_MAX_PREFETCH_THREADS = 6;
+    private static final int DEFAULT_MAX_PREFETCH_THREADS = 12;
 
     /**
-     * Default max uncompleted prefetches per connection. Raised from 2 to 6 to
-     * match the six concurrent blocks i2pd keeps in its per-peer send buffer
-     * (its MAX_NUM_PIECES); at the default 16 KiB part size that is 96 KiB of
-     * pinned buffers per uploading peer.
+     * Max uncompleted prefetches for one uploading peer. Six matches the six concurrent
+     * blocks i2pd keeps in its per-peer send buffer (its MAX_NUM_PIECES); eight covers the
+     * request pipelines the larger clients keep open, so a fast peer's later blocks are
+     * already read by the time the sender thread reaches them. It bounds pinned buffers to
+     * the depth times the block size: 128 KiB per peer at the 16 KiB default, 1 MiB at the
+     * 128 KiB maximum.
      */
-    private static final int DEFAULT_MAX_PREFETCH_INFLIGHT = 6;
+    private static final int DEFAULT_MAX_PREFETCH_INFLIGHT = 8;
 
     /** Ceiling on the per-connection depth, so a bad config cannot pin unbounded buffers. */
     private static final int MAX_PREFETCH_INFLIGHT_CAP = 32;
@@ -80,9 +84,9 @@ class PeerConnectionOut implements Runnable {
     private static final long PREFETCH_THREAD_IDLE_MS = 60 * 1000;
 
     /**
-     * Max uncompleted prefetches per connection; bounds pinned buffers to
-     * depth x the request part size (PeerState.PARTSIZE, 16KB by default,
-     * up to MAX_PARTSIZE 128KB when configured larger).
+     * Max uncompleted prefetches per connection; bounds pinned buffers to the depth
+     * times the request part size - {@link PeerState#PARTSIZE} at 16 KB by default,
+     * up to {@link PeerState#MAX_PARTSIZE} of 128 KB when configured larger.
      */
     static volatile int MAX_PREFETCH_INFLIGHT = DEFAULT_MAX_PREFETCH_INFLIGHT;
 

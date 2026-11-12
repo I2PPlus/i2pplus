@@ -46,14 +46,15 @@ public class PrefetchParamsTest {
     }
 
     /**
-     * The shipped defaults are the raised pair: six blocks in flight per uploading peer
-     * and a pool that can actually run six at once. Below four the uploading side stalls
-     * on cold reads at tunnel latency.
+     * The shipped defaults are the raised pair: eight blocks in flight per peer, and
+     * a pool that runs a dozen loads at once across all the torrents. Below four the
+     * uploading side stalls on cold reads at tunnel latency, and a pool at the old
+     * six leaves half the uploading peers loading inline on their sender thread.
      */
     @Test
     public void testShippedDefaultsAreRaised() {
-        assertTrue("inflight default " + INIT_INFLIGHT, INIT_INFLIGHT >= 6);
-        assertTrue("threads default " + INIT_THREADS, INIT_THREADS >= 6);
+        assertTrue("inflight default " + INIT_INFLIGHT, INIT_INFLIGHT >= 8);
+        assertTrue("threads default " + INIT_THREADS, INIT_THREADS >= 12);
         assertEquals(INIT_THREADS, PeerConnectionOut.prefetchPoolSize());
     }
 
