@@ -152,7 +152,6 @@ Typical workflow (from the repo root):
 ./gradlew tasks                # list tasks
 ./gradlew :core:build          # build the core module
 ./gradlew :router:build        # build the router module
-./gradlew codeCoverageReport   # Jacoco aggregate report
 ```
 
 Gradle build output goes to `${java.io.tmpdir}/build-i2p/gradle/<module>` so

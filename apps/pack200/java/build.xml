@@ -72,9 +72,7 @@
   </target>
 
   <!-- Unit tests. Mirrors the junit.test target in the other app modules so
-       tools/scripts/run-tests.sh can drive this module the same way. No
-       clover/cobertura instrumentation here: the fork is third-party code that
-       the static-analysis configs already exclude. -->
+       tools/scripts/run-tests.sh can drive this module the same way. -->
   <target name="junit.compileTest" depends="compile">
     <property name="junit.home" value="${basedir}/../../../tools/test/junit"/>
     <property name="hamcrest.home" value="${basedir}/../../../tools/test/hamcrest"/>
@@ -102,12 +100,16 @@
     </delete>
     <property name="junit.home" value="${basedir}/../../../tools/test/junit"/>
     <property name="hamcrest.home" value="${basedir}/../../../tools/test/hamcrest"/>
-    <!-- One scratch directory per module, under the shared build root: the forked
+    <!-- One scratch directory per module, under the shared test root: the forked
          test JVM reads the properties file ant wrote for it here and writes its
          vmwatcher file here, and one directory shared by the parallel suites has
          lost those files mid-run - the suite then reports a few hundred tests
          where it has a few thousand, with no failure line anywhere. -->
-    <property name="junit.tmp.dir" value="${java.io.tmpdir}/build-i2p/junit-tmp/pack200"/>
+    <!-- Scratch root for the test harness, the same one the gradle test task uses,
+         and the one place to override: -Dtest.base.root=/some/dir. Nothing a test
+         writes belongs in the workspace. -->
+    <property name="test.base.root" value="${java.io.tmpdir}/test-i2p/"/>
+    <property name="junit.tmp.dir" value="${test.base.root}pack200/tmp"/>
     <mkdir dir="${junit.tmp.dir}"/>
     <property name="junit.test.filter" value="**/*Test.java"/>
     <junit printsummary="withOutAndErr" fork="yes" showoutput="yes"

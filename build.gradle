@@ -97,13 +97,6 @@ subprojects {
 
     apply plugin: 'java'
     apply plugin: 'java-library'
-    // Coverage is opt-in (-Pcoverage). Applying jacoco unconditionally attaches its
-    // agent to every `test` task, so the agent artifact must be resolvable for tests
-    // to run at all - which makes the whole suite unrunnable offline, or on a
-    // machine that never fetched it, for a tool the tests themselves do not need.
-    if (gradle.startParameter.projectProperties.containsKey('coverage')) {
-        apply plugin: 'jacoco'
-    }
 
     // The compiler and the level come from tools/gradle/javac.gradle: JDK 8's
     // javac with -source/-target 1.8 when one is installed (byte-identical to
@@ -222,22 +215,6 @@ tasks.register('bench') {
 tasks.register('bench-fast') {
     description = 'Run the JMH crypto benchmarks with the minimum profile'
     dependsOn project(':core').tasks.named('jmh')
-}
-
-// Coverage report. Only registered when jacoco is applied (-Pcoverage); the
-// JacocoReport type does not exist otherwise, so registering it unconditionally
-// would break the default build.
-if (gradle.startParameter.projectProperties.containsKey('coverage')) {
-    task codeCoverageReport(type: JacocoReport) {
-        // Skip this task if no Java projects are found
-        doFirst {
-            def javaProjects = subprojects.findAll { it.name != 'apps' && it.hasProperty('java') }
-            if (javaProjects.isEmpty()) {
-                println "No Java projects found for coverage report"
-                return
-            }
-        }
-    }
 }
 
 ext.pkgTempDir = "${System.getProperty('java.io.tmpdir')}/build-i2p/pkg-temp"

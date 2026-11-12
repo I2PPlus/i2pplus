@@ -24,16 +24,6 @@
   <property name="systray.java.build.dir" value="${build.root}apps/systray/java/build"/>
   <property name="jetty.pkg.dir" value="../../jetty/jettylib"/>
 
-  <property name="...build.dir" value="${...build.dir}"/>
-  <property name="core.java.build.dir" value="${core.java.build.dir}"/>
-  <property name="desktopgui.build.dir" value="${desktopgui.build.dir}"/>
-  <property name="desktopgui.dist.dir" value="${desktopgui.dist.dir}"/>
-  <property name="i2ptunnel.java.build.dir" value="${i2ptunnel.java.build.dir}"/>
-  <property name="jrobin.java.build.dir" value="${jrobin.java.build.dir}"/>
-  <property name="router.java.build.dir" value="${router.java.build.dir}"/>
-  <property name="sam.java.build.dir" value="${sam.java.build.dir}"/>
-  <property name="systray.java.build.dir" value="${systray.java.build.dir}"/>
-
   <target name="all" depends="clean, build"/>
   <target name="build" depends="builddep, jar"/>
   <target name="builddep"/> <!-- run from top level build.xml to get dependencies built -->
@@ -662,8 +652,7 @@
     <!-- There are various jspc ant tasks, but they all seem a bit flakey.
          Warning - jspC will fail on unknown options, check oldest libtomcat8-java distro package version we use.
          Jessie has 8.0.14; xenial has 8.0.32; we bundle for precise/trusty.
-         Add below to get supported options:
-         <arg value="-help"/>
+         Add an -help arg to the jspc task below to print the supported options:
            **     Usage: jspc <options> <jsp files>
            **     where jsp files is
            **         -webapp <dir>      A directory containing a web-app, whose JSP pages
@@ -748,7 +737,6 @@
              top-level build, so reference them by their absolute build-root path -->
         <pathelement location="${build.root}apps/jetty/build/jetty-i2p.jar"/>
         <pathelement location="${jetty.pkg.dir}/jspc.jar"/>
-        <pathelement location="${build.root}apps/jetty/build/jspc.jar"/>
         <!-- jspc.jar is built into the build root (not jettylib) under the
              top-level build, so reference it by its absolute build-root path -->
         <pathelement location="${build.root}apps/jetty/build/jspc.jar"/>
@@ -908,28 +896,7 @@
     </scalac>
   </target>
 
-  <!-- Preparation of code coverage tool of choice -->
-  <target name="prepareClover" depends="compile" if="with.clover">
-    <taskdef resource="clovertasks"/>
-    <mkdir dir="${java.io.tmpdir}/build-i2p/reports/apps/routerconsole/clover"/>
-    <clover-setup initString="${java.io.tmpdir}/build-i2p/reports/apps/routerconsole/clover/coverage.db"/>
-  </target>
-
-  <target name="prepareCobertura" depends="compile" if="with.cobertura">
-    <taskdef classpath="${with.cobertura}" resource="tasks.properties" onerror="report"/>
-    <mkdir dir="${build.dir}/obj_cobertura"/>
-    <delete file="./cobertura.ser"/>
-    <cobertura-instrument todir="${build.dir}/obj_cobertura">
-      <fileset dir="${build.dir}/obj">
-        <include name="**/*.class"/>
-        <exclude name="**/*Test.class"/>
-      </fileset>
-    </cobertura-instrument>
-  </target>
-
-  <target name="prepareTest" depends="prepareClover, prepareCobertura"/>
-  <!-- end preparation of code coverage tool -->
-  <target name="scalatest.test" depends="clean, scalatest.compileTest, prepareTest">
+  <target name="scalatest.test" depends="clean, scalatest.compileTest">
     <mkdir dir="${java.io.tmpdir}/build-i2p/reports/apps/routerconsole/scalatest/"/>
     <delete>
       <fileset dir="${java.io.tmpdir}/build-i2p/reports/apps/routerconsole/scalatest">
@@ -938,15 +905,11 @@
     </delete>
     <taskdef name="scalatest" classname="org.scalatest.tools.ScalaTestAntTask">
       <classpath>
-        <pathelement location="${classpath}"/>
         <pathelement location="${scalactic.jar}"/>
         <pathelement location="${scala-library.jar}"/>
         <pathelement location="${scalatest.jar}"/>
         <pathelement location="${scala-xml.jar}"/>
-        <pathelement location="${with.clover}"/>
-        <pathelement location="${with.cobertura}"/>
         <pathelement location="${build.dir}/obj"/>
-        <pathelement location="${build.dir}/obj_cobertura"/>
       </classpath>
     </taskdef>
     <scalatest runpath="${build.dir}/obj_scala" fork="yes" maxmemory="384M">
@@ -1012,18 +975,22 @@
     <property name="hamcrest.home" value="../../../tools/test/hamcrest"/>
     <property name="mockito.home" value="../../../tools/test/mockito"/>
     <mkdir dir="${junit.reports.dir}/routerconsole/junit"/>
-    <!-- One scratch directory per module, under the shared build root: the forked
+    <!-- One scratch directory per module, under the shared test root: the forked
          test JVM reads the properties file ant wrote for it here and writes its
          vmwatcher file here, and one directory shared by the parallel suites has
          lost those files mid-run - the suite then reports a few hundred tests
          where it has a few thousand, with no failure line anywhere. -->
-    <property name="junit.tmp.dir" value="${java.io.tmpdir}/build-i2p/junit-tmp/routerconsole"/>
+    <!-- Scratch root for the test harness, the same one the gradle test task uses,
+         and the one place to override: -Dtest.base.root=/some/dir. Nothing a test
+         writes belongs in the workspace. -->
+    <property name="test.base.root" value="${java.io.tmpdir}/test-i2p/"/>
+    <property name="junit.tmp.dir" value="${test.base.root}routerconsole/tmp"/>
     <mkdir dir="${junit.tmp.dir}"/>
     <!-- Scratch I2P base for the forked test JVM. I2PAppContext defaults
          i2p.dir.base to user.dir (this module dir), so a test that builds a
          context writes its runtime state into the workspace. Fresh for every
          run and removed afterwards, as in the i2psnark target. -->
-    <property name="junit.test.base" value="${build.root}routerconsole-junit-base"/>
+    <property name="junit.test.base" value="${test.base.root}routerconsole/base"/>
     <delete dir="${junit.test.base}"/>
     <mkdir dir="${junit.test.base}"/>
     <property name="junit.test.filter" value="**/*Test.java"/>
@@ -1102,23 +1069,7 @@
     </junitreport>
   </target>
 
-  <target name="clover.report" depends="test" if="with.clover">
-    <clover-report>
-      <current outfile="${java.io.tmpdir}/build-i2p/reports/apps/routerconsole/html/clover">
-        <format type="html"/>
-      </current>
-    </clover-report>
-  </target>
-
-  <target name="cobertura.report" depends="test" if="with.cobertura">
-    <mkdir dir="${java.io.tmpdir}/build-i2p/reports/apps/routerconsole/cobertura"/>
-    <cobertura-report format="xml" srcdir="./src" destdir="${java.io.tmpdir}/build-i2p/reports/apps/routerconsole/cobertura"/>
-    <mkdir dir="${java.io.tmpdir}/build-i2p/reports/apps/routerconsole/html/cobertura"/>
-    <cobertura-report format="html" srcdir="./src" destdir="${java.io.tmpdir}/build-i2p/reports/apps/routerconsole/html/cobertura"/>
-    <delete file="./cobertura.ser"/>
-  </target>
-
-  <target name="test.report" depends="scalatest.report, clover.report, cobertura.report"/>
+  <target name="test.report" depends="scalatest.report"/>
   <!-- end test reports -->
 
   <target name="fulltest" depends="cleandep, test, test.report"/>

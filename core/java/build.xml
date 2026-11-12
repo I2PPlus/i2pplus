@@ -336,7 +336,6 @@
       debuglevel="lines,vars,source"
       includeAntRuntime="false"
       encoding="UTF-8"
-      excludes="${source.exclude}"
       destdir="${build.dir}/testobj">
       <classpath>
         <pathelement path="${javac.classpath.mod}"/>
@@ -417,38 +416,7 @@
       </manifest>
     </jar>
   </target>
-  <!-- preparation of code coverage tool of choice -->
-  <target name="prepareClover" depends="compile" if="with.clover">
-    <taskdef resource="clovertasks"/>
-    <mkdir dir="${java.io.tmpdir}/build-i2p/reports/core/clover"/>
-    <clover-setup initString="${java.io.tmpdir}/build-i2p/reports/core/clover/coverage.db"/>
-  </target>
-  <target name="prepareCobertura" depends="compile" if="with.cobertura">
-    <taskdef classpath="${with.cobertura}" resource="tasks.properties" onerror="report"/>
-    <mkdir dir="${build.dir}/obj_cobertura"/>
-    <delete file="./cobertura.ser"/>
-    <cobertura-instrument todir="${build.dir}/obj_cobertura">
-      <fileset dir="${build.dir}/obj">
-        <include name="**/*.class"/>
-        <!-- exclude Test classes -->
-        <exclude name="**/*Test.class"/>
-        <exclude name="**/*TestSuite.class"/>
-        <!-- specific excludes -->
-        <exclude name="**/AllCoreTests.class"/>
-        <exclude name="**/stat/SimpleStatDumper.class"/>
-        <exclude name="**/stat/SizeMeasure.class"/>
-        <!-- exclude anything not in net.i2p.* -->
-        <exclude name="com/nettgryppa/**/*.class"/>
-        <exclude name="freenet/**/*.class"/>
-        <exclude name="gnu/**/*.class"/>
-        <exclude name="net/metanotion/**/*.class"/>
-        <exclude name="org/xlattice/**/*.class"/>
-      </fileset>
-    </cobertura-instrument>
-  </target>
-  <target name="prepareTest" depends="prepareClover, prepareCobertura"/>
-  <!-- end preparation of code coverage tool -->
-  <target name="scalatest.test" depends="clean, scalatest.compileTest, prepareTest">
+  <target name="scalatest.test" depends="clean, scalatest.compileTest">
     <mkdir dir="${java.io.tmpdir}/build-i2p/reports/core/scalatest/"/>
     <delete>
       <fileset dir="${java.io.tmpdir}/build-i2p/reports/core/scalatest">
@@ -461,12 +429,9 @@
         <pathelement location="${scala-xml.jar}"/>
         <pathelement location="${scalactic.jar}"/>
         <pathelement location="${scalatest.jar}"/>
-        <pathelement location="${build.dir}/obj_cobertura"/>
         <pathelement location="${build.dir}/obj"/>
         <pathelement location="./test/resources"/>
         <pathelement location="${build.root}build/jbigi.jar"/>
-        <pathelement location="${with.clover}"/>
-        <pathelement location="${with.cobertura}"/>
       </classpath>
     </taskdef>
     <scalatest runpath="${build.dir}/obj_scala" fork="yes" maxmemory="384M">
@@ -485,7 +450,7 @@
       <fileset dir="${java.io.tmpdir}/build-i2p/reports/core/scalatest/"/>
     </replaceregexp>
   </target>
-  <target name="junit.test" depends="junit.compileTest, prepareTest">
+  <target name="junit.test" depends="junit.compileTest">
     <property name="hamcrest.home" value="../../tools/test/hamcrest"/>
     <property name="junit.home" value="../../tools/test/junit"/>
     <property name="mockito.home" value="../../tools/test/mockito"/>
@@ -496,23 +461,26 @@
         <include name="TEST-*.xml"/>
       </fileset>
     </delete>
-    <!-- One scratch directory per module, under the shared build root: the forked
+    <!-- One scratch directory per module, under the shared test root: the forked
          test JVM reads the properties file ant wrote for it here and writes its
          vmwatcher file here, and one directory shared by the parallel suites has
          lost those files mid-run - the suite then reports a few hundred tests
          where it has a few thousand, with no failure line anywhere. -->
-    <property name="junit.tmp.dir" value="${java.io.tmpdir}/build-i2p/junit-tmp/core"/>
+    <!-- Scratch root for the test harness, the same one the gradle test task uses,
+         and the one place to override: -Dtest.base.root=/some/dir. Nothing a test
+         writes belongs in the workspace. -->
+    <property name="test.base.root" value="${java.io.tmpdir}/test-i2p/"/>
+    <property name="junit.tmp.dir" value="${test.base.root}core/tmp"/>
     <mkdir dir="${junit.tmp.dir}"/>
     <!-- Scratch I2P base for the forked test JVM. I2PAppContext defaults
          i2p.dir.base to user.dir (this module dir), so a test that builds a
          context writes its runtime state into the workspace. Fresh for every
          run and removed afterwards, as in the i2psnark target. -->
-    <property name="junit.test.base" value="${build.root}core-junit-base"/>
+    <property name="junit.test.base" value="${test.base.root}core/base"/>
     <delete dir="${junit.test.base}"/>
     <mkdir dir="${junit.test.base}"/>
     <property name="junit.test.filter" value="**/*Test.java"/>
     <junit printsummary="withOutAndErr" fork="yes" maxmemory="384m" showoutput="yes" tempdir="${junit.tmp.dir}" timeout="15000">
-      <sysproperty key="net.sourceforge.cobertura.datafile" file="./cobertura.ser"/>
       <sysproperty key="i2p.dir.base" value="${junit.test.base}"/>
       <classpath>
         <pathelement location="../../installer/resources/"/>
@@ -524,23 +492,16 @@
         <pathelement location="${mockito.home}/byte-buddy.jar"/>
         <pathelement location="${mockito.home}/byte-buddy-agent.jar"/>
         <pathelement location="${mockito.home}/objenesis.jar"/>
-        <pathelement location="${build.dir}/obj_cobertura"/>
         <pathelement location="${build.dir}/obj"/>
         <pathelement location="${build.dir}/testobj"/>
         <pathelement location="./test/resources"/>
         <pathelement location="${build.root}build/jbigi.jar"/>
-        <pathelement location="${with.clover}"/>
-        <pathelement location="${with.cobertura}"/>
       </classpath>
       <batchtest todir="${junit.reports.dir}/core/junit/">
         <fileset dir="./test/junit/" includes="${junit.test.filter}">
           <include name="**/*IT.java" if="runIntegrationTests"/>
           <exclude name="**/StructureTest.java"/>
           <exclude name="**/AbstractFieldElementTest.java"/>
-          <!-- DataHelperTest is *very* slow with cobertura -->
-          <!--
-                    <exclude name="**/DataHelperTest.java"/>
-                    -->
         </fileset>
       </batchtest>
       <formatter type="xml"/>
@@ -574,21 +535,7 @@
       <report format="frames" todir="${java.io.tmpdir}/build-i2p/reports/core/html/junit"/>
     </junitreport>
   </target>
-  <target name="clover.report" depends="test" if="with.clover">
-    <clover-report>
-      <current outfile="${java.io.tmpdir}/build-i2p/reports/core/html/clover">
-        <format type="html"/>
-      </current>
-    </clover-report>
-  </target>
-  <target name="cobertura.report" depends="test" if="with.cobertura">
-    <mkdir dir="${java.io.tmpdir}/build-i2p/reports/core/cobertura"/>
-    <cobertura-report format="xml" srcdir="./src" destdir="${java.io.tmpdir}/build-i2p/reports/core/cobertura"/>
-    <mkdir dir="${java.io.tmpdir}/build-i2p/reports/core/html/cobertura"/>
-    <cobertura-report format="html" srcdir="./src" destdir="${java.io.tmpdir}/build-i2p/reports/core/html/cobertura"/>
-    <delete file="./cobertura.ser"/>
-  </target>
-  <target name="test.report" depends="junit.report, scalatest.report, clover.report, cobertura.report"/>
+  <target name="test.report" depends="junit.report, scalatest.report"/>
   <!-- end test reports -->
   <target name="fulltest" depends="test, test.report"/>
   <!-- end unit tests -->
