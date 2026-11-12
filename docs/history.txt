@@ -1,26 +1,67 @@
+2026-11-12 dr|z3d
+  * I2PSnark:
+    - Finish a download stuck with one piece left and every seed uninteresting
+      - a refused block gives its claim back, a piece no peer fetches goes back
+      to the wanted list at once, and the end game keeps peers holding one
+    - Let a piece be fetched from up to sixteen peers when it is made of that
+      many blocks, and read eight upload blocks ahead over a pool of twelve
+      disk readers shared by all torrents, instead of six and six
+    - Keep the stall clock honest - an end-game suggestion no peer took counted
+      as activity, so the five-minute stall check never fired
+    - Reschedule a torrent's checker even when a pass throws - one escaping
+      exception left it without choke, unchoke, idle-peer, rate or stall
+      handling for the rest of the run
+    - Put the torrent's log in the house form - event and outcome on one line,
+      `key: value` not `key=value`, prose where a method name stood, and peers,
+      destinations and torrents named by the bracketed form the log viewer links
+    - Stop the log burying the finding: one announce pass wrote the same tracker
+      list three times - 52,713 of 169,155 entries in a measured window - and a
+      400-node routing table printed an indented sub-list eight to a line
+  * Build:
+    - Add tools/scripts/check-build-files.py, 26 rules over the 52 ant and
+      Gradle build files with a fixture pair each, and clear the tree to zero
+      findings - the dead properties, classpath entries, wrapper targets and
+      the cobertura, clover and jacoco chains that could no longer run are gone
+    - Put every build path behind one property, `${build.root}`, at 114 sites
+      so only the final HTML reports land in the workspace, and give
+      apps/pack200/java the `all` target its default named but never had
+  * Tests: Run the two JavaScript suites nothing could execute - the repo
+    declares `"type": "module"`, so node would not load a CommonJS test file at
+    all - and make the test report's filter box and column sorting work
+
 2026-11-11 dr|z3d
   * I2PSnark:
-    - Take the piece write off the peer's read thread - a received piece was
-      hashed, re-read from the temp file and written to the data file on the
-      thread that read it off the socket, so a slow disk stalled the very
-      connection delivering it; the peer now claims the block and hands the
-      piece to a per-torrent queue drained by two writer threads, and writes
-      inline past four queued pieces so the data is never dropped
-    - Let a second peer request a piece already in flight in endgame mode and
-      under BEP 6 suggest requests - a partial piece now tracks which of its
-      sub-blocks are claimed - and fix two leaks found there: a partial piece
-      listed twice was released twice, deleting the temp file of a piece
-      another peer was still writing, and a dropped request left its
-      sub-blocks marked as requested so no peer could ask for them again
-    - Fix `setRate()` shifting the rate ring before inserting into it, which
-      held the newest sample twice and never aged out the oldest
-    - Raise the request prefetch window from two blocks in flight over four
-      threads to six blocks over six, settable with
-      `i2psnark.prefetch.inflight` and `i2psnark.prefetch.threads`
-    - Step past a DHT node that failed recently during an iterative lookup,
-      without spending one of its thirty attempts on it
-    - Jitter the checker passes and the idle checker's period, so the
-      announces and lookups of many torrents no longer arrive in one burst
+    - Take the piece write off the peer's read thread - a slow disk stalled the
+      very connection delivering the piece; writes now queue per torrent behind
+      two writer threads
+    - Let a second peer take a piece already in flight in the end game and under
+      BEP 6 suggest, fixing two leaks: a listed-twice partial piece deleted
+      another peer's temp file, a dropped request left its blocks unaskable
+    - Fix `setRate()` shifting the rate ring before inserting, which held the
+      newest sample twice; raise the prefetch to six blocks over six threads,
+      jitter the checker passes, and skip a recently failed DHT node
+  * I2PTunnel:
+    - Stop a server tunnel starting unfiltered when its access-filter file is
+      missing or invalid - a policy that did not load is not in force - and keep
+      the last good list when a reload cannot read the file
+    - Reject malformed chunked request framing, bound the trailer headers and
+      the per-destination access history that grew with every request, and keep
+      a malformed IRC line from dropping the tunnel
+  * SSU2:
+    - Stop banning a peer for 30 minutes over a token exchange that never
+      completed, and keep the ACK bitfield offsets in `long`
+    - Refresh the NAT mapping of every destination behind a symmetric NAT, and
+      advertise the published port in introductions
+  * Streaming: Bound the NACK scan for a far-ahead sequence number, which ran
+    under the data lock so one bogus number stalled the whole connection
+  * Reseed: Cap the HTTPS response at `MAX_SU3_RESPONSE_SIZE` chunk by chunk,
+    and give each reseed host its own fetch deadline
+  * Crypto: Deep-copy the mutable arrays in `Poly1305.clone()` - a shallow clone
+    shared the key, nonce and accumulator, so re-keying either side corrupted it
+  * Build: Add `tools/scripts/update-tomcat.sh`, which checks the shipped
+    Tomcat jars against Maven Central and rewrites both build pins together
+  * Installer: Resolve `ps`, `tr` and `id` with `command -v` in the SysV start
+    script
 
 2026-11-10 dr|z3d
   * Build:
@@ -20503,8 +20544,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
 
       The following linux scripts are now customized with the install path at,
       installation, and may be moved to /usr/local/bin and run from any
-      working directory:
-          eepget, i2prouter, runplain.sh
+      working directory: eepget, i2prouter, runplain.sh
 
       For new installs, the i2p base directory ($I2P) may be read-only
       if updates are disabled. The only time i2p should write to the base directory
@@ -20517,18 +20557,18 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       #  subsequent property changes.
       #  All properties, if set, should be absolute paths.
       #
-      #  Name	Property 	Method		Files
-      #  -----	-------- 	-----		-----
-      #  Base	i2p.dir.base	getBaseDir()	lib/, webapps/, docs/, geoip/, licenses/, ...
-      #  Temp	i2p.dir.temp	getTempDir()	Temporary files
-      #  PID	i2p.dir.pid	getPIDDir()	router.ping
+      #  Name		Property 		Method			Files
+      #  -----		-------- 		-----				-----
+      #  Base		i2p.dir.base	getBaseDir()	lib/, webapps/, docs/, geoip/, licenses/, ...
+      #  Temp		i2p.dir.temp	getTempDir()	Temporary files
+      #  PID		i2p.dir.pid		getPIDDir()		router.ping
       #  Config	i2p.dir.config	getConfigDir()	*.config, hosts.txt, addressbook/, ...
       #
       #  (the following all default to the same as Config)
       #
       #  Router	i2p.dir.router	getRouterDir()	netDb/, peerProfiles/, router.*, keyBackup/, ...
-      #  Log	i2p.dir.log	getLogDir()	logs/
-      #  App	i2p.dir.app	getAppDir()	eepsite/, ...
+      #  Log		i2p.dir.log	getLogDir()	logs/
+      #  App		i2p.dir.app	getAppDir()	eepsite/, ...
 
       *  Note that the router can't control where the wrapper actually puts its files.
 
