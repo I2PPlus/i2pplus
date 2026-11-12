@@ -550,20 +550,21 @@ public class SSU2PayloadTest {
         byte[] hash = new byte[Hash.HASH_LENGTH];
         for (int i = 0; i < hash.length; i++)
             hash[i] = (byte) (i + 1);
-        byte[] data14 = new byte[14];
-        for (int i = 0; i < data14.length; i++)
-            data14[i] = (byte) (0x20 + i);
-        byte[] blockData2 = new byte[3 + hash.length + data14.length];
+        // 16 bytes of test data, the same floor as the questions without a hash
+        byte[] dataWithHash = new byte[16];
+        for (int i = 0; i < dataWithHash.length; i++)
+            dataWithHash[i] = (byte) (0x20 + i);
+        byte[] blockData2 = new byte[3 + hash.length + dataWithHash.length];
         blockData2[0] = 2;
         blockData2[1] = 1;
         blockData2[2] = 0;
         System.arraycopy(hash, 0, blockData2, 3, hash.length);
-        System.arraycopy(data14, 0, blockData2, 3 + hash.length, data14.length);
+        System.arraycopy(dataWithHash, 0, blockData2, 3 + hash.length, dataWithHash.length);
         byte[] f2 = blk(SSU2Payload.BLOCK_PEERTEST, blockData2);
         r.reset();
         assertEquals(1, SSU2Payload.processPayload(CTX, r, f2, 0, f2.length, false, null));
         Hash expected = Hash.create(hash);
-        assertEquals("peertest:2:1:" + expected.toBase64() + ":" + hx(data14), r.events.get(0));
+        assertEquals("peertest:2:1:" + expected.toBase64() + ":" + hx(dataWithHash), r.events.get(0));
 
         // msg 0 and 8 are invalid
         byte[] bad = blockData.clone();
@@ -582,6 +583,60 @@ public class SSU2PayloadTest {
             fail("expected DataFormatException");
         } catch (DataFormatException dfe) {
             assertTrue(dfe.getMessage(), dfe.getMessage().contains("Bad PEERTEST number"));
+        }
+    }
+
+    /**
+     * Questions 2 and 4 carry the 32-byte Alice hash, so a block that only meets
+     * the 19-byte floor of the other questions leaves a negative data length, and
+     * the parser threw NegativeArraySizeException instead of rejecting the block.
+     *
+     * @throws Exception if the block that must be accepted is refused
+     */
+    @Test
+    public void testParsePeerTestTooShortForHash() throws Exception {
+        Recorder r = new Recorder();
+        for (int len = 19; len < 19 + Hash.HASH_LENGTH; len++) {
+            byte[] blockData = new byte[len];
+            blockData[0] = 2; // msg with a hash
+            blockData[1] = 0; // status
+            byte[] f = blk(SSU2Payload.BLOCK_PEERTEST, blockData);
+            r.reset();
+            try {
+                process(r, f, false);
+                fail("expected IOException for PEERTEST 2 of " + len + " bytes");
+            } catch (IOException ioe) {
+                assertTrue(ioe.getMessage(), ioe.getMessage().contains("Bad length for PEERTEST 2"));
+            }
+            assertEquals(0, r.events.size());
+        }
+        // one byte longer than the floor is accepted
+        byte[] ok = new byte[19 + Hash.HASH_LENGTH];
+        ok[0] = 2;
+        byte[] f = blk(SSU2Payload.BLOCK_PEERTEST, ok);
+        r.reset();
+        assertEquals(1, SSU2Payload.processPayload(CTX, r, f, 0, f.length, false, null));
+        assertTrue(r.events.get(0), r.events.get(0).startsWith("peertest:2:0:"));
+    }
+
+    /**
+     * A ROUTERINFO block shorter than its two header bytes used to allocate a
+     * negative array; the javadoc already required len &gt; 1.
+     *
+     * @throws Exception if the block that must be accepted is refused
+     */
+    @Test
+    public void testParseRouterInfoTooShort() throws Exception {
+        Recorder r = new Recorder();
+        for (int len = 0; len < 2; len++) {
+            byte[] f = blk(SSU2Payload.BLOCK_ROUTERINFO, new byte[len]);
+            r.reset();
+            try {
+                process(r, f, false);
+                fail("expected IOException for ROUTERINFO of " + len + " bytes");
+            } catch (IOException ioe) {
+                assertTrue(ioe.getMessage(), ioe.getMessage().contains("Bad length for ROUTERINFO"));
+            }
         }
     }
 

@@ -394,6 +394,10 @@ class SSU2Payload {
      */
     static void parseRouterInfo(I2PAppContext ctx, PayloadCallback cb, byte[] payload, int i, int len, boolean isHandshake)
                                 throws IOException, DataFormatException {
+        // The two header bytes are read below and the data length is len - 2, so a
+        // shorter block would allocate a negative array.
+        if (len < 2)
+            throw new IOException("Bad length for ROUTERINFO: " + len);
         int flag = payload[i] & 0xff;
         boolean flood = (flag & 0x01) != 0;
         boolean gz = (flag & 0x02) != 0;
@@ -707,7 +711,8 @@ class SSU2Payload {
      * @param cb callback
      * @param payload the whole frame
      * @param i offset of the block data
-     * @param len declared block length, must be &ge; 19
+     * @param len declared block length, must be &ge; 19, or &ge; 51 for the
+     *            questions 2 and 4 that carry the 32-byte hash
      * @param isHandshake if true the block is illegal
      * @throws IOException if the block appears in a handshake or is too short
      * @throws DataFormatException if the message number is out of the 1-7 range
@@ -722,6 +727,10 @@ class SSU2Payload {
         int mnum = payload[i] & 0xff;
         if (mnum == 0 || mnum > 7)
             throw new DataFormatException("Bad PEERTEST number: " + mnum);
+        // Questions 2 and 4 carry the 32-byte hash, so the 19-byte floor is not
+        // enough for them and the data length below would go negative.
+        if ((mnum == 2 || mnum == 4) && len < 19 + Hash.HASH_LENGTH)
+            throw new IOException("Bad length for PEERTEST " + mnum + ": " + len);
         int resp = payload[i + 1] & 0xff;
         int o = i + 3; // skip flag
         int datalen;

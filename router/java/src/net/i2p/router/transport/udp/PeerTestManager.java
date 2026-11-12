@@ -213,6 +213,30 @@ class PeerTestManager {
 
     /** How long a "no RouterInfo for this Peer Test" answer is reused. @since 0.9.71+. */
     private static final long TEST_RI_MISS_TTL = 250;
+
+    /**
+     * Bytes a peer test message carries ahead of the address it declares: the
+     * version byte, the 4-byte nonce, the 4-byte time, and the address length.
+     * Every read in {@link #receiveTest} before the address stays inside this.
+     *
+     * @since 0.9.72+
+     */
+    static final int PEERTEST_HEADER_LENGTH = 10;
+
+    /**
+     * The fewest bytes a peer test message must carry so that reading it cannot
+     * run off the end, given the address length the message itself declares.
+     * An out-of-session peer test is attacker-controlled, so the declared length
+     * is a claim to check, not a fact to trust.
+     *
+     * @param iplen the address length read from the message, 0 for no address
+     * @return the minimum total message length, at least
+     *         {@link #PEERTEST_HEADER_LENGTH}
+     * @since 0.9.72+
+     */
+    static int peerTestMinLength(int iplen) {
+        return iplen == 0 ? PEERTEST_HEADER_LENGTH : PEERTEST_HEADER_LENGTH + iplen;
+    }
     /**
      * Last hash whose RouterInfo lookup missed, with the time it was recorded.
      * Both in one immutable holder: read as two separate volatiles a writer
@@ -994,6 +1018,16 @@ class PeerTestManager {
     @SuppressWarnings("UnconditionalIfStatement")
     private void receiveTest(RemoteHostId from, PeerState2 fromPeer, int msg, int status, Hash h, byte[] data,
                              byte[] addrBlockIP, int addrBlockPort) {
+        // The fixed part is PEERTEST_HEADER_LENGTH bytes: version, nonce, time,
+        // and the address length. An out-of-session peer test is attacker-
+        // controlled, so check the length before reading, then check the address
+        // against the length it declares.
+        if (data.length < PEERTEST_HEADER_LENGTH) {
+            _log.warnThrottled("ssu2-peertest-too-short",
+                               "Peer test message too short -> Dropping it * Size: " + data.length +
+                               " bytes * From: [" + from + ']');
+            return;
+        }
         if (data[0] != 2) {
             // Throttled: an out-of-session peer test packet is attacker-controllable.
             _log.warnThrottled("ssu2-peertest-bad-version",
@@ -1008,6 +1042,15 @@ class PeerTestManager {
             _log.warnThrottled("ssu2-peertest-bad-iplen",
                                "Peer test message with a bad IP address length " + iplen + " -> Dropping it" +
                                " * From: [" + from + ']');
+            return;
+        }
+        // The address is iplen bytes ending at peerTestMinLength(iplen), so a
+        // message that declares an IPv6 address but carries less has to be
+        // dropped before the copy below runs off the end.
+        if (iplen != 0 && data.length < peerTestMinLength(iplen)) {
+            _log.warnThrottled("ssu2-peertest-short-address",
+                               "Peer test address truncated -> Dropping it * Size: " + data.length +
+                               " bytes * Declared: " + iplen + " bytes * From: [" + from + ']');
             return;
         }
         boolean isIPv6 = iplen == 18;
@@ -1986,6 +2029,10 @@ class PeerTestManager {
             return null;
         byte[] ik = Base64.decode(siv);
         if (ik == null)
+            return null;
+        // The option comes out of a remote RouterInfo, and SessionKey rejects any
+        // other size, so a short key from a hostile or buggy peer would throw.
+        if (ik.length != SessionKey.KEYSIZE_BYTES)
             return null;
         return new SessionKey(ik);
     }
