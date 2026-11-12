@@ -18,9 +18,7 @@ a suite argument; an unknown name is an error, not a full run.
 
 `ant test` auto-downloads test dependencies (JUnit, Hamcrest, Mockito, Scala) to `tools/test/` on first run via `tools/scripts/ensure-testdeps.sh`. The build compiles to Java 8 bytecode, so any newer JDK can run Ant; the extra prerequisite for the wrapper is `python3` with `markdown-it-py`, used to render the HTML report. The test JVM ant forks is Java 8, so a test may not use APIs or providers newer than that.
 
-An HTML report is generated at `dist/test-report.html` after each run. Report includes per-module pass/fail counts, timing, and failure traces.
-
-An HTML report is generated at `dist/test-report.html` after each run. Report includes per-module pass/fail counts, timing, and failure traces.
+An HTML report is generated at `dist/test-report.html` after each run. Report includes per-module pass/fail counts, timing, and failure traces, plus a filter box and sortable columns from the `tools/test/test-report.js` the generator inlines. The JS harness itself is documented in `tools/test/README.md`.
 
 ## Certificate checks
 
