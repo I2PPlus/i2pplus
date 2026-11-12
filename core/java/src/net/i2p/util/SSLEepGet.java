@@ -169,6 +169,25 @@ public class SSLEepGet extends EepGet {
     }
 
     /**
+     * Create an SSLEepGet that writes to a file, limited to a maximum response
+     * size. The limit is checked as the body arrives, so an oversized or
+     * gzip-bombed response is stopped before it is buffered - a reseed SU3 is
+     * signature-verified only after the download.
+     *
+     * @param ctx the router context supplying config, logging, and the cert directories
+     * @param outputFile path of the file to write the response body to; takes precedence over outputStream
+     * @param url the https URL to fetch; redirects back to http are not followed
+     * @param maxSize the maximum content size in bytes, -1 for unlimited
+     * @param state an SSLState retrieved from a previous SSLEepGet with getSSLState(), or null.
+     *              This makes repeated fetches from the same host MUCH faster,
+     *              and prevents repeated key store loads even for different hosts.
+     * @since 0.9.72+
+     */
+    public SSLEepGet(I2PAppContext ctx, String outputFile, String url, long maxSize, SSLState state) {
+        this(ctx, outputFile, null, url, maxSize, state);
+    }
+
+    /**
      * Use a proxy.
      *
      * @param ctx the router context supplying config, logging, and the cert directories
@@ -274,11 +293,44 @@ public class SSLEepGet extends EepGet {
             String outputFile,
             String url,
             SSLState state) {
+        this(ctx, type, proxyHost, proxyPort, outputFile, url, -1, state);
+    }
+
+    /**
+     * Use a proxy, limited to a maximum response size. The limit is checked as the
+     * body arrives, so an oversized or gzip-bombed response is stopped before it
+     * is buffered.
+     *
+     * @param ctx the router context supplying config, logging, and the cert directories
+     * @param type proxy scheme used to reach the origin, or NONE for a direct connection
+     * @param proxyHost Must be valid hostname or literal IPv4/v6.
+     *                  If type is INTERNAL, set to "localhost".
+     *
+     * @param proxyPort Must be valid, -1 disallowed, no default.
+     *                  If type is INTERNAL, set to 4444.
+     *
+     * @param outputFile path of the file to write the response body to; takes precedence over outputStream
+     * @param url the https URL to fetch; redirects back to http are not followed
+     * @param maxSize the maximum content size in bytes, -1 for unlimited
+     * @param state an SSLState retrieved from a previous SSLEepGet with getSSLState(), or null.
+     *              This makes repeated fetches from the same host MUCH faster,
+     *              and prevents repeated key store loads even for different hosts.
+     * @since 0.9.72+
+     */
+    public SSLEepGet(
+            I2PAppContext ctx,
+            ProxyType type,
+            String proxyHost,
+            int proxyPort,
+            String outputFile,
+            String url,
+            long maxSize,
+            SSLState state) {
         // we're using this constructor:
         // public EepGet(I2PAppContext ctx, boolean shouldProxy, String proxyHost, int proxyPort, int numRetries, long
         // minSize, long maxSize, String outputFile, OutputStream outputStream, String url, boolean allowCaching, String
         // etag, String postData) {
-        super(ctx, type != ProxyType.NONE, proxyHost, proxyPort, 0, -1, -1, outputFile, null, url, true, null, null);
+        super(ctx, type != ProxyType.NONE, proxyHost, proxyPort, 0, -1, maxSize, outputFile, null, url, true, null, null);
         if (type != ProxyType.NONE && !_shouldProxy) throw new IllegalArgumentException("Bad proxy params");
         _proxyType = type;
         if (state != null && state.context != null) _sslContext = state.context;
@@ -515,6 +567,23 @@ public class SSLEepGet extends EepGet {
     }
 
     /**
+     * Checks one freshly-read chunk of the response against the size ceiling this
+     * fetch was created with. Enforced as the body arrives, so an oversized or
+     * gzip-bombed response is stopped before it is written out or fills the disk.
+     *
+     * @param maxSize the ceiling in bytes, -1 for unlimited
+     * @param transferred bytes already written before this chunk
+     * @param read bytes in this chunk
+     * @throws IOException if this chunk takes the total past the ceiling
+     * @since 0.9.72+
+     */
+    static void checkSizeLimit(long maxSize, long transferred, int read) throws IOException {
+        if (maxSize > -1 && transferred + read > maxSize)
+            throw new IOException("Bytes transferred " + (transferred + read) +
+                                  " violates maximum of " + maxSize + " bytes");
+    }
+
+    /**
      * Fetch the resource over SSL.
      */
     @Override
@@ -598,6 +667,10 @@ public class SSLEepGet extends EepGet {
             int read = _proxyIn.read(buf, 0, toRead);
             if (read == -1) break;
             if (timeout != null) timeout.resetTimer();
+            // Checked here, not only at the end of the fetch: the response is
+            // written as it arrives, and a gzip bomb or an oversized reseed SU3
+            // has to stop before it fills the disk.
+            checkSizeLimit(getMaxSize(), _alreadyTransferred, read);
             _out.write(buf, 0, read);
             _bytesTransferred += read;
 

@@ -55,8 +55,41 @@ public class Reseeder {
     /** Checker watching for reseed updates. */
     private final ReseedChecker _checker;
 
-    /** Largest SU3 download accepted, in bytes. */
-    private static final long MAX_SU3_RESPONSE_SIZE = 1024 * 1024L;
+    /**
+     * Largest SU3 download accepted, in bytes. Package-visible so the reseed
+     * tests can pin that the HTTPS path is capped with the same ceiling as HTTP.
+     *
+     * @since 0.9.72+
+     */
+    static final long MAX_SU3_RESPONSE_SIZE = 1024 * 1024L;
+
+    /**
+     * How long one reseed URL gets for its response status line and headers, in
+     * ms. Shorter than EepGet's own 90 s connect timeout because a reseed tries
+     * several hosts in sequence and a silent one must not hold the whole attempt.
+     * Package-visible so the reseed tests can pin the budget ordering.
+     *
+     * @since 0.9.72+
+     */
+    static final int RESEED_HEADER_TIMEOUT = 45 * 1000;
+
+    /**
+     * How long one reseed URL gets in total, headers and body, in ms. A 1 MB SU3
+     * over a slow tunnel fits well inside this; a host that stalls past it is
+     * dropped and the next URL is tried.
+     * Package-visible so the reseed tests can pin the budget ordering.
+     *
+     * @since 0.9.72+
+     */
+    static final int RESEED_TOTAL_TIMEOUT = 5 * 60 * 1000;
+
+    /**
+     * How long a reseed host may go without sending any byte, in ms.
+     * Package-visible so the reseed tests can pin the budget ordering.
+     *
+     * @since 0.9.72+
+     */
+    static final int RESEED_INACTIVITY_TIMEOUT = 30 * 1000;
     /** Limit per host to avoid getting stuck on one that is seriously overloaded. */
     private static final long MAX_FILE_AGE = 3*24*60*60*1000L;
     /** Don't disable this! */
@@ -908,16 +941,23 @@ public class Reseeder {
             boolean ssl = "https".equals(url.getScheme());
             if (ssl) {
                 SSLEepGet sslget;
+                // The size ceiling the HTTP path below already passes: the SU3
+                // signature is only verified after the download, so an oversized
+                // or gzip-bombed response has to be stopped while it arrives.
                 if (_sslState == null) {
                     if (_shouldProxySSL) {
                         sslget = new SSLEepGet(_context, _sproxyType, _sproxyHost, _sproxyPort,
-                                               out.getPath(), url.toString());
-                    } else {sslget = new SSLEepGet(_context, out.getPath(), url.toString());}
+                                               out.getPath(), url.toString(), MAX_SU3_RESPONSE_SIZE, null);
+                    } else {
+                        sslget = new SSLEepGet(_context, out.getPath(), url.toString(), MAX_SU3_RESPONSE_SIZE, null);
+                    }
                     _sslState = sslget.getSSLState(); // Save state for next time
                 } else if (_shouldProxySSL) {
-                        sslget = new SSLEepGet(_context, _sproxyType, _sproxyHost, _sproxyPort,
-                                               out.getPath(), url.toString(), _sslState);
-                } else {sslget = new SSLEepGet(_context, out.getPath(), url.toString(), _sslState);}
+                    sslget = new SSLEepGet(_context, _sproxyType, _sproxyHost, _sproxyPort,
+                                           out.getPath(), url.toString(), MAX_SU3_RESPONSE_SIZE, _sslState);
+                } else {
+                    sslget = new SSLEepGet(_context, out.getPath(), url.toString(), MAX_SU3_RESPONSE_SIZE, _sslState);
+                }
 
                 get = sslget;
                 if (_shouldProxySSL && _context.getBooleanProperty(PROP_SPROXY_AUTH_ENABLE)) {
@@ -945,7 +985,16 @@ public class Reseeder {
                 get.addHeader("If-Modified-Since", minLastMod);
             }
             get.addStatusListener(ReseedRunner.this);
-            if (get.fetch() && get.getStatusCode() == 200) {return out;}
+            long started = _context.clock().now();
+            // EepGet has no total timeout of its own, so one silent reseed host
+            // used to hold up the whole attempt instead of moving to the next URL.
+            boolean fetched = get.fetch(RESEED_HEADER_TIMEOUT, RESEED_TOTAL_TIMEOUT, RESEED_INACTIVITY_TIMEOUT);
+            if (fetched && get.getStatusCode() == 200) {return out;}
+            int status = get.getStatusCode();
+            _log.warn("Reseed fetch failed -> Moving to the next URL" +
+                      "\n* Host: " + url.getHost() + " * HTTP Status: " + status +
+                      " * Elapsed: " + DataHelper.formatDuration(_context.clock().now() - started) +
+                      " * Budget: " + DataHelper.formatDuration(RESEED_TOTAL_TIMEOUT));
             if (!out.delete())
                 _log.warn("Failed to delete temp file " + out.getName());
             return null;

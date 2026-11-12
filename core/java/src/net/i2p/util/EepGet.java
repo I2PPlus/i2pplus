@@ -3097,6 +3097,17 @@ public class EepGet {
     }
 
     /**
+     * The response size limit this fetch was created with. Subclasses that run
+     * their own read loop have to enforce it themselves.
+     *
+     * @return the limit in bytes, -1 for unlimited
+     * @since 0.9.72+
+     */
+    protected final long getMaxSize() {
+        return _maxSize;
+    }
+
+    /**
      * The server response (200, etc).
      *
      * @return -1 if invalid, or if the proxy never responded,
