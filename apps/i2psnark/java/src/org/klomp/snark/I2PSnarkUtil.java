@@ -1878,7 +1878,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * Fetch and log the result, truncating the display URL at the first '&amp;'.
+     * Fetch and log the result, naming the tracker and the torrent in the short
+     * forms every other snark log uses.
      *
      * @param get the eepget to fetch
      * @param url the original request URL
@@ -1888,20 +1889,110 @@ public class I2PSnarkUtil implements DisconnectListener {
      * @since 0.9.4
      */
     private boolean fetchAndLog(EepGet get, String url, int timeout, long size) {
-        int truncate = url.indexOf("&");
-        String convertedurl = trackerB32ToHostname(url);
-        if (truncate < 0 || truncate > convertedurl.length()) {truncate = convertedurl.length();}
         if (get.fetch(timeout)) {
+            // an announce answers with a few hundred bytes and a scrape with a
+            // few dozen, so a zero-length body is the normal case, not a finding
             if (_log.shouldDebug())
-                _log.debug("Request successful -> Size: " + size + " bytes * URL: "
-                           + convertedurl.substring(0, truncate));
+                _log.debug("Fetch successful -> " + fetchTarget(url)
+                           + (size > 0 ? " * Size: " + size + " bytes" : ""));
             return true;
         } else {
             if (_log.shouldInfo())
-                _log.info("Request timed out -> Timeout: " + DataHelper.formatDuration(timeout)
-                          + " * URL: " + convertedurl.substring(0, truncate));
+                _log.info("Fetch timed out -> " + fetchTarget(url)
+                          + " * Timeout: " + DataHelper.formatDuration(timeout));
             return false;
         }
+    }
+
+    /**
+     * The standard tail of every fetch log line: the tracker the URL names and the
+     * torrent it asks about, both in the short forms the rest of the snark logs
+     * use. An announce URL is a host plus 40 characters of percent-encoded query,
+     * and none of that is greppable or comparable by eye.
+     *
+     * @param url the request URL, may be null
+     * @return {@code "Tracker: h * Torrent: xxxxxxxx"}; the {@code Torrent} segment
+     *         is left out when the URL is not a query about a torrent
+     * @since 0.9.72+
+     */
+    static String fetchTarget(String url) {
+        String ih = fetchInfoHash(url);
+        return "Tracker: " + trackerHost(url) + (ih != null ? " * Torrent: " + ih : "");
+    }
+
+    /**
+     * The tracker a fetch URL names, host only - the scheme and path are the same
+     * on every request to a given tracker, and the query is the part that varies
+     * without meaning anything to a reader.
+     *
+     * @param url the request URL, may be null
+     * @return the host, or {@code none} if there is no URL to name
+     * @since 0.9.72+
+     */
+    static String trackerHost(String url) {
+        if (url == null) {
+            return SnarkLogFormatter.NONE;
+        }
+        String display = trackerB32ToHostname(url);
+        int at = display.indexOf("//");
+        if (at >= 0) {
+            display = display.substring(at + 2);
+        }
+        int cut = display.length();
+        for (char c : new char[] {'/', '?', '&'}) {
+            int i = display.indexOf(c);
+            if (i >= 0 && i < cut) {
+                cut = i;
+            }
+        }
+        return cut > 0 ? display.substring(0, cut) : SnarkLogFormatter.NONE;
+    }
+
+    /**
+     * The torrent a fetch URL asks about, from its {@code info_hash} query
+     * parameter, in the eight hex characters the rest of the snark logs use for an
+     * info hash. The parameter is percent-encoded raw bytes, so the URL itself
+     * shows forty characters of {@code %b1%d2…} that no reader can compare.
+     *
+     * @param url the request URL, may be null
+     * @return the short info hash, or null if the URL carries none or it is
+     *         malformed
+     * @since 0.9.72+
+     */
+    static String fetchInfoHash(String url) {
+        if (url == null) {
+            return null;
+        }
+        int start = url.indexOf("info_hash=");
+        if (start < 0) {
+            return null;
+        }
+        start += "info_hash=".length();
+        int end = start;
+        while (end < url.length() && url.charAt(end) != '&' && url.charAt(end) != '#') {
+            end++;
+        }
+        byte[] buf = new byte[end - start];
+        int at = 0;
+        for (int i = start; i < end; i++) {
+            char c = url.charAt(i);
+            if (c == '%' && i + 2 < end) {
+                int hi = Character.digit(url.charAt(i + 1), 16);
+                int lo = Character.digit(url.charAt(i + 2), 16);
+                if (hi < 0 || lo < 0) {
+                    return null;
+                }
+                buf[at++] = (byte) ((hi << 4) + lo);
+                i += 2;
+            } else if (c == '+') {
+                buf[at++] = ' ';
+            } else if (c > 0x7f) {
+                return null;
+            } else {
+                buf[at++] = (byte) c;
+            }
+        }
+        return at >= 4 ? SnarkLogFormatter.infoHash(Arrays.copyOf(buf, at)) : null;
     }
 
     /**
@@ -1915,8 +2006,8 @@ public class I2PSnarkUtil implements DisconnectListener {
      */
     private File get(String url, boolean rewrite, int retries, I2PSocketManager mgr) {
         if (_log.shouldDebug()) {
-            _log.debug("Fetching " + url + " -> Proxy: " + _proxyHost + ":" + _proxyPort
-                       + " * Proxying: " + _shouldProxy);
+            _log.debug("Fetch to a file -> " + fetchTarget(url)
+                       + (_shouldProxy ? " * Proxy: " + _proxyHost + ":" + _proxyPort : ""));
         }
         File out = null;
         try {
@@ -1975,8 +2066,25 @@ public class I2PSnarkUtil implements DisconnectListener {
      */
     public byte[] get(String url, boolean rewrite, int retries, int initialSize, int maxSize) {
         if (_log.shouldDebug()) {
-            _log.debug("Fetching to memory -> URL: " + url);
+            _log.debug("Fetch to memory -> " + fetchTarget(url));
         }
+        return getToMemory(url, rewrite, retries, initialSize, maxSize);
+    }
+
+    /**
+     * The shared-session memory fetch, with no log line, for the caller that has
+     * already written its own - the per-torrent get() names the session it chose
+     * and why, and logging one fetch twice only costs a line.
+     *
+     * @param url the URL to fetch
+     * @param rewrite if true, convert http://KEY.i2p/foo/announce to http://i2p/KEY/foo/announce
+     * @param retries if &lt; 0, set timeout to a few seconds
+     * @param initialSize initial capacity of the output buffer, in bytes
+     * @param maxSize fails if greater
+     * @return null on error
+     */
+    private byte[] getToMemory(String url, boolean rewrite, int retries, int initialSize,
+                               int maxSize) {
         String fetchURL = url;
         if (rewrite) {
             fetchURL = rewriteAnnounce(url);
@@ -2032,14 +2140,14 @@ public class I2PSnarkUtil implements DisconnectListener {
         TorrentDest td = getTorrentDest(ih);
         if (td == null) {
             if (_log.shouldDebug()) {
-                _log.debug("No dedicated destination for this torrent -> Fetching over the shared"
-                           + " session * URL: " + url);
+                _log.debug("No dedicated destination -> Fetching over the shared session * "
+                           + fetchTarget(url));
             }
-            return get(url, rewrite, retries, initialSize, maxSize);
+            return getToMemory(url, rewrite, retries, initialSize, maxSize);
         }
         I2PSocketManager mgr = td.getSocketManager();
         if (_log.shouldDebug()) {
-            _log.debug("Fetching to memory -> URL: " + url);
+            _log.debug("Fetch to memory over a dedicated destination -> " + fetchTarget(url));
         }
         String fetchURL = url;
         if (rewrite) {
