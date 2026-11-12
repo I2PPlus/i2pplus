@@ -500,7 +500,8 @@ class PartialPiece implements Comparable<PartialPiece> {
         int end = (offset + len + SUB_PARTSIZE - 1) / SUB_PARTSIZE;
         for (int i = subBlock; i < end; i++) {
             if (bitfield.get(i)) {
-                debug("Already have sub-block " + i + " on " + this);
+                debug("Sub-block " + i + " of piece " + piece.getId()
+                      + " arrived twice -> Kept the copy already held");
             } else {
                 bitfield.set(i);
             }
@@ -516,13 +517,15 @@ class PartialPiece implements Comparable<PartialPiece> {
                 // log only the first contiguous fill - the rest follow by
                 // definition and the per-sub-block lines are pure spam
                 if (i == subBlock + 1)
-                    debug("Hole filled in before sub-block " + i + " on " + this + ' ' + bitfield);
+                    debug("Holes filled in for piece " + piece.getId()
+                          + " -> Now holding sub-blocks " + subBlock + " through " + i);
                 if (i == sz - 1) off = pclen;
                 else off += SUB_PARTSIZE;
             }
-        } else {
-            debug("Out of order chunk " + subBlock + " on " + this + ' ' + bitfield);
         }
+        // no log line for a block that lands away from the current offset - with
+        // several requests in flight that is the normal arrival order, not an
+        // anomaly, and it fired for some 3,000 blocks a day for no finding
     }
 
     /**

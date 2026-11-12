@@ -495,6 +495,34 @@ class Message {
      */
     @Override
     public String toString() {
+        String name = typeName();
+        switch (type) {
+            case HAVE:
+            case PORT:
+            case SUGGEST:
+            case ALLOWED_FAST:
+                return name + '(' + piece + ')';
+            case REQUEST:
+            case PIECE:
+            case CANCEL:
+            case REJECT:
+                return name + '(' + piece + ',' + begin + ',' + length + ')';
+            case EXTENSION:
+                // data is null for a queued-but-unsent extension message
+                return name + '(' + piece + ',' + (data != null ? data.length : 0) + ')';
+            default:
+                return name;
+        }
+    }
+
+    /**
+     * The protocol name of the message type, on its own, so a log line can put the
+     * fields somewhere other than immediately after the name.
+     *
+     * @return the upper-case protocol name, e.g. {@code REQUEST}
+     * @since 0.9.72+
+     */
+    String typeName() {
         switch (type) {
             case KEEP_ALIVE:
                 return "KEEP_ALIVE";
@@ -507,31 +535,30 @@ class Message {
             case UNINTERESTED:
                 return "UNINTERESTED";
             case HAVE:
-                return "HAVE(" + piece + ')';
+                return "HAVE";
             case BITFIELD:
                 return "BITFIELD";
             case REQUEST:
-                return "REQUEST(" + piece + ',' + begin + ',' + length + ')';
+                return "REQUEST";
             case PIECE:
-                return "PIECE(" + piece + ',' + begin + ',' + length + ')';
+                return "PIECE";
             case CANCEL:
-                return "CANCEL(" + piece + ',' + begin + ',' + length + ')';
+                return "CANCEL";
             case PORT:
-                return "PORT(" + piece + ')';
+                return "PORT";
             case EXTENSION:
-                // data is null for a queued-but-unsent extension message
-                return "EXTENSION(" + piece + ',' + (data != null ? data.length : 0) + ')';
+                return "EXTENSION";
             // fast extensions below here
             case SUGGEST:
-                return "SUGGEST(" + piece + ')';
+                return "SUGGEST";
             case HAVE_ALL:
                 return "HAVE_ALL";
             case HAVE_NONE:
                 return "HAVE_NONE";
             case REJECT:
-                return "REJECT(" + piece + ',' + begin + ',' + length + ')';
+                return "REJECT";
             case ALLOWED_FAST:
-                return "ALLOWED_FAST(" + piece + ')';
+                return "ALLOWED_FAST";
             // BEP 52 below here
             case HASH_REQUEST:
                 return "HASH_REQUEST";
@@ -541,6 +568,41 @@ class Message {
                 return "HASH_REJECT";
             default:
                 return "UNKNOWN (" + type + ')';
+        }
+    }
+
+    /**
+     * What the message carried, in the {@code key: value} form the logging guide
+     * asks for, led by the arrow that separates the event from its details. A comma
+     * tuple such as {@code REQUEST(27,0,16384)} names nothing a reader can act on,
+     * and the brackets of the {@code toString()} form are the form the console log
+     * viewer parses as a destination.
+     *
+     * @return {@code " -> Piece: 27 * Offset: 0 bytes * Size: 16384 bytes"} for a
+     *         message with fields, or an empty string for one that carries none
+     * @since 0.9.72+
+     */
+    String logArgs() {
+        switch (type) {
+            case HAVE:
+            case SUGGEST:
+            case ALLOWED_FAST:
+                return " -> Piece: " + piece;
+            case PORT:
+                // BEP 6 keeps the UDP port in the field the other messages use for
+                // the piece index
+                return " -> Port: " + piece;
+            case REQUEST:
+            case PIECE:
+            case CANCEL:
+            case REJECT:
+                return " -> Piece: " + piece + " * Offset: " + begin + " bytes * Size: "
+                       + length + " bytes";
+            case EXTENSION:
+                // data is null for a queued-but-unsent extension message
+                return " -> Size: " + (data != null ? data.length : 0) + " bytes";
+            default:
+                return "";
         }
     }
 }

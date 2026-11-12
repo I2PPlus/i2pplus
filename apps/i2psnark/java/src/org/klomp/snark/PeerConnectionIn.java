@@ -247,8 +247,8 @@ class PeerConnectionIn implements Runnable {
                             req.read(din, peer);
                             if (_log.shouldDebug()) {
                                 _log.debug("Received piece data -> Piece: " + piece
-                                           + " * Offset: " + begin + " bytes * Peer: "
-                                           + SnarkLogFormatter.peer(peer));
+                                           + " * Offset: " + begin + " bytes * Size: " + len
+                                           + " bytes * Peer: " + SnarkLogFormatter.peer(peer));
                             }
                             ps.pieceMessage(req);
                         } else {
@@ -258,10 +258,9 @@ class PeerConnectionIn implements Runnable {
                                 throw new IOException("EOF reading unwanted data");
                             }
                             if (_log.shouldDebug()) {
-                                _log.debug("Received UNWANTED data from ["
-                                           + SnarkLogFormatter.peer(peer)
-                                           + "] for [Piece " + piece + "] (Start: " + begin
-                                           + ")");
+                                _log.debug("Received piece data -> No request matched it"
+                                           + " * Piece: " + piece + " * Offset: " + begin
+                                           + " bytes * Peer: " + SnarkLogFormatter.peer(peer));
                             }
                         }
                         break;
@@ -271,9 +270,9 @@ class PeerConnectionIn implements Runnable {
                         begin = din.readInt();
                         len = din.readInt();
                         if (_log.shouldDebug()) {
-                            _log.debug("Received cancel from " + SnarkLogFormatter.peer(peer)
-                                       + " for [Piece " + piece
-                                       + "] (Start: " + begin + ")");
+                            _log.debug("Received a cancel -> Dropped the request"
+                                       + " * Piece: " + piece + " * Offset: " + begin
+                                       + " bytes * Peer: " + SnarkLogFormatter.peer(peer));
                         }
                         ps.cancelMessage(piece, begin, len);
                         break;

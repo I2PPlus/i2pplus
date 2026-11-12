@@ -18,6 +18,13 @@ import org.junit.Test;
  */
 public class FetchLogFormatTest {
 
+    /**
+     * Test instance; every test calls a static formatter method, so the instance
+     * carries no state.
+     */
+    public FetchLogFormatTest() {
+    }
+
     /** A tracker announce as the open trackers take it. */
     private static final String ANNOUNCE =
             "http://opentracker.bt.i2p/a?info_hash=%b1%d2%b8%e9%ddW%cc%5c%2ab%5f%b8%f3"
@@ -44,26 +51,31 @@ public class FetchLogFormatTest {
     /** The full announce's info hash, in the short form the log uses. */
     private static final String FULL_IH = "767cbdd2";
 
+    /** Only the host survives - no path, no query. */
     @Test
     public void hostOnlyNoPathNoQuery() {
         assertEquals("opentracker.bt.i2p", I2PSnarkUtil.trackerHost(ANNOUNCE));
     }
 
+    /** A URL written without a scheme still names its host. */
     @Test
     public void schemelessUrlIsStillNamed() {
         assertEquals("opentracker.bt.i2p", I2PSnarkUtil.trackerHost("opentracker.bt.i2p/a"));
     }
 
+    /** A port written with the host stays with it. */
     @Test
     public void portStaysWithTheHost() {
         assertEquals("1.2.3.4:8080", I2PSnarkUtil.trackerHost("http://1.2.3.4:8080/announce"));
     }
 
+    /** A query that starts without a slash still ends the host. */
     @Test
     public void queryWithoutASlashStillEndsTheHost() {
         assertEquals("host", I2PSnarkUtil.trackerHost("http://host?info_hash=%01%02%03%04"));
     }
 
+    /** A b32 tracker the name table knows is shown by its hostname. */
     @Test
     public void knownB32TrackerIsNamedByItsHostname() {
         // the log must show the same name the announce site shows for the same
@@ -71,21 +83,42 @@ public class FetchLogFormatTest {
         assertEquals("tracker2.postman.i2p", I2PSnarkUtil.trackerHost(POSTMAN));
     }
 
+    /** A missing URL has no host to name. */
     @Test
     public void missingUrlHasNoHostToName() {
         assertEquals("none", I2PSnarkUtil.trackerHost(null));
     }
 
+    /** A b32 tracker the name table does not know becomes the bracketed short form. */
+    @Test
+    public void unknownB32TrackerBecomesTheBracketedShortForm() {
+        // a b32 host the name table does not know stays 52 characters of base32,
+        // which no reader compares by eye and which pushes every line naming it past
+        // the width limit; the bracketed eight-character form is what the console log
+        // viewer links, and it matches how a destination is named everywhere else
+        String url = "http://" + UNKNOWN_B32 + ".b32.i2p/announce?info_hash=%01%02%03%04";
+        assertEquals("Tracker: [" + UNKNOWN_B32.substring(0, 8) + "] * Torrent: 01020304",
+                     I2PSnarkUtil.fetchTarget(url));
+        assertEquals("[" + UNKNOWN_B32.substring(0, 8) + "]", I2PSnarkUtil.trackerHost(url));
+    }
+
+    /** A b32 address with no entry in the name table. */
+    private static final String UNKNOWN_B32 =
+            "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz";
+
+    /** A URL with no host is named in prose, never as an empty string. */
     @Test
     public void emptyHostIsNotAnEmptyName() {
         assertEquals("none", I2PSnarkUtil.trackerHost("http://"));
     }
 
+    /** The info hash comes out of the query as eight hex characters. */
     @Test
     public void infoHashComesOutOfTheQueryAsEightHex() {
         assertEquals("b1d2b8e9", I2PSnarkUtil.fetchInfoHash(ANNOUNCE));
     }
 
+    /** The info hash ends at the next parameter. */
     @Test
     public void infoHashStopsAtTheNextParameter() {
         // peer_id follows, and it is 20 raw bytes that can hold any character
@@ -93,38 +126,45 @@ public class FetchLogFormatTest {
                      I2PSnarkUtil.fetchInfoHash("http://h/a?info_hash=%b1%d2%b8%e9&peer_id=x"));
     }
 
+    /** A plus in the query decodes as a space. */
     @Test
     public void plusDecodesAsASpace() {
         assertEquals("6120620a", I2PSnarkUtil.fetchInfoHash("http://h/a?info_hash=a+b%0a%0b"));
     }
 
+    /** A query with no info_hash names no torrent. */
     @Test
     public void noInfoHashParamNamesNoTorrent() {
         assertNull(I2PSnarkUtil.fetchInfoHash("http://host/a"));
         assertNull(I2PSnarkUtil.fetchInfoHash(null));
     }
 
+    /** A malformed escape is not guessed into a hash. */
     @Test
     public void malformedEscapeNamesNoTorrent() {
         assertNull(I2PSnarkUtil.fetchInfoHash("http://h/a?info_hash=%zz%0a%0b%0c"));
     }
 
+    /** A truncated escape is not guessed into a hash. */
     @Test
     public void truncatedEscapeNamesNoTorrent() {
         assertNull(I2PSnarkUtil.fetchInfoHash("http://h/a?info_hash=%0a%0"));
     }
 
+    /** Too few bytes to identify a torrent names no torrent. */
     @Test
     public void tooFewBytesToIdentifyANamedTorrent() {
         assertNull(I2PSnarkUtil.fetchInfoHash("http://h/a?info_hash=%0a%0b"));
     }
 
+    /** The tail names the tracker and the torrent, nothing else. */
     @Test
     public void targetNamesTheTrackerAndTheTorrent() {
         assertEquals("Tracker: opentracker.bt.i2p * Torrent: b1d2b8e9",
                      I2PSnarkUtil.fetchTarget(ANNOUNCE));
     }
 
+    /** With no info hash the tail leaves the torrent out. */
     @Test
     public void targetLeavesOutTheTorrentWhenThereIsNone() {
         // a torrent-file fetch has no info hash to name yet, and a malformed one
@@ -133,17 +173,20 @@ public class FetchLogFormatTest {
         assertEquals("Tracker: host", I2PSnarkUtil.fetchTarget("http://host/a?info_hash=%zz"));
     }
 
+    /** A missing URL still gets a tracker segment, named as none. */
     @Test
     public void targetForAMissingUrlStillNamesTheTracker() {
         assertEquals("Tracker: none", I2PSnarkUtil.fetchTarget(null));
     }
 
+    /** A full announce collapses to the tracker and the torrent. */
     @Test
     public void aFullAnnounceBecomesTheTrackerAndTheTorrent() {
         assertEquals("Tracker: opentracker.bt.i2p * Torrent: " + FULL_IH,
                      I2PSnarkUtil.fetchTarget(FULL_ANNOUNCE));
     }
 
+    /** None of the URL bulk - the ip= blob or the query - reaches the line. */
     @Test
     public void ourDestinationNeverReachesTheLine() {
         String tail = I2PSnarkUtil.fetchTarget(FULL_ANNOUNCE);
@@ -152,6 +195,7 @@ public class FetchLogFormatTest {
         assertTrue("short enough to read: " + tail.length(), tail.length() < 60);
     }
 
+    /** The URL the log used to print is pinned as unreadably long. */
     @Test
     public void theUrlReallyIsTooLongToRead() {
         // pinned so the claim in the class javadoc stays honest: the ip= value
@@ -162,6 +206,7 @@ public class FetchLogFormatTest {
         assertEquals(528, FULL_ANNOUNCE.substring(start, end).length());
     }
 
+    /** A rewritten announce names only the proxy in front of it. */
     @Test
     public void theRewrittenFormCollapsesToTheProxyHost() {
         // rewriteAnnounce() moves the b32 host into the path, so a URL in that

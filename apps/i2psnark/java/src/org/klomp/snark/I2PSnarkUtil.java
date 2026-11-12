@@ -1893,13 +1893,13 @@ public class I2PSnarkUtil implements DisconnectListener {
             // an announce answers with a few hundred bytes and a scrape with a
             // few dozen, so a zero-length body is the normal case, not a finding
             if (_log.shouldDebug())
-                _log.debug("Fetch successful -> " + fetchTarget(url)
-                           + (size > 0 ? " * Size: " + size + " bytes" : ""));
+                _log.debug("Fetch successful" + (size > 0 ? " (" + size + " bytes)" : "")
+                           + " -> " + fetchTarget(url));
             return true;
         } else {
             if (_log.shouldInfo())
-                _log.info("Fetch timed out -> " + fetchTarget(url)
-                          + " * Timeout: " + DataHelper.formatDuration(timeout));
+                _log.info("Fetch timed out (" + DataHelper.formatDuration(timeout)
+                          + ") -> " + fetchTarget(url));
             return false;
         }
     }
@@ -1945,7 +1945,10 @@ public class I2PSnarkUtil implements DisconnectListener {
                 cut = i;
             }
         }
-        return cut > 0 ? display.substring(0, cut) : SnarkLogFormatter.NONE;
+        // a base32 host stays a base32 host when the local name table does not know
+        // it, and 60 characters of it is not comparable by eye
+        return cut > 0 ? SnarkLogFormatter.host(display.substring(0, cut))
+                       : SnarkLogFormatter.NONE;
     }
 
     /**
@@ -2140,7 +2143,7 @@ public class I2PSnarkUtil implements DisconnectListener {
         TorrentDest td = getTorrentDest(ih);
         if (td == null) {
             if (_log.shouldDebug()) {
-                _log.debug("No dedicated destination -> Fetching over the shared session * "
+                _log.debug("No dedicated destination -> Using the shared session * "
                            + fetchTarget(url));
             }
             return getToMemory(url, rewrite, retries, initialSize, maxSize);

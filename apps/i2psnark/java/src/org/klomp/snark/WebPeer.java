@@ -318,7 +318,10 @@ class WebPeer extends Peer implements EepGet.StatusListener {
                     if (_log.shouldDebug())
                         _log.debug("Fetching piece " + piece + " from a webseed"
                                    + " -> Offset: " + off + " bytes * Length: " + flen
-                                   + " bytes * File offset: " + foff + " bytes * URL: " + url);
+                                   + " bytes"
+                                   // the file offset and the URL are the two values that
+                                   // cannot be shortened, so they get their own line
+                                   + "\n* File offset: " + foff + " bytes * URL: " + url);
                     if (get.fetch(HEADER_TIMEOUT, TOTAL_TIMEOUT, INACTIVITY_TIMEOUT)) {
                         int resp = get.getStatusCode();
                         if (resp != 200 && resp != 206) {
@@ -329,8 +332,8 @@ class WebPeer extends Peer implements EepGet.StatusListener {
                         if (sz != flen) {
                             if (_log.shouldWarn())
                                 _log.warn("Webseed fetch returned the wrong size"
-                                          + " -> Received: " + sz + " bytes * Expected: " + flen
-                                          + " bytes * URL: " + url);
+                                          + " -> Received: " + sz + " bytes * Expected: "
+                                          + flen + " bytes" + "\n* URL: " + url);
                             return;
                         }
                     } else {
@@ -415,7 +418,8 @@ class WebPeer extends Peer implements EepGet.StatusListener {
      * @param resp the HTTP response code
      */
     private void fail(String url, int resp) {
-        if (_log.shouldWarn()) _log.warn("Fetch of " + url + " failed, rc: " + resp);
+        if (_log.shouldWarn())
+            _log.warn("Webseed fetch failed -> Status: " + resp + " * URL: " + url);
         if (resp == 301
                 || resp == 308
                 || resp == 401
@@ -427,11 +431,13 @@ class WebPeer extends Peer implements EepGet.StatusListener {
                 || resp == 451) {
             // ban forever
             _coordinator.banWebPeer(_uri.getHost(), true);
-            if (_log.shouldWarn()) _log.warn("Permanently banning the webseed " + url);
+            if (_log.shouldWarn())
+                _log.warn("Webseed banned permanently -> URL: " + url);
         } else if (resp == 429 || resp == 503) {
             // ban for a while
             _coordinator.banWebPeer(_uri.getHost(), false);
-            if (_log.shouldWarn()) _log.warn("Temporarily banning the webseed " + url);
+            if (_log.shouldWarn())
+                _log.warn("Webseed banned temporarily -> URL: " + url);
         }
     }
 

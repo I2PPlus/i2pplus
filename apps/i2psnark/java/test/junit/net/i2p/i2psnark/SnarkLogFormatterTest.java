@@ -17,15 +17,17 @@ import net.i2p.data.Hash;
 import org.klomp.snark.I2PSnarkUtil;
 import org.klomp.snark.Peer;
 import org.klomp.snark.PeerID;
+import org.klomp.snark.MetaInfo;
 import org.klomp.snark.SnarkLogFormatter;
 import org.klomp.snark.bencode.InvalidBEncodingException;
 
 /**
  * Pins the identity shapes, the list layout and the request tally of the snark log
  * formatter: the bracketed eight-character forms the console log viewer links, the
- * one line a list of at most ten identities gets with the rest counted behind a
- * "(+N more)" tail, the sentence form an empty list has to fall back to, and the
- * per-piece tally that replaces a peer's raw request list.
+ * one line a list of at most four identities gets with the rest counted behind a
+ * "(+N more)" tail, the zero-count form an empty list has to fall back to, the
+ * continuation line a second list in the same message gets, and the per-piece tally
+ * that replaces a peer's raw request list.
  *
  * @since 0.9.72+
  */
@@ -149,13 +151,13 @@ public class SnarkLogFormatterTest {
         }
     }
 
-    /** Ten identities is the cap, and the rest are counted inline behind them. */
+    /** Four identities is the cap, and the rest are counted inline behind them. */
     @Test
-    public void testAListStopsAtTenEntriesAndCountsTheRestOnTheSameLine() {
+    public void testAListStopsAtFourEntriesAndCountsTheRestOnTheSameLine() {
         String s = SnarkLogFormatter.destList(hashes(27), "Now to try", 27);
-        assertEquals(10, countEntries(s));
+        assertEquals(4, countEntries(s));
         // the tail sits behind the last identity, not on a line of its own
-        assertTrue(s, s.endsWith(" (+17 more)"));
+        assertTrue(s, s.endsWith(" (+23 more)"));
         // the label still reports the whole list, not what is printed
         assertTrue(s, s.startsWith(" * Now to try (27): "));
     }
@@ -163,8 +165,8 @@ public class SnarkLogFormatterTest {
     /** A list that fits under the cap needs no tail at all. */
     @Test
     public void testAListAtTheCapNeedsNoTail() {
-        String s = SnarkLogFormatter.destList(hashes(10), "Peers", 10);
-        assertEquals(10, countEntries(s));
+        String s = SnarkLogFormatter.destList(hashes(4), "Peers", 4);
+        assertEquals(4, countEntries(s));
         assertFalse(s, s.contains("more)"));
     }
 
@@ -175,17 +177,18 @@ public class SnarkLogFormatterTest {
     @Test
     public void testDestListCountsWhatItDoesNotShow() {
         String s = SnarkLogFormatter.destList(hashes(20), "Peers", 30);
-        assertTrue(s, s.endsWith(" (+20 more)"));
+        assertTrue(s, s.endsWith(" (+26 more)"));
     }
 
     /**
-     * Ten identities, the label and the tail are the most a list can ever be, whatever
-     * the tracker or the routing table holds.
+     * Four identities, the label and the tail are the most a list can ever be, whatever
+     * the tracker or the routing table holds - and the budget has to leave room for the
+     * caller's lead-in on the same line.
      */
     @Test
     public void testACappedListIsBoundedInWidth() {
         String s = SnarkLogFormatter.destList(hashes(400), "Not tried", 400);
-        assertTrue(s.length() + " " + s, s.length() <= 145);
+        assertTrue(s.length() + " " + s, s.length() <= 80);
     }
 
     /**
@@ -203,15 +206,72 @@ public class SnarkLogFormatterTest {
         assertFalse(after, after.startsWith("\n"));
     }
 
-    /** An empty list becomes a sentence, never a label with nothing under it. */
+    /**
+     * A second list in the same message goes on a continuation line of its own - only
+     * one list can ride the arrow, and two capped lists plus their labels and the
+     * caller's lead-in still run past the width limit on one line.
+     */
     @Test
-    public void testEmptyListIsASentenceNotAnEmptyLabel() {
-        assertEquals(" * Peers 0 destinations",
+    public void testOnOwnLinePutsTheSegmentOnAContinuationLine() {
+        List<Hash> l = hashes(2);
+        String seg = SnarkLogFormatter.destList(l, "Peers", 2);
+        String own = SnarkLogFormatter.onOwnLine(seg);
+        assertEquals("\n* Peers (2): " + SnarkLogFormatter.dest(l.get(0)) + ' '
+                     + SnarkLogFormatter.dest(l.get(1)), own);
+        assertTrue(own, own.startsWith("\n* "));
+        // the zero-count form of an empty list moves too, and keeps its own line
+        assertEquals("\n* Peers: 0", SnarkLogFormatter.onOwnLine(" * Peers: 0"));
+    }
+
+    /**
+     * A tracker written as a base32 address becomes the bracketed eight-character form
+     * the console linkifier parses; a named tracker keeps the name a reader acts on.
+     */
+    @Test
+    public void testHostShortensABase32AddressButKeepsAName() {
+        // 52 base32 characters of a Hash, the form a private tracker's URL carries
+        String b32 = Base32.encode(hash(21).getData());
+        assertEquals(52, b32.length());
+        String s = SnarkLogFormatter.host(b32 + ".b32.i2p");
+        assertEquals('[' + b32.substring(0, 8) + ']', s);
+        // the same address written without the .b32 marker
+        assertEquals(s, SnarkLogFormatter.host(b32 + ".i2p"));
+        // names stay names, however they end
+        assertEquals("sigmatracker.i2p", SnarkLogFormatter.host("sigmatracker.i2p"));
+        assertEquals("tracker2.postman.i2p", SnarkLogFormatter.host("tracker2.postman.i2p"));
+        assertEquals("example.com", SnarkLogFormatter.host("example.com"));
+        assertEquals("none", SnarkLogFormatter.host(null));
+    }
+
+    /**
+     * A torrent name is user data of no fixed length, so it gets a budget like any
+     * other value, cut with a marker that says the name went past the line.
+     */
+    @Test
+    public void testNameCutsAnOverlongTorrentNameWithAMarker() {
+        String shortName = "Autodesk 3D Studio Max 8";
+        assertEquals(shortName, SnarkLogFormatter.name(shortName));
+        String longName = "Some Really Long Scene Release Name Of A Torrent 2026 x264";
+        String s = SnarkLogFormatter.name(longName);
+        // the budget is 24 characters, pinned here so widening it is a decision
+        assertEquals(24, s.length());
+        assertTrue(s, s.endsWith("..."));
+        assertEquals(longName.substring(0, 21) + "...", s);
+        assertEquals("none", SnarkLogFormatter.name(null));
+    }
+
+    /**
+     * An empty list is a zero count, not a label with nothing under it and not a
+     * sentence - {@code "Peers 0 destinations"} was neither a key nor readable.
+     */
+    @Test
+    public void testEmptyListIsAZeroCountNotAnEmptyLabel() {
+        assertEquals(" * Peers: 0",
                      SnarkLogFormatter.destList(Collections.<Hash> emptyList(), "Peers", 0));
-        assertEquals(" * Now to try 0 nodes",
+        assertEquals(" * Now to try: 0",
                      SnarkLogFormatter.nodeList(Collections.<Hash> emptyList(), "Now to try", 0));
         // a null list is the same case, and must not emit a label with nothing under it
-        assertEquals(" * Peers 0 destinations", SnarkLogFormatter.destList(null, "Peers", 0));
+        assertEquals(" * Peers: 0", SnarkLogFormatter.destList(null, "Peers", 0));
     }
 
     /** Nodes are named by the router form, destinations by the lease-set form. */
@@ -254,6 +314,20 @@ public class SnarkLogFormatterTest {
         assertFalse(s, s.contains("["));
     }
 
+    /**
+     * A torrent named from its metadata is cut to the name budget, and a torrent
+     * whose metadata has not arrived yet is named in prose - the wantPiece() path
+     * runs before the metadata arrives for a magnet, so a null there is normal.
+     */
+    @Test
+    public void torrentFromMetadataIsCappedOrNamedNone() {
+        assertEquals("none", SnarkLogFormatter.torrent((MetaInfo) null));
+        // the same 24-character budget name() applies, so every line naming the
+        // same torrent is the same width
+        assertEquals(24, SnarkLogFormatter
+                       .name("Some Really Long Scene Release Name Of A Torrent 2026").length());
+    }
+
     /** A missing peer is named in prose, not printed as null. */
     @Test
     public void testNullPeerIsNamedNone() {
@@ -261,67 +335,62 @@ public class SnarkLogFormatterTest {
         assertEquals("none", SnarkLogFormatter.peer((Peer) null));
     }
 
-    /** The tally leads with the total, then names the pieces the blocks came from. */
+    /** The tally names the pieces the blocks came from, each with its block count. */
     @Test
-    public void testRequestTallyTotalsThenNamesEachPiece() {
+    public void testRequestTallyNamesEachPieceAndItsBlocks() {
         Map<Integer, Integer> m = new LinkedHashMap<>();
         m.put(Integer.valueOf(27), Integer.valueOf(16));
         m.put(Integer.valueOf(40), Integer.valueOf(9));
-        assertEquals(" 25 blocks across 2 pieces * Piece 27: 16 blocks * Piece 40: 9 blocks",
+        assertEquals(" Piece 27: 16 blocks * Piece 40: 9 blocks",
                      SnarkLogFormatter.requestTally(m));
-    }
-
-    /** The total is the sum of the pieces named, and both sides of it agree. */
-    @Test
-    public void testRequestTallyAgreesOnItsTotals() {
-        Map<Integer, Integer> m = new LinkedHashMap<>();
-        m.put(Integer.valueOf(3), Integer.valueOf(1));
-        m.put(Integer.valueOf(9), Integer.valueOf(1));
-        String s = SnarkLogFormatter.requestTally(m);
-        assertTrue(s, s.startsWith(" 2 blocks across 2 pieces"));
-        assertTrue(s, s.contains("Piece 3: 1 block"));
-        assertTrue(s, s.contains("Piece 9: 1 block"));
     }
 
     /** One block of one piece reads as one block of one piece. */
     @Test
-    public void testRequestTallyIsSingularForOneOfEach() {
+    public void testRequestTallyIsSingularForOneBlock() {
         Map<Integer, Integer> m = new LinkedHashMap<>();
         m.put(Integer.valueOf(27), Integer.valueOf(1));
-        assertEquals(" 1 block across 1 piece * Piece 27: 1 block",
-                     SnarkLogFormatter.requestTally(m));
+        assertEquals(" Piece 27: 1 block", SnarkLogFormatter.requestTally(m));
     }
 
-    /** No requests is a total with no pieces named, not an empty label. */
+    /** No requests says so in prose, it is not an empty tail after an arrow. */
     @Test
     public void testRequestTallyNamesNothingForNoRequests() {
-        assertEquals(" 0 blocks across 0 pieces",
+        assertEquals(" no blocks",
                      SnarkLogFormatter.requestTally(new LinkedHashMap<Integer, Integer>()));
     }
 
-    /** Eight pieces is the cap for naming, and the total still counts every one. */
+    /**
+     * Two pieces is the naming cap, and the tail counts the rest so the reader can
+     * still add up how many pieces are in flight.
+     */
     @Test
-    public void testRequestTallyStopsAtEightPiecesAndCountsTheRest() {
+    public void testRequestTallyStopsAtTwoPiecesAndCountsTheRest() {
         Map<Integer, Integer> m = new LinkedHashMap<>();
         for (int i = 0; i < 12; i++) {
             m.put(Integer.valueOf(i), Integer.valueOf(2));
         }
         String s = SnarkLogFormatter.requestTally(m);
-        assertTrue(s, s.startsWith(" 24 blocks across 12 pieces"));
-        assertEquals(8, countPieces(s));
-        assertTrue(s, s.endsWith("(+4 more)"));
+        assertEquals(2, countPieces(s));
+        assertTrue(s, s.endsWith("(+10 more)"));
     }
 
-    /** Four-digit piece numbers and block counts are the widest a tally gets. */
+    /**
+     * Four-digit piece numbers and three-digit block counts are the widest a tally
+     * gets, and the tally shares its line with the caller's lead-in - the whole
+     * emitted line, lead-in included, has to stay inside the logging guide's 100
+     * columns, which is why the cap is two pieces and there is no totals lead.
+     */
     @Test
     public void testNoRequestTallyLineRunsPastTheWidthLimit() {
         Map<Integer, Integer> m = new LinkedHashMap<>();
         for (int i = 0; i < 12; i++) {
             m.put(Integer.valueOf(1000 + i), Integer.valueOf(1000));
         }
-        for (String line : SnarkLogFormatter.requestTally(m).split("\n")) {
-            assertTrue(line.length() + " " + line, line.length() <= 90);
-        }
+        // the real peer form is the bracketed eight-character hash, 10 characters
+        String line = "Requesting from [abcdefghi] ->" + SnarkLogFormatter.requestTally(m);
+        assertTrue(line.length() + " " + line, line.length() <= 100);
+        assertFalse(line, line.contains("\n"));
     }
 
     /** Pieces named by a tally line. */

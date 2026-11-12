@@ -630,11 +630,6 @@ class PeerState implements DataLoader {
      * @param req the request satisfied by the block that just arrived
      */
     void pieceMessage(Request req) {
-
-        if (_log.shouldDebug())
-            _log.debug("Received end of chunk (" + req.getPiece() + "," + req.off + ","
-                       + req.len + ") from " + SnarkLogFormatter.peer(peer));
-
         // Last chunk needed for this piece?
         PartialPiece pp = req.getPartialPiece();
         boolean complete = pp.isComplete();
@@ -642,10 +637,8 @@ class PeerState implements DataLoader {
             // Hands the hash verify and the disk write to the torrent's writer
             // thread, so this connection keeps reading; it only blocks here when
             // that queue is full, which is the intended backpressure.
+            // PeerCoordinator logs the piece when it verifies it.
             listener.gotPiece(peer, pp);
-            if (_log.shouldDebug())
-                _log.debug("Completed piece [" + req.getPiece() + "] from "
-                           + SnarkLogFormatter.peer(peer));
         }
 
         synchronized (this) {
@@ -716,11 +709,6 @@ class PeerState implements DataLoader {
      */
     Request getOutstandingRequest(int piece, int begin, int length) {
         // TODO this is how we tell we got all the chunks in pieceMessage() above.
-        if (_log.shouldDebug()) {
-            _log.debug("Received start of chunk (" + piece + "," + begin + "," + length
-                       + ") from " + SnarkLogFormatter.peer(peer));
-        }
-
         // Lookup the correct piece chunk request from the list.
         Request req;
         synchronized (this) {
@@ -729,8 +717,9 @@ class PeerState implements DataLoader {
             // Unrequested piece number?
             if (r == -1) {
                 if (_log.shouldDebug()) {
-                    _log.debug("Unrequested piece: " + piece + ", " + begin + ", " + length
-                               + " received from " + SnarkLogFormatter.peer(peer));
+                    _log.debug("Received a block we did not ask for"
+                               + " -> Peer: " + SnarkLogFormatter.peer(peer)
+                               + " * Piece: " + piece + " * Offset: " + begin + " bytes");
                 }
                 return null;
             }
@@ -747,9 +736,12 @@ class PeerState implements DataLoader {
             // Something wrong?
             if (req.getPiece() != piece || req.off != begin || req.len != length) {
                 if (_log.shouldDebug()) {
-                    _log.debug("Unrequested or unneeded chunk (" + piece + ", " + begin + ", "
-                               + length + ") from " + SnarkLogFormatter.peer(peer) + " requests: "
-                               + outstandingRequests);
+                    // the pipeline it did not match is in the per-peer request
+                    // lines - dumping every outstanding request as a bare comma
+                    // tuple ran the line past 300 characters
+                    _log.debug("Received a block matching no request"
+                               + " -> Peer: " + SnarkLogFormatter.peer(peer)
+                               + " * Piece: " + piece + " * Offset: " + begin + " bytes");
                 }
                 return null;
             }
@@ -763,11 +755,9 @@ class PeerState implements DataLoader {
 
             // Report skipped requests and rerequest them for non-fast peers.
             if (r != 0) {
-                if (_log.shouldDebug()) {
-                    _log.debug(r + " requests skipped or out-of-order, got " + req + " from ["
-                                   + SnarkLogFormatter.peer(peer)
-                            + "] supports fast? " + peer.supportsFast());
-                }
+                // no summary line - the loop below logs one line per skipped
+                // request, and the summary printed the same event a second time
+                // with the request as a bare comma tuple
                 for (int i = 0; i < r; i++) {
                     Request dropReq;
                     if (!peer.supportsFast()) {
@@ -785,8 +775,14 @@ class PeerState implements DataLoader {
                         dropReq = outstandingRequests.get(i);
                     }
                     if (_log.shouldDebug()) {
-                        _log.debug("Skipped or out-of-order " + dropReq + " with "
-                                   + SnarkLogFormatter.peer(peer) + " choked? " + choked);
+                        // the outcome leads, because that is what differs between
+                        // the two branches above
+                        _log.debug((peer.supportsFast()
+                                    ? "Leaving a late block in flight"
+                                    : "Re-requesting a block sent out of order")
+                                   + " -> Peer: " + SnarkLogFormatter.peer(peer)
+                                   + " * Piece: " + dropReq.getPiece()
+                                   + " * Offset: " + dropReq.off + " bytes");
                     }
                 }
             }
@@ -817,9 +813,13 @@ class PeerState implements DataLoader {
                 && pendingRequest.off < lowest) rv = pendingRequest;
 
         if (_log.shouldDebug())
-            _log.debug(SnarkLogFormatter.peer(peer) + " lowest for piece [" + piece + "] is "
-                       + rv + " out of "
-                       + pendingRequest + " and " + outstandingRequests);
+            // the request that won, not the whole queue it was picked out of - the
+            // list printed every outstanding request as a bare comma tuple and ran
+            // the line to 159 characters
+            _log.debug("Lowest request for piece " + piece + " -> Peer: "
+                       + SnarkLogFormatter.peer(peer)
+                       + (rv == null ? " * None outstanding"
+                          : " * Offset: " + rv.off + " bytes * Size: " + rv.len + " bytes"));
         return rv;
     }
 
@@ -1463,8 +1463,9 @@ class PeerState implements DataLoader {
      * @param piece the zero-based index of the piece we now hold in full
      */
     void havePiece(int piece) {
-        if (_log.shouldDebug()) _log.debug("Notifying " + SnarkLogFormatter.peer(peer)
-                                           + " havePiece(" + piece + ")");
+        if (_log.shouldDebug())
+            _log.debug("We have piece " + piece + " -> Telling "
+                       + SnarkLogFormatter.peer(peer) + " and cancelling its requests");
 
         // Tell the other side that we are no longer interested in any of
         // the outstanding requests for this piece.
@@ -1570,9 +1571,15 @@ class PeerState implements DataLoader {
                 }
             }
             if (_log.shouldWarn())
-                _log.warn(peer + " throttle request, interesting? " + interesting + " choked? "
-                          + choked + " reqq: " + outstandingRequests.size() + " maxp: "
-                          + currentMaxPipeline);
+                // our own bandwidth limit stopped us asking, not the peer - the old
+                // line named the peer, asked three yes/no questions and printed two
+                // abbreviated counters
+                _log.warn("Holding back requests -> Peer: " + SnarkLogFormatter.peer(peer)
+                          + " * Reason: our bandwidth limit"
+                          + "\n* Requests in flight: " + outstandingRequests.size()
+                          + " * Pipeline limit: " + currentMaxPipeline
+                          + " * We want: " + interesting
+                          + " * Peer chokes: " + choked);
             return;
         }
 
@@ -1628,9 +1635,9 @@ class PeerState implements DataLoader {
                         // If choked without allowed fast pieces, delay pulling
                         // a request from the PeerCoordinator until unchoked.
                         if (_log.shouldDebug()) {
-                            _log.debug(SnarkLogFormatter.peer(peer)
-                                       + " -> Choked with no allowed fast pieces,"
-                                       + " delaying the request until it unchokes");
+                            _log.debug("Choked with no allowed fast pieces"
+                                       + " -> Delaying the request until it unchokes"
+                                       + " * Peer: " + SnarkLogFormatter.peer(peer));
                         }
                         return;
                     }

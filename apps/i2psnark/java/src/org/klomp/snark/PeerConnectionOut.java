@@ -320,8 +320,9 @@ class PeerConnectionOut implements Runnable {
                                                         nm.begin,
                                                         nm.length);
                                         if (_log.shouldDebug()) {
-                                            _log.debug("Sending " + SnarkLogFormatter.peer(peer)
-                                                       + ": " + r);
+                                            _log.debug("Sending " + r.typeName() + " to "
+                                                       + SnarkLogFormatter.peer(peer)
+                                                       + r.logArgs());
                                         }
                                         // defer the write: sendMessage blocks, and we
                                         // are holding the sendQueue monitor
@@ -391,8 +392,13 @@ class PeerConnectionOut implements Runnable {
                 }
 
                 if (m != null) {
-                    if (_log.shouldDebug()) {
-                        _log.debug("Sending " + SnarkLogFormatter.peer(peer) + ": " + m);
+                    if (_log.shouldDebug() && m.type != Message.HAVE) {
+                        // HAVE is skipped - havePiece() logs it where it is made,
+                        // and says what it cancels as well, so this line duplicated
+                        // that one for every peer on every finished piece (26,644
+                        // pairs in a two-hour window)
+                        _log.debug("Sending " + m.typeName() + " to "
+                                   + SnarkLogFormatter.peer(peer) + m.logArgs());
                     }
 
                     lastSent = System.currentTimeMillis();

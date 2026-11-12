@@ -539,9 +539,12 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
             else {
                 Destination d = serversocket.getManager().getSession().getMyDestination();
                 if (_log.shouldInfo())
-                    _log.info("Torrent " + SnarkLogFormatter.torrent(this)
-                              + " started -> Listening on: " + SnarkLogFormatter.dest(d)
-                              + " * Peers and tracker starting");
+                    // the name is capped - a resolved magnet's name is the torrent's
+                    // own title, of no fixed length, and the 40-character hex form of
+                    // an unresolved one ran the line past 150
+                    _log.info("Starting the torrent "
+                              + SnarkLogFormatter.name(SnarkLogFormatter.torrent(this))
+                              + " -> Listening on: " + SnarkLogFormatter.dest(d));
             }
             coordinator =
                     new PeerCoordinator(

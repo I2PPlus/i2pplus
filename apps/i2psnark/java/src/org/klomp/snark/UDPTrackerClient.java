@@ -103,11 +103,12 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     private static final int ACTION_ERROR = 3;
 
     /**
-     * The words for a BEP 15 action number, so a log line never prints a bare
-     * code. The number stays beside the words for grepping.
+     * The words for a BEP 15 action number, so a log line never prints a bare code.
+     * The word is the greppable term - {@code "Sent announce"} finds every announce
+     * - so the number is not repeated beside it.
      *
      * @param action one of the {@code ACTION_*} values above
-     * @return the name to show, e.g. {@code "announce (Action: 1)"}
+     * @return the name to show, e.g. {@code "announce"}
      */
     static String actionName(int action) {
         String name;
@@ -118,15 +119,30 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
             case ACTION_ERROR: name = "error"; break;
             default: name = "unknown"; break;
         }
-        return name + " (Action: " + action + ')';
+        return name;
     }
 
     /**
-     * The words for a BEP 15 announce event number, so a log line never prints
-     * a bare code. The number stays beside the words for grepping.
+     * A tracker as a log value: its local name when the name table knows it, the
+     * bracketed eight-character form when the host is a raw base32 address. The fetch
+     * path already names trackers this way, so the same tracker reads the same in
+     * every snark log line.
+     *
+     * @param host the tracker's host as its URL carries it, not null
+     * @return the name to log
+     * @since 0.9.72+
+     */
+    private static String trackerName(String host) {
+        return SnarkLogFormatter.host(I2PSnarkUtil.trackerB32ToHostname(host));
+    }
+
+    /**
+     * The words for a BEP 15 announce event number, so a log line never prints a
+     * bare code. As for {@link #actionName(int)}, the word is what a reader greps.
      *
      * @param event one of the {@code EVENT_*} values above
-     * @return the name to show, e.g. {@code "started (Event: 2)"}
+     * @return the name to show, e.g. {@code "started"}, or {@code none} for an
+     *         announce that carries no event
      */
     static String eventName(int event) {
         String name;
@@ -137,7 +153,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
             case EVENT_PAUSED: name = "paused"; break;
             default: name = "none"; break;
         }
-        return name + " (Event: " + event + ')';
+        return name;
     }
 
 
@@ -504,9 +520,9 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
             ReplyWaiter rv = new ReplyWaiter(tid, tr, ACTION_CONNECT, payload, toWait);
             _sentQueries.put(Integer.valueOf(tid), rv);
             if (_log.shouldInfo()) {
-                _log.info("Sent " + actionName(ACTION_CONNECT) + " to " + tr.host
-                          + " -> Awaiting the reply * Timeout: "
-                          + DataHelper.formatDuration(toWait));
+                _log.info("Sent " + actionName(ACTION_CONNECT) + " -> Awaiting the reply"
+                          + " * Tracker: " + trackerName(tr.host)
+                          + " * Timeout: " + DataHelper.formatDuration(toWait));
             }
             return rv;
         }
@@ -565,15 +581,16 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
                 ReplyWaiter rv = new ReplyWaiter(tid, tr, ACTION_ANNOUNCE, payload, toWait);
                 _sentQueries.put(Integer.valueOf(tid), rv);
                 if (_log.shouldInfo()) {
-                    _log.info("Sent " + actionName(ACTION_ANNOUNCE) + " to " + tr.host
-                              + " -> Awaiting the reply * Timeout: "
-                              + DataHelper.formatDuration(toWait));
+                    _log.info("Sent " + actionName(ACTION_ANNOUNCE) + " -> Awaiting the reply"
+                              + " * Tracker: " + trackerName(tr.host)
+                              + " * Timeout: " + DataHelper.formatDuration(toWait));
                 }
                 return rv;
             }
             if (_log.shouldInfo()) {
-                _log.info("Sent " + actionName(ACTION_ANNOUNCE) + " to " + tr.host
-                          + " -> Not waiting for the reply * Event: " + eventName(event));
+                _log.info("Sent " + actionName(ACTION_ANNOUNCE) + " -> Not waiting for the reply"
+                          + " * Tracker: " + trackerName(tr.host)
+                          + " * Event: " + eventName(event));
             }
         }
         return null;
@@ -638,15 +655,15 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
                 ReplyWaiter rv = new ReplyWaiter(tid, tr, ACTION_SCRAPE, payload, toWait);
                 _sentQueries.put(Integer.valueOf(tid), rv);
                 if (_log.shouldInfo()) {
-                    _log.info("Sent " + actionName(ACTION_SCRAPE) + " to " + tr.host
-                              + " -> Awaiting the reply * Timeout: "
-                              + DataHelper.formatDuration(toWait));
+                    _log.info("Sent " + actionName(ACTION_SCRAPE) + " -> Awaiting the reply"
+                              + " * Tracker: " + trackerName(tr.host)
+                              + " * Timeout: " + DataHelper.formatDuration(toWait));
                 }
                 return rv;
             }
             if (_log.shouldInfo()) {
-                _log.info("Sent " + actionName(ACTION_SCRAPE) + " to " + tr.host
-                          + " -> Not waiting for the reply");
+                _log.info("Sent " + actionName(ACTION_SCRAPE) + " -> Not waiting for the reply"
+                          + " * Tracker: " + trackerName(tr.host));
             }
         }
         return null;
@@ -705,9 +722,9 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
 
                     case INIT:
                         if (_log.shouldInfo()) {
-                            _log.info("Query timer fired -> No reply yet * Tracker: "
-                                      + w.getSentTo().host + " * Action: "
-                                      + actionName(w.getExpectedAction()));
+                            _log.info("Query timer fired -> No reply yet"
+                                      + " * Tracker: " + trackerName(w.getSentTo().host)
+                                      + " * Action: " + actionName(w.getExpectedAction()));
                         }
                         long toWait = untilTime - _context.clock().now();
                         if (toWait <= 1000) {
@@ -739,8 +756,9 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         Tracker tr = w.getSentTo();
         int port = tr.getPort();
         if (_log.shouldInfo()) {
-            _log.info("Resending " + actionName(w.getExpectedAction()) + " to " + tr.host
-                      + " -> Awaiting the reply * Timeout: "
+            _log.info("Resending " + actionName(w.getExpectedAction())
+                      + " -> Awaiting the reply * Tracker: "
+                      + trackerName(tr.host) + " * Timeout: "
                       + DataHelper.formatDuration(toWait));
         }
         boolean rv = sendMessage(tr.getDest(true), port, w.getPayload(), repliable);

@@ -48,9 +48,9 @@ import net.i2p.data.SimpleDataStructure;
  * fingerprinting and column slicing already depend on.
  * <p>
  * A label that names many identities puts them in a list of its own -
- * {@link #destList} and {@link #nodeList} - one line, at most ten of them named and
- * the rest counted, so no list bounded only by the network can emit one line a
- * reader has to scroll sideways through.
+ * {@link #destList} and {@link #nodeList} - at most {@link #MAX_ENTRIES} of them
+ * named and the rest counted, so no list bounded only by the network can emit one
+ * line a reader has to scroll sideways through.
  *
  * @since 0.9.72+
  */
@@ -198,36 +198,55 @@ public class SnarkLogFormatter {
         return name;
     }
 
+    /**
+     * The torrent a log line names, from the metadata the torrent carries, cut to
+     * the name budget. A torrent's own name is user data of no fixed length - a
+     * scene release name runs past 60 characters and pushes every line naming it
+     * over the width limit - so the name is capped the way every other value is.
+     *
+     * @param metainfo the torrent's metadata, null before the metadata arrives
+     * @return the capped name, or {@code none} when there is no metadata to name it
+     * @since 0.9.72+
+     */
+    public static String torrent(MetaInfo metainfo) {
+        return metainfo == null ? NONE : name(metainfo.getName());
+    }
+
     /** The first half of a magnet lookup's synthetic torrent name. */
     private static final String LOOKUP_PREFIX = "Lookup [";
 
     /**
-     * Identities a list shows before it stops and counts the rest. A DHT announce
-     * walks its closest-node set every pass and prints the same nodes each time, so
-     * a list bounded only by the routing table costs an unbounded line per pass for
-     * identities the reader cannot act on. Ten is enough to see which part of the
-     * key space the pass is working through, and the label and the
-     * {@code "(+N more)"} tail still carry the true total.
+     * Identities a list shows before it stops and counts the rest. The cap is set
+     * by the line budget, not by taste: a caller's lead-in and label take about 40
+     * characters, each identity takes 11 ({@code " [xxxxxxxx]"}), and the
+     * {@code " (+N more)"} tail takes about 12, so four identities is what fits
+     * inside the logging guide's 100 columns. A DHT announce walks its closest-node
+     * set every pass and prints the same nodes each time, so a list bounded only by
+     * the routing table would cost an over-long line per pass for identities the
+     * reader cannot act on; four names still show which part of the key space the
+     * pass is working through, and the label and the tail still carry the true
+     * total.
      */
-    static final int MAX_ENTRIES = 10;
+    static final int MAX_ENTRIES = 4;
 
     /**
      * A labelled list of I2P destinations on one line,
-     * {@code "Peers (14): [a] [b] … (+4 more)"}, with at most
+     * {@code " * Peers (14): [a] [b] … (+4 more)"}, or {@code " * Peers: 0"} when
+     * the list is empty, with at most
      * {@link #MAX_ENTRIES} named and the rest counted, so a list bounded only by
      * the tracker or the routing table cannot emit a line of unbounded length.
      *
      * @param dests the destinations to name, in the order to print them; null or
-     *              empty is shown as the sentence form
+     *              empty is shown as a zero count
      * @param label the label to show, e.g. "Peers"
      * @param count the number the label reports, shown in parentheses and used
      *              for the {@code "(+N more)"} tail
-     * @return the labelled list as one segment, or the sentence form when there is
+     * @return the labelled list as one segment, or a zero count when there is
      *         nothing to name
      * @since 0.9.72+
      */
     public static String destList(Iterable<? extends Hash> dests, String label, int count) {
-        return entries(dests, label, count, "destinations", true);
+        return entries(dests, label, count, true);
     }
 
     /**
@@ -236,17 +255,17 @@ public class SnarkLogFormatter {
      * at {@link #MAX_ENTRIES} entries.
      *
      * @param nodes the nodes to name, in the order to print them; null or empty
-     *              is shown as the sentence form
+     *              is shown as a zero count
      * @param label the label to show, e.g. "Now to try"
      * @param count the number the label reports, shown in parentheses and used
      *              for the {@code "(+N more)"} tail
-     * @return the labelled list as one segment, or the sentence form when there is
+     * @return the labelled list as one segment, or a zero count when there is
      *         nothing to name
      * @since 0.9.72+
      */
     public static String nodeList(Iterable<? extends SimpleDataStructure> nodes, String label,
                                    int count) {
-        return entries(nodes, label, count, "nodes", false);
+        return entries(nodes, label, count, false);
     }
 
     /**
@@ -259,18 +278,16 @@ public class SnarkLogFormatter {
      * pairs.
      *
      * @param items the identities to name, in the order to print them; null or
-     *              empty is shown as the sentence form
+     *              empty is shown as a zero count
      * @param label the label to show
      * @param count the number the label reports
-     * @param noun what is being counted, used for the sentence form so an empty
-     *             list still says something
      * @param shortBase32 true to name each entry as a destination, false to name
      *                    it as a node id
-     * @return the labelled list as one segment, or the sentence form when there is
+     * @return the labelled list as one segment, or a zero count when there is
      *         nothing to name
      */
     private static String entries(Iterable<? extends SimpleDataStructure> items, String label,
-                                  int count, String noun, boolean shortBase32) {
+                                  int count, boolean shortBase32) {
         List<String> ids = new ArrayList<>(MAX_ENTRIES);
         int total = 0;
         if (items != null) {
@@ -282,8 +299,8 @@ public class SnarkLogFormatter {
                 }
             }
         }
-        // a label with a colon and nothing after it says nothing
-        if (ids.isEmpty()) {return " * " + label + ' ' + count + ' ' + noun;}
+        // an empty list is a count, not a label with nothing after it
+        if (ids.isEmpty()) {return " * " + label + ": 0";}
         StringBuilder sb = new StringBuilder(24 + 11 * ids.size());
         sb.append(" * ").append(label).append(" (").append(count).append("):");
         for (String id : ids) {
@@ -320,28 +337,123 @@ public class SnarkLogFormatter {
     }
 
     /**
+     * A list moved onto a continuation line of its own, for a message that reports
+     * more than one of them: only one list can ride the arrow, and two lists side by
+     * side on one line run past the logging guide's width even when each is capped,
+     * because the lead-in and both labels are charged to the same line. The first
+     * list keeps the arrow ({@link #afterArrow}), the rest get this.
+     *
+     * @param segment the segment as {@link #destList} or {@link #nodeList} returns
+     *                it, not null
+     * @return the segment on a {@code "\n* "} continuation line
+     * @since 0.9.72+
+     */
+    public static String onOwnLine(String segment) {
+        if (segment.startsWith(" * ")) {
+            return "\n* " + segment.substring(3);
+        }
+        return segment;
+    }
+
+    /** The suffix every I2P host name carries. */
+    private static final String I2P_TLD = ".i2p";
+
+    /** The suffix marking a host written out as a base32 address. */
+    private static final String B32_SUFFIX = ".b32";
+
+    /**
+     * Characters of a free-text name a log message shows. Torrent names are user
+     * data of no fixed length - a scene release name runs past 80 characters - and a
+     * name is the one value on a piece or torrent line that cannot be shortened by
+     * rewording, so it gets a budget like any other value.
+     */
+    static final int NAME_CHARS = 24;
+
+    /**
+     * A torrent name shortened to {@link #NAME_CHARS} characters for a log message.
+     * The three dots mark where the name was cut, which is what makes them different
+     * from the ellipsis the logging guide bans: that one stands in for a fact the
+     * message never states, these state that the fact is longer than the line can
+     * carry. A reader who needs the whole name has the console torrent page, and the
+     * info hash on the neighbouring lines identifies the torrent exactly.
+     *
+     * @param name the name to show, null when it is not known
+     * @return the name, cut to {@link #NAME_CHARS} characters with a trailing
+     *         {@code "..."} when it is longer, or {@code none} when there is no name
+     * @since 0.9.72+
+     */
+    public static String name(String name) {
+        if (name == null) {return NONE;}
+        if (name.length() <= NAME_CHARS) {return name;}
+        return name.substring(0, NAME_CHARS - 3) + "...";
+    }
+
+    /** Characters of the shortest base32 address, used to tell one from a nickname. */
+    private static final int MIN_B32_CHARS = 52;
+
+    /**
+     * A tracker host as a log value. A private tracker's host is normally its full
+     * base32 address, some 60 characters no reader compares by eye, and it pushes
+     * every line naming it past the logging guide's width; that form becomes the same
+     * eight-character bracketed identity the rest of the snark logs use, so the
+     * console log viewer links it. A named tracker keeps its name, which is shorter
+     * than the hash and is what a reader acts on.
+     *
+     * @param host the tracker's host name, null when it is not known
+     * @return {@code [xxxxxxxx]} for a base32 address, the name unchanged otherwise,
+     *         or {@code none} when there is no host to name
+     * @since 0.9.72+
+     */
+    public static String host(String host) {
+        if (host == null) {return NONE;}
+        if (!host.endsWith(I2P_TLD)) {return host;}
+        String head = host.substring(0, host.length() - I2P_TLD.length());
+        if (head.endsWith(B32_SUFFIX)) {
+            head = head.substring(0, head.length() - B32_SUFFIX.length());
+        }
+        return isBase32(head) ? '[' + head.substring(0, SHORT_CHARS) + ']' : host;
+    }
+
+    /**
+     * Whether a string is I2P base32 - lower case letters and the digits 2 through 7 -
+     * and long enough to be an address rather than a nickname that happens to end in
+     * {@code .i2p}.
+     *
+     * @param s the text to test, not null
+     * @return true if s is at least {@link #MIN_B32_CHARS} base32 characters
+     */
+    private static boolean isBase32(String s) {
+        if (s.length() < MIN_B32_CHARS) {return false;}
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (!((c >= 'a' && c <= 'z') || (c >= '2' && c <= '7'))) {return false;}
+        }
+        return true;
+    }
+
+    /**
      * Pieces a request tally names before it stops and counts the rest. A peer's
-     * request pipeline is normally a run of blocks of two or three pieces, so eight
-     * names is already more than the state being reported usually holds, and the
-     * {@code "(+N more)"} tail keeps the true total.
+     * request pipeline is normally a run of blocks of two or three pieces, so the
+     * pipeline fits without truncation in the common case, and the {@code "(+N
+     * more)"} tail keeps the total when it does not. Two is the cap because the
+     * tally shares its line with the caller's lead-in - three named pieces plus a
+     * tail, at the widest piece and block counts, runs past 100 columns.
      */
-    private static final int MAX_PIECES = 8;
+    private static final int MAX_PIECES = 2;
 
     /**
-     * Characters one line of a tally may use before it wraps onto a continuation
-     * line, inside the logging guide's 100-column limit and leaving room for the
-     * caller's lead-in.
-     */
-    private static final int LINE_LIMIT = 90;
-
-    /**
-     * What one peer is being asked for right now, as a total and then a per-piece
-     * tally: {@code " 25 blocks across 3 pieces * Piece 27: 16 blocks * Piece 40: 9
-     * blocks"}. The request list it replaces named every block offset, which ran to
-     * 596 characters for a single peer and never named a piece a reader could act
-     * on. Pieces come out in the order the map does, at most {@link #MAX_PIECES} of
-     * them, and the tally wraps onto {@code "\n* "} continuation lines once a line
-     * would pass {@link #LINE_LIMIT}.
+     * What one peer is being asked for right now, as one line of per-piece counts:
+     * {@code " Piece 27: 16 blocks * Piece 40: 9 blocks"}. The request list it
+     * replaces named every block offset, which ran to 596 characters for a single
+     * peer and never named a piece a reader could act on. Pieces come out in the
+     * order the map does, at most {@link #MAX_PIECES} of them, and the rest are
+     * counted in a {@code "(+N more)"} tail.
+     *
+     * <p>There is no totals lead, and the tally never wraps, whatever the map
+     * holds: the lead repeated what the segments add up to, and a lead plus three
+     * named pieces at the widest piece and block counts ran past 100 columns once
+     * the caller's lead-in was counted - which is what the wrapping form did, with
+     * 1,953 of 3,512 tally lines in one day's log running past the limit.
      *
      * @param blocksByPiece blocks in flight per piece number, in the order to show
      *                      them, not null; an empty map reports no blocks
@@ -350,33 +462,74 @@ public class SnarkLogFormatter {
      * @since 0.9.72+
      */
     public static String requestTally(Map<Integer, Integer> blocksByPiece) {
-        int pieces = blocksByPiece.size();
-        int blocks = 0;
-        for (Integer n : blocksByPiece.values()) {
-            blocks += n.intValue();
-        }
-        StringBuilder sb = new StringBuilder(24 + 24 * Math.min(pieces, MAX_PIECES));
-        sb.append(' ').append(blocks).append(' ').append(plural(blocks, "block"))
-          .append(" across ").append(pieces).append(' ').append(plural(pieces, "piece"));
-        int line = sb.length();
+        int pieces = Math.min(blocksByPiece.size(), MAX_PIECES);
+        StringBuilder sb = new StringBuilder(24 + 24 * pieces);
         int shown = 0;
         for (Map.Entry<Integer, Integer> e : blocksByPiece.entrySet()) {
-            if (shown++ == MAX_PIECES) {
-                sb.append("\n* (+").append(pieces - MAX_PIECES).append(" more)");
+            if (shown == MAX_PIECES) {
+                sb.append(" (+").append(blocksByPiece.size() - MAX_PIECES).append(" more)");
                 break;
             }
             int n = e.getValue().intValue();
-            int key = e.getKey().intValue();
-            String seg = "Piece " + key + ": " + n + ' ' + plural(n, "block");
-            if (line + 3 + seg.length() > LINE_LIMIT) {
-                sb.append("\n* ");
-                line = 2;
-            } else {
-                sb.append(" * ");
-                line += 3;
+            sb.append(shown++ == 0 ? " Piece " : " * Piece ").append(e.getKey().intValue())
+              .append(": ").append(n).append(' ').append(plural(n, "block"));
+        }
+        return sb.length() == 0 ? " no blocks" : sb.toString();
+    }
+
+    /**
+     * A partial piece as one value: which piece it is and how much of it is in.
+     * The form the object prints, {@code "Partial(1220,28672,65536,262144)"}, is a
+     * comma tuple that names none of its four numbers, so a line about a stalled
+     * piece could not be read.
+     *
+     * @param pp the piece being fetched, or null
+     * @return {@code "Piece 1220 (65536 of 262144 bytes in)"}, or {@code "none"}
+     * @since 0.9.72+
+     */
+    public static String partial(PartialPiece pp) {
+        if (pp == null) {return NONE;}
+        return "Piece " + pp.getPiece() + " (" + pp.getDownloaded() + " of " + pp.getLength()
+               + " bytes in)";
+    }
+
+    /**
+     * A list of partial pieces as their piece numbers, the only part of a partial
+     * a reader acts on: {@code " * Our partials (3): 305 50 1111 (+1 more)"}. At
+     * most {@link #MAX_ENTRIES} numbers, the rest counted, because the list a
+     * downloading torrent holds is bounded by nothing but the piece count and the
+     * {@code List.toString()} form printed every partial's full comma tuple.
+     *
+     * @param partials the partial pieces to name, in the order to print them, not
+     *                 null; an empty list reports no partials
+     * @param label the label to show, e.g. {@code "Our partials"}
+     * @return the labelled list as one segment, or a zero count when there is
+     *         nothing to name
+     * @since 0.9.72+
+     */
+    public static String partialList(Iterable<? extends PartialPiece> partials,
+                                     String label) {
+        List<String> nums = new ArrayList<>(MAX_ENTRIES);
+        int total = 0;
+        if (partials != null) {
+            for (PartialPiece pp : partials) {
+                if (pp == null) {continue;}
+                total++;
+                if (nums.size() < MAX_ENTRIES) {
+                    nums.add(Integer.toString(pp.getPiece()));
+                }
             }
-            sb.append(seg);
-            line += seg.length();
+        }
+        if (total == 0) {
+            return " * " + label + ": 0";
+        }
+        StringBuilder sb = new StringBuilder(12 + 8 * nums.size());
+        sb.append(" * ").append(label).append(" (").append(total).append("):");
+        for (String n : nums) {
+            sb.append(' ').append(n);
+        }
+        if (total > nums.size()) {
+            sb.append(" (+").append(total - nums.size()).append(" more)");
         }
         return sb.toString();
     }

@@ -103,15 +103,15 @@ class ConnectionAcceptor implements Runnable {
     /** May be called even when already running. May be called to start up again after {@link #halt()}. */
     public synchronized void startAccepting() {
         stop = false;
-        if (_log.shouldDebug()) {
-            _log.debug("[Snark] ConnectionAcceptor: Start accepting new thread? "
-                       + (thread == null));
-        }
         if (thread == null) {
             thread = new I2PAppThread(this, "SnarkAccp");
             thread.setDaemon(true);
             thread.start();
             _cleaner.reschedule(BAD_CLEAN_INTERVAL, false);
+            // logged only when a thread is actually started - the method is called
+            // on every torrent add, and the no-op case is the common one
+            if (_log.shouldDebug())
+                _log.debug("Starting the thread that accepts new torrent connections");
         }
     }
 

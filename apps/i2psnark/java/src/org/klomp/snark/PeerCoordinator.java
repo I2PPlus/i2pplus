@@ -1593,8 +1593,13 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 // when the seeder is super-slow and all the peers are "caught up"
                 if (wantedSize > END_GAME_THRESHOLD) {
                     if (_log.shouldInfo()) {
-                        _log.info("Nothing to request, " + requested.size()
-                                  + " being requested and " + wantedSize + " still wanted");
+                        // the peer and the torrent - the counts alone named neither
+                        // the peer being turned away nor the torrent that had
+                        // nothing left for it. What is in flight is already in the
+                        // per-peer request tally lines
+                        _log.info("Nothing to request from " + SnarkLogFormatter.peer(peer)
+                                  + " -> Torrent: " + SnarkLogFormatter.torrent(metainfo)
+                                  + " * Wanted: " + wantedSize + " pieces");
                     }
                     return null; // nothing to request and not in end game
                 }
@@ -1629,9 +1634,14 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
 
                 if (piece == null) {
                     if (_log.shouldInfo()) {
-                        _log.info("Nothing left to request from [" + SnarkLogFormatter.peer(peer)
-                                  + "] -> Ending the piece exchange (requested: " + requested
-                                  + ")");
+                        // every piece this peer has is already at the parallel
+                        // request cap or asked of it before. The requested list is
+                        // a List<Piece> printed as object identities nobody can
+                        // read; the count is the finding and the pieces themselves
+                        // are named by the request lines that put them in flight
+                        _log.info("Every piece it has is already being pulled"
+                                  + " -> Peer: " + SnarkLogFormatter.peer(peer)
+                                  + " * Torrent: " + SnarkLogFormatter.torrent(metainfo));
                     }
                     return null; // If we still can't find a piece we want, so be it.
                 } else {
@@ -1640,9 +1650,10 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                     // This is where the flaws of the snark data model are really exposed.
                     // Could also randomize within the duplicate set rather than strict rarest-first
                     if (_log.shouldInfo()) {
-                        _log.info("Parallel request (end game?) for "
-                                  + SnarkLogFormatter.peer(peer) + " [Piece "
-                                  + piece + "]");
+                        _log.info("Requesting a piece already in flight"
+                                  + " -> Peer: " + SnarkLogFormatter.peer(peer)
+                                  + " * Piece: " + piece.getId()
+                                  + " * Torrent: " + SnarkLogFormatter.torrent(metainfo));
                     }
                 }
             }
@@ -1650,12 +1661,14 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             if (record) {
                 if (_log.shouldInfo()) {
                     if (piece.getPriority() > 0) {
-                        _log.info("Requesting piece [" + piece + "] from ["
-                                  + SnarkLogFormatter.peer(peer)
-                                  + "] (Priority: " + piece.getPriority() + ")");
+                        _log.info("Requesting piece " + piece.getId()
+                                  + " -> Peer: " + SnarkLogFormatter.peer(peer)
+                                  + " * Torrent: " + SnarkLogFormatter.torrent(metainfo)
+                                  + " * Priority: " + piece.getPriority());
                     } else {
-                        _log.info("Requesting piece [" + piece + "] from "
-                                  + SnarkLogFormatter.peer(peer));
+                        _log.info("Requesting piece " + piece.getId()
+                                  + " -> Peer: " + SnarkLogFormatter.peer(peer)
+                                  + " * Torrent: " + SnarkLogFormatter.torrent(metainfo));
                     }
                 }
                 piece.setRequested(peer, true);
@@ -2027,11 +2040,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             return true;
         }
 
-        if (_log.shouldDebug()) {
-            _log.debug("Queued piece [" + piece + "/" + metainfo.getPieces() + "] from ["
-                       + SnarkLogFormatter.peer(peer)
-                       + "] for " + metainfo.getName() + " for verify and write");
-        }
+        // no log line here - writePieceNow() logs the piece once it knows whether
+        // the hash check passed, and a line for the queueing alone reported no outcome
         if (!queuePieceWrite(peer, pp, wantedPiece)) {
             // Writer backed up for this torrent: apply backpressure by doing the
             // work on this thread rather than queueing more piece data.
@@ -2058,9 +2068,10 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             // this takes forever if complete, as it rechecks
             if (storage.putPiece(pp)) {
                 if (_log.shouldDebug()) {
-                    _log.debug("Received valid piece [" + piece + "/" + metainfo.getPieces()
-                               + "] from " + SnarkLogFormatter.peer(peer) + " for "
-                                 + metainfo.getName());
+                    _log.debug("Piece " + piece + '/' + metainfo.getPieces()
+                               + " verified -> Written * Peer: "
+                               + SnarkLogFormatter.peer(peer)
+                               + " * Torrent: " + SnarkLogFormatter.torrent(metainfo));
                 }
             } else {
                 // so we will try again
@@ -2083,9 +2094,10 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                     }
                 }
                 if (_log.shouldDebug()) {
-                    _log.debug("Received BAD piece [" + piece + "/" + metainfo.getPieces()
-                               + "] from " + SnarkLogFormatter.peer(peer) + " for "
-                                 + metainfo.getName());
+                    _log.debug("Piece " + piece + '/' + metainfo.getPieces()
+                               + " corrupt -> Re-requested it * Peer: "
+                               + SnarkLogFormatter.peer(peer)
+                               + " * Torrent: " + SnarkLogFormatter.torrent(metainfo));
                 }
                 // The copy this peer sent us is corrupt; stop asking it for this
                 // piece. Done here rather than in PeerState.pieceMessage because the
@@ -2457,26 +2469,39 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                             registerLive(pp);
                             piece.setRequested(peer, true);
                             if (_log.shouldInfo()) {
-                                _log.info("Restoring orphaned partial piece " + pp + " to "
-                                          + peer + " -> Partial list size now: "
-                                          + partialPieces.size());
+                                // the piece and the peer it goes back to - the
+                                // tuple the object printed named none of its four
+                                // numbers, and the raw Peer toString is a base64
+                                // tag the log viewer cannot link
+                                _log.info("Restoring an orphaned partial piece -> "
+                                          + SnarkLogFormatter.partial(pp)
+                                          + " * Peer: " + SnarkLogFormatter.peer(peer)
+                                          + "\n* Torrent: "
+                                          + SnarkLogFormatter.torrent(metainfo));
                             }
                             return pp;
                         }
                     }
                     if (_log.shouldDebug()) {
                         if (skipped) {
-                            _log.debug("Partial piece " + pp
-                                       + " with multiple peers skipped for seeder");
+                            _log.debug("Skipping a partial piece offered by a seeder -> "
+                                       + SnarkLogFormatter.partial(pp)
+                                       + " * Peer: " + SnarkLogFormatter.peer(peer)
+                                       + "\n* Two non-seeders already hold it");
                         } else {
-                            _log.debug("Partial piece " + pp + " NOT in wantedPieces??");
+                            _log.debug("Partial piece is not in the wanted list -> "
+                                       + SnarkLogFormatter.partial(pp)
+                                       + " * Torrent: "
+                                       + SnarkLogFormatter.torrent(metainfo));
                         }
                     }
                 }
             }
             if (_log.shouldDebug() && !partialPieces.isEmpty())
-                _log.debug("Peer " + SnarkLogFormatter.peer(peer) + " has none of our partials "
-                           + partialPieces);
+                _log.debug("Peer " + SnarkLogFormatter.peer(peer)
+                           + " has none of our partial pieces -> Torrent: "
+                           + SnarkLogFormatter.torrent(metainfo)
+                           + SnarkLogFormatter.partialList(partialPieces, "Ours"));
         }
         // ...and this section turns this into the general move-requests-around code!
         // Temporary? So PeerState never calls wantPiece() directly for now...
@@ -2495,14 +2520,17 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                         // wantPiece() did so the piece is not counted against this peer.
                         piece.setRequested(peer, false);
                         if (_log.shouldDebug()) {
-                            _log.debug("Nothing left to share of partial piece " + live
-                                       + " with [" + SnarkLogFormatter.peer(peer) + ']');
+                            _log.debug("Nothing left to share of a partial piece -> "
+                                       + SnarkLogFormatter.partial(live)
+                                       + " * Peer: " + SnarkLogFormatter.peer(peer));
                         }
                         return null;
                     }
                     if (_log.shouldInfo()) {
-                        _log.info("Sharing partial piece " + live + " -> Peer: "
-                                  + SnarkLogFormatter.peer(peer));
+                        _log.info("Sharing a partial piece another peer is pulling -> "
+                                  + SnarkLogFormatter.partial(live)
+                                  + " * Peer: " + SnarkLogFormatter.peer(peer)
+                                  + "\n* Torrent: " + SnarkLogFormatter.torrent(metainfo));
                     }
                     return live;
                 }
@@ -2514,9 +2542,9 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                                 metainfo));
             }
         }
-        if (_log.shouldDebug()) {
-            _log.debug("We have no partial piece to return");
-        }
+        // no line here - wantPiece() returns null only after logging why, and
+        // the piece-already-claimed path above logs its own, so this fired as a
+        // second, context-free copy of a finding already on the line before it
         return null;
     }
 

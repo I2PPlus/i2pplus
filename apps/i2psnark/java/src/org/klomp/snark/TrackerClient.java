@@ -94,6 +94,14 @@ public class TrackerClient implements Runnable {
     /** BEP 48 scrape path segment. */
     private static final String SCRAPE = "scrape";
 
+    /**
+     * Milliseconds an announce round may take before it is worth a line. A round
+     * that contacts a tracker over I2P normally finishes in tens of milliseconds,
+     * and the per-tracker announce lines already report what it did, so only a
+     * round that blocked long enough to be a problem is logged.
+     */
+    private static final long SLOW_ROUND_MS = 30 * 1000L;
+
     /** Minutes between tracker status checks. */
     private static final int SLEEP = 5; // 5 minutes.
     /** Threads draining the unannounce queue. */
@@ -415,7 +423,7 @@ public class TrackerClient implements Runnable {
     /** Hex info hash identifying the torrent. */
     private final String infoHash;
     /**
-     * First six hex characters of the info hash, for the logs. The full hash
+     * First eight hex characters of the info hash, the same form every other snark log uses. The full hash
      * names the torrent, so it stays out of the log file.
      *
      * @since 0.9.72+
@@ -431,8 +439,6 @@ public class TrackerClient implements Runnable {
     private final Snark snark;
     /** Listen port advertised to the trackers. */
     private final int port;
-    /** Name prefix for this torrent's threads. */
-    private final String _threadName;
 
     /** Set to stop the tracker loop. */
     private volatile boolean stop = true;
@@ -493,9 +499,7 @@ public class TrackerClient implements Runnable {
             PeerCoordinator coordinator,
             Snark snark) {
         super();
-        // Set unique name.
         byte[] hash = snark.getInfoHash();
-        _threadName = "TrackerClient-" + I2PSnarkUtil.toHex(hash).substring(0, 6);
         _util = util;
         _log = util.getContext().logManager().getLog(TrackerClient.class);
         this.meta = meta;
@@ -505,7 +509,7 @@ public class TrackerClient implements Runnable {
 
         this.port = PORT; // (port == -1) ? 9 : port;
         this.infoHash = urlencode(hash);
-        this.shortInfoHash = I2PSnarkUtil.toHex(hash).substring(0, 6);
+        this.shortInfoHash = I2PSnarkUtil.toHex(hash).substring(0, 8);
         this.peerID = urlencode(snark.getID());
         this.trackers = new ArrayList<>(2);
         this.backupTrackers = new ArrayList<>(2);
@@ -518,7 +522,7 @@ public class TrackerClient implements Runnable {
     public synchronized void start() {
         if (!stop) {
             if (_log.shouldDebug()) {
-                _log.debug("Already started: " + _threadName);
+                _log.debug("Announce loop already running -> Torrent: " + shortInfoHash);
             }
             return;
         }
@@ -565,18 +569,17 @@ public class TrackerClient implements Runnable {
         boolean wasStopped = stop;
         if (wasStopped) {
             if (_log.shouldDebug()) {
-                _log.debug("Already stopped: " + _threadName);
+                _log.debug("Announce loop already stopped -> Torrent: " + shortInfoHash);
             }
         } else {
-            if (_log.shouldDebug()) {
-                _log.debug("Stopping: " + _threadName);
-            }
+            // no line for the stop itself - the cancel and interrupt lines below
+            // say what the halt did, and they name the torrent too
             stop = true;
         }
         SimpleTimer2.TimedEvent e = _event;
         if (e != null) {
             if (_log.shouldDebug()) {
-                _log.debug("Cancelling next announce " + _threadName);
+                _log.debug("Cancelling the queued announce -> Torrent: " + shortInfoHash);
             }
             e.cancel();
             _event = null;
@@ -585,18 +588,22 @@ public class TrackerClient implements Runnable {
         // have moved to another snark task, and every task on the pool
         // tolerates a spurious interrupt via its stop checks
         Thread t = _thread;
+        Thread dt = _dhtThread;
         if (t != null) {
-            if (_log.shouldDebug()) {
-                _log.debug("Interrupting " + t.getName());
-            }
             t.interrupt();
         }
-        Thread dt = _dhtThread;
         if (dt != null) {
-            if (_log.shouldDebug()) {
-                _log.debug("Interrupting " + dt.getName());
-            }
             dt.interrupt();
+        }
+        if (_log.shouldDebug() && (t != null || dt != null)) {
+            // one line for the interrupt, and the torrent rather than the pool
+            // worker's name - the worker has already moved on to another snark
+            // task and its name says nothing about which torrent stopped
+            _log.debug("Interrupting the "
+                       + (t != null && dt != null ? "announce and DHT rounds"
+                                                  : dt != null ? "DHT round"
+                                                               : "announce round")
+                       + " -> Torrent: " + shortInfoHash);
         }
         _fastUnannounce = true;
         if (!wasStopped) {
@@ -711,7 +718,6 @@ public class TrackerClient implements Runnable {
         Thread.interrupted();
         _thread = Thread.currentThread();
         long begin = _util.getContext().clock().now();
-        if (_log.shouldDebug()) _log.debug("Start " + _threadName);
         try {
             if (!_initialized) {
                 setup();
@@ -734,9 +740,14 @@ public class TrackerClient implements Runnable {
             // don't hold ref
             _thread = null;
             _roundQueued.set(false);
-            if (_log.shouldDebug())
-                _log.debug("Finish " + _threadName + " after "
-                           + DataHelper.formatDuration( _util.getContext().clock().now() - begin));
+            long elapsed = _util.getContext().clock().now() - begin;
+            // no line for a round that finished on time - the announce lines it
+            // produced already name the tracker and the torrent, and the pair of
+            // bookkeeping lines printed 3,354 times a day for no finding. Only a
+            // round that blocked long enough to delay the next one is a finding
+            if (_log.shouldDebug() && elapsed > SLOW_ROUND_MS)
+                _log.debug("Announce round ran long -> Torrent: " + shortInfoHash
+                           + " * Took: " + DataHelper.formatDuration(elapsed));
         }
     }
 
@@ -833,7 +844,7 @@ public class TrackerClient implements Runnable {
             if (isNewValidTracker(trackerHashes, primary)) {
                 trackers.add(new TCTracker(primary, true));
                 if (_log.shouldDebug())
-                    _log.debug("Primary announce -> Tracker: " + primary + " * InfoHash: "
+                    _log.debug("Primary announce -> Tracker: " + primary + " * Torrent: "
                                + shortInfoHash);
             } else {
                 if (_log.shouldWarn())
@@ -896,7 +907,7 @@ public class TrackerClient implements Runnable {
             _log.debug("Announce set built -> Torrent: " + SnarkLogFormatter.torrent(snark)
                        + "\n* Trackers: " + trackers.size() + " * Backups: "
                        + backupTrackers.size() + " * URLs not used: " + unused
-                       + " * InfoHash: " + shortInfoHash);
+                       + " * Torrent: " + shortInfoHash);
         }
         // Ask the http trackers in this announce set whether they answer BEP 15,
         // so a later start can announce to them over udp. Off this thread, and
@@ -1115,9 +1126,14 @@ public class TrackerClient implements Runnable {
 
                     if (delay > 20 * 1000) {
                         // put ourselves on SimpleTimer2
+                        // the torrent, not the thread name - the log header already
+                        // shows the thread, and its number says nothing about which
+                        // torrent is waiting
                         if (_log.shouldDebug())
-                            _log.debug("Requeueing in " + DataHelper.formatDuration(delay)
-                                       + ": " + Thread.currentThread().getName());
+                            _log.debug("Announce loop requeued -> Torrent: "
+                                       + SnarkLogFormatter.infoHash(snark.getInfoHash())
+                                       + " * Next pass in "
+                                       + DataHelper.formatDuration(delay));
                         queueLoop(delay);
                         return;
                     } else if (delay > 0) {
@@ -1473,8 +1489,9 @@ public class TrackerClient implements Runnable {
                         } catch (IOException ioe) {
                             scheduleNextScrape(tr, false);
                             if (_log.shouldDebug()) {
-                                _log.debug("Scrape failed for " + tr.host + ": "
-                                           + ioe.getMessage());
+                                _log.debug("Scrape failed -> Tracker: "
+                                           + SnarkLogFormatter.host(tr.host)
+                                           + " * Error: " + ioe.getMessage());
                             }
                         }
                     }
@@ -1571,8 +1588,9 @@ public class TrackerClient implements Runnable {
                     } catch (IOException ioe) {
                         scheduleNextScrape(tr, false);
                         if (_log.shouldDebug()) {
-                            _log.debug("Periodic scrape failed for " + tr.host + ": "
-                                       + ioe.getMessage());
+                            _log.debug("Periodic scrape failed -> Tracker: "
+                                       + SnarkLogFormatter.host(tr.host)
+                                       + " * Error: " + ioe.getMessage());
                         }
                     }
                 }
@@ -1673,7 +1691,7 @@ public class TrackerClient implements Runnable {
                 pids.clear();
             }
         } else if (_log.shouldInfo()) {
-            _log.info("Not requesting PEX peers -> InfoHash: " + shortInfoHash);
+            _log.info("Not requesting PEX peers -> Torrent: " + shortInfoHash);
         }
         return rv;
     }
@@ -1975,7 +1993,8 @@ public class TrackerClient implements Runnable {
         public void run() {
             try {
                 if (_log.shouldDebug()) {
-                    _log.debug("Running unannounce " + _threadName + " to " + tr.announce);
+                    _log.debug("Unannouncing to the tracker -> Torrent: " + shortInfoHash
+                               + " * Tracker: " + SnarkLogFormatter.host(tr.host));
                 }
                 long uploaded = coordinator.getUploaded();
                 long downloaded = coordinator.getDownloaded();
@@ -2072,8 +2091,8 @@ public class TrackerClient implements Runnable {
         String url = scrapeURL(tr.announce) + "?info_hash=" + infoHash;
         if (_log.shouldDebug()) {
             // The URL carries the full info hash, so log the tracker and the
-            // six-character hash, not the request line.
-            _log.debug("Scrape starting -> Tracker: " + tr.host + " * InfoHash: " + shortInfoHash);
+            // eight-character hash, not the request line.
+            _log.debug("Scrape starting -> Tracker: " + tr.host + " * Torrent: " + shortInfoHash);
         }
         // Single-torrent scrapes are ~60 bytes, but trackers may return the full files dict
         // (about 40 bytes per torrent), so allow up to 128K; only very large trackers exceed it
@@ -2259,7 +2278,7 @@ public class TrackerClient implements Runnable {
         if (_log.shouldDebug()) {
             // The URL carries the full info hash and our peer id, so log the
             // tracker and the six-character hash, not the request line.
-            _log.debug("Announce starting -> Tracker: " + tr.host + " * InfoHash: " + shortInfoHash);
+            _log.debug("Announce starting -> Tracker: " + tr.host + " * Torrent: " + shortInfoHash);
         }
 
         tr.lastRequestTime = System.currentTimeMillis();

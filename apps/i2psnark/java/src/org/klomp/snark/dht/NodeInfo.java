@@ -293,12 +293,15 @@ class NodeInfo extends SimpleDataStructure {
     }
 
     /**
-     * String form of the node.
+     * String form of the node: its short id and its port. Whether the destination is
+     * known is deliberately not part of this - every message that names a node would
+     * inherit the aside, and it reads as a second parenthetical next to the one the
+     * message itself needs. The sites where a missing destination is the reason
+     * something happened say so in their own words.
      */
     @Override
     public String toString() {
-        return "[" + nID.toBase64().substring(0, 8) + "]:" +
-                port + (dest != null ? "" : " (unknown dest)");
+        return "[" + nID.toBase64().substring(0, 8) + "]:" + port;
     }
 
     /**

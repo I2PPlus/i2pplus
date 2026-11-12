@@ -84,11 +84,8 @@ class PeerCheckerTask implements Runnable {
         boolean overBWLimit = coordinator.overUpBWLimit();
         // end game is per-torrent state, so decide it once for the whole pass
         boolean endGame = coordinator.inEndGame();
-        if (_log.shouldDebug())
-            _log.debug("START peers: " + peerList.size() + " uploaders: "
-                       + coordinator.getUploaders() + " interested: "
-                       + coordinator.getInterestedUploaders() + " limit: " + uploadLimit
-                       + " overBW? " + overBWLimit);
+        // no "pass starting" line - the pass logs its outcome at the end, and the
+        // two lines printed the same keys twice
         DHT dht = _util.getDHTForTorrent(coordinator.getInfoHash());
         boolean fetchComments = _util.utCommentsEnabled();
         int i = 0;
@@ -310,9 +307,16 @@ class PeerCheckerTask implements Runnable {
 
         // store the rates
         coordinator.setRateHistory(uploaded, downloaded);
-        if (_log.shouldDebug())
-            _log.debug("END peers: " + peerList.size() + " uploaders: " + uploaders
-                       + " interested: " + interestedUploaders);
+        if (_log.shouldDebug()) {
+            // one line for the pass instead of a START and an END pair printing the
+            // same keys twice, and the keys say what they count; the two states that
+            // only matter when they are abnormal get their own lines
+            _log.debug("Peer check pass -> " + peerList.size() + " peers checked"
+                       + " * Uploaders: " + uploaders + " of " + uploadLimit
+                       + " * Interested: " + interestedUploaders
+                       + (removedCount > 0 ? "\n* Removed: " + removedCount + " peers" : "")
+                       + (overBWLimit ? "\n* Over the upload limit" : ""));
+        }
 
         // close out unused files, but we don't need to do it every time
         Storage storage = coordinator.getStorage();

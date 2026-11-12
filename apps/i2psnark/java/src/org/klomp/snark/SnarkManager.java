@@ -34,6 +34,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
+import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
@@ -655,6 +656,15 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public static final int DEFAULT_MAX_UP_BW = 1024;
     /** Default download bandwidth cap, in KB/s. */
     private static final int DEFAULT_MAX_DOWN_BW = 1024;
+
+    /**
+     * Characters one line of the I2CP option dump may use before the next option
+     * wraps onto a continuation line. The logging guide's limit is 100 columns for
+     * an emitted line, and the dump leads with the host it is connecting to, so the
+     * options get less than half of it - all six of them on one line ran to 207
+     * characters, which no reader can scan or compare against i2cp.opts.
+     */
+    private static final int OPT_LINE_LIMIT = 70;
     /** Initial shortest delay before an auto-started torrent, in minutes. */
     public static final int DEFAULT_STARTUP_DELAY_MIN = 3;
     /** Initial longest delay before an auto-started torrent, in minutes. */
@@ -2352,12 +2362,24 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
         _util.setI2CPConfig(i2cpHost, i2cpPort, i2cpOpts);
         if (_log.shouldInfo()) {
-            // the map's own toString is {key=value}; the house form is key: value
-            StringBuilder buf =
-                    new StringBuilder(_t("Configuring I2PSnark with I2CP options"));
-            buf.append(" -> Host: ").append(i2cpHost).append(':').append(i2cpPort);
-            for (Map.Entry<String, String> entry : i2cpOpts.entrySet()) {
-                buf.append(" * ").append(entry.getKey()).append(": ").append(entry.getValue());
+            // the map's own toString is {key=value}; the house form is key: value.
+            // The keys stay exactly as the operator wrote them in i2cp.opts, since
+            // that is what a reader compares them against, and they are sorted so
+            // two runs of the same config print the same line. Each line is capped
+            // and the rest wrap - a full set of six options ran to 207 characters
+            StringBuilder buf = new StringBuilder(96)
+                    .append("Configuring I2PSnark -> I2CP host: ")
+                    .append(i2cpHost).append(':').append(i2cpPort);
+            int line = buf.length();
+            for (Map.Entry<String, String> entry : new TreeMap<>(i2cpOpts).entrySet()) {
+                String seg = entry.getKey() + ": " + entry.getValue();
+                if (line + 3 + seg.length() > OPT_LINE_LIMIT) {
+                    buf.append("\n* ").append(seg);
+                    line = 2 + seg.length();
+                } else {
+                    buf.append(" * ").append(seg);
+                    line += 3 + seg.length();
+                }
             }
             _log.info(buf.toString());
         }
@@ -5835,10 +5857,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                                 + _t(
                                         "Connecting to I2CP port on I2P instance at {0}",
                                         _util.getI2CPHost() + ':' + _util.getI2CPPort() + "...");
-                if (_log.shouldDebug()) {
-                    _log.debug("DirectoryMonitor scanning I2PSnark torrent dir: "
-                               + torrentDir.getAbsolutePath());
-                }
                 if (routerOK) {
                     if (_context.isRouterContext() || _util.connected() || _util.isConnecting()) {
                         autostart = shouldAutoStart();
@@ -5885,6 +5903,13 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     _log.error("Error in the DirectoryMonitor", e);
                     added = Collections.emptyList();
                     ok = false;
+                }
+                if (_log.shouldDebug()) {
+                    // one line per pass, after the scan, so it reports what the pass
+                    // found instead of announcing that it is about to look
+                    _log.debug("Directory monitor pass -> Scanned "
+                               + torrentDir.getAbsolutePath()
+                               + " * Torrents added: " + added.size());
                 }
                 if (autostart && !added.isEmpty()) {
                     // Start OUTSIDE the _snarks lock: startBatch staggers pool

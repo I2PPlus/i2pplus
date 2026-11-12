@@ -1346,7 +1346,9 @@ public class Storage implements Closeable {
         if (files == null) {
             // Create base as file.
             if (_log.shouldInfo()) {
-                _log.info("[Snark] Creating/checking file: " + _base);
+                // the path is one indivisible value, so it may run past the width
+                // limit rather than be cut - it is the finding of this line
+                _log.info("Creating the data file -> Path: " + _base);
             }
             File active = _base;
             File workFile = null;
@@ -1404,7 +1406,9 @@ public class Storage implements Closeable {
         } else {
             // Create base as dir.
             if (_log.shouldInfo()) {
-                _log.info("[Snark] Creating/checking directory: " + _base);
+                // the path is one indivisible value, so it may run past the width
+                // limit rather than be cut - it is the finding of this line
+                _log.info("Creating the data directory -> Path: " + _base);
             }
             if (!_base.mkdir() && !_base.isDirectory()) {
                 throw new IOException("Could not create directory " + _base);

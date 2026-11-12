@@ -16,6 +16,7 @@ import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
+import org.klomp.snark.SnarkLogFormatter;
 
 /**
  * The tracker stores peers, i.e. Dest hashes (not nodes).
@@ -159,7 +160,11 @@ class DHTTracker {
      * @param isSeed true if the peer is a seed
      */
     void announce(InfoHash ih, Hash hash, boolean isSeed) {
-        if (_log.shouldDebug()) _log.debug("Announce " + hash + " for " + ih);
+        if (_log.shouldDebug())
+            _log.debug("Announcing a peer to the DHT -> Torrent: "
+                       + SnarkLogFormatter.infoHash(ih.getData())
+                       + " * Peer: " + SnarkLogFormatter.dest(hash)
+                       + " * Seed: " + isSeed);
         Peers peers = _torrents.get(ih);
         if (peers == null) {
             if (_torrents.size() >= MAX_TORRENTS) return;
@@ -396,9 +401,10 @@ class DHTTracker {
                 else _expireTime = Math.min(_expireTime + DELTA_EXPIRE_TIME, getMaxExpireTime(peerCount));
 
                 if (_log.shouldDebug())
-                    _log.debug("DHT tracker cleaner done, now with " + torrentCount
-                               + " torrents, " + peerCount + " peers, "
-                               + DataHelper.formatDuration(_expireTime) + " expiration");
+                    _log.debug("DHT tracker cleaner pass done -> Torrents: " + torrentCount
+                               + " * Peers: " + peerCount
+                               + " * Expiring after: "
+                               + DataHelper.formatDuration(_expireTime));
                 _peerCount = peerCount;
                 _torrentCount = torrentCount;
                 schedule(tooMany ? CLEAN_TIME / 3 : CLEAN_TIME);
