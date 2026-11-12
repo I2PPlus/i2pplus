@@ -1211,6 +1211,36 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
+     * The port to advertise to a peer we are introducing, or to the introducer we
+     * are asking: the port stored with the external address we are advertising,
+     * because that is the mapping the peer has to reach. A firewalled router
+     * publishes no port, so fall back to the published-or-requested port, never
+     * to the local socket port - a NAT may have translated it.
+     *
+     * @param published the external address being advertised, null if none
+     * @param externalPort the fallback port for that address family
+     * @return the port to advertise, 0 or less if nothing is known
+     * @since 0.9.72+
+     */
+    static int advertisedPort(RouterAddress published, int externalPort) {
+        int port = published != null ? published.getPort() : 0;
+        return port > 0 ? port : externalPort;
+    }
+
+    /**
+     * The port to advertise for one address family, see
+     * {@link #advertisedPort(RouterAddress, int)}.
+     *
+     * @param published the external address being advertised, null if none
+     * @param ipv6 {@code true} for the IPv6 socket
+     * @return the port to advertise
+     * @since 0.9.72+
+     */
+    int advertisedPort(RouterAddress published, boolean ipv6) {
+        return advertisedPort(published, getExternalPort(ipv6));
+    }
+
+    /**
      * Published IP, IPv4 only.
      * <p>
      * Reads the cached IPv4 address rather than scanning _currentAddresses,
@@ -4197,7 +4227,13 @@ public class UDPTransport extends TransportImpl {
             long pingFirewallCutoff = now - PING_FIREWALL_CUTOFF;
             boolean shouldPingFirewall = !STATUS_OK.contains(_reachabilityStatus);
             int currentListenPort = getListenPort(false);
-            boolean pingOneOnly = shouldPingFirewall && getExternalPort(false) == currentListenPort;
+            // Whether one ping covers every IPv4 peer, see pingOneIPv4Only() -
+            // the published address, not getExternalPort(), which falls back to the
+            // local port and hides the NAT's translation for a firewalled router.
+            boolean pingOneIPv4Only = pingOneIPv4Only(shouldPingFirewall, isSymNatted(),
+                                                      currentListenPort,
+                                                      getCurrentExternalAddress(false));
+            boolean pingedIPv4 = false;
             boolean shortLoop = shouldPingFirewall || !haveCap || _context.netDb().floodfillEnabled();
             long loopTime = shortLoop ? SHORT_LOOP_TIME : LONG_LOOP_TIME;
             _lastLoopShort = shortLoop;
@@ -4223,7 +4259,9 @@ public class UDPTransport extends TransportImpl {
                     }
                     if (idleSince(peer.getLastReceiveTime(), peer.getLastSendTime(), tierCutoff)) {
                         _expireBuffer.add(peer);
-                    } else if (shouldFirewallPing(shouldPingFirewall, firewallPingSliceMatched(_runCount, peer.hashCode()),
+                    } else if (shouldFirewallPing(needsFirewallPing(shouldPingFirewall, pingedIPv4,
+                                                                    peer.isIPv6()),
+                                                  firewallPingSliceMatched(_runCount, peer.hashCode()),
                                                   peer.getLastSendOrPingTime(), peer.getLastReceiveTime(),
                                                   pingFirewallCutoff)) {
                         // ping if firewall is mapping the port to keep port the same...
@@ -4239,10 +4277,10 @@ public class UDPTransport extends TransportImpl {
                         catch (IOException ioe) {continue;}
                         send(ping);
                         peer.setLastPingTime(now);
-                        // If external port is different, it may be changing the port for every
-                        // session, so ping all of them. Otherwise only one.
-                        if (pingOneOnly)
-                            shouldPingFirewall = false;
+                        // Only a shared mapping lets one ping stand for the rest of
+                        // the pass, and an IPv6 peer is never covered by an IPv4 one.
+                        if (pingOneIPv4Only && !peer.isIPv6())
+                            pingedIPv4 = true;
                     } else {
                         // periodically send our RI
                         long uptime = now - peer.getKeyEstablishedTime();
@@ -4457,6 +4495,45 @@ if (_alive)
                                       long lastSendOrPing, long lastReceive, long pingFirewallCutoff) {
         return shouldPingFirewall && sliceMatched &&
                lastSendOrPing < pingFirewallCutoff && lastReceive < pingFirewallCutoff;
+    }
+
+    /**
+     * Whether one keepalive ping is enough for every IPv4 peer this pass, which
+     * is only true when our own outbound mapping is shared: not symmetric NAT,
+     * and the IPv4 address we publish really is the port we listen on. A
+     * symmetric NAT keeps a mapping per destination even when one of those
+     * mappings happens to preserve the local port, so it needs a ping per peer.
+     * A published firewalled address carries no port (0), and no published
+     * address at all means we do not know what is mapped - both ping everything.
+     *
+     * @param shouldPingFirewall ping mode is active
+     * @param symNatted our NAT rewrites the source port per destination
+     * @param listenPort the local IPv4 listen port, &lt;= 0 if not listening
+     * @param publishedIPv4 the IPv4 address we publish, null if none
+     * @return true when a single IPv4 ping refreshes the mapping for all peers
+     * @since 0.9.72+
+     */
+    static boolean pingOneIPv4Only(boolean shouldPingFirewall, boolean symNatted,
+                                   int listenPort, RouterAddress publishedIPv4) {
+        return shouldPingFirewall && !symNatted && listenPort > 0 &&
+               publishedIPv4 != null && publishedIPv4.getPort() == listenPort;
+    }
+
+    /**
+     * Whether this peer is still due a keepalive ping, given what this pass has
+     * already refreshed. A ping to one IPv4 peer refreshes the others only when
+     * the mapping is shared (see {@link #pingOneIPv4Only}); an IPv6 peer is never
+     * covered by an IPv4 ping, because IPv6 firewall state is per session.
+     *
+     * @param shouldPingFirewall ping mode is active
+     * @param pingedIPv4 an IPv4 peer was already pinged this pass
+     * @param peerIsIPv6 this peer's address family is IPv6
+     * @return true when this peer still needs a ping
+     * @since 0.9.72+
+     */
+    static boolean needsFirewallPing(boolean shouldPingFirewall, boolean pingedIPv4,
+                                     boolean peerIsIPv6) {
+        return shouldPingFirewall && !(pingedIPv4 && !peerIsIPv6);
     }
 
     /**

@@ -198,13 +198,21 @@ class IntroductionManager {
         // reuse old ones if ok
         if (current != null) {
             UDPAddress ua = new UDPAddress(current);
-            for (int i = 0; i < ua.getIntroducerCount(); i++) {
+            for (int i = 0; i < ua.getIntroducerCount() && found < howMany; i++) {
                 long lexp = ua.getIntroducerExpiration(i);
                 if (lexp > 0 && lexp < now + UDPTransport.INTRODUCER_EXPIRATION_MARGIN)
                     continue;
                 long tag = ua.getIntroducerTag(i);
-                if (!isInboundTagValid(tag))
+                // The tag alone is not enough - the peer behind it must still be
+                // connected, of the family being published, and really be the
+                // introducer the tag was issued to.
+                PeerState peer = _inbound.get(Long.valueOf(tag));
+                if (peer == null || peer.isIPv6() != ipv6 ||
+                    !peer.getRemotePeer().equals(ua.getIntroducerHash(i)))
                     continue;
+                // Reusing a published introducer renews its keepalive window, so the
+                // peer is not expired out from under the introduction we publish.
+                peer.setIntroducerTime();
                 String sexp = Long.toString(ua.getIntroducerExpiration(i) / 1000);
                 Introducer intro = new Introducer(ua.getIntroducerHash(i), tag, sexp);
                 if (_log.shouldInfo())
@@ -836,7 +844,9 @@ class IntroductionManager {
         SessionKey aliceIntroKey = null;
         int rcode;
         PeerState aps = _transport.getPeerState(alice);
-        if (_transport.isSymNatted()) {rcode = SSU2Util.RELAY_REJECT_CHARLIE_ADDRESS;}
+        // Symmetric NAT is an IPv4 phenomenon - an IPv6 introduction is not
+        // rejected just because our IPv4 mapping is per destination.
+        if (!isIPv6 && _transport.isSymNatted()) {rcode = SSU2Util.RELAY_REJECT_CHARLIE_ADDRESS;}
         else if (aps != null && aps.isIPv6() == isIPv6) {rcode = SSU2Util.RELAY_REJECT_CHARLIE_CONNECTED;}
         else if (_context.banlist().isBanlisted(alice) ||_context.blocklist().isBlocklisted(testIP)) {
             rcode = SSU2Util.RELAY_REJECT_CHARLIE_BANNED;
@@ -878,7 +888,9 @@ class IntroductionManager {
             if (_log.shouldWarn()) {_log.warn("No external address to send in the Relay Response -> Rejecting the introduction");}
             rcode = SSU2Util.RELAY_REJECT_CHARLIE_ADDRESS;
         }
-        int ourPort = _transport.getRequestedPort();
+        // Charlie has to reach us on the port we are seen from, not the local
+        // socket port, and it can differ per family - see advertisedPort().
+        int ourPort = _transport.advertisedPort(ourra, isIPv6);
 
         // generate our signed data
         // we sign it even if rejecting, not required though
