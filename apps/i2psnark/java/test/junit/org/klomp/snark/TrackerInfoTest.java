@@ -32,6 +32,8 @@ public class TrackerInfoTest {
 
     private static final byte[] MY_ID = new byte[20];
     private static final byte[] INFOHASH = new byte[20];
+    /** The eight-character hash form {@link SnarkLogFormatter#infoHash(byte[])} emits. */
+    private static final String HASH8 = I2PSnarkUtil.toHex(INFOHASH).substring(0, 8);
 
     private static TrackerInfo parse(String bencoded) throws Throwable {
         InputStream in = new ByteArrayInputStream(bencoded.getBytes(StandardCharsets.ISO_8859_1));
@@ -139,16 +141,17 @@ public class TrackerInfoTest {
     }
 
     /**
-     * A failure reply quotes the tracker's own words on one continuation line. The
-     * reply reached us, so the line says the announce was refused, not that the
-     * request failed, and it carries no shouty label and no nested key.
+     * A failure reply quotes the tracker's own words after the arrow, beside the
+     * torrent it refused. The reply reached us, so the caller's lead says the
+     * announce was refused, not that the request failed, and the reason carries
+     * no shouty label and no nested key.
      *
      * @throws Throwable on tracker response parse failure
      */
     @Test
     public void testFailureFormQuotesTheTrackersReason() throws Throwable {
         TrackerInfo info = parse("d14:failure reason7:go awaye");
-        assertEquals("\n* Announce refused by the tracker: go away", info.toString());
+        assertEquals(" -> Torrent: " + HASH8 + " * Reason: go away", info.logForm());
     }
 
     /**
@@ -161,12 +164,12 @@ public class TrackerInfoTest {
     @Test
     public void testSuccessFormCarriesADuration() throws Throwable {
         TrackerInfo info = parse("d8:intervali30e5:peers0:e");
-        assertEquals("\n* Announce accepted * Interval: 30s", info.toString());
+        assertEquals(" -> Torrent: " + HASH8 + " * Interval: 30s", info.logForm());
     }
 
     /**
      * The swarm counts are labelled as counts of objects and joined with the
-     * house separator, and an empty peer list adds no line of its own.
+     * house separator, and an empty peer list adds no segment of its own.
      *
      * @throws Throwable on tracker response parse failure
      */
@@ -174,15 +177,15 @@ public class TrackerInfoTest {
     public void testSuccessFormLabelsTheCounts() throws Throwable {
         TrackerInfo info =
                 parse("d8:intervali1800e8:completei5e10:incompletei2e5:peers0:e");
-        assertEquals(
-                "\n* Announce accepted * Interval: 30m * Seeds: 5 * Leeches: 2", info.toString());
+        assertEquals(" -> Torrent: " + HASH8 + " * Interval: 30m * Seeds: 5 * Leeches: 2",
+                     info.logForm());
     }
 
     /**
-     * A peer list is counted, not listed. The destinations a tracker hands back
-     * are not what an announce line is read for - the size of the swarm is - and
-     * the list of them ran the line past the width limit. One line, one count,
-     * no addresses.
+     * A peer list is counted, not listed, and the whole reply is one line. The
+     * destinations a tracker hands back are not what an announce line is read for
+     * - the size of the swarm is - and the list of them ran the line past the
+     * width limit. One count, no addresses, no continuation line.
      *
      * @throws Throwable on tracker response parse failure
      */
@@ -190,10 +193,23 @@ public class TrackerInfoTest {
     public void testPeersAreCountedNotListed() throws Throwable {
         TrackerInfo info = parse(
                 "d8:intervali1800e5:peers64:" + compactPeer('a') + compactPeer('b') + "e");
-        String s = info.toString();
-        assertEquals("\n* Announce accepted * Interval: 30m * Peers: 2", s);
-        // one continuation separator only - the count joins the interval line
-        assertEquals(1, s.chars().filter(c -> c == '\n').count());
+        String s = info.logForm();
+        assertEquals(" -> Torrent: " + HASH8 + " * Interval: 30m * Peers: 2", s);
+        // one line - the count joins the interval on the same line
+        assertEquals(0, s.chars().filter(c -> c == '\n').count());
         assertFalse(s, s.contains("["));
+    }
+
+    /**
+     * Every reply names its torrent, so no announce line can be written without
+     * it - the reply is built from the info hash the announce asked about.
+     *
+     * @throws Throwable on tracker response parse failure
+     */
+    @Test
+    public void testEveryFormNamesTheTorrent() throws Throwable {
+        assertTrue(parse("d14:failure reason7:go awaye").logForm(),
+                   parse("d14:failure reason7:go awaye").logForm().contains("Torrent: " + HASH8));
+        assertTrue(parse("d8:intervali30e5:peers0:e").logForm().contains("Torrent: " + HASH8));
     }
 }

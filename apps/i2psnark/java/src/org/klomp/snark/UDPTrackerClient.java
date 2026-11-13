@@ -133,7 +133,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
      * @since 0.9.72+
      */
     private static String trackerName(String host) {
-        return SnarkLogFormatter.host(I2PSnarkUtil.trackerB32ToHostname(host));
+        return SnarkLogFormatter.host(host);
     }
 
     /**
@@ -250,8 +250,8 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         Tracker tr = getTracker(toHost, toPort);
         if (tr.getDest(fast) == null) {
             if (_log.shouldInfo()) {
-                _log.info("Announce aborted -> Tracker destination not resolved * Tracker: "
-                          + tr.host);
+                _log.info("Announce to " + trackerName(tr.host)
+                          + " aborted -> Destination not resolved");
             }
             return null;
         }
@@ -261,16 +261,16 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
         if (toWait < 1000) {
             if (_log.shouldInfo()) {
-                _log.info("Announce aborted -> Out of time resolving the destination * Tracker: "
-                          + tr.host);
+                _log.info("Announce to " + trackerName(tr.host)
+                          + " aborted -> Out of time resolving the destination");
             }
             return null;
         }
         Long cid = getConnection(tr, now + toWait);
         if (cid == null) {
             if (_log.shouldInfo()) {
-                _log.info("Announce aborted -> Connect handshake gave no connection id * Tracker: "
-                          + tr.host);
+                _log.info("Announce to " + trackerName(tr.host)
+                          + " aborted -> Connect handshake gave no connection id");
             }
             return null;
         }
@@ -281,8 +281,8 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
             toWait = end - now;
             if (toWait < 1000) {
                 if (_log.shouldInfo()) {
-                    _log.info("Announce aborted -> Out of time after the connect handshake"
-                              + " * Tracker: " + tr.host);
+                    _log.info("Announce to " + trackerName(tr.host)
+                              + " aborted -> Out of time after the connect handshake");
                 }
                 return null;
             }
@@ -304,8 +304,8 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
         if (w == null) {
             if (_log.shouldInfo()) {
-                _log.info("Initial announce failed -> The datagram could not be sent * Tracker: "
-                          + tr.host);
+                _log.info("Announce to " + trackerName(tr.host)
+                          + " failed -> Could not send the datagram");
             }
             return null;
         }
@@ -315,7 +315,8 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
             return w.getReplyObject();
         }
         if (_log.shouldInfo()) {
-            _log.info("Announce failed after retransmitting -> Tracker: " + tr.host);
+            _log.info("Announce to " + trackerName(tr.host)
+                      + " failed -> No reply after the retransmit");
         }
         return null;
     }
@@ -342,8 +343,8 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         Tracker tr = getTracker(toHost, toPort);
         if (tr.getDest(false) == null) {
             if (_log.shouldInfo()) {
-                _log.info("Scrape aborted -> Tracker destination not resolved * Tracker: "
-                          + tr.host);
+                _log.info("Scrape to " + trackerName(tr.host)
+                          + " aborted -> Destination not resolved");
             }
             return null;
         }
@@ -351,16 +352,16 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         toWait = toWait * 3 / 4;
         if (toWait < 1000) {
             if (_log.shouldInfo()) {
-                _log.info("Scrape aborted -> Out of time resolving the destination * Tracker: "
-                          + tr.host);
+                _log.info("Scrape to " + trackerName(tr.host)
+                          + " aborted -> Out of time resolving the destination");
             }
             return null;
         }
         Long cid = getConnection(tr, now + toWait);
         if (cid == null) {
             if (_log.shouldInfo()) {
-                _log.info("Scrape aborted -> Connect handshake gave no connection id * Tracker: "
-                          + tr.host);
+                _log.info("Scrape to " + trackerName(tr.host)
+                          + " aborted -> Connect handshake gave no connection id");
             }
             return null;
         }
@@ -368,16 +369,16 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         toWait = end - now;
         if (toWait < 1000) {
             if (_log.shouldInfo()) {
-                _log.info("Scrape aborted -> Out of time after the connect handshake * Tracker: "
-                          + tr.host);
+                _log.info("Scrape to " + trackerName(tr.host)
+                          + " aborted -> Out of time after the connect handshake");
             }
             return null;
         }
         ReplyWaiter w = sendScrape(tr, cid.longValue(), ih, toWait);
         if (w == null) {
             if (_log.shouldInfo()) {
-                _log.info("Initial scrape failed -> The datagram could not be sent * Tracker: "
-                          + tr.host);
+                _log.info("Scrape to " + trackerName(tr.host)
+                          + " failed -> Could not send the datagram");
             }
             return null;
         }
@@ -387,7 +388,8 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
             return w.getReplyObject();
         }
         if (_log.shouldInfo()) {
-            _log.info("Scrape failed after retransmitting -> Tracker: " + tr.host);
+            _log.info("Scrape to " + trackerName(tr.host)
+                      + " failed -> No reply after the retransmit");
         }
         return null;
     }
@@ -417,16 +419,16 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         Tracker tr = getTracker(host, port);
         if (tr.getDest(false) == null) {
             if (_log.shouldInfo()) {
-                _log.info("Tracker probe aborted -> Destination not resolved * Tracker: "
-                          + tr.host);
+                _log.info("Probe of " + trackerName(tr.host)
+                          + " aborted -> Destination not resolved");
             }
             return false;
         }
         long toWait = (end - _context.clock().now()) * 3 / 4;
         if (toWait < 1000) {
             if (_log.shouldInfo()) {
-                _log.info("Tracker probe aborted -> Out of time resolving the destination"
-                          + " * Tracker: " + tr.host);
+                _log.info("Probe of " + trackerName(tr.host)
+                          + " aborted -> Out of time resolving the destination");
             }
             return false;
         }
@@ -520,9 +522,9 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
             ReplyWaiter rv = new ReplyWaiter(tid, tr, ACTION_CONNECT, payload, toWait);
             _sentQueries.put(Integer.valueOf(tid), rv);
             if (_log.shouldInfo()) {
-                _log.info("Sent " + actionName(ACTION_CONNECT) + " -> Awaiting the reply"
-                          + " * Tracker: " + trackerName(tr.host)
-                          + " * Timeout: " + DataHelper.formatDuration(toWait));
+                _log.info("Sent " + actionName(ACTION_CONNECT) + " to " + trackerName(tr.host)
+                          + " -> Awaiting the reply * Timeout: "
+                          + DataHelper.formatDuration(toWait));
             }
             return rv;
         }
@@ -581,16 +583,15 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
                 ReplyWaiter rv = new ReplyWaiter(tid, tr, ACTION_ANNOUNCE, payload, toWait);
                 _sentQueries.put(Integer.valueOf(tid), rv);
                 if (_log.shouldInfo()) {
-                    _log.info("Sent " + actionName(ACTION_ANNOUNCE) + " -> Awaiting the reply"
-                              + " * Tracker: " + trackerName(tr.host)
-                              + " * Timeout: " + DataHelper.formatDuration(toWait));
+                    _log.info("Sent " + actionName(ACTION_ANNOUNCE) + " to " + trackerName(tr.host)
+                              + " -> Awaiting the reply * Timeout: "
+                              + DataHelper.formatDuration(toWait));
                 }
                 return rv;
             }
             if (_log.shouldInfo()) {
-                _log.info("Sent " + actionName(ACTION_ANNOUNCE) + " -> Not waiting for the reply"
-                          + " * Tracker: " + trackerName(tr.host)
-                          + " * Event: " + eventName(event));
+                _log.info("Sent " + actionName(ACTION_ANNOUNCE) + " to " + trackerName(tr.host)
+                          + " -> Not waiting for the reply * Event: " + eventName(event));
             }
         }
         return null;
@@ -655,15 +656,15 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
                 ReplyWaiter rv = new ReplyWaiter(tid, tr, ACTION_SCRAPE, payload, toWait);
                 _sentQueries.put(Integer.valueOf(tid), rv);
                 if (_log.shouldInfo()) {
-                    _log.info("Sent " + actionName(ACTION_SCRAPE) + " -> Awaiting the reply"
-                              + " * Tracker: " + trackerName(tr.host)
-                              + " * Timeout: " + DataHelper.formatDuration(toWait));
+                    _log.info("Sent " + actionName(ACTION_SCRAPE) + " to " + trackerName(tr.host)
+                              + " -> Awaiting the reply * Timeout: "
+                              + DataHelper.formatDuration(toWait));
                 }
                 return rv;
             }
             if (_log.shouldInfo()) {
-                _log.info("Sent " + actionName(ACTION_SCRAPE) + " -> Not waiting for the reply"
-                          + " * Tracker: " + trackerName(tr.host));
+                _log.info("Sent " + actionName(ACTION_SCRAPE) + " to " + trackerName(tr.host)
+                          + " -> Not waiting for the reply");
             }
         }
         return null;
@@ -722,9 +723,8 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
 
                     case INIT:
                         if (_log.shouldInfo()) {
-                            _log.info("Query timer fired -> No reply yet"
-                                      + " * Tracker: " + trackerName(w.getSentTo().host)
-                                      + " * Action: " + actionName(w.getExpectedAction()));
+                            _log.info(actionName(w.getExpectedAction()) + " timer fired for "
+                                      + trackerName(w.getSentTo().host) + " -> No reply yet");
                         }
                         long toWait = untilTime - _context.clock().now();
                         if (toWait <= 1000) {
@@ -756,9 +756,8 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         Tracker tr = w.getSentTo();
         int port = tr.getPort();
         if (_log.shouldInfo()) {
-            _log.info("Resending " + actionName(w.getExpectedAction())
-                      + " -> Awaiting the reply * Tracker: "
-                      + trackerName(tr.host) + " * Timeout: "
+            _log.info("Resending " + actionName(w.getExpectedAction()) + " to "
+                      + trackerName(tr.host) + " -> Awaiting the reply * Timeout: "
                       + DataHelper.formatDuration(toWait));
         }
         boolean rv = sendMessage(tr.getDest(true), port, w.getPayload(), repliable);
@@ -780,13 +779,13 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     private boolean sendMessage(Destination dest, int toPort, byte[] payload, boolean repliable) {
         if (!_isRunning) {
             if (_log.shouldInfo()) {
-                _log.info("Send failed, not running");
+                _log.info("Send failed -> Session not running");
             }
             return false;
         }
         if (dest == null) {
             if (_log.shouldInfo()) {
-                _log.info("Send failed, no dest");
+                _log.info("Send failed -> No destination to send to");
             }
             return false;
         }

@@ -244,6 +244,48 @@ public class SnarkLogFormatterTest {
     }
 
     /**
+     * A tracker the name table knows is written as its nickname, not as a hash
+     * and not as the 52-character address from its URL - the name is what a
+     * reader matches against the console's tracker list. The table is the one
+     * place that mapping lives, so the console's URL display and the log lines
+     * cannot drift apart.
+     */
+    @Test
+    public void testKnownTrackerBecomesItsName() {
+        assertEquals("opentracker.dg2.i2p",
+                     SnarkLogFormatter.host(
+                             "w7tpbzncbcocrqtwwm3nezhnnsw4ozadvi2hmvzdhrqzfxfum7wa.b32.i2p"));
+        assertEquals("tracker.insulaocculta.i2p",
+                     SnarkLogFormatter.host(
+                             "4cxcka62bhpnl6raidcx7mgwkybaw3svckgbkprktd4zogc7npca.b32.i2p"));
+        // the table hands back the host unchanged when it does not know it, and
+        // host() then shortens it like any other address
+        assertEquals("example.i2p", SnarkLogFormatter.trackerName("example.i2p"));
+        String unknown = Base32.encode(hash(7).getData());
+        assertEquals('[' + unknown.substring(0, 8) + ']',
+                     SnarkLogFormatter.host(unknown + ".b32.i2p"));
+    }
+
+    /**
+     * The base64 form of a tracker's address is keyed in the table too - some
+     * announce URLs spell the host as a full 516-character base64 address, and
+     * shortening that to eight characters would hide a tracker the table names.
+     */
+    @Test
+    public void testBase64TrackerAddressBecomesItsName() {
+        String b64 = "lnQ6yoBTxQuQU8EQ1FlF395ITIQF-HGJxUeFvzETLFnoczNjQvKDbtSB7aHhn853zjVXrJBg"
+                     + "wlB9sO57KakBDaJ50lUZgVPhjlI19TgJ-CxyHhHSCeKx5JzURdEW-ucdONMynr-b2zwhsx"
+                     + "8VQCJwCEkARvt21YkOyQDaB9IdV8aTAmP~PUJQxRwceaTMn96FcVenwdXqleE16fI8CVFOV"
+                     + "18jbJKrhTOYpTtcZKV4l1wNYBDwKgwPx5c0kcrRzFyw5~bjuAKO~GJ5dR7BQsL7AwBoQUS4"
+                     + "k1lwoYrG1kOIBeDD3XF8BWb6K3GOOoyjc1umYKpur3G~FxBuqtHAsDRICkEbKUqJ9mPYQlT"
+                     + "SujhNxiRIW-oLwMtvayCFci99oX8MvazPS7~97x0Gsm-onEK1Td9nBdmq30OqDxpRtXBimb"
+                     + "zkLbR1IKObbg9HvrKs3L-kSyGwTUmHG9rSQSoZEvFMA-S0EXO~o4g21q1oikmxPMhkeVwQ2"
+                     + "2VHB0-LZJfmLr4SAAAA.i2p";
+        assertEquals(520, b64.length());
+        assertEquals("tracker2.postman.i2p", SnarkLogFormatter.host(b64));
+    }
+
+    /**
      * A torrent name is user data of no fixed length, so it gets a budget like any
      * other value, cut with a marker that says the name went past the line.
      */

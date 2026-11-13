@@ -19,6 +19,8 @@ package org.klomp.snark;
  */
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -409,20 +411,87 @@ public class SnarkLogFormatter {
     private static final int MIN_B32_CHARS = 52;
 
     /**
+     * Known public trackers, address to nickname - the one place in snark that
+     * maps a tracker's base32 or base64 address to the name its operators use.
+     * A tracker's announce URL normally carries the raw address, and a reader
+     * who sees {@code w7tpbzncbcocrqtwwm3nezhnnsw4ozadvi2hmvzdhrqzfxfum7wa.b32.i2p}
+     * in a log line cannot tell which tracker failed, or whether they configured
+     * it themselves. The nickname is what they match against the console's
+     * tracker list, so it goes in the log instead.
+     *
+     * <p>Keys are the host exactly as the announce URL spells it, suffix
+     * included. The base64 entry is a full {@code .i2p} address, not a
+     * {@code .b32.i2p} one, and it is 516 characters long, so it is keyed
+     * alongside the rest rather than handled by a second rule.
+     */
+    private static final Map<String, String> TRACKER_NAMES;
+
+    static {
+        Map<String, String> names = new HashMap<>(16);
+        names.put("ahsplxkbhemefwvvml7qovzl5a2b5xo5i7lyai7ntdunvcyfdtna.b32.i2p",
+                  "tracker2.postman.i2p");
+        names.put("lnQ6yoBTxQuQU8EQ1FlF395ITIQF-HGJxUeFvzETLFnoczNjQvKDbtSB7aHhn853zjVXrJBg"
+                  + "wlB9sO57KakBDaJ50lUZgVPhjlI19TgJ-CxyHhHSCeKx5JzURdEW-ucdONMynr-b2zwhsx"
+                  + "8VQCJwCEkARvt21YkOyQDaB9IdV8aTAmP~PUJQxRwceaTMn96FcVenwdXqleE16fI8CVFOV"
+                  + "18jbJKrhTOYpTtcZKV4l1wNYBDwKgwPx5c0kcrRzFyw5~bjuAKO~GJ5dR7BQsL7AwBoQUS4"
+                  + "k1lwoYrG1kOIBeDD3XF8BWb6K3GOOoyjc1umYKpur3G~FxBuqtHAsDRICkEbKUqJ9mPYQlT"
+                  + "SujhNxiRIW-oLwMtvayCFci99oX8MvazPS7~97x0Gsm-onEK1Td9nBdmq30OqDxpRtXBimb"
+                  + "zkLbR1IKObbg9HvrKs3L-kSyGwTUmHG9rSQSoZEvFMA-S0EXO~o4g21q1oikmxPMhkeVwQ2"
+                  + "2VHB0-LZJfmLr4SAAAA.i2p",
+                  "tracker2.postman.i2p");
+        names.put("w7tpbzncbcocrqtwwm3nezhnnsw4ozadvi2hmvzdhrqzfxfum7wa.b32.i2p",
+                  "opentracker.dg2.i2p");
+        names.put("afuuortfaqejkesne272krqvmafn65mhls6nvcwv3t7l2ic2p4kq.b32.i2p",
+                  "lyoko.i2p");
+        names.put("s5ikrdyjwbcgxmqetxb3nyheizftms7euacuub2hic7defkh3xhq.b32.i2p",
+                  "tracker.thebland.i2p");
+        names.put("nfrjvknwcw47itotkzmk6mdlxmxfxsxhbhlr5ozhlsuavcogv4hq.b32.i2p",
+                  "torrfreedom.i2p");
+        names.put("by7luzwhx733fhc5ug2o75dcaunblq2ztlshzd7qvptaoa73nqua.b32.i2p",
+                  "opentracker.skank.i2p");
+        names.put("punzipidirfqspstvzpj6gb4tkuykqp6quurj6e23bgxcxhdoe7q.b32.i2p",
+                  "opentracker.r4sas.i2p");
+        names.put("qimlze77z7w32lx2ntnwkuqslrzlsqy7774v3urueuarafyqik5a.b32.i2p",
+                  "sigmatracker.i2p");
+        names.put("4cxcka62bhpnl6raidcx7mgwkybaw3svckgbkprktd4zogc7npca.b32.i2p",
+                  "tracker.insulaocculta.i2p");
+        TRACKER_NAMES = Collections.unmodifiableMap(names);
+    }
+
+    /**
+     * The nickname a tracker's address stands for, or the address back unchanged
+     * when the table does not know it. Used by {@link #host(String)} for log
+     * lines and by {@link I2PSnarkUtil#trackerB32ToHostname(String)} for the
+     * console's display of a tracker's URL, so both name a tracker the same way.
+     *
+     * @param host the tracker host as the announce URL spells it, not null
+     * @return the nickname when the table knows the address, the host otherwise
+     * @since 0.9.72+
+     */
+    public static String trackerName(String host) {
+        return TRACKER_NAMES.getOrDefault(host, host);
+    }
+
+    /**
      * A tracker host as a log value. A private tracker's host is normally its full
      * base32 address, some 60 characters no reader compares by eye, and it pushes
      * every line naming it past the logging guide's width; that form becomes the same
      * eight-character bracketed identity the rest of the snark logs use, so the
      * console log viewer links it. A named tracker keeps its name, which is shorter
-     * than the hash and is what a reader acts on.
+     * than the hash and is what a reader acts on - so a known address is translated
+     * to its nickname by {@link #trackerName(String)} first, and only an unknown one
+     * is shortened to the hash.
      *
      * @param host the tracker's host name, null when it is not known
-     * @return {@code [xxxxxxxx]} for a base32 address, the name unchanged otherwise,
-     *         or {@code none} when there is no host to name
+     * @return the nickname when the table knows it, otherwise {@code [xxxxxxxx]}
+     *         for a base32 address, the name unchanged otherwise, or {@code none}
+     *         when there is no host to name
      * @since 0.9.72+
      */
     public static String host(String host) {
         if (host == null) {return NONE;}
+        String named = trackerName(host);
+        if (!named.equals(host)) {return named;}
         if (!host.endsWith(I2P_TLD)) {return host;}
         String head = host.substring(0, host.length() - I2P_TLD.length());
         if (head.endsWith(B32_SUFFIX)) {

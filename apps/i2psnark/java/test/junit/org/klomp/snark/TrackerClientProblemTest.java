@@ -152,10 +152,10 @@ public class TrackerClientProblemTest {
     @Test
     public void hostCutFromTheEndOfTheReason() {
         assertEquals("No response",
-                     TrackerClient.trackerFailure("sigmatracker.i2p",
+                     TrackerClient.trackerFailure("http://sigmatracker.i2p/announce",
                                                   new IOException("No response from sigmatracker.i2p")));
         assertEquals("UDP announce error",
-                     TrackerClient.trackerFailure("tracker.insulaocculta.i2p",
+                     TrackerClient.trackerFailure("udp://tracker.insulaocculta.i2p:6969/announce",
                                                   new IOException("UDP announce error to: tracker.insulaocculta.i2p")));
     }
 
@@ -166,8 +166,23 @@ public class TrackerClientProblemTest {
     @Test
     public void hostIsCutWithAndWithoutThePort() {
         assertEquals("UDP announce error",
-                     TrackerClient.trackerFailure("tracker.insulaocculta.i2p:6969",
+                     TrackerClient.trackerFailure("udp://tracker.insulaocculta.i2p:6969/announce",
                                                   new IOException("UDP announce error to: tracker.insulaocculta.i2p")));
+    }
+
+    /**
+     * The line shows the name from the table while the UDP client's message
+     * carries the raw address it dialed, so the address has to be recognised as
+     * the same tracker - a 52-character base32 host left in the reason was the
+     * longest thing on the line and named a tracker the line had already named.
+     */
+    @Test
+    public void rawAddressIsCutFromAKnownTracker() {
+        assertEquals("UDP announce error",
+                     TrackerClient.trackerFailure(
+                             "udp://w7tpbzncbcocrqtwwm3nezhnnsw4ozadvi2hmvzdhrqzfxfum7wa.b32.i2p:6969/a",
+                             new IOException("UDP announce error to: "
+                                     + "w7tpbzncbcocrqtwwm3nezhnnsw4ozadvi2hmvzdhrqzfxfum7wa.b32.i2p")));
     }
 
     /**
@@ -178,22 +193,45 @@ public class TrackerClientProblemTest {
     @Test
     public void ipv6HostIsNotSplitAtAColon() {
         String msg = "No response from [::1]";
-        assertEquals(msg, TrackerClient.trackerFailure("[::1]:6969", new IOException(msg)));
+        assertEquals(msg, TrackerClient.trackerFailure("udp://[::1]:6969/a", new IOException(msg)));
     }
 
     /** A reason that does not end with the host is passed through untouched. */
     @Test
-    public void reasonWithoutTheHostIsUnchanged() {        assertEquals("Connection refused", TrackerClient.trackerFailure("sigmatracker.i2p",
-                                                                       new IOException("Connection refused")));
+    public void reasonWithoutTheHostIsUnchanged() {
+        assertEquals("Connection refused",
+                     TrackerClient.trackerFailure("http://sigmatracker.i2p/announce",
+                                                  new IOException("Connection refused")));
         // Only a trailing clause is cut - the host mid-sentence is part of the fact.
         assertEquals("No response from sigmatracker.i2p and others",
-                     TrackerClient.trackerFailure("sigmatracker.i2p",
-                                                  new IOException("No response from sigmatracker.i2p and others")));
+                     TrackerClient.trackerFailure("http://sigmatracker.i2p/announce",
+                                                  new IOException(
+                                                          "No response from sigmatracker.i2p and others")));
     }
 
     /** A message-less failure still says what failed. */
     @Test
     public void messagelessFailureNamesTheClass() {
-        assertEquals("IOException", TrackerClient.trackerFailure("sigmatracker.i2p", new IOException()));
+        assertEquals("IOException",
+                     TrackerClient.trackerFailure("http://sigmatracker.i2p/announce", new IOException()));
+    }
+
+    /** No URL at all - the reason is the whole finding, and nothing is cut. */
+    @Test
+    public void nullAnnounceKeepsTheReason() {
+        assertEquals("Connection refused",
+                     TrackerClient.trackerFailure(null, new IOException("Connection refused")));
+    }
+
+    /**
+     * The raw host is the address as the URL spells it, with no name-table
+     * translation - that is the form the UDP client writes into its exception.
+     */
+    @Test
+    public void rawHostIsTheAddressNotTheName() {
+        assertEquals("w7tpbzncbcocrqtwwm3nezhnnsw4ozadvi2hmvzdhrqzfxfum7wa.b32.i2p:6969",
+                     TrackerClient.rawTrackerHost(
+                             "udp://w7tpbzncbcocrqtwwm3nezhnnsw4ozadvi2hmvzdhrqzfxfum7wa.b32.i2p:6969/a"));
+        assertEquals("", TrackerClient.rawTrackerHost(null));
     }
 }

@@ -41,6 +41,12 @@ class TrackerInfo {
     private int incomplete;
     /** Peers reported as downloading. */
     private int downloaders;
+    /**
+     * The torrent this reply answers. Every constructor is given it, and naming
+     * the torrent in {@link #logForm()} rather than at the call sites is what
+     * keeps the torrent off none of the announce lines.
+     */
+    private final byte[] infohash;
 
     /**
      * Create tracker info for the metainfo.
@@ -104,6 +110,7 @@ class TrackerInfo {
             MetaInfo metainfo,
             I2PSnarkUtil util)
             throws IOException {
+        this.infohash = infohash;
         BEValue reason = m.get("failure reason");
         if (reason != null) {
             failure_reason = reason.getString();
@@ -190,6 +197,7 @@ class TrackerInfo {
             byte[] infohash,
             MetaInfo metainfo,
             I2PSnarkUtil util) {
+        this.infohash = infohash;
         peers = Collections.unmodifiableSet(getPeers(hashes, my_id, infohash, metainfo, util));
         this.interval = interval;
         this.complete = complete;
@@ -385,29 +393,33 @@ class TrackerInfo {
     }
 
     /**
-     * The tracker's reply as log continuation lines, to be appended to a caller
-     * that has named the announce and pointed an arrow at its outcome. Every
-     * branch opens with the continuation separator, so the shape is the same
-     * whether the tracker answered our announce or refused it; the arrow stays
-     * at the call site, where the subject is.
+     * The tracker's reply as the values that follow an arrow - {@code " ->
+     * Torrent: 1a2b3c4d * Interval: 30m * Seeds: 5 * Peers: 2"} - for a caller
+     * that has named the tracker and said what happened to the announce. There is
+     * no "response received" clause: the counts are the finding, and a line whose
+     * only news is that something arrived tells a reader nothing.
      *
-     * <p>A successful reply reports how many peers came back, not who they are -
-     * a tracker hands back tens of destinations and the reader of an announce
-     * line wants the size of the swarm, which the address list gave no way to
-     * see. The addresses are still available at DEBUG from the peer fetch.
+     * <p>The peers are counted, not listed - a tracker hands back tens of
+     * destinations and the reader of an announce line wants the size of the
+     * swarm. The torrent is named here rather than at the call sites so that no
+     * announce line can be written without it.
+     *
+     * @return the arrow and the labelled values, beginning with {@code " -> "}
+     * @since 0.9.72+
      */
-    @Override
-    public String toString() {
-        // The reason is the tracker's own words from a reply that reached us,
-        // so the announce failed at the tracker, not on the wire.
+    String logForm() {
+        StringBuilder sb = new StringBuilder(" -> Torrent: ");
+        sb.append(SnarkLogFormatter.infoHash(infohash));
+        // The reason is the tracker's own words from a reply that reached us, so
+        // the announce failed at the tracker, not on the wire.
         if (failure_reason != null) {
-            return "\n* Announce refused by the tracker: " + failure_reason;
+            return sb.append(" * Reason: ").append(failure_reason).toString();
         }
-        String rv = "\n* Announce accepted * Interval: "
-                + DataHelper.formatDuration(interval * 1000L)
-                + (complete > 0 ? " * Seeds: " + complete : "")
-                + (incomplete > 0 ? " * Leeches: " + incomplete : "");
+        sb.append(" * Interval: ").append(DataHelper.formatDuration(interval * 1000L));
+        if (complete > 0) {sb.append(" * Seeds: ").append(complete);}
+        if (incomplete > 0) {sb.append(" * Leeches: ").append(incomplete);}
         // no segment at all when the tracker handed us nobody
-        return rv + (peers.isEmpty() ? "" : " * Peers: " + peers.size());
+        if (!peers.isEmpty()) {sb.append(" * Peers: ").append(peers.size());}
+        return sb.toString();
     }
 }

@@ -2347,8 +2347,10 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * Replace known base32 and base64 tracker hosts with their symbolic names, and strip the
-     * leading scheme, for display purposes.
+     * Replace a known tracker host with its symbolic name and strip the leading
+     * scheme, for display purposes. The name table lives in
+     * {@link SnarkLogFormatter#trackerName(String)}, shared with the log lines so a
+     * tracker is named the same way in the console and in the log.
      *
      * @param url may be null
      * @return the converted hostname, or null if url is null
@@ -2359,49 +2361,17 @@ public class I2PSnarkUtil implements DisconnectListener {
             return null;
         }
         String result = url.replace("http://", "");
-        result =
-                result.replace(
-                        "ahsplxkbhemefwvvml7qovzl5a2b5xo5i7lyai7ntdunvcyfdtna.b32.i2p",
-                        "tracker2.postman.i2p");
-        result =
-                result.replace(
-                        "lnQ6yoBTxQuQU8EQ1FlF395ITIQF-HGJxUeFvzETLFnoczNjQvKDbtSB7aHhn853zjVXrJBgwlB9sO57KakBDaJ50lUZgVPhjlI19TgJ-CxyHhHSCeKx5JzURdEW-ucdONMynr-b2zwhsx8VQCJwCEkARvt21YkOyQDaB9IdV8aTAmP~PUJQxRwceaTMn96FcVenwdXqleE16fI8CVFOV18jbJKrhTOYpTtcZKV4l1wNYBDwKgwPx5c0kcrRzFyw5~bjuAKO~GJ5dR7BQsL7AwBoQUS4k1lwoYrG1kOIBeDD3XF8BWb6K3GOOoyjc1umYKpur3G~FxBuqtHAsDRICkEbKUqJ9mPYQlTSujhNxiRIW-oLwMtvayCFci99oX8MvazPS7~97x0Gsm-onEK1Td9nBdmq30OqDxpRtXBimbzkLbR1IKObbg9HvrKs3L-kSyGwTUmHG9rSQSoZEvFMA-S0EXO~o4g21q1oikmxPMhkeVwQ22VHB0-LZJfmLr4SAAAA.i2p",
-                        "tracker2.postman.i2p");
-        result =
-                result.replace(
-                        "w7tpbzncbcocrqtwwm3nezhnnsw4ozadvi2hmvzdhrqzfxfum7wa.b32.i2p",
-                        "opentracker.dg2.i2p");
-        result =
-                result.replace(
-                        "afuuortfaqejkesne272krqvmafn65mhls6nvcwv3t7l2ic2p4kq.b32.i2p",
-                        "lyoko.i2p");
-        result =
-                result.replace(
-                        "s5ikrdyjwbcgxmqetxb3nyheizftms7euacuub2hic7defkh3xhq.b32.i2p",
-                        "tracker.thebland.i2p");
-        result =
-                result.replace(
-                        "nfrjvknwcw47itotkzmk6mdlxmxfxsxhbhlr5ozhlsuavcogv4hq.b32.i2p",
-                        "torrfreedom.i2p");
-        result =
-                result.replace(
-                        "by7luzwhx733fhc5ug2o75dcaunblq2ztlshzd7qvptaoa73nqua.b32.i2p",
-                        "opentracker.skank.i2p");
-        result =
-                result.replace(
-                        "punzipidirfqspstvzpj6gb4tkuykqp6quurj6e23bgxcxhdoe7q.b32.i2p",
-                        "opentracker.r4sas.i2p");
-        result =
-                result.replace(
-                        "qimlze77z7w32lx2ntnwkuqslrzlsqy7774v3urueuarafyqik5a.b32.i2p",
-                        "sigmatracker.i2p");
-
-        result =
-                result.replace(
-                        "4cxcka62bhpnl6raidcx7mgwkybaw3svckgbkprktd4zogc7npca.b32.i2p",
-                        "tracker.insulaocculta.i2p");
-
-        return result;
+        // The table is keyed by the host alone, so take the host out of the URL
+        // and put the rest of it back: the path and query of an announce URL
+        // never name a tracker.
+        int end = result.length();
+        for (char c : new char[] {'/', '?'}) {
+            int i = result.indexOf(c);
+            if (i >= 0 && i < end) {
+                end = i;
+            }
+        }
+        return SnarkLogFormatter.trackerName(result.substring(0, end)) + result.substring(end);
     }
 
     /**

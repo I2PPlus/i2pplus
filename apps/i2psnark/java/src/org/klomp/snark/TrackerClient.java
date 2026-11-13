@@ -19,6 +19,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -906,8 +907,7 @@ public class TrackerClient implements Runnable {
         if (_log.shouldDebug()) {
             _log.debug("Announce set built -> Torrent: " + SnarkLogFormatter.torrent(snark)
                        + "\n* Trackers: " + trackers.size() + " * Backups: "
-                       + backupTrackers.size() + " * URLs not used: " + unused
-                       + " * Torrent: " + shortInfoHash);
+                       + backupTrackers.size() + " * URLs not used: " + unused);
         }
         // Ask the http trackers in this announce set whether they answer BEP 15,
         // so a later start can announce to them over udp. Off this thread, and
@@ -1193,30 +1193,57 @@ public class TrackerClient implements Runnable {
     }
 
     /**
+     * The tracker host exactly as its announce URL spells it - no name table, no
+     * shortening. A failure message written by the UDP client carries this form,
+     * so it is what has to be matched when the reason is trimmed; the log line
+     * itself shows the translated name from {@link #trackerHost(String)}.
+     *
+     * @param announce the tracker's announce URL, may be null
+     * @return the host, with a port when the URL carries one, empty if there is
+     *         no URL
+     * @since 0.9.72+
+     */
+    static String rawTrackerHost(String announce) {
+        if (announce == null) {return "";}
+        int scheme = announce.indexOf("://");
+        String s = scheme >= 0 ? announce.substring(scheme + 3) : announce;
+        int slash = s.indexOf('/');
+        return slash >= 0 ? s.substring(0, slash) : s;
+    }
+
+    /**
      * The failure reason for a tracker line, with the tracker's own name cut
      * from the end. Both the HTTP and the UDP client end their messages with the
      * host they failed on - "No response from sigmatracker.i2p" - and the line
      * has already named that host, so printing it twice reads as two trackers.
      * Only a trailing clause is cut, and only when it names the host in full.
      *
-     * @param host the host already in the line, from {@link #trackerHost}
+     * <p>The line shows the name from the table while the message carries the
+     * raw address, so both spellings are tried - a known tracker's 52-character
+     * base32 address left in the reason is the longest thing on the line.
+     *
+     * @param announce the tracker's announce URL, may be null
      * @param t the failure, non-null
      * @return the reason, without the duplicated host
      * @since 0.9.72+
      */
-    static String trackerFailure(String host, Throwable t) {
+    static String trackerFailure(String announce, Throwable t) {
         String msg = DataHelper.messageOf(t);
+        String host = trackerHost(announce);
         if (host.isEmpty()) {return msg;}
         // The UDP client names the host without the port the announce URL carries,
         // so try the host both ways. A port is only split off a host:port form -
         // an IPv6 literal has colons with no port after them.
-        String noPort = host;
-        int colon = host.indexOf(':');
-        if (colon > 0 && host.indexOf(':', colon + 1) < 0 && colon + 1 < host.length()
-            && Character.isDigit(host.charAt(colon + 1))) {
-            noPort = host.substring(0, colon);
+        Set<String> forms = new LinkedHashSet<>(4);
+        for (String h : new String[] {host, rawTrackerHost(announce)}) {
+            if (h.isEmpty()) {continue;}
+            forms.add(h);
+            int colon = h.indexOf(':');
+            if (colon > 0 && h.indexOf(':', colon + 1) < 0 && colon + 1 < h.length()
+                && Character.isDigit(h.charAt(colon + 1))) {
+                forms.add(h.substring(0, colon));
+            }
         }
-        String[] forms = noPort.equals(host) ? new String[] {host} : new String[] {host, noPort};
         for (String h : forms) {
             for (String p : new String[] {" from: ", " from ", " to: ", " to "}) {
                 if (msg.endsWith(p + h)) {
@@ -1489,9 +1516,8 @@ public class TrackerClient implements Runnable {
                         } catch (IOException ioe) {
                             scheduleNextScrape(tr, false);
                             if (_log.shouldDebug()) {
-                                _log.debug("Scrape failed -> Tracker: "
-                                           + SnarkLogFormatter.host(tr.host)
-                                           + " * Error: " + ioe.getMessage());
+                                _log.debug("Scrape of " + SnarkLogFormatter.host(tr.host)
+                                           + " failed -> " + ioe.getMessage());
                             }
                         }
                     }
@@ -1547,7 +1573,8 @@ public class TrackerClient implements Runnable {
                         // backstop; a tracker outage is per-announce.
                         String host = trackerHost(tr.announce);
                         _log.warnThrottled("tracker-communicate",
-                                           "Error communicating with " + host + " -> " + trackerFailure(host, ioe));
+                                           "Error communicating with " + host + " -> "
+                                           + trackerFailure(tr.announce, ioe));
                     }
                     tr.trackerProblems = ioe.getMessage();
                     String tplc = normalizeTrackerProblem(tr.trackerProblems);
@@ -1558,7 +1585,10 @@ public class TrackerClient implements Runnable {
                                 || tplc.startsWith(ERROR_GOT_HTML) /* fake msg from doRequest() */
                                 || (!tr.isPrimary && tr.registerFails > MAX_REGISTER_FAILS / 2)) {
                             if (_log.shouldWarn()) {
-                                _log.warn("No longer announcing to " + tr.announce + " : "
+                                // The announce URL is a 60-character base32 host plus a
+                                // path nobody acts on; the host names the tracker.
+                                _log.warn("No longer announcing to "
+                                          + trackerHost(tr.announce) + " -> "
                                           + tr.trackerProblems + " after " + tr.registerFails
                                           + " failures");
                             }
@@ -1588,9 +1618,8 @@ public class TrackerClient implements Runnable {
                     } catch (IOException ioe) {
                         scheduleNextScrape(tr, false);
                         if (_log.shouldDebug()) {
-                            _log.debug("Periodic scrape failed -> Tracker: "
-                                       + SnarkLogFormatter.host(tr.host)
-                                       + " * Error: " + ioe.getMessage());
+                            _log.debug("Periodic scrape of " + SnarkLogFormatter.host(tr.host)
+                                       + " failed -> " + ioe.getMessage());
                         }
                     }
                 }
@@ -2092,7 +2121,8 @@ public class TrackerClient implements Runnable {
         if (_log.shouldDebug()) {
             // The URL carries the full info hash, so log the tracker and the
             // eight-character hash, not the request line.
-            _log.debug("Scrape starting -> Tracker: " + tr.host + " * Torrent: " + shortInfoHash);
+            _log.debug("Scrape starting -> Tracker: " + SnarkLogFormatter.host(tr.host)
+                       + " * Torrent: " + shortInfoHash);
         }
         // Single-torrent scrapes are ~60 bytes, but trackers may return the full files dict
         // (about 40 bytes per torrent), so allow up to 128K; only very large trackers exceed it
@@ -2311,7 +2341,9 @@ public class TrackerClient implements Runnable {
         TrackerInfo info =
                 new TrackerInfo(in, snark.getID(), snark.getInfoHash(), snark.getMetaInfo(), _util);
         if (_log.shouldInfo()) {
-            _log.info("Announce to " + tr.host + " -> Response received" + info);
+            _log.info("Announce to " + SnarkLogFormatter.host(tr.host)
+                      + (info.getFailureReason() != null ? " refused" : " accepted")
+                      + info.logForm());
         }
 
         String failure = info.getFailureReason();
@@ -2387,8 +2419,9 @@ public class TrackerClient implements Runnable {
                         snark.getMetaInfo(),
                         _util);
         if (_log.shouldInfo()) {
-            _log.info("UDP announce to " + tr.host + ':' + tr.port
-                    + " -> Response received" + info);
+            _log.info("UDP announce to " + SnarkLogFormatter.host(tr.host)
+                      + (info.getFailureReason() != null ? " refused" : " accepted")
+                      + info.logForm());
         }
         String failure = info.getFailureReason();
         if (failure != null) {
