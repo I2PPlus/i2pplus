@@ -177,7 +177,8 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
         this.peerID = new PeerID(id, sock.getPeerDestination());
         _id = __id.incrementAndGet();
         if (_log.shouldDebug())
-            _log.debug("Incoming peer connection -> Handshake complete * Peer: " + peerID);
+            _log.debug("Incoming peer connection -> Handshake complete" + peerKey()
+                       + torrentKey());
         _isIncoming = true;
     }
 
@@ -244,6 +245,41 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
      */
     public PeerID getPeerID() {
         return peerID;
+    }
+
+    /**
+     * The peer key for this class's log lines - the bracketed destination hash
+     * the console log viewer links. {@link #toString()} is a four-character peer
+     * id, a four-character public-key prefix and an internal counter, which
+     * matches neither of the two bracketed shapes the viewer parses, so every
+     * line that named a peer that way rendered as dead text and no line tied a
+     * peer to the destination it was actually connected to.
+     *
+     * @return the {@code " * Peer: [xxxxxxxx]"} segment, never empty
+     */
+    private String peerKey() {
+        PeerID id = peerID;
+        if (id != null) {
+            return " * Peer: " + SnarkLogFormatter.peer(id);
+        }
+        // handshake() runs before the constructor assigns peerID on an incoming
+        // connection, so name the destination the socket came from instead
+        I2PSocket s = sock;
+        return " * Peer: "
+                + SnarkLogFormatter.dest(s != null ? s.getPeerDestination() : null);
+    }
+
+    /**
+     * The torrent key for this peer's log lines - the capped name once the
+     * metadata arrives, the info hash prefix while a magnet fetch is still
+     * running. A peer's lines are otherwise unattributable: one download runs
+     * dozens of peers at once and the reader needs to know which torrent a
+     * handshake, a drop or a failed connection belongs to.
+     *
+     * @return the {@code " * Torrent: x"} segment, never empty
+     */
+    private String torrentKey() {
+        return " * Torrent: " + SnarkLogFormatter.torrent(metainfo, infohash);
     }
 
     /** Returns the String representation of the peerID. */
@@ -343,7 +379,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
         if (state != null) throw new IllegalStateException("Peer already started");
 
         if (_log.shouldDebug())
-            _log.debug("Starting the connection to " + peerID);
+            _log.debug("Connecting to a peer -> Opening the socket" + peerKey() + torrentKey());
         Hash h = null;
         try {
             // Do we need to handshake?
@@ -356,7 +392,8 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
                 if (listener.isBanned(h))
                     throw new IOException("IsBanned: " + peerID);
                 sock = util.connect(peerID, infohash);
-                if (_log.shouldDebug()) _log.debug("Connected to " + peerID + ": " + sock);
+                if (_log.shouldDebug())
+                    _log.debug("Connecting to a peer -> Socket open" + peerKey());
                 if ((sock == null) || (sock.isClosed())) {
                     throw new IOException("Unable to reach " + peerID);
                 }
@@ -368,7 +405,8 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
                     peerID.setID(id);
                 } else if (Arrays.equals(expectedId, id)) {
                     if (_log.shouldDebug())
-                        _log.debug("Handshake got matching IDs with " + toString());
+                        _log.debug("Handshake completed -> Peer ID matches the one we had"
+                                   + peerKey());
                 } else {
                     throw new IOException(
                             "Unexpected peerID '"
@@ -380,13 +418,15 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
             } else {
                 // Incoming connection
                 if (_log.shouldDebug())
-                    _log.debug("Already have din [" + sock + "] with " + toString());
+                    _log.debug("Incoming connection -> Handshake done at accept" + peerKey()
+                               + torrentKey());
             }
 
             // bad idea?
             if (metainfo == null && (options & OPTION_EXTENSION) == 0) {
                 if (_log.shouldInfo())
-                    _log.info("Peer does not support extensions and we need metainfo -> Peer dropped");
+                    _log.info("Peer lacks extensions and we need metainfo -> Dropped the peer"
+                              + peerKey() + torrentKey());
                 throw new IOException(
                         "Peer does not support extensions and we need metainfo, dropping");
             }
@@ -396,12 +436,17 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
             PeerState s = new PeerState(this, listener, bwl, metainfo, in, out);
 
             if ((options & OPTION_EXTENSION) != 0) {
-                if (_log.shouldDebug())
-                    _log.debug("Peer supports extensions, sending reply message");
                 int metasize = metainfo != null ? metainfo.getInfoBytesLength() : -1;
                 boolean pexAndMetadata = metainfo == null || !metainfo.isPrivate();
                 boolean dht = util.getDHT() != null;
                 boolean comment = util.utCommentsEnabled();
+                if (_log.shouldDebug())
+                    _log.debug("Peer supports extensions -> Sending our handshake reply"
+                               + peerKey()
+                               + "\n* Metadata: "
+                               + (metasize >= 0 ? metasize + " bytes" : "not offered")
+                               + " * Peer exchange: " + pexAndMetadata
+                               + " * DHT: " + dht + " * Comments: " + comment);
                 ClientID.Profile cid = util.getClientID(infohash);
                 out.sendExtension(
                         0,
@@ -427,7 +472,8 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
             connected = util.getContext().clock().now();
             listener.connected(this);
 
-            if (_log.shouldDebug()) _log.debug("Starting the peer reader for " + this);
+            if (_log.shouldDebug())
+                _log.debug("Peer connected -> Starting the reader" + peerKey() + torrentKey());
             // Use this thread for running the incoming connection.
             // The outgoing connection creates its own Thread.
             out.startup();
@@ -435,19 +481,22 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
             s.in.run();
         } catch (PeerAcceptor.ProtocolException pe) {
             if (_log.shouldWarn())
-                _log.warn("Peer handshake failed for " + this, pe);
+                _log.warn("Peer handshake failed -> Dropped the peer" + peerKey() + torrentKey(),
+                          pe);
             if (h != null)
                 listener.ban(h);
             try { sock.reset(); } catch (IOException ioe) { /* ignored */ }
         } catch (IOException eofe) {
             // Ignore, probably just the other side closing the connection.
             // Or refusing the connection, timing out, etc.
-            if (_log.shouldDebug()) _log.debug("Peer connection ended for " + this, eofe);
+            if (_log.shouldDebug())
+                _log.debug("Peer connection ended -> Dropped the peer" + peerKey() + torrentKey(),
+                           eofe);
         } catch (OutOfMemoryError oome) {
-            _log.error("Peer connection ran out of memory for " + this, oome);
+            _log.error("Peer connection out of memory -> Dropped the peer" + peerKey(), oome);
             throw oome;
         } catch (Throwable t) {
-            _log.error("Peer connection failed for " + this, t);
+            _log.error("Peer connection failed -> Dropped the peer" + peerKey() + torrentKey(), t);
         } finally {
             if (deregister) listener.disconnected(this);
             disconnect();
@@ -483,7 +532,9 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
         dout.write(my_id);
         dout.flush();
 
-        if (_log.shouldDebug()) _log.debug("Wrote our shared hash and ID to [" + toString() + "]");
+        if (_log.shouldDebug())
+            _log.debug("Wrote our handshake -> Options: 0x" + Long.toHexString(myOptions)
+                       + peerKey());
 
         // Handshake read - header
         long timeout = sock.getReadTimeout();
@@ -520,16 +571,12 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
             sock.setReadTimeout(timeout);
         }
         if (_log.shouldDebug())
-            _log.debug("Read remote peer hash and peer ID\n* " + this);
+            _log.debug("Read the peer's handshake -> Options: 0x" + Long.toHexString(options)
+                       + peerKey());
 
         if (DataHelper.eq(my_id, bs)) {
             throw new IOException("Connected to myself");
         }
-
-        if (options != 0 && _log.shouldDebug())
-            _log.debug("Peer supports options 0x" + Long.toHexString(options) + ": "
-                       + toString());
-
 
         return bs;
     }
@@ -698,7 +745,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
             try {
                 csock.close();
             } catch (IOException ioe) {
-                _log.warn("Error disconnecting " + toString(), ioe);
+                _log.warn("Closing the socket failed -> Ignored the error" + peerKey(), ioe);
             }
         }
         if (s != null) {

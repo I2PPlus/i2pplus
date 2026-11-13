@@ -212,6 +212,23 @@ public class SnarkLogFormatter {
         return metainfo == null ? NONE : name(metainfo.getName());
     }
 
+    /**
+     * The torrent a peer's line names, falling back to the info hash while a
+     * magnet fetch has not delivered the metadata yet. A peer runs before the
+     * metadata arrives, so the one-argument form would key most of its lines by
+     * the bare word "none" and leave the reader no way to say which torrent the
+     * peer belongs to.
+     *
+     * @param metainfo the torrent's metadata, null before the metadata arrives
+     * @param infohash the 20-byte info hash to fall back to, null when unknown
+     * @return the capped name, or the eight-character info hash when there is no
+     *         metadata to name it by
+     * @since 0.9.72+
+     */
+    public static String torrent(MetaInfo metainfo, byte[] infohash) {
+        return metainfo == null ? infoHash(infohash) : name(metainfo.getName());
+    }
+
     /** The first half of a magnet lookup's synthetic torrent name. */
     private static final String LOOKUP_PREFIX = "Lookup [";
 
