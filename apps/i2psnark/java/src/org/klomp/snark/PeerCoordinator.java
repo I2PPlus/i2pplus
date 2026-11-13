@@ -1105,6 +1105,25 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             }
             _writeQueue.clear();
         }
+        // Drop the wanted-piece graph. setWantedPieces() allocates one Piece per
+        // piece still wanted, each with its own set of peers, and a stopped torrent
+        // held all of it: at Storage.MAX_PIECES that is the bulk of the memory a
+        // paused torrent keeps. restart() rebuilds the set from storage.
+        synchronized (wantedPieces) {
+            wantedPieces.clear();
+            wantedMap.clear();
+        }
+        // Peers learned from PEX, and the swarm tally the console shows, are both
+        // stale the moment we stop talking to anyone
+        pexPeers.clear();
+        synchronized (swarmSeen) {
+            swarmSeen.clear();
+        }
+        // The MagnetState stays, so a restart does not re-fetch the metadata; only
+        // its copy of the bencoded info dictionary goes, and getChunk() rebuilds it
+        synchronized (magnetState) {
+            magnetState.release();
+        }
     }
 
     /** Restart after halt. */
@@ -1116,14 +1135,26 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         synchronized (downloaded_old) {
             Arrays.fill(downloaded_old, 0);
         }
-        // failsafe
-        synchronized (wantedPieces) {
-            for (Piece pc : wantedPieces) {
-                pc.clear();
-            }
-            wantedDirty = true;
-        }
+        // halt() dropped the wanted set and the Piece objects with it, so rebuild
+        // both from storage; this also recomputes wantedBytes and leaves every Piece
+        // with nothing requested from it, which is what the failsafe loop used to do
+        setWantedPieces();
         timer.schedule((CHECK_PERIOD / 2) + _random.nextInt((int) CHECK_PERIOD));
+    }
+
+    /**
+     * How many pieces the wanted set holds right now. Package-visible for the halt
+     * and restart tests, which have to see the set itself: {@code wantedBytes} keeps
+     * its last value while a torrent is stopped, so the console can still tell the
+     * user how far a paused download has to go.
+     *
+     * @return the number of pieces in the wanted set
+     * @since 0.9.72+
+     */
+    int wantedPieceCount() {
+        synchronized (wantedPieces) {
+            return wantedPieces.size();
+        }
     }
 
     /**

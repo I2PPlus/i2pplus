@@ -44,7 +44,12 @@ class MagnetState {
     /** Which metadata pieces have arrived. */
     private BitField have;
 
-    /** Bitfield for the metainfo. */
+    /**
+     * The bencoded info dictionary. For a magnet fetch in progress this is the
+     * accumulator the received chunks are copied into. For a torrent that started
+     * out complete it is null until a peer asks for a metadata chunk, and
+     * {@link #release()} drops it again while the torrent is stopped.
+     */
     private byte[] metainfoBytes;
 
     /** Only valid when finished. */
@@ -76,14 +81,15 @@ class MagnetState {
         isInitialized = true;
         metaSize = size;
         totalChunks = (size + (CHUNK_SIZE - 1)) / CHUNK_SIZE;
-        if (metainfo != null) {
-            metainfoBytes = metainfo.getInfoBytes();
-        } else {
-            // we don't need these if complete
+        if (metainfo == null) {
+            // fetching: allocate the accumulator the received chunks go into
             have = new BitField(totalChunks);
             requested = new BitField(totalChunks);
             metainfoBytes = new byte[metaSize];
         }
+        // Already complete: the bytes are derived from the MetaInfo when a peer asks
+        // for a chunk, so a torrent that never serves metadata holds no second copy
+        // of the info dictionary, which costs 20 bytes of piece hash per piece.
     }
 
     /**
@@ -190,15 +196,44 @@ class MagnetState {
      * @return the chunk data as a byte array
      * @throws IllegalArgumentException if not complete or chunk number is invalid
      */
-    public byte[] getChunk(int chunk) {
+    public synchronized byte[] getChunk(int chunk) {
         if (!complete) throw new IllegalArgumentException("Not complete");
         if (chunk < 0 || chunk >= totalChunks)
             throw new IllegalArgumentException("Bad chunk number");
         int size = chunkSize(chunk);
         byte[] rv = new byte[size];
-        System.arraycopy(metainfoBytes, chunk * CHUNK_SIZE, rv, 0, size);
-        // use meta.getInfoBytes() so we don't save it in memory
+        System.arraycopy(metainfoBytes(), chunk * CHUNK_SIZE, rv, 0, size);
         return rv;
+    }
+
+    /**
+     * The bencoded info dictionary the chunks are cut from, derived from the
+     * MetaInfo when the cached copy is not held. The caller holds this object's
+     * monitor.
+     *
+     * @return the bencoded info dictionary, null only while a magnet fetch is still
+     *         filling the accumulator
+     */
+    private byte[] metainfoBytes() {
+        if (metainfoBytes == null && metainfo != null) {
+            metainfoBytes = metainfo.getInfoBytes();
+        }
+        return metainfoBytes;
+    }
+
+    /**
+     * Drop the cached copy of the bencoded info dictionary, leaving the accumulator
+     * of a magnet fetch that is still in progress alone. A stopped torrent keeps
+     * this object alive, and for a large torrent the copy is 20 bytes of piece hash
+     * per piece; {@link #getChunk} rebuilds it from the MetaInfo when a peer asks
+     * for a chunk again.
+     *
+     * @since 0.9.72+
+     */
+    public synchronized void release() {
+        if (metainfo != null) {
+            metainfoBytes = null;
+        }
     }
 
     /**
