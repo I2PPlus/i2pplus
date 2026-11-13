@@ -2320,19 +2320,20 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                     _nodesLastSaved = now;
                 }
                 // TODO sent queries?
-                if (_log.shouldDebug())
-                    _log.debug("Cleaner pass done -> Pruned entries"
-                               + "\n* Pruned blacklist: "
-                               + (blacklistsBefore - _blacklist.size())
-                               + " * Pruned sent tokens: "
-                               + (sentTokensBefore - _outgoingTokens.size())
-                               + " * Pruned received tokens: "
-                               + (receivedTokensBefore - _incomingTokens.size())
-                               + "\n* Blacklist: " + _blacklist.size()
+                if (_log.shouldDebug()) {
+                    // One pruned total, not one per map: the per-map deltas are zero on
+                    // nearly every pass, and the sizes after the pass say what it did.
+                    int pruned = blacklistsBefore - _blacklist.size()
+                                 + sentTokensBefore - _outgoingTokens.size()
+                                 + receivedTokensBefore - _incomingTokens.size();
+                    _log.debug("Cleaner pass -> Pruned " + pruned
+                               + (pruned == 1 ? " entry" : " entries")
+                               + " * Blacklist: " + _blacklist.size()
                                + " * Sent tokens: " + _outgoingTokens.size()
                                + " * Received tokens: " + _incomingTokens.size()
-                               + " * Known nodes: " + _knownNodes.size()
-                               + "\n* Queries awaiting response: " + _sentQueries.size());
+                               + "\n* Known nodes: " + _knownNodes.size()
+                               + " * Pending queries: " + _sentQueries.size());
+                }
             } catch (Throwable t) {
                 _log.error("KRPC cleaner cycle failed", t);
             } finally {
