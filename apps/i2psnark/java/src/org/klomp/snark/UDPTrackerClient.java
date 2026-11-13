@@ -163,6 +163,18 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     /** Query timeout before any backoff, in milliseconds. */
     private static final long DEFAULT_TIMEOUT = (long) 90 * 1000;
 
+    /**
+     * Time that must be left of the caller's budget for another attempt to be worth
+     * starting, in ms. Below this a resent datagram would not have time to be answered.
+     */
+    private static final long RETRANSMIT_FLOOR_MS = 1000;
+
+    /**
+     * How many attempts the caller's overall wait is divided between, so the reply timer
+     * fires with time left to resend.
+     */
+    private static final int ATTEMPTS_PER_BUDGET = 2;
+
     /** Announce interval used until a tracker reports one, in seconds. */
     private static final int DEFAULT_INTERVAL = 60 * 60;
 
@@ -519,12 +531,13 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         int tid = _context.random().nextInt();
         byte[] payload = sendConnReq(tr, tid);
         if (payload != null) {
-            ReplyWaiter rv = new ReplyWaiter(tid, tr, ACTION_CONNECT, payload, toWait);
+            long attempt = attemptTimeout(tr.getTimeout(), toWait);
+            ReplyWaiter rv = new ReplyWaiter(tid, tr, ACTION_CONNECT, payload, attempt);
             _sentQueries.put(Integer.valueOf(tid), rv);
             if (_log.shouldInfo()) {
                 _log.info("Sent " + actionName(ACTION_CONNECT) + " to " + trackerName(tr.host)
                           + " -> Awaiting the reply * Timeout: "
-                          + DataHelper.formatDuration(toWait));
+                          + DataHelper.formatDuration(attempt));
             }
             return rv;
         }
@@ -580,12 +593,13 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
                 sendAnnounce(tr, tid, connID, ih, id, downloaded, left, uploaded, event, numWant);
         if (payload != null) {
             if (toWait > 0) {
-                ReplyWaiter rv = new ReplyWaiter(tid, tr, ACTION_ANNOUNCE, payload, toWait);
+                long attempt = attemptTimeout(tr.getTimeout(), toWait);
+                ReplyWaiter rv = new ReplyWaiter(tid, tr, ACTION_ANNOUNCE, payload, attempt);
                 _sentQueries.put(Integer.valueOf(tid), rv);
                 if (_log.shouldInfo()) {
                     _log.info("Sent " + actionName(ACTION_ANNOUNCE) + " to " + trackerName(tr.host)
                               + " -> Awaiting the reply * Timeout: "
-                              + DataHelper.formatDuration(toWait));
+                              + DataHelper.formatDuration(attempt));
                 }
                 return rv;
             }
@@ -653,12 +667,13 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         byte[] payload = sendScrape(tr, tid, connID, ih);
         if (payload != null) {
             if (toWait > 0) {
-                ReplyWaiter rv = new ReplyWaiter(tid, tr, ACTION_SCRAPE, payload, toWait);
+                long attempt = attemptTimeout(tr.getTimeout(), toWait);
+                ReplyWaiter rv = new ReplyWaiter(tid, tr, ACTION_SCRAPE, payload, attempt);
                 _sentQueries.put(Integer.valueOf(tid), rv);
                 if (_log.shouldInfo()) {
                     _log.info("Sent " + actionName(ACTION_SCRAPE) + " to " + trackerName(tr.host)
                               + " -> Awaiting the reply * Timeout: "
-                              + DataHelper.formatDuration(toWait));
+                              + DataHelper.formatDuration(attempt));
                 }
                 return rv;
             }
@@ -719,18 +734,22 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
                         return false;
 
                     case TIMEOUT:
-                        return false;
-
-                    case INIT:
-                        if (_log.shouldInfo()) {
-                            _log.info(actionName(w.getExpectedAction()) + " timer fired for "
-                                      + trackerName(w.getSentTo().host) + " -> No reply yet");
-                        }
-                        long toWait = untilTime - _context.clock().now();
-                        if (toWait <= 1000) {
+                    case INIT: {
+                        // Either the attempt timer fired or the wait ended for another
+                        // reason. What decides the outcome is whether the caller's budget
+                        // has room left for another attempt: one lost datagram used to end
+                        // the whole exchange, because the timer was armed at the entire
+                        // budget and fired only once there was nothing left to resend into.
+                        long remaining = untilTime - _context.clock().now();
+                        if (remaining <= RETRANSMIT_FLOOR_MS) {
                             return false;
                         }
-                        long reWait = Math.min(toWait, w.getSentTo().getTimeout());
+                        if (_log.shouldInfo()) {
+                            _log.info(actionName(w.getExpectedAction()) + " unanswered -> "
+                                      + "Resending it * Tracker: " + trackerName(w.getSentTo().host)
+                                      + " * Time left: " + DataHelper.formatDuration(remaining));
+                        }
+                        long reWait = Math.min(remaining, w.getSentTo().getTimeout());
                         boolean ok = resend(w, reWait);
                         if (!ok) {
                             return false;
@@ -738,9 +757,29 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
                         // re-arm the timer so the retransmit times out in its own right
                         w.schedule(reWait);
                         continue;
+                    }
                 }
             }
         }
+    }
+
+    /**
+     * How long one attempt at a query waits before it is resent: the tracker's own query
+     * timeout, capped so that at least {@link #ATTEMPTS_PER_BUDGET} attempts fit inside the
+     * caller's overall budget. The tracker timeout is longer than every budget the announce
+     * code passes - 90 s against a 60 s announce and a 5 s fast one - so capping by the
+     * budget alone still spends all of it on the first attempt and leaves nothing to
+     * retransmit into.
+     *
+     * @param trackerTimeout the tracker's query timeout with its failure backoff applied,
+     *                       from {@link Tracker#getTimeout()}
+     * @param budget how long the caller is prepared to wait in total, in ms
+     * @return the per-attempt wait in ms, at least one
+     * @since 0.9.72+
+     */
+    static long attemptTimeout(long trackerTimeout, long budget) {
+        long share = budget / ATTEMPTS_PER_BUDGET;
+        return Math.max(1, Math.min(trackerTimeout, share));
     }
 
     /**
