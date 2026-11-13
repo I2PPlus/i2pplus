@@ -1036,8 +1036,9 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      */
     private ReplyWaiter sendAnnouncePeer(NodeInfo nInfo, InfoHash ih, Token token, boolean isSeed) {
         if (_log.shouldInfo()) {
-            _log.info("Sending announce to " + nInfo + " -> Torrent: "
-                      + SnarkLogFormatter.infoHash(ih.getData()) + " * Seed: " + isSeed);
+            _log.info("Sending announce to " + nInfo + " -> Announcing as a "
+                      + (isSeed ? "seed" : "leech") + " * Torrent: "
+                      + SnarkLogFormatter.infoHash(ih.getData()));
         }
         Map<String, Object> map = new HashMap<>();
         map.put("q", "announce_peer");
@@ -1712,8 +1713,9 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             return;
         }
         if (_log.shouldInfo()) {
-            _log.info("Received get_peers from " + nInfo + " -> Torrent: "
-                      + SnarkLogFormatter.infoHash(ih.getData()) + " * No seeds: " + noSeeds);
+            _log.info("Received get_peers from " + nInfo + " -> "
+                      + (noSeeds ? "No seeds to give" : "Seeds to give") + " * Torrent: "
+                      + SnarkLogFormatter.infoHash(ih.getData()));
         }
         // generate and save random token
         Token token = new Token(_context);
@@ -1803,8 +1805,9 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             return;
         }
         if (_log.shouldInfo()) {
-            _log.info("Received announce from " + nInfo + " -> Torrent: "
-                      + SnarkLogFormatter.infoHash(ih.getData()) + " * Seed: " + isSeed);
+            _log.info("Received announce from " + nInfo + " -> Announced as a "
+                      + (isSeed ? "seed" : "leech") + " * Torrent: "
+                      + SnarkLogFormatter.infoHash(ih.getData()));
         }
 
         _tracker.announce(ih, nInfo.getHash(), isSeed);

@@ -164,7 +164,7 @@ class DHTTracker {
             _log.debug("Announcing a peer to the DHT -> Torrent: "
                        + SnarkLogFormatter.infoHash(ih.getData())
                        + " * Peer: " + SnarkLogFormatter.dest(hash)
-                       + " * Seed: " + isSeed);
+                       + (isSeed ? " (seed)" : " (leech)"));
         Peers peers = _torrents.get(ih);
         if (peers == null) {
             if (_torrents.size() >= MAX_TORRENTS) return;

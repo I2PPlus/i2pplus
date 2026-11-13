@@ -109,9 +109,15 @@ class PeerCheckerTask implements Runnable {
                 continue;
             }
 
-            // we only count choking AND interested, so as not to steal a slot
-            // from some other torrent
-            if (peer.isInterested() && !peer.isChoking()) uploaders++;
+            // The same pair of counts PeerCoordinator keeps incrementally: every unchoked
+            // peer holds an upload slot, and only the interested ones count against the
+            // global limit - see getInterestedUploaders().
+            if (!peer.isChoking()) {
+                uploaders++;
+                if (peer.isInterested()) {
+                    interestedUploaders++;
+                }
+            }
 
             long upload = peer.getUploaded();
             uploaded += upload;
@@ -122,11 +128,9 @@ class PeerCheckerTask implements Runnable {
             if (_log.shouldDebug()) {
                 // A per-peer tally, so the rates go on their own line - the value is
                 // bytes per second, KILOPERSECOND being the rate one check per period makes
-                _log.debug("Peer check -> " + SnarkLogFormatter.peer(peer)
-                           + " * We want: " + peer.isInteresting()
-                           + " * We choke: " + peer.isChoking()
-                           + "\n* Peer wants: " + peer.isInterested()
-                           + " * Peer chokes: " + peer.isChoked()
+                _log.debug("Peer check of " + SnarkLogFormatter.peer(peer)
+                           + " -> " + ourState(peer.isInteresting(), peer.isChoking())
+                           + "\n* " + theirState(peer.isInterested(), peer.isChoked())
                            + " * Up: " + upload * 1024 / KILOPERSECOND + " B/s"
                            + " * Down: " + download * 1024 / KILOPERSECOND + " B/s");
             }
@@ -161,8 +165,9 @@ class PeerCheckerTask implements Runnable {
                 if (!peer.isInterested()) {
                     // Note that we only choke if we are over our limits,
                     // so a peer may remain unchoked even if uninterested.
-                    if (_log.shouldDebug()) _log.debug("Choking uninterested peer "
-                                                       + SnarkLogFormatter.peer(peer));
+                    if (_log.shouldDebug())
+                        _log.debug("Choking the peer -> It wants nothing from us"
+                                   + " * Peer: " + SnarkLogFormatter.peer(peer));
                     peer.setChoking(true);
                     uploaders--;
                     coordinator.decrementUploaders(false);
@@ -171,9 +176,10 @@ class PeerCheckerTask implements Runnable {
                     removed.add(peer);
                 } else if (overBWLimitChoke) {
                     if (_log.shouldDebug())
-                        _log.debug("Bandwidth limit reached, choking peer "
-                                   + SnarkLogFormatter.peer(peer) + " ("
-                                   + upload + "/" + uploaded + ")");
+                        _log.debug("Choking the peer -> Over the upload limit"
+                                   + " * Peer: " + SnarkLogFormatter.peer(peer)
+                                   + "\n* From this peer: " + upload + " bytes"
+                                   + " * Total: " + uploaded + " bytes");
                     peer.setChoking(true);
                     uploaders--;
                     interestedUploaders--;
@@ -186,7 +192,8 @@ class PeerCheckerTask implements Runnable {
                 } else if (peer.isInteresting() && peer.isChoked()) {
                     // If they are choking us make someone else a downloader
                     if (_log.shouldDebug())
-                        _log.debug("Choking peer that's choking us " + SnarkLogFormatter.peer(peer));
+                        _log.debug("Choking the peer -> It is choking us"
+                                   + " * Peer: " + SnarkLogFormatter.peer(peer));
                     peer.setChoking(true);
                     uploaders--;
                     interestedUploaders--;
@@ -201,8 +208,9 @@ class PeerCheckerTask implements Runnable {
                         // give new peers a better chance to get their first two pieces
                         (peer.completed() >= 2 || random.nextInt(4) == 0)) {
                     // If they aren't interesting make someone else a downloader
-                    if (_log.shouldDebug()) _log.debug("Choking uninteresting peer "
-                                                       + SnarkLogFormatter.peer(peer));
+                    if (_log.shouldDebug())
+                        _log.debug("Choking the peer -> We want nothing from it"
+                                   + " * Peer: " + SnarkLogFormatter.peer(peer));
                     peer.setChoking(true);
                     uploaders--;
                     interestedUploaders--;
@@ -213,8 +221,9 @@ class PeerCheckerTask implements Runnable {
                     removed.add(peer);
                 } else if (peer.isInterested() && peer.isSnubbing()) {
                     // Peer wants our pieces but never requests any; free the upload slot
-                    if (_log.shouldDebug()) _log.debug("Choking snubbing peer "
-                                                       + SnarkLogFormatter.peer(peer));
+                    if (_log.shouldDebug())
+                        _log.debug("Choking the peer -> It is snubbing us"
+                                   + " * Peer: " + SnarkLogFormatter.peer(peer));
                     peer.setChoking(true);
                     uploaders--;
                     interestedUploaders--;
@@ -227,8 +236,8 @@ class PeerCheckerTask implements Runnable {
                         && uploaderNotDelivering(download, peer.getDownloadRate())) {
                     // We are downloading but didn't receive anything...
                     if (_log.shouldDebug())
-                        _log.debug("Choking an uploader that has sent us nothing -> Peer: "
-                                   + SnarkLogFormatter.peer(peer));
+                        _log.debug("Choking the peer -> It has sent us nothing"
+                                   + " * Peer: " + SnarkLogFormatter.peer(peer));
                     peer.setChoking(true);
                     uploaders--;
                     interestedUploaders--;
@@ -280,7 +289,8 @@ class PeerCheckerTask implements Runnable {
                         || uploaders > uploadLimit)
                 && worstDownloader != null) {
             if (_log.shouldDebug())
-                _log.debug("Choking worst downloader [" + worstDownloader + "]");
+                _log.debug("Choking the peer -> Worst transfer rate"
+                           + " * Peer: " + SnarkLogFormatter.peer(worstDownloader));
 
             worstDownloader.setChoking(true);
             coordinator.decrementUploaders(worstDownloader.isInterested());
@@ -311,10 +321,10 @@ class PeerCheckerTask implements Runnable {
             // one line for the pass instead of a START and an END pair printing the
             // same keys twice, and the keys say what they count; the two states that
             // only matter when they are abnormal get their own lines
-            _log.debug("Peer check pass -> " + peerList.size() + " peers checked"
+            _log.debug("Peer check pass -> Peers checked: " + peerList.size()
                        + " * Uploaders: " + uploaders + " of " + uploadLimit
                        + " * Interested: " + interestedUploaders
-                       + (removedCount > 0 ? "\n* Removed: " + removedCount + " peers" : "")
+                       + (removedCount > 0 ? "\n* Choked: " + removedCount + " peers" : "")
                        + (overBWLimit ? "\n* Over the upload limit" : ""));
         }
 
@@ -338,6 +348,37 @@ class PeerCheckerTask implements Runnable {
         if (dht != null && ((_runCount + _phase) % 16) == 0) {
             dht.announce(coordinator.getInfoHash(), coordinator.completed());
         }
+    }
+
+    /**
+     * Our half of the choke pair, in words. The two flags are logged as prose because
+     * {@code We want: false} says nothing to a reader who has not the field names in
+     * front of them, and the console renders a bare true or false as a glyph.
+     *
+     * @param interesting true if the peer holds pieces we want
+     * @param choking true if we are throttling the peer
+     * @return the clause naming what we want from the peer and what we do to it
+     * @since 0.9.72+
+     */
+    static String ourState(boolean interesting, boolean choking) {
+        return (interesting ? "We want pieces from it" : "We want nothing from it")
+               + ", "
+               + (choking ? "we are choking it" : "we have unchoked it");
+    }
+
+    /**
+     * The peer's half of the choke pair, in words, for the same reason as
+     * {@link #ourState(boolean, boolean)}.
+     *
+     * @param interested true if the peer wants pieces from us
+     * @param choked true if the peer is throttling us
+     * @return the clause naming what the peer wants from us and what it does to us
+     * @since 0.9.72+
+     */
+    static String theirState(boolean interested, boolean choked) {
+        return (interested ? "It wants pieces from us" : "It wants nothing from us")
+               + ", "
+               + (choked ? "it is choking us" : "it has unchoked us");
     }
 
     /**

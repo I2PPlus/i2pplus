@@ -3348,7 +3348,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         int up = uploaders.get();
         if (listener != null && listener.overUploadLimit(interestedUploaders.get())) {
             if (_log.shouldDebug()) {
-                _log.debug("Over limit, uploaders was: " + up);
+                _log.debug("Over the global upload limit -> Allowing one fewer uploader"
+                           + " * Was: " + up + " peers");
             }
             return up - 1;
         } else if (up < MAX_UPLOADERS) {
