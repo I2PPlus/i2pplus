@@ -347,7 +347,7 @@ class ConnectionAcceptor implements Runnable {
             } catch (I2PException ioe) {
                 int level = stop ? Log.WARN : Log.ERROR;
                 if (_log.shouldLog(level)) {
-                    _log.log(level, "[Snark] Error while accepting", ioe);
+                    _log.log(level, "Accept loop failed -> Halting the acceptor", ioe);
                 }
                 synchronized (this) {
                     if (!stop) {
@@ -362,7 +362,9 @@ class ConnectionAcceptor implements Runnable {
                  * which does not currently call our halt(), although it should
                  */
                 if (_log.shouldWarn()) {
-                    _log.warn("[Snark] Error while accepting", ioe);
+                    // expected when the session is torn down, so the reason is enough
+                    _log.warn("Accept loop failed -> Halting the acceptor"
+                              + SnarkLogFormatter.onOwnLine(SnarkLogFormatter.error(ioe)));
                 }
                 synchronized (this) {
                     if (!stop) {
@@ -374,7 +376,7 @@ class ConnectionAcceptor implements Runnable {
             } catch (IOException ioe) {
                 int level = stop ? Log.WARN : Log.ERROR;
                 if (_log.shouldLog(level)) {
-                    _log.log(level, "[Snark] Error while accepting", ioe);
+                    _log.log(level, "Accept loop failed -> Halting the acceptor", ioe);
                 }
                 synchronized (this) {
                     if (!stop) {
@@ -594,12 +596,14 @@ class ConnectionAcceptor implements Runnable {
                     sleep(10 * (long) 1000);
                 } catch (I2PException ioe) {
                     if (_log.shouldWarn()) {
-                        _log.warn("[Snark] Error while accepting", ioe);
+                        _log.warn("Accept failed -> Retrying the accept loop"
+                                  + SnarkLogFormatter.onOwnLine(SnarkLogFormatter.error(ioe)));
                     }
                     sleep(10 * (long) 1000);
                 } catch (IOException ioe) {
                     if (_log.shouldWarn()) {
-                        _log.warn("[Snark] Error while accepting", ioe);
+                        _log.warn("Accept failed -> Retrying the accept loop"
+                                  + SnarkLogFormatter.onOwnLine(SnarkLogFormatter.error(ioe)));
                     }
                     sleep(10 * (long) 1000);
                 }
@@ -675,16 +679,9 @@ class ConnectionAcceptor implements Runnable {
             } catch (IOException ioe) {
                 Hash h = _socket.getPeerDestination().calculateHash();
                 if (_log.shouldDebug()) {
-                    String why = ioe.getMessage();
-                    // a peer that hangs up mid-handshake is routine; keep the
-                    // trace only for the faults whose exception says nothing
-                    if (why != null) {
-                        _log.debug("Closing an incoming connection -> Peer: "
-                                   + SnarkLogFormatter.dest(h) + " * Reason: " + why);
-                    } else {
-                        _log.debug("Closing an incoming connection -> Peer: "
-                                   + SnarkLogFormatter.dest(h), ioe);
-                    }
+                    _log.debug("Closing an incoming connection -> Peer: "
+                               + SnarkLogFormatter.dest(h)
+                               + SnarkLogFormatter.onOwnLine(SnarkLogFormatter.error(ioe)));
                 }
                 try {
                     _socket.reset();

@@ -490,8 +490,8 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
             // Ignore, probably just the other side closing the connection.
             // Or refusing the connection, timing out, etc.
             if (_log.shouldDebug())
-                _log.debug("Peer connection ended -> Dropped the peer" + peerKey() + torrentKey(),
-                           eofe);
+                _log.debug("Peer connection ended -> Dropped the peer" + peerKey() + torrentKey()
+                           + SnarkLogFormatter.onOwnLine(SnarkLogFormatter.error(eofe)));
         } catch (OutOfMemoryError oome) {
             _log.error("Peer connection out of memory -> Dropped the peer" + peerKey(), oome);
             throw oome;

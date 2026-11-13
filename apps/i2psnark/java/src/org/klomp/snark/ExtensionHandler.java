@@ -324,8 +324,8 @@ abstract class ExtensionHandler {
             }
         } catch (Throwable e) {
             if (log.shouldWarn())
-                log.warn("Extension handshake handling failed for "
-                         + SnarkLogFormatter.peer(peer), e);
+                log.warn("Extension handshake handling failed -> Ignored the handshake"
+                         + " * Peer: " + SnarkLogFormatter.peer(peer), e);
         }
     }
 
@@ -507,7 +507,8 @@ abstract class ExtensionHandler {
             listener.gotPeers(peer, peers);
         } catch (Throwable e) {
             if (log.shouldInfo())
-                log.info("PEX message handling failed for " + SnarkLogFormatter.peer(peer), e);
+                log.info("PEX message handling failed -> No peers added"
+                         + " * Peer: " + SnarkLogFormatter.peer(peer), e);
         }
     }
 
@@ -532,8 +533,8 @@ abstract class ExtensionHandler {
             listener.gotPort(peer, qport, rport);
         } catch (Throwable e) {
             if (log.shouldInfo())
-                log.info("DHT port message handling failed for "
-                         + SnarkLogFormatter.peer(peer), e);
+                log.info("DHT port message handling failed -> No ports recorded"
+                         + " * Peer: " + SnarkLogFormatter.peer(peer), e);
         }
     }
 
@@ -619,7 +620,8 @@ abstract class ExtensionHandler {
             }
         } catch (Throwable e) {
             if (log.shouldInfo())
-                log.info("Comment message handling failed for " + SnarkLogFormatter.peer(peer), e);
+                log.info("Comment message handling failed -> No comments added"
+                         + " * Peer: " + SnarkLogFormatter.peer(peer), e);
         }
     }
 

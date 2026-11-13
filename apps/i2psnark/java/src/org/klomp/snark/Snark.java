@@ -639,8 +639,11 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
                                     // logged, stopped, and notified the fatal listener, so do not
                                     // let it escape as a "crashed" timer task (SimpleTimer2 CRIT).
                                     if (_log.shouldDebug())
-                                        _log.debug("Suppressed RouterException from retry of "
-                                                   + getBaseName(), re);
+                                        _log.debug("Torrent retry failed -> Not trying again"
+                                                   + " * Torrent: "
+                                                   + SnarkLogFormatter.torrent(Snark.this)
+                                                   + SnarkLogFormatter.onOwnLine(
+                                                             SnarkLogFormatter.error(re)));
                                 }
                             }
                         }
@@ -1740,7 +1743,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         }
         int limit = Math.max(MIN_TOTAL_UPLOADERS, maxUploaders);
         if (_log.shouldDebug()) {
-            _log.debug("Currently uploading to " + totalUploaders + " peers -> Limit: " + limit + " peers");
+            _log.debug("Upload slots in use -> " + totalUploaders + " peers"
+                       + " * Global limit: " + limit + " peers");
         }
         return totalUploaders > limit;
     }

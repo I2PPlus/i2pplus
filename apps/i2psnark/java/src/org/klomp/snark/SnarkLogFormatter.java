@@ -374,6 +374,29 @@ public class SnarkLogFormatter {
         return segment;
     }
 
+    /**
+     * Why an operation failed, for a line that does not pass the throwable to the
+     * logger. A dropped peer, a refused connection or a closed socket is what the
+     * torrent does every day, and its stack trace is four lines of router plumbing
+     * that says nothing beyond the exception's own message, so the message goes on
+     * the line instead. An exception with no message is itself the diagnosis, so
+     * its class name is used.
+     *
+     * @param t what went wrong, null means the failure was not reported
+     * @return the {@code " * Error: x"} segment, never empty
+     * @since 0.9.72+
+     */
+    public static String error(Throwable t) {
+        if (t == null) {
+            return " * Error: Not reported";
+        }
+        String msg = t.getMessage();
+        if (msg == null || msg.isEmpty()) {
+            return " * Error: " + t.getClass().getName();
+        }
+        return " * Error: " + msg;
+    }
+
     /** The suffix every I2P host name carries. */
     private static final String I2P_TLD = ".i2p";
 

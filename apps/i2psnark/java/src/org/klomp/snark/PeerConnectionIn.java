@@ -354,12 +354,14 @@ class PeerConnectionIn implements Runnable {
         } catch (IOException ioe) {
             // Ignore, probably the other side closed connection.
             if (_log.shouldDebug()) {
-                _log.debug("Error communicating with " + SnarkLogFormatter.peer(peer)
-                           + (ioe.getMessage() != null ? " -> " + ioe.getMessage() : ""));
+                _log.debug("Peer read failed -> Ended the read loop"
+                           + " * Peer: " + SnarkLogFormatter.peer(peer)
+                           + SnarkLogFormatter.onOwnLine(SnarkLogFormatter.error(ioe)));
             }
         } catch (RuntimeException t) {
             if (!isStandalone && _log.shouldWarn()) {
-                _log.warn("Error communicating with " + SnarkLogFormatter.peer(peer), t);
+                _log.warn("Peer read failed -> Ended the read loop"
+                          + " * Peer: " + SnarkLogFormatter.peer(peer), t);
             }
         } finally {
             peer.disconnect();

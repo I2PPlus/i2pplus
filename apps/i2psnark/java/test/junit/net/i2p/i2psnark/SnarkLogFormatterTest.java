@@ -1,5 +1,6 @@
 package net.i2p.i2psnark;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -433,6 +434,31 @@ public class SnarkLogFormatterTest {
         String line = "Requesting from [abcdefghi] ->" + SnarkLogFormatter.requestTally(m);
         assertTrue(line.length() + " " + line, line.length() <= 100);
         assertFalse(line, line.contains("\n"));
+    }
+
+    /**
+     * An expected failure puts the exception's own message on the line, where a
+     * reader sees it without a stack trace to page past.
+     */
+    @Test
+    public void testAFailureReportsItsOwnMessage() {
+        assertEquals(" * Error: No destination for unkn@aHyB",
+                     SnarkLogFormatter.error(new IOException("No destination for unkn@aHyB")));
+    }
+
+    /** A throwable with nothing to say names its class rather than going blank. */
+    @Test
+    public void testAMessagelessFailureNamesItsClass() {
+        assertEquals(" * Error: java.lang.NullPointerException",
+                     SnarkLogFormatter.error(new NullPointerException()));
+        assertEquals(" * Error: java.lang.IllegalStateException",
+                     SnarkLogFormatter.error(new IllegalStateException("")));
+    }
+
+    /** A failure the site never reported still gets a segment, never a blank. */
+    @Test
+    public void testANullFailureStillGetsASegment() {
+        assertEquals(" * Error: Not reported", SnarkLogFormatter.error(null));
     }
 
     /** Pieces named by a tally line. */
