@@ -1045,9 +1045,28 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
-     * Formerly used to reduce max if huge pieces to keep from ooming when leeching but now we don't.
+     * How many peers to ask a tracker or the DHT for: this torrent's own connection
+     * cap, not the global maximum. A torrent of ten pieces holds ten connections, so
+     * the further addresses the global cap of 300 asks for are parsed into
+     * {@link PeerID}s, each with a blocking destination lookup behind it, and are
+     * never usable.
      *
-     * @return usually I2PSnarkUtil.MAX_CONNECTIONS
+     * @return the peer count to request, at least one
+     * @since 0.9.72+
+     */
+    int peerListWant() {
+        return Math.max(1, getMaxConnections());
+    }
+
+    /**
+     * The connection cap for this torrent, which is far below the global maximum: a
+     * torrent with few pieces gains nothing from dozens of peers, and a torrent on a
+     * low bandwidth limit cannot feed more connections than it has rate for.
+     * Formerly used to reduce max if huge pieces to keep from ooming when leeching
+     * but now we don't.
+     *
+     * @return the per-torrent cap, at most {@link I2PSnarkUtil#getMaxConnections()}
+     *         and as low as 4 for a torrent of ten pieces or fewer
      */
     private int getMaxConnections() {
         if (metainfo == null) {

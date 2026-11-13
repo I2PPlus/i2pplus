@@ -1809,12 +1809,8 @@ public class TrackerClient implements Runnable {
          * _dhtThread reference are held.
          */
         private void fetchAndAddPeers() {
-            int numwant;
-            if (!coordinator.needOutboundPeers()) {
-                numwant = 1;
-            } else {
-                numwant = _util.getMaxConnections();
-            }
+            int numwant =
+                    peerListWant(coordinator.needOutboundPeers(), coordinator.peerListWant());
             Collection<Hash> hashes =
                     dht.getPeersAndAnnounce(
                             snark.getInfoHash(),
@@ -1954,6 +1950,24 @@ public class TrackerClient implements Runnable {
      */
     static int pacedDialCount(int candidates, int freeSlots) {
         return Math.max(0, Math.min(candidates, freeSlots));
+    }
+
+    /**
+     * How many peers one discovery round asks a tracker or the DHT for. A torrent that
+     * cannot use another peer asks for a single spare, and the DHT fetch reads that one
+     * back as "non-seeds only", so the small value has to stay small rather than
+     * becoming the torrent's cap. When peers are wanted the cap is the torrent's own,
+     * not the global 300: the addresses beyond it are parsed into peer ids, each with a
+     * blocking destination lookup behind it, and are never usable.
+     *
+     * @param needPeers whether the torrent will actually use another peer
+     * @param listWant how many peers the torrent's own connection cap allows, from
+     *                 {@link PeerCoordinator#peerListWant()}
+     * @return the peer count to request, at least one
+     * @since 0.9.72+
+     */
+    static int peerListWant(boolean needPeers, int listWant) {
+        return needPeers ? Math.max(1, listWant) : 1;
     }
 
     /**
@@ -2335,7 +2349,7 @@ public class TrackerClient implements Runnable {
         if (small) {
             buf.append('0');
         } else {
-            buf.append(_util.getMaxConnections());
+            buf.append(coordinator.peerListWant());
         }
         String s = buf.toString();
         if (_log.shouldDebug()) {
