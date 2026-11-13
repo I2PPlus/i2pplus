@@ -505,7 +505,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         }
         String key = null;
         TorrentDest td = null;
-        if (_util.getMultiDest()) {
+        if (usesTorrentDestination(_util.getMultiDest(), torrent, rootDataDir)) {
             key = Base64.encode(infoHash);
             td = _util.getOrCreateTorrentDest(key, getBaseName());
             _dest = td;
@@ -1557,6 +1557,23 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         return (name != null && (name.startsWith("Lookup [") || name.startsWith("lookup-") ||
                                  name.contains("zzzot-lookup"))) ||
                (dataDir != null && dataDir.getPath().contains("zzzot-lookup"));
+    }
+
+    /**
+     * Whether this torrent gets its own I2P destination. Multi-destination mode says
+     * yes for a real torrent; a zzzot metadata lookup is exempt. A lookup lives for
+     * minutes and the same unresolved hash is retried for hours, so a destination per
+     * cycle means a session and a set of tunnels built and torn down over and over for
+     * a torrent that only ever reports a name and a size.
+     *
+     * @param multiDest whether multi-destination mode is enabled
+     * @param name the torrent display name, may be null
+     * @param dataDir the torrent's data directory, may be null
+     * @return true to create or reuse a per-torrent destination for this torrent
+     * @since 0.9.72+
+     */
+    static boolean usesTorrentDestination(boolean multiDest, String name, File dataDir) {
+        return multiDest && !isLookupTorrent(name, dataDir);
     }
 
     /**
