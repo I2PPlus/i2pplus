@@ -231,9 +231,9 @@ class PeerConnectionIn implements Runnable {
                         begin = din.readInt();
                         len = din.readInt();
                         if (_log.shouldDebug()) {
-                            _log.debug("Received request from " + SnarkLogFormatter.peer(peer)
-                                       + " for [Piece "
-                                       + piece + "] (Start: " + begin + ")");
+                            _log.debug("Received a request -> Piece: " + piece + " * Begin: "
+                                       + begin + " * Length: " + len + " bytes * Peer: "
+                                       + SnarkLogFormatter.peer(peer));
                         }
                         ps.requestMessage(piece, begin, len);
                         break;
@@ -301,8 +301,8 @@ class PeerConnectionIn implements Runnable {
                         piece = din.readInt();
                         ps.suggestMessage(piece);
                         if (_log.shouldDebug()) {
-                            _log.debug("Received suggest(" + piece + ") from "
-                                       + SnarkLogFormatter.peer(peer));
+                            _log.debug("Received a suggest -> Piece: " + piece
+                                       + " * Peer: " + SnarkLogFormatter.peer(peer));
                         }
                         break;
 
@@ -326,9 +326,9 @@ class PeerConnectionIn implements Runnable {
                         len = din.readInt();
                         ps.rejectMessage(piece, begin, len);
                         if (_log.shouldDebug()) {
-                            _log.debug("Received reject from " + SnarkLogFormatter.peer(peer)
-                                       + " for [Piece " + piece
-                                       + "] (Start: " + begin + " Length: " + len + " bytes)");
+                            _log.debug("Received a reject -> Piece: " + piece + " * Begin: "
+                                       + begin + " * Length: " + len + " bytes * Peer: "
+                                       + SnarkLogFormatter.peer(peer));
                         }
                         break;
 
@@ -336,8 +336,8 @@ class PeerConnectionIn implements Runnable {
                         piece = din.readInt();
                         ps.allowedFastMessage(piece);
                         if (_log.shouldDebug()) {
-                            _log.debug("Received allowed_fast(" + piece + ") from "
-                                       + SnarkLogFormatter.peer(peer));
+                            _log.debug("Received allowed_fast -> Piece: " + piece
+                                       + " * Peer: " + SnarkLogFormatter.peer(peer));
                         }
                         break;
 
@@ -359,7 +359,7 @@ class PeerConnectionIn implements Runnable {
             }
         } catch (RuntimeException t) {
             if (!isStandalone && _log.shouldWarn()) {
-                _log.warn("Error communicating with " + SnarkLogFormatter.peer(peer) + " ", t);
+                _log.warn("Error communicating with " + SnarkLogFormatter.peer(peer), t);
             }
         } finally {
             peer.disconnect();

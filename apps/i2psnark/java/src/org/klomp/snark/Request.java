@@ -97,6 +97,20 @@ class Request {
         return piece.getPiece() ^ off ^ len;
     }
 
+    /**
+     * The request as log segments - {@code " -> Piece: 3 * Offset: 16384 bytes *
+     * Size: 16384 bytes"} - the same shape {@link Message#logArgs()} gives a
+     * queued message, so a request line reads the same wherever it is written.
+     * {@link #toString()} is the bare {@code (piece,off,len)} tuple, which
+     * labels nothing, gives no units, and cannot be read at a glance.
+     *
+     * @return the arrow and the labelled values, beginning with {@code " -> "}
+     */
+    String logForm() {
+        return " -> Piece: " + piece.getPiece() + " * Offset: " + off + " bytes * Size: "
+               + len + " bytes";
+    }
+
     /** Two requests are equal if they share the same piece, offset, and length. */
     @Override
     public boolean equals(Object o) {
