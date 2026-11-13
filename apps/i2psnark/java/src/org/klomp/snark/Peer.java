@@ -6,6 +6,7 @@
 
 package org.klomp.snark;
 
+import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -397,7 +398,9 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
                 if ((sock == null) || (sock.isClosed())) {
                     throw new IOException("Unable to reach " + peerID);
                 }
-                InputStream in = sock.getInputStream();
+                // Buffered, as the accepted connection is in ConnectionAcceptor:
+                // without it every header field is a separate call on the socket
+                InputStream in = buffered(sock.getInputStream());
                 OutputStream out = sock.getOutputStream();
                 byte[] id = handshake(in, out);
                 byte[] expectedId = peerID.getID();
@@ -505,6 +508,22 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
 
     /** Bound on the socket read timeout while reading the handshake, to avoid hanging a thread on a stalled peer. */
     private static final long HANDSHAKE_READ_TIMEOUT = (long) 45 * 1000;
+
+    /**
+     * Wrap a socket's input stream in a buffer, as the accepted connection's stream
+     * already is. Each primitive a {@code DataInputStream} reads is a separate call on
+     * the stream beneath it, so framing one PIECE message costs four calls against the
+     * streaming socket and a REQUEST costs three, each one a lock acquisition and a
+     * copy of a few bytes. A buffer turns the whole header into a single fill.
+     *
+     * @param in the stream to read from, raw or already buffered
+     * @return a buffered stream, or in itself when it is already buffered, so an
+     *         accepted connection is not wrapped twice
+     * @since 0.9.72+
+     */
+    static InputStream buffered(InputStream in) {
+        return in instanceof BufferedInputStream ? in : new BufferedInputStream(in);
+    }
 
     /**
      * Perform the handshake over the data streams and return the ID reported by the other side.
