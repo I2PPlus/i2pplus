@@ -39,6 +39,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
@@ -120,6 +121,12 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private File _metadataFile;
     /** The loaded global metadata. */
     private Properties _metadata;
+    /** When the metadata file was last written, 0 before the first write. */
+    private long _metadataWritten;
+    /** True while a metadata change is waiting for the queued write. */
+    private boolean _metadataDirty;
+    /** The queued write of the metadata file, null when none is pending. */
+    private volatile ScheduledFuture<?> _metadataSave;
 
     /** One lock for all config, files for simplicity. */
     private final Object _configLock = new Object();
@@ -1045,6 +1052,19 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         _snarkScheduler.shutdownNow();
         _trackerProbe.stop();
         stopAllTorrents(true);
+        // Nothing runs after this, so a queued metadata write has to happen here or
+        // the changes it carries are lost
+        ScheduledFuture<?> ms = _metadataSave;
+        if (ms != null) {
+            ms.cancel(false);
+        }
+        synchronized (_configLock) {
+            if (_metadataDirty) {
+                _metadataDirty = false;
+                _metadataWritten = _context.clock().now();
+                writeMetadata();
+            }
+        }
         ClientAppManager cmgr = _context.clientAppManager();
         if ("i2psnark".equals(_contextName)) { // only if default instance
             if (cmgr != null) {
@@ -1833,16 +1853,91 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * Save the metadata file to disk.
+     * Shortest spacing between two full rewrites of the metadata file, in ms. A
+     * lookup torrent mutates the metadata when it starts and again when it is
+     * purged, and the file is one serialization of every torrent's config, so
+     * without a floor a burst of lookups rewrites the whole file every couple of
+     * seconds.
+     */
+    static final long METADATA_SAVE_MIN_INTERVAL_MS = 30 * 1000;
+
+    /**
+     * Decide whether a metadata mutation writes the file on the spot or leaves it to
+     * the queued write. The first mutation of a burst writes at once, so a lone
+     * change is durable immediately; later mutations inside the interval are covered
+     * by one trailing write, which is what a lookup purge storm needs.
+     *
+     * @param now the current time in ms
+     * @param lastWrite when the file was last written, 0 before the first write
+     * @param queued whether a trailing write is already scheduled
+     * @param minInterval the shortest spacing two full rewrites may have, in ms
+     * @return true to write the file now, false to leave it to the queued write
+     * @since 0.9.72+
+     */
+    static boolean writeMetadataNow(long now, long lastWrite, boolean queued, long minInterval) {
+        return !queued && now - lastWrite >= minInterval;
+    }
+
+    /**
+     * Record a metadata mutation: write the file now, or leave it dirty for the
+     * trailing write scheduled here.
      * Called under _configLock after every mutation.
      *
      * @since 0.9.71+
      */
     private void saveMetadata() {
+        long now = _context.clock().now();
+        if (writeMetadataNow(now, _metadataWritten, _metadataSave != null,
+                             METADATA_SAVE_MIN_INTERVAL_MS)) {
+            _metadataWritten = now;
+            writeMetadata();
+            return;
+        }
+        _metadataDirty = true;
+        if (_metadataSave != null) {
+            return;
+        }
+        try {
+            _metadataSave = _snarkScheduler.schedule(this::writeDirtyMetadata,
+                                                     METADATA_SAVE_MIN_INTERVAL_MS,
+                                                     TimeUnit.MILLISECONDS);
+        } catch (RejectedExecutionException ree) {
+            // Snark is shutting down, so nothing will run the queued write; do it
+            // here rather than lose the change
+            _metadataSave = null;
+            _metadataDirty = false;
+            _metadataWritten = now;
+            writeMetadata();
+        }
+    }
+
+    /**
+     * Write the metadata file if a mutation left it dirty, and clear the queued flag
+     * first so a mutation made during the write schedules the next write. Runs on
+     * Snark's own scheduler rather than SimpleTimer2 for the reason given at
+     * {@link #_snarkScheduler}: this takes the config lock and does disk I/O.
+     */
+    private void writeDirtyMetadata() {
+        synchronized (_configLock) {
+            _metadataSave = null;
+            if (!_metadataDirty) {
+                return;
+            }
+            _metadataDirty = false;
+            _metadataWritten = _context.clock().now();
+            writeMetadata();
+        }
+    }
+
+    /**
+     * Write the whole metadata file out. Called with _configLock held.
+     */
+    private void writeMetadata() {
         try {
             DataHelper.storeProps(_metadata, _metadataFile);
         } catch (IOException ioe) {
-            _log.error("Error saving metadata " + _metadataFile, ioe);
+            _log.error("Saving the torrent metadata failed -> Keeping the in-memory copy"
+                       + " * File: " + _metadataFile, ioe);
         }
     }
 
