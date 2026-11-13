@@ -148,6 +148,19 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /** Max distinct swarm peers remembered per torrent. */
     private static final int MAX_SWARM_PEERS = 512;
 
+    /**
+     * Smallest bound on the PEX-advertised peers remembered per torrent, for a torrent
+     * whose own connection cap is tiny.
+     */
+    private static final int MIN_PEX_PEERS = 16;
+
+    /**
+     * How many times more PEX-advertised peers than the torrent's own peer ask are kept
+     * between drains, covering the dials that fail without retaining thousands of
+     * destinations.
+     */
+    private static final int PEX_PEER_FACTOR = 4;
+
     /** How long a remembered swarm peer stays valid without resurfacing. */
     private static final long SWARM_PEER_TTL = 2 * 60 * 60 * 1000L;
 
@@ -3427,6 +3440,16 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         if (!needOutboundPeers()) {
             return;
         }
+        // read the room once, not per candidate
+        int room = pexPeerRoom(pexPeers.size(), pexPeerCap(peerListWant()));
+        if (room <= 0) {
+            if (_log.shouldDebug()) {
+                _log.debug("Ignoring PEX peers -> Already remembering the maximum"
+                           + " * Torrent: " + SnarkLogFormatter.torrent(snark)
+                           + " * Peers: " + pexPeers.size());
+            }
+            return;
+        }
         Destination myDest = _util.getMyDestination(getInfoHash());
         if (myDest == null) {
             return;
@@ -3441,9 +3464,41 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 continue;
             }
             pexPeers.add(id);
+            if (--room <= 0) {
+                break;
+            }
         }
         // TrackerClient will poll for pexPeers and do the add in its thread,
         // rather than running another thread here.
+    }
+
+    /**
+     * How many PEX-advertised peers a torrent may remember between drains of the set.
+     * Each entry holds a full I2P destination, and the only consumer drains the set when
+     * the torrent can use another connection, so a torrent sitting at its connection cap
+     * never drains it and an unbounded set grows for the whole life of the torrent. The
+     * bound follows the torrent's own peer ask rather than being one number for every
+     * torrent.
+     *
+     * @param listWant how many peers the torrent would ask a tracker for, from
+     *                 {@link #peerListWant()}
+     * @return the bound on the remembered set, at least {@link #MIN_PEX_PEERS}
+     * @since 0.9.72+
+     */
+    static int pexPeerCap(int listWant) {
+        return Math.max(MIN_PEX_PEERS, listWant * PEX_PEER_FACTOR);
+    }
+
+    /**
+     * How many more PEX-advertised peers fit in the set.
+     *
+     * @param size how many peers the set holds now
+     * @param cap the bound from {@link #pexPeerCap(int)}
+     * @return the remaining room, 0 or less when the set is full
+     * @since 0.9.72+
+     */
+    static int pexPeerRoom(int size, int cap) {
+        return cap - size;
     }
 
     /**
