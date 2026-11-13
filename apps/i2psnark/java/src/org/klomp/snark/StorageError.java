@@ -12,9 +12,8 @@ import java.util.Locale;
  * Classified storage failures.  The JDK maps many errno failures to typed
  * NIO exceptions, so those are matched first without any message parsing;
  * the OS error text carried by the exception message is only a fallback for
- * classic java.io failures (RandomAccessFile paths surface as plain
- * IOException) and for errno cases with no typed exception (ENOSPC, EIO,
- * EMFILE, EDQUOT, ...).
+ * classic java.io failures, which surface as plain IOException, and for errno
+ * cases with no typed exception (ENOSPC, EIO, EMFILE, EDQUOT, ...).
  *
  * <p>Each constant carries the human-readable label used in console and
  * log messages, and whether the failure is fatal for the torrent (stop)
@@ -83,29 +82,62 @@ public enum StorageError {
     }
 
     /**
+     * How far down an exception's cause chain {@link #classify} and
+     * {@link #deepestMessage} look. A storage failure is wrapped once or twice to
+     * name the file involved, so the reason sits a link or two below the wrapper.
+     * The bound also keeps a cause cycle, two exceptions naming each other as each
+     * other's cause, from looping forever.
+     */
+    private static final int MAX_CAUSE_DEPTH = 8;
+
+    /**
      * Classify a storage failure.  Typed NIO exceptions map directly;
      * otherwise the errno text is matched case-insensitively, using the
      * JVM's canonical English messages for Unix and Windows.
+     *
+     * <p>The cause chain is searched as well as the exception itself, because the
+     * storage layer wraps a write or read failure to name the file it was working
+     * on: the wrapper carries the path and the errno text sits on its cause. The
+     * first link that classifies wins, so a wrapper that says something specific
+     * is still trusted first.
      *
      * @param ioe the storage error
      * @return the classified error, never null
      * @since 0.9.71+
      */
     public static StorageError classify(IOException ioe) {
-        if (ioe instanceof FileNotFoundException || ioe instanceof NoSuchFileException) {
+        Throwable t = ioe;
+        for (int depth = 0; t != null && depth < MAX_CAUSE_DEPTH; depth++) {
+            StorageError err = classifyOne(t);
+            if (err != OTHER) {
+                return err;
+            }
+            t = t.getCause();
+        }
+        return OTHER;
+    }
+
+    /**
+     * Classify one link of a cause chain, with no search of its own causes.
+     *
+     * @param t the exception to classify, any link of the chain
+     * @return the classified error, never null
+     */
+    private static StorageError classifyOne(Throwable t) {
+        if (t instanceof FileNotFoundException || t instanceof NoSuchFileException) {
             return MISSING;
         }
-        if (ioe instanceof AccessDeniedException) {
+        if (t instanceof AccessDeniedException) {
             return PERMISSION;
         }
-        if (ioe instanceof NotDirectoryException) {
+        if (t instanceof NotDirectoryException) {
             return IS_DIRECTORY;
         }
-        String msg = ioe.getMessage();
-        if (ioe instanceof FileSystemException) {
+        String msg = t.getMessage();
+        if (t instanceof FileSystemException) {
             // the reason is the errno text without the path prefix, so a
             // path that happens to contain an errno phrase cannot mislead
-            String reason = ((FileSystemException) ioe).getReason();
+            String reason = ((FileSystemException) t).getReason();
             if (reason != null) {
                 msg = reason;
             }
@@ -139,9 +171,9 @@ public enum StorageError {
      * exception text for unclassified errors.
      *
      * @param ioe the storage error
-     * @return the classification's own text when the message could be matched, otherwise the
-     *         raw message prefixed with "I/O error", or just that prefix if the message is
-     *         null
+     * @return the classification's own text when any link of the chain could be
+     *         matched, otherwise the most specific message in the chain prefixed
+     *         with "I/O error", or just that prefix if no link has a message
      * @since 0.9.71+
      */
     public static String describe(IOException ioe) {
@@ -149,10 +181,32 @@ public enum StorageError {
         if (err != OTHER) {
             return err.toString();
         }
-        String msg = ioe.getMessage();
+        String msg = deepestMessage(ioe);
         if (msg != null) {
             return "I/O error: " + msg;
         }
         return "I/O error";
+    }
+
+    /**
+     * The message of the deepest link of an exception chain that has one. The
+     * storage layer wraps a failure to name the file it was working on, so the
+     * operating system's own reason usually sits further down than the wrapper's
+     * text, and a reader wants that reason rather than the file name.
+     *
+     * @param t the exception to walk, null allowed
+     * @return the most specific message available, or null if no link has one
+     * @since 0.9.72+
+     */
+    static String deepestMessage(Throwable t) {
+        String rv = null;
+        for (int depth = 0; t != null && depth < MAX_CAUSE_DEPTH; depth++) {
+            String msg = t.getMessage();
+            if (msg != null) {
+                rv = msg;
+            }
+            t = t.getCause();
+        }
+        return rv;
     }
 }
