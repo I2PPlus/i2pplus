@@ -107,8 +107,25 @@ class Request {
      * @return the arrow and the labelled values, beginning with {@code " -> "}
      */
     String logForm() {
-        return " -> Piece: " + piece.getPiece() + " * Offset: " + off + " bytes * Size: "
-               + len + " bytes";
+        return logForm(piece.getPiece(), off, len);
+    }
+
+    /**
+     * A block named by piece, offset and length, as the same log segments
+     * {@link #logForm()} gives a request we made. PeerState holds the three
+     * numbers loose rather than a Request when a peer asks us for a block, and a
+     * block has to read identically whether we asked for it or the peer did, so
+     * the form lives here once instead of in a second copy at each call site.
+     *
+     * @param piece the piece index the block starts in
+     * @param begin the byte offset into the piece
+     * @param length the size of the block in bytes
+     * @return the arrow and the labelled values, beginning with {@code " -> "}
+     * @since 0.9.72+
+     */
+    static String logForm(int piece, int begin, int length) {
+        return " -> Piece: " + piece + " * Offset: " + begin + " bytes * Size: " + length
+               + " bytes";
     }
 
     /** Two requests are equal if they share the same piece, offset, and length. */
