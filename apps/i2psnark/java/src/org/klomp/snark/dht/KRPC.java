@@ -245,7 +245,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /** Age limit for inbound crypto tokens. */
     private static final long MAX_INBOUND_TOKEN_AGE = MAX_TOKEN_AGE - 2 * 60 * 1000;
     /** Outbound crypto tokens held at once. */
-    private static final int MAX_OUTBOUND_TOKENS = 5000;
+    static final int MAX_OUTBOUND_TOKENS = 5000;
     /** Cap on stored inbound tokens, enforced at put time as well as in the cleaner. */
     private static final int MAX_INBOUND_TOKENS = 5000;
 
@@ -1722,19 +1722,11 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         // Bound the map at put time: the periodic cleaner only runs minutes
         // later, so a get_peers flood could otherwise pile up unbounded
         // tokens in the gap (and a per-torrent TorrentKRPC has no cleaner
-        // at all)
-        if (_outgoingTokens.size() >= MAX_OUTBOUND_TOKENS) {
-            pruneOutgoingTokens();
-            if (_outgoingTokens.size() >= MAX_OUTBOUND_TOKENS) {
-                if (_log.shouldInfo())
-                    _log.info("Too many outbound tokens -> Dropping a get_peers token");
-            } else {
-                _outgoingTokens.put(token, nInfo);
-            }
-        } else {
-            _outgoingTokens.put(token, nInfo);
-        }
-        if (_log.shouldInfo()) {
+        // at all). A token we did not store must not go out either: the node
+        // would try to announce back with it and be refused, which is worse
+        // than never offering it.
+        boolean stored = storeOutgoingToken(token, nInfo);
+        if (stored && _log.shouldInfo()) {
             _log.info("Stored a token for " + nInfo + " -> Size: "
                       + token.getData().length + " bytes");
         }
@@ -1760,7 +1752,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             nodes.remove(nInfo); // him
             nodes.remove(_myNodeInfo); // me
             byte[] nodeArray = packNodes(nodes);
-            sendNodes(nInfo, msgID, token, nodeArray, bFsd, bFpe);
+            sendNodes(nInfo, msgID, stored ? token : null, nodeArray, bFsd, bFpe);
         } else {
             List<byte[]> hashes;
             if (peers.isEmpty()) {
@@ -1771,8 +1763,42 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                     hashes.add(peer.getData());
                 }
             }
-            sendPeers(nInfo, msgID, token, hashes, bFsd, bFpe);
+            sendPeers(nInfo, msgID, stored ? token : null, hashes, bFsd, bFpe);
         }
+    }
+
+    /**
+     * Remember a token we are about to hand out, so the announce that comes back with it
+     * can be traced to the node it was given to.
+     *
+     * @param token the token to remember
+     * @param nInfo the node the token is being handed to
+     * @return true if the token was stored, false if the map was still full after a prune
+     * @since 0.9.72+
+     */
+    boolean storeOutgoingToken(Token token, NodeInfo nInfo) {
+        if (!tokenRoom(_outgoingTokens.size(), MAX_OUTBOUND_TOKENS)) {
+            pruneOutgoingTokens();
+            if (!tokenRoom(_outgoingTokens.size(), MAX_OUTBOUND_TOKENS)) {
+                if (_log.shouldInfo())
+                    _log.info("Too many outbound tokens -> Not handing the token out");
+                return false;
+            }
+        }
+        _outgoingTokens.put(token, nInfo);
+        return true;
+    }
+
+    /**
+     * Whether the outbound token map can take another token.
+     *
+     * @param size how many tokens the map holds now
+     * @param cap the bound the map is held to
+     * @return true if one more token fits
+     * @since 0.9.72+
+     */
+    static boolean tokenRoom(int size, int cap) {
+        return size < cap;
     }
 
     /**
