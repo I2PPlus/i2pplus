@@ -1247,13 +1247,43 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
+     * Is the peer the same destination we are using for this torrent? The
+     * tracker, PEX and the DHT all report us back to ourselves while we are in
+     * the swarm, so the check is made before the dial rather than in the socket
+     * layer, after a thread, a destination lookup and a refused connect are spent.
+     *
+     * @param ourHash the hash of our own destination for the torrent, null when
+     *                the session is not up yet
+     * @param peerHash the hash of the peer's destination, null when the peer has
+     *                 no address yet
+     * @return true only when both hashes are known and identical
+     * @since 0.9.72+
+     */
+    static boolean isSelf(byte[] ourHash, byte[] peerHash) {
+        return ourHash != null && peerHash != null && DataHelper.eq(ourHash, peerHash);
+    }
+
+    /**
      * Add peer (inbound or outbound).
      *
-     * @param peer the connection to take over; disconnected rather than tracked if halted or full
+     * @param peer the connection to take over; disconnected rather than tracked if
+     *             halted, full, or our own destination
      * @return true if actual attempt to add peer occurs
      */
     public boolean addPeer(final Peer peer) {
         if (halted) {
+            peer.disconnect(false);
+            return false;
+        }
+
+        Destination myDest = _util.getMyDestination(getInfoHash());
+        Hash ourHash = myDest != null ? myDest.getHash() : null;
+        if (isSelf(ourHash != null ? ourHash.getData() : null, peer.getPeerID().getDestHash())) {
+            if (_log.shouldDebug()) {
+                _log.debug("Skipping our own destination -> Peer not added"
+                           + " * Peer: " + SnarkLogFormatter.peer(peer)
+                           + " * Torrent: " + SnarkLogFormatter.torrent(snark));
+            }
             peer.disconnect(false);
             return false;
         }
