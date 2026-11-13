@@ -255,7 +255,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /** Peers that did not ask for comments. */
     private final AtomicInteger _commentsNotRequested = new AtomicInteger();
     /** Interval between comment requests. */
-    private static final long COMMENT_REQ_INTERVAL = 12 * 60 * 60 * 1000L;
+    static final long COMMENT_REQ_INTERVAL = 12 * 60 * 60 * 1000L;
     /** Delay before the first comment request. */
     private static final long COMMENT_REQ_DELAY = 60 * 60 * 1000L;
     /** Non-requesting peers that trigger a request. */
@@ -1006,27 +1006,39 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
-     * Outbound. Not halted, peers &lt; max, and need pieces.
+     * Outbound. Not halted, below the connection margin, and not rechecking.
      *
-     * @return true while the coordinator is running, holds at least two
-     *         connections below the maximum so new peers can displace stale ones,
-     *         and either pieces are still wanted or a comment request is due
+     * <p>A torrent that already holds every piece still needs outbound peers. The only
+     * peers it can upload to are the ones it is connected to, so a completed torrent
+     * that stops acquiring them ends up with an uploader list that never refills, and
+     * it stops learning about peers from PEX, the DHT and the backup trackers as well.
+     * What should limit a seed is the connection cap, not whether it wants bytes.
+     *
+     * @return true while the coordinator is running and holds at least two
+     *         connections below the maximum, so new peers can displace stale ones,
+     *         and storage is not running a whole-torrent recheck
      * @since 0.9.1
      */
     public boolean needOutboundPeers() {
+        return needOutboundPeers(halted, peers.size(), getMaxConnections(),
+                                 storage != null && storage.isChecking());
+    }
+
+    /**
+     * The decision behind {@link #needOutboundPeers()}, with nothing read from the
+     * torrent so it can be tested on its own.
+     *
+     * @param halted whether the coordinator has been stopped
+     * @param peers how many connections the torrent holds now, inbound included
+     * @param maxConnections the torrent's own connection cap
+     * @param checking whether storage is running a whole-torrent recheck
+     * @return true while another outbound connection may be started
+     * @since 0.9.72+
+     */
+    static boolean needOutboundPeers(boolean halted, int peers, int maxConnections,
+                                     boolean checking) {
         // minus two to make it a little easier for new peers to get in on large swarms
-        return (wantedBytes != 0
-                        || (_util.utCommentsEnabled()
-                                &&
-                                // we should also check SnarkManager.getSavedCommentsEnabled() for
-                                // this torrent,
-                                // but that reads from metadata, there's no caching.
-                                // TODO
-                                _commentsLastRequested.get()
-                                        < _util.getContext().clock().now() - COMMENT_REQ_INTERVAL))
-                && !halted
-                && peers.size() < getMaxConnections() - 2
-                && (storage == null || !storage.isChecking());
+        return !halted && peers < maxConnections - 2 && !checking;
     }
 
     /**
@@ -3300,12 +3312,36 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
+     * Whether a comment request is due. The field is initialised to a time part-way
+     * through the interval, so the first request of a torrent lands a random hour or so
+     * after it starts rather than all torrents asking at once.
+     *
+     * @param now the current time in ms
+     * @param lastRequested when comments were last asked for, in ms
+     * @param interval the shortest spacing two requests may have, in ms
+     * @return true once the interval has passed since the last request
+     * @since 0.9.72+
+     */
+    static boolean commentsDue(long now, long lastRequested, long interval) {
+        return now - lastRequested >= interval;
+    }
+
+    /**
      * Send a comment request message to the peer, if he supports it.
+     *
+     * <p>The interval and the "nobody in this swarm supports comments" failsafe used to
+     * be enforced indirectly, by making the torrent stop wanting outbound peers. A
+     * completed torrent wants peers now whatever it does with comments, so the interval
+     * is enforced here, where the request is actually sent.
      *
      * @param peer the connection to ask for comments; needs the comment extension advertised
      * @since 0.9.31
      */
     void sendCommentReq(Peer peer) {
+        if (!commentsDue(_util.getContext().clock().now(), _commentsLastRequested.get(),
+                         COMMENT_REQ_INTERVAL)) {
+            return;
+        }
         Map<String, BEValue> handshake = peer.getHandshakeMap();
         if (handshake == null) {
             if (wantedBytes == 0

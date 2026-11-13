@@ -21,6 +21,15 @@ class PeerCheckerTask implements Runnable {
     /** Transfer rate implied by one check per period, in bytes per second. */
     private static final long KILOPERSECOND = 1024 * (PeerCoordinator.CHECK_PERIOD / 1000);
 
+    /**
+     * How often, in checker passes, to send a peer our PEX list. One pass is
+     * {@link PeerCoordinator#CHECK_PERIOD}, so 17 passes is a little over a minute.
+     * Sent to a completed peer too: a seed is the peer that most needs to hear about
+     * the downloaders we know, and withholding PEX from seeds is one reason a seeding
+     * torrent ends up with nobody to upload to.
+     */
+    static final int PEX_PERIOD = 17;
+
     /** The coordinator whose peers are checked. */
     private final PeerCoordinator coordinator;
     /** The torrent the peers belong to. */
@@ -40,6 +49,20 @@ class PeerCheckerTask implements Runnable {
      * @since 0.9.72+
      */
     private final int _phase;
+
+    /**
+     * Whether this pass sends the peer our PEX list. Deliberately independent of whether
+     * the peer already has every piece: a seed is the peer that most needs to hear about
+     * the downloaders we know.
+     *
+     * @param count the checker pass counter for this peer
+     * @param period how many passes two PEX sends are spaced by
+     * @return true to send PEX to this peer on this pass
+     * @since 0.9.72+
+     */
+    static boolean sendPEX(int count, int period) {
+        return count % period == 0;
+    }
 
     /**
      * Creates a new checker task for the given coordinator.
@@ -261,8 +284,8 @@ class PeerCheckerTask implements Runnable {
             }
             peer.retransmitRequests();
             int count = _runCount + i;
-            // send PEX, about every 12 minutes
-            if ((count % 17) == 0 && !peer.isCompleted()) coordinator.sendPeers(peer);
+            // send PEX, a little over a minute apart
+            if (sendPEX(count, PEX_PERIOD)) coordinator.sendPeers(peer);
             // send Comment Request, about every 30 minutes
             if (fetchComments && (count % 47) == 0) coordinator.sendCommentReq(peer);
             // cheap failsafe for seeds connected to seeds, stop pinging and hopefully
