@@ -583,12 +583,15 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     /**
      * {@inheritDoc}
      *
-     * @return false (WebPeer overrides to return false for historical reasons)
+     * <p>True, and the answer matters: a web seed's peer id carries a hash of its URL, not
+     * an I2P destination, so PEX must not offer it to peers as somewhere to connect to.
+     *
+     * @return true, this is a BEP 19 web seed
      * @since 0.9.49
      */
     @Override
     public boolean isWebPeer() {
-        return false;
+        return true;
     }
 
 

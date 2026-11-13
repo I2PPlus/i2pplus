@@ -3284,7 +3284,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 List<Peer> pList = new ArrayList<>();
                 long t = peer.getPexLastSent();
                 for (Peer p : peers) {
-                    if (p.equals(peer) || p.isWebPeer()) {
+                    if (!pexCandidate(p, peer)) {
                         continue;
                     }
                     if (p.getWhenConnected() > t) {
@@ -3297,6 +3297,21 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 }
             }
         } catch (InvalidBEncodingException ibee) { /* ignored */ }
+    }
+
+    /**
+     * Whether a peer may be advertised to another peer by PEX. A web seed may not: its
+     * peer id carries a hash of its URL, not an I2P destination, so a peer told about it
+     * is handed something it has no way to connect to. A peer is also never told about
+     * itself.
+     *
+     * @param p the peer being considered for the message
+     * @param to the peer being told
+     * @return true to include p in the PEX message to to
+     * @since 0.9.72+
+     */
+    static boolean pexCandidate(Peer p, Peer to) {
+        return !p.equals(to) && !p.isWebPeer();
     }
 
     /**
