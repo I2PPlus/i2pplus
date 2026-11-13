@@ -11,6 +11,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
@@ -129,7 +130,7 @@ class TrackerProbe {
                                              t.setDaemon(true);
                                              return t;
                                          },
-                                         new ThreadPoolExecutor.DiscardPolicy());
+                                         new ThreadPoolExecutor.AbortPolicy());
         load(config);
     }
 
@@ -234,24 +235,30 @@ class TrackerProbe {
         if (support(key) != Support.UNKNOWN || !_inFlight.add(key)) {
             return;
         }
-        if (_probes.getQueue().remainingCapacity() <= 0) {
-            _inFlight.remove(key);
-            return;
-        }
-        _probes.execute(() -> {
-            try {
-                Support s = ask(key, port);
-                record(key, s);
-                if (_log.shouldInfo()) {
-                    _log.info("BEP-15 probe of " + key + ':' + port + " -> " +
-                              (s == Support.UDP ? "Answers udp" : "No udp answer"));
+        try {
+            _probes.execute(() -> {
+                try {
+                    Support s = ask(key, port);
+                    record(key, s);
+                    if (_log.shouldInfo()) {
+                        _log.info("BEP-15 probe of " + key + ':' + port + " -> " +
+                                  (s == Support.UDP ? "Answers udp" : "No udp answer"));
+                    }
+                } catch (RuntimeException re) {
+                    _log.warn("BEP-15 probe of " + key + " failed -> " + re.toString(), re);
+                } finally {
+                    _inFlight.remove(key);
                 }
-            } catch (RuntimeException re) {
-                _log.warn("BEP-15 probe of " + key + " failed -> " + re.toString(), re);
-            } finally {
-                _inFlight.remove(key);
+            });
+        } catch (RejectedExecutionException ree) {
+            // The queue was full, so the probe never runs and its finally block never
+            // clears the marker. Leaving it set would make every later probe of this
+            // host read as already running, and the host would never be asked again.
+            _inFlight.remove(key);
+            if (_log.shouldDebug()) {
+                _log.debug("BEP-15 probe of " + key + " deferred -> Probe queue is full");
             }
-        });
+        }
     }
 
     /**

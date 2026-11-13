@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -14,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import org.junit.After;
 import org.junit.Before;
@@ -474,6 +477,92 @@ public class TrackerProbeTest {
         probe.probe("opentracker.dg2.i2p", -1);
         assertEquals(TrackerProbe.Support.UNKNOWN, probe.support("tracker.example.com"));
         assertNull(storedVerdictOrNull("tracker.example.com"));
+    }
+
+    /**
+     * A rejected probe leaves no marker behind, so the host is asked again once the probe
+     * queue drains. The queue is bounded and the pool drops what does not fit, and the
+     * marker is cleared by the probe's own finally block - which never runs for a task
+     * that was never started. A host left marked reads as already being probed forever,
+     * and is excluded from BEP-15 probing for the life of the router.
+     *
+     * @throws Exception if the probe pool or the marker set cannot be read
+     */
+    @Test
+    public void testRejectedProbeLeavesNoMarker() throws Exception {
+        flag(TrackerProbe.PROP_PREFER_UDP, "true");
+        flag(TrackerProbe.PROP_PROBE_UDP, "true");
+        TrackerProbe probe = mgr.getTrackerProbe();
+        ThreadPoolExecutor pool = (ThreadPoolExecutor) field(probe, "_probes");
+        CountDownLatch release = new CountDownLatch(1);
+        // occupy the single thread and fill the queue so the next task is refused
+        int blockers = pool.getQueue().size() + pool.getMaximumPoolSize()
+                       + pool.getQueue().remainingCapacity();
+        for (int i = 0; i < blockers; i++) {
+            pool.execute(() -> {
+                try {
+                    release.await();
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                }
+            });
+        }
+        assertEquals(0, pool.getQueue().remainingCapacity());
+        try {
+            probe.probe("opentracker.dg2.i2p", TrackerClient.DEFAULT_UDP_TRACKER_PORT);
+            assertFalse(inFlight(probe).contains("opentracker.dg2.i2p"));
+            // asked again, still refused, still nothing left behind
+            probe.probe("opentracker.dg2.i2p", TrackerClient.DEFAULT_UDP_TRACKER_PORT);
+            assertFalse(inFlight(probe).contains("opentracker.dg2.i2p"));
+        } finally {
+            release.countDown();
+        }
+    }
+
+    /**
+     * A probe that does run clears its marker too, so the host can be asked again after
+     * its verdict expires rather than being marked in flight forever.
+     *
+     * @throws Exception if the marker set cannot be read, or the probe thread does not
+     *                   finish in the bounded wait
+     */
+    @Test
+    public void testRunProbeClearsItsMarker() throws Exception {
+        flag(TrackerProbe.PROP_PREFER_UDP, "true");
+        flag(TrackerProbe.PROP_PROBE_UDP, "true");
+        TrackerProbe probe = mgr.getTrackerProbe();
+        probe.probe("opentracker.dg2.i2p", TrackerClient.DEFAULT_UDP_TRACKER_PORT);
+        Set<String> left = inFlight(probe);
+        for (int i = 0; i < 40 && left.contains("opentracker.dg2.i2p"); i++) {
+            Thread.sleep(50);
+        }
+        assertFalse(left.contains("opentracker.dg2.i2p"));
+    }
+
+    /**
+     * The set of hosts with a probe queued or running.
+     *
+     * @param probe the probe to read
+     * @return the hosts marked in flight
+     * @throws Exception if the field is not present or not accessible
+     */
+    @SuppressWarnings("unchecked")
+    private static Set<String> inFlight(TrackerProbe probe) throws Exception {
+        return (Set<String>) field(probe, "_inFlight");
+    }
+
+    /**
+     * Read a private field of an object.
+     *
+     * @param obj the object to read
+     * @param name the field name
+     * @return the field value
+     * @throws Exception if the field is not present or not accessible
+     */
+    private static Object field(Object obj, String name) throws Exception {
+        Field f = obj.getClass().getDeclaredField(name);
+        f.setAccessible(true);
+        return f.get(obj);
     }
 
     /**
