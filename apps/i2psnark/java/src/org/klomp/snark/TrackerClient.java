@@ -18,7 +18,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
@@ -1922,8 +1921,50 @@ public class TrackerClient implements Runnable {
     }
 
     /**
-     * Try to connect to the given peers, spreading the connection attempts over time. The peers are
-     * shuffled first so no single peer is always first; the passed collection is not modified.
+     * The delay each dial of a paced batch waits, in ms. The first dial is immediate
+     * and each later one waits a random 2-8 s more, the same spread the old in-loop
+     * sleep produced.
+     *
+     * @param random the source of the jitter
+     * @param count how many dials the batch holds
+     * @param min the shortest spacing between two dials, in ms
+     * @param spread how much longer than min a spacing may run, in ms
+     * @return one non-decreasing delay per dial, starting at 0, empty for an empty batch
+     * @since 0.9.72+
+     */
+    static long[] pacingDelays(Random random, int count, int min, int spread) {
+        long[] rv = new long[Math.max(0, count)];
+        long delay = 0;
+        for (int i = 1; i < rv.length; i++) {
+            delay += min + (spread > 0 ? random.nextInt(spread) : 0);
+            rv[i] = delay;
+        }
+        return rv;
+    }
+
+    /**
+     * How many of the candidates to dial at all. A tracker reply can name hundreds of
+     * peers; dialing them all would start hundreds of threads that each find the
+     * torrent full.
+     *
+     * @param candidates how many peers are available to dial
+     * @param freeSlots how many more outbound connections the torrent can take
+     * @return the number of dials to start, never negative
+     * @since 0.9.72+
+     */
+    static int pacedDialCount(int candidates, int freeSlots) {
+        return Math.max(0, Math.min(candidates, freeSlots));
+    }
+
+    /**
+     * Try to connect to the given peers, spreading the connection attempts over time.
+     * The peers are shuffled first so no single peer is always first; the passed
+     * collection is not modified.
+     *
+     * <p>The spread is handed to each peer's own connection thread rather than slept
+     * here: this runs on a worker of the shared announce pool, and a 2-8 s sleep per
+     * peer held that worker for up to a minute and a half per batch, putting every
+     * other torrent's announce and DHT fetch behind our connect pacing.
      *
      * @param peers the peers to try to connect to
      * @since 0.9.71+
@@ -1940,18 +1981,10 @@ public class TrackerClient implements Runnable {
         if (ordered.size() > 1) {
             Collections.shuffle(ordered, r);
         }
-        Iterator<Peer> it = ordered.iterator();
-        while ((!stop) && it.hasNext() && coordinator.needOutboundPeers()) {
-            Peer cur = it.next();
-            if (coordinator.addPeer(cur) && it.hasNext()) {
-                int delay = r.nextInt(DELAY_RAND) + DELAY_MIN;
-                try {
-                    Thread.sleep(delay);
-                } catch (InterruptedException ie) {
-                    Thread.currentThread().interrupt();
-                    break;
-                }
-            }
+        int dials = pacedDialCount(ordered.size(), coordinator.freeOutboundSlots());
+        long[] delays = pacingDelays(r, dials, DELAY_MIN, DELAY_RAND);
+        for (int i = 0; i < dials; i++) {
+            coordinator.addPeer(ordered.get(i), delays[i]);
         }
     }
 

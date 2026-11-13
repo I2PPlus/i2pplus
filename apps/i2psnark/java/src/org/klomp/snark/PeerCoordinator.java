@@ -1030,6 +1030,21 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
+     * How many more outbound connections this torrent has room for, using the same
+     * two-connection margin as {@link #needOutboundPeers()} so a batch of paced dials
+     * is sized the way the rest of the code judges the torrent full.
+     *
+     * @return the free outbound slots, 0 when halted or already at the margin
+     * @since 0.9.72+
+     */
+    int freeOutboundSlots() {
+        if (halted) {
+            return 0;
+        }
+        return Math.max(0, getMaxConnections() - 2 - peers.size());
+    }
+
+    /**
      * Formerly used to reduce max if huge pieces to keep from ooming when leeching but now we don't.
      *
      * @return usually I2PSnarkUtil.MAX_CONNECTIONS
@@ -1302,6 +1317,22 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * @return true if actual attempt to add peer occurs
      */
     public boolean addPeer(final Peer peer) {
+        return addPeer(peer, 0);
+    }
+
+    /**
+     * Add peer (inbound or outbound), starting the dial after a pacing delay.
+     *
+     * @param peer the connection to take over; disconnected rather than tracked if
+     *             halted, full, or our own destination
+     * @param dialDelay how long the peer's own connection thread waits before opening
+     *                  the socket, 0 to dial at once; a batch of dials is spread out
+     *                  this way, so the caller's thread is not held while the spread
+     *                  happens
+     * @return true if actual attempt to add peer occurs
+     * @since 0.9.72+
+     */
+    public boolean addPeer(final Peer peer, final long dialDelay) {
         if (halted) {
             peer.disconnect(false);
             return false;
@@ -1362,6 +1393,23 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             Runnable r =
                     new Runnable() {
                         public void run() {
+                            // A paced dial waits on the thread that exists only for
+                            // this connection, then re-checks the slot count: the batch
+                            // was sized when it was queued, and the dials ahead of this
+                            // one may have filled the torrent since.
+                            if (dialDelay > 0) {
+                                try {
+                                    Thread.sleep(dialDelay);
+                                } catch (InterruptedException ie) {
+                                    Thread.currentThread().interrupt();
+                                    peer.disconnect(false);
+                                    return;
+                                }
+                                if (!needOutboundPeers()) {
+                                    peer.disconnect(false);
+                                    return;
+                                }
+                            }
                             peer.runConnection(
                                     _util,
                                     listener,
