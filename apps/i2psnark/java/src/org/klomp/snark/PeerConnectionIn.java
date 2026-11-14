@@ -46,8 +46,51 @@ class PeerConnectionIn implements Runnable {
         return Math.max(PeerState.PARTSIZE + 9, MagnetState.CHUNK_SIZE + 100); // 100 for the ext msg dictionary
     }
 
-    /** Flood guard: maximum inbound messages per window, generous to tolerate bursts. */
-    private static final int MAX_MESSAGES_PER_WINDOW = 2000;
+    /**
+     * Flood guard: bytes of message data accepted from one peer per window. The bound used to
+     * be a message count alone, which only implies a volume at one block size: a peer that
+     * splits its replies into smaller pieces than we asked for - every client caps its own
+     * piece size, and the chunk size is configurable down to 1 KiB - sends proportionally more
+     * messages for the same bytes, and the old count cut off a peer streaming 200 KB/s in 1 KiB
+     * blocks. This is the volume that count implied at the default chunk size: two thousand
+     * blocks. This is the volume that count implied at the default chunk size: two thousand
+     * messages of 16 KiB, each carrying a four-byte length prefix and a one-byte id.
+     *
+     * @since 0.9.72+
+     */
+    static final long MAX_BYTES_PER_WINDOW = 2000L * (16 * 1024 + 5);
+
+    /**
+     * Flood guard: messages accepted from one peer per window whatever they carry. Well above
+     * the count the byte bound allows at the default chunk size, so a peer sending normal-sized
+     * blocks is bounded by bytes; this is the guard for a peer that sends only messages with no
+     * payload, which never moves the byte counter.
+     *
+     * @since 0.9.72+
+     */
+    static final int MAX_MESSAGES_PER_WINDOW = 20000;
+
+    /**
+     * Whether one window's worth of inbound bytes is a flood.
+     *
+     * @param bytes bytes counted for the window, including length prefixes
+     * @return true if the peer has sent more than the window allows
+     * @since 0.9.72+
+     */
+    static boolean floodByBytes(long bytes) {
+        return bytes > MAX_BYTES_PER_WINDOW;
+    }
+
+    /**
+     * Whether one window's worth of inbound messages is a flood.
+     *
+     * @param count messages counted for the window, keep-alives included
+     * @return true if the peer has sent more than the window allows
+     * @since 0.9.72+
+     */
+    static boolean floodByCount(int count) {
+        return count > MAX_MESSAGES_PER_WINDOW;
+    }
 
     /** Flood guard: length of the counting window. */
     private static final long FLOOD_WINDOW_MS = 10 * 1000;
@@ -99,6 +142,7 @@ class PeerConnectionIn implements Runnable {
         thread = Thread.currentThread();
         long windowStart = System.currentTimeMillis();
         int windowCount = 0;
+        long windowBytes = 0;
         // The length prefix and the fixed header fields are each taken in a single read. A
         // readInt() on a DataInputStream is four single-byte reads on the stream underneath,
         // and on an I2P stream each of those is a lock acquisition and a copy, so a PIECE
@@ -126,14 +170,24 @@ class PeerConnectionIn implements Runnable {
                 if (now - windowStart >= FLOOD_WINDOW_MS) {
                     windowStart = now;
                     windowCount = 0;
+                    windowBytes = 0;
                 }
-                if (++windowCount > MAX_MESSAGES_PER_WINDOW) {
-                    throw new IOException(
-                            "Message flood from ["
-                                    + peer
-                                    + "]: "
-                                    + windowCount
-                                    + " messages in window");
+                // the length prefix counts the id and the payload, not itself
+                windowBytes += i + 4L;
+                windowCount++;
+                if (floodByBytes(windowBytes)) {
+                    throw new IOException("Message flood from ["
+                                          + peer
+                                          + "] -> Too many bytes in the window"
+                                          + " * Bytes: "
+                                          + windowBytes);
+                }
+                if (floodByCount(windowCount)) {
+                    throw new IOException("Message flood from ["
+                                          + peer
+                                          + "] -> Too many messages in the window"
+                                          + " * Messages: "
+                                          + windowCount);
                 }
                 int maxMsg = maxMessageSize();
                 if (i < 0 || i > maxMsg) {
