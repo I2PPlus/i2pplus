@@ -820,24 +820,38 @@ public class SharedPartialPieceTest {
     }
 
     /**
-     * The end game starts at the threshold and not before it, and a torrent that wants
-     * nothing is not in it.
+     * The end game is entered when a pick cannot find a peer a piece nobody else is pulling, and
+     * left again as soon as one can - not counted from the pieces left, which kept a 33-piece
+     * torrent out of the end game with every piece in flight, and put a 5,000-piece torrent in
+     * it whenever 32 pieces happened to be left.
      *
      * @throws Throwable if the torrent fixture or the coordinator setup fails
      */
     @Test
-    public void testTheEndGameStartsAtTheThreshold() throws Throwable {
-        PeerCoordinator few = coordinator(newUtil(), 1);
-        PeerCoordinator at = coordinator(newUtil(), PeerCoordinator.END_GAME_THRESHOLD);
-        PeerCoordinator over = coordinator(newUtil(), PeerCoordinator.END_GAME_THRESHOLD + 1);
+    public void testTheEndGameFollowsThePickNotThePieceCount() throws Throwable {
+        // one piece more than the old threshold, so the count said this could not be the end
+        // game no matter what the peers had run out of
+        int pieces = PeerCoordinator.END_GAME_THRESHOLD + 1;
+        PeerCoordinator pc = coordinator(newUtil(), pieces);
         try {
-            assertTrue(few.inEndGame());
-            assertTrue(at.inEndGame());
-            assertFalse(over.inEndGame());
+            assertFalse(pc.inEndGame());
+            BitField all = new BitField(pieces);
+            for (int i = 0; i < pieces; i++) {
+                all.set(i);
+            }
+            Peer puller = peer(1, pieces);
+            for (int i = 0; i < pieces; i++) {
+                assertNotNull("piece " + i + " was never handed out",
+                              pc.getPartialPiece(puller, all));
+            }
+            // every piece is in flight now, so the only way to keep a second peer working is a
+            // duplicate request for a piece the first is already pulling
+            Peer idle = peer(2, pieces);
+            assertNotNull("the second peer was turned away instead of sharing a piece",
+                          pc.getPartialPiece(idle, all));
+            assertTrue(pc.inEndGame());
         } finally {
-            few.halt();
-            at.halt();
-            over.halt();
+            pc.halt();
         }
     }
 

@@ -251,6 +251,17 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      */
     private boolean wantedDirty = true;
 
+    /**
+     * Whether the torrent is in the end game: the last pick could not find a piece for a peer
+     * that no other peer is already pulling, so a peer is kept working only by duplicating a
+     * request. Written by the pick, see {@link #endGameAfterPick}, and read by the choke policy
+     * and by the suggested-piece path. Never cleared on a timer: it says what the picker most
+     * recently ran into.
+     *
+     * @since 0.9.72+
+     */
+    private volatile boolean _endGame;
+
     /** True once the coordinator has halted. */
     private volatile boolean halted;
 
@@ -1687,10 +1698,15 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
+     * How many pieces still have to be wanted before the torrent counts as far from its end.
      * This should be somewhat less than the max conns per torrent, but not too much less, so a
      * torrent doesn't get stuck near the end.
      * https://en.wikipedia.org/wiki/Glossary_of_BitTorrent_terms#Endgame_/_Endgame_mode
-     * Package-visible so the end-game boundary can be pinned by the tests.
+     *
+     * <p>Only the seeder heuristic below still counts pieces. The picker and the choke policy
+     * use the end-game state the pick itself produces, see {@link #endGameAfterPick}; a count
+     * cannot tell a torrent that is nearly done from one that is merely short of pieces.
+     * Package-visible so that heuristic can be pinned by the tests.
      *
      * @since 0.7.14
      */
@@ -1896,7 +1912,6 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         }
         Piece piece = null;
         List<Piece> requested = new ArrayList<>();
-        int wantedSize = END_GAME_THRESHOLD + 1;
         synchronized (wantedPieces) {
             if (record && wantedDirty) {
                 resortWanted(wantedPieces);
@@ -1933,28 +1948,18 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 }
             }
 
-            if (piece == null) {
-                wantedSize = wantedPieces.size();
+            // The pick is the end-game test, and it is the condition itself rather than a piece
+            // count standing in for it: nothing unrequested for this peer means its window can
+            // only be filled by asking again for a piece someone else is already pulling. A
+            // probe (record false) only asks whether work exists, so it does not move the state.
+            if (record) {
+                _endGame = endGameAfterPick(piece != null, wantedPieces.size());
             }
 
-            // Only request a piece we've requested before if there's no other choice.
+            // Only request a piece we've requested before if there's no other choice. The
+            // duplicate is bounded: at most parallelRequestCap() peers pull one piece, and a
+            // peer is never asked for a piece it is already pulling.
             if (piece == null) {
-                // AND if there are almost no wanted pieces left (real end game).
-                // If we do end game all the time, we generate lots of extra traffic
-                // when the seeder is super-slow and all the peers are "caught up"
-                if (wantedSize > END_GAME_THRESHOLD) {
-                    if (_log.shouldInfo()) {
-                        // the peer and the torrent - the counts alone named neither
-                        // the peer being turned away nor the torrent that had
-                        // nothing left for it. What is in flight is already in the
-                        // per-peer request tally lines
-                        _log.info("Nothing to request from " + SnarkLogFormatter.peer(peer)
-                                  + " -> Torrent: " + SnarkLogFormatter.torrent(metainfo)
-                                  + " * Wanted: " + wantedSize + " pieces");
-                    }
-                    return null; // nothing to request and not in end game
-                }
-
                 // Let's not all get on the same piece
                 // Even better would be to sort by number of requests
                 if (record) {
@@ -2961,7 +2966,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             if (live != null && live.isFullyClaimed()) {
                 return null; // every block is here or in flight with someone else
             }
-            if (p.isRequested() && live == null && wantedPieces.size() > END_GAME_THRESHOLD) {
+            if (p.isRequested() && live == null && !_endGame) {
                 return null; // not in end game, already requested from another peer
             }
             if (p.getRequestCount()
@@ -3226,23 +3231,38 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
-     * Whether the last few pieces are in flight - the point at which the peers that hold
-     * them are the only sources left, and choking one of them costs more than the upload
-     * slot it frees. See {@link #END_GAME_THRESHOLD}.
+     * Whether the torrent is in the end game - the last pick ran out of pieces it could hand a
+     * peer without duplicating a request, so the peers that hold the pieces still in flight are
+     * the only sources left and choking one of them costs more than the upload slot it frees.
      *
-     * <p>The count is of the pieces still on the wanted list, so a piece the user disabled
-     * counts too: a torrent with 33 wanted pieces of which 32 are disabled is not in the
-     * end game by this test, even though only one piece is really left to fetch.
+     * <p>This is the picker's own state, not a count of the pieces left: see
+     * {@link #endGameAfterPick} for why the count misfired.
      *
-     * @return true while pieces are still wanted and no more than the end-game threshold
-     *         of them is left
+     * @return true while a peer can only be kept busy by asking for a piece again
      * @since 0.9.72+
      */
     boolean inEndGame() {
-        synchronized (wantedPieces) {
-            int left = wantedPieces.size();
-            return left > 0 && left <= END_GAME_THRESHOLD;
-        }
+        return _endGame;
+    }
+
+    /**
+     * The end-game state after one pick. A peer that was handed a piece no other peer was
+     * pulling still has unrequested work available, so the torrent is not in the end game; a
+     * peer that was handed nothing while pieces are still wanted can only be kept busy by a
+     * duplicate request, which is what the end game is.
+     *
+     * <p>The piece count this replaces misfired in both directions: a torrent with 33 wanted
+     * pieces of which 32 are disabled has one piece left to fetch and was not in the end game,
+     * and a torrent with 5,000 pieces was in it whenever 32 happened to be left, whether or not
+     * any peer had run out of work.
+     *
+     * @param found true if the pick gave the peer a piece no other peer was pulling
+     * @param wanted how many pieces are still on the wanted list
+     * @return the end-game state to hold after this pick
+     * @since 0.9.72+
+     */
+    static boolean endGameAfterPick(boolean found, int wanted) {
+        return !found && wanted > 0;
     }
 
     /**
