@@ -475,6 +475,47 @@ abstract class ExtensionHandler {
     private static final int HASH_LENGTH = 32;
 
     /**
+     * Most peer addresses one PEX message carries, in either direction. BEP 11 bounds
+     * neither side: the "added" string is as long as the sender likes, and every entry we
+     * read becomes a {@link PeerID} with a destination lookup behind it, while every entry
+     * we write is 32 bytes of payload sent to each of our peers. Sixty-four is well above
+     * what a torrent normally holds - see <code>PeerCoordinator.getMaxConnections()</code> -
+     * it is enough per message because a peer assembles the swarm from all of its peers,
+     * each advertising its own newest additions, rather than from one list.
+     * <p>
+     * Deliberately not derived from <code>I2PSnarkUtil.MAX_CONNECTIONS</code>, as it was
+     * originally: that is an operator setting (<code>i2psnark.maxConnections</code>) about
+     * how many connections to <em>hold</em>, and an operator who set it to 8 would have
+     * capped how many addresses a peer could tell us about at 7.
+     *
+     * @since 0.9.72+
+     */
+    static final int MAX_PEX_PEERS = 64;
+
+    /**
+     * How many peer addresses one outgoing PEX message advertises.
+     *
+     * @param known how many peers the caller would like to advertise
+     * @return the number to put in the message, at most {@link #MAX_PEX_PEERS}
+     * @since 0.9.72+
+     */
+    static int pexPeersToSend(int known) {
+        return Math.min(known, MAX_PEX_PEERS);
+    }
+
+    /**
+     * How many peer addresses one incoming PEX message may describe. A trailing partial
+     * hash is not an address, so it is not counted.
+     *
+     * @param bytes the length of the "added" string, in bytes
+     * @return the number of addresses to decode, at most {@link #MAX_PEX_PEERS}
+     * @since 0.9.72+
+     */
+    static int pexPeersToRead(int bytes) {
+        return Math.min(bytes / HASH_LENGTH, MAX_PEX_PEERS);
+    }
+
+    /**
      * Handles an incoming PEX message. Uses the "added" key as a single string of concatenated
      * 32-byte peer hashes. added.f and dropped are unsupported.
      *
@@ -495,9 +536,9 @@ abstract class ExtensionHandler {
             if (bev == null) return;
             byte[] ids = bev.getBytes();
             if (ids.length < HASH_LENGTH) return;
-            int len = Math.min(ids.length, (I2PSnarkUtil.MAX_CONNECTIONS - 1) * HASH_LENGTH);
-            List<PeerID> peers = new ArrayList<>(len / HASH_LENGTH);
-            for (int off = 0; off < len; off += HASH_LENGTH) {
+            int count = pexPeersToRead(ids.length);
+            List<PeerID> peers = new ArrayList<>(count);
+            for (int off = 0; off < count * HASH_LENGTH; off += HASH_LENGTH) {
                 byte[] hash = new byte[HASH_LENGTH];
                 System.arraycopy(ids, off, hash, 0, HASH_LENGTH);
                 if (DataHelper.eq(hash, peer.getPeerID().getDestHash())) continue;
@@ -540,6 +581,8 @@ abstract class ExtensionHandler {
 
     /**
      * Sends a PEX message with the given peer list. added.f and dropped are unsupported.
+     * The list is truncated at {@link #MAX_PEX_PEERS}; the peers past the cut are the ones
+     * this peer is least likely to want, and it hears about them from its other peers.
      *
      * @param peer the peer the message arrived from
      * @param pList non-null list of peers to share
@@ -547,9 +590,11 @@ abstract class ExtensionHandler {
     public static void sendPEX(Peer peer, List<Peer> pList) {
         if (pList.isEmpty()) return;
         Map<String, Object> map = new TreeMap<>();
-        byte[] peers = new byte[HASH_LENGTH * pList.size()];
+        int count = pexPeersToSend(pList.size());
+        byte[] peers = new byte[HASH_LENGTH * count];
         int off = 0;
         for (Peer p : pList) {
+            if (off >= peers.length) break;
             System.arraycopy(p.getPeerID().getDestHash(), 0, peers, off, HASH_LENGTH);
             off += HASH_LENGTH;
         }

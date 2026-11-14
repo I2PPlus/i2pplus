@@ -40,7 +40,6 @@ import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 import org.klomp.snark.BandwidthGraph;
-import org.klomp.snark.I2PSnarkUtil;
 import org.klomp.snark.SnarkLogFormatter;
 import org.klomp.snark.SnarkManager;
 import org.klomp.snark.TrackerClient;
@@ -178,10 +177,31 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     private static final int K = 8;
 
     /**
-     * Max number of peers to return. BEP 5 doesn't say. We'll use more than
-     * I2PSnarkUtil.MAX_CONNECTIONS since lots could be old.
+     * Max number of peers one get_peers message carries, in either direction - the reply
+     * we send, and the reply we accept. BEP 5 bounds neither. The requester queries the
+     * {@link #K} closest nodes and asks again later, so one reply does not have to hold
+     * the whole swarm, and every entry is a 32-byte hash in a UDP packet: 64 addresses is
+     * 2 KB, where the 900 this used to allow was 28 KB.
+     * <p>
+     * Deliberately not derived from <code>I2PSnarkUtil.MAX_CONNECTIONS</code>, as it was
+     * originally: that is an operator setting about how many connections a torrent holds,
+     * which says nothing about how many addresses one query wants.
+     *
+     * @since 0.9.72+
      */
-    private static final int MAX_WANT = I2PSnarkUtil.MAX_CONNECTIONS * 3;
+    static final int MAX_PEERS = 64;
+
+    /**
+     * How many peer addresses one incoming get_peers reply may carry before the rest are
+     * dropped. A partial hash is not an address, so it is not counted.
+     *
+     * @param offered how many addresses the reply holds
+     * @return the number to keep, at most {@link #MAX_PEERS}
+     * @since 0.9.72+
+     */
+    static int peersToRead(int offered) {
+        return Math.min(offered, MAX_PEERS);
+    }
 
     /** Overloads error codes which start with 201. */
     private static final int REPLY_NONE = 0;
@@ -1740,7 +1760,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                 bFpe = filters[1].getData();
             }
         }
-        List<Hash> peers = _tracker.getPeers(ih, MAX_WANT, noSeeds);
+        List<Hash> peers = _tracker.getPeers(ih, MAX_PEERS, noSeeds);
         // Check this before removing him, so we don't needlessly send nodes
         // if he's the only one on the torrent.
         boolean noPeers = peers.isEmpty();
@@ -1982,7 +2002,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         if (_log.shouldInfo()) {
             _log.info("Received peers from " + nInfo);
         }
-        int max = Math.min(MAX_WANT * 2, peers.size());
+        int max = peersToRead(peers.size());
         List<Hash> rv = new ArrayList<>(max);
         for (BEValue bev : peers) {
             byte[] b = bev.getBytes();
