@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -95,8 +94,15 @@ class PeerState implements DataLoader {
     /** Outbound connection. */
     final PeerConnectionOut out;
 
-    /** Piece requests sent but not yet answered. */
-    private final List<Request> outstandingRequests = new LinkedList<>();
+    /**
+     * Piece requests sent but not yet answered, in the order they were sent. An array list,
+     * not a linked one: the block-arrival path walks this by index - it finds the first
+     * request for the piece, then steps forward until the chunk offset matches - and a
+     * {@code get(i)} on a linked list walks from the head each time, which made every
+     * received block quadratic in the pipeline depth. Pre-sized to the usual pipeline cap so
+     * a peer's first requests do not reallocate.
+     */
+    private final List<Request> outstandingRequests = new ArrayList<>(DEFAULT_MAX_PIPELINE);
 
     /**
      * Bytes of piece data the peer cancelled after requesting, within the

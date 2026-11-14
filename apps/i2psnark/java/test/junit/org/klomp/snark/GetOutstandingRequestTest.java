@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.RandomAccess;
 
 import org.junit.Test;
 
@@ -20,11 +21,39 @@ import org.junit.Test;
  */
 public class GetOutstandingRequestTest {
 
+    /** Size of one requested block, the unit the queue is built in. */
     private static final int CHUNK = 16384;
+
+    /** Piece length the three-chunk queue fits in, in bytes. */
     private static final int PLEN = 3 * CHUNK;
 
+    /**
+     * One instance per test method, as JUnit builds a fresh test object for each one.
+     *
+     * @since 0.9.72+
+     */
+    public GetOutstandingRequestTest() {}
+
+    /**
+     * A partial piece of the default three-chunk length.
+     *
+     * @param piece the piece number
+     * @return a partial piece that three whole chunks fit in
+     */
     private static PartialPiece partial(int piece) {
         return new PartialPiece(new Piece(piece), PLEN, null);
+    }
+
+    /**
+     * A partial piece long enough to hold {@code chunks} whole chunks, for a queue deeper
+     * than the three-chunk default.
+     *
+     * @param piece the piece number
+     * @param chunks how many chunks the piece is long enough for
+     * @return a partial piece of that piece
+     */
+    private static PartialPiece partial(int piece, int chunks) {
+        return new PartialPiece(new Piece(piece), chunks * CHUNK, null);
     }
 
     /**
@@ -49,6 +78,13 @@ public class GetOutstandingRequestTest {
         return ps;
     }
 
+    /**
+     * Whole-chunk requests for one piece, in the order they would have been sent.
+     *
+     * @param pp the piece they belong to
+     * @param chunks how many requests to build
+     * @return the requests, chunk 0 first
+     */
     private static List<Request> requests(PartialPiece pp, int chunks) {
         List<Request> rv = new ArrayList<>(chunks);
         for (int i = 0; i < chunks; i++) {
@@ -56,6 +92,11 @@ public class GetOutstandingRequestTest {
         }
         return rv;
     }
+
+    /**
+     * A chunk that arrives in order matches the head of the queue and consumes exactly it.     *
+     * @throws Throwable if the torrent bytes cannot be parsed or the private field is inaccessible
+     */
 
     @Test
     public void inOrderChunkMatchesHead() throws Throwable {
@@ -66,6 +107,12 @@ public class GetOutstandingRequestTest {
         // head consumed; the other two remain in order
         assertEquals(2, countRequests(ps));
     }
+
+    /**
+     * A chunk that arrives before its predecessors is matched, not dropped, and the requests
+     * stepped over it are requeued rather than lost.     *
+     * @throws Throwable if the torrent bytes cannot be parsed or the private field is inaccessible
+     */
 
     @Test
     public void outOfOrderMiddleChunkIsMatchedNotDropped() throws Throwable {
@@ -80,6 +127,12 @@ public class GetOutstandingRequestTest {
         assertEquals(2, countRequests(ps));
     }
 
+    /**
+     * The requests stepped over go back at the tail, in the order they were sent, so a
+     * non-fast peer is still asked for them and none is dropped.     *
+     * @throws Throwable if the torrent bytes cannot be parsed or the private field is inaccessible
+     */
+
     @Test
     public void skippedRequestsAreRequeuedAtTail() throws Throwable {
         PartialPiece pp = partial(0);
@@ -93,6 +146,11 @@ public class GetOutstandingRequestTest {
         assertEquals(0, ((Request) rest.get(1)).off);
     }
 
+    /**
+     * A matching chunk is still found behind a request for a different piece.     *
+     * @throws Throwable if the torrent bytes cannot be parsed or the private field is inaccessible
+     */
+
     @Test
     public void chunkOfDifferentPieceBetweenOthersStillMatched() throws Throwable {
         // regression: the old scan stopped advancing when the piece number
@@ -105,11 +163,21 @@ public class GetOutstandingRequestTest {
         assertEquals(CHUNK, req.off);
     }
 
+    /**
+     * A chunk for a piece we never asked for matches nothing.     *
+     * @throws Throwable if the torrent bytes cannot be parsed or the private field is inaccessible
+     */
+
     @Test
     public void unknownPieceReturnsNull() throws Throwable {
         PeerState ps = stateWith(requests(partial(0), 1));
         assertNull(ps.getOutstandingRequest(5, 0, CHUNK));
     }
+
+    /**
+     * A chunk whose length is not the one we asked for matches nothing.     *
+     * @throws Throwable if the torrent bytes cannot be parsed or the private field is inaccessible
+     */
 
     @Test
     public void wrongLengthReturnsNull() throws Throwable {
@@ -117,7 +185,51 @@ public class GetOutstandingRequestTest {
         assertNull(ps.getOutstandingRequest(0, 0, CHUNK / 2));
     }
 
+    /**
+     * A request queue deep enough that the matching chunk is the last one scanned: the chunk
+     * is matched, and the requests stepped over it come back in the order they were sent.     *
+     * @throws Throwable if the torrent bytes cannot be parsed or the private field is inaccessible
+     */
+
+    @Test
+    public void deepPipelineMatchesTheLastChunkAndKeepsTheRestInOrder() throws Throwable {
+        // a deep pipeline is what the index walk costs: the match is at the far end, so
+        // every earlier request is stepped over and then requeued
+        PeerState ps = stateWith(requests(partial(0, 40), 40));
+        Request req = ps.getOutstandingRequest(0, 39 * CHUNK, CHUNK);
+        assertNotNull(req);
+        assertEquals(39 * CHUNK, req.off);
+        assertEquals(39, countRequests(ps));
+        List<?> rest = requestList(ps);
+        for (int i = 0; i < rest.size(); i++) {
+            assertEquals(i * CHUNK, ((Request) rest.get(i)).off);
+        }
+    }
+
+    /**
+     * The queue supports positional access in constant time, which is what the arrival path
+     * depends on.     *
+     * @throws Throwable if the torrent bytes cannot be parsed or the private field is inaccessible
+     */
+
+    @Test
+    public void requestQueueIsRandomAccess() throws Throwable {
+        // the arrival path walks the queue by index, so a list that has to hop from the
+        // head for every get(i) makes each received block quadratic in the pipeline depth
+        assertTrue(requestList(ps0()) instanceof RandomAccess);
+    }
+
     // ---- helpers ------------------------------------------------------------
+
+    /**
+     * An empty queue, for the checks that look at the queue itself rather than its contents.
+     *
+     * @return a peer state with no requests outstanding
+     * @throws Throwable if the torrent bytes cannot be parsed or the private field is inaccessible
+     */
+    private static PeerState ps0() throws Throwable {
+        return stateWith(new ArrayList<Request>(0));
+    }
 
     private static int countRequests(PeerState ps) throws Throwable {
         return requestList(ps).size();
