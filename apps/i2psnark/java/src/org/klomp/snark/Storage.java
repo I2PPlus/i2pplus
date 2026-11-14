@@ -17,6 +17,8 @@ import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.DigestException;
@@ -43,6 +45,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.regex.Pattern;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.SHA1;
 import net.i2p.data.ByteArray;
@@ -191,6 +194,27 @@ public class Storage implements Closeable {
     private static final boolean _isWindows = SystemVersion.isWindows();
     /** True when running on ARM. */
     private static final boolean _isARM = SystemVersion.isARM();
+
+    /**
+     * Kernel record of this process's mounts, one per line, each naming the block device
+     * behind it as <code>major:minor</code>.
+     *
+     * @since 0.9.72+
+     */
+    static final String MOUNTINFO = "/proc/self/mountinfo";
+
+    /**
+     * Sysfs directory a block device's attributes live under, suffixed with its
+     * <code>major:minor</code> number. The rotational flag is under
+     * <code>queue/rotational</code>, or one level up for a partition, which has no queue of
+     * its own.
+     *
+     * @since 0.9.72+
+     */
+    static final String SYS_BLOCK = "/sys/dev/block/";
+
+    /** A block device number, as the mount table and sysfs name one. */
+    private static final Pattern _devNumber = Pattern.compile("\\d+:\\d+");
 
     /** Buffer size for piece reads and writes. */
     private static final int BUFSIZE = PeerState.PARTSIZE;
@@ -2538,6 +2562,145 @@ public class Storage implements Closeable {
     }
 
     /**
+     * Whether the device this storage writes to is known to be solid state, null until
+     * something asks. Asked once per torrent: the read is cheap, but it is still a read, and
+     * every file of one torrent sits on the same device.
+     */
+    private volatile Boolean _solidState;
+
+    /**
+     * Whether the storage device is solid state, where a fragmented file costs nothing and the
+     * zero-fill that un-sparses one costs the file's whole length in writes.
+     *
+     * <p>ARM is taken as a proxy for solid state, as it always has been - those boards run
+     * eMMC or an SSD, and real SSD detection is nearly impossible. On anything else the kernel
+     * is asked directly: the mount holding our data directory names its block device, and that
+     * device publishes whether it spins. Whatever the kernel does not answer - a network
+     * mount, a tmpfs, a system without sysfs - counts as spinning, so a host we cannot read
+     * keeps the defragmenting behaviour it has always had.
+     *
+     * @return true when the device is known not to spin
+     * @since 0.9.72+
+     */
+    boolean isSolidState() {
+        if (_isARM) return true;
+        Boolean cached = _solidState;
+        if (cached != null) return cached.booleanValue();
+        boolean solid = false;
+        try {
+            List<String> mounts =
+                    Files.readAllLines(Paths.get(MOUNTINFO), StandardCharsets.UTF_8);
+            solid = rotationalFlag(blockDevice(_base.getCanonicalPath(), mounts)) == 0;
+        } catch (IOException ioe) {
+            // no mount table to read, so treat the device as spinning
+        }
+        _solidState = Boolean.valueOf(solid);
+        return solid;
+    }
+
+    /**
+     * The block device the mount holding a path sits on, which is the device whose queue
+     * publishes whether it spins.
+     *
+     * @param path the absolute and resolved path to look up
+     * @param mountinfo the lines of the kernel's mount table
+     * @return the device as <code>major:minor</code>, or null if no listed mount holds the path
+     * @since 0.9.72+
+     */
+    static String blockDevice(String path, List<String> mountinfo) {
+        String dev = null;
+        int best = -1;
+        for (String line : mountinfo) {
+            // mountID parentID major:minor root mountpoint options ... - fstype source superopts
+            String[] f = line.split(" ");
+            if (f.length < 5 || !_devNumber.matcher(f[2]).matches()) continue;
+            String mount = f[4];
+            if (mount.length() > best && covers(mount, path)) {
+                best = mount.length();
+                dev = f[2];
+            }
+        }
+        return dev;
+    }
+
+    /**
+     * Whether a mount point holds a path: the path is the mount itself or something below it,
+     * never a longer name that merely starts with the same letters.
+     *
+     * @param mount the mount point as the kernel lists it
+     * @param path the path to test
+     * @return true if the mount holds the path
+     */
+    private static boolean covers(String mount, String path) {
+        if ("/".equals(mount)) return true;
+        if (!path.startsWith(mount)) return false;
+        return path.length() == mount.length() || path.charAt(mount.length()) == '/';
+    }
+
+    /**
+     * Whether the kernel says a block device spins.
+     *
+     * @param dev the device as <code>major:minor</code>, or null
+     * @return 0 for solid state, 1 for a spinning disk, -1 when there is no answer
+     * @since 0.9.72+
+     */
+    static int rotationalFlag(String dev) {
+        if (dev == null || !_devNumber.matcher(dev).matches()) return -1;
+        int flag = readFlag(SYS_BLOCK + dev + "/queue/rotational");
+        if (flag < 0) {
+            // a partition has no queue of its own, the disk underneath it does
+            flag = readFlag(SYS_BLOCK + dev + "/../queue/rotational");
+        }
+        return flag;
+    }
+
+    /**
+     * Reads one sysfs flag file.
+     *
+     * @param file the file to read
+     * @return the parsed flag, -1 if the file is not there or does not hold one
+     */
+    private static int readFlag(String file) {
+        try {
+            return parseRotationalFlag(
+                    new String(Files.readAllBytes(Paths.get(file)), StandardCharsets.UTF_8));
+        } catch (IOException ioe) {
+            return -1;
+        }
+    }
+
+    /**
+     * The rotational flag as the kernel writes it.
+     *
+     * @param text the contents of the flag file
+     * @return 1 for a spinning disk, 0 for solid state, -1 for anything else
+     * @since 0.9.72+
+     */
+    static int parseRotationalFlag(String text) {
+        String t = text.trim();
+        if ("1".equals(t)) return 1;
+        if ("0".equals(t)) return 0;
+        return -1;
+    }
+
+    /**
+     * Whether a file gets un-sparsed by being written full of zeros: only a file that was
+     * empty before we extended it, only when preallocation is configured on, and only on a
+     * device where fragmentation is a cost worth paying to avoid.
+     *
+     * @param wasEmpty true if the file held nothing before being extended to its full length
+     * @param preallocate true if preallocation is configured on
+     * @param windows true if running on Windows, which zero-fills as it writes anyway
+     * @param solidState true if the device is known not to spin
+     * @return true if the file should be ballooned with zeros
+     * @since 0.9.72+
+     */
+    static boolean shouldBalloon(boolean wasEmpty, boolean preallocate, boolean windows,
+                                 boolean solidState) {
+        return wasEmpty && preallocate && !windows && !solidState;
+    }
+
+    /**
      * Extend one torrent file to its full length and report it to the listener, so that reads
      * don't fail with an IOE before the piece arrives.
      *
@@ -3616,16 +3779,18 @@ public class Storage implements Closeable {
             boolean wasEmpty = raf.length() == 0;
             raf.setLength(length);
             boolean shouldPreallocate = _util.getPreallocateFiles();
+            boolean solidState = isSolidState();
             /*
              * Don't bother ballooning later on Windows: no sparse file support there, and
              * Windows zero-fills up to the point of the write, which leaves the file fairly
              * unfragmented on average - at least until near the end, where it gets
              * exponentially more fragmented. RAF seeks/writes do not create sparse files.
              *
-             * Also don't balloon on ARM, as a proxy for solid state disk, where fragmentation
-             * doesn't matter much. Actual detection of SSD is almost impossible.
+             * Also don't balloon on solid state storage, where fragmentation costs nothing and
+             * the zero-fill costs the file's whole length in writes. ARM is used as a proxy for
+             * that, and on other hosts the kernel is asked which device the data sits on.
              */
-            if (wasEmpty && !_isWindows && !_isARM && shouldPreallocate) {
+            if (shouldBalloon(wasEmpty, shouldPreallocate, _isWindows, solidState)) {
                 isSparse = true;
             } else if (_log.shouldInfo()) {
                 if (!shouldPreallocate) {
@@ -3635,6 +3800,8 @@ public class Storage implements Closeable {
                 } else if (_isARM) {
                     _log.info("[Snark] Not pre-allocating files -> ARM processor detected,"
                               + " assuming solid state storage");
+                } else if (solidState) {
+                    _log.info("[Snark] Not pre-allocating files -> Solid state storage detected");
                 }
             }
         }
