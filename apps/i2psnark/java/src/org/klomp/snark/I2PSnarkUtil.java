@@ -914,10 +914,17 @@ public class I2PSnarkUtil implements DisconnectListener {
      * @param nickname the tunnel nickname to assign, or null to leave the configured nickname
      * @param capTunnels whether to cap the tunnel quantities at two, used for the shared session
      *                   which IdleChecker ramps up and down as necessary
-     * @return the merged context and session properties for the new socket
-     *         manager
+     * @return a fresh {@link Properties} holding the merged context and session properties,
+     *         with the context's own values behind it as defaults; safe for the caller to
+     *         modify, and to pass on as it is - a {@code putAll()} copy of it would keep only
+     *         the own entries and drop everything inherited from the context
      */
-    private Properties buildOpts(String nickname, boolean capTunnels) {
+    Properties buildOpts(String nickname, boolean capTunnels) {
+        // getProperties() hands back a fresh Properties each call, with the context's merged
+        // system and override values behind it as defaults, so the writes below land on a
+        // throwaway object and cannot leak into the router. Keep that shape: a caller that
+        // copies this with putAll() copies only the own entries and drops every value that
+        // reaches us through the defaults chain. Package-private for the tests.
         Properties opts = _context.getProperties();
         synchronized (_opts) {
             opts.putAll(_opts);
@@ -1326,15 +1333,15 @@ public class I2PSnarkUtil implements DisconnectListener {
             }
             if (td == null) {
                 // Cap at minimal tunnels; IdleChecker ramps them up with usage.
-                // buildOpts() mutates the shared context properties, so copy them for the
-                // session and wait up to 20 minutes for the initial tunnel builds before
-                // giving up; a per-torrent session failure is retried by Snark.
+                // Give the initial tunnel builds an hour before giving up; a per-torrent
+                // session failure is retried by Snark. buildOpts() returns a fresh object
+                // with the context's values behind it as defaults, so this session's
+                // overrides go on that object directly.
                 // Pools start out named after their first torrent; TorrentDest renames
                 // them to "I2PSnark - Pool <n>" when a second torrent joins.
                 int poolNum = poolIndex >= 0 ? ++_nextPoolNum : -1;
                 String nickname = getNickname(name);
-                Properties opts = new Properties();
-                opts.putAll(buildOpts(nickname, true));
+                Properties opts = buildOpts(nickname, true);
                 opts.setProperty(I2PClient.PROP_TUNNEL_BUILD_TIMEOUT, "60");
                 if (poolIndex >= 0 && name != null) {
                     // Prefixes are required: the router only stores session options
