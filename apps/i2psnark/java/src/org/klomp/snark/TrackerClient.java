@@ -103,6 +103,23 @@ public class TrackerClient implements Runnable {
     private static final long SLOW_ROUND_MS = 30 * 1000L;
 
     /**
+     * Wall-clock budget one announce round spends starting tracker exchanges. An
+     * announce is a blocking fetch that EepGet retries, and a BEP 15/48 scrape is a
+     * second one behind it, so a tracker that is not answering costs minutes rather
+     * than seconds: measured rounds ran 5 to 17 minutes on a tracker list of half a
+     * dozen, on a torrent whose fastest announce cadence is {@link #INITIAL_SLEEP}, so
+     * the round outlasted the interval it schedules and the torrent spent its whole
+     * life in tracker I/O with its peer discovery that far out of date. The budget is
+     * that cadence: a round that cannot finish its trackers in the time before the
+     * next one is due has already fallen behind. It bounds the exchange the budget
+     * check starts, never one already under way, so the worst a round can now run is
+     * the budget plus one tracker's announce and scrape.
+     *
+     * @since 0.9.72+
+     */
+    static final long ROUND_BUDGET_MS = 90 * 1000L;
+
+    /**
      * Minutes between tracker status checks. Package-visible so the cadence contract in
      * {@link #roundCadence(int)} can be pinned by test.
      */
@@ -1066,6 +1083,16 @@ public class TrackerClient implements Runnable {
                 int webPeers = getWebPeers();
                 boolean hadMeta = coordinator.getLeft() >= 0;
 
+                // The wall-clock limit on what this round will spend on trackers. An
+                // announce is a blocking fetch that EepGet retries, and a scrape is a
+                // second one behind it, so a tracker that is not answering costs
+                // minutes, not seconds, and a round used to walk its whole tracker
+                // list at that cost: 93 rounds in a four hour window ran past the
+                // 30-second line, and their durations ran 5 to 17 minutes. A torrent
+                // whose fastest cadence is 90 seconds spent its whole life in tracker
+                // I/O, with its peer discovery that far out of date.
+                long roundDeadline = roundDeadline(_util.getContext().clock().now());
+
                 // Local DHT tracker announce
                 DHT dht = _util.getDHTForTorrent(snark.getInfoHash());
                 if (dht != null && (meta == null || !meta.isPrivate()))
@@ -1091,7 +1118,7 @@ public class TrackerClient implements Runnable {
                 List<TCTracker> primaries = primaryTrackers();
                 List<TCTracker> backups = backupTrackers();
                 if (!primaries.isEmpty() && contactTrackers) {
-                    peersFromPrimaries = getPeersFromTrackers(primaries);
+                    peersFromPrimaries = getPeersFromTrackers(primaries, roundDeadline);
                     maxSeenPeers = peersFromPrimaries;
                     // fast update for UI at startup
                     if (maxSeenPeers > oldSeenPeers) snark.setTrackerSeenPeers(maxSeenPeers);
@@ -1118,7 +1145,7 @@ public class TrackerClient implements Runnable {
                         || shouldTryFallbackTrackers(peersFromPrimaries,
                                                      !backups.isEmpty(),
                                                      wantMorePeers))) {
-                    p = getPeersFromTrackers(backups);
+                    p = getPeersFromTrackers(backups, roundDeadline);
                     if (p > maxSeenPeers) maxSeenPeers = p;
                 }
 
@@ -1452,13 +1479,58 @@ public class TrackerClient implements Runnable {
     }
 
     /**
+     * The instant one announce round stops starting new tracker exchanges. Pure so the
+     * budget can be pinned by test.
+     *
+     * @param roundStart the time the round began, in millis
+     * @return the deadline, {@link #ROUND_BUDGET_MS} after the start
+     * @since 0.9.72+
+     */
+    static long roundDeadline(long roundStart) {
+        return roundStart + ROUND_BUDGET_MS;
+    }
+
+    /**
+     * Whether this tracker is due for an announce on this round. A tracker is due once
+     * its own interval has passed since its last reply, unless the torrent is complete
+     * or still needs outbound peers or the tracker has never been registered; and an
+     * announce that just completed the download or just brought the metadata is always
+     * due, because the tracker has to be told. Pure, and package-visible so the
+     * interval rule can be pinned by test - the round budget is only meaningful
+     * because a tracker skipped here is tried again when its own interval comes round.
+     *
+     * @param stopped true once this client is stopping
+     * @param trackerStopped true if this tracker has been dropped
+     * @param completed true if the download is complete
+     * @param needOutboundPeers true if the torrent will use another connection
+     * @param started true if this tracker has answered an announce at least once
+     * @param newlyCompleted true if the download finished since the last round
+     * @param newlyGotMeta true if the metadata arrived since the last round
+     * @param now the current time, in millis
+     * @param lastResponseTime when this tracker last replied, in millis
+     * @param interval how often this tracker asks to be announced to, in millis
+     * @return true to announce to this tracker this round
+     * @since 0.9.72+
+     */
+    static boolean trackerDue(boolean stopped, boolean trackerStopped, boolean completed,
+                              boolean needOutboundPeers, boolean started, boolean newlyCompleted,
+                              boolean newlyGotMeta, long now, long lastResponseTime,
+                              long interval) {
+        if (stopped || trackerStopped) {return false;}
+        if (!(completed || needOutboundPeers || !started)) {return false;}
+        return newlyCompleted || newlyGotMeta || now > lastResponseTime + interval;
+    }
+
+    /**
      * Fetch peers from a list of trackers.
      *
      * @param trckrs the list of trackers to query
+     * @param roundDeadline the instant this round stops starting new tracker exchanges,
+     *                      from {@link #roundDeadline(long)}
      * @return max peers seen
      * @throws Throwable from a tracker announce or scrape, e.g. I/O or protocol errors
      */
-    private int getPeersFromTrackers(List<TCTracker> trckrs) throws Throwable {
+    private int getPeersFromTrackers(List<TCTracker> trckrs, long roundDeadline) throws Throwable {
         long left = coordinator.getLeft(); // -1 in magnet mode
 
         // First time we got a complete download?
@@ -1479,13 +1551,21 @@ public class TrackerClient implements Runnable {
 
         // *** loop once for each tracker
         int maxSeenPeers = 0;
+        int outOfTime = 0;
         for (TCTracker tr : trckrs) {
-            if ((!stop)
-                    && (!tr.stop)
-                    && (completed || coordinator.needOutboundPeers() || !tr.started)
-                    && (newlyCompleted
-                            || newlyGotMeta
-                             || System.currentTimeMillis() > tr.lastResponseTime + tr.interval)) {
+            long now = System.currentTimeMillis();
+            boolean due =
+                    trackerDue(stop, tr.stop, completed, coordinator.needOutboundPeers(),
+                               tr.started, newlyCompleted, newlyGotMeta, now,
+                               tr.lastResponseTime, tr.interval);
+            if (due && now >= roundDeadline) {
+                // The round has already spent its budget on the trackers before this
+                // one. Its own interval still has to pass before it is tried again, so
+                // skipping it here costs nothing it was going to spend anyway.
+                outOfTime++;
+                continue;
+            }
+            if (due) {
                 try {
                     long uploaded = coordinator.getUploaded();
                     long downloaded = coordinator.getDownloaded();
@@ -1547,8 +1627,13 @@ public class TrackerClient implements Runnable {
                     if (snark.getTrackerSeenPeers() < tr.seenPeers) {
                         snark.setTrackerSeenPeers(tr.seenPeers);
                     }
-                    // Refresh swarm composition when the announce didn't report it
-                    if (info.getSeedCount() <= 0 && info.getLeechCount() <= 0) {
+                    // Refresh swarm composition when the announce didn't report it.
+                    // Only while the round still has time to spare: a scrape is a
+                    // second blocking fetch behind the announce, and the counts it
+                    // fills are the console's swarm display, not anything this round
+                    // acts on.
+                    if (info.getSeedCount() <= 0 && info.getLeechCount() <= 0
+                            && System.currentTimeMillis() < roundDeadline) {
                         try {
                             TrackerInfo scrape = doScrape(tr);
                             if (scrape != null) {
@@ -1649,7 +1734,6 @@ public class TrackerClient implements Runnable {
                               + DataHelper.formatDuration(tr.interval) + ")");
                 }
                 // Refresh swarm composition periodically even between announces (BEP 15/48)
-                long now = System.currentTimeMillis();
                 if ((!tr.stop) && now > tr.nextScrapeTime) {
                     try {
                         TrackerInfo scrape = doScrape(tr);
@@ -1669,6 +1753,13 @@ public class TrackerClient implements Runnable {
                 maxSeenPeers = tr.seenPeers;
             }
         } // End of trackers loop here
+        if (outOfTime > 0 && _log.shouldInfo()) {
+            // one line for the whole round, naming how many trackers the budget cut off -
+            // each of them is tried again as soon as its own interval has passed
+            _log.info("Announce round out of time -> Skipped the trackers still due"
+                      + "\n* Skipped: " + outOfTime + " trackers * Torrent: " + shortInfoHash
+                      + " * Budget: " + DataHelper.formatDuration(ROUND_BUDGET_MS));
+        }
         updateTrackerProblems();
         return maxSeenPeers;
     }
