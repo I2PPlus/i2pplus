@@ -200,10 +200,18 @@ test("a generated flake is one arm replicated six times, filled, and placeholder
     assert.ok(!/<(path|polygon|rect)[^>]*\bstroke=(?!":color:")/.test(svg),
               "filled spikes, not strokes: a stroke is a hairline at the 11-16px a flake shows at");
     if (wire) {
-      for (const m of svg.match(/stroke-width="([-\d.]+)"/g) || []) {
-        const width = Number(/"([-\d.]+)"/.exec(m)[1]);
-        assert.ok(width >= 2, `a thinner stroke than ${width} shape units is gone at display size`);
-      }
+      const widths = (svg.match(/stroke-width="([-\d.]+)"/g) || [])
+                     .map(m => Number(/"([-\d.]+)"/.exec(m)[1]));
+      assert.ok(widths.length > 1, "a wireframe is drawn in depth bands, not one flat stroke");
+      assert.ok(Math.max(...widths) >= 2,
+                `the nearest edges at ${Math.max(...widths)} shape units are visible at display size`);
+      assert.ok(Math.max(...widths) <= helpers.WIRE_STROKE_NEAR + 0.05,
+                "nothing is drawn thicker than the nearest band");
+      // The far bands are under a pixel at display size on purpose: that is the depth
+      // cue, and it is what keeps the back half of the solid out of the middle of a
+      // sixteen-pixel sprite without a cut that makes lines pop in and out.
+      assert.ok(Math.min(...widths) <= helpers.WIRE_STROKE_NEAR * 0.15,
+                `the farthest band is ${Math.min(...widths)} units, and should be near invisible`);
     }
   }
 });
@@ -474,8 +482,12 @@ test("no shipped shape is a bare hexagon", () => {
   const helpers = api();
   const shapes = helpers.buildShapes(helpers.MAX_FLAKES, helpers.prng(20261114));
   for (const svg of shapes) {
-    for (const path of svg.match(/<path d="[^"]+"/g) || []) {
-      const vertices = (path.match(/L/g) || []).length + 1;
+    for (const path of svg.match(/<path d="[^"]+"\/>/g) || []) {
+      // a wireframe's strokes are open line segments, not a polygon outline
+      if (path.includes('fill="none"')) {continue;}
+      const d = /d="([^"]+)"/.exec(path)[1];
+      if (!d.endsWith("Z")) {continue;}
+      const vertices = (d.match(/L/g) || []).length + 1;
       assert.notEqual(vertices, 6, `a six-sided polygon reads as a primitive, not a flake: ${path}`);
     }
   }
@@ -489,8 +501,10 @@ test("the field shows every habit, not whatever the weighted draws happened to l
             "a dealt deck shows both the wireframe habit and the flat ones");
   // The deck deals one of each habit before any habit is drawn twice, so the count
   // of distinct shape strips is at least the number of habits whatever the seed.
+  const animated = [];
   for (let seed = 0; seed < 8; seed++) {
-    const field = helpers.buildShapes(helpers.MIN_FLAKES, helpers.prng(seed * 104729 + 7));
+    const dealt = helpers.buildSlots(helpers.MIN_FLAKES, helpers.prng(seed * 104729 + 7));
+    const field = dealt.shapes;
     assert.equal(field.length, helpers.MIN_FLAKES * helpers.FRAMES, `seed ${seed} fills every slot`);
     const strips = [];
     for (let i = 0; i < helpers.MIN_FLAKES; i++) {
@@ -498,8 +512,91 @@ test("the field shows every habit, not whatever the weighted draws happened to l
     }
     assert.ok(strips.every(n => n === 1 || n >= helpers.FRAMES / 2),
               `seed ${seed} strips are whole cycles, not part-drawn`);
-    assert.ok(strips.filter(n => n > 1).length >= helpers.MIN_FLAKES / 2,
-              `seed ${seed} animates most of the field`);
+    // A strip animates when its crystal is warped (its frames walk the warp cycle) or
+    // when it is a solid (painted as vectors at its own orientation, so its frames are
+    // one pose but the flake still turns). Which slots are warped is a draw, so the
+    // check is on the field as a whole, not on one seed.
+    animated.push(strips.filter((n, i) => n > 1 || dealt.wire[i]).length);
+  }
+  const mean = animated.reduce((sum, n) => sum + n, 0) / animated.length;
+  assert.ok(mean >= helpers.MIN_FLAKES * 0.5,
+            `${mean.toFixed(1)} of ${helpers.MIN_FLAKES} slots animate through their frames`);
+  assert.ok(Math.min(...animated) >= helpers.MIN_FLAKES / 3,
+            `the worst seed still animates ${Math.min(...animated)} slots`);
+});
+
+test("a wireframe tumbles continuously on all three axes, at a relaxed pace", () => {
+  const helpers = api();
+  const bounds = {width: 1280, height: 800};
+  const perSecond = rate => Math.abs(rate) * 1000 / helpers.FRAME_MS * 180 / Math.PI;
+  for (let seed = 0; seed < 30; seed++) {
+    const rnd = helpers.prng(seed * 7717 + 3);
+    const wire = helpers.createFlake(bounds, 0, rnd, true,
+                                     helpers.wireOrientation(helpers.prng(seed * 31337 + 5)));
+    const flat = helpers.createFlake(bounds, 0, helpers.prng(seed * 7717 + 3), false);
+    // Relaxed: a solid turning at a flat crystal's rate reads as a drill, and its
+    // twelve-pointed silhouette aliases at half the rate a six-fold one does.
+    const z = perSecond(helpers.spinSpeed(wire));
+    assert.ok(z >= 20 && z <= 45, `the z axis turns at ${z.toFixed(0)} degrees a second`);
+    assert.ok(z <= perSecond(helpers.spinSpeed(flat)),
+              "and slower than a flat crystal drawn from the same numbers");
+    for (const axis of ["spinX", "spinY"]) {
+      assert.ok(perSecond(wire[axis]) <= 21, `${axis} tumbles at ${perSecond(wire[axis]).toFixed(0)} degrees a second`);
+    }
+    // Continuous: every step advances all three axes by the same small amount, so
+    // nothing is held, jumped and held again — the stop-animate-start of a flip book.
+    const was = [wire.tiltX, wire.tiltY, wire.rotation];
+    const rates = [wire.spinX, wire.spinY, helpers.spinSpeed(wire) + wire.gustSpin];
+    helpers.stepFlake(wire, bounds, rnd);
+    const moved = [wire.tiltX - was[0], wire.tiltY - was[1], wire.rotation - was[2]];
+    for (let i = 0; i < 3; i++) {
+      assert.ok(Math.abs(moved[i] - rates[i]) < 1e-9, `axis ${i} advances by its own rate every step`);
+      assert.ok(Math.abs(moved[i]) < 0.05, `axis ${i} moves in a step, not a jump`);
+    }
+  }
+  // the atlas holds one pose per wireframe slot, because the motion is not in it
+  const slots = helpers.buildSlots(helpers.MAX_FLAKES, helpers.prng(20261114));
+  const at = slots.wire.indexOf(true);
+  assert.ok(at >= 0, "a dealt deck shows the wireframe habit");
+  const strip = slots.shapes.slice(at * helpers.FRAMES, (at + 1) * helpers.FRAMES);
+  assert.equal(new Set(strip).size, 1, "a wireframe slot's frames are one pose, not a flip book");
+  assert.ok(slots.solids[at], "and the slot carries the solid its flakes are painted from");
+  assert.ok(slots.solids.every((s, i) => (s !== null) === slots.wire[i]),
+            "exactly one solid per wireframe slot");
+});
+
+test("a needle crystal is drawn smaller, and its arms are joined by a spiral", () => {
+  const helpers = api();
+  const needle = helpers.HABITS.find(h => h[0] === "needle");
+  const scale = needle[4];
+  assert.ok(scale <= 0.7, `the needle habit draws at ${scale} of the cell radius`);
+  const view = helpers.SHAPE_VIEW;
+  const reach = view / 2 - 1;
+  for (let seed = 0; seed < 20; seed++) {
+    const svg = helpers.buildShape(helpers.prng(seed * 6151 + 11), view,
+                                   {name: "needle", build: needle[2], wire: false, scale: scale}, 0, 1);
+    const points = [];
+    const paths = /d="([^"]*)"/g;
+    let hit;
+    while ((hit = paths.exec(svg)) !== null) {
+      const pairs = /(-?[\d.]+) (-?[\d.]+)/g;
+      let pair;
+      while ((pair = pairs.exec(hit[1])) !== null) {points.push([Number(pair[1]), Number(pair[2])]);}
+    }
+    assert.ok(points.length > 40, `${points.length} points — the vane is a curve, not a line`);
+    for (const [x, y] of points) {
+      const r = Math.hypot(x, y);
+      assert.ok(r <= reach * scale + 0.6, `a point ${r.toFixed(1)} out reaches past the ${scale} scale`);
+    }
+    // the vane starts at the arm's point and ends on the neighbouring arm's axis, so
+    // six copies of it leave no arm unconnected
+    const angle = ([x, y]) => Math.atan2(x, -y) * 180 / Math.PI;
+    const radius = ([x, y]) => Math.hypot(x, y);
+    const maxR = Math.max(...points.map(radius));
+    assert.ok(points.some(p => radius(p) >= maxR * 0.92 && Math.abs(angle(p)) < 6),
+              "the vane starts at the point of the arm");
+    assert.ok(points.some(p => Math.abs(angle(p) - 60) < 4 && radius(p) > maxR * 0.35),
+              "the vane reaches the next arm");
   }
 });
 

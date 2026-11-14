@@ -231,26 +231,63 @@
    * not a re-render — and the worker rasterizes all of them itself, measured at
    * 1.3 ms for 120 cells and about 3.5 ms for this many.
    *
-   * Sixteen rather than eight because the wireframe's tumble is the binding
-   * constraint: at eight frames the solid jumps 45 degrees at a time and reads as a
-   * flip book.
+   * Sixteen rather than eight because the flat crystal's warp cycle is the binding
+   * constraint: at eight frames the twist moves 20 degrees at a time and the
+   * reforming reads as a flip book rather than as a slow untwist.
    */
   const FRAMES = 16;
   /** Simulation steps a flat flake's frame is held for; the reforming cycle's pace. */
   const FRAME_BEATS = 12;
-  /** Simulation steps a wireframe's orientation is held for; its tumble pace. */
-  const TUMBLE_BEATS = 5;
   /**
-   * Stroke width of a wireframe edge nearer the viewer, in shape units.
+   * Stroke widths of a wireframe, from the edge nearest the viewer to the farthest,
+   * as multiples of {@link WIRE_STROKE_NEAR}.
    *
-   * Kept low deliberately. A wireframe covers far more of the atlas cell than a
-   * crystal of filled spikes does — measured at 3.5 times the alpha coverage at
-   * these widths — and a flake shown at 11-16 pixels with that much ink in it reads
-   * as a fuzzy ball rather than as an open framework.
+   * A near/far cut — draw the front edges, drop the back ones — makes an edge pop
+   * into existence the moment it crosses the view plane, and a line appearing in the
+   * middle of a slowly turning crystal is what reads as jank. Width follows depth
+   * along this ramp instead, so an edge grows out of invisibility as it turns toward
+   * the viewer. The far end of the ramp is deliberately under a pixel at the size a
+   * flake is shown: that is what keeps the middle of the sprite clear of the back
+   * half of the solid.
    */
+  const WIRE_DEPTH = [0.1, 0.25, 0.42, 0.62, 0.82, 1];
+  /** Stroke width of a wireframe edge nearest the viewer, in shape units. */
   const WIRE_STROKE_NEAR = 4;
-  /** Stroke width of one farther away, in shape units. */
-  const WIRE_STROKE_FAR = 2.5;
+  /**
+   * Fastest a wireframe flake turns, in radians per step.
+   *
+   * A solid that turns quickly reads as a drill rather than as a crystal, and a
+   * twelve-pointed silhouette aliases at half the rate a six-fold one does, so the
+   * wireframe habit is capped well below the flat crystals' range: this is about
+   * 45 degrees a second, a full turn of the z axis in eight seconds.
+   */
+  const WIRE_SPIN_MAX = 0.013;
+  /**
+   * Slowest a wireframe flake turns, in radians per step: about 21 degrees a second,
+   * so even a flake that drew a near-zero spin still completes a full turn well inside
+   * its travel.
+   */
+  const WIRE_SPIN_MIN = 0.006;
+  /**
+   * Range of the tumble rate a wireframe flake draws for its two screen axes, in
+   * radians per step: up to about 21 degrees a second each, so the solid turns
+   * continuously on all three axes and completes a turn well inside its travel.
+   *
+   * This is a range around zero, not a floor: a flake that draws a near-zero rate
+   * simply tumbles slowly about that axis, which is what keeps a field of them from
+   * turning in step.
+   */
+  const WIRE_TUMBLE_RATE = 0.012;
+  /** Fastest a flat flake turns while it is alive, in radians per step. */
+  const MIN_SPIN = 0.01;
+  /**
+   * Fastest a dying wireframe spins, in radians per step, against the
+   * {@link DEATH_SPIN_MAX} a flat crystal reaches.
+   *
+   * The death spiral is the same event for both, but a solid thrown about at a flat
+   * crystal's rate stops reading as one at all.
+   */
+  const WIRE_DEATH_SPIN_MAX = 0.11;
   /**
    * The twist in force while an arm is being built, or null for straight arms.
    *
@@ -701,8 +738,57 @@
    * @param {number} radius distance from the centre to the edge of the drawing
    * @returns {string[]} the arm's filled elements, trunk first
    */
+  /**
+   * A curved vane running from the point of one arm into the trunk of the next, so
+   * six copies of it join every arm of the crystal to its neighbours.
+   *
+   * It replaces a straight chord between arms, which left the habit reading as a
+   * wheel of six separate spokes. The radius falls away fastest at the outside and
+   * flattens toward the inside, which is what leaves a visible curve at the tip of
+   * the arm — the part a reader actually sees at 12 pixels — while the inner half of
+   * the sweep stays nearly straight and simply holds the arms together.
+   *
+   * @param {Function} rnd the flake's own generator, for the sweep's depth and width
+   * @param {number} trunk radius of the arm's point, in shape units
+   * @param {number} base half width of that arm's trunk, in shape units
+   * @returns {string} one filled path, swept from this arm's point to 60 degrees out
+   */
+  function spiralVane(rnd, trunk, base) {
+    const sweep = Math.PI / 3;
+    const steps = 10;
+    // where the vane lands on the neighbouring arm, and how wide it starts
+    const lands = trunk * (0.5 + rnd() * 0.16);
+    // Thinner than the arm it joins, so the trunk still reads as an arm and the vane
+    // reads as the webbing between arms rather than as the whole crystal.
+    const wide = base * (0.7 + rnd() * 0.45);
+    // The centre line starts a band-width inside the point, so the band's outer edge
+    // starts at the point and the vane never reaches past the crystal it is on.
+    const starts = trunk - wide;
+    const near = [];
+    const far = [];
+    for (let i = 0; i <= steps; i++) {
+      const t = i / steps;
+      const ang = sweep * t;
+      // the exponent is the curve: at 1 the radius falls evenly along the sweep and
+      // the vane reads as an arc of a ring, at this it drops fastest at the outside
+      const r = starts - (starts - lands) * Math.pow(t, 1.7);
+      const h = wide * (1 - 0.72 * t);
+      const sx = Math.sin(ang);
+      const sy = -Math.cos(ang);
+      near.push([sx * (r + h), sy * (r + h)]);
+      far.push([sx * (r - h), sy * (r - h)]);
+    }
+    let d = "M" + coord(near[0][0]) + " " + coord(near[0][1]);
+    for (let i = 1; i <= steps; i++) {d += "L" + coord(near[i][0]) + " " + coord(near[i][1]);}
+    for (let i = steps; i >= 0; i--) {d += "L" + coord(far[i][0]) + " " + coord(far[i][1]);}
+    return '<path d="' + d + 'Z"/>';
+  }
+
   function armNeedle(rnd, radius) {
-    const trunk = radius * (0.88 + rnd() * 0.12);
+    // Everything the habit draws has to fit inside radius: the whole crystal is
+    // already scaled down, and a cap or a spur hanging past it puts the flake back
+    // over the seven tenths a needle is allowed to cover.
+    const trunk = radius * (0.8 + rnd() * 0.1);
     const base = radius * (0.05 + rnd() * 0.026);
     const parts = [spike(0, 0, 0, trunk, base, base * 0.3)];
     // Barbs, not a bare stick. A real needle is a columnar crystal and the
@@ -717,17 +803,15 @@
         parts.push(spike(0, -at, side * (0.6 + rnd() * 0.35), len, half, 0));
       }
     }
-    // Inter-arm web: a chord out to the point of the neighbouring arm at this
-    // radius, so six copies close into a hexagonal web. Six separate spokes with
-    // nothing between them is the one thing that makes this habit read as a wheel
-    // rather than as a crystal.
-    const web = trunk * (0.42 + rnd() * 0.26);
-    parts.push(spike(0, -web, 2 * Math.PI / 3, web, base * 0.55, 0));
+    // The spiral that joins the arms, instead of the straight chord this used to
+    // draw: six copies of it run from the point of each arm into the trunk of the
+    // next, so the habit reads as one curved crystal rather than as six spokes.
+    parts.push(spiralVane(rnd, trunk, base));
     if (rnd() < 0.6) {
       parts.push(stellate(0, -trunk * (0.5 + rnd() * 0.3), base * (1.9 + rnd() * 0.8), rnd() * Math.PI / 3, rnd));
     }
     if (rnd() < 0.5) {
-      parts.push('<path d="' + ngonPath(0, -trunk, base * 2.4, 4, Math.PI / 4) + '"/>');
+      parts.push('<path d="' + ngonPath(0, -(trunk - base * 2.4), base * 2.4, 4, Math.PI / 4) + '"/>');
     }
     return parts;
   }
@@ -912,6 +996,13 @@
   })();
 
   /**
+   * Circumradius of {@link ICOSA}, so a projected z reads as a depth from -1 at the
+   * back of the solid to 1 at the front.
+   */
+  const WIRE_CIRC = ICOSA.reduce((wide, v) =>
+    Math.max(wide, Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2])), 0);
+
+  /**
    * Rotates a point about an arbitrary axis through the origin (Rodrigues).
    *
    * @param {number[]} v the point
@@ -951,41 +1042,96 @@
    * @param {number} frames steps in a full turn
    * @returns {string[]} the frame's path elements
    */
-  function armDodeca(rnd, radius, frame, frames) {
-    const f = frame || 0;
-    const n = Math.max(1, frames || FRAMES);
+  /**
+   * The fixed orientation of one wireframe slot's solid, drawn from that slot's seed.
+   *
+   * The atlas cell and the live painting of a wireframe flake both call this with the
+   * slot's seed, so the two agree on which face the solid shows; what differs is only
+   * the tumble the flake accumulates as it falls.
+   *
+   * @param {Function} rnd the slot's own generator
+   * @returns {Object} the axis and angles the solid is set at, and the sizes its
+   *   drawing uses, the sizes as fractions of the cell radius
+   */
+  function wireOrientation(rnd) {
     let ux = rnd() * 1.6 - 0.8;
     let uy = rnd() * 1.6 - 0.8;
     let uz = 1 + rnd();
     const un = Math.sqrt(ux * ux + uy * uy + uz * uz);
-    ux /= un;
-    uy /= un;
-    uz /= un;
-    const tilt = 0.3 + rnd() * 0.8;
-    const scale = radius * (0.72 + rnd() * 0.12) / Math.sqrt(1 + ((1 + Math.sqrt(5)) / 2) ** 2);
+    return {
+      ux: ux / un,
+      uy: uy / un,
+      uz: uz / un,
+      // a fixed lean about x, so the axis is never square to the viewer
+      tilt: 0.3 + rnd() * 0.8,
+      // the slot's own turn about its axis, so a field of wireframes is not all
+      // showing the same face
+      spin: rnd() * Math.PI * 2,
+      body: 0.72 + rnd() * 0.12,
+      core: 0.15 + rnd() * 0.06,
+      coreRot: rnd() * Math.PI / 3
+    };
+  }
 
+  /**
+   * Projects one wireframe solid into the plane of the screen.
+   *
+   * @param {Object} solid the orientation from {@link wireOrientation}
+   * @param {number} tiltX tumble accumulated about the screen's x axis, in radians
+   * @param {number} tiltY tumble accumulated about the screen's y axis, in radians
+   * @param {number} radius the cell radius the solid is drawn into, in shape units
+   * @returns {Array<Array<number>>} the projected vertices: x and y in shape units,
+   *   with z still attached as the depth
+   */
+  function wireVertices(solid, tiltX, tiltY, radius) {
+    const scale = radius * solid.body / WIRE_CIRC;
+    const lean = solid.tilt + tiltX;
     const at = [];
     for (const v of ICOSA) {
-      let p = rotAxis(v, [ux, uy, uz], f * 2 * Math.PI / n);
-      // a fixed lean about x, so the axis is never square to the viewer
-      const y = p[1] * Math.cos(tilt) - p[2] * Math.sin(tilt);
-      const z = p[1] * Math.sin(tilt) + p[2] * Math.cos(tilt);
+      const p = rotAxis(v, [solid.ux, solid.uy, solid.uz], solid.spin + tiltY);
+      const y = p[1] * Math.cos(lean) - p[2] * Math.sin(lean);
+      const z = p[1] * Math.sin(lean) + p[2] * Math.cos(lean);
       // a little perspective: nearer points are pushed out, and it is the change in
-      // the outline between frames, more than the size, that reads as depth
+      // the outline as the solid turns, more than the size, that reads as depth
       const depth = 1 + z * 0.11 / scale;
       at.push([p[0] * scale * depth, -y * scale * depth, z]);
     }
+    return at;
+  }
 
-    const groups = [[], []];
-    for (const [i, j] of WIRE.stellated) {groups[zNear(at, i, j) ? 0 : 1].push([at[i], at[j]]);}
-    // The twelve points, sharpened: each vertex throws a short spike straight out,
+  /**
+   * Groups a projected solid's edges and points by how far they sit from the viewer.
+   *
+   * Every edge is drawn, at a width that follows its depth. Keeping the back half of
+   * the solid faint keeps the middle of a sixteen-pixel sprite clear, but doing it with
+   * a cut makes lines pop in and out as the solid turns, and a line appearing in the
+   * middle of a slow turn is what reads as jank.
+   *
+   * @param {Array<Array<number>>} at the projected vertices from {@link wireVertices}
+   * @returns {Array<Array<Array<Array<number>>>>} one list of line segments per
+   *   {@link WIRE_DEPTH} band, from the back of the solid to the front
+   */
+  function wireBands(at) {
+    const groups = WIRE_DEPTH.map(() => []);
+    for (const [i, j] of WIRE.stellated) {
+      groups[depthBucket((at[i][2] + at[j][2]) / 2)].push([at[i], at[j]]);
+    }
+    // The points, sharpened: every vertex throws a spike straight out past the body,
     // which is what makes the silhouette read as a stellation rather than as a ball
     // of crossing lines.
     for (const v of at) {
-      groups[v[2] > 0 ? 0 : 1].push([v, [v[0] * 1.2, v[1] * 1.2, v[2]]]);
+      groups[depthBucket(v[2])].push([v, [v[0] * 1.34, v[1] * 1.34, v[2]]]);
     }
-    const widths = [WIRE_STROKE_NEAR, WIRE_STROKE_FAR];
-    const parts = [];
+    return groups;
+  }
+
+  function armDodeca(rnd, radius) {
+    const solid = wireOrientation(rnd);
+    const groups = wireBands(wireVertices(solid, 0, 0, radius));
+    // A bright centre, as the flat crystals have. Without it the whole drawing is
+    // hairlines crossing an empty middle, which reads as a scribble and not as a
+    // flake.
+    const parts = [stellate(0, 0, radius * solid.core, solid.coreRot, rnd)];
     for (let g = 0; g < groups.length; g++) {
       if (groups[g].length === 0) {continue;}
       let d = "";
@@ -993,25 +1139,30 @@
         d += "M" + coord(a[0]) + " " + coord(a[1]) + "L" + coord(b[0]) + " " + coord(b[1]);
       }
       parts.push('<path d="' + d + '" fill="none" stroke=":color:" stroke-width="' +
-                 coord(widths[g]) + '" stroke-linecap="round"/>');
+                 coord(WIRE_STROKE_NEAR * WIRE_DEPTH[g]) + '" stroke-linecap="round"/>');
     }
     return parts;
   }
 
   /**
-   * Whether an edge sits on the near side of the solid.
+   * Which stroke width an edge or a point is drawn at, by how far it sits toward
+   * the viewer.
    *
-   * @param {number[][]} at the projected vertices, with z still attached
-   * @param {number} i first vertex index
-   * @param {number} j second vertex index
-   * @returns {boolean} true when the edge's midpoint is toward the viewer
+   * @param {number} z depth of the edge's midpoint or of the vertex, in
+   *   {@link ICOSA}'s own units, so it runs from -{@link WIRE_CIRC} at the back of
+   *   the solid to +{@link WIRE_CIRC} at the front
+   * @returns {number} index into {@link WIRE_DEPTH}, 0 at the back of the solid
    */
-  function zNear(at, i, j) {
-    return (at[i][2] + at[j][2]) / 2 > 0;
+  function depthBucket(z) {
+    const front = (z / WIRE_CIRC + 1) / 2;
+    const bucket = Math.floor(front * WIRE_DEPTH.length);
+    return Math.max(0, Math.min(WIRE_DEPTH.length - 1, bucket));
   }
 
   /**
-   * The arm builders, with the weight each is drawn at.
+   * The arm builders: name, draw weight, builder, whether the habit is a solid rather
+   * than a six-fold arm, and the radius its crystals take up in the cell as a
+   * fraction of the full one.
    *
    * A dendrite is what snow reads as, so it stays the most common; the rest are
    * there to break up a field of twenty identical silhouettes. Weighted by how
@@ -1020,16 +1171,21 @@
    * the needle, sectored, capped and star habits are still legible at 12 pixels,
    * the beaded habit is marginal, and a fine-needle burst and a faceted plate were
    * dropped for collapsing into a blob.
+   *
+   * The last column is drawn smaller than the cell for the needle habit only. Six
+   * bare columns running the full width of the sprite read as spokes from a wheel,
+   * and shrinking the crystal to seven tenths is what makes the joined-up spiral
+   * arms read as one shape rather than as six separate sticks.
    */
   const HABITS = [
-    ["dendrite", 28, armDendrite, false],
-    ["needle", 13, armNeedle, false],
-    ["sectored", 13, armSectored, false],
-    ["capped", 11, armCapped, false],
-    ["ringed", 9, armRinged, false],
-    ["star", 11, armStar, false],
-    ["beaded", 7, armBeaded, false],
-    ["dodeca", 8, armDodeca, true]
+    ["dendrite", 28, armDendrite, false, 1],
+    ["needle", 13, armNeedle, false, 0.7],
+    ["sectored", 13, armSectored, false, 1],
+    ["capped", 11, armCapped, false, 1],
+    ["ringed", 9, armRinged, false, 1],
+    ["star", 11, armStar, false, 1],
+    ["beaded", 7, armBeaded, false, 1],
+    ["dodeca", 8, armDodeca, true, 1]
   ];
 
   /**
@@ -1044,9 +1200,9 @@
     let roll = rnd() * total;
     for (const habit of HABITS) {
       roll -= habit[1];
-      if (roll < 0) {return {name: habit[0], build: habit[2], wire: habit[3]};}
+      if (roll < 0) {return {name: habit[0], build: habit[2], wire: habit[3], scale: habit[4]};}
     }
-    return {name: HABITS[0][0], build: HABITS[0][2], wire: HABITS[0][3]};
+    return {name: HABITS[0][0], build: HABITS[0][2], wire: HABITS[0][3], scale: HABITS[0][4]};
   }
 
   /**
@@ -1069,9 +1225,12 @@
    * @returns {string} a complete SVG document
    */
   function buildShape(rnd, size, habit, frame, frames) {
-    const radius = size / 2 - 1;
     const picked = habit || pickHabit(rnd);
     const n = Math.max(1, frames || FRAMES);
+    // Some habits are drawn smaller than the cell that holds them — see the last
+    // column of HABITS. Everything below is measured from this radius, so the whole
+    // crystal shrinks together rather than the arms shrinking inside a full-size core.
+    const radius = (size / 2 - 1) * (picked.scale || 1);
     const f = Math.max(0, Math.min(n - 1, frame || 0));
     // A flat crystal's frames differ only in where in the warp cycle they sit, so
     // the twist walks through zero and back: the flake untwists, then re-twists the
@@ -1124,7 +1283,8 @@
    * @returns {string[]} count * FRAMES complete SVG documents, slot-major
    */
   function buildSlots(count, rnd) {
-    const deck = HABITS.map(habit => ({name: habit[0], build: habit[2], wire: habit[3]}));
+    const deck = HABITS.map(habit =>
+      ({name: habit[0], build: habit[2], wire: habit[3], scale: habit[4]}));
     for (let i = deck.length - 1; i > 0; i--) {
       const j = Math.floor(rnd() * (i + 1));
       const swap = deck[i];
@@ -1133,15 +1293,19 @@
     }
     const shapes = [];
     const wire = [];
+    // The solid each wireframe slot shows, kept so the flake can be painted as vectors
+    // at whatever orientation it has tumbled to instead of being picked off the atlas.
+    const solids = [];
     for (let i = 0; i < count; i++) {
       const seed = Math.floor(rnd() * 0x7fffffff);
       const habit = i < deck.length ? deck[i] : pickHabit(prng(seed));
       wire.push(habit.wire);
+      solids.push(habit.wire ? wireOrientation(prng(seed)) : null);
       for (let f = 0; f < FRAMES; f++) {
         shapes.push(buildShape(prng(seed), SHAPE_VIEW, habit, f, FRAMES));
       }
     }
-    return {shapes, wire};
+    return {shapes, wire, solids};
   }
 
   /**
@@ -1162,11 +1326,12 @@
    * @param {Object} bounds {width, height} of the viewport in CSS pixels
    * @param {number} cell atlas slot this flake draws from
    * @param {function(): number} rnd source of randomness
-   * @param {boolean} [wire] true when this slot is a wireframe habit, whose frames
-   *   are orientations rather than warp steps
+   * @param {boolean} [wire] true when this slot is a wireframe habit, whose solid is
+   *   painted as vectors at the orientation the flake has tumbled to
+   * @param {Object} [solid] the solid that slot shows, from {@link wireOrientation}
    * @returns {Object} the flake's mutable state
    */
-  function createFlake(bounds, cell, rnd, wire) {
+  function createFlake(bounds, cell, rnd, wire, solid) {
     const size = Math.max(11, rnd() * 9 + 7);
     const flake = {
       cell,
@@ -1211,9 +1376,16 @@
       wire: !!wire,
       frame: 0,
       steps: 0,
-      // Where in its slot's orientation cycle this flake starts, so a field of
-      // wireframes is not sixteen copies of the same face.
-      tumblePhase: Math.floor(rnd() * FRAMES)
+      // A wireframe flake carries its solid's orientation and the tumble it has
+      // accumulated about the two screen axes. The z axis is the sprite's own rotation,
+      // which the draw transform already turns smoothly; these two are what the live
+      // painting of the solid needs, and they advance every step, so the solid turns
+      // continuously on all three axes instead of being flipped between poses.
+      solid: solid || null,
+      tiltX: rnd() * Math.PI * 2,
+      tiltY: rnd() * Math.PI * 2,
+      spinX: (rnd() - 0.5) * WIRE_TUMBLE_RATE,
+      spinY: (rnd() - 0.5) * WIRE_TUMBLE_RATE
     };
     flake.opacity = flake.initialOpacity;
     return flake;
@@ -1255,12 +1427,22 @@
    * way — the sign is the flake's own, and the death spin has to inherit it or the
    * spiral reads as a reversal.
    *
+   * A wireframe flake is geared into its own band, {@link WIRE_SPIN_MIN} to
+   * {@link WIRE_SPIN_MAX}. It is the only habit that reads as a solid rather than as
+   * a flat drawing, and a solid turning at a flat crystal's rate reads as a drill;
+   * its silhouette is twelve-pointed too, which aliases at half the rate a six-fold
+   * one does.
+   *
    * @param {Object} flake the flake to read
-   * @returns {number} signed radians per step, never nearer zero than 0.01
+   * @returns {number} signed radians per step, never nearer zero than
+   *   {@link WIRE_SPIN_MIN} for a wireframe flake and {@link MIN_SPIN} for the rest
    */
   function spinSpeed(flake) {
     const speed = flake.rotationSpeed * Math.max(1, flake.initialSize / flake.size);
-    return speed < 0 ? Math.min(-0.01, speed) : Math.max(0.01, speed);
+    const floor = flake.wire ? WIRE_SPIN_MIN : MIN_SPIN;
+    const limit = flake.wire ? WIRE_SPIN_MAX : Infinity;
+    const geared = Math.min(limit, Math.abs(speed)) * (speed < 0 ? -1 : 1);
+    return geared < 0 ? Math.min(-floor, geared) : Math.max(floor, geared);
   }
 
   /**
@@ -1306,12 +1488,14 @@
    * Advances the envelope and the wobble phase, so call it exactly once a step.
    *
    * @param {Object} flake the dying flake to read
-   * @returns {number} signed radians per step, bounded by {@link DEATH_SPIN_MAX}
+   * @returns {number} signed radians per step, bounded by {@link DEATH_SPIN_MAX} for
+   *   a flat crystal and {@link WIRE_DEATH_SPIN_MAX} for a wireframe one
    *   times the wobble factor
    */
   function deathSpinAt(flake) {
     const sign = flake.spinEnv < 0 ? -1 : 1;
-    flake.spinEnv = sign * Math.min(DEATH_SPIN_MAX, Math.abs(flake.spinEnv) * DEATH_SPIN_GROWTH);
+    const ceiling = flake.wire ? WIRE_DEATH_SPIN_MAX : DEATH_SPIN_MAX;
+    flake.spinEnv = sign * Math.min(ceiling, Math.abs(flake.spinEnv) * DEATH_SPIN_GROWTH);
     const spin = flake.spinEnv * (flake.spinBias + flake.wobbleAmp * Math.sin(flake.wobblePhase));
     flake.wobblePhase += flake.wobbleRate;
     return spin;
@@ -1360,13 +1544,18 @@
     flake.y += flake.vy + flake.gustVy;
     flake.totalDistance += flake.vy;
 
-    // Which frame of the slot's strip is showing. A flat crystal walks its warp
-    // cycle on a slow timer; a wireframe walks its orientation cycle, from its own
-    // starting angle, about the axis its slot was built with.
+    // Which frame of the slot's strip is showing: a flat crystal walks its warp cycle
+    // on a slow timer. A wireframe's frames are all one pose, because its motion is not
+    // in the atlas at all — the solid is painted as vectors at the orientation below.
     flake.steps++;
-    flake.frame = flake.wire
-      ? (flake.tumblePhase + Math.floor(flake.steps / TUMBLE_BEATS)) % FRAMES
-      : Math.floor(flake.steps / FRAME_BEATS) % FRAMES;
+    flake.frame = Math.floor(flake.steps / FRAME_BEATS) % FRAMES;
+    // The solid's tumble about the two screen axes, advanced every step so it turns
+    // continuously rather than being flipped between poses. The third axis is the
+    // sprite's own rotation, which the draw transform already turns smoothly.
+    if (flake.wire) {
+      flake.tiltX += flake.spinX;
+      flake.tiltY += flake.spinY;
+    }
 
     const travelled = Math.min(1, flake.totalDistance / flake.maxDistance);
     const windIndex = travelled * (WIND_SPEEDS.length - 1);
@@ -1635,7 +1824,8 @@
     while (state.flakes.length > want) {state.flakes.pop();}
     while (state.flakes.length < want) {
       const slot = state.flakes.length % state.palette.length;
-      state.flakes.push(createFlake(state.bounds, slot, state.rnd, state.wire[slot]));
+      state.flakes.push(createFlake(state.bounds, slot, state.rnd, state.wire[slot],
+                                    state.solids[slot]));
     }
     state.count = want;
   }
@@ -1754,6 +1944,61 @@
   }
 
   /**
+   * Paints one wireframe flake as vectors, at the orientation its solid has tumbled to.
+   *
+   * The atlas cannot carry this motion. Sixteen poses step the solid's orientation by
+   * 22 degrees at a time, and a solid that is held, jumped and held again reads as a
+   * flip book however slowly it is paced. Twelve vertices and forty-two segments cost
+   * about as much as one more flake's drawImage, and they make the tumble continuous on
+   * all three axes instead.
+   *
+   * @param {OffscreenCanvasRenderingContext2D} ctx the canvas context, already set to
+   *   this flake's position, rotation and size
+   * @param {Object} flake the flake to paint, with its solid and tumble attached
+   * @returns {void}
+   */
+  function paintWire(ctx, flake) {
+    const radius = SHAPE_VIEW / 2 - 1;
+    const groups = wireBands(wireVertices(flake.solid, flake.tiltX, flake.tiltY, radius));
+    // The transform maps a two-unit box onto the flake's sprite and the atlas draws its
+    // shapes into a cell this many units wide, so the same scale makes a vector solid
+    // exactly the size the cell would have been.
+    ctx.save();
+    ctx.scale(2 / SHAPE_VIEW, 2 / SHAPE_VIEW);
+    const cell = state.palette[flake.cell];
+    const color = cell ? cell.color : "#87ceeb";
+    ctx.fillStyle = color;
+    ctx.strokeStyle = color;
+    ctx.lineCap = "round";
+    // A bright centre, as the flat crystals have, or the whole flake is hairlines
+    // crossing an empty middle.
+    const core = new Path2D();
+    const near = radius * flake.solid.core;
+    const far = near * 0.55;
+    for (let i = 0; i < 12; i++) {
+      const r = i % 2 ? far : near;
+      const a = flake.solid.coreRot + i * Math.PI / 6;
+      const x = Math.sin(a) * r;
+      const y = -Math.cos(a) * r;
+      if (i === 0) {core.moveTo(x, y);} else {core.lineTo(x, y);}
+    }
+    core.closePath();
+    ctx.fill(core);
+    for (let g = 0; g < groups.length; g++) {
+      const segments = groups[g];
+      if (segments.length === 0) {continue;}
+      const path = new Path2D();
+      for (const [p, q] of segments) {
+        path.moveTo(p[0], p[1]);
+        path.lineTo(q[0], q[1]);
+      }
+      ctx.lineWidth = WIRE_STROKE_NEAR * WIRE_DEPTH[g];
+      ctx.stroke(path);
+    }
+    ctx.restore();
+  }
+
+  /**
    * Paints the scene into the transferred canvas, clearing only the rectangles
    * the previous frame painted. A full-viewport clear costs millions of pixels to
    * wipe for a few hundred pixels of snow; this costs the snow.
@@ -1779,14 +2024,21 @@
       const a = buf[at + F_A];
       const b = buf[at + F_B];
       const cell = buf[at + F_CELL] | 0;
-      const col = (cell % state.layout.cols) * CELL;
-      const row = Math.floor(cell / state.layout.cols) * CELL;
       ctx.setTransform(a, b, buf[at + F_C], buf[at + F_D], buf[at + F_X], buf[at + F_Y]);
       ctx.globalAlpha = buf[at + F_ALPHA];
-      ctx.drawImage(state.atlas, col, row, CELL, CELL, -1, -1, 2, 2);
+      const flake = state.flakes[i];
+      if (flake.solid) {
+        paintWire(ctx, flake);
+      } else {
+        const col = (cell % state.layout.cols) * CELL;
+        const row = Math.floor(cell / state.layout.cols) * CELL;
+        ctx.drawImage(state.atlas, col, row, CELL, CELL, -1, -1, 2, 2);
+      }
       // |a| + |b| is the rotated sprite's half-extent on each axis, so the rect
-      // recorded here is exactly the box the next frame has to erase.
-      const half = Math.abs(a) + Math.abs(b);
+      // recorded here is exactly the box the next frame has to erase. A wireframe's
+      // points stick out past the cell it would have been drawn from, so its box is
+      // that much bigger or the previous frame smears at the corners.
+      const half = (Math.abs(a) + Math.abs(b)) * (flake.solid ? 1.12 : 1);
       const rt = i * 4;
       rects[rt] = buf[at + F_X] - half;
       rects[rt + 1] = buf[at + F_Y] - half;
@@ -1956,6 +2208,7 @@
     const slots = buildSlots(state.base, state.rnd);
     state.shapes = slots.shapes;
     state.wire = slots.wire;
+    state.solids = slots.solids;
     state.palette = buildPalette(state.base, msg.baseColor, state.rnd, state.shapes.length);
     state.dirtyRects = new Float32Array(state.base * 4);
     state.dirty = 0;
@@ -2057,12 +2310,15 @@
     REMOVAL_SIZE,
     DEATH_SPIN_MAX, DEATH_SPIN_BIAS, DEATH_SPIN_REVERSE, DEATH_WOBBLE_MIN, DEATH_WOBBLE_MAX,
     DEATH_DRIFT_DECAY, SPIN_LATERAL, DEATH_FALL_ACCEL, SOFT_REACH, SEPARATION, GUST_DECAY,
-    GUST_MAX, GRAZE_SPIN, WARP_CHANCE, WARP_MAX, FRAMES, FRAME_BEATS, TUMBLE_BEATS,
-    WIRE_STROKE_NEAR, WIRE_STROKE_FAR, HABITS, ICOSA, WIRE,
+    GUST_MAX, GRAZE_SPIN, WARP_CHANCE, WARP_MAX, FRAMES, FRAME_BEATS,
+    WIRE_STROKE_NEAR, WIRE_DEPTH, WIRE_CIRC, WIRE_SPIN_MIN, WIRE_SPIN_MAX, WIRE_TUMBLE_RATE,
+    WIRE_DEATH_SPIN_MAX, MIN_SPIN, HABITS, ICOSA, WIRE,
     SHAPE_VIEW, RATE_MAX,
     flakeCountFor, atlasLayout, prng, parseHex, varyColor, buildPalette, coord,
+    paintWire,
     spike, plate, hexPath, ngonPath, dot, bar, band, star, stellate, rotAxis,
-    armDendrite, armDodeca, buildShape, buildShapes, buildSlots, shapePaths,
+    armDendrite, armDodeca, buildShape, buildShapes, buildSlots, shapePaths, spiralVane,
+    wireOrientation, wireVertices, wireBands, depthBucket,
     pickHabit, seedDeathSpin, deathSpinAt, separateFlakes,
     createFlake, respawn, spinSpeed, stepFlake, writeFlake, paintBeat
   });
