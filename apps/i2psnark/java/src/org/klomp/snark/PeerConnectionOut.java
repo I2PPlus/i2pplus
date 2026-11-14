@@ -10,6 +10,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -45,10 +46,10 @@ class PeerConnectionOut implements Runnable {
     /** True once the connection should close. Volatile: set by close(), polled by run(). */
     private volatile boolean quit;
     /**
-     * The messages waiting to be written, a bounded queue so a slow
-     * network cannot grow the memory without limit.
+     * Capacity of the send queue, bounded so a slow network cannot grow the memory holding
+     * unsent messages without limit. Package-private for the tests.
      */
-    private static final int MAX_QUEUE_SIZE = 1000;
+    static final int MAX_QUEUE_SIZE = 1000;
     /** Max consecutive PIECE messages the priority scan walks before giving up. */
     private static final int MAX_PRIORITY_SCAN = 16;
     /** The messages waiting to be written. */
@@ -404,7 +405,7 @@ class PeerConnectionOut implements Runnable {
                     lastSent = System.currentTimeMillis();
 
                     if (m.type == Message.CHOKE) {
-                        removeMessage(Message.PIECE);
+                        writeRejects(removeMessage(Message.PIECE));
                     }
 
                     int remainder = 0;
@@ -471,10 +472,34 @@ class PeerConnectionOut implements Runnable {
      * @param m the message to queue for sending to the peer
      */
     private void addMessage(Message m) {
+        writeRejects(queueMessage(m));
+    }
+
+    /**
+     * Queues one message under the send-queue monitor and returns the REJECTs that making room
+     * for it produced, without writing them. See {@link #addMessage(Message)} for the policy;
+     * this is that policy with the socket writes taken out of it, for callers that already hold
+     * the monitor and must not write under it.
+     *
+     * @param m the message to queue for sending to the peer
+     * @return the REJECT messages for the caller to write once it leaves the monitor, or null
+     *         if none were produced
+     * @since 0.9.72+
+     */
+    private List<Message> queueMessage(Message m) {
+        List<Message> rejects = null;
         synchronized (sendQueue) {
             if (!sendQueue.offer(m)) {
-                if (m.type != Message.PIECE && removeMessage(Message.PIECE)) {
-                    sendQueue.offer(m);
+                if (m.type != Message.PIECE) {
+                    rejects = removeMessage(Message.PIECE);
+                    if (rejects != null) {
+                        sendQueue.offer(m);
+                    } else {
+                        if (_log.shouldWarn()) {
+                            _log.warn("Send queue full, dropped" + m.logArgs()
+                                      + " * Peer: " + SnarkLogFormatter.peer(peer));
+                        }
+                    }
                 } else {
                     if (_log.shouldWarn()) {
                         _log.warn("Send queue full, dropped" + m.logArgs()
@@ -484,20 +509,33 @@ class PeerConnectionOut implements Runnable {
             }
             sendQueue.notifyAll();
         }
+        // Returned, not written: making room for a control message rejects the pieces it
+        // displaced, and that write can park for as long as the peer's receive window stays
+        // shut. Every other thread touching this peer - the reader queueing a cancel, the
+        // checker flipping our choke state, the sender thread itself - waits on that monitor,
+        // so the caller writes these once it has left it.
+        return rejects;
     }
 
     /** Remove messages not sent in 3m. */
     private static final int SEND_TIMEOUT = 3 * 60 * 1000;
 
     /**
-     * Removes a particular message type from the queue.
+     * Removes every queued message of one type and returns the REJECTs those pieces owe the
+     * peer, without writing them.
+     *
+     * <p>The caller writes what comes back, and writes it after leaving the send-queue monitor.
+     * A socket write here would hold that monitor for as long as the peer's window stays shut,
+     * which is unbounded while no write timeout is set, and the threads that need the monitor
+     * are the ones that would open it again.
      *
      * @param type the Message type to remove.
-     * @return true when a message of the given type was removed, false otherwise.
+     * @return the REJECT messages for the caller to write, empty if none are owed; null when
+     *         nothing of that type was in the queue
      */
-    private boolean removeMessage(int type) {
+    private List<Message> removeMessage(int type) {
         boolean removed = false;
-        List<Message> deferredRejects = null;
+        List<Message> rejects = null;
         synchronized (sendQueue) {
             Iterator<Message> it = sendQueue.iterator();
             while (it.hasNext()) {
@@ -511,24 +549,37 @@ class PeerConnectionOut implements Runnable {
                         if (_log.shouldDebug())
                             _log.debug("Sending " + r.typeName() + r.logArgs()
                                        + " * Peer: " + SnarkLogFormatter.peer(peer));
-                        // defer the write to outside the monitor
-                        if (deferredRejects == null) {
-                            deferredRejects = new ArrayList<>(4);
+                        // the caller writes these, outside the monitor
+                        if (rejects == null) {
+                            rejects = new ArrayList<>(4);
                         }
-                        deferredRejects.add(r);
+                        rejects.add(r);
                     }
                 }
             }
             sendQueue.notifyAll();
         }
-        if (deferredRejects != null) {
-            for (Message r : deferredRejects) {
-                try {
-                    r.sendMessage(dout);
-                } catch (IOException ioe) { /* ignored */ }
-            }
+        if (!removed) {
+            return null;
         }
-        return removed;
+        return rejects != null ? rejects : Collections.emptyList();
+    }
+
+    /**
+     * Writes the REJECTs a purge produced to the socket, on the calling thread, once that
+     * caller is outside the send-queue monitor. A failure here is not reported: the sender
+     * thread sees the same broken stream and logs the connection closing.
+     *
+     * @param rejects the messages to write, or null when there are none
+     * @since 0.9.72+
+     */
+    private void writeRejects(List<Message> rejects) {
+        if (rejects == null) return;
+        for (Message r : rejects) {
+            try {
+                r.sendMessage(dout);
+            } catch (IOException ioe) { /* ignored */ }
+        }
     }
 
     /**
@@ -552,13 +603,18 @@ class PeerConnectionOut implements Runnable {
     void sendChoke(boolean choke) {
         // We cancel the (un)choke but keep PIECE messages.
         // PIECE messages are purged if a choke is actually send.
+        int inverseType = choke ? Message.UNCHOKE : Message.CHOKE;
+        List<Message> displaced;
         synchronized (sendQueue) {
-            int inverseType = choke ? Message.UNCHOKE : Message.CHOKE;
-            if (!removeMessage(inverseType)) {
-                Message m = new Message(choke ? Message.CHOKE : Message.UNCHOKE);
-                addMessage(m);
+            if (removeMessage(inverseType) == null) {
+                displaced = queueMessage(new Message(choke ? Message.CHOKE : Message.UNCHOKE));
+            } else {
+                displaced = null;
             }
         }
+        // Cancelling a queued (un)choke never owes a reject, only a piece purge does, but a
+        // full queue while queueing this one purges pieces and those do.
+        writeRejects(displaced);
     }
 
     /**
@@ -567,13 +623,18 @@ class PeerConnectionOut implements Runnable {
      * @param interest true for interested, false for not-interested
      */
     void sendInterest(boolean interest) {
+        int inverseType = interest ? Message.UNINTERESTED : Message.INTERESTED;
+        List<Message> displaced;
         synchronized (sendQueue) {
-            int inverseType = interest ? Message.UNINTERESTED : Message.INTERESTED;
-            if (!removeMessage(inverseType)) {
-                Message m = new Message(interest ? Message.INTERESTED : Message.UNINTERESTED);
-                addMessage(m);
+            if (removeMessage(inverseType) == null) {
+                displaced =
+                        queueMessage(new Message(interest ? Message.INTERESTED
+                                                          : Message.UNINTERESTED));
+            } else {
+                displaced = null;
             }
         }
+        writeRejects(displaced);
     }
 
     /**
