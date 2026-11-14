@@ -229,31 +229,84 @@ class PeerState implements DataLoader {
 
     /**
      * The blocks one peer may have in flight, sized from that peer's own measured
-     * download rate as a time target: the {@link #PARTSIZE} blocks it can pull in
+     * download rate as a time target: the blocks of {@code blockSize} bytes it can pull in
      * {@code rttSeconds}. Sizing the window from the aggregate download rate against the
      * aggregate limit, as this did, makes it a deadband shared by every torrent: the
      * window only ever tracked how busy the router was, so a peer delivering well on a
      * busy router was held to one or two blocks and could never fill its own pipe, while
      * a peer that had stalled kept the same window as a healthy one.
      *
-     * @param peerRate the peer's measured download rate in bytes per second, 0 or less
-     *                 before the first checker pass has sampled it
+     * @param peerRate the peer's measured download rate in bytes per second; it reads 0
+     *                 until the first checker pass has sampled the peer
      * @param rttSeconds how much data to keep in flight with the peer, in seconds
      * @param min the floor, {@link #MIN_PIPELINE}
      * @param max the ceiling, from {@link #getPipelineLimit()}
-     * @return the number of {@link #PARTSIZE} blocks to keep in flight with this peer
+     * @param blockSize the size of the blocks being asked for, from
+     *                  {@link #requestSize(long, boolean, int, int, int)}
+     * @return the number of blocks to keep in flight with this peer
      * @since 0.9.72+
      */
-    static int requestWindow(long peerRate, int rttSeconds, int min, int max) {
+    static int requestWindow(long peerRate, int rttSeconds, int min, int max, int blockSize) {
         if (peerRate <= 0) {
             // no sample yet - start at the floor and let the ramp find the pipe
             return min;
         }
-        long blocks = peerRate * rttSeconds / PARTSIZE;
+        long blocks = peerRate * rttSeconds / blockSize;
         if (blocks < min) {
             return min;
         }
         return blocks > max ? max : (int) blocks;
+    }
+
+    /**
+     * The largest block to ask a peer for, in bytes.
+     *
+     * <p>Snark asks every peer for {@link #PARTSIZE} and serves up to {@link #MAX_PARTSIZE}, so
+     * the larger allowance is receive-only: a peer that could answer with 128 KiB in one message
+     * gets eight requests and eight replies for the same bytes. Asking for the big block is only
+     * worth it when the peer can move it inside the window kept in flight - below that the block
+     * sits in the pipe longer than the window is long, and piece completion, and therefore the
+     * cancel-and-reassign of the endgame, gets slower. BEP 6 allows the big request only of peers
+     * carrying its FAST option bit, so a peer without it is never asked for more than the chunk
+     * size.
+     *
+     * @param peerRate the peer's measured download rate in bytes per second; it reads 0 until
+     *                 the first checker pass has sampled the peer
+     * @param supportsFast whether the peer carries the BEP 6 FAST option bit
+     * @param partSize the configured chunk size, the floor
+     * @param maxPartSize the configured per-request cap, the ceiling
+     * @param rttSeconds how much data the window keeps in flight, in seconds
+     * @return the block size in bytes, a multiple of {@link PartialPiece#SUB_PARTSIZE}
+     *         between partSize and maxPartSize
+     * @since 0.9.72+
+     */
+    static int requestSize(
+            long peerRate, boolean supportsFast, int partSize, int maxPartSize, int rttSeconds) {
+        if (!supportsFast || peerRate <= 0) {
+            return partSize;
+        }
+        // The window floor is MIN_PIPELINE blocks, so a block bigger than the window divided by
+        // that would leave too few of them in flight to cover a round trip.
+        long size = peerRate * rttSeconds / MIN_PIPELINE;
+        if (size <= partSize) {
+            return partSize;
+        }
+        if (size > maxPartSize) {
+            size = maxPartSize;
+        }
+        // chunks are handed out in whole sub-blocks, so round down to one
+        return (int) ((size / PartialPiece.SUB_PARTSIZE) * PartialPiece.SUB_PARTSIZE);
+    }
+
+    /**
+     * This peer's block size right now, from its own measured rate and whether it carries the
+     * BEP 6 FAST option bit.
+     *
+     * @return the block size to ask this peer for, in bytes
+     */
+    private int requestSize() {
+        return requestSize(peer.getDownloadRate(), peer.supportsFast(), PARTSIZE, MAX_PARTSIZE,
+                           REQUEST_RTT_SECONDS);
     }
 
     /**
@@ -264,7 +317,7 @@ class PeerState implements DataLoader {
      * slowed must stop being fed at once.
      *
      * @param current the window in use now
-     * @param target the window from {@link #requestWindow(long, int, int, int)}
+     * @param target the window from {@link #requestWindow(long, int, int, int, int)}
      * @return the window to use for the next request
      * @since 0.9.72+
      */
@@ -1225,7 +1278,7 @@ class PeerState implements DataLoader {
             if (pp == null) {
                 return; // not wanted or already being fetched elsewhere
             }
-            Request r = pp.getRequest();
+            Request r = pp.getRequest(0, requestSize());
             if (r == null) {
                 // BEP 47: piece is all padding, nothing to fetch
                 pp.release();
@@ -1627,13 +1680,17 @@ class PeerState implements DataLoader {
                 currentMaxPipeline = 0;
                 return;
             }
-            // The window is this peer's own pipe, not the spare bandwidth of the whole
-            // router: the blocks it can pull in REQUEST_RTT_SECONDS at its own measured
-            // rate. The global limit still decides whether we may ask at all (the
-            // shouldRequest() gate above) and how many bytes the loop below may queue
-            // (maxReq), which is what keeping the buffer bounded was ever for.
-            int target = requestWindow(peer.getDownloadRate(), REQUEST_RTT_SECONDS,
-                                       MIN_PIPELINE, getPipelineLimit());
+            // The block size and the window are both this peer's own, and they are derived from
+            // the same number: how much it can move in REQUEST_RTT_SECONDS. Asking a fast peer
+            // for bigger blocks while counting the window in 16 KiB chunks would put eight times
+            // the bytes in flight; counting the window in the blocks actually asked for keeps the
+            // bytes in flight at one time window's worth and cuts the message count instead.
+            long peerRate = peer.getDownloadRate();
+            int reqSize =
+                    requestSize(peerRate, peer.supportsFast(), PARTSIZE, MAX_PARTSIZE,
+                                REQUEST_RTT_SECONDS);
+            int target = requestWindow(peerRate, REQUEST_RTT_SECONDS, MIN_PIPELINE,
+                                       getPipelineLimit(), reqSize);
             if (rate > limit * 9 / 10) {
                 // close to the limit - hold the window at one block rather than growing it
                 target = Math.min(target, 1);
@@ -1683,16 +1740,17 @@ class PeerState implements DataLoader {
                         }
                         return;
                     }
-                    more_pieces = requestNextPiece(fastPieces);
-                    maxReq -= PARTSIZE;
+                    more_pieces = requestNextPiece(fastPieces, reqSize);
+                    maxReq -= reqSize;
                 } else if (more_pieces) { // We want something
                     // Continue requesting the rest of the current piece; padding-only
                     // sub-blocks are marked as received (zeros) and skipped inside
                     PartialPiece nextPiece = lastRequest.getPartialPiece();
-                    Request req = nextPiece.getRequest(lastRequest.off + lastRequest.len);
+                    Request req =
+                            nextPiece.getRequest(lastRequest.off + lastRequest.len, reqSize);
                     if (req == null) {
-                        more_pieces = requestNextPiece(fastPieces);
-                        maxReq -= PARTSIZE;
+                        more_pieces = requestNextPiece(fastPieces, reqSize);
+                        maxReq -= reqSize;
                     } else {
                         outstandingRequests.add(req);
                         // BEP 6: allowed fast pieces are requested even while choked
@@ -1737,9 +1795,10 @@ class PeerState implements DataLoader {
      * requests, false otherwise. Caller should synchronize.
      *
      * @param allowed the pieces servable while choked, or null for no restriction
+     * @param reqSize the block size to ask this peer for, from {@link #requestSize()}
      * @return true if a request was added for this peer, false if nothing was requested
      */
-    private boolean requestNextPiece(Set<Integer> allowed) {
+    private boolean requestNextPiece(Set<Integer> allowed, int reqSize) {
         // Check that we already know what the other side has.
         if (bitfield != null) {
             // Check for adopting an orphaned partial piece
@@ -1747,7 +1806,7 @@ class PeerState implements DataLoader {
             if (pp != null) {
                 // Double-check that r not already in outstandingRequests
                 if (!getRequestedPieces().contains(Integer.valueOf(pp.getPiece()))) {
-                    Request r = pp.getRequest();
+                    Request r = pp.getRequest(0, reqSize);
                     if (r == null) {
                         // BEP 47: piece is all padding, nothing to fetch
                         pp.release();

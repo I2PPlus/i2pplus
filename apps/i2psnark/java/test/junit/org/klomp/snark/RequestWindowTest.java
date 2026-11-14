@@ -21,6 +21,19 @@ public class RequestWindowTest {
     /** The ceiling used by the fixtures, the shipped default. */
     private static final int MAX = 32;
 
+    /** Block size the window is counted in, the shipped chunk size. */
+    private static final int BLOCK = PeerState.PARTSIZE;
+
+    /**
+     * The window for a peer at the given rate, counted in the shipped chunk size.
+     *
+     * @param rate the peer's measured download rate in bytes per second
+     * @return the number of blocks it may have in flight
+     */
+    private static int window(long rate) {
+        return PeerState.requestWindow(rate, PeerState.REQUEST_RTT_SECONDS, MIN, MAX, BLOCK);
+    }
+
     /**
      * One instance per test method, as JUnit builds a fresh test object for each one; the
      * decisions under test are static and carry no state.
@@ -36,9 +49,9 @@ public class RequestWindowTest {
      */
     @Test
     public void testFasterPeerGetsMoreWindow() {
-        int slow = PeerState.requestWindow(8 * 1024, PeerState.REQUEST_RTT_SECONDS, MIN, MAX);
-        int mid = PeerState.requestWindow(100 * 1024, PeerState.REQUEST_RTT_SECONDS, MIN, MAX);
-        int fast = PeerState.requestWindow(1024 * 1024, PeerState.REQUEST_RTT_SECONDS, MIN, MAX);
+        int slow = window(8 * 1024);
+        int mid = window(100 * 1024);
+        int fast = window(1024 * 1024);
         assertTrue(slow + " vs " + mid, slow <= mid);
         assertTrue(mid + " vs " + fast, mid < fast);
     }
@@ -50,12 +63,9 @@ public class RequestWindowTest {
     @Test
     public void testWindowIsTheRateTimesTheRoundTrip() {
         // 32 KiB/s, 64 KiB/s and 100 KiB/s over a three second budget, in 16 KiB blocks
-        assertEquals(6, PeerState.requestWindow(32 * 1024, PeerState.REQUEST_RTT_SECONDS,
-                                                MIN, MAX));
-        assertEquals(12, PeerState.requestWindow(64 * 1024, PeerState.REQUEST_RTT_SECONDS,
-                                                 MIN, MAX));
-        assertEquals(18, PeerState.requestWindow(100 * 1024, PeerState.REQUEST_RTT_SECONDS,
-                                                 MIN, MAX));
+        assertEquals(6, window(32 * 1024));
+        assertEquals(12, window(64 * 1024));
+        assertEquals(18, window(100 * 1024));
     }
 
     /**
@@ -64,10 +74,8 @@ public class RequestWindowTest {
      */
     @Test
     public void testWindowIsCapped() {
-        assertEquals(MAX, PeerState.requestWindow(1024 * 1024, PeerState.REQUEST_RTT_SECONDS,
-                                                  MIN, MAX));
-        assertEquals(MAX, PeerState.requestWindow(Long.MAX_VALUE / 64,
-                                                  PeerState.REQUEST_RTT_SECONDS, MIN, MAX));
+        assertEquals(MAX, window(1024 * 1024));
+        assertEquals(MAX, window(Long.MAX_VALUE / 64));
     }
 
     /**
@@ -77,9 +85,9 @@ public class RequestWindowTest {
      */
     @Test
     public void testSlowAndUnmeasuredPeersGetTheFloor() {
-        assertEquals(MIN, PeerState.requestWindow(1, PeerState.REQUEST_RTT_SECONDS, MIN, MAX));
-        assertEquals(MIN, PeerState.requestWindow(0, PeerState.REQUEST_RTT_SECONDS, MIN, MAX));
-        assertEquals(MIN, PeerState.requestWindow(-1, PeerState.REQUEST_RTT_SECONDS, MIN, MAX));
+        assertEquals(MIN, window(1));
+        assertEquals(MIN, window(0));
+        assertEquals(MIN, window(-1));
     }
 
     /**
@@ -90,7 +98,7 @@ public class RequestWindowTest {
     public void testBoundsAndMonotonicity() {
         int prev = -1;
         for (long rate = 0; rate <= 4L * 1024 * 1024; rate += 1024) {
-            int win = PeerState.requestWindow(rate, PeerState.REQUEST_RTT_SECONDS, MIN, MAX);
+            int win = window(rate);
             assertTrue(rate + " -> " + win, win >= MIN);
             assertTrue(rate + " -> " + win, win <= MAX);
             assertTrue(Long.toString(rate), win >= prev);
@@ -105,7 +113,7 @@ public class RequestWindowTest {
      */
     @Test
     public void testHealthyPeerIsNotHeldToTheOldDeadbandCap() {
-        int win = PeerState.requestWindow(100 * 1024, PeerState.REQUEST_RTT_SECONDS, MIN, MAX);
+        int win = window(100 * 1024);
         assertTrue(Integer.toString(win), win > 2);
     }
 
@@ -152,7 +160,7 @@ public class RequestWindowTest {
     @Test
     public void testStalledPeerWalksBackToTheFloor() {
         int cur = MAX;
-        int target = PeerState.requestWindow(0, PeerState.REQUEST_RTT_SECONDS, MIN, MAX);
+        int target = window(0);
         for (int i = 0; i < MAX; i++) {
             cur = PeerState.nextWindow(cur, target);
         }

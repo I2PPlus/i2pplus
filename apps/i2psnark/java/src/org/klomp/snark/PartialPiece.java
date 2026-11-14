@@ -92,8 +92,10 @@ class PartialPiece implements Comparable<PartialPiece> {
      * power-of-two) block sizes are rejected by a few strict peers; reward: up to ~2K average pad
      * bytes per boundary, tens of MB on pad-heavy torrents. Would require a per-peer fallback to
      * sub-block requests.
+     *
+     * <p>Not private so a caller sizing a request cap can round it to a whole number of these.
      */
-    private static final int SUB_PARTSIZE = PeerState.PARTSIZE / 4;
+    static final int SUB_PARTSIZE = PeerState.PARTSIZE / 4;
 
     /** Largest piece kept in memory by default. */
     private static final int MAX_IN_MEM = 1024 * 1024;
@@ -196,6 +198,20 @@ class PartialPiece implements Comparable<PartialPiece> {
      * @return the next Request for downloading or null if every chunk is present or claimed
      */
     public synchronized Request getRequest(int minOffset) {
+        return getRequest(minOffset, PeerState.PARTSIZE);
+    }
+
+    /**
+     * As {@link #getRequest(int)}, but merging the run of sub-blocks up to a caller-given cap
+     * instead of the configured chunk size, so a peer that supports the BEP 6 large-block
+     * allowance can be asked for more than one chunk at a time.
+     *
+     * @param minOffset byte offset to start scanning at, rounded up to a sub-block boundary
+     * @param maxSize the most bytes to hand out in one request, at least one sub-block
+     * @return the next Request for downloading or null if every chunk is present or claimed
+     * @since 0.9.72+
+     */
+    public synchronized Request getRequest(int minOffset, int maxSize) {
         int sz = bitfield.size();
         int s = (minOffset + SUB_PARTSIZE - 1) / SUB_PARTSIZE;
         for (; s < sz; s++) {
@@ -209,8 +225,8 @@ class PartialPiece implements Comparable<PartialPiece> {
             int offset = s * SUB_PARTSIZE;
             int len = SUB_PARTSIZE;
             int s2 = s + 1;
-            // merge consecutive real sub-blocks up to a full PARTSIZE request
-            while (len < PeerState.PARTSIZE
+            // merge consecutive real sub-blocks up to the cap for this peer
+            while (len < maxSize
                     && s2 < sz
                     && !bitfield.get(s2)
                     && !_requested.get(s2)
