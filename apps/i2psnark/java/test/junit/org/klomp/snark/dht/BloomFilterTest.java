@@ -15,6 +15,17 @@ import static org.junit.Assert.*;
  */
 public class BloomFilterTest {
 
+    /**
+     * One instance per test method, as JUnit builds a fresh test object for each one.
+     *
+     * @since 0.9.72+
+     */
+    public BloomFilterTest() {}
+
+    /**
+     * The filter built from the specification's two address ranges matches the specification's
+     * bytes, and its zero-bit count estimates the 1256 inserted addresses.
+     */
     @Test
     public void testVector() {
         BloomFilter filter = new BloomFilter();
@@ -35,6 +46,9 @@ public class BloomFilterTest {
         assertEquals(1224.9308, filter.estimateSize(), 0.001);
     }
 
+    /**
+     * An empty filter holds no bits, estimates nothing, and answers every test as absent.
+     */
     @Test
     public void testEmpty() {
         BloomFilter filter = new BloomFilter();
@@ -43,6 +57,10 @@ public class BloomFilterTest {
         assertFalse(filter.contains(new byte[] {1, 2, 3, 4}));
     }
 
+    /**
+     * An inserted destination hash is found again, one that was not inserted is not, and the
+     * insert sets exactly its two bits.
+     */
     @Test
     public void testInsertAndContains() {
         BloomFilter filter = new BloomFilter();
@@ -56,6 +74,10 @@ public class BloomFilterTest {
         assertEquals(2046, filter.countZeroBits());
     }
 
+    /**
+     * Ten thousand inserts saturate the filter, which is the ceiling of what the size estimate
+     * can read.
+     */
     @Test
     public void testFull() {
         BloomFilter filter = new BloomFilter();
@@ -70,11 +92,36 @@ public class BloomFilterTest {
         assertEquals(0.0, filter.estimateSize(), 0.000001);
     }
 
+    /**
+     * Filter data that is not the specification's 256 bytes is rejected rather than read.
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testBadSize() {
         new BloomFilter(new byte[255]);
     }
 
+    /**
+     * One digest serving every insert and every test of a build carries nothing from one call to
+     * the next: interleaving tests between the inserts leaves the filter byte for byte what a
+     * plain build leaves.
+     */
+    @Test
+    public void testInterleavedTestsDoNotDisturbTheBuild() {
+        BloomFilter plain = new BloomFilter();
+        BloomFilter interleaved = new BloomFilter();
+        for (int i = 0; i < 256; i++) {
+            byte[] value = new byte[] {(byte) 192, (byte) 0, (byte) 2, (byte) i};
+            plain.insert(value);
+            interleaved.insert(value);
+            interleaved.contains(value);
+            interleaved.contains(new byte[] {(byte) 192, (byte) 0, (byte) 3, (byte) i});
+        }
+        assertArrayEquals(plain.getData(), interleaved.getData());
+    }
+
+    /**
+     * The filter bytes the BEP 33 specification gives for its test vector.
+     */
     private static final byte[] EXPECTED = {
         (byte) 0xF6, (byte) 0xC3, (byte) 0xF5, (byte) 0xEA, (byte) 0xA0, 0x7F, (byte) 0xFD, (byte) 0x91,
         (byte) 0xBD, (byte) 0xE8, (byte) 0x9F, 0x77, 0x7F, 0x26, (byte) 0xFB, 0x2B,

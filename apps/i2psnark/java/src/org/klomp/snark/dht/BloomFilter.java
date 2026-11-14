@@ -35,6 +35,15 @@ class BloomFilter {
     /** The filter's bits. */
     private final byte[] _bloom;
 
+    /**
+     * One digest per thread, reused for every value this class hashes. A filter is built by
+     * inserting every peer of a swarm - up to five hundred of them - and a fresh MessageDigest
+     * is a provider lookup that costs more than the SHA-1 over 32 bytes. The digest is reset
+     * before each use, so a reused one carries nothing over from the value before it.
+     */
+    private static final ThreadLocal<MessageDigest> _digest =
+            ThreadLocal.withInitial(SHA1::getInstance);
+
     /** Create a new empty filter. */
     BloomFilter() {
         _bloom = new byte[SIZE];
@@ -60,8 +69,7 @@ class BloomFilter {
      * @param data the value to insert, e.g. a 32-byte destination hash
      */
     void insert(byte[] data) {
-        MessageDigest md = SHA1.getInstance();
-        byte[] hash = md.digest(data);
+        byte[] hash = hash(data);
         int index1 = (hash[0] & 0xFF) | ((hash[1] & 0xFF) << 8);
         int index2 = (hash[2] & 0xFF) | ((hash[3] & 0xFF) << 8);
         setBit(index1 % M);
@@ -75,11 +83,22 @@ class BloomFilter {
      * @return true if both of the value's bits are set
      */
     boolean contains(byte[] data) {
-        MessageDigest md = SHA1.getInstance();
-        byte[] hash = md.digest(data);
+        byte[] hash = hash(data);
         int index1 = (hash[0] & 0xFF) | ((hash[1] & 0xFF) << 8);
         int index2 = (hash[2] & 0xFF) | ((hash[3] & 0xFF) << 8);
         return isSet(index1 % M) && isSet(index2 % M);
+    }
+
+    /**
+     * The SHA-1 of a value, from this thread's reused digest.
+     *
+     * @param data the value to hash
+     * @return its 20-byte digest
+     */
+    private static byte[] hash(byte[] data) {
+        MessageDigest md = _digest.get();
+        md.reset();
+        return md.digest(data);
     }
 
     /**
