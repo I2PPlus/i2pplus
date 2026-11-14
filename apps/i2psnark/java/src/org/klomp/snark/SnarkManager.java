@@ -286,6 +286,15 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public static final String PROP_DOWNBW_MAX = "i2psnark.downbw.max";
 
     /**
+     * Take the bandwidth caps from the router snark is connected to instead of snark's own
+     * <code>i2psnark.upbw.max</code> and <code>i2psnark.downbw.max</code>, so snark stops
+     * queueing bytes the router will not move. Config only, no UI control, off by default.
+     *
+     * @since 0.9.72+
+     */
+    public static final String PROP_BW_FROM_ROUTER = "i2psnark.bwFromRouter";
+
+    /**
      * Minimum request pipeline depth for outbound requests.
      *
      * @since 0.9.71+
@@ -698,7 +707,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /** Initial upload bandwidth cap across all torrents, in KBps. */
     public static final int DEFAULT_MAX_UP_BW = 1024;
     /** Default download bandwidth cap, in KB/s. */
-    private static final int DEFAULT_MAX_DOWN_BW = 1024;
+    static final int DEFAULT_MAX_DOWN_BW = 1024;
 
     /**
      * Characters one line of the I2CP option dump may use before the next option
@@ -2210,6 +2219,20 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     * The cap for one direction when snark follows the router's own limit instead of its own.
+     * A router that publishes no limit for a direction - a standalone snark JVM, or a router set
+     * to unlimited - leaves snark's configured cap in place.
+     *
+     * @param routerKBps the router's limit for that direction, 0 if unlimited, negative if absent
+     * @param snarkKBps snark's own configured cap for that direction, in KBps
+     * @return the cap to use, in KBps
+     * @since 0.9.72+
+     */
+    static int bwFromRouter(int routerKBps, int snarkKBps) {
+        return routerKBps > 0 ? routerKBps : snarkKBps;
+    }
+
+    /**
      * Load the config from the given file.
      *
      * @param filename null to set initial defaults
@@ -2321,6 +2344,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         if (!_config.containsKey(PROP_DOWNBW_MAX)) {
             _config.setProperty(PROP_DOWNBW_MAX, Integer.toString(DEFAULT_MAX_DOWN_BW));
         }
+        if (!_config.containsKey(PROP_BW_FROM_ROUTER)) {
+            _config.setProperty(PROP_BW_FROM_ROUTER, "false");
+        }
         if (!_config.containsKey(PROP_BAN_DISCARD_RATIO)) {
             _config.setProperty(PROP_BAN_DISCARD_RATIO, DEFAULT_BAN_DISCARD_RATIO);
         }
@@ -2345,8 +2371,21 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         updateConfig();
         // Initialize bandwidth from config (not from I2CP detection)
         int maxdown = getInt(PROP_DOWNBW_MAX, DEFAULT_MAX_DOWN_BW);
-        _bwManager.setDownBWLimit(maxdown * 1024L);
         int maxup = getInt(PROP_UPBW_MAX, DEFAULT_MAX_UP_BW);
+        if (Boolean.parseBoolean(_config.getProperty(PROP_BW_FROM_ROUTER))) {
+            // Follow what the router we are connected to is allowed to move instead. The keys
+            // are the router's own (FIFOBandwidthRefiller); a standalone snark JVM has neither,
+            // and no limit there means snark's own cap stands.
+            maxdown = bwFromRouter(
+                    _context.getProperty("i2np.bandwidth.inboundKBytesPerSecond", -1), maxdown);
+            maxup = bwFromRouter(
+                    _context.getProperty("i2np.bandwidth.outboundKBytesPerSecond", -1), maxup);
+            if (_log.shouldInfo()) {
+                _log.info("Bandwidth limits taken from the router -> Download: "
+                          + maxdown + " KB/s * Upload: " + maxup + " KB/s");
+            }
+        }
+        _bwManager.setDownBWLimit(maxdown * 1024L);
         _bwManager.setUpBWLimit(maxup * 1024L);
         _util.setBanDiscardRatio(
                 Boolean.parseBoolean(_config.getProperty(PROP_BAN_DISCARD_RATIO)));
