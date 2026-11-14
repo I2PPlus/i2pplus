@@ -132,8 +132,9 @@ class Message {
 
     /** Size of a chunk part. */
     private static final int BUFSIZE = PeerState.PARTSIZE;
-    /** Cache supplying the message buffers. */
-    private static final ByteCache _cache = ByteCache.getInstance(16, BUFSIZE);
+    /** Cache supplying the message buffers, shared with the piece writer and the assembler. */
+    private static final ByteCache _cache =
+            ByteCache.getInstance(PeerState.BLOCK_CACHE_OBJECTS, BUFSIZE);
 
     /**
      * The whole of a keep-alive on the wire: a length prefix of zero, which is the message,

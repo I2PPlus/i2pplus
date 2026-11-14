@@ -78,8 +78,9 @@ class PartialPiece implements Comparable<PartialPiece> {
 
     /** Size of a chunk part. */
     private static final int BUFSIZE = PeerState.PARTSIZE; // size of chunk parts
-    /** Cache supplying the chunk buffers. */
-    private static final ByteCache _cache = ByteCache.getInstance(64, BUFSIZE);
+    /** Cache supplying the chunk buffers, shared with the piece writer and the reader. */
+    private static final ByteCache _cache =
+            ByteCache.getInstance(PeerState.BLOCK_CACHE_OBJECTS, BUFSIZE);
 
     /**
      * BEP 47: sub-block granularity for requests that straddle padding files. A request is a run

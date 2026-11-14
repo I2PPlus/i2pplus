@@ -21,6 +21,7 @@ import net.i2p.crypto.SHA1;
 import net.i2p.data.ByteArray;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
+import net.i2p.util.ByteCache;
 import net.i2p.util.Log;
 import net.i2p.util.RandomSource;
 import org.klomp.snark.bencode.BEValue;
@@ -140,6 +141,19 @@ class PeerState implements DataLoader {
     /** Default cap on a single piece request from a peer. */
     private static final int DEFAULT_MAX_PARTSIZE = 128 * 1024;
 
+    /**
+     * Buffers the shared block cache holds. Three classes pool buffers of one chunk size -
+     * the piece writer in Storage, the assembler in PartialPiece and the reader in Message -
+     * and ByteCache keys its caches by entry size, so all three get the same cache object and
+     * the capacity has to be one number: asking for 16 in one class and 64 in another means
+     * whichever class initialises last decides how many buffers exist. Sixty-four is the count
+     * the assembler already needed, and it is a ceiling rather than a reservation - ByteCache
+     * caps a cache at an eighth of the heap (8 MB at most) and halves it when it sits idle.
+     *
+     * @since 0.9.72+
+     */
+    static final int BLOCK_CACHE_OBJECTS = 64;
+
     /** Discard-ratio auto-ban: minimum cancelled+uploaded bytes before evaluation. */
     private static final long DISCARD_MIN_BYTES = 5L * 1024 * 1024;
 
@@ -209,8 +223,15 @@ class PeerState implements DataLoader {
     public static void setPipelineParams(int min, int max, int chunk, int maxPart) {
         MAX_PIPELINE = Math.max(1, Math.min(MAX_PIPELINE_CAP, max));
         MIN_PIPELINE = Math.max(1, Math.min(min, MAX_PIPELINE));
+        int oldPartsize = PARTSIZE;
         PARTSIZE = Math.max(1024, Math.min(chunk, 1024 * 1024));
         MAX_PARTSIZE = Math.max(PARTSIZE, Math.min(maxPart, 1024 * 1024));
+        if (PARTSIZE != oldPartsize) {
+            // Pool for the new chunk size too. ByteCache keys a cache by its entry size, so
+            // without this the block cache keeps holding buffers of the size we no longer
+            // ask for and every block allocation is a fresh array.
+            ByteCache.getInstance(BLOCK_CACHE_OBJECTS, PARTSIZE);
+        }
     }
 
     /**

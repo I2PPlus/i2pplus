@@ -194,8 +194,9 @@ public class Storage implements Closeable {
 
     /** Buffer size for piece reads and writes. */
     private static final int BUFSIZE = PeerState.PARTSIZE;
-    /** Pooled buffers for piece data. */
-    private static final ByteCache _cache = ByteCache.getInstance(16, BUFSIZE);
+    /** Pooled buffers for piece data, from the cache shared with the assembler and reader. */
+    private static final ByteCache _cache =
+            ByteCache.getInstance(PeerState.BLOCK_CACHE_OBJECTS, BUFSIZE);
 
     /** Cap on the buffer used for piece verification during a full recheck; checking never
      * allocates a whole piece-sized buffer (piece_size can be 64MB+ on large-piece torrents). */
