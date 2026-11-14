@@ -434,6 +434,30 @@ public class SnarkLogFormatter {
         return name.substring(0, NAME_CHARS - 3) + "...";
     }
 
+    /** Characters of a reason for ending a connection before it is cut. */
+    static final int REASON_CHARS = 60;
+
+    /**
+     * A reason for ending a connection, on one line and short enough to leave room for
+     * the peer beside it. The words usually come from an exception the peer's own
+     * connection thread caught, and a streaming exception message runs to several
+     * hundred characters and wraps on its own - long enough to push the peer off the
+     * line. A reader who needs the whole message has the stack trace on the neighbouring
+     * lines of the router log.
+     *
+     * @param reason the words to show, null when nothing recorded one
+     * @return the reason on one line, cut to {@link #REASON_CHARS} characters with a
+     *         trailing {@code "..."} when it is longer, or {@code none} when there is
+     *         no reason
+     * @since 0.9.72+
+     */
+    public static String reason(String reason) {
+        if (reason == null) {return NONE;}
+        String oneLine = reason.replace('\n', ' ').replace('\r', ' ');
+        if (oneLine.length() <= REASON_CHARS) {return oneLine;}
+        return oneLine.substring(0, REASON_CHARS - 3) + "...";
+    }
+
     /** Characters of the shortest base32 address, used to tell one from a nickname. */
     private static final int MIN_B32_CHARS = 52;
 

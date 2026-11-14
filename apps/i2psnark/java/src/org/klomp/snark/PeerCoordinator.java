@@ -1210,6 +1210,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         while (!removed.isEmpty()) {
             Peer peer = removed.remove(0);
             // disconnect() calls disconnected() calls removePeerFromPieces()
+            peer.setEndReason("Torrent stopped");
             peer.disconnect();
         }
         // delete any saved orphan partial piece
@@ -1290,6 +1291,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     @Override
     public void connected(Peer peer) {
         if (halted) {
+            peer.setEndReason("Torrent stopped");
             peer.disconnect(false);
             return;
         }
@@ -1301,10 +1303,11 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 // idle for 8 minutes, kill the old con (32KB/8min = 68B/sec minimum for one block)
                 if (_log.shouldInfo())
                     _log.info("Removing an idle peer connection -> Idle too long"
-                              + "\n* Dropping: " + old + " * Keeping: "
+                              + "\n* Dropping: " + SnarkLogFormatter.peer(old) + " * Keeping: "
                                 + SnarkLogFormatter.peer(peer) + " * Idle: "
                               + DataHelper.formatDuration(old.getInactiveTime()));
                 peers.remove(old);
+                old.setEndReason("Idle too long");
                 toDisconnect = old;
                 old = null;
             }
@@ -1328,27 +1331,31 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                     if (_log.shouldInfo())
                         _log.info("Duplicate peer connection -> Keeping the existing one"
                                   + "\n* Dropping: " + SnarkLogFormatter.peer(peer) + " * Kept: "
-                                    + old + " * Idle: "
+                                    + SnarkLogFormatter.peer(old) + " * Idle: "
                                   + DataHelper.formatDuration(old.getInactiveTime()));
                     // toDisconnect = peer to get out of synchronized(peers)
+                    peer.setEndReason("Duplicate connection");
                     peer.disconnect(false); // Don't deregister this connection/peer.
                     // Already checked in addPeer() but we could have gone over the limit since then
                 } else {
                     if (_log.shouldInfo())
                         _log.info("Canonical peer priority -> Replacing the duplicate connection"
-                                  + " * Keeping: " + SnarkLogFormatter.peer(peer) + " * Dropping: "
-                                    + old);
+                                  + "\n* Keeping: " + SnarkLogFormatter.peer(peer)
+                                  + " * Dropping: " + SnarkLogFormatter.peer(old));
                     peers.remove(old);
+                    old.setEndReason("Replaced by the other connection");
                     toDisconnect = old;
                     old = null;
                 }
             }
             if (old == null && peers.size() >= getMaxConnections()) {
                 if (_log.shouldWarn()) {
-                    _log.warn("Already at MAX_CONNECTIONS in connected() with peer "
-                              + SnarkLogFormatter.peer(peer));
+                    _log.warn("At our connection limit -> Dropping the new peer"
+                              + " * Peer: " + SnarkLogFormatter.peer(peer)
+                              + " * Limit: " + getMaxConnections() + " peers");
                 }
                 // toDisconnect = peer to get out of synchronized(peers)
+                peer.setEndReason("At our connection limit");
                 peer.disconnect(false);
             } else if (old == null) {
                 if (_log.shouldInfo()) {
@@ -1459,6 +1466,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      */
     public boolean addPeer(final Peer peer, final long dialDelay) {
         if (halted) {
+            peer.setEndReason("Torrent stopped");
             peer.disconnect(false);
             return false;
         }
@@ -1471,6 +1479,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                            + " * Peer: " + SnarkLogFormatter.peer(peer)
                            + " * Torrent: " + SnarkLogFormatter.torrent(snark));
             }
+            peer.setEndReason("Our own destination");
             peer.disconnect(false);
             return false;
         }
@@ -1488,6 +1497,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                            + " * Peer: " + SnarkLogFormatter.peer(peer)
                            + " * Retry in: " + DataHelper.formatDuration(quiet));
             }
+            peer.setEndReason("Destination unknown");
             peer.disconnect(false);
             return false;
         }
@@ -1545,10 +1555,12 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                                     Thread.sleep(dialDelay);
                                 } catch (InterruptedException ie) {
                                     Thread.currentThread().interrupt();
+                                    peer.setEndReason("Dial cancelled");
                                     peer.disconnect(false);
                                     return;
                                 }
                                 if (!needOutboundPeers()) {
+                                    peer.setEndReason("At our connection limit");
                                     peer.disconnect(false);
                                     return;
                                 }
@@ -1572,13 +1584,15 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
 
         if (_log.shouldDebug()) {
             if (peer.isConnected()) {
-                _log.debug("Add peer already connected " + SnarkLogFormatter.peer(peer));
+                _log.debug("Keeping the connection we already have -> Peer: "
+                           + SnarkLogFormatter.peer(peer));
             } else {
-                _log.debug("Not accepting extra peer " + SnarkLogFormatter.peer(peer) + " ("
-                           + "Connections: "
-                           + peersize + "/" + getMaxConnections() + ")");
+                _log.debug("Not accepting another peer -> At our peer limit"
+                           + " * Peer: " + SnarkLogFormatter.peer(peer)
+                           + " * Connections: " + peersize + " of " + getMaxConnections());
             }
         }
+        peer.setEndReason(peer.isConnected() ? "Already connected" : "At our connection limit");
         return false;
     }
 
@@ -2675,6 +2689,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         }
         if (done) {
             for (Peer p : toDisconnect) {
+                p.setEndReason("Both seeding");
                 p.disconnect(true);
             }
 
@@ -2738,7 +2753,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     @Override
     public void disconnected(Peer peer) {
         if (_log.shouldInfo()) {
-            _log.info("Disconnected peer " + SnarkLogFormatter.peer(peer));
+            _log.info("Disconnected peer -> " + SnarkLogFormatter.reason(peer.endReason())
+                      + " * Peer: " + SnarkLogFormatter.peer(peer));
         }
 
         synchronized (peers) {

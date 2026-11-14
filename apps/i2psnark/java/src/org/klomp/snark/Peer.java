@@ -95,6 +95,12 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     private final long _id;
     /** True once the peer has been disconnected. */
     private final AtomicBoolean _disconnected = new AtomicBoolean();
+    /**
+     * Why this connection ended, in the words the log shows. The first cause recorded wins -
+     * the cause ends the connection, and the cleanup cascade that follows must not overwrite it
+     * with a generic label.
+     */
+    private volatile String _endReason;
 
     /** How often to recompute upload slots and UI download speeds. */
     static final long CHECK_PERIOD = PeerCoordinator.CHECK_PERIOD; // 40 seconds
@@ -483,6 +489,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
             Thread.currentThread().setName("SnarkRd");
             s.in.run();
         } catch (PeerAcceptor.ProtocolException pe) {
+            setEndReason("Handshake failed");
             if (_log.shouldWarn())
                 _log.warn("Peer handshake failed -> Dropped the peer" + peerKey() + torrentKey(),
                           pe);
@@ -492,13 +499,19 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
         } catch (IOException eofe) {
             // Ignore, probably just the other side closing the connection.
             // Or refusing the connection, timing out, etc.
+            // the exception's own words are the reason the peer is going away, and the
+            // coordinator's line for taking it out of the lists has nothing else to say
+            setEndReason(eofe.getMessage() != null ? eofe.getMessage()
+                                                   : eofe.getClass().getSimpleName());
             if (_log.shouldDebug())
                 _log.debug("Peer connection ended -> Dropped the peer" + peerKey() + torrentKey()
                            + SnarkLogFormatter.onOwnLine(SnarkLogFormatter.error(eofe)));
         } catch (OutOfMemoryError oome) {
+            setEndReason("Out of memory");
             _log.error("Peer connection out of memory -> Dropped the peer" + peerKey(), oome);
             throw oome;
         } catch (Throwable t) {
+            setEndReason(t.getMessage() != null ? t.getMessage() : t.getClass().getSimpleName());
             _log.error("Peer connection failed -> Dropped the peer" + peerKey() + torrentKey(), t);
         } finally {
             if (deregister) listener.disconnected(this);
@@ -710,6 +723,36 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
      */
     public boolean isConnected() {
         return state != null;
+    }
+
+    /**
+     * Records why this connection is ending. The coordinator writes one line when it takes the
+     * peer out of its lists, and that line has no other way to know what ended the connection -
+     * the cause is only visible at the site that caught it. The first reason recorded wins.
+     *
+     * @param reason the words to show, e.g. {@code "Inactive too long"}
+     * @since 0.9.72+
+     */
+    void setEndReason(String reason) {
+        if (reason != null && _endReason == null) {
+            _endReason = reason;
+        }
+    }
+
+    /**
+     * Why this connection ended, for the log. Where nothing recorded a cause, this says what the
+     * peer's own state shows: a peer that never finished its handshake was dropped while we were
+     * dialing it, one that did was closed by the reader or by us.
+     *
+     * @return the words to show after the arrow, never null
+     * @since 0.9.72+
+     */
+    String endReason() {
+        String reason = _endReason;
+        if (reason != null) {
+            return reason;
+        }
+        return connected > 0 ? "The connection closed" : "The dial never connected";
     }
 
     /**

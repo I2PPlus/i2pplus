@@ -571,9 +571,9 @@ class PeerState implements DataLoader {
                     }
                 }
             }
-            if (_log.shouldInfo())
-                _log.info("Seed connects to other seeds -> Disconnecting it * Peer: "
-                          + SnarkLogFormatter.peer(peer));
+            // one line for the event: the coordinator's line for taking the peer out
+            // of the lists carries the reason, so this site only records it
+            peer.setEndReason("Both seeding");
             peer.disconnect(true);
         } else {
             setInteresting(interest);
@@ -1111,6 +1111,7 @@ class PeerState implements DataLoader {
                           + " * Cancelled: " + cancelled + " bytes * Uploaded: " + uploaded
                           + " bytes");
             }
+            peer.setEndReason("Excessive discard ratio");
             peer.disconnect();
         }
     }

@@ -238,6 +238,7 @@ abstract class ExtensionHandler {
                         if (log.shouldDebug())
                             log.debug("Dropping the peer -> We need metadata and it offers none"
                                       + " * Peer: " + SnarkLogFormatter.peer(peer));
+                        peer.setEndReason("No metadata extension");
                         peer.disconnect();
                     }
                 }
@@ -255,6 +256,7 @@ abstract class ExtensionHandler {
                         if (log.shouldDebug())
                             log.debug("Dropping the peer -> We need metadata and it has no size"
                                       + " * Peer: " + SnarkLogFormatter.peer(peer));
+                        peer.setEndReason("No metadata size");
                         peer.disconnect();
                     }
                 }
@@ -269,6 +271,7 @@ abstract class ExtensionHandler {
                 if (log.shouldDebug())
                     log.debug("Invalid metadata size -> Dropping the peer * Size: " + metaSize
                               + " bytes * Peer: " + SnarkLogFormatter.peer(peer));
+                peer.setEndReason("Invalid metadata size");
                 peer.disconnect();
                 return;
             }
@@ -285,6 +288,7 @@ abstract class ExtensionHandler {
                                       + "\n* Size: " + metaSize + " bytes * Expected: "
                                       + state.getSize() + " bytes * Peer: "
                                       + SnarkLogFormatter.peer(peer));
+                        peer.setEndReason("Metadata size mismatch");
                         peer.disconnect();
                         return;
                     }
@@ -296,6 +300,7 @@ abstract class ExtensionHandler {
                                       + "\n* Size: " + metaSize + " bytes * Limit: "
                                       + MAX_METADATA_SIZE + " bytes * Peer: "
                                       + SnarkLogFormatter.peer(peer));
+                        peer.setEndReason("Metadata size over the limit");
                         peer.disconnect(false);
                         return;
                     }
@@ -410,11 +415,13 @@ abstract class ExtensionHandler {
                 if (log.shouldWarn())
                     log.warn("Peer refused the metadata -> Dropping the peer * Peer: "
                              + SnarkLogFormatter.peer(peer));
+                peer.setEndReason("Metadata refused");
                 peer.disconnect(false);
             } else {
                 if (log.shouldWarn())
                     log.warn("Unknown metadata message type -> Dropping the peer * Type: " + type
                              + " * Peer: " + SnarkLogFormatter.peer(peer));
+                peer.setEndReason("Unknown metadata message");
                 peer.disconnect(false);
             }
         } catch (Throwable e) {
@@ -422,6 +429,7 @@ abstract class ExtensionHandler {
                 log.info("Metadata message handling failed -> Dropped the peer * Peer: "
                          + SnarkLogFormatter.peer(peer), e);
             // fatal ?
+            peer.setEndReason("Metadata handling failed");
             peer.disconnect(false);
         }
     }

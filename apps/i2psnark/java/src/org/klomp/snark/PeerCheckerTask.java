@@ -211,6 +211,7 @@ class PeerCheckerTask implements Runnable {
                     _log.info("Disconnecting an idle peer -> Inactive too long * Peer: "
                               + SnarkLogFormatter.peer(peer)
                               + " * Idle: " + DataHelper.formatDuration(peer.getInactiveTime()));
+                peer.setEndReason("Inactive too long");
                 peer.disconnect();
                 continue;
             }
