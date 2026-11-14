@@ -8,6 +8,7 @@ package org.klomp.snark;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
 
@@ -90,6 +91,51 @@ class PeerConnectionIn implements Runnable {
      */
     static boolean floodByCount(int count) {
         return count > MAX_MESSAGES_PER_WINDOW;
+    }
+
+    /** Chunk size used to consume a message body we did not ask for, in bytes. */
+    private static final int DRAIN_CHUNK = 16 * 1024;
+
+    /**
+     * Scratch space for consuming a message body we did not ask for, allocated once per
+     * connection and reused for every discarded block on it.
+     */
+    private byte[] _drainBuf;
+
+    /**
+     * Consumes the body of a message we did not ask for so the stream stays aligned on the
+     * next one.
+     *
+     * @param len the number of bytes to consume
+     * @throws IOException if the stream ends before that many bytes are read
+     */
+    void drain(int len) throws IOException {
+        byte[] buf = _drainBuf;
+        if (buf == null) {
+            buf = new byte[DRAIN_CHUNK];
+            _drainBuf = buf;
+        }
+        drain(din, buf, len);
+    }
+
+    /**
+     * The same, with the stream and the scratch space supplied, so the alignment it protects
+     * can be pinned against a stream that cannot skip.
+     *
+     * @param in the stream positioned at the body
+     * @param buf the scratch space to read into
+     * @param len the number of bytes to consume
+     * @throws IOException if the stream ends before that many bytes are read
+     */
+    static void drain(InputStream in, byte[] buf, int len) throws IOException {
+        int left = len;
+        while (left > 0) {
+            int n = in.read(buf, 0, Math.min(left, buf.length));
+            if (n < 0) {
+                throw new IOException("Unwanted message body ended early -> Bytes: " + left);
+            }
+            left -= n;
+        }
     }
 
     /** Flood guard: length of the counting window. */
@@ -291,11 +337,12 @@ class PeerConnectionIn implements Runnable {
                             }
                             ps.pieceMessage(req);
                         } else {
-                            // XXX - Consume but throw away afterwards.
-                            int rcvd = din.skipBytes(len);
-                            if (rcvd != len) {
-                                throw new IOException("EOF reading unwanted data");
-                            }
+                            // Read the body and throw it away. Skipping is not an option: the
+                            // socket stream inherits InputStream.skip(), which reports that it
+                            // skipped nothing, so a buffered skip only consumes whatever is
+                            // already in the buffer and leaves the rest of this body to be
+                            // parsed as the next message's header.
+                            drain(len);
                             if (_log.shouldDebug()) {
                                 _log.debug("Received piece data -> No request matched it"
                                            + " * Piece: " + piece + " * Offset: " + begin
