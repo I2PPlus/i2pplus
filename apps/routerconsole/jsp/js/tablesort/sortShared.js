@@ -7,216 +7,239 @@
  * ported to standalone functions by dr|z3d for I2P+ (AGPLv3).
  * @license AGPLv3 or later
  */
+(function sortShared() {
 
-/** @returns {boolean} True if null, undefined, or whitespace-only. */
-function empty(v) { return v == null || String(v).trim() === ""; }
+  /** @returns {boolean} True if null, undefined, or whitespace-only. */
+  function empty(v) { return v == null || String(v).trim() === ""; }
 
-/**
- * Wrap a comparator so empty cells always sort to the bottom, regardless of direction.
- * @param {function(string, string): number} cmp - Ascending comparator
- * @returns {function(string, string): number}
- */
-function emptyLast(cmp) {
-  return function(a, b) {
-    const ae = empty(a), be = empty(b);
-    if (ae || be) return ae && be ? 0 : ae ? 1 : -1;
-    return cmp(a, b);
-  };
-}
-
-/**
- * Number comparator — strips non-numeric chars except E/e/%.
- * @param {string} a
- * @param {string} b
- * @returns {number}
- */
-function numberCmp(a, b) {
-  const clean = v => typeof v === "string" ? v.replace(/[^-0-9.Ee%]/g, "") : "";
-  const na = parseFloat(clean(a)), nb = parseFloat(clean(b));
-  if (isNaN(na) && isNaN(nb)) return 0;
-  if (isNaN(na)) return 1;
-  if (isNaN(nb)) return -1;
-  return na - nb;
-}
-
-/**
- * Match only pure numbers/percentages. Previously any string containing a digit
- * matched (e.g. "0.9.69" -> 0.9, "3KiB" -> 3, "Aug 5, 2026" -> 520261148), which
- * hijacked columns that need dotsep, filesize or date sorting.
- * @param {string} item
- */
-function numberPattern(item) {
-  if (typeof item !== "string" || item.trim() === "") return false;
-  return /^[+-]?(\d+(\.\d+)?|\.\d+)([eE][+-]?\d+)?%?$/.test(item.trim());
-}
-
-/**
- * Natural sort — splits text into numeric/text chunks for human-friendly ordering.
- * @param {string} a
- * @param {string} b
- * @returns {number}
- */
-function naturalCmp(a, b) {
-  if (a === b) return 0;
-  if (a === "unknown") return 1;
-  if (b === "unknown") return -1;
-  const aParts = a.toLowerCase().match(/(\.\d+)|(\d+(\.\d+)?)|([^\d.]+)/g) || [];
-  const bParts = b.toLowerCase().match(/(\.\d+)|(\d+(\.\d+)?)|([^\d.]+)/g) || [];
-  const min = Math.min(aParts.length, bParts.length);
-  for (let i = 0; i < min; i++) {
-    const aNum = parseFloat(aParts[i]), bNum = parseFloat(bParts[i]);
-    if (!isNaN(aNum) && !isNaN(bNum)) {
-      if (aNum !== bNum) return aNum - bNum;
-    } else if (aParts[i] !== bParts[i]) {
-      return aParts[i] < bParts[i] ? -1 : 1;
-    }
+  /**
+   * Wrap a comparator so empty cells always sort to the bottom, regardless of direction.
+   * @param {function(string, string): number} cmp - Ascending comparator
+   * @returns {function(string, string): number}
+   */
+  function emptyLast(cmp) {
+    return function(a, b) {
+      const ae = empty(a), be = empty(b);
+      if (ae || be) return ae && be ? 0 : ae ? 1 : -1;
+      return cmp(a, b);
+    };
   }
-  return aParts.length - bParts.length;
-}
 
-/** @param {string} item */
-function naturalPattern(item) { return item != null && item.trim() !== ""; }
-
-/**
- * Dot-separated comparator (IPs, version numbers).
- * Pads shorter segment lists with zeros for unequal-length comparison.
- * @param {string} a
- * @param {string} b
- * @returns {number}
- */
-function dotsepCmp(a, b) {
-  const aParts = a.split("."), bParts = b.split(".");
-  const len = Math.max(aParts.length, bParts.length);
-  for (let i = 0; i < len; i++) {
-    const ai = parseInt(aParts[i] || "0", 10), bi = parseInt(bParts[i] || "0", 10);
-    if (ai !== bi) return ai - bi;
+  /**
+   * Number comparator — strips non-numeric chars except E/e/%.
+   * @param {string} a
+   * @param {string} b
+   * @returns {number}
+   */
+  function numberCmp(a, b) {
+    const clean = v => typeof v === "string" ? v.replace(/[^-0-9.Ee%]/g, "") : "";
+    const na = parseFloat(clean(a)), nb = parseFloat(clean(b));
+    if (isNaN(na) && isNaN(nb)) return 0;
+    if (isNaN(na)) return 1;
+    if (isNaN(nb)) return -1;
+    return na - nb;
   }
-  return 0;
-}
 
-/** @param {string} item */
-function dotsepPattern(item) { return /^(\d+\.)+\d+$/.test(item); }
+  /**
+   * Match only pure numbers/percentages. Previously any string containing a digit
+   * matched (e.g. "0.9.69" -> 0.9, "3KiB" -> 3, "Aug 5, 2026" -> 520261148), which
+   * hijacked columns that need dotsep, filesize or date sorting.
+   * @param {string} item
+   */
+  function numberPattern(item) {
+    if (typeof item !== "string" || item.trim() === "") return false;
+    return /^[+-]?(\d+(\.\d+)?|\.\d+)([eE][+-]?\d+)?%?$/.test(item.trim());
+  }
 
-/**
- * Filesize comparator — converts with/without suffix to bytes (1024-base).
- * @param {string} a
- * @param {string} b
- * @returns {number}
- */
-function filesizeCmp(a, b) {
-  const toBytes = f => {
-    const m = f.match(/^(\d+(\.\d+)?) ?((K|M|G|T|P|E|Z|Y|B$)i?B?)$/i);
-    if (!m) return 0;
-    const num = parseFloat(m[1].replace(/[^\-?0-9.]/g, ""));
-    const suf = (m[3][0] || "").toLowerCase();
-    const mult = suf === "k" ? 1024 : suf === "m" ? 1048576 : suf === "g" ? 1073741824 :
-                 suf === "t" ? 1099511627776 : suf === "p" ? 1125899906842624 :
-                 suf === "e" ? 1152921504606846976 : suf === "z" ? 1180591620717411303424 :
-                 suf === "y" ? 1208925819614629174706176 : 1;
-    return num * mult;
-  };
-  return toBytes(a) - toBytes(b);
-}
-
-/** @param {string} item */
-function filesizePattern(item) {
-  return /^\d+(\.\d+)? ?(K|M|G|T|P|E|Z|Y|B$)i?B?$/i.test(item);
-}
-
-/** Month-name comparator. @param {string} a @param {string} b @returns {number} */
-function monthnameCmp(a, b) {
-  const names = ["January", "February", "March", "April", "May", "June",
-                 "July", "August", "September", "October", "November", "December"];
-  return names.indexOf(a) - names.indexOf(b);
-}
-
-/** @param {string} item */
-function monthnamePattern(item) {
-  return /January|February|March|April|May|June|July|August|September|October|November|December/i.test(item);
-}
-
-/**
- * Date comparator — normalises separators and formats before parsing.
- * @param {string} a
- * @param {string} b
- * @returns {number}
- */
-function dateCmp(a, b) {
-  const parseDate = d => {
-    d = d.replace(/-/g, "/").replace(/(\d{1,2})\/(\d{1,2})\/(\d{2,4})/, "$3-$2-$1");
-    const t = new Date(d).getTime();
-    return isNaN(t) ? -1 : t;
-  };
-  return parseDate(a.toLowerCase()) - parseDate(b.toLowerCase());
-}
-
-/** @param {string} item */
-function datePattern(item) {
-  const parseDate = d => {
-    d = d.replace(/-/g, "/").replace(/(\d{1,2})\/(\d{1,2})\/(\d{2,4})/, "$3-$2-$1");
-    return isNaN(new Date(d).getTime()) ? -1 : new Date(d).getTime();
-  };
-  if (parseDate(item) === -1) return false;
-  return /(Mon|Tue|Wed|Thu|Fri|Sat|Sun)\.?\,?\s*/i.test(item) ||
-         /\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}/.test(item) ||
-         /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)/i.test(item);
-}
-
-/** Intl.Collator comparator (locale-aware). @param {string} a @param {string} b @returns {number} */
-function intlCmp(a, b) { return new Intl.Collator().compare(a, b); }
-
-/** Intl never auto-detects; requires data-sort-method="intl". @returns {boolean} */
-function intlPattern() { return false; }
-
-/** Default string fallback (case-insensitive). @param {string} a @param {string} b @returns {number} */
-function stringCmp(a, b) {
-  a = String(a).toLowerCase();
-  b = String(b).toLowerCase();
-  return a < b ? -1 : (a > b ? 1 : 0);
-}
-
-// Exported comparators (empty-last wrapped)
-const numberCmpEL = emptyLast(numberCmp);
-const naturalCmpEL = emptyLast(naturalCmp);
-const dotsepCmpEL = emptyLast(dotsepCmp);
-const filesizeCmpEL = emptyLast(filesizeCmp);
-const monthnameCmpEL = emptyLast(monthnameCmp);
-const dateCmpEL = emptyLast(dateCmp);
-const intlCmpEL = emptyLast(intlCmp);
-const stringCmpEL = emptyLast(stringCmp);
-
-/**
- * Sort an array of row data in place by a column, applying the selected comparator and
- * direction. Empty cells always sort to the bottom, regardless of direction.
- * Shared between the main thread fallback and the sort worker.
- *
- * @param {Array<Object<string, string>>} rows - Objects mapping the sort column to a string
- * @param {string} sortColumn - Key holding the cell text
- * @param {string} direction - "ascending" or "descending"
- * @param {string} columnType - Comparator key, or the default string sort
- * @returns {Array<Object<string, string>>} the sorted array
- */
-function sortRows(rows, sortColumn, direction, columnType) {
-  const multiplier = direction === "descending" ? -1 : 1;
-  rows.sort((a, b) => {
-    const valA = a[sortColumn], valB = b[sortColumn];
-    const aEmpty = empty(valA), bEmpty = empty(valB);
-    if (aEmpty || bEmpty) {
-      if (aEmpty && bEmpty) return 0;
-      return aEmpty ? 1 : -1;
+  /**
+   * Natural sort — splits text into numeric/text chunks for human-friendly ordering.
+   * @param {string} a
+   * @param {string} b
+   * @returns {number}
+   */
+  function naturalCmp(a, b) {
+    if (a === b) return 0;
+    if (a === "unknown") return 1;
+    if (b === "unknown") return -1;
+    const aParts = a.toLowerCase().match(/(\.\d+)|(\d+(\.\d+)?)|([^\d.]+)/g) || [];
+    const bParts = b.toLowerCase().match(/(\.\d+)|(\d+(\.\d+)?)|([^\d.]+)/g) || [];
+    const min = Math.min(aParts.length, bParts.length);
+    for (let i = 0; i < min; i++) {
+      const aNum = parseFloat(aParts[i]), bNum = parseFloat(bParts[i]);
+      if (!isNaN(aNum) && !isNaN(bNum)) {
+        if (aNum !== bNum) return aNum - bNum;
+      } else if (aParts[i] !== bParts[i]) {
+        return aParts[i] < bParts[i] ? -1 : 1;
+      }
     }
-    let res;
-    switch (columnType) {
-      case "number":    res = numberCmp(valA, valB); break;
-      case "date":      res = dateCmp(valA, valB); break;
-      case "natural":   res = naturalCmp(valA, valB); break;
-      case "dotsep":    res = dotsepCmp(valA, valB); break;
-      case "filesize":  res = filesizeCmp(valA, valB); break;
-      case "monthname": res = monthnameCmp(valA, valB); break;
-      case "intl":      res = intlCmp(valA, valB); break;
-      default:          res = stringCmp(valA, valB); break;
+    return aParts.length - bParts.length;
+  }
+
+  /** @param {string} item */
+  function naturalPattern(item) { return item != null && item.trim() !== ""; }
+
+  /**
+   * Dot-separated comparator (IPs, version numbers).
+   * Pads shorter segment lists with zeros for unequal-length comparison.
+   * @param {string} a
+   * @param {string} b
+   * @returns {number}
+   */
+  function dotsepCmp(a, b) {
+    const aParts = a.split("."), bParts = b.split(".");
+    const len = Math.max(aParts.length, bParts.length);
+    for (let i = 0; i < len; i++) {
+      const ai = parseInt(aParts[i] || "0", 10), bi = parseInt(bParts[i] || "0", 10);
+      if (ai !== bi) return ai - bi;
     }
-    return res * multiplier;
-  });
-  return rows;
-}
+    return 0;
+  }
+
+  /** @param {string} item */
+  function dotsepPattern(item) { return /^(\d+\.)+\d+$/.test(item); }
+
+  /**
+   * Filesize comparator — converts with/without suffix to bytes (1024-base).
+   * @param {string} a
+   * @param {string} b
+   * @returns {number}
+   */
+  function filesizeCmp(a, b) {
+    const toBytes = f => {
+      const m = f.match(/^(\d+(\.\d+)?) ?((K|M|G|T|P|E|Z|Y|B$)i?B?)$/i);
+      if (!m) return 0;
+      const num = parseFloat(m[1].replace(/[^\-?0-9.]/g, ""));
+      const suf = (m[3][0] || "").toLowerCase();
+      const mult = suf === "k" ? 1024 : suf === "m" ? 1048576 : suf === "g" ? 1073741824 :
+                   suf === "t" ? 1099511627776 : suf === "p" ? 1125899906842624 :
+                   suf === "e" ? 1152921504606846976 : suf === "z" ? 1180591620717411303424 :
+                   suf === "y" ? 1208925819614629174706176 : 1;
+      return num * mult;
+    };
+    return toBytes(a) - toBytes(b);
+  }
+
+  /** @param {string} item */
+  function filesizePattern(item) {
+    return /^\d+(\.\d+)? ?(K|M|G|T|P|E|Z|Y|B$)i?B?$/i.test(item);
+  }
+
+  /** Month-name comparator. @param {string} a @param {string} b @returns {number} */
+  function monthnameCmp(a, b) {
+    const names = ["January", "February", "March", "April", "May", "June",
+                   "July", "August", "September", "October", "November", "December"];
+    return names.indexOf(a) - names.indexOf(b);
+  }
+
+  /** @param {string} item */
+  function monthnamePattern(item) {
+    return /January|February|March|April|May|June|July|August|September|October|November|December/i.test(item);
+  }
+
+  /**
+   * Date comparator — normalises separators and formats before parsing.
+   * @param {string} a
+   * @param {string} b
+   * @returns {number}
+   */
+  function dateCmp(a, b) {
+    const parseDate = d => {
+      d = d.replace(/-/g, "/").replace(/(\d{1,2})\/(\d{1,2})\/(\d{2,4})/, "$3-$2-$1");
+      const t = new Date(d).getTime();
+      return isNaN(t) ? -1 : t;
+    };
+    return parseDate(a.toLowerCase()) - parseDate(b.toLowerCase());
+  }
+
+  /** @param {string} item */
+  function datePattern(item) {
+    const parseDate = d => {
+      d = d.replace(/-/g, "/").replace(/(\d{1,2})\/(\d{1,2})\/(\d{2,4})/, "$3-$2-$1");
+      return isNaN(new Date(d).getTime()) ? -1 : new Date(d).getTime();
+    };
+    if (parseDate(item) === -1) return false;
+    return /(Mon|Tue|Wed|Thu|Fri|Sat|Sun)\.?\,?\s*/i.test(item) ||
+           /\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}/.test(item) ||
+           /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)/i.test(item);
+  }
+
+  /** Intl.Collator comparator (locale-aware). @param {string} a @param {string} b @returns {number} */
+  function intlCmp(a, b) { return new Intl.Collator().compare(a, b); }
+
+  /** Intl never auto-detects; requires data-sort-method="intl". @returns {boolean} */
+  function intlPattern() { return false; }
+
+  /** Default string fallback (case-insensitive). @param {string} a @param {string} b @returns {number} */
+  function stringCmp(a, b) {
+    a = String(a).toLowerCase();
+    b = String(b).toLowerCase();
+    return a < b ? -1 : (a > b ? 1 : 0);
+  }
+
+  // Exported comparators (empty-last wrapped)
+  const numberCmpEL = emptyLast(numberCmp);
+  const naturalCmpEL = emptyLast(naturalCmp);
+  const dotsepCmpEL = emptyLast(dotsepCmp);
+  const filesizeCmpEL = emptyLast(filesizeCmp);
+  const monthnameCmpEL = emptyLast(monthnameCmp);
+  const dateCmpEL = emptyLast(dateCmp);
+  const intlCmpEL = emptyLast(intlCmp);
+  const stringCmpEL = emptyLast(stringCmp);
+
+  /**
+   * Sort an array of row data in place by a column, applying the selected comparator and
+   * direction. Empty cells always sort to the bottom, regardless of direction.
+   * Shared between the main thread fallback and the sort worker.
+   *
+   * @param {Array<Object<string, string>>} rows - Objects mapping the sort column to a string
+   * @param {string} sortColumn - Key holding the cell text
+   * @param {string} direction - "ascending" or "descending"
+   * @param {string} columnType - Comparator key, or the default string sort
+   * @returns {Array<Object<string, string>>} the sorted array
+   */
+  function sortRows(rows, sortColumn, direction, columnType) {
+    const multiplier = direction === "descending" ? -1 : 1;
+    rows.sort((a, b) => {
+      const valA = a[sortColumn], valB = b[sortColumn];
+      const aEmpty = empty(valA), bEmpty = empty(valB);
+      if (aEmpty || bEmpty) {
+        if (aEmpty && bEmpty) return 0;
+        return aEmpty ? 1 : -1;
+      }
+      let res;
+      switch (columnType) {
+        case "number":    res = numberCmp(valA, valB); break;
+        case "date":      res = dateCmp(valA, valB); break;
+        case "natural":   res = naturalCmp(valA, valB); break;
+        case "dotsep":    res = dotsepCmp(valA, valB); break;
+        case "filesize":  res = filesizeCmp(valA, valB); break;
+        case "monthname": res = monthnameCmp(valA, valB); break;
+        case "intl":      res = intlCmp(valA, valB); break;
+        default:          res = stringCmp(valA, valB); break;
+      }
+      return res * multiplier;
+    });
+    return rows;
+  }
+
+  // these stay on the global object: the page's inline handlers and the scripts
+  // loaded after this one reach them there, and sortWorker.js reaches them in a
+  // scope that has no window at all, hence globalThis rather than window
+  globalThis.empty = empty;
+  globalThis.numberPattern = numberPattern;
+  globalThis.naturalPattern = naturalPattern;
+  globalThis.dotsepPattern = dotsepPattern;
+  globalThis.filesizePattern = filesizePattern;
+  globalThis.monthnamePattern = monthnamePattern;
+  globalThis.datePattern = datePattern;
+  globalThis.intlPattern = intlPattern;
+  globalThis.numberCmpEL = numberCmpEL;
+  globalThis.naturalCmpEL = naturalCmpEL;
+  globalThis.dotsepCmpEL = dotsepCmpEL;
+  globalThis.filesizeCmpEL = filesizeCmpEL;
+  globalThis.monthnameCmpEL = monthnameCmpEL;
+  globalThis.dateCmpEL = dateCmpEL;
+  globalThis.intlCmpEL = intlCmpEL;
+  globalThis.stringCmpEL = stringCmpEL;
+  globalThis.sortRows = sortRows;
+}());

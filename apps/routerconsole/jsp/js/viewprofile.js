@@ -193,50 +193,50 @@
     return (bytes / 1024).toFixed(2);
   }
 
-/**
- * Sets up collapsible section toggles for the profile table, expanding
- * router info, NetDb history, and tunnel history sections by default.
- * @function addToggles
- * @returns {void}
- */
-function addToggles() {
-  document.querySelectorAll(".section").forEach(section => {
-    let next = section.nextElementSibling;
-    while (next && !next.classList.contains("section")) {
-      next.classList.add("hidden");
-      next = next.nextElementSibling;
-    }
-  });
-
-  document.querySelectorAll(".section").forEach(section => {
-    section.addEventListener("click", function() {
-      this.classList.toggle("expanded");
-      let next = this.nextElementSibling;
-      while (next && !next.classList.contains("section")) {
-        next.classList.toggle("hidden");
-        next = next.nextElementSibling;
-      }
-      if (this.classList.contains("expanded")) {
-        window.scrollTo(0, this.offsetTop);
-      } else {
-        window.scrollTo(0, 0);
-      }
-    });
-  });
-
-  // Expand the .ri, .tnl, and .db sections by default
-  const sectionsToExpand = document.querySelectorAll(".ri, .tnl, .db");
-  if (sectionsToExpand.length > 0) {
-    Array.from(sectionsToExpand).forEach(section => {
-      section.classList.add("expanded");
+  /**
+   * Sets up collapsible section toggles for the profile table, expanding
+   * router info, NetDb history, and tunnel history sections by default.
+   * @function addToggles
+   * @returns {void}
+   */
+  function addToggles() {
+    document.querySelectorAll(".section").forEach(section => {
       let next = section.nextElementSibling;
       while (next && !next.classList.contains("section")) {
-        next.classList.remove("hidden");
+        next.classList.add("hidden");
         next = next.nextElementSibling;
       }
     });
+
+    document.querySelectorAll(".section").forEach(section => {
+      section.addEventListener("click", function() {
+        this.classList.toggle("expanded");
+        let next = this.nextElementSibling;
+        while (next && !next.classList.contains("section")) {
+          next.classList.toggle("hidden");
+          next = next.nextElementSibling;
+        }
+        if (this.classList.contains("expanded")) {
+          window.scrollTo(0, this.offsetTop);
+        } else {
+          window.scrollTo(0, 0);
+        }
+      });
+    });
+
+    // Expand the .ri, .tnl, and .db sections by default
+    const sectionsToExpand = document.querySelectorAll(".ri, .tnl, .db");
+    if (sectionsToExpand.length > 0) {
+      Array.from(sectionsToExpand).forEach(section => {
+        section.classList.add("expanded");
+        let next = section.nextElementSibling;
+        while (next && !next.classList.contains("section")) {
+          next.classList.remove("hidden");
+          next = next.nextElementSibling;
+        }
+      });
+    }
+    setTimeout(() => viewprofile.removeAttribute("hidden"), 100);
   }
-  setTimeout(() => viewprofile.removeAttribute("hidden"), 100);
-}
 
 })();

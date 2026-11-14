@@ -4,37 +4,43 @@
  * @description Attaches click handlers to delete buttons to prompt user confirmation before deletion
  * @license AGPL3 or later
  */
+(function initDeleteHandlers() {
 
-/**
- * Initializes delete button click handlers on DOM ready.
- * Finds all elements with class "delete" and attaches confirmation handlers.
- * @function init
- * @returns {void}
- */
-function init() {
-  const buttons = document.getElementsByClassName("delete");
-  for (let index = 0; index < buttons.length; index++) {
-    const button = buttons[index];
-    addClickHandler(button);
-  }
-}
-
-/**
- * Attaches a click event listener that shows a confirmation dialog.
- * If the user cancels, the default action (navigation) is prevented.
- * @function addClickHandler
- * @param {HTMLElement} elem - The element to attach the click handler to
- * @returns {void}
- * @example
- * addClickHandler(document.querySelector('.delete'));
- */
-function addClickHandler(elem) {
-  elem.addEventListener("click", function() {
-    if (!confirm(deleteMessage)) {
-      event.preventDefault();
-      return false;
+  /**
+   * Initializes delete button click handlers on DOM ready.
+   * Finds all elements with class "delete" and attaches confirmation handlers.
+   * @function init
+   * @returns {void}
+   */
+  function init() {
+    const buttons = document.getElementsByClassName("delete");
+    for (let index = 0; index < buttons.length; index++) {
+      const button = buttons[index];
+      addClickHandler(button);
     }
-  });
-}
+  }
 
-document.addEventListener("DOMContentLoaded", init);
+  /**
+   * Attaches a click event listener that shows a confirmation dialog.
+   * If the user cancels, the default action (navigation) is prevented.
+   * @function addClickHandler
+   * @param {HTMLElement} elem - The element to attach the click handler to
+   * @returns {void}
+   * @example
+   * addClickHandler(document.querySelector('.delete'));
+   */
+  function addClickHandler(elem) {
+    elem.addEventListener("click", function() {
+      if (!confirm(deleteMessage)) {
+        event.preventDefault();
+        return false;
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", init);
+
+  // these stay on the window: other scripts and the page's inline
+  // handlers reach them there
+  window.init = init;
+}());

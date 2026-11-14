@@ -4,37 +4,43 @@
  * when a click handler is triggered.
  * @license AGPL3 or later
  */
+(function initClearSelected() {
 
-/**
- * Initializes click handlers to clear selected tab styling from toggle elements.
- * @function init
- * @returns {void}
- */
-function init() {
+  /**
+   * Initializes click handlers to clear selected tab styling from toggle elements.
+   * @function init
+   * @returns {void}
+   */
+  function init() {
 
-    /**
-     * Removes the "tab2" class from all elements with class "togglestat".
-     * @function clearSelected
-     * @returns {void}
-     */
-    function clearSelected() {
-        const elements = document.getElementsByClassName("togglestat");
-        for (let i = 0; i < elements.length; i++) {
-            elements[i].classList.remove("tab2");
-        }
-    }
+      /**
+       * Removes the "tab2" class from all elements with class "togglestat".
+       * @function clearSelected
+       * @returns {void}
+       */
+      function clearSelected() {
+          const elements = document.getElementsByClassName("togglestat");
+          for (let i = 0; i < elements.length; i++) {
+              elements[i].classList.remove("tab2");
+          }
+      }
 
-    /**
-     * Attaches a click handler to the given element that clears selected tabs.
-     * @function addClickHandler1
-     * @param {HTMLElement} elem - The element to attach the click handler to
-     * @returns {void}
-     */
-    function addClickHandler1(elem) {
-        elem.addEventListener("click", function() {
-        clearSelected();
-        });
-    }
-}
+      /**
+       * Attaches a click handler to the given element that clears selected tabs.
+       * @function addClickHandler1
+       * @param {HTMLElement} elem - The element to attach the click handler to
+       * @returns {void}
+       */
+      function addClickHandler1(elem) {
+          elem.addEventListener("click", function() {
+          clearSelected();
+          });
+      }
+  }
 
-document.addEventListener("DOMContentLoaded", init);
+  document.addEventListener("DOMContentLoaded", init);
+
+  // these stay on the window: other scripts and the page's inline
+  // handlers reach them there
+  window.init = init;
+}());

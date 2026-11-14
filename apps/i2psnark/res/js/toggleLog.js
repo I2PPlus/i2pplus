@@ -7,63 +7,66 @@
  * @author dr|3d
  * @license AGPL3 or later
  */
-
-/**
- * @type {boolean}
- * @description Whether the screen log is currently in expanded state.
- */
-let isScreenlogExpanded = false;
-
-/**
- * @function initToggleLog
- * @description Initializes the screen log toggle functionality. Creates expand/shrink
- * buttons, injects CSS for expanded and collapsed states, and registers click handlers
- * to toggle between states. Cleans up any existing elements to prevent duplicates.
- * @returns {void}
- */
-function initToggleLog() {
-  const screenlog = document.getElementById("screenlog");
-  const toggleLogCss = document.getElementById("toggleLogCss");
-  const exCss = "#screenlog.xpanded{height:auto!important;max-height:300px!important;min-height:56px;will-change:transform}" +
-                "#screenlog:hover,#screenlog:focus{overflow-y:auto}" +
-                "@media (min-width:1500px){#screenlog.xpanded{min-height:60px!important}}";
-  const shCss = "#screenlog.collapsed{max-height:56px!important;min-height:56px}" +
-                "@media (min-width:1500px){#screenlog.collapsed{height:60px!important;min-height:60px}}";
-
-  if (!screenlog) { return; }
+(function toggleLog() {
 
   /**
-   * @function clean
-   * @description Removes existing expand/shrink CSS classes and button elements to
-   * prepare for reinitialization.
+   * @type {boolean}
+   * @description Whether the screen log is currently in expanded state.
+   */
+  let isScreenlogExpanded = false;
+
+  /**
+   * @function initToggleLog
+   * @description Initializes the screen log toggle functionality. Creates expand/shrink
+   * buttons, injects CSS for expanded and collapsed states, and registers click handlers
+   * to toggle between states. Cleans up any existing elements to prevent duplicates.
    * @returns {void}
    */
-  function clean() {
-    screenlog?.classList.remove("xpanded", "collapsed");
-    [...document.querySelectorAll("#expandLog, #shrinkLog")].forEach(el => el?.remove());
+  function initToggleLog() {
+    const screenlog = document.getElementById("screenlog");
+    const toggleLogCss = document.getElementById("toggleLogCss");
+    const exCss = "#screenlog.xpanded{height:auto!important;max-height:300px!important;min-height:56px;will-change:transform}" +
+                  "#screenlog:hover,#screenlog:focus{overflow-y:auto}" +
+                  "@media (min-width:1500px){#screenlog.xpanded{min-height:60px!important}}";
+    const shCss = "#screenlog.collapsed{max-height:56px!important;min-height:56px}" +
+                  "@media (min-width:1500px){#screenlog.collapsed{height:60px!important;min-height:60px}}";
+
+    if (!screenlog) { return; }
+
+    /**
+     * @function clean
+     * @description Removes existing expand/shrink CSS classes and button elements to
+     * prepare for reinitialization.
+     * @returns {void}
+     */
+    function clean() {
+      screenlog?.classList.remove("xpanded", "collapsed");
+      [...document.querySelectorAll("#expandLog, #shrinkLog")].forEach(el => el?.remove());
+    }
+
+    document.documentElement.addEventListener("click", e => {
+      const target = e.target.closest("#expand, #shrink");
+      if (!target) { return; }
+      requestAnimationFrame(() => {
+        clean();
+        if (toggleLogCss) {toggleLogCss.innerHTML = target.id === "expand" ? exCss : shCss;}
+        screenlog.classList.toggle("xpanded", target.id === "expand");
+        screenlog.classList.toggle("collapsed", target.id === "shrink");
+        isScreenlogExpanded = target.id === "expand";
+        const expandBtn = document.querySelector("#expand");
+        const shrinkBtn = document.querySelector("#shrink");
+        if (expandBtn) {expandBtn.hidden = isScreenlogExpanded;}
+        if (shrinkBtn) {shrinkBtn.hidden = !isScreenlogExpanded;}
+      });
+    });
+
+    clean();
+    if (toggleLogCss) {toggleLogCss.innerHTML = shCss;}
+    screenlog.classList.add("collapsed");
+    const expand = document.getElementById("expand");
+    if (expand) {expand.hidden = false;}
   }
 
-  document.documentElement.addEventListener("click", e => {
-    const target = e.target.closest("#expand, #shrink");
-    if (!target) { return; }
-    requestAnimationFrame(() => {
-      clean();
-      if (toggleLogCss) {toggleLogCss.innerHTML = target.id === "expand" ? exCss : shCss;}
-      screenlog.classList.toggle("xpanded", target.id === "expand");
-      screenlog.classList.toggle("collapsed", target.id === "shrink");
-      isScreenlogExpanded = target.id === "expand";
-      const expandBtn = document.querySelector("#expand");
-      const shrinkBtn = document.querySelector("#shrink");
-      if (expandBtn) {expandBtn.hidden = isScreenlogExpanded;}
-      if (shrinkBtn) {shrinkBtn.hidden = !isScreenlogExpanded;}
-    });
-  });
+  document.addEventListener("DOMContentLoaded", initToggleLog);
 
-  clean();
-  if (toggleLogCss) {toggleLogCss.innerHTML = shCss;}
-  screenlog.classList.add("collapsed");
-  const expand = document.getElementById("expand");
-  if (expand) {expand.hidden = false;}
-}
-
-document.addEventListener("DOMContentLoaded", initToggleLog);
+}());

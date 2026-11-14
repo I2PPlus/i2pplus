@@ -7,43 +7,49 @@
  * @author dr|z3d
  * @license AGPL3 or later
  */
+(function toggleVaryTunnelLengthSetup() {
 
-/**
- * @function toggleVaryTunnelLength
- * @description Registers a change listener on the specified checkbox that toggles the
- * tunnel length variance between 0 and 1 in the i2cpOpts input field. Handles both
- * replacement of existing variance values and appending new ones.
- * @param {string} checkboxId - The id of the checkbox element ("varyInbound" or "varyOutbound").
- * @param {string} string - The I2CP option string to append if no existing variance value is found.
- * @returns {void}
- * @example
- * toggleVaryTunnelLength("varyInbound", " inbound.lengthVariance=1");
- */
-function toggleVaryTunnelLength(checkboxId, string) {
-  const checkbox = document.getElementById(checkboxId);
-  const input = document.getElementById("i2cpOpts");
-  if (!checkbox || !input) {return;}
+  /**
+   * @function toggleVaryTunnelLength
+   * @description Registers a change listener on the specified checkbox that toggles the
+   * tunnel length variance between 0 and 1 in the i2cpOpts input field. Handles both
+   * replacement of existing variance values and appending new ones.
+   * @param {string} checkboxId - The id of the checkbox element ("varyInbound" or "varyOutbound").
+   * @param {string} string - The I2CP option string to append if no existing variance value is found.
+   * @returns {void}
+   * @example
+   * toggleVaryTunnelLength("varyInbound", " inbound.lengthVariance=1");
+   */
+  function toggleVaryTunnelLength(checkboxId, string) {
+    const checkbox = document.getElementById(checkboxId);
+    const input = document.getElementById("i2cpOpts");
+    if (!checkbox || !input) {return;}
 
-  checkbox.addEventListener("change", () => {
-    if (checkbox.checked) {
-      if (checkboxId === "varyInbound" && input.value.includes("inbound.lengthVariance=0")) {
-        input.value = input.value.replace("inbound.lengthVariance=0", "inbound.lengthVariance=1");
-      } else if (checkboxId === "varyOutbound" && input.value.includes("outbound.lengthVariance=0")) {
-        input.value = input.value.replace("outbound.lengthVariance=0", "outbound.lengthVariance=1");
+    checkbox.addEventListener("change", () => {
+      if (checkbox.checked) {
+        if (checkboxId === "varyInbound" && input.value.includes("inbound.lengthVariance=0")) {
+          input.value = input.value.replace("inbound.lengthVariance=0", "inbound.lengthVariance=1");
+        } else if (checkboxId === "varyOutbound" && input.value.includes("outbound.lengthVariance=0")) {
+          input.value = input.value.replace("outbound.lengthVariance=0", "outbound.lengthVariance=1");
+        } else {
+          input.value += ` ${string}`;
+        }
       } else {
-        input.value += ` ${string}`;
+        if (checkboxId === "varyInbound" && input.value.includes("inbound.lengthVariance=1")) {
+          input.value = input.value.replace("inbound.lengthVariance=1", "inbound.lengthVariance=0");
+        } else if (checkboxId === "varyOutbound" && input.value.includes("outbound.lengthVariance=1")) {
+          input.value = input.value.replace("outbound.lengthVariance=1", "outbound.lengthVariance=0");
+        }
       }
-    } else {
-      if (checkboxId === "varyInbound" && input.value.includes("inbound.lengthVariance=1")) {
-        input.value = input.value.replace("inbound.lengthVariance=1", "inbound.lengthVariance=0");
-      } else if (checkboxId === "varyOutbound" && input.value.includes("outbound.lengthVariance=1")) {
-        input.value = input.value.replace("outbound.lengthVariance=1", "outbound.lengthVariance=0");
-      }
-    }
-  });
-}
+    });
+  }
 
-document.addEventListener("DOMContentLoaded", () => {
-  toggleVaryTunnelLength("varyInbound", " inbound.lengthVariance=1");
-  toggleVaryTunnelLength("varyOutbound", " outbound.lengthVariance=1");
-});
+  document.addEventListener("DOMContentLoaded", () => {
+    toggleVaryTunnelLength("varyInbound", " inbound.lengthVariance=1");
+    toggleVaryTunnelLength("varyOutbound", " outbound.lengthVariance=1");
+  });
+
+  // these stay on the window: other scripts and the page's inline
+  // handlers reach them there
+  window.toggleVaryTunnelLength = toggleVaryTunnelLength;
+}());

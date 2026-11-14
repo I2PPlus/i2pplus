@@ -7,83 +7,86 @@
  * @author dr|3d
  * @license AGPL3 or later
  */
+(function toggleConfigPanels() {
 
-/**
- * @type {?HTMLTableElement}
- * @description The file filter configuration table element.
- */
-const filterConfigTable = document.querySelector("#fileFilter table");
+  /**
+   * @type {?HTMLTableElement}
+   * @description The file filter configuration table element.
+   */
 
-/**
- * @type {?HTMLTableElement}
- * @description The tracker configuration table element.
- */
-const trackerConfigTable = document.querySelector("#trackers table");
+  const filterConfigTable = document.querySelector("#fileFilter table");
 
-/**
- * @type {boolean}
- * @description Whether the page is running inside an iframe.
- */
-const isIframed = document.documentElement.classList.contains("iframed") || window.self !== window.top;
+  /**
+   * @type {?HTMLTableElement}
+   * @description The tracker configuration table element.
+   */
+  const trackerConfigTable = document.querySelector("#trackers table");
 
-/**
- * @function toggleConfig
- * @description Toggles the visibility of a configuration table. When shown, adds the
- * "expanded" class to the title and scrolls it into view. When hidden, removes the
- * class. In iframe mode, posts messages to the parent frame for scrolling and resizing.
- * @param {HTMLTableElement} table - The configuration table to show or hide.
- * @param {HTMLElement} title - The title element that acts as the toggle header.
- * @returns {void}
- */
-function toggleConfig(table, title) {
-  if (table.style.display === "none" || table.style.display === "") {
-    table.style.display = "table";
-    title.classList.add("expanded");
+  /**
+   * @type {boolean}
+   * @description Whether the page is running inside an iframe.
+   */
+  const isIframed = document.documentElement.classList.contains("iframed") || window.self !== window.top;
 
-    if (isIframed) {
-      parent.postMessage({ origin: "parent", command: "scrollToElement", id: title.id }, location.origin);
-      parent.postMessage({ origin: "parent", command: "resize", iframeId: "i2psnarkframe" }, location.origin);
-    } else {scrollToElement(title);}
-  } else {
-    table.style.display = "none";
-    title.classList.remove("expanded");
+  /**
+   * @function toggleConfig
+   * @description Toggles the visibility of a configuration table. When shown, adds the
+   * "expanded" class to the title and scrolls it into view. When hidden, removes the
+   * class. In iframe mode, posts messages to the parent frame for scrolling and resizing.
+   * @param {HTMLTableElement} table - The configuration table to show or hide.
+   * @param {HTMLElement} title - The title element that acts as the toggle header.
+   * @returns {void}
+   */
+  function toggleConfig(table, title) {
+    if (table.style.display === "none" || table.style.display === "") {
+      table.style.display = "table";
+      title.classList.add("expanded");
+
+      if (isIframed) {
+        parent.postMessage({ origin: "parent", command: "scrollToElement", id: title.id }, location.origin);
+        parent.postMessage({ origin: "parent", command: "resize", iframeId: "i2psnarkframe" }, location.origin);
+      } else {scrollToElement(title);}
+    } else {
+      table.style.display = "none";
+      title.classList.remove("expanded");
+    }
   }
-}
 
-/**
- * @function scrollToElement
- * @description Smoothly scrolls the given element into view within the specified window context.
- * Calculates the element's position relative to the viewport and scrolls to it.
- * @param {HTMLElement} element - The element to scroll into view.
- * @param {Window} [windowObj=window] - The window object to scroll (useful for parent window in iframe mode).
- * @returns {void}
- */
-function scrollToElement(element, windowObj = window) {
-  const elementPosition = element.getBoundingClientRect().top;
-  const scrollPosition = elementPosition + (windowObj !== window ? windowObj.pageYOffset : window.pageYOffset);
-  windowObj.scrollTo({ top: scrollPosition, behavior: "smooth" });
-}
+  /**
+   * @function scrollToElement
+   * @description Smoothly scrolls the given element into view within the specified window context.
+   * Calculates the element's position relative to the viewport and scrolls to it.
+   * @param {HTMLElement} element - The element to scroll into view.
+   * @param {Window} [windowObj=window] - The window object to scroll (useful for parent window in iframe mode).
+   * @returns {void}
+   */
+  function scrollToElement(element, windowObj = window) {
+    const elementPosition = element.getBoundingClientRect().top;
+    const scrollPosition = elementPosition + (windowObj !== window ? windowObj.pageYOffset : window.pageYOffset);
+    windowObj.scrollTo({ top: scrollPosition, behavior: "smooth" });
+  }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const configTitles = document.querySelectorAll(".configTitle");
-  configTitles.forEach((title) => title.classList.remove("expanded"));
+  document.addEventListener("DOMContentLoaded", () => {
+    const configTitles = document.querySelectorAll(".configTitle");
+    configTitles.forEach((title) => title.classList.remove("expanded"));
 
-  const setupClickListener = async (elementId, configTable) => {
-    const button = document.getElementById(elementId);
-    if (!button || !configTable) {return;}
-    button.addEventListener("click", async (e) => {
-      const clickedTitle = e.target.closest(".configTitle");
-      if (clickedTitle) {
-        await toggleConfig(configTable, clickedTitle);
-        setTimeout(() => {
-          requestAnimationFrame(() => {
-            clickedTitle.scrollIntoView({block: "center", inline: "center", behavior: "smooth"});
-          });
-        }, 60);
-      }
-    });
-  };
+    const setupClickListener = async (elementId, configTable) => {
+      const button = document.getElementById(elementId);
+      if (!button || !configTable) {return;}
+      button.addEventListener("click", async (e) => {
+        const clickedTitle = e.target.closest(".configTitle");
+        if (clickedTitle) {
+          await toggleConfig(configTable, clickedTitle);
+          setTimeout(() => {
+            requestAnimationFrame(() => {
+              clickedTitle.scrollIntoView({block: "center", inline: "center", behavior: "smooth"});
+            });
+          }, 60);
+        }
+      });
+    };
 
-  setupClickListener("fileFilter", filterConfigTable);
-  setupClickListener("trackers", trackerConfigTable);
-});
+    setupClickListener("fileFilter", filterConfigTable);
+    setupClickListener("trackers", trackerConfigTable);
+  });
+}());
