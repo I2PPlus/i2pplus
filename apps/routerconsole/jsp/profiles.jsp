@@ -51,7 +51,7 @@
 </div>
 </div>
 <script src=/js/tablesort/sortShared.js></script>
-<script src=/js/tablesort/tablesort.js type=module></script>
+<script src=/js/tablesort/tablesort.js></script>
 <script src=/js/lazyload.js></script>
 <script src=/js/profiles.js type=module></script>
 <style>.wideload{height:unset!important;opacity:1!important}#profiles::before{display:none}</style>

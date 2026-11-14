@@ -32,7 +32,7 @@
 <jsp:getProperty name="tunnelParticipatingFastestHelper" property="tunnelParticipatingFastest"/>
 </div>
 <script src=/js/tablesort/sortShared.js></script>
-<script src=/js/tablesort/tablesort.js type=module></script>
+<script src=/js/tablesort/tablesort.js></script>
 <script src=/js/transitfast.js type=module></script>
 </body>
 </html>

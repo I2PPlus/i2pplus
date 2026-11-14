@@ -37,7 +37,7 @@
 </div>
 </div>
 <script src=/js/tablesort/sortShared.js></script>
-<script src=/js/tablesort/tablesort.js type=module></script>
+<script src=/js/tablesort/tablesort.js></script>
 <script src=/js/streams.js type=module></script>
 </body>
 </html>
