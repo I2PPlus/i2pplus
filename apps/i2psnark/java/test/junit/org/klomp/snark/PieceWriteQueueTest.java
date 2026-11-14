@@ -3,7 +3,10 @@ package org.klomp.snark;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
@@ -36,6 +39,13 @@ public class PieceWriteQueueTest {
 
     /** How long a fixture waits for a write to land before calling it lost. */
     private static final long WAIT_MS = 5000;
+
+    /**
+     * One instance per test method, as JUnit builds a fresh test object for each one.
+     *
+     * @since 0.9.72+
+     */
+    public PieceWriteQueueTest() {}
 
     /**
      * Coordinator that records the pieces handed to it instead of writing them, and
@@ -97,7 +107,7 @@ public class PieceWriteQueueTest {
     /**
      * A completed in-memory partial piece for the given number.
      *
-     * @param piece piece number
+     * @param piece the piece number the fake data stands for
      * @return the piece, with one sub-block marked so it holds data
      */
     private static PartialPiece piece(int piece) {
@@ -109,7 +119,7 @@ public class PieceWriteQueueTest {
     /**
      * Waits for a write to have started on this coordinator.
      *
-     * @param rec the coordinator
+     * @param rec the coordinator to watch for a write starting
      * @return true if a write started within 5 seconds
      */
     private static boolean awaitParked(Recorder rec) {
@@ -123,7 +133,7 @@ public class PieceWriteQueueTest {
     /**
      * Waits for the coordinator to have written n pieces.
      *
-     * @param rec the coordinator
+     * @param rec the coordinator whose writes are counted
      * @param n how many writes to wait for
      * @return true if the count was reached within 5 seconds
      */
@@ -224,7 +234,7 @@ public class PieceWriteQueueTest {
     /**
      * Waits for this coordinator's write queue to empty.
      *
-     * @param rec the coordinator
+     * @param rec the coordinator whose queue is watched
      * @return true if it emptied within 5 seconds
      */
     private static boolean waitQueueEmpty(Recorder rec) {
@@ -237,13 +247,13 @@ public class PieceWriteQueueTest {
 
     /**
      * Two torrents write at the same time, so one torrent's disk I/O cannot hold up
-     * another's. That is what MAX_WRITER_THREADS buys: with a single writer thread the
-     * barrier below never trips, both writes time out, and the two pieces land on the
-     * same thread instead of two.
+     * another's. That is what more than one writer thread buys: with a single writer thread the
+     * barrier below never trips, both writes time out, and the two pieces land on the same
+     * thread instead of two.
      */
     @Test
     public void testTwoTorrentsWriteConcurrently() {
-        CyclicBarrier both = new CyclicBarrier(PeerCoordinator.MAX_WRITER_THREADS);
+        CyclicBarrier both = new CyclicBarrier(2);
         Recorder one = new Recorder(newUtil(), both, null);
         Recorder two = new Recorder(newUtil(), both, null);
         try {
@@ -261,30 +271,95 @@ public class PieceWriteQueueTest {
     }
 
     /**
-     * A piece queued while the pool is busy is still written, on the thread that
-     * queued it, rather than being dropped.
+     * A piece queued once the pool has neither a free thread nor a free waiting slot is still
+     * written, on the thread that queued it, rather than being dropped. Everything before that is
+     * absorbed: one thread per torrent while they last, then the pool's own queue.
      */
     @Test
     public void testWriteHappensWhenPoolSaturated() {
-        // hold both pool threads for the whole test
+        int threads = PeerCoordinator.MAX_WRITER_THREADS;
+        // hold every writer thread for the whole test
         CountDownLatch gate = new CountDownLatch(1);
-        Recorder one = new Recorder(newUtil(), null, gate);
-        Recorder two = new Recorder(newUtil(), null, gate);
-        Recorder three = new Recorder(newUtil(), null, null);
+        List<Recorder> parked = new ArrayList<>(threads);
+        List<Recorder> waiting = new ArrayList<>(PeerCoordinator.WRITER_QUEUE_SLOTS);
+        Recorder inline = new Recorder(newUtil(), null, null);
         try {
-            assertTrue(one.queuePieceWrite(null, piece(1), null));
-            assertTrue("writer one never started", awaitParked(one));
-            assertTrue(two.queuePieceWrite(null, piece(2), null));
-            assertTrue("writer two never started", awaitParked(two));
-            // both pool threads are parked, so this one must be drained inline
-            assertTrue(three.queuePieceWrite(null, piece(3), null));
-            assertEquals(0, three.queuedWrites());
-            assertEquals(Integer.valueOf(3), three._pieces.get(0));
+            for (int i = 0; i < threads; i++) {
+                Recorder rec = new Recorder(newUtil(), null, gate);
+                parked.add(rec);
+                assertTrue("write " + i + " not queued", rec.queuePieceWrite(null, piece(i), null));
+                assertTrue("writer " + i + " never started", awaitParked(rec));
+            }
+            // every thread is busy, so these drain tasks wait in the pool's own queue rather
+            // than being run by the peer's connection thread
+            for (int i = 0; i < PeerCoordinator.WRITER_QUEUE_SLOTS; i++) {
+                Recorder rec = new Recorder(newUtil(), null, null);
+                waiting.add(rec);
+                assertTrue("write " + i + " rejected",
+                           rec.queuePieceWrite(null, piece(threads + i), null));
+                assertEquals("write " + i + " ran before a thread freed", 1, rec.queuedWrites());
+            }
+            // no thread and no waiting slot left, so this one must be drained inline
+            assertTrue(inline.queuePieceWrite(null, piece(99), null));
+            assertEquals(0, inline.queuedWrites());
+            assertEquals(Integer.valueOf(99), inline._pieces.get(0));
         } finally {
             gate.countDown();
-            one.halt();
-            two.halt();
-            three.halt();
+            for (Recorder rec : parked) {
+                rec.halt();
+            }
+            for (Recorder rec : waiting) {
+                rec.halt();
+            }
+            inline.halt();
+        }
+    }
+
+    /**
+     * The writer thread ceiling follows the machine: never below two, so one torrent's write does
+     * not wait behind another torrent's recheck, and never so high that the SHA-1 verify passes
+     * compete with the router's own threads.
+     */
+    @Test
+    public void testWriterThreadsFollowTheCores() {
+        assertEquals(2, PeerCoordinator.writerThreads(1));
+        assertEquals(2, PeerCoordinator.writerThreads(2));
+        assertEquals(4, PeerCoordinator.writerThreads(4));
+        assertEquals(8, PeerCoordinator.writerThreads(8));
+        assertEquals(8, PeerCoordinator.writerThreads(64));
+        assertTrue(PeerCoordinator.MAX_WRITER_THREADS >= 2);
+        assertTrue(PeerCoordinator.MAX_WRITER_THREADS <= 8);
+    }
+
+    /**
+     * As many torrents as there are writer threads write at the same instant, which is what
+     * sizing the pool from the machine buys: with the old fixed two, a third torrent's piece was
+     * verified and written on its own peer's connection thread, stalling that peer's download.
+     */
+    @Test
+    public void testEveryWriterThreadTakesATorrent() {
+        int n = PeerCoordinator.MAX_WRITER_THREADS;
+        CyclicBarrier all = new CyclicBarrier(n);
+        List<Recorder> recs = new ArrayList<>(n);
+        try {
+            for (int i = 0; i < n; i++) {
+                Recorder rec = new Recorder(newUtil(), all, null);
+                recs.add(rec);
+                assertTrue("torrent " + i + " not queued", rec.queuePieceWrite(null, piece(i), null));
+            }
+            for (int i = 0; i < n; i++) {
+                assertTrue("torrent " + i + " did not write", awaitWrites(recs.get(i), 1));
+            }
+            // every write ran inside the barrier at once, each on its own thread
+            Set<String> threads = new HashSet<>();
+            for (Recorder rec : recs) {
+                threads.add(rec._threads.get(0));
+            }
+            assertEquals(n, threads.size());
+        } finally {
+            for (Recorder rec : recs) {
+                rec.halt();
+            }
         }
     }
 

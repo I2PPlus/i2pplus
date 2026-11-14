@@ -24,8 +24,8 @@ import java.util.Random;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionException;
-import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -41,6 +41,7 @@ import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 import net.i2p.util.RandomSource;
 import net.i2p.util.SimpleTimer2;
+import net.i2p.util.SystemVersion;
 import net.i2p.util.ThreadNames;
 import org.klomp.snark.bencode.BEValue;
 import org.klomp.snark.bencode.InvalidBEncodingException;
@@ -2184,11 +2185,37 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     static final int MAX_QUEUED_WRITES = 4;
 
     /**
-     * Writer threads available to all torrents. More than one lets different
-     * torrents overlap their disk I/O; a single torrent is still drained by one
-     * task at a time so its file writes stay serialized. Package-private for the tests.
+     * Most writer threads a router may run, shared by all torrents. More than one lets different
+     * torrents overlap their disk I/O; a single torrent is still drained by one task at a time so
+     * its file writes stay serialized. Two was the old fixed answer, which is one write stream
+     * and one recheck - what an HDD wants, and well below what an NVMe can use - so it is sized
+     * from the machine instead: verifying a piece is a full SHA-1 over it, which scales with
+     * cores, and a router running four cores has no business serializing every torrent's disk I/O
+     * behind two threads. Package-private for the tests.
      */
-    static final int MAX_WRITER_THREADS = 2;
+    static final int MAX_WRITER_THREADS = writerThreads(SystemVersion.getCores());
+
+    /**
+     * How many piece-writer threads a router with the given number of cores should be allowed.
+     * Never below two, so one torrent's write never waits behind another torrent's recheck, and
+     * capped well short of the core count, because these threads spend their time in disk I/O and
+     * the router's own threads want the cores.
+     *
+     * @param cpus cores the router runs on, from {@link SystemVersion#getCores()}, at least one
+     * @return the writer thread ceiling, in [2, 8]
+     * @since 0.9.72+
+     */
+    static int writerThreads(int cpus) {
+        return Math.max(2, Math.min(8, cpus));
+    }
+
+    /**
+     * Drain tasks the pool holds while every writer thread is busy. One task per torrent at a
+     * time, so this is a few torrents' worth: past it the submitting connection thread writes the
+     * piece itself, which is the backpressure the queue exists to delay, not remove.
+     * Package-private for the tests.
+     */
+    static final int WRITER_QUEUE_SLOTS = MAX_WRITER_THREADS;
 
     /** Idle writer threads exit after this long, so an idle router pays nothing. */
     private static final long WRITER_THREAD_IDLE_MS = 60 * 1000;
@@ -2202,14 +2229,20 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * big to keep in memory, and the write is a third pass plus the torrent file
      * write; all of that used to run on the peer's connection thread, where it closed
      * that peer's receive window and throttled its download for the duration.
+     *
+     * <p>Threads are created on demand up to {@link #MAX_WRITER_THREADS} and time out when idle,
+     * so a router with one torrent running pays for one thread. The queue behind them holds a
+     * drain task for a few more torrents - one task per torrent at a time, so it is a few
+     * torrents' worth - which keeps a busy router's pieces off the connection threads; only past
+     * that does a piece get written inline.
      */
     private static final ThreadPoolExecutor _writerExec =
             new ThreadPoolExecutor(
-                    0,
+                    MAX_WRITER_THREADS,
                     MAX_WRITER_THREADS,
                     WRITER_THREAD_IDLE_MS,
                     TimeUnit.MILLISECONDS,
-                    new SynchronousQueue<>(),
+                    new LinkedBlockingQueue<>(WRITER_QUEUE_SLOTS),
                     r -> {
                         Thread t =
                                 new I2PAppThread(
@@ -2293,8 +2326,9 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             try {
                 _writerExec.execute(this::drainWriteQueue);
             } catch (RejectedExecutionException ree) {
-                // Pool saturated and the queue is not empty; drain it on this thread
-                // rather than losing the queued pieces.
+                // Every writer thread is busy and every waiting slot is taken, so drain it on
+                // this thread rather than losing the queued pieces. That is the last resort it
+                // always was: the pool's own queue now absorbs a torrent's task instead.
                 drainWriteQueue();
             }
         }
