@@ -11,6 +11,8 @@
 import "./pure/uiLogic.test.js";
 import "./pure/routerControlState.test.js";
 import "./pure/logTags.test.js";
+import "./pure/snowGates.test.js";
+import "./pure/snowman.test.js";
 import "./pure/suiteCoverage.test.js";
 import "./pure/navigationJav8.test.js";
 import "./dom/refreshPayload.test.js";
@@ -31,5 +33,7 @@ import "./dom/progressx.test.js";
 import "./dom/tablesort.test.js";
 import "./dom/testReport.test.js";
 import "./dom/iframeResizer.test.js";
+import "./dom/iframeResizerHardening.test.js";
+import "./pure/scriptLoadKinds.test.js";
 
 await import("./dom/importAll.test.js");
