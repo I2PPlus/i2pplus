@@ -20,8 +20,11 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PSession;
@@ -165,6 +168,22 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     private final AtomicLong _rxBytes = new AtomicLong();
     /** DHT bytes sent. */
     private final AtomicLong _txBytes = new AtomicLong();
+
+    /**
+     * Datagrams read off the session and waiting to be parsed and answered. The session's
+     * listener thread reads them and hands them over rather than working on them itself: that
+     * thread carries every other message of the torrent's session, so a get_peers flood that
+     * keeps it busy stalls the torrent's streaming as well as its DHT.
+     */
+    private final BlockingQueue<RxMessage> _rxQueue = new ArrayBlockingQueue<>(RX_QUEUE);
+
+    /** Datagrams dropped because the receive worker could not keep up. */
+    private final AtomicLong _rxDropped = new AtomicLong();
+    /** When the last "queue full" warning was logged. */
+    private volatile long _lastRxDropWarn;
+
+    /** The thread parsing and answering received datagrams, null while the DHT is stopped. */
+    private Receiver _receiver;
     /** When the DHT was started. */
     private long _started;
     /** When the node list was last saved. */
@@ -268,6 +287,17 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     static final int MAX_OUTBOUND_TOKENS = 5000;
     /** Cap on stored inbound tokens, enforced at put time as well as in the cleaner. */
     private static final int MAX_INBOUND_TOKENS = 5000;
+
+    /**
+     * Datagrams the receive worker may have waiting in front of it. This is the throttle the
+     * receive path always lacked: past it a datagram is dropped rather than queued, and the
+     * session's listener thread is never allowed to wait. Sixty-four is a few tens of KB and a
+     * few tens of milliseconds of parsing - about what the torrent's session can afford to have
+     * sitting behind it before the sender is better told to stop.
+     *
+     * @since 0.9.72+
+     */
+    static final int RX_QUEUE = 64;
 
     /** How long since sent do we wait for a reply. */
     private static final long DEFAULT_QUERY_TIMEOUT = (long) 75 * 1000;
@@ -438,6 +468,16 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      */
     public int getRPort() {
         return _rPort;
+    }
+
+    /**
+     * Datagrams dropped because the receive queue was full, since this instance started.
+     *
+     * @return the count, 0 while the receive worker has always kept up
+     * @since 0.9.72+
+     */
+    long getRxDropped() {
+        return _rxDropped.get();
     }
 
     /**
@@ -873,13 +913,17 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     public synchronized void start() {
         if (_isRunning) return;
         if (_log.shouldInfo()) _log.info("KRPC starting");
+        // set before the worker is created, its loop reads it
+        _isRunning = true;
+        // the worker has to be running before the session starts handing datagrams over
+        _rxQueue.clear();
+        _receiver = new Receiver();
         _session.addMuxedSessionListener(this, I2PSession.PROTO_DATAGRAM_RAW, _rPort);
         _session.addMuxedSessionListener(this, I2PSession.PROTO_DATAGRAM, _qPort);
         _knownNodes.start();
         _tracker.start();
         PersistDHT.loadDHT(this, _dhtFile, _backupDhtFile);
-        // start the explore thread
-        _isRunning = true;
+        // start the cleaner and explore threads
         _cleaner = new Cleaner();
         _explorer = new Explorer((long) 5 * 1000);
         _txPkts.set(0);
@@ -900,6 +944,12 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         // unregister port listeners
         _session.removeListener(I2PSession.PROTO_DATAGRAM, _qPort);
         _session.removeListener(I2PSession.PROTO_DATAGRAM_RAW, _rPort);
+        // now nothing else can add to the queue
+        if (_receiver != null) {
+            _receiver.interrupt();
+            _receiver = null;
+        }
+        _rxQueue.clear();
         // clear the DHT and tracker
         _tracker.stop();
         // don't lose all our peers if we didn't have time to check them
@@ -946,7 +996,10 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                 .append("B/s")
                 .append(bullet)
                 .append(_incomingTokens.size())
-                .append(" tokens</span></span>")
+                .append(" tokens")
+                .append(bullet)
+                .append(_rxDropped.get())
+                .append(" dropped</span></span>")
                 .append(separator)
                 .append("<span id=rx_out class=stat><b>Sent:</b> <span class=dbug>")
                 .append(_txPkts.get())
@@ -1381,6 +1434,59 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                 _log.warn("Sending the KRPC message failed", ise);
             }
             return false;
+        }
+    }
+
+    /**
+     * Hand one received datagram to the receive thread. This runs on the session's
+     * listener thread, so it does nothing but queue the bytes: past the bounded queue a
+     * datagram is dropped and counted rather than queued, which is the throttle the
+     * receive path never had. The sender retransmits a repliable query, and a reply to
+     * one of our own queries is worth less the further behind we are, so dropping is
+     * cheaper than holding an unbounded backlog of remote-triggered allocations.
+     *
+     * @param toPort the port we received it on, {@link #_qPort} or {@link #_rPort}
+     * @param fromPort the sender's port, 1-65535 or 0 if unspecified
+     * @param payload the datagram payload
+     * @since 0.9.72+
+     */
+    private void enqueue(int toPort, int fromPort, byte[] payload) {
+        if (!_rxQueue.offer(new RxMessage(toPort, fromPort, payload))) {
+            long dropped = _rxDropped.incrementAndGet();
+            // one line a minute at most, a flood can go on for hours
+            long now = _context.clock().now();
+            if (dropped == 1 || now - _lastRxDropWarn > 60 * 1000L) {
+                _lastRxDropWarn = now;
+                if (_log.shouldWarn())
+                    _log.warn("KRPC datagrams dropped -> The receive queue is full * Dropped: "
+                              + dropped + " datagrams");
+            }
+        }
+    }
+
+    /**
+     * Dissect and handle one queued datagram. Runs on the receive thread, so the
+     * per-destination work and the reply send stay off the listener thread.
+     *
+     * @param msg the datagram taken off the queue
+     * @since 0.9.72+
+     */
+    private void process(RxMessage msg) {
+        try {
+            if (msg._toPort == _qPort) {
+                // repliable
+                I2PDatagramDissector dgDiss = new I2PDatagramDissector();
+                dgDiss.loadI2PDatagram(msg._payload);
+                // TODO per-dest throttle
+                receiveMessage(dgDiss.getSender(), msg._fromPort, dgDiss.getPayload());
+            } else {
+                // raw
+                receiveMessage(null, msg._fromPort, msg._payload);
+            }
+        } catch (DataFormatException | I2PInvalidDatagramException e) {
+            if (_log.shouldWarn()) {
+                _log.warn("Parsing a received KRPC datagram failed", e);
+            }
         }
     }
 
@@ -2216,7 +2322,6 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     @Override
     public void messageAvailable(
             I2PSession session, int msgId, long size, int proto, int fromPort, int toPort) {
-        // TODO throttle
         try {
             byte[] payload = session.receiveMessage(msgId);
             if (payload == null) {
@@ -2224,29 +2329,14 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             }
             _rxPkts.incrementAndGet();
             _rxBytes.addAndGet(payload.length);
-            if (toPort == _qPort) {
-                // repliable
-                I2PDatagramDissector dgDiss = new I2PDatagramDissector();
-                dgDiss.loadI2PDatagram(payload);
-                payload = dgDiss.getPayload();
-                Destination from = dgDiss.getSender();
-                // TODO per-dest throttle
-                receiveMessage(from, fromPort, payload);
-            } else if (toPort == _rPort) {
-                receiveMessage(null, fromPort, payload);
-            } // raw
-            else {
+            if (toPort == _qPort || toPort == _rPort) {
+                // Handed to the receive thread - the dissection, the bdecode and the
+                // reply send must not run out here, see enqueue()
+                enqueue(toPort, fromPort, payload);
+            } else {
                 if (_log.shouldWarn()) {
                     _log.warn("Received message on bad port");
                 }
-            }
-        } catch (DataFormatException e) {
-            if (_log.shouldWarn()) {
-                _log.warn("Parsing a received KRPC datagram failed", e);
-            }
-        } catch (I2PInvalidDatagramException e) {
-            if (_log.shouldWarn()) {
-                _log.warn("Parsing a received KRPC datagram failed", e);
             }
         } catch (I2PSessionException e) {
             if (_log.shouldWarn()) {
@@ -2318,7 +2408,76 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         }
     }
 
-    /** Cleaner-upper. */
+    /**
+     * One received datagram, waiting for the receive thread to work on it.
+     *
+     * @since 0.9.72+
+     */
+    private static class RxMessage {
+
+        /** The port we received it on, {@link KRPC#_qPort} or {@link KRPC#_rPort}. */
+        final int _toPort;
+        /** The sender's port, 1-65535 or 0 if unspecified. */
+        final int _fromPort;
+        /** The datagram payload, signed or raw, as read off the session. */
+        final byte[] _payload;
+
+        RxMessage(int toPort, int fromPort, byte[] payload) {
+            _toPort = toPort;
+            _fromPort = fromPort;
+            _payload = payload;
+        }
+    }
+
+    /**
+     * Takes datagrams off the receive queue and answers them. One thread, as the
+     * listener thread was before: the routing table, the token maps and the reply sends
+     * are written by this thread alone, so nothing here needs a lock the listener did
+     * not already hold. It exits when {@link #stop()} clears the running flag and
+     * interrupts it.
+     *
+     * @since 0.9.72+
+     */
+    private class Receiver extends I2PAppThread {
+
+        /** How long to wait for a datagram before checking whether to keep going. */
+        private static final long RX_POLL_TIMEOUT = 1000;
+
+        /** Starts the thread. */
+        Receiver() {
+            super("DHTReceive");
+            setDaemon(true);
+            start();
+        }
+
+        /**
+         * Handles datagrams until the DHT stops. A datagram that cannot be parsed is
+         * logged by {@link #process(RxMessage)}, and anything else that throws is
+         * caught here so one bad packet cannot leave the DHT deaf for the rest of the
+         * torrent's uptime.
+         */
+        @Override
+        public void run() {
+            while (_isRunning) {
+                RxMessage msg;
+                try {
+                    msg = _rxQueue.poll(RX_POLL_TIMEOUT, TimeUnit.MILLISECONDS);
+                } catch (InterruptedException e) {
+                    // stop() interrupts us once the listeners are gone
+                    break;
+                }
+                if (msg == null)
+                    continue;
+                try {
+                    process(msg);
+                } catch (RuntimeException e) {
+                    _log.error("Handling a received KRPC datagram failed", e);
+                }
+            }
+        }
+    }
+
+    /** Periodic expiry pass over the nodes, the tokens and the blacklist. */
     private class Cleaner extends SimpleTimer2.TimedEvent {
 
         /** Schedules the periodic cleanup pass. */
