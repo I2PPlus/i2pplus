@@ -102,9 +102,10 @@ class PartialPiece implements Comparable<PartialPiece> {
     private static final int MAX_IN_MEM = 1024 * 1024;
     /**
      * Threshold below which pieces are kept in memory rather than a
-     * temp file, can be reduced dynamically.
+     * temp file. Reduced when a piece allocation runs the process out of memory, so the
+     * pieces after it go to disk instead of failing the same way; see the constructor.
      */
-    private static int maxInMem = MAX_IN_MEM;
+    private static volatile int maxInMem = MAX_IN_MEM;
 
     /**
      * A PartialPiece for the given piece with the specified length. If piece length exceeds
@@ -138,7 +139,10 @@ class PartialPiece implements Comparable<PartialPiece> {
 
         byte[] tempBs = null;
         try {
-            if (len <= MAX_IN_MEM) {
+            // the live threshold, not the default: once a piece of this size has run the
+            // process out of memory, the pieces after it go to a temp file instead of
+            // trying the same allocation and failing the same way
+            if (len <= maxInMem) {
                 try {
                     tempBs = new byte[len];
                 } catch (OutOfMemoryError oom) {
