@@ -28,16 +28,23 @@
 #   tools/scripts/update-tomcat.sh verify       # verify the checked-in jars against Maven
 #   tools/scripts/update-tomcat.sh advisories   # advisories between the pin and the candidate
 #   tools/scripts/update-tomcat.sh apply [VER]  # update in place (default: latest compatible)
+#   tools/scripts/update-tomcat.sh commit [VER] # commit the update as one line
+#                                               # (default: the version on disk, so a
+#                                               # workspace left dirty by an earlier run
+#                                               # or a hand update is picked up too)
 #   tools/scripts/update-tomcat.sh list         # print the shipped-jar allowlist
 #   tools/scripts/update-tomcat.sh selftest     # offline tests of the logic below
 #
 # Options:
-#   --dry-run     print what apply would do without writing anything
+#   --dry-run     print what apply or commit would do without writing anything
 #   --json        machine-readable output for check
 #   --offline     do not reach for the network; report what the tree says
+#   --commit      with check or apply: report the commit the tree already
+#                 implies and make it, unless --dry-run is given as well
 #
-# Nothing here is committed, and nothing is copied to a running router: the
-# deliverable is the changed source tree plus the list of artifacts to rebuild.
+# Nothing is committed unless you ask for it, and nothing is copied to a running
+# router: the deliverable is the changed source tree plus the list of artifacts
+# to rebuild.
 
 set -u
 
@@ -352,6 +359,14 @@ cmd_check() {
                 echo "  run: tools/scripts/update-tomcat.sh apply $_latest"
                 ;;
         esac
+        # --commit with check: the tree already holds a completed update, so
+        # report the commit it implies, and make it unless --dry-run says not to.
+        # The subshell keeps a refusal from ending the check before its exit code.
+        if [ "$COMMIT" = 1 ]
+        then
+            echo ""
+            ( cmd_commit "$_dir" ) || echo "  not committing - fix the drift above first"
+        fi
     fi
 
     if [ -n "$_latest" ] && [ "$(version_cmp "$_latest" "$_pin")" = 1 ]
@@ -624,6 +639,7 @@ cmd_apply() {
         echo "  would fetch $(jar_allowlist | wc -l) jars plus NOTICE into apps/jetty/apache-tomcat-$_to"
         echo "  would remove apps/jetty/apache-tomcat-$_dir"
         echo "  would set tomcat.ver in build.xml and tomcatVersion in gradle.properties to $_to"
+        [ "$COMMIT" = 1 ] && echo "  would commit the result as: $(commit_subject "$_to")"
         return 0
     fi
 
@@ -642,8 +658,7 @@ cmd_apply() {
 
     fetch "$(printf '%s' "$NOTICE_URL" | sed "s/VERSION/$_to/")" "$_stage/NOTICE" ||
         die "cannot fetch the NOTICE for $_to; nothing was changed"
-    _year=$(sed -n 's/.*Copyright \(19[0-9][0-9]\)-\([0-9][0-9][0-9][0-9]\) The Apache Software Foundation.*/\2/p' \
-            "$_stage/NOTICE" | head -1)
+    _year=$(notice_year "$_stage/NOTICE")
     echo "  ok  NOTICE (copyright through ${_year:-unknown})"
 
     # Published only once all nine jars are on disk and verified.
@@ -709,7 +724,14 @@ cmd_apply() {
     echo "  tools/scripts/run-tests.sh i2ptunnel && tools/scripts/run-tests.sh router"
     echo "Then commit the staged apps/jetty/apache-tomcat-$_to together with the"
     echo "removal of apache-tomcat-$_dir, build.xml, gradle.properties and"
-    echo "docs/LICENSES.md. Nothing has been committed or deployed."
+    echo "docs/LICENSES.md - or run: tools/scripts/update-tomcat.sh commit $_to"
+    if [ "$COMMIT" = 1 ]
+    then
+        echo ""
+        cmd_commit "$_to"
+    else
+        echo "Nothing has been committed or deployed."
+    fi
 }
 
 # Rewrites the Ant pin in place, keeping the surrounding formatting. The
@@ -720,6 +742,19 @@ rewrite_pin() {
 
 rewrite_gradle_pin() {
     sed -i 's/^\([[:space:]]*tomcatVersion[[:space:]]*=[[:space:]]*\).*/\1'"$2"'/' "$1"
+}
+
+# The end year of the Apache copyright line in a Tomcat NOTICE - the value an
+# update writes into docs/LICENSES.md. Empty when the file has no such line.
+notice_year() {
+    sed -n 's/.*Copyright 19[0-9][0-9]-\([0-9][0-9][0-9][0-9]\) The Apache Software Foundation.*/\1/p' \
+        "$1" | head -1
+}
+
+# The same year as it stands in docs/LICENSES.md.
+licenses_year() {
+    sed -n 's/^Apache Tomcat\. Copyright 19[0-9][0-9]-\([0-9][0-9][0-9][0-9]\).*/\1/p' \
+        "$1" | head -1
 }
 
 # docs/LICENSES.md quotes the same copyright line as the NOTICE; keep the two in
@@ -734,11 +769,175 @@ sync_licenses_year() {
 # Anywhere else in the tree that still names the old version. The build and the
 # packaging targets all read the property, so a hit here is a hardcoded string
 # that will silently keep pointing at a directory that no longer exists.
+#
+# git grep, not grep -rn: the noise all lives in ignored trees - the downloaded
+# static-analysis tools under tools/, jsdoc's node_modules, every **/bin/ build
+# output - and .gitignore already says they are not ours. --untracked keeps a
+# packaging file we have just written searchable. -F because the version is a
+# literal: as a pattern its dots are wildcards, so an EdDSA test vector
+# (920c123) and SVG glyph path data (9q0 123) both read as strays. This script's
+# own selftest assertions name versions in fixtures, and they are not pins.
 find_strays() {
-    grep -rn --exclude-dir=.git --exclude-dir=build --exclude-dir=dist --exclude-dir=wip \
-         --exclude-dir=jettylib --exclude='*-test.sh' -- "$2" "$1" 2>/dev/null |
-    grep -v 'Binary file' |
-    sed 's|'"$1"'/||'
+    if git -C "$1" rev-parse --git-dir >/dev/null 2>&1
+    then
+        git -C "$1" grep --untracked -n -F -e "$2" -- \
+            . ':(exclude)*/update-tomcat.sh'
+    else
+        grep -rn -F --exclude-dir=.git --exclude-dir=build --exclude-dir=dist \
+             --exclude-dir=wip --exclude-dir=jettylib --exclude-dir=node_modules \
+             --exclude='update-tomcat.sh' --exclude='*-test.sh' -- "$2" "$1" 2>/dev/null |
+        sed 's|'"$1"'/||'
+    fi
+}
+
+#---------------------------------------------------------------------------
+# commit
+#---------------------------------------------------------------------------
+
+# The one-line subject. There is no separate Jasper release to name alongside
+# Tomcat: every jar on the allowlist is an org.apache.tomcat artifact published
+# at one version from one release train, so the pair always moves together and
+# the subject names the pair the way the tree already does.
+commit_subject() {
+    printf 'build: update Jasper/Tomcat to %s\n' "$1"
+}
+
+# The version directories HEAD itself holds. The index is the wrong source for
+# this: once apply stages the deletion, the old version is no longer in the
+# index, and a commit built from the index's versions would leave the deletion
+# uncommitted - which is the exact drift this script exists to prevent.
+head_dir_versions() {
+    git -C "$REPO_ROOT" ls-tree -r --name-only HEAD -- apps/jetty 2>/dev/null |
+        dir_versions_from_paths
+}
+
+# The paths the commit is limited to: the version directory being shipped, every
+# version directory HEAD holds but the disk does not (its deletion is the other
+# half of the change), and the three files an update rewrites. $2 and $3 are the
+# newline lists from read_dir_version and head_dir_versions.
+commit_paths() {
+    printf 'apps/jetty/apache-tomcat-%s\n' "$1"
+    for _v in $(stale_versions "$2" "$3")
+    do
+        printf 'apps/jetty/apache-tomcat-%s\n' "$_v"
+    done
+    printf 'build.xml\ngradle.properties\ndocs/LICENSES.md\n'
+}
+
+# One of the three files an update rewrites, read out of HEAD rather than out of
+# the worktree, so the script can tell a change it made from a change that was
+# already there.
+head_file() {
+    _rel=${1#"$REPO_ROOT"/}
+    git -C "$REPO_ROOT" show "HEAD:$_rel" 2>/dev/null
+}
+
+# The paths to commit, out of the candidates from commit_paths. A version
+# directory moves as a whole, so every path under it that differs from HEAD
+# belongs to the update. The three loose files are not like that: each holds one
+# line the update writes, and the script knows the value it writes, so one is
+# only ours when the worktree carries that value and HEAD does not. A
+# docs/LICENSES.md whose year already matches stays out, and one that differs
+# from HEAD only because of an unrelated license edit stays out too.
+changed_paths() {
+    _ver=$1
+    _year=$(notice_year "$JETTY_DIR/apache-tomcat-$_ver/NOTICE")
+    for _p in $(commit_paths "$_ver" "$2" "$3")
+    do
+        case "$_p" in
+            apps/jetty/apache-tomcat-*)
+                # shellcheck disable=SC2086
+                git -C "$REPO_ROOT" diff --name-only --no-renames HEAD -- $_p 2>/dev/null
+                ;;
+            build.xml)
+                if [ "$(read_pin "$BUILD_XML")" = "$_ver" ] &&
+                    [ "$(head_file "$BUILD_XML" | read_pin -)" != "$_ver" ]
+                then
+                    printf '%s\n' "$_p"
+                fi
+                ;;
+            gradle.properties)
+                if [ "$(read_gradle_pin "$GRADLE_PROPS")" = "$_ver" ] &&
+                    [ "$(head_file "$GRADLE_PROPS" | read_gradle_pin -)" != "$_ver" ]
+                then
+                    printf '%s\n' "$_p"
+                fi
+                ;;
+            docs/LICENSES.md)
+                if [ -n "$_year" ] && [ "$(licenses_year "$LICENSES_MD")" = "$_year" ] &&
+                    [ "$(head_file "$LICENSES_MD" | licenses_year -)" != "$_year" ]
+                then
+                    printf '%s\n' "$_p"
+                fi
+                ;;
+        esac
+    done
+}
+
+# Commits one completed update as a single commit. The version defaults to the
+# directory on disk, so this also picks up an update made by hand or left
+# uncommitted by an earlier run.
+cmd_commit() {
+    git -C "$REPO_ROOT" rev-parse --git-dir >/dev/null 2>&1 ||
+        die "not a git checkout - nothing to commit"
+    git -C "$REPO_ROOT" rev-parse HEAD >/dev/null 2>&1 ||
+        die "this checkout has no commits yet - stage and commit the jars by hand"
+    _pin=$(read_pin "$BUILD_XML")
+    [ -n "$_pin" ] || die "no tomcat.ver property in build.xml"
+    _dirs=$(read_dir_version "$JETTY_DIR")
+    _dir=$(printf '%s\n' "$_dirs" | head -1)
+    [ -n "$_dir" ] || die "no apps/jetty/apache-tomcat-* directory found"
+    [ "$(printf '%s\n' "$_dirs" | grep -c .)" = 1 ] ||
+        die "two version directories on disk: $(printf '%s' "$_dirs" | tr '\n' ' ')"
+
+    _ver=${1:-$_dir}
+    compatible "$_ver" || die "$_ver is not on the $COMPAT_SERIES line"
+    # The pins are checked against the directory rather than trusted, because
+    # the whole point of this script is that the three of them can disagree.
+    [ "$_pin" = "$_ver" ] ||
+        die "build.xml pins $_pin while apache-tomcat-$_ver is on disk - set the pin first"
+    _gpin=$(read_gradle_pin "$GRADLE_PROPS")
+    if [ -n "$_gpin" ] && [ "$_gpin" != "$_ver" ]
+    then
+        die "gradle.properties pins $_gpin while build.xml pins $_ver - set the pin first"
+    fi
+    _want=$(expected_tracked_count)
+    _have=$(tracked_file_count "$_ver")
+    [ "$_have" = "$_want" ] ||
+        die "apache-tomcat-$_ver has only $_have of $_want files tracked - run: git add -f -- apps/jetty/apache-tomcat-$_ver"
+
+    _paths=$(changed_paths "$_ver" "$_dirs" "$(head_dir_versions)")
+    # A rewritten file left out of that list is one this update did not move. Say
+    # so, rather than leaving its difference from HEAD unexplained.
+    for _p in build.xml gradle.properties docs/LICENSES.md
+    do
+        git -C "$REPO_ROOT" diff --quiet HEAD -- "$_p" ||
+            case "$_paths" in
+                *"$_p"*) ;;
+                *) echo "  not committing $_p - it differs from HEAD, but not by the pin or the year" ;;
+            esac
+    done
+    if [ -z "$_paths" ]
+    then
+        echo "apache-tomcat-$_ver is already committed - nothing to do"
+        return 0
+    fi
+
+    echo "Committing:"
+    printf '%s\n' "$_paths" | sed 's/^/  /'
+    echo "Proposed commit message:"
+    echo "  $(commit_subject "$_ver")"
+    if [ "$DRY_RUN" = 1 ]
+    then
+        echo "Dry run - nothing committed"
+        return 0
+    fi
+    # A pathspec commit, not a plain one: the workspace is normally dirty with
+    # unrelated work and a plain commit takes everything the index holds.
+    # shellcheck disable=SC2046,SC2086
+    git -C "$REPO_ROOT" commit -m "$(commit_subject "$_ver")" -- $(printf '%s\n' "$_paths") ||
+        die "git commit failed - nothing was committed, commit by hand"
+    echo "Committed. Nothing is deployed: rebuild the JSPs and the console jars first."
 }
 
 #---------------------------------------------------------------------------
@@ -890,9 +1089,145 @@ EOF
     mkdir -p "$TMPROOT/tree/tools"
     echo 'from("apps/jetty/apache-tomcat-9.0.107/NOTICE")' > "$TMPROOT/tree/tools/installer.gradle"
     echo '9.0.107' > "$TMPROOT/tree/build/stale.txt"
+    # Both of these hold the version's digits with other characters where the
+    # dots are, so only a pattern match reads them as a reference.
+    mkdir -p "$TMPROOT/tree/core/java/test/resources" "$TMPROOT/tree/fonts"
+    echo '{ f422362e426c82af2d503398872920c12391382be1b7c19b892495a91223bb24 },' \
+        > "$TMPROOT/tree/core/java/test/resources/basePrecmp"
+    echo '<glyph unicode="h" d="M977 0h-301l137 653q16 68 16 119q0 123"/>' \
+        > "$TMPROOT/tree/fonts/OpenSans-Italic-webfont.svg"
     _strays=$(find_strays "$TMPROOT/tree" 9.0.107)
     assert_eq 1 "$(printf '%s\n' "$_strays" | grep -c 'tools/installer.gradle')" "a hardcoded path outside the pin is reported"
     assert_eq 0 "$(printf '%s\n' "$_strays" | grep -c 'build/stale.txt')" "the build directory is not reported"
+    assert_eq 0 "$(printf '%s\n' "$_strays" | grep -c 'basePrecmp')" "a hex digit run is not a version reference"
+    assert_eq 0 "$(printf '%s\n' "$_strays" | grep -c 'webfont.svg')" "glyph path data is not a version reference"
+
+    if command -v git >/dev/null 2>&1
+    then
+        # A real checkout is searched with git grep, so the ignored trees - the
+        # downloaded tools, node_modules, **/bin/ output - never show up.
+        mkdir -p "$TMPROOT/gittree/node_modules/jsdoc" "$TMPROOT/gittree/core/bin/test" \
+            "$TMPROOT/gittree/tools" "$TMPROOT/gittree/tools/scripts"
+        printf 'node_modules/\nbin/\n' > "$TMPROOT/gittree/.gitignore"
+        echo '9.0.107' > "$TMPROOT/gittree/node_modules/jsdoc/OpenSans-Italic-webfont.svg"
+        echo '9.0.107' > "$TMPROOT/gittree/core/bin/test/basePrecmp"
+        echo 'from("apps/jetty/apache-tomcat-9.0.107/NOTICE")' > "$TMPROOT/gittree/tools/installer.gradle"
+        echo 'assert_eq 9.0.107 9.0.107 "a current pin reports up to date"' > "$TMPROOT/gittree/tools/scripts/update-tomcat.sh"
+        git -C "$TMPROOT/gittree" init -q .
+        _strays=$(find_strays "$TMPROOT/gittree" 9.0.107)
+        assert_eq 1 "$(printf '%s\n' "$_strays" | grep -c 'tools/installer.gradle')" "an untracked packaging file in a checkout is still reported"
+        assert_eq 0 "$(printf '%s\n' "$_strays" | grep -c 'node_modules')" "the ignored node_modules tree is not reported"
+        assert_eq 0 "$(printf '%s\n' "$_strays" | grep -c 'core/bin')" "ignored build output is not reported"
+        assert_eq 0 "$(printf '%s\n' "$_strays" | grep -c 'update-tomcat.sh')" "this script's own fixtures are not reported"
+    fi
+
+    echo "-- commit --"
+    assert_eq 'build: update Jasper/Tomcat to 9.0.124' "$(commit_subject 9.0.124)" \
+        "the subject is one line naming the pair and the release"
+    _paths=$(commit_paths 9.0.124 '9.0.124' '9.0.107
+9.0.124')
+    assert_eq 5 "$(printf '%s\n' "$_paths" | grep -c .)" \
+        "the new directory, the stale one, and the three rewritten files"
+    assert_eq 1 "$(printf '%s\n' "$_paths" | grep -c 'apps/jetty/apache-tomcat-9.0.107')" \
+        "the tracked deletion of the old version belongs to the same commit"
+
+    if command -v git >/dev/null 2>&1
+    then
+        # A checkout of its own, so the commit test cannot touch the real tree.
+        _mkver() {
+            mkdir -p "$JETTY_DIR/apache-tomcat-$1"
+            jar_allowlist | while read -r _p _a
+            do
+                mkdir -p "$JETTY_DIR/apache-tomcat-$1/$(dirname "$_p")"
+                printf '%s\n' "$_a-$2" > "$JETTY_DIR/apache-tomcat-$1/$_p"
+            done
+            printf 'Copyright 1999-%s The Apache Software Foundation\n' "$3" \
+                > "$JETTY_DIR/apache-tomcat-$1/NOTICE"
+        }
+        _save_ROOT=$REPO_ROOT _save_BUILD=$BUILD_XML _save_GRADLE=$GRADLE_PROPS
+        _save_LIC=$LICENSES_MD _save_JETTY=$JETTY_DIR
+        REPO_ROOT=$TMPROOT/commitrepo
+        BUILD_XML=$REPO_ROOT/build.xml
+        GRADLE_PROPS=$REPO_ROOT/gradle.properties
+        LICENSES_MD=$REPO_ROOT/docs/LICENSES.md
+        JETTY_DIR=$REPO_ROOT/apps/jetty
+        mkdir -p "$REPO_ROOT/docs"
+        printf '*.[rwjt]ar\n' > "$REPO_ROOT/.gitignore"
+        printf '  <property name="tomcat.ver" value="9.0.107"/>\n' > "$BUILD_XML"
+        printf 'tomcatVersion = 9.0.107\n' > "$GRADLE_PROPS"
+        printf 'Apache Tomcat. Copyright 1999-2025 The Apache Software Foundation.\n' > "$LICENSES_MD"
+        printf 'unrelated\n' > "$REPO_ROOT/unrelated.txt"
+        _mkver 9.0.107 107 2025
+        git -C "$REPO_ROOT" init -q .
+        git -C "$REPO_ROOT" config user.email selftest@i2p.invalid
+        git -C "$REPO_ROOT" config user.name selftest
+        git -C "$REPO_ROOT" config commit.gpgsign false
+        git -C "$REPO_ROOT" add -A -f .
+        git -C "$REPO_ROOT" commit -qm base
+
+        # The update, left exactly as apply leaves it: new directory staged, old
+        # deletion staged, Gradle pin and license year moved, Ant pin not yet.
+        _mkver 9.0.124 124 2026
+        rm -rf "$JETTY_DIR/apache-tomcat-9.0.107"
+        rewrite_gradle_pin "$GRADLE_PROPS" 9.0.124
+        sync_licenses_year "$LICENSES_MD" 2026
+        printf 'dirty\n' >> "$REPO_ROOT/unrelated.txt"
+        git -C "$REPO_ROOT" add -A -f -- apps/jetty/apache-tomcat-9.0.124 apps/jetty/apache-tomcat-9.0.107
+        _rc=0
+        ( cmd_commit 9.0.124 ) >/dev/null 2>&1 || _rc=$?
+        assert_eq 1 "$_rc" "a directory that disagrees with the Ant pin is not committed"
+        rewrite_pin "$BUILD_XML" 9.0.124
+        # What the commit will hold, read the way cmd_commit reads it.
+        _cpaths=$(changed_paths 9.0.124 "$(read_dir_version "$JETTY_DIR")" "$(head_dir_versions)")
+        assert_eq 1 "$(printf '%s\n' "$_cpaths" | grep -c '^build.xml')" \
+            "the Ant pin the update moved is ours to commit"
+        assert_eq 1 "$(printf '%s\n' "$_cpaths" | grep -c '^gradle.properties')" \
+            "and so is the Gradle pin"
+        assert_eq 1 "$(printf '%s\n' "$_cpaths" | grep -c '^docs/LICENSES.md')" \
+            "and the copyright year the NOTICE moved"
+        # check --commit --dry-run: the same commit, reported rather than made.
+        _out=$( OFFLINE=1 COMMIT=1 DRY_RUN=1 cmd_check )
+        case "$_out" in
+            *"Proposed commit message:"*"build: update Jasper/Tomcat to 9.0.124"*)
+                pass "check --commit prints the message it would use" ;;
+            *) fail "check --commit prints the message it would use" "got [$_out]" ;;
+        esac
+        case "$_out" in
+            *"Dry run - nothing committed"*) pass "and says it committed nothing" ;;
+            *) fail "and says it committed nothing" "got [$_out]" ;;
+        esac
+        assert_eq base "$(git -C "$REPO_ROOT" log -1 --pretty=%s)" "a dry run leaves HEAD alone"
+        cmd_commit 9.0.124 >/dev/null
+        assert_eq 'build: update Jasper/Tomcat to 9.0.124' \
+            "$(git -C "$REPO_ROOT" log -1 --pretty=%s)" "one line naming the release"
+        assert_eq 10 "$(git -C "$REPO_ROOT" ls-tree -r --name-only HEAD | grep -c 'apache-tomcat-9.0.124/')" \
+            "every shipped file of the new version is committed"
+        assert_eq 0 "$(git -C "$REPO_ROOT" ls-tree -r --name-only HEAD | grep -c 'apache-tomcat-9.0.107/')" \
+            "and the old version is gone from the tree"
+        assert_eq 0 "$(git -C "$REPO_ROOT" show --name-only --pretty=format: HEAD | grep -c unrelated.txt)" \
+            "the unrelated dirty file is not swept into the commit"
+        assert_eq 1 "$(git -C "$REPO_ROOT" status --porcelain | grep -c unrelated.txt)" \
+            "and it is still uncommitted afterwards"
+        # Now the license file carries an edit nobody here made: HEAD already
+        # holds the year the shipped NOTICE holds, so the file is not ours.
+        printf 'Some Other Library. Copyright 2024 Someone Else.\n' >> "$LICENSES_MD"
+        _cpaths=$(changed_paths 9.0.124 "$(read_dir_version "$JETTY_DIR")" "$(head_dir_versions)")
+        assert_eq 0 "$(printf '%s\n' "$_cpaths" | grep -c 'docs/LICENSES.md')" \
+            "a license edit the update did not make is not ours to commit"
+        _out=$(cmd_commit 9.0.124)
+        case "$_out" in
+            *"not committing docs/LICENSES.md"*) pass "the excluded file is named, not left unexplained" ;;
+            *) fail "the excluded file is named, not left unexplained" "got [$_out]" ;;
+        esac
+        case "$_out" in
+            *"already committed"*) pass "a second run finds nothing left to do" ;;
+            *) fail "a second run finds nothing left to do" "got [$_out]" ;;
+        esac
+        assert_eq 1 "$(git -C "$REPO_ROOT" status --porcelain | grep -c 'docs/LICENSES.md')" \
+            "and that edit is still sitting in the workspace afterwards"
+        REPO_ROOT=$_save_ROOT BUILD_XML=$_save_BUILD GRADLE_PROPS=$_save_GRADLE
+        LICENSES_MD=$_save_LIC JETTY_DIR=$_save_JETTY
+    fi
 
     echo "-- advisory triage --"
     # Shaped like the real page: the table of contents uses href=, the release
@@ -992,11 +1327,15 @@ EOF
 #---------------------------------------------------------------------------
 
 usage() {
-    sed -n '3,26p' "$0" | sed 's/^# \{0,1\}//'
+    # The whole header comment: from the line after the shebang to the first
+    # blank line, which is the end of the comment block. A fixed line range goes
+    # stale the first time the usage list grows.
+    sed -n '3,/^$/p' "$0" | sed 's/^# \{0,1\}//'
 }
 
 DRY_RUN=0
 OFFLINE=0
+COMMIT=0
 COMMAND=check
 TARGET=''
 JSON=''
@@ -1007,8 +1346,9 @@ do
         --dry-run) DRY_RUN=1; shift ;;
         --json) JSON=1; shift ;;
         --offline) OFFLINE=1; shift ;;
+        --commit) COMMIT=1; shift ;;
         -h|--help) usage; exit 0 ;;
-        check|verify|advisories|apply|list|selftest) COMMAND=$1; shift ;;
+        check|verify|advisories|apply|commit|list|selftest) COMMAND=$1; shift ;;
         check-version|--check-version) COMMAND=check-version; shift ;;
         -*) die "unknown option $1 (try --help)" ;;
         *) TARGET=$1; shift ;;
@@ -1021,6 +1361,7 @@ case "$COMMAND" in
     verify) cmd_verify ;;
     advisories) cmd_advisories "$TARGET" ;;
     apply) cmd_apply "$TARGET" ;;
+    commit) cmd_commit "$TARGET" ;;
     list) cmd_list ;;
     selftest) cmd_selftest ;;
 esac
