@@ -2809,8 +2809,21 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      */
     @Override
     public void savePartialPieces(Peer peer, List<Request> partials) {
-        if (_log.shouldInfo()) {
-            _log.info("Partials received from " + SnarkLogFormatter.peer(peer) + " - " + partials);
+        if (_log.shouldDebug()) {
+            // What the peer left behind, as a count and a byte total. The list's own toString
+            // printed one unlabelled tuple per request at INFO, beside the park and restore
+            // lines below that already name the same pieces and their byte counts.
+            int pieces = 0;
+            long bytes = 0;
+            for (Request req : partials) {
+                PartialPiece pp = req.getPartialPiece();
+                if (pp == null) {continue;}
+                pieces++;
+                bytes += pp.getDownloaded();
+            }
+            _log.debug("Saved the partials a peer left -> Pieces: " + pieces
+                       + " * Size: " + bytes + " bytes * Peer: "
+                       + SnarkLogFormatter.peer(peer));
         }
         if (halted || completed()) {
             for (Request req : partials) {
@@ -2868,9 +2881,6 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 } // drop the empty partial piece
                 // syncs on wantedPieces...
                 markUnrequested(peer, pp.getPiece());
-            }
-            if (_log.shouldInfo()) {
-                _log.info("Partial list size now: " + partialPieces.size());
             }
         }
     }
@@ -3583,11 +3593,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      */
     @Override
     public void gotExtension(Peer peer, int id, byte[] bs) {
-        if (_log.shouldDebug()) {
-            _log.debug("Received extension message " + id + " from " + SnarkLogFormatter.peer(peer));
-        }
-
-        // Basic handling done in PeerState... here we just check if we are done
+        // Basic handling done in PeerState... here we just check if we are done.
+        // ExtensionHandler already logged the message with its id, size and peer.
         if (metainfo == null && id == ExtensionHandler.ID_METADATA) {
             synchronized (magnetState) {
                 if (magnetState.isComplete()) {

@@ -375,10 +375,8 @@ class PeerConnectionIn implements Runnable {
                         int id = Message.readUnsignedByte(fixedBuf, 0);
                         byte[] payload = new byte[i - fixed];
                         din.readFully(payload);
-                        if (_log.shouldDebug()) {
-                            _log.debug("Received extension message from "
-                                       + SnarkLogFormatter.peer(peer));
-                        }
+                        // ExtensionHandler logs the same message with its id, size and peer,
+                        // so this site adds nothing but a second line per PEX or metadata chunk
                         ps.extensionMessage(id, payload);
                         break;
 
