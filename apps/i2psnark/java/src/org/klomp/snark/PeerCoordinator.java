@@ -1503,10 +1503,14 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * @since 0.9.72+
      */
     void unchokePeer(Collection<Peer> choked) {
-        if (storage == null || storage.getBitField().size() == 0 || overUpBWLimit()) {
+        if (storage == null || storage.getBitField().size() == 0) {
             return;
         }
-
+        // The scan runs even when the bandwidth limit stops the unchoke, because this is the
+        // only writer of the interested-and-choking counter. Returning before it left the
+        // counter growing by the checker's chokes alone, for as long as we stayed over the
+        // limit, and the checker then read that inflated count as peers waiting for a slot.
+        boolean overLimit = overUpBWLimit();
         // Two groups compete for a free upload slot. The served group is peers we have
         // been sending to recently, ranked by the rate we have been sending them, so the
         // peer that has been getting the most out of us is the one let back in - the
@@ -1526,9 +1530,12 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             if (!peer.isChoking() && beingServed) {
                 servedUploaders++;
             }
-            if (peer.isChoking() && peer.isInterested() && !choked.contains(peer)) {
+            if (peer.isChoking() && peer.isInterested()) {
+                // counted whether or not this peer can take a slot on this pass - the
+                // counter is "peers waiting for one", and a peer choked moments ago is
+                // waiting just like one choked a minute ago
                 count++;
-                if (uploaders.get() < maxUploaders) {
+                if (!choked.contains(peer) && uploaders.get() < maxUploaders) {
                     if (beingServed) {
                         served.add(peer);
                     } else {
@@ -1537,35 +1544,37 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 }
             }
         }
-        // stable, so peers the ranking cannot separate keep their place in the list, which
-        // is how long they have been waiting
-        served.sort(PeerCoordinator::compareUnchokeCandidates);
-        unserved.sort(PeerCoordinator::compareUnchokeCandidates);
+        if (!overLimit) {
+            // stable, so peers the ranking cannot separate keep their place in the list,
+            // which is how long they have been waiting
+            served.sort(PeerCoordinator::compareUnchokeCandidates);
+            unserved.sort(PeerCoordinator::compareUnchokeCandidates);
 
-        List<Peer> interested = new LinkedList<>();
-        if (slotForUnservedPeers(servedUploaders, MAX_UPLOADERS,
-                                 optimisticSlots(MAX_UPLOADERS))) {
-            interested.addAll(unserved);
-            interested.addAll(served);
-        } else {
-            interested.addAll(served);
-            interested.addAll(unserved);
-        }
-
-        int up = uploaders.get();
-        while (up < maxUploaders && !interested.isEmpty()) {
-            Peer peer = interested.remove(0);
-            if (_log.shouldDebug()) {
-                _log.debug("Unchoking " + SnarkLogFormatter.peer(peer));
+            List<Peer> interested = new LinkedList<>();
+            if (slotForUnservedPeers(servedUploaders, MAX_UPLOADERS,
+                                     optimisticSlots(MAX_UPLOADERS))) {
+                interested.addAll(unserved);
+                interested.addAll(served);
+            } else {
+                interested.addAll(served);
+                interested.addAll(unserved);
             }
-            peer.setChoking(false);
-            up = uploaders.incrementAndGet();
-            interestedUploaders.incrementAndGet();
-            count--;
-            // Put peer back at the end of the list.
-            peers.remove(peer);
-            peers.add(peer);
-            peerCount = peers.size();
+
+            int up = uploaders.get();
+            while (up < maxUploaders && !interested.isEmpty()) {
+                Peer peer = interested.remove(0);
+                if (_log.shouldDebug()) {
+                    _log.debug("Unchoking " + SnarkLogFormatter.peer(peer));
+                }
+                peer.setChoking(false);
+                up = uploaders.incrementAndGet();
+                interestedUploaders.incrementAndGet();
+                count--;
+                // Put peer back at the end of the list.
+                peers.remove(peer);
+                peers.add(peer);
+                peerCount = peers.size();
+            }
         }
         interestedAndChoking.set(count);
     }
@@ -3822,22 +3831,12 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * The current value.
      *
-     * @return the number of peers that are interested but choked
+     * @return the number of peers that are interested but choked, recounted in full by
+     *         {@link #unchokePeer(Collection)} on every pass that runs it
      * @since 0.9.28
      */
     public int getInterestedAndChoking() {
         return interestedAndChoking.get();
-    }
-
-    /**
-     * Shift the interested-and-choking count by a delta, as the checker drops peers
-     * without a full recount.
-     *
-     * @param toAdd the number of peers just removed from the interested set
-     * @since 0.9.28
-     */
-    public void addInterestedAndChoking(int toAdd) {
-        interestedAndChoking.addAndGet(toAdd);
     }
 
     /**

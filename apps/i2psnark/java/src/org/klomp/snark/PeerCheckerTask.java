@@ -373,7 +373,6 @@ class PeerCheckerTask implements Runnable {
             removed.add(worstDownloader);
         }
 
-        boolean coordOver = coordinator.overUpBWLimit(uploaded);
         synchronized (coordinator.peers) {
             // Move the peers choked this pass to the tail of the list first, so the
             // unchoke below works down the list from the head and does not pick one of
@@ -381,14 +380,12 @@ class PeerCheckerTask implements Runnable {
             for (Peer peer : removed) {
                 if (coordinator.peers.remove(peer)) coordinator.peers.add(peer);
             }
-            if ((!overBWLimit) && !coordOver) {
-                // Optimistically unchoke a peer
-                // must be called inside synch
-                coordinator.unchokePeer(removed);
-            }
+            // Called whether or not a slot may open: it is the only thing that recounts the
+            // peers waiting for one, and it holds its own bandwidth-limit check, which
+            // covers the over-limit tests this pass used to make here - a torrent alone
+            // over the limit is necessarily over it in total.
+            coordinator.unchokePeer(removed);
         }
-
-        coordinator.addInterestedAndChoking(removedCount);
 
         // store the rates
         coordinator.setRateHistory(uploaded, downloaded);
