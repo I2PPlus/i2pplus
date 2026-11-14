@@ -26,8 +26,8 @@
 <script src=/js/setupIframe.js></script>
 <title><%=intl._t("Tunnel Manager")%> - <%=(__isClient ? intl._t("Edit Client Tunnel") : intl._t("Edit Server Tunnel"))%></title>
 <meta charset=utf-8>
-<script src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script src="/js/iframeResizer/updatedEvent.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/iframeResizer/iframeResizer.contentWindow.js"></script>
+<script src="/js/iframeResizer/updatedEvent.js"></script>
 <link rel=icon href="<%=editBean.getTheme()%>images/favicon.svg">
 <link href="<%=editBean.getTheme()%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
 <link href="<%=editBean.getTheme()%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
@@ -36,7 +36,7 @@
 <%  if (indexBean.useSoraFont()) { %><link href="<%=editBean.getTheme()%>../../fonts/Sora.css" rel=stylesheet> <% } else { %>
 <link href="<%=editBean.getTheme()%>../../fonts/OpenSans.css" rel=stylesheet><% } %>
 <link href="<%=editBean.getTheme()%>override.css" rel=stylesheet>
-<script src="/js/resetScroll.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src=/js/resetScroll.js></script>
 <script src="/js/selectAll.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script src="js/delete.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <style>body{display:none;pointer-events:none}input.default{width:1px;height:1px;visibility:hidden}</style>

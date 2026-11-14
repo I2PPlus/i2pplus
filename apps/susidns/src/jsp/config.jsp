@@ -90,7 +90,7 @@
 <h3><%=intl._t("Configuration")%></h3>
 <h4><%=intl._t("File location")%>: <span class=storage>${cfg.fileName}</span></h4>
 </div>
-<script src="/js/clickToClose.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src=/js/clickToClose.js></script>
 <div id=messages class=canClose>${cfg.messages}</div>
 <form method=POST action="config#navi">
 <div id=config>
@@ -136,8 +136,8 @@
 </div>
 <span data-iframe-height></span>
 <style>body{display:block!important;pointer-events:auto!important}</style>
-<script src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script src="/js/iframeResizer/updatedEvent.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/iframeResizer/iframeResizer.contentWindow.js"></script>
+<script src="/js/iframeResizer/updatedEvent.js"></script>
 <script src=/js/autologout.js></script>
 </body>
 </html>

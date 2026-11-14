@@ -468,9 +468,9 @@
 <script src=/js/iframeResizer/iframeResizer.contentWindow.js></script>
 <script src=/js/iframeResizer/updatedEvent.js></script>
 <script src=/js/autologout.js></script>
-<script src="/js/resetScroll.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script src="/js/scrollTo.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script src="/js/clickToClose.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src=/js/resetScroll.js></script>
+<script src=/js/scrollTo.js></script>
+<script src=/js/clickToClose.js></script>
 <script src=/js/jdenticon.js></script>
 <script src=/susidns/js/clearSearch.js></script>
 <script nonce=<%=cspNonce%>>window.jdenticon_config = { padding: 0, saturation: {color: 1, grayscale: 0} };</script>
