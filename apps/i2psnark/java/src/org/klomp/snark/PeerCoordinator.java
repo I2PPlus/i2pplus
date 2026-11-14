@@ -3594,6 +3594,47 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
+     * The uploader count at which the peer checker has to start choking peers to make
+     * room, which is the per-torrent hard ceiling rather than the ratcheted target
+     * {@link #allowedUploaders()} answers. That one sits one above the current count so a
+     * slot can always be opened, and comparing the current count against it is never
+     * true: the checker's cascade for an uninterested peer, a peer choking us, a snubbing
+     * peer or a peer that sent nothing stayed unreachable except while the upload
+     * bandwidth limit was exceeded, so uninterested peers kept holding slots that
+     * interested peers were waiting for.
+     *
+     * @return the uploader count at which the checker must start making room
+     * @since 0.9.72+
+     */
+    int uploaderCeiling() {
+        int up = uploaders.get();
+        boolean overGlobal =
+                listener != null && listener.overUploadLimit(interestedUploaders.get());
+        if (overGlobal && _log.shouldDebug()) {
+            _log.debug("Over the global upload limit -> Holding one fewer uploader"
+                       + " * Was: " + up + " peers");
+        }
+        return uploaderCeiling(overGlobal, up, MAX_UPLOADERS);
+    }
+
+    /**
+     * The decision behind {@link #uploaderCeiling()}, with nothing read from the torrent
+     * so it can be tested on its own.
+     *
+     * @param overGlobalLimit whether Snark reports the total upload limit exceeded
+     * @param uploaders how many uploaders the torrent holds now
+     * @param maxUploaders the per-torrent ceiling, {@link #MAX_UPLOADERS}
+     * @return the uploader count at which the checker must start making room
+     * @since 0.9.72+
+     */
+    static int uploaderCeiling(boolean overGlobalLimit, int uploaders, int maxUploaders) {
+        // over the global limit the ceiling is one below the current count, so the
+        // checker keeps choking until the count drops - the same reduction
+        // allowedUploaders() makes
+        return overGlobalLimit ? uploaders - 1 : maxUploaders;
+    }
+
+    /**
      * Uploaders whether interested or not Use this for per-torrent limits.
      *
      * @return the uploader count, capped at the connected peer count

@@ -94,6 +94,27 @@ class PeerCheckerTask implements Runnable {
     }
 
     /**
+     * Whether the checker has to choke someone to make an upload slot available. It does
+     * when the torrent is at its uploader ceiling and peers are waiting for a slot, or is
+     * over that ceiling - which happens while the global upload limit is exceeded, where
+     * the ceiling sits one below the current count on purpose. The ceiling comes from
+     * {@link PeerCoordinator#uploaderCeiling()}, not from
+     * {@link PeerCoordinator#allowedUploaders()}: that one is always one above the count
+     * the torrent holds, so the comparison could never be true and the cascade never ran.
+     *
+     * @param uploaders how many uploaders the pass counts now
+     * @param ceiling the uploader ceiling from {@link PeerCoordinator#uploaderCeiling()}
+     * @param interestedAndChoking peers interested in us that we are choking, so peers
+     *                             waiting for a slot
+     * @return true to choke a peer to make room
+     * @since 0.9.72+
+     */
+    static boolean makesRoom(int uploaders, int ceiling, int interestedAndChoking) {
+        return uploaders == ceiling && interestedAndChoking > 0
+                || uploaders > ceiling;
+    }
+
+    /**
      * Creates a new checker task for the given coordinator.
      *
      * @param util the snark utility
@@ -132,7 +153,7 @@ class PeerCheckerTask implements Runnable {
         // Keep track of peers we remove now,
         // we will add them back to the end of the list.
         List<Peer> removed = new ArrayList<>();
-        int uploadLimit = coordinator.allowedUploaders();
+        int uploadLimit = coordinator.uploaderCeiling();
         boolean overBWLimit = coordinator.overUpBWLimit();
         // end game is per-torrent state, so decide it once for the whole pass
         boolean endGame = coordinator.inEndGame();
@@ -208,8 +229,7 @@ class PeerCheckerTask implements Runnable {
             // interested peers try to make some room.
             // (Note use of coordinator.uploaders)
             int cup = coordinator.getUploaders();
-            if (((cup == uploadLimit && coordinator.getInterestedAndChoking() > 0)
-                            || cup > uploadLimit
+            if ((makesRoom(cup, uploadLimit, coordinator.getInterestedAndChoking())
                             || overBWLimitChoke)
                     && !peer.isChoking()
                     && !spareSource) {
@@ -339,8 +359,7 @@ class PeerCheckerTask implements Runnable {
         coordinator.setUploaders(uploaders, interestedUploaders);
 
         // Remove the worst downloader if needed. (uploader if seeding)
-        if (((uploaders == uploadLimit && coordinator.getInterestedAndChoking() > 0)
-                        || uploaders > uploadLimit)
+        if (makesRoom(uploaders, uploadLimit, coordinator.getInterestedAndChoking())
                 && worstDownloader != null) {
             if (_log.shouldDebug())
                 _log.debug("Choking the peer -> Worst transfer rate"
