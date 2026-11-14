@@ -238,6 +238,16 @@ public class I2PSnarkUtil implements DisconnectListener {
     public static final boolean DEFAULT_VARY_OUTBOUND_HOPS = false;
     /** Ceiling on the peers one torrent will hold at once. */
     public static final int MAX_CONNECTIONS = 300; // per torrent
+
+    /** How long a peer dial may take to connect, in ms (5 minutes). */
+    static final long CONNECT_TIMEOUT_MS = 300000L;
+
+    /**
+     * The cap the streaming layer puts on the connect window, in ms. It has to be at least
+     * {@link #CONNECT_TIMEOUT_MS} for that timeout to be reachable: streaming clamps the
+     * window to this cap, and its own default is 75 s.
+     */
+    static final long MAX_CONNECT_TIMEOUT_MS = CONNECT_TIMEOUT_MS;
     /**
      * Bandwidth throttle property.
      */
@@ -955,8 +965,16 @@ public class I2PSnarkUtil implements DisconnectListener {
             opts.setProperty("outbound.lengthVariance", "1");
         }
         if (opts.getProperty(I2PSocketOptions.PROP_CONNECT_TIMEOUT) == null) {
-            opts.setProperty(I2PSocketOptions.PROP_CONNECT_TIMEOUT, "300000");
-        } // 5 minutes
+            opts.setProperty(I2PSocketOptions.PROP_CONNECT_TIMEOUT,
+                             Long.toString(CONNECT_TIMEOUT_MS));
+        }
+        // The streaming layer clamps the connect window to this cap, and its own default
+        // is 75 s, so without raising it alongside the value above the 5 minutes is never
+        // reached and an unreachable peer is given 75 s, not the 300 s asked for.
+        if (opts.getProperty(I2PSocketOptions.PROP_MAX_CONNECT_TIMEOUT) == null) {
+            opts.setProperty(I2PSocketOptions.PROP_MAX_CONNECT_TIMEOUT,
+                             Long.toString(MAX_CONNECT_TIMEOUT_MS));
+        }
         if (opts.getProperty("i2p.streaming.inactivityTimeout") == null) {
             opts.setProperty("i2p.streaming.inactivityTimeout", "180000");
         } // 3 minute idle time before disconnect
