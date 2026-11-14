@@ -248,6 +248,19 @@ public class I2PSnarkUtil implements DisconnectListener {
      * window to this cap, and its own default is 75 s.
      */
     static final long MAX_CONNECT_TIMEOUT_MS = CONNECT_TIMEOUT_MS;
+
+    /** Idle time before streaming acts on a stream, in ms (3 minutes). */
+    static final long STREAMING_INACTIVITY_MS = 180000L;
+
+    /**
+     * What streaming does with a stream idle for {@link #STREAMING_INACTIVITY_MS}: 2, send a
+     * keepalive. The other values are 0, do nothing, and 1, disconnect. Snark, not the
+     * transport, decides when a peer is dropped - see {@link PeerCoordinator#MAX_INACTIVE} -
+     * and disconnecting here dropped a non-seed peer at 3 minutes, before that policy could
+     * run at 5, discarding the choke flags, the allowed-fast set and the request pipeline
+     * with the socket.
+     */
+    static final int STREAMING_INACTIVITY_ACTION = 2;
     /**
      * Bandwidth throttle property.
      */
@@ -976,11 +989,13 @@ public class I2PSnarkUtil implements DisconnectListener {
                              Long.toString(MAX_CONNECT_TIMEOUT_MS));
         }
         if (opts.getProperty("i2p.streaming.inactivityTimeout") == null) {
-            opts.setProperty("i2p.streaming.inactivityTimeout", "180000");
-        } // 3 minute idle time before disconnect
+            opts.setProperty("i2p.streaming.inactivityTimeout",
+                             Long.toString(STREAMING_INACTIVITY_MS));
+        }
         if (opts.getProperty("i2p.streaming.inactivityAction") == null) {
-            opts.setProperty("i2p.streaming.inactivityAction", "1");
-        } // 1 == disconnect, 2 == ping
+            opts.setProperty("i2p.streaming.inactivityAction",
+                             Integer.toString(STREAMING_INACTIVITY_ACTION));
+        }
         // No session-level defaults for i2p.streaming.initialWindowSize or
         // i2p.streaming.slowStartGrowthRateFactor. The router tunes both
         // globally (Tuner.InitialWindowSizeParam / Tuner.SlowStartGrowthParam,
