@@ -1,1176 +1,662 @@
-/*
- * File: iframeResizer.contentWindow.js
- * Desc: Include this file in any page being loaded into an iframe
- *       to force the iframe to resize to the content size.
- * Requires: iframeResizer.js on host page.
- * Doc: https://github.com/davidjbradshaw/iframe-resizer
- * Author: David J. Bradshaw - dave@bradshaw.net
+/**
+ * @file iframeResizer.contentWindow.js
+ * @description Framed-page half of the iframe sizing pair. Measures the page
+ * and reports its height to the host page. Needs iframeResizer.js in the host.
  *
+ * Fork of iframe-resizer v4 (https://github.com/davidjbradshaw/iframe-resizer/tree/v4),
+ * cut back to what the console actually does: height only (no width sizing), no
+ * interval polling, no reset handshake, no pageInfo, no public methods the
+ * webapps never call, no V1 body margin/background/padding injection, no
+ * nested-host relaying, and no mouse, touch or print listeners re-measuring the
+ * page on every interaction.
+ *
+ * The init message carries PROTOCOL so a half left in cache across an upgrade
+ * warns instead of measuring garbage. Both halves ship from the same directory
+ * in the router console's root context, so they always upgrade together.
+ *
+ * @author David J. Bradshaw - dave@bradshaw.net (original)
+ * @author dr|z3d (I2P+ fork)
+ * @license MIT (upstream iframe-resizer v4), AGPL3 or later (I2P+ fork)
  */
 
-// eslint-disable-next-line sonarjs/cognitive-complexity, no-shadow-restricted-names
-;(function (undefined) {
-  if (typeof window === 'undefined') return // don't run for server side render
+(() => {
+  'use strict';
 
-  let autoResize = true,
-    base = 10,
-    bodyBackground = '',
-    bodyMargin = 0,
-    bodyMarginStr = '',
-    bodyObserver = null,
-    bodyPadding = '',
-    calculateWidth = false,
-    doubleEventList = { resize: 1, click: 1 },
-    eventCancelTimer = 128,
-    firstRun = true,
-    height = 1,
-    heightCalcModeDefault = 'bodyOffset',
-    heightCalcMode = heightCalcModeDefault,
-    initLock = true,
-    initMsg = '',
-    inPageLinks = {},
-    interval = 32,
-    intervalTimer = null,
-    logging = false,
-    mouseEvents = false,
-    msgID = '[iFrameSizer]', // Must match host page msg ID
-    msgIdLen = msgID.length,
-    myID = '',
-    resetRequiredMethods = {
-      max: 1,
-      min: 1,
-      bodyScroll: 1,
-      documentElementScroll: 1
-    },
-    resizeFrom = 'child',
-    sendPermit = true,
-    target = window.parent,
-    targetOriginDefault = '*',
-    tolerance = 0,
-    triggerLocked = false,
-    triggerLockedTimer = null,
-    throttledTimer = 16,
-    width = 1,
-    widthCalcModeDefault = 'scroll',
-    widthCalcMode = widthCalcModeDefault,
-    win = window,
-    onMessage = function () {
-      warn('onMessage function not defined')
-    },
-    onReady = function () {},
-    onPageInfo = function () {},
-    customCalcMethods = {
-      height: function () {
-        warn('Custom height calculation function not defined')
-        return document.documentElement.offsetHeight
-      },
-      width: function () {
-        warn('Custom width calculation function not defined')
-        return document.body.scrollWidth
-      }
-    },
-    eventHandlersByName = {},
-    passiveSupported = false
+  /** Marks our messages on the wire in both directions. */
+  const MSG_ID = '[iFrameSizer]';
+  const MSG_ID_LEN = MSG_ID.length;
 
-  function noop() {}
+  /** Must match the host half; a mismatch means one side is a cached copy. */
+  const PROTOCOL = 'i2p1';
 
-  try {
-    const options = Object.create(
-      {},
-      {
-        passive: {
-          get: function () {
-            return (passiveSupported = true)
-          }
-        }
-      }
-    )
-    window.addEventListener('test', noop, options)
-    window.removeEventListener('test', noop, options)
-  } catch (error) {
-    // The browser rejects an options object here, so listeners get a plain flag
-  }
+  /** Posted to the host when this half loads after the host has looked for it. */
+  const CHILD_READY = '[iFrameResizerChild]Ready';
 
-  function addEventListener(el, evt, func, options) {
-    el.addEventListener(evt, func, passiveSupported ? options || {} : false)
-  }
+  /** Grace period before the initial location-hash check. */
+  const HASH_CHECK_MS = 128;
 
-  function removeEventListener(el, evt, func) {
-    el.removeEventListener(evt, func, false)
-  }
+  /** Minimum spacing between reported sizes; raised if measuring proves slow. */
+  let throttledMs = 16;
 
-  function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1)
-  }
+  let autoResize = true;
+  let heightCalcMode = 'taggedElement';
+  let firstRun = true;
+  let inPageLinksEnabled = false;
+  let initMsg = '';
+  let logging = false;
+  let myId = '';
+  let tolerance = 0;
 
-  // Based on underscore.js
-  function throttle(func) {
-    let context,
-      args,
-      result,
-      timeout = null,
-      previous = 0,
-      later = function () {
-        previous = Date.now()
-        timeout = null
-        result = func.apply(context, args)
-        if (!timeout) {
-          // eslint-disable-next-line no-multi-assign
-          context = args = null
-        }
-      }
+  /** Origin to post back to, taken from the host's init message. */
+  let targetOrigin = '*';
 
-    return function () {
-      const now = Date.now()
+  /** The window the host half runs in; taken from the init message. */
+  let target = window.parent;
 
-      if (!previous) {previous = now}
+  /** Last size reported to the host, so an unchanged page stays quiet. */
+  let height = 0;
 
-      const remaining = throttledTimer - (now - previous)
+  /** Listeners that re-measure the page, kept so autoResize(false) can remove them. */
+  const triggerListeners = {};
 
-      context = this
-      args = arguments
+  /**
+   * Capture-phase handler that re-measures once a resource has finished loading.
+   * The description is only built when logging is on: this fires for every image,
+   * script and stylesheet on the page, and the throttle drops most of them.
+   */
+  const onResourceLoaded = event =>
+    sendSize('resourceLoad', logging ? `Resource loaded: ${event.target.tagName}` : '');
 
-      if (remaining <= 0 || remaining > throttledTimer) {
-        if (timeout) {
-          clearTimeout(timeout)
-          timeout = null
-        }
+  /** Observer watching the body for anything that changes its height. */
+  let bodyObserver = null;
 
-        previous = now
-        result = func.apply(context, args)
-
-        if (!timeout) {context = args = null} // eslint-disable-next-line no-multi-assign
-      } else if (!timeout) {timeout = setTimeout(later, remaining)}
-
-      return result
-    }
-  }
-
-  function formatLogMsg(msg) {return msgID + '[' + myID + '] ' + msg}
-
+  /**
+   * @param {string} msg the line to print
+   * @returns {void}
+   */
   function log(msg) {
-    if (logging && 'object' === typeof window.console) {console.log(formatLogMsg(msg))} // eslint-disable-next-line no-console
+    if (logging) {console.log(`${MSG_ID}[${myId}] ${msg}`);}
   }
 
+  /**
+   * Warnings print whether or not logging is on, so a broken handshake is
+   * never silent.
+   *
+   * @param {string} msg the line to print
+   * @returns {void}
+   */
   function warn(msg) {
-    if ('object' === typeof window.console) {console.warn(formatLogMsg(msg))} // eslint-disable-next-line no-console
+    console.warn(`${MSG_ID}[${myId}] ${msg}`);
   }
 
-  function init() {
-    readDataFromParent()
-    log('Initialising iFrame (' + window.location.href + ')')
-    readDataFromPage()
-    setMargin()
-    setBodyStyle('background', bodyBackground)
-    setBodyStyle('padding', bodyPadding)
-    injectClearFixIntoBodyElement()
-    checkHeightMode()
-    checkWidthMode()
-    stopInfiniteResizingOfIFrame()
-    setupPublicMethods()
-    setupMouseEvents()
-    startEventListeners()
-    inPageLinks = setupInPageLinks()
-    sendSize('init', 'Init message from host page')
-    onReady()
+  /**
+   * Underscore-style throttle: at most one call per throttledMs, and the
+   * trailing call always runs with its own arguments, so the last change wins.
+   *
+   * @param {Function} fn the function to pace
+   * @returns {Function} the paced function
+   */
+  function throttle(fn) {
+    let timer = null;
+    let previous = 0;
+    let lastArgs = null;
+
+    function later() {
+      previous = Date.now();
+      timer = null;
+      fn(...lastArgs);
+    }
+
+    function throttled(...args) {
+      const now = Date.now();
+      const remaining = throttledMs - (now - previous);
+
+      lastArgs = args;
+
+      if (remaining <= 0 || remaining > throttledMs) {
+        if (timer) {clearTimeout(timer);}
+        previous = now;
+        fn(...lastArgs);
+      } else if (!timer) {
+        timer = setTimeout(later, remaining);
+      }
+    }
+
+    /** Drops a measurement that has been scheduled but not yet run. */
+    throttled.cancel = () => {
+      if (timer !== null) {
+        clearTimeout(timer);
+        timer = null;
+      }
+    };
+
+    return throttled;
   }
 
+  /**
+   * Reads one CSS length as pixels. Margins are added by hand because the body
+   * box height does not include them.
+   *
+   * @param {string} prop the CSS property to read, e.g. marginTop
+   * @param {Element} [el] the element to read it from, the body by default
+   * @returns {number} the length in pixels, 0 when it cannot be read
+   */
+  function getCssPixels(prop, el) {
+    const computed = window.getComputedStyle(el || document.body);
+    return parseInt(computed[prop], 10) || 0;
+  }
+
+  /**
+   * Raises the throttle when measuring the page turns out to be slow, so a
+   * large page cannot spend its time re-measuring itself.
+   *
+   * @param {number} elapsed how long the last measurement took, in ms
+   * @returns {void}
+   */
+  function chkEventThrottle(elapsed) {
+    if (elapsed > throttledMs / 2) {
+      throttledMs = 2 * elapsed;
+      log(`Event throttle increased to ${throttledMs}ms`);
+    }
+  }
+
+  /**
+   * Parses the settings out of the host's init message.
+   *
+   * @returns {void}
+   */
   function readDataFromParent() {
-    function strBool(str) {return 'true' === str}
+    const data = initMsg.slice(MSG_ID_LEN).split(':');
 
-    const data = initMsg.substr(msgIdLen).split(':')
-
-    myID = data[0]
-    bodyMargin = undefined !== data[1] ? Number(data[1]) : bodyMargin // For V1 compatibility
-    calculateWidth = undefined !== data[2] ? strBool(data[2]) : calculateWidth
-    logging = undefined !== data[3] ? strBool(data[3]) : logging
-    interval = undefined !== data[4] ? Number(data[4]) : interval
-    autoResize = undefined !== data[6] ? strBool(data[6]) : autoResize
-    bodyMarginStr = data[7]
-    heightCalcMode = undefined !== data[8] ? data[8] : heightCalcMode
-    bodyBackground = data[9]
-    bodyPadding = data[10]
-    tolerance = undefined !== data[11] ? Number(data[11]) : tolerance
-    inPageLinks.enable = undefined !== data[12] ? strBool(data[12]) : false
-    resizeFrom = undefined !== data[13] ? data[13] : resizeFrom
-    widthCalcMode = undefined !== data[14] ? data[14] : widthCalcMode
-    mouseEvents = undefined !== data[15] ? Boolean(data[15]) : mouseEvents
+    myId = data[0];
+    logging = data[2] === 'true';
+    autoResize = data[3] === 'true';
+    tolerance = Number(data[4]) || 0;
+    inPageLinksEnabled = data[5] === 'true';
+    heightCalcMode = data[6] || heightCalcMode;
   }
 
-  function depricate(key) {
-    const splitName = key.split('Callback')
+  /**
+   * Adds the end-of-page marker the height is measured from. Framed pages emit
+   * their own `<span data-iframe-height>`; this covers the ones that do not, so
+   * there is always a bottom edge to report.
+   *
+   * @returns {void}
+   */
+  function ensureHeightMarker() {
+    if (document.querySelector('[data-iframe-height]')) {return;}
 
-    if (splitName.length === 2) {
-      const name = 'on' + splitName[0].charAt(0).toUpperCase() + splitName[0].slice(1)
-      this[name] = this[key]
-      delete this[key]
-      warn("Deprecated: '" + key + "' has been renamed '" + name +
-          "'. The old method will be removed in the next major version.")
-    }
+    const marker = document.createElement('span');
+    marker.id = 'endOfPage';
+    marker.setAttribute('data-iframe-height', '');
+    document.body.appendChild(marker);
+    log('Added end-of-page marker');
   }
 
-  function readDataFromPage() {
-    function readData() {
-      const data = window.iFrameResizer
-
-      log('Reading data from page: ' + JSON.stringify(data))
-      Object.keys(data).forEach(depricate, data)
-
-      onMessage = 'onMessage' in data ? data.onMessage : onMessage
-      onReady = 'onReady' in data ? data.onReady : onReady
-      targetOriginDefault = 'targetOrigin' in data ? data.targetOrigin : targetOriginDefault
-      heightCalcMode = 'heightCalculationMethod' in data
-                       ? data.heightCalculationMethod
-                       : heightCalcMode
-      widthCalcMode = 'widthCalculationMethod' in data
-                      ? data.widthCalculationMethod
-                      : widthCalcMode
-    }
-
-    function setupCustomCalcMethods(calcMode, calcFunc) {
-      if ('function' === typeof calcMode) {
-        log('Setup custom ' + calcFunc + 'CalcMethod')
-        customCalcMethods[calcFunc] = calcMode
-        calcMode = 'custom'
-      }
-
-      return calcMode
-    }
-
-    if ('iFrameResizer' in window && Object === window.iFrameResizer.constructor) {
-      readData()
-      heightCalcMode = setupCustomCalcMethods(heightCalcMode, 'height')
-      widthCalcMode = setupCustomCalcMethods(widthCalcMode, 'width')
-    }
-
-    log('TargetOrigin for parent set to: ' + targetOriginDefault)
-  }
-
-  function chkCSS(attr, value) {
-    if (-1 !== value.indexOf('-')) {
-      warn('Negative CSS value ignored for ' + attr)
-      value = ''
-    }
-    return value
-  }
-
-  function setBodyStyle(attr, value) {
-    if (undefined !== value && '' !== value && 'null' !== value) {
-      document.body.style[attr] = value
-      log('Body ' + attr + ' set to "' + value + '"')
-    }
-  }
-
-  function setMargin() {
-    // If called via V1 script, convert bodyMargin from int to str
-    if (undefined === bodyMarginStr) {bodyMarginStr = bodyMargin + 'px'}
-
-    setBodyStyle('margin', chkCSS('margin', bodyMarginStr))
-  }
-
-  function stopInfiniteResizingOfIFrame() {
-    document.documentElement.style.height = ''
-    document.body.style.height = ''
-    log('HTML & body height set to "auto"')
-  }
-
-  function manageTriggerEvent(options) {
-    const listener = {
-      add: function (eventName) {
-        function handleEvent() {sendSize(options.eventName, options.eventType)}
-
-        eventHandlersByName[eventName] = handleEvent
-
-        addEventListener(window, eventName, handleEvent, { passive: true })
-      },
-      remove: function (eventName) {
-        const handleEvent = eventHandlersByName[eventName]
-        delete eventHandlersByName[eventName]
-
-        removeEventListener(window, eventName, handleEvent)
-      }
-    }
-
-    if (options.eventNames) {
-      options.eventName = options.eventNames[0]
-      options.eventNames.map(listener[options.method])
-    } else {
-      listener[options.method](options.eventName)
-    }
-
-    log(capitalizeFirstLetter(options.method) + ' event listener: ' + options.eventType)
-  }
-
-  function manageEventListeners(method) {
-    manageTriggerEvent({
-      method: method,
-      eventType: 'Animation Start',
-      eventName: 'animationstart'
-    })
-    manageTriggerEvent({
-      method: method,
-      eventType: 'Animation Iteration',
-      eventName: 'animationiteration'
-    })
-    manageTriggerEvent({
-      method: method,
-      eventType: 'Animation End',
-      eventName: 'animationend'
-    })
-    manageTriggerEvent({
-      method: method,
-      eventType: 'Input',
-      eventName: 'input'
-    })
-    manageTriggerEvent({
-      method: method,
-      eventType: 'Mouse Up',
-      eventName: 'mouseup'
-    })
-    manageTriggerEvent({
-      method: method,
-      eventType: 'Mouse Down',
-      eventName: 'mousedown'
-    })
-    manageTriggerEvent({
-      method: method,
-      eventType: 'Orientation Change',
-      eventName: 'orientationchange'
-    })
-    manageTriggerEvent({
-      method: method,
-      eventType: 'Print',
-      eventName: 'afterprint'
-    })
-    manageTriggerEvent({
-      method: method,
-      eventType: 'Print',
-      eventName: 'beforeprint'
-    })
-    manageTriggerEvent({
-      method: method,
-      eventType: 'Ready State Change',
-      eventName: 'readystatechange'
-    })
-    manageTriggerEvent({
-      method: method,
-      eventType: 'Touch Start',
-      eventName: 'touchstart'
-    })
-    manageTriggerEvent({
-      method: method,
-      eventType: 'Touch End',
-      eventName: 'touchend'
-    })
-    manageTriggerEvent({
-      method: method,
-      eventType: 'Touch Cancel',
-      eventName: 'touchcancel'
-    })
-    manageTriggerEvent({
-      method: method,
-      eventType: 'Transition Start',
-      eventName: 'transitionstart'
-    })
-    manageTriggerEvent({
-      method: method,
-      eventType: 'Transition Iteration',
-      eventName: 'transitioniteration'
-    })
-    manageTriggerEvent({
-      method: method,
-      eventType: 'Transition End',
-      eventName: 'transitionend'
-    })
-    if ('child' === resizeFrom) {
-      manageTriggerEvent({
-        method: method,
-        eventType: 'IFrame Resized',
-        eventName: 'resize'
-      })
-    }
-  }
-
-  function checkCalcMode(calcMode, calcModeDefault, modes, type) {
-    if (calcModeDefault !== calcMode) {
-      if (!(calcMode in modes)) {
-        warn(calcMode + ' is not a valid option for ' + type + 'CalculationMethod.')
-        calcMode = calcModeDefault
-      }
-      log(type + ' calculation method set to "' + calcMode + '"')
-    }
-
-    return calcMode
-  }
-
-  function checkHeightMode() {
-    heightCalcMode = checkCalcMode(heightCalcMode, heightCalcModeDefault, getHeight, 'height')
-  }
-
-  function checkWidthMode() {widthCalcMode = checkCalcMode(widthCalcMode, widthCalcModeDefault, getWidth, 'width')
-  }
-
-  function startEventListeners() {
-    if (true === autoResize) {
-      manageEventListeners('add')
-      setupMutationObserver()
-    } else {log('Auto Resize disabled')}
-  }
-
-  function disconnectMutationObserver() {
-    if (null !== bodyObserver) {bodyObserver.disconnect()} /* istanbul ignore next */ // Not testable in PhantonJS
-  }
-
-  function stopEventListeners() {
-    manageEventListeners('remove')
-    disconnectMutationObserver()
-    clearInterval(intervalTimer)
-  }
-
+  /**
+   * Appends a float-clearing element so the reported height includes floated
+   * content; a page that ends inside a float otherwise reports short.
+   *
+   * @returns {void}
+   */
   function injectClearFixIntoBodyElement() {
-    const clearFix = document.createElement('div')
-    clearFix.style.clear = 'both'
-    // Guard against the following having been globally redefined in CSS.
-    clearFix.style.display = 'block'
-    clearFix.style.height = '0'
-    document.body.appendChild(clearFix)
+    const clearFix = document.createElement('div');
+    // display and height are set explicitly because a page's own CSS may have
+    // redefined those keywords globally.
+    clearFix.style.clear = 'both';
+    clearFix.style.display = 'block';
+    clearFix.style.height = '0';
+    document.body.appendChild(clearFix);
   }
 
-  function setupInPageLinks() {
-    function getPagePosition() {
-      return {
-        x:
-          window.pageXOffset !== undefined
-            ? window.pageXOffset
-            : document.documentElement.scrollLeft,
-        y:
-          window.pageYOffset !== undefined
-            ? window.pageYOffset
-            : document.documentElement.scrollTop
-      }
-    }
-
-    function getElementPosition(el) {
-      const elPosition = el.getBoundingClientRect(),
-        pagePosition = getPagePosition()
-
-      return {
-        x: parseInt(elPosition.left, 10) + parseInt(pagePosition.x, 10),
-        y: parseInt(elPosition.top, 10) + parseInt(pagePosition.y, 10)
-      }
-    }
-
-    function findTarget(location) {
-      function jumpToTarget(target) {
-        const jumpPosition = getElementPosition(target)
-
-        log('Moving to in page link (#' + hash + ') at x: ' + jumpPosition.x + ' y: ' + jumpPosition.y)
-        sendMsg(jumpPosition.y, jumpPosition.x, 'scrollToOffset') // X&Y reversed at sendMsg uses height/width
-      }
-
-      const hash = location.split('#')[1] || location, // Remove # if present
-        hashData = decodeURIComponent(hash),
-        target = document.getElementById(hashData) || document.getElementsByName(hashData)[0]
-
-      if (undefined !== target) {jumpToTarget(target)}
-      else {
-        log('In page link (#' + hash + ') not found in iFrame, so sending to parent')
-        sendMsg(0, 0, 'inPageLink', '#' + hash)
-      }
-    }
-
-    function checkLocationHash() {
-      const hash = window.location.hash
-      const href = window.location.href
-
-      if ('' !== hash && '#' !== hash) {findTarget(href)}
-    }
-
-    function bindAnchors() {
-      function setupLink(el) {
-        function linkClicked(e) {
-          e.preventDefault()
-
-          /* jshint validthis:true */
-          findTarget(this.getAttribute('href'))
-        }
-
-        if ('#' !== el.getAttribute('href')) {
-          addEventListener(el, 'click', linkClicked)
-        }
-      }
-
-      Array.prototype.forEach.call(
-        document.querySelectorAll('a[href^="#"]'),
-        setupLink
-      )
-    }
-
-    function bindLocationHash() {
-      addEventListener(window, 'hashchange', checkLocationHash)
-    }
-
-    function initCheck() {
-      // Check if page loaded with location hash after init resize
-      setTimeout(checkLocationHash, eventCancelTimer)
-    }
-
-    function enableInPageLinks() {
-      log('Setting up location.hash handlers')
-      bindAnchors()
-      bindLocationHash()
-      initCheck()
-    }
-
-    if (inPageLinks.enable) {enableInPageLinks()}
-    else {log('In page linking not enabled')}
-
-    return {findTarget: findTarget}
+  /**
+   * Clears any inline height on the root elements. A height set here would be
+   * fed back into the next measurement, and the frame would grow forever.
+   *
+   * @returns {void}
+   */
+  function stopInfiniteResizingOfIFrame() {
+    document.documentElement.style.height = '';
+    document.body.style.height = '';
   }
 
-  function setupMouseEvents() {
-    if (mouseEvents !== true) return
-
-    function sendMouse(e) {
-      sendMsg(0, 0, e.type, e.screenY + ':' + e.screenX)
-    }
-
-    function addMouseListener(evt, name) {
-      log('Add event listener: ' + name)
-      addEventListener(window.document, evt, sendMouse)
-    }
-
-    addMouseListener('mouseenter', 'Mouse Enter')
-    addMouseListener('mouseleave', 'Mouse Leave')
-  }
-
-  function setupPublicMethods() {
-    log('Enable public methods')
-
-    win.parentIFrame = {
-      autoResize: function autoResizeF(resize) {
-        if (true === resize && false === autoResize) {
-          autoResize = true
-          startEventListeners()
-        } else if (false === resize && true === autoResize) {
-          autoResize = false
-          stopEventListeners()
-        }
-        sendMsg(0, 0, 'autoResize', JSON.stringify(autoResize))
-        return autoResize
-      },
-
-      close: function closeF() {
-        sendMsg(0, 0, 'close')
-        // teardown()
-      },
-
-      getId: function getIdF() {
-        return myID
-      },
-
-      getPageInfo: function getPageInfoF(callback) {
-        if ('function' === typeof callback) {
-          onPageInfo = callback
-          sendMsg(0, 0, 'pageInfo')
-        } else {
-          onPageInfo = function () {}
-          sendMsg(0, 0, 'pageInfoStop')
-        }
-      },
-
-      moveToAnchor: function moveToAnchorF(hash) {
-        inPageLinks.findTarget(hash)
-      },
-
-      reset: function resetF() {
-        resetIFrame('parentIFrame.reset')
-      },
-
-      scrollTo: function scrollToF(x, y) {
-        sendMsg(y, x, 'scrollTo') // X&Y reversed at sendMsg uses height/width
-      },
-
-      scrollToOffset: function scrollToF(x, y) {
-        sendMsg(y, x, 'scrollToOffset') // X&Y reversed at sendMsg uses height/width
-      },
-
-      sendMessage: function sendMessageF(msg, targetOrigin) {
-        sendMsg(0, 0, 'message', JSON.stringify(msg), targetOrigin)
-      },
-
-      setHeightCalculationMethod: function setHeightCalculationMethodF(
-        heightCalculationMethod
-      ) {
-        heightCalcMode = heightCalculationMethod
-        checkHeightMode()
-      },
-
-      setWidthCalculationMethod: function setWidthCalculationMethodF(
-        widthCalculationMethod
-      ) {
-        widthCalcMode = widthCalculationMethod
-        checkWidthMode()
-      },
-
-      setTargetOrigin: function setTargetOriginF(targetOrigin) {
-        log('Set targetOrigin: ' + targetOrigin)
-        targetOriginDefault = targetOrigin
-      },
-
-      size: function sizeF(customHeight, customWidth) {
-        const valString =
-          '' + (customHeight || '') + (customWidth ? ',' + customWidth : '')
-        sendSize(
-          'size',
-          'parentIFrame.size(' + valString + ')',
-          customHeight,
-          customWidth
-        )
-      }
-    }
-  }
-
-  function initInterval() {
-    if (0 !== interval) {
-      log('setInterval: ' + interval + 'ms')
-      intervalTimer = setInterval(function () {
-        sendSize('interval', 'setInterval: ' + interval)
-      }, Math.abs(interval))
-    }
-  }
-
-  // Not testable in PhantomJS
-  /* istanbul ignore next */
-  function setupBodyMutationObserver() {
-    function addImageLoadListners(mutation) {
-      function addImageLoadListener(element) {
-        if (false === element.complete) {
-          log('Attach listeners to ' + element.src)
-          element.addEventListener('load', imageLoaded, false)
-          element.addEventListener('error', imageError, false)
-          elements.push(element)
-        }
-      }
-
-      if (mutation.type === 'attributes' && mutation.attributeName === 'src') {
-        addImageLoadListener(mutation.target)
-      } else if (mutation.type === 'childList') {
-        Array.prototype.forEach.call(
-          mutation.target.querySelectorAll('img'),
-          addImageLoadListener
-        )
-      }
-    }
-
-    function removeFromArray(element) {
-      elements.splice(elements.indexOf(element), 1)
-    }
-
-    function removeImageLoadListener(element) {
-      log('Remove listeners from ' + element.src)
-      element.removeEventListener('load', imageLoaded, false)
-      element.removeEventListener('error', imageError, false)
-      removeFromArray(element)
-    }
-
-    function imageEventTriggered(event, type, typeDesc) {
-      removeImageLoadListener(event.target)
-      sendSize(type, typeDesc + ': ' + event.target.src)
-    }
-
-    function imageLoaded(event) {
-      imageEventTriggered(event, 'imageLoad', 'Image loaded')
-    }
-
-    function imageError(event) {
-      imageEventTriggered(event, 'imageLoadFailed', 'Image load failed')
-    }
-
-    function mutationObserved(mutations) {
-      sendSize(
-        'mutationObserver',
-        'mutationObserver: ' + mutations[0].target + ' ' + mutations[0].type
-      )
-
-      // Deal with WebKit / Blink asyncing image loading when tags are injected into the page
-      mutations.forEach(addImageLoadListners)
-    }
-
-    function createMutationObserver() {
-      const target = document.querySelector('body'),
-        config = {
-          attributes: true,
-          attributeOldValue: false,
-          characterData: true,
-          characterDataOldValue: false,
-          childList: true,
-          subtree: true
-        }
-
-      observer = new MutationObserver(mutationObserved)
-
-      log('Create body MutationObserver')
-      observer.observe(target, config)
-
-      return observer
-    }
-
-    // createMutationObserver() assigns observer itself (upstream relies on the
-    // var hoist), so the binding has to exist before that call
-    let observer
-
-    const elements = [],
-      MutationObserver = window.MutationObserver
-
-    observer = createMutationObserver()
-
-    return {
-      disconnect: function () {
-        if ('disconnect' in observer) {
-          log('Disconnect body MutationObserver')
-          observer.disconnect()
-          elements.forEach(removeImageLoadListener)
-        }
-      }
-    }
-  }
-
-  function setupMutationObserver() {
-    const forceIntervalTimer = 0 > interval
-
-    if (forceIntervalTimer) {initInterval()}
-    else {bodyObserver = setupBodyMutationObserver()}
-  }
-
-  // document.documentElement.offsetHeight is not reliable, so
-  // we have to jump through hoops to get a better value.
-  function getComputedStyle(prop, el) {
-    let retVal = 0
-    el = el || document.body // Not testable in phantonJS
-
-    retVal = document.defaultView.getComputedStyle(el, null)
-    retVal = null !== retVal ? retVal[prop] : 0
-
-    return parseInt(retVal, base)
-  }
-
-  function chkEventThottle(timer) {
-    if (timer > throttledTimer / 2) {
-      throttledTimer = 2 * timer
-      log('Event throttle increased to ' + throttledTimer + 'ms')
-    }
-  }
-
-  // Idea from https://github.com/guardian/iframe-messenger
+  /**
+   * Largest edge position among a set of elements.
+   *
+   * @param {string} side the bounding-rect side to maximise, bottom or right
+   * @param {Element[]} elements the elements to measure
+   * @returns {number} the largest edge position in pixels
+   */
   function getMaxElement(side, elements) {
-    let elementsLength = elements.length,
-      elVal = 0,
-      maxVal = 0,
-      Side = capitalizeFirstLetter(side),
-      timer = Date.now()
+    const sideName = side.charAt(0).toUpperCase() + side.slice(1);
+    const started = Date.now();
+    let maxVal = 0;
 
-    for (let i = 0; i < elementsLength; i++) {
-      elVal = elements[i].getBoundingClientRect()[side] +
-              getComputedStyle('margin' + Side, elements[i])
-      if (elVal > maxVal) {maxVal = elVal}
+    for (const element of elements) {
+      const elVal = element.getBoundingClientRect()[side] + getCssPixels(`margin${sideName}`, element);
+      if (elVal > maxVal) {maxVal = elVal;}
     }
 
-    timer = Date.now() - timer
+    const elapsed = Date.now() - started;
+    log(`Parsed ${elements.length} HTML elements -> position calculated in ${elapsed}ms`);
+    chkEventThrottle(elapsed);
 
-    log('Parsed ' + elementsLength + ' HTML elements')
-    log('Element position calculated in ' + timer + 'ms')
-
-    chkEventThottle(timer)
-
-    return maxVal
-  }
-
-  function getAllMeasurements(dimensions) {
-    return [
-      dimensions.bodyOffset(),
-      dimensions.bodyScroll(),
-      dimensions.documentElementOffset(),
-      dimensions.documentElementScroll()
-    ]
-  }
-
-  function getTaggedElements(side, tag) {
-    function noTaggedElementsFound() {
-      warn('No tagged elements (' + tag + ') found on page')
-      return document.querySelectorAll('body *')
-    }
-
-    const elements = document.querySelectorAll('[' + tag + ']')
-
-    if (elements.length === 0) noTaggedElementsFound()
-
-    return getMaxElement(side, elements)
-  }
-
-  function getAllElements() {
-    return document.querySelectorAll('body *')
+    return maxVal;
   }
 
   const getHeight = {
-      bodyOffset: function getBodyOffsetHeight() {
-        return (
-          document.body.offsetHeight +
-          getComputedStyle('marginTop') +
-          getComputedStyle('marginBottom')
-        )
-      },
+    /**
+     * Bottom edge of the lowest tagged element, the console's chosen method.
+     * Falls back to the body box when a page has no marker at all, rather than
+     * measuring every element on the page as upstream does.
+     *
+     * @returns {number} the page height in pixels
+     */
+    taggedElement() {
+      const tagged = document.querySelectorAll('[data-iframe-height]');
 
-      offset: function () {
-        return getHeight.bodyOffset() // Backwards compatability
-      },
-
-      bodyScroll: function getBodyScrollHeight() {
-        return document.body.scrollHeight
-      },
-
-      custom: function getCustomWidth() {
-        return customCalcMethods.height()
-      },
-
-      documentElementOffset: function getDEOffsetHeight() {
-        return document.documentElement.offsetHeight
-      },
-
-      documentElementScroll: function getDEScrollHeight() {
-        return document.documentElement.scrollHeight
-      },
-
-      max: function getMaxHeight() {
-        return Math.max.apply(null, getAllMeasurements(getHeight))
-      },
-
-      min: function getMinHeight() {
-        return Math.min.apply(null, getAllMeasurements(getHeight))
-      },
-
-      grow: function growHeight() {
-        return getHeight.max() // Run max without the forced downsizing
-      },
-
-      lowestElement: function getBestHeight() {
-        return Math.max(
-          getHeight.bodyOffset() || getHeight.documentElementOffset(),
-          getMaxElement('bottom', getAllElements())
-        )
-      },
-
-      taggedElement: function getTaggedElementsHeight() {
-        return getTaggedElements('bottom', 'data-iframe-height')
+      if (tagged.length === 0) {
+        warn('No tagged elements (data-iframe-height) found on page -> using body offset');
+        return getHeight.bodyOffset();
       }
+      return getMaxElement('bottom', tagged);
     },
-    getWidth = {
-      bodyScroll: function getBodyScrollWidth() {
-        return document.body.scrollWidth
-      },
 
-      bodyOffset: function getBodyOffsetWidth() {
-        return document.body.offsetWidth
-      },
-
-      custom: function getCustomWidth() {
-        return customCalcMethods.width()
-      },
-
-      documentElementScroll: function getDEScrollWidth() {
-        return document.documentElement.scrollWidth
-      },
-
-      documentElementOffset: function getDEOffsetWidth() {
-        return document.documentElement.offsetWidth
-      },
-
-      scroll: function getMaxWidth() {
-        return Math.max(getWidth.bodyScroll(), getWidth.documentElementScroll())
-      },
-
-      max: function getMaxWidth() {
-        return Math.max.apply(null, getAllMeasurements(getWidth))
-      },
-
-      min: function getMinWidth() {
-        return Math.min.apply(null, getAllMeasurements(getWidth))
-      },
-
-      rightMostElement: function rightMostElement() {
-        return getMaxElement('right', getAllElements())
-      },
-
-      taggedElement: function getTaggedElementsWidth() {
-        return getTaggedElements('right', 'data-iframe-width')
-      }
+    /**
+     * Body box height plus its margins.
+     *
+     * @returns {number} the page height in pixels
+     */
+    bodyOffset() {
+      return document.body.offsetHeight + getCssPixels('marginTop') + getCssPixels('marginBottom');
     }
+  };
 
-  function sizeIFrame(
-    triggerEvent,
-    triggerEventDesc,
-    customHeight,
-    customWidth
-  ) {
-    function resizeIFrame() {
-      height = currentHeight
-      width = currentWidth
-
-      sendMsg(height, width, triggerEvent)
+  /**
+   * Rejects a calculation method this build does not implement.
+   *
+   * @returns {void}
+   */
+  function checkHeightMode() {
+    if (!(heightCalcMode in getHeight)) {
+      warn(`${heightCalcMode} is not a valid option for heightCalculationMethod -> using taggedElement`);
+      heightCalcMode = 'taggedElement';
     }
+  }
 
-    function isSizeChangeDetected() {
-      function checkTolarance(a, b) {
-        const retVal = Math.abs(a - b) <= tolerance
-        return !retVal
-      }
-
-      currentHeight = undefined !== customHeight ? customHeight : getHeight[heightCalcMode]()
-      currentWidth = undefined !== customWidth ? customWidth : getWidth[widthCalcMode]()
-
-      return (checkTolarance(height, currentHeight) || (calculateWidth && checkTolarance(width, currentWidth)))
-    }
-
-    function isForceResizableEvent() {return !(triggerEvent in { init: 1, interval: 1, size: 1 })}
-
-    function isForceResizableCalcMode() {
-      return (
-        heightCalcMode in resetRequiredMethods ||
-        (calculateWidth && widthCalcMode in resetRequiredMethods)
-      )
-    }
-
-    function logIgnored() {
-      log('No change in size detected')
-    }
-
-    function checkDownSizing() {
-      if (isForceResizableEvent() && isForceResizableCalcMode()) {
-        resetIFrame(triggerEventDesc)
-      } else if (!(triggerEvent in { interval: 1 })) {
-        logIgnored()
-      }
-    }
-
-    let currentHeight, currentWidth
-
-    if (isSizeChangeDetected() || 'init' === triggerEvent) {
-      lockTrigger()
-      resizeIFrame()
+  /**
+   * Adds or removes one page-change listener that asks for a new size.
+   *
+   * @param {string} method 'add' or 'remove'
+   * @param {string} eventName the event to listen for
+   * @param {string} eventType what the listener is for, in the log
+   * @returns {void}
+   */
+  function manageTriggerEvent(method, eventName, eventType) {
+    if (method === 'add') {
+      triggerListeners[eventName] = () => sendSize(eventName, eventType);
+      window.addEventListener(eventName, triggerListeners[eventName], {passive: true});
     } else {
-      checkDownSizing()
+      const handleEvent = triggerListeners[eventName];
+      delete triggerListeners[eventName];
+      if (handleEvent) {window.removeEventListener(eventName, handleEvent);}
     }
   }
 
-  const sizeIFrameThrottled = throttle(sizeIFrame)
+  /**
+   * Adds or removes every listener that re-measures the page.
+   *
+   * Deliberately left out: mouse, touch and print events, which re-measure on
+   * interaction rather than on content change; `transitioniteration`, which is
+   * not a real event name; the animation and transition *start* events, which
+   * report geometry mid-flight that the matching end event then corrects; and
+   * `orientationchange`, which the host already answers by asking every frame it
+   * holds to re-measure.
+   *
+   * @param {string} method 'add' or 'remove'
+   * @returns {void}
+   */
+  function manageEventListeners(method) {
+    const events = [
+      ['animationend', 'Animation End'],
+      ['transitionend', 'Transition End'],
+      ['input', 'Input'],
+      ['readystatechange', 'Ready State Change']
+    ];
 
-  function sendSize(triggerEvent, triggerEventDesc, customHeight, customWidth) {
-    function recordTrigger() {
-      if (!(triggerEvent in { reset: 1, resetPage: 1, init: 1 })) {
-        log('Trigger event: ' + triggerEventDesc)
-      }
-    }
+    for (const [eventName, eventType] of events) {manageTriggerEvent(method, eventName, eventType);}
+  }
 
-    function isDoubleFiredEvent() {
-      return triggerLocked && triggerEvent in doubleEventList
-    }
-
-    if (!isDoubleFiredEvent()) {
-      recordTrigger()
-      if (triggerEvent === 'init') {
-        sizeIFrame(triggerEvent, triggerEventDesc, customHeight, customWidth)
-      } else {
-        sizeIFrameThrottled(
-          triggerEvent,
-          triggerEventDesc,
-          customHeight,
-          customWidth
-        )
-      }
+  /**
+   * Re-measures when a resource finishes loading. Images are the common case:
+   * the tag is in the DOM long before the pixels are, so the height changes
+   * after the mutation observer has already fired. Capture phase is used
+   * because load and error do not bubble, which also avoids upstream's
+   * per-element listeners that kept detached images alive. One stable handler
+   * is shared, so arming it twice is a no-op and it can always be removed.
+   *
+   * @param {string} method 'add' or 'remove'
+   * @returns {void}
+   */
+  function manageResourceListeners(method) {
+    if (method === 'add') {
+      document.addEventListener('load', onResourceLoaded, true);
+      document.addEventListener('error', onResourceLoaded, true);
     } else {
-      log('Trigger event cancelled: ' + triggerEvent)
+      document.removeEventListener('load', onResourceLoaded, true);
+      document.removeEventListener('error', onResourceLoaded, true);
     }
   }
 
-  function lockTrigger() {
-    if (!triggerLocked) {
-      triggerLocked = true
-      log('Trigger event lock on')
+  /**
+   * Watches the body for anything that changes its height. This is the primary
+   * reporting path: the console pages set no polling interval.
+   *
+   * @returns {void}
+   */
+  function setupMutationObserver() {
+    bodyObserver = new MutationObserver(mutations => {
+      // the description is built only when it will be printed: this is the
+      // hottest path on the page, and the throttle drops most of what it sees
+      sendSize('mutationObserver',
+        logging ? `Mutation observed: ${mutations[0].target.tagName} ${mutations[0].type}` : '');
+    });
+    bodyObserver.observe(document.body, {
+      attributes: true,
+      attributeOldValue: false,
+      characterData: true,
+      characterDataOldValue: false,
+      childList: true,
+      subtree: true
+    });
+  }
+
+  /** Stops every listener that re-measures the page. */
+  function stopEventListeners() {
+    manageEventListeners('remove');
+    manageResourceListeners('remove');
+    // A measurement already scheduled would still land and resize the frame
+    // after the page asked to be left alone.
+    sizeIFrameThrottled.cancel();
+    if (bodyObserver !== null) {
+      bodyObserver.disconnect();
+      bodyObserver = null;
     }
-    clearTimeout(triggerLockedTimer)
-    triggerLockedTimer = setTimeout(function () {
-      triggerLocked = false
-      log('Trigger event lock off')
-      log('--')
-    }, eventCancelTimer)
   }
 
-  function triggerReset(triggerEvent) {
-    height = getHeight[heightCalcMode]()
-    width = getWidth[widthCalcMode]()
-
-    sendMsg(height, width, triggerEvent)
+  /** Arms the listeners that re-measure the page, if auto-resize is on. */
+  function startEventListeners() {
+    if (autoResize === true) {
+      manageEventListeners('add');
+      manageResourceListeners('add');
+      setupMutationObserver();
+    } else {
+      log('Auto Resize disabled');
+    }
   }
 
-  function resetIFrame(triggerEventDesc) {
-    const hcm = heightCalcMode
-    heightCalcMode = heightCalcModeDefault
+  /**
+   * Turns in-page links into parent scrolls: an anchor this page holds is
+   * reported as an offset for the host to scroll to, one it does not hold is
+   * handed back to the host to look for.
+   *
+   * @param {string} location the link, with or without a leading `#`
+   * @returns {void}
+   */
+  function findTargetInPage(location) {
+    const hash = location.split('#')[1] || location;
+    const hashData = decodeURIComponent(hash);
+    const element = document.getElementById(hashData) || document.getElementsByName(hashData)[0];
 
-    log('Reset trigger event: ' + triggerEventDesc)
-    lockTrigger()
-    triggerReset('reset')
+    if (!element) {
+      log(`In page link #${hash} not found in frame -> sending to host`);
+      sendMsg(0, 0, 'inPageLink', `#${hash}`);
+      return;
+    }
 
-    heightCalcMode = hcm
+    const rect = element.getBoundingClientRect();
+    const jumpPosition = {x: rect.left + window.scrollX, y: rect.top + window.scrollY};
+
+    log(`Moving to in page link #${hash} -> x: ${jumpPosition.x} * y: ${jumpPosition.y}`);
+    // The height and width fields carry y and x in a scrollToOffset message.
+    sendMsg(jumpPosition.y, jumpPosition.x, 'scrollToOffset');
   }
 
-  function sendMsg(height, width, triggerEvent, msg, targetOrigin) {
-    function setTargetOrigin() {
-      if (undefined === targetOrigin) {
-        targetOrigin = targetOriginDefault
-      } else {
-        log('Message targetOrigin: ' + targetOrigin)
+  /**
+   * Binds every `#anchor` link on the page to the in-page link handler, and
+   * watches the location hash for links this page was loaded with.
+   *
+   * @returns {void}
+   */
+  function setupInPageLinks() {
+    function checkLocationHash() {
+      const hash = window.location.hash;
+      if (hash !== '' && hash !== '#') {findTargetInPage(window.location.href);}
+    }
+
+    if (!inPageLinksEnabled) {
+      log('In page linking not enabled');
+      return;
+    }
+
+    log('Setting up location.hash handlers');
+    for (const el of document.querySelectorAll('a[href^="#"]')) {
+      const href = el.getAttribute('href');
+      if (href !== '#') {
+        el.addEventListener('click', event => {
+          event.preventDefault();
+          findTargetInPage(href);
+        });
       }
     }
+    window.addEventListener('hashchange', checkLocationHash);
+    setTimeout(checkLocationHash, HASH_CHECK_MS);
+  }
 
-    function sendToParent() {
-      const size = height + ':' + width,
-        message =
-          myID +
-          ':' +
-          size +
-          ':' +
-          triggerEvent +
-          (undefined !== msg ? ':' + msg : '')
+  /**
+   * Installs the methods a framed page can call on itself to drive the host
+   * frame. The Tunnel Manager's down-state pause is the current user of
+   * autoResize(); moveToAnchor() and size() are the library's public API, kept
+   * so a framed page can scroll or size itself without inventing its own
+   * postMessage protocol for the purpose.
+   *
+   * @returns {void}
+   */
+  function setupPublicMethods() {
+    window.parentIFrame = {
+      /**
+       * Pauses or resumes auto-resizing. Pausing also tells the host to stop
+       * asking this frame to re-measure on its own window events.
+       *
+       * @param {boolean} resize true to resume, false to pause
+       * @returns {boolean} the state the frame is now in
+       */
+      autoResize(resize) {
+        if (resize === true && autoResize === false) {
+          autoResize = true;
+          startEventListeners();
+        } else if (resize === false && autoResize === true) {
+          autoResize = false;
+          stopEventListeners();
+        }
+        sendMsg(0, 0, 'autoResize', String(autoResize));
+        return autoResize;
+      },
 
-      log('Sending message to host page (' + message + ')')
-      target.postMessage(msgID + message, targetOrigin)
-    }
+      /**
+       * Scrolls the host page to an element this page holds.
+       *
+       * @param {string} hash the element id, with or without a leading `#`
+       * @returns {void}
+       */
+      moveToAnchor(hash) {
+        findTargetInPage(hash);
+      },
 
-    if (true === sendPermit) {
-      setTargetOrigin()
-      sendToParent()
+      /**
+       * Reports a height this page chose, instead of a measured one.
+       *
+       * @param {number} [customHeight] the height to report, in pixels
+       * @returns {void}
+       */
+      size(customHeight) {
+        sendSize('size', `parentIFrame.size(${customHeight || ''})`, customHeight);
+      }
+    };
+  }
+
+  /**
+   * True when a change is big enough to be worth reporting.
+   *
+   * @param {number} next the height measured now
+   * @returns {boolean} true when the host should be told
+   */
+  function isSizeChangeDetected(next) {
+    return Math.abs(height - next) > tolerance;
+  }
+
+  /**
+   * Measures the page and reports it when the measurement changed. Width is
+   * always 0: the console sizes frames by height only, and measuring width
+   * would cost two more layout reads on every pass.
+   *
+   * @param {string} triggerEvent the message type to send
+   * @param {string} triggerEventDesc what caused it, for the log
+   * @param {number} [customHeight] a height the page chose, to skip measuring
+   * @returns {void}
+   */
+  function sizeIFrame(triggerEvent, triggerEventDesc, customHeight) {
+    const currentHeight = customHeight === undefined ? getHeight[heightCalcMode]() : customHeight;
+
+    if (isSizeChangeDetected(currentHeight) || triggerEvent === 'init') {
+      height = currentHeight;
+      sendMsg(height, 0, triggerEvent);
+    } else {
+      log('No change in size detected');
     }
   }
 
+  const sizeIFrameThrottled = throttle(sizeIFrame);
+
+  /**
+   * Entry point for every "something may have changed" signal. The init
+   * message bypasses the throttle so the frame gets its first height at once.
+   *
+   * @param {string} triggerEvent the message type to send
+   * @param {string} triggerEventDesc what caused it, for the log
+   * @param {number} [customHeight] a height the page chose
+   * @returns {void}
+   */
+  function sendSize(triggerEvent, triggerEventDesc, customHeight) {
+    if (triggerEvent !== 'init' && triggerEventDesc !== '') {log(`Trigger event: ${triggerEventDesc}`);}
+
+    if (triggerEvent === 'init') {sizeIFrame(triggerEvent, triggerEventDesc, customHeight);}
+    else {sizeIFrameThrottled(triggerEvent, triggerEventDesc, customHeight);}
+  }
+
+  /**
+   * Posts one message to the host page.
+   *
+   * @param {number} h the height, or the y of a scroll request
+   * @param {number} w the width, or the x of a scroll request
+   * @param {string} triggerEvent the message type
+   * @param {string} [msg] extra payload for the host
+   * @returns {void}
+   */
+  function sendMsg(h, w, triggerEvent, msg) {
+    const extra = msg === undefined ? '' : `:${msg}`;
+    const message = `${myId}:${h}:${w}:${triggerEvent}${extra}`;
+
+    log(`Sending message to host page (${message})`);
+    target.postMessage(MSG_ID + message, targetOrigin);
+  }
+
+  /** Runs the page-side setup once the host has said hello. */
+  function init() {
+    readDataFromParent();
+    log(`Initialising iFrame (${window.location.href})`);
+    checkHeightMode();
+    injectClearFixIntoBodyElement();
+    ensureHeightMarker();
+    stopInfiniteResizingOfIFrame();
+    setupPublicMethods();
+    setupInPageLinks();
+    startEventListeners();
+    sendSize('init', 'Init message from host page');
+  }
+
+  /**
+   * The frame's message listener. The host addresses messages by type, not by
+   * frame, so only the init message carries the settings.
+   *
+   * @param {MessageEvent} event the message as delivered
+   * @returns {void}
+   */
   function receiver(event) {
-    const processRequestFromParent = {
-      init: function initFromParent() {
-        initMsg = event.data
-        target = event.source
+    const data = String(event.data);
 
-        init()
-        firstRun = false
-        setTimeout(function () {
-          initLock = false
-        }, eventCancelTimer)
-      },
+    if (MSG_ID !== data.slice(0, MSG_ID_LEN)) {return;}
 
-      reset: function resetFromParent() {
-        if (!initLock) {
-          log('Page size reset by host page')
-          triggerReset('resetPage')
-        } else {log('Page reset ignored by init')}
-      },
+    const body = data.slice(MSG_ID_LEN);
+    const messageType = body.split(':')[0];
+    const isInitMsg = body.split(':')[1] === PROTOCOL;
 
-      resize: function resizeFromParent() {
-        sendSize('resizeParent', 'Parent window requested size check')
-      },
+    function getPayload() {
+      return data.slice(data.indexOf(':') + 1);
+    }
 
-      moveToAnchor: function moveToAnchorF() {
-        inPageLinks.findTarget(getData())
-      },
-      inPageLink: function inPageLinkF() {
-        this.moveToAnchor()
-      }, // Backward compatability
-
-      pageInfo: function pageInfoFromParent() {
-        const msgBody = getData()
-        log('PageInfoFromParent called from parent: ' + msgBody)
-        onPageInfo(JSON.parse(msgBody))
-        log(' --')
-      },
-
-      message: function messageFromParent() {
-        const msgBody = getData()
-
-        log('onMessage called from parent: ' + msgBody)
-        // eslint-disable-next-line sonarjs/no-extra-arguments
-        onMessage(JSON.parse(msgBody))
-        log(' --')
+    if (firstRun) {
+      if (!isInitMsg) {
+        log(`Ignored message of type "${messageType}" -> received before initialization`);
+        return;
       }
+
+      initMsg = data;
+      target = event.source;
+      // Same-origin frames only: from here on the host's own origin is the
+      // only one worth posting back to.
+      targetOrigin = event.origin && event.origin !== 'null' ? event.origin : '*';
+      init();
+      firstRun = false;
+      return;
     }
 
-    function isMessageForUs() {
-      return msgID === ('' + event.data).substr(0, msgIdLen) // ''+ Protects against non-string messages
+    switch (messageType) {
+      case 'resize':
+        sendSize('resizeParent', 'Parent window requested size check');
+        break;
+
+      case 'moveToAnchor':
+        findTargetInPage(getPayload());
+        break;
+
+      default:
+        // A repeated init is normal and quiet: the host re-triggers it when
+        // this half loaded after it looked for the frame, and the page is
+        // already measuring by then.
+        if (!isInitMsg) {warn(`Unexpected message (${data})`);}
     }
-
-    function getMessageType() {
-      return event.data.split(']')[1].split(':')[0]
-    }
-
-    function getData() {
-      return event.data.substr(event.data.indexOf(':') + 1)
-    }
-
-    function isMiddleTier() {
-      return (!(typeof module !== 'undefined' && module.exports) && 'iFrameResize' in window);
-    }
-
-    function isInitMsg() {
-      // Test if this message is from a child below us. This is an ugly test, however, updating
-      // the message format would break backwards compatibity.
-      return event.data.split(':')[2] in { true: 1, false: 1 }
-    }
-
-    function callFromParent() {
-      const messageType = getMessageType()
-
-      if (messageType in processRequestFromParent) {
-        processRequestFromParent[messageType]()
-      } else if (!isMiddleTier() && !isInitMsg()) {
-        warn('Unexpected message (' + event.data + ')')
-      }
-    }
-
-    function processMessage() {
-      if (false === firstRun) {
-        callFromParent()
-      } else if (isInitMsg()) {
-        processRequestFromParent.init()
-      } else {
-        log('Ignored message of type "' + getMessageType() + '". Received before initialization.')
-      }
-    }
-
-    if (isMessageForUs()) {processMessage()}
   }
 
-  // Normally the parent kicks things off when it detects the iFrame has loaded.
-  // If this script is async-loaded, then tell parent page to retry init.
+  /**
+   * Tells the host to start the handshake when this half loaded after the host
+   * had already looked for a frame to talk to.
+   *
+   * @returns {void}
+   */
   function chkLateLoaded() {
-    if ('loading' !== document.readyState) {
-      let parentOrigin = '*'
-      try {
-        parentOrigin = window.parent.location.origin
-      } catch (e) {
-        // A cross-origin parent gives up its origin, so post to any origin
-      }
-      window.parent.postMessage('[iFrameResizerChild]Ready', parentOrigin)
+    if (document.readyState === 'loading') {return;}
+
+    let parentOrigin = '*';
+    try {
+      parentOrigin = window.parent.location.origin;
+    } catch (error) {
+      // A cross-origin parent will not give up its origin, so post anywhere.
     }
+    window.parent.postMessage(CHILD_READY, parentOrigin);
   }
 
-  addEventListener(window, 'message', receiver)
-  addEventListener(window, 'readystatechange', chkLateLoaded)
-  chkLateLoaded()
-
-  document.addEventListener('DOMContentLoaded', () => {
-    const endOfPage = document.getElementById('endOfPage');
-    if (!endOfPage) {
-      const newElement = document.createElement('span');
-      newElement.id = 'endOfPage';
-      newElement.setAttribute('data-iframe-height', '');
-      document.body.appendChild(newElement);
-    }
-  });
-
-})()
+  window.addEventListener('message', receiver, false);
+  window.addEventListener('readystatechange', chkLateLoaded, false);
+  chkLateLoaded();
+})();

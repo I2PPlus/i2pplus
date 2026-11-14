@@ -616,8 +616,8 @@ SSL
 <span data-iframe-height></span>
 <script src="js/refreshIndex.js?<%=net.i2p.CoreVersion.VERSION%>" type=module></script>
 <script src="js/filterTunnels.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script src="/js/iframeResizer/updatedEvent.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/iframeResizer/iframeResizer.contentWindow.js"></script>
+<script src="/js/iframeResizer/updatedEvent.js"></script>
 <script src=/js/setupIframe.js></script>
 <noscript><style>.script{display:none!important}.tunnelInfo{display:table-row!important}#screenlog_buttons{display:table-row!important}</style></noscript>
 <style>body{display:block!important;pointer-events:auto!important}</style>

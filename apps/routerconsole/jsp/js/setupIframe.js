@@ -1,39 +1,29 @@
 /**
  * @module setupIframe
- * @description Detects if the page is running inside an iframe and adds the
- * "iframed" class to the HTML element. Also appends an end-of-page marker
- * for iframe height calculation.
+ * @description Marks a page that is running inside an iframe with the "iframed"
+ * class, which the webapps' own scripts test to decide whether to talk to their
+ * host page. The end-of-page marker used for height reporting is added by
+ * iframeResizer.contentWindow.js, which every framed page loads alongside this.
+ * @author dr|z3d
  * @license AGPL3 or later
  */
+(function setupIframeSetup() {
 
-/**
- * Checks if the page is in an iframe context and applies the "iframed" class.
- * @function setupIframe
- * @returns {void}
- */
-function setupIframe() {
-  if (window.top !== window.self) {
-    const html = document.documentElement;
-    if (!html.classList.contains("iframed")) {html.classList.add("iframed");}
-    document.addEventListener("DOMContentLoaded", function() {
-      endOfPage();
-    });
+  /**
+   * Adds the "iframed" class to the HTML element when this page is framed.
+   *
+   * @function setupIframe
+   * @returns {void}
+   */
+  function setupIframe() {
+    if (window.top !== window.self) {document.documentElement.classList.add("iframed");}
   }
-}
 
-/**
- * Creates and appends an end-of-page marker element for iframe height detection.
- * @function endOfPage
- * @returns {void}
- */
-function endOfPage() {
-  const endOfPage = document.getElementById("endOfPage");
-  if (!endOfPage) {
-    const end = document.createElement("span");
-    end.setAttribute("id", "endOfPage");
-    end.setAttribute("data-iframe-height", "");
-    document.body.appendChild(end);
-  }
-}
+  // Deferred one task so the class lands in the same place in the page's task
+  // order the webapp scripts already assume.
+  setTimeout(setupIframe, 0);
 
-setTimeout(setupIframe, 0);
+  // these stay on the window: other scripts and the page's inline
+  // handlers reach them there
+  window.setupIframe = setupIframe;
+}());

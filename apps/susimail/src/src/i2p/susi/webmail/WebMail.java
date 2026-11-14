@@ -2352,7 +2352,6 @@ public class WebMail extends HttpServlet {
             // character encoding will be set in sendAttachment()
             response.setHeader("Content-Security-Policy", "default-src 'none'; style-src 'self' 'unsafe-inline'; " + "script-src " +
                                me + "/js/iframeResizer/iframeResizer.contentWindow.js " +
-                               me + "/js/iframeResizer/iframeResizer.updatedEvent.js " +
                                me + "/susimail/js/htmlView.js " + me + "/susimail/js/sanitizeHTML.js 'nonce-" + cspNonce + "'; " +
                                "form-action 'none'; frame-ancestors " + me + myself + "; object-src 'none'; media-src 'none'; img-src 'self' " +
                                me + myself + " data:; font-src 'self'; frame-src 'none'; worker-src 'none'");
@@ -2697,10 +2696,10 @@ public class WebMail extends HttpServlet {
             } else if (state == State.LOADING) {
                 buf.append("<noscript><meta http-equiv=refresh content=\"5;url=").append(myself).append("\"></noscript>\n");
             } else if (state == State.SHOW) {
-                buf.append("<script src=\"/js/iframeResizer/iframeResizer.js?").append(CoreVersion.VERSION).append("\"></script>\n")
+                buf.append("<script src=\"/js/iframeResizer/iframeResizer.js\"></script>\n")
                    .append("<script nonce='").append(cspNonce).append("'>\n")
                    .append("  document.addEventListener('DOMContentLoaded', function(event) {\n")
-                   .append("    const htmlView = iFrameResize({interval: 0, heightCalculationMethod: 'taggedElement', warningTimeout: 0}, '#iframeSusiHtmlView');\n")
+                   .append("    iFrameResize({heightCalculationMethod: 'taggedElement'}, '#iframeSusiHtmlView');\n")
                    .append("  });\n")
                    .append("</script>\n");
             }
@@ -2708,10 +2707,10 @@ public class WebMail extends HttpServlet {
             // setup noscript style so we can hide js buttons when js is disabled
             buf.append("<noscript><style>.script{display:none!important}</style></noscript>\n")
                .append("<script src=/js/iframeResizer/iframeResizer.contentWindow.js></script>\n")
-               .append("<script src=\"/js/iframeResizer/updatedEvent.js?").append(CoreVersion.VERSION).append("\"></script>\n")
+               .append("<script src=\"/js/iframeResizer/updatedEvent.js\"></script>\n")
                .append("<script src=\"/susimail/js/notifications.js?").append(CoreVersion.VERSION).append("\"></script>\n")
                .append("<script nonce=").append(cspNonce).append(">const theme = \"").append(theme).append("\";</script>\n")
-               .append("<script src=/js/detectPageZoom.js type=module></script>\n")
+               .append("<script src=/js/detectPageZoom.js></script>\n")
                .append("<script src=/js/autologout.js></script>\n")
                .append("<style>body{display:none;pointer-events:none}</style>\n")
                .append("</head>\n");

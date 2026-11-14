@@ -197,8 +197,8 @@
 </div><%-- page --%>
 <span data-iframe-height></span>
 <style>body{display:block!important;pointer-events:auto!important}</style>
-<script src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script src="/js/iframeResizer/updatedEvent.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src="/js/iframeResizer/iframeResizer.contentWindow.js"></script>
+<script src="/js/iframeResizer/updatedEvent.js"></script>
 <script src=/js/autologout.js></script>
 <script src=/js/textareaResize.js></script>
 <script src=/js/jdenticon.js></script>

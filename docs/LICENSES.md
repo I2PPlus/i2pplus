@@ -167,7 +167,7 @@ BSD-style. Copyright (c) The xlattice Project (Bloom filter).
 The following third-party JavaScript libraries are bundled:
 
 - **HtmlSanitizer** — MIT License. Copyright (c) 2016-2024 Alexander Yumashev, Jitbit Software. https://github.com/jitbit/HtmlSanitizer
-- **iframe-resizer** — GPL-2.0. https://github.com/davidjbradshaw/iframe-resizer
+- **iframe-resizer** — MIT License. Copyright (c) 2013-2024 David J. Bradshaw. Forked from the v4 branch: https://github.com/davidjbradshaw/iframe-resizer/tree/v4
 - **jdenticon** (v3.3.0) — MIT License. https://jdenticon.com
 - **lightbox** — MIT License. Based on jsOnlyLightbox (https://github.com/felixhagspiel/jsOnlyLightbox)
 - **morphdom** — MIT License. https://github.com/patrick-steele-idem/morphdom
