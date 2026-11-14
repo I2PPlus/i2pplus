@@ -11,6 +11,7 @@ import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.data.SimpleDataStructure;
 import net.i2p.util.RandomSource;
+import org.klomp.snark.SnarkLogFormatter;
 
 /**
  * Comprehensive node information container for DHT operations.
@@ -298,10 +299,13 @@ class NodeInfo extends SimpleDataStructure {
      * inherit the aside, and it reads as a second parenthetical next to the one the
      * message itself needs. The sites where a missing destination is the reason
      * something happened say so in their own words.
+     *
+     * @return the eight base32 characters of the node id and its port, as
+     *         {@code xxxxxxxx:23060}
      */
     @Override
     public String toString() {
-        return "[" + nID.toBase64().substring(0, 8) + "]:" + port;
+        return SnarkLogFormatter.node(nID) + ':' + port;
     }
 
     /**

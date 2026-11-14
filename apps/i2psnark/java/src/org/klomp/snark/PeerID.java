@@ -119,17 +119,32 @@ public class PeerID implements Comparable<PeerID> {
 
     /**
      * The destination. If this PeerId was instantiated with a destHash, and we have not yet
-     * done so, lookup the full destination, which may take up to 10 seconds.
+     * done so, lookup the full destination, which may take up to a minute.
      *
      * @return Dest or null if unknown
      */
     public synchronized Destination getAddress() {
-        if (address == null && destHash != null && !triedDestLookup) {
+        // A hash-only id built without a util has no session to ask, and returning null is the
+        // answer - throwing here would take down the caller's connection thread
+        if (address == null && destHash != null && !triedDestLookup && util != null) {
             String b32 = Base32.encode(destHash) + ".b32.i2p";
             address = util.getDestination(b32);
             triedDestLookup = true;
         }
         return address;
+    }
+
+    /**
+     * Whether this id already carries a full destination, without running the deferred lookup.
+     * An id built from a destination, or from an inbound socket, does; the hash-only id a compact
+     * tracker answer, a PEX reply or the DHT hands us does not, and that is the one whose
+     * destination may never resolve.
+     *
+     * @return true if {@link #getAddress()} answers without asking the router
+     * @since 0.9.72+
+     */
+    boolean hasDestination() {
+        return address != null;
     }
 
     /**
@@ -200,9 +215,12 @@ public class PeerID implements Comparable<PeerID> {
     }
 
     /**
-     * Returns the String "id@address" where id is the first 4 chars of the base64 encoded id and
-     * address is the first 6 chars of the base64 dest (was the base64 hash of the dest) which
-     * should match what the bytemonsoon tracker reports on its web pages.
+     * Returns the String "id@address" where id is the first four characters of the
+     * base64-encoded BEP 20 peer id and address is the first eight characters of the
+     * base32 destination hash - the same eight characters the console log names this
+     * peer's destination by. The id half stays base64: those first four characters are
+     * the client signature other clients report, and the client-name lookup greps for
+     * exactly that prefix.
      */
     @Override
     public String toString() {
@@ -211,7 +229,8 @@ public class PeerID implements Comparable<PeerID> {
             _toStringCache = "WebSeed@" + Base32.encode(destHash) + ".b32.i2p";
             return _toStringCache;
         }
-        if (id == null || address == null) return "unkn@" + Base64.encode(destHash, 0, 3);
+        String dest = Base32.encode(destHash).substring(0, 8);
+        if (id == null) return "unkn@" + dest;
         int nonZero = 0;
         for (int i = 0; i < id.length; i++) {
             if (id[i] != 0) {
@@ -220,9 +239,7 @@ public class PeerID implements Comparable<PeerID> {
             }
         }
         _toStringCache =
-                Base64.encode(id, nonZero, Math.min(3, id.length - nonZero))
-                        + "@"
-                        + Base64.encode(address.getPublicKey().getData(), 0, 3);
+                Base64.encode(id, nonZero, Math.min(3, id.length - nonZero)) + '@' + dest;
         return _toStringCache;
     }
 

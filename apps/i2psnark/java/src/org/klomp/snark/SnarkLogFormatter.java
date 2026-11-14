@@ -110,18 +110,22 @@ public class SnarkLogFormatter {
     }
 
     /**
-     * The bracketed short form of a DHT node id - the same eight base64
-     * characters {@code dht.NodeInfo} prints, so a node reads the same inline,
-     * in a list and in a tally.
+     * The short form of a DHT node id - the same eight base32 characters
+     * {@code dht.NodeInfo} prints, so a node reads the same inline, in a list and
+     * in a tally. Deliberately not bracketed: a node id is a 20-byte SHA1 key, not
+     * a destination hash, and the console log viewer resolves every bracketed
+     * eight-character base32 token as a lease set, so bracketing one linked to a
+     * destination that does not exist.
      *
      * @param nid the node id, null when it is not known
-     * @return {@code [xxxxxxxx]}, or {@code none} when there is no node to name
+     * @return eight base32 characters, or {@code none} when there is no node to name
      */
     public static String node(SimpleDataStructure nid) {
         if (nid == null) {return NONE;}
-        String b64 = nid.toBase64();
-        if (b64 == null || b64.length() < SHORT_CHARS) {return NONE;}
-        return '[' + b64.substring(0, SHORT_CHARS) + ']';
+        byte[] data = nid.getData();
+        if (data == null) {return NONE;}
+        String b32 = Base32.encode(data);
+        return b32.length() >= SHORT_CHARS ? b32.substring(0, SHORT_CHARS) : NONE;
     }
 
     /**

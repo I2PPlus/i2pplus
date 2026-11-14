@@ -79,13 +79,19 @@ public class SnarkLogFormatterTest {
         assertEquals("none", SnarkLogFormatter.dest((Hash) null));
     }
 
-    /** A DHT node is the six-character base64 router form, bracketed for the linkifier. */
+    /**
+     * A DHT node id is eight base32 characters with no brackets - the same alphabet
+     * and length a destination uses, so one peer's node and its destination grep the
+     * same way, and the brackets stay on the destinations the console log viewer can
+     * actually resolve.
+     */
     @Test
-    public void testNodeIsEightCharBase64InBrackets() {
+    public void testNodeIsEightCharBase32Unbracketed() {
         Hash h = hash(5);
         String s = SnarkLogFormatter.node(h);
-        assertEquals('[' + h.toBase64().substring(0, 8) + ']', s);
-        assertEquals(10, s.length());
+        assertEquals(h.toBase32().substring(0, 8), s);
+        assertEquals(8, s.length());
+        assertFalse(s, s.contains("["));
     }
 
     /** A missing node is named in prose, not printed as null. */
@@ -317,13 +323,17 @@ public class SnarkLogFormatterTest {
         assertEquals(" * Peers: 0", SnarkLogFormatter.destList(null, "Peers", 0));
     }
 
-    /** Nodes are named by the router form, destinations by the lease-set form. */
+    /**
+     * Nodes are named by the unbracketed base32 form and destinations by the
+     * bracketed one the console log viewer resolves - the same eight characters,
+     * only the brackets telling them apart.
+     */
     @Test
     public void testNodeListNamesNodesNotDestinations() {
         Hash h = hash(9);
         String s = SnarkLogFormatter.nodeList(Collections.singletonList(h), "Tried", 1);
-        assertTrue(s.contains('[' + h.toBase64().substring(0, 8) + ']'));
-        assertFalse(s.contains('[' + h.toShortBase32() + ']'));
+        assertTrue(s, s.contains(h.toBase32().substring(0, 8)));
+        assertFalse(s, s.contains('[' + h.toShortBase32() + ']'));
     }
 
     /**

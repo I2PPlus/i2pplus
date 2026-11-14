@@ -388,15 +388,15 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
                 // Outgoing connection
                 Destination d = peerID.getAddress();
                 if (d == null)
-                    throw new IOException("No destination for " + peerID);
+                    throw new IOException("No destination for " + SnarkLogFormatter.peer(peerID));
                 h = d.calculateHash();
                 if (listener.isBanned(h))
-                    throw new IOException("IsBanned: " + peerID);
+                    throw new IOException("Peer banned " + SnarkLogFormatter.peer(peerID));
                 sock = util.connect(peerID, infohash);
                 if (_log.shouldDebug())
                     _log.debug("Connecting to a peer -> Socket open" + peerKey());
                 if ((sock == null) || (sock.isClosed())) {
-                    throw new IOException("Unable to reach " + peerID);
+                    throw new IOException("Unable to reach " + SnarkLogFormatter.peer(peerID));
                 }
                 // Buffered, as the accepted connection is in ConnectionAcceptor:
                 // without it every header field is a separate call on the socket

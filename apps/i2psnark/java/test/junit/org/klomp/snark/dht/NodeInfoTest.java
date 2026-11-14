@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import net.i2p.data.Base32;
 import net.i2p.data.Hash;
 
 /**
@@ -44,11 +45,12 @@ public class NodeInfoTest {
         return new NodeInfo(new NID(nb), Hash.create(hb), port);
     }
 
-    /** A node is its bracketed eight-character id and its port, the form the linkifier parses. */
+    /** A node is its base32 id and its port, the form a destination grep finds. */
     @Test
     public void nodeIsItsShortIdAndPort() {
         NodeInfo n = node(23060);
-        assertEquals('[' + n.getNID().toBase64().substring(0, 8) + "]:23060", n.toString());
+        assertEquals(Base32.encode(n.getNID().getData()).substring(0, 8) + ":23060",
+                     n.toString());
     }
 
     /**
@@ -64,12 +66,16 @@ public class NodeInfoTest {
         assertNull(node(19478).getDestination());
     }
 
-    /** One bracket pair, holding the id and nothing else. */
+    /**
+     * The id and the port and nothing else - no brackets, because a node id is not a
+     * destination and the console log viewer resolves every bracketed eight-character
+     * base32 token as a lease set.
+     */
     @Test
-    public void exactlyOneBracketPairHoldingTheId() {
+    public void idAndPortAndNothingElse() {
         String s = node(40000).toString();
-        assertEquals(1, s.length() - s.replace("[", "").length());
-        assertEquals(1, s.length() - s.replace("]", "").length());
-        assertTrue(s, s.matches("\\[[a-zA-Z0-9~\\-]{8}\\]:\\d+"));
+        assertEquals(0, s.length() - s.replace("[", "").length());
+        assertEquals(0, s.length() - s.replace("]", "").length());
+        assertTrue(s, s.matches("[a-z2-7]{8}:\\d+"));
     }
 }
