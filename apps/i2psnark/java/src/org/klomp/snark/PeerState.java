@@ -144,6 +144,13 @@ class PeerState implements DataLoader {
     private static final int MAX_PIPELINE_CAP = 256;
 
     /**
+     * How much data to keep in flight with one peer, expressed as time rather than as a
+     * count: this many seconds of that peer's own measured download rate. Three seconds
+     * is the round trip the request loop already assumes when it budgets bytes.
+     */
+    static final int REQUEST_RTT_SECONDS = 3;
+
+    /**
      * Minimum request pipeline depth for outbound requests.
      *
      * @since 0.9.47
@@ -218,6 +225,51 @@ class PeerState implements DataLoader {
             }
         }
         return Math.max(MIN_PIPELINE, max);
+    }
+
+    /**
+     * The blocks one peer may have in flight, sized from that peer's own measured
+     * download rate as a time target: the {@link #PARTSIZE} blocks it can pull in
+     * {@code rttSeconds}. Sizing the window from the aggregate download rate against the
+     * aggregate limit, as this did, makes it a deadband shared by every torrent: the
+     * window only ever tracked how busy the router was, so a peer delivering well on a
+     * busy router was held to one or two blocks and could never fill its own pipe, while
+     * a peer that had stalled kept the same window as a healthy one.
+     *
+     * @param peerRate the peer's measured download rate in bytes per second, 0 or less
+     *                 before the first checker pass has sampled it
+     * @param rttSeconds how much data to keep in flight with the peer, in seconds
+     * @param min the floor, {@link #MIN_PIPELINE}
+     * @param max the ceiling, from {@link #getPipelineLimit()}
+     * @return the number of {@link #PARTSIZE} blocks to keep in flight with this peer
+     * @since 0.9.72+
+     */
+    static int requestWindow(long peerRate, int rttSeconds, int min, int max) {
+        if (peerRate <= 0) {
+            // no sample yet - start at the floor and let the ramp find the pipe
+            return min;
+        }
+        long blocks = peerRate * rttSeconds / PARTSIZE;
+        if (blocks < min) {
+            return min;
+        }
+        return blocks > max ? max : (int) blocks;
+    }
+
+    /**
+     * The window for the next request: one block more while below the target, the target
+     * itself once at or above it. Growing one block per call instead of jumping to the
+     * target is the slow start - a peer finds its own pipe rather than being handed a
+     * full window it may not be able to drain. Falling is immediate: a peer that has
+     * slowed must stop being fed at once.
+     *
+     * @param current the window in use now
+     * @param target the window from {@link #requestWindow(long, int, int, int)}
+     * @return the window to use for the next request
+     * @since 0.9.72+
+     */
+    static int nextWindow(int current, int target) {
+        return current < target ? current + 1 : target;
     }
 
     /**
@@ -1571,16 +1623,22 @@ class PeerState implements DataLoader {
             // adjust currentMaxPipeline
             long rate = bwListener.getDownloadRate();
             long limit = bwListener.getDownBWLimit();
-            if (rate < limit * 7 / 10) {
-                if (currentMaxPipeline < getPipelineLimit()) {currentMaxPipeline++;}
-            } else if (rate > limit * 13 / 10) {
+            if (rate > limit * 13 / 10) {
                 currentMaxPipeline = 0;
                 return;
-            } else if (rate > limit * 9 / 10) {
-                currentMaxPipeline = 1;
-            } else if (currentMaxPipeline < 2) {
-                currentMaxPipeline++;
             }
+            // The window is this peer's own pipe, not the spare bandwidth of the whole
+            // router: the blocks it can pull in REQUEST_RTT_SECONDS at its own measured
+            // rate. The global limit still decides whether we may ask at all (the
+            // shouldRequest() gate above) and how many bytes the loop below may queue
+            // (maxReq), which is what keeping the buffer bounded was ever for.
+            int target = requestWindow(peer.getDownloadRate(), REQUEST_RTT_SECONDS,
+                                       MIN_PIPELINE, getPipelineLimit());
+            if (rate > limit * 9 / 10) {
+                // close to the limit - hold the window at one block rather than growing it
+                target = Math.min(target, 1);
+            }
+            currentMaxPipeline = nextWindow(currentMaxPipeline, target);
             // BEP 6: pieces requestable while choked, null when none allowed
             Set<Integer> fastPieces = null;
             if (choked && !_peerAllowedFast.isEmpty()) {
