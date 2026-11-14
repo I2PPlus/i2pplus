@@ -55,6 +55,7 @@ import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
 import org.klomp.snark.dht.DHT;
+import org.klomp.snark.dht.DestCache;
 import org.klomp.snark.dht.InfoHash;
 import org.klomp.snark.dht.KRPC;
 import org.klomp.snark.dht.TorrentKRPC;
@@ -84,7 +85,7 @@ import java.nio.charset.StandardCharsets;
  *
  * @since 0.1.0
  */
-public class I2PSnarkUtil implements DisconnectListener {
+public class I2PSnarkUtil implements DisconnectListener, DestCache {
     /** The app context. */
     private final I2PAppContext _context;
     /** Logger for the webapp's operations. */
@@ -896,7 +897,7 @@ public class I2PSnarkUtil implements DisconnectListener {
             _connecting = false;
         }
         if (_shouldUseDHT && _manager != null && _dht == null) {
-            _dht = new KRPC(_context, _baseName, _manager.getSession());
+            _dht = new KRPC(_context, _baseName, _manager.getSession(), this);
         }
         updateDHTServing();
         if (_enableUDP && _manager != null) {
@@ -2480,7 +2481,8 @@ public class I2PSnarkUtil implements DisconnectListener {
      * @return the millis left before it is worth asking again, 0 to try now
      * @since 0.9.72+
      */
-    long destLookupQuiet(Hash h) {
+    @Override
+    public long destLookupQuiet(Hash h) {
         if (h == null) {
             return 0;
         }
@@ -2490,6 +2492,47 @@ public class I2PSnarkUtil implements DisconnectListener {
         }
         long now = _context.clock().now();
         return destCacheFresh(c.expires, now) ? c.expires - now : 0;
+    }
+
+    /**
+     * The destination this hash resolved earlier, as long as that answer is still fresh.
+     * A hash that was asked about and did not resolve has no destination to hand back, so
+     * this returns null for it and {@link #destLookupQuiet(Hash)} is what says the answer
+     * was "nothing" and how long to hold that answer.
+     *
+     * @param h the destination hash, null tolerated
+     * @return the destination, or null if nothing resolved is cached or the answer has aged out
+     * @since 0.9.72+
+     */
+    @Override
+    public Destination cachedDest(Hash h) {
+        if (h == null) {
+            return null;
+        }
+        CachedDest c = _destCache.get(h);
+        if (c == null || !destCacheFresh(c.expires, _context.clock().now())) {
+            return null;
+        }
+        return c.dest;
+    }
+
+    /**
+     * Records what a lookup about this hash answered, continuing the backoff ladder from
+     * any answer already held. Both the dial path and the DHT call this, so one dead peer
+     * costs one search and one wait, not one per subsystem.
+     *
+     * @param h the hash that was asked about, null tolerated
+     * @param dest the destination that was resolved, null if it did not resolve
+     * @since 0.9.72+
+     */
+    @Override
+    public void noteDest(Hash h, Destination dest) {
+        if (h == null) {
+            return;
+        }
+        long now = _context.clock().now();
+        int held = destCacheAttemptsFor(h);
+        cacheDestination(h, dest, now, held < 0 ? 0 : held);
     }
 
     /**
@@ -2739,7 +2782,7 @@ public class I2PSnarkUtil implements DisconnectListener {
         _shouldUseDHT = yes;
         I2PSocketManager mgr = _manager;
         if (yes && mgr != null && _dht == null) {
-            _dht = new KRPC(_context, _baseName, mgr.getSession());
+            _dht = new KRPC(_context, _baseName, mgr.getSession(), this);
         } else if (!yes && _dht != null) {
             _dht.stop();
             _dht = null;

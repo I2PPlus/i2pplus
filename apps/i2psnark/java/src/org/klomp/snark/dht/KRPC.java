@@ -135,6 +135,13 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /** Hook to inject and receive datagrams. */
     protected I2PSession _session;
 
+    /**
+     * Snark's destination cache, shared so a node the dial path has already failed to
+     * resolve is not searched for again by the DHT, and vice versa. Null for a KRPC built
+     * without one, which then keeps only the copy it stores on each node.
+     */
+    private final DestCache _destCache;
+
     /** 20 byte random id. */
     private final byte[] _myID;
 
@@ -335,7 +342,21 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      * @param session the I2P session the DHT messages are sent over
      */
     public KRPC(I2PAppContext ctx, String baseName, I2PSession session) {
-        this(ctx, baseName, session, null);
+        this(ctx, baseName, session, (KRPC) null);
+    }
+
+    /**
+     * Create the DHT instance sharing snark's destination answers.
+     *
+     * @param ctx the I2P context supplying the log manager and random source
+     * @param baseName generally "i2psnark"
+     * @param session the I2P session the DHT messages are sent over
+     * @param cache the destination answers snark has already paid for, or null for a DHT
+     *              that keeps only the copy it stores on each node
+     * @since 0.9.72+
+     */
+    public KRPC(I2PAppContext ctx, String baseName, I2PSession session, DestCache cache) {
+        this(ctx, baseName, session, null, cache);
     }
 
     /**
@@ -349,8 +370,24 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      *               instance and overrides start() and {@link #stop()} to run only the message listener
      */
     protected KRPC(I2PAppContext ctx, String baseName, I2PSession session, KRPC shared) {
+        this(ctx, baseName, session, shared, shared != null ? shared._destCache : null);
+    }
+
+    /**
+     * Create the DHT instance sharing state and destination answers.
+     *
+     * @param ctx the I2P context, supplying the log manager, random source and router
+     * @param baseName generally "i2psnark"
+     * @param session the I2P session the DHT messages are sent over
+     * @param shared the KRPC instance whose routing table, tracker and blacklist are
+     *               shared with this instance, or null for a standalone one
+     * @param cache the destination answers snark has already paid for, or null
+     */
+    private KRPC(I2PAppContext ctx, String baseName, I2PSession session, KRPC shared,
+                 DestCache cache) {
         _context = ctx;
         _session = session;
+        _destCache = cache;
         _log = ctx.logManager().getLog(KRPC.class);
         _tracker = (shared != null) ? shared._tracker : new DHTTracker(ctx);
 
@@ -1380,16 +1417,43 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     }
 
     /**
-     * The dest for a NodeInfo lacking it, stored there. Blocking.
+     * The destination for a node that lacks one: from snark's shared destination cache
+     * when it holds an answer, otherwise from a network-database search whose answer goes
+     * back there. Blocking only when the search runs. Package-visible so the sharing can
+     * be pinned by test.
      *
      * @param nInfo the node to look up
      * @return true if a destination was resolved and cached on the node
      */
-    private boolean lookupDest(NodeInfo nInfo) {
+    boolean lookupDest(NodeInfo nInfo) {
+        Hash h = nInfo.getHash();
+        Destination cached = _destCache != null ? _destCache.cachedDest(h) : null;
+        if (cached != null) {
+            nInfo.setDestination(cached);
+            return true;
+        }
+        long quiet = _destCache != null ? _destCache.destLookupQuiet(h) : 0;
+        if (quiet > 0) {
+            // The dial path already asked and got nothing. The swarm keeps naming the
+            // same node for the life of a torrent, and every query aimed at it used to
+            // pay for that same search again - 3,348 dropped queries in a four hour
+            // window, each behind a lookup that had already failed.
+            if (_log.shouldDebug()) {
+                _log.debug("Skipping a node's destination lookup -> Held as unresolvable"
+                           + " * Node: " + SnarkLogFormatter.dest(h)
+                           + " * Retry in: " + DataHelper.formatDuration(quiet));
+            }
+            return false;
+        }
         try {
             Destination dest =
                     _session.lookupDest(
-                            nInfo.getHash(), DEST_LOOKUP_TIMEOUT); // use a short timeout for now
+                            h, DEST_LOOKUP_TIMEOUT); // use a short timeout for now
+            if (_destCache != null) {
+                // the answer, including "nothing", so the next query for this node and
+                // the next dial of this peer share one backoff rather than two
+                _destCache.noteDest(h, dest);
+            }
             if (dest != null) {
                 nInfo.setDestination(dest);
                 if (_log.shouldInfo()) {

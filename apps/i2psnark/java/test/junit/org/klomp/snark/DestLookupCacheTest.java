@@ -275,4 +275,38 @@ public class DestLookupCacheTest {
         util.cacheDestination(hash(I2PSnarkUtil.DEST_CACHE_MAX), null, now, 0);
         assertEquals("the sweep kept expired answers", 1, util.destCacheSize());
     }
+
+    /**
+     * The answers the DHT and the dial path share. A resolved destination is handed back;
+     * a "nothing" is not - what it hands back is the wait that has to pass before asking
+     * again - and recording an answer continues the ladder instead of restarting it, so
+     * one dead peer costs one search and one wait rather than one per subsystem.
+     *
+     * @throws Exception if the destination's keys cannot be generated
+     */
+    @Test
+    public void testTheSharedCacheAnswersBothCallers() throws Exception {
+        I2PSnarkUtil util = new I2PSnarkUtil(I2PAppContext.getGlobalContext());
+        Hash h = hash(7);
+        assertNull(util.cachedDest(h));
+        assertEquals(0, util.destLookupQuiet(h));
+        assertNull("a null hash is tolerated by both halves", util.cachedDest(null));
+        assertEquals(0, util.destLookupQuiet(null));
+
+        Destination dest = destination();
+        Hash resolved = dest.calculateHash();
+        util.noteDest(resolved, dest);
+        assertSame(dest, util.cachedDest(resolved));
+        assertEquals("a resolved destination is never held back", 0,
+                     util.destLookupQuiet(resolved));
+
+        util.noteDest(h, null);
+        assertNull("a nothing answer hands back no destination", util.cachedDest(h));
+        long first = util.destLookupQuiet(h);
+        assertTrue(first > 0);
+        // the second miss waits longer than the first: the ladder continues across
+        // whoever asked, which is the point of one cache serving both callers
+        util.noteDest(h, null);
+        assertTrue("the backoff must continue", util.destLookupQuiet(h) > first);
+    }
 }
