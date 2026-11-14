@@ -1507,26 +1507,49 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             return;
         }
 
-        // linked list will contain all interested peers that we choke.
-        // At the start are the peers that have us unchoked at the end the
-        // other peer that are interested, but are choking us.
-        List<Peer> interested = new LinkedList<>();
+        // Two groups compete for a free upload slot. The served group is peers we have
+        // been sending to recently, ranked by the rate we have been sending them, so the
+        // peer that has been getting the most out of us is the one let back in - the
+        // ranking the unchoke never had, which made upload policy first-come-first-served.
+        // The unserved group is peers we are not sending to at all. They keep a standing
+        // reservation, because a purely rate-ranked unchoke hands every slot back to peers
+        // we have served before and a new peer never gets its first piece.
+        List<Peer> served = new LinkedList<>();
+        List<Peer> unserved = new LinkedList<>();
         int count = 0;
-        int unchokedCount = 0;
+        int servedUploaders = 0;
         int maxUploaders = allowedUploaders();
         Iterator<Peer> it = peers.iterator();
         while (it.hasNext()) {
             Peer peer = it.next();
+            boolean beingServed = isBeingServed(peer.getUploadRate());
+            if (!peer.isChoking() && beingServed) {
+                servedUploaders++;
+            }
             if (peer.isChoking() && peer.isInterested() && !choked.contains(peer)) {
                 count++;
                 if (uploaders.get() < maxUploaders) {
-                    if (peer.isInteresting() && !peer.isChoked()) {
-                        interested.add(unchokedCount++, peer);
+                    if (beingServed) {
+                        served.add(peer);
                     } else {
-                        interested.add(peer);
+                        unserved.add(peer);
                     }
                 }
             }
+        }
+        // stable, so peers the ranking cannot separate keep their place in the list, which
+        // is how long they have been waiting
+        served.sort(PeerCoordinator::compareUnchokeCandidates);
+        unserved.sort(PeerCoordinator::compareUnchokeCandidates);
+
+        List<Peer> interested = new LinkedList<>();
+        if (slotForUnservedPeers(servedUploaders, MAX_UPLOADERS,
+                                 optimisticSlots(MAX_UPLOADERS))) {
+            interested.addAll(unserved);
+            interested.addAll(served);
+        } else {
+            interested.addAll(served);
+            interested.addAll(unserved);
         }
 
         int up = uploaders.get();
@@ -1545,6 +1568,74 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             peerCount = peers.size();
         }
         interestedAndChoking.set(count);
+    }
+
+    /**
+     * Upload rate at or above which a peer counts as one we are serving, in bytes per
+     * second. Below it a peer is getting nothing worth ranking, so it competes for the
+     * slots held back for peers we have not served yet.
+     */
+    static final int UPLOAD_RATE_FLOOR_BPS = 256;
+
+    /**
+     * Whether a peer is getting enough from us to count as served.
+     *
+     * @param uploadRateBps the peer's upload rate from us in bytes per second
+     * @return true if the rate is at or above {@link #UPLOAD_RATE_FLOOR_BPS}
+     * @since 0.9.72+
+     */
+    static boolean isBeingServed(long uploadRateBps) {
+        return uploadRateBps >= UPLOAD_RATE_FLOOR_BPS;
+    }
+
+    /**
+     * How many of a torrent's upload slots are held back for peers we are not serving yet.
+     * A rate-ranked unchoke always hands a slot to the peer that has been getting the most
+     * out of us, so without a reservation a swarm closes over itself: the peers we found
+     * first keep every slot and a peer that joins later is never served at all.
+     *
+     * @param maxUploaders the per-torrent slot count, {@link #MAX_UPLOADERS}
+     * @return the slots reserved for unserved peers, at least one
+     * @since 0.9.72+
+     */
+    static int optimisticSlots(int maxUploaders) {
+        return Math.max(1, maxUploaders / 5);
+    }
+
+    /**
+     * Whether the next free slot goes to a peer we are not serving. It does once the peers
+     * we are serving hold more than all but the reserved slots, which is what makes the
+     * reservation a reservation rather than a preference.
+     *
+     * @param servedUploaders uploaders we are currently serving at or above the rate floor
+     * @param maxUploaders the per-torrent slot count, {@link #MAX_UPLOADERS}
+     * @param reserve the reserved slots, from {@link #optimisticSlots(int)}
+     * @return true to take the next slot from the unserved group
+     * @since 0.9.72+
+     */
+    static boolean slotForUnservedPeers(int servedUploaders, int maxUploaders, int reserve) {
+        return servedUploaders > maxUploaders - reserve;
+    }
+
+    /**
+     * Orders two candidates for a free upload slot. A peer that has us unchoked goes ahead
+     * of one that has us choked - it is already returning the service, so serving it is
+     * tit-for-tat rather than a gamble. Within that, the peer we have been sending more to
+     * goes first, which is the ranking this method never had.
+     *
+     * @param a the first candidate
+     * @param b the second candidate
+     * @return a negative number if a goes first, positive if b does, zero if the ranking
+     *         cannot separate them, in which case their place in the peer list decides
+     * @since 0.9.72+
+     */
+    static int compareUnchokeCandidates(Peer a, Peer b) {
+        boolean ra = a.isInteresting() && !a.isChoked();
+        boolean rb = b.isInteresting() && !b.isChoked();
+        if (ra != rb) {
+            return ra ? -1 : 1;
+        }
+        return Long.compare(b.getUploadRate(), a.getUploadRate());
     }
 
     /**
