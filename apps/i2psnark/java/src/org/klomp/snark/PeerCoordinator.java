@@ -1431,6 +1431,21 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
+     * Whether to leave a peer unadded because its destination is held as unresolvable. Only an
+     * outbound dial at a hash-only peer id is deferred: an inbound connection arrives with the
+     * destination in hand, and a peer that has finished its handshake is not a dial at all.
+     *
+     * @param connected the peer has finished its handshake
+     * @param hasDestination the peer's id already carries a full destination
+     * @param quietMs how long the destination cache still holds that hash as unresolvable
+     * @return true to drop this attempt and let the wait run out
+     * @since 0.9.72+
+     */
+    static boolean defersUnresolvedPeer(boolean connected, boolean hasDestination, long quietMs) {
+        return !connected && !hasDestination && quietMs > 0;
+    }
+
+    /**
      * Add peer (inbound or outbound), starting the dial after a pacing delay.
      *
      * @param peer the connection to take over; disconnected rather than tracked if
@@ -1460,6 +1475,23 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             return false;
         }
 
+        // A peer the tracker, PEX or the DHT hands us is often only a destination hash, and that
+        // hash may not resolve. The lookup keeps its own backoff and the swarm re-advertises the
+        // same peer every announce round, so consult the backoff here instead of starting another
+        // connection thread that dies on the cached answer.
+        byte[] peerHash = peer.getPeerID().getDestHash();
+        long quiet = _util.destLookupQuiet(peerHash != null && peerHash.length == Hash.HASH_LENGTH
+                                           ? Hash.create(peerHash) : null);
+        if (defersUnresolvedPeer(peer.isConnected(), peer.getPeerID().hasDestination(), quiet)) {
+            if (_log.shouldDebug()) {
+                _log.debug("Leaving an unresolvable peer alone -> Destination unknown"
+                           + " * Peer: " + SnarkLogFormatter.peer(peer)
+                           + " * Retry in: " + DataHelper.formatDuration(quiet));
+            }
+            peer.disconnect(false);
+            return false;
+        }
+
         boolean needMore;
         int peersize = 0;
         synchronized (peers) {
@@ -1480,7 +1512,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 } else {
                     name = metainfo.getName();
                 }
-                _log.debug("Adding a peer for " + name + " -> Peer: " + peer.getPeerID());
+                _log.debug("Adding a peer for " + name + " -> Peer: "
+                           + SnarkLogFormatter.peer(peer));
             }
 
             // Run the peer with us as listener and the current bitfield.

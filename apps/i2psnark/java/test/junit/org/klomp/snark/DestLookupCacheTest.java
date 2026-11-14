@@ -178,6 +178,40 @@ public class DestLookupCacheTest {
     }
 
     /**
+     * A hash held as unresolvable reports how much of the wait is left, so the dial path can
+     * leave a peer alone instead of starting a connection that dies on the cached answer. A
+     * resolved hash, one whose wait has run out, and one never asked about are all dialable.
+     *
+     * @throws Exception if the destination's keys cannot be generated
+     */
+    @Test
+    public void testAnUnresolvedHashReportsTheWaitLeft() throws Exception {
+        I2PSnarkUtil util = new I2PSnarkUtil(I2PAppContext.getGlobalContext());
+        // the util reads its own clock, so entries are written at that clock's time
+        long now = System.currentTimeMillis();
+
+        Hash miss = hash(0x55);
+        util.cacheDestination(miss, null, now, 0);
+        long quiet = util.destLookupQuiet(miss);
+        assertTrue("quiet was " + quiet,
+                   quiet > 0 && quiet <= I2PSnarkUtil.DEST_RETRY_BASE_MS);
+
+        Destination dest = destination();
+        Hash hit = dest.calculateHash();
+        util.cacheDestination(hit, dest, now, 0);
+        assertEquals(0, util.destLookupQuiet(hit));
+
+        // the wait has run out: the next attempt is due, not deferred
+        Hash stale = hash(0x66);
+        util.cacheDestination(stale, null, now - I2PSnarkUtil.DEST_RETRY_BASE_MS - 1, 0);
+        assertEquals(0, util.destLookupQuiet(stale));
+
+        // never asked about at all
+        assertEquals(0, util.destLookupQuiet(hash(0x77)));
+        assertEquals(0, util.destLookupQuiet(null));
+    }
+
+    /**
      * A base32 address names the hash it carries; anything else has no hash to cache under.
      */
     @Test

@@ -2471,6 +2471,28 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * How long a peer with this destination hash is still held as unresolvable. The tracker, PEX
+     * and the DHT keep re-advertising the same peers for the life of a torrent, so this is what
+     * tells the dial path to leave one alone instead of starting another connection that dies on
+     * the cached answer. A hash we resolved, or one we have not asked about yet, is dialable now.
+     *
+     * @param h the destination hash of the peer, or null if there is none
+     * @return the millis left before it is worth asking again, 0 to try now
+     * @since 0.9.72+
+     */
+    long destLookupQuiet(Hash h) {
+        if (h == null) {
+            return 0;
+        }
+        CachedDest c = _destCache.get(h);
+        if (c == null || c.dest != null) {
+            return 0;
+        }
+        long now = _context.clock().now();
+        return destCacheFresh(c.expires, now) ? c.expires - now : 0;
+    }
+
+    /**
      * The hash a <code>.b32.i2p</code> address names, or null if this is not one or the
      * address does not decode.
      *
