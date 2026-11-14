@@ -197,6 +197,42 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private final Semaphore _lookupSemaphore = new Semaphore(MAX_LOOKUP_CONCURRENCY, true);
     /** Infohash to time (ms) when the lookup was created, for stale cleanup. */
     private final Map<SHA1Hash, Long> _lookupCreationTimes = new ConcurrentHashMap<>(16);
+
+    /**
+     * First hold-off applied to an info hash whose metadata lookup timed out, in millis.
+     *
+     * @since 0.9.72+
+     */
+    static final long LOOKUP_BACKOFF_INITIAL_MS = 5 * 60 * 1000L;
+
+    /**
+     * Ceiling on that hold-off, in millis. A hash nobody in the swarm can serve stays quiet for
+     * two hours instead of being re-spawned as a full magnet torrent - destination, announce
+     * loop, DHT rounds and a metadata-file rewrite - every hour.
+     *
+     * @since 0.9.72+
+     */
+    static final long LOOKUP_BACKOFF_MAX_MS = 2 * 60 * 60 * 1000L;
+
+    /**
+     * Shortest gap between two lookup attempts for one key, in millis, whatever the previous
+     * attempt returned: zzzot re-asks on every page refresh.
+     *
+     * @since 0.9.72+
+     */
+    static final long LOOKUP_MIN_GAP_MS = 5 * 1000L;
+
+    /**
+     * Entries {@link #_lookupRetries} holds before the ones whose hold-off has expired are
+     * swept, so a router shown a long tail of dead hashes does not grow the map for ever.
+     */
+    private static final int LOOKUP_RETRY_MAP_MAX = 1024;
+
+    /**
+     * Per-key metadata-lookup failure state: timeouts so far, and the earliest time the next
+     * attempt may start. Never persisted - a router restart is a fair chance to ask again.
+     */
+    private final Map<SHA1Hash, LookupRetry> _lookupRetries = new ConcurrentHashMap<>(16);
     /** How often one torrent may be told every lookup slot is taken, in ms. */
     private static final long LOOKUP_BUSY_LOG_MS = 5 * 60 * 1000L;
     /** When a busy-slot rejection was last named for each torrent. */
@@ -4439,6 +4475,134 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     * Per-key metadata-lookup failure state, kept in {@link #_lookupRetries}.
+     */
+    private static class LookupRetry {
+
+        /** Timeouts this key has had so far. */
+        int failures;
+
+        /** Earliest time the next lookup attempt for this key may start, in millis. */
+        long retryAt;
+    }
+
+    /**
+     * How long to hold a key off after this many metadata-lookup timeouts: five minutes,
+     * doubling, capped at two hours. A hash no peer in the swarm can serve gets asked about
+     * again and again by the console, and every attempt is a full magnet torrent - destination,
+     * announce loop, DHT get_peers rounds, peer dials, and a rewrite of the metadata file when
+     * it is purged - so what the asking costs is what makes a ceiling worth having.
+     *
+     * @param failures timeouts for the key so far, at least one
+     * @return the hold-off in millis, never more than {@link #LOOKUP_BACKOFF_MAX_MS}
+     * @since 0.9.72+
+     */
+    static long lookupBackoffMs(int failures) {
+        if (failures <= 1) {
+            return LOOKUP_BACKOFF_INITIAL_MS;
+        }
+        // 32 doublings of five minutes overflow a long, and the cap is reached far sooner
+        if (failures >= 32) {
+            return LOOKUP_BACKOFF_MAX_MS;
+        }
+        return Math.min(LOOKUP_BACKOFF_INITIAL_MS << (failures - 1), LOOKUP_BACKOFF_MAX_MS);
+    }
+
+    /**
+     * The earliest time a key may be looked up again after this many timeouts, never sooner
+     * than the floor between attempts.
+     *
+     * @param now the current time, in millis
+     * @param failures timeouts for the key so far, at least one
+     * @return the time of the next allowed attempt, in millis
+     * @since 0.9.72+
+     */
+    static long lookupRetryAt(long now, int failures) {
+        return now + Math.max(LOOKUP_MIN_GAP_MS, lookupBackoffMs(failures));
+    }
+
+    /**
+     * True while a key is inside its hold-off window, so the lookup is refused here instead of
+     * by starting a torrent that times out again. The window expires: a hash that finally has
+     * peers willing to serve it is asked about again, at worst two hours later. A hash that is
+     * already running as a torrent never reaches this check.
+     *
+     * @param infoHash the torrent being asked about
+     * @return true if the next allowed attempt has not been reached yet
+     */
+    boolean lookupDeferred(byte[] infoHash) {
+        return lookupDeferred(infoHash, _context.clock().now());
+    }
+
+    /**
+     * The hold-off check with the clock supplied, for the tests.
+     *
+     * @param infoHash the torrent being asked about
+     * @param now the current time, in millis
+     * @return true if the next allowed attempt has not been reached yet
+     */
+    boolean lookupDeferred(byte[] infoHash, long now) {
+        LookupRetry retry = _lookupRetries.get(new SHA1Hash(infoHash));
+        return retry != null && now < retry.retryAt;
+    }
+
+    /**
+     * When the next lookup attempt for a key is allowed, or -1 if the key is not being held
+     * off. Package-private for the tests.
+     *
+     * @param infoHash the torrent being asked about
+     * @return the earliest allowed attempt, in millis
+     */
+    long lookupRetryTime(byte[] infoHash) {
+        LookupRetry retry = _lookupRetries.get(new SHA1Hash(infoHash));
+        return retry != null ? retry.retryAt : -1L;
+    }
+
+    /**
+     * Records what one lookup attempt returned. A resolved hash stops being held off; a timeout
+     * pushes the next attempt back by the doubling window and says so once, as the attempt
+     * itself already logged its own lines.
+     *
+     * @param infoHash the torrent that was asked about
+     * @param found true if the metadata was resolved
+     */
+    void recordLookupResult(byte[] infoHash, boolean found) {
+        recordLookupResult(infoHash, found, _context.clock().now());
+    }
+
+    /**
+     * The same, with the clock supplied, for the tests.
+     *
+     * @param infoHash the torrent that was asked about
+     * @param found true if the metadata was resolved
+     * @param now the current time, in millis
+     */
+    void recordLookupResult(byte[] infoHash, boolean found, long now) {
+        SHA1Hash key = new SHA1Hash(infoHash);
+        if (found) {
+            _lookupRetries.remove(key);
+            return;
+        }
+        LookupRetry retry = _lookupRetries.get(key);
+        if (retry == null) {
+            retry = new LookupRetry();
+            _lookupRetries.put(key, retry);
+        }
+        retry.failures++;
+        retry.retryAt = lookupRetryAt(now, retry.failures);
+        // keep the map bounded when a long tail of dead hashes is being asked about
+        if (_lookupRetries.size() > LOOKUP_RETRY_MAP_MAX) {
+            _lookupRetries.values().removeIf(r -> now >= r.retryAt);
+        }
+        if (_log.shouldInfo()) {
+            _log.info("Metadata lookup timed out -> Trying this torrent again in "
+                      + DataHelper.formatDuration(retry.retryAt - now)
+                      + "\n* Torrent: " + SnarkLogFormatter.infoHash(infoHash)
+                      + " * Failures: " + retry.failures);
+        }
+    }
+
+    /**
      * Self-contained DHT lookup for torrent name without persisting torrent data.
      * Creates a temporary magnet in a temp directory under the I2P temp dir,
      * waits for metadata via DHT, extracts the torrent name, then deletes the
@@ -4495,6 +4659,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         // With zero timeout, don't create a magnet (addMagnet + startTorrent + deleteMagnet is expensive)
         if (timeoutMs <= 0)
             return null;
+        // A hash that has timed out before is held off rather than re-spawned: every attempt
+        // costs a destination, an announce loop, DHT rounds and a metadata-file rewrite.
+        if (lookupDeferred(infoHash)) {
+            return null;
+        }
         File tmpBase = _context.getTempDir();
         File lookupDir = new File(tmpBase, "zzzot-lookup-" + _context.random().nextLong());
         // Ensure directory exists; SecureDirectory handles perms
@@ -4645,6 +4814,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             // Always delete our tmp dir (contains pre-allocated data if any)
             try { FileUtil.rmdir(lookupDir, false); } catch (Exception ignore) { /* best-effort temp dir cleanup on every exit path */ }
         }
+        recordLookupResult(infoHash, result != null);
         return result;
     }
 
@@ -4721,6 +4891,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         // Reuse the name-only lookup then enrich with size from MetaInfo if available.
         // This keeps metadata-only semantics (Snark.gotMetaInfo skips Storage) and
         // avoids duplicating the full wait/cleanup logic here.
+        // A hash that has timed out before is held off rather than re-spawned: every attempt
+        // costs a destination, an announce loop, DHT rounds and a metadata-file rewrite.
+        if (lookupDeferred(infoHash)) {
+            return null;
+        }
         File tmpBase = _context.getTempDir();
         File lookupDir = new File(tmpBase, "zzzot-lookup-" + _context.random().nextLong());
         if (!lookupDir.mkdirs() && !lookupDir.isDirectory()) {
@@ -4834,6 +5009,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             }
             try { FileUtil.rmdir(lookupDir, false); } catch (Exception ignore) { /* best-effort temp dir cleanup on every exit path */ }
         }
+        recordLookupResult(infoHash, result != null);
         return result;
     }
 
