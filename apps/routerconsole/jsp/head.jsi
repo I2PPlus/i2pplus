@@ -34,7 +34,6 @@ boolean noAuth = !_hasConsolePW;
 <link rel=modulepreload href=/js/refreshSidebar.js>
 <link rel=modulepreload href=/js/sectionToggle.js>
 <link rel=modulepreload href=/js/stickySidebar.js>
-<link rel=modulepreload href=/js/iframeResizer/iframeResizer.js>
 <link rel=preload href="<%=themePath%>console.css?version=<%=v%>" as=style>
 <link rel=preload href=<%=themePath%>images/i2plogo.png as=image>
 <link rel=preload href=/themes/console/images/images.css as=style>
@@ -68,5 +67,6 @@ else if (lang.equals("bo")) {%> <link rel=stylesheet href="<%=themePath%>console
 <% if (!isWizardPage) {%> <script src=/js/refreshSidebar.js type=module></script> <% } %>
 <script src=/js/autologout.js></script>
 <script src=/js/detectPageZoom.js></script>
+<script src=/js/snowflakes/snowflakes.js defer></script>
 <noscript><style>.script{display:none!important}</style></noscript>
 <% } %>
