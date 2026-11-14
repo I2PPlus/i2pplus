@@ -9,7 +9,8 @@ import org.junit.Test;
  * Announcing a connected peer to the local DHT ran every fifth pass - every 25 s, per peer -
  * which was the third most frequent snark event in the measured window at 42,020 lines. The
  * effect, keeping one peer discoverable in the DHT, is the same at ten minutes as at 25
- * seconds, so the extra datagrams bought nothing.
+ * seconds, so the extra datagrams bought nothing. A transient metadata lookup does none of
+ * that work at all, which is the other decision pinned here.
  *
  * @since 0.9.72+
  */
@@ -89,5 +90,16 @@ public class PeerCheckerCadenceTest {
     public void testCadencesAreOrdered() {
         assertTrue(PeerCheckerTask.PEX_PERIOD < PeerCheckerTask.COMMENT_PERIOD);
         assertTrue(PeerCheckerTask.COMMENT_PERIOD < PeerCheckerTask.DHT_ANNOUNCE_PERIOD);
+    }
+
+    /**
+     * A metadata lookup does none of the three: it holds no data for the swarm it is asking
+     * about, is deleted minutes after it resolves, and its announces are refused by nodes
+     * that never handed it a token. A user torrent does all of them.
+     */
+    @Test
+    public void testAMetadataLookupDoesNoSwarmWork() {
+        assertFalse(PeerCheckerTask.servesSwarm(true));
+        assertTrue(PeerCheckerTask.servesSwarm(false));
     }
 }

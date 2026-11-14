@@ -586,11 +586,10 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      * @param annMax the number of peers to announce to
      * @param annMaxWait the maximum total time to wait for announces, may be 0 to return
      *                   immediately without waiting for acks
-     * @param isSeed true if seed, false if leech
+     * @param isSeed true if seed, false for a leech
      * @param noSeeds true if we do not want seeds in the result
      * @return possibly empty (never null)
      */
-    @SuppressWarnings("unchecked")
     public Collection<Hash> getPeersAndAnnounce(
             byte[] ih,
             int max,
@@ -599,6 +598,52 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             long annMaxWait,
             boolean isSeed,
             boolean noSeeds) {
+        return lookupPeers(ih, max, maxWait, annMax, annMaxWait, isSeed, noSeeds, true);
+    }
+
+    /**
+     * Find peers for a torrent and leave the swarm alone - the same iterative get_peers
+     * as {@link #getPeersAndAnnounce}, with no announce afterwards. A torrent that is
+     * only looking the metadata up holds no data for this swarm and is deleted minutes
+     * later, so announcing it spends one announce_peer round trip per node and gets
+     * refused by every node that never handed us a token for it. Blocking! Caller should
+     * run in a thread.
+     *
+     * @param ih the Info Hash (torrent)
+     * @param max maximum number of peers to return
+     * @param maxWait the maximum time to wait (ms) must be &gt; 0
+     * @param noSeeds true if we do not want seeds in the result
+     * @return possibly empty (never null)
+     * @since 0.9.72+
+     */
+    public Collection<Hash> getPeers(byte[] ih, int max, long maxWait, boolean noSeeds) {
+        return lookupPeers(ih, max, maxWait, 0, 0, false, noSeeds, false);
+    }
+
+    /**
+     * The iterative get_peers, with the announce that follows it optional.
+     *
+     * @param ih the Info Hash (torrent)
+     * @param max maximum number of peers to return
+     * @param maxWait the maximum time to wait (ms) must be &gt; 0
+     * @param annMax the number of peers to announce to, unused without the announce
+     * @param annMaxWait the maximum total time to wait for announces, may be 0
+     * @param isSeed true if seed, false for a leech
+     * @param noSeeds true if we do not want seeds in the result
+     * @param andAnnounce true to announce to the swarm once the lookup is done
+     * @return possibly empty (never null)
+     * @since 0.9.72+
+     */
+    @SuppressWarnings("unchecked")
+    private Collection<Hash> lookupPeers(
+            byte[] ih,
+            int max,
+            long maxWait,
+            int annMax,
+            long annMaxWait,
+            boolean isSeed,
+            boolean noSeeds,
+            boolean andAnnounce) {
         // check local tracker first
         InfoHash iHash = new InfoHash(ih);
         Collection<Hash> rv = _tracker.getPeers(iHash, max, noSeeds);
@@ -607,7 +652,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             // we have enough local peers, but still announce remotely so
             // other nodes can find us; no lookup was done, so spray the
             // kbuckets like we do when a lookup fails
-            announce(ih, annMax, annMaxWait, isSeed);
+            if (andAnnounce)
+                announce(ih, annMax, annMaxWait, isSeed);
             return rv;
         }
         rv = new HashSet<>(rv);
@@ -723,36 +769,38 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             }
         }
         // now announce
-        if (!heardFrom.isEmpty() && !Thread.currentThread().isInterrupted()) {
-            announce(ih, isSeed);
-            // announce to the closest we've heard from
-            int annCnt = 0;
-            for (Iterator<NodeInfo> iter = heardFrom.iterator();
-                    iter.hasNext()
-                            && annCnt < annMax
-                            && _isRunning
-                            && !Thread.currentThread().isInterrupted(); ) {
-                NodeInfo annTo = iter.next();
-                if (_log.shouldInfo())
-                    _log.info("Announcing to the closest node found by get_peers"
-                              + " -> Node: " + annTo);
-                long toWait = annMaxWait > 0 ? Math.min(annMaxWait, (long) 60 * 1000) : 0;
-                // measure this announce only - subtracting the time since the
-                // loop start each pass charged every iteration for all the
-                // earlier ones and collapsed the budget early
-                long iterStart = _context.clock().now();
-                if (announce(ih, annTo, toWait, isSeed)) annCnt++;
-                if (annMaxWait > 0) {
-                    annMaxWait -= _context.clock().now() - iterStart;
-                    if (annMaxWait < 1000) break;
+        if (andAnnounce) {
+            if (!heardFrom.isEmpty() && !Thread.currentThread().isInterrupted()) {
+                announce(ih, isSeed);
+                // announce to the closest we've heard from
+                int annCnt = 0;
+                for (Iterator<NodeInfo> iter = heardFrom.iterator();
+                        iter.hasNext()
+                                && annCnt < annMax
+                                && _isRunning
+                                && !Thread.currentThread().isInterrupted(); ) {
+                    NodeInfo annTo = iter.next();
+                    if (_log.shouldInfo())
+                        _log.info("Announcing to the closest node found by get_peers"
+                                  + " -> Node: " + annTo);
+                    long toWait = annMaxWait > 0 ? Math.min(annMaxWait, (long) 60 * 1000) : 0;
+                    // measure this announce only - subtracting the time since the
+                    // loop start each pass charged every iteration for all the
+                    // earlier ones and collapsed the budget early
+                    long iterStart = _context.clock().now();
+                    if (announce(ih, annTo, toWait, isSeed)) annCnt++;
+                    if (annMaxWait > 0) {
+                        annMaxWait -= _context.clock().now() - iterStart;
+                        if (annMaxWait < 1000) break;
+                    }
                 }
+            } else {
+                // spray it, but unlikely to work, we just went through the kbuckets,
+                // so this is essentially just a retry
+                if (_log.shouldInfo())
+                    _log.info("Announcing to the closest kbucket nodes -> Get_peers failed");
+                announce(ih, annMax, annMaxWait, isSeed);
             }
-        } else {
-            // spray it, but unlikely to work, we just went through the kbuckets,
-            // so this is essentially just a retry
-            if (_log.shouldInfo())
-                _log.info("Announcing to the closest kbucket nodes -> Get_peers failed");
-            announce(ih, annMax, annMaxWait, isSeed);
         }
         if (_log.shouldDebug()) {
             // the nodes that answered first - they are the ones the announce used,

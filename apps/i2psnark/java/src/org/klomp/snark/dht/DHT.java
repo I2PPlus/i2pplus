@@ -63,6 +63,21 @@ public interface DHT {
             boolean noSeeds);
 
     /**
+     * Fetch peers for a torrent without announcing us to the swarm - the same lookup as
+     * {@link #getPeersAndAnnounce}, minus the announce that follows it. For a torrent that
+     * is only looking the metadata up and has no data to hand on. Blocking! Caller should
+     * run in a thread.
+     *
+     * @param ih the Info Hash (torrent)
+     * @param max maximum number of peers to return
+     * @param maxWait the maximum time to wait (ms) must be &gt; 0
+     * @param noSeeds true if we do not want seeds in the result
+     * @return possibly empty (never null)
+     * @since 0.9.72+
+     */
+    public Collection<Hash> getPeers(byte[] ih, int max, long maxWait, boolean noSeeds);
+
+    /**
      * Announce to ourselves. Non-blocking.
      *
      * @param ih the Info Hash (torrent)

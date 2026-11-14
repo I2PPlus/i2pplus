@@ -401,6 +401,12 @@ public class TrackerClient implements Runnable {
     /** No guidance in BEP 5; standard practice is K (=8). */
     private static final int DHT_ANNOUNCE_PEERS = 8;
 
+    /** How long one DHT get_peers round may take. */
+    private static final long DHT_LOOKUP_WAIT = 5 * (long) 60 * 1000;
+
+    /** How long the announces that follow a successful get_peers may take in total. */
+    private static final long DHT_ANNOUNCE_WAIT = 3 * (long) 60 * 1000;
+
     /**
      * A DHT with fewer than this many known nodes is still bootstrapping and
      * unreliable, so a seeding trackerless torrent falls back to its backup
@@ -1341,6 +1347,21 @@ public class TrackerClient implements Runnable {
     }
 
     /**
+     * Whether a DHT round announces us into the swarm it just looked up. A transient zzzot
+     * metadata lookup holds no data for the torrent and is deleted minutes after it
+     * resolves, so the announce half of the round is one announce_peer query per node -
+     * refused by any node that never handed us a token for it - spent on a torrent no peer
+     * will ever dial. The get_peers half is what fetches the metadata.
+     *
+     * @param isLookup true for a transient zzzot metadata-lookup torrent
+     * @return true to announce to the swarm after the lookup
+     * @since 0.9.72+
+     */
+    static boolean announcesToSwarm(boolean isLookup) {
+        return !isLookup;
+    }
+
+    /**
      * Whether a round (announce or DHT fetch) may be submitted to the shared
      * pool now. The caller claims the client's single slot with compareAndSet;
      * a claimed slot that is not submitted (client halted) must be released by
@@ -1811,15 +1832,20 @@ public class TrackerClient implements Runnable {
         private void fetchAndAddPeers() {
             int numwant =
                     peerListWant(coordinator.needOutboundPeers(), coordinator.peerListWant());
+            byte[] ih = snark.getInfoHash();
+            // A metadata lookup is not a member of the swarm it is asking about, so it
+            // does the lookup without the announce - see announcesToSwarm()
             Collection<Hash> hashes =
-                    dht.getPeersAndAnnounce(
-                            snark.getInfoHash(),
-                            numwant,
-                            5 * (long) 60 * 1000,
-                            DHT_ANNOUNCE_PEERS,
-                            3 * (long) 60 * 1000,
-                            coordinator.completed(),
-                            numwant <= 1);
+                    announcesToSwarm(snark.isLookup())
+                            ? dht.getPeersAndAnnounce(
+                                    ih,
+                                    numwant,
+                                    DHT_LOOKUP_WAIT,
+                                    DHT_ANNOUNCE_PEERS,
+                                    DHT_ANNOUNCE_WAIT,
+                                    coordinator.completed(),
+                                    numwant <= 1)
+                            : dht.getPeers(ih, numwant, DHT_LOOKUP_WAIT, numwant <= 1);
             if (!hashes.isEmpty()) {
                 runStarted = true;
                 _runCount = 0;

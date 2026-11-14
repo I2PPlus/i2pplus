@@ -8,7 +8,8 @@ import org.junit.Test;
  * Tests for TrackerClient's shared announce pool decisions: keeping transient
  * zzzot metadata lookups off the trackers (name and size come from BEP 9
  * metadata via DHT-discovered peers, so a lookup announcement only leaks
- * interest, burns a shared permit and adds scrape traffic), claiming at most
+ * interest, burns a shared permit and adds scrape traffic) and off the swarm
+ * announce that follows a DHT get_peers, claiming at most
  * one pool slot per client, accepting tasks only while the pool has capacity
  * (a 1000-torrent batch start must not drive flow control through rejected
  * executions), and bounding the first-round spread and DHT-fetcher concurrency.
@@ -17,23 +18,54 @@ import org.junit.Test;
  */
 public class TrackerClientAnnounceDecisionTest {
 
+    /**
+     * One instance per test method, as JUnit builds a fresh test object for each one; the
+     * decisions under test are static and carry no state.
+     */
+    public TrackerClientAnnounceDecisionTest() {}
+
+    /**
+     * A lookup with the DHT running does not touch the trackers at all.
+     */
     @Test
     public void testLookupWithDHTSkipsTrackers() {
         assertFalse(TrackerClient.shouldAnnounceToTrackers(true, true));
     }
 
+    /**
+     * A lookup with no DHT still announces, as the tracker round is then its only
+     * way to find a peer.
+     */
     @Test
     public void testLookupWithoutDHTFallsBackToTrackers() {
         // without a DHT the tracker round is the only way to find a peer
         assertTrue(TrackerClient.shouldAnnounceToTrackers(true, false));
     }
 
+    /**
+     * A user torrent announces whether or not a DHT is running.
+     */
     @Test
     public void testUserTorrentAlwaysAnnounces() {
         assertTrue(TrackerClient.shouldAnnounceToTrackers(false, true));
         assertTrue(TrackerClient.shouldAnnounceToTrackers(false, false));
     }
 
+    /**
+     * A metadata lookup does the DHT get_peers without announcing itself into the
+     * swarm it is only asking about - it holds no data for it and is deleted
+     * minutes later. A user torrent still announces.
+     */
+    @Test
+    public void testLookupSkipsTheSwarmAnnounce() {
+        assertFalse(TrackerClient.announcesToSwarm(true));
+        assertTrue(TrackerClient.announcesToSwarm(false));
+    }
+
+    /**
+     * A round is submitted only when the client holds no slot and has not halted;
+     * a claimed slot that is not submitted must be released by the caller.
+     */
     @Test
     public void testSubmitRoundOnlyWithFreeSlotAndRunning() {
         assertTrue(TrackerClient.shouldSubmitRound(true, false));
@@ -44,6 +76,10 @@ public class TrackerClientAnnounceDecisionTest {
         assertFalse(TrackerClient.shouldSubmitRound(false, true));
     }
 
+    /**
+     * The pool's own bounds are ordered: core threads below the ceiling, a queue
+     * that is not empty, and a retry delay that is not zero.
+     */
     @Test
     public void testPoolBoundsSane() {
         assertTrue(TrackerClient.ANNOUNCE_THREADS > 0);
@@ -52,6 +88,10 @@ public class TrackerClientAnnounceDecisionTest {
         assertTrue(TrackerClient.ROUND_RETRY_SECONDS > 0);
     }
 
+    /**
+     * Below the thread ceiling the pool grows; at the ceiling only queue space
+     * accepts, and with the queue full too the task is rejected rather than thrown.
+     */
     @Test
     public void testPoolCapacityPrecheck() {
         // below the ceiling: the pool grows to take the task
@@ -63,6 +103,11 @@ public class TrackerClientAnnounceDecisionTest {
         assertFalse(TrackerClient.poolHasCapacity(32, 32, 0));
     }
 
+    /**
+     * The first round's delay stays inside its budget: a torrent within the 90 s
+     * spread, a magnet or lookup inside its much shorter one, and a non-zero delay
+     * never rounded down to zero.
+     */
     @Test
     public void testFirstRoundDelayBounds() {
         // zero spread means announce immediately
@@ -83,6 +128,10 @@ public class TrackerClientAnnounceDecisionTest {
         }
     }
 
+    /**
+     * DHT fetchers hold a pool worker for minutes at a time, so their number must
+     * stay below the pool's ceiling - they can never occupy the whole announce pool.
+     */
     @Test
     public void testDHTFetchersCannotStarvePool() {
         // fetchers hold workers for minutes; they must never be able to

@@ -94,6 +94,23 @@ class PeerCheckerTask implements Runnable {
     }
 
     /**
+     * Whether this torrent does the swarm-side work at all: sending PEX, asking for
+     * comments, and announcing itself and its peers to the local DHT. A metadata lookup
+     * holds no data for the torrent, is deleted minutes after it resolves, and is not a
+     * member of the swarm it is asking about, so each of those messages is traffic it
+     * never earns - and the announces are the ones a node refuses for want of a token.
+     * The pass keeps its peer bookkeeping: a metadata source that goes silent still has
+     * to be dropped for another to be tried.
+     *
+     * @param metadataOnly true for a transient metadata-lookup torrent
+     * @return true to send the swarm-side messages
+     * @since 0.9.72+
+     */
+    static boolean servesSwarm(boolean metadataOnly) {
+        return !metadataOnly;
+    }
+
+    /**
      * Whether the checker has to choke someone to make an upload slot available. It does
      * when the torrent is at its uploader ceiling and peers are waiting for a slot, or is
      * over that ceiling - which happens while the global upload limit is exceeded, where
@@ -160,7 +177,9 @@ class PeerCheckerTask implements Runnable {
         // no "pass starting" line - the pass logs its outcome at the end, and the
         // two lines printed the same keys twice
         DHT dht = _util.getDHTForTorrent(coordinator.getInfoHash());
-        boolean fetchComments = _util.utCommentsEnabled();
+        // a metadata lookup is not a member of the swarm it is asking about - see servesSwarm()
+        boolean swarm = servesSwarm(coordinator.isMetadataOnly());
+        boolean fetchComments = swarm && _util.utCommentsEnabled();
         int i = 0;
         for (Peer peer : peerList) {
             i++;
@@ -334,7 +353,7 @@ class PeerCheckerTask implements Runnable {
             peer.retransmitRequests();
             int count = _runCount + i;
             // send PEX, a little over a minute apart
-            if (sendPEX(count, PEX_PERIOD)) coordinator.sendPeers(peer);
+            if (swarm && sendPEX(count, PEX_PERIOD)) coordinator.sendPeers(peer);
             // ask for comments on this pass; the coordinator holds the real interval
             // between requests to one per COMMENT_REQ_INTERVAL, so this only offers
             // the next peer in line once that interval has passed
@@ -346,7 +365,8 @@ class PeerCheckerTask implements Runnable {
                 (coordinator.getNeededLength() > 0 || !peer.isCompleted()))
                 peer.keepAlive();
             // announce them to local tracker (TrackerClient does this too)
-            if (dht != null && announcePeerToDHT(_runCount + _phase, DHT_ANNOUNCE_PERIOD)) {
+            if (swarm && dht != null
+                    && announcePeerToDHT(_runCount + _phase, DHT_ANNOUNCE_PERIOD)) {
                 dht.announce(
                         coordinator.getInfoHash(),
                         peer.getPeerID().getDestHash(),
@@ -417,7 +437,7 @@ class PeerCheckerTask implements Runnable {
         }
 
         // announce ourselves to local tracker (TrackerClient does this too)
-        if (dht != null && ((_runCount + _phase) % 16) == 0) {
+        if (swarm && dht != null && ((_runCount + _phase) % 16) == 0) {
             dht.announce(coordinator.getInfoHash(), coordinator.completed());
         }
     }

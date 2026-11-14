@@ -1128,6 +1128,19 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
+     * Whether this torrent exists only to fetch the metadata: a transient zzzot lookup.
+     * It holds no data for the swarm it is asking about and is deleted minutes after it
+     * resolves, so the swarm-side work - PEX, the local DHT announces, comment requests -
+     * is traffic it never earns, and its peers are only sources for the metadata.
+     *
+     * @return true for a metadata-lookup torrent
+     * @since 0.9.72+
+     */
+    boolean isMetadataOnly() {
+        return snark.isLookup();
+    }
+
+    /**
      * Returns whether this coordinator has been halted.
      *
      * @return true if halted
