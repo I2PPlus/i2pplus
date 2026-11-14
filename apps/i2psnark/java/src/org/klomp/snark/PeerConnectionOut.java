@@ -745,6 +745,26 @@ class PeerConnectionOut implements Runnable {
     }
 
     /**
+     * How many messages of one type are waiting to go out. Package-private for the tests, which
+     * do not start the sender thread and so can only read the queue.
+     *
+     * @param type the Message type to count
+     * @return how many messages of that type are queued
+     * @since 0.9.72+
+     */
+    int queuedCount(int type) {
+        int count = 0;
+        synchronized (sendQueue) {
+            for (Message m : sendQueue) {
+                if (m.type == type) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    /**
      * Returns the total bytes of piece messages currently queued.
      * Used by {@link PeerState} to limit pipelined requests.
      *

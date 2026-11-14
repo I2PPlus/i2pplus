@@ -1881,27 +1881,75 @@ class PeerState implements DataLoader {
     private long lastChokeSendTime = 0;
 
     /**
+     * Minimum spacing between two choke-state messages to one peer, in millis. A peer that is
+     * told it is unchoked and choked again inside a few hundred milliseconds learns nothing
+     * useful from either.
+     */
+    private static final long CHOKE_SEND_SPACING_MS = 200;
+
+    /**
+     * The choke state the wire has not been told about yet, or null when the wire and
+     * {@link #choking} agree. Set when the spacing guard below holds a message back, and
+     * cleared when it goes out, so a suppressed decision is not lost - the next call for this
+     * peer sends it once the spacing allows.
+     */
+    private Boolean _chokeMsgPending;
+
+    /**
      * Whether we are choking the peer.
      *
      * @param choke true to choke, false to unchoke
      */
     synchronized void setChoking(boolean choke) {
-        long now = System.currentTimeMillis();
+        setChoking(choke, System.currentTimeMillis());
+    }
 
-        // Only allow sending a choke message if 200ms has passed since last send
-        if (choking != choke && (now - lastChokeSendTime >= 200)) {
-            if (_log.shouldDebug()) {
-                _log.debug(SnarkLogFormatter.peer(peer) + " -> Setting choking: " + choke);
+    /**
+     * Whether we are choking the peer, with the clock the message spacing is judged against
+     * supplied, for the tests.
+     *
+     * @param choke true to choke, false to unchoke
+     * @param now the current time, in millis
+     * @since 0.9.72+
+     */
+    synchronized void setChoking(boolean choke, long now) {
+        if (choking == choke) {
+            // Nothing to change, but the spacing guard may still owe the peer a message.
+            if (_chokeMsgPending != null && now - lastChokeSendTime >= CHOKE_SEND_SPACING_MS) {
+                sendChokeState(_chokeMsgPending.booleanValue(), now);
             }
-            choking = choke;
-            out.sendChoke(choke);
-            lastChokeSendTime = now;
-            if (!choke) {
-                // Restart the snub clock: the peer gets a full SNUB_TIMEOUT from the moment
-                // we unchoke it, so a just-unchoked peer is never re-choked before it can respond
-                _lastRequestTime = now;
-            }
+            return;
         }
+        // The state moves whatever the guard below decides. The checker adjusts its uploader
+        // counters for this decision before calling, so holding the field back until the
+        // message is allowed out leaves the counters and the peer's choke state disagreeing.
+        choking = choke;
+        if (!choke) {
+            // Restart the snub clock: the peer gets a full SNUB_TIMEOUT from the moment
+            // we unchoke it, so a just-unchoked peer is never re-choked before it can respond
+            _lastRequestTime = now;
+        }
+        // Only allow sending a choke message if 200ms has passed since last send
+        if (now - lastChokeSendTime >= CHOKE_SEND_SPACING_MS) {
+            sendChokeState(choke, now);
+        } else {
+            _chokeMsgPending = Boolean.valueOf(choke);
+        }
+    }
+
+    /**
+     * Puts a choke-state change on the wire and records that the wire now agrees with us.
+     *
+     * @param choke the state to announce
+     * @param now the time the message goes out, in millis
+     */
+    private void sendChokeState(boolean choke, long now) {
+        _chokeMsgPending = null;
+        if (_log.shouldDebug()) {
+            _log.debug(SnarkLogFormatter.peer(peer) + " -> Setting choking: " + choke);
+        }
+        out.sendChoke(choke);
+        lastChokeSendTime = now;
     }
 
     /**
