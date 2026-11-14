@@ -3308,7 +3308,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         pp.clearAllRequested();
         pp.setShared(false);
         parkOrphanLocked(pp);
-        if (_log.shouldWarn()) {
+        if (_log.shouldInfo()) {
             Piece p = wantedMap.get(Integer.valueOf(piece));
             String reason;
             if (peer != null) {
@@ -3317,7 +3317,11 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 long idle = p != null ? now - p.getLastActive() : 0;
                 reason = "No requester for " + DataHelper.formatDuration(idle);
             }
-            _log.warn("Re-queued a partial piece -> " + reason + " * Piece: " + piece
+            // INFO, not WARN: a peer dying mid-piece is the ordinary case, and the
+            // re-queue is the recovery working, not a fault - the same window that
+            // re-queued 971 pieces contains 949 peer disconnects. It stays logged
+            // because this is the only place the re-queue is visible at all.
+            _log.info("Re-queued a partial piece -> " + reason + " * Piece: " + piece
                       + " * Downloaded: " + pp.getDownloaded() + " bytes");
         }
         return true;
