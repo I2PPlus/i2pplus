@@ -2,6 +2,8 @@ package org.klomp.snark;
 
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
+
 import net.i2p.util.RandomSource;
 import org.junit.Test;
 
@@ -14,6 +16,8 @@ import org.junit.Test;
  *
  * <p>What matters is that the spread is real and bounded. A period that could go near
  * zero would spin the timer, and one that drifts upward would slow peer maintenance.
+ * A transient metadata lookup runs its checker at a multiple of the download period, so
+ * the coarser period and the rate sample it produces are pinned here too.
  *
  * @since 0.9.72+
  */
@@ -34,12 +38,12 @@ public class CheckerJitterTest {
     @Test
     public void testPeerCheckerPeriodIsBoundedAndVaried() {
         RandomSource r = RandomSource.getInstance();
-        long first = PeerCoordinator.checkPeriod(r);
+        long first = PeerCoordinator.checkPeriod(r, false);
         boolean varied = false;
         long sum = 0;
         int draws = 2000;
         for (int i = 0; i < draws; i++) {
-            long p = PeerCoordinator.checkPeriod(r);
+            long p = PeerCoordinator.checkPeriod(r, false);
             assertTrue("period " + p, p >= PeerCoordinator.CHECK_PERIOD - 1000
                                             && p < PeerCoordinator.CHECK_PERIOD + 1000);
             if (p != first) {
@@ -85,10 +89,82 @@ public class CheckerJitterTest {
         int same = 0;
         int draws = 1000;
         for (int i = 0; i < draws; i++) {
-            if (PeerCoordinator.checkPeriod(r) == PeerCoordinator.checkPeriod(r)) {
+            long a = PeerCoordinator.checkPeriod(r, false);
+            long b = PeerCoordinator.checkPeriod(r, false);
+            if (a == b) {
                 same++;
             }
         }
         assertTrue("same " + same + " of " + draws, same < draws / 5);
+    }
+
+    /**
+     * A metadata lookup's checker period is the download period times the lookup
+     * multiplier, and it is still spread by a proportion of that period rather than
+     * running in lockstep with the other lookups.
+     */
+    @Test
+    public void testLookupPeriodIsCoarserAndStillSpread() {
+        RandomSource r = RandomSource.getInstance();
+        int mult = PeerCoordinator.LOOKUP_CHECK_MULTIPLIER;
+        long period = PeerCoordinator.CHECK_PERIOD * mult;
+        long spread = 1000L * mult;
+        long first = PeerCoordinator.checkPeriod(r, true);
+        boolean varied = false;
+        long sum = 0;
+        int draws = 2000;
+        for (int i = 0; i < draws; i++) {
+            long p = PeerCoordinator.checkPeriod(r, true);
+            assertTrue("period " + p, p >= period - spread && p < period + spread);
+            if (p != first) {
+                varied = true;
+            }
+            sum += p;
+        }
+        assertTrue("no jitter", varied);
+        assertEquals((double) period, sum / (double) draws, 500d);
+    }
+
+    /**
+     * The coarser period still watches the two timeouts a lookup's pass depends on: an
+     * idle peer is cut at MAX_INACTIVE and streaming closes the socket at four minutes,
+     * so a stalled metadata source is noticed long before either, and a lookup is not
+     * left waiting past the minute its caller waits for a name.
+     */
+    @Test
+    public void testLookupCadenceStillWatchesWhatItDependsOn() {
+        int mult = PeerCoordinator.LOOKUP_CHECK_MULTIPLIER;
+        long period = PeerCoordinator.CHECK_PERIOD * mult;
+        // twelve passes is the window in which an idle peer has to be noticed
+        long window = period * 12;
+        assertTrue(Long.toString(window), window <= PeerCoordinator.MAX_INACTIVE);
+        assertTrue(Long.toString(window), window <= PeerCoordinator.MAX_SEED_INACTIVE);
+        // a zzzot lookup waits about a minute for a name
+        assertTrue(Long.toString(period), period * 3 <= 60 * 1000L);
+    }
+
+    /**
+     * A byte sample taken at the coarser cadence reports the same rate as one taken at
+     * the download cadence: 100 bytes per period is 20 B/s whether the pass ran every
+     * period or every multiplier-th one, as the sample is divided by the periods it
+     * covers before it is pushed.
+     */
+    @Test
+    public void testTheRateSampleIsScaledToTheCadenceThatTookIt() {
+        int mult = PeerCoordinator.LOOKUP_CHECK_MULTIPLIER;
+        assertEquals(1, PeerCheckerTask.ratePeriods(false));
+        assertEquals(mult, PeerCheckerTask.ratePeriods(true));
+        // the same 100 B/s, sampled once a period, or once every mult periods
+        long coarse = 100L * mult / PeerCheckerTask.ratePeriods(true);
+        long[] normal = new long[PeerCoordinator.RATE_DEPTH];
+        long[] lookup = new long[PeerCoordinator.RATE_DEPTH];
+        Arrays.fill(normal, -1);
+        Arrays.fill(lookup, -1);
+        for (int i = 0; i < PeerCoordinator.RATE_DEPTH; i++) {
+            PeerCoordinator.setRate(100, normal);
+            PeerCoordinator.setRate(coarse, lookup);
+        }
+        assertEquals(20, PeerCoordinator.getRate(normal));
+        assertEquals(PeerCoordinator.getRate(normal), PeerCoordinator.getRate(lookup));
     }
 }

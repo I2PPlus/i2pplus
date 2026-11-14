@@ -111,6 +111,19 @@ class PeerCheckerTask implements Runnable {
     }
 
     /**
+     * How many checker periods this pass's byte counts cover. A metadata lookup's checker
+     * runs at a multiple of the download cadence, while the rate ring divides every sample
+     * by a single period, so an unscaled lookup sample would read that many times too high.
+     *
+     * @param metadataOnly true for a transient metadata-lookup torrent
+     * @return the number of checker periods the sample covers, 1 or more
+     * @since 0.9.72+
+     */
+    static int ratePeriods(boolean metadataOnly) {
+        return metadataOnly ? PeerCoordinator.LOOKUP_CHECK_MULTIPLIER : 1;
+    }
+
+    /**
      * Whether the checker has to choke someone to make an upload slot available. It does
      * when the torrent is at its uploader ceiling and peers are waiting for a slot, or is
      * over that ceiling - which happens while the global upload limit is exceeded, where
@@ -178,7 +191,8 @@ class PeerCheckerTask implements Runnable {
         // two lines printed the same keys twice
         DHT dht = _util.getDHTForTorrent(coordinator.getInfoHash());
         // a metadata lookup is not a member of the swarm it is asking about - see servesSwarm()
-        boolean swarm = servesSwarm(coordinator.isMetadataOnly());
+        boolean metadataOnly = coordinator.isMetadataOnly();
+        boolean swarm = servesSwarm(metadataOnly);
         boolean fetchComments = swarm && _util.utCommentsEnabled();
         int i = 0;
         for (Peer peer : peerList) {
@@ -407,8 +421,9 @@ class PeerCheckerTask implements Runnable {
             coordinator.unchokePeer(removed);
         }
 
-        // store the rates
-        coordinator.setRateHistory(uploaded, downloaded);
+        // store the rates - a lookup's pass covers more than one period, so the sample
+        // is scaled back to what one period would have carried
+        coordinator.setRateHistory(uploaded, downloaded, ratePeriods(metadataOnly));
         if (_log.shouldDebug()) {
             // one line for the pass instead of a START and an END pair printing the
             // same keys twice, and the keys say what they count; the two states that

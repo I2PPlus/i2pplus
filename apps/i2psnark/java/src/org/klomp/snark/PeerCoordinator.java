@@ -93,6 +93,18 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /** How often to recompute upload slots and UI download speeds. */
     static final long CHECK_PERIOD =
             (long) 5 * 1000; // update download speed in UI and choke/unchoke tests
+    /**
+     * How much longer a transient metadata lookup waits between checker passes. Its pass
+     * has no upload slots to recompute and no stalled pieces to re-request: all it does for
+     * a lookup is keep the metadata source alive and drop one that has gone silent, and
+     * both of those are timeouts measured in minutes - an idle peer is cut at five minutes
+     * and streaming closes the socket at four - so the five-second cadence a download needs
+     * buys nothing here. Two rather than more, so a source that stalls is still replaced
+     * well inside the minute a zzzot lookup waits for a name.
+     *
+     * @since 0.9.72+
+     */
+    static final int LOOKUP_CHECK_MULTIPLIER = 2;
     /** Maximum peers we upload to at once. */
     static final int MAX_UPLOADERS = 16;
     /**
@@ -335,7 +347,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         // Install a timer to check the uploaders.
         // Randomize the first start time so multiple tasks are spread out,
         // this will help the behavior with global limits
-        timer = new CheckEvent(_util.getContext(), new PeerCheckerTask(_util, this));
+        timer = new CheckEvent(_util.getContext(), new PeerCheckerTask(_util, this),
+                               isMetadataOnly());
         timer.schedule((CHECK_PERIOD * 8 / 2) + _random.nextInt((int) CHECK_PERIOD * 8));
 
         // NOT scheduled until needed
@@ -357,17 +370,23 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         private final PeerCheckerTask _task;
         /** Where a pass that threw is reported, on the coordinator's logger. */
         private final Log _log;
+        /** Whether this torrent is a transient metadata lookup, which checks less often. */
+        private final boolean _metadataOnly;
 
         /**
          * Wrapper to reschedule the checker task on each fire.
          *
          * @param ctx the app context, for the timer
          * @param task the checker task to reschedule
+         * @param metadataOnly true for a transient metadata-lookup torrent, whose passes run
+         *                     at a multiple of the download cadence - see
+         *                     {@link #LOOKUP_CHECK_MULTIPLIER}
          */
-        public CheckEvent(I2PAppContext ctx, PeerCheckerTask task) {
+        public CheckEvent(I2PAppContext ctx, PeerCheckerTask task, boolean metadataOnly) {
             super(ctx.simpleTimer2());
             _task = task;
             _log = ctx.logManager().getLog(PeerCoordinator.class);
+            _metadataOnly = metadataOnly;
         }
 
         /**
@@ -383,7 +402,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 if (_log.shouldLog(Log.WARN))
                     _log.warn("Checker pass failed -> Rescheduling anyway", re);
             } finally {
-                schedule(checkPeriod(RandomSource.getInstance()));
+                schedule(checkPeriod(RandomSource.getInstance(), _metadataOnly));
             }
         }
     }
@@ -391,14 +410,19 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * The next checker delay: CHECK_PERIOD spread by up to a second either way, so two
      * torrents started together do not keep running their checks, file cleanups and
-     * local DHT announces in lockstep. The average stays at CHECK_PERIOD.
+     * local DHT announces in lockstep. The average stays at CHECK_PERIOD. A metadata
+     * lookup runs at a multiple of that period, and its spread is scaled with it so its
+     * own passes do not line up either.
      *
      * @param r the random to spread with
+     * @param metadataOnly true for a transient metadata-lookup torrent
      * @return the delay in ms
      * @since 0.9.72+
      */
-    static long checkPeriod(RandomSource r) {
-        return CHECK_PERIOD - 1000 + r.nextLong(2000);
+    static long checkPeriod(RandomSource r, boolean metadataOnly) {
+        long period = metadataOnly ? CHECK_PERIOD * LOOKUP_CHECK_MULTIPLIER : CHECK_PERIOD;
+        long spread = metadataOnly ? 1000L * LOOKUP_CHECK_MULTIPLIER : 1000L;
+        return period - spread + r.nextLong(spread * 2);
     }
 
     /**
@@ -855,14 +879,29 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
-     * Push the total uploaded/downloaded onto a RATE_DEPTH deep stack.
+     * Push this period's uploaded and downloaded byte counts onto a RATE_DEPTH deep stack.
      *
      * @param up uploaded bytes this period
      * @param down downloaded bytes this period
      */
     public void setRateHistory(long up, long down) {
-        setRate(up, uploaded_old);
-        setRate(down, downloaded_old);
+        setRateHistory(up, down, 1);
+    }
+
+    /**
+     * The same, for a torrent whose checker does not run at CHECK_PERIOD. Each sample is the
+     * bytes since the previous pass and {@link #getRate(long[])} divides it by CHECK_PERIOD,
+     * so a pass covering several periods has to be scaled down first or the rate reads that
+     * many times too high.
+     *
+     * @param up uploaded bytes this period
+     * @param down downloaded bytes this period
+     * @param periods how many {@link #CHECK_PERIOD}s this sample covers, 1 or more
+     * @since 0.9.72+
+     */
+    public void setRateHistory(long up, long down, int periods) {
+        setRate(periods > 1 ? up / periods : up, uploaded_old);
+        setRate(periods > 1 ? down / periods : down, downloaded_old);
     }
 
     /**
@@ -1131,13 +1170,14 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * Whether this torrent exists only to fetch the metadata: a transient zzzot lookup.
      * It holds no data for the swarm it is asking about and is deleted minutes after it
      * resolves, so the swarm-side work - PEX, the local DHT announces, comment requests -
-     * is traffic it never earns, and its peers are only sources for the metadata.
+     * is traffic it never earns, and its peers are only sources for the metadata. A
+     * coordinator built without a torrent is not a lookup, so a null one reads false.
      *
      * @return true for a metadata-lookup torrent
      * @since 0.9.72+
      */
     boolean isMetadataOnly() {
-        return snark.isLookup();
+        return snark != null && snark.isLookup();
     }
 
     /**
