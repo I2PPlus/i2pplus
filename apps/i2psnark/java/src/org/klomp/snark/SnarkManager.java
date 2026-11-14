@@ -1275,6 +1275,48 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     * How long a screen message from a transient metadata lookup stays in the screen log
+     * once lookups are hidden from the torrent list. Long enough to read the hash and see
+     * what happened to the lookup, short enough that a probe which comes and goes does not
+     * leave its lines in front of a user who asked never to see lookups at all.
+     *
+     * @since 0.9.72+
+     */
+    static final long LOOKUP_MESSAGE_LIFETIME = 30 * 1000L;
+
+    /**
+     * Whether a screen message belongs to a transient metadata lookup rather than a user
+     * torrent. The message text carries the torrent's name, and a lookup torrent is named
+     * "Lookup [hash8]" or "lookup-*" and lives under a "zzzot-lookup" directory, so the
+     * same markers that identify the torrent identify its messages.
+     *
+     * @param message the message text as it is queued
+     * @return true if the message is about a metadata lookup
+     * @since 0.9.72+
+     */
+    static boolean isLookupMessage(String message) {
+        return message != null
+                && (message.contains("Lookup [")
+                    || message.contains("zzzot-lookup")
+                    || message.contains("lookup-"));
+    }
+
+    /**
+     * How long this message stays in the screen log: 0 to keep it until the buffer wraps
+     * or the user clears it. A lookup's message is short-lived only while lookups are
+     * hidden from the torrent list - with the list showing lookups, these messages are the
+     * only trace of them. Everything else is kept as before.
+     *
+     * @param hideLookups the {@link I2PSnarkUtil#hideLookups()} setting
+     * @param message the message text as it is queued
+     * @return the lifetime in ms, or 0 for no expiry
+     * @since 0.9.72+
+     */
+    static long messageLifetime(boolean hideLookups, String message) {
+        return hideLookups && isLookupMessage(message) ? LOOKUP_MESSAGE_LIFETIME : 0L;
+    }
+
+    /**
      * Use if it does not include a link. Escapes '&lt;' and '&gt;' before queueing.
      *
      * @param message text to queue for the messages page
@@ -1298,7 +1340,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public void addMessageNoEscape(String message) {
         long currentTime = System.currentTimeMillis() / 1000;
         if (shouldQueueMessage(currentTime, message)) {
-            _messages.addMessageNoEscape(getTime() + "&nbsp; " + message);
+            _messages.addMessageNoEscape(getTime() + "&nbsp; " + message,
+                                        messageLifetime(_util.hideLookups(), message));
         }
         if (_log.shouldInfo()) {
             _log.info(message);
@@ -1364,7 +1407,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private void queueAndPrint(String message, String print) {
         long currentTime = System.currentTimeMillis() / 1000;
         if (shouldQueueMessage(currentTime, message)) {
-            _messages.addMessageNoEscape(getTime() + "&nbsp; " + message);
+            _messages.addMessageNoEscape(getTime() + "&nbsp; " + message,
+                                        messageLifetime(_util.hideLookups(), message));
         }
         printToConsole(print);
     }

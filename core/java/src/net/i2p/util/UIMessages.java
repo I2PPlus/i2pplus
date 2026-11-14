@@ -59,13 +59,51 @@ public class UIMessages {
      * @return the message id
      */
     public synchronized int addMessageNoEscape(String message) {
-        _messages.offer(new Message(_count++, message));
+        return addMessageNoEscape(message, 0);
+    }
+
+    /**
+     * The same, with a lifetime. A message with a lifetime leaves the queue by itself
+     * once it is that old, so a brief event can be shown without sitting in front of the
+     * user until the buffer wraps or they clear it. Messages queued without one are
+     * unaffected.
+     *
+     * @param message text to queue verbatim, so it may carry markup such as a link
+     * @param lifetime how long the message stays in ms, or 0 to keep it until the buffer
+     *                 wraps or it is cleared
+     * @return the message id
+     * @since 0.9.72+
+     */
+    public synchronized int addMessageNoEscape(String message, long lifetime) {
+        pruneExpired();
+        long expires = lifetime > 0 ? System.currentTimeMillis() + lifetime : 0;
+        _messages.offer(new Message(_count++, message, expires));
         while (_messages.size() > _maxSize) {
             _messages.poll();
         }
         _cachedStrings = null;
         _cachedCount = -1;
         return _count;
+    }
+
+    /**
+     * Drop the messages that have run out their lifetime. Run on every read and write, so
+     * an expired message is gone from the next render without the queue needing a timer
+     * of its own.
+     */
+    private void pruneExpired() {
+        long now = System.currentTimeMillis();
+        boolean modified = false;
+        for (Iterator<Message> iter = _messages.iterator(); iter.hasNext(); ) {
+            if (iter.next().isExpired(now)) {
+                iter.remove();
+                modified = true;
+            }
+        }
+        if (modified) {
+            _cachedStrings = null;
+            _cachedCount = -1;
+        }
     }
 
     /**
@@ -83,6 +121,7 @@ public class UIMessages {
      * @return a new list of the retained messages, newest last; empty if none
      */
     public synchronized List<Message> getMessages() {
+        pruneExpired();
         if (_messages.peekLast() == null) return Collections.emptyList();
         return new ArrayList<>(_messages);
     }
@@ -94,6 +133,7 @@ public class UIMessages {
      * @since 0.9.46
      */
     public synchronized List<String> getMessageStrings() {
+        pruneExpired();
         if (_messages.peekLast() == null) return Collections.emptyList();
         // Return cached version if available and messages haven't changed
         if (_cachedStrings != null && _cachedCount == _count - 1) {
@@ -154,6 +194,7 @@ public class UIMessages {
      * @since 0.9.46
      */
     public synchronized boolean isEmpty() {
+        pruneExpired();
         return _messages.peekLast() == null;
     }
 
@@ -168,16 +209,30 @@ public class UIMessages {
         public final int id;
         /** The message text. */
         public final String message;
+        /** When this message leaves the queue on its own, 0 for never. */
+        private final long _expires;
 
         /**
-         * Records one message with its id.
+         * Records one message with its id and its expiry.
          *
          * @param i the message's id
          * @param msg the text to show
+         * @param expires when the message stops being shown, in ms, or 0 for never
          */
-        private Message(int i, String msg) {
+        private Message(int i, String msg, long expires) {
             id = i;
             message = msg;
+            _expires = expires;
+        }
+
+        /**
+         * Whether this message has run out the lifetime it was queued with.
+         *
+         * @param now the current time in ms
+         * @return true if the message should no longer be shown
+         */
+        boolean isExpired(long now) {
+            return _expires > 0 && now >= _expires;
         }
 
         /**
