@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.SynchronousQueue;
@@ -1767,10 +1768,88 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * @since 0.9.72+
      */
     static void resortWanted(Set<Piece> wanted) {
-        List<Piece> sorted = new ArrayList<>(wanted);
-        Collections.sort(sorted);
+        List<Piece> sorted = sortWanted(wanted);
         wanted.clear();
         wanted.addAll(sorted);
+    }
+
+    /**
+     * The wanted pieces in request order: priority highest first, then fewest peers first.
+     *
+     * <p>This is a counting sort, not a comparison sort. Both sort keys are small integers - a
+     * piece's priority, and how many peers hold it - so the pieces are bucketed by them in two
+     * linear passes rather than compared n log n times. The set is dirtied by every HAVE of a
+     * wanted piece, so in a busy swarm this runs about once per block, under the monitor the
+     * request path holds; at 16k pieces that is the difference between a few tens of thousands
+     * of comparator calls, each taking a set size, and two passes over the pieces.
+     *
+     * <p>Pieces are grouped by priority first. Distinct priorities are few - one per file in the
+     * torrent, plus the disabled level - so ordering those costs nothing worth naming, and each
+     * group is then counting-sorted on its peer count.
+     *
+     * @param wanted the pieces to order; the caller holds their monitor
+     * @return the pieces in request order, every piece of the input exactly once
+     * @since 0.9.72+
+     */
+    static List<Piece> sortWanted(Collection<Piece> wanted) {
+        Map<Integer, List<Piece>> byPriority = new TreeMap<>(Collections.reverseOrder());
+        for (Piece p : wanted) {
+            Integer key = Integer.valueOf(p.getPriority());
+            List<Piece> group = byPriority.get(key);
+            if (group == null) {
+                group = new ArrayList<>();
+                byPriority.put(key, group);
+            }
+            group.add(p);
+        }
+        List<Piece> sorted = new ArrayList<>(wanted.size());
+        for (List<Piece> group : byPriority.values()) {
+            sorted.addAll(sortByPeerCount(group));
+        }
+        return sorted;
+    }
+
+    /**
+     * One priority group, ordered by how many peers hold each piece, rarest first, by counting
+     * the pieces at each peer count and laying them out from the counts. The sort is stable:
+     * pieces with the same priority and the same number of peers keep the order they arrived in,
+     * which is what keeps a shuffle from being undone by the next resort.
+     *
+     * @param group the pieces to order, all of one priority; the caller holds their monitor
+     * @return the group rarest first
+     * @since 0.9.72+
+     */
+    static List<Piece> sortByPeerCount(List<Piece> group) {
+        int size = group.size();
+        if (size < 2) {
+            return group;
+        }
+        // the peer count is bounded by the number of peers we know, so the count arrays stay
+        // small no matter how many pieces the torrent has
+        int max = 0;
+        for (int i = 0; i < size; i++) {
+            int peers = group.get(i).getPeerCount();
+            if (peers > max) {
+                max = peers;
+            }
+        }
+        int[] at = new int[max + 1];
+        for (int i = 0; i < size; i++) {
+            at[group.get(i).getPeerCount()]++;
+        }
+        // turn the counts into the offset each peer count starts at
+        int offset = 0;
+        for (int i = 0; i <= max; i++) {
+            int count = at[i];
+            at[i] = offset;
+            offset += count;
+        }
+        Piece[] sorted = new Piece[size];
+        for (int i = 0; i < size; i++) {
+            Piece p = group.get(i);
+            sorted[at[p.getPeerCount()]++] = p;
+        }
+        return Arrays.asList(sorted);
     }
 
     /**
@@ -2699,43 +2778,43 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 if (havePieces.get(savedPiece)) {
                     // this is just a double-check, it should be in there
                     boolean skipped = false;
-                    outer:
-                    for (Piece piece : wantedPieces) {
-                        if (piece.getId() == savedPiece) {
-                            if (peer.isCompleted()
-                                    && piece.getPeerCount() > 1
-                                    && wantedPieces.size() > 2 * END_GAME_THRESHOLD
-                                    && partialPieces.size() < 4
-                                    && _random.nextInt(4) != 0) {
+                    Piece piece = wantedMap.get(Integer.valueOf(savedPiece));
+                    if (piece != null) {
+                        if (peer.isCompleted()
+                                && piece.getPeerCount() > 1
+                                && wantedPieces.size() > 2 * END_GAME_THRESHOLD
+                                && partialPieces.size() < 4
+                                && _random.nextInt(4) != 0) {
 
-                                // Try to preserve rarest-first
-                                // by not requesting a partial piece that at least two non-seeders
-                                // also have
-                                // from a seeder
-                                int nonSeeds = 0;
-                                int seeds = 0;
-                                for (Peer pr : peers) {
-                                    if (pr.isCompleted()) {
-                                        if (++seeds >= 4) {
-                                            break;
-                                        }
-                                    } else {
-                                        // TODO don't access state directly
-                                        PeerState state = pr.state;
-                                        if (state == null) {
-                                            continue;
-                                        }
-                                        BitField bf = state.bitfield;
-                                        if (bf == null) {
-                                            continue;
-                                        }
-                                        if (bf.get(savedPiece) && ++nonSeeds > 1) {
-                                            skipped = true;
-                                            break outer;
-                                        }
+                            // Try to preserve rarest-first
+                            // by not requesting a partial piece that at least two non-seeders
+                            // also have
+                            // from a seeder
+                            int nonSeeds = 0;
+                            int seeds = 0;
+                            for (Peer pr : peers) {
+                                if (pr.isCompleted()) {
+                                    if (++seeds >= 4) {
+                                        break;
+                                    }
+                                } else {
+                                    // TODO don't access state directly
+                                    PeerState state = pr.state;
+                                    if (state == null) {
+                                        continue;
+                                    }
+                                    BitField bf = state.bitfield;
+                                    if (bf == null) {
+                                        continue;
+                                    }
+                                    if (bf.get(savedPiece) && ++nonSeeds > 1) {
+                                        skipped = true;
+                                        break;
                                     }
                                 }
                             }
+                        }
+                        if (!skipped) {
                             iter.remove();
                             registerLive(pp);
                             piece.setRequested(peer, true);
@@ -2882,16 +2961,13 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         synchronized (wantedPieces) {
             for (PartialPiece pp : partialPieces) {
                 int savedPiece = pp.getPiece();
-                if (havePieces.get(savedPiece)) {
-                    // this is just a double-check, it should be in there
-                    for (Piece piece : wantedPieces) {
-                        if (piece.getId() == savedPiece) {
-                            if (_log.shouldInfo()) {
-                                _log.info("We could restore orphaned partial piece " + pp);
-                            }
-                            return true;
-                        }
+                // this is just a double-check, it should be in there
+                if (havePieces.get(savedPiece)
+                        && wantedMap.containsKey(Integer.valueOf(savedPiece))) {
+                    if (_log.shouldInfo()) {
+                        _log.info("We could restore orphaned partial piece " + pp);
                     }
+                    return true;
                 }
             }
         }

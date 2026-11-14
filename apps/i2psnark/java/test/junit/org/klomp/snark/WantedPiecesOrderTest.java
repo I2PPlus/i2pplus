@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -264,6 +265,81 @@ public class WantedPiecesOrderTest {
         set.add(new Piece(5));
         set.add(new Piece(5));
         assertEquals(3, set.size());
+    }
+
+    /**
+     * The piece ids of a list, in list order.
+     *
+     * @param list the list to read out
+     * @return the ids, in order
+     */
+    private static List<Integer> idsOf(List<Piece> list) {
+        List<Integer> rv = new ArrayList<>(list.size());
+        for (Piece p : list) {
+            rv.add(Integer.valueOf(p.getId()));
+        }
+        return rv;
+    }
+
+    /**
+     * The counting sort produces exactly the order a comparison sort of the same pieces
+     * produces, ties included, so replacing the sort cannot change one thing the
+     * request path asks for.
+     *
+     * @throws Exception if the private peer set is not readable, so the fixture
+     *                   cannot be built and the rarity ordering is untestable
+     */
+    @Test
+    public void testResortMatchesAComparisonSort() throws Exception {
+        Random rnd = new Random(20261114L);
+        for (int trial = 0; trial < 25; trial++) {
+            Set<Piece> set = new LinkedHashSet<>();
+            int n = 1 + rnd.nextInt(200);
+            for (int i = 0; i < n; i++) {
+                Piece p = new Piece(i);
+                p.setPriority(rnd.nextInt(4) - 1);
+                withPeers(p, rnd.nextInt(30));
+                set.add(p);
+            }
+            List<Piece> expected = new ArrayList<>(set);
+            Collections.sort(expected);
+            assertEquals(idsOf(expected), idsOf(PeerCoordinator.sortWanted(set)));
+        }
+    }
+
+    /**
+     * Pieces the two sort keys cannot separate keep the order they were in, which is
+     * what keeps the init-path shuffle from being undone by the next resort: a
+     * comparison sort is stable, and so is the counting sort that replaced it.
+     *
+     * @throws Exception if the private peer set is not readable, so the fixture
+     *                   cannot be built and the rarity ordering is untestable
+     */
+    @Test
+    public void testResortIsStableForTies() throws Exception {
+        Set<Piece> set = new LinkedHashSet<>();
+        for (int id = 0; id < 12; id++) {
+            Piece p = new Piece(id);
+            p.setPriority(2);
+            withPeers(p, id % 3);
+            set.add(p);
+        }
+        PeerCoordinator.resortWanted(set);
+        // rarest first, and within each availability the original id order
+        assertEquals(Arrays.asList(0, 3, 6, 9, 1, 4, 7, 10, 2, 5, 8, 11), ids(set));
+    }
+
+    /**
+     * A group of one or none is returned as it stands, the case for a torrent with one
+     * wanted piece or none.
+     */
+    @Test
+    public void testSortHandlesSingletons() {
+        List<Piece> one = Arrays.asList(new Piece(5));
+        assertSame(one, PeerCoordinator.sortByPeerCount(one));
+        List<Piece> none = new ArrayList<>();
+        assertSame(none, PeerCoordinator.sortByPeerCount(none));
+        assertEquals(0, PeerCoordinator.sortWanted(new ArrayList<>()).size());
     }
 
     /**
