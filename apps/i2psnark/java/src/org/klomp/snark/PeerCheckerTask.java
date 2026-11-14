@@ -375,14 +375,16 @@ class PeerCheckerTask implements Runnable {
 
         boolean coordOver = coordinator.overUpBWLimit(uploaded);
         synchronized (coordinator.peers) {
+            // Move the peers choked this pass to the tail of the list first, so the
+            // unchoke below works down the list from the head and does not pick one of
+            // them back up again in the same pass.
+            for (Peer peer : removed) {
+                if (coordinator.peers.remove(peer)) coordinator.peers.add(peer);
+            }
             if ((!overBWLimit) && !coordOver) {
                 // Optimistically unchoke a peer
                 // must be called inside synch
-                coordinator.unchokePeer();
-            }
-            // Put peers back at the end of the list that we removed earlier.
-            for (Peer peer : removed) {
-                if (coordinator.peers.remove(peer)) coordinator.peers.add(peer);
+                coordinator.unchokePeer(removed);
             }
         }
 

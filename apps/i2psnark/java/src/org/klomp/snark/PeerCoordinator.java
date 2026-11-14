@@ -1485,6 +1485,24 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
 
     /** (Optimistically) unchoke. Must be called with peers synchronized. */
     void unchokePeer() {
+        unchokePeer(Collections.<Peer>emptySet());
+    }
+
+    /**
+     * (Optimistically) unchoke, leaving choking every peer the caller choked moments ago.
+     * Must be called with peers synchronized.
+     *
+     * <p>Re-unchoking a peer choked on the same pass is a CHOKE and UNCHOKE pair that buys
+     * nothing and costs the peer's whole pipeline: the choke cancels its outstanding
+     * requests and hands back the partial pieces it had begun. The checker choked the worst
+     * uploader and then unchoked it again in the same pass because the choked peers were
+     * moved to the tail of the peer list only after the unchoke ran, and the unchoke picks
+     * in list order.
+     *
+     * @param choked peers the caller choked on this pass, to be left choking
+     * @since 0.9.72+
+     */
+    void unchokePeer(Collection<Peer> choked) {
         if (storage == null || storage.getBitField().size() == 0 || overUpBWLimit()) {
             return;
         }
@@ -1499,7 +1517,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         Iterator<Peer> it = peers.iterator();
         while (it.hasNext()) {
             Peer peer = it.next();
-            if (peer.isChoking() && peer.isInterested()) {
+            if (peer.isChoking() && peer.isInterested() && !choked.contains(peer)) {
                 count++;
                 if (uploaders.get() < maxUploaders) {
                     if (peer.isInteresting() && !peer.isChoked()) {
