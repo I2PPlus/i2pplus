@@ -30,6 +30,23 @@ class PeerCheckerTask implements Runnable {
      */
     static final int PEX_PERIOD = 17;
 
+    /**
+     * How often, in checker passes, to announce a connected peer to the local DHT so other
+     * nodes can find it. One pass is {@link PeerCoordinator#CHECK_PERIOD}, so 120 passes is
+     * ten minutes. The announce is per peer, so a short period multiplies into tens of
+     * thousands of datagrams per window for no extra discoverability: a DHT peer entry only
+     * has to stay fresh for well under half an hour.
+     */
+    static final int DHT_ANNOUNCE_PERIOD = 120;
+
+    /**
+     * How often, in checker passes, to offer a peer a comment request. One pass is
+     * {@link PeerCoordinator#CHECK_PERIOD}, so 47 passes is a little under four minutes.
+     * This only rotates which peer is offered; {@code PeerCoordinator.sendCommentReq()}
+     * enforces the real interval between requests.
+     */
+    static final int COMMENT_PERIOD = 47;
+
     /** The coordinator whose peers are checked. */
     private final PeerCoordinator coordinator;
     /** The torrent the peers belong to. */
@@ -61,6 +78,18 @@ class PeerCheckerTask implements Runnable {
      * @since 0.9.72+
      */
     static boolean sendPEX(int count, int period) {
+        return count % period == 0;
+    }
+
+    /**
+     * Whether this pass announces a connected peer to the local DHT.
+     *
+     * @param count the checker pass counter for this torrent, phase included
+     * @param period how many passes two announces are spaced by
+     * @return true to announce on this pass
+     * @since 0.9.72+
+     */
+    static boolean announcePeerToDHT(int count, int period) {
         return count % period == 0;
     }
 
@@ -286,8 +315,10 @@ class PeerCheckerTask implements Runnable {
             int count = _runCount + i;
             // send PEX, a little over a minute apart
             if (sendPEX(count, PEX_PERIOD)) coordinator.sendPeers(peer);
-            // send Comment Request, about every 30 minutes
-            if (fetchComments && (count % 47) == 0) coordinator.sendCommentReq(peer);
+            // ask for comments on this pass; the coordinator holds the real interval
+            // between requests to one per COMMENT_REQ_INTERVAL, so this only offers
+            // the next peer in line once that interval has passed
+            if (fetchComments && (count % COMMENT_PERIOD) == 0) coordinator.sendCommentReq(peer);
             // cheap failsafe for seeds connected to seeds, stop pinging and hopefully
             // the inactive checker (above) will eventually disconnect it
             if ((count & 0x01) == 0 &&
@@ -295,7 +326,7 @@ class PeerCheckerTask implements Runnable {
                 (coordinator.getNeededLength() > 0 || !peer.isCompleted()))
                 peer.keepAlive();
             // announce them to local tracker (TrackerClient does this too)
-            if (dht != null && ((_runCount + _phase) % 5) == 0) {
+            if (dht != null && announcePeerToDHT(_runCount + _phase, DHT_ANNOUNCE_PERIOD)) {
                 dht.announce(
                         coordinator.getInfoHash(),
                         peer.getPeerID().getDestHash(),
