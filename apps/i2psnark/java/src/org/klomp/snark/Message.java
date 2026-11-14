@@ -136,6 +136,12 @@ class Message {
     private static final ByteCache _cache = ByteCache.getInstance(16, BUFSIZE);
 
     /**
+     * The whole of a keep-alive on the wire: a length prefix of zero, which is the message,
+     * and no id. Shared because it never changes and is only ever read.
+     */
+    private static final byte[] KEEP_ALIVE_BYTES = {0, 0, 0, 0};
+
+    /**
      * For types KEEP_ALIVE, CHOKE, UNCHOKE, INTERESTED, UNINTERESTED, HAVE_ALL, HAVE_NONE.
      *
      * @param type the message type
@@ -236,7 +242,134 @@ class Message {
     }
 
     /**
-     * Sends this message through the given DataOutputStream.
+     * Whether this message id is followed by a 4-byte piece number on the wire.
+     *
+     * @param type the message id
+     * @return true if a piece number follows this id
+     */
+    static boolean hasPieceNumber(byte type) {
+        return type == HAVE
+                || type == REQUEST
+                || type == PIECE
+                || type == CANCEL
+                || type == SUGGEST
+                || type == REJECT
+                || type == ALLOWED_FAST;
+    }
+
+    /**
+     * Whether this message id is followed by a 4-byte offset within the piece.
+     *
+     * @param type the message id
+     * @return true if a byte offset follows this id
+     */
+    static boolean hasOffset(byte type) {
+        return type == REQUEST || type == PIECE || type == CANCEL || type == REJECT;
+    }
+
+    /**
+     * Whether this message id is followed by a 4-byte transfer length.
+     *
+     * @param type the message id
+     * @return true if a transfer length follows this id
+     */
+    static boolean hasTransferLength(byte type) {
+        return type == REQUEST || type == CANCEL || type == REJECT;
+    }
+
+    /**
+     * Whether this message id is followed by the 1-byte BEP 10 sub-type.
+     *
+     * @param type the message id
+     * @return true if an extended message id follows this id
+     */
+    static boolean hasSubType(byte type) {
+        return type == EXTENSION;
+    }
+
+    /**
+     * Whether this message id is followed by the 2-byte BEP 5 port.
+     *
+     * @param type the message id
+     * @return true if a listening port follows this id
+     */
+    static boolean hasPort(byte type) {
+        return type == PORT;
+    }
+
+    /**
+     * Whether a byte-array payload follows this message's fixed header.
+     *
+     * @param type the message id
+     * @return true if this id carries payload bytes after its header
+     */
+    static boolean hasPayload(byte type) {
+        return type == BITFIELD || type == PIECE || type == EXTENSION;
+    }
+
+    /**
+     * How many bytes a message of this id holds before its payload: the id itself plus
+     * whichever of the piece number, offset, transfer length, sub-type or port fields that
+     * id uses. These are the only fields any message id uses, so this is also the number of
+     * bytes a reader must take before it knows what the message is.
+     *
+     * @param type the message id
+     * @return the fixed byte count after the 4-byte length prefix, at least one
+     * @since 0.9.72+
+     */
+    static int fixedBytes(byte type) {
+        int rv = 1;
+        if (hasPieceNumber(type)) rv += 4;
+        if (hasOffset(type)) rv += 4;
+        if (hasTransferLength(type)) rv += 4;
+        if (hasSubType(type)) rv += 1;
+        if (hasPort(type)) rv += 2;
+        return rv;
+    }
+
+    /**
+     * Writes a big-endian int into a byte array.
+     *
+     * @param buf the array to write into
+     * @param off where in the array to write
+     * @param val the value to write
+     * @return off plus four, the position after what was written
+     */
+    private static int putInt(byte[] buf, int off, int val) {
+        buf[off] = (byte) (val >>> 24);
+        buf[off + 1] = (byte) (val >>> 16);
+        buf[off + 2] = (byte) (val >>> 8);
+        buf[off + 3] = (byte) val;
+        return off + 4;
+    }
+
+    /**
+     * Assembles this message's fixed header - the length prefix, the id, and the numeric
+     * fields that id uses - into one array.
+     *
+     * @return the header bytes, ready to hand to the socket in a single write
+     */
+    private byte[] header() {
+        byte[] buf = new byte[4 + fixedBytes(type)];
+        int p = putInt(buf, 0, fixedBytes(type) + (hasPayload(type) ? len : 0));
+        buf[p++] = type;
+        if (hasPieceNumber(type)) p = putInt(buf, p, piece);
+        if (hasOffset(type)) p = putInt(buf, p, begin);
+        if (hasTransferLength(type)) p = putInt(buf, p, length);
+        else if (hasSubType(type)) buf[p++] = (byte) (piece & 0xff);
+        else if (hasPort(type)) {
+            buf[p++] = (byte) (piece >>> 8);
+            buf[p++] = (byte) (piece & 0xff);
+        }
+        return buf;
+    }
+
+    /**
+     * Sends this message through the given DataOutputStream. The fixed header goes out as one
+     * array write and the payload, when there is one, as a second, so a REQUEST - the most
+     * common message by a wide margin, and nothing but fixed bytes - is a single write. It
+     * used to be five: each write on the streaming MessageOutputStream underneath is its own
+     * lock acquisition and its own copy into the I2P stream.
      *
      * @param dos the output stream to write to
      * @return true if the message was written, false if the deferred data could not be loaded and
@@ -244,9 +377,9 @@ class Message {
      * @throws IOException if an I/O error occurs
      */
     boolean sendMessage(DataOutputStream dos) throws IOException {
-        // KEEP_ALIVE is special.
+        // KEEP_ALIVE is special: a length of zero and no id at all.
         if (type == KEEP_ALIVE) {
-            dos.writeInt(0);
+            dos.write(KEEP_ALIVE_BYTES, 0, KEEP_ALIVE_BYTES.length);
             return true;
         }
 
@@ -257,57 +390,12 @@ class Message {
             if (data == null) return false; // dropped, caller must not count it as sent
         }
 
-        // Calculate the total length in bytes
-
-        // Type is one byte.
-        int datalen = 1;
-
-        // piece is 4 bytes.
-        if (type == HAVE
-                || type == REQUEST
-                || type == PIECE
-                || type == CANCEL
-                || type == SUGGEST
-                || type == REJECT
-                || type == ALLOWED_FAST) datalen += 4;
-
-        // begin/offset is 4 bytes
-        if (type == REQUEST || type == PIECE || type == CANCEL || type == REJECT) datalen += 4;
-
-        // length is 4 bytes
-        if (type == REQUEST || type == CANCEL || type == REJECT) datalen += 4;
-
-        // msg type is 1 byte
-        else if (type == EXTENSION) datalen += 1;
-        else if (type == PORT) datalen += 2;
-
-        // add length of data for piece or bitfield array.
-        if (type == BITFIELD || type == PIECE || type == EXTENSION) datalen += len;
-
-        // Send length
-        dos.writeInt(datalen);
-        dos.writeByte(type & 0xFF);
-
-        // Send additional info (piece number)
-        if (type == HAVE
-                || type == REQUEST
-                || type == PIECE
-                || type == CANCEL
-                || type == SUGGEST
-                || type == REJECT
-                || type == ALLOWED_FAST) dos.writeInt(piece);
-
-        // Send additional info (begin/offset)
-        if (type == REQUEST || type == PIECE || type == CANCEL || type == REJECT)
-            dos.writeInt(begin);
-
-        // Send additional info (length); for PIECE this is implicit.
-        if (type == REQUEST || type == CANCEL || type == REJECT) dos.writeInt(length);
-        else if (type == EXTENSION) dos.writeByte((byte) piece & 0xff);
-        else if (type == PORT) dos.writeShort(piece & 0xffff);
+        // Send the fixed header as one write, then the payload as another.
+        byte[] hdr = header();
+        dos.write(hdr, 0, hdr.length);
 
         // Send actual data
-        if (type == BITFIELD || type == PIECE || type == EXTENSION) dos.write(data, off, len);
+        if (hasPayload(type)) dos.write(data, off, len);
 
         // Buffer was pulled from cache in Storage.getPiece() via dataLoader
         releaseOwned();
