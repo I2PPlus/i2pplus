@@ -233,13 +233,22 @@ class PeerCheckerTask implements Runnable {
             peer.setRateHistory();
 
             if (_log.shouldDebug()) {
-                // A per-peer tally, so the rates go on their own line - the value is
-                // bytes per second, KILOPERSECOND being the rate one check per period makes
-                _log.debug("Peer check of " + SnarkLogFormatter.peer(peer)
-                           + " -> " + ourState(peer.isInteresting(), peer.isChoking())
-                           + "\n* " + theirState(peer.isInterested(), peer.isChoked())
-                           + " * Up: " + upload * 1024 / KILOPERSECOND + " B/s"
-                           + " * Down: " + download * 1024 / KILOPERSECOND + " B/s");
+                // The matrix says nothing new while the four bits hold still, and every
+                // connected peer used to print it on every pass - ten thousand lines in a two
+                // and a half hour window. Say it when the peer's treatment changes, and once
+                // when we first see it.
+                int state = checkState(peer.isInteresting(), peer.isChoking(),
+                                       peer.isInterested(), peer.isChoked());
+                if (state != peer.checkedState()) {
+                    peer.setCheckedState(state);
+                    // A per-peer tally, so the rates go on their own line - the value is
+                    // bytes per second, KILOPERSECOND being the rate one check per period makes
+                    _log.debug("Peer check of " + SnarkLogFormatter.peer(peer)
+                               + " -> " + ourState(peer.isInteresting(), peer.isChoking())
+                               + "\n* " + theirState(peer.isInterested(), peer.isChoked())
+                               + " * Up: " + upload * 1024 / KILOPERSECOND + " B/s"
+                               + " * Down: " + download * 1024 / KILOPERSECOND + " B/s");
+                }
             }
 
             // Choke a percentage of them rather than all so it isn't so drastic...
@@ -456,6 +465,25 @@ class PeerCheckerTask implements Runnable {
         if (swarm && dht != null && ((_runCount + _phase) % 16) == 0) {
             dht.announce(coordinator.getInfoHash(), coordinator.completed());
         }
+    }
+
+    /**
+     * The four choke and interest bits of one check pass, packed so the next pass can tell
+     * whether it has anything new to say about this peer. The checker's per-peer matrix used to
+     * print on every pass whatever had changed - ten thousand lines in a two and a half hour
+     * window - while what a reader wants is the moment the treatment of a peer changes.
+     *
+     * @param interesting true if the peer holds pieces we want
+     * @param choking true if we are throttling the peer
+     * @param interested true if the peer wants pieces from us
+     * @param choked true if the peer is throttling us
+     * @return the four flags as one int, a different value for every combination
+     * @since 0.9.72+
+     */
+    static int checkState(boolean interesting, boolean choking, boolean interested,
+                          boolean choked) {
+        return (interesting ? 1 : 0) | (choking ? 2 : 0)
+               | (interested ? 4 : 0) | (choked ? 8 : 0);
     }
 
     /**

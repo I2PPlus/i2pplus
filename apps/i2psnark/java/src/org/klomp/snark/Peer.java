@@ -101,6 +101,12 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
      * with a generic label.
      */
     private volatile String _endReason;
+    /**
+     * The choke and interest bits the last check pass reported about this peer, -1 before the
+     * first pass. The checker prints its per-peer matrix only when these move: every connected
+     * peer printed it on every pass, thousands of lines saying the same thing.
+     */
+    private volatile int _checkedState = -1;
 
     /** How often to recompute upload slots and UI download speeds. */
     static final long CHECK_PERIOD = PeerCoordinator.CHECK_PERIOD; // 40 seconds
@@ -753,6 +759,28 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
             return reason;
         }
         return connected > 0 ? "The connection closed" : "The dial never connected";
+    }
+
+    /**
+     * The choke and interest bits the last check pass reported.
+     *
+     * @return the packed state from {@link PeerCheckerTask#checkState}, or -1 if this peer has
+     *         not been checked yet
+     * @since 0.9.72+
+     */
+    int checkedState() {
+        return _checkedState;
+    }
+
+    /**
+     * Records the choke and interest bits a check pass reported, so the next pass can tell
+     * whether it has anything new to say about this peer.
+     *
+     * @param state the packed state from {@link PeerCheckerTask#checkState}
+     * @since 0.9.72+
+     */
+    void setCheckedState(int state) {
+        _checkedState = state;
     }
 
     /**
