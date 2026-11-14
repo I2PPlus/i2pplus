@@ -2297,7 +2297,128 @@ public class I2PSnarkUtil implements DisconnectListener {
     private static final int BASE32_HASH_LENGTH = 52; // 1 + Hash.HASH_LENGTH * 8 / 5
 
     /**
-     * Base64 Hash or Hash.i2p or name.i2p using naming service.
+     * How long a destination resolved for a <code>.b32.i2p</code> hash is reused, in millis.
+     * A running destination keeps its key, and the tracker, the DHT and PEX all keep
+     * re-advertising the same peers for the life of a torrent, so without a cache every dial
+     * to a hash-only peer id pays for the same lookup again - up to 15 seconds of a
+     * connection thread each time.
+     *
+     * @since 0.9.72+
+     */
+    static final long DEST_CACHE_POSITIVE_MS = 6 * 60 * 60 * 1000L;
+
+    /**
+     * How long a hash that did not resolve is treated as unresolvable, in millis. A miss
+     * costs what a hit costs - the whole 15-second wait - and a peer that has just stopped
+     * running is still advertised by the swarm for a while, so the answer is kept. It is kept
+     * briefly: a peer that comes back under a new destination is dialable again after this.
+     *
+     * @since 0.9.72+
+     */
+    static final long DEST_CACHE_NEGATIVE_MS = 15 * 60 * 1000L;
+
+    /**
+     * Entries {@link #_destCache} holds before the expired ones are swept, so a torrent shown
+     * a long tail of dead peers cannot grow the map for the life of the router. An entry is a
+     * hash, an expiry, and on a hit a parsed destination of a few hundred bytes.
+     */
+    static final int DEST_CACHE_MAX = 512;
+
+    /**
+     * Hash to the answer of a previous <code>.b32.i2p</code> lookup and the time that answer
+     * stops being reused. Never persisted: a router restart is a fair chance to ask again.
+     */
+    private final Map<Hash, CachedDest> _destCache = new ConcurrentHashMap<>(16);
+
+    /**
+     * One <code>.b32.i2p</code> lookup answer, kept in {@link #_destCache}.
+     */
+    private static class CachedDest {
+
+        /** The destination that was resolved, null if the hash did not resolve. */
+        final Destination dest;
+
+        /** When this answer stops being reused, in millis. */
+        final long expires;
+
+        /**
+         * @param dest the destination that was resolved, or null if the hash did not resolve
+         * @param expires the time this answer stops being reused, in millis
+         */
+        CachedDest(Destination dest, long expires) {
+            this.dest = dest;
+            this.expires = expires;
+        }
+    }
+
+    /**
+     * How long one lookup answer stays reusable: hours for a destination we resolved, minutes
+     * for a hash that did not resolve, because a peer that is gone may come back with a new
+     * key while a destination we dialled does not change underneath us.
+     *
+     * @param dest the destination from the lookup, null if it did not resolve
+     * @return the lifetime of the answer, in millis
+     * @since 0.9.72+
+     */
+    static long destCacheTtl(Destination dest) {
+        return dest != null ? DEST_CACHE_POSITIVE_MS : DEST_CACHE_NEGATIVE_MS;
+    }
+
+    /**
+     * Whether a cached answer is still used.
+     *
+     * @param expires the time the answer stops being reused, in millis
+     * @param now the current time, in millis
+     * @return true if the answer has not expired
+     * @since 0.9.72+
+     */
+    static boolean destCacheFresh(long expires, long now) {
+        return now < expires;
+    }
+
+    /**
+     * Remembers what one <code>.b32.i2p</code> lookup returned, including "nothing", and keeps
+     * the map bounded by dropping the answers that have already expired once it is over the
+     * cap. An entry that is still fresh is never dropped, so the map may sit at the cap.
+     *
+     * @param h the hash that was looked up
+     * @param dest the destination that was resolved, or null
+     * @param now the current time, in millis
+     */
+    void cacheDestination(Hash h, Destination dest, long now) {
+        _destCache.put(h, new CachedDest(dest, now + destCacheTtl(dest)));
+        if (_destCache.size() > DEST_CACHE_MAX) {
+            _destCache.values().removeIf(c -> now >= c.expires);
+        }
+    }
+
+    /**
+     * Entries held by the destination cache, for the tests.
+     *
+     * @return the number of cached answers
+     */
+    int destCacheSize() {
+        return _destCache.size();
+    }
+
+    /**
+     * The hash a <code>.b32.i2p</code> address names, or null if this is not one or the
+     * address does not decode.
+     *
+     * @param ip the address to read, an <code>.i2p</code> name
+     * @return the hash it names, or null
+     */
+    static Hash b32Hash(String ip) {
+        if (ip.length() != BASE32_HASH_LENGTH + 8 || !ip.endsWith(".b32.i2p")) {
+            return null;
+        }
+        byte[] b = Base32.decode(ip.substring(0, BASE32_HASH_LENGTH));
+        return b != null ? Hash.create(b) : null;
+    }
+
+    /**
+     * Base64 Hash or Hash.i2p or name.i2p using naming service. A <code>.b32.i2p</code>
+     * answer, including "nothing", is cached and reused while it is fresh.
      *
      * @param ip destination string: base64, a .b32.i2p address, or a name.i2p hostname
      * resolved through the naming service
@@ -2307,27 +2428,40 @@ public class I2PSnarkUtil implements DisconnectListener {
         if (ip == null) return null;
         if (ip.endsWith(".i2p")) {
             if (ip.length() < 520) { // key + ".i2p"
-                I2PSocketManager mgr = _manager;
-                if (mgr != null
-                        && ip.length() == BASE32_HASH_LENGTH + 8
-                        && ip.endsWith(".b32.i2p")) {
-                    I2PSession sess = mgr.getSession();
-                    if (sess != null) {
-                        byte[] b = Base32.decode(ip.substring(0, BASE32_HASH_LENGTH));
-                        if (b != null) {
-                            Hash h = Hash.create(b);
-                            if (_log.shouldDebug())
-                                _log.debug("Using existing session for lookup of [" + ip + "]");
-                            try {
-                                return sess.lookupDest(h, (long) 15 * 1000);
-                            } catch (I2PSessionException ise) { /* ignored */ }
-                        }
+                // A .b32.i2p address is only a hash, so it has to be resolved, and the
+                // wait for it is up to 15 seconds of whatever thread asked. The same peers
+                // are re-advertised by the tracker, the DHT and PEX for the life of a
+                // torrent, so the answer - including "nothing" - is kept and reused.
+                Hash h = b32Hash(ip);
+                long now = _context.clock().now();
+                if (h != null) {
+                    CachedDest hit = _destCache.get(h);
+                    if (hit != null && destCacheFresh(hit.expires, now)) {
+                        if (_log.shouldDebug())
+                            _log.debug("Reusing a destination resolved earlier for " + ip);
+                        return hit.dest;
                     }
+                }
+                I2PSocketManager mgr = _manager;
+                I2PSession sess = mgr != null ? mgr.getSession() : null;
+                if (h != null && sess != null) {
+                    if (_log.shouldDebug())
+                        _log.debug("Using existing session for lookup of [" + ip + "]");
+                    Destination dest = null;
+                    try {
+                        dest = sess.lookupDest(h, (long) 15 * 1000);
+                    } catch (I2PSessionException ise) { /* ignored */ }
+                    cacheDestination(h, dest, now);
+                    return dest;
                 }
                 if (_log.shouldDebug()) {
                     _log.debug("Using naming service for lookup of [" + ip + "]");
                 }
-                return _context.namingService().lookup(ip);
+                Destination dest = _context.namingService().lookup(ip);
+                if (h != null) {
+                    cacheDestination(h, dest, now);
+                }
+                return dest;
             }
             if (_log.shouldDebug()) {
                 _log.debug("Creating Destination for [" + ip + "]");
