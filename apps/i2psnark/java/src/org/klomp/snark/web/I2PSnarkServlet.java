@@ -1042,9 +1042,9 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<script nonce=").append(cspNonce).append(">const theme = \"").append(theme).append("\";</script>\n");
 
         if (!isConfigure && !isStandalone()) {
-            buf.append("<link rel=modulepreload href=/js/iframeResizer/updatedEvent.js>\n")
-               .append("<link rel=modulepreload href=/js/iframeResizer/iframeResizer.contentWindow.js>\n")
-               .append("<link rel=modulepreload href=/js/setupIframe.js>\n");
+            buf.append("<link rel=preload as=script href=/js/iframeResizer/updatedEvent.js>\n")
+               .append("<link rel=preload as=script href=/js/iframeResizer/iframeResizer.contentWindow.js>\n")
+               .append("<link rel=preload as=script href=/js/setupIframe.js>\n");
         }
         if (!isConfigure) {
             buf.append("<link rel=modulepreload href=").append(resourcePath).append("js/refreshTorrents.js>\n")
@@ -5825,10 +5825,10 @@ public class I2PSnarkServlet extends BasicServlet {
 
     /** The html footer of the page, up to the snark-alert stylesheet. */
     private static final String FOOTER_PREFIX = "</div>\n<span id=endOfPage data-iframe-height></span>\n" +
-        "<script src=/js/iframeResizer/iframeResizer.contentWindow.js id=iframeResizer type=module></script>\n" +
-        "<script src=/js/iframeResizer/updatedEvent.js type=module></script>\n" +
-        "<script src=/js/setupIframe.js type=module></script>\n" +
-        "<script src=/js/detectPageZoom.js type=module></script>\n" +
+        "<script src=/js/iframeResizer/iframeResizer.contentWindow.js id=iframeResizer></script>\n" +
+        "<script src=/js/iframeResizer/updatedEvent.js></script>\n" +
+        "<script src=/js/setupIframe.js></script>\n" +
+        "<script src=/js/detectPageZoom.js></script>\n" +
         "<script src=/js/autologout.js></script>\n";
 
     /** The html footer of the standalone page, up to its zoom script. */
@@ -5848,7 +5848,7 @@ public class I2PSnarkServlet extends BasicServlet {
     private String footer() {
         if (isStandalone()) {
             return FOOTER_STANDALONE_PREFIX
-                    + "<script src=" + _resourcePath + "js/detectPageZoom.js type=module></script>\n"
+                    + "<script src=" + _resourcePath + "js/detectPageZoom.js></script>\n"
                     + "<link rel=stylesheet href=" + _resourcePath + "snarkAlert.css>\n"
                     + FOOTER_END;
         }
