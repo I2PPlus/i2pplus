@@ -74,35 +74,6 @@ class PeerConnectionIn implements Runnable {
         lastRcvd = System.currentTimeMillis();
     }
 
-    /**
-     * The minimum complete message length in bytes for a message type, including the type byte.
-     * Messages with variable-length data (PIECE, BITFIELD, EXTENSION) have a minimum of just their
-     * fixed header.
-     *
-     * @param type the message type byte
-     * @return the minimum length for the given type
-     */
-    private static int minLengthFor(byte type) {
-        switch (type) {
-            case Message.HAVE:
-            case Message.SUGGEST:
-            case Message.ALLOWED_FAST:
-                return 5;
-            case Message.PIECE:
-                return 9;
-            case Message.REQUEST:
-            case Message.CANCEL:
-            case Message.REJECT:
-                return 13;
-            case Message.PORT:
-                return 3;
-            case Message.EXTENSION:
-                return 2;
-            default:
-                return 1;
-        }
-    }
-
     /** Disconnect from the peer and release resources. */
     void disconnect() {
         if (quit) {
@@ -128,6 +99,12 @@ class PeerConnectionIn implements Runnable {
         thread = Thread.currentThread();
         long windowStart = System.currentTimeMillis();
         int windowCount = 0;
+        // The length prefix and the fixed header fields are each taken in a single read. A
+        // readInt() on a DataInputStream is four single-byte reads on the stream underneath,
+        // and on an I2P stream each of those is a lock acquisition and a copy, so a PIECE
+        // header used to cost thirteen of them before a byte of payload was seen.
+        byte[] lenBuf = new byte[4];
+        byte[] fixedBuf = new byte[Message.MAX_FIXED_BYTES - 1];
         try {
             while (!quit) {
                 final PeerState ps = peer.state;
@@ -141,7 +118,8 @@ class PeerConnectionIn implements Runnable {
                 int len;
 
                 // Wait till we hear something...
-                int i = din.readInt();
+                din.readFully(lenBuf);
+                int i = Message.readInt(lenBuf, 0);
                 lastRcvd = System.currentTimeMillis();
                 // Count all messages including keep-alives; disconnect on flood
                 long now = System.currentTimeMillis();
@@ -173,8 +151,15 @@ class PeerConnectionIn implements Runnable {
                 byte b = din.readByte();
                 // Validate the payload length against the minimum for this message type;
                 // a short prefix is a protocol error and would desync the stream
-                if (i < minLengthFor(b)) {
+                int fixed = Message.fixedBytes(b);
+                if (i < fixed) {
                     throw new IOException("Unexpected length prefix: " + i + " for type " + b);
+                }
+                // Take whatever fields follow the id in one read too. They always arrive in
+                // the order fixedBytes() counts them, and the switch below parses them out of
+                // fixedBuf rather than reading each one from the stream on its own.
+                if (fixed > 1) {
+                    din.readFully(fixedBuf, 0, fixed - 1);
                 }
                 switch (b) {
                     case Message.CHOKE:
@@ -207,7 +192,7 @@ class PeerConnectionIn implements Runnable {
                         break;
 
                     case Message.HAVE:
-                        piece = din.readInt();
+                        piece = Message.readInt(fixedBuf, 0);
                         if (_log.shouldDebug()) {
                             _log.debug("Received a Have message -> Piece: " + piece +
                                        " * Peer: " + SnarkLogFormatter.peer(peer));
@@ -216,7 +201,7 @@ class PeerConnectionIn implements Runnable {
                         break;
 
                     case Message.BITFIELD:
-                        byte[] bitmap = new byte[i - 1];
+                        byte[] bitmap = new byte[i - fixed];
                         din.readFully(bitmap);
                         if (_log.shouldDebug()) {
                             _log.debug("Received a bitmap from " + SnarkLogFormatter.peer(peer)
@@ -227,9 +212,9 @@ class PeerConnectionIn implements Runnable {
                         break;
 
                     case Message.REQUEST:
-                        piece = din.readInt();
-                        begin = din.readInt();
-                        len = din.readInt();
+                        piece = Message.readInt(fixedBuf, 0);
+                        begin = Message.readInt(fixedBuf, 4);
+                        len = Message.readInt(fixedBuf, 8);
                         if (_log.shouldDebug()) {
                             _log.debug("Received a request -> Piece: " + piece + " * Begin: "
                                        + begin + " * Length: " + len + " bytes * Peer: "
@@ -239,9 +224,9 @@ class PeerConnectionIn implements Runnable {
                         break;
 
                     case Message.PIECE:
-                        piece = din.readInt();
-                        begin = din.readInt();
-                        len = i - 9;
+                        piece = Message.readInt(fixedBuf, 0);
+                        begin = Message.readInt(fixedBuf, 4);
+                        len = i - fixed;
                         Request req = ps.getOutstandingRequest(piece, begin, len);
                         if (req != null) {
                             req.read(din, peer);
@@ -266,9 +251,9 @@ class PeerConnectionIn implements Runnable {
                         break;
 
                     case Message.CANCEL:
-                        piece = din.readInt();
-                        begin = din.readInt();
-                        len = din.readInt();
+                        piece = Message.readInt(fixedBuf, 0);
+                        begin = Message.readInt(fixedBuf, 4);
+                        len = Message.readInt(fixedBuf, 8);
                         if (_log.shouldDebug()) {
                             _log.debug("Received a cancel -> Dropped the request"
                                        + " * Piece: " + piece + " * Offset: " + begin
@@ -278,7 +263,7 @@ class PeerConnectionIn implements Runnable {
                         break;
 
                     case Message.PORT:
-                        int port = din.readUnsignedShort();
+                        int port = Message.readUnsignedShort(fixedBuf, 0);
                         if (_log.shouldDebug()) {
                             _log.debug("Received port message from " + SnarkLogFormatter.peer(peer));
                         }
@@ -286,8 +271,8 @@ class PeerConnectionIn implements Runnable {
                         break;
 
                     case Message.EXTENSION:
-                        int id = din.readUnsignedByte();
-                        byte[] payload = new byte[i - 2];
+                        int id = Message.readUnsignedByte(fixedBuf, 0);
+                        byte[] payload = new byte[i - fixed];
                         din.readFully(payload);
                         if (_log.shouldDebug()) {
                             _log.debug("Received extension message from "
@@ -298,7 +283,7 @@ class PeerConnectionIn implements Runnable {
 
                     // fast extensions below here
                     case Message.SUGGEST:
-                        piece = din.readInt();
+                        piece = Message.readInt(fixedBuf, 0);
                         ps.suggestMessage(piece);
                         if (_log.shouldDebug()) {
                             _log.debug("Received a suggest -> Piece: " + piece
@@ -321,9 +306,9 @@ class PeerConnectionIn implements Runnable {
                         break;
 
                     case Message.REJECT:
-                        piece = din.readInt();
-                        begin = din.readInt();
-                        len = din.readInt();
+                        piece = Message.readInt(fixedBuf, 0);
+                        begin = Message.readInt(fixedBuf, 4);
+                        len = Message.readInt(fixedBuf, 8);
                         ps.rejectMessage(piece, begin, len);
                         if (_log.shouldDebug()) {
                             _log.debug("Received a reject -> Piece: " + piece + " * Begin: "
@@ -333,7 +318,7 @@ class PeerConnectionIn implements Runnable {
                         break;
 
                     case Message.ALLOWED_FAST:
-                        piece = din.readInt();
+                        piece = Message.readInt(fixedBuf, 0);
                         ps.allowedFastMessage(piece);
                         if (_log.shouldDebug()) {
                             _log.debug("Received allowed_fast -> Piece: " + piece
@@ -342,7 +327,7 @@ class PeerConnectionIn implements Runnable {
                         break;
 
                     default:
-                        byte[] bs = new byte[i - 1];
+                        byte[] bs = new byte[i - fixed];
                         din.readFully(bs);
                         ps.unknownMessage(b, bs);
                         if (_log.shouldDebug()) {

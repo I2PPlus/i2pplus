@@ -344,6 +344,50 @@ class Message {
     }
 
     /**
+     * Reads back what {@link #putInt} wrote, so the reader and the writer cannot disagree
+     * about the byte order of a protocol field.
+     *
+     * @param buf the bytes to read from
+     * @param off where in the array to start
+     * @return the 4-byte big-endian value at that position
+     * @since 0.9.72+
+     */
+    static int readInt(byte[] buf, int off) {
+        return ((buf[off] & 0xff) << 24) | ((buf[off + 1] & 0xff) << 16) |
+               ((buf[off + 2] & 0xff) << 8) | (buf[off + 3] & 0xff);
+    }
+
+    /**
+     * Reads a 2-byte big-endian field, the BEP 5 port.
+     *
+     * @param buf the bytes to read from
+     * @param off where in the array to start
+     * @return the unsigned value at that position, 0-65535
+     * @since 0.9.72+
+     */
+    static int readUnsignedShort(byte[] buf, int off) {
+        return ((buf[off] & 0xff) << 8) | (buf[off + 1] & 0xff);
+    }
+
+    /**
+     * Reads a 1-byte field, the BEP 10 extended message id.
+     *
+     * @param buf the bytes to read from
+     * @param off where in the array to start
+     * @return the unsigned value at that position, 0-255
+     * @since 0.9.72+
+     */
+    static int readUnsignedByte(byte[] buf, int off) {
+        return buf[off] & 0xff;
+    }
+
+    /**
+     * The widest fixed header any message id has: the id itself plus the piece number, offset
+     * and transfer length a REQUEST carries. A reader sizes its header buffer from this.
+     */
+    static final int MAX_FIXED_BYTES = 1 + 4 + 4 + 4;
+
+    /**
      * Assembles this message's fixed header - the length prefix, the id, and the numeric
      * fields that id uses - into one array.
      *

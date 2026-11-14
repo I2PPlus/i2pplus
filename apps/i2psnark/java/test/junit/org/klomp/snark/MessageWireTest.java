@@ -80,10 +80,17 @@ public class MessageWireTest {
         }
 
         /**
+         * @return everything written, as raw bytes
+         */
+        byte[] bytes() {
+            return _buf.toByteArray();
+        }
+
+        /**
          * @return everything written, as hex
          */
         String hex() {
-            return hexBytes(_buf.toByteArray());
+            return hexBytes(bytes());
         }
     }
 
@@ -294,6 +301,8 @@ public class MessageWireTest {
             if (Message.hasSubType(id)) expected += 1;
             if (Message.hasPort(id)) expected += 2;
             assertEquals(expected, Message.fixedBytes(id));
+            // the read loop sizes its header buffer from MAX_FIXED_BYTES, so no id may exceed it
+            assertTrue(Message.fixedBytes(id) <= Message.MAX_FIXED_BYTES);
             // a transfer length is only sent alongside an offset, and an offset alongside a
             // piece number, so the fields always arrive in the order the reader takes them
             if (Message.hasTransferLength(id)) assertTrue(Message.hasOffset(id));
@@ -325,6 +334,78 @@ public class MessageWireTest {
             // the prefix counts everything after itself, and the bytes after it are all there is
             assertEquals((hex.length() / 2) - 4, declared);
             assertTrue(declared >= Message.fixedBytes(msg.type));
+        }
+    }
+
+    /**
+     * The reader takes the fields back in the order and at the offsets the writer laid them
+     * down, for every id that carries any, and consumes exactly the header: no less, or a field
+     * is missed, and no more, or the payload is eaten. This is the agreement the read loop now
+     * relies on, since it takes all the fixed fields in one read and parses them locally.
+     *
+     * @throws IOException on stream failure
+     */
+    @Test
+    public void testReaderTakesWhatTheWriterPut() throws IOException {
+        byte[] payload = new byte[64];
+        Message[] msgs = {new Message(Message.HAVE, 7),
+                          new Message(Message.SUGGEST, 123456),
+                          new Message(Message.ALLOWED_FAST, 2048),
+                          new Message(Message.REQUEST, 1, OFFSET, 16384),
+                          new Message(Message.CANCEL, 2, 0, 1),
+                          new Message(Message.REJECT, 3, OFFSET, 16384),
+                          new Message(4, OFFSET, payload.length,
+                                      (p, b, l) -> new ByteArray(payload)),
+                          new Message(Message.PORT, 6881),
+                          new Message(9, payload)};
+        for (Message msg : msgs) {
+            byte[] wire = send(msg).bytes();
+            byte id = wire[4];
+            assertEquals(msg.type, id);
+            // the reader's own walk of the header, in the order fixedBytes() counts the fields
+            int p = 5;
+            int piece = 0;
+            int begin = 0;
+            int length = 0;
+            if (Message.hasPieceNumber(id)) {
+                piece = Message.readInt(wire, p);
+                p += 4;
+            }
+            if (Message.hasOffset(id)) {
+                begin = Message.readInt(wire, p);
+                p += 4;
+            }
+            if (Message.hasTransferLength(id)) {
+                length = Message.readInt(wire, p);
+                p += 4;
+            } else if (Message.hasSubType(id)) {
+                piece = Message.readUnsignedByte(wire, p);
+                p += 1;
+            } else if (Message.hasPort(id)) {
+                piece = Message.readUnsignedShort(wire, p);
+                p += 2;
+            }
+            assertEquals(4 + Message.fixedBytes(id), p);
+            assertEquals(msg.begin, begin);
+            if (Message.hasTransferLength(id)) {
+                assertEquals(msg.length, length);
+            } else {
+                // a PIECE's length is implicit in the prefix, and no other id carries one, so
+                // the reader leaves it at zero for all of them
+                assertEquals(0, length);
+            }
+            if (Message.hasSubType(id)) {
+                assertEquals(msg.piece & 0xff, piece);
+            } else if (Message.hasPort(id)) {
+                assertEquals(msg.piece & 0xffff, piece);
+            } else {
+                assertEquals(msg.piece, piece);
+            }
+            // the payload begins where the header ends, and is exactly as long as the length
+            // prefix promises, so one read of it is enough
+            int declared = Message.readInt(wire, 0);
+            assertEquals(wire.length - 4, declared);
+            assertEquals(wire.length - p, declared - Message.fixedBytes(id));
         }
     }
 }
