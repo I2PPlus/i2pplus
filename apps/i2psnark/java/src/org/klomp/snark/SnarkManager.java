@@ -1275,16 +1275,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * How long a screen message from a transient metadata lookup stays in the screen log
-     * once lookups are hidden from the torrent list. Long enough to read the hash and see
-     * what happened to the lookup, short enough that a probe which comes and goes does not
-     * leave its lines in front of a user who asked never to see lookups at all.
-     *
-     * @since 0.9.72+
-     */
-    static final long LOOKUP_MESSAGE_LIFETIME = 30 * 1000L;
-
-    /**
      * Whether a screen message belongs to a transient metadata lookup rather than a user
      * torrent. The message text carries the torrent's name, and a lookup torrent is named
      * "Lookup [hash8]" or "lookup-*" and lives under a "zzzot-lookup" directory, so the
@@ -1302,18 +1292,19 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * How long this message stays in the screen log: 0 to keep it until the buffer wraps
-     * or the user clears it. A lookup's message is short-lived only while lookups are
-     * hidden from the torrent list - with the list showing lookups, these messages are the
-     * only trace of them. Everything else is kept as before.
+     * Whether this message is kept out of the screen log. A lookup is a probe, not a torrent
+     * the user added, and it is deleted minutes after it resolves, so with the torrent list
+     * hiding lookups its messages are noise that pushes the traffic about real torrents off
+     * the visible log - the router log still carries them. With the list showing lookups the
+     * messages stay, as they are then the only trace of a lookup in the console.
      *
      * @param hideLookups the {@link I2PSnarkUtil#hideLookups()} setting
      * @param message the message text as it is queued
-     * @return the lifetime in ms, or 0 for no expiry
+     * @return true to leave the message out of the screen log
      * @since 0.9.72+
      */
-    static long messageLifetime(boolean hideLookups, String message) {
-        return hideLookups && isLookupMessage(message) ? LOOKUP_MESSAGE_LIFETIME : 0L;
+    static boolean hidesLookupMessage(boolean hideLookups, String message) {
+        return hideLookups && isLookupMessage(message);
     }
 
     /**
@@ -1339,9 +1330,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     public void addMessageNoEscape(String message) {
         long currentTime = System.currentTimeMillis() / 1000;
-        if (shouldQueueMessage(currentTime, message)) {
-            _messages.addMessageNoEscape(getTime() + "&nbsp; " + message,
-                                        messageLifetime(_util.hideLookups(), message));
+        if (shouldQueueMessage(currentTime, message)
+                && !hidesLookupMessage(_util.hideLookups(), message)) {
+            _messages.addMessageNoEscape(getTime() + "&nbsp; " + message);
         }
         if (_log.shouldInfo()) {
             _log.info(message);
@@ -1406,9 +1397,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     private void queueAndPrint(String message, String print) {
         long currentTime = System.currentTimeMillis() / 1000;
-        if (shouldQueueMessage(currentTime, message)) {
-            _messages.addMessageNoEscape(getTime() + "&nbsp; " + message,
-                                        messageLifetime(_util.hideLookups(), message));
+        if (shouldQueueMessage(currentTime, message)
+                && !hidesLookupMessage(_util.hideLookups(), message)) {
+            _messages.addMessageNoEscape(getTime() + "&nbsp; " + message);
         }
         printToConsole(print);
     }
