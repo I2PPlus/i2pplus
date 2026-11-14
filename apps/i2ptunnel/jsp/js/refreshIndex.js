@@ -42,11 +42,6 @@ try {
 } catch (e) {
   console.warn('[refreshIndex] Cannot access parent document:', e);
 }
-/**
- * Resize-event guard that re-pins the iframe to 100% while down.
- * @type {Function|null}
- */
-let _resizeGuard = null;
 /** @type {HTMLElement|null} */
 const isDownElement = document.getElementById("down");
 /** @type {HTMLElement|null} */
@@ -136,7 +131,9 @@ async function refreshTunnelStatus() {
           ? window.parent.document.querySelector(".main#tunnelmgr") : null;
         if (parentBox) { parentBox.style.minHeight = ""; parentBox.style.height = ""; }
       }
-      if (_resizeGuard) { window.removeEventListener("resize", _resizeGuard); _resizeGuard = null; }
+      // Resume reporting our height now the overlay is gone; the host sizes the
+      // frame to content again from the next change on.
+      if (isDownClassAdded) {window.parentIFrame?.autoResize(true);}
 
       if (notReady || doc.getElementById("notReady")) {
         const notReadyResponse = doc.getElementById("notReady");
@@ -213,17 +210,12 @@ function handleDownState() {
         parentBox.style.minHeight = "100vh";
         parentBox.style.height = "100vh";
       }
-      if (_resizeGuard) { window.removeEventListener("resize", _resizeGuard); }
-      _resizeGuard = () => {
-        iframe.style.height = "100%";
-        iframe.style.minHeight = "100%";
-        if (parentBox) {
-          parentBox.style.minHeight = "100vh";
-          parentBox.style.height = "100vh";
-        }
-        requestAnimationFrame(() => { resizeIframe(); });
-      };
-      window.addEventListener("resize", _resizeGuard);
+      // Stop reporting our height while the overlay is up: the page under it is
+      // empty, so continuing to report would shrink the frame back to nothing
+      // and overwrite the pin above. The resize guard that used to fight that
+      // only ran on a window resize, so the frame shrank anyway. Resumed when
+      // the router comes back, in refreshTunnelStatus().
+      window.parentIFrame?.autoResize(false);
       requestAnimationFrame(() => {resizeIframe();});
     }
   }
