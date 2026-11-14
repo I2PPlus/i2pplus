@@ -102,8 +102,11 @@ public class TrackerClient implements Runnable {
      */
     private static final long SLOW_ROUND_MS = 30 * 1000L;
 
-    /** Minutes between tracker status checks. */
-    private static final int SLEEP = 5; // 5 minutes.
+    /**
+     * Minutes between tracker status checks. Package-visible so the cadence contract in
+     * {@link #roundCadence(int)} can be pinned by test.
+     */
+    static final int SLEEP = 5; // 5 minutes.
     /** Threads draining the unannounce queue. */
     private static final int UNANNOUNCE_THREADS = 32;
     /** Unannounce requests held before they are dropped. */
@@ -242,8 +245,12 @@ public class TrackerClient implements Runnable {
     private static final int DELAY_RAND = 6 * 1000;
     /** Failed registrations before giving up on a tracker. */
     private static final int MAX_REGISTER_FAILS = 15; // * INITIAL_SLEEP = 15m to register
-    /** A failed registration is retried after 90 seconds. */
-    private static final int INITIAL_SLEEP = 90 * 1000;
+    /**
+     * A failed registration is retried after 90 seconds. Package-visible, and it carries
+     * no jitter, so the cadence contract in {@link #roundCadence(int)} can be pinned by
+     * test against this exact value.
+     */
+    static final int INITIAL_SLEEP = 90 * 1000;
 
     /**
      * First-announce delay for a torrent with no metainfo, a magnet
@@ -252,8 +259,11 @@ public class TrackerClient implements Runnable {
      * once still does not announce in lockstep.
      */
     static final int MAGNET_INITIAL_SLEEP = 3 * 1000;
-    /** Tracker requests slow down after this many consecutive failures. */
-    private static final int MAX_CONSEC_FAILS = 10; // slow down after this
+    /**
+     * Tracker requests slow down after this many consecutive failures. Package-visible so
+     * the cadence contract in {@link #nextRoundDelay} can be pinned by test.
+     */
+    static final int MAX_CONSEC_FAILS = 10; // slow down after this
     /**
      * Global cap on tracker HTTP requests in flight across ALL torrents, so
      * simultaneous announce/scrape rounds cannot stampede a tracker, or our
@@ -472,6 +482,12 @@ public class TrackerClient implements Runnable {
     private volatile boolean runStarted;
     /** Consecutive failed requests in the loop. */
     private volatile int consecutiveFails;
+    /**
+     * The cadence the last requeue line named - retry, steady or seeding. Null until the
+     * first round is requeued; the line is printed only when the cadence moves, because
+     * the wait itself is jittered and every round would otherwise print one.
+     */
+    private volatile String _lastRoundCadence;
     /** Whether the last response carried fresh metadata. */
     private volatile boolean lastHadMeta;
     /** Whether the torrent is complete, not necessarily seeding, as files may be skipped. */
@@ -1116,29 +1132,34 @@ public class TrackerClient implements Runnable {
                     // This is the wake-up interval of the announce loop, not a per-tracker
                     // interval: on each wake only the trackers whose own interval has passed
                     // are contacted (see getPeersFromTrackers)
-                    int delay;
                     Random r = _util.getContext().random();
-                    int random = r.nextInt(120 * 1000);
-                    if (completed && runStarted) delay = 3 * SLEEP * 60 * 1000 + random;
-                    else if (snark.getTrackerProblems() != null
-                            && ++consecutiveFails < MAX_CONSEC_FAILS) delay = INITIAL_SLEEP;
-                    else if ((!runStarted) && _runCount < MAX_CONSEC_FAILS) delay = INITIAL_SLEEP;
-                    else if (!hadMeta) delay = INITIAL_SLEEP;
-                    else
-                        // sleep a while, when we wake up we will contact only the trackers whose
-                        // intervals have passed
-                        delay = SLEEP * 60 * 1000 + random;
+                    boolean trackerProblems = snark.getTrackerProblems() != null;
+                    if (trackerProblems) {
+                        consecutiveFails++;
+                    }
+                    int delay = nextRoundDelay(completed && runStarted, trackerProblems,
+                                               consecutiveFails,
+                                               !runStarted && _runCount < MAX_CONSEC_FAILS,
+                                               hadMeta, r.nextInt(120 * 1000));
 
                     if (delay > 20 * 1000) {
                         // put ourselves on SimpleTimer2
                         // the torrent, not the thread name - the log header already
                         // shows the thread, and its number says nothing about which
-                        // torrent is waiting
-                        if (_log.shouldDebug())
+                        // torrent is waiting. The cadence is what is worth reporting:
+                        // the wait itself is jittered, so comparing the numbers would
+                        // call every round a change, and 11,545 rounds in four hours
+                        // each printed their own line. Say it when the torrent moves
+                        // between the retry, steady and seeding cadences.
+                        String cadence = roundCadence(delay);
+                        if (_log.shouldDebug() && !cadence.equals(_lastRoundCadence)) {
+                            _lastRoundCadence = cadence;
                             _log.debug("Announce loop requeued -> Torrent: "
                                        + SnarkLogFormatter.infoHash(snark.getInfoHash())
                                        + " * Next pass in "
-                                       + DataHelper.formatDuration(delay));
+                                       + DataHelper.formatDuration(delay)
+                                       + " * Cadence: " + cadence);
+                        }
                         queueLoop(delay);
                         return;
                     } else if (delay > 0) {
@@ -1962,6 +1983,56 @@ public class TrackerClient implements Runnable {
             rv[i] = delay;
         }
         return rv;
+    }
+
+    /**
+     * How long to wait before the next announce round, split out of the loop so the
+     * cadence can be pinned by test. This is the wake-up interval of the whole loop,
+     * not a per-tracker interval - on each wake only the trackers whose own interval
+     * has passed are contacted.
+     *
+     * <p>A seeding torrent sleeps three times as long as a downloading one; a torrent
+     * whose announces are failing, that has never announced successfully, or that has no
+     * metadata yet wakes at the fast retry rate instead.
+     *
+     * @param seeding true if the torrent is complete and has announced successfully
+     * @param trackerProblems true if the last round reported a tracker problem, with
+     *                        {@code consecutiveFails} already counted for this round
+     * @param consecutiveFails how many rounds in a row have had problems
+     * @param notStarted true if no announce has succeeded and the round counter is
+     *                   still below its cap
+     * @param hadMeta true if the torrent's metadata is in hand
+     * @param jitter 0 to just under 2 minutes, added to the two long cadences so the
+     *               router's torrents do not all wake on the same second
+     * @return the wait in millis, at least {@link #INITIAL_SLEEP}
+     * @since 0.9.72+
+     */
+    static int nextRoundDelay(boolean seeding, boolean trackerProblems, int consecutiveFails,
+                              boolean notStarted, boolean hadMeta, int jitter) {
+        if (seeding) {return 3 * SLEEP * 60 * 1000 + jitter;}
+        if (trackerProblems && consecutiveFails < MAX_CONSEC_FAILS) {return INITIAL_SLEEP;}
+        if (notStarted) {return INITIAL_SLEEP;}
+        if (!hadMeta) {return INITIAL_SLEEP;}
+        // a while, when we wake up we contact only the trackers whose intervals have passed
+        return SLEEP * 60 * 1000 + jitter;
+    }
+
+    /**
+     * Which cadence produced a round delay, in words. The delay itself is jittered, so
+     * two rounds of the same cadence rarely print the same number - the cadence is the
+     * part that only changes when something worth reporting has happened. The three
+     * ranges do not overlap: the retry cadence carries no jitter, the steady one tops
+     * out at {@link #SLEEP} plus under two minutes, and the seeding one starts at three
+     * times {@link #SLEEP}.
+     *
+     * @param delay the wait from {@link #nextRoundDelay}, in millis
+     * @return the words the requeue line shows after {@code Cadence: }
+     * @since 0.9.72+
+     */
+    static String roundCadence(int delay) {
+        if (delay == INITIAL_SLEEP) {return "retry after failures";}
+        if (delay >= 3 * SLEEP * 60 * 1000) {return "seeding";}
+        return "steady";
     }
 
     /**

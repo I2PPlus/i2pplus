@@ -17,6 +17,11 @@ public class DHTTrackerTest {
     private static final InfoHash IH = new InfoHash(new byte[20]);
 
     /**
+     * One instance per test method, as JUnit builds a fresh test object for each one.
+     */
+    public DHTTrackerTest() {}
+
+    /**
      * An InfoHash distinct from {@link #IH}.
      *
      * @return a fresh info hash differing from {@link #IH} in the first byte
@@ -116,5 +121,33 @@ public class DHTTrackerTest {
         List<Hash> peers = tracker.getPeers(IH, 10, false);
         assertEquals(1, peers.size());
         peers.remove(0);
+    }
+
+    /**
+     * A peer the checker re-announces every pass stays one entry, and its seed flag only
+     * ever moves one way. The checker announces us on every pass, so the same peer with
+     * the same seed flag is not news and is not logged; the announce only says anything
+     * when the peer joins the torrent's list or starts seeding it, and both of those
+     * judgements read this state.
+     */
+    @Test
+    public void testAReannouncedPeerStaysOneEntryAndOnlyBecomesASeed() {
+        DHTTracker tracker = new DHTTracker(I2PAppContext.getGlobalContext(), 0);
+        byte[] raw = new byte[32];
+        raw[1] = 7;
+        Hash hash = new Hash(raw);
+        tracker.announce(IH, hash, false);
+        tracker.announce(IH, hash, false);
+        BloomFilter[] leech = tracker.getBloomFilters(IH);
+        assertNotNull(leech);
+        assertFalse("a leech is not in the seed filter", leech[0].contains(raw));
+        assertTrue("a leech is in the peer filter", leech[1].contains(raw));
+        // the same peer announces as a seed: still one entry, and the seed filter gains it
+        tracker.announce(IH, hash, true);
+        assertTrue("the peer became a seed", tracker.getBloomFilters(IH)[0].contains(raw));
+        // a later announce that does not know the seed status must not undo it
+        tracker.announce(IH, hash, false);
+        assertTrue("false must not trump true", tracker.getBloomFilters(IH)[0].contains(raw));
+        assertEquals("one entry for the peer", 1, tracker.getPeers(IH, 10, false).size());
     }
 }

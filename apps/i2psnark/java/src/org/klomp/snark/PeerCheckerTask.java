@@ -58,6 +58,11 @@ class PeerCheckerTask implements Runnable {
     /** How many times the task has run. */
     private int _runCount;
     /**
+     * The last check-pass line this task printed, so a pass that has nothing new to
+     * say stays quiet. Null until the first pass reports.
+     */
+    private String _lastPassLine;
+    /**
      * Random phase for the work that runs every Nth pass - closing files, announcing to
      * the local DHT - so two torrents started at the same time do not do it in lockstep.
      * Combined with the jittered checker cadence, this spreads the periodic work of a
@@ -437,12 +442,16 @@ class PeerCheckerTask implements Runnable {
         if (_log.shouldDebug()) {
             // one line for the pass instead of a START and an END pair printing the
             // same keys twice, and the keys say what they count; the two states that
-            // only matter when they are abnormal get their own lines
-            _log.debug("Peer check pass -> Peers checked: " + peerList.size()
-                       + " * Uploaders: " + uploaders + " of " + uploadLimit
-                       + " * Interested: " + interestedUploaders
-                       + (removedCount > 0 ? "\n* Choked: " + removedCount + " peers" : "")
-                       + (overBWLimit ? "\n* Over the upload limit" : ""));
+            // only matter when they are abnormal get their own lines. The pass runs
+            // every CHECK_PERIOD whatever else is happening, and between the events
+            // that would move those numbers it says the same thing - 2,647 lines in a
+            // four hour window, nearly all of them repeats. Say it when it changes.
+            String line = passLine(peerList.size(), uploaders, uploadLimit, interestedUploaders,
+                                   removedCount, overBWLimit);
+            if (!line.equals(_lastPassLine)) {
+                _lastPassLine = line;
+                _log.debug(line);
+            }
         }
 
         // close out unused files, but we don't need to do it every time
@@ -465,6 +474,31 @@ class PeerCheckerTask implements Runnable {
         if (swarm && dht != null && ((_runCount + _phase) % 16) == 0) {
             dht.announce(coordinator.getInfoHash(), coordinator.completed());
         }
+    }
+
+    /**
+     * The one line a check pass reports: how many peers it covered, how many are
+     * uploading and of how many slots, how many of those want more from us, and the two
+     * states that only matter when they are abnormal. Pure, and package-visible so the
+     * test can pin that two passes with the same numbers produce the same line - that
+     * equality is what lets the pass stay quiet instead of printing every period.
+     *
+     * @param peers how many peers this pass covered
+     * @param uploaders how many of them are uploading to us
+     * @param uploadLimit how many upload slots this torrent may use
+     * @param interested how many uploaders want more pieces from us
+     * @param choked how many peers this pass choked, 0 for none
+     * @param overLimit true if the torrent is over its upload slots
+     * @return the line to log
+     * @since 0.9.72+
+     */
+    static String passLine(int peers, int uploaders, int uploadLimit, int interested,
+                           int choked, boolean overLimit) {
+        return "Peer check pass -> Peers checked: " + peers
+               + " * Uploaders: " + uploaders + " of " + uploadLimit
+               + " * Interested: " + interested
+               + (choked > 0 ? "\n* Choked: " + choked + " peers" : "")
+               + (overLimit ? "\n* Over the upload limit" : "");
     }
 
     /**

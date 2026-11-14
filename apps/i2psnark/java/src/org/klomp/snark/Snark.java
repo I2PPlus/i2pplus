@@ -1759,11 +1759,17 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
             }
         }
         int limit = Math.max(MIN_TOTAL_UPLOADERS, maxUploaders);
-        if (_log.shouldDebug()) {
-            _log.debug("Upload slots in use -> " + totalUploaders + " peers"
-                       + " * Global limit: " + limit + " peers");
+        boolean over = totalUploaders > limit;
+        if (over && _log.shouldDebug()) {
+            // Only when the limit actually bites. This is a CoordinatorListener
+            // callback the unchoke cascade makes once per peer per check pass, so
+            // printing the answer every time reported the same two numbers 4,154
+            // times in four hours, including the passes where nothing was wrong.
+            _log.debug("Global upload limit exceeded -> Throttling this torrent's uploads"
+                       + "\n* Uploaders: " + totalUploaders + " peers * Limit: " + limit
+                       + " peers");
         }
-        return totalUploaders > limit;
+        return over;
     }
 
     /**

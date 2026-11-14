@@ -160,11 +160,6 @@ class DHTTracker {
      * @param isSeed true if the peer is a seed
      */
     void announce(InfoHash ih, Hash hash, boolean isSeed) {
-        if (_log.shouldDebug())
-            _log.debug("Announcing a peer to the DHT -> Torrent: "
-                       + SnarkLogFormatter.infoHash(ih.getData())
-                       + " * Peer: " + SnarkLogFormatter.dest(hash)
-                       + (isSeed ? " (seed)" : " (leech)"));
         Peers peers = _torrents.get(ih);
         if (peers == null) {
             if (_torrents.size() >= MAX_TORRENTS) return;
@@ -176,10 +171,22 @@ class DHTTracker {
         if (peers.size() < ABSOLUTE_MAX_PER_TORRENT) {
             Peer peer = new Peer(hash.getData());
             Peer peer2 = peers.putIfAbsent(peer, peer);
+            boolean joined = peer2 == null;
             if (peer2 != null) peer = peer2;
             peer.setLastSeen(_context.clock().now());
             // don't let false trump true, as not all sources know the seed status
+            boolean becameSeed = isSeed && !peer.isSeed();
             if (isSeed) peer.setSeed(true);
+            // The checker re-announces us on every pass, so the same peer with the
+            // same seed flag is not news - 13,154 lines in a four hour window, all
+            // but a handful of them the same peer re-announcing itself. Say it when
+            // the peer joins the torrent's list or starts seeding it.
+            if (_log.shouldDebug() && (joined || becameSeed)) {
+                _log.debug("Announcing a peer to the DHT -> "
+                           + (joined ? "Joined the torrent's peer list" : "Now seeding")
+                           + " * Torrent: " + SnarkLogFormatter.infoHash(ih.getData())
+                           + " * Peer: " + SnarkLogFormatter.dest(hash));
+            }
         } else {
             // We don't update setLastSeen here so that the peer
             // will expire, allowing new peers to come in.
