@@ -2297,25 +2297,53 @@ public class I2PSnarkUtil implements DisconnectListener {
     private static final int BASE32_HASH_LENGTH = 52; // 1 + Hash.HASH_LENGTH * 8 / 5
 
     /**
+     * How long one <code>.b32.i2p</code> lookup waits for the router's answer, in millis. The
+     * router runs a network-database search for that long, asking several floodfills, so a
+     * destination that is published but not yet in this router's netdb still turns up. A dial
+     * to a hash-only peer already owns a thread of its own, so the longer wait costs only the
+     * wait.
+     *
+     * @since 0.9.72+
+     */
+    static final long DEST_LOOKUP_TIMEOUT_MS = 60 * 1000L;
+
+    /**
      * How long a destination resolved for a <code>.b32.i2p</code> hash is reused, in millis.
      * A running destination keeps its key, and the tracker, the DHT and PEX all keep
      * re-advertising the same peers for the life of a torrent, so without a cache every dial
-     * to a hash-only peer id pays for the same lookup again - up to 15 seconds of a
-     * connection thread each time.
+     * to a hash-only peer id pays for the same lookup again - up to a minute of a connection
+     * thread each time.
      *
      * @since 0.9.72+
      */
     static final long DEST_CACHE_POSITIVE_MS = 6 * 60 * 60 * 1000L;
 
     /**
-     * How long a hash that did not resolve is treated as unresolvable, in millis. A miss
-     * costs what a hit costs - the whole 15-second wait - and a peer that has just stopped
-     * running is still advertised by the swarm for a while, so the answer is kept. It is kept
-     * briefly: a peer that comes back under a new destination is dialable again after this.
+     * The first wait before asking again about a hash that did not resolve. Each later wait
+     * doubles, so the four attempts land at 0, 30, 90 and 210 seconds: a peer whose destination
+     * is published a moment after we first ask becomes dialable inside that window, while a peer
+     * that has simply gone away is not asked about five times a minute for the life of the
+     * torrent.
      *
      * @since 0.9.72+
      */
-    static final long DEST_CACHE_NEGATIVE_MS = 15 * 60 * 1000L;
+    static final long DEST_RETRY_BASE_MS = 30 * 1000L;
+
+    /**
+     * How many times a hash is asked about before it is left alone.
+     *
+     * @since 0.9.72+
+     */
+    static final int DEST_RETRY_ATTEMPTS = 4;
+
+    /**
+     * How long a hash is left alone once its attempts are used up, in millis. A peer that has
+     * just stopped running is still advertised by the swarm for a while, so the answer is kept;
+     * briefly, so a peer that comes back under a new destination is dialable again.
+     *
+     * @since 0.9.72+
+     */
+    static final long DEST_CACHE_NEGATIVE_MS = 5 * 60 * 1000L;
 
     /**
      * Entries {@link #_destCache} holds before the expired ones are swept, so a torrent shown
@@ -2342,26 +2370,53 @@ public class I2PSnarkUtil implements DisconnectListener {
         final long expires;
 
         /**
+         * How many attempts the next one is, counted from 0, so the backoff continues across
+         * the waits; 0 again once the attempts are used up and the quiet period starts over.
+         */
+        final int attempts;
+
+        /**
          * @param dest the destination that was resolved, or null if the hash did not resolve
          * @param expires the time this answer stops being reused, in millis
+         * @param attempts how many attempts the next lookup is, from 0
          */
-        CachedDest(Destination dest, long expires) {
+        CachedDest(Destination dest, long expires, int attempts) {
             this.dest = dest;
             this.expires = expires;
+            this.attempts = attempts;
         }
     }
 
     /**
-     * How long one lookup answer stays reusable: hours for a destination we resolved, minutes
-     * for a hash that did not resolve, because a peer that is gone may come back with a new
-     * key while a destination we dialled does not change underneath us.
+     * How long one lookup answer stays reusable: hours for a destination we resolved, and for a
+     * hash that did not resolve, the wait before the next attempt - doubling until the attempts
+     * are used up, then the quiet period. A peer that is gone may come back with a new key while
+     * a destination we dialled does not change underneath us.
      *
      * @param dest the destination from the lookup, null if it did not resolve
+     * @param attempts how many attempts this one is, counted from 0
      * @return the lifetime of the answer, in millis
      * @since 0.9.72+
      */
-    static long destCacheTtl(Destination dest) {
-        return dest != null ? DEST_CACHE_POSITIVE_MS : DEST_CACHE_NEGATIVE_MS;
+    static long destCacheTtl(Destination dest, int attempts) {
+        if (dest != null) {
+            return DEST_CACHE_POSITIVE_MS;
+        }
+        return attempts + 1 >= DEST_RETRY_ATTEMPTS ? DEST_CACHE_NEGATIVE_MS
+                                                   : DEST_RETRY_BASE_MS << attempts;
+    }
+
+    /**
+     * The attempt number the next lookup about this hash is, so the backoff continues across
+     * the waits instead of restarting. It goes back to 0 once the attempts are used up and the
+     * quiet period starts over.
+     *
+     * @param attempts how many attempts this one is, counted from 0
+     * @return the attempt number to record for the next lookup
+     * @since 0.9.72+
+     */
+    static int destCacheAttempts(int attempts) {
+        return attempts + 1 >= DEST_RETRY_ATTEMPTS ? 0 : attempts + 1;
     }
 
     /**
@@ -2384,9 +2439,11 @@ public class I2PSnarkUtil implements DisconnectListener {
      * @param h the hash that was looked up
      * @param dest the destination that was resolved, or null
      * @param now the current time, in millis
+     * @param attempts how many attempts this lookup was, counted from 0
      */
-    void cacheDestination(Hash h, Destination dest, long now) {
-        _destCache.put(h, new CachedDest(dest, now + destCacheTtl(dest)));
+    void cacheDestination(Hash h, Destination dest, long now, int attempts) {
+        _destCache.put(h, new CachedDest(dest, now + destCacheTtl(dest, attempts),
+                                         dest == null ? destCacheAttempts(attempts) : 0));
         if (_destCache.size() > DEST_CACHE_MAX) {
             _destCache.values().removeIf(c -> now >= c.expires);
         }
@@ -2399,6 +2456,18 @@ public class I2PSnarkUtil implements DisconnectListener {
      */
     int destCacheSize() {
         return _destCache.size();
+    }
+
+    /**
+     * The attempt number the next lookup about this hash is recorded as, so a test can see the
+     * backoff continuing across the waits instead of restarting.
+     *
+     * @param h the hash to read the entry for
+     * @return the recorded attempt number from 0, or -1 when nothing is cached for the hash
+     */
+    int destCacheAttemptsFor(Hash h) {
+        CachedDest c = _destCache.get(h);
+        return c != null ? c.attempts : -1;
     }
 
     /**
@@ -2429,29 +2498,53 @@ public class I2PSnarkUtil implements DisconnectListener {
         if (ip.endsWith(".i2p")) {
             if (ip.length() < 520) { // key + ".i2p"
                 // A .b32.i2p address is only a hash, so it has to be resolved, and the
-                // wait for it is up to 15 seconds of whatever thread asked. The same peers
+                // wait for it is up to a minute of whatever thread asked. The same peers
                 // are re-advertised by the tracker, the DHT and PEX for the life of a
-                // torrent, so the answer - including "nothing" - is kept and reused.
+                // torrent, so the answer - including "nothing" - is kept and reused, and a
+                // "nothing" is asked about four times on a backoff before it is left alone.
                 Hash h = b32Hash(ip);
                 long now = _context.clock().now();
+                int attempts = 0;
                 if (h != null) {
                     CachedDest hit = _destCache.get(h);
                     if (hit != null && destCacheFresh(hit.expires, now)) {
-                        if (_log.shouldDebug())
-                            _log.debug("Reusing a destination resolved earlier for " + ip);
+                        if (_log.shouldDebug()) {
+                            if (hit.dest != null) {
+                                _log.debug("Reusing a destination resolved earlier -> Dialable"
+                                           + " * Destination: " + SnarkLogFormatter.dest(h));
+                            } else {
+                                _log.debug("Skipping a destination lookup -> Held as unresolvable"
+                                           + " * Destination: " + SnarkLogFormatter.dest(h)
+                                           + " * Retry in: "
+                                           + DataHelper.formatDuration(hit.expires - now));
+                            }
+                        }
                         return hit.dest;
+                    }
+                    if (hit != null) {
+                        // the wait ran out: this attempt continues the backoff it started
+                        attempts = hit.attempts;
                     }
                 }
                 I2PSocketManager mgr = _manager;
                 I2PSession sess = mgr != null ? mgr.getSession() : null;
                 if (h != null && sess != null) {
-                    if (_log.shouldDebug())
-                        _log.debug("Using existing session for lookup of [" + ip + "]");
+                    if (_log.shouldDebug()) {
+                        _log.debug("Asking the router for a destination -> Using the existing"
+                                   + " session * Destination: " + SnarkLogFormatter.dest(h));
+                    }
                     Destination dest = null;
                     try {
-                        dest = sess.lookupDest(h, (long) 15 * 1000);
+                        dest = sess.lookupDest(h, DEST_LOOKUP_TIMEOUT_MS);
                     } catch (I2PSessionException ise) { /* ignored */ }
-                    cacheDestination(h, dest, now);
+                    if (_log.shouldDebug() && dest == null) {
+                        _log.debug("Resolved no destination -> Retrying in "
+                                   + DataHelper.formatDuration(destCacheTtl(null, attempts))
+                                   + " * Destination: " + SnarkLogFormatter.dest(h)
+                                   + " * Attempt: " + (attempts + 1) + " of "
+                                   + DEST_RETRY_ATTEMPTS);
+                    }
+                    cacheDestination(h, dest, now, attempts);
                     return dest;
                 }
                 if (_log.shouldDebug()) {
@@ -2459,7 +2552,7 @@ public class I2PSnarkUtil implements DisconnectListener {
                 }
                 Destination dest = _context.namingService().lookup(ip);
                 if (h != null) {
-                    cacheDestination(h, dest, now);
+                    cacheDestination(h, dest, now, attempts);
                 }
                 return dest;
             }
