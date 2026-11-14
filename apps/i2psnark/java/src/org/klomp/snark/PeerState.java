@@ -1804,8 +1804,12 @@ class PeerState implements DataLoader {
             setInteresting(false);
         }
 
-        if (_log.shouldDebug() && !outstandingRequests.isEmpty()) {
-            // a per-piece tally, not the request list - the list named every block
+        if (_log.shouldDebug() && choked && !outstandingRequests.isEmpty()) {
+            // Only while the peer is throttling us. Every request that goes on the wire is
+            // already logged by PeerConnectionOut with its offset and size, and this tally
+            // repeated that - 95 thousand lines in a two and a half hour window. What the wire
+            // lines cannot show is the requests we hold back because the peer will not send.
+            // A per-piece tally, not the request list - the list named every block
             // offset and ran to 596 characters for one peer
             Map<Integer, Integer> tally = new TreeMap<>();
             for (Request req : outstandingRequests) {
@@ -1813,8 +1817,9 @@ class PeerState implements DataLoader {
                 Integer prior = tally.get(key);
                 tally.put(key, Integer.valueOf(prior == null ? 1 : prior.intValue() + 1));
             }
-            _log.debug("Requesting from " + SnarkLogFormatter.peer(peer) + " ->"
-                       + SnarkLogFormatter.requestTally(tally));
+            _log.debug("Holding requests back from a choking peer ->"
+                       + SnarkLogFormatter.requestTally(tally)
+                       + " * Peer: " + SnarkLogFormatter.peer(peer));
         }
     }
 
