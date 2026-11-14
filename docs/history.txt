@@ -1,3 +1,22 @@
+2026-11-14 dr|z3d
+  * Console:
+    - Cut the vendored iframe-resizer pair down to what the console uses -
+      height only, one level of nesting and same-origin frames - dropping width
+      sizing, polling and the reset handshake, a third of the pair's lines
+    - Load both halves from one unversioned URL and tag the handshake, stop a
+      framed page navigation adding another host listener, and re-measure a
+      frame sized while hidden instead of leaving it collapsed
+    - Fix pages that loaded one script twice, holding two copies of one file in
+      cache, and keep each page script's helpers in its own file rather than on
+      the shared window, where two scripts overwrote each other's names
+    - Fix the loading bar never hiding - its own wrapper function hid the object
+      the script published, so the call that was to hide it failed
+  * I2PSnark: Load the framed-page half of the iframe resizer, `updatedEvent.js`
+    and `setupIframe.js` as plain scripts rather than ES modules, so a snark
+    page fetches them once and sizes its frame during the parse
+  * I2PTunnel: Hold the Tunnel Manager's frame at full height while it shows the
+    router-is-down overlay - the resize guard only ran on a window resize
+
 2026-11-12 dr|z3d
   * I2PSnark:
     - Finish a download stuck with one piece left and every seed uninteresting
