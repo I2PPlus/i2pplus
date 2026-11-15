@@ -203,6 +203,37 @@ public class StatManagerRateHandleTest {
     }
 
     /**
+     * A required stat is created even while this manager is skipping the optional
+     * ones, and the handle resolved for it is never null.
+     *
+     * <p>Pinned because a caller that caches the handle and dereferences it without
+     * a null check throws on a default install when the registration is skipped -
+     * which is what a plain {@code createRateStat()} registration does here.
+     */
+    @Test
+    public void requiredStatIsCreatedAndResolvedWhenStatsAreNotCollected() {
+        when(_ctx.isRouterContext()).thenReturn(true);
+        when(_ctx.getBooleanProperty(StatManager.PROP_STAT_FULL)).thenReturn(false);
+        assertTrue(_sm.ignoreStat(NAME));
+
+        _sm.createRateStat("test.optional", DESC, GROUP, PERIODS);
+        assertFalse("a plain registration is skipped", _sm.isRate("test.optional"));
+
+        _sm.createRequiredRateStat(NAME, DESC, GROUP, PERIODS);
+        assertTrue(_sm.isRate(NAME));
+        RateStat handle = _sm.getOrCreateRateStat(NAME, DESC, GROUP, PERIODS);
+        assertNotNull("a required stat must resolve to a usable handle", handle);
+        assertSame(handle, _sm.getRate(NAME));
+        handle.addData(3L);
+        assertEquals(1L, handle.getLifetimeEventCount());
+
+        _sm.createRequiredFrequencyStat(FREQ, DESC, GROUP, PERIODS);
+        FrequencyStat freq = _sm.getOrCreateFrequencyStat(FREQ, DESC, GROUP, PERIODS);
+        assertNotNull(freq);
+        assertSame(freq, _sm.getFrequency(FREQ));
+    }
+
+    /**
      * A removed stat takes its handle out of the table, so a cached handle must be
      * treated as invalid afterwards rather than silently writing to a detached stat.
      */
