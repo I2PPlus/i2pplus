@@ -210,6 +210,15 @@ public class LogsHelper extends HelperBase {
     public String getJettyVersion() {return RouterConsoleRunner.jettyVersion();}
 
     /**
+     * Return the Tomcat release the Jasper jars on the classpath came from,
+     * for the "Jasper/Tomcat" entry beside the Jetty version.
+     *
+     * @return the Tomcat version string, never null
+     * @since 0.9.72+
+     */
+    public String getJasperVersion() {return RouterConsoleRunner.TOMCAT_VERSION;}
+
+    /**
      * Return a table row for each signature type this router cannot use.
      *
      * @return the table rows listing each unavailable signature type, empty if

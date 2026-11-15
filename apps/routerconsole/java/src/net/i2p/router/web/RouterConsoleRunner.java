@@ -383,6 +383,18 @@ public class RouterConsoleRunner implements RouterApp {
 
 
     /**
+     * The Tomcat release the Jasper jars we ship are built from, as shown on the
+     * router information page. Jetty reports its own version at run time, but the
+     * Jasper jars are merged out of the checked-in apache-tomcat tree by
+     * apps/jetty/build.xml, which discards the upstream manifest, so nothing at
+     * run time knows the number. It is the same pin the build reads from
+     * build.xml's tomcat.ver and gradle.properties' tomcatVersion, and
+     * tools/scripts/update-tomcat.sh rewrites all four together;
+     * JasperVersionTest fails if they ever disagree.
+     */
+    public static final String TOMCAT_VERSION = "9.0.124";
+
+    /**
      * The version string of the Jetty server library the console runs on.
      * @return the Jetty version, as reported by Jetty itself
      * @since 0.8.13, moved from LogsHelper in 0.9.33

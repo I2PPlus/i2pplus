@@ -36,7 +36,7 @@
 <%  } %>
 </td></tr>
 <jsp:getProperty name="logsHelper" property="unavailableCrypto"/>
-<tr><td><b>Jetty:</b></td><td><jsp:getProperty name="logsHelper" property="jettyVersion"/>&ensp;<b>Servlet:</b>&ensp;<%=getServletInfo()%></td></tr>
+<tr><td><b>Jetty:</b></td><td><jsp:getProperty name="logsHelper" property="jettyVersion"/>&ensp;<b>Jasper/Tomcat:</b>&ensp;<jsp:getProperty name="logsHelper" property="jasperVersion"/></td></tr>
 <tr><td><b>JBigI:</b></td><td><%=net.i2p.util.NativeBigInteger.loadStatus()%>&ensp;<span class=nowrap>[version: <%=net.i2p.util.NativeBigInteger.getJbigiVersion()%>]</span>&ensp;<span class=nowrap><b>GMP:</b>&ensp;<%=net.i2p.util.NativeBigInteger.getLibGMPVersion()%></span></td></tr>
 <tr><td><b>JSTL:</b></td><td><jsp:getProperty name="logsHelper" property="jstlVersion"/>&ensp;<span class=nowrap><b>Encoding:</b>&ensp;<%=System.getProperty("file.encoding")%></span>&ensp;<span class=nowrap><b>Charset:</b>&ensp;<%=java.nio.charset.Charset.defaultCharset().name()%></span></td></tr>
 </tbody>
