@@ -47,12 +47,19 @@ SRC_DIR="${WORK_DIR}/wrapper_${VERSION}_src"
 
 echo "Checking wrapper ${VERSION} win64..."
 
+# version.txt and README.md name the version, whatever the build did.
+sync_bookkeeping() {
+    "${WRAPPER_DIR}/sync-wrapper-version.sh" --version "${VERSION}" ||
+        echo "WARNING: version.txt / README.md were not updated - fix them by hand" >&2
+}
+
 if [ "${FORCE:-0}" -eq 1 ]; then
     true
 elif [ -f "${WRAPPER_DIR}/win64/I2Psvc.exe" ] && [ -f "${WRAPPER_DIR}/win64/wrapper.dll" ] && [ -f "${WRAPPER_DIR}/all/wrapper.jar" ]; then
     jar_ver=$(unzip -p "${WRAPPER_DIR}/all/wrapper.jar" META-INF/MANIFEST.MF 2>/dev/null | grep "Implementation-Version" | cut -d' ' -f2 | tr -d '\r')
     if [ "${jar_ver}" = "${VERSION}" ]; then
         echo "Nothing to do, all win64 wrapper files are up to date."
+        sync_bookkeeping
         exit 0
     fi
 fi
@@ -363,6 +370,8 @@ if [ ! -f wrapper.dll ]; then
 fi
 cp wrapper.dll "${INSTALL_DIR}/${WIN_DIR}/wrapper.dll"
 ${HOST}-strip -s "${INSTALL_DIR}/${WIN_DIR}/wrapper.dll"
+
+sync_bookkeeping
 
 echo ""
 echo "=== Built ==="

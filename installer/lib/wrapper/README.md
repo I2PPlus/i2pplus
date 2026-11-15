@@ -1,7 +1,9 @@
 # Tanuki Java Service Wrapper
 
 This directory contains the Tanuki Java Service Wrapper binaries for all supported platforms.
-The wrapper version is managed via `version.txt` (currently **3.7.0**).
+The wrapper version is managed via `version.txt` (currently **3.7.3**), and
+`README.md` names the same version. `sync-wrapper-version.sh` keeps the two in
+step; `update-wrapper.sh` and `build-wrapper-win64.sh` run it for you.
 
 ## Automated Updates
 
@@ -43,6 +45,18 @@ sudo apt install mingw-w64
 ./build-wrapper-win64.sh --version 3.6.5  # Specific version
 ```
 
+#### sync-wrapper-version.sh
+
+Keeps `version.txt` and the version line at the top of this file in step with
+the version being installed. Both update scripts run it, including when they
+find nothing to do, so a bump cannot leave either file naming an older release.
+
+```bash
+./sync-wrapper-version.sh --check           # Report drift, change nothing
+./sync-wrapper-version.sh                   # Use the version in all/wrapper.jar
+./sync-wrapper-version.sh --version 3.7.3   # Set both files to one version
+```
+
 ## Supported Platforms
 
 ### Native Libraries
@@ -60,6 +74,8 @@ sudo apt install mingw-w64
 > Tanuki ships no 64-bit Windows binaries; win64/I2Psvc.exe and win64/wrapper.dll
 > are cross-compiled from source by `build-wrapper-win64.sh`. The JNI wrapper.dll
 > is required by WrapperManager (service integration) and must match the exe version.
+> `jni-win64/jni_md.h` is the JNI platform header that build compiles against and
+> is not shipped in the package.
 
 ### Executables
 
@@ -70,6 +86,7 @@ sudo apt install mingw-w64
 | Linux x86-64      | linux64/         | i2psvc                                 |
 | Linux ARM64       | linux64-armv8/   | i2psvc                                 |
 | macOS Universal   | macosx/          | i2psvc-macosx-universal-64             |
+| macOS ARM64       | macosx-arm64/    | i2psvc-macosx-arm-64                   |
 | Windows x86-64    | win64/           | I2Psvc.exe                             |
 
 ## Building Other Platforms from Source
@@ -89,7 +106,9 @@ chmod 644 bin/wrapper lib/libwrapper.so
 
 ### Linux/ARM
 
-See `linux-armv5/README.txt` for cross-compilation instructions.
+ARM64 comes from the delta pack: `update-wrapper.sh` installs it into
+`linux64-armv8/`. The 32-bit ARM trees (`linux-armv5/`, `linux-armv7/`) were
+dropped, and the update script deletes them if they reappear.
 
 ### macOS
 

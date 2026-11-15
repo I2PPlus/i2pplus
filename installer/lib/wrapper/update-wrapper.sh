@@ -50,13 +50,23 @@ check_up_to_date() {
     [ -f "${WRAPPER_DIR}/macosx/libwrapper-macosx-universal-64.jnilib" ] || return 1
 
     local jar_ver=$(unzip -p "${WRAPPER_DIR}/all/wrapper.jar" META-INF/MANIFEST.MF 2>/dev/null | grep "Implementation-Version" | cut -d' ' -f2 | tr -d '\r')
-    [ "${jar_ver}" = "${VERSION}" ] || return 1
+    [ "${jar_ver}" = "${VERSION}" ] || {
+        [ -n "${jar_ver}" ] && echo "Installed wrapper.jar is ${jar_ver}, target is ${VERSION}"
+        return 1
+    }
 
     return 0
 }
 
+# version.txt and README.md name the version, whatever the update did.
+sync_bookkeeping() {
+    "${WRAPPER_DIR}/sync-wrapper-version.sh" --version "${VERSION}" ||
+        echo "WARNING: version.txt / README.md were not updated - fix them by hand" >&2
+}
+
 if check_up_to_date; then
     echo "Nothing to do, all wrapper files are up to date."
+    sync_bookkeeping
     exit 0
 fi
 
@@ -145,6 +155,8 @@ for f in "${WRAPPER_DIR}"/macosx/*-32 "${WRAPPER_DIR}"/macosx/*universal-32*; do
     echo "  Removing $(basename "$f") (32-bit)"
     rm -f "$f"
 done
+
+sync_bookkeeping
 
 echo ""
 echo "=== Updated ==="
