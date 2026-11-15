@@ -54,6 +54,20 @@ case "$MODULE" in
         CP="$(find apps/jetty -name '*.jar' | tr '\n' ':')"
         LOGSCOPE="core/java/src"
         ;;
+    router)
+        BUILD="router/java/build.xml"
+        REPORTS="/tmp/build-i2p/reports/router/junit"
+        SOURCEPATH="router/java/src:router/java/test/junit:core/java/src:apps/streaming/java/src:apps/ministreaming/java/src:apps/i2ptunnel/java/src"
+        CP="$(find tools/test -name '*.jar' | tr '\n' ':')"
+        LOGSCOPE="router/java/src"
+        ;;
+    streaming)
+        BUILD="apps/streaming/java/build.xml"
+        REPORTS="/tmp/build-i2p/reports/streaming/junit"
+        SOURCEPATH="apps/streaming/java/src:apps/streaming/java/test/junit:core/java/src:router/java/src:apps/ministreaming/java/src"
+        CP="$(find tools/test -name '*.jar' | tr '\n' ':')"
+        LOGSCOPE="apps/streaming/java/src"
+        ;;
     routerconsole)
         BUILD="apps/routerconsole/java/build.xml"
         REPORTS="/tmp/build-i2p/reports/routerconsole/junit"
