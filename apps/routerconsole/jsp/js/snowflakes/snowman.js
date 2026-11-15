@@ -222,6 +222,18 @@
    */
   const WARP_MAX = 0.45;
   /**
+   * Chance a stem habit's crystal gets the spiral that joins its arms to their
+   * neighbours.
+   *
+   * Mostly, not always. The join is what makes a spoke-and-plate crystal read as one
+   * object rather than as six separate sticks, and a field where every crystal is
+   * joined loses the difference; a field where none of them are is the diagram look
+   * the stem habits are capped for. The decision is made from the slot's own seed, so
+   * all sixteen frames of a crystal agree and a flake never flickers between joined
+   * and broken.
+   */
+  const SPIRAL_CHANCE = 0.7;
+  /**
    * Frames held per flake slot.
    *
    * For a flat crystal the frames are the same arm drawn at successive points of a
@@ -269,17 +281,35 @@
    */
   const WIRE_SPIN_MIN = 0.006;
   /**
-   * Range of the tumble rate a wireframe flake draws for its two screen axes, in
-   * radians per step: up to about 21 degrees a second each, so the solid turns
-   * continuously on all three axes and completes a turn well inside its travel.
+   * Slowest and fastest a wireframe flake tumbles about each of the two screen axes,
+   * in radians per step: 17 to 34 degrees a second.
    *
-   * This is a range around zero, not a floor: a flake that draws a near-zero rate
-   * simply tumbles slowly about that axis, which is what keeps a field of them from
-   * turning in step.
+   * A floor on the magnitude, not a range around zero. Drawn from a range centred on
+   * zero, a third of the field drew a near-zero rate on one axis or the other and fell
+   * turning on two axes while looking flat, which is what a solid built in three
+   * dimensions is not supposed to do. Each axis draws its own rate and its own sign,
+   * so the three axes turn at different speeds and no two wireframes tumble in step.
    */
-  const WIRE_TUMBLE_RATE = 0.012;
+  const WIRE_TUMBLE_MIN = 0.005;
+  const WIRE_TUMBLE_MAX = 0.01;
   /** Fastest a flat flake turns while it is alive, in radians per step. */
   const MIN_SPIN = 0.01;
+  /**
+   * Fall speed that counts as slow, in pixels a step. Everything under this is one of
+   * the smallest flakes in the field, and a small flake drifting down almost square
+   * to the viewer reads as a speck rather than as a crystal.
+   */
+  const SLOW_FALL_SPEED = 0.78;
+  /**
+   * How much spin a slow flake picks up over its fall, as a multiple of the rate it
+   * started at, reached at the end of its travel.
+   *
+   * Two reasons, and they are the same reason: air catches a face and a small flake
+   * really does spin up as it falls, and a field whose slow third never turns is a
+   * field with no spin variation in it. The fast flakes get their spread of rates from
+   * their size; this is what gives the slow ones theirs.
+   */
+  const SLOW_SPIN_RAMP = 1.6;
   /**
    * Fastest a dying wireframe spins, in radians per step, against the
    * {@link DEATH_SPIN_MAX} a flat crystal reaches.
@@ -501,9 +531,11 @@
    * @param {number} radius distance from centre to vertex
    * @param {number} sides number of corners, at least 3
    * @param {number} rotation orientation in radians
+   * @param {boolean} [reverse] walk the corners the other way round, which is what
+   *   makes the polygon a hole rather than a fill when it sits inside another path
    * @returns {string} the closed path data, with no element around it
    */
-  function ngonPath(cx, cy, radius, sides, rotation) {
+  function ngonPath(cx, cy, radius, sides, rotation, reverse) {
     const twist = warpAt(cx, cy);
     if (twist) {
       const at = warpPoint(cx, cy, twist);
@@ -513,10 +545,32 @@
     }
     let d = "";
     for (let k = 0; k < sides; k++) {
-      const a = rotation + k * 2 * Math.PI / sides;
+      const a = rotation + (reverse ? -1 : 1) * k * 2 * Math.PI / sides;
       d += (k ? "L" : "M") + coord(cx + Math.sin(a) * radius) + " " + coord(cy - Math.cos(a) * radius);
     }
     return d + "Z";
+  }
+
+  /**
+   * Builds a hollow polygon: a plate with a hole in it, as one path.
+   *
+   * A hole is the one thing a filled silhouette cannot otherwise do, and it is what
+   * the hollow-plate class is made of. The inner edge is wound the other way so the
+   * non-zero fill rule both SVG and the worker's own rasterizer use leaves it empty.
+   * At the 11-16 pixels a flake is shown at, a plate with a hole still reads as a
+   * plate where a solid one of the same size reads as a dot.
+   *
+   * @param {number} cx centre x in shape units
+   * @param {number} cy centre y in shape units
+   * @param {number} outer distance from centre to a vertex of the outer edge
+   * @param {number} inner distance from centre to a vertex of the hole
+   * @param {number} sides number of corners, at least 3
+   * @param {number} rotation orientation in radians
+   * @returns {string} one filled path element with a hole in it
+   */
+  function hollowPlate(cx, cy, outer, inner, sides, rotation) {
+    return '<path d="' + ngonPath(cx, cy, outer, sides, rotation) +
+           ngonPath(cx, cy, inner, sides, rotation, true) + '"/>';
   }
 
   /**
@@ -573,20 +627,27 @@
       const spread = (50 + rnd() * 18) * Math.PI / 180;
       const len = (trunk - at) * (0.5 + rnd() * 0.42);
       const half = base * (1 - f * 0.6) * (0.75 + rnd() * 0.35);
+      // Decided once per pair, not per side: a second-order branch that is longer on
+      // one side of the arm than the other is the stray tail that showed up on a
+      // single arm of some flakes, and the plate on a branch tip is the blob version
+      // of the same thing.
+      const branched = rnd() < 0.6;
+      const branchLen = len * (0.34 + rnd() * 0.26);
+      const branchLean = (0.5 + rnd() * 0.45) * Math.PI / 3 * 0.9;
+      const capped = rnd() < 0.35;
+      const cap = Math.max(1.5, len * (0.11 + rnd() * 0.08));
       for (const side of [-1, 1]) {
         const angle = side * spread;
         parts.push(spike(0, -at, angle, len, half, 0));
         const tipX = Math.sin(angle) * len;
         const tipY = -at - Math.cos(angle) * len;
         // second-order branching, which is what makes a crystal dendritic
-        if (rnd() < 0.6) {
-          const branchLen = len * (0.34 + rnd() * 0.26);
-          const branchAngle = angle + side * (0.5 + rnd() * 0.45) * Math.PI / 3 * 0.9;
-          parts.push(spike(tipX, tipY, branchAngle, branchLen, half * 0.55, 0));
+        if (branched) {
+          parts.push(spike(tipX, tipY, angle + side * branchLean, branchLen, half * 0.55, 0));
         }
         // a plate capping a branch tip
-        if (rnd() < 0.35) {
-          parts.push(stellate(tipX, tipY, Math.max(1.5, len * (0.11 + rnd() * 0.08)), rnd(), rnd));
+        if (capped) {
+          parts.push(stellate(tipX, tipY, cap, rnd(), rnd));
         }
       }
     }
@@ -714,6 +775,12 @@
    * silhouette arms of its own, so a capped or ringed flake still reads as a
    * crystal.
    *
+   * The notch is cut deep on purpose. A shallow one — a notch at half the point
+   * radius — is a hexagon with its corners chamfered, and at the 11-16 pixels a flake
+   * is shown at, six overlapping copies of that merge into one bright blob in the
+   * middle of the sprite. At this depth the points stay separate spikes with clear
+   * sky between them, which is the crystalline structure the plate is here to add.
+   *
    * @param {number} cx centre x in shape units
    * @param {number} cy centre y in shape units
    * @param {number} radius distance from centre to a point
@@ -722,7 +789,7 @@
    * @returns {string} one filled path element
    */
   function stellate(cx, cy, radius, rotation, rnd) {
-    return star(radius, radius * (0.45 + rnd() * 0.2), 6, rotation, cx, cy);
+    return star(radius, radius * (0.3 + rnd() * 0.16), 6, rotation, cx, cy);
   }
 
   /**
@@ -739,79 +806,95 @@
    * @returns {string[]} the arm's filled elements, trunk first
    */
   /**
-   * A curved vane running from the point of one arm into the trunk of the next, so
-   * six copies of it join every arm of the crystal to its neighbours.
+   * A spiral running from the point of one arm inward to the trunk of the next, so
+   * every arm of the crystal is joined to its neighbour.
    *
-   * It replaces a straight chord between arms, which left the habit reading as a
-   * wheel of six separate spokes. The radius falls away fastest at the outside and
-   * flattens toward the inside, which is what leaves a visible curve at the tip of
-   * the arm — the part a reader actually sees at 12 pixels — while the inner half of
-   * the sweep stays nearly straight and simply holds the arms together.
+   * It is built out of straight facets rather than one smooth arc. A real spiral arm is
+   * a run of straight growth segments joined at slight angles, and a smooth ribbon was
+   * what made the needle habit read as a flower: on a crystal made of tapered spikes
+   * and hexagonal faces, the curve is the only round thing there, so it is the first
+   * thing the eye reads.
+   *
+   * The three facets are placed along a quadratic that starts at the arm's point and
+   * ends on the neighbouring arm's own axis, so the join is exact rather than a
+   * near-miss: the whole point of the element is that no arm stands on its own, and a
+   * spiral that stops short reads as a broken flake. The control point sits outside the
+   * chord, which is what bows it the way a spiral arm bows.
    *
    * @param {Function} rnd the flake's own generator, for the sweep's depth and width
    * @param {number} trunk radius of the arm's point, in shape units
    * @param {number} base half width of that arm's trunk, in shape units
-   * @returns {string} one filled path, swept from this arm's point to 60 degrees out
+   * @param {number} [sweep] angle to the neighbour the spiral lands on, in radians:
+   *   60 degrees for a six-fold crystal, 30 for the twelve-branched twin
+   * @param {number} [depth] how far in the spiral falls, as a fraction of the arm's
+   *   length. The default is a shallow sweep, which is what an arm with barbs along it
+   *   wants; a habit whose arm is bare — a capped column, a beaded spine — needs to
+   *   fall much further or the six copies close into a rim, and a rim on six spokes is
+   *   the ship's wheel again.
+   * @returns {string[]} the spiral's filled elements, outermost first
    */
-  function spiralVane(rnd, trunk, base) {
-    const sweep = Math.PI / 3;
-    const steps = 10;
-    // where the vane lands on the neighbouring arm, and how wide it starts
-    const lands = trunk * (0.5 + rnd() * 0.16);
-    // Thinner than the arm it joins, so the trunk still reads as an arm and the vane
-    // reads as the webbing between arms rather than as the whole crystal.
-    const wide = base * (0.7 + rnd() * 0.45);
-    // The centre line starts a band-width inside the point, so the band's outer edge
-    // starts at the point and the vane never reaches past the crystal it is on.
-    const starts = trunk - wide;
-    const near = [];
-    const far = [];
-    for (let i = 0; i <= steps; i++) {
-      const t = i / steps;
-      const ang = sweep * t;
-      // the exponent is the curve: at 1 the radius falls evenly along the sweep and
-      // the vane reads as an arc of a ring, at this it drops fastest at the outside
-      const r = starts - (starts - lands) * Math.pow(t, 1.7);
-      const h = wide * (1 - 0.72 * t);
-      const sx = Math.sin(ang);
-      const sy = -Math.cos(ang);
-      near.push([sx * (r + h), sy * (r + h)]);
-      far.push([sx * (r - h), sy * (r - h)]);
+  function spiralVane(rnd, trunk, base, sweep, depth) {
+    const arc = sweep === undefined ? Math.PI / 3 : sweep;
+    // Thinner than the arm it joins, so the trunk still reads as an arm and the spiral
+    // reads as a branch of it rather than as the whole crystal.
+    const wide = base * (0.42 + rnd() * 0.3);
+    const land = trunk * (depth === undefined ? 0.66 + rnd() * 0.16 : depth + rnd() * 0.14);
+    const start = trunk - wide;
+    const half = arc / 2;
+    const bulge = (start + land) / 2 * (1.12 + rnd() * 0.1);
+    const p0 = [0, -start];
+    const p1 = [Math.sin(half) * bulge, -Math.cos(half) * bulge];
+    const p2 = [Math.sin(arc) * land, -Math.cos(arc) * land];
+    const parts = [];
+    let prev = p0;
+    for (let i = 1; i <= 3; i++) {
+      const t = i / 3;
+      const mt = 1 - t;
+      const x = mt * mt * p0[0] + 2 * mt * t * p1[0] + t * t * p2[0];
+      const y = mt * mt * p0[1] + 2 * mt * t * p1[1] + t * t * p2[1];
+      parts.push(spike(prev[0], prev[1], Math.atan2(x - prev[0], -(y - prev[1])),
+                       Math.hypot(x - prev[0], y - prev[1]),
+                       wide * (1 - 0.15 * t), wide * (1 - 0.25 * t)));
+      prev = [x, y];
     }
-    let d = "M" + coord(near[0][0]) + " " + coord(near[0][1]);
-    for (let i = 1; i <= steps; i++) {d += "L" + coord(near[i][0]) + " " + coord(near[i][1]);}
-    for (let i = steps; i >= 0; i--) {d += "L" + coord(far[i][0]) + " " + coord(far[i][1]);}
-    return '<path d="' + d + 'Z"/>';
+    return parts;
   }
 
   function armNeedle(rnd, radius) {
     // Everything the habit draws has to fit inside radius: the whole crystal is
     // already scaled down, and a cap or a spur hanging past it puts the flake back
     // over the seven tenths a needle is allowed to cover.
-    const trunk = radius * (0.8 + rnd() * 0.1);
-    const base = radius * (0.05 + rnd() * 0.026);
+    const trunk = radius * (0.76 + rnd() * 0.08);
+    const base = radius * (0.055 + rnd() * 0.025);
     const parts = [spike(0, 0, 0, trunk, base, base * 0.3)];
     // Barbs, not a bare stick. A real needle is a columnar crystal and the
     // reference sheets draw them with a few short side spurs; without them the
     // habit reads at 12 pixels as a spoke from a wheel rather than as a flake.
-    const barbs = 2 + Math.floor(rnd() * 3);
+    // Kept short and thin, and one set of numbers per pair: long barbs on six arms
+    // reach into their neighbours' space and merge into one flower, which is what
+    // this habit used to look like, and a spur longer on one side than the other is
+    // the stray tail that showed up on a single arm.
+    const barbs = 2 + Math.floor(rnd() * 2);
     for (let i = 0; i < barbs; i++) {
-      const at = trunk * ((i + 0.7) / (barbs + 0.6));
-      const len = (trunk - at) * (0.3 + rnd() * 0.22);
-      const half = base * (0.8 + rnd() * 0.5);
+      const at = trunk * ((i + 0.6) / (barbs + 0.9));
+      const len = (trunk - at) * (0.26 + rnd() * 0.18);
+      const lean = 0.75 + rnd() * 0.3;
+      const half = base * (0.7 + rnd() * 0.4);
       for (const side of [-1, 1]) {
-        parts.push(spike(0, -at, side * (0.6 + rnd() * 0.35), len, half, 0));
+        parts.push(spike(0, -at, side * lean, len, half, 0));
       }
     }
-    // The spiral that joins the arms, instead of the straight chord this used to
-    // draw: six copies of it run from the point of each arm into the trunk of the
-    // next, so the habit reads as one curved crystal rather than as six spokes.
-    parts.push(spiralVane(rnd, trunk, base));
-    if (rnd() < 0.6) {
-      parts.push(stellate(0, -trunk * (0.5 + rnd() * 0.3), base * (1.9 + rnd() * 0.8), rnd() * Math.PI / 3, rnd));
+    // The spiral that joins the arms: six copies of it run from the point of each
+    // arm down into the trunk of the next, so the habit reads as one curved crystal
+    // rather than as six spokes, and no arm is left standing on its own.
+    if (rnd() < SPIRAL_CHANCE) {
+      parts.push(...spiralVane(rnd, trunk, base));
     }
-    if (rnd() < 0.5) {
-      parts.push('<path d="' + ngonPath(0, -(trunk - base * 2.4), base * 2.4, 4, Math.PI / 4) + '"/>');
+    // A face on the point. The vane leaves from here, and without something solid at
+    // that join the six hooks read as six separate strokes rather than as one crystal.
+    parts.push(stellate(0, -trunk, base * (1.5 + rnd() * 0.6), rnd() * Math.PI / 3, rnd));
+    if (rnd() < 0.55) {
+      parts.push(stellate(0, -trunk * (0.45 + rnd() * 0.25), base * (1.3 + rnd() * 0.5), rnd() * Math.PI / 3, rnd));
     }
     return parts;
   }
@@ -830,17 +913,29 @@
    * @returns {string[]} the arm's filled elements, trunk first
    */
   function armSectored(rnd, radius) {
-    const trunk = radius * (0.86 + rnd() * 0.14);
-    const base = radius * (0.05 + rnd() * 0.02);
+    const trunk = radius * (0.82 + rnd() * 0.14);
+    const base = radius * (0.045 + rnd() * 0.016);
     const parts = [spike(0, 0, 0, trunk, base, base * 0.25)];
-    const chevrons = 3 + Math.floor(rnd() * 3);
+    // The chevrons are the sectored plate's ridges, and they are also the way this
+    // habit over-fills itself: stacked close, wide and long, six arms of them merge
+    // into one solid stellated disc with no sky anywhere in it. Fewer, shorter and
+    // further apart keeps the stepped outline the habit is named for, and leaves the
+    // trunk readable between each pair, which is what makes it a crystal rather than
+    // a filled star.
+    const chevrons = 2 + Math.floor(rnd() * 2);
     for (let i = 0; i < chevrons; i++) {
-      const at = trunk * ((i + 0.5) / (chevrons + 0.4));
-      const len = (trunk - at) * (0.55 + rnd() * 0.3);
-      const half = base * (1.6 + rnd() * 0.9) * (1 - at / trunk * 0.3);
+      const f = (i + 0.55) / (chevrons + 0.5);
+      const at = trunk * f;
+      const len = (trunk - at) * (0.42 + rnd() * 0.26);
+      const lean = 0.75 + rnd() * 0.25;
+      const half = base * (0.8 + rnd() * 0.45) * (1 - f * 0.3);
       for (const side of [-1, 1]) {
-        parts.push(spike(0, -at, side * (0.72 + rnd() * 0.2), len, half, 0));
+        parts.push(spike(0, -at, side * lean, len, half, 0));
       }
+    }
+    // A face on the point, so the arm ends in a crystal rather than a plain taper.
+    if (rnd() < 0.7) {
+      parts.push(stellate(0, -trunk, base * (1.4 + rnd() * 0.8), rnd() * Math.PI / 3, rnd));
     }
     return parts;
   }
@@ -862,6 +957,11 @@
       parts.push(stellate(0, -at, base * (2.1 + rnd() * 1.6) * (1 - at / trunk * 0.2), rnd() * Math.PI / 3, rnd));
     }
     parts.push(stellate(0, -trunk, base * (2.8 + rnd() * 1.6), rnd() * Math.PI / 3, rnd));
+    // The fall is deep here: a capped column's arm is bare apart from its plates, so a
+    // shallow sweep would close six of them into a rim around the flake.
+    if (rnd() < SPIRAL_CHANCE) {
+      parts.push(...spiralVane(rnd, trunk, base, Math.PI / 3, 0.42));
+    }
     return parts;
   }
 
@@ -887,36 +987,69 @@
       parts.push(dot(0, -at, base * (1.4 + rnd() * 1.2) * (1 - at / trunk * 0.25)));
     }
     parts.push(dot(0, -trunk, base * (2.4 + rnd() * 1.4)));
+    // The join is built off a wider base than the spine: at this habit's spine width
+    // the spiral's facets would be hairlines, and the one element whose job is to
+    // survive the downsample is the one that joins the arms.
+    if (rnd() < SPIRAL_CHANCE) {
+      parts.push(...spiralVane(rnd, trunk, base * 1.6, Math.PI / 3, 0.42));
+    }
     return parts;
   }
 
   /**
-   * Builds one arm of a ring flake: a spoke out to a hexagonal band, and a short
-   * spur beyond it.
+   * Builds one arm of a ring flake: a barbed spoke, a ring the arm grows itself, and
+   * a face on the point.
+   *
+   * The ring is what makes this habit a ring flake rather than a dendrite, and it is
+   * also what made it read as a ship's wheel: a band drawn straight across six
+   * straight spokes is a rim on a wheel, and the long spikes this habit used to throw
+   * out of the rim's corners were the handles. So the ring is not drawn across the
+   * arms — it is the arms' own sidebranches, set at 60 degrees to the trunk and long
+   * enough to land on the hexagon corner 30 degrees out, which is exactly where the
+   * neighbouring arm's matching branch lands. Six arms, twelve bars, one hexagonal
+   * lattice, with a gap wherever the pair fell short.
    *
    * @param {function(): number} rnd source of randomness
    * @param {number} radius distance from the centre to the edge of the drawing
    * @returns {string[]} the arm's filled elements, trunk first
    */
   function armRinged(rnd, radius) {
-    const trunk = radius * (0.9 + rnd() * 0.1);
-    const base = radius * (0.035 + rnd() * 0.015);
-    const parts = [spike(0, 0, 0, trunk, base, base * 0.25)];
-    const at = trunk * (0.42 + rnd() * 0.2);
-    const thick = base * (2.2 + rnd() * 1.2);
-    parts.push(band(at, thick, Math.PI / 6));
-    // Stellated, and exaggeratedly so: a bare hexagonal band reads as a geometric
-    // primitive, so the corners of each arm's wedge throw long thin points out
-    // radially and short ones in, and six copies give the ring twelve of each.
+    const trunk = radius * (0.84 + rnd() * 0.12);
+    const base = radius * (0.04 + rnd() * 0.014);
+    const parts = [spike(0, 0, 0, trunk, base, base * 0.3)];
+    // The ring's radius, and the branch that reaches its corner: starting a branch
+    // 0.577R out along the trunk and running it 60 degrees off that at the same
+    // length puts its point on the corner at radius R, 30 degrees round. Jittering
+    // both leaves some corners closed and some open, which is what a real ring flake
+    // looks like and what keeps the lattice from reading as a drawn hexagon.
+    const ring = trunk * (0.5 + rnd() * 0.16);
+    const reach = ring * (0.52 + rnd() * 0.12);
+    const lean = Math.PI / 3 * (0.92 + rnd() * 0.16);
+    const half = base * (0.85 + rnd() * 0.45);
     for (const side of [-1, 1]) {
-      const a = side * Math.PI / 6;
-      const px = Math.sin(a) * at;
-      const py = -Math.cos(a) * at;
-      parts.push(spike(px, py, a, thick * 3.6, base * 1.05, 0));
-      parts.push(spike(px, py, a + Math.PI, thick * 1.3, base * 0.8, 0));
+      parts.push(spike(0, -reach * Math.cos(lean), side * lean, reach, half, 0));
     }
-    if (rnd() < 0.7) {
-      parts.push(stellate(0, -trunk, base * (2.4 + rnd() * 1.2), rnd() * Math.PI / 3, rnd));
+    // One plate on the corner, drawn by the arm on the clockwise side of it, so the
+    // six-fold replication puts exactly one on each corner and it sits where the two
+    // branches meet.
+    const corner = Math.PI / 6;
+    parts.push(stellate(Math.sin(corner) * ring, -Math.cos(corner) * ring,
+                        base * (1.6 + rnd() * 0.9), rnd() * Math.PI / 3, rnd));
+    // Barbs beyond the ring, on the span of spoke that sticks out past it, which is
+    // the part of the arm a reader sees. Mirrored pair, one set of numbers both sides.
+    const barbs = 2 + Math.floor(rnd() * 2);
+    for (let i = 0; i < barbs; i++) {
+      const f = (i + 0.55) / (barbs + 0.45);
+      const pos = ring + (trunk - ring) * f;
+      const len = (trunk - pos) * (0.4 + rnd() * 0.3);
+      const angle = 0.6 + rnd() * 0.3;
+      const wide = base * (0.75 + rnd() * 0.4);
+      for (const side of [-1, 1]) {
+        parts.push(spike(0, -pos, side * angle, len, wide, 0));
+      }
+    }
+    if (rnd() < 0.75) {
+      parts.push(stellate(0, -trunk, base * (2 + rnd() * 1), rnd() * Math.PI / 3, rnd));
     }
     return parts;
   }
@@ -954,6 +1087,125 @@
       }
     }
     parts.push(stellate(0, -trunk, base * (2.2 + rnd() * 1.2), rnd() * Math.PI / 3, rnd));
+    return parts;
+  }
+
+  /**
+   * Builds one arm of a fernlike stellar dendrite: a thin trunk carrying many closely
+   * spaced sidebranches, each of which throws a spur of its own.
+   *
+   * The plain dendrite above draws three to five branches and stops; this is the
+   * fernlike class, whose crystals are the largest and finest there are, and the
+   * difference between the two is the thing that makes a field of dendrites read as
+   * one silhouette. The rows are packed close and kept thin, because at display size
+   * a fern reads as a feathered edge rather than as separate branches — which is the
+   * effect being aimed at — and a thick one just fills in.
+   *
+   * @param {function(): number} rnd source of randomness
+   * @param {number} radius distance from the centre to the edge of the drawing
+   * @returns {string[]} the arm's filled elements, trunk first
+   */
+  function armFern(rnd, radius) {
+    const trunk = radius * (0.86 + rnd() * 0.12);
+    const base = radius * (0.026 + rnd() * 0.01);
+    const parts = [spike(0, 0, 0, trunk, base, base * 0.15)];
+    const rows = 4 + Math.floor(rnd() * 3);
+    const lean = 0.85 + rnd() * 0.2;
+    const spur = 0.6 + rnd() * 0.3;
+    for (let i = 0; i < rows; i++) {
+      const f = (i + 0.5) / (rows + 0.3);
+      const at = trunk * f;
+      const len = (trunk - at) * (0.46 + rnd() * 0.3);
+      const half = base * (1 - f * 0.5) * (0.8 + rnd() * 0.3);
+      for (const side of [-1, 1]) {
+        parts.push(spike(0, -at, side * lean, len, half, 0));
+        // the fern's own fern: a second-order spur near the tip of each branch,
+        // mirrored off the same numbers so both sides feather the same way
+        const tx = Math.sin(side * lean) * len;
+        const ty = -at - Math.cos(side * lean) * len;
+        parts.push(spike(tx, ty, side * (lean + spur), len * (0.3 + rnd() * 0.12), half * 0.5, 0));
+      }
+    }
+    return parts;
+  }
+
+  /**
+   * Builds one arm of a hollow-plate crystal: a thin spoke with hexagonal rings on it
+   * instead of solid plates.
+   *
+   * This is the class the hand-drawn fallback shapes are mostly made of — hexagon
+   * outlines, nested, on the corners of a star — and it is the one the generator had
+   * no version of. The rings are drawn as one path with a reversed inner edge, so the
+   * hole survives both the SVG fill and the worker's own rasterizer. It only reads on
+   * the larger flakes, where the hole is more than a pixel across, which is why the
+   * habit is weighted below the solid ones rather than with them.
+   *
+   * @param {function(): number} rnd source of randomness
+   * @param {number} radius distance from the centre to the edge of the drawing
+   * @returns {string[]} the arm's filled elements, trunk first
+   */
+  function armHexPlate(rnd, radius) {
+    const trunk = radius * (0.78 + rnd() * 0.1);
+    const base = radius * (0.05 + rnd() * 0.018);
+    const parts = [spike(0, 0, 0, trunk, base, base * 0.3)];
+    const plate = base * (3 + rnd() * 1.4);
+    parts.push(hollowPlate(0, -trunk, plate, plate * (0.42 + rnd() * 0.2), 6, rnd() * Math.PI / 3));
+    if (rnd() < 0.6) {
+      const at = trunk * (0.45 + rnd() * 0.2);
+      const small = plate * (0.55 + rnd() * 0.25);
+      parts.push(hollowPlate(0, -at, small, small * (0.42 + rnd() * 0.2), 6, rnd() * Math.PI / 3));
+    }
+    // Short barbs on the spoke, so the arm is a crystal and not a line with a ring
+    // hung off the end of it.
+    const barbs = 2 + Math.floor(rnd() * 2);
+    for (let i = 0; i < barbs; i++) {
+      const at = trunk * ((i + 0.5) / (barbs + 0.8));
+      const len = (trunk - at) * (0.2 + rnd() * 0.14);
+      for (const side of [-1, 1]) {
+        parts.push(spike(0, -at, side * (0.8 + rnd() * 0.3), len, base * 0.7, 0));
+      }
+    }
+    if (rnd() < SPIRAL_CHANCE) {
+      parts.push(...spiralVane(rnd, trunk, base));
+    }
+    return parts;
+  }
+
+  /**
+   * Builds one arm of a twelve-branched twin: the crystal two hexagonal stars grown
+   * through each other make, where the second is turned 30 degrees against the first.
+   *
+   * The arm itself is a short barbed needle; what makes the habit is that
+   * {@link buildShape} replicates it twelve times rather than six, so the long and the
+   * short arms alternate around the centre. The trunk is deliberately not full length:
+   * twelve arms at 30 degrees each crowd one another at full reach, and the alternation
+   * is the silhouette.
+   *
+   * @param {function(): number} rnd source of randomness
+   * @param {number} radius distance from the centre to the edge of the drawing
+   * @returns {string[]} the arm's filled elements, trunk first
+   */
+  function armTwin(rnd, radius) {
+    const trunk = radius * (0.62 + rnd() * 0.3);
+    const base = radius * (0.026 + rnd() * 0.012);
+    const parts = [spike(0, 0, 0, trunk, base, base * 0.25)];
+    const barbs = 1 + Math.floor(rnd() * 2);
+    for (let i = 0; i < barbs; i++) {
+      const at = trunk * ((i + 0.6) / (barbs + 0.7));
+      const len = (trunk - at) * (0.3 + rnd() * 0.2);
+      const lean = 0.7 + rnd() * 0.3;
+      for (const side of [-1, 1]) {
+        parts.push(spike(0, -at, side * lean, len, base * 0.8, 0));
+      }
+    }
+    if (rnd() < 0.7) {
+      parts.push(stellate(0, -trunk, base * (1.8 + rnd() * 1), rnd() * Math.PI / 3, rnd));
+    }
+    // The join sweeps 30 degrees here, not 60: the twin habit's neighbour is the next
+    // copy of the arm, and there are twelve of them around the centre.
+    if (rnd() < SPIRAL_CHANCE) {
+      parts.push(...spiralVane(rnd, trunk, base, Math.PI / 6));
+    }
     return parts;
   }
 
@@ -1074,6 +1326,18 @@
   }
 
   /**
+   * The tumble rate one of a wireframe flake's screen axes turns at.
+   *
+   * @param {function(): number} rnd source of randomness
+   * @returns {number} signed radians per step, {@link WIRE_TUMBLE_MIN} to
+   *   {@link WIRE_TUMBLE_MAX} away from zero, in either direction
+   */
+  function tumbleRate(rnd) {
+    const rate = WIRE_TUMBLE_MIN + rnd() * (WIRE_TUMBLE_MAX - WIRE_TUMBLE_MIN);
+    return rnd() < 0.5 ? -rate : rate;
+  }
+
+  /**
    * Projects one wireframe solid into the plane of the screen.
    *
    * @param {Object} solid the orientation from {@link wireOrientation}
@@ -1161,38 +1425,107 @@
 
   /**
    * The arm builders: name, draw weight, builder, whether the habit is a solid rather
-   * than a six-fold arm, and the radius its crystals take up in the cell as a
-   * fraction of the full one.
+   * than a six-fold arm, the radius its crystals take up in the cell as a fraction of
+   * the full one, the warp it takes, and how many times the arm is replicated.
    *
    * A dendrite is what snow reads as, so it stays the most common; the rest are
-   * there to break up a field of twenty identical silhouettes. Weighted by how
-   * well each one still reads at the 11-16 pixels a flake is shown at, measured
-   * against a contact sheet of each habit at the atlas cell size and at those two:
-   * the needle, sectored, capped and star habits are still legible at 12 pixels,
-   * the beaded habit is marginal, and a fine-needle burst and a faceted plate were
-   * dropped for collapsing into a blob.
+   * there to break up a field of twenty identical silhouettes. Weighted by how well
+   * each one still reads at the 11-16 pixels a flake is shown at, measured against a
+   * contact sheet of each habit at the atlas cell size and at those two: the needle,
+   * sectored, capped and star habits are still legible at 12 pixels, the beaded habit
+   * is marginal, and a fine-needle burst and a faceted plate were dropped for
+   * collapsing into a blob.
    *
-   * The last column is drawn smaller than the cell for the needle habit only. Six
-   * bare columns running the full width of the sprite read as spokes from a wheel,
-   * and shrinking the crystal to seven tenths is what makes the joined-up spiral
-   * arms read as one shape rather than as six separate sticks.
+   * The set is drawn from the Magono–Lee classification rather than invented: stellar
+   * dendrite, fernlike stellar dendrite, needles, sectored plate, capped column,
+   * stellar plate with a ring, hexagonal hollow plate, and the 12-branched twin. The
+   * wireframe solid is the one entry that is not a snow-crystal class; it is here
+   * because the ice lattice is a stellated polyhedron and it is the only thing in the
+   * field with depth.
+   *
+   * The fifth column shrinks the crystal inside its cell. Six bare columns running
+   * the full width of the sprite read as spokes from a wheel, and shrinking the
+   * crystal to seven tenths is what makes the needle habit's joined-up spiral arms
+   * read as one shape rather than as six separate sticks.
+   *
+   * The sixth column is the warp that habit takes, as a fraction of
+   * {@link WARP_MAX}. A needle's features are small and its arms are thin, so a
+   * full-strength twist turns each arm's inner half a quarter turn against its own
+   * point and six of those merge into a pinwheel flower; the ring, hollow-plate and
+   * twin habits take a gentler twist for the same reason at a smaller scale. The
+   * wireframe habit is never warped, so its entry is inert.
+   *
+   * The seventh column is the replication count. Everything here is six-fold because
+   * ice is, except the twelve-branched twin, which is two six-fold crystals grown
+   * through each other at a 30 degree twist, and the wireframe solid, which is drawn
+   * once because it has no arms to replicate.
+   *
+   * The eighth column splits the set into the branched crystals that are what a
+   * snowflake is taken to look like, and the stem habits — a straight spoke with
+   * plates, beads or rings hung on it. The stem habits are drawn smaller on purpose
+   * (see the fifth column) and held to {@link STEM_SHARE} of the field: a spoke with
+   * three dots on it fills the same cell as a dendrite but reads as a much bigger
+   * object, because almost all of it is ink, and a field of twenty of them stops
+   * looking like snow and starts looking like a diagram.
    */
   const HABITS = [
-    ["dendrite", 28, armDendrite, false, 1],
-    ["needle", 13, armNeedle, false, 0.7],
-    ["sectored", 13, armSectored, false, 1],
-    ["capped", 11, armCapped, false, 1],
-    ["ringed", 9, armRinged, false, 1],
-    ["star", 11, armStar, false, 1],
-    ["beaded", 7, armBeaded, false, 1],
-    ["dodeca", 8, armDodeca, true, 1]
+    ["dendrite", 30, armDendrite, false, 1, 1, 6, "branch"],
+    ["fern", 14, armFern, false, 1, 1, 6, "branch"],
+    ["sectored", 11, armSectored, false, 1, 1, 6, "branch"],
+    ["star", 9, armStar, false, 1, 1, 6, "branch"],
+    ["ringed", 8, armRinged, false, 0.92, 0.7, 6, "branch"],
+    ["needle", 9, armNeedle, false, 0.7, 0.45, 6, "stem"],
+    ["capped", 6, armCapped, false, 0.82, 1, 6, "stem"],
+    ["hexplate", 6, armHexPlate, false, 0.75, 0.6, 6, "stem"],
+    ["twin", 5, armTwin, false, 0.82, 0.8, 12, "stem"],
+    ["beaded", 4, armBeaded, false, 0.8, 1, 6, "stem"],
+    ["dodeca", 8, armDodeca, true, 1, 1, 1, "solid"]
   ];
+
+  /**
+   * Largest share of the field the stem habits may hold.
+   *
+   * The weighted draw alone does not enforce this: with eleven habits and twenty
+   * slots, a run of weighted picks can land half the field on the stem group, and
+   * that is the field that reads as spokes rather than as snow.
+   */
+  const STEM_SHARE = 0.3;
+
+  /**
+   * Turns one {@link HABITS} row into the object {@link buildShape} draws from.
+   *
+   * @param {Array} habit one row of {@link HABITS}
+   * @returns {{name: string, build: Function, wire: boolean, scale: number,
+   *   warp: number, copies: number, stem: boolean}} the habit to draw
+   */
+  function habitSpec(habit) {
+    return {name: habit[0], build: habit[2], wire: habit[3], scale: habit[4],
+            warp: habit[5], copies: habit[6], stem: habit[7] === "stem"};
+  }
+
+  /**
+   * Shuffles a list in place (Fisher–Yates) with the caller's generator.
+   *
+   * @param {Array} list the list to shuffle
+   * @param {function(): number} rnd source of randomness
+   * @returns {Array} the same list, shuffled
+   */
+  function shuffle(list, rnd) {
+    for (let i = list.length - 1; i > 0; i--) {
+      const j = Math.floor(rnd() * (i + 1));
+      const swap = list[i];
+      list[i] = list[j];
+      list[j] = swap;
+    }
+    return list;
+  }
 
   /**
    * Picks an arm builder from {@link HABITS} by weight.
    *
    * @param {function(): number} rnd source of randomness
-   * @returns {{name: string, build: function(function(): number, number, number=, number=): string[], wire: boolean}} the habit
+   * @returns {{name: string, build: Function, wire: boolean, scale: number,
+   *   warp: number, copies: number, stem: boolean}} the habit to draw
    */
   function pickHabit(rnd) {
     let total = 0;
@@ -1200,13 +1533,14 @@
     let roll = rnd() * total;
     for (const habit of HABITS) {
       roll -= habit[1];
-      if (roll < 0) {return {name: habit[0], build: habit[2], wire: habit[3], scale: habit[4]};}
+      if (roll < 0) {return habitSpec(habit);}
     }
-    return {name: HABITS[0][0], build: HABITS[0][2], wire: HABITS[0][3], scale: HABITS[0][4]};
+    return habitSpec(HABITS[HABITS.length - 1]);
   }
 
   /**
-   * Assembles one whole flake from the arm replicated six times about the centre.
+   * Assembles one whole flake from the arm replicated about the centre — six times
+   * for every habit but the twelve-branched twin and the wireframe solid.
    *
    * The arm is defined once in a defs block and referenced with use elements,
    * which is what keeps the markup smaller than the hand-drawn files it replaces:
@@ -1218,7 +1552,8 @@
    *
    * @param {function(): number} rnd source of randomness
    * @param {number} size edge length of the square the flake fills
-   * @param {{name: string, build: Function, wire: boolean}} [habit]
+   * @param {{name: string, build: Function, wire: boolean, scale: number,
+   *   warp: number, copies: number}} [habit]
    *   arm builder to use, drawn by weight from {@link HABITS} when not given
    * @param {number} [frame] which of the slot's frames this is
    * @param {number} [frames] frames per slot
@@ -1238,7 +1573,7 @@
     if (picked.wire) {
       warp = null;
     } else if (rnd() < WARP_CHANCE) {
-      const amp = (rnd() - 0.5) * 2 * WARP_MAX;
+      const amp = (rnd() - 0.5) * 2 * WARP_MAX * (picked.warp === undefined ? 1 : picked.warp);
       const phase = rnd() * Math.PI * 2;
       warp = {k: amp * Math.sin(phase + f * 2 * Math.PI / n), radius: radius};
     } else {
@@ -1253,9 +1588,10 @@
     let uses = "";
     // A wireframe is not six-fold symmetric, so it is drawn once rather than
     // replicated; the replication count is part of the habit, not a guess here.
-    const copies = picked.wire ? 1 : 6;
+    const copies = picked.wire ? 1 : (picked.copies || 6);
+    const step = 360 / copies;
     for (let k = 0; k < copies; k++) {
-      uses += '<use xlink:href="#a"' + (k ? ' transform="rotate(' + (k * 60) + ')"' : "") + "/>";
+      uses += '<use xlink:href="#a"' + (k ? ' transform="rotate(' + step * k + ')"' : "") + "/>";
     }
     return '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" ' +
            'width="' + size + '" height="' + size + '" ' +
@@ -1264,41 +1600,67 @@
   }
 
   /**
-   * Generates {@link FRAMES} shapes per flake slot.
-   *
-   * This replaces the six hand-drawn files as the shape source: nothing is
-   * fetched, and every flake in the field is a different crystal, which costs
-   * nothing at draw time because the atlas already holds one cell per frame.
-   * Generation runs once at startup, on the worker thread.
+   * Decides which habit each flake slot draws.
    *
    * The first pass deals one of each habit in a shuffled order, so a field of ten
    * still shows every silhouette rather than whatever seven weighted draws happened
    * to land on. Past that the habit is drawn by weight.
    *
-   * A slot's frames are built from the same seed, so the crystal is identical
-   * across them and only the warp (or the orientation) changes.
+   * The stem habits are held to {@link STEM_SHARE} of the slots in both passes: the
+   * deck carries at most that many of them, and a weighted pick that would go past the
+   * cap is re-rolled. Twenty slots of spokes-and-beads reads as a diagram, not as snow,
+   * however good each one looks on its own.
    *
    * @param {number} count number of flake slots
    * @param {function(): number} rnd source of randomness
-   * @returns {string[]} count * FRAMES complete SVG documents, slot-major
+   * @returns {Array<Object>} one {@link habitSpec} per slot, in slot order
+   */
+  function dealSlots(count, rnd) {
+    const n = Math.max(1, count | 0);
+    const cap = Math.max(1, Math.round(n * STEM_SHARE));
+    const deck = shuffle(HABITS.filter(h => h[7] !== "stem").map(habitSpec), rnd)
+      .concat(shuffle(HABITS.filter(h => h[7] === "stem").map(habitSpec), rnd).slice(0, cap));
+    shuffle(deck, rnd);
+    let stems = 0;
+    const dealt = [];
+    for (let i = 0; i < n; i++) {
+      let habit = i < deck.length ? deck[i] : pickHabit(rnd);
+      // Past the dealt deck the draw is by weight, and a run of weighted picks can put
+      // the field back over the cap; re-roll those rather than drop the slot.
+      for (let tries = 0; habit.stem && stems >= cap && tries < 16; tries++) {
+        habit = pickHabit(rnd);
+      }
+      if (habit.stem && stems >= cap) {habit = deck.find(h => !h.stem) || habit;}
+      if (habit.stem) {stems++;}
+      dealt.push(habit);
+    }
+    return dealt;
+  }
+
+  /**
+   * Generates {@link FRAMES} shapes per flake slot.
+   *
+   * This replaces the six hand-drawn files as the shape source: nothing is fetched,
+   * and every flake in the field is a different crystal, which costs nothing at draw
+   * time because the atlas already holds one cell per frame. Generation runs once at
+   * startup, on the worker thread.
+   *
+   * A slot's frames are built from the same seed, so the crystal is identical across
+   * them and only the warp (or the orientation) changes.
+   *
+   * @param {number} count number of flake slots
+   * @param {function(): number} rnd source of randomness
+   * @returns {{shapes: string[], wire: boolean[], solids: Array<Object|null>}} the
+   *   shape documents slot-major, and which slots are wireframe solids
    */
   function buildSlots(count, rnd) {
-    const deck = HABITS.map(habit =>
-      ({name: habit[0], build: habit[2], wire: habit[3], scale: habit[4]}));
-    for (let i = deck.length - 1; i > 0; i--) {
-      const j = Math.floor(rnd() * (i + 1));
-      const swap = deck[i];
-      deck[i] = deck[j];
-      deck[j] = swap;
-    }
     const shapes = [];
     const wire = [];
     // The solid each wireframe slot shows, kept so the flake can be painted as vectors
     // at whatever orientation it has tumbled to instead of being picked off the atlas.
     const solids = [];
-    for (let i = 0; i < count; i++) {
+    for (const habit of dealSlots(count, rnd)) {
       const seed = Math.floor(rnd() * 0x7fffffff);
-      const habit = i < deck.length ? deck[i] : pickHabit(prng(seed));
       wire.push(habit.wire);
       solids.push(habit.wire ? wireOrientation(prng(seed)) : null);
       for (let f = 0; f < FRAMES; f++) {
@@ -1384,8 +1746,8 @@
       solid: solid || null,
       tiltX: rnd() * Math.PI * 2,
       tiltY: rnd() * Math.PI * 2,
-      spinX: (rnd() - 0.5) * WIRE_TUMBLE_RATE,
-      spinY: (rnd() - 0.5) * WIRE_TUMBLE_RATE
+      spinX: tumbleRate(rnd),
+      spinY: tumbleRate(rnd)
     };
     flake.opacity = flake.initialOpacity;
     return flake;
@@ -1433,12 +1795,22 @@
    * its silhouette is twelve-pointed too, which aliases at half the rate a six-fold
    * one does.
    *
+   * A flake that is falling slowly — under {@link SLOW_FALL_SPEED} a step, which is
+   * the smallest third of the field — ramps up as it travels, from its own rate at the
+   * top of the screen to {@link SLOW_SPIN_RAMP} times it at the bottom. Without the
+   * ramp those flakes barely turn at all, and a field of them has one spin rate in it
+   * rather than a spread.
+   *
    * @param {Object} flake the flake to read
    * @returns {number} signed radians per step, never nearer zero than
    *   {@link WIRE_SPIN_MIN} for a wireframe flake and {@link MIN_SPIN} for the rest
    */
   function spinSpeed(flake) {
-    const speed = flake.rotationSpeed * Math.max(1, flake.initialSize / flake.size);
+    let speed = flake.rotationSpeed * Math.max(1, flake.initialSize / flake.size);
+    if (!flake.wire && flake.speed <= SLOW_FALL_SPEED && flake.maxDistance > 0) {
+      const travelled = Math.min(1, flake.totalDistance / flake.maxDistance);
+      speed *= 1 + SLOW_SPIN_RAMP * travelled;
+    }
     const floor = flake.wire ? WIRE_SPIN_MIN : MIN_SPIN;
     const limit = flake.wire ? WIRE_SPIN_MAX : Infinity;
     const geared = Math.min(limit, Math.abs(speed)) * (speed < 0 ? -1 : 1);
@@ -2310,14 +2682,18 @@
     REMOVAL_SIZE,
     DEATH_SPIN_MAX, DEATH_SPIN_BIAS, DEATH_SPIN_REVERSE, DEATH_WOBBLE_MIN, DEATH_WOBBLE_MAX,
     DEATH_DRIFT_DECAY, SPIN_LATERAL, DEATH_FALL_ACCEL, SOFT_REACH, SEPARATION, GUST_DECAY,
-    GUST_MAX, GRAZE_SPIN, WARP_CHANCE, WARP_MAX, FRAMES, FRAME_BEATS,
-    WIRE_STROKE_NEAR, WIRE_DEPTH, WIRE_CIRC, WIRE_SPIN_MIN, WIRE_SPIN_MAX, WIRE_TUMBLE_RATE,
-    WIRE_DEATH_SPIN_MAX, MIN_SPIN, HABITS, ICOSA, WIRE,
+    GUST_MAX, GRAZE_SPIN, WARP_CHANCE, WARP_MAX, SPIRAL_CHANCE, FRAMES, FRAME_BEATS,
+    WIRE_STROKE_NEAR, WIRE_DEPTH, WIRE_CIRC, WIRE_SPIN_MIN, WIRE_SPIN_MAX,
+    WIRE_TUMBLE_MIN, WIRE_TUMBLE_MAX, tumbleRate,
+    SLOW_FALL_SPEED, SLOW_SPIN_RAMP,
+    WIRE_DEATH_SPIN_MAX, MIN_SPIN, HABITS, STEM_SHARE, ICOSA, WIRE,
     SHAPE_VIEW, RATE_MAX,
-    flakeCountFor, atlasLayout, prng, parseHex, varyColor, buildPalette, coord,
+    flakeCountFor, atlasLayout, prng, parseHex, varyColor, buildPalette, coord, habitSpec,
     paintWire,
-    spike, plate, hexPath, ngonPath, dot, bar, band, star, stellate, rotAxis,
-    armDendrite, armDodeca, buildShape, buildShapes, buildSlots, shapePaths, spiralVane,
+    spike, plate, hexPath, ngonPath, hollowPlate, dot, bar, band, star, stellate, rotAxis,
+    armDendrite, armFern, armNeedle, armSectored, armCapped, armBeaded, armRinged, armStar,
+    armHexPlate, armTwin, armDodeca,
+    buildShape, buildShapes, buildSlots, dealSlots, shapePaths, spiralVane,
     wireOrientation, wireVertices, wireBands, depthBucket,
     pickHabit, seedDeathSpin, deathSpinAt, separateFlakes,
     createFlake, respawn, spinSpeed, stepFlake, writeFlake, paintBeat

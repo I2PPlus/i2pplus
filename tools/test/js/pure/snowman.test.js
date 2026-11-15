@@ -178,18 +178,20 @@ test("a generated flake is one arm replicated six times, filled, and placeholder
     assert.ok(svg.endsWith("</svg>"), "and it is closed");
     assert.ok(!svg.includes("currentColor"), "currentColor resolves to black through a blob <img>");
     assert.ok(!svg.includes("fill-rule"),
-              "no interior hole — a hole shows whatever the flake drifts over");
+              "no fill-rule attribute: the hollow plates get their hole from a reversed " +
+              "inner ring, which both the SVG fill and the worker's rasterizer honour without one");
     assert.ok(!/NaN|Infinity|undefined/.test(svg),
               "arithmetic that leaked a bad coordinate into the markup");
     const uses = svg.match(/<use /g) || [];
-    // A flat crystal is one arm replicated six times; the wireframe habit is a
-    // whole solid drawn once, because a polyhedron is not six-fold symmetric.
-    assert.equal(uses.length, wire ? 1 : 6, wire
-      ? "a wireframe is drawn once, not replicated"
-      : "the arm is replicated six times about the centre");
+    // A flat crystal is one arm replicated about the centre: six times for every habit
+    // but the twelve-branched twin, which is two six-fold crystals grown through each
+    // other, and once for the wireframe solid, which is not six-fold at all.
+    assert.ok(wire ? uses.length === 1 : uses.length === 6 || uses.length === 12,
+              `${uses.length} copies: six-fold, the twelve-fold twin, or one for a wireframe`);
     if (!wire) {
-      for (const deg of [60, 120, 180, 240, 300]) {
-        assert.ok(svg.includes(`rotate(${deg})`), `and one copy is turned through ${deg} degrees`);
+      const step = 360 / uses.length;
+      for (let k = 1; k < uses.length; k++) {
+        assert.ok(svg.includes(`rotate(${step * k})`), `and copy ${k} is turned through ${step * k} degrees`);
       }
     }
     assert.equal((svg.match(/<defs>/g) || []).length, 1, "the arm itself is defined exactly once");
@@ -379,7 +381,11 @@ test("a flake that shrinks past the threshold spins, falls out, and recycles", (
   const spun = flake.deathSpinSpeed;
   for (let i = 0; i < helpers.DEATH_SPIN_STEPS + 4; i++) {helpers.stepFlake(flake, bounds, rnd);}
   assert.ok(flake.vy > flake.speed, "past the spin delay it accelerates downward");
-  assert.ok(Math.abs(flake.spinEnv) > Math.abs(spun) * 3, "and the spin envelope grows as it falls out");
+  // The envelope grows until the cap stops it. A flake whose living spin was already
+  // ramped up by the slow-flake spin-up starts near that cap, so the honest statement
+  // is that it reaches it, not that it triples whatever it started at.
+  assert.ok(Math.abs(flake.spinEnv) >= Math.min(helpers.DEATH_SPIN_MAX, Math.abs(spun) * 3),
+            "and the spin envelope grows as it falls out");
   assert.ok(Math.abs(flake.spinEnv) <= helpers.DEATH_SPIN_MAX,
             "and the envelope is capped, so the turn stays resolvable");
 
@@ -510,7 +516,12 @@ test("the field shows every habit, not whatever the weighted draws happened to l
     for (let i = 0; i < helpers.MIN_FLAKES; i++) {
       strips.push(new Set(field.slice(i * helpers.FRAMES, (i + 1) * helpers.FRAMES)).size);
     }
-    assert.ok(strips.every(n => n === 1 || n >= helpers.FRAMES / 2),
+    // A strip is either one static pose or a whole warp cycle. The floor is a quarter
+    // of the cycle, not half: a habit that takes a gentle warp (see the sixth column
+    // of HABITS) displaces its points by less than coord() rounds, so some of its
+    // sixteen frames come out identical and a legitimately animated strip can hold as
+    // few as four distinct poses.
+    assert.ok(strips.every(n => n === 1 || n >= helpers.FRAMES / 4),
               `seed ${seed} strips are whole cycles, not part-drawn`);
     // A strip animates when its crystal is warped (its frames walk the warp cycle) or
     // when it is a solid (painted as vectors at its own orientation, so its frames are
@@ -540,8 +551,15 @@ test("a wireframe tumbles continuously on all three axes, at a relaxed pace", ()
     assert.ok(z >= 20 && z <= 45, `the z axis turns at ${z.toFixed(0)} degrees a second`);
     assert.ok(z <= perSecond(helpers.spinSpeed(flat)),
               "and slower than a flat crystal drawn from the same numbers");
+    // Both screen axes have a floor on the magnitude, not a range around zero: a
+    // wireframe that draws a near-zero rate on one axis falls turning on two, which is
+    // the flat spin the solid was built in three dimensions to avoid.
+    const floor = perSecond(helpers.WIRE_TUMBLE_MIN);
+    const ceiling = perSecond(helpers.WIRE_TUMBLE_MAX);
     for (const axis of ["spinX", "spinY"]) {
-      assert.ok(perSecond(wire[axis]) <= 21, `${axis} tumbles at ${perSecond(wire[axis]).toFixed(0)} degrees a second`);
+      const rate = perSecond(wire[axis]);
+      assert.ok(rate >= floor && rate <= ceiling,
+                `${axis} tumbles at ${rate.toFixed(0)} degrees a second, outside ${floor.toFixed(0)}-${ceiling.toFixed(0)}`);
     }
     // Continuous: every step advances all three axes by the same small amount, so
     // nothing is held, jumped and held again — the stop-animate-start of a flip book.
@@ -565,39 +583,112 @@ test("a wireframe tumbles continuously on all three axes, at a relaxed pace", ()
             "exactly one solid per wireframe slot");
 });
 
-test("a needle crystal is drawn smaller, and its arms are joined by a spiral", () => {
+test("a slow flake spins up as it falls, and a fast one keeps its own rate", () => {
   const helpers = api();
-  const needle = helpers.HABITS.find(h => h[0] === "needle");
-  const scale = needle[4];
-  assert.ok(scale <= 0.7, `the needle habit draws at ${scale} of the cell radius`);
+  const bounds = {width: 400, height: 900};
+  let slow = 0;
+  for (let seed = 0; seed < 40; seed++) {
+    const flake = helpers.createFlake(bounds, 0, helpers.prng(seed * 4463 + 17));
+    const top = Math.abs(helpers.spinSpeed(flake));
+    flake.totalDistance = flake.maxDistance;
+    const bottom = Math.abs(helpers.spinSpeed(flake));
+    // The ramp applies to every flake under the fall-speed threshold, but it is only
+    // visible above the MIN_SPIN floor when the flake's own rate already clears it:
+    // one that drew a near-zero rate is pinned to the floor at both ends.
+    const slowFlake = flake.speed <= helpers.SLOW_FALL_SPEED;
+    if (slowFlake) {
+      slow++;
+      if (Math.abs(flake.rotationSpeed) > helpers.MIN_SPIN) {
+        assert.ok(bottom > top * 1.5,
+                  `a flake falling ${flake.speed.toFixed(2)} px a step turns ${top.toFixed(4)} at the top and ${bottom.toFixed(4)} at the bottom`);
+      } else {
+        assert.ok(bottom >= top, "the floor never lets a ramped flake spin slower than it started");
+      }
+    } else {
+      assert.equal(bottom, top, `a flake falling ${flake.speed.toFixed(2)} px a step keeps ${top.toFixed(4)}`);
+    }
+  }
+  assert.ok(slow > 4 && slow < 36, `${slow} of 40 flakes fall slowly enough to spin up`);
+});
+
+test("the stem habits stay a minority of the field", () => {
+  const helpers = api();
+  for (const count of [helpers.MIN_FLAKES, helpers.MAX_FLAKES, 40]) {
+    for (let seed = 0; seed < 8; seed++) {
+      const dealt = helpers.dealSlots(count, helpers.prng(seed * 104729 + 7));
+      assert.equal(dealt.length, count, `${count} slots dealt`);
+      const cap = Math.max(1, Math.round(count * helpers.STEM_SHARE));
+      const stems = dealt.filter(h => h.stem).length;
+      const branch = dealt.filter(h => !h.stem && !h.wire).length;
+      assert.ok(stems <= cap, `${stems} stem crystals in a field of ${count}, cap ${cap}`);
+      assert.ok(stems >= 1, "and the field still shows one");
+      assert.ok(branch > stems, `branched crystals outnumber stems, ${branch} against ${stems}`);
+    }
+  }
+});
+
+test("a hollow plate keeps its hole", () => {
+  const helpers = api();
+  const d = /d="([^"]*)"/.exec(helpers.hollowPlate(0, -20, 8, 4, 6, 0.2))[1];
+  const rings = d.split("Z").filter(Boolean);
+  assert.equal(rings.length, 2, "an outer ring and an inner one in one path");
+  const area = ring => {
+    const pts = [...ring.matchAll(/(-?[\d.]+) (-?[\d.]+)/g)].map(m => [Number(m[1]), Number(m[2])]);
+    let sum = 0;
+    for (let i = 0; i < pts.length; i++) {
+      const [x1, y1] = pts[i];
+      const [x2, y2] = pts[(i + 1) % pts.length];
+      sum += x1 * y2 - x2 * y1;
+    }
+    return sum;
+  };
+  // The non-zero fill rule both rasterizers use only leaves the middle empty if the
+  // two rings wind opposite ways; wound the same way, the plate is solid and the
+  // habit's whole point is gone.
+  assert.ok(area(rings[0]) * area(rings[1]) < 0, "the inner ring is wound the other way");
+});
+
+test("a needle crystal is drawn smaller, and mostly joins its arms to their neighbours", () => {
+  const helpers = api();
+  const spec = helpers.habitSpec(helpers.HABITS.find(h => h[0] === "needle"));
+  assert.ok(spec.scale <= 0.7, `the needle habit draws at ${spec.scale} of the cell radius`);
   const view = helpers.SHAPE_VIEW;
   const reach = view / 2 - 1;
-  for (let seed = 0; seed < 20; seed++) {
-    const svg = helpers.buildShape(helpers.prng(seed * 6151 + 11), view,
-                                   {name: "needle", build: needle[2], wire: false, scale: scale}, 0, 1);
+  const seeds = 24;
+  let joined = 0;
+  for (let seed = 0; seed < seeds; seed++) {
+    const svg = helpers.buildShape(helpers.prng(seed * 6151 + 11), view, spec, 0, 1);
+    const paths = (svg.match(/d="([^"]*)"/g) || []).map(m => /d="([^"]*)"/.exec(m)[1]);
     const points = [];
-    const paths = /d="([^"]*)"/g;
-    let hit;
-    while ((hit = paths.exec(svg)) !== null) {
+    for (const d of paths) {
       const pairs = /(-?[\d.]+) (-?[\d.]+)/g;
       let pair;
-      while ((pair = pairs.exec(hit[1])) !== null) {points.push([Number(pair[1]), Number(pair[2])]);}
+      while ((pair = pairs.exec(d)) !== null) {points.push([Number(pair[1]), Number(pair[2])]);}
     }
-    assert.ok(points.length > 40, `${points.length} points — the vane is a curve, not a line`);
     for (const [x, y] of points) {
       const r = Math.hypot(x, y);
-      assert.ok(r <= reach * scale + 0.6, `a point ${r.toFixed(1)} out reaches past the ${scale} scale`);
+      assert.ok(r <= reach * spec.scale + 0.6, `a point ${r.toFixed(1)} out reaches past the ${spec.scale} scale`);
     }
-    // the vane starts at the arm's point and ends on the neighbouring arm's axis, so
-    // six copies of it leave no arm unconnected
     const angle = ([x, y]) => Math.atan2(x, -y) * 180 / Math.PI;
     const radius = ([x, y]) => Math.hypot(x, y);
     const maxR = Math.max(...points.map(radius));
     assert.ok(points.some(p => radius(p) >= maxR * 0.92 && Math.abs(angle(p)) < 6),
-              "the vane starts at the point of the arm");
-    assert.ok(points.some(p => Math.abs(angle(p) - 60) < 4 && radius(p) > maxR * 0.35),
-              "the vane reaches the next arm");
+              "an arm reaches its point");
+    // The landing corners sit a few degrees either side of the neighbour's axis: the
+    // spiral's last facet ends on the axis, but the quad's corners are offset from it
+    // by the facet's own half width at that radius.
+    if (points.some(p => Math.abs(angle(p) - 60) < 6 && radius(p) > maxR * 0.3)) {joined++;}
+    // The join is straight facets, not a smooth arc. Every element of a crystal is a
+    // tapered quad; a many-sided path is the ribbon that made this habit read as a
+    // flower, because the curve was the only round thing on it.
+    for (const d of paths) {
+      const corners = (d.match(/L/g) || []).length + 1;
+      assert.ok(corners <= 13, `${corners}-sided element — a spiral facet is a quad, not an arc`);
+    }
   }
+  assert.ok(joined >= seeds * helpers.SPIRAL_CHANCE * 0.6,
+            `${joined} of ${seeds} needle crystals join their arms to their neighbour`);
+  assert.ok(joined < seeds, "and not every one does — an unjoined crystal is not a defect");
 });
 
 test("the size envelope over a flake's travel has no slope break", () => {
