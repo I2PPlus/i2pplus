@@ -1,12 +1,3 @@
-/*
-    Physics and rendering worker for the I2P+ console's festive snow.
-
-    The drift, deterioration and death-spin constants are inherited from
-    Snowflakes © 2024 Denis Seleznev (MIT, https://github.com/hcodes/snowflakes/).
-    Worker transport, sprite atlas and offscreen rendering for I2P+ by dr|z3d,
-    AGPLv3 or later.
-*/
-
 /**
  * @module snowman
  * @description Dedicated worker that drives the router console's snow. It owns
@@ -15,10 +6,11 @@
  * not, it posts one packed Float32Array of draw transforms per frame and lets the
  * page paint them. Either way the page runs no animation math.
  *
- * The physics constants are written per 60Hz frame, exactly as the original DOM
- * animation had them, and applied by a fixed 16.667ms step. A 30Hz or 144Hz
- * display therefore gets the same fall speed and the same sparkle noise as a 60Hz
- * one, which the per-frame version could not promise.
+ * The drift, deterioration and death-spin constants are inherited from Snowflakes
+ * © 2024 Denis Seleznev (MIT, https://github.com/hcodes/snowflakes/), and are written
+ * per 60Hz frame exactly as his DOM animation had them, applied by a fixed 16.667ms
+ * step. A 30Hz or 144Hz display therefore gets the same fall speed and the same
+ * sparkle noise as a 60Hz one, which the per-frame version could not promise.
  *
  * It also draws the flakes. Each one is a generated SVG crystal: a single arm of
  * filled, tapered spikes, replicated six times about the centre, so the six-fold
@@ -26,7 +18,6 @@
  * One shape per flake slot, about 1.7 KB of markup and 0.05 ms each, sent to the
  * page with the ready message for it to rasterize into the sprite atlas. That
  * replaces fetching the six hand-drawn files, which are kept only as a fallback.
- *
  * @author dr|z3d
  * @license AGPL3 or later
  */
@@ -52,6 +43,15 @@
    */
   const MIN_FLAKES = 10;
   const MAX_FLAKES = 20;
+  /**
+   * Most flakes the tuning panel can ask for, above the automatic {@link MAX_FLAKES}.
+   *
+   * The field's own ceiling comes from the viewport area; this is the reviewer's
+   * override, and it is a ceiling on flakes rather than on crystals — the atlas holds
+   * {@link MAX_FLAKES} slots and a hundred flakes draw from those slots, several to a
+   * crystal, which is what a deliberately over-snowed page looks like.
+   */
+  const TUNING_MAX_FLAKES = 100;
   const AREA_PER_FLAKE = 80000;
   /** Steps a dying flake spins before it starts to fall out; 200ms at 60Hz. */
   const DEATH_SPIN_STEPS = Math.round(200 / FRAME_MS);
@@ -234,6 +234,122 @@
    */
   const SPIRAL_CHANCE = 0.7;
   /**
+   * Chance a replacement flake is given a brand-new crystal instead of the one its
+   * slot held.
+   *
+   * One crystal set is twenty-odd shapes, and a slot is reused every few minutes, so
+   * without a refresh the viewer watches the same handful of crystals for as long as
+   * the page is open. Refreshing a few of the slots at a time turns the field over
+   * continuously — about six new crystals in every twenty replacements, so a whole set
+   * has turned over in a few minutes of snow — without ever changing the shape of a
+   * flake that is on screen.
+   *
+   * The refresh happens on the step a flake is recycled, when it is above the top
+   * edge and has not been drawn yet, and it repaints only that slot's cells in the
+   * atlas. A rate high enough to look like a reshuffle, or a refresh applied to a
+   * slot a live flake is holding, is what would make the snow visibly re-draw itself.
+   */
+  const CRYSTAL_REFRESH_CHANCE = 0.3;
+  /**
+   * Hue spread, in degrees, that a variation setting of 100% puts across the field.
+   *
+   * Half of that is what a single crystal may sit off the theme colour by, on either
+   * side. Much past this and a field of snow stops reading as one colour at all, which
+   * is the effect the control is meant to tune rather than overshoot.
+   */
+  const HUE_SPREAD_MAX = 120;
+  /**
+   * Hue degrees a colour cycle moves per second.
+   *
+   * A full turn of the wheel in a minute: slow enough that no single flake is visibly
+   * shifting while it falls — a flake is on screen for a few seconds, which is a handful
+   * of degrees — and fast enough that a field watched for a minute is unmistakably a
+   * different colour. The panel's thumbnails cycle at the same rate.
+   */
+  const CYCLE_DEGREES_PER_SEC = 6;
+  /**
+   * How many fixed steps pass between the colour cycle re-sending the atlas to a page
+   * that rasterizes it — one second of simulated time.
+   *
+   * The page rebuilds that atlas by decoding every shape, which is work worth doing once
+   * a second for a colour drift and not worth doing thirty times a second.
+   */
+  const CYCLE_PAGE_STEPS = 30;
+  /**
+   * Field defaults the panel resets to.
+   *
+   * Kept as named constants because the reset button has to put back exactly what the
+   * worker started with, and a second copy of these numbers in the panel drifts.
+   */
+  const DEFAULT_VARIATION = 0.15;
+  /** Per-flake gravity spread the field starts with, as a fraction of each flake's own. */
+  const DEFAULT_GRAVITY_VAR = 0;
+  /**
+   * Per-flake spin spread the field starts with, as a fraction of each flake's own.
+   *
+   * 1, not 0: every flake is dealt its own rotation rate, so the field has always turned
+   * at a dozen rates, and the slider is set to that spread rather than to a spread on top
+   * of it. At 0 the dealt rates are switched off and the whole field turns at the floor.
+   */
+  const DEFAULT_SPIN_VAR = 1;
+  /**
+   * Widest per-crystal spin deviation range the panel may set, as a multiple of the spread
+   * the field is dealt. Above 1 the flakes turn at more than the rates they were drawn at;
+   * the spin limits in scaleSpin still bound what any one flake actually turns at.
+   */
+  const SPIN_VAR_MAX = 2;
+  /**
+   * The size, in CSS pixels, a flake is dealt at before its own spread and the panel's
+   * multiplier are applied.
+   *
+   * The field's natural spread is a fraction of this rather than a range of sizes, so the
+   * size slider moves the whole field up and down without changing how varied it is, and
+   * the spread slider widens it without moving the average.
+   */
+  const BASE_SIZE = 12.2;
+  /**
+   * Smallest size, in CSS pixels, a flake may be dealt at relative to {@link BASE_SIZE},
+   * however wide the spread is set. Below this the crystal's own detail — the holes in a
+   * hollow plate, the beads on a beaded arm — closes up and the habit stops reading.
+   */
+  const MIN_SIZE = 11;
+  /**
+   * Per-flake size spread the field starts with, as a fraction of {@link BASE_SIZE}.
+   *
+   * This is the spread the field was dealt with before the panel could set one: 12.2 ± 27%
+   * is 8.9 to 15.5 pixels, which the {@link MIN_SIZE} floor lifts to the 11 to 16 range the
+   * old inline formula produced. The slider's default is this so the field looks the same
+   * before anyone touches it as it did before the slider existed.
+   */
+  const DEFAULT_SIZE_VAR = 0.27;
+  /** Field size multiplier the field starts at and the panel resets to. */
+  const DEFAULT_SIZE = 1;
+  /**
+   * Smallest and largest size multipliers the panel may set. The floor keeps a flake
+   * large enough to rasterize and read as a crystal; the ceiling is where one flake starts
+   * covering the console's text.
+   */
+  const SIZE_MIN = 0.4;
+  const SIZE_MAX = 2.5;
+  /**
+   * Size multiplier the figure habit is dealt at, on top of the field's own size.
+   *
+   * A figure is a recognisable object rather than a texture: at the size a crystal is
+   * painted, the hat brim and the twig arms land under a pixel each and the snowman reads
+   * as a smudge. The in-cell scale column of {@link HABITS} cannot fix this — it shrinks
+   * the drawing inside the sprite, so raising it above 1 would clip the hat off the top of
+   * the atlas cell. Growing the flake is what makes the figure legible without moving any
+   * of the crystals beside it.
+   */
+  const FIGURE_SIZE = 1.25;
+  /**
+   * Lowest and highest fall-rate and spin multipliers the panel may set. The floor on
+   * gravity is not zero because a field that does not fall is not snow, and the ceiling
+   * is where the fixed step stops being able to follow a flake across the viewport.
+   */
+  const MOTION_MIN = 0.2;
+  const MOTION_MAX = 3;
+  /**
    * Frames held per flake slot.
    *
    * For a flat crystal the frames are the same arm drawn at successive points of a
@@ -413,6 +529,17 @@
    * @param {string} hex colour in #rrggbb or rrggbb form
    * @returns {number[]|null} [r, g, b], or null when the text is not a hex colour
    */
+  /**
+   * Formats an rgb triple as the hex form the palette builder takes.
+   *
+   * @param {number[]} rgb the colour as [r, g, b]
+   * @returns {string} the colour as #rrggbb, each channel clamped to 8 bits
+   */
+  function rgbText(rgb) {
+    const hex = v => Math.max(0, Math.min(255, v | 0)).toString(16).padStart(2, "0");
+    return "#" + hex(rgb[0]) + hex(rgb[1]) + hex(rgb[2]);
+  }
+
   function parseHex(hex) {
     const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(String(hex));
     if (!m) {return null;}
@@ -430,17 +557,110 @@
    * @returns {string} an rgb() colour string
    */
   function varyColor(base, maxVar, rnd) {
-    const clamp = v => Math.max(0, Math.min(255, v | 0));
+    return colorText(base, varyDelta(base, maxVar, rnd));
+  }
+
+  /**
+   * The per-slot colour offset that makes a field of flakes one colour without making
+   * them all the same colour.
+   *
+   * Kept separate from the formatting so the offset can be re-applied to a different
+   * base — which is what the panel's hue control does: it moves the base and every slot
+   * keeps the offset it was dealt, so turning the hue shifts the field's palette instead
+   * of reshuffling it.
+   *
+   * @param {number[]} base theme colour as [r, g, b]
+   * @param {number} maxVar largest per-channel offset, in 8-bit steps
+   * @param {function(): number} rnd source of randomness
+   * @returns {number[]} the per-channel offset, [dr, dg, db]
+   */
+  function varyDelta(base, maxVar, rnd) {
     if (rnd() < 0.5) {
       const tint = FESTIVE_TINTS[Math.floor(rnd() * FESTIVE_TINTS.length)];
       const mix = 0.075;
-      return "rgb(" + clamp(base[0] * (1 - mix) + tint[0] * mix + rnd() * maxVar - maxVar / 2) + "," +
-                      clamp(base[1] * (1 - mix) + tint[1] * mix + rnd() * maxVar - maxVar / 2) + "," +
-                      clamp(base[2] * (1 - mix) + tint[2] * mix + rnd() * maxVar - maxVar / 2) + ")";
+      return [base[0] * (1 - mix) + tint[0] * mix + rnd() * maxVar - maxVar / 2 - base[0],
+              base[1] * (1 - mix) + tint[1] * mix + rnd() * maxVar - maxVar / 2 - base[1],
+              base[2] * (1 - mix) + tint[2] * mix + rnd() * maxVar - maxVar / 2 - base[2]];
     }
-    return "rgb(" + clamp(base[0] + rnd() * maxVar * 3 - maxVar) + "," +
-                    clamp(base[1] + rnd() * maxVar * 3 - maxVar) + "," +
-                    clamp(base[2] + rnd() * maxVar * 3 - maxVar) + ")";
+    return [rnd() * maxVar * 3 - maxVar, rnd() * maxVar * 3 - maxVar, rnd() * maxVar * 3 - maxVar];
+  }
+
+  /**
+   * Formats a base colour with a per-slot offset as a CSS colour.
+   *
+   * @param {number[]} base the colour as [r, g, b]
+   * @param {number[]} delta the per-channel offset, [dr, dg, db]
+   * @returns {string} the colour as rgb(r,g,b), each channel clamped to 8 bits
+   */
+  function colorText(base, delta) {
+    const clamp = v => Math.max(0, Math.min(255, v | 0));
+    return "rgb(" + clamp(base[0] + delta[0]) + "," + clamp(base[1] + delta[1]) + "," +
+                    clamp(base[2] + delta[2]) + ")";
+  }
+
+  /**
+   * Rotates a colour about its hue, leaving its lightness and saturation alone.
+   *
+   * @param {number[]} rgb the colour as [r, g, b] in 8-bit steps
+   * @param {number} degrees the rotation, clockwise on the colour wheel
+   * @returns {number[]} the rotated colour as [r, g, b]
+   */
+  /**
+   * The hue of a colour, in degrees on the colour wheel.
+   *
+   * A grey has no hue of its own and reports 0, which is the honest answer for a colour
+   * the wheel cannot place: the caller that wants to match or oppose a colour has to
+   * look at its saturation for itself.
+   *
+   * @param {number[]} rgb the colour as [r, g, b] in 8-bit steps
+   * @returns {number} the hue in [0, 360)
+   */
+  function hueOf(rgb) {
+    const r = rgb[0] / 255;
+    const g = rgb[1] / 255;
+    const b = rgb[2] / 255;
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    const span = max - min;
+    if (span === 0) {return 0;}
+    let hue;
+    if (max === r) {hue = (g - b) / span + (g < b ? 6 : 0);}
+    else if (max === g) {hue = (b - r) / span + 2;}
+    else {hue = (r - g) / span + 4;}
+    return hue * 60;
+  }
+
+  function rotateHue(rgb, degrees) {
+    const r = rgb[0] / 255;
+    const g = rgb[1] / 255;
+    const b = rgb[2] / 255;
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    const light = (max + min) / 2;
+    const span = max - min;
+    if (span === 0) {return rgb.slice();}
+    const saturation = span / (light > 0.5 ? 2 - max - min : max + min);
+    let hue = (hueOf(rgb) + degrees) / 360 % 1;
+    if (hue < 0) {hue += 1;}
+    /**
+     * One channel of an HSL colour, as the hue sector it falls in.
+     * @param {number} q the HSL q term
+     * @param {number} p the HSL p term
+     * @param {number} t the channel's position on the wheel
+     * @returns {number} the channel in [0, 1]
+     */
+    function channel(q, p, t) {
+      if (t < 0) {t += 1;}
+      if (t > 1) {t -= 1;}
+      if (t < 1 / 6) {return q + (p - q) * 6 * t;}
+      if (t < 1 / 2) {return q;}
+      if (t < 2 / 3) {return q + (p - q) * (2 / 3 - t) * 6;}
+      return p;
+    }
+    const q = light < 0.5 ? light * (1 + saturation) : light + saturation - light * saturation;
+    const p = 2 * light - q;
+    const clamp = v => Math.max(0, Math.min(255, Math.round(v * 255)));
+    return [clamp(channel(q, p, hue + 1 / 3)), clamp(channel(q, p, hue)), clamp(channel(q, p, hue - 1 / 3))];
   }
 
   /**
@@ -466,7 +686,12 @@
       // used when generation is unavailable — is instead picked at random, which
       // spreads the six shapes across the field rather than cycling them.
       const type = shapes >= count ? i + 1 : Math.floor(rnd() * shapes) + 1;
-      cells.push({type, color: varyColor(rgb, 10, rnd)});
+      const delta = varyDelta(rgb, 10, rnd);
+      // The slot's own place in the palette's spread, fixed when it is dealt: the hue
+      // control moves the whole field together and the variation control widens the
+      // spread around it, and neither would do either if this number were redrawn each
+      // time.
+      cells.push({type, delta, spread: rnd() * 2 - 1, color: colorText(rgb, delta)});
     }
     return cells;
   }
@@ -1185,6 +1410,145 @@
    * @param {number} radius distance from the centre to the edge of the drawing
    * @returns {string[]} the arm's filled elements, trunk first
    */
+  /**
+   * A ring: one circle with a hole, as a single filled path.
+   *
+   * The two circles run in opposite directions so the fill leaves the inside empty,
+   * which is what lets a figure keep details — eyes, buttons — that a filled disc would
+   * swallow.
+   *
+   * @param {number} cx centre x in shape units
+   * @param {number} cy centre y in shape units
+   * @param {number} outer outer radius, in shape units
+   * @param {number} inner hole radius, in shape units
+   * @returns {string} the path markup
+   */
+  function ring(cx, cy, outer, inner) {
+    const ro = coord(outer);
+    const ri = coord(inner);
+    const circle = (r, x, sweep) => "M" + coord(x - r) + " " + coord(cy) +
+      "A" + r + " " + r + " 0 1 " + sweep + " " + coord(x + r) + " " + coord(cy) +
+      "A" + r + " " + r + " 0 1 " + sweep + " " + coord(x - r) + " " + coord(cy) + "Z";
+    return '<path d="' + circle(ro, cx, 0) + circle(ri, cx, 1) + '"/>';
+  }
+
+  /**
+   * The traditional snowman: three rings of snow, a hat, and arms out flat.
+   *
+   * This is the one habit that is a figure rather than an arm repeated around a centre,
+   * so it is drawn once and it is drawn upright. The arms go out flat, near enough to
+   * fill the cell from side to side, because the figure turns about a vertical axis and
+   * outstretched arms are what make that turn read as a rotor sweeping rather than as a
+   * silhouette widening and narrowing.
+   *
+   * @param {function(): number} rnd source of randomness
+   * @param {number} radius the habit's radius, in shape units
+   * @returns {string[]} the figure's path markup
+   */
+  /**
+   * A filled disc with holes punched out of it, as one path.
+   *
+   * A flake is drawn in one colour, so a detail painted on top of a filled body cannot
+   * be seen — the only way to give a filled snowman a face is to take the face out of
+   * the body. The holes are subpaths of the same path, wound the other way, so the fill
+   * leaves them empty.
+   *
+   * @param {number} cx centre x in shape units
+   * @param {number} cy centre y in shape units
+   * @param {number} radius the disc's radius, in shape units
+   * @param {Array<Array<number>>} holes holes as [x, y, radius], in shape units, or none
+   * @returns {string} the path markup
+   */
+  function disc(cx, cy, radius, holes) {
+    const arc = (x, y, rad, sweep) => "M" + coord(x - rad) + " " + coord(y) +
+      "A" + coord(rad) + " " + coord(rad) + " 0 1 " + sweep + " " + coord(x + rad) + " " + coord(y) +
+      "A" + coord(rad) + " " + coord(rad) + " 0 1 " + sweep + " " + coord(x - rad) + " " + coord(y) + "Z";
+    let d = arc(cx, cy, radius, 0);
+    for (const hole of holes || []) {d += arc(hole[0], hole[1], hole[2], 1);}
+    return '<path d="' + d + '"/>';
+  }
+
+  /**
+   * The traditional snowman, drawn once, upright, and turned through the frame strip.
+   *
+   * He is filled rather than outlined, because at the size a flake is painted at a
+   * three-ring stack reads as a target and a filled silhouette reads as a snowman. The
+   * turn is baked into the frames: each frame of a slot is the same figure seen one step
+   * around a vertical axis, which is what keeps the body one size all the way round. A
+   * draw transform that squashed the whole sprite would make him swell and shrink
+   * instead of turning, and it would squash the hat and the body along with the arms.
+   *
+   * What does change with the frame is how far anything sticks out sideways: the arms,
+   * the hat, the scarf and the face all live on a plane that swings through the view, so
+   * they foreshorten together while the three balls of snow stay put.
+   *
+   * @param {function(): number} rnd source of randomness
+   * @param {number} radius the habit's radius, in shape units
+   * @param {number} frame which step of the turn to draw
+   * @param {number} frames steps in a full turn
+   * @returns {string[]} the figure's path markup
+   */
+  function armSnowman(rnd, radius, frame, frames) {
+    const r = radius;
+    const n = Math.max(1, frames || FRAMES);
+    const f = Math.max(0, Math.min(n - 1, frame || 0));
+    const yaw = f * Math.PI * 2 / n;
+    // How much of the sideways extent is still in the plane of the screen: 1 facing us,
+    // nothing edge-on. The floor keeps the arms a stub rather than a vanishing line.
+    const flat = 0.18 + Math.abs(Math.cos(yaw)) * 0.82;
+    // Which half of the turn he is on. The face and the coals are on the front, so they
+    // are gone for the back half — and without that the strip is mirror-symmetric, only
+    // about five of its sixteen frames differ at all, and the turn reads as a shuffle
+    // rather than as a rotation.
+    const facing = Math.cos(yaw) > 0;
+    const parts = [];
+    // Two circles and a hat. That is the whole figure: at the size a flake is painted at,
+    // anything finer — a scarf, a carrot, a mouth — is a smudge that costs more than it
+    // tells, so the details stop at two eyes and a coal.
+    const body = r * (0.4 + rnd() * 0.02);
+    const head = body * (0.72 + rnd() * 0.05);
+    const yBody = r * 0.42;
+    // Overlapped at the neck, so the two circles read as one figure and not as a stack
+    // with a gap in it.
+    const yHead = yBody - body - head + r * 0.12;
+    // Outlined rather than filled: a flake is one colour, so a filled body can only carry
+    // its face as holes punched in the fill, and those holes close up at flake size. A
+    // ring leaves the inside empty, and the dots drawn in it stay separate dots.
+    parts.push(ring(0, yBody, body, body - r * 0.055));
+    parts.push(ring(0, yHead, head, head - r * 0.05));
+    // Eyes and one coal, and the eyes slide toward the centre line as he turns away.
+    if (facing) {
+      const eye = r * 0.038;
+      const eyeX = head * 0.4 * flat;
+      parts.push(dot(-eyeX, yHead - head * 0.12, eye));
+      parts.push(dot(eyeX, yHead - head * 0.12, eye));
+      parts.push(dot(0, yBody - body * 0.12, r * 0.042));
+    }
+    // The hat: a brim across the top of the head and a crown standing off it, both level,
+    // both keeping their width all the way round — a brim is a disc and a crown is a
+    // cylinder, and a thing round about the axis he turns on looks the same from every side.
+    const brim = head * (1.3 + rnd() * 0.25);
+    parts.push(bar(-brim, yHead - head - r * 0.025, brim * 2, r * 0.045));
+    const crown = head * (0.62 + rnd() * 0.08);
+    parts.push(bar(-crown, yHead - head - r * 0.28, crown * 2, r * 0.255));
+    // Twig arms, level: they hold their height whatever the turn and shorten instead of
+    // tilting. One fork each — a stick with a fork in it is a stick, and more than that is
+    // noise at this size. Out to the edge of the cell and no further: the arms are the
+    // widest thing about him, and past the radius they are drawn into the next cell over.
+    const armY = yBody - body * 0.5;
+    const edge = Math.sqrt(body * body - (armY - yBody) * (armY - yBody));
+    const reach = r * (0.6 + rnd() * 0.05);
+    const thick = r * 0.05;
+    for (const side of [-1, 1]) {
+      const root = side * edge;
+      const len = reach * flat;
+      parts.push(bar(side < 0 ? root - len : root, armY - thick / 2, len, thick));
+      parts.push(spike(root + side * len * 0.7, armY, side * (Math.PI / 2 - 0.75),
+                       len * 0.34, r * 0.016, 0));
+    }
+    return parts;
+  }
+
   function armTwin(rnd, radius) {
     const trunk = radius * (0.62 + rnd() * 0.3);
     const base = radius * (0.026 + rnd() * 0.012);
@@ -1479,7 +1843,11 @@
     ["hexplate", 6, armHexPlate, false, 0.75, 0.6, 6, "stem"],
     ["twin", 5, armTwin, false, 0.82, 0.8, 12, "stem"],
     ["beaded", 4, armBeaded, false, 0.8, 1, 6, "stem"],
-    ["dodeca", 8, armDodeca, true, 1, 1, 1, "solid"]
+    ["dodeca", 8, armDodeca, true, 1, 1, 1, "solid"],
+    // The figure habit: drawn once, upright, turning about a vertical axis. It is not a
+    // crystal and it is not repeated six times, so it sits outside both the branch and
+    // the stem families — see {@link habitSpec}'s figure flag.
+    ["snowman", 6, armSnowman, false, 1, 0, 1, "figure", "off"]
   ];
 
   /**
@@ -1500,7 +1868,8 @@
    */
   function habitSpec(habit) {
     return {name: habit[0], build: habit[2], wire: habit[3], scale: habit[4],
-            warp: habit[5], copies: habit[6], stem: habit[7] === "stem"};
+            warp: habit[5], copies: habit[6], stem: habit[7] === "stem",
+            figure: habit[7] === "figure"};
   }
 
   /**
@@ -1528,14 +1897,15 @@
    *   warp: number, copies: number, stem: boolean}} the habit to draw
    */
   function pickHabit(rnd) {
+    const rows = activeHabits();
     let total = 0;
-    for (const habit of HABITS) {total += habit[1];}
+    for (const habit of rows) {total += habit[1];}
     let roll = rnd() * total;
-    for (const habit of HABITS) {
+    for (const habit of rows) {
       roll -= habit[1];
       if (roll < 0) {return habitSpec(habit);}
     }
-    return habitSpec(HABITS[HABITS.length - 1]);
+    return habitSpec(rows[rows.length - 1]);
   }
 
   /**
@@ -1581,14 +1951,16 @@
     }
     const arm = picked.build(rnd, radius, f, n).join("");
     warp = null;
-    const core = !picked.wire && rnd() < 0.75
+    // A figure is the whole drawing, so it gets no core: a random stellate burst at the
+    // centre of a snowman is a snowman with a star growing out of it.
+    const core = !picked.wire && (picked.copies || 6) > 1 && rnd() < 0.75
       ? stellate(0, 0, radius * (0.1 + rnd() * 0.12), rnd() * Math.PI / 3, rnd)
       : "";
     const half = size / 2;
     let uses = "";
     // A wireframe is not six-fold symmetric, so it is drawn once rather than
     // replicated; the replication count is part of the habit, not a guess here.
-    const copies = picked.wire ? 1 : (picked.copies || 6);
+    const copies = picked.wire || picked.figure ? 1 : (picked.copies || 6);
     const step = 360 / copies;
     for (let k = 0; k < copies; k++) {
       uses += '<use xlink:href="#a"' + (k ? ' transform="rotate(' + step * k + ')"' : "") + "/>";
@@ -1597,6 +1969,38 @@
            'width="' + size + '" height="' + size + '" ' +
            'viewBox="' + coord(-half) + " " + coord(-half) + " " + size + " " + size + '">' +
            '<defs><g id="a" fill=":color:">' + core + arm + "</g></defs>" + uses + "</svg>";
+  }
+
+  /**
+   * The habit rows the field may draw right now.
+   *
+   * The page can switch a variant off while it is being reviewed — one checkbox per
+   * habit on its tuning panel. A filter that leaves nothing enabled is ignored rather
+   * than obeyed: a field with no shapes at all is a blank canvas, and switching the
+   * last variant off is more likely a slip than a decision.
+   *
+   * With no filter at all the field is dealt from {@link defaultHabits}, not from the
+   * whole set: the bonus habit stays a bonus until somebody asks for it.
+   *
+   * @returns {Array<Array>} the enabled rows of {@link HABITS}
+   */
+  function activeHabits() {
+    if (!state.enabled) {return defaultHabits();}
+    const on = HABITS.filter(h => state.enabled[h[0]] !== false);
+    return on.length ? on : defaultHabits();
+  }
+
+  /**
+   * The habits the field is dealt from when nobody has said which are in play.
+   *
+   * The figure habit is marked off by default in its {@link HABITS} row: a snowman is a
+   * bonus on the field rather than one of the crystal silhouettes a field is expected to
+   * show, so it arrives when the reader presses its tile and not before.
+   *
+   * @returns {Array<Array>} the rows of {@link HABITS} that are on by default
+   */
+  function defaultHabits() {
+    return HABITS.filter(habit => habit[8] !== "off");
   }
 
   /**
@@ -1618,8 +2022,9 @@
   function dealSlots(count, rnd) {
     const n = Math.max(1, count | 0);
     const cap = Math.max(1, Math.round(n * STEM_SHARE));
-    const deck = shuffle(HABITS.filter(h => h[7] !== "stem").map(habitSpec), rnd)
-      .concat(shuffle(HABITS.filter(h => h[7] === "stem").map(habitSpec), rnd).slice(0, cap));
+    const rows = activeHabits();
+    const deck = shuffle(rows.filter(h => h[7] !== "stem").map(habitSpec), rnd)
+      .concat(shuffle(rows.filter(h => h[7] === "stem").map(habitSpec), rnd).slice(0, cap));
     shuffle(deck, rnd);
     let stems = 0;
     const dealt = [];
@@ -1650,8 +2055,9 @@
    *
    * @param {number} count number of flake slots
    * @param {function(): number} rnd source of randomness
-   * @returns {{shapes: string[], wire: boolean[], solids: Array<Object|null>}} the
-   *   shape documents slot-major, and which slots are wireframe solids
+   * @returns {{shapes: string[], wire: boolean[], solids: Array<Object|null>,
+   *   specs: Array<Object>}} the shape documents slot-major, which slots are wireframe
+   *   solids, their solids, and the habit each slot draws
    */
   function buildSlots(count, rnd) {
     const shapes = [];
@@ -1659,15 +2065,33 @@
     // The solid each wireframe slot shows, kept so the flake can be painted as vectors
     // at whatever orientation it has tumbled to instead of being picked off the atlas.
     const solids = [];
+    const specs = [];
+    // The seed each slot's crystal was built from, kept so the panel can paint its
+    // thumbnails from the same draws the field is showing — see slotSeeds.
+    const seeds = [];
     for (const habit of dealSlots(count, rnd)) {
       const seed = Math.floor(rnd() * 0x7fffffff);
+      specs.push(habit);
+      seeds.push(seed);
       wire.push(habit.wire);
       solids.push(habit.wire ? wireOrientation(prng(seed)) : null);
-      for (let f = 0; f < FRAMES; f++) {
-        shapes.push(buildShape(prng(seed), SHAPE_VIEW, habit, f, FRAMES));
-      }
+      shapes.push(...buildSlotFrames(seed, habit));
     }
-    return {shapes, wire, solids};
+    return {shapes, wire, solids, specs, seeds};
+  }
+
+  /**
+   * Builds one slot's strip of {@link FRAMES} shapes.
+   *
+   * @param {number} seed the slot's own seed, shared by all its frames so the crystal
+   *   is identical across them and only the warp (or the orientation) changes
+   * @param {Object} spec the habit this slot draws, from {@link habitSpec}
+   * @returns {string[]} FRAMES complete SVG documents, in frame order
+   */
+  function buildSlotFrames(seed, spec) {
+    const frames = [];
+    for (let f = 0; f < FRAMES; f++) {frames.push(buildShape(prng(seed), SHAPE_VIEW, spec, f, FRAMES));}
+    return frames;
   }
 
   /**
@@ -1679,6 +2103,54 @@
    */
   function buildShapes(count, rnd) {
     return buildSlots(count, rnd).shapes;
+  }
+
+  /**
+   * The size, in CSS pixels, a flake with this deviation is dealt at right now.
+   *
+   * Read where the size is written rather than only when a flake is made, so the panel's
+   * size sliders change the flakes already falling. The {@link MIN_SIZE} floor is scaled
+   * with the multiplier along with everything else: a floor in absolute pixels would pin
+   * a shrunken field back to full size.
+   *
+   * @param {number} sizeDev the flake's own deviation, in [-1, 1]
+   * @param {number} [grow] the habit's own multiplier, from {@link habitGrow}; 1 for a
+   *   crystal, {@link FIGURE_SIZE} for the figure
+   * @returns {number} the dealt size in CSS pixels, at or above the floor
+   */
+  function flakeSize(sizeDev, grow) {
+    return (grow || 1) * state.size * Math.max(MIN_SIZE, BASE_SIZE * (1 + sizeDev * state.sizeVar));
+  }
+
+  /**
+   * The size multiplier the habit in this atlas slot is dealt at.
+   *
+   * Read from the slot rather than from the flake, because a refresh can hand a slot to a
+   * different habit while a flake keeps drawing from it, and a snowman dealt at crystal
+   * size is a snowman nobody can see.
+   *
+   * @param {number} cell the atlas slot the flake draws from
+   * @returns {number} {@link FIGURE_SIZE} for a figure habit, 1 for a crystal
+   */
+  function habitGrow(cell) {
+    const spec = state.specs[cell];
+    return spec && spec.figure ? FIGURE_SIZE : 1;
+  }
+
+  /**
+   * The size a flake has melted down to when it is spent and starts its fall out.
+   *
+   * Scaled with the panel's size multiplier so a field of small flakes still lives as long
+   * as a field of large ones: the removal size is a size, not a lifetime, and leaving it
+   * unscaled would kill every flake the moment the multiplier dropped below it. The habit's
+   * own multiplier applies here too, so a figure melts by the same proportion as the crystal
+   * beside it rather than shrinking to a crystal's endpoint.
+   *
+   * @param {number} [grow] the habit's own multiplier, from {@link habitGrow}
+   * @returns {number} the removal size in CSS pixels
+   */
+  function removalSize(grow) {
+    return (grow || 1) * REMOVAL_SIZE * state.size;
   }
 
   /**
@@ -1694,15 +2166,30 @@
    * @returns {Object} the flake's mutable state
    */
   function createFlake(bounds, cell, rnd, wire, solid) {
-    const size = Math.max(11, rnd() * 9 + 7);
+    // How far this flake sits off the field's size, in [-1, 1], drawn once and kept for
+    // its whole life the way the gravity and spin deviations are. The size-variation
+    // setting says how much of it counts, so moving that slider re-spreads the field that
+    // is already falling instead of waiting for the next respawn.
+    const sizeDev = rnd() * 2 - 1;
+    const size = flakeSize(sizeDev, habitGrow(cell));
     const flake = {
       cell,
+      // Falls this flake has lived through. The simulation watches it change to catch
+      // the step a flake was recycled on, which is the only step on which the crystal
+      // it draws may change — see {@link refreshCrystal}.
+      life: 0,
+      sizeDev,
       initialSize: size,
       size,
       x: rnd() * bounds.width,
       y: rnd() * bounds.height - size,
       speed: 0.3 + (size / 17) * 0.6,
       vy: 0.3 + (size / 17) * 0.6,
+      // How far this flake sits off the field's gravity, in [-1, 1]. The panel's
+      // gravity-variation setting multiplies this; at 0 every flake falls at the
+      // configured rate and at 1 the field spreads across the whole range. The size
+      // term above is the flake's own weight and stays whatever the setting says.
+      speedDev: rnd() * 2 - 1,
       vx: 0,
       initialOpacity: rnd() * 0.2 + 0.8,
       opacity: 0,
@@ -1712,6 +2199,8 @@
       // Both directions, so a field of flakes does not read as one pinwheel. The
       // sign is the flake's own and the death spin inherits it; spinSpeed is what
       // keeps the magnitude off zero rather than this clamp keeping it positive.
+      // This is also the deviation the panel's spin-variation setting scales: at its
+      // default of 1 the field turns at the whole spread it has always been dealt.
       rotationSpeed: (rnd() - 0.5) * 0.12,
       windPhase: rnd() * Math.PI * 2,
       windSpeed: WIND_SPEEDS[Math.floor(rnd() * WIND_SPEEDS.length)],
@@ -1750,6 +2239,20 @@
       spinY: tumbleRate(rnd)
     };
     flake.opacity = flake.initialOpacity;
+    // A figure habit — the snowman — is not a crystal: it has a top, and it keeps it.
+    // The turn it makes is a yaw about its own vertical axis, which the draw transform
+    // shows as a horizontal sweep rather than as a rotation, and the rock is the few
+    // degrees it leans off vertical as the wind takes it.
+    const spec = state.specs[cell];
+    flake.figure = !!(spec && spec.figure);
+    if (flake.figure) {
+      flake.yawPhase = rnd() * Math.PI * 2;
+      // Radians per step: about one turn in 3-5 seconds, which is slow enough that the
+      // arms read as sweeping rather than as a strobe.
+      flake.yawSpeed = (0.02 + rnd() * 0.014) * (rnd() < 0.5 ? -1 : 1);
+      flake.rock = rnd() * Math.PI * 2;
+      flake.rockSpeed = 0.02 + rnd() * 0.02;
+    }
     return flake;
   }
 
@@ -1763,6 +2266,7 @@
    * @returns {void}
    */
   function respawn(flake, bounds, rnd) {
+    flake.life++;
     flake.y = -flake.initialSize;
     flake.x = rnd() * bounds.width;
     flake.totalDistance = 0;
@@ -1806,7 +2310,10 @@
    *   {@link WIRE_SPIN_MIN} for a wireframe flake and {@link MIN_SPIN} for the rest
    */
   function spinSpeed(flake) {
-    let speed = flake.rotationSpeed * Math.max(1, flake.initialSize / flake.size);
+    // The panel's spin variation scales this rate's own magnitude: at 1 every flake turns
+    // at the rate it was dealt, which is the spread the field has always had, and at 0 the
+    // dealt rates are switched off and the field turns at the floor below.
+    let speed = flake.rotationSpeed * state.spinVar * Math.max(1, flake.initialSize / flake.size);
     if (!flake.wire && flake.speed <= SLOW_FALL_SPEED && flake.maxDistance > 0) {
       const travelled = Math.min(1, flake.totalDistance / flake.maxDistance);
       speed *= 1 + SLOW_SPIN_RAMP * travelled;
@@ -1886,7 +2393,38 @@
    * @param {function(): number} rnd source of randomness for the sparkle flicker
    * @returns {void}
    */
+  /**
+   * How far off vertical a figure habit may lean, in radians.
+   *
+   * A snowman rocks; it does not turn over. Past this the figure reads as falling head
+   * over heels, which is what the crystal physics does to a shape that has no top.
+   */
+  const FIGURE_ROCK = 0.06;
+
+  /**
+   * Sets a figure flake's lean and advances its yaw.
+   *
+   * Both are driven off phases rather than rates, so the lean is bounded: the figure
+   * swings through a few degrees and back, the way a helicopter model hangs on a string,
+   * and the yaw runs steadily so the outstretched arms sweep in and out.
+   *
+   * @param {Object} flake the figure flake
+   * @param {number} spin the field's spin multiplier, with the flake's spread in it
+   * @returns {void}
+   */
+  function figureTurn(flake, spin) {
+    flake.rock += flake.rockSpeed * spin;
+    flake.yaw += flake.yawSpeed * spin;
+    flake.rotation = Math.sin(flake.rock) * FIGURE_ROCK;
+  }
+
   function stepFlake(flake, bounds, rnd) {
+    // The panel's gravity and spin settings are multipliers read where the motion is
+    // applied, not at the flake's creation, so moving a slider moves the flakes already
+    // on the field rather than only the next ones in. Each flake carries its own
+    // deviation, drawn when it was made, which is what the variation settings widen.
+    const gravity = state.gravity * (1 + (flake.speedDev || 0) * state.gravityVar);
+    const spin = state.spin;
     if (flake.isDying && flake.deathAge >= DEATH_SPIN_STEPS) {
       flake.deathFallSpeed += DEATH_FALL_ACCEL;
       flake.vy = flake.deathFallSpeed;
@@ -1900,7 +2438,9 @@
       // makes the fall-out leave on the heading the flake was already on.
       flake.driftVx *= DEATH_DRIFT_DECAY;
       flake.deathSpinSpeed = deathSpinAt(flake);
-      flake.rotation += flake.deathSpinSpeed + flake.gustSpin;
+      if (flake.figure) {figureTurn(flake, spin);} else {
+        flake.rotation += scaleSpin(flake.deathSpinSpeed, spin, DEATH_SPIN_MAX) + flake.gustSpin;
+      }
       // A flake tumbling fast does not fall along a straight line: a little of the
       // spin comes back out as sideways travel, which is what makes the path read
       // as a spiral rather than as a spin in place.
@@ -1910,23 +2450,35 @@
       flake.windPhase += WIND_STEP;
       flake.vx = Math.sin(flake.windPhase) * flake.windSpeed;
       flake.driftVx = flake.vx;
-      flake.rotation += spinSpeed(flake) + flake.gustSpin;
+      if (flake.figure) {figureTurn(flake, spin);} else {
+        flake.rotation += scaleSpin(spinSpeed(flake), spin, flake.wire ? WIRE_SPIN_MAX : Infinity) +
+                          flake.gustSpin;
+      }
       flake.x += flake.vx + flake.gustVx;
     }
-    flake.y += flake.vy + flake.gustVy;
-    flake.totalDistance += flake.vy;
+    flake.y += flake.vy * gravity + flake.gustVy;
+    flake.totalDistance += flake.vy * gravity;
 
     // Which frame of the slot's strip is showing: a flat crystal walks its warp cycle
     // on a slow timer. A wireframe's frames are all one pose, because its motion is not
     // in the atlas at all — the solid is painted as vectors at the orientation below.
     flake.steps++;
-    flake.frame = Math.floor(flake.steps / FRAME_BEATS) % FRAMES;
+    if (flake.figure) {
+      // A figure's frames are steps of one turn about its own vertical axis, so walking
+      // the strip is the turn. It is driven off spin so the panel's spin control turns
+      // him, and the frame index is kept in range by the strip's own length.
+      flake.yawPhase = (flake.yawPhase || 0) + flake.yawSpeed * spin;
+      flake.frame = Math.round(flake.yawPhase / (Math.PI * 2 / FRAMES)) % FRAMES;
+      if (flake.frame < 0) {flake.frame += FRAMES;}
+    } else {
+      flake.frame = Math.floor(flake.steps / FRAME_BEATS) % FRAMES;
+    }
     // The solid's tumble about the two screen axes, advanced every step so it turns
     // continuously rather than being flipped between poses. The third axis is the
     // sprite's own rotation, which the draw transform already turns smoothly.
     if (flake.wire) {
-      flake.tiltX += flake.spinX;
-      flake.tiltY += flake.spinY;
+      flake.tiltX += scaleSpin(flake.spinX, spin, WIRE_TUMBLE_MAX);
+      flake.tiltY += scaleSpin(flake.spinY, spin, WIRE_TUMBLE_MAX);
     }
 
     const travelled = Math.min(1, flake.totalDistance / flake.maxDistance);
@@ -1948,7 +2500,10 @@
     // mid-screen, and a flake that vanishes in mid-air and reappears bright at the
     // top is what reads here as one pulsing on and off.
     const ease = travelled * travelled;
-    flake.size = flake.initialSize - (flake.initialSize - REMOVAL_SIZE + 0.4) * ease;
+    // The habit's own multiplier, read once: the melt endpoint is scaled by it as well as
+    // the size it started at, so a figure shrinks by the same proportion as a crystal.
+    const spent = removalSize(habitGrow(flake.cell));
+    flake.size = flake.initialSize - (flake.initialSize - spent + 0.4) * ease;
     // And dim by three tenths over the journey, not by more than that: past this the
     // fade-out to a respawn is a blink, not ageing.
     flake.opacity = flake.initialOpacity * (1 - 0.3 * travelled);
@@ -1958,7 +2513,7 @@
     flake.opacityPhase += flake.opacitySpeed;
     flake.opacity *= 0.95 + Math.sin(flake.opacityPhase) * 0.05 + (rnd() - 0.5) * 0.03;
 
-    if (flake.size < REMOVAL_SIZE) {
+    if (flake.size < spent) {
       if (!flake.isDying) {
         flake.isDying = true;
         seedDeathSpin(flake, rnd);
@@ -2018,6 +2573,12 @@
     palette: [],
     shapes: [],
     wire: [],
+    // The habit each slot draws, kept so a refresh can replace one slot's crystal
+    // without re-dealing the field and changing every other slot.
+    specs: [],
+    // The seed each slot's crystal was built from, index-for-index with specs, so the
+    // panel can paint its thumbnails from the same draws the field is showing.
+    seeds: [],
     flakes: [],
     count: 0,
     base: 0,
@@ -2025,7 +2586,50 @@
     canvas: null,
     ctx: null,
     atlas: null,
+    // The atlas's own context, kept because a refresh patches single cells in the atlas
+    // rather than rebuilding it, and getContext() on an OffscreenCanvas hands back the
+    // same context only if it was already created — which is what rasterAtlas did.
+    atlasCtx: null,
     layout: null,
+    // The base colour as rgb, with the panel's hue rotation already applied, so a
+    // refreshed slot is coloured the same way buildPalette coloured the rest.
+    rgb: null,
+    // The theme colour as the page sent it, before any rotation.
+    baseRgb: null,
+    // Hue rotation the panel has asked for, in degrees; 0 is the theme colour.
+    hue: 0,
+    // Whether the panel's colour cycle is running.
+    cycle: false,
+    // How far the cycle has moved the palette so far, in degrees. Added to the hue
+    // slider rather than replacing it, so the control still says where the field is.
+    cycleHue: 0,
+    // Fixed steps since the cycle last re-sent the atlas to a page that rasterizes it.
+    cycleSteps: 0,
+    // Motion multipliers the panel has asked for. 1 is the field as it was dealt; the
+    // variation settings are fractions of each flake's own deviation, so 0 makes the
+    // field move as one flake and 1 spends the whole range it was dealt.
+    gravity: 1,
+    gravityVar: DEFAULT_GRAVITY_VAR,
+    spin: 1,
+    spinVar: DEFAULT_SPIN_VAR,
+    // Size multiplier and per-flake size spread, read where a flake's size is written
+    // rather than only when it is made — see setSize. The spread is a fraction of each
+    // flake's own deviation from BASE_SIZE, exactly as the gravity and spin spreads are.
+    size: DEFAULT_SIZE,
+    sizeVar: DEFAULT_SIZE_VAR,
+    // How far an individual crystal may sit off that hue, 0 to 1, as a fraction of
+    // {@link HUE_SPREAD_MAX}. The default is deliberately small: a field of snow is one
+    // colour, and the control exists to widen that, not to start there.
+    variation: 0.15,
+    // Crystals replaced so far, reported in the stats message so the page can show that
+    // an open field is still producing new shapes rather than looping the first twenty.
+    refreshes: 0,
+    // Chance a recycled flake draws a new crystal, set from {@link CRYSTAL_REFRESH_CHANCE}
+    // at init and adjustable by the page — see the refresh message.
+    refreshChance: CRYSTAL_REFRESH_CHANCE,
+    // Which variants the page has switched on, keyed by habit name; null means every
+    // variant in HABITS is in play.
+    enabled: null,
     running: false,
     prepared: false,
     accumulator: 0,
@@ -2138,35 +2742,150 @@
       return false;
     }
     if (!ctx) {return false;}
-    const scale = CELL / SHAPE_VIEW;
-    ctx.lineCap = "round";
     for (let i = 0; i < state.shapes.length; i++) {
-      const color = state.palette[Math.floor(i / FRAMES) % state.palette.length].color;
-      const shape = shapePaths(state.shapes[i]);
+      drawCell(ctx, i, state.palette[Math.floor(i / FRAMES) % state.palette.length].color);
+    }
+    state.atlas = canvas;
+    state.atlasCtx = ctx;
+    return true;
+  }
+
+  /**
+   * Rasterizes one shape into its atlas cell.
+   *
+   * @param {OffscreenCanvasRenderingContext2D} ctx the atlas context
+   * @param {number} index cell index, slot-major and frame-minor
+   * @param {string} color the fill and stroke colour this slot's crystals are drawn in
+   * @returns {void}
+   */
+  function drawCell(ctx, index, color) {
+    const scale = CELL / SHAPE_VIEW;
+    const shape = shapePaths(state.shapes[index]);
+    ctx.save();
+    ctx.translate((index % state.layout.cols) * CELL + CELL / 2,
+                  Math.floor(index / state.layout.cols) * CELL + CELL / 2);
+    ctx.scale(scale, scale);
+    ctx.lineCap = "round";
+    ctx.fillStyle = color;
+    ctx.strokeStyle = color;
+    for (const deg of shape.uses) {
       ctx.save();
-      ctx.translate((i % state.layout.cols) * CELL + CELL / 2,
-                    Math.floor(i / state.layout.cols) * CELL + CELL / 2);
-      ctx.scale(scale, scale);
-      ctx.fillStyle = color;
-      ctx.strokeStyle = color;
-      for (const deg of shape.uses) {
-        ctx.save();
-        ctx.rotate(deg * Math.PI / 180);
-        for (const part of shape.paths) {
-          const path = new Path2D(part.d);
-          if (part.w > 0) {
-            ctx.lineWidth = part.w;
-            ctx.stroke(path);
-          } else {
-            ctx.fill(path);
-          }
+      ctx.rotate(deg * Math.PI / 180);
+      for (const part of shape.paths) {
+        const path = new Path2D(part.d);
+        if (part.w > 0) {
+          ctx.lineWidth = part.w;
+          ctx.stroke(path);
+        } else {
+          ctx.fill(path);
         }
-        ctx.restore();
       }
       ctx.restore();
     }
-    state.atlas = canvas;
+    ctx.restore();
+  }
+
+  /**
+   * Re-draws one slot's {@link FRAMES} cells in the atlas.
+   *
+   * The cells are cleared before they are drawn again: the atlas is patched, not
+   * rebuilt, so the ink the old crystal left inside a cell would still be sitting
+   * behind the new one.
+   *
+   * @param {number} slot the slot whose cells are stale
+   * @returns {void}
+   */
+  function repaintCells(slot) {
+    const ctx = state.atlasCtx;
+    if (!ctx) {return;}
+    const color = state.palette[slot] ? state.palette[slot].color : "#87ceeb";
+    for (let f = 0; f < FRAMES; f++) {
+      const i = slot * FRAMES + f;
+      const col = (i % state.layout.cols) * CELL;
+      const row = Math.floor(i / state.layout.cols) * CELL;
+      ctx.clearRect(col, row, CELL, CELL);
+      drawCell(ctx, i, color);
+    }
+  }
+
+  /**
+   * Re-draws every cell in the atlas.
+   *
+   * A change that touches all of them at once — the palette's hue, for one — cannot be
+   * patched a slot at a time, and at this atlas size the whole repaint costs about the
+   * same as a dozen slots would.
+   *
+   * @returns {void}
+   */
+  function repaintAllCells() {
+    for (let slot = 0; slot < state.specs.length; slot++) {repaintCells(slot);}
+  }
+
+  /**
+   * Gives a recycled flake a crystal its slot has never held.
+   *
+   * The slot's whole frame strip is rebuilt from one fresh seed and its atlas cells are
+   * painted over, so the flake falls with a new shape and every later flake that draws
+   * from that slot gets the same one. A wireframe slot's solid is replaced with the one
+   * the new habit shows, and the flake's colour is re-varied, which is the other half of
+   * "the field keeps changing" — a set of crystals that only changes shape half the time
+   * looks like it is changing shape half the time.
+   *
+   * The stem habits stay a minority: a refresh that would put the field back over
+   * {@link STEM_SHARE} is re-rolled rather than applied, because a slow drift through
+   * refreshes would otherwise undo the cap the deck enforces.
+   *
+   * Only the worker-rasterized atlas can be patched in place. In the fallback the page
+   * holds the bitmap it rasterized from the ready message, and replacing that means a
+   * second handshake and a race with the frames in flight, so there the field keeps the
+   * crystals it started with.
+   *
+   * @param {Object} flake the flake that has just been recycled; it draws the new
+   *   crystal from its next fall
+   * @returns {boolean} true when the slot was replaced
+   */
+  function refreshCrystal(flake) {
+    if (!state.rasterized || !state.atlasCtx) {return false;}
+    const spec = refreshSpec(state.specs, state.rnd);
+    if (!spec) {return false;}
+    dealSlot(flake.cell, spec);
+    flake.wire = spec.wire;
+    flake.solid = state.solids[flake.cell];
+    flake.frame = 0;
+    flake.steps = 0;
+    // The new habit may be drawn at a different size than the one it replaced — the
+    // figure is dealt bigger than a crystal — and a flake keeps its size across a
+    // recycle, so the slot's multiplier is applied here rather than only when the
+    // flake was first made. The step recomputes the melt curve from this value.
+    flake.initialSize = flakeSize(flake.sizeDev || 0, habitGrow(flake.cell));
     return true;
+  }
+
+  /**
+   * Chooses the habit a slot takes over, or null when no replacement fits.
+   *
+   * The stem habits are held to {@link STEM_SHARE} of the slots here exactly as the
+   * dealt deck holds them: the deck's cap only covers the field as first dealt, and a
+   * refresh that lands on a stem habit every time would drift a capped field back to
+   * uncapped within a few minutes of snow.
+   *
+   * @param {Array<Object>} specs the habits the field's slots draw now
+   * @param {function(): number} rnd source of randomness
+   * @returns {Object|null} the habit to deal, or null when every draw was a stem habit
+   *   the field has no room for
+   */
+  function refreshSpec(specs, rnd) {
+    const cap = Math.max(1, Math.round(specs.length * STEM_SHARE));
+    let stems = 0;
+    for (const spec of specs) {
+      if (spec.stem) {stems++;}
+    }
+    for (let tries = 0; tries < 8; tries++) {
+      const pick = dealSlots(1, prng(Math.floor(rnd() * 0x7fffffff)))[0];
+      if (pick.stem && stems >= cap) {continue;}
+      return pick;
+    }
+    return null;
   }
 
   /**
@@ -2184,6 +2903,18 @@
   }
 
   /**
+   * The habit each slot draws right now.
+   *
+   * The page's panel uses this to show which variants the live field holds, and the
+   * tests use it to check that switching a variant out really did reach the field.
+   *
+   * @returns {string[]} one habit name per slot, in slot order; empty before init
+   */
+  function fieldSpecs() {
+    return state.specs.map(spec => spec.name);
+  }
+
+  /**
    * Sets the live flake count, adding or dropping flakes at the end of the list.
    * New flakes reuse an existing atlas slot, which is why the atlas never needs
    * rebuilding when the quality controller changes the count.
@@ -2192,14 +2923,484 @@
    * @returns {void}
    */
   function setCount(count) {
-    const want = Math.max(1, Math.min(state.palette.length, count | 0));
-    while (state.flakes.length > want) {state.flakes.pop();}
-    while (state.flakes.length < want) {
+    // Zero is allowed: the panel's slider runs down to nothing, and an empty field is a
+    // field the reader can bring back rather than a broken page. Past the dealt slot
+    // count the flakes share crystals, which is what asking for more snow than the
+    // atlas holds looks like.
+    const want = Math.max(0, Math.min(TUNING_MAX_FLAKES, count | 0));
+    // What the page asked for is kept even when nothing is in play, so switching a
+    // variant back on brings the same number of flakes back rather than a stub field.
+    state.count = want;
+    if (!state.dirtyRects || state.dirtyRects.length < want * 4) {
+      state.dirtyRects = new Float32Array(Math.max(1, want) * 4);
+    }
+    const live = anyOn() ? want : 0;
+    while (state.flakes.length > live) {state.flakes.pop();}
+    while (state.flakes.length < live) {
       const slot = state.flakes.length % state.palette.length;
       state.flakes.push(createFlake(state.bounds, slot, state.rnd, state.wire[slot],
                                     state.solids[slot]));
     }
-    state.count = want;
+  }
+
+  /**
+   * Switches variants in and out of the field.
+   *
+   * A variant that goes off goes now: every slot drawing it is re-dealt and the flakes
+   * standing on those slots are replaced with new ones, so the reviewer sees the field
+   * without it instead of waiting out a fall. A variant that comes back is dealt into
+   * slots taken from whichever habit the field holds most of, so it shows up on this
+   * field rather than only after a restart. Everything else keeps its crystal, colour
+   * and drift — the point of the panel is to compare one habit against the rest, and a
+   * field that re-drew itself every time a box was ticked would make that impossible.
+   *
+   * @param {Object|null} enabled habit name to boolean; null puts every variant back in
+   *   play
+   * @returns {void}
+   */
+  function setHabits(enabled) {
+    const was = state.enabled;
+    state.enabled = enabled && typeof enabled === "object" ? enabled : null;
+    if (!state.specs.length) {return;}
+    if (!anyOn()) {
+      // Every variant is off, so there is nothing to deal and nothing to draw: the
+      // field is empty now, not a field that finishes falling and then empties.
+      state.flakes.length = 0;
+      state.dirtyAll = true;
+      return;
+    }
+    const stale = [];
+    for (let i = 0; i < state.specs.length; i++) {
+      if (!isOn(state.specs[i].name)) {stale.push(i);}
+    }
+    // Variants that were off and are on now: each one needs a slot of its own.
+    const back = [];
+    for (const habit of HABITS) {
+      const name = habit[0];
+      if (isOn(name) && was && was[name] === false) {back.push(name);}
+    }
+    const touched = new Set(stale);
+    /** Habits this pass has already dealt, so freed slots spread out instead of piling up. */
+    const taken = new Set();
+    for (let i = stale.length; i < back.length; i++) {
+      const donor = largestHabitSlot(touched);
+      if (donor < 0) {break;}
+      touched.add(donor);
+    }
+    if (!touched.size) {return;}
+    let at = 0;
+    for (const slot of touched) {
+      const named = at < back.length ? back[at] : null;
+      at++;
+      // A replacement crystal is drawn in the field's own proportions, and one habit
+      // taking every freed slot is not proportions — it is a pile-up, and it is what makes
+      // a toggle look like the field collapsed onto one shape. Re-roll a repeat.
+      const spec = named ? habitSpec(HABITS.find(h => h[0] === named)) : freshSpec(taken);
+      taken.add(spec && spec.name);
+      dealSlot(slot, spec || refreshSpec(state.specs, state.rnd));
+    }
+    // The flakes that were drawing those slots are gone and new ones take their place,
+    // which is also what puts the returning variants on screen straight away.
+    for (let i = 0; i < state.flakes.length; i++) {
+      if (!touched.has(state.flakes[i].cell)) {continue;}
+      const cell = state.flakes[i].cell;
+      state.flakes[i] = createFlake(state.bounds, cell, state.rnd, state.wire[cell], state.solids[cell]);
+    }
+    // A field that was emptied by switching everything off has no flakes to replace, so
+    // the flakes that come back with the first variant are added here, at the count the
+    // page asked for before it cleared the field.
+    if (state.flakes.length < state.count) {setCount(state.count);}
+    state.dirtyAll = true;
+    sendCells();
+    sendSlots();
+  }
+
+  /**
+   * A crystal to put in a slot whose habit was just switched off.
+   *
+   * Drawn the way a rolling refresh draws one — weighted over the variants still in play,
+   * and held under the field's stem cap — but skipping any habit this same pass has
+   * already used, so switching two variants off does not hand both slots to one shape.
+   *
+   * @param {Set<string>} used habit names already dealt by this pass
+   * @returns {Object|null} the habit spec to deal, or null when nothing can be drawn
+   */
+  function freshSpec(used) {
+    for (let tries = 0; tries < 8; tries++) {
+      const pick = refreshSpec(state.specs, state.rnd);
+      if (pick && !used.has(pick.name)) {return pick;}
+    }
+    return refreshSpec(state.specs, state.rnd);
+  }
+
+  /**
+   * Whether any variant is in play.
+   *
+   * @returns {boolean} false when the panel has switched every variant off
+   */
+  function anyOn() {
+    return HABITS.some(habit => isOn(habit[0]));
+  }
+
+  /**
+   * Whether a variant is in play.
+   *
+   * @param {string} name the habit's name
+   * @returns {boolean} true when the panel has not switched it off
+   */
+  function isOn(name) {
+    return !state.enabled || state.enabled[name] !== false;
+  }
+
+  /**
+   * The slot holding a member of the habit the field has most of.
+   *
+   * @param {Set<number>} skip slots already being re-dealt
+   * @returns {number} a slot to take a crystal from, or -1 when none is left
+   */
+  function largestHabitSlot(skip) {
+    const counts = new Map();
+    for (let i = 0; i < state.specs.length; i++) {
+      if (skip.has(i)) {continue;}
+      const name = state.specs[i].name;
+      counts.set(name, (counts.get(name) || 0) + 1);
+    }
+    let best = -1;
+    let bestCount = 0;
+    for (let i = 0; i < state.specs.length; i++) {
+      if (skip.has(i)) {continue;}
+      if ((counts.get(state.specs[i].name) || 0) > bestCount) {
+        best = i;
+        bestCount = counts.get(state.specs[i].name) || 0;
+      }
+    }
+    return best;
+  }
+
+  /**
+   * Gives one slot a new crystal: its habit, its frame strip, its solid, its colour and
+   * the atlas cells that hold it.
+   *
+   * @param {number} slot the slot to re-deal
+   * @param {Object|null} spec the habit to deal, from {@link habitSpec}
+   * @returns {void}
+   */
+  function dealSlot(slot, spec) {
+    if (!spec) {return;}
+    const seed = Math.floor(state.rnd() * 0x7fffffff);
+    state.specs[slot] = spec;
+    state.seeds[slot] = seed;
+    state.shapes.splice(slot * FRAMES, FRAMES, ...buildSlotFrames(seed, spec));
+    state.wire[slot] = spec.wire;
+    state.solids[slot] = spec.wire ? wireOrientation(prng(seed)) : null;
+    if (state.palette[slot]) {
+      const cell = state.palette[slot];
+      cell.delta = varyDelta(state.rgb, 10, state.rnd);
+      cell.spread = state.rnd() * 2 - 1;
+      cell.color = cellColor(cell);
+    }
+    if (state.atlasCtx) {repaintCells(slot);}
+  }
+
+  /**
+   * One entry per habit the field's slots draw, as [name, seed], the seed being the one
+   * that built that habit's first crystal in the field.
+   *
+   * The panel paints one thumbnail per habit. Painted from a seed of its own, a thumbnail
+   * is a different crystal from the one the field is drawing under that name, and it keeps
+   * showing the old one while a reseed, a switched-off variant or a rolling refresh moves
+   * the field to a new set. This is what the panel redraws from.
+   *
+   * @returns {Array<Array>} [habit name, slot seed] pairs, first slot per habit
+   */
+  function slotSeeds() {
+    const first = new Map();
+    for (let i = 0; i < state.specs.length; i++) {
+      if (!first.has(state.specs[i].name)) {first.set(state.specs[i].name, state.seeds[i]);}
+    }
+    return Array.from(first, ([name, seed]) => [name, seed]);
+  }
+
+  /**
+   * Posts the field's current per-habit seeds to the page.
+   *
+   * Sent wherever the field's crystals are dealt wholesale — a reseed, a variant switched
+   * on or off — because the panel redraws its thumbnails from them, and waiting for the
+   * next stats message would leave the old crystals on the card for up to two seconds
+   * after the field changed.
+   *
+   * @returns {void}
+   */
+  function sendSlots() {
+    send({type: "slots", slots: slotSeeds()});
+  }
+
+  /**
+   * Sets how often a replacement flake draws a brand-new crystal.
+   *
+   * @param {number} chance probability in [0, 1]; anything else restores
+   *   {@link CRYSTAL_REFRESH_CHANCE}
+   * @returns {void}
+   */
+  function setRefreshChance(chance) {
+    const want = Number(chance);
+    state.refreshChance = Number.isFinite(want) ? Math.max(0, Math.min(1, want)) : CRYSTAL_REFRESH_CHANCE;
+  }
+
+  /**
+   * Rotates the field's palette about its hue.
+   *
+   * @param {number} degrees rotation on the colour wheel; anything else is ignored
+   * @returns {void}
+   */
+  function setHue(degrees) {
+    const want = Number(degrees);
+    if (!Number.isFinite(want)) {return;}
+    state.hue = ((want % 360) + 360) % 360;
+    applyHue();
+  }
+
+  /**
+   * The colour one slot draws in.
+   *
+   * The theme colour, turned by the panel's hue, pushed off it by the slot's own share
+   * of the variation, and then given the slot's small channel offset. The slot's share
+   * was fixed when it was dealt, so moving either control moves the field as a field:
+   * the same crystals in a different colour, rather than a reshuffle of which flake is
+   * which shade.
+   *
+   * @param {Object} cell the palette entry for the slot
+   * @returns {string} the colour as rgb(r,g,b)
+   */
+  function cellColor(cell) {
+    const shift = state.hue + state.cycleHue + (cell.spread || 0) * state.variation * HUE_SPREAD_MAX;
+    return colorText(rotateHue(state.baseRgb, shift), cell.delta);
+  }
+
+  /**
+   * Applies the field's spin multiplier and spread to one rotation rate.
+   *
+   * The clamp is not decoration. Every spin rate in the field already carries a ceiling
+   * set by how fast a sprite of that symmetry can be sampled before it aliases, and a
+   * spread that pushed a flake past its own ceiling buys a shimmer, not a faster turn.
+   *
+   * @param {number} rate the rate as the physics computed it, signed
+   * @param {number} factor the field's spin multiplier, with this flake's spread in it
+   * @param {number} limit the largest magnitude this rate may reach
+   * @returns {number} the scaled rate, inside the limit
+   */
+  function scaleSpin(rate, factor, limit) {
+    const scaled = rate * factor;
+    return scaled < 0 ? -Math.min(-scaled, limit) : Math.min(scaled, limit);
+  }
+
+  /**
+   * Sets the field's motion multipliers and how far individual flakes may sit off them.
+   *
+   * Read where the motion is applied rather than when a flake is made, so a slider move
+   * changes the flakes already falling. Each flake carries its own deviation, drawn when
+   * it was created; the variation settings say how much of that deviation counts, which
+   * is why gravity at 0 makes the field fall as one sheet. The spin setting is the range
+   * of that deviation per crystal, and its default of 1 is the spread the field has always
+   * been dealt — the setting narrows it below that, or widens it past it.
+   *
+   * @param {Object} msg the page's motion message; anything it leaves out is unchanged
+   * @param {number} msg.gravity fall-rate multiplier, 1 is the field as dealt
+   * @param {number} msg.gravityVar per-flake gravity spread, 0 to 1
+   * @param {number} msg.spin rotation-rate multiplier, 0 stops the spin
+   * @param {number} msg.spinVar per-crystal spin deviation range, 0 to {@link SPIN_VAR_MAX}
+   * @returns {void}
+   */
+  function setMotion(msg) {
+    state.gravity = clampSetting(msg.gravity, state.gravity, MOTION_MIN, MOTION_MAX);
+    state.gravityVar = clampSetting(msg.gravityVar, state.gravityVar, 0, 1);
+    state.spin = clampSetting(msg.spin, state.spin, 0, MOTION_MAX);
+    state.spinVar = clampSetting(msg.spinVar, state.spinVar, 0, SPIN_VAR_MAX);
+  }
+
+  /**
+   * Sets the field's size multiplier and the per-flake spread on it, and re-deals the
+   * sizes of the flakes that are already falling.
+   *
+   * The same shape as {@link setMotion}: each flake carries its own deviation from the
+   * field's size, drawn when it was created, and the spread setting says how much of that
+   * deviation counts. The flakes' current sizes are recomputed here as well as the sizes
+   * they are dealt at, because a paused field takes no step to do it and a slider that
+   * does nothing until the field is falling again reads as a broken control.
+   *
+   * @param {Object} msg the page's size message; anything it leaves out is unchanged
+   * @param {number} msg.scale field size multiplier, 1 is the field as dealt
+   * @param {number} msg.variation per-flake size spread, 0 to 1
+   * @returns {void}
+   */
+  function setSize(msg) {
+    state.size = clampSetting(msg.scale, state.size, SIZE_MIN, SIZE_MAX);
+    state.sizeVar = clampSetting(msg.variation, state.sizeVar, 0, 1);
+    for (const flake of state.flakes) {
+      const grow = habitGrow(flake.cell);
+      flake.initialSize = flakeSize(flake.sizeDev || 0, grow);
+      if (flake.isDying) {continue;}
+      // The same curve the step uses, so a flake that has already begun to melt keeps its
+      // place on that curve instead of snapping back to full size.
+      const travelled = flake.maxDistance > 0 ? Math.min(1, flake.totalDistance / flake.maxDistance) : 0;
+      flake.size = flake.initialSize - (flake.initialSize - removalSize(grow) + 0.4) * travelled * travelled;
+    }
+  }
+
+  /**
+   * Clamps one panel setting, leaving the current value in place when the page sent no
+   * number at all — a motion message may carry only the one slider that moved.
+   *
+   * @param {*} value what the page sent
+   * @param {number} current the setting as it stands
+   * @param {number} min lowest accepted value
+   * @param {number} max highest accepted value
+   * @returns {number} the value to use
+   */
+  function clampSetting(value, current, min, max) {
+    const want = Number(value);
+    return Number.isFinite(want) ? Math.max(min, Math.min(max, want)) : current;
+  }
+
+  /**
+   * Turns the colour cycle on or off.
+   *
+   * Switching it off puts the palette back where the hue slider says it is, rather than
+   * leaving the field stopped at whatever point of the wheel the cycle happened to be at.
+   *
+   * @param {boolean} on whether the palette keeps moving
+   * @returns {void}
+   */
+  function setCycle(on) {
+    state.cycle = !!on;
+    state.cycleSteps = 0;
+    if (!state.cycle) {state.cycleHue = 0;}
+    applyHue();
+  }
+
+  /**
+   * Moves the cycle along for the steps just simulated and repaints part of the atlas.
+   *
+   * @param {number} steps fixed steps the simulation just ran
+   * @returns {void}
+   */
+  function advanceCycle(steps) {
+    if (!state.cycle || !state.palette.length) {return;}
+    state.cycleHue = (state.cycleHue + steps * CYCLE_DEGREES_PER_SEC * FRAME_MS / 1000) % 360;
+    for (const cell of state.palette) {cell.color = cellColor(cell);}
+    if (!state.atlasCtx) {
+      // The page owns the atlas in this mode and repainting it costs a decode of every
+      // shape, so the cycle sends it once a second of simulated time there. A colour
+      // drift that needs a second to land is not one anyone is watching.
+      state.cycleSteps += steps;
+      if (state.cycleSteps < CYCLE_PAGE_STEPS) {return;}
+      state.cycleSteps = 0;
+      sendCells();
+      return;
+    }
+    const slots = state.specs.length;
+    if (!slots) {return;}
+    // Repaint the cells the field is actually showing, once per painted beat, so every
+    // flake changes colour on the same beat it is drawn on. Repainting a slot's whole
+    // frame strip instead — the form this had — left each flake holding one colour until
+    // the walk reached it, which reads as a wave crossing the field rather than as one
+    // colour moving; and repainting every strip every beat costs FRAMES times the work
+    // for frames nobody is looking at.
+    const seen = new Set();
+    for (const flake of state.flakes) {
+      const at = flake.cell * FRAMES + flake.frame;
+      if (seen.has(at)) {continue;}
+      seen.add(at);
+      const col = (at % state.layout.cols) * CELL;
+      const row = Math.floor(at / state.layout.cols) * CELL;
+      state.atlasCtx.clearRect(col, row, CELL, CELL);
+      const cell = state.palette[flake.cell];
+      drawCell(state.atlasCtx, at, cell ? cell.color : "#87ceeb");
+    }
+  }
+
+  /**
+   * Re-derives every slot's colour from the rotated theme colour and repaints the atlas.
+   *
+   * @returns {void}
+   */
+  function applyHue() {
+    if (!state.baseRgb) {return;}
+    state.rgb = rotateHue(state.baseRgb, state.hue);
+    for (const cell of state.palette) {cell.color = cellColor(cell);}
+    if (state.atlasCtx) {repaintAllCells();}
+    sendCells();
+  }
+
+  /**
+   * Sets how far individual crystals may sit off the field's hue.
+   *
+   * @param {number} percent the spread as a percentage of {@link HUE_SPREAD_MAX};
+   *   anything outside 0-100 is ignored
+   * @returns {void}
+   */
+  function setVariation(percent) {
+    const want = Number(percent);
+    if (!Number.isFinite(want)) {return;}
+    state.variation = Math.max(0, Math.min(100, want)) / 100;
+    applyHue();
+  }
+
+  /**
+   * Re-deals the field from a new seed and replaces every flake standing on it.
+   *
+   * This is the panel's reseed button: the reviewer wants a different set of crystals
+   * now, not a field that turns over as flakes happen to fall out. The viewport, the
+   * palette and the flake count stay as they are and only what the slots hold is new,
+   * so the change costs one message instead of a teardown and re-handshake.
+   *
+   * @param {number} seed seed to draw the new field from; anything else draws a new one
+   * @returns {void}
+   */
+  function reseed(seed) {
+    if (!state.specs.length) {return;}
+    const want = Number(seed);
+    state.rnd = prng(Number.isFinite(want) ? want : (Date.now() & 0x7fffffff));
+    const slots = buildSlots(state.base, state.rnd);
+    state.shapes = slots.shapes;
+    state.wire = slots.wire;
+    state.solids = slots.solids;
+    state.specs = slots.specs;
+    state.seeds = slots.seeds;
+    state.palette = buildPalette(state.base, rgbText(state.rgb), state.rnd, state.shapes.length);
+    if (state.atlasCtx) {repaintAllCells();}
+    // Every flake is replaced, and replaced in place: the field keeps its count and its
+    // flakes keep their cells, so a reseed is a new set of crystals, not a new field.
+    const live = state.flakes.length;
+    state.flakes.length = 0;
+    setCount(live);
+    state.dirtyAll = true;
+    sendCells();
+    sendSlots();
+  }
+
+  /**
+   * Tells the page that the atlas it paints is out of date.
+   *
+   * When the worker rasterizes it patches its own atlas and the page keeps drawing the
+   * same image. In the mode where the browser has no OffscreenCanvas the page owns the
+   * atlas, so a hue, a variant or a reseed has to travel back over the channel for the
+   * page to repaint it — otherwise the panel's controls would only take effect on the
+   * next restart.
+   *
+   * @returns {void}
+   */
+  function sendCells() {
+    if (state.rasterized || !state.prepared || !state.shapes.length) {return;}
+    send({
+      type: "cells",
+      cells: state.palette,
+      shapes: state.shapes,
+      layout: state.layout,
+      cell: CELL,
+      frames: FRAMES,
+      count: state.base
+    });
   }
 
   /**
@@ -2307,7 +3508,16 @@
     let steps = 0;
     while (state.accumulator >= FRAME_MS && steps < MAX_STEPS) {
       separateFlakes(state.flakes);
-      for (const flake of state.flakes) {stepFlake(flake, state.bounds, state.rnd);}
+      for (const flake of state.flakes) {
+        const life = flake.life;
+        stepFlake(flake, state.bounds, state.rnd);
+        // A flake that was just recycled is above the top edge and has not been drawn
+        // on this step, which makes this the one moment its crystal can change without
+        // the viewer watching a flake re-draw itself in mid-air.
+        if (flake.life !== life && state.rnd() < state.refreshChance) {
+          refreshCrystal(flake);
+        }
+      }
       state.accumulator -= FRAME_MS;
       steps++;
     }
@@ -2410,12 +3620,20 @@
       // recorded here is exactly the box the next frame has to erase. A wireframe's
       // points stick out past the cell it would have been drawn from, so its box is
       // that much bigger or the previous frame smears at the corners.
-      const half = (Math.abs(a) + Math.abs(b)) * (flake.solid ? 1.12 : 1);
+      // The two columns of the transform, not one: a figure habit squashes its x axis,
+      // so the y extent comes from the other column and a rect built from the first
+      // alone leaves a strip of the previous frame behind.
+      const half = Math.max(Math.abs(a) + Math.abs(b), Math.abs(buf[at + F_C]) + Math.abs(buf[at + F_D])) *
+                   (flake.solid ? 1.12 : 1);
       const rt = i * 4;
-      rects[rt] = buf[at + F_X] - half;
-      rects[rt + 1] = buf[at + F_Y] - half;
-      rects[rt + 2] = half * 2;
-      rects[rt + 3] = half * 2;
+      // Rounded out, not in. The sprite's edge is antialiased, so its coverage runs a
+      // fraction of a pixel past the box the transform describes, and a clear of exactly
+      // that box leaves a faint fringe one pixel deep along the way the flake came from —
+      // which is what a trail is.
+      rects[rt] = Math.floor(buf[at + F_X] - half) - 1;
+      rects[rt + 1] = Math.floor(buf[at + F_Y] - half) - 1;
+      rects[rt + 2] = Math.ceil(half * 2) + 2;
+      rects[rt + 3] = Math.ceil(half * 2) + 2;
     }
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.globalAlpha = 1;
@@ -2458,7 +3676,16 @@
     state.frames++;
     if (now - state.statsAt < STATS_MS) {return;}
     const elapsed = now - state.statsAt;
-    send({type: "stats", fps: elapsed > 0 ? (state.frames * 1000) / elapsed : 0, count: state.count});
+    send({
+      type: "stats",
+      fps: elapsed > 0 ? (state.frames * 1000) / elapsed : 0,
+      count: state.count,
+      refreshes: state.refreshes,
+      // The panel's thumbnails are crystals of its own unless they are painted from the
+      // seeds the field's slots were built from, so the current ones ride along here:
+      // a rolling refresh changes a slot's crystal with no message of its own.
+      slots: slotSeeds()
+    });
     state.frames = 0;
     state.statsAt = now;
   }
@@ -2581,8 +3808,17 @@
     state.shapes = slots.shapes;
     state.wire = slots.wire;
     state.solids = slots.solids;
-    state.palette = buildPalette(state.base, msg.baseColor, state.rnd, state.shapes.length);
-    state.dirtyRects = new Float32Array(state.base * 4);
+    state.specs = slots.specs;
+    state.seeds = slots.seeds;
+    state.baseRgb = parseHex(msg.baseColor) || [135, 206, 235];
+    state.rgb = rotateHue(state.baseRgb, state.hue);
+    state.palette = buildPalette(state.base, rgbText(state.rgb), state.rnd, state.shapes.length);
+    // Sized for the largest field the panel can ask for, not for the slots this viewport
+    // was dealt: a frame records one rect per flake so the next frame can erase it, and a
+    // buffer that runs out mid-frame drops the writes for the rest of it. Those flakes are
+    // then never cleared, and every frame after paints on top of the last — a field of
+    // flakes smearing into streaks the moment the count passes the slot count.
+    state.dirtyRects = new Float32Array(Math.max(state.base, TUNING_MAX_FLAKES) * 4);
     state.dirty = 0;
     state.dirtyAll = true;
     setCount(state.base);
@@ -2597,7 +3833,8 @@
       frames: FRAMES,
       layout: state.layout,
       cells: state.palette,
-      shapes: state.shapes
+      shapes: state.shapes,
+      slots: slotSeeds()
     });
     // In offscreen mode the worker paints, so it rasterizes its own atlas and gets
     // straight on with the animation; the page is not asked to decode anything. In
@@ -2629,12 +3866,15 @@
       case "tick": {
         if (!state.prepared || !state.running) {break;}
         const now = Number(msg.t) || clock();
-        simulate(now);
+        const steps = simulate(now);
         const draw = paintBeat(state.beat, state.rate);
         state.beat++;
         // Skipping the pack as well as the send is the point: on a throttled beat
         // nothing is copied, nothing is transferred, and the page paints nothing.
         if (draw) {
+          // On the beat that gets drawn, so a colour cycle moves the atlas it is about
+          // to sample from and not one it has already shown.
+          advanceCycle(steps);
           packFrame();
           const out = state.buffer.slice(0, state.frameLength * STRIDE);
           send({type: "frame", buf: out, count: state.frameLength}, [out.buffer]);
@@ -2654,12 +3894,40 @@
         send({type: "viewed", width: state.bounds.width, height: state.bounds.height});
         break;
       }
-      case "quality":
-        setCount(Number(msg.count) || state.count);
+      case "quality": {
+        // Not `Number(msg.count) || state.count`: zero is a count, and the panel's
+        // slider runs down to it.
+        const asked = Number(msg.count);
+        setCount(Number.isFinite(asked) ? asked : state.count);
         state.dirtyAll = true;
         break;
+      }
       case "rate":
         setRate(Number(msg.rate));
+        break;
+      case "habits":
+        setHabits(msg.enabled);
+        break;
+      case "refresh":
+        setRefreshChance(msg.chance);
+        break;
+      case "hue":
+        setHue(msg.degrees);
+        break;
+      case "variation":
+        setVariation(msg.percent);
+        break;
+      case "cycle":
+        setCycle(msg.on);
+        break;
+      case "motion":
+        setMotion(msg);
+        break;
+      case "size":
+        setSize(msg);
+        break;
+      case "reseed":
+        reseed(msg.seed);
         break;
       case "visible":
         if (msg.visible) {start();} else {stop();}
@@ -2672,28 +3940,45 @@
     }
   }
 
-  self.onmessage = onMessage;
+  // Only where this is not a page. The console also loads this file as a page script,
+  // for the panel's thumbnails, and a page has a window.onmessage that other scripts may
+  // already own — and every message posted to the window, iframe resizes included, would
+  // land in the snow's handler. A worker, and the test harness that drives one, have no
+  // document.
+  if (typeof self.document === "undefined") {self.onmessage = onMessage;}
 
   // The JS harness (tools/test/js/pure/snowman.test.js) loads this file in a
   // worker-like context and drives these directly, so the physics is pinned
   // without a browser.
   self.SNOWMAN = Object.freeze({
-    FRAME_MS, STRIDE, CELL, MIN_FLAKES, MAX_FLAKES, DEATH_SPIN_STEPS, DEATH_SPIN_GROWTH,
+    FRAME_MS, STRIDE, CELL, MIN_FLAKES, MAX_FLAKES, TUNING_MAX_FLAKES, DEATH_SPIN_STEPS, DEATH_SPIN_GROWTH,
     REMOVAL_SIZE,
     DEATH_SPIN_MAX, DEATH_SPIN_BIAS, DEATH_SPIN_REVERSE, DEATH_WOBBLE_MIN, DEATH_WOBBLE_MAX,
     DEATH_DRIFT_DECAY, SPIN_LATERAL, DEATH_FALL_ACCEL, SOFT_REACH, SEPARATION, GUST_DECAY,
-    GUST_MAX, GRAZE_SPIN, WARP_CHANCE, WARP_MAX, SPIRAL_CHANCE, FRAMES, FRAME_BEATS,
+    GUST_MAX, GRAZE_SPIN, WARP_CHANCE, WARP_MAX, SPIRAL_CHANCE, CRYSTAL_REFRESH_CHANCE,
+    CYCLE_DEGREES_PER_SEC,
+    FRAMES, FRAME_BEATS,
     WIRE_STROKE_NEAR, WIRE_DEPTH, WIRE_CIRC, WIRE_SPIN_MIN, WIRE_SPIN_MAX,
+    SPIN_VAR_MAX,
     WIRE_TUMBLE_MIN, WIRE_TUMBLE_MAX, tumbleRate,
     SLOW_FALL_SPEED, SLOW_SPIN_RAMP,
     WIRE_DEATH_SPIN_MAX, MIN_SPIN, HABITS, STEM_SHARE, ICOSA, WIRE,
     SHAPE_VIEW, RATE_MAX,
-    flakeCountFor, atlasLayout, prng, parseHex, varyColor, buildPalette, coord, habitSpec,
+    BASE_SIZE, MIN_SIZE, SIZE_MIN, SIZE_MAX, DEFAULT_SIZE, DEFAULT_SIZE_VAR, FIGURE_SIZE,
+    flakeSize, removalSize,
+    // The protocol's entry point, for a harness that drives the worker from a page
+    // (a page has a document, so this module does not claim window.onmessage there).
+    handle: data => onMessage({data}),
+    flakeCountFor, atlasLayout, prng, parseHex, varyColor, varyDelta, colorText, rgbText,
+    rotateHue, hueOf, buildPalette, DEFAULT_VARIATION, DEFAULT_GRAVITY_VAR, DEFAULT_SPIN_VAR,
+    coord, habitSpec, fieldSpecs, setHue, setVariation, HUE_SPREAD_MAX,
     paintWire,
     spike, plate, hexPath, ngonPath, hollowPlate, dot, bar, band, star, stellate, rotAxis,
     armDendrite, armFern, armNeedle, armSectored, armCapped, armBeaded, armRinged, armStar,
     armHexPlate, armTwin, armDodeca,
-    buildShape, buildShapes, buildSlots, dealSlots, shapePaths, spiralVane,
+    buildShape, buildShapes, buildSlots, buildSlotFrames, dealSlots, refreshSpec, slotSeeds, dealSlot,
+    refreshCrystal, shapePaths, spiralVane, activeHabits, setHabits, setRefreshChance,
+    setCycle, reseed, anyOn, cellColor,
     wireOrientation, wireVertices, wireBands, depthBucket,
     pickHabit, seedDeathSpin, deathSpinAt, separateFlakes,
     createFlake, respawn, spinSpeed, stepFlake, writeFlake, paintBeat

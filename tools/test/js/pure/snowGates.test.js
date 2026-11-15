@@ -32,6 +32,14 @@ import vm from "node:vm";
 const SRC = readFileSync(
   new URL("../../../../apps/routerconsole/jsp/js/snowflakes/snowflakes.js", import.meta.url), "utf8");
 
+/**
+ * The loader that decides whether the page side is fetched at all, and the file that owns
+ * the season, the query, the stored choice and the typed gestures. A page runs it first, so
+ * the test context runs it first too — snowflakes.js reads its decision from window.snowBoot.
+ */
+const BOOT_SRC = readFileSync(
+  new URL("../../../../apps/routerconsole/jsp/js/snowflakes/snowboot.js", import.meta.url), "utf8");
+
 const REAL_DATE = Date;
 
 /**
@@ -92,6 +100,25 @@ function openPage(options = {}) {
     }
   }
 
+  /**
+   * An element the loader injects: a script or a stylesheet link it can append to the page
+   * and take back off again, which is the loader's whole contract.
+   *
+   * @param {string} tag the tag name asked for
+   * @returns {Object} an element stub that reports where it is attached
+   */
+  const element = tag => ({
+    tagName: tag.toUpperCase(),
+    rel: "",
+    href: "",
+    src: "",
+    async: true,
+    style: {},
+    parentNode: null,
+    addEventListener: () => {},
+    setAttribute: () => {}
+  });
+
   const canvas = () => {
     const made = {
       width: 0,
@@ -117,21 +144,39 @@ function openPage(options = {}) {
     ? {getItem: () => {throw new Error("denied");}, setItem: () => {throw new Error("denied");}}
     : {getItem: k => (store.has(k) ? store.get(k) : null), setItem: (k, v) => {store.set(k, String(v));}};
 
+  /** Everything appended to the page's head or body, in order, with its tag. */
+  const appended = [];
+  const head = {
+    appendChild: el => {el.parentNode = head; appended.push(el);},
+    removeChild: el => {el.parentNode = null;}
+  };
+  const body = {
+    appendChild: el => {el.parentNode = body; appended.push(el);},
+    removeChild: el => {el.parentNode = null;}
+  };
+
   const ctx = {
     window: {
       location: {search: options.search || ""},
+      localStorage: storage,
+      matchMedia: () => ({matches: !!options.reduced}),
       innerWidth: options.width === undefined ? 1280 : options.width,
       innerHeight: options.height === undefined ? 720 : options.height,
       devicePixelRatio: options.dpr === undefined ? 1 : options.dpr,
       theme: options.theme === undefined ? "light" : options.theme,
-      addEventListener: (type, fn) => {listeners.window[type] = fn;}
+      addEventListener: (type, fn) => {listeners.window[type] = fn;},
+      removeEventListener: type => {delete listeners.window[type];}
     },
     document: {
-      body: {appendChild: () => {}},
+      head,
+      body,
+      // The loader derives the paths it injects from the src it was served from.
+      currentScript: {src: "http://localhost:7657/js/snowflakes/snowboot.js"},
       visibilityState: "visible",
-      createElement: canvas,
+      createElement: tag => (tag === "canvas" ? canvas() : element(tag)),
       getElementById: () => null,
-      addEventListener: (type, fn) => {listeners.document[type] = fn;}
+      addEventListener: (type, fn) => {listeners.document[type] = fn;},
+      removeEventListener: type => {delete listeners.document[type];}
     },
     localStorage: storage,
     matchMedia: () => ({matches: !!options.reduced}),
@@ -170,8 +215,16 @@ function openPage(options = {}) {
   };
   ctx.self = ctx;
   vm.createContext(ctx);
-  vm.runInContext(SRC, ctx);
-  return {gates: ctx.window.snowGates, workers, canvases, listeners, fetches, store};
+  vm.runInContext(BOOT_SRC, ctx);
+  // A page whose loader decided the field is wanted goes on to fetch the page side; one
+  // that did not stops here, which is the point of the loader.
+  if (options.pageScripts !== false) {vm.runInContext(SRC, ctx);}
+  return {
+    gates: ctx.window.snowGates, boot: ctx.window.snowBoot, workers, canvases, listeners,
+    fetches, store, appended,
+    /** The script URLs the loader injected, in order, empty when it fetched nothing. */
+    scripts: () => appended.filter(el => el.tagName === "SCRIPT").map(el => el.src)
+  };
 }
 
 /**

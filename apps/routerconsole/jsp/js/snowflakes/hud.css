@@ -1,0 +1,485 @@
+/*
+ * Styling for the snow field's tuning HUD (hud.js).
+ *
+ * One card, 400px wide, fixed to the top right of the viewport, over the snow canvas.
+ * It is hidden by opacity and pointer-events rather than display, so opening it is a
+ * fade rather than a reflow, and the field behind it never moves.
+ *
+ * Every rule is rooted at #hud and every element inside it carries an hud- name, because
+ * the console's theme styles bare buttons, labels and inputs, and a panel that inherits
+ * them picks up the page's colours instead of its own. The reset below is what stops that:
+ * appearance:none takes the control out of the theme's hands, and each rule below states
+ * its own colour, border and size rather than relying on inheritance. The one thing the
+ * card does take from the page is its typeface — see --hud-font. Nothing here is
+ * !important — the sheet is loaded after every theme sheet, so #hud plus a class already
+ * outweighs the theme's bare-element rules, and an important reset would outvote the
+ * card's own layout too. It reaches nothing outside #hud.
+ *
+ * Colours are written as #rrggbb and #rrggbbaa rather than rgb()/rgba(), and the card
+ * itself is fully opaque: the snow field behind it is the page's, not something the
+ * reader is trying to read through the panel.
+ */
+
+/* Above everything the console draws, including its own fixed headers and menus. */
+#hud {
+  z-index: 99999999999;
+}
+
+#hud,
+#hud * {
+  box-sizing: border-box;
+  font-family: var(--hud-font);
+}
+
+/*
+ * The console's theme styles bare buttons — its own margin, min-width, font, text shadow
+ * and an active-state box shadow — and none of it is wanted inside the card. One rule on
+ * #hud button switches all of it off: an id plus an element outweighs the theme's button,
+ * button:visited and button:active selectors, none of which carries an id, so the
+ * pseudo-class variants do not need repeating here.
+ *
+ * And they must not be. #hud button:active has a pseudo-class of its own on top of the id,
+ * which puts it above the card's own #hud .hud-act and #hud .hud-left rules — that is how
+ * the foot's reset button lost its border and its margin the moment it was pressed.
+ *
+ * The box shadows go with the rest of it. The theme draws most of a button's edge with an
+ * inset shadow rather than a border, so a button that keeps the shadow keeps the theme's
+ * green frame no matter what border is set underneath it.
+ */
+#hud button {
+  appearance: none;
+  -webkit-appearance: none;
+  display: inline-block;
+  float: none;
+  width: auto;
+  min-width: 0;
+  min-height: 0;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  line-height: inherit;
+  text-align: inherit;
+  text-decoration: none;
+  text-shadow: none;
+  box-shadow: none;
+  outline: none;
+  /* The theme's own values for these two are the ones wanted here as well — a tile label
+     and a foot button never wrap — but they have to be said, or they arrive only when the
+     theme is on the page and the card lays out differently on a page without it. */
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+/*
+ * The same for the rest of what the card renders: the theme's inset shadows read as a
+ * border drawn in the page's colours, and the card's own rules set no shadows below the
+ * card itself. No pseudo-class variants here either, for the same reason as above.
+ */
+#hud input,
+#hud label,
+#hud span,
+#hud div,
+#hud canvas {
+  box-shadow: none;
+}
+
+/*
+ * The theme also sizes and emboldens every input it has — button, input, select {font-weight:
+ * 700} and button, input, input[type=text], input[type=password], select {font-size: 9pt} —
+ * and both rules reach the card's sliders and checkboxes, whose boxes are measured in
+ * pixels. Every input in the card takes the card's own metrics instead.
+ */
+#hud input {
+  font: inherit;
+}
+#hud {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  width: 400px;
+  box-sizing: border-box;
+  padding: 10px 12px 9px;
+  user-select: none;
+  /*
+   * The page's own faces, not a stack of our own: the theme's font sheet defines --bodyfont
+   * on :root (Sora, then Open Sans) and every console page loads that sheet, so the card
+   * reads as part of the page it sits on. The names are spelled out as the fallback for the
+   * one case where that sheet is not on the page and the variable is not defined.
+   */
+  --hud-font: var(--bodyfont, "Open Sans", "Noto Sans", "Segoe UI", sans-serif);
+  /* The theme centres its whole page (body {text-align: center}), and centred is what every
+     line of this card would inherit — the slider rows, the stats, the habit names. The card
+     is a column of label-and-control rows, so it starts its own text at the reading edge and
+     centres only the few things that want centring. */
+  text-align: start;
+  font: 11px/1.55 var(--hud-font);
+  font-variant-numeric: tabular-nums;
+  color: #d8ecff;
+  background: #08101c;
+  border: 1px solid #8cbef029;
+  border-radius: 8px;
+  box-shadow: 0 2px 16px #0000008c;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease;
+}
+
+#hud.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#hud .hud-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 9px;
+  padding-right: 18px;
+}
+
+#hud .hud-title {
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #6f93b4;
+}
+
+#hud .hud-stats {
+  margin-left: auto;
+  font-size: 10px;
+  color: #4d6d8d;
+}
+
+#hud .hud-x {
+  position: absolute;
+  top: 6px;
+  right: 7px;
+  width: 16px;
+  height: 16px;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  color: #3f5f7e;
+  font: 15px/16px var(--hud-font);
+  transition: color .2s ease;
+}
+
+#hud .hud-x:hover,
+#hud .hud-x:focus {
+  color: #cfe8ff;
+  outline: none;
+}
+
+/* label, control, value — one grid so the values line up down the card */
+#hud .hud-row {
+  display: grid;
+  grid-template-columns: 96px 1fr 42px;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0;
+}
+
+#hud .hud-k {
+  text-align: left;
+  text-indent: 0;
+  padding: 0;
+  font-size: 10px;
+  letter-spacing: .04em;
+  color: #5d7f9e;
+}
+
+#hud .hud-v {
+  font-size: 10px;
+  text-align: right;
+  color: #9fc3e8;
+}
+
+#hud .hud-bools {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0 2px;
+}
+
+/*
+ * The one control in a row that belongs at its far end: the colour cycle on the toggle
+ * row, the randomize button on the foot. Margin rather than a second wrapper element,
+ * because the row is three items and a wrapper would be more structure than it holds.
+ */
+#hud .hud-right {
+  margin-left: auto;
+}
+
+/* The end of the foot's left group: the pause button, kept apart from the two actions
+   that change the field so a reach for one cannot land on the other. The auto margin on
+   this one is what pushes randomize and reseed to the far end. */
+#hud .hud-left {
+  margin-right: auto;
+}
+
+#hud .hud-bools label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  /* The theme says label {cursor: pointer} and it is the right affordance here — clicking
+     the word toggles the box — but it has to be the card's own declaration, or the pointer
+     appears only on a themed page. */
+  cursor: pointer;
+  font-size: 10px;
+  letter-spacing: .04em;
+  color: #5d7f9e;
+}
+
+/*
+ * Every console theme opens with a universal pseudo-element rule — *::before, *::after —
+ * and several put a ::before on a label or a ::after on a control to carry a tooltip, a
+ * tick or a spacer. Those are drawn inside the card whether the card asked for them or
+ * not, and a stray box next to a 11-pixel checkbox is enough to knock the row out of
+ * line. Both slots are named here for everything the card puts a control in, so the only
+ * pseudo-element in this card is one this file draws itself.
+ */
+#hud input::before,
+#hud input::after,
+#hud button::before,
+#hud button::after,
+#hud label::before,
+#hud label::after {
+  content: none;
+}
+
+/*
+ * The native checkbox is white when it is off, which is the one colour this card has
+ * nowhere else, so the box is drawn here: a dim blue outline when off, a light blue
+ * face with a dark tick when on.
+ */
+#hud input[type=checkbox] {
+  -webkit-appearance: none;
+  appearance: none;
+  position: relative;
+  width: 11px;
+  height: 11px;
+  margin: 0;
+  border: 1px solid #8cbef059;
+  border-radius: 2px;
+  background: #8cbef012;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease;
+}
+
+#hud input[type=checkbox]:hover {
+  border-color: #8fd0ff99;
+}
+
+#hud input[type=checkbox]:checked {
+  border-color: #7fc4f5;
+  background: #7fc4f5;
+}
+
+#hud input[type=checkbox]:checked::after {
+  content: "";
+  position: absolute;
+  left: 2.5px;
+  top: 0;
+  width: 4px;
+  height: 7px;
+  border: solid #08101c;
+  border-width: 0 1.5px 1.5px 0;
+  transform: rotate(45deg);
+}
+
+#hud input[type=checkbox]:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #8fd0ff66;
+}
+
+/*
+ * The slider. The native track is replaced outright: at this width the default one is a
+ * hairline that disappears against the card, so the filled part is drawn as a gradient
+ * stop that panel.js keeps in step with the value (--pct), and the thumb is a disc with
+ * the card's own colour ringed around it so it reads against either half of the track.
+ */
+#hud input[type=range] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 16px;
+  margin: 0;
+  background: none;
+  cursor: pointer;
+}
+
+#hud input[type=range]::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(90deg,
+                              #7fc4f5 0 var(--pct, 50%),
+                              #8cbef033 var(--pct, 50%) 100%);
+}
+
+#hud input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  margin-top: -4px;
+  border: 0;
+  border-radius: 50%;
+  background: #d8ecff;
+  box-shadow: 0 0 0 1.5px #08101ce6;
+}
+
+#hud input[type=range]::-moz-range-track {
+  height: 4px;
+  border-radius: 2px;
+  background: #8cbef033;
+}
+
+#hud input[type=range]::-moz-range-progress {
+  height: 4px;
+  border-radius: 2px;
+  background: #7fc4f5;
+}
+
+#hud input[type=range]::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border: 1.5px solid #08101ce6;
+  border-radius: 50%;
+  background: #d8ecff;
+}
+
+#hud input[type=range]:focus {
+  outline: none;
+}
+
+#hud input[type=range]:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 1.5px #08101ce6, 0 0 0 3px #8fd0ff73;
+}
+
+/*
+ * One cell per crystal habit: a thumbnail of the crystal over its checkbox. Six to a
+ * row, so the whole set is on screen at once without leaving the card. A habit that is
+ * switched off keeps its thumbnail, dimmed — the panel is a map of the set, and hiding
+ * the cell would leave a gap that reads as a missing habit rather than an off one.
+ */
+#hud .hud-vars {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 7px 4px;
+  margin: 9px 0 2px;
+  padding-top: 9px;
+  border-top: 1px solid #8cbef024;
+}
+
+/*
+ * One tile per crystal: the drawing, a rule, and its name under it. The tile is the
+ * control — pressing the crystal is what puts it in or out of the field — so there is no
+ * checkbox beside it to line up with a thing the reader is already looking at.
+ *
+ * On is shown by the frame and the name strip only, and both shift a little rather than
+ * inverting: the drawing is the thing the reader is deciding about, so a tile that dimmed
+ * its crystal would make the off state look like a different crystal, and comparing the
+ * two habits would mean comparing two different brightnesses.
+ */
+#hud .hud-var {
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 1px solid #8cbef024;
+  border-radius: 5px;
+  background: #8cbef008;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color .15s ease, background .15s ease;
+}
+
+#hud .hud-var canvas {
+  display: block;
+  width: 56px;
+  height: 56px;
+  margin: 0 auto;
+  border: 0;
+  border-radius: 0;
+  background: none;
+}
+
+#hud .hud-name {
+  display: block;
+  margin-top: 3px;
+  padding: 2px 0 3px;
+  border-top: 1px solid #8cbef02e;
+  text-align: center;
+  font-size: 9px;
+  letter-spacing: .04em;
+  white-space: nowrap;
+  color: #9fc3e8;
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
+}
+
+#hud .hud-var:hover {
+  border-color: #8fd0ff73;
+}
+
+#hud .hud-var.on {
+  border-color: #7fc4f58c;
+  background: #7fc4f50f;
+}
+
+#hud .hud-var.on .hud-name {
+  border-top-color: #7fc4f580;
+  background: #7fc4f52e;
+  color: #cfeaff;
+}
+
+#hud .hud-var:not(.on) .hud-name {
+  color: #6f92b3;
+}
+
+#hud .hud-var:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #8fd0ff66;
+}
+
+#hud .hud-foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 9px;
+  padding-top: 8px;
+  border-top: 1px solid #8cbef024;
+  font-size: 10px;
+  color: #4d6d8d;
+}
+
+/*
+ * The foot's buttons. They are one width rather than four: the labels are four, six and
+ * seven characters apart, and a row of buttons that each end where their word happens to
+ * end reads as a ragged edge rather than as a control strip. The width is the widest label
+ * at this font size, so no label is ever clipped and the narrow ones simply centre.
+ */
+#hud .hud-act {
+  min-width: 74px;
+  padding: 2px 8px;
+  text-align: center;
+  border: 1px solid #8cbef033;
+  border-radius: 4px;
+  background: #8cbef014;
+  color: #9fc3e8;
+  font: inherit;
+  font-size: 10px;
+  cursor: pointer;
+}
+
+#hud .hud-act:hover {
+  background: #8cbef029;
+  color: #d8ecff;
+}

@@ -1,27 +1,21 @@
-/*
-    Snow for the I2P+ router console.
-
-    Effect, colours and drift constants: Snowflakes © 2024 Denis Seleznev
-    (MIT, https://github.com/hcodes/snowflakes/). Worker transport, sprite
-    atlas, offscreen rendering and the season gate for I2P+ by dr|z3d,
-    AGPLv3 or later.
-*/
-
 /**
  * @module snowflakes
- * @description Page side of the router console's festive snow. It decides whether
- * snow should run at all, rasterizes the flake shapes the worker generates into
- * one sprite atlas, and hands the animation to a dedicated worker (snowman.js).
- * Where the browser supports OffscreenCanvas the worker paints the canvas itself
- * and the page runs no animation code per frame; where it does not, the worker
- * posts one packed Float32Array of draw transforms per frame and the page paints
+ * @description Page side of the router console's snow. It rasterizes the flake shapes
+ * the worker generates into one sprite atlas, and hands the animation to a dedicated
+ * worker (snowman.js). Where the browser supports OffscreenCanvas the worker paints the
+ * canvas itself and the page runs no animation code per frame; where it does not, the
+ * worker posts one packed Float32Array of draw transforms per frame and the page paints
  * them with no trigonometry of its own.
  *
- * Snow is decoration, so it is gated: it runs from 1 December to 6 January, and
- * not at all when the visitor asks for reduced motion. Ctrl+Alt+S, or typing the
- * word "snow" with no field focused, overrides the gate for this browser and
- * remembers the choice.
+ * The effect, colours and drift constants come from Snowflakes © 2024 Denis Seleznev
+ * (MIT, https://github.com/hcodes/snowflakes/); the worker transport, sprite atlas and
+ * offscreen rendering are I2P+ work.
  *
+ * Whether this file is on the page at all is the loader's decision (snowboot.js): the
+ * season, ?snow=, ?hud=, what the reader left the last page, or a typed gesture. This
+ * script re-exports those rules on window.snowGates rather than keeping a second copy,
+ * and it starts the field as soon as it runs, because the loader only fetches it when the
+ * answer is yes.
  * @author dr|z3d
  * @license AGPL3 or later
  */
@@ -44,8 +38,6 @@
     '/js/snowflakes/flake5.svg',
     '/js/snowflakes/flake6.svg'
   ];
-  /** localStorage key holding the visitor's own choice: "on" or "off". */
-  const LS_KEY = 'snowMode';
   /** Flake colours per theme, inherited from the original. */
   const THEME_COLORS = {
     light: '#78c3f2',
@@ -53,13 +45,15 @@
     classic: '#b0e0e6',
     midnight: '#9662ca'
   };
-  /** Season bounds, inclusive: 1 December through 6 January. */
-  const SEASON_FIRST_MONTH = 11;
-  const SEASON_LAST_MONTH = 0;
-  const SEASON_LAST_DAY = 6;
-  /** Typed sequence that toggles snow, and how long it may take. */
-  const HOTKEY_SEQUENCE = 'snow';
-  const HOTKEY_WINDOW_MS = 2000;
+  /**
+   * The loader that put this script on the page.
+   *
+   * It owns the decision to run at all — the season, the query, what the reader left the
+   * last page, reduced motion — because that decision has to be made before a byte of this
+   * file is fetched. Reading it from here rather than carrying a second copy is what keeps
+   * the two from drifting apart.
+   */
+  const BOOT = typeof window.snowBoot === 'object' ? window.snowBoot : {};
   /** Resize work is batched; a canvas reallocation per drag event is waste. */
   const RESIZE_DEBOUNCE_MS = 150;
   /**
@@ -130,55 +124,26 @@
     calibrated: false,
     /** The panel's own refresh rate, measured before any paint was thinned. */
     panel: 0,
+    /** The tuning HUD's handle, from hud.js; null until the field has a worker. */
+    hud: null,
+    /** Set when the gesture arrives before the field exists, cleared when the HUD lands. */
+    hudWanted: false,
+    /** Set while attachHud waits for hud.js to load. */
+    hudWaiting: false,
+    /** The seeds the worker built its crystals from, [habit, seed] per habit; null until ready. */
+    fieldSlots: null,
     raf: 0,
     dirtyRects: null,
     dirty: 0,
     dirtyAll: true,
     low: 0,
     high: 0,
-    seqIndex: 0,
-    seqAt: 0,
     resizeTimer: null,
     viewTimer: null,
     starting: false,
     failed: false,
     retried: false
   };
-
-  /**
-   * Whether a date falls inside the snow season: all of December, and 1–6
-   * January. The viewer's own calendar is what matters for a festive effect, so
-   * this is the browser's local date, not the router's.
-   *
-   * @param {Date} date the moment to test
-   * @returns {boolean} true when snow should run by the calendar alone
-   */
-  function inSeason(date) {
-    const month = date.getMonth();
-    if (month === SEASON_FIRST_MONTH) {return true;}
-    return month === SEASON_LAST_MONTH && date.getDate() <= SEASON_LAST_DAY;
-  }
-
-  /**
-   * Resolves the gates into a decision. An explicit choice beats the calendar,
-   * and a URL flag beats a stored choice so a single page can be shown with or
-   * without snow without changing what the browser remembers.
-   *
-   * @param {Object} flags the gate inputs
-   * @param {string|null} flags.url "on" or "off" from ?snow=, else null
-   * @param {string|null} flags.stored "on" or "off" from localStorage, else null
-   * @param {boolean} flags.reduced whether prefers-reduced-motion matches
-   * @param {boolean} flags.season whether the date is inside the season
-   * @returns {string} "on" or "off"
-   */
-  function modeFor(flags) {
-    if (flags.url === 'on') {return 'on';}
-    if (flags.url === 'off') {return 'off';}
-    if (flags.stored === 'on') {return 'on';}
-    if (flags.stored === 'off') {return 'off';}
-    if (flags.reduced) {return 'off';}
-    return flags.season ? 'on' : 'off';
-  }
 
   /**
    * The paint divisor that holds the draw at or below {@link TARGET_FPS} on a panel
@@ -293,71 +258,6 @@
     const memory = Number(navigator.deviceMemory) || 4;
     const cap = cores <= 2 || memory <= 2 ? DPR_CAP_WEAK : DPR_CAP;
     return Math.max(1, Math.min(raw, cap));
-  }
-
-  /**
-   * Whether this browser asked for motion to be reduced.
-   *
-   * @returns {boolean} true when reduced motion is requested
-   */
-  function prefersReducedMotion() {
-    if (typeof matchMedia !== 'function') {return false;}
-    return matchMedia('(prefers-reduced-motion: reduce)').matches === true;
-  }
-
-  /**
-   * Reads the visitor's stored choice, ignoring anything that is not one of the
-   * two values this script writes.
-   *
-   * @returns {string|null} "on", "off", or null when nothing is stored
-   */
-  function storedMode() {
-    let value = null;
-    try {
-      value = localStorage.getItem(LS_KEY);
-    } catch {
-      return null;
-    }
-    return value === 'on' || value === 'off' ? value : null;
-  }
-
-  /**
-   * Reads a one-page override from the query string: ?snow=1, ?snow=on, ?snow=0
-   * or ?snow=off.
-   *
-   * @returns {string|null} "on", "off", or null when the URL says nothing
-   */
-  function urlMode() {
-    let query = '';
-    try {
-      query = window.location.search || '';
-    } catch {
-      return null;
-    }
-    if (query.indexOf('snow=') === -1) {return null;}
-    let value = null;
-    try {
-      value = new URLSearchParams(query).get('snow');
-    } catch {
-      return null;
-    }
-    if (value === '1' || value === 'on') {return 'on';}
-    return value === '0' || value === 'off' ? 'off' : null;
-  }
-
-  /**
-   * Remembers the visitor's choice. Storage is not guaranteed — private browsing
-   * throws on write — and a failure only costs the memory, not the effect.
-   *
-   * @param {string} value "on" or "off"
-   * @returns {void}
-   */
-  function storeMode(value) {
-    try {
-      localStorage.setItem(LS_KEY, value);
-    } catch {
-      /* nothing to remember it in */
-    }
   }
 
   /**
@@ -563,7 +463,15 @@
   function paintFrame(buf, count) {
     const ctx = state.ctx;
     if (!ctx || !state.atlas || !buf) {return;}
-    const rects = state.dirtyRects;
+    let rects = state.dirtyRects;
+    // One rect per flake is recorded for the next frame to erase, and a frame may carry
+    // more flakes than this viewport was dealt slots for. A buffer that runs out drops
+    // the rest of the writes, and those flakes are never erased — the field smears.
+    if (!rects || rects.length < count * 4) {
+      const bigger = new Float32Array(count * 4);
+      if (rects) {bigger.set(rects);}
+      state.dirtyRects = rects = bigger;
+    }
     if (state.dirtyAll) {
       ctx.clearRect(0, 0, state.canvas.width, state.canvas.height);
       state.dirtyAll = false;
@@ -583,11 +491,16 @@
       ctx.globalAlpha = buf[at + 6];
       ctx.drawImage(state.atlas, (slot % cols) * cell, Math.floor(slot / cols) * cell, cell, cell,
                     -1, -1, 2, 2);
-      const half = Math.abs(a) + Math.abs(b);
-      rects[i * 4] = buf[at] - half;
-      rects[i * 4 + 1] = buf[at + 1] - half;
-      rects[i * 4 + 2] = half * 2;
-      rects[i * 4 + 3] = half * 2;
+      // Both columns of the transform: a figure habit squashes its x axis, so the y
+      // extent comes from the other column and a rect from the first alone smears.
+      const half = Math.max(Math.abs(a) + Math.abs(b), Math.abs(buf[at + 4]) + Math.abs(buf[at + 5]));
+      // Rounded out, not in: the sprite's edge is antialiased and runs a fraction of a
+      // pixel past the box the transform describes, so an exact clear leaves a one-pixel
+      // fringe along the way the flake came from.
+      rects[i * 4] = Math.floor(buf[at] - half) - 1;
+      rects[i * 4 + 1] = Math.floor(buf[at + 1] - half) - 1;
+      rects[i * 4 + 2] = Math.ceil(half * 2) + 2;
+      rects[i * 4 + 3] = Math.ceil(half * 2) + 2;
     }
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.globalAlpha = 1;
@@ -695,6 +608,15 @@
     }
     if (msg.type === 'stats') {
       applyStats(msg.fps);
+      if (state.hud) {state.hud.stats(msg);}
+      return;
+    }
+    if (msg.type === 'slots') {
+      // The worker has re-dealt its crystals — a reseed, a variant switched on or off —
+      // and the panel paints one thumbnail per habit, so those are repainted from the
+      // seeds the field's slots were actually built from.
+      state.fieldSlots = msg.slots;
+      if (state.hud) {state.hud.field(msg.slots);}
       return;
     }
     if (msg.type === 'viewed') {
@@ -710,7 +632,19 @@
       return;
     }
     if (msg.type === 'ready') {
+      // The atlas the worker is holding, and the seeds it was built from, which the panel
+      // needs before its first stats message to paint the field's crystals rather than
+      // its own guesses.
+      state.fieldSlots = msg.slots;
+      if (state.hud && msg.slots) {state.hud.field(msg.slots);}
       await onReady(msg);
+      return;
+    }
+    if (msg.type === 'cells') {
+      // The worker changed what the atlas holds — a hue, a variant, a reseed — and in
+      // this mode the page is the one that rasterizes, so it repaints and the field
+      // keeps running.
+      await onCells(msg);
       return;
     }
   }
@@ -773,6 +707,36 @@
   }
 
   /**
+   * Rebuilds the atlas after the worker changed the crystals it draws or their colours.
+   *
+   * A worker with an OffscreenCanvas patches its own atlas and says nothing; this page
+   * is the one that rasterizes, so a hue, a variant switched out or a reseed arrives as
+   * new cells and has to be painted here. The decode is asynchronous and the old atlas
+   * stays in place until the new one is complete, so the field never shows a half-drawn
+   * sprite sheet — one frame of the previous colours is invisible, a torn atlas is not.
+   *
+   * @param {Object} msg the worker's cells message
+   * @returns {Promise<void>} resolves once the atlas has been replaced
+   */
+  async function onCells(msg) {
+    if (!state.worker || !Array.isArray(msg.cells) || msg.cells.length === 0) {return;}
+    const shapes = Array.isArray(msg.shapes) && msg.shapes.length > 0 ? msg.shapes : state.shapes;
+    if (!shapes || shapes.length === 0) {return;}
+    const atlas = await buildAtlas(msg.cells, shapes, msg.cell, msg.layout, msg.frames);
+    if (!atlas || !state.worker) {return;}
+    state.atlas = atlas;
+    if (state.mode !== 'offscreen') {return;}
+    // This is the mode where the worker paints but could not rasterize, so it draws
+    // from a bitmap the page made for it and needs a new one with the new cells.
+    try {
+      const bitmap = await createImageBitmap(atlas);
+      if (state.worker) {state.worker.postMessage({type: 'atlas', bitmap}, [bitmap]);}
+    } catch {
+      restartInPhysicsMode();
+    }
+  }
+
+  /**
    * Falls back to the physics-only mode after the offscreen path turned out to be
    * unavailable in the worker. A transferred canvas cannot be painted by the page,
    * so the canvas is replaced rather than reused.
@@ -803,6 +767,95 @@
       baseColor: themeColor(),
       seed: Date.now() & 0x7fffffff
     });
+  }
+
+  /**
+   * Opens the tuning HUD, starting the field first if it is not running.
+   *
+   * The gesture is the reader asking for the field as much as for the panel: a page in the
+   * off season, or one where reduced motion stopped the snow, still has to answer it.
+   *
+   * @returns {void}
+   */
+  function openHud() {
+    // The card's stylesheet is the card's, and the loader brings it in only when the card
+    // is wanted: opening a card the page has never styled would show an unstyled one.
+    if (BOOT.loadSheet) {BOOT.loadSheet();}
+    if (state.hud) {
+      state.hud.open();
+      return;
+    }
+    if (state.worker || state.starting) {return;}
+    state.hudWanted = true;
+    start();
+  }
+
+  /**
+   * Puts the tuning HUD on the page and points it at the worker.
+   *
+   * The HUD is the review surface for the field: it is hidden until the reader types hud
+   * or asks for ?hud=1, and it holds the settings that are not the page's to make — which
+   * crystal habits are in play, how fast they fall and turn, what colour the field is. It
+   * talks to the worker through this page because the worker is the page's, and it keeps
+   * its own settings in localStorage, so a half-tuned field survives a reload.
+   *
+   * Nothing here depends on the HUD being visible: an invisible HUD still pushes the
+   * settings it remembers, which is the point of remembering them.
+   *
+   * @returns {void}
+   */
+  function attachHud() {
+    const api = typeof window.SNOWHUD === 'object' ? window.SNOWHUD : null;
+    if (!api) {
+      // The panel module has not run yet. head.jsi loads it first, so this is the
+      // unusual order, and a page that loads the scripts the other way round still gets
+      // its panel rather than a field with no way into it.
+      if (!state.hudWaiting) {
+        state.hudWaiting = true;
+        if (document.readyState === 'complete') {attachHud();} else {
+          window.addEventListener('load', attachHud, {once: true});
+        }
+      }
+      return;
+    }
+    if (state.hud) {return;}
+    const root = document.createElement('div');
+    root.id = 'hud';
+    document.body.appendChild(root);
+    try {
+      state.hud = api.attach({
+        root,
+        send: message => {
+          if (state.worker) {state.worker.postMessage(message);}
+        },
+        baseColor: themeColor()
+      });
+      if (state.hudWanted) {
+        state.hudWanted = false;
+        state.hud.open();
+      }
+      // A HUD that attaches after the field was dealt — the usual order — has never seen
+      // the seeds the worker built its crystals from, so it is handed them now.
+      if (state.fieldSlots) {state.hud.field(state.fieldSlots);}
+    } catch {
+      // A HUD that will not attach is a field without a review panel, not a field that
+      // does not run: the snow is the feature, the panel is the way into it.
+      state.hud = null;
+      state.hudWanted = false;
+      if (root.parentNode) {root.parentNode.removeChild(root);}
+    }
+  }
+
+  /**
+   * Takes the HUD's element off the page.
+   *
+   * @returns {void}
+   */
+  function detachHud() {
+    if (!state.hud) {return;}
+    state.hud = null;
+    const root = document.getElementById('hud');
+    if (root && root.parentNode) {root.parentNode.removeChild(root);}
   }
 
   /**
@@ -844,6 +897,9 @@
       worker.addEventListener('message', onMessage);
       worker.addEventListener('error', giveUp);
       state.worker = worker;
+      // The HUD comes first: it holds the seed and the settings the field starts with,
+      // so a field restarted after a tuning session comes back tuned, not fresh.
+      attachHud();
       worker.postMessage({
         type: 'init',
         width: viewport.width,
@@ -851,9 +907,14 @@
         dpr: state.dpr,
         rate: state.rate,
         baseColor: themeColor(),
-        seed: Date.now() & 0x7fffffff,
+        seed: state.hud ? state.hud.prefs.seed : (Date.now() & 0x7fffffff),
         canvas: offscreen
       }, offscreen ? [offscreen] : []);
+      // The page owns the viewport, the colour and the canvas; the HUD follows with the
+      // settings that are its own, so a restart cannot come back with the variants
+      // switched on that were switched off. The init callback is a no-op because the
+      // init above has already gone, with the HUD's seed in it.
+      if (state.hud) {state.hud.applyTo(null, () => {});}
     } finally {
       state.starting = false;
     }
@@ -888,6 +949,7 @@
       }
     }
     if (state.canvas && state.canvas.parentNode) {state.canvas.parentNode.removeChild(state.canvas);}
+    detachHud();
     state.worker = null;
     state.canvas = null;
     state.ctx = null;
@@ -937,15 +999,34 @@
    */
   function toggle() {
     if (isRunning()) {
-      storeMode('off');
-      stop();
+      BOOT.storeMode('off');
+      // The loader put these files on the page because the reader asked for snow. With the
+      // choice switched off, nothing on the page needs them any more, so the loader takes
+      // them back off — and that takes the field, the canvas and this script's own
+      // listeners with them.
+      if (BOOT.unload) {BOOT.unload();} else {stop();}
       return;
     }
-    storeMode('on');
+    BOOT.storeMode('on');
     // A previous failure is not a permanent verdict for the whole page load: the
     // visitor asking for snow again is a reasonable reason to try once more.
     state.failed = false;
     start();
+  }
+
+  /**
+   * Takes this script off the page: stops the field and removes every listener it added.
+   *
+   * A script tag cannot be unrun, so an unload that left a resize listener, a visibility
+   * listener and a live worker behind would keep costing the page for a field nobody can
+   * see. The loader calls this before it removes the elements it injected.
+   *
+   * @returns {void}
+   */
+  function shutdown() {
+    document.removeEventListener('visibilitychange', onVisibility);
+    window.removeEventListener('resize', onResize);
+    stop();
   }
 
   /**
@@ -1007,40 +1088,6 @@
   }
 
   /**
-   * Installs the override keys: Ctrl+Alt+S, or the word "snow" typed with no
-   * field focused. Installed whatever the calendar says, because the override is
-   * the only way to see snow outside the season.
-   *
-   * @returns {void}
-   */
-  function installHotkeys() {
-    document.addEventListener('keydown', event => {
-      if (event.ctrlKey && event.altKey && (event.key === 's' || event.key === 'S')) {
-        event.preventDefault();
-        toggle();
-        return;
-      }
-      if (event.ctrlKey || event.altKey || event.metaKey || event.repeat) {return;}
-      const target = event.target;
-      if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' ||
-                     target.tagName === 'SELECT' || target.isContentEditable)) {return;}
-      const key = typeof event.key === 'string' ? event.key.toLowerCase() : '';
-      const now = Date.now();
-      if (now - state.seqAt > HOTKEY_WINDOW_MS) {state.seqIndex = 0;}
-      state.seqAt = now;
-      if (key === HOTKEY_SEQUENCE.charAt(state.seqIndex)) {
-        state.seqIndex++;
-        if (state.seqIndex === HOTKEY_SEQUENCE.length) {
-          state.seqIndex = 0;
-          toggle();
-        }
-      } else {
-        state.seqIndex = 0;
-      }
-    });
-  }
-
-  /**
    * Decides whether snow runs on this page load and starts it if so.
    *
    * @returns {string} the mode that was chosen, for the caller's own use
@@ -1050,20 +1097,29 @@
       document.addEventListener('DOMContentLoaded', boot, {once: true});
       return 'waiting';
     }
-    installHotkeys();
     document.addEventListener('visibilitychange', onVisibility);
     window.addEventListener('resize', onResize);
-    const mode = modeFor({url: urlMode(), stored: storedMode(),
-                          reduced: prefersReducedMotion(), season: inSeason(new Date())});
-    if (mode === 'on') {start();}
+    // The loader decided whether this page needs snow at all — that decision is why this
+    // file is being fetched. It also says which gesture asked for the fetch, because a
+    // reader typing 'hud' out of season wants the field running and the card open, and the
+    // calendar alone says neither.
+    const mode = BOOT.decide ? BOOT.decide() : 'off';
+    const asked = BOOT.takePending ? BOOT.takePending() : null;
+    if (asked === 'hud') {state.hudWanted = true;}
+    if (mode === 'on' || asked !== null) {start();}
     return mode;
   }
 
-  // The JS harness (tools/test/js/pure/snowGates.test.js) drives these directly,
-  // and they are the whole reason the effect is quiet for eleven months a year.
+  // The JS harness (tools/test/js/pure/snowGates.test.js) drives these directly, and they
+  // are the whole reason the effect is quiet for eleven months a year. The decision rules
+  // are the loader's — it has to make them before a byte of this file is fetched — so they
+  // are re-exported here rather than copied: one object answers "what decides whether the
+  // effect runs", and there is only one copy of each rule.
   window.snowGates = Object.freeze({
-    inSeason, modeFor, qualityStep, rateFor, maxRate, pickDpr, urlMode, storedMode, themeColor,
-    status, start, stop, toggle, isRunning
+    inSeason: BOOT.inSeason, modeFor: BOOT.modeFor, urlMode: BOOT.urlMode,
+    hudRequested: BOOT.hudRequested, storedMode: BOOT.storedMode,
+    qualityStep, rateFor, maxRate, pickDpr, themeColor,
+    status, start, stop, toggle, isRunning, openHud, shutdown
   });
 
   boot();

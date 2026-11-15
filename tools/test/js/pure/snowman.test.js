@@ -171,8 +171,33 @@ test("init answers with the atlas table, and no frame arrives before the atlas",
 
 test("a generated flake is one arm replicated six times, filled, and placeholder-coloured", () => {
   const helpers = api();
-  for (let seed = 0; seed < 40; seed++) {
-    const svg = helpers.buildShape(helpers.prng(seed * 7919 + 13), helpers.SHAPE_VIEW);
+  for (const row of helpers.HABITS) {
+    const spec = helpers.habitSpec(row);
+    for (let seed = 0; seed < 4; seed++) {
+      buildOne(helpers, spec, row, seed);
+    }
+  }
+});
+
+/**
+ * One habit's crystal, checked against everything the generator owes the atlas.
+ *
+ * Driven per habit rather than by whatever a weighted draw happens to pick, because the
+ * replication count is part of the habit: a crystal is one arm turned about the centre,
+ * the twelve-branched twin is two six-fold crystals grown through each other, and the
+ * wireframe solid and the figure habit are drawn once, being shapes that are not repeated
+ * around a centre at all.
+ *
+ * @param {Object} helpers the worker's test surface
+ * @param {Object} spec the habit to draw, from habitSpec
+ * @param {Array} row that habit's HABITS entry, for the message on a failure
+ * @param {number} seed which of the habit's variants to draw
+ * @returns {void}
+ */
+function buildOne(helpers, spec, row, seed) {
+  for (let frame = 0; frame < 2; frame++) {
+    const svg = helpers.buildShape(helpers.prng(seed * 7919 + 13), helpers.SHAPE_VIEW, spec,
+                                   frame, helpers.FRAMES);
     const wire = svg.includes('stroke-width=');
     assert.match(svg, /^<svg xmlns="http:\/\/www\.w3\.org\/2000\/svg"/, "a standalone SVG document");
     assert.ok(svg.endsWith("</svg>"), "and it is closed");
@@ -183,11 +208,8 @@ test("a generated flake is one arm replicated six times, filled, and placeholder
     assert.ok(!/NaN|Infinity|undefined/.test(svg),
               "arithmetic that leaked a bad coordinate into the markup");
     const uses = svg.match(/<use /g) || [];
-    // A flat crystal is one arm replicated about the centre: six times for every habit
-    // but the twelve-branched twin, which is two six-fold crystals grown through each
-    // other, and once for the wireframe solid, which is not six-fold at all.
-    assert.ok(wire ? uses.length === 1 : uses.length === 6 || uses.length === 12,
-              `${uses.length} copies: six-fold, the twelve-fold twin, or one for a wireframe`);
+    const want = row[3] || row[7] === "figure" ? 1 : (row[6] || 6);
+    assert.equal(uses.length, want, `${row[0]} draws ${want} copies, not ${uses.length}`);
     if (!wire) {
       const step = 360 / uses.length;
       for (let k = 1; k < uses.length; k++) {
@@ -216,7 +238,7 @@ test("a generated flake is one arm replicated six times, filled, and placeholder
                 `the farthest band is ${Math.min(...widths)} units, and should be near invisible`);
     }
   }
-});
+}
 
 test("the colour placeholder sits where a use clone will actually inherit it", () => {
   const helpers = api();
@@ -627,6 +649,136 @@ test("the stem habits stay a minority of the field", () => {
   }
 });
 
+test("a rolling refresh keeps the field changing without breaking the stem cap", () => {
+  const helpers = api();
+  const specs = helpers.dealSlots(helpers.MAX_FLAKES, helpers.prng(20261115));
+  const cap = Math.max(1, Math.round(specs.length * helpers.STEM_SHARE));
+  const rnd = helpers.prng(777);
+  const seen = new Set();
+  // The worker applies each pick to one slot, exactly as refreshCrystal does, so the
+  // tally below is the field's real one rather than a tally of the draws.
+  for (let i = 0; i < 400; i++) {
+    const pick = helpers.refreshSpec(specs, rnd);
+    assert.ok(pick, `a replacement habit is available for a field of ${specs.length} (refresh ${i})`);
+    seen.add(pick.name);
+    specs[i % specs.length] = pick;
+    const stems = specs.filter(s => s.stem).length;
+    assert.ok(stems <= cap, `${stems} stem crystals after ${i} refreshes, cap ${cap}`);
+  }
+  assert.ok(seen.size >= 6, `the refresh reaches ${seen.size} different habits, not one corner of the set`);
+});
+
+test("a recycled flake is the one whose crystal may change, and only over an atlas it owns", () => {
+  const helpers = api();
+  const bounds = {width: 400, height: 300};
+  const rnd = helpers.prng(5);
+  const flake = helpers.createFlake(bounds, 0, rnd);
+  assert.equal(flake.life, 0, "a new flake has not fallen yet");
+  flake.totalDistance = flake.maxDistance - 1;
+  for (let i = 0; i < helpers.DEATH_SPIN_STEPS + 40 && flake.life === 0; i++) {
+    helpers.stepFlake(flake, bounds, rnd);
+  }
+  assert.equal(flake.life, 1, "falling out bumps the life count the simulation watches");
+  const wire = flake.wire;
+  const solid = flake.solid;
+  // The harness has no OffscreenCanvas, so the worker never rasterized an atlas of its
+  // own and there is nothing to patch: the honest answer is no, and the flake keeps the
+  // crystal it was drawn with rather than a half-updated one.
+  assert.equal(helpers.refreshCrystal(flake), false, "no worker-owned atlas to repaint");
+  assert.equal(flake.wire, wire, "and the flake is left exactly as it was");
+  assert.equal(flake.solid, solid, "solid included");
+});
+
+test("a slot's frames are one crystal at successive points of its warp cycle", () => {
+  const helpers = api();
+  const spec = helpers.habitSpec(helpers.HABITS[0]);
+  const frames = helpers.buildSlotFrames(4242, spec);
+  assert.equal(frames.length, helpers.FRAMES, "one shape per frame");
+  const elements = frames.map(f => (f.match(/<path/g) || []).length);
+  assert.ok(elements.every(n => n === elements[0]),
+            "the same elements in every frame — the warp moves points, it does not redraw the crystal");
+  // A gentle warp displaces some frames by less than coord() rounds, so the cycle can
+  // hold as few as a quarter of the frames as distinct poses; zero distinct means the
+  // seed drew no warp at all, which is the other thing a strip is allowed to be.
+  const distinct = new Set(frames).size;
+  assert.ok(distinct === 1 || distinct >= helpers.FRAMES / 4, `${distinct} distinct poses in the cycle`);
+});
+
+test("switching a variant off takes it out of the field, and switching all off does not", () => {
+  const helpers = api();
+  const names = helpers.HABITS.map(h => h[0]);
+  const off = {};
+  off[names[0]] = false;
+  helpers.setHabits(off);
+  try {
+    for (let seed = 0; seed < 6; seed++) {
+      const dealt = helpers.dealSlots(helpers.MAX_FLAKES, helpers.prng(seed * 104729 + 3));
+      assert.equal(dealt.length, helpers.MAX_FLAKES, "every slot is still filled");
+      assert.ok(!dealt.some(h => h.name === names[0]), `${names[0]} is switched off and never dealt`);
+    }
+    assert.ok(helpers.activeHabits().length === helpers.HABITS.length - 1, "and the deck carries one fewer variant");
+    const none = {};
+    for (const name of names) {none[name] = false;}
+    helpers.setHabits(none);
+    const dealt = helpers.dealSlots(helpers.MIN_FLAKES, helpers.prng(11));
+    assert.equal(dealt.length, helpers.MIN_FLAKES, "a field with every variant off still draws");
+    assert.ok(dealt.every(h => names.includes(h.name)), "and it draws real variants, not nothing");
+  } finally {
+    helpers.setHabits(null);
+  }
+});
+
+test("switching a variant off replaces it in place, and the field keeps its ratios", () => {
+  const run = openPrepared({seed: 20261203});
+  const helpers = run.w.api();
+  run.ticks(3);
+  const before = run.w.api().fieldSpecs();
+  const counts = list => {
+    const tally = new Map();
+    for (const name of list) {tally.set(name, (tally.get(name) || 0) + 1);}
+    return tally;
+  };
+  const was = counts(before);
+  assert.ok(was.size >= 8, `the deck deals one of every habit, saw ${was.size} of ${helpers.HABITS.length}`);
+  // Two single-slot habits, so a replacement that lands badly cannot hide behind a
+  // habit the field already holds several of.
+  const off = [...was.keys()].filter(name => was.get(name) === 1).slice(0, 2);
+  assert.equal(off.length, 2, "the field holds at least two singleton habits to switch off");
+  const asked = {};
+  for (const name of off) {asked[name] = false;}
+  run.w.send({type: "habits", enabled: asked});
+  // The atlas cells the field draws have changed, so the worker has to hand the page the
+  // new ones on the spot: in the mode where the page rasterizes, a toggle that only took
+  // effect at the next restart would leave the old crystal on screen.
+  assert.ok(run.w.messages().some(m => m.type === "cells"), "and the new cells go out at once");
+  run.ticks(1);
+  const now = counts(run.w.api().fieldSpecs());
+  for (const name of off) {assert.ok(!now.has(name), `${name} is out of the field, not just out of the deck`);}
+  assert.equal([...now.values()].reduce((a, b) => a + b, 0), before.length,
+               "the slots are replaced, not dropped: the field is the same size");
+  const grew = [...now.entries()].filter(([name, n]) => n > (was.get(name) || 0));
+  assert.ok(grew.length >= off.length,
+            `the freed slots spread over ${grew.length} habits, not one: ${JSON.stringify([...now])}`);
+  for (const [, n] of grew) {
+    assert.ok(n <= (was.get(grew.find(([name]) => now.get(name) === n)[0]) || 0) + 1,
+              `no habit takes more than one of the freed slots: ${JSON.stringify([...now])}`);
+  }
+  // And back on: the variant is on screen again without a restart, which is the half of
+  // the contract a deck-only filter would fail.
+  const backOn = {};
+  for (const [name] of grew) {backOn[name] = false;}
+  backOn[off[0]] = true;
+  run.w.send({type: "habits", enabled: backOn});
+  run.ticks(1);
+  assert.ok(run.w.api().fieldSpecs().includes(off[0]), `${off[0]} is back in the field on the next tick`);
+  // Everything off is an empty field, not a field that keeps drawing.
+  const none = {};
+  for (const habit of helpers.HABITS) {none[habit[0]] = false;}
+  run.w.send({type: "habits", enabled: none});
+  const frame = run.ticks(1);
+  assert.equal(frame.count, 0, "every variant off draws no flakes at all");
+});
+
 test("a hollow plate keeps its hole", () => {
   const helpers = api();
   const d = /d="([^"]*)"/.exec(helpers.hollowPlate(0, -20, 8, 4, 6, 0.2))[1];
@@ -715,6 +867,96 @@ test("the size envelope over a flake's travel has no slope break", () => {
   assert.ok(jerk < 3e-3, `largest second difference is ${jerk.toExponential(1)} px a step`);
 });
 
+test("a size slider scales the field, and its default spread is the one the field always had", () => {
+  const w = openWorker();
+  const helpers = w.api();
+  // The sizes dealt at the default spread have to match the inline formula the sliders
+  // replaced, or the field looks different the moment the panel is opened to look at it.
+  const dealt = [];
+  const before = [];
+  const now = helpers.prng(5);
+  const then = helpers.prng(5);
+  for (let i = 0; i < 500; i++) {
+    dealt.push(helpers.flakeSize(now() * 2 - 1));
+    before.push(Math.max(11, then() * 9 + 7));
+  }
+  const mean = values => values.reduce((sum, value) => sum + value, 0) / values.length;
+  assert.ok(Math.abs(mean(dealt) - mean(before)) < 0.5,
+            `${mean(dealt).toFixed(2)} px dealt against the ${mean(before).toFixed(2)} px it replaces`);
+  assert.ok(Math.min(...dealt) >= helpers.MIN_SIZE,
+            "nothing is dealt below the size a crystal's own detail closes up at");
+  assert.ok(Math.max(...dealt) <= Math.max(...before), "and nothing above what the field drew before");
+  // The multiplier scales the removal size with everything else: the removal size is a
+  // size, not a lifetime, and an unscaled one would kill a shrunken field on its first step.
+  w.send({type: "size", scale: 2});
+  assert.equal(helpers.flakeSize(0), 2 * helpers.BASE_SIZE);
+  assert.equal(helpers.removalSize(), 2 * helpers.REMOVAL_SIZE);
+  // Out-of-range multipliers are clamped, not taken literally: zero would be no flakes at all.
+  w.send({type: "size", scale: 0.01});
+  assert.equal(helpers.removalSize(), helpers.SIZE_MIN * helpers.REMOVAL_SIZE);
+  w.send({type: "size", scale: 99});
+  assert.equal(helpers.removalSize(), helpers.SIZE_MAX * helpers.REMOVAL_SIZE);
+  // The figure habit is dealt bigger than a crystal, and the multiplier that scales the
+  // field scales it along with everything else.
+  assert.ok(helpers.FIGURE_SIZE > 1, "the snowman is drawn bigger than the crystal beside it");
+  assert.equal(helpers.flakeSize(0, helpers.FIGURE_SIZE), helpers.FIGURE_SIZE * helpers.flakeSize(0));
+  w.send({type: "size", scale: 1});
+  assert.equal(helpers.flakeSize(0, helpers.FIGURE_SIZE), helpers.FIGURE_SIZE * helpers.BASE_SIZE);
+  assert.equal(helpers.flakeSize(0, 1), helpers.flakeSize(0), "a crystal takes no multiplier");
+});
+
+test("the figure habit is a bonus: the field is dealt without it", () => {
+  const run = openPrepared({seed: 20261206});
+  const helpers = run.w.api();
+  const off = helpers.HABITS.filter(habit => habit[8] === "off").map(habit => habit[0]);
+  assert.ok(off.includes("snowman"), "the set itself marks the figure habit off by default");
+  const dealt = run.w.api().fieldSpecs();
+  for (const name of off) {
+    assert.ok(!dealt.includes(name), `${name} is not dealt until the reader asks for it`);
+  }
+  // Asking for it puts it in the field on the next deal, and switching it off takes it out
+  // again — the same contract as every other variant, once it has been asked for at all.
+  run.w.send({type: "habits", enabled: {snowman: true}});
+  run.w.send({type: "reseed", seed: 20261206});
+  assert.ok(run.w.api().fieldSpecs().includes("snowman"), "and its tile puts it on the field");
+});
+
+test("a size slider moves the flakes that are already falling", () => {
+  const run = openPrepared({seed: 31});
+  const helpers = run.w.api();
+  // The figure habit is the bonus one, so a field nobody has tuned does not hold one;
+  // ask for it and re-deal, which is what pressing its tile on the card does.
+  run.w.send({type: "habits", enabled: {snowman: true}});
+  run.w.send({type: "reseed", seed: 31});
+  const first = run.ticks(2);
+  // The transform's first column pair is cos and sin times the size, so its length is the
+  // size and nothing else — rotation cancels out of it.
+  const before = Math.hypot(first.buf[2], first.buf[3]);
+  run.w.send({type: "size", scale: 2});
+  const after = run.ticks(1);
+  const scaled = Math.hypot(after.buf[2], after.buf[3]);
+  assert.ok(scaled > before * 1.7, `flake 0 scales from ${before.toFixed(1)} to ${scaled.toFixed(1)} px`);
+  run.w.send({type: "size", scale: 1, variation: 0});
+  const even = run.ticks(1);
+  const names = run.w.api().fieldSpecs();
+  const crystals = [];
+  const figures = [];
+  for (let i = 0; i < even.count; i++) {
+    const at = i * 8;
+    const size = Math.hypot(even.buf[at + 2], even.buf[at + 3]);
+    const habit = names[Math.floor((even.buf[at + 7] / run.ready.frames) | 0)];
+    (habit === "snowman" ? figures : crystals).push({habit, size});
+  }
+  const spread = Math.max(...crystals.map(f => f.size)) - Math.min(...crystals.map(f => f.size));
+  assert.ok(spread < 0.6, `zero variation leaves one size across the crystals, spread measured ${spread.toFixed(2)} px`);
+  assert.ok(figures.length, "the deck deals the figure habit into the field");
+  const one = crystals[0].size;
+  for (const f of figures) {
+    assert.ok(Math.abs(f.size - one * helpers.FIGURE_SIZE) < 0.6,
+              `the snowman is dealt ${helpers.FIGURE_SIZE}x the crystal beside it: ${f.size.toFixed(1)} vs ${one.toFixed(1)}`);
+  }
+});
+
 test("a resize retargets travel budgets, so flakes recycle at the new height", () => {
   const run = openPrepared({seed: 17, height: 900});
   run.w.send({type: "view", width: 800, height: 200, dpr: 1});
@@ -730,13 +972,20 @@ test("a resize retargets travel budgets, so flakes recycle at the new height", (
 });
 
 test("the quality controller's count is the count the next frame holds", () => {
+  const helpers = api();
   const run = openPrepared({seed: 21});
   run.w.send({type: "quality", count: 6});
   assert.equal(run.ticks(2).count, 6);
   run.w.send({type: "quality", count: run.ready.count});
   assert.equal(run.ticks(2).count, run.ready.count, "flakes are given back up to the viewport's count");
+  // The tuning panel can ask for more snow than the atlas holds crystals for; those
+  // flakes then share slots, which is what a deliberately over-snowed page looks like.
   run.w.send({type: "quality", count: 9999});
-  assert.equal(run.ticks(2).count, run.ready.count, "never more than the atlas has slots for");
+  assert.equal(run.ticks(2).count, helpers.TUNING_MAX_FLAKES,
+               "clamped to the tuning ceiling rather than the atlas's slots");
+  // and zero is a field with nothing in it, not a default creeping back in
+  run.w.send({type: "quality", count: 0});
+  assert.equal(run.ticks(2).count, 0, "zero flakes is an empty field");
 });
 
 test("a paused worker stays silent until it is released", () => {
@@ -776,6 +1025,60 @@ test("varyColor stays inside the colour range and honours the hex form", () => {
       assert.ok(value >= 0 && value <= 255, `channel ${value} is in range`);
     }
   }
+});
+
+test("the worker reports the seed each habit's crystal was built from", () => {
+  const run = openPrepared({seed: 41});
+  const H = run.w.api();
+  const slots = run.ready.slots;
+  assert.ok(Array.isArray(slots) && slots.length > 1, "ready carries one entry per habit in the field");
+  for (const [name, seed] of slots) {
+    assert.ok(Number.isInteger(seed) && seed >= 0, `${name} carries a slot seed`);
+    // The reported seed is the one the atlas strip was built from, not a seed the panel
+    // could only guess at: rebuilding the strip from it reproduces a strip the field holds.
+    const row = H.HABITS.find(habit => habit[0] === name);
+    assert.ok(row, `${name} is a habit the worker knows`);
+    const strip = H.buildSlotFrames(seed, H.habitSpec(row));
+    assert.ok(run.ready.shapes.includes(strip[0]), `${name}'s reported seed rebuilds its crystal`);
+  }
+  // A reseed answers with the new seeds at once, rather than leaving the panel's tiles on
+  // the old crystals until the next stats message.
+  run.w.send({type: "reseed", seed: 99});
+  const msg = run.w.take("slots");
+  assert.ok(msg, "a reseed answers with a slots message");
+  assert.notDeepEqual(msg.slots, slots, "and the seeds moved with the reseed");
+  // The stats message carries them too: a rolling refresh replaces a slot's crystal as
+  // flakes recycle, with no message of its own, and the tiles have to keep up with that.
+  run.ticks(400);
+  const stats = run.w.take("stats");
+  assert.ok(stats && Array.isArray(stats.slots) && stats.slots.length,
+            "the stats message carries the field's current seeds");
+});
+
+test("the spin variation is the deviation range dealt to each crystal", () => {
+  const w = openWorker();
+  const H = w.api();
+  const bounds = {width: 400, height: 900};
+  const rnd = H.prng(11);
+  const flakes = [];
+  for (let i = 0; i < 12; i++) {flakes.push(H.createFlake(bounds, 0, rnd));}
+  // The default is the spread the field has always turned at, not a spread on top of it.
+  assert.equal(H.DEFAULT_SPIN_VAR, 1, "the slider's default is the dealt deviation range");
+  const dealt = flakes.map(flake => H.spinSpeed(flake));
+  assert.ok(Math.max(...dealt) - Math.min(...dealt) > 1e-3,
+            "the field turns at more than one rate by default");
+  // Zero switches the dealt rates off: every flake is left at the floor.
+  w.send({type: "motion", spinVar: 0});
+  const flat = flakes.map(flake => H.spinSpeed(flake));
+  const spread = Math.max(...flat) - Math.min(...flat);
+  assert.ok(spread < 1e-9, `zero variation leaves one rate, spread measured ${spread.toFixed(6)}`);
+  // Widening past the dealt range moves the rates up, and the clamp bounds the setting.
+  w.send({type: "motion", spinVar: 2});
+  const wide = flakes.map(flake => Math.abs(H.spinSpeed(flake)));
+  assert.ok(Math.max(...wide) > Math.max(...dealt.map(Math.abs)), "2x the range turns them faster");
+  w.send({type: "motion", spinVar: 99});
+  const clamped = flakes.map(flake => Math.abs(H.spinSpeed(flake)));
+  assert.deepEqual(clamped, wide, `the range is clamped to ${H.SPIN_VAR_MAX}`);
 });
 
 test("each frame is its own transferable buffer", () => {
