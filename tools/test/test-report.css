@@ -322,7 +322,8 @@ h2 {
 
 .trace-class {
   color: var(--dim);
-  font-weight: 400
+  font-weight: 400;
+  text-align: left !important;
 }
 
 .trace-type {
