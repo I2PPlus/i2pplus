@@ -695,6 +695,28 @@ def rule_undefined_property(doc, corpus):
     if doc.root is None:
         return
     local = set()
+    # A macro that names its own attribute where a property is defined
+    # (outputproperty="@{out}") hands the property name to its callers, so every
+    # call site's attribute value is a property the macro sets. Without this, a
+    # property produced through a macro reads as used-but-never-defined.
+    macro_prop_attrs = {}
+    for node in doc.root.iter():
+        if node.tag != 'macrodef' or not node.attrs.get('name'):
+            continue
+        attrs = set()
+        for inner in node.iter():
+            for attr in PROP_DEFINE_ATTRS:
+                value = inner.attrs.get(attr) or ''
+                attrs.update(re.findall(r'@\{(\w+)\}', value))
+            if inner.tag in PROP_DEFINE_NAME_TAGS:
+                attrs.update(re.findall(r'@\{(\w+)\}', inner.attrs.get('name') or ''))
+        if attrs:
+            macro_prop_attrs.setdefault(node.attrs['name'], set()).update(attrs)
+    for node in doc.root.iter():
+        for attr in macro_prop_attrs.get(node.tag, ()):
+            value = node.attrs.get(attr)
+            if value:
+                local.add(value)
     for node in doc.root.iter():
         for attr in PROP_DEFINE_ATTRS:
             value = node.attrs.get(attr)
@@ -1306,6 +1328,148 @@ def rule_gradle_dup_task(doc, corpus):
 
 
 #---------------------------------------------------------------------------
+# shipped-artifact checksum coverage
+#---------------------------------------------------------------------------
+
+# What the release ships: updaters, installers and platform packages. Docs and
+# theme zips, the unsigned seeds zip and the gradle-only install-windows.jar
+# intermediate are not binary components, so they are not in this set - the
+# signed dist/i2pseeds.su3 is.
+SHIPPED_ARTIFACT = re.compile(
+    r'^(?:i2pupdate[^/]*\.(?:zip|su3)|i2pinstall[^/]*\.(?:exe|jar|tar\.bz2)|install\.jar|'
+    r'i2p-[^/]*\.(?:zip|7z)|i2p\.tar\.bz2|i2p_[^/]*\.deb|i2pseeds\.su3|'
+    r'i2psnark-standalone\.(?:zip|7z)|I2P\+[^/]*\.appimage)$')
+
+# The ant tasks that put a shipped artifact on disk, and the attribute holding
+# the output path. exec is handled separately: 7z and izpack2exe name the output
+# in an <arg>.
+ARTIFACT_WRITERS = {'zip': 'destfile', 'tar': 'destfile', 'gzip': 'destfile',
+                    'copy': 'tofile', 'move': 'tofile', 'su3sign': 'outfile',
+                    'izpack': 'output', 'izpack5compile': 'output'}
+
+ARG_OUTPUT = re.compile(r'--output=(\S+)')
+# A bare 7z operand: "./dist/i2p-linux.7z"
+ARG_DIST_PATH = re.compile(r'(?:^|[/\\])dist/(\S+)')
+
+
+def shipped_name(path):
+    """The basename of path if it is a shipped artifact, else ''."""
+    base = (path or '').rstrip('/').split('/')[-1]
+    return base if SHIPPED_ARTIFACT.match(base) else ''
+
+
+def rule_sha256_missing(doc, corpus):
+    """A shipped artifact this ant file writes but never prints a hash for.
+
+    Every installer, updater and platform package carries a "basename: hash" line
+    - the sha256sum target or the sha256sum macro - so the download page and the
+    release notes can quote it. The check is per file rather than per target:
+    installer-windows writes dist/install.jar and dist/i2pinstall.exe, and those
+    are hashed by the installer and installerexe targets that build them.
+    """
+    hashed = set()
+    for node in doc.root.iter():
+        if node.tag == 'param' and node.attrs.get('name') == 'sha256.file':
+            hashed.add(shipped_name(node.attrs.get('value')))
+        elif node.tag == 'sha256sum' and node.attrs.get('file'):
+            hashed.add(shipped_name(node.attrs.get('file')))
+    hashed.discard('')
+    if not hashed:
+        # a build file that never prints a checksum at all is a different question
+        return
+    for target in doc.root.descendants('target'):
+        for node in target.iter():
+            cand = None
+            attr = ARTIFACT_WRITERS.get(node.tag)
+            if attr:
+                cand = node.attrs.get(attr)
+            elif node.tag == 'arg':
+                value = (node.attrs.get('value') or '').strip()
+                out = ARG_OUTPUT.search(value)
+                cand = out.group(1) if out else None
+                if cand is None and not value.startswith('-'):
+                    # a positional operand: 7z names the archive it writes that way
+                    pos = ARG_DIST_PATH.search(value)
+                    cand = pos.group(1) if pos else None
+            name = shipped_name(cand)
+            if name and name not in hashed:
+                yield Finding('sha256-missing', doc.path, node.line,
+                              f'{name} is written here and never hashed in this file')
+
+
+GRADLE_TASK_HEAD = re.compile(
+    r"""\s*(?:task\s+([A-Za-z]\w*)|task\(\s*['"]([^'"]+)['"]|"""
+    r"""tasks\.register\(\s*['"]([^'"]+)['"])""")
+
+# A Gradle task prints a hash through one of these: the installer helper, the
+# zip helper that returns the digest, or a sha256sum shell line (the deb task).
+GRADLE_HASH_MARKS = ('printSha', 'sha256sum', 'zipIt', 'sha256(')
+
+# And it writes one through one of these. Without a write marker a block that
+# only names the artifact - a Delete task clearing a stale archive, a test task
+# putting dist/install.jar on its classpath - is not producing anything.
+GRADLE_WRITE_MARKS = ('outputs.file', 'archiveFileName', 'destinationDirectory',
+                      'commandLine', '--output=', 'renameTo', 'setText',
+                      'new FileOutputStream')
+
+
+def gradle_task_blocks(text):
+    """[(task name, first line, last line)] for every task block in a script.
+
+    Blocks are matched by brace depth, so a task's own doLast counts as part of
+    the task and a nested closure does not end it early.
+    """
+    stack = []
+    out = []
+    depth = 0
+    pending = ''
+    for idx, raw in enumerate(text.splitlines(), 1):
+        line = strip_gradle_noise(raw)
+        if not stack:
+            head = GRADLE_TASK_HEAD.match(line)
+            if head:
+                pending = next(g for g in head.groups() if g)
+        for ch in line:
+            if ch == '{':
+                depth += 1
+                if pending:
+                    stack.append((pending, idx, depth))
+                    pending = ''
+            elif ch == '}':
+                if stack and depth == stack[-1][2]:
+                    name, start, _ = stack.pop()
+                    out.append((name, start, idx))
+                depth -= 1
+    return out
+
+
+def rule_gradle_sha256_missing(doc, corpus):
+    """A Gradle task that writes a shipped artifact and prints no hash for it.
+
+    The ant mirror of each of these targets ends with a "basename: hash" line, so
+    a gradle task that produces the same artifact without one is the two builds
+    drifting apart: the artifact lands in dist/ and no checksum is printed for it
+    anywhere in that build.
+    """
+    if not doc.path.endswith('.gradle'):
+        return
+    lines = doc.text.splitlines()
+    for name, start, end in gradle_task_blocks(doc.text):
+        body = '\n'.join(lines[start - 1:end])
+        if any(mark in body for mark in GRADLE_HASH_MARKS):
+            continue
+        if not any(mark in body for mark in GRADLE_WRITE_MARKS):
+            continue
+        for match in re.finditer(r'([A-Za-z0-9_.$${}+-]+\.(?:zip|7z|exe|jar|deb|su3|'
+                                 r'tar\.bz2|appimage))', body):
+            artifact = shipped_name(match.group(1))
+            if artifact:
+                yield Finding('gradle-sha256-missing', doc.path, start,
+                              f'task "{name}" writes {artifact} and prints no sha256')
+                break
+
+
+#---------------------------------------------------------------------------
 # rule table
 #---------------------------------------------------------------------------
 
@@ -1357,6 +1521,11 @@ def rules():
                                        '<arg value="saved=$((before - ${file})) ${z_mb}"/>\n'
                                        '<math result="js.saved" operand1="1" operand2="2" operation="-"/>\n'
                                        '<echo message="${js.saved}"/></target>\n'
+                                       '<macrodef name="elapsed-since"><attribute name="out"/>\n'
+                                       '<sequential><exec executable="sh" outputproperty="@{out}"/>\n'
+                                       '</sequential></macrodef>\n'
+                                       '<target name="c"><elapsed-since out="build.elapsed"/>\n'
+                                       '<echo message="${build.elapsed}"/></target>\n'
                                        '<!-- ${not.a.use} in prose is not a use -->\n',
                                        '<property name="known.f" value="x"/>\n')}),
         Rule('dup-pathelement', 'the same jar twice on one classpath', rule_dup_pathelement,
@@ -1476,6 +1645,29 @@ def rules():
               # a file with no build.root is the build-root rule's business, and its
               # relative paths are its own
               'apps/x/build.xml': xml_project('<target name="a"><mkdir dir="build"/></target>\n')}),
+        Rule('sha256-missing', 'a shipped artifact no target in the file hashes',
+             rule_sha256_missing,
+             {'build.xml': xml_project('<target name="zip-x"><zip destfile="./dist/i2p-linux.zip"/>\n'
+                                       '</target>\n<target name="other">'
+                                       '<antcall target="sha256sum">\n'
+                                       '<param name="sha256.file" value="dist/i2pupdate.zip"/>\n'
+                                       '</antcall></target>\n')},
+             {'build.xml': xml_project('<target name="zip-x"><zip destfile="./dist/i2p-linux.zip"/>\n'
+                                       '<antcall target="sha256sum">\n'
+                                       '<param name="sha256.file" value="dist/i2p-linux.zip"/>\n'
+                                       '</antcall></target>\n'
+                                       '<target name="other"><antcall target="sha256sum">\n'
+                                       '<param name="sha256.file" value="dist/i2pupdate.zip"/>\n'
+                                       '</antcall></target>\n')}),
+        Rule('gradle-sha256-missing', 'a Gradle task that writes an artifact and prints no hash',
+             rule_gradle_sha256_missing,
+             {'a.gradle': "task tarball(type: Tar) {\n"
+                          "  archiveFileName.set('i2p.tar.bz2')\n"
+                          "  destinationDirectory.set(distDir)\n}\n"},
+             {'a.gradle': "task tarball(type: Tar) {\n"
+                          "  archiveFileName.set('i2p.tar.bz2')\n"
+                          "  destinationDirectory.set(distDir)\n"
+                          "  doLast {\n    println 'i2p.tar.bz2: ' + sha256(f)\n  }\n}\n"}),
         Rule('gradle-abs-build-path', 'a Gradle script hardcoded to /tmp/build-i2p',
              rule_gradle_abs_build_path,
              {'a.gradle': 'buildDir = file("/tmp/build-i2p/gradle")\n'},
@@ -1645,6 +1837,8 @@ RULE_LABELS = {
     'gradle-dup-dependency': 'dependency declared twice',
     'gradle-dup-copy-pattern': 'same include or exclude twice in one copy block',
     'gradle-dup-task': 'task registered twice',
+    'sha256-missing': 'shipped artifact written with no checksum printed',
+    'gradle-sha256-missing': 'Gradle task writes an artifact with no checksum printed',
 }
 
 
