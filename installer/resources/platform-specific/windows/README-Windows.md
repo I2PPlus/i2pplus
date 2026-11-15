@@ -87,6 +87,22 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\portable.ps1
   I2P+ folder and starts the wrapper from that copy. `wrapper.config` is never
   edited, the copy is rewritten on every run, and deleting it changes nothing.
 
+### One router per machine
+
+The service and a portable run cannot both run at the same time: both bind the
+same ports - 7654 (SAM), 7656, 7657 (router console) and the eepsite ports - and
+the second one fails with `Address already in use: bind` in the log while the
+first keeps running. `portable.ps1` warns when it sees the `I2P+` service
+running. Stop it from an elevated window before starting the portable router:
+
+```powershell
+.\service.ps1 -Action Stop      # or -Action Disable to keep it off at boot
+```
+
+This is a port conflict, not a profile problem: the portable profile in
+`configuration\` is fine as it is, and deleting it only loses your keys,
+netdb and tunnel setup.
+
 ### Stopping and restarting
 
 - `Ctrl+C` in the window stops the router gracefully. Closing the window does

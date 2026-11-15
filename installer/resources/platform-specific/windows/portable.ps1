@@ -135,7 +135,8 @@ function Find-Java {
                 'JAVA_HOME' { if ($env:JAVA_HOME) { "no bin\java.exe under JAVA_HOME=$env:JAVA_HOME" } else { 'JAVA_HOME is not set' } }
                 'PATH' { 'no java on PATH' }
             }
-            $found += [pscustomobject]@{ Source = $check; Path = $null; Version = $null; Usable = $false; Note = $note }
+            $found += [pscustomobject]@{ Source = $check; Path = $null; Version = $null; Major = 0;
+                                        Usable = $false; Note = $note }
             continue
         }
         # java prints its version banner on stderr before 1.8 and on stdout
@@ -175,6 +176,7 @@ function Find-Java {
             Source  = $check
             Path    = $exe
             Version = $version
+            Major   = $major
             Usable  = $usable
             Note    = $note
         }
@@ -185,10 +187,11 @@ function Find-Java {
 
 $report = Find-Java
 $java = $null
+$javaMajor = 0
 foreach ($entry in $report) {
     if ($entry.Usable) {
         Write-Host ("Java {0} found via {1}: {2}" -f $entry.Version, $entry.Source, $entry.Path) -ForegroundColor Green
-        if (-not $java) { $java = $entry.Path }
+        if (-not $java) { $java = $entry.Path; $javaMajor = $entry.Major }
     } else {
         Write-Host $entry.Note -ForegroundColor Yellow
     }
@@ -262,8 +265,9 @@ try {
     $svcRunning = $null
 }
 if ($svcRunning -and $svcRunning.Status -eq 'Running') {
-    Write-Host 'Warning: the I2P+ service is running. It uses %PROGRAMDATA%\i2p and' -ForegroundColor Yellow
-    Write-Host 'holds console port 7657, so this second router will not open a console.' -ForegroundColor Yellow
+    Write-Host 'Warning: the I2P+ service is running. It uses %PROGRAMDATA%\i2p and holds' -ForegroundColor Yellow
+    Write-Host 'ports 7654, 7657 and the eepsite ports, so this router cannot bind them.' -ForegroundColor Yellow
+    Write-Host 'Stop it first from an elevated window: .\service.ps1 -Action Stop' -ForegroundColor Yellow
 }
 
 # ---------------------------------------------------------------------------
@@ -316,6 +320,14 @@ $wrapperArgs = @(
     "wrapper.java.additional.$($last + 1)=-Di2p.dir.base=$base"
     "wrapper.java.additional.$($last + 2)=-Di2p.dir.config=$(Format-WrapperPath $chosen)"
 )
+
+# Java 24 and newer print a warning on every start that System.loadLibrary is a
+# restricted method a future release will block; the flag silences it. Java 8-23
+# treat an unknown option as fatal, so it is only passed when the JVM that was
+# just checked is new enough to accept it.
+if ($javaMajor -ge 24) {
+    $wrapperArgs += "wrapper.java.additional.$($last + 3)=--enable-native-access=ALL-UNNAMED"
+}
 
 Write-Host ''
 Write-Host "Install directory : $dir"
