@@ -4558,6 +4558,13 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
         /** Earliest time the next lookup attempt for this key may start, in millis. */
         long retryAt;
+
+        /**
+         * A key that has never timed out: no failures and no hold-off, so its next
+         * lookup may start at once.
+         */
+        LookupRetry() {
+        }
     }
 
     /**

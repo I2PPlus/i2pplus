@@ -2847,6 +2847,13 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         /** The datagram payload, signed or raw, as read off the session. */
         final byte[] _payload;
 
+        /**
+         * One message as it arrived, before it is decrypted and dispatched.
+         *
+         * @param toPort the port we received it on, {@link KRPC#_qPort} or {@link KRPC#_rPort}
+         * @param fromPort the sender's port, 0 if it was not specified
+         * @param payload the datagram payload, signed or raw, as read off the session
+         */
         RxMessage(int toPort, int fromPort, byte[] payload) {
             _toPort = toPort;
             _fromPort = fromPort;

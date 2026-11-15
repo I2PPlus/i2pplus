@@ -2432,6 +2432,9 @@ public class I2PSnarkUtil implements DisconnectListener, DestCache {
         final int attempts;
 
         /**
+         * Records one lookup answer, when it stops being reused, and the attempt number
+         * the next lookup continues from.
+         *
          * @param dest the destination that was resolved, or null if the hash did not resolve
          * @param expires the time this answer stops being reused, in millis
          * @param attempts how many attempts the next lookup is, from 0

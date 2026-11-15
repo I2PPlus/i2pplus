@@ -772,7 +772,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
      * retransmit into.
      *
      * @param trackerTimeout the tracker's query timeout with its failure backoff applied,
-     *                       from {@link Tracker#getTimeout()}
+     *                       from {@code Tracker#getTimeout()}
      * @param budget how long the caller is prepared to wait in total, in ms
      * @return the per-attempt wait in ms, at least one
      * @since 0.9.72+

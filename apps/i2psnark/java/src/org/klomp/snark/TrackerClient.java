@@ -2101,6 +2101,12 @@ public class TrackerClient implements Runnable {
      */
     private static class DHTDrain implements Runnable {
 
+        /**
+         * A drain pass over the fetch queue, queued by the client that wants a slot.
+         */
+        DHTDrain() {
+        }
+
         public void run() {
             // pool workers are reused; a stale interrupt from another client's halt()
             // must not abort the hand-out
