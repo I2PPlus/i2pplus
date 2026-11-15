@@ -118,15 +118,15 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     private final ConcurrentHashMap<NID, Token> _incomingTokens;
 
     /**
-     * Nodes marked deaf, keyed by node id, value the time the mark was last refreshed.
-     * A map rather than a set because a set keeps the key instance that was inserted
-     * first, while a later mark for the same node arrives as a different {@link NID}
-     * object - refreshing the age has to land on the entry the cleaner reads, or a node we
-     * keep failing on is pruned while it is still failing. The age is kept here rather
-     * than on the {@code NID} because {@link NID#setLastSeen()} zeroes the failure count,
-     * and stamping when a node was marked must not erase why it was marked.
+     * Nodes that have failed to answer, keyed by node id. A map rather than a set because
+     * a set keeps the key instance that was inserted first, while a later failure for the
+     * same node arrives as a different {@link NID} object - refreshing the count has to
+     * land on the entry the cleaner reads, or a node we keep failing on is pruned while it
+     * is still failing. The count and the mark's age are kept here rather than on the
+     * {@code NID} because {@link NID#setLastSeen()} zeroes the failure count, and stamping
+     * when a node was marked must not erase why it was marked.
      */
-    private final ConcurrentHashMap<NID, Long> _blacklist;
+    private final ConcurrentHashMap<NID, BlacklistMark> _blacklist;
 
     /** Infohashes this instance serves tracker queries for, empty when serving all. */
     private final Set<InfoHash> _servedTorrents = new CopyOnWriteArraySet<>();
@@ -315,12 +315,20 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
 
     /**
      * How long since sent we wait for a reply before treating the query as unanswered.
-     * Package-visible so the blacklist window can be pinned against it by test: reaching
-     * the routing-table bar costs this many times six queries.
+     * Measured on this router over 171 minutes: 15,000 DHT queries, 3,556 of them
+     * unanswered - 24% - spread over 867 distinct nodes, and 34% of those nodes failed
+     * exactly once. A node that answers slowly is not a deaf node, and at 75 seconds a
+     * reply that took a little over a minute was counted as a failure and cost the node
+     * its place in the walk. Three minutes covers a reply across a slow tunnel and a
+     * router that was busy, and it is the price of one attempt, not of a walk: the
+     * get_peers lookup keeps moving on after its own shorter step wait, so this only
+     * decides when a node is called deaf. Package-visible so the blacklist window can be
+     * pinned against it by test: reaching the routing-table bar costs this many times
+     * six queries.
      *
      * @since 0.9.72+
      */
-    static final long DEFAULT_QUERY_TIMEOUT = (long) 75 * 1000;
+    static final long DEFAULT_QUERY_TIMEOUT = (long) 180 * 1000;
 
     /**
      * How long one step of an exploration waits for one node before moving on. It has to
@@ -351,21 +359,56 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     static final long EXPLORE_TIME = 10 * (long) 60 * 1000;
 
     /**
-     * How long a node stays blacklisted from when it was last marked deaf. The window has
-     * to outlast the walk that would otherwise try it again: the explorer runs every
-     * {@link #EXPLORE_TIME} and one attempt costs {@link #DEFAULT_QUERY_TIMEOUT}, so the
-     * old five minutes always expired before the next pass - measured on this router, the
-     * blacklist was empty on every cleaner pass and no walk ever skipped a node, while one
-     * deaf node was queried seven times in 37 minutes. Thirty minutes is three explore
-     * passes, and about four times the seven and a half minutes it takes to reach the
-     * routing-table bar, so a node that has simply gone away is left alone and one that
-     * has come back is tried again inside half an hour. Measured: 60 distinct nodes time
-     * out per 37 minutes, so the window holds some 50 entries, well under
-     * {@link #BLACKLIST_MAX_PEERS}. Package-visible for the same invariant test.
+     * How long a node stays blacklisted for the lightest offence - it failed to answer
+     * {@link #BLACKLIST_FAILS} queries in a row. The mark has to outlast the walk that
+     * would otherwise try it again: the explorer runs every {@link #EXPLORE_TIME}, so this
+     * is a whole explore pass plus half again - the old five minutes always expired before
+     * the next pass, which is why the blacklist measured empty on every cleaner pass while
+     * one deaf node was queried seven times in 37 minutes. This is the floor for every
+     * mark, major offence included. Package-visible for the invariant test.
      *
      * @since 0.9.72+
      */
-    static final long BLACKLIST_CLEAN_TIME = 30 * (long) 60 * 1000;
+    static final long BLACKLIST_MINOR_TIME = 15 * (long) 60 * 1000;
+
+    /**
+     * How long a node stays blacklisted for the heaviest offence - it keeps handing us data
+     * we cannot use. A node that answers nothing costs one attempt and a wait; a node that
+     * answers with garbage costs the parse, a routing-table entry that cannot be trusted,
+     * and every later query that believes what it said. So the mark for that offence
+     * doubles from {@link #BLACKLIST_MINOR_TIME} with each repeat and stops here: one
+     * malformed reply is a fifteen-minute pause, a node that keeps doing it is left alone
+     * for an hour. Package-visible for the invariant test.
+     *
+     * @since 0.9.72+
+     */
+    static final long BLACKLIST_MAJOR_TIME = 60 * (long) 60 * 1000;
+
+    /**
+     * Unanswered queries a node must rack up before the walks step over it. One lost
+     * datagram is not proof a node has gone away: measured over 171 minutes, 867 distinct
+     * nodes failed to answer a query and 295 of them - 34% - failed exactly once, while
+     * 135 nodes that had been marked went on to answer again. Marking on the first failure
+     * filled the blacklist to its {@link #BLACKLIST_MAX_PEERS} cap and held it there on 149
+     * of 160 cleaner passes, which makes it a list of everyone we ever asked rather than a
+     * list of deaf nodes. Five failures in {@link #BLACKLIST_FAIL_WINDOW} is the shape of
+     * a node that is really not answering, and it cuts the marked set from 867 nodes to the
+     * 110 that reach it. Package-visible for the invariant test.
+     *
+     * @since 0.9.72+
+     */
+    static final int BLACKLIST_FAILS = 5;
+
+    /**
+     * How close together those unanswered queries have to be to count as one run. It is
+     * exactly {@link #BLACKLIST_FAILS} query timeouts, so a node that is queried
+     * continuously and never answers reaches the bar inside a single window, while a node
+     * that fails once every half hour never does. A gap longer than this restarts the run.
+     * Package-visible for the invariant test.
+     *
+     * @since 0.9.72+
+     */
+    static final long BLACKLIST_FAIL_WINDOW = BLACKLIST_FAILS * DEFAULT_QUERY_TIMEOUT;
 
     /** Peers held in the DHT blacklist. */
     private static final int BLACKLIST_MAX_PEERS = 500;
@@ -1161,10 +1204,28 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                 .append("</span></span></div>");
         _tracker.renderStatusHTML(buf);
         buf.append("<span id=blacklisted class=stat><b>Blacklisted Peers:</b> <span class=dbug>")
-                .append(_blacklist.size())
+                .append(markedCount())
                 .append("</span></span>")
                 .append("</div>");
         return buf.toString();
+    }
+
+    /**
+     * How many nodes the walks are stepping over right now - the runs that have reached the
+     * blacklist bar, not every run still counting toward it. Counting the map itself would
+     * report a node that has missed one reply as blacklisted.
+     *
+     * @return the number of marked nodes
+     */
+    private int markedCount() {
+        long now = _context.clock().now();
+        int rv = 0;
+        for (BlacklistMark mark : _blacklist.values()) {
+            if (mark._markedAt > 0 && mark._expiresAt > now) {
+                rv++;
+            }
+        }
+        return rv;
     }
 
     /**
@@ -1824,8 +1885,9 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /**
      * Called when anything at all arrives from a node: it puts the node in the routing
      * table, restarts its run of unanswered queries, and takes it off the blacklist, so a
-     * node that starts answering again is back in play for the next lookup. Package private
-     * for the tests.
+     * node that starts answering again is back in play for the next lookup. The exception
+     * is a node marked for sending us unusable data - answering is what that node does, so
+     * an answer does not shorten that mark. Package private for the tests.
      *
      * @param nInfo the node we heard from
      * @return the routing table's entry for it, or {@code nInfo} itself if it is new - the
@@ -1853,7 +1915,17 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         }
         nID = oldInfo.getNID();
         nID.setLastSeen();
-        if (_blacklist.remove(nID) != null) {
+        BlacklistMark cleared = _blacklist.remove(nID);
+        long now = _context.clock().now();
+        if (cleared != null && cleared._majorOffences > 0 && cleared._expiresAt > now) {
+            // A node that hands us garbage is marked for the data, not for being deaf,
+            // and answering a query says nothing about the data it will send next time.
+            // The mark stands until it expires; only its run of unanswered queries
+            // starts over, so a later timeout still has to be earned.
+            cleared._windowStart = now;
+            cleared._fails = 0;
+            _blacklist.put(nID, cleared);
+        } else if (cleared != null && cleared._markedAt > 0) {
             if (_log.shouldInfo()) {
                 _log.info("Unblacklisted node " + oldInfo + " -> It answered again");
             }
@@ -1884,17 +1956,19 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     }
 
     /**
-     * Called when a reply times out: marks the node deaf so the iterative walks step over
-     * it, and once it has failed to answer in a row often enough, takes it out of the
-     * routing table. Package private for the tests.
+     * One unanswered query for this node. The node joins the blacklist - the set the
+     * iterative walks step over - once {@link #BLACKLIST_FAILS} of its queries have gone
+     * unanswered inside {@link #BLACKLIST_FAIL_WINDOW}, and it leaves again as soon as it
+     * answers anything. The routing-table eviction is unchanged: {@link NID#timeout()}
+     * still takes the node out of the table after its own run of consecutive failures.
+     * Package private for the tests.
      *
-     * <p>The mark goes on at the first timeout, not at the sixth. One lost datagram is not
-     * proof a node has gone away - but the cost of the doubt was measured: 410 of this
-     * router's walk attempts in 37 minutes went to nodes with no reachable destination and
-     * 96 more waited out the whole reply timeout, while the blacklist stayed empty on every
-     * cleaner pass and no walk ever skipped a node. A marked node is tried again the moment
-     * it answers anything ({@link #heardFrom}), so a node having one bad minute loses
-     * nothing but the attempts it would have cost.
+     * <p>The bar is a run of failures, not the first one. Marking on a single timeout
+     * measured badly: over 171 minutes 867 distinct nodes failed to answer something, 295
+     * of them only once, and 135 marked nodes went on to answer again, while the blacklist
+     * sat at its {@link #BLACKLIST_MAX_PEERS} cap on 149 of 160 cleaner passes. A list of
+     * everyone we have asked tells a walk nothing; a list of nodes that have failed five
+     * times in fifteen minutes names the ones that are actually deaf.
      *
      * @param nInfo the node whose reply timed out
      */
@@ -1910,10 +1984,28 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         // is not restarted by a walk that parsed a fresh NodeInfo for the same node.
         NodeInfo known = _knownNodes.get(nid);
         NID counted = known != null ? known.getNID() : nid;
-        // The mark's age lives in the map, not on the NID: setLastSeen() zeroes the
-        // failure count, and this used to call it here, so the run restarted the moment a
-        // node reached the bar and it had to fail six more times before it was marked.
-        _blacklist.put(counted, Long.valueOf(_context.clock().now()));
+        long now = _context.clock().now();
+        // The run is counted in the map, not on the NID: setLastSeen() zeroes the failure
+        // count, and this used to call it here, so the run restarted the moment a node
+        // reached the bar and it had to fail six more times before it was marked.
+        _blacklist.compute(counted, (key, mark) -> {
+            if (mark == null) {
+                mark = new BlacklistMark(now);
+            } else if (now - mark._windowStart > BLACKLIST_FAIL_WINDOW) {
+                // a gap past the window starts the run over, but a node already marked
+                // for an earlier run stays marked until that mark expires
+                mark._windowStart = now;
+                mark._fails = 0;
+            }
+            mark._fails++;
+            if (mark._fails >= BLACKLIST_FAILS) {
+                // being deaf is the lightest offence - the mark is the floor duration,
+                // refreshed each time the node fails another run
+                mark._markedAt = now;
+                mark._expiresAt = now + mark._duration();
+            }
+            return mark;
+        });
         if (counted.timeout()) {
             if (_knownNodes.remove(counted) != null) {
                 if (_log.shouldInfo()) {
@@ -1925,34 +2017,158 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     }
 
     /**
-     * True if this node is on the blacklist, which it joins at its first unanswered query
-     * and leaves again as soon as it answers anything. The iterative lookups step over
-     * these nodes instead of spending one of their limited attempts, and the seconds of
-     * clock each attempt waits for a reply, on a node that has already proved deaf.
-     * Package-private for the tests.
+     * True if this node is on the blacklist - it has failed to answer
+     * {@link #BLACKLIST_FAILS} queries inside {@link #BLACKLIST_FAIL_WINDOW}, or it has
+     * handed us data we could not use, and its mark has not expired yet. The iterative
+     * lookups step over these nodes instead of spending one of their limited attempts, and
+     * the seconds of clock each attempt waits for a reply, on a node that has already
+     * proved deaf. A node whose failures have not reached the bar is counted and tried
+     * again. Package-private for the tests.
      *
      * @param nInfo the node to check
-     * @return true if a recent query to this node went unanswered
+     * @return true if this node has used up the slack its first failures buy it
      * @since 0.9.72+
      */
     boolean recentlyFailed(NodeInfo nInfo) {
-        return _blacklist.containsKey(nInfo.getNID());
+        BlacklistMark mark = _blacklist.get(nInfo.getNID());
+        return mark != null && mark._markedAt > 0 && mark._expiresAt > _context.clock().now();
     }
 
     /**
-     * When this node was last marked deaf, or -1 if it is not on the blacklist. The age is
-     * what the cleaner expires, and it is held in the map rather than on the node id, so a
-     * mark that arrives as a different {@link NID} instance for the same node refreshes the
-     * entry the cleaner reads instead of leaving the old one to expire. Package private for
-     * the tests.
+     * When this node reached the blacklist bar, or -1 if it has not. The age is what the
+     * cleaner expires, and it is held in the map rather than on the node id, so a failure
+     * arriving as a different {@link NID} instance for the same node refreshes the entry
+     * the cleaner reads instead of leaving the old one to expire. Package private for the
+     * tests.
      *
      * @param nid the node id to look up
-     * @return the time the mark was last refreshed, in millis, or -1 if it is not marked
+     * @return the time the node was last marked, in millis, or -1 if it is not marked
      * @since 0.9.72+
      */
     long blacklistedAt(NID nid) {
-        Long when = _blacklist.get(nid);
-        return when != null ? when.longValue() : -1;
+        BlacklistMark mark = _blacklist.get(nid);
+        return mark != null && mark._markedAt > 0 ? mark._markedAt : -1;
+    }
+
+    /**
+     * How many unanswered queries this node has counted in its current run. Package private
+     * for the tests.
+     *
+     * @param nid the node id to look up
+     * @return the failures counted in the current window, 0 when there are none
+     * @since 0.9.72+
+     */
+    int blacklistFails(NID nid) {
+        BlacklistMark mark = _blacklist.get(nid);
+        return mark != null ? mark._fails : 0;
+    }
+
+    /**
+     * Called when a node answers and what it answers with is unusable - a node list with
+     * entries that do not parse. Unlike a timeout this is not a node having a bad minute:
+     * it is a node that talks to us and talks nonsense, and that costs the parse, a
+     * routing-table entry we cannot trust, and every later query that believes what it
+     * said. So it is marked on the spot, with no run of offences needed, and each repeat
+     * doubles the mark from {@link #BLACKLIST_MINOR_TIME} up to
+     * {@link #BLACKLIST_MAJOR_TIME}. An answer does not wipe this mark the way it wipes a
+     * deaf node's ({@link #heardFrom}) - replying is exactly what a node that sends
+     * garbage does. Package private for the tests.
+     *
+     * @param nInfo the node that sent the unusable data
+     * @since 0.9.72+
+     */
+    void badData(NodeInfo nInfo) {
+        NID nid = nInfo.getNID();
+        // the shared fake NID is not a node we can blacklist, and it must never
+        // accumulate offence counts
+        if (nid.equals(FAKE_NID)) {
+            return;
+        }
+        // Same rule as timeout(): count on the routing table's copy so the offence
+        // history follows the node, not the object the reply happened to carry.
+        NodeInfo known = _knownNodes.get(nid);
+        NID counted = known != null ? known.getNID() : nid;
+        long now = _context.clock().now();
+        _blacklist.compute(counted, (key, mark) -> {
+            // a bad reply is not an unanswered query, so nothing is charged to the run
+            if (mark == null) {
+                mark = new BlacklistMark(now);
+            }
+            mark._majorOffences++;
+            mark._markedAt = now;
+            mark._expiresAt = now + mark._duration();
+            return mark;
+        });
+    }
+
+    /**
+     * When a node's current mark stops holding the walks over, or -1 if it is not marked.
+     * Package private for the tests, which pin the escalation: fifteen minutes for a deaf
+     * node, doubling to an hour for one that keeps sending us unusable data.
+     *
+     * @param nid the node id to look up
+     * @return the mark's expiry time in millis, or -1 if the node is not marked
+     * @since 0.9.72+
+     */
+    long blacklistedUntil(NID nid) {
+        BlacklistMark mark = _blacklist.get(nid);
+        return mark != null && mark._markedAt > 0 ? mark._expiresAt : -1;
+    }
+
+    /**
+     * One node's standing with us: its run of unanswered queries, how many heavy offences
+     * it has racked up, and when its mark expires. Held in {@link #_blacklist} rather than
+     * on the {@link NID} so that a fresh {@link NodeInfo} for the same node, as every
+     * parsed reply hands the walk, counts into the same record instead of starting a new one.
+     */
+    static class BlacklistMark {
+
+        /** When this run began; a gap past {@link #BLACKLIST_FAIL_WINDOW} starts a new one. */
+        long _windowStart;
+
+        /** Unanswered queries counted in this run, counting from one. */
+        int _fails;
+
+        /** When this run last reached the bar, or 0 while it has not. */
+        long _markedAt;
+
+        /** When the mark stops holding the walks over, in millis. */
+        long _expiresAt;
+
+        /** Times this node has been marked for a heavy offence, counting from zero. */
+        int _majorOffences;
+
+        /**
+         * Opens a record at the time of a node's first recent failure, with nothing
+         * counted yet - the caller counts it.
+         *
+         * @param now the time of that failure, in millis
+         */
+        BlacklistMark(long now) {
+            _windowStart = now;
+            _fails = 0;
+            _markedAt = 0;
+            _expiresAt = 0;
+        }
+
+        /**
+         * How long to hold the mark, escalating with the offence. A node that is deaf, or
+         * that hands us unusable data for the first time, is held for
+         * {@link #BLACKLIST_MINOR_TIME}; each further bad reply doubles that, up to
+         * {@link #BLACKLIST_MAJOR_TIME}.
+         *
+         * @return the mark's duration, in millis
+         */
+        long _duration() {
+            long dur = BLACKLIST_MINOR_TIME;
+            for (int i = 1; i < _majorOffences; i++) {
+                dur *= 2;
+                if (dur >= BLACKLIST_MAJOR_TIME) {
+                    return BLACKLIST_MAJOR_TIME;
+                }
+            }
+            return dur;
+        }
     }
 
     /**
@@ -2266,24 +2482,34 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         }
         int max = Math.min(3 * K, ids.length / NodeInfo.LENGTH);
         List<NodeInfo> rv = new ArrayList<>(max);
+        int bad = 0;
         for (int off = 0; off < ids.length && rv.size() < max; off += NodeInfo.LENGTH) {
             NodeInfo nInf;
             try {
                 nInf = new NodeInfo(ids, off);
             } catch (IllegalArgumentException iae) {
+                bad++;
                 if (_log.shouldWarn()) {
                     _log.warn("Ignoring invalid node in list received from " + nInfo);
                 }
                 continue;
             }
-            if (_blacklist.containsKey(nInf.getNID())) {
+            if (recentlyFailed(nInf)) {
                 if (_log.shouldInfo()) {
-                    _log.info("Ignoring blacklisted node " + nInf + " named in a reply from " + nInfo);
+                    _log.info("Ignoring blacklisted node " + nInf
+                              + " named in a reply from " + nInfo);
                 }
                 continue;
             }
             nInf = heardAbout(nInf);
             rv.add(nInf);
+        }
+        // One offence for the reply, not one per bad entry - a node that hands us a list
+        // with five unusable entries in it is not five times as guilty as one that hands
+        // us a single one. What matters is that it keeps doing it, and each reply that
+        // does escalates the mark. See badData().
+        if (bad > 0) {
+            badData(nInfo);
         }
         if (_log.shouldDebug()) {
             _log.debug("Received a node list from " + nInfo + " ->"
@@ -2705,10 +2931,17 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                         iter.remove();
                     }
                 }
-                expire = now - BLACKLIST_CLEAN_TIME;
-                for (Iterator<Map.Entry<NID, Long>> iter = _blacklist.entrySet().iterator();
-                        iter.hasNext(); ) {
-                    if (iter.next().getValue().longValue() < expire) {
+                long staleRun = now - BLACKLIST_FAIL_WINDOW;
+                for (Iterator<Map.Entry<NID, BlacklistMark>> iter =
+                        _blacklist.entrySet().iterator(); iter.hasNext(); ) {
+                    BlacklistMark mark = iter.next().getValue();
+                    // A marked node is dropped once its own mark expires - fifteen minutes
+                    // for being deaf, up to an hour for a node that keeps sending us data
+                    // we cannot use. A run that never reached the bar is dropped as soon as
+                    // its window closes, so the map holds the nodes that are failing, not
+                    // everyone who has ever missed one reply.
+                    if (mark._markedAt > 0 ? mark._expiresAt < now
+                                           : mark._windowStart < staleRun) {
                         iter.remove();
                     }
                 }
@@ -2735,10 +2968,11 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                                  + receivedTokensBefore - _incomingTokens.size();
                     _log.debug("Cleaner pass -> Pruned " + pruned
                                + (pruned == 1 ? " entry" : " entries")
-                               + " * Blacklist: " + _blacklist.size()
                                + " * Sent tokens: " + _outgoingTokens.size()
                                + " * Received tokens: " + _incomingTokens.size()
-                               + "\n* Known nodes: " + _knownNodes.size()
+                               + "\n* Blacklisted nodes: " + markedCount()
+                               + " * Failing nodes: " + _blacklist.size()
+                               + " * Known nodes: " + _knownNodes.size()
                                + " * Pending queries: " + _sentQueries.size());
                 }
             } catch (Throwable t) {
