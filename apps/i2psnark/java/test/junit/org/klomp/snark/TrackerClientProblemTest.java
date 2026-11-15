@@ -19,6 +19,11 @@ import static org.junit.Assert.*;
  */
 public class TrackerClientProblemTest {
 
+    /**
+     * Fixture group for the tracker problem strings; it holds no state.
+     */
+    public TrackerClientProblemTest() {}
+
     // ---- normalizeTrackerProblem ----
 
     /** The regression: a null message must not blow up the announce loop. */
@@ -27,12 +32,14 @@ public class TrackerClientProblemTest {
         assertEquals("", TrackerClient.normalizeTrackerProblem(null));
     }
 
+    /** The classification keys are matched case-insensitively after lowering. */
     @Test
     public void messagesAreLowerCased() {
         assertEquals("torrent not registered",
                      TrackerClient.normalizeTrackerProblem("Torrent Not Registered"));
     }
 
+    /** A leading space is kept, and that is a classification miss worth pinning. */
     @Test
     public void surroundingWhitespaceIsNotStripped() {
         // Pinned deliberately: the prefix checks are startsWith, so a leading space
@@ -41,6 +48,7 @@ public class TrackerClientProblemTest {
                      TrackerClient.normalizeTrackerProblem(" Torrent Not Registered"));
     }
 
+    /** Nothing to normalize stays nothing, without an exception. */
     @Test
     public void anEmptyMessageStaysEmpty() {
         assertEquals("", TrackerClient.normalizeTrackerProblem(""));
@@ -48,6 +56,7 @@ public class TrackerClientProblemTest {
 
     // ---- isRegistrationFailure ----
 
+    /** Every wording a tracker uses to reject an unregistered torrent is one. */
     @Test
     public void eachKnownRejectionMessageIsClassified() {
         for (String msg : new String[] {
@@ -61,12 +70,14 @@ public class TrackerClientProblemTest {
         }
     }
 
+    /** A timeout is a transient failure, not a reason to stop announcing. */
     @Test
     public void aTransientFailureIsNotARegistrationFailure() {
         assertFalse(TrackerClient.isRegistrationFailure(
                 TrackerClient.normalizeTrackerProblem("Read timed out")));
     }
 
+    /** A refused connection is a transient failure too. */
     @Test
     public void aConnectionFailureIsNotARegistrationFailure() {
         assertFalse(TrackerClient.isRegistrationFailure(
@@ -102,6 +113,7 @@ public class TrackerClientProblemTest {
         assertFalse(TrackerClient.isRegistrationFailure(normalized));
     }
 
+    /** A timeout keeps its cause's words, so failure kinds stay distinguishable. */
     @Test
     public void aTimeoutIsReportedWithItsCause() {
         // The reason the cause is now logged: a timeout, a refused connection and
@@ -207,6 +219,22 @@ public class TrackerClientProblemTest {
                      TrackerClient.trackerFailure("http://sigmatracker.i2p/announce",
                                                   new IOException(
                                                           "No response from sigmatracker.i2p and others")));
+    }
+
+    /**
+     * The scrape sites log through this helper as well, so the tracker named by the line and
+     * the tracker named by the failure message cannot both appear: the two reasons the HTTP
+     * scraper raises come back as the bare cause, to sit beside "Periodic scrape of X failed".
+     */
+    @Test
+    public void scrapeFailureKeepsOnlyTheCause() {
+        assertEquals("No response",
+                     TrackerClient.trackerFailure("http://tracker2.postman.i2p/announce",
+                                                  new IOException("No response from tracker2.postman.i2p")));
+        assertEquals("No files in the response",
+                     TrackerClient.trackerFailure("http://tracker2.postman.i2p/announce",
+                                                  new IOException(
+                                                          "No files in the response from tracker2.postman.i2p")));
     }
 
     /** A message-less failure still says what failed. */

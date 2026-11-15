@@ -1642,8 +1642,10 @@ public class TrackerClient implements Runnable {
                         } catch (IOException ioe) {
                             scheduleNextScrape(tr, false);
                             if (_log.shouldDebug()) {
+                                // trackerFailure() drops the " from <host>" the failure
+                                // messages carry - this line already names the tracker
                                 _log.debug("Scrape of " + SnarkLogFormatter.host(tr.host)
-                                           + " failed -> " + ioe.getMessage());
+                                           + " failed -> " + trackerFailure(tr.announce, ioe));
                             }
                         }
                     }
@@ -1744,7 +1746,7 @@ public class TrackerClient implements Runnable {
                         scheduleNextScrape(tr, false);
                         if (_log.shouldDebug()) {
                             _log.debug("Periodic scrape of " + SnarkLogFormatter.host(tr.host)
-                                       + " failed -> " + ioe.getMessage());
+                                       + " failed -> " + trackerFailure(tr.announce, ioe));
                         }
                     }
                 }
@@ -2363,7 +2365,7 @@ public class TrackerClient implements Runnable {
         // (about 40 bytes per torrent), so allow up to 128K; only very large trackers exceed it
         byte[] fetched = _util.get(url, true, 1, 256, 128 * 1024, snark.getInfoHash());
         if (fetched == null || fetched.length == 0) {
-            throw new IOException("No scrape response from " + tr.host);
+            throw new IOException("No response from " + tr.host);
         }
         // The HTML check only works if we didn't exceed the maxium fetch size specified in get(),
         // otherwise we already threw an IOE.
@@ -2384,7 +2386,7 @@ public class TrackerClient implements Runnable {
             fv = files.get("peers"); // some trackers (opentracker) use this
         }
         if (fv == null) {
-            throw new IOException("No files in scrape response from " + tr.host);
+            throw new IOException("No files in response from " + tr.host);
         }
         int complete = 0;
         int incomplete = 0;
@@ -2410,7 +2412,8 @@ public class TrackerClient implements Runnable {
             break;
         }
         if (_log.shouldInfo()) {
-            _log.info("Scrape response from " + tr.host + " -> Swarm reported"
+            _log.info("Scrape response from " + SnarkLogFormatter.host(tr.host)
+                    + " -> Swarm reported"
                     + "\n* Seeds: " + complete
                     + " * Leeches: " + incomplete
                     + " * Partial seeds: " + Math.max(0, incomplete - downloaders));
