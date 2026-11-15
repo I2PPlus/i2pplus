@@ -38,7 +38,6 @@ import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
-import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
@@ -118,8 +117,16 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /** Index to incoming opaque tokens, received in a peers or nodes reply. */
     private final ConcurrentHashMap<NID, Token> _incomingTokens;
 
-    /** Recently unreachable, with lastSeen() as the added-to-blacklist time. */
-    private final Set<NID> _blacklist;
+    /**
+     * Nodes marked deaf, keyed by node id, value the time the mark was last refreshed.
+     * A map rather than a set because a set keeps the key instance that was inserted
+     * first, while a later mark for the same node arrives as a different {@link NID}
+     * object - refreshing the age has to land on the entry the cleaner reads, or a node we
+     * keep failing on is pruned while it is still failing. The age is kept here rather
+     * than on the {@code NID} because {@link NID#setLastSeen()} zeroes the failure count,
+     * and stamping when a node was marked must not erase why it was marked.
+     */
+    private final ConcurrentHashMap<NID, Long> _blacklist;
 
     /** Infohashes this instance serves tracker queries for, empty when serving all. */
     private final Set<InfoHash> _servedTorrents = new CopyOnWriteArraySet<>();
@@ -306,8 +313,27 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      */
     static final int RX_QUEUE = 64;
 
-    /** How long since sent do we wait for a reply. */
-    private static final long DEFAULT_QUERY_TIMEOUT = (long) 75 * 1000;
+    /**
+     * How long since sent we wait for a reply before treating the query as unanswered.
+     * Package-visible so the blacklist window can be pinned against it by test: reaching
+     * the routing-table bar costs this many times six queries.
+     *
+     * @since 0.9.72+
+     */
+    static final long DEFAULT_QUERY_TIMEOUT = (long) 75 * 1000;
+
+    /**
+     * How long one step of an exploration waits for one node before moving on. It has to
+     * outlast {@link #DEFAULT_QUERY_TIMEOUT}: a shorter wait gives up while the query is
+     * still pending, so the reply, if it ever arrives, lands on a waiter nobody is waiting
+     * on, and the step reports an answer that never came. Measured on this router, the
+     * 60 seconds used here expired 15 seconds early on every deaf node, 93 times in 37
+     * minutes. Package-visible so the relation to {@link #DEFAULT_QUERY_TIMEOUT} can be
+     * pinned by test.
+     *
+     * @since 0.9.72+
+     */
+    static final long EXPLORE_NODE_WAIT = DEFAULT_QUERY_TIMEOUT + 5 * 1000L;
 
     /** Timeout for a destination lookup. */
     private static final long DEST_LOOKUP_TIMEOUT = (long) 10 * 1000;
@@ -315,10 +341,32 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /** Stagger with other cleaners. */
     private static final long CLEAN_TIME = (long) 63 * 1000;
 
-    /** Interval between DHT explorations. */
-    private static final long EXPLORE_TIME = 10 * (long) 60 * 1000;
-    /** Interval between blacklist cleanups. */
-    private static final long BLACKLIST_CLEAN_TIME = 5 * (long) 60 * 1000;
+    /**
+     * Interval between DHT explorations. Package-visible so the blacklist window can be
+     * pinned against it by test: a mark that expires before this pass runs is never seen
+     * by the walk that would use it.
+     *
+     * @since 0.9.72+
+     */
+    static final long EXPLORE_TIME = 10 * (long) 60 * 1000;
+
+    /**
+     * How long a node stays blacklisted from when it was last marked deaf. The window has
+     * to outlast the walk that would otherwise try it again: the explorer runs every
+     * {@link #EXPLORE_TIME} and one attempt costs {@link #DEFAULT_QUERY_TIMEOUT}, so the
+     * old five minutes always expired before the next pass - measured on this router, the
+     * blacklist was empty on every cleaner pass and no walk ever skipped a node, while one
+     * deaf node was queried seven times in 37 minutes. Thirty minutes is three explore
+     * passes, and about four times the seven and a half minutes it takes to reach the
+     * routing-table bar, so a node that has simply gone away is left alone and one that
+     * has come back is tried again inside half an hour. Measured: 60 distinct nodes time
+     * out per 37 minutes, so the window holds some 50 entries, well under
+     * {@link #BLACKLIST_MAX_PEERS}. Package-visible for the same invariant test.
+     *
+     * @since 0.9.72+
+     */
+    static final long BLACKLIST_CLEAN_TIME = 30 * (long) 60 * 1000;
+
     /** Peers held in the DHT blacklist. */
     private static final int BLACKLIST_MAX_PEERS = 500;
     /** How often the local dht node list is saved, in milliseconds. */
@@ -394,7 +442,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         _sentQueries = new ConcurrentHashMap<>();
         _outgoingTokens = new ConcurrentHashMap<>();
         _incomingTokens = new ConcurrentHashMap<>();
-        _blacklist = (shared != null) ? shared._blacklist : new ConcurrentHashSet<>();
+        _blacklist = (shared != null) ? shared._blacklist : new ConcurrentHashMap<>();
 
         // Construct my NodeInfo
         // Pick ports over a big range to marginally increase security
@@ -591,11 +639,16 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                 }
             } else if (replyType == REPLY_NETWORK_FAIL) {
                 break;
-            } else {
+            } else if (replyType != REPLY_NONE) {
+                // REPLY_NONE means nothing came back at all, and the query's own timeout
+                // says so, with the node's name and the wait it ran. Reporting it again
+                // here as an "unexpected reply" was measured at 93 lines in 37 minutes,
+                // every one of them a node that never answered. Anything else is an
+                // answer this query cannot use, and that is worth one line - it says the
+                // node is speaking a different dialect.
                 if (_log.shouldInfo())
-                    _log.info("Received an unexpected reply -> Ignored it"
-                              + " * Reply type: " + replyName(replyType)
-                              + " * From: " + nInfo);
+                    _log.info("Received an unexpected reply from " + nInfo
+                              + " -> Ignored it (type: " + replyName(replyType) + ")");
             }
         }
         if (_log.shouldInfo()) _log.info("Finished explore of " + SnarkLogFormatter.node(target));
@@ -790,11 +843,16 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                 }
             } else if (replyType == REPLY_NETWORK_FAIL) {
                 break;
-            } else {
+            } else if (replyType != REPLY_NONE) {
+                // REPLY_NONE means nothing came back at all, and the query's own timeout
+                // says so, with the node's name and the wait it ran. Reporting it again
+                // here as an "unexpected reply" was measured at 93 lines in 37 minutes,
+                // every one of them a node that never answered. Anything else is an
+                // answer this query cannot use, and that is worth one line - it says the
+                // node is speaking a different dialect.
                 if (_log.shouldInfo())
-                    _log.info("Received an unexpected reply -> Ignored it"
-                              + " * Reply type: " + replyName(replyType)
-                              + " * From: " + nInfo);
+                    _log.info("Received an unexpected reply from " + nInfo
+                              + " -> Ignored it (type: " + replyName(replyType) + ")");
             }
             if (_context.clock().now() > endTime) break;
             if (!toTry.isEmpty()
@@ -1761,12 +1819,16 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     }
 
     /**
-     * Called for a request or response.
+     * Called when anything at all arrives from a node: it puts the node in the routing
+     * table, restarts its run of unanswered queries, and takes it off the blacklist, so a
+     * node that starts answering again is back in play for the next lookup. Package private
+     * for the tests.
      *
      * @param nInfo the node we heard from
-     * @return old NodeInfo or nInfo if none, use this to reduce object churn
+     * @return the routing table's entry for it, or {@code nInfo} itself if it is new - the
+     *         one to use, so a caller does not keep a copy the table has replaced
      */
-    private NodeInfo heardFrom(NodeInfo nInfo) {
+    NodeInfo heardFrom(NodeInfo nInfo) {
         // try to keep ourselves out of the DHT
         if (nInfo.equals(_myNodeInfo)) {
             return _myNodeInfo;
@@ -1788,9 +1850,9 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         }
         nID = oldInfo.getNID();
         nID.setLastSeen();
-        if (_blacklist.remove(nID)) {
+        if (_blacklist.remove(nID) != null) {
             if (_log.shouldInfo()) {
-                _log.info("Unblacklisted " + nID);
+                _log.info("Unblacklisted a node -> It answered again * Node: " + oldInfo);
             }
         }
         return oldInfo;
@@ -1819,11 +1881,21 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     }
 
     /**
-     * Called when a reply times out.
+     * Called when a reply times out: marks the node deaf so the iterative walks step over
+     * it, and once it has failed to answer in a row often enough, takes it out of the
+     * routing table. Package private for the tests.
+     *
+     * <p>The mark goes on at the first timeout, not at the sixth. One lost datagram is not
+     * proof a node has gone away - but the cost of the doubt was measured: 410 of this
+     * router's walk attempts in 37 minutes went to nodes with no reachable destination and
+     * 96 more waited out the whole reply timeout, while the blacklist stayed empty on every
+     * cleaner pass and no walk ever skipped a node. A marked node is tried again the moment
+     * it answers anything ({@link #heardFrom}), so a node having one bad minute loses
+     * nothing but the attempts it would have cost.
      *
      * @param nInfo the node whose reply timed out
      */
-    private void timeout(NodeInfo nInfo) {
+    void timeout(NodeInfo nInfo) {
         NID nid = nInfo.getNID();
         // a fake NID means we never heard from the node, so there is no
         // routing table entry to evict and no real node to blacklist;
@@ -1831,41 +1903,54 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         if (nid.equals(FAKE_NID)) {
             return;
         }
-        boolean remove = nid.timeout();
-        if (remove) {
-            if (_knownNodes.remove(nid) != null) {
+        // Count on the routing table's own copy where there is one, so a run of failures
+        // is not restarted by a walk that parsed a fresh NodeInfo for the same node.
+        NodeInfo known = _knownNodes.get(nid);
+        NID counted = known != null ? known.getNID() : nid;
+        // The mark's age lives in the map, not on the NID: setLastSeen() zeroes the
+        // failure count, and this used to call it here, so the run restarted the moment a
+        // node reached the bar and it had to fail six more times before it was marked.
+        _blacklist.put(counted, Long.valueOf(_context.clock().now()));
+        if (counted.timeout()) {
+            if (_knownNodes.remove(counted) != null) {
                 if (_log.shouldInfo()) {
-                    _log.info("Removed " + nInfo + " after consecutive timeouts");
-                }
-            }
-            // remove and add back with new date, may not be same object
-            // used as when-added time
-            nid.setLastSeen();
-            boolean already = _blacklist.remove(nid);
-            _blacklist.add(nid);
-            if (!already) {
-                if (_log.shouldInfo()) {
-                    _log.info("Blacklisted " + SnarkLogFormatter.node(nid)
-                              + " -> Failed to respond * Timed-out queries: "
-                              + nid.getFailCount());
+                    _log.info("Removed a node from the routing table -> Failed to answer"
+                              + " * Node: " + nInfo
+                              + " * Timed-out queries: " + counted.getFailCount());
                 }
             }
         }
     }
 
     /**
-     * True if this node has failed to answer so many queries in a row that it is on the
-     * blacklist, which it leaves again as soon as it answers anything. The iterative
-     * lookups step over these nodes instead of spending one of their limited attempts,
-     * and the seconds of clock each attempt waits for a reply, on a node that has
-     * already proved deaf. Package-private for the tests.
+     * True if this node is on the blacklist, which it joins at its first unanswered query
+     * and leaves again as soon as it answers anything. The iterative lookups step over
+     * these nodes instead of spending one of their limited attempts, and the seconds of
+     * clock each attempt waits for a reply, on a node that has already proved deaf.
+     * Package-private for the tests.
      *
      * @param nInfo the node to check
-     * @return true if the node has been failing repeatedly
+     * @return true if a recent query to this node went unanswered
      * @since 0.9.72+
      */
     boolean recentlyFailed(NodeInfo nInfo) {
-        return _blacklist.contains(nInfo.getNID());
+        return _blacklist.containsKey(nInfo.getNID());
+    }
+
+    /**
+     * When this node was last marked deaf, or -1 if it is not on the blacklist. The age is
+     * what the cleaner expires, and it is held in the map rather than on the node id, so a
+     * mark that arrives as a different {@link NID} instance for the same node refreshes the
+     * entry the cleaner reads instead of leaving the old one to expire. Package private for
+     * the tests.
+     *
+     * @param nid the node id to look up
+     * @return the time the mark was last refreshed, in millis, or -1 if it is not marked
+     * @since 0.9.72+
+     */
+    long blacklistedAt(NID nid) {
+        Long when = _blacklist.get(nid);
+        return when != null ? when.longValue() : -1;
     }
 
     /**
@@ -2189,10 +2274,11 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                 }
                 continue;
             }
-            if (_blacklist.contains(nInf.getNID())) {
+            if (_blacklist.containsKey(nInf.getNID())) {
                 if (_log.shouldInfo()) {
-                    _log.info("Ignoring a blacklisted node " + SnarkLogFormatter.node(nInf.getNID())
-                              + " -> Received from: " + nInfo);
+                    _log.info("Ignoring a node named in a reply -> It is blacklisted"
+                              + " * Node: " + nInf
+                              + " * Received from: " + nInfo);
                 }
                 continue;
             }
@@ -2619,16 +2705,16 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                     }
                 }
                 expire = now - BLACKLIST_CLEAN_TIME;
-                for (Iterator<NID> iter = _blacklist.iterator(); iter.hasNext(); ) {
-                    NID nid = iter.next();
-                    if (nid.lastSeen() < expire) {
+                for (Iterator<Map.Entry<NID, Long>> iter = _blacklist.entrySet().iterator();
+                        iter.hasNext(); ) {
+                    if (iter.next().getValue().longValue() < expire) {
                         iter.remove();
-                    } // lastSeen() is actually when-added
+                    }
                 }
                 int sz = _blacklist.size();
                 if (sz > BLACKLIST_MAX_PEERS) {
                     // just remove random peers
-                    for (Iterator<NID> iter = _blacklist.iterator();
+                    for (Iterator<NID> iter = _blacklist.keySet().iterator();
                             iter.hasNext() && sz > BLACKLIST_MAX_PEERS;
                             sz--) {
                         iter.next();
@@ -2706,7 +2792,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                     if (_log.shouldInfo()) {
                         _log.info("Bootstrap starting -> Known nodes: " + _knownNodes.size());
                     }
-                    explore(_myNID, 8, (long) 60 * 1000, 1);
+                    explore(_myNID, 8, EXPLORE_NODE_WAIT, 1);
                     if (_log.shouldInfo()) {
                         _log.info("Bootstrap finished -> Known nodes: " + _knownNodes.size());
                     }
@@ -2720,7 +2806,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                 }
                 List<NID> keys = _knownNodes.getExploreKeys();
                 for (NID nid : keys) {
-                    explore(nid, 8, (long) 60 * 1000, 1);
+                    explore(nid, 8, EXPLORE_NODE_WAIT, 1);
                     if (!_isRunning) {
                         return;
                     }

@@ -45,8 +45,13 @@ public class NID extends SHA1Hash {
      */
     private volatile int fails;
 
-    /** Maximum allowed consecutive failures before considering node problematic. */
-    private static final int MAX_FAILS = 5;
+    /**
+     * Consecutive unanswered queries before a node is taken out of the routing table.
+     * Package-visible so a test can pin that the eviction bar stays well above the one
+     * blacklist mark: a node is marked deaf for the walks on its first unanswered query,
+     * and only a run of this many more removes the routing table entry.
+     */
+    static final int MAX_FAILS = 5;
 
     /**
      * Creates a new empty NID.
@@ -98,13 +103,16 @@ public class NID extends SHA1Hash {
     }
 
     /**
-     * Records a timeout and checks if the node should be considered problematic.
+     * Records one unanswered query and says whether the run is now long enough to take the
+     * node out of the routing table.
      *
-     * <p>Increments the failure counter and returns whether the node has exceeded the maximum
-     * allowed consecutive failures. This helps identify nodes that are consistently unreachable and
-     * should be removed from the routing table.
+     * <p>The count is consecutive - {@link #setLastSeen()} zeroes it, so one answer starts a
+     * fresh run. Nothing else may call {@code setLastSeen()} merely to stamp bookkeeping
+     * information: the blacklist used to do exactly that, and the run restarted at zero the
+     * moment the node reached the bar, so it had to fail six more times before it was
+     * marked again.
      *
-     * @return true if the node has exceeded the maximum allowed failures, false otherwise
+     * @return true if the run of unanswered queries now exceeds {@link #MAX_FAILS}
      */
     public boolean timeout() {
         return ++fails > MAX_FAILS;
