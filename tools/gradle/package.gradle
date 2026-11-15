@@ -171,12 +171,12 @@ final def pkgCfg = [dAbs: workspaceDist, util: packageUtil]
 // any more (Gradle 9 removed it) and 7z has no gradle equivalent at all. Both
 // tools update an existing archive in place, so the stale artifact is deleted
 // first, as ant's targets do.
-def makePlatformZipTask(String taskName, String stageTask, String stageDir,
+def makePlatformZipTask(String taskName, String stageTask, String jbigiTask, String stageDir,
                         String artifact, String taskDesc, Map cfg) {
     task(taskName, type: Exec) {
         group = 'package'
         description = taskDesc
-        dependsOn stageTask
+        dependsOn stageTask, jbigiTask
         // cwd is the payload root, so the archive holds lib/, docs/, ... at its root
         workingDir stageDir
         commandLine 'zip', '-r', '-9', '-q',
@@ -190,12 +190,12 @@ def makePlatformZipTask(String taskName, String stageTask, String stageDir,
     }
 }
 
-def makePlatform7zTask(String taskName, String stageTask, String stageDir,
+def makePlatform7zTask(String taskName, String stageTask, String jbigiTask, String stageDir,
                        String artifact, String taskDesc, Map cfg) {
     task(taskName, type: Exec) {
         group = 'package'
         description = taskDesc
-        dependsOn stageTask
+        dependsOn stageTask, jbigiTask
         // cwd is the parent of the payload directory, so every entry is i2p/...
         workingDir new File(stageDir).parent
         // The flags are ant's, p7zip's: -mx=9 -md=4m -mmt2 -t7z -ssw -bt
@@ -213,22 +213,22 @@ def makePlatform7zTask(String taskName, String stageTask, String stageDir,
 
 // The staging trees are named for ant's preppkg-<platform> targets, which is what
 // fills them (see installer.gradle).
-makePlatformZipTask('zip-linux', 'preppkg-linux', "${pkgStageRoot}/pkg-linux/i2p", 'i2p-linux.zip',
+makePlatformZipTask('zip-linux', 'preppkg-linux', 'jbigi-pkg-linux', "${pkgStageRoot}/pkg-linux/i2p", 'i2p-linux.zip',
     'Build the linux platform package dist/i2p-linux.zip (mirrors ant zip-linux).', pkgCfg)
-makePlatformZipTask('zip-windows', 'preppkg-windows', "${pkgStageRoot}/pkg-windows/i2p", 'i2p-windows.zip',
+makePlatformZipTask('zip-windows', 'preppkg-windows', 'jbigi-pkg-windows', "${pkgStageRoot}/pkg-windows/i2p", 'i2p-windows.zip',
     'Build the windows platform package dist/i2p-windows.zip (mirrors ant zip-windows).', pkgCfg)
-makePlatformZipTask('zip-macos', 'preppkg-osx', "${pkgStageRoot}/pkg-osx/i2p", 'i2p-macos.zip',
+makePlatformZipTask('zip-macos', 'preppkg-osx', 'jbigi-pkg-osx', "${pkgStageRoot}/pkg-osx/i2p", 'i2p-macos.zip',
     'Build the macos platform package dist/i2p-macos.zip (mirrors ant zip-macos).', pkgCfg)
-makePlatformZipTask('zip-freebsd', 'preppkg-freebsd', "${pkgStageRoot}/pkg-freebsd/i2p", 'i2p-freebsd.zip',
+makePlatformZipTask('zip-freebsd', 'preppkg-freebsd', 'jbigi-pkg-freebsd', "${pkgStageRoot}/pkg-freebsd/i2p", 'i2p-freebsd.zip',
     'Build the freebsd platform package dist/i2p-freebsd.zip (mirrors ant zip-freebsd).', pkgCfg)
 
-makePlatform7zTask('7zip-linux', 'preppkg-linux', "${pkgStageRoot}/pkg-linux/i2p", 'i2p-linux.7z',
+makePlatform7zTask('7zip-linux', 'preppkg-linux', 'jbigi-pkg-linux', "${pkgStageRoot}/pkg-linux/i2p", 'i2p-linux.7z',
     'Build the linux platform package dist/i2p-linux.7z (mirrors ant 7zip-linux).', pkgCfg)
-makePlatform7zTask('7zip-windows', 'preppkg-windows', "${pkgStageRoot}/pkg-windows/i2p", 'i2p-windows.7z',
+makePlatform7zTask('7zip-windows', 'preppkg-windows', 'jbigi-pkg-windows', "${pkgStageRoot}/pkg-windows/i2p", 'i2p-windows.7z',
     'Build the windows platform package dist/i2p-windows.7z (mirrors ant 7zip-windows).', pkgCfg)
-makePlatform7zTask('7zip-macos', 'preppkg-osx', "${pkgStageRoot}/pkg-osx/i2p", 'i2p-macos.7z',
+makePlatform7zTask('7zip-macos', 'preppkg-osx', 'jbigi-pkg-osx', "${pkgStageRoot}/pkg-osx/i2p", 'i2p-macos.7z',
     'Build the macos platform package dist/i2p-macos.7z (mirrors ant 7zip-macos).', pkgCfg)
-makePlatform7zTask('7zip-freebsd', 'preppkg-freebsd', "${pkgStageRoot}/pkg-freebsd/i2p", 'i2p-freebsd.7z',
+makePlatform7zTask('7zip-freebsd', 'preppkg-freebsd', 'jbigi-pkg-freebsd', "${pkgStageRoot}/pkg-freebsd/i2p", 'i2p-freebsd.7z',
     'Build the freebsd platform package dist/i2p-freebsd.7z (mirrors ant 7zip-freebsd).', pkgCfg)
 
 // The ant target name starts with a digit, which a groovy task name cannot, so

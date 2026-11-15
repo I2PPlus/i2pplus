@@ -440,6 +440,16 @@ def makeStageTask(String taskName, String stageDir, String variant, String taskD
       from(cfg.launcherWork) {
         include 'i2p.exe'
       }
+      // ant preppkg-windows also ships the CPUID native as a plain lib/jcpuid.dll:
+      // the loader tries System.loadLibrary("jcpuid") before extracting the copy
+      // inside jbigi.jar, and a real file on java.library.path means it never
+      // writes the temp file that Windows Defender then locks.
+      into('lib') {
+        from('installer/lib/jbigi') {
+          include 'jcpuid-x86_64-windows.dll'
+          rename 'jcpuid-x86_64-windows.dll', 'jcpuid.dll'
+        }
+      }
       ['win64'].each { d ->
         into("lib/wrapper/${d}") {
           from("installer/lib/wrapper/${d}") {
@@ -522,8 +532,11 @@ makeStageTask('preppkg-windows', "${stageRoot}/pkg-windows/i2p", 'windows',
     'Stage the windows package payload (mirrors ant preppkg-windows).', stageCfg, false)
 
 // Variant-specific jbigi.jar built from the bundled natives (ant jbigi-*-only)
-def makeJbigiJarTask(String taskName, String stageDir, String variant, String taskDesc, String version) {
-  String stageDep = [all: 'preppkg', nowindows: 'preppkg-nowindows', linux: 'preppkg-linux-only',
+def makeJbigiJarTask(String taskName, String stageDir, String variant, String taskDesc, String version,
+                     String stageDepOverride = null) {
+  // stageDepOverride points the task at a different payload tree: the platform
+  // packages stage into pkg-<platform>, not the installer-<platform> tree.
+  String stageDep = stageDepOverride ?: [all: 'preppkg', nowindows: 'preppkg-nowindows', linux: 'preppkg-linux-only',
            freebsd: 'preppkg-freebsd-only', osx: 'preppkg-osx-only',
            windows: 'preppkg-windows-only'][variant]
   // Ant filesets split the includes on spaces; one pattern per gradle include
@@ -563,6 +576,21 @@ makeJbigiJarTask('jbigi-osx', "${stageRoot}/osx", 'osx',
     'Build the osx-only jbigi.jar into the staged payload (mirrors ant jbigi-osx).', fullVersion)
 makeJbigiJarTask('jbigi-windows', "${stageRoot}/windows", 'windows',
     'Build the windows-only jbigi.jar into the staged payload (mirrors ant jbigi-windows).', fullVersion)
+
+// The platform packages (zip-<platform>, 7zip-<platform>) stage into pkg-<platform>
+// rather than the installer tree, so each needs its own lib/jbigi.jar: the router
+// loads its native math and CPUID libraries out of that jar as classpath resources,
+// and without it the router logs "Resource name [jbigi-windows-none_64.dll] was not
+// found" and does all crypto in pure Java. ant gets the same jar by staging these
+// payloads through preppkg-<platform>-only.
+makeJbigiJarTask('jbigi-pkg-linux', "${stageRoot}/pkg-linux/i2p", 'linux',
+    'Build the linux jbigi.jar into the linux package payload (mirrors ant preppkg-linux-only).', fullVersion, 'preppkg-linux')
+makeJbigiJarTask('jbigi-pkg-freebsd', "${stageRoot}/pkg-freebsd/i2p", 'freebsd',
+    'Build the freebsd jbigi.jar into the freebsd package payload (mirrors ant preppkg-freebsd-only).', fullVersion, 'preppkg-freebsd')
+makeJbigiJarTask('jbigi-pkg-osx', "${stageRoot}/pkg-osx/i2p", 'osx',
+    'Build the macos jbigi.jar into the macos package payload (mirrors ant preppkg-osx-only).', fullVersion, 'preppkg-osx')
+makeJbigiJarTask('jbigi-pkg-windows', "${stageRoot}/pkg-windows/i2p", 'windows',
+    'Build the windows jbigi.jar into the windows package payload (mirrors ant preppkg-windows-only).', fullVersion, 'preppkg-windows')
 
 // Filtered IzPack install descriptors with the pkg-temp dir redirected to the
 // gradle payload location (ant preppkg-base ends with the same substitution)
