@@ -19,6 +19,7 @@ import java.util.Locale;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.util.FileUtil;
+import net.i2p.util.NativeLoader;
 import net.i2p.util.SystemVersion;
 
 /**
@@ -453,8 +454,8 @@ public class CPUID {
      * </ul>
      *
      * <p><b>IMPORTANT:</b> This is preferred over model-based identification.
-     * AMD model number ranges overlap across product lines (e.g., model 0x44
-     * is Granite Ridge desktop, but model ranges can be ambiguous). The brand
+     * AMD model number ranges overlap across product lines, e.g. model 0x44 is
+     * Granite Ridge desktop, but model ranges can be ambiguous. The brand
      * string is always correct when available.</p>
      *
      * @return CPU brand string, or null if unsupported or native library not loaded
@@ -721,7 +722,7 @@ public class CPUID {
         try (InputStream libStream = resource.openStream();
              FileOutputStream fos = new FileOutputStream(outFile)) {
             DataHelper.copy(libStream, fos);
-            System.load(outFile.getAbsolutePath());
+            NativeLoader.load(outFile);
         } catch (UnsatisfiedLinkError ule) {
             if (_doLog) {
                 System.err.println("The resource " + resourceName +

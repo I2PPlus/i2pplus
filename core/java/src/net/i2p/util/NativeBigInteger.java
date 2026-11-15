@@ -988,8 +988,8 @@ public class NativeBigInteger extends BigInteger {
      * implementation.  For instance, a windows user on a p4 would define
      * -Djbigi.impl=win-686 if there is a jbigi.jar in the classpath containing the
      * files "win-686", "win-athlon", "freebsd-p4", "linux-p3", where each
-     * of those files contain the correct binary file for a native library (e.g.
-     * windows DLL, or a *nix .so).  </p>
+     * of those files contain the correct binary file for a native library, a
+     * windows DLL or a *nix .so.  </p>
      * <p>This is a pretty ugly hack, using the general technique illustrated by the
      * onion FEC libraries.  It works by pulling the resource, writing out the
      * byte stream to a temporary file, loading the native library from that file.
@@ -1019,7 +1019,7 @@ public class NativeBigInteger extends BigInteger {
             try (FileOutputStream fos = new FileOutputStream(outFile)) {
                 DataHelper.copy(libStream, fos);
             }
-            System.load(outFile.getAbsolutePath());
+            NativeLoader.load(outFile);
             info("Loaded library: " + resource);
         } catch (UnsatisfiedLinkError ule) {
             warn("Failed to load the resource " + resourceName + " - not a valid library for this platform");
