@@ -175,8 +175,20 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      */
     private static final int PEX_PEER_FACTOR = 4;
 
-    /** How long a remembered swarm peer stays valid without resurfacing. */
-    private static final long SWARM_PEER_TTL = 2 * 60 * 60 * 1000L;
+    /**
+     * How long a remembered swarm peer stays valid without resurfacing. The slowest cadence
+     * on which a source names a peer again is a seeding torrent's announce round - three
+     * times {@link TrackerClient#SLEEP} plus up to two minutes of jitter, so a little under
+     * seventeen minutes - and this is two and a half of those rounds: a peer the tracker, the
+     * DHT and PEX have all stopped naming for that long is not coming back from this list.
+     * The old two hours kept a peer that had gone away counted for seven rounds after its
+     * destination stopped resolving, which is what made the torrent view's peer count read
+     * high for a torrent whose swarm had already left. Package-visible so the relation to the
+     * announce cadence can be pinned by test.
+     *
+     * @since 0.9.72+
+     */
+    static final long SWARM_PEER_TTL = 45 * 60 * 1000L;
 
     /** Distinct swarm peers, keyed by destination hash, value is the last-seen wall time. */
     private final Map<Hash, Long> swarmSeen = new HashMap<>(64);
@@ -623,6 +635,11 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * distinct swarm member, keyed by destination hash. Web seeds are not
      * swarm members. Bounded; refreshes the last-seen time.
      *
+     * <p>A peer whose destination the router has stopped being able to resolve is not
+     * recorded, and an entry already held for it is dropped here. The swarm keeps naming a
+     * peer that has gone away for the life of a torrent, so without that check a dead peer
+     * stayed in the count for as long as the tracker chose to advertise it.
+     *
      * @param peer the peer, non-null
      */
     void recordSwarmPeer(Peer peer) {
@@ -635,7 +652,20 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         }
         Hash key = new Hash(destHash);
         long now = System.currentTimeMillis();
+        long quiet = _util.destLookupQuiet(key);
         synchronized (swarmSeen) {
+            if (!keepsSwarmPeer(quiet, now, now - SWARM_PEER_TTL, isConnected(key))) {
+                // An entry we are dropping rather than refreshing: the peer was named again
+                // while its destination was unresolvable, which is the swarm's word against
+                // the router's. Once, not on every re-advertisement - the entry is gone, so
+                // the next time this peer is named there is nothing left to drop.
+                if (swarmSeen.remove(key) != null && _log.shouldDebug()) {
+                    _log.debug("Dropped a swarm peer -> Destination unresolvable"
+                               + " * Peer: " + SnarkLogFormatter.dest(key)
+                               + " * Torrent: " + SnarkLogFormatter.torrent(snark));
+                }
+                return;
+            }
             if (!swarmSeen.containsKey(key) && swarmSeen.size() >= MAX_SWARM_PEERS) {
                 // stay bounded, drop the oldest entry
                 long oldest = Long.MAX_VALUE;
@@ -655,14 +685,57 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
+     * Whether a remembered swarm peer is still worth counting. A peer we are connected to is
+     * counted whatever else is true. Otherwise the swarm's own word is what keeps it: a peer
+     * no source has named since {@code cutoff} goes, and so does one whose destination the
+     * router has stopped resolving - four failed network-database searches say it has gone
+     * away, and the tracker, the DHT and PEX go on naming a dead peer for the life of a
+     * torrent. Pure and package-visible so the retention rule can be pinned by test.
+     *
+     * @param quiet how long this peer's destination is still held as unresolvable, 0 if a
+     *              lookup may run again now
+     * @param lastSeen when any source last named this peer, in millis
+     * @param cutoff the oldest last-seen time still worth keeping, in millis
+     * @param connected true if we are connected to this peer right now
+     * @return true to keep remembering this peer
+     * @since 0.9.72+
+     */
+    static boolean keepsSwarmPeer(long quiet, long lastSeen, long cutoff, boolean connected) {
+        if (connected) {
+            return true;
+        }
+        return quiet <= 0 && lastSeen >= cutoff;
+    }
+
+    /**
+     * Whether we hold a connected peer for this destination hash. Callers hold the
+     * {@link #swarmSeen} monitor; the peer list is a concurrent deque, so this does not
+     * deadlock against the peers monitor.
+     *
+     * @param key the destination hash to look for
+     * @return true if a connected peer with that destination is in use
+     */
+    private boolean isConnected(Hash key) {
+        for (Peer p : peers) {
+            byte[] destHash = p.getPeerID().getDestHash();
+            if (destHash != null && key.equals(new Hash(destHash))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Distinct swarm peers seen recently (within {@link #SWARM_PEER_TTL}) or
      * currently connected, for the torrent view peer count. Prunes stale
-     * entries lazily.
+     * entries lazily, including the peers whose destination the router can no
+     * longer resolve.
      *
      * @return the count, 0 if none
      */
     public int getSwarmPeerCount() {
-        long cutoff = System.currentTimeMillis() - SWARM_PEER_TTL;
+        long now = System.currentTimeMillis();
+        long cutoff = now - SWARM_PEER_TTL;
         Set<Hash> connected = new HashSet<>(peers.size());
         for (Peer p : peers) {
             byte[] destHash = p.getPeerID().getDestHash();
@@ -675,11 +748,12 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             int rv = 0;
             while (it.hasNext()) {
                 Map.Entry<Hash, Long> e = it.next();
-                long lastSeen = e.getValue().longValue();
-                if (lastSeen < cutoff && !connected.contains(e.getKey())) {
-                    it.remove();
-                } else {
+                long quiet = _util.destLookupQuiet(e.getKey());
+                if (keepsSwarmPeer(quiet, e.getValue().longValue(), cutoff,
+                                   connected.contains(e.getKey()))) {
                     rv++;
+                } else {
+                    it.remove();
                 }
             }
             return rv;
