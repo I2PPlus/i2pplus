@@ -2349,11 +2349,64 @@ public class I2PSnarkUtil implements DisconnectListener, DestCache {
     static final long DEST_CACHE_NEGATIVE_MS = 5 * 60 * 1000L;
 
     /**
-     * Entries {@link #_destCache} holds before the expired ones are swept, so a torrent shown
-     * a long tail of dead peers cannot grow the map for the life of the router. An entry is a
-     * hash, an expiry, and on a hit a parsed destination of a few hundred bytes.
+     * Fewest answers {@link #_destCache} keeps before sweeping the expired ones, the floor of
+     * the heap-scaled figure from {@link #destCacheMax(long)}.
+     *
+     * @since 0.9.72+
      */
-    static final int DEST_CACHE_MAX = 512;
+    static final int DEST_CACHE_MIN = 512;
+
+    /**
+     * Most answers {@link #_destCache} keeps, however much heap the router has. This is the
+     * OOM guard: at {@link #DEST_CACHE_ENTRY_BYTES} an entry, the ceiling is 16 MB of
+     * destinations no matter how large the heap is.
+     *
+     * @since 0.9.72+
+     */
+    static final int DEST_CACHE_LIMIT = 16384;
+
+    /**
+     * What one cache entry costs, on the worst assumption that it holds a resolved destination
+     * rather than a miss: the 256-byte key, the signing key and certificate structure, and the
+     * hash key and expiry alongside it.
+     */
+    private static final int DEST_CACHE_ENTRY_BYTES = 1024;
+
+    /**
+     * Share of the maximum heap the destination cache may hold, as a denominator - a two
+     * hundredth of it. The cache is a lookup-time saving, not a store worth arguing heap with
+     * the tunnel pools or the transit buffers over.
+     */
+    private static final int DEST_CACHE_HEAP_DIVISOR = 200;
+
+    /**
+     * How many answers the destination cache holds before the expired ones are swept, scaled
+     * from the heap rather than fixed. A fixed 512 was sized for a handful of torrents: two
+     * thousand torrents with a swarm of a dozen-odd peers each name some 25,000 distinct
+     * destinations, so the map sits at the cap with every entry still fresh, and every hash
+     * that does not fit pays for a router lookup all over again - which is the load the cache
+     * exists to prevent. Scaling it from the heap keeps that true at any torrent count without
+     * ever risking the heap.
+     *
+     * @param maxHeapBytes the JVM's maximum heap, from {@link SystemVersion#getMaxMemory()}
+     * @return entries to hold, between {@link #DEST_CACHE_MIN} and {@link #DEST_CACHE_LIMIT}
+     * @since 0.9.72+
+     */
+    static int destCacheMax(long maxHeapBytes) {
+        if (maxHeapBytes <= 0) {
+            return DEST_CACHE_MIN;
+        }
+        long entries = maxHeapBytes / DEST_CACHE_HEAP_DIVISOR / DEST_CACHE_ENTRY_BYTES;
+        return entries < DEST_CACHE_MIN ? DEST_CACHE_MIN
+                                        : entries > DEST_CACHE_LIMIT ? DEST_CACHE_LIMIT
+                                                                     : (int) entries;
+    }
+
+    /**
+     * Entries {@link #_destCache} holds before the expired ones are swept, so a torrent shown
+     * a long tail of dead peers cannot grow the map for the life of the router.
+     */
+    private final int _destCacheMax = destCacheMax(SystemVersion.getMaxMemory());
 
     /**
      * Hash to the answer of a previous <code>.b32.i2p</code> lookup and the time that answer
@@ -2447,7 +2500,7 @@ public class I2PSnarkUtil implements DisconnectListener, DestCache {
     void cacheDestination(Hash h, Destination dest, long now, int attempts) {
         _destCache.put(h, new CachedDest(dest, now + destCacheTtl(dest, attempts),
                                          dest == null ? destCacheAttempts(attempts) : 0));
-        if (_destCache.size() > DEST_CACHE_MAX) {
+        if (_destCache.size() > _destCacheMax) {
             _destCache.values().removeIf(c -> now >= c.expires);
         }
     }
@@ -2459,6 +2512,15 @@ public class I2PSnarkUtil implements DisconnectListener, DestCache {
      */
     int destCacheSize() {
         return _destCache.size();
+    }
+
+    /**
+     * The cap the destination cache is working to, for the tests.
+     *
+     * @return entries before the expired ones are swept
+     */
+    int destCacheMax() {
+        return _destCacheMax;
     }
 
     /**

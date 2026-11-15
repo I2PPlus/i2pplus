@@ -271,14 +271,36 @@ public class DestLookupCacheTest {
     public void testExpiredAnswersAreDroppedWhenTheCacheIsFull() {
         I2PSnarkUtil util = new I2PSnarkUtil(I2PAppContext.getGlobalContext());
         long now = System.currentTimeMillis();
+        int cap = util.destCacheMax();
         // over the cap, every one of them written two hours ago, so every one of them is
         // already past its expiry by the time the last write sweeps the map
-        for (int i = 0; i < I2PSnarkUtil.DEST_CACHE_MAX; i++) {
+        for (int i = 0; i < cap; i++) {
             util.cacheDestination(hash(i), null, now - 2 * 60 * 60 * 1000L, 0);
         }
-        assertEquals(I2PSnarkUtil.DEST_CACHE_MAX, util.destCacheSize());
-        util.cacheDestination(hash(I2PSnarkUtil.DEST_CACHE_MAX), null, now, 0);
+        assertEquals(cap, util.destCacheSize());
+        util.cacheDestination(hash(cap), null, now, 0);
         assertEquals("the sweep kept expired answers", 1, util.destCacheSize());
+    }
+
+    /**
+     * The cache is sized from the heap, not fixed: a floor for a small heap, then a two
+     * hundredth of it, and a ceiling so no heap size can make it cost more than 16 MB of
+     * destinations. Two thousand torrents name some 25,000 destinations, and a cache stuck at
+     * the floor re-asks the router about all of them.
+     */
+    @Test
+    public void testTheCacheIsSizedFromTheHeap() {
+        // a heap too small to hold even the floor is still given the floor
+        assertEquals(I2PSnarkUtil.DEST_CACHE_MIN, I2PSnarkUtil.destCacheMax(0));
+        assertEquals(I2PSnarkUtil.DEST_CACHE_MIN,
+                     I2PSnarkUtil.destCacheMax(16 * 1024 * 1024L));
+        // 768 MB of heap, a two hundredth of it, at 1 KB an entry
+        assertEquals(3932, I2PSnarkUtil.destCacheMax(768L * 1024 * 1024));
+        // a heap that would buy more than the ceiling is capped, so the cache cannot OOM us
+        assertEquals(I2PSnarkUtil.DEST_CACHE_LIMIT,
+                     I2PSnarkUtil.destCacheMax(64L * 1024 * 1024 * 1024));
+        assertTrue("the ceiling covers a 2000-torrent swarm's hashes",
+                   I2PSnarkUtil.DEST_CACHE_LIMIT >= 16384);
     }
 
     /**
