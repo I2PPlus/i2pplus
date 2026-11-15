@@ -63,10 +63,12 @@ ext.workspaceVersion = providers.exec {
     workingDir = rootDir
 }.standardOutput.asText.map { it.trim() }.orElse('unknown')
 
-// Mirrors ant setBuildTimestamp: "reproducible" when -Dbuild.reproducible is
-// set, else the current UTC time
+// Mirrors ant setBuildTimestamp and its switchOn macro: the switch is ON when
+// -Dbuild.reproducible is set to anything except "false", so =false still gets a
+// real timestamp — the one rule every build switch in this tree follows.
 ext.buildTimestamp = providers.provider {
-    if (System.getProperty('build.reproducible') != null) {
+    def flag = System.getProperty('build.reproducible')
+    if (flag != null && flag != 'false') {
         'reproducible'
     } else {
         def fmt = new java.text.SimpleDateFormat('yyyy-MM-dd HH:mm:ss z', Locale.ENGLISH)

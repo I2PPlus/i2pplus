@@ -18,6 +18,28 @@
   <property name="jsp.build.dir" value="${build.dir}/jsp-output"/>
   <property name="tmp" value="${jsp.build.dir}/tmp"/>
   <property name="jsp" value="./jsp"/>
+
+  <!-- One test for every distro switch (-Dwith-libtaglibs-standard and friends):
+       the switch is ON when it is set to anything except "false". if/unless take
+       a property NAME, so the guarded targets below use the name form and this
+       turns the value into a set/unset property once, for every switch, so a
+       bare -Dswitch, =true and =false behave the same here as they do in the
+       top-level build.xml and in gradle. Same macro, same semantics, because
+       this file is also run on its own. -->
+  <macrodef name="switchOn">
+    <attribute name="name"/>
+    <attribute name="property"/>
+    <sequential>
+      <condition property="@{property}">
+        <and>
+          <isset property="@{name}"/>
+          <not>
+            <equals arg1="${@{name}}" arg2="false"/>
+          </not>
+        </and>
+      </condition>
+    </sequential>
+  </macrodef>
   <path id="cp">
     <pathelement location="${bin}"/>
     <!-- commons-el MUST be first to ensure we get the right (2.2) version otherwise:
@@ -94,7 +116,11 @@
     </javac>
   </target>
 
-  <target name="verifylibtaglibs" if="${with-libtaglibs-standard}">
+  <target name="-set-libtaglibs-flag">
+    <switchOn name="with-libtaglibs-standard" property="libtaglibs.on"/>
+  </target>
+
+  <target name="verifylibtaglibs" depends="-set-libtaglibs-flag" if="libtaglibs.on">
     <!-- lib/jstlel.jar should be a symlink to the package jar. If the package jar is not there,
          we will still compile fine but it won't run, so catch it here. -->
     <fail message="libtaglibs-standard-jstlel-java package must be installed for debian builds">

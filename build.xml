@@ -328,11 +328,61 @@
   <macrodef name="log-timestamp">
     <attribute name="message"/>
       <sequential>
+        <!-- local, so every call stamps the time of that call: ant properties are
+             immutable, and without this the stop stamp reprints the start time. -->
+        <local name="current.time"/>
         <tstamp>
           <format property="current.time" pattern="yyyy-MM-dd HH:mm:ss z" locale="en"/>
         </tstamp>
         <echo message="@{message} at ${current.time}"/>
       </sequential>
+  </macrodef>
+
+  <!-- Elapsed wall time between the two build stamps, as "123s". Ant has no
+       arithmetic of its own, so sh does the subtraction, the same way the pack200
+       size accounting in zipit200 does it. Without the start stamp, or without sh,
+       the figure is reported as unknown rather than left out, so a log line never
+       reads as a duration it is not. -->
+  <macrodef name="elapsed-since">
+    <attribute name="since"/>
+    <attribute name="out"/>
+    <sequential>
+      <if>
+        <and>
+          <isset property="@{since}"/>
+          <os family="unix"/>
+        </and>
+        <then>
+          <exec executable="sh" outputproperty="@{out}" failonerror="false">
+            <arg value="-c"/>
+            <arg value="echo $(( $(date +%s) - ${@{since}} ))s"/>
+          </exec>
+        </then>
+        <else>
+          <property name="@{out}" value="unknown"/>
+        </else>
+      </if>
+    </sequential>
+  </macrodef>
+
+  <!-- One test for every distro switch (-Dwith-libtomcat9-java and friends): the
+       switch is ON when it is set to anything except "false". if/unless take a
+       property NAME, so the guarded targets use the name form and this turns the
+       value into a set/unset property once, for every switch, so a bare
+       -Dswitch, =true and =false behave the same here as they do in gradle. -->
+  <macrodef name="switchOn">
+    <attribute name="name"/>
+    <attribute name="property"/>
+    <sequential>
+      <condition property="@{property}">
+        <and>
+          <isset property="@{name}"/>
+          <not>
+            <equals arg1="${@{name}}" arg2="false"/>
+          </not>
+        </and>
+      </condition>
+    </sequential>
   </macrodef>
 
   <macrodef name="gpgsign">
@@ -522,11 +572,21 @@
   </macrodef>
 
   <target name="timestamp.started">
-    <log-timestamp message="Build started"/>
+    <!-- Wall-clock start, in epoch seconds, for the elapsed figure the stop stamp
+         prints. POSIX date; failonerror="false" so a build without sh still gets
+         the pair. Ant properties are immutable, so a nested pair measures from the
+         outermost start, not its own - the invoked-targets name on both lines is
+         what tells the two apart in the log. -->
+    <exec executable="sh" osfamily="unix" outputproperty="build.start.epoch" failonerror="false">
+      <arg value="-c"/>
+      <arg value="date +%s"/>
+    </exec>
+    <log-timestamp message="Build started for ${ant.project.invoked-targets}"/>
   </target>
 
   <target name="timestamp.stopped">
-    <log-timestamp message="Build completed"/>
+    <elapsed-since since="build.start.epoch" out="build.elapsed"/>
+    <log-timestamp message="Build completed for ${ant.project.invoked-targets} (elapsed ${build.elapsed})"/>
   </target>
 
   <target name="dist" depends="pkg, javadoc"/>
@@ -957,14 +1017,32 @@
     <echo message="  Jasper/Tomcat: tools/scripts/update-tomcat.sh check, then apply"/>
   </target>
 
-  <target name="setBuildTimestamp" unless="${build.reproducible}">
+  <!-- if/unless take a property NAME. Written as if/unless="${name}" Ant expands
+       the value first and then tests that string, so the switch depends on what
+       it was set to rather than on whether it was set at all: =true, =yes and
+       =on read as ON, while =false, =1 and an empty value read as OFF. Measured
+       on 1.10.18. An empty value cannot come from the command line - ant refuses
+       a bare -Dname with "Missing value for property" - so it arrives from
+       build.properties or override.properties instead. Every switch in this
+       build goes through switchOn, so one rule holds everywhere: ON when set to
+       anything except "false", which is also how build.gradle reads the same
+       flags. -->
+  <target name="-set-reproducible-flag">
+    <switchOn name="build.reproducible" property="reproducible.on"/>
+  </target>
+
+  <target name="setBuildTimestamp" depends="-set-reproducible-flag" unless="reproducible.on">
     <tstamp>
       <format property="build.timestamp" pattern="yyyy-MM-dd HH:mm:ss z" timezone="UTC" locale="en"/>
     </tstamp>
   </target>
 
   <!-- Disable Class-Path in jar manifests by renaming it (Fedora) -->
-  <target name="disableManifestClasspath" if="${without-manifest-classpath}">
+  <target name="-set-manifest-classpath-flag">
+    <switchOn name="without-manifest-classpath" property="manifest.classpath.off"/>
+  </target>
+
+  <target name="disableManifestClasspath" depends="-set-manifest-classpath-flag" if="manifest.classpath.off">
     <property name="manifest.classpath.name" value="Disabled-Class-Path"/>
   </target>
 
@@ -2979,27 +3057,59 @@
     <copy quiet="true" verbose="false" file="${build.root}build/jetty-i2p.jar" todir="${pkg.temp.dir}/lib"/>
   </target>
 
-  <target name="copyjetty-unlesspkg" unless="${with-libjetty9-java}">
+  <target name="-set-libjetty-flag">
+    <switchOn name="with-libjetty9-java" property="libjetty9.on"/>
+  </target>
+
+  <target name="copyjetty-unlesspkg" depends="-set-libjetty-flag" unless="libjetty9.on">
     <copy quiet="true" verbose="false" todir="${pkg.temp.dir}/lib">
       <fileset dir="${build.root}build/" includes="javax.servlet.jar jetty*.jar org.mortbay.*.jar" excludes="jetty-i2p.jar"/>
     </copy>
   </target>
 
   <target name="settomcatprop">
+    <switchOn name="with-libtomcat6-java" property="libtomcat6.on"/>
+    <switchOn name="with-libtomcat7-java" property="libtomcat7.on"/>
+    <switchOn name="with-libtomcat8-java" property="libtomcat8.on"/>
+    <switchOn name="with-libtomcat9-java" property="libtomcat9.on"/>
     <condition property="with-libtomcat-java">
       <or>
-        <istrue value="${with-libtomcat6-java}"/>
-        <istrue value="${with-libtomcat7-java}"/>
-        <istrue value="${with-libtomcat8-java}"/>
-        <istrue value="${with-libtomcat9-java}"/>
+        <isset property="libtomcat6.on"/>
+        <isset property="libtomcat7.on"/>
+        <isset property="libtomcat8.on"/>
+        <isset property="libtomcat9.on"/>
       </or>
     </condition>
   </target>
 
-  <target name="copytomcat-unlesspkg" depends="settomcatprop" unless="${with-libtomcat-java}">
+  <target name="copytomcat-unlesspkg" depends="settomcatprop" unless="with-libtomcat-java">
     <copy quiet="true" verbose="false" todir="${pkg.temp.dir}/lib">
       <fileset dir="${build.root}build/" includes="commons*.jar jasper*.jar javax*.jar"/>
     </copy>
+  </target>
+
+  <!-- The Tomcat/Jasper half of the vendored jars and only that half: the five
+       jars apps/jetty/build.xml assembles out of apache-tomcat-${tomcat.ver}.
+       jasper-compiler.jar and commons-logging.jar are deliberately empty - they
+       exist so an update overwrites whatever the install already has. Staged
+       from ${build.root}build, where buildJetty unpacks jettylib/. No jetty*.jar
+       here, which is the whole point of the target: a Jasper/Tomcat bump does
+       not have to ship the Jetty distribution along with it. Skipped when the
+       build takes Tomcat from the system package, the same gate
+       copytomcat-unlesspkg uses, so an update cannot clobber a distro Tomcat. -->
+  <target name="preptomcatupdate" depends="buildJetty, settomcatprop">
+    <if>
+      <isset property="with-libtomcat-java"/>
+      <then>
+        <echo message="Tomcat comes from the system package -> Update carries no Jasper/Tomcat jars"/>
+      </then>
+      <else>
+        <copy quiet="true" verbose="false" todir="${pkg.temp.dir}/lib">
+          <fileset dir="${build.root}build/"
+            includes="jasper-compiler.jar jasper-runtime.jar commons-el.jar commons-logging.jar javax.servlet.jar"/>
+        </copy>
+      </else>
+    </if>
   </target>
 
   <!--
@@ -3008,23 +3118,29 @@
        and libjstl1.1-java isn't sufficient,
        so we only skip it with libtaglibs-standard
     -->
-  <target name="copyjstl-unlesspkg" unless="${with-libtaglibs-standard}">
+  <target name="-set-libtaglibs-flag">
+    <switchOn name="with-libtaglibs-standard" property="libtaglibs.on"/>
+  </target>
+
+  <target name="copyjstl-unlesspkg" depends="-set-libtaglibs-flag" unless="libtaglibs.on">
     <copy quiet="true" verbose="false" file="apps/susidns/src/lib/jstl.jar" todir="${pkg.temp.dir}/lib/"/>
   </target>
 
   <!-- standard.jar -->
   <target name="copystandard-unlesspkg" depends="copystandard-unlesspkg1, copystandard-unlesspkg2"/>
   <target name="copystandard-unlesspkg1">
+    <switchOn name="with-libtaglibs-standard" property="libtaglibs.on"/>
+    <switchOn name="with-glassfish-javaee" property="glassfish.on"/>
+    <switchOn name="with-libjakarta-taglibs-standard-java" property="jakarta-taglibs.on"/>
     <condition property="with-any-standard-pkg">
       <or>
-        <istrue value="${with-libtaglibs-standard}"/>
-        <istrue value="${with-glassfish-javaee}"/>
-        <istrue value="${with-libjakarta-taglibs-standard-java}"/>
+        <isset property="libtaglibs.on"/>
+        <isset property="glassfish.on"/>
+        <isset property="jakarta-taglibs.on"/>
       </or>
-
     </condition>
   </target>
-  <target name="copystandard-unlesspkg2" unless="${with-any-standard-pkg}">
+  <target name="copystandard-unlesspkg2" unless="with-any-standard-pkg">
     <copy quiet="true" verbose="false" file="apps/susidns/src/lib/standard.jar" todir="${pkg.temp.dir}/lib/"/>
   </target>
 
@@ -3253,6 +3369,9 @@
   <target name="updaterWithJettyAndJbigi" depends="timestamp.started, prepjupdate, prepjbigiupdate, zipit, timestamp.stopped"/>
   <target name="updaterWithJettyAndJbigiRepack" depends="timestamp.started, prepjupdate, prepjbigiupdate, repack200, zipit, timestamp.stopped"/>
   <target name="updaterWithJetty" depends="timestamp.started, prepjupdate, zipit, timestamp.stopped"/>
+  <!-- The same update with only the Jasper/Tomcat jars swapped - no Jetty
+       distribution. Use it for a tools/scripts/update-tomcat.sh bump. -->
+  <target name="updaterWithTomcat" depends="timestamp.started, prepupdate, preptomcatupdate, zipit, timestamp.stopped"/>
   <target name="updaterWithJettyFixesAndGeoIP" depends="timestamp.started, prepjupdatefixes, prepgeoupdate, zipit, timestamp.stopped"/>
   <target name="updaterWithJettyFixesAndJbigi" depends="timestamp.started, prepjupdatefixes, prepjbigiupdate, zipit, timestamp.stopped"/>
   <target name="updaterWithJettyFixes" depends="timestamp.started, prepjupdatefixes, preplicenses, zipit, timestamp.stopped"/>
@@ -3418,6 +3537,7 @@
   <target name="updater200WithJettyAndGeoIP" depends="timestamp.started, prepjupdate, prepgeoupdate, pack200, zipit200, timestamp.stopped"/>
   <target name="updater200WithJettyAndJbigi" depends="timestamp.started, prepjupdate, prepjbigiupdate, pack200, zipit200, timestamp.stopped"/>
   <target name="updater200WithJetty" depends="timestamp.started, prepjupdate, pack200, zipit200, timestamp.stopped"/>
+  <target name="updater200WithTomcat" depends="timestamp.started, prepupdate, preptomcatupdate, pack200, zipit200, timestamp.stopped"/>
   <target name="updater200WithJettyFixesAndGeoIP" depends="timestamp.started, prepjupdatefixes, prepgeoupdate, pack200, zipit200, timestamp.stopped"/>
   <target name="updater200Full" depends="timestamp.started, prepjupdate, prepgeoupdate, prepjbigiupdate, pack200, zipit200, timestamp.stopped"/>
   <!-- Signs the pack200 update. Callers that build the plain (non-compressed)
@@ -3435,6 +3555,7 @@
   <target name="signed-updater" depends="timestamp.started, -pre-sign, updater, -sign-update-plain, timestamp.stopped"/>
   <target name="signed-updater200" depends="timestamp.started, -pre-sign, updater200, -sign-update, timestamp.stopped"/>
   <target name="signed-updater200WithJetty" depends="timestamp.started, -pre-sign, updater200WithJetty, -sign-update, timestamp.stopped"/>
+  <target name="signed-updater200WithTomcat" depends="timestamp.started, -pre-sign, updater200WithTomcat, -sign-update, timestamp.stopped"/>
   <target name="signed-updater200WithJettyAndGeoIP" depends="timestamp.started, -pre-sign, updater200WithJettyAndGeoIP, -sign-update, timestamp.stopped"/>
   <target name="signed-updater200Full" depends="timestamp.started, -pre-sign, updater200Full, -sign-update, timestamp.stopped"/>
   <target name="signed-updater200WithJavadoc" depends="timestamp.started, -pre-sign, updater200WithJavadoc, -sign-update, timestamp.stopped"/>
@@ -3684,7 +3805,11 @@
 
   <!-- GeoIP database, set withGeoIPDatabase=true in override.properties to prevent -->
   <!-- As of 0.9.26, the files are not included in Debian/Ubuntu builds. -->
-  <target name="prepgeoupdate-unlesspkg" unless="${with-geoip-database}">
+  <target name="-set-geoip-flag">
+    <switchOn name="with-geoip-database" property="geoip.on"/>
+  </target>
+
+  <target name="prepgeoupdate-unlesspkg" depends="-set-geoip-flag" unless="geoip.on">
     <mkdir dir="${pkg.temp.dir}/geoip"/>
     <gunzip src="installer/resources/geoip/GeoLite2-Country.mmdb.gz" dest="${pkg.temp.dir}/geoip/GeoLite2-Country.mmdb"/>
     <gunzip src="installer/resources/geoip/db-ip-asn.mmdb.gz" dest="${pkg.temp.dir}/geoip/db-ip-asn.mmdb"/>
@@ -6008,12 +6133,23 @@
     <condition property="download.fail">
       <contains string="${shell.output}" substring="Failed to download the latest list."/>
     </condition>
-    <antcall target="echo.torblocklistsuccess">
-      <param name="condition" value="${download.success}"/>
-    </antcall>
-    <antcall target="echo.torblocklistfail">
-      <param name="condition" value="${download.fail}"/>
-    </antcall>
+    <!-- The two echo targets used to be gated by if="${condition}" fed from
+         <param name="condition" value="${download.success}"/>, which works only
+         because an unset property expands to its own name: the test was on the
+         VALUE of a string, not on whether the run succeeded. Test the condition
+         properties themselves instead. -->
+    <if>
+      <isset property="download.success"/>
+      <then>
+        <antcall target="echo.torblocklistsuccess"/>
+      </then>
+    </if>
+    <if>
+      <isset property="download.fail"/>
+      <then>
+        <antcall target="echo.torblocklistfail"/>
+      </then>
+    </if>
   </target>
 
   <target name="updateWrapper">
@@ -6030,12 +6166,12 @@
     <echo message="Wrapper update complete."/>
   </target>
 
-  <target name="echo.torblocklistsuccess" if="${condition}">
+  <target name="echo.torblocklistsuccess">
     <property name="message" value="Successfully updated the Tor blocklist."/>
     <echo level="info" message="${message}"/>
   </target>
 
-  <target name="echo.torblocklistfail" if="${condition}">
+  <target name="echo.torblocklistfail">
     <property name="message" value="Failed to update the Tor blocklist."/>
     <echo level="error" message="${message}"/>
   </target>

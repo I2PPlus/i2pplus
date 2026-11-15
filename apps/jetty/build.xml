@@ -35,6 +35,28 @@
   <property name="tomcat.lib" value="apache-tomcat-${tomcat.ver}/lib"/>
   <property name="tomcat.bin" value="apache-tomcat-${tomcat.ver}/bin"/>
 
+  <!-- One test for every distro switch (-Dwith-libtomcat9-java and friends): the
+       switch is ON when it is set to anything except "false". if/unless take a
+       property NAME, so the guarded targets below use the name form and this
+       turns the value into a set/unset property once, for every switch, so a
+       bare -Dswitch, =true and =false behave the same here as they do in the
+       top-level build.xml and in gradle. Same macro, same semantics, because
+       this file is also run on its own. -->
+  <macrodef name="switchOn">
+    <attribute name="name"/>
+    <attribute name="property"/>
+    <sequential>
+      <condition property="@{property}">
+        <and>
+          <isset property="@{name}"/>
+          <not>
+            <equals arg1="${@{name}}" arg2="false"/>
+          </not>
+        </and>
+      </condition>
+    </sequential>
+  </macrodef>
+
   <target name="all" depends="build"/>
 
   <!-- The Jetty archive is checked in unpacked as ${jetty.base}, so the fetch,
@@ -133,9 +155,11 @@
   <target name="copyJettylib"
     depends="mkJettylibdir, copyJettylib1, copyTomcatLib1, copyJettylib2, copyJettylib3, copyTomcatLib"/>
 
-  <!-- Jetty files only -->
-  <target name="copyJettylib1" depends="extractJettylib"
-    unless="${with-libjetty9-java}">
+  <!-- Jetty files only. copyTomcatLib1 only computes the switch properties, so
+       running it first lets this guard read the normalized libjetty9.on and
+       makes the target correct when it is invoked on its own. -->
+  <target name="copyJettylib1" depends="extractJettylib, copyTomcatLib1"
+    unless="libjetty9.on">
     <!-- The version is dropped from every name so a version bump overwrites the
          old jar in place. Where Jetty 5 or 6 shipped an equivalent jar we keep
          the old name (jetty-server becomes org.mortbay.jetty.jar, jetty-jmx
@@ -220,7 +244,7 @@
        originals rather than the copies in the Jetty archive so a Debian build,
        which has to use the distro's libtomcat, ends up with the same classes. -->
   <target name="copyJettylib2" depends="extractJettylib, copyTomcatLib1"
-    unless="${with-libtomcat-java}">
+    unless="with-libtomcat-java">
     <jar destfile="jettylib/javax.servlet.jar" duplicate="preserve"
       filesetmanifest="mergewithoutmain">
       <zipfileset src="${tomcat.lib}/servlet-api.jar"/>
@@ -233,7 +257,7 @@
        Jetty; otherwise it is merged into jasper-runtime.jar by copyTomcatLib2
        below. -->
   <target name="copyJettylib3" depends="extractJettylib, copyTomcatLib1"
-    if="${with-libtomcat-without-libjetty}">
+    if="with-libtomcat-without-libjetty">
     <copy preservelastmodified="true"
       file="${jetty.base}/lib/apache-jsp/org.eclipse.jetty.apache-jsp-${jetty.ver}.jar"
       tofile="jettylib/jetty-apache-jsp.jar"/>
@@ -254,19 +278,24 @@
     depends="mkJettylibdir, copyTomcatLib1, copyTomcatLib2, copyTomcatLib3"/>
 
   <target name="copyTomcatLib1">
+    <switchOn name="with-libtomcat6-java" property="libtomcat6.on"/>
+    <switchOn name="with-libtomcat7-java" property="libtomcat7.on"/>
+    <switchOn name="with-libtomcat8-java" property="libtomcat8.on"/>
+    <switchOn name="with-libtomcat9-java" property="libtomcat9.on"/>
+    <switchOn name="with-libjetty9-java" property="libjetty9.on"/>
     <condition property="with-libtomcat-java">
       <or>
-        <istrue value="${with-libtomcat6-java}"/>
-        <istrue value="${with-libtomcat7-java}"/>
-        <istrue value="${with-libtomcat8-java}"/>
-        <istrue value="${with-libtomcat9-java}"/>
+        <isset property="libtomcat6.on"/>
+        <isset property="libtomcat7.on"/>
+        <isset property="libtomcat8.on"/>
+        <isset property="libtomcat9.on"/>
       </or>
     </condition>
     <condition property="with-libtomcat-without-libjetty">
       <and>
-        <istrue value="${with-libtomcat-java}"/>
+        <isset property="with-libtomcat-java"/>
         <not>
-          <istrue value="${with-libjetty9-java}"/>
+          <isset property="libjetty9.on"/>
         </not>
       </and>
     </condition>
@@ -274,7 +303,7 @@
 
 
   <!-- commons-el.jar and jasper-runtime.jar -->
-  <target name="copyTomcatLib2" unless="${with-libtomcat-java}">
+  <target name="copyTomcatLib2" unless="with-libtomcat-java">
     <!-- commons-el.jar: the EL API (javax.el) plus Tomcat's implementation of it -->
     <jar destfile="jettylib/commons-el.jar" duplicate="preserve"
       filesetmanifest="mergewithoutmain">
@@ -310,7 +339,7 @@
     </jar>
   </target>
 
-  <target name="copyTomcatLib3" unless="${with-libtomcat-java}">
+  <target name="copyTomcatLib3" unless="with-libtomcat-java">
     <jar destfile="jettylib/jasper-compiler.jar">
       <manifest>
         <attribute name="Note" value="Intentionally empty"/>
