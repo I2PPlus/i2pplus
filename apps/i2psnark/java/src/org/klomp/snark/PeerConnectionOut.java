@@ -321,9 +321,9 @@ class PeerConnectionOut implements Runnable {
                                                         nm.begin,
                                                         nm.length);
                                         if (_log.shouldDebug()) {
-                                            _log.debug("Sending " + r.typeName() + r.logArgs()
-                                                       + " * Peer: "
-                                                       + SnarkLogFormatter.peer(peer));
+                                            _log.debug("Sending " + r.typeName() + " to "
+                                                       + SnarkLogFormatter.peer(peer)
+                                                       + r.logArgs());
                                         }
                                         // defer the write: sendMessage blocks, and we
                                         // are holding the sendQueue monitor
@@ -342,14 +342,16 @@ class PeerConnectionOut implements Runnable {
                                 } else if (shouldThrottleRequests) {
                                     // previous request in queue throttled, skip this one too
                                     if (_log.shouldDebug())
-                                        _log.debug("Extra request throttled" + nm.logArgs()
-                                                   + " * Peer: " + SnarkLogFormatter.peer(peer));
+                                        _log.debug("Extra request throttled for "
+                                                   + SnarkLogFormatter.peer(peer)
+                                                   + nm.logArgs());
                                     nm = null;
                                 } else if (!peer.shouldRequest(nm.length)) {
                                     // request throttle, skip this and all others in this loop
                                     if (_log.shouldDebug())
-                                        _log.debug("Request throttled" + nm.logArgs()
-                                                   + " * Peer: " + SnarkLogFormatter.peer(peer));
+                                        _log.debug("Request throttled for "
+                                                   + SnarkLogFormatter.peer(peer)
+                                                   + nm.logArgs());
                                     shouldThrottleRequests = true;
                                     nm = null;
                                 }
@@ -368,8 +370,9 @@ class PeerConnectionOut implements Runnable {
                                 // simply wait right here and then loop
                                 if (!peer.shouldSend(Math.min(m.length, PeerState.PARTSIZE))) {
                                     if (_log.shouldDebug())
-                                        _log.debug("Piece throttled" + m.logArgs()
-                                                   + " * Peer: " + SnarkLogFormatter.peer(peer));
+                                        _log.debug("Piece throttled for "
+                                                   + SnarkLogFormatter.peer(peer)
+                                                   + m.logArgs());
                                     try {
                                         sendQueue.wait(5000);
                                     } catch (InterruptedException ie) { /* ignored */ }
@@ -398,8 +401,8 @@ class PeerConnectionOut implements Runnable {
                         // and says what it cancels as well, so this line duplicated
                         // that one for every peer on every finished piece (26,644
                         // pairs in a two-hour window)
-                        _log.debug("Sending " + m.typeName() + m.logArgs()
-                                   + " * Peer: " + SnarkLogFormatter.peer(peer));
+                        _log.debug("Sending " + m.typeName() + " to "
+                                   + SnarkLogFormatter.peer(peer) + m.logArgs());
                     }
 
                     lastSent = System.currentTimeMillis();
@@ -422,9 +425,8 @@ class PeerConnectionOut implements Runnable {
             // Ignore, probably other side closed connection.
             if (_log.shouldInfo()) {
                 String msg = ioe.getMessage();
-                _log.info("Send failed -> "
-                          + (msg != null ? msg : "No message from the socket")
-                          + " * Peer: " + SnarkLogFormatter.peer(peer));
+                _log.info("Send failed for " + SnarkLogFormatter.peer(peer) + " -> "
+                          + (msg != null ? msg : "No message from the socket"));
             }
         } catch (OutOfMemoryError oome) {
             _log.error("Send failed for " + SnarkLogFormatter.peer(peer), oome);
@@ -496,14 +498,14 @@ class PeerConnectionOut implements Runnable {
                         sendQueue.offer(m);
                     } else {
                         if (_log.shouldWarn()) {
-                            _log.warn("Send queue full, dropped" + m.logArgs()
-                                      + " * Peer: " + SnarkLogFormatter.peer(peer));
+                            _log.warn("Send queue full, dropped for "
+                                      + SnarkLogFormatter.peer(peer) + m.logArgs());
                         }
                     }
                 } else {
                     if (_log.shouldWarn()) {
-                        _log.warn("Send queue full, dropped" + m.logArgs()
-                                  + " * Peer: " + SnarkLogFormatter.peer(peer));
+                        _log.warn("Send queue full, dropped for "
+                                  + SnarkLogFormatter.peer(peer) + m.logArgs());
                     }
                 }
             }
@@ -547,8 +549,8 @@ class PeerConnectionOut implements Runnable {
                     if (type == Message.PIECE && peer.supportsFast()) {
                         Message r = new Message(Message.REJECT, m.piece, m.begin, m.length);
                         if (_log.shouldDebug())
-                            _log.debug("Sending " + r.typeName() + r.logArgs()
-                                       + " * Peer: " + SnarkLogFormatter.peer(peer));
+                            _log.debug("Sending " + r.typeName() + " to "
+                                       + SnarkLogFormatter.peer(peer) + r.logArgs());
                         // the caller writes these, outside the monitor
                         if (rejects == null) {
                             rejects = new ArrayList<>(4);
@@ -694,8 +696,8 @@ class PeerConnectionOut implements Runnable {
             Request req = it.next();
             if (now > req.sendTime + REQ_TIMEOUT) {
                 if (_log.shouldDebug()) {
-                    _log.debug("Retransmitting a request" + req.logForm()
-                               + " * Peer: " + SnarkLogFormatter.peer(peer));
+                    _log.debug("Retransmitting a request to "
+                               + SnarkLogFormatter.peer(peer) + req.logForm());
                 }
                 sendRequest(req);
             }
@@ -732,8 +734,8 @@ class PeerConnectionOut implements Runnable {
                         && m.begin == req.off
                         && m.length == req.len) {
                     if (_log.shouldDebug()) {
-                        _log.debug("Duplicate request discarded" + req.logForm()
-                                   + " * Peer: " + SnarkLogFormatter.peer(peer));
+                        _log.debug("Duplicate request discarded for "
+                                   + SnarkLogFormatter.peer(peer) + req.logForm());
                     }
                     return;
                 }
@@ -845,8 +847,8 @@ class PeerConnectionOut implements Runnable {
             }
             m.completeLoad(ba);
         } catch (Throwable t) {
-            _log.error("Piece prefetch failed" + m.logArgs() + " * Peer: "
-                       + SnarkLogFormatter.peer(peer), t);
+            _log.error("Piece prefetch failed for " + SnarkLogFormatter.peer(peer)
+                       + m.logArgs(), t);
             m.completeLoad(null);
         } finally {
             _prefetchInFlight.decrementAndGet();

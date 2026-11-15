@@ -182,10 +182,9 @@ class DHTTracker {
             // but a handful of them the same peer re-announcing itself. Say it when
             // the peer joins the torrent's list or starts seeding it.
             if (_log.shouldDebug() && (joined || becameSeed)) {
-                _log.debug("Announcing a peer to the DHT -> "
+                _log.debug("Announcing " + SnarkLogFormatter.dest(hash) + " to the DHT -> "
                            + (joined ? "Joined the torrent's peer list" : "Now seeding")
-                           + " * Torrent: " + SnarkLogFormatter.infoHash(ih.getData())
-                           + " * Peer: " + SnarkLogFormatter.dest(hash));
+                           + " * Infohash: " + SnarkLogFormatter.infoHash(ih.getData()));
             }
         } else {
             // We don't update setLastSeen here so that the peer

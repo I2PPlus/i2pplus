@@ -1417,7 +1417,7 @@ public class I2PSnarkUtil implements DisconnectListener, DestCache {
             TorrentDest td = _torrentDests.remove(key);
             if (td != null && td.unassign(key)) {
                 if (_log.shouldInfo()) {
-                    _log.info("Unassigned torrent destination -> Destroying it * Torrent: "
+                    _log.info("Unassigned torrent destination -> Destroying it * Infohash: "
                               + SnarkLogFormatter.infoHashKey(key));
                 }
                 td.destroy();
@@ -1952,13 +1952,13 @@ public class I2PSnarkUtil implements DisconnectListener, DestCache {
      * and none of that is greppable or comparable by eye.
      *
      * @param url the request URL, may be null
-     * @return {@code "Tracker: h * Torrent: xxxxxxxx"}; the {@code Torrent} segment
+     * @return {@code "Tracker: h * Infohash: xxxxxxxx"}; the {@code Infohash} segment
      *         is left out when the URL is not a query about a torrent
      * @since 0.9.72+
      */
     static String fetchTarget(String url) {
         String ih = fetchInfoHash(url);
-        return "Tracker: " + trackerHost(url) + (ih != null ? " * Torrent: " + ih : "");
+        return "Tracker: " + trackerHost(url) + (ih != null ? " * Infohash: " + ih : "");
     }
 
     /**
@@ -2639,11 +2639,12 @@ public class I2PSnarkUtil implements DisconnectListener, DestCache {
                     if (hit != null && destCacheFresh(hit.expires, now)) {
                         if (_log.shouldDebug()) {
                             if (hit.dest != null) {
-                                _log.debug("Reusing a destination resolved earlier -> Dialable"
-                                           + " * Destination: " + SnarkLogFormatter.dest(h));
+                                _log.debug("Reusing a cached destination for "
+                                           + SnarkLogFormatter.dest(h) + " -> Dialable");
                             } else {
-                                _log.debug("Skipping a destination lookup -> Held as unresolvable"
-                                           + " * Destination: " + SnarkLogFormatter.dest(h)
+                                _log.debug("Skipping a destination lookup for "
+                                           + SnarkLogFormatter.dest(h)
+                                           + " -> Held as unresolvable"
                                            + " * Retry in: "
                                            + DataHelper.formatDuration(hit.expires - now));
                             }
@@ -2659,17 +2660,18 @@ public class I2PSnarkUtil implements DisconnectListener, DestCache {
                 I2PSession sess = mgr != null ? mgr.getSession() : null;
                 if (h != null && sess != null) {
                     if (_log.shouldDebug()) {
-                        _log.debug("Asking the router for a destination -> Using the existing"
-                                   + " session * Destination: " + SnarkLogFormatter.dest(h));
+                        _log.debug("Asking the router for the destination of "
+                                   + SnarkLogFormatter.dest(h)
+                                   + " -> Using the existing session");
                     }
                     Destination dest = null;
                     try {
                         dest = sess.lookupDest(h, DEST_LOOKUP_TIMEOUT_MS);
                     } catch (I2PSessionException ise) { /* ignored */ }
                     if (_log.shouldDebug() && dest == null) {
-                        _log.debug("Resolved no destination -> Retrying in "
+                        _log.debug("Resolved no destination for " + SnarkLogFormatter.dest(h)
+                                   + " -> Retrying in "
                                    + DataHelper.formatDuration(destCacheTtl(null, attempts))
-                                   + " * Destination: " + SnarkLogFormatter.dest(h)
                                    + " * Attempt: " + (attempts + 1) + " of "
                                    + DEST_RETRY_ATTEMPTS);
                     }

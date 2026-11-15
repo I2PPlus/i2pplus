@@ -4544,7 +4544,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
         long suppressed = _lookupBusySuppressed.getAndSet(0);
         _log.info("Lookup by " + how + " -> All " + MAX_LOOKUP_CONCURRENCY
-                  + " lookup slots busy * Torrent: " + SnarkLogFormatter.infoHash(infoHash)
+                  + " lookup slots busy * Infohash: " + SnarkLogFormatter.infoHash(infoHash)
                   + (suppressed > 0 ? " * Repeats suppressed: " + suppressed : ""));
     }
 
@@ -4671,7 +4671,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         if (_log.shouldInfo()) {
             _log.info("Metadata lookup timed out -> Trying this torrent again in "
                       + DataHelper.formatDuration(retry.retryAt - now)
-                      + "\n* Torrent: " + SnarkLogFormatter.infoHash(infoHash)
+                      + "\n* Infohash: " + SnarkLogFormatter.infoHash(infoHash)
                       + " * Failures: " + retry.failures);
         }
     }
@@ -4783,7 +4783,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     _util.setLookupPending(true);
                 }
             } catch (Exception e) {
-                _log.warn("Lookup by name -> Adding magnet failed * Torrent: "
+                _log.warn("Lookup by name -> Adding magnet failed * Infohash: "
                           + SnarkLogFormatter.infoHash(infoHash), e);
                 FileUtil.rmdir(lookupDir, false);
                 return null;
@@ -4871,7 +4871,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     try {
                         deleteMagnet(toDelete);
                     } catch (Exception e) {
-                        _log.warn("Lookup by name -> Deleting magnet failed * Torrent: "
+                        _log.warn("Lookup by name -> Deleting magnet failed * Infohash: "
                                   + SnarkLogFormatter.infoHash(infoHash), e);
                     }
                     // Delete .torrent file if it was written to lookupDir (now possibly in default dir)
@@ -4997,7 +4997,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     _util.setLookupPending(true);
                 }
             } catch (Exception e) {
-                _log.warn("Lookup by info -> Adding magnet failed * Torrent: "
+                _log.warn("Lookup by info -> Adding magnet failed * Infohash: "
                           + SnarkLogFormatter.infoHash(infoHash), e);
                 FileUtil.rmdir(lookupDir, false);
                 return null;
@@ -5069,7 +5069,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     try {
                         deleteMagnet(toDelete);
                     } catch (Exception e) {
-                        _log.warn("Lookup by info -> Deleting magnet failed * Torrent: "
+                        _log.warn("Lookup by info -> Deleting magnet failed * Infohash: "
                                   + SnarkLogFormatter.infoHash(infoHash), e);
                     }
                     if (toDeleteName != null && toDeleteName.endsWith(".torrent")) {
@@ -5236,7 +5236,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             try {
                 deleteMagnet(snark);
             } catch (Exception e) {
-                _log.warn("Stale lookup cleanup -> Deleting magnet failed * Torrent: "
+                _log.warn("Stale lookup cleanup -> Deleting magnet failed * Infohash: "
                           + SnarkLogFormatter.infoHash(ih), e);
             }
             // Clean up tmp dir

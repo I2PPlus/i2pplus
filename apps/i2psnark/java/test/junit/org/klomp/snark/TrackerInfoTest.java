@@ -151,7 +151,7 @@ public class TrackerInfoTest {
     @Test
     public void testFailureFormQuotesTheTrackersReason() throws Throwable {
         TrackerInfo info = parse("d14:failure reason7:go awaye");
-        assertEquals(" -> Torrent: " + HASH8 + " * Reason: go away", info.logForm());
+        assertEquals(" -> Infohash: " + HASH8 + " * Reason: go away", info.logForm());
     }
 
     /**
@@ -164,7 +164,7 @@ public class TrackerInfoTest {
     @Test
     public void testSuccessFormCarriesADuration() throws Throwable {
         TrackerInfo info = parse("d8:intervali30e5:peers0:e");
-        assertEquals(" -> Torrent: " + HASH8 + " * Interval: 30s", info.logForm());
+        assertEquals(" -> Infohash: " + HASH8 + " * Interval: 30s", info.logForm());
     }
 
     /**
@@ -177,7 +177,7 @@ public class TrackerInfoTest {
     public void testSuccessFormLabelsTheCounts() throws Throwable {
         TrackerInfo info =
                 parse("d8:intervali1800e8:completei5e10:incompletei2e5:peers0:e");
-        assertEquals(" -> Torrent: " + HASH8 + " * Interval: 30m * Seeds: 5 * Leeches: 2",
+        assertEquals(" -> Infohash: " + HASH8 + " * Interval: 30m * Seeds: 5 * Leeches: 2",
                      info.logForm());
     }
 
@@ -194,7 +194,7 @@ public class TrackerInfoTest {
         TrackerInfo info = parse(
                 "d8:intervali1800e5:peers64:" + compactPeer('a') + compactPeer('b') + "e");
         String s = info.logForm();
-        assertEquals(" -> Torrent: " + HASH8 + " * Interval: 30m * Peers: 2", s);
+        assertEquals(" -> Infohash: " + HASH8 + " * Interval: 30m * Peers: 2", s);
         // one line - the count joins the interval on the same line
         assertEquals(0, s.chars().filter(c -> c == '\n').count());
         assertFalse(s, s.contains("["));
@@ -208,8 +208,8 @@ public class TrackerInfoTest {
      */
     @Test
     public void testEveryFormNamesTheTorrent() throws Throwable {
-        assertTrue(parse("d14:failure reason7:go awaye").logForm(),
-                   parse("d14:failure reason7:go awaye").logForm().contains("Torrent: " + HASH8));
-        assertTrue(parse("d8:intervali30e5:peers0:e").logForm().contains("Torrent: " + HASH8));
+        String failed = parse("d14:failure reason7:go awaye").logForm();
+        assertTrue(failed, failed.contains("Infohash: " + HASH8));
+        assertTrue(parse("d8:intervali30e5:peers0:e").logForm().contains("Infohash: " + HASH8));
     }
 }

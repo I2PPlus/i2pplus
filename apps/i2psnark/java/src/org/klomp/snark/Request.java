@@ -111,6 +111,18 @@ class Request {
     }
 
     /**
+     * The same three labelled values as {@link #logForm()} without the leading arrow, for
+     * a line whose outcome sits between the event and the block it names - the arrow goes
+     * once, after the event, and the block follows as segments.
+     *
+     * @return the labelled values, beginning with {@code "Piece: "}
+     * @since 0.9.72+
+     */
+    String logSegments() {
+        return logSegments(piece.getPiece(), off, len);
+    }
+
+    /**
      * A block named by piece, offset and length, as the same log segments
      * {@link #logForm()} gives a request we made. PeerState holds the three
      * numbers loose rather than a Request when a peer asks us for a block, and a
@@ -124,8 +136,22 @@ class Request {
      * @since 0.9.72+
      */
     static String logForm(int piece, int begin, int length) {
-        return " -> Piece: " + piece + " * Offset: " + begin + " bytes * Size: " + length
-               + " bytes";
+        return " -> " + logSegments(piece, begin, length);
+    }
+
+    /**
+     * The same three labelled values as {@link #logForm(int, int, int)} without the leading
+     * arrow, for a line whose outcome sits between the event and the block it names - the
+     * arrow goes once, after the event, and the block follows as segments.
+     *
+     * @param piece the piece index the block starts in
+     * @param begin the byte offset into the piece
+     * @param length the size of the block in bytes
+     * @return the labelled values, beginning with {@code "Piece: "}
+     * @since 0.9.72+
+     */
+    static String logSegments(int piece, int begin, int length) {
+        return "Piece: " + piece + " * Offset: " + begin + " bytes * Size: " + length + " bytes";
     }
 
     /** Two requests are equal if they share the same piece, offset, and length. */

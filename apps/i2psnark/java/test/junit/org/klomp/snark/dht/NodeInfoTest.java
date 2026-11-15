@@ -8,11 +8,13 @@ import net.i2p.data.Base32;
 import net.i2p.data.Hash;
 
 /**
- * Pins how a DHT node renders in a log line: its short id and its port, and nothing
- * else. The form the node used to print, {@code [xxxxxxxx]:23060 (unknown dest)},
- * was inherited by every message that named a node, so a message with an aside of
+ * Pins how a DHT node renders in a log line: its short id and nothing else. The
+ * form the node used to print, {@code [xxxxxxxx]:23060 (unknown dest)}, was
+ * inherited by every message that named a node, so a message with an aside of
  * its own read as two adjacent parentheticals, and the destination state was
- * reported whether or not it had anything to do with the event.
+ * reported whether or not it had anything to do with the event. The port went the
+ * same way: a node id names the node, and the same node was printed one way on
+ * its query port and another on its reply port.
  *
  * @since 0.9.72+
  */
@@ -45,11 +47,11 @@ public class NodeInfoTest {
         return new NodeInfo(new NID(nb), Hash.create(hb), port);
     }
 
-    /** A node is its base32 id and its port, the form a destination grep finds. */
+    /** A node is its base32 id, the form a destination grep finds. */
     @Test
-    public void nodeIsItsShortIdAndPort() {
+    public void nodeIsItsShortId() {
         NodeInfo n = node(23060);
-        assertEquals(Base32.encode(n.getNID().getData()).substring(0, 8) + ":23060",
+        assertEquals(Base32.encode(n.getNID().getData()).substring(0, 8),
                      n.toString());
     }
 
@@ -67,15 +69,17 @@ public class NodeInfoTest {
     }
 
     /**
-     * The id and the port and nothing else - no brackets, because a node id is not a
-     * destination and the console log viewer resolves every bracketed eight-character
-     * base32 token as a lease set.
+     * The id and nothing else - no brackets, because a node id is not a destination
+     * and the console log viewer resolves every bracketed eight-character base32
+     * token as a lease set, and no port, because the id names the node whichever port
+     * it is reached on.
      */
     @Test
-    public void idAndPortAndNothingElse() {
+    public void idAndNothingElse() {
         String s = node(40000).toString();
         assertEquals(0, s.length() - s.replace("[", "").length());
         assertEquals(0, s.length() - s.replace("]", "").length());
-        assertTrue(s, s.matches("[a-z2-7]{8}:\\d+"));
+        assertEquals(0, s.length() - s.replace(":", "").length());
+        assertTrue(s, s.matches("[a-z2-7]{8}"));
     }
 }

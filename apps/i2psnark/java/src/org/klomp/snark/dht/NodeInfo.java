@@ -294,18 +294,19 @@ class NodeInfo extends SimpleDataStructure {
     }
 
     /**
-     * String form of the node: its short id and its port. Whether the destination is
-     * known is deliberately not part of this - every message that names a node would
+     * String form of the node: its short id. The port is left off - a node id is what
+     * identifies a node in a log, and the same node is named by the same eight characters
+     * whether it is reached on its query port or its reply port. Whether the destination is
+     * known is deliberately not part of this either - every message that names a node would
      * inherit the aside, and it reads as a second parenthetical next to the one the
      * message itself needs. The sites where a missing destination is the reason
      * something happened say so in their own words.
      *
-     * @return the eight base32 characters of the node id and its port, as
-     *         {@code xxxxxxxx:23060}
+     * @return the eight base32 characters of the node id, as {@code xxxxxxxx}
      */
     @Override
     public String toString() {
-        return SnarkLogFormatter.node(nID) + ':' + port;
+        return SnarkLogFormatter.node(nID);
     }
 
     /**

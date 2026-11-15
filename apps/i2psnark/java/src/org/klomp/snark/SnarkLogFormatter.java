@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import net.i2p.data.Base32;
 import net.i2p.data.Base64;
@@ -41,7 +42,7 @@ import net.i2p.data.SimpleDataStructure;
  * blob or a 6-character base64 tag renders as dead text. A torrent info hash is
  * eight hex characters with no brackets: it is a BitTorrent identity the router
  * cannot look up, and a bracket pair around it is read as a broken destination
- * link. Keeping the label outside the value ("Torrent: d344dabd") also keeps the
+ * link. Keeping the label outside the value ("Infohash: d344dabd") also keeps the
  * messages that name a torrent short enough to stay on one line.
  * <p>
  * Kept free of router and snark state so the layout can be pinned by test, and
@@ -430,8 +431,9 @@ public class SnarkLogFormatter {
      */
     public static String name(String name) {
         if (name == null) {return NONE;}
-        if (name.length() <= NAME_CHARS) {return name;}
-        return name.substring(0, NAME_CHARS - 3) + "...";
+        String flat = unbracket(name);
+        if (flat.length() <= NAME_CHARS) {return flat;}
+        return flat.substring(0, NAME_CHARS - 3) + "...";
     }
 
     /** Characters of a reason for ending a connection before it is cut. */
@@ -453,9 +455,37 @@ public class SnarkLogFormatter {
      */
     public static String reason(String reason) {
         if (reason == null) {return NONE;}
-        String oneLine = reason.replace('\n', ' ').replace('\r', ' ');
+        String oneLine = unbracket(reason).replace('\n', ' ').replace('\r', ' ');
         if (oneLine.length() <= REASON_CHARS) {return oneLine;}
         return oneLine.substring(0, REASON_CHARS - 3) + "...";
+    }
+
+    /**
+     * A bracketed run of six or eight hash-shaped characters - the two shapes the
+     * console log viewer turns into a netdb link, six characters of base64 for a
+     * router and eight of base32 for a lease set.
+     */
+    private static final Pattern HASH_SHAPED =
+            Pattern.compile("\\[([A-Za-z0-9~\\-]{6}|[A-Za-z0-9~\\-]{8})\\]");
+
+    /**
+     * Takes the brackets off a hash-shaped run inside free text, so a value the
+     * router did not compute cannot be read as one. A torrent name is user data,
+     * and the tag of a scene release - {@code [WEBRip]} - is exactly six
+     * characters, so the log viewer links it to a router that does not exist, the
+     * same way a bracketed tally label would. The word stays, only the brackets
+     * go, and the line stays greppable. Values this class renders itself are
+     * never passed through here: {@link #dest(Hash)} and {@link #peer(PeerID)}
+     * put their brackets in deliberately, and those are real hashes.
+     *
+     * @param text the free text to show, null when there is nothing to show
+     * @return the text with any hash-shaped bracket pair emptied, or the value
+     *         unchanged when it holds no brackets
+     * @since 0.9.72+
+     */
+    static String unbracket(String text) {
+        if (text == null || text.indexOf('[') < 0) {return text;}
+        return HASH_SHAPED.matcher(text).replaceAll("$1");
     }
 
     /** Characters of the shortest base32 address, used to tell one from a nickname. */

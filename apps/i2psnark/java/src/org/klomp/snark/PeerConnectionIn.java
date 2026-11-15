@@ -242,7 +242,7 @@ class PeerConnectionIn implements Runnable {
 
                 if (i == 0) {
                     if (_log.shouldDebug()) {
-                        _log.debug("Received keepalive from " + SnarkLogFormatter.peer(peer));
+                        _log.debug("Received KEEP_ALIVE from " + SnarkLogFormatter.peer(peer));
                     }
                     ps.keepAliveMessage();
                     continue;
@@ -264,28 +264,28 @@ class PeerConnectionIn implements Runnable {
                 switch (b) {
                     case Message.CHOKE:
                         if (_log.shouldDebug()) {
-                            _log.debug("Received choke from " + SnarkLogFormatter.peer(peer));
+                            _log.debug("Received CHOKE from " + SnarkLogFormatter.peer(peer));
                         }
                         ps.chokeMessage(true);
                         break;
 
                     case Message.UNCHOKE:
                         if (_log.shouldDebug()) {
-                            _log.debug("Received unchoke from " + SnarkLogFormatter.peer(peer));
+                            _log.debug("Received UNCHOKE from " + SnarkLogFormatter.peer(peer));
                         }
                         ps.chokeMessage(false);
                         break;
 
                     case Message.INTERESTED:
                         if (_log.shouldDebug()) {
-                            _log.debug("Received interested from " + SnarkLogFormatter.peer(peer));
+                            _log.debug("Received INTERESTED from " + SnarkLogFormatter.peer(peer));
                         }
                         ps.interestedMessage(true);
                         break;
 
                     case Message.UNINTERESTED:
                         if (_log.shouldDebug()) {
-                            _log.debug("Received not interested from "
+                            _log.debug("Received UNINTERESTED from "
                                        + SnarkLogFormatter.peer(peer));
                         }
                         ps.interestedMessage(false);
@@ -294,8 +294,8 @@ class PeerConnectionIn implements Runnable {
                     case Message.HAVE:
                         piece = Message.readInt(fixedBuf, 0);
                         if (_log.shouldDebug()) {
-                            _log.debug("Received a Have message -> Piece: " + piece +
-                                       " * Peer: " + SnarkLogFormatter.peer(peer));
+                            _log.debug("Received HAVE from " + SnarkLogFormatter.peer(peer)
+                                       + " -> Piece: " + piece);
                         }
                         ps.haveMessage(piece);
                         break;
@@ -304,7 +304,7 @@ class PeerConnectionIn implements Runnable {
                         byte[] bitmap = new byte[i - fixed];
                         din.readFully(bitmap);
                         if (_log.shouldDebug()) {
-                            _log.debug("Received a bitmap from " + SnarkLogFormatter.peer(peer)
+                            _log.debug("Received BITFIELD from " + SnarkLogFormatter.peer(peer)
                                        + " -> Size: "
                                        + (i - 1) + " bytes");
                         }
@@ -316,9 +316,8 @@ class PeerConnectionIn implements Runnable {
                         begin = Message.readInt(fixedBuf, 4);
                         len = Message.readInt(fixedBuf, 8);
                         if (_log.shouldDebug()) {
-                            _log.debug("Received a request -> Piece: " + piece + " * Begin: "
-                                       + begin + " * Length: " + len + " bytes * Peer: "
-                                       + SnarkLogFormatter.peer(peer));
+                            _log.debug("Received REQUEST from " + SnarkLogFormatter.peer(peer)
+                                       + Request.logForm(piece, begin, len));
                         }
                         ps.requestMessage(piece, begin, len);
                         break;
@@ -331,9 +330,8 @@ class PeerConnectionIn implements Runnable {
                         if (req != null) {
                             req.read(din, peer);
                             if (_log.shouldDebug()) {
-                                _log.debug("Received piece data -> Piece: " + piece
-                                           + " * Offset: " + begin + " bytes * Size: " + len
-                                           + " bytes * Peer: " + SnarkLogFormatter.peer(peer));
+                                _log.debug("Received data from " + SnarkLogFormatter.peer(peer)
+                                           + Request.logForm(piece, begin, len));
                             }
                             ps.pieceMessage(req);
                         } else {
@@ -344,9 +342,9 @@ class PeerConnectionIn implements Runnable {
                             // parsed as the next message's header.
                             drain(len);
                             if (_log.shouldDebug()) {
-                                _log.debug("Received piece data -> No request matched it"
-                                           + " * Piece: " + piece + " * Offset: " + begin
-                                           + " bytes * Peer: " + SnarkLogFormatter.peer(peer));
+                                _log.debug("Received data from " + SnarkLogFormatter.peer(peer)
+                                           + " -> No request matched it * "
+                                           + Request.logSegments(piece, begin, len));
                             }
                         }
                         break;
@@ -356,9 +354,9 @@ class PeerConnectionIn implements Runnable {
                         begin = Message.readInt(fixedBuf, 4);
                         len = Message.readInt(fixedBuf, 8);
                         if (_log.shouldDebug()) {
-                            _log.debug("Received a cancel -> Dropped the request"
-                                       + " * Piece: " + piece + " * Offset: " + begin
-                                       + " bytes * Peer: " + SnarkLogFormatter.peer(peer));
+                            _log.debug("Received CANCEL from " + SnarkLogFormatter.peer(peer)
+                                       + " -> Dropped the request * "
+                                       + Request.logSegments(piece, begin, len));
                         }
                         ps.cancelMessage(piece, begin, len);
                         break;
@@ -366,7 +364,8 @@ class PeerConnectionIn implements Runnable {
                     case Message.PORT:
                         int port = Message.readUnsignedShort(fixedBuf, 0);
                         if (_log.shouldDebug()) {
-                            _log.debug("Received port message from " + SnarkLogFormatter.peer(peer));
+                            _log.debug("Received PORT from " + SnarkLogFormatter.peer(peer)
+                                       + " -> Port: " + port);
                         }
                         ps.portMessage(port);
                         break;
@@ -385,22 +384,22 @@ class PeerConnectionIn implements Runnable {
                         piece = Message.readInt(fixedBuf, 0);
                         ps.suggestMessage(piece);
                         if (_log.shouldDebug()) {
-                            _log.debug("Received a suggest -> Piece: " + piece
-                                       + " * Peer: " + SnarkLogFormatter.peer(peer));
+                            _log.debug("Received SUGGEST from " + SnarkLogFormatter.peer(peer)
+                                       + " -> Piece: " + piece);
                         }
                         break;
 
                     case Message.HAVE_ALL:
                         ps.haveMessage(true);
                         if (_log.shouldDebug()) {
-                            _log.debug("Received have_all from " + SnarkLogFormatter.peer(peer));
+                            _log.debug("Received HAVE_ALL from " + SnarkLogFormatter.peer(peer));
                         }
                         break;
 
                     case Message.HAVE_NONE:
                         ps.haveMessage(false);
                         if (_log.shouldDebug()) {
-                            _log.debug("Received have_none from " + SnarkLogFormatter.peer(peer));
+                            _log.debug("Received HAVE_NONE from " + SnarkLogFormatter.peer(peer));
                         }
                         break;
 
@@ -410,9 +409,8 @@ class PeerConnectionIn implements Runnable {
                         len = Message.readInt(fixedBuf, 8);
                         ps.rejectMessage(piece, begin, len);
                         if (_log.shouldDebug()) {
-                            _log.debug("Received a reject -> Piece: " + piece + " * Begin: "
-                                       + begin + " * Length: " + len + " bytes * Peer: "
-                                       + SnarkLogFormatter.peer(peer));
+                            _log.debug("Received REJECT from " + SnarkLogFormatter.peer(peer)
+                                       + Request.logForm(piece, begin, len));
                         }
                         break;
 
@@ -420,8 +418,8 @@ class PeerConnectionIn implements Runnable {
                         piece = Message.readInt(fixedBuf, 0);
                         ps.allowedFastMessage(piece);
                         if (_log.shouldDebug()) {
-                            _log.debug("Received allowed_fast -> Piece: " + piece
-                                       + " * Peer: " + SnarkLogFormatter.peer(peer));
+                            _log.debug("Received ALLOWED_FAST from " + SnarkLogFormatter.peer(peer)
+                                       + " -> Piece: " + piece);
                         }
                         break;
 
@@ -431,21 +429,22 @@ class PeerConnectionIn implements Runnable {
                         ps.unknownMessage(b, bs);
                         if (_log.shouldDebug()) {
                             _log.debug("Received unknown message from "
-                                       + SnarkLogFormatter.peer(peer));
+                                       + SnarkLogFormatter.peer(peer)
+                                       + " -> Ignored it (Type: " + b + ")");
                         }
                 }
             }
         } catch (IOException ioe) {
             // Ignore, probably the other side closed connection.
             if (_log.shouldDebug()) {
-                _log.debug("Peer read failed -> Ended the read loop"
-                           + " * Peer: " + SnarkLogFormatter.peer(peer)
+                _log.debug("Peer read failed for " + SnarkLogFormatter.peer(peer)
+                           + " -> Ended the read loop"
                            + SnarkLogFormatter.onOwnLine(SnarkLogFormatter.error(ioe)));
             }
         } catch (RuntimeException t) {
             if (!isStandalone && _log.shouldWarn()) {
-                _log.warn("Peer read failed -> Ended the read loop"
-                          + " * Peer: " + SnarkLogFormatter.peer(peer), t);
+                _log.warn("Peer read failed for " + SnarkLogFormatter.peer(peer)
+                          + " -> Ended the read loop", t);
             }
         } finally {
             peer.disconnect();

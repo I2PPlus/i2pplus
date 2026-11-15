@@ -213,8 +213,8 @@ class PeerCheckerTask implements Runnable {
             // so this probably won't happen here.
             if (inactiveTime > peer.getMaxInactiveTime()) {
                 if (_log.shouldInfo())
-                    _log.info("Disconnecting an idle peer -> Inactive too long * Peer: "
-                              + SnarkLogFormatter.peer(peer)
+                    _log.info("Disconnecting " + SnarkLogFormatter.peer(peer)
+                              + " -> Inactive too long"
                               + " * Idle: " + DataHelper.formatDuration(peer.getInactiveTime()));
                 peer.setEndReason("Inactive too long");
                 peer.disconnect();
@@ -286,8 +286,8 @@ class PeerCheckerTask implements Runnable {
                     // Note that we only choke if we are over our limits,
                     // so a peer may remain unchoked even if uninterested.
                     if (_log.shouldDebug())
-                        _log.debug("Choking the peer -> It wants nothing from us"
-                                   + " * Peer: " + SnarkLogFormatter.peer(peer));
+                        _log.debug("Choking " + SnarkLogFormatter.peer(peer)
+                                   + " -> It wants nothing from us");
                     peer.setChoking(true);
                     uploaders--;
                     coordinator.decrementUploaders(false);
@@ -296,8 +296,8 @@ class PeerCheckerTask implements Runnable {
                     removed.add(peer);
                 } else if (overBWLimitChoke) {
                     if (_log.shouldDebug())
-                        _log.debug("Choking the peer -> Over the upload limit"
-                                   + " * Peer: " + SnarkLogFormatter.peer(peer)
+                        _log.debug("Choking " + SnarkLogFormatter.peer(peer)
+                                   + " -> Over the upload limit"
                                    + "\n* From this peer: " + upload + " bytes"
                                    + " * Total: " + uploaded + " bytes");
                     peer.setChoking(true);
@@ -312,8 +312,8 @@ class PeerCheckerTask implements Runnable {
                 } else if (peer.isInteresting() && peer.isChoked()) {
                     // If they are choking us make someone else a downloader
                     if (_log.shouldDebug())
-                        _log.debug("Choking the peer -> It is choking us"
-                                   + " * Peer: " + SnarkLogFormatter.peer(peer));
+                        _log.debug("Choking " + SnarkLogFormatter.peer(peer)
+                                   + " -> It is choking us");
                     peer.setChoking(true);
                     uploaders--;
                     interestedUploaders--;
@@ -329,8 +329,8 @@ class PeerCheckerTask implements Runnable {
                         (peer.completed() >= 2 || random.nextInt(4) == 0)) {
                     // If they aren't interesting make someone else a downloader
                     if (_log.shouldDebug())
-                        _log.debug("Choking the peer -> We want nothing from it"
-                                   + " * Peer: " + SnarkLogFormatter.peer(peer));
+                        _log.debug("Choking " + SnarkLogFormatter.peer(peer)
+                                   + " -> We want nothing from it");
                     peer.setChoking(true);
                     uploaders--;
                     interestedUploaders--;
@@ -342,8 +342,8 @@ class PeerCheckerTask implements Runnable {
                 } else if (peer.isInterested() && peer.isSnubbing()) {
                     // Peer wants our pieces but never requests any; free the upload slot
                     if (_log.shouldDebug())
-                        _log.debug("Choking the peer -> It is snubbing us"
-                                   + " * Peer: " + SnarkLogFormatter.peer(peer));
+                        _log.debug("Choking " + SnarkLogFormatter.peer(peer)
+                                   + " -> It is snubbing us");
                     peer.setChoking(true);
                     uploaders--;
                     interestedUploaders--;
@@ -356,8 +356,8 @@ class PeerCheckerTask implements Runnable {
                         && uploaderNotDelivering(download, peer.getDownloadRate())) {
                     // We are downloading but didn't receive anything...
                     if (_log.shouldDebug())
-                        _log.debug("Choking the peer -> It has sent us nothing"
-                                   + " * Peer: " + SnarkLogFormatter.peer(peer));
+                        _log.debug("Choking " + SnarkLogFormatter.peer(peer)
+                                   + " -> It has sent us nothing");
                     peer.setChoking(true);
                     uploaders--;
                     interestedUploaders--;
@@ -411,8 +411,8 @@ class PeerCheckerTask implements Runnable {
         if (makesRoom(uploaders, uploadLimit, coordinator.getInterestedAndChoking())
                 && worstDownloader != null) {
             if (_log.shouldDebug())
-                _log.debug("Choking the peer -> Worst transfer rate"
-                           + " * Peer: " + SnarkLogFormatter.peer(worstDownloader));
+                _log.debug("Choking " + SnarkLogFormatter.peer(worstDownloader)
+                           + " -> Worst transfer rate");
 
             worstDownloader.setChoking(true);
             coordinator.decrementUploaders(worstDownloader.isInterested());

@@ -406,8 +406,8 @@ class WebPeer extends Peer implements EepGet.StatusListener {
             listener.disconnected(this);
             disconnect();
             if (_log.shouldInfo())
-                _log.info("Webseed finished -> Successful fetches: " + successes
-                          + " * Downloaded: " + dl + " bytes * Peer: " + this);
+                _log.info(this + " finished -> Successful fetches: " + successes
+                          + " * Downloaded: " + dl + " bytes");
         }
     }
 

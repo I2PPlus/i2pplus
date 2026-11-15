@@ -657,7 +657,7 @@ public class TrackerClient implements Runnable {
     public synchronized void start() {
         if (!stop) {
             if (_log.shouldDebug()) {
-                _log.debug("Announce loop already running -> Torrent: " + shortInfoHash);
+                _log.debug("Announce loop already running -> Infohash: " + shortInfoHash);
             }
             return;
         }
@@ -704,7 +704,7 @@ public class TrackerClient implements Runnable {
         boolean wasStopped = stop;
         if (wasStopped) {
             if (_log.shouldDebug()) {
-                _log.debug("Announce loop already stopped -> Torrent: " + shortInfoHash);
+                _log.debug("Announce loop already stopped -> Infohash: " + shortInfoHash);
             }
         } else {
             // no line for the stop itself - the cancel and interrupt lines below
@@ -714,7 +714,7 @@ public class TrackerClient implements Runnable {
         SimpleTimer2.TimedEvent e = _event;
         if (e != null) {
             if (_log.shouldDebug()) {
-                _log.debug("Cancelling the queued announce -> Torrent: " + shortInfoHash);
+                _log.debug("Cancelling the queued announce -> Infohash: " + shortInfoHash);
             }
             e.cancel();
             _event = null;
@@ -738,7 +738,7 @@ public class TrackerClient implements Runnable {
                        + (t != null && dt != null ? "announce and DHT rounds"
                                                   : dt != null ? "DHT round"
                                                                : "announce round")
-                       + " -> Torrent: " + shortInfoHash);
+                       + " -> Infohash: " + shortInfoHash);
         }
         _fastUnannounce = true;
         if (!wasStopped) {
@@ -881,7 +881,7 @@ public class TrackerClient implements Runnable {
             // bookkeeping lines printed 3,354 times a day for no finding. Only a
             // round that blocked long enough to delay the next one is a finding
             if (_log.shouldDebug() && elapsed > SLOW_ROUND_MS)
-                _log.debug("Announce round ran long -> Torrent: " + shortInfoHash
+                _log.debug("Announce round ran long -> Infohash: " + shortInfoHash
                            + " * Took: " + DataHelper.formatDuration(elapsed));
         }
     }
@@ -979,7 +979,7 @@ public class TrackerClient implements Runnable {
             if (isNewValidTracker(trackerHashes, primary)) {
                 trackers.add(new TCTracker(primary, true));
                 if (_log.shouldDebug())
-                    _log.debug("Primary announce -> Tracker: " + primary + " * Torrent: "
+                    _log.debug("Primary announce -> Tracker: " + primary + " * Infohash: "
                                + shortInfoHash);
             } else {
                 if (_log.shouldWarn())
@@ -1277,7 +1277,7 @@ public class TrackerClient implements Runnable {
                         String cadence = roundCadence(delay);
                         if (_log.shouldDebug() && !cadence.equals(_lastRoundCadence)) {
                             _lastRoundCadence = cadence;
-                            _log.debug("Announce loop requeued -> Torrent: "
+                            _log.debug("Announce loop requeued -> Infohash: "
                                        + SnarkLogFormatter.infoHash(snark.getInfoHash())
                                        + " * Next pass in "
                                        + DataHelper.formatDuration(delay)
@@ -1855,7 +1855,7 @@ public class TrackerClient implements Runnable {
             // one line for the whole round, naming how many trackers the budget cut off -
             // each of them is tried again as soon as its own interval has passed
             _log.info("Announce round out of time -> Skipped the trackers still due"
-                      + "\n* Skipped: " + outOfTime + " trackers * Torrent: " + shortInfoHash
+                      + "\n* Skipped: " + outOfTime + " trackers * Infohash: " + shortInfoHash
                       + " * Budget: " + DataHelper.formatDuration(ROUND_BUDGET_MS));
         }
         updateTrackerProblems();
@@ -1950,7 +1950,7 @@ public class TrackerClient implements Runnable {
                 pids.clear();
             }
         } else if (_log.shouldInfo()) {
-            _log.info("Not requesting PEX peers -> Torrent: " + shortInfoHash);
+            _log.info("Not requesting PEX peers -> Infohash: " + shortInfoHash);
         }
         return rv;
     }
@@ -2193,7 +2193,7 @@ public class TrackerClient implements Runnable {
                     } else {
                         if (_log.shouldDebug()) {
                             _log.debug("Skipping a DHT peer fetch -> All " + slots
-                                       + " slots are taken * Torrent: " + shortInfoHash);
+                                       + " slots are taken * Infohash: " + shortInfoHash);
                         }
                         // The slot went to another torrent first. Back to the end of the line
                         // rather than out of it: the torrent keeps its turn and is served when
@@ -2579,7 +2579,7 @@ public class TrackerClient implements Runnable {
         public void run() {
             try {
                 if (_log.shouldDebug()) {
-                    _log.debug("Unannouncing to the tracker -> Torrent: " + shortInfoHash
+                    _log.debug("Unannouncing to the tracker -> Infohash: " + shortInfoHash
                                + " * Tracker: " + SnarkLogFormatter.host(tr.host));
                 }
                 long uploaded = coordinator.getUploaded();
@@ -2679,7 +2679,7 @@ public class TrackerClient implements Runnable {
             // The URL carries the full info hash, so log the tracker and the
             // eight-character hash, not the request line.
             _log.debug("Scrape starting -> Tracker: " + SnarkLogFormatter.host(tr.host)
-                       + " * Torrent: " + shortInfoHash);
+                       + " * Infohash: " + shortInfoHash);
         }
         // Single-torrent scrapes are ~60 bytes, but trackers may return the full files dict
         // (about 40 bytes per torrent), so allow up to 128K; only very large trackers exceed it
@@ -2866,7 +2866,7 @@ public class TrackerClient implements Runnable {
         if (_log.shouldDebug()) {
             // The URL carries the full info hash and our peer id, so log the
             // tracker and the six-character hash, not the request line.
-            _log.debug("Announce starting -> Tracker: " + tr.host + " * Torrent: " + shortInfoHash);
+            _log.debug("Announce starting -> Tracker: " + tr.host + " * Infohash: " + shortInfoHash);
         }
 
         tr.lastRequestTime = System.currentTimeMillis();

@@ -97,7 +97,7 @@ public class FetchLogFormatTest {
         // the width limit; the bracketed eight-character form is what the console log
         // viewer links, and it matches how a destination is named everywhere else
         String url = "http://" + UNKNOWN_B32 + ".b32.i2p/announce?info_hash=%01%02%03%04";
-        assertEquals("Tracker: [" + UNKNOWN_B32.substring(0, 8) + "] * Torrent: 01020304",
+        assertEquals("Tracker: [" + UNKNOWN_B32.substring(0, 8) + "] * Infohash: 01020304",
                      I2PSnarkUtil.fetchTarget(url));
         assertEquals("[" + UNKNOWN_B32.substring(0, 8) + "]", I2PSnarkUtil.trackerHost(url));
     }
@@ -160,7 +160,7 @@ public class FetchLogFormatTest {
     /** The tail names the tracker and the torrent, nothing else. */
     @Test
     public void targetNamesTheTrackerAndTheTorrent() {
-        assertEquals("Tracker: opentracker.bt.i2p * Torrent: b1d2b8e9",
+        assertEquals("Tracker: opentracker.bt.i2p * Infohash: b1d2b8e9",
                      I2PSnarkUtil.fetchTarget(ANNOUNCE));
     }
 
@@ -182,7 +182,7 @@ public class FetchLogFormatTest {
     /** A full announce collapses to the tracker and the torrent. */
     @Test
     public void aFullAnnounceBecomesTheTrackerAndTheTorrent() {
-        assertEquals("Tracker: opentracker.bt.i2p * Torrent: " + FULL_IH,
+        assertEquals("Tracker: opentracker.bt.i2p * Infohash: " + FULL_IH,
                      I2PSnarkUtil.fetchTarget(FULL_ANNOUNCE));
     }
 
@@ -212,7 +212,7 @@ public class FetchLogFormatTest {
         // rewriteAnnounce() moves the b32 host into the path, so a URL in that
         // form names only the i2p proxy. Pinned: the fetch sites log the original
         // url, never the rewritten one, so this stays off the log.
-        assertEquals("Tracker: i2p * Torrent: " + FULL_IH,
+        assertEquals("Tracker: i2p * Infohash: " + FULL_IH,
                      I2PSnarkUtil.fetchTarget("http://i2p/abc.b32.i2p/announce"
                                               + "?info_hash=%76%7c%bd%d2%79%77%74%6e%07%d5%7a%2b"
                                               + "%f3%0b%b8%81%c0%fb%8a%e1"));

@@ -394,7 +394,7 @@ class TrackerInfo {
 
     /**
      * The tracker's reply as the values that follow an arrow - {@code " ->
-     * Torrent: 1a2b3c4d * Interval: 30m * Seeds: 5 * Peers: 2"} - for a caller
+     * Infohash: 1a2b3c4d * Interval: 30m * Seeds: 5 * Peers: 2"} - for a caller
      * that has named the tracker and said what happened to the announce. There is
      * no "response received" clause: the counts are the finding, and a line whose
      * only news is that something arrived tells a reader nothing.
@@ -408,7 +408,7 @@ class TrackerInfo {
      * @since 0.9.72+
      */
     String logForm() {
-        StringBuilder sb = new StringBuilder(" -> Torrent: ");
+        StringBuilder sb = new StringBuilder(" -> Infohash: ");
         sb.append(SnarkLogFormatter.infoHash(infohash));
         // The reason is the tracker's own words from a reply that reached us, so
         // the announce failed at the tracker, not on the wire.

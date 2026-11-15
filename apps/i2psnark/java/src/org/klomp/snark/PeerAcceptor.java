@@ -96,7 +96,7 @@ class PeerAcceptor {
                 if (_log.shouldInfo())
                     _log.info("Read an infohash from a peer -> Peer: "
                               + SnarkLogFormatter.dest(peerHash)
-                              + " * Torrent: " + SnarkLogFormatter.infoHash(peerInfoHash));
+                              + " * Infohash: " + SnarkLogFormatter.infoHash(peerInfoHash));
             } catch (IOException ioe) {
                 if (_log.shouldInfo())
                     _log.info("Unable to read the infohash -> Peer: "
@@ -151,7 +151,7 @@ class PeerAcceptor {
                         return;
                     } else {
                         if (_log.shouldDebug())
-                            _log.debug("Rejecting a new peer -> Torrent: "
+                            _log.debug("Rejecting a new peer -> Infohash: "
                                        + SnarkLogFormatter.infoHash(cur.getInfoHash())
                                        + " * Reason: No peer slots needed");
                         socket.close();
