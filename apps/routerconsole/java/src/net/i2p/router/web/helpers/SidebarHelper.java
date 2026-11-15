@@ -106,6 +106,16 @@ public class SidebarHelper extends HelperBase {
      */
     public void storeSession(HttpSession session) { _session = session; }
 
+    /**
+     * The session bound by {@link #storeSession} - the one {@link CSSHelper#getNonce(HttpSession)}
+     * mints into and the console validates a submitted nonce against, so a link that
+     * carries any other value is refused.
+     *
+     * @return the request session, or null on a request that has none
+     * @since 0.9.72+
+     */
+    HttpSession getSession() {return _session;}
+
     /** Thin space separator. */
     static final String THINSP = " / ";
     /** Separator character for summary bar section configuration. */

@@ -397,7 +397,10 @@ public class NewsHelper extends ContentHelper {
              buf.append("\nNo update currently available.");
         }
         buf.append("</i></span><span id=newsDisplay>");
-        String consoleNonce = CSSHelper.getNonce();
+        // headers.jsi validates the consoleNonce parameter against the session's nonce
+        // queue before it applies the news parameter, so a link carrying the static
+        // rotating nonce is refused and Hide/Show news does nothing at all.
+        String consoleNonce = session != null ? CSSHelper.getNonce(session) : CSSHelper.getNonce();
         if (lastUpdated > 0 && consoleNonce != null) {
             if (shouldShowNews(ctx)) {
                 buf.append(" <a href=\"/home?news=0&amp;consoleNonce=").append(consoleNonce).append("\">")

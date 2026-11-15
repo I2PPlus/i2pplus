@@ -14,6 +14,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.TreeMap;
+import javax.servlet.http.HttpSession;
 import net.i2p.app.ClientAppManager;
 import net.i2p.crypto.SigType;
 import net.i2p.data.DataHelper;
@@ -1603,7 +1604,11 @@ class SidebarRenderer {
         NewsHelper newshelper = _helper.getNewsHelper();
         if (newshelper == null || newshelper.shouldShowNews()) return "";
         StringBuilder buf = new StringBuilder(512);
-        String consoleNonce = CSSHelper.getNonce();
+        // The show-news link is checked in headers.jsi against the session's nonce queue,
+        // so the static rotating nonce it used to carry was always refused and the click
+        // did nothing.
+        HttpSession session = _helper.getSession();
+        String consoleNonce = session != null ? CSSHelper.getNonce(session) : CSSHelper.getNonce();
         if (consoleNonce != null) {
             // Get news content.
             List<NewsEntry> entries = Collections.emptyList();
