@@ -25,14 +25,17 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.crypto.SigType;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
@@ -227,18 +230,109 @@ public class TrackerClient implements Runnable {
     }
 
     /**
-     * Ceiling on concurrent DHT fetches. A fetch blocks in getPeersAndAnnounce
-     * for up to eight minutes, so uncapped, a batch start would fill the whole
-     * announce pool with fetchers and starve the announce rounds that share
-     * it. A fetch that cannot get a permit is skipped this round and retried
-     * by the next announce round, the same degradation as a rejected one.
+     * Most DHT peer fetches started per minute across all torrents, when every torrent wants
+     * one. A torrent asks no sooner than {@link #MIN_DHT_ANNOUNCE_INTERVAL} plus jitter after
+     * its last fetch, about every 17 minutes, so 2000 torrents want roughly 110 fetches a
+     * minute and the ceiling, not the cadence, is what bounds the load. Forty a minute gives a
+     * torrent that missed its round its turn inside two announce rounds while leaving the
+     * router's own network-database searches the bulk of their capacity; the floodfills a
+     * fetch's walk reaches are spread by the router's own distance ordering and its 60-second
+     * per-floodfill cooldown, so the rate is the only knob snark has for that load.
      *
      * @since 0.9.72+
      */
-    static final int DHT_FETCH_PERMITS = 4;
+    static final int DHT_FETCH_RATE_MAX = 40;
 
-    /** Non-blocking cap on concurrent DHTFetcher runs, see DHT_FETCH_PERMITS. */
-    private static final Semaphore _dhtFetchPermits = new Semaphore(DHT_FETCH_PERMITS);
+    /**
+     * Fewest fetches allowed to run at once, however little is wanted and however busy things
+     * are. A torrent that wants peers must be able to start its walk, and a DHT that is still
+     * bootstrapping is served by one walk at a time but not by none.
+     *
+     * @since 0.9.72+
+     */
+    static final int DHT_FETCH_MIN_SLOTS = 2;
+
+    /**
+     * Most fetches allowed to run at once. This is the thread ceiling, and it is what protects
+     * the router when the DHT is deaf: a fetch blocks in getPeersAndAnnounce for up to eight
+     * minutes, so 32 running fetches is the most network-database work any number of torrents
+     * can have in flight, and it holds the {@link #DHT_FETCH_RATE_MAX} start rate for any fetch
+     * that finishes inside 48 seconds - see {@link #dhtFetchSlots}.
+     *
+     * @since 0.9.72+
+     */
+    static final int DHT_FETCH_MAX_SLOTS = 32;
+
+    /**
+     * Clients with a DHT fetch queued or running - the demand the start rate is scaled by, so
+     * two torrents do not get forty slots a minute and 2000 do not get four.
+     */
+    private static final AtomicInteger _dhtFetchDemand = new AtomicInteger();
+
+    /** Fetches running right now, compared against the slots from {@link #dhtFetchSlots}. */
+    private static final AtomicInteger _dhtFetchRunning = new AtomicInteger();
+
+    /**
+     * Exponentially weighted mean of how long a fetch takes, in millis, 0 until the first one
+     * finishes. This is the wait time that turns the start rate into the number of slots.
+     */
+    private static final AtomicLong _dhtFetchAvgMs = new AtomicLong();
+
+    /**
+     * Earliest time the next fetch may start, in millis - the token bucket that spreads the
+     * start rate over the minute instead of letting a round of torrents fire together.
+     */
+    private static final AtomicLong _dhtFetchNext = new AtomicLong();
+
+    /**
+     * Torrents waiting for a fetch slot, in the order they asked. One line for every torrent,
+     * and a passed-over fetch goes back at its end, so the torrents take turns and their peers
+     * arrive in parallel rather than the same few torrents going first every round.
+     */
+    private static final ConcurrentLinkedQueue<TrackerClient> _dhtFetchQueue =
+            new ConcurrentLinkedQueue<>();
+
+    /** Set while a drain task is handing out slots, so only one hands out at a time. */
+    private static final AtomicBoolean _dhtDraining = new AtomicBoolean();
+
+    /**
+     * Pool the DHT fetches run on, deliberately not {@link #_announcers}. A fetch blocks for
+     * minutes, so on the announce pool it both holds a worker away from the torrent announces
+     * that share it and gets skipped when that pool is full. A bounded cached pool: a fetch
+     * with no idle worker gets a new thread until DHT_FETCH_MAX_SLOTS exist, and past that it
+     * is rejected, which is the skip that the next announce round retries.
+     *
+     * @since 0.9.72+
+     */
+    private static final ThreadPoolExecutor _dhtFetchers =
+            new ThreadPoolExecutor(
+                    0,
+                    DHT_FETCH_MAX_SLOTS,
+                    UNANNOUNCE_KEEPALIVE,
+                    TimeUnit.MILLISECONDS,
+                    new SynchronousQueue<Runnable>(),
+                    new ThreadFactory() {
+                        /** Sequence number for the pool thread names. */
+                        private final AtomicInteger _n = new AtomicInteger();
+
+                        /**
+                         * Make the pool worker: named for the console's thread
+                         * list, daemon so it never keeps the JVM up.
+                         *
+                         * @param r the task to run
+                         * @return the unstarted thread
+                         */
+                        public Thread newThread(Runnable r) {
+                            Thread t = new Thread(r, "SnarkDHT" + ThreadNames.seq(_n.incrementAndGet()));
+                            t.setDaemon(true);
+                            return t;
+                        }
+                    });
+
+    static {
+        // every worker is borrowed for one fetch, so all of them may die when idle
+        _dhtFetchers.allowCoreThreadTimeOut(true);
+    }
 
     /** Released when this client's last unannounce dispatch finishes; awaited by halt() callers. */
     private volatile CountDownLatch _unannounceLatch;
@@ -489,8 +583,10 @@ public class TrackerClient implements Runnable {
     /** The running DHT fetch thread, kept for interrupts. */
     private volatile Thread _dhtThread;
     /** True from the moment a DHT fetch is queued until it finishes; keeps at
-     *  most one fetch per client queued on the shared pool. */
+     *  most one fetch per client in the shared line. */
     private final AtomicBoolean _dhtQueued = new AtomicBoolean();
+    /** The DHT this client is waiting on in {@link #_dhtFetchQueue}, null once it is served. */
+    private volatile DHT _pendingDHT;
     /** Peers seen in the last DHT fetch, updated by that thread. */
     private volatile int _dhtPeersSeen;
     /** The queued timer event, kept for cancellation. */
@@ -1881,18 +1977,168 @@ public class TrackerClient implements Runnable {
             // a fetch is already queued or running for this client
             return;
         }
-        if (stop ||
-            !poolHasCapacity(_announcers.getPoolSize(), MAX_ANNOUNCE_THREADS,
-                             _announcers.getQueue().remainingCapacity())) {
-            // halted, or saturated pool; the next announce round retries
+        if (stop) {
             _dhtQueued.set(false);
             return;
         }
+        // Join the back of one line shared by every torrent, rather than racing for a slot on
+        // a private schedule: a torrent that is passed over this round still sits ahead of
+        // everyone who asks after it, so the torrents are served in turn and their peers come
+        // in in parallel instead of one torrent's fetch after another's.
+        _pendingDHT = dht;
+        _dhtFetchQueue.add(this);
+        _dhtFetchDemand.incrementAndGet();
+        scheduleDHTDrain();
+    }
+
+    /**
+     * Hand the free fetch slots to the torrents at the head of the line, if no drain is already
+     * doing it. Called when a torrent asks and again when a fetch finishes and frees a slot, so
+     * a slot is never idle while a torrent waits.
+     *
+     * @since 0.9.72+
+     */
+    static void scheduleDHTDrain() {
+        if (!_dhtDraining.compareAndSet(false, true)) {
+            return;
+        }
         try {
-            _announcers.execute(new DHTFetcher(dht));
+            _dhtFetchers.execute(new DHTDrain());
         } catch (RejectedExecutionException ree) {
-            // pool and queue saturated; this round simply skips the DHT fetch
-            _dhtQueued.set(false);
+            // no thread to hand out slots with; the torrents stay in the line and the next
+            // fetch that finishes, or the next torrent that asks, tries again
+            _dhtDraining.set(false);
+        }
+    }
+
+    /**
+     * How many fetches to start per minute: what the torrents actually want, up to
+     * {@link #DHT_FETCH_RATE_MAX}, and one at a time while the DHT is still bootstrapping,
+     * because more walks over the same handful of nodes find nothing new. Package private so
+     * the scaling can be pinned by test.
+     *
+     * @param demand torrents with a fetch queued or running
+     * @param knownNodes nodes the DHT knows, from {@link DHT#size()}
+     * @return fetch starts allowed per minute, at least one
+     * @since 0.9.72+
+     */
+    static int dhtFetchRate(int demand, int knownNodes) {
+        if (demand <= 0) {
+            return 1;
+        }
+        if (knownNodes < DHT_BOOTSTRAP_NODES) {
+            return 1;
+        }
+        return Math.min(demand, DHT_FETCH_RATE_MAX);
+    }
+
+    /**
+     * How many fetches may run at once to hold that start rate - Little's Law, the rate times
+     * how long one fetch takes. A healthy DHT answers a get_peers round in seconds, so a few
+     * slots hold forty starts a minute; a deaf one takes minutes, and then the slots, not the
+     * rate, are what limits the load, which is exactly what keeps the router's network database
+     * from being asked about hundreds of unreachable nodes at once.
+     *
+     * @param rate fetch starts allowed per minute
+     * @param avgMs mean fetch duration so far, in millis, 0 with no sample yet
+     * @param min fewest slots, {@link #DHT_FETCH_MIN_SLOTS}
+     * @param max most slots, {@link #DHT_FETCH_MAX_SLOTS}
+     * @return slots to run fetches in, between min and max
+     * @since 0.9.72+
+     */
+    static int dhtFetchSlots(int rate, long avgMs, int min, int max) {
+        if (avgMs <= 0) {
+            // nothing measured yet, so start at the floor and let the first fetches report
+            return min;
+        }
+        // rate per minute times a duration in millis, rounded up to whole fetches
+        long slots = ((long) rate * avgMs + 60_000L - 1) / 60_000L;
+        return slots < min ? min : slots > max ? max : (int) slots;
+    }
+
+    /**
+     * The gap between fetch starts, jittered by up to half again either way, so a round of
+     * torrents does not line up on the same second and the floodfills its walks reach see a
+     * trickle rather than a burst.
+     *
+     * @param rate fetch starts allowed per minute
+     * @param rnd the util's random, so the spread is not reproducible in production
+     * @return millis between starts, never negative
+     * @since 0.9.72+
+     */
+    static long fetchStartSpacing(int rate, Random rnd) {
+        long base = 60_000L / Math.max(1, rate);
+        long jitter = base / 2;
+        return base - jitter + (jitter > 0 ? rnd.nextInt((int) jitter * 2) : 0);
+    }
+
+    /**
+     * Fold one fetch duration into the running average: a quarter of the weight on the newest
+     * sample, so the slots follow the DHT's current health within a few rounds instead of
+     * remembering one bad hour for the life of the router.
+     *
+     * @param previous the average so far, 0 with no sample yet
+     * @param sample the duration just measured, in millis
+     * @return the average to keep, in millis
+     * @since 0.9.72+
+     */
+    static long fetchDurationEwma(long previous, long sample) {
+        if (sample < 0) {
+            return previous;
+        }
+        if (previous <= 0) {
+            return sample;
+        }
+        return previous + (sample - previous) / 4;
+    }
+
+    /**
+     * Gives the free fetch slots to the torrents at the head of {@link #_dhtFetchQueue}, one
+     * task each, so the fetches that do run are in parallel. It stops when the slots are full;
+     * the fetch that finishes re-runs it, so a freed slot goes to the next torrent at once.
+     *
+     * @since 0.9.72+
+     */
+    private static class DHTDrain implements Runnable {
+
+        public void run() {
+            // pool workers are reused; a stale interrupt from another client's halt()
+            // must not abort the hand-out
+            Thread.interrupted();
+            try {
+                while (true) {
+                    TrackerClient client = _dhtFetchQueue.peek();
+                    if (client == null) {
+                        return;
+                    }
+                    DHT dht = client._pendingDHT;
+                    if (client.stop || dht == null) {
+                        // halted while it waited; its own halt() reports the stop
+                        _dhtFetchQueue.poll();
+                        client._dhtQueued.set(false);
+                        client._pendingDHT = null;
+                        _dhtFetchDemand.decrementAndGet();
+                        continue;
+                    }
+                    int rate = dhtFetchRate(_dhtFetchDemand.get(), dht.size());
+                    int slots = dhtFetchSlots(rate, _dhtFetchAvgMs.get(),
+                                              DHT_FETCH_MIN_SLOTS, DHT_FETCH_MAX_SLOTS);
+                    if (_dhtFetchRunning.get() >= slots) {
+                        // full, and the fetch that frees the next slot drains the line again
+                        return;
+                    }
+                    _dhtFetchQueue.poll();
+                    try {
+                        _dhtFetchers.execute(client.new DHTFetcher(dht, rate));
+                    } catch (RejectedExecutionException ree) {
+                        // no thread for it after all: back of the line, and stop handing out
+                        _dhtFetchQueue.add(client);
+                        return;
+                    }
+                }
+            } finally {
+                _dhtDraining.set(false);
+            }
         }
     }
 
@@ -1906,37 +2152,111 @@ public class TrackerClient implements Runnable {
         /** The DHT to fetch peers from. */
         private final DHT dht;
 
+        /** The fetches-per-minute rate the drain scaled from the demand when it handed this fetch its slot. */
+        private final int rate;
+
         /**
-         * Stores the DHT to fetch from.
+         * Stores the DHT to fetch from and the start rate in force for this fetch.
          *
          * @param dht the DHT to query
+         * @param rate fetches per minute, from {@link #dhtFetchRate}
          */
-        public DHTFetcher(DHT dht) {
+        public DHTFetcher(DHT dht, int rate) {
             this.dht = dht;
+            this.rate = rate;
         }
 
         public void run() {
-            // cap concurrent fetchers so they cannot starve announce rounds
-            if (!_dhtFetchPermits.tryAcquire()) {
-                _dhtThread = null;
-                _dhtQueued.set(false);
-                return;
-            }
             // pool workers are reused; a stale interrupt left by another
             // client's halt() must not abort this fetch
             Thread.interrupted();
             _dhtThread = Thread.currentThread();
+            boolean running = false;
+            boolean requeued = false;
+            int slots = dhtFetchSlots(rate, _dhtFetchAvgMs.get(),
+                                      DHT_FETCH_MIN_SLOTS, DHT_FETCH_MAX_SLOTS);
             try {
                 // a fetch queued before halt() must not spend its multi-minute
-                // lookup on a dead client, holding a permit and a worker
+                // lookup on a dead client, holding a slot and a worker
                 if (!stop) {
-                    fetchAndAddPeers();
+                    running = takeDHTFetchSlot(slots, rate);
+                    if (running) {
+                        long started = _util.getContext().clock().now();
+                        try {
+                            fetchAndAddPeers();
+                        } finally {
+                            // the duration is what turns the start rate into slots
+                            long elapsed = _util.getContext().clock().now() - started;
+                            _dhtFetchAvgMs.accumulateAndGet(elapsed,
+                                                            TrackerClient::fetchDurationEwma);
+                        }
+                    } else {
+                        if (_log.shouldDebug()) {
+                            _log.debug("Skipping a DHT peer fetch -> All " + slots
+                                       + " slots are taken * Torrent: " + shortInfoHash);
+                        }
+                        // The slot went to another torrent first. Back to the end of the line
+                        // rather than out of it: the torrent keeps its turn and is served when
+                        // a slot frees, instead of waiting a whole announce round for one.
+                        _dhtFetchQueue.add(TrackerClient.this);
+                        requeued = true;
+                    }
                 }
             } finally {
-                _dhtFetchPermits.release();
+                if (running) {
+                    _dhtFetchRunning.decrementAndGet();
+                }
                 _dhtThread = null;
-                _dhtQueued.set(false);
+                if (!requeued) {
+                    _dhtQueued.set(false);
+                    _pendingDHT = null;
+                    _dhtFetchDemand.decrementAndGet();
+                }
+                // a freed slot goes to the torrent at the head of the line at once
+                scheduleDHTDrain();
             }
+        }
+
+        /**
+         * Take one of the running-fetch slots, then the next start token. The slots bound how
+         * much DHT work the router's network database is asked about at once; the token is what
+         * spreads the starts over the minute, so the walks do not reach the same floodfills in
+         * one burst. Waits for the token, never longer than one spacing.
+         *
+         * @param slots fetches allowed to run at once, from {@link #dhtFetchSlots}
+         * @param rate fetches per minute in force when this fetch was handed its slot
+         * @return true if a slot was taken and the start token is held for this fetch
+         */
+        private boolean takeDHTFetchSlot(int slots, int rate) {
+            for (;;) {
+                int running = _dhtFetchRunning.get();
+                if (running >= slots) {
+                    return false;
+                }
+                if (_dhtFetchRunning.compareAndSet(running, running + 1)) {
+                    break;
+                }
+            }
+            long spacing = fetchStartSpacing(rate, _util.getContext().random());
+            long now = _util.getContext().clock().now();
+            long start = now;
+            for (;;) {
+                long next = _dhtFetchNext.get();
+                start = Math.max(now, next);
+                if (_dhtFetchNext.compareAndSet(next, start + spacing)) {
+                    break;
+                }
+            }
+            long wait = start - now;
+            if (wait > 0) {
+                try {
+                    Thread.sleep(wait);
+                } catch (InterruptedException ie) {
+                    // halt() cutting the wait short; the fetch itself checks for the stop
+                    Thread.currentThread().interrupt();
+                }
+            }
+            return true;
         }
 
         /**

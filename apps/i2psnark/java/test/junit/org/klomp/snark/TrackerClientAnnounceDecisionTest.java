@@ -129,14 +129,18 @@ public class TrackerClientAnnounceDecisionTest {
     }
 
     /**
-     * DHT fetchers hold a pool worker for minutes at a time, so their number must
-     * stay below the pool's ceiling - they can never occupy the whole announce pool.
+     * DHT fetchers run on their own pool now, so the only relation to the
+     * announce pool that matters is that they cannot take every announce
+     * worker: the fetches that do run are bounded by their own slot ceiling.
      */
     @Test
     public void testDHTFetchersCannotStarvePool() {
-        // fetchers hold workers for minutes; they must never be able to
-        // occupy the whole announce pool
-        assertTrue(TrackerClient.DHT_FETCH_PERMITS > 0);
-        assertTrue(TrackerClient.DHT_FETCH_PERMITS < TrackerClient.MAX_ANNOUNCE_THREADS);
+        // fetchers hold their own workers for minutes; the ceiling stays a small
+        // multiple of the start rate, not the whole torrent thread budget
+        assertTrue(TrackerClient.DHT_FETCH_MIN_SLOTS > 0);
+        assertTrue(TrackerClient.DHT_FETCH_MIN_SLOTS
+                   < TrackerClient.DHT_FETCH_MAX_SLOTS);
+        assertTrue(TrackerClient.DHT_FETCH_MAX_SLOTS
+                   < TrackerClient.MAX_ANNOUNCE_THREADS * 2);
     }
 }
