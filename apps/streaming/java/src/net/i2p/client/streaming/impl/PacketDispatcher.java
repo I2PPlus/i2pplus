@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import net.i2p.I2PAppContext;
 import net.i2p.stat.RateConstants;
+import net.i2p.stat.StatManager;
 import net.i2p.util.Log;
 import net.i2p.util.ThreadNames;
 
@@ -27,8 +28,8 @@ import net.i2p.util.ThreadNames;
  * saturated connection's shard.
  * <p>
  * Live resize: the router's Tuner can change the worker count at runtime via
- * {@link #resizeAll} (applies the Tuner's global default to every live
- * manager).  A resize is guarded by the dispatcher's write lock so no dispatch
+ * {@link #resizeAll}, which applies the Tuner's global default to every live
+ * manager.  A resize is guarded by the dispatcher's write lock so no dispatch
  * is in flight while the shard array is rebuilt; each old shard is drained to
  * idle before its worker is retired, so every connection stays on exactly one
  * thread with no reordering and no dropped packets.
@@ -80,8 +81,8 @@ class PacketDispatcher {
     }
 
     /**
-     * Guards the shard array.  Dispatch holds the read lock (one reader in
-     * practice — a single notifier thread), so it is uncontended on the hot
+     * Guards the shard array.  Dispatch holds the read lock, one reader in
+     * practice — a single notifier thread — so it is uncontended on the hot
      * path. Resize and shutdown hold the write lock, excluding every dispatch
      * while the array is rebuilt, an old worker retired, or the dispatcher
      * stopped.
@@ -128,15 +129,16 @@ class PacketDispatcher {
         _processor = processor;
         _workers = newWorkers(Math.max(1, workerCount));
         if (context != null) {
-            if (context.statManager().getRate("stream.receiveBacklogged") == null) {
-                context.statManager().createRateStat("stream.receiveBacklogged",
-                                                     "Producers blocked on a full receive shard queue",
-                                                     "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.ONE_HOUR });
+            StatManager sm = context.statManager();
+            if (sm.getRate("stream.receiveBacklogged") == null) {
+                sm.createRequiredRateStat("stream.receiveBacklogged",
+                                          "Producers blocked on a full receive shard queue",
+                                          "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.ONE_HOUR });
             }
-            if (context.statManager().getRate("stream.receiveQueueDepth") == null) {
-                context.statManager().createRateStat("stream.receiveQueueDepth",
-                                                     "Inbound receive shard queue depth at dispatch",
-                                                     "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.ONE_HOUR });
+            if (sm.getRate("stream.receiveQueueDepth") == null) {
+                sm.createRequiredRateStat("stream.receiveQueueDepth",
+                                          "Inbound receive shard queue depth at dispatch",
+                                          "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.ONE_HOUR });
             }
         }
         _live.add(this);
@@ -147,9 +149,9 @@ class PacketDispatcher {
      * promptly. Wait for space only while that shard's queue is full.  Records
      * the target shard's queue depth and any producer-blind back-pressure.
      * <p>The 1ms back-pressure wait runs OUTSIDE the read lock: a saturated
-     * shard must not pin the lock, or {@link #shutdown} / {@link #resize(int)}
-     * (which need the write lock to flip {@code _running} / rebuild the shard
-     * array) would deadlock exactly when a worker is stuck behind a full
+     * shard must not pin the lock, or {@link #shutdown} / {@link #resize(int)},
+     * which need the write lock to flip {@code _running} or rebuild the shard
+     * array, would deadlock exactly when a worker is stuck behind a full
      * queue. The shard is therefore re-resolved each iteration, so an entry
      * offered across a resize lands on the shard's <em>current</em> worker —
      * a resize drains each old shard to idle before swapping, so ordering is
@@ -205,9 +207,9 @@ class PacketDispatcher {
 
     /**
      * Rebuild the shard array at a new size.  Takes the write lock, so no
-     * dispatch is in flight. Each old shard is drained to idle (queue empty,
-     * no entry mid-process) before its worker is retired and the new workers
-     * take over.  A no-op when the size is unchanged.
+     * dispatch is in flight. Each old shard is drained to idle, queue empty
+     * and no entry mid-process, before its worker is retired and the new
+     * workers take over.  A no-op when the size is unchanged.
      *
      * @param n the new worker count, at least 1 (lower values clamped)
      */
@@ -282,8 +284,7 @@ class PacketDispatcher {
      * <p>
      * The id is masked to 31 bits so the result is always non-negative even if
      * the id space wraps. Inbound stream ids are unique per live connection
-     * within a manager, giving a stable per-connection (and thus
-     * order-preserving) mapping.
+     * within a manager, giving a stable and thus order-preserving mapping.
      *
      * @param sendStreamId inbound stream id, &gt; 0 for known connections
      * @param nThreads number of shards, &gt;= 1
