@@ -278,9 +278,9 @@ task i2psnark(type: Exec) {
     commandLine 'zip', '-r', '-9', '-q',
             new File(distDir, 'i2psnark-standalone.zip').absolutePath, 'standalone'
     doLast {
-        // ant sha256sum: print "basename: hash"
+        // ant sha256sum: print "SHA256: <hash>"
         def f = new File(distDir, 'i2psnark-standalone.zip')
-        def pb = new ProcessBuilder('sh', '-c', 'h=$(sha256sum "$0"); echo "$(basename "$0"): ${h%% *}"', f.absolutePath)
+        def pb = new ProcessBuilder('sh', '-c', 'h=$(sha256sum "$0"); echo "SHA256: ${h%% *}  $(basename "$0")"', f.absolutePath)
         pb.inheritIO()
         pb.start().waitFor()
     }
@@ -296,6 +296,13 @@ task i2psnark7zip(type: Exec) {
     }
     commandLine '7z', 'a', '-t7z', '-mx=9', '-md=4m', '-mmt2', '-ssw', '-bt',
             new File(distDir, 'i2psnark-standalone.7z').absolutePath, 'standalone'
+    doLast {
+        // ant sha256sum: print "SHA256: <hash>"
+        def f = new File(distDir, 'i2psnark-standalone.7z')
+        def pb = new ProcessBuilder('sh', '-c', 'h=$(sha256sum "$0"); echo "SHA256: ${h%% *}  $(basename "$0")"', f.absolutePath)
+        pb.inheritIO()
+        pb.start().waitFor()
+    }
 }
 
 // ant deletes the target dir but keeps a hand-placed README.md

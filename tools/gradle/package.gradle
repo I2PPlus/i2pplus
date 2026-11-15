@@ -101,7 +101,7 @@ task buildDeb(type: Exec) {
     dependsOn prepUpdate
     commandLine 'bash', '-c',
         'tools/scripts/build-deb.sh "${1}" "${2}" && ' +
-        'h=$(sha256sum "dist/i2p_${1}_all.deb"); echo "$(basename "dist/i2p_${1}_all.deb"): ${h%% *}"',
+        'h=$(sha256sum "dist/i2p_${1}_all.deb"); echo "SHA256: ${h%% *}  i2p_${1}_all.deb"',
         'build-deb', pkgVersion, pkgTempArg
 }
 
@@ -114,6 +114,11 @@ task tarball(type: Tar) {
     compression = Compression.BZIP2
     from(pkgTmpDirAbs) { exclude 'README.md' }
     into 'i2p'
+    // ant's sha256sum target prints "SHA256: <hash>" after every shipped artifact
+    doLast {
+        new ProcessBuilder('sh', '-c',
+            'h=$(sha256sum "dist/i2p.tar.bz2"); echo "SHA256: ${h%% *}  i2p.tar.bz2"').inheritIO().start().waitFor()
+    }
 }
 
 task pkg {

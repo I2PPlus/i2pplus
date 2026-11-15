@@ -111,10 +111,11 @@ final def launcherSupported = ['x86', 'i386', 'i586', 'i686', 'amd64', 'x86_64']
 // an explicit receiver; bare script methods and script locals do not resolve
 // inside task configuration closures (delegate-first dispatch)
 class InstallerUtil {
-  // ant's sha256sum helper prints "basename: hash"
+  // ant's sha256sum target prints "SHA256: <hash>"; gradle keeps the name on the
+  // line because its Exec tasks do not echo the artifact path the way ant does
   void printSha(File absFile) {
     def pb = new ProcessBuilder('sh', '-c',
-        "f=\"${absFile}\"; h=\$(sha256sum \"\$f\"); echo \"\$(basename \"\$f\"): \${h%% *}\"")
+        "f=\"${absFile}\"; h=\$(sha256sum \"\$f\"); echo \"SHA256: \${h%% *}  \$(basename \"\$f\")\"")
     pb.inheritIO()
     pb.start().waitFor()
   }

@@ -248,7 +248,8 @@ class UpdateZip {
         new ProcessBuilder(['sh', '-c', script]).directory(new File(dir)).inheritIO().start().waitFor()
     }
 
-    // ant's sha256sum target: "<basename>: <hash>"
+    // ant's sha256sum target: "SHA256: <hash>" (gradle names the artifact on
+    // the same line: its Exec and Copy tasks do not echo the output path the way ant does)
     static String sha256(File f) {
         def digest = java.security.MessageDigest.getInstance('SHA-256')
         byte[] buf = new byte[8192]
@@ -267,7 +268,7 @@ task updaterRouter {
     dependsOn prepUpdateRouter
     doLast {
         def out = new File(distAbsDir, 'i2pupdate.zip')
-        logger.lifecycle("i2pupdate.zip: ${UpdateZip.zipIt(new File(routerStageDir), out, releaseNum, ['README.md'])}")
+        logger.lifecycle("SHA256: ${UpdateZip.zipIt(new File(routerStageDir), out, releaseNum, ['README.md'])}  i2pupdate.zip")
     }
 }
 
@@ -277,7 +278,7 @@ task updaterSmall {
     dependsOn prepUpdateSmall
     doLast {
         def out = new File(distAbsDir, 'i2pupdate.zip')
-        logger.lifecycle("i2pupdate.zip: ${UpdateZip.zipIt(new File(smallStageDir), out, releaseNum, ['README.md'])}")
+        logger.lifecycle("SHA256: ${UpdateZip.zipIt(new File(smallStageDir), out, releaseNum, ['README.md'])}  i2pupdate.zip")
     }
 }
 
@@ -291,7 +292,7 @@ task updater {
         def out = new File(distAbsDir, 'i2pupdate.zip')
         def sha = UpdateZip.zipIt(new File(pkgTmpDir), out, releaseNum, ['README.md'])
         logger.lifecycle("Created I2P+ update (rev. ${UpdateZip.gitRev(rootDirAbs)}): ${distAbsDir}/i2pupdate.zip")
-        logger.lifecycle("i2pupdate.zip: ${sha}")
+        logger.lifecycle("SHA256: ${sha}  i2pupdate.zip")
     }
 }
 
@@ -333,7 +334,7 @@ task updaterCompact {
     dependsOn prepUpdateCompact
     doLast {
         def out = new File(distAbsDir, 'i2pupdate.zip')
-        logger.lifecycle("i2pupdate.zip: ${UpdateZip.zipIt(new File(compactStageDir), out, releaseNum, ['README.md'])}")
+        logger.lifecycle("SHA256: ${UpdateZip.zipIt(new File(compactStageDir), out, releaseNum, ['README.md'])}  i2pupdate.zip")
     }
 }
 
@@ -391,7 +392,7 @@ task updater200Compact {
     dependsOn pack200Updater
     doLast {
         def out = new File(distAbsDir, 'i2pupdate200.zip')
-        logger.lifecycle("i2pupdate200.zip: ${UpdateZip.zipIt(new File(compact200StageDir), out, releaseNum, ['README.md'])}")
+        logger.lifecycle("SHA256: ${UpdateZip.zipIt(new File(compact200StageDir), out, releaseNum, ['README.md'])}  i2pupdate200.zip")
         // Pack200 savings vs. the raw payload (mirrors ant zipit200)
         if (new File(pack200MarkerAbs).exists()) {
             UpdateZip.runShell(rootDirAbs, '''if [ -f __MARKER__ ]; then before=$(cat __MARKER__); zipsize=$(wc -c < dist/i2pupdate200.zip); saved=$((before - zipsize)); b_mb=$(printf "%d.%02d" $((before/1000000)) $(((before%1000000)/10000))); z_mb=$(printf "%d.%02d" $((zipsize/1000000)) $(((zipsize%1000000)/10000))); s_mb=$(printf "%d.%02d" $((saved/1000000)) $(((saved%1000000)/10000))); echo "Pack200: jars (${b_mb}MB) -> zip (${z_mb}MB) (saved ${s_mb}MB)"; rm -f __MARKER__; fi'''.replace('__MARKER__', pack200MarkerAbs))

@@ -170,6 +170,7 @@
     <echo message="  updaterWithJettyFixesAndJbigi                Updater + local Jetty patches + jBigi library"/>
     <echo message="  updaterWithJettyFixes                        Updater + local Jetty patches"/>
     <echo message="  updaterWithJetty                             Updater + Jetty"/>
+    <echo message="  updaterWithTomcat                            Updater + Jasper/Tomcat jars only"/>
     <echo message="  updaterFull                                  Updater + every optional code component (GeoIP/ASN, Jetty, jbigi)"/>
     <echo message="  updaterCompact                               Updater w/o SAM, DesktopGUI, systray, country/continent lists, docs/proxy, docs/readme, translations"/>
     <echo message="  updaterCompactRouterConsoleNoThemes          Updater with RouterConsole only (no themes)"/>
@@ -193,6 +194,7 @@
     <echo message="  updater200WithJettyAndGeoIP                  Updater (pack200) + Jetty + GeoIP database"/>
     <echo message="  updater200WithJettyFixesAndGeoIP             Updater (pack200) + local Jetty patches + GeoIP database"/>
     <echo message="  updater200WithJetty                          Updater (pack200) + Jetty"/>
+    <echo message="  updater200WithTomcat                         Updater (pack200) + Jasper/Tomcat jars only"/>
     <echo message="  updater200Full                               Updater (pack200) + every optional code component (GeoIP/ASN, Jetty, jbigi)"/>
     <echo message="  updaterRouter                                Updater with i2p.jar and router.jar only"/>
     <echo message="  updaterSmall                                 Updater with essentials (no SAM/I2PSnark/SusiMail/SusiDNS/history.txt)"/>
@@ -202,6 +204,7 @@
     <echo message="  signed-updater200WithJavadocAndJetty         Signed Updater (pack200) + javadocs + Jetty &#10140; ./dist/i2pupdate.su3"/>
     <echo message="  signed-updater200WithJavadoc                 Signed Updater (pack200) + javadocs &#10140; ./dist/i2pupdate.su3"/>
     <echo message="  signed-updater200WithJetty                   Signed Updater (pack200) + Jetty"/>
+    <echo message="  signed-updater200WithTomcat                  Signed Updater (pack200) + Jasper/Tomcat jars only"/>
     <echo message="  signed-updater200WithJettyAndGeoIP           Signed Updater (pack200) + Jetty + GeoIP database"/>
     <echo message="  signed-updater200Full                        Signed Updater (pack200) + every optional code component &#10140; ./dist/i2pupdate.su3"/>
     <echo message=""/>
@@ -450,7 +453,8 @@
       -->
       <local name="file-sum"/>
       <checksum format="MD5SUM" file="@{file}" property="file-sum" algorithm="sha-256"/>
-      <echo message="${file-sum}  @{file}"/>
+      <!-- The release block lists these side by side, so this one keeps the name -->
+      <echo message="SHA256: ${file-sum}  @{file}"/>
     </sequential>
   </macrodef>
 
@@ -2837,6 +2841,9 @@
     <zip destfile="./dist/i2p-linux.zip" level="9">
       <fileset dir="${pkg.temp.dir}" excludes="README.md"/>
     </zip>
+    <antcall target="sha256sum">
+      <param name="sha256.file" value="dist/i2p-linux.zip"/>
+    </antcall>
   </target>
 
   <target name="zip-windows">
@@ -2848,6 +2855,9 @@
     <zip destfile="./dist/i2p-windows.zip" level="9">
       <fileset dir="${pkg.temp.dir}" excludes="README.md"/>
     </zip>
+    <antcall target="sha256sum">
+      <param name="sha256.file" value="dist/i2p-windows.zip"/>
+    </antcall>
   </target>
 
   <target name="zip-macos">
@@ -2859,6 +2869,9 @@
     <zip destfile="./dist/i2p-macos.zip" level="9">
       <fileset dir="${pkg.temp.dir}" excludes="README.md"/>
     </zip>
+    <antcall target="sha256sum">
+      <param name="sha256.file" value="dist/i2p-macos.zip"/>
+    </antcall>
   </target>
 
   <target name="zip-freebsd">
@@ -2870,6 +2883,9 @@
     <zip destfile="./dist/i2p-freebsd.zip" level="9">
       <fileset dir="${pkg.temp.dir}" excludes="README.md"/>
     </zip>
+    <antcall target="sha256sum">
+      <param name="sha256.file" value="dist/i2p-freebsd.zip"/>
+    </antcall>
   </target>
 
   <target name="7zip-linux">
@@ -3211,6 +3227,9 @@
     <delete file="dist/i2pseeds.su3"/>
     <zip destfile="./dist/i2pseeds.zip" basedir="${pkg.temp.dir}/netDb" whenempty="fail"/>
     <su3sign infile="dist/i2pseeds.zip" sigtype="RESEED" outfile="dist/i2pseeds.su3" su3.ver="${epoch}"/>
+    <antcall target="sha256sum">
+      <param name="sha256.file" value="dist/i2pseeds.su3"/>
+    </antcall>
   </target>
 
   <!-- text output -->
@@ -3268,6 +3287,9 @@
     <tar compression="bzip2" destfile="./dist/i2p.tar.bz2">
       <tarfileset dir="${pkg.temp.dir}" includes="**/*" excludes="README.md" prefix="i2p"/>
     </tar>
+    <antcall target="sha256sum">
+      <param name="sha256.file" value="dist/i2p.tar.bz2"/>
+    </antcall>
   </target>
 
   <target name="deletepkg-temp">
@@ -3546,10 +3568,16 @@
        worse, signed a stale i2pupdate200.zip left over from an earlier run. -->
   <target name="-sign-update" depends="buildrouter">
     <su3sign infile="dist/i2pupdate200.zip" sigtype="ROUTER" outfile="dist/i2pupdate.su3" su3.ver="${full.version}"/>
+    <antcall target="sha256sum">
+      <param name="sha256.file" value="dist/i2pupdate.su3"/>
+    </antcall>
   </target>
 
   <target name="-sign-update-plain" depends="buildrouter">
     <su3sign infile="dist/i2pupdate.zip" sigtype="ROUTER" outfile="dist/i2pupdate.su3" su3.ver="${full.version}"/>
+    <antcall target="sha256sum">
+      <param name="sha256.file" value="dist/i2pupdate.su3"/>
+    </antcall>
   </target>
 
   <target name="signed-updater" depends="timestamp.started, -pre-sign, updater, -sign-update-plain, timestamp.stopped"/>
@@ -3666,10 +3694,12 @@
     </exec>
   </target>
 
-  <target name="sha256sum" description="Print SHA256 checksum of file in ${sha256.file}">
+  <target name="sha256sum" description="Print SHA256 checksum of the file in ${sha256.file}">
+    <!-- The task that wrote the artifact names it on the line above, so the hash
+         line carries no second copy of the path. -->
     <exec executable="sh" failonerror="false">
       <arg value="-c"/>
-      <arg value="h=$(sha256sum &quot;${sha256.file}&quot;); echo &quot;$(basename &quot;${sha256.file}&quot;): ${h%% *}&quot;"/>
+      <arg value="h=$(sha256sum &quot;${sha256.file}&quot;); echo &quot;SHA256: ${h%% *}&quot;"/>
     </exec>
   </target>
 
@@ -4282,35 +4312,53 @@
   <target name="installer-nowindows" depends="timestamp.started, clean, preppkg-nowindows, izpack-patches, timestamp.stopped">
     <fixcrlf srcdir="${pkg.temp.dir}" includes="*.config **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="lf"/>
     <izpack input="${build.root}/izpack/4/install.xml" output="${basedir}/dist/i2pinstall_${full.version}.jar" installerType="standard" basedir="${basedir}"/>
+    <antcall target="sha256sum">
+      <param name="sha256.file" value="dist/i2pinstall_${full.version}.jar"/>
+    </antcall>
   </target>
 
   <!-- IzPack 5 -->
   <target name="installer5-nowindows" depends="timestamp.started, clean, izpack5-patches, preppkg-nowindows, timestamp.stopped">
     <fixcrlf srcdir="${pkg.temp.dir}" includes="*.config **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="lf"/>
     <izpack5compile input="${build.root}/izpack/5/install5.xml" output="${basedir}/dist/i2pinstall_${full.version}.jar"/>
+    <antcall target="sha256sum">
+      <param name="sha256.file" value="dist/i2pinstall_${full.version}.jar"/>
+    </antcall>
   </target>
 
   <target name="installer-freebsd" depends="timestamp.started, clean, preppkg-freebsd-only, izpack-patches, timestamp.stopped">
     <fixcrlf srcdir="${pkg.temp.dir}" includes="*.config **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="lf"/>
     <izpack input="${build.root}/izpack/4/install.xml" output="${basedir}/dist/i2pinstall_${full.version}_freebsd-only.jar" installerType="standard" basedir="${basedir}"/>
+    <antcall target="sha256sum">
+      <param name="sha256.file" value="dist/i2pinstall_${full.version}_freebsd-only.jar"/>
+    </antcall>
   </target>
 
   <!-- IzPack 4 -->
   <target name="installer-linux" depends="timestamp.started, clean, preppkg-linux-only, izpack-patches, timestamp.stopped">
     <fixcrlf srcdir="${pkg.temp.dir}" includes="*.config **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="lf"/>
     <izpack input="${build.root}/izpack/4/install.xml" output="${basedir}/dist/i2pinstall_${full.version}_linux-only.jar" installerType="standard" basedir="${basedir}"/>
+    <antcall target="sha256sum">
+      <param name="sha256.file" value="dist/i2pinstall_${full.version}_linux-only.jar"/>
+    </antcall>
   </target>
 
   <!-- IzPack 5 -->
   <target name="installer5-linux" depends="timestamp.started, clean, izpack5-patches, preppkg-linux-only, timestamp.stopped">
     <fixcrlf srcdir="${pkg.temp.dir}" includes="*.config **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="lf"/>
     <izpack5compile input="${build.root}/izpack/5/install5.xml" output="${basedir}/dist/i2pinstall_${full.version}_linux-only.jar"/>
+    <antcall target="sha256sum">
+      <param name="sha256.file" value="dist/i2pinstall_${full.version}_linux-only.jar"/>
+    </antcall>
   </target>
 
   <target name="installer-osx" depends="timestamp.started, clean, checkForIzpack2App, preppkg-osx-only, izpack-patches, timestamp.stopped">
     <fixcrlf srcdir="${pkg.temp.dir}" includes="*.config **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="lf"/>
     <mkdir dir="${pkg.temp.dir}/osx"/>
     <izpack input="${build.root}/izpack/4/install.xml" output="${basedir}/dist/i2pinstall_${full.version}_osx-only.jar" installerType="standard" basedir="${basedir}"/>
+    <antcall target="sha256sum">
+      <param name="sha256.file" value="dist/i2pinstall_${full.version}_osx-only.jar"/>
+    </antcall>
     <ant target="installer2app"/>
     <delete dir="${pkg.temp.dir}/osx"/>
   </target>
@@ -4319,6 +4367,9 @@
     <fixcrlf srcdir="${pkg.temp.dir}" includes="*.config **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="lf"/>
     <mkdir dir="${pkg.temp.dir}/osx"/>
     <izpack5compile input="${build.root}/izpack/5/install5.xml" output="${basedir}/dist/i2pinstall_${full.version}_osx-only.jar"/>
+    <antcall target="sha256sum">
+      <param name="sha256.file" value="dist/i2pinstall_${full.version}_osx-only.jar"/>
+    </antcall>
     <ant target="installer2app"/>
     <delete dir="${pkg.temp.dir}/osx"/>
   </target>
@@ -4351,6 +4402,9 @@
         <include name="Contents/MacOS/*"/>
       </tarfileset>
     </tar>
+    <antcall target="sha256sum">
+      <param name="sha256.file" value="dist/i2pinstall_${full.version}_osx.tar.bz2"/>
+    </antcall>
   </target>
 
   <!-- call between installer-xxx and installer-windows -->
@@ -4369,6 +4423,9 @@
     <ant target="installerexe"/>
     <delete file="${basedir}/install.jar"/>
     <move file="${basedir}/dist/i2pinstall.exe" tofile="${basedir}/dist/i2pinstall_${full.version}_windows.exe"/>
+    <antcall target="sha256sum">
+      <param name="sha256.file" value="dist/i2pinstall_${full.version}_windows.exe"/>
+    </antcall>
   </target>
 
   <!-- IzPack 5 -->
@@ -4378,6 +4435,9 @@
     <ant target="installer5exe"/>
     <delete file="${basedir}/install.jar"/>
     <move file="${basedir}/dist/i2pinstall.exe" tofile="${basedir}/dist/i2pinstall_${full.version}_windows.exe"/>
+    <antcall target="sha256sum">
+      <param name="sha256.file" value="dist/i2pinstall_${full.version}_windows.exe"/>
+    </antcall>
   </target>
 
   <!-- this is broken as installer-xxx targets may delete (or not delete) things in pkg-temp -->
@@ -5629,17 +5689,17 @@
     <echo message="   TBD    i2pinstall_${release.number}_windows.exe"/>
     <echo message="   TBD    i2pinstall_${release.number}_windows.exe.sig"/>
     <echo message="SHA256 sums:"/>
-    <echo message="   TBD    i2pinstall_${release.number}_windows.exe"/>
+    <sha256sum file="dist/i2pinstall_${release.number}_windows.exe"/>
     <sha256sum file="dist/i2pinstall_${release.number}.jar"/>
     <sha256sum file="dist/i2psource_${release.number}.tar.bz2"/>
     <sha256sum file="dist/i2pupdate_${release.number}.zip"/>
     <sha256sum file="dist/i2pupdate.su3"/>
     <!-- make torrent files -->
     <copy quiet="true" verbose="false" file="dist/i2pupdate.su3" tofile="dist/i2pupdate-${release.number}.su3"/>
+    <sha256sum file="dist/i2pupdate-${release.number}.su3"/>
     <mktorrent file="dist/i2pupdate-${release.number}.su3"/>
     <echo message=" Don't forget to sign i2pinstall_${release.number}_windows.exe on Windows and then:"/>
     <echo message="   ${gpg} -u ${release.gpg.keyid} -b i2pinstall_${release.number}_windows.exe"/>
-    <echo message="   sha256sum i2pinstall_${release.number}_windows.exe"/>
     <echo message="&#8199;"/>
     <echo message=" Don't forget to git tag -s i2p-${release.number}"/>
     <echo message=" ...and git push origin tag i2p-${release.number}"/>
@@ -6133,8 +6193,8 @@
     <condition property="download.fail">
       <contains string="${shell.output}" substring="Failed to download the latest list."/>
     </condition>
-    <!-- The two echo targets used to be gated by if="${condition}" fed from
-         <param name="condition" value="${download.success}"/>, which works only
+    <!-- The two echo targets used to be gated by if="${condition}" on a param
+         carrying the value of the download.success property, which works only
          because an unset property expands to its own name: the test was on the
          VALUE of a string, not on whether the run succeeded. Test the condition
          properties themselves instead. -->
