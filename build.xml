@@ -2753,6 +2753,8 @@
       <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/eephead.bat" todir="${pkg.temp.dir}/"/>
       <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/i2prouter.bat" todir="${pkg.temp.dir}/"/>
       <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/service.ps1" todir="${pkg.temp.dir}/"/>
+      <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/portable.ps1" todir="${pkg.temp.dir}/"/>
+      <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/README-Windows.md" todir="${pkg.temp.dir}/"/>
       <copy quiet="true" verbose="false" file="${build.root}build/utility.jar" todir="${pkg.temp.dir}"/>
       <copy quiet="true" verbose="false" todir="${pkg.temp.dir}/lib/wrapper/win64/">
         <fileset dir="installer/lib/wrapper/win64/" excludes="*.txt README.md *.nmake"/>

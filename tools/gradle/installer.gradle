@@ -425,7 +425,8 @@ def makeStageTask(String taskName, String stageDir, String variant, String taskD
       from 'installer/resources/platform-specific/macos/uninstall_i2p_service_osx.command'
     }
     if (variant == 'all' || variant == 'windows') {
-      ['eepget.bat', 'eephead.bat', 'i2prouter.bat', 'service.ps1'].each { b ->
+      ['eepget.bat', 'eephead.bat', 'i2prouter.bat', 'service.ps1', 'portable.ps1',
+       'README-Windows.md'].each { b ->
         from "installer/resources/platform-specific/windows/${b}"
       }
       // ant preppkg-windows copies the launch4j launcher into the payload root;
