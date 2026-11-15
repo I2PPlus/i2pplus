@@ -142,14 +142,20 @@ class InstallerUtil {
     }
   }
 
-  // Convert the windows-relevant payload files to CRLF (ant fixcrlf)
+  // Convert the windows-relevant payload files to CRLF (ant fixcrlf). ant's
+  // fixcrlf rewrites every line ending, not only a file that has none of ours,
+  // and its fixlast (default true) terminates a file that ends without one.
   void crlfStage(File stage) {
     def patterns = ['**/*.config', '**/*.bat', '**/*.cmd', '**/*.xml', '**/*.properties', '**/*.txt', 'scripts/*']
     new Paths().forEachFile(stage, patterns) { File f ->
       String text = f.getText('UTF-8')
-      if (text.contains('\n') && !text.contains('\r\n')) {
-        f.setText(text.replaceAll('\r?\n', '\r\n'), 'UTF-8')
+      if (!text) {
+        return
       }
+      if (!text.endsWith('\n')) {
+        text += '\r\n'
+      }
+      f.setText(text.replaceAll('\r?\n', '\r\n'), 'UTF-8')
     }
   }
 

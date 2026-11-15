@@ -2890,6 +2890,10 @@
       <fileset dir="dist" includes="i2p-windows.zip" excludes="README.md"/>
     </delete>
     <ant target="preppkg-windows"/>
+    <!-- Same conversion installer-windows does: a windows package that keeps the
+         payload at LF ships batch files and a wrapper.config no Windows tool is
+         happy with, and the Gradle side already converts its windows stage. -->
+    <fixcrlf srcdir="${pkg.temp.dir}" includes="*.config *.bat *.cmd **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="crlf"/>
     <zip destfile="./dist/i2p-windows.zip" level="9">
       <fileset dir="${pkg.temp.dir}" excludes="README.md"/>
     </zip>
@@ -2948,6 +2952,9 @@
     <move todir="${pkg.temp.dir}/i2p">
       <fileset dir="${pkg.temp.dir}" includes="**/*" excludes="README.md"/>
     </move>
+    <!-- mkdir made i2p/ before the move scanned pkg-temp, so the move packs that
+         empty directory into itself as i2p/i2p -->
+    <delete dir="${pkg.temp.dir}/i2p/i2p" quiet="true"/>
     <exec executable="7z" failifexecutionfails="true" failonerror="true">
       <arg value="a"/>
       <arg value="-bt"/>
@@ -3026,10 +3033,16 @@
       </delete>
     </parallel>
     <ant target="preppkg-windows"/>
+    <!-- Same conversion installer-windows does, so the zip, the 7z and the
+         installed tree all ship the same line endings. -->
+    <fixcrlf srcdir="${pkg.temp.dir}" includes="*.config *.bat *.cmd **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="crlf"/>
     <mkdir dir="${pkg.temp.dir}/i2p"/>
     <move todir="${pkg.temp.dir}/i2p">
       <fileset dir="${pkg.temp.dir}" includes="**/*" excludes="README.md"/>
     </move>
+    <!-- mkdir made i2p/ before the move scanned pkg-temp, so the move packs that
+         empty directory into itself as i2p/i2p -->
+    <delete dir="${pkg.temp.dir}/i2p/i2p" quiet="true"/>
     <exec executable="7z" failifexecutionfails="true" failonerror="true">
       <arg value="a"/>
       <arg value="-bt"/>
@@ -3061,6 +3074,9 @@
     <move todir="${pkg.temp.dir}/i2p">
       <fileset dir="${pkg.temp.dir}" includes="**/*" excludes="README.md"/>
     </move>
+    <!-- mkdir made i2p/ before the move scanned pkg-temp, so the move packs that
+         empty directory into itself as i2p/i2p -->
+    <delete dir="${pkg.temp.dir}/i2p/i2p" quiet="true"/>
     <exec executable="7z" failifexecutionfails="true" failonerror="true">
       <arg value="a"/>
       <arg value="-bt"/>
@@ -3092,6 +3108,9 @@
     <move todir="${pkg.temp.dir}/i2p">
       <fileset dir="${pkg.temp.dir}" includes="**/*" excludes="README.md"/>
     </move>
+    <!-- mkdir made i2p/ before the move scanned pkg-temp, so the move packs that
+         empty directory into itself as i2p/i2p -->
+    <delete dir="${pkg.temp.dir}/i2p/i2p" quiet="true"/>
     <exec executable="7z" failifexecutionfails="true" failonerror="true">
       <arg value="a"/>
       <arg value="-bt"/>
