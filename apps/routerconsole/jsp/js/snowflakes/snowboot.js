@@ -14,6 +14,11 @@
  * When the last of those stops holding, the scripts it loaded are taken back off the
  * page and the listener is put back, so the next gesture can bring them in.
  *
+ * The field and the card are two decisions, kept in two localStorage keys (snowMode and
+ * snowHud), because they are two things a reader does: the field is left on for the season,
+ * while the card is opened and shut, and the card's own close button takes the card's module
+ * and its stylesheet back off the page straight away, leaving the snow exactly as it was.
+ *
  * The decision rules live here and nowhere else: snowflakes.js reads them from
  * window.snowBoot rather than carrying a second copy that can drift.
  * @author dr|z3d
@@ -22,8 +27,18 @@
 (function snowboot() {
   'use strict';
 
-  /** localStorage key holding the visitor's own choice: "on" or "off". */
+  /** localStorage key holding the visitor's own choice about the field: "on" or "off". */
   const LS_KEY = "snowMode";
+  /**
+   * localStorage key holding the visitor's own choice about the tuning card: "on" or "off".
+   *
+   * A separate key on purpose. The card is something the reader opens and shuts, and
+   * shutting it takes its two files back off the page while the field may well carry on
+   * running; the field is something they leave on for the season. One key for both means
+   * one choice, and a card shut on one page then decides what the next page fetches —
+   * which is how a card shows up with its module loaded and its stylesheet not.
+   */
+  const HUD_KEY = "snowHud";
   /**
    * The season is the browser's local calendar, not the router's: a festive effect follows
    * the calendar the viewer is looking at. All of December, and 1-6 January.
@@ -38,20 +53,26 @@
   /** How long two keystrokes may be apart and still be one gesture, in milliseconds. */
   const GESTURE_WINDOW_MS = 2000;
   /**
-   * What gets loaded, in the order it has to run in: the card's stylesheet last of the
-   * sheets so it outvotes the console theme, then the card, then the worker it draws its
-   * thumbnails from, then the page side — which starts the field as soon as it runs, and
-   * starting it attaches the card, so the other two have to be defined already.
+   * What the field is: the worker, then the page side that runs it — which starts the
+   * field as soon as it runs, so the worker has to be defined already.
    */
-  const SCRIPTS = ["hud.js", "snowman.js", "snowflakes.js"];
-  /** The card's stylesheet, injected with the scripts rather than on every page. */
+  const FIELD_SCRIPTS = ["snowman.js", "snowflakes.js"];
+  /**
+   * The tuning card's module, loaded only when the card is wanted, and always before the
+   * page side: starting a field attaches the card, so the card has to be defined by then.
+   */
+  const HUD_SCRIPT = "hud.js";
+  /** The card's stylesheet, injected with the card rather than on every page. */
   const SHEET = "hud.css";
   /** The globals the loaded scripts publish, cleared again on unload. */
   const GLOBALS = ["SNOWMAN", "SNOWHUD", "snowGates"];
 
   /** The elements this file injected, in injection order, empty until it loads anything. */
   const injected = [];
-  /** The card's stylesheet element, or null while the card has never been opened. */
+  /** The card's own elements — its module and its stylesheet — so closing it can take just
+      those back off a page whose field is still running. */
+  const card = [];
+  /** The card's stylesheet element, or null while the card has never been on the page. */
   let sheet = null;
   /** Set once the sheet has landed or refused to; after that an open never waits. */
   let sheetReady = false;
@@ -187,6 +208,53 @@
   }
 
   /**
+   * Whether the tuning card is wanted on this page: ?hud=1 or ?hud=on says yes for this
+   * page alone, ?hud=0 or ?hud=off says no for this page alone, and otherwise what the
+   * reader left the last time the card was opened or shut.
+   *
+   * @returns {boolean} true when this page should carry the card
+   */
+  function hudMode() {
+    const query = queryOf();
+    const value = query === null ? null : param(query, 'hud');
+    if (value === '1' || value === 'on') {return true;}
+    if (value === '0' || value === 'off') {return false;}
+    return storedHud();
+  }
+
+  /**
+   * The visitor's stored choice about the card, which is not the field's choice: a reader
+   * who shut the card may well be running the field, and one who never opened it may be
+   * running the field too.
+   *
+   * @returns {boolean} true when the reader left the card open
+   */
+  function storedHud() {
+    let value = null;
+    try {
+      value = window.localStorage.getItem(HUD_KEY);
+    } catch (e) {
+      return false;
+    }
+    return value === 'on';
+  }
+
+  /**
+   * Remembers the visitor's choice about the card. Storage is not guaranteed, and a failure
+   * only costs the memory.
+   *
+   * @param {boolean} on true to leave the card on for the next page
+   * @returns {void}
+   */
+  function storeHud(on) {
+    try {
+      window.localStorage.setItem(HUD_KEY, on ? 'on' : 'off');
+    } catch (e) {
+      /* nothing to remember it in */
+    }
+  }
+
+  /**
    * Whether the visitor has asked the system for reduced motion.
    *
    * @returns {boolean} true when reduced motion is requested
@@ -232,39 +300,103 @@
     if (loading || isLoaded()) {return;}
     loading = true;
     pending = asked || null;
-    // The card's stylesheet travels with the card, not with the field: a December page
-    // that puts snow on the viewport and never opens the card never asks for it.
-    if (asked === 'hud' || hudRequested()) {loadSheet();}
-    const base = baseDir();
-    for (const name of SCRIPTS) {
-      const script = document.createElement('script');
-      script.src = base + name;
-      script.async = false;
-      script.addEventListener('error', onLoadError);
-      document.body.appendChild(script);
-      injected.push(script);
+    // The card and its stylesheet travel together, and on their own terms: a December page
+    // that puts snow on the viewport and never opens the card never asks for either of them.
+    if (asked === 'hud' || hudMode()) {loadCard(null);}
+    for (const name of FIELD_SCRIPTS) {injectScript(name, null);}
+  }
+
+  /**
+   * Puts one script on the page.
+   *
+   * async=false is what keeps the load order: a script inserted at runtime is async by
+   * default, and a field whose page side runs before the worker it drives is a field that
+   * never starts.
+   *
+   * @param {string} name the file beside this loader
+   * @param {Array<Object>|null} extra a second list to remember the element in, for the ones
+   *        that have to come back off without the rest of the field
+   * @returns {Object} the script element
+   */
+  function injectScript(name, extra) {
+    const script = document.createElement('script');
+    script.src = baseDir() + name;
+    script.async = false;
+    script.addEventListener('error', onLoadError);
+    document.body.appendChild(script);
+    injected.push(script);
+    if (extra) {extra.push(script);}
+    return script;
+  }
+
+  /**
+   * Puts the card's module on the page, once, and runs what happens next when it has run.
+   *
+   * @param {Function|null} then to run once the card's module is on the page
+   * @returns {void}
+   */
+  function loadCard(then) {
+    injectSheet();
+    if (hudLoaded()) {
+      if (then) {then();}
+      return;
     }
+    const script = injectScript(HUD_SCRIPT, card);
+    if (then) {script.addEventListener('load', then, {once: true});}
+  }
+
+  /**
+   * Whether the card's module is on the page.
+   *
+   * @returns {boolean} true when hud.js has run
+   */
+  function hudLoaded() {
+    return typeof window.SNOWHUD === 'object';
   }
 
   /**
    * Puts the card's stylesheet on the page, once.
    *
-   * The card is attached as soon as the field starts, so that a gesture can open it without
-   * waiting on a fetch, but it is not styled until it is opened — and the page side, which
-   * is the only thing that knows when the reader pressed the card's own control, calls this
-   * at that moment. It is appended to the head rather than put beside the scripts so it
-   * lands after every theme sheet and wins the ties on order as well as on specificity.
+   * It is appended to the head rather than put beside the scripts so it lands after every
+   * theme sheet and wins the ties on order as well as on specificity.
    *
    * @returns {void}
    */
-  function loadSheet() {
+  function injectSheet() {
     if (sheet) {return;}
     const link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href = baseDir() + SHEET;
+    link.addEventListener('load', readySheet, {once: true});
+    link.addEventListener('error', readySheet, {once: true});
     document.head.appendChild(link);
     sheet = link;
     injected.push(link);
+    card.push(link);
+  }
+
+  /**
+   * Says the sheet has landed, or refused to, and runs everything that was waiting on it.
+   *
+   * A sheet that will not load still counts: a card shown without its colours is worse
+   * than a card shown late, and waiting on a fetch that failed would never open it at all.
+   *
+   * @returns {void}
+   */
+  function readySheet() {
+    sheetReady = true;
+    while (sheetWaiters.length) {sheetWaiters.shift()();}
+  }
+
+  /**
+   * Runs something once the card's stylesheet is on the page — immediately if it already is.
+   *
+   * @param {Function} then what to run
+   * @returns {void}
+   */
+  function whenSheet(then) {
+    if (sheetReady) {then(); return;}
+    sheetWaiters.push(then);
   }
 
   /**
@@ -303,6 +435,54 @@
   }
 
   /**
+   * Brings the card onto a page that is already running the field, and opens it once both
+   * of its files have landed.
+   *
+   * @returns {void}
+   */
+  function openHud() {
+    storeHud(true);
+    loadCard(() => {whenSheet(() => {
+      if (typeof window.snowGates === 'object' && window.snowGates.openHud) {
+        window.snowGates.openHud();
+      }
+    });});
+  }
+
+  /**
+   * Takes the card off the page and remembers that the reader does not want it.
+   *
+   * This is what the card's own close button does, and it is deliberately not the field's
+   * business: the snow may be running, and it carries on running. What goes is the card's
+   * module and the card's stylesheet, and the card's element with them, so a page that wants
+   * the card next time is a page that fetches both again rather than one that shows a card
+   * whose colours never arrived.
+   *
+   * @returns {void}
+   */
+  function closeHud() {
+    storeHud(false);
+    const gates = typeof window.snowGates === 'object' ? window.snowGates : null;
+    if (gates && typeof gates.dropHud === 'function') {gates.dropHud();}
+    while (card.length) {
+      const element = card.pop();
+      const at = injected.indexOf(element);
+      if (at !== -1) {injected.splice(at, 1);}
+      if (element.parentNode) {element.parentNode.removeChild(element);}
+    }
+    if (sheet) {
+      sheet = null;
+      sheetReady = false;
+      sheetWaiters.length = 0;
+    }
+    try {
+      delete window.SNOWHUD;
+    } catch (e) {
+      window.SNOWHUD = undefined;
+    }
+  }
+
+  /**
    * Takes the field's scripts back off the page.
    *
    * A script tag cannot be unrun, so this is the honest half of an unload: the page side
@@ -321,7 +501,10 @@
       const element = injected.pop();
       if (element.parentNode) {element.parentNode.removeChild(element);}
     }
+    card.length = 0;
     sheet = null;
+    sheetReady = false;
+    sheetWaiters.length = 0;
     for (const name of GLOBALS) {
       try {
         delete window[name];
@@ -419,14 +602,16 @@
    */
   function ask(asked) {
     if (!isLoaded()) {
-      // The gesture is the reader asking for the field, so it is remembered the way the
-      // field remembers its own toggles: the next page load answers with snow too.
-      if (asked === 'snow') {storeMode('on');}
+      // The gesture is the reader asking, so each one is remembered the way its own kind of
+      // toggle is remembered: the next page load answers the same way.
+      if (asked === 'snow') {storeMode('on');} else {storeHud(true);}
       load(asked);
       return;
     }
     if (asked === 'hud') {
-      if (window.snowGates.openHud) {window.snowGates.openHud();}
+      // Typing the gesture is the reader asking for the card, whether it is on the page
+      // already or was shut and taken off with its own files.
+      openHud();
       return;
     }
     // The field's own toggle remembers the choice; switching it off leaves nothing on the
@@ -437,15 +622,17 @@
   // The whole reason the effect is quiet for eleven months a year: nothing is fetched until
   // one of the conditions holds. The keystream is watched either way — before a load it is
   // what decides to fetch anything, and after one the same gestures toggle the field and
-  // open the card, which is the same decision one step in.
-  if (decide() === 'on') {load(null);}
+  // open the card, which is the same decision one step in. A card left open is a field
+  // wanted too, since the card drives it, so either one brings the stack in.
+  if (decide() === 'on' || hudMode()) {load(null);}
   watch();
 
   // The JS harness (tools/test/js/pure/snowGates.test.js) drives these directly, and
   // snowflakes.js reads the decision rules from here.
   window.snowBoot = Object.freeze({
-    LS_KEY, SEASON_FIRST_MONTH, SEASON_LAST_MONTH, SEASON_LAST_DAY, GESTURE_WINDOW_MS,
-    inSeason, modeFor, urlMode, hudRequested, storedMode, storeMode, prefersReducedMotion,
-    decide, load, loadSheet, unload, isLoaded, takePending, watch, unwatch
+    LS_KEY, HUD_KEY, SEASON_FIRST_MONTH, SEASON_LAST_MONTH, SEASON_LAST_DAY,
+    GESTURE_WINDOW_MS, inSeason, modeFor, urlMode, hudRequested, storedMode, storeMode,
+    hudMode, storedHud, storeHud, prefersReducedMotion, decide, load, loadCard, hudLoaded,
+    whenSheet, openHud, closeHud, unload, isLoaded, takePending, watch, unwatch
   });
 }());

@@ -93,8 +93,11 @@
                                    : (Number.isFinite(Number(saved.hueManual)) ? Number(saved.hueManual) : null),
       context: params.has("context") ? params.get("context") === "1" : !!saved.context,
       paused: !!saved.paused,
-      open: params.has("hud") ? params.get("hud") === "1"
-                              : (saved.open === undefined ? false : !!saved.open),
+      // Whether the card is on screen. The loader's own stored key is what decides whether
+      // this module is fetched at all, so a card that got this far starts open: the only
+      // thing that shuts it is its own close button, and that hands the decision back to the
+      // loader, which takes this module and its stylesheet off the page with it.
+      open: params.has("hud") ? params.get("hud") === "1" : true,
       enabled: saved.enabled && typeof saved.enabled === "object" ? saved.enabled : {}
     };
 
@@ -148,7 +151,7 @@
     root.innerHTML =
       '<div class="hud-head"><span class="hud-title">snow field</span>' +
       '<span class="hud-stats" id="hud-stats"></span></div>' +
-      '<button class="hud-x" type="button" title="hide (or type ' + GESTURE + ')">&times;</button>' +
+      '<button class="hud-x" type="button" title="close (or type ' + GESTURE + ')">&times;</button>' +
       '<div class="hud-row"><span class="hud-k">flakes</span>' +
       '<input type="range" id="hud-count" min="0" max="' + H.TUNING_MAX_FLAKES + '" step="1">' +
       '<span class="hud-v" id="hud-count-v"></span></div>' +
@@ -739,7 +742,14 @@
       reseed();
       cycleLoop();
     });
-    root.querySelector(".hud-x").addEventListener("click", () => setOpen(false));
+    // The close button is not a hide, it is an end: the loader stores the choice in the card's
+    // own key and takes the card's module and stylesheet back off the page, which leaves the
+    // field exactly as it was — running, or not running. Without a loader to unload it, as in
+    // a page that pulled this module in by hand, the card simply closes.
+    root.querySelector(".hud-x").addEventListener("click", () => {
+      if (self.snowBoot && typeof self.snowBoot.closeHud === "function") {self.snowBoot.closeHud();}
+      else {setOpen(false);}
+    });
 
     /**
      * Shows or hides the panel, and remembers which.

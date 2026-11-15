@@ -770,24 +770,27 @@
   }
 
   /**
-   * Opens the tuning HUD, starting the field first if it is not running.
+   * Opens the tuning card, starting whatever it needs that is not on the page yet.
    *
-   * The gesture is the reader asking for the field as much as for the panel: a page in the
-   * off season, or one where reduced motion stopped the snow, still has to answer it.
+   * The gesture is the reader asking for the field as much as for the card: a page in the off
+   * season, or one where reduced motion stopped the snow, still has to answer it. And a card
+   * that was shut earlier on this page has no module to open — its files came back off with
+   * it — so this asks the loader for them and runs again when they land.
    *
    * @returns {void}
    */
   function openHud() {
-    // The card's stylesheet is the card's, and the loader brings it in only when the card
-    // is wanted: opening a card the page has never styled would show an unstyled one.
-    if (BOOT.loadSheet) {BOOT.loadSheet();}
     if (state.hud) {
       state.hud.open();
       return;
     }
-    if (state.worker || state.starting) {return;}
     state.hudWanted = true;
-    start();
+    if (typeof window.SNOWHUD !== 'object') {
+      if (BOOT.openHud) {BOOT.openHud();}
+      return;
+    }
+    if (state.worker || state.canvas) {attachHud(); return;}
+    if (!state.starting) {start();}
   }
 
   /**
@@ -807,10 +810,10 @@
   function attachHud() {
     const api = typeof window.SNOWHUD === 'object' ? window.SNOWHUD : null;
     if (!api) {
-      // The panel module has not run yet. head.jsi loads it first, so this is the
-      // unusual order, and a page that loads the scripts the other way round still gets
-      // its panel rather than a field with no way into it.
-      if (!state.hudWaiting) {
+      // No card module, which is the ordinary state of a page nobody asked to show a card.
+      // It is only worth waiting for when the reader did ask and the module is still in
+      // flight, which is the order the loader injects them in.
+      if (state.hudWanted && !state.hudWaiting) {
         state.hudWaiting = true;
         if (document.readyState === 'complete') {attachHud();} else {
           window.addEventListener('load', attachHud, {once: true});
@@ -856,6 +859,22 @@
     state.hud = null;
     const root = document.getElementById('hud');
     if (root && root.parentNode) {root.parentNode.removeChild(root);}
+  }
+
+  /**
+   * Takes the card off the page because the reader shut it with its own close button.
+   *
+   * The field is not touched: a shut card over a running field is the ordinary state of a
+   * December console. What the loader has already done is forget the card's module and its
+   * stylesheet, so this only has to forget the card's element and any open that was waiting
+   * on a field that has not started yet.
+   *
+   * @returns {void}
+   */
+  function dropHud() {
+    state.hudWanted = false;
+    state.hudWaiting = false;
+    detachHud();
   }
 
   /**
@@ -1102,11 +1121,13 @@
     // The loader decided whether this page needs snow at all — that decision is why this
     // file is being fetched. It also says which gesture asked for the fetch, because a
     // reader typing 'hud' out of season wants the field running and the card open, and the
-    // calendar alone says neither.
+    // calendar alone says neither. A card left open by the reader is the same ask: the card
+    // drives the field, so a page that carries the card runs the field.
     const mode = BOOT.decide ? BOOT.decide() : 'off';
     const asked = BOOT.takePending ? BOOT.takePending() : null;
-    if (asked === 'hud') {state.hudWanted = true;}
-    if (mode === 'on' || asked !== null) {start();}
+    const card = BOOT.hudMode ? BOOT.hudMode() : false;
+    if (asked === 'hud' || card) {state.hudWanted = true;}
+    if (mode === 'on' || asked !== null || card) {start();}
     return mode;
   }
 
@@ -1117,9 +1138,9 @@
   // effect runs", and there is only one copy of each rule.
   window.snowGates = Object.freeze({
     inSeason: BOOT.inSeason, modeFor: BOOT.modeFor, urlMode: BOOT.urlMode,
-    hudRequested: BOOT.hudRequested, storedMode: BOOT.storedMode,
+    hudRequested: BOOT.hudRequested, hudMode: BOOT.hudMode, storedMode: BOOT.storedMode,
     qualityStep, rateFor, maxRate, pickDpr, themeColor,
-    status, start, stop, toggle, isRunning, openHud, shutdown
+    status, start, stop, toggle, isRunning, openHud, dropHud, shutdown
   });
 
   boot();
