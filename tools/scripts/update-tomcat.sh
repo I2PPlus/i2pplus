@@ -56,6 +56,14 @@ GRADLE_PROPS="$REPO_ROOT/gradle.properties"
 LICENSES_MD="$REPO_ROOT/docs/LICENSES.md"
 JETTY_DIR="$REPO_ROOT/apps/jetty"
 
+# The console's copy of the pin, printed on the router information page. It is a
+# Java literal because the Jasper jars we ship are merged out of the vendored
+# tree and the merge throws the upstream manifest away, so nothing at run time
+# knows what release the classes came from. Same path relative to the checkout,
+# for the commit plumbing, which speaks in repo-relative paths.
+JAVA_PIN_REL='apps/routerconsole/java/src/net/i2p/router/web/RouterConsoleRunner.java'
+JAVA_PIN="$REPO_ROOT/$JAVA_PIN_REL"
+
 MAVEN_BASE='https://repo1.maven.org/maven2/org/apache/tomcat'
 NOTICE_URL='https://raw.githubusercontent.com/apache/tomcat/VERSION/NOTICE'
 SECURITY_URL='https://tomcat.apache.org/security-9.html'
@@ -122,6 +130,14 @@ read_pin() {
 # the org.apache.tomcat coordinates.
 read_gradle_pin() {
     sed -n 's/^[[:space:]]*tomcatVersion[[:space:]]*=[[:space:]]*\([^[:space:]]*\).*/\1/p' "$1" | head -1
+}
+
+# The console's literal, as shown on the router information page. Anchored on the
+# field declaration, so a version named in prose or in a comment is not mistaken
+# for the pin.
+read_java_pin() {
+    sed -n 's/.*static final String TOMCAT_VERSION[[:space:]]*=[[:space:]]*"\([^"]*\)".*/\1/p' "$1" |
+        head -1
 }
 
 # The version carried by the checked-in directory name.
@@ -288,12 +304,13 @@ cmd_list() {
     done
 }
 
-# Reports the three version strings that have to agree, the newest compatible
+# Reports the four version strings that have to agree, the newest compatible
 # release, and whether the tree is behind.
 cmd_check() {
     _pin=$(read_pin "$BUILD_XML")
     [ -n "$_pin" ] || die "no tomcat.ver property in build.xml"
     _gpin=$(read_gradle_pin "$GRADLE_PROPS")
+    _jpin=$(read_java_pin "$JAVA_PIN")
     _dir=$(read_dir_version "$JETTY_DIR" | head -1)
     [ -n "$_dir" ] || die "no apps/jetty/apache-tomcat-* directory found"
     _drift=0
@@ -314,13 +331,14 @@ cmd_check() {
 
     if [ "$JSON" = 1 ]
     then
-        printf '{"ant":"%s","gradle":"%s","directory":"%s","latest":"%s","stale":"%s","behind":%s}\n' \
-            "$_pin" "$_gpin" "$_dir" "$_latest" \
+        printf '{"ant":"%s","gradle":"%s","console":"%s","directory":"%s","latest":"%s","stale":"%s","behind":%s}\n' \
+            "$_pin" "$_gpin" "$_jpin" "$_dir" "$_latest" \
             "$(printf '%s' "$_stale" | tr '\n' ' ' | sed 's/ $//')" \
             "$([ -n "$_latest" ] && [ "$(version_cmp "$_latest" "$_pin")" = 1 ] && echo true || echo false)"
     else
         echo "Ant pin (build.xml):        $_pin"
         echo "Gradle pin (gradle.properties): ${_gpin:-none}"
+        echo "Console literal ($JAVA_PIN_REL): ${_jpin:-none}"
         echo "checked-in directory:       apache-tomcat-$_dir"
         echo "compatible line:            $COMPAT_SERIES.x (javax API, Jetty 9.x)"
         echo "latest compatible release:  ${_latest:-unknown}"
@@ -329,6 +347,15 @@ cmd_check() {
         if [ -n "$_gpin" ] && [ "$_gpin" != "$_pin" ]
         then
             echo "DRIFT: gradle.properties pins $_gpin, build.xml pins $_pin"
+            _drift=1
+        fi
+        if [ -z "$_jpin" ]
+        then
+            echo "DRIFT: no TOMCAT_VERSION constant in $JAVA_PIN_REL - /info cannot report a version"
+            _drift=1
+        elif [ "$_jpin" != "$_pin" ]
+        then
+            echo "DRIFT: $JAVA_PIN_REL pins $_jpin, build.xml pins $_pin"
             _drift=1
         fi
         if [ "$(read_dir_version "$JETTY_DIR" | grep -c .)" -gt 1 ]
@@ -638,7 +665,8 @@ cmd_apply() {
     then
         echo "  would fetch $(jar_allowlist | wc -l) jars plus NOTICE into apps/jetty/apache-tomcat-$_to"
         echo "  would remove apps/jetty/apache-tomcat-$_dir"
-        echo "  would set tomcat.ver in build.xml and tomcatVersion in gradle.properties to $_to"
+        echo "  would set tomcat.ver in build.xml, tomcatVersion in gradle.properties and"
+        echo "  TOMCAT_VERSION in $JAVA_PIN_REL to $_to"
         [ "$COMMIT" = 1 ] && echo "  would commit the result as: $(commit_subject "$_to")"
         return 0
     fi
@@ -703,6 +731,12 @@ cmd_apply() {
 
     rewrite_pin "$BUILD_XML" "$_to"
     rewrite_gradle_pin "$GRADLE_PROPS" "$_to"
+    if [ -n "$(read_java_pin "$JAVA_PIN")" ]
+    then
+        rewrite_java_pin "$JAVA_PIN" "$_to"
+    else
+        echo "  WARNING: no TOMCAT_VERSION constant in $JAVA_PIN_REL - /info still shows the old version" >&2
+    fi
     [ -n "$_year" ] && sync_licenses_year "$LICENSES_MD" "$_year"
     echo "  pins set to $_to"
 
@@ -723,8 +757,8 @@ cmd_apply() {
     echo "  tools/scripts/checkjsps.py"
     echo "  tools/scripts/run-tests.sh i2ptunnel && tools/scripts/run-tests.sh router"
     echo "Then commit the staged apps/jetty/apache-tomcat-$_to together with the"
-    echo "removal of apache-tomcat-$_dir, build.xml, gradle.properties and"
-    echo "docs/LICENSES.md - or run: tools/scripts/update-tomcat.sh commit $_to"
+    echo "removal of apache-tomcat-$_dir, build.xml, gradle.properties,"
+    echo "$JAVA_PIN_REL and docs/LICENSES.md - or run: tools/scripts/update-tomcat.sh commit $_to"
     if [ "$COMMIT" = 1 ]
     then
         echo ""
@@ -742,6 +776,12 @@ rewrite_pin() {
 
 rewrite_gradle_pin() {
     sed -i 's/^\([[:space:]]*tomcatVersion[[:space:]]*=[[:space:]]*\).*/\1'"$2"'/' "$1"
+}
+
+# The console's literal, in place, keeping the declaration's own spacing. The
+# replacement stops at the closing quote, so the rest of the line is untouched.
+rewrite_java_pin() {
+    sed -i 's|\(static final String TOMCAT_VERSION[[:space:]]*=[[:space:]]*"\)[^"]*|\1'"$2"'|' "$1"
 }
 
 # The end year of the Apache copyright line in a Tomcat NOTICE - the value an
@@ -813,7 +853,7 @@ head_dir_versions() {
 
 # The paths the commit is limited to: the version directory being shipped, every
 # version directory HEAD holds but the disk does not (its deletion is the other
-# half of the change), and the three files an update rewrites. $2 and $3 are the
+# half of the change), and the four files an update rewrites. $2 and $3 are the
 # newline lists from read_dir_version and head_dir_versions.
 commit_paths() {
     printf 'apps/jetty/apache-tomcat-%s\n' "$1"
@@ -821,10 +861,10 @@ commit_paths() {
     do
         printf 'apps/jetty/apache-tomcat-%s\n' "$_v"
     done
-    printf 'build.xml\ngradle.properties\ndocs/LICENSES.md\n'
+    printf 'build.xml\ngradle.properties\n%s\ndocs/LICENSES.md\n' "$JAVA_PIN_REL"
 }
 
-# One of the three files an update rewrites, read out of HEAD rather than out of
+# One of the four files an update rewrites, read out of HEAD rather than out of
 # the worktree, so the script can tell a change it made from a change that was
 # already there.
 head_file() {
@@ -834,7 +874,7 @@ head_file() {
 
 # The paths to commit, out of the candidates from commit_paths. A version
 # directory moves as a whole, so every path under it that differs from HEAD
-# belongs to the update. The three loose files are not like that: each holds one
+# belongs to the update. The four loose files are not like that: each holds one
 # line the update writes, and the script knows the value it writes, so one is
 # only ours when the worktree carries that value and HEAD does not. A
 # docs/LICENSES.md whose year already matches stays out, and one that differs
@@ -859,6 +899,13 @@ changed_paths() {
             gradle.properties)
                 if [ "$(read_gradle_pin "$GRADLE_PROPS")" = "$_ver" ] &&
                     [ "$(head_file "$GRADLE_PROPS" | read_gradle_pin -)" != "$_ver" ]
+                then
+                    printf '%s\n' "$_p"
+                fi
+                ;;
+            "$JAVA_PIN_REL")
+                if [ "$(read_java_pin "$JAVA_PIN")" = "$_ver" ] &&
+                    [ "$(head_file "$JAVA_PIN" | read_java_pin -)" != "$_ver" ]
                 then
                     printf '%s\n' "$_p"
                 fi
@@ -909,7 +956,7 @@ cmd_commit() {
     _paths=$(changed_paths "$_ver" "$_dirs" "$(head_dir_versions)")
     # A rewritten file left out of that list is one this update did not move. Say
     # so, rather than leaving its difference from HEAD unexplained.
-    for _p in build.xml gradle.properties docs/LICENSES.md
+    for _p in build.xml gradle.properties "$JAVA_PIN_REL" docs/LICENSES.md
     do
         git -C "$REPO_ROOT" diff --quiet HEAD -- "$_p" ||
             case "$_paths" in
@@ -1048,6 +1095,16 @@ tomcatVersion=9.0.62
 jettyVersion = '9.3.30.v20211001'
 EOF
     assert_eq 9.0.62 "$(read_gradle_pin "$TMPROOT/gradle.properties")" "the Gradle pin is read out of gradle.properties"
+    cat > "$TMPROOT/RouterConsoleRunner.java" <<'EOF'
+    /**
+     * The Tomcat release 9.0.10 is not the one we ship - see build.xml.
+     */
+    public static final String TOMCAT_VERSION = "9.0.107";
+EOF
+    assert_eq 9.0.107 "$(read_java_pin "$TMPROOT/RouterConsoleRunner.java")" \
+        "the console pin comes from the field, not from prose naming another version"
+    assert_eq "$(read_pin "$BUILD_XML")" "$(read_java_pin "$JAVA_PIN")" \
+        "this checkout reports the same Tomcat on /info as it builds"
 
     echo "-- pin rewriting --"
     rewrite_pin "$TMPROOT/build.xml" 9.0.123
@@ -1065,6 +1122,15 @@ EOF
     assert_eq 9.0.123 "$(read_gradle_pin "$TMPROOT/gradle.properties")" "the Gradle pin is rewritten in place"
     assert_eq "jettyVersion = '9.3.30.v20211001'" "$(grep '^jettyVersion' "$TMPROOT/gradle.properties")" \
         "rewriting tomcatVersion leaves the other lines alone"
+    rewrite_java_pin "$TMPROOT/RouterConsoleRunner.java" 9.0.123
+    assert_eq 9.0.123 "$(read_java_pin "$TMPROOT/RouterConsoleRunner.java")" \
+        "the console pin is rewritten in place"
+    assert_eq '    public static final String TOMCAT_VERSION = "9.0.123";' \
+        "$(grep 'TOMCAT_VERSION =' "$TMPROOT/RouterConsoleRunner.java")" \
+        "the rewriting keeps the declaration form intact"
+    assert_eq '     * The Tomcat release 9.0.10 is not the one we ship - see build.xml.' \
+        "$(grep 'not the one we ship' "$TMPROOT/RouterConsoleRunner.java")" \
+        "rewriting the console pin leaves a version named in prose alone"
 
     echo "-- license year sync --"
     cat > "$TMPROOT/LICENSES.md" <<'EOF'
@@ -1126,8 +1192,10 @@ EOF
         "the subject is one line naming the pair and the release"
     _paths=$(commit_paths 9.0.124 '9.0.124' '9.0.107
 9.0.124')
-    assert_eq 5 "$(printf '%s\n' "$_paths" | grep -c .)" \
-        "the new directory, the stale one, and the three rewritten files"
+    assert_eq 6 "$(printf '%s\n' "$_paths" | grep -c .)" \
+        "the new directory, the stale one, and the four rewritten files"
+    assert_eq 1 "$(printf '%s\n' "$_paths" | grep -c "$JAVA_PIN_REL")" \
+        "the console literal the update moves is in the commit"
     assert_eq 1 "$(printf '%s\n' "$_paths" | grep -c 'apps/jetty/apache-tomcat-9.0.107')" \
         "the tracked deletion of the old version belongs to the same commit"
 
@@ -1145,18 +1213,21 @@ EOF
                 > "$JETTY_DIR/apache-tomcat-$1/NOTICE"
         }
         _save_ROOT=$REPO_ROOT _save_BUILD=$BUILD_XML _save_GRADLE=$GRADLE_PROPS
-        _save_LIC=$LICENSES_MD _save_JETTY=$JETTY_DIR
+        _save_LIC=$LICENSES_MD _save_JETTY=$JETTY_DIR _save_JPIN=$JAVA_PIN
         REPO_ROOT=$TMPROOT/commitrepo
         BUILD_XML=$REPO_ROOT/build.xml
         GRADLE_PROPS=$REPO_ROOT/gradle.properties
         LICENSES_MD=$REPO_ROOT/docs/LICENSES.md
         JETTY_DIR=$REPO_ROOT/apps/jetty
+        JAVA_PIN=$REPO_ROOT/$JAVA_PIN_REL
         mkdir -p "$REPO_ROOT/docs"
         printf '*.[rwjt]ar\n' > "$REPO_ROOT/.gitignore"
         printf '  <property name="tomcat.ver" value="9.0.107"/>\n' > "$BUILD_XML"
         printf 'tomcatVersion = 9.0.107\n' > "$GRADLE_PROPS"
         printf 'Apache Tomcat. Copyright 1999-2025 The Apache Software Foundation.\n' > "$LICENSES_MD"
         printf 'unrelated\n' > "$REPO_ROOT/unrelated.txt"
+        mkdir -p "$(dirname "$JAVA_PIN")"
+        printf '    public static final String TOMCAT_VERSION = "9.0.107";\n' > "$JAVA_PIN"
         _mkver 9.0.107 107 2025
         git -C "$REPO_ROOT" init -q .
         git -C "$REPO_ROOT" config user.email selftest@i2p.invalid
@@ -1166,10 +1237,11 @@ EOF
         git -C "$REPO_ROOT" commit -qm base
 
         # The update, left exactly as apply leaves it: new directory staged, old
-        # deletion staged, Gradle pin and license year moved, Ant pin not yet.
+        # deletion staged, Gradle and console pins and license year moved, Ant pin not yet.
         _mkver 9.0.124 124 2026
         rm -rf "$JETTY_DIR/apache-tomcat-9.0.107"
         rewrite_gradle_pin "$GRADLE_PROPS" 9.0.124
+        rewrite_java_pin "$JAVA_PIN" 9.0.124
         sync_licenses_year "$LICENSES_MD" 2026
         printf 'dirty\n' >> "$REPO_ROOT/unrelated.txt"
         git -C "$REPO_ROOT" add -A -f -- apps/jetty/apache-tomcat-9.0.124 apps/jetty/apache-tomcat-9.0.107
@@ -1183,6 +1255,8 @@ EOF
             "the Ant pin the update moved is ours to commit"
         assert_eq 1 "$(printf '%s\n' "$_cpaths" | grep -c '^gradle.properties')" \
             "and so is the Gradle pin"
+        assert_eq 1 "$(printf '%s\n' "$_cpaths" | grep -c "^$JAVA_PIN_REL")" \
+            "and so is the console literal the information page reads"
         assert_eq 1 "$(printf '%s\n' "$_cpaths" | grep -c '^docs/LICENSES.md')" \
             "and the copyright year the NOTICE moved"
         # check --commit --dry-run: the same commit, reported rather than made.
@@ -1226,7 +1300,7 @@ EOF
         assert_eq 1 "$(git -C "$REPO_ROOT" status --porcelain | grep -c 'docs/LICENSES.md')" \
             "and that edit is still sitting in the workspace afterwards"
         REPO_ROOT=$_save_ROOT BUILD_XML=$_save_BUILD GRADLE_PROPS=$_save_GRADLE
-        LICENSES_MD=$_save_LIC JETTY_DIR=$_save_JETTY
+        LICENSES_MD=$_save_LIC JETTY_DIR=$_save_JETTY JAVA_PIN=$_save_JPIN
     fi
 
     echo "-- advisory triage --"
