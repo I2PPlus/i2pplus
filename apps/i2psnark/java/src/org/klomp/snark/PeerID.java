@@ -119,7 +119,7 @@ public class PeerID implements Comparable<PeerID> {
 
     /**
      * The destination. If this PeerId was instantiated with a destHash, and we have not yet
-     * done so, lookup the full destination, which may take up to a minute.
+     * done so, lookup the full destination, which may take up to ten seconds.
      *
      * @return Dest or null if unknown
      */

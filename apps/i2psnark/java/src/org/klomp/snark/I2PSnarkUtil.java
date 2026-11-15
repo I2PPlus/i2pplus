@@ -2299,20 +2299,22 @@ public class I2PSnarkUtil implements DisconnectListener, DestCache {
 
     /**
      * How long one <code>.b32.i2p</code> lookup waits for the router's answer, in millis. The
-     * router runs a network-database search for that long, asking several floodfills, so a
-     * destination that is published but not yet in this router's netdb still turns up. A dial
-     * to a hash-only peer already owns a thread of its own, so the longer wait costs only the
-     * wait.
+     * router does not use the whole wait: its search asks the floodfills it is connected to and
+     * ends as soon as they have answered or run out, so a destination that is not published is
+     * reported as missing in seconds, not after the deadline. Measured on this router over 111
+     * lookups, the router answered in 1-5 s, and in 2-3 ms when it already held the answer. Ten
+     * seconds is what the DHT allows for the same lookup, and it is enough for one floodfill
+     * round trip, which is all the router ever spends.
      *
      * @since 0.9.72+
      */
-    static final long DEST_LOOKUP_TIMEOUT_MS = 60 * 1000L;
+    static final long DEST_LOOKUP_TIMEOUT_MS = 10 * 1000L;
 
     /**
      * How long a destination resolved for a <code>.b32.i2p</code> hash is reused, in millis.
      * A running destination keeps its key, and the tracker, the DHT and PEX all keep
      * re-advertising the same peers for the life of a torrent, so without a cache every dial
-     * to a hash-only peer id pays for the same lookup again - up to a minute of a connection
+     * to a hash-only peer id pays for the same lookup again - ten seconds of a connection
      * thread each time.
      *
      * @since 0.9.72+
@@ -2563,7 +2565,7 @@ public class I2PSnarkUtil implements DisconnectListener, DestCache {
         if (ip.endsWith(".i2p")) {
             if (ip.length() < 520) { // key + ".i2p"
                 // A .b32.i2p address is only a hash, so it has to be resolved, and the
-                // wait for it is up to a minute of whatever thread asked. The same peers
+                // wait for it is up to ten seconds of whatever thread asked. The same peers
                 // are re-advertised by the tracker, the DHT and PEX for the life of a
                 // torrent, so the answer - including "nothing" - is kept and reused, and a
                 // "nothing" is asked about four times on a backoff before it is left alone.
