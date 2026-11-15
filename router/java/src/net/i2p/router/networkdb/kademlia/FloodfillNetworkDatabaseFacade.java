@@ -167,7 +167,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         _context.statManager().createRateStat("netDb.failedAttemptedPeers", "Number of peers we sent a search to that failed", "NetworkDatabase", rate);
         _context.statManager().createRateStat("netDb.successPeers", "Number of peers we sent a search to that succeeded", "NetworkDatabase", rate);
         _context.statManager().createRateStat("netDb.failedPeers", "Number of peers failing to respond to a NetDb lookup", "NetworkDatabase", rate);
-        _context.statManager().createRateStat("netDb.searchCount", "Total number of searches sent", "NetworkDatabase", rate);
+        _context.statManager().createRequiredRateStat("netDb.searchCount", "Total number of searches sent", "NetworkDatabase", rate);
         _context.statManager().createRequiredRateStat("netDb.failedRetries", "Additional queries for failed Iterative search", "NetworkDatabase", rate);
         _context.statManager().createRequiredRateStat("netDb.successRetries", "Additional queries for successful Iterative search", "NetworkDatabase", rate);
         _context.statManager().createRateStat("netDb.searchMessageCount", "Total number of messages for all searches sent", "NetworkDatabase", rate);
@@ -178,7 +178,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         // absent stat rather than a zero one, and every graph, Tuner rule and health
         // check that referenced it silently no-oped. Nothing here ever measured.
         _context.statManager().createRateStat("netDb.searchReplyValidationSkipped", "Skipped NetDb search replies (unreliable peers)", "NetworkDatabase", rate);
-        _context.statManager().createRateStat("netDb.republishQuantity", "Number of peers we need to send a found LeaseSet to", "NetworkDatabase", rate);
+        _context.statManager().createRequiredRateStat("netDb.republishQuantity", "Number of peers we need to send a found LeaseSet to", "NetworkDatabase", rate);
         // for ISJ
         _context.statManager().createRateStat("netDb.RILookupDirect", "Number of direct Iterative RouterInfo lookups", "NetworkDatabase", rate);
         // late reply grace period cache
@@ -894,8 +894,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      * Caller should check negative cache and/or banlist before calling.
      * <p>
      * Begin a kademlia style search for the key specified, which can take up to timeoutMs and
-     * will fire the appropriate jobs on success or timeout (or if the kademlia search completes
-     * without any match).
+     * will fire the appropriate jobs on success, on timeout, or if the kademlia
+     * search completes without any match.
      *
      * @return always null; the caller is notified through onFindJob or onFailedLookupJob
      */
@@ -1026,9 +1026,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     }
 
     /**
-     * Notify that we heard from or about a peer (e.g. received a DatabaseStoreMessage
-     * from them).  The ContactDrivenRefreshJob will consider refreshing their RouterInfo
-     * if it is stale.
+     * Notify that we heard from or about a peer, e.g. we received a
+     * DatabaseStoreMessage from them.  The ContactDrivenRefreshJob will
+     * consider refreshing their RouterInfo if it is stale.
      *
      * @param peer the peer hash we heard from or about
      * @since 0.9.70+
@@ -1196,8 +1196,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
              _context.banlist().isBanlisted(peer) || uninteresting) {
             /**
              * Don't try to overload ourselves (e.g. failing 3000 router refs at once, and then firing off 3000 netDb lookup tasks)
-             * Also don't queue a search if we have plenty of routerinfos (KBucketSetSize() includes leasesets
-             * but avoids locking).
+             * Also don't queue a search if we have plenty of routerinfos, as
+             * KBucketSetSize() includes leasesets but avoids locking.
              */
             if (_log.shouldInfo()) {
                 boolean ffEnabled;

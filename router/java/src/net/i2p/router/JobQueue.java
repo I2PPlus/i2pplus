@@ -219,7 +219,7 @@ public class JobQueue {
         _log = context.logManager().getLog(JobQueue.class);
         _maxWaitingJobs = _context.getProperty(PROP_MAX_WAITING_JOBS, DEFAULT_MAX_WAITING_JOBS);
 
-        _context.statManager().createRateStat("jobQueue.droppedJobs", "Scheduled jobs dropped due to insane overload", "JobQueue", RATES);
+        _context.statManager().createRequiredRateStat("jobQueue.droppedJobs", "Scheduled jobs dropped due to insane overload", "JobQueue", RATES);
         _context.statManager().createRequiredRateStat("jobQueue.queuedJobs", "Scheduled jobs in queue", "JobQueue", RATES);
         _context.statManager().createRequiredRateStat("jobQueue.readyJobs", "Ready and waiting scheduled jobs", "JobQueue", RATES);
         _context.statManager().createRateStat("jobQueue.testJobCount", "Number of TestJob instances in queue", "JobQueue", RATES);
@@ -234,7 +234,7 @@ public class JobQueue {
         // following are for JobQueueRunner
         _context.statManager().createRateStat("jobQueue.jobRun", "Duration of scheduled jobs", "JobQueue", RATES);
         _context.statManager().createRequiredRateStat("jobQueue.jobRunSlow", "Duration of jobs that take over a second (ms)", "JobQueue", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
-        _context.statManager().createRateStat("jobQueue.jobWait", "Time a scheduled job stays queued before running (ms)", "JobQueue", RATES);
+        _context.statManager().createRequiredRateStat("jobQueue.jobWait", "Time a scheduled job stays queued before running (ms)", "JobQueue", RATES);
         _context.statManager().createRequiredRateStat("jobQueue.jobLag", "Delay before waiting jobs are run (ms)", "JobQueue", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
 
         _readyJobs = new LinkedBlockingQueue<>();
@@ -736,8 +736,8 @@ public class JobQueue {
 
     /**
      * Check if the job queue is currently alive and processing jobs.
-     * Public so subsystems that queue long-lived work (notably
-     * {@link TestJob}'s batch dispatch) can refuse to hand it new jobs once
+     * Public so subsystems that queue long-lived work, notably
+     * {@link TestJob}'s batch dispatch, can refuse to hand it new jobs once
      * the queue is gone — addJob() silently discards then, which would leave
      * their internal state waiting on a pump that never runs.
      *

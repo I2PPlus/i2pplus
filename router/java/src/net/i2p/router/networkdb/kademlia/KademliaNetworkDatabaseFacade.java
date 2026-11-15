@@ -393,11 +393,11 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
         /* stats */
         context.statManager().createRateStat("netDb.exploreKeySet", "NetDb keys queued for exploration", "NetworkDatabase", RATES);
-        context.statManager().createRateStat("netDb.lookupDeferred", "Deferred NetDb lookups", "NetworkDatabase", RATES);
+        context.statManager().createRequiredRateStat("netDb.lookupDeferred", "Deferred NetDb lookups", "NetworkDatabase", RATES);
         context.statManager().createRateStat("netDb.negativeCache", "Aborted NetDb lookups (already cached)", "NetworkDatabase", RATES);
 
         /* the following are for StoreJob */
-        context.statManager().createRateStat("netDb.ackTime", "Time peer takes to ACK a DbStore", "NetworkDatabase", RATES);
+        context.statManager().createRequiredRateStat("netDb.ackTime", "Time peer takes to ACK a DbStore", "NetworkDatabase", RATES);
         context.statManager().createRateStat("netDb.DLMAllZeros", "Message lookups in NetDb with zero key ", "NetworkDatabase", RATES); // HandleDatabaseLookupMessageJob
         context.statManager().createRateStat("netDb.DSMAllZeros", "Messages stored in NetDb with zero key", "NetworkDatabase", RATES); // DatabaseStoreMessage
         context.statManager().createRequiredRateStat("netDb.replyTimeout", "Timeout expiry after a NetDb send (peer fails to reply in time)", "NetworkDatabase", RATES);
@@ -959,9 +959,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /**
      * Whether a client sub-NetDb local miss for a destination this router
      * hosts must fail immediately instead of starting a network search.
-     * Locally-published LeaseSets live in the main NetDb (mirrored on
-     * publish); querying floodfills for our own key is always wasted work
-     * and the client sub-Db path has no reply routing for that search.
+     * Locally-published LeaseSets live in the main NetDb (mirrored on publish);
+     * querying floodfills for our own key is always wasted work and the client
+     * sub-Db path has no reply routing for that search.
      *
      * @param isClientDb true when this facade is a client sub-NetDb
      * @param isLocalDest true when the key is a destination hosted on this router
@@ -1236,10 +1236,11 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * Screening (country/capability bans, blocklists) applies only to an
      * entry we actually hold; a screened-out entry fails the callback
      * instead of succeeding. A cache miss always starts a real search:
-     * data-plane callers (transit next-hop resolution in BuildHandler and
-     * TunnelParticipant, tunnel receivers, message distributors) depend on
-     * this actually finding the peer, and an instant fail here turns every
-     * next-hop miss into a rejected join or a silently dropped message.
+     * data-plane callers depend on this actually finding the peer -
+     * transit next-hop resolution in BuildHandler and TunnelParticipant,
+     * tunnel receivers, message distributors - and an instant fail here
+     * turns every next-hop miss into a rejected join or a silently dropped
+     * message.
      * Negatively-cached keys short-circuit inside IterativeSearchJob, so
      * repeated searches for known-dead peers stay cheap.
      */
@@ -1276,8 +1277,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * the local netdb. The caller should provide a timeoutMs shorter than the acceptable
      * delay (typical: 8-15 seconds).
      * <p>
-     * The onFindJob fires when the RI is available locally (either it was already present
-     * or the search completed). The onFailedLookupJob fires on search timeout or failure.
+     * The onFindJob fires when the RI is available locally, either because it
+     * was already present or because the search completed.
+     * The onFailedLookupJob fires on search timeout or failure.
      * <p>
      * Caller must clean up via {@link #removeRouterInfo} after extracting the needed data.
      *
@@ -1805,8 +1807,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /**
      * Publishes a local LeaseSet to the network: stores it in this facade and,
      * for a client facade, also in the floodfill facade, then schedules
-     * republishing.  LeaseSet expiry dates are validated first (not expired
-     * before publish).
+     * republishing.  LeaseSet expiry dates are validated first, so an
+     * expired LeaseSet is never published.
      *
      * @param localLeaseSet the LeaseSet to publish
      * @throws IllegalArgumentException if the LeaseSet is invalid or expired
@@ -1885,8 +1887,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
     /**
      * A locally-published LeaseSet legitimately occupies both the client
-     * facade (where the client pushed it) and the floodfill facade (where
-     * the router console and the network look it up).  Storing the copy
+     * facade, where the client pushed it, and the floodfill facade, where the
+     * router console and the network look it up.  Storing the copy
      * into the floodfill facade here makes hosted services retrievable
      * immediately, without waiting for the network to flood the LeaseSet
      * back to us.  The NetDbRenderer dedups the two facades' entries on
@@ -2565,11 +2567,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * <p>
      * Exception: when the stored copy has lapsed - its latest lease ends within
      * {@link net.i2p.router.Router#CLOCK_FUDGE_FACTOR} of {@code now} - the stored copy
-     * carries no reachability value, so any incoming copy (still validated by the
-     * caller before {@link #store}) is accepted to restore service.  Without this,
-     * a hidden service that re-publishes the same LeaseSet2 generation (unchanged
-     * publish date) can never refresh a lapsed local copy, leaving the destination
-     * unreachable until the service happens to generate a brand-new LeaseSet2.
+     * carries no reachability value, so any incoming copy is accepted to restore
+     * service, still validated by the caller before {@link #store}.  Without
+     * this, a hidden service that re-publishes the same LeaseSet2 generation,
+     * with an unchanged publish date, can never refresh a lapsed local copy,
+     * leaving the destination unreachable until the service happens to generate
+     * a brand-new LeaseSet2.
      *
      * @param stored the currently stored copy, non-null
      * @param incoming the incoming copy, non-null
@@ -3335,8 +3338,8 @@ return false;
      * {@link #_unverifiedPeers} until direct-contact evidence arrives
      * (a reply, a successful send, or an established session). This is the
      * main dead-peer contamination vector for the routing table.</li>
-     * <li>IP diversity — cap how many entries of one IP group (a /16 for
-     * IPv4, a /48 for IPv6) one bucket and the whole table will hold, so a
+     * <li>IP diversity — cap how many entries of one IP group, a /16 for
+     * IPv4 or a /48 for IPv6, one bucket and the whole table will hold, so a
      * single entity cannot eclipse our routing table.</li>
      * </ol>
      *
@@ -3410,8 +3413,8 @@ return false;
 
     /**
      * Direct-contact test on profile evidence only: heard-from or
-     * successful-send, never heard-about (that only means someone mentioned
-     * them). Null-safe.
+     * successful-send, never merely heard-about, which only means someone
+     * mentioned them. Null-safe.
      *
      * @param prof the peer's profile or null
      * @return true if the profile shows direct contact
@@ -4027,8 +4030,8 @@ return false;
     }
 
     /**
-     * Turns a base64 hash into the standard router-info reference (flag,
-     * netdb link, bandwidth) for the bucket entry lists.
+     * Turns a base64 hash into the standard router-info reference, with the
+     * flag, netdb link and bandwidth, for the bucket entry lists.
      *
      * @return a function mapping a base64 hash to html
      */

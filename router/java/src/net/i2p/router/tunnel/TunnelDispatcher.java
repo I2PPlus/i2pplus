@@ -513,9 +513,9 @@ public class TunnelDispatcher implements Service {
         _context.statManager().createRequiredRateStat("tunnel.participatingTunnelChurn", "Net churn of transit tunnels (join-expire)", "Tunnels [Participating]", RATES);
         _context.statManager().createRateStat("tunnel.dispatchOutboundPeer", "Outbound messages targeting a peer", "Tunnels [Participating]", RATES);
         _context.statManager().createRateStat("tunnel.dispatchOutboundTunnel", "Outbound messages targeting a tunnel", "Tunnels [Participating]", RATES);
-        _context.statManager().createRateStat("tunnel.dispatchInbound", "Messages we sent through our Tunnel Gateway", "Tunnels [Participating]", RATES);
+        _context.statManager().createRequiredRateStat("tunnel.dispatchInbound", "Messages we sent through our Tunnel Gateway", "Tunnels [Participating]", RATES);
         _context.statManager().createRequiredRateStat("tunnel.dispatchParticipant", "Messages we sent through a tunnel we are participating in", "Tunnels [Participating]", RATES);
-        _context.statManager().createRateStat("tunnel.dispatchEndpoint", "Messages received as Outbound Endpoint of a tunnel", "Tunnels [Participating]", RATES);
+        _context.statManager().createRequiredRateStat("tunnel.dispatchEndpoint", "Messages received as Outbound Endpoint of a tunnel", "Tunnels [Participating]", RATES);
         _context.statManager().createRateStat("tunnel.joinOutboundGateway", "Tunnels joined as Outbound Gateway", "Tunnels [Participating]", RATES);
         _context.statManager().createRateStat("tunnel.cache.outboundGateways", "Outbound gateway cache size", "Tunnels [Memory]", RATES);
         _context.statManager().createRateStat("tunnel.cache.outboundEndpoints", "Outbound endpoint cache size", "Tunnels [Memory]", RATES);
@@ -1331,8 +1331,8 @@ public class TunnelDispatcher implements Service {
      *
      * @param loc role in the tunnel, currently unused; the cap depends only on
      * the outbound rate and our share percentage
-     * @return cap in bytes per second, floored at 10KB (30KB or 50KB for the
-     * larger allocation tiers) once the computed value exceeds 256KB
+     * @return cap in bytes per second, floored at 10KB once the computed value
+     *         exceeds 256KB, or at 30KB or 50KB for the larger allocation tiers
      */
     int getMaxPerTunnelBandwidth(Location loc) {
         int outKBps = _context.bandwidthLimiter().getOutboundKBytesPerSecond();

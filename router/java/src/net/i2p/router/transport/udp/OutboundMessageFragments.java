@@ -102,7 +102,7 @@ class OutboundMessageFragments {
         _alive = true;
         _context.statManager().createRateStat("udp.outboundActivePeers", "Number of peers we are actively sending to", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.memory.activePeers", "Memory usage tracking for active peers", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.packetsRetransmitted", "Lifetime (ms) of packets during retransmission", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRequiredRateStat("udp.packetsRetransmitted", "Lifetime (ms) of packets during retransmission", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.partialACKReceived", "Number of partially ACKed fragments", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.peerPacketsRetransmitted", "Resent packets during burst (period = pkts sent, lifetime)", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.sendAggressiveFailed", "Number of volleys a packet was sent before we gave up", "Transport [UDP]", UDPTransport.RATES);
