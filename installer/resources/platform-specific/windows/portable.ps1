@@ -115,13 +115,38 @@ if (-not (Test-Path -LiteralPath $conf)) {
 # say what was found, and hand it to the wrapper explicitly through
 # wrapper.java.command. I2P+ needs a 64-bit Java 8 or newer.
 # ---------------------------------------------------------------------------
+# JAVA_HOME is very often set with the quotes left in - setx JAVA_HOME
+# "C:\Program Files\Java\jdk1.8", or a value pasted out of a GUI field - and
+# Join-Path then reads the leading quote as a drive name and dies with
+# "Cannot find drive. A drive with the name '"c does not exist". Strip the
+# decoration, and anything else that makes the value unusable, before using it.
+function Get-EnvPath([string]$value) {
+    if (-not $value) { return $null }
+    $clean = $value.Trim().Trim('"').Trim().TrimEnd('\')
+    if ($clean -eq '') { return $null }
+    return $clean
+}
+
 function Find-Java {
     $found = @()
     foreach ($check in @('JAVA_HOME', 'PATH')) {
         $exe = $null
-        if ($check -eq 'JAVA_HOME' -and $env:JAVA_HOME) {
-            $cand = Join-Path $env:JAVA_HOME 'bin\java.exe'
-            if (Test-Path -LiteralPath $cand) { $exe = $cand }
+        if ($check -eq 'JAVA_HOME') {
+            # A JAVA_HOME this broken is reported, not fatal: java on PATH is
+            # still tried next, and a machine with both should use the working
+            # one rather than losing the router to a typo in an environment
+            # variable.
+            try {
+                $javaHome = Get-EnvPath $env:JAVA_HOME
+                if ($javaHome) {
+                    $cand = Join-Path $javaHome 'bin\java.exe'
+                    if (Test-Path -LiteralPath $cand) { $exe = $cand }
+                }
+            } catch {
+                $found += [pscustomobject]@{ Source = $check; Path = $null; Version = $null; Major = 0;
+                                            Usable = $false; Note = "JAVA_HOME=$env:JAVA_HOME is not a usable path." }
+                continue
+            }
         } elseif ($check -eq 'PATH') {
             # No extension: Windows resolves java.exe through PATHEXT. Several
             # matches are possible (a JDK on PATH plus the System32 stub), so
