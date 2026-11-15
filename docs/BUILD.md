@@ -117,25 +117,51 @@ offline builds keep working. See
 
 ### Updaters
 
-| Target                                                                                                            | Output                                       |
-| ----------------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
-| `updater`                                                                                                         | `dist/i2pupdate.zip`                         |
-| `updaterWithJetty`, `updaterWithGeoIP`, `updaterWithASN`, `updaterWithJbigi`, `updaterSmall`, `updaterCompact`, … | Updater variants                             |
-| `signed-updater200*`                                                                                              | Signed `.su3` updates → `dist/i2pupdate.su3` |
+| Target                                                                                                                                 | Output                                       |
+| -------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
+| `updater`                                                                                                                              | `dist/i2pupdate.zip`                         |
+| `updaterWithJetty`, `updaterWithGeoIP`, `updaterWithASN`, `updaterWithJbigi`, `updaterWithTomcat`, `updaterSmall`, `updaterCompact`, … | Updater variants                             |
+| `updater200`, `updater200Compact`, `updater200WithTomcat`, …                                                                           | `dist/i2pupdate200.zip` (pack200-compressed) |
+| `signed-updater200*`, `signed-updater200WithTomcat`                                                                                    | Signed `.su3` updates → `dist/i2pupdate.su3` |
+
+Every target that writes a deliverable ends with the `sha256sum` target, which
+prints `SHA256: <hash>` for the artifact it just wrote (the producing task names
+the file on the line above). `-releaseit` hashes the release set it assembles:
+the update zip, the signed `i2pupdate.su3` and its dashed copy, the installer
+jar, the windows installer exe, and the source tarball.
+
+#### Translations
+
+Every payload carries the gettext catalogs (`locale/<lang>/LC_MESSAGES/i2prouter.mo`)
+except the compact updaters (`updaterCompact`, `updater200Compact`, the
+`updaterCompactWith*` family), which exist to be small, and the Windows packages,
+whose scripts are the `.bat`/`.ps1` ones that never read them. If `xgettext` and
+`msgfmt` are not on your PATH, set `require.gettext=false` in `build.properties`:
+the build then prints
+
+```
+WARNING: require.gettext=false - no gettext catalogs are compiled, ...
+```
+
+and every package built from there ships untranslated. `updater` and
+`updaterSmall` also print one line saying how many catalogs they staged.
 
 ### Utilities & distribution
 
-| Target                                             | Purpose                                         |
-| -------------------------------------------------- | ----------------------------------------------- |
-| `test`, `junit.test`                               | Unit tests                                      |
-| `distclean`                                        | Remove all derived/temporary files              |
-| `buildProperties`, `buildRequirements`             | Show build configuration and requirements       |
-| `tarball`                                          | Clean-install tar → `dist/i2p.tar.bz2`          |
-| `buildDeb`                                         | Self-contained Debian package → `dist/i2p*.deb` |
-| `buildAppImage`                                    | Linux AppImage → `dist/I2P+_<ver>.appimage`     |
-| `git-tag`                                          | Create annotated release tag                    |
-| `javadoc`, `javadoc-zip`, `devdocs`, `devdocs-zip` | Documentation                                   |
-| `poupdate-source`                                  | Update translation `.po` files                  |
+| Target                                                                           | Purpose                                         |
+| -------------------------------------------------------------------------------- | ----------------------------------------------- |
+| `test`, `junit.test`                                                             | Unit tests                                      |
+| `distclean`                                                                      | Remove all derived/temporary files              |
+| `buildProperties`, `buildRequirements`                                           | Show build configuration and requirements       |
+| `tarball`                                                                        | Clean-install tar → `dist/i2p.tar.bz2`          |
+| `buildDeb`                                                                       | Self-contained Debian package → `dist/i2p*.deb` |
+| `zip-linux`, `zip-windows`, `zip-macos`, `zip-freebsd`                           | Platform package → `dist/i2p-<platform>.zip`    |
+| `7zip-linux`, `7zip-windows`, `7zip-macos`, `7zip-freebsd`, `7zip-multiplatform` | The same as 7z → `dist/i2p-<platform>.7z`       |
+| `i2pseeds`                                                                       | Reseed bundle → `dist/i2pseeds.su3`             |
+| `buildAppImage`                                                                  | Linux AppImage → `dist/I2P+_<ver>.appimage`     |
+| `git-tag`                                                                        | Create annotated release tag                    |
+| `javadoc`, `javadoc-zip`, `devdocs`, `devdocs-zip`                               | Documentation                                   |
+| `poupdate-source`                                                                | Update translation `.po` files                  |
 
 ## Gradle build
 
@@ -156,6 +182,25 @@ Typical workflow (from the repo root):
 
 Gradle build output goes to `${java.io.tmpdir}/build-i2p/gradle/<module>` so
 the workspace stays clean (matching the ant convention).
+
+The packaging targets are mirrored too, and each one prints the same
+`SHA256: <hash>` line the ant `sha256sum` target prints:
+
+| Area               | Gradle tasks                                                                                                                               |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| Update zips        | `updater`, `updaterSmall`, `updaterRouter`, `updaterCompact`, `updater200`, `updater200Compact`                                            |
+| Installers         | `installer`, `installerexe`, `installer-{nowindows,linux,freebsd,osx,windows}`, `installer2app`, `installer-all`, the `installer5*` family |
+| Platform packages  | `zip-{linux,windows,macos,freebsd}`, `7zip-{linux,windows,macos,freebsd}`, `7zip-multiplatform`                                            |
+| Other deliverables | `tarball`, `buildDeb`, `buildAppImage`, `i2psnark`, `i2psnark7zip`, `i2psnark_nozip`, `i2pseeds`                                           |
+| Sets               | `pkg`, `pkg200`, `distclean`                                                                                                               |
+
+Still Ant-only: the heavy `updater*With*` / `signed-updater*` variant family
+(javadoc, GeoIP, ASN, jbigi, Jetty and Tomcat payloads beyond the plain and
+compact updaters), `jpackage-win`, the native `buildJbigi*` compiles (Gradle
+jars the vendored natives as `jbigi`), the `javadoc*` / `jsdoc*` / `devdocs*`
+documentation targets, and the `debian*` / `slackpkg` helpers.
+`tools/gradle/README.md` keeps the full task inventory, the properties each task
+takes, and the list of deliberate deviations from ant.
 
 ## Build output verbosity
 

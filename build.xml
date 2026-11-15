@@ -236,7 +236,7 @@
     <echo message="  debian                                       Generate Debian packages in ../ then run &apos;debian-clean&apos;"/>
     <echo message="  debianhowto                                  Instructions on building Debian packages"/>
     <echo message="  debian-patch                                 Apply the Debian quilt patches in distro/debian/patches/"/>
-    <echo message="  debian-unpatch                             Roll back the Debian quilt patches"/>
+    <echo message="  debian-unpatch                               Roll back the Debian quilt patches"/>
     <echo message="  debianrepo                                   Build a Debian repository (reprepro required)"/>
     <echo message="  generateBadges                               Regenerate the tools/badges/ SVGs that are out of date"/>
     <echo message="  git-tag                                      Create annotated Git tag for release (e.g. 0.9.70+)"/>
@@ -1833,11 +1833,22 @@
     </exec>
   </target>
 
+  <!-- require.gettext=false is a toolchain choice, not a build choice: it means no
+       gettext catalogs can be compiled at all. Give it its own property, so the
+       compact chains' no.bundle (a deliberate omission) cannot be confused with it,
+       and so a build that ships an untranslated i2prouter script says so out loud. -->
+  <condition property="no.gettext">
+    <isfalse value="${require.gettext}"/>
+  </condition>
   <condition property="no.bundle">
     <isfalse value="${require.gettext}"/>
   </condition>
 
-  <target name="prep-script-translation" unless="no.bundle">
+  <target name="-warn-no-gettext" if="no.gettext">
+    <echo level="warning" message="WARNING: require.gettext=false - no gettext catalogs are compiled, so locale/*/LC_MESSAGES/i2prouter.mo is absent from every package built here and the router scripts ship untranslated"/>
+  </target>
+
+  <target name="prep-script-translation" depends="-warn-no-gettext" unless="no.gettext">
     <!-- script translation added in 0.8.13, enabled in 0.9.5. -->
     <ant dir="installer/resources/locale" target="bundleTranslations">
       <property name="build.dir" location="${build.root}installer/resources/locale/build"/>
@@ -1853,18 +1864,21 @@
        each jar. So a build log never says whether translations were compiled or
        reused, and a missing bundle only shows up later as untranslated pages.
        Report the state explicitly. "already compiled" means the .mo is newer than the
-       .po it came from, i.e. the bundler took its cached path. -->
-  <target name="reportTranslations" depends="prep-script-translation"
+       .po it came from, i.e. the bundler took its cached path.
+       This target only reports - it no longer produces the catalogs. Every non-compact
+       payload depends on prep-script-translation directly, because no.bundle is
+       immutable: a compact target run earlier in the same invocation leaves it set, and
+       a guard on that flag would strip this payload's catalogs as well. -->
+  <target name="reportTranslations"
           description="Report whether the translation catalogs are compiled or reused">
-    <!-- Compact dev updaters (prepcompactNoBundle) set no.bundle, which skips
-         prep-script-translation entirely, so the catalog count is legitimately 0.
-         Distinguish that from the real failure mode before reporting: a count of 0
-         with no.bundle set means "translations intentionally omitted", and saying
-         "gettext is missing" there is simply false and sends the reader hunting for
-         a toolchain problem that does not exist. Only a count of 0 *without*
-         no.bundle means the bundler ran and produced nothing. -->
     <resourcecount property="tx.mo.count">
       <fileset dir="${build.root}installer/resources/locale/build/mo" includes="**/*.mo" erroronmissingdir="false"/>
+    </resourcecount>
+    <!-- What this payload actually stages, not what the bundler left in its build
+         directory: a compact chain can run after a full one and leave compiled
+         catalogs on disk while staging none of them. -->
+    <resourcecount property="tx.payload.mo.count">
+      <fileset dir="${pkg.temp.dir}/locale" includes="**/*.mo" erroronmissingdir="false"/>
     </resourcecount>
     <uptodate property="tx.mo.fresh"
               targetfile="${build.root}installer/resources/locale/build/mo/de/LC_MESSAGES/i2prouter.mo">
@@ -1873,15 +1887,25 @@
     <condition property="tx.mo.state" value="already compiled" else="compiled this run">
       <isset property="tx.mo.fresh"/>
     </condition>
-    <!-- Set first: Ant properties are write-once, so when no.bundle is set this
-         wins and the count condition below cannot overwrite it. -->
-    <condition property="tx.mo.summary" value="Translations: omitted (no.bundle set - compact build).">
-      <isset property="no.bundle"/>
+    <!-- Set first: Ant properties are write-once, so the first condition that matches
+         wins and the ones below cannot overwrite it. A missing gettext toolchain is
+         reported by -warn-no-gettext; this line only states the payload state. -->
+    <condition property="tx.mo.summary" value="Translations: none staged (require.gettext=false).">
+      <isset property="no.gettext"/>
+    </condition>
+    <condition property="tx.mo.summary" value="Translations: omitted (compact build, no.bundle set).">
+      <and>
+        <isset property="no.bundle"/>
+        <equals arg1="${tx.payload.mo.count}" arg2="0"/>
+      </and>
     </condition>
     <condition property="tx.mo.summary"
-               value="WARNING: no translation catalogs were produced in ${build.root}installer/resources/locale/build/mo despite require.gettext=${require.gettext}"
-               else="Translations: ${tx.mo.count} catalogs, ${tx.mo.state}.">
-      <equals arg1="${tx.mo.count}" arg2="0"/>
+               value="WARNING: no translation catalogs staged in ${pkg.temp.dir}/locale"
+               else="Translations: ${tx.payload.mo.count} catalogs staged, ${tx.mo.count} compiled in ${build.root}installer/resources/locale/build/mo (${tx.mo.state}).">
+      <and>
+        <not><isset property="no.gettext"/></not>
+        <equals arg1="${tx.payload.mo.count}" arg2="0"/>
+      </and>
     </condition>
     <echo>${tx.mo.summary}</echo>
   </target>
@@ -2833,8 +2857,16 @@
   </target>
 
   <target name="zip-linux">
-    <delete>
+    <!-- includeemptydirs is load-bearing: a fileset delete removes the files but
+         leaves the directory tree, so the next payload built in this directory
+         inherits it. An i2p-windows.zip built right after zip-linux carried 81
+         empty locale/... directories from that run, none of them staged by
+         preppkg-windows. The staging directory itself is never deleted, so a
+         pkg-temp that is a symlink or a mount point to tmpfs stays mapped. -->
+    <delete includeemptydirs="true" quiet="true" failonerror="false">
       <fileset dir="${pkg.temp.dir}" includes="**/*" excludes="README.md"/>
+    </delete>
+    <delete>
       <fileset dir="dist" includes="i2p-linux.zip" excludes="README.md"/>
     </delete>
     <ant target="preppkg-linux"/>
@@ -2847,8 +2879,12 @@
   </target>
 
   <target name="zip-windows">
-    <delete>
+    <!-- includeemptydirs, as in zip-linux: leave the empty dirs and this payload
+         inherits the previous platform's tree -->
+    <delete includeemptydirs="true" quiet="true" failonerror="false">
       <fileset dir="${pkg.temp.dir}" includes="**/*" excludes="README.md"/>
+    </delete>
+    <delete>
       <fileset dir="dist" includes="i2p-windows.zip" excludes="README.md"/>
     </delete>
     <ant target="preppkg-windows"/>
@@ -2861,8 +2897,12 @@
   </target>
 
   <target name="zip-macos">
-    <delete>
+    <!-- includeemptydirs, as in zip-linux: leave the empty dirs and this payload
+         inherits the previous platform's tree -->
+    <delete includeemptydirs="true" quiet="true" failonerror="false">
       <fileset dir="${pkg.temp.dir}" includes="**/*" excludes="README.md"/>
+    </delete>
+    <delete>
       <fileset dir="dist" includes="i2p-macos.zip" excludes="README.md"/>
     </delete>
     <ant target="preppkg-osx"/>
@@ -2875,8 +2915,12 @@
   </target>
 
   <target name="zip-freebsd">
-    <delete>
+    <!-- includeemptydirs, as in zip-linux: leave the empty dirs and this payload
+         inherits the previous platform's tree -->
+    <delete includeemptydirs="true" quiet="true" failonerror="false">
       <fileset dir="${pkg.temp.dir}" includes="**/*" excludes="README.md"/>
+    </delete>
+    <delete>
       <fileset dir="dist" includes="i2p-freebsd.zip" excludes="README.md"/>
     </delete>
     <ant target="preppkg-freebsd"/>
@@ -2890,8 +2934,10 @@
 
   <target name="7zip-linux">
     <parallel>
-      <delete>
+      <delete includeemptydirs="true" quiet="true" failonerror="false">
         <fileset dir="${pkg.temp.dir}" includes="**/*" excludes="README.md"/>
+      </delete>
+      <delete>
         <fileset dir="dist" includes="**/i2p-linux.7z" excludes="README.md"/>
       </delete>
       <ant target="preppkg-linux"/>
@@ -2970,8 +3016,10 @@
 
   <target name="7zip-windows">
     <parallel>
-      <delete>
+      <delete includeemptydirs="true" quiet="true" failonerror="false">
         <fileset dir="${pkg.temp.dir}" includes="**/*" excludes="README.md"/>
+      </delete>
+      <delete>
         <fileset dir="dist" includes="**/i2p-windows.7z" excludes="README.md"/>
       </delete>
     </parallel>
@@ -2999,8 +3047,10 @@
   </target>
   <target name="7zip-macos">
     <parallel>
-      <delete>
+      <delete includeemptydirs="true" quiet="true" failonerror="false">
         <fileset dir="${pkg.temp.dir}" includes="**/*" excludes="README.md"/>
+      </delete>
+      <delete>
         <fileset dir="dist" includes="**/i2p-macos.7z" excludes="README.md"/>
       </delete>
     </parallel>
@@ -3028,8 +3078,10 @@
   </target>
   <target name="7zip-freebsd">
     <parallel>
-      <delete>
+      <delete includeemptydirs="true" quiet="true" failonerror="false">
         <fileset dir="${pkg.temp.dir}" includes="**/*" excludes="README.md"/>
+      </delete>
+      <delete>
         <fileset dir="dist" includes="**/i2p-freebsd.7z" excludes="README.md"/>
       </delete>
     </parallel>
@@ -3378,7 +3430,7 @@
   <target name="updaterCompactWithGeoIPAndJbigi" depends="timestamp.started, prepupdatecompact, prepjbigiupdate, prepgeoupdate, zipit, timestamp.stopped"/>
   <target name="updaterCompactWithJettyAndGeoIP" depends="timestamp.started, prepupdatecompact, prepgeoupdate, prepjupdate, zipit, timestamp.stopped"/>
   <target name="updaterRepack" depends="timestamp.started, prepupdate, repack200, zipit, timestamp.stopped"/>
-  <target name="updaterRouter" depends="timestamp.started, prepupdateRouter, zipit, timestamp.stopped"/>
+  <target name="updaterRouter" depends="timestamp.started, prepupdateRouter, prep-script-translation, zipit, timestamp.stopped"/>
   <target name="updaterSmall" depends="timestamp.started, prepupdateSmall, zipit, timestamp.stopped"/>
   <target name="updaterWithGeoIP" depends="timestamp.started, prepupdate, prepgeoupdate, zipit, timestamp.stopped"/>
   <target name="updaterWithASN" depends="timestamp.started, prepupdate, prepasnupdate, zipit, timestamp.stopped"/>
@@ -3703,7 +3755,7 @@
     </exec>
   </target>
 
-  <target name="prepupdate" depends="build, prepupdateSmall, preplicenses, prepConsoleDocUpdates, prepCertificates, reportTranslations, truncatehistory">
+  <target name="prepupdate" depends="build, prepupdateSmall, preplicenses, prepConsoleDocUpdates, prepCertificates, prep-script-translation, reportTranslations, truncatehistory">
     <parallel>
       <copy quiet="true" verbose="false" file="${build.root}build/sam.jar" todir="${pkg.temp.dir}/lib/"/>
       <copy quiet="true" verbose="false" file="${build.root}build/i2psnark.jar" todir="${pkg.temp.dir}/lib"/>
@@ -3736,7 +3788,13 @@
     <concat append="true" destfile="${pkg.temp.dir}/history.txt">&#10;&#10;----------------&#10;&#10;EARLIER HISTORY IS AVAILABLE IN THE SOURCE PACKAGE</concat>
   </target>
 
-  <target name="prepupdateSmall" depends="buildSmall, prepupdateRouter, prepjupdatefixes, prepthemeupdates">
+  <!-- prep-script-translation is an explicit dependency of every non-compact payload,
+       not something pulled in by the reporting target: no.bundle is immutable, so a
+       compact target run earlier in the same invocation leaves it set and a guard on
+       that flag would silently strip the catalogs from this payload too. Only the
+       gettext toolchain (no.gettext) may skip them. Staged after prepupdateRouter,
+       which deletes pkg-temp. -->
+  <target name="prepupdateSmall" depends="buildSmall, prepupdateRouter, prepjupdatefixes, prepthemeupdates, prep-script-translation">
     <parallel>
       <copy quiet="true" verbose="false" file="${build.root}build/i2ptunnel.jar" todir="${pkg.temp.dir}/lib/"/>
       <copy quiet="true" verbose="false" file="${build.root}build/mstreaming.jar" todir="${pkg.temp.dir}/lib/"/>
@@ -3778,13 +3836,16 @@
        the whole compact chain (per-module message bundles and the top-level locale/
        gettext .mo files); pass -Dno.bundle=false to force them.
 
-       no.bundle is a plain immutable property, so it stays set for every later
-       target in the same invocation. Naming a compact and a non-compact variant in
-       one `ant` command would therefore strip translations from the non-compact
-       build as well. That is left as-is deliberately: all the updater variants
-       write the same dist/i2pupdate.zip, so such an invocation is already
-       ambiguous, and scoping the flag would mean re-plumbing the `unless="no.bundle"`
-       guards in ~10 module build files for no gain in the supported usage. -->
+        no.bundle is a plain immutable property, so it stays set for every later
+        target in the same invocation, and a compact target named first used to strip
+        the gettext catalogs from a non-compact payload named after it. That is fixed
+        for the catalogs: the non-compact chains (prepupdate, prepupdateSmall,
+        updaterRouter) depend on prep-script-translation directly, and only
+        no.gettext - the gettext toolchain being unavailable - may skip it. What still
+        follows no.bundle for the whole invocation is the per-module message bundling
+        (bundleTranslations in ~10 module build files, reached through depends inside
+        those projects), so a full target named after a compact one in one invocation
+        still ships jars and wars without their message bundles. Run them separately. -->
   <target name="prepcompactNoBundle" description="Compact updaters skip translation bundling (dev builds)">
     <property name="no.bundle" value="true"/>
   </target>

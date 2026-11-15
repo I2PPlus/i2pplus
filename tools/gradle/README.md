@@ -22,21 +22,32 @@ All build artifacts go under `${java.io.tmpdir}/build-i2p/gradle/<project>/`, th
 
 ### Update packages
 
-| Task                      | Description                                    | Output                                     |
-| ------------------------- | ---------------------------------------------- | ------------------------------------------ |
-| `./gradlew updater`       | Build full update zip                          | `dist/i2pupdate.zip`                       |
-| `./gradlew updaterSmall`  | Build minimal update (router + essential apps) | `dist/i2pupdate.zip`                       |
-| `./gradlew updaterRouter` | Build router-only update                       | `dist/i2pupdate.zip`                       |
+| Task                          | Description                                                         | Output                                     |
+| ----------------------------- | ------------------------------------------------------------------- | ------------------------------------------ |
+| `./gradlew updater`           | Build full update zip                                               | `dist/i2pupdate.zip`                       |
+| `./gradlew updaterSmall`      | Build minimal update (router + essential apps)                      | `dist/i2pupdate.zip`                       |
+| `./gradlew updaterRouter`     | Build router-only update                                            | `dist/i2pupdate.zip`                       |
+| `./gradlew updaterCompact`    | Compact update zip, no translations (Ant `updaterCompact`)          | `dist/i2pupdate.zip`                       |
+| `./gradlew updater200`        | Full update zip, lib jars pack200-compressed (Ant `updater200`)     | `dist/i2pupdate200.zip`                    |
+| `./gradlew updater200Compact` | Compact + pack200 (Ant `updater200Compact`)                         | `dist/i2pupdate200.zip`                    |
+| `./gradlew pkg200`            | pack200 distribution set: `updater200` + `installer` (Ant `pkg200`) | `dist/`                                    |
 
-Update zips land in `dist/` (repo root), like the Ant build.
+Update zips land in `dist/` (repo root), like the Ant build. Every one of them
+prints `SHA256: <hash>  <name>` when it finishes, as the Ant `sha256sum` target
+does.
 
 ### Prep tasks (used by updater targets)
 
-| Task               | Description                                                       |
-| ------------------ | ----------------------------------------------------------------- |
-| `prepUpdate`       | Build all Java jars/wars and stage them into the package temp dir |
-| `prepUpdateSmall`  | Build and stage router + essential apps only                      |
-| `prepUpdateRouter` | Build and stage router jars only                                  |
+| Task                   | Description                                                                                   |
+| ---------------------- | --------------------------------------------------------------------------------------------- |
+| `prepUpdate`           | Build all Java jars/wars and stage them into the package temp dir                             |
+| `prepUpdateSmall`      | Build and stage router + essential apps only                                                  |
+| `prepUpdateRouter`     | Build and stage router jars only                                                              |
+| `prepUpdateCompact`    | Stage the compact payload (own staging dir, so the compact and full chains never share files) |
+| `prepUpdateCompact200` | Copy the compact payload aside for pack200 (pack200 rewrites jars in place)                   |
+| `prepUpdate200`        | Copy the full payload aside for pack200                                                       |
+| `pack200Updater`       | Pack200-compress the compact payload jars and webapps (Ant `pack200`)                         |
+| `pack200FullUpdater`   | Pack200-compress the full payload (Ant `pack200` for `updater200`)                            |
 
 ### IzPack installers
 
@@ -137,6 +148,54 @@ themed standalone war, then packages the install dir.
 
 Prerequisite: `jbigi` (jars the vendored natives from `installer/lib/jbigi`).
 
+### Platform packages, AppImage and reseed
+
+Mirrors of the Ant `zip-*`, `7zip-*`, `buildAppImage` and `i2pseeds` targets.
+The payload for a platform is staged once, under an `i2p/` directory in
+`/tmp/build-i2p/pkg-installer/pkg-<platform>/`, by `preppkg-<platform>`: Ant's
+`zip-<platform>` packs that tree at the archive root and `7zip-<platform>` packs
+the `i2p/` directory itself, so one tree serves both with no second copy. Both
+archives are written by the same external tools Ant calls (`zip`, `7z`), and the
+stale artifact is deleted first, because both update an existing archive in place.
+
+| Task                           | Description                                            | Output                     |
+| ------------------------------ | ------------------------------------------------------ | -------------------------- |
+| `./gradlew zip-linux`          | Linux package (Ant `zip-linux`)                        | `dist/i2p-linux.zip`       |
+| `./gradlew zip-windows`        | Windows package (Ant `zip-windows`)                    | `dist/i2p-windows.zip`     |
+| `./gradlew zip-macos`          | macOS package (Ant `zip-macos`)                        | `dist/i2p-macos.zip`       |
+| `./gradlew zip-freebsd`        | FreeBSD package (Ant `zip-freebsd`)                    | `dist/i2p-freebsd.zip`     |
+| `./gradlew 7zip-linux`         | Linux package, 7z (Ant `7zip-linux`)                   | `dist/i2p-linux.7z`        |
+| `./gradlew 7zip-windows`       | Windows package, 7z                                    | `dist/i2p-windows.7z`      |
+| `./gradlew 7zip-macos`         | macOS package, 7z                                      | `dist/i2p-macos.7z`        |
+| `./gradlew 7zip-freebsd`       | FreeBSD package, 7z                                    | `dist/i2p-freebsd.7z`      |
+| `./gradlew 7zip-multiplatform` | All four 7z packages (Ant `7zip-multiplatform`)        | (all of the above)         |
+| `./gradlew buildAppImage`      | Self-contained Linux AppImage (Ant `buildAppImage`)    | `dist/I2P+_<ver>.appimage` |
+| `./gradlew appimageSetup`      | Fetch or refresh `appimagetool` (Ant `appimage-setup`) |                            |
+
+`buildAppImage` takes Ant's properties as Gradle properties:
+`-Pappimage.jdk=/path/to/jdk17` (the runtime bundled into the image, default
+`/usr/lib/jvm/java-17-openjdk-amd64`) and `-Pappimagetool.update=<arg>` (passed
+to `tools/appimage/download-appimagetool.sh`).
+
+The reseed bundle runs the same `BundleRouterInfos` and `SU3File` Ant runs:
+
+| Task                 | Description                                                      | Output              |
+| -------------------- | ---------------------------------------------------------------- | ------------------- |
+| `./gradlew i2pseeds` | Bundle, zip, sign and verify the reseed bundle (Ant `i2pseeds`)  | `dist/i2pseeds.su3` |
+| `prepRouterInfos`    | Bundle router infos from a running router's netDb                |                     |
+| `seedsZip`           | Pack the bundled router infos                                    | `dist/i2pseeds.zip` |
+| `signSeeds`          | `SU3File sign -c RESEED -t RSA_SHA512_4096`                      | `dist/i2pseeds.su3` |
+| `verifySeeds`        | `SU3File verifysig` against the pubkey certificate               |                     |
+| `showSeedsVersion`   | `SU3File showversion`                                            |                     |
+
+Ant prompts for the signing key store, the key name and the key password; Gradle
+takes them as `-Pprivkey=/path/to/keystore.ks`, `-Psigner=name@i2pmail.org` and
+`-Ppassword=<key password>` so the task can run without a terminal. The keystore
+must be a JKS one whose store password is `SU3File`'s default (`changeit`): the
+tool takes only the *key* password from stdin, exactly as the Ant macro does.
+The router infos come from `-Pbundle.routerInfos.i2pConfigDir=/path/to/.i2p` and
+`-Pbundle.routerInfos.count=200`, the same switches `build.properties` documents.
+
 ### Other
 
 | Task                              | Description                                                                                                                                   |
@@ -146,6 +205,7 @@ Prerequisite: `jbigi` (jars the vendored natives from `installer/lib/jbigi`).
 | `./gradlew jar`                   | Build all jars                                                                                                                                |
 | `./gradlew war`                   | Build all wars                                                                                                                                |
 | `./gradlew pkg`                   | Full distribution: update zip, deb, tarball, installer (Ant `pkg`)                                                                            |
+| `./gradlew pkg200`                | Same set with the pack200 update zip (Ant `pkg200`)                                                                                           |
 | `./gradlew buildDeb`              | Debian package                                                                                                                                |
 | `./gradlew tarball`               | Source-less tarball                                                                                                                           |
 | `./gradlew distclean`             | Wipe all build state                                                                                                                          |
@@ -200,9 +260,41 @@ Configuration cache is enabled in `gradle.properties`. If you see "configuration
   jar, so no JDK-provided `pack200` tool is needed.
 - The installer payload is seeded from `prepUpdate`, so its contents follow
   the fix-ups (no jars in `WEB-INF/lib`, clean locale trees)
-- Jetty runtime jars (vendored in `apps/jetty/jettylib/`) and the Tomcat
-  NOTICE are staged into the installer payload only, matching Ant's
-  `preppkg-base`; the updater/deb/tarball packages do not include them
+- Jetty runtime jars (vendored in `apps/jetty/jettylib/`) are staged into the
+  payload, matching Ant's `preppkg-base`; the updater/deb/tarball packages do not
+  include them. The Tomcat NOTICE is not staged: `preppkg-base` has never shipped
+  it, and the payload's license file is `docs/LICENSE.md` (`preplicenses`)
+- `zip-<platform>` runs the `zip` command line, as `i2psnark` does (Gradle 9
+  removed `Zip.compressionLevel`, and there is no 7z task at all). The external
+  tool preserves the unix modes, so the Gradle-built `i2p-<platform>.zip` keeps
+  `+x` on `eepget`, `i2prouter` and the rest where Ant's `<zip>` task stores them
+  `-rw-r--r--` and leaves the mode to the installer's `chmod` entries. The 7z
+  archives carry the modes in both builds
+- `prepUpdate` wipes its staging dir before staging. Ant's `zip-<platform>`
+  targets delete `pkg-temp` before `preppkg-<platform>`, and the platform
+  packages here seed from that directory, so without the wipe an earlier
+  installer run's `i2p.exe`, `lib/wrapper.jar` or `utility.jar` rides into a
+  Linux package
+- The windows payload drops what the seed carries but Ant's windows payload
+  never had: the shell scripts and the `locale/` catalogs (`preppkg-windows`
+  depends on `preppkg-base`, not `preppkg-unix` or `prep-script-translation`,
+  and `installer-windows` runs `delete-nonwindows`), and it adds the two files
+  Ant's `preppkg-windows` does add: `i2p.exe` from `buildexe` and
+  `lib/wrapper.jar`. Ant's windows archive also stores 81 empty `locale/…`
+  directories that its copy step creates while staging nothing; the Gradle
+  archive simply has no `locale/` tree
+- The gettext catalogs are staged by `prepUpdateRouter`, at the bottom of the payload
+  chain, so `updaterSmall`, `updater` and `updater200` all inherit them and only
+  `prepUpdateCompact` takes them back out - the compact updater is the small one, and
+  shipping no catalogs is the point of it. `compileLocale` prints the same warning ant's
+  `-warn-no-gettext` prints when `msgfmt` is not on the PATH
+- Every staged payload has been diffed file-for-file against the Ant one: the
+  six installer variants (`preppkg`, `-nowindows`, and the four `-only` dirs,
+  each with its `jbigi-<variant>` jar) and the four package variants
+  (`preppkg-{linux,freebsd,osx,windows}`) match exactly
+- The `SHA256:` line is printed from the build JVM, not from a child process:
+  the Gradle daemon forwards our stdout to the client, but a grandchild on
+  `inheritIO` writes where nothing sees it, and the line silently disappears
 - The standalone war is built as a separate `i2psnark-standalone.war`;
   Ant mutates the regular `build/i2psnark.war` in place (`zip update`)
 - The standalone fat jar merges with `duplicates=EXCLUDE` (first entry

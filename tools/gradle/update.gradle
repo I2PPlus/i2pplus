@@ -3,6 +3,7 @@ def routerStageDir = pkgTempRouterDir
 def smallStageDir = pkgTempSmallDir
 def compactStageDir = pkgTempCompactDir
 def compact200StageDir = pkgTempCompact200Dir
+def full200StageDir = pkgTemp200Dir
 def distAbsDir = distDir.absolutePath
 def localeBuildDir = "${System.getProperty('java.io.tmpdir')}/build-i2p/locale-build"
 
@@ -21,17 +22,30 @@ task prepUpdateRouter(type: Copy) {
     description = 'Assemble the router-only update payload (mirrors ant prepupdate-router).'
     includeEmptyDirs = false
     dependsOn ':core:jar', ':router:jar'
+    // Every payload except the compact ones carries the gettext catalogs, as ant's
+    // non-compact chains now depend on prep-script-translation directly. Staged here,
+    // at the bottom of the payload chain, so the small and full variants inherit it and
+    // only prepUpdateCompact has to take it back out.
+    dependsOn 'compileLocale'
     // Fresh staging dir; the zip task zips everything found, so stale
     // leftovers from earlier runs (renamed jars, deleted dirs) must not persist
     doFirst {
         new File(routerStageDir).deleteDir()
     }
     // Pass in paths as a closure, so they are not executed during configuration
-    from {[
+    into routerStageDir
+    from({[
         project(':core').jar.archiveFile,
         project(':router').jar.archiveFile
-    ]}
-    into routerStageDir + '/lib'
+    ]}) {
+        into 'lib'
+    }
+    // The gettext catalogs belong at the payload root, where the i2prouter script
+    // looks for them (TEXTDOMAINDIR=$I2P/locale), so this is a sibling of lib/ and
+    // not another copy into the same spec
+    from("$localeBuildDir/mo") {
+        into 'locale'
+    }
 }
 
 task prepUpdateSmall(type: Copy) {
@@ -47,6 +61,12 @@ task prepUpdateSmall(type: Copy) {
     dependsOn ':apps:pack200:jar'
     // The router payload staged by prepUpdateRouter, then this variant's own
     // files on top - ant builds one payload cumulatively in the shared pkg-temp
+    // Fresh staging dir, as every other payload stage does: this task copies the
+    // router payload and then adds to it, so anything a previous run left here
+    // (a tree this variant no longer stages) would ride into the zip
+    doFirst {
+        new File(smallStageDir).deleteDir()
+    }
     from routerStageDir
     into smallStageDir
     into('lib') {
@@ -89,6 +109,12 @@ task compileLocale(type: Exec) {
     description = 'Compile the locale po files to gettext .mo via tools/scripts/bundle-messages.sh (mirrors ant prep-script-translation).'
     workingDir rootDir
     commandLine 'sh', 'tools/scripts/bundle-messages.sh', '--dir', 'installer/resources/locale', '--build-dir', localeBuildDir
+    doFirst {
+        // ant's -warn-no-gettext: a build that cannot compile the catalogs has to say
+        // so, or the payload quietly ships untranslated router scripts.
+        if (['sh', '-c', 'command -v msgfmt >/dev/null 2>&1'].execute().waitFor() != 0)
+            println 'WARNING: msgfmt is not on the PATH - no gettext catalogs are compiled, so locale/*/LC_MESSAGES/i2prouter.mo is absent from every package built here and the router scripts ship untranslated'
+    }
 }
 
 task prepUpdate(type: Copy) {
@@ -113,6 +139,14 @@ task prepUpdate(type: Copy) {
     // updater adds on top
     from smallStageDir
     into pkgTmpDir
+    // Fresh staging dir, as ant's zip-<platform> targets do before preppkg-<platform>:
+    // they wipe pkg-temp and rebuild it, so their archives hold only the payload. The
+    // platform packages here seed from this directory, so anything a previous run left
+    // behind (an installer run's i2p.exe, lib/wrapper.jar, utility.jar) would ride into
+    // the archive otherwise.
+    doFirst {
+        new File(pkgTmpDir).deleteDir()
+    }
     into('lib') {
         from {[
             project(':apps:sam').jar.archiveFile,
@@ -120,9 +154,6 @@ task prepUpdate(type: Copy) {
             project(':apps:systray').jar.archiveFile,
             project(':apps:desktopgui').jar.archiveFile,
         ]}
-        // as of 0.7.12; someday, we can remove these from the updater
-        from 'apps/susidns/src/WEB-INF/lib/jstl.jar'
-        from 'apps/susidns/src/WEB-INF/lib/standard.jar'
     }
     into('webapps') {
         from {[
@@ -156,7 +187,8 @@ task prepUpdate(type: Copy) {
         rename 'LICENSES.md', 'LICENSE.md'
     }
     into('certificates') { from 'installer/resources/certificates' }
-    into('locale') { from "$localeBuildDir/mo" }
+    // The locale catalogs ride in with the prepUpdateSmall payload (staged by
+    // prepUpdateRouter), so this variant does not copy them a second time
     // ant copies docs/history.txt through a headfilter of 1500 lines and then
     // concats the pointer; one write, so the payload never holds a history.txt
     // without the note
@@ -240,12 +272,29 @@ class UpdateZip {
         }
     }
 
-    // Run a shell snippet. ProcessBuilder rather than ant.exec: `ant` is the
-    // project's AntIntegration, so reaching it from doLast is Task.project at
-    // execution time and the configuration cache rejects it. Plain String
-    // arguments, so nothing here closes over the Project.
-    static void runShell(String dir, String script) {
-        new ProcessBuilder(['sh', '-c', script]).directory(new File(dir)).inheritIO().start().waitFor()
+    // The pack200 savings line ant's zipit200 prints. The marker holds the pre-pack
+    // byte total written by tools/scripts/pack200.sh; it is compared with the size of
+    // the zip that was just written, then removed. Silent when the marker is absent,
+    // as in ant. The arithmetic is ant's shell arithmetic, truncation and all, and it
+    // runs in this JVM: a grandchild process on inheritIO writes where the daemon's
+    // client never sees it, and the line disappears.
+    static void reportPack200Savings(String marker, File zip) {
+        if (!new File(marker).exists())
+            return
+        long before = new File(marker).text.trim() as long
+        long zipsize = zip.length()
+        long saved = before - zipsize
+        new File(marker).delete()
+        // groovy's / on longs yields a BigDecimal, so cast each part: truncating an
+        // exact quotient toward zero is what bash's integer division does
+        long bWhole = (long) (before / 1000000L)
+        long bFrac = (long) ((before % 1000000L) / 10000L)
+        long zWhole = (long) (zipsize / 1000000L)
+        long zFrac = (long) ((zipsize % 1000000L) / 10000L)
+        long sWhole = (long) (saved / 1000000L)
+        long sFrac = (long) ((saved % 1000000L) / 10000L)
+        println String.format('Pack200: jars (%d.%02dMB) -> zip (%d.%02dMB) (saved %d.%02dMB)',
+                              bWhole, bFrac, zWhole, zFrac, sWhole, sFrac)
     }
 
     // ant's sha256sum target: "SHA256: <hash>" (gradle names the artifact on
@@ -312,6 +361,10 @@ task prepUpdateCompact(type: Copy) {
     // The base payload from prepUpdateSmall, in its own staging dir so the
     // compact and full chains never read or write the same files
     from smallStageDir
+    // The compact updater is the small one: it ships no gettext catalogs, which is
+    // the whole point of the target. The payload chain stages them for every other
+    // variant, so they come back out here.
+    exclude 'locale/**'
     into compactStageDir
     into('certificates') { from 'installer/resources/certificates' }
     into('docs/proxy') { from('installer/resources/console/proxy') { include '*.ht' } }
@@ -344,6 +397,10 @@ task updaterCompact {
 // routers can unpack what we pack here. GNU parallel is used when installed but is no
 // longer required: tools/scripts/pack200.sh falls back to a serial loop.
 def pack200MarkerAbs = "${System.getProperty('java.io.tmpdir')}/build-i2p/.pack200-before"
+// Its own marker for the full payload: the compact and full pack200 passes may run
+// in one gradle invocation, and a shared marker is read and deleted by whichever
+// zip finishes first
+def pack200FullMarkerAbs = "${System.getProperty('java.io.tmpdir')}/build-i2p/.pack200-before-full"
 // The pack200 jar's path, captured once every project has been evaluated:
 // :apps:pack200's jar task does not exist while this script is applied, and reading
 // project(...) from doFirst is rejected by the configuration cache. A captured Provider
@@ -394,9 +451,60 @@ task updater200Compact {
         def out = new File(distAbsDir, 'i2pupdate200.zip')
         logger.lifecycle("SHA256: ${UpdateZip.zipIt(new File(compact200StageDir), out, releaseNum, ['README.md'])}  i2pupdate200.zip")
         // Pack200 savings vs. the raw payload (mirrors ant zipit200)
-        if (new File(pack200MarkerAbs).exists()) {
-            UpdateZip.runShell(rootDirAbs, '''if [ -f __MARKER__ ]; then before=$(cat __MARKER__); zipsize=$(wc -c < dist/i2pupdate200.zip); saved=$((before - zipsize)); b_mb=$(printf "%d.%02d" $((before/1000000)) $(((before%1000000)/10000))); z_mb=$(printf "%d.%02d" $((zipsize/1000000)) $(((zipsize%1000000)/10000))); s_mb=$(printf "%d.%02d" $((saved/1000000)) $(((saved%1000000)/10000))); echo "Pack200: jars (${b_mb}MB) -> zip (${z_mb}MB) (saved ${s_mb}MB)"; rm -f __MARKER__; fi'''.replace('__MARKER__', pack200MarkerAbs))
-        }
+        UpdateZip.reportPack200Savings(pack200MarkerAbs, out)
+    }
+}
+
+// ---------------------------------------------------------------------------
+// updater200 — the pack200 variant of the full payload (mirrors ant
+// updater-work-200: prepupdate, pack200, zipit200)
+// ---------------------------------------------------------------------------
+
+// The full payload copied aside: pack200 rewrites every jar in place, so it
+// cannot share the directory the uncompressed i2pupdate.zip is zipped from.
+task prepUpdate200(type: Copy) {
+    group = 'package'
+    description = 'Copy the full update payload aside for pack200 compression (mirrors ant pack200 over the shared pkg-temp).'
+    dependsOn prepUpdate
+    includeEmptyDirs = false
+    from pkgTmpDir
+    into full200StageDir
+    doFirst {
+        new File(full200StageDir).deleteDir()
+    }
+}
+
+// Its own marker file: the compact and full pack200 passes may run in the same
+// gradle invocation, and one shared marker would be read and deleted by whichever
+// zip finished first.
+task pack200FullUpdater(type: Exec) {
+    group = 'package'
+    description = 'Pack200-compress the full payload lib jars and webapps (mirrors ant pack200 for updater200).'
+    dependsOn prepUpdate200
+    dependsOn ':apps:pack200:jar'
+    workingDir rootDirAbs
+    commandLine 'sh', 'tools/scripts/pack200.sh'
+    environment 'MODE', 'compress'
+    environment 'JAVA', "${System.getProperty('java.home')}/bin/java"
+    environment 'PKGDIR', full200StageDir
+    environment 'MARKER', pack200FullMarkerAbs
+    // Read the captured Provider here, not at configuration time: see pack200Updater.
+    doFirst {
+        environment 'P200JAR', p200JarFile.get().asFile.absolutePath
+    }
+}
+
+// Not a Gradle Zip task: see updaterCompact.
+task updater200 {
+    group = 'package'
+    description = 'Build the pack200 full update zip dist/i2pupdate200.zip (mirrors ant updater200).'
+    dependsOn pack200FullUpdater
+    doLast {
+        def out = new File(distAbsDir, 'i2pupdate200.zip')
+        def sha = UpdateZip.zipIt(new File(full200StageDir), out, releaseNum, ['README.md'])
+        logger.lifecycle("Created I2P+ pack200 update (rev. ${UpdateZip.gitRev(rootDirAbs)}): ${distAbsDir}/i2pupdate200.zip")
+        logger.lifecycle("SHA256: ${sha}  i2pupdate200.zip")
+        UpdateZip.reportPack200Savings(pack200FullMarkerAbs, out)
     }
 }
 

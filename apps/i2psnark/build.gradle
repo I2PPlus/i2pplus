@@ -266,6 +266,25 @@ task cleanSnark7z(type: Delete) {
     delete file("$distDir/i2psnark-standalone.7z")
 }
 
+// ant's sha256sum target: "SHA256: <hash>". The name stays on the line because
+// gradle's Exec tasks do not echo the artifact path the way ant's producing tasks
+// do. Hashed and printed in this JVM: the daemon forwards our stdout to the client,
+// but a grandchild process on inheritIO writes where nothing sees it. A script-level
+// closure, not a method: a task configuration closure resolves methods against the
+// task, where a bare script method is not found.
+def printSnarkSha = { File artifact ->
+    if (!artifact.isFile())
+        throw new GradleException("No artifact to hash at ${artifact} - the task that writes it produced nothing")
+    def digest = java.security.MessageDigest.getInstance('SHA-256')
+    artifact.withInputStream { is ->
+        byte[] buf = new byte[65536]
+        int n
+        while ((n = is.read(buf)) > 0)
+            digest.update(buf, 0, n)
+    }
+    println "SHA256: ${digest.digest().collect { String.format('%02x', it) }.join()}  ${artifact.name}"
+}
+
 task i2psnark(type: Exec) {
     group = 'package'
     description = 'Build the standalone I2PSnark zip in dist/ (ant i2psnark).'
@@ -279,10 +298,7 @@ task i2psnark(type: Exec) {
             new File(distDir, 'i2psnark-standalone.zip').absolutePath, 'standalone'
     doLast {
         // ant sha256sum: print "SHA256: <hash>"
-        def f = new File(distDir, 'i2psnark-standalone.zip')
-        def pb = new ProcessBuilder('sh', '-c', 'h=$(sha256sum "$0"); echo "SHA256: ${h%% *}  $(basename "$0")"', f.absolutePath)
-        pb.inheritIO()
-        pb.start().waitFor()
+        printSnarkSha(new File(distDir, 'i2psnark-standalone.zip'))
     }
 }
 
@@ -298,10 +314,7 @@ task i2psnark7zip(type: Exec) {
             new File(distDir, 'i2psnark-standalone.7z').absolutePath, 'standalone'
     doLast {
         // ant sha256sum: print "SHA256: <hash>"
-        def f = new File(distDir, 'i2psnark-standalone.7z')
-        def pb = new ProcessBuilder('sh', '-c', 'h=$(sha256sum "$0"); echo "SHA256: ${h%% *}  $(basename "$0")"', f.absolutePath)
-        pb.inheritIO()
-        pb.start().waitFor()
+        printSnarkSha(new File(distDir, 'i2psnark-standalone.7z'))
     }
 }
 

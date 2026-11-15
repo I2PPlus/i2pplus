@@ -27,7 +27,7 @@
 // resolvable when the configuration cache replays task execution; function
 // bodies get the values they need as parameters instead
 final def workspaceRootAbs = rootDir.absolutePath
-final def stageRoot = file("${System.getProperty('java.io.tmpdir')}/build-i2p/pkg-installer")
+final def stageRoot = file(pkgStageRoot)
 final def izpackWork = file("${buildDir}/izpack")
 final def launcherWork = file("${buildDir}/launch4j")
 final def izPack4Compiler = "${workspaceRootAbs}/installer/lib/izpack/4/standalone-compiler.jar"
@@ -112,12 +112,21 @@ final def launcherSupported = ['x86', 'i386', 'i586', 'i686', 'amd64', 'x86_64']
 // inside task configuration closures (delegate-first dispatch)
 class InstallerUtil {
   // ant's sha256sum target prints "SHA256: <hash>"; gradle keeps the name on the
-  // line because its Exec tasks do not echo the artifact path the way ant does
+  // line because its Exec tasks do not echo the artifact path the way ant does.
+  // Hashed and printed in this JVM: the daemon forwards our stdout to the client,
+  // but a grandchild process on inheritIO writes where nothing sees it, and the
+  // line disappears.
   void printSha(File absFile) {
-    def pb = new ProcessBuilder('sh', '-c',
-        "f=\"${absFile}\"; h=\$(sha256sum \"\$f\"); echo \"SHA256: \${h%% *}  \$(basename \"\$f\")\"")
-    pb.inheritIO()
-    pb.start().waitFor()
+    if (!absFile.isFile())
+      throw new GradleException("No artifact to hash at ${absFile} - the task that writes it produced nothing")
+    def digest = java.security.MessageDigest.getInstance('SHA-256')
+    absFile.withInputStream { is ->
+      byte[] buf = new byte[65536]
+      int n
+      while ((n = is.read(buf)) > 0)
+        digest.update(buf, 0, n)
+    }
+    println "SHA256: ${digest.digest().collect { String.format('%02x', it) }.join()}  ${absFile.name}"
   }
 
   void gunzip(File gz, File out) {
@@ -232,7 +241,8 @@ class InstallerUtil {
 // One staging task per variant, named after the ant preppkg targets. The
 // staging runs fresh every time (never up-to-date), exactly like ant, and the
 // up-to-date checks live on the izpack tasks that consume the payload.
-def makeStageTask(String taskName, String stageDir, String variant, String taskDesc, Map cfg) {
+def makeStageTask(String taskName, String stageDir, String variant, String taskDesc, Map cfg,
+                  boolean withWrapperJar = true) {
   task(taskName, type: Copy) {
     group = 'package'
     description = taskDesc
@@ -259,6 +269,17 @@ def makeStageTask(String taskName, String stageDir, String variant, String taskD
       exclude '**/*.war.pack'
       exclude '**/deletelist.txt'
       exclude 'webapps/addressbook.war'
+      if (variant == 'windows') {
+        // The seed is the updater payload, and the updater is a unix-shaped
+        // payload: it carries the shell scripts and the script translation
+        // catalogs. Ant's windows payload has neither - preppkg-windows depends
+        // on preppkg-base, not preppkg-unix or prep-script-translation, and
+        // installer-windows deletes whatever the other installers left behind
+        // (delete-nonwindows).
+        exclude 'locale/**'
+        ['eepget', 'eephead', 'i2ping', 'hostping', 'graceful_update', 'i2prouter',
+         'runplain.sh', 'osid', 'postinstall.sh', 'uninstall-i2p.sh'].each { exclude it }
+      }
     }
     from 'apps/i2psnark/i2psnark.config'
     from 'installer/resources/blocklist/blocklist.txt'
@@ -280,6 +301,16 @@ def makeStageTask(String taskName, String stageDir, String variant, String taskD
         include 'console.ico'
         include 'uninstall.ico'
       }
+      // ant prepConsoleDocs: the news item a fresh install shows before its first
+      // reseed
+      into('initialNews') {
+        from 'installer/resources/initialNews'
+      }
+    }
+    // ant prepthemeupdates: the theme trees live under docs/themes. Copying them
+    // straight into docs put console/, snark/, susimail/ and the rest at the wrong
+    // level, where ant's payload has never had them.
+    into('docs/themes') {
       from('installer/resources/console/themes') {
         exclude '**/*.*~'
       }
@@ -316,14 +347,11 @@ def makeStageTask(String taskName, String stageDir, String variant, String taskD
         exclude 'jetty-sslengine.jar'
       }
       from { project(':apps:jetty').jar.archiveFile }
-    }
-    into('licenses') {
-      from('docs/LICENSES.md') {
-        rename { 'LICENSE.md' }
-      }
-      from("apps/jetty/apache-tomcat-${tomcatVersion}/NOTICE") {
-        rename { 'NOTICE-Tomcat.txt' }
-      }
+      // ant copyjstl-unlesspkg and copystandard-unlesspkg: the JSTL jars the
+      // launcher classpath names (lib/jstl.jar lib/standard.jar). The updater does
+      // not carry them, so they come in with the package payload.
+      from('apps/susidns/src/lib/jstl.jar')
+      from('apps/susidns/src/lib/standard.jar')
     }
     into('geoip') {
       from 'installer/resources/geoip/countries.txt'
@@ -331,10 +359,15 @@ def makeStageTask(String taskName, String stageDir, String variant, String taskD
     }
     into('eepsite/docroot/help/lib') {
       from('apps/routerconsole/resources/icons/flags_svg') {
-        include 'az.svg bn.svg cn.svg cz.svg de.svg dk.svg es.svg ee.svg fi.svg fr.svg'
-        include 'gr.svg hu.svg id.svg in.svg ir.svg it.svg jp.svg kr.svg no.svg nl.svg'
-        include 'pl.svg pt.svg ro.svg ru.svg se.svg si.svg tr.svg us.svg lang_ar.svg'
-        include 'ua.svg vn.svg xt.svg'
+        // ant copyflags' list, verbatim. One space-separated string per include is
+        // not a list of patterns - groovy passes it through as a single pattern that
+        // matches nothing, which is how this ended up shipping no flags at all.
+        include(['af.svg', 'az.svg', 'bn.svg', 'cn.svg', 'cz.svg', 'de.svg', 'dk.svg',
+                 'es.svg', 'ee.svg', 'fi.svg', 'fr.svg', 'gr.svg', 'hu.svg', 'id.svg',
+                 'il.svg', 'in.svg', 'ir.svg', 'it.svg', 'jp.svg', 'kr.svg', 'no.svg',
+                 'nl.svg', 'ph.svg', 'pk.svg', 'pl.svg', 'pt.svg', 'ro.svg', 'ru.svg',
+                 'se.svg', 'si.svg', 'sk.svg', 'th.svg', 'tr.svg', 'tw.svg', 'tz.svg',
+                 'us.svg', 'lang_ar.svg', 'lang_ca.svg', 'ua.svg', 'vn.svg', 'xt.svg'])
       }
     }
 
@@ -351,6 +384,11 @@ def makeStageTask(String taskName, String stageDir, String variant, String taskD
       from 'installer/resources/platform-specific/unix/osid'
       from 'installer/resources/platform-specific/unix/postinstall.sh'
       from 'installer/resources/platform-specific/unix/uninstall-i2p.sh'
+      // ant preppkg-unix stages the man pages too; they were missing here, so every
+      // unix package and installer built here shipped none
+      into('man') {
+        from 'installer/resources/platform-specific/unix/man'
+      }
     }
     if (variant == 'all' || variant == 'nowindows' || variant == 'linux') {
       ['linux', 'linux64', 'linux-armv5', 'linux-armv7', 'linux64-armv8'].each { d ->
@@ -390,6 +428,11 @@ def makeStageTask(String taskName, String stageDir, String variant, String taskD
       ['eepget.bat', 'eephead.bat', 'i2prouter.bat', 'service.ps1'].each { b ->
         from "installer/resources/platform-specific/windows/${b}"
       }
+      // ant preppkg-windows copies the launch4j launcher into the payload root;
+      // without it the windows package and installer shipped no i2p.exe at all
+      from(cfg.launcherWork) {
+        include 'i2p.exe'
+      }
       ['win64'].each { d ->
         into("lib/wrapper/${d}") {
           from("installer/lib/wrapper/${d}") {
@@ -404,8 +447,14 @@ def makeStageTask(String taskName, String stageDir, String variant, String taskD
 
     // installer/lib/wrapper/all/wrapper.jar is the canonical jar for every
     // platform (win64 cross-compiled, all others from the Tanuki delta pack).
-    into('lib') {
-      from('installer/lib/wrapper/all/wrapper.jar')
+    // ant copies it in preppkg, in the -only installer targets, and in
+    // preppkg-windows; the plain preppkg-linux / -freebsd / -osx targets the
+    // other platform packages stage from do not, so those payloads have no
+    // lib/wrapper.jar either.
+    if (withWrapperJar || variant == 'windows') {
+      into('lib') {
+        from('installer/lib/wrapper/all/wrapper.jar')
+      }
     }
 
     doLast {
@@ -450,6 +499,20 @@ makeStageTask('preppkg-osx-only', "${stageRoot}/osx", 'osx',
     'Stage the osx-only installer payload (mirrors ant preppkg-osx-only).', stageCfg)
 makeStageTask('preppkg-windows-only', "${stageRoot}/windows", 'windows',
     'Stage the windows-only installer payload (mirrors ant preppkg-windows-only).', stageCfg)
+
+// The platform package payloads (ant preppkg-linux / -freebsd / -osx / -windows):
+// the same tree as that platform's installer payload, without lib/wrapper.jar,
+// which ant copies only in the -only installer targets. Staged under an i2p/
+// directory so the 7z packages (ant 7zip-*, which pack that directory as the
+// archive root) need no second copy of the payload.
+makeStageTask('preppkg-linux', "${stageRoot}/pkg-linux/i2p", 'linux',
+    'Stage the linux package payload (mirrors ant preppkg-linux).', stageCfg, false)
+makeStageTask('preppkg-freebsd', "${stageRoot}/pkg-freebsd/i2p", 'freebsd',
+    'Stage the freebsd package payload (mirrors ant preppkg-freebsd).', stageCfg, false)
+makeStageTask('preppkg-osx', "${stageRoot}/pkg-osx/i2p", 'osx',
+    'Stage the macos package payload (mirrors ant preppkg-osx).', stageCfg, false)
+makeStageTask('preppkg-windows', "${stageRoot}/pkg-windows/i2p", 'windows',
+    'Stage the windows package payload (mirrors ant preppkg-windows).', stageCfg, false)
 
 // Variant-specific jbigi.jar built from the bundled natives (ant jbigi-*-only)
 def makeJbigiJarTask(String taskName, String stageDir, String variant, String taskDesc, String version) {

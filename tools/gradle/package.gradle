@@ -3,8 +3,8 @@
 // (the update zip variants, including updaterCompact and updater200Compact)
 // and from installer.gradle (the IzPack installer family).
 //
-// NOT ported (Ant-only today): jbigi native builds (buildJbigi*), the zip /
-// 7z platform packages, AppImage, pkg200, updater200, and build-buildtools.
+// NOT ported (Ant-only today): the jbigi native builds (buildJbigi*), the jpackage
+// windows installer (jpackage-win*), and build-buildtools.
 // Pass -PnoBundle to also skip the per-module translation bundling (matches
 // ant's compact targets, which set no.bundle for the whole compact chain).
 //
@@ -23,6 +23,29 @@ def buildExtraSuffix = "${ext.buildExtra}"
 // The AppImage AppDir staging tree (ant: appimage.dir). gradle has no AppImage
 // task, so the path is spelled out here to keep distclean in step with ant.
 def appImageDir = file("${System.getProperty('java.io.tmpdir')}/build-i2p/appimage")
+
+// ant's sha256sum target: "SHA256: <hash>". Declared up here because a script
+// local is only visible to the code that follows it, and every artifact-producing
+// task below prints one. Gradle's Exec tasks do not echo the artifact path the way
+// ant's producing tasks do, so the name stays on the line. Hashed and printed in
+// this JVM: the daemon forwards our stdout to the client, but a grandchild process
+// on inheritIO writes where nothing sees it, and the line disappears.
+class PackageUtil {
+    void printSha(File absFile) {
+        if (!absFile.isFile())
+            throw new GradleException("No artifact to hash at ${absFile} - the task that writes it produced nothing")
+        def digest = java.security.MessageDigest.getInstance('SHA-256')
+        absFile.withInputStream { is ->
+            byte[] buf = new byte[65536]
+            int n
+            while ((n = is.read(buf)) > 0)
+                digest.update(buf, 0, n)
+        }
+        println "SHA256: ${digest.digest().collect { String.format('%02x', it) }.join()}  ${absFile.name}"
+    }
+}
+
+final def packageUtil = new PackageUtil()
 
 // File sets for distclean, captured at configuration time so the task body
 // stays configuration-cache compatible. dist is emptied, not removed: the
@@ -116,8 +139,7 @@ task tarball(type: Tar) {
     into 'i2p'
     // ant's sha256sum target prints "SHA256: <hash>" after every shipped artifact
     doLast {
-        new ProcessBuilder('sh', '-c',
-            'h=$(sha256sum "dist/i2p.tar.bz2"); echo "SHA256: ${h%% *}  i2p.tar.bz2"').inheritIO().start().waitFor()
+        packageUtil.printSha(new File(workspaceDist, 'i2p.tar.bz2'))
     }
 }
 
@@ -125,6 +147,247 @@ task pkg {
     group = 'package'
     description = 'Assemble the distribution set: update zip, Debian package, tarball, and the IzPack installer (mirrors ant pkg).'
     dependsOn 'distclean', 'updater', 'buildDeb', 'tarball', 'installer'
+}
+
+task pkg200 {
+    group = 'package'
+    description = 'Assemble the pack200 distribution set: packed update zip and the IzPack installer (mirrors ant pkg200).'
+    dependsOn 'distclean', 'updater200', 'installer'
+}
+
+// ---------------------------------------------------------------------------
+// zip-* / 7zip-* — the platform packages (mirrors ant zip-*, 7zip-*)
+// ---------------------------------------------------------------------------
+
+// Closures created inside the factory functions below cannot see script-level
+// locals, so each factory gets the values it needs as one config map
+final def pkgCfg = [dAbs: workspaceDist, util: packageUtil]
+
+// One staging tree serves both archives (preppkg-<platform> in installer.gradle):
+// the payload lives under an i2p/ directory, ant's zip-<platform> packs it at the
+// archive root and 7zip-<platform> packs that i2p/ directory, so the two tasks
+// differ only in the directory the tool runs from. Both archives are written by
+// the same external tools ant calls — gradle's Zip task has no compression level
+// any more (Gradle 9 removed it) and 7z has no gradle equivalent at all. Both
+// tools update an existing archive in place, so the stale artifact is deleted
+// first, as ant's targets do.
+def makePlatformZipTask(String taskName, String stageTask, String stageDir,
+                        String artifact, String taskDesc, Map cfg) {
+    task(taskName, type: Exec) {
+        group = 'package'
+        description = taskDesc
+        dependsOn stageTask
+        // cwd is the payload root, so the archive holds lib/, docs/, ... at its root
+        workingDir stageDir
+        commandLine 'zip', '-r', '-9', '-q',
+                new File(cfg.dAbs, artifact).absolutePath, '.', '-x', 'README.md'
+        doFirst {
+            new File(cfg.dAbs, artifact).delete()
+        }
+        doLast {
+            cfg.util.printSha(new File(cfg.dAbs, artifact))
+        }
+    }
+}
+
+def makePlatform7zTask(String taskName, String stageTask, String stageDir,
+                       String artifact, String taskDesc, Map cfg) {
+    task(taskName, type: Exec) {
+        group = 'package'
+        description = taskDesc
+        dependsOn stageTask
+        // cwd is the parent of the payload directory, so every entry is i2p/...
+        workingDir new File(stageDir).parent
+        // The flags are ant's, p7zip's: -mx=9 -md=4m -mmt2 -t7z -ssw -bt
+        commandLine '7z', 'a', '-bt', '-mx=9', '-md=4m', '-mmt2', '-t7z', '-ssw',
+                '-xr!pkg-temp', '-xr!README.md',
+                new File(cfg.dAbs, artifact).absolutePath, new File(stageDir).name
+        doFirst {
+            new File(cfg.dAbs, artifact).delete()
+        }
+        doLast {
+            cfg.util.printSha(new File(cfg.dAbs, artifact))
+        }
+    }
+}
+
+// The staging trees are named for ant's preppkg-<platform> targets, which is what
+// fills them (see installer.gradle).
+makePlatformZipTask('zip-linux', 'preppkg-linux', "${pkgStageRoot}/pkg-linux/i2p", 'i2p-linux.zip',
+    'Build the linux platform package dist/i2p-linux.zip (mirrors ant zip-linux).', pkgCfg)
+makePlatformZipTask('zip-windows', 'preppkg-windows', "${pkgStageRoot}/pkg-windows/i2p", 'i2p-windows.zip',
+    'Build the windows platform package dist/i2p-windows.zip (mirrors ant zip-windows).', pkgCfg)
+makePlatformZipTask('zip-macos', 'preppkg-osx', "${pkgStageRoot}/pkg-osx/i2p", 'i2p-macos.zip',
+    'Build the macos platform package dist/i2p-macos.zip (mirrors ant zip-macos).', pkgCfg)
+makePlatformZipTask('zip-freebsd', 'preppkg-freebsd', "${pkgStageRoot}/pkg-freebsd/i2p", 'i2p-freebsd.zip',
+    'Build the freebsd platform package dist/i2p-freebsd.zip (mirrors ant zip-freebsd).', pkgCfg)
+
+makePlatform7zTask('7zip-linux', 'preppkg-linux', "${pkgStageRoot}/pkg-linux/i2p", 'i2p-linux.7z',
+    'Build the linux platform package dist/i2p-linux.7z (mirrors ant 7zip-linux).', pkgCfg)
+makePlatform7zTask('7zip-windows', 'preppkg-windows', "${pkgStageRoot}/pkg-windows/i2p", 'i2p-windows.7z',
+    'Build the windows platform package dist/i2p-windows.7z (mirrors ant 7zip-windows).', pkgCfg)
+makePlatform7zTask('7zip-macos', 'preppkg-osx', "${pkgStageRoot}/pkg-osx/i2p", 'i2p-macos.7z',
+    'Build the macos platform package dist/i2p-macos.7z (mirrors ant 7zip-macos).', pkgCfg)
+makePlatform7zTask('7zip-freebsd', 'preppkg-freebsd', "${pkgStageRoot}/pkg-freebsd/i2p", 'i2p-freebsd.7z',
+    'Build the freebsd platform package dist/i2p-freebsd.7z (mirrors ant 7zip-freebsd).', pkgCfg)
+
+// The ant target name starts with a digit, which a groovy task name cannot, so
+// the quoted form keeps the ant spelling greppable.
+task('7zip-multiplatform') {
+    group = 'package'
+    description = 'Build the 7z platform packages for FreeBSD, macOS, Linux and Windows (mirrors ant 7zip-multiplatform).'
+    dependsOn '7zip-freebsd', '7zip-macos', '7zip-linux', '7zip-windows'
+    doLast {
+        logger.lifecycle('7zip packages built for FreeBSD, macOS, Linux and Windows -> Copied to ./dist/')
+    }
+}
+
+// ---------------------------------------------------------------------------
+// buildAppImage — the self-contained Linux AppImage (mirrors ant appimage-setup,
+// buildAppImage)
+// ---------------------------------------------------------------------------
+
+// ant's properties, read the gradle way: -Dappimage.jdk=/PATH in ant becomes
+// -Pappimage.jdk=/PATH here, with ant's defaults kept.
+def appImageJdk = providers.gradleProperty('appimage.jdk').getOrElse('/usr/lib/jvm/java-17-openjdk-amd64')
+def appImageToolUpdate = providers.gradleProperty('appimagetool.update').getOrElse('')
+
+// appimagetool is not in the repository (tools/ is gitignored), so the packing
+// script cannot assume it is there. The download script reports what it found
+// and what it installed, and ant shows that output; gradle inherits it.
+task appimageSetup(type: Exec) {
+    group = 'package'
+    description = 'Fetch or refresh the appimagetool buildAppImage packs with (mirrors ant appimage-setup).'
+    commandLine 'bash', 'tools/appimage/download-appimagetool.sh', appImageToolUpdate
+}
+
+task buildAppImage(type: Exec) {
+    group = 'package'
+    description = 'Build the self-contained Linux AppImage dist/I2P+_<version>.appimage (mirrors ant buildAppImage).'
+    dependsOn appimageSetup, 'preppkg-linux'
+    // version, appimagetool update flag, payload directory, AppDir tree, JDK to bundle
+    commandLine 'bash', 'tools/appimage/build-appimage.sh', pkgVersion, appImageToolUpdate,
+        "${pkgStageRoot}/pkg-linux/i2p", appImageDir.absolutePath, appImageJdk
+    doLast {
+        packageUtil.printSha(new File(workspaceDist, "I2P+_${pkgVersion}.appimage"))
+    }
+}
+
+// ---------------------------------------------------------------------------
+// i2pseeds — the reseed bundle (mirrors ant prepRouterInfos, i2pseeds)
+// ---------------------------------------------------------------------------
+
+// The same build.properties switches ant reads: bundle.routerInfos.i2pConfigDir is
+// the running router's config directory to read the netDb from, .count how many
+// router infos go in. Unset, the tool's own defaults apply ($HOME/.i2p, 200), as
+// they do in ant. ant prompts for the signing key store, the key name and the
+// password; gradle takes them as -Pprivkey / -Psigner / -Ppassword so the task can
+// run without a terminal, and fails when they are missing rather than waiting on
+// an input ant would have shown.
+def routerInfosConfigDir = providers.gradleProperty('bundle.routerInfos.i2pConfigDir').getOrElse('')
+def routerInfosCount = providers.gradleProperty('bundle.routerInfos.count').getOrElse('')
+def su3PrivKey = providers.gradleProperty('privkey').getOrElse('')
+def su3Signer = providers.gradleProperty('signer').getOrElse('')
+def su3Password = providers.gradleProperty('password').getOrElse('')
+def netDbStageDir = "${pkgStageRoot}/netDb"
+// ant's -setepoch: the su3 version is the build's epoch seconds
+def su3Epoch = "${(long) (System.currentTimeMillis() / 1000L)}"
+
+// :installer's tools source set is where BundleRouterInfos lives (ant compiles it
+// into tools.jar). ant's classpath also names gnu-getopt.jar, which is only there
+// for a build configured with -Dwith-libgetopt-java=true; by default the vendored
+// gnu/getopt sources compile into i2p.jar, as they do here, so the three jars are
+// the whole classpath.
+// evaluationDependsOn: this script runs while the root project is being evaluated,
+// so the other projects' jar tasks do not exist yet. Same reason as in
+// apps/routerconsole/build.gradle.
+([':installer', ':core', ':router']).each { evaluationDependsOn(it) }
+def reseedClasspath = files(project(':installer').tasks.named('toolsJar').flatMap { it.archiveFile },
+                            project(':core').tasks.named('jar').flatMap { it.archiveFile },
+                            project(':router').tasks.named('jar').flatMap { it.archiveFile })
+
+task prepRouterInfos(type: JavaExec) {
+    group = 'package'
+    description = 'Bundle a selection of router infos for the reseed payload (mirrors ant prepRouterInfos).'
+    classpath = reseedClasspath
+    mainClass.set('net.i2p.router.networkdb.kademlia.BundleRouterInfos')
+    // Only pass what was configured: the tool defaults -i and -c itself, and an
+    // empty argument is not the same as no argument
+    if (!routerInfosConfigDir.isEmpty())
+        args '-i', routerInfosConfigDir
+    args '-o', netDbStageDir
+    if (!routerInfosCount.isEmpty())
+        args '-c', routerInfosCount
+    doFirst {
+        new File(netDbStageDir).deleteDir()
+    }
+}
+
+task seedsZip(type: Zip) {
+    group = 'package'
+    description = 'Pack the bundled router infos into dist/i2pseeds.zip (the first half of ant i2pseeds).'
+    dependsOn prepRouterInfos
+    archiveFileName.set('i2pseeds.zip')
+    destinationDirectory.set(distDir)
+    from(netDbStageDir)
+    doFirst {
+        // ant's whenempty="fail": an empty netDb means the bundling found nothing
+        File[] seeds = new File(netDbStageDir).listFiles()
+        if (seeds == null || seeds.length == 0)
+            throw new GradleException("No router infos bundled in ${netDbStageDir} -> " +
+                                      "check -Pbundle.routerInfos.i2pConfigDir points at a running router's config directory")
+    }
+}
+
+// SU3File sign, ant's su3sign macro: the keystore, the version (the epoch) and the
+// signer name are arguments; the key password goes to stdin, as ant's inputstring.
+task signSeeds(type: JavaExec) {
+    group = 'package'
+    description = 'Sign dist/i2pseeds.zip into dist/i2pseeds.su3 (the second half of ant i2pseeds).'
+    dependsOn seedsZip, ':core:jar'
+    classpath = files(project(':core').tasks.named('jar').flatMap { it.archiveFile })
+    mainClass.set('net.i2p.crypto.SU3File')
+    args 'sign', '-c', 'RESEED', '-t', 'RSA_SHA512_4096',
+         "${workspaceDist}/i2pseeds.zip", "${workspaceDist}/i2pseeds.su3",
+         su3PrivKey, su3Epoch, su3Signer
+    doFirst {
+        if (su3PrivKey.isEmpty() || su3Signer.isEmpty() || su3Password.isEmpty())
+            throw new GradleException('Signing needs -Pprivkey=/path/to/keystore.ks, -Psigner=name@i2pmail.org ' +
+                                      'and -Ppassword=... (ant prompts for these three)')
+        new File("${workspaceDist}/i2pseeds.su3").delete()
+        standardInput = new ByteArrayInputStream((su3Password + '\n').getBytes('UTF-8'))
+    }
+    doLast {
+        packageUtil.printSha(new File(workspaceDist, 'i2pseeds.su3'))
+    }
+}
+
+// The macro's two checks. -Di2p.dir.base=installer/resources is how ant points the
+// tool at the pubkey certificate that verifies a RESEED signature.
+task verifySeeds(type: JavaExec) {
+    group = 'package'
+    description = 'Verify the reseed bundle signature (mirrors the verifysig step of ant su3sign).'
+    dependsOn signSeeds
+    classpath = files(project(':core').tasks.named('jar').flatMap { it.archiveFile })
+    mainClass.set('net.i2p.crypto.SU3File')
+    jvmArgs "-Di2p.dir.base=${rootDir}/installer/resources"
+    args 'verifysig', "${workspaceDist}/i2pseeds.su3"
+}
+
+task showSeedsVersion(type: JavaExec) {
+    group = 'package'
+    description = 'Print the reseed bundle version (mirrors the showversion step of ant su3sign).'
+    dependsOn verifySeeds
+    classpath = files(project(':core').tasks.named('jar').flatMap { it.archiveFile })
+    mainClass.set('net.i2p.crypto.SU3File')
+    jvmArgs "-Di2p.dir.base=${rootDir}/installer/resources"
+    args 'showversion', "${workspaceDist}/i2pseeds.su3"
+}
+
+task i2pseeds {
+    group = 'package'
+    description = 'Build and sign the reseed bundle dist/i2pseeds.su3 (mirrors ant i2pseeds).'
+    dependsOn showSeedsVersion
 }
 
 // Ant runs a target's dependencies in list order (distclean first); Gradle

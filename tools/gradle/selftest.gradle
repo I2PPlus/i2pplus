@@ -8,14 +8,20 @@
 // now: they download a server on first run, so they are exercised manually.
 def documentedTasks = [
     'updater', 'updaterSmall', 'updaterRouter', 'updaterCompact',
-    'prepUpdate', 'prepUpdateSmall', 'prepUpdateRouter',
+    'updater200', 'updater200Compact',
+    'prepUpdate', 'prepUpdateSmall', 'prepUpdateRouter', 'prepUpdateCompact',
+    'prepUpdateCompact200', 'prepUpdate200', 'pack200Updater', 'pack200FullUpdater',
     'installer', 'installerexe', 'installer-nowindows', 'installer-linux',
     'installer-freebsd', 'installer-osx', 'installer-windows', 'installer2app',
     'installer-all',
     'installer5', 'installer5exe', 'installer5-freebsd', 'installer5-linux',
     'installer5-nowindows', 'installer5-osx', 'installer5-windows',
     'installer5WExe', 'installer5WJar', 'installerW4Exe', 'installerW4Jar',
-    'pkg', 'tarball', 'distclean',
+    'pkg', 'pkg200', 'tarball', 'distclean',
+    'zip-linux', 'zip-windows', 'zip-macos', 'zip-freebsd',
+    '7zip-linux', '7zip-windows', '7zip-macos', '7zip-freebsd', '7zip-multiplatform',
+    'buildAppImage', 'appimageSetup',
+    'i2pseeds', 'prepRouterInfos', 'seedsZip', 'signSeeds', 'verifySeeds', 'showSeedsVersion',
     'i2psnark', 'i2psnark7zip', 'i2psnark_nozip',
     'jbigi', 'jbigi-linux', 'jbigi-osx', 'jbigi-windows', 'jbigi-freebsd',
     'jbigi-nowindows',
@@ -23,6 +29,7 @@ def documentedTasks = [
     'testCore', 'testRouter', 'testApps', 'checkJsps',
     'preppkg', 'preppkg-nowindows', 'preppkg-linux-only',
     'preppkg-freebsd-only', 'preppkg-osx-only', 'preppkg-windows-only',
+    'preppkg-linux', 'preppkg-freebsd', 'preppkg-osx', 'preppkg-windows',
     'izpackPanelJar', 'izpackPanelTest', 'izpackBrandingCheck',
 ]
 

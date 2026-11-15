@@ -231,6 +231,16 @@ ext.pkgTempCompactDir = "${pkgTempDir}-compact"
 // rewrites every jar in place, so it cannot share a directory with the
 // uncompressed compact zip
 ext.pkgTempCompact200Dir = "${pkgTempDir}-compact-200"
+// The pack200 variant of the full updater payload, for the same reason (ant
+// pack200 rewrites its one shared pkg-temp in place)
+ext.pkgTemp200Dir = "${pkgTempDir}-200"
+
+// Root of the payload staging trees the installers and the platform packages
+// build (ant stages all of them in the single pkg-temp, one target per run).
+// Each platform package stages under an i2p/ directory: ant zip-<platform>
+// packs the payload at the archive root and 7zip-<platform> packs that i2p
+// directory, so one tree serves both with no second copy.
+ext.pkgStageRoot = "${System.getProperty('java.io.tmpdir')}/build-i2p/pkg-installer"
 
 // Final artifacts (i2pupdate.zip, i2p.tar.bz2, *.deb) land in dist/, as in ant
 ext.distDir = file('dist')
