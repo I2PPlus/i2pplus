@@ -547,6 +547,9 @@
 <tr class=config><th>i2p.streaming.initialWindowSize={n}</th></tr>
 <tr><td><%=intl._t("Initial congestion window size (in packets) for new streaming connections. A larger window starts connections faster but may cause more retransmissions on congested paths. [Default is 64]")%></td></tr>
 
+<tr class=config><th>i2p.streaming.maxConcurrentStreamsPerDest={n} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("Caps how many concurrent streams a single destination may hold, independently of the overall limit in <code>i2p.streaming.maxConcurrentStreams</code>, which bounds all destinations together. Set this to keep one destination from using up every stream: the lower of the two caps applies, and 0 means no per-destination limit. Unlike the Tuner's reactive cap, this is never raised automatically, and a destination refused this often is temporarily prevented from opening more streams. Takes effect within a minute, no restart required. [Default is 0]")%></td></tr>
+
 <tr class=config><th>i2p.streaming.maxConnectTimeout={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("The upper bound clamp on streaming connect timeout. Prevents per-connection timeouts from exceeding this ceiling. Increase for very high-latency remote access. May be overridden on a per-connection basis by setting the same property in a client tunnel's advanced client options (e.g. the IRC client tunnel defaults to 300000). [Default is 75000 (75 seconds)]")%></td></tr>
 
