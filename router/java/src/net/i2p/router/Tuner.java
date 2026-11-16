@@ -2416,7 +2416,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 if (_factoryDefault > 0 && _defaultValue != _factoryDefault) {
                     int prev = _defaultValue;
                     _defaultValue = Math.max(_min, Math.min(_max, _factoryDefault));
-                    if (_log.shouldWarn())
+                    // Report the heal only if the clamp left anything to report. A
+                    // factory default below the range floor is clamped straight back
+                    // to where it started, and "Healed default for X: 500 -> 500"
+                    // reads as a change that did not happen.
+                    if (_defaultValue != prev && _log.shouldWarn())
                         _log.warn("Healed default for " + _name + ": " + prev +
                                   " -> " + _defaultValue);
                     defaultHealed = true;
