@@ -512,6 +512,10 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
 
     /**
      * Blocks until outbound window is not full. See {@link net.i2p.client.streaming.impl.Connection#packetSendChoke}.
+     * <p>On a refusal the payload stays attached unless the packet is already
+     * finished: a packet that is still unacked and uncancelled will be
+     * retransmitted, and a packet retransmitted without its payload is a
+     * header-only resend that silently drops the data.
      *
      * @param maxWaitMs MessageOutputStream is the only caller, generally with -1
      * @throws IOException if the connection is closed
@@ -531,7 +535,13 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
                 _acceptedOn = _context.clock().now();
             } else {
                 _acceptedOn = -1;
-                releasePayload();
+                // Only a finished packet may give its buffer back. When the choke
+                // times out on a live connection this packet is still in the
+                // outbound queue, unacked and uncancelled, so the retransmit loop
+                // re-enqueues it - and with the payload released, getPayloadSize()
+                // reports 0 and the resend carries the header alone. The data is
+                // gone and the peer never knows.
+                if (writeReleased()) {releasePayload();}
             }
             if ( (_acceptedOn - before > 1000) && (_log.shouldDebug()) )  {
                 int queued = _connection.getUnackedPacketsSent();

@@ -56,9 +56,31 @@ class TCBShare {
     /** Config key for the RTT deviation dampening. */
     private static final String RTTDEV_DAMP_PROP="i2p.streaming.tcbcache.rttdevDampening";
     /////
-    private static final int MAX_RTT = Connection.getMaxResendDelay() / 2;
-    /** Largest RTT deviation allowed. */
-    private static final int MAX_RTT_DEV = (int) (MAX_RTT * 1.5);
+    /**
+     * Ceiling on a shared RTT estimate, in ms: half the live resend-delay ceiling
+     * the streaming stack clamps a computed RTO to.
+     * <p>Read live, not cached in a static final: the Tuner moves that ceiling
+     * every few minutes, and a constant froze it to whatever the Tuner had
+     * persisted when this class was loaded, so the cache clamped shared RTTs to a
+     * number nothing else in streaming was using.
+     *
+     * @return the ceiling in ms
+     * @since 0.9.72+
+     */
+    private int maxRttMs() {
+        return ConnectionOptions.getMaxResendDelayStatic() / 2;
+    }
+
+    /**
+     * Ceiling on a shared RTT deviation estimate, in ms — 1.5x {@link #maxRttMs()},
+     * the rfc 2140 ratio.
+     *
+     * @return the ceiling in ms
+     * @since 0.9.72+
+     */
+    private int maxRttDevMs() {
+        return (int) (maxRttMs() * 1.5);
+    }
 
     /**
      * Maximum window size for TCB sharing from config.
@@ -231,8 +253,8 @@ class TCBShare {
          */
         public synchronized void setRTT(int ms) {
             _rtt = (int)(_rttDampening*_rtt + (1-_rttDampening)*ms);
-            if (_rtt > MAX_RTT)
-                _rtt = MAX_RTT;
+            if (_rtt > maxRttMs())
+                _rtt = maxRttMs();
             _updated = _context.clock().now();
         }
         /**
@@ -248,8 +270,8 @@ class TCBShare {
          */
         public synchronized void setRTTDev(int count) {
             _rttDev = (int)(_rttDevDampening*_rttDev + (1-_rttDevDampening)*count);
-            if (_rttDev > MAX_RTT_DEV)
-                _rttDev = MAX_RTT_DEV;
+            if (_rttDev > maxRttDevMs())
+                _rttDev = maxRttDevMs();
             _updated = _context.clock().now();
         }
         /**

@@ -129,11 +129,14 @@ class ConnectionHandler {
      * this is a backlog of 5 to 64 Syns, which seems like plenty for now
      * Don't make this too big: removal of an expired entry is O(queue size), so
      * a sweep that reaps the whole queue is O(n**2) - sortof.
-     * Read dynamically from config or Tuner — no restart required.
+     * <p>Read from {@code i2p.streaming.maxQueueSize} on every call, so a config
+     * change applies without a restart. The {@link I2PSocketManagerFull} override
+     * is checked first, but the Tuner has no parameter for the queue size and
+     * never writes it, so in a running router the config value is what applies.
      * @return the max queue size
      */
     private int getMaxQueueSize() {
-        // Tuner override takes precedence over config
+        // API override first, then config: see I2PSocketManagerFull.getMaxSYNQueueSize()
         int tuner = I2PSocketManagerFull.getMaxSYNQueueSize();
         if (tuner > 0) return tuner;
         int def = SystemVersion.isSlow() ? 256 : DEFAULT_MAX_QUEUE_SIZE;
@@ -141,7 +144,11 @@ class ConnectionHandler {
     }
 
     /**
-     * Number of accept worker threads. Dynamically adjustable via Tuner.
+     * Number of accept worker threads, from
+     * {@code i2p.streaming.acceptWorkerThreads}. The {@link I2PSocketManagerFull}
+     * override is checked first, but the Tuner has no parameter for it and never
+     * writes it, so in a running router the config value, or
+     * {@link #DEFAULT_ACCEPT_WORKERS}, is what applies.
      * @return the number of accept worker threads
      */
     private int getAcceptWorkerCount() {

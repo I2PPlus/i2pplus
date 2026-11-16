@@ -566,7 +566,13 @@ class Connection {
     private final AtomicLong _lifetimeDupBytesSent = new AtomicLong();
 
     /**
-     * Default resend delay ({@code i2p.streaming.maxResendDelay}) in ms.
+     * The {@code i2p.streaming.maxResendDelay} config property in ms, as an
+     * operator set it.
+     * <p>This is <em>not</em> the ceiling the streaming stack clamps a computed RTO
+     * to: the Tuner writes that one every few minutes and it lives in
+     * {@link ConnectionOptions#getMaxResendDelayStatic()}. Code that has to agree
+     * with the RTO clamp reads the static; only the operator-facing default reads
+     * this property.
      * @return the router-wide resend delay default in ms
      * @since 0.9.70+
      */
@@ -988,10 +994,13 @@ class Connection {
      * <p>8s, not 4s. Measured after deploying a 4s floor: the give-ups landed on
      * connections that had sent one or two SYNs and simply had not been answered
      * yet (2,014 at two sends, 473 at one, every one with no ACK), against 1,046
-     * successful opens. The floor has to outlast the widest observed inter-SYN
-     * interval (4s, from a peer RTT of 2s at the 200% headroom) twice over, so a
-     * connect gets two full probes before it is called dead; it is also well
-     * above the slowest healthy handshake measured on a warm router (1,704ms).
+     * successful opens. It is also well above the slowest healthy handshake
+     * measured on a warm router (1,704ms).
+     * <p>This is a floor, not the budget. The budget is
+     * {@link #SYN_PHASE_BUDGET_MIN_PROBES} probes at the live interval, so on a
+     * path whose interval the Tuner has walked out to 12-18s the floor is far
+     * below one probe gap and the probe count governs; the floor only binds on a
+     * fast path, where the probes are cheap.
      *
      * @since 0.9.72+
      */
@@ -1019,21 +1028,27 @@ class Connection {
      * <p>This bounds the phase by elapsed time so the caller's retry loop — which
      * opens a fresh connection, and so a fresh outbound tunnel — gets to run.
      * Sized from the measured path: {@link #SYN_PHASE_BUDGET_MIN_PROBES} probes at
-     * the live interval when there is no RTT sample, ten RTTs once there is,
-     * floored at {@link #SYN_PHASE_BUDGET_MIN_MS} so a fast path is not cut off
-     * before one healthy handshake would have finished, and capped at the connect
-     * window so this never fires before the window it lives inside.
+     * the live interval when there is no RTT sample, ten RTTs once there is but
+     * never fewer than those probes, floored at {@link #SYN_PHASE_BUDGET_MIN_MS}
+     * so a fast path is not cut off before one healthy handshake would have
+     * finished, and capped at the connect window so this never fires before the
+     * window it lives inside. The probe floor matters because the Tuner walks the
+     * interval out on a slow path: a budget of ten RTTs at a 12s interval would
+     * otherwise end the phase after two probes, and a peer that answers on the
+     * third would never get the chance.
      *
      * @param connectWindowMs the effective connect window from
      *                        {@link #computeEffectiveConnectTimeout(long, int, long)}; 0
      *                        means no connect timeout is configured, and 0 is
      *                        returned to mean "no extra bound"
      * @param measuredRttMs the peer's RTT evidence (ms), or &lt;= 0 when there is
-     *                      none. Take it from {@link ConnectionOptions#getRTT()}
-     *                      directly: gating it on this connection having an ACK
-     *                      makes the branch dead code in exactly the phase it
-     *                      governs, because a connection in the SYN phase has by
-     *                      definition never been acknowledged
+     *                      none. Pass {@link ConnectionOptions#getRTT()} only when
+     *                      {@link ConnectionOptions#receivedAck()} says an ACK has
+     *                      been seen for this path: otherwise that field is the
+     *                      {@link ConnectionOptions#DEFAULT_INITIAL_RTT} seed, a
+     *                      placeholder, and a placeholder multiplied by
+     *                      {@link #SYN_PHASE_BUDGET_RTT_PCT} is a deadline the peer
+     *                      was never given a chance to meet
      * @param synIntervalMs the live inter-SYN retransmit interval (ms) from
      *                      {@link #computeSynRetransmitInterval(int, int)}
      * @return the budget in ms, or 0 for no bound
@@ -1041,12 +1056,27 @@ class Connection {
      */
     static long computeSynPhaseBudgetMs(long connectWindowMs, int measuredRttMs, int synIntervalMs) {
         if (connectWindowMs <= 0) {return 0;}
+        long probes = (long) SYN_PHASE_BUDGET_MIN_PROBES * Math.max(0, synIntervalMs);
         long budget = measuredRttMs > 0
-                      ? (long) measuredRttMs * SYN_PHASE_BUDGET_RTT_PCT / 100
-                      : (long) SYN_PHASE_BUDGET_MIN_PROBES * Math.max(0, synIntervalMs);
+                      ? Math.max((long) measuredRttMs * SYN_PHASE_BUDGET_RTT_PCT / 100, probes)
+                      : probes;
         if (budget < SYN_PHASE_BUDGET_MIN_MS) {budget = SYN_PHASE_BUDGET_MIN_MS;}
         return Math.min(budget, connectWindowMs);
     }
+
+    /**
+     * Minimum SYNs that must have reached the tunnel fabric before the wall-clock
+     * budget may end the handshake.
+     * <p>The send-count bound discounts router-side soft failures
+     * ({@link #synGiveUpBudgetExceeded(int, int, int)}): a SYN the router never
+     * put on the fabric is not evidence about the peer. The wall clock has no
+     * such discount of its own, so without this a connect whose every SYN was a
+     * soft failure (no outbound tunnel, expired message) still dies on a clock
+     * that started when the packet was built, not when it was transmitted.
+     *
+     * @since 0.9.72+
+     */
+    static final int SYN_PHASE_MIN_FABRIC_SENDS = 1;
 
     /**
      * RTT multiplier for {@link #computeSynPhaseBudgetMs}, in percent, so 1000 is
@@ -1071,6 +1101,31 @@ class Connection {
      */
     static boolean synPhaseBudgetExceeded(long elapsedMs, long budgetMs) {
         return budgetMs > 0 && elapsedMs >= budgetMs;
+    }
+
+    /**
+     * Pure decision: has the unacknowledged-SYN phase spent its wall-clock budget,
+     * and did the peer actually get a SYN to answer?
+     * <p>The two bounds in the give-up branch discount router-side soft failures
+     * differently, and this overload makes them agree: a phase in which every send
+     * was a soft failure never reached the fabric, so its elapsed time says nothing
+     * about the peer and the wall clock must not end it.
+     *
+     * @param elapsedMs the SYN phase's age so far (ms), from
+     *                  {@link #synPhaseAgeMs(long, long)}
+     * @param budgetMs  the budget from {@link #computeSynPhaseBudgetMs(long, int, int)};
+     *                  &lt;= 0 means no bound, so this never fires
+     * @param totalSends the SYN's completed sends
+     *                   ({@link net.i2p.client.streaming.impl.PacketLocal#getNumSends()})
+     * @param softResends the send attempts that were router soft failures
+     *                    ({@link net.i2p.client.streaming.impl.PacketLocal#getNumSoftResends()})
+     * @return true if the SYN phase has run out of time <em>and</em> the peer has
+     *         been given at least one on-fabric SYN
+     * @since 0.9.72+
+     */
+    static boolean synPhaseBudgetExceeded(long elapsedMs, long budgetMs, int totalSends, int softResends) {
+        return synPhaseBudgetExceeded(elapsedMs, budgetMs) &&
+               Math.max(0, totalSends - softResends) >= SYN_PHASE_MIN_FABRIC_SENDS;
     }
 
     /**
@@ -1386,6 +1441,27 @@ class Connection {
     }
 
     /**
+     * Pure decision: is this RTT value evidence the SYN-phase budget may be sized
+     * from, or a placeholder?
+     * <p>{@link ConnectionOptions#getRTT()} is initialised to
+     * {@link ConnectionOptions#DEFAULT_INITIAL_RTT} and keeps that value until an
+     * ACK is seen, so on a connection that has never been acknowledged it is a
+     * seed, not a measurement. Sizing a deadline from it gives a peer a fixed
+     * 10 x seed milliseconds to answer a SYN it has not yet been sent.
+     * {@link ConnectionOptions#receivedAck()} is true for a real handshake ACK and
+     * for a TCB-cache value carried over from an earlier connection to the same
+     * destination; both are evidence about this path.
+     *
+     * @param rttMs the value of {@link ConnectionOptions#getRTT()}
+     * @param ackSeen whether {@link ConnectionOptions#receivedAck()} is true
+     * @return the RTT to size the budget from, or -1 for "no evidence"
+     * @since 0.9.72+
+     */
+    static int synPhaseEvidenceRttMs(int rttMs, boolean ackSeen) {
+        return ackSeen ? rttMs : -1;
+    }
+
+    /**
      * This connection's SYN-phase wall-clock budget, read from its own options so
      * the retransmit loop applies one consistent view of the path.
      *
@@ -1394,10 +1470,16 @@ class Connection {
      * @since 0.9.72+
      */
     long getSynPhaseBudgetMs() {
-        // The peer's cached RTT, not this connection's: a connection in the SYN
-        // phase has never been acknowledged, so gating on receivedAck() left the
-        // RTT branch unreachable and made every connect take the floor.
-        return computeSynPhaseBudgetMs(getEffectiveConnectWindow(), _options.getRTT(),
+        // Evidence, not the seed. ConnectionOptions#getRTT() is initialised to
+        // DEFAULT_INITIAL_RTT and stays there until an ACK is seen, so reading it
+        // ungated hands computeSynPhaseBudgetMs a fabricated 2s "measurement" and
+        // 10x that becomes the handshake deadline - 20s, against the minutes a
+        // torrent client asks for. receivedAck() is true for a real handshake ACK
+        // and for a TCB-cache value carried over from a previous connection to
+        // this destination; both are evidence. getSynRetransmitInterval() below
+        // applies the same gate, and the two must agree about the same path.
+        int rtt = synPhaseEvidenceRttMs(_options.getRTT(), _options.receivedAck());
+        return computeSynPhaseBudgetMs(getEffectiveConnectWindow(), rtt,
                                        getSynRetransmitInterval());
     }
 
@@ -3336,8 +3418,15 @@ class Connection {
             if (_closeSentOn.get() > 0) {
                 // We sent close first, peer acked it
                 disconnect(true);
-            } else if (!_isInbound && _receiveStreamId.get() <= 0) {
+            } else if (!_isInbound && _sendStreamId.get() <= 0) {
                 // Outbound connection that never completed - treat as reset/failure.
+                // The send id is the completion marker: connect() assigns the receive
+                // id before the SYN is ever sent, so that one is always set here, and
+                // only the SYN-ACK (PacketHandler) fills in the send id. Testing the
+                // receive id made this branch dead and a CLOSE that arrived before
+                // the SYN-ACK fell through to the normal-close path, which cancels the
+                // retransmit timer and leaves waitForConnect() to report a generic
+                // timeout after the whole window instead of a refusal.
                 // Set an accurate error so any waitForConnect() caller sees why the
                 // remote closed before establishment instead of the generic fallback.
                 if (_connectionError == null) {setConnectionError(ERR_CONNECTION_REFUSED);}
@@ -3755,6 +3844,23 @@ class Connection {
      */
     void resetSlotRelease() {
         _slotReleaseClaimed.set(false);
+    }
+
+    /**
+     * Clear both stream IDs so this connection can be bound to a fresh pair.
+     * <p>{@link #setSendStreamId(long)} and {@link #setReceiveStreamId(long)} are
+     * one-shot {@code compareAndSet(0, id)} and throw when the slot is occupied,
+     * so a connection handed back by the stream pool could never be re-bound:
+     * every reuse threw out of {@code connect()} after the reservation was
+     * already taken. Callers must have unlinked the dispatch tables first
+     * ({@link net.i2p.client.streaming.impl.ConnectionManager#removeConnection} does), or a packet for the previous
+     * generation routes into a connection that no longer owns those IDs.
+     *
+     * @since 0.9.72+
+     */
+    void resetStreamIds() {
+        _sendStreamId.set(0);
+        _receiveStreamId.set(0);
     }
 
     /**
@@ -5137,7 +5243,9 @@ class Connection {
                                                     getMaxSynSends())
                             || synPhaseBudgetExceeded(synPhaseAgeMs(_context.clock().now(),
                                                                     packet.getCreatedOn()),
-                                                      getSynPhaseBudgetMs()))) {
+                                                      getSynPhaseBudgetMs(),
+                                                      packet.getNumSends(),
+                                                      packet.getNumSoftResends()))) {
                     // The SYN was never ACKed and the handshake has run out of
                     // budget, so stop resending instead of running to maxResends
                     // (~4 min). Two independent bounds: the send count
@@ -5709,7 +5817,11 @@ synchronized boolean checkRetransmitStall() {
                 disconnect(true);
             } else {
                 int timeout = _options.getRTO();
-                int mrd = getMaxResendDelay();
+                // The live ceiling, the same one computeRTO() clamped this RTO to.
+                // Reading the config property here let a 20s default sit beside a
+                // Tuner ceiling of 1.6s, so a stalled RTO was re-armed far past the
+                // ceiling the rest of the stack is using.
+                int mrd = ConnectionOptions.getMaxResendDelayStatic();
                 if ((timeout > mrd) || (timeout <= 0)) {timeout = mrd;}
                 // set this before enqueue() as it passes it on to the router
                 _packet.setTimeout(timeout);

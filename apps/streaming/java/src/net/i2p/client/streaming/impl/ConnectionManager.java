@@ -1977,6 +1977,13 @@ class ConnectionManager {
         // Done before publishing the id so no teardown can observe a live
         // token behind a stale claim (which would strand the slot forever).
         con.resetSlotRelease();
+        // Both ids, not just the receive one: setReceiveStreamId() and
+        // setSendStreamId() are one-shot CAS(0, id) and throw if the slot is
+        // occupied, so a reused connection carrying its previous generation's
+        // pair threw IllegalStateException out of connect() on every reuse. The
+        // dispatch tables were already unlinked by removeConnection() before
+        // returnToPool(), so clearing them here strands nothing.
+        con.resetStreamIds();
         long receiveId;
         synchronized(_recentlyClosed) {
             Long rcvID;
@@ -2793,7 +2800,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
 
         // Two-arg removes: if this id was already recycled, a stale entry must
         // not unlink the live connection that now owns it.
-        Object o = _connectionByInboundId.remove(rcvID, con);
+        boolean removed = _connectionByInboundId.remove(rcvID, con);
         // Token lookup first: the reservation records the dest that was
         // actually charged at admission, so teardown neither misses nor
         // mis-attributes the slot (and never has to recompute the peer hash).
@@ -2807,13 +2814,22 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
         // Attempt to return to pool after removing from the dispatch tables
         returnToPool(con);
 
-        boolean removed = (o == con);
         if (_log.shouldDebug())
             _log.debug("Removing a connection -> Removed: " + removed
                        + " * Remaining connections: " + _connectionByInboundId.size()
                        + "\n* " + con);
-        if (!removed && _log.shouldDebug())
-            _log.debug("Failed to remove " + con + "\n" + _connectionByInboundId.values());
+        if (!removed && _log.shouldDebug()) {
+            // Not the map itself. On a busy host the dispatch table runs into the
+            // low thousands, and values() is a multi-line dump of every one of
+            // them - measured at 646 KB per teardown, 22 teardowns a second, which
+            // rotated an 8 x 100 MB log ring every 30 seconds and buried the
+            // finding it was meant to explain. The ids and the count are what a
+            // reader can act on: the entry is either already gone or now owned by
+            // a different connection.
+            _log.debug("Failed to unlink a connection -> Stream ID already unlinked"
+                       + "\n* Stream ID: " + rcvID + "/" + sendId
+                       + " * Connections: " + _connectionByInboundId.size());
+        }
     }
 
     /**

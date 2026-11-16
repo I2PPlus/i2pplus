@@ -57,9 +57,10 @@ public class ConnectionSynPhaseBudgetTest {
 
     /**
      * The floor is 8 s, not the 4 s that produced 5,444 give-ups against 1,046
-     * opens. It has to cover two of the widest observed inter-SYN intervals, 4 s
-     * from a 2 s peer RTT at the 200% headroom, and stay well above the slowest
-     * healthy handshake measured on a warm router, 1,704 ms.
+     * opens. It stays well above the slowest healthy handshake measured on a warm
+     * router, 1,704 ms. It is a floor only: the budget is
+     * {@code SYN_PHASE_BUDGET_MIN_PROBES} probes at the live interval, so on a
+     * slow path the probes govern and the floor never binds.
      */
     @Test
     public void testFloorIsTwoWideIntervals() {
@@ -106,6 +107,52 @@ public class ConnectionSynPhaseBudgetTest {
     @Test
     public void testPeerRttSizesTheBudget() {
         assertEquals(20_000, Connection.computeSynPhaseBudgetMs(MEASURED_WINDOW_MS, 2_000, 4_000));
+    }
+
+    /**
+     * The probe floor: on a path whose interval the Tuner has walked out to 12s,
+     * ten RTTs of a 2s sample is 20,000 ms - two probes - so the phase would end
+     * before the third SYN reached the peer. Four probes at 12s is 48,000 ms and
+     * that governs. This is the case that made a torrent client's five-minute
+     * connect window die at twenty seconds.
+     */
+    @Test
+    public void testProbeFloorGovernsAWalkedInterval() {
+        assertEquals(48_000, Connection.computeSynPhaseBudgetMs(300_000, 2_000, 12_000));
+        assertEquals(72_000, Connection.computeSynPhaseBudgetMs(300_000, 2_000, 18_000));
+        // Still capped by the window it lives inside.
+        assertEquals(39_650, Connection.computeSynPhaseBudgetMs(MEASURED_WINDOW_MS, 2_000, 12_000));
+    }
+
+    /** With no evidence the RTT term cannot shorten anything: only probes count. */
+    @Test
+    public void testNoEvidenceIgnoresTheRttTerm() {
+        assertEquals(Connection.computeSynPhaseBudgetMs(300_000, -1, 12_000),
+                     Connection.computeSynPhaseBudgetMs(300_000, 0, 12_000));
+        assertEquals(48_000, Connection.computeSynPhaseBudgetMs(300_000, -1, 12_000));
+    }
+
+    // ---------- evidence, not the seed ----------
+
+    /**
+     * An unacknowledged connection's {@code getRTT()} is the
+     * DEFAULT_INITIAL_RTT seed. Passing it as evidence gave every cold connect a
+     * 10 x 2s = 20s handshake deadline; the seed must be reported as "no
+     * evidence" so the probe floor sizes the budget instead.
+     */
+    @Test
+    public void testSeedIsNotEvidence() {
+        assertEquals(-1, Connection.synPhaseEvidenceRttMs(ConnectionOptions.DEFAULT_INITIAL_RTT,
+                                                         false));
+        assertEquals(-1, Connection.synPhaseEvidenceRttMs(4_500, false));
+    }
+
+    /** A real ACK, or a TCB-cache value from an earlier connection, is evidence. */
+    @Test
+    public void testAckedPathKeepsItsRtt() {
+        assertEquals(2_000, Connection.synPhaseEvidenceRttMs(2_000, true));
+        assertEquals(9_500, Connection.synPhaseEvidenceRttMs(9_500, true));
+        assertEquals(-1, Connection.synPhaseEvidenceRttMs(-1, true));
     }
 
     /** A fast peer keeps the floor, so it is not cut off before one healthy handshake. */
@@ -178,6 +225,48 @@ public class ConnectionSynPhaseBudgetTest {
     public void testFreshConnectionIsNotExpired() {
         assertFalse(Connection.synPhaseBudgetExceeded(0, 8_000));
         assertFalse(Connection.synPhaseBudgetExceeded(-1, 8_000));
+    }
+
+    // ---------- the wall clock discounts soft failures the same way the count does ----------
+
+    /**
+     * A SYN the router never put on the fabric, for no outbound tunnel or an
+     * expired message, is not the peer being silent, so the clock must not end the
+     * handshake while every send was a soft failure.
+     */
+    @Test
+    public void testWallClockWaitsForOneFabricSend() {
+        assertFalse(Connection.synPhaseBudgetExceeded(20_000, 8_000, 1, 1));
+        assertFalse(Connection.synPhaseBudgetExceeded(20_000, 8_000, 3, 3));
+        assertFalse(Connection.synPhaseBudgetExceeded(20_000, 8_000, 0, 0));
+    }
+
+    /** Once one SYN reached the fabric the budget binds again. */
+    @Test
+    public void testWallClockFiresAfterAFabricSend() {
+        assertTrue(Connection.synPhaseBudgetExceeded(8_000, 8_000, 1, 0));
+        assertTrue(Connection.synPhaseBudgetExceeded(20_000, 8_000, 4, 3));
+    }
+
+    /**
+     * The discount cannot go negative: more soft resends than sends leaves the
+     * packet one fabric send short, not excused.
+     */
+    @Test
+    public void testSoftDiscountIsClampedAtZero() {
+        assertFalse(Connection.synPhaseBudgetExceeded(20_000, 8_000, 1, 5));
+    }
+
+    /** A budget of 0 still never fires, however many sends landed. */
+    @Test
+    public void testZeroBudgetNeverFiresWithSends() {
+        assertFalse(Connection.synPhaseBudgetExceeded(Long.MAX_VALUE, 0, 9, 0));
+    }
+
+    /** The constant the fabric-send guard reads. */
+    @Test
+    public void testFabricSendGuardConstant() {
+        assertEquals(1, Connection.SYN_PHASE_MIN_FABRIC_SENDS);
     }
 
     /** The constants the budget arithmetic is read from. */

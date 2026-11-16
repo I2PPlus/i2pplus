@@ -477,18 +477,24 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      */
     static void setReceiveWorkerThreads(int val) { receiveWorkerThreads = Math.max(0, Math.min(PacketHandler.MAX_RECEIVE_WORKERS, val)); }
 
-    /** Accept worker threads, Tuner-managed override; 0 = no override. @since 0.9.71+. */
+    /**
+     * Accept worker threads, as an override set through
+     * {@link I2PSocketManagerFull#setAcceptWorkerThreads(int)}; 0 = no override.
+     * The Tuner has no parameter for it, so a running router falls through to the
+     * {@code i2p.streaming.acceptWorkerThreads} config property.
+     * @since 0.9.71+.
+     */
     static volatile int acceptWorkerThreads = 0;
 
     /**
-     * The Tuner's accept-worker override; 0 = no override, so the configured
+     * The accept-worker override; 0 = no override, so the configured
      * {@code i2p.streaming.acceptWorkerThreads} applies. @since 0.9.71+.
-     * @return the reactive accept-worker override, or 0 if none
+     * @return the accept-worker override, or 0 if none
      */
     static int getAcceptWorkerThreads() { return acceptWorkerThreads; }
     /**
-     * The Tuner's accept-worker override; clamped to [0, 16]. @since 0.9.71+.
-     * @param val the reactive accept-worker override; 0 removes it
+     * The accept-worker override; clamped to [0, 16]. Not Tuner-driven. @since 0.9.71+.
+     * @param val the accept-worker override; 0 removes it
      */
     static void setAcceptWorkerThreads(int val) { acceptWorkerThreads = Math.max(0, Math.min(16, val)); }
 

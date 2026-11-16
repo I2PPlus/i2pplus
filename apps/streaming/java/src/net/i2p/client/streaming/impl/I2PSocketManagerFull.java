@@ -1148,19 +1148,27 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      */
     public static void setMaxMaxConcurrentStreams(int val) { ConnectionOptions.setMaxMaxConcurrentStreams(val); }
 
-    /** Largest SYN queue allowed, Tuner override. */
+    /**
+     * Largest SYN queue allowed, as an override set through this API.
+     * <p>The Tuner has no parameter for the SYN queue size, so nothing writes this
+     * in a running router: it stays 0 and {@link ConnectionHandler#getMaxQueueSize}
+     * falls through to {@code i2p.streaming.maxQueueSize}. The javadoc here used to
+     * say "dynamically adjustable by the Tuner", which read as if the queue were
+     * self-tuning when the branch that would apply an override is unreachable.
+     */
     private static volatile int _maxSYNQueueSize;
 
     /**
-     * Max SYN queue size, dynamically adjustable by the Tuner.
-     * @return the current max SYN queue size
+     * Max SYN queue size override, 0 for none. See
+     * {@link #_maxSYNQueueSize} for why this is 0 in a running router.
+     * @return the current max SYN queue size override, or 0 if none
      * @since 0.9.71+
      */
     public static int getMaxSYNQueueSize() { return _maxSYNQueueSize; }
 
     /**
-     * Max SYN queue size, dynamically adjustable by the Tuner.
-     * @param val the new max SYN queue size
+     * Max SYN queue size override. See {@link #_maxSYNQueueSize}.
+     * @param val the new max SYN queue size, 0 to fall back to the config property
      * @since 0.9.71+
      */
     public static void setMaxSYNQueueSize(int val) { _maxSYNQueueSize = val; }
@@ -1189,14 +1197,21 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      */
     public static void setRttSynTimeoutScale(int val) { _rttSynTimeoutScale = val; }
 
-    /** SYN expiry threshold, Tuner override. */
+    /**
+     * SYN expiry threshold, as an override set through this API. The Tuner has no
+     * parameter for it, so a running router leaves it 0 and
+     * {@link ConnectionHandler#computeSynTimeout} falls back to
+     * {@link ConnectionHandler#SYN_EXPIRE_THRESHOLD_DEFAULT}.
+     */
     private static volatile int _synExprExpireThresh;
 
     /**
      * Fraction (percent) of recent SYN-queue entries that must expire un-accepted
      * before the adaptive timeout clamp is armed, in addition to low tunnel build
      * success. Requiring positive stall evidence keeps a slow-but-alive server from
-     * being punished by its own latency. Dynamically adjustable by the Tuner.
+     * being punished by its own latency.
+     * <p>An override set through this API, not a Tuner parameter: 0 means unset and
+     * the caller substitutes its default.
      *
      * @return the expire-rate threshold as a percent [0,100], 100 disables the clamp
      * @since 0.9.71+
@@ -1211,8 +1226,9 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     public static void setSynExprExpireThresh(int val) { _synExprExpireThresh = val; }
 
     /**
-     * The Tuner-managed accept-worker override; 0 = no override, so each
+     * The accept-worker override set through this API; 0 = no override, so each
      * manager's configured {@code i2p.streaming.acceptWorkerThreads} applies.
+     * The Tuner has no parameter for it, so a running router uses the config value.
      * @return the current override worker count, or 0 if disabled
      * @since 0.9.71+
      */
@@ -1221,8 +1237,8 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     }
 
     /**
-     * Set the Tuner-managed accept-worker override. Clamped to {@code [0, 16]};
-     * 0 removes the override.
+     * Set the accept-worker override. Clamped to {@code [0, 16]}; 0 removes the
+     * override. Not Tuner-driven — see {@link #getAcceptWorkerThreads()}.
      * @param val the new override worker count, or 0 to disable
      * @since 0.9.71+
      */
