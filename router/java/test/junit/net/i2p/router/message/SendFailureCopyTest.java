@@ -9,6 +9,7 @@ import java.util.EnumSet;
 import java.util.Set;
 
 import net.i2p.crypto.EncType;
+import net.i2p.data.Hash;
 import net.i2p.data.LeaseSet;
 import net.i2p.data.LeaseSet2;
 import net.i2p.data.PublicKey;
@@ -114,5 +115,27 @@ public class SendFailureCopyTest {
                 Collections.singleton(EncType.ELGAMAL_2048)));
         assertEquals("none", OutboundClientMessageOneShotJob.encryptionTypes(
                 Collections.<EncType>emptySet()));
+    }
+
+    /**
+     * Our own destination is named beside the mismatch, in the bracketed eight-character
+     * form the console linkifier parses. The peer is named on the first line; without
+     * our side the reader cannot tell which of the router's destinations is walled out
+     * of an ElGamal-only peer. A destination with no readable hash degrades to a word,
+     * never to "null" or an empty pair of brackets the linkifier would misread.
+     */
+    @Test
+    public void testOurDestinationIsTagged() {
+        byte[] bytes = new byte[32];
+        for (int i = 0; i < bytes.length; i++) {
+            bytes[i] = (byte) i;
+        }
+        String tag = OutboundClientMessageOneShotJob.destTag(Hash.create(bytes));
+        assertEquals("the tag is brackets around an eight-character base32 prefix",
+                     10, tag.length());
+        assertTrue(tag.charAt(0) == '[' && tag.charAt(tag.length() - 1) == ']');
+        assertEquals(tag, OutboundClientMessageOneShotJob.destTag(Hash.create(bytes)));
+        assertEquals("[unknown]", OutboundClientMessageOneShotJob.destTag(null));
+        assertEquals("[unknown]", OutboundClientMessageOneShotJob.destTag(new Hash()));
     }
 }

@@ -652,7 +652,8 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                               + sendFailureName(rc)
                               + "\n* Peer encryption: " + (_leaseSet != null ? encryptionTypes(_leaseSet) : "none")
                               + " * Our encryption: " + encryptionTypes(localSupportedTypes())
-                              + " (Status: " + rc + ")");
+                              + "\n* Our destination: " + localTag()
+                              + " * Status: " + rc);
                 }
                 dieFatal(rc);
             }
@@ -674,6 +675,35 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     private Set<EncType> localSupportedTypes() {
         LeaseSetKeys ourKeys = getContext().keyManager().getKeys(_from);
         return ourKeys != null ? ourKeys.getSupportedEncryption() : LeaseSetKeys.SET_ELG;
+    }
+
+    /**
+     * Our own destination, as the short bracketed tag the console log linkifier
+     * parses.
+     * <p>An encryption mismatch has two sides, and only one of them is the peer
+     * named on the first line: a session whose destination publishes no ElGamal key
+     * cannot reach a peer that publishes nothing else. Without our side named, the
+     * reader cannot tell which of the router's destinations is walled out, and the
+     * two mismatches need opposite remedies.
+     *
+     * @return the tag, {@code [xxxxxxxx]}, or {@code [unknown]} if the destination
+     *         or its hash cannot be read
+     * @since 0.9.72+
+     */
+    String localTag() {
+        return destTag(_from != null ? _from.calculateHash() : null);
+    }
+
+    /**
+     * A destination hash as the short bracketed tag the console log linkifier parses.
+     *
+     * @param h the destination hash, null tolerated
+     * @return the tag, {@code [xxxxxxxx]}, or {@code [unknown]} when there is no hash
+     * @since 0.9.72+
+     */
+    static String destTag(Hash h) {
+        String b32 = h != null ? h.toShortBase32() : null;
+        return '[' + (b32 != null ? b32 : "unknown") + ']';
     }
 
     /**
