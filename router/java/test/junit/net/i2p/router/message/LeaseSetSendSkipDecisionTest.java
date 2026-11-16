@@ -22,7 +22,10 @@ import net.i2p.router.message.OutboundCache.LsSkip;
  * <p>
  * The second decides the cooldown length from what the lookup learned, so a
  * search that never reached the network does not blackhole a destination we
- * browsed minutes ago.
+ * browsed minutes ago. The window it measures against comes from
+ * {@link OutboundClientMessageOneShotJob#leaseSetLookupTimeoutMs(int)}, which
+ * tracks the deadline the search itself runs under; a fixed window wider than
+ * that cap made the verdict branch unreachable.
  *
  * @since 0.9.72+
  */
@@ -47,12 +50,13 @@ public class LeaseSetSendSkipDecisionTest {
     private static final long SHORT = OutboundCache.LS_TRANSIENT_FAIL_COOLDOWN_MS;
 
     /**
-     * The lookup window a full search is given, mirroring the private
-     * {@code OutboundClientMessageOneShotJob.LS_LOOKUP_TIMEOUT} (25s). Keep the
-     * two in step; the slack-boundary cases below are only meaningful against
-     * the real window.
+     * The lookup window a full search is given at the Tuner's highest cap:
+     * {@code MAX_LS_LOOKUP_TIME} tops out at 15s and the job adds its grace.
+     * Derived from the production helper so the slack-boundary cases below are
+     * always measured against the real window.
      */
-    private static final long WINDOW = 25 * 1000L;
+    private static final long WINDOW =
+            OutboundClientMessageOneShotJob.leaseSetLookupTimeoutMs(15_000);
 
     /** The production slack that marks a search as having run its window. */
     private static final long SLACK = OutboundCache.LOOKUP_WINDOW_SLACK_MS;
@@ -196,5 +200,44 @@ public class LeaseSetSendSkipDecisionTest {
     public void testSlackIsAPositiveSliceOfTheWindow() {
         assertTrue(SLACK > 0);
         assertTrue(SLACK < WINDOW);
+    }
+
+    // ---------- the window itself tracks the search's own deadline ----------
+
+    /**
+     * The window handed to {@link OutboundCache#failCooldownMs} is the Tuner's
+     * search cap plus the job's grace, so the "ran its whole window" test lands
+     * exactly on the deadline the search actually runs under. The old fixed 25s
+     * was never reachable against a 15s cap: no failure could read as a verdict,
+     * so every one took the short cooldown and the next SYN was instant-failed
+     * without a search at all.
+     */
+    @Test
+    public void testWindowTracksTheSearchCap() {
+        assertEquals(17_000, OutboundClientMessageOneShotJob.leaseSetLookupTimeoutMs(15_000));
+        assertEquals(12_000, OutboundClientMessageOneShotJob.leaseSetLookupTimeoutMs(10_000));
+    }
+
+    /**
+     * A search truncated by the Tuner cap is a verdict about the network, not an
+     * early abort. Measured before the fix: failed lookups averaged 2,088 ms
+     * against a 25s window, so the verdict branch was unreachable in practice.
+     */
+    @Test
+    public void testSearchTruncatedAtTheCapIsAVerdict() {
+        long window = OutboundClientMessageOneShotJob.leaseSetLookupTimeoutMs(15_000);
+        assertEquals(FULL, OutboundCache.failCooldownMs(false, 15_000, window));
+        assertEquals(SHORT, OutboundCache.failCooldownMs(false, 14_999, window));
+    }
+
+    /**
+     * The floor keeps a Tuner value at its minimum from shrinking the window past
+     * the grace, and a nonsensical cap cannot make it negative.
+     */
+    @Test
+    public void testWindowHasAFloor() {
+        assertEquals(5_000, OutboundClientMessageOneShotJob.leaseSetLookupTimeoutMs(3_000));
+        assertEquals(5_000, OutboundClientMessageOneShotJob.leaseSetLookupTimeoutMs(0));
+        assertEquals(5_000, OutboundClientMessageOneShotJob.leaseSetLookupTimeoutMs(-1));
     }
 }

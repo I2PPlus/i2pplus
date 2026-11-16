@@ -9,6 +9,7 @@ import org.junit.Test;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.EncType;
 import net.i2p.router.crypto.pqc.MLKEMKeyFactory;
+import net.i2p.router.networkdb.kademlia.IterativeSearchJob;
 import net.i2p.router.transport.TransportImpl;
 import net.i2p.router.transport.udp.PeerState;
 
@@ -27,6 +28,14 @@ import net.i2p.router.transport.udp.PeerState;
  * leaves it, and apply and verify share one source.
  */
 public class TunerCalleeBoundsTest {
+
+    /**
+     * One instance per test method, as JUnit builds a fresh test object for each
+     * one; the class carries no per-test state.
+     *
+     * @since 0.9.72+
+     */
+    public TunerCalleeBoundsTest() {}
 
     /** The I2CP queue bounds the tuner uses are the ones setInternalQueueSize honours. */
     @Test
@@ -151,6 +160,98 @@ public class TunerCalleeBoundsTest {
         assertTrue("the tuner floor " + Tuner.clientRunnerMaxMin() + " must not be below the " +
                    "gate the setter enforces (" + gate + ')',
                    Tuner.clientRunnerMaxMin() >= gate);
+    }
+
+    /**
+     * {@code setMaxRouterInfoLookupTime()} floors its argument at 5s while the
+     * parameter declared 3s as its minimum, so every target in 3000-4999 was
+     * rewritten up on the way in and the parameter could never reach its own
+     * bottom. The 4999 probe pins the setter's floor itself: if it moves, the
+     * tuner bound has to move with it.
+     */
+    @Test
+    public void riLookupFloorStaysAtTheSetterFloor() {
+        int before = IterativeSearchJob.getMaxRouterInfoLookupTime();
+        try {
+            IterativeSearchJob.setMaxRouterInfoLookupTime(4999);
+            int landed = IterativeSearchJob.getMaxRouterInfoLookupTime();
+            assertEquals("the setter floors at 5s, so the tuner must not go below it",
+                         Tuner.riLookupFloorMs(), landed);
+            IterativeSearchJob.setMaxRouterInfoLookupTime(Tuner.riLookupFloorMs());
+            assertEquals(Tuner.riLookupFloorMs(),
+                         IterativeSearchJob.getMaxRouterInfoLookupTime());
+        } finally {
+            IterativeSearchJob.setMaxRouterInfoLookupTime(before);
+        }
+    }
+
+    /**
+     * {@code setMaxLeaseSetLookupTime()} clamps to the total search-time cap, which
+     * the operator controls through {@code netdb.maxSearchTime}. With the parameter's
+     * ceiling fixed at 15s, an operator who set that cap to 10s left a 5s band of the
+     * range unreachable — every target in it read back as "did not take effect".
+     */
+    @Test
+    public void lsLookupCeilingStaysAtTheSearchTimeCap() {
+        long searchBefore = IterativeSearchJob.getMaxSearchTime();
+        int lsBefore = IterativeSearchJob.getMaxLeaseSetLookupTime();
+        try {
+            IterativeSearchJob.setMaxSearchTime(10_000);
+            IterativeSearchJob.setMaxLeaseSetLookupTime(99_999);
+            assertEquals("the setter caps at the search-time cap",
+                         10_000, IterativeSearchJob.getMaxLeaseSetLookupTime());
+            assertEquals("the tuner ceiling tracks the live cap",
+                         10_000, Tuner.lsLookupCeilingMs());
+        } finally {
+            IterativeSearchJob.setMaxSearchTime((int) searchBefore);
+            IterativeSearchJob.setMaxLeaseSetLookupTime(lsBefore);
+        }
+    }
+
+    /**
+     * {@code Connection.setMaxSynResends()} floors at 3 while the parameter declared
+     * 2, so its own minimum was unreachable and a target of 2 read back as 3 forever.
+     * Streaming is not on the router's compile classpath, so the setter is reached
+     * reflectively; skipped when it is absent.
+     */
+    @Test
+    public void maxSynResendsFloorStaysAtTheSetterFloor() {
+        Class<?> cls;
+        try {
+            cls = Class.forName("net.i2p.client.streaming.impl.Connection");
+        } catch (ReflectiveOperationException e) {
+            Assume.assumeNoException("streaming is not on this test classpath", e);
+            return;
+        }
+        try {
+            int before = callStreamingStatic(cls, "getMaxSynResendsStatic", null);
+            callStreamingStatic(cls, "setMaxSynResends", Integer.valueOf(2));
+            int landed = callStreamingStatic(cls, "getMaxSynResendsStatic", null);
+            callStreamingStatic(cls, "setMaxSynResends", Integer.valueOf(before));
+            assertEquals("the setter floors at 3, so the tuner must not go below it",
+                         3, landed);
+        } catch (ReflectiveOperationException e) {
+            Assume.assumeNoException("streaming statics are not reachable", e);
+        }
+    }
+
+    /**
+     * Reads or writes one streaming static reflectively, for the bounds the router
+     * cannot compile against.
+     *
+     * @param cls the streaming class holding the static
+     * @param name the getter or setter to call
+     * @param arg the value for a setter, or null to call the no-arg getter
+     * @return the getter's value, or 0 after a setter call
+     * @throws ReflectiveOperationException if the static is not reachable
+     * @since 0.9.72+
+     */
+    private static int callStreamingStatic(Class<?> cls, String name, Integer arg)
+            throws ReflectiveOperationException {
+        if (arg == null)
+            return ((Integer) cls.getMethod(name).invoke(null)).intValue();
+        cls.getMethod(name, int.class).invoke(null, arg);
+        return 0;
     }
 
     /**

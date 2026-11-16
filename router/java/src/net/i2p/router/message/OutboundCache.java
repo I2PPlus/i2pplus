@@ -393,8 +393,13 @@ public class OutboundCache {
      *                   be empty when no tunnels are currently available
      * @param rnd randomness source for choosing among several distinct tunnels
      * @return a candidate distinct from {@code old} when one exists, otherwise
-     *         {@code old} unchanged, so rotation is best-effort and never
-     *         blocks or drops a connection
+     *         {@code old} unchanged. The caller reads "unchanged" as rotation
+     *         finding no alternative and drops the cached tunnel so the
+     *         fall-through selection re-draws; this method itself never blocks
+     *         and never drops a connection. A caller whose pool cannot offer an
+     *         alternative at all (a single-tunnel client pool) should not call it
+     *         at all, or the eviction that follows repeats on every fresh
+     *         connection without changing anything.
      * @since 0.9.71+
      */
     static TunnelInfo pickDistinctTunnel(TunnelInfo old, List<TunnelInfo> candidates, Random rnd) {

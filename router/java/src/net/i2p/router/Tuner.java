@@ -947,6 +947,37 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     static int initConcurrentMsgsMax() {
         return Math.min(memoryDerivedInitMsgMax(), 256);
     }
+
+    /**
+     * The floor the tuner may propose for {@code MAX_RI_LOOKUP_TIME}.
+     *
+     * <p>{@link IterativeSearchJob#setMaxRouterInfoLookupTime} floors its argument at
+     * 5s. The parameter declared 3s as its minimum, so every target in 3000-4999 was
+     * rewritten up to 5000 on the way in and the parameter could never reach its own
+     * bottom — it reported the floor as unreachable rather than as already applied.
+     *
+     * @return the setter's own floor, in ms
+     * @since 0.9.72+
+     */
+    static int riLookupFloorMs() {
+        return 5000;
+    }
+
+    /**
+     * The ceiling the tuner may propose for {@code MAX_LS_LOOKUP_TIME}.
+     *
+     * <p>{@link IterativeSearchJob#setMaxLeaseSetLookupTime} clamps to the total
+     * search-time cap, which the operator controls through
+     * {@code netdb.maxSearchTime} (floor 10s). A fixed 15s ceiling left a 5s band of
+     * the range unreachable on such a router: every target in it was rewritten on the
+     * way in and read back as "did not take effect".
+     *
+     * @return the highest value the setter can hold, in ms
+     * @since 0.9.72+
+     */
+    static int lsLookupCeilingMs() {
+        return (int) IterativeSearchJob.getMaxSearchTime();
+    }
     /**
      * Memory-derived ceiling for the I2PTunnel client worker pool and its admission
      * gate. A thread-per-connection {@link java.util.concurrent.SynchronousQueue} pool
@@ -3692,7 +3723,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         bindReflectorTargets("net.i2p.client.streaming.impl.I2PSocketManagerFull",
                              "getDefaultInactivityTimeout", "getDefaultInitialAckDelay",
                              "getDefaultPassiveFlushDelay", "getInitialRTO", "getInitialWindowSize",
-                             "getMaxInboundBuffer", "getMaxStreamsOverride",
+                             "getMaxInboundBuffer", "getMaxMaxConcurrentStreams",
+                             "getMaxStreamsOverride",
                              "getReceiveWorkerThreads", "resizeReceiveWorkers",
                              "setDefaultInactivityTimeout", "setDefaultInitialAckDelay",
                              "setDefaultPassiveFlushDelay", "setInitialRTO", "setInitialWindowSize",
@@ -5430,7 +5462,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int getRuntimeValue() {
             int v = StreamingReflector.invokeGetInt("getInitialRTO");
-            return v >= 0 ? v : 6000;
+            // The streaming default, the same value this param declares as its
+            // factory default below. Falling back to the Tuner's own 6000ms floor
+            // reported a value the streaming stack never holds, and computeTarget()
+            // then tuned against a phantom baseline.
+            return v >= 0 ? v : 9000;
         }
 
         protected double getObservedStat(RouterContext ctx) {
@@ -5547,7 +5583,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /** Current live worker default; falls back to the core-derived count. */
         protected int getRuntimeValue() {
             int v = StreamingReflector.invokeGetInt("getReceiveWorkerThreads");
-            return v > 0 ? v : Math.max(2, Math.min(8, Runtime.getRuntime().availableProcessors()));
+            // SystemVersion.getCores(), not availableProcessors(): the former is
+            // cached and sees parked cores, and it is what the rest of the router
+            // sizes thread pools from.
+            return v > 0 ? v : Math.max(2, Math.min(8, SystemVersion.getCores()));
         }
 
         /**
@@ -5590,8 +5629,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * Tunes connect timeout multiplier based on observed RTT.
      * Scales each client's desired connect timeout so low-latency paths fail fast
      * and high-latency paths have enough time for SYN retransmits.
-     * Multiplier range: 30-200 (0.3x-2.0x), centered on 100 (1.0x) at RTO=5000.
+     * Multiplier range: 30-200 (0.3x-2.0x), centered on 100 (1.0x).
      * Target: RTO / 5000 * 100, i.e. proportional to the dynamic initial RTO.
+     * The 5000 is a normalisation anchor, not the streaming default: the default
+     * initial RTO is 9000ms, which lands the multiplier at 180% until the Tuner
+     * walks the RTO down.
      */
     private class ConnectTimeoutMultiplierParam extends BaseParam {
 
@@ -5602,7 +5644,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   30, 200, 10, "stream.rtt", _context);
         }
 
-        /** Apply to Connection's static multiplier, clamped to [50,200]. */
+        /** Apply to Connection's static multiplier, clamped to [30,200]. */
         protected void applyValue(int value) {
             StreamingReflector.invokeSetInt("setConnectTimeoutMultiplier", value);
         }
@@ -5622,7 +5664,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
             int rto = StreamingReflector.invokeGetInt("getInitialRTO");
-            if (rto <= 0) { rto = 5000; }
+            // The streaming default, so a failed read leaves the target where the
+            // stack actually sits rather than at an arbitrary midpoint.
+            if (rto <= 0) { rto = 9000; }
             // Target: RTO / 5000 * 100, clamped to param range
             int target = (int) Math.round((double) rto * 100.0 / 5000.0);
             target = Math.max(_min, Math.min(_max, target));
@@ -5793,7 +5837,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int getRuntimeValue() {
             int v = StreamingReflector.invokeGetInt("getDefaultPassiveFlushDelay");
-            return v >= 0 ? v : 100;
+            // The stack's default is machine-scaled, and the fallback is what the
+            // framework heals the persisted default back to.
+            return v >= 0 ? v : (SystemVersion.isSlow() ? 200 : 100);
         }
 
         protected double getObservedStat(RouterContext ctx) {
@@ -5863,7 +5909,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int getRuntimeValue() {
             int v = StreamingReflector.invokeGetInt("getMaxSlowStartWindowStatic");
-            return v > 0 ? v : 1024;
+            // The stack's default is machine-scaled; a flat 1024 healed it down from
+            // 2048 on every non-slow box.
+            return v > 0 ? v : (SystemVersion.isSlow() ? 1024 : 2048);
         }
 
         protected double getObservedStat(RouterContext ctx) {
@@ -6478,7 +6526,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int getRuntimeValue() {
             int v = StreamingReflector.invokeGetInt("getGlobalMaxWindowSize");
-            return v > 0 ? v : 1024;
+            // Connection.MAX_WINDOW_SIZE_DEFAULT is machine-scaled; a flat 1024
+            // healed it down from 2048 on every non-slow box.
+            return v > 0 ? v : (SystemVersion.isSlow() ? 1024 : 2048);
         }
 
         protected double getObservedStat(RouterContext ctx) {
@@ -8427,13 +8477,36 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   1000, 60000, 1000, "stream.rtt", _context);
         }
 
+        /**
+         * Ceiling the setter will actually accept.
+         * <p>{@code ConnectionOptions.setMaxRTO()} clamps what it is given down to
+         * {@code maxResendDelay}, and that ceiling is itself Tuner-driven — it sat
+         * at 1600ms on a measured live router. Offering the constructor's 60s left
+         * this parameter proposing values the setter rewrote every cycle, so the
+         * Tuner saw "did not take effect" and hill-climbed against a number the
+         * stack never held.
+         *
+         * @param ctx router context, unused
+         * @return the highest value {@code setMaxRTO()} can hold
+         * @since 0.9.72+
+         */
+        @Override
+        protected int getDefaultMax(RouterContext ctx) {
+            int resendDelay = StreamingReflector.invokeGetInt("getMaxResendDelayStatic");
+            return resendDelay > 0 ? Math.min(_defaultMax, resendDelay) : _defaultMax;
+        }
+
         protected void applyValue(int value) {
             StreamingReflector.invokeSetInt("setMaxRTO", value);
         }
 
         protected int getRuntimeValue() {
             int v = StreamingReflector.invokeGetInt("getMaxRTOStatic");
-            return v > 0 ? v : 10000;
+            // The streaming default, not a round number: this value is what the
+            // framework heals i2p.streaming.maxRTO.default back to and
+            // force-applies on the first tick, so a fallback of 10000 quietly
+            // raised the stack's 8000ms default before any measurement was taken.
+            return v > 0 ? v : 8000;
         }
 
         protected double getObservedStat(RouterContext ctx) {
@@ -8503,7 +8576,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int getRuntimeValue() {
             int v = StreamingReflector.invokeGetInt("getRTOMultiplier");
-            return v > 0 ? v : 125;
+            // The streaming default — see MaxRTOParam on why the fallback matters.
+            return v > 0 ? v : 120;
         }
 
         protected double getObservedStat(RouterContext ctx) {
@@ -8565,7 +8639,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int getRuntimeValue() {
             int v = StreamingReflector.invokeGetInt("getMaxResendDelayStatic");
-            return v > 0 ? v : 15000;
+            // The streaming default — see MaxRTOParam on why the fallback matters.
+            // A fallback of 15000 healed the persisted default down from the
+            // stack's 20000ms before the Tuner had observed anything, and that
+            // ceiling is what clamps every computed RTO.
+            return v > 0 ? v : 20000;
         }
 
         protected double getObservedStat(RouterContext ctx) {
@@ -8699,6 +8777,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int getRuntimeValue() {
             int v = StreamingReflector.invokeGetInt("getMinResendDelayStatic");
+            // Deliberately the range floor, not the stack's 100ms default: the
+            // framework heals the persisted default to this value and force-applies
+            // it on the first tick, and 100ms sits below the 300ms floor this
+            // parameter exists to hold.
             return v > 0 ? v : 300;
         }
 
@@ -9278,7 +9360,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int getRuntimeValue() {
             int v = StreamingReflector.invokeGetInt("getImmediateAckDelayStatic");
-            return v > 0 ? v : 80;
+            // The stack's default is machine-scaled; a single fallback healed it to
+            // 80ms on every box, above the fast-path default and below the slow one.
+            return v > 0 ? v : (SystemVersion.isSlow() ? 100 : 40);
         }
 
         protected double getObservedStat(RouterContext ctx) {
@@ -9375,19 +9459,32 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * Maximum SYN sends before giving up on a handshake.
      * SYN retransmission uses a fixed RTO interval (no exponential backoff
      * — there's no congestion to manage before the connection establishes),
-     * so the total SYN budget equals maxSynResends * initialRTO and should
-     * roughly fill the connect() timeout (~60s).
+     * so the total SYN budget equals maxSynResends * the inter-SYN interval and
+     * should roughly fill the connect() timeout (30s by default).
      * Raise when connects are failing on slow/lossy paths.
      *
      * @since 0.9.70+
      */
     private class MaxSynResendsParam extends BaseParam {
 
+        /**
+         * The streaming-side default this param converges back to when the path is
+         * healthy — the initial value of {@code Connection.maxSynResends}. Kept in
+         * step with it: converging to anything else silently re-picks the default
+         * under the streaming stack, and the SYN send budget moves with it.
+         *
+         * @since 0.9.72+
+         */
+        private static final int DEFAULT_MAX_SYN_SENDS = 12;
+
         /** Creates the parameter that caps streaming SYN retransmissions. */
         MaxSynResendsParam() {
+            // _min is set to 3, the floor setMaxSynResends() applies. Offering 2
+            // only produced a target the setter rewrote back to 3, so the Tuner
+            // could never observe its own minimum.
             super("i2p.streaming.maxSynResends", "Streaming max SYN sends",
                   SUB_STREAMING,
-                  2, 12, 1, "stream.connectFailed", _context);
+                  3, 12, 1, "stream.connectFailed", _context);
         }
 
         protected void applyValue(int value) {
@@ -9396,7 +9493,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         protected int getRuntimeValue() {
             int v = StreamingReflector.invokeGetInt("getMaxSynResendsStatic");
-            return v > 0 ? v : 5;
+            return v > 0 ? v : DEFAULT_MAX_SYN_SENDS;
         }
 
         protected double getObservedStat(RouterContext ctx) {
@@ -9425,10 +9522,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
             // No failures + healthy = converge toward default
             if (!connectsFailing && !highRTT) {
-                if (current > 5)
-                    return Math.max(5, current - _step);
-                if (current < 5)
-                    return Math.min(5, current + _step);
+                if (current > DEFAULT_MAX_SYN_SENDS)
+                    return Math.max(DEFAULT_MAX_SYN_SENDS, current - _step);
+                if (current < DEFAULT_MAX_SYN_SENDS)
+                    return Math.min(DEFAULT_MAX_SYN_SENDS, current + _step);
             }
             return current;
         }
@@ -9455,6 +9552,26 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   SUB_STREAMING,
                   16, _context.getProperty("i2p.streaming.maxMaxConcurrentStreams", 1024), 32,
                   "stream.receiveActive", _context);
+        }
+
+        /**
+         * Ceiling the setter will actually accept, read live.
+         * <p>{@code setMaxConcurrentStreamsOverride()} clamps to
+         * {@code ConnectionOptions.getMaxMaxConcurrentStreams()}, the operator's
+         * {@code i2p.streaming.maxMaxConcurrentStreams}. The constructor captures
+         * that property once, at Tuner construction, so an operator raising or
+         * lowering it without a restart left this parameter's ceiling stale: the
+         * Tuner kept proposing against the boot-time number while the setter
+         * clamped to the new one.
+         *
+         * @param ctx router context, unused
+         * @return the highest value {@code setMaxConcurrentStreamsOverride()} can hold
+         * @since 0.9.72+
+         */
+        @Override
+        protected int getDefaultMax(RouterContext ctx) {
+            int ceil = StreamingReflector.invokeGetInt("getMaxMaxConcurrentStreams");
+            return ceil > 0 ? ceil : _defaultMax;
         }
 
         /** Apply the tunable value to the streaming override. */
@@ -9964,6 +10081,24 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   3000, 15000, 1000, "client.leaseSetFoundRemoteTime", _context);
         }
 
+        /**
+         * Ceiling the setter will actually accept.
+         * <p>{@link IterativeSearchJob#setMaxLeaseSetLookupTime} clamps to
+         * {@code getMaxSearchTime()}, which the operator controls through
+         * {@code netdb.maxSearchTime} (floor 10s). With the constructor's fixed 15s
+         * ceiling, an operator who set the search time to 10s left this parameter a
+         * 5s band it could never move into: every target above 10s was rewritten on
+         * the way in and read back as unchanged.
+         *
+         * @param ctx router context, unused
+         * @return the highest value {@code setMaxLeaseSetLookupTime()} can hold
+         * @since 0.9.72+
+         */
+        @Override
+        protected int getDefaultMax(RouterContext ctx) {
+            return Math.min(_defaultMax, lsLookupCeilingMs());
+        }
+
         protected void applyValue(int value) {
             IterativeSearchJob.setMaxLeaseSetLookupTime(value);
         }
@@ -10058,12 +10193,26 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("MAX_RI_LOOKUP_TIME", "RouterInfo lookup timeout (ms)",
                   SUB_NETDB,
 
-                  // 3000..8000: 8s is ~1.6x the old ceiling, room to let
+                  // 5000..8000: 8s is ~1.6x the old ceiling, room to let
                   // congested nets finish a search that is merely slow.
-                  // The min stays 3s so a healthy net keeps fast failure.
-                  // Step 500 keeps changes gradual across the wider range.
+                  // The min is setMaxRouterInfoLookupTime()'s own floor of 5s —
+                  // it was 3s here, so every target in 3000-4999 was rewritten up
+                  // to 5000 on the way in and the parameter could never reach its
+                  // own bottom. Step 500 keeps changes gradual across the range.
 
-                  3000, 8000, 500, "netDb.successTime", _context);
+                  5000, 8000, 500, "netDb.successTime", _context);
+        }
+
+        /**
+         * Floor the setter honours, so the parameter's own minimum is reachable.
+         *
+         * @param ctx router context, unused
+         * @return {@link #riLookupFloorMs()}
+         * @since 0.9.72+
+         */
+        @Override
+        protected int getDefaultMin(RouterContext ctx) {
+            return riLookupFloorMs();
         }
 
         protected void applyValue(int value) {

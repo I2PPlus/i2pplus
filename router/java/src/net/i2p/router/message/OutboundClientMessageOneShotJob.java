@@ -41,7 +41,9 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.crypto.ratchet.ReplyCallback;
+import net.i2p.router.networkdb.kademlia.IterativeSearchJob;
 import net.i2p.router.networkdb.kademlia.KademliaNetworkDatabaseFacade;
+import net.i2p.router.tunnel.pool.TunnelPool;
 import net.i2p.util.Log;
 
 /**
@@ -163,10 +165,68 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     private static final long OVERALL_TIMEOUT_MS_MIN = 8*1000L;
     /** Longest overall send timeout allowed. */
     private static final long OVERALL_TIMEOUT_MS_MAX = 90*1000L;
-    /** Timeout for the lease set lookup. */
-    private static final long LS_LOOKUP_TIMEOUT = 25*1000L;
-    /** Minimum overall timeout when a lookup is needed. */
-    private static final long OVERALL_TIMEOUT_NOLS_MIN = OVERALL_TIMEOUT_MS_MIN + LS_LOOKUP_TIMEOUT;
+    /**
+     * Grace added to the search's own deadline before this job gives up on it,
+     * in ms. Deliberately the same slack {@link OutboundCache#LOOKUP_WINDOW_SLACK_MS}
+     * uses to decide whether a failed search ran its window, so the two ends of one
+     * lookup agree on what that window was.
+     *
+     * @since 0.9.72+
+     */
+    private static final long LS_LOOKUP_GRACE_MS = OutboundCache.LOOKUP_WINDOW_SLACK_MS;
+
+    /**
+     * Floor for {@link #leaseSetLookupTimeoutMs(int)}, in ms, so a Tuner value at
+     * its minimum still leaves the lookup long enough to be worth running.
+     *
+     * @since 0.9.72+
+     */
+    private static final long LS_LOOKUP_TIMEOUT_MIN_MS = 5*1000L;
+
+    /**
+     * Timeout for the lease set lookup, in ms, for a search capped at
+     * {@code searchCapMs}.
+     * <p>Tracks the deadline the search actually runs under instead of a fixed
+     * number. The old 25s constant was never reachable: the Tuner's
+     * {@code MAX_LS_LOOKUP_TIME} caps the search at 15s, so the network work was
+     * over ten seconds before this job noticed. That extra time did real damage —
+     * it stretched the in-flight marker in {@link OutboundCache#lsLookupInFlight},
+     * which is what suppresses the next send to the destination, it pushed the
+     * minimum overall send timeout up to 33s, and it made
+     * {@link OutboundCache#failCooldownMs}'s "ran the whole window" branch
+     * unreachable, so every real failure took the short cooldown and the next SYN
+     * was instant-failed without a search at all.
+     *
+     * @param searchCapMs the live LeaseSet search deadline, from
+     *                    {@link IterativeSearchJob#getMaxLeaseSetLookupTime()}
+     * @return how long this job waits for the lookup, in ms
+     * @since 0.9.72+
+     */
+    static long leaseSetLookupTimeoutMs(int searchCapMs) {
+        return Math.max(LS_LOOKUP_TIMEOUT_MIN_MS, searchCapMs + LS_LOOKUP_GRACE_MS);
+    }
+
+    /**
+     * Timeout for the lease set lookup, read live from the Tuner's search cap.
+     *
+     * @return the lookup timeout in ms
+     * @since 0.9.72+
+     */
+    private long getLeaseSetLookupTimeout() {
+        return leaseSetLookupTimeoutMs(IterativeSearchJob.getMaxLeaseSetLookupTime());
+    }
+
+    /**
+     * Minimum overall send timeout when the LeaseSet has to be looked up first,
+     * in ms: the shortest send plus the lookup's own deadline.
+     *
+     * @return the minimum overall timeout in ms
+     * @since 0.9.72+
+     */
+    private long getNoLeaseSetMinTimeoutMs() {
+        return OVERALL_TIMEOUT_MS_MIN + getLeaseSetLookupTimeout();
+    }
+
     /** Minimum time left for the reply after sending. */
     private static final long REPLY_TIMEOUT_MS_MIN = OVERALL_TIMEOUT_MS_DEFAULT - 5*1000L;
     /**
@@ -286,7 +346,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             // Unless it's already expired, set a min and max expiration
             if (overallExpiration > _start) {
                 // extend the minimum timeout if we must lookup LS
-                long minTimeout = _leaseSet != null ? OVERALL_TIMEOUT_MS_MIN : OVERALL_TIMEOUT_NOLS_MIN;
+                long minTimeout = _leaseSet != null ? OVERALL_TIMEOUT_MS_MIN : getNoLeaseSetMinTimeoutMs();
                 overallExpiration = Math.max(overallExpiration, _start + minTimeout);
                 overallExpiration = Math.min(overallExpiration, _start + OVERALL_TIMEOUT_MS_MAX);
                 // Per-message routine state, not an event - INFO here is one line
@@ -378,7 +438,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                     }
                     LookupLeaseSetFailedJob failed = new LookupLeaseSetFailedJob(getContext());
                     kndf.lookupLeaseSetRemotely(_leaseSet.getHash(), success, failed,
-                                                LS_LOOKUP_TIMEOUT, _from.calculateHash());
+                                                getLeaseSetLookupTimeout(), _from.calculateHash());
                 } else {dieFatal(MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET);}
                 return;
             }
@@ -407,7 +467,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                     // Use lookupLeaseSetRemotely to force a remote lookup (lookupLeaseSet would
                     // find the same expired LS locally and call success immediately).
                     kndf.lookupLeaseSetRemotely(_leaseSet.getHash(), success, failed,
-                                                LS_LOOKUP_TIMEOUT, _from.calculateHash());
+                                                getLeaseSetLookupTimeout(), _from.calculateHash());
                 }
             }
             success.runJob();
@@ -477,7 +537,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             // the only one that knows what the lookup learned.
             // Not marked on the pure neg-cache path above, or for local dests.
             if (!isLocalDest) {
-                _cache.lsLookupInFlight.put(toHash, now + LS_LOOKUP_TIMEOUT);
+                _cache.lsLookupInFlight.put(toHash, now + getLeaseSetLookupTimeout());
             }
             if (recentlyValid) {
                 // Sweep any transient negative-cache abort so this probe actually
@@ -494,7 +554,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             }
             LookupLeaseSetFailedJob failed = new LookupLeaseSetFailedJob(getContext());
             Hash key = _to.calculateHash();
-            kndf.lookupLeaseSet(key, success, failed, LS_LOOKUP_TIMEOUT, _from.calculateHash());
+            kndf.lookupLeaseSet(key, success, failed, getLeaseSetLookupTimeout(), _from.calculateHash());
         }
     }
 
@@ -580,12 +640,108 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 send();
             }
             else {
-                // shouldn't happen unless unsupported encryption
+                // The lease set is in hand and the send still cannot be built, so
+                // name the reason in words and print both sides of an encryption
+                // mismatch. The old line asked "Unsupported encryption?" with a
+                // question mark and a bare status: neither type appeared, so the
+                // reader could not tell whether the peer publishes no ElGamal key
+                // or our own destination is the ElGamal-only one, and those need
+                // opposite fixes.
                 if (_log.shouldWarn()) {
-                    _log.warn("Received Lease " + _toString + " but can't send to it -> Unsupported encryption? (Failure code: " + rc  + ")");
+                    _log.warn("LeaseSet found for " + _toString + " but the send cannot be built -> "
+                              + sendFailureName(rc)
+                              + "\n* Peer encryption: " + (_leaseSet != null ? encryptionTypes(_leaseSet) : "none")
+                              + " * Our encryption: " + encryptionTypes(localSupportedTypes())
+                              + " (Status: " + rc + ")");
                 }
                 dieFatal(rc);
             }
+        }
+    }
+
+    /**
+     * The encryption types our own destination can decrypt, i.e. the set a peer's
+     * lease set must carry a key of for a send to it be possible at all.
+     * <p>Falls back to ElGamal only when the session's keys are not in the local
+     * key manager. A client session whose destination was created before X25519
+     * publishes only an ElGamal key here, so it cannot reach a peer that publishes
+     * no ElGamal key in its lease set — a reachability wall, not a transient
+     * failure, and the send is torn down rather than retried.
+     *
+     * @return the accepted encryption types, never null
+     * @since 0.9.72+
+     */
+    private Set<EncType> localSupportedTypes() {
+        LeaseSetKeys ourKeys = getContext().keyManager().getKeys(_from);
+        return ourKeys != null ? ourKeys.getSupportedEncryption() : LeaseSetKeys.SET_ELG;
+    }
+
+    /**
+     * The encryption types a lease set offers, as a short readable list.
+     * <p>Printed beside the "unsupported encryption" failure so a reader can tell
+     * which side of the mismatch is the legacy one — the two cases need opposite
+     * fixes, and the failure code alone names neither type.
+     *
+     * @param ls the lease set to read the keys of, non-null
+     * @return the type names separated by {@code /}, or {@code none} when the
+     *         lease set carries no encryption key at all
+     * @since 0.9.72+
+     */
+    static String encryptionTypes(LeaseSet ls) {
+        List<PublicKey> keys = ls instanceof LeaseSet2 ? ((LeaseSet2) ls).getEncryptionKeys() : null;
+        if (keys == null || keys.isEmpty()) {
+            PublicKey pk = ls.getEncryptionKey();
+            return pk != null ? pk.getType().name() : "none";
+        }
+        StringBuilder buf = new StringBuilder(keys.size() * 16);
+        for (PublicKey pk : keys) {
+            if (buf.length() > 0) {buf.append('/');}
+            buf.append(pk.getType().name());
+        }
+        return buf.toString();
+    }
+
+    /**
+     * The encryption types in a set, as a short readable list, for the same log
+     * line as {@link #encryptionTypes(LeaseSet)}.
+     *
+     * @param types the types to name, non-null
+     * @return the type names separated by {@code /}, or {@code none} for an empty
+     *         set
+     * @since 0.9.72+
+     */
+    static String encryptionTypes(Set<EncType> types) {
+        StringBuilder buf = new StringBuilder(32);
+        for (EncType t : types) {
+            if (buf.length() > 0) {buf.append('/');}
+            buf.append(t.name());
+        }
+        return buf.length() > 0 ? buf.toString() : "none";
+    }
+
+    /**
+     * The words for a {@link #getNextLease()} failure code.
+     * <p>A bare status integer is not a finding: the reader has no source open at
+     * 3am, and the words for these codes are already in the tree.
+     *
+     * @param rc a {@link MessageStatusMessage} send-failure code
+     * @return a short capitalised reason phrase, never null
+     * @since 0.9.72+
+     */
+    static String sendFailureName(int rc) {
+        switch (rc) {
+            case MessageStatusMessage.STATUS_SEND_FAILURE_UNSUPPORTED_ENCRYPTION:
+                return "No encryption type in common";
+            case MessageStatusMessage.STATUS_SEND_FAILURE_META_LEASESET:
+                return "Meta LeaseSet cannot receive messages";
+            case MessageStatusMessage.STATUS_SEND_FAILURE_BAD_LEASESET:
+                return "Malformed LeaseSet";
+            case MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET:
+                return "No LeaseSet";
+            case MessageStatusMessage.STATUS_SEND_FAILURE_NO_TUNNELS:
+                return "No outbound tunnel";
+            default:
+                return "Send rejected";
         }
     }
 
@@ -640,10 +796,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         }
 
         // select an encryption key from the leaseset
-        Set<EncType> supported;
-        LeaseSetKeys ourKeys = getContext().keyManager().getKeys(_from);
-        if (ourKeys != null) {supported = ourKeys.getSupportedEncryption();}
-        else {supported = LeaseSetKeys.SET_ELG;}
+        Set<EncType> supported = localSupportedTypes();
         _encryptionKey = _leaseSet.getEncryptionKey(supported);
         if (_encryptionKey == null) {
             if (_leaseSet.getEncryptionKey() != null) {
@@ -781,7 +934,13 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             Hash toHash = _to.calculateHash();
             _cache.lsLookupInFlight.remove(toHash);
             if (_leaseSetLookupBegin > 0) {
-                long cooldown = OutboundCache.failCooldownMs(provedUnusable, lookupTime, LS_LOOKUP_TIMEOUT);
+                // The window the search actually ran under. Because the grace is
+                // the same slack failCooldownMs() subtracts, the "ran its whole
+                // window" test lands exactly on the search's own deadline, so a
+                // lookup that was truncated by the Tuner cap reads as a verdict
+                // instead of an early abort.
+                long cooldown = OutboundCache.failCooldownMs(provedUnusable, lookupTime,
+                                                             getLeaseSetLookupTimeout());
                 _cache.lsFailCooldown.put(toHash, getContext().clock().now() + cooldown);
             }
             dieFatal(cause);
@@ -1184,6 +1343,46 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     }
 
     /**
+     * Minimum outbound tunnels a client pool must hold for an outbound-tunnel
+     * rotation to be worth attempting.
+     *
+     * @since 0.9.72+
+     */
+    static final int ROTATION_MIN_POOL_TUNNELS = 2;
+
+    /**
+     * Pure decision: is this client's outbound pool too small for a rotation to
+     * have anywhere to go?
+     * <p>Rotation exists so a retry does not ride the tunnel that stalled the
+     * previous connection. With one tunnel in the pool the draw can only return
+     * that tunnel, the caller reads the failure as saturation and evicts the
+     * cached entry, and normal selection immediately re-picks and re-caches the
+     * same tunnel — so every fresh connection repeats the cycle and nothing
+     * changes. Skipping the attempt is what makes the eviction mean what it says.
+     *
+     * @param poolTunnels how many outbound tunnels the client's dedicated pool
+     *                    holds, or -1 when the client has no dedicated pool and
+     *                    draws on the exploratory pool instead
+     * @return true when rotation can only re-pick the tunnel it already has
+     * @since 0.9.72+
+     */
+    static boolean rotationPoolTooSmall(int poolTunnels) {
+        return poolTunnels >= 0 && poolTunnels < ROTATION_MIN_POOL_TUNNELS;
+    }
+
+    /**
+     * How many outbound tunnels this client's dedicated pool currently holds.
+     *
+     * @return the tunnel count, or -1 when the client has no dedicated pool and
+     *         selects from the exploratory outbound pool, which always holds
+     *         several tunnels
+     */
+    private int outboundPoolTunnelCount() {
+        TunnelPool pool = getContext().tunnelManager().getOutboundPool(_from.calculateHash());
+        return pool != null ? pool.listTunnels().size() : -1;
+    }
+
+    /**
      * Try to pick a different outbound tunnel than the one the previous
      * connection to this destination used.  Only called for the first message
      * of a new connection (fresh streaming SYN), so nothing is in flight on
@@ -1193,12 +1392,13 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      * <p>Called with {@code _cache.tunnelCache} locked.
      *
      * @return the rotated tunnel, or null when there is no cached tunnel or it
-     *         is no longer valid - the caller then falls through to normal
-     *         selection logic.  When rotation is saturated (the pool offered no
-     *         tunnel distinguishable from the previously-used one), the cached
-     *         entry is evicted before returning null, so the fall-through
-     *         re-selects fresh instead of riding the tunnel that stalled the
-     *         previous connection.
+     *         is no longer valid, or when the client's outbound pool is too small
+     *         for a rotation to have anywhere to go - the caller then falls
+     *         through to normal selection logic.  When rotation is saturated (the
+     *         pool offered no tunnel distinguishable from the previously-used one),
+     *         the cached entry is evicted before returning null, so the
+     *         fall-through re-selects fresh instead of riding the tunnel that
+     *         stalled the previous connection.
      */
     private TunnelInfo selectFreshConnectionTunnel() {
         TunnelInfo cached = _cache.tunnelCache.get(_hashPair);
@@ -1206,6 +1406,20 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             return null;
         if (!getContext().tunnelManager().isValidTunnel(_from.calculateHash(), cached)) {
             _cache.tunnelCache.remove(_hashPair);
+            return null;
+        }
+        if (rotationPoolTooSmall(outboundPoolTunnelCount())) {
+            // A dedicated client pool with a single outbound tunnel: the draw
+            // below cannot produce anything but the cached tunnel, the caller
+            // would read that as saturation and evict it, and normal selection
+            // would immediately re-pick and re-cache the same tunnel. Measured at
+            // 19 evictions of one tunnel in 17 minutes for a one-tunnel client
+            // session, with the eviction changing nothing. Fall through to normal
+            // selection, which keeps the cached tunnel and still handles a
+            // backlogged one.
+            if (_log.shouldDebug())
+                _log.debug("Skipping outbound tunnel rotation for " + _toString
+                           + " -> Client pool holds one outbound tunnel");
             return null;
         }
         List<TunnelInfo> candidates = new ArrayList<>(MAX_ROTATION_CANDIDATES);
