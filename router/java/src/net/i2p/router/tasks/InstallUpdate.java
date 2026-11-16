@@ -5,11 +5,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.RouterVersion;
@@ -59,6 +61,36 @@ public class InstallUpdate {
 
     /** File listing what the previous update installed. */
     private static final String DELETE_FILE = "deletelist.txt";
+
+    /**
+     * The version of the wrapper that started this JVM. The wrapper passes it on
+     * the JVM command line itself, so it is set whenever the router runs under
+     * the wrapper and absent under runplain.sh, where there is no wrapper to
+     * update.
+     */
+    private static final String WRAPPER_VERSION_PROP = "wrapper.version";
+
+    /**
+     * Where an update leaves the wrapper release it staged. The launcher, the
+     * native library it loads and the jar it starts belong to the process the
+     * router runs under, and a restart from the console re-launches only the JVM,
+     * so no update can put them in place while the router is running. The
+     * install-wrapper scripts do, once the wrapper is stopped.
+     */
+    private static final String WRAPPER_STAGED_DIR = "lib/wrapper";
+
+    /** Names the release staged in {@link #WRAPPER_STAGED_DIR}. */
+    private static final String WRAPPER_STAGED_VERSION = WRAPPER_STAGED_DIR + "/version.txt";
+
+    /**
+     * Installs the staged wrapper files on linux, FreeBSD and macOS. Named for
+     * <code>sh</code> because an update extracts its files without the exec bit,
+     * so the script arrives not runnable on its own.
+     */
+    private static final String WRAPPER_SCRIPT_UNIX = "sh ./install-wrapper.sh";
+
+    /** Installs the staged wrapper files on Windows. */
+    private static final String WRAPPER_SCRIPT_WINDOWS = ".\\install-wrapper.ps1";
 
     /**
      * Install updates from i2pupdate.zip file if present.
@@ -133,6 +165,99 @@ public class InstallUpdate {
         } else {
             deleteJbigiFiles(context);
             deleteListedFiles(context);
+            reportWrapperUpdate(context);
+        }
+    }
+
+    /**
+     * Say what to do when this install holds a wrapper release that an update
+     * staged but could not install itself. Called on every start until the
+     * staged files are put in place, so the notice is not a one-line accident in
+     * the middle of an update log.
+     *
+     * @param context provides the base directory holding the staged release
+     */
+    private static void reportWrapperUpdate(RouterContext context) {
+        String running = System.getProperty(WRAPPER_VERSION_PROP);
+        if (running == null)
+            return;
+        String staged = stagedWrapperVersion(new File(context.getBaseDir(), WRAPPER_STAGED_VERSION));
+        String notice = wrapperUpdateNotice(staged, running);
+        if (notice != null)
+            System.out.println(notice); // NOSONAR startup notice, before the log is up
+    }
+
+    /**
+     * Read the wrapper release an update staged, or null when this install holds
+     * no staged release.
+     *
+     * @param versionFile the version.txt inside the staged lib/wrapper directory
+     * @return the release it names, such as 3.7.4, or null if there is none to read
+     */
+    static String stagedWrapperVersion(File versionFile) {
+        if (!versionFile.isFile())
+            return null;
+        Properties props = new Properties();
+        try (InputStream in = new BufferedInputStream(new FileInputStream(versionFile))) {
+            props.load(in);
+        } catch (IOException ioe) {
+            return null;
+        }
+        String version = props.getProperty("WRAPPER_VERSION");
+        return version != null ? version.trim() : null;
+    }
+
+    /**
+     * The line to print when the staged release is newer than the wrapper that
+     * started this JVM, or null when there is nothing to report. Split out of the
+     * startup path so the comparison and the wording are testable without an
+     * install directory.
+     *
+     * @param staged the release staged under lib/wrapper, or null if none
+     * @param running the version of the wrapper running this JVM, or null if it
+     *                is not running under a wrapper at all
+     * @return the message to print, or null if nothing is waiting to be installed
+     */
+    static String wrapperUpdateNotice(String staged, String running) {
+        if (staged == null || running == null || compareVersions(staged, running) <= 0)
+            return null;
+        String script = SystemVersion.isWindows() ? WRAPPER_SCRIPT_WINDOWS : WRAPPER_SCRIPT_UNIX;
+        return "New wrapper release staged -> Run " + script +
+               "\n* Staged: " + staged + " * Running: " + running;
+    }
+
+    /**
+     * Compare two dotted numeric versions, the form the wrapper and the updater
+     * both use. A field missing on one side counts as zero, so 3.7 equals 3.7.0,
+     * and a field that is not a plain number compares as zero.
+     *
+     * @param one the first version, such as 3.7.4
+     * @param two the second version
+     * @return negative if one is older, zero if they are the same release, positive if newer
+     */
+    static int compareVersions(String one, String two) {
+        String[] a = one.split("\\.");
+        String[] b = two.split("\\.");
+        for (int i = 0; i < Math.max(a.length, b.length); i++) {
+            int x = i < a.length ? versionField(a[i]) : 0;
+            int y = i < b.length ? versionField(b[i]) : 0;
+            if (x != y)
+                return x < y ? -1 : 1;
+        }
+        return 0;
+    }
+
+    /**
+     * One dotted field of a version as a number, zero if it is not a plain number.
+     *
+     * @param field one component of a version, such as the 7 of 3.7.4
+     * @return its value, or zero if it does not parse
+     */
+    private static int versionField(String field) {
+        try {
+            return Integer.parseInt(field);
+        } catch (NumberFormatException nfe) {
+            return 0;
         }
     }
 

@@ -3483,12 +3483,16 @@
   <target name="updaterWithJettyFixesAndJbigi" depends="timestamp.started, prepjupdatefixes, prepjbigiupdate, zipit, timestamp.stopped"/>
   <target name="updaterWithJettyFixes" depends="timestamp.started, prepjupdatefixes, preplicenses, zipit, timestamp.stopped"/>
   <target name="updaterWithJettyRepack" depends="timestamp.started, prepjupdate, repack200, zipit, timestamp.stopped"/>
+  <!-- A wrapper release on its own: the jars plus the staged wrapper files and
+       the scripts that install them. The update cannot apply those itself, so
+       the user runs install-wrapper.sh (or .ps1) once it is unpacked. -->
+  <target name="updaterWithWrapper" depends="timestamp.started, prepupdate, prepwrapperupdate, zipit, timestamp.stopped"/>
   <!-- The maximal code payload: every optional component the build can stage.
        prepjupdate already pulls prepupdate, prepgeoupdate already unpacks
        db-ip-asn.mmdb (so ASN needs no separate prep), and prepupdate already
        runs preplicenses. Javadoc is deliberately left out - it is docs, not
        code, and the WithJavadoc variants cover it. -->
-  <target name="updaterFull" depends="timestamp.started, prepjupdate, prepgeoupdate, prepjbigiupdate, zipit, timestamp.stopped"/>
+  <target name="updaterFull" depends="timestamp.started, prepjupdate, prepgeoupdate, prepjbigiupdate, prepwrapperupdate, zipit, timestamp.stopped"/>
   <!-- Updater staleness is timestamp based, so it cannot see uncommitted work:
        an edited, staged or untracked file leaves the payload on disk describing
        a tree that no longer exists. Set workspace.dirty whenever the tree is not
@@ -3540,6 +3544,12 @@
       <srcfiles dir="installer/resources/certificates"/>
       <srcfiles dir="installer/resources/geoip"/>
       <srcfiles dir="installer/resources/locale/po"/>
+      <!-- The wrapper payload prepwrapperupdate copies verbatim, and the two
+           scripts it stages beside it: a wrapper release commit or a script
+           edit has to force a rebuild the same way a theme or geoip change
+           does. -->
+      <srcfiles dir="installer/lib/wrapper" includes="version.txt all/wrapper.jar linux64/** linux64-armv8/** freebsd64/** freebsd-arm64/** macosx/** macosx-arm64/** win64/**"/>
+      <srcfiles dir="installer/resources/platform-specific" includes="unix/install-wrapper.sh windows/install-wrapper.ps1"/>
       <srcfiles dir="docs"/>
     </uptodate>
     <if>
@@ -3583,6 +3593,12 @@
       <srcfiles dir="installer/resources/certificates"/>
       <srcfiles dir="installer/resources/geoip"/>
       <srcfiles dir="installer/resources/locale/po"/>
+      <!-- The wrapper payload prepwrapperupdate copies verbatim, and the two
+           scripts it stages beside it: a wrapper release commit or a script
+           edit has to force a rebuild the same way a theme or geoip change
+           does. -->
+      <srcfiles dir="installer/lib/wrapper" includes="version.txt all/wrapper.jar linux64/** linux64-armv8/** freebsd64/** freebsd-arm64/** macosx/** macosx-arm64/** win64/**"/>
+      <srcfiles dir="installer/resources/platform-specific" includes="unix/install-wrapper.sh windows/install-wrapper.ps1"/>
       <srcfiles dir="docs"/>
     </uptodate>
     <if>
@@ -3646,7 +3662,8 @@
   <target name="updater200WithJetty" depends="timestamp.started, prepjupdate, pack200, zipit200, timestamp.stopped"/>
   <target name="updater200WithTomcat" depends="timestamp.started, prepupdate, preptomcatupdate, pack200, zipit200, timestamp.stopped"/>
   <target name="updater200WithJettyFixesAndGeoIP" depends="timestamp.started, prepjupdatefixes, prepgeoupdate, pack200, zipit200, timestamp.stopped"/>
-  <target name="updater200Full" depends="timestamp.started, prepjupdate, prepgeoupdate, prepjbigiupdate, pack200, zipit200, timestamp.stopped"/>
+  <target name="updater200WithWrapper" depends="timestamp.started, prepupdate, prepwrapperupdate, pack200, zipit200, timestamp.stopped"/>
+  <target name="updater200Full" depends="timestamp.started, prepjupdate, prepgeoupdate, prepjbigiupdate, prepwrapperupdate, pack200, zipit200, timestamp.stopped"/>
   <!-- Signs the pack200 update. Callers that build the plain (non-compressed)
        i2pupdate.zip must use -sign-update-plain instead: this hardcodes the
        i2pupdate200.zip input, so signing the plain build here either failed or,
@@ -3670,6 +3687,7 @@
   <target name="signed-updater200WithJetty" depends="timestamp.started, -pre-sign, updater200WithJetty, -sign-update, timestamp.stopped"/>
   <target name="signed-updater200WithTomcat" depends="timestamp.started, -pre-sign, updater200WithTomcat, -sign-update, timestamp.stopped"/>
   <target name="signed-updater200WithJettyAndGeoIP" depends="timestamp.started, -pre-sign, updater200WithJettyAndGeoIP, -sign-update, timestamp.stopped"/>
+  <target name="signed-updater200WithWrapper" depends="timestamp.started, -pre-sign, updater200WithWrapper, -sign-update, timestamp.stopped"/>
   <target name="signed-updater200Full" depends="timestamp.started, -pre-sign, updater200Full, -sign-update, timestamp.stopped"/>
   <target name="signed-updater200WithJavadoc" depends="timestamp.started, -pre-sign, updater200WithJavadoc, -sign-update, timestamp.stopped"/>
   <target name="signed-updater200WithJavadocAndJetty" depends="timestamp.started, -pre-sign, updater200WithJavadocAndJetty, -sign-update, timestamp.stopped"/>
@@ -3943,6 +3961,45 @@
   <target name="prepasnupdate">
     <mkdir dir="${pkg.temp.dir}/geoip"/>
     <gunzip src="installer/resources/geoip/db-ip-asn.mmdb.gz" dest="${pkg.temp.dir}/geoip/db-ip-asn.mmdb"/>
+  </target>
+
+  <!--
+    The wrapper's own files: the launcher, the native library it loads, and the
+    jar it starts. None of them can be replaced while the router runs, because
+    the process the router runs under IS the wrapper - a restart from the console
+    re-launches only the JVM and leaves the native layer mapped - and Windows
+    locks all three for the life of the process. So the updater stages them under
+    lib/wrapper/ and stops there; the two install-wrapper scripts beside them stop
+    the wrapper, put the files in place, and start it again. `version.txt` comes
+    along so the script can name the staged release back to the user. See
+    installer/lib/wrapper/README.md.
+  -->
+  <target name="prepwrapperupdate">
+    <!-- The copies below are quiet, so the release being bundled is named here
+         instead. version.txt is the only place the tree records it; the default
+         is set after the load because ant properties are write-once, so it only
+         applies when the file is missing. -->
+    <property file="installer/lib/wrapper/version.txt"/>
+    <property name="WRAPPER_VERSION" value="unknown"/>
+    <copy quiet="true" verbose="false" todir="${pkg.temp.dir}/lib/wrapper/">
+      <fileset dir="installer/lib/wrapper">
+        <include name="version.txt"/>
+        <include name="all/wrapper.jar"/>
+        <include name="linux64/**"/>
+        <include name="linux64-armv8/**"/>
+        <include name="freebsd64/**"/>
+        <include name="freebsd-arm64/**"/>
+        <include name="macosx/**"/>
+        <include name="macosx-arm64/**"/>
+        <include name="win64/**"/>
+        <exclude name="**/*.nmake"/>
+        <exclude name="**/*.o"/>
+        <exclude name="**/Makefile*"/>
+      </fileset>
+    </copy>
+    <copy quiet="true" verbose="false" file="installer/resources/platform-specific/unix/install-wrapper.sh" todir="${pkg.temp.dir}/"/>
+    <copy quiet="true" verbose="false" file="installer/resources/platform-specific/windows/install-wrapper.ps1" todir="${pkg.temp.dir}/"/>
+    <echo>Bundling Wrapper ${WRAPPER_VERSION} -> lib/wrapper/ and the install-wrapper scripts</echo>
   </target>
 
   <!-- All jetty jars required for update. (TODO do we need to bother updating jasper?) -->

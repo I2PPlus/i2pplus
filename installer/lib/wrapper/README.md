@@ -104,6 +104,77 @@ find nothing to do, so a bump cannot leave either file naming an older release.
 ./sync-wrapper-version.sh --version 3.7.3   # Set both files to one version
 ```
 
+## Updating the wrapper in an install
+
+Everything above updates the **repository**. Putting a new wrapper into a running
+install is a separate step, because an I2P update cannot update the wrapper it is
+running under: the launcher, the native library it loads and the jar it starts
+all belong to the wrapper process, and a restart from the console re-launches
+only the JVM inside that same wrapper.
+
+### Staging the release into an update
+
+```bash
+ant updaterWithWrapper             # i2pupdate.zip carrying the wrapper files
+ant updater200WithWrapper          # the Java 200 update, same payload
+ant signed-updater200WithWrapper   # the same, signed as an .su3
+```
+
+```bash
+./gradlew updaterWithWrapper       # gradle mirrors both ant targets
+./gradlew updater200WithWrapper
+```
+
+`updaterFull` and `updater200Full` include them as well; the plain `updater`
+targets do not. They copy the artifacts out of `installer/lib/wrapper/`, so run
+`ant updateWrapper` first — that is what puts the new release in the tree. Each
+build says which release it bundled:
+
+```
+* Bundling Wrapper 3.7.4 -> lib/wrapper/ and the install-wrapper scripts
+```
+
+The payload is the release itself — the `all/` jar and every platform directory,
+about 5 MB unpacked — plus the two scripts that do the install:
+
+```
+lib/wrapper/<platform>/...
+lib/wrapper/version.txt
+install-wrapper.sh    linux, FreeBSD, macOS
+install-wrapper.ps1   Windows
+```
+
+### Applying it
+
+Until the staged files are in place, the router says what is waiting on every
+start, in `wrapper.log`:
+
+```
+New wrapper release staged -> Run sh ./install-wrapper.sh
+* Staged: 3.7.4 * Running: 3.7.3
+```
+
+Then run the script from the install directory. It stops the router, replaces
+the launcher, the native library and the jar for the platform it is running on,
+and starts it again. An update extracts its files without the exec bit, so run
+the script through `sh`:
+
+```bash
+sh ./install-wrapper.sh --dry-run   # show what it would do
+sh ./install-wrapper.sh
+```
+
+```powershell
+.\install-wrapper.ps1 -DryRun
+.\install-wrapper.ps1
+```
+
+Both keep what they replace under `lib/wrapper-backup/` and put it back if the
+new launcher does not start. They find the router however it is running — a
+systemd unit, a macOS launchd job, a FreeBSD service, the `I2P+` Windows
+service, or a process started with the `i2prouter` script — and stop and start
+it through that mechanism.
+
 ## Supported Platforms
 
 ### Native Libraries
@@ -169,7 +240,11 @@ strip i2psvc
 
 ## Notes
 
-- Native wrapper binaries are **not** included in incremental updates (`ant updater`).
-- They are only distributed via full installers (`ant pkg`).
+- Native wrapper binaries reach an incremental install only through
+  `updaterWithWrapper`, `updater200WithWrapper`, `updaterFull` or
+  `updater200Full` — see Updating the wrapper in an install above. The plain
+  `updater` targets stay small and do not carry them.
+- Full installers (`ant pkg`) always carry them, and need no follow-up script:
+  they install the release they were built with.
 - Cache location: `installer/lib/wrapper/cache/`
 - Use `version.txt` to manage the wrapper version.

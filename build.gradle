@@ -234,6 +234,11 @@ ext.pkgTempCompact200Dir = "${pkgTempDir}-compact-200"
 // The pack200 variant of the full updater payload, for the same reason (ant
 // pack200 rewrites its one shared pkg-temp in place)
 ext.pkgTemp200Dir = "${pkgTempDir}-200"
+// The wrapper variants stage their own copy of the full payload: the wrapper
+// files ride in on top of it, and the pack200 pass rewrites jars in place, so
+// neither can share the directory the plain zips are built from
+ext.pkgTempWrapperDir = "${pkgTempDir}-wrapper"
+ext.pkgTempWrapper200Dir = "${pkgTempDir}-wrapper-200"
 
 // Root of the payload staging trees the installers and the platform packages
 // build (ant stages all of them in the single pkg-temp, one target per run).

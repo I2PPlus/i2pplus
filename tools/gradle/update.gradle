@@ -4,6 +4,8 @@ def smallStageDir = pkgTempSmallDir
 def compactStageDir = pkgTempCompactDir
 def compact200StageDir = pkgTempCompact200Dir
 def full200StageDir = pkgTemp200Dir
+def wrapperStageDir = pkgTempWrapperDir
+def wrapper200StageDir = pkgTempWrapper200Dir
 def distAbsDir = distDir.absolutePath
 def localeBuildDir = "${System.getProperty('java.io.tmpdir')}/build-i2p/locale-build"
 
@@ -505,6 +507,106 @@ task updater200 {
         logger.lifecycle("Created I2P+ pack200 update (rev. ${UpdateZip.gitRev(rootDirAbs)}): ${distAbsDir}/i2pupdate200.zip")
         logger.lifecycle("SHA256: ${sha}  i2pupdate200.zip")
         UpdateZip.reportPack200Savings(pack200FullMarkerAbs, out)
+    }
+}
+
+// ---------------------------------------------------------------------------
+// updaterWithWrapper / updater200WithWrapper — the full payload plus a wrapper
+// release staged under lib/wrapper/ (mirrors ant prepwrapperupdate). An update
+// cannot replace the wrapper it runs under, so the payload also carries the two
+// scripts that do, and the router prints what is waiting on every start until
+// they are run. See installer/lib/wrapper/README.md.
+// ---------------------------------------------------------------------------
+
+// What release is staged, read at configuration time like the release number.
+def wrapperVersionFile = file('installer/lib/wrapper/version.txt')
+def wrapperVersion = wrapperVersionFile.canRead() ?
+        (wrapperVersionFile.getText() =~ /WRAPPER_VERSION\s*=\s*(\S+)/)[0][1] : 'unknown'
+
+// The same file set ant's prepwrapperupdate copies, build byproducts excluded.
+def wrapperIncludes = ['version.txt', 'all/wrapper.jar', 'linux64/**', 'linux64-armv8/**',
+                       'freebsd64/**', 'freebsd-arm64/**', 'macosx/**', 'macosx-arm64/**', 'win64/**']
+def wrapperExcludes = ['**/*.nmake', '**/*.o', '**/Makefile*']
+
+task prepWrapperUpdate(type: Copy) {
+    group = 'package'
+    description = 'Stage the wrapper release and its install scripts on top of the full update payload (mirrors ant prepwrapperupdate).'
+    dependsOn prepUpdate
+    includeEmptyDirs = false
+    from pkgTmpDir
+    into wrapperStageDir
+    into('lib/wrapper') {
+        from('installer/lib/wrapper') {
+            include wrapperIncludes
+            exclude wrapperExcludes
+        }
+    }
+    from('installer/resources/platform-specific/unix') { include 'install-wrapper.sh' }
+    from('installer/resources/platform-specific/windows') { include 'install-wrapper.ps1' }
+    doFirst {
+        new File(wrapperStageDir).deleteDir()
+    }
+    doLast {
+        logger.lifecycle("Bundling Wrapper ${wrapperVersion} -> lib/wrapper/ and the install-wrapper scripts")
+    }
+}
+
+task updaterWithWrapper {
+    group = 'package'
+    description = 'Build the update zip dist/i2pupdate.zip carrying a wrapper release (mirrors ant updaterWithWrapper).'
+    dependsOn prepWrapperUpdate
+    doLast {
+        def out = new File(distAbsDir, 'i2pupdate.zip')
+        def sha = UpdateZip.zipIt(new File(wrapperStageDir), out, releaseNum, ['README.md'])
+        logger.lifecycle("Created I2P+ update (rev. ${UpdateZip.gitRev(rootDirAbs)}): ${distAbsDir}/i2pupdate.zip")
+        logger.lifecycle("SHA256: ${sha}  i2pupdate.zip")
+    }
+}
+
+// Its own marker: the compact, full and wrapper pack200 passes may run in one
+// gradle invocation, and a shared marker is read and deleted by whichever zip
+// finishes first.
+def pack200WrapperMarkerAbs = "${System.getProperty('java.io.tmpdir')}/build-i2p/.pack200-before-wrapper"
+
+task prepWrapperUpdate200(type: Copy) {
+    group = 'package'
+    description = 'Copy the wrapper payload aside for pack200 compression (ant compresses its one shared pkg-temp in place).'
+    dependsOn prepWrapperUpdate
+    includeEmptyDirs = false
+    from wrapperStageDir
+    into wrapper200StageDir
+    doFirst {
+        new File(wrapper200StageDir).deleteDir()
+    }
+}
+
+task pack200WrapperUpdater(type: Exec) {
+    group = 'package'
+    description = 'Pack200-compress the wrapper variant payload lib jars and webapps (mirrors ant pack200 for updater200).'
+    dependsOn prepWrapperUpdate200
+    dependsOn ':apps:pack200:jar'
+    workingDir rootDirAbs
+    commandLine 'sh', 'tools/scripts/pack200.sh'
+    environment 'MODE', 'compress'
+    environment 'JAVA', "${System.getProperty('java.home')}/bin/java"
+    environment 'PKGDIR', wrapper200StageDir
+    environment 'MARKER', pack200WrapperMarkerAbs
+    // Read the captured Provider here, not at configuration time: see pack200Updater.
+    doFirst {
+        environment 'P200JAR', p200JarFile.get().asFile.absolutePath
+    }
+}
+
+task updater200WithWrapper {
+    group = 'package'
+    description = 'Build the pack200 update zip dist/i2pupdate200.zip carrying a wrapper release (mirrors ant updater200WithWrapper).'
+    dependsOn pack200WrapperUpdater
+    doLast {
+        def out = new File(distAbsDir, 'i2pupdate200.zip')
+        def sha = UpdateZip.zipIt(new File(wrapper200StageDir), out, releaseNum, ['README.md'])
+        logger.lifecycle("Created I2P+ pack200 update (rev. ${UpdateZip.gitRev(rootDirAbs)}): ${distAbsDir}/i2pupdate200.zip")
+        logger.lifecycle("SHA256: ${sha}  i2pupdate200.zip")
+        UpdateZip.reportPack200Savings(pack200WrapperMarkerAbs, out)
     }
 }
 
