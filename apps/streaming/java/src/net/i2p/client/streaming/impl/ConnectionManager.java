@@ -1222,6 +1222,73 @@ class ConnectionManager {
     }
 
     /**
+     * The per-destination stream cap to enforce right now. The manager-wide cap
+     * from {@link #getEffectiveMaxStreams} already limits one destination, but it
+     * limits <em>all</em> of them together, so a single host can spend the whole
+     * budget — a router with the default unlimited manager cap has held thousands
+     * of half-open streams from one destination while every other host was
+     * unthrottled. This is the second, independent gate on the same per-dest
+     * ledger: the lower of the two caps binds, and either one being unlimited
+     * (&le; 0) leaves it out of the min.
+     *
+     * @return the per-destination cap; &le; 0 means no per-dest cap is enforced
+     * @since 0.9.72+
+     */
+    private int getEffectiveMaxStreamsPerDest() {
+        return computePerDestCap(getConfiguredMaxStreamsPerDest(), getEffectiveMaxStreams());
+    }
+
+    /**
+     * The configured per-destination stream cap, read from {@code router.config}
+     * on each admission check rather than captured into the connection options at
+     * startup. The router rereads its config file every minute, so an edit there
+     * binds on the next admission without a restart; the read is one map lookup on
+     * the admission path, not the per-packet path.
+     *
+     * @return the configured cap, &lt;= 0 for no per-destination limit
+     * @since 0.9.72+
+     */
+    private int getConfiguredMaxStreamsPerDest() {
+        return _context.getProperty(ConnectionOptions.PROP_MAX_STREAMS_PER_DEST, 0);
+    }
+
+    /**
+     * Pure decision: the per-destination ceiling to enforce given the two caps.
+     * Either cap being unlimited (&le; 0) is simply left out of the min, so an
+     * unlimited manager cap no longer lets one destination spend the whole
+     * admission budget when a per-destination cap is configured.
+     *
+     * @param perDestCap configured per-destination cap, &le; 0 for unlimited
+     * @param managerCap effective manager-wide cap, &le; 0 for unlimited
+     * @return the binding cap, &le; 0 only when both are unlimited
+     * @since 0.9.72+
+     */
+    static int computePerDestCap(int perDestCap, int managerCap) {
+        if (perDestCap <= 0)
+            return managerCap;
+        if (managerCap <= 0)
+            return perDestCap;
+        return Math.min(perDestCap, managerCap);
+    }
+
+    /**
+     * How many streams this destination currently holds in the admission ledger,
+     * including slots reserved by SYNs that have not become connections yet. The
+     * refusal copy uses it so the reader sees the count that actually hit the cap
+     * rather than having to infer it.
+     *
+     * @param h remote dest hash, null-safe
+     * @return the live count, 0 for an untracked dest
+     * @since 0.9.72+
+     */
+    private int streamsForDest(Hash h) {
+        if (h == null)
+            return 0;
+        AtomicInteger held = _streamsByDest.get(h);
+        return held != null ? held.get() : 0;
+    }
+
+    /**
      * The cap to <em>report</em> in refusal log messages: the Tuner's current
      * override when it has armed one, otherwise the user-configured ceiling.
      * <p>This deliberately differs from {@link #getEffectiveMaxStreams}, which
@@ -1241,6 +1308,38 @@ class ConnectionManager {
         if (override > 0)
             return override;
         return _defaultOptions.getMaxConns();
+    }
+
+    /**
+     * The clause a stream-cap refusal reports: which of the two caps bound, and
+     * for the per-destination one, how many streams the dest actually holds. A
+     * refusal that only ever names the manager-wide cap reads as a lie when the
+     * manager cap is unlimited and the per-dest gate is what said no.
+     *
+     * @param perDestCap the per-destination cap in force, &le; 0 if unlimited
+     * @param managerCap the manager-wide cap in force for logging, &le; 0 if unlimited
+     * @param held live streams this destination holds
+     * @return the refusal clause, ending the log line
+     * @since 0.9.72+
+     */
+    static String streamCapRefusal(int perDestCap, int managerCap, int held) {
+        if (perDestCap > 0 && (managerCap <= 0 || perDestCap < managerCap))
+            return "Maximum " + perDestCap + " concurrent streams for this destination" +
+                   " exceeded (Held: " + held + ')';
+        return "Maximum " + managerCap + " concurrent streams exceeded";
+    }
+
+    /**
+     * The refusal clause for an inbound SYN, naming the dest's live count from
+     * the ledger. See {@link #streamCapRefusal(int, int, int)}.
+     *
+     * @param h remote dest hash, null-safe
+     * @return the refusal clause, ending the log line
+     * @since 0.9.72+
+     */
+    private String streamCapRefusal(Hash h) {
+        return streamCapRefusal(getConfiguredMaxStreamsPerDest(), getLogMaxStreams(),
+                                streamsForDest(h));
     }
 
     /**
@@ -1676,7 +1775,7 @@ class ConnectionManager {
             // all read "room left" and admit past the per-dest ceiling. The slot is
             // bound to a reservation token once the connection has a receive ID; a
             // SYN rejected below never gets that far and gives its slot back here.
-            boolean reserved = tryReserveStream(fromHash, getEffectiveMaxStreams());
+            boolean reserved = tryReserveStream(fromHash, getEffectiveMaxStreamsPerDest());
             if (!reserved) {
                 // If already temp-banned, drop the SYN silently before any processing,
                 // SYN-ACK, or refusal logging, so a banned dest can't keep hammering.
@@ -1688,8 +1787,7 @@ class ConnectionManager {
                 if ((!_defaultOptions.getDisableRejectLogging()) && _log.shouldWarn()) {
                     // Log the peer so a rejection burst can be attributed to a single source rather than
                     // a faceless count. Matches the client logging in the shouldRejectConnection() branch below.
-                    _log.warn("Refusing connection from [" + client + "] -> Maximum " + getLogMaxStreams() +
-                              " concurrent streams exceeded");
+                    _log.warn("Refusing connection from [" + client + "] -> " + streamCapRefusal(fromHash));
                 }
                 // A dest refused this many times in the current window is hammering its
                 // per-dest budget; promote it to an autoban so its SYNs are dropped
@@ -2068,6 +2166,10 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
           // against the same ceiling, and calculateHash() on the peer is real work.
           final Hash destHash = peer.calculateHash();
           final int max = getEffectiveMaxStreams();
+          // The admission gate takes the lower of the manager-wide and the
+          // per-destination cap; the waiter-queue depth check below is still sized
+          // from the manager-wide cap, since that queue is manager-wide too.
+          final int perDestMax = getEffectiveMaxStreamsPerDest();
 
           // Try to acquire a pooled connection first
           if (isPoolEnabled()) {
@@ -2080,7 +2182,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
                   // this teardown decrement a later stream's slot).
                   _admissionLock.readLock().lock();
                   try {
-                      if (tryReserveStream(destHash, max)) {
+                      if (tryReserveStream(destHash, perDestMax)) {
                           // Update connection options and session if needed
                           try {
                               pooled.setRemotePeer(peer);
@@ -2126,7 +2228,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
               while (true) {
                   long remaining = expiration - _context.clock().now();
                   if (remaining <= 0) {
-                      _log.logAlways(Log.WARN, "Refusing connection -> Maximum " + getLogMaxStreams() + " concurrent streams exceeded");
+                      _log.logAlways(Log.WARN, "Refusing connection -> " + streamCapRefusal(destHash));
                       return null;
                   }
 
@@ -2138,7 +2240,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
                   boolean admitted = false;
                   _admissionLock.readLock().lock();
                   try {
-                      if (tryReserveStream(destHash, max)) {
+                      if (tryReserveStream(destHash, perDestMax)) {
                           try {
                               con = new Connection(_context, this, session, _schedulerChooser, _timer.getSharedTimer(),
                                                    _outboundQueue, _conPacketHandler, opts, false);
@@ -2166,8 +2268,8 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
                       break; // stop looping as a psuedo-wait
                   // allow a full buffer of pending/waiting streams
                   if (_numWaiting.get() > max) {
-                      _log.logAlways(Log.WARN, "Refusing connection -> Maximum " + getLogMaxStreams() + " concurrent streams exceeded, with " +
-                                               _numWaiting + " queued");
+                      _log.logAlways(Log.WARN, "Refusing connection -> " + streamCapRefusal(destHash) +
+                                               ", with " + _numWaiting + " queued");
                       return null;
                   }
 
