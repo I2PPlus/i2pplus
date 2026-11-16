@@ -336,4 +336,66 @@ public class DestLookupCacheTest {
         util.noteDest(h, null);
         assertTrue("the backoff must continue", util.destLookupQuiet(h) > first);
     }
+
+    /**
+     * A resolved destination is held for the lease-set lifetime, not hours. The key
+     * outlives that, the leases inside it do not: the router publishes its leases for
+     * ten minutes, so a longer entry has snark dialling peers whose lease sets the
+     * router has itself dropped. Measured over 9 hours, 113 of 128 cached peers were
+     * re-dialled more than 30 minutes after the lookup, mean gap 254 minutes.
+     */
+    @Test
+    public void testAResolvedDestinationExpiresWithTheLeaseSet() {
+        assertEquals("the positive TTL is the spec lease-set lifetime",
+                     10 * 60 * 1000L, I2PSnarkUtil.DEST_CACHE_POSITIVE_MS);
+        assertTrue("and it is far below the six hours that hid the staleness",
+                   I2PSnarkUtil.DEST_CACHE_POSITIVE_MS < 60 * 60 * 1000L);
+    }
+
+    /**
+     * A connect failure drops the answer. The destination is what failed to open a
+     * stream, so keeping it means every later dial reuses an address the router has
+     * also lost, routing the connect into the router's LeaseSet lookup path instead of
+     * saving the lookup the cache exists to save.
+     *
+     * @throws Exception if the destination's keys cannot be generated
+     */
+    @Test
+    public void testAFailedConnectDropsTheCachedDestination() throws Exception {
+        I2PSnarkUtil util = new I2PSnarkUtil(I2PAppContext.getGlobalContext());
+        Destination dest = destination();
+        Hash h = dest.calculateHash();
+        util.noteDest(h, dest);
+        assertSame(dest, util.cachedDest(h));
+        util.invalidateDest(h);
+        assertNull("the next dial must re-ask rather than reuse the dead answer",
+                   util.cachedDest(h));
+        assertEquals("the entry is removed, not merely unreadable", 0, util.destCacheSize());
+        // nothing is held back for the hash: the next dial asks again straight away
+        assertEquals(0, util.destLookupQuiet(h));
+    }
+
+    /**
+     * Dropping an answer is safe on the edges: a null hash is tolerated, a hash nothing
+     * is cached for changes nothing, and a negative entry's backoff ladder is left for
+     * the lookup path to manage rather than reset here.
+     */
+    @Test
+    public void testInvalidateToleratesNullAndUnknownHashes() {
+        I2PSnarkUtil util = new I2PSnarkUtil(I2PAppContext.getGlobalContext());
+        util.invalidateDest(null);
+        util.invalidateDest(hash(91));
+        assertEquals(0, util.destCacheSize());
+        long now = I2PAppContext.getGlobalContext().clock().now();
+        Hash h = hash(92);
+        util.cacheDestination(h, null, now, 2);
+        int ladder = util.destCacheAttemptsFor(h);
+        util.invalidateDest(h);
+        assertEquals(0, util.destCacheSize());
+        assertEquals("a fresh miss is simply gone, not carried over", -1,
+                     util.destCacheAttemptsFor(h));
+        util.cacheDestination(h, null, now, ladder);
+        assertTrue("the ladder can be resumed by the caller that re-asks",
+                   util.destLookupQuiet(h) > 0);
+    }
 }

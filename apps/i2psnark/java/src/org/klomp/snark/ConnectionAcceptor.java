@@ -659,6 +659,12 @@ class ConnectionAcceptor implements Runnable {
                                + SnarkLogFormatter.dest(h));
                 }
                 _pa.connection(_socket, in, out);
+                // A successful inbound handshake carries the peer's own destination, and it
+                // arrives whether or not we dialled it. Feeding it into the destination cache
+                // makes the peer dialable without a lookup the next time we want it - the
+                // outbound half of a connection we did not open. Nothing else in snark learns
+                // a destination from an inbound connect.
+                _util.noteDest(h, _socket.getPeerDestination());
                 // A successful handshake shows the client is healthy; drop
                 // any protocol-error count so only serial failures blacklist
                 _badCounter.clear(h);
