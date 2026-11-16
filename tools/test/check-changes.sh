@@ -124,5 +124,8 @@ for p in glob.glob(os.path.join(os.environ['REPORTS'], 'TEST-*.xml')):
     e += int(r.get('errors', 0))
     if int(r.get('failures', 0)) + int(r.get('errors', 0)):
         bad.append(r.get('name'))
-print('tests', t, 'failures', f, 'errors', e, bad)
+line = 'tests: %d * failures: %d * errors: %d' % (t, f, e)
+if bad:
+    line += ' * Failing: ' + ', '.join(bad)
+print(line)
 EOF
