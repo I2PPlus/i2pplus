@@ -39,6 +39,7 @@ import net.i2p.router.ReplyJob;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
+import net.i2p.router.TunnelManagerFacade;
 import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.crypto.ratchet.ReplyCallback;
 import net.i2p.router.networkdb.kademlia.IterativeSearchJob;
@@ -707,6 +708,21 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     }
 
     /**
+     * How many outbound tunnels this session's pool can dispatch through right now.
+     * <p>Both tunnel failures reported the failure without the pool state, so the
+     * reader could not tell an empty pool from a pool whose tunnels were all too
+     * lagged to select — the first is a build problem and the second a quality
+     * problem, and the router responds to them differently.
+     *
+     * @return the usable count, or -1 if the tunnel manager is not available
+     * @since 0.9.72+
+     */
+    int outboundTunnelCount() {
+        TunnelManagerFacade tm = getContext().tunnelManager();
+        return tm != null ? tm.getOutboundClientTunnelCount(_from.calculateHash()) : -1;
+    }
+
+    /**
      * The encryption types a lease set offers, as a short readable list.
      * <p>Printed beside the "unsupported encryption" failure so a reader can tell
      * which side of the mismatch is the legacy one — the two cases need opposite
@@ -1012,7 +1028,8 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             // message, it does not queue it. The delay is trended by the rate
             // stat added next.
             _log.warnThrottled("no-out-tunnels",
-                               "No outbound tunnels to send payload through -> Failing the message");
+                               "No outbound tunnels to send payload through -> Failing the message" +
+                               " * Outbound tunnels: " + outboundTunnelCount());
             getContext().statManager().addRateData("client.dispatchNoTunnels", now - _start);
             dieFatal(MessageStatusMessage.STATUS_SEND_FAILURE_NO_TUNNELS);
             return;
@@ -1098,7 +1115,9 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             // Set to null if there are no tunnels to ack the reply back through (should we always fail for this?
             // or should we send it anyway, even if we don't receive the reply? hmm...)
             if (_log.shouldWarn()) {
-                _log.warn("Unable to create garlic message to " + _toString + " -> No available tunnels or too lagged");
+                _log.warn("Unable to create garlic message to " + _toString +
+                          " -> No available tunnels or too lagged" +
+                          " * Outbound tunnels: " + outboundTunnelCount());
             }
             getContext().statManager().addRateData("client.dispatchNoTunnels", now - _start);
             dieFatal(MessageStatusMessage.STATUS_SEND_FAILURE_NO_TUNNELS);
