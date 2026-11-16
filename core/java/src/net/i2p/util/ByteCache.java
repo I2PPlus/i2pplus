@@ -120,6 +120,17 @@ public final class ByteCache extends TryCache<ByteArray> {
 
     /**
      * Shared cache for the given entry size and capacity.
+     * <p>
+     * There is one cache per entry size for the life of the JVM, and several
+     * components ask for the same size with different capacities: the streaming
+     * managers ask for 128 of 4 KB while every connection handler asks for 32.
+     * A request larger than the capacity held grows the cache, a smaller one
+     * leaves it alone. Resizing on every request made the last caller win, and
+     * the handlers run once per stream, so each new stream cut the shared pool
+     * back to 32 and the busiest caller went back to allocating. A caller that
+     * asked for less than the pool holds may keep more entries than it asked
+     * for: the pool is sized for its largest caller, and every request is still
+     * trimmed to stay under {@link #MAX_CACHE} bytes.
      *
      * @param cacheSize the number of entries to hold, trimmed as needed to stay under MAX_CACHE
      * @param size the byte length of every cached entry, raised to at least 1 and used as the cache key
@@ -141,12 +152,20 @@ public final class ByteCache extends TryCache<ByteArray> {
             if (cache == null) {
                 cache = new ByteCache(cacheSize, size);
                 _caches.put(key, cache);
-            } else {
-                cache.resize(cacheSize); // Only resize if it already exists
-            }
-
-            if (_log.shouldInfo()) {
-                _log.info("ByteCache for " + (size / 1024) + "KB cache -> Max objects: " + cacheSize);
+                if (_log.shouldInfo()) {
+                    _log.info("Creating byte cache -> Entry size: " + size
+                              + " bytes * Entries: " + cacheSize);
+                }
+            } else if (cacheSize > cache.getCapacity()) {
+                // Grow only, and log only on the change: this is on the per-stream
+                // path, and the old unconditional resize plus INFO line ran for every
+                // stream that opened.
+                int prior = cache.getCapacity();
+                cache.resize(cacheSize);
+                if (_log.shouldInfo()) {
+                    _log.info("Raising byte cache capacity -> Entry size: " + size
+                              + " bytes * Entries: " + cacheSize + " (was: " + prior + ')');
+                }
             }
 
             return cache;
