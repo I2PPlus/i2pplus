@@ -173,6 +173,18 @@ public class OutboundCache {
      */
     final ConcurrentHashMap<Hash, Long> lsLookupInFlight = new ConcurrentHashMap<>(128, 0.9f, 16);
 
+    /**
+     * End time (epoch ms) of the suppression window for a background LeaseSet
+     * refresh started for a destination whose local LeaseSet is still usable but
+     * expiring. Unlike {@link #lsLookupInFlight}, which the next message clears as
+     * soon as it finds any local copy, this marker survives: the copy we hold is
+     * the expiring one, so clearing it on every send would start a fresh network
+     * search per message. Pruned by {@code OCMOSJCacheCleaner}.
+     *
+     * @since 0.9.72+
+     */
+    final ConcurrentHashMap<Hash, Long> lsRefreshInFlight = new ConcurrentHashMap<>(128, 0.9f, 16);
+
     /** The router sending the messages. */
     private final RouterContext _context;
 
@@ -283,6 +295,7 @@ public class OutboundCache {
         multihomedCache.clear();
         lsFailCooldown.clear();
         lsLookupInFlight.clear();
+        lsRefreshInFlight.clear();
     }
 
     /**
@@ -487,6 +500,24 @@ public class OutboundCache {
     }
 
     /**
+     * Pure decision: is a background LeaseSet refresh already marked for this
+     * destination, so a further send must not start another search?
+     * <p>A client-initiated LeaseSet search is deliberately not deduplicated by
+     * the NetDb facade (see FloodfillNetworkDatabaseFacade#search), so without a
+     * marker of our own every message to a destination with an expiring LeaseSet
+     * pays for a full iterative search.
+     *
+     * @param stamp the destination's suppression end time in ms since the epoch,
+     *              or null if no refresh is marked
+     * @param now the current clock time, in ms since the epoch
+     * @return true while the marker is in force
+     * @since 0.9.72+
+     */
+    static boolean leaseSetRefreshInFlight(Long stamp, long now) {
+        return stamp != null && stamp > now;
+    }
+
+    /**
      * Prunes last-valid timestamps older than the transient-gap grace window
      * plus one cleanup interval (so a two-minute slack is kept).
      *
@@ -509,6 +540,20 @@ public class OutboundCache {
      * @since 0.9.72+
      */
     private static void cleanLsLookupInFlight(final RouterContext ctx, final Map<Hash, Long> mc) {
+        final long now = ctx.clock().now();
+        mc.entrySet().removeIf(e -> e.getValue() < now);
+    }
+
+    /**
+     * Prunes LeaseSet refresh suppression markers whose window has passed, so a
+     * refresh whose completion callback never ran cannot keep a destination from
+     * being refreshed.
+     *
+     * @param ctx the router context for current time.
+     * @param mc  the refresh marker cache to clean.
+     * @since 0.9.72+
+     */
+    private static void cleanLsRefreshInFlight(final RouterContext ctx, final Map<Hash, Long> mc) {
         final long now = ctx.clock().now();
         mc.entrySet().removeIf(e -> e.getValue() < now);
     }
@@ -541,6 +586,7 @@ public class OutboundCache {
             cleanLsFailCooldown(_context, lsFailCooldown);
             cleanLsLastValid(_context, lsLastValid);
             cleanLsLookupInFlight(_context, lsLookupInFlight);
+            cleanLsRefreshInFlight(_context, lsRefreshInFlight);
             schedule(CLEAN_INTERVAL);
         }
     }

