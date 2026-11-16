@@ -88,18 +88,15 @@ restore_bookkeeping() {
     fi
 }
 
-# Paths already dirty before this run. An update must not sweep a hand edit to
-# one of these scripts into the release commit, so the commit skips anything the
-# pass did not make dirty itself.
-dirty_paths() {
-    git -C "${WRAPPER_DIR}" status --porcelain -- "${WRAPPER_REL}" 2>/dev/null |
-        cut -c4-
-}
-
 # The artifacts an update produces: the binaries the delta pack installs, the
 # win64 pair this script cross-compiles, and the two bookkeeping files naming
 # the release. Scripts are deliberately absent - they are source, edited by
 # hand, and they commit on their own.
+#
+# Scoping is by path pattern, not by what this pass happened to dirty: a stage
+# that failed part-way (the delta pack in, the win64 pair not) leaves the
+# binaries already modified when the update is retried, and the retry has to
+# commit the whole release, not the half it redid.
 ARTIFACT_RE='^installer/lib/wrapper/(all/wrapper\.jar|(linux64|linux64-armv8|freebsd64|freebsd-arm64|macosx|macosx-arm64|win64)/[^/]+$|version\.txt$|README\.md$)'
 
 commit_release() {
@@ -116,33 +113,27 @@ commit_release() {
         return 1
     fi
 
-    local paths p staged=""
+    local paths staged=""
     # -u --no-renames: deletions (the platforms a new delta pack drops) and
     # added binaries both have to show, and a rename would hide the old path.
-    paths=$(git -C "${gitroot}" status --porcelain -- "${WRAPPER_REL}" |
+    paths=$(git -C "${gitroot}" status --porcelain -u --no-renames -- "${WRAPPER_REL}" |
         sed -e 's/^...//' -e 's/ -> .*$//' |
         grep -E "${ARTIFACT_RE}" || true)
-    for p in ${paths}; do
-        case " ${BEFORE_DIRTY} " in
-            *" ${p} "*) continue ;;
-        esac
-        staged="${staged} ${p}"
-    done
-    if [ -z "${staged}" ]; then
+    if [ -z "${paths}" ]; then
         echo "wrapper-update.sh: no release artifacts changed against HEAD, nothing to commit"
         return 0
     fi
     # shellcheck disable=SC2086
-    git -C "${gitroot}" add -- ${staged} || {
+    git -C "${gitroot}" add -- ${paths} || {
         echo "wrapper-update.sh: staging failed, leaving the update uncommitted" >&2
         return 1
     }
-    git -C "${gitroot}" commit -q -m "installer: update wrapper to ${TARGET}" -- ${staged} || {
+    git -C "${gitroot}" commit -q -m "installer: update wrapper to ${TARGET}" -- ${paths} || {
         echo "wrapper-update.sh: the commit failed, the files stay staged" >&2
         return 1
     }
     echo "Committed $(git -C "${gitroot}" rev-parse --short HEAD): installer: update wrapper to ${TARGET}"
-    echo "  $(printf '%s\n' ${staged} | grep -c .) files"
+    echo "  $(printf '%s\n' ${paths} | grep -c .) files"
 }
 
 echo "=== Wrapper update: target ${TARGET} (version.txt pins ${PINNED:-nothing}, installed jar is ${INSTALLED:-nothing}) ==="
@@ -153,7 +144,6 @@ if [ -n "${REPO_ROOT}" ]; then
 else
     WRAPPER_REL="installer/lib/wrapper"
 fi
-BEFORE_DIRTY=$(dirty_paths)
 
 if ! "${WRAPPER_DIR}/update-wrapper.sh" --version "${TARGET}"; then
     echo "wrapper-update.sh: the delta pack stage failed" >&2
