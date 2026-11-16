@@ -12,32 +12,65 @@ WRAPPER_DIR="${SCRIPT_DIR}"
 CACHE_DIR="${WRAPPER_DIR}/cache"
 INSTALL_DIR="${WRAPPER_DIR}"
 WORK_DIR="${WRAPPER_DIR}/build-temp"
+RELEASES="${WRAPPER_DIR}/wrapper-release.sh"
+# Names the release the cross-compiled win64 pair was built from.
+WIN_BUILT_FROM="${WRAPPER_DIR}/win64/BUILT-FROM"
 
-if [ -f "${WRAPPER_DIR}/version.txt" ]; then
-    VERSION=$(grep "^WRAPPER_VERSION=" "${WRAPPER_DIR}/version.txt" | cut -d= -f2)
-else
+# The pinned release, what version.txt names.
+pinned_version() {
+    if [ -f "${WRAPPER_DIR}/version.txt" ]; then
+        grep "^WRAPPER_VERSION=" "${WRAPPER_DIR}/version.txt" | cut -d= -f2
+    fi
+}
+
+VERSION=$(pinned_version)
+if [ -z "${VERSION}" ]; then
     VERSION="3.6.4"
 fi
 
+LATEST=0
 while [[ $# -gt 0 ]]; do
     case "$1" in
         --version) VERSION="$2"; shift 2 ;;
+        --latest) LATEST=1; shift ;;
         --force) FORCE=1; shift ;;
         *) shift ;;
     esac
 done
 
-SRC_DATE="20260904"
-case "$VERSION" in
-    3.7.3) SRC_DATE="20260904" ;;
-    3.7.0) SRC_DATE="20260716" ;;
-    3.6.5) SRC_DATE="20260317" ;;
-    3.6.4) SRC_DATE="20251218" ;;
-    3.6.3) SRC_DATE="20250910" ;;
-esac
+# --latest takes the newest release on SourceForge, so the win64 build follows
+# the delta pack to the same release without anyone editing version.txt first.
+if [ "${LATEST}" -eq 1 ]; then
+    newest=$("${RELEASES}" latest) || {
+        echo "build-wrapper-win64.sh: cannot reach the SourceForge feed, staying at ${VERSION}" >&2
+        newest=""
+    }
+    if [ -n "${newest}" ] && [ "${newest}" != "${VERSION}" ]; then
+        echo "Target release ${newest} (version.txt pins ${VERSION})"
+        VERSION="${newest}"
+    fi
+fi
 
 BASE_URL="https://sourceforge.net/projects/wrapper/files/wrapper_src"
 TGZ="wrapper_${VERSION}_src.tar.gz"
+
+# The source lives in its own file area, published separately from the binaries,
+# and its folder carries the upload date in its name. Both are looked up rather
+# than remembered: a hand-kept date table went stale the day a new release
+# landed, and the download asked the previous release's folder for the new
+# source.
+SRC_DATE=$("${RELEASES}" --version "${VERSION}" date) || {
+    echo "build-wrapper-win64.sh: no release folder for ${VERSION} on SourceForge" >&2
+    exit 1
+}
+
+# Ask before downloading anything: a release whose binaries are up but whose
+# source is not published yet cannot be cross-compiled, and finding that out
+# after the make has started wastes the whole pass.
+if ! "${RELEASES}" --version "${VERSION}" has-src; then
+    echo "build-wrapper-win64.sh: wrapper ${VERSION} binaries are published but the source is not, cannot build win64 yet" >&2
+    exit 1
+fi
 
 mkdir -p "${CACHE_DIR}"
 mkdir -p "${WORK_DIR}"
@@ -55,9 +88,13 @@ sync_bookkeeping() {
 
 if [ "${FORCE:-0}" -eq 1 ]; then
     true
-elif [ -f "${WRAPPER_DIR}/win64/I2Psvc.exe" ] && [ -f "${WRAPPER_DIR}/win64/wrapper.dll" ] && [ -f "${WRAPPER_DIR}/all/wrapper.jar" ]; then
-    jar_ver=$(unzip -p "${WRAPPER_DIR}/all/wrapper.jar" META-INF/MANIFEST.MF 2>/dev/null | grep "Implementation-Version" | cut -d' ' -f2 | tr -d '\r')
-    if [ "${jar_ver}" = "${VERSION}" ]; then
+elif [ -f "${WIN_BUILT_FROM}" ] && [ -f "${WRAPPER_DIR}/win64/I2Psvc.exe" ] && [ -f "${WRAPPER_DIR}/win64/wrapper.dll" ]; then
+    # The marker, not the jar's manifest: wrapper.jar arrives from the delta
+    # pack while the win64 pair is cross-compiled here, so the two can drift,
+    # and a jar already bumped by the delta-pack stage would otherwise certify
+    # a win64 pair still built from the previous release's source.
+    built_from=$(cat "${WIN_BUILT_FROM}")
+    if [ "${built_from}" = "${VERSION}" ]; then
         echo "Nothing to do, all win64 wrapper files are up to date."
         sync_bookkeeping
         exit 0
@@ -82,7 +119,10 @@ done
 
 if [ ! -d "${SRC_CACHE_DIR}" ]; then
     echo "=== Downloading Wrapper ${VERSION} Source ==="
-    curl -L -o "${CACHE_DIR}/${TGZ}" "${BASE_URL}/Wrapper_${VERSION}_${SRC_DATE}/${TGZ}"
+    echo "URL: ${BASE_URL}/Wrapper_${VERSION}_${SRC_DATE}/${TGZ}"
+    # -f so a 404 fails here instead of writing SourceForge's HTML 404 page into
+    # the tarball cache, which the untar then reports as "not in gzip format".
+    curl -fSL "${BASE_URL}/Wrapper_${VERSION}_${SRC_DATE}/${TGZ}" -o "${CACHE_DIR}/${TGZ}"
     tar -xzf "${CACHE_DIR}/${TGZ}" -C "${CACHE_DIR}"
     echo "Cached at: ${SRC_CACHE_DIR}"
 else
@@ -101,6 +141,29 @@ WIN_DIR="win64"
 command -v ${HOST}-gcc >/dev/null || { echo "Need ${HOST}-gcc"; exit 1; }
 command -v ${HOST}-windres >/dev/null || { echo "Need ${HOST}-windres"; exit 1; }
 command -v clang >/dev/null || { echo "Need clang (compiles the SEH source wrapper_win.c)"; exit 1; }
+
+# GCC 14 promoted incompatible-pointer-types from a warning to an error, and the
+# wrapper's Windows sources trip on it: they size the out-params of ReadFile,
+# WriteFile and _tstat as written for MSVC, where DWORD and time_t are 4 bytes,
+# where the mingw-w64 headers declare them as 8-byte long and 64-bit time_t.
+# Upstream ships mingw-built binaries built under exactly this warning, so the
+# pass keeps the diagnostic visible and only drops it back to non-fatal.
+#
+# Probed, not version-tested: the flag is accepted by gcc since 4.4 and by
+# clang, so the same pass runs on a pre-14 toolchain (where it is a no-op) and a
+# 14+ one (where it is what lets the build finish), and a toolchain that does not
+# know the flag at all simply builds without it.
+PERMISSIVE=""
+if ${HOST}-gcc -Wno-error=incompatible-pointer-types -E -xc /dev/null >/dev/null 2>&1; then
+    echo 'int main(void){int i; char *p=&i; return *p;}' > ptr-probe.c
+    if ${HOST}-gcc -c ptr-probe.c -o ptr-probe.o >/dev/null 2>&1; then
+        echo "Toolchain already tolerates the wrapper's MSVC-sized win32 pointers"
+    else
+        PERMISSIVE="-Wno-error=incompatible-pointer-types"
+        echo "Toolchain treats incompatible pointer types as errors, downgrading to a warning"
+    fi
+    rm -f ptr-probe.c ptr-probe.o
+fi
 
 cp wrapper_win.c wrapper_win.c.orig 2>/dev/null || true
 cp wrapper.c wrapper.c.orig 2>/dev/null || true
@@ -220,7 +283,7 @@ cat > Makefile-windows-x64.mingw << 'MAKEFILE'
 CC = x86_64-w64-mingw32-gcc
 CC_SEH = clang --target=x86_64-w64-windows-gnu -fms-extensions
 RC = x86_64-w64-mingw32-windres
-WIN_FLAGS = -O2 -DWIN32 -DWIN64 -DNDEBUG -D_UNICODE -DUNICODE -D_WIN32_WINNT=0x0601 -DHAVE_EADDRINUSE
+WIN_FLAGS = -O2 -DWIN32 -DWIN64 -DNDEBUG -D_UNICODE -DUNICODE -D_WIN32_WINNT=0x0601 -DHAVE_EADDRINUSE $(PERMISSIVE)
 LDFLAGS = -lws2_32 -lshlwapi -ladvapi32 -luser32 -lcrypt32 -lwintrust -lpdh -lpsapi -lole32 -loleaut32 -lactiveds -ladsiid -lmpr -lshell32 -lnetapi32 -lbcrypt -lntdll -lwtsapi32 -lwevtapi -ldbghelp -liphlpapi
 
 OBJS = wrapper.o wrapperinfo.o wrappereventloop.o wrapper_jvm_launch.o \
@@ -255,7 +318,7 @@ clean:
 MAKEFILE
 
 rm -f *.o ../../src/bin/wrapper.exe
-make -f Makefile-windows-x64.mingw
+make -f Makefile-windows-x64.mingw JNI_INC="${JNI_INC}" JNI_WIN_INC="${JNI_WIN_INC}" PERMISSIVE="${PERMISSIVE}"
 
 if [ ! -f "${SRC_DIR}/src/bin/wrapper.exe" ]; then
     echo "Build failed"
@@ -335,7 +398,7 @@ SHIM
 
 cat > Makefile-windows-x64-dll.mingw << 'MAKEFILE'
 CC = x86_64-w64-mingw32-gcc
-DLL_FLAGS = -O2 -DWIN32 -DWIN64 -DNDEBUG -D_UNICODE -DUNICODE -D_WINDOWS -D_USRDLL -DDECODERJNI_VC8_EXPORTS -D_WINDLL -D_WIN32_WINNT=0x0601
+DLL_FLAGS = -O2 -DWIN32 -DWIN64 -DNDEBUG -D_UNICODE -DUNICODE -D_WINDOWS -D_USRDLL -DDECODERJNI_VC8_EXPORTS -D_WINDLL -D_WIN32_WINNT=0x0601 $(PERMISSIVE)
 # Link order matters: --start-group/--end-group resolves circular deps between
 # libucrt.a, libucrtbase.a, and libmingwex.a.  libucrt.a provides CRT symbols
 # backed by ucrtbase.dll; libucrtbase.a adds ucrt-specific I/O; libmingwex.a
@@ -362,7 +425,7 @@ clean:
 	rm -f $(OBJS) wrapper-dllmain.c wrapper.dll
 MAKEFILE
 
-make -f Makefile-windows-x64-dll.mingw JNI_INC="${JNI_INC}" JNI_WIN_INC="${JNI_WIN_INC}"
+make -f Makefile-windows-x64-dll.mingw JNI_INC="${JNI_INC}" JNI_WIN_INC="${JNI_WIN_INC}" PERMISSIVE="${PERMISSIVE}"
 
 if [ ! -f wrapper.dll ]; then
     echo "DLL build failed"

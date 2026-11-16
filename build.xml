@@ -6307,15 +6307,18 @@
   </target>
 
   <target name="updateWrapper">
+    <!-- No default: the target picks the newest release unless the caller
+         pins one with -Dwrapper.update.args, e.g. a value of "pinned" or
+         "version 3.7.3" prefixed by two dashes. An undefined property would
+         reach /bin/sh as a literal ${...} and fail as a bad substitution, so
+         name it here. -->
+    <condition property="wrapper.update.args" value="">
+      <not><isset property="wrapper.update.args"/></not>
+    </condition>
     <echo message="Updating Tanuki Wrapper..."/>
     <exec executable="/bin/sh" dir="${basedir}/installer/lib/wrapper" failonerror="true">
       <arg value="-c"/>
-      <arg value="./update-wrapper.sh"/>
-    </exec>
-    <echo message="Building Windows x64 binaries..."/>
-    <exec executable="/bin/sh" dir="${basedir}/installer/lib/wrapper" failonerror="true">
-      <arg value="-c"/>
-      <arg value="./build-wrapper-win64.sh"/>
+      <arg value="./wrapper-update.sh ${wrapper.update.args}"/>
     </exec>
     <echo message="Wrapper update complete."/>
   </target>

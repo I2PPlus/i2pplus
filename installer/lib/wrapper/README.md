@@ -1,9 +1,9 @@
 # Tanuki Java Service Wrapper
 
 This directory contains the Tanuki Java Service Wrapper binaries for all supported platforms.
-The wrapper version is managed via `version.txt` (currently **3.7.3**), and
+The wrapper version is managed via `version.txt` (currently **3.7.4**), and
 `README.md` names the same version. `sync-wrapper-version.sh` keeps the two in
-step; `update-wrapper.sh` and `build-wrapper-win64.sh` run it for you.
+step; `wrapper-update.sh` and the scripts it runs do that for you.
 
 ## Automated Updates
 
@@ -12,15 +12,60 @@ step; `update-wrapper.sh` and `build-wrapper-win64.sh` run it for you.
 The easiest way to update all wrapper binaries:
 
 ```bash
-ant updateWrapper
+ant updateWrapper                        # newest release on SourceForge
+ant updateWrapper -Dwrapper.update.args="--pinned"   # only what version.txt names
+ant updateWrapper -Dwrapper.update.args="--version 3.7.3"
+ant updateWrapper -Dwrapper.update.args="--no-commit"  # install, do not commit
 ```
 
 This will:
-1. Download the delta pack and update Unix/Linux/FreeBSD/macOS binaries
-2. Download source and cross-compile Windows x64 binaries
-3. Automatically remove obsolete platforms not in the current delta pack
+1. Ask SourceForge which release is newest (`wrapper-release.sh`)
+2. Download the delta pack and update Unix/Linux/FreeBSD/macOS binaries
+3. Download source and cross-compile Windows x64 binaries
+4. Automatically remove obsolete platforms not in the current delta pack
+5. Name the new release in `version.txt` and this file only once the build passed
+6. Commit the release - binaries, `version.txt` and this file only, never the
+   scripts - as `installer: update wrapper to X.Y.Z`
+
+A release folder on SourceForge is named `Wrapper_<version>_<date>`, and that
+date is part of every download URL, so it is looked up at run time rather than
+kept in a table by hand — a remembered date goes stale the day a new release
+lands, and the download then asks the previous release's folder for the new one.
+If either stage fails, `version.txt` and this file are put back at the release
+the tree actually holds. Pass `--no-commit` (as an ant property, see above) to
+install the release and leave it unstaged.
+
+`win64/BUILT-FROM` names the release the cross-compiled Windows pair was built
+from. The jar's manifest cannot answer that: the jar comes from the delta pack
+and the pair is built here, so the two can drift, and a jar the delta pack
+already bumped would otherwise certify a win64 pair still built from the
+previous release's source.
 
 ### Manual Scripts
+
+#### wrapper-update.sh
+
+Runs both stages and rolls the bookkeeping files back if either fails:
+
+```bash
+./wrapper-update.sh                       # newest release
+./wrapper-update.sh --pinned              # version.txt's release
+./wrapper-update.sh --version 3.7.3       # one release
+```
+
+#### wrapper-release.sh
+
+Asks SourceForge which releases exist. Used by the other scripts; handy on its own:
+
+```bash
+./wrapper-release.sh latest                       # newest version number
+./wrapper-release.sh --version 3.7.4 date         # folder date for the URL
+./wrapper-release.sh --version 3.7.4 has-src      # is the source published yet?
+```
+
+The binaries (`/wrapper`) and the source (`/wrapper_src`) are published
+separately, so a new release can have downloadable binaries and no source yet;
+`build-wrapper-win64.sh` checks before it downloads anything.
 
 #### update-wrapper.sh
 
@@ -28,6 +73,7 @@ Downloads delta pack and updates Unix binaries:
 
 ```bash
 ./update-wrapper.sh              # Update using version.txt
+./update-wrapper.sh --latest     # Newest release on SourceForge
 ./update-wrapper.sh --version 3.6.5  # Specific version
 ```
 
@@ -42,6 +88,7 @@ sudo apt install mingw-w64
 
 ```bash
 ./build-wrapper-win64.sh         # Build using version.txt
+./build-wrapper-win64.sh --latest     # Newest release on SourceForge
 ./build-wrapper-win64.sh --version 3.6.5  # Specific version
 ```
 

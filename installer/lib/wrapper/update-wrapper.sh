@@ -8,31 +8,54 @@
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 WRAPPER_DIR="${SCRIPT_DIR}"
 CACHE_DIR="${WRAPPER_DIR}/cache"
+RELEASES="${WRAPPER_DIR}/wrapper-release.sh"
 
-if [ -f "${WRAPPER_DIR}/version.txt" ]; then
-    VERSION=$(grep "^WRAPPER_VERSION=" "${WRAPPER_DIR}/version.txt" | cut -d= -f2)
-else
+# The pinned release, what version.txt names.
+pinned_version() {
+    if [ -f "${WRAPPER_DIR}/version.txt" ]; then
+        grep "^WRAPPER_VERSION=" "${WRAPPER_DIR}/version.txt" | cut -d= -f2
+    fi
+}
+
+VERSION=$(pinned_version)
+if [ -z "${VERSION}" ]; then
     VERSION="3.6.4"
 fi
 
+LATEST=0
 while [[ $# -gt 0 ]]; do
     case "$1" in
         --version) VERSION="$2"; shift 2 ;;
+        --latest) LATEST=1; shift ;;
         *) shift ;;
     esac
 done
 
-SRC_DATE="20260904"
-case "$VERSION" in
-    3.7.3) SRC_DATE="20260904" ;;
-    3.7.0) SRC_DATE="20260716" ;;
-    3.6.5) SRC_DATE="20260317" ;;
-    3.6.4) SRC_DATE="20251218" ;;
-    3.6.3) SRC_DATE="20250910" ;;
-esac
+# --latest takes the newest release on SourceForge, so a bump needs no edit to
+# version.txt first; the file follows the build in sync_bookkeeping, and the
+# caller rolls it back if the build fails.
+if [ "${LATEST}" -eq 1 ]; then
+    newest=$("${RELEASES}" latest) || {
+        echo "update-wrapper.sh: cannot reach the SourceForge feed, staying at ${VERSION}" >&2
+        newest=""
+    }
+    if [ -n "${newest}" ] && [ "${newest}" != "${VERSION}" ]; then
+        echo "Target release ${newest} (version.txt pins ${VERSION})"
+        VERSION="${newest}"
+    fi
+fi
 
 BASE_URL="https://sourceforge.net/projects/wrapper/files/wrapper"
 DELTA_PACK="wrapper-delta-pack-${VERSION}.zip"
+
+# The release folder carries the upload date in its name, and that date is part
+# of the download URL. Looked up rather than remembered: a hand-kept table of
+# dates went stale the day a new release landed, and the download asked the
+# previous release's folder for the new one - a 404.
+SRC_DATE=$("${RELEASES}" --version "${VERSION}" date) || {
+    echo "update-wrapper.sh: no release folder for ${VERSION} on SourceForge" >&2
+    exit 1
+}
 
 mkdir -p "${CACHE_DIR}"
 
@@ -49,13 +72,27 @@ check_up_to_date() {
     [ -f "${WRAPPER_DIR}/win64/I2Psvc.exe" ] || return 1
     [ -f "${WRAPPER_DIR}/macosx/libwrapper-macosx-universal-64.jnilib" ] || return 1
 
-    local jar_ver=$(unzip -p "${WRAPPER_DIR}/all/wrapper.jar" META-INF/MANIFEST.MF 2>/dev/null | grep "Implementation-Version" | cut -d' ' -f2 | tr -d '\r')
-    [ "${jar_ver}" = "${VERSION}" ] || {
+    [ "$(jar_version "${WRAPPER_DIR}/all/wrapper.jar")" = "${VERSION}" ] || {
+        local jar_ver=$(jar_version "${WRAPPER_DIR}/all/wrapper.jar")
         [ -n "${jar_ver}" ] && echo "Installed wrapper.jar is ${jar_ver}, target is ${VERSION}"
         return 1
     }
 
     return 0
+}
+
+# The version a jar was built as, from its manifest.
+jar_version() {
+    unzip -p "$1" META-INF/MANIFEST.MF 2>/dev/null |
+        grep "Implementation-Version" | cut -d' ' -f2 | tr -d '\r'
+}
+
+# A delta pack is only cached if it unpacked: an earlier run that downloaded a
+# 404 page and tried to unzip it left an empty deltapack_<version>/ behind, and
+# the next run trusted the directory, copied nothing, and still called itself
+# up to date.
+delta_pack_cached() {
+    [ -f "${DELTA_DIR}/wrapper-delta-pack-${VERSION}/lib/wrapper.jar" ]
 }
 
 # version.txt and README.md name the version, whatever the update did.
@@ -86,24 +123,44 @@ for f in "${CACHE_DIR}"/*delta*.zip; do
     fi
 done
 
-if [ -d "${DELTA_DIR}" ]; then
+if delta_pack_cached; then
     echo "Using cached delta pack: ${DELTA_DIR}"
 else
+    [ -d "${DELTA_DIR}" ] && {
+        echo "Discarding incomplete delta pack cache: ${DELTA_DIR}"
+        rm -rf "${DELTA_DIR}"
+    }
     echo "=== Downloading Delta Pack ${VERSION} ==="
     echo "URL: ${BASE_URL}/Wrapper_${VERSION}_${SRC_DATE}/${DELTA_PACK}"
 
-    curl -fSL "${BASE_URL}/Wrapper_${VERSION}_${SRC_DATE}/${DELTA_PACK}" -o "${DELTA_CACHE}"
+    curl -fSL "${BASE_URL}/Wrapper_${VERSION}_${SRC_DATE}/${DELTA_PACK}" -o "${DELTA_CACHE}" || {
+        echo "update-wrapper.sh: the delta pack download failed" >&2
+        rm -f "${DELTA_CACHE}"
+        exit 1
+    }
 
     echo "Extracting..."
     mkdir -p "${DELTA_DIR}"
-    unzip -qo "${DELTA_CACHE}" -d "${DELTA_DIR}"
+    unzip -qo "${DELTA_CACHE}" -d "${DELTA_DIR}" || {
+        echo "update-wrapper.sh: the downloaded delta pack is not a zip" >&2
+        rm -rf "${DELTA_DIR}" "${DELTA_CACHE}"
+        exit 1
+    }
+    delta_pack_cached || {
+        echo "update-wrapper.sh: the delta pack unpacked without a wrapper.jar in it" >&2
+        rm -rf "${DELTA_DIR}" "${DELTA_CACHE}"
+        exit 1
+    }
 fi
 
 LIB="${DELTA_DIR}/wrapper-delta-pack-${VERSION}/lib"
 BIN="${DELTA_DIR}/wrapper-delta-pack-${VERSION}/bin"
 
 echo "Updating wrapper.jar..."
-cp "${LIB}/wrapper.jar" "${WRAPPER_DIR}/all/wrapper.jar"
+cp "${LIB}/wrapper.jar" "${WRAPPER_DIR}/all/wrapper.jar" || {
+    echo "update-wrapper.sh: no wrapper.jar in the delta pack" >&2
+    exit 1
+}
 
 echo "Updating platform binaries..."
 
