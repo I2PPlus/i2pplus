@@ -2791,6 +2791,64 @@ class Connection {
     }
 
     /**
+     * Pure decision: the per-packet resend budget for a stream that has already
+     * made forward progress.
+     * <p>An established stream is deliberately allowed past the connect-phase
+     * budget - see {@link #budgetExhaustionClosesConnection(boolean, boolean)} -
+     * because a head-of-line hole is not a dead path. "Past" was unbounded,
+     * though: the only thing that ended it was the wall-clock backstop, by which
+     * point one packet had been retransmitted 181 times in 90s. Deriving the
+     * ceiling from {@code maxResends} keeps a single knob, so raising the
+     * connect-phase budget raises the established one with it.
+     *
+     * @param configured the per-connection override, 0 to derive it
+     * @param maxResends the connect-phase budget
+     * @return the send count past which an established stream stops resending
+     *         the packet, never below 1
+     * @since 0.9.72+
+     */
+    static int effectiveEstablishedMaxResends(int configured, int maxResends) {
+        return configured > 0 ? configured : Math.max(1, maxResends * 2);
+    }
+
+    /**
+     * Pure decision: has an established stream exhausted its (larger) per-packet
+     * resend budget? Soft-failure resends are excluded exactly as in
+     * {@link #hardResendBudgetExceeded(int, int, int)} - a resend the router
+     * asked for never reached the tunnel fabric, so it is not evidence of a hole
+     * in the path.
+     *
+     * @param totalSends times this packet has been sent, including soft resends
+     * @param softResends of those, the sends triggered by a router soft failure
+     * @param configuredMax the per-connection established override, 0 to derive
+     * @param maxResends the connect-phase budget
+     * @return true if the packet has been resent past the established budget
+     * @since 0.9.72+
+     */
+    static boolean establishedResendBudgetExceeded(int totalSends, int softResends,
+                                                   int configuredMax, int maxResends) {
+        return Math.max(0, totalSends - softResends) >
+               effectiveEstablishedMaxResends(configuredMax, maxResends);
+    }
+
+    /**
+     * Pure decision: log this resend, or let a later line carry the count?
+     * <p>One line per send per packet is the largest single producer of log
+     * volume in this layer: 123,962 lines in one 22-minute rotation, 71% of them
+     * from a single connection, with the tail reaching 181 sends of one packet.
+     * The first sends of a packet are where a stall becomes visible, so log
+     * those in full and then every tenth send - 21 lines instead of 181 for that
+     * measured packet, with the count still reported as it grows.
+     *
+     * @param numSends times this packet has been sent, as reported in the line
+     * @return true if this resend should be logged
+     * @since 0.9.72+
+     */
+    static boolean shouldLogResend(int numSends) {
+        return numSends <= 3 || numSends % 10 == 0;
+    }
+
+    /**
      * Pure decision: should an exhausted per-packet retransmit budget close the
      * connection?
      * <p>Once a connection has made forward progress (any packet acknowledged) it
@@ -3419,6 +3477,23 @@ class Connection {
                           " * Pumped through " + sched);
             }
         }
+    }
+
+    /**
+     * Tell the manager this path to the peer died, so the next connect to that
+     * destination waits out its cooldown instead of paying the stall again.
+     * <p>Only a death after the stream established belongs here: a connect that
+     * never established is recorded by
+     * {@link ConnectionManager#finalizeConnection} from the error
+     * {@code waitForConnect()} reports, and recording it here as well would
+     * escalate one failure into two strikes.
+     *
+     * @since 0.9.72+
+     */
+    void recordPathFailure() {
+        Destination peer = _remotePeer;
+        if (peer != null && _highestAckedThrough.get() >= 0)
+            _connectionManager.recordPathFailure(peer.calculateHash());
     }
 
     /**
@@ -5074,6 +5149,7 @@ class Connection {
             boolean backstopDisconnect = checkLivenessBackstop();
             if (backstopDisconnect) {
                 if (_connectionError == null) {setConnectionError(ERR_RETRANSMIT_LIMIT);}
+                recordPathFailure();
                 disconnect(false);
                 return;
             }
@@ -5284,11 +5360,36 @@ class Connection {
                     // Debug, not warn. The budget is the connect-phase give-up
                     // rule; once the connection is established and has
                     // acknowledged data the exhaustion does not bind - the packet
-                    // is a path hole, not a dead path, and the terminal bound is
-                    // the creation-anchored stall backstop below. Nothing for the
-                    // operator to do, and 359 of these fired in four minutes.
+                    // is a path hole, not a dead path. The terminal bounds are the
+                    // larger established budget just below and the creation-
+                    // anchored stall backstop. Nothing for the operator to do, and
+                    // 359 of these fired in four minutes.
                     if (_log.shouldDebug())
-                        _log.debug(shortLabel() + " -> Established, resends continue after the connect-phase budget");
+                        _log.debug(shortLabel() + " -> Established, resends continue past the connect-phase budget");
+                }
+                // The established budget: past the connect-phase cap, but not
+                // unbounded. Measured on a live router, one head-of-line packet
+                // was resent 181 times in the 90s before the wall clock closed the
+                // stream; this cuts that to twice the connect-phase budget. Same
+                // error as the connect-phase give-up so the application sees one
+                // failure shape, and the destination is cooled down because this
+                // is the death the connect-time cooldown never recorded.
+                // Throttled with no shouldWarn() guard, like the stall backstop:
+                // the suppressor has to see every occurrence for its count.
+                if (forwardProgress &&
+                    establishedResendBudgetExceeded(nResends, packet.getNumSoftResends(),
+                                                    _options.getEstablishedMaxResends(),
+                                                    _options.getMaxResends())) {
+                    _log.warnThrottled("streaming-established-cap",
+                                       shortLabel() + " -> Established retransmit budget exhausted, closing" +
+                                       " * Sends: " + nResends + " * Cap: " +
+                                       effectiveEstablishedMaxResends(_options.getEstablishedMaxResends(),
+                                                                      _options.getMaxResends()));
+                    packet.cancelled();
+                    if (_connectionError == null) {setConnectionError(ERR_RETRANSMIT_LIMIT);}
+                    recordPathFailure();
+                    disconnect(false);
+                    return;
                 }
                 if (packet.getNumSends() >= 3 &&
                            packet.isFlagSet(Packet.FLAG_CLOSE) &&
@@ -5405,7 +5506,7 @@ class Connection {
                         if (_outboundQueue.enqueue(packet)) {
                             burstCount++;
                             if (softPass) {packet.incrementSoftResends();}
-                            if (_log.shouldInfo()) {
+                            if (_log.shouldInfo() && shouldLogResend(packet.getNumSends())) {
                                 _log.info(shortLabel() + " -> Resending packet * Sends so far: " + packet.getNumSends()
                                           + " * Sequence: " + packet.getSequenceNum() + packet.formatAsString(false));
                             }
@@ -5430,7 +5531,7 @@ class Connection {
                         } else {
                             if (_outboundQueue.enqueue(packet)) {
                                 if (softPass) {packet.incrementSoftResends();}
-                                if (_log.shouldInfo()) {
+                                if (_log.shouldInfo() && shouldLogResend(packet.getNumSends())) {
                                     _log.info(shortLabel() + " -> Resending packet * Sends so far: " + packet.getNumSends()
                                               + " * Sequence: " + packet.getSequenceNum() + packet.formatAsString(false));
                                 }
@@ -5867,6 +5968,7 @@ synchronized boolean checkRetransmitStall() {
                 }
                 _packet.cancelled();
                 if (_connectionError == null) {setConnectionError(ERR_RETRANSMIT_LIMIT);}
+                recordPathFailure();
                 disconnect(false);
             } else if (numSends >= 3 &&
                        _packet.isFlagSet(Packet.FLAG_CLOSE) &&

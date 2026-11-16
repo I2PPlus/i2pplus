@@ -60,6 +60,12 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     private int _maxInitialMessageSize;
     /** Max resends. */
     private int _maxResends;
+    /**
+     * Per-packet resend budget for a stream that has already made forward
+     * progress; 0 derives it as twice {@link #_maxResends}. See
+     * PROP_ESTABLISHED_MAX_RESENDS.
+     */
+    private int _establishedMaxResends;
     /** Wall-clock ms an established connection may hold an unacked packet; see PROP_STALL_GIVEUP_MS. */
     private long _stallGiveupMs = DEFAULT_STALL_GIVEUP_MS;
     /** Inactivity timeout. */
@@ -324,6 +330,18 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     public static final String PROP_MAX_MESSAGE_SIZE = "i2p.streaming.maxMessageSize";
     /** Maximum number of times a message is resent. */
     public static final String PROP_MAX_RESENDS = "i2p.streaming.maxResends";
+
+    /**
+     * Per-packet resend budget for a stream that has already acknowledged data.
+     * 0 (the default) derives it as twice {@link #PROP_MAX_RESENDS}. The
+     * connect-phase budget is what gives up on a dead path; an established
+     * stream may carry a temporary path hole, but not indefinitely - without a
+     * ceiling a single stuck head-of-line packet is retransmitted until the
+     * wall-clock backstop closes the stream, measured at 181 sends of one
+     * packet in 90s.
+     * @since 0.9.72+
+     */
+    public static final String PROP_ESTABLISHED_MAX_RESENDS = "i2p.streaming.establishedMaxResends";
     /** Initial delay before retransmitting, in ms. */
     public static final String PROP_INITIAL_RESEND_DELAY = "i2p.streaming.initialResendDelay";
     /** Initial delay before sending an ACK, in ms. */
@@ -853,6 +871,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
             setResendDelay(opts.getResendDelay());
             setMaxMessageSize(opts.getMaxMessageSize());
             setMaxResends(opts.getMaxResends());
+            setEstablishedMaxResends(opts.getEstablishedMaxResends());
             setStallGiveupMs(opts.getStallGiveupMs());
             setInactivityTimeout(opts.getInactivityTimeout());
             setInactivityAction(opts.getInactivityAction());
@@ -933,6 +952,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         applyInt(opts, PROP_INITIAL_ACK_DELAY, defaultInitialAckDelay, onlyIfSet, this::setSendAckDelay);
         applyInt(opts, PROP_INITIAL_WINDOW_SIZE, initialWindowSize, onlyIfSet, this::setWindowSize);
         applyInt(opts, PROP_MAX_RESENDS, DEFAULT_MAX_SENDS, onlyIfSet, this::setMaxResends);
+        applyInt(opts, PROP_ESTABLISHED_MAX_RESENDS, 0, onlyIfSet, this::setEstablishedMaxResends);
         applyLong(opts, PROP_STALL_GIVEUP_MS, DEFAULT_STALL_GIVEUP_MS, onlyIfSet, this::setStallGiveupMs);
         applyInt(opts, PROP_INACTIVITY_TIMEOUT, defaultInactivityTimeout, onlyIfSet, this::setInactivityTimeout);
         applyInt(opts, PROP_INACTIVITY_ACTION, DEFAULT_INACTIVITY_ACTION, onlyIfSet, this::setInactivityAction);
@@ -1429,6 +1449,25 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     public void setMaxResends(int numSends) {_maxResends = Math.max(numSends, 0);}
 
     /**
+     * Per-packet resend budget for a stream that has already acknowledged data.
+     *
+     * @return the configured budget, or 0 if it is to be derived from
+     *         {@link #getMaxResends()}
+     * @since 0.9.72+
+     */
+    public int getEstablishedMaxResends() {return _establishedMaxResends;}
+
+    /**
+     * Per-packet resend budget for a stream that has already acknowledged data.
+     * See {@link #PROP_ESTABLISHED_MAX_RESENDS}.
+     *
+     * @param numSends the budget; 0 derives twice {@link #getMaxResends()},
+     *                 negative clamps to 0
+     * @since 0.9.72+
+     */
+    public void setEstablishedMaxResends(int numSends) {_establishedMaxResends = Math.max(numSends, 0);}
+
+    /**
      * Inactivity timeout before action in ms.
      * @return the idle time before the inactivity action fires, in ms
      */
@@ -1734,6 +1773,9 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         opts.add(new Option("Ack delay", Integer.valueOf(_ackDelay), formatDuration(_ackDelay)));
         opts.add(new Option("Window size", Integer.valueOf(_windowSize), formatBytes(_windowSize)));
         opts.add(new Option("Max resends", Integer.valueOf(_maxResends), String.valueOf(_maxResends)));
+        opts.add(new Option("Established resends", Integer.valueOf(_establishedMaxResends),
+                            _establishedMaxResends > 0 ? String.valueOf(_establishedMaxResends) :
+                                                        "twice max resends"));
         opts.add(new Option("Stall give-up", Long.valueOf(_stallGiveupMs), formatDuration(_stallGiveupMs)));
         opts.add(new Option("Write timeout", Long.valueOf(getWriteTimeout()), formatTimeout(getWriteTimeout())));
         opts.add(new Option("Read timeout", Long.valueOf(getReadTimeout()), formatTimeout(getReadTimeout())));

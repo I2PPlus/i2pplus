@@ -95,30 +95,39 @@ class ConnectionManager {
 
     /**
      * Per-destination cooldown to avoid hammering unreachable peers.
-     * Key is destination Hash, value is timestamp of last failed connect.
+     * Key is destination Hash, value is {ms of the last failure, consecutive
+     * failures, whether that failure was a stream that died after it
+     * established} - the strike count is what grows the cooldown, so a peer that
+     * failed once is retried promptly and one that keeps failing is not. The
+     * third element decides whether a successful connect may forget the record:
+     * a connect that failed is forgotten once one succeeds, a stream that died
+     * mid-life is not, because the connect before it dying succeeded too.
+     * Mutated only through {@link #recordPathFailure} and the compute in
+     * {@link #finalizeConnection}, so a record is never read half-updated.
      */
-    private final ConcurrentHashMap<Hash, Long> _destFailures = new ConcurrentHashMap<>(4);
+    private final ConcurrentHashMap<Hash, long[]> _destFailures = new ConcurrentHashMap<>(4);
 
     /**
-     * When we last logged the "Delaying connect" cooldown WARN per destination.
-     * Complements {@link #_destFailures}: a dest that keeps failing re-enters
-     * cooldown (and thus arms the WARN) on every attempt, so without this the
-     * message would fire once per connect() against an unreachable peer. The
-     * key is pruned together with {@link #_destFailures} using the same cutoff.
+     * When we last logged the "Delaying connect" cooldown line per destination
+     * (DEBUG). Complements {@link #_destFailures}: a dest that keeps failing
+     * re-enters cooldown (and thus arms the line) on every attempt, so without
+     * this the message would fire once per connect() against an unreachable
+     * peer. The key is pruned together with {@link #_destFailures} using the
+     * same cutoff.
      * @since 0.9.71+
      */
     private final ConcurrentHashMap<Hash, Long> _cooldownWarned = new ConcurrentHashMap<>(4);
 
     /**
-     * Whether to log another cooldown-delay WARN for a destination.
-     * Rate-limits to one warning per cooldown window per destination so a peer
+     * Whether to log another cooldown-delay line for a destination.
+     * Rate-limits to one per cooldown window per destination so a peer
      * that keeps failing to connect cannot turn every retry into a log line.
-     * A value of 0 (never warned, or pruned) always logs.
+     * A value of 0 (never logged, or pruned) always logs.
      *
-     * @param lastWarnTime last timestamp the WARN was emitted for this dest, 0 if never
+     * @param lastWarnTime last timestamp the line was emitted for this dest, 0 if never
      * @param now          router clock time in milliseconds
-     * @param cooldownMs   length of the cooldown window that arms the WARN
-     * @return true if the WARN should be emitted
+     * @param cooldownMs   length of the cooldown window that arms the line
+     * @return true if the line should be emitted
      * @since 0.9.71+
      */
     static boolean shouldLogCooldownWarn(long lastWarnTime, long now, long cooldownMs) {
@@ -158,6 +167,85 @@ class ConnectionManager {
             }
         }
         return clock.now() - start;
+    }
+
+    /**
+     * Pure decision: how long a destination stays in connect cooldown after a
+     * failure.
+     * <p>A flat window is the wrong size at both ends. Measured on a live
+     * router: one stream to a peer established, then died on the 90s liveness
+     * backstop six times in thirteen minutes, each attempt reconnecting ~16s
+     * after the last - a flat 5s window against a 90s failure cost spends 6% of
+     * the time waiting. But a peer that merely lost one connect should not be
+     * punished for an hour. So the window doubles per consecutive failure,
+     * from the configured base up to the ceiling.
+     *
+     * @param failures consecutive failures recorded for this destination, 1 for the first
+     * @param baseMs the configured base window, non-positive to disable the cooldown
+     * @param maxMs the ceiling the escalating window may reach
+     * @return ms to wait before the next connect attempt, 0 if disabled
+     * @since 0.9.72+
+     */
+    static long destCooldownMs(int failures, long baseMs, long maxMs) {
+        if (baseMs <= 0)
+            return 0;
+        long ceiling = Math.max(baseMs, maxMs);
+        long ms = baseMs;
+        for (int i = 1; i < failures && ms < ceiling; i++)
+            ms = ceiling - ms >= ms ? ms * 2 : ceiling;
+        return ms;
+    }
+
+    /**
+     * Pure decision: the record to store for a failure against a destination.
+     * The strike count only ever grows, so a record read concurrently with a
+     * second failure cannot lose the escalation.
+     *
+     * @param prior the destination's existing record, or null if none
+     * @param now the clock time of this failure, in ms since the epoch
+     * @param fromPath true if a stream died after it established, false for a
+     *                 connect that never got there
+     * @return {now, consecutive failures, 1 if fromPath else 0}
+     * @since 0.9.72+
+     */
+    static long[] recordFailure(long[] prior, long now, boolean fromPath) {
+        int strikes = prior == null ? 1 : (int) Math.max(1, prior[1]) + 1;
+        return new long[] {now, strikes, fromPath ? 1 : 0};
+    }
+
+    /**
+     * Pure decision: may a connect that succeeded forget this destination's
+     * failure record?
+     * <p>A connect that failed and a connect that then worked says the path was
+     * briefly broken, so the record has done its job. A stream that died after it
+     * established says something different: the connect that preceded the death
+     * also succeeded, so clearing on the next success throws away everything the
+     * deaths taught us and the destination is retried at the base window forever.
+     * Measured: one peer's stream established and died on the 90s backstop six
+     * times in thirteen minutes, each reconnect clearing the record.
+     *
+     * @param record the destination's record, or null if none
+     * @return true if a successful connect may drop the record
+     * @since 0.9.72+
+     */
+    static boolean forgetsOnConnectSuccess(long[] record) {
+        return record != null && record[2] == 0;
+    }
+
+    /**
+     * Pure decision: is a failure record still worth keeping? Pruning on the
+     * base window would drop a destination whose escalating cooldown has outgrown
+     * it while that cooldown is still in force, letting the very peer the
+     * escalation was for connect immediately.
+     *
+     * @param failedOn ms since the epoch of the failure the record holds
+     * @param now the current clock reading, in ms since the epoch
+     * @param maxCooldownMs the longest cooldown the escalation can reach
+     * @return true if the record is older than any cooldown it could arm
+     * @since 0.9.72+
+     */
+    static boolean failureRecordExpired(long failedOn, long now, long maxCooldownMs) {
+        return failedOn < now - maxCooldownMs;
     }
 
     /**
@@ -201,25 +289,44 @@ class ConnectionManager {
     }
 
     /**
-     * Cooldown between connection attempts to the same failed destination.
+     * Base cooldown between connection attempts to the same failed destination.
+     * A destination's actual window escalates from this up to
+     * {@link #getDestCooldownMaxMs()} - see {@link #destCooldownMs(int, long, long)}.
      * Tunable via {@code i2p.streaming.destinationCooldownMs} (default: 5000).
-     * @return the dest cooldown ms
+     * 0 disables the cooldown entirely.
+     *
+     * @return the base dest cooldown ms
      */
     private long getDestCooldownMs() {
         return _context.getProperty("i2p.streaming.destinationCooldownMs", 5*1000);
     }
 
     /**
+     * Ceiling for the escalating cooldown of a destination that keeps failing.
+     * Tunable via {@code i2p.streaming.destinationCooldownMaxMs} (default: 300000).
+     * It is also the age past which a failure record is pruned, so a record
+     * cannot be dropped while the window it arms is still running.
+     *
+     * @return the dest cooldown ceiling ms
+     * @since 0.9.72+
+     */
+    private long getDestCooldownMaxMs() {
+        return _context.getProperty("i2p.streaming.destinationCooldownMaxMs", 5*60*1000);
+    }
+
+    /**
      * Remove expired entries from {@link #_destFailures} and {@link #_cooldownWarned}.
-     * Called on every connect failure to prevent unbounded growth.
-     * Uses the cooldown window as the eviction threshold.
-     * @since 0.9.71+
+     * Called on every failure to prevent unbounded growth, and pruned on the
+     * cooldown ceiling rather than the base window - see
+     * {@link #failureRecordExpired(long, long, long)}.
      */
     private void trimDestFailures() {
-        long cutoff = _context.clock().now() - getDestCooldownMs();
-        for (Iterator<Map.Entry<Hash, Long>> it = _destFailures.entrySet().iterator(); it.hasNext(); ) {
-            Map.Entry<Hash, Long> e = it.next();
-            if (e.getValue() < cutoff)
+        long now = _context.clock().now();
+        long maxMs = getDestCooldownMaxMs();
+        long cutoff = now - maxMs;
+        for (Iterator<Map.Entry<Hash, long[]>> it = _destFailures.entrySet().iterator(); it.hasNext(); ) {
+            Map.Entry<Hash, long[]> e = it.next();
+            if (failureRecordExpired(e.getValue()[0], now, maxMs))
                 it.remove();
         }
         for (Iterator<Map.Entry<Hash, Long>> it = _cooldownWarned.entrySet().iterator(); it.hasNext(); ) {
@@ -2318,24 +2425,26 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
           Hash destHash = peer.calculateHash();
           // Skip cooldown for pooled connections — the connection is already established
           if (!fromPool) {
-              Long lastFailure = _destFailures.get(destHash);
-              if (lastFailure != null) {
-                  long elapsed = _context.clock().now() - lastFailure;
-                  if (elapsed < getDestCooldownMs() && elapsed >= 0) {
-                      long delay = getDestCooldownMs() - elapsed;
+              long[] failure = _destFailures.get(destHash);
+              if (failure != null) {
+                  int strikes = (int) Math.max(1, failure[1]);
+                  long cooldown = destCooldownMs(strikes, getDestCooldownMs(), getDestCooldownMaxMs());
+                  long elapsed = _context.clock().now() - failure[0];
+                  if (elapsed < cooldown && elapsed >= 0) {
+                      long delay = cooldown - elapsed;
                       long now = _context.clock().now();
                       Long lw = _cooldownWarned.get(destHash);
                       long lastWarn = lw == null ? 0 : lw.longValue();
-                      if (shouldLogCooldownWarn(lastWarn, now, getDestCooldownMs())) {
+                      if (shouldLogCooldownWarn(lastWarn, now, cooldown)) {
                           _cooldownWarned.put(destHash, Long.valueOf(now));
                           if (_log.shouldDebug())
-                              _log.debug("Delaying connect to [" +
-                                         destHash.toShortBase64() +
-                                         "] " + delay + "ms (cooldown)");
+                              _log.debug("Delaying connect to [" + destHash.toShortBase64() +
+                                         "] -> Cooling down for " + delay +
+                                         "ms * Consecutive failures: " + strikes);
                       }
                       awaitCooldown(_cooldownLock, delay, _context.clock());
                   } else {
-                      _destFailures.remove(destHash, lastFailure);
+                      _destFailures.remove(destHash, failure);
                   }
               }
           }
@@ -2368,15 +2477,18 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
                             "] succeeded in " + connectElapsed + "ms");
               }
           }
-           // Record failure for cooldown, clear on success
+           // Record failure for cooldown; a success forgets the record only if the
+           // failure was a connect that never established - see forgetsOnConnectSuccess()
            if (con.getConnectionError() != null) {
               _context.statManager().addRateData("stream.connectFailed", connectElapsed, connectElapsed);
-              _destFailures.put(destHash, _context.clock().now());
+              _destFailures.compute(destHash, (k, prior) -> recordFailure(prior, _context.clock().now(), false));
               // Opportunistic trim: prevent unbounded growth from abandoned destinations
               trimDestFailures();
           } else {
               _context.statManager().addRateData("stream.connectTime", connectElapsed, connectElapsed);
-              _destFailures.remove(destHash);
+              long[] prior = _destFailures.get(destHash);
+              if (forgetsOnConnectSuccess(prior))
+                  _destFailures.remove(destHash, prior);
           }
           // No _numWaiting adjustment here: connect()'s finally block is the
           // single drain point for the increment (releaseWaiting() clamps the
@@ -2386,6 +2498,29 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
 
          _context.statManager().addRateData("stream.connectionCreated", 1);
          return con;
+    }
+
+    /**
+     * Record that a path to a destination died after the stream had established
+     * - the retransmit limit, or a liveness backstop firing on a stalled stream.
+     * <p>{@link #finalizeConnection} records only what {@code waitForConnect()}
+     * reports, so a stream that connects cleanly and then stalls for its full
+     * budget leaves no failure behind, and the application reconnects
+     * immediately to pay the whole stall again. Measured: one peer cycle of
+     * stall, disconnect, reconnect ~16s later, repeat - six times in thirteen
+     * minutes. This is the missing half of that bookkeeping.
+     * <p>Callers must not record a connect-phase failure here: that failure is
+     * already recorded once by finalizeConnection, and counting it twice
+     * escalates a single failure as if the peer had failed twice.
+     *
+     * @param dest the destination whose path failed, ignored if null
+     * @since 0.9.72+
+     */
+    void recordPathFailure(Hash dest) {
+        if (dest == null)
+            return;
+        _destFailures.compute(dest, (k, prior) -> recordFailure(prior, _context.clock().now(), true));
+        trimDestFailures();
     }
 
     /**
