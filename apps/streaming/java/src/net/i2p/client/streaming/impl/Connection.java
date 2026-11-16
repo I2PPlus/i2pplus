@@ -1194,7 +1194,7 @@ class Connection {
      * @param connectWindowMs the client's effective connect window
      * ({@link #getEffectiveConnectWindow}); &lt;=0 means no
      * window is configured and no cap is applied
-     * @param spacingMs       the inter-SYN-AACK spacing in use; &lt;=0 means no spacing
+     * @param spacingMs       the inter-SYN-ACK spacing in use; &lt;=0 means no spacing
      * is derived and no cap is applied
      * @return the cap; never less than 1, or {@link #SYN_ACK_RESEND_MAX} when no
      * window is configured
@@ -1273,6 +1273,75 @@ class Connection {
     void recordSynAckResend(long now) {
         _lastSynAckSentOn = now;
         _synAckResends++;
+    }
+
+    /**
+     * Pure decision: has a hosted handshake run out of both answers and evidence?
+     * <p>{@link #shouldResendSynAck(long, int, long, long, int)} answers no for two
+     * different reasons — the re-send spacing has not elapsed, or the re-send cap is
+     * spent — and only the second one can end a handshake. A peer that retransmits
+     * faster than the spacing is merely impatient and must keep its connection. A
+     * peer that has outlived its own connect window without completing the
+     * handshake never will acknowledge, and the connection then sits in the dispatch
+     * table until the peer's RESET, or until the inactivity action sends a keepalive
+     * and re-arms the timer five minutes on.
+     * <p>The silence test is what keeps an established connection safe: the
+     * duplicate-SYN path never calls {@link #packetReceived()}, so
+     * {@code lastReceivedOn} stays at the original SYN for a stream whose only
+     * traffic is SYNs, while any live stream has received something recently.
+     *
+     * @param synAckResends   SYN-ACK re-sends already performed for this connection
+     * @param connectWindowMs the effective connect window in ms from
+     *                        {@link #computeEffectiveConnectTimeout(long, int, long)};
+     *                        &lt;= 0 means no window is configured and no cap applies
+     * @param spacingMs       the inter-SYN-ACK spacing, as
+     *                        {@link #shouldResendSynAck(long, int, long, long, int)} sees it;
+     *                        &lt;= 0 means no cap is derived
+     * @param lastReceivedOn  when a packet was last processed on this connection, or
+     *                        &lt;= 0 for never
+     * @param now             current wall-clock ms ({@code I2PAppContext.clock()})
+     * @return true if the re-send cap is spent and the peer has sent nothing but
+     *         SYNs for a full connect window
+     * @since 0.9.72+
+     */
+    static boolean handshakeAbandoned(int synAckResends, long connectWindowMs, long spacingMs,
+                                      long lastReceivedOn, long now) {
+        if (connectWindowMs <= 0 || spacingMs <= 0) {return false;}
+        if (synAckResends < computeSynAckResendCap(connectWindowMs, spacingMs)) {return false;}
+        return lastReceivedOn <= 0 || now - lastReceivedOn >= connectWindowMs;
+    }
+
+    /**
+     * Whether this hosted connection's handshake is over: the SYN-ACK re-send cap
+     * derived from its own connect window is spent, and the peer has sent nothing
+     * but SYNs for that whole window. Pure delegate over
+     * {@link #handshakeAbandoned(int, long, long, long, long)} using the same spacing
+     * and window {@link #shouldResendSynAck(long)} applies, so the two decisions
+     * cannot disagree about the cap.
+     * <p>Only a connection we accepted can be abandoned this way: the duplicate-SYN
+     * path is the peer retransmitting a SYN to us, which never happens on a
+     * connection we opened.
+     *
+     * @param now current wall-clock ms from {@code I2PAppContext.clock()}
+     * @return true if the handshake should be closed rather than answered again
+     * @since 0.9.72+
+     */
+    boolean handshakeAbandoned(long now) {
+        if (!_isInbound) {return false;}
+        int spacing = getSynRetransmitInterval();
+        return handshakeAbandoned(_synAckResends, getEffectiveConnectWindow(), spacing,
+                                  _lastReceivedOn, now);
+    }
+
+    /**
+     * How many SYN-ACK re-sends this connection has performed, so the abandoned
+     * handshake can be logged with the budget it ran out of.
+     *
+     * @return the re-send count, 0 if the SYN-ACK has never been re-sent
+     * @since 0.9.72+
+     */
+    int synAckResendCount() {
+        return _synAckResends;
     }
 
     /**

@@ -589,7 +589,28 @@ class ConnectionHandler {
                     if (from != null) {
                         Connection oldcon = _manager.getConnectionByOutboundId(syn.getReceiveStreamId());
                         if (oldcon != null && from.equals(oldcon.getRemotePeer())) {
-                            if (!oldcon.shouldResendSynAck(_context.clock().now())) {
+                            long now = _context.clock().now();
+                            if (!oldcon.shouldResendSynAck(now)) {
+                                // The throttle says no. If the reason is that we have
+                                // already answered this peer's SYN as many times as its
+                                // own connect window allows, and it has sent nothing but
+                                // SYNs since, the handshake is over. Close it instead of
+                                // holding a dispatch-table entry, a stream id and the
+                                // connection's buffers until the peer's RESET, or until
+                                // the inactivity action sends a keepalive and re-arms the
+                                // timer five minutes on. A hard disconnect completes
+                                // immediately, so no TIME-WAIT slot is left behind, and no
+                                // RESET is sent: a peer that floods us with SYNs would be
+                                // handed a crypto operation per SYN.
+                                if (oldcon.handshakeAbandoned(now)) {
+                                    if (_log.shouldWarn()) {
+                                        _log.warn("Closing inbound handshake -> SYN-ACK unanswered"
+                                                  + " * Re-sends: " + oldcon.synAckResendCount()
+                                                  + " * Connect window: "
+                                                  + DataHelper.formatDuration(oldcon.getEffectiveConnectWindow()));
+                                    }
+                                    oldcon.disconnect(false);
+                                }
                                 syn.releasePayload();
                                 continue; // SYN-ACK throttle active
                             }
