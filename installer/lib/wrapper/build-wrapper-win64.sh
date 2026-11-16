@@ -165,6 +165,33 @@ if ${HOST}-gcc -Wno-error=incompatible-pointer-types -E -xc /dev/null >/dev/null
     rm -f ptr-probe.c ptr-probe.o
 fi
 
+# GCC 15 made C23 the default dialect, and in C23 a bare foo() declaration is a
+# zero-parameter prototype. The wrapper declares its GetProcAddress-loaded win32
+# entry points that way (DynSetProcessDpiAwareness and the other DPI hooks in
+# wrapperjni_win.c), so calling them with arguments is a constraint error there,
+# and no -Wno-error= flag undoes a constraint error. Drop the dialect to one
+# where an empty parameter list still means "unprototyped".
+#
+# Probed rather than version-tested again: a toolchain whose default already
+# takes the call builds with no flag at all, and one too old to know -std=gnu17
+# falls back to -std=gnu11.
+LANGSTD=""
+echo 'int probe_dpi();
+int main(void){return probe_dpi(1);}' > kr-probe.c
+if ! ${HOST}-gcc -c kr-probe.c -o kr-probe.o >/dev/null 2>&1; then
+    for std in gnu17 gnu11; do
+        if ${HOST}-gcc -std=${std} -c kr-probe.c -o kr-probe.o >/dev/null 2>&1; then
+            LANGSTD="-std=${std}"
+            echo "Toolchain defaults to C23, where foo() takes no arguments - building as ${std}"
+            break
+        fi
+    done
+    if [ -z "${LANGSTD}" ]; then
+        echo "No dialect found that takes the wrapper's unprototyped calls" >&2
+    fi
+fi
+rm -f kr-probe.c kr-probe.o
+
 cp wrapper_win.c wrapper_win.c.orig 2>/dev/null || true
 cp wrapper.c wrapper.c.orig 2>/dev/null || true
 
@@ -283,7 +310,7 @@ cat > Makefile-windows-x64.mingw << 'MAKEFILE'
 CC = x86_64-w64-mingw32-gcc
 CC_SEH = clang --target=x86_64-w64-windows-gnu -fms-extensions
 RC = x86_64-w64-mingw32-windres
-WIN_FLAGS = -O2 -DWIN32 -DWIN64 -DNDEBUG -D_UNICODE -DUNICODE -D_WIN32_WINNT=0x0601 -DHAVE_EADDRINUSE $(PERMISSIVE)
+WIN_FLAGS = -O2 $(LANGSTD) -DWIN32 -DWIN64 -DNDEBUG -D_UNICODE -DUNICODE -D_WIN32_WINNT=0x0601 -DHAVE_EADDRINUSE $(PERMISSIVE)
 LDFLAGS = -lws2_32 -lshlwapi -ladvapi32 -luser32 -lcrypt32 -lwintrust -lpdh -lpsapi -lole32 -loleaut32 -lactiveds -ladsiid -lmpr -lshell32 -lnetapi32 -lbcrypt -lntdll -lwtsapi32 -lwevtapi -ldbghelp -liphlpapi
 
 OBJS = wrapper.o wrapperinfo.o wrappereventloop.o wrapper_jvm_launch.o \
@@ -318,7 +345,7 @@ clean:
 MAKEFILE
 
 rm -f *.o ../../src/bin/wrapper.exe
-make -f Makefile-windows-x64.mingw JNI_INC="${JNI_INC}" JNI_WIN_INC="${JNI_WIN_INC}" PERMISSIVE="${PERMISSIVE}"
+make -f Makefile-windows-x64.mingw JNI_INC="${JNI_INC}" JNI_WIN_INC="${JNI_WIN_INC}" PERMISSIVE="${PERMISSIVE}" LANGSTD="${LANGSTD}"
 
 if [ ! -f "${SRC_DIR}/src/bin/wrapper.exe" ]; then
     echo "Build failed"
@@ -398,7 +425,7 @@ SHIM
 
 cat > Makefile-windows-x64-dll.mingw << 'MAKEFILE'
 CC = x86_64-w64-mingw32-gcc
-DLL_FLAGS = -O2 -DWIN32 -DWIN64 -DNDEBUG -D_UNICODE -DUNICODE -D_WINDOWS -D_USRDLL -DDECODERJNI_VC8_EXPORTS -D_WINDLL -D_WIN32_WINNT=0x0601 $(PERMISSIVE)
+DLL_FLAGS = -O2 $(LANGSTD) -DWIN32 -DWIN64 -DNDEBUG -D_UNICODE -DUNICODE -D_WINDOWS -D_USRDLL -DDECODERJNI_VC8_EXPORTS -D_WINDLL -D_WIN32_WINNT=0x0601 $(PERMISSIVE)
 # Link order matters: --start-group/--end-group resolves circular deps between
 # libucrt.a, libucrtbase.a, and libmingwex.a.  libucrt.a provides CRT symbols
 # backed by ucrtbase.dll; libucrtbase.a adds ucrt-specific I/O; libmingwex.a
@@ -425,7 +452,7 @@ clean:
 	rm -f $(OBJS) wrapper-dllmain.c wrapper.dll
 MAKEFILE
 
-make -f Makefile-windows-x64-dll.mingw JNI_INC="${JNI_INC}" JNI_WIN_INC="${JNI_WIN_INC}" PERMISSIVE="${PERMISSIVE}"
+make -f Makefile-windows-x64-dll.mingw JNI_INC="${JNI_INC}" JNI_WIN_INC="${JNI_WIN_INC}" PERMISSIVE="${PERMISSIVE}" LANGSTD="${LANGSTD}"
 
 if [ ! -f wrapper.dll ]; then
     echo "DLL build failed"
@@ -433,6 +460,10 @@ if [ ! -f wrapper.dll ]; then
 fi
 cp wrapper.dll "${INSTALL_DIR}/${WIN_DIR}/wrapper.dll"
 ${HOST}-strip -s "${INSTALL_DIR}/${WIN_DIR}/wrapper.dll"
+
+# Both halves built: record the release they came from, the marker the up-to-date
+# check reads instead of the jar's manifest.
+printf '%s\n' "${VERSION}" > "${WIN_BUILT_FROM}"
 
 sync_bookkeeping
 
