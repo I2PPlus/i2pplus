@@ -27,6 +27,7 @@ public class NativeLoader {
      */
     private static final long[] LOCK_BACKOFF_MS = {200, 500, 1000};
 
+    /** Not instantiable - the loader holds no state, every entry point is static. */
     private NativeLoader() {}
 
     /**
