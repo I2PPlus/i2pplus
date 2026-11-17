@@ -71,7 +71,16 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
      * Most routers the entry is sent to, lower than the explorers'
      * limit since exploration registers no reply job.
      */
-    private static final int LIMIT_ROUTERS = SystemVersion.isSlow() ? 1000 : 4000;
+    static final int LIMIT_ROUTERS = SystemVersion.isSlow() ? 1000 : 4000;
+    /**
+     * Multiple of LIMIT_ROUTERS at which the fast-router admission stops
+     * exempting a new entry from the fill-level drop probability. The bandwidth
+     * tier that makes a router "fast" is written into its own RouterInfo by its
+     * signer, so minted identities all claim it; with no ceiling they are stored
+     * by every router that sees them, past the limit, with no admission check at
+     * all.
+     */
+    private static final int FAST_ADMISSION_CEILING = 2;
     /** The bloom filter XOR of the message ids. */
     private final long _msgIDBloomXor;
     /** Delay before a reply is resent. */
@@ -302,7 +311,6 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                     boolean isInvalidVersion = Banlist.isInvalidVersion(v);
                     boolean notFrom = !key.equals(_fromHash);
                     boolean logged = false;
-                    boolean bypassThrottle = false;
 
                     if (isBanned) {
                         shouldStore = false;
@@ -336,9 +344,8 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                       " [" + key.toShortBase64() + "]" +
                                       "\n* Invalid Router version: " + v);
                         }
-                    } else if (isFast && !isOld && prevNetDb == null) {
+                    } else if (prevNetDb == null && bypassesStoreThrottle(isFast, isOld, _facade.getDataStore().size())) {
                         shouldStore = true;
-                        bypassThrottle = true;
                     } else if (prevNetDb == null) { // actually new
                         if (isUnreachable && isOld) {
                             shouldStore = false;
@@ -382,7 +389,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                         }
 
                         int count = _facade.getDataStore().size();
-                        if (count > LIMIT_ROUTERS && !bypassThrottle) {
+                        if (count > LIMIT_ROUTERS) {
                             if (_facade.floodfillEnabled()) {
                                 // determine if they're "close enough"
                                 // we will still ack and flood by setting wasNew = true even if we don't store locally
@@ -659,6 +666,26 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
         }
         Hash id = ri.getIdentity().getHash();
         return id != null && id.equals(key);
+    }
+
+    /**
+     * Whether a new RouterInfo is admitted past the fill-level drop probability
+     * because it declares itself fast. The bandwidth tier and the version that
+     * qualify it are written by the entry's own signer, so they are a claim and
+     * not evidence, and the exemption is bounded by
+     * {@link #FAST_ADMISSION_CEILING}: past the ceiling a minted identity
+     * labelled X is subject to the same admission check as every other new
+     * entry, which is the only thing keeping the RouterInfo side of the netDb
+     * from growing without limit.
+     *
+     * @param isFast true if the entry's caps name a fast bandwidth tier
+     * @param isOld true if the entry's version predates the minimum accepted
+     * @param count entries currently held in the data store
+     * @return true if the entry skips the drop probability
+     * @since 0.9.72+
+     */
+    static boolean bypassesStoreThrottle(boolean isFast, boolean isOld, int count) {
+        return isFast && !isOld && count <= LIMIT_ROUTERS * FAST_ADMISSION_CEILING;
     }
 
     /**
