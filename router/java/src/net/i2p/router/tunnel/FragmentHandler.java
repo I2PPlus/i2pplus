@@ -148,10 +148,17 @@ class FragmentHandler {
      * many distinct message IDs faster than they expire would otherwise grow
      * the map without bound, so new messages are refused while the map is at
      * the limit and the remaining fragments of those messages are dropped.
+     * <p>
+     * This is a memory bound, not a throughput one. One in-progress message
+     * holds a buffer per fragment slot, and each buffer is a full cache buffer
+     * whatever the fragment's own length, so a handler's worst case is this cap
+     * times the slots in {@link FragmentedMessage} times that buffer size: 1,024
+     * was 64 MB per tunnel endpoint, which an attacker pays for with a few
+     * hundred small messages. This is upstream's figure.
      *
      * @since 0.9.71+
      */
-    static final int MAX_FRAGMENTED_MESSAGES = 1024;
+    static final int MAX_FRAGMENTED_MESSAGES = 128;
     /** The cache supplying the write buffers. */
     private static final ByteCache _cache = ByteCache.getInstance(512, TrivialPreprocessor.PREPROCESSED_SIZE);
 
@@ -575,16 +582,23 @@ class FragmentHandler {
     FragmentedMessage getOrCreate(int messageId, long fMessageId) {
         FragmentedMessage msg = _fragmentedMessages.get(messageId);
         if (msg != null) {return msg;}
-        if (!mayStartNewFragmentedMessage(_fragmentedMessages.size())) {
-            // Registered in TunnelDispatcher.initializeStats(). The stat must be
-            // declared with createRequiredRateStat, not createRateStat: the
-            // latter is a no-op unless stat.full is set, and StatManager
-            // silently discards addRateData for an unregistered stat.
-            _context.statManager().addRateData("tunnel.fragmentMapFull", 1);
-            return null;
-        }
-        return _fragmentedMessages.computeIfAbsent(messageId,
-            k -> new FragmentedMessage(_context, fMessageId));
+        // The cap is checked inside the mapping function, not in front of it. The
+        // fragments of one message arrive on different tunnel threads, so two
+        // creators that both tested the size before inserting each added an entry
+        // on top of the other's, and the map settles above the cap by however many
+        // threads raced. computeIfAbsent runs the function under the map's own lock
+        // for that bucket, and a null result records no mapping at all.
+        return _fragmentedMessages.computeIfAbsent(messageId, k -> {
+            if (!mayStartNewFragmentedMessage(_fragmentedMessages.size())) {
+                // Registered in TunnelDispatcher.initializeStats(). The stat must be
+                // declared with createRequiredRateStat, not createRateStat: the
+                // latter is a no-op unless stat.full is set, and StatManager
+                // silently discards addRateData for an unregistered stat.
+                _context.statManager().addRateData("tunnel.fragmentMapFull", 1);
+                return null;
+            }
+            return new FragmentedMessage(_context, fMessageId);
+        });
     }
 
     /**

@@ -2,6 +2,7 @@ package net.i2p.router.tunnel;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -26,6 +27,18 @@ public class FragmentHandlerCapTest {
     @BeforeClass
     public static void globalSetUp() {
         _context = new RouterContext(null);
+    }
+
+    /**
+     * The cap is a memory bound, not a throughput one. Each in-progress message
+     * holds a buffer per fragment slot, and each buffer is a full cache buffer
+     * whatever the fragment's own length, so the cap times those buffers is what
+     * one tunnel endpoint can be made to pin. 1,024 let a peer pin 64 MB per
+     * endpoint with a few hundred small messages; this is upstream's figure.
+     */
+    @Test
+    public void testCapIsTheMemoryBound() {
+        assertEquals(128, FragmentHandler.MAX_FRAGMENTED_MESSAGES);
     }
 
     @Test
