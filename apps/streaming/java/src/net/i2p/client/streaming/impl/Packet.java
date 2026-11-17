@@ -1285,24 +1285,25 @@ class Packet {
             buf.append(" ACK ").append(getAckThrough());
         }
         if (isFlagSet(FLAG_FROM_INCLUDED) && _optionFrom != null && _optionFrom.size() > 0)
-            buf.append(" * FROM: ").append(_optionFrom.size()).append(" bytes");
+            buf.append(" * Sender identity: ").append(_optionFrom.size()).append(" bytes");
         if (_nacks != null && debug) {
-            buf.append(" NACK");
+            buf.append(" * NACK");
             for (int i = 0; i < _nacks.length; i++) {buf.append(' ').append(_nacks[i]);}
         }
         // A requested delay of zero is no delay at all, so printing it states an
         // absence as if it were a value; every SYN in a live log carried
-        // "DELAY 0ms" for exactly that reason.
+        // "Delay: 0ms" for exactly that reason.
         if (isFlagSet(FLAG_DELAY_REQUESTED) && _optionDelay > 0)
-            buf.append(" * DELAY ").append(DataHelper.formatDuration(_optionDelay));
-        if (isFlagSet(FLAG_MAX_PACKET_SIZE_INCLUDED)) buf.append(" * MAXSIZE ").append(_optionMaxSize).append(" bytes");
-        if (isFlagSet(FLAG_PROFILE_INTERACTIVE)) buf.append(" * INTERACTIVE");
-        if (isFlagSet(FLAG_SIGNATURE_REQUESTED)) buf.append(" * SIGREQ");
+            buf.append(" * Delay: ").append(DataHelper.formatDuration(_optionDelay));
+        if (isFlagSet(FLAG_MAX_PACKET_SIZE_INCLUDED)) buf.append(" * Max size: ").append(_optionMaxSize).append(" bytes");
+        if (isFlagSet(FLAG_PROFILE_INTERACTIVE)) buf.append(" * Interactive profile");
+        if (isFlagSet(FLAG_SIGNATURE_REQUESTED)) buf.append(" * Signature requested");
         if (isFlagSet(FLAG_SIGNATURE_OFFLINE) && debug) {
-            if (_transientExpires != 0) {buf.append(" * TRANSEXP ").append(new Date(_transientExpires));}
+            if (_transientExpires != 0) {buf.append(" * Expires: ").append(new Date(_transientExpires));}
             else {buf.append(" (No expiration)");}
             if (_transientSigningPublicKey != null) {
-                buf.append(" TRANSKEY ").append(_transientSigningPublicKey.getType()).append(':').append(_transientSigningPublicKey.toBase64());
+                buf.append(" * Transient key: ").append(_transientSigningPublicKey.getType())
+                   .append(':').append(_transientSigningPublicKey.toBase64());
             } else {buf.append(" (No key data)");}
             if (_offlineSignature != null) {buf.append(" * Offline Signature: ").append(_offlineSignature.getType());}
             else {buf.append(" (No offline signature data)");}
