@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Proxy local server tests</title>
+</head>
+<body>
+<p>
+    The decisions the HTTP proxy makes about the files it serves to its own
+    pages. {@code ThemeCorsDecisionTest} covers which of them a cross-origin page
+    may read: the proxy serves its theme under the reserved host
+    <code>proxy.i2p</code> while the pages that use it sit at the host the
+    browser asked for, so every theme file is cross-origin to them, and granting
+    every one of them to every origin let any clearnet page read the proxy's CSS
+    and learn that this browser runs an I2P+ proxy. Only a web font is fetched in
+    CORS mode, so only a font keeps the grant. Plain statics, so they are tested
+    without a running proxy. Run by <code>ant test</code> in
+    <code>apps/i2ptunnel</code>.
+</p>
+</body>
+</html>

@@ -101,6 +101,40 @@ public abstract class LocalHTTPServer {
     /** Logo block shared by the reply pages. */
     private final static String logo =
         "<img src=\"http://proxy.i2p/themes/console/default/images/i2plogo.png\" alt=\"I2P+ Router Console\" border=0>";
+
+    /**
+     * The response headers for a file served out of docs/themes to the proxy's
+     * own pages.
+     * <p>
+     * Only a font carries Access-Control-Allow-Origin. A stylesheet, an image or
+     * a script referenced by one of those pages is fetched in no-CORS mode and
+     * needs nothing, but a web font is fetched in CORS mode, and the page that
+     * references it is served at the destination's own host while the font comes
+     * from proxy.i2p - a different origin. Everything else here is readable only
+     * same-origin, so a clearnet page can no longer fetch proxy.css and learn,
+     * with no cookie and no prompt, that this browser runs an I2P+ proxy and
+     * which console theme it has.
+     *
+     * @param filename the path under docs/themes, as the request named it
+     * @param type the content type chosen for the file
+     * @return the header block, ending with the blank line before the body
+     * @since 0.9.72+
+     */
+    static String themeResponseHeaders(String filename, String type) {
+        StringBuilder buf = new StringBuilder(256);
+        buf.append("HTTP/1.1 200 OK\r\nContent-Type: ").append(type).append("\r\n");
+        if (type.startsWith("font/")) {
+            buf.append("Access-Control-Allow-Origin: *\r\n");
+        }
+        if (filename.contains(".css") || filename.contains(".js") || filename.endsWith(".jpg") || filename.endsWith(".png") ||
+            filename.endsWith(".webp") || filename.endsWith(".ttf") || filename.endsWith(".woff2") || filename.endsWith(".svg")) {
+            buf.append("Cache-Control: max-age=2628000, immutable\r\nConnection: close\r\n\r\n");
+        } else {
+            buf.append("Cache-Control: private, no-cache, max-age=2628000\r\nConnection: close\r\n\r\n");
+        }
+        return buf.toString();
+    }
+
     /**
      * Very simple web server.
      * <p>
@@ -195,16 +229,7 @@ public abstract class LocalHTTPServer {
                 else if (filename.endsWith(".xhtml"))
                     type = "application/xhtml+xml";
                 else type = "text/html; charset=UTF-8";
-                StringBuilder buf = new StringBuilder(256);
-                buf.append("HTTP/1.1 200 OK\r\nContent-Type: ").append(type).append("\r\n")
-                   .append("Access-Control-Allow-Origin: *");
-                if (filename.contains(".css") || filename.contains(".js") || filename.endsWith(".jpg") || filename.endsWith(".png") ||
-                    filename.endsWith(".webp") || filename.endsWith(".ttf") || filename.endsWith(".woff2") || filename.endsWith(".svg")) {
-                    buf.append("\r\nCache-Control: max-age=2628000, immutable\r\nConnection: close\r\n\r\n");
-                } else {
-                    buf.append("\r\nCache-Control: private, no-cache, max-age=2628000\r\nConnection: close\r\n\r\n");
-                }
-                out.write(buf.toString().getBytes(StandardCharsets.UTF_8));
+                out.write(themeResponseHeaders(filename, type).getBytes(StandardCharsets.UTF_8));
                 FileUtil.readFile(filename, themesDir.getAbsolutePath(), out);
                 return;
             }
@@ -399,10 +424,12 @@ public abstract class LocalHTTPServer {
         PortMapper pm = I2PAppContext.getGlobalContext().portMapper();
         String conURL = pm.getConsoleURL();
         String idn = I2PTunnelHTTPClientBase.decodeIDNHost(host);
+        // No Access-Control-Allow-Origin: nothing fetches this page
+        // cross-origin, and with the header any page that has rebound its own
+        // origin to the proxy can read whether the add succeeded.
         out.write(("HTTP/1.1 200 OK\r\n"+
                   "Content-Type: text/html; charset=UTF-8\r\n" +
                   "Referrer-Policy: no-referrer\r\n" +
-                  "Access-Control-Allow-Origin: *\r\n" +
                   "Connection: close\r\n\r\n" +
                   "<!DOCTYPE html>\n<html>\n<head>\n<title>" + _t("Redirecting to {0}", idn) + "</title>\n" + headerLinks +
                   "<meta http-equiv=\"Refresh\" content=\"1; url=" + DataHelper.escapeHTML(url) + "\">\n</head>\n<body>\n" +
@@ -436,10 +463,12 @@ public abstract class LocalHTTPServer {
         PortMapper pm = I2PAppContext.getGlobalContext().portMapper();
         String conURL = pm.getConsoleURL();
         String idn = I2PTunnelHTTPClientBase.decodeIDNHost(host);
+        // No Access-Control-Allow-Origin: nothing fetches this page
+        // cross-origin, and with the header any page that has rebound its own
+        // origin to the proxy can read which destination was saved.
         out.write(("HTTP/1.1 200 OK\r\n" +
                   "Content-Type: text/html; charset=UTF-8\r\n" +
                   "Referrer-Policy: no-referrer\r\n" +
-                  "Access-Control-Allow-Origin: *\r\n" +
                   "Connection: close\r\n\r\n" +
                   "<!DOCTYPE html>\n<html>\n<head>\n<title>" + _t("Redirecting to {0}", idn) + "</title>\n" + headerLinks +
                   "<meta http-equiv=\"Refresh\" content=\"1; url=" + DataHelper.escapeHTML(url) + "\">\n</head>\n<body>\n" +
