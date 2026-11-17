@@ -212,6 +212,11 @@ public class HostCheckHandler extends GzipHandler
      * Host header. Same-origin is allowed, as is a request where both sides are
      * loopback <em>and</em> the ports match; anything else is rejected.
      * <p>
+     * An Origin of "null" - what a sandboxed frame, a data: URL or a blob: page
+     * sends - names no origin at all and is rejected. A request that carries no
+     * Origin at all is not a browser POST and is left to the nonce and password
+     * checks behind this one.
+     * <p>
      * Both sides are compared as literal text. Neither header is ever resolved
      * through DNS: a hostname whose A record points at 127.0.0.1 (DNS
      * rebinding) is not loopback here, which is what keeps the localhost
@@ -234,9 +239,12 @@ public class HostCheckHandler extends GzipHandler
             return true;
         }
 
-        // Allow if Origin: null (from file://, sandbox, or detached context)
+        // A sandboxed frame, a data: URL or a blob: page all send this, and any
+        // page can put one of those on an origin of its own, so it names no page
+        // at all - which is exactly what a foreign page's form looks like when it
+        // posts to the console through the operator's own browser. Refuse it.
         if ("null".equalsIgnoreCase(origin)) {
-            return true;
+            return false;
         }
 
         // Extract origin host:port

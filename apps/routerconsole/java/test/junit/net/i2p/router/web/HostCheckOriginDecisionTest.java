@@ -13,6 +13,9 @@ import org.junit.Test;
  */
 public class HostCheckOriginDecisionTest {
 
+    /** Runs the origin decisions; it holds no state. */
+    public HostCheckOriginDecisionTest() {}
+
     /** A same-origin POST, host and port identical, is allowed. */
     @Test
     public void testSameOriginAllowed() {
@@ -130,6 +133,20 @@ public class HostCheckOriginDecisionTest {
     public void testNoOriginAllowed() {
         assertTrue(HostCheckHandler.originAllowed(null, "127.0.0.1:7657", false));
         assertTrue(HostCheckHandler.originAllowed("", "127.0.0.1:7657", false));
+    }
+
+    /**
+     * Origin: null is what a sandboxed frame, a data: URL or a blob: page sends,
+     * and any foreign page can put its form in one of those to post here without
+     * naming itself, so it is refused. A POST that carries no Origin header at
+     * all is not a browser POST and stays allowed for the nonce and password
+     * checks behind this one.
+     */
+    @Test
+    public void testNullOriginRejected() {
+        assertFalse(HostCheckHandler.originAllowed("null", "127.0.0.1:7657", false));
+        assertFalse(HostCheckHandler.originAllowed("NULL", "localhost:7657", false));
+        assertFalse(HostCheckHandler.originAllowed("null", "localhost:7657", false));
     }
 
     /** An absent Host header cannot be judged, and is allowed as before. */
