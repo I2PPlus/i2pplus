@@ -14,6 +14,7 @@ import java.net.SocketTimeoutException;
 import java.nio.channels.SocketChannel;
 import java.util.Properties;
 import net.i2p.I2PAppContext;
+import net.i2p.data.DataHelper;
 import net.i2p.util.Log;
 import net.i2p.util.VersionComparator;
 
@@ -40,8 +41,10 @@ class SAMHandlerFactory {
      * @param s Socket attached to SAM client
      * @param i2cpProps config options for our i2cp connection
      * @param parent the bridge owning this session, supplying the secure session for authentication
-     * @return A SAM protocol handler, or null if the client closed before the handshake
-     * @throws SAMException if the connection handshake (HELLO message) was malformed
+     * @return A SAM protocol handler, or null if the handshake never arrived or
+     *         was refused, in which case the caller closes the socket
+     * @throws SAMException if the secure session denied the connection, or the
+     *                      handler could not be created
      */
     public static SAMHandler createSAMHandler(SocketChannel s, Properties i2cpProps,
                                               SAMBridge parent) throws SAMException {
@@ -57,19 +60,35 @@ class SAMHandlerFactory {
             sock.setSoTimeout(0);
             line = buf.toString();
         } catch (SocketTimeoutException e) {
-            if (log.shouldWarn()) {log.warn("Timeout (75s) waiting for \'HELLO VERSION\' from remote client");}
+            if (log.shouldWarn()) {
+                log.warn("No SAM handshake -> Timed out waiting for 'HELLO VERSION'" +
+                         "\n* Timeout: " + DataHelper.formatDuration(HELLO_TIMEOUT));
+            }
+            return null;
         } catch (IOException e) {
-            if (log.shouldWarn()) {log.warn("IO Error reading from socket" + " -> " + e.getMessage());}
+            if (log.shouldWarn()) {
+                log.warn("No SAM handshake -> Error reading from the socket" +
+                         "\n* Error: " + e.getMessage());
+            }
+            return null;
         } catch (RuntimeException e) {
-            if (log.shouldError()) {log.error("Unexpected runtime error in SAM protocol handler -> " + e.getMessage());}
+            if (log.shouldError()) {log.error("Unexpected error reading the SAM handshake", e);}
+            return null;
         }
         if (log.shouldInfo() && line != null) {log.info("New message received: [" + line + ']');}
 
         // Message format: HELLO VERSION [MIN=v1] [MAX=v2]
         Properties props = SAMUtils.parseParams(line);
-        if ((!"HELLO".equals(props.remove(SAMUtils.COMMAND)) ||
-             !"VERSION".equals(props.remove(SAMUtils.OPCODE))) && log.shouldWarn()) {
-            log.warn("Malformed SAM handshake received from remote client -> Must start with \'HELLO VERSION\'");
+        if (!isHelloVersion((String) props.remove(SAMUtils.COMMAND),
+                            (String) props.remove(SAMUtils.OPCODE))) {
+            // Anything else is not SAM, a browser's "POST / HTTP/1.1" included,
+            // and the lines that follow it would otherwise be run as SAM
+            // commands by the handler this handshake opens.
+            if (log.shouldWarn()) {
+                log.warn("Refusing a SAM connection -> Handshake does not start with 'HELLO VERSION'");
+            }
+            SAMHandler.writeString("HELLO REPLY RESULT=I2P FAIL reason=\"not 'HELLO VERSION'\"\n", s);
+            return null;
         }
 
         String minVer = props.getProperty("MIN");
@@ -87,11 +106,13 @@ class SAMHandlerFactory {
 
         boolean authenticated = false;
         if (secureSession != null) {
-            boolean approval = secureSession.approveOrDenySecureSession(i2cpProps, props);
-            authenticated = approval;
-            if (!approval && log.shouldWarn()) {
-                log.warn("SAM connection cancelled by user request");
+            if (!secureSession.approveOrDenySecureSession(i2cpProps, props)) {
+                // Answering RESULT=OK anyway left the session open and
+                // unauthenticated, with the denial visible only in the log.
+                log.logAlways(Log.WARN, "Refusing a SAM connection -> Cancelled by user request");
+                throw new SAMException("SAM connection cancelled by user request");
             }
+            authenticated = true;
         }
 
         // Let's answer positively
@@ -127,6 +148,22 @@ class SAMHandlerFactory {
             handler.setAuthUser(props.getProperty("USER"));
         }
         return handler;
+    }
+
+    /**
+     * Whether the command and opcode parsed out of a handshake line are the
+     * {@code HELLO VERSION} every other SAM command depends on. The comparison
+     * is exact: SAM commands are upper case, and a browser's
+     * {@code POST / HTTP/1.1} parses as the command {@code POST}, which is not
+     * this.
+     *
+     * @param command the COMMAND value parsed out of the line, may be null
+     * @param opcode the OPCODE value parsed out of the line, may be null
+     * @return true only if the line is a SAM hello
+     * @since 0.9.72+
+     */
+    static boolean isHelloVersion(String command, String opcode) {
+        return "HELLO".equals(command) && "VERSION".equals(opcode);
     }
 
     /**

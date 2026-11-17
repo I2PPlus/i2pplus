@@ -75,6 +75,13 @@ case "$MODULE" in
         CP="$(find tools/test -name '*.jar' | tr '\n' ':')"
         LOGSCOPE="apps/pack200/java/src"
         ;;
+    sam)
+        BUILD="apps/sam/java/build.xml"
+        REPORTS="/tmp/build-i2p/reports/sam/junit"
+        SOURCEPATH="apps/sam/java/src:apps/sam/java/test:core/java/src:router/java/src:apps/streaming/java/src:apps/ministreaming/java/src"
+        CP="$(find tools/test -name '*.jar' | tr '\n' ':')"
+        LOGSCOPE="apps/sam/java/src"
+        ;;
     routerconsole)
         BUILD="apps/routerconsole/java/build.xml"
         REPORTS="/tmp/build-i2p/reports/routerconsole/junit"

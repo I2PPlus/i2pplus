@@ -12,7 +12,10 @@
     ({@code SAMHandlerPoolTeardownTest}); the session debug table the console
     renders ({@code SAMDebugTableTest}); and the standalone parsing in
     {@code SAMUtils} - the master-key and destination forms, and the
-    destination-string grammar. Run by <code>ant test</code> in
+    destination-string grammar. Also the hello gate at the head of a connection:
+    the first line must be {@code HELLO VERSION}, or a browser posting to the
+    SAM port has a session and its following lines run as SAM commands
+    ({@code SAMHelloGateTest}). Run by <code>ant test</code> in
     <code>apps/sam/java</code>.
 </p>
 </body>
