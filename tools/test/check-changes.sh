@@ -89,6 +89,13 @@ case "$MODULE" in
         CP="$(find apps/jetty installer/lib/wrapper -name '*.jar' | tr '\n' ':')$(find /tmp/build-i2p/pkg-temp/lib -name '*.jar' ! -name 'routerconsole.jar' 2>/dev/null | tr '\n' ':')"
         LOGSCOPE="apps/routerconsole/java/src"
         ;;
+    susidns)
+        BUILD="apps/susidns/src/build.xml"
+        REPORTS="/tmp/build-i2p/reports/susidns/junit"
+        SOURCEPATH="apps/susidns/src/java/src:apps/susidns/src/java/test/junit:core/java/src:apps/jetty/java/src:apps/addressbook/java/src"
+        CP="$(find tools/test apps/jetty apps/susidns/src/lib installer/lib/wrapper -name '*.jar' | tr '\n' ':')$(find /tmp/build-i2p/pkg-temp/lib -name '*.jar' 2>/dev/null | tr '\n' ':')"
+        LOGSCOPE="apps/susidns/src/java/src"
+        ;;
     *)
         echo "check-changes.sh: no wiring for module '$MODULE' — add it above" >&2
         exit 1
