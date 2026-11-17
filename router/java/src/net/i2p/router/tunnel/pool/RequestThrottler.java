@@ -378,9 +378,12 @@ public class RequestThrottler {
     static final boolean DEFAULT_SHOULD_THROTTLE = true;
     /** Enables counting transit requests and rejecting or dropping over-limit peers. */
     static final String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
-    /** Whether a versionless peer is disconnected when the property is unset. */
+    /** Whether a throttled peer also has its session dropped, when the property is unset. */
     static final boolean DEFAULT_SHOULD_DISCONNECT = false;
-    /** Enables scheduling a disconnect for a peer that joins with no version. */
+    /**
+     * Drops the transport session of a peer whose transit request was throttled,
+     * on both the burst path and the probability-reject path.
+     */
     static final String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
 
     /**
@@ -428,12 +431,30 @@ public class RequestThrottler {
         return Math.min(rv, BURST_BAN_MAX_MS);
     }
 
+    /**
+     * Ban length for a burst offense, or zero when the operator has the
+     * build-request bans switched off. The offense is counted either way, so an
+     * operator who turns the bans on sees the history behind the first ban.
+     * <p>
+     * The switch matters more here than on the excessive-request path below: this
+     * runs before the record is decrypted, so the peer in hand is the previous hop
+     * of a transit build request, not necessarily the router that sent it.
+     *
+     * @param offenses the consecutive offense count, 1-based
+     * @param bansEnabled the {@code router.banlist.enableExcessiveTunnelRequestsBan} value
+     * @return the ban duration in ms, 0 when only throttling applies
+     * @since 0.9.72+
+     */
+    static long burstBanDurationFor(int offenses, boolean bansEnabled) {
+        return bansEnabled ? burstBanDurationMs(offenses) : 0;
+    }
+
     /** Rejecting old routers is on by default. */
     private static final boolean DEFAULT_BLOCK_OLD_ROUTERS = true;
     /** Config key for rejecting routers with old profiles. */
     private static final String PROP_BLOCK_OLD_ROUTERS = "router.blockOldRouters";
     /** Banning excessive requesters is off by default. */
-    private static final boolean DEFAULT_BAN_EXCESSIVE_REQUESTS = false;
+    static final boolean DEFAULT_BAN_EXCESSIVE_REQUESTS = false;
     /** Config key turning the excessive request ban on or off. */
     private static final String PROP_BAN_EXCESSIVE_REQUESTS = "router.banlist.enableExcessiveTunnelRequestsBan";
 
@@ -574,7 +595,11 @@ public class RequestThrottler {
                 BurstOffenseRecord record = _burstOffenses.computeIfAbsent(h, k -> new BurstOffenseRecord());
                 record.recordOffense();
                 int offenses = record.getConsecutiveOffenses();
-                long banTime = burstBanDurationMs(offenses);
+                // The ban is behind the same switch as the excessive-request bans
+                // below: banning the previous hop of a transit request punishes a
+                // relay every creator in front of it is using. The throttle itself
+                // always applies.
+                long banTime = burstBanDurationFor(offenses, cachedShouldBanExcessive);
                 if (_log.shouldWarn()) {
                     _log.warn("Transit request burst from router [" + routerId + "] -> " +
                               "Offense " + offenses + (banTime > 0 ?
@@ -680,7 +705,14 @@ public class RequestThrottler {
                     _log.info("Rejecting a transit request from [" + routerId + "] -> Drawn under the rejection probability"
                               + "\n* Requests: " + count + " of " + limit + " per 90s"
                               + " * Ratio: " + ratio + "x * Load: " + (int) (load * 100) + "%");
-                context.commSystem().forceDisconnect(h, "Transit request throttle");
+                // Dropping the session is behind the same switch as the burst
+                // disconnect. This branch is a peer drawn by a probability, not a
+                // peer over any limit, and the peer is the previous hop of a
+                // transit request: at the default limits an honest relay loses its
+                // session to us after ten forwarded requests.
+                if (cachedShouldDisconnect) {
+                    context.commSystem().forceDisconnect(h, "Transit request throttle");
+                }
             }
         }
 
