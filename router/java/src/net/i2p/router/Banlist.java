@@ -438,8 +438,14 @@ public class Banlist {
     public boolean isXgBanEnabled() { return _enableXgBan; }
 
     /**
-     * Check if LU router bans are enabled.
-     * LU = low bandwidth tier (L) + unreachable/firewalled (U).
+     * Whether the LU ban is enabled - banning peers that publish a low
+     * bandwidth tier and no reachability, see
+     * {@link #isLowTierUnreachable(String)}.
+     * <p>
+     * This covers the ban, the disconnect that goes with it, and the NetDb rule
+     * that skips storing such a peer. It does not cover the wider rule that
+     * keeps unreachable and low-bandwidth RouterInfos off disk: a peer this
+     * switch leaves unbanned is still not persisted while it is unreachable.
      *
      * @return true if LU router bans are enabled
      * @since 0.9.70+
@@ -520,6 +526,36 @@ public class Banlist {
         return caps != null &&
                caps.indexOf(Router.CAPABILITY_REACHABLE) >= 0 &&
                caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
+    }
+
+    /**
+     * Whether a capability string is the LU condition: a peer that advertises
+     * little bandwidth and cannot be reached as a client. Low tier is BW12 or
+     * BW32; unreachable is the U flag, or the absence of R, which is how the
+     * transports read a peer that never answered a handshake.
+     * <p>
+     * This is the one definition of the condition. The two bans in
+     * KademliaNetworkDatabaseFacade, the store rules in PersistentDataStore and
+     * TransientDataStore, and the request throttle all ask the same question of
+     * the same RouterInfo, and they used to answer it from five hand-written
+     * capability tests that disagreed about which tiers counted - one read
+     * BW12 only, another BW32 only. A peer could be banned on one path and kept
+     * on another.
+     * <p>
+     * ParticipatingThrottler's low-share test is deliberately wider than this -
+     * it also counts BW64 and the no-transit G flag - and is not this question.
+     *
+     * @param caps the capability string, may be null
+     * @return true if the peer is both low tier and unreachable
+     * @since 0.9.72+
+     */
+    public static boolean isLowTierUnreachable(String caps) {
+        if (caps == null) return false;
+        boolean isLowTier = caps.indexOf(Router.CAPABILITY_BW12) >= 0 ||
+                            caps.indexOf(Router.CAPABILITY_BW32) >= 0;
+        boolean isUnreachable = caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
+                                caps.indexOf(Router.CAPABILITY_REACHABLE) < 0;
+        return isLowTier && isUnreachable;
     }
 
     /**

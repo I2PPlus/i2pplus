@@ -107,7 +107,7 @@
 <tr><td><%=intl._t("This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. [Default is false]")%></td></tr>
 
 <tr class=config><th>router.banlistLU={true|false} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("This setting, when set to true, will block direct communication from all LU tier routers (low bandwidth, unreachable, or firewalled), adding them to the session banlist. [Default is false]")%></td></tr>
+<tr><td><%=intl._t("This setting, when set to true, bans for one hour, and disconnects from, every router that publishes a bandwidth tier of 12 or 32 KBps together with the unreachable flag, or with no reachability flag at all, adding them to the session banlist. It does not change which RouterInfos are kept on disk - unreachable and low bandwidth peers are not persisted either way. [Default is false]")%></td></tr>
 
 <tr class=config><th>router.banlistIntroducers={true|false} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting, when set to true, will ban routers that advertise more than the five introducers the SSU2 specification allows on a single transport address, adding them to the session banlist. The check runs as a RouterInfo is stored or looked up, and during the SSU2 handshake. [Default is true]")%></td></tr>

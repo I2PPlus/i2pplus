@@ -22,6 +22,7 @@ import net.i2p.data.LeaseSet2;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.Router;
 import net.i2p.router.BanLogger;
+import net.i2p.router.Banlist;
 import net.i2p.router.RouterContext;
 
 import net.i2p.router.transport.CommSystemFacadeImpl;
@@ -200,11 +201,7 @@ class TransientDataStore implements DataStore {
             String routerId = key.toShortBase64();
             boolean isFF = caps != null && caps.contains("f");
             boolean isUs = _context.routerHash().equals(ri.getIdentity().getHash());
-            boolean isLTier = containsCapability(ri, Router.CAPABILITY_BW12) ||
-                              containsCapability(ri, Router.CAPABILITY_BW32);
-            boolean isUnreachable = containsCapability(ri, Router.CAPABILITY_UNREACHABLE) ||
-                                    !containsCapability(ri, Router.CAPABILITY_REACHABLE);
-            boolean isLU = !isUs && isLTier && isUnreachable;
+            boolean isLU = !isUs && Banlist.isLowTierUnreachable(caps);
             boolean isXTier = containsCapability(ri, Router.CAPABILITY_BW_UNLIMITED);
             boolean isG = containsCapability(ri, Router.CAPABILITY_NO_TUNNELS);
             boolean isXG = !isUs && isXTier && isG;

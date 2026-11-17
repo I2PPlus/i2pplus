@@ -9,6 +9,7 @@ import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.BanLogger;
+import net.i2p.router.Banlist;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.transport.TransportImpl;
@@ -530,11 +531,7 @@ public class RequestThrottler {
         // short ban whose probability scales with the load score, so unloaded
         // routers still carry LU traffic instead of silently dropping it all.
         if (ri != null && context.banlist().isLuBanEnabled()) {
-            String caps = ri.getCapabilities();
-            boolean isLowTier = caps != null && (caps.indexOf(Router.CAPABILITY_BW12) >= 0 ||
-                                            caps.indexOf(Router.CAPABILITY_BW32) >= 0);
-            boolean isUnreachable = caps != null && (caps.indexOf('U') >= 0 || caps.indexOf('R') < 0);
-            if (isLowTier && isUnreachable) {
+            if (Banlist.isLowTierUnreachable(ri.getCapabilities())) {
                 float prob = luEnforcementProbability(ParticipatingThrottler.calculateLoadScore(context));
                 if (context.random().nextFloat() < prob || context.banlist().isBanlisted(h)) {
                     if (!context.banlist().isBanlisted(h)) {

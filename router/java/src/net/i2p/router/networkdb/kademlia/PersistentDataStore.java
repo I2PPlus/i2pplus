@@ -28,6 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.data.Base64;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DatabaseEntry;
+import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.BanLogger;
@@ -89,6 +90,13 @@ public class PersistentDataStore extends TransientDataStore {
     private static final int MAX_ROUTERS_INIT = 6000;
     /** Minimum router version to persist to disk. */
     private static final String MIN_VERSION = "0.9.64";
+
+    /** How long a peer that publishes our own IP address as its own is banned. */
+    private static final long SPOOF_BAN_MS = 72L*60*60*1000;
+    /** How long a peer whose RouterInfo carries an impossible version is banned. */
+    private static final long INVALID_VERSION_BAN_MS = 24L*60*60*1000;
+    /** How long a low-tier unreachable peer is banned, while the LU ban is on. */
+    private static final long LU_BAN_MS = 60L*60*1000;
 
     /** Stat rate periods for NetDb write metrics. */
     private static final long[] RATES = RateConstants.BASIC_RATES;
@@ -540,10 +548,11 @@ public class PersistentDataStore extends TransientDataStore {
             boolean peerIsFirewalled = ri.isHidden() || f.unreachable;
             if (f.ip != null && f.ip.equals(f.ourIP) && !peerIsFirewalled) {
                 if (_log.shouldWarn()) {
-                    _log.warn("Banning and disconnecting from [" + key.toShortBase64() + "] for 72h -> Router is spoofing our IP address!");
+                    _log.warn("Banning and disconnecting from [" + key.toShortBase64() + "] -> Router is spoofing our IP address " +
+                              "* Ban: " + DataHelper.formatDuration(SPOOF_BAN_MS));
                 }
-                _banLogger.logBan(key, f.ip, "Spoofed IP address (ours)", 72L*60*60*1000, ri);
-                _context.banlist().banlistRouter(key, "Spoofed IP address (ours)", null, null, _context.clock().now() + 72L*60*60*1000);
+                _banLogger.logBan(key, f.ip, "Spoofed IP address (ours)", SPOOF_BAN_MS, ri);
+                _context.banlist().banlistRouter(key, "Spoofed IP address (ours)", null, null, _context.clock().now() + SPOOF_BAN_MS);
                 _context.simpleTimer2().addEvent(new Disconnector(key, "Spoofed IP address"), 3L*1000);
                 shouldDelete = true;
             }
@@ -553,28 +562,33 @@ public class PersistentDataStore extends TransientDataStore {
             if (_log.shouldDebug()) {
                 _log.debug("Not writing RouterInfo [" + key.toShortBase64() + "] to disk -> Invalid version in RouterInfo (" + f.version + ")");
             }
-            if (_log.shouldWarn()) {
-                _log.warn("Banning for 24h and disconnecting from Router [" + key.toShortBase64() + "]" +
-                          " -> Invalid version " + f.version + " / " + f.bw + (f.unreachable ? "U" : ""));
-                _banLogger.logBan(key, f.ip != null ? f.ip : "UNKNOWN", "Invalid Router version (" + f.version + " / " + f.bw + ")", 24L*60*60*1000, ri);
+            // The RouterInfo is rejected either way; the switch decides only
+            // whether the identity behind it is also banlisted.
+            if (_context.banlist().isInvalidVersionBanEnabled()) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Banning and disconnecting from Router [" + key.toShortBase64() + "]" +
+                              " -> Invalid version " + f.version + " / " + f.bw + (f.unreachable ? "U" : "") +
+                              " * Ban: " + DataHelper.formatDuration(INVALID_VERSION_BAN_MS));
+                }
+                _banLogger.logBan(key, f.ip != null ? f.ip : "UNKNOWN", "Invalid Router version (" + f.version + " / " + f.bw + ")",
+                                  INVALID_VERSION_BAN_MS, ri);
                 String flag = f.unreachable ? "U" : f.reachable ? "R" : "";
                 _context.banlist().banlistRouter(key, "Invalid Router version (" + f.version + " / " + f.bw +
-                                                 flag + ")", null, null, _context.clock().now() + 24L*60*60*1000);
+                                                 flag + ")", null, null, _context.clock().now() + INVALID_VERSION_BAN_MS);
+                _context.simpleTimer2().addEvent(new Disconnector(key, "Invalid version"), 11L*60*1000);
             }
-            _context.simpleTimer2().addEvent(new Disconnector(key, "Invalid version"), 11L*60*1000);
             shouldDelete = true;
-        } else if (f.isLTier && f.unreachable) {
+        } else if (Banlist.isLowTierUnreachable(f.caps) && _context.banlist().isLuBanEnabled()) {
             if (_log.shouldDebug()) {
                 _log.debug("Not writing RouterInfo [" + key.toShortBase64() + "] to disk -> LU Router");
             }
-            if (_context.banlist().isLuBanEnabled()) {
-                if (_log.shouldInfo()) {
-                    _log.info("Banning [" + key.toShortBase64() + "] for 1h -> LU Router");
-                    _banLogger.logBan(key, f.ip != null ? f.ip : "UNKNOWN", "LU Router", 60L*60*1000, ri);
-                    _context.banlist().banlistRouter(key, "LU Router", null, null, _context.clock().now() + 60L*60*1000);
-                }
+            if (_log.shouldInfo()) {
+                _log.info("Banning Router [" + key.toShortBase64() + "] -> Low bandwidth tier and unreachable " +
+                          "* Ban: " + DataHelper.formatDuration(LU_BAN_MS));
             }
-            _context.simpleTimer2().addEvent(new Disconnector(key, "Invalid version"), 11L*60*1000);
+            _banLogger.logBan(key, f.ip != null ? f.ip : "UNKNOWN", "LU Router", LU_BAN_MS, ri);
+            _context.banlist().banlistRouter(key, "LU Router", null, null, _context.clock().now() + LU_BAN_MS);
+            _context.simpleTimer2().addEvent(new Disconnector(key, "LU Router"), 11L*60*1000);
             shouldDelete = true;
         } else if (f.unreachable) {
             if (_log.shouldDebug()) {

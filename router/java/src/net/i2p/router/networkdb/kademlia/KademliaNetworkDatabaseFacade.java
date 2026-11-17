@@ -1363,8 +1363,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     * Determine whether the given router should be banlisted due to being:
-     * - an unreachable L-tier router (CAPABILITY_BW12),
+     * Determine whether the given router should be banlisted for being an
+     * unreachable low-tier peer - the LU condition, see
+     * {@link Banlist#isLowTierUnreachable(String)} - while the LU ban is
+     * enabled.
      * <p>
      * This is typically used to filter out low-performing routers.
      *
@@ -1374,11 +1376,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      */
     private boolean shouldBanlistLU(RouterInfo ri) {
         if (!_context.banlist().isLuBanEnabled()) return false;
-        boolean isLTier = containsCapability(ri, Router.CAPABILITY_BW12);
         boolean isUs = _context.routerHash().equals(ri.getIdentity().getHash());
-        boolean isUnreachable = containsCapability(ri, Router.CAPABILITY_UNREACHABLE) ||
-                                !containsCapability(ri, Router.CAPABILITY_REACHABLE);
-        return !isUs && isLTier && isUnreachable;
+        return !isUs && Banlist.isLowTierUnreachable(ri.getCapabilities());
     }
 
     /**
@@ -2911,11 +2910,7 @@ return false;
      */
     private boolean checkLU(RouterInfo routerInfo, String caps, String routerId, Hash h) {
         if (!_context.banlist().isLuBanEnabled()) return false;
-        if (caps == null) return false;
-        boolean isLowTier = caps.indexOf(Router.CAPABILITY_BW12) >= 0 ||
-                            caps.indexOf(Router.CAPABILITY_BW32) >= 0;
-        boolean isUnreachable = caps.indexOf('U') >= 0 || caps.indexOf('R') < 0;
-        if (isLowTier && isUnreachable) {
+        if (Banlist.isLowTierUnreachable(caps)) {
             if (!_context.banlist().isBanlisted(h)) {
                 String ipPort = TransportImpl.getRouterIPPort(routerInfo);
                 String version = routerInfo.getVersion();
