@@ -3202,7 +3202,8 @@ public class ProfileOrganizer {
 
     /**
      * Common gate for fast/high-cap tier fill passes: the peer must be
-     * selectable, have acceptable tunnel acceptance, no recent tunnel
+     * selectable, have answered enough build requests for its acceptance ratio to
+     * be judged at all, have acceptable tunnel acceptance, no recent tunnel
      * failures, and not be in loss probation.  Evaluation order preserves
      * the original short-circuit chain (cheap pure checks before the
      * netDb-backed selectability check is already handled by callers that
@@ -3239,6 +3240,13 @@ public class ProfileOrganizer {
         // The fast-tier sample floor, not one: this gate runs on the fill passes
         // as well as the rebuild, so a floor of one rejected fill candidates on a
         // single refusal, which is the asymmetry the high-capacity path documents.
+        // And the floor is a floor on the *evidence*, not only on the ratio: a peer
+        // with no answered build requests is not judged by isLowTunnelAcceptance at
+        // all, it falls through to the "alive peer is allowed in to accumulate data"
+        // branch, which is how a freshly minted identity reached the fast tier at
+        // the first reorganize. The data it would accumulate comes from the
+        // high-capacity and not-failing tiers, which stay permissive.
+        if (requireAcceptance && !hasBuildHistory(profile, FAST_ACCEPTANCE_SAMPLES)) {return false;}
         if (requireAcceptance && isLowTunnelAcceptance(profile, buildSuccess, now, FAST_ACCEPTANCE_SAMPLES)) {return false;}
         if (hasRecentTunnelFailures(profile)) {return false;}
         return !inLossProbation(profile, now);
@@ -3501,7 +3509,10 @@ public class ProfileOrganizer {
     private int fillFastTierFallbacks(long now, Set<PeerProfile> activeProfiles, double buildSuccess, int known) {
         int minFast = getMinimumFastPeers(known);
         int added = 0;
-        int target = minFast;
+        // Held one below the reservoir, the same bar the rebuild and the
+        // demotion-driven fill use. The high-capacity fill runs first for exactly
+        // this reason, so the depth here is the one step 6 just established.
+        int target = fastFillTargetFor(minFast, _highCapacityPeers.size());
 
         if (_fastPeers.size() < target) {
             // The high-capacity tier is the priority ordering, not the universe.
@@ -4105,8 +4116,11 @@ public class ProfileOrganizer {
         if (needsTierRestore(_fastPeers.size(), oldFastSize, minFast)) {
             // Aim at the tier minimum, not only at the old size: on a tier that
             // has been short for days, the old size is short too, and stopping at
-            // it leaves the tier exactly as starved as it was.
-            int target = Math.max(oldFastSize, minFast);
+            // it leaves the tier exactly as starved as it was. Still one below the
+            // reservoir's depth — this pass runs after the high-capacity fill, and
+            // restoring a fast tier deeper than the supply behind it is what the
+            // fill ordering exists to prevent.
+            int target = fastFillTargetFor(Math.max(oldFastSize, minFast), _highCapacityPeers.size());
             int restored = 0;
             for (Hash peer : oldFastPeers) {
                 if (_fastPeers.size() >= target) break;
@@ -5996,6 +6010,12 @@ public class ProfileOrganizer {
         //   requests than that is how good peers stayed out of it.
         // - isHighBandwidthCapable: X/P/O tier, no D/E/G caps
         // - Capacity above threshold, or room in the tier
+        // High capacity stays the permissive tier on purpose: it is the
+        // reservoir the fast tier is seeded from and the pool exploratory
+        // tunnels are built from, and a peer has to be offered builds before it
+        // can have any build history at all. Keeping it roomy is what keeps it
+        // larger than the fast tier, so a fast peer that demotes has a
+        // replacement beside it.
         if (isLowTunnelAcceptance(profile, buildSuccess, now, MIN_TUNNEL_REQUESTS)) {
             recordPromotionSkip("lowTunnelAcceptance.highCap");
             return false;
@@ -6017,7 +6037,8 @@ public class ProfileOrganizer {
         // Fast tier
         // Fast = high-cap + responsive, with strict bandwidth gate:
         // X/P/O only, no D/E/G/U caps.  Three admission paths:
-        // 1. High-cap responsive: already high-cap, low-latency or untested.
+        // 1. High-cap responsive: already high-cap, and low-latency or its
+        //    peer-test data is stale.
         // 2. Quality mode: all tests passing, active, proven throughput.
         // 3. Filling mode: speed-based or low-latency bypass.
         // The fast tier keeps the strict acceptance floor high capacity dropped: it is
@@ -6029,8 +6050,23 @@ public class ProfileOrganizer {
             recordPromotionSkip("lowTunnelAcceptance.fast");
             return false;
         }
-        if (!_fastPeers.containsKey(peer) && _fastPeers.size() < maxFast &&
-            isFastTierCapable(peer)) {
+        // All three paths below need that same five-request floor. A peer with no
+        // build history has no measurement of its own at all, and the speed value
+        // it is scored on is then the bandwidth tier it advertised (X = 10000), so
+        // "speed above threshold" is not evidence either. A peer with no history is
+        // still offered builds through the high-capacity and not-failing tiers, and
+        // that is where it earns the samples this gate wants.
+        //
+        // The fast tier is also held one below the reservoir behind it, the same
+        // bar the fill passes use (see {@link #fastFillTargetFor}). Its own ceiling
+        // does not do that: the active-peer caps scale the fast tier at 1.5x of
+        // reachable peers and high capacity at 1x, so at the sizes a live router
+        // runs at — 1,221 reachable peers — the fast ceiling is 1,831 against the
+        // reservoir's 1,221, and a rebuild can seat more fast peers than there is
+        // supply to replace them with.
+        int fastCeiling = fastFillTargetFor(maxFast, _highCapacityPeers.size());
+        if (!_fastPeers.containsKey(peer) && _fastPeers.size() < fastCeiling &&
+            isFastTierCapable(peer) && hasBuildHistory(profile, FAST_ACCEPTANCE_SAMPLES)) {
             // Proven throughput is a dated credential, not a permanent one. The
             // peak ring is never decayed, so as an undated credential it pushed
             // _fastQualityCount past MIN_FAST_QUALITY_COUNT over days, the tier
@@ -6046,17 +6082,20 @@ public class ProfileOrganizer {
             // have dropped is not counted as a deferral.
             boolean fastCandidate;
             if (!recentFailures && alreadyHighCap &&
-                (profile.isLowLatency() || !profile.hasLatencyEvidence() ||
-                 !profile.hasBeenTested(now))) {
+                (profile.isLowLatency() || !profile.hasBeenTested(now))) {
                 // High-cap responsive: peer is in high-cap (X/P/O or
-                // capacity-qualified) and is low-latency, unmeasured for latency,
-                // or untested for responsiveness.
+                // capacity-qualified) and is low-latency, or its peer-test data
+                // is stale.
                 // Tested-and-slow peers are excluded — their bandwidth tier is
                 // real, but their responsiveness is, today. "Today" is the point:
                 // both of these measurements were undated, so a peer measured
                 // slow once, years ago, was excluded from this path permanently,
                 // and the only thing that refreshes a measurement is being
                 // selected by a path this one gates.
+                // A peer with no latency measurement at all no longer takes this
+                // path: it says nothing about responsiveness, and this is the
+                // path that asserts it. The filling path below still gives an
+                // unmeasured peer its probe.
                 fastCandidate = true;
             } else if (fastQuality) {
                 // Quality mode: all tests passing — peer test, active,
@@ -7230,6 +7269,28 @@ public class ProfileOrganizer {
         double bar = (total < MIN_TUNNEL_REQUESTS) ? 0.20 : MIN_TUNNEL_ACCEPTANCE_RATIO;
         if (highStress) {bar = 0.10;}
         return ratio < bar;
+    }
+
+    /**
+     * Whether the peer has been asked about at least {@code minRequests} tunnel
+     * builds over its lifetime — the sample count {@link #isLowTunnelAcceptance}
+     * needs before it will judge a peer's acceptance ratio at all. Timeouts are
+     * in neither count, so this counts offers the peer answered, not attempts.
+     * <p>
+     * Package-visible and static so a test can pin the floor without a router
+     * context: tier admission itself runs under the organizer's write lock.
+     *
+     * @param profile the peer's profile, may be null
+     * @param minRequests the number of answered build requests the caller needs
+     *                    before it will treat the peer's acceptance ratio as a
+     *                    measurement
+     * @return true if the peer has agreed to or rejected at least that many builds
+     * @since 0.9.72+
+     */
+    static boolean hasBuildHistory(PeerProfile profile, int minRequests) {
+        TunnelHistory th = profile != null ? profile.getTunnelHistory() : null;
+        if (th == null) {return false;}
+        return th.getLifetimeAgreedTo() + th.getLifetimeRejected() >= minRequests;
     }
 
     /**
