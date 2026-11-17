@@ -203,14 +203,17 @@ public class SDSCache<V extends SimpleDataStructure> {
      * since every int is a legal key (a hash of ff ff ff ff is -1). Its
      * release/acquire ordering also means a reader that sees a reference sees
      * its key and everything the writer did before publishing it.
-     * <p>As with the map it replaces, a collected value keeps its slot until the
-     * key is written again, so the table grows with the number of distinct keys
-     * seen rather than with the number of live entries.
+     * <p>A collected value keeps its slot until something else claims it, so the
+     * table is reclaimed in place: a put reuses a slot whose referent is gone,
+     * growing drops the collected entries instead of copying them, and a table
+     * that is full of live entries at its ceiling is replaced by an empty one of
+     * the same size. The table is therefore bounded by the size the cache was
+     * built for, not by the number of distinct keys the router has ever parsed.
      *
      * @param <V> type of object cached
      * @since 0.9.72+
      */
-    private static final class IntWeakCache<V> {
+    static final class IntWeakCache<V> {
 
         /** Largest table allocated up front, however big the caller expects the cache to get. */
         private static final int MAX_INITIAL_CAPACITY = 1024;
@@ -243,6 +246,13 @@ public class SDSCache<V extends SimpleDataStructure> {
         private int _size;
 
         /**
+         * Largest table the cache will use, from the size it was built for. At
+         * most half the slots are occupied, so this is twice the number of
+         * entries the cache is sized to hold.
+         */
+        private final int _maxCapacity;
+
+        /**
          * Builds a cache for the expected size.
          *
          * @param expectedSize the number of entries expected
@@ -251,6 +261,7 @@ public class SDSCache<V extends SimpleDataStructure> {
             int capacity = 16;
             while (capacity < expectedSize && capacity < MAX_INITIAL_CAPACITY) capacity <<= 1;
             _table = new Table(capacity);
+            _maxCapacity = Math.max(capacity, expectedSize * 2);
         }
 
         /**
@@ -297,8 +308,13 @@ public class SDSCache<V extends SimpleDataStructure> {
         synchronized void put(int key, WeakReference<V> ref) {
             Table t = _table;
             int idx = slot(key, t.mask);
-            while (t.refs.get(idx) != null) {
-                if (t.keys[idx] == key) {
+            while (true) {
+                WeakReference<?> old = t.refs.get(idx);
+                if (old == null) {break;}
+                if (t.keys[idx] == key || old.get() == null) {
+                    // The key is already here, or its value has been collected and
+                    // the slot is free for the taking either way.
+                    t.keys[idx] = key;
                     t.refs.set(idx, ref);
                     return;
                 }
@@ -306,7 +322,7 @@ public class SDSCache<V extends SimpleDataStructure> {
             }
             // keep the table at most half full, so probes stay short
             if (_size * 2 >= t.keys.length) {
-                t = grow();
+                t = t.keys.length >= _maxCapacity ? reset() : grow();
                 idx = slot(key, t.mask);
                 while (t.refs.get(idx) != null) idx = (idx + 1) & t.mask;
             }
@@ -316,23 +332,43 @@ public class SDSCache<V extends SimpleDataStructure> {
         }
 
         /**
-         * Doubles the table. Callers must synchronize on this.
+         * Doubles the table, dropping the entries whose values have been collected
+         * rather than carrying them into the new table. Callers must synchronize
+         * on this.
          *
          * @return the new table
          */
         private Table grow() {
             Table old = _table;
             Table t = new Table(old.keys.length * 2);
+            int n = 0;
             for (int i = 0; i < old.keys.length; i++) {
                 WeakReference<?> ref = old.refs.get(i);
-                if (ref == null) continue;
+                if (ref == null || ref.get() == null) {continue;}
                 int key = old.keys[i];
                 int idx = slot(key, t.mask);
                 while (t.refs.get(idx) != null) idx = (idx + 1) & t.mask;
                 t.keys[idx] = key;
                 t.refs.set(idx, ref);
+                n++;
             }
+            _size = n;
             _table = t;
+            return t;
+        }
+
+        /**
+         * Replaces a table that is half full of live entries at the ceiling with an
+         * empty one of the same size, so the cache holds at its high-water mark
+         * instead of growing with every distinct key the router parses. Callers
+         * must synchronize on this.
+         *
+         * @return the new table
+         */
+        private Table reset() {
+            Table t = new Table(_table.keys.length);
+            _table = t;
+            _size = 0;
             return t;
         }
 
@@ -343,5 +379,19 @@ public class SDSCache<V extends SimpleDataStructure> {
                 _size = 0;
             }
         }
+
+        /**
+         * Slots holding an entry right now, for tests and diagnostics.
+         *
+         * @return the occupied slot count
+         */
+        synchronized int size() { return _size; }
+
+        /**
+         * Slots in the table in use, for tests and diagnostics.
+         *
+         * @return the table capacity
+         */
+        int capacity() { return _table.keys.length; }
     }
 }
