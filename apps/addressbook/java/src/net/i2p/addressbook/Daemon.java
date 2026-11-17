@@ -917,7 +917,15 @@ public class Daemon {
             }
             if (delay < 1) {delay = 1;}
 
-            update(settings, homeFile.getAbsolutePath());
+            try {
+                update(settings, homeFile.getAbsolutePath());
+            } catch (RuntimeException re) {
+                // One subscription's response must not end the daemon. With
+                // this thread gone, nothing is fetched again until the router
+                // restarts, and the failure was one host's HTTP response.
+                _log.append("ERROR: Addressbook update failed: " + re);
+                re.printStackTrace();
+            }
             try {
                 synchronized (this) {wait(delay * 60 * 60 * 1000);}
             } catch (InterruptedException exp) { /* ignored */ }
