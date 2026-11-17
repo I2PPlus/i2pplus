@@ -3,11 +3,14 @@ package net.i2p.router.update;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import net.i2p.CoreVersion;
 import net.i2p.crypto.SU3File;
 import net.i2p.crypto.TrustedUpdate;
@@ -433,29 +436,32 @@ class PluginUpdateRunner extends UpdateRunner {
      * @since 0.9.15
      */
     private Properties getPluginConfig(File f, File to, String url) {
-        File tempDir = new File(_context.getTempDir(), "tmp" + _context.random().nextInt() + "-unzip");
-        if (!FileUtil.extractZip(to, tempDir, Log.ERROR)) {
+        Properties props = new OrderedProperties();
+        // Read the configuration straight out of the zip. Extracting the archive
+        // to get at it unpacks every .jar.pack entry through Pack200 first, and a
+        // crafted pack costs the heap inside the unpacker before the signature
+        // over the archive has even been looked at. The archive is extracted in
+        // full later, once the signature has been checked.
+        try (ZipFile zf = new ZipFile(to)) {
+            ZipEntry entry = zf.getEntry("plugin.config");
+            if (entry == null || entry.isDirectory()) {
+                f.delete();
+                to.delete();
+                statusDone("<b>" + _t("Plugin from {0} does not contain the required configuration file", url)
+                           + "</b>");
+                return null;
+            }
+            try (InputStream in = zf.getInputStream(entry)) {
+                DataHelper.loadProps(props, in);
+            }
+        } catch (IOException ioe) {
             f.delete();
             to.delete();
-            FileUtil.rmdir(tempDir, false);
             String msg = _t("Plugin from {0} is corrupt", url);
             // too hard to figure out if it actually contains pack200 files, so just add a hint...
             if (!FileUtil.isPack200Supported()) msg += " (or requires Pack200 which is unsupported in this JVM)";
             statusDone("<b>" + msg + "</b>");
             return null;
-        }
-        File installProps = new File(tempDir, "plugin.config");
-        Properties props = new OrderedProperties();
-        try {
-            DataHelper.loadProps(props, installProps);
-        } catch (IOException ioe) {
-            f.delete();
-            to.delete();
-            statusDone("<b>" + _t("Plugin from {0} does not contain the required configuration file", url) + "</b>");
-            return null;
-        } finally {
-            // we don't need this anymore, we will unzip again
-            FileUtil.rmdir(tempDir, false);
         }
         return props;
     }
