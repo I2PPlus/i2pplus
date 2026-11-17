@@ -769,12 +769,15 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
             }
             if (state != null) {
                 _inboundCompleted.increment();
-                // O(tags_in_set) removal using the tagset's registered tags,
-                // instead of O(total_tags) scan of the entire _inboundTagSets map.
-                for (RatchetSessionTag t : tagSet.getRegisteredTags()) {
-                    _inboundTagSets.remove(t);
-                }
-                tagSet.clearRegisteredTags();
+                // Leave the rest of the NSR window where it is. This runs
+                // before the engine has checked the message's AEAD, so a
+                // message copying an observed tag would empty the window and
+                // still fail to decrypt; and the responder keeps answering with
+                // the next tags of the same handshake until our Existing
+                // Session message reaches it, so the window has to outlive the
+                // first reply that came out of it. What is left of it expires
+                // with the tag set in aggressiveExpire(), and the tags of a
+                // handshake that lost the race are removed in updateSession().
             }
         } else {
             if (_log.shouldInfo())

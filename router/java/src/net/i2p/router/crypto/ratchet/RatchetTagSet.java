@@ -531,7 +531,8 @@ class RatchetTagSet implements TagSetHandle {
         // The caller took this tag out of the SKM's inbound map before asking us
         // for the key, so it is unreachable there already. Drop it from the index
         // as well, or the index keeps every tag the session ever spent and the
-        // SKM's two removal loops re-remove them for the rest of the session.
+        // SKM's cleanup of a lost handshake re-removes them for the rest of the
+        // session.
         _registeredTags.remove(tag);
 
         // NSR
@@ -642,7 +643,8 @@ class RatchetTagSet implements TagSetHandle {
 
     /**
      * Return the set of tags registered in the SKM's _inboundTagSets map.
-     * Used for O(tags_in_set) removal in {@link net.i2p.router.crypto.ratchet.RatchetSKM#consumeTag}.
+     * Used for the O(tags_in_set) removal of a handshake that lost the race,
+     * in {@link net.i2p.router.crypto.ratchet.RatchetSKM#updateSession}.
      * <p>
      * Live view only: a tag leaves this set when the SKM expires it, so its size
      * tracks the ratchet window, not the number of tags the session has used.
@@ -656,8 +658,8 @@ class RatchetTagSet implements TagSetHandle {
 
     /**
      * Forget every tag this set registered with the SKM, for a caller that has
-     * just removed them all from _inboundTagSets - handshake completion or a
-     * stale-session cleanup. Without this the tags of a finished handshake stay
+     * just removed them all from _inboundTagSets - the cleanup of a handshake
+     * that lost the race. Without this the tags of that handshake stay
      * reachable for the rest of the tagset's life.
      *
      * @since 0.9.72+
