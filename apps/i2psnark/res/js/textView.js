@@ -67,12 +67,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const responseCache = new Map();
 
   /**
-   * @type {DOMParser}
-   * @description Reusable DOMParser for escaping HTML in fetched content.
-   */
-  const parser = new DOMParser();
-
-  /**
    * @type {boolean}
    * @description Whether event listeners have already been attached.
    */
@@ -144,15 +138,26 @@ document.addEventListener("DOMContentLoaded", function () {
   ({ viewerWrapper, viewerContent, viewerFilename } = createTextViewer());
 
   /**
-   * @function displayWithLineNumbers
-   * @description Converts plain text into an ordered list with each line as a list item,
-   * providing numbered line display for code-like files.
-   * @param {string} text - The raw text content to format.
-   * @returns {string} HTML string with line numbers as an ordered list.
+   * @function buildContent
+   * @description Builds the node that holds a fetched file in the viewer: one text node
+   * for a plain file, an ordered list with one text node per line for the
+   * line-numbered types. The file's text is never parsed as markup. A torrent's
+   * `.txt` or `.nfo` is content its author chose, and parsing it as HTML and writing
+   * the result back with `innerHTML` turned `&lt;b&gt;` in the file into an element of
+   * the console page, so a torrent could put live markup on the listing.
+   * @param {string} text - The text to show, already space-normalised.
+   * @param {boolean} numbered - Whether to wrap the lines in an ordered list.
+   * @returns {Node} the node to place in the viewer
    */
-  const displayWithLineNumbers = text => {
-    const lines = text.split("\n").map(line => `<li>${line}</li>`);
-    return `<ol>${lines.join("")}</ol>`;
+  const buildContent = (text, numbered) => {
+    if (!numbered) {return doc.createTextNode(text);}
+    const list = doc.createElement("ol");
+    for (const line of text.split("\n")) {
+      const item = doc.createElement("li");
+      item.textContent = line;
+      list.appendChild(item);
+    }
+    return list;
   };
 
   /**
@@ -167,7 +172,7 @@ document.addEventListener("DOMContentLoaded", function () {
    */
   const displayText = (link, fileName, fileExt, linkHref) => {
     if (responseCache.has(linkHref)) {
-      renderContent(fileName, fileExt, responseCache.get(linkHref));
+      renderContent(fileExt, responseCache.get(linkHref));
       return;
     }
 
@@ -181,7 +186,7 @@ document.addEventListener("DOMContentLoaded", function () {
     fetch(linkHref).then(response => response.text()).then(data => {
       if (responseCache.size >= 50) {responseCache.delete(responseCache.keys().next().value);}
       responseCache.set(linkHref, data);
-      renderContent(fileName, fileExt, data);
+      renderContent(fileExt, data);
     }).catch(() => {});
 
     const fileNameSpan = doc.createElement("span");
@@ -216,22 +221,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /**
    * @function renderContent
-   * @description Renders fetched text content into the viewer. Applies pre-formatted styling
-   * for non-plain-text files, HTML-escapes the content, displays with or without line numbers
-   * based on file type, and shows the viewer wrapper.
-   * @param {string} fileName - The filename to display in the viewer header.
+   * @description Renders fetched text content into the viewer. Applies pre-formatted
+   * styling for non-plain-text files, normalises the spaces the display would
+   * otherwise collapse, shows line numbers for the code-like types, and opens the
+   * viewer. The content goes in as text nodes, never as markup.
    * @param {string} fileExt - The file extension determining display format.
    * @param {string} data - The raw text content to render.
    * @returns {void}
    */
-  const renderContent = (fileName, fileExt, data) => {
+  const renderContent = (fileExt, data) => {
     if (fileExt !== "txt" && fileExt !== "srt") { viewerContent.classList.add("pre"); }
-    const escaped = parser.parseFromString(data, "text/html").body.textContent || data;
-    const needsHardSpaces = numberedFileExts.has(fileExt) || viewerContent.classList.contains("pre");
-    const encoded = needsHardSpaces ? escaped.replace(/ /g, "\u00A0") : escaped;
-    viewerContent.innerHTML = numberedFileExts.has(fileExt) ? displayWithLineNumbers(encoded) : encoded;
-    viewerContent.classList.toggle("lines", numberedFileExts.has(fileExt));
-    viewerContent.insertBefore(viewerFilename, viewerContent.firstChild);
+    const numbered = numberedFileExts.has(fileExt);
+    const needsHardSpaces = numbered || viewerContent.classList.contains("pre");
+    const text = needsHardSpaces ? data.replace(/ /g, "\u00A0") : data;
+    viewerContent.replaceChildren(viewerFilename, buildContent(text, numbered));
+    viewerContent.classList.toggle("lines", numbered);
     viewerWrapper.hidden = false;
     requestAnimationFrame(resetScrollPosition);
     preventScroll([doc.documentElement, doc.body], true);

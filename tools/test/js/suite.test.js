@@ -35,6 +35,7 @@ import "./dom/tablesort.test.js";
 import "./dom/testReport.test.js";
 import "./dom/iframeResizer.test.js";
 import "./dom/iframeResizerHardening.test.js";
+import "./dom/textViewerEscaping.test.js";
 import "./pure/scriptLoadKinds.test.js";
 
 await import("./dom/importAll.test.js");
