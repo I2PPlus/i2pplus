@@ -117,6 +117,13 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     private static final long TASK_CLEANER_TIME = 15 * (long) 60 * 1000;
     /** Config key enabling unsigned updates. */
     private static final String PROP_UNSIGNED_AVAILABLE = "router.updateUnsignedAvailable";
+    /**
+     * Config key holding the date of the last unsigned update accepted for
+     * install. Kept apart from {@link NewsHelper#PROP_LAST_UPDATE_TIME}, which
+     * the update checker overwrites with its own check time on every pass, so
+     * that one cannot also be the baseline a new update is compared against.
+     */
+    private static final String PROP_UNSIGNED_ACCEPTED = "router.updateUnsignedAccepted";
     /** Config key enabling dev SU3 updates. */
     private static final String PROP_DEV_SU3_AVAILABLE = "router.updateDevSU3Available";
 
@@ -1459,6 +1466,27 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
+     * Whether an unsigned update is new enough to stage. The zip carries no
+     * version and no signature, so the server's Last-Modified header is the
+     * only statement of what the file is, and it is whatever the server says
+     * it is. Accepting a date at or before the last update accepted lets the
+     * server hand back an older build - one with the fixes taken out - and
+     * re-arms the download for the next pass, so the router can be held on a
+     * build of the server's choosing.
+     *
+     * @param modtime the update's Last-Modified in ms, 0 or less if the server
+     *                sent none, in which case the current time stands in for
+     *                it
+     * @param accepted the date of the last unsigned update accepted, 0 if none
+     * @param now current time in ms
+     * @return true if the update is dated after the last one accepted
+     * @since 0.9.72+
+     */
+    static boolean isUnsignedUpdateNewer(long modtime, long accepted, long now) {
+        return (modtime > 0 ? modtime : now) > accepted;
+    }
+
+    /**
      * Only for router updates.
      *
      * @param uri download URI, used only for the status text and to tell an
@@ -1472,6 +1500,22 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     private boolean handleUnsignedFile(URI uri, String lastmod, File updFile) {
         String url = uri.toString();
         String policy = _context.getProperty(ConfigUpdateHandler.PROP_UPDATE_POLICY);
+        long modtime = 0;
+        if (lastmod != null) {
+            try {modtime = Long.parseLong(lastmod);}
+            catch (NumberFormatException nfe) { /* ignored */ }
+        }
+        long accepted = _context.getProperty(PROP_UNSIGNED_ACCEPTED, 0L);
+        if (!isUnsignedUpdateNewer(modtime, accepted, _context.clock().now())) {
+            updFile.delete();
+            String msg = _t("Unsigned update file from {0} is out of date", url);
+            if (url.contains("skank")) {msg = msg.replace("Unsigned update file", "I2P+ Update");}
+            updateStatus("<b class=volatile>" + msg + "</b>");
+            _log.log(Log.CRIT, "Refusing an unsigned update -> Dated no later than the update already accepted" +
+                               "\n* Source: " + url +
+                               "\n* Stale by: " + DataHelper.formatDuration(accepted - modtime));
+            return false;
+        }
         if (FileUtil.verifyZip(updFile) && (!isExternalRestartPending() || !("install".equals(policy)))) {
             if (url.contains("skank")) {updateStatus("<b class=volatile>" + _t("Update downloaded").replace("Update", "I2P+ Update") + "</b>");}
             else {updateStatus("<b class=volatile>" + _t("Update downloaded") + "</b>");}
@@ -1489,22 +1533,16 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         boolean copied = FileUtil.copy(updFile, to, true, false);
         if (copied) {
             updFile.delete();
-            long modtime = 0;
-            if (lastmod != null) {
-                try {modtime = Long.parseLong(lastmod);}
-                catch (NumberFormatException nfe) { /* ignored */ }
-            }
             if (modtime <= 0) {modtime = _context.clock().now();}
             _context.router().saveConfig(NewsHelper.PROP_LAST_UPDATE_TIME, Long.toString(modtime));
-            if ("install".equals(policy)) {
-                if (url.contains("skank")) {_log.log(Log.CRIT, "I2P+ update downloaded, restarting to install it...");}
-                else {_log.log(Log.CRIT, "Update was downloaded, restarting to install it...");}
-                restart();
-            } else {
-                if (url.contains("skank")) {_log.logAlways(Log.CRIT, "I2P+ update downloaded - will be installed at next restart");}
-                else {_log.logAlways(Log.CRIT, "Update was downloaded - will be installed at next restart");}
-                updateStatus(""); // SidebarHelper will display restart info separately
-            }
+            _context.router().saveConfig(PROP_UNSIGNED_ACCEPTED, Long.toString(modtime));
+            // An unsigned zip is authenticated by nothing but the destination it
+            // was fetched from, so it does not get to restart the router by
+            // itself: the user sees the staged update in the sidebar and
+            // restarts once they have seen what was fetched.
+            if (url.contains("skank")) {_log.logAlways(Log.CRIT, "I2P+ update downloaded - will be installed at next restart");}
+            else {_log.logAlways(Log.CRIT, "Update was downloaded - will be installed at next restart");}
+            updateStatus(""); // SidebarHelper will display restart info separately
         } else {
             _log.log(Log.CRIT, "Failed copy to " + to);
             updateStatus("<b class=volatile>" + _t("Failed copy to {0}", to.getAbsolutePath()) + "</b>");
