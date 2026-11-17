@@ -122,4 +122,14 @@ public class EepGetFailureReasonTest {
     public void urlWithoutASchemePassesThrough() {
         assertEquals("[plain.example/path]", EepGet.urlLabel("plain.example/path"));
     }
+
+    /**
+     * A base32 host shorter than a real destination's 52-character hash is left
+     * whole; cutting at a fixed offset instead ran off the end of the string.
+     */
+    @Test
+    public void shortB32IsNotCut() {
+        assertEquals("[x.b32.i2p/]", EepGet.urlLabel("http://x.b32.i2p/"));
+        assertEquals("[127.0.0.1:8080/x.b32.i2p]", EepGet.urlLabel("http://127.0.0.1:8080/x.b32.i2p"));
+    }
 }

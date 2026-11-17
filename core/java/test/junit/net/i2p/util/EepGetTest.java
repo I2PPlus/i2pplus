@@ -283,6 +283,28 @@ public class EepGetTest extends TestCase {
     }
 
     /**
+     * The same loop when the Location names a short base32 host. The target is
+     * shortened for the error message, and cutting it at a fixed offset ran off
+     * the end of a Location shorter than the offset - an unchecked exception
+     * fetch() does not catch, so the caller's IOException handler never ran and
+     * the addressbook daemon's thread ended on it.
+     *
+     * @throws Exception on server bind failure
+     */
+    public void testTooManyRedirectsShortB32Location() throws Exception {
+        TestServer server = startServer(new Handler() {
+            @Override
+            public void handle(TestServer s, String requestLine, Map<String, String> headers, OutputStream out) throws IOException {
+                out.write(("HTTP/1.1 301 Moved Permanently\r\nLocation: " + s.url("/x.b32.i2p")
+                        + "\r\nContent-Length: 0\r\nConnection: close\r\n\r\n").getBytes(StandardCharsets.ISO_8859_1));
+            }
+        });
+        EepGet get = newFetch(server.url("/x.b32.i2p"), 0);
+        assertFalse(get.fetch(FETCH_TIMEOUT, TOTAL_TIMEOUT, FETCH_TIMEOUT));
+        assertEquals(6, server.getRequestLines().size());
+    }
+
+    /**
      * A pre-existing partial file resumes with a Range request and a 206 response.
      *
      * @throws Exception on temp-file I/O or server bind failure

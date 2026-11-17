@@ -297,14 +297,7 @@ public class EepHead extends EepGet {
             } else {
                 _redirects.incrementAndGet();
                 if (_redirects.get() > 5) {
-                    String redirectURL = _redirectLocation;
-                    if (redirectURL.startsWith("http://")) {
-                        redirectURL = redirectURL.substring(7, redirectURL.length());
-                    }
-                    if (redirectURL.contains("b32.i2p")) {
-                        redirectURL = redirectURL.substring(0, 32) + "...";
-                    }
-                    throw new IOException("Too many redirects to " + redirectURL);
+                    throw new IOException("Too many redirects to " + urlLabel(_redirectLocation));
                 }
                 if (_log.shouldInfo()) _log.info("Redirecting to " + _redirectLocation);
                 if (as != null) as.authSent = false;
