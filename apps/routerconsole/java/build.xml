@@ -1014,8 +1014,11 @@
         <pathelement location="../../../apps/jetty/jettylib/javax.servlet.jar"/>
         <!-- CSSHelper.allowIFrame() calls ServletUtil.isSmallBrowser(); the main
              compile classpath carries jetty-i2p.jar (where ServletUtil lives) so
-             the test runtime classpath must too. -->
+             the test runtime classpath must too. The fork is built into
+             ${build.root}apps/jetty/build, not into jettylib/, so both entries are
+             needed - the jettylib one is absent in a normal checkout. -->
         <pathelement location="${jetty.pkg.dir}/jetty-i2p.jar"/>
+        <pathelement location="${build.root}apps/jetty/build/jetty-i2p.jar"/>
         <!-- HostCheckHandler extends GzipHandler; loading the class at runtime
              needs its supertype on the classpath as well. -->
         <pathelement location="../../../apps/jetty/jettylib/org.mortbay.jetty.jar"/>
