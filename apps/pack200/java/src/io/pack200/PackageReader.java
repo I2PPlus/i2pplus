@@ -688,6 +688,46 @@ class PackageReader extends BandStructure {
         setBandIndexes();
     }
 
+    /**
+     * Longest string the cp_Utf8 bands may name.  JVMS 4.4.7 caps a UTF8
+     * constant pool entry at 65535 bytes, and every character costs at least
+     * one of them.
+     */
+    static final int MAX_UTF8_CHARS = 0xFFFF;
+
+    /**
+     * Most characters all the cp_Utf8 bands of one class may produce together.
+     * The characters of a constant pool are bounded by the size of the class
+     * file that carries them, and the largest class file in the I2P jars is
+     * about 1 MB, so this is a wide margin over anything a real pack carries.
+     */
+    static final int MAX_TOTAL_CHARS = 1 << 23;
+
+    /**
+     * Check one cp_Utf8 entry against the invariants the rebuild relies on.
+     * A prefix is the run of characters shared with the previous string, so it
+     * cannot be longer than that string, and a UTF8 constant is capped by the
+     * class file format.  Neither check is a formality: the last loop copies
+     * each prefix out of a buffer holding the previous string, so a pack that
+     * ignores them names a number of characters quadratic in the size of the
+     * pack, and the reader allocates for every one of them before it notices.
+     *
+     * @param prefix characters shared with the previous string
+     * @param suffix characters unique to this string
+     * @param prevChars length of the previous string
+     * @throws IOException if the entry breaks one of the invariants
+     */
+    static void checkUtf8Run(int prefix, int suffix, int prevChars) throws IOException {
+        if (prefix < 0 || suffix < 0)
+            throw new IOException("Negative cp_Utf8 prefix " + prefix + " or suffix " + suffix);
+        if (prefix > prevChars)
+            throw new IOException("cp_Utf8 prefix " + prefix +
+                                  " longer than the previous string " + prevChars);
+        if (suffix > MAX_UTF8_CHARS - prefix)
+            throw new IOException("cp_Utf8 string length " + (prefix + suffix) +
+                                  " longer than " + MAX_UTF8_CHARS);
+    }
+
     void readUtf8Bands(Entry[] cpMap) throws IOException {
         //  cp_Utf8:
         //        *cp_Utf8_prefix :DELTA5
@@ -716,7 +756,11 @@ class PackageReader extends BandStructure {
         int bigSuffixCount = 0;
 
         // Third band:  Read the char values in the unshared suffixes:
-        cp_Utf8_chars.expectLength(cp_Utf8_suffix.getIntTotal());
+        int charTotal = cp_Utf8_suffix.getIntTotal();
+        if (charTotal < 0 || charTotal > MAX_TOTAL_CHARS)
+            throw new IOException("cp_Utf8 character total " + charTotal +
+                                  " outside 0.." + MAX_TOTAL_CHARS);
+        cp_Utf8_chars.expectLength(charTotal);
         cp_Utf8_chars.readFrom(in);
         for (int i = 0; i < len; i++) {
             int suffix = (i < SUFFIX_SKIP_1)? 0: cp_Utf8_suffix.getInt();
@@ -725,6 +769,9 @@ class PackageReader extends BandStructure {
                 bigSuffixCount += 1;
                 continue;
             }
+            if (suffix > MAX_UTF8_CHARS)
+                throw new IOException("cp_Utf8 suffix length " + suffix +
+                                      " longer than " + MAX_UTF8_CHARS);
             suffixChars[i] = new char[suffix];
             for (int j = 0; j < suffix; j++) {
                 int ch = cp_Utf8_chars.getInt();
@@ -736,6 +783,8 @@ class PackageReader extends BandStructure {
 
         // Fourth band:  Go back and size the specially packed strings.
         int maxChars = 0;
+        int prevChars = 0;   // length of the previous string, source of the next prefix
+        long totalChars = 0;
         cp_Utf8_big_suffix.expectLength(bigSuffixCount);
         cp_Utf8_big_suffix.readFrom(in);
         cp_Utf8_suffix.resetForSecondPass();
@@ -748,6 +797,11 @@ class PackageReader extends BandStructure {
             } else {
                 assert(suffixChars[i] != null);
             }
+            checkUtf8Run(prefix, suffix, prevChars);
+            prevChars = prefix + suffix;
+            totalChars += prevChars;
+            if (totalChars > MAX_TOTAL_CHARS)
+                throw new IOException("cp_Utf8 total characters beyond " + MAX_TOTAL_CHARS);
             if (maxChars < prefix + suffix)
                 maxChars = prefix + suffix;
         }
