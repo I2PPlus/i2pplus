@@ -82,15 +82,21 @@ public class InstallUpdate {
     /** Names the release staged in {@link #WRAPPER_STAGED_DIR}. */
     private static final String WRAPPER_STAGED_VERSION = WRAPPER_STAGED_DIR + "/version.txt";
 
+    /** Name the update gives the unix script, at the install root. */
+    private static final String WRAPPER_SCRIPT_UNIX_NAME = "install-wrapper.sh";
+
+    /** Name the update gives the Windows script, at the install root. */
+    private static final String WRAPPER_SCRIPT_WINDOWS_NAME = "install-wrapper.ps1";
+
     /**
      * Installs the staged wrapper files on linux, FreeBSD and macOS. Named for
-     * <code>sh</code> because an update extracts its files without the exec bit,
-     * so the script arrives not runnable on its own.
+     * <code>sh</code> so the line also works on an install that extracted the
+     * script before its execute bit was set, where it is not runnable on its own.
      */
-    private static final String WRAPPER_SCRIPT_UNIX = "sh ./install-wrapper.sh";
+    private static final String WRAPPER_SCRIPT_UNIX = "sh ./" + WRAPPER_SCRIPT_UNIX_NAME;
 
     /** Installs the staged wrapper files on Windows. */
-    private static final String WRAPPER_SCRIPT_WINDOWS = ".\\install-wrapper.ps1";
+    private static final String WRAPPER_SCRIPT_WINDOWS = ".\\" + WRAPPER_SCRIPT_WINDOWS_NAME;
 
     /**
      * Install updates from i2pupdate.zip file if present.
@@ -125,6 +131,11 @@ public class InstallUpdate {
                 config.put("router.previousFullVersion", RouterVersion.FULL_VERSION);
                 r.saveConfig(config, null);
                 ok = FileUtil.extractZip(updateFile, context.getBaseDir());
+                if (ok) {
+                    // FileUtil and this class are already loaded, so the execute
+                    // bit is still settable here, unlike anything not yet loaded.
+                    makeWrapperScriptsExecutable(context.getBaseDir());
+                }
             }
 
             // Very important - we have now trashed our jars.
@@ -183,8 +194,25 @@ public class InstallUpdate {
             return;
         String staged = stagedWrapperVersion(new File(context.getBaseDir(), WRAPPER_STAGED_VERSION));
         String notice = wrapperUpdateNotice(staged, running);
-        if (notice != null)
+        if (notice != null) {
+            makeWrapperScriptsExecutable(context.getBaseDir());
             System.out.println(notice); // NOSONAR startup notice, before the log is up
+        }
+    }
+
+    /**
+     * Gives the two scripts an update stages the execute bit that extracting a
+     * zip drops, so the operator can run the one the notice names rather than
+     * having to know to start it with an interpreter. It also covers an install
+     * that extracted the scripts under an older release, since this runs on every
+     * start that still has a wrapper waiting to be installed.
+     *
+     * @param baseDir the install the update was extracted into
+     * @since 0.9.72+
+     */
+    static void makeWrapperScriptsExecutable(File baseDir) {
+        FileUtil.setExecutable(new File(baseDir, WRAPPER_SCRIPT_UNIX_NAME));
+        FileUtil.setExecutable(new File(baseDir, WRAPPER_SCRIPT_WINDOWS_NAME));
     }
 
     /**
