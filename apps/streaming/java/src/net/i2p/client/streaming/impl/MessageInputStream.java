@@ -143,6 +143,19 @@ class MessageInputStream extends InputStream {
     private int _readyDataSize = 0;
 
     /**
+     * Total bytes held in {@link #_notYetReadyBlocks}, the counterpart of
+     * {@link #_readyDataSize} for the blocks waiting on a gap. Both halves have
+     * to be counted against {@link #_maxBufferSize}: an estimate based on the
+     * configured message size says nothing about the bytes actually held,
+     * because a data packet may carry up to {@link Packet#MAX_PAYLOAD_SIZE} no
+     * matter what size the connection negotiated.
+     * <p>
+     * The {@link #DUMMY_BA} sentinel counts 0 bytes, which is what keeps a
+     * retransmit on a closed stream from adding anything.
+     */
+    private int _notYetReadySize = 0;
+
+    /**
      * New stream with the specified buffer limits.
      *
      * @param ctx Application context for logging and utilities
@@ -253,13 +266,25 @@ class MessageInputStream extends InputStream {
                 return false;
             }
 
-            if (messageId < MIN_READY_BUFFERS && _readyDataSize < _maxBufferSize / 2) {
+            // Both halves of the buffer hold memory, so both are counted. The
+            // blocks waiting on a gap are the ones an attacker can fill.
+            int buffered = (_readyDataSize - _readyDataBlockIndex) + _notYetReadySize;
+
+            if (messageId < MIN_READY_BUFFERS && buffered < _maxBufferSize / 2) {
                 return true;
             }
 
-            // Check both byte-based and packet-based limits
+            // Check both byte-based and packet-based limits. The packet count is
+            // an estimate - it prices every block at the negotiated message size
+            // - so the bytes actually held are checked beside it. A peer that
+            // withholds one early block and sends the rest at the wire's
+            // MAX_PAYLOAD_SIZE fills the count estimate at a nineteenth of the
+            // memory it really costs, so the buffer cap stops binding long
+            // before the memory it names is reached.
             int totalPackets = _readyDataBlocks.size() + _notYetReadyBlocks.size();
-            if (totalPackets * _maxMessageSize < _maxBufferSize && totalPackets < _maxPacketCount) {
+            if (totalPackets * _maxMessageSize < _maxBufferSize &&
+                totalPackets < _maxPacketCount &&
+                buffered + payloadSize < _maxBufferSize) {
                 return true;
             }
 
@@ -267,8 +292,8 @@ class MessageInputStream extends InputStream {
                 return true;
             }
 
-            int available = _maxBufferSize - (_readyDataSize - _readyDataBlockIndex);
-            if (available <= 0) {
+            int available = _maxBufferSize - buffered;
+            if (available < payloadSize) {
                 logBufferFull(messageId, available);
                 return false;
             }
@@ -362,7 +387,7 @@ class MessageInputStream extends InputStream {
      * @since 0.9.72+
      */
     private void noteBuffered() {
-        int buffered = _readyDataSize - _readyDataBlockIndex;
+        int buffered = (_readyDataSize - _readyDataBlockIndex) + _notYetReadySize;
         if (buffered > _peakBuffered) {
             _peakBuffered = buffered;
         }
@@ -545,6 +570,7 @@ class MessageInputStream extends InputStream {
             long cur = _highestReadyBlockId + 1;
             while (_notYetReadyBlocks.containsKey(cur)) {
                 ByteArray ba = _notYetReadyBlocks.remove(cur);
+                _notYetReadySize -= ba.getValid();
                 if (ba.getData() != null && ba.getValid() > 0) {
                     _readyDataBlocks.addLast(ba);
                     _readyDataSize += ba.getValid();
@@ -602,6 +628,7 @@ class MessageInputStream extends InputStream {
                 long cur = _highestReadyBlockId + 1;
                 ByteArray ba;
                 while ((ba = _notYetReadyBlocks.remove(cur)) != null) {
+                    _notYetReadySize -= ba.getValid();
                     if (ba.getData() != null && ba.getValid() > 0) {
                         _readyDataBlocks.addLast(ba);
                         _readyDataSize += ba.getValid();
@@ -631,6 +658,9 @@ class MessageInputStream extends InputStream {
                     _log.infoThrottled("streaming-out-of-order",
                                        "Received out-of-order message ID " + messageId + " -> Buffered");
                     _notYetReadyBlocks.put(messageId, payload);
+                    if (payload != null) {
+                        _notYetReadySize += payload.getValid();
+                    }
                 }
             }
         }
@@ -773,7 +803,10 @@ class MessageInputStream extends InputStream {
                     _readyDataSize -= blockSize;
                     _readyDataBlockIndex = 0;
                     _readyDataBlocks.pollFirst();
-                    if (_readyDataBlocks.isEmpty()) {
+                    // Blocks still waiting on a gap hold the buffer, so the
+                    // reader has not emptied it and the cap must not drop under
+                    // what that data needs.
+                    if (_readyDataBlocks.isEmpty() && _notYetReadySize == 0) {
                         decayBuffer();
                     }
                 }
@@ -846,6 +879,7 @@ class MessageInputStream extends InputStream {
             for (ByteArray ba : _notYetReadyBlocks.values()) {
                 ba.setData(null);
             }
+            _notYetReadySize = 0;
             _locallyClosed.set(true);
             _dataLock.notifyAll();
         }
