@@ -96,6 +96,15 @@ case "$MODULE" in
         CP="$(find tools/test apps/jetty apps/susidns/src/lib installer/lib/wrapper -name '*.jar' | tr '\n' ':')$(find /tmp/build-i2p/pkg-temp/lib -name '*.jar' 2>/dev/null | tr '\n' ':')"
         LOGSCOPE="apps/susidns/src/java/src"
         ;;
+    i2ptunnel)
+        BUILD="apps/i2ptunnel/java/build.xml"
+        # this module's suite target is plain `test`, not `junit.test`
+        TARGET="test"
+        REPORTS="/tmp/build-i2p/reports/i2ptunnel/junit"
+        SOURCEPATH="apps/i2ptunnel/java/src:apps/i2ptunnel/java/test/junit:core/java/src:router/java/src:apps/streaming/java/src:apps/ministreaming/java/src:apps/jetty/java/src"
+        CP="$(find tools/test apps/jetty/jettylib -name '*.jar' | tr '\n' ':')"
+        LOGSCOPE="apps/i2ptunnel/java/src"
+        ;;
     *)
         echo "check-changes.sh: no wiring for module '$MODULE' — add it above" >&2
         exit 1
