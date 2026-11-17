@@ -642,6 +642,16 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     }
 
     /**
+     * The lookup throttler, or null before startup. Its getters report the caps
+     * a lookup was actually measured against, so a log line can name those
+     * numbers instead of a hand-written copy of them.
+     *
+     * @return the throttler, or null before startup
+     * @since 0.9.72+
+     */
+    LookupThrottler lookupThrottler() { return _lookupThrottler; }
+
+    /**
      * If we are floodfill AND the key is not throttled,
      * flood it, otherwise don't.
      *

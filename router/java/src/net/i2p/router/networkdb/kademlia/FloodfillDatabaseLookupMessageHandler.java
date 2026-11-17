@@ -9,6 +9,7 @@ package net.i2p.router.networkdb.kademlia;
  */
 
 import java.util.Set;
+import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.i2np.DatabaseLookupMessage;
 import net.i2p.stat.RateConstants;
@@ -44,6 +45,10 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
     private final long _msgIDBloomXor = RandomSource.getInstance().nextLong(I2NPMessage.MAX_ID_VALUE);
     /** Rate windows kept for the lookup statistics. */
     private static final long[] RATES = RateConstants.BASIC_RATES;
+    /** How long a peer that exceeds the lookup rate is banlisted for. */
+    private static final long LOOKUP_BAN_MS = 30 * 60 * 1000L;
+    /** A peer is not banned for excessive lookups until the router has been up this long. */
+    private static final long BAN_AFTER_UPTIME_MS = 5 * 60 * 1000L;
 
     /**
      * Handler for floodfill DatabaseLookupMessages.
@@ -119,21 +124,35 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
             _log.debug("Throttling lookup from [" + dlm.getFrom().toShortBase64() + "]");
         }
         final boolean shouldAccept = shouldAcceptLookup(isSenderUs, shouldThrottle, shouldBan, ourRI, floodfillMode, isFF, type);
-        final int maxLookups = isFF ? 60 : 30;
         final long uptime = _context.router().getUptime();
-        final long bantime = _context.clock().now() + 30 * 60 * 1000;
+        final long bantime = _context.clock().now() + LOOKUP_BAN_MS;
+        // The reason a throttled lookup is dropped, with the caps the lookup was
+        // actually measured against rather than a copy of them.
+        final LookupThrottler throttler = _facade.lookupThrottler();
+        final String rateReason = throttler != null ?
+                                  " -> Over " + throttler.getMaxLookups() + " lookups in " +
+                                  DataHelper.formatDuration(throttler.getCleanTimeMs()) + " or " +
+                                  LookupThrottler.getBurstThreshold() + " in " +
+                                  DataHelper.formatDuration(LookupThrottler.getBurstWindowMs()) :
+                                  " -> Over the lookup rate";
 
         DatabaseLookupMessage processedDLM = preProcessDatabaseLookup(dlm, fromHash);
         if (processedDLM == null) {return null;}
 
-        if (shouldBan && uptime > 5*60*1000) {
-            if (dlm.getFrom() != null) {
-                String ipPort = getIPFromHash(dlm.getFrom());
-                _context.banlist().banlistRouter(dlm.getFrom(), "Excessive lookups" + (isFF ? " (Floodfill)" : ""),
-                                                 null, null, bantime);
-                _banLogger.logBan(dlm.getFrom(), ipPort != null ? ipPort : "UNKNOWN", "Excessive lookups" + (isFF ? " (Floodfill)" : ""), bantime);
-                _context.commSystem().mayDisconnect(dlm.getFrom());
-            }
+        /**
+         * The `from` field of a lookup is whatever the sender wrote in it and is
+         * authenticated by nothing, so it may name any router on the network.
+         * Ban the peer the message actually arrived on instead, and ban nobody
+         * when the lookup came in through a reply tunnel and gives us no such
+         * peer to prove.
+         */
+        final Hash banTarget = lookupBanTarget(fromHash);
+        if (shouldBan && uptime > BAN_AFTER_UPTIME_MS && banTarget != null) {
+            String ipPort = getIPFromHash(banTarget);
+            _context.banlist().banlistRouter(banTarget, "Excessive lookups" + (isFF ? " (Floodfill)" : ""),
+                                             null, null, bantime);
+            _banLogger.logBan(banTarget, ipPort != null ? ipPort : "UNKNOWN", "Excessive lookups" + (isFF ? " (Floodfill)" : ""), bantime);
+            _context.commSystem().mayDisconnect(banTarget);
 
             if (_log.shouldWarn() && dlm.getFrom() != null) {
                 StringBuilder message = new StringBuilder(128);
@@ -141,20 +160,30 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
                        .append(isFF ? "floodfill " : "").append("[").append(fromBase64.substring(0,6)).append("]");
 
                 if (!isDirect && _log.shouldInfo()) {message.append(" via [TunnelId ").append(dlm.getReplyTunnel()).append("]");}
-                message.append(" and banning for 10m -> Max 60 requests in 30s or 10/s exceeded");
+                message.append(" and banning for ").append(DataHelper.formatDuration(LOOKUP_BAN_MS)).
+                       append(" -> Over the lookup rate").
+                       append("\n* Max lookups: ").append(LookupBanHammer.getMaxLookups()).
+                       append(" in ").append(DataHelper.formatDuration(LookupBanHammer.getCountWindowMs())).
+                       append(" * Max burst: ").append(LookupBanHammer.getBurstThreshold()).
+                       append(" in ").append(DataHelper.formatDuration(LookupBanHammer.getBurstWindowMs()));
                 _log.info(message.toString());
             }
 
             _context.statManager().addRateData("netDb.lookupsDropped", 1);
             return null;
         } else if (shouldBan) {
+            if (_log.shouldDebug() && banTarget == null && dlm.getFrom() != null) {
+                _log.debug("Dropping " + (isDirect ? "direct " : "") + searchType + " lookup -> " +
+                           "Over the lookup limit but no provable peer to ban");
+            }
             _context.statManager().addRateData("netDb.lookupsDropped", 1);
             return null;
         }
 
         if (!shouldAccept) {
             if (_log.shouldWarn()) {
-                logDroppedLookup(searchType, fromBase64, searchKeyBase64, keyLength, isFF, floodfillMode, isDirect, isBanned, maxLookups);
+                logDroppedLookup(searchType, fromBase64, searchKeyBase64, keyLength, isFF, floodfillMode, isDirect, isBanned,
+                                 rateReason, type);
             }
             _context.statManager().addRateData("netDb.lookupsDropped", 1);
             return null;
@@ -237,20 +266,20 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
      * @param floodfillMode true if the local router is participating as floodfill
      * @param isDirect true if the lookup is being sent directly (no tunnel)
      * @param isBanned true if the sender router is banned
-     * @param maxLookups max allowed lookups in time window for floodfill or non-floodfill
+     * @param rateReason the throttling reason, naming the caps the lookup was measured against
+     * @param type the lookup type, used to name a direct exploratory search
      */
     private void logDroppedLookup(String searchType, String fromBase64, String searchKeyBase64, int keyLength, boolean isFF,
-                                  boolean floodfillMode, boolean isDirect, boolean isBanned, int maxLookups) {
+                                  boolean floodfillMode, boolean isDirect, boolean isBanned, String rateReason,
+                                  DatabaseLookupMessage.Type type) {
         if (!_log.shouldInfo() || isBanned) {return;}
         StringBuilder msg = new StringBuilder(128);
         msg.append("Dropping ").append(isDirect ? "direct " : "").append(searchType)
            .append(" lookup from ").append(isFF? "floodfill " : "").append("[").append(fromBase64.substring(0,6)).append("]")
            .append(" for [").append(searchKeyBase64, 0, keyLength).append("]");
         if (!floodfillMode) {msg.append(" -> We are not a floodfill");}
-        else if (!isFF) {msg.append(" -> Max ").append(maxLookups).append(" requests in 3m or 5/s exceeded");}
-        else if (!isDirect) {
-            msg.append(" -> Max ").append(maxLookups).append(" requests in 3m or 5/s exceeded");
-        } else if (isDirect && (searchType.equals("ANY") || searchType.equals("EXPL"))) {
+        else if (!isFF || !isDirect) {msg.append(rateReason);}
+        else if (type == DatabaseLookupMessage.Type.EXPL || type == DatabaseLookupMessage.Type.ANY) {
             msg.append(" -> Direct search for Exploratory or Any from floodfill");
         }
         _log.info(msg.toString());
@@ -276,6 +305,23 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
                                        DatabaseLookupMessage.Type type) {
         return isSenderUs || (!shouldThrottle && !shouldBan && (ourRI || (floodfillMode && !isFF) ||
                (floodfillMode && isFF && type != DatabaseLookupMessage.Type.EXPL && type != DatabaseLookupMessage.Type.ANY)));
+    }
+
+    /**
+     * Which router an excessive-lookup ban may name. The <code>from</code> field
+     * of a DatabaseLookupMessage is written by whoever sent it and is
+     * authenticated by nothing, so it may name any router on the network, and a
+     * ban against it punishes a router that never exceeded anything. Only the
+     * peer the message actually arrived on can be named; a lookup delivered
+     * through a reply tunnel gives us no such peer, so nothing is banned and the
+     * lookup is simply dropped.
+     *
+     * @param fromHash the peer the lookup arrived from, null when it came in through a reply tunnel
+     * @return the hash to banlist, or null when nothing in the message proves a peer to ban
+     * @since 0.9.72+
+     */
+    static Hash lookupBanTarget(Hash fromHash) {
+        return fromHash;
     }
 
     /**

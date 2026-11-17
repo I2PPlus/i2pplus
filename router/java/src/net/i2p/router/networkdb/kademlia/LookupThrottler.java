@@ -110,6 +110,39 @@ class LookupThrottler {
     }
 
     /**
+     * Read the per-peer lookup cap in force right now, which follows whether
+     * this router is acting as a floodfill.
+     *
+     * @return lookups per peer per {@link #getCleanTimeMs()} window before a lookup is throttled
+     * @since 0.9.72+
+     */
+    int getMaxLookups() { return _max; }
+
+    /**
+     * Read how long the per-peer lookup counts are held.
+     *
+     * @return counting window in ms
+     * @since 0.9.72+
+     */
+    long getCleanTimeMs() { return CLEAN_TIME; }
+
+    /**
+     * Read the burst cap.
+     *
+     * @return lookups per peer inside {@link #getBurstWindowMs()} before the burst is throttled
+     * @since 0.9.72+
+     */
+    static int getBurstThreshold() { return BURST_THRESHOLD; }
+
+    /**
+     * Read the burst detection window.
+     *
+     * @return burst window in ms
+     * @since 0.9.72+
+     */
+    static long getBurstWindowMs() { return BURST_WINDOW_MS; }
+
+    /**
      * Increment and check throttling for the given peer and tunnel.
      *
      * @param key non-null

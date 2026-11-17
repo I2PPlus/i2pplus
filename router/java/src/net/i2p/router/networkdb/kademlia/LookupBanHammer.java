@@ -31,6 +31,12 @@ class LookupBanHammer {
     private static final int MAX_LOOKUPS = 120;
     /** Interval of the counter cleanup. */
     private static final long CLEAN_TIME = 30 * 1000L;
+    /**
+     * Length of the sliding window the lookup counts are measured over. It is
+     * not the cleanup interval: a counter older than this is out of the count
+     * whether or not the cleaner has run yet.
+     */
+    private static final long COUNT_WINDOW_MS = 30 * 1000L;
     /** Lookups per window counted as a burst. */
     private static volatile int _burstThreshold = 10;
     /** Length of the lookup counting window. */
@@ -94,6 +100,38 @@ class LookupBanHammer {
     }
 
     /**
+     * Read the burst threshold last set by {@link #setBurstThreshold}.
+     *
+     * @return lookups inside the burst window that trigger a ban
+     * @since 0.9.72+
+     */
+    static int getBurstThreshold() { return _burstThreshold; }
+
+    /**
+     * Read the lookup count that bans a peer.
+     *
+     * @return lookups per {@link #getCountWindowMs()} window before a ban
+     * @since 0.9.72+
+     */
+    static int getMaxLookups() { return MAX_LOOKUPS; }
+
+    /**
+     * Read the length of the sliding window the lookup counts are measured over.
+     *
+     * @return counting window in ms
+     * @since 0.9.72+
+     */
+    static long getCountWindowMs() { return COUNT_WINDOW_MS; }
+
+    /**
+     * Read the length of the burst window.
+     *
+     * @return burst window in ms
+     * @since 0.9.72+
+     */
+    static long getBurstWindowMs() { return BURST_WINDOW_MS; }
+
+    /**
      * Record a lookup and check if the requester should be banned.
      * @param key the requesting peer's router hash, one half of the identity a ban is recorded against
      * @param id reply tunnel, or null for direct
@@ -132,13 +170,13 @@ class LookupBanHammer {
     }
 
     /**
-     * Remove entries older than 30s from the deque.
+     * Drop the timestamps that have slid out of the counting window.
      *
      * @param deque lookup timestamps in ms, oldest first
      * @param now the current time in ms
      */
     private static void slideWindow(ConcurrentLinkedDeque<Long> deque, long now) {
-        while (!deque.isEmpty() && (now - deque.peekFirst() > 30000))
+        while (!deque.isEmpty() && (now - deque.peekFirst() > COUNT_WINDOW_MS))
             deque.pollFirst();
     }
 
