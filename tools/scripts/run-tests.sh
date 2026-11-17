@@ -9,7 +9,7 @@
 #                                               ministreaming, streaming, router,
 #                                               i2ptunnel, addressbook,
 #                                               routerconsole, i2psnark, susimail,
-#                                               sam, pack200, jrobin, js
+#                                               sam, pack200, jrobin, jetty, js
 #   tools/scripts/run-tests.sh js               Run the console/webapp JS harness
 #                                               only (needs node; no Java build)
 #   tools/scripts/run-tests.sh --logs all       Keep ant's console output and
@@ -153,6 +153,7 @@ get_report_name() {
     apps/ministreaming/java) echo "ministreaming" ;;
     apps/streaming/java) echo "streaming" ;;
     apps/addressbook) echo "addressbook" ;;
+    apps/jetty) echo "jetty" ;;
     apps/i2ptunnel/java) echo "i2ptunnel" ;;
     apps/routerconsole/java) echo "routerconsole" ;;
     apps/i2psnark/java) echo "i2psnark" ;;
@@ -176,6 +177,14 @@ get_build_props() {
       ;;
     apps/addressbook)
       props="$props -Dcore.java.build.dir=${build_root}/core/java/build -Drouter.java.build.dir=${build_root}/router/java/build -Dministreaming.java.build.dir=${build_root}/apps/ministreaming/java/build -Dstreaming.java.build.dir=${build_root}/apps/streaming/java/build"
+      ;;
+    apps/jetty)
+      # this module's ant build refuses to run without the version pins the
+      # top-level build.xml normally supplies, and jettylib/ is generated from
+      # them; read the pins from there rather than repeating them here
+      jv=$(grep -oP '(?<=<property name="jetty.ver" value=")[^"]+' "${REPO_ROOT}/build.xml")
+      tv=$(grep -oP '(?<=<property name="tomcat.ver" value=")[^"]+' "${REPO_ROOT}/build.xml")
+      props="$props -Djetty.ver=${jv} -Dtomcat.ver=${tv} -Dcore.java.build.dir=${build_root}/core/java/build"
       ;;
     apps/routerconsole/java)
       props="$props -Dcore.java.build.dir=${build_root}/core/java/build -Drouter.java.build.dir=${build_root}/router/java/build -Dministreaming.java.build.dir=${build_root}/apps/ministreaming/java/build -Dstreaming.java.build.dir=${build_root}/apps/streaming/java/build -Di2ptunnel.java.build.dir=${build_root}/apps/i2ptunnel/java/build -Djetty.pkg.dir=${build_root}/apps/jetty/build -Djrobin.java.build.dir=${build_root}/apps/jrobin/java/build -Dsystray.java.build.dir=${build_root}/apps/systray/java/build -Dsam.java.build.dir=${build_root}/apps/sam/java/build -Ddesktopgui.dist.dir=${build_root}/apps/desktopgui/dist -Ddesktopgui.build.dir=${build_root}/apps/desktopgui/build -Dwrapper.dir=${REPO_ROOT}/installer/lib/wrapper/all"
@@ -256,7 +265,7 @@ build_jetty() {
     echo "ERROR: no compatible javac release flag found" >&2
     return 1
   fi
-  javac $JAVAC_RELEASE -Xlint:-options -cp "$cp" -d "$out" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/util/ServletUtil.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/util/WriterOutputStream.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/util/JspC.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/I2PDefaultServlet.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/WebAppProviderConfiguration.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/RequestWrapper.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/ErrorServlet.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/filters/XSSRequestWrapper.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/filters/XI2PLocationFilter.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/filters/XSSFilter.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/jetty/JettyXmlConfigurationParser.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/jetty/I2PRequestLog.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/jetty/I2PLogger.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/jetty/JettyStart.java" 2>&1
+  javac $JAVAC_RELEASE -Xlint:-options -cp "$cp" -d "$out" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/util/ServletUtil.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/util/WriterOutputStream.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/util/JspC.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/I2PErrorPageErrorHandler.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/I2PDefaultServlet.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/WebAppProviderConfiguration.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/RequestWrapper.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/ErrorServlet.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/filters/XSSRequestWrapper.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/filters/XI2PLocationFilter.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/servlet/filters/XSSFilter.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/jetty/JettyXmlConfigurationParser.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/jetty/I2PRequestLog.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/jetty/I2PLogger.java" "${REPO_ROOT}/apps/jetty/java/src/net/i2p/jetty/JettyStart.java" 2>&1
   local src_d="$out"
   (cd "$src_d" && jar cf jetty-i2p.jar net/)
   # Copy needed jetty lib jars to build dir for other modules
@@ -292,6 +301,8 @@ run_test_bg() {
   (
     local test_dir="${dir}/test"
     if [ "$dir" = "apps/addressbook" ]; then
+      test_dir="${dir}/java/test"
+    elif [ "$dir" = "apps/jetty" ]; then
       test_dir="${dir}/java/test"
     elif [ "$dir" = "apps/susimail" ]; then
       test_dir="${dir}/src/test"
@@ -329,6 +340,8 @@ run_test() {
 
   local test_dir="${dir}/test"
   if [ "$dir" = "apps/addressbook" ]; then
+    test_dir="${dir}/java/test"
+  elif [ "$dir" = "apps/jetty" ]; then
     test_dir="${dir}/java/test"
   elif [ "$dir" = "apps/susimail" ]; then
     test_dir="${dir}/src/test"
@@ -573,6 +586,12 @@ case "$SUITE" in
     run_build apps/jrobin/java
     run_test apps/jrobin/java "JRobin"
     ;;
+  jetty)
+    # the module's junit.test target compiles java/src first, so core's jar is
+    # the only thing that has to be built here
+    run_build core/java
+    run_test apps/jetty "Jetty"
+    ;;
   js)
     run_js_test || js_rc=1
     ;;
@@ -608,7 +627,8 @@ case "$SUITE" in
     sam_r=$(mktemp)
     p200_r=$(mktemp)
     jrob_r=$(mktemp)
-    trap 'rm -f "$core_r" "$mini_r" "$stream_r" "$router_r" "$addr_r" "$i2pt_r" "$rcons_r" "$snark_r" "$susi_r" "$sam_r" "$p200_r" "$jrob_r"; rm -rf "${REPO_ROOT}/reports"' EXIT
+    jetty_r=$(mktemp)
+    trap 'rm -f "$core_r" "$mini_r" "$stream_r" "$router_r" "$addr_r" "$i2pt_r" "$rcons_r" "$snark_r" "$susi_r" "$sam_r" "$p200_r" "$jrob_r" "$jetty_r"; rm -rf "${REPO_ROOT}/reports"' EXIT
 
     run_test_bg core/java "$core_r"
     run_test_bg apps/ministreaming/java "$mini_r"
@@ -622,13 +642,14 @@ case "$SUITE" in
     run_test_bg apps/sam/java "$sam_r"
     run_test_bg apps/pack200/java "$p200_r"
     run_test_bg apps/jrobin/java "$jrob_r"
+    run_test_bg apps/jetty "$jetty_r"
 
     echo -e "${BOLD}Running test suites in parallel...${RESET}"
     wait
 
     # Print per-suite results and aggregate
     total_t=0; total_f=0; total_e=0
-    for pair in "Core:$core_r" "MiniStreaming:$mini_r" "Streaming:$stream_r" "Router:$router_r" "Addressbook:$addr_r" "I2PTunnel:$i2pt_r" "RouterConsole:$rcons_r" "I2PSnark:$snark_r" "Susimail:$susi_r" "SAM:$sam_r" "Pack200:$p200_r" "JRobin:$jrob_r"; do
+    for pair in "Core:$core_r" "MiniStreaming:$mini_r" "Streaming:$stream_r" "Router:$router_r" "Addressbook:$addr_r" "I2PTunnel:$i2pt_r" "RouterConsole:$rcons_r" "I2PSnark:$snark_r" "Susimail:$susi_r" "SAM:$sam_r" "Pack200:$p200_r" "JRobin:$jrob_r" "Jetty:$jetty_r"; do
       label="${pair%%:*}"
       rf="${pair#*:}"
       read -r t f e <<< "$(read_result "$rf")"
@@ -653,7 +674,7 @@ case "$SUITE" in
     # An unknown name used to fall through to the `all` branch, so a typo ran the
     # whole suite and still looked like a pass. Name what is available instead.
     echo "Unknown suite: $SUITE" >&2
-    echo "Suites: core ministreaming streaming router i2ptunnel addressbook routerconsole i2psnark susimail sam pack200 jrobin js, or 'all'" >&2
+    echo "Suites: core ministreaming streaming router i2ptunnel addressbook routerconsole i2psnark susimail sam pack200 jrobin jetty js, or 'all'" >&2
     exit 1
     ;;
 esac

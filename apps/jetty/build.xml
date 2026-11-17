@@ -467,6 +467,74 @@
     </condition>
   </target>
 
+  <!-- The suite is compiled here, not in "compile": it needs junit4 on the
+       path, and "compile" runs on every build of the router. -->
+  <target name="junit.compileTest" depends="compile">
+    <property name="junit.home" value="../../tools/test/junit"/>
+    <mkdir dir="${build.dir}/testobj"/>
+    <javac
+      srcdir="./java/test/junit"
+      debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
+      release="${javac.release}"
+      destdir="${build.dir}/testobj"
+      encoding="UTF-8"
+      includeAntRuntime="false">
+      <classpath>
+        <pathelement location="${build.dir}/obj"/>
+        <pathelement location="${core.java.build.dir}/i2p.jar"/>
+        <pathelement location="./jettylib/javax.servlet.jar"/>
+        <pathelement location="./jettylib/jetty-http.jar"/>
+        <pathelement location="./jettylib/jetty-io.jar"/>
+        <pathelement location="${jetty.pkg.dir}/jetty-util.jar"/>
+        <pathelement location="./jettylib/jetty-servlet.jar"/>
+        <!-- jetty-server, under the name this build renames it to -->
+        <pathelement location="./jettylib/org.mortbay.jetty.jar"/>
+        <pathelement location="${junit.home}/junit4.jar"/>
+      </classpath>
+      <compilerarg line="${javac.compilerargs}"/>
+    </javac>
+  </target>
+
+  <target name="junit.test" depends="junit.compileTest">
+    <property name="junit.reports.dir" value="${build.root}reports"/>
+    <property name="junit.home" value="../../tools/test/junit"/>
+    <property name="hamcrest.home" value="../../tools/test/hamcrest"/>
+    <mkdir dir="${junit.reports.dir}/jetty/junit/"/>
+    <delete>
+      <fileset dir="${junit.reports.dir}/jetty/junit">
+        <include name="TEST-*.xml"/>
+      </fileset>
+    </delete>
+    <!-- One scratch directory per module, under the shared test root, as in the
+         other app modules: the forked test JVM reads the properties file ant
+         wrote for it here and writes its vmwatcher file here. -->
+    <property name="test.base.root" value="${java.io.tmpdir}/test-i2p/"/>
+    <property name="junit.tmp.dir" value="${test.base.root}jetty/tmp"/>
+    <mkdir dir="${junit.tmp.dir}"/>
+    <property name="junit.test.filter" value="**/*Test.java"/>
+    <junit printsummary="withOutAndErr" fork="yes" showoutput="yes" tempdir="${junit.tmp.dir}" timeout="15000">
+      <classpath>
+        <pathelement location="${build.dir}/obj"/>
+        <pathelement location="${build.dir}/testobj"/>
+        <pathelement location="${core.java.build.dir}/i2p.jar"/>
+        <pathelement location="./jettylib/javax.servlet.jar"/>
+        <pathelement location="./jettylib/jetty-http.jar"/>
+        <pathelement location="./jettylib/jetty-io.jar"/>
+        <pathelement location="${jetty.pkg.dir}/jetty-util.jar"/>
+        <pathelement location="./jettylib/jetty-servlet.jar"/>
+        <pathelement location="./jettylib/org.mortbay.jetty.jar"/>
+        <pathelement location="${junit.home}/junit4.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
+      </classpath>
+      <batchtest todir="${junit.reports.dir}/jetty/junit/">
+        <fileset dir="./java/test/junit" includes="${junit.test.filter}"/>
+      </batchtest>
+      <formatter type="xml"/>
+    </junit>
+  </target>
+
+  <target name="test" depends="junit.test"/>
+
   <target name="clean">
     <delete dir="${build.dir}"/>
     <delete file="${verified.filename}"/>

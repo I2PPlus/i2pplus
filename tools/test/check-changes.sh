@@ -19,6 +19,9 @@ set -u
 
 TMPDIR_BASE="${TMPDIR_BASE:-/tmp/opencode}"
 MODULE="i2psnark"
+# extra -D properties a module's ant build needs (jetty's version pins);
+# empty for every module that takes none
+ANTPROPS=""
 
 while [ "${1:-}" = "-m" ]; do
     MODULE="$2"
@@ -122,6 +125,16 @@ case "$MODULE" in
         # are upstream's and out of this repo's scope
         LOGSCOPE="apps/addressbook/java/src/net/i2p/addressbook"
         ;;
+    jetty)
+        BUILD="apps/jetty/build.xml"
+        REPORTS="/tmp/build-i2p/reports/jetty/junit"
+        SOURCEPATH="apps/jetty/java/src:apps/jetty/java/test/junit:core/java/src"
+        CP="$(find tools/test apps/jetty/jettylib -name '*.jar' | tr '\n' ':')"
+        LOGSCOPE="apps/jetty/java/src"
+        # this build refuses to run without the version pins the top-level
+        # build.xml normally supplies, and jettylib/ is generated from them
+        ANTPROPS="-Djetty.ver=9.3.30.v20211001 -Dtomcat.ver=9.0.124"
+        ;;
     *)
         echo "check-changes.sh: no wiring for module '$MODULE' — add it above" >&2
         exit 1
@@ -159,7 +172,7 @@ if [ ${#SRC[@]} -gt 0 ]; then
 fi
 
 echo "=== $MODULE suite"
-ant -q -f "$BUILD" "${TARGET:-junit.test}" 2>&1 | rg -n 'error:|BUILD' | head -12
+ant -q -f "$BUILD" $ANTPROPS "${TARGET:-junit.test}" 2>&1 | rg -n 'error:|BUILD' | head -12
 REPORTS="$REPORTS" python3 - <<'EOF'
 import glob, os, xml.etree.ElementTree as ET
 t = f = e = 0

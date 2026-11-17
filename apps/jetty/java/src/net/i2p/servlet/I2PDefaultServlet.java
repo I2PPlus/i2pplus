@@ -96,7 +96,11 @@ public class I2PDefaultServlet extends DefaultServlet {
     protected ContextHandler initContextHandler(ServletContext servletContext) {
         ContextHandler rv = super.initContextHandler(servletContext);
         _contextHandler = rv;
-        ErrorPageErrorHandler errorHandler = new ErrorPageErrorHandler();
+        // Not Jetty's own handler: it ranks the client's Accept header by quality
+        // with a sort that is quadratic in the number of values, and every status
+        // with no page mapped below runs that sort on the sender's header before
+        // it answers.
+        ErrorPageErrorHandler errorHandler = new I2PErrorPageErrorHandler();
         errorHandler.addErrorPage(403, "/.resources/403.html");
         errorHandler.addErrorPage(404, "/.resources/404.html");
         rv.setErrorHandler(errorHandler);
