@@ -154,6 +154,10 @@ public class SecurityManager {
             }
             return token;
         } else {
+            // A wrong password used to be silent, so an online guess against the
+            // API left no trace at any level.
+            _log.warnThrottled("i2pcontrol-auth-failed",
+                               "API password rejected -> No token issued");
             return null;
         }
     }

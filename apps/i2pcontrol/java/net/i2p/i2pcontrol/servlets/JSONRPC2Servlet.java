@@ -24,12 +24,15 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import net.i2p.I2PAppContext;
+import net.i2p.data.Base64;
 import net.i2p.i2pcontrol.I2PControlVersion;
 import net.i2p.i2pcontrol.security.SecurityManager;
 import net.i2p.i2pcontrol.servlets.configuration.ConfigurationManager;
@@ -37,6 +40,7 @@ import net.i2p.i2pcontrol.servlets.jsonrpc2handlers.*;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 import net.i2p.util.PortMapper;
+import net.i2p.util.RandomSource;
 
 import java.nio.charset.StandardCharsets;
 /**
@@ -52,6 +56,21 @@ public class JSONRPC2Servlet extends HttpServlet {
     private static final String SVC_HTTP_I2PCONTROL = "http_i2pcontrol";
     /** Service name checked for HTTPS access. */
     private static final String SVC_HTTPS_I2PCONTROL = "https_i2pcontrol";
+    /** Bytes in a password-form nonce, rendered as Base64. */
+    private static final int NONCE_BYTES = 16;
+    /**
+     * How long a password-form nonce stays usable. Long enough to type two
+     * passwords into the form, short enough that a token left in a page that is
+     * still open cannot be replayed for hours.
+     */
+    private static final long FORM_NONCE_TTL_MS = 10 * 60 * 1000L;
+    /**
+     * Password-form nonces this servlet has handed out, nonce -> the time it
+     * stops being usable. Held here rather than in the session because the
+     * standalone server has no session manager at all: it wires a plain
+     * ServletHandler, so getSession() throws there.
+     */
+    private final Map<String, Long> _formNonces = new ConcurrentHashMap<String, Long>(8);
     /** JSON-RPC 2.0 request dispatcher. */
     private Dispatcher disp;
     /** Class logger. */
@@ -171,10 +190,10 @@ public class JSONRPC2Servlet extends HttpServlet {
         out.println("<b>Status:</b> Running</p>");
        if ("/password".equals(httpServletRequest.getServletPath())) {
             out.println("<hr>\n<form method=POST action=\"password\">\n");
+            out.println("<input name=\"nonce\" type=hidden value=\"" + mintFormNonce() + "\">\n");
+            out.println("<p><span class=prompt>Current API password:</span> <input name=\"password\" type=password></p>");
             if (_secMan.isDefaultPasswordValid()) {
                 out.println("<p>The current API password is the default, \"" + _secMan.DEFAULT_AUTH_PASSWORD + "\". You should change it.</p>");
-            } else {
-                out.println("<p><span class=prompt>Current API password:</span> <input name=\"password\" type=password></p>");
             }
             out.println("<p><span class=prompt>New API password:</span> <input name=\"password2\" type=password placeholder=\"new password\">&nbsp;" +
                         "<input name=\"password3\" type=password placeholder=\"confirm new password\">" + "</p>\n" +
@@ -199,25 +218,29 @@ public class JSONRPC2Servlet extends HttpServlet {
         resp.setHeader("Content-Security-Policy", "default-src 'self'; object-src 'none'; media-src 'none'; form-action 'self'");
         resp.setHeader("X-XSS-Protection", "1; mode=block");
         resp.setHeader("X-Content-Type-Options", "nosniff");
-        resp.setHeader("Cache-Control","private, no-cache, max-age=14400");
+        // The page names the config file that holds the API password and carries
+        // the form token, so nothing of it may be kept by the browser or a proxy.
+        resp.setHeader("Cache-Control", "private, no-store");
     }
 
     /**
      * Handle API password change form submission.
      *
-     * @param req the form submission carrying the password, password2 and password3 fields
+     * @param req the form submission carrying the nonce, password, password2 and
+     *            password3 fields
      * @param httpServletResponse the response the result page is written to
      * @throws IOException if the response writer cannot be obtained
      * @throws ServletException declared for the servlet API, never thrown here
      */
     private void doPasswordChange(HttpServletRequest req, HttpServletResponse httpServletResponse) throws ServletException, IOException {
         setHeaders(httpServletResponse);
+        if (!nonceMatches(_formNonces, req.getParameter("nonce"), System.currentTimeMillis())) {
+            _log.warnThrottled("i2pcontrol-nonce-fail", "API password change refused -> No usable form token");
+            httpServletResponse.sendError(403, "Missing or stale form token");
+            return;
+        }
         PrintWriter out = httpServletResponse.getWriter();
         String pw = req.getParameter("password");
-        if (pw == null)
-            pw = _secMan.DEFAULT_AUTH_PASSWORD;
-        else
-            pw = pw.trim();
         String pw2 = req.getParameter("password2");
         String pw3 = req.getParameter("password3");
         out.println("<!DOCTYPE html>");
@@ -229,24 +252,88 @@ public class JSONRPC2Servlet extends HttpServlet {
         out.println("</head>\n<body>");
         out.println("<h1>I2PControl RPC Service&nbsp;&nbsp;<a href=\"/configwebapps\" title=\"Control and configure service\">" +
                     "<img src=\"/themes/console/images/configure.svg\" height=16 width=16></a></h1>");
-        if (pw2 == null || pw3 == null) {
-            out.println("<p>Please fill in both fields&hellip;</p>");
+        String err = passwordFormError(pw, pw2, pw3);
+        if (err != null) {
+            out.println("<p>" + err + "</p>");
+        } else if (_secMan.isValid(pw.trim())) {
+            _secMan.setPasswd(pw2.trim());
+            out.println("<p>API Password changed</p>");
         } else {
-            pw2 = pw2.trim();
-            pw3 = pw3.trim();
-            if (!pw2.equals(pw3)) {
-                out.println("<p>New passwords don't match!</p>");
-            } else if (pw2.length() <= 0) {
-                out.println("<p>Enter new password twice!</p>");
-            } else if (_secMan.isValid(pw)) {
-                _secMan.setPasswd(pw2);
-                out.println("<p>API Password changed</p>");
-            } else {
-                out.println("<p>Incorrect old password, not changed</p>");
-            }
+            out.println("<p>Incorrect old password, not changed</p>");
         }
         out.println("<hr>\n<p id=password><a href=\"password\">Change API Password</a></p>");
         out.println("</body>\n</html>");
+    }
+
+    /**
+     * Check the three password fields of the change form before any of them is
+     * compared against the stored password.
+     * <p>
+     * The current password is required. The form used to hide its field while
+     * the default password was in place, and this handler substituted the
+     * default for a missing password, so a cross-origin POST carrying only the
+     * two new-password fields - a CORS simple request, needing no preflight -
+     * replaced the API password without knowing it.
+     *
+     * @param pw the current password as submitted, null if the field was left out
+     * @param pw2 the new password, null if the field was left out
+     * @param pw3 the new password again, null if the field was left out
+     * @return null if the change may go ahead, otherwise the message to show the
+     *         user, already marked up for the page
+     * @since 0.9.72+
+     */
+    static String passwordFormError(String pw, String pw2, String pw3) {
+        if (pw == null || pw.trim().isEmpty()) {
+            return "Enter the current API password!";
+        }
+        if (pw2 == null || pw3 == null) {
+            return "Please fill in both fields&hellip;";
+        }
+        if (pw2.trim().isEmpty()) {
+            return "Enter new password twice!";
+        }
+        if (!pw2.trim().equals(pw3.trim())) {
+            return "New passwords don't match!";
+        }
+        return null;
+    }
+
+    /**
+     * Hand out a single-use token for the password form, and drop the tokens no
+     * browser ever submitted.
+     *
+     * @return the token to put in the form's hidden field
+     */
+    private String mintFormNonce() {
+        long now = System.currentTimeMillis();
+        for (Map.Entry<String, Long> entry : _formNonces.entrySet()) {
+            if (entry.getValue() < now) {
+                _formNonces.remove(entry.getKey(), entry.getValue());
+            }
+        }
+        byte[] buf = new byte[NONCE_BYTES];
+        RandomSource.getInstance().nextBytes(buf);
+        String nonce = Base64.encode(buf);
+        _formNonces.put(nonce, now + FORM_NONCE_TTL_MS);
+        return nonce;
+    }
+
+    /**
+     * Is this a token the given store handed out and not yet used? A match is
+     * consumed here, so the same submission cannot be replayed.
+     *
+     * @param nonces the tokens handed out, token -> the time each stops being usable
+     * @param submitted the token from the form, null if the field was left out
+     * @param now the current time in ms
+     * @return true if the token is present, unused and unexpired
+     * @since 0.9.72+
+     */
+    static boolean nonceMatches(Map<String, Long> nonces, String submitted, long now) {
+        if (submitted == null || submitted.isEmpty()) {
+            return false;
+        }
+        Long expiry = nonces.remove(submitted);
+        return expiry != null && expiry >= now;
     }
 
     /** Handle JSON-RPC 2.0 requests and password changes. */
