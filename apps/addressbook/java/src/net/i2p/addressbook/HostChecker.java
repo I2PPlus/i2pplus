@@ -138,6 +138,38 @@ public class HostChecker {
     /** Default hosts pinged at once. */
     private static final int DEFAULT_MAX_CONCURRENT = 16;
     /**
+     * Whether the periodic check runs at all. A cycle contacts every destination
+     * in the subscribed address book from the router's own destination, and the
+     * HEAD fallback from the browsing destination of the proxy it is sent
+     * through, so it is off until the operator asks for it. The console's "Run
+     * HostChecker" button is unaffected - that is an explicit request.
+     */
+    private static final boolean DEFAULT_ENABLED = false;
+    /** Default proxy the HEAD fallback is sent through, the local eepProxy. */
+    private static final String DEFAULT_PROXY_HOST = "127.0.0.1";
+    /** Default proxy port for the HEAD fallback, the local eepProxy. */
+    private static final int DEFAULT_PROXY_PORT = 4444;
+    /**
+     * Names probed in one cycle. A cycle is serialised by the concurrency
+     * limit, and one silent host holds a slot for the ping timeout plus the HEAD
+     * fallback, so an unbounded book makes a cycle outlive the interval between
+     * cycles, and it also sets how many destinations the router reaches out to
+     * on its own. At the default concurrency and timeouts this many names is 13
+     * passes of 16, under a fifth of the default four hour interval even with
+     * every host silent. A larger book is sampled across cycles rather than
+     * truncated, because the names are shuffled first.
+     */
+    static final int MAX_HOSTS_PER_CYCLE = 200;
+    /**
+     * Address book the checker probes: the router's own book, the one the
+     * subscriptions feed. Naming services select it under different option
+     * names, so both are set - <code>list</code> for the blockfile service and
+     * <code>file</code> for the hosts-file service - and a service that merges
+     * several books cannot widen the probe set to the operator's private or
+     * master entries.
+     */
+    private static final String PROBE_BOOK = "hosts.txt";
+    /**
      * Cap on outbound tunnels for the shared ping session; pings are a
      * bonus check, each tunnel costs a network build.
      */
@@ -149,6 +181,12 @@ public class HostChecker {
     private static final String PROP_PING_INTERVAL = "pingInterval";
     /** Config key for the concurrent ping limit. */
     private static final String PROP_MAX_CONCURRENT = "maxConcurrentPings";
+    /** Config key for turning the periodic check on. */
+    private static final String PROP_ENABLE = "enablePing";
+    /** Config key for the proxy the HEAD fallback is sent through. */
+    private static final String PROP_PROXY_HOST = "proxy_host";
+    /** Config key for the port of that proxy. */
+    private static final String PROP_PROXY_PORT = "proxy_port";
 
     /**
      * Load configuration from addressbook/config.txt file
@@ -167,10 +205,15 @@ public class HostChecker {
     }
 
     /**
-     * Parse addressbook/config.txt and update the ping interval and concurrency
-     * fields. Invalid values leave the current settings untouched.
+     * Parse addressbook/config.txt and update the enable, interval, concurrency
+     * and proxy fields. An invalid value leaves the current setting untouched.
+     * The enable key is the exception: absent means off, so deleting the line
+     * turns the periodic check off again.
      */
     private void parseConfigFile() {
+        boolean enabled = DEFAULT_ENABLED;
+        String proxyHost = _proxyHost;
+        int proxyPort = _proxyPort;
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new BufferedInputStream(new FileInputStream(_configFile)), StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -224,9 +267,23 @@ public class HostChecker {
                                 _log.warn("Invalid max concurrent in config: " + value + ", using default " + DEFAULT_MAX_CONCURRENT);
                             }
                         }
+                    } else if (PROP_ENABLE.equals(key)) {
+                        enabled = parseEnabled(value);
+                        if (_log.shouldInfo()) {
+                            _log.info("Loaded the periodic host check setting from config: " + value);
+                        }
+                    } else if (PROP_PROXY_HOST.equals(key)) {
+                        if (!value.isEmpty()) {
+                            proxyHost = value;
+                        }
+                    } else if (PROP_PROXY_PORT.equals(key)) {
+                        proxyPort = parseProxyPort(value, proxyPort);
                     }
                 }
             }
+            _enabled = enabled;
+            _proxyHost = proxyHost;
+            _proxyPort = proxyPort;
         } catch (IOException e) {
             if (_log.shouldWarn()) {
                 _log.warn("Error loading addressbook config.txt", e);
@@ -235,9 +292,60 @@ public class HostChecker {
     }
 
     /**
+     * Does this value turn the periodic host check on? Only an affirmative
+     * does: anything else, a misspelling included, leaves it off, so a typo
+     * cannot start a cycle of probes nobody asked for.
+     *
+     * @param value the raw value from addressbook/config.txt, already trimmed
+     * @return true if the periodic check should run
+     * @since 0.9.72+
+     */
+    static boolean parseEnabled(String value) {
+        return "true".equalsIgnoreCase(value) || "yes".equalsIgnoreCase(value) || "1".equals(value);
+    }
+
+    /**
+     * Port of the proxy the HEAD fallback is sent through. A value that is not a
+     * port a socket can be opened on is not used at all - an EepHead pointed at
+     * port 0 or a negative port fails for every host in the book.
+     *
+     * @param value the raw value from addressbook/config.txt, already trimmed
+     * @param current the port in effect, returned if the value is unusable
+     * @return the port to use
+     * @since 0.9.72+
+     */
+    static int parseProxyPort(String value, int current) {
+        try {
+            int port = Integer.parseInt(value);
+            if (port < 1 || port > 65535) {return current;}
+            return port;
+        } catch (NumberFormatException e) {
+            return current;
+        }
+    }
+
+    /**
+     * The names one cycle probes out of the whole book. The list is shuffled
+     * before it is cut, so a book larger than the limit is sampled over the
+     * cycles instead of the same first names being probed every time.
+     *
+     * @param names the shuffled names from the address book
+     * @param limit at most this many names per cycle
+     * @return the names to probe, a prefix of the shuffled list
+     * @since 0.9.72+
+     */
+    static List<String> probeSet(List<String> names, int limit) {
+        int count = Math.max(0, Math.min(names.size(), limit));
+        return names.subList(0, count);
+    }
+
+    /**
      * Re-read addressbook/config.txt when it changed and apply the new values
      * live. A new interval reschedules the cycle task (next cycle only); a new
      * concurrency limit takes effect in the in-progress cycle immediately.
+     * Turning the check on schedules the cycle from now on, and turning it off
+     * cancels the schedule - a cycle already running finishes, since it is
+     * bounded by {@link #MAX_HOSTS_PER_CYCLE}.
      */
     private void refreshConfiguration() {
         if (!_configFile.exists()) {
@@ -249,8 +357,20 @@ public class HostChecker {
         }
         long oldInterval = _pingInterval;
         int oldMaxConcurrent = _maxConcurrent;
+        boolean wasEnabled = _enabled;
         parseConfigFile();
         _configLastModified = lastModified;
+        if (_enabled != wasEnabled) {
+            if (_enabled) {
+                if (_log.shouldInfo())
+                    _log.info("Periodic host check enabled -> Starting the cycle");
+                schedulePingTask();
+            } else {
+                if (_log.shouldInfo())
+                    _log.info("Periodic host check disabled -> Cancelling the cycle");
+                cancelPingTask();
+            }
+        }
         // Skip rescheduling until the initial cycle schedule exists; the
         // initial schedule picks up the new interval anyway.
         if (_pingInterval != oldInterval && _pingTaskFuture != null) {
@@ -306,6 +426,12 @@ public class HostChecker {
     private long _pingTimeout = DEFAULT_PING_TIMEOUT;
     /** Hosts pinged at once, in effect right now. */
     private volatile int _maxConcurrent = DEFAULT_MAX_CONCURRENT;
+    /** Whether the periodic check runs, in effect right now. */
+    private volatile boolean _enabled = DEFAULT_ENABLED;
+    /** Proxy the HEAD fallback is sent through, in effect right now. */
+    private volatile String _proxyHost = DEFAULT_PROXY_HOST;
+    /** Port of that proxy, in effect right now. */
+    private volatile int _proxyPort = DEFAULT_PROXY_PORT;
     /** Whether a lease set reply counts as a successful ping. */
     private boolean _useLeaseSetCheck = true;
 
@@ -498,7 +624,10 @@ public class HostChecker {
     }
 
     /**
-     * Start periodic ping testing.
+     * Start periodic ping testing. The cycle only runs when the operator has
+     * asked for it with the enablePing key; the config file is watched either
+     * way, so turning it on takes effect without a restart, and the console's
+     * "Run HostChecker" button works while it is off.
      */
     public synchronized void start() {
         if (_running.get()) {
@@ -515,8 +644,15 @@ public class HostChecker {
             }
         }, 15, 15, TimeUnit.SECONDS);
 
+        if (!_enabled) {
+            if (_log.shouldInfo()) {
+                _log.info("HostChecker idle -> The periodic host check is disabled by config");
+            }
+            return;
+        }
+
         if (_log.shouldInfo()) {
-            _log.info("Starting HostChecker with a " + (_pingInterval/1000/60) + " minute interval...");
+            _log.info("Starting HostChecker with a " + DataHelper.formatDuration(_pingInterval) + " interval");
         }
 
         // Start category download in a separate thread with delay
@@ -538,7 +674,7 @@ public class HostChecker {
                     for (int i = 0; i < 300; i++) {
                         if (_categoriesDownloaded.get()) {
                             _log.info("Downloaded the host categories -> Starting the ping cycle");
-                            _pingTaskFuture = _scheduler.scheduleAtFixedRate(new PingTask(), STARTUP_DELAY_MS, _pingInterval, TimeUnit.MILLISECONDS);
+                            schedulePingTask();
                             return;
                         }
                         Thread.sleep(1000); // Wait 1 second
@@ -546,7 +682,7 @@ public class HostChecker {
 
                     // Timeout reached - start ping cycle anyway
                     _log.warn("Categories were not downloaded within the wait -> Starting the ping cycle anyway");
-                    _pingTaskFuture = _scheduler.scheduleAtFixedRate(new PingTask(), STARTUP_DELAY_MS, _pingInterval, TimeUnit.MILLISECONDS);
+                    schedulePingTask();
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     if (_log.shouldWarn()) {
@@ -557,6 +693,27 @@ public class HostChecker {
         };
         categoryWaiter.setDaemon(true);
         categoryWaiter.start();
+    }
+
+    /**
+     * Schedule the periodic cycle, the first one after {@link #STARTUP_DELAY_MS}
+     * so the router has its tunnels before anything is probed.
+     */
+    private void schedulePingTask() {
+        _pingTaskFuture = _scheduler.scheduleAtFixedRate(new PingTask(), STARTUP_DELAY_MS, _pingInterval, TimeUnit.MILLISECONDS);
+    }
+
+    /**
+     * Cancel the scheduled cycle. A cycle already running is left to finish: it
+     * is bounded by {@link #MAX_HOSTS_PER_CYCLE}, and stopping it mid-cycle
+     * would leave the results file holding a partial pass.
+     */
+    private void cancelPingTask() {
+        ScheduledFuture<?> future = _pingTaskFuture;
+        if (future != null) {
+            future.cancel(false);
+            _pingTaskFuture = null;
+        }
     }
 
     /**
@@ -588,7 +745,9 @@ public class HostChecker {
 
     /**
      * Run a host check cycle immediately, unless one is already in progress.
-     * The periodic cycle schedule is unaffected.
+     * The periodic cycle schedule is unaffected, and a cycle runs this way even
+     * while the periodic check is disabled: this is an explicit request from the
+     * console.
      */
     public void runCheckNow() {
         if (!_running.get()) {
@@ -610,6 +769,17 @@ public class HostChecker {
      */
     public boolean isScanRunning() {
         return _cycleInProgress.get();
+    }
+
+    /**
+     * Whether the periodic check runs, as addressbook/config.txt has it set with
+     * the enablePing key. A cycle started from the console happens regardless.
+     *
+     * @return true if the periodic check is enabled
+     * @since 0.9.72+
+     */
+    public boolean isEnabled() {
+        return _enabled;
     }
 
     /**
@@ -1142,7 +1312,9 @@ public class HostChecker {
 
     /**
      * Fallback method to use EepHead for HTTP HEAD request testing
-     * Marks site as up if any response is received.
+     * Marks site as up if any response is received. The request goes through the
+     * proxy addressbook/config.txt names with proxy_host and proxy_port, so it
+     * leaves from that proxy's client destination, not the checker's own.
      *
      * @param hostname the host to probe, used as the result cache key
      * @param startTime test start time in ms, used as the result timestamp
@@ -1154,7 +1326,7 @@ public class HostChecker {
     private PingResult fallbackToEepHead(String hostname, long startTime, String leaseSetTypes, boolean saveResult) {
         try {
             String url = "http://" + hostname;
-            EepHead eepHead = new EepHead(_context, "127.0.0.1", 4444, 1, url);
+            EepHead eepHead = new EepHead(_context, _proxyHost, _proxyPort, 1, url);
 
             if (leaseSetTypes == null) {
                 leaseSetTypes = "[]";
@@ -1462,7 +1634,11 @@ public class HostChecker {
     }
 
     /**
-     * Get all hostnames from the naming service.
+     * Get all hostnames from the naming service, from the address book the
+     * checker probes. The book is named in the options so a naming service that
+     * merges several books - the hosts-file service does - cannot widen the
+     * probe set to the operator's private or master entries.
+     *
      * @return the all hostnames
      */
     private Set<String> getAllHostnames() {
@@ -1470,6 +1646,8 @@ public class HostChecker {
 
         // Use NamingService.getNames() to get all hostnames
         Properties options = new Properties();
+        options.setProperty("list", PROBE_BOOK);
+        options.setProperty("file", PROBE_BOOK);
         Set<String> names = _namingService.getNames(options);
         if (names != null) {
             hostnames.addAll(names);
@@ -2178,15 +2356,18 @@ public class HostChecker {
 
             // Get all hostnames and randomize order
             Set<String> allHostnamesSet = getAllHostnames();
-            List<String> allHostnames = new ArrayList<>(allHostnamesSet);
-            Collections.shuffle(allHostnames, _context.random());
-            int addressBookSize = allHostnames.size();
+            List<String> shuffled = new ArrayList<>(allHostnamesSet);
+            Collections.shuffle(shuffled, _context.random());
+            int addressBookSize = shuffled.size();
+            List<String> allHostnames = probeSet(shuffled, MAX_HOSTS_PER_CYCLE);
+            int probed = allHostnames.size();
 
             // Wait for socket manager to be fully ready
             try {
                 Thread.sleep(5000);
                 if (_log.shouldInfo()) {
-                    _log.info("Starting HostChecker cycle for address book with " + addressBookSize + " entries...");
+                    _log.info("Starting HostChecker cycle for address book with " + addressBookSize + " entries"
+                              + (probed < addressBookSize ? " -> Probing " + probed + " of them" : ""));
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();

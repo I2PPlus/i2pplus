@@ -113,6 +113,7 @@
 <li><%=intl._t("File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows).")%></li>
 <li><%=intl._t("If you want to manually add lines to an addressbook, add them to the private or master addressbooks.")%>&nbsp;<wbr><%=intl._t("The router addressbook and the published addressbook are updated by the addressbook application.")%></li>
 <li><%=intl._t("When you publish your addressbook, ALL destinations from the master and router addressbooks appear there.")%>&nbsp;<wbr><%=intl._t("Use the private addressbook for private destinations, these are not published.")%></li>
+<li><%=intl._t("The host checker probes the router addressbook only, never the private or master addressbooks, and its HTTP HEAD requests go through the proxy configured above.")%></li>
 </ol>
 <h3><%=intl._t("Options")%></h3>
 <ul>
@@ -129,6 +130,7 @@
 <li><b>last_modified</b> - <%=intl._t("File containing the modification timestamp for each fetched subscription URL (no need to change)")%></li>
 <li><b>log</b> - <%=intl._t("File to log activity to (change to /dev/null if you like)")%></li>
 <li><b>theme</b> - <%=intl._t("Name of override theme to use (defaults to console-selected theme)")%></li>
+<li><b>enablePing</b> - <%=intl._t("true or false, whether the host checker runs on its own schedule (default is false, the Run HostChecker button works either way)")%></li>
 <li><b>pingInterval</b> - <%=intl._t("Interval (in hours) for running host checker (default is 4 hours)")%></li>
 <li><b>maxConcurrentPings</b> - <%=intl._t("Maximum concurrent pings when running host checker (Default is 16, max is 160)")%></li>
 </ul>

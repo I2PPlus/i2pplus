@@ -113,6 +113,15 @@ case "$MODULE" in
         CP="$(find tools/test apps/jetty/jettylib installer/lib/wrapper -name '*.jar' | tr '\n' ':')"
         LOGSCOPE="apps/i2pcontrol/java/net"
         ;;
+    addressbook)
+        BUILD="apps/addressbook/build.xml"
+        REPORTS="/tmp/build-i2p/reports/addressbook/junit"
+        SOURCEPATH="apps/addressbook/java/src:apps/addressbook/java/test/junit:core/java/src:router/java/src:apps/streaming/java/src:apps/ministreaming/java/src:apps/i2ptunnel/java/src"
+        CP="$(find tools/test -name '*.jar' | tr '\n' ':')"
+        # the module also vendors the metanotion block store, whose log findings
+        # are upstream's and out of this repo's scope
+        LOGSCOPE="apps/addressbook/java/src/net/i2p/addressbook"
+        ;;
     *)
         echo "check-changes.sh: no wiring for module '$MODULE' — add it above" >&2
         exit 1

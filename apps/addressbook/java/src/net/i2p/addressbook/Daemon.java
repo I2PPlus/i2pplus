@@ -897,7 +897,8 @@ public class Daemon {
             _log.append("HostChecker instance set in bridge");
 
             hostChecker.start();
-            _log.append("HostChecker started successfully");
+            _log.append("HostChecker started, periodic check " +
+                        (hostChecker.isEnabled() ? "enabled" : "disabled"));
         } catch (Exception e) {
             _log.append("Failed to initialize HostChecker: " + e.getMessage());
             e.printStackTrace();
