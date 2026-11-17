@@ -504,6 +504,26 @@ public class FileUtil {
     }
 
     /**
+     * Adds the execute bit to a file, leaving its other permissions alone. Any
+     * code that puts a script in place from an archive should call it: extracting
+     * a zip writes each file with this process' umask, so a script an update
+     * delivers arrives not runnable however it was stored in the archive. A file
+     * that is already executable is left untouched, since setting the bit again
+     * widens it to every account on the machine. Windows has no execute bit, so
+     * the call reports success without changing anything.
+     *
+     * @param file the file to make runnable
+     * @return true if the file is now executable by this process, false if it is
+     *         missing or the bit could not be set
+     * @since 0.9.72+
+     */
+    public static boolean setExecutable(File file) {
+        if (file.canExecute())
+            return true;
+        return file.setExecutable(true, false) && file.canExecute();
+    }
+
+    /**
      * Usage: FileUtil (delete path | copy source dest | rename from to | unzip path.zip).
      *
      * @param args the subcommand and its operands: delete path | copy source
