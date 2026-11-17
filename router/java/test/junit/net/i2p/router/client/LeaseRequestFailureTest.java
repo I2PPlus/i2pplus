@@ -78,20 +78,38 @@ import net.i2p.util.SimpleTimer2;
 /**
  * Lease request failure and retry behavior: every early-failure path must
  * deliver onFailed exactly once and clear the session slot, a stale job run
- * must not account for an already-resolved request, and the expired-published
+ * must not account for an already-resolved request, the expired-published
  * rerequest path must re-queue the same state a bounded number of times
- * instead of waiting out the full timeout check.
+ * instead of waiting out the full timeout check, and a client that is not
+ * reading its queue must be retried by re-queueing the job rather than by
+ * blocking the job queue runner that runs it.
  */
 public class LeaseRequestFailureTest {
+    /** The fixed time the mocked clock reports, so lease times are predictable. */
     private static final long NOW = 1_000_000_000L;
+    /** How long a request this test creates waits for the client. */
     private static final long EXPIRATION_MS = 60_000L;
 
+    /** Mocked context the runner and the jobs are built on. */
     private RouterContext _ctx;
+    /** Mocked client manager the runner reports destination state through. */
     private ClientManager _cm;
+    /** Mocked job queue, the record of what the code under test re-queued. */
     private JobQueue _jobQueue;
+    /** The runner under test, with no client attached. */
     private ClientConnectionRunner _runner;
+    /** Scratch directory for the config and log files this fixture needs. */
     private File _tmpDir;
 
+    /**
+     * Runs the lease request failure and retry cases; the fixture is per test.
+     */
+    public LeaseRequestFailureTest() {}
+
+    /**
+     * Builds the mocked context, its job queue and a bare runner, with the log
+     * and config files in this test's own scratch directory.
+     */
     @Before
     public void setUp() {
         _tmpDir = new File(System.getProperty("java.io.tmpdir"), "i2p-leasesetreq-" + System.nanoTime());
@@ -167,6 +185,9 @@ public class LeaseRequestFailureTest {
         _runner = new ClientConnectionRunner(_ctx, _cm, null);
     }
 
+    /**
+     * Removes the scratch directory, whatever a test left in it.
+     */
     @After
     public void tearDown() {
         deleteRecursively(_tmpDir);
@@ -290,6 +311,55 @@ public class LeaseRequestFailureTest {
         assertNull(queued.getLeaseRequest(dest.calculateHash()));
         assertTrue("blocking on a wedged client must stay far below the request timeout, took "
                    + elapsed + "ms", elapsed < RequestLeaseSetJob.DEFAULT_SEND_WAIT * 10);
+    }
+
+    /**
+     * A client that is not reading its queue must not hold a job queue runner while the
+     * router waits between attempts: the waits are requeues of the same job, so one run
+     * costs one refused send. The attempt count and the request's own deadline still
+     * bound the sequence, and the slot stays held until the last attempt fails.
+     *
+     * @throws Exception on crypto setup failure generating the test destination's keys
+     */
+    @Test
+    public void wedgedClientIsRetriedByRequeueNotBySleeping() throws Exception {
+        Destination dest = createDestination();
+        assertEquals(SessionStatusMessage.STATUS_CREATED,
+                _runner.sessionEstablished(new SessionConfig(dest)));
+        _runner.setSessionId(dest.calculateHash(), new SessionId(9));
+        when(_ctx.getProperty(eq(RequestLeaseSetJob.PROP_SEND_ATTEMPTS), anyInt()))
+                .thenReturn(RequestLeaseSetJob.DEFAULT_SEND_ATTEMPTS);
+
+        Job onFailed = namedJob("onFailed");
+        _runner.requestLeaseSet(dest.calculateHash(), createLeaseSet(dest), EXPIRATION_MS,
+                null, onFailed);
+        RequestLeaseSetJob job = lastRequestJob();
+
+        long start = System.currentTimeMillis();
+        job.runJob();
+        long elapsed = System.currentTimeMillis() - start;
+
+        assertTrue("a refused send held the job runner for " + elapsed + "ms instead of requeueing",
+                   elapsed < RequestLeaseSetJob.DEFAULT_SEND_WAIT);
+        assertEquals("the first refusal failed the request instead of retrying",
+                     0, countOf(onFailed));
+        assertNotNull("the retry lost the session's request slot",
+                      _runner.getLeaseRequest(dest.calculateHash()));
+        assertEquals("the job was not requeued for another attempt", 2, countOf(job));
+        assertEquals("the requeue did not wait for the client to drain",
+                     NOW + RequestLeaseSetJob.retryDelay(RequestLeaseSetJob.DEFAULT_SEND_WAIT, 1),
+                     job.getTiming().getStartAfter());
+
+        // Each remaining attempt arrives on its own run; the last one fails the request.
+        for (int attempt = 2; attempt < RequestLeaseSetJob.DEFAULT_SEND_ATTEMPTS; attempt++) {
+            job.runJob();
+            assertEquals("attempt " + attempt + " ended the request early", 0, countOf(onFailed));
+        }
+        job.runJob();
+        assertEquals(1, countOf(onFailed));
+        assertNull(_runner.getLeaseRequest(dest.calculateHash()));
+        assertEquals("the retries ran past the attempt limit",
+                     RequestLeaseSetJob.DEFAULT_SEND_ATTEMPTS, countOf(job));
     }
 
     /**

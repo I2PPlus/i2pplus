@@ -37,14 +37,19 @@ class RequestLeaseSetJob extends JobImpl {
     private final ClientConnectionRunner _runner;
     /** The state of the lease request. */
     private final LeaseRequestState _requestState;
+    /**
+     * Send attempts made for this request so far. A refused send requeues this
+     * same job, so the count is what bounds the retries a request can get.
+     */
+    private int _attempts;
 
     /** Default maximum clock fudge. */
     private static final long DEFAULT_MAX_FUDGE = 5L*1000;
     /** Config key of the maximum clock fudge. */
     private static final String PROP_MAX_FUDGE = "router.requestLeaseSetMaxFudge";
     /**
-     * Property overriding {@link #DEFAULT_SEND_WAIT}: ms to wait for the client to drain
-     * its I2CP queue before failing the LeaseSet request.
+     * Property overriding {@link #DEFAULT_SEND_WAIT}: ms to wait for the client to make
+     * room in its I2CP queue for one attempt at the LeaseSet request.
      *
      * @since 0.9.71+
      */
@@ -80,11 +85,11 @@ class RequestLeaseSetJob extends JobImpl {
     static final String PROP_SEND_ATTEMPTS = "router.requestLeaseSetSendAttempts";
 
     /**
-     * Attempts before giving up on a backed-up client. The router's request
-     * timeout is around a minute, so with a one-second first wait and doubling,
-     * five attempts span roughly 15 seconds. The client has to read one message
-     * in that time, and anything that cannot is not going to recover inside the
-     * request timeout either.
+     * Attempts before giving up on a backed-up client. The waits between them come
+     * from {@link #retryDelay(long, int)}, so with the default one-second wait the
+     * four gaps span 20 seconds against a request timeout of around a minute. The
+     * client has to read one message in that time, and anything that cannot is not
+     * going to recover inside the request timeout either.
      */
     static final int DEFAULT_SEND_ATTEMPTS = 5;
     /**
@@ -262,45 +267,81 @@ class RequestLeaseSetJob extends JobImpl {
         // refusal costs the whole request timeout plus another LeaseSet lookup through the
         // netdb, so retry with a growing wait before giving up. Each attempt only asks the
         // client to read one more message, so the router side stays cheap.
+        //
+        // Only one attempt runs per job run. This job runs on a JobQueue runner, a thread
+        // every subsystem of the router shares, so the wait between attempts is a requeue
+        // and not a sleep: a client that never reads its queue then costs a runner one
+        // short offer per attempt, instead of the whole retry sequence in one go.
         int attempts = Math.max(1, getContext().getProperty(PROP_SEND_ATTEMPTS, DEFAULT_SEND_ATTEMPTS));
         long waitMs = getContext().getProperty(PROP_SEND_WAIT, DEFAULT_SEND_WAIT);
         I2CPMessageException lastFailure = null;
-        for (int attempt = 1; attempt <= attempts; attempt++) {
-            try {
-                _runner.doSendWait(msg, waitMs);
-                if (_log.shouldInfo())
-                    _log.info("LeaseSet request sent to client [Session " + id.getSessionId() +
-                              "] -> Scheduling the timeout check");
-                getContext().jobQueue().addJob(new CheckLeaseRequestStatus());
-                return;
-            } catch (I2CPMessageException ime) {
-                lastFailure = ime;
-                if (attempt == attempts) {break;}
-                // The client's queue has a fixed capacity, so waiting longer is the only
-                // lever this side has; grow it so a slow client gets a fair chance to
-                // drain rather than a fixed second repeatedly failing.
-                long nextWait = waitMs * attempt * 2;
+        try {
+            _runner.doSendWait(msg, waitMs);
+            if (_log.shouldInfo())
+                _log.info("LeaseSet request sent to client [Session " + id.getSessionId() +
+                          "] -> Scheduling the timeout check");
+            getContext().jobQueue().addJob(new CheckLeaseRequestStatus());
+            return;
+        } catch (I2CPMessageException ime) {
+            lastFailure = ime;
+            _attempts++;
+            long nextWait = retryDelay(waitMs, _attempts);
+            // Read the clock again: the attempt above may have waited for the queue.
+            long when = getContext().clock().now();
+            // Retry while attempts remain and the request still has a future to be sent
+            // into - a retry that lands after the request expires is only a delay.
+            if (retryWorthwhile(_attempts, attempts, nextWait, when, _requestState.getExpiration())) {
                 if (_log.shouldInfo())
                     _log.info("I2CP queue full sending the LeaseSet request for [Session " + id.getSessionId() +
                               "] -> Retrying"
-                              + "\n* Attempt: " + attempt + " of " + attempts
+                              + "\n* Attempt: " + _attempts + " of " + attempts
                               + " * Wait: " + DataHelper.formatDuration(nextWait)
                               + " * Error: " + ime.getMessage());
-                try {
-                    Thread.sleep(nextWait);
-                } catch (InterruptedException ie) {
-                    Thread.currentThread().interrupt();
-                    break;
-                }
+                getTiming().setStartAfter(when + nextWait);
+                getContext().jobQueue().addJob(this);
+                return;
             }
         }
         getContext().statManager().addRateData("client.requestLeaseSetDropped", 1);
         if (_log.shouldWarn())
             _log.warn("Giving up on the LeaseSet request for [Session " + id.getSessionId() +
-                      "] after " + attempts +
-                      " attempts -> The client is not draining its I2CP queue"
+                      "] -> The client is not draining its queue"
+                      + "\n* Attempts: " + _attempts + " of " + attempts
                       + (lastFailure != null ? " * Error: " + lastFailure.getMessage() : ""));
         failEarlyRequest("Error sending I2CP message");
+    }
+
+    /**
+     * How long to wait before the next attempt to hand the request to the client.
+     * The client's queue has a fixed capacity, so waiting longer is the only lever
+     * this side has; the wait grows with the attempt number so a slow client gets a
+     * fair chance to drain rather than a fixed interval repeatedly failing.
+     *
+     * @param waitMs the base wait, from {@link #PROP_SEND_WAIT}
+     * @param attempt how many attempts have already been made, 1 for the first retry
+     * @return ms to wait before the next attempt
+     * @since 0.9.72+
+     */
+    static long retryDelay(long waitMs, int attempt) {
+        return waitMs * Math.max(1, attempt) * 2;
+    }
+
+    /**
+     * Should this job be requeued for another send attempt? The attempt count is
+     * capped by configuration; the deadline is what stops a retry scheduled after
+     * the request has already expired from buying anything, however large the
+     * configured waits are.
+     *
+     * @param attempts how many attempts have been made
+     * @param maxAttempts the configured limit
+     * @param nextWait the wait before the next attempt
+     * @param now the current time
+     * @param expiration when the request itself expires
+     * @return true if the job should be requeued for another attempt
+     * @since 0.9.72+
+     */
+    static boolean retryWorthwhile(int attempts, int maxAttempts, long nextWait, long now, long expiration) {
+        return attempts < maxAttempts && now + nextWait < expiration;
     }
 
     /**
