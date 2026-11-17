@@ -15,11 +15,13 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.util.Collections;
+import java.util.Date;
 
 import org.junit.After;
 import org.junit.Before;
@@ -28,10 +30,13 @@ import org.junit.Test;
 import net.i2p.crypto.KeyGenerator;
 import net.i2p.data.Certificate;
 import net.i2p.data.Destination;
+import net.i2p.data.Hash;
 import net.i2p.data.PublicKey;
 import net.i2p.data.SigningPublicKey;
+import net.i2p.data.i2cp.SessionConfig;
 import net.i2p.data.i2cp.SessionStatusMessage;
 import net.i2p.router.CommSystemFacade;
+import net.i2p.router.KeyManager;
 import net.i2p.router.RouterContext;
 import net.i2p.stat.StatManager;
 import net.i2p.util.Log;
@@ -42,15 +47,33 @@ import net.i2p.util.SimpleTimer2;
 /**
  * A client that reconnects with a destination that a previous dead connection
  * still owns must replace the stale registration instead of being refused,
- * and the stale connection's teardown must not drop the new registration.
+ * and the stale connection's teardown must not drop the new registration. A
+ * connection that is still live is only replaced by a session the destination
+ * authorized later, so a replay of the live session's own CreateSession - the
+ * frame's date is inside its signature and nothing else distinguishes one
+ * session from the next - cannot take the destination over.
  */
 public class ClientManagerTest {
+
+    /** Port the manager under test is built with; it opens no socket. */
     private static final int PORT = 7654;
 
+    /** Mocked context the manager reads its config dir, stats and keys from. */
     private RouterContext _ctx;
+    /** The manager under test. */
     private ClientManager _manager;
+    /** Scratch config dir, removed afterwards. */
     private File _tmpDir;
 
+    /** Builds a fresh manager for each case; it holds no state of its own. */
+    public ClientManagerTest() {}
+
+    /**
+     * Builds the manager over a mocked context with room for every session ID
+     * the cases allocate.
+     *
+     * @throws Exception declared for the test harness, never thrown here
+     */
     @Before
     public void setUp() throws Exception {
         _tmpDir = new File(System.getProperty("java.io.tmpdir"), "i2p-clientmgr-" + System.nanoTime());
@@ -69,12 +92,15 @@ public class ClientManagerTest {
         CommSystemFacade csf = mock(CommSystemFacade.class);
         when(csf.isDummy()).thenReturn(false);
         when(_ctx.commSystem()).thenReturn(csf);
+        // a replaced session's lease-set keys are unregistered at the handover
+        when(_ctx.keyManager()).thenReturn(mock(KeyManager.class));
         // room for all session IDs allocated in the tests
         when(_ctx.getProperty(anyString(), anyInt())).thenReturn(1536);
 
         _manager = new ClientManager(_ctx, PORT);
     }
 
+    /** Removes the scratch config dir. */
     @After
     public void tearDown() {
         deleteRecursively(_tmpDir);
@@ -130,6 +156,52 @@ public class ClientManagerTest {
     }
 
     /**
+     * A byte-for-byte replay of the live connection's own CreateSession carries
+     * that frame's date, so it is refused and the owner keeps the destination.
+     */
+    @Test
+    public void testReplayedSessionDoesNotReplaceLiveOne() {
+        Destination dest = createDestination();
+        Hash hash = dest.calculateHash();
+        Date authorized = new Date(1_700_000_000_000L);
+        ClientConnectionRunner live = mock(ClientConnectionRunner.class);
+        ClientConnectionRunner replay = mock(ClientConnectionRunner.class);
+        when(live.getDestinations()).thenReturn(Collections.singletonList(dest));
+        when(live.getConfig(hash)).thenReturn(sessionConfig(authorized));
+        when(replay.getConfig(hash)).thenReturn(sessionConfig(authorized));
+
+        assertEquals(SessionStatusMessage.STATUS_CREATED, _manager.destinationEstablished(live, dest));
+        assertEquals("A replayed CreateSession must not take over a live session",
+                     SessionStatusMessage.STATUS_DUP_DEST,
+                     _manager.destinationEstablished(replay, dest));
+        assertSame(live, _manager.getRunner(dest));
+        verify(live, never()).disconnectClient(anyString(), anyInt());
+    }
+
+    /**
+     * A session the destination authorized later does take over a live
+     * connection, which is what a reconnect with fresh keys, or a second holder
+     * of the keys that waits its turn, looks like.
+     */
+    @Test
+    public void testNewerSessionReplacesLiveOne() {
+        Destination dest = createDestination();
+        Hash hash = dest.calculateHash();
+        Date authorized = new Date(1_700_000_000_000L);
+        ClientConnectionRunner live = mock(ClientConnectionRunner.class);
+        ClientConnectionRunner fresh = mock(ClientConnectionRunner.class);
+        when(live.getDestinations()).thenReturn(Collections.singletonList(dest));
+        when(fresh.getDestinations()).thenReturn(Collections.singletonList(dest));
+        when(live.getConfig(hash)).thenReturn(sessionConfig(authorized));
+        when(fresh.getConfig(hash)).thenReturn(sessionConfig(new Date(authorized.getTime() + 60 * 1000L)));
+
+        assertEquals(SessionStatusMessage.STATUS_CREATED, _manager.destinationEstablished(live, dest));
+        assertEquals(SessionStatusMessage.STATUS_CREATED, _manager.destinationEstablished(fresh, dest));
+        assertSame(fresh, _manager.getRunner(dest));
+        verify(live).disconnectClient("Replaced by a new connection for the same destination", Log.WARN);
+    }
+
+    /**
      * Different destinations on different connections coexist
      * normally, no replacement involved.
      */
@@ -165,6 +237,19 @@ public class ClientManagerTest {
         dest.setSigningPublicKey(spk);
         dest.setCertificate(new Certificate());
         return dest;
+    }
+
+    /**
+     * A session config carrying only the authorization date the takeover
+     * decision reads.
+     *
+     * @param authorized the date the destination authorized the session
+     * @return the config, with no destination or options set
+     */
+    private static SessionConfig sessionConfig(Date authorized) {
+        SessionConfig cfg = new SessionConfig();
+        cfg.setCreationDate(authorized);
+        return cfg;
     }
 
     /**

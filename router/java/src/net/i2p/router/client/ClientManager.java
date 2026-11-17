@@ -13,6 +13,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -346,10 +347,18 @@ class ClientManager {
      * Add to the clients list. Check for a dup destination.
      * Side effect: Sets the session ID of the runner.
      * Caller must call runner.disconnectClient() on failure.
+     * <p>
+     * A destination held by a connection that is still live is only taken over
+     * by a session the destination authorized later than the one in possession,
+     * see {@link #mayTakeOver}; otherwise the claim is refused and the owner
+     * keeps the destination.
      *
      * @param runner the connection claiming the destination
      * @param dest the destination being claimed; must not already be registered
-     * @return SessionStatusMessage return code, 1 for success, != 1 for failure
+     * @return SessionStatusMessage return code: STATUS_CREATED (1) on success,
+     *         STATUS_DUP_DEST (5) if a live connection holds the destination and
+     *         this claim is not a newer session, STATUS_REFUSED (4) if the
+     *         session limit is reached
      */
     public int destinationEstablished(ClientConnectionRunner runner, Destination dest) {
         if (_log.shouldDebug()) {
@@ -357,7 +366,7 @@ class ClientManager {
         }
 
         synchronized (_pendingRunners) {_pendingRunners.remove(runner);}
-        int rv;
+        int rv = SessionStatusMessage.STATUS_CREATED;
         ClientConnectionRunner stale = null;
         synchronized (_runners) {
             Hash destHash = dest.calculateHash();
@@ -365,33 +374,80 @@ class ClientManager {
             if (id != null) {
                 ClientConnectionRunner old = _runnersByHash.get(destHash);
                 if (old != null && old != runner) {
-                    // A previous connection still owns this destination (e.g.
-                    // the client reconnected after its session died). Replace
-                    // it below, and stop the stale runner once out of the
-                    // lock; its teardown re-enters unregisterConnection() with
-                    // value-aware removals, so it can't drop the new entry.
-                    stale = old;
-                    for (Destination od : old.getDestinations()) {
-                        _runners.remove(od, old);
-                        _runnersByHash.remove(od.calculateHash(), old);
+                    SessionConfig freshCfg = runner.getConfig(destHash);
+                    SessionConfig liveCfg = old.getConfig(destHash);
+                    if (mayTakeOver(freshCfg != null ? freshCfg.getCreationDate() : null,
+                                    liveCfg != null ? liveCfg.getCreationDate() : null,
+                                    old.isDead())) {
+                        // A previous connection still owns this destination (e.g.
+                        // the client reconnected after its session died). Replace
+                        // it below, and stop the stale runner once out of the
+                        // lock; its teardown re-enters unregisterConnection() with
+                        // value-aware removals, so it can't drop the new entry.
+                        stale = old;
+                        for (Destination od : old.getDestinations()) {
+                            _runners.remove(od, old);
+                            _runnersByHash.remove(od.calculateHash(), old);
+                        }
+                    } else {
+                        // The owner is still connected and this frame is not
+                        // newer than the one it holds - a replay of the owner's
+                        // own CreateSession, or a second key holder that would
+                        // not wait. Refuse it and leave the owner alone.
+                        rv = SessionStatusMessage.STATUS_DUP_DEST;
                     }
                 }
-                runner.setSessionId(destHash, id);
-                _runners.put(dest, runner);
-                _runnersByHash.put(destHash, runner);
-                rv = SessionStatusMessage.STATUS_CREATED;
+                if (rv == SessionStatusMessage.STATUS_CREATED) {
+                    runner.setSessionId(destHash, id);
+                    _runners.put(dest, runner);
+                    _runnersByHash.put(destHash, runner);
+                }
             } else {rv = SessionStatusMessage.STATUS_REFUSED;}
         }
         if (stale != null) {
             if (_log.shouldInfo()) {
                 _log.info("Replacing connection for destination [" + dest.calculateHash().toShortBase32() + ']');
             }
+            // The replaced session's lease-set keys go with it, so the successor
+            // does not keep decrypting inbound garlic with keys the old session
+            // registered. The successor registers its own when it sends its
+            // LeaseSet, which cannot arrive before this point.
+            for (Destination od : stale.getDestinations()) {
+                _ctx.keyManager().unregisterKeys(od);
+            }
             stale.disconnectClient("Replaced by a new connection for the same destination", Log.WARN);
+        } else if (rv == SessionStatusMessage.STATUS_DUP_DEST && _log.shouldWarn()) {
+            _log.warn("Duplicate destination refused -> Already connected [" + dest.calculateHash().toShortBase32() + ']');
         }
         if (rv == SessionStatusMessage.STATUS_REFUSED) {
             _log.error("Max sessions exceeded for: [" + dest.toBase32().substring(0, 8) + "]");
         }
         return rv;
+    }
+
+    /**
+     * May a second CreateSession for a destination take it over from the
+     * connection that already holds it?
+     * <p>
+     * A connection that is closed, or that no longer has a session for the
+     * destination, gives way unconditionally - that is what lets a client
+     * reconnect immediately after its own session dies. A live one gives way
+     * only to a frame the destination authorized later than the frame it is
+     * holding: the CreateSession date is inside the signature and is not
+     * covered by any nonce or sequence number, so a byte-for-byte replay of the
+     * owner's own frame carries that frame's date and cannot take over, while a
+     * fresh session from any holder of the keys can.
+     *
+     * @param freshDate when the asking session was authorized, null if unknown
+     * @param liveDate when the session now in possession was authorized, null if
+     *                 it no longer holds a session for this destination
+     * @param liveDead whether the connection now in possession is already closed
+     * @return true if the connection in possession gives way
+     * @since 0.9.72+
+     */
+    static boolean mayTakeOver(Date freshDate, Date liveDate, boolean liveDead) {
+        if (liveDead || liveDate == null) {return true;}
+        return freshDate != null && freshDate.after(liveDate);
     }
 
     /**
