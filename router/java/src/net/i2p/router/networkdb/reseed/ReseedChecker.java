@@ -72,27 +72,29 @@ public class ReseedChecker {
         long uptime = _context.router().getUptime();
         long downtime = _context.getEstimatedDowntime();
         boolean disabled = _context.getBooleanProperty(Reseeder.PROP_DISABLE);
+        boolean noReseedFile = _hasNoReseedFile();
         boolean vmCommSystem = _context.getBooleanProperty("i2p.vmCommSystem");
         boolean shuttingDown = _context.router().gracefulShutdownInProgress();
         boolean networkConnected = _hasNetworkConnection();
         long tenMinutes = 10*60*1000L;
 
         // Determine if reseed is allowed
-        boolean shouldReseed = (peers < MINIMUM && networkConnected && !shuttingDown && !disabled) || !vmCommSystem;
+        boolean shouldReseed = reseedAllowed(disabled, noReseedFile, shuttingDown, vmCommSystem,
+                                             networkConnected);
 
         if (!shouldReseed) {
-            // !shouldReseed implies vmCommSystem, so a plain disabled check
-            // leaves the shutdown/network diagnostics below reachable
             if (disabled) {logOnceWarning(peers, "disabled by configuration");}
+            else if (noReseedFile) {logOnceWarning(peers, "disabled by config file");}
             else if (shuttingDown) {logOnceWarning(peers, "prevented by router shutdown");}
             else if (!networkConnected) {
                 if (!_networkLogged) {
                     _log.logAlways(Log.WARN, "Cannot reseed - no network connection");
                     _networkLogged = true;
                }
-            } else {_networkLogged = false;}
+            }
             return false;
         }
+        _networkLogged = false;
 
         // Prevent reseed if uptime less than 10 minutes (except hidden routers or minimal peers)
         if (uptime < tenMinutes && known > 1 && !isHidden) {return false;}
@@ -121,6 +123,33 @@ public class ReseedChecker {
     }
 
     /**
+     * Is a reseed allowed at all, before the peer count and the downtime decide
+     * how often it happens? The four opt-outs are absolute: the configuration
+     * switch, either marker file in the home or config directory, a shutdown in
+     * progress, and a test JVM running the VM comm system. A clearnet address
+     * family is needed to fetch over.
+     * <p>
+     * The peer count deliberately does not appear here. A router with enough
+     * peers is let through to the checks in {@link #checkReseed(int)}, which
+     * reseed it once after a long downtime; written as
+     * {@code (few peers and healthy) || !vmCommSystem}, the expression was true
+     * on every real router, so none of the opt-outs stopped anything and a
+     * disabled router reseeded anyway.
+     *
+     * @param disabled true if {@code router.reseedDisable} is set
+     * @param noReseedFile true if one of the {@code .i2pnoreseed} marker files exists
+     * @param shuttingDown true if a graceful shutdown is in progress
+     * @param vmCommSystem true in a test JVM with no real network stack
+     * @param networkConnected true if the host has an IPv4 or IPv6 address
+     * @return true if a reseed may be attempted
+     * @since 0.9.72+
+     */
+    static boolean reseedAllowed(boolean disabled, boolean noReseedFile, boolean shuttingDown,
+                                 boolean vmCommSystem, boolean networkConnected) {
+        return !disabled && !noReseedFile && !shuttingDown && !vmCommSystem && networkConnected;
+    }
+
+    /**
      * Logs a warning message once for reseed prevention reason based on peer count.
      *
      * @param peers number of known peers excluding this router
@@ -137,11 +166,15 @@ public class ReseedChecker {
     }
 
     /**
-     * Checks for network connection and reseed disable config files.
+     * Is one of the marker files that stop reseeding present? Either name in
+     * either the home or the config directory is enough: they are the
+     * operator's way of stopping the clearnet fetch without editing the
+     * configuration.
      *
-     * @return true if network is connected and no config disables reseed; false otherwise
+     * @return true if a marker file exists
+     * @since 0.9.72+
      */
-    private boolean _hasNetworkConnection() {
+    private boolean _hasNoReseedFile() {
         File userHome = new File(System.getProperty("user.home"));
         File configDir = _context.getConfigDir();
         File[] noReseedFiles = {
@@ -151,21 +184,34 @@ public class ReseedChecker {
             new File(configDir, "noreseed.i2p")
         };
         for (File f : noReseedFiles) {
-            if (f.exists()) {
-                logOnceWarning(0, "disabled by config file");
-                return false;
-            }
+            if (f.exists()) {return true;}
         }
+        return false;
+    }
+
+    /**
+     * Do we have a clearnet address family to fetch a reseed over?
+     *
+     * @return true if the host has an IPv4 or IPv6 address
+     */
+    private boolean _hasNetworkConnection() {
         Set<AddressType> addrs = Addresses.getConnectedAddressTypes();
         return addrs.contains(AddressType.IPV4) || addrs.contains(AddressType.IPV6);
     }
 
     /**
-     * Starts a reseed if one is not already in progress.
+     * Starts a reseed if one is not already in progress and the configuration
+     * allows reseeding at all.
      *
-     * @return true if reseed was started; false if already in progress or failed to start
+     * @return true if reseed was started; false if reseeding is disabled by
+     *         configuration, already in progress, or failed to start
      */
     public boolean requestReseed() {
+        if (_context.getBooleanProperty(Reseeder.PROP_DISABLE)) {
+            _log.warnThrottled("reseed-disabled",
+                               "Reseed request refused -> Disabled by configuration");
+            return false;
+        }
         if (_inProgress.compareAndSet(false, true)) {
             _alreadyRun = true;
             try {
@@ -184,13 +230,22 @@ public class ReseedChecker {
     }
 
     /**
-     * Starts a reseed from a zip or su3 URI if one is not already in progress.
+     * Starts a reseed from a zip or su3 URI if one is not already in progress
+     * and the configuration allows reseeding at all. A reseed file uploaded
+     * through {@link #requestReseed(java.io.InputStream)} is not refused here,
+     * as the operator handed that file over by hand.
      *
      * @param url URI to the reseed data file (zip/su3)
-     * @return true if reseed was started; false if already in progress or failed to start
+     * @return true if reseed was started; false if reseeding is disabled by
+     *         configuration, already in progress, or failed to start
      * @throws IllegalArgumentException if URI is invalid or unsupported format
      */
     public boolean requestReseed(URI url) throws IllegalArgumentException {
+        if (_context.getBooleanProperty(Reseeder.PROP_DISABLE)) {
+            _log.warnThrottled("reseed-disabled",
+                               "Reseed request refused -> Disabled by configuration");
+            return false;
+        }
         if (_inProgress.compareAndSet(false, true)) {
             Reseeder reseeder = new Reseeder(_context, this);
             try {
