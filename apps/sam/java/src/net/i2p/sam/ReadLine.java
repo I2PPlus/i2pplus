@@ -18,7 +18,7 @@ class ReadLine {
     private ReadLine() {}
 
     /** Longest line accepted from the client: 8 KB. */
-    private static final int MAX_LINE_LENGTH = 8*1024;
+    static final int MAX_LINE_LENGTH = 8*1024;
 
     /**
      * Read a line terminated by newline, with a total read timeout.
@@ -72,8 +72,12 @@ class ReadLine {
         }
     }
 
-    /** Thrown when a client line exceeds the limit. */
-    private static class LineTooLongException extends IOException {
+    /**
+     * Thrown when a client line exceeds {@link #MAX_LINE_LENGTH}. Also used by
+     * {@link SAMHandlerPool}, which reads the pooled v3 command lines without
+     * going through {@link #readLine}.
+     */
+    static class LineTooLongException extends IOException {
         /**
          * Names what was too long.
          *

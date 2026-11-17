@@ -26,6 +26,7 @@ import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 import net.i2p.I2PAppContext;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
@@ -378,6 +379,40 @@ class SAMHandlerPool {
     ThreadPoolExecutor getTeardowns() { return _teardowns; }
 
     /**
+     * Split one read's bytes into complete SAM command lines, holding the
+     * incomplete tail in the connection's buffer between reads.
+     *
+     * <p>The buffer is capped at {@link ReadLine#MAX_LINE_LENGTH}, the limit the
+     * line-oriented read path has always applied. Without it a client that sends
+     * no newline grows the buffer at wire speed: 32 MB of loopback traffic put
+     * 32 MB on the router's heap and left the connection open, and a newline
+     * then echoed the whole of it back as the command token of an error reply.
+     *
+     * @param buf the connection's partial line, updated in place
+     * @param tmp the bytes just read, flipped, consumed until the read ends or
+     *            the limit is passed
+     * @param lines called once per complete line, without its newline
+     * @throws ReadLine.LineTooLongException if a line reaches {@link ReadLine#MAX_LINE_LENGTH}
+     * @since 0.9.72+
+     */
+    static void readLines(StringBuilder buf, ByteBuffer tmp, Consumer<String> lines)
+            throws ReadLine.LineTooLongException {
+        while (tmp.hasRemaining()) {
+            char c = (char) tmp.get();
+            if (c == '\n') {
+                lines.accept(buf.toString());
+                buf.setLength(0);
+            } else if (c != '\r') {
+                if (buf.length() >= ReadLine.MAX_LINE_LENGTH) {
+                    throw new ReadLine.LineTooLongException(
+                            "Command line beyond " + ReadLine.MAX_LINE_LENGTH + " characters");
+                }
+                buf.append(c);
+            }
+        }
+    }
+
+    /**
      * NIO selector loop. Reads available data from all registered handler
      * sockets, splits on newlines, dispatches complete lines to workers,
      * and handles idle timeouts and PING/PONG.
@@ -474,16 +509,13 @@ class SAMHandlerPool {
             }
             ctx.lastDataTime = System.currentTimeMillis();
             tmp.flip();
-            while (tmp.hasRemaining()) {
-                char c = (char) tmp.get();
-                if (c == '\n') {
-                    String line = ctx.buf.toString();
-                    ctx.buf.setLength(0);
+            try {
+                readLines(ctx.buf, tmp, line -> {
                     ctx.gotFirstLine = true;
                     dispatchLine(ctx, line);
-                } else if (c != '\r') {
-                    ctx.buf.append(c);
-                }
+                });
+            } catch (ReadLine.LineTooLongException ltte) {
+                disconnect(ctx, "command line beyond " + ReadLine.MAX_LINE_LENGTH + " characters");
             }
         }
 
