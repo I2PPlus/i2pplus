@@ -21,9 +21,25 @@
          4) TODO xxxjar with bundled, small non-Jetty server, similar to I2PTunnelHTTPClient?
      -->
 
+  <!-- The two router jars are named through properties: a release build has them in
+       ${i2plib}, while a module run in a development tree takes them from the shared
+       build root the other app modules build into. Override either with
+       -Di2p.jar=... -Drouter.jar=... -->
+  <available file="${i2plib}/i2p.jar" property="i2plib.i2p.present"/>
+  <condition property="i2p.jar" value="${i2plib}/i2p.jar">
+    <isset property="i2plib.i2p.present"/>
+  </condition>
+  <property name="i2p.jar" value="${core.java.build.dir}/i2p.jar"/>
+  <available file="${i2plib}/router.jar" property="i2plib.router.present"/>
+  <property name="router.java.build.dir" value="${build.root}router/java/build"/>
+  <condition property="router.jar" value="${i2plib}/router.jar">
+    <isset property="i2plib.router.present"/>
+  </condition>
+  <property name="router.jar" value="${router.java.build.dir}/router.jar"/>
+
   <path id="cp">
-    <pathelement location="${i2plib}/i2p.jar"/>
-    <pathelement location="${i2plib}/router.jar"/>
+    <pathelement location="${i2p.jar}"/>
+    <pathelement location="${router.jar}"/>
     <pathelement location="${jettylib}/org.mortbay.jetty.jar"/>
     <pathelement location="${jettylib}/javax.servlet.jar"/>
     <pathelement location="${jettylib}/jetty-servlet.jar"/>
@@ -72,6 +88,8 @@
       destdir="${build.dir}/obj">
       <compilerarg line="${javac.compilerargs}"/>
       <classpath refid="cp"/>
+      <!-- the junit sources are compiled by junit.compileTest, against junit4 -->
+      <exclude name="test/**"/>
     </javac>
   </target>
 
@@ -97,6 +115,7 @@
       <exclude name="**/I2PControlController.java"/>
       <exclude name="**/HostCheckHandler.java"/>
       <exclude name="**/JSONRPC2Servlet.java"/>
+      <exclude name="test/**"/>
     </javac>
   </target>
 
@@ -160,6 +179,65 @@
       </manifest>
     </war>
   </target>
+
+  <target name="junit.compileTest" depends="compile">
+    <property name="junit.home" value="../../tools/test/junit/"/>
+    <property name="hamcrest.home" value="../../tools/test/hamcrest/"/>
+    <mkdir dir="${build.dir}/testobj"/>
+    <javac debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
+      release="${javac.release}" includeAntRuntime="false" encoding="UTF-8"
+      destdir="${build.dir}/testobj" srcdir="./java/test/junit" includes="**/*Test.java">
+      <classpath>
+        <path refid="cp"/>
+        <pathelement location="${build.dir}/obj"/>
+        <pathelement location="${junit.home}/junit4.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
+      </classpath>
+      <compilerarg line="${javac.compilerargs}"/>
+    </javac>
+  </target>
+
+  <target name="junit.test" depends="junit.compileTest">
+    <property name="junit.reports.dir" value="${build.root}reports"/>
+    <property name="junit.home" value="../../tools/test/junit/"/>
+    <property name="hamcrest.home" value="../../tools/test/hamcrest/"/>
+    <mkdir dir="${junit.reports.dir}/i2pcontrol/junit/"/>
+    <delete>
+      <fileset dir="${junit.reports.dir}/i2pcontrol/junit">
+        <include name="TEST-*.xml"/>
+      </fileset>
+    </delete>
+    <!-- One scratch directory per module, under the shared test root, as in the
+         other app modules: the forked test JVM reads the properties file ant
+         wrote for it here and writes its vmwatcher file here. -->
+    <property name="test.base.root" value="${java.io.tmpdir}/test-i2p/"/>
+    <property name="junit.tmp.dir" value="${test.base.root}i2pcontrol/tmp"/>
+    <mkdir dir="${junit.tmp.dir}"/>
+    <!-- Scratch I2P base for the forked test JVM, so a test that builds a
+         context does not write runtime state into the workspace. -->
+    <property name="junit.test.base" value="${test.base.root}i2pcontrol/base"/>
+    <delete dir="${junit.test.base}"/>
+    <mkdir dir="${junit.test.base}"/>
+    <property name="junit.test.filter" value="**/*Test.java"/>
+    <junit printsummary="withOutAndErr" fork="yes" showoutput="yes" tempdir="${junit.tmp.dir}" timeout="15000">
+      <sysproperty key="i2p.dir.base" value="${junit.test.base}"/>
+      <classpath>
+        <path refid="cp"/>
+        <pathelement location="${junit.home}/junit4.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-library.jar"/>
+        <pathelement location="${build.dir}/obj"/>
+        <pathelement location="${build.dir}/testobj"/>
+      </classpath>
+      <batchtest todir="${junit.reports.dir}/i2pcontrol/junit/">
+        <fileset dir="./java/test/junit" includes="${junit.test.filter}"/>
+      </batchtest>
+      <formatter type="xml"/>
+    </junit>
+    <delete dir="${junit.test.base}"/>
+  </target>
+
+  <target name="test" depends="junit.test"/>
 
   <target name="clean">
     <delete dir="${build.dir}"/>

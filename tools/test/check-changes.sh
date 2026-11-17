@@ -105,6 +105,14 @@ case "$MODULE" in
         CP="$(find tools/test apps/jetty/jettylib -name '*.jar' | tr '\n' ':')"
         LOGSCOPE="apps/i2ptunnel/java/src"
         ;;
+    i2pcontrol)
+        BUILD="apps/i2pcontrol/build.xml"
+        REPORTS="/tmp/build-i2p/reports/i2pcontrol/junit"
+        # the jsonrpc2 and jbcrypt sources are vendored under this module's java dir
+        SOURCEPATH="apps/i2pcontrol/java:core/java/src:router/java/src:apps/streaming/java/src:apps/ministreaming/java/src"
+        CP="$(find tools/test apps/jetty/jettylib installer/lib/wrapper -name '*.jar' | tr '\n' ':')"
+        LOGSCOPE="apps/i2pcontrol/java/net"
+        ;;
     *)
         echo "check-changes.sh: no wiring for module '$MODULE' — add it above" >&2
         exit 1
