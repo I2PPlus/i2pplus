@@ -30,6 +30,9 @@ import net.i2p.util.ThreadNames;
  * <p>
  * Thread safety notes:
  * - Uses a LinkedBlockingQueue with bounded capacity for backpressure.
+ * - The Tuner resizes that queue by replacing the object; pump threads wait on
+ *   the queue they read and re-read the field every QUEUE_RECHECK_MS, so a
+ *   resize reaches threads that were already waiting.
  * - Uses a concurrent Set to track backlogged gateways for requeueing.
  * - Non-blocking offer() with timeout prevents I2CP reader stalls.
  * - Gateway drops are tracked via {@code tunnel.pumperQueueFull} stat.
@@ -60,6 +63,10 @@ class TunnelGatewayPumper implements Runnable {
 
     /** Capacity of the wants queue. */
     private static volatile int _queueCapacity;
+    /** Smallest wants queue capacity the Tuner may ask for. */
+    private static final int MIN_QUEUE_CAPACITY = 64;
+    /** Largest wants queue capacity the Tuner may ask for. */
+    private static final int MAX_QUEUE_CAPACITY = 4096;
     /** Most pump threads allowed. */
     private static volatile int _maxPumpers;
 
@@ -82,6 +89,15 @@ class TunnelGatewayPumper implements Runnable {
      * Prevents blocking the I2CP reader thread indefinitely.
      */
     private static final long OFFER_TIMEOUT_MS = 50;
+
+    /**
+     * Max time a pump thread waits for a gateway before going back to the field
+     * for the queue to wait on. A resize replaces the queue object, so a thread
+     * waiting on the old one is not woken by a gateway offered to the new one,
+     * and this is how long that can go on. It is also how often an idle thread
+     * wakes up for nothing, which is why it is not smaller.
+     */
+    private static final long QUEUE_RECHECK_MS = 250;
 
     static {
         int cores = SystemVersion.getCores();
@@ -121,7 +137,9 @@ class TunnelGatewayPumper implements Runnable {
      * @param capacity the requested queue capacity, clamped to the range 64 to 4096
      * @since 0.9.70+
      */
-    public static void setQueueCapacity(int capacity) { _queueCapacity = Math.max(64, Math.min(4096, capacity)); }
+    public static void setQueueCapacity(int capacity) {
+        _queueCapacity = Math.max(MIN_QUEUE_CAPACITY, Math.min(MAX_QUEUE_CAPACITY, capacity));
+    }
 
     /**
      * The current max pumper threads.
@@ -236,17 +254,25 @@ class TunnelGatewayPumper implements Runnable {
     }
 
     /**
-     * Resize the pumper queue. Drains old queue into new one.
-     * @param newCapacity new queue capacity
+     * Resize the pumper queue by building a new one and moving the gateways
+     * waiting in the old one into it. Pump threads do not wait on this field
+     * continuously - they wait on the queue they read and come back to the
+     * field every QUEUE_RECHECK_MS - so a thread that was already waiting picks
+     * the new queue up within that time and keeps pumping.
+     *
+     * @param newCapacity new queue capacity, ignored outside 64 to 4096
      * @since 0.9.70+
      */
     public void resizeQueue(int newCapacity) {
-        if (newCapacity < 64 || newCapacity > 4096) return;
+        if (newCapacity < MIN_QUEUE_CAPACITY || newCapacity > MAX_QUEUE_CAPACITY) return;
         BlockingQueue<PumpedTunnelGateway> oldQueue = _wantsPumping;
         if (oldQueue.remainingCapacity() + oldQueue.size() == newCapacity) return;
         LinkedBlockingQueue<PumpedTunnelGateway> newQueue = new LinkedBlockingQueue<>(newCapacity);
         oldQueue.drainTo(newQueue);
         _wantsPumping = newQueue;
+        // A gateway offered to the old queue between the drain and the swap has
+        // to be moved too, or it is dropped along with the queue it was in.
+        oldQueue.drainTo(newQueue);
     }
 
     /**
@@ -363,7 +389,15 @@ class TunnelGatewayPumper implements Runnable {
 
         while (!_stop) {
             try {
-                gw = _wantsPumping.take(); // Blocks until an item is available
+                // Wait on the queue this loop read, not on the field: the Tuner
+                // resizes by replacing the object, and a thread parked on the
+                // old one would never be woken by anything offered to the new
+                // one. Timing out and re-reading the field is what makes a
+                // resize take effect on threads that were already waiting.
+                gw = _wantsPumping.poll(QUEUE_RECHECK_MS, TimeUnit.MILLISECONDS);
+                if (gw == null) {
+                    continue;
+                }
                 _inQueue.remove(gw);
                 if (gw.getMessagesSent() == POISON_PTG) {
                     break; // poison pill detected, exit thread
