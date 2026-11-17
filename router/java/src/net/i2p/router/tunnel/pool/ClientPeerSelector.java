@@ -1888,8 +1888,9 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
 
     /**
      * Insert self, ghost-filter, strategy post-processing, duplicate re-check,
-     * and cooldowns.  Quality-sorts the non-self hops for inbound selections
-     * only (see below).
+     * and cooldowns.  The keyed order the selection built is preserved: the
+     * first hop is the last element of {@code rv} and it was chosen with its
+     * own role and quality checks, so nothing here re-sorts the hops.
      *
      * @param settings the pool settings for the tunnel being built
      * @param rv the selected peers, reordered and filtered in place
@@ -1901,25 +1902,11 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         if (isInbound) {rv.add(0, ctx.routerHash());}
         else {rv.add(ctx.routerHash());}
 
-        // Inbound keeps its quality preference ordering (rv[1] is the IBGW,
-        // best-first is benign there).
-        if (isInbound && rv.size() > 2) {
-            List<Hash> nonSelf = new ArrayList<>(rv);
-            nonSelf.remove(ctx.routerHash());
-            if (nonSelf.size() > 1) {
-                sortByPeerQuality(nonSelf, null);
-                rv.clear();
-                rv.add(ctx.routerHash());
-                rv.addAll(nonSelf);
-            }
-        }
-
         // Same quality pre-filtering both directions: swap poorly performing
         // hops for proven responders, then drop anything still unreliable
-        // when surplus hops remain. Outbound slot 0 (cfg.getPeer(1)) stays
-        // the vetted first hop chosen by selectFirstHop(); re-sorting exiled
-        // it to the OBEP and put the worst-ranked peer adjacent to us, which
-        // is why the swap below replaces hops in place.
+        // when surplus hops remain. The swap replaces hops in place rather
+        // than reordering the list, so the vetted first hop keeps its slot
+        // at the end of rv in both directions.
         List<Hash> nonSelf = new ArrayList<>(rv);
         nonSelf.remove(ctx.routerHash());
         if (!nonSelf.isEmpty()) {
@@ -1936,8 +1923,13 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
             }
             // Outbound protects both endpoint slots: slot 0 is the vetted
             // transport send target, the OBEP slot the far-end delivery exit.
+            // Inbound protects the last slot for the same reason: it is the
+            // first hop we send the build request to and the tunnel's inbound
+            // gateway, filled by selectFirstHop() through the IBGW role checks,
+            // and checkTunnel() does not re-check those roles for client
+            // tunnels.  A proven candidate never went through them.
             int from = isInbound ? 0 : 1;
-            int to = isInbound ? nonSelf.size() : nonSelf.size() - 1;
+            int to = nonSelf.size() - 1;
             int swaps = preferProven(nonSelf, from, to,
                                      _provenResponders, ctx.clock().now(),
                                      PROVEN_RESPONDER_WINDOW_MS,
@@ -2139,9 +2131,9 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     /**
      * Filter candidates through the reliability gate: a peer must have an
      * adequate acceptance ratio and at least one recent activity or
-     * connection signal to remain. The input order is preserved. Ranking
-     * is left to the caller's quality sort so each reliability signal
-     * plays a single role.
+     * connection signal to remain. The input order is preserved. This is a
+     * gate only, it never ranks, so each reliability signal plays a single
+     * role: quality already entered when the tier drew the peer.
      *
      * @param candidates peers to filter
      * @param exclude peers to exclude
@@ -2309,228 +2301,6 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
             return true;
         }
         return ctx.commSystem().isEstablished(profile.getPeer());
-    }
-
-    /**
-     * Sort peers by quality for tunnel building preference.
-     * Higher quality peers (recently tested, active, connected) sort first.
-     *
-     * @param peers the selected peers, reordered in place; nothing happens when the list
-     *              is null or empty
-     * @param exclude peers to push to the end of the list, or null
-     */
-    private void sortByPeerQuality(List<Hash> peers, Set<Hash> exclude) {
-        if (peers == null || peers.isEmpty()) {
-            return;
-        }
-        long now = ctx.clock().now();
-        long thirtyMinutes = 30 * 60 * 1000L;
-        // Fetch each peer's profile exactly once. getProfile() takes a blocking
-        // read lock, so calling it inside the comparator cost 2·n·log n lock
-        // acquisitions per selection; the comparator now reads this map instead.
-        Map<Hash, PeerProfile> profiles = new HashMap<>(peers.size() * 4 / 3 + 1);
-        for (Hash h : peers) {
-            profiles.put(h, ctx.profileOrganizer().getProfile(h));
-        }
-        // Snapshot the proven-responder timestamps the same way: the shared
-        // map is written by build threads, and a comparator that re-reads it
-        // can violate its contract mid-sort (TimSort throws).
-        Map<Hash, Long> proven = new HashMap<>(peers.size() * 4 / 3 + 1);
-        for (Hash h : peers) {
-            Long t = _provenResponders.get(h);
-            if (t != null) {proven.put(h, t);}
-        }
-        peers.sort((p1, p2) -> compareQuality(p1, p2, exclude,
-                                              profiles.get(p1), profiles.get(p2),
-                                              proven, now, thirtyMinutes));
-    }
-
-    /**
-     * Full quality comparison cascade.  Stage order is significant — each
-     * stage short-circuits the ones below it: excluded last, then proven
-     * responders (recent successful participation), then acceptance ratio,
-     * slow tunnel-test latency, activity recency, and latency.
-     *
-     * @param p1 peer on the left of the comparison
-     * @param p2 peer on the right of the comparison
-     * @param exclude peers to deprioritize, or null
-     * @param prof1 first peer's profile, or null
-     * @param prof2 second peer's profile, or null
-     * @param proven local snapshot mapping peer hash to proven-responder timestamp; must
-     *               not be the live shared map, or the sort's contract can be violated
-     *               mid-flight by build-thread writes
-     * @param now current time from the router clock
-     * @param thirtyMinutes activity window in ms
-     * @return negative, zero, or positive
-     * @since 0.9.71+ (extracted from peerQualityComparator)
-     */
-    static int compareQuality(Hash p1, Hash p2, Set<Hash> exclude, PeerProfile prof1, PeerProfile prof2,
-                               Map<Hash, Long> proven, long now, long thirtyMinutes) {
-        int c = compareExcluded(p1, p2, exclude);
-        if (c != 0) {return c;}
-        long t1 = proven.getOrDefault(p1, 0L);
-        long t2 = proven.getOrDefault(p2, 0L);
-        c = compareProven(t1, t2, now);
-        if (c != 0) {return c;}
-        c = compareReliability(prof1, prof2);
-        if (c != 0) {return c;}
-        float lat1 = prof1 != null ? prof1.getTunnelTestTimeAverage() : 0;
-        float lat2 = prof2 != null ? prof2.getTunnelTestTimeAverage() : 0;
-        c = compareAcceptance(prof1, prof2);
-        if (c != 0) {return c;}
-        c = compareSlowLatency(lat1, lat2);
-        if (c != 0) {return c;}
-        c = compareActivity(prof1, prof2, now, thirtyMinutes);
-        if (c != 0) {return c;}
-        c = compareLatency(lat1, lat2);
-        if (c != 0) {return c;}
-        // When both latencies are 0 (expired or never tested), prefer
-        // peers with a test history over never-tested peers.
-        return compareTestHistory(prof1, prof2);
-    }
-
-    /**
-     * Compare floodfill reliability: GOOD &gt; OK &gt; UNKNOWN &gt; BAD.
-     * Unproven floodfills sort lower to reduce load on them until
-     * their reliability is established.
-     *
-     * @param prof1 first peer's profile, or null
-     * @param prof2 second peer's profile, or null
-     * @return negative if p1 is more reliable, positive if p2 is more reliable, 0 if equal
-     */
-    public static int compareReliability(PeerProfile prof1, PeerProfile prof2) {
-        FloodfillReliability r1 = prof1 != null ? prof1.getFloodfillReliability() : null;
-        FloodfillReliability r2 = prof2 != null ? prof2.getFloodfillReliability() : null;
-        if (r1 == null) r1 = FloodfillReliability.UNKNOWN;
-        if (r2 == null) r2 = FloodfillReliability.UNKNOWN;
-        // Higher ordinal = more reliable: BAD(0) < UNKNOWN(1) < OK(2) < GOOD(3)
-        // Sort descending so GOOD sorts first
-        return Integer.compare(r2.ordinal(), r1.ordinal());
-    }
-
-    /**
-     * Excluded peers sort last; two excluded peers compare equal.
-     *
-     * @param p1 peer on the left of the comparison
-     * @param p2 peer on the right of the comparison
-     * @param exclude peers to deprioritize, or null
-     * @return negative, zero, or positive
-     * @since 0.9.71+ (extracted from peerQualityComparator)
-     */
-    static int compareExcluded(Hash p1, Hash p2, Set<Hash> exclude) {
-        if (exclude == null) {return 0;}
-        if (exclude.contains(p1)) {
-            if (exclude.contains(p2)) {return 0;}
-            return 1;
-        }
-        if (exclude.contains(p2)) {return -1;}
-        return 0;
-    }
-
-    /**
-     * Acceptance ratio tiers: good (&gt; 0.3) ranks above low (&lt; 0.3), which
-     * ranks above dead (&lt;= 0).  Missing profiles default to 1.0.
-     *
-     * @param prof1 first peer's profile, or null
-     * @param prof2 second peer's profile, or null
-     * @return negative, zero, or positive
-     * @since 0.9.71+ (extracted from peerQualityComparator)
-     */
-    static int compareAcceptance(PeerProfile prof1, PeerProfile prof2) {
-        double ar1 = prof1 != null ? prof1.getTunnelAcceptanceRatio() : 1.0;
-        double ar2 = prof2 != null ? prof2.getTunnelAcceptanceRatio() : 1.0;
-        // Good (> 0.3) > Low (0 < r < 0.3) > Dead (<= 0): decide the dead
-        // tier first so dead never ties with low.
-        if (ar1 <= 0 && ar2 > 0) {return 1;}
-        if (ar2 <= 0 && ar1 > 0) {return -1;}
-        if (ar1 < 0.3 && ar2 >= 0.3) {return 1;}
-        if (ar2 < 0.3 && ar1 >= 0.3) {return -1;}
-        return 0;
-    }
-
-    /**
-     * Peers with tunnel test latency over 15s sort last; when both are slow,
-     * the less slow one sorts first.  0 latency means no data (unknown).
-     *
-     * @param lat1 first peer's tunnel test time average
-     * @param lat2 second peer's tunnel test time average
-     * @return negative, zero, or positive
-     * @since 0.9.71+ (extracted from peerQualityComparator)
-     */
-    static int compareSlowLatency(float lat1, float lat2) {
-        boolean slow1 = lat1 > 15_000;
-        boolean slow2 = lat2 > 15_000;
-        if (slow1 && !slow2) {return 1;}
-        if (!slow1 && slow2) {return -1;}
-        if (slow1 && slow2) {
-            // Both slow — prefer the less slow one
-            if (lat1 < lat2) {return -1;}
-            if (lat1 > lat2) {return 1;}
-        }
-        return 0;
-    }
-
-    /**
-     * Peers active within the activity window sort first.
-     *
-     * @param prof1 first peer's profile, or null
-     * @param prof2 second peer's profile, or null
-     * @param now current time from the router clock
-     * @param thirtyMinutes activity window in ms
-     * @return negative, zero, or positive
-     * @since 0.9.71+ (extracted from peerQualityComparator)
-     */
-    static int compareActivity(PeerProfile prof1, PeerProfile prof2, long now, long thirtyMinutes) {
-        boolean active1 = prof1 != null && (prof1.getLastHeardFrom() > 0 && now - prof1.getLastHeardFrom() < thirtyMinutes ||
-                                          prof1.getLastSendSuccessful() > 0 && now - prof1.getLastSendSuccessful() < thirtyMinutes);
-        boolean active2 = prof2 != null && (prof2.getLastHeardFrom() > 0 && now - prof2.getLastHeardFrom() < thirtyMinutes ||
-                                          prof2.getLastSendSuccessful() > 0 && now - prof2.getLastSendSuccessful() < thirtyMinutes);
-        if (active1 && !active2) {return -1;}
-        if (!active1 && active2) {return 1;}
-        return 0;
-    }
-
-    /**
-     * Lower measured tunnel-test latency sorts first; measured beats unknown.
-     * When both latencies are 0 (unknown), peers that have been tested before
-     * (have a persisted test timestamp) sort before never-tested peers, so
-     * proven peers with expired latency data are preferred over new peers.
-     *
-     * @param lat1 first peer's tunnel test time average
-     * @param lat2 second peer's tunnel test time average
-     * @return negative, zero, or positive
-     * @since 0.9.71+ (extracted from peerQualityComparator)
-     */
-    static int compareLatency(float lat1, float lat2) {
-        // Prefer lower latency — peers with recent fast tunnel tests
-        // get priority over peers with high or no latency data.
-        if (lat1 > 0 && lat2 > 0) {
-            if (lat1 < lat2) {return -1;}
-            if (lat1 > lat2) {return 1;}
-        } else if (lat1 > 0) {
-            return -1;  // only p1 has measured latency
-        } else if (lat2 > 0) {
-            return 1;   // only p2 has measured latency
-        }
-        return 0;
-    }
-
-    /**
-     * When both peers have unknown latency (lat=0), peers with a proven
-     * test history sort first.  Uses the persisted EWMA update timestamp
-     * to distinguish tested peers from never-tested peers.
-     *
-     * @param prof1 first peer's profile, or null
-     * @param prof2 second peer's profile, or null
-     * @return negative, zero, or positive
-     * @since 0.9.71+
-     */
-    static int compareTestHistory(PeerProfile prof1, PeerProfile prof2) {
-        long t1 = prof1 != null ? prof1.getTunnelTestTimeAvgLastUpdate() : 0;
-        long t2 = prof2 != null ? prof2.getTunnelTestTimeAvgLastUpdate() : 0;
-        // Tested peers (t > 0) sort before never-tested peers (t == 0)
-        // Among tested peers, more recently tested sorts first
-        return Long.compare(t2, t1);
     }
 
     /**

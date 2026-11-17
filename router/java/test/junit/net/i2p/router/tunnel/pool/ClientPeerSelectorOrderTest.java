@@ -30,12 +30,12 @@ import net.i2p.util.LogManager;
 import net.i2p.util.OrderedProperties;
 
 /**
- * Tests for the inbound-only quality sort in ClientPeerSelector.finalizeSelection:
- * inbound selections get best-first hops, outbound selections preserve the
- * key-distance ordering from orderPeers() so the peer adjacent to us stays the
- * vetted first hop (compareAcceptance sorts the strongest peer to the front,
- * which for outbound would exile it to the OBEP and put the worst-ranked peer
- * adjacent to us).
+ * Tests that finalizeSelection() keeps the hop order the selection built, in
+ * both directions: self is inserted at the pool's own end and the vetted first
+ * hop keeps the last slot of the peer list. A quality re-sort of the non-self
+ * hops put the worst-ranked peer in that slot instead, displacing the peer
+ * selectFirstHop() had filled through the role checks. The proven-responder
+ * swap still runs, but only in the replaceable slots.
  *
  * @since 0.9.71+
  */
@@ -70,8 +70,8 @@ public class ClientPeerSelectorOrderTest {
         when(_ctx.clock()).thenReturn(clock);
 
         when(_ctx.profileManager()).thenReturn(mock(net.i2p.router.ProfileManager.class));
-        // Peer hash 2 is good (0.8), hash 3 is dead (0.0): quality sort must
-        // pull hash 2 to the front.
+        // Peer hash 2 is good (0.8) and hash 3 is dead (0.0), so a quality sort
+        // would move hash 2 ahead of hash 3 — and must not.
         net.i2p.router.peermanager.ProfileOrganizer po =
             mock(net.i2p.router.peermanager.ProfileOrganizer.class);
         when(po.getProfile(any(Hash.class))).thenAnswer(inv -> {
@@ -102,12 +102,14 @@ public class ClientPeerSelectorOrderTest {
         when(_ctx.commSystem()).thenReturn(cs);
 
         TunnelPeerSelector._peerCooldowns.clear();
+        TunnelPeerSelector._provenResponders.clear();
         _selector = new ClientPeerSelector(_ctx);
     }
 
     @After
     public void tearDown() {
         TunnelPeerSelector._peerCooldowns.clear();
+        TunnelPeerSelector._provenResponders.clear();
         File[] children = _tmpDir.listFiles();
         if (children != null) {
             for (File c : children) {c.delete();}
@@ -140,7 +142,7 @@ public class ClientPeerSelectorOrderTest {
         byte[] data = new byte[Hash.HASH_LENGTH];
         data[0] = (byte) b;
         data[1] = (byte) (5 - b);
-        return Hash.create(data);
+        return new Hash(data);
     }
 
     @Test
@@ -153,11 +155,24 @@ public class ClientPeerSelectorOrderTest {
     }
 
     @Test
-    public void testInboundSortsBestFirst() {
+    public void testInboundPreservesSelectionOrder() {
         Hash weak = hash(3), strong = hash(2);
         List<Hash> rv = _selector.finalizeSelection(new TunnelPoolSettings(true),
                                                     new ArrayList<>(Arrays.asList(weak, strong)), true);
         assertNotNull(rv);
-        assertEquals(Arrays.asList(_self, strong, weak), rv);
+        assertEquals(Arrays.asList(_self, weak, strong), rv);
+    }
+
+    @Test
+    public void testInboundFirstHopSlotIsNotSwapped() {
+        // hash 4 has fresh proof and is eligible, so the swap takes the
+        // replaceable slot (the hop next to us) and leaves the last slot —
+        // the first hop and inbound gateway — to the peer selectFirstHop() chose
+        Hash closest = hash(2), firstHop = hash(3);
+        TunnelPeerSelector._provenResponders.put(hash(4), NOW - 1000L);
+        List<Hash> rv = _selector.finalizeSelection(new TunnelPoolSettings(true),
+                                                    new ArrayList<>(Arrays.asList(closest, firstHop)), true);
+        assertNotNull(rv);
+        assertEquals(Arrays.asList(_self, hash(4), firstHop), rv);
     }
 }

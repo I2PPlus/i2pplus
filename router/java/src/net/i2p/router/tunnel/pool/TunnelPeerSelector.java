@@ -323,7 +323,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     /**
      * Peers whose most recent tunnel participation succeeded, mapped to the
      * time of that success. Selection prefers fresh entries via
-     * {@code ClientPeerSelector.compareQuality}; entries older than
+     * {@link #preferProven}; entries older than
      * {@link #PROVEN_RESPONDER_WINDOW_MS} carry no weight and are pruned.
      *
      * @since 0.9.71+
@@ -545,25 +545,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             if (_provenResponders.size() >= MIN_PROVEN_RESPONDER_COUNT) break;
             _provenResponders.putIfAbsent(peer, seedTime);
         }
-    }
-
-    /**
-     * Proven-responder comparison for the quality cascade: a peer whose last
-     * tunnel participation succeeded within the recency window sorts before
-     * one without; two peers on the same side compare equal so later cascade
-     * stages decide.
-     *
-     * @param t1 last proven-join time of the first peer, 0 if none
-     * @param t2 last proven-join time of the second peer, 0 if none
-     * @param now current time from the router clock
-     * @return negative if only p1 is proven, positive if only p2 is, else 0
-     * @since 0.9.71+
-     */
-    static int compareProven(long t1, long t2, long now) {
-        boolean p1 = isProvenResponder(t1, now);
-        boolean p2 = isProvenResponder(t2, now);
-        if (p1 == p2) {return 0;}
-        return p1 ? -1 : 1;
     }
 
     /**
