@@ -12,6 +12,11 @@
 #
 # Nothing is written until every file it is about to replace has been copied
 # aside, and a failed install puts them back and starts the service again.
+#
+# The files are installed for the account the router runs as. Run the script as
+# that account, or as root, in which case what it writes is made to belong to the
+# install's owner - a root-owned launcher is not readable by the service, and
+# i2prouter reads that as a platform the bundled wrapper does not support.
 
 I2P=""
 SOURCE=""
@@ -27,6 +32,11 @@ Stops the wrapper service, replaces the wrapper's own files (the launcher, its
 native library and lib/wrapper.jar) with the release this script was built or
 updated with, and starts the service again. Run it after the rest of an update
 is in place.
+
+Run it as the account that owns the install, which is the account the service
+runs as, or as root. A root run makes what it writes belong to that account; a
+run as anyone else leaves the new files owned by whoever ran it, and the service
+may then be unable to read them.
 
 Options:
   --install-dir DIR  I2P install to update. Default: the directory holding this
@@ -90,6 +100,17 @@ has_x() {
         *[1357]*) return 0 ;;
     esac
     return 1
+}
+
+# uid and gid of a file as "uid gid", empty when neither stat form works. GNU
+# stat's -c first, then the BSD form, since the install may be on either.
+owner_of() {
+    stat -c '%u %g' "$1" 2>/dev/null || stat -f '%u %g' "$1" 2>/dev/null || echo ""
+}
+
+# A name for a uid, for messages an operator can act on.
+name_of() {
+    id -un "$1" 2>/dev/null || echo "$1"
 }
 
 while [ $# -gt 0 ]; do
@@ -162,11 +183,22 @@ if [ -z "$SOURCE" ]; then
         fi
     done
 fi
-[ -n "$SOURCE" ] || die "no wrapper files to install - name them with --source DIR"
-[ -d "$SOURCE/$PLATFORM" ] || die "$SOURCE has no $PLATFORM - this release carries no wrapper for $OS $ARCH"
+if [ -z "$SOURCE" ]; then
+    die "no wrapper files to install - name them with --source DIR, or check $I2P/lib/wrapper is readable"
+fi
+# A payload staged by another account is often closed to this one, and every
+# check below would then read as a release with no binaries for this platform.
+if [ ! -r "$SOURCE" ] || [ ! -x "$SOURCE" ]; then
+    die "cannot read $SOURCE - run this script as root, or as the account that staged it"
+fi
+if [ ! -d "$SOURCE/$PLATFORM" ]; then
+    die "no readable $PLATFORM in $SOURCE - no wrapper for $OS $ARCH, or the payload belongs to another account"
+fi
 
 SRC_JAR="$SOURCE/all/wrapper.jar"
-[ -f "$SRC_JAR" ] || die "missing $SRC_JAR"
+if [ ! -f "$SRC_JAR" ]; then
+    die "no wrapper.jar in $SOURCE/all - this payload is incomplete, or it belongs to another account"
+fi
 
 src_launcher=$(first_match "$SOURCE/$PLATFORM" i2psvc 'i2psvc-*')
 [ -n "$src_launcher" ] || die "no launcher in $SOURCE/$PLATFORM"
@@ -182,6 +214,30 @@ dst_lib=$(first_match "$I2P/lib" $LIB_PATTERNS)
 [ -n "$dst_lib" ] || dst_lib="$I2P/lib/$(basename "$src_lib")"
 dst_jar="$I2P/lib/wrapper.jar"
 
+# The account the router runs as is the account these three files have to belong
+# to, so it is read from the files already in place where there are any - that
+# is what the service has been running under - and from the install directory
+# otherwise. Ignoring it is how a root run leaves a root-owned launcher that the
+# service account cannot read, and i2prouter tests the launcher with -x, so the
+# operator is told the bundled wrapper does not support their platform.
+I2P_OWNER=""
+I2P_GROUP=""
+owner_from=""
+for f in "$dst_launcher" "$dst_jar" "$dst_lib" "$I2P"; do
+    if [ -e "$f" ]; then
+        owner_from=$f
+        break
+    fi
+done
+if [ -n "$owner_from" ]; then
+    owner_ids=$(owner_of "$owner_from")
+    if [ -n "$owner_ids" ]; then
+        I2P_OWNER=${owner_ids% *}
+        I2P_GROUP=${owner_ids#* }
+    fi
+fi
+me=$(id -u)
+
 # Which release is being installed, from whichever marker is present.
 version=""
 for m in "$SOURCE/version.txt" "$SOURCE/VERSION" "$SOURCE/win64/BUILT-FROM"; do
@@ -196,11 +252,44 @@ say "Release:  ${version:-unknown}"
 say "Platform: $PLATFORM"
 say "Install:  $I2P"
 say "Source:   $SOURCE"
+if [ -n "$I2P_OWNER" ]; then
+    say "Owner:    $(name_of "$I2P_OWNER")"
+fi
 say ""
 say "  $(basename "$src_launcher") -> $dst_launcher"
 say "  $(basename "$src_lib") -> $dst_lib"
 say "  wrapper.jar -> $dst_jar"
+if [ "$me" -eq 0 ] && [ -n "$I2P_OWNER" ]; then
+    say ""
+    say "  Running as root - the files will belong to $(name_of "$I2P_OWNER"), the install's owner."
+elif [ "$me" -ne 0 ] && [ -n "$I2P_OWNER" ] && [ "$me" -ne "$I2P_OWNER" ]; then
+    say ""
+    say "  Running as $(name_of "$me"), not the install's owner $(name_of "$I2P_OWNER")."
+    say "  The files will belong to $(name_of "$me"), and the service may not be able to read them."
+fi
 say ""
+
+# ---------------------------------------------------------------- preflight ---
+
+# Say what cannot be done before the service is stopped. The payload a previous
+# update staged is often only readable by the account that staged it, and a
+# router install is often only writable by the account that owns it.
+for f in "$SRC_JAR" "$src_launcher" "$src_lib"; do
+    if [ ! -r "$f" ]; then
+        die "cannot read $f - run this script as root, or as the account that staged $SOURCE"
+    fi
+done
+for d in "$I2P" "$I2P/lib"; do
+    if [ -d "$d" ] && [ ! -w "$d" ]; then
+        if [ -z "$I2P_OWNER" ]; then
+            die "cannot write $d - run this script as the install's owner, or as root"
+        elif [ "$I2P_OWNER" = 0 ]; then
+            die "cannot write $d - the install belongs to root, run this script as root"
+        else
+            die "cannot write $d - run this script as $(name_of "$I2P_OWNER"), the install's owner, or as root"
+        fi
+    fi
+done
 
 # ----------------------------------------------------------------- service ---
 
@@ -342,13 +431,27 @@ case "$STOPPED_BY" in
         ;;
 esac
 
+# A root run leaves whatever it writes owned by root, and the service runs as the
+# install's owner: i2prouter tests the launcher with -x, so a launcher the
+# service account cannot read reads as a platform the wrapper does not support.
+own() {
+    if [ "$me" -eq 0 ] && [ -n "$I2P_OWNER" ]; then
+        if ! run chown "$I2P_OWNER:$I2P_GROUP" "$1"; then
+            say "Could not make $(basename "$1") belong to $(name_of "$I2P_OWNER") - fix it before starting the service."
+        fi
+    fi
+}
+
 # Copied aside first, in the install rather than in /tmp, so an interrupted
-# update can still be undone by hand.
+# update can still be undone by hand. The directory is made to belong to the
+# install's owner too, since a failed install leaves it behind to clear by hand.
 backup="$I2P/lib/wrapper-backup"
 if [ -z "$DRY" ]; then
     rm -rf "$backup"
     mkdir -p "$backup" || die "cannot create $backup"
+    own "$backup"
 fi
+
 saved=""
 for f in "$dst_launcher" "$dst_lib" "$dst_jar"; do
     if [ -f "$f" ]; then
@@ -373,6 +476,7 @@ restore_backup() {
             rm -f "$f"
             cp "$backup/$name" "$f"
             chmod "$(sed -n "s/^$name //p" "$backup/modes" 2>/dev/null)" "$f" 2>/dev/null
+            own "$f"
         fi
     done
     say "Rolled back to the previous wrapper."
@@ -400,6 +504,7 @@ install_one() {
     run rm -f "$dst"
     run cp "$src" "$dst" || return 1
     run chmod "$mode" "$dst"
+    own "$dst"
     if [ -z "$DRY" ] && ! cmp -s "$src" "$dst"; then
         return 1
     fi

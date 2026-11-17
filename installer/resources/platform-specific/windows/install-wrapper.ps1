@@ -13,6 +13,11 @@
   Nothing is written until every file it is about to replace has been copied
   aside, and a failed install puts them back and starts the wrapper again.
 
+  The files are installed for the account the router runs as. Run the script as
+  that account, or elevated, in which case what it writes is given to that
+  account - the owner of a copied file is whoever copied it, and a service
+  running as another account may then be denied access.
+
   Run it once the rest of an update is in place, from an elevated prompt when
   the router runs as a service.
 
@@ -84,6 +89,48 @@ function Test-Locked([string]$path) {
     }
 }
 
+# Can this account read the file? A payload staged by another account is often
+# closed to this one, and every check below would then read as a release with no
+# binaries for this platform.
+function Test-Readable([string]$path) {
+    if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { return $false }
+    try {
+        $h = [System.IO.File]::Open($path, 'Open', 'Read', 'ReadWrite')
+        $h.Close()
+        return $true
+    } catch {
+        return $false
+    }
+}
+
+# Can this account create and replace files in the directory? Probed with a
+# temporary file, since the ACL answer and the answer the copy gets are not the
+# same thing on a directory with deny entries or a forced-inheritance parent.
+function Test-Writable([string]$path) {
+    if (-not (Test-Path -LiteralPath $path -PathType Container)) { return $true }
+    $probe = Join-Path $path '.iw-probe'
+    try {
+        [System.IO.File]::Open($probe, 'Create', 'Write', 'None').Close()
+        Remove-Item -LiteralPath $probe -Force
+        return $true
+    } catch {
+        if (Test-Path -LiteralPath $probe) {
+            Remove-Item -LiteralPath $probe -Force -ErrorAction SilentlyContinue
+        }
+        return $false
+    }
+}
+
+# The account a file belongs to, as a name an operator can act on. Empty when
+# the security descriptor cannot be read.
+function Get-OwnerName([string]$path) {
+    try {
+        return (Get-Acl -LiteralPath $path -ErrorAction Stop).Owner
+    } catch {
+        return ''
+    }
+}
+
 # ------------------------------------------------------------------ layout ---
 
 $here = $PSScriptRoot
@@ -111,13 +158,17 @@ foreach ($c in $candidates) {
         break
     }
 }
-if (-not $Source) { Die "no wrapper files to install - name them with -Source" }
+if (-not $Source) {
+    Die "no wrapper files to install - name them with -Source, or check the staged lib\wrapper is readable"
+}
 
 $srcExe  = Join-Path $Source 'win64\I2Psvc.exe'
 $srcDll  = Join-Path $Source 'win64\wrapper.dll'
 $srcJar  = Join-Path $Source 'all\wrapper.jar'
 foreach ($f in @($srcExe, $srcDll, $srcJar)) {
-    if (-not (Test-Path -LiteralPath $f -PathType Leaf)) { Die "missing $f" }
+    if (-not (Test-Readable $f)) {
+        Die "cannot read $f - run this script as the account that staged $Source, or elevated"
+    }
 }
 
 # I2Psvc.exe and wrapper.dll sit together: the installer puts them in the install
@@ -133,6 +184,41 @@ if (-not (Test-Path -LiteralPath $dstExe)) {
     }
 }
 $dstJar = Join-Path $InstallDir 'lib\wrapper.jar'
+
+# The account the router runs as is the account these three files have to belong
+# to, so it is read from the files already in place where there are any - that is
+# what the service has been running under - and from the install directory
+# otherwise. A copied file belongs to whoever copied it, so an elevated run would
+# otherwise hand the launcher to Administrators.
+$installOwner = ''
+foreach ($f in @($dstExe, $dstJar, $dstDll, $InstallDir)) {
+    if (Test-Path -LiteralPath $f) {
+        $installOwner = Get-OwnerName $f
+        if ($installOwner) { break }
+    }
+}
+
+$isAdmin = Test-IsAdmin
+$me = [Security.Principal.WindowsIdentity]::GetCurrent().Name
+
+# Gives what was just written to the install's owner, leaving the access entries
+# it inherits from its directory alone. Only possible elevated, which is also the
+# only case where the owner would otherwise be wrong.
+function Set-FileOwner([string]$path) {
+    $acl = Get-Acl -LiteralPath $path
+    $acl.SetOwner((New-Object System.Security.Principal.NTAccount($installOwner)))
+    Set-Acl -LiteralPath $path -AclObject $acl
+}
+
+function Set-Owner([string]$path) {
+    if (-not $installOwner) { return }
+    if (-not $isAdmin) { return }
+    try {
+        Run { Set-FileOwner $path }
+    } catch {
+        Say "Could not give $(Split-Path -Leaf $path) to $installOwner - fix it before starting the service."
+    }
+}
 
 $version = ''
 foreach ($m in @((Join-Path $Source 'version.txt'), (Join-Path $Source 'win64\BUILT-FROM'))) {
@@ -150,11 +236,36 @@ Say "Release:  $(if ($version) { $version } else { 'unknown' })"
 Say "Platform: win64"
 Say "Install:  $InstallDir"
 Say "Source:   $Source"
+if ($installOwner) {
+    Say "Owner:    $installOwner"
+}
 Say ''
 Say "  I2Psvc.exe  -> $dstExe"
 Say "  wrapper.dll -> $dstDll"
 Say "  wrapper.jar -> $dstJar"
+if ($installOwner -and $installOwner -ne $me) {
+    Say ''
+    if ($isAdmin) {
+        Say "  Running as $me - the files will be given to $installOwner, the install's owner."
+    } else {
+        Say "  Running as $me, not the install's owner $installOwner."
+        Say '  The files will belong to this account, and the service may be denied access to them.'
+    }
+}
 Say ''
+
+# ---------------------------------------------------------------- preflight ---
+
+# Say what cannot be done before the wrapper is stopped. A router install is
+# usually only writable by the account that owns it.
+foreach ($d in @($InstallDir, (Join-Path $InstallDir 'lib'))) {
+    if (-not (Test-Writable $d)) {
+        if ($installOwner) {
+            Die "cannot write $d - run this script as $installOwner, the install's owner, or elevated"
+        }
+        Die "cannot write $d - run this script as the install's owner, or elevated"
+    }
+}
 
 # ----------------------------------------------------------------- service ---
 
@@ -247,7 +358,12 @@ if (-not $DryRun) {
 
 $backup = Join-Path $InstallDir 'lib\wrapper-backup'
 Run { Remove-Item -LiteralPath $backup -Recurse -Force -ErrorAction SilentlyContinue }
-if (-not $DryRun) { New-Item -ItemType Directory -Path $backup -Force | Out-Null }
+if (-not $DryRun) {
+    New-Item -ItemType Directory -Path $backup -Force | Out-Null
+    # Given to the install's owner too, since a failed install leaves it behind to
+    # clear by hand.
+    Set-Owner $backup
+}
 $saved = @()
 foreach ($f in @($dstExe, $dstDll, $dstJar)) {
     if (Test-Path -LiteralPath $f -PathType Leaf) {
@@ -261,6 +377,7 @@ function Restore-Backup() {
         $b = Join-Path $backup (Split-Path -Leaf $f)
         if (Test-Path -LiteralPath $b -PathType Leaf) {
             Copy-Item -LiteralPath $b -Destination $f -Force
+            Set-Owner $f
         }
     }
     Say 'Rolled back to the previous wrapper.'
@@ -270,6 +387,7 @@ $failed = @()
 foreach ($pair in @(@($srcExe, $dstExe), @($srcDll, $dstDll), @($srcJar, $dstJar))) {
     $src = $pair[0]; $dst = $pair[1]
     Run { Copy-Item -LiteralPath $src -Destination $dst -Force }
+    Set-Owner $dst
     if (-not $DryRun) {
         if ((Get-FileHash -LiteralPath $src).Hash -ne (Get-FileHash -LiteralPath $dst).Hash) {
             $failed += (Split-Path -Leaf $dst)
