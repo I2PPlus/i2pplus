@@ -1651,7 +1651,7 @@ class SidebarRenderer {
                            .append(DataHelper.formatDate(entry.updated))
                            .append("\"");
                     }
-                    buf.append(">").append(entry.title).append("</a></td></tr>\n");
+                    buf.append(">").append(DataHelper.escapeHTML(entry.title)).append("</a></td></tr>\n");
                     if (++i >= max) {break;}
                 }
                 if (i > 0) {buf.append("</table>\n</div>\n");}

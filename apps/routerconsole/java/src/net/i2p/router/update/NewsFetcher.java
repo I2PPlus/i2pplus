@@ -41,6 +41,7 @@ import net.i2p.router.news.NewsEntry;
 import net.i2p.router.news.NewsManager;
 import net.i2p.router.news.NewsMetadata;
 import net.i2p.router.news.NewsXMLParser;
+import net.i2p.router.news.RFC3339Date;
 import net.i2p.router.web.ConfigUpdateHandler;
 import net.i2p.router.web.NewsHelper;
 import net.i2p.update.*;
@@ -730,7 +731,8 @@ class NewsFetcher extends UpdateRunner {
         Banlist ban = _context.banlist();
         String reason = "Blocklist feed " + new Date(ble.updated);
         int banned = 0;
-        for (Iterator<String> iter = ble.entries.iterator(); iter.hasNext(); ) {
+        Iterator<String> iter = ble.entries.iterator();
+        while (iter.hasNext()) {
             String s = iter.next();
             if (s.length() == 44) {
                 byte[] b = Base64.decode(s);
@@ -758,6 +760,13 @@ class NewsFetcher extends UpdateRunner {
             }
             if (++banned >= BlocklistEntries.MAX_ENTRIES) {break;} // prevent somebody from destroying the whole network
         }
+        // Say so when the cap cut the list short: the rest of a signer's entries
+        // were not applied, and the count applied is not the count published.
+        if (iter.hasNext()) {
+            _log.logAlways(Log.WARN, "Stopped applying the blocklist feed -> Entry cap reached" +
+                                     "\n* Blocks: " + BlocklistEntries.MAX_ENTRIES +
+                                     " * Feed: " + ble.entries.size());
+        }
         for (String s : ble.removes) {
             if (s.length() == 44) {
                 byte[] b = Base64.decode(s);
@@ -783,7 +792,11 @@ class NewsFetcher extends UpdateRunner {
         try {
             out = new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(f), StandardCharsets.UTF_8));
             out.write("# ");
-            out.write(ble.supdated);
+            // supdated is the signer's own text, and exactly what was signed, so
+            // nothing constrains it: parse3339Date() ignores trailing text, and a
+            // newline in here would land in the file as entries the cap below
+            // never counted. Write the instant that was parsed and verified.
+            out.write(RFC3339Date.to3339Date(ble.updated));
             out.newLine();
             banned = 0;
             for (String s : ble.entries) {

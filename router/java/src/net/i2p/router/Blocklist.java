@@ -137,6 +137,15 @@ public class Blocklist {
     public static final String BLOCKLIST_FILE_TOR_EXITS = "blocklist_tor.txt";
     /** Feed blocklist file path. */
     private static final String BLOCKLIST_FEED_FILE = "docs/feed/blocklist/blocklist.txt";
+    /**
+     * Entries read from the feed blocklist file. The writer of that file caps
+     * what a news signer may put in it at the same number, so more entries than
+     * this means the file was edited or a line was injected into its header,
+     * and the extras would grow the peer blocklist without end.
+     *
+     * @see "net.i2p.router.news.BlocklistEntries.MAX_ENTRIES"
+     */
+    static final int MAX_FEED_ENTRIES = 2000;
     /** Country-based blocklist filename.
      * @since 0.9.48
      */
@@ -687,12 +696,17 @@ public class Blocklist {
         int badcount = 0;
         int peercount = 0;
         int feedcount = 0;
+        boolean truncated = false;
         long ipcount = 0;
         final boolean isFeedFile = blFile.equals(_blocklistFeedFile);
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new BufferedInputStream(new FileInputStream(blFile)), StandardCharsets.UTF_8))) {
             String source = blFile.toString();
             String buf = null;
             while ((buf = br.readLine()) != null) {
+                if (isFeedFile && feedcount >= MAX_FEED_ENTRIES) {
+                    truncated = true;
+                    break;
+                }
                 Entry e = parse(buf, true);
                 if (e == null) {
                     badcount++;
@@ -701,6 +715,7 @@ public class Blocklist {
                 if (e.peer != null) {
                     _peerBlocklist.put(e.peer, e.comment);
                     peercount++;
+                    if (isFeedFile) {feedcount++;}
                     continue;
                 }
                 byte[] ip1 = e.ip1;
@@ -709,6 +724,7 @@ public class Blocklist {
                     store(ip1, ip2, blocklist, count++);
                     ipcount += 1 + toInt(ip2) - toInt(ip1); // includes dups, oh well
                 } else {add(ip1, source);} // IPv6
+                if (isFeedFile) {feedcount++;}
             }
         } catch (IOException ioe) {
             if (_log.shouldError()) {_log.error("Loading the blocklist file failed", ioe);}
@@ -734,6 +750,10 @@ public class Blocklist {
                       ipcount + " IPs and " + peercount + " router hashes" +
                       "\n* Removed: " + badcount + " bad entries and comment lines" +
                       " * Elapsed: " + (_context.clock().now() - start) + "ms");
+        }
+        if (truncated) {
+            _log.logAlways(Log.WARN, "Stopped reading the blocklist feed -> Entry cap reached" +
+                                     "\n* Entries: " + MAX_FEED_ENTRIES + " * File: " + blFile);
         }
         return count;
     }

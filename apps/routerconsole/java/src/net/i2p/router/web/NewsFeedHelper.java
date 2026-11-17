@@ -88,7 +88,7 @@ public class NewsFeedHelper extends HelperBase {
                 if (entry.link != null) {
                     buf.append("<a href=\"").append(DataHelper.escapeHTML(entry.link)).append("\" target=_blank>");
                 }
-                buf.append(entry.title);
+                buf.append(DataHelper.escapeHTML(entry.title));
                 if (entry.link != null) {buf.append("</a>");}
                 if (entry.authorName != null) {
                     buf.append(" <span class=\"newsAuthor\" title=\"Post author\"><i>")
