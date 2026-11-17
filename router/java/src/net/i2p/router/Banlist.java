@@ -22,6 +22,7 @@ import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.time.BuildTime;
+import net.i2p.util.Addresses;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.Log;
 import net.i2p.util.VersionComparator;
@@ -46,6 +47,13 @@ public class Banlist {
     private final ConcurrentHashMap<String, long[]> _corruptConnectionIPs;
     /** Port hopping offenses by IP address, with times. */
     private final ConcurrentHashMap<String, long[]> _portHoppingIPs;
+    /**
+     * Most source addresses one offense tracker will hold at once. A
+     * spoofed-source flood presents a new source per packet, so this ceiling,
+     * not the age sweep in {@link Cleanup}, is what bounds the trackers; it is
+     * the order of magnitude of the single-IP blocklist they feed.
+     */
+    static final int MAX_OFFENSE_TRACKING = 8192;
     /** Config key for the offenses needed to ban. */
     private static final String PROP_MAX_OFFENSES = "router.banlist.maxOffenses";
     /** Default offenses needed to ban. */
@@ -57,7 +65,7 @@ public class Banlist {
      */
     private static final String PROP_OFFENSE_WINDOW = "router.banlist.offenseWindow";
     /** The default offense window is 15 minutes. */
-    private static final long OFFENSE_WINDOW_DEFAULT = 15*60*1000L;
+    static final long OFFENSE_WINDOW_DEFAULT = 15*60*1000L;
     /** Offense window in effect right now. */
     private long _offenseWindow;
     /**
@@ -617,6 +625,11 @@ public class Banlist {
             // Proportionally reduce durations of longer bans when count is high
             reduceDurations(now);
 
+            // Offense counts older than the window can no longer reach the
+            // threshold, and a spoofed-source flood leaves one entry per source
+            // behind it, so drop them here.
+            pruneOffenses(now);
+
             requeue(5L*60*1000);
         }
     }
@@ -678,13 +691,13 @@ public class Banlist {
         if (ip == null) return;
         if (!_enableBadPacketBan) return;
         if (_context.router().getUptime() < _startupGrace) return;
+        ip = offenseIP(ip);
         long now = _context.clock().now();
 
         long[] data = _badPacketIPs.get(ip);
         if (data == null) {
             // First bad packet from this IP
-            data = new long[] {now, 1};
-            _badPacketIPs.put(ip, data);
+            addFirstOffense(_badPacketIPs, ip, now);
             return;
         }
 
@@ -741,7 +754,7 @@ public class Banlist {
         if (!_enableBadPacketBan) return;
         if (_context.router().getUptime() < _startupGrace) return;
         RouterInfo ri = _context.netDb().lookupRouterInfoLocally(hash);
-        String ip = observedIP;
+        String ip = offenseIP(observedIP);
         if (version == null && ri != null) {version = ri.getVersion();}
         long now = _context.clock().now();
 
@@ -789,12 +802,12 @@ public class Banlist {
         if (ip == null) return;
         if (!_enableCorruptConnectionBan) return;
         if (_context.router().getUptime() < _startupGrace) return;
+        ip = offenseIP(ip);
         long now = _context.clock().now();
 
         long[] data = _corruptConnectionIPs.get(ip);
         if (data == null) {
-            data = new long[] {now, 1};
-            _corruptConnectionIPs.put(ip, data);
+            addFirstOffense(_corruptConnectionIPs, ip, now);
             return;
         }
 
@@ -835,12 +848,12 @@ public class Banlist {
         if (ip == null) return;
         if (!_enablePortHoppingBan) return;
         if (_context.router().getUptime() < _startupGrace) return;
+        ip = offenseIP(ip);
         long now = _context.clock().now();
 
         long[] data = _portHoppingIPs.get(ip);
         if (data == null) {
-            data = new long[] {now, 1};
-            _portHoppingIPs.put(ip, data);
+            addFirstOffense(_portHoppingIPs, ip, now);
             return;
         }
 
@@ -887,13 +900,12 @@ public class Banlist {
         if (!_enablePortHoppingBan) return;
         if (_context.router().getUptime() < _startupGrace) return;
         RouterInfo ri = _context.netDb().lookupRouterInfoLocally(hash);
-        String ip = observedIP;
+        String ip = offenseIP(observedIP);
         long now = _context.clock().now();
 
         long[] data = _portHoppingIPs.get(ip);
         if (data == null) {
-            data = new long[] {now, 1};
-            _portHoppingIPs.put(ip, data);
+            addFirstOffense(_portHoppingIPs, ip, now);
             return;
         }
 
@@ -918,6 +930,71 @@ public class Banlist {
             _context.blocklist().add(ip, reason);
             _portHoppingIPs.remove(ip);
         }
+    }
+
+    /**
+     * Reduce a source address to the bare IP the offense counters and the
+     * blocklist key on. Callers hold socket addresses and hand them over with
+     * the port attached, and the blocklist takes only a bare address, so a
+     * port-keyed source costs one tracker entry per port and is never banned.
+     * An address that does not parse as a literal is returned unchanged -
+     * there is nothing safe to strip from it, and the blocklist simply refuses
+     * it when the ban is issued.
+     *
+     * @param ip an address with or without a port (non-null)
+     * @return the bare address string, or the input if it has no port to strip
+     */
+    static String offenseIP(String ip) {
+        byte[] bytes = Addresses.getIPOnly(ip);
+        if (bytes == null) {
+            int i = ip.lastIndexOf(':');
+            if (i > 0) {bytes = Addresses.getIPOnly(ip.substring(0, i));}
+        }
+        return bytes != null ? Addresses.toString(bytes) : ip;
+    }
+
+    /**
+     * Start an offense count for a source, if there is room to track it.
+     * A spoofed-source flood presents a new source per packet, so the trackers
+     * need a ceiling as well as the age sweep in {@link Cleanup}; over the
+     * ceiling the packet is not tracked rather than evicting a source that is
+     * already being counted.
+     *
+     * @param offenses the tracker to add to
+     * @param ip the bare source address being counted
+     * @param now current time in ms, stored as the start of the offense window
+     */
+    private void addFirstOffense(ConcurrentHashMap<String, long[]> offenses, String ip, long now) {
+        if (offenses.size() >= MAX_OFFENSE_TRACKING) {return;}
+        offenses.put(ip, new long[] {now, 1});
+    }
+
+    /**
+     * Drop offense entries that can no longer lead to a ban, in all three
+     * trackers. A count runs from its first offense, and a strike after the
+     * offense window starts a new count instead of adding to it, so an entry
+     * older than the window is dead weight - and without this sweep it is also
+     * kept forever.
+     *
+     * @param now current time in ms
+     */
+    void pruneOffenses(long now) {
+        pruneOffenses(now, _badPacketIPs);
+        pruneOffenses(now, _corruptConnectionIPs);
+        pruneOffenses(now, _portHoppingIPs);
+    }
+
+    /**
+     * Drop the offense entries of one tracker that are older than the offense
+     * window.
+     *
+     * @param now current time in ms
+     * @param offenses the tracker to prune
+     */
+    private void pruneOffenses(long now, ConcurrentHashMap<String, long[]> offenses) {
+        try {
+            offenses.entrySet().removeIf(e -> now - e.getValue()[0] > _offenseWindow);
+        } catch (IllegalStateException ise) { /* next time... */ }
     }
 
     /**

@@ -1616,27 +1616,18 @@ public class EstablishmentManager {
 
         int count = _terminationCounter.increment(to);
         if (count > MAX_TERMINATIONS) {
-            // not everybody listens or backs off...
-            if (count > MAX_TERMINATIONS*2) {
-                try {
-                    String toIP = InetAddress.getByAddress(to.getIP()).getHostAddress();
-                    String targetIP = toIP.replace("/", "");
-                    byte[] ip = Addresses.getIP(targetIP);
-                    if (ip != null && !_context.blocklist().isBlocklisted(ip)) {
-                        _context.blocklist().add(ip, "Ignores termination packets");
-                        if (_log.shouldWarn()) {
-                            _log.warn("[SSU] Banning " + targetIP + " for duration of session -> Repeatedly ignoring termination packets");
-                        }
-                        return;
-                    }
-                } catch (UnknownHostException uhe) { /* ignored */ }
-            }
+            // not everybody listens or backs off... Stop answering rather than
+            // banlisting: the source address of a datagram is authenticated by
+            // nothing, so this counter is not evidence to ban on. Six forged
+            // TokenRequests would otherwise put any address the attacker chose
+            // on the no-expiry blocklist of every router that received them.
             if (_log.shouldWarn()) {
                 // One line: the count and the peer are both facts about this
                 // peer, and the second line carried only the peer.
                 _log.warn("[SSU] " + count + " termination packets in 3m to " + to +
                           ", limit " + MAX_TERMINATIONS + " -> Not sending any more");
             }
+            return;
         }
         // very basic validation that this is probably in response to a good packet.
         // we don't bother to decrypt the packet, even if it's only a token request
@@ -1683,8 +1674,13 @@ public class EstablishmentManager {
                               + "\n* " + corruptConfirmReason(e)
                               + (suppressed > 0 ? " (suppressed " + suppressed + ")" : ""));
                 }
-                // Track probing attempts
-                _context.banlist().badPacket(state.getRemoteHostId().toString(), null);
+                // Track probing attempts, keyed on the bare address: the
+                // blocklist takes no port, and one tracker entry per port would
+                // let a probe flood outrun the tracker before it could ban.
+                RemoteHostId probe = state.getRemoteHostId();
+                if (probe.getIP() != null) {
+                    _context.banlist().badPacket(Addresses.toString(probe.getIP()), null);
+                }
             }
             _inboundStates.remove(state.getRemoteHostId());
             return;

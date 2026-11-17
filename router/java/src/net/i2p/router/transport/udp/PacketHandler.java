@@ -7,6 +7,7 @@ import net.i2p.router.Banlist;
 import net.i2p.router.RouterContext;
 import net.i2p.router.Tuner;
 import net.i2p.router.util.CoDelBlockingQueue;
+import net.i2p.util.Addresses;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.ThreadNames;
@@ -621,7 +622,7 @@ class PacketHandler {
         Banlist banlist = _context.banlist();
         if (!banlist.isBadPacketBanEnabled()) {return;}
         if (_context.router().getUptime() < banlist.getStartupGrace()) {return;}
-        banlist.badPacket(from.toString(), null);
+        banlist.badPacket(Addresses.toString(from.getIP()), null);
     }
 
 }
