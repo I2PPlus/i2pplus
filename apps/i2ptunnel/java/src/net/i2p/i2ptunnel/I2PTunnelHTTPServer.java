@@ -14,15 +14,14 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.HashSet;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionException;
@@ -47,6 +46,7 @@ import net.i2p.client.streaming.I2PSocketException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
+import net.i2p.util.Addresses;
 import net.i2p.util.EventDispatcher;
 import net.i2p.stat.RateConstants;
 import net.i2p.util.Log;
@@ -93,9 +93,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     /** Config key for post check time window. */
     public static final String OPT_POST_WINDOW = "postCheckTime";
 
-    /** Max wait for DNS resolution of non-I2P hostnames in the HTTP proxy. */
-    private static final int DNS_TIMEOUT_MS = 5000;
-
     /**
      * Ceiling on a request host as it is logged. The Host header is
      * attacker-controlled and a header line may be 8 KB, so an unbounded host
@@ -103,6 +100,23 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      * 100 characters, and a FQDN is 253 at most.
      */
     private static final int MAX_LOG_HOST_LEN = 64;
+
+    /**
+     * The IPv4 wildcard address, named rather than parsed: the IPv4 pattern
+     * the tree uses for literals requires a non-zero first field, so this form
+     * is not an address to it.
+     */
+    private static final String WILDCARD_V4 = "0.0.0.0";
+
+    /** The IPv6 wildcard address, named for the same reason. */
+    private static final String WILDCARD_V6 = "::";
+
+    /**
+     * The one host name that always means loopback. Every other name is
+     * accepted as given, since resolving it is what let a client drive the
+     * router's resolver.
+     */
+    private static final String LOOPBACK_NAME = "localhost";
 
     /**
      * Minimum interval between per-client "Request error" warnings. A single
@@ -186,20 +200,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      * @since 0.9.71+
      */
     static int trackedErrorClients() { return _lastErrorLogTime.size(); }
-
-    /**
-     * Dedicated executor for non-blocking DNS lookups with bounded timeout.
-     * Fixed-size with a bounded queue: a cached pool spawns a thread per blocked
-     * lookup without bound, so hostile unique Host: headers could exhaust native
-     * threads, and its unbounded queue made the RejectedExecutionException
-     * handling below dead code. Rejections now surface and shed the request.
-     */
-    private static final ExecutorService _dnsResolver = new ThreadPoolExecutor(2, 4, 30, TimeUnit.SECONDS,
-        new ArrayBlockingQueue<>(64), r -> {
-            Thread t = new Thread(r, "DNSResolve");
-            t.setDaemon(true);
-            return t;
-        });
 
     /**
      * Per-tunnel I/O pools for Server→Client data transfer, keyed by this
@@ -2108,11 +2108,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
     /**
      * Validate the request hostname against local/loopback/private addresses.
-     * If the hostname resolves to a private or loopback address, the peer is
-     * blocklisted and the socket is closed. If DNS resolves to 0.0.0.0 (blocked DNS),
-     * a 403 is sent.
-     * DNS is resolved asynchronously with a bounded timeout to avoid
-     * blocking the shared client thread pool on slow or unreachable DNS servers.
+     * A host that names one of them, or the name localhost, gets the peer
+     * blocklisted and the socket closed. The header is never resolved: the
+     * client chooses it, and a lookup would hand a client-chosen name to the
+     * router host's resolver and let any client bill the router for lookups.
      *
      * @param headers the request headers map (to extract Host header)
      * @param socket the incoming I2P socket
@@ -2124,12 +2123,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     private boolean validateRequestHost(Map<String, List<String>> headers, I2PSocket socket, String peerB32) throws IOException {
         String tunnelId = getTunnelLogId(socket.getThisDestination());
         String hostname = null;
-        boolean isValidRequest = true;
-        boolean isPossibleExploit = false;
         List<String> host = headers.get("Host");
-        // One entry per rejected request: the branches below record why, and the
-        // blocklist branch emits it, so a single exploit attempt is not logged twice.
-        String denyReason = null;
 
         if (peerB32.length() != 60) {
             // The Host header has not been read at this point, so this line
@@ -2144,9 +2138,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
 
         if (host != null && !host.isEmpty()) {
-            hostname = host.get(0);
-            int port = hostname.indexOf(":");
-            if (port != -1) {hostname = hostname.substring(0, port);}
+            hostname = requestHost(host.get(0));
         }
         // A hostname is neither a router hash nor a destination, so
         // loggableHost() prints it whole, unbracketed and length-bounded.
@@ -2155,94 +2147,70 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                        "\n* Tunnel: " + tunnelId + " * Client: [" + peerB32 + ']');
         }
         if (hostname != null && !hostname.endsWith(".i2p") && !hostname.endsWith(".onion")) {
-            InetAddress address;
-            Future<InetAddress> future = null;
-            try {
-                final String lookupHost = hostname;
-                future = _dnsResolver.submit(() -> InetAddress.getByName(lookupHost));
-                address = future.get(DNS_TIMEOUT_MS, TimeUnit.MILLISECONDS);
-            } catch (TimeoutException e) {
-                _log.warnThrottled("httpserver-dns-timeout",
-                                   "[HTTPServer] DNS lookup timed out -> Denying the request" +
-                                   "\n* Host: " + loggableHost(hostname) + " * Tunnel: " + tunnelId +
-                                   " * Client: [" + peerB32 + ']');
-                // Cancel so the resolver thread is not left parked in a JVM-level
-                // resolution (which can run far longer than our timeout) holding a
-                // pool slot; a queued task is dropped outright.
-                if (future != null) {future.cancel(true);}
-                try {socket.close();}
-                catch (IOException ioe) { /* ignored */ }
-                return false;
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                if (future != null) {future.cancel(true);}
-                try {socket.close();}
-                catch (IOException ioe) { /* ignored */ }
-                return false;
-            } catch (ExecutionException e) {
-                _log.warnThrottled("httpserver-dns-failed",
-                                   "[HTTPServer] DNS lookup failed -> Denying the request" +
-                                   "\n* Host: " + loggableHost(hostname) + " * Tunnel: " + tunnelId +
-                                   " * Client: [" + peerB32 + ']');
-                try {socket.close();}
-                catch (IOException ioe) { /* ignored */ }
-                return false;
-            } catch (RejectedExecutionException e) {
-                // Executor saturated — do NOT block on synchronous DNS, which
-                // would stall the request handler thread under load.  Close the
-                // socket so the client gets a clean failure instead of a hang.
-                _log.warnThrottled("httpserver-dns-executor-saturated",
-                                   "[HTTPServer] DNS executor saturated -> Denying the request" +
-                                   "\n* Host: " + loggableHost(hostname) + " * Tunnel: " + tunnelId +
-                                   " * Client: [" + peerB32 + ']');
-                try {socket.close();}
-                catch (IOException ioe) { /* ignored */ }
-                return false;
-            }
-            if (address.isLinkLocalAddress() || address.isLoopbackAddress() || address.isSiteLocalAddress()) {
-                denyReason = "Localhost or loopback address requested -> Blocked the client";
-                _blocklistManager.logBlockedDestination(peerB32);
-                isValidRequest = false;
-                isPossibleExploit = true;
-            } else if (address.isAnyLocalAddress()) { // check for 0.0.0.0 response (DNS blocking)
-                if (!hostname.equals("::") && !hostname.equals("0.0.0.0")) {
-                    _log.warnThrottled("httpserver-dns-blocked",
-                                       "[HTTPServer] DNS server is blocking this host -> Sending Error 403" +
-                                       "\n* Host: " + loggableHost(hostname) + " * Tunnel: " + tunnelId +
-                                       " * Client: [" + peerB32 + ']');
-                    try {sendError(socket, ERR_FORBIDDEN);}
-                    catch (IOException ioe) { /* ignored */ }
-                    isValidRequest = false;
-                    isPossibleExploit = false;
-                } else {
-                    try {sendError(socket, ERR_FORBIDDEN);}
-                    catch (IOException ioe) { /* ignored */ }
-                    isValidRequest = false;
-                    isPossibleExploit = true;
-                }
-            } else {
-                if (_log.shouldInfo() && !hostname.equals(address.getHostAddress())) {
-                    _log.info("[HTTPServer] Hostname validated -> Resolves to: " + address.getHostAddress() +
-                              "\n* Host: " + loggableHost(hostname) + " * Tunnel: " + tunnelId);
-                }
-                isPossibleExploit = false;
-            }
-            if (isPossibleExploit) {
+            // The client picks this header, so it is never resolved. A lookup
+            // hands a client-chosen name to the router host's resolver and lets
+            // any client bill the router for lookups at wire speed. Only a
+            // literal address can name one of the router host's own networks.
+            if (isLocalRequestHost(hostname)) {
                 _blocklistManager.logBlockedDestination(peerB32);
                 _log.warnThrottled("httpserver-private-address",
-                                   "[HTTPServer] " +
-                                   (denyReason != null ? denyReason
-                                    : "Private or wildcard address requested -> Blocked the client") +
+                                   "[HTTPServer] Localhost or private address requested" +
+                                   " -> Blocked the client" +
                                    "\n* Host: " + loggableHost(hostname) + " * Tunnel: " + tunnelId +
                                    " * Client: [" + peerB32 + ']');
-            }
-            if (!isValidRequest) {
                 try {socket.close();}
                 catch (IOException e) { /* ignored */ }
                 return false;
             }
         }
         return true;
+    }
+
+    /**
+     * The host part of a Host header, with the port removed: "example.com:8080"
+     * gives "example.com". A bracketed IPv6 literal gives the address inside the
+     * brackets, so "[::1]:80" gives "::1" rather than the "[" the port split
+     * alone would leave behind.
+     * <p>
+     * Package-visible and static so a test can cover the bracketed form, which
+     * the request path only reaches with a hand-written header.
+     *
+     * @param header the Host header value, non-null
+     * @return the host as the client named it, without the port
+     * @since 0.9.72+
+     */
+    static String requestHost(String header) {
+        String host = header.trim();
+        if (host.startsWith("[")) {
+            int end = host.indexOf(']');
+            if (end > 0) {return host.substring(1, end);}
+        }
+        int port = host.indexOf(':');
+        return port != -1 ? host.substring(0, port) : host;
+    }
+
+    /**
+     * Whether a request host names one of the router host's own networks:
+     * loopback, link-local, site-local or the wildcard address, or the name
+     * localhost, which means loopback wherever it is used. The host is read
+     * literally and never resolved, so a client cannot make the router query
+     * its resolver, and no name can hide a local address from this check.
+     *
+     * @param hostname the request host with the port removed, may be null or empty
+     * @return true if the request must be denied and the client blocklisted
+     * @since 0.9.72+
+     */
+    static boolean isLocalRequestHost(String hostname) {
+        if (hostname == null || hostname.isEmpty()) {return false;}
+        if (LOOPBACK_NAME.equals(hostname.toLowerCase(Locale.US))) {return true;}
+        if (WILDCARD_V4.equals(hostname) || WILDCARD_V6.equals(hostname)) {return true;}
+        if (!Addresses.isIPAddress(hostname)) {return false;}
+        try {
+            // A literal, so this parses without touching the resolver
+            InetAddress address = InetAddress.getByName(hostname);
+            return address.isLoopbackAddress() || address.isLinkLocalAddress() ||
+                   address.isSiteLocalAddress() || address.isAnyLocalAddress();
+        } catch (UnknownHostException e) {return false;}
     }
 
     /**
