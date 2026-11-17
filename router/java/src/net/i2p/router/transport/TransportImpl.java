@@ -61,6 +61,7 @@ import net.i2p.router.OutNetMessage;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.stat.RateConstants;
+import net.i2p.util.Addresses;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.LHMCache;
 import net.i2p.util.Log;
@@ -1363,7 +1364,7 @@ public abstract class TransportImpl implements Transport {
     /**
      * Best IP:port for a router, for ban logging: the direct connection
      * IP from the transport layer, else a compatible address, else any
-     * announced address.
+     * announced address that carries a literal IP.
      *
      * @param router may be null
      * @return "host:port" or "UNKNOWN"
@@ -1385,21 +1386,34 @@ public abstract class TransportImpl implements Transport {
                 }
                 return formatIPPort(ip, port);
             }
-            for (RouterAddress addr : router.getAddresses()) {
-                if (addr != null && addr.getHost() != null) {
-                    String ipAddr = addr.getHost();
-                    int port = addr.getPort();
-                    if (port > 0) {
-                        if (ipAddr.contains(":") && !ipAddr.startsWith("[")) {
-                            return "[" + ipAddr + "]:" + port;
-                        }
-                        return ipAddr + ":" + port;
-                    }
-                    return ipAddr;
-                }
-            }
+            return formatAnnouncedIPPort(router);
         } catch (Exception e) {
             // Ignore extraction errors
+        }
+        return "UNKNOWN";
+    }
+
+    /**
+     * The first announced address carrying a literal IP, formatted for logging.
+     * A peer picks its own host string, and a RouterAddress may hold a DNS name
+     * rather than an address. Naming a banned peer by a name it chose itself
+     * puts an unverified string in the ban log and passes it to the country and
+     * ASN lookups, which would then resolve a peer-supplied name over DNS.
+     *
+     * @param router the router whose addresses are scanned, non-null
+     * @return "host:port" or "[host]:port", or "UNKNOWN" when every address is
+     *         a host name or carries no host at all
+     * @since 0.9.72+
+     */
+    static String formatAnnouncedIPPort(RouterInfo router) {
+        for (RouterAddress addr : router.getAddresses()) {
+            if (addr == null) {continue;}
+            String host = addr.getHost();
+            if (host == null || !Addresses.isIPAddress(host)) {continue;}
+            int port = addr.getPort();
+            if (port <= 0) {return host;}
+            if (host.indexOf(':') >= 0) {return '[' + host + "]:" + port;}
+            return host + ':' + port;
         }
         return "UNKNOWN";
     }

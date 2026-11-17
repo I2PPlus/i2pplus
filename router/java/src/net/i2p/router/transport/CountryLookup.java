@@ -25,6 +25,7 @@ import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.RouterContext;
+import net.i2p.util.Addresses;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
@@ -334,12 +335,18 @@ public class CountryLookup {
     }
 
     /**
-     * Convert IP string to Hash and call existing getCountry method
-     * Return two-letter country code or null if unknown.
-     * @param ipAddress the IP address string to resolve and look up
-     * @return the country from IP address
+     * Convert IP string to raw address bytes and look up the GeoIP table.
+     * The string is accepted only as a literal address: it comes from a
+     * peer's own RouterInfo or from a ban log entry, and handing a
+     * peer-chosen name to the resolver would send it over DNS and block the
+     * caller on the answer.
+     * @param ipAddress the IP address string to look up, a literal address;
+     *                  anything else, including null, yields no country
+     * @return the country from IP address, or null if the string is not a
+     *         literal address or the table has no entry for it
      */
     private String getCountryFromIPAddress(String ipAddress) {
+        if (ipAddress == null || !Addresses.isIPAddress(ipAddress)) {return null;}
         try {
             byte[] ipBytes = InetAddress.getByName(ipAddress).getAddress();
             return _geoIP.get(ipBytes); // Existing geoip lookup by raw IP bytes

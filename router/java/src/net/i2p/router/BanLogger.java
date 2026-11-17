@@ -23,10 +23,10 @@ import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 import net.i2p.data.Hash;
-import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.JobImpl;
 import net.i2p.router.networkdb.kademlia.KademliaNetworkDatabaseFacade;
+import net.i2p.router.transport.TransportImpl;
 
 import net.i2p.util.Log;
 
@@ -573,8 +573,8 @@ public class BanLogger {
         try {
             RouterInfo ri = context.netDb().lookupRouterInfoLocally(hash);
             if (ri != null) {
-                String ipPort = getIPFromRouterInfo(ri);
-                if (!ipPort.isEmpty()) {
+                String ipPort = TransportImpl.getRouterIPPort(ri);
+                if (!"UNKNOWN".equals(ipPort)) {
                     return ipPort;
                 }
             }
@@ -611,8 +611,7 @@ public class BanLogger {
                         if (caps == null) caps = "";
                         String ver = ri.getVersion();
                         if (ver == null) ver = "";
-                        String ip = getIPFromRouterInfo(ri);
-                        if (ip.isEmpty()) ip = "UNKNOWN";
+                        String ip = TransportImpl.getRouterIPPort(ri);
                         String dur = formatDuration(durationMs);
                         String ts = _dateFormat.get().format(new Date());
                         String entry = String.format("%s | %s | %s | %s | %s | %s | %s | %s | %s",
@@ -642,40 +641,6 @@ public class BanLogger {
             if (_log.shouldLog(Log.WARN))
                 _log.warn("Cannot schedule ban log lookup -> NetDb is not a KademliaNetworkDatabaseFacade", e);
         }
-    }
-
-    /**
-     * Extract IP address and port from RouterInfo.
-     *
-     * @param router the router whose first address with a host is used, null yields an empty
-     *               string
-     * @return the address as "host:port", with an IPv6 host in brackets, or an empty string when
-     *         no address has a host
-     */
-    private String getIPFromRouterInfo(RouterInfo router) {
-        if (router == null) { return ""; }
-        try {
-            for (RouterAddress addr : router.getAddresses()) {
-                if (addr != null && addr.getHost() != null) {
-                    String ip = addr.getHost();
-                    int port = addr.getPort();
-                    if (port > 0) {
-                        // Check if it's IPv6 address
-                        if (ip.contains(":") && !ip.startsWith("[")) {
-                            // IPv6 address needs brackets
-                            return '[' + ip + "]:" + port;
-                        } else {
-                            return ip + ':' + port;
-                        }
-                    } else {
-                        return ip;
-                    }
-                }
-            }
-        } catch (Exception e) {
-            // Ignore extraction errors
-        }
-        return "";
     }
 
     /**
