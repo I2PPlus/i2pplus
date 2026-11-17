@@ -117,12 +117,35 @@ class ExpireLeasesJob extends JobImpl {
     }
 
     /**
+     * Whether this database should search for lease sets that are about to
+     * expire. A floodfill is the authority for the entries stored to it, and its
+     * own searches mark the other floodfills as recently queried for a minute,
+     * which leaves the next store with nobody to flood to - so the main netDb of
+     * a floodfill lets its entries expire instead of chasing them, while a
+     * client sub-database, which is a copy of somebody else's entry, keeps
+     * refreshing for continuity of service.
+     *
+     * @param isClientDb true for a client sub-database rather than the main netDb
+     * @param floodfillEnabled true if this router is acting as a floodfill
+     * @return true if the pre-expiry search should run
+     * @since 0.9.72+
+     */
+    static boolean refreshesExpiringLeaseSets(boolean isClientDb, boolean floodfillEnabled) {
+        return isClientDb || !floodfillEnabled;
+    }
+
+    /**
      * Refresh leasesets that are about to expire to ensure continuity of service.
      * This preemptively fetches new leasesets before the old ones expire,
      * avoiding any gap in service.
      */
     private void refreshAboutToExpire() {
         RouterContext ctx = getContext();
+        // A floodfill is the authority for the entries stored to it, and its own
+        // pre-expiry searches mark the other floodfills as recently queried for
+        // a minute. On a busy floodfill that leaves the next store with no one to
+        // flood to, so the entry is acked and then never spreads.
+        if (!refreshesExpiringLeaseSets(_facade.isClientDb(), _facade.floodfillEnabled())) {return;}
         long now = ctx.clock().now();
         Set<Map.Entry<Hash, DatabaseEntry>> entries = _facade.getDataStore().getMapEntries();
         for (Map.Entry<Hash, DatabaseEntry> entry : entries) {

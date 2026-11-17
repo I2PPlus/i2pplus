@@ -679,8 +679,11 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      * we flood to those closest to the key.
      *
      * @param ds the entry to store and flood to the closest floodfill participants
+     * @return the floodfill peers the entry was actually sent to, 0 if there was
+     *         nobody to flood to or every candidate was refused
+     * @since 0.9.36 for NTCP2, returns the send count as of 0.9.72+
      */
-    public void flood(DatabaseEntry ds) {
+    public int flood(DatabaseEntry ds) {
         Hash key = ds.getHash();
         RouterKeyGenerator gen = _context.routerKeyGenerator();
         Hash rkey = gen.getRoutingKey(key);
@@ -696,6 +699,16 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         if (type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {max *= 4;}
         else if (isls2) {max *= 3;}
         List<Hash> peers = sel.selectFloodfillParticipants(rkey, max, getKBuckets());
+        if (peers.isEmpty()) {
+            // The sender is acked either way, so this is the only place the gap
+            // is visible: with no candidate the entry stops here and never
+            // spreads, which is the floodfill failing at its one job.
+            _context.statManager().addRateData("netDb.floodNoPeers", 1);
+            if (_log.shouldWarn()) {
+                _log.warn("Flooding the entry for [" + key.toShortBase32() + "] -> No floodfill candidates");
+            }
+            return 0;
+        }
 
         // todo key cert skip?
         long until = gen.getTimeTillMidnight();
@@ -758,6 +771,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         if (_log.shouldInfo()) {
             _log.info("Flooded the entry for [" + key.toShortBase32() + "] to " + flooded + " of " + peers.size() + " peers");
         }
+        return flooded;
     }
 
     /**
@@ -854,6 +868,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         if (yes && _floodThrottler == null) {
             _floodThrottler = new FloodThrottler();
             _context.statManager().createRateStat("netDb.floodThrottled", "How often we decline to flood the NetDb", "NetworkDatabase", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+            _context.statManager().createRateStat("netDb.floodNoPeers", "How often we had no floodfill peer to flood to", "NetworkDatabase", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
             // following are for HFDSMJ
             _context.statManager().createRequiredRateStat("netDb.storeFloodNew", "Time to flood out a newly received NetDb entry", "NetworkDatabase", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
             _context.statManager().createRateStat("netDb.storeFloodOld", "How often we receive a stale NetDb entry", "NetworkDatabase", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
