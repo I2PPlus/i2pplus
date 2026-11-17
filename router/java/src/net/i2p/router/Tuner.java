@@ -3153,12 +3153,36 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         private boolean _reverted;
 
         /**
+         * Whether the value left in autotune.config is applied on the first
+         * tuning pass after a restart.
+         * <p>
+         * True for everything this router's own load drives: whatever it settled
+         * on last session describes this machine, and starting from it avoids a
+         * slow walk back up through the range. Overridden to false where remote
+         * peers drive the measurement. A transit throttle raised by a flood of
+         * transit requests describes the flood, not the router, and the flood is
+         * not there at boot — so restoring it hands every later session the
+         * loosest limit the worst session ever reached, with nothing left to
+         * decay it. Those params start from the configured value instead, and the
+         * measurements raise them again if the load is real.
+         *
+         * @return true if a persisted value is applied on the first pass
+         * @since 0.9.72+
+         */
+        protected boolean restorePersistedValue() {
+            return true;
+        }
+
+        /**
          * Main tuning loop for this param. Called each tune cycle: every 5s
          * for transport thread pool params, every 15s for all others.
          * <p>Sequence:
          * <ol>
          *   <li>Read observed stat via {@link #getObservedStat}</li>
          *   <li>Record value/stat history for sparklines</li>
+         *   <li>On the first pass only, apply the value left in autotune.config,
+         *       unless {@link #restorePersistedValue()} says the param is
+         *       peer-driven</li>
          *   <li>Skip if auto-tuning disabled or stat unavailable</li>
          *   <li>Auto-revert to default if system health &lt; 0.3</li>
          *   <li>Compute target via {@link #computeTarget}</li>
@@ -3178,11 +3202,17 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 _firstTick = false;
                 int current = getRuntimeValue();
                 if (_initialValue != current) {
-                    if (_log.shouldInfo())
-                        _log.info("Restoring persisted value " + _initialValue + " for " + _name +
-                                  " (current: " + current + ")");
-                    applyValue(_initialValue);
-                    persistValue(_ctx, _initialValue);
+                    if (restorePersistedValue()) {
+                        if (_log.shouldInfo())
+                            _log.info("Restoring persisted value " + _initialValue + " for " + _name +
+                                      " (current: " + current + ")");
+                        applyValue(_initialValue);
+                        persistValue(_ctx, _initialValue);
+                    } else if (_log.shouldInfo()) {
+                        _log.info("Not restoring " + _name + " from autotune.config" +
+                                  " -> Remote peers drive it\n* Persisted: " + _initialValue +
+                                  " * Runtime: " + current);
+                    }
                 }
             }
             if (!_autoTuning)
@@ -8247,6 +8277,73 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     }
 
     /**
+     * Transit usage below this fraction of the cap means the cap is idle, and it
+     * walks back toward the configured value.
+     */
+    private static final double LOW_TRANSIT_UTILIZATION = 0.25;
+    /** Transit usage above this fraction of the cap is worth raising the cap for. */
+    private static final double CAPACITY_HEADROOM_FRACTION = 0.5;
+    /** Transit usage above this fraction of the cap raises it at twice the step. */
+    private static final double CAPACITY_PRESSURE_FRACTION = 0.7;
+    /** Heap pressure above which the transit cap is reduced. */
+    private static final double MEMORY_PRESSURE_REDUCE = 0.9;
+
+    /**
+     * One tuning pass for the cap on the tunnels this router offers for transit.
+     * <p>
+     * The cap is raised when the tunnels actually in use approach it, which is a
+     * peer-driven signal, and it used to be lowered only under heap pressure
+     * above 90%. A router that carried heavy transit once kept the raised cap for
+     * the rest of the session however quiet it became. It now walks back toward
+     * the configured value while transit usage stays well under it — the count is
+     * the ten-minute average, so that is a settled reading and not one quiet
+     * minute. The walk only starts above the configured value and stops there:
+     * the tuner may raise the cap for transit it is carrying and give it back when
+     * that transit goes away, and only heap pressure takes it under the
+     * configured value, to the range minimum.
+     *
+     * @param current the cap as it stands
+     * @param min range minimum, reachable only under heap pressure
+     * @param defaultValue the cap the operator configured
+     * @param max range maximum
+     * @param step size of one move
+     * @param tunnelCount transit tunnels in use, from the ten-minute average
+     * @param networkHealthy true if builds are succeeding
+     * @param congested true if sends have been failing for a long time
+     * @param systemBusy true if the job queue is lagging
+     * @param memPressure used heap over max heap, 0 to 1
+     * @return the value to move the cap to
+     * @since 0.9.72+
+     */
+    static int participatingTunnelsTarget(int current, int min, int defaultValue, int max, int step,
+                                          double tunnelCount, boolean networkHealthy, boolean congested,
+                                          boolean systemBusy, double memPressure) {
+        double countPct = current > 0 ? tunnelCount / current : 0;
+
+        // Transit tunnels are provisioned by peers — max is capacity, not a target.
+        // Scale up when approaching capacity and healthy.
+        if (countPct > CAPACITY_PRESSURE_FRACTION && networkHealthy && !congested && !systemBusy) {
+            return Math.min(max, current + step * 2);
+        }
+        if (countPct > CAPACITY_HEADROOM_FRACTION && networkHealthy && !congested && !systemBusy) {
+            return Math.min(max, current + step);
+        }
+
+        // Heap pressure is the only thing that takes the cap below the configured value
+        if (memPressure > MEMORY_PRESSURE_REDUCE) {
+            return Math.max(min, current - step);
+        }
+
+        // Quiet transit: give back the headroom a busy stretch bought. A cap the
+        // operator set, or one heap pressure took under it, is left where it is.
+        if (countPct < LOW_TRANSIT_UTILIZATION && current > defaultValue) {
+            return Math.max(defaultValue, current - step);
+        }
+
+        return current;
+    }
+
+    /**
      * Max participating tunnels.
      * Master knob for transit capacity.
      */
@@ -8258,6 +8355,19 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   SUB_ROUTER,
 
                   500, 20000, 500, "tunnel.participating InBps", _context);
+        }
+
+        /**
+         * The cap is raised by transit peers asking for tunnels, so a raised cap
+         * in autotune.config records how much transit one session carried, not
+         * what this router can carry. The next session starts from the configured
+         * value and raises it again if the transit is really there.
+         *
+         * @return false
+         * @since 0.9.72+
+         */
+        protected boolean restorePersistedValue() {
+            return false;
         }
 
         protected void applyValue(int value) {
@@ -8295,33 +8405,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 : null;
             double tunnelCount = (avgTunnels != null && avgTunnels.getLastEventCount() > 0)
                 ? avgTunnels.getAverageValue() : 0;
-            double countPct = current > 0 ? tunnelCount / current : 0;
 
             // Cross-refs: buildSuccessRate, sendMessageFailureLifetime, jobLag
             double buildSuccess = getBuildSuccessRate(_context);
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
-            double memPressure = getMemoryPressure();
 
             boolean networkHealthy = Double.isNaN(buildSuccess) || buildSuccess > 0.7;
             boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
             boolean systemBusy = !Double.isNaN(jobLag) && jobLag > 100;
 
-            // Transit tunnels are provisioned by peers — max is capacity, not a target.
-            // Scale up when approaching capacity and healthy.
-            if (countPct > 0.7 && networkHealthy && !congested && !systemBusy) {
-                return Math.min(_max, current + _step * 2);
-            }
-            if (countPct > 0.5 && networkHealthy && !congested && !systemBusy) {
-                return Math.min(_max, current + _step);
-            }
-
-            // Only scale down under extreme memory pressure — never for low utilization
-            if (memPressure > 0.9) {
-                return Math.max(_min, current - _step);
-            }
-
-            return current;
+            return participatingTunnelsTarget(current, _min, _defaultValue, _max, _step, tunnelCount,
+                                              networkHealthy, congested, systemBusy, getMemoryPressure());
         }
     }
 
@@ -15239,130 +15334,205 @@ protected int computeTarget(double observed) {
     }
 
     /**
-     * Tunes the minimum per-participant transit tunnel limit in {@link ParticipatingThrottler}.
-     * Raises when we have capacity (high build success, low CPU), lowers under stress.
+     * How far a raise justified only by what peers ask us to carry may take a
+     * transit limit above the configured value.
+     *
+     * @see #peerDrivenCeiling(int, int)
      */
-    private class ParticipatingThrottleMinParam extends BaseParam {
-        /** Creates the parameter that floors the transit tunnel throttle, in tunnels. */
-        ParticipatingThrottleMinParam() {
-            super("i2p.tunnel.participatingThrottle.minLimit", "Transit throttle min (tunnels)",
-                  SUB_TRANSIT, 20, 500, 4, "tunnel.buildSuccessRate", _context);
+    private static final int PEER_RAISE_CEILING_FACTOR = 2;
+
+    /**
+     * The highest value a peer-driven raise may reach on one of the transit
+     * limits.
+     * <p>
+     * The throttle's accept, reject and drop counts are generated by the peers
+     * being throttled, so "the throttle is rejecting most of what it is asked"
+     * is evidence that peers want more transit, not evidence that we can give it
+     * to them. Read as a reason to raise the allowance with no bound on it, that
+     * is a ratchet a peer drives: ask for more, get rejected, the allowance
+     * rises, ask for more again. The lab left one router with a per-peer
+     * allowance about 3.3 times the shipped one this way. A raise justified by
+     * our own headroom — builds succeeding with nothing queueing — is not
+     * bounded by this, and neither is a param's range maximum.
+     *
+     * @param defaultValue the value the operator configured for this limit
+     * @param hardMax the param's range maximum
+     * @return the ceiling for a raise justified only by peer demand
+     * @since 0.9.72+
+     */
+    static int peerDrivenCeiling(int defaultValue, int hardMax) {
+        return Math.min(hardMax, defaultValue * PEER_RAISE_CEILING_FACTOR);
+    }
+
+    /**
+     * Whether the transit throttle is rejecting most of what it is asked to
+     * accept — the peer-driven signal behind a raise.
+     * <p>
+     * The three counts are event counts, not averages, so they are read with
+     * {@link BaseParam#getAdditionalEventCount}. A window with no throttle
+     * activity at all is not a tight throttle.
+     *
+     * @param accept accepts in the window, NaN if the stat is unavailable
+     * @param reject rejects in the window, NaN if the stat is unavailable
+     * @param drop drops in the window, NaN if the stat is unavailable
+     * @return true if under 30% of the throttle's decisions were accepts
+     * @since 0.9.72+
+     */
+    static boolean transitThrottleIsTight(double accept, double reject, double drop) {
+        if (Double.isNaN(accept) || Double.isNaN(reject) || Double.isNaN(drop)) return false;
+        double total = accept + reject + drop;
+        return total > 0 && accept / total < TIGHT_ACCEPT_RATIO;
+    }
+
+    /** Accept ratio below which the transit throttle counts as tight. */
+    private static final double TIGHT_ACCEPT_RATIO = 0.3;
+
+    /**
+     * One tuning pass for a per-participant transit limit.
+     * <p>
+     * Stress is tested first and it wins. A router that is failing builds,
+     * lagging its job queue or queueing transit bandwidth has nothing to give,
+     * and the pass used to ask the peer-driven question first: a tight throttle
+     * raised the allowance before stress was considered at all, so a flood of
+     * transit requests raised the limit while the router was already overloaded.
+     * A raise that rests only on the tight throttle is held to
+     * {@link #peerDrivenCeiling(int, int)}; a raise resting on our own headroom
+     * may go as far as the range maximum.
+     *
+     * @param current the limit as it stands
+     * @param min range minimum, the floor a stressed router walks down to
+     * @param max range maximum, reachable on our own headroom
+     * @param step size of one move
+     * @param peerCeiling ceiling for a raise resting only on peer demand
+     * @param hasCapacity true if builds succeed with nothing queueing
+     * @param stressed true if builds fail or CPU or bandwidth is queueing
+     * @param tightThrottle true if the throttle is rejecting most requests
+     * @return the value to move the limit to
+     * @since 0.9.72+
+     */
+    static int transitThrottleTarget(int current, int min, int max, int step, int peerCeiling,
+                                     boolean hasCapacity, boolean stressed, boolean tightThrottle) {
+        if (stressed) return Math.max(min, current - step);
+        if (tightThrottle) return Math.min(peerCeiling, current + step);
+        if (hasCapacity) return Math.min(max, current + step);
+        return current;
+    }
+
+    /**
+     * Shared tuning for the three per-participant transit limits in
+     * {@link ParticipatingThrottler} — the minimum, the maximum and the target
+     * percentage. All three are tuned from the same measurements and move
+     * together, so they share the read and the decision, and each supplies only
+     * the getter and setter for the limit it owns.
+     *
+     * @since 0.9.72+
+     */
+    private abstract static class ParticipatingThrottleParam extends BaseParam {
+
+        /** The build success rate all three limits are tuned against. */
+        private static final String THROTTLE_STAT = "tunnel.buildSuccessRate";
+        /** Transit bandwidth queued, in bytes, that counts as pressure. */
+        private static final double BW_QUEUE_PRESSURE = 50000;
+        /** Job queue lag, in ms, that counts as CPU pressure. */
+        private static final double JOB_LAG_PRESSURE = 100;
+        /** Build success percentage above which there is capacity to spare. */
+        private static final double CAPACITY_BUILD_SUCCESS = 90;
+        /** Build success percentage below which the router is stressed. */
+        private static final double STRESS_BUILD_SUCCESS = 70;
+
+        /**
+         * @param name the config key the limit is stored under
+         * @param description the label shown on the Tuner page
+         * @param min range minimum, in the unit the limit is measured in
+         * @param max range maximum, in the unit the limit is measured in
+         * @param step size of one move, in the unit the limit is measured in
+         * @param ctx the router context
+         */
+        ParticipatingThrottleParam(String name, String description, int min, int max, int step,
+                                   RouterContext ctx) {
+            super(name, description, SUB_TRANSIT, min, max, step, THROTTLE_STAT, ctx);
         }
-        protected void applyValue(int value) { ParticipatingThrottler.setParticipatingMinLimit(value); }
-        protected int getRuntimeValue() { return ParticipatingThrottler.getParticipatingMinLimit(); }
+
+        /**
+         * A limit a peer drove up in autotune.config is not carried into the next
+         * session: the throttle starts from the configured value and the
+         * measurements raise it again if the transit load is really there.
+         *
+         * @return false
+         * @since 0.9.72+
+         */
+        protected boolean restorePersistedValue() {
+            return false;
+        }
+
         protected double getObservedStat(RouterContext ctx) {
-            RateStat rs = _context.statManager().getRate(_statName);
+            RateStat rs = _ctx.statManager().getRate(_statName);
             if (rs == null) return Double.NaN;
             Rate rate = rs.getRate(STAT_PERIOD);
             if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
             return rate.getAverageValue();
         }
+
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
+            double jobLag = getAdditionalStat(_ctx, "jobQueue.jobLag");
             // Note: throttleParticipating{Accept,Reject,Drop} are event-count stats
             //       (addRateData(..., 1)); use getAdditionalEventCount() for raw counts.
-            double accept = getAdditionalEventCount(_context, "tunnel.throttleParticipatingAccept");
-            double reject = getAdditionalEventCount(_context, "tunnel.throttleParticipatingReject");
-            double drop = getAdditionalEventCount(_context, "tunnel.throttleParticipatingDrop");
-            double bwQueue = getAdditionalStat(_context, "bwLimiter.participatingBandwidthQueue");
-            boolean bwPressure = !Double.isNaN(bwQueue) && bwQueue > 50000;
-            boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
-            boolean hasCapacity = !Double.isNaN(observed) && observed > 90 && !cpuPressure && !bwPressure;
-            boolean stressed = (!Double.isNaN(observed) && observed < 70) || cpuPressure || bwPressure;
-            double totalThrottle = (!Double.isNaN(accept) && !Double.isNaN(reject) && !Double.isNaN(drop))
-                ? accept + reject + drop : Double.NaN;
-            double acceptRatio = !Double.isNaN(totalThrottle) && totalThrottle > 0
-                ? accept / totalThrottle : Double.NaN;
-            boolean tightThrottle = !Double.isNaN(acceptRatio) && acceptRatio < 0.3;
-            // Don't decrease when throttle is already tight — that's the feedback loop
-            if (tightThrottle) return Math.min(_max, current + _step);
-            if (hasCapacity) return Math.min(_max, current + _step);
-            if (stressed) return Math.max(_min, current - _step);
-            return current;
+            double accept = getAdditionalEventCount(_ctx, "tunnel.throttleParticipatingAccept");
+            double reject = getAdditionalEventCount(_ctx, "tunnel.throttleParticipatingReject");
+            double drop = getAdditionalEventCount(_ctx, "tunnel.throttleParticipatingDrop");
+            double bwQueue = getAdditionalStat(_ctx, "bwLimiter.participatingBandwidthQueue");
+            boolean bwPressure = !Double.isNaN(bwQueue) && bwQueue > BW_QUEUE_PRESSURE;
+            boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > JOB_LAG_PRESSURE;
+            boolean hasCapacity = !Double.isNaN(observed) && observed > CAPACITY_BUILD_SUCCESS &&
+                                  !cpuPressure && !bwPressure;
+            boolean stressed = (!Double.isNaN(observed) && observed < STRESS_BUILD_SUCCESS) ||
+                               cpuPressure || bwPressure;
+            boolean tightThrottle = transitThrottleIsTight(accept, reject, drop);
+            return transitThrottleTarget(current, _min, _max, _step,
+                                         peerDrivenCeiling(_defaultValue, _max),
+                                         hasCapacity, stressed, tightThrottle);
         }
+    }
+
+    /**
+     * Tunes the minimum per-participant transit tunnel limit in {@link ParticipatingThrottler}.
+     * Raises when we have capacity (high build success, low CPU), lowers under stress.
+     */
+    private class ParticipatingThrottleMinParam extends ParticipatingThrottleParam {
+        /** Creates the parameter that floors the transit tunnel throttle, in tunnels. */
+        ParticipatingThrottleMinParam() {
+            super("i2p.tunnel.participatingThrottle.minLimit", "Transit throttle min (tunnels)",
+                  20, 500, 4, _context);
+        }
+        protected void applyValue(int value) { ParticipatingThrottler.setParticipatingMinLimit(value); }
+        protected int getRuntimeValue() { return ParticipatingThrottler.getParticipatingMinLimit(); }
     }
 
     /**
      * Tunes the maximum per-participant transit tunnel limit in ParticipatingThrottler.
      */
-    private class ParticipatingThrottleMaxParam extends BaseParam {
+    private class ParticipatingThrottleMaxParam extends ParticipatingThrottleParam {
         /** Creates the parameter that caps the transit tunnel throttle, in tunnels. */
         ParticipatingThrottleMaxParam() {
             super("i2p.tunnel.participatingThrottle.maxLimit", "Transit throttle max (tunnels)",
-                  SUB_TRANSIT, 50, 1000, 8, "tunnel.buildSuccessRate", _context);
+                  50, 1000, 8, _context);
         }
         protected void applyValue(int value) { ParticipatingThrottler.setParticipatingMaxLimit(value); }
         protected int getRuntimeValue() { return ParticipatingThrottler.getParticipatingMaxLimit(); }
-        protected double getObservedStat(RouterContext ctx) {
-            RateStat rs = _context.statManager().getRate(_statName);
-            if (rs == null) return Double.NaN;
-            Rate rate = rs.getRate(STAT_PERIOD);
-            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
-            return rate.getAverageValue();
-        }
-        protected int computeTarget(double observed) {
-            int current = getRuntimeValue();
-            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
-            double accept = getAdditionalEventCount(_context, "tunnel.throttleParticipatingAccept");
-            double reject = getAdditionalEventCount(_context, "tunnel.throttleParticipatingReject");
-            double drop = getAdditionalEventCount(_context, "tunnel.throttleParticipatingDrop");
-            double bwQueue = getAdditionalStat(_context, "bwLimiter.participatingBandwidthQueue");
-            boolean bwPressure = !Double.isNaN(bwQueue) && bwQueue > 50000;
-            boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
-            boolean hasCapacity = !Double.isNaN(observed) && observed > 90 && !cpuPressure && !bwPressure;
-            boolean stressed = (!Double.isNaN(observed) && observed < 70) || cpuPressure || bwPressure;
-            double totalThrottle = (!Double.isNaN(accept) && !Double.isNaN(reject) && !Double.isNaN(drop))
-                ? accept + reject + drop : Double.NaN;
-            double acceptRatio = !Double.isNaN(totalThrottle) && totalThrottle > 0
-                ? accept / totalThrottle : Double.NaN;
-            boolean tightThrottle = !Double.isNaN(acceptRatio) && acceptRatio < 0.3;
-            if (tightThrottle) return Math.min(_max, current + _step);
-            if (hasCapacity) return Math.min(_max, current + _step);
-            if (stressed) return Math.max(_min, current - _step);
-            return current;
-        }
     }
 
     /**
      * Tunes the percentage-based transit tunnel limit in ParticipatingThrottler.
      */
-    private class ParticipatingThrottlePctParam extends BaseParam {
+    private class ParticipatingThrottlePctParam extends ParticipatingThrottleParam {
         /** Creates the parameter that tunes the transit throttle target in percent. */
         ParticipatingThrottlePctParam() {
             super("i2p.tunnel.participatingThrottle.percentLimit", "Transit throttle target (%)",
-                  SUB_TRANSIT, 5, 100, 1, "tunnel.buildSuccessRate", _context);
+                  5, 100, 1, _context);
         }
         protected void applyValue(int value) { ParticipatingThrottler.setParticipatingPctLimit(value); }
         protected int getRuntimeValue() { return ParticipatingThrottler.getParticipatingPctLimit(); }
-        protected double getObservedStat(RouterContext ctx) {
-            RateStat rs = _context.statManager().getRate(_statName);
-            if (rs == null) return Double.NaN;
-            Rate rate = rs.getRate(STAT_PERIOD);
-            if (rate == null || rate.getLastEventCount() == 0) return Double.NaN;
-            return rate.getAverageValue();
-        }
-        protected int computeTarget(double observed) {
-            int current = getRuntimeValue();
-            double jobLag = getAdditionalStat(_context, "jobQueue.jobLag");
-            double accept = getAdditionalEventCount(_context, "tunnel.throttleParticipatingAccept");
-            double reject = getAdditionalEventCount(_context, "tunnel.throttleParticipatingReject");
-            double drop = getAdditionalEventCount(_context, "tunnel.throttleParticipatingDrop");
-            double bwQueue = getAdditionalStat(_context, "bwLimiter.participatingBandwidthQueue");
-            boolean bwPressure = !Double.isNaN(bwQueue) && bwQueue > 50000;
-            boolean cpuPressure = !Double.isNaN(jobLag) && jobLag > 100;
-            boolean hasCapacity = !Double.isNaN(observed) && observed > 90 && !cpuPressure && !bwPressure;
-            boolean stressed = (!Double.isNaN(observed) && observed < 70) || cpuPressure || bwPressure;
-            double totalThrottle = (!Double.isNaN(accept) && !Double.isNaN(reject) && !Double.isNaN(drop))
-                ? accept + reject + drop : Double.NaN;
-            double acceptRatio = !Double.isNaN(totalThrottle) && totalThrottle > 0
-                ? accept / totalThrottle : Double.NaN;
-            boolean tightThrottle = !Double.isNaN(acceptRatio) && acceptRatio < 0.3;
-            if (tightThrottle) return Math.min(_max, current + _step);
-            if (hasCapacity) return Math.min(_max, current + _step);
-            if (stressed) return Math.max(_min, current - _step);
-            return current;
-        }
     }
 
     /**
