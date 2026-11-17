@@ -96,8 +96,16 @@ public class RouterInfo extends DatabaseEntry {
     public static final char CAPABILITY_HIDDEN = 'H';
     /** Most addresses one router info may carry. */
     private static final int MAX_ADDRESSES = 16;
-    /** Most introducers a floodfill will return. */
-    private static final int MAX_INTRODUCERS = 5;
+
+    /**
+     * The message of the {@link DataFormatException} thrown when a router info
+     * does not verify its own signature. A transport that catches a parse
+     * failure matches on it to tell a bad signature from a bad format - only the
+     * first says anything about the peer that sent it.
+     *
+     * @since 0.9.72+
+     */
+    public static final String BAD_SIGNATURE_MESSAGE = "BAD RouterInfo signature";
 
     /**
      * All legit RIs are currently under 2KB.
@@ -635,16 +643,11 @@ public class RouterInfo extends DatabaseEntry {
         int numPeers = din.read();
         if (numPeers <= 0) {_peers = null;}
         else {
+            // The spec requires this list to be empty, and nothing here uses it,
+            // so a peer that fills it is bounded only by MAX_UNCOMPRESSED_SIZE -
+            // 4 KB of router info cannot hold more than about 120 32-byte hashes,
+            // well under the 255 this one byte can name.
             _peers = new HashSet<>(numPeers);
-            if (numPeers > MAX_INTRODUCERS) {
-                if (_identity != null) {
-                    Hash h = _identity.getHash();
-                    if (log.shouldWarn()) {
-                        log.warn("Warning! [" + h.toShortBase64() + "] has too many introducers (" + numPeers + ")");
-                    }
-                }
-                throw new DataFormatException("Too many introducers");
-            }
             for (int i = 0; i < numPeers; i++) {
                 Hash peerIdentityHash = new Hash();
                 peerIdentityHash.readBytes(din);
@@ -665,7 +668,7 @@ public class RouterInfo extends DatabaseEntry {
                 _isValid = DSAEngine.getInstance().verifySignature(_signature, hash, _identity.getSigningPublicKey());
                 _validated = true;
             } else {doValidate();} // doValidate will log
-            if (!_isValid) {throw new DataFormatException("BAD RouterInfo signature");}
+            if (!_isValid) {throw new DataFormatException(BAD_SIGNATURE_MESSAGE);}
         }
     }
 

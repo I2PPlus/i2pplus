@@ -9,12 +9,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.i2p.I2PAppContext;
+import net.i2p.crypto.DSAEngine;
 import net.i2p.crypto.KeyGenerator;
+import net.i2p.crypto.SigType;
 import net.i2p.data.Certificate;
 import net.i2p.data.DataFormatException;
+import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
+import net.i2p.data.KeyCertificate;
 import net.i2p.data.PublicKey;
+import net.i2p.data.Signature;
+import net.i2p.data.SigningPrivateKey;
 import net.i2p.data.SigningPublicKey;
+import net.i2p.data.SimpleDataStructure;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.i2np.I2NPMessageException;
 import net.i2p.data.router.RouterIdentity;
@@ -837,5 +844,60 @@ public class SSU2PayloadTest {
         } catch (DataFormatException e) {
             assertSame(dfe, e);
         }
+    }
+
+    /**
+     * A router info that is signed correctly but cannot be parsed — here, one
+     * announcing more addresses than the format allows — comes back marked with a
+     * publication date of -1. That marker is what {@code InboundEstablishState2
+     * .gotRI} turns into a blocklisted address and, while the publication-date
+     * ban is on, a 24-hour ban. Before it acted on the marker the peer was only
+     * disconnected, with no counter and no ban, and came back on the next packet.
+     *
+     * <p>The bytes are assembled by hand because no RouterInfo field combination
+     * produces something its own reader rejects. The signing key is Ed25519: the
+     * recovery path splits the signature off by {@code SigType.getSigLen()}, and
+     * only the fixed-size signature types have a signature that long.
+     *
+     * @throws Exception if the keypair generation or the byte output fails
+     */
+    @Test
+    public void testRecoverRouterInfoMarksASignedUnparseableRI() throws Exception {
+        KeyGenerator kg = KeyGenerator.getInstance();
+        Object[] enc = kg.generatePKIKeypair();
+        SimpleDataStructure[] signing = kg.generateSigningKeys(SigType.EdDSA_SHA512_Ed25519);
+        SigningPublicKey pub = (SigningPublicKey) signing[0];
+        SigningPrivateKey priv = (SigningPrivateKey) signing[1];
+
+        RouterIdentity ident = new RouterIdentity();
+        ident.setCertificate(KeyCertificate.ELG_Ed25519_CERT);
+        ident.setPublicKey((PublicKey) enc[0]);
+        ident.setSigningPublicKey(pub);
+        // The signing key slot is 128 bytes wide whatever the key type
+        ident.setPadding(new byte[SigningPublicKey.KEYSIZE_BYTES - pub.length()]);
+
+        ByteArrayOutputStream data = new ByteArrayOutputStream();
+        ident.writeBytes(data);
+        DataHelper.writeLong(data, 8, System.currentTimeMillis());
+        data.write((byte) 17);
+        DataHelper.writeLong(data, 2, 0);
+        byte[] signed = data.toByteArray();
+        Signature sig = DSAEngine.getInstance().sign(signed, priv);
+        ByteArrayOutputStream all = new ByteArrayOutputStream();
+        all.write(signed);
+        sig.writeBytes(all);
+        byte[] bytes = all.toByteArray();
+
+        try {
+            new RouterInfo().readBytes(new ByteArrayInputStream(bytes), true);
+            fail("expected the address count to be rejected");
+        } catch (DataFormatException dfe) {
+            assertTrue(dfe.getMessage(), dfe.getMessage().contains("Too many addresses"));
+        }
+
+        RouterInfo recovered = SSU2Payload.recoverRouterInfo(CTX, new ByteArrayInputStream(bytes),
+                                                             new DataFormatException("parse failed"));
+        assertEquals(-1, recovered.getPublished());
+        assertEquals(ident.calculateHash(), recovered.getIdentity().calculateHash());
     }
 }

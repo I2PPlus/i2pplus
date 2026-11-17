@@ -339,7 +339,16 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         if (isHandshake) {throw new DataFormatException("RouterInfo in Session Request");}
         if (_receivedUnconfirmedIdentity != null) {throw new DataFormatException("Duplicate RouterInfo in SessionConfirmed");}
         _receivedUnconfirmedIdentity = ri.getIdentity();
-        if (ri.getPublished() < 0) {throw new RIException("Invalid publication date in RouterInfo", REASON_BANNED);}
+        if (ri.getPublished() < 0) {
+            // The payload parser marks an RI with published = -1 only after it
+            // has verified the signature over the wire bytes, so the identity is
+            // as trustworthy as a parsed RI's. This is also the only place the
+            // session can be dropped for it: a recovered RI carries no address,
+            // so the address selection below would fail first and lose the ban.
+            Hash h = _receivedUnconfirmedIdentity.calculateHash();
+            boolean isBanned = _context.banlist().isBanlisted(h);
+            throw rejectPublicationDate(ri, h, Addresses.toString(_aliceIP, _alicePort), isBanned, true);
+        }
 
         // try to find the right address, because we need the MTU
         boolean isIPv6 = _aliceIP.length == 16;
@@ -642,27 +651,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         }
 
         if (ri.getPublished() < 0) {
-            // RI format error, signature was verified, so we can take action
-            if (ri.verifySignature()) {
-                _context.blocklist().add(_aliceIP);
-            }
-            // The RouterInfo is unusable either way, so the session is always
-            // dropped. Whether the verified identity is also banlisted is the
-            // operator's call - see the publication-date toggle on /configban.
-            boolean ban = _context.banlist().isPubDateBanEnabled();
-            if (ban) {
-                _context.banlist().banlistRouter(h, "Invalid publication date",
-                                                 null, null, _context.clock().now() + 24*60*60*1000L);
-                _banLogger.logBan(h, ipPort, "Invalid publication date", 24*60*60*1000L, ri);
-            }
-            if (ban && _log.shouldWarn() && !isBanned) {
-                _log.warn("Banning for 24h and disconnecting from Router [" +
-                          h.toShortBase64() + "] -> Invalid publication date");
-            } else if (!ban && _log.shouldInfo()) {
-                _log.info("Disconnecting from Router [" + h.toShortBase64() +
-                          "] -> Invalid publication date");
-            }
-            throw new RIException("Invalid publication date in RouterInfo", REASON_BANNED);
+            // A parsed RI that carries a negative date: the signature check
+            // re-serialises it, so it works and decides the blocklist.
+            throw rejectPublicationDate(ri, h, ipPort, isBanned, ri.verifySignature());
         }
 
         if (mismatchMessage != null) {
@@ -729,6 +720,53 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             _context.commSystem().forceDisconnect(h, "Old and slow (" + version + ")");
             throw new RIException("Old and slow: " + h, REASON_BANNED);
         }
+    }
+
+    /** How long a router info with an unusable publication date bans the identity. */
+    private static final long PUB_DATE_BAN_DURATION = 24 * 60 * 60 * 1000L;
+
+    /**
+     * Drops the session over a router info whose publication date is not
+     * usable: a negative date in a parsed router info, or the -1 the SSU2
+     * payload parser puts on one whose signature verified but whose body did not
+     * parse. The session is always dropped, because the router info is unusable
+     * either way; the identity is banlisted only while the publication-date
+     * toggle on /configban is on, and the address is blocklisted whenever the
+     * signature was checked over the bytes the peer actually sent.
+     *
+     * <p>Both call sites need the same policy. The parse-recovery path used to
+     * throw here from {@link #gotRI} with no ban at all, because a recovered
+     * router info carries no address and the address selection below would fail
+     * first - so the peer that sent a signed router info we could not parse was
+     * disconnected, counted nothing, and came back next packet.
+     *
+     * @param ri the router info being rejected
+     * @param h its identity hash
+     * @param ipPort the peer's address, for the ban log
+     * @param isBanned whether the hash is already banlisted, so the log does not repeat it
+     * @param signatureVerified true if the signature was verified over the wire bytes
+     * @return the exception the caller throws
+     * @since 0.9.72+
+     */
+    private RIException rejectPublicationDate(RouterInfo ri, Hash h, String ipPort, boolean isBanned,
+                                              boolean signatureVerified) {
+        if (signatureVerified) {
+            _context.blocklist().add(_aliceIP);
+        }
+        boolean ban = _context.banlist().isPubDateBanEnabled();
+        if (ban) {
+            _context.banlist().banlistRouter(h, "Invalid publication date", null, null,
+                                             _context.clock().now() + PUB_DATE_BAN_DURATION);
+            _banLogger.logBan(h, ipPort, "Invalid publication date", PUB_DATE_BAN_DURATION, ri);
+        }
+        if (ban && _log.shouldWarn() && !isBanned) {
+            _log.warn("Banning for 24h and disconnecting from Router [" +
+                      h.toShortBase64() + "] -> Invalid publication date");
+        } else if (!ban && _log.shouldInfo()) {
+            _log.info("Disconnecting from Router [" + h.toShortBase64() +
+                      "] -> Invalid publication date");
+        }
+        return new RIException("Invalid publication date in RouterInfo", REASON_BANNED);
     }
 
     /**

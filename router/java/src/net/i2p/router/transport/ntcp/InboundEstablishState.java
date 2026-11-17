@@ -606,15 +606,21 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 if (_log.shouldInfo()) {
                     _log.info("BAD Establishment handshake message #3 payload -> " + dfe.getMessage());
                 }
-                // Probably RI signature failure - setDataPhase() will send termination
-                if (_msg3p2FailReason < 0) {
-                    _msg3p2FailReason = NTCPConnection.REASON_SIGFAIL;
+                // gotRI() names its own reason for every validation failure, so an
+                // unset reason here means the router info itself did not parse.
+                // Only a signature failure in that parse says anything about the
+                // peer; a format error is a fork's serializer or a truncated
+                // block, and blocking the address for that shuts out an honest
+                // router that changes its mind about the format next time.
+                if (_msg3p2FailReason < 0)
+                    _msg3p2FailReason = msg3PayloadFailReason(dfe.getMessage());
+                if (_msg3p2FailReason == NTCPConnection.REASON_SIGFAIL) {
                     // Buggy/forked and very persistent i2pd
                     // So next time we will not accept the con from this IP, rather than doing the whole handshake
                     byte[] ip = _con.getRemoteIP();
                     if (ip != null) {_context.blocklist().add(ip);}
+                    _context.statManager().addRateData("ntcp.invalidInboundSignature", 1);
                 }
-                _context.statManager().addRateData("ntcp.invalidInboundSignature", 1);
             } catch (I2NPMessageException ime) {
                 // shouldn't happen, no I2NP msgs in msg3p2
                 if (_log.shouldInfo()) {
@@ -630,6 +636,29 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             setDataPhase(src);
         }
     // TODO check for remaining data and log/throw
+    }
+
+    /**
+     * Why a message #3 payload failed when nothing in the router info
+     * validation code named a reason — that is, the router info itself did not
+     * parse.
+     *
+     * <p>A bad signature and a bad format both arrive as the same checked
+     * exception out of {@link RouterInfo#readBytes}, and the old code called
+     * every one of them a signature failure and blocklisted the sender's
+     * address. A fork that serialises the router info's peer list differently,
+     * or a block truncated by a MTU, is not a router forging its identity, and
+     * the blocklist outlives the connection.
+     *
+     * @param dfeMessage the parse failure's message, possibly null
+     * @return {@link NTCPConnection#REASON_SIGFAIL} for a router info that did
+     *         not verify its own signature, {@link NTCPConnection#REASON_FRAMING}
+     *         for anything else the parse rejected
+     * @since 0.9.72+
+     */
+    static int msg3PayloadFailReason(String dfeMessage) {
+        return RouterInfo.BAD_SIGNATURE_MESSAGE.equals(dfeMessage) ?
+               NTCPConnection.REASON_SIGFAIL : NTCPConnection.REASON_FRAMING;
     }
 
     /**
