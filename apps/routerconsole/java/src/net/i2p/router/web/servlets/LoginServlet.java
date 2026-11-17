@@ -19,7 +19,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpSession;
 import net.i2p.I2PAppContext;
 import net.i2p.router.Router;
@@ -104,7 +103,7 @@ public class LoginServlet extends HttpServlet {
             return;
         }
 
-        String sessionToken = getSessionCookie(req);
+        String sessionToken = SessionManager.getSessionCookie(req);
         String username = SessionManager.getInstance().validateSession(sessionToken);
         if (username != null) {
             resp.sendRedirect(req.getContextPath() + "/");
@@ -597,23 +596,6 @@ public class LoginServlet extends HttpServlet {
             }
         }
         return result;
-    }
-
-    /**
-     * Returns the persisted session cookie value.
-     *
-     * @param req the request to read the cookie from
-     * @return the cookie value, null if absent
-     */
-    private String getSessionCookie(HttpServletRequest req) {
-        Cookie[] cookies = req.getCookies();
-        if (cookies == null) return null;
-        for (Cookie cookie : cookies) {
-            if (SessionManager.SESSION_COOKIE_NAME.equals(cookie.getName())) {
-                return cookie.getValue();
-            }
-        }
-        return null;
     }
 
     /**

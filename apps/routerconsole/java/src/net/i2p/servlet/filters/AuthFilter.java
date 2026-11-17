@@ -115,7 +115,7 @@ if ("/prefs".equals(path)) {
             return;
         }
 
-        String sessionToken = getSessionCookie(req);
+        String sessionToken = SessionManager.getSessionCookie(req);
         String username = SessionManager.getInstance().validateSession(sessionToken);
 
         if (username == null) {
@@ -269,23 +269,6 @@ if ("/prefs".equals(path)) {
             }
         }
         return false;
-    }
-
-    /**
-     * Returns the session cookie of the request.
-     *
-     * @param req the request to check
-     * @return the session id, null if absent
-     */
-    private String getSessionCookie(HttpServletRequest req) {
-        Cookie[] cookies = req.getCookies();
-        if (cookies == null) return null;
-        for (Cookie cookie : cookies) {
-            if (SessionManager.SESSION_COOKIE_NAME.equals(cookie.getName())) {
-                return cookie.getValue();
-            }
-        }
-        return null;
     }
 
     /**

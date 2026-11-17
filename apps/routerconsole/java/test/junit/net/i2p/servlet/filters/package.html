@@ -5,14 +5,18 @@
 </head>
 <body>
 <p>
-    The path the console login filter decides on. The filter used to match
-    public-page prefixes against the request target as the client sent it, while
-    the container decodes that path and resolves {@code .} and {@code ..} before
-    it maps the request, so a traversal segment written after a public prefix
-    passed the filter and named a protected page. The canonicaliser and the
-    prefix match are plain statics or a no-arg instance, so they are tested
-    without a running router or a servlet container. Run by <code>ant test</code>
-    in <code>apps/routerconsole</code>.
+    The decisions the console's login path makes about a request.
+    {@code AuthFilterPathTest} covers the path the login filter decides on: the
+    filter used to match public-page prefixes against the request target as the
+    client sent it, while the container decodes that path and resolves
+    {@code .} and {@code ..} before it maps the request, so a traversal segment
+    written after a public prefix passed the filter and named a protected page.
+    {@code SessionCookieDecisionTest} covers how the session token is read out of
+    the {@code Cookie} header, where the container's own parser lets a quoted
+    cookie value run across the {@code ;} separators and swallow the token.
+    Both are plain statics or a no-arg instance, so they are tested without a
+    running router or a servlet container. Run by <code>ant test</code> in
+    <code>apps/routerconsole</code>.
 </p>
 </body>
 </html>

@@ -11,7 +11,6 @@ import net.i2p.router.web.RouterConsoleRunner;
 import net.i2p.servlet.filters.SessionManager;
 import net.i2p.util.Log;
 import java.util.Map.Entry;
-import javax.servlet.http.Cookie;
 
 /**
  * Lightweight session validation endpoint for AJAX polling.
@@ -40,7 +39,7 @@ public class SessionCheckServlet extends HttpServlet {
             return;
         }
 
-        String token = getSessionCookie(req);
+        String token = SessionManager.getSessionCookie(req);
         String username = SessionManager.getInstance().validateSession(token);
         if (username != null) {
             resp.setStatus(HttpServletResponse.SC_OK);
@@ -75,22 +74,5 @@ public class SessionCheckServlet extends HttpServlet {
             }
         }
         return false;
-    }
-
-    /**
-     * The session cookie the request carries.
-     *
-     * @param req the request to read
-     * @return the cookie value, or null if absent
-     */
-    private String getSessionCookie(HttpServletRequest req) {
-        Cookie[] cookies = req.getCookies();
-        if (cookies == null) return null;
-        for (Cookie cookie : cookies) {
-            if (SessionManager.SESSION_COOKIE_NAME.equals(cookie.getName())) {
-                return cookie.getValue();
-            }
-        }
-        return null;
     }
 }

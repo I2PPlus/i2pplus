@@ -6,6 +6,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.security.SecureRandom;
+import javax.servlet.http.HttpServletRequest;
 import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
 
@@ -42,8 +43,8 @@ public class SessionManager {
      * so a browser that enforces the cookie grammar drops a cookie called
      * I2P+AUTH: the console then hands out a fresh login session on every
      * request. It is also kept distinct from the servlet session cookie
-     * I2PSESSIONID, which every webapp on the host shares (see
-     * apps/routerconsole/jsp/web.xml) - one name for both would let a login
+     * I2PSESSIONID, which every webapp on the host shares - see
+     * apps/routerconsole/jsp/web.xml - one name for both would let a login
      * overwrite the session the CSRF nonces are recorded in.
      */
     public static final String SESSION_COOKIE_NAME = "I2PAUTH";
@@ -51,6 +52,54 @@ public class SessionManager {
      * Session attribute under which the console stores the logged-in username.
      */
     public static final String SESSION_ATTR_USER = "user";
+
+    /**
+     * The session token the request carries, read out of the Cookie header
+     * itself rather than through the container's cookie parser.
+     * <p>
+     * Jetty 9.3.30, the console's container, treats a <code>"</code> at the start
+     * of a cookie value as opening a quoted string that runs across the
+     * <code>;</code> separators to the next <code>"</code> (CVE-2023-26049).
+     * Browsers do not scope cookies by port, so a page on any other port of
+     * 127.0.0.1 - a previewed eepsite, a standalone Snark, a local dev server -
+     * that sets <code>a="b</code> and <code>c=d"</code> arrives beside the
+     * console's cookie and swallows the token into its own value, and the console
+     * loses the session. RFC 6265 ends a value at the separator and quotes
+     * nothing, which is what this does: a <code>"</code> is an ordinary character,
+     * so an unterminated quote costs one cookie here rather than the header.
+     *
+     * @param req the request to read
+     * @return the session token, or null if the request carries none
+     * @since 0.9.72+
+     */
+    public static String getSessionCookie(HttpServletRequest req) {
+        return sessionCookieFrom(req.getHeader("Cookie"));
+    }
+
+    /**
+     * The token in a Cookie header, one cookie per <code>;</code>, whatever the
+     * values are quoted with. Split out from {@link #getSessionCookie} so it can
+     * be tested without a request.
+     *
+     * @param header the raw Cookie header, or null if the request sent none
+     * @return the session token, or null if the header carries none
+     * @since 0.9.72+
+     */
+    static String sessionCookieFrom(String header) {
+        if (header == null) {return null;}
+        int len = header.length();
+        int start = 0;
+        while (start <= len) {
+            int semi = header.indexOf(';', start);
+            int end = semi < 0 ? len : semi;
+            int eq = header.indexOf('=', start);
+            if (eq >= 0 && eq < end && SESSION_COOKIE_NAME.equals(header.substring(start, eq).trim())) {
+                return header.substring(eq + 1, end).trim();
+            }
+            start = end + 1;
+        }
+        return null;
+    }
 
     /** Builds the singleton and starts the cleanup. */
     private SessionManager() {
