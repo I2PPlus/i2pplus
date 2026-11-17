@@ -245,13 +245,22 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
                 boolean shouldPreserve = _util.getPreserveFileNames();
                 if (baseFile == null) {
                     String base = meta.getName();
-                    if (!shouldPreserve) {
+                    // Preserve mode takes the author's name as given, but four of
+                    // them are directions rather than names - ".", "..", " " and the
+                    // empty string - and a name may carry a separator in it. Either
+                    // one puts the download outside the download directory, and on a
+                    // router the parent of that directory is the config directory the
+                    // router reads at every start.
+                    if (!shouldPreserve || !isSingleComponentName(base)) {
                         base = Storage.filterName(base);
                     }
                     if (_util.getFilesPublic()) {
                         baseFile = new File(rootDataDir, base);
                     } else {
                         baseFile = new SecureFile(rootDataDir, base);
+                    }
+                    if (!isDirectChild(baseFile, rootDataDir)) {
+                        throw new IOException("\n* Torrent name is not a name in the download directory: " + base);
                     }
                 }
                 storage = new Storage(_util, baseFile, meta, slistener, shouldPreserve);
@@ -263,10 +272,15 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
                     storage.check();
                 }
             } catch (IOException ioe) {
-                try {
-                    storage.close();
-                    } catch (IOException ioee) {
-                    _log.log(Log.WARN, "Error closing storage after failure", ioee);
+                // The name check above can fail before any storage exists, and a
+                // Storage constructor that throws leaves the field null too, so the
+                // close is guarded rather than assumed.
+                if (storage != null) {
+                    try {
+                        storage.close();
+                        } catch (IOException ioee) {
+                        _log.log(Log.WARN, "Error closing storage after failure", ioee);
+                    }
                 }
                 fatal("Could not check or create files for " + getBaseInfo(), ioe);
             }
@@ -1574,6 +1588,43 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      */
     static boolean usesTorrentDestination(boolean multiDest, String name, File dataDir) {
         return multiDest && !isLookupTorrent(name, dataDir);
+    }
+
+    /**
+     * Whether a torrent author's own name can be used as the data directory name
+     * exactly as written: one path component, and not one of the four names that
+     * are directions rather than names — the empty string, " ", "." and "..". The
+     * metainfo name is chosen by whoever made the torrent and, in preserve-original-
+     * names mode, is used as given, so a torrent named ".." downloads into the
+     * parent of the download directory — on a router, the config directory it reads
+     * at every start.
+     *
+     * @param base the name the metainfo carries, may be null
+     * @return true if the name is a single component that names one directory
+     * @since 0.9.72+
+     */
+    static boolean isSingleComponentName(String base) {
+        if (base == null || base.length() == 0 || base.equals(".") ||
+            base.equals("..") || base.equals(" ")) {
+            return false;
+        }
+        return base.indexOf('/') < 0 && base.indexOf('\\') < 0;
+    }
+
+    /**
+     * Whether a built data path still sits directly inside the download directory,
+     * resolved past any symlinks. The name is author-chosen, so this is the check
+     * that does not have to enumerate everything a name may contain.
+     *
+     * @param baseFile the data path built for the torrent
+     * @param rootDataDir the configured download directory
+     * @return true if the canonical parent of baseFile is the canonical rootDataDir
+     * @throws IOException if either path cannot be resolved
+     * @since 0.9.72+
+     */
+    static boolean isDirectChild(File baseFile, File rootDataDir) throws IOException {
+        File parent = baseFile.getCanonicalFile().getParentFile();
+        return parent != null && parent.equals(rootDataDir.getCanonicalFile());
     }
 
     /**
