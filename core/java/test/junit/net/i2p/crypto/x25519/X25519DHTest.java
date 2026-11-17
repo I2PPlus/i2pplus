@@ -205,4 +205,38 @@ public class X25519DHTest {
         assertNotNull(sk);
         assertEquals(32, sk.getData().length);
     }
+
+    /**
+     * A low-order public key is rejected even with bit 255 clear, which is the
+     * form a peer can send it in: the transports check only that bit before the
+     * Diffie-Hellman runs, so the rejection has to come out of the DH itself.
+     * Zero, one and p-1 all give an all-zero shared secret.
+     */
+    @Test
+    public void lowOrderPublicKeyIsRejected() {
+        byte[] privData = new byte[32];
+        for (int i = 0; i < 32; i++)
+            privData[i] = (byte) (i * 7 + 3);
+        privData[0] &= 0xf8;
+        privData[31] &= 0x7f;
+        privData[31] |= 0x40;
+        PrivateKey priv = new PrivateKey(TYPE, privData);
+        byte[][] lowOrder = new byte[3][];
+        lowOrder[0] = new byte[32];
+        lowOrder[1] = new byte[32];
+        lowOrder[1][0] = 1;
+        lowOrder[2] = new byte[32];
+        java.util.Arrays.fill(lowOrder[2], (byte) 0xff);
+        lowOrder[2][0] = (byte) 0xec;
+        lowOrder[2][31] = 0x7f;
+        for (byte[] data : lowOrder) {
+            assertEquals("bit 255 is clear, so the transport check passes", 0, data[31] & 0x80);
+            try {
+                X25519DH.dh(priv, new PublicKey(TYPE, data));
+                fail("No exception for a low-order public key");
+            } catch (IllegalArgumentException iae) {
+                // expected, and unchecked - see the SSU2 establishment sites
+            }
+        }
+    }
 }

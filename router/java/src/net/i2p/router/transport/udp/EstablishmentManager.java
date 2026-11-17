@@ -1546,9 +1546,15 @@ public class EstablishmentManager {
                     return;
                 }
             }
+            // Curve25519.eval rejects a low-order X25519 point with an
+            // IllegalArgumentException, and five of those points pass the
+            // transport's bit-255 check, so a peer can put one in its ephemeral
+            // key and reach it here. Left uncaught it escapes to the packet
+            // handler's catch-all, which prints an ERROR and a stack trace per
+            // packet and counts nothing.
             try {
                 state = new InboundEstablishState2(_context, _transport, packet);
-            } catch (GeneralSecurityException gse) {
+            } catch (GeneralSecurityException | IllegalArgumentException gse) {
                 if (from != null && !isPeerBanned(from)) {
                     // Debug, not warn: a peer sending an unparseable Session
                     // Request is remote junk, and udp.establishDropped trends it.
@@ -1570,9 +1576,11 @@ public class EstablishmentManager {
                 state = (InboundEstablishState2) oldState;
             }
         } else {
+            // Low-order X25519 point - see the first-request site above. Without
+            // this arm the state stays in the map until its own expiry.
             try {
                 state.receiveSessionOrTokenRequestAfterRetry(packet);
-            } catch (GeneralSecurityException gse) {
+            } catch (GeneralSecurityException | IllegalArgumentException gse) {
                 if (state != null && !isPeerBanned(state)) {
                     // Debug, not warn - see the first-request site above.
                     if (_log.shouldDebug())
@@ -1713,8 +1721,10 @@ public class EstablishmentManager {
             return;
         }
 
+        // A low-order X25519 point in the peer's ephemeral key reaches us as an
+        // IllegalArgumentException - see the inbound sites above.
         try {state.receiveSessionCreated(packet);}
-        catch (GeneralSecurityException gse) {
+        catch (GeneralSecurityException | IllegalArgumentException gse) {
             // Debug, not warn: remote junk on a path a peer can trigger per
             // packet. The guard said shouldDebug() and called _log.warn().
             if (_log.shouldDebug() && !shouldSuppressException(gse)) {
@@ -1749,8 +1759,10 @@ public class EstablishmentManager {
             return;
         }
 
+        // A low-order X25519 point in the peer's ephemeral key reaches us as an
+        // IllegalArgumentException - see the inbound sites above.
         try {state.receiveRetry(packet);}
-        catch (GeneralSecurityException gse) {
+        catch (GeneralSecurityException | IllegalArgumentException gse) {
             if (_log.shouldDebug() && !shouldSuppressException(gse)) {
                 _log.debug("[SSU] Corrupt Retry from " + state + " -> " + DataHelper.messageOf(gse), gse);
             }
