@@ -172,8 +172,10 @@
            jetty-util.jar: LifeCycle, URIUtil, JavaVersion
            jetty-rewrite-handler.jar: eepsite/jetty-rewrite.xml configures a
              RewriteHandler with MsieSslRule and HeaderPatternRule rules
-           jetty-servlets.jar: eepsite/contexts/cgi-context.xml configures
-             org.eclipse.jetty.servlets.CGI
+           jetty-servlets.jar: org.eclipse.jetty.servlets.CGI, needed by the
+             eepsite's CGI context only if an operator enables it - the context
+             ships as contexts/cgi-context.xml.disabled, which the deployer
+             ignores because its name does not end in .xml
            jetty-continuation.jar: Jetty's continuation API, nothing in I2P calls
              it, shipped because it is on the Java Web Start classpath
            jetty-start.jar: Jetty's own launcher. Our eepsite is started by

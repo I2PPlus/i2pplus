@@ -2,7 +2,14 @@
 <!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure.dtd">
 
 <!--
-Configure a custom context for the eepsite.
+The CGI context for the eepsite, shipped disabled.
+
+The context deployer picks up any file in this directory whose name ends in
+.xml, so this one stays inert while it is named cgi-context.xml.disabled.
+Rename it to cgi-context.xml to serve /cgi-bin/ out of eepsite/cgi-bin/ through
+org.eclipse.jetty.servlets.CGI. That makes every request to that path run a
+program on the router host, and the eepsite ships no programs of its own, so
+there is nothing to gain from leaving it on.
 
  * CGI Servlet.
  *
