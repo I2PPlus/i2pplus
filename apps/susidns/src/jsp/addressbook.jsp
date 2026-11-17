@@ -6,7 +6,7 @@
  * License: GPL2 or later
  */
 %>
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" import="net.i2p.servlet.RequestWrapper" import="java.util.regex.Pattern" import="java.util.regex.Matcher" buffer="128kb"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" import="net.i2p.servlet.RequestWrapper" import="i2p.susi.dns.BaseBean" import="java.util.regex.Pattern" import="java.util.regex.Matcher" buffer="128kb"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@include file="headers.jsi"%>
 <jsp:useBean id="base" class="i2p.susi.dns.BaseBean" scope="session"/>
@@ -65,9 +65,16 @@
     RequestWrapper bookRequest = new RequestWrapper(request);
     String here = bookRequest.getParameter("book");
     String formMessages = book.getMessages();
+    /*
+     * The import is dispatched here, not by getMessages(), so it needs the same
+     * nonce check getMessages() does. Read the nonce the previous page's forms
+     * were given before getSerial() replaces it with the one for this page.
+     */
+    String issued = book.getLastSerial();
     String susiNonce = book.getSerial(); // have to only do this once per page
     boolean isFiltered = book.isHasFilter();
-    if (intl._t("Import").equals(request.getParameter("action"))) {
+    if (intl._t("Import").equals(bookRequest.getParameter("action")) &&
+        BaseBean.isAuthorizedAction(bookRequest.getParameter("serial"), issued, request.getMethod())) {
         RequestWrapper wrequest = new RequestWrapper(request);
         importMessages = book.importFile(wrequest);
     }

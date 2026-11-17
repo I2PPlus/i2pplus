@@ -231,6 +231,37 @@ public class BaseBean {
     public void setSerial(String serial) {this.serial = DataHelper.stripHTML(serial);}
 
     /**
+     * The serial number the forms of the page that was just rendered carry, or
+     * null if this session has not rendered a page yet. {@link #getSerial()}
+     * replaces it with a fresh one for the next page, so a page that dispatches
+     * an action of its own, outside {@code getMessages()}, has to read this
+     * value before calling {@code getSerial()}.
+     *
+     * @return the nonce the previous page's forms were given, null if none yet
+     * @since 0.9.72+
+     */
+    public String getLastSerial() {return lastSerial;}
+
+    /**
+     * Whether a request may run an action at all: it has to have arrived by POST
+     * and to carry the nonce the page holding its form was given. A session that
+     * has not rendered a page has no nonce to match, so the request that creates
+     * a session can never run an action - which is what stops a form posted by
+     * another site, arriving with no session and no nonce, from writing into the
+     * address book.
+     *
+     * @param serial the nonce the request carries, null if it carries none
+     * @param lastSerial the nonce issued for the previous page, from
+     *                   {@link #getLastSerial()}, null if none
+     * @param method the HTTP method the request arrived by
+     * @return true if the action may run
+     * @since 0.9.72+
+     */
+    public static boolean isAuthorizedAction(String serial, String lastSerial, String method) {
+        return "POST".equals(method) && lastSerial != null && lastSerial.equals(serial);
+    }
+
+    /**
      * Store the HTTP method.
      * @param method the HTTP method
      * @since 0.9.65
