@@ -55,6 +55,64 @@ public class BrowserApiTest {
         assertFalse(I2PSnarkServlet.browserApiAuthorized(true, false, "anything", ""));
     }
 
+    // ----- POST Origin check -----
+
+    @Test
+    public void testAllowOriginRequiresSameOrigin() {
+        assertTrue(I2PSnarkServlet.allowOrigin("http://127.0.0.1:7657", "127.0.0.1:7657", false));
+        assertTrue(I2PSnarkServlet.allowOrigin("https://console.i2p", "console.i2p", true));
+        assertFalse(I2PSnarkServlet.allowOrigin("http://evil.example", "127.0.0.1:7657", false));
+        // another port on the same host is another origin
+        assertFalse(I2PSnarkServlet.allowOrigin("http://127.0.0.1:9999", "127.0.0.1:7657", false));
+    }
+
+    @Test
+    public void testAllowOriginRefusesTheSandboxedOrigin() {
+        // what a sandboxed iframe, a data: URL or a blob: page sends, and any site
+        // can put one of those on its own origin
+        assertFalse(I2PSnarkServlet.allowOrigin("null", "127.0.0.1:7657", false));
+        assertFalse(I2PSnarkServlet.allowOrigin("NULL", "127.0.0.1:7657", false));
+    }
+
+    @Test
+    public void testAllowOriginLetsNonBrowserPostsWithoutAnOrigin() {
+        // every browser sends Origin on a POST, so an absent one is a script or a
+        // tool, and those are the nonce and API-key checks' business
+        assertTrue(I2PSnarkServlet.allowOrigin(null, "127.0.0.1:7657", false));
+        assertTrue(I2PSnarkServlet.allowOrigin("", "127.0.0.1:7657", false));
+    }
+
+    // ----- data directory against the router's config directory -----
+
+    @Test
+    public void testConfigDirRejectsItselfAndAnythingBelow() throws Exception {
+        File base = Files.createTempDirectory("snarkcfg").toFile();
+        try {
+            File config = new File(base, ".i2p");
+            assertTrue(config.mkdir());
+            assertTrue(I2PSnarkServlet.isInsideConfigDir(config, config));
+            assertTrue(I2PSnarkServlet.isInsideConfigDir(new File(config, "clients.config.d"), config));
+            assertFalse(I2PSnarkServlet.isInsideConfigDir(new File(base, "downloads"), config));
+            assertFalse(I2PSnarkServlet.isInsideConfigDir(config, null));
+        } finally {
+            deleteRecursive(base);
+        }
+    }
+
+    @Test
+    public void testConfigDirComparesResolvedPaths() throws Exception {
+        // a name that walks back out of the config tree is not inside it
+        File base = Files.createTempDirectory("snarkcfg").toFile();
+        try {
+            File config = new File(base, ".i2p");
+            assertTrue(config.mkdir());
+            assertFalse(I2PSnarkServlet.isInsideConfigDir(new File(config, ".."), config));
+            assertFalse(I2PSnarkServlet.isInsideConfigDir(new File(config, "../downloads"), config));
+        } finally {
+            deleteRecursive(base);
+        }
+    }
+
     // ----- info hash validation -----
 
     @Test

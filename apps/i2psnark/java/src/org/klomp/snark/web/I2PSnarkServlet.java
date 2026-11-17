@@ -221,23 +221,40 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     * Validate Origin header for POST requests.
-     * Allows requests with matching Origin (same-origin), or no Origin header.
-     * Rejects cross-origin POST requests to prevent CSRF attacks.
+     * Read the two headers and the TLS flag out of the request and check them.
      *
      * @param request the HTTP request
-     * @return true if allowed
+     * @return true if the request is allowed
      */
     private boolean allowOrigin(HttpServletRequest request) {
-        String origin = request.getHeader("Origin");
-        String host = request.getHeader("Host");
+        return allowOrigin(request.getHeader("Origin"), request.getHeader("Host"), request.isSecure());
+    }
 
+    /**
+     * Validate the Origin header of a POST request. A same-origin browser POST
+     * carries an Origin that matches the Host it was sent to; a cross-origin one
+     * names the page that sent it, and is refused. A request with no Origin at all
+     * is not a browser POST, since every browser sends one, so it is left to the
+     * nonce and API-key checks that follow.
+     *
+     * @param origin the Origin header, may be null or empty
+     * @param host the Host header, may be null
+     * @param secure whether the request arrived over TLS, for the default port
+     * @return true if the request is allowed
+     * @since 0.9.72+
+     */
+    public static boolean allowOrigin(String origin, String host, boolean secure) {
         if (origin == null || origin.isEmpty()) {
             return true;
         }
 
+        // A sandboxed iframe, a data: URL and a blob: page all send this Origin,
+        // and any web page can put one of those on its own origin. Accepting it
+        // lets a page that has no relationship to this console POST to it from the
+        // user's own machine - which is also what makes a loopback source address
+        // worthless as authorization for the browser API.
         if ("null".equalsIgnoreCase(origin)) {
-            return true;
+            return false;
         }
 
         String originHost;
@@ -284,11 +301,11 @@ public class I2PSnarkServlet extends BasicServlet {
                     if (rest.startsWith(":")) {
                         requestPort = Integer.parseInt(rest.substring(1));
                     } else {
-                        requestPort = request.isSecure() ? 443 : 80;
+                        requestPort = secure ? 443 : 80;
                     }
                 } else {
                     requestHost = host;
-                    requestPort = request.isSecure() ? 443 : 80;
+                    requestPort = secure ? 443 : 80;
                 }
             } else {
                 int colon = host.indexOf(':');
@@ -297,7 +314,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     requestPort = Integer.parseInt(host.substring(colon + 1));
                 } else {
                     requestHost = host;
-                    requestPort = request.isSecure() ? 443 : 80;
+                    requestPort = secure ? 443 : 80;
                 }
             }
         } catch (Exception e) {
@@ -575,7 +592,8 @@ public class I2PSnarkServlet extends BasicServlet {
         }
 
         // Browser API: nonce-free add of magnet links, torrent URLs, or info hashes.
-        // POST only; authorized by the enable flag plus loopback / allowed hosts / API key.
+        // POST only; needs a same-origin Origin, plus the enable flag and loopback /
+        // allowed hosts / API key.
         if ("/_add".equals(path)) {
             handleBrowserApiAdd(req, resp);
             return;
@@ -2820,7 +2838,7 @@ public class I2PSnarkServlet extends BasicServlet {
         if (newFile != null && !newFile.trim().isEmpty()) {
             handleAddFile(newFile.trim(), _manager.getTorrentDir(), dataDir, reqw);
         } else if (newURL != null && !newURL.trim().isEmpty()) {
-            handleAddURL(newURL.trim(), dataDir, reqw);
+            handleAddURL(newURL.trim(), dataDir, reqw, true);
         } else {
             _manager.addMessage(_t("Enter URL or select torrent file"));
         }
@@ -2828,9 +2846,11 @@ public class I2PSnarkServlet extends BasicServlet {
 
     /**
      * Nonce-free browser API: adds a magnet link, torrent URL, info hash, or local
-     * torrent file path. POST only. Authorized when the browser API is enabled and
-     * the client is loopback, in the configured allowed hosts list, or presents a
-     * valid API key. Replies with a single text/plain status line.
+     * torrent file path. POST only. Authorized when the browser API is enabled, the
+     * request carries a same-origin Origin, and the client is loopback, in the
+     * configured allowed hosts list, or presents a valid API key. The data
+     * directory is always the configured one. Replies with a single text/plain
+     * status line.
      *
      * @param req the HTTP request
      * @param resp the HTTP response
@@ -2842,6 +2862,18 @@ public class I2PSnarkServlet extends BasicServlet {
             resp.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
             resp.setContentType("text/plain; charset=UTF-8");
             resp.getWriter().println("ERR: POST required");
+            return;
+        }
+        // This is the one POST path with no nonce, so the Origin header is all that
+        // separates a same-origin page from a form a foreign page submitted through
+        // the user's own browser. Every browser sends Origin on a POST, and the
+        // bridge extension's script posts from a page this servlet served, so a
+        // missing one is refused here even though the nonce'd paths accept it.
+        String origin = req.getHeader("Origin");
+        if (origin == null || origin.isEmpty()) {
+            resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            resp.setContentType("text/plain; charset=UTF-8");
+            resp.getWriter().println("ERR: missing Origin header");
             return;
         }
         if (!browserApiAuthorized(req)) {
@@ -2871,7 +2903,9 @@ public class I2PSnarkServlet extends BasicServlet {
             return;
         }
         File dataDir = _manager.getDataDir();
-        handleAddURL(url, dataDir, new RequestWrapper(req));
+        // The browser API takes no directory from the caller at all: the request
+        // carries no nonce, and the directory it names is created if missing.
+        handleAddURL(url, dataDir, new RequestWrapper(req), false);
         resp.setContentType("text/plain; charset=UTF-8");
         resp.getWriter().println("OK: " + name);
     }
@@ -2969,8 +3003,33 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
+     * Whether a requested data directory is the router's config directory or sits
+     * inside it. The router reads its own configuration from there at every start,
+     * and the add path creates a missing directory, so a download aimed at
+     * {@code clients.config.d} leaves a file there that the router then loads.
+     * Both paths are resolved past any symlinks before they are compared.
+     *
+     * @param dir the requested data directory, non-null
+     * @param configDir the router's config directory, may be null for a context
+     *                  that has none
+     * @return true if dir is configDir itself or below it
+     * @since 0.9.72+
+     */
+    public static boolean isInsideConfigDir(File dir, File configDir) {
+        if (configDir == null) {return false;}
+        try {
+            String d = dir.getCanonicalPath();
+            String c = configDir.getCanonicalPath();
+            return d.equals(c) || d.startsWith(c + File.separator);
+        } catch (IOException ioe) {
+            // Nothing resolved, nothing vouched for
+            return true;
+        }
+    }
+
+    /**
      * Validate the browser API payload and extract a display name for the OK reply.
-     * Mirrors the formats accepted by {@link #handleAddURL(String, File, RequestWrapper)}.
+     * Mirrors the formats accepted by {@link #handleAddURL(String, File, RequestWrapper, boolean)}.
      *
      * @param url the URL, magnet, info hash, or file path
      * @return a display name, or null if unsupported
@@ -3094,9 +3153,15 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param newURL the URL or magnet link string
      * @param dataDir directory the new torrent's files are created under
      * @param reqw the wrapped request, read for the nofilter_ parameters
+     * @param allowNewDir whether the request may name its own data directory. The
+     *                    nonce-free browser API may not: the directory is created
+     *                    if it is missing, and the router loads every {@code
+     *                    *.config} file in its own config directory at the next
+     *                    start, so a page in the user's browser can otherwise put a
+     *                    download there
      */
-    private void handleAddURL(String newURL, File dataDir, RequestWrapper reqw) {
-        String newDir = reqw.getParameter("nofilter_newDir");
+    private void handleAddURL(String newURL, File dataDir, RequestWrapper reqw, boolean allowNewDir) {
+        String newDir = allowNewDir ? reqw.getParameter("nofilter_newDir") : null;
         File dir = null;
 
         if (newDir != null) {
@@ -3105,6 +3170,13 @@ public class I2PSnarkServlet extends BasicServlet {
                 dir = new SecureFile(newDir);
                 if (!dir.isAbsolute()) {
                     String msg = _t("Data directory must be an absolute path") + ": " + dir;
+                    _manager.addMessageAndPrint(msg);
+                    return;
+                }
+                // Checked before the mkdirs below: refusing to add a torrent is
+                // cheap, leaving a directory behind in the config tree is not.
+                if (isInsideConfigDir(dir, _context.getConfigDir())) {
+                    String msg = _t("Data directory cannot be inside the router's config directory") + ": " + dir;
                     _manager.addMessageAndPrint(msg);
                     return;
                 }
