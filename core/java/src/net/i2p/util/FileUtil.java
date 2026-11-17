@@ -21,6 +21,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 /**
  * General helper methods for messing with files
  * <p>
@@ -53,6 +54,8 @@ public class FileUtil {
 
     /**
      * Delete the path as well as any files or directories underneath it.
+     * A symbolic link is removed as a link, never followed, so whatever is on
+     * the other side of it stays where it is.
      *
      * @param target the file or directory being deleted
      * @param failIfNotEmpty if true, do not delete anything if the directory
@@ -62,6 +65,12 @@ public class FileUtil {
      *         false if it remains
      */
     public static final boolean rmdir(File target, boolean failIfNotEmpty) {
+        if (Files.isSymbolicLink(target.toPath())) {
+            // Remove the link itself. Following it would delete what is on the
+            // other side - a directory the caller has no claim on, and one that
+            // may belong to another user in a world-writable parent.
+            return target.delete();
+        }
         if (!target.exists()) {
             return true;
         }

@@ -1,6 +1,9 @@
 package net.i2p;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.attribute.UserPrincipal;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Properties;
@@ -143,6 +146,20 @@ public class I2PAppContext {
     private final File _logDir;
     /** Directory of the running application. */
     private final File _appDir;
+    /**
+     * Prefix of the scratch directory this context creates in the temp parent,
+     * and of the leftovers this cleanup looks for.
+     */
+    private static final String TEMP_PREFIX = "i2p-";
+    /** Suffix of the scratch directory this context creates and looks for. */
+    private static final String TEMP_SUFFIX = ".tmp";
+    /**
+     * How long a leftover scratch directory must have gone untouched before this
+     * cleanup treats it as abandoned: two keep-alive intervals, because a
+     * running JVM re-touches every file in its own scratch directory once an
+     * interval, so one that is being touched is in use.
+     */
+    private static final long STALE_TEMP_AGE = 2 * TempDirScanner.KEEPALIVE_INTERVAL;
     /** Directory for scratch files. */
     private volatile File _tmpDir;
     /** Directory holding the jar files. */
@@ -484,7 +501,7 @@ public class I2PAppContext {
                 // our random() probably isn't warmed up yet
                 byte[] rand = new byte[6];
                 _tmpDirRand.nextBytes(rand);
-                String f = "i2p-" + Base64.encode(rand) + ".tmp";
+                String f = TEMP_PREFIX + Base64.encode(rand) + TEMP_SUFFIX;
                 _tmpDir = new SecureDirectory(d, f);
                 if (_tmpDir.exists()) {
                     // good or bad ? loop and try again?
@@ -527,9 +544,10 @@ public class I2PAppContext {
     }
 
     /**
-     * Clean up stale i2p- temp directories from previous sessions.
-     * Since we're starting a new session, all existing i2p-*.tmp folders
-     * are from previous sessions and can be safely deleted.
+     * Delete the scratch directories left behind by earlier sessions, and only
+     * those that are ours and no longer in use. The parent is the system temp
+     * dir by default, which every local user may write to, so an entry that
+     * merely looks like one of ours is not enough to delete it.
      */
     private void cleanupStaleTempDirs() {
         String tempParent = getProperty("i2p.dir.temp", System.getProperty("java.io.tmpdir"));
@@ -538,20 +556,85 @@ public class I2PAppContext {
             return;
         }
 
+        // The same clock the keep-alive scanner stamps files with, so the two
+        // agree on what "untouched" means.
+        long cutoff = System.currentTimeMillis() - STALE_TEMP_AGE;
         File[] files = parentDir.listFiles();
         if (files != null) {
             for (File file : files) {
                 String name = file.getName();
-                if (file.isDirectory() && name.startsWith("i2p-") && name.endsWith(".tmp")) {
-                    try {
-                        // Delete all existing i2p-*.tmp directories since they're from previous sessions
+                if (!name.startsWith(TEMP_PREFIX) || !name.endsWith(TEMP_SUFFIX)) {
+                    continue;
+                }
+                try {
+                    if (isStaleOwnTempDir(file, _configDir, cutoff)) {
                         FileUtil.rmdir(file, false);
-                    } catch (Exception e) {
-                        // Ignore cleanup errors, just continue
                     }
+                } catch (Exception e) {
+                    // Ignore cleanup errors, just continue
                 }
             }
         }
+    }
+
+    /**
+     * Is this entry ours to delete? It has to be a real directory and not a
+     * link - a link somebody else made in a world-writable parent can point at
+     * our own config dir, and deleting "what is underneath" would empty it; it
+     * has to have been created by the same user that owns our config dir, since
+     * anybody else's entry is not ours to remove; and nothing inside it may have
+     * been modified since the cutoff, because another JVM running on this host
+     * re-touches everything in its own scratch directory every
+     * {@link TempDirScanner#KEEPALIVE_INTERVAL}, whether or not it is the one
+     * that created it.
+     * <p>
+     * Anything this method cannot find out - an owner it cannot read, a
+     * filesystem without ownership - counts as not ours, so the cleanup does
+     * nothing rather than delete something it cannot account for.
+     *
+     * @param dir the entry found in the temp parent
+     * @param ours a path we created, our config directory, to compare owners with
+     * @param cutoff an entry modified at or after this time is still in use
+     * @return true if the directory may be deleted
+     * @since 0.9.72+
+     */
+    static boolean isStaleOwnTempDir(File dir, File ours, long cutoff) {
+        try {
+            if (Files.isSymbolicLink(dir.toPath())) {return false;}
+            if (!dir.isDirectory()) {return false;}
+            UserPrincipal us = Files.getOwner(ours.toPath(), LinkOption.NOFOLLOW_LINKS);
+            UserPrincipal them = Files.getOwner(dir.toPath(), LinkOption.NOFOLLOW_LINKS);
+            return us.equals(them) && isUnmodifiedSince(dir, cutoff);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * Has nothing inside this directory been modified at or after the cutoff?
+     * A link's own time is read through the link, which can only ever make the
+     * directory look younger and in use; the link is not followed for the
+     * recursion, so a directory on the other side of it is not searched.
+     *
+     * @param dir the directory to check
+     * @param cutoff an entry modified at or after this time counts as in use
+     * @return true if every entry inside is older than the cutoff
+     * @since 0.9.72+
+     */
+    @SuppressWarnings("PMD.AvoidInfiniteRecursion")
+    static boolean isUnmodifiedSince(File dir, long cutoff) {
+        if (dir.lastModified() >= cutoff) {return false;}
+        File[] kids = dir.listFiles();
+        if (kids != null) {
+            for (File kid : kids) {
+                if (kid.lastModified() >= cutoff) {return false;}
+                if (!Files.isSymbolicLink(kid.toPath()) && kid.isDirectory() &&
+                    !isUnmodifiedSince(kid, cutoff)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /**

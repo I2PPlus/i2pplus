@@ -1,8 +1,11 @@
 package net.i2p.util;
 
 import static org.junit.Assert.*;
+import static org.junit.Assume.assumeNoException;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 
 import org.junit.Test;
 
@@ -21,6 +24,11 @@ import org.junit.Test;
  * @since 0.9.71+
  */
 public class FileUtilRmdirTest {
+
+    /**
+     * Runs the recursive-delete cases; it holds no state.
+     */
+    public FileUtilRmdirTest() {}
 
     /**
      * Build {@code root/a/b/c} and return {@code root}. Every directory in the
@@ -159,5 +167,81 @@ public class FileUtilRmdirTest {
         assertFalse(dir.exists());
         assertTrue(FileUtil.rmdir(dir, false));
         assertTrue(FileUtil.rmdir(dir, true));
+    }
+
+    /**
+     * A link to a directory is removed as a link. Following it instead deletes
+     * what is on the other side - in a world-writable parent that directory may
+     * be somebody else's, or our own config directory somebody linked here.
+     *
+     * @throws Exception on temp-directory creation or cleanup failure
+     */
+    @Test
+    public void testSymlinkToDirectoryIsNotFollowed() throws Exception {
+        File root = new File(System.getProperty("java.io.tmpdir"),
+                             "i2p-rmdir-link-" + System.nanoTime());
+        File target = new File(System.getProperty("java.io.tmpdir"),
+                               "i2p-rmdir-link-target-" + System.nanoTime());
+        try {
+            assertTrue(target.mkdir());
+            File inside = new File(target, "keepme");
+            assertTrue(inside.createNewFile());
+            assertTrue(root.mkdir());
+            File link = new File(root, "link");
+            makeLink(link, target);
+
+            assertTrue("the link and its parent must still be removable",
+                       FileUtil.rmdir(root, false));
+
+            assertGone(root, "directory holding the link");
+            assertGone(link, "the link itself");
+            assertTrue("what the link points at must stay", target.isDirectory());
+            assertTrue("the file inside it must stay", inside.isFile());
+        } finally {
+            deleteTree(root);
+            deleteTree(target);
+        }
+    }
+
+    /**
+     * A link to something that is not there is removed too. A dangling link
+     * reports that it does not exist, so the old code counted it as already
+     * deleted and then failed to remove the directory holding it.
+     *
+     * @throws Exception on temp-directory creation or cleanup failure
+     */
+    @Test
+    public void testDanglingSymlinkIsRemoved() throws Exception {
+        File root = new File(System.getProperty("java.io.tmpdir"),
+                             "i2p-rmdir-dangling-" + System.nanoTime());
+        try {
+            assertTrue(root.mkdir());
+            File link = new File(root, "link");
+            makeLink(link, new File(root, "nowhere-at-all"));
+            assertFalse("the link's target must be absent", link.exists());
+
+            assertTrue("a directory holding only a dangling link must be removable",
+                       FileUtil.rmdir(root, false));
+
+            assertGone(root, "directory holding the dangling link");
+        } finally {
+            deleteTree(root);
+        }
+    }
+
+    /**
+     * Makes {@code link} a symbolic link to {@code target}, or skips the test on
+     * a platform or filesystem that will not make one - Windows without the
+     * privilege, some container filesystems.
+     *
+     * @param link the path the link is created at
+     * @param target the path the link points at
+     */
+    private static void makeLink(File link, File target) {
+        try {
+            Files.createSymbolicLink(link.toPath(), target.toPath());
+        } catch (UnsupportedOperationException | IOException e) {
+            assumeNoException("no symbolic links on this filesystem", e);
+        }
     }
 }

@@ -26,9 +26,13 @@ public class TempDirScanner extends SimpleTimer2.TimedEvent {
 
     /**
      * Milliseconds between scans, a little under a day. systemd's default for
-     * /tmp is 10 days, distro dependent, so scan sooner to be safe.
+     * /tmp is 10 days, distro dependent, so scan sooner to be safe. Anything
+     * that has to decide whether a temp directory is still in use uses this: a
+     * running JVM re-touches everything in its own temp dir once an interval.
+     *
+     * @since 0.9.72+
      */
-    private static final long DELAY = 23 * 60 * 60 * 1000L;
+    public static final long KEEPALIVE_INTERVAL = 23 * 60 * 60 * 1000L;
 
     /**
      * Schedules itself.
@@ -38,13 +42,13 @@ public class TempDirScanner extends SimpleTimer2.TimedEvent {
     public TempDirScanner(I2PAppContext context) {
         super(context.simpleTimer2());
         ctx = context;
-        schedule(DELAY);
+        schedule(KEEPALIVE_INTERVAL);
     }
 
     @Override
     public void timeReached() {
         scan(ctx.getTempDir());
-        schedule(DELAY);
+        schedule(KEEPALIVE_INTERVAL);
     }
 
     /**
