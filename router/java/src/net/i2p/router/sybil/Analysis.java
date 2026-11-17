@@ -164,6 +164,12 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     public static final long SHORT_REMOVE_TIME = 12*60*60*1000L;
     /** Minimum points to block. */
     public static final float MIN_BLOCK_POINTS = 12.01f;
+    /**
+     * The label a Sybil ban carries. The console's ban table matches a cause
+     * against it before looking for an address in the parentheses that follow,
+     * so the label and that match have to stay in step.
+     */
+    private static final String CAUSE_LABEL = "Sybil Analysis";
     /** IPv6 loopback address, never scored. */
     private static final byte[] IPV6_LOCALHOST = new byte[16];
     static { IPV6_LOCALHOST[15] = 1; }
@@ -244,14 +250,12 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
                         Hash h = Hash.create(b);
                         long until = e.getValue().longValue();
                         String ipPort = "UNKNOWN";
-                        String version = null;
                         RouterInfo ri = _context.netDb().lookupRouterInfoLocally(h);
                         if (ri != null) {
                             ipPort = TransportImpl.getRouterIPPort(ri);
-                            version = ri.getVersion();
                             if (ipPort == null || ipPort.isEmpty()) ipPort = "UNKNOWN";
                         }
-                        String reason = version != null ? "Sybil Analysis (" + version + ")" : "Sybil Analysis";
+                        String reason = CAUSE_LABEL;
                         ban.banlistRouter(h, reason, when, null, until);
                         _banLogger.logBan(h, ipPort, reason, until, ri);
                     }
@@ -588,10 +592,8 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
                 blocks.add(h.toBase64());
                 RouterInfo ri = _context.netDb().lookupRouterInfoLocally(h);
                 String ipPort = "UNKNOWN";
-                String version = null;
                 if (ri != null) {
                     ipPort = TransportImpl.getRouterIPPort(ri);
-                    version = ri.getVersion();
                     if (ipPort == null || ipPort.isEmpty()) ipPort = "UNKNOWN";
                     for (RouterAddress ra : ri.getAddresses()) {
                         byte[] ip = ra.getIP();
@@ -600,13 +602,9 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
                         if (host != null) {blocks.add(host);}
                     }
                 }
-                StringBuilder reasonBuf = new StringBuilder(128);
-                reasonBuf.append("Sybil Analysis");
-                if (version != null) {
-                    reasonBuf.append(" (").append(version).append(")");
-                }
-                reasonBuf.append(" (").append(fmt.format(p).replace(".00", "")).append(" points)");
-                String reason = reasonBuf.toString();
+                // Our own text: the cause is rendered in the console's ban
+                // table, so it carries no RouterInfo field
+                String reason = banCause(p);
                 _context.banlist().banlistRouter(h, reason, null, null, blockUntil);
                 _banLogger.logBan(h, ipPort, reason, blockUntil, ri);
 
@@ -617,6 +615,25 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
         }
         if (!blocks.isEmpty())
             _persister.storeBlocklist(blocks, blockUntil);
+    }
+
+    /**
+     * The cause recorded for a router the analysis blocks: the analysis' name
+     * and the score that reached the threshold, and nothing the peer chose to
+     * call itself. The cause is shown in the console's ban table and searched
+     * there for an address, and it used to carry the RouterInfo's version
+     * string as well - up to 255 bytes of whatever the peer wrote, markup
+     * included, rendered into the table on the console's own origin.
+     *
+     * @param points the score that reached the blocking threshold
+     * @return the cause to record for the ban
+     * @since 0.9.72+
+     */
+    static String banCause(double points) {
+        // A formatter of its own: DecimalFormat is not thread-safe, and this
+        // is reached from the analysis job and from the startup restore.
+        String pts = new DecimalFormat("#0.00").format(points).replace(".00", "");
+        return CAUSE_LABEL + " (" + pts + " points)";
     }
 
     /**

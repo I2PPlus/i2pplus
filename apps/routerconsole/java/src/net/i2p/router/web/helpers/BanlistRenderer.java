@@ -66,6 +66,8 @@ class BanlistRenderer {
     private static final int STREAM_BATCH = 100;
     /** Length of the truncated base64 hash used as a per-row data-key in fragment mode; 16 chars = 96 bits, collision-free at 10K-20K rows. */
     private static final int KEY_LEN = 16;
+    /** Highest port number, the upper bound of the 16-bit port space. */
+    private static final int MAX_PORT = 65535;
 
     /**
      * Stores the router context used to reach the banlist and network database.
@@ -181,7 +183,7 @@ class BanlistRenderer {
      * @param ipPort the address string to split, may be null or empty
      * @return the IP without the port; the input unchanged when null, empty or portless
      */
-    private String extractIP(String ipPort) {
+    static String extractIP(String ipPort) {
         if (ipPort == null || ipPort.isEmpty()) {
             return ipPort;
         }
@@ -221,7 +223,7 @@ class BanlistRenderer {
      * @param ipPort the address string to split, may be null or empty
      * @return the port as a string, or null when no port is present
      */
-    private String extractPort(String ipPort) {
+    static String extractPort(String ipPort) {
         if (ipPort == null || ipPort.isEmpty()) {
             return null;
         }
@@ -252,6 +254,66 @@ class BanlistRenderer {
 
         // No port found
         return null;
+    }
+
+    /**
+     * The address a "Blocklist (1.2.3.4:5678)" or "Sybil Analysis (...)" cause
+     * carries in its parentheses, if the text there is an address at all. The
+     * parentheses have also carried a peer's own version string - up to 255
+     * bytes of whatever it chose to write - and that text was cut out of the
+     * cause and rendered into the table's IP column as if it were an address.
+     *
+     * @param reason the ban cause as logged, null yields nothing
+     * @return the address from the parentheses, or null if it is not one
+     * @since 0.9.72+
+     */
+    static String causeAddress(String reason) {
+        if (reason == null) {return null;}
+        int parenOpen = reason.indexOf('(');
+        int parenClose = reason.indexOf(')');
+        if (parenOpen <= 0 || parenClose <= parenOpen) {return null;}
+        String value = reason.substring(parenOpen + 1, parenClose);
+        return isAddress(value) ? value : null;
+    }
+
+    /**
+     * Is this text an IP address, with or without a port? The bracketed IPv6
+     * form and the plain IPv4 one are both accepted; a version string, a peer's
+     * family name or anything else that is not an address is not.
+     *
+     * @param s the text to check, null or empty is not an address
+     * @return true if the text can be used as an address
+     * @since 0.9.72+
+     */
+    static boolean isAddress(String s) {
+        if (s == null || s.isEmpty()) {return false;}
+        String ip = extractIP(s);
+        if (ip == null || !Addresses.isIPAddress(ip)) {return false;}
+        String port = extractPort(s);
+        if (port == null) {return true;}
+        if (port.length() > 5) {return false;}
+        int p = 0;
+        for (int i = 0; i < port.length(); i++) {
+            char c = port.charAt(i);
+            if (c < '0' || c > '9') {return false;}
+            p = p * 10 + (c - '0');
+        }
+        return p > 0 && p <= MAX_PORT;
+    }
+
+    /**
+     * Escapes a value for the ban table. Most of the table's columns carry text
+     * a peer wrote about itself - its version, its capabilities, a hostname, an
+     * address taken out of a ban cause - and the console's CSP stops a script
+     * in that text but not markup, so it has to be escaped where it is written
+     * out.
+     *
+     * @param s the value, null renders as nothing
+     * @return the value safe for a cell or a quoted attribute
+     * @since 0.9.72+
+     */
+    private static String esc(String s) {
+        return s == null ? "" : DataHelper.escapeHTML(s);
     }
 
     /**
@@ -470,18 +532,10 @@ class BanlistRenderer {
             String lcReason = reason.toLowerCase();
             String extractedIP = null;
             if (lcReason.startsWith("blocklist")) {
-                int parenOpen = reason.indexOf('(');
-                int parenClose = reason.indexOf(')');
-                if (parenOpen > 0 && parenClose > parenOpen) {
-                    extractedIP = reason.substring(parenOpen + 1, parenClose);
-                }
+                extractedIP = causeAddress(reason);
                 reason = "Blocklist";
             } else if (lcReason.startsWith("sybil analysis")) {
-                int parenOpen = reason.indexOf('(');
-                int parenClose = reason.indexOf(')');
-                if (parenOpen > 0 && parenClose > parenOpen) {
-                    extractedIP = reason.substring(parenOpen + 1, parenClose);
-                }
+                extractedIP = causeAddress(reason);
                 reason = "Sybil Analysis";
             }
             // Always try to get IP:PORT from sessionbans log first, as it contains port info
@@ -555,23 +609,23 @@ class BanlistRenderer {
             }
             String cleanedReason = cleanReason(reason, routerVersion);
             buf.append("<td class=country data-sort=").append(countryCode).append(">")
-               .append("<img width=28 height=21 title=\"").append(countryName)
+               .append("<img width=28 height=21 title=\"").append(esc(countryName))
                .append("\" src=\"/flags.jsp?c=").append(countryCode).append("\" loading=lazy>")
                .append("</td><td class=hash>")
                .append("<span class=b64>").append(b64).append("</span>")
-               .append("</td><td class=caps>").append(caps != null ? caps : "")
-               .append("</td><td class=routerversion>").append(routerVersion != null ? routerVersion : "")
+               .append("</td><td class=caps>").append(esc(caps))
+               .append("</td><td class=routerversion>").append(esc(routerVersion))
                .append("</td><td class=ip>")
-               .append(ip != null ? ip : "")
+               .append(esc(ip))
                .append("</td><td class=port")
-               .append(port != null && !port.equals("0") ? " data-sort=" + port : "").append(">")
-               .append(port != null && !port.equals("0") ? port : "")
+               .append(port != null && !port.equals("0") ? " data-sort=" + esc(port) : "").append(">")
+               .append(port != null && !port.equals("0") ? esc(port) : "")
                .append("</td>")
                .append("<td class=hostname>")
-               .append(hostname != null && !hostname.isEmpty() && !"unknown".equals(hostname) ? hostname : "")
+               .append(hostname != null && !hostname.isEmpty() && !"unknown".equals(hostname) ? esc(hostname) : "")
                .append("</td>")
                .append("<td class=reason>")
-               .append(cleanedReason)
+               .append(esc(cleanedReason))
                .append("</td><td class=expires data-sort=").append(expires).append(">")
                .append(expireString)
                .append("</td></tr>\n");
@@ -614,25 +668,25 @@ class BanlistRenderer {
             }
             String countryName =  _context.commSystem().getCountryName(countryCode);
             buf.append("<tr");
-            if (fragmentKeys) {buf.append(" data-key=\"").append(ip).append("\"");}
+            if (fragmentKeys) {buf.append(" data-key=\"").append(esc(ip)).append("\"");}
             buf.append(" class=ipOnly>")
                .append("<td class=country data-sort=").append(countryCode).append(">")
-               .append("<img width=28 height=21 title=\"").append(countryName)
+               .append("<img width=28 height=21 title=\"").append(esc(countryName))
                .append("\" src=\"/flags.jsp?c=").append(countryCode).append("\" loading=lazy>")
                .append("</td>").append("<td class=hash></td>")
                .append("<td class=caps></td>")
                .append("<td class=routerversion></td>")
                .append("<td class=ip>")
-               .append(ip != null ? ip : "")
+               .append(esc(ip))
                .append("</td><td class=port")
-               .append(port != null && !port.equals("0") ? " data-sort=" + port : "").append(">")
-               .append(port != null && !port.equals("0") ? port : "")
+               .append(port != null && !port.equals("0") ? " data-sort=" + esc(port) : "").append(">")
+               .append(port != null && !port.equals("0") ? esc(port) : "")
                .append("</td>")
                .append("<td class=hostname>")
-               .append(hostname != null && !hostname.isEmpty() && !"unknown".equals(hostname) ? hostname : "")
+               .append(hostname != null && !hostname.isEmpty() && !"unknown".equals(hostname) ? esc(hostname) : "")
                .append("</td>")
                .append("<td class=reason>")
-               .append(ipBan.reason.isEmpty() ? "IP Ban" : ipBan.reason)
+               .append(ipBan.reason.isEmpty() ? "IP Ban" : esc(ipBan.reason))
                .append("</td><td class=expires data-sort=").append(msLeft).append(">")
                .append(expireString)
                .append("</td></tr>\n");
