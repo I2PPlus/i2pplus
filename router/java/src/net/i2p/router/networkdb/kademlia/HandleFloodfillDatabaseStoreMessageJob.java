@@ -256,6 +256,25 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                     throw new IllegalArgumentException("Router [" + key.toShortBase64() + "] attempted to store our RouterInfo");
                 }
                 /**
+                 * The key is chosen by whoever sent the message and is not
+                 * covered by the entry's signature, so a RouterInfo whose
+                 * identity hash differs from it says nothing about the router
+                 * the key names. Every ban below names the key, so check the
+                 * pairing first: storing any other router's newer RouterInfo
+                 * under a victim's hash would get the victim banlisted.
+                 */
+                if (!keyMatchesIdentity(key, ri)) {
+                    Hash id = ri.getIdentity() != null ? ri.getIdentity().getHash() : null;
+                    String idStr = id != null ? id.toShortBase64() : "none";
+                    if (_log.shouldWarn()) {
+                        _log.warn("Dropping NetDbStore -> Store key does not match the RouterInfo identity" +
+                                  "\n* Store key: [" + key.toShortBase64() + ']' +
+                                  "\n* Identity: [" + idStr + ']');
+                    }
+                    throw new IllegalArgumentException("Store key [" + key.toShortBase64() +
+                                                       "] does not match the RouterInfo identity [" + idStr + ']');
+                }
+                /**
                  * If we're in the client netDb context, log a warning since this is not expected.
                  * This is probably impossible but log it if we ever see it so it can be investigated.
                  */
@@ -620,6 +639,26 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 getContext().statManager().addRateData("netDb.storeFloodOld", 1);
             }
         }
+    }
+
+    /**
+     * Whether a RouterInfo is the entry its store message's key names, i.e. the
+     * key equals the hash of the entry's own identity. The key is picked by the
+     * sender and is not covered by the entry's signature, so a mismatch is not
+     * evidence against the router the key names — it only shows the message
+     * talks about two different routers.
+     *
+     * @param key the key the store message asks us to store under
+     * @param ri the RouterInfo carried by the store message
+     * @return true only if both are present and the entry's identity hashes to the key
+     * @since 0.9.72+
+     */
+    static boolean keyMatchesIdentity(Hash key, RouterInfo ri) {
+        if (key == null || ri == null || ri.getIdentity() == null) {
+            return false;
+        }
+        Hash id = ri.getIdentity().getHash();
+        return id != null && id.equals(key);
     }
 
     /**
