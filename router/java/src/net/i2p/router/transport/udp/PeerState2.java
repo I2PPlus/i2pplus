@@ -27,6 +27,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.router.transport.TransportUtil;
 import net.i2p.router.transport.udp.PacketBuilder2.Fragment;
+import net.i2p.util.Addresses;
 import net.i2p.util.HexDump;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
@@ -711,10 +712,17 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                                        "[SSU] BAD " + len + " byte data packet from: " + from +
                                        " [Type " + (header.getType() & 0xff) + "]");
                 }
-                // Track bad packets for repeat offender detection (skip if already blocklisted)
-                // Use the peer hash for full-context BanLogger output (caps, version) instead of IP-only
-                if (!_context.blocklist().isBlocklisted(_remotePeer)) {
-                    _context.banlist().badPacket(_remotePeer, null);
+                // Track bad packets for repeat offender detection (skip if already blocklisted).
+                // Charge the strike to the address the packet arrived on: the hosts in the
+                // peer's own RouterInfo are the peer's to write, and banning one of them lets
+                // the peer get a stranger's address blocked while its own stays clean. The
+                // peer hash goes along for the BanLogger's caps and version only.
+                byte[] badIP = from.getIP();
+                if (badIP != null) {
+                    String badStr = Addresses.toString(badIP);
+                    if (!_context.blocklist().isBlocklisted(badStr)) {
+                        _context.banlist().badPacket(_remotePeer, null, badStr);
+                    }
                 }
                 // TODO if it's early:
                 // If inbound, could be a retransmitted Session Confirmed, ack it again.
@@ -1404,9 +1412,15 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                                     + " * Expected: [" + _pendingRemoteHostId + "]"
                                     + " * Received from: [" + from + "]");
                         }
-                        // Track port hopping attempts via the peer hash for full BanLogger context
-                        if (!_context.blocklist().isBlocklisted(_remotePeer)) {
-                            _context.banlist().portHopping(_remotePeer);
+                        // Track port hopping attempts, charged to the address the path response
+                        // arrived on - the hosts the peer published in its own RouterInfo prove
+                        // nothing about where the packet came from.
+                        byte[] hopIP = from.getIP();
+                        if (hopIP != null) {
+                            String hopStr = Addresses.toString(hopIP);
+                            if (!_context.blocklist().isBlocklisted(hopStr)) {
+                                _context.banlist().portHopping(_remotePeer, hopStr);
+                            }
                         }
                         _migrationState = MigrationState.MIGRATION_STATE_NONE; // Reset on failure
                         pathVerified();

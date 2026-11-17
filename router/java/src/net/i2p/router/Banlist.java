@@ -20,7 +20,6 @@ import java.util.regex.Pattern;
 import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
-import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.time.BuildTime;
 import net.i2p.util.ConcurrentHashSet;
@@ -50,7 +49,7 @@ public class Banlist {
     /** Config key for the offenses needed to ban. */
     private static final String PROP_MAX_OFFENSES = "router.banlist.maxOffenses";
     /** Default offenses needed to ban. */
-    private static final int MAX_OFFENSES_DEFAULT = 3;
+    static final int MAX_OFFENSES_DEFAULT = 3;
     /** Offenses needed to ban, in effect right now. */
     private int _maxOffenses;
     /**
@@ -722,28 +721,28 @@ public class Banlist {
     }
 
     /**
-     * Record a bad packet from a peer identified by its Router hash.
-     * Looks up the RouterInfo from the local netdb to extract the
-     * peer's IP address, caps, and version for threshold tracking
-     * and full-context BanLogger output. Silently returns if the
-     * RouterInfo is not in the netdb or has no reachable address.
+     * Record a bad packet from an established peer, charged to the address the
+     * packet was received from. The peer's RouterInfo is looked up in the local
+     * netdb for the caps and version of the full-context BanLogger output only -
+     * never to choose the address to track or blocklist. Every host in a
+     * RouterInfo is a host the peer itself published, so a peer that publishes
+     * someone else's address first would otherwise get that stranger blocked
+     * while its own address stayed clean.
      * <p>
-     * Prefer this overload when a Router hash is available at the
-     * call site; otherwise use {@link #badPacket(String, String)}
-     * for IP-only tracking.
+     * Use {@link #badPacket(String, String)} when no authenticated peer hash is
+     * available and only the observed address is known.
      *
-     * @param hash Router hash (non-null, must exist in local netdb)
+     * @param hash Router hash of the peer the session is authenticated to (non-null)
      * @param version router version info (may be null, falls back to RouterInfo version)
+     * @param observedIP address the packet arrived from, "1.2.3.4" or "1.2.3.4:5678" (non-null)
      */
-    public void badPacket(Hash hash, String version) {
-        if (hash == null) return;
+    public void badPacket(Hash hash, String version, String observedIP) {
+        if (hash == null || observedIP == null) return;
         if (!_enableBadPacketBan) return;
         if (_context.router().getUptime() < _startupGrace) return;
         RouterInfo ri = _context.netDb().lookupRouterInfoLocally(hash);
-        if (ri == null) return;
-        String ip = getRouterIP(ri);
-        if (ip == null) return;
-        if (version == null) {version = ri.getVersion();}
+        String ip = observedIP;
+        if (version == null && ri != null) {version = ri.getVersion();}
         long now = _context.clock().now();
 
         long[] data = _badPacketIPs.get(ip);
@@ -827,64 +826,6 @@ public class Banlist {
     }
 
     /**
-     * Record a corrupt connection from a peer identified by its Router hash.
-     * Looks up the RouterInfo from the local netdb to extract the
-     * peer's IP address, caps, and version for threshold tracking
-     * and full-context BanLogger output. Silently returns if the
-     * RouterInfo is not in the netdb or has no reachable address.
-     * <p>
-     * Prefer this overload when a Router hash is available at the
-     * call site; otherwise use {@link #corruptConnection(String, String)}
-     * for IP-only tracking.
-     *
-     * @param hash Router hash (non-null, must exist in local netdb)
-     * @param version router version info (may be null, falls back to RouterInfo version)
-     */
-    public void corruptConnection(Hash hash, String version) {
-        if (hash == null) return;
-        if (!_enableCorruptConnectionBan) return;
-        if (_context.router().getUptime() < _startupGrace) return;
-        RouterInfo ri = _context.netDb().lookupRouterInfoLocally(hash);
-        if (ri == null) return;
-        String ip = getRouterIP(ri);
-        if (ip == null) return;
-        if (version == null) {version = ri.getVersion();}
-        long now = _context.clock().now();
-
-        long[] data = _corruptConnectionIPs.get(ip);
-        if (data == null) {
-            data = new long[] {now, 1};
-            _corruptConnectionIPs.put(ip, data);
-            return;
-        }
-
-        if (now - data[0] > _offenseWindow) {
-            data[0] = now;
-            data[1] = 1;
-        } else {
-            data[1]++;
-        }
-
-        if (data[1] >= _maxOffenses) {
-            String reason = "Corrupt connection (no data)";
-            if (version != null) {
-                reason += " (" + version + ")";
-            }
-
-            if (_log.shouldWarn()) {
-                _log.warn("Banning [" + ip + "] -> " + reason);
-            }
-
-            BanLogger banLogger = new BanLogger();
-            banLogger.initialize(_context);
-            banLogger.logBan(hash, ip, reason, _badPacketDuration, ri);
-
-            _context.blocklist().add(ip, reason);
-            _corruptConnectionIPs.remove(ip);
-        }
-    }
-
-    /**
      * Record a port hopping attempt from an IP.
      * If threshold exceeded, ban the IP.
      *
@@ -928,26 +869,25 @@ public class Banlist {
     }
 
     /**
-     * Record a port hopping attempt from a peer identified by its Router hash.
-     * Looks up the RouterInfo from the local netdb to extract the
-     * peer's IP address, caps, and version for threshold tracking
-     * and full-context BanLogger output. Silently returns if the
-     * RouterInfo is not in the netdb or has no reachable address.
+     * Record a port hopping attempt from an established peer, charged to the
+     * address the path response was received from. The peer's RouterInfo is
+     * looked up in the local netdb for the full-context BanLogger output only,
+     * never to choose the address to track or blocklist - see
+     * {@link #badPacket(Hash, String, String)} for why a published address is
+     * the wrong one to ban.
      * <p>
-     * Prefer this overload when a Router hash is available at the
-     * call site; otherwise use {@link #portHopping(String)}
-     * for IP-only tracking.
+     * Use {@link #portHopping(String)} when no authenticated peer hash is
+     * available.
      *
-     * @param hash Router hash (non-null, must exist in local netdb)
+     * @param hash Router hash of the peer the session is authenticated to (non-null)
+     * @param observedIP address the path response arrived from, "1.2.3.4" or "1.2.3.4:5678" (non-null)
      */
-    public void portHopping(Hash hash) {
-        if (hash == null) return;
+    public void portHopping(Hash hash, String observedIP) {
+        if (hash == null || observedIP == null) return;
         if (!_enablePortHoppingBan) return;
         if (_context.router().getUptime() < _startupGrace) return;
         RouterInfo ri = _context.netDb().lookupRouterInfoLocally(hash);
-        if (ri == null) return;
-        String ip = getRouterIP(ri);
-        if (ip == null) return;
+        String ip = observedIP;
         long now = _context.clock().now();
 
         long[] data = _portHoppingIPs.get(ip);
@@ -978,26 +918,6 @@ public class Banlist {
             _context.blocklist().add(ip, reason);
             _portHoppingIPs.remove(ip);
         }
-    }
-
-    /**
-     * Extract the first reachable IP from a RouterInfo's address list.
-     * Iterates over all published addresses and returns the host portion
-     * of the first one that has a non-null host string. This is used by
-     * the Hash-based overloads to obtain an IP for threshold tracking
-     * when the caller only has a Router hash.
-     *
-     * @param ri RouterInfo to extract from (null-safe)
-     * @return the IP address string, or null if no address has a host
-     */
-    private static String getRouterIP(RouterInfo ri) {
-        if (ri == null) {return null;}
-        for (RouterAddress addr : ri.getAddresses()) {
-            if (addr != null && addr.getHost() != null) {
-                return addr.getHost();
-            }
-        }
-        return null;
     }
 
     /**

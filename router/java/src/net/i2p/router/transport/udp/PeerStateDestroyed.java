@@ -14,6 +14,7 @@ import net.i2p.data.Hash;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.RouterContext;
+import net.i2p.util.Addresses;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 
@@ -335,18 +336,22 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
                 if (_log.shouldDebug())
                     _log.debug("BAD " + len + "B packet (type " + header.getType() +
                                ") from " + this);
-                // Track bad packets for repeat offender detection (skip if already blocklisted)
-                // Prefer the peer hash for full-context BanLogger output; fall back to IP string
-                // for direct peers whose hash is unknown at this layer
-                Hash peerHash = _remoteHostId.getPeerHash();
-                if (peerHash != null) {
-                    if (!_context.blocklist().isBlocklisted(peerHash)) {
-                        _context.banlist().badPacket(peerHash, null);
-                    }
-                } else {
-                    String ipStr = _remoteHostId.toString();
+                // Track bad packets for repeat offender detection (skip if already blocklisted).
+                // Charge the strike to the address the packet arrived on - the hosts in the
+                // peer's own RouterInfo are the peer's to write, so banning one of them lets a
+                // peer get a stranger's address blocked while its own stays clean. The peer
+                // hash goes along for the BanLogger's caps and version; a packet with no
+                // observed address strikes nobody.
+                byte[] badIP = _remoteHostId.getIP();
+                if (badIP != null) {
+                    String ipStr = Addresses.toString(badIP);
                     if (!_context.blocklist().isBlocklisted(ipStr)) {
-                        _context.banlist().badPacket(ipStr, null);
+                        Hash peerHash = _remoteHostId.getPeerHash();
+                        if (peerHash != null) {
+                            _context.banlist().badPacket(peerHash, null, ipStr);
+                        } else {
+                            _context.banlist().badPacket(ipStr, null);
+                        }
                     }
                 }
                 return;
