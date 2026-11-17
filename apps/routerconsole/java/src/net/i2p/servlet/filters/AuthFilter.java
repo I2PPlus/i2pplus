@@ -2,8 +2,10 @@ package net.i2p.servlet.filters;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.servlet.Filter;
@@ -89,9 +91,13 @@ if (!AUTH_TYPE_CUSTOM.equals(authType)) {
             return;
         }
 
-        String path = req.getRequestURI();
-        if (path == null) {
-            path = "";
+        String path = dispatchPath(req);
+        // A null path is one the filter cannot name, so it cannot match it
+        // against a public prefix either; the request is challenged for a login
+        // rather than let through on a guess.
+        String rawPath = req.getRequestURI();
+        if (rawPath == null) {
+            rawPath = "";
         }
 
 if ("/prefs".equals(path)) {
@@ -104,7 +110,7 @@ if ("/prefs".equals(path)) {
             return;
         }
 
-        if (isPublicPath(path)) {
+        if (path != null && isPublicPath(path)) {
             chain.doFilter(request, response);
             return;
         }
@@ -130,19 +136,87 @@ if ("/prefs".equals(path)) {
         }
 
         String loginUrl = req.getContextPath() + "/login";
-        if (!path.equals("/") && !path.isEmpty()) {
-            loginUrl += "?redirect=" + path;
+        if (!rawPath.equals("/") && !rawPath.isEmpty()) {
+            loginUrl += "?redirect=" + rawPath;
         }
         resp.sendRedirect(loginUrl);
     }
 
     /**
-     * Checks whether a path needs no authentication.
+     * The path the container will dispatch on, which is the only path the
+     * public-page test may be answered about. {@link HttpServletRequest#getRequestURI()}
+     * is the request target as the client sent it, percent-encoding and path
+     * parameters intact, while Jetty 9.3 decodes that path and resolves
+     * {@code .} and {@code ..} before it maps the request. A traversal segment
+     * written after a public prefix therefore satisfies a prefix test on the
+     * raw URI and names a protected page: {@code /js/../configclients} is
+     * public under the {@code /js/} prefix and dispatches to
+     * {@code /configclients}.
      *
-     * @param path the request path
+     * @param req the request being filtered
+     * @return the in-context path the container dispatches on, or null if it
+     *         cannot be used and the request must be treated as protected
+     * @since 0.9.72+
+     */
+    static String dispatchPath(HttpServletRequest req) {
+        String servlet = req.getServletPath();
+        String info = req.getPathInfo();
+        if (servlet == null) {
+            // A catch-all mapping leaves the whole path in pathInfo.
+            if (info == null) {return null;}
+            servlet = "";
+        }
+        return canonicalPath(servlet + (info == null ? "" : info));
+    }
+
+    /**
+     * Resolve the {@code .} and {@code ..} segments of a path the container has
+     * already decoded, the same way the container resolves them before mapping
+     * the request. A path that walks out of the root, or that still carries a
+     * path parameter, has no answer here: the caller reads null as protected,
+     * so an unusual path is challenged for a login instead of being matched
+     * against a public prefix it merely looks like.
+     *
+     * @param path the decoded in-context path, starting with {@code /}
+     * @return the canonical path, or null if it escapes the root or holds a
+     *         path parameter
+     * @since 0.9.72+
+     */
+    static String canonicalPath(String path) {
+        if (path == null || path.isEmpty()) {return "/";}
+        if (path.indexOf(';') >= 0) {return null;}
+        List<String> kept = new ArrayList<>(8);
+        for (String seg : path.split("/", -1)) {
+            if (seg.isEmpty() || ".".equals(seg)) {
+                continue;
+            }
+            if ("..".equals(seg)) {
+                if (kept.isEmpty()) {return null;}
+                kept.remove(kept.size() - 1);
+            } else {
+                kept.add(seg);
+            }
+        }
+        StringBuilder buf = new StringBuilder(path.length());
+        for (String seg : kept) {
+            buf.append('/').append(seg);
+        }
+        if (path.endsWith("/") && buf.length() > 0) {
+            buf.append('/');
+        }
+        return buf.length() > 0 ? buf.toString() : "/";
+    }
+
+    /**
+     * Checks whether a path needs no authentication. The match is a prefix
+     * match, so the path must already be the one the container dispatches on -
+     * see {@link #dispatchPath} - or a traversal segment answers the question
+     * about the wrong page.
+     *
+     * @param path the canonical in-context path
      * @return true if the path is public
      */
-    private boolean isPublicPath(String path) {
+    boolean isPublicPath(String path) {
         for (String publicPath : PUBLIC_PATHS) {
             if (path.equals(publicPath) || path.startsWith(publicPath)) {
                 return true;
