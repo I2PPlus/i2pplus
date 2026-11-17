@@ -34,10 +34,19 @@ def display_width(s):
     return w
 
 
+def rendered_width(s):
+    """Display width of a cell as it actually renders.
+
+    A literal pipe inside a table cell is written ``\\|`` and renders as one
+    character, so counting the backslash leaves that column a space too wide and
+    the separators do not line up.
+    """
+    return display_width(s.replace('\\|', '|'))
+
+
 def pad_to(s, target_width):
     """Pad string to target display width."""
-    dw = display_width(s)
-    return s + ' ' * (target_width - dw)
+    return s + ' ' * (target_width - rendered_width(s))
 
 
 def is_table_row(line):
@@ -55,10 +64,24 @@ def is_separator_row(line):
     return all(c in '-:| ' for c in inner)
 
 
+# Split a row on cell separators only. A pipe written ``\|`` is data, not a
+# separator, so splitting on every pipe turns one cell into several and
+# silently corrupts the row. The ``(?:\\\\)*`` lets a cell end in a literal
+# backslash immediately before the separator.
+CELL_SPLIT = re.compile(r'(?<!\\)(?:\\\\)*\|')
+
+
 def parse_row(line):
-    """Split a table row into cells, stripping whitespace."""
-    stripped = line.strip().strip('|')
-    return [cell.strip() for cell in stripped.split('|')]
+    """Split a table row into cells, stripping whitespace.
+
+    Escaped pipes stay inside their cell.
+    """
+    stripped = line.strip()
+    if stripped.startswith('|'):
+        stripped = stripped[1:]
+    if stripped.endswith('|'):
+        stripped = stripped[:-1]
+    return [cell.strip() for cell in CELL_SPLIT.split(stripped)]
 
 
 def align_table(table_lines):
@@ -79,7 +102,7 @@ def align_table(table_lines):
     widths = [0] * ncols
     for row in parsed:
         for i, cell in enumerate(row):
-            widths[i] = max(widths[i], display_width(cell))
+            widths[i] = max(widths[i], rendered_width(cell))
 
     # Rebuild lines
     result = []
