@@ -150,7 +150,7 @@ if [ ${#SRC[@]} -gt 0 ]; then
 fi
 
 echo "=== $MODULE suite"
-ant -q -f "$BUILD" junit.test 2>&1 | rg -n 'error:|BUILD' | head -12
+ant -q -f "$BUILD" "${TARGET:-junit.test}" 2>&1 | rg -n 'error:|BUILD' | head -12
 REPORTS="$REPORTS" python3 - <<'EOF'
 import glob, os, xml.etree.ElementTree as ET
 t = f = e = 0
