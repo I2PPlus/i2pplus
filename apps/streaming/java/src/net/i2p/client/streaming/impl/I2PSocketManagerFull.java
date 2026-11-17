@@ -1200,7 +1200,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     /**
      * SYN expiry threshold, as an override set through this API. The Tuner has no
      * parameter for it, so a running router leaves it 0 and
-     * {@link ConnectionHandler#computeSynTimeout} falls back to
+     * {@link ConnectionHandler#getAdaptiveSynTimeout} falls back to
      * {@link ConnectionHandler#SYN_EXPIRE_THRESHOLD_DEFAULT}.
      */
     private static volatile int _synExprExpireThresh;
