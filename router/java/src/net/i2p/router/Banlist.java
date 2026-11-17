@@ -25,6 +25,7 @@ import net.i2p.time.BuildTime;
 import net.i2p.util.Addresses;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.Log;
+import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
 
@@ -40,6 +41,13 @@ public class Banlist {
     private final RouterContext _context;
     /** Active bans by router hash. */
     private final Map<Hash, Entry> _entries;
+    /**
+     * How many entries {@link #_entries} may hold. A banlist with no ceiling
+     * grows to whatever a flood of RouterInfos can fill it with, and the
+     * duration reduction in {@link #reduceDurations} is not a bound on that:
+     * it only shortens the bans already here.
+     */
+    private final int _maxBanEntries;
 
     /** Bad packet offenses by IP address, with times. */
     private final ConcurrentHashMap<String, long[]> _badPacketIPs;
@@ -238,15 +246,44 @@ public class Banlist {
      * Above this, remaining durations are scaled by baseline / count,
      * minimum scale floor MIN_BAN_SCALE.
      */
-    private static final int BAN_COUNT_BASELINE = 3000;
+    static final int BAN_COUNT_BASELINE = 3000;
     /** Smallest factor a ban duration may be scaled by. */
     private static final double MIN_BAN_SCALE = 0.25;
     /** Eligible ban durations for reduction: &gt; 4 hours. */
-    private static final long BAN_REDUCTION_MIN = 4 * 60 * 60 * 1000L;
+    static final long BAN_REDUCTION_MIN = 4 * 60 * 60 * 1000L;
     /** Eligible ban durations for reduction: &lt; 1 week. */
-    private static final long BAN_REDUCTION_MAX = 7 * 24 * 60 * 60 * 1000L;
+    static final long BAN_REDUCTION_MAX = 7 * 24 * 60 * 60 * 1000L;
     /** Above this count, ALL bans over 1h are halved regardless of existing scaling. */
-    private static final int BAN_COUNT_HIGH = 8000;
+    static final int BAN_COUNT_HIGH = 8000;
+    /** A ban with more than this much left is halved once the count is over {@link #BAN_COUNT_HIGH}. */
+    static final long BAN_HALVE_CUTOFF = 60 * 60 * 1000L;
+
+    /**
+     * A ban with at least this much time left is one of the permanent ones: a
+     * signed feed's list, a country ban, the operator's bans on
+     * /configpeer, our own previous identity, a peer on another network. The
+     * pressure relief in {@link #reduceDurations} and the ceiling enforced by
+     * {@link #pruneExcess} leave those alone. The threshold is above the
+     * longest ban a peer can buy for itself - 30 days, the
+     * unspecified-network class any peer earns with one RouterInfo - and below
+     * {@link #BANLIST_DURATION_FOREVER}, so a flood of cheap bans is still
+     * shortened and dropped while the bans that matter are not.
+     * <p>
+     * This is not the question {@link #isBanlistedForever(Hash)} asks: that one
+     * is whether a ban is hard enough to refuse an inbound handshake.
+     *
+     * @since 0.9.72+
+     */
+    static final long BANLIST_PERMANENT_REMAINING = 90L*24*60*60*1000L;
+
+    /**
+     * Banlist ceiling for a slow router, the size upstream gives it. It is
+     * below {@link #BAN_COUNT_HIGH}, so a low-memory router bounds the list by
+     * dropping its newest bans rather than by shortening them.
+     */
+    static final int MAX_BAN_ENTRIES_SLOW = 2048;
+    /** Banlist ceiling for a desktop router, the size upstream gives it. */
+    static final int MAX_BAN_ENTRIES = 16384;
 
     /**
      * A ban that expires after this will return true in {@link #isBanlistedForever(Hash)}.
@@ -266,6 +303,7 @@ public class Banlist {
         _context = context;
         _log = context.logManager().getLog(Banlist.class);
         _entries = new ConcurrentHashMap<>(16);
+        _maxBanEntries = maxBanEntries();
         _badPacketIPs = new ConcurrentHashMap<>(64);
         _portHoppingIPs = new ConcurrentHashMap<>(64);
         _context.jobQueue().addJob(new Cleanup(_context));
@@ -606,6 +644,11 @@ public class Banlist {
             // Proportionally reduce durations of longer bans when count is high
             reduceDurations(now);
 
+            // Shortening bans is no bound on the size of the list: a flood of
+            // cheap RouterInfos leaves it as full as it filled. Give the newest
+            // of them back, so the room is there for the bans that matter.
+            pruneExcess(now);
+
             // Offense counts older than the window can no longer reach the
             // threshold, and a spoofed-source flood leaves one entry per source
             // behind it, so drop them here.
@@ -631,34 +674,164 @@ public class Banlist {
         double scale = (double) BAN_COUNT_BASELINE / count;
         if (scale < MIN_BAN_SCALE)
             scale = MIN_BAN_SCALE;
-        long minRemaining = BAN_REDUCTION_MIN / 2;
+        boolean halving = count > BAN_COUNT_HIGH;
+        int scaledCount = 0;
+        int halvedCount = 0;
         for (Entry e : _entries.values()) {
-            long remaining = e.expireOn - now;
-            if (remaining >= BAN_REDUCTION_MIN && remaining < BAN_REDUCTION_MAX) {
-                long newRemaining = (long) (remaining * scale);
-                if (newRemaining < minRemaining)
-                    newRemaining = minRemaining;
-                e.expireOn = now + newRemaining;
+            long expireOn = e.expireOn;
+            long newExpireOn = scaledExpiry(expireOn, now, scale);
+            if (newExpireOn != expireOn) {scaledCount++;}
+            if (halving) {
+                long halvedOn = halvedExpiry(newExpireOn, now);
+                if (halvedOn != newExpireOn) {halvedCount++;}
+                newExpireOn = halvedOn;
+            }
+            if (newExpireOn != expireOn) {
+                e.expireOn = newExpireOn;
             }
         }
-        if (_log.shouldDebug()) {
-            _log.debug("Reduced ban durations: count=" + count + " scale=" + scale);
+        if (scaledCount > 0 && _log.shouldDebug()) {
+            _log.debug("Reduced ban durations -> Bans: " + count + " * Scaled: " + scaledCount +
+                       " * Scale: " + scale);
         }
-        // Aggressive halving when ban count exceeds BAN_COUNT_HIGH
-        if (count > BAN_COUNT_HIGH) {
-            long cutoff = 60 * 60 * 1000L;
-            int halved = 0;
-            for (Entry e : _entries.values()) {
-                long remaining = e.expireOn - now;
-                if (remaining > cutoff) {
-                    e.expireOn = now + (remaining / 2);
-                    halved++;
+        if (halvedCount > 0 && _log.shouldInfo()) {
+            _log.info("Banlist over " + BAN_COUNT_HIGH + " -> Halved bans over " +
+                      DataHelper.formatDuration(BAN_HALVE_CUTOFF) + " * Bans: " + count +
+                      " * Halved: " + halvedCount);
+        }
+    }
+
+    /**
+     * Is this a permanent ban, one the pressure relief must not undo?
+     *
+     * @param remaining ms left on the ban, negative if it has already expired
+     * @return true if the ban is long enough to be one of the permanent ones
+     * @since 0.9.72+
+     */
+    static boolean isPermanentBan(long remaining) {
+        return remaining >= BANLIST_PERMANENT_REMAINING;
+    }
+
+    /**
+     * New expiry for one ban under the proportional pass: a ban between
+     * {@link #BAN_REDUCTION_MIN} and {@link #BAN_REDUCTION_MAX} of remaining
+     * time is scaled by the current count, never below half the minimum.
+     * Anything else, and any permanent ban, keeps its expiry.
+     *
+     * @param expireOn when the ban currently expires
+     * @param now the current time in ms
+     * @param scale the factor for the current count, between
+     *              {@link #MIN_BAN_SCALE} and 1
+     * @return the expiry to use, expireOn if the ban is not eligible
+     * @since 0.9.72+
+     */
+    static long scaledExpiry(long expireOn, long now, double scale) {
+        long remaining = expireOn - now;
+        if (isPermanentBan(remaining) || remaining < BAN_REDUCTION_MIN || remaining >= BAN_REDUCTION_MAX) {
+            return expireOn;
+        }
+        long minRemaining = BAN_REDUCTION_MIN / 2;
+        long newRemaining = Math.max((long) (remaining * scale), minRemaining);
+        return now + newRemaining;
+    }
+
+    /**
+     * New expiry for one ban under the aggressive pass taken above
+     * {@link #BAN_COUNT_HIGH}: every ban with more than
+     * {@link #BAN_HALVE_CUTOFF} left has it halved, except a permanent one,
+     * which is the case this pass used to clear - seven passes turned a
+     * 181-day ban into a soft one and eight took the hostility off it, so a
+     * flood of cheap RouterInfos undid the feed's bans and the operator's in
+     * under an hour.
+     *
+     * @param expireOn when the ban currently expires
+     * @param now the current time in ms
+     * @return the expiry to use, expireOn if the ban is not eligible
+     * @since 0.9.72+
+     */
+    static long halvedExpiry(long expireOn, long now) {
+        long remaining = expireOn - now;
+        if (isPermanentBan(remaining) || remaining <= BAN_HALVE_CUTOFF) {
+            return expireOn;
+        }
+        return now + remaining / 2;
+    }
+
+    /**
+     * How many bans this router holds room for. A low-memory router cannot
+     * afford the desktop's ceiling, and each entry is a hash, an entry object
+     * and the strings naming its cause.
+     *
+     * @return the ceiling on the number of entries in the banlist
+     * @since 0.9.72+
+     */
+    static int maxBanEntries() {
+        return SystemVersion.isSlow() ? MAX_BAN_ENTRIES_SLOW : MAX_BAN_ENTRIES;
+    }
+
+    /**
+     * How far the Cleanup job trims the list back once it is over the ceiling.
+     * Trimming only as far as the ceiling would leave no room for a new ban
+     * until the next pass, so a quarter of the list is freed for them.
+     *
+     * @param maxEntries the ceiling being enforced
+     * @return the size to trim down to
+     * @since 0.9.72+
+     */
+    static int pruneTarget(int maxEntries) {
+        return maxEntries - maxEntries / 4;
+    }
+
+    /**
+     * Trim the banlist back to {@link #pruneTarget(int)} when it is over the
+     * ceiling, dropping the newest bans first. The newest are the flood: the
+     * hashes behind it are ones we will never see again, while the bans that
+     * matter were recorded earlier and are the last to go. Permanent bans are
+     * not candidates at all, and the ceiling is enforced where bans are
+     * recorded as well, so the list cannot grow past it between passes.
+     *
+     * @param now the current time in ms
+     * @since 0.9.72+
+     */
+    void pruneExcess(long now) {
+        if (_entries.size() <= _maxBanEntries) {return;}
+        int target = pruneTarget(_maxBanEntries);
+        int dropped = 0;
+        for (Map.Entry<Hash, Entry> e : droppableBans(_entries, now)) {
+            if (_entries.size() <= target) {break;}
+            if (_entries.remove(e.getKey(), e.getValue())) {
+                _context.messageHistory().unbanlist(e.getKey());
+                dropped++;
+            }
+        }
+        if (dropped > 0 && _log.shouldWarn()) {
+            _log.warn("Banlist over its limit -> Dropped the newest bans * Dropped: " + dropped +
+                      " * Limit: " + _maxBanEntries + " bans");
+        }
+    }
+
+    /**
+     * The bans a trim may drop, the most recently recorded first, so the flood
+     * that filled the list is what goes and the bans that have been standing
+     * longest are what stays. A permanent ban is never a candidate.
+     *
+     * @param entries the bans being trimmed
+     * @param now the current time in ms, the reference for each entry's
+     *            remaining duration
+     * @return the droppable entries, newest first; empty if none may go
+     * @since 0.9.72+
+     */
+    static List<Map.Entry<Hash, Entry>> droppableBans(Map<Hash, Entry> entries, long now) {
+        List<Map.Entry<Hash, Entry>> droppable = new ArrayList<>(entries.size());
+        try {
+            for (Map.Entry<Hash, Entry> e : entries.entrySet()) {
+                if (!isPermanentBan(e.getValue().expireOn - now)) {
+                    droppable.add(e);
                 }
             }
-            if (halved > 0 && _log.shouldInfo()) {
-                _log.info("High ban count (" + count + "): halved " + halved + " bans over 1h");
-            }
-        }
+        } catch (IllegalStateException ise) {return Collections.emptyList();} // next time...
+        droppable.sort((a, b) -> Long.compare(b.getValue().addedOn, a.getValue().addedOn));
+        return droppable;
     }
 
     /**
@@ -1114,6 +1287,15 @@ public class Banlist {
                     e.causeCode = reasonCode;
                 }
             }
+        }
+        if (old == null && _entries.size() >= _maxBanEntries && !isPermanentBan(e.expireOn - e.addedOn)) {
+            // The list is full. A ban a peer can buy for itself with one
+            // RouterInfo does not get in ahead of the bans already here; the
+            // Cleanup job trims the flood back and makes room again.
+            _log.warnThrottled("banlist-full",
+                               "Banlist at its limit -> Refused a new ban * Limit: " + _maxBanEntries +
+                               " bans\n* Cause: " + reason);
+            return false;
         }
         _entries.put(peer, e);
 
