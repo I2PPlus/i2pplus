@@ -43,8 +43,6 @@ public class Banlist {
 
     /** Bad packet offenses by IP address, with times. */
     private final ConcurrentHashMap<String, long[]> _badPacketIPs;
-    /** Corrupt connection offenses by IP address, with times. */
-    private final ConcurrentHashMap<String, long[]> _corruptConnectionIPs;
     /** Port hopping offenses by IP address, with times. */
     private final ConcurrentHashMap<String, long[]> _portHoppingIPs;
     /**
@@ -89,12 +87,6 @@ public class Banlist {
     private static final boolean ENABLE_BAD_PACKET_BAN_DEFAULT = false;
     /** Whether bad packet banning is enabled. */
     private boolean _enableBadPacketBan;
-    /** Config key turning the corrupt connection ban on or off. */
-    private static final String PROP_ENABLE_CORRUPT_CONNECTION_BAN = "router.banlist.enableCorruptConnectionBan";
-    /** Corrupt connection banning is off by default. */
-    private static final boolean ENABLE_CORRUPT_CONNECTION_BAN_DEFAULT = false;
-    /** Whether corrupt connection banning is enabled. */
-    private boolean _enableCorruptConnectionBan;
     /** Config key turning the port hopping ban on or off. */
     private static final String PROP_ENABLE_PORT_HOPPING_BAN = "router.banlist.enablePortHoppingBan";
     /** Port hopping banning is off by default. */
@@ -275,7 +267,6 @@ public class Banlist {
         _log = context.logManager().getLog(Banlist.class);
         _entries = new ConcurrentHashMap<>(16);
         _badPacketIPs = new ConcurrentHashMap<>(64);
-        _corruptConnectionIPs = new ConcurrentHashMap<>(64);
         _portHoppingIPs = new ConcurrentHashMap<>(64);
         _context.jobQueue().addJob(new Cleanup(_context));
         banlistRouterForever(Hash.FAKE_HASH, "" + "Invalid Hash"); // i2pd bug?
@@ -293,7 +284,6 @@ public class Banlist {
         _startupGrace = _context.getProperty(PROP_STARTUP_GRACE, STARTUP_GRACE_DEFAULT);
         _badPacketDuration = _context.getProperty(PROP_BAD_PACKET_DURATION, BANLIST_DURATION_BAD_PACKETS_DEFAULT);
         _enableBadPacketBan = "true".equals(_context.getProperty(PROP_ENABLE_BAD_PACKET_BAN, String.valueOf(ENABLE_BAD_PACKET_BAN_DEFAULT)));
-        _enableCorruptConnectionBan = "true".equals(_context.getProperty(PROP_ENABLE_CORRUPT_CONNECTION_BAN, String.valueOf(ENABLE_CORRUPT_CONNECTION_BAN_DEFAULT)));
         _enablePortHoppingBan = "true".equals(_context.getProperty(PROP_ENABLE_PORT_HOPPING_BAN, String.valueOf(ENABLE_PORT_HOPPING_BAN_DEFAULT)));
         _enableBlocklist = "true".equals(_context.getProperty(PROP_ENABLE_BLOCKLIST, String.valueOf(ENABLE_BLOCKLIST_DEFAULT)));
         _enableTorBlocklist = "true".equals(_context.getProperty(PROP_ENABLE_TOR_BLOCKLIST, String.valueOf(ENABLE_TOR_BLOCKLIST_DEFAULT)));
@@ -325,7 +315,6 @@ public class Banlist {
     public void clearSessionBans() {
         _entries.clear();
         _badPacketIPs.clear();
-        _corruptConnectionIPs.clear();
         _portHoppingIPs.clear();
     }
 
@@ -368,14 +357,6 @@ public class Banlist {
      * @since 0.9.70+
      */
     public boolean isBadPacketBanEnabled() { return _enableBadPacketBan; }
-
-    /**
-     * Check if corrupt connection auto-ban is enabled.
-     *
-     * @return true if corrupt connection auto-ban is enabled
-     * @since 0.9.70+
-     */
-    public boolean isCorruptConnectionBanEnabled() { return _enableCorruptConnectionBan; }
 
     /**
      * Check if port hopping auto-ban is enabled.
@@ -792,53 +773,6 @@ public class Banlist {
     }
 
     /**
-     * Record a corrupt connection (EOF/no data during establishment) from an IP.
-     * If threshold exceeded, ban the IP.
-     *
-     * @param ip IP address (format: "1.2.3.4" or "1.2.3.4:port")
-     * @param version router version info (may be null)
-     */
-    public void corruptConnection(String ip, String version) {
-        if (ip == null) return;
-        if (!_enableCorruptConnectionBan) return;
-        if (_context.router().getUptime() < _startupGrace) return;
-        ip = offenseIP(ip);
-        long now = _context.clock().now();
-
-        long[] data = _corruptConnectionIPs.get(ip);
-        if (data == null) {
-            addFirstOffense(_corruptConnectionIPs, ip, now);
-            return;
-        }
-
-        if (now - data[0] > _offenseWindow) {
-            data[0] = now;
-            data[1] = 1;
-        } else {
-            data[1]++;
-        }
-
-        if (data[1] >= _maxOffenses) {
-            String reason = "Corrupt connection (no data)";
-            if (version != null) {
-                reason += " (" + version + ")";
-            }
-
-            if (_log.shouldWarn()) {
-                _log.warn("Banning [" + ip + "] -> " + reason);
-            }
-
-            BanLogger banLogger = new BanLogger();
-            banLogger.initialize(_context);
-            banLogger.logBan(ip, reason, _badPacketDuration);
-
-            _context.blocklist().add(ip, reason);
-
-            _corruptConnectionIPs.remove(ip);
-        }
-    }
-
-    /**
      * Record a port hopping attempt from an IP.
      * If threshold exceeded, ban the IP.
      *
@@ -980,7 +914,6 @@ public class Banlist {
      */
     void pruneOffenses(long now) {
         pruneOffenses(now, _badPacketIPs);
-        pruneOffenses(now, _corruptConnectionIPs);
         pruneOffenses(now, _portHoppingIPs);
     }
 

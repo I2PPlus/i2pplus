@@ -1,6 +1,7 @@
 package net.i2p.router.web.helpers;
 
 import static net.i2p.router.web.helpers.ConfigBanHelper.*;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -17,6 +18,13 @@ public class ConfigBanHandler extends FormHandler {
      */
     public ConfigBanHandler() {}
 
+    /**
+     * Config key the corrupt-connection ban was gated on. Nothing reads it now
+     * that the ban is gone, so resetting to defaults drops it from a config an
+     * older build wrote.
+     */
+    private static final String RETIRED_PROP_CORRUPT_CONNECTION_BAN = "router.banlist.enableCorruptConnectionBan";
+
     /** Form value for the maximum offenses before a ban. */
     private String _maxOffenses;
     /** Form value for the offense window, in minutes. */
@@ -27,8 +35,6 @@ public class ConfigBanHandler extends FormHandler {
     private String _badPacketDuration;
     /** Form flag for the bad packet ban. */
     private boolean _enableBadPacketBan;
-    /** Form flag for the corrupt connection ban. */
-    private boolean _enableCorruptConnectionBan;
     /** Form flag for the port hopping ban. */
     private boolean _enablePortHoppingBan;
     /** Form flag for the blocklist. */
@@ -100,7 +106,6 @@ public class ConfigBanHandler extends FormHandler {
         defaults.put(PROP_STARTUP_GRACE, String.valueOf(3*60*1000));
         defaults.put(PROP_BAD_PACKET_DURATION, String.valueOf(60*60*1000));
         defaults.put(PROP_ENABLE_BAD_PACKET_BAN, "false");
-        defaults.put(PROP_ENABLE_CORRUPT_CONNECTION_BAN, "false");
         defaults.put(PROP_ENABLE_PORT_HOPPING_BAN, "false");
         defaults.put(PROP_ENABLE_BLOCKLIST, "true");
         defaults.put(PROP_ENABLE_TOR_BLOCKLIST, "true");
@@ -118,7 +123,8 @@ public class ConfigBanHandler extends FormHandler {
         defaults.put(PROP_BAN_NEXT_HOP, "true");
         defaults.put(PROP_CUSTOM_CAPABILITY_BANS, "");
         defaults.put(PROP_COUNTRY_CODES, "");
-        _context.router().saveConfig(defaults, null);
+        _context.router().saveConfig(defaults,
+                                     Collections.singletonList(RETIRED_PROP_CORRUPT_CONNECTION_BAN));
         _context.banlist().reloadConfig();
         _context.blocklist().reloadConfig();
         addFormNotice(_t("Ban settings reset to defaults"), true);
@@ -149,11 +155,6 @@ public class ConfigBanHandler extends FormHandler {
      * @param val the value
      */
     public void setEnableBadPacketBan(String val) { _enableBadPacketBan = true; }
-    /**
-     * Enable or disable corrupt connection banning.
-     * @param val the value
-     */
-    public void setEnableCorruptConnectionBan(String val) { _enableCorruptConnectionBan = true; }
     /**
      * Enable or disable port hopping banning.
      * @param val the value
@@ -286,7 +287,6 @@ public class ConfigBanHandler extends FormHandler {
         }
 
         changes.put(PROP_ENABLE_BAD_PACKET_BAN, Boolean.toString(_enableBadPacketBan));
-        changes.put(PROP_ENABLE_CORRUPT_CONNECTION_BAN, Boolean.toString(_enableCorruptConnectionBan));
         changes.put(PROP_ENABLE_PORT_HOPPING_BAN, Boolean.toString(_enablePortHoppingBan));
 
         boolean blocklistWasEnabled = "true".equals(_context.getProperty(PROP_ENABLE_BLOCKLIST, "true"));

@@ -23,8 +23,6 @@ public class ConfigBanHelper extends HelperBase {
     public static final String PROP_BAD_PACKET_DURATION = "router.banlist.badPacketDuration";
     /** Set to true to start banning IPs that send malformed packets; default false. */
     public static final String PROP_ENABLE_BAD_PACKET_BAN = "router.banlist.enableBadPacketBan";
-    /** Set to true to start banning peers seen with corrupt transport connections; default false. */
-    public static final String PROP_ENABLE_CORRUPT_CONNECTION_BAN = "router.banlist.enableCorruptConnectionBan";
     /** Set to true to start banning peers abusing port hopping; default false. */
     public static final String PROP_ENABLE_PORT_HOPPING_BAN = "router.banlist.enablePortHoppingBan";
     /** Set to false to stop loading the subscription blocklist; default true. */
@@ -110,16 +108,6 @@ public class ConfigBanHelper extends HelperBase {
      */
     public String getBadPacketBanChecked() {
         boolean enabled = "true".equals(_context.getProperty(PROP_ENABLE_BAD_PACKET_BAN, "false"));
-        return enabled ? "checked" : "";
-    }
-
-    /**
-     * Get the checked status of the corrupt connection ban option.
-     *
-     * @return "checked" if enabled, empty string otherwise
-     */
-    public String getCorruptConnectionBanChecked() {
-        boolean enabled = "true".equals(_context.getProperty(PROP_ENABLE_CORRUPT_CONNECTION_BAN, "false"));
         return enabled ? "checked" : "";
     }
 

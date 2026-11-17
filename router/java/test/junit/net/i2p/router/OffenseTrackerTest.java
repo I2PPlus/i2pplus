@@ -11,12 +11,12 @@ import org.junit.AfterClass;
 import org.junit.Test;
 
 /**
- * The bad-packet, corrupt-connection and port-hop offense trackers count
- * offenses against a bare source address, hold a bounded number of sources, and
- * drop counts that can no longer reach the threshold. A UDP source address
- * proves nothing and a socket address carries a port, so a tracker keyed on
- * "ip:port" costs one entry per port, never matches the blocklist it feeds, and
- * grows without limit under a spoofed-source flood.
+ * The bad-packet and port-hop offense trackers count offenses against a bare
+ * source address, hold a bounded number of sources, and drop counts that can no
+ * longer reach the threshold. A UDP source address proves nothing and a socket
+ * address carries a port, so a tracker keyed on "ip:port" costs one entry per
+ * port, never matches the blocklist it feeds, and grows without limit under a
+ * spoofed-source flood.
  *
  * @since 0.9.72+
  */
@@ -29,7 +29,7 @@ public class OffenseTrackerTest {
     /** The trackers, rebuilt per case so the ceiling case cannot poison the others. */
     private Banlist _banlist;
     /** The switches the trackers are gated on, and what they were set to before. */
-    private static final String[] PROPS = {"router.banlist.enableBadPacketBan", "router.banlist.enableCorruptConnectionBan"};
+    private static final String[] PROPS = {"router.banlist.enableBadPacketBan", "router.banlist.enablePortHoppingBan"};
     /** What those switches were set to before this class ran, null where unset. */
     private static String[] _saved;
 
@@ -137,16 +137,16 @@ public class OffenseTrackerTest {
     }
 
     /**
-     * A corrupt connection from a port-bearing address is counted against the
-     * bare address too, the form the blocklist accepts.
+     * Three port hops from three ports of one address reach the threshold
+     * together, and the ban names the bare address the blocklist accepts.
      */
     @Test
-    public void corruptConnectionsAreCountedAgainstTheBareAddress() {
+    public void portHopsOfOneAddressReachTheBanTogether() {
         String base = "198.51.100.55";
         for (int port = 41000; port < 41000 + Banlist.MAX_OFFENSES_DEFAULT; port++) {
-            _banlist.corruptConnection(base + ":" + port, null);
+            _banlist.portHopping(base + ":" + port);
         }
         assertTrue("address " + base + " should be blocklisted after " + Banlist.MAX_OFFENSES_DEFAULT +
-                   " corrupt connections", _blocklist.isBlocklisted(base));
+                   " port hops", _blocklist.isBlocklisted(base));
     }
 }

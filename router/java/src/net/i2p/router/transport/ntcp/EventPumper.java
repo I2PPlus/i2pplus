@@ -1405,8 +1405,8 @@ class EventPumper implements Runnable {
 
     /**
      * Handle end-of-stream on a read. An inbound connection that received nothing
-     * before EOF is treated as a connection-flood probe (or a dead handshake);
-     * its IP is counted and escalated to the banlist unless already blocklisted.
+     * before EOF is counted against the source address in {@link #_blockedIPs}, which
+     * is what upstream reacts with; it is not escalated to the banlist.
      *
      * @param con  the connection that hit EOF
      * @param chan  the connection's socket channel (for the peer address)
@@ -1416,12 +1416,14 @@ class EventPumper implements Runnable {
     private void handleReadEof(NTCPConnection con, SocketChannel chan, ByteBuffer buf) {
         if (con.isInbound() && con.getMessagesReceived() <= 0) {
             InetAddress addr = chan.socket().getInetAddress();
+            // Counted, never struck. A peer that closes an inbound connection
+            // before sending one message is a browser giving up on an <img>, a
+            // scan that only says FIN, or an honest peer idling a connection it
+            // no longer needs, and none of that says the address is bad. The
+            // counter is the reaction: it refuses further accepts from the IP on
+            // this transport only, and is cleared every BLOCKED_IP_FREQ.
             if (addr != null) {
-                String ipStr = Addresses.toString(addr.getAddress()).replace("/", "");
-                if (!_context.blocklist().isBlocklisted(ipStr)) {
-                    _context.banlist().corruptConnection(ipStr, null);
-                }
-                countInboundNoMessage(ipStr, con, "EOF");
+                countInboundNoMessage(Addresses.toString(addr.getAddress()).replace("/", ""), con, "EOF");
             } else {
                 countInboundNoMessage(null, con, "EOF");
             }
