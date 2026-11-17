@@ -99,6 +99,15 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     public static final String OPT_KEEPALIVE_I2P = "keepalive.i2p";
     /** Config key: max reconnects on a zero-byte (empty) upstream response for GET/HEAD. */
     public static final String OPT_EMPTY_RETRIES = "i2p.emptyResponseRetries";
+    /**
+     * Config key: open a second, empty I2P socket alongside each GET/HEAD so a
+     * retry does not have to handshake cold. Off by default - the destination
+     * sees two streams per request, the second one idle until the first ends,
+     * which marks the proxy to every eepsite and doubles what each request
+     * costs the server.
+     * @since 0.9.72+
+     */
+    public static final String OPT_SPECULATIVE_WARM = "i2p.speculativeWarm";
 
     /** How long to wait for another request on the same socket. */
     static final int BROWSER_KEEPALIVE_TIMEOUT = 2*60*1000;
@@ -112,6 +121,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     private static final boolean DEFAULT_KEEPALIVE_I2P = true;
     /** Default reconnects on an empty upstream response before giving up. */
     private static final int DEFAULT_EMPTY_RETRIES = 9;
+    /** Whether a second empty stream is opened per GET/HEAD unless configured. */
+    private static final boolean DEFAULT_SPECULATIVE_WARM = false;
     /**
      * Wall-clock ceiling on one {@code openEmptyReconnect} retry loop (ms).
      * <p>The attempt budget bounds how many connects may be tried, but each
@@ -598,6 +609,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     private volatile boolean _keepAliveI2P = DEFAULT_KEEPALIVE_I2P;
     /** Cached i2p.emptyResponseRetries. @since 0.9.72+ */
     private volatile int _emptyRetries = DEFAULT_EMPTY_RETRIES;
+    /** Cached i2p.speculativeWarm, false when unset. @since 0.9.72+ */
+    private volatile boolean _speculativeWarm = DEFAULT_SPECULATIVE_WARM;
 
     /**
      * Resolve the per-tunnel options read on the request path into fields.
@@ -627,6 +640,20 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         _keepAliveBrowser = getBooleanOption(OPT_KEEPALIVE_BROWSER, DEFAULT_KEEPALIVE_BROWSER);
         _keepAliveI2P = getBooleanOption(OPT_KEEPALIVE_I2P, DEFAULT_KEEPALIVE_I2P);
         _emptyRetries = parseEmptyRetries(opts.getProperty(OPT_EMPTY_RETRIES, "" + DEFAULT_EMPTY_RETRIES));
+        _speculativeWarm = parseSpeculativeWarm(opts.getProperty(OPT_SPECULATIVE_WARM, ""));
+    }
+
+    /**
+     * Parse the i2p.speculativeWarm option. Unset, blank or unparseable means
+     * off: the second empty stream is what makes each GET cost the destination
+     * two accepted streams instead of one, so it has to be asked for.
+     *
+     * @param value the configured text, "" when unset
+     * @return true only when the option says true
+     * @since 0.9.72+
+     */
+    static boolean parseSpeculativeWarm(String value) {
+        return value != null && Boolean.parseBoolean(value.trim());
     }
 
     /**
@@ -1897,6 +1924,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 // headers) and resending is idempotent; the runner further guards
                 // empty retry to transfers with no request-body forwarder.
                 final int emptyBudget = _emptyRetries;
+                final String reconnectMethod = method;
                 if (("GET".equals(method) || "HEAD".equals(method)) && emptyBudget > 0) {
                     final WarmSlot slot = new WarmSlot(I2PTunnelHTTPClient::releaseConnPermit);
                     warmSlot = slot;
@@ -1912,6 +1940,17 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     hrunner.setReconnectCallback(new I2PTunnelRunner.ReconnectCallback() {
                         @Override
                         public I2PSocket reconnect(Exception cause) {
+                            // Once the browser has hung up nobody is waiting for the
+                            // rest of the body, and a server that declares more than
+                            // it sends can keep the resume loop opening streams to
+                            // itself. Stop here instead.
+                            if (isBrowserPeerClosed(s, reader, reconnectMethod)) {
+                                if (_log.shouldInfo()) {
+                                    _log.info(getPrefix(requestId) +
+                                              "Browser closed before the body-resume -> Leaving the response as delivered");
+                                }
+                                return null;
+                            }
                             I2PSocket warm = slot.take(reconnectHash, reconnectPort);
                             if (warm != null) {
                                 // Hand the warm socket over as the request's primary.
@@ -1939,6 +1978,15 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
 
                         @Override
                         public I2PSocket[] reconnectPair(Exception cause) {
+                            // Same as the single reconnect: a browser that has hung
+                            // up is not waiting for a retry, let alone two.
+                            if (isBrowserPeerClosed(s, reader, reconnectMethod)) {
+                                if (_log.shouldInfo()) {
+                                    _log.info(getPrefix(requestId) +
+                                              "Browser closed before the empty-response retry -> Not reconnecting");
+                                }
+                                return null;
+                            }
                             Hash destHash = reconnectDest.calculateHash();
                             long now = System.currentTimeMillis();
                             long[] budget = _raceBudget.computeIfAbsent(destHash,
@@ -1999,7 +2047,14 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     });
                     // Open one secondary I2P socket while the primary is healthy so a
                     // mid-body stall/failure can fail over without a cold handshake.
-                    openSpeculativeWarm(reconnectDest, reconnectPort, emptyBudget, requestId, slot);
+                    // Off by default: the destination sees two streams per request,
+                    // the second empty until the first ends, which marks the proxy to
+                    // every eepsite and doubles what a request costs the server. An
+                    // outproxy sees it on every clearnet page, so it is skipped there
+                    // whatever the option says.
+                    if (_speculativeWarm && !usingWWWProxy) {
+                        openSpeculativeWarm(reconnectDest, reconnectPort, emptyBudget, requestId, slot);
+                    }
                 }
                 t = hrunner;
             }
