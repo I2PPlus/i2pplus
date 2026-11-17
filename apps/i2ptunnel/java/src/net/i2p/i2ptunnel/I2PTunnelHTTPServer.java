@@ -1883,7 +1883,13 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
              * over two minutes when a browser vanished mid-persistent-connection.
              */
             long timeout = requestCount > 0 ? keepAliveTimeout : headerTimeout;
-            return readHeaders(socket, null, command, CLIENT_SKIPHEADERS, ctx, timeout);
+            Map<String, List<String>> headers = readHeaders(socket, null, command, CLIENT_SKIPHEADERS, ctx, timeout);
+            // The body is forwarded byte for byte, so framing the backend reads
+            // differently from a canonical parser lets the sender put a second
+            // request where we see body bytes.
+            String bad = framingError(headers);
+            if (bad != null) {throw new BadRequestException(bad);}
+            return headers;
         } catch (SocketTimeoutException ste) {
             if (requestCount > 0) {
                 if (log.shouldDebug())
@@ -1979,6 +1985,78 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         if (connlc.contains("upgrade")) {return CONN_UPGRADE;}
         if (connlc.contains("keep-alive")) {return CONN_KEEPALIVE;}
         return CONN_CLOSE;
+    }
+
+    /**
+     * Is the request's body framing one this tunnel and the backend behind it
+     * agree on? The tunnel never frames the body itself - it forwards the bytes -
+     * so a length the backend reads differently from a canonical parser lets the
+     * sender put a second request where we see body bytes. The backend trusts the
+     * X-I2P-Dest header this tunnel adds, so a smuggled second request can carry
+     * one of the sender's own and name a client that never connected.
+     * <p>
+     * Jetty 9.3.30, the container the eepsite and the console run on, accepts
+     * <code>Content-Length: +13</code> as 13; Jetty 12 answers 400. Reject the
+     * same shape here, before the body reaches the backend. A
+     * <code>Transfer-Encoding</code> header needs no check of its own: the header
+     * reader above already refuses any request header whose name ends in
+     * "-encoding" other than Accept-Encoding, so no transfer coding reaches the
+     * backend through this tunnel at all.
+     *
+     * @param headers the parsed request headers, as read from the client
+     * @return null if the framing is canonical, otherwise why it is not
+     * @since 0.9.72+
+     */
+    static String framingError(Map<String, List<String>> headers) {
+        if (headers == null) {return null;}
+        List<String> lengths = getValues(headers, "content-length");
+        if (lengths == null) {return null;}
+        if (lengths.size() > 1) {
+            return "More than one Content-Length";
+        }
+        String length = lengths.get(0);
+        if (!isCanonicalLength(length)) {
+            return "Non-canonical Content-Length: \"" + length + "\"";
+        }
+        return null;
+    }
+
+    /**
+     * Is this a plain unsigned decimal length? A leading <code>+</code>, a sign,
+     * spaces or anything else that is not a digit is read differently by
+     * different parsers, which is what makes the body length something the sender
+     * and the backend can disagree about.
+     *
+     * @param length the Content-Length value as the client sent it
+     * @return true if it is digits only
+     * @since 0.9.72+
+     */
+    static boolean isCanonicalLength(String length) {
+        if (length == null || length.isEmpty()) {return false;}
+        for (int i = 0; i < length.length(); i++) {
+            char c = length.charAt(i);
+            if (c < '0' || c > '9') {return false;}
+        }
+        return true;
+    }
+
+    /**
+     * Every value sent for a header, whatever case the sender used for its name -
+     * the parsed map keeps the names as they arrived.
+     *
+     * @param headers the parsed request headers
+     * @param lcName the header name, lower case
+     * @return the values in the order they were read, or null if the header is absent
+     */
+    private static List<String> getValues(Map<String, List<String>> headers, String lcName) {
+        List<String> rv = null;
+        for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
+            if (lcName.equalsIgnoreCase(entry.getKey())) {
+                if (rv == null) {rv = new ArrayList<>(entry.getValue().size());}
+                rv.addAll(entry.getValue());
+            }
+        }
+        return rv;
     }
 
     /**

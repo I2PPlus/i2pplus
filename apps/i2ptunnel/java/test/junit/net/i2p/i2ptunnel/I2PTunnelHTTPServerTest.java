@@ -27,6 +27,12 @@ import static org.junit.Assert.*;
  * extracted from {@link net.i2p.i2ptunnel.I2PTunnelHTTPServer#blockingHandle}.
  */
 public class I2PTunnelHTTPServerTest {
+
+    /**
+     * Runs the request-reading and header helpers; the fixtures are per test.
+     */
+    public I2PTunnelHTTPServerTest() {}
+
     private static final I2PAppContext CTX = I2PAppContext.getGlobalContext();
     private static final Log LOG = new Log(I2PTunnelHTTPServerTest.class);
 
@@ -112,6 +118,55 @@ public class I2PTunnelHTTPServerTest {
         assertNull(headers);
         assertTrue(sock._out.toString().contains("400 Bad Request"));
         assertEquals(1, sock.closeCount);
+    }
+
+    /**
+     * A Content-Length the sender signed - the shape Jetty 9.3.30 reads as a
+     * number and Jetty 12 refuses - is answered with 400 and a closed
+     * connection, before any of the body reaches the backend.
+     *
+     * @throws IOException if the socket read fails, which this fixture does not do
+     */
+    @Test
+    public void testReadRequestHeadersSignedContentLength() throws IOException {
+        FakeSocket sock = new FakeSocket("POST / HTTP/1.1\r\nContent-Length: +13\r\n\r\n".getBytes());
+        Map<String, List<String>> headers = I2PTunnelHTTPServer.readRequestHeaders(sock, new StringBuilder(), 0, "peer.b32.i2p", CTX, LOG, "[skank / ab12cd34]");
+        assertNull(headers);
+        assertTrue(sock._out.toString().contains("400 Bad Request"));
+        assertEquals(1, sock.closeCount);
+    }
+
+    /**
+     * A Transfer-Encoding header is refused outright. Any coding, not just an
+     * unknown one: the header reader refuses every request header named
+     * <code>*-encoding</code> except Accept-Encoding, which is why no chunked
+     * body reaches the backend through this tunnel at all.
+     *
+     * @throws IOException if the socket read fails, which this fixture does not do
+     */
+    @Test
+    public void testReadRequestHeadersUnknownTransferEncoding() throws IOException {
+        FakeSocket sock = new FakeSocket("POST / HTTP/1.1\r\nTransfer-Encoding: xchunked\r\n\r\n".getBytes());
+        Map<String, List<String>> headers = I2PTunnelHTTPServer.readRequestHeaders(sock, new StringBuilder(), 0, "peer.b32.i2p", CTX, LOG, "[skank / ab12cd34]");
+        assertNull(headers);
+        assertTrue(sock._out.toString().contains("400 Bad Request"));
+        assertTrue(sock.closeCount > 0);
+    }
+
+    /**
+     * A plain decimal length is the framing every backend agrees on, so it
+     * passes through untouched: nothing written, connection left open.
+     *
+     * @throws IOException if the socket read fails, which this fixture does not do
+     */
+    @Test
+    public void testReadRequestHeadersCanonicalFramingPasses() throws IOException {
+        FakeSocket sock = new FakeSocket("POST / HTTP/1.1\r\nContent-Length: 13\r\n\r\n".getBytes());
+        Map<String, List<String>> headers = I2PTunnelHTTPServer.readRequestHeaders(sock, new StringBuilder(), 0, "peer.b32.i2p", CTX, LOG, "[skank / ab12cd34]");
+        assertNotNull(headers);
+        assertEquals("13", headers.get("Content-Length").get(0));
+        assertEquals(0, sock._out.size());
+        assertEquals(0, sock.closeCount);
     }
 
     @Test
