@@ -36,10 +36,23 @@ public class RouterTestHelper {
      * @return the new context, or null if creation failed
      */
     public static RouterContext newContext() {
+        return newContext(true);
+    }
+
+    /**
+     * A brand-new context, with either the dummy netDb or the real one. A client
+     * sub-NetDb takes its peer selector from the context's own netDb, so a test
+     * that builds one needs {@code dummyNetDb} false.
+     *
+     * @param dummyNetDb true for the lightweight dummy netDb, false for the real
+     *                   floodfill facade
+     * @return the new context, or null if creation failed
+     */
+    public static RouterContext newContext(boolean dummyNetDb) {
         try {
             Properties props = new Properties();
             props.setProperty("i2p.dummyClientFacade", "true");
-            props.setProperty("i2p.dummyNetDb", "true");
+            props.setProperty("i2p.dummyNetDb", String.valueOf(dummyNetDb));
             props.setProperty("i2p.dummyPeerManager", "true");
             props.setProperty("i2p.dummyTunnelManager", "true");
             props.setProperty("i2p.vmCommSystem", "true");

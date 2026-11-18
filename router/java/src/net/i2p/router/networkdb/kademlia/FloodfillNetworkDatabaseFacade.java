@@ -450,11 +450,12 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      * Whether sendStore should wide-flood the entry via {@link #flood} when this
      * router participates in floodfill.
      * <p>
-     * Floodfill participants wide-flood both RouterInfos (existing) and
-     * LeaseSets so published LSs reach the routing-key-closest peers that
-     * lookups query, not only the few peers chosen for the reply-based
-     * store job. Narrow store-only delivery leaves keys missing on other
-     * floodfills (verify FailNoKey).
+     * Only our own RouterInfo, which is the entry this router is authoritative
+     * for and whose connections are public anyway. A lease set we publish goes
+     * to the floodfills through our client tunnels instead, and that is what has
+     * to stay: {@link #flood} sends a direct, token-less store naming the entry,
+     * so a floodfill that hosted the destination would name itself as that
+     * destination's gateway to the floodfills closest to its key.
      *
      * @param floodfillEnabled whether this router is a floodfill participant
      * @param ds the entry being stored, may be null
@@ -462,19 +463,19 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      * @since 0.9.71+
      */
     static boolean shouldFloodOnStore(boolean floodfillEnabled, DatabaseEntry ds) {
-        if (!floodfillEnabled || ds == null) {return false;}
-        int type = ds.getType();
-        return type == DatabaseEntry.KEY_TYPE_ROUTERINFO || ds.isLeaseSet();
+        return floodfillEnabled && ds != null &&
+               ds.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO;
     }
 
     /**
      * How many FloodfillStoreJob instances sendStore should schedule
      * alongside (or instead of) a wide flood.
      * <p>
-     * Floodfill + RouterInfo: 0 — wide flood only (existing; no reply-based job).
-     * Floodfill + LeaseSet: 1 — wide flood covers propagation; this job
-     * supplies reply-based success/failure callbacks and verify accounting.
-     * Otherwise: {@code selectedCount} staggered multi-peer jobs (non-floodfill path).
+     * Floodfill + RouterInfo: 0 — the wide flood is the whole delivery, and a
+     * reply-based job on top of it would store our own identity twice.
+     * Otherwise: {@code selectedCount} staggered multi-peer jobs, which is how a
+     * lease set is published — through the client tunnels, the replies driving
+     * the success and verify accounting.
      *
      * @param floodfillEnabled whether this router is a floodfill participant
      * @param ds the entry being stored, may be null
@@ -484,10 +485,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      */
     static int storeJobCount(boolean floodfillEnabled, DatabaseEntry ds, int selectedCount) {
         if (ds == null || selectedCount <= 0) {return 0;}
-        if (floodfillEnabled) {
-            if (ds.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO) {return 0;}
-            if (ds.isLeaseSet()) {return 1;}
-        }
+        if (floodfillEnabled && ds.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO) {return 0;}
         return selectedCount;
     }
 
@@ -522,7 +520,6 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             // circuited with addJob(onSuccess) which skipped the store entirely and
             // was incorrect for LeaseSet publication.
             final int delay = (int) Math.min(idx * 1000L, 10_000);
-            final int concurrentForLog = concurrent;
             new SimpleTimer2.TimedEvent(_context.simpleTimer2()) {
                 /** Submit the store job after delay to spread flood load. */
                 @Override
@@ -540,8 +537,10 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                 } else {
                     name = "key for [" + key.toShortBase32() + "]";
                 }
-                _log.info("Flood of " + name + " to [" + peer.toShortBase64() + "] failed -> " +
-                          "Resending to " + (concurrentForLog > 1 ? concurrentForLog + " new floodfills" : "a different floodfill") + "...");
+                // Nothing failed and nothing was flooded to get here — this runs
+                // as each store job is queued, on every publish.
+                _log.info("Storing " + name + " -> Floodfill: [" + peer.toShortBase64() + "]" +
+                          " * Stores: " + jobs);
             }
             idx++;
         }
