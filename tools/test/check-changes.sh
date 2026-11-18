@@ -99,6 +99,18 @@ case "$MODULE" in
         CP="$(find tools/test apps/jetty apps/susidns/src/lib installer/lib/wrapper -name '*.jar' | tr '\n' ':')$(find /tmp/build-i2p/pkg-temp/lib -name '*.jar' 2>/dev/null | tr '\n' ':')"
         LOGSCOPE="apps/susidns/src/java/src"
         ;;
+    susimail)
+        BUILD="apps/susimail/build.xml"
+        REPORTS="/tmp/build-i2p/reports/susimail/junit"
+        SOURCEPATH="apps/susimail/src/src:apps/susimail/src/test/junit:core/java/src:router/java/src:apps/streaming/java/src:apps/ministreaming/java/src:apps/jetty/java/src"
+        CP="$(find tools/test apps/jetty/jettylib -name '*.jar' | tr '\n' ':')"
+        LOGSCOPE="apps/susimail/src/src"
+        # WebMail imports net.i2p.servlet, which lives in jetty-i2p.jar. The module's
+        # own build looks for that jar in apps/jetty/jettylib/, and a standalone run
+        # of this module never puts it there - point it at the jar the jetty module
+        # builds (needs `ant -q buildJetty` once).
+        ANTPROPS="-Djetty.pkg.dir=/tmp/build-i2p/apps/jetty/build"
+        ;;
     i2ptunnel)
         BUILD="apps/i2ptunnel/java/build.xml"
         # this module's suite target is plain `test`, not `junit.test`
