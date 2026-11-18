@@ -172,6 +172,19 @@ if [ ${#SRC[@]} -gt 0 ]; then
 fi
 
 echo "=== $MODULE suite"
+# A changed `static final` constant is inlined into every class that reads it, and ant's
+# staleness check only compares a .java against its own .class — so a test class compiled
+# against the old value keeps the old number and fails for a reason that is not in the
+# test. Touch the module's test sources whenever a main source was touched, so the suite
+# compiles against the constants it asserts on.
+if [ ${#SRC[@]} -gt 0 ]; then
+    IFS=':' read -ra SP <<< "$SOURCEPATH"
+    for d in "${SP[@]}"; do
+        case "$d" in
+            *test*) [ -d "$d" ] && find "$d" -name '*.java' -exec touch {} + ;;
+        esac
+    done
+fi
 ant -q -f "$BUILD" $ANTPROPS "${TARGET:-junit.test}" 2>&1 | rg -n 'error:|BUILD' | head -12
 REPORTS="$REPORTS" python3 - <<'EOF'
 import glob, os, xml.etree.ElementTree as ET
