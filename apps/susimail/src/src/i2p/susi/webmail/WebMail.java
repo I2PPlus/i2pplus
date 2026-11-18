@@ -3024,6 +3024,27 @@ public class WebMail extends HttpServlet {
     }
 
     /**
+     * The name of the file inside a downloaded attachment's ZIP archive. That name
+     * comes straight out of the message's Content-Disposition header, so it can
+     * carry a path: an entry named ../../evil.sh lands outside the directory the
+     * user chose to extract into. The sanitizer the HTTP header already uses maps
+     * every path separator to an underscore, and the entry has to be named with
+     * the same result. A name the sanitizer leaves empty, or as a bare dot, becomes
+     * a placeholder, because no extractor can name an entry that.
+     *
+     * @param raw the filename as the message header gave it, never null
+     * @return one path segment, never empty and never a bare dot
+     * @since 0.9.72+
+     */
+    static String zipEntryName(String raw) {
+        String name = FilenameUtil.sanitizeFilename(raw);
+        if (name.isEmpty() || name.equals(".") || name.equals("..")) {
+            return "attachment";
+        }
+        return name;
+    }
+
+    /**
      * Stream one attachment part to the browser.
      *
      * @param sessionObject the current session, used for logging
@@ -3047,7 +3068,7 @@ public class WebMail extends HttpServlet {
                         name = "part" + part.getID();
                 }
             }
-            String name2 = FilenameUtil.sanitizeFilename(name);
+            String name2 = zipEntryName(name);
             String name3 = FilenameUtil.encodeFilenameRFC5987(name);
             response.setHeader("Cache-Control", "no-cache, private, max-age=604800");
             if (isRaw) {
@@ -3110,7 +3131,7 @@ public class WebMail extends HttpServlet {
                     response.setContentType("application/zip; name=\"" + name2 + ".zip\"");
                     response.addHeader("Content-Disposition", "attachment; filename=\"" + name2 + ".zip\"; " +
                                        "filename*=" + name3 + ".zip");
-                    ZipEntry entry = new ZipEntry(name);
+                    ZipEntry entry = new ZipEntry(name2);
                     zip.putNextEntry(entry);
                     // was 2
                     part.decode(0, new OutputStreamBuffer(zip));
