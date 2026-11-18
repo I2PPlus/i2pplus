@@ -324,6 +324,7 @@
   <target name="compileTest" depends="builddeptest, compile">
     <property name="junit.home" value="../../tools/test/junit/"/>
     <property name="hamcrest.home" value="../../tools/test/hamcrest/"/>
+    <property name="mockito.home" value="../../tools/test/mockito/"/>
     <mkdir dir="${build.dir}/obj_test"/>
     <javac srcdir="./src/test/junit" debug="true" source="${javac.version}" target="${javac.version}"
       release="${javac.release}"
@@ -335,6 +336,10 @@
         <pathelement location="${core.java.build.dir}/i2p.jar"/>
         <pathelement location="${core.java.build.dir}/i2ptest.jar"/>
         <pathelement location="${junit.home}/junit4.jar"/>
+        <!-- A test that stands in for a servlet request needs mockito, and the
+             module never had it on this path, so a test using it failed to
+             compile rather than being skipped. -->
+        <pathelement location="${mockito.home}/mockito-core.jar"/>
         <pathelement location="../jetty/jettylib/javax.servlet.jar"/>
         <pathelement location="${classes.dir}"/>
       </classpath>
@@ -346,6 +351,7 @@
     <property name="junit.reports.dir" value="${build.root}reports"/>
     <property name="junit.home" value="../../tools/test/junit/"/>
     <property name="hamcrest.home" value="../../tools/test/hamcrest/"/>
+    <property name="mockito.home" value="../../tools/test/mockito/"/>
     <mkdir dir="${junit.reports.dir}/susimail/junit/"/>
     <delete>
       <fileset dir="${junit.reports.dir}/susimail/junit">
@@ -371,6 +377,12 @@
         <pathelement location="${junit.home}/junit4.jar"/>
         <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
         <pathelement location="${hamcrest.home}/hamcrest-library.jar"/>
+        <!-- mockito's runtime: the core jar needs byte-buddy to make its stubs
+             and objenesis to build them without calling a constructor. -->
+        <pathelement location="${mockito.home}/mockito-core.jar"/>
+        <pathelement location="${mockito.home}/byte-buddy.jar"/>
+        <pathelement location="${mockito.home}/byte-buddy-agent.jar"/>
+        <pathelement location="${mockito.home}/objenesis.jar"/>
         <pathelement location="../jetty/jettylib/javax.servlet.jar"/>
         <pathelement location="${build.dir}/obj_test"/>
         <pathelement location="${classes.dir}"/>

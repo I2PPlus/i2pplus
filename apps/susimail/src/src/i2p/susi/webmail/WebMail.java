@@ -89,8 +89,11 @@ public class WebMail extends HttpServlet {
     private static final int DEFAULT_POP3PORT = 7660;
     /** SMTP port used when none is configured. */
     private static final int DEFAULT_SMTPPORT = 7659;
-    /** The page the servlet shows next. */
-    private enum State {
+    /**
+     * The page the servlet shows next. Package visible so the transitions between
+     * pages, and what each one does to the session, can be pinned by test.
+     */
+    enum State {
         /** Waiting for the login form. */
         AUTH,
         /** Fetching the mailbox for the first time. */
@@ -2285,6 +2288,60 @@ public class WebMail extends HttpServlet {
     }
 
     /**
+     * Whether this request has just opened a mailbox, so the session identifier
+     * has to change. The page before the state-change buttons ran was the login
+     * form and a mailbox exists now: that is the step from an anonymous session
+     * to an authenticated one, and the identifier the browser already carried
+     * must not carry over into it.
+     *
+     * @param oldstate the state before the state-change buttons were processed,
+     *                 null for an already authenticated request
+     * @param hasMailbox true if the session holds an open mailbox now
+     * @return true to re-key the session identifier
+     * @since 0.9.72+
+     */
+    static boolean rotatesSessionId(State oldstate, boolean hasMailbox) {
+        return oldstate == State.AUTH && hasMailbox;
+    }
+
+    /**
+     * Re-keys the session identifier when this request has just opened a mailbox,
+     * answering with the new identifier. The identifier the browser held before it
+     * logged in must not be the one the signed-in mailbox answers on, or an
+     * identifier fixed earlier - by an earlier request, or handed over already
+     * set - becomes the authenticated session's. changeSessionId() re-keys only
+     * the identifier on the wire, so the mailbox this session now holds survives
+     * the change.
+     *
+     * @param httpRequest the request being served, whose session is re-keyed
+     * @param oldstate the state before the state-change buttons were processed,
+     *                 null for an already authenticated request
+     * @param hasMailbox true if the session holds an open mailbox now
+     * @return the new session identifier, or null when this transition asks for
+     *         no change
+     * @since 0.9.72+
+     */
+    static String rotateSessionIdIfNeeded(HttpServletRequest httpRequest, State oldstate,
+                                          boolean hasMailbox) {
+        return rotatesSessionId(oldstate, hasMailbox) ? httpRequest.changeSessionId() : null;
+    }
+
+    /**
+     * Whether this request has just left a mailbox for the login form - the
+     * mirror of {@link #rotatesSessionId(State, boolean)}, and the reason the two
+     * must not be confused: one re-keys the session, the other discards it.
+     *
+     * @param oldstate the state before the state-change buttons were processed,
+     *                 null for an already authenticated request
+     * @param state the state after them
+     * @return true if the session has gone and a fresh one is needed
+     * @since 0.9.72+
+     */
+    static boolean leavesMailbox(State oldstate, State state) {
+        return oldstate != State.AUTH && state == State.AUTH;
+    }
+
+    /**
      * A Jetty session id is a long hex blob that nothing in the log viewer
      * links, and it repeats on every request, so only its head is kept and
      * bracketed.
@@ -2417,7 +2474,13 @@ public class WebMail extends HttpServlet {
             // This calls processLogout() which processes the logout button and invalidates sessionobject
             State oldstate = state;
             state = processStateChangeButtons(sessionObject, request, isPOST, state);
-            if (oldstate != State.AUTH && state == State.AUTH) {
+            String newSessionId = rotateSessionIdIfNeeded(httpRequest, oldstate,
+                                                          sessionObject.mailbox != null);
+            if (newSessionId != null && _log.shouldDebug()) {
+                _log.debug("Re-keying the session -> A mailbox was just opened"
+                           + " * Session: " + shortSessionId(newSessionId));
+            }
+            if (leavesMailbox(oldstate, state)) {
                 if (_log.shouldDebug()) {
                     _log.debug("Session invalidated: " + pageName(oldstate) + " -> the login page");
                 }
