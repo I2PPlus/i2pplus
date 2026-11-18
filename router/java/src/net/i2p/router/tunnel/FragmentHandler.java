@@ -297,6 +297,16 @@ class FragmentHandler {
     public int getFailedCount() { return _failed.get(); }
 
     /**
+     * Messages being reassembled right now, i.e. the entries in the map the
+     * 128-message cap bounds. Package-visible for the tests that pin a refused
+     * fragment leaving nothing behind.
+     *
+     * @return the number of partially reassembled messages
+     * @since 0.9.72+
+     */
+    int getPendingCount() { return _fragmentedMessages.size(); }
+
+    /**
      * The two byte ranges the inbound verifier must hash, in the order they must
      * be fed to the digest: {payloadOffset, payloadLength, ivOffset, ivLength}.
      * <p>
@@ -452,7 +462,7 @@ class FragmentHandler {
         long messageId = -1;
 
         if (type == TYPE_TUNNEL) {
-            if (offset + 4 >= preprocessed.length)
+            if (offset + 4 > length)
                 return -1;
             long id = DataHelper.fromLong(preprocessed, offset, 4);
             // i2pd 2.19 bug? 0 will throw IAE.
@@ -463,13 +473,13 @@ class FragmentHandler {
             offset += 4;
         }
         if ( (type == TYPE_ROUTER) || (type == TYPE_TUNNEL) ) {
-            if (offset + Hash.HASH_LENGTH >= preprocessed.length)
+            if (offset + Hash.HASH_LENGTH > length)
                 return -1;
             router = Hash.create(preprocessed, offset);
             offset += Hash.HASH_LENGTH;
         }
         if (fragmented) {
-            if (offset + 4 >= preprocessed.length)
+            if (offset + 4 > length)
                 return -1;
             messageId = DataHelper.fromLong(preprocessed, offset, 4);
             if (_log.shouldDebug())
@@ -481,15 +491,25 @@ class FragmentHandler {
             offset += 4;
         }
         if (extended) {
+            if (offset >= length)
+                return -1;
             int extendedSize = preprocessed[offset] & 0xff;
             offset++;
             offset += extendedSize; // we don't interpret these yet, but skip them for now
+            if (offset > length)
+                return -1;
         }
 
-        if (offset + 2 >= preprocessed.length)
+        if (offset + 2 > length)
             return -1;
         int size = (int)DataHelper.fromLong(preprocessed, offset, 2);
         offset += 2;
+        // A size that cannot fit in what is left of the message is refused here,
+        // before any reassembly state exists. A fragment that gets as far as the
+        // map and is then rejected leaves an entry no timer will ever clear, and
+        // 128 of those close defragmentation at this endpoint for good.
+        if (size <= 0 || size > length - offset)
+            return -1;
 
         if (type == TYPE_UNDEF) {
             // do this after the above since we have to return offset
@@ -523,23 +543,24 @@ class FragmentHandler {
             } else {
                 // synchronized is required, fragments may be arriving in different threads
                 synchronized(msg) {
+                    // Arm the removal before the fragment is stored, so an entry in
+                    // the map always has an event that will take it out again - the
+                    // 45 second sweep is the only thing that bounds this map.
+                    if (msg.getExpireEvent() == null) {
+                        RemoveFailed evt = new RemoveFailed(msg);
+                        msg.setExpireEvent(evt);
+                        if (_log.shouldDebug())
+                            _log.debug("The fragments will be dropped in " +
+                                       DataHelper.formatDuration(MAX_DEFRAGMENT_TIME) +
+                                       " [MsgID " + messageId + "]");
+                        evt.schedule(MAX_DEFRAGMENT_TIME);
+                    }
                     boolean ok = msg.receive(preprocessed, offset, size, false, router, tunnelId);
                     if (!ok) return -1;
                     if (msg.isComplete()) {
                         _fragmentedMessages.remove((int) messageId);
-                        if (msg.getExpireEvent() != null)
-                            msg.getExpireEvent().cancel();
+                        msg.getExpireEvent().cancel();
                         receiveComplete(msg);
-                    } else {
-                        if (msg.getExpireEvent() == null) {
-                            RemoveFailed evt = new RemoveFailed(msg);
-                            msg.setExpireEvent(evt);
-                            if (_log.shouldDebug())
-                                _log.debug("The fragments will be dropped in " +
-                                           DataHelper.formatDuration(MAX_DEFRAGMENT_TIME) +
-                                           " [MsgID " + messageId + "]");
-                            evt.schedule(MAX_DEFRAGMENT_TIME);
-                        }
                     }
                 }
             }
@@ -613,6 +634,9 @@ class FragmentHandler {
     private int receiveSubsequentFragment(byte[] preprocessed, int offset, int length) {
         if (_log.shouldDebug())
             _log.debug("Subsequent fragment begins at " + offset + " for " + length + " bytes");
+        // 1 flag byte, 4 message id bytes, 2 size bytes
+        if (length - offset < 7)
+            return -1;
         int fragmentNum = ((preprocessed[offset] & MASK_FRAGMENT_NUM) >>> 1);
         boolean isLast = (0 != (preprocessed[offset] & 1));
         offset++;
@@ -626,6 +650,11 @@ class FragmentHandler {
         if (messageId < 0)
             throw new RuntimeException("Preprocessed message was invalid [messageId: " + messageId + "; size:"
                                        + size + "; offset: " + offset + "; fragment:" + fragmentNum);
+
+        // Refused before the reassembly slot is created, so a fragment that
+        // cannot be stored never leaves an entry behind that no timer will clear
+        if (fragmentNum <= 0 || size <= 0 || size > length - offset)
+            return -1;
 
         final long fMessageId = messageId;
         FragmentedMessage msg = getOrCreate((int) messageId, fMessageId);
@@ -641,25 +670,25 @@ class FragmentHandler {
 
         // synchronized is required, fragments may be arriving in different threads
         synchronized(msg) {
+            // Arm the removal before the fragment is stored, so an entry in the map
+            // always has an event that will take it out again
+            if (msg.getExpireEvent() == null) {
+                RemoveFailed evt = new RemoveFailed(msg);
+                msg.setExpireEvent(evt);
+                if (_log.shouldDebug())
+                    _log.debug("The fragments will be dropped in " +
+                               DataHelper.formatDuration(MAX_DEFRAGMENT_TIME) +
+                               " [MsgID " + msg.getMessageId() + "/" + fragmentNum + "]");
+                evt.schedule(MAX_DEFRAGMENT_TIME);
+            }
             boolean ok = msg.receive(fragmentNum, preprocessed, offset, size, isLast);
             if (!ok) return -1;
 
             if (msg.isComplete()) {
                 _fragmentedMessages.remove((int) messageId);
-                if (msg.getExpireEvent() != null)
-                    msg.getExpireEvent().cancel();
+                msg.getExpireEvent().cancel();
                 _context.statManager().addRateData("tunnel.fragmentedComplete", msg.getFragmentCount(), msg.getLifetime());
                 receiveComplete(msg);
-            } else {
-                if (msg.getExpireEvent() == null) {
-                    RemoveFailed evt = new RemoveFailed(msg);
-                    msg.setExpireEvent(evt);
-                    if (_log.shouldDebug())
-                        _log.debug("The fragments will be dropped in " +
-                                   DataHelper.formatDuration(MAX_DEFRAGMENT_TIME) +
-                                   " [MsgID " + msg.getMessageId() + "/" + fragmentNum + "]");
-                    evt.schedule(MAX_DEFRAGMENT_TIME);
-                }
             }
         }
 
