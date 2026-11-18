@@ -210,7 +210,7 @@ abstract class ExtensionHandler {
         try {
             // this throws NPE on missing keys
             InputStream is = new ByteArrayInputStream(bs);
-            BDecoder dec = new BDecoder(is);
+            BDecoder dec = new BDecoder(is, bs.length);
             BEValue bev = dec.bdecodeMap();
             Map<String, BEValue> map = bev.getMap();
             peer.setHandshakeMap(map);
@@ -353,7 +353,7 @@ abstract class ExtensionHandler {
             log.debug("Received a metadata message from " + SnarkLogFormatter.peer(peer));
         try {
             InputStream is = new ByteArrayInputStream(bs);
-            BDecoder dec = new BDecoder(is);
+            BDecoder dec = new BDecoder(is, bs.length);
             BEValue bev = dec.bdecodeMap();
             Map<String, BEValue> map = bev.getMap();
             int type = map.get("msg_type").getInt();
@@ -534,7 +534,7 @@ abstract class ExtensionHandler {
             log.debug("Received a PEX message from " + SnarkLogFormatter.peer(peer));
         try {
             InputStream is = new ByteArrayInputStream(bs);
-            BDecoder dec = new BDecoder(is);
+            BDecoder dec = new BDecoder(is, bs.length);
             BEValue bev = dec.bdecodeMap();
             Map<String, BEValue> map = bev.getMap();
             bev = map.get("added");
@@ -571,7 +571,7 @@ abstract class ExtensionHandler {
             log.debug("Received a DHT port message from " + SnarkLogFormatter.peer(peer));
         try {
             InputStream is = new ByteArrayInputStream(bs);
-            BDecoder dec = new BDecoder(is);
+            BDecoder dec = new BDecoder(is, bs.length);
             BEValue bev = dec.bdecodeMap();
             Map<String, BEValue> map = bev.getMap();
             int qport = map.get("port").getInt();
@@ -636,7 +636,7 @@ abstract class ExtensionHandler {
             log.debug("Received a comment message from " + SnarkLogFormatter.peer(peer));
         try {
             InputStream is = new ByteArrayInputStream(bs);
-            BDecoder dec = new BDecoder(is);
+            BDecoder dec = new BDecoder(is, bs.length);
             BEValue bev = dec.bdecodeMap();
             Map<String, BEValue> map = bev.getMap();
             int type = map.get("msg_type").getInt();

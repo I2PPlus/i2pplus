@@ -2698,7 +2698,7 @@ public class TrackerClient implements Runnable {
         if (fetched[0] == '<') {
             throw new IOException(ERROR_GOT_HTML + " from " + tr.host);
         }
-        BDecoder bd = new BDecoder(new ByteArrayInputStream(fetched));
+        BDecoder bd = new BDecoder(new ByteArrayInputStream(fetched), fetched.length);
         Map<String, BEValue> files;
         try {
             files = bd.bdecodeMap().getMap();

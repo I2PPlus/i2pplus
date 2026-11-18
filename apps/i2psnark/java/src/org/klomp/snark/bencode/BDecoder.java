@@ -26,6 +26,13 @@ import java.util.Map;
  * dictionary named "info", the info dictionary of a torrent. The info hash is defined as
  * the digest of those bytes, which cannot be recomputed from the decoded map without
  * re-encoding it byte for byte, so the bytes are hashed as they stream past.
+ *
+ * <p>What it decodes is often written by somebody else — a peer's extension message, a DHT
+ * datagram, a tracker's reply — so nothing is allocated before it is bounded: a byte string
+ * over the decoder's limit, a number with more digits than it will read, and nesting deeper
+ * than it will follow are rejected, and a list or a map the stream stops in the middle of is
+ * an error rather than a value. Only a stream that ends before its first top-level value is
+ * not an error: {@link #bdecode()} answers <code>null</code> for that.
  */
 public class BDecoder {
 
@@ -41,8 +48,26 @@ public class BDecoder {
      */
     private static final int MAX_DEPTH = 64;
 
+    /**
+     * Most digits a bencoded number may carry, to stop a stream of digits from
+     * filling memory before it is parsed. A number longer than this is not a
+     * number anyone meant: the widest value that fits a BigInteger usefully in
+     * this protocol is a 40-character SHA-1 hash, and that is a string, not a
+     * number.
+     */
+    private static final int MAX_DIGITS = 256;
+
     /** The stream bencode is read from. */
     private final InputStream in;
+
+    /**
+     * Largest byte string this decoder may allocate, from the constructor. It is
+     * the size of the message being decoded wherever the caller has the whole
+     * message in hand, so a length in the header cannot claim more memory than
+     * the message could possibly hold; a stream of unknown length, a torrent
+     * file, keeps {@link #MAX_BYTE_ARRAY_LENGTH}.
+     */
+    private final int maxStringLength;
 
     /**
      * The last indicator read, zero if unknown: '0'..'9' indicates a byte[],
@@ -87,11 +112,30 @@ public class BDecoder {
 
     /**
      * Initializes a new BDecoder. Nothing is read from the given InputStream yet.
+     * A byte string it decodes may be as large as {@link #MAX_BYTE_ARRAY_LENGTH}.
      *
      * @param in the InputStream to decode from
      */
     public BDecoder(InputStream in) {
+        this(in, MAX_BYTE_ARRAY_LENGTH);
+    }
+
+    /**
+     * Initializes a new BDecoder that will not allocate a byte string bigger than
+     * the message it is decoding. Nothing is read from the stream yet.
+     *
+     * Use this wherever the whole message is already in memory — a peer extension
+     * message, a DHT datagram — so a length in the bencode cannot ask for more
+     * than the message could hold.
+     *
+     * @param in the InputStream to decode from
+     * @param maxStringLength the size of that message in bytes, a length of 0 or
+     *                        less allowing only an empty string
+     * @since 0.9.72+
+     */
+    public BDecoder(InputStream in, int maxStringLength) {
         this.in = in;
+        this.maxStringLength = Math.max(maxStringLength, 0);
     }
 
     /**
@@ -143,7 +187,8 @@ public class BDecoder {
      * rest of the stream and returns the appropriate BEValue encoded object.
      *
      * @return the next BEValue on the stream, or null if the stream has ended
-     * @throws IOException if an I/O error occurs or the stream is not bencoded
+     * @throws IOException if an I/O error occurs, the stream is not bencoded, or a
+     *                     list or map in it is not closed before the stream ends
      * @throws StackOverflowError if the stream is nested too deeply to decode
      */
     public BEValue bdecode() throws IOException, Throwable {
@@ -175,7 +220,7 @@ public class BDecoder {
         c = read();
         int i = c - '0';
         while (i >= 0 && i <= 9) {
-            if (num > (MAX_BYTE_ARRAY_LENGTH - i) / 10) {
+            if (num > (maxStringLength - i) / 10) {
                 throw new InvalidBEncodingException("Byte array length too large");
             }
             num = num * 10 + i;
@@ -194,7 +239,9 @@ public class BDecoder {
      *
      * @return the next BEValue as a Number
      * @throws IOException if an I/O error occurs
-     * @throws InvalidBEncodingException if the next value is not a number
+     * @throws InvalidBEncodingException if the next value is not a number, or if it
+     *                                   carries more digits than the decoder will
+     *                                   read
      */
     public BEValue bdecodeNumber() throws IOException {
         int c = getNextIndicator();
@@ -222,9 +269,14 @@ public class BDecoder {
         if (c < '1' || c > '9')
             throw new InvalidBEncodingException("Invalid Integer start '" + (char) c + "'");
         chars.append((char) c);
+        int digits = 1;
 
         c = read();
         while (c >= '0' && c <= '9') {
+            // bounded as it is read: an unbounded run of digits would fill memory
+            // before a length check after the fact could see it
+            if (++digits > MAX_DIGITS)
+                throw new InvalidBEncodingException("Too many digits: " + digits);
             chars.append((char) c);
             c = read();
         }
@@ -247,8 +299,7 @@ public class BDecoder {
             } catch (NumberFormatException nfe) {
                 num = new BigInteger(s);
             }
-        } else if (len > 256) throw new InvalidBEncodingException("Too many digits: " + len);
-        else num = new BigInteger(s);
+        } else num = new BigInteger(s);
         return new BEValue(num);
     }
 
@@ -257,7 +308,7 @@ public class BDecoder {
      * list it will throw InvalidBEncodingException.
      *
      * @return the next BEValue as a List
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs or the list is not closed before the stream ends
      * @throws InvalidBEncodingException if the next value is not a list
      * @throws StackOverflowError if the stream is nested too deeply to decode
      */
@@ -273,7 +324,15 @@ public class BDecoder {
             List<BEValue> result = new ArrayList<>();
             c = getNextIndicator();
             while (c != 'e') {
-                result.add(bdecode());
+                // End of stream inside a list is a truncated message, not an element:
+                // bdecode() answers null for it, and adding nulls forever would grow
+                // this list until the heap is gone.
+                if (c == -1)
+                    throw new EOFException("List ends without a closing 'e'");
+                BEValue value = bdecode();
+                if (value == null)
+                    throw new EOFException("List ends without a closing 'e'");
+                result.add(value);
                 c = getNextIndicator();
             }
             indicator = 0;
@@ -289,7 +348,8 @@ public class BDecoder {
      * is not a map it will throw InvalidBEncodingException.
      *
      * @return the next BEValue as a Map
-     * @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs or the dictionary is not closed
+     *                     before the stream ends, or ends without a value for a key
      * @throws InvalidBEncodingException if the next value is not a map
      * @throws StackOverflowError if the stream is nested too deeply to decode
      */
@@ -309,8 +369,16 @@ public class BDecoder {
             Map<String, BEValue> result = new HashMap<>();
             c = getNextIndicator();
             while (c != 'e') {
+                // End of stream inside a dictionary is a truncated message, not a
+                // missing key: bdecode() answers null for it, and the only report the
+                // reader got was a bare NullPointerException.
+                if (c == -1)
+                    throw new EOFException("Dictionary ends without a closing 'e'");
                 // Dictionary keys are always strings.
-                String key = bdecode().getString();
+                BEValue keyVal = bdecode();
+                if (keyVal == null)
+                    throw new EOFException("Dictionary ends without a closing 'e'");
+                String key = keyVal.getString();
 
                 // Hash the info dictionary's bytes as they are read. An info dictionary
                 // nested in another one is handled correctly, because in_special_map is
@@ -323,6 +391,8 @@ public class BDecoder {
                 }
 
                 BEValue value = bdecode();
+                if (value == null)
+                    throw new EOFException("Dictionary ends without a value for " + key);
                 BEValue old = result.put(key, value);
                 if (old != null)
                     throw new InvalidBEncodingException("Duplicate key " + key + " in dictionary");

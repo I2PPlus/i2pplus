@@ -1733,7 +1733,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         BandwidthGraph.datagramReceived(payload.length);
         try {
             InputStream is = new ByteArrayInputStream(payload);
-            BDecoder dec = new BDecoder(is);
+            BDecoder dec = new BDecoder(is, payload.length);
             BEValue bev = dec.bdecodeMap();
             Map<String, BEValue> map = bev.getMap();
 
