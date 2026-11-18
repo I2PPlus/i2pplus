@@ -283,6 +283,18 @@ public class EepGet {
     private static final int MAX_REASON_LEN = 120;
 
     /**
+     * Most bytes a chunk-size line may be. RFC 9112 gives the size at most 19
+     * hex digits plus a chunk extension, so anything past a few dozen bytes is a
+     * misframed stream, and the server decides how long the line is: read one
+     * byte at a time into a buffer that grows until two line endings show up, an
+     * unbounded line costs heap for as long as the connection stays warm, and
+     * none of it counts against the body-size ceiling it sits between.
+     *
+     * @since 0.9.72+
+     */
+    static final int MAX_CHUNK_LINE = 4096;
+
+    /**
      * Creates a new EepGet instance with proxy support, defaulting to allow caching.
      *
      * @param ctx I2P app context
@@ -2006,12 +2018,20 @@ public class EepGet {
      * terminating zero-length chunk is not consumed.
      *
      * @return the chunk length
-     * @throws IOException on IO error, or if the chunk-size line is not hex
+     * @throws IOException on IO error, if the chunk-size line is not hex, or if
+     *                     it is longer than {@link #MAX_CHUNK_LINE} bytes without a line
+     *                     ending
      */
     protected long readChunkLength() throws IOException {
         StringBuilder buf = new StringBuilder(8);
         int nl = 0;
         while (true) {
+            if (buf.length() >= MAX_CHUNK_LINE) {
+                // Checked before the append, so the line never gets past the
+                // bound it is being bounded by. The message names no bytes:
+                // echoing the line costs the heap all over again.
+                throw new IOException("Chunk-size line too long");
+            }
             int cur = _proxyIn.read();
             switch (cur) {
                 case -1:
