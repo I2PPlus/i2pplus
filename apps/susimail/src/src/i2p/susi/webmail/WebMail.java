@@ -322,6 +322,14 @@ public class WebMail extends HttpServlet {
     private static final String CONFIG_COMPOSER_COLS = "composer.cols";
     /** Config key for the composer height in rows. */
     private static final String CONFIG_COMPOSER_ROWS = "composer.rows";
+    /** Composer width used when the key is unset or unreadable, in characters. */
+    private static final int DEFAULT_COMPOSER_COLS = 80;
+    /** Composer height used when the key is unset or unreadable, in lines. */
+    private static final int DEFAULT_COMPOSER_ROWS = 10;
+    /** Narrowest composer the page draws, in characters - the config page takes any integer. */
+    private static final int MIN_COMPOSER_COLS = 1;
+    /** Shortest composer the page draws, in lines. */
+    private static final int MIN_COMPOSER_ROWS = 1;
     /** Config key allowing HTML mail at all. */
     private static final String CONFIG_HTML_ALLOWED = "view.html.allowed";
     /** Config key preferring the HTML view. */
@@ -3714,6 +3722,28 @@ public class WebMail extends HttpServlet {
     }
 
     /**
+     * The compose form's message body box, with the text it is showing already
+     * escaped. A reply quotes the message it answers, so the text in here is
+     * attacker-authored, and written raw a body containing &lt;/textarea&gt;
+     * closes the element early and everything after it is markup the browser
+     * parses inside susimail's own form. The size comes from the configuration,
+     * where either value can be 0 or negative, so both are floored to what a
+     * browser will still draw as a box.
+     *
+     * @param name the form field name the text is posted back under
+     * @param cols the configured width in characters, floored at one
+     * @param rows the configured height in lines, floored at one
+     * @param text the body to show, null for an empty box
+     * @return the textarea element, with the body escaped inside it
+     * @since 0.9.72+
+     */
+    static String composeTextarea(String name, int cols, int rows, String text) {
+        return "<textarea cols=\"" + Math.max(MIN_COMPOSER_COLS, cols) + "\" rows=\"" +
+               Math.max(MIN_COMPOSER_ROWS, rows) + "\" name=\"" + name + "\">" +
+               quoteHTML(text) + "</textarea>";
+    }
+
+    /**
      * Show the compose form.
      *
      * @param out where the form is written
@@ -3796,10 +3826,12 @@ public class WebMail extends HttpServlet {
            .append("<tr><td class=right>").append(_t("Subject")).append("</td>")
            .append("<td><input type=text size=80 name=\"")
            .append(NEW_SUBJECT).append("\" value=\"").append(quoteHTML(subject)).append("\"></td></tr>\n")
-           .append("<tr><td></td><td><textarea cols=\"")
-           .append(Config.getProperty(CONFIG_COMPOSER_COLS, 80)).append("\" rows=\"")
-           .append(Config.getProperty(CONFIG_COMPOSER_ROWS, 10)).append("\" name=\"")
-           .append(NEW_TEXT).append("\">").append(text).append("</textarea></td></tr>\n")
+           .append("<tr><td></td><td>")
+           .append(composeTextarea(NEW_TEXT,
+                                   Config.getProperty(CONFIG_COMPOSER_COLS, DEFAULT_COMPOSER_COLS),
+                                   Config.getProperty(CONFIG_COMPOSER_ROWS, DEFAULT_COMPOSER_ROWS),
+                                   text))
+           .append("</td></tr>\n")
            .append("<tr class=\"bottombuttons spacer\"><td colspan=7><hr></td></tr>\n")
            .append("<tr class=bottombuttons id=addattachment><td class=right>").append(_t("Add Attachment")).append("</td>")
            .append("<td class=left><input type=file size=50% name=\"").append(NEW_FILENAME).append("\" value=\"\">&nbsp;")
