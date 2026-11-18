@@ -269,6 +269,7 @@ public class Reader {
             EstablishState est = con.getEstablishState();
             if (est == null) {
                 if (_log.shouldWarn()) _log.warn("EstablishState is null for connection: " + con);
+                EventPumper.releaseBuf(buf);
                 con.close();
                 return;
             }
@@ -307,8 +308,13 @@ public class Reader {
                 }
                 con.close();
                 return;
+            } finally {
+                // One release on every way out of the receive, including the two
+                // returns above and anything that escapes: a buffer not handed
+                // back here becomes garbage, and the next reader allocates
+                // another 8 KiB in its place.
+                EventPumper.releaseBuf(buf);
             }
-            EventPumper.releaseBuf(buf);
             if (est.isCorrupt()) {
                 String reason = est.getFailReason();
                 if (reason == null) { reason = "Unknown failure"; }
