@@ -1944,7 +1944,7 @@ public final class ECIESAEADEngine {
             // i2pd bug?
             if (ls2.getLeaseCount() == 0)
                 return;
-            if (!ls2.isCurrent(Router.CLOCK_FUDGE_FACTOR))
+            if (!ls2.isCurrent(Router.LEASE_FUDGE_FACTOR))
                 continue;
             PublicKey pk = ls2.getEncryptionKey(getEncTypeSet(from.getType()));
             if (!from.equals(pk))

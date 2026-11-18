@@ -1,5 +1,6 @@
 package net.i2p.router;
 
+import net.i2p.data.DataHelper;
 import net.i2p.router.util.DecayingBloomFilter;
 import net.i2p.router.util.DecayingHashSet;
 import net.i2p.util.Log;
@@ -77,10 +78,18 @@ public class MessageValidator {
             _context.statManager().addRateData("router.invalidMessageTime", (now-expiration));
             return "Expired " + (now-expiration) + "ms ago";
         } else if (now + 4*Router.CLOCK_FUDGE_FACTOR < expiration) {
-            if (_log.shouldInfo())
-                _log.info("Rejecting message expiring too far in the future (" + (expiration-now) + "ms)");
-            _context.statManager().addRateData("router.invalidMessageTime", (now-expiration));
-            return "Expires too far in the future (" + (expiration-now) + "ms)";
+            long future = expiration - now;
+            // WARN and throttled, not INFO: a peer just outside this window has
+            // every message it sends dropped, and on a default install the only
+            // trace was a negative average on the invalidMessageTime stat. The
+            // window is 4 * CLOCK_FUDGE_FACTOR, so the line names the window
+            // rather than leaving the reader to halve a number and guess.
+            _log.warnThrottled("msg-future-expiration",
+                               "Rejecting message -> Expires too far in the future" +
+                               " * Expires in: " + DataHelper.formatDuration(future) +
+                               " * Window: " + DataHelper.formatDuration(4*Router.CLOCK_FUDGE_FACTOR));
+            _context.statManager().addRateData("router.invalidMessageTime", -future);
+            return "Expires too far in the future (" + future + "ms)";
         }
         return null;
     }

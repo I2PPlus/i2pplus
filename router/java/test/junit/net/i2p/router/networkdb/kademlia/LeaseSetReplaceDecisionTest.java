@@ -23,7 +23,7 @@ import net.i2p.router.Router;
 public class LeaseSetReplaceDecisionTest {
 
     private static final long NOW = 1_700_000_000_000L;
-    private static final long FUDGE = Router.CLOCK_FUDGE_FACTOR;
+    private static final long FUDGE = Router.LEASE_FUDGE_FACTOR;
 
     private LeaseSet ls1(long end) {
         LeaseSet ls = mock(LeaseSet.class);

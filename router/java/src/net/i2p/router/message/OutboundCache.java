@@ -322,7 +322,7 @@ public class OutboundCache {
     private static void cleanLeaseCache(final Map<HashPair, Lease> tc) {
         for (Iterator<Lease> iter = tc.values().iterator(); iter.hasNext(); ) {
             final Lease l = iter.next();
-            if (l.isExpired(Router.CLOCK_FUDGE_FACTOR)) {
+            if (l.isExpired(Router.LEASE_FUDGE_FACTOR)) {
                 iter.remove();
             }
         }

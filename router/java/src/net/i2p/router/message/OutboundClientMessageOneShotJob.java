@@ -909,7 +909,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         _lease = _cache.leaseCache.get(_hashPair);
         if (_lease != null) {
             // if outbound tunnel length == 0 && lease.firsthop.isBacklogged() don't use it ??
-            if (!_lease.isExpired(Router.CLOCK_FUDGE_FACTOR / 4)) {
+            if (!_lease.isExpired(Router.LEASE_FUDGE_FACTOR / 4)) {
                 // see if the current leaseSet contains the old lease, so that if the dest removes
                 // it (due to failure for example) we won't continue to use it.
                 for (int i = 0; i < _leaseSet.getLeaseCount(); i++) {
@@ -933,16 +933,16 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         // first try to get ones that really haven't expired
         for (int i = 0; i < _leaseSet.getLeaseCount(); i++) {
             Lease lease = _leaseSet.getLease(i);
-            if (!lease.isExpired(Router.CLOCK_FUDGE_FACTOR / 4)) {leases.add(lease);}
+            if (!lease.isExpired(Router.LEASE_FUDGE_FACTOR / 4)) {leases.add(lease);}
         }
 
         if (leases.isEmpty()) {
             // TODO if _lease != null, fire off
-            // a lookup ? KNDF will keep giving us the current ls until CLOCK_FUDGE_FACTOR
+            // a lookup ? KNDF will keep giving us the current ls until LEASE_FUDGE_FACTOR
             // try again with a fudge factor
             for (int i = 0; i < _leaseSet.getLeaseCount(); i++) {
                 Lease lease = _leaseSet.getLease(i);
-                if (!lease.isExpired(Router.CLOCK_FUDGE_FACTOR)) {leases.add(lease);}
+                if (!lease.isExpired(Router.LEASE_FUDGE_FACTOR)) {leases.add(lease);}
             }
         }
 
@@ -1068,7 +1068,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             return;
         }
 
-        if (_leaseSet != null && !_leaseSet.isCurrent(Router.CLOCK_FUDGE_FACTOR / 4) && _log.shouldWarn()) {
+        if (_leaseSet != null && !_leaseSet.isCurrent(Router.LEASE_FUDGE_FACTOR / 4) && _log.shouldWarn()) {
             _log.warn("Sending with STALE LeaseSet for " + _toString + " -> Expired " +
                       DataHelper.formatDuration(now - _leaseSet.getLatestLeaseDate()) + " ago");
         }
@@ -1648,7 +1648,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             String lsInfo = _leaseSet != null ?
                 ("LS [" + _leaseSet.getHash().toShortBase32() + "]" +
                  " leases=" + _leaseSet.getLeaseCount() +
-                 " current=" + _leaseSet.isCurrent(Router.CLOCK_FUDGE_FACTOR)) :
+                 " current=" + _leaseSet.isCurrent(Router.LEASE_FUDGE_FACTOR)) :
                 null;
             if (!statusToString.isEmpty() && !statusToString.equals("Unknown status")) {
                 // LS-not-found is routine (cooldown, negative cache) — demote to info;

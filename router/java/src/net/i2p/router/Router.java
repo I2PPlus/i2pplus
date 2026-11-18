@@ -156,8 +156,28 @@ public class Router implements RouterClock.ClockShiftListener {
      */
     public static final String PROP_CONFIG_FILE = "router.configLocation";
 
-    /** Let clocks be off by 30 seconds (reduced from 60s to improve lease renewal timing). */
-    public static final long CLOCK_FUDGE_FACTOR = 30L*1000;
+    /**
+     * How far a peer's clock may be off and still have the dates it publishes
+     * believed: message expirations, router-info publication dates, tunnel
+     * build expirations, and the window a message id is remembered as a
+     * duplicate. A router three minutes off is a working peer for the rest of
+     * the network, so this stays at the value the rest of the network uses.
+     *
+     * @see #LEASE_FUDGE_FACTOR
+     */
+    public static final long CLOCK_FUDGE_FACTOR = 60L*1000;
+
+    /**
+     * How close to expiry a lease may be and still be used, or still make a
+     * lease set count as current. This is a margin on our own tunnel use, not a
+     * judgement of a peer's clock, and it is deliberately tighter than
+     * {@link #CLOCK_FUDGE_FACTOR}: republishing a lease set a minute before it
+     * expires is a netDb write for nothing, while using a lease that has seven
+     * seconds left on it is a message that will fail.
+     *
+     * @since 0.9.72+
+     */
+    public static final long LEASE_FUDGE_FACTOR = 30L*1000;
 
     /** Used to differentiate routerInfo files on different networks. */
     private static final int DEFAULT_NETWORK_ID = 2;

@@ -319,7 +319,7 @@ public class RepublishLeaseSetJob extends JobImpl {
             String name = !tunnelName.isEmpty() ? " for '" + tunnelName + "'" : " for key";
             long now = getContext().clock().now();
 
-            if (!ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {
+            if (!ls.isCurrent(Router.LEASE_FUDGE_FACTOR)) {
                 handleExpiredLeaseSet(ls, name);
             } else {
                 long timeUntilExpiry = ls.getEarliestLeaseDate() - now;
@@ -401,7 +401,7 @@ public class RepublishLeaseSetJob extends JobImpl {
             // no entry exists.
             _facade.fail(_dest);
             _facade.stopPublishing(_dest);
-        } else if (!ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {
+        } else if (!ls.isCurrent(Router.LEASE_FUDGE_FACTOR)) {
             _facade.fail(_dest);
             _facade.stopPublishing(_dest);
         } else {

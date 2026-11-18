@@ -869,7 +869,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         int type = rv.getType();
         if (DatabaseEntry.isLeaseSet(type)) {
             LeaseSet ls = (LeaseSet)rv;
-            if (ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {return rv;}
+            if (ls.isCurrent(Router.LEASE_FUDGE_FACTOR)) {return rv;}
             else {
                 key = blindCache().getHash(key);
                 fail(key);
@@ -1100,7 +1100,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         DatabaseEntry ds = _ds.get(key);
         if (ds == null || !ds.isLeaseSet()) {return null;}
         LeaseSet ls = (LeaseSet) ds;
-        if (ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {return ls;}
+        if (ls.isCurrent(Router.LEASE_FUDGE_FACTOR)) {return ls;}
         return null;
     }
 
@@ -2293,6 +2293,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         final long TEN_MINUTES_MS = 10 * 60 * 1000L;  // 10 minutes in milliseconds
         // Determine if LeaseSet timestamps are outdated (stale)
         boolean isEarliestStale = earliest <= now - TEN_MINUTES_MS;
+        // The dates in a stored LeaseSet are the destination's own clock, so how
+        // long past its last lease we still accept a store is clock tolerance, not
+        // a lease margin - the future-expiration check below uses the same window.
         boolean isLatestStale = latest <= now - Router.CLOCK_FUDGE_FACTOR;
         if (!isEarliestStale && !isLatestStale) {return null;}
         long age = now - earliest;
@@ -2565,7 +2568,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * echo or duplicate cannot clobber fresher data (see {@link #isNewer}).
      * <p>
      * Exception: when the stored copy has lapsed - its latest lease ends within
-     * {@link net.i2p.router.Router#CLOCK_FUDGE_FACTOR} of {@code now} - the stored copy
+     * {@link net.i2p.router.Router#LEASE_FUDGE_FACTOR} of {@code now} - the stored copy
      * carries no reachability value, so any incoming copy is accepted to restore
      * service, still validated by the caller before {@link #store}.  Without
      * this, a hidden service that re-publishes the same LeaseSet2 generation,
@@ -2581,7 +2584,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      */
     static boolean shouldAcceptLeaseSet(LeaseSet stored, LeaseSet incoming, long now) {
         if (isNewer(incoming, stored)) {return true;}
-        return stored.getLatestLeaseDate() <= now - Router.CLOCK_FUDGE_FACTOR;
+        return stored.getLatestLeaseDate() <= now - Router.LEASE_FUDGE_FACTOR;
     }
 
 

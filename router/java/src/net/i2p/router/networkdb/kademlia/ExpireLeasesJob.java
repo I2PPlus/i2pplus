@@ -105,8 +105,8 @@ class ExpireLeasesJob extends JobImpl {
             // Skip current local LeaseSets - RepublishLeaseSetJob refreshes
             // those.  Stale expired local copies fall through and are purged
             // once they pass the stale threshold, like any other entry.
-            if (isLocal && ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {continue;}
-            if (!ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {
+            if (isLocal && ls.isCurrent(Router.LEASE_FUDGE_FACTOR)) {continue;}
+            if (!ls.isCurrent(Router.LEASE_FUDGE_FACTOR)) {
                 long expiredAgo = now - ls.getLatestLeaseDate();
                 if (expiredAgo > STALE_EXPIRED_MS) {
                     if (_log.shouldInfo()) {_log.info("Purging stale LeaseSet [" + h.toShortBase32() + "] expired " + expiredAgo + "ms ago");}
@@ -170,7 +170,7 @@ class ExpireLeasesJob extends JobImpl {
 
     /**
      * Run through the entire data store, finding all expired leaseSets (ones that
-     * don't have any leases that haven't yet passed, even with the CLOCK_FUDGE_FACTOR).
+     * don't have any leases that haven't yet passed, even with the LEASE_FUDGE_FACTOR).
      *
      * @return the keys of the leaseSets to expire, empty if none
      */
@@ -196,10 +196,10 @@ class ExpireLeasesJob extends JobImpl {
                 // dontPublishLeaseSet service with no inbound pool) must still
                 // fall through to the expiry purge below, otherwise the stale
                 // LeaseSet lingers in the netdb listing forever.
-                if (isLocal && ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {
+                if (isLocal && ls.isCurrent(Router.LEASE_FUDGE_FACTOR)) {
                     continue;
                 }
-                if (!ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {
+                if (!ls.isCurrent(Router.LEASE_FUDGE_FACTOR)) {
                     toExpire.add(h);
                 } else {
                     sz++;

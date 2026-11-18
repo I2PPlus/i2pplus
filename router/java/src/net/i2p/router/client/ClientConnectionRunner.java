@@ -1131,7 +1131,7 @@ class ClientConnectionRunner {
             // Skip this check for meta, for now, TODO
             if (current != null && current.getLeaseCount() == leases &&
                 current.getType() != DatabaseEntry.KEY_TYPE_META_LS2 &&
-                current.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {
+                current.isCurrent(Router.LEASE_FUDGE_FACTOR)) {
                 for (int i = 0; i < leases; i++) {
                     if (! current.getLease(i).getTunnelId().equals(set.getLease(i).getTunnelId()))
                         break;
