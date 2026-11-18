@@ -202,8 +202,10 @@ public class UDPTransport extends TransportImpl {
     static final int SSU2_INT_VERSION = 2;
     /** "2". */
     static final String SSU2_VERSION = Integer.toString(SSU2_INT_VERSION);
-    /** "2,". */
-    static final String SSU2_VERSION_ALT = SSU2_VERSION + ',';
+    /** "3", the NTSNTT hybrid, as one entry of the pq option. */
+    static final String PQ_VERSION_NTSNTT = "3";
+    /** "4", the MLKEM768 hybrid, as one entry of the pq option. */
+    static final String PQ_VERSION_MLKEM768 = "4";
     /** Builds the SSU2 packets we send. */
     private final PacketBuilder2 _packetBuilder2;
     /** Shared X25519 factory for the handshakes. */
@@ -1123,11 +1125,13 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     * Valid SSU version of Bob's SSU address
-     * for our outbound connections as Alice.
+     * Which SSU2 handshake to attempt against Bob's SSU address, for our
+     * outbound connections as Alice.
      *
-     * @param addr the remote RouterAddress, whose transport style selects the version
-     * @return the valid version 1 or 2, or 0 if unusable
+     * @param addr the remote RouterAddress, whose transport style and options
+     *             decide the version
+     * @return 2 for plain SSU2, 3 for the NTSNTT hybrid, 4 for the MLKEM768
+     *         hybrid, or 0 if no SSU2 handshake can be attempted
      * @since 0.9.54
      */
     int getSSUVersion(RouterAddress addr) {
@@ -1139,40 +1143,98 @@ public class UDPTransport extends TransportImpl {
         } else {
             return 0;
         }
-        // check version == "2" || version starts with "2,"
-        // and static key and intro key
-        // and, until we support relay, host and port.
-        String v = addr.getOption("v");
-        if (v == null ||
-            addr.getOption("i") == null ||
-            addr.getOption("s") == null ||
-            (!v.equals(SSU2_VERSION) && !v.startsWith(SSU2_VERSION_ALT))) {
+        String smtu = addr.getOption("mtu");
+        int theirMtu = 0;
+        if (smtu != null) {
+            try {
+                theirMtu = Integer.parseInt(smtu);
+            } catch (NumberFormatException nfe) { /* treated as absent */ }
+        }
+        // Not addr.getHost(): an address that reaches us through introducers has
+        // no host option at all, so the host string cannot say which family it
+        // is, and every IPv6 introducer would be measured against the IPv4 MTU
+        // floor. isIPv6() reads the caps option when there is no host.
+        boolean ipv6 = TransportUtil.isIPv6(addr);
+        return negotiateVersion(addr.getOption("v"), addr.getOption("pq"), addr.getOption("i"),
+                                addr.getOption("s"), theirMtu, getSSU2MTU(ipv6), ipv6);
+    }
+
+    /**
+     * Is this version one whole entry of a comma-delimited version option? A
+     * substring test reads a peer advertising pq=14 as offering hybrid 4, and
+     * v=12 as offering version 2, and we then attempt a handshake the peer never
+     * advertised. The delimiters are part of the match, so a list with a trailing
+     * comma (v=2,) still matches, as does a single value with none (v=2).
+     *
+     * @param versions the option value, null if the option is absent
+     * @param version the version to look for, as digits
+     * @return true if it is one entry of the list
+     * @since 0.9.72+
+     */
+    static boolean hasVersion(String versions, String version) {
+        return versions != null && version != null &&
+               (',' + versions + ',').contains(',' + version + ',');
+    }
+
+    /**
+     * Does this key option decode, and to the size the handshake needs? Checking
+     * it here is what lets an unusable address be skipped rather than tried: the
+     * same malformed option throws part-way through the handshake otherwise,
+     * where it reads as a peer that does not support SSU2 instead of an address
+     * we should never have selected.
+     *
+     * @param key the base64 option value, null if the option is absent
+     * @param length the exact number of bytes it must decode to
+     * @return true if it decodes to exactly that many bytes
+     * @since 0.9.72+
+     */
+    static boolean isKeyOfLength(String key, int length) {
+        byte[] decoded = Base64.decode(key);
+        return decoded != null && decoded.length == length;
+    }
+
+    /**
+     * Which SSU2 handshake to attempt against a remote address, from the options
+     * it advertises. The post-quantum hybrids need a larger packet than plain
+     * SSU2, so the MTU both sides can carry decides which of them, if either, is
+     * usable; the version and both keys have to be present and well-formed
+     * before any handshake is attempted at all.
+     *
+     * @param v the v option, a comma-delimited version list, null if absent
+     * @param pq the pq option, a comma-delimited list of post-quantum hybrids,
+     *           null if the peer advertises none
+     * @param introKey the i option, base64
+     * @param staticKey the s option, base64
+     * @param theirMtu the mtu option in bytes, 0 if absent or unparseable
+     * @param ourMtu our MTU in bytes for the address's family, 0 if unavailable
+     * @param ipv6 whether the address is IPv6, from {@link TransportUtil#isIPv6}
+     *             so an introducer address with no host is read from its caps
+     * @return 2 for plain SSU2, 3 for the NTSNTT hybrid, 4 for the MLKEM768
+     *         hybrid, or 0 if no SSU2 handshake can be attempted
+     * @since 0.9.72+
+     */
+    static int negotiateVersion(String v, String pq, String introKey, String staticKey,
+                                int theirMtu, int ourMtu, boolean ipv6) {
+        if (!hasVersion(v, SSU2_VERSION)) {
             // his address is SSU1 or is outbound SSU2 only
             return 0;
         }
-        // his address is SSU2
-        // do not validate the s/i b64, we will just catch it later
-        // todo check mtu
-        String pq = addr.getOption("pq");
-        if (pq != null) {
-            if (pq.indexOf('4') >= 0) {
-                String ip = addr.getHost();
-                boolean ipv6 = ip != null && ip.indexOf(':') >= 0;
-                int mtu = 0;
-                String smtu = addr.getOption("mtu");
-                if (smtu != null) {
-                    try {
-                        mtu = Integer.parseInt(smtu);
-                    } catch (NumberFormatException nfe) { /* ignored */ }
-                }
-                int ourmtu = getSSU2MTU(ipv6);
-                int min = ipv6 ? PeerState2.MIN_MLKEM768_IPV6_MTU : PeerState2.MIN_MLKEM768_IPV4_MTU;
-                if ((mtu == 0 || mtu >= min) && (ourmtu == 0 || ourmtu >= min))
-                    return 4;
-            }
-            if (pq.indexOf('3') >= 0)
-                return 3;
+        if (!isKeyOfLength(introKey, SSU2Util.INTRO_KEY_LEN) ||
+            !isKeyOfLength(staticKey, SSU2Util.KEY_LEN)) {
+            return 0;
         }
+        if ((theirMtu != 0 && theirMtu < PeerState2.MIN_MTU) ||
+            (ourMtu != 0 && ourMtu < PeerState2.MIN_MTU)) {
+            // below the SSU2 floor on either side, so no SSU2 packet fits
+            return 0;
+        }
+        if (hasVersion(pq, PQ_VERSION_MLKEM768)) {
+            int min = ipv6 ? PeerState2.MIN_MLKEM768_IPV6_MTU : PeerState2.MIN_MLKEM768_IPV4_MTU;
+            if ((theirMtu == 0 || theirMtu >= min) && (ourMtu == 0 || ourMtu >= min))
+                return 4;
+        }
+        if (hasVersion(pq, PQ_VERSION_NTSNTT))
+            return 3;
         return SSU2_INT_VERSION;
     }
 
@@ -2843,7 +2905,10 @@ public class UDPTransport extends TransportImpl {
         List<RouterAddress> addrs = getTargetAddresses(target);
         for (int i = 0; i < addrs.size(); i++) {
             RouterAddress addr = addrs.get(i);
-            if (addr.getTransportStyle().equals("SSU") && !"2".equals(addr.getOption("v")))
+            // Ask the target the same question the handshake will ask, so the two
+            // cannot disagree: the literal option test this replaces took an address
+            // advertising v=2,4 as the target and then refused to connect to it.
+            if (getSSUVersion(addr) == 0)
                 continue;
             if (addr.getOption("itag0") == null) {
                 // No introducers
