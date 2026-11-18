@@ -34,7 +34,7 @@ public class AccessListReloadTest {
         try {
             FileFilterDefinitionElement element = new FileFilterDefinitionElement(file, Threshold.DENY);
             Map<Hash, DestTracker> map = new HashMap<>();
-            element.update(map);
+            element.update(map, 0);
             assertEquals(1, map.size());
             assertTrue(map.containsKey(hash(B32_ONE)));
         } finally {
@@ -55,7 +55,7 @@ public class AccessListReloadTest {
         try {
             FileFilterDefinitionElement element = new FileFilterDefinitionElement(file, Threshold.DENY);
             Map<Hash, DestTracker> first = new HashMap<>();
-            element.update(first);
+            element.update(first, 0);
             assertEquals(1, first.size());
 
             // Change the file so a reload is actually attempted, then take the
@@ -65,14 +65,14 @@ public class AccessListReloadTest {
             Assume.assumeTrue("running as root, an unreadable file is still readable", !canOpen(file));
 
             Map<Hash, DestTracker> after = new HashMap<>();
-            element.update(after);
+            element.update(after, 0);
             assertTrue("A failed reload dropped the deny list", after.containsKey(hash(B32_ONE)));
 
             // The read is retried on the next sync, so fixing the file is enough
             // on its own - no timestamp change needed.
             file.setReadable(true);
             Map<Hash, DestTracker> third = new HashMap<>();
-            element.update(third);
+            element.update(third, 0);
             assertEquals(2, third.size());
         } finally {
             file.setReadable(true);
@@ -95,7 +95,7 @@ public class AccessListReloadTest {
             Assume.assumeTrue("running as root, an unreadable file is still readable", !canOpen(file));
             FileFilterDefinitionElement element = new FileFilterDefinitionElement(file, Threshold.DENY);
             try {
-                element.update(new HashMap<>());
+                element.update(new HashMap<>(), 0);
                 fail("An access list that has never been read must report the failure");
             } catch (IOException expected) {
                 // expected
@@ -120,13 +120,13 @@ public class AccessListReloadTest {
             file.setLastModified(System.currentTimeMillis() + 60 * 60 * 1000L);
             FileFilterDefinitionElement element = new FileFilterDefinitionElement(file, Threshold.DENY);
             Map<Hash, DestTracker> first = new HashMap<>();
-            element.update(first);
+            element.update(first, 0);
             assertEquals(1, first.size());
 
             write(file, B32_ONE, B32_TWO);
             file.setLastModified(System.currentTimeMillis() - 60 * 60 * 1000L);
             Map<Hash, DestTracker> second = new HashMap<>();
-            element.update(second);
+            element.update(second, 0);
             assertTrue("A rewritten file with an older timestamp was skipped",
                        second.containsKey(hash(B32_TWO)));
         } finally {
@@ -146,13 +146,13 @@ public class AccessListReloadTest {
         try {
             FileFilterDefinitionElement element = new FileFilterDefinitionElement(file, Threshold.DENY);
             Map<Hash, DestTracker> first = new HashMap<>();
-            element.update(first);
+            element.update(first, 0);
             Hash wanted = hash(B32_ONE);
             DestTracker tracker = first.get(wanted);
             assertNotNull(tracker);
 
             Map<Hash, DestTracker> second = new HashMap<>();
-            element.update(second);
+            element.update(second, 0);
             assertSame("An unchanged file must reuse the tracked destination",
                        tracker, second.get(wanted));
         } finally {
@@ -175,7 +175,7 @@ public class AccessListReloadTest {
             java.nio.file.Files.write(file.toPath(), text.getBytes(java.nio.charset.StandardCharsets.UTF_8));
             FileFilterDefinitionElement element = new FileFilterDefinitionElement(file, Threshold.DENY);
             Map<Hash, DestTracker> map = new HashMap<>();
-            element.update(map);
+            element.update(map, 0);
             assertEquals(2, map.size());
             assertTrue(map.containsKey(hash(B32_ONE)));
             assertTrue(map.containsKey(hash(B32_TWO)));

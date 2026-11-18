@@ -134,12 +134,12 @@ public class AccessCounterTest {
      */
     @Test
     public void testRetentionSizedFromRule() {
-        assertEquals(MIN_RETAINED, AccessCounter.retainedFor(new Threshold(5, 10)));
-        assertEquals(1, AccessCounter.retainedFor(Threshold.DENY));
-        int allow = AccessCounter.retainedFor(Threshold.ALLOW);
+        assertEquals(MIN_RETAINED, AccessCounter.retainedFor(new Threshold(5, 10), 0));
+        assertEquals(1, AccessCounter.retainedFor(Threshold.DENY, 0));
+        int allow = AccessCounter.retainedFor(Threshold.ALLOW, 0);
         assertTrue(allow >= MIN_RETAINED);
         assertTrue(allow < 100000);
-        assertTrue(AccessCounter.retainedFor(new Threshold(500, 60)) >= 500);
+        assertTrue(AccessCounter.retainedFor(new Threshold(500, 60), 0) >= 500);
     }
 
     /**
@@ -148,7 +148,7 @@ public class AccessCounterTest {
      */
     @Test
     public void testDenyRuleKeepsOneTimestamp() {
-        AccessCounter c = new AccessCounter(Threshold.DENY);
+        AccessCounter c = new AccessCounter(Threshold.DENY, 0);
         for (int i = 0; i < 1000; i++) {
             c.recordAccess(i);
         }
@@ -165,8 +165,8 @@ public class AccessCounterTest {
     @Test
     public void testFloodKeepsRetentionBounded() {
         Threshold threshold = new Threshold(5, 10);
-        AccessCounter c = new AccessCounter(threshold);
-        int capacity = AccessCounter.retainedFor(threshold);
+        AccessCounter c = new AccessCounter(threshold, 0);
+        int capacity = AccessCounter.retainedFor(threshold, 0);
         for (int i = 0; i < 1000000; i++) {
             c.recordAccess(i);
         }
@@ -181,7 +181,7 @@ public class AccessCounterTest {
     @Test
     public void testOverflowStillBreached() {
         Threshold threshold = new Threshold(3, 1);
-        AccessCounter c = new AccessCounter(threshold);
+        AccessCounter c = new AccessCounter(threshold, 0);
         for (long i = 0; i < 1000; i++) {
             c.recordAccess(i * 10);
         }
@@ -211,7 +211,7 @@ public class AccessCounterTest {
         for (int round = 0; round < 200; round++) {
             List<Long> history = new ArrayList<>();
             Threshold threshold = new Threshold(1 + rnd.nextInt(8), 1 + rnd.nextInt(5));
-            AccessCounter c = new AccessCounter(threshold);
+            AccessCounter c = new AccessCounter(threshold, 0);
             long t = rnd.nextInt(1000);
             int n = rnd.nextInt(60);
             for (int i = 0; i < n; i++) {

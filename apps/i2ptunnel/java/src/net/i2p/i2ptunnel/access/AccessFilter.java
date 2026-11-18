@@ -168,7 +168,8 @@ class AccessFilter implements StatefulConnectionFilter {
             synchronized(unknownDests) {
                 tracker = unknownDests.get(hash);
                 if (tracker == null) {
-                    tracker = new DestTracker(hash, definition.getDefaultThreshold());
+                    tracker = new DestTracker(hash, definition.getDefaultThreshold(),
+                                              definition.getMaxRecorderConnections());
                     if (unknownDests.size() >= MAX_STORED_DESTS) {
                         Iterator<Map.Entry<Hash, DestTracker>> iter = unknownDests.entrySet().iterator();
                         if (iter.hasNext()) {
@@ -191,8 +192,12 @@ class AccessFilter implements StatefulConnectionFilter {
      */
     private void reload() throws IOException {
         Map<Hash, DestTracker> tmp = new HashMap<>();
+        // The trackers built here are also what each recorder tests, so they have
+        // to retain the attempts the widest recorder rule asks for, not only the
+        // ones the admission rule that owns them keeps.
+        int recorderConnections = definition.getMaxRecorderConnections();
         for (FilterDefinitionElement element : definition.getElements()) {
-            element.update(tmp);
+            element.update(tmp, recorderConnections);
         }
 
         synchronized(knownDests) {

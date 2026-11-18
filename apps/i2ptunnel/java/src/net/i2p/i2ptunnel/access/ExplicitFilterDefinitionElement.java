@@ -29,9 +29,9 @@ class ExplicitFilterDefinitionElement extends FilterDefinitionElement {
     }
 
     @Override
-    public void update(Map<Hash, DestTracker> map) {
+    public void update(Map<Hash, DestTracker> map, int recorderConnections) {
         if (map.containsKey(hash))
             return;
-        map.put(hash, new DestTracker(hash, threshold));
+        map.put(hash, new DestTracker(hash, threshold, recorderConnections));
     }
 }

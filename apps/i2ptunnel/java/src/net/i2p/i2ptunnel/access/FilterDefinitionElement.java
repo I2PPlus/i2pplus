@@ -32,10 +32,16 @@ abstract class FilterDefinitionElement {
      * mentioned in this element.
      *
      * @param map the destination-to-tracker map the discovered hashes are added to
+     * @param recorderConnections the largest count any recorder of the
+     *                            definition tests against these
+     *                            destinations' attempts, 0 if it has none;
+     *                            each tracker retains enough history for
+     *                            that rule as well
      * @throws IOException if the destinations this element names cannot be read,
      * as when a file-backed element cannot be opened
      */
-    abstract void update(Map<Hash, DestTracker> map) throws IOException;
+    abstract void update(Map<Hash, DestTracker> map,
+                         int recorderConnections) throws IOException;
 
     /**
      * The access limit applied to the destinations this element names.

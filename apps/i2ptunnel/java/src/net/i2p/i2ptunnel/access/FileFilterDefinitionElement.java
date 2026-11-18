@@ -69,10 +69,13 @@ class FileFilterDefinitionElement extends FilterDefinitionElement {
      * running unfiltered.
      *
      * @param map the working set the filter is rebuilt from
+     * @param recorderConnections the largest connection count any recorder of the
+     *                            definition tests, passed to each tracker so it retains enough history
+     *                            for that rule as well, 0 if the definition has none
      * @throws IOException if the file has never been read successfully
      */
     @Override
-    public void update(Map<Hash, DestTracker> map) throws IOException {
+    public void update(Map<Hash, DestTracker> map, int recorderConnections) throws IOException {
         if (!(file.exists() && file.isFile())) {return;}
         long modified = file.lastModified();
         long length = file.length();
@@ -87,7 +90,7 @@ class FileFilterDefinitionElement extends FilterDefinitionElement {
 
         Map<Hash, DestTracker> fresh = new HashMap<>();
         try {
-            readInto(fresh);
+            readInto(fresh, recorderConnections);
         } catch (IOException failed) {
             // Clearing the cache before the read, as this class used to, meant one
             // disk error dropped every deny and throttle entry until the file's
@@ -122,10 +125,12 @@ class FileFilterDefinitionElement extends FilterDefinitionElement {
      * of the list for one bad entry.
      *
      * @param into map to add the destinations found to, keyed by destination hash
+     * @param recorderConnections the largest connection count any recorder of the
+     *                            definition tests, given to each tracker built here
      * @throws IOException if the file cannot be read
      * @since 0.9.72+
      */
-    private void readInto(Map<Hash, DestTracker> into) throws IOException {
+    private void readInto(Map<Hash, DestTracker> into, int recorderConnections) throws IOException {
         int skipped = 0;
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
             String line;
@@ -148,7 +153,7 @@ class FileFilterDefinitionElement extends FilterDefinitionElement {
                 }
                 if (into.containsKey(hash))
                     continue;
-                into.put(hash, new DestTracker(hash, threshold));
+                into.put(hash, new DestTracker(hash, threshold, recorderConnections));
             }
         }
         if (skipped > 0)

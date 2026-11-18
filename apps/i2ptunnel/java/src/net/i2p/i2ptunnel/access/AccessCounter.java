@@ -29,9 +29,11 @@ class AccessCounter {
 
     /**
      * Most timestamps retained, so a rule written with an absurd count, or with
-     * {@link Threshold#ALLOW}, cannot allocate a buffer per destination.
+     * {@link Threshold#ALLOW}, cannot allocate a buffer per destination. A rule
+     * that wants more than this can never be met by the history kept, and
+     * {@link FilterDefinition} says so once when the definition is read.
      */
-    private static final int MAX_RETAINED = 16384;
+    static final int MAX_RETAINED = 16384;
 
     /**
      * Retained attempt timestamps, oldest first at {@link #_oldest}, in the order
@@ -57,35 +59,45 @@ class AccessCounter {
     }
 
     /**
-     * Create a counter that retains enough history for the rule that owns it.
+     * Create a counter that retains enough history for the rule that owns it and
+     * for the recorder that reads the same attempts.
      *
-     * @param threshold the rule tested against the recorded attempts; the
-     *                  retention is at least its connection count, so the breach
-     *                  test never has to look at more history than the rule needs
+     * @param threshold the rule tested against the recorded attempts
+     * @param recorderConnections the largest count any recorder of the
+     *                            same definition tests against these
+     *                            attempts, 0 if it has none
      */
-    AccessCounter(Threshold threshold) {
-        this(retainedFor(threshold));
+    AccessCounter(Threshold threshold, int recorderConnections) {
+        this(retainedFor(threshold, recorderConnections));
     }
 
     /**
      * How many timestamps a counter for this rule must retain.
      * <p>
-     * A rule of N attempts per window only ever needs the N newest attempts, so
-     * the retention is N, floored at {@link #MIN_RETAINED} and capped at
-     * {@link #MAX_RETAINED}. A rule whose count exceeds the cap can never be met
-     * by the retained history and is therefore never breached - the same answer
-     * {@link Threshold#ALLOW} gives, and the only way to bound the memory a
-     * hand-written definition file can ask for. A rule of zero attempts
-     * ({@link Threshold#DENY}) only needs to know whether anything was recorded
-     * at all, so it retains one timestamp; that is what keeps a deny list of
-     * thousands of destinations cheap.
+     * A rule of N attempts per window only ever needs the N newest attempts, so the
+     * retention is the larger of the admission rule's count and the largest recorder
+     * count reading the same attempts, floored at {@link #MIN_RETAINED} and capped at
+     * {@link #MAX_RETAINED}. The recorder half is not optional: the filter tests the
+     * recorded attempts against each recorder's own rule as well, so a counter sized
+     * from the admission rule alone cannot hold the attempts a wider recorder rule
+     * asks for, and that recorder writes nothing, forever.
+     * <p>
+     * A rule whose count exceeds the cap can never be met by the retained history
+     * and is therefore never breached - the same answer {@link Threshold#ALLOW}
+     * gives, and the only way to bound the memory a hand-written definition file can
+     * ask for; {@link FilterDefinition} logs the case once when the definition is
+     * read. A rule of zero attempts ({@link Threshold#DENY}) only needs to know
+     * whether anything was recorded at all, so it retains one timestamp, which is
+     * what keeps a deny list of thousands of destinations cheap.
      *
      * @param threshold the rule to size the retention for
+     * @param recorderConnections the largest count any recorder of the
+     *                            same definition tests, 0 if there are none
      * @return the number of timestamps to retain, at least 1
      * @since 0.9.72+
      */
-    static int retainedFor(Threshold threshold) {
-        int count = threshold.getConnections();
+    static int retainedFor(Threshold threshold, int recorderConnections) {
+        int count = Math.max(threshold.getConnections(), recorderConnections);
         if (count <= 0)
             return 1;
         return Math.min(Math.max(count, MIN_RETAINED), MAX_RETAINED);

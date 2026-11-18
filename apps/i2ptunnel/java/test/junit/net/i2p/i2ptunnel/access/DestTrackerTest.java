@@ -17,7 +17,7 @@ public class DestTrackerTest {
     public void testRecordAccessReturnsBreach() {
         Hash h = Hash.FAKE_HASH;
         Threshold t = new Threshold(3, 5);
-        DestTracker tracker = new DestTracker(h, t);
+        DestTracker tracker = new DestTracker(h, t, 0);
         assertEquals(h, tracker.getHash());
         assertNotNull(tracker.getCounter());
 
@@ -30,7 +30,8 @@ public class DestTrackerTest {
     @Test
     public void testPurge() {
         Hash h = Hash.FAKE_HASH;
-        DestTracker tracker = new DestTracker(h, new Threshold(10, 10));
+        Threshold t = new Threshold(10, 10);
+        DestTracker tracker = new DestTracker(h, t, 0);
         tracker.recordAccess(1000);
         tracker.recordAccess(2000);
         // purge older than 1500: removes 1000 but keeps 2000
@@ -42,7 +43,8 @@ public class DestTrackerTest {
     @Test
     public void testNoBreachWithFewAccesses() {
         Hash h = Hash.FAKE_HASH;
-        DestTracker tracker = new DestTracker(h, new Threshold(10, 60));
+        Threshold t = new Threshold(10, 60);
+        DestTracker tracker = new DestTracker(h, t, 0);
         long now = 1000;
         for (int i = 0; i < 5; i++) {
             assertFalse(tracker.recordAccess(now + i * 1000));

@@ -21,11 +21,17 @@ class DestTracker {
      *
      * @param hash hash of the remote destination
      * @param threshold threshold defined in the access rule
+     * @param recorderConnections the largest count any recorder of the
+     *                            definition tests against this
+     *                            destination's attempts, 0 if it has
+     *                            none; the history is sized for that rule
+     *                            too, since a recorder wanting more
+     *                            attempts than are retained never breaches
      */
-    DestTracker(Hash hash, Threshold threshold) {
+    DestTracker(Hash hash, Threshold threshold, int recorderConnections) {
         this.hash = hash;
         this.threshold = threshold;
-        this.counter = new AccessCounter(threshold);
+        this.counter = new AccessCounter(threshold, recorderConnections);
     }
 
     /**
