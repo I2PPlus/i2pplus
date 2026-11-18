@@ -274,6 +274,32 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     }
 
     /**
+     * Re-points an introduced handshake at the source a validated HolePunch
+     * came from, when the RelayResponse named a different port than the peer's
+     * NAT mapped for us. The noise state, the keys and the token do not depend
+     * on the endpoint, so the handshake is not restarted; where it is sent, and
+     * the source their SessionCreated must come from, both follow the punch.
+     * <p>
+     * Caller checks the attempt is early enough to move
+     * ({@link EstablishmentManager#canRepointEndpoint}) and holds this state's
+     * lock, as {@link #introduced(byte[], int, long)} does not.
+     *
+     * @param ip the validated IP address bytes, already checked by the transport
+     * @param port the validated port
+     * @since 0.9.72+
+     */
+    synchronized void holePunchAddress(byte[] ip, int port) {
+        _bobIP = ip;
+        _bobPort = port;
+        _remoteHostId = new RemoteHostId(ip, port);
+        try {
+            _bobSocketAddress = new InetSocketAddress(InetAddress.getByAddress(ip), port);
+        } catch (UnknownHostException uhe) {
+            throw new IllegalArgumentException("BAD IP", uhe);
+        }
+    }
+
+    /**
      * This will be called 0 times if we don't have a token and never get a retry;
      * once if we have a token;
      * and twice if the token we had was bad and we got a retry.

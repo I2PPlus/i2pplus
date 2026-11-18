@@ -953,6 +953,76 @@ public class EstablishmentManager {
     }
 
     /**
+     * Does this relay response end the introduction attempt? Only Charlie's
+     * rejection does (codes 64+) - he is the destination and he said no. Bob's
+     * rejection (1-63) leaves the attempt alive so another introducer can be
+     * asked, and an accepted response (0) must leave it alive too: the
+     * HolePunch is what proves the endpoint, and it may arrive after the
+     * response, which travels through the introducer in two round trips while
+     * the punch takes one, and from a source port the response never named,
+     * which is what a NAT that maps one port per destination does. The nonce is
+     * then the only key that still finds the state, so the response must not
+     * spend it.
+     *
+     * @param code the relay response code
+     * @return true if the live introduction entry is spent by this response
+     * @since 0.9.72+
+     */
+    static boolean endsIntroduction(int code) {
+        return code >= 64;
+    }
+
+    /**
+     * Find the outbound state a HolePunch belongs to, looking, but not taking.
+     * The endpoint is tried first, because a punch that follows the relay
+     * response is keyed by the address it named whenever Charlie's NAT maps the
+     * same source port for every destination. When that lookup misses, the
+     * nonce is the fallback, and the only key that works when it does not.
+     * <p>
+     * Nothing is removed here: the caller has not authenticated the punch yet,
+     * and a spoofed one that carries a guessed nonce and passes the published
+     * introduction key would otherwise delete the live introduction and leave
+     * nothing for Charlie's real punch to land on.
+     *
+     * @param byEndpoint the outbound states, keyed by remote endpoint
+     * @param byNonce the live introductions, keyed by nonce
+     * @param id the endpoint the punch actually came from
+     * @param nonce the nonce from the validated response
+     * @return the state, or null if neither key matches it
+     * @since 0.9.72+
+     */
+    static OutboundEstablishState findIntroduction(Map<RemoteHostId, OutboundEstablishState> byEndpoint,
+                                                   Map<Long, OutboundEstablishState> byNonce,
+                                                   RemoteHostId id, long nonce) {
+        OutboundEstablishState state = byEndpoint.get(id);
+        if (state != null) {return state;}
+        return byNonce.get(Long.valueOf(nonce));
+    }
+
+    /**
+     * May a validated HolePunch still move an introduced handshake to the
+     * address it came from? Yes while the handshake is in flight or has not
+     * been sent: the noise state, the token and the keys do not depend on the
+     * endpoint, so only the destination changes. No once their SessionCreated
+     * has been authenticated, because the session is keyed by that address by
+     * then and moving it under the session strands it.
+     *
+     * @param state the state of the outbound attempt
+     * @return true if the endpoint may still be corrected
+     * @since 0.9.72+
+     */
+    static boolean canRepointEndpoint(OutboundEstablishState.OutboundState state) {
+        switch (state) {
+            case OB_STATE_PENDING_INTRO:
+            case OB_STATE_INTRODUCED:
+            case OB_STATE_REQUEST_SENT:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /**
      * Is the claimed relay address unacceptable, meaning Charlie asked us to
      * connect somewhere invalid, too close, on our own network, or a
      * blocklisted address? Finding the introducer's own IP in the claim is
@@ -2433,11 +2503,14 @@ public class EstablishmentManager {
      * @since 0.9.55
      */
     void receiveRelayResponse(PeerState2 bob, long nonce, int code, byte[] data) {
-        // don't remove unless accepted or rejected by charlie
+        // don't remove unless rejected by charlie - an accepted introduction is
+        // spent by the HolePunch that proves the endpoint, not by this answer,
+        // and a bob rejection leaves the attempt alive for another introducer,
+        // see endsIntroduction()
         OutboundEstablishState charlie;
         Long lnonce = Long.valueOf(nonce);
-        if (isBobRelayReject(code)) {charlie = _liveIntroductions.get(lnonce);}
-        else {charlie = _liveIntroductions.remove(lnonce);}
+        if (endsIntroduction(code)) {charlie = _liveIntroductions.remove(lnonce);}
+        else {charlie = _liveIntroductions.get(lnonce);}
         if (charlie == null) {
             if (_log.shouldDebug()) {
                 _log.debug("[SSU] Duplicate or unknown RelayResponse: " + nonce);
@@ -2626,6 +2699,12 @@ public class EstablishmentManager {
         if (signedData == null) {return;}
         int port = validateHolePunchAddress(state, id, signedData);
         if (port < 0) {return;}
+        // The introduction is spent here, not at the lookup: the ChaChaPoly tag
+        // on a HolePunch is keyed by a key we publish, so until the introducer's
+        // signature has been checked, a spoofed punch carrying a guessed nonce
+        // would have deleted the live introduction and left Charlie's real one
+        // nowhere to land.
+        _liveIntroductions.remove(Long.valueOf(nonce), state);
         long token = SSU2Util.getRelayResponseToken(cb._respData);
         updateHolePunchState(state, state2, signedData, port, now, token);
     }
@@ -2672,30 +2751,28 @@ public class EstablishmentManager {
     }
 
     /**
-     * Find the outbound establish state this HolePunch belongs to.
+     * Find the outbound establish state this HolePunch belongs to, without
+     * consuming the introduction - the caller removes it once the punch is
+     * authenticated.
      *
      * @param id the {@link RemoteHostId} of the sending peer
      * @param nonce the nonce from the validated response
      * @return the state, or null if unknown
      */
     private OutboundEstablishState findHolePunchState(RemoteHostId id, long nonce) {
-        // Tracked optimization, not a defect: the RemoteHostId map is consulted
-        // first and the nonce map second. The nonce is the stronger key (it
-        // survives a claimed-address change), so swapping the order would save
-        // a lookup on the usual path.
-        OutboundEstablishState state = _outboundStates.get(id);
-        if (state != null) {
+        OutboundEstablishState state = findIntroduction(_outboundStates, _liveIntroductions, id, nonce);
+        if (state == null) {
+            if (_log.shouldInfo()) {_log.info("[SSU] No state found for SSU2 HolePunch from " + id);}
+            return null;
+        }
+        if (_outboundStates.get(id) == state) {
             if (_log.shouldInfo()) {_log.info("[SSU] HolePunch after RelayResponse from " + state);}
         } else {
-            // This is the usual case, we received the HolePunch (1 1/2 RTT)
-            // before the RelayResponse (2 RTT), lookup by nonce.
-            state = _liveIntroductions.remove(Long.valueOf(nonce));
-            if (state != null) {
-                if (_log.shouldInfo()) {_log.info("[SSU] HolePunch before RelayResponse from " + state);}
-            } else {
-                if (_log.shouldLog(Log.INFO)) {_log.info("[SSU] No state found for SSU2 HolePunch from " + id);}
-                return null;
-            }
+            // The usual case is the HolePunch (1 1/2 RTT) arriving before the
+            // RelayResponse (2 RTT), so it is keyed by nonce. It is also the
+            // only way a punch that arrives later can be found when Charlie's
+            // NAT maps a different source port for us than the one Bob relayed.
+            if (_log.shouldInfo()) {_log.info("[SSU] HolePunch before RelayResponse from " + state);}
         }
         return state;
     }
@@ -2851,16 +2928,64 @@ public class EstablishmentManager {
                 }
                 if (claimed != null)
                     _outboundByClaimedAddress.remove(oldId, state);  // only if == state
+            } else {
+                // The RelayResponse came first and keyed the attempt to the
+                // address Charlie named. The punch is signed proof of where
+                // Charlie's NAT put them for us, so follow it.
+                repointState(state, state2, ip, port, now, token);
             }
-            // Tracked limitation: the IP/port Bob claimed in the
-            // RelayResponse is not compared against the address the
-            // HolePunch actually came from; see the equivalent note in
-            // receiveRelayResponse() for why the addresses may differ.
         }
         boolean sendNow = state.receiveHolePunch();
         if (sendNow) {
             if (_log.shouldInfo()) {_log.info("[SSU] Send Session Request after HolePunch from " + state);}
             notifyActivity();
+        }
+    }
+
+    /**
+     * Follow a validated HolePunch to the address it came from, when the
+     * RelayResponse arrived first and keyed the attempt to the address Charlie
+     * named in it. Charlie publishes a mapping it observed through the
+     * introducer, and a NAT that maps a different source port per destination
+     * puts our session on a port nothing is listening on: the handshake then
+     * keeps pointing at the named port, their SessionCreated arrives from the
+     * mapped one, and the attempt times out. The punch carries the source it
+     * really left, it is signed by the introducer, and the handshake keys and
+     * token do not depend on the endpoint, so only the destination moves.
+     * <p>
+     * Caller holds the state's lock.
+     *
+     * @param state the outbound establish state
+     * @param state2 SSU2-specific state, to re-point the handshake itself
+     * @param ip the validated IP address the punch came from
+     * @param port the validated port the punch came from
+     * @param now the packet receipt time in milliseconds
+     * @param token the token from the end of the full response
+     */
+    private void repointState(OutboundEstablishState state, OutboundEstablishState2 state2,
+                              byte[] ip, int port, long now, long token) {
+        RemoteHostId oldId = state.getRemoteHostId();
+        if (port == oldId.getPort() && DataHelper.eq(ip, oldId.getIP()))
+            return;
+        if (!canRepointEndpoint(state.getState())) {
+            // Their SessionCreated has been authenticated, so the session is
+            // keyed by the address we are already using. Moving it now would
+            // strand the session that just came up.
+            if (_log.shouldDebug()) {
+                _log.debug("[SSU] HolePunch named another endpoint -> Handshake too far advanced to move" +
+                           " * Punch: " + Addresses.toString(ip, port));
+            }
+            return;
+        }
+        state2.holePunchAddress(ip, port);
+        RemoteHostId newId = state.getRemoteHostId();
+        _outboundStates.remove(oldId, state);  // only if == state
+        _outboundStates.put(newId, state);
+        // The token is keyed by the address we connect from, so a later attempt
+        // has to find it under the mapped port, not the named one.
+        addOutboundToken(newId, token, now + 10*1000);
+        if (_log.shouldInfo()) {
+            _log.info("[SSU] HolePunch corrected the endpoint -> RelayResponse named " + oldId + " * Now: " + newId);
         }
     }
 
@@ -3180,7 +3305,11 @@ public class EstablishmentManager {
             if (removed) {
                 if (_log.shouldDebug())
                     _log.debug("RelayRequest for " + outboundState + " timed out");
-                _context.statManager().addRateData("udp.sendIntroRelayTimeout", 1);
+                // An accepted introduction stays in the map until the HolePunch
+                // spends it, so an attempt that got its RelayResponse and then
+                // never got punched is not a relay request timing out.
+                if (outboundState.getState() == OB_STATE_PENDING_INTRO)
+                    _context.statManager().addRateData("udp.sendIntroRelayTimeout", 1);
             }
         }
         // only if == state
