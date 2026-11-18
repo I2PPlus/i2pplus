@@ -8,6 +8,7 @@ package i2p.susi.webmail.pop3;
 
 import i2p.susi.util.Buffer;
 import i2p.susi.util.Config;
+import i2p.susi.util.CommandUtil;
 import i2p.susi.util.LogHelper;
 import i2p.susi.util.MemoryBuffer;
 import i2p.susi.webmail.Messages;
@@ -1018,10 +1019,17 @@ public class POP3MailBox implements NewMailListener {
      * Caller must sync.
      *
      * @param cmd command to send non-null
-     * @throws IOException if the command cannot be written to the socket
+     * @throws IOException if the command is not a single line, or cannot be
+     *                     written to the socket
      * @since 0.9.13
      */
     private void sendCmd1aNoWait(String cmd) throws IOException {
+        // Checked before anything is written: a control character in a USER or
+        // PASS argument from the login form ends this command early, and the
+        // rest of it reaches the server as a command nobody asked for.
+        if (!CommandUtil.isSingleLine(cmd)) {
+            throw new IOException("Command is not a single line");
+        }
         cmd += "\r\n";
         socket.getOutputStream().write(DataHelper.getASCII(cmd));
         updateActivity();

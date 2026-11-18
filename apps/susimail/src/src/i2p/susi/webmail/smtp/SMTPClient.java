@@ -6,6 +6,7 @@
  */
 package i2p.susi.webmail.smtp;
 
+import i2p.susi.util.CommandUtil;
 import i2p.susi.util.FilenameUtil;
 import i2p.susi.webmail.Attachment;
 import i2p.susi.webmail.Messages;
@@ -20,6 +21,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
@@ -61,9 +63,6 @@ public class SMTPClient {
     private boolean supports8BitMime;
     /** Largest message the server accepts, in bytes. */
     private long maxSize = DEFAULT_MAX_SIZE;
-    /** Encoder for base64-authenticated logins. */
-    private static final Encoding base64;
-    static {base64 = EncodingFactory.getEncoding("base64");}
 
     /** Creates a client with no error. */
     public SMTPClient() {
@@ -128,10 +127,17 @@ public class SMTPClient {
      *
      * @param cmd the command to write, never null
      * @param mask true to mask the command in debug logs (credentials)
-     * @throws IOException if there is no connected socket, or the write fails
+     * @throws IOException if there is no connected socket, the command is not a
+     *                     single line, or the write fails
      * @since 0.9.13
      */
     private void sendCmdNoWait(String cmd, boolean mask) throws IOException {
+        // Checked before anything is written or logged: a control character in a
+        // credential ends this command early and the rest of it reaches the
+        // server as a command nobody asked for.
+        if (!CommandUtil.isSingleLine(cmd)) {
+            throw new IOException("Command is not a single line");
+        }
         if (_log.shouldDebug()) {
             String logCmd = mask || cmd.startsWith("PASS ") ? "****" : cmd;
             _log.debug("SMTP command -> Command: " + logCmd);
@@ -140,6 +146,21 @@ public class SMTPClient {
         OutputStream out = socket.getOutputStream();
         cmd += "\r\n";
         out.write(DataHelper.getASCII(cmd));
+    }
+
+    /**
+     * The base64 of one AUTH LOGIN argument. RFC 4954 wants it on a single line,
+     * and the MIME content-transfer encoder in this package wraps at 76
+     * characters, so a credential of 57 bytes or more came back from it split in
+     * two: the server read the token as ending early and the remainder as a
+     * separate, invalid command, and the login failed.
+     *
+     * @param credential the user name or password as the login form gave it
+     * @return the credential, UTF-8 encoded in base64, on one line
+     * @since 0.9.72+
+     */
+    static String authToken(String credential) {
+        return Base64.getEncoder().encodeToString(DataHelper.getUTF8(credential));
     }
 
     /**
@@ -327,12 +348,12 @@ public class SMTPClient {
                 }
             }
             if (ok) {
-                // RFC 4954 says AUTH must be the last but let's assume
-                // that includes the user/pass on following lines
+                // RFC 4954 says AUTH must be the last command, but let's assume
+                // that means last but for its own base64 user and password
                 List<SendExpect> cmds = new ArrayList<>();
                 cmds.add(new SendExpect("AUTH LOGIN", 334));
-                cmds.add(new SendExpect(base64.encode(user), 334, true));
-                cmds.add(new SendExpect(base64.encode(pass), 235, true));
+                cmds.add(new SendExpect(authToken(user), 334, true));
+                cmds.add(new SendExpect(authToken(pass), 235, true));
                 if (sendCmds(cmds) != 3) {
                     error += _t("Login failed") + '\n';
                     ok = false;
