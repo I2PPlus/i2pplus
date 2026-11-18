@@ -308,7 +308,12 @@ public class BuildExecutor implements Runnable {
     private final ConcurrentHashMap<Long, PooledTunnelCreatorConfig> _recentlyBuildingMap; // indexed by ptcc.getReplyMessageId()
     /** True while the executor thread runs. */
     private volatile boolean _isRunning;
-    /** True to force another build pass. */
+    /**
+     * True to force another build pass. run2() reads it under
+     * {@link #_currentlyBuilding}, so every writer must hold that monitor too:
+     * a write outside it can be reset by the pass before the pass ever sees it,
+     * and the wakeup is then lost for the full {@link #LOOP_TIME}.
+     */
     private boolean _repoll;
     /** When the last build pass started. */
     private long _lastBuildPassTime;
@@ -735,6 +740,15 @@ public class BuildExecutor implements Runnable {
     private static final int MIN_BUILD_SPACING_MS = 2000;
 
     /**
+     * Fastest completed build that still wakes the build loop. Anything quicker
+     * is the no-network shape - the first-hop fail job fires one per outstanding
+     * request - and waking the loop for each of them burns CPU instead of
+     * waiting for the next pass.
+     * @since 0.9.72+
+     */
+    private static final int MIN_REPOLL_BUILD_TIME_MS = 250;
+
+    /**
      * Pool-backoff counting excludes results that are not peer failures:
      * SUCCESS, DUP_ID (already handled), REJECT (peer said no),
      * NO_TUNNELS (local resource condition), NO_NETDB (local netdb miss),
@@ -912,6 +926,9 @@ public class BuildExecutor implements Runnable {
         _lastRebuildTime.clear();
         _lastConfigureTime.clear();
         restart();
+        // Take the loop out of its park as well as stopping it, or shutdown
+        // waits out the LOOP_TIME timeout; run2() re-tests _isRunning and exits
+        repoll();
     }
 
     /**
@@ -2550,7 +2567,9 @@ public class BuildExecutor implements Runnable {
 
         while (_isRunning && !_manager.isShutdown()) {
             try {
-                _repoll = false;
+                // Under the monitor, or a repoll() that lands between the last
+                // pass's wait() and this line is erased before the pass sees it
+                synchronized (_currentlyBuilding) {_repoll = false;}
                 _manager.listPools(pools);
 
                 // DIAGNOSTIC: confirm BldExecutor thread is alive each iteration
@@ -3214,6 +3233,19 @@ public class BuildExecutor implements Runnable {
     }
 
     /**
+     * Whether a completed build is worth waking the build loop for. A build that
+     * ended faster than {@link #MIN_REPOLL_BUILD_TIME_MS} is the no-network
+     * shape - the first-hop fail job fires one of those per request - and waking
+     * the loop for each of them burns CPU instead of backing off until the next
+     * pass.
+     *
+     * @param buildTime how long the build took, in milliseconds
+     * @return true to remember the completion and wake the build loop
+     * @since 0.9.72+
+     */
+    static boolean shouldRepoll(long buildTime) { return buildTime > MIN_REPOLL_BUILD_TIME_MS; }
+
+    /**
      * Handle a completed tunnel build.
      *
      * @param cfg the tunnel configuration to build
@@ -3338,10 +3370,14 @@ public class BuildExecutor implements Runnable {
 
         /* Only wake up the build thread if it took a reasonable amount of time -
          this prevents high CPU usage when there is no network connection
-         (via BuildRequestor.TunnelBuildFirstHopFailJob)
+         (via BuildRequestor.TunnelBuildFirstHopFailJob).
+         repoll() remembers the completion as well as notifying, because a
+         completion that arrives while run2() is in the pass body is not parked
+         in wait() to receive it, and the loop would then sit out the full
+         LOOP_TIME before it saw that a slot had freed up.
          */
-        if (buildTime > 250) {
-            synchronized (_currentlyBuilding) {_currentlyBuilding.notifyAll();}
+        if (shouldRepoll(buildTime)) {
+            repoll();
         } else if (cfg.getLength() > 1 && _log.shouldInfo() && buildTime < 50) {
             _log.info("Build completed fast (" + buildTime + "ms) -> " + cfg.toShortString());
         }
