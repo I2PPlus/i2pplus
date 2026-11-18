@@ -363,6 +363,61 @@ public class RouterThrottleImpl implements RouterThrottle {
 
     /** Also limited to 90% - see below. */
     private static final int MIN_AVAILABLE_BPS = 4*1024; // always leave at least 4KBps free when allowing
+
+    /** Fraction of the total bandwidth limit the ceiling is taken from. */
+    private static final float TOTAL_LIMIT_FRACTION = 0.9f;
+
+    /**
+     * How full the allowance has to be before the rejection curve applies at all:
+     * below this the probability is reported as 0.
+     */
+    private static final float REJECT_CURVE_THRESHOLD = 0.90f;
+
+    /**
+     * The ceiling the throttle measures fullness against: the share of the
+     * bandwidth limit offered to participating tunnels, bounded by the total
+     * limit less its reserve. Measuring against the unshared limit instead calls
+     * a router at a fifth of its allowance nearly full, and the curve then
+     * refuses transit build requests while there is room.
+     *
+     * @param maxKBps the configured bandwidth limit, in kilobytes per second
+     * @param share the fraction of it offered to participating tunnels
+     * @return the ceiling in bytes per second, 0 or below for a tiny share
+     * @since 0.9.72+
+     */
+    static float sharedCeilingBps(int maxKBps, double share) {
+        return Math.min((float) (maxKBps * 1024 * share),
+                        (maxKBps * 1024f * TOTAL_LIMIT_FRACTION) - MIN_AVAILABLE_BPS);
+    }
+
+    /**
+     * How full the allowance is, as a fraction: 1 when the share leaves no
+     * allowance to measure against, so a degenerate share rejects rather than
+     * dividing by zero or going negative.
+     *
+     * @param availBps bandwidth still unallocated, in bytes per second
+     * @param maxBps the ceiling from {@link #sharedCeilingBps}, in bytes per second
+     * @return the fraction of the allowance in use, 0 to 1
+     * @since 0.9.72+
+     */
+    static float percentFull(int availBps, float maxBps) {
+        return maxBps > 0 ? (maxBps - availBps) / maxBps : 1;
+    }
+
+    /**
+     * Probability of refusing a participating tunnel request at this fullness:
+     * nothing below the curve threshold, then the fullness raised to the
+     * configured exponent, so a small overshoot of a steep curve is a small
+     * rate and a used-up allowance is near-certain rejection.
+     *
+     * @param pctFull how full the shared allowance is, as a fraction
+     * @param exponent steepness of the curve, already clamped by the caller
+     * @return the probability of rejecting, 0 to 1
+     * @since 0.9.72+
+     */
+    static double rejectProbability(float pctFull, int exponent) {
+        return pctFull < REJECT_CURVE_THRESHOLD ? 0 : Math.pow(pctFull, exponent);
+    }
     /** Log text for a bandwidth-limit rejection. */
     private static final String LIMIT_STR = _x("Declining requests" + ": " + "Bandwidth limit");
 
@@ -424,10 +479,13 @@ public class RouterThrottleImpl implements RouterThrottle {
                                    " * Estimated requirement: " + bytesAllocated + "B/s");
             }
         } else {
-            // limit at 90% - 4KBps (see above)
-            float maxBps = (maxKBps * 1024f * 0.9f) - MIN_AVAILABLE_BPS;
-            float pctFull = (maxBps - availBps) / (maxBps);
-            if (pctFull < 0.90f) {
+            // Measure fullness against the bandwidth offered to participating
+            // tunnels, bounded by the reserve taken off the total limit above.
+            // The unshared limit is not what those tunnels were given, so
+            // measuring against it calls a lightly used share nearly full.
+            float maxBps = sharedCeilingBps(maxKBps, share);
+            float pctFull = percentFull(availBps, maxBps);
+            if (pctFull < REJECT_CURVE_THRESHOLD) {
                 probReject = 0; // probReject < ~5%
                 reject = false;
                 if (_log.shouldDebug()) {
@@ -442,15 +500,16 @@ public class RouterThrottleImpl implements RouterThrottle {
                 // at moderate load), above 20 it creates a cliff (near-zero rejection
                 // until saturation, then instant 100%).
                 int exponent = getThrottleRejectExponent(_context);
-                probReject = Math.pow(pctFull, exponent);
+                probReject = rejectProbability(pctFull, exponent);
                 double rand = _context.random().nextFloat();
                 reject = rand <= probReject;
                 if (reject) {
                     if (_log.shouldWarn()) {
                         _log.warnThrottled("throttle-probabilistic-reject",
-                                           "Rejecting a message -> The bandwidth limit is " +
+                                           "Rejecting a participating tunnel -> The shared bandwidth allowance is " +
                                            (int) (pctFull * 100) + "% used" +
-                                           "\n* Available: " + availBps + "B/s * In use: " + used + "B/s" +
+                                           "\n* Available: " + availBps + "B/s * Allowance: " + (int) maxBps + "B/s" +
+                                           " * In use: " + used + "B/s" +
                                            " * Reject probability: " + String.format("%.2f", probReject) +
                                            " * Tunnels: " + numTunnels +
                                            " * Estimated requirement: " + bytesAllocated + "B/s");
