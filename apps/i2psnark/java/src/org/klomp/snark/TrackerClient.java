@@ -545,8 +545,12 @@ public class TrackerClient implements Runnable {
     private static final int MAX_TRACKERS = 32;
     /** Util providing the session and proxy settings. */
     private final I2PSnarkUtil _util;
-    /** The torrent's metadata, reassigned by reinitialize. */
-    private MetaInfo meta;
+    /**
+     * The torrent's metadata, reassigned by reinitialize() and by gotMetaInfo()
+     * when a magnet resolves it. Volatile: written on a peer thread, read on the
+     * announce thread and on the DHT fetch pool.
+     */
+    private volatile MetaInfo meta;
     /** Hex info hash identifying the torrent. */
     private final String infoHash;
     /**
@@ -887,7 +891,9 @@ public class TrackerClient implements Runnable {
     }
 
     /**
-     * Call after editing torrent.
+     * Rebuild the tracker lists after the torrent has been edited. Only a
+     * stopped client re-runs setup(), so a running torrent keeps the lists it
+     * built when it started.
      *
      * @since 0.9.57
      */
@@ -899,6 +905,85 @@ public class TrackerClient implements Runnable {
         backupTrackers.clear();
         meta = snark.getMetaInfo();
         setup();
+    }
+
+    /**
+     * Hand this client the metadata a magnet link resolved. setup() runs once,
+     * and a torrent added by magnet reaches it with no metadata at all, so
+     * without this the private flag stays unknown for the life of the torrent:
+     * reinitialize() will not re-run setup() on a running client. An unknown
+     * private flag means the torrent is announced into the DHT and its peers are
+     * shared over PEX, both of which BEP 3, BEP 11 and BEP 5 forbid for a
+     * private torrent, and its own announce list and web seeds are never used.
+     *
+     * @param metainfo the metadata that just arrived, never null
+     * @since 0.9.72+
+     */
+    synchronized void gotMetaInfo(MetaInfo metainfo) {
+        meta = metainfo;
+        if (!isPrivateTorrent(metainfo)) {
+            return;
+        }
+        boolean cancelled = cancelDHTFetch();
+        byte[] ih = snark.getInfoHash();
+        DHT dht = _util.getDHTForTorrent(ih);
+        if (dht != null) {
+            dht.unannounce(ih);
+        }
+        if (_log.shouldInfo()) {
+            _log.info("Stopping DHT and PEX -> The metadata marks this magnet torrent private"
+                      + " * Infohash: " + shortInfoHash);
+        }
+        if (cancelled && _log.shouldDebug()) {
+            _log.debug("Removing a queued DHT fetch -> The torrent is private"
+                       + " * Infohash: " + shortInfoHash);
+        }
+    }
+
+    /**
+     * Take this torrent's DHT fetch out of the line shared by every torrent. A
+     * fetch that is already running is left alone - it re-checks the private
+     * flag before it starts the lookup, and halt() interrupts it - so its queue
+     * entry, its queued flag and its demand stay owned by the fetch thread that
+     * is holding them.
+     *
+     * @return true if a fetch that had not started yet was taken out of the line
+     * @since 0.9.72+
+     */
+    private boolean cancelDHTFetch() {
+        if (!_dhtFetchQueue.remove(this)) {
+            return false;
+        }
+        _dhtQueued.set(false);
+        _pendingDHT = null;
+        _dhtFetchDemand.decrementAndGet();
+        return true;
+    }
+
+    /**
+     * Whether this torrent's metadata forbids public peer discovery. BEP 3 keeps
+     * a private torrent out of the DHT and BEP 11 out of PEX, and BEP 12 keeps
+     * its announce list to the trackers the torrent itself names. A magnet
+     * torrent with no metadata yet is not private - that is what lets it look
+     * the metadata up in the first place.
+     *
+     * @param metainfo the torrent's metadata, null while a magnet has none yet
+     * @return true if the torrent is private
+     * @since 0.9.72+
+     */
+    static boolean isPrivateTorrent(MetaInfo metainfo) {
+        return metainfo != null && metainfo.isPrivate();
+    }
+
+    /**
+     * Whether the metadata this client holds right now forbids public peer
+     * discovery - see {@link #isPrivateTorrent(MetaInfo)}.
+     *
+     * @return true if the torrent is private
+     * @since 0.9.72+
+     */
+    boolean isPrivateTorrent() {
+        return isPrivateTorrent(meta);
     }
 
     /**
@@ -951,7 +1036,7 @@ public class TrackerClient implements Runnable {
         // slot for, so picking the URL for the primary's host has to see the
         // pair, not just the declared one.
         List<String> urls = new ArrayList<>(16);
-        if (meta == null || !meta.isPrivate()) {
+        if (!isPrivateTorrent()) {
             if (meta != null) {
                 List<List<String>> list = meta.getAnnounceList();
                 if (list != null) {
@@ -995,7 +1080,7 @@ public class TrackerClient implements Runnable {
         // We completely ignore the BEP 12 processing rules
         // When meta is null (magnet/lookup), skip the announce-list but still
         // add open trackers so we don't hit "No valid trackers" at startup.
-        if (meta == null || !meta.isPrivate()) {
+        if (!isPrivateTorrent()) {
             if (urls.size() > 1) {
                 Collections.shuffle(urls, _util.getContext().random());
                 if (_util.udpEnabled()) {
@@ -1020,7 +1105,7 @@ public class TrackerClient implements Runnable {
         // default UDP tracker is what makes this list non-empty in the default
         // configuration, and it was previously unreachable because it was only added
         // inside the trackers.isEmpty() branch.
-        if (meta == null || !meta.isPrivate()) {
+        if (!isPrivateTorrent()) {
             List<String> tlist = _util.getBackupTrackers();
             for (int i = 0; i < tlist.size(); i++) {
                 String url = tlist.get(i);
@@ -1191,7 +1276,7 @@ public class TrackerClient implements Runnable {
 
                 // Local DHT tracker announce
                 DHT dht = _util.getDHTForTorrent(snark.getInfoHash());
-                if (dht != null && (meta == null || !meta.isPrivate()))
+                if (dht != null && !isPrivateTorrent())
                     dht.announce(snark.getInfoHash(), coordinator.completed());
 
                 int oldSeenPeers = snark.getTrackerSeenPeers();
@@ -1934,7 +2019,7 @@ public class TrackerClient implements Runnable {
     private int getPeersFromPEX() {
         // Get peers from PEX
         int rv = 0;
-        if (coordinator.needOutboundPeers() && (meta == null || !meta.isPrivate()) && !stop) {
+        if (coordinator.needOutboundPeers() && !isPrivateTorrent() && !stop) {
             Set<PeerID> pids = coordinator.getPEXPeers();
             if (!pids.isEmpty()) {
                 if (_log.shouldInfo()) {
@@ -1963,7 +2048,7 @@ public class TrackerClient implements Runnable {
      */
     private void fetchPeersFromDHT() {
         DHT dht = _util.getDHTForTorrent(snark.getInfoHash());
-        if (dht == null || (meta != null && meta.isPrivate()) || stop) {
+        if (dht == null || isPrivateTorrent() || stop) {
             return;
         }
         if (meta != null
@@ -2183,8 +2268,10 @@ public class TrackerClient implements Runnable {
                                       DHT_FETCH_MIN_SLOTS, DHT_FETCH_MAX_SLOTS);
             try {
                 // a fetch queued before halt() must not spend its multi-minute
-                // lookup on a dead client, holding a slot and a worker
-                if (!stop) {
+                // lookup on a dead client, holding a slot and a worker; and one
+                // queued before a magnet resolved the metadata must not announce
+                // a torrent that turns out to be private
+                if (!stop && !isPrivateTorrent()) {
                     running = takeDHTFetchSlot(slots, rate);
                     if (running) {
                         long started = _util.getContext().clock().now();
@@ -2207,6 +2294,9 @@ public class TrackerClient implements Runnable {
                         _dhtFetchQueue.add(TrackerClient.this);
                         requeued = true;
                     }
+                } else if (!stop && _log.shouldDebug()) {
+                    _log.debug("Skipping a DHT peer fetch -> The torrent is private"
+                               + " * Infohash: " + shortInfoHash);
                 }
             } finally {
                 if (running) {
@@ -2286,6 +2376,13 @@ public class TrackerClient implements Runnable {
                                     coordinator.completed(),
                                     numwant <= 1)
                             : dht.getPeers(ih, numwant, DHT_LOOKUP_WAIT, numwant <= 1);
+            if (isPrivateTorrent()) {
+                // The metadata arrived while this lookup was walking, so the
+                // announce it just made is one a private torrent must not have.
+                // gotMetaInfo() unannounces too; this is the other order of the
+                // same race, where the announce lands after that unannounce.
+                dht.unannounce(ih);
+            }
             if (!hashes.isEmpty()) {
                 runStarted = true;
                 _runCount = 0;
@@ -2313,7 +2410,7 @@ public class TrackerClient implements Runnable {
             }
 
             // Now try these peers
-            if ((!stop) && !hashes.isEmpty()) {
+            if ((!stop) && !hashes.isEmpty() && !isPrivateTorrent()) {
                 List<Peer> peers = new ArrayList<>(hashes.size());
                 for (Hash h : hashes) {
                     try {

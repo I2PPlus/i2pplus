@@ -84,8 +84,12 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     /** Shared across all peers on this torrent. */
     MagnetState magnetState;
 
-    /** The socket connected to the peer. */
-    private I2PSocket sock;
+    /**
+     * The socket connected to the peer. Volatile: published by the connect
+     * thread and closed by disconnect() on whichever thread dropped the peer,
+     * which may be while the connect thread is still inside connect().
+     */
+    private volatile I2PSocket sock;
 
     /** True to deregister the peer when it disconnects. */
     private boolean deregister = true;
@@ -398,12 +402,35 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
             if (din == null) {
                 // Outgoing connection
                 Destination d = peerID.getAddress();
+                // That lookup may block for seconds, and a disconnect() during it
+                // finds no socket to close, so the connect has to notice the peer
+                // was dropped before it opens one.
+                if (_disconnected.get()) {
+                    setEndReason("Cancelled while the peer's address was looked up");
+                    return;
+                }
                 if (d == null)
                     throw new IOException("No destination for " + SnarkLogFormatter.peer(peerID));
                 h = d.calculateHash();
                 if (listener.isBanned(h))
                     throw new IOException("Peer banned " + SnarkLogFormatter.peer(peerID));
-                sock = util.connect(peerID, infohash);
+                I2PSocket newSock = util.connect(peerID, infohash);
+                if (_disconnected.get()) {
+                    // disconnect() ran while the connect was in flight and closed
+                    // nothing, because there was no socket for it to see yet
+                    setEndReason("Cancelled while the socket was opening");
+                    closeSocket(newSock);
+                    return;
+                }
+                sock = newSock;
+                if (_disconnected.get()) {
+                    // Or it ran between the check above and publishing the socket,
+                    // which is the same gap seen from the other side
+                    sock = null;
+                    setEndReason("Cancelled while the socket was published");
+                    closeSocket(newSock);
+                    return;
+                }
                 if (_log.shouldDebug())
                     _log.debug("Connecting to " + peerName() + " -> Socket open");
                 if ((sock == null) || (sock.isClosed())) {
@@ -482,6 +509,17 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
 
             // We are up and running!
             state = s;
+            if (_disconnected.get()) {
+                // disconnect() ran during the handshake, when there was no state
+                // for it to clean up and no socket published for it to close
+                state = null;
+                setEndReason("Cancelled during the handshake");
+                in.disconnect();
+                I2PSocket dropped = sock;
+                sock = null;
+                closeSocket(dropped);
+                return;
+            }
             magnetState = mState;
             connected = util.getContext().clock().now();
             listener.connected(this);
@@ -830,15 +868,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
 
         I2PSocket csock = sock;
         sock = null;
-        if ((csock != null) && (!csock.isClosed())) {
-            try {
-                csock.close();
-            } catch (IOException ioe) {
-                _log.warn("Closing the socket to " + peerName()
-                          + " failed -> Ignored the error"
-                          + SnarkLogFormatter.onOwnLine(SnarkLogFormatter.error(ioe)));
-            }
-        }
+        closeSocket(csock);
         if (s != null) {
             // This is blocking in streaming, so do this after closing the socket so it won't really
             // block
@@ -846,6 +876,28 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
             if (out != null) {
                 out.disconnect();
             }
+        }
+    }
+
+    /**
+     * Close a socket this peer is giving up on. disconnect() uses it for the
+     * socket it can see, and the connect thread uses it for one a concurrent
+     * disconnect() could not see because it had not been published yet - left
+     * open, it stays open until its own read timeout fires.
+     *
+     * @param csock the socket to close, null for nothing to close
+     * @since 0.9.72+
+     */
+    private void closeSocket(I2PSocket csock) {
+        if (csock == null || csock.isClosed()) {
+            return;
+        }
+        try {
+            csock.close();
+        } catch (IOException ioe) {
+            _log.warn("Closing the socket to " + peerName()
+                      + " failed -> Ignored the error"
+                      + SnarkLogFormatter.onOwnLine(SnarkLogFormatter.error(ioe)));
         }
     }
 

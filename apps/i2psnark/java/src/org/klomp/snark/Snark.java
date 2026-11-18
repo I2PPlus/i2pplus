@@ -38,8 +38,11 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     /** Most of these used to be public; use accessors below instead. */
     private String torrent;
 
-    /** Metadata of the torrent being downloaded. */
-    private MetaInfo meta;
+    /**
+     * Metadata of the torrent being downloaded. Volatile: assigned on a peer
+     * thread when a magnet resolves it, read on the announce and web threads.
+     */
+    private volatile MetaInfo meta;
     /**
      * The torrent's storage. Volatile: reassigned on restart, read by
      * web threads.
@@ -49,8 +52,11 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     private PeerCoordinator coordinator;
     /** Acceptor of incoming peer connections. */
     private ConnectionAcceptor acceptor;
-    /** The tracker client. */
-    private TrackerClient trackerclient;
+    /**
+     * The tracker client. Volatile: handed the metadata from a peer thread when
+     * a magnet resolves it, started and halted from the torrent's own thread.
+     */
+    private volatile TrackerClient trackerclient;
     /** Root directory of the downloaded data. */
     private final File rootDataDir;
     /** Listener notified when the download completes. */
@@ -1488,8 +1494,9 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     public void peerChange(PeerCoordinator coordinator, Peer peer) { /* no-op */ }
 
     /**
-     * Called when the PeerCoordinator got the MetaInfo via magnet. CoordinatorListener. Create the
-     * storage, tell SnarkManager, and give the storage back to the coordinator.
+     * Called when the PeerCoordinator got the MetaInfo via magnet. CoordinatorListener. Create
+     * the storage, tell the tracker client and SnarkManager, and give the storage back to the
+     * coordinator.
      *
      * @throws RuntimeException if the data location cannot be created for the
      *                          metainfo that arrived
@@ -1505,6 +1512,10 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         // via SnarkManager.gotMetaInfo(), leak a .torrent into the data dir.
         if (isLookupTorrent(torrent, rootDataDir)) {
             meta = metainfo;
+            TrackerClient tc = trackerclient;
+            if (tc != null) {
+                tc.gotMetaInfo(metainfo);
+            }
             if (completeListener != null) {
                 try { completeListener.gotMetaInfo(this); } catch (Exception ignore) { /* lookup poller did not take the notification; its wait loop simply times out instead */ }
             }
@@ -1526,6 +1537,14 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
             storage.check();
             // ... so don't set meta until here
             meta = metainfo;
+            // The tracker client built its tracker list before the metadata
+            // arrived and will not re-run setup() while it is running, so it has
+            // to be told the torrent is private: nothing else closes the DHT and
+            // PEX gates or starts using the torrent's own announce list.
+            TrackerClient tc = trackerclient;
+            if (tc != null) {
+                tc.gotMetaInfo(metainfo);
+            }
             if (completeListener != null) {
                 String newName = completeListener.gotMetaInfo(this);
                 if (newName != null) {
