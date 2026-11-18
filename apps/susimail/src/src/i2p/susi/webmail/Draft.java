@@ -44,18 +44,25 @@ class Draft extends Mail {
 	}
 
 	/**
-	 * Overridden to process attachment and Bcc headers.
+	 * Overridden to process attachment and Bcc headers. The attachment headers
+	 * are written before the identity headers, so a header that is neither is
+	 * skipped, not taken as the end of the block, and both prefixes are matched
+	 * without regard to case. A body is parsed more than once over a draft's
+	 * life, so what the last parse found is dropped first: otherwise every
+	 * re-parse adds the attachments again.
 	 */
 	@Override
 	public synchronized void setBody(Buffer rb) {
 		super.setBody(rb);
+		attachments.clear();
+		bcc = null;
 		size = rb.getLength();
 		MailPart part = getPart();
 		if (part != null) {
 			String[] hdrs = part.headerLines;
 			for (int i = 0; i < hdrs.length; i++) {
 				String hdr = hdrs[i];
-				if (hdr.startsWith(HDR_BCC)) {
+				if (hdr.regionMatches(true, 0, HDR_BCC, 0, HDR_BCC.length())) {
 					ArrayList<String> list = new ArrayList<>();
 					getRecipientsFromList(list, hdr.substring(HDR_BCC.length()).trim(), true);
 					if (list.isEmpty()) {
@@ -63,15 +70,16 @@ class Draft extends Mail {
 					} else if (bcc == null) {
 						bcc = list.toArray(new String[list.size()]);
 					} else {
-						// add to the array, shouldn't happen
+						// a second Bcc line, keep what the first one named
 						for (int j = 0; j < bcc.length; j++) {
-							list.add(j, bcc[i]);
+							list.add(j, bcc[j]);
 						}
 						bcc = list.toArray(new String[list.size()]);
 					}
+					continue;
 				}
-				if (!hdr.startsWith(HDR_ATTACH))
-					break;
+				if (!hdr.regionMatches(true, 0, HDR_ATTACH, 0, HDR_ATTACH.length()))
+					continue;
 				String[] flds = DataHelper.split(hdr.substring(HDR_ATTACH.length()), ",", 4);
 				if (flds.length != 4)
 					continue;
