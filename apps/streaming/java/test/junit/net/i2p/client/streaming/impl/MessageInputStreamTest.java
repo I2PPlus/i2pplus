@@ -104,7 +104,7 @@ public class MessageInputStreamTest {
 
     @Test
     public void testCanAccept() {
-        // Can always accept packets with no data
+        // A packet with no data at a block we are waiting for is accepted
         assertTrue(in.canAccept(0, 0));
         assertTrue(in.canAccept(0, -1));
 

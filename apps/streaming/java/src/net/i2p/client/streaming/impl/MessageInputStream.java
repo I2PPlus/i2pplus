@@ -238,17 +238,18 @@ class MessageInputStream extends InputStream {
     /**
      * Determines whether the stream can accept a new message.
      * <p>
-     * Accepts zero-length or duplicate packets always.
+     * A packet at or below the highest block already delivered is a duplicate and
+     * is accepted, and so is a zero-length packet - a CLOSE, an ACK-only
+     * keepalive - which is not buffered and so needs no room of its own. Neither
+     * is accepted from further ahead than the receive buffer could hold blocks: a
+     * packet that far ahead is not one we are waiting for, and an empty one still
+     * moves the high-water mark that every ACK we send reports.
      *
      * @param messageId The sequence ID of the message
      * @param payloadSize Size of the message payload
      * @return true if the message can be accepted, false otherwise
      */
     public boolean canAccept(long messageId, int payloadSize) {
-        if (payloadSize <= 0) {
-            return true;
-        }
-
         synchronized (_dataLock) {
             if (messageId <= _highestReadyBlockId) {
                 return true;
@@ -260,10 +261,20 @@ class MessageInputStream extends InputStream {
 
             // A block ID further ahead than the buffer could ever hold blocks is
             // not a block we are waiting for, whatever the byte accounting below
-            // concludes. Checked first because it is one comparison.
+            // concludes, and a zero-length packet is no exception: it is accepted
+            // below without being counted, and messageReceived() still moves the
+            // high-water mark through it, so every ACK we then send claims we
+            // have received the gap it jumped over.
+            // Checked first because it is one comparison.
             if (messageId > _highestBlockId + maxBlocksAhead()) {
                 logSequenceGap(messageId);
                 return false;
+            }
+
+            // A zero-length packet holds nothing, so it needs no room in the
+            // buffer - but it has to be a block we are waiting for first.
+            if (payloadSize <= 0) {
+                return true;
             }
 
             // Both halves of the buffer hold memory, so both are counted. The

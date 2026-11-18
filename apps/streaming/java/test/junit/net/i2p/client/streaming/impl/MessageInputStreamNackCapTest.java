@@ -15,7 +15,11 @@ import org.junit.Test;
  * mis-parses the remaining NACK bytes as options or payload and drops the
  * ACK. Generation ({@link MessageInputStream#getNacksLocked()}) and the
  * write path both cap at 255, keeping the lowest (head-of-line) gaps the
- * sender's recovery acts on first.
+ * sender's recovery acts on first. Acceptance is bounded by the same number the
+ * scan is: {@link MessageInputStream#canAccept(long, int)} refuses a block
+ * further ahead than the receive buffer could hold blocks, a packet that carries
+ * nothing included, so a peer that jumps the sequence number does not turn every
+ * ACK into a full-window list in the first place.
  *
  * @since 0.9.72+
  */
@@ -108,5 +112,40 @@ public class MessageInputStreamNackCapTest {
         assertTrue(_in.canAccept(100, 100));
         assertFalse(_in.canAccept(1000000, 100));
         assertTrue(_in.canAccept(2048, 100));
+    }
+
+    /**
+     * A packet that carries nothing is bound the same way. It is not buffered, so
+     * it needs no room, but it still moves the high-water mark, and every ACK we
+     * send after it reports that we have received through wherever it jumped to.
+     */
+    @Test
+    public void testWildEmptyPacketRefused() {
+        assertFalse(_in.canAccept(1000000, 0));
+        assertTrue(_in.canAccept(2048, 0));
+        assertTrue(_in.canAccept(100, 0));
+    }
+
+    /**
+     * A refused empty packet leaves the high-water mark where it was, so the ACKs
+     * sent afterwards report no gap and NACK nothing.
+     */
+    @Test
+    public void testRefusedEmptyPacketLeavesTheAcksAlone() {
+        _in.messageReceived(0, null);
+        assertFalse(_in.canAccept(1000000, 0));
+        assertEquals(0, _in.getHighestBlockId());
+        assertEquals(0, _in.getNacksLocked().length);
+    }
+
+    /**
+     * What empty packets are for still passes: a CLOSE at the next block, and a
+     * retransmit of a block already delivered.
+     */
+    @Test
+    public void testEmptyPacketsInSequenceAccepted() {
+        _in.messageReceived(0, null);
+        assertTrue("the next block, empty - a CLOSE", _in.canAccept(1, 0));
+        assertTrue("a retransmit of a delivered block", _in.canAccept(0, 0));
     }
 }
