@@ -1,8 +1,10 @@
 package net.i2p.servlet.filters;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -14,8 +16,9 @@ import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
 /**
- *  Request wrapper to prevent XSS attacks.
- *  @since 0.9.14
+ * Request wrapper to prevent XSS attacks.
+ *
+ * @since 0.9.14
  */
 public class XSSRequestWrapper extends HttpServletRequestWrapper {
     /**
@@ -44,7 +47,7 @@ public class XSSRequestWrapper extends HttpServletRequestWrapper {
     }
 
     /**
-     *  Parameter names starting with "nofilter_" will not be filtered.
+     * Parameter names starting with "nofilter_" will not be filtered.
      * @return the parameter values
      */
     @Override
@@ -85,7 +88,7 @@ public class XSSRequestWrapper extends HttpServletRequestWrapper {
     }
 
     /**
-     *  Parameter names starting with "nofilter_" will not be filtered.
+     * Parameter names starting with "nofilter_" will not be filtered.
      * @return the value submitted for this parameter once it has been checked
      *         against the whitelist, or null if the parameter is absent or its
      *         value did not match and was dropped
@@ -107,7 +110,51 @@ public class XSSRequestWrapper extends HttpServletRequestWrapper {
     }
 
     /**
-     *  Parameter names starting with "nofilter_" will not be filtered.
+     * The parameter names that still have a value.
+     * <p>
+     * A value that fails the whitelist is dropped, so a name can be present in the
+     * request and have nothing to read. Enumerating it and then reading it gives
+     * null, which callers that compare the value do not expect, so the name is left
+     * out here and the two accessors agree.
+     *
+     * @return the names of the parameters that survived filtering, non-null
+     * @since 0.9.72+
+     */
+    @Override
+    public Enumeration<String> getParameterNames() {
+        Enumeration<String> names = super.getParameterNames();
+        if (names == null)
+            return Collections.emptyEnumeration();
+        List<String> rv = new ArrayList<>(16);
+        while (names.hasMoreElements()) {
+            String name = names.nextElement();
+            if (name.startsWith(NOFILTER) || hasFilteredValue(name))
+                rv.add(name);
+        }
+        return Collections.enumeration(rv);
+    }
+
+    /**
+     * Whether a parameter still has a usable value once the whitelist has run.
+     * Checked without the warning the accessor logs, so listing the names does not
+     * report the same dropped parameter twice.
+     *
+     * @param name the parameter to check
+     * @return true if at least one value survived filtering
+     */
+    private boolean hasFilteredValue(String name) {
+        String[] values = super.getParameterValues(name);
+        if (values == null)
+            return false;
+        for (String value : values) {
+            if (stripXSS(value, parameterValuePattern) != null)
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * Parameter names starting with "nofilter_" will not be filtered.
      * @return the parameter map
      */
     @Override
