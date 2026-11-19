@@ -1,11 +1,22 @@
 package net.i2p.servlet.util;
 
+import java.util.Base64;
+
+import net.i2p.util.RandomSource;
+
 /**
  * Simple utilities for servlets.
  * Consolidated from i2psnark, susimail, and routerconsole
  * @since 0.9.33
  */
 public class ServletUtil {
+
+    /**
+     * Random bytes in one CSP nonce. 18, not 16, so the Base64 needs no
+     * padding: several console pages write the nonce into an unquoted
+     * attribute, where a trailing = is an HTML parse error.
+     */
+    private static final int CSP_NONCE_BYTES = 18;
 
     /** Utility class, not intended for instantiation. */
     private ServletUtil() {};
@@ -119,5 +130,26 @@ public class ServletUtil {
             }
         }
         return s;
+    }
+
+    /**
+     * A Content-Security-Policy script nonce for one response. Drawn from
+     * {@link RandomSource}, which is SecureRandom-backed, and Base64 encoded,
+     * so it holds at least the 128 bits a CSP nonce is meant to carry and a
+     * page cannot be reached by searching the value out.
+     * <p>
+     * Call this once per response and use the result in both the
+     * script-src 'nonce-…' directive and every inline script tag: a nonce
+     * computed once per servlet or per JVM is a constant printed on every page
+     * the operator loads, which retires it as the one thing separating an
+     * inline script from being blocked.
+     *
+     * @return a 24-character Base64 string, no padding, never null
+     * @since 0.9.72+
+     */
+    public static String getCSPNonce() {
+        byte[] nonce = new byte[CSP_NONCE_BYTES];
+        RandomSource.getInstance().nextBytes(nonce);
+        return Base64.getEncoder().encodeToString(nonce);
     }
 }

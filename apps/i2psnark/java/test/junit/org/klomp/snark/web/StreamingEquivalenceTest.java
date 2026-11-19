@@ -44,7 +44,16 @@ import org.klomp.snark.TorrentCreateFilter;
  */
 public class StreamingEquivalenceTest {
 
+    /**
+     * A fixture group for the streaming render path; it holds no state.
+     *
+     * @since 0.9.72+
+     */
+    public StreamingEquivalenceTest() {}
+
     private static final String CTX = "/i2psnark";
+    /** CSP nonce handed to the renderer, fixed so two renders of one page match. */
+    private static final String TEST_CSP_NONCE = "testcspnonce";
     private static final Map<String, String> INIT_PARAMS = new HashMap<>();
     private static I2PSnarkServlet servlet;
 
@@ -56,6 +65,12 @@ public class StreamingEquivalenceTest {
         @Override public String toString() {return ((StringWriter) out).toString();}
     }
 
+    /**
+     * Boots the servlet against throwaway I2P directories and registers the two
+     * on-disk torrents the tests render.
+     *
+     * @throws Exception if the servlet's init() or the torrent setup fails
+     */
     @BeforeClass
     public static void boot() throws Exception {
         File tmp = Files.createTempDirectory("snarkeq").toFile();
@@ -200,9 +215,18 @@ public class StreamingEquivalenceTest {
     private static String render(String rel, boolean stream, CountingWriter cw) throws Exception {
         File resource = new File(new File(servlet.manager().getDataDir(), rel).getAbsolutePath());
         PrintWriter pw = stream ? (PrintWriter) cw : null;
-        return servlet.getListHTML(resource, CTX + "/" + rel, true, null, null, pw);
+        // fixed so the streamed and buffered renders of the same page compare
+        // equal: the real servlet draws a fresh CSP nonce per response
+        return servlet.getListHTML(resource, CTX + "/" + rel, true, null, null, pw,
+                                   TEST_CSP_NONCE);
     }
 
+    /**
+     * The 80-file page streams in several drains, and the bytes it writes add up
+     * to exactly what the buffered render returns.
+     *
+     * @throws Exception if the render or the temp torrent setup fails
+     */
     @Test
     public void testLargePageStreamedEqualsBuffered() throws Exception {
         String rel = "TestTorrent/";
@@ -218,6 +242,12 @@ public class StreamingEquivalenceTest {
         assertTrue("expected multiple drains, got " + cw.flushes, cw.flushes >= 3);
     }
 
+    /**
+     * The 12-file page stays under the streaming gate: one drain at most, and
+     * the same bytes as the buffered render.
+     *
+     * @throws Exception if the render or the temp torrent setup fails
+     */
     @Test
     public void testSmallPageBelowGateNeverDrains() throws Exception {
         String rel = "SmallTorrent/";

@@ -1,5 +1,5 @@
 <%  String uri = request.getRequestURI();
-    String cspNonce = Integer.toHexString(net.i2p.util.RandomSource.getInstance().nextInt());
+    String cspNonce = net.i2p.servlet.util.ServletUtil.getCSPNonce();
     request.setAttribute("cspNonce", cspNonce);
     if (request.getCharacterEncoding() == null) { request.setCharacterEncoding("UTF-8"); }
     response.setHeader("Content-Security-Policy", "default-src 'self'; base-uri 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'nonce-" + cspNonce + "'; object-src 'none'; media-src 'none'; form-action 'self'");

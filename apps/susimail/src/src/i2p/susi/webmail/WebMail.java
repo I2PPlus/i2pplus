@@ -64,7 +64,6 @@ import net.i2p.servlet.util.ServletUtil;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 import net.i2p.util.RFC822Date;
-import net.i2p.util.RandomSource;
 import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.Translate;
 
@@ -125,13 +124,6 @@ public class WebMail extends HttpServlet {
     // TODO generate from servlet name to allow for renaming or multiple instances
     /** Path prefix used to build the page's own links. */
     private static final String myself = "/susimail/";
-
-    /**
-     * Per-server Content-Security-Policy nonce.
-     *
-     * @since 0.9.62+
-     */
-    private static final String cspNonce = Integer.toHexString(RandomSource.getInstance().nextInt());
 
     /** Parameter for the login action. */
     private static final String LOGIN = "login";
@@ -2676,6 +2668,11 @@ public class WebMail extends HttpServlet {
         } catch(URISyntaxException use) { /* ignored */ }
 
         httpRequest.setCharacterEncoding("UTF-8");
+
+        // one nonce per response - the header here and the inline script tag
+        // further down have to agree on it, and a value that outlives the
+        // response is printed on every page and stops being a secret
+        String cspNonce = ServletUtil.getCSPNonce();
 
         if (httpRequest.getParameter(RAW_ATTACHMENT) != null ||
             httpRequest.getParameter(CID_ATTACHMENT) != null ||

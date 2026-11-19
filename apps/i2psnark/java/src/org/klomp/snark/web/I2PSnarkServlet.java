@@ -178,8 +178,6 @@ public class I2PSnarkServlet extends BasicServlet {
         }
     };
 
-    /** Csp nonce. */
-    String cspNonce = Integer.toHexString(_context.random().nextInt());
     /**
      * Constructor called by the servlet container; all setup is deferred to init().
      */
@@ -583,11 +581,17 @@ public class I2PSnarkServlet extends BasicServlet {
         String pOverride = isConnected ? null : "";
         String peerString = getQueryString(req, pOverride, null, null, "");
 
+        // One CSP nonce per response. The header set below and every inline
+        // script tag written further down have to agree on it, and a value
+        // kept on the servlet instead is printed on every page the operator
+        // loads, which stops it separating an inline script from being blocked.
+        String cspNonce = ServletUtil.getCSPNonce();
+
         PrintWriter out = null;
         boolean isConfigure = path.endsWith("/configure");
 
         if (isAjaxPath(path)) {
-            handleAjaxRequest(path, isConfigure, peerString, req, resp);
+            handleAjaxRequest(path, isConfigure, peerString, cspNonce, req, resp);
             return;
         }
 
@@ -624,7 +628,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         // Handle non index, configure, or known special paths
         if (isUnmanagedPath(path, isIndex, isConfigure)) {
-            handleUnmanagedPath(req, resp, method, path);
+            handleUnmanagedPath(req, resp, method, path, cspNonce);
             return;
         }
 
@@ -643,7 +647,7 @@ public class I2PSnarkServlet extends BasicServlet {
         int delay = _manager.getRefreshDelaySeconds();
         int pageSize = _manager.getPageSize();
         String head = renderHead(req, isConfigure, isIndex, noCollapse, collapsePanels,
-                                     showStatusFilter, peerString, lang, delay, pageSize);
+                                     showStatusFilter, peerString, lang, delay, pageSize, cspNonce);
 
         buf.append(head)
            .append("<body style=display:none;pointer-events:none id=snarkxhr class=\"")
@@ -734,6 +738,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param path servlet path after the context, may be null
      * @param isConfigure whether the request selected the configuration UI
      * @param peerString the peer parameter to carry into message rendering, may be null
+     * @param cspNonce this response's CSP script nonce, matching the header
      * @param req the HTTP request
      * @param resp the HTTP response
      * @return true if the request was handled here
@@ -741,7 +746,8 @@ public class I2PSnarkServlet extends BasicServlet {
      * @since 0.9.71+
      */
     private boolean handleAjaxRequest(String path, boolean isConfigure, String peerString,
-                                      HttpServletRequest req, HttpServletResponse resp) throws IOException {
+                                      String cspNonce, HttpServletRequest req,
+                                      HttpServletResponse resp) throws IOException {
         if (!isAjaxPath(path)) {return false;}
         setXHRHeaders(resp, cspNonce, false);
         PrintWriter out = resp.getWriter();
@@ -776,13 +782,15 @@ public class I2PSnarkServlet extends BasicServlet {
  *               anything else gets 405
  * @param path the servlet path; a trailing slash selects the directory
  *             listing branch
+ * @param cspNonce this response's CSP script nonce, matching the header
  * @throws ServletException if a passthrough to the container's doGet/doPost
  *                          or a sendError fails
  * @throws IOException if writing the listing or an error page fails
  * @since 0.9.71+
  */
     private void handleUnmanagedPath(HttpServletRequest req, HttpServletResponse resp,
-                                     String method, String path) throws ServletException, IOException {
+                                     String method, String path, String cspNonce)
+                                     throws ServletException, IOException {
         if (!path.endsWith("/")) {
             if ("GET".equals(method) || "HEAD".equals(method)) {super.doGet(req, resp);}
             else if ("POST".equals(method)) {super.doPost(req, resp);}
@@ -816,7 +824,7 @@ public class I2PSnarkServlet extends BasicServlet {
         String listing = getListHTML(resource, base, true,
             isPost ? req.getParameterMap() : null,
             req.getParameter("sort"),
-            isPost ? null : resp.getWriter());
+            isPost ? null : resp.getWriter(), cspNonce);
         if (isPost) {
             sendRedirect(req, resp, ""); // POST-Redirect-GET
         } else if (listing != null && !listing.isEmpty()) {
@@ -1027,6 +1035,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param delay auto-refresh interval in seconds; &gt; 0 adds a noscript
      *              meta-refresh, floored at 60
      * @param pageSize torrents per page, exported to JS as snarkPageSize
+     * @param cspNonce this response's CSP script nonce, matching the header
      * @return the doctype, the opening &lt;html&gt; tag and the complete
      *         &lt;head&gt; section
      * @since 0.9.68+
@@ -1034,7 +1043,8 @@ public class I2PSnarkServlet extends BasicServlet {
     private String renderHead(HttpServletRequest req, boolean isConfigure,
                               boolean isIndex, boolean noCollapse,
                               boolean collapsePanels, boolean showStatusFilter,
-                              String peerString, String lang, int delay, int pageSize) {
+                              String peerString, String lang, int delay, int pageSize,
+                              String cspNonce) {
         StringBuilder buf = new StringBuilder(4096);
         String theme = _manager.getTheme();
 
@@ -6022,13 +6032,15 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param sortParam the file sort key from the request, or null
      * @param out the response writer for streamed mode, or null to buffer
      *            everything into the returned string
+     * @param cspNonce this response's CSP script nonce, matching the header
      * @return buffered mode: the full page; streamed mode: the tail remaining
      *         after the last drained chunk (possibly empty); null only when
      *         postParams != null (P-R-G)
      * @throws IOException if the response writer or resource lookups fail
      * @since 0.7.14
      */
-    String getListHTML(File xxxr, String base, boolean parent, Map<String, String[]> postParams, String sortParam, PrintWriter out) throws IOException {
+    String getListHTML(File xxxr, String base, boolean parent, Map<String, String[]> postParams,
+                       String sortParam, PrintWriter out, String cspNonce) throws IOException {
         String decodedBase = decodePath(base);
         String title = decodedBase;
         String cpath = _contextPath + '/';
@@ -6063,7 +6075,7 @@ public class I2PSnarkServlet extends BasicServlet {
         final boolean isTopLevel = dirSlash <= 0;
 
         StringBuilder buf = new StringBuilder(6*1024);
-        renderHeader(buf, directory);
+        renderHeader(buf, directory, cspNonce);
 
         if (parent) {buf.append("<div class=page id=dirlist>\n");} // always true
          // for stop/start/check
@@ -6282,15 +6294,16 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      * Renders the doctype, HTML head (theme and font CSS, CSP'd theme script,
      * favicon) and the navbar. All inputs come from servlet state so page
-     * assembly stays allocation-light; only the directory display name is
-     * passed in. Extracted from getListHTML.
+     * assembly stays allocation-light; only the directory display name and
+     * this response's CSP nonce are passed in. Extracted from getListHTML.
      *
      * @param buf StringBuilder the markup is appended to
      * @param directory decoded directory display name for the page title,
      *                  escaped here; may be empty
+     * @param cspNonce this response's CSP script nonce, matching the header
      * @since 0.9.71+
      */
-    private void renderHeader(StringBuilder buf, String directory) {
+    private void renderHeader(StringBuilder buf, String directory, String cspNonce) {
         String theme = _manager.getTheme();
         boolean standalone = isStandalone();
         buf.append(DOCTYPE).append("<html").append(standalone ? " class=standalone" : "").append(">\n")

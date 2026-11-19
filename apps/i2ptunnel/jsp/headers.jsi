@@ -1,7 +1,7 @@
 <%
     String uri = request.getRequestURI();
     String mimeType = getServletContext().getMimeType(uri);
-    String cspNonce = Integer.toHexString(net.i2p.util.RandomSource.getInstance().nextInt());
+    String cspNonce = net.i2p.servlet.util.ServletUtil.getCSPNonce();
     if (request.getCharacterEncoding() == null) {request.setCharacterEncoding("UTF-8");}
     response.setHeader("Content-Security-Policy", "default-src 'self'; connect-src 'self' *.i2p; frame-src 'self'; base-uri 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'nonce-" + cspNonce + "'; object-src 'none'; media-src 'none'; form-action 'self'");
     response.setHeader("X-XSS-Protection", "1; mode=block");
