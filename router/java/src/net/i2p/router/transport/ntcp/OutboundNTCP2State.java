@@ -391,9 +391,37 @@ class OutboundNTCP2State implements EstablishState {
         if (s == null)
             throw new IllegalArgumentException("No NTCP2 IV");
         _bobIV = Base64.decode(s);
-        if (_bobIV == null || _bobIV.length != IV_SIZE ||
-            DataHelper.eqCT(_bobIV, 0, ZEROKEY, 0, IV_SIZE))
+        if (!isValidIV(_bobIV))
             throw new IllegalArgumentException("Bad NTCP2 IV");
+    }
+
+    /**
+     * Whether a peer's advertised static IV can be used for a handshake: the right
+     * length and not all zeros, an all-zero IV being what an address with no IV at
+     * all decodes to.
+     *
+     * @param iv the decoded IV option, may be null if the option was not valid base64
+     * @return true if a handshake can use it
+     * @since 0.9.72+
+     */
+    static boolean isValidIV(byte[] iv) {
+        return iv != null && iv.length == IV_SIZE && !DataHelper.eqCT(iv, 0, ZEROKEY, 0, IV_SIZE);
+    }
+
+    /**
+     * Whether a peer's advertised static key can be used for a handshake: the right
+     * length, not all zeros, and without the high bit of the last byte set - that
+     * bit is the PQ handshake marker we write into message 1, so a published key
+     * carrying it is not a key at all.
+     *
+     * @param key the decoded key option, may be null if the option was not valid
+     *            base64
+     * @return true if a handshake can use it
+     * @since 0.9.72+
+     */
+    static boolean isValidStaticKey(byte[] key) {
+        return key != null && key.length == KEY_SIZE && (key[KEY_SIZE - 1] & 0x80) == 0 &&
+               !DataHelper.eqCT(key, 0, ZEROKEY, 0, KEY_SIZE);
     }
 
     /**
@@ -512,9 +540,7 @@ class OutboundNTCP2State implements EstablishState {
             return;
         }
         byte[] bk = Base64.decode(s);
-        if (bk == null || bk.length != KEY_SIZE ||
-            (bk[KEY_SIZE - 1] & 0x80) != 0 ||
-            DataHelper.eqCT(bk, 0, ZEROKEY, 0, KEY_SIZE)) {
+        if (!isValidStaticKey(bk)) {
             fail("Bad NTCP2 S: " + s);
             return;
         }

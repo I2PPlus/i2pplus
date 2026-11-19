@@ -2013,12 +2013,18 @@ public int getEstimatedRTT(Hash peer) {
     /**
      * Valid NTCP version of Bob's NTCP address
      * for our outbound connections as Alice.
+     * <p>
+     * The handshake material is decoded and checked here rather than left for the
+     * connection, because the caller picks the first address that passes: a peer
+     * whose first NTCP2 address carries a corrupt static key or IV would otherwise
+     * be the only address we ever try, and the peer is then marked unreachable even
+     * though its second address is fine.
      *
      * @param addr Bob's NTCP router address to evaluate
      * @return the valid version 2-5, 1 for old NTCP1, or 0 if unusable
      * @since 0.9.35
      */
-    private static int getNTCPVersion(RouterAddress addr) {
+    static int getNTCPVersion(RouterAddress addr) {
         String style = addr.getTransportStyle();
         if (style.equals(STYLE)) { /* both NTCP styles are accepted; the option checks below decide */ }
         else if (style.equals(STYLE2)) { /* likewise accepted; the option checks below decide */ }
@@ -2033,6 +2039,12 @@ public int getEstimatedRTT(Hash peer) {
             // his address is NTCP1 or is outbound NTCP2 only
             return 0;
         }
+        byte[] iv = Base64.decode(addr.getOption("i"));
+        if (!OutboundNTCP2State.isValidIV(iv))
+            return 0;
+        byte[] key = Base64.decode(addr.getOption("s"));
+        if (!OutboundNTCP2State.isValidStaticKey(key))
+            return 0;
         {
             String pq = addr.getOption("pq");
             if (pq != null) {
@@ -2047,7 +2059,6 @@ public int getEstimatedRTT(Hash peer) {
             }
         }
         // his address is NTCP2
-        // do not validate the s/i b64, we will just catch it later
         return NTCP2_INT_VERSION;
     }
 
