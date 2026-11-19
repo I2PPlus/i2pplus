@@ -217,7 +217,7 @@ class TrackerInfo {
      * @return the parsed peers, entries that fail to parse being skipped
      * @throws IOException declared on the method; every parse failure is caught and skipped
      */
-    private static Set<Peer> getPeers(
+    static Set<Peer> getPeers(
             List<BEValue> l, byte[] my_id, byte[] infohash, MetaInfo metainfo, I2PSnarkUtil util)
             throws IOException {
         Set<Peer> peers = new HashSet<>(l.size());

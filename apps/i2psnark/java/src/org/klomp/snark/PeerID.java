@@ -61,12 +61,19 @@ public class PeerID implements Comparable<PeerID> {
      * Non-compact tracker response.
      *
      * @param m the map containing peer id and ip entries
-     * @throws InvalidBEncodingException if the map entries are missing or invalid
+     * @throws InvalidBEncodingException if the map entries are missing or invalid,
+     *                                   including a peer id that is not the 20 bytes
+     *                                   the protocol defines
      */
     public PeerID(Map<String, BEValue> m) throws InvalidBEncodingException {
         BEValue bevalue = m.get("peer id");
         if (bevalue == null) throw new InvalidBEncodingException("peer id missing");
         id = bevalue.getBytes();
+        // The protocol defines a peer id as 20 bytes. Anything else can never match
+        // what the peer sends in its handshake, so checking it here is what keeps a
+        // malformed tracker entry from costing a full outbound connection - Peer
+        // only reads this array once the socket is open and the handshake is in.
+        if (id.length != 20) throw new InvalidBEncodingException("Bad peer id length " + id.length);
 
         bevalue = m.get("ip");
         if (bevalue == null) throw new InvalidBEncodingException("ip missing");
