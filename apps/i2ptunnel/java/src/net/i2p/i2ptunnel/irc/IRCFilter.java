@@ -602,6 +602,12 @@ abstract class IRCFilter {
         // no IP in these, replace port only
         if (type.equals("RESUME") || type.equals("ACCEPT")) {
             haveIP = false;
+        } else if (!(type.equals("CHAT") || type.equals("SEND"))) {
+            // "DCC xxx -> null", the contract this method's javadoc states and the
+            // inbound filter already keeps. An unrecognised type carries no IP to
+            // rewrite, and forwarding it allocated a DCC proxy port and opened an
+            // outbound connection for a transfer nobody asked for.
+            return null;
         }
         if (helper == null || !helper.isEnabled())
             return null;
