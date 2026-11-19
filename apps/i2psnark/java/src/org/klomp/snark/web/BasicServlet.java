@@ -25,6 +25,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Locale;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
@@ -95,6 +96,24 @@ class BasicServlet extends HttpServlet {
     private static final int WAR_CACHE_CONTROL_SECS = 7 * 24 * 60 * 60;
     /** Browser cache time of the torrent files, in seconds. */
     private static final int FILE_CACHE_CONTROL_SECS = 30 * 24 * 60 * 60;
+
+    /**
+     * The policy a file from a torrent is served under. The torrent's author chose
+     * the file, and it is served from the console's own origin, so a document in
+     * the torrent is a page of the console: it can read every other same-origin
+     * response on the router and submit forms to it. This takes that away - no
+     * script of its own, nothing it can load, no base tag to aim requests at, no
+     * form it can post, and no other page allowed to frame it.
+     */
+    private static final String FILE_CSP =
+        "sandbox; default-src 'none'; script-src 'none'; base-uri 'none'; form-action 'none'; " +
+        "frame-ancestors 'self'";
+
+    /**
+     * The type an active document is served as instead of its own, so it cannot
+     * run even by a browser that ignored the policy above.
+     */
+    private static final String INERT_TYPE = "application/octet-stream";
 
     /** Bind to the global context and build a fresh MIME table. */
     public BasicServlet() {
@@ -326,6 +345,10 @@ class BasicServlet extends HttpServlet {
                         return true;
                     } // committed
                     response.setStatus(304);
+                    // reset() took the isolation headers off with everything
+                    // else, and the browser keeps the cached copy it is being
+                    // told to reuse, so put them back.
+                    writeFileSecurityHeaders(response, content);
                     response.getOutputStream().close();
                     return false;
                 }
@@ -425,6 +448,60 @@ class BasicServlet extends HttpServlet {
     }
 
     /**
+     * The type a downloaded file is served as: an inert one for every type a
+     * browser would run as a document or a script, and the type it has for
+     * everything it would only display. An HTML, SVG or XML file inside a torrent
+     * is markup the torrent's author wrote, and it arrives on the console's own
+     * origin; images, video, audio and plain text are left alone because snark's
+     * own pages display them inline.
+     *
+     * @param mime the type the file's name maps to, may be null
+     * @return {@link #INERT_TYPE} for a type that runs, mime otherwise
+     * @since 0.9.72+
+     */
+    static String inertType(String mime) {
+        if (mime == null) {
+            return null;
+        }
+        String type = mime.toLowerCase(Locale.US);
+        int semi = type.indexOf(';');
+        if (semi >= 0) {
+            type = type.substring(0, semi).trim();
+        }
+        if (type.equals("text/html") || type.equals("application/xhtml+xml") ||
+            type.endsWith("+xml") || type.equals("text/xml") || type.equals("application/xml") ||
+            type.contains("javascript") || type.contains("ecmascript")) {
+            return INERT_TYPE;
+        }
+        return mime;
+    }
+
+    /**
+     * Isolates a file from a torrent from the rest of the console. Only the file
+     * content is touched: the webapp's own resources come from the war and are
+     * trusted, and they keep their caching and their scripts.
+     * <p>
+     * A document in a torrent is otherwise a page of the console - same host, same
+     * port, same origin - so its script can read the stats, the logs and the
+     * address book and post to the config pages. The policy removes the script;
+     * the type demotion removes the document, for a browser that ignores the
+     * policy. X-Content-Type-Options is already set for everything this servlet
+     * serves.
+     *
+     * @param response the response being written
+     * @param content the body being served, a file only if it came from a torrent
+     * @since 0.9.72+
+     */
+    static void writeFileSecurityHeaders(HttpServletResponse response, HttpContent content) {
+        if (!(content instanceof FileContent)) {
+            return;
+        }
+        response.setHeader("Referrer-Policy", "no-referrer");
+        response.setHeader("Cross-Origin-Resource-Policy", "same-origin");
+        response.setHeader("Content-Security-Policy", FILE_CSP);
+    }
+
+    /**
      * Write response headers for the content.
      *
      * @param response the HTTP response
@@ -436,12 +513,22 @@ class BasicServlet extends HttpServlet {
             throws IOException {
         String rtype = response.getContentType();
         String ctype = content.getContentType();
+        boolean downloaded = content instanceof FileContent;
         if (rtype != null && rtype.contains("javascript")) {
             response.setCharacterEncoding("utf-8");
         } else if (ctype != null) {
             response.setContentType(ctype);
             if (ctype.contains("javascript")) {
                 response.setCharacterEncoding("utf-8");
+            }
+        }
+        // A file from a torrent arrives on the console's own origin, so a document
+        // in it is a page of the console. Demote the types a browser would run.
+        if (downloaded) {
+            String served = inertType(ctype);
+            if (served != null && !served.equals(ctype)) {
+                response.setContentType(served);
+                response.setHeader("Content-Disposition", "attachment");
             }
         }
         response.setHeader("X-Content-Type-Options", "nosniff");
@@ -462,7 +549,12 @@ class BasicServlet extends HttpServlet {
         }
 
         long ct = content.getCacheTime();
-        if (ct >= 0) {
+        if (downloaded) {
+            // Not immutable: the same name in the download directory can belong to
+            // the next torrent, and a document pinned for a month would come back
+            // with the type and the isolation of the file it used to be.
+            response.setHeader("Cache-Control", "private, max-age=" + ct);
+        } else if (ct >= 0) {
             if (ctype != null
                     && (ctype.contains("javascript")
                             || ctype.contains("text/")
@@ -475,6 +567,7 @@ class BasicServlet extends HttpServlet {
         } else {
             response.setHeader("Cache-Control", "private, max-age=" + ct + ", immutable");
         }
+        writeFileSecurityHeaders(response, content);
     }
 
 
