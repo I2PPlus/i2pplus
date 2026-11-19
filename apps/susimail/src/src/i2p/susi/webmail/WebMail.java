@@ -299,6 +299,12 @@ public class WebMail extends HttpServlet {
     private static final String[] DISPLAY_DIRS = {_x("Inbox"), DIR_DRAFTS, DIR_SENT, DIR_TRASH, DIR_SPAM }; // untranslated, translate on use
     /** Compose-style field carrying the raw config text. */
     private static final String CONFIG_TEXT = "config_text";
+    /**
+     * Field carrying the mailbox password a settings change is authorized with.
+     *
+     * @since 0.9.72+
+     */
+    private static final String CONFIG_PASSWORD = "config_password";
     /** Switch enabling the HTML view of a message. */
     private static final boolean SHOW_HTML = true;
     /** Switch forcing the text-only view of every message. */
@@ -312,6 +318,22 @@ public class WebMail extends HttpServlet {
     private static final String CONFIG_PORTS_POP3 = "ports.pop3";
     /** Config key for the SMTP port. */
     private static final String CONFIG_PORTS_SMTP = "ports.smtp";
+    /**
+     * Config keys that decide where mail goes, kept at their current values when the
+     * settings are saved from the page, as the host already is. POP3 authentication is
+     * cleartext, so moving its port moves where the next login's password goes.
+     *
+     * @since 0.9.72+
+     */
+    private static final String[] PINNED_SETTINGS = {CONFIG_PORTS_POP3, CONFIG_PORTS_SMTP,
+                                                     CONFIG_PORTS_FIXED};
+    /**
+     * Attempts to authorize a settings change in one session before it has to sign in
+     * again, so the password check cannot be worked through.
+     *
+     * @since 0.9.72+
+     */
+    static final int MAX_CONFIG_ATTEMPTS = 5;
     /** Config key pinning the sender address. */
     private static final String CONFIG_SENDER_FIXED = "sender.fixed";
     /** Config key for the sender domain. */
@@ -412,6 +434,12 @@ public class WebMail extends HttpServlet {
          */
         private String _sessionKey;
         /**
+         * Settings changes this session has been refused for want of the password.
+         *
+         * @since 0.9.72+
+         */
+        private int _configFails;
+        /**
          * Attachments staged for this session, cleared and deleted together.
          */
         public ArrayList<Attachment> attachments; // TODO Map of UIDL to List
@@ -482,6 +510,48 @@ public class WebMail extends HttpServlet {
             }
             String hash = hashPassword(password, _sessionSalt);
             return hash.equals(_sessionKey);
+        }
+
+        /**
+         * Is there a password to re-authorize against? A mailbox signed into without a
+         * password has none, and there the sign-in itself is the proof.
+         *
+         * @return true if a login password was stored for this session
+         * @since 0.9.72+
+         */
+        boolean hasLocalPassword() {
+            return _sessionSalt != null && _sessionKey != null;
+        }
+
+        /**
+         * How many settings changes this session has been refused for want of the
+         * password.
+         *
+         * @return the failures counted so far
+         * @since 0.9.72+
+         */
+        int getConfigFailures() {
+            return _configFails;
+        }
+
+        /**
+         * Count a settings change refused for want of the password, so the check cannot
+         * be worked through at leisure.
+         *
+         * @since 0.9.72+
+         */
+        void countConfigFailure() {
+            _configFails++;
+        }
+
+        /**
+         * Forget the refused settings changes, because the account was just signed into
+         * again and proved the password another way.
+         *
+         * @since 0.9.72+
+         */
+        void clearConfigFailures() {
+            _configFails = 0;
         }
 
         /**
@@ -1100,6 +1170,8 @@ public class WebMail extends HttpServlet {
         sessionObject.reallyDelete = false;
         // Store local password hash for session protection @since 0.9.70+
         sessionObject.setLocalPassword(pass);
+        // The login just proved the password, so the settings check starts over
+        sessionObject.clearConfigFailures();
 
         // Thread the loading and the server connection - either could finish first.
         // We only load the inbox here. Others are loaded on-demand in processRequest()
@@ -1564,7 +1636,15 @@ public class WebMail extends HttpServlet {
 
         // Set state if unknown
         if (state == null) {
-            if (request.getParameter(CONFIG_TEXT) != null || buttonPressed(request, CONFIGURE)) {state = State.CONFIG;}
+            if (request.getParameter(CONFIG_TEXT) != null || buttonPressed(request, CONFIGURE)) {
+                String why = configPageRejection(sessionObject.user != null, Config.hasConfigFile());
+                if (why != null) {
+                    sessionObject.error += why + '\n';
+                    state = sessionObject.user != null ? State.LIST : State.AUTH;
+                } else {
+                    state = State.CONFIG;
+                }
+            }
             else if (request.getParameter(SHOW) != null) {state = State.SHOW;}
             else if (request.getParameter(NEW_UIDL) != null) {state = State.NEW;}
             else {state = State.LIST;}
@@ -2080,25 +2160,47 @@ public class WebMail extends HttpServlet {
      * @return the new state, or null if unknown
      */
     private static State processConfigButtons(SessionObject sessionObject, RequestWrapper request, boolean isPOST, State state) {
-        if (buttonPressed(request, CONFIGURE)) {return state.CONFIG;}
+        if (buttonPressed(request, CONFIGURE)) {
+            String why = configPageRejection(sessionObject.user != null, Config.hasConfigFile());
+            if (why != null) {
+                sessionObject.error += why + '\n';
+                Folder<String> folder = getCurrentFolder(sessionObject, request);
+                return folder != null ? State.LIST : State.AUTH;
+            }
+            return state.CONFIG;
+        }
         // If no config text, we can't be on the config page, and we don't want to process
         // the CANCEL button which is also on the compose page.
         if (!isPOST || request.getParameter(CONFIG_TEXT) == null) {return state;}
+        // Both of the buttons that follow rewrite the on-disk settings, which say where
+        // mail goes and how it is treated for every session, not just this one.
+        if (buttonPressed(request, SAVE) || buttonPressed(request, SETPAGESIZE)) {
+            String why = authorizeConfigChange(sessionObject, request);
+            if (why != null) {
+                sessionObject.error += why + '\n';
+                Folder<String> folder = getCurrentFolder(sessionObject, request);
+                return folder != null ? State.LIST : State.AUTH;
+            }
+        }
         if (buttonPressed(request, SAVE)) {
             try {
                 String raw = request.getParameter(CONFIG_TEXT);
                 Properties props = new Properties();
                 DataHelper.loadProps(props, new ByteArrayInputStream(DataHelper.getUTF8(raw)));
                 // for safety, disallow changing host via UI
+                File cfg = new File(I2PAppContext.getGlobalContext().getConfigDir(), "susimail.config");
                 String oldHost = Config.getProperty(CONFIG_HOST, DEFAULT_HOST);
                 String newHost = props.getProperty(CONFIG_HOST);
                 if (newHost == null) {props.setProperty(CONFIG_HOST, oldHost);}
                 else if (!newHost.equals(oldHost) && !newHost.equals("localhost")) {
                     props.setProperty(CONFIG_HOST, oldHost);
-                    File cfg = new File(I2PAppContext.getGlobalContext().getConfigDir(), "susimail.config");
                     sessionObject.error += _t("Host unchanged. Edit configation file {0} to change host.", cfg.getAbsolutePath()) + '\n';
                 }
-
+                // and the same for where the cleartext login goes
+                if (pinMailEndpoint(props, Config.getProperties())) {
+                    sessionObject.error += _t("Mail ports unchanged. Edit the configuration file {0} to change them.",
+                                              cfg.getAbsolutePath()) + '\n';
+                }
                 String ps = props.getProperty(Folder.PAGESIZE);
                 Folder<String> folder = getCurrentFolder(sessionObject, request);
                 if (folder != null && ps != null) {
@@ -2133,6 +2235,112 @@ public class WebMail extends HttpServlet {
         }
         return state;
     } // End state change and button processing
+
+    /**
+     * Why this session may not open the settings page, or null if it may.
+     *
+     * The settings are global: they say which host and ports mail goes to, whether the
+     * sender address is pinned, and whether HTML messages are rendered at all. Before
+     * anyone has signed in, none of that has been proved to the webmail, so the page is
+     * only open while there is no config file on disk to bootstrap from - a first run
+     * with nothing to read yet.
+     *
+     * @param signedIn true if a mailbox is open in this session
+     * @param haveConfig true if the on-disk config file already exists
+     * @return the message to show, null if the page may be opened
+     * @since 0.9.72+
+     */
+    static String configPageRejection(boolean signedIn, boolean haveConfig) {
+        if (signedIn || !haveConfig)
+            return null;
+        return _t("Sign in to the mailbox before opening the settings");
+    }
+
+    /**
+     * Why this request may not rewrite the on-disk settings, or null if it may.
+     *
+     * The form nonce the request carries proves the click came from this webmail, not
+     * from another page; it does not prove the click came from anyone entitled to change
+     * where every session's mail goes. The password signed in with is the only secret
+     * this tree holds that the page cannot read back off the DOM, so the save asks for
+     * it again.
+     *
+     * @param signedIn true if a mailbox is open in this session
+     * @param hasPassword true if that login had a password to check against
+     * @param supplied the password the request carried, null if it carried none
+     * @param matches true if the supplied password is the one signed in with
+     * @param failures changes refused for want of the password in this session
+     * @return the message to show, null if the change may go ahead
+     * @since 0.9.72+
+     */
+    static String configWriteRejection(boolean signedIn, boolean hasPassword, String supplied,
+                                       boolean matches, int failures) {
+        if (!signedIn)
+            return _t("Sign in to the mailbox before saving the settings");
+        if (failures >= MAX_CONFIG_ATTEMPTS)
+            return _t("Too many failed attempts, sign in again before saving the settings");
+        if (!hasPassword)
+            return null;
+        if (supplied == null || supplied.isEmpty())
+            return _t("Enter the mailbox password to save the settings");
+        if (!matches)
+            return _t("Wrong password, the settings were not saved");
+        return null;
+    }
+
+    /**
+     * Ask the session to prove it still holds the mailbox password before it may
+     * rewrite the settings, and count the attempt when it got one wrong.
+     *
+     * @param sessionObject the session asking
+     * @param request the request carrying the password field
+     * @return the message to show, null if the change may go ahead
+     * @since 0.9.72+
+     */
+    private static String authorizeConfigChange(SessionObject sessionObject, RequestWrapper request) {
+        String supplied = request.getParameter(CONFIG_PASSWORD);
+        boolean matches = sessionObject.hasLocalPassword() && sessionObject.verifyLocalPassword(supplied);
+        String why = configWriteRejection(sessionObject.user != null, sessionObject.hasLocalPassword(),
+                                          supplied, matches, sessionObject.getConfigFailures());
+        if (why == null)
+            return null;
+        // Only a wrong password counts. A save that never offered one is the page being
+        // used as it was before this check existed, not somebody guessing.
+        boolean guessing = supplied != null && !supplied.isEmpty() && !matches;
+        if (guessing)
+            sessionObject.countConfigFailure();
+        if (sessionObject.log.shouldWarn())
+            sessionObject.log.warn("Settings change refused -> " + why +
+                                   "\n* Account: " + sessionObject.user +
+                                   "\n* Attempts: " + sessionObject.getConfigFailures());
+        return why;
+    }
+
+    /**
+     * Keep the settings that decide where mail goes at the values they already have,
+     * the way the host is kept. POP3 sends its login in clear, so a settings save that
+     * moved the port moves where the next login's password goes.
+     *
+     * @param props the settings about to be written
+     * @param current the settings in force, without the config prefix
+     * @return true if a value was put back, so the operator can be told
+     * @since 0.9.72+
+     */
+    static boolean pinMailEndpoint(Properties props, Properties current) {
+        boolean pinned = false;
+        for (String key : PINNED_SETTINGS) {
+            String now = current.getProperty(key);
+            String want = props.getProperty(key);
+            if (want == null ? now != null : !want.equals(now)) {
+                if (now != null)
+                    props.setProperty(key, now);
+                else
+                    props.remove(key);
+                pinned = true;
+            }
+        }
+        return pinned;
+    }
 
     /**
      * The session's state, creating it if needed.
@@ -4636,6 +4844,10 @@ public class WebMail extends HttpServlet {
         }
         out.print("\n</textarea>\n");
         out.print("<div id=prefsave>");
+        // The settings say where every session's mail goes, so saving them asks again
+        // for the secret a page that is not this one cannot read off the form
+        out.print("<b>" + _t("Mailbox password") + ":</b>&nbsp;<input type=password name=\"" + CONFIG_PASSWORD +
+                  "\" size=20 autocomplete=off>&nbsp;");
         out.print(button(CANCEL, _t("Cancel")));
         out.print(button(SAVE, _t("Save Configuration")));
         if (folder != null)
