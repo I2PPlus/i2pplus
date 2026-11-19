@@ -6,6 +6,7 @@ import java.io.ByteArrayInputStream;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 
 /**
  * Simple lookahead buffer to keep the last K bytes in reserve,
@@ -54,6 +55,10 @@ public class LookaheadInputStream extends FilterInputStream {
      * Start the LookaheadInputStream with the given input stream.
      * Resets everything if the LookaheadInputStream was previously used.
      * WARNING - blocking until lookaheadSize bytes are read!
+     * <p>
+     * If the read fails, the footer is zeroed and the stream is left at EOF, so a
+     * caller cannot read the partial bytes it managed to take followed by whatever the
+     * previous user of this pooled stream left behind.
      *
      * @param src the input stream
      * @throws IOException if less than lookaheadSize bytes could be read.
@@ -62,7 +67,13 @@ public class LookaheadInputStream extends FilterInputStream {
         in = src;
         _eofReached = false;
         index = 0;
-        DataHelper.read(in, _footerLookahead);
+        try {
+            DataHelper.read(in, _footerLookahead);
+        } catch (IOException ioe) {
+            Arrays.fill(_footerLookahead, (byte) 0);
+            _eofReached = true;
+            throw ioe;
+        }
     }
 
     @Override
