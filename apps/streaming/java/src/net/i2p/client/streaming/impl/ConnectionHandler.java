@@ -144,6 +144,25 @@ class ConnectionHandler {
     }
 
     /**
+     * Is there room in the accept queue for one more SYN?
+     *
+     * A cap of zero, or less, means uncapped — the same sentinel the accept-queue
+     * reaper and {@link #synExpiryMessage(Packet, int, int, int)} use, and the same
+     * one {@code i2p.streaming.maxQueueSize} is documented with. Comparing the depth
+     * against the cap without honouring it makes an uncapped queue reject every
+     * inbound connection instead, which is a live change: the cap is re-read on
+     * every call, so one write of 0 stops the router accepting streams at all.
+     *
+     * @param queued SYNs waiting now
+     * @param max the configured queue cap, 0 or less when uncapped
+     * @return true if the SYN may be queued rather than answered with a reset
+     * @since 0.9.72+
+     */
+    static boolean synAdmitted(int queued, int max) {
+        return max <= 0 || queued < max;
+    }
+
+    /**
      * Number of accept worker threads, from
      * {@code i2p.streaming.acceptWorkerThreads}. The {@link I2PSocketManagerFull}
      * override is checked first, but the Tuner has no parameter for it and never
@@ -695,7 +714,8 @@ class ConnectionHandler {
         }
         // Re-read the max queue size dynamically — Tuner override or config change
         // applies without a restart.
-        boolean success = _synQueue.size() < getMaxQueueSize() && _synQueue.offer(packet);
+        int max = getMaxQueueSize();
+        boolean success = synAdmitted(_synQueue.size(), max) && _synQueue.offer(packet);
         if (success) {
             _synEnqueueTimes.put(packet, new SynEntry(_context.clock().now(), timeoutMs));
             _synQueueProcessed.increment();
@@ -706,7 +726,8 @@ class ConnectionHandler {
             // The client's connect timeout (default 60s) gives plenty of
             // time for the server to drain its accept queue.
             _log.warnThrottled("streaming-syn-queue-full",
-                               "SYN queue full -> Reset sent to the client");
+                               "SYN queue full -> Reset sent to the client" +
+                               " * Queued: " + _synQueue.size() + " SYNs * Limit: " + max + " SYNs");
             sendReset(packet);
             // Ours to release - the offer failed, so no accept worker will
             // ever pick this packet up.

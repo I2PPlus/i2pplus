@@ -1,0 +1,94 @@
+package net.i2p.client.streaming.impl;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
+
+/**
+ * The ceiling on the SYN accept queue, and what "no ceiling" means.
+ *
+ * <p>{@code i2p.streaming.maxQueueSize} of 0 is documented, and handled by the
+ * accept-queue reaper and the expiry report, as uncapped. The admission test was a
+ * plain {@code size() < max}, so at 0 it was false for every packet and the router
+ * answered every inbound SYN with a RESET. The cap is re-read on every call so a
+ * Tuner write or a config change applies without a restart, which is what makes the
+ * trap live: one write of 0 stops the router accepting any inbound stream at all.
+ *
+ * @since 0.9.72+
+ */
+public class ConnectionHandlerSynAdmissionTest {
+
+    /** The configured cap in a running router, used for the boundary cases. */
+    private static final int CONFIGURED = 16384;
+
+    /**
+     * A fixture group for the accept-queue ceiling; it holds no state.
+     *
+     * @since 0.9.72+
+     */
+    public ConnectionHandlerSynAdmissionTest() {}
+
+    /**
+     * Zero is the sentinel for uncapped: a queue of any depth still takes the SYN,
+     * rather than resetting every connection attempt.
+     */
+    @Test
+    public void testZeroMeansUncapped() {
+        assertTrue(ConnectionHandler.synAdmitted(0, 0));
+        assertTrue(ConnectionHandler.synAdmitted(1, 0));
+        assertTrue(ConnectionHandler.synAdmitted(CONFIGURED, 0));
+        assertTrue(ConnectionHandler.synAdmitted(Integer.MAX_VALUE, 0));
+    }
+
+    /**
+     * A negative cap behaves like zero. A comparison of {@code size() < max} would
+     * refuse everything, and a nonsense value must not be read as a nonsense cap.
+     */
+    @Test
+    public void testANegativeCapBehavesLikeUncapped() {
+        assertTrue(ConnectionHandler.synAdmitted(0, -1));
+        assertTrue(ConnectionHandler.synAdmitted(CONFIGURED, -1));
+        assertTrue(ConnectionHandler.synAdmitted(1, Integer.MIN_VALUE));
+    }
+
+    /**
+     * A real cap admits up to itself and refuses at it, which is the behaviour the
+     * uncapped cases must not disturb.
+     */
+    @Test
+    public void testARealCapRefusesAtTheBoundary() {
+        assertTrue(ConnectionHandler.synAdmitted(0, 1));
+        assertFalse(ConnectionHandler.synAdmitted(1, 1));
+        assertTrue(ConnectionHandler.synAdmitted(CONFIGURED - 1, CONFIGURED));
+        assertFalse(ConnectionHandler.synAdmitted(CONFIGURED, CONFIGURED));
+        assertFalse(ConnectionHandler.synAdmitted(CONFIGURED + 1, CONFIGURED));
+    }
+
+    /**
+     * The expiry report reads the same sentinel, so the two places cannot disagree
+     * about whether the queue is capped: a capped queue is reported as a fraction of
+     * the cap, an uncapped one as a depth.
+     */
+    @Test
+    public void testTheExpiryReportUsesTheSameSentinel() {
+        Packet syn = synPacket();
+        String capped = ConnectionHandler.synExpiryMessage(syn, 5, CONFIGURED, 60000);
+        assertTrue(capped, capped.contains("5/" + CONFIGURED));
+        String uncapped = ConnectionHandler.synExpiryMessage(syn, 5, 0, 60000);
+        assertTrue(uncapped, uncapped.contains("depth 5"));
+        assertFalse(uncapped, uncapped.contains("5/0"));
+    }
+
+    /**
+     * @return a SYN packet for the report fixture
+     */
+    private static Packet synPacket() {
+        Packet p = new Packet(null);
+        p.setFlag(Packet.FLAG_SYNCHRONIZE);
+        p.setSequenceNum(3);
+        p.setSendStreamId(0x11111111L);
+        p.setReceiveStreamId(0x22222222L);
+        return p;
+    }
+}
