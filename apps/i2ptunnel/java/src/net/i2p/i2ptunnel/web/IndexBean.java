@@ -498,8 +498,9 @@ public class IndexBean {
     private String restartDoneMessage(int scope, int started) {
         switch (scope) {
             case TunnelControllerGroup.RESTART_CLIENTS: return _t("Restarted all running client tunnels");
-            case TunnelControllerGroup.RESTART_SERVERS: return "Restarted " + started + " running server " +
-                                         (started > 1 ? "tunnels" : "tunnel");
+            case TunnelControllerGroup.RESTART_SERVERS: return ngettext("Restarted {0} running server tunnel",
+                                                                        "Restarted {0} running server tunnels",
+                                                                        started);
             default: return _t("Restarted all running tunnels");
         }
     }
@@ -544,7 +545,7 @@ public class IndexBean {
     private String start() {
         if (_tunnel < 0) {return "✖ " + _t("Error: Invalid tunnel");}
         List<TunnelController> controllers = _group.getControllers();
-        if (_tunnel >= controllers.size()) {return "✖ Error: Invalid tunnel";}
+        if (_tunnel >= controllers.size()) {return "✖ " + _t("Error: Invalid tunnel");}
 
         TunnelController controller = controllers.get(_tunnel);
         controller.startTunnelBackground();
@@ -561,7 +562,7 @@ public class IndexBean {
     private String stop() {
         if (_tunnel < 0) {return "✖ " + _t("Error: Invalid tunnel");}
         List<TunnelController> controllers = _group.getControllers();
-        if (controllers == null || _tunnel >= controllers.size()) {return "✖ Error: Invalid tunnel";}
+        if (controllers == null || _tunnel >= controllers.size()) {return "✖ " + _t("Error: Invalid tunnel");}
 
         TunnelController controller = controllers.get(_tunnel);
         controller.stopTunnel();
