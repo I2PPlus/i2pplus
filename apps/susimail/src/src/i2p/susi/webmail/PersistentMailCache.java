@@ -1,14 +1,18 @@
 package i2p.susi.webmail;
 
 import i2p.susi.util.Buffer;
+import i2p.susi.util.Config;
 import i2p.susi.util.FixCRLFOutputStream;
 import i2p.susi.util.GzipFileBuffer;
 import i2p.susi.util.LogHelper;
+import i2p.susi.util.SealedFileBuffer;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -16,6 +20,7 @@ import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
+import javax.crypto.SecretKey;
 import net.i2p.I2PAppContext;
 import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
@@ -25,20 +30,23 @@ import net.i2p.util.Log;
 import net.i2p.util.PasswordManager;
 import net.i2p.util.SecureDirectory;
 import net.i2p.util.SecureFile;
+import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.ThreadNames;
 
 /**
  * Manages persistent on-disk email cache with custom compressed format.
  *
- * This is a custom format with subdirectories, gzipped files,
- * and the encoded UIDL in the file name.
+ * This is a custom format with subdirectories, compressed files, and the encoded
+ * UIDL in the file name. A file is gzipped, and where the account has a mailbox
+ * password it is also sealed with AES-GCM keyed on that password, so a backup of the
+ * config directory does not hand over the mailbox in clear.
  * We store either the headers or the full message.
  * No, it is not Maildir format but we could add Maildir-style
  * status suffixes (e.g. ":2.SR") later.
  *
- * Exporting to a Maildir format would be just ungzipping
- * each file to a flat directory.
+ * Exporting to a Maildir format would be just ungzipping, and decrypting, each file
+ * to a flat directory.
  *
  * This class should only be accessed from {@link MailCache}.
  *
@@ -66,6 +74,11 @@ class PersistentMailCache {
     private final Log _log;
     /** True for the drafts folder cache. */
     private final boolean _isDrafts;
+    /**
+     * Key the cached messages are sealed with, or null to store them the way this
+     * tree always did: gzip only.
+     */
+    private final SecretKey _key;
 
     /** Name of the mail data directory. */
     private static final String DIR_SUSI = "susimail";
@@ -91,6 +104,42 @@ class PersistentMailCache {
     private static final String FULL_SUFFIX = ".full.txt.gz";
     /** Alphabet of the base64 mail uids. */
     private static final String B64 = Base64.ALPHABET_I2P;
+    /** Name of the per-account salt file, written beside the cache directories. */
+    private static final String SALT_FILE = "salt";
+    /** Suffix of the temporary file a legacy cache file is re-sealed into. */
+    private static final String SEALING_SUFFIX = ".sealing";
+    /** A legacy file larger than this is left as it is rather than re-sealed. */
+    private static final long MAX_SEAL_BYTES = 32L * 1024 * 1024;
+    /** Config key that turns cache encryption off, `true` unless set otherwise. */
+    private static final String CONFIG_CACHE_ENCRYPT = "cache.encrypt";
+
+    /**
+     * Cache-encryption keys, one per account, keyed like the account locks, and
+     * holding the password each was derived from so a different password re-derives
+     * it instead of reusing a key that cannot open the cache.
+     */
+    private static final ConcurrentHashMap<String, CacheKey> _keys = new ConcurrentHashMap<>();
+
+    /**
+     * A derived cache key with the password it came from.
+     *
+     * @since 0.9.72+
+     */
+    private static final class CacheKey {
+        /** The mailbox password the key was derived from. */
+        private final String _pass;
+        /** The derived key. */
+        private final SecretKey _key;
+
+        /**
+         * @param pass the mailbox password the key was derived from
+         * @param key the derived key
+         */
+        CacheKey(String pass, SecretKey key) {
+            _pass = pass;
+            _key = key;
+        }
+    }
 
     /**
      * Use the params to generate a unique directory name.
@@ -101,7 +150,8 @@ class PersistentMailCache {
      * @param host IMAP host, part of the directory name
      * @param port IMAP port, part of the directory name
      * @param user mail account name, part of the directory name
-     * @param pass not used; the cache is keyed on account name alone
+     * @param pass the mailbox password, used to derive the key the cache is sealed
+     *             with, and otherwise not used; the cache is keyed on account name
      * @param folder on-disk maildir name, one of the {@code DIRS} values,
      *               e.g. {@code DIR_FOLDER}; only DIR_DRAFTS gets an
      *               attachment directory
@@ -114,6 +164,12 @@ class PersistentMailCache {
         _lock = getLock(host, port, user);
         synchronized(_lock) {
             _cacheDir = makeCacheDirs(host, port, user, folder);
+            _key = cacheKey(_cacheDir.getParentFile(), host, port, user, pass);
+            if (_key != null) {
+                int sealed = sealLegacy(_cacheDir, _key, _log);
+                if (sealed > 0 && _log.shouldInfo())
+                    _log.info("Cache files re-sealed -> Messages no longer readable in plaintext\n* Files: " + sealed);
+            }
             // Debugging only for now.
             File attach = null;
             if (folder.equals(WebMail.DIR_FOLDER)) {
@@ -166,7 +222,7 @@ class PersistentMailCache {
         int tcnt = Math.max(1, Math.min(sz / 4, Math.min(SystemVersion.getCores(), 16)));
         List<Thread> threads = new ArrayList<>(tcnt);
         for (int i = 0; i < tcnt; i++) {
-            Thread t = new I2PAppThread(new Loader(fq, rv, _isDrafts, _attachmentDir, _log),
+            Thread t = new I2PAppThread(new Loader(fq, rv, _isDrafts, _attachmentDir, _key, _log),
                                         "MailLd" + ThreadNames.idx(i));
             t.start();
             threads.add(t);
@@ -196,6 +252,8 @@ class PersistentMailCache {
         private final boolean _isD;
         /** Where a draft's uploaded attachments live, null when not drafts. */
         private final File _attachDir;
+        /** Key a sealed cache file needs, null for a cache that does not encrypt. */
+        private final SecretKey _key;
         /** Logger for this loader, handed down from the cache. */
         private final Log _log;
 
@@ -208,12 +266,14 @@ class PersistentMailCache {
          * @param isDrafts whether these are drafts
          * @param attachDir where a draft's uploaded attachments are kept, or null
          *                  to accept an attachment path as the draft wrote it
+         * @param key the key a sealed cache file needs, null for a plaintext cache
          * @param log the cache's log, for reporting a file that cannot be loaded
          */
-        public Loader(Queue<File> in, Queue<Mail> out, boolean isDrafts, File attachDir, Log log) {
+        public Loader(Queue<File> in, Queue<Mail> out, boolean isDrafts, File attachDir, SecretKey key, Log log) {
             _in = in; _out = out;
             _isD = isDrafts;
             _attachDir = attachDir;
+            _key = key;
             _log = log;
         }
 
@@ -228,7 +288,7 @@ class PersistentMailCache {
             while ((f = _in.poll()) != null) {
                 Mail mail;
                 try {
-                    mail = load(f, _isD, _attachDir);
+                    mail = load(f, _isD, _attachDir, _key);
                 } catch (Throwable t) {
                     // a StackOverflowError or an OutOfMemoryError is an Error, not an
                     // Exception, and load() parses remote MIME structure
@@ -267,7 +327,7 @@ class PersistentMailCache {
         if (headerOnly) {
             File hf = getHeaderFile(mail.uidl);
             if (hf.exists()) {
-                Buffer rb = read(hf);
+                Buffer rb = read(hf, _key);
                 if (rb != null) {
                     mail.setHeader(rb);
                     return true;
@@ -284,7 +344,7 @@ class PersistentMailCache {
         }
         File f = getFullFile(mail.uidl);
         if (f.exists()) {
-            Buffer rb = read(f);
+            Buffer rb = read(f, _key);
             if (rb != null) {
                 mail.setBody(rb);
                 // not "true": a cached file this tree cannot parse leaves the mail
@@ -300,7 +360,7 @@ class PersistentMailCache {
         }
         f = getHeaderFile(mail.uidl);
         if (f.exists()) {
-            Buffer rb = read(f);
+            Buffer rb = read(f, _key);
             if (rb != null) {
                 mail.setHeader(rb);
                 return true;
@@ -416,7 +476,165 @@ class PersistentMailCache {
     }
 
     /**
-     * The gzipped header-only file for this uidl. The file need not exist yet.
+     * The key this account's cache files are sealed with, or null to leave them as
+     * plain gzip.
+     *
+     * The key is PBKDF2 over the mailbox password the user types at login and a salt
+     * written beside the cache, so the config directory holds the ciphertext and the
+     * salt but not the secret the ciphertext needs. It is derived once per account and
+     * password: the round count that makes a guess expensive would otherwise be paid
+     * once per folder on every login.
+     *
+     * @param accountDir the directory holding this account's folders
+     * @param host the mail host, part of the account name
+     * @param port the mail port, part of the account name
+     * @param user the account name, part of the account name
+     * @param pass the mailbox password, null or empty for an account with none
+     * @return the key, or null if encryption is switched off or there is no password
+     */
+    private SecretKey cacheKey(File accountDir, String host, int port, String user, String pass) {
+        if (pass == null || pass.isEmpty())
+            return null;
+        if (!Boolean.parseBoolean(Config.getProperty(CONFIG_CACHE_ENCRYPT, "true")))
+            return null;
+        String account = user + host + port;
+        CacheKey ck = _keys.get(account);
+        if (ck != null && pass.equals(ck._pass))
+            return ck._key;
+        try {
+            byte[] salt = readOrCreateSalt(accountDir);
+            SecretKey key = SealedFileBuffer.deriveKey(pass, salt);
+            _keys.put(account, new CacheKey(pass, key));
+            return key;
+        } catch (IOException ioe) {
+            _log.error("Cache key could not be derived -> Messages stored in plaintext", ioe);
+            return null;
+        }
+    }
+
+    /**
+     * The account's PBKDF2 salt, created and stored on first use.
+     *
+     * @param accountDir the directory holding this account's folders
+     * @return {@link SealedFileBuffer#SALT_LENGTH} bytes
+     * @throws IOException if the salt file can be neither read nor written
+     */
+    static byte[] readOrCreateSalt(File accountDir) throws IOException {
+        File f = new SecureFile(accountDir, SALT_FILE);
+        if (f.canRead()) {
+            byte[] raw = Files.readAllBytes(f.toPath());
+            byte[] salt = Base64.decode(new String(raw, StandardCharsets.US_ASCII).trim());
+            if (salt != null && salt.length == SealedFileBuffer.SALT_LENGTH)
+                return salt;
+        }
+        byte[] salt = SealedFileBuffer.newSalt();
+        byte[] text = DataHelper.getASCII(Base64.encode(salt) + '\n');
+        try (OutputStream out = new SecureFileOutputStream(f)) {
+            out.write(text);
+        }
+        return salt;
+    }
+
+    /**
+     * Re-seal the cache files an earlier release left as plain gzip, so upgrading
+     * does not leave the mailbox readable.
+     *
+     * A file that already carries the sealed header is skipped, which is what lets an
+     * interrupted pass resume where it stopped instead of sealing a file twice.
+     *
+     * @param dir the folder directory to walk
+     * @param key the key to seal with
+     * @param log the cache's log, for a file that could not be re-sealed
+     * @return the number of files re-sealed
+     */
+    static int sealLegacy(File dir, SecretKey key, Log log) {
+        File[] entries = dir.listFiles();
+        if (entries == null)
+            return 0;
+        int sealed = 0;
+        for (File f : entries) {
+            if (f.isDirectory())
+                sealed += sealLegacy(f, key, log);
+            else if (f.getName().startsWith(FILE_PREFIX) && !SealedFileBuffer.isSealed(f) &&
+                     sealOne(f, key, log))
+                sealed++;
+        }
+        return sealed;
+    }
+
+    /**
+     * Re-seal one legacy file: decompress it, write it back through the sealed
+     * buffer under a temporary name, then rename it into place.
+     *
+     * @param f the plain gzip cache file
+     * @param key the key to seal with
+     * @param log the cache's log
+     * @return true if the file now carries the sealed header
+     */
+    private static boolean sealOne(File f, SecretKey key, Log log) {
+        if (f.length() > MAX_SEAL_BYTES) {
+            if (log.shouldWarn())
+                log.warn("Legacy cache file left as it is -> Larger than the re-seal limit" +
+                         "\n* File: " + f.getName());
+            return false;
+        }
+        File tmp = new SecureFile(f.getParentFile(), f.getName() + SEALING_SUFFIX);
+        Buffer legacy = new GzipFileBuffer(f);
+        SealedFileBuffer sealed = new SealedFileBuffer(tmp, key, f.getName());
+        InputStream in = null;
+        OutputStream out = null;
+        boolean done = false;
+        try {
+            in = legacy.getInputStream();
+            out = sealed.getOutputStream();
+            DataHelper.copy(in, out);
+            out.close();
+            out = null;
+            legacy.readComplete(true);
+            sealed.writeComplete(true);
+            done = tmp.renameTo(f);
+            if (!done && log.shouldWarn())
+                log.warn("Legacy cache file left unsealed -> The re-sealed copy could not take its place" +
+                         "\n* File: " + f.getName());
+        } catch (IOException ioe) {
+            if (log.shouldWarn())
+                log.warn("Re-sealing a legacy cache file failed -> Left as it is\n* File: " + f.getName(), ioe);
+        } finally {
+            if (in != null) {
+                try {in.close();}
+                catch (IOException ioe) { /* ignored */ }
+            }
+            if (out != null) {
+                try {out.close();}
+                catch (IOException ioe) { /* ignored */ }
+            }
+            legacy.readComplete(false);
+            sealed.writeComplete(false);
+            if (!done)
+                tmp.delete();
+        }
+        return done;
+    }
+
+    /**
+     * The buffer for a cache file: sealed whenever this cache has a key, except when
+     * reading a file an earlier release wrote as plain gzip, which is read the way it
+     * was written until the re-seal pass reaches it.
+     *
+     * @param f the cache file
+     * @param writing true when the file is about to be written
+     * @return a buffer over the file, never null
+     */
+    private Buffer bufferFor(File f, boolean writing) {
+        if (_key == null)
+            return new GzipFileBuffer(f);
+        if (writing || !f.exists() || SealedFileBuffer.isSealed(f))
+            return new SealedFileBuffer(f, _key);
+        return new GzipFileBuffer(f);
+    }
+
+    /**
+     * The header-only cache file for this uidl. The file need not exist yet.
      *
      * @param uidl the unique ID of the mail
      * @return the header-only file for this UIDL
@@ -437,10 +655,10 @@ class PersistentMailCache {
      * Does not necessarily exist.
      *
      * @param uidl the unique ID of the mail
-     * @return a new buffer over the full message file
+     * @return a new buffer over the full message file, sealed if this cache encrypts
      * @since 0.9.35
      */
-    public GzipFileBuffer getFullBuffer(String uidl) {return new GzipFileBuffer(getFile(uidl, FULL_SUFFIX));}
+    public Buffer getFullBuffer(String uidl) {return bufferFor(getFile(uidl, FULL_SUFFIX), false);}
 
     /**
      * Where draft attachments are stored, which only the drafts cache creates.
@@ -470,7 +688,7 @@ class PersistentMailCache {
      * Save data to disk.
      *
      * @param rb the in-memory buffer whose data is written to disk
-     * @param f the gzip cache file to write
+     * @param f the cache file to write
      * @return true if the buffer was written in full; false on an IOException,
      *         which also leaves the buffer marked incomplete
      */
@@ -479,7 +697,7 @@ class PersistentMailCache {
         OutputStream out = null;
         try {
             in = rb.getInputStream();
-            GzipFileBuffer gb = new GzipFileBuffer(f);
+            Buffer gb = bufferFor(f, true);
             out = gb.getOutputStream();
             DataHelper.copy(in, out);
             out.close();
@@ -503,13 +721,17 @@ class PersistentMailCache {
     }
 
     /**
-     * Wrap a cache file in a decompressing buffer.
+     * Wrap a cache file in a buffer that decompresses it, and decrypts it first when
+     * the file carries the sealed header.
      *
-     * @param f the gzip cache file to read
+     * @param f the cache file to read
+     * @param key the key a sealed file needs, null for a cache that does not encrypt
      * @return null on failure
      */
-    private static Buffer read(File f) {
+    private static Buffer read(File f, SecretKey key) {
         if (!f.canRead()) {return null;}
+        if (key != null && SealedFileBuffer.isSealed(f))
+            return new SealedFileBuffer(f, key);
         return new GzipFileBuffer(f);
     }
 
@@ -521,9 +743,10 @@ class PersistentMailCache {
      * @param isDrafts true if the file is in the drafts folder
      * @param attachDir where a draft's uploaded attachments are kept, or null to
      *                  accept an attachment path as the draft wrote it
+     * @param key the key a sealed cache file needs, null for a plaintext cache
      * @return null on failure
      */
-    private static Mail load(File f, boolean isDrafts, File attachDir) {
+    private static Mail load(File f, boolean isDrafts, File attachDir, SecretKey key) {
         String name = f.getName();
         String uidl;
         boolean headerOnly;
@@ -539,7 +762,7 @@ class PersistentMailCache {
             if (log.shouldWarn()) {log.warn("Unable to extract UIDL from file " + f);}
             return null;
         }
-        Buffer rb = read(f);
+        Buffer rb = read(f, key);
         if (rb == null) {
             Log log = I2PAppContext.getGlobalContext().logManager().getLog(PersistentMailCache.class);
             if (log.shouldWarn()) {log.warn("Unable to read file " + f);}
@@ -612,7 +835,7 @@ class PersistentMailCache {
                 OutputStream out = null;
                 try {
                     in = new FileInputStream(f);
-                    GzipFileBuffer gb = new GzipFileBuffer(to);
+                    Buffer gb = bufferFor(to, true);
                     // Thunderbird exports aren't CRLF terminated
                     out = new FixCRLFOutputStream(gb.getOutputStream());
                     DataHelper.copy(in, out);
