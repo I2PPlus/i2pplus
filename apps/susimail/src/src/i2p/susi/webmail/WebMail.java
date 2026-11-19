@@ -418,14 +418,14 @@ public class WebMail extends HttpServlet {
         String info = "";
         /** UIDL of the draft being edited. */
         String draftUIDL; // Just convenience to pass from PSCB to P-R-G
-        /** Local password verification for session protection @since 0.9.70+. */
-        private String _sessionSalt;
         /**
-         * Key for signing session identifiers.
+         * The login password, hashed with a per-session salt, so a settings rewrite
+         * can ask the session to prove it still holds the credential. Null until a
+         * login supplies a password, and null again once the mailbox is gone.
          *
          * @since 0.9.70+
          */
-        private String _sessionKey;
+        private LocalPassword _localPassword;
         /**
          * Settings changes this session has been refused for want of the password.
          *
@@ -486,8 +486,11 @@ public class WebMail extends HttpServlet {
          */
         public void setLocalPassword(String password) {
             if (password == null || password.isEmpty()) return;
-            _sessionSalt = Long.toHexString(I2PAppContext.getGlobalContext().random().nextLong());
-            _sessionKey = hashPassword(password, _sessionSalt);
+            _localPassword = LocalPassword.create(password, LocalPassword.newSalt());
+            if (_localPassword == null && log.shouldWarn()) {
+                log.warn("Hashing the login password for this session failed -> " +
+                         "Saving the settings will not ask for it again");
+            }
         }
 
         /**
@@ -498,11 +501,7 @@ public class WebMail extends HttpServlet {
          * @since 0.9.70+
          */
         public boolean verifyLocalPassword(String password) {
-            if (_sessionSalt == null || _sessionKey == null || password == null) {
-                return false;
-            }
-            String hash = hashPassword(password, _sessionSalt);
-            return hash.equals(_sessionKey);
+            return _localPassword != null && _localPassword.matches(password);
         }
 
         /**
@@ -513,7 +512,17 @@ public class WebMail extends HttpServlet {
          * @since 0.9.72+
          */
         boolean hasLocalPassword() {
-            return _sessionSalt != null && _sessionKey != null;
+            return _localPassword != null;
+        }
+
+        /**
+         * Forget the hashed login password, because the mailbox it belonged to is gone
+         * and the next sign-in will supply a new one.
+         *
+         * @since 0.9.72+
+         */
+        void clearLocalPassword() {
+            _localPassword = null;
         }
 
         /**
@@ -545,30 +554,6 @@ public class WebMail extends HttpServlet {
          */
         void clearConfigFailures() {
             _configFails = 0;
-        }
-
-        /**
-         * PBKDF2 hash for password verification with high iteration count.
-         *
-         * @param password the password to hash
-         * @param salt the per-user salt
-         * @return the hashed password
-         * @since 0.9.70+
-         */
-        private static String hashPassword(String password, String salt) {
-            try {
-                javax.crypto.SecretKeyFactory factory = javax.crypto.SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
-                javax.crypto.spec.PBEKeySpec spec = new javax.crypto.spec.PBEKeySpec(
-                    password.toCharArray(), salt.getBytes(StandardCharsets.UTF_8), 1000000, 256);
-                byte[] hash = factory.generateSecret(spec).getEncoded();
-                StringBuilder sb = new StringBuilder(hash.length * 2);
-                for (byte b : hash) {
-                    sb.append(String.format("%02x", b));
-                }
-                return sb.toString();
-            } catch (Exception e) {
-                return "";
-            }
         }
 
         /**
@@ -1179,7 +1164,8 @@ public class WebMail extends HttpServlet {
         sessionObject.pass = pass;
         sessionObject.host = host;
         sessionObject.reallyDelete = false;
-        // Store local password hash for session protection @since 0.9.70+
+        // Keep a salted hash of the password this session signed in with, so a
+        // settings rewrite can ask the operator for it back
         sessionObject.setLocalPassword(pass);
         // The login just proved the password, so the settings check starts over
         sessionObject.clearConfigFailures();
@@ -2761,10 +2747,10 @@ public class WebMail extends HttpServlet {
 
             State state = null;
             // If mailbox is null but we have a user, this means session expired or auth failed
-            // (e.g., password changed on server). Clear local password to force re-login. @since 0.9.70+
+            // (e.g., password changed on server). Drop the hashed password with it - the
+            // settings check asks for the credential of the mailbox in hand, not an old one.
             if (sessionObject.mailbox == null && sessionObject.user != null) {
-                sessionObject._sessionSalt = null;
-                sessionObject._sessionKey = null;
+                sessionObject.clearLocalPassword();
             }
             if (sessionObject.mailbox == null) {state = State.AUTH;}
             else if (isPOST) {
