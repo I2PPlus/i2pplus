@@ -131,6 +131,10 @@ class MessageInputStream extends InputStream {
      * instead of the actual payload to prevent memory accumulation while still allowing
      * {@link #canAccept(long, int)} to return true for retransmits of already-processed messages.
      * This enables proper handling of late-arriving duplicate packets after stream closure.
+     * <p>It is also what {@link #messageReceived(long, ByteArray)} normalises a null
+     * payload to, so no value in {@link #_notYetReadyBlocks} is ever null: the
+     * promotion loop reads a null value as a missing entry and stops promoting,
+     * and the two teardown paths dereference the values.
      * <p>Note: the payload size of this sentinel is 0, so it does not count toward
      * {@link #_readyDataSize} or buffer limits.  See {@link #canAccept(long, int)}.
      */
@@ -607,15 +611,24 @@ class MessageInputStream extends InputStream {
      * <p>
      * If the message is next in sequence, it's added to the ready list and contiguous out-of-order
      * messages are promoted.
+     * <p>
+     * A null payload is normalised to the empty sentinel before anything reads
+     * it. {@link Packet#getPayload()} is documented as
+     * possibly null, and a null stored in the out-of-order map is worse than no
+     * entry at all: the promotion loop reads a null value as "nothing buffered
+     * here" and stops, leaving every later block unreadable, and both teardown
+     * paths dereference the map's values and throw on a null one.
      *
      * @param messageId The message sequence ID
-     * @param payload The message payload
+     * @param payload The message payload, null for a block with no bytes
      * @return true if the message was new, false if a duplicate
      */
     public boolean messageReceived(long messageId, ByteArray payload) {
+        if (payload == null) {
+            payload = DUMMY_BA;
+        }
         if (_log.shouldDebug()) {
-            _log.debug("Received message ID " + messageId + ", length: " +
-                       (payload != null ? payload.getValid() : "no payload"));
+            _log.debug("Received message ID " + messageId + ", length: " + payload.getValid());
         }
 
         synchronized (_dataLock) {
@@ -630,7 +643,7 @@ class MessageInputStream extends InputStream {
             }
 
             if (messageId == _highestReadyBlockId + 1) {
-                if (!_locallyClosed.get() && payload != null && payload.getValid() > 0) {
+                if (!_locallyClosed.get() && payload.getValid() > 0) {
                     _readyDataBlocks.addLast(payload);
                     _readyDataSize += payload.getValid();
                 }
@@ -669,9 +682,7 @@ class MessageInputStream extends InputStream {
                     _log.infoThrottled("streaming-out-of-order",
                                        "Received out-of-order message ID " + messageId + " -> Buffered");
                     _notYetReadyBlocks.put(messageId, payload);
-                    if (payload != null) {
-                        _notYetReadySize += payload.getValid();
-                    }
+                    _notYetReadySize += payload.getValid();
                 }
             }
         }
