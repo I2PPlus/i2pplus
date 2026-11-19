@@ -61,6 +61,7 @@ import net.i2p.I2PAppContext;
 import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 import net.i2p.servlet.RequestWrapper;
+import net.i2p.servlet.util.OriginCheck;
 import net.i2p.servlet.util.ServletUtil;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
@@ -3891,6 +3892,7 @@ public class WebMail extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException {
         if (!allowOrigin(request)) {
+            OriginCheck.logDenial(request);
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "Invalid Origin header for POST request");
             return;
         }
@@ -3901,88 +3903,18 @@ public class WebMail extends HttpServlet {
      * Validate Origin header for POST requests.
      * Allows requests with matching Origin (same-origin), or no Origin header.
      * Rejects cross-origin POST requests to prevent CSRF attacks.
+     * <p>
+     * The rule is {@link OriginCheck}'s, shared with the console and the other
+     * webapps. This copy differed from the console's in two ways that both matter
+     * for a mail client: it accepted {@code Origin: null}, the value a sandboxed
+     * frame or a data: URL sends, and it waved through an Origin it could not
+     * parse.
      *
      * @param request the POST request, read for the Origin and Host headers
-     * @return false only for a parseable cross-origin mismatch, true for a
-     *         same-origin, missing, or unparseable Origin
+     * @return true if the request's Origin is acceptable for its Host
      */
     private boolean allowOrigin(HttpServletRequest request) {
-        String origin = request.getHeader("Origin");
-        String host = request.getHeader("Host");
-
-        if (origin == null || origin.isEmpty()) {
-            return true;
-        }
-
-        if ("null".equalsIgnoreCase(origin)) {
-            return true;
-        }
-
-        String originHost;
-        int originPort;
-        try {
-            if (origin.startsWith("http://")) {
-                String rest = origin.substring(7);
-                int colon = rest.indexOf(':');
-                if (colon > 0) {
-                    originHost = rest.substring(0, colon);
-                    originPort = Integer.parseInt(rest.substring(colon + 1));
-                } else {
-                    originHost = rest;
-                    originPort = 80;
-                }
-            } else if (origin.startsWith("https://")) {
-                String rest = origin.substring(8);
-                int colon = rest.indexOf(':');
-                if (colon > 0) {
-                    originHost = rest.substring(0, colon);
-                    originPort = Integer.parseInt(rest.substring(colon + 1));
-                } else {
-                    originHost = rest;
-                    originPort = 443;
-                }
-            } else {
-                return true;
-            }
-        } catch (Exception e) {
-            return true;
-        }
-
-        String requestHost;
-        int requestPort;
-        try {
-            if (host == null) {
-                return true;
-            }
-            if (host.startsWith("[")) {
-                int brack = host.indexOf(']');
-                if (brack > 0) {
-                    requestHost = host.substring(1, brack);
-                    String rest = host.substring(brack + 1);
-                    if (rest.startsWith(":")) {
-                        requestPort = Integer.parseInt(rest.substring(1));
-                    } else {
-                        requestPort = request.isSecure() ? 443 : 80;
-                    }
-                } else {
-                    requestHost = host;
-                    requestPort = request.isSecure() ? 443 : 80;
-                }
-            } else {
-                int colon = host.indexOf(':');
-                if (colon > 0) {
-                    requestHost = host.substring(0, colon);
-                    requestPort = Integer.parseInt(host.substring(colon + 1));
-                } else {
-                    requestHost = host;
-                    requestPort = request.isSecure() ? 443 : 80;
-                }
-            }
-        } catch (Exception e) {
-            return true;
-        }
-
-        return originHost.equals(requestHost) && originPort == requestPort;
+        return OriginCheck.isAllowed(request);
     }
 
     /**

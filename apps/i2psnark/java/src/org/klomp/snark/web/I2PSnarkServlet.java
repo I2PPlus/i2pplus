@@ -45,6 +45,7 @@ import net.i2p.data.DataHelper;
 import net.i2p.data.ByteArray;
 import net.i2p.data.Hash;
 import net.i2p.servlet.RequestWrapper;
+import net.i2p.servlet.util.OriginCheck;
 import net.i2p.servlet.util.ServletUtil;
 import net.i2p.util.Escapes;
 import net.i2p.util.FileUtil;
@@ -225,7 +226,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * @return true if the request is allowed
      */
     private boolean allowOrigin(HttpServletRequest request) {
-        return allowOrigin(request.getHeader("Origin"), request.getHeader("Host"), request.isSecure());
+        return OriginCheck.isAllowed(request);
     }
 
     /**
@@ -234,6 +235,10 @@ public class I2PSnarkServlet extends BasicServlet {
      * names the page that sent it, and is refused. A request with no Origin at all
      * is not a browser POST, since every browser sends one, so it is left to the
      * nonce and API-key checks that follow.
+     * <p>
+     * The rule is {@link OriginCheck}'s, shared with the console and the other
+     * webapps: this servlet used to carry its own parse-and-compare, and the two
+     * disagreed about what a malformed Origin means.
      *
      * @param origin the Origin header, may be null or empty
      * @param host the Host header, may be null
@@ -242,84 +247,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * @since 0.9.72+
      */
     public static boolean allowOrigin(String origin, String host, boolean secure) {
-        if (origin == null || origin.isEmpty()) {
-            return true;
-        }
-
-        // A sandboxed iframe, a data: URL and a blob: page all send this Origin,
-        // and any web page can put one of those on its own origin. Accepting it
-        // lets a page that has no relationship to this console POST to it from the
-        // user's own machine - which is also what makes a loopback source address
-        // worthless as authorization for the browser API.
-        if ("null".equalsIgnoreCase(origin)) {
-            return false;
-        }
-
-        String originHost;
-        int originPort;
-        try {
-            if (origin.startsWith("http://")) {
-                String rest = origin.substring(7);
-                int colon = rest.indexOf(':');
-                if (colon > 0) {
-                    originHost = rest.substring(0, colon);
-                    originPort = Integer.parseInt(rest.substring(colon + 1));
-                } else {
-                    originHost = rest;
-                    originPort = 80;
-                }
-            } else if (origin.startsWith("https://")) {
-                String rest = origin.substring(8);
-                int colon = rest.indexOf(':');
-                if (colon > 0) {
-                    originHost = rest.substring(0, colon);
-                    originPort = Integer.parseInt(rest.substring(colon + 1));
-                } else {
-                    originHost = rest;
-                    originPort = 443;
-                }
-            } else {
-                return true;
-            }
-        } catch (Exception e) {
-            return true;
-        }
-
-        String requestHost;
-        int requestPort;
-        try {
-            if (host == null) {
-                return true;
-            }
-            if (host.startsWith("[")) {
-                int brack = host.indexOf(']');
-                if (brack > 0) {
-                    requestHost = host.substring(1, brack);
-                    String rest = host.substring(brack + 1);
-                    if (rest.startsWith(":")) {
-                        requestPort = Integer.parseInt(rest.substring(1));
-                    } else {
-                        requestPort = secure ? 443 : 80;
-                    }
-                } else {
-                    requestHost = host;
-                    requestPort = secure ? 443 : 80;
-                }
-            } else {
-                int colon = host.indexOf(':');
-                if (colon > 0) {
-                    requestHost = host.substring(0, colon);
-                    requestPort = Integer.parseInt(host.substring(colon + 1));
-                } else {
-                    requestHost = host;
-                    requestPort = secure ? 443 : 80;
-                }
-            }
-        } catch (Exception e) {
-            return true;
-        }
-
-        return originHost.equals(requestHost) && originPort == requestPort;
+        return OriginCheck.isAllowed(origin, host, secure);
     }
 
     /**
@@ -556,8 +484,9 @@ public class I2PSnarkServlet extends BasicServlet {
 
         req.setCharacterEncoding("UTF-8"); // Set request encoding early
 
-        // CSRF: Validate Origin header for POST requests
+        // CSRF: a POST that carries an Origin must come from this same origin
         if ("POST".equals(method) && !allowOrigin(req)) {
+            OriginCheck.logDenial(req);
             resp.sendError(HttpServletResponse.SC_FORBIDDEN, "Invalid Origin header for POST request");
             return;
         }
