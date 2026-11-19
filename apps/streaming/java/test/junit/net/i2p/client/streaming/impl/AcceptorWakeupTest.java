@@ -31,8 +31,20 @@ import org.junit.Test;
  */
 public class AcceptorWakeupTest {
 
+    /**
+     * The tests build their own manager and handler, so nothing is held between
+     * instances.
+     */
+    public AcceptorWakeupTest() {}
+
     /** How long to wait for a parked accept() to come back. */
     private static final int WAKEUP_LIMIT = 5000;
+
+    /**
+     * Property naming the accept worker threads. Pinned to none for this class:
+     * a worker would race the tests that put a SYN on the queue by hand.
+     */
+    private static final String PROP_WORKERS = "i2p.streaming.acceptWorkerThreads";
 
     /** Owns the handler under test. */
     private ConnectionManager _manager;
@@ -40,23 +52,42 @@ public class AcceptorWakeupTest {
     /** The accept side of that manager. */
     private ConnectionHandler _handler;
 
+    /** What the worker-count property said before this test changed it. */
+    private String _savedWorkers;
+
+    /**
+     * Builds a manager and its accept side over a mocked session, with no accept
+     * workers started: a worker would take the SYNs and connections these tests put
+     * on the queues by hand, and the assertions would race it.
+     */
     @Before
     public void setUp() {
         I2PSession session = mock(I2PSession.class);
         Destination myDest = mock(Destination.class);
         when(myDest.calculateHash()).thenReturn(new Hash(new byte[32]));
         when(session.getMyDestination()).thenReturn(myDest);
-        _manager = new ConnectionManager(I2PAppContext.getGlobalContext(), session,
+        I2PAppContext ctx = I2PAppContext.getGlobalContext();
+        _savedWorkers = System.getProperty(PROP_WORKERS);
+        System.setProperty(PROP_WORKERS, "0");
+        _manager = new ConnectionManager(ctx, session,
                                          new ConnectionOptions(), IncomingConnectionFilter.ALLOW);
         _handler = _manager.getConnectionHandler();
     }
 
+    /**
+     * Stops the handler, shuts the manager down, and puts the accept-worker-count
+     * property back as it was, so a later test class sees the tree's own setting.
+     */
     @After
     public void tearDown() {
         if (_handler != null)
             _handler.setActive(false);
         if (_manager != null)
             _manager.shutdown();
+        if (_savedWorkers != null)
+            System.setProperty(PROP_WORKERS, _savedWorkers);
+        else
+            System.clearProperty(PROP_WORKERS);
     }
 
     /**
@@ -156,6 +187,109 @@ public class AcceptorWakeupTest {
             // expected
         }
         verify(syn).releasePayload();
+    }
+
+    /**
+     * The reason a listening period ended has to outlive that period. A hosted
+     * server that starts listening again before the parked acceptor's next poll
+     * must still be told the router restarted; otherwise the acceptor quietly
+     * joins a listener it never asked to reopen and the application never
+     * re-registers. At HEAD the reopen cleared the one flag the acceptor reads,
+     * so the thread stayed parked.
+     *
+     * @throws Exception if the accept thread cannot be started or joined
+     */
+    @Test(timeout = 20000)
+    public void testRestartReasonSurvivesAnImmediateReopen() throws Exception {
+        _handler.setActive(true);
+        AtomicReference<Throwable> thrown = new AtomicReference<>();
+        Thread waiter = parkAccept(0, null, thrown);
+        Thread.sleep(200);
+        _handler.setRestartPending();
+        _handler.setActive(true);
+        waiter.join(WAKEUP_LIMIT);
+        assertFalse("accept(0) joined the reopened listener instead of reporting the restart",
+                    waiter.isAlive());
+        assertTrue("expected a RouterRestartException, got " + thrown.get(),
+                   thrown.get() instanceof RouterRestartException);
+    }
+
+    /**
+     * The same for a plain close and reopen, with no restart involved: the
+     * acceptor parked through the close comes back with the socket-closed
+     * exception rather than waiting out the new period.
+     *
+     * @throws Exception if the accept thread cannot be started or joined
+     */
+    @Test(timeout = 20000)
+    public void testPlainCloseSurvivesAnImmediateReopen() throws Exception {
+        _handler.setActive(true);
+        AtomicReference<Throwable> thrown = new AtomicReference<>();
+        Thread waiter = parkAccept(0, null, thrown);
+        Thread.sleep(200);
+        _handler.setActive(false);
+        _handler.setActive(true);
+        waiter.join(WAKEUP_LIMIT);
+        assertFalse("accept(0) joined the reopened listener instead of reporting the close",
+                    waiter.isAlive());
+        assertTrue("expected a ConnectException, got " + thrown.get(),
+                   thrown.get() instanceof ConnectException);
+    }
+
+    /**
+     * An acceptor that entered <em>after</em> the reopen is unaffected by the
+     * period it did not enter: it is handed the connection waiting on the queue.
+     *
+     * @throws Exception if the queued connection cannot be inspected
+     */
+    @Test(timeout = 20000)
+    public void testAcceptorEnteredAfterAReopenIsNormal() throws Exception {
+        _handler.setActive(true);
+        _handler.setRestartPending();
+        _handler.setActive(true);
+        Connection con = mock(Connection.class);
+        resultQueue().offer(con);
+        assertSame(con, _handler.accept(0));
+    }
+
+    /**
+     * A SYN still on the accept queue when the handler stops is reset and
+     * released by the stop itself. setActive(false) used to clear the queue
+     * before anything could drain it, so the RESET that handlerInactive()
+     * promises never happened for a client whose SYN was queued at shutdown, and
+     * the client sat out its own retransmit.
+     *
+     * @throws Exception if the queue cannot be inspected
+     */
+    @Test(timeout = 20000)
+    public void testStoppingResetsAQueuedSyn() throws Exception {
+        _handler.setActive(true);
+        Packet syn = mock(Packet.class);
+        // unverifiable -> sendReset() gives up without touching the packet queue
+        when(syn.verifySignature(any(I2PAppContext.class), any(byte[].class))).thenReturn(false);
+        synQueue().offer(syn);
+        _handler.setActive(false);
+        verify(syn).releasePayload();
+        assertTrue("the queued SYN was left behind", synQueue().isEmpty());
+    }
+
+    /**
+     * A connection a worker produced but nobody accepted is closed on the way
+     * out, not dropped: dropped, the peer holds a half-open connection until its
+     * own timeout and this side keeps the streams' buffers.
+     *
+     * @throws Exception if the queue cannot be inspected
+     */
+    @Test(timeout = 20000)
+    public void testStoppingClosesAnUnacceptedConnection() throws Exception {
+        _handler.setActive(true);
+        Connection con = mock(Connection.class);
+        MessageOutputStream out = mock(MessageOutputStream.class);
+        when(con.getOutputStream()).thenReturn(out);
+        resultQueue().offer(con);
+        _handler.setActive(false);
+        verify(out).close();
+        assertTrue("the unaccepted connection was left behind", resultQueue().isEmpty());
     }
 
     /**

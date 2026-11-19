@@ -1,5 +1,6 @@
 package net.i2p.client.streaming.impl;
 
+import java.io.IOException;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
@@ -55,8 +56,12 @@ class ConnectionHandler {
     /** Explicit per-manager override, or -1 to use the live configured {@link #getAcceptTimeout}.
      * @since 0.9.71+ */
     private volatile int _acceptTimeout = -1;
-    /** True to restart the handler after the current pass. */
-    private boolean _restartPending;
+    /**
+     * The listening period this handler is in, replaced rather than cleared when
+     * a new one starts, so an acceptor parked across a restart keeps the reason
+     * belonging to the period it entered.
+     */
+    private volatile ListenState _listenState = new ListenState();
 
     /**
      * Max time a received SYN may sit in the accept queue before {@link #accept} is
@@ -461,13 +466,41 @@ class ConnectionHandler {
     }
 
     /**
+     * What one listening period knows about how it ended.
+     * <p>
+     * A boolean on the handler cannot carry the restart reason across a restart.
+     * Starting a new period has to clear it, and an acceptor parked in
+     * {@link ConnectionHandler#accept} from the previous period wakes after that
+     * clear - within one poll interval if the hosted application reopens its
+     * listener - and finds nothing to report, so it quietly joins the new period
+     * instead of telling the application the router restarted. One object per
+     * period means the parked acceptor keeps the period it entered, and a new
+     * period's fresh object cannot hide the old one's reason.
+     *
+     * @since 0.9.72+
+     */
+    static class ListenState {
+
+        /**
+         * A listening period with no reason recorded against it yet.
+         */
+        ListenState() {}
+
+        /** True once the router has said it is restarting during this period. */
+        boolean restartPending;
+    }
+
+    /**
      * The router told us it's going to restart.
      * Call instead of setActive(false).
+     * <p>
+     * The flag goes on the period we are in, not on the handler, so an acceptor
+     * that entered this period still sees it after the next one starts.
      *
      * @since 0.9.34
      */
     public synchronized void setRestartPending() {
-        _restartPending = true;
+        _listenState.restartPending = true;
         setActive(false);
     }
 
@@ -482,7 +515,7 @@ class ConnectionHandler {
     public synchronized void setActive(boolean active) {
         // if starting, clear any old poison
         if (active && !_active) {
-            _restartPending = false;
+            _listenState = new ListenState();
             _synQueue.clear();
             _synEnqueueTimes.clear();
             _resultQueue.clear();
@@ -493,10 +526,16 @@ class ConnectionHandler {
         boolean wasActive = _active;
         _active = active;
         if (wasActive && !active) {
-            // stopping, drain queues and wake all workers
-            _synQueue.clear();
+            // stopping, drain queues and wake all workers.
+            // The SYNs are reset before the queue is dropped: an accept worker
+            // that is still running may take one and answer it, but a SYN that
+            // nobody takes must not vanish silently, or the client sits out its
+            // own retransmit on a connection that is never coming. handlerInactive()
+            // promises the same thing to a parked acceptor, and it could not keep
+            // that promise while this clear ran first.
+            resetQueuedSyns();
             _synEnqueueTimes.clear();
-            _resultQueue.clear();
+            closeQueuedResults();
             _synQueueProcessed.reset();
             _synQueueExpired.reset();
             // Wake all worker threads with poison packets
@@ -506,6 +545,46 @@ class ConnectionHandler {
             }
             try { Thread.sleep(50); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
             shutdownAcceptWorkers();
+        }
+    }
+
+    /**
+     * Reset and release every SYN still sitting on the accept queue.
+     * <p>
+     * Called on the way out of a listening period, before the queue is dropped.
+     * A SYN dropped without a word costs the client a retransmit round and, if
+     * the listener is not coming back, a connect timeout it could have avoided;
+     * this is the same RESET the accept path sends when the queue is full. A
+     * poison packet ends the drain - it wakes a worker and is not a connection,
+     * and it carries no payload to hand back.
+     */
+    private void resetQueuedSyns() {
+        while (true) {
+            Packet packet = _synQueue.poll();
+            if (packet == null || packet.getOptionalDelay() == PoisonPacket.POISON_MAX_DELAY_REQUEST)
+                break;
+            _synEnqueueTimes.remove(packet);
+            sendReset(packet);
+            // Polled, so no accept worker will see it - ours to return.
+            packet.releasePayload();
+        }
+    }
+
+    /**
+     * Close the connections an accept worker produced that no caller ever took.
+     * <p>
+     * Dropping them instead leaves the peer holding a half-open connection until
+     * its own timeout, and leaves this side's streams holding their buffers.
+     */
+    private void closeQueuedResults() {
+        Connection con;
+        while ((con = _resultQueue.poll()) != null) {
+            try {
+                con.getOutputStream().close();
+            } catch (IOException e) {
+                if (_log.shouldWarn())
+                    _log.warn("Closing an unaccepted connection failed", e);
+            }
         }
     }
 
@@ -750,10 +829,14 @@ class ConnectionHandler {
     public Connection accept(long timeoutMs) throws RouterRestartException, ConnectException, SocketTimeoutException {
         if (_log.shouldDebug()) {_log.debug("Accept with timeout of " + timeoutMs + "ms called");}
 
-        if (!_active)
-            return handlerInactive();
+        // The listening period we are accepting for, captured once. If the
+        // handler is stopped and started again while we wait, this reference is
+        // how we learn we were parked through the close, and it still carries
+        // that period's reason for closing - the new period gets a fresh object.
+        ListenState state = _listenState;
 
-        if (_restartPending) throw new RouterRestartException();
+        if (!_active || state != _listenState)
+            return handlerInactive(state);
 
         long expiration = timeoutMs > 0 ? timeoutMs + _context.clock().now() : 0;
         while (true) {
@@ -776,9 +859,9 @@ class ConnectionHandler {
             }
             if (con != null) return con;
             // Poll timed out — check state and retry
-            if (!_active)
-                return handlerInactive();
-            if (_restartPending) throw new RouterRestartException();
+            if (!_active || state != _listenState)
+                return handlerInactive(state);
+            if (state.restartPending) throw new RouterRestartException();
         }
         throw new SocketTimeoutException("accept() timed out");
     }
@@ -786,28 +869,22 @@ class ConnectionHandler {
     /**
      * The handler stopped accepting. Hand back a connection a worker already
      * produced if there is one, reset the SYNs still waiting, and report why the
-     * accept cannot go on. Called only when the handler is inactive, so it never
-     * returns a connection for a handler that is still running.
+     * accept cannot go on. Called only when the handler is inactive, or when the
+     * caller has been parked through a close into a new listening period, so it
+     * never returns a connection for a handler that is still running.
      *
+     * @param state the listening period the caller entered, which carries the
+     *              reason that period stopped
      * @return a connection a worker queued before the shutdown, if any
      * @throws RouterRestartException if the router told us it is restarting
      * @throws ConnectException if the server socket is simply closed
      */
-    private Connection handlerInactive() throws RouterRestartException, ConnectException {
+    private Connection handlerInactive(ListenState state) throws RouterRestartException, ConnectException {
         // Drain any remaining results
         Connection con = _resultQueue.poll();
         if (con != null) return con;
-        while(true) {
-            Packet packet = _synQueue.poll();
-            if (packet == null || packet.getOptionalDelay() == PoisonPacket.POISON_MAX_DELAY_REQUEST) break;
-            _synEnqueueTimes.remove(packet);
-            sendReset(packet);
-            // Polled, so no accept worker will see it - ours to return.
-            packet.releasePayload();
-        }
-        boolean restartPending;
-        synchronized(this) { restartPending = _restartPending; }
-        if (restartPending) throw new RouterRestartException();
+        resetQueuedSyns();
+        if (state.restartPending) throw new RouterRestartException();
         throw new ConnectException("ServerSocket closed");
     }
 
