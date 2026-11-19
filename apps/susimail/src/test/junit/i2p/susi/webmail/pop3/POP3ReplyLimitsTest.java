@@ -392,8 +392,9 @@ public class POP3ReplyLimitsTest {
 
             @Override
             public int read() {
+                int b = bytes[at] & 0xff;
                 at = (at + 1) % bytes.length;
-                return bytes[at] & 0xff;
+                return b;
             }
         };
     }
