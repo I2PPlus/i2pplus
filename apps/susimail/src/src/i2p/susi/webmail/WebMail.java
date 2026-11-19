@@ -3015,6 +3015,12 @@ public class WebMail extends HttpServlet {
             if (sessionObject != null && sessionObject.isFetching) {
                 info.append(_t("Checking for new messages on server")).append("&hellip;<br>");
             }
+            // A mailbox bigger than one refresh can fetch says so, rather than
+            // presenting a short list as the whole folder
+            MailCache inbox = sessionObject != null ? sessionObject.caches.get(DIR_FOLDER) : null;
+            String fetchNote = inbox != null ? inbox.getFetchNote() : null;
+            if (fetchNote != null && !fetchNote.isEmpty())
+                info.append(quoteHTML(fetchNote)).append("<br>");
             if (showRefresh) {
                 info.append("<noscript>").append(_t("Refresh the page for updates"))
                     .append("<br></noscript>");

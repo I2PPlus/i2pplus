@@ -70,6 +70,13 @@ class MailCache {
     private final boolean _isDrafts;
     /** Logger for the mail cache. */
     private final Log _log;
+    /**
+     * What the last refresh told the user about stopping short of the server's list,
+     * or null when it fetched everything. Read by the page that lists the folder.
+     *
+     * @since 0.9.72+
+     */
+    private volatile String _fetchNote;
 
     /**
      * Includes header, headers are generally 1KB to 1.5 KB,
@@ -493,6 +500,11 @@ class MailCache {
      *
      * Blocking.
      *
+     * A refresh fetches at most {@link FetchBudget#MAX_MESSAGES} messages and
+     * {@link FetchBudget#MAX_BYTES} of them, in batches of
+     * {@link FetchBudget#BATCH_SIZE}, and leaves the rest for the next refresh. What it
+     * left behind is reported by {@link #getFetchNote()}.
+     *
      * @param mode HEADER or ALL only
      * @return true if any were fetched
      * @since 0.9.13
@@ -514,12 +526,15 @@ class MailCache {
         if (popKnown == null)
             return false;
         List<POP3Request> fetches = new ArrayList<>();
+        FetchBudget budget = new FetchBudget(_context.getTempDir());
+        int skipped = 0;
         //  Fill in the answers from the cache and make a list of
         //  requests.to send off
         for (String uidl : popKnown) {
             Mail mail = null;
             Mail newMail = null;
             boolean headerOnly = hOnly;
+            int size = mailbox.getSize(uidl);
 
             /*
              * synchronize update to Map
@@ -533,7 +548,7 @@ class MailCache {
             }
             if( mail == null ) {
                 mail = newMail;
-                mail.setSize(mailbox.getSize(uidl));
+                mail.setSize(size);
             }
             if (mail.markForDeletion)
                 continue;
@@ -556,6 +571,12 @@ class MailCache {
                         }
                         continue;  // found on disk, woo
                     }
+                    if (!budget.allows(FetchBudget.HEADER_BYTES)) {
+                        unlist(uidl, newMail);
+                        skipped++;
+                        continue;
+                    }
+                    budget.queued(FetchBudget.HEADER_BYTES);
                     POP3Request pr = new POP3Request(mail, true, new MemoryBuffer(1024));
                     fetches.add(pr);
                 } else {
@@ -578,6 +599,12 @@ class MailCache {
                         }
                         continue;  // found on disk, woo
                     }
+                    if (!budget.allows(size)) {
+                        unlist(uidl, newMail);
+                        skipped++;
+                        continue;
+                    }
+                    budget.queued(size);
                     File file = new File(_context.getTempDir(), "susimail-new-" + _context.random().nextLong());
                     POP3Request pr = new POP3Request(mail, false, new FileBuffer(file));
                     fetches.add(pr);
@@ -592,11 +619,24 @@ class MailCache {
 
         boolean rv = false;
         if (!fetches.isEmpty()) {
-            //  Send off the fetches
-            // gaah compiler
-            List foo = fetches;
-            List<FetchRequest> bar = foo;
-            mailbox.getBodies(bar);
+            //  Send off the fetches, a batch at a time. One round trip for the whole
+            //  list meant nothing could be kept if the fetch had to stop, and the free
+            //  space check below is what stops a temp directory that filled up during
+            //  the refresh.
+            int sent = 0;
+            while (sent < fetches.size() && budget.allows(0)) {
+                int to = Math.min(sent + FetchBudget.BATCH_SIZE, fetches.size());
+                // gaah compiler
+                List foo = fetches.subList(sent, to);
+                List<FetchRequest> bar = foo;
+                mailbox.getBodies(bar);
+                for (POP3Request pr : fetches.subList(sent, to)) {
+                    if (pr.getSuccess())
+                        budget.correct(pr.getBuffer().getLength() - chargeFor(pr));
+                }
+                sent = to;
+            }
+            skipped += fetches.size() - sent;
             //  Process results
             int newMail = 0;
             String additionalMsg = null;  // info on first new message
@@ -638,7 +678,84 @@ class MailCache {
                 }
             }
         }
+        if (skipped > 0) {
+            FetchBudget.Reason reason = budget.getReason();
+            _fetchNote = fetchNote(skipped, reason);
+            if (_log.shouldInfo()) {
+                _log.info("Refresh stopped short of the server's list -> Part of the folder fetched" +
+                          "\n* Limit reached: " + FetchBudget.describe(reason) +
+                          "\n* Skipped: " + skipped + " messages" +
+                          "\n* Fetched: " + budget.getMessages() + " messages");
+            }
+        } else {
+            _fetchNote = null;
+        }
         return rv;
+    }
+
+    /**
+     * What the last refresh stopped short of, for the page that lists the folder.
+     *
+     * @return the message to show, null if the last refresh fetched everything it was
+     *         asked for
+     * @since 0.9.72+
+     */
+    public String getFetchNote() {
+        return _fetchNote;
+    }
+
+    /**
+     * What the folder page tells the user when a refresh did not fetch everything, so
+     * a short list is not read as an empty mailbox.
+     *
+     * @param skipped messages left for a later refresh
+     * @param reason why the fetch stopped
+     * @return the message to show, never null
+     * @since 0.9.72+
+     */
+    static String fetchNote(int skipped, FetchBudget.Reason reason) {
+        switch (reason) {
+            case BYTES:
+                return _t("The limit for one refresh was reached, refresh again for the rest of the messages");
+            case DISK:
+                return _t("Too little free space to fetch more messages, refresh again later");
+            default:
+                return ngettext("{0} message is not shown yet, refresh again for the rest",
+                                "{0} messages are not shown yet, refresh again for the rest", skipped);
+        }
+    }
+
+    /**
+     * What a request was charged against the fetch budget, so the byte tally can be
+     * corrected to what actually arrived.
+     *
+     * @param pr the request that was queued
+     * @return the bytes charged
+     * @since 0.9.72+
+     */
+    private static int chargeFor(POP3Request pr) {
+        if (pr.getHeaderOnly())
+            return FetchBudget.HEADER_BYTES;
+        long size = pr.mail.getSize();
+        return size > 0 && size <= Integer.MAX_VALUE ? (int) size : 0;
+    }
+
+    /**
+     * Take back a message that was listed but will not be fetched, so a folder cut
+     * short by the fetch budget does not show rows with nothing in them. The next
+     * refresh lists it again.
+     *
+     * @param uidl the message to take back
+     * @param newMail the object just added, null if this message was already listed
+     * @since 0.9.72+
+     */
+    private void unlist(String uidl, Mail newMail) {
+        if (newMail == null)
+            return;
+        synchronized (mails) {
+            if (mails.get(uidl) == newMail)
+                mails.remove(uidl);
+        }
     }
 
     /**
