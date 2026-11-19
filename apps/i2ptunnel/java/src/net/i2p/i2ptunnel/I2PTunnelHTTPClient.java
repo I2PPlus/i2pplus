@@ -3078,8 +3078,16 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 if (valstart < 0) {
                     key = query.substring(keystart, i);
                 }
-                String decodedKey = LocalHTTPServer.decode(key);
-                if (decodedKey.equals(HELPER_PARAM)) {
+                String decodedKey;
+                try {
+                    decodedKey = LocalHTTPServer.decode(key);
+                } catch (IllegalArgumentException iae) {
+                    // The query belongs to the destination, so an escape this
+                    // server cannot read is simply not the helper parameter - the
+                    // query goes on unchanged rather than failing the request
+                    decodedKey = null;
+                }
+                if (HELPER_PARAM.equals(decodedKey)) {
                     String newQuery = keystart > 0 ? query.substring(0, keystart - 1) : "";
                     if (i < query.length() - 1) {
                         if (keystart > 0) {
@@ -3089,7 +3097,14 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         }
                     }
                     String value = valstart >= 0 ? query.substring(valstart, i) : "";
-                    String helperValue = LocalHTTPServer.decode(value);
+                    String helperValue;
+                    try {
+                        helperValue = LocalHTTPServer.decode(value);
+                    } catch (IllegalArgumentException iae) {
+                        // Not a helper this server can act on either, so leave the
+                        // parameter where it is and let the destination have it
+                        return null;
+                    }
                     return new String[] {newQuery, helperValue};
                 }
                 keystart = i + 1;

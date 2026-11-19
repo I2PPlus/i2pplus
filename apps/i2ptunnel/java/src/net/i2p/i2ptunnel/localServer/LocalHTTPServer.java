@@ -3,9 +3,11 @@
  */
 package net.i2p.i2ptunnel.localServer;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -32,6 +34,9 @@ import net.i2p.util.Log;
 import net.i2p.util.PortMapper;
 import net.i2p.util.Translate;
 
+import java.nio.charset.CharacterCodingException;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CodingErrorAction;
 import java.nio.charset.StandardCharsets;
 /**
  * Very simple web server.
@@ -66,6 +71,14 @@ public abstract class LocalHTTPServer {
          "Connection: close\r\n"+
          "\r\n"+
          "Add to addressbook failed - bad parameters";
+
+    /** Reply page when a query cannot be decoded at all. */
+    private final static String ERR_QUERY =
+         "HTTP/1.1 400 Bad\r\n"+
+         "Content-Type: text/plain\r\n"+
+         "Connection: close\r\n"+
+         "\r\n"+
+         "Bad query - undecodable parameters";
 
     /** Reply page when a base32 address is invalid. */
     private final static String ERR_B32 =
@@ -243,7 +256,16 @@ public abstract class LocalHTTPServer {
                 out.write(ERR_ADD.getBytes(StandardCharsets.UTF_8));
                 return;
             }
-            Map<String, String> opts = decodeQuery(query);
+            Map<String, String> opts;
+            try {
+                opts = decodeQuery(query);
+            } catch (IllegalArgumentException iae) {
+                // The whole query is refused, so nothing was looked up, stored or
+                // sent - a partly decoded one loses every parameter after the bad
+                // escape, which is what used to happen
+                out.write(ERR_QUERY.getBytes(StandardCharsets.UTF_8));
+                return;
+            }
 
             String url = opts.get("url");
             String host = opts.get("host");
@@ -289,7 +311,16 @@ public abstract class LocalHTTPServer {
                 out.write(ERR_ADD.getBytes(StandardCharsets.UTF_8));
                 return;
             }
-            Map<String, String> opts = decodeQuery(query);
+            Map<String, String> opts;
+            try {
+                opts = decodeQuery(query);
+            } catch (IllegalArgumentException iae) {
+                // The whole query is refused, so nothing was looked up, stored or
+                // sent - a partly decoded one loses every parameter after the bad
+                // escape, which is what used to happen
+                out.write(ERR_QUERY.getBytes(StandardCharsets.UTF_8));
+                return;
+            }
 
             String err = null;
             String url = opts.get("url");
@@ -493,9 +524,13 @@ public abstract class LocalHTTPServer {
      *
      * @param query an ENCODED query, non-null
      * @return map of DECODED keys to DECODED values, non-null. Values may be empty.
+     * @throws IllegalArgumentException if any key or value is not valid encoded
+     *                                  text, so that a query is never partly
+     *                                  decoded and the parameters after the bad
+     *                                  escape silently missing
      * @since 0.9.43 adapted from {@link net.i2p.i2ptunnel.I2PTunnelHTTPClient#removeHelper}
      */
-    private static Map<String, String> decodeQuery(String query) {
+    static Map<String, String> decodeQuery(String query) {
         Map<String, String> rv = new HashMap<>(8);
         int keystart = 0;
         int valstart = -1;
@@ -525,30 +560,67 @@ public abstract class LocalHTTPServer {
 
     /**
      * Decode percent-encoded (%xx) strings.
+     * <p>
+     * A run of escapes is one byte sequence, decoded as UTF-8, so a character
+     * encoded as several %xx pairs comes back as that character. A bare '%', an
+     * escape with a non-hex digit after it, and a run of escapes that is not valid
+     * UTF-8 are all errors: stopping at the first one, as this used to, silently
+     * dropped the rest of the parameter and everything after it.
      *
      * @param s the encoded string
      * @return the decoded string
+     * @throws IllegalArgumentException if the string is not valid encoded text
      * @since 0.8.7
      */
     public static String decode(String s) {
         if (!s.contains("%"))
             return s;
         StringBuilder buf = new StringBuilder(s.length());
-        for (int i = 0; i < s.length(); i++) {
+        ByteArrayOutputStream escaped = new ByteArrayOutputStream(s.length());
+        int i = 0;
+        while (i < s.length()) {
             char c = s.charAt(i);
             if (c != '%') {
                 buf.append(c);
-            } else {
-                try {
-                    buf.append((char) Integer.parseInt(s.substring(++i, (++i) + 1), 16));
-                } catch (IndexOutOfBoundsException ioobe) {
-                    break;
-                } catch (NumberFormatException nfe) {
-                    break;
-                }
+                i++;
+                continue;
             }
+            // Collect the whole run of escapes before decoding any of it - a
+            // multi-byte character arrives as several pairs and only the run
+            // together is a character.
+            while (i < s.length() && s.charAt(i) == '%') {
+                if (i + 2 >= s.length())
+                    throw new IllegalArgumentException("Incomplete escape at " + i);
+                int hi = Character.digit(s.charAt(i + 1), 16);
+                int lo = Character.digit(s.charAt(i + 2), 16);
+                if (hi < 0 || lo < 0)
+                    throw new IllegalArgumentException("Not a hex escape at " + i);
+                escaped.write((hi << 4) | lo);
+                i += 3;
+            }
+            buf.append(decodeEscapes(escaped));
+            escaped.reset();
         }
         return buf.toString();
+    }
+
+    /**
+     * Decodes one run of escaped bytes as UTF-8, refusing anything the encoder
+     * would not have written.
+     *
+     * @param escaped the bytes the escapes decoded to
+     * @return the text those bytes hold
+     * @throws IllegalArgumentException if the bytes are not valid UTF-8
+     */
+    private static String decodeEscapes(ByteArrayOutputStream escaped) {
+        CharsetDecoder decoder = StandardCharsets.UTF_8.newDecoder().
+                                  onMalformedInput(CodingErrorAction.REPORT).
+                                  onUnmappableCharacter(CodingErrorAction.REPORT);
+        try {
+            return decoder.decode(ByteBuffer.wrap(escaped.toByteArray())).toString();
+        } catch (CharacterCodingException e) {
+            throw new IllegalArgumentException("Escaped bytes are not UTF-8", e);
+        }
     }
 
     /** These strings go in the jar, not the war. */
