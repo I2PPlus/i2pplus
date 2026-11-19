@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -1170,19 +1171,51 @@ public class JobQueue {
 
     /**
      * Shifts the scheduled job times by a clock change.
+     * <p>
+     * One shift per timing. A recurring job that requeued itself inside runJob()
+     * sits in a queue and in its runner at the same moment, and the pumper may
+     * have promoted it to the ready queue as well, so the same timing is
+     * reachable through several of the collections below. Shifted twice, its next
+     * start lands 2 * delta away and the error survives the next requeue; missed
+     * entirely, as a job in the ready queue used to be, getMaxLag() and getAvgLag()
+     * report the clock change as queue lag, and the tunnel pools back off on it.
+     * The set is keyed on identity because two different jobs of the same class
+     * are different jobs; JobTiming defines no equality of its own.
      *
      * @param delta the clock change, in ms
      */
-    private void updateJobTimings(long delta) {
+    void updateJobTimings(long delta) {
+        Set<JobTiming> updated = Collections.newSetFromMap(new IdentityHashMap<JobTiming, Boolean>());
         synchronized (_jobLock) {
-            for (Job j : _timedJobs) j.getTiming().offsetChanged(delta);
-            for (Job j : _readyJobs) j.getTiming().offsetChanged(delta);
-            for (Job j : _highPriorityJobs) j.getTiming().offsetChanged(delta);
+            for (Job j : _timedJobs) {
+                JobTiming timing = j.getTiming();
+                if (updated.add(timing))
+                    timing.offsetChanged(delta);
+            }
+            for (Job j : _readyJobs) {
+                JobTiming timing = j.getTiming();
+                if (updated.add(timing))
+                    timing.offsetChanged(delta);
+            }
+            for (Job j : _highPriorityJobs) {
+                JobTiming timing = j.getTiming();
+                if (updated.add(timing))
+                    timing.offsetChanged(delta);
+            }
+            for (Job j : _timedJobsReady) {
+                JobTiming timing = j.getTiming();
+                if (updated.add(timing))
+                    timing.offsetChanged(delta);
+            }
         }
         synchronized (_runnerLock) {
             for (JobQueueRunner runner : _queueRunners.values()) {
                 Job job = runner.getCurrentJob();
-                if (job != null) job.getTiming().offsetChanged(delta);
+                if (job != null) {
+                    JobTiming timing = job.getTiming();
+                    if (updated.add(timing))
+                        timing.offsetChanged(delta);
+                }
             }
         }
     }
