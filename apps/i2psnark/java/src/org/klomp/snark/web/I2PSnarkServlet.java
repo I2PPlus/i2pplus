@@ -670,8 +670,7 @@ public class I2PSnarkServlet extends BasicServlet {
         appendSearchForm(buf, req);
 
         // Notify user about new torrent URLs in GET requests
-        String newURL = req.getParameter("newURL");
-        if (newURL != null && !newURL.trim().isEmpty() && "GET".equals(method)) {
+        if (!addURL(req, method).isEmpty()) {
             _manager.addMessage(_t("Click \"Add torrent\" button to fetch torrent"));
         }
 
@@ -5609,7 +5608,38 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
+     * The URL the add-torrent form is prefilled with, taken from the query string
+     * of a GET so a link can hand a magnet or a torrent URL to the console.
+     * <p>
+     * The nofilter_ name is the one that arrives intact: the XSS parameter filter
+     * drops any value containing an '&amp;', which every real magnet link has. The
+     * plain newURL name is read as a fallback so the links that have pointed here
+     * for years keep working.
+     *
+     * @param req the request to read the query string from
+     * @param method the HTTP method of the request, POST never prefills
+     * @return the URL trimmed, or empty if there is none or this is a POST
+     * @since 0.9.72+
+     */
+    static String addURL(HttpServletRequest req, String method) {
+        if ("POST".equals(method)) {
+            return "";
+        }
+        String url = req.getParameter("nofilter_newURL");
+        if (url == null || url.trim().isEmpty()) {
+            url = req.getParameter("newURL");
+        }
+        return url == null ? "" : url.trim();
+    }
+
+    /**
      * Writes the HTML form for adding new torrents via URL or file upload.
+     * <p>
+     * The prefilled URL is written into the value attribute HTML-escaped rather
+     * than stripped: stripping '&lt;', '&gt;', '&quot;' and "'" to spaces turned an
+     * apostrophe in a magnet dn= field into a space, and left every '&amp;name;'
+     * sequence for the browser to decode, so the URL that came back out of the
+     * form was not the one that was linked.
      *
      * @param out the PrintWriter to write the HTML output
      * @param req the HTTP request containing query parameters
@@ -5618,9 +5648,7 @@ public class I2PSnarkServlet extends BasicServlet {
     private void writeAddForm(PrintWriter out, HttpServletRequest req) throws IOException {
         // display incoming parameter if a GET so links will work
         StringBuilder buf = new StringBuilder(1024);
-        String newURL = req.getParameter("nofilter_newURL");
-        if (newURL == null || newURL.trim().length() <= 0 || req.getMethod().equals("POST")) {newURL = "";}
-        else {newURL = DataHelper.stripHTML(newURL);} // XSS
+        String newURL = addURL(req, req.getMethod());
 
         String addTop =
             "<div id=add class=snarkNewTorrent>\n" +
@@ -5634,7 +5662,7 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("<label id=tab_addtorrent class=toggleview for=toggle_addtorrent><span class=tab_label>")
            .append(_t("Add Torrent")).append("</span></label><hr>\n<table border=0><tr><td class=right><span>")
            .append(_t("From URL")).append("</span>:</td><td class=left><input id=addTorrentURL type=text name=nofilter_newURL size=85 value=\"")
-           .append(newURL).append("\" spellcheck=false title=\"").append(_t("Enter the torrent file download URL (I2P only), magnet link, or info hash"))
+           .append(DataHelper.escapeHTML(newURL)).append("\" spellcheck=false title=\"").append(_t("Enter the torrent file download URL (I2P only), magnet link, or info hash"))
            .append("\" required>\n").append("<input type=submit class=add value=\"").append(_t("Add torrent"))
            .append("\" name=foo></td>\n<tr hidden><td class=right>").append(_t("Torrent file"))
            .append(":</td><td class=left><input type=file name=newFile accept=\".torrent\"></td><tr><td class=right><span>")
