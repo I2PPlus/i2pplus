@@ -249,10 +249,13 @@ class PeerConnectionIn implements Runnable {
                 }
 
                 byte b = din.readByte();
-                // Validate the payload length against the minimum for this message type;
-                // a short prefix is a protocol error and would desync the stream
+                // Validate the payload length against this message type. A short
+                // prefix is a protocol error; a long one for an id that carries no
+                // payload is worse - the surplus stays in the stream and the next
+                // iteration reads it as a length prefix, which puts every message
+                // after it out of step.
                 int fixed = Message.fixedBytes(b);
-                if (i < fixed) {
+                if (i < fixed || (i > fixed && !Message.hasPayload(b))) {
                     throw new IOException("Unexpected length prefix: " + i + " for type " + b);
                 }
                 // Take whatever fields follow the id in one read too. They always arrive in

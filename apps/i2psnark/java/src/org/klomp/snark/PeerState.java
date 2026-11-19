@@ -609,12 +609,19 @@ class PeerState implements DataLoader {
             return;
         }
 
+        // The block has to fit inside the piece. begin is already known to be
+        // below the piece length, so the subtraction cannot go negative. Without
+        // this the read starts inside the piece and runs past it: on a middle
+        // piece we hand over bytes of the neighbouring pieces, and on the final
+        // piece, short in almost every torrent, it walks off the end of the
+        // torrent and the storage layer throws.
         if (piece < 0
                 || piece >= metainfo.getPieces()
                 || begin < 0
                 || begin >= metainfo.getPieceLength(piece)
                 || length <= 0
-                || length > MAX_PARTSIZE) {
+                || length > MAX_PARTSIZE
+                || length > metainfo.getPieceLength(piece) - begin) {
             // XXX - Protocol error -> disconnect?
             if (_log.shouldDebug())
                 _log.debug("Rejected a bad request from " + SnarkLogFormatter.peer(peer) + " -> "
