@@ -18,6 +18,10 @@ import java.nio.charset.StandardCharsets;
  * This isn't the most robust for malformed input, so it
  * may not be appropriate for e.g. HTTP headers.
  * <p>
+ * A code point above the BMP is returned as a surrogate pair, one char
+ * per read() call, with the low half held between calls rather than read
+ * ahead from the stream.
+ * <p>
  * Not thread-safe, obviously.
  * <p>
  * May be moved to net.i2p.util if anybody else needs it.
@@ -34,6 +38,11 @@ public class UTF8Reader extends Reader {
     private CharBuffer _cb;
     /** The UTF-8 decoder, initialized lazily. */
     private CharsetDecoder _dc;
+    /**
+     * The low half of a surrogate pair, kept between calls because its
+     * bytes are already consumed. -1 when nothing is pending.
+     */
+    private int _pendingChar = -1;
 
     /** Character substituted for an undecodable byte. */
     private static final int REPLACEMENT = 0xfffd;
@@ -54,6 +63,14 @@ public class UTF8Reader extends Reader {
      */
     @Override
     public int read() throws IOException {
+        // Hand back the second half of a surrogate pair first: its bytes
+        // are already consumed, and reading one here would consume a
+        // byte we never return.
+        if (_pendingChar >= 0) {
+            int pending = _pendingChar;
+            _pendingChar = -1;
+            return pending;
+        }
         int b = _in.read();
         if (b < 0)
             return b;
@@ -62,7 +79,8 @@ public class UTF8Reader extends Reader {
             return b;
         if (_bb == null) {
             _bb = ByteBuffer.allocate(6);
-            _cb = CharBuffer.allocate(1);
+            // Two chars - a code point above the BMP needs both halves.
+            _cb = CharBuffer.allocate(2);
             _dc = StandardCharsets.UTF_8.newDecoder();
         } else {
             (_bb).clear();
@@ -103,7 +121,14 @@ public class UTF8Reader extends Reader {
         if (result.isError() || !_cb.hasRemaining())
             return REPLACEMENT;
         // let underflow and overflow go, return first
-        return _cb.get() & 0xffff;
+        int c = _cb.get() & 0xffff;
+        // A code point above the BMP decodes to a surrogate pair, and
+        // its bytes are all off the stream already, so the second half
+        // has to be kept here for the next read(). Dropping it leaves an
+        // unpaired high surrogate where the client sent an emoji.
+        if (_cb.hasRemaining())
+            _pendingChar = _cb.get() & 0xffff;
+        return c;
     }
 
     /**
