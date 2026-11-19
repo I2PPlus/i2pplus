@@ -166,7 +166,8 @@ class PersistentMailCache {
         int tcnt = Math.max(1, Math.min(sz / 4, Math.min(SystemVersion.getCores(), 16)));
         List<Thread> threads = new ArrayList<>(tcnt);
         for (int i = 0; i < tcnt; i++) {
-            Thread t = new I2PAppThread(new Loader(fq, rv, _isDrafts, _log), "MailLd" + ThreadNames.idx(i));
+            Thread t = new I2PAppThread(new Loader(fq, rv, _isDrafts, _attachmentDir, _log),
+                                        "MailLd" + ThreadNames.idx(i));
             t.start();
             threads.add(t);
         }
@@ -193,6 +194,8 @@ class PersistentMailCache {
         private final Queue<Mail> _out;
         /** True when reading from the cache. */
         private final boolean _isD;
+        /** Where a draft's uploaded attachments live, null when not drafts. */
+        private final File _attachDir;
         /** Logger for this loader, handed down from the cache. */
         private final Log _log;
 
@@ -203,11 +206,14 @@ class PersistentMailCache {
          * @param in queue of files to load
          * @param out queue to put loaded mails into
          * @param isDrafts whether these are drafts
+         * @param attachDir where a draft's uploaded attachments are kept, or null
+         *                  to accept an attachment path as the draft wrote it
          * @param log the cache's log, for reporting a file that cannot be loaded
          */
-        public Loader(Queue<File> in, Queue<Mail> out, boolean isDrafts, Log log) {
+        public Loader(Queue<File> in, Queue<Mail> out, boolean isDrafts, File attachDir, Log log) {
             _in = in; _out = out;
             _isD = isDrafts;
+            _attachDir = attachDir;
             _log = log;
         }
 
@@ -222,7 +228,7 @@ class PersistentMailCache {
             while ((f = _in.poll()) != null) {
                 Mail mail;
                 try {
-                    mail = load(f, _isD);
+                    mail = load(f, _isD, _attachDir);
                 } catch (Throwable t) {
                     // a StackOverflowError or an OutOfMemoryError is an Error, not an
                     // Exception, and load() parses remote MIME structure
@@ -513,9 +519,11 @@ class PersistentMailCache {
      *
      * @param f the cache file to parse, in full or header form
      * @param isDrafts true if the file is in the drafts folder
+     * @param attachDir where a draft's uploaded attachments are kept, or null to
+     *                  accept an attachment path as the draft wrote it
      * @return null on failure
      */
-    private static Mail load(File f, boolean isDrafts) {
+    private static Mail load(File f, boolean isDrafts, File attachDir) {
         String name = f.getName();
         String uidl;
         boolean headerOnly;
@@ -538,7 +546,7 @@ class PersistentMailCache {
             return null;
         }
         Mail mail;
-        if (isDrafts) {mail = new Draft(uidl);}
+        if (isDrafts) {mail = new Draft(uidl, attachDir);}
         else {mail = new Mail(uidl);}
         if (headerOnly) {mail.setHeader(rb);}
         else if (isDrafts) {

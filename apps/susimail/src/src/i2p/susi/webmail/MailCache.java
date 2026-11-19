@@ -178,7 +178,7 @@ class MailCache {
         if (success) {
             Mail mail;
             if (_isDrafts)
-                mail = new Draft(uidl);
+                mail = new Draft(uidl, getAttachmentDir());
             else
                 mail = new Mail(uidl);
             mail.setBody(buffer);

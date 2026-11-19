@@ -2,10 +2,14 @@ package i2p.susi.webmail;
 
 import i2p.susi.util.Buffer;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import net.i2p.I2PAppContext;
 import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
+import net.i2p.util.Log;
 
 /**
  * Represents a draft email message with attachments and Bcc support.
@@ -21,6 +25,11 @@ class Draft extends Mail {
 
 	/** Files attached to the draft. */
 	private final List<Attachment> attachments;
+	/**
+	 * Directory the attachment paths of this draft are confined to, or null to
+	 * accept the path as written.
+	 */
+	private final File attachmentDir;
 	/** Blind copies, addresses only, enclosed by angle brackets. */
 	private String[] bcc;        // addresses only, enclosed by <>
 	/** Size of the draft's contents, in bytes. */
@@ -34,13 +43,28 @@ class Draft extends Mail {
 	public static final String HDR_BCC = "Bcc: ";
 
 	/**
-	 * Start an empty draft with no attachments.
+	 * Start an empty draft with no attachments, and no directory to confine an
+	 * attachment path to. Only safe where the body is written, not read back:
+	 * see the two-argument form for what a stored draft needs.
 	 *
 	 * @param uidl unique ID for this draft
 	 */
 	public Draft(String uidl) {
+		this(uidl, null);
+	}
+
+	/**
+	 * Start an empty draft with no attachments.
+	 *
+	 * @param uidl unique ID for this draft
+	 * @param attachmentDir the directory an attachment file of this account must
+	 *                      live in, or null to accept the path as written
+	 * @since 0.9.72+
+	 */
+	public Draft(String uidl, File attachmentDir) {
 		super(uidl);
 		attachments = new ArrayList<>(4);
+		this.attachmentDir = attachmentDir;
 	}
 
 	/**
@@ -49,7 +73,9 @@ class Draft extends Mail {
 	 * skipped, not taken as the end of the block, and both prefixes are matched
 	 * without regard to case. A body is parsed more than once over a draft's
 	 * life, so what the last parse found is dropped first: otherwise every
-	 * re-parse adds the attachments again.
+	 * re-parse adds the attachments again. An attachment named by a path outside
+	 * the account's attachment directory is skipped, as
+	 * {@link #attachmentFile(String, File)} decides.
 	 */
 	@Override
 	public synchronized void setBody(Buffer rb) {
@@ -93,11 +119,54 @@ class Draft extends Mail {
 				if (b == null)
 					continue;
 				String path = DataHelper.getUTF8(b);
-				Attachment a = new Attachment(name, type, enc, new File(path));
+				File f = attachmentFile(path, attachmentDir);
+				if (f == null) {
+					Log log = I2PAppContext.getGlobalContext().logManager().getLog(Draft.class);
+					if (log.shouldWarn())
+						log.warn("Draft attachment skipped -> Not an upload of this account: " + path);
+					continue;
+				}
+				Attachment a = new Attachment(name, type, enc, f);
 				size += a.getSize();
 				attachments.add(a);
 			}
 		}
+	}
+
+	/**
+	 * The file a draft's attachment header names, if it really is one of this
+	 * account's uploads.
+	 *
+	 * A draft stores an attachment as a path written into its own body, and that
+	 * body can arrive from a restored backup or from the import/ directory, not
+	 * only from the upload that created it. Without this check the path is taken
+	 * on trust and the file is opened wherever it points, so a draft can name any
+	 * file the router's user can read. Confining it to the account's attachments
+	 * directory, and rejecting a symlink there, keeps the path a name for an
+	 * upload and nothing more.
+	 *
+	 * @param path the path as the draft recorded it
+	 * @param dir the directory uploads are written to, null to accept any path
+	 * @return the file to open, null if the path is not inside dir or is a link
+	 * @since 0.9.72+
+	 */
+	static File attachmentFile(String path, File dir) {
+		if (path == null || path.isEmpty())
+			return null;
+		if (dir == null)
+			return new File(path);
+		File f = new File(path);
+		if (Files.isSymbolicLink(f.toPath()))
+			return null;
+		try {
+			String parent = dir.getCanonicalPath();
+			String child = f.getCanonicalPath();
+			if (!child.startsWith(parent + File.separator))
+				return null;
+		} catch (IOException ioe) {
+			return null;
+		}
+		return f;
 	}
 
 	/**
