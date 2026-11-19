@@ -425,26 +425,36 @@ class BasicServlet extends HttpServlet {
         List<InclusiveByteRange> ranges =
                 InclusiveByteRange.satisfiableRanges(reqRanges, content_length);
 
-        // If there are no satisfiable ranges, send 416 response
-        // Completely punt on multiple ranges (unlike Default)
-        if (ranges == null || ranges.size() != 1) {
-            writeHeaders(response, content, content_length);
-            response.setStatus(416);
-            response.setHeader(
-                    "Content-Range", InclusiveByteRange.to416HeaderRangeString(content_length));
-            in.close();
-            return;
-        }
+        // try/finally: the 416 branch returns without ever reaching copy(), which
+        // is what closes these streams on the other paths, and writeHeaders() can
+        // throw before it - the content is a file handle on a download
+        try {
+            // If there are no satisfiable ranges, send 416 response
+            // Completely punt on multiple ranges (unlike Default)
+            if (ranges == null || ranges.size() != 1) {
+                // The 416 has no body, so the length it advertises is the length it
+                // sends. Promising the whole file here leaves a client that honours
+                // Content-Length waiting for bytes that never arrive, and the
+                // container may turn the short response into an error of its own.
+                writeHeaders(response, content, 0);
+                response.setStatus(416);
+                response.setHeader(
+                        "Content-Range", InclusiveByteRange.to416HeaderRangeString(content_length));
+                return;
+            }
 
-        // If there is only a single valid range (must be satisfiable since were here now),
-        // send that range with a 216 response
-        InclusiveByteRange singleSatisfiableRange = ranges.get(0);
-        long singleLength = singleSatisfiableRange.getSize(content_length);
-        writeHeaders(response, content, singleLength);
-        response.setStatus(206);
-        response.setHeader(
-                "Content-Range", singleSatisfiableRange.toHeaderRangeString(content_length));
-        copy(in, singleSatisfiableRange.getFirst(content_length), out, singleLength);
+            // If there is only a single valid range (must be satisfiable since were here now),
+            // send that range with a 216 response
+            InclusiveByteRange singleSatisfiableRange = ranges.get(0);
+            long singleLength = singleSatisfiableRange.getSize(content_length);
+            writeHeaders(response, content, singleLength);
+            response.setStatus(206);
+            response.setHeader(
+                    "Content-Range", singleSatisfiableRange.toHeaderRangeString(content_length));
+            copy(in, singleSatisfiableRange.getFirst(content_length), out, singleLength);
+        } finally {
+            in.close();
+        }
     }
 
     /**
