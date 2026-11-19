@@ -32,6 +32,14 @@ public class SOCKS5Client {
     private SOCKS5Client() {}
 
     /**
+     * Largest username, password or hostname a SOCKS5 request can carry. Each of
+     * those fields is sized by a single octet, so anything longer cannot be sent -
+     * writing its length would wrap and the proxy would read the rest of the field
+     * as the next one.
+     */
+    private static final int MAX_FIELD_LENGTH = 255;
+
+    /**
      * Act as a SOCKS 5 client to connect to a proxy
      * <p>
      * Will throw and close sock on all errors.
@@ -102,7 +110,8 @@ public class SOCKS5Client {
      * @param connPort port for the proxy to connect to
      * @param configUser username for proxy authentication or null
      * @param configPW password for proxy authentication or null
-     * @throws IOException if the connection fails or the proxy rejects the request
+     * @throws IOException if the connection fails, the proxy rejects the request, or
+     *                     a credential or hostname is too long to be framed
      */
     public static void connect(InputStream pin, OutputStream pout, String connHostName, int connPort, String configUser, String configPW) throws IOException {
         DataOutputStream out = null;
@@ -134,10 +143,13 @@ public class SOCKS5Client {
                 // good
             } else if (method == Method.USERNAME_PASSWORD) {
                 if (authAvail) {
-                    // send the auth
-                    out.writeByte(AUTH_VERSION);
+                    // send the auth, after checking both lengths, so a rejected
+                    // attempt leaves nothing at all on the wire
                     byte[] user = configUser.getBytes(StandardCharsets.UTF_8);
                     byte[] pw = configPW.getBytes(StandardCharsets.UTF_8);
+                    if (user.length > MAX_FIELD_LENGTH || pw.length > MAX_FIELD_LENGTH)
+                        throw new SOCKSException("Proxy username or password exceeds " + MAX_FIELD_LENGTH + " bytes");
+                    out.writeByte(AUTH_VERSION);
                     out.writeByte(user.length);
                     out.write(user);
                     out.writeByte(pw.length);
@@ -154,9 +166,17 @@ public class SOCKS5Client {
             }
 
             int addressType;
+            byte[] domain = null;
             if (Addresses.isIPv4Address(connHostName)) addressType = AddressType.IPV4;
             else if (Addresses.isIPv6Address(connHostName)) addressType = AddressType.IPV6;
-            else addressType = AddressType.DOMAINNAME;
+            else {
+                addressType = AddressType.DOMAINNAME;
+                // encoded here, before the command is written, so an unrepresentable
+                // name is refused rather than framed wrong
+                domain = connHostName.getBytes(StandardCharsets.ISO_8859_1);
+                if (domain.length > MAX_FIELD_LENGTH)
+                    throw new SOCKSException("Proxy destination hostname exceeds " + MAX_FIELD_LENGTH + " bytes");
+            }
 
             // send the connect command
             out.writeByte(SOCKS_VERSION_5);
@@ -166,9 +186,8 @@ public class SOCKS5Client {
             if (addressType == AddressType.IPV4 || addressType == AddressType.IPV6) {
                 out.write(InetAddress.getByName(connHostName).getAddress());
             } else {
-                byte[] d = connHostName.getBytes(StandardCharsets.ISO_8859_1);
-                out.writeByte(d.length);
-                out.write(d);
+                out.writeByte(domain.length);
+                out.write(domain);
             }
             out.writeShort(connPort);
             out.flush();
