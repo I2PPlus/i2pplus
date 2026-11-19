@@ -18,6 +18,7 @@ All files must be DOS formatted with `\r\n` (CRLF) line endings for HTTP header 
 | `b32-header.ht`              | Base32 address error                     |
 | `baduri-header.ht`           | Bad URI request                          |
 | `blacklist-header.ht`        | URL blocked by blacklist                 |
+| `crossnet-header.ht`         | Cross-network sub-resource blocked       |
 | `denied-header.ht`           | Access denied                            |
 | `dnfb-header.ht`             | Destination not found (blocked)          |
 | `dnf-header.ht`              | Destination not found                    |

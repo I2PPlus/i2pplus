@@ -259,6 +259,19 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         "<html><body><H1>I2P ERROR: REQUEST DENIED</H1>" +
         "The requested address appears to be invalid.<BR>";
 
+    /** Error response for a sub-resource a page on the other network tried to load. */
+    private final static String ERR_CROSS_NETWORK =
+        "HTTP/1.1 403 Access Denied\r\n" +
+        "Content-Type: text/html; charset=iso-8859-1\r\n" +
+        "Cache-Control: no-cache\r\n" +
+        "Connection: close\r\n"+
+        "\r\n" +
+        "<html><body><H1>I2P ERROR: CROSS-NETWORK REQUEST DENIED</H1>" +
+        "A page on one network (I2P or the clearnet) tried to load a sub-resource " +
+        "(image, icon, favicon, script, stylesheet, font) from the other network. " +
+        "This was blocked to keep the visit private and to stop the two networks' " +
+        "activity being correlated.<BR>";
+
     /** Error response for a blacklisted address. */
     private final static String ERR_BLACKLISTED =
         "HTTP/1.1 403 Address Blacklisted\r\n" +
@@ -535,6 +548,17 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     private static final boolean DEFAULT_GZIP = true;
     /** All default to false. */
     public static final String PROP_REFERER = "i2ptunnel.httpclient.sendReferer";
+    /**
+     * Config key: true, the default, refuses a sub-resource that a page on one network
+     * asks the browser to load from the other - an image, icon, favicon, script,
+     * stylesheet or font - which would tell that network the page was visited.
+     * Top-level navigations are never refused.
+     *
+     * @since 0.9.72+
+     */
+    public static final String PROP_BLOCK_CROSS_NETWORK = "i2ptunnel.httpclient.blockCrossNetwork";
+    /** Cross-network sub-resources are refused unless the tunnel says otherwise. @since 0.9.72+ */
+    private static final boolean DEFAULT_BLOCK_CROSS_NETWORK = true;
     /** Config key to enable sending User-Agent header. */
     public static final String PROP_USER_AGENT = "i2ptunnel.httpclient.sendUserAgent";
     /** Config key to enable sending Via header. */
@@ -575,6 +599,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      * @since 0.9.72+
      */
     private volatile boolean _sendReferer;
+    /** Cached i2ptunnel.httpclient.blockCrossNetwork, true when unset. @since 0.9.72+ */
+    private volatile boolean _blockCrossNetwork = DEFAULT_BLOCK_CROSS_NETWORK;
     /** Cached i2ptunnel.httpclient.sendUserAgent. @since 0.9.72+ */
     private volatile boolean _sendUserAgent;
     /** Cached i2ptunnel.httpclient.sendAccept. @since 0.9.72+ */
@@ -622,6 +648,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     private void updateCachedOptions() {
         Properties opts = getTunnel().getClientOptions();
         _sendReferer = Boolean.parseBoolean(opts.getProperty(PROP_REFERER));
+        String blockCross = opts.getProperty(PROP_BLOCK_CROSS_NETWORK);
+        _blockCrossNetwork = blockCross == null ? DEFAULT_BLOCK_CROSS_NETWORK
+                                                : Boolean.parseBoolean(blockCross);
         _sendUserAgent = Boolean.parseBoolean(opts.getProperty(PROP_USER_AGENT));
         _sendAccept = Boolean.parseBoolean(opts.getProperty(PROP_ACCEPT));
         _sendVia = Boolean.parseBoolean(opts.getProperty(PROP_VIA));
@@ -767,6 +796,11 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             String authorization = null;
             int remotePort = 0;
             String referer = null;
+            // Fetch Metadata: the browser's own words for what kind of request this
+            // is, used below to tell a navigation the user asked for from a
+            // sub-resource the page loaded by itself
+            String secFetchDest = null;
+            String secFetchMode = null;
             URI origRequestURI = null;
             boolean preserveConnectionHeader = false;
             boolean allowGzip = true;
@@ -1331,6 +1365,11 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                 continue; // completely strip the line
                             }
                         } // else allow
+                    } else if (lowercaseLine.startsWith("sec-fetch-dest: ")) {
+                        // captured for the cross-network check below, and forwarded as-is
+                        secFetchDest = lowercaseLine.substring(16).trim();
+                    } else if (lowercaseLine.startsWith("sec-fetch-mode: ")) {
+                        secFetchMode = lowercaseLine.substring(16).trim();
                     } else if (lowercaseLine.startsWith("via: ") && !_sendVia) {
                         line = null;
                         continue; // completely strip the line
@@ -1461,6 +1500,34 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     writeFooter(out);
                 } catch (IOException ioe) { /* ignored */ } // ignore
                 return;
+            }
+
+            // Privacy: refuse a sub-resource that a page on the other network asked
+            // the browser to load. An eepsite embedding a clearnet image, icon, script
+            // or font gets it fetched through this proxy and out the outproxy, which
+            // tells that clearnet host which eepsite was just visited; the same trick
+            // works the other way, as a probe for whether a clearnet visitor browses
+            // I2P at all. A navigation the user asked for is never refused. The
+            // internal proxy.i2p server is exempt - it supplies the error pages' own
+            // styling and favicon, so refusing it would strip those pages.
+            if (!usingInternalServer && _blockCrossNetwork) {
+                boolean targetIsClearnet = usingWWWProxy || usingInternalOutproxy;
+                if (isCrossNetworkResourceRequest(referer, secFetchDest, secFetchMode, targetIsClearnet)) {
+                    if (_log.shouldWarn()) {
+                        _log.warn(getPrefix(requestId) +
+                                  "Blocked a cross-network sub-resource request" +
+                                  " -> Loaded by a page on the " + refererNetworkForLog(referer) + " network" +
+                                  "\n* Target network: " + (targetIsClearnet ? "clearnet" : "I2P") +
+                                  " * Host: " + host +
+                                  " * Fetch destination: " + metadataForLog(secFetchDest) +
+                                  " * Fetch mode: " + metadataForLog(secFetchMode));
+                    }
+                    try {
+                        out.write(getErrorPage("crossnet", ERR_CROSS_NETWORK).getBytes(StandardCharsets.UTF_8));
+                        writeFooter(out);
+                    } catch (IOException ioe) { /* ignored */ } // ignore
+                    return;
+                }
             }
 
             // Serve local proxy files (images, css linked from error pages)
@@ -2928,6 +2995,100 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         Destination dest = lookupWithTimeout(host, NAMING_SERVICE_TIMEOUT_MS);
         if (dest == null) {return "i2p";}
         return dest.toBase32();
+    }
+
+    /**
+     * Whether to refuse a request as a sub-resource that a page on the other network
+     * asked the browser to load.
+     *
+     * <p>A page on one network can embed a favicon, icon, image, script, stylesheet or
+     * font hosted on the other. The browser fetches those by itself, so the fetch
+     * reports to the other network that the page was visited, and lets that network
+     * correlate the same user across I2P and the clearnet. A navigation the user asked
+     * for - a link click or a typed address - is never refused, so ordinary browsing
+     * is unaffected.
+     *
+     * <p>The origin network is read from the Referer. Without one that names a host,
+     * the request is allowed: a site's own favicon, a same-network load and a direct
+     * address all arrive that way, and none of them crosses a boundary. The decision
+     * is deliberately conservative - it refuses only what it can prove crosses.
+     *
+     * @param referer the raw Referer header value, or null if the browser sent none
+     * @param secFetchDest the lowercased Sec-Fetch-Dest value, or null if not sent
+     * @param secFetchMode the lowercased Sec-Fetch-Mode value, or null if not sent
+     * @param targetIsClearnet true when the request is routed to an outproxy, false
+     *                         when it goes to an I2P destination
+     * @return true to refuse the request
+     * @since 0.9.72+
+     */
+    static boolean isCrossNetworkResourceRequest(String referer, String secFetchDest,
+                                                 String secFetchMode, boolean targetIsClearnet) {
+        // A navigation is user intent, so it is never refused. Prefer the browser's
+        // own word for it when it sends one, and fall back to the destination field
+        // for the browsers that send only that.
+        if (secFetchMode != null) {
+            if (secFetchMode.equals("navigate") || secFetchMode.equals("nested-navigate")) {
+                return false;
+            }
+        } else if (secFetchDest != null && secFetchDest.equals("document")) {
+            return false;
+        }
+        // Only the Referer says which page the request came from.
+        if (referer == null) {
+            return false;
+        }
+        String refererHost;
+        try {
+            refererHost = new URI(referer.trim()).getHost();
+        } catch (URISyntaxException use) {
+            return false;
+        }
+        // A relative Referer is the same page, which cannot cross a network.
+        if (refererHost == null) {
+            return false;
+        }
+        boolean refererIsI2P = refererHost.toLowerCase(Locale.US).endsWith(".i2p");
+        boolean targetIsI2P = !targetIsClearnet;
+        return refererIsI2P != targetIsI2P;
+    }
+
+    /**
+     * Which network a Referer belongs to - <code>i2p</code>, <code>clearnet</code>,
+     * <code>relative</code>, <code>none</code> or <code>unparseable</code> - for the
+     * log only. Deliberately never returns the Referer itself: its path and query would
+     * keep the user's browsing in the router log, the correlation this block exists to
+     * avoid.
+     *
+     * @param referer the raw Referer header value, or null if the browser sent none
+     * @return the network name, never null
+     * @since 0.9.72+
+     */
+    private static String refererNetworkForLog(String referer) {
+        if (referer == null) {
+            return "none";
+        }
+        String host;
+        try {
+            host = new URI(referer.trim()).getHost();
+        } catch (URISyntaxException use) {
+            return "unparseable";
+        }
+        if (host == null) {
+            return "relative";
+        }
+        return host.toLowerCase(Locale.US).endsWith(".i2p") ? "i2p" : "clearnet";
+    }
+
+    /**
+     * A Fetch Metadata header value for the log, in words when the browser sent
+     * nothing, so a reader can tell a missing header from an empty one.
+     *
+     * @param value the header value, or null if it was not sent
+     * @return the value, or <code>not sent</code>
+     * @since 0.9.72+
+     */
+    private static String metadataForLog(String value) {
+        return value == null || value.isEmpty() ? "not sent" : value;
     }
 
     /** Default jump server URLs. */
