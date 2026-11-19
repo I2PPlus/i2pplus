@@ -532,6 +532,8 @@ public class TunnelDispatcher implements Service {
         _context.statManager().createRequiredRateStat("tunnel.participating OutBps", "Out (B/s) for Participating tunnels", "Tunnels [Participating]", RATES);
         _context.statManager().createRequiredRateStat("tunnel.participatingMessageDropped", "Dropped participating messages (share limit exceeded)", "Tunnels [Participating]", RATES);
         _context.statManager().createRateStat("tunnel.participatingInboundMessageDropped", "Dropped inbound participating messages (share limit exceeded)", "Tunnels [Participating]", RATES);
+        // emitted by InboundMessageDistributor when a peer nests garlic past MAX_CLOVE_DEPTH
+        _context.statManager().createRateStat("tunnel.dropDeepGarlicClove", "Garlic cloves dropped for nesting depth", "Tunnels", RATES);
         _context.statManager().createRequiredRateStat("tunnel.participatingMessageCount", "Total 1KB participating messages", "Tunnels [Participating]", RATES);
         // 10m period used for tunnel capacity planning (smoother average than 1m)
         _context.statManager().createRequiredRateStat("tunnel.participatingMessageCountAvgPerTunnel", "Estimated participating messages per tunnel lifetime", "Tunnels [Participating]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES });

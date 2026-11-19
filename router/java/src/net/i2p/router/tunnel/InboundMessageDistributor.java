@@ -263,11 +263,78 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
     }
 
     /**
+     * How deep a garlic message may nest another garlic message before we stop
+     * opening them.
+     * <p>
+     * A clove that decrypts to another garlic message is handed straight back to
+     * the receiver, so the peer that built the message chooses how deep the
+     * recursion through handleClove, receive and readCloveSet goes. The only
+     * bound was the size of what arrived down the tunnel: at roughly 110 bytes of
+     * clove overhead, a 16 KB tunnel message carries on the order of 140 levels.
+     * Real garlic carries one or two - a session reply wrapped for a destination,
+     * a clove set of replies - so ten is generous for anything a peer has a
+     * reason to send and small enough that the stack is never the thing that
+     * stops it.
+     */
+    static final int MAX_CLOVE_DEPTH = 10;
+
+    /**
+     * Whether a clove holding another garlic message may be opened at all.
+     *
+     * @param depth how many garlic messages enclose the clove
+     * @return true to open it and go one level deeper, false to drop the clove
+     * @since 0.9.72+
+     */
+    static boolean mayOpenNestedGarlic(int depth) {
+        return depth < MAX_CLOVE_DEPTH;
+    }
+
+    /**
+     * Opens a clove that holds another garlic message, one level deeper than the
+     * clove it came from. Package-visible so a test can watch the recursion point
+     * without having to decrypt a message to reach it.
+     *
+     * @param nested the garlic message the clove carried
+     * @param depth the level that message's own cloves sit at
+     */
+    void openNestedGarlic(GarlicMessage nested, int depth) {
+        _receiver.receive(nested, depth);
+    }
+
+    /**
+     * A clove nested too deep to open: drop it, count it, and say so once per
+     * period for all tunnels together rather than once per clove.
+     *
+     * @param data the payload we will not open
+     */
+    void dropDeepGarlicClove(I2NPMessage data) {
+        _context.statManager().addRateData("tunnel.dropDeepGarlicClove", 1);
+        _log.warnThrottled("imd-garlic-too-deep",
+                           "Dropping a deeply nested garlic clove -> Past the depth limit"
+                           + " * Limit: " + MAX_CLOVE_DEPTH + " * MsgID: " + data.getUniqueId());
+    }
+
+    /**
      * Handle a clove removed from the garlic message.
      *
+     * @param instructions where the clove asks for its payload to go
+     * @param data the payload the clove carries
      */
     @Override
     public void handleClove(DeliveryInstructions instructions, I2NPMessage data) {
+        handleClove(instructions, data, 0);
+    }
+
+    /**
+     * Handle a clove removed from the garlic message at a given nesting level.
+     *
+     * @param instructions where the clove asks for its payload to go
+     * @param data the payload the clove carries
+     * @param depth how many garlic messages enclose this clove, zero for the
+     *              message that arrived down the tunnel
+     */
+    @Override
+    public void handleClove(DeliveryInstructions instructions, I2NPMessage data, int depth) {
         int type = data.getType();
         switch (instructions.getDeliveryMode()) {
             case DeliveryInstructions.DELIVERY_MODE_LOCAL:
@@ -275,7 +342,11 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                     _log.debug("Local delivery instructions for clove: " + data.getClass().getSimpleName());
                     switch (type) {
                         case GarlicMessage.MESSAGE_TYPE:
-                            _receiver.receive((GarlicMessage)data);
+                            if (mayOpenNestedGarlic(depth)) {
+                                openNestedGarlic((GarlicMessage) data, depth + 1);
+                            } else {
+                                dropDeepGarlicClove(data);
+                            }
                             break;
 
                         case DatabaseStoreMessage.MESSAGE_TYPE:

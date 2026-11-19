@@ -75,6 +75,25 @@ public class GarlicMessageReceiver {
          * @param data         The I2NPMessage data carried by the clove.
          */
         void handleClove(DeliveryInstructions instructions, I2NPMessage data);
+
+        /**
+         * Handles a decrypted garlic clove found at a given nesting level.
+         * <p>
+         * A clove may itself carry a garlic message, and whoever opens it hands it
+         * back to the code that opened the outer one, so the nesting depth is set
+         * by the remote peer that built the message, not by us. An implementation
+         * that hands a garlic clove back to a receiver uses this level to stop
+         * the recursion. The default ignores the level.
+         *
+         * @param instructions Delivery instructions associated with the clove.
+         * @param data         The I2NPMessage data carried by the clove.
+         * @param depth        how many garlic messages enclose this clove, zero
+         *                     for the cloves of the outermost message
+         * @since 0.9.72+
+         */
+        default void handleClove(DeliveryInstructions instructions, I2NPMessage data, int depth) {
+            handleClove(instructions, data);
+        }
     }
 
     /**
@@ -112,6 +131,23 @@ public class GarlicMessageReceiver {
      * @param message The incoming GarlicMessage to be processed.
      */
     public void receive(final GarlicMessage message) {
+        receive(message, 0);
+    }
+
+    /**
+     * Processes a received GarlicMessage found at a given nesting level.
+     * <p>
+     * The level is handed to the CloveReceiver with every clove, so a receiver
+     * that opens a clove carrying another garlic message knows how deep it is and
+     * can stop going deeper. A peer builds the nesting, and against the 16 KB a
+     * tunnel delivers it can build on the order of 140 levels of it.
+     *
+     * @param message The incoming GarlicMessage to be processed.
+     * @param depth   how many garlic messages already enclose this one, zero for
+     *                the message that arrived down the tunnel
+     * @since 0.9.72+
+     */
+    public void receive(final GarlicMessage message, int depth) {
         PrivateKey decryptionKey;
         PrivateKey decryptionKey2 = null;
         SessionKeyManager skm;
@@ -190,7 +226,7 @@ public class GarlicMessageReceiver {
             final int cloveCount = set.getCloveCount();
             for (int i = 0; i < cloveCount; i++) {
                 final GarlicClove clove = set.getClove(i);
-                handleClove(clove);
+                handleClove(clove, depth);
             }
         } else {
             if (debug) {
@@ -237,12 +273,14 @@ public class GarlicMessageReceiver {
      * Validates a GarlicClove and, if valid, passes it to the configured receiver.
      *
      * @param clove The garlic clove to validate and handle.
+     * @param depth how many garlic messages enclose this clove, passed on so the
+     *              receiver can bound how much deeper it will go
      */
-    private void handleClove(final GarlicClove clove) {
+    private void handleClove(final GarlicClove clove, int depth) {
         if (!isValid(clove)) {
             return;
         }
-        _receiver.handleClove(clove.getInstructions(), clove.getData());
+        _receiver.handleClove(clove.getInstructions(), clove.getData(), depth);
     }
 
     /**
