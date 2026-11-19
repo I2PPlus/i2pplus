@@ -6564,15 +6564,21 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             snark.setNotificationSent(true);
             ClientAppManager cmgr = _context.clientAppManager();
             if (cmgr != null) {
-                NotificationService ns = (NotificationService) cmgr.getRegisteredApp("desktopgui");
-                if (ns != null) {
-                    ns.notify(
-                            "I2PSnark",
-                            null,
-                            Log.INFO,
-                            _t("I2PSnark"),
-                            _t("Download finished: {0}", snark.getName()),
-                            "/i2psnark/" + linkify(snark));
+                ClientApp app = cmgr.getRegisteredApp("desktopgui");
+                if (app instanceof NotificationService) {
+                    try {
+                        ((NotificationService) app).notify(
+                                "I2PSnark",
+                                null,
+                                Log.INFO,
+                                _t("I2PSnark"),
+                                _t("Download finished: {0}", snark.getName()),
+                                getTorrentURL(snark));
+                    } catch (RuntimeException e) {
+                        // a desktop GUI that cannot notify must not take down the
+                        // completion callback for the torrent
+                        _log.warn("Desktop notification failed -> Torrent: " + snark.getName(), e);
+                    }
                 }
             }
             updateStatus(snark);
@@ -6724,6 +6730,37 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
 
     /**
+     * The path that browses a torrent's files in the webapp, percent-encoded so
+     * every character a real file name can hold survives it: a space, '#', '%',
+     * '&amp;', '[', and a name outside ASCII. Ends with a slash for a multi-file
+     * torrent or one still downloading, where the path is a directory.
+     *
+     * @param snark the torrent to link to
+     * @return the path, absolute from the webapp root, or the webapp root itself
+     *         for a torrent without metainfo or storage
+     * @since 0.9.72+
+     */
+    public String getTorrentURL(Snark snark) {
+        MetaInfo meta = snark.getMetaInfo();
+        Storage storage = snark.getStorage();
+        if (meta == null || storage == null) {
+            return _contextPath.endsWith("/") ? _contextPath : _contextPath + '/';
+        }
+        StringBuilder buf = new StringBuilder(256);
+        buf.append(_contextPath);
+        // the default instance is deployed at the root, where the context path is
+        // "/" and a second slash would make the link protocol-relative
+        if (!_contextPath.endsWith("/")) {
+            buf.append('/');
+        }
+        buf.append(URIUtil.encodePath(storage.getBaseName()));
+        if (meta.getFiles() != null || !storage.complete()) {
+            buf.append('/');
+        }
+        return buf.toString();
+    }
+
+    /**
      * An HTML link to the file if complete and a single file, to the directory if not complete or
      * not a single file, or simply the unlinkified name of the snark if a magnet.
      *
@@ -6739,25 +6776,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             return DataHelper.escapeHTML(snark.getBaseName().replace("%20", " "));
         }
         StringBuilder buf = new StringBuilder(256);
-        String base = DataHelper.escapeHTML(storage.getBaseName());
-        String enc =
-                base.replace("[", "%5B")
-                        .replace("]", "%5D")
-                        .replace("|", "%7C")
-                        .replace(" ", "%20")
-                        .replace("è", "&egrave;")
-                        .replace("é", "&eacute;")
-                        .replace("à", "&agrave;");
-        buf.append("<a href=\"").append(_contextPath).append('/').append(enc);
-        if (meta.getFiles() != null || !storage.complete()) {
-            buf.append('/');
-        }
-        buf.append("\">")
-                .append(
-                        base.replace("%20", " ")
-                                .replace("&egrave;", "è")
-                                .replace("&eacute;", "é")
-                                .replace("&agrave;", "à"))
+        buf.append("<a href=\"").append(getTorrentURL(snark)).append("\">")
+                .append(DataHelper.escapeHTML(storage.getBaseName().replace("%20", " ")))
                 .append("</a>");
         return buf.toString();
     }
