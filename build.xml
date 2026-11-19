@@ -1925,6 +1925,16 @@
       <isset property="javadoc.css.assets"/>
     </condition>
     <property name="javadoc.css" location="${basedir}/tools/javadoc/jdk8/javadoc.css"/>
+    <!--
+       test.junit.* in excludepackagenames below is not a package we ship. I2PControl
+       keeps its JUnit sources under its own source root (apps/i2pcontrol/java/test/
+       junit, which its build.xml points at), and the sourcepath entry here is that
+       root, so the scan Ant runs to build the package list derives a package named
+       after the directory. JUnit is not on this classpath, so javadoc reported
+       "package org.junit does not exist" - 11 errors and 58 cascading "Class Test
+       not found" warnings - for a file with no defect in it. Exclude the derived
+       package rather than put a test library in the API docs.
+    -->
     <javadoc access="package"
       source="${javac.version}"
       destdir="${build.dir}/javadoc"
@@ -1935,7 +1945,7 @@
       additionalparam="-notimestamp -stylesheetFile ${javadoc.css} -quiet -Xmaxwarns 100000 -nodeprecated -nosince"
       doctitle="I2P+ Javadocs [${release.number}-${i2p.build.number}${build.extra}]"
       windowtitle="Javadocs [I2P+ ${release.number}+] - API Version ${api.version}+"
-      excludepackagenames="com.mpatric.mp3agic">
+      excludepackagenames="com.mpatric.mp3agic,test.junit.*">
       <group title="Core (i2p.jar)" packages="net.i2p:net.i2p.*:net.i2p.client:net.i2p.client.*:net.i2p.internal:net.i2p.internal.*"/>
       <group title="Core Crypto" packages="net.i2p.crypto:net.i2p.crypto.*:com.southernstorm.noise.crypto.x25519:com.southernstorm.noise.crypto.chacha20"/>
       <group title="Core Dependencies" packages="freenet.support.CPUInformation:gnu.crypto.*:gnu.getopt:gnu.gettext:com.nettgryppa.security:net.i2p.apache.http.conn.ssl:net.i2p.apache.http.conn.util:net.i2p.apache.http.util:org.json.simple:org.minidns:org.minidns.*"/>

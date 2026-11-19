@@ -7,6 +7,17 @@ sourceSets {
     main {
         java {
             srcDir 'java'
+            // The JUnit sources live under this same root, because that is where
+            // apps/i2pcontrol/build.xml looks for them. Without this exclude they are
+            // compiled as main sources - and junit is not on the main classpath, so
+            // they fail there - and the javadoc task, which documents the main source
+            // set, reports "package org.junit does not exist" for them.
+            exclude 'test/**'
+        }
+    }
+    test {
+        java {
+            srcDir 'java/test/junit'
         }
     }
 }
