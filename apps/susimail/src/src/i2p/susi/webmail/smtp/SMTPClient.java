@@ -49,6 +49,19 @@ public class SMTPClient {
      */
     public static final long BINARY_MAX_SIZE = (long) ((DEFAULT_MAX_SIZE * 57.0d / 78) - 32*1024);
 
+    /**
+     * Most lines one reply may have. RFC 5321 puts no ceiling on a multi-line reply,
+     * every real reply is a handful of lines, and the whole reply is kept in memory
+     * and shown to the user when a command fails.
+     */
+    static final int MAX_REPLY_LINES = 100;
+    /**
+     * Most characters one reply line may hold, RFC 5321 sec. 4.2's ceiling of 512
+     * including the line's CRLF. A server that ignores it is not sending replies this
+     * client can show.
+     */
+    static final int MAX_REPLY_LINE_CHARS = 512;
+
     /** Logger for this class. */
     private final Log _log;
     /** Socket connection to the SMTP server. */
@@ -229,7 +242,11 @@ public class SMTPClient {
     private int getResult() {return getFullResult().result;}
 
     /**
-     * Read the complete server reply.
+     * Read the complete server reply. A reply is only a reply once its last line has
+     * arrived - the code, a space, and the text - so a connection that ends in the
+     * middle of a multi-line reply is a failed command, not one the server agreed
+     * to. Both the lines and the length of each are bounded, because the whole reply
+     * is kept in memory and shown to the user when a command fails.
      *
      * @return result code and string, all lines combined with \r separators,
      * first 3 bytes are the ASCII return code or "000" for failure
@@ -239,14 +256,22 @@ public class SMTPClient {
     private Result getFullResult() {
         int result = 0;
         StringBuilder fullResponse = new StringBuilder(512);
+        boolean complete = false;
         try {
             InputStream in = socket.getInputStream();
             StringBuilder buf = new StringBuilder(128);
+            int lines = 1;
             while (DataHelper.readLine(in, buf)) {
                 int len = buf.length();
                 if (len < 4) {
                     result = 0;
                     break; // huh? no nnn\r?
+                }
+                if (len > MAX_REPLY_LINE_CHARS) {
+                    error += "SMTP reply line too long" +
+                             "\n* Characters: " + len + " * Limit: " + MAX_REPLY_LINE_CHARS + '\n';
+                    result = 0;
+                    break;
                 }
                 if (result == 0) {
                     try {
@@ -255,11 +280,26 @@ public class SMTPClient {
                     } catch (NumberFormatException nfe) {break;}
                 }
                 fullResponse.append(buf.substring(4));
-                if (buf.charAt(3) == ' ') {break;}
+                if (buf.charAt(3) == ' ') {
+                    complete = true;
+                    break;
+                }
+                // a continuation line, so the reply is still open and the ceiling on
+                // how many there may be is what stops a server that never closes it
+                if (++lines > MAX_REPLY_LINES) {
+                    error += "SMTP reply too long to hold" +
+                             "\n* Lines: " + lines + " * Limit: " + MAX_REPLY_LINES + '\n';
+                    result = 0;
+                    break;
+                }
                 buf.setLength(0);
             }
         } catch (IOException e) {
             error += e + "\n";
+            result = 0;
+        }
+        if (!complete && result != 0) {
+            error += _t("Server ended the reply before its last line") + '\n';
             result = 0;
         }
         lastResponse = fullResponse.toString();
