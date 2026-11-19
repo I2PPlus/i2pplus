@@ -13,8 +13,9 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import net.i2p.I2PAppContext;
@@ -45,14 +46,31 @@ class AccessFilter implements StatefulConnectionFilter {
     private static final int MAX_STORED_DESTS = 1024;
 
     /**
+     * Tasks the shared disk writer will hold. Every filtered tunnel submits one
+     * every SYNC_INTERVAL, and a writer blocked on a bad disk - a hung mount, a
+     * full filesystem, an fsync that does not return - never drains them, so an
+     * unbounded queue grows by one task per interval per tunnel, each holding its
+     * filter and its definition alive, and replays all of them against state that
+     * is hours stale when the disk comes back.
+     */
+    static final int MAX_PENDING_WRITES = 128;
+
+    /**
      * All disk i/o from all instances of this filter
      * happen on this thread (apart from initial load).
+     * <p>
+     * The queue is bounded, so a stalled writer sheds the work it cannot do
+     * instead of accumulating it, and the backlog on shutdown is a number that
+     * can be read rather than an unbounded one that is discarded.
      */
-    private static final ExecutorService DISK_WRITER = Executors.newSingleThreadExecutor(r -> {
-        Thread t = new Thread(r, "AccLogWtr");
-        t.setDaemon(true);
-        return t;
-    });
+    private static final ThreadPoolExecutor DISK_WRITER = new ThreadPoolExecutor(
+            1, 1, 0L, TimeUnit.MILLISECONDS,
+            new ArrayBlockingQueue<Runnable>(MAX_PENDING_WRITES),
+            r -> {
+                Thread t = new Thread(r, "AccLogWtr");
+                t.setDaemon(true);
+                return t;
+            });
 
     static {
         Runtime.getRuntime().addShutdownHook(new Thread("AccLogShut") {
@@ -74,6 +92,45 @@ class AccessFilter implements StatefulConnectionFilter {
             DISK_WRITER.shutdownNow();
             Thread.currentThread().interrupt();
         }
+    }
+
+    /**
+     * How many disk tasks are waiting for the shared writer, the backlog a
+     * stalled disk leaves behind.
+     *
+     * @return the queued task count, not counting the one being written
+     * @since 0.9.72+
+     */
+    static int pendingWrites() {
+        return DISK_WRITER.getQueue().size();
+    }
+
+    /**
+     * The shared writer itself, so the ceiling on its queue can be pinned by a
+     * test rather than only asserted about the decision that reads it.
+     *
+     * @return the executor every filter's disk i/o runs on
+     * @since 0.9.72+
+     */
+    static ThreadPoolExecutor diskWriter() {
+        return DISK_WRITER;
+    }
+
+    /**
+     * Whether one more disk pass may be queued behind the tasks already waiting.
+     * A stalled writer makes every queued pass stale before it runs - it records
+     * and re-reads state that has moved on since the pass was scheduled - so
+     * shedding the work is better than holding it: the backlog stays at the
+     * ceiling and the next tick tries again.
+     *
+     * @param queued tasks already waiting on the shared writer
+     * @param limit the queue ceiling
+     * @return true to queue another pass, false to skip this one and wait for the
+     *         next sync interval
+     * @since 0.9.72+
+     */
+    static boolean mayQueueDiskPass(int queued, int limit) {
+        return queued < limit;
     }
 
     /** The definition the filter was built from. */
@@ -472,6 +529,11 @@ class AccessFilter implements StatefulConnectionFilter {
         /**
          * Called by the timer when the sync interval has elapsed.
          * Saves recorder data and reloads access lists from disk.
+         * <p>
+         * A tick is skipped, not queued, while the shared writer is at its queue
+         * ceiling: the pass would record and re-read state that has moved on
+         * anyway, and queueing it would keep the backlog growing for as long as
+         * the disk stays blocked.
          *
          * @since 0.9.40
          */
@@ -483,19 +545,44 @@ class AccessFilter implements StatefulConnectionFilter {
             // disk task is queued, rescheduling the *current* syncer from the
             // old task's finally would double-schedule it.
             final Syncer self = this;
-            DISK_WRITER.submit(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        syncCycle();
-                    } finally {
-                        // always reschedule, even on I/O error, so reloads don't stop permanently
-                        Syncer current = AccessFilter.this.syncer;
-                        if (current == self && current != null)
-                            current.schedule(SYNC_INTERVAL);
+            if (!mayQueueDiskPass(pendingWrites(), MAX_PENDING_WRITES)) {
+                reportStalledWriter(self);
+                return;
+            }
+            try {
+                DISK_WRITER.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            syncCycle();
+                        } finally {
+                            // always reschedule, even on I/O error, so reloads don't stop permanently
+                            Syncer current = AccessFilter.this.syncer;
+                            if (current == self && current != null)
+                                current.schedule(SYNC_INTERVAL);
+                        }
                     }
-                }
-            });
+                });
+            } catch (RejectedExecutionException ree) {
+                // the queue filled between the check and the submit
+                reportStalledWriter(self);
+            }
          }
+
+        /**
+         * The shared writer is behind: say so, throttled rather than once per
+         * interval from every filtered tunnel, and try again next interval.
+         *
+         * @param self the syncer that was turned down
+         * @since 0.9.72+
+         */
+        private void reportStalledWriter(Syncer self) {
+            Log log = context.logManager().getLog(AccessFilter.class);
+            log.throttled(Log.CRIT, "access-filter-sync",
+                          "Syncing the tunnel filter's access list -> Write queue full" +
+                          " * Pending: " + pendingWrites() + " of " + MAX_PENDING_WRITES);
+            if (timersRunning.get() && AccessFilter.this.syncer == self)
+                self.schedule(SYNC_INTERVAL);
+        }
     }
 }
