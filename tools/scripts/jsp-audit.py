@@ -587,9 +587,18 @@ def java_sources(app):
 
 
 def repo_rel(path):
-    """Path as seen from the repo root, so a finding never carries the
-    machine's absolute location."""
-    ap = os.path.abspath(path)
+    """
+    Path as seen from the repo root, so a finding never carries the machine's
+    absolute location.
+
+    A relative path is resolved against the repo root, never the working
+    directory. The ant hooks invoke the checkers from the webapp's own module
+    directory, and a path an earlier call already made relative would otherwise
+    be re-based on that directory, so a report would name
+    apps/susidns/src/apps/susidns/src/jsp/config.jsp.
+    """
+    ap = path if os.path.isabs(path) else os.path.join(ROOT, path)
+    ap = os.path.abspath(ap)
     return os.path.relpath(ap, ROOT) if ap.startswith(ROOT + os.sep) else path
 
 
@@ -2025,6 +2034,25 @@ def selftest():
             continue
         failed += 1
         print('* FAIL branch name %r: expected %r, got %r' % (src, want, got))
+    # a finding's file is repo-relative exactly once, whatever the working
+    # directory is: the ant hooks run the checkers from the webapp's own module
+    # directory, and a path already made relative must not be re-based on it
+    abs_page = os.path.join(ROOT, 'apps', 'susidns', 'src', 'jsp', 'config.jsp')
+    rel_page = os.path.relpath(abs_page, ROOT)
+    saved = os.getcwd()
+    try:
+        os.chdir(os.path.join(ROOT, 'apps', 'susidns', 'src'))
+        for path in (abs_page, rel_page):
+            checks += 1
+            once = repo_rel(path)
+            again = repo_rel(once)
+            if once == rel_page and again == once:
+                continue
+            failed += 1
+            print('* FAIL repo_rel %r: %r, and that re-relativizes to %r'
+                  % (path, once, again))
+    finally:
+        os.chdir(saved)
     # balance is a property of the rendered page, so these need real files on disk:
     # the fragments are read through the same resolver the pages use
     for what, files, page, body, want, where in INCLUDE_FIXTURES:

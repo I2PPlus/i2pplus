@@ -16,9 +16,16 @@ Rules
                             its context when the checker is run with --verbose.
   csrf-check-fails-open     an Origin/Host same-origin test that starts allowed and
                             is also set to allowed by its own catch, so a malformed
-                            request or a lookup failure authorizes the POST.
-  form-post-without-nonce   a <form method=POST> in a page with no CSRF nonce field
-                            and no Origin/Host test anywhere in it.
+                            request or a lookup failure authorizes the POST. The
+                            shared net.i2p.servlet.util.OriginCheck call counts as
+                            such a test.
+  form-post-without-nonce   a <form method=POST> in a page with no CSRF token
+                            anywhere in it - the console's nonce field, or the
+                            address book's serial field and its getSerial() /
+                            isAuthorizedAction() pair. An Origin or Host test is a
+                            second layer, not a substitute: a foreign page on the
+                            same origin, or any client that names no origin, posts
+                            straight through it.
   script-output-unescaped   <%= x %> between <script> and </script> where x is not
                             run through an escaper and can be traced back to the
                             request - HTML escaping is the wrong context there and
@@ -29,7 +36,7 @@ Rules
                             a blind spot and is reported as such, not as a finding.
 
 Usage: jsp-security-audit.py [path ...] [--verbose] [--json] [--rule RULE]
-       [--app APP]
+       [--app APP] [--selftest]
 """
 
 import argparse
@@ -56,10 +63,14 @@ ESCAPER = re.compile(r'\b(esc|escape|escapeXml|escapeHtml4|filter|sanitize|'
 
 FORM = re.compile(r'<form\b(?P<attrs>[^>]*)>', re.I)
 SCRIPT = re.compile(r'<script\b[^>]*>(?P<body>.*?)</script\s*>', re.I | re.S)
-ORIGIN_TEST = re.compile(r'getHeader\(\s*"(?:Origin|Host)"', re.I)
+ORIGIN_TEST = re.compile(r'getHeader\(\s*"(?:Origin|Host)"|'
+                         r'OriginCheck\s*\.\s*isAllowed\s*\(', re.I)
 ALLOW_INIT = re.compile(r'\bboolean\s+(?P<name>\w*[Aa]llowed\w*)\s*=\s*true\b')
 ALLOW_CATCH = re.compile(r'catch\s*\([^)]*\)\s*\{[^}]*?(?P<name>\w*[Aa]llowed\w*)\s*=\s*true', re.S)
-NONCE = re.compile(r'name[= ]*"?nonce\b|getNonce\(|CSSHelper', re.I)
+# The two CSRF tokens the tree issues: the console's nonce, and the address book's
+# serial, issued by BaseBean.getSerial() and matched by isAuthorizedAction().
+NONCE = re.compile(r'name[= ]*"?(?:nonce|serial)\b|getNonce\(|getSerial\(|'
+                   r'isAuthorizedAction\(|CSSHelper', re.I)
 
 # Where a value in a page can come from the request at all. A scriptlet variable
 # is only as safe as what was assigned to it, so the search follows assignments.
@@ -157,9 +168,9 @@ def provenance(expr, assigns, depth=0):
 
 def check_page(path, text, expanded, findings, blind):
     body = ja.strip_jsp_comments(text)
-    # a nonce or an Origin test declared in a statically included fragment
-    # protects the page that pulls it in, so the page-level decision reads the
-    # expanded text while every finding is reported at its real file and line
+    # a CSRF token declared in a statically included fragment protects the page
+    # that pulls it in, so the page-level decision reads the expanded text while
+    # every finding is reported at its real file and line
     page = ja.strip_jsp_comments(expanded)
 
     # unencoded-request-param
@@ -188,7 +199,7 @@ def check_page(path, text, expanded, findings, blind):
     for m in FORM.finditer(body):
         if not re.search(r'method\s*=\s*["\']?\s*post', m.group('attrs'), re.I):
             continue
-        if has_nonce or ORIGIN_TEST.search(page):
+        if has_nonce:
             continue
         findings.add('form-post-without-nonce', path, body, m.start(),
                      os.path.basename(path))
@@ -211,6 +222,64 @@ def check_page(path, text, expanded, findings, blind):
                              base + em.start(), expr)
 
 
+# The CSRF rules, over pages short enough to read in one line each. A rule that
+# reports 0 across the tree may be reporting 0 because it matches nothing.
+PAGE_FIXTURES = (
+    ('a POST form with no token anywhere is a finding',
+     '<form method=POST action="save"><input type=submit></form>',
+     ('form-post-without-nonce',)),
+    ('the console nonce field is a token',
+     '<form method=POST action="save"><input type=hidden name="nonce" value="7">'
+     '</form>', ()),
+    ('the address book serial field is a token, quoted or not',
+     '<form method=POST action="save"><input type=hidden name=serial '
+     'value="${blacklist.serial}"></form>', ()),
+    ('a page that issues the serial from Java holds a token too',
+     '<% String n = book.getSerial(); %><form method=POST action="save">'
+     '<input type=hidden name="serial" value="<%=n%>"></form>', ()),
+    ('an Origin test is a second layer, not a token',
+     '<% if (!OriginCheck.isAllowed(request)) { return; } %>'
+     '<form method=POST action="save"><input type=submit></form>',
+     ('form-post-without-nonce',)),
+    ('so is an inline one, and it still does not excuse a missing token',
+     '<% if (request.getHeader("Origin") == null) { return; } %>'
+     '<form method=POST action="save"><input type=submit></form>',
+     ('form-post-without-nonce',)),
+    ('an inline Origin test its own catch allows is a finding',
+     '<% String o = request.getHeader("Origin"); boolean allowed = true; '
+     'try { allowed = sameOrigin(o); } catch (Exception e) { allowed = true; } %>'
+     '<form method=POST action="save"><input type=hidden name=serial value="7">'
+     '</form>', ('csrf-check-fails-open',)),
+    ('a page that delegates the Origin test to OriginCheck is not an inline one',
+     '<% if (!OriginCheck.isAllowed(request)) { return; } %>'
+     '<form method=POST action="save"><input type=hidden name=serial value="7">'
+     '</form>', ()),
+)
+
+
+def selftest():
+    """
+    Run the two CSRF rules over PAGE_FIXTURES.
+
+    Each fixture names what the rule owes the reader, so a regex widened to fit one
+    page is caught the moment it stops reporting another.
+    """
+    failed = 0
+    for what, text, want in PAGE_FIXTURES:
+        findings = ja.Findings()
+        check_page('fixture.jsp', text, text, findings, set())
+        got = set(i['rule'] for i in findings.items)
+        if got == set(want):
+            continue
+        failed += 1
+        print('* FAIL %s: expected %s, got %s'
+              % (what, ', '.join(sorted(want)) or 'nothing',
+                 ', '.join(sorted(got)) or 'nothing'))
+    print('* jsp security selftest: %d check(s), %d failure(s)'
+          % (len(PAGE_FIXTURES), failed))
+    return 1 if failed else 0
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument('paths', nargs='*', help='files or directories (default: the JSP trees)')
@@ -220,7 +289,12 @@ def main():
     ap.add_argument('--app', action='append', help='only these apps')
     ap.add_argument('--ant-report', metavar='FILE',
                     help='append the finding counts to FILE as ant properties')
+    ap.add_argument('--selftest', action='store_true',
+                    help='run the CSRF rules over the built-in page fixtures')
     args = ap.parse_args()
+
+    if args.selftest:
+        sys.exit(selftest())
 
     wanted_apps = set(args.app) if args.app else set(a['name'] for a in APPS)
     wanted_rules = set(args.rule) if args.rule else None
