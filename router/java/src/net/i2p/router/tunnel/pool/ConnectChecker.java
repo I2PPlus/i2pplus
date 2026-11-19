@@ -7,6 +7,7 @@ import net.i2p.data.router.RouterInfo;
 import net.i2p.router.CommSystemFacade.Status;
 import net.i2p.router.RouterContext;
 import net.i2p.router.transport.TransportManager;
+import net.i2p.router.transport.TransportUtil;
 import net.i2p.util.Log;
 
     /**
@@ -22,19 +23,26 @@ import net.i2p.util.Log;
     protected final Log log;
 
     /** Bit for an NTCP connection to an IPv4 address. */
-    private static final int NTCP_V4 = 0x01;
+    static final int NTCP_V4 = 0x01;
     /** Bit for an NTCP connection to an IPv6 address. */
-    private static final int NTCP_V6 = 0x04;
+    static final int NTCP_V6 = 0x04;
     /** Bit for an SSU connection to an IPv4 address. */
-    private static final int SSU_V4 = 0x02;
+    static final int SSU_V4 = 0x02;
     /** Bit for an SSU connection to an IPv6 address. */
-    private static final int SSU_V6 = 0x08;
+    static final int SSU_V6 = 0x08;
     /** Bit for an SSU2 connection to an IPv4 address. */
-    private static final int SSU2_V4 = 0x10;
+    static final int SSU2_V4 = 0x10;
     /** Bit for an SSU2 connection to an IPv6 address. */
-    private static final int SSU2_V6 = 0x20;
+    static final int SSU2_V6 = 0x20;
     /** Any IPv4 transport. */
     public static final int ANY_V4 = NTCP_V4 | SSU_V4 | SSU2_V4;
+
+    /**
+     * Inbound capacity, as a percentage of each transport's inbound connection
+     * limit, that we require before letting a peer we have no session with be
+     * the closest hop of one of our inbound tunnels.
+     */
+    private static final int INBOUND_CAPACITY_PCT = 95;
 
     /**
      * Create a new ConnectChecker.
@@ -209,58 +217,68 @@ import net.i2p.util.Log;
     }
 
     /**
-     * Our inbound mask.
-     * For most cases, we use what we published, i.e. getConnectMask().
+     * Our inbound mask: the routes we published that someone outside can
+     * actually dial.
      *
      * @param us our router info
-     * @return bitmask for accepting connections
+     * @return bitmask for accepting connections, 0 if nothing we published can
+     *         be dialed
      * @since 0.9.34
      */
     public int getInboundMask(RouterInfo us) {
-        // to us
-        int ct = 0;
+        // Only what we published, and only the routes that can actually be
+        // dialed. The status switch this replaces consulted nothing we published
+        // at all for UNKNOWN, DISCONNECTED, HOSED and the v4-OK statuses, so at
+        // startup, and during a network problem, we claimed v4 inbound routes
+        // whatever the router advertises - an outbound-only router included,
+        // whose NTCP2 address has no host at all.
+        return getConnectMask(us.getAddresses(), true);
+    }
+
+    /**
+     * Must the hop adjacent to us be a peer we already have a session with?
+     * <p>
+     * True when nothing we published can be dialed at all, and when a symmetric
+     * NAT leaves only IPv4 UDP routes: under one, the mapping a peer sees is
+     * per-peer, so the port we published is not one anyone else can reach us on.
+     * Both cases are the same problem the {@code hidden} flag already covers -
+     * an inbound tunnel whose adjacent hop was picked without a live session
+     * fails its build, and the adjacent hop is penalized for a route we never
+     * had.
+     *
+     * @param us our router info
+     * @return true if the adjacent hop has to be an established peer
+     * @since 0.9.72+
+     */
+    boolean requiresConnectedInboundPeer(RouterInfo us) {
+        int mask = getInboundMask(us);
+        if (mask == 0)
+            return true;
         Status status = ctx.commSystem().getStatus();
-        switch (status) {
-            case OK:
-            case IPV4_UNKNOWN_IPV6_OK:
-            case IPV4_FIREWALLED_IPV6_OK:
-            case IPV4_SNAT_IPV6_OK:
-            case IPV4_SNAT_IPV6_UNKNOWN:
-            case IPV4_FIREWALLED_IPV6_UNKNOWN:
-            case IPV4_UNKNOWN_IPV6_FIREWALLED:
-            case IPV4_OK_IPV6_FIREWALLED:
-            case DIFFERENT:
-            case REJECT_UNSOLICITED:
-                Collection<RouterAddress> at = us.getAddresses(); // use what we published
-                if (at.isEmpty()) {return 0;}
-                ct = getConnectMask(at);
-                break;
+        if (status != Status.IPV4_SNAT_IPV6_OK && status != Status.IPV4_SNAT_IPV6_UNKNOWN)
+            return false;
+        return (mask & ~(SSU_V4 | SSU2_V4)) == 0;
+    }
 
-            case IPV4_DISABLED_IPV6_OK:
-            case IPV4_DISABLED_IPV6_UNKNOWN:
-            // maybe should return zero for this one?
-            case IPV4_DISABLED_IPV6_FIREWALLED:
-                // TODO look at force-firewalled settings per-transport
-                if (!isNTCPDisabled()) {ct |= NTCP_V6;}
-                if (!isSSUDisabled()) {
-                    ct |= SSU_V6;
-                    if (isSSU2Enabled()) {ct |= SSU2_V6;}
-                }
-                break;
-
-            case IPV4_OK_IPV6_UNKNOWN:
-            case DISCONNECTED:
-            case HOSED:
-            case UNKNOWN:
-            default:
-                if (!isNTCPDisabled()) {ct |= NTCP_V4;}
-                if (!isSSUDisabled()) {
-                    ct |= SSU_V4;
-                    if (isSSU2Enabled()) {ct |= SSU2_V4;}
-                }
-                break;
-        }
-        return ct;
+    /**
+     * Must the hop adjacent to us be a peer we already have a session with?
+     * <p>
+     * The full decision the peer selectors fold into their {@code hidden} flag:
+     * a hidden router, one that publishes no addresses at all, one whose
+     * transports are near their inbound connection limit, and one whose
+     * published routes cannot be dialed all mean the same thing when picking the
+     * closest hop - an inbound tunnel built through a peer we cannot be reached
+     * through fails, and that peer is blamed for it.
+     *
+     * @return true if the closest hop of an inbound tunnel has to be established
+     * @since 0.9.72+
+     */
+    boolean inboundHopMustBeConnected() {
+        RouterInfo us = ctx.router().getRouterInfo();
+        return ctx.router().isHidden() ||
+               us.getAddressCount() <= 0 ||
+               !ctx.commSystem().haveInboundCapacity(INBOUND_CAPACITY_PCT) ||
+               requiresConnectedInboundPeer(us);
     }
 
     /**
@@ -336,22 +354,39 @@ import net.i2p.util.Log;
     private static final String IHOST[] = {"ihost0", "ihost1", "ihost2"};
 
     /**
-     * The bitmask of supported transports for the given addresses.
+     * The bitmask of supported transports for the given addresses, counting only
+     * what could be dialed from outside when {@code inbound} is set.
+     * <p>
+     * An address with no host, or no usable port, cannot be dialed, and the
+     * {@code caps} option that a hostless address carries says what the peer
+     * could reach, not what can reach it. Our own transports publish exactly that
+     * form for an outbound-only listener, so reading the families out of
+     * {@code caps} tells the tunnel validator that a peer can dial us when
+     * nothing is listening. An SSU address with an introducer tag is the
+     * exception: the introducer can reach it on our behalf.
      *
      * @param addrs non-empty, set your own default if empty
-     * @return bitmask of v4/v6 NTCP/SSU
-     * @since 0.9.34
+     * @param inbound true to count only routes that can actually be dialed
+     * @return bitmask of v4/v6 NTCP/SSU/SSU2
+     * @since 0.9.72+
      */
-    private static int getConnectMask(Collection<RouterAddress> addrs) {
+    static int getConnectMask(Collection<RouterAddress> addrs, boolean inbound) {
         int rv = 0;
         for (RouterAddress ra : addrs) {
             String style = ra.getTransportStyle();
             String host = ra.getHost();
+            // A host with no port, or a port that is not one, is not a route
+            // either - the transport writes -1 when it has no bind port.
+            boolean dialable = host != null && TransportUtil.isValidPort(ra.getPort());
             if ("NTCP2".equals(style)) {
                 if (host != null) {
+                    if (inbound && !dialable)
+                        continue;
                     if (host.contains(":")) {rv |= NTCP_V6;}
                     else {rv |= NTCP_V4;}
                 } else {
+                    if (inbound)
+                        continue;
                     String caps = ra.getOption("caps");
                     if (caps != null) {
                         if (caps.contains("4")) {rv |= NTCP_V4;}
@@ -361,6 +396,8 @@ import net.i2p.util.Log;
             } else if ("SSU".equals(style)) {
                 boolean v2 = ra.getOption("v") != null;
                 if (host == null) {
+                    if (inbound && !hasIntroducer(ra))
+                        continue;
                     String caps = ra.getOption("caps");
                     boolean v4 = false;
                     boolean v6 = false;
@@ -386,24 +423,68 @@ import net.i2p.util.Log;
                         }
                     }
                 } else if (host.contains(":")) {
+                    if (inbound && !dialable)
+                        continue;
                     rv |= SSU_V6;
                     if (v2) {rv |= SSU2_V6;}
                 } else {
+                    if (inbound && !dialable)
+                        continue;
                     rv |= SSU_V4;
                     if (v2) {rv |= SSU2_V4;}
                 }
             } else if ("SSU2".equals(style)) {
                 if (host == null) {
+                    if (inbound && !hasIntroducer(ra))
+                        continue;
                     String caps = ra.getOption("caps");
                     if (caps != null) {
                         if (caps.contains("4")) {rv |= SSU2_V4;}
                         if (caps.contains("6")) {rv |= SSU2_V6;}
                     }
-                } else if (host.contains(":")) {rv |= SSU2_V6;}
-                else {rv |= SSU2_V4;}
+                } else if (host.contains(":")) {
+                    if (inbound && !dialable)
+                        continue;
+                    rv |= SSU2_V6;
+                } else {
+                    if (inbound && !dialable)
+                        continue;
+                    rv |= SSU2_V4;
+                }
             }
         }
         return rv;
+    }
+
+    /**
+     * The bitmask of supported transports for the given addresses, counting what
+     * the peer could reach, dialable or not.
+     *
+     * @param addrs non-empty, set your own default if empty
+     * @return bitmask of v4/v6 NTCP/SSU
+     * @since 0.9.34
+     */
+    private static int getConnectMask(Collection<RouterAddress> addrs) {
+        return getConnectMask(addrs, false);
+    }
+
+    /**
+     * Can an introducer reach this address on someone else's behalf? An SSU
+     * introducer tag, or for v1 an introducer host, stands in for the host and
+     * port the address does not carry.
+     *
+     * @param ra the published address
+     * @return true if there is an introducer route to it
+     * @since 0.9.72+
+     */
+    private static boolean hasIntroducer(RouterAddress ra) {
+        if (ra.getOption("itag0") != null)
+            return true;
+        for (String ihost : IHOST) {
+            if (ra.getOption(ihost) != null)
+                return true;
+        }
+        return false;
     }
 
 }

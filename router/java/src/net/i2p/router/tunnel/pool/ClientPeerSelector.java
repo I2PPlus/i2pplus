@@ -455,9 +455,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         // for these cases, check the closest hop up front,
         // otherwise, will be done in checkTunnel() at the end
         boolean checkClosestHop = v6Only || ntcpDisabled || ssuDisabled;
-        boolean hidden = ctx.router().isHidden() ||
-                         ctx.router().getRouterInfo().getAddressCount() <= 0 ||
-                         !ctx.commSystem().haveInboundCapacity(95);
+        boolean hidden = inboundHopMustBeConnected();
         boolean hiddenInbound = hidden && isInbound;
         boolean hiddenOutbound = hidden && !isInbound;
         int ipRestriction = ipRestrictionFor(settings, length, buildSuccess,

@@ -251,9 +251,7 @@ import net.i2p.util.SystemVersion;
         // for these cases, check the closest hop up front,
         // otherwise, will be done in checkTunnel() at the end
         boolean checkClosestHop = v6Only || ntcpDisabled || ssuDisabled;
-        boolean hidden = nonzero && (ctx.router().isHidden() ||
-                                     ctx.router().getRouterInfo().getAddressCount() <= 0 ||
-                                     !ctx.commSystem().haveInboundCapacity(95));
+        boolean hidden = nonzero && inboundHopMustBeConnected();
         boolean hiddenInbound = hidden && isInbound;
         boolean hiddenOutbound = hidden && !isInbound;
         boolean lowOutbound = nonzero && !isInbound && !ctx.commSystem().haveHighOutboundCapacity();

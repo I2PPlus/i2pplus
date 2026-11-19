@@ -17,6 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import net.i2p.data.Hash;
+import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.CommSystemFacade;
 import net.i2p.router.NetworkDatabaseFacade;
@@ -27,6 +28,7 @@ import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.peermanager.ProfileOrganizer;
 import net.i2p.util.Clock;
 import net.i2p.util.LogManager;
+import net.i2p.util.OrderedProperties;
 
 /**
  * Tests for the checkTunnel-failure path in ExploratoryPeerSelector:
@@ -40,6 +42,13 @@ public class ExploratoryPeerSelectorCooldownTest {
 
     private static final long NOW = 1_000_000_000L;
 
+    /**
+     * A fixture group for exploratory pool selection; it holds no state.
+     *
+     * @since 0.9.72+
+     */
+    public ExploratoryPeerSelectorCooldownTest() {}
+
     private RouterContext _ctx;
     private CommSystemFacade _commSystem;
     private ProfileOrganizer _po;
@@ -47,6 +56,15 @@ public class ExploratoryPeerSelectorCooldownTest {
     private File _tmpDir;
     private Hash _self;
 
+    /**
+     * A context with a router that publishes a dialable address, a comm system
+     * with spare inbound capacity, and a profile organizer handing out two
+     * not-failing peers, so a selection failure can only come from the tunnel
+     * check or a cooldown.
+     *
+     * @throws Exception if the scratch config directory the logger writes into
+     *                   cannot be created
+     */
     @Before
     public void setUp() throws Exception {
         _tmpDir = new File(System.getProperty("java.io.tmpdir"), "i2p-eps-cool-test-" + System.nanoTime());
@@ -64,6 +82,12 @@ public class ExploratoryPeerSelectorCooldownTest {
         when(router.isHidden()).thenReturn(false);
         RouterInfo ri = mock(RouterInfo.class);
         when(ri.getAddressCount()).thenReturn(2);
+        // A dialable route, so the router is not treated as unreachable from
+        // outside and the selection stays off the hidden-router path.
+        OrderedProperties props = new OrderedProperties();
+        props.setProperty(RouterAddress.PROP_HOST, "1.2.3.4");
+        props.setProperty(RouterAddress.PROP_PORT, "37772");
+        when(ri.getAddresses()).thenReturn(Collections.singletonList(new RouterAddress("NTCP2", props, 5)));
         when(router.getRouterInfo()).thenReturn(ri);
         when(_ctx.router()).thenReturn(router);
         when(_ctx.routerHash()).thenReturn(_self);
@@ -99,6 +123,7 @@ public class ExploratoryPeerSelectorCooldownTest {
         when(_ctx.netDb()).thenReturn(mock(NetworkDatabaseFacade.class));
 
         _commSystem = mock(CommSystemFacade.class);
+        when(_commSystem.getStatus()).thenReturn(CommSystemFacade.Status.OK);
         when(_commSystem.countActivePeers()).thenReturn(0);
         when(_commSystem.haveInboundCapacity(anyInt())).thenReturn(true);
         when(_commSystem.haveHighOutboundCapacity()).thenReturn(true);
@@ -115,6 +140,10 @@ public class ExploratoryPeerSelectorCooldownTest {
         _selector = new ExploratoryPeerSelector(_ctx);
     }
 
+    /**
+     * Leaves no cooldown behind for the next test, and no log files behind on
+     * disk.
+     */
     @After
     public void tearDown() {
         TunnelPeerSelector._peerCooldowns.clear();
@@ -125,6 +154,11 @@ public class ExploratoryPeerSelectorCooldownTest {
         _tmpDir.delete();
     }
 
+    /**
+     * @param b the first byte, and the second derived from it, so each argument
+     *          gives a different hash
+     * @return a hash usable as a peer or router id
+     */
     private static Hash hash(int b) {
         byte[] data = new byte[Hash.HASH_LENGTH];
         data[0] = (byte) b;
@@ -132,12 +166,22 @@ public class ExploratoryPeerSelectorCooldownTest {
         return Hash.create(data);
     }
 
+    /**
+     * A two-hop pool, so the selection has to place a closest hop.
+     *
+     * @param isInbound true for an inbound exploratory pool
+     * @return the settings for that pool
+     */
     private static TunnelPoolSettings settings(boolean isInbound) {
         TunnelPoolSettings s = new TunnelPoolSettings(isInbound);
         s.setLength(2);
         return s;
     }
 
+    /**
+     * An inbound exploratory pool whose only candidates fail the tunnel check
+     * selects nothing, and never null.
+     */
     @Test
     public void testInboundCheckTunnelFailureReturnsEmptyNotNull() {
         List<Hash> rv = _selector.selectPeers(settings(true));
@@ -145,6 +189,10 @@ public class ExploratoryPeerSelectorCooldownTest {
         assertTrue(rv.isEmpty());
     }
 
+    /**
+     * The same for an outbound pool: the tunnel check rejects the candidates and
+     * the selection comes back empty.
+     */
     @Test
     public void testOutboundCheckTunnelFailureReturnsEmptyNotNull() {
         List<Hash> rv = _selector.selectPeers(settings(false));
@@ -152,6 +200,10 @@ public class ExploratoryPeerSelectorCooldownTest {
         assertTrue(rv.isEmpty());
     }
 
+    /**
+     * A selection reads the shared cooldown map without emptying it: an expired
+     * entry is skipped at read time and stays in the map for the bulk prune.
+     */
     @Test
     public void testSelectionDoesNotSweepSharedCooldowns() {
         // Fresh entry stays in the exclusion window; expired entry must be
@@ -168,6 +220,10 @@ public class ExploratoryPeerSelectorCooldownTest {
         assertEquals(2, TunnelPeerSelector._peerCooldowns.size());
     }
 
+    /**
+     * With no candidates at all the selection degrades to a self-only list
+     * rather than returning null.
+     */
     @Test
     public void testNoPeersAvailableNeverReturnsNull() {
         // Empty profileOrganizer selection must not return null either:
