@@ -56,7 +56,7 @@ public class Banlist {
     /**
      * Most source addresses one offense tracker will hold at once. A
      * spoofed-source flood presents a new source per packet, so this ceiling,
-     * not the age sweep in {@link Cleanup}, is what bounds the trackers; it is
+     * not the age sweep in {@code Cleanup}, is what bounds the trackers; it is
      * the order of magnitude of the single-IP blocklist they feed.
      */
     static final int MAX_OFFENSE_TRACKING = 8192;
@@ -1099,7 +1099,7 @@ public class Banlist {
     /**
      * Start an offense count for a source, if there is room to track it.
      * A spoofed-source flood presents a new source per packet, so the trackers
-     * need a ceiling as well as the age sweep in {@link Cleanup}; over the
+     * need a ceiling as well as the age sweep in {@code Cleanup}; over the
      * ceiling the packet is not tracked rather than evicting a source that is
      * already being counted.
      *
