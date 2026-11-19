@@ -802,32 +802,14 @@ public class RouterConsoleRunner implements RouterApp {
 
     /**
      * Expand the listen-host set with the local addresses and the allowed-hosts
-     * property, unless a wildcard address was configured, and hand it to the
-     * host check handler.
+     * property, and hand it to the host check handler.
      *
-     * @param listenHosts the configured hosts, modified in place
+     * @param listenHosts the addresses the console bound to, not modified
      * @param chCollWrapper the handler that rejects requests with an unexpected Host header
      */
     private void fixUpListenHosts(Set<String> listenHosts, HostCheckHandler chCollWrapper) {
-        if (listenHosts.contains("0.0.0.0") ||
-            listenHosts.contains("::") ||
-            listenHosts.contains("0:0:0:0:0:0:0:0")) {
-            // empty set says all are valid
-            listenHosts.clear();
-        } else {
-            listenHosts.add("localhost");
-            listenHosts.add("127.0.0.1");
-            listenHosts.add("::1");
-            listenHosts.add("0:0:0:0:0:0:0:1");
-            String allowed = _context.getProperty(PROP_ALLOWED_HOSTS);
-            if (allowed != null) {
-                StringTokenizer tok = new StringTokenizer(allowed, " ,");
-                while (tok.hasMoreTokens()) {
-                    listenHosts.add(tok.nextToken());
-                }
-            }
-        }
-        chCollWrapper.setListenHosts(listenHosts);
+        chCollWrapper.setListenHosts(HostCheckHandler.listenHosts(listenHosts,
+                                                                  _context.getProperty(PROP_ALLOWED_HOSTS)));
     }
 
     /**

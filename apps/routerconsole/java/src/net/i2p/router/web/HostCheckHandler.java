@@ -2,7 +2,9 @@ package net.i2p.router.web;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
+import java.util.StringTokenizer;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -69,13 +71,49 @@ public class HostCheckHandler extends GzipHandler
     /**
      * Set the legal hosts.
      * Not synched. Call this BEFORE starting.
-     * If empty, all are allowed.
+     * Names are matched case-insensitively, as a Host header is, so they are folded
+     * on the way in. An empty set allows only the loopback names and IP addresses,
+     * never every name there is - the check has to fail closed if the caller sets
+     * nothing.
      *
      * @param hosts contains hostnames or IPs. But we allow all IPs anyway.
      */
     public void setListenHosts(Set<String> hosts) {
         _listenHosts.clear();
-        _listenHosts.addAll(hosts);
+        for (String h : hosts) {
+            _listenHosts.add(h.toLowerCase(Locale.US));
+        }
+    }
+
+    /**
+     * The host names a Host header may carry when the console is bound to the given
+     * addresses. A wildcard bind widens which of the router's addresses answer, not
+     * which names are believed, so the localhost names and the operator's allowlist
+     * are added whatever was bound. Clearing the set on a wildcard instead turned
+     * DNS-rebinding protection off for exactly the operators who exposed the console
+     * to a network, which is where rebinding is worth something.
+     *
+     * @param bound the addresses the console bound to, possibly a wildcard, not modified
+     * @param allowedHostsProp the routerconsole.allowedHosts property, null for none
+     * @return the lower-cased host names to accept, never empty
+     * @since 0.9.72+
+     */
+    static Set<String> listenHosts(Set<String> bound, String allowedHostsProp) {
+        Set<String> rv = new HashSet<>(bound.size() + 6);
+        for (String h : bound) {
+            rv.add(h.toLowerCase(Locale.US));
+        }
+        rv.add("localhost");
+        rv.add("127.0.0.1");
+        rv.add("::1");
+        rv.add("0:0:0:0:0:0:0:1");
+        if (allowedHostsProp != null) {
+            StringTokenizer tok = new StringTokenizer(allowedHostsProp, " ,");
+            while (tok.hasMoreTokens()) {
+                rv.add(tok.nextToken().toLowerCase(Locale.US));
+            }
+        }
+        return rv;
     }
 
     /**
@@ -151,6 +189,21 @@ public class HostCheckHandler extends GzipHandler
      * @return true if OK
      */
     private boolean allowHost(String host) {
+        return hostAllowed(host, _listenHosts);
+    }
+
+    /**
+     * Should we allow a request with this Host header, given the hosts the console
+     * is listening on? An empty set is not "everything is allowed" - it is the
+     * caller having named nothing, and a rebinding check that turns itself off when
+     * nothing was configured is a check that fails open.
+     *
+     * @param host the HTTP Host header, null ok
+     * @param allowed the lower-cased host names set by {@link #setListenHosts}
+     * @return true if OK
+     * @since 0.9.72+
+     */
+    static boolean hostAllowed(String host, Set<String> allowed) {
         if (host == null)
             return true;
         // common cases
@@ -161,11 +214,8 @@ public class HostCheckHandler extends GzipHandler
             host.equals("localhost:7667") ||
             host.equals("[::1]:7667"))
             return true;
-        // all allowed?
-        if (_listenHosts.isEmpty())
-            return true;
-        host = getHost(host);
-        if (_listenHosts.contains(host))
+        host = getHost(host).toLowerCase(Locale.US);
+        if (allowed.contains(host))
             return true;
         // allow all IP addresses
         if (Addresses.isIPAddress(host))
