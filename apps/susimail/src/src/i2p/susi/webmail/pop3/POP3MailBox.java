@@ -22,7 +22,9 @@ import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
@@ -36,6 +38,31 @@ import net.i2p.util.Log;
  * Optimized for high-latency I2P connections with pipelining and idle timeout management.
  */
 public class POP3MailBox implements NewMailListener {
+
+    /**
+     * Most bytes one message body may be. The body is written to a file, so an
+     * unbounded reply costs disk rather than heap, and the cost of not bounding it
+     * is a full disk. This is well above the largest message the SMTP client will
+     * accept, so a real message is never refused for being too big.
+     */
+    static final int MAX_BODY_BYTES = 16 * 1024 * 1024;
+    /**
+     * Most lines one UIDL or LIST reply may have. Each line becomes a String held
+     * in memory for the life of the session, and a mailbox with more messages than
+     * this cannot be shown in the webmail anyway.
+     */
+    static final int MAX_LIST_LINES = 50000;
+    /** Most characters all the lines of one UIDL or LIST reply may hold together. */
+    static final int MAX_LIST_CHARS = 8 * 1024 * 1024;
+    /**
+     * Longest UIDL the server may give a message. RFC 1939 allows 70 printable
+     * characters, and the value is used in the cache filename and in the URL that
+     * addresses the message, so a longer one is not merely untidy.
+     */
+    static final int MAX_UIDL_LENGTH = 70;
+    /** How long a multi-line reply may take to finish, in milliseconds. */
+    private static final long LIST_TIMEOUT = 120 * 1000L;
+
     /** The mail server host. */
     private final String host;
     /** The login user name. */
@@ -458,6 +485,12 @@ public class POP3MailBox implements NewMailListener {
     }
 
     /**
+     * Record the message ids the server listed, dropping the lines that cannot be
+     * used. A number the server hands to two ids is kept for the first only: the
+     * number is what RETR, TOP and DELE address, so the second id is a second
+     * folder entry for one message on the server, and deleting either takes the
+     * other with it.
+     *
      * Caller must sync.
      *
      * @param lines the UIDL response, one "message number uidl" pair per line, null when the
@@ -467,13 +500,15 @@ public class POP3MailBox implements NewMailListener {
         uidlToID.clear();
         if (lines != null) {
             int bad = 0;
+            Set<Integer> numbers = new HashSet<>(Math.max(16, lines.size()));
             for (String line : lines) {
                 int j = line.indexOf(' ');
                 if (j != -1) {
                     try {
                         int n = Integer.parseInt(line.substring(0, j));
                         String uidl = line.substring(j + 1).trim();
-                        uidlToID.put(uidl, Integer.valueOf(n));
+                        if (!validUIDL(uidl) || !numbers.add(Integer.valueOf(n))) {bad++;}
+                        else {uidlToID.put(uidl, Integer.valueOf(n));}
                     } catch (NumberFormatException nfe) {
                         bad++;
                     } catch (IndexOutOfBoundsException ioobe) {
@@ -482,7 +517,7 @@ public class POP3MailBox implements NewMailListener {
                 }
             }
             if (bad > 0 && _log.shouldWarn()) {
-                _log.warn("UIDL list lines skipped -> Could not be parsed\n* Skipped: " + bad +
+                _log.warn("UIDL list lines skipped -> Not a usable number and id\n* Skipped: " + bad +
                            " * Total lines: " + lines.size());
             }
             lastChecked.set(System.currentTimeMillis());
@@ -490,6 +525,29 @@ public class POP3MailBox implements NewMailListener {
     }
 
     /**
+     * Whether the server's id for a message is one this client can use. RFC 1939
+     * allows printable characters only, and no more than 70 of them; the id is
+     * written into the cache filename and into the URL that addresses the message,
+     * so a control character or a multi-kilobyte blob is not merely untidy.
+     *
+     * @param uidl the id as the server sent it, already trimmed
+     * @return true if the id can be used
+     * @since 0.9.72+
+     */
+    static boolean validUIDL(String uidl) {
+        if (uidl == null || uidl.isEmpty() || uidl.length() > MAX_UIDL_LENGTH) {return false;}
+        for (int i = 0; i < uidl.length(); i++) {
+            char c = uidl.charAt(i);
+            // no space, no control character, no delete, no non-ASCII
+            if (c <= ' ' || c >= 0x7f) {return false;}
+        }
+        return true;
+    }
+
+    /**
+     * Record the size the server gave each message, dropping the lines that cannot
+     * be used: a message number is 1-based and an octet count is never negative, so
+     * either one wrong is a server describing a message that is not there.
      * Caller must sync.
      *
      * @param lines the LIST response, one "message number octets" pair per line, null when the
@@ -508,14 +566,16 @@ public class POP3MailBox implements NewMailListener {
                     try {
                         int key = Integer.parseInt(line.substring(0, j));
                         int value = Integer.parseInt(line.substring(j + 1).trim());
-                        sizes.put(Integer.valueOf(key), Integer.valueOf(value));
+                        if (key > 0 && value >= 0) {
+                            sizes.put(Integer.valueOf(key), Integer.valueOf(value));
+                        } else {bad++;}
                     } catch (NumberFormatException nfe) {
                         bad++;
                     }
                 }
             }
             if (bad > 0 && _log.shouldWarn()) {
-                _log.warn("Message size lines skipped -> Could not be parsed\n* Skipped: " + bad +
+                _log.warn("Message size lines skipped -> Not a usable number and size\n* Skipped: " + bad +
                            " * Total lines: " + lines.size());
             }
         } else {
@@ -1117,11 +1177,18 @@ public class POP3MailBox implements NewMailListener {
     }
 
     /**
-     * No total timeout (result could be large)
+     * Read one message body into a buffer, until the server's terminating dot.
+     * No total timeout (the result could be large), but the byte count is bounded,
+     * and a body that never reached its terminator is reported as a failure rather
+     * than committed: a connection that drops mid-body is indistinguishable from a
+     * complete body by any other means, and a message the caller then treats as
+     * fetched is deleted from the server with only half of it on disk.
      * Caller must sync.
      *
      * @param buffer non-null
-     * @throws IOException if a line cannot be read from the server or the buffer write fails
+     * @throws IOException if a line cannot be read from the server, the body is
+     *                     past {@code MAX_BODY_BYTES}, or the transfer ended
+     *                     without its terminating dot
      */
     private void getResultNa(Buffer buffer) throws IOException {
         InputStream input = socket.getInputStream();
@@ -1130,55 +1197,90 @@ public class POP3MailBox implements NewMailListener {
         try {
             out = buffer.getOutputStream();
             StringBuilder buf = new StringBuilder(512);
+            long total = 0;
+            boolean terminated = false;
             while (DataHelper.readLine(input, buf)) {
                 updateActivity();
                 int len = buf.length();
-                if (len == 0) {break;} // huh? no \r?
-                if (len == 2 && buf.charAt(0) == '.' && buf.charAt(1) == '\r') {break;}
+                // RFC 1939 ends the body with a line holding a single dot. A dot with
+                // no carriage return before the line feed is the same terminator sent
+                // by a server that ends its lines with a bare line feed.
+                if ((len == 2 && buf.charAt(0) == '.' && buf.charAt(1) == '\r') ||
+                    (len == 1 && buf.charAt(0) == '.')) {
+                    terminated = true;
+                    break;
+                }
                 String line;
                 // RFC 1939 sec. 3 de-byte-stuffing
-                if (buf.charAt(0) == '.') {line = buf.substring(1);}
+                if (len > 0 && buf.charAt(0) == '.') {line = buf.substring(1);}
                 else {line = buf.toString();}
                 out.write(DataHelper.getASCII(line));
-                if (buf.charAt(len - 1) != '\r') {out.write('\n');}
+                // readLine() took the line feed and left the carriage return, so a
+                // line that still has one needs a single line feed written back
+                if (len > 0 && buf.charAt(len - 1) != '\r') {out.write('\n');}
                 out.write('\n');
+                total += line.length() + 2;
+                if (total > MAX_BODY_BYTES) {
+                    throw new IOException("Message body too large to store" +
+                                          "\n* Read: " + total + " bytes * Limit: " +
+                                          MAX_BODY_BYTES + " bytes");
+                }
                 buf.setLength(0);
+            }
+            if (!terminated) {
+                throw new IOException("Message body ended before its terminating dot" +
+                                      "\n* Read: " + total + " bytes");
             }
             success = true;
         } finally {
-            if (out != null) try { out.close(); } catch (IOException ioe) { /* ignored */ }
+            // The buffer decides whether the file it was written to is kept, so it
+            // has to be told the transfer failed before its stream is closed.
             buffer.writeComplete(success);
+            if (out != null) try { out.close(); } catch (IOException ioe) { /* ignored */ }
         }
     }
 
     /**
      * Like getResultNa but returns a list of strings, one per line.
      * Strings will have trailing \r but not \n.
-     * Total timeout 2 minutes.
+     * Total timeout 2 minutes, and the listing is bounded in lines and characters,
+     * because every line is kept in memory and the server writes as many as it
+     * likes.
      * Caller must sync.
      *
      * @return the lines non-null
-     * @throws IOException if the server goes 2 minutes without
-     *                     sending the terminating dot
+     * @throws IOException if the server goes 2 minutes without sending the
+     *                     terminating dot, or the listing is past
+     *                     {@code MAX_LIST_LINES} or {@code MAX_LIST_CHARS}
      * @since 0.9.13
      */
     private List<String> getResultNl() throws IOException {
         List<String> rv = new ArrayList<>(16);
-        long timeOut = (long) 120*1000;
         InputStream input = socket.getInputStream();
         long startTime = System.currentTimeMillis();
         StringBuilder buf = new StringBuilder(512);
+        int chars = 0;
         while (DataHelper.readLine(input, buf)) {
             updateActivity();
+            // Tested before the line is kept: a fast server can fill the list long
+            // before a deadline checked at the bottom of the loop is ever reached.
+            if (System.currentTimeMillis() - startTime > LIST_TIMEOUT) {
+                throw new IOException(_t("No response from server"));
+            }
             int len = buf.length();
             if (len == 0) {break;} // huh? no \r?
-            if (len == 2 && buf.charAt(0) == '.' && buf.charAt(1) == '\r') {break;}
-            if (System.currentTimeMillis() - startTime > timeOut) {throw new IOException(_t("No response from server"));}
+            if ((len == 2 && buf.charAt(0) == '.' && buf.charAt(1) == '\r') ||
+                (len == 1 && buf.charAt(0) == '.')) {break;}
             String line;
             // RFC 1939 sec. 3 de-byte-stuffing
             if (buf.charAt(0) == '.') {line = buf.substring(1);}
             else {line = buf.toString();}
             rv.add(line);
+            chars += line.length();
+            if (rv.size() > MAX_LIST_LINES || chars > MAX_LIST_CHARS) {
+                throw new IOException("Server's message listing too large to hold" +
+                                      "\n* Lines: " + rv.size() + " * Characters: " + chars);
+            }
             buf.setLength(0);
         }
         return rv;
