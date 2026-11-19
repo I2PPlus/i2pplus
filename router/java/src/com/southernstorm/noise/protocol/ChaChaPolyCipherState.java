@@ -77,6 +77,11 @@ public class ChaChaPolyCipherState implements CipherState {
 
     @Override
     public void initializeKey(byte[] key, int offset) {
+        // Checked before ChaChaCore.initKey256() can read past the end of the
+        // array, which it would do unchecked.
+        if (key == null || offset < 0 || offset > key.length - 32) {
+            throw new IllegalArgumentException("Key range " + offset + "+32 is outside the buffer");
+        }
         if (DEBUG) {
             initialKey = new byte[32];
             System.arraycopy(key, 0, initialKey, 0, 32);
@@ -157,6 +162,41 @@ public class ChaChaPolyCipherState implements CipherState {
      * @param ciphertextOffset The offset to the first ciphertext byte.
      * @param length The number of bytes to encrypt.
      */
+    /**
+     * Whether an offset and a length address bytes that exist in the buffer.
+     * <p>
+     * Checked before {@link #setup} runs. setup() rewrites the nonce schedule and
+     * derives the one-time MAC key, so a range that only fails inside it has
+     * already changed what the next packet on this state is encrypted with, and
+     * the caller gets an unchecked index exception out of the bargain.
+     *
+     * @param buf the buffer the range is read from
+     * @param offset where the range starts in it
+     * @param length how many bytes the range covers
+     * @return true if every byte of the range exists
+     */
+    private static boolean addressable(byte[] buf, int offset, int length) {
+        return buf != null && offset >= 0 && length >= 0 && length <= buf.length &&
+               offset <= buf.length - length;
+    }
+
+    /**
+     * The associated-data range, checked the same way. A null ad means no
+     * associated data, which is only consistent with a length of zero.
+     *
+     * @param ad the buffer, null for no associated data
+     * @param offset where in it the associated data starts
+     * @param length how many bytes to absorb
+     * @throws ShortBufferException if the range is not addressable
+     */
+    private static void checkAd(byte[] ad, int offset, int length) throws ShortBufferException {
+        if (ad == null) {
+            if (length != 0) {throw new ShortBufferException();}
+        } else if (!addressable(ad, offset, length)) {
+            throw new ShortBufferException();
+        }
+    }
+
     private void encrypt(byte[] plaintext, int plaintextOffset, byte[] ciphertext, int ciphertextOffset, int length) {
         while (length > 0) {
             int tempLen = 64;
@@ -184,9 +224,16 @@ public class ChaChaPolyCipherState implements CipherState {
     @Override
     public int encryptWithAd(byte[] ad, int adOffset, int adLength, byte[] plaintext, int plaintextOffset,
             byte[] ciphertext, int ciphertextOffset, int length) throws ShortBufferException {
+        checkAd(ad, adOffset, adLength);
+        if (length < 0 || (length > 0 && !addressable(plaintext, plaintextOffset, length))) {
+            throw new ShortBufferException();
+        }
         int space;
-        if (ciphertextOffset > ciphertext.length) {space = 0;}
-        else {space = ciphertext.length - ciphertextOffset;}
+        if (ciphertextOffset < 0 || ciphertextOffset > ciphertext.length) {
+            // A negative offset used to make space larger than the buffer, so the
+            // size checks below passed and the copy ran off the front of it.
+            throw new ShortBufferException();
+        } else {space = ciphertext.length - ciphertextOffset;}
         if (!haskey) {
             // The key is not set yet - return the plaintext as-is.
             if (length > space) {throw new ShortBufferException();}
@@ -221,12 +268,15 @@ public class ChaChaPolyCipherState implements CipherState {
     public int decryptWithAd(byte[] ad, int adOffset, int adLength, byte[] ciphertext,
                              int ciphertextOffset, byte[] plaintext, int plaintextOffset,
                              int length) throws ShortBufferException, BadPaddingException {
+        checkAd(ad, adOffset, adLength);
+        if (length < 0 || ciphertextOffset < 0 || ciphertextOffset > ciphertext.length ||
+            plaintextOffset < 0 || plaintextOffset > plaintext.length) {
+            throw new ShortBufferException();
+        }
         int space;
-        if (ciphertextOffset > ciphertext.length) {space = 0;}
-        else {space = ciphertext.length - ciphertextOffset;}
+        space = ciphertext.length - ciphertextOffset;
         if (length > space) {throw new ShortBufferException();}
-        if (plaintextOffset > plaintext.length) {space = 0;}
-        else {space = plaintext.length - plaintextOffset;}
+        space = plaintext.length - plaintextOffset;
         if (!haskey) {
             // The key is not set yet - return the ciphertext as-is.
             if (length > space) {throw new ShortBufferException();}
