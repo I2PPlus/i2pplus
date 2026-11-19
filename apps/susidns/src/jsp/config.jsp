@@ -6,7 +6,7 @@
  * License: GPL2 or later
  */
 %>
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" import="net.i2p.addressbook.HostCheckerBridge" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" import="net.i2p.addressbook.HostCheckerBridge, net.i2p.servlet.util.OriginCheck" %>
 <%@include file="headers.jsi"%>
 <jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application"/>
 <jsp:useBean id="cfg" class="i2p.susi.dns.ConfigBean" scope="session"/>
@@ -15,40 +15,11 @@
 <jsp:setProperty name="cfg" property="*"/>
 <%
     cfg.storeMethod(request.getMethod());
-    // CSRF: Validate Origin header for POST requests
-    if ("POST".equals(request.getMethod())) {
-        String origin = request.getHeader("Origin");
-        String host = request.getHeader("Host");
-        boolean allowed = true;
-        if (origin != null && !origin.isEmpty() && !"null".equalsIgnoreCase(origin)) {
-            allowed = false;
-            try {
-                String originHost; int originPort;
-                if (origin.startsWith("http://")) {
-                    String rest = origin.substring(7);
-                    int colon = rest.indexOf(':');
-                    originHost = colon > 0 ? rest.substring(0, colon) : rest;
-                    originPort = colon > 0 ? Integer.parseInt(rest.substring(colon + 1)) : 80;
-                } else if (origin.startsWith("https://")) {
-                    String rest = origin.substring(8);
-                    int colon = rest.indexOf(':');
-                    originHost = colon > 0 ? rest.substring(0, colon) : rest;
-                    originPort = colon > 0 ? Integer.parseInt(rest.substring(colon + 1)) : 443;
-                } else {
-                    allowed = false; originHost = null; originPort = 0;
-                }
-                if (allowed && host != null) {
-                    int colon = host.indexOf(':');
-                    String reqHost = colon > 0 ? host.substring(0, colon) : host;
-                    int reqPort = colon > 0 ? Integer.parseInt(host.substring(colon + 1)) : (request.isSecure() ? 443 : 80);
-                    allowed = originHost != null && originHost.equals(reqHost) && originPort == reqPort;
-                }
-            } catch (Exception e) { allowed = false; }
-        }
-        if (!allowed) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Invalid Origin header for POST request");
-            return;
-        }
+    // CSRF: a POST that carries an Origin must come from this same origin
+    if ("POST".equals(request.getMethod()) && !OriginCheck.isAllowed(request)) {
+        OriginCheck.logDenial(request);
+        response.sendError(HttpServletResponse.SC_FORBIDDEN, "Invalid Origin header for POST request");
+        return;
     }
     // Run HostChecker button: trigger a cycle now, then reflect its running state
     boolean checkerRunning = HostCheckerBridge.isScanRunning();

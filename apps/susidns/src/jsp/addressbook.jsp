@@ -6,7 +6,7 @@
  * License: GPL2 or later
  */
 %>
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" import="net.i2p.servlet.RequestWrapper" import="i2p.susi.dns.BaseBean" import="java.util.regex.Pattern" import="java.util.regex.Matcher" buffer="128kb"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" import="net.i2p.servlet.RequestWrapper" import="i2p.susi.dns.BaseBean" import="net.i2p.servlet.util.OriginCheck" import="java.util.regex.Pattern" import="java.util.regex.Matcher" buffer="128kb"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@include file="headers.jsi"%>
 <jsp:useBean id="base" class="i2p.susi.dns.BaseBean" scope="session"/>
@@ -16,44 +16,11 @@
 <jsp:setProperty name="book" property="*"/>
 <%
     book.storeMethod(request.getMethod());
-    // CSRF: Validate Origin header for POST requests
-    if ("POST".equals(request.getMethod())) {
-        String origin = request.getHeader("Origin");
-        String host = request.getHeader("Host");
-        boolean allowed = true;
-        if (origin != null && !origin.isEmpty() && !"null".equalsIgnoreCase(origin)) {
-            allowed = false;
-            try {
-                String originHost; int originPort;
-                if (origin.startsWith("http://")) {
-                    String rest = origin.substring(7);
-                    int colon = rest.indexOf(':');
-                    originHost = colon > 0 ? rest.substring(0, colon) : rest;
-                    originPort = colon > 0 ? Integer.parseInt(rest.substring(colon + 1)) : 80;
-                } else if (origin.startsWith("https://")) {
-                    String rest = origin.substring(8);
-                    int colon = rest.indexOf(':');
-                    originHost = colon > 0 ? rest.substring(0, colon) : rest;
-                    originPort = colon > 0 ? Integer.parseInt(rest.substring(colon + 1)) : 443;
-                } else {
-                    allowed = false;
-                    originHost = null; originPort = 0;
-                }
-                if (allowed && host != null) {
-                    String reqHost; int reqPort;
-                    int colon = host.indexOf(':');
-                    reqHost = colon > 0 ? host.substring(0, colon) : host;
-                    reqPort = colon > 0 ? Integer.parseInt(host.substring(colon + 1)) : (request.isSecure() ? 443 : 80);
-                    allowed = originHost != null && originHost.equals(reqHost) && originPort == reqPort;
-                }
-            } catch (Exception e) {
-                allowed = false;
-            }
-        }
-        if (!allowed) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Invalid Origin header for POST request");
-            return;
-        }
+    // CSRF: a POST that carries an Origin must come from this same origin
+    if ("POST".equals(request.getMethod()) && !OriginCheck.isAllowed(request)) {
+        OriginCheck.logDenial(request);
+        response.sendError(HttpServletResponse.SC_FORBIDDEN, "Invalid Origin header for POST request");
+        return;
     }
 %>
 <jsp:setProperty name="book" property="resetDeletionMarks" value="1"/>
