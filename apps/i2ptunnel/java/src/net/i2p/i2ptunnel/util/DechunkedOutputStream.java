@@ -29,6 +29,23 @@ public class DechunkedOutputStream extends LimitOutputStream {
     /** Most bytes in one trailer header line. */
     private static final int MAX_TRAILER_LINE_LENGTH = 8192;
 
+    /**
+     * Most bytes in one chunk header: the size digits, the extension after the ';'
+     * and the line ending. A sender that writes "5;" and then an endless run of
+     * bytes never leaves the extension state, so the body never completes, the done
+     * callback never fires, and the request above it waits for a body that cannot
+     * end.
+     */
+    private static final int MAX_CHUNK_HEADER_LENGTH = 64 * 1024;
+
+    /**
+     * Most bytes in the whole trailer section, all its header lines together. The
+     * per-line and per-line-count ceilings above leave no room for a run of bare CR
+     * bytes, which the parser accepts where a line ending belongs and counts
+     * against neither.
+     */
+    private static final int MAX_TRAILER_LENGTH = 64 * 1024;
+
     /** True to strip the chunk headers and footers. */
     private final boolean _strip;
     /** The current state of the chunk parser. */
@@ -37,6 +54,10 @@ public class DechunkedOutputStream extends LimitOutputStream {
     private int _remaining;
     /** Whether the chunk size being read has any hex digit yet. */
     private boolean _sawSizeDigit;
+    /** Bytes of the chunk header being read, size digits and extension together. */
+    private int _chunkHeaderBytes;
+    /** Bytes of the trailer section being read, all its lines together. */
+    private int _trailerBytes;
     /** Trailer header lines read since the last chunk. */
     private int _trailerLines;
 
@@ -85,6 +106,7 @@ public class DechunkedOutputStream extends LimitOutputStream {
                 // collect chunk len and possible ';' then wait for extension if any and CRLF
                 case LEN: {
                     int c = buf[off + i] & 0xff;
+                    countChunkHeaderByte();
                     if (c >= '0' && c <= '9') {
                         _sawSizeDigit = true;
                         _remaining = nextChunkSize(_remaining, c - '0');
@@ -114,12 +136,14 @@ public class DechunkedOutputStream extends LimitOutputStream {
                 // collect any chunk extension and CR then wait for LF
                 case CR: {
                     int c = buf[off + i] & 0xff;
+                    countChunkHeaderByte();
                     if (c == '\r') {
                         _state = State.LF;
                     } else if (c == '\n') {
                         startChunk();
                     } else {
-                        // chunk extension between the ';' and the CR
+                        // chunk extension between the ';' and the CR, bounded by
+                        // the chunk-header ceiling
                     }
                     if (!_strip)
                         out.write(buf, off + i, 1);
@@ -129,6 +153,7 @@ public class DechunkedOutputStream extends LimitOutputStream {
                 // collect LF then wait for DATA
                 case LF: {
                     int c = buf[off + i] & 0xff;
+                    countChunkHeaderByte();
                     if (c == '\n') {
                         startChunk();
                     } else {
@@ -181,8 +206,11 @@ public class DechunkedOutputStream extends LimitOutputStream {
                 // we reuse _remaining here to count the size of the header
                 case TRAILER: {
                     int c = buf[off + i] & 0xff;
+                    countTrailerByte();
                     if (c == '\r') {
-                        // stay here
+                        // Stay here. A bare CR is still a byte of the trailer, and
+                        // the section ceiling above is what stops a sender that
+                        // sends CR over and over.
                     } else if (c == '\n') {
                         if (_remaining <= 0) {
                             // that's it!
@@ -222,8 +250,35 @@ public class DechunkedOutputStream extends LimitOutputStream {
         } else {
             _state = State.TRAILER;
             _trailerLines = 0;
+            _trailerBytes = 0;
         }
         _sawSizeDigit = false;
+        _chunkHeaderBytes = 0;
+    }
+
+    /**
+     * Counts one byte of the chunk header being read - size digits, the extension
+     * after the ';' and the line ending - and rejects a header over the ceiling.
+     * This is what ends a chunk extension that never does.
+     *
+     * @throws IOException if the header is over {@link #MAX_CHUNK_HEADER_LENGTH}
+     */
+    private void countChunkHeaderByte() throws IOException {
+        if (++_chunkHeaderBytes > MAX_CHUNK_HEADER_LENGTH)
+            throw new IOException("Chunk header too long");
+    }
+
+    /**
+     * Counts one byte of the trailer section being read, every header line in it
+     * together, and rejects a section over the ceiling. The per-line and per-line
+     * ceilings do not bound a run of bare CR bytes, which the parser accepts where a
+     * line ending belongs.
+     *
+     * @throws IOException if the section is over {@link #MAX_TRAILER_LENGTH}
+     */
+    private void countTrailerByte() throws IOException {
+        if (++_trailerBytes > MAX_TRAILER_LENGTH)
+            throw new IOException("Trailer section too long");
     }
 
     /**

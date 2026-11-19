@@ -21,17 +21,42 @@ import org.junit.Test;
  */
 public class DechunkedOutputStreamTest {
 
+    /**
+     * One instance per test method, as JUnit builds a fresh test object for each one.
+     *
+     * @since 0.9.72+
+     */
+    public DechunkedOutputStreamTest() {}
+
     /** A complete chunked body with two chunks and one trailer header. */
     private static final String VALID = "5\r\nhello\r\n6;ext=1\r\n world\r\n0\r\nx-trailer: 1\r\n\r\n";
 
     /** The body {@link #VALID} decodes to. */
     private static final String VALID_BODY = "hello world";
 
+    /** The parser's ceiling on one chunk header, size digits and extension together. */
+    private static final int MAX_CHUNK_HEADER = 64 * 1024;
+
+    /** The parser's ceiling on the whole trailer section. */
+    private static final int MAX_TRAILER = 64 * 1024;
+
+    /**
+     * With strip set, the framing is dropped and only the chunk data reaches the
+     * target.
+     *
+     * @throws IOException not expected; the framing is valid
+     */
     @Test
     public void testStripsTheFraming() throws IOException {
         assertEquals(VALID_BODY, dechunk(VALID, true, 4096));
     }
 
+    /**
+     * With strip unset, the framing reaches the target unchanged, for a client that
+     * wants the chunked body as the server sent it.
+     *
+     * @throws IOException not expected; the framing is valid
+     */
     @Test
     public void testPassesTheFramingThrough() throws IOException {
         assertEquals(VALID, dechunk(VALID, false, 4096));
@@ -76,6 +101,12 @@ public class DechunkedOutputStreamTest {
         }
     }
 
+    /**
+     * The done callback fires exactly once, when the terminating blank line of the
+     * last chunk is read.
+     *
+     * @throws IOException not expected; the framing is valid
+     */
     @Test
     public void testCallbackFiresOnceAtTheTerminator() throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -119,6 +150,12 @@ public class DechunkedOutputStreamTest {
         assertEquals("hi", dechunk("2\nhi\n0\n\n", true, 4096));
     }
 
+    /**
+     * A chunk extension after the ';' is part of the framing and is dropped with it,
+     * whatever it holds.
+     *
+     * @throws IOException not expected; the framing is valid
+     */
     @Test
     public void testChunkExtensionSkipped() throws IOException {
         assertEquals("hi", dechunk("2;a=b c\r\nhi\r\n0\r\n\r\n", true, 4096));
@@ -169,6 +206,12 @@ public class DechunkedOutputStreamTest {
         assertEquals("", dechunk(ok.toString(), true, 4096));
     }
 
+    /**
+     * A body written after the chunking is done means the parser is out of step with
+     * the sender, so the extra bytes are reported rather than swallowed.
+     *
+     * @throws IOException not expected; the framing up to the terminator is valid
+     */
     @Test(expected = EOFException.class)
     public void testBytesAfterDoneRejected() throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -177,9 +220,62 @@ public class DechunkedOutputStreamTest {
         os.write("more".getBytes(StandardCharsets.US_ASCII));
     }
 
+    /**
+     * A zero-length chunk followed by the blank line is a complete body with nothing
+     * in it.
+     *
+     * @throws IOException not expected; the framing is valid
+     */
     @Test
     public void testEmptyBodyIsJustTheTerminator() throws IOException {
         assertEquals("", dechunk("0\r\n\r\n", true, 4096));
+    }
+
+    /**
+     * A chunk extension runs as long as the sender likes, but not forever: the
+     * parser sits in the extension state until a line ending arrives, and a body
+     * that never gets one never finishes.
+     *
+     * @throws IOException not expected; the long extensions are caught by the
+     *                     helper
+     */
+    @Test
+    public void testChunkExtensionBounded() throws IOException {
+        // the ceiling counts the size digit, the ';', the extension and the CRLF,
+        // so an extension of ceiling minus four bytes is the longest that fits
+        assertRejected("3;" + repeat('x', MAX_CHUNK_HEADER - 3) + "\r\nabc\r\n0\r\n\r\n");
+        // one byte less than the ceiling, and the extension really does end the
+        // header rather than the body
+        assertEquals("abc", dechunk("3;" + repeat('x', MAX_CHUNK_HEADER - 4) + "\r\nabc\r\n0\r\n\r\n",
+                                    true, 4096));
+    }
+
+    /**
+     * A run of bare CR bytes in the trailer section is accepted framing - a line
+     * ending may be preceded by more than one CR - so it has to be bounded as a
+     * section, not as a line.
+     *
+     * @throws IOException not expected; the long runs are caught by the helper
+     */
+    @Test
+    public void testTrailerCRRunBounded() throws IOException {
+        assertRejected("0\r\n" + repeat('\r', MAX_TRAILER - 1) + "\r\n");
+        // a run just inside the ceiling still ends the body
+        assertEquals("", dechunk("0\r\n" + repeat('\r', MAX_TRAILER - 2) + "\r\n", true, 4096));
+    }
+
+    /**
+     * A run of one character, for building the oversized metadata lines.
+     *
+     * @param c the character to repeat
+     * @param count how many times
+     * @return the string to feed the parser
+     */
+    private static String repeat(char c, int count) {
+        StringBuilder sb = new StringBuilder(count);
+        for (int i = 0; i < count; i++)
+            sb.append(c);
+        return sb.toString();
     }
 
     /**
