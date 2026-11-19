@@ -167,10 +167,33 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private final Map<String, Tracker> _trackerMap;
     /** Torrent create filters by name. */
     private final Map<String, TorrentCreateFilter> _torrentCreateFilterMap;
-    /** Manager of the torrent update threads. */
-    private UpdateManager _umgr;
-    /** Thread handling torrent updates. */
-    private UpdateHandler _uhandler;
+    /**
+     * The update manager we registered our torrents with, null until we do.
+     * Volatile: written by the registration timer, read by stop() from the
+     * webapp's shutdown thread.
+     */
+    private volatile UpdateManager _umgr;
+    /**
+     * The handler we registered with {@link #_umgr}, null until we do. Volatile,
+     * for the same reason.
+     */
+    private volatile UpdateHandler _uhandler;
+    /**
+     * The pending update-manager registration event, kept so stop() can cancel
+     * it and so a re-armed event can be told from a stale one. Volatile: armed
+     * by start(), cancelled by stop() from another thread.
+     */
+    private volatile Register _registerEvent;
+    /**
+     * Whether the "no update manager" warning has been logged since the last
+     * successful registration, kept so the retry does not repeat it every minute.
+     */
+    private boolean _registerWarned;
+    /**
+     * The state reported to the ClientAppManager, tracked so the console and the
+     * app manager can tell a running I2PSnark from a stopped one.
+     */
+    private volatile ClientAppState _state = ClientAppState.INITIALIZED;
     /** Timer stopping idle torrents. */
     private SimpleTimer2.TimedEvent _idleChecker;
     /**
@@ -687,6 +710,22 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private static final long DEST_CYCLE_RESTART_DELAY = 70 * 1000;
 
     /**
+     * Delay before the first attempt to register the torrents with the update
+     * manager, so the router is up and the routerconsole has registered it.
+     */
+    private static final long REGISTER_INITIAL_DELAY = 4 * (long) 60 * 1000;
+
+    /**
+     * How often that registration is re-checked afterwards. The update manager is
+     * registered by the router's own app manager, and a routerconsole redeploy
+     * replaces that instance, so one attempt at start-up can find nothing at all,
+     * or hold on to a manager that is no longer the live one. A re-check is one
+     * map lookup and one comparison, and nothing is re-registered unless the
+     * manager actually changed.
+     */
+    private static final long REGISTER_INTERVAL = 60 * 1000L;
+
+    /**
      * Stagger batched starts with a random delay, so torrents that start together
      * cannot be correlated by trackers or DHT peers, and tunnel builds are spread
      * out. Disable to start all torrents in a batch immediately.
@@ -965,9 +1004,15 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
     /**
      * Caller _must_ call loadConfig(file) before this if setting new values for i2cp host/port or
-     * i2psnark.dir.
+     * i2psnark.dir. Idempotent: a second call while running does nothing, so the
+     * app manager starting us and the webapp starting us cannot leave two
+     * directory monitors or two registrations behind.
      */
-    public void start() {
+    public synchronized void start() {
+        if (_running) {
+            return;
+        }
+        changeState(ClientAppState.STARTING);
         _running = true;
         _stopping = false;
         ClientAppManager cmgr = _context.clientAppManager();
@@ -980,10 +1025,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             }
         } else { // Register link with NavHelper
             if (cmgr != null) {
-                NavService nav = (NavService) cmgr.getRegisteredApp("NavHelper");
-                if (nav != null) {
+                ClientApp app = cmgr.getRegisteredApp("NavHelper");
+                if (app instanceof NavService) {
                     String name = DataHelper.stripHTML(_contextPath.substring(1));
-                    nav.registerApp(
+                    ((NavService) app).registerApp(
                             name, name, _contextPath, null, "/themes/console/images/i2psnark.png");
                 }
             }
@@ -992,9 +1037,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         _monitor.start();
         if (_context.isRouterContext()
                 && "i2psnark".equals(_contextName)) { // only if default instance
-            _context.simpleTimer2()
-                    .addEvent(new Register(), 4 * (long) 60 * 1000);
-        // Register self-schedules via setPool() in addEvent()
+            _registerEvent = new Register();
+            _registerEvent.schedule(REGISTER_INITIAL_DELAY);
         }
         _idleChecker = new IdleChecker(this, _peerCoordinatorSet);
         _idleChecker.schedule(3 * (long) 60 * 1000);
@@ -1007,6 +1051,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 Translate.setLanguage(lang, country);
             }
         }
+        changeState(ClientAppState.RUNNING);
     }
 
     /**
@@ -1033,29 +1078,76 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * Periodically re-registers the app with the update manager.
+     * The update manager the torrents can be registered with, if there is one.
+     * The registered app of that name is not necessarily an update manager, and
+     * the cast used to be unchecked, which threw on the timer thread.
+     *
+     * @param cmgr the app manager to ask, null in a router context until it is up
+     * @return the update manager, or null if none is registered or the app under
+     *         that name is something else
+     * @since 0.9.72+
+     */
+    static UpdateManager pickUpdateManager(ClientAppManager cmgr) {
+        if (cmgr == null) {
+            return null;
+        }
+        ClientApp app = cmgr.getRegisteredApp(UpdateManager.APP_NAME);
+        return app instanceof UpdateManager ? (UpdateManager) app : null;
+    }
+
+    /**
+     * Drop our registration from whichever update manager we hold, if any, and
+     * forget both it and our handler.
+     *
+     * @since 0.9.72+
+     */
+    private void unregisterFromUpdateManager() {
+        UpdateManager umgr = _umgr;
+        UpdateHandler handler = _uhandler;
+        if (umgr != null && handler != null) {
+            umgr.unregister(handler, UpdateType.ROUTER_SIGNED, UpdateMethod.TORRENT);
+            umgr.unregister(handler, UpdateType.ROUTER_SIGNED_SU3, UpdateMethod.TORRENT);
+        }
+        _umgr = null;
+        _uhandler = null;
+    }
+
+    /**
+     * Registers the torrents with the update manager, then re-checks every
+     * REGISTER_INTERVAL that it is still the live one. The update manager is
+     * registered by the router's own app manager and a routerconsole redeploy
+     * replaces that instance, so a single attempt at start-up can find nothing at
+     * all, or register with one that is later replaced.
      *
      * @since 0.9.4
      */
     private class Register extends SimpleTimer2.TimedEvent {
-        /** Periodically re-registers the torrents with the tracker. */
+        /** Re-arms itself, so it is not the one-shot it used to be. */
         private Register() {}
+
+        @Override
         public void timeReached() {
             if (!_running) {
                 return;
             }
-            ClientAppManager cmgr = _context.clientAppManager();
-            if (cmgr != null) {
-                _umgr = (UpdateManager) cmgr.getRegisteredApp(UpdateManager.APP_NAME);
+            UpdateManager current = pickUpdateManager(_context.clientAppManager());
+            if (current != _umgr) {
+                unregisterFromUpdateManager();
+                _umgr = current;
+                if (current != null) {
+                    _uhandler = new UpdateHandler(_context, current, SnarkManager.this);
+                    current.register(_uhandler, UpdateType.ROUTER_SIGNED, UpdateMethod.TORRENT, 10);
+                    current.register(_uhandler, UpdateType.ROUTER_SIGNED_SU3, UpdateMethod.TORRENT, 10);
+                    _registerWarned = false;
+                    _log.info("Registered I2PSnark with Update Manager for Router updates");
+                }
             }
-            if (_umgr != null) {
-                _uhandler = new UpdateHandler(_context, _umgr, SnarkManager.this);
-                _umgr.register(_uhandler, UpdateType.ROUTER_SIGNED, UpdateMethod.TORRENT, 10);
-                _umgr.register(_uhandler, UpdateType.ROUTER_SIGNED_SU3, UpdateMethod.TORRENT, 10);
-                _log.info("Registered I2PSnark with Update Manager for Router updates");
-            } else {
+            if (_umgr == null && !_registerWarned) {
+                // retried every minute, so say it once, until a manager shows up
+                _registerWarned = true;
                 _log.warn("No Update Manager found: cannot register I2PSnark for Router updates");
             }
+            schedule(REGISTER_INTERVAL);
         }
     }
 
@@ -1075,15 +1167,21 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * Called by the webapp at Jetty shutdown.
      * Stops all torrents. Does not close the tunnel, so the announces have a chance.
      * Fix this so an individual webapp stop will close the tunnel.
-     * Runs inline.
+     * Runs inline. Idempotent: the app manager shutting us down after the webapp
+     * already did, or a second call from either, does nothing.
      */
-    public void stop() {
-        if (_umgr != null && _uhandler != null) {
-            _umgr.unregister(_uhandler, UpdateType.ROUTER_SIGNED, UpdateMethod.TORRENT);
-            _umgr.unregister(_uhandler, UpdateType.ROUTER_SIGNED_SU3, UpdateMethod.TORRENT);
+    public synchronized void stop() {
+        if (!_running) {
+            return;
         }
+        changeState(ClientAppState.STOPPING);
         _running = false;
         _stopping = true;
+        if (_registerEvent != null) {
+            _registerEvent.cancel();
+            _registerEvent = null;
+        }
+        unregisterFromUpdateManager();
         if (_monitor != null) {
             _monitor.interrupt();
         }
@@ -1117,13 +1215,14 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             }
         } else {
             if (cmgr != null) {
-                NavService nav = (NavService) cmgr.getRegisteredApp("NavHelper");
-                if (nav != null) {
+                ClientApp app = cmgr.getRegisteredApp("NavHelper");
+                if (app instanceof NavService) {
                     String name = DataHelper.stripHTML(_contextPath.substring(1));
-                    nav.unregisterApp(name); // Unregister link with NavHelper
+                    ((NavService) app).unregisterApp(name); // Unregister link with NavHelper
                 }
             }
         }
+        changeState(ClientAppState.STOPPED);
     }
 
     /**
@@ -1137,30 +1236,68 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * ClientApp method. Does nothing. Doesn't matter, we are only registering.
+     * ClientApp method. Starts the manager, so the app manager can start I2PSnark
+     * the way it starts any other client app. Idempotent with the webapp having
+     * started us already.
      *
      * @since 0.9.30
      */
     @Override
-    public void startup() { /* no-op */ }
+    public void startup() {
+        start();
+    }
 
     /**
-     * ClientApp method. Does nothing. Doesn't matter, we are only registering.
+     * ClientApp method. Stops the manager. The arguments are those a client app
+     * started by the app manager is shut down with, and I2PSnark takes none.
      *
+     * @param args the arguments the app manager shuts a client app down with,
+     *             none of which I2PSnark takes
      * @since 0.9.30
      */
     @Override
-    public void shutdown(String[] args) { /* no-op */ }
+    public void shutdown(String[] args) {
+        stop();
+    }
 
     /**
-     * ClientApp method. Doesn't matter, we are only registering.
+     * ClientApp method. The state the manager is actually in, so the console and
+     * the app manager can tell a running I2PSnark from a stopped one.
      *
-     * @return ClientAppState.INITIALIZED, the manager never enters another state
+     * @return INITIALIZED before it has been started or stopped, then STARTING or
+     *         RUNNING, and STOPPING or STOPPED once stopped
      * @since 0.9.30
      */
     @Override
     public ClientAppState getState() {
-        return ClientAppState.INITIALIZED;
+        return _state;
+    }
+
+    /**
+     * Record a state change and tell the app manager about it.
+     *
+     * @param state the new state
+     * @since 0.9.72+
+     */
+    private void changeState(ClientAppState state) {
+        changeState(state, null, null);
+    }
+
+    /**
+     * Record a state change and tell the app manager about it, so the client apps
+     * page and any listener see what this app is doing.
+     *
+     * @param state the new state
+     * @param msg what to report beside it, null for nothing
+     * @param e a failure to report, null for none
+     * @since 0.9.72+
+     */
+    private synchronized void changeState(ClientAppState state, String msg, Exception e) {
+        _state = state;
+        ClientAppManager cmgr = _context.clientAppManager();
+        if (cmgr != null) {
+            cmgr.notify(this, state, msg, e);
+        }
     }
 
     /**
