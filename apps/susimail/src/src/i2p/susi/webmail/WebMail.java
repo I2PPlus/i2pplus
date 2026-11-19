@@ -857,7 +857,7 @@ public class WebMail extends HttpServlet {
             boolean showBody = false;
             boolean prepareAttachment = false;
             String reason = "";
-            String ident = quoteHTML((mailPart.description != null ? mailPart.description + " " : "") +
+            String ident = quoteDisplay((mailPart.description != null ? mailPart.description + " " : "") +
                                      (mailPart.filename != null ? mailPart.filename + " " : "") +
                                      (mailPart.name != null ? mailPart.name + " " : "") +
                                      (mailPart.type != null ? '(' + mailPart.type + ')' : _t("unknown")));
@@ -949,7 +949,7 @@ public class WebMail extends HttpServlet {
                             name = mailPart.name;
                             if (name == null) {name = mailPart.description;}
                         }
-                        name = quoteHTML(name);
+                        name = quoteDisplay(name);
                         buf.append("<img src=\"").append(myself).append('?').append(RAW_ATTACHMENT).append('=').append(mailPart.getID())
                            .append("&amp;").append(B64UIDL).append('=').append(Base64.encode(mailPart.uidl)).append("\" alt=\"").append(name).append("\">")
                            .append("<span id=imageInfo><b>").append(_t("File")).append(": ").append("</b><a target=_blank href=\"")
@@ -1012,6 +1012,24 @@ public class WebMail extends HttpServlet {
         if (line != null) {line = DataHelper.escapeHTML(line);}
         else {line = "";}
         return line;
+    }
+
+    /**
+     * Escape a label the correspondent wrote, after taking out the characters that
+     * let it hide or reverse text. The list rows, the attachment labels and the
+     * compose form's headers all show text from the mail, and a zero-width or
+     * directional character in one of them shows the operator something other than
+     * what was sent. The compose values matter twice over: on a reply they are
+     * seeded from the incoming headers, so a spoofed name is handed back as if it
+     * were the correspondent's own.
+     *
+     * @param line the mail-supplied text, may be null
+     * @return the text with the invisible and directional characters removed and
+     *         then escaped, never null
+     * @since 0.9.72+
+     */
+    static String quoteDisplay(String line) {
+        return quoteHTML(Mail.displayable(line));
     }
 
     /**
@@ -4091,17 +4109,17 @@ public class WebMail extends HttpServlet {
         buf.append("<div id=composemail>")
            .append("<table id=newmail width=100%>\n<tr><td colspan=2><hr></td></tr>\n")
            .append("<tr><td class=right>").append(_t("From")).append("</td><td><input type=text size=80 name=\"")
-           .append(NEW_FROM).append("\" value=\"").append(quoteHTML(from)).append("\" ").append((fixed ? "disabled" : ""))
+           .append(NEW_FROM).append("\" value=\"").append(quoteDisplay(from)).append("\" ").append((fixed ? "disabled" : ""))
            .append("\"></td></tr>\n")
            .append("<tr><td class=right>").append(_t("To")).append("</td><td><input type=text size=80 name=\"")
-           .append(NEW_TO).append("\" value=\"").append(quoteHTML(to)).append("\"></td></tr>\n")
+           .append(NEW_TO).append("\" value=\"").append(quoteDisplay(to)).append("\"></td></tr>\n")
            .append("<tr><td class=right>").append(_t("Cc")).append("</td><td><input type=text size=80 name=\"")
-           .append(NEW_CC).append("\" value=\"").append(quoteHTML(cc)).append("\"></td></tr>\n")
+           .append(NEW_CC).append("\" value=\"").append(quoteDisplay(cc)).append("\"></td></tr>\n")
            .append("<tr><td class=right>").append(_t("Bcc")).append("</td><td><input type=text size=80 name=\"")
-           .append(NEW_BCC).append("\" value=\"").append(quoteHTML(bcc)).append("\"></td></tr>\n")
+           .append(NEW_BCC).append("\" value=\"").append(quoteDisplay(bcc)).append("\"></td></tr>\n")
            .append("<tr><td class=right>").append(_t("Subject")).append("</td>")
            .append("<td><input type=text size=80 name=\"")
-           .append(NEW_SUBJECT).append("\" value=\"").append(quoteHTML(subject)).append("\"></td></tr>\n")
+           .append(NEW_SUBJECT).append("\" value=\"").append(quoteDisplay(subject)).append("\"></td></tr>\n")
            .append("<tr><td></td><td>")
            .append(composeTextarea(NEW_TEXT,
                                    Config.getProperty(CONFIG_COMPOSER_COLS, DEFAULT_COMPOSER_COLS),
@@ -4124,7 +4142,7 @@ public class WebMail extends HttpServlet {
                     wroteHeader = true;
                 } else {buf.append("<tr><td>&nbsp;</td>");}
                 buf.append("<td id=attachedfile class=left><label><input type=checkbox class=optbox name=\"check")
-                   .append(attachment.id).append("\" value=1>&nbsp;").append(quoteHTML(attachment.getFileName()));
+                   .append(attachment.id).append("\" value=1>&nbsp;").append(quoteDisplay(attachment.getFileName()));
                 buf.append(" <span class=attachSize>(").append(attachSize).append(")</span></label>");
                 String type = attachment.getContentType();
                 String iconDir = "/themes/susimail/images/";
@@ -4451,7 +4469,7 @@ public class WebMail extends HttpServlet {
                 }
                 boolean trim = to.length() > 45;
                 if (trim) {to = ServletUtil.truncate(to, 42);}
-                to = quoteHTML(to);
+                to = quoteDisplay(to);
                 sb.append("<td class=\"mailListSender ")
                   .append(jslink)
                   .append(" title=\"")
@@ -4822,7 +4840,7 @@ public class WebMail extends HttpServlet {
                 if (i < to.length - 1)
                     buf.append(", ");
             }
-            return quoteHTML(buf.toString());
+            return quoteDisplay(buf.toString());
         } else {
             return "";
         }

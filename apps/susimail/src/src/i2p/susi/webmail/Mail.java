@@ -346,6 +346,43 @@ class Mail {
     }
 
     /**
+     * Remove the characters that let a display name hide or reverse text: the
+     * zero-width spaces and joiners, the bidi embeddings, overrides and isolates,
+     * the word joiner and invisible operators, the byte-order mark, and combining
+     * diacritical marks. A name built as "paypal" plus the right-to-left override
+     * plus "leap.com" otherwise renders reversed, and a subject can carry characters
+     * that take up no width at all, so what the operator reads is not the string
+     * that was sent.
+     * <p>
+     * This is not an escaper - the caller still has to escape the result. It runs
+     * before escaping and before any truncation, so an invisible run cannot eat the
+     * budget of a name that is about to be shortened for a list row.
+     *
+     * @param s the mail-supplied text to make displayable, may be null
+     * @return s with the invisible and directional formatting characters removed,
+     *         or null if it was null
+     * @since 0.9.72+
+     */
+    static String displayable(String s) {
+        if (s == null) {return null;}
+        int length = s.length();
+        StringBuilder buf = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            char c = s.charAt(i);
+            if ((c >= 0x200b && c <= 0x200f) ||   // zero-width space, joiners, LRM, RLM
+                (c >= 0x202a && c <= 0x202e) ||   // bidi embeddings and overrides
+                (c >= 0x2060 && c <= 0x2064) ||   // word joiner, invisible operators
+                (c >= 0x2066 && c <= 0x2069) ||   // bidi isolates
+                (c >= 0x0300 && c <= 0x036f) ||   // combining diacritical marks
+                c == 0xfeff) {                    // byte-order mark
+                continue;
+            }
+            buf.append(c);
+        }
+        return buf.toString();
+    }
+
+    /**
      * Pull the first e-mail address out of a header line.
      *
      * @param address the header text to scan
@@ -522,7 +559,7 @@ class Mail {
 
                         String hlc = line.toLowerCase(Locale.US);
                         if (hlc.startsWith("from:")) {
-                            sender = line.substring(5).trim();
+                            sender = displayable(line.substring(5).trim());
                             shortSender = sender.replace("\"", "").trim();
                             int lt = shortSender.indexOf('<');
                             if (lt > 0) {shortSender = shortSender.substring(0, lt).trim();}
@@ -539,7 +576,7 @@ class Mail {
                             if (dateLong > 0) {setDate(dateLong);}
                         }
                         else if (hlc.startsWith("subject:")) {
-                            subject = line.substring(8).trim();
+                            subject = displayable(line.substring(8).trim());
                             shortSubject = subject;
                             boolean trim = subject.length() > 75;
                             if (trim) {shortSubject = ServletUtil.truncate(subject, 72).trim();}
