@@ -34,6 +34,36 @@ class MailPart {
     /** Sink discarding a part that has no destination. */
     private static final OutputStream DUMMY_OUTPUT = new DummyOutputStream();
     /**
+     * Deepest MIME nesting a message may ask for, counting the top-level part as
+     * zero. The structure is written by whoever sent the message, so a crafted one
+     * can ask for any depth, and each level is another constructor frame on the
+     * stack - a StackOverflowError from that is an Error none of the callers catch.
+     * Real messages nest a handful of levels.
+     */
+    static final int MAX_MIME_DEPTH = 32;
+    /**
+     * Most parts one message may have, at any depth. A multipart part builds a
+     * child for every boundary line it finds, so a message that repeats its own
+     * boundary keeps the parser building parts until the heap is gone.
+     */
+    static final int MAX_MIME_PARTS = 1024;
+
+    /**
+     * Whether a part at this depth, about to be the nth part of its message, may be
+     * parsed at all. Both numbers come from the message, so both are checks on
+     * remote data.
+     *
+     * @param depth how many multipart levels sit above the part, 0 for the message
+     *              itself
+     * @param parts how many parts the message has already built
+     * @return true if the part is within {@code MAX_MIME_DEPTH} and
+     *         {@code MAX_MIME_PARTS}
+     * @since 0.9.72+
+     */
+    static boolean withinLimits(int depth, int parts) {
+        return depth <= MAX_MIME_DEPTH && parts < MAX_MIME_PARTS;
+    }
+    /**
      * The raw header lines of this part, in the order they were received.
      */
     public final String[] headerLines;
@@ -116,19 +146,51 @@ class MailPart {
     private final int intID;
 
     /**
-     * Probably the same as InputStream but a different interface.
-     * were already parsed in Mail. Null otherwise.
+     * Parse one MIME part of a message, reading its headers and, for a multipart
+     * or message part, building its sub-parts as this constructor runs.
      *
      * @param uidl the IMAP UID of the owning message, kept in the public uidl field
      * @param id a counter from which this part takes its next sequence number
      * @param readBuffer has zero offset for top-level MailPart.
      * @param in used for reading (NOT readBuffer.getInputStream())
      * @param counter used for counting how much we have read.
-     * @param hdrlines non-null for top-level MailPart, where they
-     * @throws IOException if the header block cannot be read from in
+     * @param hdrlines non-null for top-level MailPart, where they were already
+     *                 parsed in Mail; null otherwise
+     * @throws IOException if the header block cannot be read from in, or the
+     *                     message nests past {@code MAX_MIME_DEPTH} or holds
+     *                     past {@code MAX_MIME_PARTS} parts
      */
     public MailPart(String uidl, AtomicInteger id, Buffer readBuffer, InputStream in,
                     ReadCounter counter, String[] hdrlines) throws IOException {
+        this(uidl, id, readBuffer, in, counter, hdrlines, 0);
+    }
+
+    /**
+     * Parse one MIME part at a given nesting depth, and stop rather than recurse
+     * further when the message asks for more than the limits allow. The structure
+     * is written by whoever sent the message, so both limits are checks on remote
+     * data, not on anything we control.
+     *
+     * @param uidl the IMAP UID of the owning message, kept in the public uidl field
+     * @param id a counter from which this part takes its next sequence number
+     * @param readBuffer has zero offset for top-level MailPart.
+     * @param in used for reading (NOT readBuffer.getInputStream())
+     * @param counter used for counting how much we have read.
+     * @param hdrlines non-null for top-level MailPart, where they were already
+     *                 parsed in Mail; null otherwise
+     * @param depth how many multipart levels sit above this part, 0 for the
+     *              message itself
+     * @throws IOException if the header block cannot be read from in, or this part
+     *                     sits below {@code MAX_MIME_DEPTH} levels, or the message
+     *                     has already built {@code MAX_MIME_PARTS} parts
+     * @since 0.9.72+
+     */
+    private MailPart(String uidl, AtomicInteger id, Buffer readBuffer, InputStream in,
+                     ReadCounter counter, String[] hdrlines, int depth) throws IOException {
+        if (!withinLimits(depth, id.get())) {
+            throw new IOException("Message MIME structure past the safety limit" +
+                                  " * Depth: " + depth + " * Parts: " + id.get());
+        }
         _log = I2PAppContext.getGlobalContext().logManager().getLog(MailPart.class);
         this.uidl = uidl;
         intID = id.getAndIncrement();
@@ -260,7 +322,7 @@ class MailPart {
                     match = DataHelper.getASCII("\r\n--" + boundary);
                     eofin = new EOFOnMatchInputStream(in, counter, match);
                 }
-                MailPart newPart = new MailPart(uidl, id, buffer, eofin, eofin, null);
+                MailPart newPart = new MailPart(uidl, id, buffer, eofin, eofin, null, depth + 1);
                 parts.add( newPart);
                 tmpEnd = (int) eofin.getRead();
                 if (!eofin.wasFound()) {
@@ -276,7 +338,7 @@ class MailPart {
             }
         }
         else if (message) {
-            MailPart newPart = new MailPart(uidl, id, buffer, in, counter, null);
+            MailPart newPart = new MailPart(uidl, id, buffer, in, counter, null, depth + 1);
             // TODO newPart doesn't save message headers we might like to display,
             // like From, To, and Subject
             parts.add( newPart);

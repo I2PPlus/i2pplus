@@ -166,7 +166,7 @@ class PersistentMailCache {
         int tcnt = Math.max(1, Math.min(sz / 4, Math.min(SystemVersion.getCores(), 16)));
         List<Thread> threads = new ArrayList<>(tcnt);
         for (int i = 0; i < tcnt; i++) {
-            Thread t = new I2PAppThread(new Loader(fq, rv, _isDrafts), "MailLd" + ThreadNames.idx(i));
+            Thread t = new I2PAppThread(new Loader(fq, rv, _isDrafts, _log), "MailLd" + ThreadNames.idx(i));
             t.start();
             threads.add(t);
         }
@@ -193,6 +193,8 @@ class PersistentMailCache {
         private final Queue<Mail> _out;
         /** True when reading from the cache. */
         private final boolean _isD;
+        /** Logger for this loader, handed down from the cache. */
+        private final Log _log;
 
         /**
          * Take the queues to drain and whether the files are drafts, so the
@@ -201,20 +203,35 @@ class PersistentMailCache {
          * @param in queue of files to load
          * @param out queue to put loaded mails into
          * @param isDrafts whether these are drafts
+         * @param log the cache's log, for reporting a file that cannot be loaded
          */
-        public Loader(Queue<File> in, Queue<Mail> out, boolean isDrafts) {
+        public Loader(Queue<File> in, Queue<Mail> out, boolean isDrafts, Log log) {
             _in = in; _out = out;
             _isD = isDrafts;
+            _log = log;
         }
 
         @Override
         /**
-         * Execute the task.
+         * Execute the task. One unreadable file must not end the pass: the loader
+         * thread dying mid-queue leaves every message behind it in that queue
+         * unloaded, with nothing to say why the folder is short.
          */
         public void run() {
             File f;
             while ((f = _in.poll()) != null) {
-                Mail mail = load(f, _isD);
+                Mail mail;
+                try {
+                    mail = load(f, _isD);
+                } catch (Throwable t) {
+                    // a StackOverflowError or an OutOfMemoryError is an Error, not an
+                    // Exception, and load() parses remote MIME structure
+                    if (_log.shouldWarn()) {
+                        _log.warn("Loading a cached message failed -> Skipping the file" +
+                                  "\n* File: " + f.getName(), t);
+                    }
+                    mail = null;
+                }
                 if (mail != null) {_out.offer(mail);}
             }
         }
@@ -264,7 +281,10 @@ class PersistentMailCache {
             Buffer rb = read(f);
             if (rb != null) {
                 mail.setBody(rb);
-                return true;
+                // not "true": a cached file this tree cannot parse leaves the mail
+                // with no body, and the caller has to know that to leave the server
+                // copy alone
+                return mail.hasBody();
             } else {
                 if (_log.shouldWarn()) {
                     _log.warn("Message file for " + LogHelper.shortId(mail.uidl) + " could not be read\n* File: " +

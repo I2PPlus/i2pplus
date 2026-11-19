@@ -371,6 +371,22 @@ class MailCache {
     }
 
     /**
+     * Whether the server's copy of this message may be queued for deletion: we hold
+     * a body we could parse, and the account is not set to leave mail where it is.
+     * Deleting a message whose body never parsed loses the mail - the bytes this
+     * tree wrote to its cache are ones its parser cannot read, and the server copy
+     * was the only other copy there was.
+     *
+     * @param mail the message the server would be asked to drop
+     * @return true if the server copy may go
+     * @since 0.9.72+
+     */
+    static boolean canDropFromServer(Mail mail) {
+        return mail.hasBody() &&
+               !Boolean.parseBoolean(Config.getProperty(WebMail.CONFIG_LEAVE_ON_SERVER));
+    }
+
+    /**
      * Fetch any needed data from pop3 server, unless mode is CACHE_ONLY or HEADER_CACHE_ONLY,
      * or this isn't the Inbox.
      * Blocking for a long time unless mode is CACHE_ONLY or HEADER_CACHE_ONLY.
@@ -456,9 +472,11 @@ class MailCache {
                 Buffer rb = mailbox.getBody(uidl, new FileBuffer(file));
                 if (rb != null) {
                     mail.setBody(rb);
-                    if (disk.saveMail(mail) &&
-                        !Boolean.parseBoolean(Config.getProperty(WebMail.CONFIG_LEAVE_ON_SERVER))) {
+                    if (disk.saveMail(mail) && canDropFromServer(mail)) {
                         mailbox.queueForDeletion(mail.uidl);
+                    } else if (!mail.hasBody() && _log.shouldWarn()) {
+                        _log.warn("Keeping the message on the server -> Its body could not be parsed" +
+                                  " * Message: " + LogHelper.shortId(mail.uidl));
                     }
                 }
             }
@@ -532,8 +550,7 @@ class MailCache {
                             _log.debug("Loaded the header for [" + LogHelper.head(uidl) + "] from the cache");
                         }
                         // note that disk loaded the full body if we asked for it
-                        if (mail.hasBody() &&
-                            !Boolean.parseBoolean(Config.getProperty(WebMail.CONFIG_LEAVE_ON_SERVER))) {
+                        if (canDropFromServer(mail)) {
                             // we already have it, send delete
                             mailbox.queueForDeletion(mail.uidl);
                         }
@@ -542,8 +559,7 @@ class MailCache {
                     POP3Request pr = new POP3Request(mail, true, new MemoryBuffer(1024));
                     fetches.add(pr);
                 } else {
-                    if (mail.hasBody() &&
-                        !Boolean.parseBoolean(Config.getProperty(WebMail.CONFIG_LEAVE_ON_SERVER))) {
+                    if (canDropFromServer(mail)) {
                         // we already have it, send delete
                         mailbox.queueForDeletion(mail.uidl);
                     }
@@ -556,8 +572,7 @@ class MailCache {
                         }
                         // disk may only have the header file; never delete the
                         // server copy unless we actually have the body
-                        if (mail.hasBody() &&
-                            !Boolean.parseBoolean(Config.getProperty(WebMail.CONFIG_LEAVE_ON_SERVER))) {
+                        if (canDropFromServer(mail)) {
                             // we already have it, send delete
                             mailbox.queueForDeletion(mail.uidl);
                         }
@@ -567,7 +582,7 @@ class MailCache {
                     POP3Request pr = new POP3Request(mail, false, new FileBuffer(file));
                     fetches.add(pr);
                 } else {
-                    if (!Boolean.parseBoolean(Config.getProperty(WebMail.CONFIG_LEAVE_ON_SERVER))) {
+                    if (canDropFromServer(mail)) {
                         // we already have it, send delete
                         mailbox.queueForDeletion(mail.uidl);
                     }
@@ -604,8 +619,7 @@ class MailCache {
                         additionalMsg = new StringBuilder(mail.sender.length() + mail.subject.length() + 3)
                             .append("\n\n").append(mail.sender).append('\n').append(mail.subject).toString();
                     rv = true;
-                    if (disk.saveMail(mail) && mail.hasBody() &&
-                        !Boolean.parseBoolean(Config.getProperty(WebMail.CONFIG_LEAVE_ON_SERVER))) {
+                    if (disk.saveMail(mail) && canDropFromServer(mail)) {
                         mailbox.queueForDeletion(mail.uidl);
                     }
                 }

@@ -193,17 +193,18 @@ class Mail {
     }
 
     /**
-     * Record the body bytes fetched from the server.
+     * Record the body bytes fetched from the server, and parse them into the
+     * message's MIME structure. The body is kept only if that parse succeeds: a
+     * message this tree cannot read is left as a message with no body, so it is not
+     * counted as fetched and understood, and nothing drops the server's copy of it.
      *
-     * @param rb buffer containing body data
-    */
+     * @param rb buffer containing body data, null for nothing to record
+     */
     public synchronized void setBody(Buffer rb) {
         if (rb == null) {return;}
-        if (body != rb) {deleteTempBodyFile(body);}
         // In the common case where we have the body, we only parse the headers once.
         // we always re-set the header, even if it was non-null before, as we have to
         // parse them to find the start of the body
-        body = rb;
         boolean success = false;
         CountingInputStream in = null;
         try {
@@ -211,10 +212,17 @@ class Mail {
             String[] headerLines = setHeader(rb, in, false);
             // TODO just fail?
             if (headerLines == null) {headerLines = new String[0];}
-            part = new MailPart(uidl, new AtomicInteger(), rb, in, in, headerLines);
+            MailPart parsed = new MailPart(uidl, new AtomicInteger(), rb, in, in, headerLines);
             rb.readComplete(true);
             // may only be available after reading and calling readComplete()
             size = rb.getLength();
+            // Only now is the body kept, and only now is the buffer it was read
+            // from replaced. hasBody() is what every caller checks before it drops
+            // the server's copy of a message, so a body this tree cannot parse must
+            // not look like one that was fetched and understood.
+            if (body != rb) {deleteTempBodyFile(body);}
+            body = rb;
+            part = parsed;
             success = true;
         } catch (IOException de) {_log.error("Decoding the message for [" + LogHelper.head(uidl) + "] failed", de);}
         catch (RuntimeException e) {_log.error("Parsing the message for [" + LogHelper.head(uidl) + "] failed", e);}
@@ -224,6 +232,11 @@ class Mail {
                 catch (IOException ioe) { /* ignored */ }
             }
             rb.readComplete(success);
+            if (!success && body != rb) {
+                // nothing points at these bytes now, and a temp file nobody reads is
+                // a temp file nobody deletes
+                deleteTempBodyFile(rb);
+            }
         }
     }
 
