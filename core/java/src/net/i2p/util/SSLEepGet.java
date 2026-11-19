@@ -567,23 +567,6 @@ public class SSLEepGet extends EepGet {
     }
 
     /**
-     * Checks one freshly-read chunk of the response against the size ceiling this
-     * fetch was created with. Enforced as the body arrives, so an oversized or
-     * gzip-bombed response is stopped before it is written out or fills the disk.
-     *
-     * @param maxSize the ceiling in bytes, -1 for unlimited
-     * @param transferred bytes already written before this chunk
-     * @param read bytes in this chunk
-     * @throws IOException if this chunk takes the total past the ceiling
-     * @since 0.9.72+
-     */
-    static void checkSizeLimit(long maxSize, long transferred, int read) throws IOException {
-        if (maxSize > -1 && transferred + read > maxSize)
-            throw new IOException("Bytes transferred " + (transferred + read) +
-                                  " violates maximum of " + maxSize + " bytes");
-    }
-
-    /**
      * Fetch the resource over SSL.
      */
     @Override

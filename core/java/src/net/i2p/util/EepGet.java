@@ -283,6 +283,15 @@ public class EepGet {
     private static final int MAX_REASON_LEN = 120;
 
     /**
+     * How many inflated bytes the decompressor moves at a time. The same size the
+     * plain copy helper uses, so bounding the stream costs no more memory than the
+     * copy it replaces.
+     *
+     * @since 0.9.72+
+     */
+    private static final int GUNZIP_BUFFER_SIZE = 8192;
+
+    /**
      * Most bytes a chunk-size line may be. RFC 9112 gives the size at most 19
      * hex digits plus a chunk extension, so anything past a few dozen bytes is a
      * misframed stream, and the server decides how long the line is: read one
@@ -1630,8 +1639,7 @@ public class EepGet {
                     timeout.resetTimer();
                 _out.write(buf, 0, read);
                 _bytesTransferred += read;
-                if ((_maxSize > -1) && (_alreadyTransferred + read > _maxSize))
-                    throw new IOException("Bytes transferred " + (_alreadyTransferred + read) + " violates maximum of " + _maxSize + " bytes");
+                checkSizeLimit(_maxSize, _alreadyTransferred, read);
                 remaining -= read;
                 if (remaining==0 && _encodingChunked) {
                     int char1 = _proxyIn.read();
@@ -3128,6 +3136,51 @@ public class EepGet {
     }
 
     /**
+     * Checks one freshly-read chunk of the response against the size ceiling this
+     * fetch was created with. Enforced as the body arrives, so an oversized or
+     * gzip-bombed response is stopped before it is written out or fills the disk.
+     * The count handed in is whatever this fetch is bounding, the bytes off the
+     * socket or the bytes a decompressor expanded, which is why the ceiling has to
+     * be checked on both.
+     *
+     * @param maxSize the ceiling in bytes, -1 for unlimited
+     * @param transferred bytes already written before this chunk
+     * @param read bytes in this chunk
+     * @throws IOException if this chunk takes the total past the ceiling
+     * @since 0.9.72+
+     */
+    protected static void checkSizeLimit(long maxSize, long transferred, int read) throws IOException {
+        if (maxSize > -1 && transferred + read > maxSize)
+            throw new IOException("Bytes transferred " + (transferred + read) +
+                                  " violates maximum of " + maxSize + " bytes");
+    }
+
+    /**
+     * Copy a stream as far as the response size ceiling allows. Used for the
+     * inflated side of a gzipped response, where the bytes that arrived say nothing
+     * about the bytes that come out, so the ceiling has to be counted here too.
+     *
+     * @param in the stream to read, already inflated
+     * @param out where the bytes are written
+     * @param maxSize the ceiling in bytes, -1 for unlimited
+     * @return how many bytes were written
+     * @throws IOException if a chunk takes the total past the ceiling, or either
+     *                     stream reports one
+     * @since 0.9.72+
+     */
+    static long copyBounded(InputStream in, OutputStream out, long maxSize) throws IOException {
+        byte[] buf = new byte[GUNZIP_BUFFER_SIZE];
+        long written = 0;
+        int read;
+        while ((read = in.read(buf)) != -1) {
+            checkSizeLimit(maxSize, written, read);
+            out.write(buf, 0, read);
+            written += read;
+        }
+        return written;
+    }
+
+    /**
      * The server response (200, etc).
      *
      * @return -1 if invalid, or if the proxy never responded,
@@ -3611,21 +3664,26 @@ public class EepGet {
         }
 
         /**
-         * Decompress the raw input stream to the output stream.
+         * Decompress the raw input stream to the output stream, stopping at the
+         * response size ceiling. That ceiling has to be applied here as well as to
+         * the bytes off the socket: a gzip member inside a small compressed body
+         * expands to whatever its author chose, so the transport count says nothing
+         * about how much lands in the file - a gigabyte of zeros fits in a few
+         * kilobytes of gzip.
          */
         @Override
         public void run() {
             ReusableGZIPInputStream in = ReusableGZIPInputStream.acquire();
-            long written = 0;
             try {
                 // blocking
                 in.initialize(_inRaw);
-                DataHelper.copy(in, _out);
+                copyBounded(in, _out, getMaxSize());
             } catch (IOException ioe) {
                 _decompressException = ioe;
                 if (_log.shouldWarn())
-                    _log.warn("[Eepget] Error decompressing: " + written + ", " + in.getTotalRead() + "/" + in.getTotalExpanded() +
-                               "\n* Request: " + redactedUrl(_url), ioe);
+                    _log.warn("[Eepget] Decompressing the response failed -> " + in.getTotalRead() +
+                              " compressed bytes, " + in.getTotalExpanded() + " bytes expanded" +
+                              "\n* Request: " + redactedUrl(_url), ioe);
             } catch (OutOfMemoryError oom) {
                 _decompressException = new IOException("OOM in HTTP Decompressor");
                 _log.error("[Eepget] OOM in HTTP Decompressor -> Request: " + redactedUrl(_url), oom);
