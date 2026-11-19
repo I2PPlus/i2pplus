@@ -9,7 +9,6 @@ package org.klomp.snark;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import net.i2p.data.ByteArray;
-import net.i2p.util.ByteCache;
 
 /**
  * Represents a BitTorrent protocol message for peer communication.
@@ -129,12 +128,6 @@ class Message {
     private boolean _discarded;
     /** Max time the sender thread will wait for an in-flight prefetch before falling back to a drop. */
     private static final int AWAIT_PREFETCH_TIMEOUT = 30 * 1000;
-
-    /** Size of a chunk part. */
-    private static final int BUFSIZE = PeerState.PARTSIZE;
-    /** Cache supplying the message buffers, shared with the piece writer and the assembler. */
-    private static final ByteCache _cache =
-            ByteCache.getInstance(PeerState.BLOCK_CACHE_OBJECTS, BUFSIZE);
 
     /**
      * The whole of a keep-alive on the wire: a length prefix of zero, which is the message,
@@ -594,11 +587,15 @@ class Message {
     /**
      * Return a cache-acquired buffer to the pool, mirroring {@link org.klomp.snark.Storage#getPiece}'s acquire
      * condition; non-cache-backed partial-read buffers are simply dropped for GC.
+     * The buffer's own length is what decides, so a chunk size changed between the
+     * acquire and this call drops the buffer rather than putting it in a pool of a
+     * different size.
      *
      * @param ba the buffer to release
      */
-    private static void releaseBuffer(ByteArray ba) {
-        if (ba.getData().length == BUFSIZE) _cache.release(ba, false);
+    static void releaseBuffer(ByteArray ba) {
+        int partsize = PeerState.PARTSIZE;
+        if (ba.getData().length == partsize) PeerState.blockCache(partsize).release(ba, false);
     }
 
     /**

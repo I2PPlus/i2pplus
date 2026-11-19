@@ -227,11 +227,31 @@ class PeerState implements DataLoader {
         PARTSIZE = Math.max(1024, Math.min(chunk, 1024 * 1024));
         MAX_PARTSIZE = Math.max(PARTSIZE, Math.min(maxPart, 1024 * 1024));
         if (PARTSIZE != oldPartsize) {
-            // Pool for the new chunk size too. ByteCache keys a cache by its entry size, so
-            // without this the block cache keeps holding buffers of the size we no longer
-            // ask for and every block allocation is a fresh array.
-            ByteCache.getInstance(BLOCK_CACHE_OBJECTS, PARTSIZE);
+            // Create the pool for the new chunk size up front. The block buffers are
+            // looked up by size at each acquire, so nothing is stranded at the old
+            // size; this only saves the first block after the change an allocation.
+            blockCache(PARTSIZE);
         }
+    }
+
+    /**
+     * The pooled buffers for one chunk of piece data, sized to the chunk size as it
+     * is now rather than as it was when the calling class loaded. The console can
+     * change the chunk size while a download runs, and ByteCache keys a cache by
+     * its entry size, so a cache bound at class load to the size we no longer ask
+     * for is never acquired from again: every block becomes a fresh array and every
+     * buffer is dropped for the GC instead of being reused.
+     * <p>
+     * Callers that acquire and later release the same buffer take the size once and
+     * pass it to both calls, so a change between the two cannot put a buffer into a
+     * pool of a different size.
+     *
+     * @param size the buffer size the pool should hold, the chunk size at the call
+     * @return the cache for buffers of that size, never null
+     * @since 0.9.72+
+     */
+    static ByteCache blockCache(int size) {
+        return ByteCache.getInstance(BLOCK_CACHE_OBJECTS, size);
     }
 
     /**

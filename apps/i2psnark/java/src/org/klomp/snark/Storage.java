@@ -216,12 +216,6 @@ public class Storage implements Closeable {
     /** A block device number, as the mount table and sysfs name one. */
     private static final Pattern _devNumber = Pattern.compile("\\d+:\\d+");
 
-    /** Buffer size for piece reads and writes. */
-    private static final int BUFSIZE = PeerState.PARTSIZE;
-    /** Pooled buffers for piece data, from the cache shared with the assembler and reader. */
-    private static final ByteCache _cache =
-            ByteCache.getInstance(PeerState.BLOCK_CACHE_OBJECTS, BUFSIZE);
-
     /** Cap on the buffer used for piece verification during a full recheck; checking never
      * allocates a whole piece-sized buffer (piece_size can be 64MB+ on large-piece torrents). */
     private static final int VERIFY_BUFSIZE = 256 * 1024;
@@ -2759,10 +2753,16 @@ public class Storage implements Closeable {
         // Catch a common place for OOMs esp. on 1MB pieces
         ByteArray rv;
         byte[] bs;
+        // The chunk size can change while we run, so the size and the pool for it are
+        // taken once here; the buffer's own length is what decides the release, so a
+        // change between the two drops the buffer instead of putting it in a pool of
+        // a different size.
+        int partsize = PeerState.PARTSIZE;
+        ByteCache cache = PeerState.blockCache(partsize);
         try {
             // Will be restored to cache in Message.sendMessage()
-            if (len == BUFSIZE) {
-                rv = _cache.acquire();
+            if (len == partsize) {
+                rv = cache.acquire();
             } else {
                 rv = new ByteArray(new byte[len]);
             }
@@ -2783,8 +2783,8 @@ public class Storage implements Closeable {
             // the buffer is only handed back to the cache by
             // Message.sendMessage() on success; a failed read must release
             // it here or every error permanently drains the static cache
-            if (len == BUFSIZE) {
-                _cache.release(rv);
+            if (bs.length == partsize) {
+                cache.release(rv);
             }
             throw ioe;
         }
@@ -3097,16 +3097,18 @@ public class Storage implements Closeable {
     }
 
     /**
-     * Take this thread's staging-copy buffer, allocating it on first use.
+     * Take this thread's staging-copy buffer, allocating it on first use. It is
+     * scratch for a chunked file copy, so its size only sets how much is copied per
+     * pass - a chunk size changed later leaves it a different size, not a problem.
      *
-     * @return a buffer of {@link #BUFSIZE} bytes, reused for every copy this
+     * @return a buffer of the chunk size as it is now, reused for every copy this
      *         thread runs
      * @since 0.9.72+
      */
     private static byte[] copyBuffer() {
         byte[] buf = _copyBuf.get();
         if (buf == null) {
-            buf = new byte[BUFSIZE];
+            buf = new byte[PeerState.PARTSIZE];
             _copyBuf.set(buf);
         }
         return buf;

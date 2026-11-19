@@ -11,7 +11,6 @@ import java.util.Objects;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.SHA1;
 import net.i2p.data.ByteArray;
-import net.i2p.util.ByteCache;
 import net.i2p.util.Log;
 import net.i2p.util.SecureFile;
 
@@ -76,17 +75,16 @@ class PartialPiece implements Comparable<PartialPiece> {
     /** Offset of the next expected chunk start. */
     private int off; // offset of next expected chunk start
 
-    /** Size of a chunk part. */
-    private static final int BUFSIZE = PeerState.PARTSIZE; // size of chunk parts
-    /** Cache supplying the chunk buffers, shared with the piece writer and the reader. */
-    private static final ByteCache _cache =
-            ByteCache.getInstance(PeerState.BLOCK_CACHE_OBJECTS, BUFSIZE);
-
     /**
      * BEP 47: sub-block granularity for requests that straddle padding files. A request is a run
      * of consecutive real sub-blocks capped at PARTSIZE, so at most SUB_PARTSIZE bytes of padding
      * are ever requested per boundary. A power of two, so it is the same class of block size as
      * the short tail block every client accepts.
+     *
+     * <p>Deliberately read once, unlike the chunk size the block buffers are pooled for: the
+     * bitfields below are sized and indexed by this, so a chunk size changed on the console
+     * mid-download leaves a running piece's sub-blocks where they are, rather than putting the
+     * offsets out of step with the bitfields.
      *
      * <p>Next logical step: request the exact real sub-range of a straddling sub-block instead of
      * the whole sub-block, eliminating the remaining pad waste entirely. Risk: arbitrary (non
@@ -426,8 +424,10 @@ class PartialPiece implements Comparable<PartialPiece> {
             sha1.update(bs);
         } else {
             int read = 0;
-            int buflen = Math.min(pclen, BUFSIZE);
-            ByteArray ba = (buflen == BUFSIZE) ? _cache.acquire() : null;
+            // the pool is found by the chunk size in use now, held here so the release matches
+            int bufsize = PeerState.PARTSIZE;
+            int buflen = Math.min(pclen, bufsize);
+            ByteArray ba = (buflen == bufsize) ? PeerState.blockCache(bufsize).acquire() : null;
             try {
                 byte[] buf = (ba != null) ? ba.getData() : new byte[buflen];
                 synchronized (this) {
@@ -442,7 +442,7 @@ class PartialPiece implements Comparable<PartialPiece> {
                 }
                 if (read < pclen) throw new IOException("Incomplete piece data");
             } finally {
-                if (ba != null) _cache.release(ba, false);
+                if (ba != null) PeerState.blockCache(bufsize).release(ba, false);
             }
         }
         return sha1.digest();
@@ -479,10 +479,14 @@ class PartialPiece implements Comparable<PartialPiece> {
         } else {
             // Use temporary file
             ByteArray ba = null;
+            // The pool is found by the chunk size in use now, held here so the release
+            // matches. A chunk that is not that size gets its own array, since a buffer
+            // of another size cannot go back to this pool.
+            int bufsize = PeerState.PARTSIZE;
             try {
                 byte[] tmp;
-                if (len == BUFSIZE) {
-                    ba = _cache.acquire();
+                if (len == bufsize) {
+                    ba = PeerState.blockCache(bufsize).acquire();
                     tmp = ba.getData();
                 } else {
                     tmp = new byte[len];
@@ -502,7 +506,7 @@ class PartialPiece implements Comparable<PartialPiece> {
                 }
             } finally {
                 if (ba != null) {
-                    _cache.release(ba, false);
+                    PeerState.blockCache(bufsize).release(ba, false);
                 }
             }
         }
@@ -564,8 +568,10 @@ class PartialPiece implements Comparable<PartialPiece> {
             out.write(bs, offset, len);
         } else {
             int read = 0;
-            int buflen = Math.min(len, BUFSIZE);
-            ByteArray ba = (buflen == BUFSIZE) ? _cache.acquire() : null;
+            // the pool is found by the chunk size in use now, held here so the release matches
+            int bufsize = PeerState.PARTSIZE;
+            int buflen = Math.min(len, bufsize);
+            ByteArray ba = (buflen == bufsize) ? PeerState.blockCache(bufsize).acquire() : null;
             try {
                 byte[] buf = (ba != null) ? ba.getData() : new byte[buflen];
                 synchronized (this) {
@@ -579,7 +585,7 @@ class PartialPiece implements Comparable<PartialPiece> {
                     }
                 }
             } finally {
-                if (ba != null) _cache.release(ba, false);
+                if (ba != null) PeerState.blockCache(bufsize).release(ba, false);
             }
         }
     }
