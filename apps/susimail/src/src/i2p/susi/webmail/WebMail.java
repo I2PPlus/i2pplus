@@ -2215,7 +2215,7 @@ public class WebMail extends HttpServlet {
                 Folder<String> folder = getCurrentFolder(sessionObject, request);
                 if (folder != null && ps != null) {
                     try {
-                        int pageSize = Math.max(5, Integer.parseInt(request.getParameter(PAGESIZE)));
+                        int pageSize = Integer.parseInt(request.getParameter(PAGESIZE));
                         int oldPageSize = folder.getPageSize();
                         if (pageSize != oldPageSize) {folder.setPageSize(pageSize);}
                     } catch(NumberFormatException nfe) { /* ignored */ }
@@ -2228,17 +2228,19 @@ public class WebMail extends HttpServlet {
         } else if (buttonPressed(request, SETPAGESIZE)) {
             Folder<String> folder = getCurrentFolder(sessionObject, request);
             try {
-                int pageSize = Math.max(5, Integer.parseInt(request.getParameter(PAGESIZE)));
+                int pageSize = Integer.parseInt(request.getParameter(PAGESIZE));
                 if (folder != null) {
                     int oldPageSize = folder.getPageSize();
                     if (pageSize != oldPageSize) {folder.setPageSize(pageSize);}
                     state = State.LIST;
                 } else {state = State.AUTH;}
                 Properties props = Config.getProperties();
-                props.setProperty(Folder.PAGESIZE, String.valueOf(pageSize));
+                // Store what is in force, not what was typed, so the number in the
+                // config file is one the folder will actually use
+                props.setProperty(Folder.PAGESIZE, String.valueOf(Folder.clampPageSize(pageSize)));
                 Config.saveConfiguration(props);
             } catch (IOException ioe) {sessionObject.error = ioe.toString();}
-            catch(NumberFormatException nfe) {sessionObject.error += _t("Invalid pagesize number, resetting to default value.") + '\n';}
+            catch(NumberFormatException nfe) {sessionObject.error += _t("Invalid pagesize number, the page size was not changed.") + '\n';}
         } else if (buttonPressed(request, CANCEL)) {
             Folder<String> folder = getCurrentFolder(sessionObject, request);
             state = (folder != null) ? State.LIST : State.AUTH;
@@ -4844,7 +4846,7 @@ public class WebMail extends HttpServlet {
         if (folder != null)
             sz = folder.getPageSize();
         else
-            sz = Config.getProperty(Folder.PAGESIZE, Folder.DEFAULT_PAGESIZE);
+            sz = Folder.clampPageSize(Config.getProperty(Folder.PAGESIZE, Folder.DEFAULT_PAGESIZE));
         out.print("<div class=topbuttons id=pagesize><b>");
         out.print(_t("Folder Page Size") + ":</b>&nbsp;<input type=text name=\"" + PAGESIZE +
                     "\" size=4 value=\"" +  sz + "\">&nbsp;" + button(SETPAGESIZE, _t("Set")) + "</div>\n");

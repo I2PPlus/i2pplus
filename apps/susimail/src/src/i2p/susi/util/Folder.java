@@ -30,6 +30,18 @@ public class Folder<O extends Object> {
 	public static final String PAGESIZE = "pager.pagesize";
 	/** Default page size for folder display. */
 	public static final int DEFAULT_PAGESIZE = 30;
+	/**
+	 * Smallest page size the folder uses. Below this the paging controls cost more
+	 * clicks than the messages they separate.
+	 */
+	public static final int MIN_PAGESIZE = 5;
+	/**
+	 * Largest page size the folder uses. The list page renders a row per entry while
+	 * the session is locked, so an unbounded page size makes one request pay for the
+	 * whole folder, and a value written into the config file by an older release
+	 * stays in force across restarts.
+	 */
+	public static final int MAX_PAGESIZE = 200;
 
 	/**
 	 * Enumeration defining sort direction for folder elements.
@@ -108,23 +120,43 @@ public class Folder<O extends Object> {
 
 	/**
 	 * Returns page size. If no page size has been set, returns the
-	 * {@link #PAGESIZE} property value, or {@link #DEFAULT_PAGESIZE}.
+	 * {@link #PAGESIZE} property value, or {@link #DEFAULT_PAGESIZE}. The result is
+	 * always in [{@link #MIN_PAGESIZE}, {@link #MAX_PAGESIZE}], a value read from the
+	 * config file included, since an older release wrote whatever the console was
+	 * handed.
 	 *
 	 * @return the page size
 	 */
 	public synchronized int getPageSize() {
-		return pageSize > 0 ? pageSize : Config.getProperty( PAGESIZE, DEFAULT_PAGESIZE );
+		int size = pageSize > 0 ? pageSize : Config.getProperty( PAGESIZE, DEFAULT_PAGESIZE );
+		return clampPageSize(size);
 	}
 
 	/**
-	 * Set page size and recalculate page counts.
+	 * Set page size and recalculate page counts. A size outside
+	 * [{@link #MIN_PAGESIZE}, {@link #MAX_PAGESIZE}] is pulled into that range rather
+	 * than refused, so a POST from the console and a hand-edited config file are
+	 * treated the same way.
 	 *
-	 * @param pageSize the new page size
+	 * @param pageSize the new page size, ignored unless positive
 	 */
 	public synchronized void setPageSize(int pageSize) {
 		if ( pageSize > 0 )
-			this.pageSize = pageSize;
+			this.pageSize = clampPageSize(pageSize);
 		update();
+	}
+
+	/**
+	 * Put a page size inside the range the folder will render, so the number that
+	 * feeds the list loop has both ends pinned wherever it comes from.
+	 *
+	 * @param pageSize the size asked for
+	 * @return that size, raised to {@link #MIN_PAGESIZE} or lowered to
+	 *         {@link #MAX_PAGESIZE} if it is outside the range
+	 * @since 0.9.72+
+	 */
+	public static int clampPageSize(int pageSize) {
+		return Math.min(MAX_PAGESIZE, Math.max(MIN_PAGESIZE, pageSize));
 	}
 
 	/**
