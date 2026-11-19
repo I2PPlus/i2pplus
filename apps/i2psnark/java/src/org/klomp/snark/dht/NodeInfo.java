@@ -245,9 +245,11 @@ class NodeInfo extends SimpleDataStructure {
      */
     public void setDestination(Destination dest) throws IllegalArgumentException {
         if (this.dest != null) return;
-        if (!dest.calculateHash().equals(this.hash))
+        Hash calculated = dest.calculateHash();
+        if (!calculated.equals(this.hash))
             throw new IllegalArgumentException(
-                    "Hash mismatch, was: " + this.hash + " new: " + dest.calculateHash());
+                    "Node " + nID + " is " + hash.toBase64() + ", the destination is "
+                    + calculated.toBase64());
         this.dest = dest;
     }
 

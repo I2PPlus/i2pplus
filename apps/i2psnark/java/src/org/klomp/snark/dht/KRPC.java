@@ -1543,8 +1543,9 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     boolean lookupDest(NodeInfo nInfo) {
         Hash h = nInfo.getHash();
         Destination cached = _destCache != null ? _destCache.cachedDest(h) : null;
-        if (cached != null) {
-            nInfo.setDestination(cached);
+        // A cached destination that does not hash to the node is no answer at all, so
+        // the naming lookup below gets the chance to supply the right one.
+        if (cached != null && attachDestination(nInfo, cached)) {
             return true;
         }
         long quiet = _destCache != null ? _destCache.destLookupQuiet(h) : 0;
@@ -1569,8 +1570,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                 // the next dial of this peer share one backoff rather than two
                 _destCache.noteDest(h, dest);
             }
-            if (dest != null) {
-                nInfo.setDestination(dest);
+            if (dest != null && attachDestination(nInfo, dest)) {
                 if (_log.shouldInfo()) {
                     _log.info("Resolved the destination for " + nInfo);
                 }
@@ -1590,6 +1590,47 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         // the caller logs the query it is dropping because of it, so nothing here
         // needs to say the lookup found nothing
         return false;
+    }
+
+    /**
+     * Attach a resolved destination to a node, and say what was wrong when the
+     * destination is not the one the node's hash names.
+     *
+     * <p>Both ways of getting here can produce a mismatch that is not our bug: a
+     * peer's node list may pair a node id with a destination belonging to another
+     * hash, and the shared destination cache may still hold an entry that outlived
+     * its key. The setter used to throw straight through the caller, and the caller
+     * is the peer-fetch thread partway through a walk, so one bad node cost the
+     * torrent every peer the rest of that walk would have found, with the reason on
+     * stderr and nothing in the router log. One bad node is worth a log line and a
+     * skip, not a lost fetch.
+     *
+     * @param nInfo the node to attach the destination to
+     * @param dest the destination resolved for that node's hash
+     * @return true if the node now carries the destination, false if it was refused
+     * @since 0.9.72+
+     */
+    boolean attachDestination(NodeInfo nInfo, Destination dest) {
+        try {
+            nInfo.setDestination(dest);
+            return true;
+        } catch (IllegalArgumentException iae) {
+            if (_log.shouldWarn()) {
+                Hash want = nInfo.getHash();
+                Hash got = dest.calculateHash();
+                // Two hashes that print the same and still fail to compare are a
+                // different fault from a peer pairing the wrong destination with the
+                // node, and the reader needs to know which one they are looking at.
+                boolean sameText = want.toBase64().equals(got.toBase64());
+                _log.warn("Rejected a DHT node's destination -> " +
+                          (sameText ? "It prints the same hash but does not compare equal"
+                                    : "It hashes to a different node") +
+                          "\n* Node: " + nInfo +
+                          " * Expected: [" + want.toShortBase32() + ']' +
+                          " * Received: [" + got.toShortBase32() + ']');
+            }
+            return false;
+        }
     }
 
     /**
@@ -1911,7 +1952,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             }
         } else {
             if (oldInfo.getDestination() == null && nInfo.getDestination() != null)
-                oldInfo.setDestination(nInfo.getDestination());
+                attachDestination(oldInfo, nInfo.getDestination());
         }
         nID = oldInfo.getNID();
         nID.setLastSeen();
@@ -2567,7 +2608,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             NodeInfo newInfo = new NodeInfo(new NID(nid), nInfo.getHash(), nInfo.getPort());
             Destination dest = nInfo.getDestination();
             if (dest != null) {
-                newInfo.setDestination(dest);
+                attachDestination(newInfo, dest);
             }
             heardFrom(newInfo);
         }
