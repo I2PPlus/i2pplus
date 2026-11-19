@@ -99,8 +99,19 @@ class AccessFilter implements StatefulConnectionFilter {
      */
     private final Map<Hash, DestTracker> unknownDests = new HashMap<>();
 
-    /** The timer writing the filter to disk. */
-    private volatile Syncer syncer;
+    /**
+     * The timer writing the filter to disk, null while the filter is stopped.
+     * Package-visible so a test can see that a restart leaves one of each.
+     */
+    volatile Syncer syncer;
+    /**
+     * The timer purging the expired entries, held so {@link #stop()} can cancel it
+     * rather than leave it to stop itself on its next tick, and null while the
+     * filter is stopped.
+     *
+     * @since 0.9.72+
+     */
+    volatile Purger purger;
 
     /**
      * Create a new access filter.
@@ -126,7 +137,7 @@ class AccessFilter implements StatefulConnectionFilter {
     @Override
     public void start() {
         if (timersRunning.compareAndSet(false, true)) {
-            new Purger();
+            purger = new Purger();
             syncer = new Syncer();
         }
     }
@@ -134,15 +145,27 @@ class AccessFilter implements StatefulConnectionFilter {
     /**
      * Stops the filter's background tasks.
      * <p>
-     * Halts the purger and syncer timers. Existing connection data is
-     * retained until the next purge cycle.
+     * Cancels the purger and syncer timers, so a filter started again has one of
+     * each. A purge already in flight when the filter stopped still clears the
+     * tracked connections; otherwise they are kept and age out by the purge
+     * interval once the filter runs again.
      *
      * @since 0.9.40
      */
     @Override
     public void stop() {
         timersRunning.set(false);
+        // Cancel by identity: null the field first, so the syncer's disk task, if
+        // one is queued, sees no current syncer and does not reschedule one this
+        // filter no longer owns.
+        Syncer s = syncer;
         syncer = null;
+        if (s != null)
+            s.cancel();
+        Purger p = purger;
+        purger = null;
+        if (p != null)
+            p.cancel();
     }
 
     /**
@@ -216,6 +239,35 @@ class AccessFilter implements StatefulConnectionFilter {
             }
         }
 
+    }
+
+    /**
+     * One disk cycle: write what has been recorded, then re-read the access lists.
+     * <p>
+     * The two halves are kept apart on purpose. A recorder that cannot be read or
+     * written — a read-only directory, a full disk, a file another process holds —
+     * says nothing about the deny and throttle lists, which are the ones the
+     * operator edits; with both calls in one try, one persistently bad recorder
+     * meant those lists were never re-read again for the life of the tunnel.
+     *
+     * @since 0.9.72+
+     */
+    void syncCycle() {
+        Log log = context.logManager().getLog(AccessFilter.class);
+        try {
+            record();
+        } catch (IOException bad) {
+            log.throttled(Log.CRIT, "access-filter-record",
+                          "Recording the tunnel filter's access list failed -> The deny and throttle lists are still re-read" +
+                          "\n* Error: " + bad);
+        }
+        try {
+            reload();
+        } catch (IOException bad) {
+            log.throttled(Log.CRIT, "access-filter-reload",
+                          "Reloading the tunnel filter's access lists failed -> The lists in force stay in force" +
+                          "\n* Error: " + bad);
+        }
     }
 
     /**
@@ -375,7 +427,7 @@ class AccessFilter implements StatefulConnectionFilter {
     }
 
     /** Timer purging the expired entries. */
-    private class Purger extends SimpleTimer2.TimedEvent {
+    class Purger extends SimpleTimer2.TimedEvent {
         /** Builds the purge timer. */
         Purger() {
             super(context.simpleTimer2(), PURGE_INTERVAL);
@@ -384,6 +436,10 @@ class AccessFilter implements StatefulConnectionFilter {
         /**
          * Called by the timer when the purge interval has elapsed.
          * Removes old connection records and clears all data if stopped.
+         * <p>
+         * Only reschedules the purger this filter still owns: if stop() and start()
+         * replaced it while this tick was queued, rescheduling the new one from here
+         * leaves two purge timers running for the life of the tunnel.
          *
          * @since 0.9.40
          */
@@ -398,13 +454,16 @@ class AccessFilter implements StatefulConnectionFilter {
                 }
                 return;
             }
+            final Purger self = this;
             purge();
-            schedule(PURGE_INTERVAL);
+            Purger current = AccessFilter.this.purger;
+            if (current == self)
+                current.schedule(PURGE_INTERVAL);
         }
     }
 
     /** Timer writing the filter to disk. */
-    private class Syncer extends SimpleTimer2.TimedEvent {
+    class Syncer extends SimpleTimer2.TimedEvent {
         /** Builds the sync timer. */
         Syncer() {
             super(context.simpleTimer2(), SYNC_INTERVAL);
@@ -428,11 +487,7 @@ class AccessFilter implements StatefulConnectionFilter {
                 @Override
                 public void run() {
                     try {
-                        record();
-                        reload();
-                    } catch (IOException bad) {
-                        Log log = context.logManager().getLog(AccessFilter.class);
-                        log.log(Log.CRIT, "Syncing access list for Tunnel Filter failed", bad);
+                        syncCycle();
                     } finally {
                         // always reschedule, even on I/O error, so reloads don't stop permanently
                         Syncer current = AccessFilter.this.syncer;
