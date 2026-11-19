@@ -18,7 +18,8 @@ import net.i2p.util.Log;
  * The file is the policy, so a read that fails must not take the policy away with
  * it: the parsed list is staged in a local map and only published once the whole
  * file has been read, and a failed reload leaves the previous list in force and
- * retries on the next sync.
+ * retries on the next sync. While the file is gone altogether the same holds -
+ * its last entries stay in force until it comes back.
  *
  * @since 0.9.40
  */
@@ -63,10 +64,13 @@ class FileFilterDefinitionElement extends FilterDefinitionElement {
      * successful read.
      * <p>
      * A reload that fails while a previous list is in force is logged once, keeps
-     * that list, and does not throw - the next sync retries the read. Only a
-     * failure to read the file the first time is reported to the caller, so a
-     * tunnel configured with an unreadable list fails at startup instead of
-     * running unfiltered.
+     * that list, and does not throw - the next sync retries the read. A file that
+     * was read once and has disappeared is treated the same way: the entries it
+     * last held stay in force and the absence is logged once. A file that has
+     * never existed contributes nothing and is not an error, because a recorder's
+     * list is only written once something breaches. Only a failure to read the
+     * file the first time is reported to the caller, so a tunnel configured with
+     * an unreadable list fails at startup instead of running unfiltered.
      *
      * @param map the working set the filter is rebuilt from
      * @param recorderConnections the largest connection count any recorder of the
@@ -76,7 +80,21 @@ class FileFilterDefinitionElement extends FilterDefinitionElement {
      */
     @Override
     public void update(Map<Hash, DestTracker> map, int recorderConnections) throws IOException {
-        if (!(file.exists() && file.isFile())) {return;}
+        if (!(file.exists() && file.isFile())) {
+            // A list that was read once and has gone away - a volume that is not
+            // mounted yet, a mv-away by a job that regenerates it - is still the
+            // policy until it comes back. Returning here instead would leave the
+            // reload to drop every entry this file owns, which fails open: the
+            // deny entry is let through, the throttle entry is unthrottled.
+            if (!loaded)
+                return;
+            publishSnapshot(map);
+            if (!failureLogged) {
+                failureLogged = true;
+                _log.error("The access list is missing -> Keeping the entries it last held * File: " + file);
+            }
+            return;
+        }
         long modified = file.lastModified();
         long length = file.length();
         // Same (lastModified, length) signature the breach-recorder files use: an

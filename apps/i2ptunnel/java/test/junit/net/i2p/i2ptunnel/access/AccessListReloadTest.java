@@ -28,6 +28,18 @@ public class AccessListReloadTest {
     /** A second valid entry, differing from the first in its leading character. */
     private static final String B32_TWO = "hbbkv6ordyceofn542c2aa2o24s77mbis3pzio77yegf4glqsmwq.b32.i2p";
 
+    /**
+     * A fixture group for reading an access list; it holds no state.
+     *
+     * @since 0.9.72+
+     */
+    public AccessListReloadTest() {}
+
+    /**
+     * The entries in the file are the entries the filter enforces.
+     *
+     * @throws Exception if the temporary list file cannot be created or written
+     */
     @Test
     public void testReadsTheEntriesInTheFile() throws Exception {
         File file = list(B32_ONE);
@@ -104,6 +116,60 @@ public class AccessListReloadTest {
             file.setReadable(true);
             file.delete();
         }
+    }
+
+    /**
+     * The defect: a list that was read once and then disappeared - a volume not
+     * mounted yet, a mv-away by a job that regenerates it - contributed nothing to
+     * the reload, which then dropped every entry it owned, so the deny entry was
+     * let through and the throttle entry unthrottled for as long as the file was
+     * away.
+     *
+     * @throws Exception if the temporary list file cannot be created or written
+     */
+    @Test
+    public void testADisappearedFileKeepsItsEntries() throws Exception {
+        File file = list(B32_ONE, B32_TWO);
+        try {
+            FileFilterDefinitionElement element = new FileFilterDefinitionElement(file, Threshold.DENY);
+            Map<Hash, DestTracker> first = new HashMap<>();
+            element.update(first, 0);
+            assertEquals(2, first.size());
+
+            file.delete();
+            Map<Hash, DestTracker> away = new HashMap<>();
+            element.update(away, 0);
+            assertTrue("a missing deny file stopped denying", away.containsKey(hash(B32_ONE)));
+            assertTrue("a missing deny file stopped denying", away.containsKey(hash(B32_TWO)));
+
+            // The file coming back is picked up as well - keeping the policy while
+            // it is away is not the same as freezing it.
+            write(file, B32_ONE);
+            Map<Hash, DestTracker> back = new HashMap<>();
+            element.update(back, 0);
+            assertTrue(back.containsKey(hash(B32_ONE)));
+            assertFalse("an entry outlived the shorter list that replaced it",
+                        back.containsKey(hash(B32_TWO)));
+        } finally {
+            file.delete();
+        }
+    }
+
+    /**
+     * A list that has never existed is not a policy that went missing: a
+     * recorder's file is only written once something breaches, so an empty result
+     * is the right answer and nothing is thrown.
+     *
+     * @throws Exception if the temporary path cannot be resolved
+     */
+    @Test
+    public void testAFileThatNeverExistedYieldsNothing() throws Exception {
+        File file = new File(System.getProperty("java.io.tmpdir"),
+                             "access-list-absent-" + System.nanoTime() + ".txt");
+        FileFilterDefinitionElement element = new FileFilterDefinitionElement(file, Threshold.DENY);
+        Map<Hash, DestTracker> map = new HashMap<>();
+        element.update(map, 0);
+        assertTrue(map.isEmpty());
     }
 
     /**
