@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import net.i2p.data.DataHelper;
 import net.i2p.util.SecureFile;
 import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.SystemVersion;
@@ -50,6 +49,84 @@ class ConfigParser {
     }
 
     /**
+     * Split one line into its key and its value, at the first unescaped '='.
+     * Both halves come back trimmed, and the key has its escapes undone, so a
+     * key that contains a '=' survives the round trip. That is not hypothetical:
+     * the subscription metadata files are keyed by URL, and a cgi URL carries
+     * one - http://example.com/hosts.txt?rev=3 - and was cut in half, the first
+     * half becoming the key.
+     *
+     * @param inputLine
+     *            A line to split, with its comments already stripped.
+     * @return A two element array of the key and the value, or null if the line
+     *         holds no unescaped '=' at all.
+     * @since 0.9.72+
+     */
+    private static String[] splitKeyValue(String inputLine) {
+        int eq = -1;
+        boolean escaped = false;
+        for (int i = 0; i < inputLine.length(); i++) {
+            char c = inputLine.charAt(i);
+            if (escaped) {
+                escaped = false;
+            } else if (c == '\\') {
+                escaped = true;
+            } else if (c == '=') {
+                eq = i;
+                break;
+            }
+        }
+        if (eq < 0) {return null;}
+        return new String[] {unescapeKey(inputLine.substring(0, eq).trim()),
+                             inputLine.substring(eq + 1).trim()};
+    }
+
+    /**
+     * Write a key out so splitKeyValue can read it back: a '=' or a backslash in
+     * the key is escaped with a backslash. Values are written as they are, since
+     * the split stops at the first unescaped '=' and nothing here writes a value
+     * that needs escaping.
+     *
+     * @param key
+     *            A key to escape.
+     * @return The key, with any '=' or backslash in it escaped.
+     * @since 0.9.72+
+     */
+    private static String escapeKey(String key) {
+        if (key.indexOf('=') < 0 && key.indexOf('\\') < 0) {return key;}
+        StringBuilder rv = new StringBuilder(key.length() + 4);
+        for (int i = 0; i < key.length(); i++) {
+            char c = key.charAt(i);
+            if (c == '=' || c == '\\') {rv.append('\\');}
+            rv.append(c);
+        }
+        return rv.toString();
+    }
+
+    /**
+     * Undo escapeKey's escapes in a key read back from a file. A backslash with
+     * nothing after it is left alone.
+     *
+     * @param key
+     *            A key as read from a file.
+     * @return The key as it was before it was written out.
+     * @since 0.9.72+
+     */
+    private static String unescapeKey(String key) {
+        if (key.indexOf('\\') < 0) {return key;}
+        StringBuilder rv = new StringBuilder(key.length());
+        for (int i = 0; i < key.length(); i++) {
+            char c = key.charAt(i);
+            if (c == '\\' && i + 1 < key.length()) {
+                i++;
+                c = key.charAt(i);
+            }
+            rv.append(c);
+        }
+        return rv.toString();
+    }
+
+    /**
      * Return a Map using the contents of BufferedReader input. input must have
      * a single key, value pair on each line, in the format: key=value. Lines
      * starting with '#' or ';' are considered comments, and ignored. Lines that
@@ -74,11 +151,11 @@ class ConfigParser {
             while ((inputLine = input.readLine()) != null) {
                 inputLine = stripComments(inputLine);
                 if (inputLine.isEmpty()) {continue;}
-                String[] splitLine = DataHelper.split(inputLine, "=", 2);
-                if (splitLine.length == 2) {
-                    String key = splitLine[0].trim();
+                String[] splitLine = splitKeyValue(inputLine);
+                if (splitLine != null) {
+                    String key = splitLine[0];
                     if (lowerCaseKeys) {key = key.toLowerCase(Locale.US);}
-                    result.put(key, splitLine[1].trim());
+                    result.put(key, splitLine[1]);
                 }
             }
             return result;
@@ -250,7 +327,9 @@ class ConfigParser {
 
     /**
      * Write contents of Map map to BufferedWriter output. Output is written
-     * with one key, value pair on each line, in the format: key=value.
+     * with one key, value pair on each line, in the format: key=value. A '=' or
+     * a backslash in the key is escaped, so a key that contains one - a cgi
+     * subscription URL - is read back whole.
      *
      * @param map
      *            A Map to write to output.
@@ -262,7 +341,7 @@ class ConfigParser {
     private static void write(Map<String, String> map, BufferedWriter output) throws IOException {
         try {
             for (Map.Entry<String, String> entry : map.entrySet()) {
-                output.write(entry.getKey() + '=' + entry.getValue());
+                output.write(escapeKey(entry.getKey()) + '=' + entry.getValue());
                 output.newLine();
             }
         } finally {

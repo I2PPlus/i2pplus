@@ -134,8 +134,8 @@ class SubscriptionList implements Iterable<AddressBook> {
     /**
      * Write the etag and last-modified headers,
      * and the last-fetched time, for each Subscription to files.
-     * BUG - If the subscription URL is a cgi containing an '=' the files
-     * won't be read back correctly; the '=' should be escaped.
+     * The keys are the subscription URLs, escaped by the parser so a cgi URL
+     * containing an '=' is read back whole.
      */
     public void write() {
         int sz = subscriptions.size();

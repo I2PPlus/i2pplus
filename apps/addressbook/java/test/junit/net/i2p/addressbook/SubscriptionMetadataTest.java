@@ -219,4 +219,56 @@ public class SubscriptionMetadataTest {
         assertTrue("the key was folded: " + etags.keySet(), etags.containsKey(URL));
         assertEquals("abc", etags.get(URL));
     }
+
+    /**
+     * A cgi subscription URL, which carries an '=' in its query: the writer escapes
+     * it in the key and the reader stops at the first unescaped one, so the entry is
+     * stored and found under the whole URL. It used to be cut in half at the first
+     * '=', which is the defect the BUG note above write() described.
+     *
+     * @throws IOException if a file cannot be written or read
+     */
+    @Test
+    public void testACgiUrlWithAnEqualsRoundTrips() throws IOException {
+        String cgi = "http://example.i2p/hosts.txt?rev=3&x=4";
+        File dir = tempDir("cgi");
+        locations(dir, cgi);
+        metadata(dir, "etags", cgi, ETAG);
+        SubscriptionList list = load(dir);
+        assertEquals(ETAG, list.getSubscriptions().get(0).getEtag());
+        list.write();
+        assertEquals(ETAG, load(dir).getSubscriptions().get(0).getEtag());
+    }
+
+    /**
+     * What the escaping looks like on disk, and that a key with a backslash in it
+     * survives as well.
+     *
+     * @throws IOException if a file cannot be written or read
+     */
+    @Test
+    public void testAnEscapedKeyIsWrittenAndReadBack() throws IOException {
+        File dir = tempDir("esc");
+        File file = new File(dir, "etags");
+        ConfigParser.write(Collections.singletonMap("a=b\\c", "v"), file);
+        String contents = new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8);
+        assertEquals("a\\=b\\\\c=v" + System.lineSeparator(), contents);
+        assertEquals("v", ConfigParser.parseSubscriptionMetadata(file).get("a=b\\c"));
+    }
+
+    /**
+     * A line with no unescaped '=' at all is not a key, value pair and is skipped -
+     * the behaviour the split had before, kept.
+     *
+     * @throws IOException if a file cannot be written or read
+     */
+    @Test
+    public void testALineWithoutAnEqualsIsIgnored() throws IOException {
+        File dir = tempDir("noeq");
+        File file = new File(dir, "etags");
+        Files.write(file.toPath(), Arrays.asList(URL, "http://other.i2p/x=y"));
+        Map<String, String> etags = ConfigParser.parseSubscriptionMetadata(file);
+        assertEquals(1, etags.size());
+        assertEquals("y", etags.get("http://other.i2p/x"));
+    }
 }
