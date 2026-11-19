@@ -236,7 +236,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             changeState(State.IB_NTCP2_GOT_X);
             if (!_transport.isHXHIValid(_X)) {
                 _context.statManager().addRateData("ntcp.replayHXxorBIH", 1);
-                fail("Replay msg 1, eX = " + Base64.encode(_X, 0, KEY_SIZE));
+                delayMsg1Failure(src, "Replay msg 1, eX = " + Base64.encode(_X, 0, KEY_SIZE), null);
                 return;
             }
 
@@ -245,7 +245,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             System.arraycopy(_X, KEY_SIZE - IV_SIZE, _prevEncrypted, 0, IV_SIZE);
             _context.aes().decrypt(_X, 0, _X, 0, bobHash, _transport.getNTCP2StaticIV(), KEY_SIZE);
             if (DataHelper.eqCT(_X, 0, ZEROKEY, 0, KEY_SIZE)) {
-                fail("Bad msg 1, X = 0");
+                delayMsg1Failure(src, "Bad msg 1, X = 0", null);
                 return;
             }
             if ((_X[KEY_SIZE - 1] & 0x80) != 0) {
@@ -260,6 +260,53 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 _X[KEY_SIZE - 1] &= (byte) 0x7f;
             }
             _con.setVersion(_version);
+        }
+    }
+
+    /**
+     * Rejects a message 1 the way a good one is read, for probing resistance: the
+     * connection stays open until a random number of further bytes arrive, and only
+     * then fails. A prober that watches the connection close the instant its prefix
+     * is rejected learns that it reached an NTCP2 listener, and which rejection it
+     * hit - the replay check, the zero-key check and the Noise read all used to
+     * answer at a different moment.
+     * <p>
+     * The budget is reduced by what the buffer still holds, because the drain in
+     * {@link #receiveInboundNTCP2} counts those bytes toward it. Nothing else is
+     * done here: the IP blocking and the banlist tracking belong to the
+     * authentication-failure path alone, which is the only rejection that has
+     * proved something about who is on the other end.
+     *
+     * @param src the buffer being read, to count what it still holds
+     * @param reason the failure text, kept by {@link #getFailReason}
+     * @param e the exception behind the rejection, null for a check that simply failed
+     * @return true if the failure is now waiting for more bytes, false if it failed here
+     * @since 0.9.72+
+     */
+    private boolean delayMsg1Failure(ByteBuffer src, String reason, Exception e) {
+        _padlen1 = _context.random().nextInt(PADDING1_FAIL_MAX) - src.remaining();
+        _received = 0;
+        if (_padlen1 > 0) {
+            changeState(State.IB_NTCP2_READ_RANDOM);
+            return true;
+        }
+        fail(reason, e);
+        return false;
+    }
+
+    /**
+     * The peer's address as text, for the probe and invalid-encryption warnings.
+     *
+     * @return the dotted-quad or IPv6 text form, or "unknown" if the connection has no address
+     * @since 0.9.72+
+     */
+    private String remoteIPString() {
+        byte[] ip = _con.getRemoteIP();
+        if (ip == null) {return "unknown";}
+        try {
+            return InetAddress.getByAddress(ip).getHostAddress();
+        } catch (UnknownHostException uhe) {
+            return "unknown";
         }
     }
 
@@ -430,40 +477,29 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                     _log.debug("After start: " + _handshakeState.toString());
                 _handshakeState.readMessage(_X, 0, msg1Size(_version), options, 0);
             } catch (GeneralSecurityException gse) {
-                 // Read a random number of bytes, store wanted in _padlen1
-                 _padlen1 = _context.random().nextInt(PADDING1_FAIL_MAX) - src.remaining();
-                 if (_padlen1 > 0) {
-                      // Delayed fail for probing resistance - need more bytes before failure
-                     if (_log.shouldDebug()) {
-                         _log.debug("[NTCP] Bad establishment handshake message #1 -> X: " + Base64.encode(_X, 0, 8)
+                boolean delayed = delayMsg1Failure(src,
+                        "BAD Establishment handshake message #1: X = " + Base64.encode(_X, 0, KEY_SIZE) +
+                        " remaining = " + src.remaining(), gse);
+                if (delayed) {
+                    // Delayed fail for probing resistance - need more bytes before failure
+                    if (_log.shouldDebug()) {
+                        _log.debug("[NTCP] Bad establishment handshake message #1 -> X: " + Base64.encode(_X, 0, 8)
                                    + " * Received: " + src.remaining() + " bytes"
                                    + "\n* Waiting: " + _padlen1 + " bytes");
-                     } else if (_log.shouldWarn()) {
-                     String ip;
-                     try {
-                          ip = _con.getRemoteIP() != null ? InetAddress.getByAddress(_con.getRemoteIP()).getHostAddress() : "unknown";
-                      } catch (UnknownHostException uhe) {
-                          ip = "unknown";
-                      }
-                      _log.warnThrottled("ntcp2-probe", "[NTCP] BAD NTCP2 handshake #1 from " + ip + ", waiting for " + _padlen1 + " more bytes -> Probable probe");
-                      // Track probe attempts for repeat offender detection
-                      _context.banlist().badPacket(ip, null);
-                     }
-                     changeState(State.IB_NTCP2_READ_RANDOM);
-                  } else {
-                      // Got all we need, fail now
-                       String ip;
-                       try {
-                           ip = _con.getRemoteIP() != null ? InetAddress.getByAddress(_con.getRemoteIP()).getHostAddress() : "unknown";
-                       } catch (UnknownHostException uhe) {
-                           ip = "unknown";
-                       }
-                        _log.warnThrottled("ntcp2-invalid-enc", "[NTCP] BAD NTCP2 handshake #1 from " + ip +
-                                  " -> Invalid encryption" +
-                                  "\n* All bytes received but handshake failed");
-                       _transport.getPumper().trackInvalidEncryption(_con.getRemoteIP(), null);
-                      fail("BAD Establishment handshake message #1: X = " + Base64.encode(_X, 0, KEY_SIZE) + " remaining = " + src.remaining(), gse);
-                  }
+                    } else if (_log.shouldWarn()) {
+                        String ip = remoteIPString();
+                        _log.warnThrottled("ntcp2-probe", "[NTCP] BAD NTCP2 handshake #1 from " + ip +
+                                  ", waiting for " + _padlen1 + " more bytes -> Probable probe");
+                        // Track probe attempts for repeat offender detection
+                        _context.banlist().badPacket(ip, null);
+                    }
+                } else {
+                    // Got all we need, fail now
+                    _log.warnThrottled("ntcp2-invalid-enc", "[NTCP] BAD NTCP2 handshake #1 from " + remoteIPString() +
+                              " -> Invalid encryption" +
+                              "\n* All bytes received but handshake failed");
+                    _transport.getPumper().trackInvalidEncryption(_con.getRemoteIP(), null);
+                }
                 _transport.getPumper().blockIP(_con.getRemoteIP());
                 return;
             } catch (RuntimeException re) {
