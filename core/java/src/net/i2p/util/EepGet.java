@@ -2905,7 +2905,10 @@ public class EepGet {
         }
         if (post) {
             buf.append("Content-length: ");
-            if (_postData != null) {buf.append(_postData.length());}
+            // Bytes, not characters: the body is appended below into this same
+            // buffer and the whole request goes out as UTF-8, so a non-ASCII body
+            // is longer on the wire than the String is in Java.
+            if (_postData != null) {buf.append(DataHelper.getUTF8(_postData).length);}
             else if (_postBinaryData != null) {buf.append(_postBinaryData.length);}
             else if (_postDataFile != null) {buf.append(_postDataFile.length());}
             buf.append("\r\n");
