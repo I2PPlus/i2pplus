@@ -54,17 +54,20 @@ class ConfigParser {
      * a single key, value pair on each line, in the format: key=value. Lines
      * starting with '#' or ';' are considered comments, and ignored. Lines that
      * are obviously not in the format key=value are also ignored.
-     * The key is converted to lower case.
      *
      * @param input
      *            A BufferedReader with lines in key=value format to parse into
      *            a Map.
+     * @param lowerCaseKeys
+     *            Whether to fold each key to lower case. True for a settings file,
+     *            whose keys are fixed names the reader compares against; false for
+     *            a file whose keys are URLs, which are looked up exactly as written.
      * @return A Map containing the key, value pairs from input.
      * @throws IOException
      *             if the BufferedReader cannot be read.
      *
      */
-    private static Map<String, String> parse(BufferedReader input) throws IOException {
+    private static Map<String, String> parse(BufferedReader input, boolean lowerCaseKeys) throws IOException {
         try {
             Map<String, String> result = new HashMap<>();
             String inputLine;
@@ -73,7 +76,9 @@ class ConfigParser {
                 if (inputLine.isEmpty()) {continue;}
                 String[] splitLine = DataHelper.split(inputLine, "=", 2);
                 if (splitLine.length == 2) {
-                    result.put(splitLine[0].trim().toLowerCase(Locale.US), splitLine[1].trim());
+                    String key = splitLine[0].trim();
+                    if (lowerCaseKeys) {key = key.toLowerCase(Locale.US);}
+                    result.put(key, splitLine[1].trim());
                 }
             }
             return result;
@@ -87,7 +92,8 @@ class ConfigParser {
 
     /**
      * Return a Map using the contents of the File file. See parseBufferedReader
-     * for details of the input format.
+     * for details of the input format. Keys are folded to lower case, as this is
+     * the reader for the settings file.
      *
      * @param file
      *            A File to parse.
@@ -97,7 +103,30 @@ class ConfigParser {
      */
     public static Map<String, String> parse(File file) throws IOException {
         try (BufferedReader input = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
-            return parse(input);
+            return parse(input, true);
+        }
+    }
+
+    /**
+     * Return a Map using the contents of the File file, in the key=value format
+     * described for parseBufferedReader, but with the keys left exactly as they
+     * were written. This is the reader for the subscription metadata files
+     * (etags, last-modified, last-fetched), whose keys are subscription URLs.
+     * Those URLs are looked up with the text of the subscriptions file, which is
+     * never folded, so folding them here would mean a URL containing any upper
+     * case letter never finds its own stored value: the conditional-GET headers
+     * are dropped and the last-fetched time resets to zero.
+     *
+     * @param file
+     *            A File to parse.
+     * @return A Map containing the key, value pairs from file, keys unfolded.
+     * @throws IOException
+     *             if file cannot be read.
+     * @since 0.9.72+
+     */
+    public static Map<String, String> parseSubscriptionMetadata(File file) throws IOException {
+        try (BufferedReader input = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
+            return parse(input, false);
         }
     }
 

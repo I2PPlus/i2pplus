@@ -67,17 +67,17 @@ class SubscriptionList implements Iterable<AddressBook> {
         List<String> locations = ConfigParser.parseSubscriptions(locationsFile,
                 defaultSubs);
         try {
-            etags = ConfigParser.parse(etagsFile);
+            etags = ConfigParser.parseSubscriptionMetadata(etagsFile);
         } catch (IOException exp) {
             etags = Collections.<String, String>emptyMap();
         }
         try {
-            lastModified = ConfigParser.parse(lastModifiedFile);
+            lastModified = ConfigParser.parseSubscriptionMetadata(lastModifiedFile);
         } catch (IOException exp) {
             lastModified = Collections.<String, String>emptyMap();
         }
         try {
-            lastFetched = ConfigParser.parse(lastFetchedFile);
+            lastFetched = ConfigParser.parseSubscriptionMetadata(lastFetchedFile);
         } catch (IOException exp) {
             lastFetched = Collections.<String, String>emptyMap();
         }
@@ -116,6 +116,19 @@ class SubscriptionList implements Iterable<AddressBook> {
     public SubscriptionIterator iterator() {
         return new SubscriptionIterator(this.subscriptions, this.delay, this.proxyHost,
                 this.proxyPort);
+    }
+
+    /**
+     * The subscriptions, in the order their locations were read from the
+     * locations file. Package-visible so a test can read the metadata each one
+     * was loaded with - the public surface only offers the iterator, and that
+     * fetches.
+     *
+     * @return an unmodifiable view of the subscriptions
+     * @since 0.9.72+
+     */
+    List<Subscription> getSubscriptions() {
+        return Collections.unmodifiableList(this.subscriptions);
     }
 
     /**
